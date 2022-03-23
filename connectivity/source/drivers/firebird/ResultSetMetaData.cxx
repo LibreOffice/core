@@ -128,9 +128,15 @@ OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32)
 OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
 {
     verifyValidColumn(column);
-    OUString sRet(m_pSqlda->sqlvar[column-1].sqlname,
-                    m_pSqlda->sqlvar[column-1].sqlname_length,
-                    RTL_TEXTENCODING_UTF8);
+    char* pColumnName = m_pSqlda->sqlvar[column - 1].sqlname;
+    sal_Int32 nColumnNameLength = m_pSqlda->sqlvar[column - 1].sqlname_length;
+    // tdf#132924 - return column alias if specified
+    if (m_pSqlda->sqlvar[column - 1].aliasname_length > 0)
+    {
+        pColumnName = m_pSqlda->sqlvar[column - 1].aliasname;
+        nColumnNameLength = m_pSqlda->sqlvar[column - 1].aliasname_length;
+    }
+    OUString sRet(pColumnName, nColumnNameLength, RTL_TEXTENCODING_UTF8);
     sanitizeIdentifier(sRet);
     return sRet;
 }
