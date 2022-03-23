@@ -148,9 +148,8 @@ void SwInsTableDlg::InitAutoTableFormat()
     // Change this min variable if you add autotable manually.
     minTableIndexInLb = 1;
     maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(m_xTableTable->size());
-    lbIndex = 0;
-    m_xLbFormat->select( lbIndex );
-    tbIndex = lbIndexToTableIndex(lbIndex);
+    m_xLbFormat->select( minTableIndexInLb );
+    tbIndex = lbIndexToTableIndex( minTableIndexInLb );
 
     SelFormatHdl( *m_xLbFormat );
 }
