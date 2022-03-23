@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59d6eb4e_30d8dfd5",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T08:57:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbe07057_ef9c5c25",
+      "revId": "7c77202f0e548e1b72203f147c146d70d6f11d48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "533ac92c_d526beda",
@@ -31,6 +49,30 @@
       "writtenOn": "2022-03-22T11:05:53Z",
       "side": 1,
       "message": "o3tl::toU(propvar.pwszVal)",
+      "range": {
+        "startLine": 201,
+        "startChar": 32,
+        "endLine": 201,
+        "endChar": 57
+      },
+      "revId": "7c77202f0e548e1b72203f147c146d70d6f11d48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9271816d_ac5d2dfe",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T08:57:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "533ac92c_d526beda",
       "range": {
         "startLine": 201,
         "startChar": 32,

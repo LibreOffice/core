@@ -51,6 +51,24 @@
       "parentUuid": "0a73e307_b5b166f0",
       "revId": "97463f690bab756cbf500cd4df6bf220df12dfb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "882f46cc_8d067bca",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T08:57:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca579484_30a3748b",
+      "revId": "97463f690bab756cbf500cd4df6bf220df12dfb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

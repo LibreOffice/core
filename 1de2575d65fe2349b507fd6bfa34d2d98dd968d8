@@ -16,6 +16,23 @@
       "message": "👍🏻",
       "revId": "1de2575d65fe2349b507fd6bfa34d2d98dd968d8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b950d81e_6d4675fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-23T08:57:39Z",
+      "side": 1,
+      "message": "The PropVariantToStringWithDefault change doesn\u0027t build for me. Any idea?\n\n JumpList.o : error LNK2019: Verweis auf nicht aufgel□stes externes Symbol \"__imp_PropVariantToStringWithDefault\" in Funktion \"\"public: virtual class com::sun::star::uno::Sequence\u003cstruct com::sun::star::system::windows::JumpLi\nstItem\u003e __cdecl JumpListImpl::getRemovedItems(class rtl::OUString const \u0026)\" (?getRemovedItems@JumpListImpl@@UEAA?AV?$Sequence@UJumpListItem@windows@system@star@sun@com@@@uno@star@sun@com@@AEBVOUString@rtl@@@Z)\".\ninstdir\\program\\jumplistlo.dll : fatal error LNK1120: 1 nicht aufgel□ste Externe",
+      "revId": "1de2575d65fe2349b507fd6bfa34d2d98dd968d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
