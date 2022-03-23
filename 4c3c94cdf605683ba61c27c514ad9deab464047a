@@ -527,6 +527,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99b06252_1f903cdb",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T11:05:17Z",
+      "side": 1,
+      "message": "\u003e these UNO strings\n\nI still fail to see which UNO strings are meant? again: sApplicationID is constructed completely locally, and sDocumentService is not used to construct it (it is only used to choose which variant to use). SetAppID is a WinAPI. So all this is not exposed in any way from this place at all - or do I miss something?",
+      "parentUuid": "a3e9e758_34338360",
+      "range": {
+        "startLine": 96,
+        "startChar": 45,
+        "endLine": 96,
+        "endChar": 68
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "de7246bc_326d449c",
         "filename": "shell/source/win32/jumplist/JumpList.cxx",
         "patchSetId": 12
