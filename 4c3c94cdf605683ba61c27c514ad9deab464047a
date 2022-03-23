@@ -433,6 +433,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6e5d4607_83c8f132",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T10:30:51Z",
+      "side": 1,
+      "message": "* \"The mutex reference passed to the constructor has to outlive the constructed instance.\" (include/cppuhelper/compbase.hxx); i.e., use some MutexBase helper\n* (nitpick: you can use the injected short base class name \"WeakComponentImplHelper\" without \u003c...\u003e here)",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 97
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c52866fb_d00b3443",
         "filename": "shell/source/win32/jumplist/JumpList.cxx",
         "patchSetId": 12
@@ -497,6 +520,29 @@
         "startChar": 45,
         "endLine": 96,
         "endChar": 68
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de7246bc_326d449c",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T10:30:51Z",
+      "side": 1,
+      "message": "here and elsewhere: is that an appropriate log area to use here?",
+      "range": {
+        "startLine": 109,
+        "startChar": 21,
+        "endLine": 109,
+        "endChar": 26
       },
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
