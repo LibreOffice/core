@@ -16,6 +16,23 @@
       "message": "Any comments on the API syntax?\n\nNot sure if there is a better way than using the document service as an identifier.",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ed0115_d10c3a04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-23T09:17:16Z",
+      "side": 1,
+      "message": "yeah, using the service name in the API is not great. I would just use a string parameter, which can be one of a small list of predefined names, and then map that name to a service name internally. That way, we can at least change service names later without breaking extensions.",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
