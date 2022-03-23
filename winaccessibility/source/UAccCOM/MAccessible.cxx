@@ -220,16 +220,16 @@ CMAccessible::~CMAccessible()
 
     if(m_pszName!=nullptr)
     {
-        SAFE_SYSFREESTRING(m_pszName);
+        ::SysFreeString(std::exchange(m_pszName, nullptr));
     }
     if(m_pszValue!=nullptr)
     {
-        SAFE_SYSFREESTRING(m_pszValue);
+        ::SysFreeString(std::exchange(m_pszValue, nullptr));
     }
 
     if(m_pszActionDescription!=nullptr)
     {
-        SAFE_SYSFREESTRING(m_pszActionDescription);
+        ::SysFreeString(std::exchange(m_pszActionDescription, nullptr));
     }
 
     if(m_pIParent)
@@ -373,7 +373,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BS
         {
             if(varChild.lVal==CHILDID_SELF)
             {
-                SAFE_SYSFREESTRING(*pszName);
+                ::SysFreeString(*pszName);
                 *pszName = SysAllocString(m_pszName);
                 return S_OK;
             }
@@ -418,7 +418,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, B
                 if ( m_pszValue !=nullptr && wcslen(m_pszValue) == 0 )
                     return S_OK;
 
-                SAFE_SYSFREESTRING(*pszValue);
+                ::SysFreeString(*pszValue);
                 *pszValue = SysAllocString(m_pszValue);
                 return S_OK;
             }
@@ -465,7 +465,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varCh
                     return S_FALSE;
 
                 const OUString sDescription = xContext->getAccessibleDescription();
-                SAFE_SYSFREESTRING(*pszDescription);
+                ::SysFreeString(*pszDescription);
                 *pszDescription = SysAllocString(o3tl::toW(sDescription.getStr()));
                 return S_OK;
             }
@@ -760,7 +760,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
                             return S_FALSE;
                     }
 
-                    SAFE_SYSFREESTRING(*pszKeyboardShortcut);
+                    ::SysFreeString(*pszKeyboardShortcut);
                     *pszKeyboardShortcut = SysAllocString(o3tl::toW(wString.getStr()));
 
                     return S_OK;
@@ -1069,7 +1069,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BS
         {
             if(varChild.lVal==CHILDID_SELF)
             {
-                SAFE_SYSFREESTRING(m_pszName);
+                ::SysFreeString(m_pszName);
                 m_pszName=SysAllocString(szName);
                 return S_OK;
             }
@@ -1103,7 +1103,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, B
         {
             if(varChild.lVal==CHILDID_SELF)
             {
-                SAFE_SYSFREESTRING(m_pszValue);
+                ::SysFreeString(m_pszValue);
                 m_pszValue=SysAllocString(szValue);
                 return S_OK;
             }
@@ -1137,7 +1137,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC
             return E_INVALIDARG;
         }
 
-        SAFE_SYSFREESTRING(m_pszName);
+        ::SysFreeString(m_pszName);
         m_pszName = SysAllocString(pszName);
         if(m_pszName==nullptr)
             return E_FAIL;
@@ -1214,7 +1214,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RP
         {
             return E_INVALIDARG;
         }
-        SAFE_SYSFREESTRING(m_pszValue);
+        ::SysFreeString(m_pszValue);
         m_pszValue = SysAllocString(pszAccValue);
         if(m_pszValue==nullptr)
             return E_FAIL;
@@ -2408,7 +2408,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
             {
                 if (!m_xAction.is())
                     return DISP_E_MEMBERNOTFOUND;
-                SAFE_SYSFREESTRING(*pszDefaultAction);
+                ::SysFreeString(*pszDefaultAction);
                 *pszDefaultAction = SysAllocString(m_pszActionDescription);
                 return S_OK;
             }
@@ -2476,7 +2476,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLE
         {
             return E_INVALIDARG;
         }
-        SAFE_SYSFREESTRING(m_pszActionDescription );
+        ::SysFreeString(m_pszActionDescription );
         m_pszActionDescription = SysAllocString( szAction );
         return S_OK;
 
@@ -3154,7 +3154,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
         anyVal >>= val;
 
         if(*pAttr)
-            SAFE_SYSFREESTRING(*pAttr);
+            ::SysFreeString(*pAttr);
         *pAttr = SysAllocString(o3tl::toW(val.getStr()));
 
         return S_OK;

@@ -56,7 +56,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)
         return E_FAIL;
 
     OUString ouStr = GetXInterface()->getAccessibleImageDescription();
-    SAFE_SYSFREESTRING(*description);
+    ::SysFreeString(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
 
     return S_OK;

@@ -137,7 +137,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_columnDescription(long column, 
     const OUString& ouStr = pRXTable->getAccessibleColumnDescription(column);
     // #CHECK#
 
-    SAFE_SYSFREESTRING(*description);
+    ::SysFreeString(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
     if (*description==nullptr)
         return E_FAIL;
@@ -348,7 +348,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR *
     const OUString& ouStr = pRXTable->getAccessibleRowDescription(row);
     // #CHECK#
 
-    SAFE_SYSFREESTRING(*description);
+    ::SysFreeString(*description);
     *description = SysAllocString(o3tl::toW(ouStr.getStr()));
     if (*description==nullptr)
         return E_FAIL;

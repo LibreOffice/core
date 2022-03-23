@@ -70,8 +70,6 @@ extern CComModule _Module;
         return E_FAIL;          \
     }
 
-#define SAFE_SYSFREESTRING(x) { ::SysFreeString(x); x=NULL; }
-
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
