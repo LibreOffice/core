@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ef5256a_0011e446",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-23T11:30:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "72823263_5a1b8fd0",
+      "revId": "694148a9898b47d749588f9a32173a9933262e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd4232c7_333887ed",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-23T09:58:12Z",
       "side": 1,
       "message": "[1] if endCol was e.g 1 then we alloc with len 3 and nEndCol is 1",
+      "revId": "694148a9898b47d749588f9a32173a9933262e29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfa774de_62aed9b1",
+        "filename": "sc/inc/fillinfo.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-23T11:30:11Z",
+      "side": 1,
+      "message": "You\u0027re right, this is indeed broken. It should be as if \u0027nStartCol \u003d\u003d 0\u0027, so there\u0027s +1 missing.",
+      "parentUuid": "cd4232c7_333887ed",
       "revId": "694148a9898b47d749588f9a32173a9933262e29",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
