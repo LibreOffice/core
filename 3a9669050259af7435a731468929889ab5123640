@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "649aafc3_753399e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-23T06:37:45Z",
+      "side": 1,
+      "message": "Is there are specific reason why you\u0027re using those types? (In general, it makes sense to use the types that the called methods return/take.)",
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b74ec32_e85973c3",
+        "filename": "editeng/source/editeng/impedit4.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-23T06:37:45Z",
+      "side": 1,
+      "message": "I would use the type that aFontTable.size() returns instead.",
+      "range": {
+        "startLine": 311,
+        "startChar": 0,
+        "endLine": 312,
+        "endChar": 88
+      },
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ddc5b73_22b845f5",
+        "filename": "editeng/source/outliner/outliner.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 849,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-23T06:37:45Z",
+      "side": 1,
+      "message": "Similarly here: Size::Height() returns tools::Long and the ctor below also takes that as param.",
+      "range": {
+        "startLine": 849,
+        "startChar": 4,
+        "endLine": 849,
+        "endChar": 67
+      },
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
