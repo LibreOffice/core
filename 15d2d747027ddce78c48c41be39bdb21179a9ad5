@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47355313_99dc92de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-23T19:09:23Z",
+      "side": 1,
+      "message": "Hope Generics command can also be useful for officecfg/registry/data/org/openoffice/Office/UI/DbuCommands.xcu and officecfg/registry/data/org/openoffice/Office/UI/ReportCommands.xcu",
+      "revId": "15d2d747027ddce78c48c41be39bdb21179a9ad5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
