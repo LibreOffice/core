@@ -433,6 +433,12 @@ FreetypeFont::FreetypeFont(FreetypeFontInstance& rFontInstance, const std::share
     mnWidth = rFSD.mnWidth;
     if( !mnWidth )
         mnWidth = rFSD.mnHeight;
+    if (rFSD.mnHeight == 0)
+    {
+        SAL_WARN("vcl", "FreetypeFont divide by zero");
+        mfStretch = 1.0;
+        return;
+    }
     mfStretch = static_cast<double>(mnWidth) / rFSD.mnHeight;
     // sanity checks (e.g. #i66394#, #i66244#, #i66537#)
     if (mnWidth < 0)
