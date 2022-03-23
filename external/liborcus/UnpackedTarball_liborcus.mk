@@ -15,8 +15,8 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
-# crashtesting-crash-on-passing-null-to-std-string_vie.patch.1 submitted as
-# https://gitlab.com/orcus/orcus/-/merge_requests/113
+# forcepoint-83.patch.1 submitted as
+# https://gitlab.com/orcus/orcus/-/merge_requests/117
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
@@ -25,6 +25,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/fix-pch.patch.0 \
 	external/liborcus/liborcus_newline.patch.1 \
 	external/liborcus/std-get-busted.patch.1 \
+	external/liborcus/forcepoint-83.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
