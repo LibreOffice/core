@@ -21,6 +21,7 @@
 #define INCLUDED_SYSTOOLS_WIN32_COMTOOLS_HXX
 
 #include <string>
+#include <string_view>
 #include <stdexcept>
 #include <type_traits>
 #include <objbase.h>
@@ -47,6 +48,36 @@ namespace systools
 
     private:
         HRESULT hr_;
+    };
+
+    /* Convert failed HRESULT to thrown ComError */
+    inline void ThrowIfFailed(HRESULT hr, std::string_view msg)
+    {
+        if (FAILED(hr))
+            throw ComError(std::string(msg), hr);
+    }
+    /* A guard class to call CoInitializeEx/CoUninitialize in proper pairs
+     * See also: o3tl::safeCoInitializeEx doing dangerous re-initialization
+     */
+    class CoInitializeGuard
+    {
+    public:
+        explicit CoInitializeGuard(DWORD dwCoInit, bool bThrowOnChangeMode = false)
+        {
+            HRESULT hr = ::CoInitializeEx(nullptr, dwCoInit);
+            if (FAILED(hr) && (bThrowOnChangeMode || hr != RPC_E_CHANGED_MODE))
+                throw ComError("CoInitializeEx failed", hr);
+            mbUninit = SUCCEEDED(hr);
+        }
+        CoInitializeGuard(const CoInitializeGuard&) = delete; // non-construction-copyable
+        void operator=(const CoInitializeGuard&) = delete; // non-copyable
+        ~CoInitializeGuard()
+        {
+            if (mbUninit)
+                CoUninitialize();
+        }
+    private:
+        bool mbUninit;
     };
 
     struct COM_QUERY_TAG {} constexpr COM_QUERY;
@@ -118,7 +149,7 @@ namespace systools
         COMReference<T2> QueryInterface(TAG) const
         {
             void* ip = nullptr;
-            HRESULT hr = E_FAIL;
+            HRESULT hr = E_POINTER;
             if (com_ptr_)
                 hr = com_ptr_->QueryInterface(__uuidof(T2), &ip);
             if constexpr (std::is_same_v<TAG, COM_QUERY_THROW_TAG>)
