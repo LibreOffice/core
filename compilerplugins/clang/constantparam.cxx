@@ -111,8 +111,6 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
         return;
     if (functionDecl->isVariadic())
         return;
-    if (ignoreLocation(functionDecl))
-        return;
     // ignore stuff that forms part of the stable URE interface
     if (isInUnoIncludeFile(functionDecl))
         return;
@@ -121,7 +119,6 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
     if (!loplugin::hasPathnamePrefix(filename, SRCDIR "/"))
         return;
     filename = filename.substr(strlen(SRCDIR)+1);
-
 
     MyCallSiteInfo aInfo;
     aInfo.returnType = functionDecl->getReturnType().getCanonicalType().getAsString();
@@ -148,8 +145,8 @@ void ConstantParam::addToCallSet(const FunctionDecl* functionDecl, int paramInde
     aInfo.paramIndex = paramIndex;
     if (paramIndex < (int)functionDecl->getNumParams())
         aInfo.paramType = functionDecl->getParamDecl(paramIndex)->getType().getCanonicalType().getAsString();
-    aInfo.callValue = callValue;
 
+    aInfo.callValue = callValue;
     aInfo.sourceLocation = filename.str() + ":" + std::to_string(compiler.getSourceManager().getSpellingLineNumber(expansionLoc));
     loplugin::normalizeDotDotInFilePath(aInfo.sourceLocation);
 
@@ -207,10 +204,10 @@ std::string ConstantParam::getCallValue(const Expr* arg)
     }
     unsigned n = Lexer::MeasureTokenLength( endLoc, SM, compiler.getLangOpts());
     std::string s( p1, p2 - p1 + n);
-    // strip linefeed and tab characters so they don't interfere with the parsing of the log file
-    std::replace( s.begin(), s.end(), '\r', ' ');
-    std::replace( s.begin(), s.end(), '\n', ' ');
-    std::replace( s.begin(), s.end(), '\t', ' ');
+    // sanitize call value, makes using command line tools (and python) much less error prone
+    for (auto const & ch : s)
+        if (ch < 32)
+            return "sanitised";
 
     // now normalize the value. For some params, like OUString, we can pass it as OUString() or "" and they are the same thing
     if (s == "OUString()")
