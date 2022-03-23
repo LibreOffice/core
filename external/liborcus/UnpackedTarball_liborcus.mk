@@ -17,6 +17,8 @@ $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
 # forcepoint-83.patch.1 submitted as
 # https://gitlab.com/orcus/orcus/-/merge_requests/117
+# forcepoint-84.patch.1 submitted as
+# https://gitlab.com/orcus/orcus/-/merge_requests/118
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
@@ -26,6 +28,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/liborcus_newline.patch.1 \
 	external/liborcus/std-get-busted.patch.1 \
 	external/liborcus/forcepoint-83.patch.1 \
+	external/liborcus/forcepoint-84.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
