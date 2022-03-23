@@ -46,6 +46,30 @@
       },
       "revId": "a99119ad75dd239e0b3f45594734b8ef404185e3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccd8e362_bc498969",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T06:37:34Z",
+      "side": 1,
+      "message": "Also note that this code likely leaks, snice you don\u0027t release the propvar after use, so the last string there is not properly destroyed.",
+      "parentUuid": "5c165d83_df528385",
+      "range": {
+        "startLine": 200,
+        "startChar": 42,
+        "endLine": 200,
+        "endChar": 57
+      },
+      "revId": "a99119ad75dd239e0b3f45594734b8ef404185e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
