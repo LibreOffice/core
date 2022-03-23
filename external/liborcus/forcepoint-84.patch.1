@@ -1,0 +1,38 @@
+From 0fee6c0e3074be11874f1911a76f10eef5f59985 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Wed, 23 Mar 2022 20:04:31 +0000
+Subject: [PATCH] forcepoint#84 Invalid read of size 1
+
+==356879== Invalid read of size 1
+==356879==    at 0x11EC50B0: orcus::parser_base::cur_char() const (parser_base.hpp:79)
+==356879==    by 0x11EDD736: orcus::sax::parser_base::value(std::basic_string_view<char, std::char_traits<char> >&, bool) (sax_parser_base.cpp:303)
+==356879==    by 0x11B7C3D5: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::attribute() (sax_parser.hpp:563)
+==356879==    by 0x11B7B35E: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::element_open(long) (sax_parser.hpp:292)
+==356879==    by 0x11B7A2F7: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::element() (sax_parser.hpp:246)
+==356879==    by 0x11B7A1C7: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::body() (sax_parser.hpp:214)
+==356879==    by 0x11B7A009: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::parse() (sax_parser.hpp:182)
+==356879==    by 0x11B79FBB: orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::parse() (sax_ns_parser.hpp:277)
+==356879==    by 0x11B79798: orcus::sax_token_parser<orcus::xml_stream_handler>::parse() (sax_token_parser.hpp:215)
+==356879==    by 0x11B79436: orcus::xml_stream_parser::parse() (xml_stream_parser.cpp:68)
+==356879==    by 0x11BE3855: orcus::orcus_xlsx::detect(unsigned char const*, unsigned long) (orcus_xlsx.cpp:188)
+==356879==    by 0x11AB2492: orcus::detect(unsigned char const*, unsigned long) (format_detection.cpp:60)
+---
+ src/parser/sax_parser_base.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/parser/sax_parser_base.cpp b/src/parser/sax_parser_base.cpp
+index 46acb81d..11791edc 100644
+--- a/src/parser/sax_parser_base.cpp
++++ b/src/parser/sax_parser_base.cpp
+@@ -300,6 +300,8 @@ void parser_base::value_with_encoded_char(cell_buffer& buf, std::string_view& st
+ 
+ bool parser_base::value(std::string_view& str, bool decode)
+ {
++    if (!has_char())
++        throw malformed_xml_error("value must be quoted", offset());
+     char c = cur_char();
+     if (c != '"' && c != '\'')
+         throw malformed_xml_error("value must be quoted", offset());
+-- 
+2.35.1
+
