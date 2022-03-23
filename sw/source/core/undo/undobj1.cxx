@@ -56,9 +56,9 @@ SwUndoFlyBase::~SwUndoFlyBase()
 {
     if( m_bDelFormat )       // delete during an Undo?
     {
-        if (m_pFrameFormat->GetOtherTextBoxFormat())
+        if (m_pFrameFormat->GetTextBoxHandler())
         {   // clear that before delete
-            m_pFrameFormat->SetOtherTextBoxFormat(nullptr);
+            m_pFrameFormat->SetTextBoxHandler(nullptr);
         }
         delete m_pFrameFormat;
     }
@@ -139,19 +139,19 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         pCNd->GetTextNode()->InsertItem(aFormat, m_nContentPos, m_nContentPos, SetAttrMode::NOHINTEXPAND);
     }
 
-    if (m_pFrameFormat->GetOtherTextBoxFormat())
+    if (m_pFrameFormat->GetTextBoxHandler())
     {
         // recklessly assume that this thing will live longer than the
         // SwUndoFlyBase - not sure what could be done if that isn't the case...
-        m_pFrameFormat->GetOtherTextBoxFormat()->GetOwnerShape()->SetOtherTextBoxFormat(
-            m_pFrameFormat->GetOtherTextBoxFormat());
+        m_pFrameFormat->GetTextBoxHandler()->GetOwnerShape()->SetTextBoxHandler(
+            m_pFrameFormat->GetTextBoxHandler());
 
         SdrObject* pSdrObject
-            = m_pFrameFormat->GetOtherTextBoxFormat()->GetOwnerShape()->FindSdrObject();
+            = m_pFrameFormat->GetTextBoxHandler()->GetOwnerShape()->FindSdrObject();
         if (pSdrObject && m_pFrameFormat->Which() == RES_FLYFRMFMT)
-            m_pFrameFormat->GetOtherTextBoxFormat()->AddTextBox(pSdrObject, m_pFrameFormat);
+            m_pFrameFormat->GetTextBoxHandler()->AddTextBox(pSdrObject, m_pFrameFormat);
 
-        if (m_pFrameFormat->GetOtherTextBoxFormat()->GetOwnerShape()->Which() == RES_DRAWFRMFMT)
+        if (m_pFrameFormat->GetTextBoxHandler()->GetOwnerShape()->Which() == RES_DRAWFRMFMT)
         {
 
             if (pSdrObject)
@@ -164,7 +164,7 @@ void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrame)
         }
         if (m_pFrameFormat->Which() == RES_FLYFRMFMT)
         {
-            SwFrameFormat* pShapeFormat = m_pFrameFormat->GetOtherTextBoxFormat()->GetOwnerShape();
+            SwFrameFormat* pShapeFormat = m_pFrameFormat->GetTextBoxHandler()->GetOwnerShape();
             pShapeFormat->SetFormatAttr(m_pFrameFormat->GetContent());
         }
     }
@@ -208,9 +208,9 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     m_bDelFormat = true;                 // delete Format in DTOR
     m_pFrameFormat->DelFrames();                 // destroy Frames
 
-    if (m_pFrameFormat->GetOtherTextBoxFormat())
+    if (m_pFrameFormat->GetTextBoxHandler())
     {   // tdf#108867 clear that pointer
-        m_pFrameFormat->GetOtherTextBoxFormat()->GetOwnerShape()->SetOtherTextBoxFormat(nullptr);
+        m_pFrameFormat->GetTextBoxHandler()->GetOwnerShape()->SetTextBoxHandler(nullptr);
     }
 
     // all Uno objects should now log themselves off

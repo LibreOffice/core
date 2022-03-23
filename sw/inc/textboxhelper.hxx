@@ -184,7 +184,7 @@ public:
 /// This is not enough for group shapes, because they have only one shape format and
 /// can have many frame formats. This class provides if there is a group shape for example,
 /// it can have multiple textboxes.
-class SwTextBoxNode
+class SwTextBoxHandler
 {
     // One TextBox-entry
     struct SwTextBoxElement
@@ -205,15 +205,15 @@ class SwTextBoxNode
 
 public:
     // Not needed.
-    SwTextBoxNode() = delete;
+    SwTextBoxHandler() = delete;
 
     // ctor
-    SwTextBoxNode(SwFrameFormat* pOwnerShapeFormat);
+    SwTextBoxHandler(SwFrameFormat* pOwnerShapeFormat);
     // dtor
-    ~SwTextBoxNode();
+    ~SwTextBoxHandler();
 
     // default copy ctor is enough
-    SwTextBoxNode(SwTextBoxNode&) = default;
+    SwTextBoxHandler(SwTextBoxHandler&) = default;
 
     // This method adds a textbox entry to the shape
     // Parameters:

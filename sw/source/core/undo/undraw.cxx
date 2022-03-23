@@ -199,7 +199,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 
     // This will store the textboxes what were owned by this group
     std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
-    if (auto pOldTextBoxNode = pFormat->GetOtherTextBoxFormat())
+    if (auto pOldTextBoxNode = pFormat->GetTextBoxHandler())
     {
         if (auto pChildren = pObj->getChildrenOfSdrObject())
         {
@@ -240,10 +240,10 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         {
             if (rElem.first == pObj)
             {
-                auto pNewTextBoxNode = new SwTextBoxNode(rSave.pFormat);
-                rSave.pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
+                auto pNewTextBoxNode = new SwTextBoxHandler(rSave.pFormat);
+                rSave.pFormat->SetTextBoxHandler(pNewTextBoxNode);
                 pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
-                rElem.second->SetOtherTextBoxFormat(pNewTextBoxNode);
+                rElem.second->SetTextBoxHandler(pNewTextBoxNode);
                 break;
             }
         }
@@ -278,7 +278,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
         SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
         // Save the textboxes
-        if (auto pOldTextBoxNode = rSave.pFormat->GetOtherTextBoxFormat())
+        if (auto pOldTextBoxNode = rSave.pFormat->GetTextBoxHandler())
         {
             if (auto pTextBox = pOldTextBoxNode->GetTextBox(pObj))
                 vTextBoxes.push_back(std::pair(pObj, pTextBox));
@@ -310,13 +310,13 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     // Restore the textboxes
     if (vTextBoxes.size())
     {
-        auto pNewTextBoxNode = new SwTextBoxNode(m_pObjArray[0].pFormat);
+        auto pNewTextBoxNode = new SwTextBoxHandler(m_pObjArray[0].pFormat);
         for (auto& rElem : vTextBoxes)
         {
             pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
-            rElem.second->SetOtherTextBoxFormat(pNewTextBoxNode);
+            rElem.second->SetTextBoxHandler(pNewTextBoxNode);
         }
-        m_pObjArray[0].pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
+        m_pObjArray[0].pFormat->SetTextBoxHandler(pNewTextBoxNode);
     }
 
     // #i45952# - notify that position attributes are already set
@@ -401,7 +401,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
         ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx );
 
         // copy the textboxes for later use to this vector
-        if (auto pTxBxNd = rSave.pFormat->GetOtherTextBoxFormat())
+        if (auto pTxBxNd = rSave.pFormat->GetTextBoxHandler())
         {
             if (auto pGroupObj = m_pObjArray[0].pObj)
             {
@@ -436,13 +436,13 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     // Restore the vector content for the new formats
     if (vTextBoxes.size())
     {
-        auto pNewTxBxNd = new SwTextBoxNode(m_pObjArray[0].pFormat);
+        auto pNewTxBxNd = new SwTextBoxHandler(m_pObjArray[0].pFormat);
         for (auto& rElem : vTextBoxes)
         {
             pNewTxBxNd->AddTextBox(rElem.first, rElem.second);
-            rElem.second->SetOtherTextBoxFormat(pNewTxBxNd);
+            rElem.second->SetTextBoxHandler(pNewTxBxNd);
         }
-        m_pObjArray[0].pFormat->SetOtherTextBoxFormat(pNewTxBxNd);
+        m_pObjArray[0].pFormat->SetTextBoxHandler(pNewTxBxNd);
     }
 
 
@@ -466,7 +466,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 
     // Store the textboxes in this vector for later use.
     std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
-    if (auto pTextBoxNode = pFormat->GetOtherTextBoxFormat())
+    if (auto pTextBoxNode = pFormat->GetTextBoxHandler())
     {
         auto pMasterObj = m_pObjArray[0].pObj;
 
@@ -498,10 +498,10 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         {
             if (pElem.first == rSave.pObj)
             {
-                auto pTmpTxBxNd = new SwTextBoxNode(rSave.pFormat);
+                auto pTmpTxBxNd = new SwTextBoxHandler(rSave.pFormat);
                 pTmpTxBxNd->AddTextBox(rSave.pObj, pElem.second);
-                pFormat->SetOtherTextBoxFormat(pTmpTxBxNd);
-                pElem.second->SetOtherTextBoxFormat(pTmpTxBxNd);
+                pFormat->SetTextBoxHandler(pTmpTxBxNd);
+                pElem.second->SetTextBoxHandler(pTmpTxBxNd);
                 break;
             }
         }
