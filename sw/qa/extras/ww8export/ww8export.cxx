@@ -843,8 +843,7 @@ DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
      * xray ThisComponent.DrawPage(0).BackColorTransparency
      */
 
-    sal_Int32 nValue = getProperty< sal_Int32 >(getShape(1), "BackColorTransparency");
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
+    CPPUNIT_ASSERT_EQUAL(Color(0x000064), getProperty< Color >(getShape(1), "BackColorTransparency"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
@@ -893,7 +892,7 @@ DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
     // The text and background color of the control shape was not correct.
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<form::validation::XValidatableFormComponent> xComponent(xControlShape->getControl(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(COL_WHITE, Color(ColorTransparency, getProperty<sal_uInt32>(xComponent, "BackgroundColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(xComponent, "BackgroundColor"));
     CPPUNIT_ASSERT_EQUAL(OUString("xxx"), xComponent->getCurrentValue().get<OUString>());
 }
 
@@ -1277,7 +1276,7 @@ DECLARE_WW8EXPORT_TEST(testCellBgColor, "cell-bg-color.odt")
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0xCC0000), Color(ColorTransparency, getProperty<sal_Int32>(xTable->getCellByName("A1"), "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xCC0000), getProperty<Color>(xTable->getCellByName("A1"), "BackColor"));
 }
 
 DECLARE_WW8EXPORT_TEST(testBnc636128, "bnc636128.doc")
@@ -1564,8 +1563,7 @@ DECLARE_WW8EXPORT_TEST(testTdf99474, "tdf99474.odt")
     uno::Reference<beans::XPropertySet> xStyle(
         getStyles("CharacterStyles")->getByName(charStyleName),
         uno::UNO_QUERY);
-    Color charColor(ColorTransparency, getProperty<util::Color>(xStyle, "CharColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_uInt32(COL_AUTO), sal_uInt32(charColor));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xStyle, "CharColor"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
