@@ -47,21 +47,24 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_description(BSTR* description)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        // #CHECK#
+        if (description == nullptr)
+            return E_INVALIDARG;
+        if (!pRXImg.is())
+            return E_FAIL;
 
-    // #CHECK#
-    if (description == nullptr)
-        return E_INVALIDARG;
-    if (!pRXImg.is())
+        OUString ouStr = GetXInterface()->getAccessibleImageDescription();
+        SysFreeString(*description);
+        *description = SysAllocString(o3tl::toW(ouStr.getStr()));
+
+        return S_OK;
+    }
+    catch (...)
+    {
         return E_FAIL;
-
-    OUString ouStr = GetXInterface()->getAccessibleImageDescription();
-    SysFreeString(*description);
-    *description = SysAllocString(o3tl::toW(ouStr.getStr()));
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
+    }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::get_imagePosition(
@@ -88,26 +91,29 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccImage::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        CUNOXWrapper::put_XInterface(pXInterface);
+        //special query.
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
 
-    CUNOXWrapper::put_XInterface(pXInterface);
-    //special query.
-    if (pUNOInterface == nullptr)
-        return E_FAIL;
-
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if (!pRContext.is())
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        if (!pRContext.is())
+        {
+            return E_FAIL;
+        }
+        Reference<XAccessibleImage> pRXI(pRContext, UNO_QUERY);
+        if (!pRXI.is())
+            pRXImg = nullptr;
+        else
+            pRXImg = pRXI.get();
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    Reference<XAccessibleImage> pRXI(pRContext, UNO_QUERY);
-    if (!pRXI.is())
-        pRXImg = nullptr;
-    else
-        pRXImg = pRXI.get();
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
