@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18a295c4_27b6f548",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-23T08:21:28Z",
+      "side": 1,
+      "message": "Fun, looks like today\u0027s Word doesn\u0027t provide UI to set these custom values, but indeed they can be specified in RTF. (And then probably also DOC, but that may not be interesting for you currently.)\n\nMakes sense to me.",
+      "revId": "f2e33855f8c0dc3cf4fe8a9847ee64bba889be24",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
