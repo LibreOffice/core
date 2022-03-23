@@ -35,6 +35,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfb98e59_f9e043d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-03-23T15:18:48Z",
+      "side": 1,
+      "message": "I work at a slow pace and have no problem with others taking their time.",
+      "parentUuid": "51a2d05d_09f07ca5",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "520b10e5_27a0fe4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-03-23T15:18:48Z",
+      "side": 1,
+      "message": "Hi Eike,\n\nEnjoy your vacation! ",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4856f1eb_7f909c6a",
@@ -48,6 +83,30 @@
       "writtenOn": "2022-03-22T21:54:08Z",
       "side": 1,
       "message": "typo: return",
+      "range": {
+        "startLine": 3391,
+        "startChar": 70,
+        "endLine": 3391,
+        "endChar": 76
+      },
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f5b5382_81c331c6",
+        "filename": "sc/inc/scfuncs.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 3391,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-03-23T15:18:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4856f1eb_7f909c6a",
       "range": {
         "startLine": 3391,
         "startChar": 70,
@@ -77,6 +136,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "48736421_9daa571d",
+        "filename": "sc/qa/unit/data/functions/spreadsheet/fods/xlookup.fods",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-03-23T15:18:48Z",
+      "side": 1,
+      "message": "Correct, the document is definitively not the final one and I gave no attention to number formats and locales. Once I\u0027m confident all/most is finished, I wil create a new document with minimum overhead and en-US locale.\nThe current document is there just to show (possible) problems.",
+      "parentUuid": "9b565e30_05b7c0ae",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2ff764a0_eeeec8a0",
         "filename": "sc/source/core/data/funcdesc.cxx",
         "patchSetId": 3
@@ -88,6 +165,24 @@
       "writtenOn": "2022-03-22T21:54:08Z",
       "side": 1,
       "message": "The definitions here must be in the same order as the numeric opcode assignments in include/formula/compiler.hxx so this would have to go after the HYPERLINK function. See comment above this array at line 405.",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "244acd59_8741b13c",
+        "filename": "sc/source/core/data/funcdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-03-23T15:18:48Z",
+      "side": 1,
+      "message": "I missed that comment. One of my problems has now been solved, with \u0027only\u0027 wildcards and matrix problems remaining.",
+      "parentUuid": "2ff764a0_eeeec8a0",
       "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
