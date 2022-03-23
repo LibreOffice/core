@@ -224,6 +224,7 @@ public:
     void WriteConnectorConnections( EscherConnectorListEntry& rConnectorEntry, sal_Int32 nStartID, sal_Int32 nEndID );
 
     bool WriteCharColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
+    bool WriteFillColor(const css::uno::Reference<css::beans::XPropertySet>& xPropertySet);
 
     void WriteSolidFill( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteSolidFill( const OUString& sSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );
