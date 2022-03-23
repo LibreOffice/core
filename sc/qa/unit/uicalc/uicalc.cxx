@@ -195,6 +195,43 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     return pModelObj;
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf36387)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "1");
+    insertStringToCell(*pModelObj, "B1", "2");
+    insertStringToCell(*pModelObj, "C1", "3");
+    insertStringToCell(*pModelObj, "D1", "4");
+
+    // Save the document
+    utl::TempFile aTempFile = save(mxComponent, "calc8");
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Insert the reference to the external document
+    OUString aAndFormula = "=AND('" + aTempFile.GetURL() + "'#$Sheet1.A1:D1)";
+    insertStringToCell(*pModelObj, "A1", aAndFormula.toUtf8().getStr());
+
+    OUString aOrFormula = "=OR('" + aTempFile.GetURL() + "'#$Sheet1.A1:D1)";
+    insertStringToCell(*pModelObj, "B1", aOrFormula.toUtf8().getStr());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: TRUE
+    // - Actual  : Err:504
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(0, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(1, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
