@@ -919,46 +919,35 @@ sal_Int32 Array::GetHeight() const
     return GetRowPosition( mxImpl->mnHeight ) - GetRowPosition( 0 );
 }
 
-basegfx::B2DRange Array::GetCellRange( sal_Int32 nCol, sal_Int32 nRow, bool bExpandMerged ) const
+basegfx::B2DRange Array::GetCellRange( sal_Int32 nCol, sal_Int32 nRow ) const
 {
-    if(bExpandMerged)
+    // get the Range of the fully expanded cell (if merged)
+    const sal_Int32 nFirstCol(mxImpl->GetMergedFirstCol( nCol, nRow ));
+    const sal_Int32 nFirstRow(mxImpl->GetMergedFirstRow( nCol, nRow ));
+    const sal_Int32 nLastCol(mxImpl->GetMergedLastCol( nCol, nRow ));
+    const sal_Int32 nLastRow(mxImpl->GetMergedLastRow( nCol, nRow ));
+    const Point aPoint( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
+    const Size aSize( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
+    tools::Rectangle aRect(aPoint, aSize);
+
+    // adjust rectangle for partly visible merged cells
+    const Cell& rCell = CELL( nCol, nRow );
+
+    if( rCell.IsMerged() )
     {
-        // get the Range of the fully expanded cell (if merged)
-        const sal_Int32 nFirstCol(mxImpl->GetMergedFirstCol( nCol, nRow ));
-        const sal_Int32 nFirstRow(mxImpl->GetMergedFirstRow( nCol, nRow ));
-        const sal_Int32 nLastCol(mxImpl->GetMergedLastCol( nCol, nRow ));
-        const sal_Int32 nLastRow(mxImpl->GetMergedLastRow( nCol, nRow ));
-        const Point aPoint( GetColPosition( nFirstCol ), GetRowPosition( nFirstRow ) );
-        const Size aSize( GetColWidth( nFirstCol, nLastCol ) + 1, GetRowHeight( nFirstRow, nLastRow ) + 1 );
-        tools::Rectangle aRect(aPoint, aSize);
-
-        // adjust rectangle for partly visible merged cells
-        const Cell& rCell = CELL( nCol, nRow );
-
-        if( rCell.IsMerged() )
-        {
-            // not *sure* what exactly this is good for,
-            // it is just a hard set extension at merged cells,
-            // probably *should* be included in the above extended
-            // GetColPosition/GetColWidth already. This might be
-            // added due to GetColPosition/GetColWidth not working
-            // correctly over PageChanges (if used), but not sure.
-            aRect.AdjustLeft( -(rCell.mnAddLeft) );
-            aRect.AdjustRight(rCell.mnAddRight );
-            aRect.AdjustTop( -(rCell.mnAddTop) );
-            aRect.AdjustBottom(rCell.mnAddBottom );
-        }
-
-        return vcl::unotools::b2DRectangleFromRectangle(aRect);
+        // not *sure* what exactly this is good for,
+        // it is just a hard set extension at merged cells,
+        // probably *should* be included in the above extended
+        // GetColPosition/GetColWidth already. This might be
+        // added due to GetColPosition/GetColWidth not working
+        // correctly over PageChanges (if used), but not sure.
+        aRect.AdjustLeft( -(rCell.mnAddLeft) );
+        aRect.AdjustRight(rCell.mnAddRight );
+        aRect.AdjustTop( -(rCell.mnAddTop) );
+        aRect.AdjustBottom(rCell.mnAddBottom );
     }
-    else
-    {
-        const Point aPoint( GetColPosition( nCol ), GetRowPosition( nRow ) );
-        const Size aSize( GetColWidth( nCol, nCol ) + 1, GetRowHeight( nRow, nRow ) + 1 );
-        const tools::Rectangle aRect(aPoint, aSize);
 
-        return vcl::unotools::b2DRectangleFromRectangle(aRect);
-    }
+    return vcl::unotools::b2DRectangleFromRectangle(aRect);
 }
 
 // return output range of given row/col range in logical coordinates

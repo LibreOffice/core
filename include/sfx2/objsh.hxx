@@ -295,7 +295,7 @@ public:
      * @return true if the initialization is successful, false otherwise.
      */
     void                        DoInitUnitTest();
-    bool                        DoInitNew( SfxMedium* pMedium=nullptr );
+    bool                        DoInitNew();
     bool                        DoLoad( SfxMedium* pMedium );
     bool                        DoLoadExternal( SfxMedium* pMed );
     bool                        DoSave();
