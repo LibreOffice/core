@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ea70077_870dfe34",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 3937,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T08:10:30Z",
+      "side": 0,
+      "message": "This doesn\u0027t looks like normal \"X \u003c 0\" check used to correct the atan return value. First, it checks some \u003e\u003d pi/2, while it\u0027s impossible to have \u003e pi/2. Then, it checks the *return value*, while the atan-\u003eatan2 check should be against the x value.\n\nSo - being not familiar with the code: have you checked what happens at the +-pi/2 return values?",
+      "range": {
+        "startLine": 3934,
+        "startChar": 16,
+        "endLine": 3937,
+        "endChar": 39
+      },
+      "revId": "69656132a00491b96da3a898c350f11e9619da64",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
