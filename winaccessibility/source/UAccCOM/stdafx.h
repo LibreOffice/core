@@ -59,17 +59,6 @@ extern CComModule _Module;
 #undef OPAQUE
 
 
-#define ENTER_PROTECTED_BLOCK   \
-    try                         \
-    {
-
-#define LEAVE_PROTECTED_BLOCK   \
-    }                           \
-    catch(...)                  \
-    {                           \
-        return E_FAIL;          \
-    }
-
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 

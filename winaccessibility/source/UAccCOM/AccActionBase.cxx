@@ -60,7 +60,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long*
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try {
 
     // #CHECK#
     if( pRXAct.is() && nActions != nullptr )
@@ -72,7 +72,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::nActions(/*[out,retval]*/long*
 
     return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -84,7 +84,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actio
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try {
 
     if( pRXAct.is() )
     {
@@ -92,7 +92,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::doAction(/* [in] */ long actio
     }
     return E_FAIL;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -105,7 +105,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_description(long actionInd
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try {
 
     // #CHECK#
     if(description == nullptr)
@@ -123,7 +123,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_description(long actionInd
 
     return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_name( long, BSTR __RPC_FAR *)
@@ -154,7 +154,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_keyBinding(
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try {
 
     if( !keyBinding || !nBinding)
         return E_INVALIDARG;
@@ -185,7 +185,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::get_keyBinding(
     *nBinding = nCount;
     return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -197,7 +197,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterfa
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
+    try {
 
     CUNOXWrapper::put_XInterface(pXInterface);
 
@@ -215,7 +215,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccActionBase::put_XInterface(hyper pXInterfa
         pRXAct = pRXI.get();
     return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

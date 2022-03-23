@@ -187,10 +187,6 @@ short const UNO_STATES[] =
 
 using namespace com::sun::star::accessibility::AccessibleRole;
 
-#define ISDESTROY() \
-    if(m_isDestroy) \
-    return S_FALSE;
-
 
 AccObjectManagerAgent* CMAccessible::g_pAgent = nullptr;
 
@@ -253,8 +249,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdisp
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(ppdispParent == nullptr)
         {
@@ -278,7 +274,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accParent(IDispatch **ppdisp
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -290,8 +286,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChildCount(long *pcountCh
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pcountChildren == nullptr)
         {
@@ -310,7 +306,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChildCount(long *pcountCh
 
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -324,8 +320,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, I
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(ppdispChild == nullptr)
         {
@@ -348,7 +344,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accChild(VARIANT varChild, I
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -362,8 +358,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BS
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pszName == nullptr)
         {
@@ -387,7 +383,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accName(VARIANT varChild, BS
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -401,8 +397,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, B
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if( pszValue == nullptr )
         {
@@ -432,7 +428,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accValue(VARIANT varChild, B
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -446,8 +442,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varCh
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pszDescription == nullptr)
         {
@@ -479,7 +475,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accDescription(VARIANT varCh
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -493,8 +489,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VA
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarRole == nullptr)
         {
@@ -526,7 +522,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accRole(VARIANT varChild, VA
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -540,8 +536,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, V
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarState == nullptr)
         {
@@ -586,7 +582,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accState(VARIANT varChild, V
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -641,9 +637,9 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try {
 
-        ISDESTROY()
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pszKeyboardShortcut == nullptr)
         {
@@ -781,7 +777,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accKeyboardShortcut(VARIANT 
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -794,8 +790,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarChild == nullptr)
         {
@@ -822,7 +818,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accFocus(VARIANT *pvarChild)
         }
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -837,8 +833,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarCh
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarChildren == nullptr)
         {
@@ -871,7 +867,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_accSelection(VARIANT *pvarCh
         }
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -888,8 +884,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pxLeft == nullptr || pyTop == nullptr || pcxWidth == nullptr || pcyHeight == nullptr)
         {
@@ -932,7 +928,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accLocation(long *pxLeft, long *
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -946,8 +942,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarEndUpAt == nullptr)
         {
@@ -981,15 +977,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accNavigate(long navDir, VARIANT
         }
         return ret;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop, VARIANT *pvarChild)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarChild == nullptr)
         {
@@ -1036,7 +1032,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accHitTest(long xLeft, long yTop
         }
         return S_FALSE;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1063,8 +1059,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BS
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(varChild.vt==VT_I4)
         {
             if(varChild.lVal==CHILDID_SELF)
@@ -1083,7 +1079,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accName(VARIANT varChild, BS
         }
         return E_FAIL;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1097,8 +1093,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, B
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(varChild.vt==VT_I4)
         {
             if(varChild.lVal==CHILDID_SELF)
@@ -1117,7 +1113,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::put_accValue(VARIANT varChild, B
         }
         return E_FAIL;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1129,8 +1125,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC
 {
     // internal IMAccessible - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pszName == nullptr)
         {
@@ -1143,7 +1139,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccName(const OLECHAR __RPC
             return E_FAIL;
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1207,8 +1203,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RP
 {
     // internal IMAccessible - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pszAccValue == nullptr)
         {
@@ -1220,7 +1216,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccValue(const OLECHAR __RP
             return E_FAIL;
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1233,12 +1229,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccWindowHandle(HWND hwnd)
 {
     // internal IMAccessible - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         m_hwnd = hwnd;
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1250,8 +1246,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
 {
     // internal IMAccessible - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
 
         if(dChildID==CHILDID_SELF)
         {
@@ -1272,7 +1268,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_XAccFocus(long dChildID)
         }
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1492,8 +1488,8 @@ IMAccessible* CMAccessible::GetNavigateChildForDM(VARIANT varCur, short flags)
 HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarEndUpAt == nullptr)
         {
@@ -1516,7 +1512,7 @@ HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
         pvarEndUpAt->vt = VT_EMPTY;
         return E_FAIL;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1529,8 +1525,8 @@ HRESULT CMAccessible::GetFirstChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarEndUpAt == nullptr)
         {
@@ -1552,7 +1548,7 @@ HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
         pvarEndUpAt->vt = VT_EMPTY;
         return E_FAIL;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1565,8 +1561,8 @@ HRESULT CMAccessible::GetLastChild(VARIANT varStart,VARIANT* pvarEndUpAt)
 HRESULT CMAccessible::GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(varStart.vt != VT_I4)
         {
             pvarEndUpAt->vt = VT_EMPTY;
@@ -1588,7 +1584,7 @@ HRESULT CMAccessible::GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
         pvarEndUpAt->vt = VT_EMPTY;
         return E_FAIL;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1600,8 +1596,8 @@ HRESULT CMAccessible::GetNextSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pvarEndUpAt == nullptr)
         {
@@ -1628,7 +1624,7 @@ HRESULT CMAccessible::GetPreSibling(VARIANT varStart,VARIANT* pvarEndUpAt)
         pvarEndUpAt->vt = VT_EMPTY;
         return E_FAIL;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -1638,8 +1634,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
 
         // #CHECK#
         if(nRelations == nullptr)
@@ -1662,15 +1658,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nRelations( long __RPC_FAR *
         *nRelations = pRrelationSet->getRelationCount();
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relation( long relationIndex, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(relation == nullptr)
         {
@@ -1724,15 +1720,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relation( long relationIndex
 
         return E_FAIL;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relations( long, IAccessibleRelation __RPC_FAR *__RPC_FAR *relation, long __RPC_FAR *nRelations)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
 
         // #CHECK#
         if(relation == nullptr || nRelations == nullptr)
@@ -1785,20 +1781,20 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_relations( long, IAccessible
         *nRelations = nCount;
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::role(long __RPC_FAR *role)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try {
 
         (*role) = m_iRole;
 
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 
@@ -1808,7 +1804,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_nActions(long __RPC_FAR *nAc
 
     try
     {
-        ISDESTROY()
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(nActions == nullptr)
         {
@@ -1869,8 +1865,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(groupLevel == nullptr || similarItemsInGroup == nullptr || positionInGroup == nullptr)
         {
@@ -2038,7 +2034,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
         }
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_extendedStates(long, BSTR __RPC_FAR *__RPC_FAR *, long __RPC_FAR *)
@@ -2051,8 +2047,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_uniqueID(long __RPC_FAR *uni
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(uniqueID == nullptr)
         {
@@ -2061,15 +2057,15 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_uniqueID(long __RPC_FAR *uni
         *uniqueID = m_dChildID;
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_windowHandle(HWND __RPC_FAR *windowHandle)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(windowHandle == nullptr)
         {
@@ -2092,7 +2088,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_windowHandle(HWND __RPC_FAR 
         *windowHandle = nHwnd;
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2141,8 +2137,8 @@ Reference< XAccessibleSelection > CMAccessible::GetSelection()
 HRESULT CMAccessible::SelectChild(XAccessible* pItem)
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         XAccessibleContext* pParentContext = GetContextByXAcc(m_xAccessible.get());
         XAccessibleContext* pContext = GetContextByXAcc( pItem );
         if( pParentContext == nullptr || pContext == nullptr )
@@ -2155,7 +2151,7 @@ HRESULT CMAccessible::SelectChild(XAccessible* pItem)
         pRSelection->selectAccessibleChild( Index );
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2166,8 +2162,8 @@ HRESULT CMAccessible::SelectChild(XAccessible* pItem)
 HRESULT CMAccessible::DeSelectChild(XAccessible* pItem)
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         XAccessibleContext* pParentContext = GetContextByXAcc(m_xAccessible.get());
         ;
         XAccessibleContext* pContext = GetContextByXAcc( pItem );
@@ -2182,7 +2178,7 @@ HRESULT CMAccessible::DeSelectChild(XAccessible* pItem)
 
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2194,8 +2190,8 @@ HRESULT CMAccessible::DeSelectChild(XAccessible* pItem)
 HRESULT CMAccessible::SelectMultipleChidren( XAccessible** pItem,int size )
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pItem == nullptr)
         {
@@ -2207,7 +2203,7 @@ HRESULT CMAccessible::SelectMultipleChidren( XAccessible** pItem,int size )
         }
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2219,8 +2215,8 @@ HRESULT CMAccessible::SelectMultipleChidren( XAccessible** pItem,int size )
 HRESULT CMAccessible::DeSelectMultipleChildren( XAccessible** pItem,int size )
 {
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pItem == nullptr)
         {
@@ -2232,7 +2228,7 @@ HRESULT CMAccessible::DeSelectMultipleChildren( XAccessible** pItem,int size )
         }
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2267,8 +2263,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARI
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if( (flagsSelect&SELFLAG_ADDSELECTION) &&
             (SELFLAG_REMOVESELECTION&flagsSelect) )
             return E_INVALIDARG;
@@ -2352,7 +2348,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::accSelect(long flagsSelect, VARI
         pSelectAcc->Release();
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2395,8 +2391,8 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(pszDefaultAction == nullptr)
         {
@@ -2422,7 +2418,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::get_accDefaultActio
         }
         return S_FALSE;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2434,8 +2430,8 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if( varChild.vt != VT_I4 )
             return E_INVALIDARG;
         if (!m_xAction.is())
@@ -2457,7 +2453,7 @@ COM_DECLSPEC_NOTHROW HRESULT STDMETHODCALLTYPE CMAccessible::accDoDefaultAction(
             return E_FAIL;
         return pChild->accDoDefaultAction( varChild );
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /**
@@ -2469,8 +2465,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLE
 {
     // internal IMAccessible - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(szAction == nullptr)
         {
@@ -2480,7 +2476,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::Put_ActionDescription( const OLE
         m_pszActionDescription = SysAllocString( szAction );
         return S_OK;
 
-        LEAVE_PROTECTED_BLOCK
+        } catch(...) { return E_FAIL; }
 }
 
 bool CMAccessible::GetXInterfaceFromXAccessible(XAccessible* pXAcc, XInterface** ppXI, XInterfaceType eType)
@@ -2561,9 +2557,9 @@ static AggMapEntry g_CMAccessible_AggMap[] = {
 
 HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
 {
-    ENTER_PROTECTED_BLOCK
+    try {
 
-    ISDESTROY()
+    if (m_isDestroy) return S_FALSE;
     if (InlineIsEqualGUID(iid,IID_IAccIdentity) ||
         InlineIsEqualGUID(iid,IID_IStdMarshalInfo) ||
         InlineIsEqualGUID(iid,IID_IMarshal) ||
@@ -2615,7 +2611,7 @@ HRESULT WINAPI CMAccessible::SmartQI(void* /*pv*/, REFIID iid, void** ppvObject)
     }
     return E_FAIL;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 bool CMAccessible::get_IAccessibleFromXAccessible(XAccessible* pXAcc, IAccessible** ppIA)
@@ -2981,8 +2977,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RP
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-    ISDESTROY()
+    try {
+    if (m_isDestroy) return S_FALSE;
 
     if (!m_xContext.is())
         return E_FAIL;
@@ -3012,7 +3008,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_states(AccessibleStates __RP
     return S_OK;
 
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 // return the UNO roles
@@ -3040,8 +3036,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_localizedExtendedStates(long
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_indexInParent(long __RPC_FAR *accParentIndex)
 {
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         // #CHECK#
         if(accParentIndex == nullptr)
             return E_INVALIDARG;
@@ -3053,12 +3049,12 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_indexInParent(long __RPC_FAR
         return S_OK;
 
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_locale( IA2Locale __RPC_FAR *locale  )
 {
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(locale == nullptr)
             return E_INVALIDARG;
 
@@ -3072,57 +3068,57 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_locale( IA2Locale __RPC_FAR 
 
         return S_OK;
 
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appName(BSTR __RPC_FAR *name)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(name == nullptr)
             return E_INVALIDARG;
 
         *name = SysAllocString(OLESTR("Hannover"));
         return S_OK;
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_appVersion(BSTR __RPC_FAR *version)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(version == nullptr)
             return E_INVALIDARG;
         *version=SysAllocString(OLESTR("3.0"));
         return S_OK;
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_toolkitName(BSTR __RPC_FAR *name)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(name == nullptr)
             return E_INVALIDARG;
         *name = SysAllocString(OLESTR(" "));
         return S_OK;
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_toolkitVersion(BSTR __RPC_FAR *version)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-        ISDESTROY()
+    try {
+        if (m_isDestroy) return S_FALSE;
         if(version == nullptr)
             return E_INVALIDARG;
         *version = SysAllocString(OLESTR(" "));
         return S_OK;
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 
@@ -3130,8 +3126,8 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
-    ISDESTROY()
+    try {
+    if (m_isDestroy) return S_FALSE;
 
     if (!m_xAccessible.is())
         return E_FAIL;
@@ -3159,7 +3155,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_attributes(/*[out]*/ BSTR *p
 
         return S_OK;
     }
-    LEAVE_PROTECTED_BLOCK
+    } catch(...) { return E_FAIL; }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -48,21 +48,24 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_currentValue(VARIANT* currentVa
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        if (currentValue == nullptr)
+            return E_INVALIDARG;
+        if (!pRXVal.is())
+            return E_FAIL;
 
-    if (currentValue == nullptr)
-        return E_INVALIDARG;
-    if (!pRXVal.is())
+        // Get Any type value from UNO.
+        css::uno::Any anyVal = GetXInterface()->getCurrentValue();
+        // Convert Any to VARIANT.
+        CMAccessible::ConvertAnyToVariant(anyVal, currentValue);
+
+        return S_OK;
+    }
+    catch (...)
+    {
         return E_FAIL;
-
-    // Get Any type value from UNO.
-    css::uno::Any anyVal = GetXInterface()->getCurrentValue();
-    // Convert Any to VARIANT.
-    CMAccessible::ConvertAnyToVariant(anyVal, currentValue);
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
+    }
 }
 
 /**
@@ -75,74 +78,77 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::setCurrentValue(VARIANT value)
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        if (!pRXVal.is())
+            return E_FAIL;
 
-    if (!pRXVal.is())
+        HRESULT hRet = S_OK;
+        css::uno::Any anyVal;
+
+        // Set value according to value type.
+        switch (value.vt)
+        {
+            case VT_UI1:
+            {
+                anyVal <<= sal_Unicode(value.bVal);
+            }
+            break;
+
+            case VT_BOOL:
+            {
+                css::uno::Type typeInfo(TypeClass_BOOLEAN, "bool");
+                anyVal.setValue(&value.boolVal, typeInfo);
+            }
+            break;
+
+            case VT_I2:
+            {
+                css::uno::Type typeInfo(TypeClass_SHORT, "short");
+                anyVal.setValue(&value.iVal, typeInfo);
+            }
+            break;
+
+            case VT_I4:
+            {
+                css::uno::Type typeInfo(TypeClass_LONG, "long");
+                anyVal.setValue(&value.lVal, typeInfo);
+            }
+            break;
+
+            case VT_R4:
+            {
+                css::uno::Type typeInfo(TypeClass_FLOAT, "float");
+                anyVal.setValue(&value.fltVal, typeInfo);
+            }
+            break;
+
+            case VT_R8:
+            {
+                css::uno::Type typeInfo(TypeClass_DOUBLE, "double");
+                anyVal.setValue(&value.dblVal, typeInfo);
+            }
+            break;
+
+            default:
+            {
+                // Unsupported type conversion.
+                hRet = E_FAIL;
+            }
+            break;
+        }
+
+        if (hRet == S_OK)
+        {
+            hRet = pRXVal->setCurrentValue(anyVal) ? S_OK : E_FAIL;
+        }
+
+        return hRet;
+    }
+    catch (...)
+    {
         return E_FAIL;
-
-    HRESULT hRet = S_OK;
-    css::uno::Any anyVal;
-
-    // Set value according to value type.
-    switch (value.vt)
-    {
-        case VT_UI1:
-        {
-            anyVal <<= sal_Unicode(value.bVal);
-        }
-        break;
-
-        case VT_BOOL:
-        {
-            css::uno::Type typeInfo(TypeClass_BOOLEAN, "bool");
-            anyVal.setValue(&value.boolVal, typeInfo);
-        }
-        break;
-
-        case VT_I2:
-        {
-            css::uno::Type typeInfo(TypeClass_SHORT, "short");
-            anyVal.setValue(&value.iVal, typeInfo);
-        }
-        break;
-
-        case VT_I4:
-        {
-            css::uno::Type typeInfo(TypeClass_LONG, "long");
-            anyVal.setValue(&value.lVal, typeInfo);
-        }
-        break;
-
-        case VT_R4:
-        {
-            css::uno::Type typeInfo(TypeClass_FLOAT, "float");
-            anyVal.setValue(&value.fltVal, typeInfo);
-        }
-        break;
-
-        case VT_R8:
-        {
-            css::uno::Type typeInfo(TypeClass_DOUBLE, "double");
-            anyVal.setValue(&value.dblVal, typeInfo);
-        }
-        break;
-
-        default:
-        {
-            // Unsupported type conversion.
-            hRet = E_FAIL;
-        }
-        break;
     }
-
-    if (hRet == S_OK)
-    {
-        hRet = pRXVal->setCurrentValue(anyVal) ? S_OK : E_FAIL;
-    }
-
-    return hRet;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /**
@@ -154,21 +160,24 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_maximumValue(VARIANT* maximumVa
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        if (maximumValue == nullptr)
+            return E_INVALIDARG;
+        if (!pRXVal.is())
+            return E_FAIL;
 
-    if (maximumValue == nullptr)
-        return E_INVALIDARG;
-    if (!pRXVal.is())
+        // Get Any type value from UNO.
+        css::uno::Any anyVal = GetXInterface()->getMaximumValue();
+        // Convert Any to VARIANT.
+        CMAccessible::ConvertAnyToVariant(anyVal, maximumValue);
+
+        return S_OK;
+    }
+    catch (...)
+    {
         return E_FAIL;
-
-    // Get Any type value from UNO.
-    css::uno::Any anyVal = GetXInterface()->getMaximumValue();
-    // Convert Any to VARIANT.
-    CMAccessible::ConvertAnyToVariant(anyVal, maximumValue);
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
+    }
 }
 
 /**
@@ -180,21 +189,24 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::get_minimumValue(VARIANT* minimumVa
 {
     SolarMutexGuard g;
 
-    ENTER_PROTECTED_BLOCK
+    try
+    {
+        if (minimumValue == nullptr)
+            return E_FAIL;
+        if (!pRXVal.is())
+            return E_FAIL;
 
-    if (minimumValue == nullptr)
+        // Get Any type value from UNO.
+        css::uno::Any anyVal = GetXInterface()->getMinimumValue();
+        // Convert Any to VARIANT.
+        CMAccessible::ConvertAnyToVariant(anyVal, minimumValue);
+
+        return S_OK;
+    }
+    catch (...)
+    {
         return E_FAIL;
-    if (!pRXVal.is())
-        return E_FAIL;
-
-    // Get Any type value from UNO.
-    css::uno::Any anyVal = GetXInterface()->getMinimumValue();
-    // Convert Any to VARIANT.
-    CMAccessible::ConvertAnyToVariant(anyVal, minimumValue);
-
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
+    }
 }
 
 /**
@@ -206,25 +218,28 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CAccValue::put_XInterface(hyper pXInterface)
 {
     // internal IUNOXWrapper - no mutex meeded
 
-    ENTER_PROTECTED_BLOCK
-
-    CUNOXWrapper::put_XInterface(pXInterface);
-    //special query.
-    if (pUNOInterface == nullptr)
-        return E_FAIL;
-    Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
-    if (!pRContext.is())
+    try
+    {
+        CUNOXWrapper::put_XInterface(pXInterface);
+        //special query.
+        if (pUNOInterface == nullptr)
+            return E_FAIL;
+        Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
+        if (!pRContext.is())
+        {
+            return E_FAIL;
+        }
+        Reference<XAccessibleValue> pRXI(pRContext, UNO_QUERY);
+        if (!pRXI.is())
+            pRXVal = nullptr;
+        else
+            pRXVal = pRXI.get();
+        return S_OK;
+    }
+    catch (...)
     {
         return E_FAIL;
     }
-    Reference<XAccessibleValue> pRXI(pRContext, UNO_QUERY);
-    if (!pRXI.is())
-        pRXVal = nullptr;
-    else
-        pRXVal = pRXI.get();
-    return S_OK;
-
-    LEAVE_PROTECTED_BLOCK
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
