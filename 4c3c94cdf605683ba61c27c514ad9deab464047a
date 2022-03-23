@@ -33,6 +33,24 @@
       "message": "yeah, using the service name in the API is not great. I would just use a string parameter, which can be one of a small list of predefined names, and then map that name to a service name internally. That way, we can at least change service names later without breaking extensions.",
       "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3760a7a_2ab24879",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T09:18:14Z",
+      "side": 1,
+      "message": "I suppose it depends on your task; for the sake of e.g. tdf#76131, what you implement is adequate, but I don\u0027t know what your customer wants to do with the API. Still, I don\u0027t think there\u0027s some better way, since you are bound to the registered app ids anyway, and they match document service (or maybe loaded component?) nicely.\n\nOtherwise, I suppose sberg is the expert who can review API syntax 😊",
+      "parentUuid": "1c7c3f46_a2dc0ba9",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
