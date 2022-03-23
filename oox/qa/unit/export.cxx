@@ -407,7 +407,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146690_endParagraphRunPropertiesNewLinesTextSi
 
     std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
     xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
-    // Then make sure the shape text color is a scheme color:
+    // Make sure the text size is exported correctly:
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 500
     // - Actual  : 1800
