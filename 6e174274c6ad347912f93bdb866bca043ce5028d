@@ -16,6 +16,24 @@
       "message": "This would be OK without casting integer arguments to double explicitly. The cast will happen implicitly, so please remove the casts.",
       "revId": "6e174274c6ad347912f93bdb866bca043ce5028d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a0d7dbf_f5d296f3",
+        "filename": "lotuswordpro/source/filter/lwpsdwrect.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1003492
+      },
+      "writtenOn": "2022-03-23T17:49:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c23ed76d_3b41f25e",
+      "revId": "6e174274c6ad347912f93bdb866bca043ce5028d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
