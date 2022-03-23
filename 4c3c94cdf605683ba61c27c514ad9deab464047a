@@ -330,6 +330,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6d99a540_0208af07",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T13:13:40Z",
+      "side": 1,
+      "message": "still, how are multiple arguments supposed to be encoded in the single string?",
+      "parentUuid": "ca8812a4_4d550896",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf60904f_4b6dc8fe",
         "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
         "patchSetId": 12
@@ -465,6 +483,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c8c4b90_2506b55b",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T13:13:40Z",
+      "side": 1,
+      "message": "When I look at \u003chttps://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nn-shobjidl_core-icustomdestinationlist\u003e (and if I understand it correctly), I think it offers a way to call AppendCategory without a TOCTOU race:\n(1) Call BeginList, note the [out] ppv \"collection of IShellItem and IShellLink objects that represent the removed items\".\n(2) Filter those removed items out of the list to pass to AppendCategory.\n(3) Call AppendCategory, which then cannot fail because it \"attempts to add an item that is in the removed destinations list retrieved by the call to BeginList that initiated the session\".\nWhat the proposed UNO API does, though, is:\n(1) Call GetRemovedDestinations.\n(2) Filter those removed items out of the list to pass to AppendCategory.\n(3) Call BeginList.\n(4) Call AppendCategory, but which can fail because the list retreived by BeginList in (3) can be different from the list retrieved iby GetRemovedDestinations in (1) (if some other entity removes items from the Jump List UI in the meantime).",
+      "parentUuid": "9b14f5c7_a25d108b",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 75
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fcace964_701a67c7",
         "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
         "patchSetId": 12
@@ -535,6 +577,30 @@
       "side": 1,
       "message": "It does mention IllegalArgumentException (lines 42-43).",
       "parentUuid": "f4aea95f_32277a7c",
+      "range": {
+        "startLine": 53,
+        "startChar": 25,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffb12536_4ff6d166",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T13:13:40Z",
+      "side": 1,
+      "message": "but not as a response for this",
+      "parentUuid": "b4136296_3ff06c70",
       "range": {
         "startLine": 53,
         "startChar": 25,
@@ -792,6 +858,30 @@
       "side": 1,
       "message": "\u003e \"The mutex reference passed to the constructor has to outlive the constructed instance.\" (include/cppuhelper/compbase.hxx); i.e., use some MutexBase helper\n\nI don\u0027t understand exactly what that means.\n\n\u003e (nitpick: you can use the injected short base class name \"WeakComponentImplHelper\" without \u003c...\u003e here)\n\nDone.",
       "parentUuid": "6e5d4607_83c8f132",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 97
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84ffa1cf_fe4cae1a",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T13:13:40Z",
+      "side": 1,
+      "message": "\u003e \u003e \"The mutex reference passed to the constructor has to outlive the constructed instance.\" (include/cppuhelper/compbase.hxx); i.e., use some MutexBase helper\n\u003e \n\u003e I don\u0027t understand exactly what that means.\n\nThe WeakComponentImplHelper base class lives longer than the m_aMutex non-static data member, but it needs to be the other way around.  (Hence the mutex must come from another base class that is listed before the WeakComponentImplHelper base class, thus lives longer.)\n\n\u003e \u003e (nitpick: you can use the injected short base class name \"WeakComponentImplHelper\" without \u003c...\u003e here)\n\u003e \n\u003e Done.\n\nno :)",
+      "parentUuid": "20d5d0ee_98e9b669",
       "range": {
         "startLine": 42,
         "startChar": 6,

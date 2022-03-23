@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25269eae_94bfbdc6",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 14
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-23T13:13:40Z",
+      "side": 1,
+      "message": "\"*GetRemovedDestinations* failed\"?",
+      "range": {
+        "startLine": 210,
+        "startChar": 23,
+        "endLine": 210,
+        "endChar": 32
+      },
+      "revId": "2ffb88075bc3e9d5896dad96fdcbda51ae924ebd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
