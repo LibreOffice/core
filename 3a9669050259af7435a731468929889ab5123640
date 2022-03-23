@@ -125,6 +125,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5f22969_7f47c391",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-23T14:15:33Z",
+      "side": 1,
+      "message": "It\u0027s good to replace the uses of sal_uLong there as well. The task is then to identify what are proper integer types to do so.\n\nLet me give an example on what I would do for the one in `editeng/source/outliner/outliner.cxx`:\n\nThis is currently:\n\n    sal_uLong nScaledLineHeight \u003d aStdFont.GetFontSize().Height();\n\nThe value assigned to `nScaledLineHeight` is the result of calling `aStdFont.GetFontSize().Height()`.\n\nLet\u0027s see what integer type that method returns: This is a call to `Size::Height()`, which is defined here:\nhttps://git.libreoffice.org/core/+/66dea2b9ba257c8e3e1baec9adbc37afd0eca910/include/tools/gen.hxx#213\n(If you\u0027re using an IDE, you can probably use some \"Jump to Definition\" functionality or so to get there.)\n\nThe method is defined like this:\n\n    constexpr tools::Long  Height() const { return nB; }\n\nThis means, the method returns a `tools::Long`.\n\nTherefore, `tools::long` is what looks like a good candidate to use for the type of `nScaledLineHeight` instead of `sal_uLong`.\n\nNow, let\u0027s double-check what the value is used for. Some multiplication and division is done in the two lines below. That is fine.\n\nThen it is passed in this call a few lines further down:\n\n    aBulletFont.SetFontSize( Size( 0, nScaledLineHeight ) );\n\ni.e. it is passed as the second parameter to the `Size` ctor.\nThat one is defined here: https://git.libreoffice.org/core/+/66dea2b9ba257c8e3e1baec9adbc37afd0eca910/include/tools/gen.hxx#210\n\n    constexpr Size( tools::Long nWidth, tools::Long nHeight ) : Pair( nWidth, nHeight ) {}\n\nIt takes a `tool::Long` as a second parameter.\n\nTherefore, using `tool::Long` is ideal. The type of `nScaledLineHeight` can be changed to `tools::Long` (instead of using `sal_uLong`).\n\nIs the idea behind that clear? Does this also give enough information to find a better type for the case in `editeng/source/editeng/impedit4.cxx`?",
+      "parentUuid": "1e9df38a_c990b1b1",
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b74ec32_e85973c3",
