@@ -143,6 +143,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbebdc7d_bc385053",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-23T15:31:08Z",
+      "side": 1,
+      "message": "Thank you Sir for such good and elaborated explanation.I am looking forward to it.",
+      "parentUuid": "d5f22969_7f47c391",
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b74ec32_e85973c3",
