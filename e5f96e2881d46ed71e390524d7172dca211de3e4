@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fbefcda8_82aef727",
+        "filename": "writerfilter/source/rtftok/rtfdispatchvalue.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T08:38:35Z",
+      "side": 1,
+      "message": "CellColorHandler::getProperties seems to handle some \"Code from binary word filter (the values are out of 1000)\", which likely is a better match; and some values there seem to relate to things like \"Dark Diagonal Cross\", etc. RTF must be close to the old binary format feature-wise - it was created as \"open\"/\"human-reradable\" counterpart to the binary format. Should that code in binary filter be found and reused maybe?\n\n[1] https://opengrok.libreoffice.org/xref/core/writerfilter/source/dmapper/CellColorHandler.cxx?r\u003d30bd841e#151",
+      "revId": "e5f96e2881d46ed71e390524d7172dca211de3e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
