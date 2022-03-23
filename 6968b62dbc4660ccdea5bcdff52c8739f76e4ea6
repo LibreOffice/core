@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcdf14e8_cae1a585",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-23T09:52:36Z",
+      "side": 1,
+      "message": "Hi Gülşah,\nAny reason why this backport is needed at this point ? LibreOffice 7.2 has just one minor release left \u003chttps://wiki.documentfoundation.org/ReleasePlan/7.2\u003e and only importart fixes should be backported",
+      "revId": "6968b62dbc4660ccdea5bcdff52c8739f76e4ea6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
