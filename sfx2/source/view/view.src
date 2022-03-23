@@ -162,4 +162,14 @@ String STR_SIGNATURE_SHOW
     Text[ en-US ] = "Show Signatures";
 };
 
+String STR_REFRESH_MASTER_PASSWORD
+{
+    Text[ en-US ] = "The master password is stored in an outdated format, you should refresh it";
+};
+
+String STR_REFRESH_PASSWORD
+{
+    Text[ en-US ] = "Refresh Password";
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -122,6 +122,8 @@
 #define STR_SIGNATURE_NOTVALIDATED          (RID_SFX_START+142)
 #define STR_SIGNATURE_PARTIAL_OK            (RID_SFX_START+143)
 #define STR_SIGNATURE_OK                    (RID_SFX_START+144)
+#define STR_REFRESH_MASTER_PASSWORD         (RID_SFX_START+145)
+#define STR_REFRESH_PASSWORD                (RID_SFX_START+146)
 
 // group ids
 
