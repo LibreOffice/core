@@ -599,9 +599,9 @@ bool SwStdFontTabPage::FillItemSet( SfxItemSet* )
 
     bool bStandardHeightChanged = m_xStandardHeightLB->get_value_changed_from_saved();
     bool bTitleHeightChanged = m_xTitleHeightLB->get_value_changed_from_saved();
-    bool bListHeightChanged = m_xListHeightLB->get_value_changed_from_saved() && !m_bListHeightDefault;
-    bool bLabelHeightChanged = m_xLabelHeightLB->get_value_changed_from_saved() && !m_bLabelHeightDefault;
-    bool bIndexHeightChanged = m_xIndexHeightLB->get_value_changed_from_saved() && !m_bIndexHeightDefault;
+    bool bListHeightChanged = m_xListHeightLB->get_value_changed_from_saved();
+    bool bLabelHeightChanged = m_xLabelHeightLB->get_value_changed_from_saved();
+    bool bIndexHeightChanged = m_xIndexHeightLB->get_value_changed_from_saved();
 
     m_pFontConfig->SetFontStandard(sStandard, m_nFontGroup);
     m_pFontConfig->SetFontOutline(sTitle, m_nFontGroup);
