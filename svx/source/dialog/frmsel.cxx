@@ -424,7 +424,7 @@ void FrameSelectorImpl::InitBorderGeometry()
     {
         for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
         {
-            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
             const tools::Rectangle aRect(
                 basegfx::fround(aCellRange.getMinX()), basegfx::fround(aCellRange.getMinY()),
                 basegfx::fround(aCellRange.getMaxX()), basegfx::fround(aCellRange.getMaxY()));
@@ -484,7 +484,7 @@ void FrameSelectorImpl::InitBorderGeometry()
         for( nRow = 0, nRows = maArray.GetRowCount(); nRow < nRows; ++nRow )
         {
             // the usable area between horizontal/vertical frame borders of current quadrant
-            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow, true ));
+            const basegfx::B2DRange aCellRange(maArray.GetCellRange( nCol, nRow ));
             const tools::Rectangle aRect(
                 basegfx::fround(aCellRange.getMinX()) + nClV + 1, basegfx::fround(aCellRange.getMinY()) + nClH + 1,
                 basegfx::fround(aCellRange.getMaxX()) - nClV + 1, basegfx::fround(aCellRange.getMaxY()) - nClH + 1);

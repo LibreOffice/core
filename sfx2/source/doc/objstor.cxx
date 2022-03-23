@@ -437,7 +437,7 @@ void SfxObjectShell::DoInitUnitTest()
     pMedium = new SfxMedium;
 }
 
-bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
+bool SfxObjectShell::DoInitNew()
 /*  [Description]
 
     This from SvPersist inherited virtual method is called to initialize
@@ -460,15 +460,11 @@ bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 
 {
     ModifyBlocker_Impl aBlock( this );
-    pMedium = pMed;
-    if ( !pMedium )
-    {
-        pMedium = new SfxMedium;
-    }
+    pMedium = new SfxMedium;
 
     pMedium->CanDisposeStorage_Impl( true );
 
-    if ( InitNew( pMed ? pMed->GetStorage() : uno::Reference < embed::XStorage >() ) )
+    if ( InitNew( nullptr ) )
     {
         // empty documents always get their macros from the user, so there is no reason to restrict access
         pImpl->aMacroMode.allowMacroExecution();
