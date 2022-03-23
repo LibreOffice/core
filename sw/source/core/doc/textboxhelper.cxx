@@ -548,7 +548,7 @@ uno::Any SwTextBoxHelper::queryInterface(const SwFrameFormat* pShape, const uno:
     return aRet;
 }
 
-tools::Rectangle SwTextBoxHelper::getTextRectangle(SdrObject* pShape, bool bAbsolute)
+tools::Rectangle SwTextBoxHelper::getTextRectangle(SdrObject* pShape)
 {
     tools::Rectangle aRet;
     aRet.SetEmpty();
@@ -576,7 +576,7 @@ tools::Rectangle SwTextBoxHelper::getTextRectangle(SdrObject* pShape, bool bAbso
         aRet = pShape->GetCurrentBoundRect();
     }
 
-    if (!bAbsolute && pShape)
+    if (!pShape)
     {
         // Relative, so count the logic (reference) rectangle, see the EnhancedCustomShape2d ctor.
         Point aPoint(pShape->GetSnapRect().Center());
@@ -977,8 +977,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, sal_uInt16 nWID, sal_u
     if (bAdjustX || bAdjustY || bAdjustSize)
     {
         changeAnchor(pShape, pObj);
-        tools::Rectangle aRect
-            = getTextRectangle(pObj ? pObj : pShape->FindRealSdrObject(), /*bAbsolute=*/false);
+        tools::Rectangle aRect = getTextRectangle(pObj ? pObj : pShape->FindRealSdrObject());
         if (!aRect.IsEmpty())
         {
             if (bAdjustX || bAdjustY)
@@ -1094,8 +1093,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     return;
                 SwFormatVertOrient aOrient(pItem->StaticWhichCast(RES_VERT_ORIENT));
 
-                tools::Rectangle aRect = getTextRectangle(pObj ? pObj : rShape.FindRealSdrObject(),
-                                                          /*bAbsolute=*/false);
+                tools::Rectangle aRect = getTextRectangle(pObj ? pObj : rShape.FindRealSdrObject());
                 if (!aRect.IsEmpty())
                     aOrient.SetPos(aOrient.GetPos() + aRect.Top());
 
@@ -1124,8 +1122,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                     return;
                 SwFormatHoriOrient aOrient(pItem->StaticWhichCast(RES_HORI_ORIENT));
 
-                tools::Rectangle aRect = getTextRectangle(pObj ? pObj : rShape.FindRealSdrObject(),
-                                                          /*bAbsolute=*/false);
+                tools::Rectangle aRect = getTextRectangle(pObj ? pObj : rShape.FindRealSdrObject());
                 if (!aRect.IsEmpty())
                     aOrient.SetPos(aOrient.GetPos() + aRect.Left());
 
@@ -1145,8 +1142,7 @@ void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& 
                 SwFormatHoriOrient aHoriOrient(rShape.GetHoriOrient());
                 SwFormatFrameSize aSize(pFormat->GetFrameSize());
 
-                tools::Rectangle aRect = getTextRectangle(pObj ? pObj : rShape.FindRealSdrObject(),
-                                                          /*bAbsolute=*/false);
+                tools::Rectangle aRect = getTextRectangle(pObj ? pObj : rShape.FindRealSdrObject());
                 if (!aRect.IsEmpty())
                 {
                     if (!bInlineAnchored)
@@ -1341,8 +1337,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
         if (pShape->GetAnchor().GetAnchorId() == RndStdIds::FLY_AS_CHAR)
         {
             // Get the text area of the shape
-            tools::Rectangle aRect(
-                getTextRectangle(pObj ? pObj : pShape->FindRealSdrObject(), false));
+            tools::Rectangle aRect(getTextRectangle(pObj ? pObj : pShape->FindRealSdrObject()));
 
             // Get the left spacing of the text area of the shape
             auto nLeftSpace = pShape->GetLRSpace().GetLeft();
@@ -1421,8 +1416,7 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
         else
         {
             // Text area of the shape
-            tools::Rectangle aRect(
-                getTextRectangle(pObj ? pObj : pShape->FindRealSdrObject(), false));
+            tools::Rectangle aRect(getTextRectangle(pObj ? pObj : pShape->FindRealSdrObject()));
 
             // X Offset of the shape spacing
             auto nLeftSpace = pShape->GetLRSpace().GetLeft();
@@ -1514,7 +1508,7 @@ bool SwTextBoxHelper::syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj)
 
     if (auto pTextBox = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj))
     {
-        const auto& rSize = getTextRectangle(pObj, false).GetSize();
+        const auto& rSize = getTextRectangle(pObj).GetSize();
         if (!rSize.IsEmpty())
         {
             SwFormatFrameSize aSize(pTextBox->GetFrameSize());

@@ -42,7 +42,7 @@ QtSvpSurface::QtSvpSurface(const CairoSurfaceSharedPtr& pSurface)
 
 QtSvpSurface::QtSvpSurface(const QtSvpGraphics* pGraphics, int x, int y, int width, int height)
     : m_pGraphics(pGraphics)
-    , m_pCairoContext(pGraphics->getCairoContext(false))
+    , m_pCairoContext(pGraphics->getCairoContext())
 {
     cairo_surface_t* surface = cairo_get_target(m_pCairoContext);
     m_pSurface.reset(cairo_surface_create_for_rectangle(surface, x, y, width, height),

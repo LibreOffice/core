@@ -495,59 +495,15 @@ void ScColumn::AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1,
     sc::ProcessFormula(it, maCells, nRow1, nRow2, aFunc);
 }
 
-void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
-        std::vector<SCROW>* pNewSharedRows )
+void ScColumn::DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 )
 {
     sc::CellStoreType::position_type aPos = maCells.position(nRow1);
     sc::CellStoreType::iterator it = aPos.first;
-
-    bool bLowerSplitOff = false;
-    if (pNewSharedRows && !GetDoc().IsClipOrUndo())
-    {
-        const ScFormulaCell* pFC = sc::SharedFormulaUtil::getSharedTopFormulaCell(aPos);
-        if (pFC)
-        {
-            const SCROW nTopRow = pFC->GetSharedTopRow();
-            const SCROW nBotRow = nTopRow + pFC->GetSharedLength() - 1;
-            // nTopRow <= nRow1 <= nBotRow, because otherwise pFC would not exist.
-            if (nTopRow < nRow1)
-            {
-                // Upper part will be split off.
-                pNewSharedRows->push_back(nTopRow);
-                pNewSharedRows->push_back(nRow1 - 1);
-            }
-            if (nRow2 < nBotRow)
-            {
-                // Lower part will be split off.
-                pNewSharedRows->push_back(nRow2 + 1);
-                pNewSharedRows->push_back(nBotRow);
-                bLowerSplitOff = true;
-            }
-        }
-    }
 
     // Split formula grouping at the top and bottom boundaries.
     sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, &rCxt);
     if (GetDoc().ValidRow(nRow2+1))
     {
-        if (pNewSharedRows && !bLowerSplitOff && !GetDoc().IsClipOrUndo())
-        {
-            sc::CellStoreType::position_type aPos2 = maCells.position(aPos.first, nRow2);
-            const ScFormulaCell* pFC = sc::SharedFormulaUtil::getSharedTopFormulaCell(aPos2);
-            if (pFC)
-            {
-                const SCROW nTopRow = pFC->GetSharedTopRow();
-                const SCROW nBotRow = nTopRow + pFC->GetSharedLength() - 1;
-                // nRow1 < nTopRow <= nRow2 < nBotRow
-                if (nRow2 < nBotRow)
-                {
-                    // Lower part will be split off.
-                    pNewSharedRows->push_back(nRow2 + 1);
-                    pNewSharedRows->push_back(nBotRow);
-                }
-            }
-        }
-
         aPos = maCells.position(it, nRow2+1);
         sc::SharedFormulaUtil::splitFormulaCellGroup(aPos, &rCxt);
     }

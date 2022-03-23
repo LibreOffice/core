@@ -494,17 +494,14 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
     m_aStyleList.FilterSelect(nActFilter, true);
 }
 
-void SfxCommonTemplateDialog_Impl::IsUpdate(bool bDoUpdate, StyleList&)
+void SfxCommonTemplateDialog_Impl::IsUpdate(StyleList&)
 {
     SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
     SfxObjectShell* pDocShell = pViewFrame->GetObjectShell();
-    if (bDoUpdate)
+    nActFilter = static_cast<sal_uInt16>(LoadFactoryStyleFilter_Hdl(pDocShell));
+    if (0xffff == nActFilter)
     {
-        nActFilter = static_cast<sal_uInt16>(LoadFactoryStyleFilter_Hdl(pDocShell));
-        if (0xffff == nActFilter)
-        {
-            nActFilter = pDocShell->GetAutoStyleFilterIndex();
-        }
+        nActFilter = pDocShell->GetAutoStyleFilterIndex();
     }
 }
 

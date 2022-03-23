@@ -105,14 +105,14 @@ public:
     virtual css::uno::Any   GetNativeSurfaceHandle(cairo::SurfaceSharedPtr& rSurface, const basegfx::B2ISize& rSize) const override;
 #endif // ENABLE_CAIRO_CANVAS
 
-    cairo_t* getCairoContext(bool bXorModeAllowed) const
+    cairo_t* getCairoContext() const
     {
-        return m_aCairoCommon.getCairoContext(bXorModeAllowed, getAntiAlias());
+        return m_aCairoCommon.getCairoContext(/*bXorModeAllowed*/false, getAntiAlias());
     }
 
-    void releaseCairoContext(cairo_t* cr, bool bXorModeAllowed, const basegfx::B2DRange& rExtents) const
+    void releaseCairoContext(cairo_t* cr, const basegfx::B2DRange& rExtents) const
     {
-        return m_aCairoCommon.releaseCairoContext(cr, bXorModeAllowed, rExtents);
+        return m_aCairoCommon.releaseCairoContext(cr, /*bXorModeAllowed*/false, rExtents);
     }
 
     void clipRegion(cairo_t* cr)

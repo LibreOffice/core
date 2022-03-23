@@ -1010,7 +1010,7 @@ public:
 };
 
 OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
-                                         const OUString& sOldName, bool bIsUpperName)
+                                         const OUString& sOldName)
 {
     sal_Int32 nLastIndex = sOldName.lastIndexOf('_') + 1;
     sal_Int32 nOldNumber = 1;
@@ -1034,8 +1034,7 @@ OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
     do
     {
         sNewName = sOldName.subView(0, nLastIndex) + OUString::number(++nOldNumber);
-    } while ((bIsUpperName ? namedDBs.findByUpperName(sNewName) : namedDBs.findByName(sNewName))
-             != nullptr);
+    } while (namedDBs.findByName(sNewName) != nullptr);
     return sNewName;
 }
 
@@ -1553,7 +1552,7 @@ void ScDBCollection::CopyToTable(SCTAB nOldPos, SCTAB nNewPos)
             return;
 
         OUString newName
-            = lcl_IncrementNumberInNamedRange(getNamedDBs(), rxNamedDB->GetName(), false);
+            = lcl_IncrementNumberInNamedRange(getNamedDBs(), rxNamedDB->GetName());
         std::unique_ptr<ScDBData> pDataCopy = std::make_unique<ScDBData>(newName, *rxNamedDB);
         pDataCopy->UpdateMoveTab(nOldPos, nNewPos);
         pDataCopy->SetIndex(0);

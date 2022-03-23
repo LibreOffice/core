@@ -16,7 +16,7 @@ SvpCairoTextRender::SvpCairoTextRender(SvpSalGraphics& rParent)
 {
 }
 
-cairo_t* SvpCairoTextRender::getCairoContext() { return mrParent.getCairoContext(false); }
+cairo_t* SvpCairoTextRender::getCairoContext() { return mrParent.getCairoContext(); }
 
 void SvpCairoTextRender::getSurfaceOffset(double& nDX, double& nDY)
 {
@@ -28,7 +28,7 @@ void SvpCairoTextRender::clipRegion(cairo_t* cr) { mrParent.clipRegion(cr); }
 
 void SvpCairoTextRender::releaseCairoContext(cairo_t* cr)
 {
-    mrParent.releaseCairoContext(cr, false, basegfx::B2DRange());
+    mrParent.releaseCairoContext(cr, basegfx::B2DRange());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

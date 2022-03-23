@@ -595,7 +595,7 @@ ScXMLChangeTrackingImportHelper* ScXMLImport::GetChangeTrackingImportHelper()
 
 void ScXMLImport::InsertStyles()
 {
-    GetStyles()->CopyStylesToDoc(true);
+    GetStyles()->CopyStylesToDoc();
 
     // if content is going to be loaded with the same import, set bLatinDefaultStyle flag now
     if ( getImportFlags() & SvXMLImportFlags::CONTENT )

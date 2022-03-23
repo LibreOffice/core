@@ -138,13 +138,8 @@ public:
     virtual bool DelFullPara(SwPaM&) = 0;
 
     /** complete delete of a given PaM
-
-        #i100466#
-        Add optional parameter <bForceJoinNext>, default value <false>
-        Needed for hiding of deletion redlines
     */
-    virtual bool DeleteAndJoin( SwPaM&,
-        const bool bForceJoinNext = false ) = 0;
+    virtual bool DeleteAndJoin( SwPaM& ) = 0;
 
     virtual bool MoveRange(SwPaM&, SwPosition&, SwMoveFlags) = 0;
 
