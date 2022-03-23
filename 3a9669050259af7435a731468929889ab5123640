@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "196e9d0a_532aed67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-23T07:40:58Z",
+      "side": 1,
+      "message": "I suggest to instead upload a new version that uses different types there (the ones that the called methods return/take).",
+      "parentUuid": "eb6df4d9_40d25232",
+      "revId": "3a9669050259af7435a731468929889ab5123640",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1b74ec32_e85973c3",
