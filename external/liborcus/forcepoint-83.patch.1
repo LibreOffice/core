@@ -1,0 +1,38 @@
+From 283b45ba3bcb22dc28303a09a96c9b94f86d1ba2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Wed, 23 Mar 2022 16:44:00 +0000
+Subject: [PATCH] forcepoint#83 Invalid read of size 1
+
+==343916== Invalid read of size 1
+==343916==    at 0x11A7B2F0: orcus::parser_base::cur_char() const (parser_base.hpp:79)
+==343916==    by 0x11B7B112: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::element_open(long) (sax_parser.hpp:258)
+==343916==    by 0x11B7A2C7: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::element() (sax_parser.hpp:246)
+==343916==    by 0x11B7A197: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::body() (sax_parser.hpp:214)
+==343916==    by 0x11B79FD9: orcus::sax_parser<orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::handler_wrapper, orcus::sax_parser_default_config>::parse() (sax_parser.hpp:182)
+==343916==    by 0x11B79F8B: orcus::sax_ns_parser<orcus::sax_token_parser<orcus::xml_stream_handler>::handler_wrapper>::parse() (sax_ns_parser.hpp:277)
+==343916==    by 0x11B79768: orcus::sax_token_parser<orcus::xml_stream_handler>::parse() (sax_token_parser.hpp:215)
+==343916==    by 0x11B79406: orcus::xml_stream_parser::parse() (xml_stream_parser.cpp:68)
+==343916==    by 0x11BE3805: orcus::orcus_xlsx::detect(unsigned char const*, unsigned long) (orcus_xlsx.cpp:188)
+==343916==    by 0x11AB2482: orcus::detect(unsigned char const*, unsigned long) (format_detection.cpp:60)
+==343916==    by 0x30E60945: (anonymous namespace)::OrcusFormatDetect::detect(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&) (filterdetect.cxx:83)
+==343916==    by 0x30E60ABE: non-virtual thunk to (anonymous namespace)::OrcusFormatDetect::detect(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&) (filterdetect.cxx:0)
+---
+ include/orcus/sax_parser.hpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/include/orcus/sax_parser.hpp b/include/orcus/sax_parser.hpp
+index 15e8d917..d0fc45b5 100644
+--- a/include/orcus/sax_parser.hpp
++++ b/include/orcus/sax_parser.hpp
+@@ -255,6 +255,8 @@ void sax_parser<_Handler,_Config>::element_open(std::ptrdiff_t begin_pos)
+     while (true)
+     {
+         skip_space_and_control();
++        if (!has_char())
++            return;
+         char c = cur_char();
+         if (c == '/')
+         {
+-- 
+2.35.1
+
