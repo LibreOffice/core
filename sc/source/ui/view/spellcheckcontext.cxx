@@ -348,11 +348,13 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
     }
 
     // Cache miss, the cell needs spell-check..
-    mpEngine->SetDefaultItem(SvxLanguageItem(eCellLang, EE_CHAR_LANGUAGE));
     if (eType == CELLTYPE_STRING)
         mpEngine->SetText(aCell.mpString->getString());
     else
         mpEngine->SetText(*aCell.mpEditText);
+
+    // it has to happen after we set text
+    mpEngine->SetDefaultItem(SvxLanguageItem(eCellLang, EE_CHAR_LANGUAGE));
 
     mpStatus->mbModified = false;
     mpEngine->CompleteOnlineSpelling();
