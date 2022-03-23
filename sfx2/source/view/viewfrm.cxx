@@ -34,6 +34,7 @@
 #include <com/sun/star/frame/XLoadable.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/task/PasswordContainer.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Setup.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -1476,6 +1477,21 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     batch->commit();
                 }
 #endif
+                if (officecfg::Office::Common::Passwords::HasMaster::get() &&
+                    officecfg::Office::Common::Passwords::StorageVersion::get() == 0)
+                {
+                    // master password stored in deprecated format
+                    VclPtr<SfxInfoBarWindow> pOldMasterPasswordInfoBar =
+                        AppendInfoBar("oldmasterpassword", "",
+                                      SfxResId(STR_REFRESH_MASTER_PASSWORD), InfobarType::DANGER, false);
+                    if (pOldMasterPasswordInfoBar)
+                    {
+                        weld::Button& rButton = pOldMasterPasswordInfoBar->addButton();
+                        rButton.set_label(SfxResId(STR_REFRESH_PASSWORD));
+                        rButton.connect_clicked(LINK(this,
+                                                   SfxViewFrame, RefreshMasterPasswordHdl));
+                    }
+                }
 
                 // read-only infobar if necessary
                 const SfxViewShell *pVSh;
@@ -1687,6 +1703,27 @@ IMPL_LINK_NOARG(SfxViewFrame, HyphenationMissingHandler, weld::Button&, void)
 {
     GetDispatcher()->Execute(SID_HYPHENATIONMISSING);
     RemoveInfoBar(u"hyphenationmissing");
+}
+
+IMPL_LINK_NOARG(SfxViewFrame, RefreshMasterPasswordHdl, weld::Button&, void)
+{
+    bool bChanged = false;
+    try
+    {
+        Reference< task::XPasswordContainer2 > xMasterPasswd(
+            task::PasswordContainer::create(comphelper::getProcessComponentContext()));
+
+        css::uno::Reference<css::frame::XFrame> xFrame = GetFrame().GetFrameInterface();
+        css::uno::Reference<css::awt::XWindow> xContainerWindow = xFrame->getContainerWindow();
+
+        uno::Reference<task::XInteractionHandler> xTmpHandler(task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(),
+                                                              xContainerWindow));
+        bChanged = xMasterPasswd->changeMasterPassword(xTmpHandler);
+    }
+    catch (const Exception&)
+    {}
+    if (bChanged)
+        RemoveInfoBar(u"oldmasterpassword");
 }
 
 void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )

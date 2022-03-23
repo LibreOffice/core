@@ -290,6 +290,8 @@
 #define STR_TRACK_CHANGES_BUTTON                NC_("STR_TRACK_CHANGES_BUTTON", "Show Toolbar")
 #define STR_TRACK_CHANGES_BUTTON_HIDE           NC_("STR_TRACK_CHANGES_BUTTON_HIDE", "Hide Toolbar")
 #define STR_HYPHENATION_BUTTON                  NC_("STR_HYPHENATION_BUTTON", "Learn more")
+#define STR_REFRESH_MASTER_PASSWORD             NC_("STR_REFRESH_MASTER_PASSWORD", "The master password is stored in an outdated format, you should refresh it")
+#define STR_REFRESH_PASSWORD                    NC_("STR_REFRESH_PASSWORD", "Refresh Password")
 
 // Translators: default Impress template names
 #define STR_TEMPLATE_NAME1                      NC_("STR_TEMPLATE_NAME1", "Grey Elegant")
