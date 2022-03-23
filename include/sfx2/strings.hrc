@@ -297,6 +297,8 @@
 #define STR_SIGNATURE_NOTVALIDATED_PARTIAL_OK   NC_("STR_SIGNATURE_NOTVALIDATED_PARTIAL_OK", "The certificate could not be validated and the document is only partially signed.")
 #define STR_SIGNATURE_OK                        NC_("STR_SIGNATURE_OK", "This document is digitally signed and the signature is valid.")
 #define STR_SIGNATURE_SHOW                      NC_("STR_SIGNATURE_SHOW", "Show Signatures")
+#define STR_REFRESH_MASTER_PASSWORD             NC_("STR_REFRESH_MASTER_PASSWORD", "The master password is stored in an outdated format, you should refresh it")
+#define STR_REFRESH_PASSWORD                    NC_("STR_REFRESH_PASSWORD", "Refresh Password")
 
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 #define STR_SFX_DOCK                            NC_("STR_SFX_DOCK", "Dock")
