@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d93a32a_c72cb48c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-03-23T11:43:22Z",
+      "side": 1,
+      "message": "Good catch \u003d) thanks Szymon; can we get it into master, libreoffice-7-3, cp-6.4 etc. (if it\u0027s there?)",
+      "revId": "f68837b75187948536bd84a7dc7a0439c66a9c0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
