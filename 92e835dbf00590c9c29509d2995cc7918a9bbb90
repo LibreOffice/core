@@ -34,6 +34,24 @@
       "parentUuid": "34d27700_4279d5d2",
       "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0d65bb1_3cdaa603",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-23T08:44:02Z",
+      "side": 0,
+      "message": "You need to use this CPP code to study the behavior change here. Please look at the values where the second parameter to atan2 is less than zero (x\u003c0).\nIn this CPP code, you will see that if j starts at zero instead of -1000, there will be no difference between the return value of two functions, and the output that happens on a difference will be empty.",
+      "parentUuid": "f33d586b_71ecc7a2",
+      "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
