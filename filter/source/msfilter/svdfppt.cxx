@@ -5135,15 +5135,14 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
                                             sal_uInt32& nExtParaFlags, sal_uInt16& nBuBlip,
                                             sal_uInt16& nHasAnm, sal_uInt32& nAnmScheme )
 {
-    sal_uInt32  nMask = 0; //TODO: nMask initialized here to suppress warning for now, see corresponding TODO below
-    sal_uInt16  nDummy16;
-    sal_Int32   nCharsToRead;
-    sal_uInt16  nStringLen = aString.getLength();
+    sal_uInt16 nStringLen = aString.getLength();
 
+    sal_uInt16 nDummy16;
     rIn.ReadUInt16( nDummy16 );
     nCharCount = (rIn.good()) ? nDummy16 : 0;
     rIn.ReadUInt16( nDummy16 );
-    nCharsToRead = nStringLen - ( nCharReadCnt + nCharCount );
+
+    sal_Int32 nCharsToRead = nStringLen - ( nCharReadCnt + nCharCount );
     if ( nCharsToRead < 0 )
     {
         nCharCount = nStringLen - nCharReadCnt;
@@ -5156,6 +5155,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     ImplPPTCharPropSet& aSet = *aCharPropSet.mpImplPPTCharPropSet;
 
     // character attributes
+    sal_uInt32 nMask(0);
     rIn.ReadUInt32( nMask );
     if ( static_cast<sal_uInt16>(nMask) )
     {
@@ -5189,7 +5189,7 @@ void PPTStyleTextPropReader::ReadCharProps( SvStream& rIn, PPTCharPropSet& aChar
     }
     if ( nMask & 0x40000 )  // cfColor
     {
-        sal_uInt32 nVal;
+        sal_uInt32 nVal(0);
         rIn.ReadUInt32( nVal );
         if ( !( nVal & 0xff000000 ) )
             nVal = PPT_COLSCHEME_HINTERGRUND;
