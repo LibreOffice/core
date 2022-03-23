@@ -421,6 +421,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ac9daa3c_12c058d7",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-23T10:20:45Z",
+      "side": 1,
+      "message": "sApplicationID is a Windows API-specific thing, constructed here in lcl_getAppId to match things defined in scp2/ (grep for \"TheDocumentFoundation.LibreOffice\"). So I suppose it\u0027s not some UNO API thing here.",
+      "parentUuid": "c52866fb_d00b3443",
+      "range": {
+        "startLine": 96,
+        "startChar": 45,
+        "endLine": 96,
+        "endChar": 68
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b71c4038_0f4c5db5",
         "filename": "shell/source/win32/jumplist/JumpList.hxx",
         "patchSetId": 12
