@@ -467,7 +467,7 @@ SwFrameFormat *DocumentLayoutManager::CopyLayoutFormat(
     if (rSource.Which() == RES_DRAWFRMFMT && rSource.GetOtherTextBoxFormat())
     {
         auto pObj = rSource.FindRealSdrObject();
-        auto pTextBoxNd = new SwTextBoxNode(pDest);
+        auto pTextBoxNd = new SwTextBoxHandler(pDest);
         pDest->SetOtherTextBoxFormat(pTextBoxNd);
 
         if (pObj)

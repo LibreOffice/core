@@ -240,7 +240,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         {
             if (rElem.first == pObj)
             {
-                auto pNewTextBoxNode = new SwTextBoxNode(rSave.pFormat);
+                auto pNewTextBoxNode = new SwTextBoxHandler(rSave.pFormat);
                 rSave.pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
                 pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
                 rElem.second->SetOtherTextBoxFormat(pNewTextBoxNode);
@@ -310,7 +310,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     // Restore the textboxes
     if (vTextBoxes.size())
     {
-        auto pNewTextBoxNode = new SwTextBoxNode(m_pObjArray[0].pFormat);
+        auto pNewTextBoxNode = new SwTextBoxHandler(m_pObjArray[0].pFormat);
         for (auto& rElem : vTextBoxes)
         {
             pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
@@ -436,7 +436,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     // Restore the vector content for the new formats
     if (vTextBoxes.size())
     {
-        auto pNewTxBxNd = new SwTextBoxNode(m_pObjArray[0].pFormat);
+        auto pNewTxBxNd = new SwTextBoxHandler(m_pObjArray[0].pFormat);
         for (auto& rElem : vTextBoxes)
         {
             pNewTxBxNd->AddTextBox(rElem.first, rElem.second);
@@ -498,7 +498,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         {
             if (pElem.first == rSave.pObj)
             {
-                auto pTmpTxBxNd = new SwTextBoxNode(rSave.pFormat);
+                auto pTmpTxBxNd = new SwTextBoxHandler(rSave.pFormat);
                 pTmpTxBxNd->AddTextBox(rSave.pObj, pElem.second);
                 pFormat->SetOtherTextBoxFormat(pTmpTxBxNd);
                 pElem.second->SetOtherTextBoxFormat(pTmpTxBxNd);

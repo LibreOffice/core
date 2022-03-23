@@ -117,7 +117,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 
     if (!pShape->GetOtherTextBoxFormat())
     {
-        auto* pTextBox = new SwTextBoxNode(pShape);
+        auto* pTextBox = new SwTextBoxHandler(pShape);
         pTextBox->AddTextBox(pObject, pFormat);
         pShape->SetOtherTextBoxFormat(pTextBox);
         pFormat->SetOtherTextBoxFormat(pTextBox);
@@ -257,7 +257,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     {
         // If the shape do not have a texbox node and textbox,
         // create that for the shape.
-        auto* pTextBox = new SwTextBoxNode(pShapeFormat);
+        auto* pTextBox = new SwTextBoxHandler(pShapeFormat);
         pTextBox->AddTextBox(pObj, pFormat);
         pShapeFormat->SetOtherTextBoxFormat(pTextBox);
         pFormat->SetOtherTextBoxFormat(pTextBox);
@@ -1623,7 +1623,7 @@ std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(const SdrObject* p
     return vRet;
 }
 
-SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
+SwTextBoxHandler::SwTextBoxHandler(SwFrameFormat* pOwnerShape)
 {
     assert(pOwnerShape);
     assert(pOwnerShape->Which() == RES_DRAWFRMFMT);
@@ -1633,7 +1633,7 @@ SwTextBoxNode::SwTextBoxNode(SwFrameFormat* pOwnerShape)
         m_pTextBoxes.clear();
 }
 
-SwTextBoxNode::~SwTextBoxNode()
+SwTextBoxHandler::~SwTextBoxHandler()
 {
     m_pTextBoxes.clear();
 
@@ -1641,7 +1641,7 @@ SwTextBoxNode::~SwTextBoxNode()
         m_pOwnerShapeFormat->SetOtherTextBoxFormat(nullptr);
 }
 
-void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBox)
+void SwTextBoxHandler::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBox)
 {
     assert(pNewTextBox);
     assert(pNewTextBox->Which() == RES_FLYFRMFMT);
@@ -1660,7 +1660,7 @@ void SwTextBoxNode::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBo
     m_pTextBoxes.push_back(aElem);
 }
 
-void SwTextBoxNode::DelTextBox(const SdrObject* pDrawObject)
+void SwTextBoxHandler::DelTextBox(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
     if (m_pTextBoxes.empty())
@@ -1679,7 +1679,7 @@ void SwTextBoxNode::DelTextBox(const SdrObject* pDrawObject)
     }
 }
 
-SwFrameFormat* SwTextBoxNode::GetTextBox(const SdrObject* pDrawObject) const
+SwFrameFormat* SwTextBoxHandler::GetTextBox(const SdrObject* pDrawObject) const
 {
     assert(pDrawObject);
     if (!m_pTextBoxes.empty())
@@ -1695,7 +1695,7 @@ SwFrameFormat* SwTextBoxNode::GetTextBox(const SdrObject* pDrawObject) const
     return nullptr;
 }
 
-bool SwTextBoxNode::IsTextBoxActive(const SdrObject* pDrawObject) const
+bool SwTextBoxHandler::IsTextBoxActive(const SdrObject* pDrawObject) const
 {
     assert(pDrawObject);
 
@@ -1712,7 +1712,7 @@ bool SwTextBoxNode::IsTextBoxActive(const SdrObject* pDrawObject) const
     return false;
 }
 
-void SwTextBoxNode::SetTextBoxActive(const SdrObject* pDrawObject)
+void SwTextBoxHandler::SetTextBoxActive(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
 
@@ -1728,7 +1728,7 @@ void SwTextBoxNode::SetTextBoxActive(const SdrObject* pDrawObject)
     }
 }
 
-void SwTextBoxNode::SetTextBoxInactive(const SdrObject* pDrawObject)
+void SwTextBoxHandler::SetTextBoxInactive(const SdrObject* pDrawObject)
 {
     assert(pDrawObject);
 
@@ -1744,9 +1744,9 @@ void SwTextBoxNode::SetTextBoxInactive(const SdrObject* pDrawObject)
     }
 }
 
-bool SwTextBoxNode::IsGroupTextBox() const { return m_pTextBoxes.size() > 1; }
+bool SwTextBoxHandler::IsGroupTextBox() const { return m_pTextBoxes.size() > 1; }
 
-std::map<SdrObject*, SwFrameFormat*> SwTextBoxNode::GetAllTextBoxes() const
+std::map<SdrObject*, SwFrameFormat*> SwTextBoxHandler::GetAllTextBoxes() const
 {
     std::map<SdrObject*, SwFrameFormat*> aRet;
     for (auto& rElem : m_pTextBoxes)

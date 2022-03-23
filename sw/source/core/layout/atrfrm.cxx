@@ -2522,7 +2522,7 @@ SwFrameFormat::SwFrameFormat(
     const WhichRangesContainer& pWhichRange)
 :   SwFormat(rPool, pFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_ffList(nullptr),
-    m_pOtherTextBoxFormat(nullptr)
+    m_pTextBoxHandler(nullptr)
 {
 }
 
@@ -2534,7 +2534,7 @@ SwFrameFormat::SwFrameFormat(
     const WhichRangesContainer& pWhichRange)
 :   SwFormat(rPool, rFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_ffList(nullptr),
-    m_pOtherTextBoxFormat(nullptr)
+    m_pTextBoxHandler(nullptr)
 {
 }
 
@@ -2549,7 +2549,7 @@ SwFrameFormat::~SwFrameFormat()
         }
     }
 
-    if( nullptr == m_pOtherTextBoxFormat )
+    if( nullptr == m_pTextBoxHandler )
         return;
 
     auto pObj = FindRealSdrObject();
@@ -2557,15 +2557,15 @@ SwFrameFormat::~SwFrameFormat()
     {
         // This is a fly-frame-format just delete this
         // textbox entry from the draw-frame-format.
-        m_pOtherTextBoxFormat->DelTextBox(pObj);
+        m_pTextBoxHandler->DelTextBox(pObj);
     }
 
     if (Which() == RES_DRAWFRMFMT)
     {
         // This format is the owner shape, so its time
         // to del the textbox node.
-        delete m_pOtherTextBoxFormat;
-        m_pOtherTextBoxFormat = nullptr;
+        delete m_pTextBoxHandler;
+        m_pTextBoxHandler = nullptr;
     }
 }
 
@@ -2885,9 +2885,9 @@ void SwFrameFormat::dumpAsXml(xmlTextWriterPtr pWriter) const
     if (pWhich)
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("which"), BAD_CAST(pWhich));
 
-    if (m_pOtherTextBoxFormat)
+    if (m_pTextBoxHandler)
     {
-        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("OtherTextBoxFormat"), "%p", m_pOtherTextBoxFormat);
+        (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("TextBoxHandler"), "%p", m_pTextBoxHandler);
     }
 
     GetAttrSet().dumpAsXml(pWriter);

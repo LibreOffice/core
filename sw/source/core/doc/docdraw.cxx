@@ -255,7 +255,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
 
         // Add the saved textboxes to the new format.
-        auto pTextBoxNode = new SwTextBoxNode(pFormat);
+        auto pTextBoxNode = new SwTextBoxHandler(pFormat);
         for (const auto& pTextBoxEntry : vSavedTextBoxes)
         {
             pTextBoxNode->AddTextBox(const_cast<SdrObject*>(pTextBoxEntry.first),
@@ -302,7 +302,7 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     return pNewContact;
 }
 
-static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, SwTextBoxNode* pTextBoxNode,
+static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, SwTextBoxHandler* pTextBoxNode,
                                                SdrObject* pSourceObjs)
 {
     if (auto pChildrenObjs = pSourceObjs->getChildrenOfSdrObject())
@@ -314,7 +314,7 @@ static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, SwT
         {
             if (!pTargetFormat->GetOtherTextBoxFormat())
             {
-                pTargetFormat->SetOtherTextBoxFormat(new SwTextBoxNode(pTargetFormat));
+                pTargetFormat->SetOtherTextBoxFormat(new SwTextBoxHandler(pTargetFormat));
             }
             pTargetFormat->GetOtherTextBoxFormat()->AddTextBox(pSourceObjs, pTextBox);
             pTextBox->SetOtherTextBoxFormat(pTargetFormat->GetOtherTextBoxFormat());
@@ -351,7 +351,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
-                    SwTextBoxNode* pTextBoxNode = nullptr;
+                    SwTextBoxHandler* pTextBoxNode = nullptr;
                     if (auto pGroupFormat = pContact->GetFormat())
                         pTextBoxNode = pGroupFormat->GetOtherTextBoxFormat();
 
@@ -378,7 +378,7 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                             {
                                 if (auto pTextBoxFormat = pTextBoxNode->GetTextBox(pSubObj))
                                 {
-                                    auto pNewTextBoxNode = new SwTextBoxNode(pFormat);
+                                    auto pNewTextBoxNode = new SwTextBoxHandler(pFormat);
                                     pNewTextBoxNode->AddTextBox(pSubObj, pTextBoxFormat);
                                     pFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
                                     pTextBoxFormat->SetOtherTextBoxFormat(pNewTextBoxNode);
