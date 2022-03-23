@@ -131,6 +131,11 @@ OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     OUString sRet(m_pSqlda->sqlvar[column-1].sqlname,
                     m_pSqlda->sqlvar[column-1].sqlname_length,
                     RTL_TEXTENCODING_UTF8);
+    // tdf#132924 - return column alias if specified
+    if (m_pSqlda->sqlvar[column - 1].aliasname_length > 0)
+        sRet = OUString(m_pSqlda->sqlvar[column - 1].aliasname,
+                        m_pSqlda->sqlvar[column - 1].aliasname_length, RTL_TEXTENCODING_UTF8);
+
     sanitizeIdentifier(sRet);
     return sRet;
 }
