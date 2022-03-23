@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3ef0cb8_560fb5bd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-23T20:24:37Z",
+      "side": 1,
+      "message": "Hi Mike! I\u0027m not sure if we should just return the alias or if we should check if there is any column name. Could this be the case?",
+      "revId": "d8ddcd0d1cd08ebd80d29895b057ff0b4aad2e3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
