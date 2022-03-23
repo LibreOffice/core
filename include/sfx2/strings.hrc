@@ -295,6 +295,8 @@
 #define STR_SIGNATURE_SHOW                      NC_("STR_SIGNATURE_SHOW", "Show Signatures")
 #define STR_TRACK_CHANGES_BUTTON                NC_("STR_TRACK_CHANGES_BUTTON", "Show Toolbar")
 #define STR_TRACK_CHANGES_BUTTON_HIDE           NC_("STR_TRACK_CHANGES_BUTTON_HIDE", "Hide Toolbar")
+#define STR_REFRESH_MASTER_PASSWORD             NC_("STR_REFRESH_MASTER_PASSWORD", "The master password is stored in an outdated format, you should refresh it")
+#define STR_REFRESH_PASSWORD                    NC_("STR_REFRESH_PASSWORD", "Refresh Password")
 
 #define STR_CLOSE_PANE                          NC_("STR_CLOSE_PANE", "Close Pane")
 
