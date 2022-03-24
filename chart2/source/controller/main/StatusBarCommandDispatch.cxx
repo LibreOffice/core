@@ -66,7 +66,7 @@ void StatusBarCommandDispatch::fireStatusEvent(
     bool bFireContext(  bFireAll || rURL == ".uno:Context" );
     bool bFireModified( bFireAll || rURL == ".uno:ModifiedStatus" );
 
-    if( bFireContext )
+    if( bFireContext && m_xChartModel.is())
     {
         uno::Any aArg;
         aArg <<= ObjectNameProvider::getSelectedObjectText( m_aSelectedOID.getObjectCID(), m_xChartModel );
