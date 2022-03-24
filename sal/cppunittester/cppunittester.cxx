@@ -572,11 +572,11 @@ static void printStack( CONTEXT* ctx )
         //get symbol name for address
         pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
         pSymbol->MaxNameLen = MAX_SYM_NAME;
-#ifdef _M_AMD64
-        SymFromAddr(process, static_cast< ULONG64 >(stack.AddrPC.Offset), &displacement, pSymbol);
-#else
-        SymFromAddr(process, static_cast< ULONG >(stack.AddrPC.Offset), &displacement, pSymbol);
-#endif
+        if (!SymFromAddr(process, static_cast< DWORD64 >(stack.AddrPC.Offset), &displacement, pSymbol))
+        {
+            snprintf(pSymbol->Name, MAX_SYM_NAME - 1, "Error in SymFromAddr=%#08x", GetLastError());
+        }
+
         //try to get line
 #ifdef _M_AMD64
         if (SymGetLineFromAddr64(process, stack.AddrPC.Offset, &disp, line.get()))
