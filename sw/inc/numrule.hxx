@@ -168,7 +168,6 @@ public:
          restrict returned string to this level. */
     OUString MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                           const bool bInclStrings = true,
-                          const bool bOnlyArabic = false,
                           const unsigned int _nRestrictToThisLevel = MAXLEVEL,
                           Extremities* pExtremities = nullptr,
                           LanguageType nLang = LANGUAGE_SYSTEM) const;
