@@ -240,10 +240,11 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         {
             if (rElem.first == pObj)
             {
-                auto pNewTextBoxNode = new SwTextBoxHandler(rSave.pFormat);
-                rSave.pFormat->SetTextBoxHandler(pNewTextBoxNode);
-                pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
-                rElem.second->SetTextBoxHandler(pNewTextBoxNode);
+                auto pNewTextBoxHandler
+                    = std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(rSave.pFormat));
+                rSave.pFormat->SetTextBoxHandler(pNewTextBoxHandler);
+                pNewTextBoxHandler->AddTextBox(rElem.first, rElem.second);
+                rElem.second->SetTextBoxHandler(pNewTextBoxHandler);
                 break;
             }
         }
@@ -310,13 +311,14 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     // Restore the textboxes
     if (vTextBoxes.size())
     {
-        auto pNewTextBoxNode = new SwTextBoxHandler(m_pObjArray[0].pFormat);
+        auto pNewTextBoxHandler
+            = std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(m_pObjArray[0].pFormat));
         for (auto& rElem : vTextBoxes)
         {
-            pNewTextBoxNode->AddTextBox(rElem.first, rElem.second);
-            rElem.second->SetTextBoxHandler(pNewTextBoxNode);
+            pNewTextBoxHandler->AddTextBox(rElem.first, rElem.second);
+            rElem.second->SetTextBoxHandler(pNewTextBoxHandler);
         }
-        m_pObjArray[0].pFormat->SetTextBoxHandler(pNewTextBoxNode);
+        m_pObjArray[0].pFormat->SetTextBoxHandler(pNewTextBoxHandler);
     }
 
     // #i45952# - notify that position attributes are already set
@@ -436,13 +438,14 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     // Restore the vector content for the new formats
     if (vTextBoxes.size())
     {
-        auto pNewTxBxNd = new SwTextBoxHandler(m_pObjArray[0].pFormat);
+        auto pNewTextBoxHandler
+            = std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(m_pObjArray[0].pFormat));
         for (auto& rElem : vTextBoxes)
         {
-            pNewTxBxNd->AddTextBox(rElem.first, rElem.second);
-            rElem.second->SetTextBoxHandler(pNewTxBxNd);
+            pNewTextBoxHandler->AddTextBox(rElem.first, rElem.second);
+            rElem.second->SetTextBoxHandler(pNewTextBoxHandler);
         }
-        m_pObjArray[0].pFormat->SetTextBoxHandler(pNewTxBxNd);
+        m_pObjArray[0].pFormat->SetTextBoxHandler(pNewTextBoxHandler);
     }
 
 
@@ -498,10 +501,11 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
         {
             if (pElem.first == rSave.pObj)
             {
-                auto pTmpTxBxNd = new SwTextBoxHandler(rSave.pFormat);
-                pTmpTxBxNd->AddTextBox(rSave.pObj, pElem.second);
-                pFormat->SetTextBoxHandler(pTmpTxBxNd);
-                pElem.second->SetTextBoxHandler(pTmpTxBxNd);
+                auto pNewTextBoxHandler
+                    = std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(rSave.pFormat));
+                pNewTextBoxHandler->AddTextBox(rSave.pObj, pElem.second);
+                pFormat->SetTextBoxHandler(pNewTextBoxHandler);
+                pElem.second->SetTextBoxHandler(pNewTextBoxHandler);
                 break;
             }
         }
