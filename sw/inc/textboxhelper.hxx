@@ -178,6 +178,9 @@ public:
     /// vector filled with the textboxes.
     static std::vector<SwFrameFormat*> CollectTextBoxes(const SdrObject* pGroupObject,
                                                         SwFrameFormat* pFormat);
+
+    static void cloneTextBoxTree(const SwFrameFormat* pSourceFormat, const SdrObject* pSourceObj,
+                                 SwFrameFormat* pDestinationFormat, SdrObject* pDestinationObj);
 };
 
 /// Textboxes are basically textframe + shape pairs. This means one shape has one frame.
@@ -195,6 +198,9 @@ class SwTextBoxHandler
         SdrObject* m_pDrawObject;
         // This is for indicating if the textbox is in special case: for example during undo.
         bool m_bIsActive;
+
+        SwTextBoxElement();
+        ~SwTextBoxElement();
     };
 
     // This vector stores the textboxes what belongs to this node
@@ -224,7 +230,10 @@ public:
     // This will remove the textbox entry.
     // Parameters:
     //     pDrawObject: The shape which have the textbox to be deleted.
-    void DelTextBox(const SdrObject* pDrawObject);
+    void DelTextBox(const SdrObject* pDrawObject, bool bJustEntry = true);
+
+    // This will remove the textbox entry.
+    void DelTextBox(SwFrameFormat* pTextBox, bool bJustEntry = true);
 
     // This will return with the frame format of the textbox what belongs
     // to the given shape (pDrawObject)
@@ -245,6 +254,8 @@ public:
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
     // Returns with a const collection of textboxes owned by this node.
     std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
+
+    void RemoveAllTextBoxes();
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

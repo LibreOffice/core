@@ -2549,21 +2549,23 @@ SwFrameFormat::~SwFrameFormat()
         }
     }
 
-    if( nullptr == m_pTextBoxHandler )
+    if( nullptr == m_pTextBoxHandler || GetDoc()->IsInDtor() )
         return;
 
-    auto pObj = FindRealSdrObject();
-    if (Which() == RES_FLYFRMFMT && pObj)
+    if (Which() == RES_FLYFRMFMT)
     {
         // This is a fly-frame-format just delete this
         // textbox entry from the draw-frame-format.
-        m_pTextBoxHandler->DelTextBox(pObj);
+        m_pTextBoxHandler->DelTextBox(this);
+        m_pTextBoxHandler = nullptr;
+        return;
     }
 
     if (Which() == RES_DRAWFRMFMT)
     {
         // This format is the owner shape, so its time
         // to del the textbox node.
+        m_pTextBoxHandler->RemoveAllTextBoxes();
         delete m_pTextBoxHandler;
         m_pTextBoxHandler = nullptr;
     }
