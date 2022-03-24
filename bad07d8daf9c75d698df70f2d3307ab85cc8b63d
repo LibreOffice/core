@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa5155e_b895caf0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-24T13:58:05Z",
+      "side": 1,
+      "message": "Well done!\nI have added your name to the contributors list at https://wiki.documentfoundation.org/Development/Developers#J - feel free to update in case you want to add more information.",
+      "revId": "bad07d8daf9c75d698df70f2d3307ab85cc8b63d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
