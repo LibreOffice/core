@@ -1,4 +1,4 @@
-From 283b45ba3bcb22dc28303a09a96c9b94f86d1ba2 Mon Sep 17 00:00:00 2001
+From 4d58816e995a562f26f3cc5006ae9ddd46b1bbed Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
 Date: Wed, 23 Mar 2022 16:44:00 +0000
 Subject: [PATCH] forcepoint#83 Invalid read of size 1
@@ -17,22 +17,22 @@ Subject: [PATCH] forcepoint#83 Invalid read of size 1
 ==343916==    by 0x30E60945: (anonymous namespace)::OrcusFormatDetect::detect(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&) (filterdetect.cxx:83)
 ==343916==    by 0x30E60ABE: non-virtual thunk to (anonymous namespace)::OrcusFormatDetect::detect(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>&) (filterdetect.cxx:0)
 ---
- include/orcus/sax_parser.hpp | 2 ++
- 1 file changed, 2 insertions(+)
+ include/orcus/sax_parser.hpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/include/orcus/sax_parser.hpp b/include/orcus/sax_parser.hpp
-index 15e8d917..d0fc45b5 100644
+index 15e8d917..2e707568 100644
 --- a/include/orcus/sax_parser.hpp
 +++ b/include/orcus/sax_parser.hpp
-@@ -255,6 +255,8 @@ void sax_parser<_Handler,_Config>::element_open(std::ptrdiff_t begin_pos)
+@@ -255,7 +255,7 @@ void sax_parser<_Handler,_Config>::element_open(std::ptrdiff_t begin_pos)
      while (true)
      {
          skip_space_and_control();
-+        if (!has_char())
-+            return;
-         char c = cur_char();
+-        char c = cur_char();
++        char c = cur_char_checked();
          if (c == '/')
          {
+             // Self-closing element: <element/>
 -- 
 2.35.1
 
