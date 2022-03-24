@@ -262,8 +262,10 @@ void SvtScriptedTextHelper_Impl::DrawText( const Point& _rPos )
     {
         nNextPos = maPosVec[ nPosVecIndex++ ];
         nScript = maScriptVec[ nVecIndex ];
-
-        SetOutDevFont( nScript );
+        vcl::Font aFont = GetFont( nScript );
+        mrOutDevice.SetFont( aFont );
+        if (aFont.GetColor() == COL_AUTO)
+            mrOutDevice.SetTextColor( mrOutDevice.GetFillColor().IsDark() ? COL_WHITE : COL_BLACK);
         mrOutDevice.DrawText( aCurrPos, maText, nThisPos, nNextPos - nThisPos );
         aCurrPos.AdjustX(maWidthVec[ nVecIndex++ ] );
         aCurrPos.AdjustX(mrOutDevice.GetTextHeight() / 5 );   // add 20% of font height as portion spacing
