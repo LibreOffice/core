@@ -16,6 +16,24 @@
       "message": "Likely this is tdf#148160, and likely this is a regression :-)",
       "revId": "41a504677c4cc5281433a1e2c5d6ba4732504290",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c35985f8_fc8a4db4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-03-24T10:37:22Z",
+      "side": 1,
+      "message": "exactly, thanks for a ticket number :)",
+      "parentUuid": "0e06e35a_43c752ee",
+      "revId": "41a504677c4cc5281433a1e2c5d6ba4732504290",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
