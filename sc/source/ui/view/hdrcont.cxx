@@ -228,7 +228,8 @@ void ScHeaderControl::Paint( vcl::RenderContext& /*rRenderContext*/, const tools
 
     Color aTextColor = rStyleSettings.GetButtonTextColor();
     Color aSelTextColor = rStyleSettings.GetHighlightTextColor();
-    Color aAFilterTextColor = COL_LIGHTBLUE;    // color of filtered row numbers
+    Color aAFilterTextColor = rStyleSettings.GetButtonTextColor();
+    aAFilterTextColor.Merge(COL_LIGHTBLUE, bDark ? 150 : 10); // color of filtered row numbers
     aNormFont.SetColor( aTextColor );
     aAutoFilterFont.SetColor(aAFilterTextColor);
     if ( bHighContrast )
