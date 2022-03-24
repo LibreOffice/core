@@ -68,6 +68,7 @@ std::unique_ptr<SwField> SwUserField::Copy() const
 {
     std::unique_ptr<SwField> pTmp(new SwUserField(static_cast<SwUserFieldType*>(GetTyp()), m_nSubType, GetFormat()));
     pTmp->SetAutomaticLanguage(IsAutomaticLanguage());
+    pTmp->SetTitle(GetTitle());
     return pTmp;
 }
 

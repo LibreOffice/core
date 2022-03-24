@@ -299,6 +299,8 @@ private:
     bool                m_bIsAutomaticLanguage;
     sal_uInt32          m_nFormat;              /// this can be either SvxNumType or SwChapterFormat depending on the subtype
     SwFieldType*        m_pType;
+    /// Used for tooltip purposes when it's not-empty.
+    OUString m_aTitle;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const = 0;
     virtual std::unique_ptr<SwField> Copy() const = 0;
@@ -391,6 +393,8 @@ public:
     /// Is this field clickable?
     bool IsClickable() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    OUString GetTitle() const { return m_aTitle; }
+    void SetTitle(const OUString& rTitle) { m_aTitle = rTitle; }
 };
 
 inline SwFieldType* SwField::GetTyp() const

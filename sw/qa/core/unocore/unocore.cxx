@@ -28,6 +28,7 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
+#include <com/sun/star/text/XDependentTextField.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -163,6 +164,34 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testBrokenEmbeddedObject)
     // shown to the user.
     CPPUNIT_ASSERT(
         xEmbeddedObject->supportsService("com.sun.star.comp.embed.OCommonEmbeddedObject"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserFieldTooltip)
+{
+    // Given a document with a user field:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XDependentTextField> xField(
+        xFactory->createInstance("com.sun.star.text.TextField.User"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xMaster(
+        xFactory->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY);
+    xMaster->setPropertyValue("Name", uno::makeAny(OUString("a_user_field")));
+    xField->attachTextFieldMaster(xMaster);
+    xField->getTextFieldMaster()->setPropertyValue("Content", uno::makeAny(OUString("42")));
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
+    uno::Reference<beans::XPropertySet> xFieldProps(xField, uno::UNO_QUERY);
+
+    // When setting a tooltip on the field:
+    OUString aExpected("first line\nsecond line");
+    xFieldProps->setPropertyValue("Title", uno::makeAny(aExpected));
+
+    // Then make sure that the tooltip we read back matches the one previously specified:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - the property is of unexpected type or void: Title
+    // i.e. reading of the tooltip was broken.
+    CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(xFieldProps, "Title"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
