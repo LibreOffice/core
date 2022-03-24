@@ -560,9 +560,9 @@ public:
                                   sal_uInt32 nId ) const;
     static bool SeekToRec( SvStream& rSt,
                     sal_uInt16 nRecId,
-                    sal_uLong nMaxFilePos,
+                    sal_uInt64 nMaxFilePos,
                     DffRecordHeader* pRecHd = nullptr,
-                    sal_uLong nSkipCount = 0 );
+                    sal_uInt64 nSkipCount = 0 );
     bool SeekToRec2( sal_uInt16 nRecId1,
                      sal_uInt16 nRecId2,
                      sal_uLong nMaxFilePos ) const;
