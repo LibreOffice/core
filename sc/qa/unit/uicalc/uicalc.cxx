@@ -234,6 +234,10 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
     insertStringToCell(*pModelObj, "C2", "20");
     insertStringToCell(*pModelObj, "C3", "5");
 
+    insertStringToCell(*pModelObj, "D1", "BIG FISH");
+    insertStringToCell(*pModelObj, "D2", "FISHFISH");
+    insertStringToCell(*pModelObj, "D3", "FISHY");
+
     // Save the document
     utl::TempFile aTempFile = save(mxComponent, "calc8");
 
@@ -316,6 +320,18 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
         // - Actual  : Err:504
         CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(0, 0, 0)));
         CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(1, 0, 0)));
+    }
+
+    {
+        //tdf#113898
+        OUString aAndFormula = "=SUMPRODUCT(NOT(ISERROR(FIND(\"FISH\";'" + aTempFile.GetURL()
+                               + "'#$Sheet1.D1:D3))))";
+        insertStringToCell(*pModelObj, "A1", aAndFormula.toUtf8().getStr());
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 3
+        // - Actual  : 1
+        CPPUNIT_ASSERT_EQUAL(3.0, pDoc->GetValue(ScAddress(0, 0, 0)));
     }
 }
 
