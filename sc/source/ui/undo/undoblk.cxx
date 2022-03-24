@@ -1094,6 +1094,11 @@ void ScUndoPaste::DoChange(bool bUndo)
 
     ScRangeList aDrawRanges(maBlockRanges);
     PaintPartFlags nPaint = PaintPartFlags::Grid;
+
+    // For sheet geometry invalidation.
+    bool bColsAffected = false;
+    bool bRowsAffected = false;
+
     for (size_t i = 0, n = aDrawRanges.size(); i < n; ++i)
     {
         ScRange& rDrawRange = aDrawRanges[i];
@@ -1116,11 +1121,13 @@ void ScUndoPaste::DoChange(bool bUndo)
             {
                 nPaint |= PaintPartFlags::Top;
                 rDrawRange.aEnd.SetCol(rDoc.MaxCol());
+                bColsAffected = true;
             }
             if (maBlockRanges[i].aStart.Col() == 0 && maBlockRanges[i].aEnd.Col() == rDoc.MaxCol()) // whole row
             {
                 nPaint |= PaintPartFlags::Left;
                 rDrawRange.aEnd.SetRow(rDoc.MaxRow());
+                bRowsAffected = true;
             }
             if (pViewShell && pViewShell->AdjustBlockHeight(false, &aData))
             {
@@ -1142,6 +1149,13 @@ void ScUndoPaste::DoChange(bool bUndo)
     pDocShell->PostDataChanged();
     if (pViewShell)
         pViewShell->CellContentChanged();
+
+    if (bColsAffected || bRowsAffected)
+        ScTabViewShell::notifyAllViewsSheetGeomInvalidation(
+            pViewShell,
+            bColsAffected, bRowsAffected,
+            true /* bSizes*/, true /* bHidden */, true /* bFiltered */,
+            true /* bGroups */, aDrawRanges[0].aStart.Tab());
 }
 
 void ScUndoPaste::Undo()
