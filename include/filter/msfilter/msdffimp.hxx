@@ -541,7 +541,7 @@ protected:
 
         @return true means "conversion".
     */
-    virtual bool ShapeHasText(sal_uLong nShapeId, sal_uLong nFilePos) const;
+    virtual bool ShapeHasText(sal_uInt64 nShapeId, sal_uInt64 nFilePos) const;
 
 public:
     std::unique_ptr<DffPropertyReader> pSecPropSet;
@@ -560,12 +560,12 @@ public:
                                   sal_uInt32 nId ) const;
     static bool SeekToRec( SvStream& rSt,
                     sal_uInt16 nRecId,
-                    sal_uLong nMaxFilePos,
+                    sal_uInt64 nMaxFilePos,
                     DffRecordHeader* pRecHd = nullptr,
-                    sal_uLong nSkipCount = 0 );
+                    sal_uInt64 nSkipCount = 0 );
     bool SeekToRec2( sal_uInt16 nRecId1,
                      sal_uInt16 nRecId2,
-                     sal_uLong nMaxFilePos ) const;
+                     sal_uInt64 nMaxFilePos ) const;
 
     static OUString MSDFFReadZString( SvStream& rIn,
                                            sal_uInt32 nMaxLen,
@@ -648,7 +648,7 @@ public:
 
         @return true if successful, false otherwise
     */
-    bool GetBLIP( sal_uLong nIdx, Graphic& rData, tools::Rectangle* pVisArea = nullptr );
+    bool GetBLIP(sal_uInt64 nIdx, Graphic& rData, tools::Rectangle* pVisArea = nullptr);
 
 // TODO: provide proper documentation here
     /** read a BLIP out of an already positioned stream
@@ -662,7 +662,7 @@ public:
     */
     static bool GetBLIPDirect(SvStream& rBLIPStream, Graphic& rData, tools::Rectangle* pVisArea = nullptr );
 
-    bool GetShape(sal_uLong nId, SdrObject*& rpData, SvxMSDffImportData& rData);
+    bool GetShape(sal_uInt64 nId, SdrObject*& rpData, SvxMSDffImportData& rData);
 
     SdrObject* ImportObj( SvStream& rSt,
                           SvxMSDffClientData& rData,
@@ -701,13 +701,13 @@ public:
     const SvxMSDffShapeOrders* GetShapeOrders() const
         { return &m_aShapeOrders; }
 
-    void StoreShapeOrder(sal_uLong      nId,
-                         sal_uLong      nTxBx,
+    void StoreShapeOrder(sal_uInt64      nId,
+                         sal_uInt64      nTxBx,
                          SdrObject*     pObject,
                          SwFlyFrameFormat*   pFly = nullptr) const;
 
     void ExchangeInShapeOrder(SdrObject const * pOldObject,
-                              sal_uLong     nTxBx,
+                              sal_uInt64     nTxBx,
                               SdrObject*    pObject) const;
 
     void RemoveFromShapeOrder( SdrObject const * pObject ) const;
