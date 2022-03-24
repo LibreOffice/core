@@ -87,7 +87,7 @@
 #include <mailconfigpage.hxx>
 #include <uiborder.hxx>
 #include <mmresultdialogs.hxx>
-
+#include <formatlinebreak.hxx>
 
 using namespace ::com::sun::star;
 using namespace css::frame;
@@ -384,6 +384,15 @@ sal_uInt16 AbstractSwBreakDlg_Impl:: GetKind()
         return pDlg->GetPageNumber();
 
     return 0;
+}
+
+std::optional<SwLineBreakClear> AbstractSwBreakDlg_Impl::GetClear()
+{
+    SwBreakDlg* pDlg = dynamic_cast<SwBreakDlg*>(m_xDlg.get());
+    if (pDlg)
+        return pDlg->GetClear();
+
+    return SwLineBreakClear::NONE;
 }
 
 void AbstractSwConvertTableDlg_Impl::GetValues( sal_Unicode& rDelim,SwInsertTableOptions& rInsTableFlags,

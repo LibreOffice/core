@@ -331,12 +331,13 @@ namespace {
 void InsertBreak(SwWrtShell& rWrtSh,
                  sal_uInt16 nKind,
                  ::std::optional<sal_uInt16> oPageNumber,
-                 const OUString& rTemplateName)
+                 const OUString& rTemplateName, std::optional<SwLineBreakClear> oClear)
 {
     switch ( nKind )
     {
         case 1 :
-            rWrtSh.InsertLineBreak(); break;
+            rWrtSh.InsertLineBreak(oClear);
+            break;
         case 2 :
             rWrtSh.InsertColumnBreak(); break;
         case 3 :
@@ -652,6 +653,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 ::std::optional<sal_uInt16> oPageNumber;
+                std::optional<SwLineBreakClear> oClear;
                 OUString aTemplateName;
                 sal_uInt16 nKind = static_cast<const SfxInt16Item*>(pItem)->GetValue();
                 const SfxStringItem* pTemplate = rReq.GetArg<SfxStringItem>(FN_PARAM_1);
@@ -662,7 +664,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if ( pNumber && pIsNumberFilled && pIsNumberFilled->GetValue() )
                     oPageNumber = pNumber->GetValue();
 
-                InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName);
+                InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName, oClear);
             }
             else
             {
@@ -678,8 +680,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             sal_uInt16 nKind = pAbstractDialog->GetKind();
                             OUString aTemplateName = pAbstractDialog->GetTemplateName();
                             ::std::optional<sal_uInt16> oPageNumber = pAbstractDialog->GetPageNumber();
+                            std::optional<SwLineBreakClear> oClear = pAbstractDialog->GetClear();
 
-                            InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName);
+                            InsertBreak(rWrtSh, nKind, oPageNumber, aTemplateName, oClear);
                         }
                     });
             }

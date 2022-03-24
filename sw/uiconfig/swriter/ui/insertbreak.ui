@@ -115,6 +115,41 @@
                   </packing>
                 </child>
                 <child>
+                  <object class="GtkLabel" id="clearft">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_top">6</property>
+                    <property name="label" translatable="yes" context="insertbreak|clearft">Restart Location:</property>
+                    <property name="use_underline">True</property>
+                    <property name="mnemonic_widget">clearlb</property>
+                    <property name="xalign">0</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBoxText" id="clearlb">
+                    <property name="visible">True</property>
+                    <property name="sensitive">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="active">0</property>
+                    <items>
+                      <item id="0" translatable="yes" context="insertbreak|clearlb0">[None]</item>
+                      <item id="1" translatable="yes" context="insertbreak|clearlb1">Left</item>
+                      <item id="2" translatable="yes" context="insertbreak|clearlb2">Right</item>
+                      <item id="3" translatable="yes" context="insertbreak|clearlb3">Next Full Line</item>
+                    </items>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
                   <object class="GtkRadioButton" id="columnrb">
                     <property name="label" translatable="yes" context="insertbreak|columnrb">Column break</property>
                     <property name="visible">True</property>
@@ -132,7 +167,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">3</property>
                   </packing>
                 </child>
                 <child>
@@ -153,7 +188,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">2</property>
+                    <property name="position">4</property>
                   </packing>
                 </child>
                 <child>
@@ -169,7 +204,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -189,7 +224,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">4</property>
+                    <property name="position">6</property>
                   </packing>
                 </child>
                 <child>
@@ -210,7 +245,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">5</property>
+                    <property name="position">7</property>
                   </packing>
                 </child>
                 <child>
@@ -233,7 +268,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">6</property>
+                    <property name="position">8</property>
                   </packing>
                 </child>
               </object>
