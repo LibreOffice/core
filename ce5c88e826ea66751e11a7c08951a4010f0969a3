@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a390e248_e3eb9025",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport8.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-24T16:22:03Z",
+      "side": 1,
+      "message": "I verified this was actually \"2014\" in MS Word 2003 as well. So this is actually a good improvement and not just a \"this is how it currently looks\" unit test change.",
+      "range": {
+        "startLine": 132,
+        "startChar": 35,
+        "endLine": 132,
+        "endChar": 45
+      },
+      "revId": "ce5c88e826ea66751e11a7c08951a4010f0969a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97e0fd4a_f03235b0",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 5434,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-03-24T16:22:03Z",
+      "side": 1,
+      "message": "I decided to cache the value out of convenience. Doing it here seems nice and clean (as opposed to replicating all of this in the code below when I need it). Plus, I can imagine that it might be useful to have in the future, since field import in general seems like it needs a lot of work.",
+      "range": {
+        "startLine": 5434,
+        "startChar": 18,
+        "endLine": 5434,
+        "endChar": 36
+      },
+      "revId": "ce5c88e826ea66751e11a7c08951a4010f0969a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
