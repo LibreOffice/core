@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55657211_4a6fa6fa",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-24T10:43:33Z",
+      "side": 1,
+      "message": "should we remove the existing ones then, easy hack it or whatever ?",
+      "parentUuid": "7fbf5bfc_ed54409d",
+      "range": {
+        "startLine": 30,
+        "startChar": 65,
+        "endLine": 30,
+        "endChar": 86
+      },
+      "revId": "2be61f75743b732230b9b83c5e36d3f8623b49f3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6ea0c2a2_caedc386",
