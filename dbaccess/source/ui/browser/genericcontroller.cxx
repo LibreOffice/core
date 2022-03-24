@@ -755,7 +755,7 @@ void OGenericUnoController::frameAction(const FrameActionEvent& aEvent)
         m_aCurrentFrame.frameAction( aEvent.Action );
 }
 
-void OGenericUnoController::implDescribeSupportedFeature( const char* _pAsciiCommandURL,
+void OGenericUnoController::implDescribeSupportedFeature( const OUString& _rCommandURL,
         sal_uInt16 _nFeatureId, sal_Int16 _nCommandGroup )
 {
 #ifdef DBG_UTIL
@@ -765,7 +765,7 @@ void OGenericUnoController::implDescribeSupportedFeature( const char* _pAsciiCom
                 "OGenericUnoController::implDescribeSupportedFeature: invalid feature id!" );
 
     ControllerFeature aFeature;
-    aFeature.Command = OUString::createFromAscii( _pAsciiCommandURL );
+    aFeature.Command = _rCommandURL;
     aFeature.nFeatureId = _nFeatureId;
     aFeature.GroupId = _nCommandGroup;
 
