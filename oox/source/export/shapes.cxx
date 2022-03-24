@@ -1679,6 +1679,7 @@ static const NameToConvertMapType& lcl_GetConverters()
         { "com.sun.star.drawing.EllipseShape"              , &ShapeExport::WriteEllipseShape },
         { "com.sun.star.drawing.GraphicObjectShape"        , &ShapeExport::WriteGraphicObjectShape },
         { "com.sun.star.drawing.LineShape"                 , &ShapeExport::WriteLineShape },
+        { "com.sun.star.drawing.MediaShape"                , &ShapeExport::WriteGraphicObjectShape },
         { "com.sun.star.drawing.OpenBezierShape"           , &ShapeExport::WriteOpenPolyPolygonShape },
         { "com.sun.star.drawing.PolyPolygonShape"          , &ShapeExport::WriteClosedPolyPolygonShape },
         { "com.sun.star.drawing.PolyLineShape"             , &ShapeExport::WriteOpenPolyPolygonShape },
