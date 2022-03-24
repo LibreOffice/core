@@ -19,4 +19,5 @@
  <library:element library:name="SF_UI"/>
  <library:element library:name="SF_Platform"/>
  <library:element library:name="SF_PythonHelper"/>
+ <library:element library:name="SF_Region"/>
 </library:library>

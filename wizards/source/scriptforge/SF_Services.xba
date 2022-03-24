@@ -294,6 +294,7 @@ Public Sub RegisterScriptServices() As Variant
 		.RegisterService(&quot;FileSystem&quot;, GlobalScope.ScriptForge.SF_FileSystem)
 		.RegisterService(&quot;L10N&quot;, &quot;ScriptForge.SF_Services._NewL10N&quot;)
 		.RegisterService(&quot;Platform&quot;, GlobalScope.ScriptForge.SF_Platform)
+		.RegisterService(&quot;Region&quot;, GlobalScope.ScriptForge.SF_Region)
 		.RegisterService(&quot;Session&quot;, GlobalScope.ScriptForge.SF_Session)
 		.RegisterService(&quot;String&quot;, GlobalScope.ScriptForge.SF_String)
 		.RegisterService(&quot;Timer&quot;, &quot;ScriptForge.SF_Services._NewTimer&quot;)
