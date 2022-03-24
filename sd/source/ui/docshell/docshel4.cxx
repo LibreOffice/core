@@ -399,6 +399,18 @@ bool DrawDocShell::ImportFrom(SfxMedium &rMedium,
         mpDoc->SetSummationOfParagraphs();
     }
 
+    if (aFilterName == "Impress MS PowerPoint 2007 XML" ||
+        aFilterName == "Impress MS PowerPoint 2007 XML AutoPlay" ||
+        aFilterName == "Impress MS PowerPoint 2007 XML VBA" ||
+        aFilterName == "Impress Office Open XML")
+    {
+        // We need to be able to set the default tab size for each text object.
+        // This is possible at the moment only for the whole document. See
+        // TextParagraphPropertiesContext constructor. So default tab width
+        // of the LibreOffice is 1270 but MSO is 2540 on general settings.
+        mpDoc->SetDefaultTabulator( 2540 );
+    }
+
     const bool bRet = SfxObjectShell::ImportFrom(rMedium, xInsertPosition);
 
     SfxItemSet* pSet = rMedium.GetItemSet();
