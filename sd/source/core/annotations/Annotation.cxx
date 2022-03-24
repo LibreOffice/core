@@ -21,8 +21,6 @@
 
 #include <Annotation.hxx>
 
-#include <boost/property_tree/json_parser.hpp>
-
 #include <com/sun/star/drawing/XDrawPage.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -36,6 +34,8 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include <notifydocumentevent.hxx>
+
+#include <tools/json_writer.hxx>
 
 using namespace css;
 
@@ -341,34 +341,33 @@ namespace
 {
 std::string lcl_LOKGetCommentPayload(CommentNotificationType nType, uno::Reference<office::XAnnotation> const & rxAnnotation)
 {
-    boost::property_tree::ptree aAnnotation;
-    aAnnotation.put("action", (nType == CommentNotificationType::Add ? "Add" :
-                               (nType == CommentNotificationType::Remove ? "Remove" :
-                                (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
-    aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
-    if (nType != CommentNotificationType::Remove && rxAnnotation.is())
+    ::tools::JsonWriter aJsonWriter;
     {
-        aAnnotation.put("id", sd::getAnnotationId(rxAnnotation));
-        aAnnotation.put("author", rxAnnotation->getAuthor());
-        aAnnotation.put("dateTime", utl::toISO8601(rxAnnotation->getDateTime()));
-        uno::Reference<text::XText> xText(rxAnnotation->getTextRange());
-        aAnnotation.put("text", xText->getString());
-        const SdPage* pPage = sd::getAnnotationPage(rxAnnotation);
-        aAnnotation.put("parthash", pPage ? OString::number(pPage->GetHashCode()) : OString());
-        geometry::RealPoint2D const & rPoint = rxAnnotation->getPosition();
-        geometry::RealSize2D const & rSize = rxAnnotation->getSize();
-        ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));
-        aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
-        OString sRectangle = aRectangle.toString();
-        aAnnotation.put("rectangle", sRectangle.getStr());
+        auto aCommentNode = aJsonWriter.startNode("comment");
+
+        aJsonWriter.put("action", (nType == CommentNotificationType::Add ? "Add" :
+                                (nType == CommentNotificationType::Remove ? "Remove" :
+                                    (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
+        aJsonWriter.put("id", sd::getAnnotationId(rxAnnotation));
+
+        if (nType != CommentNotificationType::Remove && rxAnnotation.is())
+        {
+            aJsonWriter.put("id", sd::getAnnotationId(rxAnnotation));
+            aJsonWriter.put("author", rxAnnotation->getAuthor());
+            aJsonWriter.put("dateTime", utl::toISO8601(rxAnnotation->getDateTime()));
+            uno::Reference<text::XText> xText(rxAnnotation->getTextRange());
+            aJsonWriter.put("text", xText->getString());
+            const SdPage* pPage = sd::getAnnotationPage(rxAnnotation);
+            aJsonWriter.put("parthash", pPage ? OString::number(pPage->GetHashCode()) : OString());
+            geometry::RealPoint2D const & rPoint = rxAnnotation->getPosition();
+            geometry::RealSize2D const & rSize = rxAnnotation->getSize();
+            ::tools::Rectangle aRectangle(Point(rPoint.X * 100.0, rPoint.Y * 100.0), Size(rSize.Width * 100.0, rSize.Height * 100.0));
+            aRectangle = OutputDevice::LogicToLogic(aRectangle, MapMode(MapUnit::Map100thMM), MapMode(MapUnit::MapTwip));
+            OString sRectangle = aRectangle.toString();
+            aJsonWriter.put("rectangle", sRectangle.getStr());
+        }
     }
-
-    boost::property_tree::ptree aTree;
-    aTree.add_child("comment", aAnnotation);
-    std::stringstream aStream;
-    boost::property_tree::write_json(aStream, aTree);
-
-    return aStream.str();
+    return aJsonWriter.extractData();
 }
 } // anonymous ns
 
