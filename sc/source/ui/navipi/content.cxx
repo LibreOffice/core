@@ -1548,7 +1548,7 @@ void ScContentTree::SelectEntryByName(const ScContentId nRoot, std::u16string_vi
     }
 }
 
-void ScContentTree::ApplyNavigatorSettings(bool bRestorePos, int nScrollPos)
+void ScContentTree::ApplyNavigatorSettings()
 {
     const ScNavigatorSettings* pSettings = ScNavigatorDlg::GetNavigatorSettings();
     if( !pSettings )
@@ -1589,9 +1589,6 @@ void ScContentTree::ApplyNavigatorSettings(bool bRestorePos, int nScrollPos)
             // select
             if( nRootSel == nEntry )
             {
-                if (bRestorePos)
-                    m_xTreeView->vadjustment_set_value(nScrollPos);
-
                 std::unique_ptr<weld::TreeIter> xEntry;
                 if (bExp && (nChildSel != SC_CONTENT_NOCHILD))
                 {
