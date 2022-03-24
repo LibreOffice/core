@@ -125,8 +125,8 @@ public:
     /// If we have an associated TextFrame, then return its XTextFrame.
     static css::uno::Reference<css::text::XTextFrame>
     getUnoTextFrame(css::uno::Reference<css::drawing::XShape> const& xShape);
-    /// Return the textbox rectangle of a draw shape (in twips).
-    static tools::Rectangle getTextRectangle(SdrObject* pShape, bool bAbsolute = true);
+    /// Return the textbox rectangle of a draw shape (in relative twips).
+    static tools::Rectangle getRelativeTextRectangle(SdrObject* pShape);
 
     /**
      * Is the frame format a text box?
