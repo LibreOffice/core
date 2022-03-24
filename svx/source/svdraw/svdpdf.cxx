@@ -74,7 +74,7 @@
 
 namespace
 {
-double sqrt2(double a, double b) { return sqrt(a * a + b * b); }
+double sqrt2(double a, double b) { return std::hypot(a, b); }
 }
 
 using namespace com::sun::star;
