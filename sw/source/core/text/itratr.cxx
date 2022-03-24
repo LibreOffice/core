@@ -444,7 +444,7 @@ static void InsertCharAttrs(SfxPoolItem const** pAttrs, SfxItemSet const& rItems
         }
         else if (nWhich == RES_TXTATR_UNKNOWN_CONTAINER)
         {
-            pAttrs[RES_CHRATR_END] = pItem;
+            pAttrs[RES_CHRATR_END - RES_CHRATR_BEGIN] = pItem;
         }
     }
 }
