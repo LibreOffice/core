@@ -398,7 +398,7 @@ SwSpellPopup::SwSpellPopup(
             vcl::CommandInfoProvider::GetImageForCommand(".uno:SpellingAndGrammarDialog", xFrame));
 
     checkRedline();
-    m_xPopupMenu->RemoveDisabledEntries( true, true );
+    m_xPopupMenu->RemoveDisabledEntries( true );
 
     InitItemCommands(aSuggestions);
 }
@@ -555,7 +555,7 @@ SwSpellPopup::SwSpellPopup(
             vcl::CommandInfoProvider::GetImageForCommand(".uno:SpellingAndGrammarDialog", xFrame));
 
     checkRedline();
-    m_xPopupMenu->RemoveDisabledEntries(true, true);
+    m_xPopupMenu->RemoveDisabledEntries(true);
 
     SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( true ));
 

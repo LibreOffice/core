@@ -172,7 +172,7 @@ public:
     void SelectStyle(const OUString& rStyle, bool bIsCallback, StyleList& rStyleList);
 
     //When a new document is created, it comes into action
-    void IsUpdate(bool bDoUpdate, StyleList&);
+    void IsUpdate(StyleList&);
 
     // This function return the value of bUpdate in Stylelist
     // This value is used in StyleList's Notify

@@ -181,7 +181,7 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(weld::Container* pPage, weld::Dialo
 
 SmPrintOptionsTabPage::~SmPrintOptionsTabPage()
 {
-    SmGetActiveView()->GetEditWindow()->UpdateStatus(false);
+    SmGetActiveView()->GetEditWindow()->UpdateStatus();
 }
 
 bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
@@ -204,7 +204,7 @@ bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet* rSet)
     rSet->Put(SfxBoolItem(SID_AUTO_CLOSE_BRACKETS, m_xAutoCloseBrackets->get_active()));
     rSet->Put(SfxUInt16Item(SID_SMEDITWINDOWZOOM, sal::static_int_cast<sal_uInt16>(m_xSmZoom->get_value(FieldUnit::PERCENT))));
 
-    SmGetActiveView()->GetEditWindow()->UpdateStatus(false);
+    SmGetActiveView()->GetEditWindow()->UpdateStatus();
     return true;
 }
 

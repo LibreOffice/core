@@ -112,7 +112,7 @@ public:
 
     ESelection GetSelection() const;
     void SetSelection(const ESelection& rSel);
-    void UpdateStatus(bool bSetDocModified);
+    void UpdateStatus();
 
     bool IsEmpty() const;
     bool IsSelected() const;

@@ -217,7 +217,7 @@ SwReadOnlyPopup::SwReadOnlyPopup(const Point &rDPos, SwView &rV)
     }
     Check(m_nReadonlyFullscreen, SID_WIN_FULLSCREEN, rDis);
 
-    m_xMenu->RemoveDisabledEntries( true, true );
+    m_xMenu->RemoveDisabledEntries( true );
 }
 
 void SwReadOnlyPopup::Execute( vcl::Window* pWin, const Point &rPixPos )

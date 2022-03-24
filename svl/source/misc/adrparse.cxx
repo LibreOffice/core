@@ -88,7 +88,7 @@ class SvAddressParser_Impl
     bool readToken();
 
     static OUString reparse(sal_Unicode const * pBegin,
-                            sal_Unicode const * pEnd, bool bAddrSpec);
+                            sal_Unicode const * pEnd);
 
 public:
     SvAddressParser_Impl(SvAddressParser * pParser, const OUString& rIn);
@@ -245,12 +245,11 @@ bool SvAddressParser_Impl::readToken()
 
 // static
 OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
-                                       sal_Unicode const * pEnd, bool bAddrSpec)
+                                       sal_Unicode const * pEnd)
 {
     OUStringBuffer aResult;
     TokenType eMode = TOKEN_ATOM;
     bool bEscaped = false;
-    bool bEndsWithSpace = false;
     int nLevel = 0;
     while (pBegin < pEnd)
     {
@@ -265,14 +264,12 @@ OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
             }
             else if (cChar == '"')
             {
-                if (bAddrSpec)
-                    aResult.append(cChar);
+                aResult.append(cChar);
                 eMode = TOKEN_ATOM;
             }
             else if (cChar == '\\')
             {
-                if (bAddrSpec)
-                    aResult.append(cChar);
+                aResult.append(cChar);
                 bEscaped = true;
             }
             else
@@ -292,8 +289,7 @@ OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
             }
             else if (cChar == '\\')
             {
-                if (bAddrSpec)
-                    aResult.append(cChar);
+                aResult.append(cChar);
                 bEscaped = true;
             }
             else
@@ -317,28 +313,16 @@ OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
         case TOKEN_ATOM:
             if (cChar <= ' ' || cChar == 0x7F) // DEL
             {
-                if (!bAddrSpec && !bEndsWithSpace)
-                {
-                    aResult.append(' ');
-                    bEndsWithSpace = true;
-                }
             }
             else if (cChar == '(')
             {
-                if (!bAddrSpec && !bEndsWithSpace)
-                {
-                    aResult.append(' ');
-                    bEndsWithSpace = true;
-                }
                 eMode = TOKEN_COMMENT;
             }
             else
             {
-                bEndsWithSpace = false;
                 if (cChar == '"')
                 {
-                    if (bAddrSpec)
-                        aResult.append(cChar);
+                    aResult.append(cChar);
                     eMode = TOKEN_QUOTED;
                 }
                 else if (cChar == '[')
@@ -502,7 +486,7 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                 {
                     OUString aTheAddrSpec;
                     if (m_pAddrSpec->m_bReparse)
-                        aTheAddrSpec = reparse(m_pAddrSpec->m_pBegin, m_pAddrSpec->m_pEnd, true);
+                        aTheAddrSpec = reparse(m_pAddrSpec->m_pBegin, m_pAddrSpec->m_pEnd);
                     else
                     {
                         sal_Int32 nLen = m_pAddrSpec->m_pEnd - m_pAddrSpec->m_pBegin;

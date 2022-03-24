@@ -715,9 +715,9 @@ void SmEditTextWindow::UpdateStatus(bool bSetDocModified)
     static_cast<SmEditEngine*>(GetEditEngine())->executeZoom(GetEditView());
 }
 
-void SmEditWindow::UpdateStatus(bool bSetDocModified)
+void SmEditWindow::UpdateStatus()
 {
-    mxTextControl->UpdateStatus(bSetDocModified);
+    mxTextControl->UpdateStatus(/*bSetDocModified*/false);
 }
 
 void SmEditWindow::Cut()

@@ -510,13 +510,10 @@ public:
 
     /** Convert Locale to MS-LangID with fallback.
 
-        @param bResolveSystem
-               If TRUE, resolve an empty language tag denoting the system
-               locale to the real locale used and fallback.
-               If FALSE, return LANGUAGE_SYSTEM for such a tag and do not fallback.
+        Resolves an empty language tag denoting the system
+        locale to LANGUAGE_SYSTEM and does not fallback.
      */
-    static LanguageType convertToLanguageTypeWithFallback( const css::lang::Locale& rLocale,
-                                                           bool bResolveSystem = true );
+    static LanguageType convertToLanguageTypeWithFallback( const css::lang::Locale& rLocale );
 
     /** If rString represents a valid BCP 47 language tag.
 
