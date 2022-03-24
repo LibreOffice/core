@@ -3021,7 +3021,7 @@ SwFlyFrameFormat* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject*& rpObject,
             deleted and useless.
             */
             m_xMSDffManager->StoreShapeOrder(rF.nSpId,
-                (static_cast<sal_uLong>(rRecord.aTextId.nTxBxS) << 16) +
+                (static_cast<sal_uInt64>(rRecord.aTextId.nTxBxS) << 16) +
                 rRecord.aTextId.nSequence, nullptr, pRetFrameFormat);
 
             // The Contact object has to be inserted into the draw page, so

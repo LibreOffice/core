@@ -1071,7 +1071,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
         if( pImpRec->nShapeId )
         {
             auto nShapeId = pImpRec->nShapeId;
-            auto nShapeOrder = (static_cast<sal_uLong>(pImpRec->aTextId.nTxBxS) << 16)
+            auto nShapeOrder = (static_cast<sal_uInt64>(pImpRec->aTextId.nTxBxS) << 16)
                                     + pImpRec->aTextId.nSequence;
             // Complement Import Record List
             pImpRec->pObj = pObj;
@@ -6682,7 +6682,7 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
  * So convert all of them as a precaution.
  * FIXME: Actually implement this!
  */
-bool SwMSDffManager::ShapeHasText(sal_uLong, sal_uLong) const
+bool SwMSDffManager::ShapeHasText(sal_uInt64, sal_uInt64) const
 {
     return true;
 }
