@@ -27,7 +27,9 @@ struct S3
 
 template <typename> struct S4
 {
-    // expected-error@+1 {{no need for explicit constructor decl [loplugin:trivialconstructor]}}
+#if !defined _MSC_VER
+// expected-error@+2 {{no need for explicit constructor decl [loplugin:trivialconstructor]}}
+#endif
     S4() {}
 };
 
