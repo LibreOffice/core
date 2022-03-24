@@ -308,6 +308,15 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf115162)
     // - Expected: 30
     // - Actual  : Err:504
     CPPUNIT_ASSERT_EQUAL(OUString("30"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    aFormula = "=VLOOKUP('" + aTempFile.GetURL() + "'#$Sheet1.A2;'" + aTempFile.GetURL()
+               + "'#$Sheet1.A2:B4,2,0)";
+    insertStringToCell(*pModelObj, "B1", aFormula.toUtf8().getStr());
+
+    // tdf#114820: Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : Err:504
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(1, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
