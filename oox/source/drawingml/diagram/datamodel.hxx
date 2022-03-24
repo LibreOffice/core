@@ -92,9 +92,8 @@ struct Point
         mbCustomText(false),
         mbIsPlaceholder(false)
     {}
-    void dump() const;
 
-    ShapePtr      mpShape;
+    void dump(const Shape* pShape) const;
 
     OUString msCnxId;
     OUString msModelId;
@@ -146,22 +145,26 @@ typedef std::vector< Point >        Points;
 class DiagramData
 {
 public:
+    typedef std::map< OUString, ShapePtr > PointShapeMap;
     typedef std::map< OUString, dgm::Point* > PointNameMap;
-    typedef std::map< OUString,
-                      std::vector<dgm::Point*> >   PointsNameMap;
+    typedef std::map< OUString, std::vector<dgm::Point*> > PointsNameMap;
     typedef std::map< OUString, const dgm::Connection* > ConnectionNameMap;
+
     struct SourceIdAndDepth
     {
         OUString msSourceId;
         sal_Int32 mnDepth = 0;
     };
+
     /// Tracks connections: destination id -> {destination order, details} map.
-    typedef std::map< OUString,
-                      std::map<sal_Int32, SourceIdAndDepth > > StringMap;
+    typedef std::map< OUString, std::map<sal_Int32, SourceIdAndDepth > > StringMap;
 
     DiagramData();
     virtual ~DiagramData() {}
+
+    // creates temporary processing data from model data
     void build();
+
     FillPropertiesPtr & getFillProperties()
         { return mpFillProperties; }
     dgm::Connections & getConnections()
@@ -184,14 +187,25 @@ public:
     OUString addNode(const OUString& rText);
     bool removeNode(const OUString& rNodeId);
 
+    Shape* getOrCreateAssociatedShape(const dgm::Point& rPoint, bool bCreateOnDemand = false) const;
+
 private:
     void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;
     void addConnection(sal_Int32 nType, const OUString& sSourceId, const OUString& sDestId);
 
+    // evtl. existing alternative imported visualization identifier
     ::std::vector<OUString>  maExtDrawings;
+
+    // the model definition,
+    // - FillStyle
+    // - logic connections/assoziations
+    // - data point entries
     FillPropertiesPtr mpFillProperties;
     dgm::Connections  maConnections;
     dgm::Points       maPoints;
+
+    // temporary processing data
+    PointShapeMap     maPointShapeMap;
     PointNameMap      maPointNameMap;
     PointsNameMap     maPointsPresNameMap;
     ConnectionNameMap maConnectionNameMap;
