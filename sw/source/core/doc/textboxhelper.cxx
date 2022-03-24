@@ -1623,6 +1623,68 @@ std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(const SdrObject* p
     return vRet;
 }
 
+void SwTextBoxHelper::cloneTextBoxTree(const SwFrameFormat* pSourceFormat,
+                                       const SdrObject* pSourceObj,
+                                       SwFrameFormat* pDestinationFormat,
+                                       SdrObject* pDestinationObj)
+{
+    if (!pSourceFormat || !pSourceObj || !pDestinationFormat || !pDestinationObj)
+        return;
+
+    if ((pSourceFormat->Which() != RES_DRAWFRMFMT)
+        || (pDestinationFormat->Which() != RES_DRAWFRMFMT))
+        return;
+
+    auto pSourceTextBoxHandler = pSourceFormat->GetTextBoxHandler();
+    auto pDestTextBoxHandler = pDestinationFormat->GetTextBoxHandler();
+
+    if (!pSourceTextBoxHandler)
+        return;
+
+    if (!pDestTextBoxHandler)
+    {
+        pDestTextBoxHandler = new SwTextBoxHandler(pDestinationFormat);
+        pDestinationFormat->SetTextBoxHandler(pDestTextBoxHandler);
+    }
+
+    SdrObjList* pSourceSdrList = pSourceObj->getChildrenOfSdrObject();
+    SdrObjList* pDestSdrList = pDestinationObj->getChildrenOfSdrObject();
+
+    if (pSourceSdrList && pDestSdrList)
+    {
+        size_t nSrcObjs = pSourceSdrList->GetObjCount();
+        size_t nDestObj = pDestSdrList->GetObjCount();
+
+        if (nSrcObjs != nDestObj)
+        {
+            SAL_WARN("sw.core", "cloneTextBoxTree(): Different tree, cloning impossible!");
+            return;
+        }
+
+        for (size_t i = 0; i < nSrcObjs; ++i)
+            cloneTextBoxTree(pSourceFormat, pSourceSdrList->GetObj(i), pDestinationFormat,
+                             pDestSdrList->GetObj(i));
+    }
+
+    if ((!pSourceSdrList && pDestSdrList) || (pSourceSdrList && !pDestSdrList))
+    {
+        SAL_WARN("sw.core", "cloneTextBoxTree(): Different tree, cloning impossible!");
+        return;
+    }
+
+    if (!pSourceSdrList && !pDestSdrList)
+    {
+        if (auto pTextBox = pSourceTextBoxHandler->GetTextBox(pSourceObj))
+        {
+            auto pNew = pTextBox->GetDoc()->getIDocumentLayoutAccess().CopyLayoutFormat(
+                *pTextBox, pTextBox->GetAnchor(), false, true);
+
+            pDestTextBoxHandler->AddTextBox(pDestinationObj, pNew);
+            pNew->SetTextBoxHandler(pDestTextBoxHandler);
+        }
+    }
+}
+
 SwTextBoxHandler::SwTextBoxHandler(SwFrameFormat* pOwnerShape)
 {
     assert(pOwnerShape);
