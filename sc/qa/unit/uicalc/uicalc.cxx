@@ -317,6 +317,15 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf115162)
     // - Expected: 1
     // - Actual  : Err:504
     CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(1, 0, 0)));
+
+    aFormula
+        = "=VAR('" + aTempFile.GetURL() + "'#$Sheet1.C2;'" + aTempFile.GetURL() + "'#$Sheet1.C3)";
+    insertStringToCell(*pModelObj, "C1", aFormula.toUtf8().getStr());
+
+    // tdf#116149: Without the fix in place, this test would have failed with
+    // - Expected: 50
+    // - Actual  : Err:504
+    CPPUNIT_ASSERT_EQUAL(OUString("50"), pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
