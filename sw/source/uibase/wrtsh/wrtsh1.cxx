@@ -111,6 +111,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <UndoInsert.hxx>
 #include <UndoCore.hxx>
+#include <formatlinebreak.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -949,7 +950,7 @@ void SwWrtShell::InsertPageBreak(const OUString *pPageDesc, const ::std::optiona
 // Insert hard page break;
 // Selections will be overwritten
 
-void SwWrtShell::InsertLineBreak()
+void SwWrtShell::InsertLineBreak(std::optional<SwLineBreakClear> oClear)
 {
     if (!lcl_IsAllowed(this))
         return;
@@ -961,11 +962,26 @@ void SwWrtShell::InsertLineBreak()
             DelRight();
 
         const sal_Unicode cIns = 0x0A;
+        SwLineBreakClear eClear = SwLineBreakClear::NONE;
+        if (oClear.has_value())
+        {
+            eClear = *oClear;
+        }
         SvxAutoCorrect* pACorr = lcl_IsAutoCorr();
-        if( pACorr )
+        if (pACorr && eClear == SwLineBreakClear::NONE)
             AutoCorrect( *pACorr, cIns );
         else
-            SwWrtShell::Insert( OUString( cIns ) );
+        {
+            if (eClear == SwLineBreakClear::NONE)
+            {
+                SwWrtShell::Insert(OUString(cIns));
+            }
+            else
+            {
+                SwFormatLineBreak aLineBreak(eClear);
+                SetAttrItem(aLineBreak);
+            }
+        }
     }
 }
 

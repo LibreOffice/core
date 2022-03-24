@@ -53,6 +53,7 @@ class SfxStringListItem;
 enum class SvMacroItemId : sal_uInt16;
 class SwFieldMgr;
 class SfxRequest;
+enum class SwLineBreakClear;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -312,7 +313,7 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
 
     void    InsertByWord( const OUString & );
     void    InsertPageBreak(const OUString *pPageDesc = nullptr, const ::std::optional<sal_uInt16>& rPgNum = std::nullopt);
-    void    InsertLineBreak();
+    void InsertLineBreak(std::optional<SwLineBreakClear> oClear = std::nullopt);
     void    InsertColumnBreak();
     void    InsertFootnote(const OUString &, bool bEndNote = false, bool bEdit = true );
     void    SplitNode( bool bAutoFormat = false );

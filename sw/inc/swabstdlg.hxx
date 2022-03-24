@@ -60,6 +60,7 @@ class SwInsTableDlg;
 enum class SwBorderModes;
 enum class SwCharDlgMode;
 enum class SfxStyleFamily;
+enum class SwLineBreakClear;
 
 namespace com::sun::star{
     namespace frame{
@@ -235,6 +236,7 @@ public:
     virtual OUString                        GetTemplateName() = 0;
     virtual sal_uInt16                      GetKind() = 0;
     virtual ::std::optional<sal_uInt16>   GetPageNumber() = 0;
+    virtual std::optional<SwLineBreakClear> GetClear() = 0;
 
     virtual std::shared_ptr<weld::DialogController> getDialogController() = 0;
 };

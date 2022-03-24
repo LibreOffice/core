@@ -181,6 +181,7 @@ public:
     virtual OUString                        GetTemplateName() override;
     virtual sal_uInt16                      GetKind() override;
     virtual ::std::optional<sal_uInt16>   GetPageNumber() override;
+    std::optional<SwLineBreakClear> GetClear() override;
 
     virtual std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
 };
