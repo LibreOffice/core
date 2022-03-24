@@ -154,6 +154,7 @@ public:
     void testColumnWidthRowHeightXLSXML();
     void testCharacterSetXLSXML();
     void testTdf137091();
+    void testTdf70455();
     void testTdf62268();
     void testTdf137453();
     void testTdf112780();
@@ -265,6 +266,7 @@ public:
     CPPUNIT_TEST(testCharacterSetXLSXML);
     CPPUNIT_TEST(testCondFormatFormulaListenerXLSX);
     CPPUNIT_TEST(testTdf137091);
+    CPPUNIT_TEST(testTdf70455);
     CPPUNIT_TEST(testTdf62268);
     CPPUNIT_TEST(testTdf137453);
     CPPUNIT_TEST(testTdf112780);
@@ -2319,6 +2321,19 @@ void ScFiltersTest2::testTdf137091()
     // - Expected: 28/4
     // - Actual  : Err:507
     CPPUNIT_ASSERT_EQUAL(OUString("28/4"), rDoc.GetString(ScAddress(2, 1, 0)));
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf70455()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf70455.", FORMAT_XLSX);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: €780.00
+    // - Actual  : Err:509
+    CPPUNIT_ASSERT_EQUAL(OUString(OUStringChar(u'\x20AC') + "780.00"),
+                         rDoc.GetString(ScAddress(7, 7, 0)));
     xDocSh->DoClose();
 }
 
