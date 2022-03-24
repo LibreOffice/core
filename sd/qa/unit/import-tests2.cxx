@@ -129,6 +129,7 @@ public:
     void testHyperlinksOnShapes();
     void testTdf112209();
     void testTdf128596();
+    void testDefaultTabStop();
 
     CPPUNIT_TEST_SUITE(SdImportTest2);
 
@@ -194,6 +195,7 @@ public:
     CPPUNIT_TEST(testHyperlinksOnShapes);
     CPPUNIT_TEST(testTdf112209);
     CPPUNIT_TEST(testTdf128596);
+    CPPUNIT_TEST(testDefaultTabStop);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -1903,6 +1905,18 @@ void SdImportTest2::testTdf128596()
     css::drawing::BitmapMode bitmapmode;
     xShape->getPropertyValue("FillBitmapMode") >>= bitmapmode;
     CPPUNIT_ASSERT_EQUAL(css::drawing::BitmapMode_REPEAT, bitmapmode);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testDefaultTabStop()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/deftabstop.pptx"), PPTX);
+    SdDrawDocument* pDoc = xDocShRef->GetDoc();
+    sal_Int32 nDefTab = pDoc->GetDefaultTabulator();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2540), nDefTab);
 
     xDocShRef->DoClose();
 }
