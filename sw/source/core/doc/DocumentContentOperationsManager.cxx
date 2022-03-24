@@ -639,7 +639,7 @@ namespace
 {
 
     bool lcl_DoWithBreaks(::sw::DocumentContentOperationsManager & rDocumentContentOperations, SwPaM & rPam,
-            bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&, bool), const bool bForceJoinNext = false)
+            bool (::sw::DocumentContentOperationsManager::*pFunc)(SwPaM&))
     {
         std::vector<std::pair<SwNodeOffset, sal_Int32>> Breaks;
 
@@ -647,7 +647,7 @@ namespace
 
         if (Breaks.empty())
         {
-            return (rDocumentContentOperations.*pFunc)(rPam, bForceJoinNext);
+            return (rDocumentContentOperations.*pFunc)(rPam);
         }
 
         // Deletion must be split into several parts if the text node
@@ -671,7 +671,7 @@ namespace
             rStart = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second + 1);
             if (rStart < rEnd) // check if part is empty
             {
-                bRet &= (rDocumentContentOperations.*pFunc)(aPam, bForceJoinNext);
+                bRet &= (rDocumentContentOperations.*pFunc)(aPam);
                 nOffset = iter->first - rStart.nNode.GetIndex(); // deleted fly nodes...
             }
             rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
@@ -681,7 +681,7 @@ namespace
         rStart = *rPam.Start(); // set to original start
         if (rStart < rEnd) // check if part is empty
         {
-            bRet &= (rDocumentContentOperations.*pFunc)(aPam, bForceJoinNext);
+            bRet &= (rDocumentContentOperations.*pFunc)(aPam);
         }
 
         return bRet;
@@ -2292,17 +2292,14 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
     return true;
 }
 
-// #i100466# Add handling of new optional parameter <bForceJoinNext>
-bool DocumentContentOperationsManager::DeleteAndJoin( SwPaM & rPam,
-                           const bool bForceJoinNext )
+bool DocumentContentOperationsManager::DeleteAndJoin( SwPaM & rPam )
 {
     if ( lcl_StrLenOverflow( rPam ) )
         return false;
 
     bool const ret = lcl_DoWithBreaks( *this, rPam, (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
                 ? &DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl
-                : &DocumentContentOperationsManager::DeleteAndJoinImpl,
-                bForceJoinNext );
+                : &DocumentContentOperationsManager::DeleteAndJoinImpl );
 
     return ret;
 }
@@ -3494,7 +3491,7 @@ bool DocumentContentOperationsManager::ReplaceRange( SwPaM& rPam, const OUString
         {
             bRet &= (m_rDoc.getIDocumentRedlineAccess().IsRedlineOn())
                 ? DeleteAndJoinWithRedlineImpl(aPam)
-                : DeleteAndJoinImpl(aPam, false);
+                : DeleteAndJoinImpl(aPam);
             nOffset = iter->first - rStart.nNode.GetIndex(); // deleted fly nodes...
         }
         rEnd = SwPosition(*rNodes[iter->first - nOffset]->GetTextNode(), iter->second);
@@ -4067,7 +4064,7 @@ DocumentContentOperationsManager::~DocumentContentOperationsManager()
 }
 //Private methods
 
-bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
+bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPam  )
 {
     assert(m_rDoc.getIDocumentRedlineAccess().IsRedlineOn());
 
@@ -4209,22 +4206,14 @@ bool DocumentContentOperationsManager::DeleteAndJoinWithRedlineImpl( SwPaM & rPa
     return true;
 }
 
-bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
-                               const bool bForceJoinNext )
+bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam )
 {
     bool bJoinText, bJoinPrev;
     ::sw_GetJoinFlags( rPam, bJoinText, bJoinPrev );
-    // #i100466#
-    if ( bForceJoinNext )
-    {
-        bJoinPrev = false;
-    }
 
-    {
-        bool const bSuccess( DeleteRangeImpl( rPam ) );
-        if (!bSuccess)
-            return false;
-    }
+    bool const bSuccess( DeleteRangeImpl( rPam ) );
+    if (!bSuccess)
+        return false;
 
     if( bJoinText )
     {
@@ -4240,7 +4229,7 @@ bool DocumentContentOperationsManager::DeleteAndJoinImpl( SwPaM & rPam,
     return true;
 }
 
-bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam, const bool)
+bool DocumentContentOperationsManager::DeleteRangeImpl(SwPaM & rPam)
 {
     // Move all cursors out of the deleted range, but first copy the
     // passed PaM, because it could be a cursor that would be moved!
