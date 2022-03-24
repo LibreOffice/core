@@ -140,9 +140,6 @@ void MenuBarManager::Destroy()
 {
     SolarMutexGuard aGuard;
 
-    if ( m_bDisposed )
-        return;
-
     // stop asynchronous settings timer and
     // release deferred item container reference
     m_aAsyncSettingsTimer.Stop();
