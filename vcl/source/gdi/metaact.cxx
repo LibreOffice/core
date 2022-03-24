@@ -841,7 +841,7 @@ static bool AllowScale(const Size& rSource, const Size& rDest)
 {
     if (utl::ConfigManager::IsFuzzing())
     {
-        constexpr int nMaxScaleWhenFuzzing = 1024;
+        constexpr int nMaxScaleWhenFuzzing = 512;
 
         auto nSourceHeight = rSource.Height();
         auto nDestHeight = rDest.Height();
