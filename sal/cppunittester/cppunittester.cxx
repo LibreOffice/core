@@ -488,60 +488,46 @@ static bool main2()
 #if defined(_WIN32) && defined(_DEBUG)
 
 //Prints stack trace based on exception context record
-static void printStack( CONTEXT* ctx )
+static void printStack( PCONTEXT ctx )
 {
-    constexpr int MaxNameLen = 256;
-    bool    result;
-    HANDLE  process;
-    HANDLE  thread;
-    HMODULE hModule;
-#ifdef _M_AMD64
-    STACKFRAME64        stack;
-#else
-    STACKFRAME          stack;
-#endif
-    ULONG               frame;
-    DWORD64             displacement;
-    DWORD disp;
-    char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR)];
-    char module[MaxNameLen];
+    HANDLE process = GetCurrentProcess();
+    HANDLE thread = GetCurrentThread();
+    STACKFRAME64 stack{};
+    alignas(SYMBOL_INFO) char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(CHAR)];
     PSYMBOL_INFO pSymbol = reinterpret_cast<PSYMBOL_INFO>(buffer);
 
-#ifdef _M_AMD64
-    memset( &stack, 0, sizeof( STACKFRAME64 ) );
-#else
-    memset( &stack, 0, sizeof( STACKFRAME ) );
-#endif
-
-    process                = GetCurrentProcess();
-    thread                 = GetCurrentThread();
-    displacement           = 0;
-#if !defined(_M_AMD64)
-    stack.AddrPC.Offset    = (*ctx).Eip;
     stack.AddrPC.Mode      = AddrModeFlat;
-    stack.AddrStack.Offset = (*ctx).Esp;
     stack.AddrStack.Mode   = AddrModeFlat;
-    stack.AddrFrame.Offset = (*ctx).Ebp;
     stack.AddrFrame.Mode   = AddrModeFlat;
+#ifdef _M_AMD64
+    stack.AddrPC.Offset    = ctx->Rip;
+    stack.AddrStack.Offset = ctx->Rsp;
+    stack.AddrFrame.Offset = ctx->Rsp;
+#else
+    stack.AddrPC.Offset    = ctx->Eip;
+    stack.AddrStack.Offset = ctx->Esp;
+    stack.AddrFrame.Offset = ctx->Ebp;
 #endif
 
     SymInitialize( process, nullptr, TRUE ); //load symbols
+    DWORD symOptions = SymGetOptions();
+    symOptions |= SYMOPT_LOAD_LINES;
+    symOptions |= SYMOPT_FAIL_CRITICAL_ERRORS;
+    symOptions = SymSetOptions(symOptions);
 
-#ifdef _M_AMD64
-    std::unique_ptr<IMAGEHLP_LINE64> line(new IMAGEHLP_LINE64);
-    line->SizeOfStruct = sizeof(IMAGEHLP_LINE64);
-#else
-    std::unique_ptr<IMAGEHLP_LINE> line(new IMAGEHLP_LINE);
-    line->SizeOfStruct = sizeof(IMAGEHLP_LINE);
-#endif
+    IMAGEHLP_LINE64 line{};
+    line.SizeOfStruct = sizeof(line);
 
-    for( frame = 0; ; frame++ )
+    for (;;)
     {
         //get next call from stack
-#ifdef _M_AMD64
-        result = StackWalk64
+        bool result = StackWalk64
         (
+#ifdef _M_AMD64
             IMAGE_FILE_MACHINE_AMD64,
+#else
+            IMAGE_FILE_MACHINE_I386,
+#endif
             process,
             thread,
             &stack,
@@ -551,54 +537,38 @@ static void printStack( CONTEXT* ctx )
             SymGetModuleBase64,
             nullptr
         );
-#else
-        result = StackWalk
-        (
-            IMAGE_FILE_MACHINE_I386,
-            process,
-            thread,
-            &stack,
-            ctx,
-            nullptr,
-            SymFunctionTableAccess,
-            SymGetModuleBase,
-            nullptr
-        );
-#endif
 
         if( !result )
             break;
 
         //get symbol name for address
         pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
-        pSymbol->MaxNameLen = MAX_SYM_NAME;
-#ifdef _M_AMD64
-        SymFromAddr(process, static_cast< ULONG64 >(stack.AddrPC.Offset), &displacement, pSymbol);
-#else
-        SymFromAddr(process, static_cast< ULONG >(stack.AddrPC.Offset), &displacement, pSymbol);
-#endif
+        pSymbol->MaxNameLen = MAX_SYM_NAME + 1;
+        if (SymFromAddr(process, stack.AddrPC.Offset, nullptr, pSymbol))
+            printf("\tat %s", pSymbol->Name);
+        else
+            printf("\tat unknown (Error in SymFromAddr=%#08x)", GetLastError());
+
+        DWORD disp;
         //try to get line
-#ifdef _M_AMD64
-        if (SymGetLineFromAddr64(process, stack.AddrPC.Offset, &disp, line.get()))
-#else
-        if (SymGetLineFromAddr(process, stack.AddrPC.Offset, &disp, line.get()))
-#endif
+        if (SymGetLineFromAddr64(process, stack.AddrPC.Offset, &disp, &line))
         {
-            printf("\tat %s in %s: line: %lu: address: 0x%0I64X\n", pSymbol->Name, line->FileName, line->LineNumber, pSymbol->Address);
+            printf(" in %s: line: %lu: address: 0x%0I64X\n", line.FileName, line.LineNumber, stack.AddrPC.Offset);
         }
         else
         {
             //failed to get line
-            printf("\tat %s, address 0x%0I64X.\n", pSymbol->Name, pSymbol->Address);
-            hModule = nullptr;
-            lstrcpyA(module,"");
+            printf(", address 0x%0I64X", stack.AddrPC.Offset);
+            HMODULE hModule = nullptr;
             GetModuleHandleEx(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
                 reinterpret_cast<LPCTSTR>(stack.AddrPC.Offset), &hModule);
 
+            char sModule[256];
             //at least print module name
-            if(hModule != nullptr)GetModuleFileNameA(hModule,module,MaxNameLen);
+            if (hModule != nullptr)
+                GetModuleFileNameA(hModule, sModule, std::size(sModule));
 
-            printf ("in %s\n",module);
+            printf (" in %s\n", sModule);
         }
     }
 }
