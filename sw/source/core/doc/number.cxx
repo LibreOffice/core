@@ -649,7 +649,6 @@ OUString SwNumRule::MakeNumString( const SwNodeNum& rNum, bool bInclStrings ) co
 
 OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
                                  const bool bInclStrings,
-                                 const bool bOnlyArabic,
                                  const unsigned int _nRestrictToThisLevel,
                                  SwNumRule::Extremities* pExtremities,
                                  LanguageType nLang ) const
@@ -711,12 +710,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 }
             }
             else if (rNumVector[i])
-            {
-                if (bOnlyArabic)
-                    sReplacement = OUString::number(rNumVector[i]);
-                else
-                    sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale);
-            }
+                sReplacement = Get(i).GetNumStr(rNumVector[i], aLocale);
             else
                 sReplacement = "0";        // all 0 level are a 0
 
@@ -761,12 +755,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
             }
 
             if (rNumVector[i])
-            {
-                if (bOnlyArabic)
-                    aStr.append(rNumVector[i]);
-                else
-                    aStr.append(rNFormat.GetNumStr(rNumVector[i], aLocale));
-            }
+                aStr.append(rNFormat.GetNumStr(rNumVector[i], aLocale));
             else
                 aStr.append("0");        // all 0 level are a 0
             if (i != nLevel && !aStr.isEmpty())
@@ -775,7 +764,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
         // The type doesn't have any number, so don't append
         // the post-/prefix string
-        if (bInclStrings && !bOnlyArabic &&
+        if (bInclStrings &&
             SVX_NUM_CHAR_SPECIAL != rMyNFormat.GetNumberingType() &&
             SVX_NUM_BITMAP != rMyNFormat.GetNumberingType())
         {
@@ -831,7 +820,7 @@ OUString SwNumRule::MakeRefNumString( const SwNodeNum& rNodeNum,
             {
                 Extremities aExtremities;
                 OUString aPrevStr = MakeNumString( pWorkingNodeNum->GetNumberVector(),
-                                                 true, false, MAXLEVEL,
+                                                 true, MAXLEVEL,
                                                  &aExtremities);
                 sal_Int32 nStrip = 0;
                 while ( nStrip < aExtremities.nPrefixChars )

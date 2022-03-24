@@ -3121,7 +3121,6 @@ OUString SwTextNode::GetNumString( const bool _bInclPrefixAndSuffixStrings,
         {
             return pRule->MakeNumString( GetNum(pLayout)->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings,
-                                     false,
                                      _nRestrictToThisLevel,
                                      nullptr,
                                      GetLang(0));
