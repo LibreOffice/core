@@ -51,6 +51,24 @@
       "message": "oh feel free to hack away, I\u0027m just rebasing to try and trigger the crash, but I see you have found a better way than just rebasing lots of times :-)",
       "revId": "801426ddc4d7ad7d88bbffd91723f5a9c00cc9cd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c470f127_f0be8934",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-24T20:05:07Z",
+      "side": 1,
+      "message": "hmm, I tested locally with both 64- and 32-bit builds. Now I will try to use exactly the same configure settings as jenkins to try to repro the problem.",
+      "parentUuid": "53399da1_5e7c4367",
+      "revId": "801426ddc4d7ad7d88bbffd91723f5a9c00cc9cd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
