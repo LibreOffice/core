@@ -175,7 +175,7 @@ hchar_string DateCode::GetString()
         case '@':
         {
             static_assert((std::size(eng_mon) - 1) / 3 == 12);
-            size_t nIndex = (date[MONTH] - 1) % 12;
+            size_t nIndex = o3tl::make_unsigned(date[MONTH] - 1) % 12;
             memcpy(cbuf, eng_mon + nIndex * 3, 3);
             cbuf[3] = '.';
             cbuf[4] = 0;
@@ -183,7 +183,7 @@ hchar_string DateCode::GetString()
         }
         case '*':
         {
-            size_t nIndex = (date[MONTH] - 1) % std::size(en_mon);
+            size_t nIndex = o3tl::make_unsigned(date[MONTH] - 1) % std::size(en_mon);
             strncat(cbuf, en_mon[nIndex], sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         }
@@ -220,14 +220,14 @@ hchar_string DateCode::GetString()
             break;
         case '6':
         {
-            size_t nIndex = date[WEEK] % std::size(kor_week);
+            size_t nIndex = o3tl::make_unsigned(date[WEEK]) % std::size(kor_week);
             ret.push_back(kor_week[nIndex]);
             break;
         }
         case '^':
         {
             static_assert((std::size(eng_week) - 1) / 3 == 7);
-            size_t nIndex = date[WEEK] % 7;
+            size_t nIndex = o3tl::make_unsigned(date[WEEK]) % 7;
             memcpy(cbuf, eng_week + nIndex * 3, 3);
             cbuf[3] = '.';
             cbuf[4] = 0;
@@ -235,7 +235,7 @@ hchar_string DateCode::GetString()
         }
         case '_':
         {
-            size_t nIndex = date[WEEK] % std::size(en_week);
+            size_t nIndex = o3tl::make_unsigned(date[WEEK]) % std::size(en_week);
             strncat(cbuf, en_week[nIndex], sizeof(cbuf) - strlen(cbuf) - 1);
             break;
         }
@@ -274,7 +274,7 @@ hchar_string DateCode::GetString()
             fmt++;
             if (*fmt == '6')
             {
-                size_t nIndex = date[WEEK] % std::size(china_week);
+                size_t nIndex = o3tl::make_unsigned(date[WEEK]) % std::size(china_week);
                 ret.push_back(china_week[nIndex]);
                 break;
             }
