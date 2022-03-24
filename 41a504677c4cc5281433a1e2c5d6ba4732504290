@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e06e35a_43c752ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-24T10:36:07Z",
+      "side": 1,
+      "message": "Likely this is tdf#148160, and likely this is a regression :-)",
+      "revId": "41a504677c4cc5281433a1e2c5d6ba4732504290",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
