@@ -411,26 +411,19 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
     bool bIsSuccessful = true;
     const lcl_tSizeType n = rUniquePoints.size() - 1;
     t[0]=0.0;
-    double dx = 0.0;
-    double dy = 0.0;
-    double fDiffMax = 1.0; //dummy values
     double fDenominator = 0.0; // initialized for summing up
     for (lcl_tSizeType i=1; i<=n ; ++i)
     {   // 4th root(dx^2+dy^2)
-        dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
-        dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
-        // scaling to avoid underflow or overflow
-        fDiffMax = std::max(fabs(dx), fabs(dy));
-        if (fDiffMax == 0.0)
+        double dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
+        double dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
+        if (dx == 0 && dy == 0)
         {
             bIsSuccessful = false;
             break;
         }
         else
         {
-            dx /= fDiffMax;
-            dy /= fDiffMax;
-            fDenominator += sqrt(sqrt(dx * dx + dy * dy)) * sqrt(fDiffMax);
+            fDenominator += sqrt(std::hypot(dx, dy));
         }
     }
     if (fDenominator == 0.0)
@@ -444,13 +437,9 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
             double fNumerator = 0.0;
             for (lcl_tSizeType i=1; i<=j ; ++i)
             {
-                dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
-                dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
-                fDiffMax = std::max(fabs(dx), fabs(dy));
-                // same as above, so should not be zero
-                dx /= fDiffMax;
-                dy /= fDiffMax;
-                fNumerator += sqrt(sqrt(dx * dx + dy * dy)) * sqrt(fDiffMax);
+                double dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
+                double dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
+                fNumerator += sqrt(std::hypot(dx, dy));
             }
             t[j] = fNumerator / fDenominator;
 
@@ -506,7 +495,6 @@ void applyNtoParameterT(const lcl_tSizeType i,const double tk,const sal_uInt32 p
     for (sal_uInt32 s = 1; s <= p; ++s)
     {
         // first element
-        double fLeftFactor = 0.0;
         double fRightFactor = ( u[i+1] - tk ) / ( u[i+1]- u[i-s+1] );
         // i-s "true index" - (i-p)"shift" = p-s
         rowN[p-s] = fRightFactor * rowN[p-s+1];
@@ -514,14 +502,14 @@ void applyNtoParameterT(const lcl_tSizeType i,const double tk,const sal_uInt32 p
         // middle elements
         for (sal_uInt32 j = s-1; j>=1 ; --j)
         {
-            fLeftFactor = ( tk - u[i-j] ) / ( u[i-j+s] - u[i-j] ) ;
+            double fLeftFactor = ( tk - u[i-j] ) / ( u[i-j+s] - u[i-j] ) ;
             fRightFactor = ( u[i-j+s+1] - tk ) / ( u[i-j+s+1] - u[i-j+1] );
             // i-j "true index" - (i-p)"shift" = p-j
             rowN[p-j] = fLeftFactor * rowN[p-j] + fRightFactor *  rowN[p-j+1];
         }
 
         // last element
-        fLeftFactor = ( tk - u[i] ) / ( u[i+s] - u[i] );
+        double fLeftFactor = ( tk - u[i] ) / ( u[i+s] - u[i] );
         // i "true index" - (i-p)"shift" = p
         rowN[p] = fLeftFactor * rowN[p];
     }
@@ -734,22 +722,14 @@ void SplineCalculater::CalculateBSplines(
 
             applyNtoParameterT(i, t[k], p, u.get(), aMatN[k]);
         } // next row k
-
+        bool bIsSuccessful = true;
         // Get matrix C of control points from the matrix equation aMatN * C = aPointsIn
         // aPointsIn is overwritten with C.
         // Gaussian elimination is possible without pivoting, see reference
-        lcl_tSizeType r = 0; // true row index
-        lcl_tSizeType c = 0; // true column index
-        double fDivisor = 1.0; // used for diagonal element
-        double fEliminate = 1.0; // used for the element, that will become zero
-        double fHelp;
-        tPointType aHelp;
-        lcl_tSizeType nHelp; // used in triangle change
-        bool bIsSuccessful = true;
-        for (c = 0 ; c <= n && bIsSuccessful; ++c)
+        for ( lcl_tSizeType c = 0; c <= n && bIsSuccessful; ++c )
         {
             // search for first non-zero downwards
-            r = c;
+            lcl_tSizeType r = c;
             while ( r < n && aMatN[r][c-aShift[r]] == 0 )
             {
                 ++r;
@@ -764,22 +744,16 @@ void SplineCalculater::CalculateBSplines(
                 // exchange total row r with total row c if necessary
                 if (r != c)
                 {
-                    for ( sal_uInt32 i = 0; i <= p ; ++i)
+                    for ( sal_uInt32 i = 0; i <= p ; ++i )
                     {
-                        fHelp = aMatN[r][i];
-                        aMatN[r][i] = aMatN[c][i];
-                        aMatN[c][i] = fHelp;
+                        std::swap( aMatN[r][i], aMatN[c][i] );
                     }
-                    aHelp = aPointsIn[r];
-                    aPointsIn[r] = aPointsIn[c];
-                    aPointsIn[c] = aHelp;
-                    nHelp = aShift[r];
-                    aShift[r] = aShift[c];
-                    aShift[c] = nHelp;
+                    std::swap( aPointsIn[r], aPointsIn[c] );
+                    std::swap( aShift[r], aShift[c] );
                 }
 
                 // divide row c, so that element(c,c) becomes 1
-                fDivisor = aMatN[c][c-aShift[c]]; // not zero, see above
+                double fDivisor = aMatN[c][c-aShift[c]]; // not zero, see above
                 for (sal_uInt32 i = 0; i <= p; ++i)
                 {
                     aMatN[c][i] /= fDivisor;
@@ -792,7 +766,7 @@ void SplineCalculater::CalculateBSplines(
                 // look at nShift for that, elements in nShift are equal or increasing
                 for ( r = c+1; r < n && aShift[r]<=c ; ++r)
                 {
-                    fEliminate = aMatN[r][0];
+                    double fEliminate = aMatN[r][0];
                     if (fEliminate != 0.0) // else accidentally zero, nothing to do
                     {
                         for (sal_uInt32 i = 1; i <= p; ++i)
@@ -816,10 +790,10 @@ void SplineCalculater::CalculateBSplines(
                 // diagonal are zero and do not influence other rows.
                 // Full matrix N has semibandwidth < p, therefore element(r,c) is
                 // zero, if abs(r-cc)>=p.  abs(r-cc)=cc-r, because r<cc.
-                r = cc - 1;
+                lcl_tSizeType r = cc - 1;
                 while ( r !=0 && cc-r < p )
                 {
-                    fEliminate = aMatN[r][ cc - aShift[r] ];
+                    double fEliminate = aMatN[r][ cc - aShift[r] ];
                     if ( fEliminate != 0.0) // else element is accidentally zero, no action needed
                     {
                         // row r -= fEliminate * row cc only relevant for right side
