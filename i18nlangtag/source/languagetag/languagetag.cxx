@@ -2828,9 +2828,9 @@ css::lang::Locale LanguageTag::convertToLocaleWithFallback( const OUString& rBcp
 
 
 // static
-LanguageType LanguageTag::convertToLanguageTypeWithFallback( const css::lang::Locale& rLocale, bool bResolveSystem )
+LanguageType LanguageTag::convertToLanguageTypeWithFallback( const css::lang::Locale& rLocale )
 {
-    if (rLocale.Language.isEmpty() && !bResolveSystem)
+    if (rLocale.Language.isEmpty())
         return LANGUAGE_SYSTEM;
 
     return LanguageTag( rLocale).makeFallback().getLanguageType();

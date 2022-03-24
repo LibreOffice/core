@@ -2139,7 +2139,7 @@ Menu* Menu::ImplFindMenu( sal_uInt16 nItemId )
     return pSelMenu;
 }
 
-void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
+void Menu::RemoveDisabledEntries( bool bRemoveEmptyPopups )
 {
     for ( sal_uInt16 n = 0; n < GetItemCount(); n++ )
     {
@@ -2153,7 +2153,7 @@ void Menu::RemoveDisabledEntries( bool bCheckPopups, bool bRemoveEmptyPopups )
         else
             bRemove = !pItem->bEnabled;
 
-        if ( bCheckPopups && pItem->pSubMenu )
+        if ( pItem->pSubMenu )
         {
             pItem->pSubMenu->RemoveDisabledEntries();
             if ( bRemoveEmptyPopups && !pItem->pSubMenu->GetItemCount() )

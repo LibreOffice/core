@@ -972,16 +972,13 @@ static void ImplAddNum( OUStringBuffer& rBuf, sal_Int64 nNumber, int nMinLen )
     return ImplAddUNum( rBuf, nNumber, nMinLen);
 }
 
-static void ImplAdd2UNum( OUStringBuffer& rBuf, sal_uInt16 nNumber, bool bLeading )
+static void ImplAdd2UNum( OUStringBuffer& rBuf, sal_uInt16 nNumber )
 {
     DBG_ASSERT( nNumber < 100, "ImplAdd2UNum() - Number >= 100" );
 
     if ( nNumber < 10 )
     {
-        if ( bLeading )
-        {
-            rBuf.append('0');
-        }
+        rBuf.append('0');
         rBuf.append(static_cast<char>(nNumber + '0'));
     }
     else
@@ -1124,25 +1121,25 @@ OUString LocaleDataWrapper::getDate( const Date& rDate ) const
     switch ( getDateOrder() )
     {
         case DateOrder::DMY :
-            ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
+            ImplAdd2UNum( aBuf, nDay );
             aBuf.append( aLocaleDataItem.dateSeparator );
-            ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
+            ImplAdd2UNum( aBuf, nMonth );
             aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAddNum( aBuf, nYear, nYearLen );
         break;
         case DateOrder::MDY :
-            ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
+            ImplAdd2UNum( aBuf, nMonth );
             aBuf.append( aLocaleDataItem.dateSeparator );
-            ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
+            ImplAdd2UNum( aBuf, nDay );
             aBuf.append( aLocaleDataItem.dateSeparator );
             ImplAddNum( aBuf, nYear, nYearLen );
         break;
         default:
             ImplAddNum( aBuf, nYear, nYearLen );
             aBuf.append( aLocaleDataItem.dateSeparator );
-            ImplAdd2UNum( aBuf, nMonth, true /* IsDateMonthLeadingZero() */ );
+            ImplAdd2UNum( aBuf, nMonth );
             aBuf.append( aLocaleDataItem.dateSeparator );
-            ImplAdd2UNum( aBuf, nDay, true /* IsDateDayLeadingZero() */ );
+            ImplAdd2UNum( aBuf, nDay );
     }
 
     return aBuf.makeStringAndClear();
@@ -1156,13 +1153,13 @@ OUString LocaleDataWrapper::getTime( const tools::Time& rTime, bool bSec, bool b
 
     nHour %= 24;
 
-    ImplAdd2UNum( aBuf, nHour, true /* IsTimeLeadingZero() */ );
+    ImplAdd2UNum( aBuf, nHour );
     aBuf.append( aLocaleDataItem.timeSeparator );
-    ImplAdd2UNum( aBuf, rTime.GetMin(), true );
+    ImplAdd2UNum( aBuf, rTime.GetMin() );
     if ( bSec )
     {
         aBuf.append( aLocaleDataItem.timeSeparator );
-        ImplAdd2UNum( aBuf, rTime.GetSec(), true );
+        ImplAdd2UNum( aBuf, rTime.GetSec() );
 
         if ( b100Sec )
         {
@@ -1186,11 +1183,11 @@ OUString LocaleDataWrapper::getDuration( const tools::Time& rTime, bool bSec, bo
     else
         ImplAddUNum( aBuf, rTime.GetHour() );
     aBuf.append( aLocaleDataItem.timeSeparator );
-    ImplAdd2UNum( aBuf, rTime.GetMin(), true );
+    ImplAdd2UNum( aBuf, rTime.GetMin() );
     if ( bSec )
     {
         aBuf.append( aLocaleDataItem.timeSeparator );
-        ImplAdd2UNum( aBuf, rTime.GetSec(), true );
+        ImplAdd2UNum( aBuf, rTime.GetSec() );
 
         if ( b100Sec )
         {

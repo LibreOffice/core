@@ -289,7 +289,7 @@ public:
     bool IsMenuVisible() const;
     virtual bool IsMenuBar() const = 0;
 
-    void RemoveDisabledEntries( bool bCheckPopups = true, bool bRemoveEmptyPopups = false );
+    void RemoveDisabledEntries( bool bRemoveEmptyPopups = false );
 
     void UpdateNativeMenu();
 

@@ -39,14 +39,14 @@ class VCL_DLLPUBLIC TaskStopwatch
     bool m_bConsiderLastIterTime;
     VclInputFlags m_eInputStop;
 
-    bool nextIter(bool bQueryOnly)
+    bool nextIter()
     {
         sal_uInt64 nCurTicks = tools::Time::GetSystemTicks();
         // handle system ticks wrap as exceeded time slice
         if (nCurTicks < m_nStartTicks)
             return false;
 
-        if (!bQueryOnly && m_bConsiderLastIterTime)
+        if (m_bConsiderLastIterTime)
         {
             // based on the last iter runtime, we don't expect to finish in time
             // m_nTimeSlice < (nCurTicks - m_nStartTicks) + (nCurTicks - m_nIterStartTicks)
@@ -57,8 +57,7 @@ class VCL_DLLPUBLIC TaskStopwatch
         else if (m_nTimeSlice < nCurTicks - m_nStartTicks)
             return false;
 
-        if (!bQueryOnly)
-            m_nIterStartTicks = nCurTicks;
+        m_nIterStartTicks = nCurTicks;
 
         return !Application::AnyInput(m_eInputStop);
     }
@@ -84,7 +83,7 @@ public:
     /**
      * Returns true, if another iteration will probably pass in the time slot
      **/
-    bool continueIter() { return nextIter(false); }
+    bool continueIter() { return nextIter(); }
 
     /**
      * Reset the stopwatch

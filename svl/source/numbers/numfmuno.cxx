@@ -97,7 +97,7 @@ static const SfxItemPropertyMapEntry* lcl_GetNumberSettingsPropertyMap()
 
 static LanguageType lcl_GetLanguage( const lang::Locale& rLocale )
 {
-    LanguageType eRet = LanguageTag::convertToLanguageTypeWithFallback( rLocale, false);
+    LanguageType eRet = LanguageTag::convertToLanguageTypeWithFallback( rLocale );
     if ( eRet == LANGUAGE_NONE )
         eRet = LANGUAGE_SYSTEM; //! or throw an exception?
 
