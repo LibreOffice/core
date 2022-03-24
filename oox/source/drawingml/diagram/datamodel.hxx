@@ -198,7 +198,7 @@ private:
 
     // the model definition,
     // - FillStyle
-    // - logic connections/assoziations
+    // - logic connections/associations
     // - data point entries
     FillPropertiesPtr mpFillProperties;
     dgm::Connections  maConnections;
