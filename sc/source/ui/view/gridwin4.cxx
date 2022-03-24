@@ -1434,7 +1434,9 @@ namespace
             if (!pPageView)
                 return;
 
-            SdrPageWindow* pSdrPageWindow = pPageView->GetPageWindow(0);
+            SdrPageWindow* pSdrPageWindow = nullptr;
+            if (pPageView->PageWindowCount() > 0)
+                pSdrPageWindow = pPageView->GetPageWindow(0);
             if (!pSdrPageWindow)
                 return;
 
