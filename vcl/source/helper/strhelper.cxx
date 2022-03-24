@@ -84,7 +84,8 @@ inline void CopyUntil( sal_Unicode*& pTo, const sal_Unicode*& pFrom, sal_Unicode
             *pTo = *pFrom;
             pTo++;
         }
-        pFrom++;
+        if( *pFrom )
+            pFrom++;
     } while( *pFrom && *pFrom != cUntil );
     // copy the terminating character unless zero or protector
     if( ! isProtect( *pFrom ) || bIncludeUntil )
