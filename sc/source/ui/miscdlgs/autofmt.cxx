@@ -50,6 +50,8 @@
 #include <scresid.hxx>
 #include <document.hxx>
 #include <viewdata.hxx>
+#include <svtools/colorcfg.hxx>
+#include <scmod.hxx>
 
 #define FRAME_OFFSET 4
 
@@ -497,7 +499,7 @@ void ScAutoFmtPreview::DoPaint(vcl::RenderContext& rRenderContext)
 
     Size aWndSize(GetOutputSizePixel());
     vcl::Font aFont(aVD->GetFont());
-    Color aBackCol(rRenderContext.GetSettings().GetStyleSettings().GetWindowColor());
+    const Color& aBackCol = SC_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
     tools::Rectangle aRect(Point(), aWndSize);
 
     aFont.SetTransparent( true );
