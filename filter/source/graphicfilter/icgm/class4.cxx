@@ -36,7 +36,7 @@ double CGM::ImplGetOrientation( FloatPoint const & rCenter, FloatPoint const & r
     double nX = rPoint.X - rCenter.X;
     double nY = rPoint.Y - rCenter.Y;
 
-    double fSqrt = sqrt(nX * nX + nY * nY);
+    double fSqrt = std::hypot(nX, nY);
     double fOrientation = fSqrt != 0.0 ? basegfx::rad2deg(acos(nX / fSqrt)) : 0.0;
     if (nY > 0)
         fOrientation = 360 - fOrientation;

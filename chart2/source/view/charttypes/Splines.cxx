@@ -411,26 +411,19 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
     bool bIsSuccessful = true;
     const lcl_tSizeType n = rUniquePoints.size() - 1;
     t[0]=0.0;
-    double dx = 0.0;
-    double dy = 0.0;
-    double fDiffMax = 1.0; //dummy values
     double fDenominator = 0.0; // initialized for summing up
     for (lcl_tSizeType i=1; i<=n ; ++i)
     {   // 4th root(dx^2+dy^2)
-        dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
-        dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
-        // scaling to avoid underflow or overflow
-        fDiffMax = std::max(fabs(dx), fabs(dy));
-        if (fDiffMax == 0.0)
+        double dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
+        double dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
+        if (dx == 0 && dy == 0)
         {
             bIsSuccessful = false;
             break;
         }
         else
         {
-            dx /= fDiffMax;
-            dy /= fDiffMax;
-            fDenominator += sqrt(sqrt(dx * dx + dy * dy)) * sqrt(fDiffMax);
+            fDenominator += sqrt(std::hypot(dx, dy));
         }
     }
     if (fDenominator == 0.0)
@@ -444,13 +437,9 @@ bool createParameterT(const tPointVecType& rUniquePoints, double* t)
             double fNumerator = 0.0;
             for (lcl_tSizeType i=1; i<=j ; ++i)
             {
-                dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
-                dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
-                fDiffMax = std::max(fabs(dx), fabs(dy));
-                // same as above, so should not be zero
-                dx /= fDiffMax;
-                dy /= fDiffMax;
-                fNumerator += sqrt(sqrt(dx * dx + dy * dy)) * sqrt(fDiffMax);
+                double dx = rUniquePoints[i].first - rUniquePoints[i-1].first;
+                double dy = rUniquePoints[i].second - rUniquePoints[i-1].second;
+                fNumerator += sqrt(std::hypot(dx, dy));
             }
             t[j] = fNumerator / fDenominator;
 
