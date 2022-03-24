@@ -117,14 +117,14 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 
     if (!pShape->GetTextBoxHandler())
     {
-        auto* pTextBox = new SwTextBoxHandler(pShape);
+        auto pTextBox = std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(pShape));
         pTextBox->AddTextBox(pObject, pFormat);
         pShape->SetTextBoxHandler(pTextBox);
         pFormat->SetTextBoxHandler(pTextBox);
     }
     else
     {
-        auto* pTextBox = pShape->GetTextBoxHandler();
+        auto pTextBox = pShape->GetTextBoxHandler();
         pTextBox->AddTextBox(pObject, pFormat);
         pShape->SetTextBoxHandler(pTextBox);
         pFormat->SetTextBoxHandler(pTextBox);
@@ -257,7 +257,7 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     {
         // If the shape do not have a texbox node and textbox,
         // create that for the shape.
-        auto* pTextBox = new SwTextBoxHandler(pShapeFormat);
+        auto pTextBox = std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(pShapeFormat));
         pTextBox->AddTextBox(pObj, pFormat);
         pShapeFormat->SetTextBoxHandler(pTextBox);
         pFormat->SetTextBoxHandler(pTextBox);
@@ -336,14 +336,18 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
 void SwTextBoxHelper::destroy(const SwFrameFormat* pShape, const SdrObject* pObject)
 {
     // If a TextBox was enabled previously
-    auto pTextBox = pShape->GetTextBoxHandler();
-    if (pTextBox && pTextBox->IsTextBoxActive(pObject))
+    auto pTextBoxHandler = pShape->GetTextBoxHandler();
+    if (!pTextBoxHandler)
+        return;
+
+    if (auto pTextBox = pTextBoxHandler->GetTextBox(pObject))
     {
         // Unlink the TextBox's text range from the original shape.
-        pTextBox->SetTextBoxInactive(pObject);
+        pTextBoxHandler->DelTextBox(pObject);
 
         // Delete the associated TextFrame.
-        pTextBox->DelTextBox(pObject);
+        pTextBox->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(pTextBox);
+        pTextBox = nullptr;
     }
 }
 
@@ -1623,6 +1627,70 @@ std::vector<SwFrameFormat*> SwTextBoxHelper::CollectTextBoxes(const SdrObject* p
     return vRet;
 }
 
+void SwTextBoxHelper::cloneTextBoxTree(SwDoc& rDoc, const SwFrameFormat* pSourceFormat,
+                                       const SdrObject* pSourceObj,
+                                       SwFrameFormat* pDestinationFormat,
+                                       SdrObject* pDestinationObj, bool bMakeFrames,
+                                       bool bSetTextFlyAtt)
+{
+    if (!pSourceFormat || !pSourceObj || !pDestinationFormat || !pDestinationObj)
+        return;
+
+    if ((pSourceFormat->Which() != RES_DRAWFRMFMT)
+        || (pDestinationFormat->Which() != RES_DRAWFRMFMT))
+        return;
+
+    auto pSourceTextBoxHandler = pSourceFormat->GetTextBoxHandler();
+    auto pDestTextBoxHandler = pDestinationFormat->GetTextBoxHandler();
+
+    if (!pSourceTextBoxHandler)
+        return;
+
+    if (!pDestTextBoxHandler)
+    {
+        pDestTextBoxHandler
+            = std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(pDestinationFormat));
+        pDestinationFormat->SetTextBoxHandler(pDestTextBoxHandler);
+    }
+
+    SdrObjList* pSourceSdrList = pSourceObj->getChildrenOfSdrObject();
+    SdrObjList* pDestSdrList = pDestinationObj->getChildrenOfSdrObject();
+
+    if (pSourceSdrList && pDestSdrList)
+    {
+        size_t nSrcObjs = pSourceSdrList->GetObjCount();
+        size_t nDestObj = pDestSdrList->GetObjCount();
+
+        if (nSrcObjs != nDestObj)
+        {
+            SAL_WARN("sw.core", "cloneTextBoxTree(): Different tree, cloning impossible!");
+            return;
+        }
+
+        for (size_t i = 0; i < nSrcObjs; ++i)
+            cloneTextBoxTree(rDoc, pSourceFormat, pSourceSdrList->GetObj(i), pDestinationFormat,
+                             pDestSdrList->GetObj(i), bMakeFrames, bSetTextFlyAtt);
+    }
+
+    if ((!pSourceSdrList && pDestSdrList) || (pSourceSdrList && !pDestSdrList))
+    {
+        SAL_WARN("sw.core", "cloneTextBoxTree(): Different tree, cloning impossible!");
+        return;
+    }
+
+    if (!pSourceSdrList && !pDestSdrList)
+    {
+        if (auto pTextBox = pSourceTextBoxHandler->GetTextBox(pSourceObj))
+        {
+            auto pNew = rDoc.getIDocumentLayoutAccess().CopyLayoutFormat(
+                *pTextBox, pTextBox->GetAnchor(), bSetTextFlyAtt, bMakeFrames);
+
+            pDestTextBoxHandler->AddTextBox(pDestinationObj, pNew);
+            pNew->SetTextBoxHandler(pDestTextBoxHandler);
+        }
+    }
+}
+
 SwTextBoxHandler::SwTextBoxHandler(SwFrameFormat* pOwnerShape)
 {
     assert(pOwnerShape);
@@ -1633,13 +1701,7 @@ SwTextBoxHandler::SwTextBoxHandler(SwFrameFormat* pOwnerShape)
         m_pTextBoxes.clear();
 }
 
-SwTextBoxHandler::~SwTextBoxHandler()
-{
-    m_pTextBoxes.clear();
-
-    if (m_pOwnerShapeFormat && m_pOwnerShapeFormat->GetTextBoxHandler())
-        m_pOwnerShapeFormat->SetTextBoxHandler(nullptr);
-}
+SwTextBoxHandler::~SwTextBoxHandler() { m_pTextBoxes.clear(); }
 
 void SwTextBoxHandler::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTextBox)
 {
@@ -1648,19 +1710,20 @@ void SwTextBoxHandler::AddTextBox(SdrObject* pDrawObject, SwFrameFormat* pNewTex
 
     assert(pDrawObject);
 
-    SwTextBoxElement aElem;
-    aElem.m_bIsActive = true;
-    aElem.m_pDrawObject = pDrawObject;
-    aElem.m_pTextBoxFormat = pNewTextBox;
+    SwTextBoxElement rElem;
+    rElem.m_pDrawObject = pDrawObject;
+    rElem.m_pTextBoxFormat = pNewTextBox;
+    rElem.m_bIsActive = true;
+
     auto pSwFlyDraw = dynamic_cast<SwFlyDrawObj*>(pDrawObject);
     if (pSwFlyDraw)
     {
         pSwFlyDraw->SetTextBox(true);
     }
-    m_pTextBoxes.push_back(aElem);
+    m_pTextBoxes.push_back(rElem);
 }
 
-void SwTextBoxHandler::DelTextBox(const SdrObject* pDrawObject)
+void SwTextBoxHandler::DelTextBox(const SdrObject* pDrawObject, bool bJustEntry)
 {
     assert(pDrawObject);
     if (m_pTextBoxes.empty())
@@ -1670,8 +1733,33 @@ void SwTextBoxHandler::DelTextBox(const SdrObject* pDrawObject)
     {
         if (it->m_pDrawObject == pDrawObject)
         {
-            m_pOwnerShapeFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(
-                it->m_pTextBoxFormat);
+            if (!bJustEntry)
+                m_pOwnerShapeFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(
+                    it->m_pTextBoxFormat);
+            it->m_pDrawObject = nullptr;
+            it->m_pTextBoxFormat = nullptr;
+            it = m_pTextBoxes.erase(it);
+            break;
+        }
+        ++it;
+    }
+}
+
+void SwTextBoxHandler::DelTextBox(SwFrameFormat* pTextBox, bool bJustEntry)
+{
+    assert(pTextBox);
+    if (m_pTextBoxes.empty())
+        return;
+
+    for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end();)
+    {
+        if (it->m_pTextBoxFormat == pTextBox)
+        {
+            if (!bJustEntry)
+                m_pOwnerShapeFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(
+                    it->m_pTextBoxFormat);
+            it->m_pDrawObject = nullptr;
+            it->m_pTextBoxFormat = nullptr;
             it = m_pTextBoxes.erase(it);
             break;
         }
@@ -1754,6 +1842,18 @@ std::map<SdrObject*, SwFrameFormat*> SwTextBoxHandler::GetAllTextBoxes() const
         aRet.emplace(rElem.m_pDrawObject, rElem.m_pTextBoxFormat);
     }
     return aRet;
+}
+
+void SwTextBoxHandler::RemoveAllTextBoxes()
+{
+    for (auto it = m_pTextBoxes.begin(); it != m_pTextBoxes.end();)
+    {
+        auto pTextBox = it->m_pTextBoxFormat;
+        it = m_pTextBoxes.erase(it);
+        if (pTextBox)
+            m_pOwnerShapeFormat->GetDoc()->getIDocumentLayoutAccess().DelLayoutFormat(pTextBox);
+    }
+    m_pTextBoxes.clear();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
