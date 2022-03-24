@@ -16,6 +16,24 @@
       "message": "CellColorHandler::getProperties seems to handle some \"Code from binary word filter (the values are out of 1000)\", which likely is a better match; and some values there seem to relate to things like \"Dark Diagonal Cross\", etc. RTF must be close to the old binary format feature-wise - it was created as \"open\"/\"human-reradable\" counterpart to the binary format. Should that code in binary filter be found and reused maybe?\n\n[1] https://opengrok.libreoffice.org/xref/core/writerfilter/source/dmapper/CellColorHandler.cxx?r\u003d30bd841e#151",
       "revId": "e5f96e2881d46ed71e390524d7172dca211de3e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5de4d7cb_7fd09a87",
+        "filename": "writerfilter/source/rtftok/rtfdispatchvalue.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 545,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-24T07:40:12Z",
+      "side": 1,
+      "message": "As far as I see, that nWW8BrushStyle is not set on the document model at the end, so I wouldn\u0027t mind either way. Perhaps just wait for an end-user bugreport before investing more energy there.",
+      "parentUuid": "fbefcda8_82aef727",
+      "revId": "e5f96e2881d46ed71e390524d7172dca211de3e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
