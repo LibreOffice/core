@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84dce1d8_bc3b5e11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-24T08:50:29Z",
+      "side": 1,
+      "message": "Tor, any thoughts on this?  Looks like all entries in CFBundleDocumentTypes have such a CFBundleTypeRole Editor, and none of the entries in CFBundleURLTypes have it, so maybe it was just forgotten when that latter section started out with \u003chttps://git.libreoffice.org/core/+/56a36956ed1fee1dd53817a81bcb2241373aebdc%5E!/\u003e \"Related: tdf#72880 add vnd.libreoffice.cmis to CFBundleURLTypes\"?",
+      "revId": "b63c43ce232f474bbd6abc5db381e1362e3f49de",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
