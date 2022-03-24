@@ -269,6 +269,47 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
     CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf115162)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A2", "2015");
+    insertStringToCell(*pModelObj, "A3", "2015");
+    insertStringToCell(*pModelObj, "A4", "2015");
+
+    insertStringToCell(*pModelObj, "B2", "1");
+    insertStringToCell(*pModelObj, "B3", "1");
+    insertStringToCell(*pModelObj, "B4", "2");
+
+    insertStringToCell(*pModelObj, "C2", "10");
+    insertStringToCell(*pModelObj, "C3", "20");
+    insertStringToCell(*pModelObj, "C4", "5");
+
+    // Save the document
+    utl::TempFile aTempFile = save(mxComponent, "calc8");
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Insert the reference to the external document
+    OUString aFormula = "=SUMIFS('" + aTempFile.GetURL() + "'#$Sheet1.C2:C4,'" + aTempFile.GetURL()
+                        + "'#$Sheet1.B2:B4,1,'" + aTempFile.GetURL() + "'#$Sheet1.A2:A4,2015)";
+    insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 30
+    // - Actual  : Err:504
+    CPPUNIT_ASSERT_EQUAL(OUString("30"), pDoc->GetString(ScAddress(0, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
