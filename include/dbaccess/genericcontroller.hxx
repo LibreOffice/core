@@ -289,7 +289,7 @@ namespace dbaui
 
             Must not be called outside <member>describeSupportedFeatures</member>.
 
-            @param _pAsciiCommandURL
+            @param _rCommandURL
                 the URL of the feature command
             @param _nFeatureId
                 the id of the feature. Later references to this feature usually happen by id, not by
@@ -299,7 +299,7 @@ namespace dbaui
                 by the user, see also <type scope="css::frame">CommandGroup</type>.
         */
         void    implDescribeSupportedFeature(
-                    const char* _pAsciiCommandURL,
+                    const OUString& _rCommandURL,
                     sal_uInt16 _nFeatureId,
                     sal_Int16 _nCommandGroup = css::frame::CommandGroup::INTERNAL
                 );
