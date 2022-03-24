@@ -414,51 +414,6 @@ void loadDiagram( ShapePtr const & pShape,
     pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
 }
 
-void loadDiagram(ShapePtr const& pShape,
-                 DiagramDataPtr pDiagramData,
-                 const uno::Reference<xml::dom::XDocument>& layoutDom,
-                 const uno::Reference<xml::dom::XDocument>& styleDom,
-                 const uno::Reference<xml::dom::XDocument>& colorDom,
-                 core::XmlFilterBase& rFilter)
-{
-    DiagramPtr pDiagram = std::make_shared<Diagram>();
-
-    pDiagram->setData(pDiagramData);
-
-    DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);
-    pDiagram->setLayout(pLayout);
-
-    // layout
-    if (layoutDom.is())
-    {
-        rtl::Reference<core::FragmentHandler> xRefLayout(
-            new DiagramLayoutFragmentHandler(rFilter, OUString(), pLayout));
-
-        importFragment(rFilter, layoutDom, "OOXLayout", pDiagram, xRefLayout);
-    }
-
-    // style
-    if (styleDom.is())
-    {
-        rtl::Reference<core::FragmentHandler> xRefQStyle(
-            new DiagramQStylesFragmentHandler(rFilter, OUString(), pDiagram->getStyles()));
-
-        importFragment(rFilter, styleDom, "OOXStyle", pDiagram, xRefQStyle);
-    }
-
-    // colors
-    if (colorDom.is())
-    {
-        rtl::Reference<core::FragmentHandler> xRefColorStyle(
-            new ColorFragmentHandler(rFilter, OUString(), pDiagram->getColors()));
-
-        importFragment(rFilter, colorDom, "OOXColor", pDiagram, xRefColorStyle);
-    }
-
-    // diagram loaded. now lump together & attach to shape
-    pDiagram->addTo(pShape);
-}
-
 const oox::drawingml::Color&
 DiagramColor::getColorByIndex(const std::vector<oox::drawingml::Color>& rColors, sal_Int32 nIndex)
 {

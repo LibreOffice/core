@@ -39,12 +39,11 @@ bool AdvancedDiagramHelper::hasDiagramData() const
 AdvancedDiagramHelper::AdvancedDiagramHelper(
     const std::shared_ptr< Diagram >& rDiagramPtr,
     const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
-    const Shape& rSourceShape)
+    css::awt::Size aImportSize)
 : IDiagramHelper()
 , mpDiagramPtr(rDiagramPtr)
 , mpThemePtr(rTheme)
-, maImportSize(rSourceShape.getSize())
-, maImportPosition(rSourceShape.getPosition())
+, maImportSize(aImportSize)
 {
 }
 
@@ -70,7 +69,6 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
     pShapePtr->setDiagramType();
     pShapePtr->setSize(maImportSize);
-    pShapePtr->setPosition(maImportPosition);
     pShapePtr->getFillProperties() = *mpDiagramPtr->getData()->getFillProperties();
 
     // Re-create the oox::Shapes for the diagram content

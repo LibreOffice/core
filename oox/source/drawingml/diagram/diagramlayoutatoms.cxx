@@ -1898,7 +1898,8 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 continue;
             }
 
-            if (!aDataNode2->second->mpShape)
+            Shape* pDataNode2Shape(mrDgm.getData()->getOrCreateAssociatedShape(*aDataNode2->second));
+            if (nullptr == pDataNode2Shape)
             {
                 //busted, skip it
                 continue;
@@ -1909,11 +1910,11 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
             if (rItem.mnDepth == 0)
             {
                 // grab shape attr from topmost element(s)
-                rShape->getShapeProperties() = aDataNode2->second->mpShape->getShapeProperties();
-                rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
-                rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
-                rShape->getCustomShapeProperties() = aDataNode2->second->mpShape->getCustomShapeProperties();
-                rShape->setMasterTextListStyle( aDataNode2->second->mpShape->getMasterTextListStyle() );
+                rShape->getShapeProperties() = pDataNode2Shape->getShapeProperties();
+                rShape->getLineProperties() = pDataNode2Shape->getLineProperties();
+                rShape->getFillProperties() = pDataNode2Shape->getFillProperties();
+                rShape->getCustomShapeProperties() = pDataNode2Shape->getCustomShapeProperties();
+                rShape->setMasterTextListStyle( pDataNode2Shape->getMasterTextListStyle() );
 
                 SAL_INFO(
                     "oox.drawingml",
@@ -1927,14 +1928,14 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
             {
                 // If no real topmost element, then take properties from the one that's the closest
                 // to topmost.
-                rShape->getLineProperties() = aDataNode2->second->mpShape->getLineProperties();
-                rShape->getFillProperties() = aDataNode2->second->mpShape->getFillProperties();
+                rShape->getLineProperties() = pDataNode2Shape->getLineProperties();
+                rShape->getFillProperties() = pDataNode2Shape->getFillProperties();
             }
 
             // append text with right outline level
-            if( aDataNode2->second->mpShape->getTextBody() &&
-                !aDataNode2->second->mpShape->getTextBody()->getParagraphs().empty() &&
-                !aDataNode2->second->mpShape->getTextBody()->getParagraphs().front()->getRuns().empty() )
+            if( pDataNode2Shape->getTextBody() &&
+                !pDataNode2Shape->getTextBody()->getParagraphs().empty() &&
+                !pDataNode2Shape->getTextBody()->getParagraphs().front()->getRuns().empty() )
             {
                 TextBodyPtr pTextBody=rShape->getTextBody();
                 if( !pTextBody )
@@ -1943,15 +1944,15 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
 
                     // also copy text attrs
                     pTextBody->getTextListStyle() =
-                        aDataNode2->second->mpShape->getTextBody()->getTextListStyle();
+                        pDataNode2Shape->getTextBody()->getTextListStyle();
                     pTextBody->getTextProperties() =
-                        aDataNode2->second->mpShape->getTextBody()->getTextProperties();
+                        pDataNode2Shape->getTextBody()->getTextProperties();
 
                     rShape->setTextBody(pTextBody);
                 }
 
                 const TextParagraphVector& rSourceParagraphs
-                    = aDataNode2->second->mpShape->getTextBody()->getParagraphs();
+                    = pDataNode2Shape->getTextBody()->getParagraphs();
                 for (const auto& pSourceParagraph : rSourceParagraphs)
                 {
                     TextParagraph& rPara = pTextBody->addParagraph();
@@ -1960,7 +1961,7 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
 
                     for (const auto& pRun : pSourceParagraph->getRuns())
                         rPara.addRun(pRun);
-                    const TextBodyPtr& rBody = aDataNode2->second->mpShape->getTextBody();
+                    const TextBodyPtr& rBody = pDataNode2Shape->getTextBody();
                     rPara.getProperties().apply(rBody->getParagraphs().front()->getProperties());
                 }
             }
@@ -1974,8 +1975,9 @@ bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode
                 " processing shape type "
                 << rShape->getCustomShapeProperties()->getShapePresetType()
                 << " for layout node named \"" << msName << "\"");
-        if (pPresNode->mpShape)
-            rShape->getFillProperties().assignUsed(pPresNode->mpShape->getFillProperties());
+        Shape* pPresNodeShape(mrDgm.getData()->getOrCreateAssociatedShape(*pPresNode));
+        if (nullptr != pPresNodeShape)
+            rShape->getFillProperties().assignUsed(pPresNodeShape->getFillProperties());
     }
 
     // TODO(Q1): apply styling & coloring - take presentation

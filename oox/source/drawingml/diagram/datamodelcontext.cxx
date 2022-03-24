@@ -203,9 +203,11 @@ class PtContext
 public:
     PtContext( ContextHandler2Helper const & rParent,
                const AttributeList& rAttribs,
-               dgm::Point & rPoint):
+               dgm::Point & rPoint,
+               DiagramData& rDiagramData):
         ContextHandler2( rParent ),
-        mrPoint( rPoint )
+        mrPoint( rPoint ),
+        mrDiagramData( rDiagramData )
     {
         mrPoint.msModelId = rAttribs.getString( XML_modelId ).get();
 
@@ -229,15 +231,15 @@ public:
             case DGM_TOKEN( prSet ):
                 return new PropertiesContext( *this, mrPoint, rAttribs );
             case DGM_TOKEN( spPr ):
-                if( !mrPoint.mpShape )
-                    mrPoint.mpShape = std::make_shared<Shape>();
-                return new ShapePropertiesContext( *this, *(mrPoint.mpShape) );
+            {
+                Shape* pShape(mrDiagramData.getOrCreateAssociatedShape(mrPoint, true));
+                return new ShapePropertiesContext( *this, *pShape );
+            }
             case DGM_TOKEN( t ):
             {
+                Shape* pShape(mrDiagramData.getOrCreateAssociatedShape(mrPoint, true));
                 TextBodyPtr xTextBody = std::make_shared<TextBody>();
-                if( !mrPoint.mpShape )
-                    mrPoint.mpShape = std::make_shared<Shape>();
-                mrPoint.mpShape->setTextBody( xTextBody );
+                pShape->setTextBody( xTextBody );
                 return new TextBodyContext( *this, *xTextBody );
             }
             default:
@@ -248,6 +250,7 @@ public:
 
 private:
     dgm::Point& mrPoint;
+    DiagramData& mrDiagramData;
 };
 
 // CT_PtList
@@ -255,9 +258,10 @@ class PtListContext
     : public ContextHandler2
 {
 public:
-    PtListContext( ContextHandler2Helper const & rParent,  dgm::Points& rPoints) :
+    PtListContext( ContextHandler2Helper const & rParent,  dgm::Points& rPoints, DiagramData& rDiagramData) :
         ContextHandler2( rParent ),
-        mrPoints( rPoints )
+        mrPoints( rPoints ),
+        mrDiagramData( rDiagramData )
     {}
     virtual ContextHandlerRef
     onCreateContext( sal_Int32 aElementToken,
@@ -269,7 +273,7 @@ public:
             {
                 // CT_Pt
                 mrPoints.emplace_back( );
-                return new PtContext( *this, rAttribs, mrPoints.back() );
+                return new PtContext( *this, rAttribs, mrPoints.back(), mrDiagramData );
             }
             default:
                 break;
@@ -279,6 +283,7 @@ public:
 
 private:
     dgm::Points& mrPoints;
+    DiagramData& mrDiagramData;
 };
 
 // CT_BackgroundFormatting
@@ -349,7 +354,7 @@ DataModelContext::onCreateContext( ::sal_Int32 aElement,
         return new CxnListContext( *this, mpDataModel->getConnections() );
     case DGM_TOKEN( ptLst ):
         // CT_PtList
-        return new PtListContext( *this, mpDataModel->getPoints() );
+        return new PtListContext( *this, mpDataModel->getPoints(), *mpDataModel );
     case DGM_TOKEN( bg ):
         // CT_BackgroundFormatting
         return new BackgroundFormattingContext( *this, mpDataModel );

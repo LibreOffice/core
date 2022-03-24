@@ -46,15 +46,32 @@ void Connection::dump() const
             << mnSourceOrder << ", dstOrd " << mnDestOrder);
 }
 
-void Point::dump() const
+void Point::dump(const Shape* pShape) const
 {
     SAL_INFO(
         "oox.drawingml",
-        "pt text " << mpShape.get() << ", cnxId " << msCnxId << ", modelId "
+        "pt text " << pShape << ", cnxId " << msCnxId << ", modelId "
             << msModelId << ", type " << mnType);
 }
 
 } // oox::drawingml::dgm namespace
+
+Shape* DiagramData::getOrCreateAssociatedShape(const dgm::Point& rPoint, bool bCreateOnDemand) const
+{
+    if(maPointShapeMap.end() == maPointShapeMap.find(rPoint.msModelId))
+    {
+        const_cast<DiagramData*>(this)->maPointShapeMap[rPoint.msModelId] = ShapePtr();
+    }
+
+    const ShapePtr& rShapePtr = maPointShapeMap.find(rPoint.msModelId)->second;
+
+    if(!rShapePtr && bCreateOnDemand)
+    {
+        const_cast<ShapePtr&>(rShapePtr) = std::make_shared<Shape>();
+    }
+
+    return rShapePtr.get();
+}
 
 DiagramData::DiagramData() :
     mpFillProperties( std::make_shared<FillProperties>() )
@@ -79,12 +96,16 @@ void DiagramData::dump() const
 
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of pt: " << maPoints.size() );
     for (const auto& rPoint : maPoints)
-        rPoint.dump();
+        rPoint.dump(getOrCreateAssociatedShape(rPoint));
 }
 
 void DiagramData::getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const
 {
     if (!pPoint)
+        return;
+
+    Shape* pShape(getOrCreateAssociatedShape(*pPoint));
+    if(!pShape)
         return;
 
     if (nLevel > 0)
@@ -93,7 +114,8 @@ void DiagramData::getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoi
             rBuf.append('\t');
         rBuf.append('+');
         rBuf.append(' ');
-        rBuf.append(pPoint->mpShape->getTextBody()->toString());
+        if(pShape->getTextBody())
+            rBuf.append(pShape->getTextBody()->toString());
         rBuf.append('\n');
     }
 
@@ -131,9 +153,12 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
                 aChildren.resize(rCxn.mnSourceOrder + 1);
             const auto pChild = maPointNameMap.find(rCxn.msDestId);
             if (pChild != maPointNameMap.end())
+            {
+                Shape* pShape(getOrCreateAssociatedShape(*(pChild->second)));
                 aChildren[rCxn.mnSourceOrder] = std::make_pair(
                     pChild->second->msModelId,
-                    pChild->second->mpShape->getTextBody()->toString());
+                    nullptr != pShape && pShape->getTextBody() ? pShape->getTextBody()->toString() : OUString());
+            }
         }
 
     // HACK: empty items shouldn't appear there
@@ -174,11 +199,12 @@ OUString DiagramData::addNode(const OUString& rText)
     dgm::Point aDataPoint;
     aDataPoint.mnType = XML_node;
     aDataPoint.msModelId = sNewNodeId;
-    aDataPoint.mpShape = std::make_shared<Shape>();
-    aDataPoint.mpShape->setTextBody(std::make_shared<TextBody>());
+
+    Shape* pShape(getOrCreateAssociatedShape(aDataPoint, true));
+    pShape->setTextBody(std::make_shared<TextBody>());
     TextRunPtr pTextRun = std::make_shared<TextRun>();
     pTextRun->getText() = rText;
-    aDataPoint.mpShape->getTextBody()->addParagraph().addRun(pTextRun);
+    pShape->getTextBody()->addParagraph().addRun(pTextRun);
 
     OUString sDataSibling;
     for (const auto& aCxn : maConnections)
@@ -193,7 +219,10 @@ OUString DiagramData::addNode(const OUString& rText)
     dgm::Point aPresPoint;
     aPresPoint.mnType = XML_pres;
     aPresPoint.msModelId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
-    aPresPoint.mpShape = std::make_shared<Shape>();
+
+    // create pesPoint shape
+    getOrCreateAssociatedShape(aPresPoint, true);
+
     aPresPoint.msPresentationAssociationId = aDataPoint.msModelId;
     if (!sPresSibling.isEmpty())
     {
@@ -356,9 +385,8 @@ void DiagramData::build()
 #endif
 
         // does currpoint have any text set?
-        if( point.mpShape &&
-            point.mpShape->getTextBody() &&
-            !point.mpShape->getTextBody()->isEmpty() )
+        Shape* pShape(getOrCreateAssociatedShape(point));
+        if( nullptr != pShape && pShape->getTextBody() && !pShape->getTextBody()->isEmpty() )
         {
 #ifdef DEBUG_OOX_DIAGRAM
             static sal_Int32 nCount=0;
@@ -367,7 +395,7 @@ void DiagramData::build()
                    << " ["
                    << "label=\""
                    << OUStringToOString(
-                       point.mpShape->getTextBody()->toString(),
+                       pShape->getTextBody()->toString(),
                        RTL_TEXTENCODING_UTF8).getStr()
                    << "\"" << "];" << std::endl;
             output << "\t"
