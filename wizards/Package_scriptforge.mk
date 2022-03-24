@@ -27,6 +27,7 @@ $(eval $(call gb_Package_add_files,wizards_basicsrvscriptforge,$(LIBO_SHARE_FOLD
 	SF_L10N.xba \
 	SF_Platform.xba \
 	SF_PythonHelper.xba \
+	SF_Region.xba \
 	SF_Root.xba \
 	SF_Services.xba \
 	SF_Session.xba \

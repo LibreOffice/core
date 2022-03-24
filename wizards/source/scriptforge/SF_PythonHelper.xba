@@ -717,11 +717,20 @@ Try:
 			bBasicClass = ( Left(sObjectType, 3) &lt;&gt; &quot;SF_&quot; )
 			sLibrary = Split(sServiceName, &quot;.&quot;)(0)
 			
-			&apos;	Methods in standard modules returning a date are hardcoded as exceptions
-			If Not bBasicClass And ((CallType And vbMethod) = vbMethod) And ((CallType And cstDateRet) = cstDateRet) Then
+			&apos;	Methods in standard modules returning/passing a date are hardcoded as exceptions
+			If Not bBasicClass And ((CallType And vbMethod) = vbMethod) _
+					And (((CallType And cstDateRet) = cstDateRet) Or ((CallType And cstDateArg) = cstDateArg)) Then
 				Select Case sServiceName
 					Case &quot;ScriptForge.FileSystem&quot;
 						If Script = &quot;GetFileModified&quot; Then vReturn = SF_FileSystem.GetFileModified(vArgs(0))
+					Case &quot;ScriptForge.Region&quot;
+						Select Case Script
+							Case &quot;DSTOffset&quot;		:	vReturn = SF_Region.DSTOffset(vArgs(0), vArgs(1), vArgs(2))
+							Case &quot;LocalDateTime&quot;	:	vReturn = SF_Region.LocalDateTime(vArgs(0), vArgs(1), vArgs(2))
+							Case &quot;UTCDateTime&quot;		:	vReturn = SF_Region.UTCDateTime(vArgs(0), vArgs(1), vArgs(2))
+							Case &quot;UTCNow&quot;			:	vReturn = SF_Region.UTCNow(vArgs(0), vArgs(1))
+							Case Else
+						End Select
 				End Select
 
 			&apos;	Methods in usual modules using a 2D array or returning arrays are hardcoded as exceptions

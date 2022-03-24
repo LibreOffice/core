@@ -103,7 +103,7 @@ class ScriptForge(object, metaclass = _Singleton):
     # Class constants
     # #########################################################################
     library = 'ScriptForge'
-    Version = '7.3'  # Actual version number
+    Version = '7.4'  # Actual version number
     #
     # Basic dispatcher for Python scripts
     basicdispatcher = '@application#ScriptForge.SF_PythonHelper._PythonDispatcher'
@@ -123,10 +123,11 @@ class ScriptForge(object, metaclass = _Singleton):
                             ('ScriptForge.Exception', 1),
                             ('ScriptForge.FileSystem', 2),
                             ('ScriptForge.Platform', 3),
-                            ('ScriptForge.Services', 4),
-                            ('ScriptForge.Session', 5),
-                            ('ScriptForge.String', 6),
-                            ('ScriptForge.UI', 7)])
+                            ('ScriptForge.Region', 4),
+                            ('ScriptForge.Services', 5),
+                            ('ScriptForge.Session', 6),
+                            ('ScriptForge.String', 7),
+                            ('ScriptForge.UI', 8)])
 
     def __init__(self, hostname = '', port = 0):
         """
@@ -1284,6 +1285,101 @@ class SFScriptForge:
         @property
         def PythonVersion(self):
             return self.SIMPLEEXEC(self.py, 'PythonVersion')
+
+    # #########################################################################
+    # SF_Region CLASS
+    # #########################################################################
+    class SF_Region(SFServices, metaclass = _Singleton):
+        """
+            The "Region" service gathers a collection of functions about languages, countries and timezones
+                - Locales
+                - Currencies
+                - Numbers and dates formatting
+                - Calendars
+                - Timezones conversions
+                - Numbers transformed to text
+            """
+        # Mandatory class properties for service registration
+        serviceimplementation = 'basic'
+        servicename = 'ScriptForge.Region'
+        servicesynonyms = ('region', 'scriptforge.region')
+        serviceproperties = dict()
+
+        # Next functions are implemented in Basic as read-only properties with 1 argument
+        def Country(self, region = ''):
+            return self.GetProperty('Country', region)
+
+        def Currency(self, region = ''):
+            return self.GetProperty('Currency', region)
+
+        def DatePatterns(self, region = ''):
+            return self.GetProperty('DatePatterns', region)
+
+        def DateSeparator(self, region = ''):
+            return self.GetProperty('DateSeparator', region)
+
+        def DayAbbrevNames(self, region = ''):
+            return self.GetProperty('DayAbbrevNames', region)
+
+        def DayNames(self, region = ''):
+            return self.GetProperty('DayNames', region)
+
+        def DayNarrowNames(self, region = ''):
+            return self.GetProperty('DayNarrowNames', region)
+
+        def DecimalPoint(self, region = ''):
+            return self.GetProperty('DecimalPoint', region)
+
+        def Language(self, region = ''):
+            return self.GetProperty('Language', region)
+
+        def ListSeparator(self, region = ''):
+            return self.GetProperty('ListSeparator', region)
+
+        def MonthAbbrevNames(self, region = ''):
+            return self.GetProperty('MonthAbbrevNames', region)
+
+        def MonthNames(self, region = ''):
+            return self.GetProperty('MonthNames', region)
+
+        def MonthNarrowNames(self, region = ''):
+            return self.GetProperty('MonthNarrowNames', region)
+
+        def ThousandSeparator(self, region = ''):
+            return self.GetProperty('ThousandSeparator', region)
+
+        def TimeSeparator(self, region = ''):
+            return self.GetProperty('TimeSeparator', region)
+
+        # Usual methods
+        def DSTOffset(self, localdatetime, timezone, locale = ''):
+            if isinstance(localdatetime, datetime.datetime):
+                localdatetime = SFScriptForge.SF_Basic.CDateToUnoDateTime(localdatetime)
+            return self.ExecMethod(self.vbMethod + self.flgDateArg, 'DSTOffset', localdatetime, timezone, locale)
+
+        def LocalDateTime(self, utcdatetime, timezone, locale = ''):
+            if isinstance(utcdatetime, datetime.datetime):
+                utcdatetime = SFScriptForge.SF_Basic.CDateToUnoDateTime(utcdatetime)
+            localdate = self.ExecMethod(self.vbMethod + self.flgDateArg + self.flgDateRet, 'LocalDateTime',
+                                        utcdatetime, timezone, locale)
+            return SFScriptForge.SF_Basic.CDateFromUnoDateTime(localdate)
+
+        def Number2Text(self, number, locale = ''):
+            return self.ExecMethod(self.vbMethod, 'Number2Text', number, locale)
+
+        def TimeZoneOffset(self, timezone, locale = ''):
+            return self.ExecMethod(self.vbMethod, 'TimeZoneOffset', timezone, locale)
+
+        def UTCDateTime(self, localdatetime, timezone, locale = ''):
+            if isinstance(localdatetime, datetime.datetime):
+                localdatetime = SFScriptForge.SF_Basic.CDateToUnoDateTime(localdatetime)
+            utcdate = self.ExecMethod(self.vbMethod + self.flgDateArg + self.flgDateRet, 'UTCDateTime', localdatetime,
+                                      timezone, locale)
+            return SFScriptForge.SF_Basic.CDateFromUnoDateTime(utcdate)
+
+        def UTCNow(self, timezone, locale = ''):
+            now = self.ExecMethod(self.vbMethod + self.flgDateRet, 'UTCNow', timezone, locale)
+            return SFScriptForge.SF_Basic.CDateFromUnoDateTime(now)
 
     # #########################################################################
     # SF_Session CLASS

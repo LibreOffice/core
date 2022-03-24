@@ -62,6 +62,8 @@ Private SystemLocale		As Object	&apos; com.sun.star.lang.Locale
 Private OfficeLocale		As Object	&apos; com.sun.star.lang.Locale
 Private FormatLocale		As Object	&apos; com.sun.star.lang.Locale
 Private LocaleData			As Object	&apos; com.sun.star.i18n.LocaleData
+Private CalendarImpl		As Object	&apos; com.sun.star.i18n.CalendarImpl
+Private Number2Text			As Object	&apos; com.sun.star.linguistic2.NumberText
 Private PrinterServer		As Object	&apos; com.sun.star.awt.PrinterServer
 Private CharacterClass		As Object	&apos; com.sun.star.i18n.CharacterClassification
 Private FileAccess			As Object	&apos; com.sun.star.ucb.SimpleFileAccess
@@ -126,6 +128,8 @@ Private Sub Class_Initialize()
 	Set OfficeLocale = Nothing
 	Set FormatLocale = Nothing
 	Set LocaleData = Nothing
+	Set CalendarImpl = Nothing
+	Set Number2Text = Nothing
 	Set PrinterServer = Nothing
 	Set CharacterClass = Nothing
 	Set FileAccess = Nothing
@@ -262,7 +266,7 @@ Public Sub _InitPythonStorage()
 
 Try:
 	If Not IsArray(PythonStorage) Then
-		PythonPermanent = 7
+		PythonPermanent = 8
 		PythonStorage = Array()
 		ReDim PythonStorage(0 To PythonPermanent)
 		&apos;	Initialize each entry
@@ -270,10 +274,11 @@ Try:
 		PythonStorage(1) = ScriptForge.SF_Exception
 		PythonStorage(2) = ScriptForge.SF_FileSystem
 		PythonStorage(3) = ScriptForge.SF_Platform
-		PythonStorage(4) = ScriptForge.SF_Services
-		PythonStorage(5) = ScriptForge.SF_Session
-		PythonStorage(6) = ScriptForge.SF_String
-		PythonStorage(7) = ScriptForge.SF_UI
+		PythonStorage(4) = ScriptForge.SF_Region
+		PythonStorage(5) = ScriptForge.SF_Services
+		PythonStorage(6) = ScriptForge.SF_Session
+		PythonStorage(7) = ScriptForge.SF_String
+		PythonStorage(8) = ScriptForge.SF_UI
 	End If
 
 Finally:
