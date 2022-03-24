@@ -36,7 +36,10 @@ void SwBreakDlg::rememberResult()
 {
     nKind = 0;
     if (m_xLineBtn->get_active())
+    {
         nKind = 1;
+        m_eClear = static_cast<SwLineBreakClear>(m_xLineClearBox->get_active());
+    }
     else if(m_xColumnBtn->get_active())
         nKind = 2;
     else if(m_xPageBtn->get_active())
@@ -125,6 +128,8 @@ IMPL_LINK_NOARG(SwBreakDlg, OkHdl, weld::Button&, void)
 SwBreakDlg::SwBreakDlg(weld::Window *pParent, SwWrtShell &rS)
     : GenericDialogController(pParent, "modules/swriter/ui/insertbreak.ui", "BreakDialog")
     , m_xLineBtn(m_xBuilder->weld_radio_button("linerb"))
+    , m_xLineClearText(m_xBuilder->weld_label("clearft"))
+    , m_xLineClearBox(m_xBuilder->weld_combo_box("clearlb"))
     , m_xColumnBtn(m_xBuilder->weld_radio_button("columnrb"))
     , m_xPageBtn(m_xBuilder->weld_radio_button("pagerb"))
     , m_xPageCollText(m_xBuilder->weld_label("styleft"))
@@ -189,6 +194,9 @@ void SwBreakDlg::CheckEnable()
     const bool bPage = m_xPageBtn->get_active();
     m_xPageCollText->set_sensitive(bPage);
     m_xPageCollBox->set_sensitive(bPage);
+    bool bLine = m_xLineBtn->get_active();
+    m_xLineClearText->set_sensitive(bLine);
+    m_xLineClearBox->set_sensitive(bLine);
 
     bEnable &= bPage;
     if ( bEnable )
