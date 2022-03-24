@@ -25,7 +25,6 @@
 #include <doc.hxx>
 
 #include <PostItMgr.hxx>
-#include <edtwin.hxx>
 
 #include <cmdid.h>
 #include <strings.hrc>
@@ -39,8 +38,9 @@
 #include <sfx2/sfxhelp.hxx>
 
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
+#include <vcl/ptrstyle.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/help.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/settings.hxx>
@@ -49,8 +49,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
 #include <editeng/flditem.hxx>
-#include <comphelper/lok.hxx>
-#include <sfx2/lokhelper.hxx>
 
 #include <uitool.hxx>
 #include <view.hxx>

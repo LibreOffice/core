@@ -20,14 +20,11 @@
 #include <svx/svdmark.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <com/sun/star/frame/XModel.hpp>
-
 #include <editsh.hxx>
 #include <fesh.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <pam.hxx>
 #include <UndoCore.hxx>
 #include <swundo.hxx>
 #include <flyfrm.hxx>

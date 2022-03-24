@@ -41,7 +41,8 @@
 #include "redlnitr.hxx"
 #include "atrhndl.hxx"
 #include <rootfrm.hxx>
-#include <textlinebreak.hxx>
+#include <formatlinebreak.hxx>
+#include <txatbase.hxx>
 
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>

@@ -26,7 +26,6 @@
 #include <flyfrm.hxx>
 #include <layact.hxx>
 #include <dview.hxx>
-#include <swmodule.hxx>
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>
 

@@ -9,12 +9,13 @@
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <swmodeltestbase.hxx>
+#include <cntfrm.hxx>
+#include <itabenum.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <drawdoc.hxx>
 #include <view.hxx>
 #include <swacorr.hxx>
-#include <modcfg.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <com/sun/star/text/XTextColumns.hpp>
 
@@ -32,7 +33,6 @@
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
-#include <txtfrm.hxx>
 #include <swdtflvr.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>

@@ -34,7 +34,6 @@
 #include "xmlexp.hxx"
 #include <editeng/memberids.h>
 #include <editeng/prntitem.hxx>
-#include <xmloff/xmlnamespace.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

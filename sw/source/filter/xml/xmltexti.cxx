@@ -63,7 +63,6 @@
 #include <svl/urihelper.hxx>
 #include <sfx2/frmdescr.hxx>
 #include <tools/globname.hxx>
-#include <tools/UnitConversion.hxx>
 
 #include <algorithm>
 #include <utility>

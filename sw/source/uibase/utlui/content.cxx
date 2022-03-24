@@ -32,6 +32,7 @@
 #include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
 #include <uiitems.hxx>
+#include <fmtanchr.hxx>
 #include <fmtinfmt.hxx>
 #include <txtinet.hxx>
 #include <fmtfld.hxx>
@@ -66,7 +67,6 @@
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
-#include <dcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 #include <SwRewriter.hxx>
@@ -80,7 +80,6 @@
 #include <swabstdlg.hxx>
 #include <bitmaps.hlst>
 
-#include <navmgr.hxx>
 #include <AnnotationWin.hxx>
 #include <memory>
 
@@ -90,18 +89,10 @@
 #include <viewopt.hxx>
 
 #include <IDocumentFieldsAccess.hxx>
-#include <IDocumentLayoutAccess.hxx>
-#include <docfld.hxx>
 #include <txtfld.hxx>
-#include <expfld.hxx>
 #include <fldmgr.hxx>
-#include <docufld.hxx>
 
 #include <frameformats.hxx>
-
-#include <unotextrange.hxx>
-#include <com/sun/star/text/XTextRange.hpp>
-#include <com/sun/star/text/XTextRangeCompare.hpp>
 
 #include <ftnidx.hxx>
 #include <txtftn.hxx>

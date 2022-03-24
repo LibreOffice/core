@@ -24,7 +24,6 @@
 #include <o3tl/any.hxx>
 
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <unotools/charclass.hxx>
 
 #include <calc.hxx>

@@ -31,7 +31,6 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 
 #include <osl/mutex.hxx>
-#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/interfacecontainer4.hxx>
 #include <comphelper/multicontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>

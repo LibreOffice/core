@@ -23,7 +23,6 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <svl/itemprop.hxx>
 #include <svl/listener.hxx>
 #include <vcl/svapp.hxx>

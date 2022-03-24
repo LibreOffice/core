@@ -61,7 +61,6 @@
 #include <numrule.hxx>
 #include "sprmids.hxx"
 #include <wwstyles.hxx>
-#include "writerhelper.hxx"
 #include "ww8struc.hxx"
 #include "ww8par.hxx"
 #include "ww8par2.hxx"

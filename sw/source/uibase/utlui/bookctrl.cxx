@@ -17,12 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <swtypes.hxx>
-#include <strings.hrc>
-
 #include <svl/intitem.hxx>
 #include <svl/slstitm.hxx>
-#include <svl/eitem.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/commandevent.hxx>

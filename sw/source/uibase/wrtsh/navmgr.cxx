@@ -17,9 +17,6 @@
 #include <doc.hxx>
 #include <unocrsr.hxx>
 
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
-
 // This method positions the cursor to the position rPos.
 
 void SwNavigationMgr::GotoSwPosition(const SwPosition &rPos) {

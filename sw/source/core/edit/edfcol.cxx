@@ -97,8 +97,6 @@
 
 #include <tools/diagnose_ex.h>
 #include <IDocumentRedlineAccess.hxx>
-#include <SwStyleNameMapper.hxx>
-#include <comphelper/lok.hxx>
 
 constexpr OUStringLiteral WATERMARK_NAME = u"PowerPlusWaterMarkObject";
 #define WATERMARK_AUTO_SIZE sal_uInt32(1)

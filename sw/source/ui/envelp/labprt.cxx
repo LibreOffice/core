@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/diagnose.h>
 #include <svtools/prnsetup.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <vcl/print.hxx>

@@ -19,7 +19,6 @@
 
 #include <config_features.h>
 
-#include <hintids.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/accessibilityoptions.hxx>
 #include <unotools/resmgr.hxx>

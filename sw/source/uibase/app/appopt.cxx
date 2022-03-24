@@ -56,8 +56,6 @@
 #include <swabstdlg.hxx>
 #include <swwrtshitem.hxx>
 
-#include <ndtxt.hxx>
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 

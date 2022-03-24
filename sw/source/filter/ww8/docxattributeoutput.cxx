@@ -90,7 +90,6 @@
 #include <editeng/editobj.hxx>
 #include <editeng/keepitem.hxx>
 #include <editeng/borderline.hxx>
-#include <editeng/prntitem.hxx>
 #include <sax/tools/converter.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xfillit0.hxx>
@@ -104,7 +103,6 @@
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
 #include <tools/datetimeutils.hxx>
-#include <tools/UnitConversion.hxx>
 #include <svl/whiter.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>

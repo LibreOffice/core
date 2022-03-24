@@ -37,7 +37,6 @@
 #include <vcl/weld.hxx>
 #include <svl/eitem.hxx>
 #include <svl/macitem.hxx>
-#include <svl/zforlist.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/transfer.hxx>
 #include <sfx2/dinfdlg.hxx>
@@ -58,7 +57,6 @@
 #include <sfx2/classificationhelper.hxx>
 #include <sfx2/watermarkitem.hxx>
 
-#include <svtools/htmlcfg.hxx>
 #include <svx/ofaitem.hxx>
 #include <SwSmartTagMgr.hxx>
 #include <sfx2/app.hxx>

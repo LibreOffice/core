@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 
-#include <osl/thread.hxx>
-
 class TxtEncExportTest : public SwModelTestBase
 {
 public:

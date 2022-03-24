@@ -33,7 +33,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/style/GraphicLocation.hpp>
-#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/PageNumberType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>

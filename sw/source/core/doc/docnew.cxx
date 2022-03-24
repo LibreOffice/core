@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <mutex>
 #include <string_view>
 
 #include <config_features.h>
@@ -31,7 +30,6 @@
 #include <proofreadingiterator.hxx>
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/linguistic2/XProofreadingIterator.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -45,7 +43,6 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <unotools/lingucfg.hxx>
 #include <svx/svdpage.hxx>
 #include <fmtcntnt.hxx>

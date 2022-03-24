@@ -39,8 +39,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/event.hxx>
-#include <sfx2/infobar.hxx>
 #include <svx/ruler.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/fmshell.hxx>
@@ -73,7 +71,6 @@
 #include <gloshdl.hxx>
 #include <usrpref.hxx>
 #include <srcview.hxx>
-#include <strings.hrc>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IDocumentSettingAccess.hxx>
@@ -95,7 +92,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/XDatabaseContext.hpp>
 #include <com/sun/star/sdb/DatabaseContext.hpp>
-#include <com/sun/star/sdbc/XDataSource.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/log.hxx>
 
@@ -112,7 +108,6 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <svtools/embedhlp.hxx>
 #include <tools/UnitConversion.hxx>
-#include <svx/svdoutl.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

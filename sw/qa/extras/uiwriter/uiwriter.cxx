@@ -25,12 +25,12 @@
 #include <swacorr.hxx>
 #include <swmodule.hxx>
 #include <modcfg.hxx>
-#include <charatr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unocrsrhelper.hxx>
-#include <unotbl.hxx>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
+#include <com/sun/star/text/XTextTable.hpp>
 #include <vcl/TypeSerializer.hxx>
 
 #include <svx/svdpage.hxx>
@@ -39,11 +39,11 @@
 
 #include <editeng/eeitem.hxx>
 #include <editeng/scripttypeitem.hxx>
+#include <editeng/wghtitem.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <UndoManager.hxx>
 #include <frmatr.hxx>
-#include <frmmgr.hxx>
 
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <osl/file.hxx>

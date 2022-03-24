@@ -9,8 +9,6 @@
 
 #include <swmodeltestbase.hxx>
 #include <AccessibilityCheck.hxx>
-#include <unotxdoc.hxx>
-#include <docsh.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/accessibilitycheck/data/";
 

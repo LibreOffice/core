@@ -79,7 +79,6 @@
 #include <wview.hxx>
 
 #include <swabstdlg.hxx>
-#include <memory>
 
 using namespace ::com::sun::star;
 

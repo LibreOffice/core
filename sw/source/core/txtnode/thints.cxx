@@ -74,7 +74,6 @@
 #include <algorithm>
 #include <map>
 #include <memory>
-#include <unordered_map>
 
 #include <rdfhelper.hxx>
 #include <hints.hxx>

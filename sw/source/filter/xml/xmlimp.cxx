@@ -30,7 +30,6 @@
 
 #include <o3tl/any.hxx>
 #include <xmloff/xmlnamespace.hxx>
-#include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/XMLTextShapeImportHelper.hxx>
@@ -62,7 +61,6 @@
 #include <svx/xmleohlp.hxx>
 #include <sfx2/printer.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <unotools/saveopt.hxx>
 #include <unotools/streamwrap.hxx>
 #include <tools/UnitConversion.hxx>
 #include <tools/diagnose_ex.h>

@@ -20,7 +20,6 @@
 #include <iodetect.hxx>
 #include <memory>
 #include <osl/endian.h>
-#include <osl/thread.h>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>

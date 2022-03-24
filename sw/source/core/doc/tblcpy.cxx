@@ -21,7 +21,6 @@
 
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
-#include <svl/zforlist.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

@@ -11,7 +11,6 @@
 
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-#include <com/sun/star/table/XTable.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>

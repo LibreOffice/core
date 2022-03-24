@@ -34,8 +34,6 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 
-#include <numeric>
-
 using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;

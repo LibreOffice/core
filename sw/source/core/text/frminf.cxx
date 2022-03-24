@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <o3tl/safeint.hxx>
-
 #include <frminf.hxx>
 #include "itrtxt.hxx"
 

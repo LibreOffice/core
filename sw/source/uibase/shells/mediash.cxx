@@ -30,7 +30,6 @@
 
 #define ShellClass_SwMediaShell
 #include <swslots.hxx>
-#include <memory>
 
 using namespace svx;
 

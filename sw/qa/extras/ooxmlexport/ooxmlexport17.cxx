@@ -18,7 +18,6 @@
 
 #include <queue>
 #include <swmodeltestbase.hxx>
-#include <unotxdoc.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 

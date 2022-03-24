@@ -27,7 +27,6 @@
 #include "customizeaddresslistdialog.hxx"
 #include <mmconfigitem.hxx>
 #include <vcl/svapp.hxx>
-#include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <rtl/textenc.h>

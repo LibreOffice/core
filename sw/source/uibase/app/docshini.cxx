@@ -31,7 +31,6 @@
 #include <sfx2/printer.hxx>
 #include <svl/asiancfg.hxx>
 #include <svl/intitem.hxx>
-#include <tools/UnitConversion.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -74,7 +73,6 @@
 #include <swerror.h>
 #include <unochart.hxx>
 #include <drawdoc.hxx>
-#include <DocumentSettingManager.hxx>
 
 #include <svx/CommonStyleManager.hxx>
 

@@ -61,7 +61,6 @@
 #include <expfld.hxx>
 #include <section.hxx>
 #include <mvsave.hxx>
-#include <swcache.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include <redline.hxx>
 #include <IMark.hxx>
@@ -80,7 +79,6 @@
 #include <memory>
 #include <unoparagraph.hxx>
 #include <wrtsh.hxx>
-#include <frameformats.hxx>
 #include <fmtpdsc.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svl/itemiter.hxx>

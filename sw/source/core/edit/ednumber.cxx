@@ -28,9 +28,6 @@
 #include <numrule.hxx>
 #include <osl/diagnose.h>
 
-#include <viewopt.hxx>
-#include <wrtsh.hxx>
-
 SwPamRanges::SwPamRanges( const SwPaM& rRing )
 {
     for(SwPaM& rTmp : const_cast<SwPaM*>(&rRing)->GetRingContainer())

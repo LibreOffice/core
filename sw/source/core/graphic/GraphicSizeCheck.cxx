@@ -11,7 +11,6 @@
 #include <GraphicSizeCheck.hxx>
 #include <svx/strings.hrc>
 #include <svx/svdobj.hxx>
-#include <unotools/viewoptions.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 
@@ -19,8 +18,8 @@
 #include <ndgrf.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <fmtfsize.hxx>
+#include <view.hxx>
 #include <wrtsh.hxx>
-#include <wview.hxx>
 #include <cmdid.h>
 
 using namespace css;

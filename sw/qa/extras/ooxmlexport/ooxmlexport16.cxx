@@ -9,20 +9,26 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <comphelper/processfactory.hxx>
 #include <svx/svddef.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/svdobj.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
-#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/text/XChapterNumberingSupplier.hpp>
+#include <com/sun/star/text/XEndnotesSupplier.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XViewCursor.hpp>
-#include <comphelper/configuration.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unoprnms.hxx>
-#include <unotxdoc.hxx> //XChapterNumberingSupplier
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 

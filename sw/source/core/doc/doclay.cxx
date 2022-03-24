@@ -66,7 +66,6 @@
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
-#include <flyfrm.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
 #include <swundo.hxx>

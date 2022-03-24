@@ -66,7 +66,6 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <pagepreviewlayout.hxx>
 #include <dcontact.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdmark.hxx>
 #include <doc.hxx>
 #include <drawdoc.hxx>

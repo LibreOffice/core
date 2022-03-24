@@ -12,7 +12,6 @@
 
 #include <ndtxt.hxx>
 #include <ndole.hxx>
-#include <ndnotxt.hxx>
 #include <ndgrf.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdotext.hxx>

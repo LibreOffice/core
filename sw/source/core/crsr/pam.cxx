@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include <tools/gen.hxx>
 #include <editeng/protitem.hxx>
 #include <officecfg/Office/Common.hxx>

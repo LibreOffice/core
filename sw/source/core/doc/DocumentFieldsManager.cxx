@@ -49,7 +49,6 @@
 #include <fldbas.hxx>
 #include <expfld.hxx>
 #include <ddefld.hxx>
-#include <swddetbl.hxx>
 #include <authfld.hxx>
 #include <usrfld.hxx>
 #include <ndindex.hxx>

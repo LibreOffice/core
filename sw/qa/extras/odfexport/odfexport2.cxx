@@ -8,9 +8,9 @@
  */
 
 #include <swmodeltestbase.hxx>
-#include <unotxdoc.hxx>
 
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 
 class Test : public SwModelTestBase
 {

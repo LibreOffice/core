@@ -70,7 +70,6 @@
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <txtfly.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
-#include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/objectinfoprimitive2d.hxx>
 #include <osl/diagnose.h>
 

@@ -15,7 +15,6 @@
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/Size.hpp>
-#include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -38,7 +37,6 @@
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 
-#include <config_features.h>
 #include <config_fonts.h>
 #include <editeng/ulspitem.hxx>
 #include <sfx2/bindings.hxx>

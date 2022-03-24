@@ -22,7 +22,6 @@
 #include <comphelper/string.hxx>
 #include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
@@ -82,7 +81,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/document/RedlineDisplayType.hpp>
@@ -112,7 +110,6 @@
 #include <IDocumentStatistics.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <IDocumentState.hxx>
-#include <svl/zforlist.hxx>
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
@@ -120,7 +117,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <unotools/saveopt.hxx>
 #include <swruler.hxx>
 #include <docufld.hxx>
 

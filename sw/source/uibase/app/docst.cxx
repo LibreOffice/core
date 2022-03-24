@@ -39,7 +39,6 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
-#include <svl/languageoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <swmodule.hxx>
@@ -75,7 +74,6 @@
 #include <edtwin.hxx>
 #include <unochart.hxx>
 #include <swabstdlg.hxx>
-#include <paratr.hxx>
 #include <tblafmt.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svl/grabbagitem.hxx>

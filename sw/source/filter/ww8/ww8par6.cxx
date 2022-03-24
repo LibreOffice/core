@@ -99,7 +99,6 @@
 #include "ww8graf.hxx"
 
 #include <fmtwrapinfluenceonobjpos.hxx>
-#include <textlinebreak.hxx>
 
 using namespace sw::util;
 using namespace sw::types;

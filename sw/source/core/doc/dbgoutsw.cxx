@@ -41,7 +41,6 @@
 #include <SwNodeNum.hxx>
 #include <dbgoutsw.hxx>
 #include <frameformats.hxx>
-#include <iostream>
 #include <cstdio>
 
 static OString aDbgOutResult;

@@ -27,7 +27,6 @@
 #include <viewsh.hxx>
 #include <docfld.hxx>
 
-#include <svl/languageoptions.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/ctloptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>

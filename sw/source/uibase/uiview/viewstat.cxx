@@ -25,7 +25,6 @@
 #include <svl/cjkoptions.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/imageitm.hxx>
-#include <svl/languageoptions.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/brushitem.hxx>

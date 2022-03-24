@@ -43,9 +43,7 @@
 #include <tgrditem.hxx>
 #include <scriptinfo.hxx>
 #include <editeng/brushitem.hxx>
-#include <swmodule.hxx>
 #include <accessibilityoptions.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <doc.hxx>
 #include <editeng/fhgtitem.hxx>

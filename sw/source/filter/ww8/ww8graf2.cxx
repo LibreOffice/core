@@ -25,7 +25,6 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
-#include <unotools/configmgr.hxx>
 #include <grfatr.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>

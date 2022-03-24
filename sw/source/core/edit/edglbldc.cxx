@@ -29,7 +29,6 @@
 #include <section.hxx>
 #include <doctxm.hxx>
 #include <edglbldc.hxx>
-#include <osl/diagnose.h>
 
 bool SwEditShell::IsGlobalDoc() const
 {

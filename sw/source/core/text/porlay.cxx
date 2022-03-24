@@ -47,19 +47,17 @@
 #include <unotools/charclass.hxx>
 #include <charfmt.hxx>
 #include <docary.hxx>
+#include <fmtanchr.hxx>
 #include <redline.hxx>
 #include <calbck.hxx>
 #include <doc.hxx>
 #include <swscanner.hxx>
 #include <txatbase.hxx>
-#include <calc.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentContentOperations.hxx>
-#include <IDocumentFieldsAccess.hxx>
 #include <IMark.hxx>
 #include <sortedobjs.hxx>
-#include <dcontact.hxx>
 
 using namespace ::com::sun::star;
 using namespace i18n::ScriptType;

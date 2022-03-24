@@ -50,7 +50,6 @@
 #include <fldbas.hxx>
 #include <strings.hrc>
 #include <svl/cjkoptions.hxx>
-#include <comphelper/fileurl.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <ndtxt.hxx>
 #include <SwRewriter.hxx>

@@ -36,7 +36,6 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
 #include <IDocumentState.hxx>
-#include <docary.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
 #include <cntfrm.hxx>

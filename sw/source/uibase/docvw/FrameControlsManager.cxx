@@ -19,8 +19,6 @@
 #include <view.hxx>
 #include <wrtsh.hxx>
 #include <OutlineContentVisibilityWin.hxx>
-#include <ndtxt.hxx>
-#include <IDocumentOutlineNodes.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>

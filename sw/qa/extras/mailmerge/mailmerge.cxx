@@ -22,7 +22,6 @@
 #include <com/sun/star/task/XJob.hpp>
 
 #include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
 #include <comphelper/sequence.hxx>
 
 #include <wrtsh.hxx>
