@@ -36,6 +36,8 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <strings.hrc>
+#include <svtools/colorcfg.hxx>
+#include <swmodule.hxx>
 
 #include <autoformatpreview.hxx>
 
@@ -442,7 +444,7 @@ void AutoFormatPreview::Paint(vcl::RenderContext& rRenderContext, const tools::R
 
     rRenderContext.SetFont(aFont);
     rRenderContext.SetLineColor();
-    const Color& rWinColor = rRenderContext.GetSettings().GetStyleSettings().GetWindowColor();
+    const Color& rWinColor = SW_MOD()->GetColorConfig().GetColorValue( ::svtools::DOCCOLOR ).nColor;
     rRenderContext.SetBackground(Wallpaper(rWinColor));
     rRenderContext.SetFillColor(rWinColor);
 
