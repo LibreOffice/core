@@ -2796,7 +2796,7 @@ OUString CMAccessible::get_StringFromAny(Any const & pAny)
     return OUString();
 }
 
-OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numberingLevel,const OUString& numberingPrefix)
+OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numberingLevel,std::u16string_view numberingPrefix)
 {
     Reference< css::container::XIndexReplace > pXIndex;
     if((pAny>>=pXIndex) && (numberingLevel !=-1))//numbering level is -1,means invalid value
@@ -2818,7 +2818,7 @@ OUString CMAccessible::get_String4Numbering(const Any& pAny, sal_Int16 numbering
                 buf.append(pTemp);
                 buf.append(',');
 
-                if (rProp.Name == "NumberingType" && !numberingPrefix.isEmpty())
+                if (rProp.Name == "NumberingType" && !numberingPrefix.empty())
                 {
                     buf.append("NumberingPrefix=");
                     buf.append(numberingPrefix);
