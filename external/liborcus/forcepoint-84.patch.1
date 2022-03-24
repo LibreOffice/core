@@ -1,4 +1,4 @@
-From 0fee6c0e3074be11874f1911a76f10eef5f59985 Mon Sep 17 00:00:00 2001
+From ec469f774bb91302c4df21eff1314dfd508d37c8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
 Date: Wed, 23 Mar 2022 20:04:31 +0000
 Subject: [PATCH] forcepoint#84 Invalid read of size 1
@@ -17,22 +17,22 @@ Subject: [PATCH] forcepoint#84 Invalid read of size 1
 ==356879==    by 0x11BE3855: orcus::orcus_xlsx::detect(unsigned char const*, unsigned long) (orcus_xlsx.cpp:188)
 ==356879==    by 0x11AB2492: orcus::detect(unsigned char const*, unsigned long) (format_detection.cpp:60)
 ---
- src/parser/sax_parser_base.cpp | 2 ++
- 1 file changed, 2 insertions(+)
+ src/parser/sax_parser_base.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/parser/sax_parser_base.cpp b/src/parser/sax_parser_base.cpp
-index 46acb81d..11791edc 100644
+index 46acb81d..1cee821e 100644
 --- a/src/parser/sax_parser_base.cpp
 +++ b/src/parser/sax_parser_base.cpp
-@@ -300,6 +300,8 @@ void parser_base::value_with_encoded_char(cell_buffer& buf, std::string_view& st
+@@ -300,7 +300,7 @@ void parser_base::value_with_encoded_char(cell_buffer& buf, std::string_view& st
  
  bool parser_base::value(std::string_view& str, bool decode)
  {
-+    if (!has_char())
-+        throw malformed_xml_error("value must be quoted", offset());
-     char c = cur_char();
+-    char c = cur_char();
++    char c = cur_char_checked();
      if (c != '"' && c != '\'')
          throw malformed_xml_error("value must be quoted", offset());
+ 
 -- 
 2.35.1
 
