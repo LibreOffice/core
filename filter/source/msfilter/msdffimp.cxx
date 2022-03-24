@@ -174,8 +174,8 @@ namespace {
 
 struct SvxMSDffBLIPInfo
 {
-    sal_uLong  nFilePos;    ///< offset of the BLIP in data stream
-    explicit SvxMSDffBLIPInfo(sal_uLong nFPos)
+    sal_uInt64  nFilePos;    ///< offset of the BLIP in data stream
+    explicit SvxMSDffBLIPInfo(sal_uInt64 nFPos)
         : nFilePos(nFPos)
     {
     }
@@ -3244,7 +3244,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
                 rSt.Seek( nOfs );
                 DffRecordHeader aEscherF002Hd;
                 bool bOk = ReadDffRecordHeader( rSt, aEscherF002Hd );
-                sal_uLong nEscherF002End = bOk ? aEscherF002Hd.GetRecEndFilePos() : 0;
+                sal_uInt64 nEscherF002End = bOk ? aEscherF002Hd.GetRecEndFilePos() : 0;
                 while (rSt.good() && rSt.Tell() < nEscherF002End)
                 {
                     DffRecordHeader aEscherObjListHd;
@@ -3283,7 +3283,7 @@ bool SvxMSDffManager::SeekToShape( SvStream& rSt, SvxMSDffClientData* /* pClient
     return bRet;
 }
 
-bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMaxFilePos, DffRecordHeader* pRecHd, sal_uLong nSkipCount )
+bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uInt64 nMaxFilePos, DffRecordHeader* pRecHd, sal_uInt64 nSkipCount )
 {
     bool bRet = false;
     sal_uInt64 nOldFPos = rSt.Tell(); // store FilePos to restore it later if necessary
@@ -3327,7 +3327,7 @@ bool SvxMSDffManager::SeekToRec( SvStream& rSt, sal_uInt16 nRecId, sal_uLong nMa
     return bRet;
 }
 
-bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uLong nMaxFilePos ) const
+bool SvxMSDffManager::SeekToRec2( sal_uInt16 nRecId1, sal_uInt16 nRecId2, sal_uInt64 nMaxFilePos ) const
 {
     bool bRet = false;
     sal_uInt64 nOldFPos = rStCtrl.Tell();   // remember FilePos for conditionally later restoration
@@ -3844,10 +3844,10 @@ SdrObject* SvxMSDffManager::ImportGraphic( SvStream& rSt, SfxItemSet& rSet, cons
                 }
                 if (bOk && DFF_msofbtBSE == aHd.nRecType)
                 {
-                    const sal_uLong nSkipBLIPLen = 20;
-                    const sal_uLong nSkipShapePos = 4;
-                    const sal_uLong nSkipBLIP = 4;
-                    const sal_uLong nSkip =
+                    const sal_uInt32 nSkipBLIPLen = 20;
+                    const sal_uInt32 nSkipShapePos = 4;
+                    const sal_uInt32 nSkipBLIP = 4;
+                    const sal_uInt32 nSkip =
                         nSkipBLIPLen + 4 + nSkipShapePos + 4 + nSkipBLIP;
 
                     if (nSkip <= aHd.nRecLen)
@@ -5660,8 +5660,8 @@ SdrObject* SvxMSDffManager::FinalizeObj(DffObjData& /* rObjData */, SdrObject* p
 }
 
 
-void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
-                                      sal_uLong         nTxBx,
+void SvxMSDffManager::StoreShapeOrder(sal_uInt64         nId,
+                                      sal_uInt64         nTxBx,
                                       SdrObject*    pObject,
                                       SwFlyFrameFormat*  pFly) const
 {
@@ -5678,7 +5678,7 @@ void SvxMSDffManager::StoreShapeOrder(sal_uLong         nId,
 
 
 void SvxMSDffManager::ExchangeInShapeOrder( SdrObject const * pOldObject,
-                                            sal_uLong    nTxBx,
+                                            sal_uInt64    nTxBx,
                                             SdrObject*   pObject) const
 {
     for (const auto& pOrder : m_aShapeOrders)
@@ -5994,7 +5994,7 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uInt32 nL
     sal_uInt32 nLength;
 
     sal_uInt32 nLenBStoreCont = 0, nLenFBSE = 0;
-    sal_uLong nRead = 0;
+    sal_uInt32 nRead = 0;
 
     // search for a  BStore Container
     bool bOk = true;
@@ -6019,8 +6019,8 @@ void SvxMSDffManager::GetDrawingGroupContainerData( SvStream& rSt, sal_uInt32 nL
     // relevant data of all contained FBSEs in out pointer array.
     // We also count all found FBSEs in member nBLIPCount.
 
-    const sal_uLong nSkipBLIPLen = 20;  // skip to get to the nBLIPLen
-    const sal_uLong nSkipBLIPPos =  4;  // thereafter skip up to nBLIPPos
+    const sal_uInt32 nSkipBLIPLen = 20; // skip to get to the nBLIPLen
+    const sal_uInt32 nSkipBLIPPos = 4; // thereafter skip up to nBLIPPos
 
     sal_uInt32 nBLIPLen = 0, nBLIPPos = 0;
 
@@ -6079,7 +6079,7 @@ void SvxMSDffManager::GetDrawingContainerData( SvStream& rSt, sal_uInt32 nLenDg,
 {
     sal_uInt8 nVer;sal_uInt16 nInst;sal_uInt16 nFbt;sal_uInt32 nLength;
 
-    sal_uLong nReadDg = 0;
+    sal_uInt32 nReadDg = 0;
 
     // We are now in a drawing container (one per each page) and
     // we now have to iterate through all contained shape group containers
@@ -6121,7 +6121,7 @@ bool SvxMSDffManager::GetShapeGroupContainerData( SvStream& rSt,
     // We are now in a shape group container (conditionally multiple per page)
     // and we now have to iterate through all contained shape containers
     bool  bFirst = !bPatriarch;
-    sal_uLong nReadSpGrCont = 0;
+    sal_uInt32 nReadSpGrCont = 0;
     do
     {
         if( !ReadCommonRecordHeader( rSt, nVer, nInst, nFbt, nLength ) )
@@ -6166,7 +6166,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     // have to fetch the shape id and file position (to be able to access them again later)
     // and the first BStore reference (if present).
     sal_uInt32 nLenShapePropTbl = 0;
-    sal_uLong nReadSpCont = 0;
+    sal_uInt32 nReadSpCont = 0;
 
     // Store file offset of the shape containers or respectively the group(!).
     sal_uInt64 nStartOffs = (std::numeric_limits<sal_uInt64>::max() > nPosGroup) ?
@@ -6199,7 +6199,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
         {
             // We've found the Property Table:
             // search for the Blip Property!
-            sal_uLong  nPropRead = 0;
+            sal_uInt32 nPropRead = 0;
             nLenShapePropTbl = nLength;
             auto nStartShapePropTbl = rSt.Tell();
             do
@@ -6345,7 +6345,7 @@ bool SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
     Access to a shape at runtime (via the Shape-Id)
     ----------------------------
 ******************************************************************************/
-bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
+bool SvxMSDffManager::GetShape(sal_uInt64 nId, SdrObject*&         rpShape,
                                           SvxMSDffImportData& rData)
 {
     auto const pTmpRec = std::make_shared<SvxMSDffShapeInfo>(0, nId);
@@ -6381,7 +6381,7 @@ bool SvxMSDffManager::GetShape(sal_uLong nId, SdrObject*&         rpShape,
 
 /** Access to a BLIP at runtime (if the Blip-Number is already known)
  */
-bool SvxMSDffManager::GetBLIP( sal_uLong nIdx_, Graphic& rGraphic, tools::Rectangle* pVisArea )
+bool SvxMSDffManager::GetBLIP( sal_uInt64 nIdx_, Graphic& rGraphic, tools::Rectangle* pVisArea )
 {
     if (!pStData)
         return false;
@@ -6481,7 +6481,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
         bool        bMtfBLIP = false;
         bool        bZCodecCompression = false;
         // now position it exactly at the beginning of the embedded graphic
-        sal_uLong nSkip = ( nInst & 0x0001 ) ? 32 : 16;
+        sal_Int64 nSkip = ( nInst & 0x0001 ) ? 32 : 16;
 
         switch( nInst & 0xFFFE )
         {
@@ -6700,7 +6700,7 @@ bool SvxMSDffManager::GetOLEStorageName( sal_uInt32, OUString&, tools::SvRef<Sot
     return false;
 }
 
-bool SvxMSDffManager::ShapeHasText( sal_uLong /* nShapeId */, sal_uLong /* nFilePos */ ) const
+bool SvxMSDffManager::ShapeHasText( sal_uInt64 /* nShapeId */, sal_uInt64 /* nFilePos */ ) const
 {
     return true;
 }

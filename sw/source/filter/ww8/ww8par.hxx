@@ -751,7 +751,7 @@ private:
 
     virtual bool GetOLEStorageName( sal_uInt32 nOLEId, OUString& rStorageName,
         tools::SvRef<SotStorage>& rSrcStorage, css::uno::Reference < css::embed::XStorage >& rDestStorage ) const override;
-    virtual bool ShapeHasText( sal_uLong nShapeId, sal_uLong nFilePos ) const override;
+    virtual bool ShapeHasText(sal_uInt64 nShapeId, sal_uInt64 nFilePos) const override;
     // #i32596# - new parameter <_nCalledByGroup>, which
     // indicates, if the OLE object is imported inside a group object
     virtual SdrObject* ImportOLE( sal_uInt32 nOLEId,

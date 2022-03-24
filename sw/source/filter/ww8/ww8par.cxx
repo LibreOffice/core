@@ -6683,7 +6683,7 @@ bool SwMSDffManager::GetOLEStorageName(sal_uInt32 nOLEId, OUString& rStorageName
  * So convert all of them as a precaution.
  * FIXME: Actually implement this!
  */
-bool SwMSDffManager::ShapeHasText(sal_uLong, sal_uLong) const
+bool SwMSDffManager::ShapeHasText(sal_uInt64, sal_uInt64) const
 {
     return true;
 }
