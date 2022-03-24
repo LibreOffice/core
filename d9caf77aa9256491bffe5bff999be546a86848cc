@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db1a1650_452efbb6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-03-24T21:02:43Z",
+      "side": 1,
+      "message": "There was suggestion to pick only one file for change, as others are simultaneously working on the same issue, and this has lead to multiple people changing the same files. See change #131504.",
+      "revId": "d9caf77aa9256491bffe5bff999be546a86848cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef9be375_b72e818a",
+        "filename": "svx/source/svdraw/svdpdf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-03-24T21:02:43Z",
+      "side": 1,
+      "message": "No need to keep this alias. Please replace sqrt2 with std::hypot.",
+      "revId": "d9caf77aa9256491bffe5bff999be546a86848cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
