@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "638952fa_b1e385f6",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-03-24T17:17:52Z",
+      "side": 1,
+      "message": "Image deduplication for docx was added in https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d797fef38612fb2fd62d1f6591619b9361e526bca\nbut perhaps some of those checks in the docx export could be made unnecessary by using this for docx as well?",
+      "range": {
+        "startLine": 1249,
+        "startChar": 48,
+        "endLine": 1249,
+        "endChar": 77
+      },
+      "revId": "22ffcc25c3cd4c7a1eb7de1b4b1c5b554f85bcb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
