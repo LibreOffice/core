@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "805c5ed2_4d1df716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-24T13:39:33Z",
+      "side": 1,
+      "message": "Possibly mike has something to add here?\n\nThis thankfully triggered the build, and the error message can be seen at\n  https://ci.libreoffice.org/job/gerrit_windows/123051/consoleFull#-1376424562d893063f-7f3d-4b7e-b56f-4e0f225817cd\n\n\nThis is apparently ERROR_INVALID_ADDRESS, which means the stack walking is wonky somehow. Any ideas?",
+      "revId": "c4269e64b7790fdb7520a4d81837ffda606561eb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
