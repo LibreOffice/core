@@ -67,6 +67,7 @@ using namespace ::com::sun::star::beans;
 #define COMMON_FLDTYP_PROPERTIES \
                     { u"" UNO_NAME_IS_FIELD_USED,      FIELD_PROP_IS_FIELD_USED,      cppu::UnoType<float>::get(), PropertyAttribute::READONLY, 0},\
                     { u"" UNO_NAME_IS_FIELD_DISPLAYED, FIELD_PROP_IS_FIELD_DISPLAYED, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::READONLY, 0},\
+                    { u"" UNO_NAME_TITLE, FIELD_PROP_TITLE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0},\
 
 const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(sal_uInt16 nPropertyId)
 {

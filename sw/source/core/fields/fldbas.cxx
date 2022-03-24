@@ -355,6 +355,11 @@ bool  SwField::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
         case FIELD_PROP_BOOL4:
             rVal <<= !m_bIsAutomaticLanguage;
         break;
+        case FIELD_PROP_TITLE:
+        {
+            rVal <<= m_aTitle;
+        }
+        break;
         default:
             assert(false);
     }
@@ -370,6 +375,15 @@ bool SwField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
             bool bFixed = false;
             if(rVal >>= bFixed)
                 m_bIsAutomaticLanguage = !bFixed;
+        }
+        break;
+        case FIELD_PROP_TITLE:
+        {
+            OUString aTitle;
+            if (rVal >>= aTitle)
+            {
+                m_aTitle = aTitle;
+            }
         }
         break;
         default:
@@ -843,6 +857,7 @@ void SwField::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nFormat"), BAD_CAST(OString::number(m_nFormat).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_nLang"), BAD_CAST(OString::number(m_nLang.get()).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("m_aTitle"), BAD_CAST(m_aTitle.toUtf8().getStr()));
 
     (void)xmlTextWriterEndElement(pWriter);
 }
