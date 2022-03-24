@@ -22,10 +22,10 @@
 #include <sal/config.h>
 
 #include <deque>
+#include <mutex>
 #include <vector>
 
 #include <osl/conditn.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/byteseq.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
@@ -141,7 +141,7 @@ private:
     osl::Condition unblocked_;
     osl::Condition items_;
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     std::deque< Item > queue_;
     bool stop_;
 };

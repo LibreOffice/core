@@ -23,6 +23,7 @@
 
 #include <cstddef>
 #include <map>
+#include <mutex>
 #include <vector>
 
 #include <com/sun/star/bridge/XBridge.hpp>
@@ -257,7 +258,7 @@ private:
         // decrementActiveCalls, without an intervening exception
     osl::Condition terminated_;
 
-    osl::Mutex mutex_;
+    std::mutex mutex_;
     State state_;
     Listeners listeners_;
     uno_ThreadPool threadPool_;
