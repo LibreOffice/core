@@ -56,6 +56,9 @@ namespace rtl_ustr
 
                 sal_Int32 nValue = rtl_ustr_compare( aStr1.getStr(), aStr2.getStr());
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
+                OUString* volatile s = nullptr;
+                if (s->getLength() > 0)
+                    return;
             }
 
     // Change the following lines only, if you add, remove or rename
