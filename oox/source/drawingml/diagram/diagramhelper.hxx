@@ -47,7 +47,6 @@ class AdvancedDiagramHelper final : public IDiagramHelper
     const std::shared_ptr<::oox::drawingml::Theme>  mpThemePtr;
 
     css::awt::Size maImportSize;
-    css::awt::Point maImportPosition;
 
     bool hasDiagramData() const;
 
@@ -55,7 +54,7 @@ public:
     AdvancedDiagramHelper(
         const std::shared_ptr< Diagram >& rDiagramPtr,
         const std::shared_ptr<::oox::drawingml::Theme>& rTheme,
-        const Shape& rSourceShape);
+        css::awt::Size aImportSize);
     virtual ~AdvancedDiagramHelper();
 
     // re-create XShapes

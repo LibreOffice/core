@@ -47,15 +47,6 @@ void loadDiagram( ShapePtr const & pShape,
                   const OUString& rColorStylePath,
                   const oox::core::Relations& rRelations );
 
-void loadDiagram(ShapePtr const& pShape,
-                 DiagramDataPtr pDiagramData,
-                 const css::uno::Reference<css::xml::dom::XDocument>& layoutDom,
-                 const css::uno::Reference<css::xml::dom::XDocument>& styleDom,
-                 const css::uno::Reference<css::xml::dom::XDocument>& colorDom,
-                 core::XmlFilterBase& rFilter);
-
-// OOX_DLLPUBLIC void reloadDiagram(SdrObject* pObj, core::XmlFilterBase& rFilter);
-
 }
 
 #endif

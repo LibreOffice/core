@@ -208,7 +208,10 @@ void Shape::prepareDiagramHelper(
     // Prepare Diagram data collecting for this Shape
     if( nullptr == mpDiagramHelper && FRAMETYPE_DIAGRAM == meFrameType )
     {
-        mpDiagramHelper = new AdvancedDiagramHelper(rDiagramPtr, rTheme, *this);
+        mpDiagramHelper = new AdvancedDiagramHelper(
+            rDiagramPtr,
+            rTheme,
+            getSize());
     }
 }
 
