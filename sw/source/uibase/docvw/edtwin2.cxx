@@ -321,6 +321,18 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                             break;
 
                         case SwFieldIds::User:
+                        {
+                            OUString aTitle = pField->GetTitle();
+                            if (!aTitle.isEmpty())
+                            {
+                                sText = aTitle;
+                            }
+                            else
+                            {
+                                sText = pField->GetPar1();
+                            }
+                            break;
+                        }
                         case SwFieldIds::HiddenText:
                             sText = pField->GetPar1();
                             break;

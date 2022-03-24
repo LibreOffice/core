@@ -66,6 +66,12 @@ published service TextField
      */
     [optional, property, readonly] boolean IsFieldDisplayed;
 
+    /** Contains short title for the field, used to for tooltip purposes if it's non-empty.
+
+        @since LibreOffice 7.4
+    */
+    [optional, property] string Title;
+
 
 };
 

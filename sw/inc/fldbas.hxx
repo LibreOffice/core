@@ -297,6 +297,8 @@ private:
     LanguageType        m_nLang;                ///< Always change via SetLanguage!
     bool                m_bUseFieldValueCache;  /// control the usage of the cached field value
     bool                m_bIsAutomaticLanguage;
+    /// Used for tooltip purposes when it's not-empty.
+    OUString m_aTitle;
 
     virtual OUString    ExpandImpl(SwRootFrame const* pLayout) const = 0;
     virtual std::unique_ptr<SwField> Copy() const = 0;
@@ -389,6 +391,8 @@ public:
     /// Is this field clickable?
     bool IsClickable() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    OUString GetTitle() const { return m_aTitle; }
+    void SetTitle(const OUString& rTitle) { m_aTitle = rTitle; }
 };
 
 inline SwFieldType* SwField::GetTyp() const
