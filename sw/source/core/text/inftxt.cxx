@@ -29,7 +29,6 @@
 #include <editeng/hyphenzoneitem.hxx>
 #include <editeng/hngpnctitem.hxx>
 #include <editeng/scriptspaceitem.hxx>
-#include <editeng/brushitem.hxx>
 #include <editeng/splwrap.hxx>
 #include <editeng/pgrditem.hxx>
 #include <editeng/tstpitem.hxx>
@@ -38,7 +37,6 @@
 #include <SwSmartTagMgr.hxx>
 #include <breakit.hxx>
 #include <editeng/forbiddenruleitem.hxx>
-#include <paintfrm.hxx>
 #include <swmodule.hxx>
 #include <vcl/svapp.hxx>
 #include <viewsh.hxx>

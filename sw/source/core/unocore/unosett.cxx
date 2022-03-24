@@ -25,7 +25,6 @@
 #include <poolfmt.hxx>
 #include <fmtcol.hxx>
 #include <unomap.hxx>
-//#include <unostyle.hxx>
 #include <unosett.hxx>
 #include <unoprnms.hxx>
 #include <ftninfo.hxx>
@@ -37,7 +36,6 @@
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <docstyle.hxx>
-#include <fmtclds.hxx>
 #include <editeng/brushitem.hxx>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/text/FootnoteNumbering.hpp>
@@ -47,7 +45,6 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <com/sun/star/style/VerticalAlignment.hpp>
 #include <o3tl/any.hxx>
 #include <o3tl/enumarray.hxx>
 #include <tools/UnitConversion.hxx>
@@ -73,7 +70,6 @@
 #include <svl/listener.hxx>
 #include <paratr.hxx>
 #include <sal/log.hxx>
-#include <numeric>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

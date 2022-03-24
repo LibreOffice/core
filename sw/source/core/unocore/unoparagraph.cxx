@@ -37,7 +37,6 @@
 #include <unocrsrhelper.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <docsh.hxx>
 #include <swunohelper.hxx>

@@ -30,7 +30,6 @@
 #include <accmap.hxx>
 #include <fesh.hxx>
 #include <viewopt.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>

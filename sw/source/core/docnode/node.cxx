@@ -37,7 +37,6 @@
 #include <swtable.hxx>
 #include <ndtxt.hxx>
 #include <pam.hxx>
-#include <swcache.hxx>
 #include <section.hxx>
 #include <cntfrm.hxx>
 #include <flyfrm.hxx>

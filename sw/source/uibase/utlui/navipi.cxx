@@ -45,8 +45,6 @@
 
 #include <memory>
 
-#include <uiobject.hxx>
-
 #include <o3tl/enumrange.hxx>
 
 #include <workctrl.hxx>

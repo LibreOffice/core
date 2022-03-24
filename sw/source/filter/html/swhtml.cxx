@@ -48,7 +48,6 @@
 #include <sfx2/event.hxx>
 #include <sfx2/docfile.hxx>
 
-#include <svtools/htmlcfg.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <editeng/kernitem.hxx>
 #include <editeng/boxitem.hxx>

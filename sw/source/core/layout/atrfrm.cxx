@@ -25,6 +25,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
+#include <com/sun/star/text/XTextColumns.hpp>
 #include <sal/log.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
@@ -37,7 +38,6 @@
 #include <unotools/syslocale.hxx>
 #include <frmfmt.hxx>
 #include <unocoll.hxx>
-#include <unosett.hxx>
 #include <fmtclds.hxx>
 #include <fmtornt.hxx>
 #include <fmthdft.hxx>
@@ -92,7 +92,6 @@
 #include <hints.hxx>
 #include <frameformats.hxx>
 #include <unoprnms.hxx>
-#include <svx/svdpage.hxx>
 
 #include <ndtxt.hxx>
 

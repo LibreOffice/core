@@ -27,12 +27,10 @@
 #include <viewsh.hxx>
 #include <textboxhelper.hxx>
 #include <IDocumentState.hxx>
-#include <frmatr.hxx>
 
 #include <sal/log.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
-#include <fmtornt.hxx>
 #include <flyfrms.hxx>
 #include <txatbase.hxx>
 #include "porfly.hxx"

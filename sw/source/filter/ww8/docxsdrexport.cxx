@@ -10,10 +10,8 @@
 #include "docxsdrexport.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
-#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/unoprnms.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -39,12 +37,9 @@
 #include <comphelper/flagguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <sal/log.hxx>
 #include <frmfmt.hxx>
 #include <IDocumentDrawModelAccess.hxx>
 
-#include <tools/diagnose_ex.h>
-#include <svx/xlnwtit.hxx>
 #include <svx/svdtrans.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 

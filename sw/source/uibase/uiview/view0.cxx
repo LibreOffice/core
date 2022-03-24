@@ -59,8 +59,6 @@
 #include <swslots.hxx>
 #include <PostItMgr.hxx>
 
-#include <ndtxt.hxx>
-
 using namespace ::com::sun::star;
 
 #include <unotools/moduleoptions.hxx>

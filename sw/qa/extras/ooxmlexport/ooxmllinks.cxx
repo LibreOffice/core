@@ -10,7 +10,6 @@
 #include <swmodeltestbase.hxx>
 #include <unotools/tempfile.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/saveopt.hxx>
 #include <officecfg/Office/Common.hxx>
 
 // This file contains tests to check relative/absolute hyperlinks handling

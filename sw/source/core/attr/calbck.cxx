@@ -20,10 +20,9 @@
 
 #include <algorithm>
 #include <format.hxx>
-#include <frame.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
-#include <osl/diagnose.hxx>
+#include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 

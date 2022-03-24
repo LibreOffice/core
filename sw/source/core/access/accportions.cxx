@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <string_view>
-
 #include "accportions.hxx"
 #include <osl/diagnose.h>
 #include <rtl/ustring.hxx>

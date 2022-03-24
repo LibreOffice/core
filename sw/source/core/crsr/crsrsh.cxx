@@ -19,7 +19,6 @@
 
 #include <config_wasm_strip.h>
 
-#include <memory>
 #include <com/sun/star/text/XTextRange.hpp>
 
 #include <hintids.hxx>

@@ -35,7 +35,6 @@
 #include <swundo.hxx>
 #include <dbmgr.hxx>
 #include <hints.hxx>
-#include <calbck.hxx>
 #include <fieldhint.hxx>
 #include <DocumentSettingManager.hxx>
 #include <IDocumentContentOperations.hxx>

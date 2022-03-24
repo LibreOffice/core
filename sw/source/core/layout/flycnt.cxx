@@ -30,7 +30,6 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <frmtool.hxx>
 #include <dflyobj.hxx>
-#include <hints.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>

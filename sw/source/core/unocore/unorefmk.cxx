@@ -26,7 +26,6 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <osl/mutex.hxx>
 #include <sal/config.h>
 #include <svl/listener.hxx>
 #include <vcl/svapp.hxx>

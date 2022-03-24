@@ -31,7 +31,6 @@
 #include <svx/svdoole2.hxx>
 #include <filter/msfilter/msdffimp.hxx>
 #include "sprmids.hxx"
-#include <svx/unoapi.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 

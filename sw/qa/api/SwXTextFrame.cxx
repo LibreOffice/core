@@ -17,10 +17,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/text/XTextDocument.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
 
 using namespace css;

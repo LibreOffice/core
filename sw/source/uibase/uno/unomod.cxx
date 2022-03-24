@@ -23,7 +23,6 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
-#include <rtl/ustrbuf.hxx>
 #include <svl/itemprop.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/UnitConversion.hxx>

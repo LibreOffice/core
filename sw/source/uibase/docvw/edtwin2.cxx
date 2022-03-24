@@ -51,7 +51,6 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <txtfrm.hxx>
 #include <ndtxt.hxx>
-#include <FrameControlsManager.hxx>
 #include <comphelper/lok.hxx>
 #include <authfld.hxx>
 

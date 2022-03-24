@@ -17,9 +17,9 @@
 #include <redline.hxx>
 #include <dcontact.hxx>
 #include <view.hxx>
-#include <unotbl.hxx>
 #include <IDocumentSettingAccess.hxx>
 
+#include <editeng/brushitem.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
 
@@ -27,13 +27,13 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <UndoManager.hxx>
-#include <frmatr.hxx>
 #include <tblafmt.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
+#include <com/sun/star/text/XParagraphAppend.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 #include <osl/thread.hxx>
 #include <hyp.hxx>

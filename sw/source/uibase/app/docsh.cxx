@@ -26,7 +26,6 @@
 #include <vcl/jobset.hxx>
 #include <svl/numformat.hxx>
 #include <svl/whiter.hxx>
-#include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/PasswordHelper.hxx>
@@ -80,7 +79,6 @@
 #include <strings.hrc>
 
 #include <unotools/fltrcfg.hxx>
-#include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 

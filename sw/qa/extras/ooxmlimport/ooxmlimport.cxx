@@ -7,9 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <string_view>
-#include <config_features.h>
 #include <config_fonts.h>
 
 #ifdef MACOSX
@@ -64,7 +61,6 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/propertysequence.hxx>
-#include <osl/time.h>
 #include <comphelper/processfactory.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <comphelper/scopeguard.hxx>

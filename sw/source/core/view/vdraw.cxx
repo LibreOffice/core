@@ -20,8 +20,6 @@
 #include <officecfg/Office/Common.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
-#include <swmodule.hxx>
-#include <svtools/accessibilityoptions.hxx>
 #include <svx/svdpagv.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>

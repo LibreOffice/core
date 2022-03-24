@@ -63,7 +63,6 @@
 #include <layact.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
-#include <tblsel.hxx>
 
 // RotateFlyFrame3
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

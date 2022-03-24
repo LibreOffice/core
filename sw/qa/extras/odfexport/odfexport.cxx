@@ -9,7 +9,6 @@
 
 #include <algorithm>
 #include <memory>
-#include <string_view>
 #include <swmodeltestbase.hxx>
 
 #include <com/sun/star/awt/FontSlant.hpp>

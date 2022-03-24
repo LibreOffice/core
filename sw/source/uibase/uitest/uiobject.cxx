@@ -12,7 +12,6 @@
 #include <edtwin.hxx>
 #include <view.hxx>
 #include <wrtsh.hxx>
-#include <navipi.hxx>
 #include <ndtxt.hxx>
 #include <viewopt.hxx>
 #include <sfx2/sidebar/Sidebar.hxx>

@@ -9,6 +9,7 @@
 
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <swmodeltestbase.hxx>
+#include <itabenum.hxx>
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <expfld.hxx>
@@ -16,7 +17,6 @@
 #include <view.hxx>
 #include <swacorr.hxx>
 #include <swmodule.hxx>
-#include <modcfg.hxx>
 #include <charatr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <unotbl.hxx>

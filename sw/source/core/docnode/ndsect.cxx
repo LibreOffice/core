@@ -57,7 +57,6 @@
 #include <fmtftntx.hxx>
 #include <strings.hrc>
 #include <viewsh.hxx>
-#include <txtfrm.hxx>
 #include <memory>
 #include "ndsect.hxx"
 #include <tools/datetimeutils.hxx>

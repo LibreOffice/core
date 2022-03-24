@@ -58,7 +58,6 @@
 #include <vector>
 
 #include <sortedobjs.hxx>
-#include <UndoManager.hxx>
 
 using namespace com::sun::star;
 

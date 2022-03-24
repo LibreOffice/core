@@ -66,7 +66,6 @@
 #include <svx/xfillit0.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/drawitem.hxx>
-#include <editeng/eeitem.hxx>
 
 using namespace com::sun::star;
 

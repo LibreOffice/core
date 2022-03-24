@@ -28,7 +28,6 @@
 #include <vcl/mnemonic.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
-#include <editeng/sizeitem.hxx>
 #include <editeng/opaqitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/prntitem.hxx>

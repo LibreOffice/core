@@ -18,7 +18,6 @@
  */
 
 #include "objectformattertxtfrm.hxx"
-#include <IDocumentUndoRedo.hxx>
 #include <sortedobjs.hxx>
 #include <rootfrm.hxx>
 #include <anchoredobject.hxx>
@@ -32,8 +31,6 @@
 #include <layact.hxx>
 #include <flyfrm.hxx>
 #include <ftnfrm.hxx>
-#include <fmtornt.hxx>
-#include <textboxhelper.hxx>
 #include <osl/diagnose.h>
 
 using namespace ::com::sun::star;

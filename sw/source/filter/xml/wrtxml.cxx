@@ -27,7 +27,6 @@
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/frame/XModule.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <officecfg/Office/Common.hxx>
 #include <comphelper/fileformat.h>
@@ -37,10 +36,8 @@
 #include <vcl/errinf.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
-#include <o3tl/any.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <svx/xmleohlp.hxx>
-#include <unotools/saveopt.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/docfile.hxx>

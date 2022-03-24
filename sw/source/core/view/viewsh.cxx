@@ -39,7 +39,6 @@
 #include <IDocumentState.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
-#include <cntfrm.hxx>
 #include <viewimp.hxx>
 #include <frmtool.hxx>
 #include <viewopt.hxx>
@@ -53,7 +52,6 @@
 #include <fntcache.hxx>
 #include <ptqueue.hxx>
 #include <docsh.hxx>
-#include <pagedesc.hxx>
 #include <bookmark.hxx>
 #include <ndole.hxx>
 #include <ndindex.hxx>

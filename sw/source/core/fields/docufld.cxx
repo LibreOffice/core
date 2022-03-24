@@ -43,7 +43,6 @@
 #include <svl/urihelper.hxx>
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
-#include <svl/zforlist.hxx>
 #include <libxml/xmlstring.h>
 #include <libxml/xmlwriter.h>
 

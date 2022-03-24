@@ -66,7 +66,6 @@
 #include <pagefrm.hxx>
 #include <svl/eitem.hxx>
 #include <svl/lngmisc.hxx>
-#include <docary.hxx>
 #include <swtable.hxx>
 #include <tox.hxx>
 #include <doctxm.hxx>

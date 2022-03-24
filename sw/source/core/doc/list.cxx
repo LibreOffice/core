@@ -19,7 +19,6 @@
 
 #include <list.hxx>
 
-#include <vector>
 #include <numrule.hxx>
 #include <ndarr.hxx>
 #include <node.hxx>

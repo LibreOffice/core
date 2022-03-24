@@ -22,7 +22,6 @@
 #include <doc.hxx>
 #include <fmtcolfunc.hxx>
 #include <format.hxx>
-#include <frame.hxx>
 #include <frmatr.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>
@@ -33,7 +32,6 @@
 #include <svx/sdr/attribute/sdrallfillattributeshelper.hxx>
 #include <svx/unobrushitemhelper.hxx>
 #include <svx/xdef.hxx>
-#include <swcache.hxx>
 
 using namespace com::sun::star;
 

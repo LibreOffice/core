@@ -14,7 +14,6 @@
 #include <docsh.hxx>
 
 #include <unotools/mediadescriptor.hxx>
-#include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/servicehelper.hxx>
 
 #include <com/sun/star/io/XOutputStream.hpp>

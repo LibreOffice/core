@@ -64,7 +64,6 @@
 
 #include <cmdid.h>
 #include <doc.hxx>
-#include <docary.hxx>
 #include <charfmt.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <strings.hrc>

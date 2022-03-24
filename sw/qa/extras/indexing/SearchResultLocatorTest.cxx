@@ -7,8 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <memory>
-#include <string_view>
 #include <swmodeltestbase.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>

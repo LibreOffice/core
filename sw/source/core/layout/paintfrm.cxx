@@ -25,6 +25,7 @@
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
+#include <svx/ctredlin.hxx>
 #include <svx/framelink.hxx>
 #include <drawdoc.hxx>
 #include <tgrditem.hxx>
@@ -75,7 +76,6 @@
 #include <DocumentSettingManager.hxx>
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentDrawModelAccess.hxx>
-#include <IDocumentRedlineAccess.hxx>
 
 #include <ndole.hxx>
 #include <PostItMgr.hxx>
@@ -89,7 +89,6 @@
 
 #include <bitmaps.hlst>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
-#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>

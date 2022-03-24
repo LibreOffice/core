@@ -27,7 +27,6 @@
 #include <ftnfrm.hxx>
 #include <frmatr.hxx>
 #include <frmtool.hxx>
-#include <hints.hxx>
 #include <sectfrm.hxx>
 #include <notxtfrm.hxx>
 #include <txtfly.hxx>

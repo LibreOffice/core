@@ -45,9 +45,6 @@
 #include <rolbck.hxx>
 #include <ddefld.hxx>
 #include <tabfrm.hxx>
-#include <rowfrm.hxx>
-#include <cellfrm.hxx>
-#include <swcache.hxx>
 #include <tblafmt.hxx>
 #include <poolfmt.hxx>
 #include <mvsave.hxx>

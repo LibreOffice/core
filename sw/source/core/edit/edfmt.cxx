@@ -21,7 +21,6 @@
 #include <IDocumentStylePoolAccess.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
-#include <docary.hxx>
 #include <fchrfmt.hxx>
 #include <frmfmt.hxx>
 #include <charfmt.hxx>

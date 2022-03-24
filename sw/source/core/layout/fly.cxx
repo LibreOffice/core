@@ -26,7 +26,6 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/frmdiritem.hxx>
-#include <editeng/outlobj.hxx>
 #include <fmtfsize.hxx>
 #include <fmtclds.hxx>
 #include <fmtcntnt.hxx>

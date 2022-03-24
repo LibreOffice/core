@@ -19,7 +19,6 @@
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <strings.hrc>
-#include <svx/svdview.hxx>
 
 #include <viewopt.hxx>
 

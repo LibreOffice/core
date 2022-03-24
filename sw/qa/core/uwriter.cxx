@@ -13,7 +13,6 @@
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <comphelper/processfactory.hxx>
-#include <comphelper/random.hxx>
 #include <i18nutil/transliteration.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -43,11 +42,9 @@
 #include <sfx2/docfile.hxx>
 
 #include <xmloff/odffields.hxx>
-#include <osl/process.h>
 
 #include <breakit.hxx>
 #include <doc.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStatistics.hxx>
@@ -59,7 +56,6 @@
 #include <ndtxt.hxx>
 #include <shellres.hxx>
 #include <swscanner.hxx>
-#include <swmodule.hxx>
 #include <swdll.hxx>
 #include <swtypes.hxx>
 #include <fmtftn.hxx>

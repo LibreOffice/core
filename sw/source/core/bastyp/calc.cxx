@@ -24,7 +24,6 @@
 #include <cfloat>
 #include <climits>
 #include <memory>
-#include <string_view>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <cstdlib>
@@ -43,7 +42,6 @@
 #include <shellres.hxx>
 #include <svl/numformat.hxx>
 #include <svl/languageoptions.hxx>
-#include <svl/zforlist.hxx>
 #include <swmodule.hxx>
 #include <swtypes.hxx>
 #include <unotools/charclass.hxx>

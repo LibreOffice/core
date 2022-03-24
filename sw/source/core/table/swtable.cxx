@@ -38,7 +38,6 @@
 #include <docary.hxx>
 #include <frame.hxx>
 #include <swtable.hxx>
-#include <swcrsr.hxx>
 #include <ndtxt.hxx>
 #include <tabcol.hxx>
 #include <tabfrm.hxx>

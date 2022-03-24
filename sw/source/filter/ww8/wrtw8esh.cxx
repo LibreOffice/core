@@ -46,9 +46,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <svx/svdouno.hxx>
-#include <svx/unoapi.hxx>
 #include <svx/svdview.hxx>
-#include <svx/unopage.hxx>
 #include <fmtcnct.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
@@ -87,7 +85,6 @@
 #include <fmturl.hxx>
 #include <frameformats.hxx>
 #include <sfx2/sfxsids.hrc>
-#include <unotools/saveopt.hxx>
 #include <o3tl/enumrange.hxx>
 #include <o3tl/enumarray.hxx>
 #include <sfx2/docfile.hxx>

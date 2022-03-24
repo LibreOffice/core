@@ -19,7 +19,6 @@
 
 #include <cmdid.h>
 #include <hintids.hxx>
-#include <swtypes.hxx>
 #include <svx/colorbox.hxx>
 #include <editeng/sizeitem.hxx>
 #include <editeng/lrspitem.hxx>

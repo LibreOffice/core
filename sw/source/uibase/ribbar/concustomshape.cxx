@@ -36,8 +36,6 @@
 #include <svx/xfillit0.hxx>
 #include <editeng/adjustitem.hxx>
 
-#include <math.h>
-
 using namespace com::sun::star;
 
 ConstCustomShape::ConstCustomShape( SwWrtShell* pWrtShell, SwEditWin* pEditWin, SwView* pSwView, SfxRequest const & rReq )

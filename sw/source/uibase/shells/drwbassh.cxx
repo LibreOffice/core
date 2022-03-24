@@ -52,8 +52,6 @@
 #include <vcl/unohelp2.hxx>
 #include <swabstdlg.hxx>
 #include <swundo.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>

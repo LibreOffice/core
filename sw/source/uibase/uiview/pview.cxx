@@ -27,7 +27,6 @@
 #include <vcl/syswin.hxx>
 #include <vcl/weld.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <svl/whiter.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/eitem.hxx>

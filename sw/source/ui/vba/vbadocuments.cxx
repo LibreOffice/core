@@ -19,7 +19,6 @@
 
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <tools/urlobj.hxx>
 #include <rtl/ref.hxx>

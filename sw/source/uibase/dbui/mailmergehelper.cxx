@@ -35,7 +35,6 @@
 #include <o3tl/safeint.hxx>
 #include <vcl/event.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/weldutils.hxx>
 #include <tools/diagnose_ex.h>
 

@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
-#include <unotools/pathoptions.hxx>
 #include <svl/undo.hxx>
 #include <svl/eitem.hxx>
 #include <svl/whiter.hxx>
