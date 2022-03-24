@@ -204,7 +204,7 @@ namespace rtl_str
             {
                 OString aStr1 = "Line for a hashCode.";
                 sal_Int32 nHashCode = rtl_str_hashCode( aStr1.getStr() );
-                printf("hashcode: %d\n", nHashCode);
+                printf("hashcode: %" SAL_PRIdINT32 "\n", nHashCode);
                 // CPPUNIT_ASSERT_MESSAGE("failed.", nValue == 0);
             }
 
