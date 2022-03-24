@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "Resource.h"       // main symbols
 #include <map>
+#include <string_view>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/accessibility/XAccessibleAction.hpp>
@@ -229,7 +230,7 @@ public:
     static OUString get_StringFromAny(css::uno::Any const & pAny);
 
     static OUString get_String4Numbering(const css::uno::Any& pAny,
-            sal_Int16 numberingLevel, const OUString& numberingPrefix);
+            sal_Int16 numberingLevel, std::u16string_view numberingPrefix);
 
     // Helper function for data conversion.
     static void ConvertAnyToVariant(const css::uno::Any &rAnyVal,
