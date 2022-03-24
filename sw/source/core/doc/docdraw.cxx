@@ -255,14 +255,15 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
 
         // Add the saved textboxes to the new format.
-        auto pTextBoxNode = new SwTextBoxHandler(pFormat);
+        std::shared_ptr<SwTextBoxHandler> pTextBoxHandler;
+        pTextBoxHandler.reset(new SwTextBoxHandler(pFormat));
         for (const auto& pTextBoxEntry : vSavedTextBoxes)
         {
-            pTextBoxNode->AddTextBox(const_cast<SdrObject*>(pTextBoxEntry.first),
+            pTextBoxHandler->AddTextBox(const_cast<SdrObject*>(pTextBoxEntry.first),
                                      pTextBoxEntry.second);
-            pTextBoxEntry.second->SetTextBoxHandler(pTextBoxNode);
+            pTextBoxEntry.second->SetTextBoxHandler(pTextBoxHandler);
         }
-        pFormat->SetTextBoxHandler(pTextBoxNode);
+        pFormat->SetTextBoxHandler(pTextBoxHandler);
         vSavedTextBoxes.clear();
 
         rDrawView.GroupMarked();
@@ -302,19 +303,22 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
     return pNewContact;
 }
 
-static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat, SwTextBoxHandler* pTextBoxNode,
+static void lcl_CollectTextBoxesForSubGroupObj(SwFrameFormat* pTargetFormat,
+                                               std::shared_ptr<SwTextBoxHandler> pTextBoxHandler,
                                                SdrObject* pSourceObjs)
 {
     if (auto pChildrenObjs = pSourceObjs->getChildrenOfSdrObject())
         for (size_t i = 0; i < pChildrenObjs->GetObjCount(); ++i)
-            lcl_CollectTextBoxesForSubGroupObj(pTargetFormat, pTextBoxNode, pChildrenObjs->GetObj(i));
+            lcl_CollectTextBoxesForSubGroupObj(pTargetFormat, pTextBoxHandler,
+                                               pChildrenObjs->GetObj(i));
     else
     {
-        if (auto pTextBox = pTextBoxNode->GetTextBox(pSourceObjs))
+        if (auto pTextBox = pTextBoxHandler->GetTextBox(pSourceObjs))
         {
             if (!pTargetFormat->GetTextBoxHandler())
             {
-                pTargetFormat->SetTextBoxHandler(new SwTextBoxHandler(pTargetFormat));
+                pTargetFormat->SetTextBoxHandler(
+                    std::make_shared<SwTextBoxHandler>(SwTextBoxHandler(pTargetFormat)));
             }
             pTargetFormat->GetTextBoxHandler()->AddTextBox(pSourceObjs, pTextBox);
             pTextBox->SetTextBoxHandler(pTargetFormat->GetTextBoxHandler());
@@ -351,9 +355,9 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                 {
                     SwDrawContact *pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
-                    SwTextBoxHandler* pTextBoxNode = nullptr;
+                    std::shared_ptr<SwTextBoxHandler> pTextBoxHandler = nullptr;
                     if (auto pGroupFormat = pContact->GetFormat())
-                        pTextBoxNode = pGroupFormat->GetTextBoxHandler();
+                        pTextBoxHandler = pGroupFormat->GetTextBoxHandler();
 
                     SwFormatAnchor aAnch( pContact->GetFormat()->GetAnchor() );
                     SdrObjList *pLst = pObjGroup->GetSubList();
@@ -372,21 +376,23 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                                                             GetDfltFrameFormat() );
                         pFormat->SetFormatAttr( aAnch );
 
-                        if (pTextBoxNode)
+                        if (pTextBoxHandler)
                         {
                             if (!pObj->getChildrenOfSdrObject())
                             {
-                                if (auto pTextBoxFormat = pTextBoxNode->GetTextBox(pSubObj))
+                                if (auto pTextBoxFormat = pTextBoxHandler->GetTextBox(pSubObj))
                                 {
-                                    auto pNewTextBoxNode = new SwTextBoxHandler(pFormat);
-                                    pNewTextBoxNode->AddTextBox(pSubObj, pTextBoxFormat);
-                                    pFormat->SetTextBoxHandler(pNewTextBoxNode);
-                                    pTextBoxFormat->SetTextBoxHandler(pNewTextBoxNode);
+                                    std::shared_ptr<SwTextBoxHandler> pTextBoxHandler
+                                        = std::make_shared<SwTextBoxHandler>(
+                                            SwTextBoxHandler(pFormat));
+                                    pTextBoxHandler->AddTextBox(pSubObj, pTextBoxFormat);
+                                    pFormat->SetTextBoxHandler(pTextBoxHandler);
+                                    pTextBoxFormat->SetTextBoxHandler(pTextBoxHandler);
                                 }
                             }
                             else
                             {
-                                lcl_CollectTextBoxesForSubGroupObj(pFormat, pTextBoxNode, pSubObj);
+                                lcl_CollectTextBoxesForSubGroupObj(pFormat, pTextBoxHandler, pSubObj);
                             }
                         }
                         // #i36010# - set layout direction of the position
