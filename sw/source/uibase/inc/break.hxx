@@ -24,10 +24,13 @@
 #include <optional>
 
 class SwWrtShell;
+enum class SwLineBreakClear;
 
 class SwBreakDlg final : public weld::GenericDialogController
 {
     std::unique_ptr<weld::RadioButton> m_xLineBtn;
+    std::unique_ptr<weld::Label> m_xLineClearText;
+    std::unique_ptr<weld::ComboBox> m_xLineClearBox;
     std::unique_ptr<weld::RadioButton> m_xColumnBtn;
     std::unique_ptr<weld::RadioButton> m_xPageBtn;
     std::unique_ptr<weld::Label> m_xPageCollText;
@@ -40,6 +43,7 @@ class SwBreakDlg final : public weld::GenericDialogController
     OUString m_aTemplate;
     sal_uInt16 nKind;
     ::std::optional<sal_uInt16> oPgNum;
+    std::optional<SwLineBreakClear> m_eClear;
 
     bool bHtmlMode;
 
@@ -57,6 +61,7 @@ public:
     const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
     const ::std::optional<sal_uInt16>& GetPageNumber() const { return oPgNum; }
+    std::optional<SwLineBreakClear> GetClear() const { return m_eClear; }
 };
 
 #endif
