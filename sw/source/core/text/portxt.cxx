@@ -792,6 +792,17 @@ void SwHolePortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
+void SwHolePortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHolePortion"));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("blank-width"),
+                                      BAD_CAST(OString::number(m_nBlankWidth).getStr()));
+
+    SwLinePortion::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 void SwFieldMarkPortion::Paint( const SwTextPaintInfo & /*rInf*/) const
 {
     // These shouldn't be painted!
