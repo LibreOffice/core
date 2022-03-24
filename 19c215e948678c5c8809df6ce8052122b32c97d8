@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4e409c1_801bc9be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-03-24T11:34:19Z",
+      "side": 1,
+      "message": "For the record:\n\n• Classic: Removed in 2010 with 5ec6595b6fa7017f5dfbb75406fb2595542e493a and 2012 with 2794c1945a5c6921c8ba6a1bdbbe6d67eb8bbd69, dropped entirely in 2015 with 38b7ee39d945e8b236de6abeedac53edf37f5894. None of the three commits removed the string.\n• Hicontrast: Killed in 2018 with 12e3f64f270d464313176d4936ea811b45fb750e\n• Oxygen and Industrial: Also killed in 2018 with 8bdd059a1d64a1818ee0093d7a512fe38c4e2b20",
+      "revId": "19c215e948678c5c8809df6ce8052122b32c97d8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
