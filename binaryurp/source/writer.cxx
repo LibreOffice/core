@@ -31,7 +31,6 @@
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/uno/XCurrentContext.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <osl/mutex.hxx>
 #include <sal/log.hxx>
 #include <uno/dispatcher.hxx>
 
@@ -108,7 +107,7 @@ void Writer::queueRequest(
     std::vector< BinaryAny >&& inArguments)
 {
     css::uno::UnoInterfaceReference cc(current_context::get());
-    osl::MutexGuard g(mutex_);
+    std::lock_guard g(mutex_);
     queue_.emplace_back(tid, oid, type, member, std::move(inArguments), cc);
     items_.set();
 }
@@ -119,7 +118,7 @@ void Writer::queueReply(
     bool exception, BinaryAny const & returnValue,
     std::vector< BinaryAny >&& outArguments, bool setCurrentContextMode)
 {
-    osl::MutexGuard g(mutex_);
+    std::lock_guard g(mutex_);
     queue_.emplace_back(
             tid, member, setter, exception, returnValue, std::move(outArguments),
             setCurrentContextMode);
@@ -135,7 +134,7 @@ void Writer::unblock() {
 
 void Writer::stop() {
     {
-        osl::MutexGuard g(mutex_);
+        std::lock_guard g(mutex_);
         stop_ = true;
     }
     unblocked_.set();
@@ -151,7 +150,7 @@ void Writer::execute() {
             items_.wait();
             Item item;
             {
-                osl::MutexGuard g(mutex_);
+                std::lock_guard g(mutex_);
                 if (stop_) {
                     return;
                 }
