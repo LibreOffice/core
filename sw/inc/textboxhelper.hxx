@@ -178,6 +178,9 @@ public:
     /// vector filled with the textboxes.
     static std::vector<SwFrameFormat*> CollectTextBoxes(const SdrObject* pGroupObject,
                                                         SwFrameFormat* pFormat);
+
+    static void cloneTextBoxTree(const SwFrameFormat* pSourceFormat, const SdrObject* pSourceObj,
+                                 SwFrameFormat* pDestinationFormat, SdrObject* pDestinationObj);
 };
 
 /// Textboxes are basically textframe + shape pairs. This means one shape has one frame.
