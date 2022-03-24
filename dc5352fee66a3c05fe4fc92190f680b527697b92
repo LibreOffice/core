@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bd2c919_fb499666",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-24T07:08:32Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/110925/ : FAILURE\n\u003e \n\u003e Visual studio complained about error C2511: \"bool SvxMSDffManager::SeekToRec(SvStream \u0026,sal_uInt16,sal_uInt64,DffRecordHeader *,sal_uInt64)\": overloaded member function not found in \"SvxMSDffManager\" in file C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows/filter/source/msfilter/msdffimp.cxx(3287) ( https://ci.libreoffice.org/job/gerrit_windows/123000/ )\n\nHint: check also the corresponding .hxx file",
+      "revId": "dc5352fee66a3c05fe4fc92190f680b527697b92",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
