@@ -346,6 +346,8 @@ bool OSSupportsDarkMode()
     return bRet;
 }
 
+namespace {
+
 enum PreferredAppMode
 {
     Default,
@@ -354,6 +356,8 @@ enum PreferredAppMode
     ForceLight,
     Max
 };
+
+}
 
 extern "C" {
 VCLPLUG_WIN_PUBLIC SalInstance* create_SalInstance()
