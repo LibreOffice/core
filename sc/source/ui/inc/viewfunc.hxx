@@ -356,7 +356,7 @@ private:
 
     bool PasteMultiRangesFromClip(
         InsertDeleteFlags nFlags, ScDocument* pClipDoc,
-        ScPasteFunc nFunction, bool bSkipEmptyCells, bool bIncludeFiltered,
+        ScPasteFunc nFunction, bool bSkipEmptyCells,
         bool bTranspose, bool bAsLink, bool bAllowDialogs,
         InsCellCmd eMoveMode, InsertDeleteFlags nUndoFlags );
 
