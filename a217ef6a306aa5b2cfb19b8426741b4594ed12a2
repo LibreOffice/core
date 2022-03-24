@@ -16,6 +16,23 @@
       "message": "Any cons here? (eg: can it be to \"techy\" for some people?)",
       "revId": "a217ef6a306aa5b2cfb19b8426741b4594ed12a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51f64cf6_cec18047",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-24T07:15:28Z",
+      "side": 1,
+      "message": "Let\u0027s give it a try since it\u0027ll be only on master branch. At worst, it can be reverted.",
+      "revId": "a217ef6a306aa5b2cfb19b8426741b4594ed12a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
