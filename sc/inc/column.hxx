@@ -721,8 +721,7 @@ public:
                              std::vector<SCROW>* pNewSharedRows );
 
     void AttachFormulaCells( sc::StartListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
-    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2,
-                             std::vector<SCROW>* pNewSharedRows );
+    void DetachFormulaCells( sc::EndListeningContext& rCxt, SCROW nRow1, SCROW nRow2 );
 
     /**
      * Regroup formula cells for the entire column.

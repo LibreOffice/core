@@ -1210,8 +1210,7 @@ public:
                                                   { mbFormulaGroupCxtBlockDiscard = block; }
 
     // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
-    SC_DLLPUBLIC OUString                     GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                                  const svl::SharedString** pShared = nullptr ) const;
+    SC_DLLPUBLIC OUString                     GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     FormulaError                              GetStringForFormula( const ScAddress& rPos, OUString& rString );
     SC_DLLPUBLIC double                       GetValue( const ScAddress& rPos ) const;
     SC_DLLPUBLIC double                       GetValue( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
