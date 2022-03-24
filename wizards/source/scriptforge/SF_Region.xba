@@ -169,7 +169,7 @@ End Property	&apos;	ScriptForge.SF_Region.Language (get)
 
 REM -----------------------------------------------------------------------------
 Property Get ListSeparator(Optional ByVal Region As Variant) As String
-&apos;&apos;&apos;	Returns the separator used in lits applicable in the given region.
+&apos;&apos;&apos;	Returns the separator used in list applicable in the given region.
 &apos;&apos;&apos;	The region is expressed as a locale combining language-COUNTRY (la-CO)
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		MsgBox Regio.ListSeparator(&quot;it-IT&quot;)	&apos;	;
@@ -249,7 +249,7 @@ Public Function DSTOffset(Optional ByVal LocalDateTime As Variant _
 						, Optional ByVal TimeZone As Variant _
 						, Optional ByVal Locale As Variant _
 						) As Integer
-&apos;&apos;&apos;	Computes the additional offset due to day light saving (&quot;summer time&quot;)
+&apos;&apos;&apos;	Computes the additional offset due to daylight saving (&quot;summer time&quot;)
 &apos;&apos;&apos;	Args
 &apos;&apos;&apos;		LocalDateTime: local date and time as a Date. DST offset varies during the year.
 &apos;&apos;&apos;		TimeZone: specified as &quot;Region/City&quot; name like &quot;Europe/Berlin&quot;, or a custom time zone ID such as &quot;UTC&quot; or &quot;GMT-8:00&quot;
@@ -348,7 +348,7 @@ Public Function LocalDateTime(Optional ByVal UTCDateTime As Variant _
 &apos;&apos;&apos;	Return:
 &apos;&apos;&apos;		The local time converted from the corresponding UTC date and time as a Date
 &apos;&apos;&apos;		If the returned value is before 1900, it is likely that the Locale is not recognized
-&apos;&apos;&apos;		If the returned value matches the local time, it is likely that the the timezone is not recognized
+&apos;&apos;&apos;		If the returned value matches the local time, it is likely that the timezone is not recognized
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		regio.LocalDateTime(DateSerial(2022, 3, 20) + TimeSerial(16, 58, 17), &quot;Europe/Brussels&quot;, &quot;fr-BE&quot;)
 &apos;&apos;&apos;				&apos;	2022-03-20 17:58:17
@@ -411,7 +411,7 @@ Public Function Number2Text(Optional ByVal Number As Variant _
 &apos;&apos;&apos;	Convert numbers and money amounts in many languages into words
 &apos;&apos;&apos;	Args
 &apos;&apos;&apos;		Number: the number to spell out
-&apos;&apos;&apos;			Accepted types: strings or numeric values (integeror real numbers)
+&apos;&apos;&apos;			Accepted types: strings or numeric values (integer or real numbers)
 &apos;&apos;&apos;			When a string, a variety of prefixes is supported
 &apos;&apos;&apos;				The string &quot;help&quot; provides helpful tips about allowed prefixes by language
 &apos;&apos;&apos;					Example for french
