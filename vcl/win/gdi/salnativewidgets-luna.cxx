@@ -44,6 +44,7 @@
 #include <win/svsys.h>
 #include <win/salgdi.h>
 #include <win/saldata.hxx>
+#include <win/salframe.h>
 #include <win/scoped_gdi.hxx>
 #include <win/wingdiimpl.hxx>
 
