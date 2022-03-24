@@ -416,10 +416,6 @@
                     <property name="hexpand">True</property>
                     <items>
                       <item translatable="yes" context="optviewpage|iconstyle">Automatic</item>
-                      <item translatable="yes" context="optviewpage|iconstyle">Galaxy</item>
-                      <item translatable="yes" context="optviewpage|iconstyle">High Contrast</item>
-                      <item translatable="yes" context="optviewpage|iconstyle">Oxygen</item>
-                      <item translatable="yes" context="optviewpage|iconstyle">Classic</item>
                       <item translatable="yes" context="optviewpage|iconstyle">Sifr</item>
                       <item translatable="yes" context="optviewpage|iconstyle">Breeze</item>
                     </items>
