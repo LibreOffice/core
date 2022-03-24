@@ -195,43 +195,6 @@ ScModelObj* ScUiCalcTest::saveAndReload(css::uno::Reference<css::lang::XComponen
     return pModelObj;
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf36387)
-{
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
-    ScDocument* pDoc = pModelObj->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-
-    insertStringToCell(*pModelObj, "A1", "1");
-    insertStringToCell(*pModelObj, "B1", "2");
-    insertStringToCell(*pModelObj, "C1", "3");
-    insertStringToCell(*pModelObj, "D1", "4");
-
-    // Save the document
-    utl::TempFile aTempFile = save(mxComponent, "calc8");
-
-    // Open a new document
-    mxComponent = loadFromDesktop("private:factory/scalc");
-    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
-    CPPUNIT_ASSERT(pModelObj);
-    pDoc = pModelObj->GetDocument();
-    CPPUNIT_ASSERT(pDoc);
-
-    // Insert the reference to the external document
-    OUString aAndFormula = "=AND('" + aTempFile.GetURL() + "'#$Sheet1.A1:D1)";
-    insertStringToCell(*pModelObj, "A1", aAndFormula.toUtf8().getStr());
-
-    OUString aOrFormula = "=OR('" + aTempFile.GetURL() + "'#$Sheet1.A1:D1)";
-    insertStringToCell(*pModelObj, "B1", aOrFormula.toUtf8().getStr());
-
-    // Without the fix in place, this test would have failed with
-    // - Expected: TRUE
-    // - Actual  : Err:504
-    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(0, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(1, 0, 0)));
-}
-
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
@@ -249,27 +212,9 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf100847)
     CPPUNIT_ASSERT(pModelObj);
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
-
-    // Insert the reference to the external document
-    OUString aFormula = "=+'" + aTempFile.GetURL() + "'#$Sheet1.A1";
-    insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
-
-    aFormula = "=+'" + aTempFile.GetURL() + "'#$Sheet1.A1*1";
-    insertStringToCell(*pModelObj, "B1", aFormula.toUtf8().getStr());
-
-    aFormula = "=+N('" + aTempFile.GetURL() + "'#$Sheet1.A1)*1";
-    insertStringToCell(*pModelObj, "C1", aFormula.toUtf8().getStr());
-
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(0, 0, 0)));
-
-    // Without the fix in place, this test would have failed with
-    // - Expected: 0
-    // - Actual  : #VALUE!
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(1, 0, 0)));
-    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(2, 0, 0)));
 }
 
-CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf115162)
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testExternalReferences)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
@@ -277,17 +222,17 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf115162)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
+    insertStringToCell(*pModelObj, "A1", "2015");
     insertStringToCell(*pModelObj, "A2", "2015");
     insertStringToCell(*pModelObj, "A3", "2015");
-    insertStringToCell(*pModelObj, "A4", "2015");
 
+    insertStringToCell(*pModelObj, "B1", "1");
     insertStringToCell(*pModelObj, "B2", "1");
-    insertStringToCell(*pModelObj, "B3", "1");
-    insertStringToCell(*pModelObj, "B4", "2");
+    insertStringToCell(*pModelObj, "B3", "2");
 
-    insertStringToCell(*pModelObj, "C2", "10");
-    insertStringToCell(*pModelObj, "C3", "20");
-    insertStringToCell(*pModelObj, "C4", "5");
+    insertStringToCell(*pModelObj, "C1", "10");
+    insertStringToCell(*pModelObj, "C2", "20");
+    insertStringToCell(*pModelObj, "C3", "5");
 
     // Save the document
     utl::TempFile aTempFile = save(mxComponent, "calc8");
@@ -299,33 +244,79 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf115162)
     pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    // Insert the reference to the external document
-    OUString aFormula = "=SUMIFS('" + aTempFile.GetURL() + "'#$Sheet1.C2:C4,'" + aTempFile.GetURL()
-                        + "'#$Sheet1.B2:B4,1,'" + aTempFile.GetURL() + "'#$Sheet1.A2:A4,2015)";
-    insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
+    // Insert the references to the external document
+    {
+        // tdf#115162
+        OUString aFormula = "=SUMIFS('" + aTempFile.GetURL() + "'#$Sheet1.C1:C3,'"
+                            + aTempFile.GetURL() + "'#$Sheet1.B1:B3,1,'" + aTempFile.GetURL()
+                            + "'#$Sheet1.A1:A3,2015)";
+        insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
 
-    // Without the fix in place, this test would have failed with
-    // - Expected: 30
-    // - Actual  : Err:504
-    CPPUNIT_ASSERT_EQUAL(OUString("30"), pDoc->GetString(ScAddress(0, 0, 0)));
+        // tdf#115162: Without the fix in place, this test would have failed with
+        // - Expected: 30
+        // - Actual  : Err:504
+        CPPUNIT_ASSERT_EQUAL(OUString("30"), pDoc->GetString(ScAddress(0, 0, 0)));
+    }
 
-    aFormula = "=VLOOKUP('" + aTempFile.GetURL() + "'#$Sheet1.A2;'" + aTempFile.GetURL()
-               + "'#$Sheet1.A2:B4,2,0)";
-    insertStringToCell(*pModelObj, "B1", aFormula.toUtf8().getStr());
+    {
+        // tdf#114820
+        OUString aFormula = "=VLOOKUP('" + aTempFile.GetURL() + "'#$Sheet1.A1;'"
+                            + aTempFile.GetURL() + "'#$Sheet1.A1:B3,2,0)";
+        insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
 
-    // tdf#114820: Without the fix in place, this test would have failed with
-    // - Expected: 1
-    // - Actual  : Err:504
-    CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(1, 0, 0)));
+        // Without the fix in place, this test would have failed with
+        // - Expected: 1
+        // - Actual  : Err:504
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), pDoc->GetString(ScAddress(0, 0, 0)));
+    }
 
-    aFormula
-        = "=VAR('" + aTempFile.GetURL() + "'#$Sheet1.C2;'" + aTempFile.GetURL() + "'#$Sheet1.C3)";
-    insertStringToCell(*pModelObj, "C1", aFormula.toUtf8().getStr());
+    {
+        // tdf#116149
+        OUString aFormula = "=VAR('" + aTempFile.GetURL() + "'#$Sheet1.C1;'" + aTempFile.GetURL()
+                            + "'#$Sheet1.C2)";
+        insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
 
-    // tdf#116149: Without the fix in place, this test would have failed with
-    // - Expected: 50
-    // - Actual  : Err:504
-    CPPUNIT_ASSERT_EQUAL(OUString("50"), pDoc->GetString(ScAddress(2, 0, 0)));
+        // Without the fix in place, this test would have failed with
+        // - Expected: 50
+        // - Actual  : Err:504
+        CPPUNIT_ASSERT_EQUAL(OUString("50"), pDoc->GetString(ScAddress(0, 0, 0)));
+    }
+
+    {
+        // tdf#100847
+        // Use an empty cell
+        OUString aFormula = "=+'" + aTempFile.GetURL() + "'#$Sheet1.A1000";
+        insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
+
+        aFormula = "=+'" + aTempFile.GetURL() + "'#$Sheet1.A1000*1";
+        insertStringToCell(*pModelObj, "B1", aFormula.toUtf8().getStr());
+
+        aFormula = "=+N('" + aTempFile.GetURL() + "'#$Sheet1.A1000)*1";
+        insertStringToCell(*pModelObj, "C1", aFormula.toUtf8().getStr());
+
+        CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: 0
+        // - Actual  : #VALUE!
+        CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(1, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(2, 0, 0)));
+    }
+
+    {
+        //tdf#36387
+        OUString aAndFormula = "=AND('" + aTempFile.GetURL() + "'#$Sheet1.A1:C1)";
+        insertStringToCell(*pModelObj, "A1", aAndFormula.toUtf8().getStr());
+
+        OUString aOrFormula = "=OR('" + aTempFile.GetURL() + "'#$Sheet1.A1:C1)";
+        insertStringToCell(*pModelObj, "B1", aOrFormula.toUtf8().getStr());
+
+        // Without the fix in place, this test would have failed with
+        // - Expected: TRUE
+        // - Actual  : Err:504
+        CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(0, 0, 0)));
+        CPPUNIT_ASSERT_EQUAL(OUString("TRUE"), pDoc->GetString(ScAddress(1, 0, 0)));
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
