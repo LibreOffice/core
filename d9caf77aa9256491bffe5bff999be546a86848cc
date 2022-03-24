@@ -33,6 +33,24 @@
       "message": "No need to keep this alias. Please replace sqrt2 with std::hypot.",
       "revId": "d9caf77aa9256491bffe5bff999be546a86848cc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8220b62_f4798c8e",
+        "filename": "svx/source/svdraw/svdpdf.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-24T22:34:20Z",
+      "side": 1,
+      "message": "alias removed and sqrt2 occurrences replaced",
+      "parentUuid": "ef9be375_b72e818a",
+      "revId": "d9caf77aa9256491bffe5bff999be546a86848cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
