@@ -17,7 +17,6 @@ template <class... Interfaces>
 class COMRefCounted : public Interfaces...
 {
 public:
-    COMRefCounted() {}
     virtual ~COMRefCounted() {}
 
     // IUnknown methods
