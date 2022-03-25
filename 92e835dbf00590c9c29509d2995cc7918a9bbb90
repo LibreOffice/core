@@ -70,6 +70,24 @@
       "parentUuid": "d0d65bb1_3cdaa603",
       "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f7a6b9_1dfb3507",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-03-25T11:47:38Z",
+      "side": 0,
+      "message": "I runned the code shared above by Hossein Sir and I found diff(values\nof v1(i,j)-v2(i,j)) \u003e 1e+15 for different values of i and j.After studying \nit I had made some modifications in this code.When I runned it after the modifications there was no diff value \u003e1e-15.\nHere is the code:-\n\n #include \u003ciostream\u003e\n #include \u003ccmath\u003e\n double v1(int x, int y)\n {\n  double skewX;\n  if( y \u003d\u003d 0 )\n           skewX \u003d 0;\n  else\n           skewX \u003d atan(static_cast\u003cdouble\u003e(y)/x);\n  if( skewX \u003e\u003d M_PI_2 )\n           skewX -\u003d M_PI;\n  if( skewX \u003c\u003d -M_PI_2 )\n           skewX +\u003d M_PI;\n  return skewX;\n }\n double v2(int x, int y)\n {\n  double skewX \u003d atan2(y, x);       \n if((y\u003c0 || y\u003d\u003d0) \u0026\u0026 x\u003c0){\n \tskewX\u003dskewX+M_PI;\n }else if(x\u003d\u003d0 \u0026\u0026 y\u003c0){\n \tskewX\u003dskewX+M_PI;\n }\n return skewX;\n }\n int main()\n {\n  double diff;\n  for(int i\u003d-1000; i\u003c1000; ++i)\n   for(int j\u003d-1000; j\u003c1000; ++j)\n   {\n     diff\u003dv1(i, j) - v2(i, j);\n     if(diff \u003e 1e-15)\n      std::cout \u003c\u003c i \u003c\u003c \" \" \u003c\u003c j \u003c\u003c \" \"\n                \u003c\u003c diff \u003c\u003c \" \" \u003c\u003c v1(i,j) \u003c\u003c \" \" \u003c\u003c v2(i,j) \u003c\u003c std::endl;\n   }\n }\n\nPlease tell me if the modifications are correct then I would make the changes \naccordingly in \"hwpreader.cxx\".",
+      "parentUuid": "56d87e0c_9110ce12",
+      "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
