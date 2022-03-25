@@ -3740,8 +3740,8 @@ void AttributeOutputBase::ParaNumRule( const SwNumRuleItem& rNumRule )
             const SfxItemSet* pSet = GetExport().m_pISet;
             if (pSet && pSet->HasItem(RES_PARATR_LIST_LEVEL))
             {
-                const SfxPoolItem* pItem = pSet->GetItem(RES_PARATR_LIST_LEVEL);
-                nLvl = pItem->StaticWhichCast(RES_PARATR_LIST_LEVEL).GetValue();
+                const SfxInt16Item* pItem = pSet->GetItem(RES_PARATR_LIST_LEVEL);
+                nLvl = pItem->GetValue();
             }
         }
     }
@@ -4124,7 +4124,7 @@ void WW8AttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLR )
         m_pageMargins.nLeft = 0;
         m_pageMargins.nRight = 0;
 
-        if ( auto pBoxItem = static_cast<const SvxBoxItem*>(m_rWW8Export.HasItem( RES_BOX )) )
+        if ( const SvxBoxItem* pBoxItem = m_rWW8Export.HasItem( RES_BOX ) )
         {
             m_pageMargins.nLeft = pBoxItem->CalcLineSpace( SvxBoxItemLine::LEFT, /*bEvenIfNoLine*/true );
             m_pageMargins.nRight = pBoxItem->CalcLineSpace( SvxBoxItemLine::RIGHT, /*bEvenIfNoLine*/true );
@@ -4674,12 +4674,11 @@ void WW8AttributeOutput::FormatBox( const SvxBoxItem& rBox )
         return;
 
     bool bShadow = false;
-    const SfxPoolItem* pItem = m_rWW8Export.HasItem( RES_SHADOW );
-    if ( pItem )
+    const SvxShadowItem* pShadowItem = m_rWW8Export.HasItem( RES_SHADOW );
+    if ( pShadowItem )
     {
-        const SvxShadowItem& rShadow = pItem->StaticWhichCast(RES_SHADOW);
-        bShadow = ( rShadow.GetLocation() != SvxShadowLocation::NONE )
-                  && ( rShadow.GetWidth() != 0 );
+        bShadow = ( pShadowItem->GetLocation() != SvxShadowLocation::NONE )
+                  && ( pShadowItem->GetWidth() != 0 );
     }
 
     SvxBoxItem aBox(rBox);

@@ -3611,8 +3611,8 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
     else
     {
         SvxShadowLocation eShadowLocation = SvxShadowLocation::NONE;
-        if (const SfxPoolItem* pItem = GetExport().HasItem(RES_SHADOW))
-            eShadowLocation = pItem->StaticWhichCast(RES_SHADOW).GetLocation();
+        if (const SvxShadowItem* pItem = GetExport().HasItem(RES_SHADOW))
+            eShadowLocation = pItem->GetLocation();
 
         const SvxBoxItemLine* pBrd = aBorders;
         const char** pBrdNms = aBorderNames;

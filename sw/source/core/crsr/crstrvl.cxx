@@ -2216,12 +2216,12 @@ bool SwCursorShell::SetShadowCursorPos( const Point& rPt, SwFillMode eFillMode )
                     SfxItemSetFixed<
                             RES_PARATR_ADJUST, RES_PARATR_ADJUST,
                             RES_LR_SPACE, RES_LR_SPACE>  aSet( GetDoc()->GetAttrPool() );
-                    SvxLRSpaceItem aLR(pCNd->GetAttr(RES_LR_SPACE).StaticWhichCast(RES_LR_SPACE));
+                    SvxLRSpaceItem aLR(pCNd->GetAttr(RES_LR_SPACE));
                     aLR.SetTextLeft( aFPos.nTabCnt );
                     aLR.SetTextFirstLineOffset( 0 );
                     aSet.Put( aLR );
 
-                    const SvxAdjustItem& rAdj = pCNd->GetAttr(RES_PARATR_ADJUST).StaticWhichCast(RES_PARATR_ADJUST);
+                    const SvxAdjustItem& rAdj = pCNd->GetAttr(RES_PARATR_ADJUST);
                     if( SvxAdjust::Left != rAdj.GetAdjust() )
                         aSet.Put( SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST ) );
 

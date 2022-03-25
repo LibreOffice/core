@@ -716,19 +716,18 @@ void SfxToSwPageDescAttr( const SwWrtShell& rShell, SfxItemSet& rSet )
 // Inquire if in the set is a Sfx-PageDesc combination present and return it.
 void SwToSfxPageDescAttr( SfxItemSet& rCoreSet )
 {
-    const SwFormatPageDesc* pItem = nullptr;
+    const SwFormatPageDesc* pPageDescItem = nullptr;
     OUString aName;
     ::std::optional<sal_uInt16> oNumOffset;
     bool bPut = true;
-    switch( rCoreSet.GetItemState( RES_PAGEDESC, true, &pItem ) )
+    switch( rCoreSet.GetItemState( RES_PAGEDESC, true, &pPageDescItem ) )
     {
     case SfxItemState::SET:
         {
-            auto rPageDescItem = pItem->StaticWhichCast(RES_PAGEDESC);
-            if( rPageDescItem.GetPageDesc() )
+            if( pPageDescItem->GetPageDesc() )
             {
-                aName = rPageDescItem.GetPageDesc()->GetName();
-                oNumOffset = rPageDescItem.GetNumOffset();
+                aName = pPageDescItem->GetPageDesc()->GetName();
+                oNumOffset = pPageDescItem->GetNumOffset();
             }
             rCoreSet.ClearItem( RES_PAGEDESC );
             // Page number

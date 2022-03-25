@@ -1658,7 +1658,7 @@ void SwDoc::MoveLeftMargin(const SwPaM& rPam, bool bRight, bool bModulus,
         if( pTNd )
         {
             pTNd = sw::GetParaPropsNode(*pLayout, aIdx);
-            SvxLRSpaceItem aLS(pTNd->SwContentNode::GetAttr(RES_LR_SPACE).StaticWhichCast(RES_LR_SPACE));
+            SvxLRSpaceItem aLS(pTNd->SwContentNode::GetAttr(RES_LR_SPACE));
 
             // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
             if ( pTNd->AreListLevelIndentsApplicable() )

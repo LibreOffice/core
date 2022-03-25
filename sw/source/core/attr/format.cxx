@@ -440,10 +440,10 @@ SfxItemState SwFormat::GetBackgroundState(std::unique_ptr<SvxBrushItem>& rItem) 
         return SfxItemState::DEFAULT;
     }
 
-    const SfxPoolItem* pItem = nullptr;
+    const SvxBrushItem* pItem = nullptr;
     SfxItemState eRet = m_aSet.GetItemState(RES_BACKGROUND, true, &pItem);
     if (pItem)
-        rItem.reset(&pItem->Clone()->StaticWhichCast(RES_BACKGROUND));
+        rItem.reset(pItem->Clone());
     return eRet;
 }
 
