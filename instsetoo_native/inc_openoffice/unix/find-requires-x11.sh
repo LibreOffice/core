@@ -18,7 +18,7 @@
 #
 
 cat > /dev/null
-[[ "${PLATFORMID}" == "linux_x86_64" ]] && mark64="()(64bit)"
+[[ "${PLATFORMID}" == "linux_x86_64" || "${PLATFORMID}" == "linux_aarch64" ]] && mark64="()(64bit)"
 if [[ "${OS}" == "AIX" ]]; then
   echo "libfreetype.a(libfreetype.so.6${mark64})"
 else
