@@ -696,6 +696,7 @@ void ExcTable::WriteXml( XclExpXmlStream& rStrm )
         FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)).toUtf8(),
         FSNS(XML_xmlns, XML_xdr), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing", // rStrm.getNamespaceURL(OOX_NS(xm)).toUtf8() -> "http://schemas.microsoft.com/office/excel/2006/main",
         FSNS(XML_xmlns, XML_x14), rStrm.getNamespaceURL(OOX_NS(xls14Lst)).toUtf8(),
+        FSNS(XML_xmlns, XML_xr2), rStrm.getNamespaceURL(OOX_NS(xr2)).toUtf8(),
         FSNS(XML_xmlns, XML_mc), rStrm.getNamespaceURL(OOX_NS(mce)).toUtf8());
 
     SetCurrScTab( mnScTab );

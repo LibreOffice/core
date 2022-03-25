@@ -21,11 +21,14 @@ class SC_DLLPUBLIC SparklineGroup
 {
 private:
     SparklineAttributes m_aAttributes;
+    OUString m_sUID;
 
 public:
     SparklineAttributes& getAttributes() { return m_aAttributes; }
 
-    OUString m_sUID;
+    OUString getID() { return m_sUID; }
+
+    void setID(OUString const& rID) { m_sUID = rID; }
 
     SparklineGroup();
 

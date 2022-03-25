@@ -187,6 +187,12 @@ void SparklineExt::addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGrou
 
     // Sparkline Group Attributes
     auto pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
+
+    // Write ID
+    OString sUID = OUStringToOString(rSparklineGroup.getID(), RTL_TEXTENCODING_UTF8);
+    pAttrList->addNS(XML_xr2, XML_uid, sUID);
+
+    // Write attributes
     addSparklineGroupAttributes(pAttrList, rSparklineGroup.getAttributes());
 
     rWorksheet->startElementNS(XML_x14, XML_sparklineGroup, pAttrList);

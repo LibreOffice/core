@@ -59,6 +59,9 @@ void checkSparklines(ScDocument& rDocument)
     {
         auto pSparkline = rDocument.GetSparkline(ScAddress(0, 1, 0)); // A2
         CPPUNIT_ASSERT(pSparkline);
+        CPPUNIT_ASSERT_EQUAL(OUString("{1C5C5DE0-3C09-4CB3-A3EC-9E763301EC82}"),
+                             pSparkline->getSparklineGroup()->getID());
+
         auto& rAttributes = pSparkline->getSparklineGroup()->getAttributes();
         CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Line, rAttributes.getType());
 

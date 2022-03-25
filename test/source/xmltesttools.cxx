@@ -440,6 +440,8 @@ void XmlTestTools::registerOOXMLNamespaces(xmlXPathContextPtr& pXmlXpathCtx)
                        BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/diagram"));
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c15"),
                        BAD_CAST("http://schemas.microsoft.com/office/drawing/2012/chart"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("xr2"),
+                       BAD_CAST("http://schemas.microsoft.com/office/spreadsheetml/2015/revision2"));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
