@@ -188,6 +188,7 @@ void MenuBarWindow::SetMenu( MenuBar* pMen )
             ImplGetFrame()->SetMenu( m_pMenu->ImplGetSalMenu() );
 
         m_pMenu->ImplGetSalMenu()->SetFrame( ImplGetFrame() );
+        m_pMenu->ImplGetSalMenu()->ShowMenuBar(true);
     }
 }
 
