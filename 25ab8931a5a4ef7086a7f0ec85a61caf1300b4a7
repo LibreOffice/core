@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea083113_607e77a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-03-25T07:24:48Z",
+      "side": 1,
+      "message": "Hi Noel, is it ok for you ?",
+      "revId": "25ab8931a5a4ef7086a7f0ec85a61caf1300b4a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
