@@ -117,8 +117,6 @@ std::string niceName(const CXXMethodDecl* cxxMethodDecl)
 
 bool VirtualDead::VisitCXXMethodDecl(const CXXMethodDecl* methodDecl)
 {
-    if (ignoreLocation(methodDecl))
-        return true;
     if (!methodDecl->isVirtual() || methodDecl->isDeleted())
         return true;
     if (isa<CXXDestructorDecl>(methodDecl))

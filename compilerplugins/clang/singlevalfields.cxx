@@ -180,8 +180,7 @@ bool SingleValFields::VisitFieldDecl( const FieldDecl* fieldDecl )
 {
     auto canonicalDecl = fieldDecl->getCanonicalDecl();
 
-    if( ignoreLocation( canonicalDecl )
-        || isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(canonicalDecl->getLocation())) )
+    if( isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(canonicalDecl->getLocation())) )
         return true;
 
     MyFieldInfo aInfo;
@@ -212,8 +211,7 @@ bool SingleValFields::VisitVarDecl( const VarDecl* varDecl )
     if (!canonicalDecl->getLocation().isValid())
         return true;
 
-    if( ignoreLocation( canonicalDecl )
-        || isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(canonicalDecl->getLocation())) )
+    if( isInUnoIncludeFile( compiler.getSourceManager().getSpellingLoc(canonicalDecl->getLocation())) )
         return true;
 
     MyFieldInfo aInfo;
@@ -233,9 +231,6 @@ bool SingleValFields::VisitVarDecl( const VarDecl* varDecl )
 
 bool SingleValFields::VisitCXXConstructorDecl( const CXXConstructorDecl* decl )
 {
-    if( ignoreLocation( decl ) )
-        return true;
-
     // doesn't count as a write to fields because it's self->self
     if (decl->isCopyOrMoveConstructor())
         return true;
@@ -266,8 +261,6 @@ bool SingleValFields::VisitMemberExpr( const MemberExpr* memberExpr )
     const FieldDecl* fieldDecl = dyn_cast<FieldDecl>(decl);
     if (!fieldDecl)
         return true;
-    if (ignoreLocation(memberExpr))
-        return true;
     walkPotentialAssign(fieldDecl, memberExpr);
     return true;
 }
@@ -282,8 +275,6 @@ bool SingleValFields::VisitDeclRefExpr( const DeclRefExpr* declRefExpr )
     if (varDecl->getType().isConstQualified())
         return true;
     if (!(varDecl->isStaticLocal() || varDecl->isStaticDataMember() || varDecl->hasGlobalStorage()))
-        return true;
-    if (ignoreLocation(declRefExpr))
         return true;
     walkPotentialAssign(varDecl, declRefExpr);
     return true;
