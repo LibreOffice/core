@@ -131,9 +131,9 @@ static void ReadLimitedDouble(SvStream& rIStm, double &fDest)
 {
     double fTmp(0.0);
     rIStm.ReadDouble(fTmp);
-    if (fTmp < std::numeric_limits<sal_Int32>::min() || fTmp > std::numeric_limits<sal_Int32>::max())
+    if (!std::isfinite(fTmp) || fTmp < std::numeric_limits<sal_Int32>::min() || fTmp > std::numeric_limits<sal_Int32>::max())
     {
-        SAL_WARN("vcl", "Parsing error: double too large: " << fTmp);
+        SAL_WARN("vcl", "Parsing error: out of range double: " << fTmp);
         return;
     }
     fDest = fTmp;
