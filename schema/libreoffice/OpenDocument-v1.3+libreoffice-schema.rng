@@ -1535,6 +1535,171 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
             </rng:oneOrMore>
           </rng:element>
         </rng:optional>
+        <!-- Sparklines-->
+        <rng:optional>
+          <rng:element name="calcext:sparkline-groups">
+            <rng:oneOrMore>
+              <rng:element name="calcext:sparkline-group">
+                <rng:attribute name="calcext:id">
+                  <rng:ref name="string"/>
+                </rng:attribute>
+                <rng:optional>
+                  <rng:attribute name="calcext:type">
+                    <rng:choice>
+                      <rng:value>line</rng:value>
+                      <rng:value>column</rng:value>
+                      <rng:value>stacked</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:line-width">
+                    <rng:ref name="length"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:date-axis">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:display-empty-cells-as">
+                    <rng:choice>
+                      <rng:value>zero</rng:value>
+                      <rng:value>gap</rng:value>
+                      <rng:value>span</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:markers">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:high">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:low">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:first">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:last">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:negative">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:display-x-axis">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:display-hidden">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:min-axis-type">
+                    <rng:choice>
+                      <rng:value>individual</rng:value>
+                      <rng:value>group</rng:value>
+                      <rng:value>custom</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:max-axis-type">
+                    <rng:choice>
+                      <rng:value>individual</rng:value>
+                      <rng:value>group</rng:value>
+                      <rng:value>custom</rng:value>
+                    </rng:choice>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:right-to-left">
+                    <rng:ref name="boolean"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:manual-max">
+                    <rng:ref name="double"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:manual-min">
+                    <rng:ref name="double"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-series">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-negative">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-axis">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-markers">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-first">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-last">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-high">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:optional>
+                  <rng:attribute name="calcext:color-low">
+                    <rng:ref name="color"/>
+                  </rng:attribute>
+                </rng:optional>
+                <rng:element name="calcext:sparklines">
+                  <rng:oneOrMore>
+                    <rng:element name="calcext:sparkline">
+                      <rng:attribute name="calcext:cell-address">
+                        <rng:ref name="cellAddress"/>
+                      </rng:attribute>
+                      <rng:attribute name="calcext:data-range">
+                        <rng:ref name="cellRangeAddressList"/>
+                      </rng:attribute>
+                    </rng:element>
+                  </rng:oneOrMore>
+                </rng:element>
+              </rng:element>
+            </rng:oneOrMore>
+          </rng:element>
+        </rng:optional>
       </rng:element>
     </rng:define>
 
