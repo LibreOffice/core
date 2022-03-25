@@ -308,10 +308,19 @@ protected:
 
     void load(std::u16string_view pDir, const char* pName, const char* pPassword = nullptr)
     {
-        return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName, pPassword);
+        return loadURLWithComponent(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName),
+                                    "com.sun.star.text.TextDocument", pName, pPassword);
+    }
+
+    void load_web(std::u16string_view pDir, const char* pName, const char* pPassword = nullptr)
+    {
+        return loadURLWithComponent(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName),
+                                    "com.sun.star.text.WebDocument", pName, pPassword);
     }
 
     void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions);
+
+    void loadURLWithComponent(OUString const& rURL, OUString const& rComponent, const char* pName, const char* pPassword);
 
     void loadURL(OUString const& rURL, const char* pName, const char* pPassword = nullptr);
 
@@ -366,6 +375,12 @@ protected:
      * SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "test.fodt");
      */
     SwDoc* createSwDoc(
+        std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
+
+    /**
+     * As createSwDoc except a Web Document in Browse Mode
+     */
+    SwDoc* createSwWebDoc(
         std::u16string_view rDataDirectory = std::u16string_view(), const char* pName = nullptr);
 };
 

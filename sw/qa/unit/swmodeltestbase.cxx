@@ -480,7 +480,8 @@ void SwModelTestBase::setTestInteractionHandler(const char* pPassword,
 
 void SwModelTestBase::header() {}
 
-void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const char* pPassword)
+void SwModelTestBase::loadURLWithComponent(OUString const& rURL, OUString const& rComponent,
+                                           const char* pName, const char* pPassword)
 {
     if (mxComponent.is())
         mxComponent->dispose();
@@ -512,8 +513,8 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
     if (pName)
         std::cout << pName << ":\n";
     mnStartTime = osl_getGlobalTimer();
-    mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument",
-                                  comphelper::containerToSequence(aFilterOptions));
+    mxComponent
+        = loadFromDesktop(rURL, rComponent, comphelper::containerToSequence(aFilterOptions));
 
     if (pPassword)
     {
@@ -524,6 +525,11 @@ void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const cha
     discardDumpedLayout();
     if (pName && mustCalcLayoutOf(pName))
         calcLayout();
+}
+
+void SwModelTestBase::loadURL(OUString const& rURL, const char* pName, const char* pPassword)
+{
+    loadURLWithComponent(rURL, "com.sun.star.text.TextDocument", pName, pPassword);
 }
 
 void SwModelTestBase::reload(const char* pFilter, const char* filename, const char* pPassword)
@@ -723,6 +729,18 @@ SwDoc* SwModelTestBase::createSwDoc(std::u16string_view rDataDirectory, const ch
         loadURL("private:factory/swriter", nullptr);
     else
         load(rDataDirectory, pName);
+
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    return pTextDoc->GetDocShell()->GetDoc();
+}
+
+SwDoc* SwModelTestBase::createSwWebDoc(std::u16string_view rDataDirectory, const char* pName)
+{
+    if (rDataDirectory.empty() || !pName)
+        loadURL("private:factory/swriter/web", nullptr);
+    else
+        load_web(rDataDirectory, pName);
 
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pTextDoc);
