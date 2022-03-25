@@ -148,8 +148,13 @@ void SwInsTableDlg::InitAutoTableFormat()
     // Change this min variable if you add autotable manually.
     minTableIndexInLb = 1;
     maxTableIndexInLb = minTableIndexInLb + static_cast<sal_uInt8>(m_xTableTable->size());
-    m_xLbFormat->select( minTableIndexInLb );
-    m_tbIndex = lbIndexToTableIndex( minTableIndexInLb );
+    // 1 means default table style
+    // unfortunately when the table has a style sw/qa/uitest/writer_tests4/tdf115573.py fails
+    // because tables that have pre-applied style resets the style of the elements in their cells
+    // when a new row is inserted and the ui test above relies on that. For now this is LOK only
+    m_lbIndex = comphelper::LibreOfficeKit::isActive() ? 1 : 0;
+    m_xLbFormat->select(m_lbIndex);
+    m_tbIndex = lbIndexToTableIndex(m_lbIndex);
 
     SelFormatHdl( *m_xLbFormat );
 }
