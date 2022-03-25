@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b3734181_372b14eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-25T11:06:15Z",
+      "side": 1,
+      "message": "Taking over Verified+1 from patch set 1, only commit msg was updated.",
+      "revId": "2eac7d2e45da6d24cee2e9f8658fc5fd836a4038",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
