@@ -295,7 +295,8 @@ bool SwLayAction::RemoveEmptyBrowserPages()
         do
         {
             if ( (pPage->GetSortedObjs() && pPage->GetSortedObjs()->size()) ||
-                 pPage->ContainsContent() )
+                 pPage->ContainsContent() ||
+                 pPage->FindFootnoteCont() )
                 pPage = static_cast<SwPageFrame*>(pPage->GetNext());
             else
             {
