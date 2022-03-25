@@ -403,6 +403,11 @@ void loadDiagram( ShapePtr const & pShape,
         }
     }
 
+    // After Diagram import, parts of the Diagram ModelData is at the
+    // oox::drawingml::Shape. Since these objects are temporary helpers,
+    // secure that data at the Diagram ModelData by copying.
+    pData->secureDataFromShapeToModelAfterDiagramImport();
+
     // collect data, init maps
     pData->build();
 
