@@ -88,6 +88,7 @@ w15                     http://schemas.microsoft.com/office/word/2012/wordml
 p15                     http://schemas.microsoft.com/office/powerpoint/2012/main
 x12ac                   http://schemas.microsoft.com/office/spreadsheetml/2011/1/ac
 c15                     http://schemas.microsoft.com/office/drawing/2012/chart
+xr2                     http://schemas.microsoft.com/office/spreadsheetml/2015/revision2
 
 # extlst namespaces
 
