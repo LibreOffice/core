@@ -3455,8 +3455,11 @@ if test $_os = Darwin; then
     12.1)
         MAC_OS_X_VERSION_MAX_ALLOWED="120100"
         ;;
+    12.3)
+        MAC_OS_X_VERSION_MAX_ALLOWED="120300"
+        ;;
     *)
-        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.12--12.1])
+        AC_MSG_ERROR([with-macosx-version-max-allowed $with_macosx_version_max_allowed is not a supported value, supported values are 10.12--12.3])
         ;;
     esac
 
