@@ -37,6 +37,7 @@ public:
     void testForcepoint90();
     void testForcepoint92();
     void testForcepoint93();
+    void testTdf147485Forcepoint();
     void testTdf118058();
     void testTdf117188();
     void testTdf119875();
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testForcepoint90);
     CPPUNIT_TEST(testForcepoint92);
     CPPUNIT_TEST(testForcepoint93);
+    CPPUNIT_TEST(testTdf147485Forcepoint);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
@@ -262,6 +264,14 @@ void SwLayoutWriter::testTdf109137()
 void SwLayoutWriter::testForcepoint76() { createDoc("forcepoint76-1.rtf"); }
 
 //just care it doesn't crash/assert
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint89)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint89.html");
+}
+#endif
+
+//just care it doesn't crash/assert
 void SwLayoutWriter::testN4LA0OHZ() { createDoc("LIBREOFFICE-N4LA0OHZ.rtf"); }
 
 // FIXME: apparently infinite loop on Mac
@@ -274,6 +284,13 @@ void SwLayoutWriter::testForcepoint90()
 {
     createDoc("forcepoint90.rtf");
 }
+
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint91.html");
+}
+#endif
 
 //just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint92() { createDoc("forcepoint92.doc"); }
@@ -292,6 +309,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
     createSwWebDoc(DATA_DIRECTORY, "forcepoint94.html");
 }
 #endif
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testTdf147485Forcepoint()
+{
+    createDoc("tdf147485-forcepoint.doc");
+}
 
 void SwLayoutWriter::testTdf118058()
 {
