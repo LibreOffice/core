@@ -16,6 +16,23 @@
       "message": "macOS failed in coinmp, resume.",
       "revId": "56b64e0a426cffb842cabaabdbe99168ea4357c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "09a46ef3_885c6452",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-25T13:00:19Z",
+      "side": 1,
+      "message": "Thanks for the detailed commit message, this looks like a nice improvement to me.\n\nOne nitpick: DrawingML::WriteCustomGeometry() is very long, almost 500 lines of code. If you are interested, I think it would be nice to split it up to smaller functions to make it more readable. Perhaps extract a WriterCustomGeometrySegment() out of it, containing the rather large \"switch (rSegment.Command)\" block? That seems to be about half of the function.",
+      "revId": "56b64e0a426cffb842cabaabdbe99168ea4357c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
