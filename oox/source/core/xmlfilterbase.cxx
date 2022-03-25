@@ -146,6 +146,8 @@ const Sequence< beans::Pair< OUString, sal_Int32 > >& NamespaceIds()
              NMSP_x12ac},
             {"http://schemas.microsoft.com/office/drawing/2012/chart",
              NMSP_c15},
+            {"http://schemas.microsoft.com/office/spreadsheetml/2015/revision2",
+             NMSP_xr2},
         };
     return SINGLETON;
 };
