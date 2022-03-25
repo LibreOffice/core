@@ -2941,8 +2941,19 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
     createDoc("forcepoint-swfootnoteframe-1.rtf");
 }
 
-//FIXME: disabled after failing again with fixed layout
-//CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76) { createDoc("forcepoint76-1.rtf"); }
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76)
+{
+    createDoc("forcepoint76-1.rtf");
+}
+
+//just care it doesn't crash/assert
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint89)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint89.html");
+}
+#endif
 
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testN4LA0OHZ) { createDoc("LIBREOFFICE-N4LA0OHZ.rtf"); }
@@ -2951,6 +2962,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint90)
 {
     createDoc("forcepoint90.rtf");
 }
+
+//just care it doesn't crash/assert
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint91.html");
+}
+#endif
 
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92) { createDoc("forcepoint92.doc"); }
@@ -2969,6 +2988,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
     createSwWebDoc(DATA_DIRECTORY, "forcepoint94.html");
 }
 #endif
+
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf147485Forcepoint)
+{
+    createDoc("tdf147485-forcepoint.doc");
+}
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
 {
