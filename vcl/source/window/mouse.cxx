@@ -769,6 +769,9 @@ Reference< css::datatransfer::dnd::XDragSource > Window::GetDragSource()
                     pDragSourceAL[ 1 ] <<= pEnvData->aShellWindow;
                     pDropTargetAL[ 0 ] <<= Application::GetDisplayConnection();
                     pDropTargetAL[ 1 ] <<= pEnvData->aShellWindow;
+#else // LOKit
+                    (void)pDragSourceAL;
+                    (void)pDropTargetAL;
 #endif
                     if( !aDragSourceSN.isEmpty() )
                         mpWindowImpl->mpFrameData->mxDragSource.set(
