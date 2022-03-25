@@ -108,9 +108,6 @@ std::string niceName(const CXXMethodDecl* cxxMethodDecl)
 
 bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
 {
-    if (ignoreLocation(methodDecl)) {
-        return true;
-    }
     if (!methodDecl->isVirtual() || methodDecl->isDeleted()) {
         return true;
     }
@@ -132,6 +129,8 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
         return true;
 
     methodDecl = methodDecl->getCanonicalDecl();
+    if (!methodDecl)
+        return true;
     std::string aNiceName = niceName(methodDecl);
 
     // for destructors, we need to check if any of the superclass' destructors are virtual
@@ -147,8 +146,11 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
             if (baseSpecifier->getType()->isRecordType())
             {
                 const CXXRecordDecl* superclassCXXRecordDecl = baseSpecifier->getType()->getAsCXXRecordDecl();
-                std::string aOverriddenNiceName = niceName(superclassCXXRecordDecl->getDestructor());
-                overridingSet.insert(aOverriddenNiceName);
+                if (superclassCXXRecordDecl->getDestructor())
+                {
+                    std::string aOverriddenNiceName = niceName(superclassCXXRecordDecl->getDestructor());
+                    overridingSet.insert(aOverriddenNiceName);
+                }
             }
         }
         return true;
@@ -174,6 +176,8 @@ bool UnnecessaryVirtual::VisitCXXMethodDecl( const CXXMethodDecl* methodDecl )
 
 void UnnecessaryVirtual::MarkRootOverridesNonEmpty( const CXXMethodDecl* methodDecl )
 {
+    if (!methodDecl)
+        return;
     if (methodDecl->size_overridden_methods() == 0) {
         nonEmptySet.insert(niceName(methodDecl));
         return;
