@@ -1617,6 +1617,8 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
         if ( pFrame->IsLayoutFrame() &&
              ( !_bOnlyRowsAndCells || pFrame->IsRowFrame() || pFrame->IsCellFrame() ) )
         {
+            SwFrameDeleteGuard aDeleteGuard(pFrame);
+
             // #130744# An invalid locked table frame will
             // not be calculated => It will not become valid =>
             // Loop in lcl_RecalcRow(). Therefore we do not consider them for bRet.
