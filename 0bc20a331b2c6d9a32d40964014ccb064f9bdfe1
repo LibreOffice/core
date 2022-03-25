@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0ac262b_a8ff3e52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-03-25T11:33:24Z",
+      "side": 1,
+      "message": "Hi Noël,\n\nIs it OK ?\n\nI used à Java extension to be sure it\u0027s fine",
+      "revId": "0bc20a331b2c6d9a32d40964014ccb064f9bdfe1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
