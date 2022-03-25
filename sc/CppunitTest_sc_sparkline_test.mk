@@ -18,6 +18,12 @@ $(eval $(call gb_CppunitTest_add_exception_objects,sc_sparkline_test, \
     sc/qa/unit/SparklineTest \
 ))
 
+$(eval $(call gb_CppunitTest_use_externals,sc_sparkline_test, \
+    boost_headers \
+    mdds_headers \
+    libxml2 \
+))
+
 $(eval $(call gb_CppunitTest_use_libraries,sc_sparkline_test, \
     basegfx \
     comphelper \
