@@ -15,10 +15,14 @@ $(eval $(call gb_UnpackedTarball_set_patchlevel,liborcus,1))
 
 $(eval $(call gb_UnpackedTarball_update_autoconf_configs,liborcus))
 
-# forcepoint-83.patch.1 submitted as
-# https://gitlab.com/orcus/orcus/-/merge_requests/117
-# forcepoint-84.patch.1 submitted as
-# https://gitlab.com/orcus/orcus/-/merge_requests/118
+# forcepoint-83.patch.1 merged as
+# https://gitlab.com/orcus/orcus/-/commit/9f6400b8192e39fefd475a96222713e9e9c60038
+# forcepoint-84.patch.1 merged as
+# https://gitlab.com/orcus/orcus/-/commit/223defe95d6f20f1bc5fd22fecc80a79a9519028
+# forcepoint-87.patch.1 merged as
+# https://gitlab.com/orcus/orcus/-/commit/a718524ca424fb8a7e7931345a118342d1d4a507
+# forcepoint-95.patch.1 submitted as
+# https://gitlab.com/orcus/orcus/-/merge_requests/124
 
 $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/rpath.patch.0 \
@@ -34,6 +38,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,liborcus,\
 	external/liborcus/forcepoint-83.patch.1 \
 	external/liborcus/forcepoint-84.patch.1 \
 	external/liborcus/forcepoint-87.patch.1 \
+	external/liborcus/forcepoint-95.patch.1 \
 ))
 
 ifeq ($(OS),WNT)
