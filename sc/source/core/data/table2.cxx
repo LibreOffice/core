@@ -3845,22 +3845,21 @@ SCROW ScTable::GetLastFlaggedRow() const
     return nLastFound;
 }
 
-SCCOL ScTable::GetLastChangedCol() const
+SCCOL ScTable::GetLastChangedColFlagsWidth() const
 {
     if ( !mpColFlags )
         return 0;
 
     SCCOL nLastFound = 0;
-    const auto nColSize = aCol.size();
     auto colWidthIt = mpColWidth->begin() + 1;
-    for (SCCOL nCol = 1; nCol < nColSize; (++nCol < nColSize) ? ++colWidthIt : (void)false)
+    for (SCCOL nCol = 1; nCol <= GetDoc().MaxCol(); (++nCol <= GetDoc().MaxCol()) ? ++colWidthIt : (void)false)
         if ((mpColFlags->GetValue(nCol) & CRFlags::All) || (*colWidthIt != STD_COL_WIDTH))
             nLastFound = nCol;
 
     return nLastFound;
 }
 
-SCROW ScTable::GetLastChangedRow() const
+SCROW ScTable::GetLastChangedRowFlagsWidth() const
 {
     if ( !pRowFlags )
         return 0;

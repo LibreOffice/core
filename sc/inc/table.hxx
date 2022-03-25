@@ -870,10 +870,10 @@ public:
                 /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     SCROW      GetLastFlaggedRow() const;
 
-                /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
-    SCCOL      GetLastChangedCol() const;
-                /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
-    SCROW      GetLastChangedRow() const;
+    /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
+    SCCOL      GetLastChangedColFlagsWidth() const;
+    /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
+    SCROW      GetLastChangedRowFlagsWidth() const;
 
     bool       IsDataFiltered(SCCOL nColStart, SCROW nRowStart, SCCOL nColEnd, SCROW nRowEnd) const;
     bool       IsDataFiltered(const ScRange& rRange) const;

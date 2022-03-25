@@ -2025,17 +2025,17 @@ public:
      */
     void                        SyncColRowFlags();
 
-                    /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
+    /// @return  the index of the last row with any set flags (auto-pagebreak is ignored).
     SC_DLLPUBLIC SCROW          GetLastFlaggedRow( SCTAB nTab ) const;
 
-                    /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
-    SCCOL           GetLastChangedCol( SCTAB nTab ) const;
-                    /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
-    SCROW           GetLastChangedRow( SCTAB nTab ) const;
+    /// @return  the index of the last changed column (flags and column width, auto pagebreak is ignored).
+    SCCOL           GetLastChangedColFlagsWidth( SCTAB nTab ) const;
+    /// @return  the index of the last changed row (flags and row height, auto pagebreak is ignored).
+    SCROW           GetLastChangedRowFlagsWidth( SCTAB nTab ) const;
 
-    SCCOL           GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const;
+    SCCOL           GetNextDifferentChangedColFlagsWidth( SCTAB nTab, SCCOL nStart) const;
 
-    SCROW           GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const;
+    SCROW           GetNextDifferentChangedRowFlagsWidth( SCTAB nTab, SCROW nStart) const;
 
     // returns whether to export a Default style for this col or not
     // nDefault is set to one position in the current row where the Default style is

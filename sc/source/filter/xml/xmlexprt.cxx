@@ -2532,7 +2532,7 @@ void ScXMLExport::collectAutoStyles()
                 uno::Reference<table::XTableColumns> xTableColumns(xColumnRowRange->getColumns());
                 if (xTableColumns.is())
                 {
-                    sal_Int32 nColumns(pDoc->GetLastChangedCol(sal::static_int_cast<SCTAB>(nTable)));
+                    sal_Int32 nColumns(pDoc->GetLastChangedColFlagsWidth(sal::static_int_cast<SCTAB>(nTable)));
                     pSharedData->SetLastColumn(nTable, nColumns);
                     table::CellRangeAddress aCellAddress(GetEndAddress(xTable));
                     if (aCellAddress.EndColumn > nColumns)
@@ -2554,7 +2554,7 @@ void ScXMLExport::collectAutoStyles()
                             pColumnStyles->AddFieldStyleName(nTable, nColumn, nIndex, bIsVisible);
                         }
                         sal_Int32 nOld(nColumn);
-                        nColumn = pDoc->GetNextDifferentChangedCol(sal::static_int_cast<SCTAB>(nTable), static_cast<SCCOL>(nColumn));
+                        nColumn = pDoc->GetNextDifferentChangedColFlagsWidth(sal::static_int_cast<SCTAB>(nTable), static_cast<SCCOL>(nColumn));
                         for (sal_Int32 i = nOld + 1; i < nColumn; ++i)
                             pColumnStyles->AddFieldStyleName(nTable, i, nIndex, bIsVisible);
                     }
@@ -2569,7 +2569,7 @@ void ScXMLExport::collectAutoStyles()
                 uno::Reference<table::XTableRows> xTableRows(xColumnRowRange->getRows());
                 if (xTableRows.is())
                 {
-                    sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
+                    sal_Int32 nRows(pDoc->GetLastChangedRowFlagsWidth(sal::static_int_cast<SCTAB>(nTable)));
                     pSharedData->SetLastRow(nTable, nRows);
 
                     pRowStyles->AddNewTable(nTable, pDoc->MaxRow());
@@ -2584,7 +2584,7 @@ void ScXMLExport::collectAutoStyles()
                             pRowStyles->AddFieldStyleName(nTable, nRow, nIndex);
                         }
                         sal_Int32 nOld(nRow);
-                        nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow));
+                        nRow = pDoc->GetNextDifferentChangedRowFlagsWidth(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow));
                         if (nRow > nOld + 1)
                             pRowStyles->AddFieldStyleName(nTable, nOld + 1, nIndex, nRow - 1);
                     }

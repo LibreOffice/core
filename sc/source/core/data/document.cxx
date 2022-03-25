@@ -4596,21 +4596,21 @@ SCROW ScDocument::GetLastFlaggedRow( SCTAB nTab ) const
     return 0;
 }
 
-SCCOL ScDocument::GetLastChangedCol( SCTAB nTab ) const
+SCCOL ScDocument::GetLastChangedColFlagsWidth( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetLastChangedCol();
+        return maTabs[nTab]->GetLastChangedColFlagsWidth();
     return 0;
 }
 
-SCROW ScDocument::GetLastChangedRow( SCTAB nTab ) const
+SCROW ScDocument::GetLastChangedRowFlagsWidth( SCTAB nTab ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetLastChangedRow();
+        return maTabs[nTab]->GetLastChangedRowFlagsWidth();
     return 0;
 }
 
-SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
+SCCOL ScDocument::GetNextDifferentChangedColFlagsWidth( SCTAB nTab, SCCOL nStart) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
     {
@@ -4628,7 +4628,7 @@ SCCOL ScDocument::GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const
     return 0;
 }
 
-SCROW ScDocument::GetNextDifferentChangedRow( SCTAB nTab, SCROW nStart) const
+SCROW ScDocument::GetNextDifferentChangedRowFlagsWidth( SCTAB nTab, SCROW nStart) const
 {
     if (!ValidTab(nTab) || nTab >= static_cast<SCTAB>(maTabs.size()) || !maTabs[nTab])
         return 0;
