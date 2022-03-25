@@ -507,9 +507,6 @@ SwStdFontTabPage::SwStdFontTabPage(weld::Container* pPage, weld::DialogControlle
     , m_bIdxDefault(false)
     , m_bSetIdxDefault(true)
     , m_bDisposePrinter(false)
-    , m_bListHeightDefault(false)
-    , m_bLabelHeightDefault(false)
-    , m_bIndexHeightDefault(false)
     , m_nFontGroup(FONT_GROUP_DEFAULT)
     , m_sScriptWestern(SwResId(ST_SCRIPT_WESTERN))
     , m_sScriptAsian(SwResId(ST_SCRIPT_ASIAN))
@@ -847,7 +844,6 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
 
         const SvxFontHeightItem& rFontHeightList = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
         nListHeight = static_cast<sal_Int32>(rFontHeightList.GetHeight());
-        m_bListHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_LABEL);
         m_bLabelDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
@@ -856,7 +852,6 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         m_sShellLabel = sCapBackup = rFontCP.GetFamilyName();
         const SvxFontHeightItem& rFontHeightLabel = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
         nLabelHeight = static_cast<sal_Int32>(rFontHeightLabel.GetHeight());
-        m_bLabelHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
 
         pColl = m_pWrtShell->GetTextCollFromPool(RES_POOLCOLL_REGISTER_BASE);
         m_bIdxDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
@@ -865,7 +860,6 @@ void SwStdFontTabPage::Reset( const SfxItemSet* rSet)
         m_sShellIndex = sIdxBackup = rFontIDX.GetFamilyName();
         const SvxFontHeightItem& rFontHeightIndex = static_cast<const SvxFontHeightItem&>(pColl->GetFormatAttr(nFontHeightWhich));
         nIndexHeight = static_cast<sal_Int32>(rFontHeightIndex.GetHeight());
-        m_bIndexHeightDefault = SfxItemState::DEFAULT == pColl->GetAttrSet().GetItemState(nFontWhich, false);
     }
     m_xStandardBox->set_entry_text(sStdBackup );
     m_xTitleBox->set_entry_text(sOutBackup );

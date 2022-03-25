@@ -143,10 +143,6 @@ class SwStdFontTabPage final : public SfxTabPage
     bool    m_bSetIdxDefault  :1;
     bool    m_bDisposePrinter :1;
 
-    bool    m_bListHeightDefault    :1;
-    bool    m_bLabelHeightDefault   :1;
-    bool    m_bIndexHeightDefault     :1;
-
     sal_uInt8 m_nFontGroup; //fontcfg.hxx: FONT_GROUP_[STANDARD|CJK|CTL]
 
     OUString m_sScriptWestern;
