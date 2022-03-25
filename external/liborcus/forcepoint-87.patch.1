@@ -1,0 +1,27 @@
+From e4f3741197a3af6d434850d388483b523138a214 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Thu, 24 Mar 2022 21:31:14 +0000
+Subject: [PATCH] forcepoint#87 Assertion `mp_char <= mp_end' failed
+
+soffice.bin: ../../include/orcus/parser_base.hpp:65: bool orcus::parser_base::has_char() const: Assertion `mp_char <= mp_end' failed.
+---
+ src/parser/sax_parser_base.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/parser/sax_parser_base.cpp b/src/parser/sax_parser_base.cpp
+index 46acb81d..cb7a9c04 100644
+--- a/src/parser/sax_parser_base.cpp
++++ b/src/parser/sax_parser_base.cpp
+@@ -295,7 +295,8 @@ void parser_base::value_with_encoded_char(cell_buffer& buf, std::string_view& st
+ 
+     // Skip the closing quote.
+     assert(!has_char() || cur_char() == quote_char);
+-    next();
++    if (has_char())
++       next();
+ }
+ 
+ bool parser_base::value(std::string_view& str, bool decode)
+-- 
+2.35.1
+
