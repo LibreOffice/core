@@ -1188,7 +1188,8 @@ bool DocInsertStringSplitCR(
     sal_Int32 nStartIdx = 0;
     const sal_Int32 nMaxLength = COMPLETE_STRING - pTextNd->GetText().getLength();
 
-    sal_Int32 nIdx = rText.indexOf( '\r', nStartIdx );
+    // tdf#69795 - use correct new line string to determine a line break
+    sal_Int32 nIdx = rText.indexOf( SAL_NEWLINE_STRING, nStartIdx );
     if( ( nIdx == -1 && nMaxLength < rText.getLength() ) ||
         ( nIdx != -1 && nMaxLength < nIdx ) )
     {
@@ -1209,8 +1210,9 @@ bool DocInsertStringSplitCR(
             OSL_FAIL( "SplitNode failed" );
             bOK = false;
         }
-        nStartIdx = nIdx + 1;
-        nIdx = rText.indexOf( '\r', nStartIdx );
+        // tdf#69795 - use correct new line string to determine a line break
+        nStartIdx = nIdx + sizeof(SAL_NEWLINE_STRING) - 1;
+        nIdx = rText.indexOf( SAL_NEWLINE_STRING, nStartIdx );
     }
     aText = rText.copy( nStartIdx );
     if (!aText.isEmpty() &&
