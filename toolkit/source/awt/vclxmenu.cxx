@@ -57,6 +57,7 @@ VCLXMenu::~VCLXMenu()
     maPopupMenuRefs.clear();
     if ( mpMenu )
     {
+        SolarMutexGuard g;
         mpMenu->RemoveEventListener( LINK( this, VCLXMenu, MenuEventListener ) );
         mpMenu.disposeAndClear();
     }
