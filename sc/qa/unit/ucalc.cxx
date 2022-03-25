@@ -117,6 +117,7 @@ public:
     void testValueIterator();
     void testHorizontalAttrIterator();
     void testIteratorsUnallocatedColumnsAttributes();
+    void testLastChangedColFlagsWidth();
 
     /**
      * More direct test for cell broadcaster management, used to track formula
@@ -250,6 +251,7 @@ public:
     CPPUNIT_TEST(testValueIterator);
     CPPUNIT_TEST(testHorizontalAttrIterator);
     CPPUNIT_TEST(testIteratorsUnallocatedColumnsAttributes);
+    CPPUNIT_TEST(testLastChangedColFlagsWidth);
     CPPUNIT_TEST(testCellBroadcaster);
     CPPUNIT_TEST(testFuncParam);
     CPPUNIT_TEST(testNamedRange);
@@ -1452,6 +1454,23 @@ void Test::testIteratorsUnallocatedColumnsAttributes()
     CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
     CPPUNIT_ASSERT_EQUAL( SCROW(2), row1 );
     CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == nullptr );
+
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testLastChangedColFlagsWidth()
+{
+    m_pDoc->InsertTab(0, "Tab1");
+
+    constexpr SCCOL firstChangedCol = 100;
+    assert( firstChangedCol > INITIALCOLCOUNT );
+    for( SCCOL col = firstChangedCol; col <= m_pDoc->MaxCol(); ++col )
+        m_pDoc->SetColWidth( col, 0, 10 );
+
+    // That shouldn't need allocating more columns, just changing column flags.
+    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), m_pDoc->GetAllocatedColumnsCount(0));
+    // But the flags are changed.
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->MaxCol(), m_pDoc->GetLastChangedColFlagsWidth(0));
 
     m_pDoc->DeleteTab(0);
 }
