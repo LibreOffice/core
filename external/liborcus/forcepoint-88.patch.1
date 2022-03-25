@@ -1,0 +1,42 @@
+From 8c9537fe46b85acde0a7a183cee9066919c6b619 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Fri, 25 Mar 2022 10:10:17 +0000
+Subject: [PATCH] forcepoint#88 assigned temp std::string return to string_view
+
+it's out of scope when used
+
+=ERROR: AddressSanitizer: stack-use-after-scope on address 0x7ffcaf91b111 at pc 0x000000486ec4 bp 0x7ffcaf91aed0 sp 0x7ffcaf91a680
+READ of size 2 at 0x7ffcaf91b111 thread T0
+    #0 0x486ec3 in __interceptor_memcpy.part.0 (instdir/program/soffice.bin+0x486ec3)
+    #1 0x7fa6c4471b77 in std::basic_streambuf<char, std::char_traits<char> >::xsputn(char const*, long) (/lib64/libstdc++.so.6+0x143b77)
+    #2 0x7fa6c4463ae3 in std::basic_ostream<char, std::char_traits<char> >& std::__ostream_insert<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, char const*, long) (/lib64/libstdc++.so.6+0x135ae3)
+    #3 0x7fa6b4027a26 in std::basic_ostream<char, std::char_traits<char> >& std::operator<<<char, std::char_traits<char> >(std::basic_ostream<char, std::char_traits<char> >&, std::basic_string_view<char, std::char_traits<char> >) /usr/bin/../lib/gcc/x86_64-redhat-linux/11/../../../../include/c++/11/string_view:669:14
+    #4 0x7fa6b426792b in orcus::xml_element_printer::print_namespace(std::ostream&, char const*) const workdir/UnpackedTarball/liborcus/src/liborcus/xml_util.cpp:35:12
+    #5 0x7fa6b4267c68 in orcus::xml_element_printer::print_element(std::ostream&, char const*, unsigned long) const workdir/UnpackedTarball/liborcus/src/liborcus/xml_util.cpp:46:5
+    #6 0x7fa6b41c1956 in orcus::xml_context_base::print_element(std::ostream&, std::pair<char const*, unsigned long> const&) const workdir/UnpackedTarball/liborcus/src/liborcus/xml_context_base.cpp:280:20
+---
+ src/liborcus/xml_util.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/liborcus/xml_util.cpp b/src/liborcus/xml_util.cpp
+index 906d321d..ff270d4a 100644
+--- a/src/liborcus/xml_util.cpp
++++ b/src/liborcus/xml_util.cpp
+@@ -29,10 +29,10 @@ void xml_element_printer::print_namespace(std::ostream& os, xmlns_id_t ns) const
+     if (mp_ns_cxt)
+     {
+         std::string_view alias = mp_ns_cxt->get_alias(ns);
+-        if (alias.empty())
+-            alias = mp_ns_cxt->get_short_name(ns);
+-
+-        os << alias;
++        if (!alias.empty())
++            os << alias;
++        else
++            os << mp_ns_cxt->get_short_name(ns);
+     }
+     else
+         os << ns;
+-- 
+2.35.1
+
