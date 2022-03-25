@@ -16,6 +16,23 @@
       "message": "seems reasonable to me for whatever that\u0027s worth",
       "revId": "9fc25ee93df4c58b0bc3afffe51613b6002be086",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "931e3740_f74f3588",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-25T15:54:46Z",
+      "side": 1,
+      "message": "turns out this causes issues at least with SAL_USE_VCLPLUGIN\u003dkf5",
+      "revId": "9fc25ee93df4c58b0bc3afffe51613b6002be086",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
