@@ -5848,6 +5848,7 @@ xmlDataType
 xmlPr
 xmlns
 xpath
+xr2
 xrange
 xsc
 xscale

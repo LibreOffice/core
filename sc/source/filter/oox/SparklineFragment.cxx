@@ -173,7 +173,8 @@ ContextHandlerRef SparklineGroupsContext::onCreateContext(sal_Int32 nElement,
             auto& rLastGroup = m_aSparklineGroups.emplace_back();
             auto& rSparklineAttributes = rLastGroup.getSparklineGroup()->getAttributes();
             addAttributesToSparklineAttributes(rSparklineAttributes, rAttribs);
-            rLastGroup.getSparklineGroup()->m_sUID = rAttribs.getString(XML_uid, OUString());
+            OUString sUID = rAttribs.getString(XR2_TOKEN(uid), OUString());
+            rLastGroup.getSparklineGroup()->setID(sUID);
             return this;
         }
         case XLS14_TOKEN(colorSeries):
