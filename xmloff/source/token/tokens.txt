@@ -366,8 +366,16 @@ code
 codebase
 collapse
 color
+color-axis
+color-first
+color-high
 color-inversion
+color-last
+color-low
+color-markers
 color-mode
+color-negative
+color-series
 color-scale
 color-scale-entry
 color-table
@@ -510,6 +518,7 @@ data-pilot-subtotals
 data-pilot-table
 data-pilot-tables
 data-point
+data-range
 data-stream-source
 data-style
 data-style-name
@@ -526,6 +535,7 @@ database-source-sql
 database-source-table
 database-table-name
 date
+date-axis
 date-is
 date-adjust
 date-style
@@ -585,12 +595,15 @@ display-border
 display-details
 display-duplicates
 display-empty
+display-empty-cells-as
 display-filter-buttons
 display-formula
+display-hidden
 display-label
 display-levels
 display-name
 display-outline-level
+display-x-axis
 dissolve
 distance
 distance-after-sep
@@ -1093,6 +1106,7 @@ line-number
 line-skew
 line-spacing
 line-style
+line-width
 linear
 linearGradient
 linenumbering-configuration
@@ -1120,6 +1134,7 @@ log
 logarithmic
 logbase
 long
+low
 lowlimit
 lr-tb
 lt
@@ -1133,6 +1148,8 @@ major-origin
 maligngroup
 malignmark
 manual
+manual-min
+manual-max
 map
 margin-bottom
 margin-left
@@ -1140,6 +1157,7 @@ margin-right
 margin-top
 margins
 marker
+markers
 marker-end
 marker-end-center
 marker-end-width
@@ -1158,6 +1176,7 @@ matrix
 matrix-covered
 matrixrow
 max
+max-axis-type
 max-edge
 max-height
 max-length
@@ -1183,6 +1202,7 @@ mi
 middle
 mime-type
 min
+min-axis-type
 min-denominator-digits
 min-edge
 min-exponent-digits
@@ -1257,6 +1277,7 @@ named-expressions
 named-range
 navigation-mode
 navy
+negative
 negative-color
 neq
 new
@@ -1518,6 +1539,7 @@ ridge
 right
 right-outside
 right-text
+right-to-left
 right-arc
 right-circle
 ring
@@ -1672,6 +1694,10 @@ source-name
 source-range-address
 source-service
 space-before
+sparkline-groups
+sparkline-group
+sparklines
+sparkline
 span
 specular
 specular-color

@@ -67,6 +67,7 @@
 #include <cellform.hxx>
 #include <datamapper.hxx>
 #include <datatransformation.hxx>
+#include "SparklineGroupsExport.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -2984,6 +2985,7 @@ void ScXMLExport::WriteTable(sal_Int32 nTable, const uno::Reference<sheet::XSpre
     {
         //export new conditional format information
         ExportConditionalFormat(nTable);
+        exportSparklineGroups(nTable);
     }
 }
 
@@ -4508,6 +4510,19 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
         {
             AddAttribute(XML_NAMESPACE_TABLE, XML_EXPRESSION, sTempSymbol);
             SvXMLElementExport aElemNE(*this, XML_NAMESPACE_TABLE, XML_NAMED_EXPRESSION, true, true);
+        }
+    }
+}
+
+void ScXMLExport::exportSparklineGroups(SCTAB nTable)
+{
+    if (sc::SparklineList* pSparklineList = pDoc->GetSparklineList(nTable))
+    {
+        auto pSparklines = pSparklineList->getSparklines();
+        if (!pSparklines.empty())
+        {
+            sc::SparklineGroupsExport aSparklineGroupExport(*this, nTable, pSparklines);
+            aSparklineGroupExport.write();
         }
     }
 }

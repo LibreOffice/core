@@ -34,6 +34,7 @@
 #include <externalrefmgr.hxx>
 #include <sheetdata.hxx>
 #include "xmlcondformat.hxx"
+#include "SparklineGroupsImportContext.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -298,6 +299,9 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     case XML_ELEMENT( CALC_EXT, XML_CONDITIONAL_FORMATS ):
         pContext = new ScXMLConditionalFormatsContext( GetScImport() );
         break;
+     case XML_ELEMENT(CALC_EXT, XML_SPARKLINE_GROUPS):
+        pContext = new sc::SparklineGroupsImportContext(GetScImport());
+        break;
     case XML_ELEMENT(OFFICE, XML_EVENT_LISTENERS):
     case XML_ELEMENT(OFFICE_EXT, XML_EVENT_LISTENERS):
         {
@@ -315,6 +319,7 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         break;
     default:
         XMLOFF_WARN_UNKNOWN_ELEMENT("sc", nElement);
+        break;
     }
 
     return pContext;

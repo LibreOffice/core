@@ -293,6 +293,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/webservicelink \
     sc/source/core/tool/zforauto \
     sc/source/filter/xml/datastreamimport \
+    sc/source/filter/xml/SparklineGroupsExport \
+    sc/source/filter/xml/SparklineGroupsImportContext \
     sc/source/filter/xml/XMLCalculationSettingsContext \
     sc/source/filter/xml/XMLCellRangeSourceContext \
     sc/source/filter/xml/XMLChangeTrackingExportHelper \

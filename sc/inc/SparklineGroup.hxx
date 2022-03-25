@@ -25,6 +25,7 @@ private:
 
 public:
     SparklineAttributes& getAttributes() { return m_aAttributes; }
+    SparklineAttributes const& getAttributes() const { return m_aAttributes; }
 
     OUString getID() { return m_sUID; }
 

@@ -8,6 +8,7 @@
  */
 
 #include "helper/qahelper.hxx"
+#include "helper/xpath.hxx"
 
 #include <com/sun/star/lang/XComponent.hpp>
 #include <docsh.hxx>
@@ -16,7 +17,7 @@
 
 using namespace css;
 
-class SparklineImportExportTest : public ScBootstrapFixture
+class SparklineImportExportTest : public ScBootstrapFixture, public XmlTestTools
 {
 private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
@@ -44,10 +45,19 @@ public:
         test::BootstrapFixture::tearDown();
     }
 
-    void testSparklines();
+    virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathContextPtr) override
+    {
+        XmlTestTools::registerODFNamespaces(pXmlXPathContextPtr);
+    }
+
+    void testSparklinesRoundtripXLSX();
+    void testSparklinesExportODS();
+    void testSparklinesRoundtripODS();
 
     CPPUNIT_TEST_SUITE(SparklineImportExportTest);
-    CPPUNIT_TEST(testSparklines);
+    CPPUNIT_TEST(testSparklinesRoundtripXLSX);
+    CPPUNIT_TEST(testSparklinesExportODS);
+    CPPUNIT_TEST(testSparklinesRoundtripODS);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -74,7 +84,7 @@ void checkSparklines(ScDocument& rDocument)
         CPPUNIT_ASSERT_EQUAL(Color(0x92d050), rAttributes.getColorHigh());
         CPPUNIT_ASSERT_EQUAL(Color(0x00b0f0), rAttributes.getColorLow());
 
-        CPPUNIT_ASSERT_EQUAL(1.0, rAttributes.getLineWeight());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, rAttributes.getLineWeight(), 1E-2);
         CPPUNIT_ASSERT_EQUAL(false, rAttributes.isDateAxis());
         CPPUNIT_ASSERT_EQUAL(sc::DisplayEmptyCellsAs::Gap, rAttributes.getDisplayEmptyCellsAs());
 
@@ -154,7 +164,7 @@ void checkSparklines(ScDocument& rDocument)
 
 } // end anonymous namespace
 
-void SparklineImportExportTest::testSparklines()
+void SparklineImportExportTest::testSparklinesRoundtripXLSX()
 {
     ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
     CPPUNIT_ASSERT(xDocSh);
@@ -162,6 +172,70 @@ void SparklineImportExportTest::testSparklines()
     checkSparklines(xDocSh->GetDocument());
 
     xDocSh = saveAndReload(*xDocSh, FORMAT_XLSX);
+
+    checkSparklines(xDocSh->GetDocument());
+
+    xDocSh->DoClose();
+}
+
+void SparklineImportExportTest::testSparklinesExportODS()
+{
+    // Load the document containing sparklines
+    ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh);
+
+    // Save as ODS and check content.xml with XPath
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_ODS);
+    xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
+
+    // We have 3 sparkline groups = 3 tables that contain spakrlines
+    assertXPath(pXmlDoc, "//table:table/calcext:sparkline-groups", 3);
+
+    // Check the number of sparkline groups in table[1]
+    assertXPath(pXmlDoc, "//table:table[1]/calcext:sparkline-groups/calcext:sparkline-group", 2);
+    // Check the number of sparkline groups in table[2]
+    assertXPath(pXmlDoc, "//table:table[2]/calcext:sparkline-groups/calcext:sparkline-group", 2);
+    // Check the number of sparkline groups in table[3]
+    assertXPath(pXmlDoc, "//table:table[3]/calcext:sparkline-groups/calcext:sparkline-group", 3);
+
+    // Check table[1] - sparkline-group[1]
+    OString aSparklineGroupPath
+        = "//table:table[1]/calcext:sparkline-groups/calcext:sparkline-group[1]";
+    assertXPath(pXmlDoc, aSparklineGroupPath, "type", "line");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "line-width", "1pt");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "display-empty-cells-as", "gap");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "markers", "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "high", "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "low", "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "first", "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "last", "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "negative", "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "display-x-axis", "true");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "min-axis-type", "individual");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "max-axis-type", "individual");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-series", "#376092");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-negative", "#00b050");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-axis", "#000000");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-markers", "#000000");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-first", "#7030a0");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-last", "#ff0000");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-high", "#92d050");
+    assertXPath(pXmlDoc, aSparklineGroupPath, "color-low", "#00b0f0");
+
+    assertXPath(pXmlDoc, aSparklineGroupPath + "/calcext:sparklines/calcext:sparkline", 1);
+    assertXPath(pXmlDoc, aSparklineGroupPath + "/calcext:sparklines/calcext:sparkline[1]",
+                "cell-address", "Sheet1.A2");
+}
+
+void SparklineImportExportTest::testSparklinesRoundtripODS()
+{
+    ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
+    CPPUNIT_ASSERT(xDocSh);
+
+    checkSparklines(xDocSh->GetDocument());
+
+    // Trigger export and import of sparklines
+    xDocSh = saveAndReload(*xDocSh, FORMAT_ODS);
 
     checkSparklines(xDocSh->GetDocument());
 
