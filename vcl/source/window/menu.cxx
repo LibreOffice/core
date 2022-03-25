@@ -2473,6 +2473,9 @@ void MenuBar::ImplDestroy( MenuBar* pMenu, bool bDelete )
         pWindow->disposeOnce();
     }
     pMenu->pWindow = nullptr;
+    if (pMenu->mpSalMenu) {
+        pMenu->mpSalMenu->ShowMenuBar(false);
+    }
 }
 
 bool MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent )
