@@ -201,7 +201,8 @@ std::optional<OUString> SdtHelper::getValueFromDataBinding()
     {
         uno::Reference<XXPathObject> xResult = xXpathAPI->eval(xDocument, m_sDataBindingXPath);
 
-        if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength())
+        if (xResult.is() && xResult->getNodeList() && xResult->getNodeList()->getLength()
+            && xResult->getString().getLength())
         {
             return xResult->getString();
         }
