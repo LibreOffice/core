@@ -52,6 +52,24 @@
       "parentUuid": "f33d586b_71ecc7a2",
       "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56d87e0c_9110ce12",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-03-25T00:22:23Z",
+      "side": 0,
+      "message": "It would be much easier to extract that part of the code into a function that can be unit tested, then unit test like crazy the function with covering all the corner cases and only then change the atan to atan2 in a way that doesn\u0027t break the unit test.\n\nIt not only is easier to make sure that a regression isn\u0027t introduced as part of refactoring (which still depends on how many corner cases are covered), but it will also make sure the behavior of the function doesn\u0027t change in the future, if the code is changed. \n\nThis also teaches how to tackle complicated code refactoring in a way that won\u0027t produce regressions.",
+      "parentUuid": "d0d65bb1_3cdaa603",
+      "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
