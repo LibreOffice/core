@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7186c665_5082724a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-25T04:14:47Z",
+      "side": 1,
+      "message": "Sorry, no ideas from me - I\u0027m lost. It works perfectly on my system; it could be version of libraries on OS maybe ... or some permission so it fails to get symbols - but symbols must be right inside the binaries ... :-(",
+      "revId": "090a7a7e7e14f4bdd5dfe582a7e367df6def85b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "619a696c_6ce6522b",
+        "filename": "sal/cppunittester/cppunittester.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-25T04:14:47Z",
+      "side": 1,
+      "message": "I suspected that wrong alignment could be a problem, but it turned out it works with the alignas just as bad.",
+      "range": {
+        "startLine": 496,
+        "startChar": 4,
+        "endLine": 496,
+        "endChar": 24
+      },
+      "revId": "090a7a7e7e14f4bdd5dfe582a7e367df6def85b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "285379cc_37294d24",
+        "filename": "sal/cppunittester/cppunittester.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-25T04:14:47Z",
+      "side": 1,
+      "message": "One char is already accounted for in the SYMBOL_INFO itself. As said on https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info :\n\n\u003e Note that the total size of the data is the SizeOfStruct + (MaxNameLen - 1) * sizeof(TCHAR). The reason to subtract one is that the first character in the name is accounted for in the size of the structure.\n\nMy note: use of TCHAR is wrong here, since actually, SYMBOL_INFO is not a macro that may map to A/W variant; MS has multiple wrong statements about A/W and 32/64 throughout the dbghelp.h-related pages",
+      "range": {
+        "startLine": 546,
+        "startChar": 42,
+        "endLine": 546,
+        "endChar": 46
+      },
+      "revId": "090a7a7e7e14f4bdd5dfe582a7e367df6def85b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44e288d_614349c7",
+        "filename": "sal/cppunittester/cppunittester.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 556,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-25T04:14:47Z",
+      "side": 1,
+      "message": "Printing stack.AddrPC.Offset is correct, while printing pSymbol-\u003eAddress gives garbage, so possibly this is the only sane change that I made :-)",
+      "range": {
+        "startLine": 556,
+        "startChar": 93,
+        "endLine": 556,
+        "endChar": 112
+      },
+      "revId": "090a7a7e7e14f4bdd5dfe582a7e367df6def85b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
