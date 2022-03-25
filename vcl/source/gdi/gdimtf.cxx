@@ -462,6 +462,10 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     if (aDestSize.Width() <= 0 || aDestSize.Height() <= 0)
         return;
 
+    if (aDestSize.Width() > std::numeric_limits<sal_Int32>::max() ||
+        aDestSize.Height() > std::numeric_limits<sal_Int32>::max())
+        return;
+
     GDIMetaFile* pMtf = rOut.GetConnectMetaFile();
 
     if (ImplPlayWithRenderer(rOut, rPos, rSize))
