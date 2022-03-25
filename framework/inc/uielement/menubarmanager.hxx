@@ -127,8 +127,6 @@ class MenuBarManager final :
         static bool MustBeHidden( PopupMenu* pPopupMenu, const css::uno::Reference< css::util::XURLTransformer >& rTransformer );
         OUString RetrieveLabelFromCommand(const OUString& rCmdURL);
 
-        void Destroy();
-
         struct MenuItemHandler
         {
             MenuItemHandler( sal_uInt16             aItemId,

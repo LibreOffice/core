@@ -136,9 +136,12 @@ MenuBarManager::~MenuBarManager()
     SAL_WARN_IF( OWeakObject::m_refCount != 0, "fwk.uielement", "Who wants to delete an object with refcount > 0!" );
 }
 
-void MenuBarManager::Destroy()
+// XComponent
+void MenuBarManager::disposing(std::unique_lock<std::mutex>& )
 {
-    SolarMutexGuard aGuard;
+    Reference< XComponent > xThis( this );
+
+    SolarMutexGuard g;
 
     // stop asynchronous settings timer and
     // release deferred item container reference
@@ -152,15 +155,6 @@ void MenuBarManager::Destroy()
     {
         m_pVCLMenu.disposeAndClear();
     }
-}
-
-// XComponent
-void MenuBarManager::disposing(std::unique_lock<std::mutex>& )
-{
-    Reference< XComponent > xThis( this );
-
-    SolarMutexGuard g;
-    Destroy();
 
     if ( m_xDocImageManager.is() )
     {
