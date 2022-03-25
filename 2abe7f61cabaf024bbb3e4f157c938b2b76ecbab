@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 2: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/111024/ : FAILURE\n\u003e \n\u003e Visual studio complained about error C2511: \"bool SvxMSDffManager::SeekToRec2(sal_uInt16,sal_uInt16,sal_uInt64) const\": overloaded member function not found in \"SvxMSDffManager\" in file C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows/filter/source/msfilter/msdffimp.cxx(3331) ( https://ci.libreoffice.org/job/gerrit_windows/123109/ )\n\nYou touched other functions, too :)",
       "revId": "2abe7f61cabaf024bbb3e4f157c938b2b76ecbab",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3a4ed56d_1a58a928",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003536
+      },
+      "writtenOn": "2022-03-25T23:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8dbe9f7d_85dcd3a4",
+      "revId": "2abe7f61cabaf024bbb3e4f157c938b2b76ecbab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
