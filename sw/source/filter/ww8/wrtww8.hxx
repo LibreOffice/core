@@ -813,6 +813,10 @@ public:
     virtual sal_uInt64 ReplaceCr( sal_uInt8 nChar ) = 0;
 
     const SfxPoolItem* HasItem( sal_uInt16 nWhich ) const;
+    template<class T> const T* HasItem(TypedWhichId<T> nWhich) const
+    {
+        return static_cast<const T*>(HasItem(sal_uInt16(nWhich)));
+    }
 
     /// Returns the index of a picture bullet, used in numberings.
     int GetGrfIndex(const SvxBrushItem& rBrush);
@@ -1446,8 +1450,16 @@ public:
     virtual ~MSWordAttrIter();
 
     virtual const SfxPoolItem* HasTextItem( sal_uInt16 nWhich ) const = 0;
+    template<class T> const T* HasTextItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T*>(HasTextItem(sal_uInt16(nWhich)));
+    }
     virtual const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const = 0;
- };
+    template<class T> const T* GetItem( TypedWhichId<T> nWhich ) const
+    {
+        return static_cast<const T*>(GetItem(sal_uInt16(nWhich)));
+    }
+};
 
 /// Used to export formatted text associated to drawings.
 class MSWord_SdrAttrIter : public MSWordAttrIter

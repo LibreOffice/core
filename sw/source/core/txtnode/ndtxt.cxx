@@ -4000,7 +4000,7 @@ void SwTextNode::UpdateOutlineState()
 
 int SwTextNode::GetAttrOutlineLevel() const
 {
-    return GetAttr(RES_PARATR_OUTLINELEVEL).StaticWhichCast(RES_PARATR_OUTLINELEVEL).GetValue();
+    return GetAttr(RES_PARATR_OUTLINELEVEL).GetValue();
 }
 
 void SwTextNode::SetAttrOutlineLevel(int nLevel)
@@ -4103,8 +4103,7 @@ void SwTextNode::SetListRestart( bool bRestart )
 
 bool SwTextNode::IsListRestart() const
 {
-    const SfxBoolItem& aIsRestartItem =
-        GetAttr( RES_PARATR_LIST_ISRESTART ).StaticWhichCast(RES_PARATR_LIST_ISRESTART);
+    const SfxBoolItem& aIsRestartItem = GetAttr( RES_PARATR_LIST_ISRESTART );
 
     return aIsRestartItem.GetValue();
 }
@@ -4218,8 +4217,7 @@ void SwTextNode::SetCountedInList( bool bCounted )
 
 bool SwTextNode::IsCountedInList() const
 {
-    const SfxBoolItem& aIsCountedInListItem =
-        GetAttr( RES_PARATR_LIST_ISCOUNTED ).StaticWhichCast(RES_PARATR_LIST_ISCOUNTED);
+    const SfxBoolItem& aIsCountedInListItem = GetAttr( RES_PARATR_LIST_ISCOUNTED );
 
     return aIsCountedInListItem.GetValue();
 }

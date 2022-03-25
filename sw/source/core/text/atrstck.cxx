@@ -526,7 +526,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 
         if ( pTwoLineAttr )
         {
-             const auto& rTwoLineItem = CharFormat::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES )->StaticWhichCast(RES_CHRATR_TWO_LINES);
+             const auto& rTwoLineItem = *CharFormat::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
              bTwoLineAct = rTwoLineItem.GetValue();
         }
         else
@@ -541,7 +541,7 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
 
         if ( pRotateAttr )
         {
-            const auto& rRotateItem = CharFormat::GetItem( *pRotateAttr, RES_CHRATR_ROTATE )->StaticWhichCast(RES_CHRATR_ROTATE);
+            const auto& rRotateItem = *CharFormat::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
             rFnt.SetVertical( rRotateItem.GetValue(), m_bVertLayout );
         }
         else
@@ -746,7 +746,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 
             if ( pTwoLineAttr )
             {
-                const auto& rTwoLineItem = CharFormat::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES )->StaticWhichCast(RES_CHRATR_TWO_LINES);
+                const auto& rTwoLineItem = *CharFormat::GetItem( *pTwoLineAttr, RES_CHRATR_TWO_LINES );
                 bTwoLineAct = rTwoLineItem.GetValue();
             }
             else
@@ -781,7 +781,7 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
 
             if ( pRotateAttr )
             {
-                const auto& rRotateItem = CharFormat::GetItem( *pRotateAttr, RES_CHRATR_ROTATE )->StaticWhichCast(RES_CHRATR_ROTATE);
+                const auto& rRotateItem = *CharFormat::GetItem( *pRotateAttr, RES_CHRATR_ROTATE );
                 rFnt.SetVertical( rRotateItem.GetValue(), m_bVertLayout );
             }
             else
