@@ -2493,13 +2493,28 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
     createSwDoc(DATA_DIRECTORY, "forcepoint-swfootnoteframe-1.rtf");
 }
 
-//FIXME: disabled after failing again with fixed layout
-//CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76) { createSwDoc(DATA_DIRECTORY, "forcepoint76-1.rtf"); }
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76)
+{
+    createSwDoc(DATA_DIRECTORY, "forcepoint76-1.rtf");
+}
+
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint89)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint89.html");
+}
 
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint90)
 {
     createSwDoc(DATA_DIRECTORY, "forcepoint90.rtf");
+}
+
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint91.html");
 }
 
 //just care it doesn't crash/assert
@@ -2512,6 +2527,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
 {
     createSwWebDoc(DATA_DIRECTORY, "forcepoint94.html");
+}
+
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf147485Forcepoint)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf147485-forcepoint.doc");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
