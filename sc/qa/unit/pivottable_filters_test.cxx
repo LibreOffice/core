@@ -1095,7 +1095,7 @@ void ScPivotTableFiltersTest::testPivotTableXLSX()
             const char* pNames[] = { "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10" };
 
             size_t nCount = pCache->GetFieldCount();
-            if (nCount != SAL_N_ELEMENTS(pNames))
+            if (nCount != std::size(pNames))
             {
                 cout << "Incorrect number of fields in pivot cache." << endl;
                 return false;
@@ -1234,7 +1234,7 @@ void ScPivotTableFiltersTest::testPivotTableTwoDataFieldsXLSX()
             (void)pNames;
 
             size_t nCount = pCache->GetFieldCount();
-            if (nCount != SAL_N_ELEMENTS(pNames))
+            if (nCount != std::size(pNames))
             {
                 cout << "Incorrect number of fields in pivot cache." << endl;
                 return false;
