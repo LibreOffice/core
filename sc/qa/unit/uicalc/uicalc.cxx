@@ -380,6 +380,42 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf103994)
     CPPUNIT_ASSERT_EQUAL(1.0, pDoc->GetValue(ScAddress(1, 0, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf113541)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "A1", "50");
+
+    // Save the document
+    utl::TempFile aTempFile = save(mxComponent, "calc8");
+
+    // Open a new document
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    // Change grammar to Excel A1
+    pDoc->SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+
+    // Insert the reference to the external document
+    OUString aFormula = "=['" + aTempFile.GetURL() + "']Sheet1!A1";
+    insertStringToCell(*pModelObj, "A1", aFormula.toUtf8().getStr());
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 50
+    // - Actual  : Err:507
+    CPPUNIT_ASSERT_EQUAL(OUString("50"), pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // Change grammar to default
+    pDoc->SetGrammar(formula::FormulaGrammar::GRAM_ENGLISH);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126577)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
