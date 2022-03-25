@@ -146,6 +146,7 @@ class DiagramData
 {
 public:
     typedef std::map< OUString, ShapePtr > PointShapeMap;
+    typedef std::map< OUString, TextBodyPtr > PointTextMap;
     typedef std::map< OUString, dgm::Point* > PointNameMap;
     typedef std::map< OUString, std::vector<dgm::Point*> > PointsNameMap;
     typedef std::map< OUString, const dgm::Connection* > ConnectionNameMap;
@@ -163,7 +164,7 @@ public:
     virtual ~DiagramData() {}
 
     // creates temporary processing data from model data
-    void build();
+    void build(bool bClearOoxShapes);
 
     FillPropertiesPtr & getFillProperties()
         { return mpFillProperties; }
@@ -189,6 +190,10 @@ public:
 
     Shape* getOrCreateAssociatedShape(const dgm::Point& rPoint, bool bCreateOnDemand = false) const;
 
+    // get/set data between Diagram DataModel and oox::drawingml::Shape
+    void secureDataFromShapeToModelAfterDiagramImport();
+    void restoreDataFromModelToShapeAfterReCreation(const dgm::Point& rPoint, Shape& rNewShape) const;
+
 private:
     void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;
     void addConnection(sal_Int32 nType, const OUString& sSourceId, const OUString& sDestId);
@@ -198,9 +203,11 @@ private:
 
     // the model definition,
     // - FillStyle
-    // - logic connections/associations
+    // - Texts for oox::drawingml::Points/dgm::Points, associated by ModelId
+    // - logic connections/assoziations
     // - data point entries
     FillPropertiesPtr mpFillProperties;
+    PointTextMap      maPointTextMap;
     dgm::Connections  maConnections;
     dgm::Points       maPoints;
 
