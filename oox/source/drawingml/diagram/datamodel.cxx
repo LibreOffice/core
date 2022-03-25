@@ -68,9 +68,51 @@ Shape* DiagramData::getOrCreateAssociatedShape(const dgm::Point& rPoint, bool bC
     if(!rShapePtr && bCreateOnDemand)
     {
         const_cast<ShapePtr&>(rShapePtr) = std::make_shared<Shape>();
+
+        // If we did create a new oox::drawingml::Shape, directly apply
+        // available data from the Diagram ModelData to it as preparation
+        restoreDataFromModelToShapeAfterReCreation(rPoint, *rShapePtr);
     }
 
     return rShapePtr.get();
+}
+
+void DiagramData::restoreDataFromModelToShapeAfterReCreation(const dgm::Point& rPoint, Shape& rNewShape) const
+{
+    // If we did create a new oox::drawingml::Shape, directly apply
+    // available data from the Diagram ModelData to it as preparation
+
+    // This is e.g. the Text, but may get more (styles?)
+    const auto pTextForShape = maPointTextMap.find(rPoint.msModelId);
+    if (pTextForShape != maPointTextMap.end())
+    {
+        rNewShape.setTextBody(pTextForShape->second);
+    }
+}
+
+void DiagramData::secureDataFromShapeToModelAfterDiagramImport()
+{
+    // After Diagram import, parts of the Diagram ModelData is at the
+    // oox::drawingml::Shape. Since these objects are temporary helpers,
+    // secure that data at the Diagram ModelData by copying.
+
+    // This is currently mainly the Text, but may get more (styles?)
+    for (auto & point : maPoints)
+    {
+        Shape* pShapeCandidate(getOrCreateAssociatedShape(point));
+
+        if(nullptr != pShapeCandidate
+            && pShapeCandidate->getTextBody()
+            && !pShapeCandidate->getTextBody()->isEmpty())
+        {
+            maPointTextMap[point.msModelId] = pShapeCandidate->getTextBody();
+        }
+    }
+
+    // At this place a mechanism to find missing data should be added:
+    // Create a Shape from so-far secured data & compare it with the
+    // imported one. Report differences to allow extending the mechanism
+    // more easily.
 }
 
 DiagramData::DiagramData() :
@@ -242,7 +284,7 @@ OUString DiagramData::addNode(const OUString& rText)
     maPoints.push_back(aDataPoint);
     maPoints.push_back(aPresPoint);
 
-    build();
+    build(true);
     return sNewNodeId;
 }
 
@@ -294,7 +336,7 @@ bool DiagramData::removeNode(const OUString& rNodeId)
 
     // TODO: fix source/dest order
 
-    build();
+    build(true);
     return true;
 }
 
@@ -338,8 +380,14 @@ static sal_Int32 calcDepth( std::u16string_view rNodeName,
     return 0;
 }
 
-void DiagramData::build()
+void DiagramData::build(bool bClearOoxShapes)
 {
+    // Delete/remove all existing oox::drawingml::Shape
+    if(bClearOoxShapes)
+    {
+        maPointShapeMap.clear();
+    }
+
     // build name-object maps
     maPointNameMap.clear();
     maPointsPresNameMap.clear();
@@ -384,8 +432,11 @@ void DiagramData::build()
         output << "];" << std::endl;
 #endif
 
+        // Create/get shape. Re-create here, that may also set needed
+        // and available data from the Diagram ModelData at the Shape
+        Shape* pShape(getOrCreateAssociatedShape(point, true));
+
         // does currpoint have any text set?
-        Shape* pShape(getOrCreateAssociatedShape(point));
         if( nullptr != pShape && pShape->getTextBody() && !pShape->getTextBody()->isEmpty() )
         {
 #ifdef DEBUG_OOX_DIAGRAM
