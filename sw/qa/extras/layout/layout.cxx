@@ -2509,6 +2509,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint90)
     createSwDoc(DATA_DIRECTORY, "forcepoint90.rtf");
 }
 
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint91.html");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118058.fodt");
