@@ -12,6 +12,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 
 char const DATA_DIRECTORY[] = "/sw/qa/extras/ooxmlexport/data/";
 
@@ -180,6 +181,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
     // Ensure that we have <w15:color v:val="xxxx"/>
     OUString sColor = getXPath(pXmlDoc, "/w:document/w:body/w:p/w:sdt/w:sdtPr/w15:color", "val");
     CPPUNIT_ASSERT_EQUAL(OUString("FF0000"), sColor);
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    std::vector<OUString> aExpectedValues = {
+        // These field values are NOT in order in document: getTextFields did provide
+        // fields in a strange but fixed order
+        "Title", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Title", "Title", "Title",
+        "Title", "Title", "Title", "Title"
+    };
+
+    sal_uInt16 nIndex = 0;
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nIndex++], xTextField->getPresentation(false));
+    }
+
+    // No more fields
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
