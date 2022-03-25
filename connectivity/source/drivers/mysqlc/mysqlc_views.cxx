@@ -84,13 +84,6 @@ void connectivity::mysqlc::Views::dropObject(sal_Int32 _nPos, const OUString& /*
     }
 }
 
-void connectivity::mysqlc::Views::dropByNameImpl(const OUString& elementName)
-{
-    m_bInDrop = true;
-    connectivity::sdbcx::OCollection::dropByName(elementName);
-    m_bInDrop = false;
-}
-
 void connectivity::mysqlc::Views::createView(
     const css::uno::Reference<css::beans::XPropertySet>& descriptor)
 {

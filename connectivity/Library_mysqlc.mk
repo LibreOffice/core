@@ -68,7 +68,6 @@ $(eval $(call gb_Library_add_exception_objects,mysqlc,\
 	connectivity/source/drivers/mysqlc/mysqlc_tables \
 	connectivity/source/drivers/mysqlc/mysqlc_types \
 	connectivity/source/drivers/mysqlc/mysqlc_user \
-	connectivity/source/drivers/mysqlc/mysqlc_users \
 	connectivity/source/drivers/mysqlc/mysqlc_view \
 	connectivity/source/drivers/mysqlc/mysqlc_views \
 ))

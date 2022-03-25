@@ -45,8 +45,6 @@ public:
 
     // XDrop
     virtual void dropObject(sal_Int32 _nPos, const OUString& _sElementName) override;
-
-    void dropByNameImpl(const OUString& elementName);
 };
 }
 
