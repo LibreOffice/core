@@ -1353,45 +1353,62 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     return bRet;
 }
 
+namespace
+{
+    bool CanDeleteFollow(SwTabFrame *pFoll)
+    {
+        if (pFoll->IsJoinLocked())
+            return false;
+
+        if (pFoll->IsDeleteForbidden())
+        {
+            SAL_WARN("sw.layout", "Delete Forbidden");
+            return false;
+        }
+
+        return true;
+    }
+}
+
 void SwTabFrame::Join()
 {
     OSL_ENSURE( !HasFollowFlowLine(), "Joining follow flow line" );
 
     SwTabFrame *pFoll = GetFollow();
 
-    if (!pFoll || pFoll->IsJoinLocked())
-        return;
-
-    SwRectFnSet aRectFnSet(this);
-    pFoll->Cut();   //Cut out first to avoid unnecessary notifications.
-
-    SwFrame *pRow = pFoll->GetFirstNonHeadlineRow(),
-          *pNxt;
-
-    SwFrame* pPrv = GetLastLower();
-
-    SwTwips nHeight = 0;    //Total height of the inserted rows as return value.
-
-    while ( pRow )
+    if (pFoll && CanDeleteFollow(pFoll))
     {
-        pNxt = pRow->GetNext();
-        nHeight += aRectFnSet.GetHeight(pRow->getFrameArea());
-        pRow->RemoveFromLayout();
-        pRow->InvalidateAll_();
-        pRow->InsertBehind( this, pPrv );
-        pRow->CheckDirChange();
-        pPrv = pRow;
-        pRow = pNxt;
+        SwRectFnSet aRectFnSet(this);
+        pFoll->Cut();   //Cut out first to avoid unnecessary notifications.
+
+        SwFrame *pRow = pFoll->GetFirstNonHeadlineRow(),
+              *pNxt;
+
+        SwFrame* pPrv = GetLastLower();
+
+        SwTwips nHeight = 0;    //Total height of the inserted rows as return value.
+
+        while ( pRow )
+        {
+            pNxt = pRow->GetNext();
+            nHeight += aRectFnSet.GetHeight(pRow->getFrameArea());
+            pRow->RemoveFromLayout();
+            pRow->InvalidateAll_();
+            pRow->InsertBehind( this, pPrv );
+            pRow->CheckDirChange();
+            pPrv = pRow;
+            pRow = pNxt;
+        }
+
+        SetFollow( pFoll->GetFollow() );
+        SetFollowFlowLine( pFoll->HasFollowFlowLine() );
+        SwFrame::DestroyFrame(pFoll);
+
+        Grow( nHeight );
     }
-
-    SetFollow( pFoll->GetFollow() );
-    SetFollowFlowLine( pFoll->HasFollowFlowLine() );
-    SwFrame::DestroyFrame(pFoll);
-
-    Grow( nHeight );
 }
 
-static void SwInvalidatePositions( SwFrame *pFrame, tools::Long nBottom )
+static void SwInvalidatePositions( SwFrame *pFrame, long nBottom )
 {
     // LONG_MAX == nBottom means we have to calculate all
     bool bAll = LONG_MAX == nBottom;
@@ -1869,7 +1886,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // is not locked. Otherwise, join will not be performed and this loop
     // will be endless.
     while ( GetNext() && GetNext() == GetFollow() &&
-            !GetFollow()->IsJoinLocked()
+            CanDeleteFollow(GetFollow())
           )
     {
         if ( HasFollowFlowLine() )

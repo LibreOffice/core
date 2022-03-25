@@ -12450,6 +12450,7 @@ sw/qa/core/uwriter.cxx
 sw/qa/extras/docbookexport/docbookexport.cxx
 sw/qa/extras/globalfilter/globalfilter.cxx
 sw/qa/extras/htmlimport/htmlimport.cxx
+sw/qa/extras/layout/layout.cxx
 sw/qa/extras/mailmerge/mailmerge.cxx
 sw/qa/extras/odfexport/odfexport.cxx
 sw/qa/extras/odfimport/odfimport.cxx

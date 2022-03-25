@@ -2308,6 +2308,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL) { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
 #endif
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint90)
+{
+    createDoc("forcepoint90.rtf");
+}
+
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92) { createDoc("forcepoint92.doc"); }
 
