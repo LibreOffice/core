@@ -198,6 +198,7 @@ class ScXMLExport : public SvXMLExport
     void WriteExternalDataTransformations(const std::vector<std::shared_ptr<sc::DataTransformation>>& aDataTransformations);
     void WriteDataStream();
     void WriteNamedRange(ScRangeName* pRangeName);
+    void exportSparklineGroups(SCTAB nTab);
     void ExportConditionalFormat(SCTAB nTab);
     void WriteExternalRefCaches();
     void WriteConsolidation();  // core implementation
