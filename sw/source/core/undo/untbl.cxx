@@ -35,6 +35,8 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
@@ -936,6 +938,12 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 {
     m_bModifyBox = bMdfyBox;
 
+    FndBox_ aTmpBox( nullptr, nullptr );
+    bool bHideChanges = rTable.GetFrameFormat()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
+    // TODO delete/make frames only at changing line attribute TextChangesOnly (RES_PRINT) to true again
+    if ( bHideChanges )
+        aTmpBox.DelFrames( rTable );
+
     // first, get back attributes of TableFrameFormat
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
     SfxItemSet& rFormatSet  = const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pFormat->GetAttrSet()));
@@ -976,6 +984,9 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 
     m_aFrameFormats.clear();
     m_bModifyBox = false;
+
+    if ( bHideChanges )
+        aTmpBox.MakeFrames( rTable );
 }
 
 void SaveTable::SaveContentAttrs( SwDoc* pDoc )

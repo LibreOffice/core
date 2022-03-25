@@ -2333,6 +2333,10 @@ void FndBox_::MakeFrames( SwTable &rTable )
     // And this for all instances of a table (for example in header/footer).
     sal_uInt16 nStPos = 0;
     sal_uInt16 nEndPos= rTable.GetTabLines().size() - 1;
+    SwRootFrame* pLayout =
+        rTable.GetFrameFormat()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout();
+    bool bHideChanges = pLayout && pLayout->IsHideRedlines();
+
     if ( m_pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
@@ -2386,9 +2390,14 @@ void FndBox_::MakeFrames( SwTable &rTable )
 // ???? or is this the last Follow of the table ????
                 pUpperFrame = pTable;
 
+            SwRedlineTable::size_type nRedlinePos = 0;
             for ( sal_uInt16 j = nStPos; j <= nEndPos; ++j )
-                ::lcl_InsertRow( *rTable.GetTabLines()[j],
+            {
+                SwTableLine * pLine = rTable.GetTabLines()[j];
+                if ( !bHideChanges || !pLine->IsDeleted(nRedlinePos) )
+                    ::lcl_InsertRow( *pLine,
                                 static_cast<SwLayoutFrame*>(pUpperFrame), pSibling );
+            }
             if ( pUpperFrame->IsTabFrame() )
                 static_cast<SwTabFrame*>(pUpperFrame)->SetCalcLowers();
         }
