@@ -440,6 +440,7 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
                 = connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
             mpCloseButton = pButton;
         }
+        mpQMenuBar->setVisible(true);
     }
 
     mpQMenu = nullptr;
