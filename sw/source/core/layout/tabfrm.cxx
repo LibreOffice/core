@@ -1363,13 +1363,30 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     return bRet;
 }
 
+namespace
+{
+    bool CanDeleteFollow(SwTabFrame *pFoll)
+    {
+        if (pFoll->IsJoinLocked())
+            return false;
+
+        if (pFoll->IsDeleteForbidden())
+        {
+            SAL_WARN("sw.layout", "Delete Forbidden");
+            return false;
+        }
+
+        return true;
+    }
+}
+
 void SwTabFrame::Join()
 {
     OSL_ENSURE( !HasFollowFlowLine(), "Joining follow flow line" );
 
     SwTabFrame *pFoll = GetFollow();
 
-    if (!pFoll || pFoll->IsJoinLocked())
+    if (!pFoll || !CanDeleteFollow(pFoll))
         return;
 
     SwRectFnSet aRectFnSet(this);
@@ -1884,7 +1901,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // is not locked. Otherwise, join will not be performed and this loop
     // will be endless.
     while ( GetNext() && GetNext() == GetFollow() &&
-            !GetFollow()->IsJoinLocked()
+            CanDeleteFollow(GetFollow())
           )
     {
         if ( HasFollowFlowLine() )
