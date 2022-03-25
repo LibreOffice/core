@@ -67,6 +67,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/gradient.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <formatlinebreak.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -964,6 +965,13 @@ void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
     if( !OnWin() )
         return;
 
+    SwLineBreakClear eClear = SwLineBreakClear::NONE;
+    if (rPor.IsBreakPortion())
+    {
+        const auto& rBreakPortion = static_cast<const SwBreakPortion&>(rPor);
+        eClear = rBreakPortion.GetClear();
+    }
+
     sal_uInt16 nOldWidth = rPor.Width();
     const_cast<SwLinePortion&>(rPor).Width( LINE_BREAK_WIDTH );
 
@@ -976,7 +984,24 @@ void SwTextPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
                                   CHAR_LINEBREAK_RTL : CHAR_LINEBREAK;
         const sal_uInt8 nOptions = 0;
 
-        lcl_DrawSpecial( *this, rPor, aRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
+        SwRect aTextRect(aRect);
+        if (eClear == SwLineBreakClear::LEFT || eClear == SwLineBreakClear::ALL)
+            aTextRect.AddLeft(30);
+        if (eClear == SwLineBreakClear::RIGHT || eClear == SwLineBreakClear::ALL)
+            aTextRect.AddRight(-30);
+        lcl_DrawSpecial( *this, rPor, aTextRect, NON_PRINTING_CHARACTER_COLOR, cChar, nOptions );
+
+        if (eClear != SwLineBreakClear::NONE)
+        {
+            // Paint indicator if this clear is left/right/all.
+            m_pOut->Push(vcl::PushFlags::LINECOLOR);
+            m_pOut->SetLineColor(NON_PRINTING_CHARACTER_COLOR);
+            if (eClear != SwLineBreakClear::RIGHT)
+                m_pOut->DrawLine(aRect.BottomLeft(), aRect.TopLeft());
+            if (eClear != SwLineBreakClear::LEFT)
+                m_pOut->DrawLine(aRect.BottomRight(), aRect.TopRight());
+            m_pOut->Pop();
+        }
     }
 
     const_cast<SwLinePortion&>(rPor).Width( nOldWidth );
