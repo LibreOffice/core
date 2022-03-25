@@ -369,18 +369,18 @@ JNI_type_info const * JNI_info::create_type_info(
 
     // look up
     JNI_type_info * info;
-    ClearableMutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     JNI_type_info_holder & holder = m_type_map[ uno_name ];
     if (holder.m_info == nullptr) // new insertion
     {
         holder.m_info = new_info;
-        guard.clear();
+        guard.unlock();
         info = new_info;
     }
     else // inserted in the meantime
     {
         info = holder.m_info;
-        guard.clear();
+        guard.unlock();
         new_info->destroy( jni.get_jni_env() );
     }
     return info;
@@ -397,12 +397,12 @@ JNI_type_info const * JNI_info::get_type_info(
 
     OUString const & uno_name = OUString::unacquired( &td->pTypeName );
     JNI_type_info const * info;
-    ClearableMutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
 
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
     if (iFind == m_type_map.end())
     {
-        guard.clear();
+        guard.unlock();
         info = create_type_info( jni, td );
     }
     else
@@ -424,11 +424,11 @@ JNI_type_info const * JNI_info::get_type_info(
 
     OUString const & uno_name = OUString::unacquired( &type->pTypeName );
     JNI_type_info const * info;
-    ClearableMutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
     if (iFind == m_type_map.end())
     {
-        guard.clear();
+        guard.unlock();
         TypeDescr td( type );
         info = create_type_info( jni, td.get() );
     }
@@ -450,11 +450,11 @@ JNI_type_info const * JNI_info::get_type_info(
     }
 
     JNI_type_info const * info;
-    ClearableMutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     t_str2type::const_iterator iFind( m_type_map.find( uno_name ) );
     if (iFind == m_type_map.end())
     {
-        guard.clear();
+        guard.unlock();
         css::uno::TypeDescription td( uno_name );
         if (! td.is())
         {

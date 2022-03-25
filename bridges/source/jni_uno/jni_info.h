@@ -25,7 +25,7 @@
 
 #include "jni_base.h"
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
@@ -122,7 +122,7 @@ typedef std::unordered_map<
 
 class JNI_info
 {
-    mutable ::osl::Mutex        m_mutex;
+    mutable std::mutex          m_mutex;
     mutable t_str2type          m_type_map;
 
 public:
