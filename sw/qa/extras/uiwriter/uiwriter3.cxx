@@ -2353,6 +2353,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146962)
     pXmlDoc = parseLayoutDump();
     // only a single row is visible again
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
+
+    // check Undo
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 1
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147347)
