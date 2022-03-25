@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65b61524_c3f40b80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-25T06:01:51Z",
+      "side": 1,
+      "message": "Just a wild idea: maybe we need to [ use https://docs.microsoft.com/en-us/windows/win32/debug/vectored-exception-handling ] - as they are documented to be \"called in the order that they were added, after the debugger gets a first chance notification, but before the system begins unwinding the stack\" - maybe that is important?",
+      "revId": "090a7a7e7e14f4bdd5dfe582a7e367df6def85b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "619a696c_6ce6522b",
