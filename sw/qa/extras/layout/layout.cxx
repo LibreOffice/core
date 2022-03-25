@@ -2308,10 +2308,32 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testRedlineTables)
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL) { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
 #endif
 
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint76)
+{
+    createDoc("forcepoint76-1.rtf");
+}
+
+//just care it doesn't crash/assert
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint89)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint89.html");
+}
+#endif
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint90)
 {
     createDoc("forcepoint90.rtf");
 }
+
+//just care it doesn't crash/assert
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint91)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint91.html");
+}
+#endif
 
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92) { createDoc("forcepoint92.doc"); }
@@ -2330,6 +2352,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
     createSwWebDoc(DATA_DIRECTORY, "forcepoint94.html");
 }
 #endif
+
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf147485Forcepoint)
+{
+    createDoc("tdf147485-forcepoint.doc");
+}
 
 //just care it doesn't crash/assert
 #if 0 // no createSwWebDoc
