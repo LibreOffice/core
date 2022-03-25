@@ -300,6 +300,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146851_2, "tdf146851_2.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Schedule"), xTextField->getPresentation(false));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    std::vector<OUString> aExpectedValues = {
+        // These field values are NOT in order in document: getTextFields did provide
+        // fields in a strange but fixed order
+        "Title", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Title", "Title", "Title",
+        "Title", "Title", "Title", "Title"
+    };
+
+    sal_uInt16 nIndex = 0;
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nIndex++], xTextField->getPresentation(false));
+    }
+
+    // No more fields
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
