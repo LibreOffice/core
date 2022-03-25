@@ -87,63 +87,6 @@ connectivity::sdbcx::ObjectType connectivity::mysqlc::Tables::createObject(const
     return xRet;
 }
 
-OUString connectivity::mysqlc::Tables::createStandardColumnPart(
-    const css::uno::Reference<css::beans::XPropertySet>& xColProp,
-    const css::uno::Reference<css::sdbc::XConnection>& _xConnection)
-{
-    css::uno::Reference<css::sdbc::XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
-
-    ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-
-    bool bIsAutoIncrement = false;
-    xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))
-        >>= bIsAutoIncrement;
-
-    const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
-    OUStringBuffer aSql(
-        ::dbtools::quoteName(sQuoteString, ::comphelper::getString(xColProp->getPropertyValue(
-                                               rPropMap.getNameByIndex(PROPERTY_ID_NAME)))));
-
-    // check if the user enter a specific string to create autoincrement values
-    OUString sAutoIncrementValue;
-    css::uno::Reference<css::beans::XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
-
-    if (xPropInfo.is()
-        && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)))
-        xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION))
-            >>= sAutoIncrementValue;
-
-    aSql.append(" ");
-
-    aSql.append(dbtools::createStandardTypePart(xColProp, _xConnection));
-    // Add character set for (VAR)BINARY (fix) types:
-    // (VAR) BINARY is distinguished from other CHAR types by its character set.
-    // Octets is a special character set for binary data.
-    if (xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)))
-    {
-        sal_Int32 aType = 0;
-        xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= aType;
-        if (aType == css::sdbc::DataType::BINARY || aType == css::sdbc::DataType::VARBINARY)
-        {
-            aSql.append(" ");
-            aSql.append("CHARACTER SET OCTETS");
-        }
-    }
-
-    if (bIsAutoIncrement && !sAutoIncrementValue.isEmpty())
-    {
-        aSql.append(" ");
-        aSql.append(sAutoIncrementValue);
-    }
-    // AutoIncrement "IDENTITY" is implicitly "NOT NULL"
-    else if (::comphelper::getINT32(
-                 xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_ISNULLABLE)))
-             == css::sdbc::ColumnValue::NO_NULLS)
-        aSql.append(" NOT NULL");
-
-    return aSql.makeStringAndClear();
-}
-
 css::uno::Reference<css::beans::XPropertySet> connectivity::mysqlc::Tables::createDescriptor()
 {
     // There is some internal magic so that the same class can be used as either

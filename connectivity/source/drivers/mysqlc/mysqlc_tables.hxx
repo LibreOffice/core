@@ -24,10 +24,6 @@ class Tables : public ::connectivity::sdbcx::OCollection
 protected:
     css::uno::Reference<css::sdbc::XDatabaseMetaData> m_xMetaData;
 
-    static OUString createStandardColumnPart(
-        const css::uno::Reference<css::beans::XPropertySet>& xColProp,
-        const css::uno::Reference<com::sun::star::sdbc::XConnection>& _xConnection);
-
     // OCollection
     virtual void impl_refresh() override;
     virtual ::connectivity::sdbcx::ObjectType createObject(const OUString& rName) override;

@@ -41,31 +41,6 @@ public:
 
     bool isDeviceBlocked();
 
-    const OString& GetVendor() const
-    {
-        return maVendor;
-    }
-
-    const OString& GetRenderer() const
-    {
-        return maRenderer;
-    }
-
-    const OString& GetVersion() const
-    {
-        return maVersion;
-    }
-
-    const OString& GetOS() const
-    {
-        return maOS;
-    }
-
-    const OString& GetOSRelease() const
-    {
-        return maOSRelease;
-    }
-
 };
 
 #endif
