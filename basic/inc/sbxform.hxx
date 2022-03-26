@@ -83,20 +83,44 @@ class SbxBasicFormater {
                       const OUString& _sCurrencyStrg,
                       const OUString& _sCurrencyFormatStrg );
 
-    /* Basic command: Format$( number,format-string )
+   /**
+     Format number input
 
-       Parameter:
-        dNumber     : number to be formatted
-        sFormatStrg : the Format-String, e.g. ###0.0###
+     @param dNumber
+     the input number
 
-       Return value:
-        String containing the formatted output
-    */
+     @param sFormatStrg
+     string with formatting rules
+
+     @result
+     the resulting string after formatting
+   */
     OUString  BasicFormat( double dNumber, const OUString& sFormatStrg );
-    static OUString BasicFormatNull( const OUString& sFormatStrg );
+   /**
+     Format string input
 
-    static  bool isBasicFormat( const OUString& sFormatStrg );
+     @param sInputStrg
+     the input string
 
+     @param sFormatStrg
+     string with formatting rules
+
+     @result
+     the resulting string after formatting
+   */
+    OUString  BasicFormat( const OUString& sInputStrg, const OUString& sFormatStrg);
+    OUString BasicFormatNull( const OUString& sFormatStrg );
+
+    bool isBasicFormat( const OUString& sFormatStrg );
+    /**
+      Checks whether format string contains special format chars (@, #, !), which
+      would mean that numbers get converted to strings before formatting, and
+      BasicFormat(const OUString&, const OUString&) overload is called
+
+      @result
+      whether to convert input number to string
+     */
+    bool overridesNumericChars( const OUString& sFormatStrg );
   private:
     static inline void ShiftString( OUStringBuffer& sStrg, sal_uInt16 nStartPos );
     static void AppendDigit( OUStringBuffer& sStrg, short nDigit );
@@ -123,6 +147,7 @@ class SbxBasicFormater {
                                                  short& nNoOfOptionalExponentDigits,
                                                  bool& bPercent, bool& bCurrency, bool& bScientific,
                                                  bool& bGenerateThousandSeparator,
+                                                 bool bStandardFormat,
                                                  short& nMultipleThousandSeparators );
     void   ScanFormatString( double dNumber, const OUString& sFormatStrg,
                                               OUString& sReturnStrg, bool bCreateSign );
@@ -149,6 +174,7 @@ class SbxBasicFormater {
     double  dNum;           // the number that is scanned
     short   nNumExp;        // the exponent of the number
     short   nExpExp;        // the number of digits in the exponent
+    bool    bStandardFormat;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
