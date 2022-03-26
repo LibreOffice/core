@@ -87,9 +87,10 @@ Use `emrun --serve_after_close` to run Qt WASM demos.
 environment vars, especially `EMMAKEN_JUST_CONFIGURE`, which will create the
 correct output file names, checked by `configure` (`a.out`).
 
-There's a distro config for WASM (work in progress), that gets your
-defaults right (and currently disables a ton of 3rd party stuff which
-is not essential).
+There's a distro config for WASM, but it just provides --host=wasm32-local-emscripten, which
+should be enough setup. The build itself is a cross build and the cross-toolset just depends
+on a minimal toolset (gcc, libc-dev, flex, bison); all else is build from source, because the
+final result is not depending on the build system at all.
 
 Recommended configure setup is thusly:
 
@@ -106,6 +107,21 @@ Recommended configure setup is thusly:
 FWIW: it's also possible to build an almost static Linux LibreOffice by just using
 --disable-dynloading --enable-customtarget-components. System externals are still
 linked dynamically, but everything else is static.
+
+#### Experimental (AKA currently broken) WASM exception + SjLj build
+
+You can build LO with WASM exceptions, which should be "much" faster then the JS
+based Emscripten EH handling. For setjmp / longjmp (SjLj) used by the PNG and JPEG
+libraries error handling, this needs Emscripten 3.1.3+. That builds, but execution
+still fails early with a signature mismatch call to Task::UpdateMinPeriod in LO's
+job scheduler code. Unfortunatly the build also needs a Qt build with
+"-s SUPPORT_LONGJMP=wasm", which is incompatible with the JS EH + SjLj.
+
+The LO configure flag is simply an additional --enable-wasm-exceptions. Qt5 can
+be patched in qtbase/mkspecs/wasm-emscripten/qmake.conf with the addition of
+
+    QMAKE_CFLAGS += -s SUPPORT_LONGJMP=wasm
+    QMAKE_CXXFLAGS += -s SUPPORT_LONGJMP=wasm
 
 ### "Deploying" soffice.wasm
 

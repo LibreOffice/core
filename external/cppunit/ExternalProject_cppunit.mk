@@ -28,7 +28,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 	$(call gb_Trace_EndRange,cppunit,EXTERNAL)
 else
 
-cppunit_CXXFLAGS=$(CXXFLAGS)
+cppunit_CXXFLAGS=$(CXXFLAGS) $(gb_EMSCRIPTEN_CXXFLAGS)
 
 cppunit_CXXFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
@@ -52,7 +52,7 @@ $(call gb_ExternalProject_get_state_target,cppunit,build) :
 			$(if $(filter SOLARIS,$(OS)),LIBS="-lm") \
 			$(if $(filter ANDROID,$(OS)),LIBS="$(gb_STDLIBS)") \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(cppunit_CXXFLAGS) $(gb_EMSCRIPTEN_CPPFLAGS)" \
+			CXXFLAGS="$(cppunit_CXXFLAGS)" \
 		&& cd src \
 		&& $(MAKE) \
 	)
