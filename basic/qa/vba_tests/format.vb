@@ -70,7 +70,9 @@ Sub Predefined_Number_Format_Sample()
 
     TestUtil.AssertEqual(Format(562486.2356, "General Number"), "562486.2356", "Format(562486.2356, ""General Number"")")
     TestUtil.AssertEqual(Format(0.2, "Fixed"),                  "0.20",        "Format(0.2, ""Fixed"")")
-    TestUtil.AssertEqual(Format(562486.2356, "Standard"),       "562,486.24",  "Format(562486.2356, ""Standard"")")
+    ' Drop special processing of @ format used to indicate insertion of thousand separators
+    ' as suggested in tdf#143193
+    TestUtil.AssertEqual(Format(562486.2356, "Standard"),       "562486.24",  "Format(562486.2356, ""Standard"")")
     TestUtil.AssertEqual(Format(0.7521, "Percent"),             "75.21%",      "Format(0.7521, ""Percent"")")
     TestUtil.AssertEqual(Format(562486.2356, "Scientific"),     "5.62E+05",    "Format(562486.2356, ""Scientific"")")
     TestUtil.AssertEqual(Format(-3456.789, "Scientific"),       "-3.46E+03",   "Format(-3456.789, ""Scientific"")")
@@ -157,9 +159,11 @@ errorHandler:
 End Sub
 Sub Custom_Null_Format_Sample()
     On Error GoTo errorHandler
-
+    TestUtil.AssertEqual(Format(23),                          "23",                  "Format(23)")
     TestUtil.AssertEqual(Format(Null, "null"),                "",                    "Format(Null, ""null"")")
     TestUtil.AssertEqual(Format(Null),                        "",                    "Format(Null)")
+    ' (Null, Null) does not actually return "". It produces an error in VBA, and here as well (Data type mismatch)
+    ' TestUtil.AssertEqual(Format(Null, Null),                  "",                    "Format(Null, Null)")
     TestUtil.AssertEqual(Format(Null, ";;;NNN"),              "NNN",                 "Format(Null, "";;;NNN"")")
     TestUtil.AssertEqual(Format(Null, ";;;123ABCDEFGHIJ123"), "123ABCDEFGHIJ123",    "Format(Null, "";;;123ABCDEFGHIJ123"")")
     Exit Sub
