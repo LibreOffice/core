@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb308f80_e207946e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-26T15:43:19Z",
+      "side": 1,
+      "message": "I suppose it\u0027s not a correct place to handle. You need to make the change closer to the string assignment code...\n\nMy idea is:\nthere is a difference in what Cell.String *returns* (so I\u0027d start at finding at what place there is the code that inserts LF vs CRLF into the result); *assigning* the string should be symmetrical - so after finding the code that I mentioned above, I\u0027d try to find a symmetrical code on assignment.",
+      "revId": "4878b01a1fd24457dd6f97799021fef416705b9c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
