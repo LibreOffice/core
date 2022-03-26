@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "777f4cb4_e6570586",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-26T12:51:37Z",
+      "side": 1,
+      "message": "Hi Mike! I need your advice on this problem. Imho, the fix for this problem is correct since Win encodes new lines using \\r\\n and Unix systems with \\n. However, if I make this change, the rtf line breaks (SHIFT+ENTER) disappear since they are also encoded using \\n on Unix systems (DomainMapper::lcl_text) and so I am not able to distinguish them (DomainMapper_Impl::HandleLineBreak). Is there any other character to insert a SHIFT+ENTER line break on Unix systems?",
+      "revId": "fdaa477f5c9980a0007480015a650df33d33ea06",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
