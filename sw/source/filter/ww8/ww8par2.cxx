@@ -39,6 +39,7 @@
 #include <editeng/pgrditem.hxx>
 #include <msfilter.hxx>
 #include <pam.hxx>
+#include <deletelistener.hxx>
 #include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
@@ -167,32 +168,6 @@ sal_uInt32 wwSectionManager::GetWWPageTopMargin() const
     return !maSegments.empty() ? maSegments.back().maSep.dyaTop : 0;
 }
 
-namespace
-{
-    class DeleteListener final : public SvtListener
-    {
-    private:
-        bool bObjectDeleted;
-    public:
-        explicit DeleteListener(SvtBroadcaster& rNotifier)
-            : bObjectDeleted(false)
-        {
-            StartListening(rNotifier);
-        }
-
-        virtual void Notify(const SfxHint& rHint) override
-        {
-            if (rHint.GetId() == SfxHintId::Dying)
-                bObjectDeleted = true;
-        }
-
-        bool WasDeleted() const
-        {
-            return bObjectDeleted;
-        }
-    };
-}
-
 sal_uInt16 SwWW8ImplReader::End_Footnote()
 {
     /*
@@ -252,7 +227,7 @@ sal_uInt16 SwWW8ImplReader::End_Footnote()
 
         SwFormatFootnote& rFormatFootnote = static_cast<SwFormatFootnote&>(pFN->GetAttr());
 
-        DeleteListener aDeleteListener(rFormatFootnote.GetNotifier());
+        SvtDeleteListener aDeleteListener(rFormatFootnote.GetNotifier());
 
         // read content of Ft-/End-Note
         Read_HdFtFootnoteText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
@@ -2783,46 +2758,6 @@ void WW8TabDesc::MoveOutsideTable()
         *m_pIo->m_pPaM->GetPoint() = *m_xTmpPos->GetPoint();
 }
 
-namespace
-{
-    class SwTableNodeListener final : public SwClient
-    {
-    private:
-        SwModify* m_pModify;
-
-        virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override
-        {
-            if (rHint.GetId() != SfxHintId::SwLegacyModify)
-                return;
-            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            if (pLegacy->GetWhich() == RES_OBJECTDYING)
-            {
-                m_pModify->Remove(this);
-                m_pModify = nullptr;
-            }
-        }
-
-    public:
-        SwTableNodeListener(SwModify* pModify)
-            : m_pModify(pModify)
-        {
-            m_pModify->Add(this);
-        }
-
-        bool WasDeleted() const
-        {
-            return !m_pModify;
-        }
-
-        virtual ~SwTableNodeListener() override
-        {
-            if (!m_pModify)
-                return;
-            m_pModify->Remove(this);
-        }
-    };
-}
-
 void WW8TabDesc::FinishSwTable()
 {
     m_pIo->m_xRedlineStack->closeall(*m_pIo->m_pPaM->GetPoint());
@@ -2833,7 +2768,7 @@ void WW8TabDesc::FinishSwTable()
     m_pIo->m_pLastAnchorPos.reset();
 
     SwTableNode* pTableNode = m_pTable->GetTableNode();
-    SwTableNodeListener aListener(pTableNode);
+    SwDeleteListener aListener(*pTableNode);
     m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
 
     if (xLastAnchorCursor)
