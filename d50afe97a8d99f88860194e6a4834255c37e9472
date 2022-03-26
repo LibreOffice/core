@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d026d69a_1e85c819",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-26T08:39:53Z",
+      "side": 1,
+      "message": "Stephan: would you consider this an improvement (I feel it cleaner, but who knows :)), or maybe are there any problems that I do not see here? (And I don\u0027t know it P1331R2 applies here anymore after the change.)",
+      "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
