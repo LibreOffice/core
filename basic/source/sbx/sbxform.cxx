@@ -371,26 +371,29 @@ OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, bool &
 OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, bool & bFound )
 {
     bFound = false;     // default...
-    sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
+    if (&sFormatStrg) {
+        sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
 
-    if( nPos >= 0 )
-    {
-        // the format-string for the Null is
-        // everything after the third ';'
-        OUString sTempStrg = sFormatStrg.copy( nPos+1 );
-        nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
         if( nPos >= 0 )
         {
-            sTempStrg = sTempStrg.copy( nPos+1 );
+            // the format-string for the Null is
+            // everything after the third ';'
+            OUString sTempStrg = sFormatStrg.copy( nPos+1 );
             nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
             if( nPos >= 0 )
             {
-                bFound = true;
-                return sTempStrg.copy( nPos+1 );
+                sTempStrg = sTempStrg.copy( nPos+1 );
+                nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
+                if( nPos >= 0 )
+                {
+                    bFound = true;
+                    return sTempStrg.copy( nPos+1 );
+                }
             }
         }
     }
-
+    // Edge case: null format string and value. Example: Format(Null)
+    bFound = true;
     return OUString();
 }
 

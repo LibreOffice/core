@@ -17,6 +17,7 @@ Function doUnitTest() As String
     'Custom_Datetime_Format_Sample
     Custom_Number_Format_Sample
     Custom_Text_Format_Sample
+    Custom_Null_Format_Sample
     testFormat
 
     doUnitTest = TestUtil.GetResult()
@@ -154,7 +155,17 @@ Sub Custom_Number_Format_Sample()
 errorHandler:
     TestUtil.ReportErrorHandler("Custom_Number_Format_Sample", Err, Error$, Erl)
 End Sub
+Sub Custom_Null_Format_Sample()
+    On Error GoTo errorHandler
 
+    TestUtil.AssertEqual(Format(Null, "null"),                "",                    "Format(Null, ""null"")")
+    TestUtil.AssertEqual(Format(Null),                        "",                    "Format(Null)")
+    TestUtil.AssertEqual(Format(Null, ";;;NNN"),              "NNN",                 "Format(Null, "";;;NNN"")")
+    TestUtil.AssertEqual(Format(Null, ";;;123ABCDEFGHIJ123"), "123ABCDEFGHIJ123",    "Format(Null, "";;;123ABCDEFGHIJ123"")")
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("Custom_Null_Format_Sample", Err, Error$, Erl)
+End Sub
 Sub Custom_Text_Format_Sample()
     On Error GoTo errorHandler
 
