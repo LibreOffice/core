@@ -25,6 +25,9 @@
 
 #include <rtl/character.hxx>
 
+#include <unotools/syslocale.hxx>
+#include <unotools/charclass.hxx>
+
 /*
 TODO: are there any Star-Basic characteristics unconsidered?
 
@@ -53,8 +56,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
                     // +3 for the exponent's value
                     // +1 for closing 0
 
-#define CREATE_1000SEP_CHAR         '@'
-
 #define FORMAT_SEPARATOR            ';'
 
 // predefined formats for the Format$()-command:
@@ -73,12 +74,20 @@ constexpr OUStringLiteral BASICFORMAT_ONOFF = u"On/Off";
 // all format-strings are compatible to Visual-Basic:
 constexpr OUStringLiteral GENERALNUMBER_FORMAT = u"0.############";
 constexpr OUStringLiteral FIXED_FORMAT = u"0.00";
-constexpr OUStringLiteral STANDARD_FORMAT = u"@0.00";
+constexpr OUStringLiteral STANDARD_FORMAT = u"0.00";
 constexpr OUStringLiteral PERCENT_FORMAT = u"0.00%";
 constexpr OUStringLiteral SCIENTIFIC_FORMAT = u"#.00E+00";
-// Comment: the character @ means that thousand-separators shall
-//          be generated. That's a StarBasic 'extension'.
 
+// Special VBA Format characters
+constexpr sal_Unicode VBASPECIAL_LOWER               = '<';
+constexpr sal_Unicode VBASPECIAL_UPPER               = '>';
+constexpr sal_Unicode VBASPECIAL_PLACEHOLDER_SPACE   = '@';
+constexpr sal_Unicode VBASPECIAL_PLACEHOLDER_NOSPACE = '&';
+constexpr sal_Unicode VBASPECIAL_PLACEHOLDER_FLIP    = '!';
+
+// Numeric VBA Format characters
+constexpr sal_Unicode VBANUM_PLACEHOLDER_ZERO       = '0';
+constexpr sal_Unicode VBANUM_PLACEHOLDER_NOZERO     = '#';
 
 static double get_number_of_digits( double dNumber )
 //double floor_log10_fabs( double dNumber )
@@ -390,7 +399,7 @@ OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, boo
             }
         }
     }
-
+    bFound = true;
     return OUString();
 }
 
@@ -401,6 +410,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
                 short& nNoOfExponentDigits, short& nNoOfOptionalExponentDigits,
                 bool& bPercent, bool& bCurrency, bool& bScientific,
                 bool& bGenerateThousandSeparator,
+                bool bStandardFormat,
                 short& nMultipleThousandSeparators )
 {
     sal_Int32 nLen;
@@ -417,7 +427,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
     bScientific = false;
     // from 11.7.97: as soon as a comma (point?) is found in the format string,
     // all three decimal powers are marked (i. e. thousand, million, ...)
-    bGenerateThousandSeparator = sFormatStrg.indexOf( ',' ) >= 0;
+    bGenerateThousandSeparator = ( sFormatStrg.indexOf( ',' ) >= 0 ) | bStandardFormat;
     nMultipleThousandSeparators = 0;
 
     for( sal_Int32 i = 0; i < nLen; i++ )
@@ -425,8 +435,8 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
         sal_Unicode c = sFormatStrg[ i ];
         switch( c )
         {
-        case '#':
-        case '0':
+        case VBANUM_PLACEHOLDER_NOZERO:
+        case VBANUM_PLACEHOLDER_ZERO:
             if( nState==0 )
             {
                 nNoOfDigitsLeft++;
@@ -434,7 +444,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
                 // ATTENTION: 'undefined' behaviour if # and 0 are combined!
                 // REMARK: #-placeholders are actually useless for
                 // scientific display before the decimal point!
-                if( c=='#' )
+                if( c==VBANUM_PLACEHOLDER_NOZERO )
                 {
                     nNoOfOptionalDigitsLeft++;
                 }
@@ -445,7 +455,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             }
             else if( nState==-1 )   // search 0 in the exponent
             {
-                if( c=='#' )    // # switches on the condition
+                if( c==VBANUM_PLACEHOLDER_NOZERO )    // # switches on the condition
                 {
                     nNoOfOptionalExponentDigits++;
                     nState = -2;
@@ -454,7 +464,7 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             }
             else if( nState==-2 )   // search # in the exponent
             {
-                if( c=='0' )
+                if( c==VBANUM_PLACEHOLDER_ZERO )
                 {
                     // ERROR: 0 after # in the exponent is NOT allowed!!
                     return;
@@ -501,9 +511,6 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             // Ignore next char
             i++;
             break;
-        case CREATE_1000SEP_CHAR:
-            bGenerateThousandSeparator = true;
-            break;
         }
     }
 }
@@ -542,7 +549,8 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                          nNoOfOptionalDigitsLeft, nNoOfExponentDigits,
                          nNoOfOptionalExponentDigits,
                          bPercent, bCurrency, bScientific,
-                         bGenerateThousandSeparator, nMultipleThousandSeparators );
+                         bGenerateThousandSeparator, bStandardFormat,
+                         nMultipleThousandSeparators );
     // special handling for special characters
     if( bPercent )
     {
@@ -808,18 +816,9 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
                 sReturnStrg.append(c);
             }
             break;
-        case CREATE_1000SEP_CHAR:
-            // ignore here, action has already been
-            // executed in AnalyseFormatString
-            break;
         default:
-            // output characters and digits, too (like in Visual-Basic)
-            if( ( c>='a' && c<='z' ) ||
-                ( c>='A' && c<='Z' ) ||
-                ( c>='1' && c<='9' ) )
-            {
-                sReturnStrg.append(c);
-            }
+            // output other characters
+            sReturnStrg.append(c);
         }
     }
 
@@ -852,9 +851,143 @@ OUString SbxBasicFormater::BasicFormatNull( const OUString& sFormatStrg )
     return "null";
 }
 
+OUString SbxBasicFormater::BasicFormat( const OUString& sInputStrg, const OUString& _sFormatStrg)
+{
+    OUStringBuffer aSb;
+    if( _sFormatStrg.getLength() == 1 && _sFormatStrg[0] == VBASPECIAL_LOWER )
+    {
+        SvtSysLocale aSysLocale;
+        const CharClass& rCharClass = aSysLocale.GetCharClass();
+        aSb = rCharClass.lowercase( sInputStrg );
+    }
+    else if( _sFormatStrg.getLength() == 1 && _sFormatStrg[0] ==  VBASPECIAL_UPPER )
+    {
+        SvtSysLocale aSysLocale;
+        const CharClass& rCharClass = aSysLocale.GetCharClass();
+        aSb = rCharClass.uppercase( sInputStrg );
+    }
+    else
+    {
+        sal_Int32 aPlaceholderCount = 0;
+        sal_Int32 aUsedPlaceholderCount = 0;
+        sal_Int32 aInputLength = sInputStrg.getLength();
+        bool bFlip = false;
+        // Count @ and &. Needed for index checking of current placeholder
+        // Also locate ! special character
+        for ( sal_Int32 i = 0; i < _sFormatStrg.getLength(); i++ )
+        {
+            auto c = _sFormatStrg[i];
+            switch ( c )
+            {
+                case VBASPECIAL_PLACEHOLDER_SPACE:
+                case VBASPECIAL_PLACEHOLDER_NOSPACE:
+                    aPlaceholderCount++;
+                    break;
+                case VBASPECIAL_PLACEHOLDER_FLIP:
+                    bFlip = true;
+                    break;
+            }
+        }
+        sal_Int32 aInitial = _sFormatStrg.getLength() - 1;
+        sal_Int32 aFinal = -1;
+        sal_Int32 aSign = -1;
+        sal_Int32 aIndex = aInputLength - 1;
+        if ( bFlip )
+        {
+            aInitial = 0;
+            aFinal = _sFormatStrg.getLength();
+            aSign = 1;
+            aIndex = 0;
+        }
+        for ( sal_Int32 i = aInitial; i != aFinal; i += aSign )
+        {
+            auto c = _sFormatStrg[i];
+            switch ( c )
+            {
+                case VBASPECIAL_PLACEHOLDER_NOSPACE:
+                case VBASPECIAL_PLACEHOLDER_SPACE:
+                {
+                    if ( aIndex >= 0 && aIndex < aInputLength )
+                    {
+                        if ( bFlip )
+                        {
+                            sal_Int32 j = aUsedPlaceholderCount;
+                            if ( aInputLength > aPlaceholderCount )
+                            {
+                                j = aInputLength - aPlaceholderCount + aUsedPlaceholderCount;
+                            }
+                            aSb.append( sInputStrg[j] );
+                        }
+                        else
+                        {
+                            sal_Int32 j = aInputLength - aUsedPlaceholderCount - 1;
+                            if ( aInputLength > aPlaceholderCount )
+                            {
+                                // Weird vba behavior. For input strings bigger than the amount
+                                // of placeholders, the placeholder replacing starts left to right
+                                // even when not flipped, and the remaining characters are appended
+                                // at the end
+                                // eg. Format("BAZ", "foo@bar")
+                                // expected result: fooZbar
+                                // actual result:   fooBbarAZ
+                                j = aPlaceholderCount - aUsedPlaceholderCount - 1;
+                            }
+                            aSb.insert( 0, sInputStrg[j] );
+                        }
+                        aUsedPlaceholderCount++;
+                    }
+                    else
+                    {
+                        if ( c == VBASPECIAL_PLACEHOLDER_SPACE )
+                        {
+                            if ( bFlip )
+                            {
+                                aSb.append( ' ' );
+                            }
+                            else
+                            {
+                                aSb.insert( 0, ' ' );
+                            }
+                        }
+                    }
+                    aIndex += aSign;
+                    break;
+                }
+                case VBASPECIAL_PLACEHOLDER_FLIP:
+                case VBASPECIAL_UPPER:
+                case VBASPECIAL_LOWER:
+                    // These characters are ignored here
+                    break;
+                default:
+                {
+                    if ( bFlip )
+                    {
+                        aSb.append( c );
+                    }
+                    else
+                    {
+                        aSb.insert( 0, c );
+                    }
+                    break;
+                }
+            }
+        }
+        // Check if theres remaining characters and append them to the end if bFlip == false
+        if ( !bFlip )
+        {
+            for ( int i = aUsedPlaceholderCount; i < aInputLength; i++ )
+            {
+                aSb.append( sInputStrg[i] );
+            }
+        }
+    }
+    return aSb.makeStringAndClear();
+}
+
 OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormatStrg )
 {
     bool bPosFormatFound,bNegFormatFound,b0FormatFound;
+    bStandardFormat = false;
     OUString sFormatStrg = _sFormatStrg;
 
     // analyse format-string concerning predefined formats:
@@ -872,6 +1005,7 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormat
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_STANDARD ) )
     {
+        bStandardFormat = true;
         sFormatStrg = STANDARD_FORMAT;
     }
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_PERCENT ) )
@@ -994,6 +1128,45 @@ bool SbxBasicFormater::isBasicFormat( const OUString& sFormatStrg )
     if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_ONOFF ) )
     {
         return true;
+    }
+    // Look for special characters
+    for ( sal_Int32 i = 0; i < sFormatStrg.getLength(); i++ )
+    {
+        auto c = sFormatStrg[i];
+        switch ( c )
+        {
+            case VBASPECIAL_PLACEHOLDER_SPACE:
+            case VBASPECIAL_PLACEHOLDER_NOSPACE:
+            case VBASPECIAL_PLACEHOLDER_FLIP:
+            case VBASPECIAL_LOWER:
+            case VBASPECIAL_UPPER:
+                return true;
+            default:
+                break;
+        }
+    }
+    return false;
+}
+
+bool SbxBasicFormater::overridesNumericChars( const OUString& sFormatStrg )
+{
+    for ( sal_Int32 i = 0; i < sFormatStrg.getLength(); i++ )
+    {
+        auto c = sFormatStrg[i];
+        switch ( c )
+        {
+            case VBASPECIAL_PLACEHOLDER_SPACE:
+            case VBASPECIAL_PLACEHOLDER_NOSPACE:
+            case VBASPECIAL_PLACEHOLDER_FLIP:
+            case VBASPECIAL_LOWER:
+            case VBASPECIAL_UPPER:
+                return true;
+            case VBANUM_PLACEHOLDER_ZERO:
+            case VBANUM_PLACEHOLDER_NOZERO:
+                return false;
+            default:
+                break;
+        }
     }
     return false;
 }
