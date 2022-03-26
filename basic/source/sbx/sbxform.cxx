@@ -53,8 +53,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
                     // +3 for the exponent's value
                     // +1 for closing 0
 
-#define CREATE_1000SEP_CHAR         '@'
-
 #define FORMAT_SEPARATOR            ';'
 
 // predefined formats for the Format$()-command:
@@ -371,24 +369,22 @@ OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, bool &
 OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, bool & bFound )
 {
     bFound = false;     // default...
-    if (&sFormatStrg) {
-        sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
+    sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
 
+    if( nPos >= 0 )
+    {
+        // the format-string for the Null is
+        // everything after the third ';'
+        OUString sTempStrg = sFormatStrg.copy( nPos+1 );
+        nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
         if( nPos >= 0 )
         {
-            // the format-string for the Null is
-            // everything after the third ';'
-            OUString sTempStrg = sFormatStrg.copy( nPos+1 );
+            sTempStrg = sTempStrg.copy( nPos+1 );
             nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
             if( nPos >= 0 )
             {
-                sTempStrg = sTempStrg.copy( nPos+1 );
-                nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
-                if( nPos >= 0 )
-                {
-                    bFound = true;
-                    return sTempStrg.copy( nPos+1 );
-                }
+                bFound = true;
+                return sTempStrg.copy( nPos+1 );
             }
         }
     }
@@ -503,9 +499,6 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
         case '\\':
             // Ignore next char
             i++;
-            break;
-        case CREATE_1000SEP_CHAR:
-            bGenerateThousandSeparator = true;
             break;
         }
     }
@@ -810,10 +803,6 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
             {
                 sReturnStrg.append(c);
             }
-            break;
-        case CREATE_1000SEP_CHAR:
-            // ignore here, action has already been
-            // executed in AnalyseFormatString
             break;
         default:
             // output characters and digits, too (like in Visual-Basic)
