@@ -53,8 +53,6 @@ COMMENT: Visual-Basic treats the following (invalid) format-strings
                     // +3 for the exponent's value
                     // +1 for closing 0
 
-#define CREATE_1000SEP_CHAR         '@'
-
 #define FORMAT_SEPARATOR            ';'
 
 // predefined formats for the Format$()-command:
@@ -504,9 +502,6 @@ void SbxBasicFormater::AnalyseFormatString( const OUString& sFormatStrg,
             // Ignore next char
             i++;
             break;
-        case CREATE_1000SEP_CHAR:
-            bGenerateThousandSeparator = true;
-            break;
         }
     }
 }
@@ -810,10 +805,6 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
             {
                 sReturnStrg.append(c);
             }
-            break;
-        case CREATE_1000SEP_CHAR:
-            // ignore here, action has already been
-            // executed in AnalyseFormatString
             break;
         default:
             // output characters and digits, too (like in Visual-Basic)
