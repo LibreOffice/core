@@ -39,6 +39,7 @@
 #include <editeng/pgrditem.hxx>
 #include <msfilter.hxx>
 #include <pam.hxx>
+#include <deletelistener.hxx>
 #include <doc.hxx>
 #include <IDocumentStylePoolAccess.hxx>
 #include <docary.hxx>
@@ -165,69 +166,6 @@ sal_uInt32 wwSectionManager::GetTextAreaWidth() const
 sal_uInt32 wwSectionManager::GetWWPageTopMargin() const
 {
     return !maSegments.empty() ? maSegments.back().maSep.dyaTop : 0;
-}
-
-namespace
-{
-    class SvtDeleteListener final : public SvtListener
-    {
-    private:
-        bool bObjectDeleted;
-    public:
-        explicit SvtDeleteListener(SvtBroadcaster& rNotifier)
-            : bObjectDeleted(false)
-        {
-            StartListening(rNotifier);
-        }
-
-        virtual void Notify(const SfxHint& rHint) override
-        {
-            if (rHint.GetId() == SfxHintId::Dying)
-                bObjectDeleted = true;
-        }
-
-        bool WasDeleted() const
-        {
-            return bObjectDeleted;
-        }
-    };
-
-    class SwDeleteListener final : public SwClient
-    {
-    private:
-        SwModify* m_pModify;
-
-        virtual void SwClientNotify(const SwModify&, const SfxHint& rHint) override
-        {
-            if (rHint.GetId() != SfxHintId::SwLegacyModify)
-                return;
-            auto pLegacy = static_cast<const sw::LegacyModifyHint*>(&rHint);
-            if (pLegacy->GetWhich() == RES_OBJECTDYING)
-            {
-                m_pModify->Remove(this);
-                m_pModify = nullptr;
-            }
-        }
-
-    public:
-        SwDeleteListener(SwModify* pModify)
-            : m_pModify(pModify)
-        {
-            m_pModify->Add(this);
-        }
-
-        bool WasDeleted() const
-        {
-            return !m_pModify;
-        }
-
-        virtual ~SwDeleteListener() override
-        {
-            if (!m_pModify)
-                return;
-            m_pModify->Remove(this);
-        }
-    };
 }
 
 sal_uInt16 SwWW8ImplReader::End_Footnote()
@@ -2827,7 +2765,7 @@ void WW8TabDesc::FinishSwTable()
     m_pIo->m_pLastAnchorPos.reset();
 
     SwTableNode* pTableNode = m_pTable->GetTableNode();
-    SwDeleteListener aListener(pTableNode);
+    SwDeleteListener aListener(*pTableNode);
     m_pIo->m_xRedlineStack = std::move(mxOldRedlineStack);
 
     if (xLastAnchorCursor)
