@@ -4625,10 +4625,10 @@ check_use_ld()
             fi
         else
             # I tried to use gcc's '-B<path>' and a directory + symlink setup in
-	    # $BUILDDIR, but libtool always filtered-out that option, so gcc wouldn't
-	    # pickup the alternative linker, when called by libtool for linking.
+            # $BUILDDIR, but libtool always filtered-out that option, so gcc wouldn't
+            # pickup the alternative linker, when called by libtool for linking.
             # For mold, one can use LD_PRELOAD=/usr/lib/mold/mold-wrapper.so instead.
-	    AC_MSG_ERROR([A linker path is just supported with clang, because of libtool's -B filtering!])
+            AC_MSG_ERROR([A linker path is just supported with clang, because of libtool's -B filtering!])
         fi
     fi
     use_ld_fail_if_error=$2
@@ -12965,6 +12965,21 @@ then
         fi
         if test ! -f "${qt5_platformsdir}"/libqwasm.a -o ! -f "$QT5_PLATFORMS_SRCDIR"/wasm_shell.html; then
             AC_MSG_ERROR([No Qt5 WASM QPA plugin found in ${qt5_platformsdir} or ${QT5_PLATFORMS_SRCDIR}])
+        fi
+
+        EMSDK_LLVM_NM="$(em-config EMSCRIPTEN_ROOT)"/../bin/llvm-nm
+        if ! test -x "$EMSDK_LLVM_NM"; then
+            AC_MSG_ERROR([Missing llvm-nm expected to be found at "$EMSDK_LLVM_NM".])
+        fi
+        if test ! -f "${qt5_libdir}"/libQt5Gui.a; then
+            AC_MSG_ERROR([No Qt5 WASM libQt5Gui.a in ${qt5_libdir}])
+        fi
+        QT5_WASM_SJLJ="`${EMSDK_LLVM_NM} "${qt5_libdir}"/libQt5Gui.a | $GREP emscripten_longjmp 2>/dev/null`"
+        if test "$ENABLE_WASM_EXCEPTIONS" = TRUE -a -n "$QT5_WASM_SJLJ"; then
+            AC_MSG_ERROR(['emscripten_longjmp' symbol found in libQt5Gui.a (missing '-s SUPPORT_LONGJMP=wasm'). See static/README.wasm.md.])
+        fi
+        if test "$ENABLE_WASM_EXCEPTIONS" != TRUE -a -z "$QT5_WASM_SJLJ"; then
+            AC_MSG_ERROR(['emscripten_longjmp' symbol not found in libQt5Gui.a. You probably use an incompatible Qt build with '-s SUPPORT_LONGJMP=wasm'.])
         fi
     fi
 
