@@ -498,6 +498,12 @@ constexpr OUStringLiteral VBAFORMAT_UPPERCASE = u">";
 
 void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
 {
+    // Null check at the start, fixes Incompatible data type error
+    SbxDataType eType = GetType();
+    if (eType == SbxNULL) {
+        rRes = SbxBasicFormater::BasicFormatNull( *pFmt );
+        return;
+    }
     short nComma = 0;
     double d = 0;
 
@@ -630,8 +636,6 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
         }
     }
 #endif
-
-    SbxDataType eType = GetType();
     switch( eType )
     {
     case SbxCHAR:
@@ -642,8 +646,6 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
     case SbxULONG:
     case SbxINT:
     case SbxUINT:
-    case SbxNULL:       // #45929 NULL with a little cheating
-        nComma = 0;     goto cvt;
     case SbxSINGLE:
         nComma = 6;     goto cvt;
     case SbxDOUBLE:
@@ -705,17 +707,10 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
             // here are problems with ;;;Null because this method is only
             // called, if SbxValue is a number!!!
             // in addition rAppData.pBasicFormater->BasicFormatNull( *pFmt ); could be called!
-            if( eType != SbxNULL )
-            {
-                rRes = rAppData.pBasicFormater->BasicFormat( d ,*pFmt );
-            }
-            else
-            {
-                rRes = SbxBasicFormater::BasicFormatNull( *pFmt );
-            }
-
+            rRes = rAppData.pBasicFormater->BasicFormat( d ,*pFmt );
         }
         else
+            // Seems to jump here when you run Format(Null)
             ImpCvtNum( GetDouble(), nComma, rRes );
         break;
     case SbxSTRING:
