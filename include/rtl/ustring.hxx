@@ -120,15 +120,10 @@ private:
     union {
         rtl_uString str;
         struct {
-            oslInterlockedCount refCount;
-            sal_Int32 length;
+            oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+            sal_Int32 length = N - 1;
             sal_Unicode buffer[N];
-        } more =
-            {
-                0x40000000, // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
-                N - 1,
-                {} //TODO: drop initialization for C++20 (P1331R2)
-            };
+        } more{}; //TODO: drop initialization for C++20 (P1331R2)
     };
 };
 
