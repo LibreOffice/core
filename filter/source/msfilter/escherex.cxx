@@ -2451,13 +2451,13 @@ static void ConvertEnhancedCustomShapeEquation(
     sal_Int32 i;
     for ( i = 0; i < nEquationSourceCount; i++ )
     {
-        EnhancedCustomShape2d aCustoShape2d(
+        EnhancedCustomShape2d aCustomShape2d(
             const_cast< SdrObjCustomShape& >(rSdrObjCustomShape));
         try
         {
             std::shared_ptr< EnhancedCustomShape::ExpressionNode > aExpressNode(
                 EnhancedCustomShape::FunctionParser::parseFunction(
-                    sEquationSource[ i ], aCustoShape2d));
+                    sEquationSource[ i ], aCustomShape2d));
             drawing::EnhancedCustomShapeParameter aPara( aExpressNode->fillNode( rEquations, nullptr, 0 ) );
             if ( aPara.Type != drawing::EnhancedCustomShapeParameterType::EQUATION )
             {
