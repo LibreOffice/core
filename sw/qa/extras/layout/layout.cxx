@@ -2311,6 +2311,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testUXTSOREL) { createDoc("LIBREOFFICE-UXTS
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92) { createDoc("forcepoint92.doc"); }
 
+#if 0 // no createSwWebDoc
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint94.html");
+}
+#endif
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
