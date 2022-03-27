@@ -183,10 +183,6 @@ void RTFTokenizer::popGroup() { m_nGroup--; }
 RTFError RTFTokenizer::resolveKeyword()
 {
     char ch;
-    OStringBuffer aBuf(32);
-    bool bNeg = false;
-    bool bParam = false;
-    int nParam = 0;
 
     Strm().ReadChar(ch);
     if (Strm().eof())
@@ -194,12 +190,11 @@ RTFError RTFTokenizer::resolveKeyword()
 
     if (!rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
-        aBuf.append(ch);
-        OString aKeyword = aBuf.makeStringAndClear();
         // control symbols aren't followed by a space, so we can return here
         // without doing any SeekRel()
-        return dispatchKeyword(aKeyword, bParam, nParam);
+        return dispatchKeyword(OString(ch), false, 0);
     }
+    OStringBuffer aBuf(32);
     while (rtl::isAsciiAlpha(static_cast<unsigned char>(ch)))
     {
         aBuf.append(ch);
@@ -215,6 +210,7 @@ RTFError RTFTokenizer::resolveKeyword()
         }
     }
 
+    bool bNeg = false;
     if (ch == '-')
     {
         // in case we'll have a parameter, that will be negative
@@ -223,6 +219,8 @@ RTFError RTFTokenizer::resolveKeyword()
         if (Strm().eof())
             return RTFError::UNEXPECTED_EOF;
     }
+    bool bParam = false;
+    int nParam = 0;
     if (rtl::isAsciiDigit(static_cast<unsigned char>(ch)))
     {
         OStringBuffer aParameter;
