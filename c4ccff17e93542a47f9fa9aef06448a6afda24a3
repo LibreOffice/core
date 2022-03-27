@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2624f433_1113eb29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-27T21:00:38Z",
+      "side": 1,
+      "message": "\u003e Patch Set 7:\n\u003e \n\u003e Build queued https://ci.libreoffice.org/job/gerrit_master/111124/\n\nWindows failed, that has to be a bug.",
+      "revId": "c4ccff17e93542a47f9fa9aef06448a6afda24a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
