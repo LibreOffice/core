@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f46622bf_34a98105",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-27T14:37:59Z",
+      "side": 0,
+      "message": "Lol. It only required to read one line above, to see the overflow/underflow guard :-) So yes, fine to drop here, as one of *intended* effects of using hypot.",
+      "revId": "e8c95b796626cb9db163f5d563fa67f38a5e92b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e8586c6_b0b3374f",
         "filename": "chart2/source/view/charttypes/Splines.cxx",
         "patchSetId": 4
