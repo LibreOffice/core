@@ -269,6 +269,14 @@ void SwLayoutWriter::testUXTSOREL() { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
 //just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint92() { createDoc("forcepoint92.doc"); }
 
+#if 0 // no createSwWebDoc
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint94.html");
+}
+#endif
+
 void SwLayoutWriter::testTdf118058()
 {
     SwDoc* pDoc = createDoc("tdf118058.fodt");
