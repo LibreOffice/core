@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6154e8d5_d1d33d60",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-27T19:34:28Z",
+      "side": 1,
+      "message": "Thanks!",
+      "revId": "51f1312ae45db86b2a899bc98c0f7a55411d512b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4fadf103_bdaa5c60",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 421,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-27T19:34:28Z",
+      "side": 1,
+      "message": "Still it would be best to remove it altogether. The condition below is equal to\n\n    if (dx \u003d\u003d 0 \u0026\u0026 dy \u003d\u003d 0)\n\nwhich is better written explicitly this way (it is cleaner, not telling that it\u0027s also more efficient).\n\nBy the way, nice that you moved the definition to where it was used; this file uses the odd (C-style) declarations outside of use sites - including those dx/dy.",
+      "revId": "51f1312ae45db86b2a899bc98c0f7a55411d512b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
