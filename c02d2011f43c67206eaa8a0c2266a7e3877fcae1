@@ -22,6 +22,30 @@
       },
       "revId": "c02d2011f43c67206eaa8a0c2266a7e3877fcae1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a40fc4a_4629dc12",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1003375
+      },
+      "writtenOn": "2022-03-27T12:17:27Z",
+      "side": 1,
+      "message": "Thanks for the feedback. Would it be a good idea to display a message box instead?",
+      "parentUuid": "09bc9ab8_81645fc3",
+      "range": {
+        "startLine": 183,
+        "startChar": 55,
+        "endLine": 183,
+        "endChar": 74
+      },
+      "revId": "c02d2011f43c67206eaa8a0c2266a7e3877fcae1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
