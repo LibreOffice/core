@@ -56,8 +56,7 @@
 #define BDADDR_ANY (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}})
 #define BDADDR_ALL (&(bdaddr_t) {{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}})
 #define BDADDR_LOCAL (&(bdaddr_t) {{0, 0, 0, 0xff, 0xff, 0xff}})
-#ifdef __cplusplus
-#endif
+#pragma once
 typedef struct
 {
   uint8_t b[6];
