@@ -53,7 +53,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147861_customField, "tdf147861_customField.docx"
 {
     // These should each be specific values, not a shared DocProperty
     getParagraph(1, "CustomEditedTitle"); // edited
-    // A couple of nulls at the end of the string thwarted all attemps at an "equals" comparison.
+    // A couple of nulls at the end of the string thwarted all attempts at an "equals" comparison.
     CPPUNIT_ASSERT(getParagraph(2)->getString().startsWith(" INSERT Custom Title here"));
     getParagraph(3, "My Title"); // edited
 
