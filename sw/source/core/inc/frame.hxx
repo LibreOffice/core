@@ -443,7 +443,7 @@ protected:
     bool mbColLocked     : 1;  // lock Grow/Shrink for column-wise section
                                   // or fly frames, will be set in Format
     bool m_isInDestroy : 1;
-    bool mbForbidDelete : 1;
+    int mnForbidDelete;
 
     void ColLock()      { mbColLocked = true; }
     void ColUnlock()    { mbColLocked = false; }
@@ -884,7 +884,7 @@ public:
     bool IsProtected() const;
 
     bool IsColLocked()  const { return mbColLocked; }
-    virtual bool IsDeleteForbidden() const { return mbForbidDelete; }
+    virtual bool IsDeleteForbidden() const { return mnForbidDelete > 0; }
 
     /// this is the only way to delete a SwFrame instance
     static void DestroyFrame(SwFrame *const pFrame);
@@ -924,8 +924,8 @@ public:
     void RegisterToFormat( SwFormat& rFormat );
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
 
-    void ForbidDelete()      { mbForbidDelete = true; }
-    void AllowDelete()    { mbForbidDelete = false; }
+    void ForbidDelete() { ++mnForbidDelete; }
+    void AllowDelete() { assert(mnForbidDelete > 0); --mnForbidDelete; }
 
     drawinglayer::attribute::SdrAllFillAttributesHelperPtr getSdrAllFillAttributesHelper() const;
     bool supportsFullDrawingLayerFillAttributeSet() const;
@@ -1262,8 +1262,7 @@ public:
     //it in e.g. SwSectionFrame::MergeNext etc because we will need it
     //again after the SwFrameDeleteGuard dtor
     explicit SwFrameDeleteGuard(SwFrame* pFrame)
-        : m_pForbidFrame((pFrame && !pFrame->IsDeleteForbidden()) ?
-            pFrame : nullptr)
+        : m_pForbidFrame(pFrame)
     {
         if (m_pForbidFrame)
             m_pForbidFrame->ForbidDelete();
