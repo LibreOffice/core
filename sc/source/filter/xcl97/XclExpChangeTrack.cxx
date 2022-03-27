@@ -29,6 +29,7 @@
 #include <document.hxx>
 #include <editutil.hxx>
 #include <root.hxx>
+#include <tools/Guid.hxx>
 
 #include <oox/export/utils.hxx>
 #include <oox/token/namespaces.hxx>
@@ -37,16 +38,6 @@
 #include <svl/sharedstring.hxx>
 
 using namespace oox;
-
-static OString lcl_GuidToOString( sal_uInt8 aGuid[ 16 ] )
-{
-    char sBuf[ 40 ];
-    snprintf( sBuf, sizeof( sBuf ),
-            "{%02X%02X%02X%02X-%02X%02X-%02X%02X-%02X%02X-%02X%02X%02X%02X%02X%02X}",
-            aGuid[ 0 ], aGuid[ 1 ], aGuid[ 2 ], aGuid[ 3 ], aGuid[ 4 ], aGuid[ 5 ], aGuid[ 6 ], aGuid[ 7 ],
-            aGuid[ 8 ], aGuid[ 9 ], aGuid[ 10 ], aGuid[ 11 ], aGuid[ 12 ], aGuid[ 13 ], aGuid[ 14 ], aGuid[ 15 ] );
-    return OString(sBuf);
-}
 
 static OString lcl_DateTimeToOString( const DateTime& rDateTime )
 {
@@ -351,8 +342,9 @@ std::size_t XclExpChTrHeader::GetLen() const
 void XclExpChTrHeader::SaveXml( XclExpXmlStream& rRevisionHeadersStrm )
 {
     sax_fastparser::FSHelperPtr pHeaders = rRevisionHeadersStrm.GetCurrentStream();
+    tools::Guid aGuid(aGUID);
     rRevisionHeadersStrm.WriteAttributes(
-            XML_guid,               lcl_GuidToOString(aGUID),
+            XML_guid,               aGuid.getString(),
             XML_lastGuid,           nullptr,   // OOXTODO
             XML_shared,             nullptr,   // OOXTODO
             XML_diskRevisions,      nullptr,   // OOXTODO
@@ -378,10 +370,11 @@ void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
 
     pHeaders->write("<")->writeId(XML_headers);
 
+    tools::Guid aGuid(maGUID);
     rStrm.WriteAttributes(
         XML_xmlns,              rStrm.getNamespaceURL(OOX_NS(xls)),
         FSNS(XML_xmlns, XML_r), rStrm.getNamespaceURL(OOX_NS(officeRel)),
-        XML_guid,               lcl_GuidToOString(maGUID),
+        XML_guid,               aGuid.getString(),
         XML_lastGuid,           nullptr,   // OOXTODO
         XML_shared,             nullptr,   // OOXTODO
         XML_diskRevisions,      nullptr,   // OOXTODO
@@ -426,8 +419,9 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
             CREATE_OFFICEDOC_RELATION_TYPE("revisionLog"),
             &aRelId);
 
+    tools::Guid aGuid(maGUID);
     rStrm.WriteAttributes(
-        XML_guid, lcl_GuidToOString(maGUID),
+        XML_guid, aGuid.getString(),
         XML_dateTime, lcl_DateTimeToOString(maDateTime),
         XML_userName, maUserName,
         FSNS(XML_r, XML_id), aRelId);
