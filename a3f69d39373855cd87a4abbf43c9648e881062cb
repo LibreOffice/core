@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1fcabb86_78c183f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-27T18:32:07Z",
+      "side": 1,
+      "message": "\u003e Patch Set 6:\n\u003e \n\u003e Build queued https://ci.libreoffice.org/job/gerrit_master/111118/\n\nRebase was so Jenkins recompiles, because I changed the commit message and he didn\u0027t.\nPlease do let me know if there was an easier way to do this.",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
