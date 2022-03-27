@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b31c1aad_a4ed56d6",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-03-27T15:04:57Z",
+      "side": 0,
+      "message": "Nice catch! Could this be added to easy hack description?",
+      "parentUuid": "f46622bf_34a98105",
+      "revId": "e8c95b796626cb9db163f5d563fa67f38a5e92b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0e8586c6_b0b3374f",
         "filename": "chart2/source/view/charttypes/Splines.cxx",
         "patchSetId": 4
