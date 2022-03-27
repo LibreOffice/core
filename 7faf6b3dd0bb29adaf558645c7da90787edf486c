@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28c3f66c_ce6876ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-03-27T21:09:59Z",
+      "side": 1,
+      "message": "Please focus on sqrt -\u003e hypot and related changes. Cleanup could be done in separate change.",
+      "revId": "7faf6b3dd0bb29adaf558645c7da90787edf486c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
