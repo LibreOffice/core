@@ -2861,6 +2861,9 @@ bool SwContentFrame::MoveFootnoteCntFwd( bool bMakePage, SwFootnoteBossFrame *pO
                             OSL_ENSURE( pTmp->IsTabFrame(), "GetNextSctLeaf: Wrong Type" );
                             pTmpNxt = static_cast<SwTabFrame*>(pTmp);
                         }
+                        // we will dereference pNewUp in the following MoveSubTree call
+                        // so it certainly should not be deleted before that
+                        SwFrameDeleteGuard aDeleteGuard(pNewUp);
                         pTmpNxt->MoveSubTree( pTmpFootnote, pNewUp->GetNext() );
                     }
                 }
