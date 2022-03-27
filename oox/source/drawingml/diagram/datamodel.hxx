@@ -204,7 +204,7 @@ private:
     // the model definition,
     // - FillStyle
     // - Texts for oox::drawingml::Points/dgm::Points, associated by ModelId
-    // - logic connections/assoziations
+    // - logic connections/associations
     // - data point entries
     FillPropertiesPtr mpFillProperties;
     PointTextMap      maPointTextMap;

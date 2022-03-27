@@ -3897,7 +3897,7 @@ bool DrawingML::WriteCustomGeometry(
         return false;
     }
 
-    // A EnhancedCustomShape2d caches the equation results. Therefor we use only one of it for the
+    // A EnhancedCustomShape2d caches the equation results. Therefore we use only one of it for the
     // entire method.
     const EnhancedCustomShape2d aCustomShape2d(const_cast<SdrObjCustomShape&>(rSdrObjCustomShape));
 
@@ -4279,7 +4279,7 @@ bool DrawingML::WriteCustomGeometry(
                                 double fHR = std::abs(fCurrentY - fY);
                                 double fStartAngle(0.0);
                                 double fSwingAngle(0.0);
-                                // The starting direction of the arc toggles beween X and Y
+                                // The starting direction of the arc toggles between X and Y
                                 if ((rSegment.Command == ELLIPTICALQUADRANTX && !(k % 2))
                                     || (rSegment.Command == ELLIPTICALQUADRANTY && (k % 2)))
                                 {
