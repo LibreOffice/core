@@ -876,6 +876,8 @@ void SwObjectFormatterTextFrame::FormatAnchorFrameAndItsPrevs( SwTextFrame& _rAn
                 // Thus, check for valid <pFrame>.
                 while ( pFrame && pFrame != pSectFrame )
                 {
+                    SwFrameDeleteGuard aDeleteFrameGuard(pFrame);
+
                     if ( pFrame->IsLayoutFrame() )
                         lcl_FormatContentOfLayoutFrame( static_cast<SwLayoutFrame*>(pFrame) );
                     else
