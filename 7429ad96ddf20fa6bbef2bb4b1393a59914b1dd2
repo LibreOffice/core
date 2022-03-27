@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71283e35_03793650",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-27T13:12:25Z",
+      "side": 1,
+      "message": "I think it’s ok here, retrieving data from Vector Graphic Data",
+      "revId": "7429ad96ddf20fa6bbef2bb4b1393a59914b1dd2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
