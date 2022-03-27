@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13add994_3e6734c3",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-27T17:51:20Z",
+      "side": 0,
+      "message": "Good catch indeed. This should be resolved in the latest patchset. I kept the fDiffMax variable as it is used in line #424, but removed the unnecessary divisions/multiplications.",
+      "parentUuid": "b31c1aad_a4ed56d6",
+      "revId": "e8c95b796626cb9db163f5d563fa67f38a5e92b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e8586c6_b0b3374f",
