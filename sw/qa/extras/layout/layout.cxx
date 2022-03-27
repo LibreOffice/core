@@ -2947,6 +2947,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepointFootnoteFrame)
 //just care it doesn't crash/assert
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testN4LA0OHZ) { createDoc("LIBREOFFICE-N4LA0OHZ.rtf"); }
 
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint92) { createDoc("forcepoint92.doc"); }
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
 {
     SwDoc* pDoc = createDoc("tdf118058.fodt");
