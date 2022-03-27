@@ -36,6 +36,7 @@ public:
     void testUXTSOREL();
     void testForcepoint90();
     void testForcepoint92();
+    void testForcepoint93();
     void testTdf118058();
     void testTdf117188();
     void testTdf119875();
@@ -60,6 +61,7 @@ public:
 //FIXME this asserts    CPPUNIT_TEST(testUXTSOREL);
     CPPUNIT_TEST(testForcepoint90);
     CPPUNIT_TEST(testForcepoint92);
+    CPPUNIT_TEST(testForcepoint93);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
@@ -275,6 +277,13 @@ void SwLayoutWriter::testForcepoint90()
 
 //just care it doesn't crash/assert
 void SwLayoutWriter::testForcepoint92() { createDoc("forcepoint92.doc"); }
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testForcepoint93()
+{
+//fails to load    createDoc("forcepoint93-1.rtf");
+//layout loop    createDoc("forcepoint93-2.rtf");
+}
 
 #if 0 // no createSwWebDoc
 //just care it doesn't crash/assert
