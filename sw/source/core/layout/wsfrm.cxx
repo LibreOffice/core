@@ -319,7 +319,7 @@ SwFrame::SwFrame( sw::BroadcastingModify *pMod, SwFrame* pSib )
     mbInfSct ( false ),
     mbColLocked(false),
     m_isInDestroy(false),
-    mbForbidDelete(false)
+    mnForbidDelete(0)
 {
     OSL_ENSURE( pMod, "No frame format given." );
 }
