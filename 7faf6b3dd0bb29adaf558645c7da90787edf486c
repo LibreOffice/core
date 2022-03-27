@@ -52,6 +52,24 @@
       "parentUuid": "391ec327_cc71af42",
       "revId": "7faf6b3dd0bb29adaf558645c7da90787edf486c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc73d27c_7a0f8596",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-27T22:27:22Z",
+      "side": 1,
+      "message": "Okay done. Are such small changes (the ones I discarded, I mean) worth making a new patch for? Just asking in general, I\u0027m new to open source.",
+      "parentUuid": "a93c3d31_9138dc61",
+      "revId": "7faf6b3dd0bb29adaf558645c7da90787edf486c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
