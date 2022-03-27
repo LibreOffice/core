@@ -34,6 +34,7 @@ public:
     void testForcepoint76();
     void testN4LA0OHZ();
     void testUXTSOREL();
+    void testForcepoint92();
     void testTdf118058();
     void testTdf117188();
     void testTdf119875();
@@ -56,6 +57,7 @@ public:
     CPPUNIT_TEST(testForcepoint76);
     CPPUNIT_TEST(testN4LA0OHZ);
 //FIXME this asserts    CPPUNIT_TEST(testUXTSOREL);
+    CPPUNIT_TEST(testForcepoint92);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
     CPPUNIT_TEST(testTdf119875);
@@ -263,6 +265,9 @@ void SwLayoutWriter::testN4LA0OHZ() { createDoc("LIBREOFFICE-N4LA0OHZ.rtf"); }
 //just care it doesn't crash/assert
 void SwLayoutWriter::testUXTSOREL() { createDoc("LIBREOFFICE-UXTSOREL.rtf"); }
 #endif
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testForcepoint92() { createDoc("forcepoint92.doc"); }
 
 void SwLayoutWriter::testTdf118058()
 {
