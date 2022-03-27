@@ -26,6 +26,7 @@
 #include <viewimp.hxx>
 #include <fesh.hxx>
 #include <swtable.hxx>
+#include <deletelistener.hxx>
 #include <dflyobj.hxx>
 #include <anchoreddrawobject.hxx>
 #include <fmtanchr.hxx>
@@ -2135,13 +2136,18 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             }
             SwFootnoteBossFrame *pOldBoss = bFootnotesInDoc ? FindFootnoteBossFrame( true ) : nullptr;
             bool bReformat;
+            std::optional<SfxDeleteListener> oDeleteListener;
+            if (pOldBoss)
+                oDeleteListener.emplace(*pOldBoss);
             SwFrameDeleteGuard g(this);
             if ( MoveBwd( bReformat ) )
             {
+                SAL_WARN_IF(oDeleteListener && oDeleteListener->WasDeleted(), "sw.layout", "SwFootnoteBossFrame unexpectedly deleted");
+
                 aRectFnSet.Refresh(this);
                 bMovedBwd = true;
                 aNotify.SetLowersComplete( false );
-                if ( bFootnotesInDoc )
+                if (bFootnotesInDoc && !oDeleteListener->WasDeleted())
                     MoveLowerFootnotes( nullptr, pOldBoss, nullptr, true );
                 if ( bReformat || bKeep )
                 {
