@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e8586c6_b0b3374f",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 423,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-27T14:30:23Z",
+      "side": 0,
+      "message": "The fDiffMax thing here puzzles me. What is this for? dx and dy are divided by it, which makes its square in denominator under the square root of square root, and then end result is the factor is just cancelled.\n\n(Unrelated to the change itself. Or maybe not unrelated - could it be used to avoid overflow? In which case, it could be dropped here - because it\u0027s the hypot\u0027s documented feature to avoid intermediate overflows.)",
+      "revId": "e8c95b796626cb9db163f5d563fa67f38a5e92b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
