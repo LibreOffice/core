@@ -26,8 +26,8 @@
 #include <mediamisc.hxx>
 
 constexpr sal_Int32 AVMEDIA_DB_RANGE = -40;
-#define AVMEDIA_LINEINCREMENT       1.0
-#define AVMEDIA_PAGEINCREMENT       10.0
+constexpr double AVMEDIA_LINEINCREMENT = 1.0;
+constexpr double AVMEDIA_PAGEINCREMENT = 10.0;
 
 namespace avmedia {
 
