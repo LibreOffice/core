@@ -16,6 +16,23 @@
       "message": "\u003e Patch Set 6:\n\u003e \n\u003e Build queued https://ci.libreoffice.org/job/gerrit_master/111118/\n\nRebase was so Jenkins recompiles, because I changed the commit message and he didn\u0027t.\nPlease do let me know if there was an easier way to do this.",
       "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcf96f95_4a392236",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-27T22:42:24Z",
+      "side": 1,
+      "message": "I could use some mentoring on this easyhack. I\u0027m not familiar with VBA, and while I did run unit tests, I don\u0027t know how much an actual user could push this function.\n\nThis function does pass the unit tests and the extra ones I added (check format.vba) which should _not_ pass in the previous version.",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
