@@ -374,7 +374,7 @@ public:
     typedef std::set<ScFormulaCell*>                      RefCellSet;
     typedef std::unordered_map<sal_uInt16, RefCellSet>         RefCellMap;
 
-    enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN };
+    enum LinkUpdateType { LINK_MODIFIED, LINK_BROKEN, OH_NO_WE_ARE_GOING_TO_DIE };
 
     /**
      * Base class for objects that need to listen to link updates.  When a
