@@ -16,6 +16,23 @@
       "message": "ClassModule instances or UNO services can\u0027t be tested/validated in Basicic/qa context.\n",
       "revId": "ff4a4e483d9df0dae78621c18f52f18fd38eecd1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c00ed00_4fd0326f",
+        "filename": "basic/qa/basic_coverage/test_CallByName.bas",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T12:15:19Z",
+      "side": 1,
+      "message": "Why the \u0027vb\u0027 constants here? Is this a VBA-compatibility function? Then likely that should be mentioned explicitly both here, and on its help page; and then, we need these names defined?",
+      "revId": "ff4a4e483d9df0dae78621c18f52f18fd38eecd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
