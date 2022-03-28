@@ -731,9 +731,6 @@ void SplineCalculater::CalculateBSplines(
         lcl_tSizeType c = 0; // true column index
         double fDivisor = 1.0; // used for diagonal element
         double fEliminate = 1.0; // used for the element, that will become zero
-        double fHelp;
-        tPointType aHelp;
-        lcl_tSizeType nHelp; // used in triangle change
         bool bIsSuccessful = true;
         for (c = 0 ; c <= n && bIsSuccessful; ++c)
         {
@@ -755,16 +752,10 @@ void SplineCalculater::CalculateBSplines(
                 {
                     for ( sal_uInt32 i = 0; i <= p ; ++i)
                     {
-                        fHelp = aMatN[r][i];
-                        aMatN[r][i] = aMatN[c][i];
-                        aMatN[c][i] = fHelp;
+                        std::swap( aMatN[r][i], aMatN[c][i] );
                     }
-                    aHelp = aPointsIn[r];
-                    aPointsIn[r] = aPointsIn[c];
-                    aPointsIn[c] = aHelp;
-                    nHelp = aShift[r];
-                    aShift[r] = aShift[c];
-                    aShift[c] = nHelp;
+                    std::swap( aPointsIn[r], aPointsIn[c] );
+                    std::swap( aShift[r], aShift[c] );
                 }
 
                 // divide row c, so that element(c,c) becomes 1
