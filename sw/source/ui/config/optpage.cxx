@@ -107,16 +107,7 @@ SwContentOptPage::SwContentOptPage(weld::Container* pPage, weld::DialogControlle
     , m_xFieldHiddenCB(m_xBuilder->weld_check_button("hiddentextfield"))
     , m_xFieldHiddenParaCB(m_xBuilder->weld_check_button("hiddenparafield"))
 {
-    if (!officecfg::Office::Common::Misc::ExperimentalMode::get())
-    {
-        m_xOutlineLabel->hide();
-        m_xShowOutlineContentVisibilityButton->hide();
-        m_xTreatSubOutlineLevelsAsContent->hide();
-    }
-    else
-    {
-        m_xShowOutlineContentVisibilityButton->connect_toggled(LINK(this, SwContentOptPage, ShowOutlineContentVisibilityButtonHdl));
-    }
+    m_xShowOutlineContentVisibilityButton->connect_toggled(LINK(this, SwContentOptPage, ShowOutlineContentVisibilityButtonHdl));
 
     /* This part is visible only with Writer/Web->View dialogue. */
     const SfxUInt16Item* pItem = rCoreSet.GetItemIfSet(SID_HTML_MODE, false );
