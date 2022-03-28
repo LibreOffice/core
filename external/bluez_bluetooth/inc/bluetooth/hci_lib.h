@@ -12,8 +12,8 @@
 #ifndef __HCI_LIB_H
 #define __HCI_LIB_H
 
-#ifdef __cplusplus
-#endif
+#pragma once
+
 #ifdef __cplusplus
 #endif
 static inline int hci_test_bit(int nr, void* addr)
