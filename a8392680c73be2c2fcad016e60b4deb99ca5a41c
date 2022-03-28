@@ -16,6 +16,29 @@
       "message": "It seems that std::hypot is much slower that square root:\nhttps://stackoverflow.com/questions/32435796/when-to-use-stdhypotx-y-over-stdsqrtxx-yy\n\nI am wondering if this change is worth of it.",
       "revId": "a8392680c73be2c2fcad016e60b4deb99ca5a41c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bbda185_23321935",
+        "filename": "chart2/source/view/charttypes/PieChart.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T13:54:21Z",
+      "side": 1,
+      "message": "Here and elsewhere:\nThe explicit cast to double is not needed - please drop it. The implicit cast should be used as much as possible. In case of 32-bit integer, the implicit cast is completely safe (all 32-bit integers are representable in double without loss).",
+      "range": {
+        "startLine": 516,
+        "startChar": 33,
+        "endLine": 516,
+        "endChar": 52
+      },
+      "revId": "a8392680c73be2c2fcad016e60b4deb99ca5a41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
