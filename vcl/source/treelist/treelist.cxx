@@ -675,8 +675,6 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntr
 {
     DBG_ASSERT(pView&&pActEntry,"PrevVis:View/Entry?");
 
-    sal_uInt16 nDepth = 0;
-
     SvTreeListEntries* pActualList = &pActEntry->pParent->m_Children;
     sal_uInt32 nActualPos = pActEntry->GetChildListPos();
 
@@ -686,7 +684,6 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntr
         while( pView->IsExpanded(pActEntry) )
         {
             pActualList = &pActEntry->m_Children;
-            nDepth++;
             pActEntry = pActualList->back().get();
         }
         return pActEntry;
@@ -698,7 +695,6 @@ SvTreeListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvTreeListEntr
     pActEntry = pActEntry->pParent;
     if ( pActEntry )
     {
-        nDepth--;
         return pActEntry;
     }
     return nullptr;
