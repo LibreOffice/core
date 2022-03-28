@@ -2354,7 +2354,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146962)
     // only a single row is visible again
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 1);
 
-    // check Undo
+    // tdf#148227 check Undo of tracked table row deletion
 
     dispatchCommand(mxComponent, ".uno:Undo", {});
     discardDumpedLayout();
@@ -2406,6 +2406,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147347)
     pXmlDoc = parseLayoutDump();
     // no visible row again
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 0);
+
+    // tdf#148228 check Undo of tracked table deletion
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 0
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
