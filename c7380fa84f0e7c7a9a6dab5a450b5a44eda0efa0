@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ebe1896e_d0022d10",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-03-28T17:51:59Z",
+      "side": 1,
+      "message": "Is it possible to convert this to atan2?",
+      "revId": "c7380fa84f0e7c7a9a6dab5a450b5a44eda0efa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
