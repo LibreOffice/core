@@ -115,6 +115,8 @@ int main() {
     int n8 = 0;
     ASSERT(USE(USE(n8 == 0)));
     (void) n8;
+    int volatile n9 = 0;
+    (void) n9;
     return n1 // expected-note 8 {{first consumption is here [loplugin:casttovoid]}}
         + n2 // expected-note {{first consumption is here [loplugin:casttovoid]}}
         + n3;

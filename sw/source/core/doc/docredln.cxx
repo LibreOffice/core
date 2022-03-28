@@ -69,13 +69,13 @@ using namespace com::sun::star;
         const SwRedlineTable& rTable = pDoc->getIDocumentRedlineAccess().GetRedlineTable();
         for( SwRedlineTable::size_type n = 0; n < rTable.size(); ++n )
         {
-            SwRedlineTable::size_type nDummy = 0;
+            volatile SwRedlineTable::size_type nDummy = 0;
             const SwRangeRedline* pCurrent = rTable[ n ];
             const SwRangeRedline* pNext = n+1 < rTable.size() ? rTable[ n+1 ] : nullptr;
             if( pCurrent == pNext )
-                ++nDummy;
+                (void) nDummy;
             if( n == nWatch )
-                ++nDummy; // Possible debugger breakpoint
+                (void) nDummy; // Possible debugger breakpoint
         }
     }
 
