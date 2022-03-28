@@ -70,7 +70,9 @@ void SparklineGroupsImportContext::fillSparklineGroupID(
         {
             case XML_ELEMENT(CALC_EXT, XML_ID):
             {
-                m_pCurrentSparklineGroup->setID(rIter.toString());
+                OString aString = OUStringToOString(rIter.toString(), RTL_TEXTENCODING_ASCII_US);
+                tools::Guid aGuid(aString);
+                m_pCurrentSparklineGroup->setID(aGuid);
                 break;
             }
         }

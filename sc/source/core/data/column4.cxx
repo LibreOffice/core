@@ -373,8 +373,11 @@ void ScColumn::duplicateSparkline(sc::CopyFromClipContext& rContext, sc::ColumnB
     ScAddress aCurrentPosition = aDestPosition;
     for (size_t i = 0; i < nDestSize; ++i)
     {
-        auto pNewSparklineGroup = std::make_shared<sc::SparklineGroup>(*pSparklineGroup);
-        auto pNewSparkline = std::make_shared<sc::Sparkline>(aCurrentPosition.Col(), aCurrentPosition.Row(), pNewSparklineGroup);
+        auto pDuplicatedGroup = GetDoc().SearchSparklineGroup(pSparklineGroup->getID());
+        if (!pDuplicatedGroup)
+            pDuplicatedGroup = std::make_shared<sc::SparklineGroup>(*pSparklineGroup);
+
+        auto pNewSparkline = std::make_shared<sc::Sparkline>(aCurrentPosition.Col(), aCurrentPosition.Row(), pDuplicatedGroup);
         pNewSparkline->setInputRange(pSparkline->getInputRange());
         aSparklines[i] = new sc::SparklineCell(pNewSparkline);
         aCurrentPosition.IncRow();
