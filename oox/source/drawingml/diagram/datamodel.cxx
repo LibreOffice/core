@@ -34,29 +34,7 @@ using namespace ::com::sun::star;
 
 namespace oox::drawingml {
 
-namespace dgm {
-
-void Connection::dump() const
-{
-    SAL_INFO(
-        "oox.drawingml",
-        "cnx modelId " << msModelId << ", srcId " << msSourceId << ", dstId "
-            << msDestId << ", parTransId " << msParTransId << ", presId "
-            << msPresId << ", sibTransId " << msSibTransId << ", srcOrd "
-            << mnSourceOrder << ", dstOrd " << mnDestOrder);
-}
-
-void Point::dump(const Shape* pShape) const
-{
-    SAL_INFO(
-        "oox.drawingml",
-        "pt text " << pShape << ", cnxId " << msCnxId << ", modelId "
-            << msModelId << ", type " << mnType);
-}
-
-} // oox::drawingml::dgm namespace
-
-Shape* DiagramData::getOrCreateAssociatedShape(const dgm::Point& rPoint, bool bCreateOnDemand) const
+Shape* DiagramData::getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand) const
 {
     if(maPointShapeMap.end() == maPointShapeMap.find(rPoint.msModelId))
     {
@@ -77,7 +55,7 @@ Shape* DiagramData::getOrCreateAssociatedShape(const dgm::Point& rPoint, bool bC
     return rShapePtr.get();
 }
 
-void DiagramData::restoreDataFromModelToShapeAfterReCreation(const dgm::Point& rPoint, Shape& rNewShape) const
+void DiagramData::restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape) const
 {
     // If we did create a new oox::drawingml::Shape, directly apply
     // available data from the Diagram ModelData to it as preparation
@@ -120,28 +98,49 @@ DiagramData::DiagramData() :
 {
 }
 
-const dgm::Point* DiagramData::getRootPoint() const
+const svx::diagram::Point* DiagramData::getRootPoint() const
 {
     for (const auto & aCurrPoint : maPoints)
-        if (aCurrPoint.mnType == XML_doc)
+        if (aCurrPoint.mnXMLType == svx::diagram::TypeConstant::XML_doc)
             return &aCurrPoint;
 
     SAL_WARN("oox.drawingml", "No root point");
     return nullptr;
 }
 
+static void Connection_dump(const svx::diagram::Connection& rConnection)
+{
+    SAL_INFO(
+        "oox.drawingml",
+        "cnx modelId " << rConnection.msModelId << ", srcId " << rConnection.msSourceId << ", dstId "
+            << rConnection.msDestId << ", parTransId " << rConnection.msParTransId << ", presId "
+            << rConnection.msPresId << ", sibTransId " << rConnection.msSibTransId << ", srcOrd "
+            << rConnection.mnSourceOrder << ", dstOrd " << rConnection.mnDestOrder);
+}
+
+static void Point_dump(const svx::diagram::Point& rPoint, const Shape* pShape)
+{
+    SAL_INFO(
+        "oox.drawingml",
+        "pt text " << pShape << ", cnxId " << rPoint.msCnxId << ", modelId "
+            << rPoint.msModelId << ", type " << rPoint.mnXMLType);
+}
+
 void DiagramData::dump() const
 {
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of cnx: " << maConnections.size() );
     for (const auto& rConnection : maConnections)
-        rConnection.dump();
+        Connection_dump(rConnection);
 
     SAL_INFO("oox.drawingml", "Dgm: DiagramData # of pt: " << maPoints.size() );
     for (const auto& rPoint : maPoints)
-        rPoint.dump(getOrCreateAssociatedShape(rPoint));
+        Point_dump(rPoint, getOrCreateAssociatedShape(rPoint));
 }
 
-void DiagramData::getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const
+void DiagramData::getChildrenString(
+    OUStringBuffer& rBuf,
+    const svx::diagram::Point* pPoint,
+    sal_Int32 nLevel) const
 {
     if (!pPoint)
         return;
@@ -161,9 +160,9 @@ void DiagramData::getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoi
         rBuf.append('\n');
     }
 
-    std::vector<const dgm::Point*> aChildren;
+    std::vector< const svx::diagram::Point* > aChildren;
     for (const auto& rCxn : maConnections)
-        if (rCxn.mnType == XML_parOf && rCxn.msSourceId == pPoint->msModelId)
+        if (rCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && rCxn.msSourceId == pPoint->msModelId)
         {
             if (rCxn.mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
                 aChildren.resize(rCxn.mnSourceOrder + 1);
@@ -179,7 +178,7 @@ void DiagramData::getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoi
 OUString DiagramData::getString() const
 {
     OUStringBuffer aBuf;
-    const dgm::Point* pPoint = getRootPoint();
+    const svx::diagram::Point* pPoint = getRootPoint();
     getChildrenString(aBuf, pPoint, 0);
     return aBuf.makeStringAndClear();
 }
@@ -189,7 +188,7 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
     const OUString sModelId = rParentId.isEmpty() ? getRootPoint()->msModelId : rParentId;
     std::vector<std::pair<OUString, OUString>> aChildren;
     for (const auto& rCxn : maConnections)
-        if (rCxn.mnType == XML_parOf && rCxn.msSourceId == sModelId)
+        if (rCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && rCxn.msSourceId == sModelId)
         {
             if (rCxn.mnSourceOrder >= static_cast<sal_Int32>(aChildren.size()))
                 aChildren.resize(rCxn.mnSourceOrder + 1);
@@ -211,15 +210,15 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
     return aChildren;
 }
 
-void DiagramData::addConnection(sal_Int32 nType, const OUString& sSourceId, const OUString& sDestId)
+void DiagramData::addConnection(svx::diagram::TypeConstant nType, const OUString& sSourceId, const OUString& sDestId)
 {
     sal_Int32 nMaxOrd = -1;
     for (const auto& aCxn : maConnections)
-        if (aCxn.mnType == nType && aCxn.msSourceId == sSourceId)
+        if (aCxn.mnXMLType == nType && aCxn.msSourceId == sSourceId)
             nMaxOrd = std::max(nMaxOrd, aCxn.mnSourceOrder);
 
-    dgm::Connection& rCxn = maConnections.emplace_back();
-    rCxn.mnType = nType;
+    svx::diagram::Connection& rCxn = maConnections.emplace_back();
+    rCxn.mnXMLType = nType;
     rCxn.msSourceId = sSourceId;
     rCxn.msDestId = sDestId;
     rCxn.mnSourceOrder = nMaxOrd + 1;
@@ -227,10 +226,10 @@ void DiagramData::addConnection(sal_Int32 nType, const OUString& sSourceId, cons
 
 OUString DiagramData::addNode(const OUString& rText)
 {
-    const dgm::Point& rDataRoot = *getRootPoint();
+    const svx::diagram::Point& rDataRoot = *getRootPoint();
     OUString sPresRoot;
     for (const auto& aCxn : maConnections)
-        if (aCxn.mnType == XML_presOf && aCxn.msSourceId == rDataRoot.msModelId)
+        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_presOf && aCxn.msSourceId == rDataRoot.msModelId)
             sPresRoot = aCxn.msDestId;
 
     if (sPresRoot.isEmpty())
@@ -238,8 +237,8 @@ OUString DiagramData::addNode(const OUString& rText)
 
     OUString sNewNodeId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
 
-    dgm::Point aDataPoint;
-    aDataPoint.mnType = XML_node;
+    svx::diagram::Point aDataPoint;
+    aDataPoint.mnXMLType = svx::diagram::TypeConstant::XML_node;
     aDataPoint.msModelId = sNewNodeId;
 
     Shape* pShape(getOrCreateAssociatedShape(aDataPoint, true));
@@ -250,16 +249,16 @@ OUString DiagramData::addNode(const OUString& rText)
 
     OUString sDataSibling;
     for (const auto& aCxn : maConnections)
-        if (aCxn.mnType == XML_parOf && aCxn.msSourceId == rDataRoot.msModelId)
+        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msSourceId == rDataRoot.msModelId)
             sDataSibling = aCxn.msDestId;
 
     OUString sPresSibling;
     for (const auto& aCxn : maConnections)
-        if (aCxn.mnType == XML_presOf && aCxn.msSourceId == sDataSibling)
+        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_presOf && aCxn.msSourceId == sDataSibling)
             sPresSibling = aCxn.msDestId;
 
-    dgm::Point aPresPoint;
-    aPresPoint.mnType = XML_pres;
+    svx::diagram::Point aPresPoint;
+    aPresPoint.mnXMLType = svx::diagram::TypeConstant::XML_pres;
     aPresPoint.msModelId = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
 
     // create pesPoint shape
@@ -269,16 +268,16 @@ OUString DiagramData::addNode(const OUString& rText)
     if (!sPresSibling.isEmpty())
     {
         // no idea where to get these values from, so copy from previous sibling
-        const dgm::Point* pSiblingPoint = maPointNameMap[sPresSibling];
+        const svx::diagram::Point* pSiblingPoint = maPointNameMap[sPresSibling];
         aPresPoint.msPresentationLayoutName = pSiblingPoint->msPresentationLayoutName;
         aPresPoint.msPresentationLayoutStyleLabel = pSiblingPoint->msPresentationLayoutStyleLabel;
         aPresPoint.mnLayoutStyleIndex = pSiblingPoint->mnLayoutStyleIndex;
         aPresPoint.mnLayoutStyleCount = pSiblingPoint->mnLayoutStyleCount;
     }
 
-    addConnection(XML_parOf, rDataRoot.msModelId, aDataPoint.msModelId);
-    addConnection(XML_presParOf, sPresRoot, aPresPoint.msModelId);
-    addConnection(XML_presOf, aDataPoint.msModelId, aPresPoint.msModelId);
+    addConnection(svx::diagram::TypeConstant::XML_parOf, rDataRoot.msModelId, aDataPoint.msModelId);
+    addConnection(svx::diagram::TypeConstant::XML_presParOf, sPresRoot, aPresPoint.msModelId);
+    addConnection(svx::diagram::TypeConstant::XML_presOf, aDataPoint.msModelId, aPresPoint.msModelId);
 
     // adding at the end, so that references are not invalidated in between
     maPoints.push_back(aDataPoint);
@@ -292,15 +291,15 @@ bool DiagramData::removeNode(const OUString& rNodeId)
 {
     // check if it doesn't have children
     for (const auto& aCxn : maConnections)
-        if (aCxn.mnType == XML_parOf && aCxn.msSourceId == rNodeId)
+        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msSourceId == rNodeId)
         {
             SAL_WARN("oox.drawingml", "Node has children - can't be removed");
             return false;
         }
 
-    dgm::Connection aParCxn;
+    svx::diagram::Connection aParCxn;
     for (const auto& aCxn : maConnections)
-        if (aCxn.mnType == XML_parOf && aCxn.msDestId == rNodeId)
+        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msDestId == rNodeId)
             aParCxn = aCxn;
 
     std::unordered_set<OUString> aIdsToRemove;
@@ -310,7 +309,7 @@ bool DiagramData::removeNode(const OUString& rNodeId)
     if (!aParCxn.msSibTransId.isEmpty())
         aIdsToRemove.insert(aParCxn.msSibTransId);
 
-    for (const dgm::Point& rPoint : maPoints)
+    for (const svx::diagram::Point& rPoint : maPoints)
         if (aIdsToRemove.count(rPoint.msPresentationAssociationId))
             aIdsToRemove.insert(rPoint.msModelId);
 
@@ -322,14 +321,14 @@ bool DiagramData::removeNode(const OUString& rNodeId)
 
     // remove connections
     maConnections.erase(std::remove_if(maConnections.begin(), maConnections.end(),
-                                       [aIdsToRemove](const dgm::Connection& rCxn) {
+                                       [aIdsToRemove](const svx::diagram::Connection& rCxn) {
                                            return aIdsToRemove.count(rCxn.msSourceId) || aIdsToRemove.count(rCxn.msDestId);
                                        }),
                         maConnections.end());
 
     // remove data and presentation nodes
     maPoints.erase(std::remove_if(maPoints.begin(), maPoints.end(),
-                                  [aIdsToRemove](const dgm::Point& rPoint) {
+                                  [aIdsToRemove](const svx::diagram::Point& rPoint) {
                                       return aIdsToRemove.count(rPoint.msModelId);
                                   }),
                    maPoints.end());
@@ -361,7 +360,7 @@ OString normalizeDotName( const OUString& rStr )
 #endif
 
 static sal_Int32 calcDepth( std::u16string_view rNodeName,
-                            const dgm::Connections& rCnx )
+                            const svx::diagram::Connections& rCnx )
 {
     // find length of longest path in 'isChild' graph, ending with rNodeName
     for (auto const& elem : rCnx)
@@ -370,7 +369,7 @@ static sal_Int32 calcDepth( std::u16string_view rNodeName,
             !elem.msSibTransId.isEmpty() &&
             !elem.msSourceId.isEmpty() &&
             !elem.msDestId.isEmpty() &&
-            elem.mnType == XML_parOf &&
+            elem.mnXMLType == svx::diagram::TypeConstant::XML_parOf &&
             rNodeName == elem.msDestId )
         {
             return calcDepth(elem.msSourceId, rCnx) + 1;
@@ -399,7 +398,7 @@ void DiagramData::build(bool bClearOoxShapes)
 
     output << "digraph datatree {" << std::endl;
 #endif
-    dgm::Points& rPoints = getPoints();
+    svx::diagram::Points& rPoints = getPoints();
     for (auto & point : rPoints)
     {
 #ifdef DEBUG_OOX_DIAGRAM
@@ -470,7 +469,7 @@ void DiagramData::build(bool bClearOoxShapes)
         }
     }
 
-    const dgm::Connections& rConnections = getConnections();
+    const svx::diagram::Connections& rConnections = getConnections();
     for (auto const& connection : rConnections)
     {
 #ifdef DEBUG_OOX_DIAGRAM
@@ -527,7 +526,7 @@ void DiagramData::build(bool bClearOoxShapes)
 
         SAL_WARN_IF(!bInserted1, "oox.drawingml", "DiagramData::build(): non-unique connection model id");
 
-        if( connection.mnType == XML_presOf )
+        if( connection.mnXMLType == svx::diagram::TypeConstant::XML_presOf )
         {
             DiagramData::StringMap::value_type::second_type& rVec = getPresOfNameMap()[connection.msDestId];
             rVec[connection.mnDestOrder] = { connection.msSourceId, sal_Int32(0) };

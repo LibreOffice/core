@@ -116,7 +116,7 @@ void LayoutAtomVisitorBase::visit(LayoutNode& rAtom)
         || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
-    const dgm::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
+    const svx::diagram::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
     if (!mpCurrentNode || !pNewNode)
         return;
 
@@ -129,7 +129,7 @@ void LayoutAtomVisitorBase::visit(LayoutNode& rAtom)
     if (!bIsChild)
         return;
 
-    const dgm::Point* pPreviousNode = mpCurrentNode;
+    const svx::diagram::Point* pPreviousNode = mpCurrentNode;
     mpCurrentNode = pNewNode;
 
     defaultVisit(rAtom);

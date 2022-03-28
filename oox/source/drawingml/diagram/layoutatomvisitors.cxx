@@ -62,7 +62,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
-    const dgm::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
+    const svx::diagram::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
     if (!mpCurrentNode || !pNewNode)
         return;
 
@@ -117,7 +117,7 @@ void ShapeCreationVisitor::visit(LayoutNode& rAtom)
         }
     }
 
-    const dgm::Point* pPreviousNode = mpCurrentNode;
+    const svx::diagram::Point* pPreviousNode = mpCurrentNode;
     mpCurrentNode = pNewNode;
 
     // set new parent for children
@@ -222,7 +222,7 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
         || mnCurrIdx >= static_cast<sal_Int32>(aDataNode->second.size()))
         return;
 
-    const dgm::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
+    const svx::diagram::Point* pNewNode = aDataNode->second.at(mnCurrIdx);
     if (!mpCurrentNode || !pNewNode)
         return;
 
@@ -237,7 +237,7 @@ void ShapeLayoutingVisitor::visit(LayoutNode& rAtom)
 
     size_t nParentConstraintsNumber = maConstraints.size();
 
-    const dgm::Point* pPreviousNode = mpCurrentNode;
+    const svx::diagram::Point* pPreviousNode = mpCurrentNode;
     mpCurrentNode = pNewNode;
 
     // process alg atoms first, nested layout nodes afterwards

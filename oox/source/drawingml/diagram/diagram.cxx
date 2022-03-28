@@ -111,7 +111,7 @@ void Diagram::addTo( const ShapePtr & pParentShape )
 
     pParentShape->setChildSize(pParentShape->getSize());
 
-    const dgm::Point* pRootPoint = mpData->getRootPoint();
+    const svx::diagram::Point* pRootPoint = mpData->getRootPoint();
     if (mpLayout->getNode() && pRootPoint)
     {
         // create Shape hierarchy
