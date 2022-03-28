@@ -87,7 +87,7 @@ void Impl_calcFatLine( FatLine& line, const Bezier& c )
     line.b = (c.p0.x - c.p3.x);
 
     // normalize
-    const double len( sqrt( line.a*line.a + line.b*line.b ) );
+    const double len(std::hypot(line.a, line.b));
     if( !tolZero(len) )
     {
         line.a /= len;
