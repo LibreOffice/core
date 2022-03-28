@@ -719,7 +719,6 @@ std::unique_ptr<SbiExprNode> SbiExpression::Comp()
     std::unique_ptr<SbiExprNode> pNd = Cat();
     if( m_eMode != EXPRMODE_EMPTY_PAREN )
     {
-        short nCount = 0;
         for( ;; )
         {
             SbiToken eTok = pParser->Peek();
@@ -734,7 +733,6 @@ std::unique_ptr<SbiExprNode> SbiExpression::Comp()
             }
             eTok = pParser->Next();
             pNd = std::make_unique<SbiExprNode>( std::move(pNd), eTok, Cat() );
-            nCount++;
         }
     }
     return pNd;
