@@ -952,14 +952,20 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 
     pFormat->InvalidateInSwCache(RES_ATTRSET_CHG);
 
+    // table without table frame
+    bool bHiddenTable = true;
+
     // for safety, invalidate all TableFrames
     SwIterator<SwTabFrame,SwFormat> aIter( *pFormat );
     for( SwTabFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    {
         if( pLast->GetTable() == &rTable )
         {
             pLast->InvalidateAll();
             pLast->SetCompletePaint();
+            bHiddenTable = false;
         }
+    }
 
     // fill FrameFormats with defaults (0)
     pFormat = nullptr;
@@ -986,7 +992,19 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
     m_bModifyBox = false;
 
     if ( bHideChanges )
-        aTmpBox.MakeFrames( rTable );
+    {
+        if ( bHiddenTable )
+        {
+            SwTableNode* pTableNode = rTable.GetTableNode();
+            pTableNode->DelFrames();
+            SwNodeIndex aTableIdx( *pTableNode->EndOfSectionNode(), 1 );
+            pTableNode->MakeOwnFrames(&aTableIdx);
+        }
+        else
+        {
+            aTmpBox.MakeFrames( rTable );
+        }
+    }
 }
 
 void SaveTable::SaveContentAttrs( SwDoc* pDoc )
