@@ -228,7 +228,7 @@ void ChartTypePanel::updateData()
         = DiagramHelper::getTemplateForDiagram(xDiagram, xTemplateManager);
     OUString aServiceName(aTemplate.second);
 
-    sal_uInt16 nM = 0;
+    //sal_uInt16 nM = 0;
     for (auto const& elem : m_aChartTypeDialogControllerList)
     {
         if (elem->isSubType(aServiceName))
@@ -237,7 +237,7 @@ void ChartTypePanel::updateData()
             //m_pMainTypeList->select_entry_region(nM, nM);
             break;
         }
-        ++nM;
+        //++nM;
     }
 }
 
