@@ -28,6 +28,7 @@
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewsh.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/settings.hxx>
 
 #include <editeng/editids.hrc>
 #include <editeng/fontitem.hxx>
@@ -45,11 +46,14 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/brushitem.hxx>
 
+#include <i18nlangtag/mslangid.hxx>
+
 #include <svx/xfillit0.hxx>
 #include <svx/xdef.hxx>
 #include <svx/xflclit.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 
 #include <vcl/commandevent.hxx>
@@ -264,7 +268,16 @@ void StyleItemController::DrawEntry(vcl::RenderContext& rRenderContext)
 
     Color aFontHighlight = COL_AUTO;
 
-    const SvxFontItem* const pFontItem = pItemSet->GetItem<SvxFontItem>(SID_ATTR_CHAR_FONT);
+    sal_Int16 nScriptType
+        = MsLangId::getScriptType(Application::GetSettings().GetUILanguageTag().getLanguageType());
+
+    sal_uInt16 nFontSlot = SID_ATTR_CHAR_FONT;
+    if (nScriptType == css::i18n::ScriptType::ASIAN)
+        nFontSlot = SID_ATTR_CHAR_CJK_FONT;
+    else if (nScriptType == css::i18n::ScriptType::COMPLEX)
+        nFontSlot = SID_ATTR_CHAR_CTL_FONT;
+
+    const SvxFontItem* const pFontItem = pItemSet->GetItem<SvxFontItem>(nFontSlot);
     const SvxFontHeightItem* const pFontHeightItem
         = pItemSet->GetItem<SvxFontHeightItem>(SID_ATTR_CHAR_FONTHEIGHT);
 
