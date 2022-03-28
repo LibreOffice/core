@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a76bc4a_1fc6a391",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-28T13:04:06Z",
+      "side": 1,
+      "message": "Jenkins failure obviously bogus. This change can not have any impact on Cypress tests in Collabora Online.",
+      "revId": "a533310cd37c78fbd44ad6a40a9d78683bcb92c3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
