@@ -6532,15 +6532,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
         else
             nTextRulerAtomOfs = 0xffffffff;
 
-        sal_uInt32 nInstance = 0;
         switch( rSdrPowerPointImport.m_eCurrentPageKind )
         {
             case PPT_NOTEPAGE :
-                nInstance++;
-                [[fallthrough]];
             case PPT_MASTERPAGE :
-                nInstance++;
-                break;
             case PPT_SLIDEPAGE :
             break;
             default :
