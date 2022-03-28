@@ -3106,6 +3106,14 @@ void ScExternalRefManager::setFilterData(sal_uInt16 nFileId, const OUString& rFi
 
 void ScExternalRefManager::clear()
 {
+    for (auto& rEntry : maLinkListeners)
+    {
+        for (auto& it : rEntry.second)
+        {
+            it->notify(0, OH_NO_WE_ARE_GOING_TO_DIE);
+        }
+    }
+
     for (auto& rEntry : maDocShells)
         rEntry.second.maShell->DoClose();
 
