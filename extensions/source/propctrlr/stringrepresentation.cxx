@@ -416,10 +416,6 @@ bool StringRepresentation::convertGenericValueToString( const uno::Any& _rValue,
     }
     break;
     case uno::TypeClass_CONSTANT:
-        {
-            int i = 0;
-            ++i;
-        }
         break;
 
     // some structs
