@@ -813,7 +813,7 @@ void ScDBData::RefreshTableColumnNames( ScDocument* pDoc )
         ScRefCellValue* pCell;
         SCCOL nCol, nLastColFilled = nStartCol - 1;
         SCROW nRow;
-        for (size_t i=0; (pCell = aIter.GetNext( nCol, nRow)) != nullptr; ++i)
+        while ((pCell = aIter.GetNext( nCol, nRow)) != nullptr)
         {
             if (pCell->hasString())
             {
