@@ -422,8 +422,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
     std::unique_ptr<sal_Int32[]> pConvertPos( new sal_Int32[nTextLen+2] );
     std::unique_ptr<sal_Int32[]> pConvertPara( new sal_Int32[nTextLen+2] );
 
-    const sal_Unicode* pText = aText.getStr();
-
     sal_Int32* pPos = pConvertPos.get();
     sal_Int32* pPara = pConvertPara.get();
 
@@ -473,7 +471,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
                                         *pPara++ = aStartSel.nStartPara;
 
                                         ndbg += 1;
-                                        pText++;
                                     }
                                     else
                                     {
@@ -494,7 +491,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
                                         *pPara++ = aStartSel.nStartPara;
 
                                         ndbg += 1;
-                                        pText++;
                                     }
                                     else
                                     {
@@ -515,8 +511,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( const uno::
             {
                 *pPos++ = nLastPos + 1;
                 *pPara++ = nLastPara;
-
-                pText++;
             }
             else
             {
