@@ -512,8 +512,8 @@ void PieChart::createTextLabelShape(
             {
                 //when the line is very short compared to the page size don't create one
                 ::basegfx::B2DVector aLength(nX1 - nX2, nY1 - nY2);
-                double fPageDiagonaleLength = sqrt(double(nPageWidth) * double(nPageWidth)
-                                                   + double(nPageHeight) * double(nPageHeight));
+                double fPageDiagonaleLength
+                    = std::hypot(static_cast<double>(nPageWidth), static_cast<double>(nPageHeight));
                 if ((aLength.getLength() / fPageDiagonaleLength) >= 0.01)
                 {
                     drawing::PointSequenceSequence aPoints{ { {nX1, nY1}, {nX2, nY2} } };
@@ -1235,7 +1235,8 @@ void PieChart::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& rPageSi
     if(!bMoveableFound)
         return;
 
-    double fPageDiagonaleLength = sqrt( double(rPageSize.Width)*double(rPageSize.Width) + double(rPageSize.Height)*double(rPageSize.Height) );
+    double fPageDiagonaleLength
+        = std::hypot(static_cast<double>(rPageSize.Width), static_cast<double>(rPageSize.Height));
     if( fPageDiagonaleLength == 0.0 )
         return;
 
@@ -1475,8 +1476,7 @@ bool PieChart::performLabelBestFitInnerPlacement(ShapeParam& rShapeParam, PieLab
 
     // compute the length of the diagonal vector d,
     // that is the distance between P and F
-    double fSquaredDistancePF = fDistancePM * fDistancePM + fOrthogonalEdgeLength * fOrthogonalEdgeLength;
-    double fDistancePF = sqrt( fSquaredDistancePF );
+    double fDistancePF = std::hypot(fDistancePM, fOrthogonalEdgeLength);
 
     SAL_INFO( "chart2.pie.label.bestfit.inside",
               "      width = " << fLabelWidth );
