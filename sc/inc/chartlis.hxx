@@ -56,7 +56,7 @@ public:
 
         ScChartListener& mrParent;
         std::unordered_set<sal_uInt16> maFileIds;
-        ScDocument&                 mrDoc;
+        ScDocument* m_pDoc;
     };
 
 private:

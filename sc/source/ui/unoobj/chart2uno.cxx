@@ -2915,6 +2915,9 @@ void ScChart2DataSequence::ExternalRefListener::notify(sal_uInt16 nFileId, ScExt
         case ScExternalRefManager::LINK_BROKEN:
             maFileIds.erase(nFileId);
         break;
+        case ScExternalRefManager::OH_NO_WE_ARE_GOING_TO_DIE:
+            mpDoc = nullptr;
+        break;
     }
 }
 
