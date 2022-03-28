@@ -539,6 +539,20 @@ bool ScTable::GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const
                     nMaxX = i;
                 }
             }
+            if (aCol[i].HasSparklines())
+            {
+                SCROW maxSparklineRow = aCol[i].GetSparklinesMaxRow();
+                if (maxSparklineRow >= nMaxY)
+                {
+                    bFound = true;
+                    nMaxY = maxSparklineRow;
+                }
+                if (i > nMaxX)
+                {
+                    bFound = true;
+                    nMaxX = i;
+                }
+            }
     }
 
     rEndCol = nMaxX;
@@ -603,6 +617,20 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bC
                     nMaxY = maxNoteRow;
                 }
                 if (i>nMaxX)
+                {
+                    bFound = true;
+                    nMaxX = i;
+                }
+            }
+            if (aCol[i].HasSparklines())
+            {
+                SCROW maxSparklineRow = aCol[i].GetSparklinesMaxRow();
+                if (maxSparklineRow >= nMaxY)
+                {
+                    bFound = true;
+                    nMaxY = maxSparklineRow;
+                }
+                if (i > nMaxX)
                 {
                     bFound = true;
                     nMaxX = i;
@@ -695,8 +723,16 @@ bool ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
         if (!aCol[i].IsEmptyBlock( nStartRow, nEndRow ))        //TODO: bNotes ??????
         {
             bFound = true;
-            if (i>nMaxX)
+            if (i > nMaxX)
                 nMaxX = i;
+        }
+        else if (aCol[i].HasSparklines())
+        {
+            if (i > nMaxX)
+            {
+                bFound = true;
+                nMaxX = i;
+            }
         }
     }
 
@@ -736,6 +772,15 @@ bool ScTable::GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
         if (bNotes && aCol[i].HasCellNotes() )
         {
             SCROW maxNoteRow =aCol[i].GetCellNotesMaxRow();
+            if (maxNoteRow > nMaxY)
+            {
+                bFound = true;
+                nMaxY = maxNoteRow;
+            }
+        }
+        if (aCol[i].HasSparklines())
+        {
+            SCROW maxNoteRow = aCol[i].GetSparklinesMaxRow();
             if (maxNoteRow > nMaxY)
             {
                 bFound = true;
@@ -799,6 +844,20 @@ bool ScTable::GetDataStart( SCCOL& rStartCol, SCROW& rStartRow ) const
                 nMinY = minNoteRow;
             }
             if (i<nMinX)
+            {
+                bFound = true;
+                nMinX = i;
+            }
+        }
+        if (aCol[i].HasSparklines())
+        {
+            SCROW minSparkline = aCol[i].GetSparklinesMinRow();
+            if (minSparkline <= nMinY)
+            {
+                bFound = true;
+                nMinY = minSparkline;
+            }
+            if (i < nMinX)
             {
                 bFound = true;
                 nMinX = i;
