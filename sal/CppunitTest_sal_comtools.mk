@@ -17,4 +17,8 @@ $(eval $(call gb_CppunitTest_use_libraries,sal_comtools,\
     sal \
 ))
 
+$(eval $(call gb_CppunitTest_use_system_win32_libs,sal_comtools,\
+    ole32 \
+))
+
 # vim: set noet sw=4 ts=4:
