@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5848469_54b0bee5",
+        "filename": "basic/qa/basic_coverage/test_CallByName.bas",
+        "patchSetId": 10
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T13:10:30Z",
+      "side": 1,
+      "message": "In the meanwhile, I looked at the code, and saw that it *should* not depend on Option Compatible (at least that is what I seem to see). *If* so, please drop this - we must test functions in as minimal environment as possible.",
+      "revId": "99c645a463262b98dea00e7e1808cd44e209de8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
