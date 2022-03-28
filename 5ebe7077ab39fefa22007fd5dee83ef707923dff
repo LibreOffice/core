@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96bef024_bfb6194d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-28T13:58:33Z",
+      "side": 1,
+      "message": "Jenkins seems to be just wasting time here, I won\u0027t bother waiting any longer. It won\u0027t be able to check what this two-line change actually affects (one single thing in the mobile app UI) anyway.",
+      "revId": "5ebe7077ab39fefa22007fd5dee83ef707923dff",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
