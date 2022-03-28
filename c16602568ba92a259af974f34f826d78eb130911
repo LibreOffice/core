@@ -16,6 +16,23 @@
       "message": "FTR: License statement is at https://lists.freedesktop.org/archives/libreoffice/2022-March/088693.html",
       "revId": "c16602568ba92a259af974f34f826d78eb130911",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8f30029_2f7373f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T09:43:25Z",
+      "side": 1,
+      "message": "Thank you for your work!",
+      "revId": "c16602568ba92a259af974f34f826d78eb130911",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
