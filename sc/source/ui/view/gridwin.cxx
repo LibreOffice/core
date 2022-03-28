@@ -1344,7 +1344,6 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
     OUString aCurrent;
     OUString aTabName;
     SCTAB nTabCount = rDoc.GetTableCount();
-    SCTAB nEntryCount = 0;
     for (SCTAB i=nTab+1; i<nTabCount && rDoc.IsScenario(i); i++)
     {
         if (rDoc.HasScenarioRange( i, rScenRange ))
@@ -1353,7 +1352,6 @@ void ScGridWindow::DoScenarioMenu( const ScRange& rScenRange )
                 rFilterBox.append_text(aTabName);
                 if (rDoc.IsActiveScenario(i))
                     aCurrent = aTabName;
-                ++nEntryCount;
             }
     }
     rFilterBox.thaw();
