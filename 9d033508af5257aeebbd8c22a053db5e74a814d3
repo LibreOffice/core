@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca8b243_f7f8a72b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-28T06:54:47Z",
+      "side": 1,
+      "message": "Thanks for this, definitely an improvement.\n\nAs noted in https://gerrit.libreoffice.org/c/core/+/129288, there are currently no Writer construct that could represent SDTs perfectly -- I think in this case (this change) the trouble is that if you map SDTs to fields, then you can\u0027t have multiple text portions inside the field, while SDTs support that. I plan to add a new Writer text attribute (\"content control\") to support this use-case. Hopefully I can start working towards that later this week. If you see any trouble with that, let me know.\n\nAnd great that you added a test for this, this allows me to be more confident that I won\u0027t break too many things when I try to change the existing field/fieldmark mess with something that is closer to the SDT requirements.",
+      "revId": "9d033508af5257aeebbd8c22a053db5e74a814d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
