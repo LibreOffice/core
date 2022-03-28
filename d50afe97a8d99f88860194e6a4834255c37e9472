@@ -33,6 +33,24 @@
       "message": "The drawback is that buffer is now forcefully zero-initialized, loosing the opportunity to keep it uninitialized---which had the nice benefit that the consteval ctor would not compile if it failed to write to every element of buffer.  In any case, that \"TODO: drop initialization for C++20\" comment was about exactly this opportunity, and it pertained to the initialization of buffer, not to the initialization of the whole struct.",
       "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2522241a_2df95988",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T07:13:33Z",
+      "side": 1,
+      "message": "I was under an impression that there was something in the standard that brace-initialization *zeroes* everything after the explicitly defined values of the initial members - so it looked to me that avoiding the last array piece *should* make no difference. But the stuff is complex, and I indeed could just misunderstand it altogether 😊",
+      "parentUuid": "844c9b6d_2c63b257",
+      "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
