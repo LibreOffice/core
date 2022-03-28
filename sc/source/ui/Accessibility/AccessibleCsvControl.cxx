@@ -1163,7 +1163,7 @@ void ScAccessibleCsvGrid::SendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uI
     if( nFirstColumn <= nLastColumn )
     {
         AccessibleTableModelChange aModelChange(
-            AccessibleTableModelChangeType::INSERT, 0, implGetRowCount() - 1,
+            AccessibleTableModelChangeType::COLUMNS_INSERTED, -1, -1,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
         Any aOldAny, aNewAny;
         aNewAny <<= aModelChange;
@@ -1176,7 +1176,7 @@ void ScAccessibleCsvGrid::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uI
     if( nFirstColumn <= nLastColumn )
     {
         AccessibleTableModelChange aModelChange(
-            AccessibleTableModelChangeType::DELETE, 0, implGetRowCount() - 1,
+            AccessibleTableModelChangeType::COLUMNS_REMOVED, -1, -1,
             lcl_GetApiColumn( nFirstColumn ), lcl_GetApiColumn( nLastColumn ) );
         Any aOldAny, aNewAny;
         aNewAny <<= aModelChange;

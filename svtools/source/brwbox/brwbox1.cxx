@@ -495,9 +495,9 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
     commitTableEvent(
         TABLE_MODEL_CHANGED,
         makeAny( AccessibleTableModelChange(
-                    DELETE,
-                    0,
-                    GetRowCount(),
+                    COLUMNS_REMOVED,
+                    -1,
+                    -1,
                     nOldPos,
                     nOldPos
                 )
@@ -508,9 +508,9 @@ void BrowseBox::SetColumnPos( sal_uInt16 nColumnId, sal_uInt16 nPos )
     commitTableEvent(
         TABLE_MODEL_CHANGED,
         makeAny( AccessibleTableModelChange(
-                    INSERT,
-                    0,
-                    GetRowCount(),
+                    COLUMNS_INSERTED,
+                    -1,
+                    -1,
                     nPos,
                     nPos
                 )
@@ -740,9 +740,9 @@ void BrowseBox::RemoveColumn( sal_uInt16 nItemId )
 
     commitTableEvent(
         TABLE_MODEL_CHANGED,
-        makeAny( AccessibleTableModelChange(    DELETE,
-                                                0,
-                                                GetRowCount(),
+        makeAny( AccessibleTableModelChange(COLUMNS_REMOVED,
+                                                -1,
+                                                -1,
                                                 nPos,
                                                 nPos
                                            )
@@ -814,9 +814,9 @@ void BrowseBox::RemoveColumns()
     // notify a table model change
     commitTableEvent(
         TABLE_MODEL_CHANGED,
-        makeAny ( AccessibleTableModelChange( DELETE,
-                        0,
-                        GetRowCount(),
+        makeAny ( AccessibleTableModelChange( COLUMNS_REMOVED,
+                        -1,
+                        -1,
                         0,
                         nOldCount
                     )
@@ -1134,11 +1134,11 @@ void BrowseBox::Clear()
     // notify a table model change
     commitTableEvent(
         TABLE_MODEL_CHANGED,
-        makeAny( AccessibleTableModelChange( DELETE,
+        makeAny( AccessibleTableModelChange(ROWS_REMOVED,
             0,
             nOldRowCount,
-            0,
-            GetColumnCount())
+            -1,
+            -1)
         ),
         Any()
     );
@@ -1221,11 +1221,11 @@ void BrowseBox::RowInserted( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint, 
         commitTableEvent(
             TABLE_MODEL_CHANGED,
             makeAny( AccessibleTableModelChange(
-                        INSERT,
+                        ROWS_INSERTED,
                         nRow,
                         nRow + nNumRows,
-                        0,
-                        GetColumnCount()
+                        -1,
+                        -1
                     )
             ),
             Any()
@@ -1391,11 +1391,11 @@ void BrowseBox::RowRemoved( sal_Int32 nRow, sal_Int32 nNumRows, bool bDoPaint )
             commitTableEvent(
                 TABLE_MODEL_CHANGED,
                 makeAny( AccessibleTableModelChange(
-                            DELETE,
+                            ROWS_REMOVED,
                             nRow,
                             nRow + nNumRows,
-                            0,
-                            GetColumnCount()
+                            -1,
+                            -1
                             )
                 ),
                 Any()
