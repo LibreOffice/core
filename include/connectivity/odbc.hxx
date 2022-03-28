@@ -18,9 +18,7 @@
  */
 
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONDEFS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONDEFS_HXX
-
+#pragma once
 #if defined(_WIN32)
 
 #include <prewin.h>
@@ -93,8 +91,4 @@
 #define SQL_C_TCHAR     SQL_C_CHAR
 #endif
 #endif
-
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONDEFS_HXX
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
