@@ -16,6 +16,23 @@
       "message": "Stephan: would you consider this an improvement (I feel it cleaner, but who knows :)), or maybe are there any problems that I do not see here? (And I don\u0027t know it P1331R2 applies here anymore after the change.)",
       "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "844c9b6d_2c63b257",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-28T06:52:36Z",
+      "side": 1,
+      "message": "The drawback is that buffer is now forcefully zero-initialized, loosing the opportunity to keep it uninitialized---which had the nice benefit that the consteval ctor would not compile if it failed to write to every element of buffer.  In any case, that \"TODO: drop initialization for C++20\" comment was about exactly this opportunity, and it pertained to the initialization of buffer, not to the initialization of the whole struct.",
+      "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
