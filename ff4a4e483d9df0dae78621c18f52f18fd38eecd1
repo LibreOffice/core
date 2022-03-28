@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "348b8098_a318c235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-03-28T12:49:55Z",
+      "side": 1,
+      "message": "🙏",
+      "revId": "ff4a4e483d9df0dae78621c18f52f18fd38eecd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c00ed00_4fd0326f",
@@ -31,6 +48,24 @@
       "writtenOn": "2022-03-28T12:15:19Z",
       "side": 1,
       "message": "Why the \u0027vb\u0027 constants here? Is this a VBA-compatibility function? Then likely that should be mentioned explicitly both here, and on its help page; and then, we need these names defined?",
+      "revId": "ff4a4e483d9df0dae78621c18f52f18fd38eecd1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51cf651c_bf23f4d3",
+        "filename": "basic/qa/basic_coverage/test_CallByName.bas",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-03-28T12:49:55Z",
+      "side": 1,
+      "message": "Indeed, constant names are misleading and are absent from help page. Constants renamed.",
+      "parentUuid": "2c00ed00_4fd0326f",
       "revId": "ff4a4e483d9df0dae78621c18f52f18fd38eecd1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
