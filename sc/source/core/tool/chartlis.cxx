@@ -50,18 +50,18 @@ public:
 
 // ScChartListener
 ScChartListener::ExternalRefListener::ExternalRefListener(ScChartListener& rParent, ScDocument& rDoc) :
-    mrParent(rParent), mrDoc(rDoc)
+    mrParent(rParent), m_pDoc(&rDoc)
 {
 }
 
 ScChartListener::ExternalRefListener::~ExternalRefListener()
 {
-    if (mrDoc.IsInDtorClear())
+    if (!m_pDoc || m_pDoc->IsInDtorClear())
         // The document is being destroyed.  Do nothing.
         return;
 
     // Make sure to remove all pointers to this object.
-    mrDoc.GetExternalRefManager()->removeLinkListener(this);
+    m_pDoc->GetExternalRefManager()->removeLinkListener(this);
 }
 
 void ScChartListener::ExternalRefListener::notify(sal_uInt16 nFileId, ScExternalRefManager::LinkUpdateType eType)
@@ -78,6 +78,9 @@ void ScChartListener::ExternalRefListener::notify(sal_uInt16 nFileId, ScExternal
         break;
         case ScExternalRefManager::LINK_BROKEN:
             removeFileId(nFileId);
+        break;
+        case ScExternalRefManager::OH_NO_WE_ARE_GOING_TO_DIE:
+            m_pDoc = nullptr;
         break;
     }
 }
