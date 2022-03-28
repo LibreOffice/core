@@ -123,7 +123,7 @@ std::vector<Guess> SimpleGuesser::GuessLanguage(const char* text)
 
     int current_pointer = 0;
 
-    for(int i = 0; guess_list[current_pointer] != '\0'; i++)
+    while(guess_list[current_pointer] != '\0')
     {
         while (guess_list[current_pointer] != GUESS_SEPARATOR_OPEN && guess_list[current_pointer] != '\0')
             current_pointer++;
