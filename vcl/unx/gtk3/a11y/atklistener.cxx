@@ -647,7 +647,22 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                                                aSignalNames[aChange.Type].col,
                                                aChange.FirstColumn, nColumnsChanged );
                     break;
-
+                case accessibility::AccessibleTableModelChangeType::COLUMNS_INSERTED:
+                    g_signal_emit_by_name(G_OBJECT(atk_obj), "column-inserted",
+                                          aChange.FirstColumn, nColumnsChanged);
+                    break;
+                case accessibility::AccessibleTableModelChangeType::COLUMNS_REMOVED:
+                    g_signal_emit_by_name(G_OBJECT(atk_obj), "column-deleted",
+                                          aChange.FirstColumn, nColumnsChanged);
+                    break;
+                case accessibility::AccessibleTableModelChangeType::ROWS_INSERTED:
+                    g_signal_emit_by_name(G_OBJECT(atk_obj), "row-inserted",
+                                          aChange.FirstRow, nRowsChanged);
+                    break;
+                case accessibility::AccessibleTableModelChangeType::ROWS_REMOVED:
+                    g_signal_emit_by_name(G_OBJECT(atk_obj), "row-deleted",
+                                          aChange.FirstRow, nRowsChanged);
+                    break;
                 case accessibility::AccessibleTableModelChangeType::UPDATE:
                     // This is not really a model change, is it ?
                     break;

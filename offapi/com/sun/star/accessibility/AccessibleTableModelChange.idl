@@ -39,8 +39,8 @@ struct AccessibleTableModelChange
     /** The type of the event as defined in
             AccessibleTableModelChangeType.
 
-        <p>The model change either inserted or deleted one or more rows
-        and/or columns or modified the content of a number of cells.  See
+        <p>The model change either inserted or removed one or more rows
+        or columns or modified the content of a number of cells.  See
         AccessibleTableModelChangeType for details of the type
         of the model change.</p>
     */
