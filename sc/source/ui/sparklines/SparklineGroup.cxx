@@ -12,11 +12,14 @@
 
 namespace sc
 {
-SparklineGroup::SparklineGroup() {}
+SparklineGroup::SparklineGroup()
+    : m_aGUID(tools::Guid::Generate)
+{
+}
 
 SparklineGroup::SparklineGroup(SparklineGroup const& pOtherSparkline)
     : m_aAttributes(pOtherSparkline.m_aAttributes)
-    , m_sUID(pOtherSparkline.m_sUID)
+    , m_aGUID(pOtherSparkline.m_aGUID)
 {
 }
 

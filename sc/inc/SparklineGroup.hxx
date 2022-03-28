@@ -13,6 +13,7 @@
 #include "scdllapi.h"
 #include "SparklineAttributes.hxx"
 #include <tools/color.hxx>
+#include <tools/Guid.hxx>
 #include <optional>
 
 namespace sc
@@ -22,15 +23,15 @@ class SC_DLLPUBLIC SparklineGroup
 {
 private:
     SparklineAttributes m_aAttributes;
-    OUString m_sUID;
+    tools::Guid m_aGUID;
 
 public:
     SparklineAttributes& getAttributes() { return m_aAttributes; }
     SparklineAttributes const& getAttributes() const { return m_aAttributes; }
 
-    OUString getID() { return m_sUID; }
+    tools::Guid& getID() { return m_aGUID; }
 
-    void setID(OUString const& rID) { m_sUID = rID; }
+    void setID(tools::Guid const& rGuid) { m_aGUID = rGuid; }
 
     SparklineGroup();
     SparklineGroup(SparklineGroup const& pOtherSparkline);
