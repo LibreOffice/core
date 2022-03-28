@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3f15620_6e57e5da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-03-28T13:53:43Z",
+      "side": 1,
+      "message": "It seems that std::hypot is much slower that square root:\nhttps://stackoverflow.com/questions/32435796/when-to-use-stdhypotx-y-over-stdsqrtxx-yy\n\nI am wondering if this change is worth of it.",
+      "revId": "a8392680c73be2c2fcad016e60b4deb99ca5a41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
