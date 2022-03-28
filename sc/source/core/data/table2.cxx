@@ -2354,6 +2354,10 @@ bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, 
     for (SCCOL i=nCol1; i<=nCol2 && bEmpty; i++)
     {
         bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2 );
+        if (bEmpty)
+        {
+            bEmpty = aCol[i].IsSparklinesEmptyBlock(nRow1, nRow2);
+        }
         if (!bIgnoreNotes && bEmpty)
         {
             bEmpty = aCol[i].IsNotesEmptyBlock(nRow1, nRow2);

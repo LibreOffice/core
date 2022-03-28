@@ -2082,6 +2082,37 @@ void ScColumn::DuplicateSparklines(SCROW nStartRow, size_t nDataSize, ScColumn& 
     rDestBlockPos.miSparklinePos = rDestCol.maSparklines.begin();
 }
 
+bool ScColumn::HasSparklines() const
+{
+    if (maSparklines.block_size() == 1 && maSparklines.begin()->type == sc::element_type_empty)
+        return false; // all elements are empty
+    return true; // otherwise some must be sparklines
+}
+
+SCROW ScColumn::GetSparklinesMaxRow() const
+{
+    SCROW maxRow = 0;
+    for (const auto& rSparkline : maSparklines)
+    {
+        if (rSparkline.type == sc::element_type_sparkline)
+            maxRow = rSparkline.position + rSparkline.size - 1;
+    }
+    return maxRow;
+}
+
+SCROW ScColumn::GetSparklinesMinRow() const
+{
+    SCROW minRow = 0;
+    sc::SparklineStoreType::const_iterator it = std::find_if(maSparklines.begin(), maSparklines.end(),
+        [](const auto& rSparkline)
+        {
+            return rSparkline.type == sc::element_type_sparkline;
+        });
+    if (it != maSparklines.end())
+        minRow = it->position;
+    return minRow;
+}
+
 // Notes
 
 ScPostIt* ScColumn::GetCellNote(SCROW nRow)
