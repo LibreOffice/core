@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9add0729_cc46cd8c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-28T06:40:33Z",
+      "side": 1,
+      "message": "You left empty lines behind.\nIt would be better to refer to the open report 143148 and also describe what you did in the message, like Use pragma once in connectivity.\nPlease amend your change https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version",
+      "revId": "0a5c403cd5fd5a90d8c25ae4106afe083da5587f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
