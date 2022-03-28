@@ -4532,7 +4532,8 @@ IMPL_LINK_NOARG(SwContentTree, SelectHdl, weld::TreeView&, void)
         return;
     // Select the content type in the Navigate By control
     std::unique_ptr<weld::TreeIter> xEntry(m_xTreeView->make_iterator());
-    m_xTreeView->get_selected(xEntry.get());
+    if (!m_xTreeView->get_selected(xEntry.get()))
+        return;
     while (m_xTreeView->get_iter_depth(*xEntry))
         m_xTreeView->iter_parent(*xEntry);
     m_pDialog->SelectNavigateByContentType(m_xTreeView->get_text(*xEntry));
