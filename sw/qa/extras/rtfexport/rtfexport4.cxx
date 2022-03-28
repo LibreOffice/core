@@ -469,33 +469,33 @@ DECLARE_RTFEXPORT_TEST(testTdf111851, "tdf111851.rtf")
     // No shading
     uno::Reference<text::XTextRange> xCell1(xTable->getCellByName("A1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("a"), xCell1->getString());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell1, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xCell1, "BackColor"));
 
     uno::Reference<text::XTextRange> xCell2(xTable->getCellByName("B1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("b"), xCell2->getString());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(xCell2, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xCell2, "BackColor"));
 
     // Check some random not standard shading values and ensure some non-white background color
     uno::Reference<text::XTextRange> xCell3(xTable->getCellByName("C1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("c"), xCell3->getString());
-    sal_Int32 nShadingColor3 = getProperty<sal_Int32>(xCell3, "BackColor");
-    CPPUNIT_ASSERT(0x00FFFFFF > nShadingColor3);
-    CPPUNIT_ASSERT(0 < nShadingColor3);
+    Color nShadingColor3 = getProperty<Color>(xCell3, "BackColor");
+    CPPUNIT_ASSERT(COL_WHITE > nShadingColor3);
+    CPPUNIT_ASSERT(COL_BLACK < nShadingColor3);
 
     uno::Reference<text::XTextRange> xCell4(xTable->getCellByName("D1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("d"), xCell4->getString());
-    sal_Int32 nShadingColor4 = getProperty<sal_Int32>(xCell4, "BackColor");
-    CPPUNIT_ASSERT(0x00FFFFFF > nShadingColor4);
-    CPPUNIT_ASSERT(0 < nShadingColor4);
+    Color nShadingColor4 = getProperty<Color>(xCell4, "BackColor");
+    CPPUNIT_ASSERT(COL_WHITE > nShadingColor4);
+    CPPUNIT_ASSERT(COL_BLACK < nShadingColor4);
 
     // Values 10000 and more - black
     uno::Reference<text::XTextRange> xCell5(xTable->getCellByName("E1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("e"), xCell5->getString());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xCell5, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xCell5, "BackColor"));
 
     uno::Reference<text::XTextRange> xCell6(xTable->getCellByName("F1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("f"), xCell6->getString());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xCell6, "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xCell6, "BackColor"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
