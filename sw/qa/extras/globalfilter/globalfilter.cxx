@@ -691,19 +691,19 @@ void Test::testCharHighlightODF()
         switch (i)
         {
             case 1: // non-transparent highlight
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(64), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(Color(0x000040), getProperty<Color>(xRun, "CharBackColor"));
             CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
             case 2: // transparent backcolor
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_TRANSPARENT), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(COL_TRANSPARENT, getProperty<Color>(xRun, "CharBackColor"));
             CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
             case 3: // non-transparent backcolor
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(128), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(COL_BLUE, getProperty<Color>(xRun, "CharBackColor"));
             CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
             case 4: // non-transparent highlight again
-            CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(64), getProperty<sal_Int32>(xRun, "CharBackColor"));
+            CPPUNIT_ASSERT_EQUAL(Color(0x000040), getProperty<Color>(xRun, "CharBackColor"));
             CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xRun, "CharBackTransparent"));
             break;
         }
@@ -1781,9 +1781,9 @@ void Test::testDateFormFieldCharacterFormatting()
 
         // We have one date field, first half of the field has bold character weight and second part has red character color
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(1), 3), "CharWeight"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_AUTO, Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraph(1), 3), "CharColor")));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), COL_AUTO, getProperty<Color>(getRun(getParagraph(1), 3), "CharColor"));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), awt::FontWeight::NORMAL, getProperty<float>(getRun(getParagraph(1), 4), "CharWeight"));
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), Color(ColorTransparency, getProperty<sal_Int32>(getRun(getParagraph(1), 4), "CharColor")));
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFailedMessage.getStr(), Color(0xff0000), getProperty<Color>(getRun(getParagraph(1), 4), "CharColor"));
     }
 }
 

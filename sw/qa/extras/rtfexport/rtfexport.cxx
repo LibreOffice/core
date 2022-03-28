@@ -599,8 +599,7 @@ DECLARE_RTFEXPORT_TEST(testTextFrameBorders, "textframe-borders.rtf")
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(),
                                                          uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0xD99594),
-                         Color(ColorTransparency, getProperty<sal_Int32>(xFrame, "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xD99594), getProperty<Color>(xFrame, "BackColor"));
 
     table::BorderLine2 aBorder = getProperty<table::BorderLine2>(xFrame, "TopBorder");
     CPPUNIT_ASSERT_EQUAL(Color(0xC0504D), Color(ColorTransparency, aBorder.Color));
@@ -736,8 +735,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
     // This was too dark, 0x7f7f7f.
-    CPPUNIT_ASSERT_EQUAL(Color(0xd8d8d8),
-                         Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xd8d8d8), getProperty<Color>(xCell, "BackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo68787, "fdo68787.rtf")
@@ -1103,8 +1101,7 @@ DECLARE_RTFEXPORT_TEST(testPageBackground, "page-background.rtf")
     // The problem was that \background was ignored.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(Color(0x92D050),
-                         Color(ColorTransparency, getProperty<sal_Int32>(xPageStyle, "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x92D050), getProperty<Color>(xPageStyle, "BackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf96175, "tdf96175.rtf")
