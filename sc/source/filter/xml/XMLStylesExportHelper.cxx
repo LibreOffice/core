@@ -752,6 +752,7 @@ sal_Int32 ScFormatRangeStyles::GetStyleNameIndex(const sal_Int32 nTable,
     const sal_Int32 nColumn, const sal_Int32 nRow, bool& bIsAutoStyle) const
 {
     OSL_ENSURE(o3tl::make_unsigned(nTable) < aTables.size(), "wrong table");
+    bIsAutoStyle = false;
     if (o3tl::make_unsigned(nTable) >= aTables.size())
         return -1;
     for (const ScMyFormatRange & rFormatRange : aTables[nTable])
