@@ -1099,7 +1099,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
     const Any* pSelectedRow         = m_aSourceSelection.getConstArray();
     const Any* pSelEnd              = pSelectedRow + m_aSourceSelection.getLength();
 
-    sal_Int32 nRowCount = 0;
     bool bContinue = false;
 
     CopyTableRowEvent aCopyEvent;
@@ -1133,8 +1132,6 @@ void CopyTableWizard::impl_copyRows_throw( const Reference< XResultSet >& _rxSou
         {
             break;
         }
-
-        ++nRowCount;
 
         aCopyEvent.Error.clear();
         try
