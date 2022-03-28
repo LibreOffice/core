@@ -277,7 +277,7 @@ std::string VirtualDead::toString(SourceLocation loc)
     return sourceLocation;
 }
 
-loplugin::Plugin::Registration<VirtualDead> X("virtualdead", false);
+loplugin::Plugin::Registration<VirtualDead> X("virtualdead", true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

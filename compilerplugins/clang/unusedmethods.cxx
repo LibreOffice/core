@@ -457,7 +457,7 @@ bool UnusedMethods::TraverseCXXDeductionGuideDecl(CXXDeductionGuideDecl* f)
     return ret;
 }
 
-loplugin::Plugin::Registration< UnusedMethods > X("unusedmethods", false);
+loplugin::Plugin::Registration< UnusedMethods > X("unusedmethods", true);
 
 }
 

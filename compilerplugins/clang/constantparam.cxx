@@ -289,7 +289,7 @@ bool ConstantParam::VisitCXXConstructExpr( const CXXConstructExpr* constructExpr
 }
 
 
-loplugin::Plugin::Registration< ConstantParam > X("constantparam", false);
+loplugin::Plugin::Registration< ConstantParam > X("constantparam", true);
 
 }
 

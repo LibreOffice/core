@@ -199,7 +199,7 @@ std::string UnnecessaryVirtual::toString(SourceLocation loc)
 }
 
 
-loplugin::Plugin::Registration< UnnecessaryVirtual > X("unnecessaryvirtual", false);
+loplugin::Plugin::Registration< UnnecessaryVirtual > X("unnecessaryvirtual", true);
 
 }
 
