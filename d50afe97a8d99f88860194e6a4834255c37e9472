@@ -69,6 +69,24 @@
       "parentUuid": "2522241a_2df95988",
       "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a637195b_751b3fff",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-28T12:10:21Z",
+      "side": 1,
+      "message": "the opportunity to keep it uninitialized was thwarted (and the TODO comment broken) by \u003chttps://git.libreoffice.org/core/+/21584b304b21bfe6b99b6f29018c6b754ea28fc0%5E!/\u003e \"make OUString(OUStringLiteral) constructor constexpr\" and \u003chttps://git.libreoffice.org/core/+/bca539e889d40e06cb3275442622cb075b2484a2%5E!/\u003e \"make OString(OStringLiteral) constructor constexpr\"; I\u0027ll look into fixing that",
+      "parentUuid": "60b8c2f8_4fc490e8",
+      "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
