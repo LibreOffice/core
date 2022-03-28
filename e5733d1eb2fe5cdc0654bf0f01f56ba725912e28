@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c0c55d8_765e9120",
+        "filename": "Repository.mk",
+        "patchSetId": 15
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-28T06:57:29Z",
+      "side": 1,
+      "message": "I think `$(filter WNT,$(OS),` is a more canonical way to write this (as already used two lines below)",
+      "range": {
+        "startLine": 417,
+        "startChar": 6,
+        "endLine": 417,
+        "endChar": 26
+      },
+      "revId": "e5733d1eb2fe5cdc0654bf0f01f56ba725912e28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
