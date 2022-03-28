@@ -2217,7 +2217,6 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     // Perform the fill once per each 'outer' position i.e. one per column
     // when filling vertically.
 
-    sal_uInt64 nActFormCnt = 0;
     for (rOuter = nOStart; rOuter <= nOEnd; rOuter++)
     {
         rInner = nISource;
@@ -2511,7 +2510,6 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
             nProgress += nIMax - nIMin + 1;
             pProgress->SetStateOnPercent( nProgress );
         }
-        ++nActFormCnt;
     }
 }
 
