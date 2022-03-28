@@ -50,6 +50,24 @@
       "message": "Instead of quadruplicating the same ternary expression at different places please create a local inline function that does this and can be changed later in that one central place to handle 64-bit values. Also adding a SAL_WARN() as Luboš mentioned sounds like a good idea.",
       "revId": "f1fd542e93abca1f5797b271198dae85698079bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7565452_fa75f6f6",
+        "filename": "sc/source/filter/oox/worksheethelper.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1367,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2022-03-28T09:26:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a12f74b_0d0c91a0",
+      "revId": "f1fd542e93abca1f5797b271198dae85698079bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
