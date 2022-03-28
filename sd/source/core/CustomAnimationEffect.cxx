@@ -2179,7 +2179,7 @@ bool EffectSequenceHelper::getParagraphNumberingLevels( const Reference< XShape 
 
             if( xEnumeration.is() )
             {
-                for( sal_Int32 index = 0; xEnumeration->hasMoreElements(); index++ )
+                while( xEnumeration->hasMoreElements() )
                 {
                     Reference< XPropertySet > xParaSet;
                     xEnumeration->nextElement() >>= xParaSet;
