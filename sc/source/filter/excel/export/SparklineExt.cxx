@@ -189,7 +189,7 @@ void SparklineExt::addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGrou
     auto pAttrList = sax_fastparser::FastSerializerHelper::createAttrList();
 
     // Write ID
-    OString sUID = OUStringToOString(rSparklineGroup.getID(), RTL_TEXTENCODING_UTF8);
+    OString sUID = rSparklineGroup.getID().getString();
     pAttrList->addNS(XML_xr2, XML_uid, sUID);
 
     // Write attributes

@@ -153,6 +153,7 @@ void SparklineTest::testCopyPasteSparkline()
 
     ScRange aSourceRange(0, 6, 0, 0, 6, 0);
     auto pSparkline = rDocument.GetSparkline(aSourceRange.aStart);
+    auto const& pOriginalGroup = pSparkline->getSparklineGroup();
 
     CPPUNIT_ASSERT(pSparkline);
     CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
@@ -177,6 +178,11 @@ void SparklineTest::testCopyPasteSparkline()
 
         CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparklineCopy->getColumn());
         CPPUNIT_ASSERT_EQUAL(SCROW(7), pSparklineCopy->getRow());
+
+        auto const& pCopyGroup = pSparklineCopy->getSparklineGroup();
+
+        CPPUNIT_ASSERT(pOriginalGroup->getID() == pCopyGroup->getID());
+        CPPUNIT_ASSERT(pOriginalGroup.get() == pCopyGroup.get());
     }
 
     // Copy / Paste with a ClipDoc
@@ -198,6 +204,11 @@ void SparklineTest::testCopyPasteSparkline()
 
         CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparklineCopy->getColumn());
         CPPUNIT_ASSERT_EQUAL(SCROW(8), pSparklineCopy->getRow());
+
+        auto const& pCopyGroup = pSparklineCopy->getSparklineGroup();
+
+        CPPUNIT_ASSERT(pOriginalGroup->getID() == pCopyGroup->getID());
+        CPPUNIT_ASSERT(pOriginalGroup.get() == pCopyGroup.get());
     }
 
     xDocSh->DoClose();
