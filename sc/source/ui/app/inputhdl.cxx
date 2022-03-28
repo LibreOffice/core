@@ -2387,7 +2387,7 @@ void ScInputHandler::RemoveAdjust()
 void ScInputHandler::RemoveRangeFinder()
 {
     // Delete pRangeFindList and colors
-    mpEditEngine->SetUpdateLayout(false);
+    const bool bUpdateLayout = mpEditEngine->SetUpdateLayout(false);
     sal_Int32 nCount = mpEditEngine->GetParagraphCount(); // Could just have been inserted
     for (sal_Int32 i=0; i<nCount; i++)
         mpEditEngine->RemoveCharAttribs( i, EE_CHAR_COLOR );
@@ -2397,6 +2397,8 @@ void ScInputHandler::RemoveRangeFinder()
     pActiveView->ShowCursor( false );
 
     DeleteRangeFinder(); // Deletes the list and the labels on the table
+    if (bUpdateLayout)
+        mpEditEngine->SetUpdateLayout(true);
 }
 
 bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bInputActivated,
@@ -3122,7 +3124,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     //  After RemoveAdjust, the EditView must not be repainted (has wrong font size etc).
     //  SetUpdateLayout must come after CompleteOnlineSpelling.
     //  The view is hidden in any case below (Broadcast).
-    mpEditEngine->SetUpdateLayout( false );
+    const bool bUpdateLayout = mpEditEngine->SetUpdateLayout( false );
 
     if ( bModified && !bForget ) // What is being entered (text/object)?
     {
@@ -3360,6 +3362,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
     bInOwnChange = false;
     bInEnterHandler = false;
+    if (bUpdateLayout)
+        mpEditEngine->SetUpdateLayout( true );
 }
 
 void ScInputHandler::CancelHandler()
