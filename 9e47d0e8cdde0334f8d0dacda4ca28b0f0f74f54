@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a113b3c6_c5deefe4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-28T13:06:51Z",
+      "side": 1,
+      "message": "Success for Linux, Windows, macOS, and iOS is good enough.",
+      "revId": "9e47d0e8cdde0334f8d0dacda4ca28b0f0f74f54",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
