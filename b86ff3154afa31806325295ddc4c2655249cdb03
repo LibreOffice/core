@@ -16,6 +16,23 @@
       "message": "Thanks. feel free to go ahead with this if you want.\n\nMy ideal would be include before/after cost (time) for a large document in the commit message if you do an optimization, though. :-)",
       "revId": "b86ff3154afa31806325295ddc4c2655249cdb03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07ff34ff_da28ba71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-28T15:58:53Z",
+      "side": 1,
+      "message": "I had tried to retrieve the time with \"--eventtesting\" option but it hangs, so I gave up.\n(and --terminate_after_init as its name indicates quits after LO init, not after file loading).\n\nAnyway, let\u0027s push this one since you\u0027re ok and Jenkins too.",
+      "revId": "b86ff3154afa31806325295ddc4c2655249cdb03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
