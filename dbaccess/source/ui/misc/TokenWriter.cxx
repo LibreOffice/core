@@ -791,14 +791,12 @@ void OHTMLImportExport::WriteTables()
 
         // 2. and now the data
         Reference< XRowSet > xRowSet(m_xRow,UNO_QUERY);
-        sal_Int32 kk=0;
         m_xResultSet->beforeFirst(); // set back before the first row
         while(m_xResultSet->next())
         {
             IncIndent(1);
             HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_tablerow).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
-            ++kk;
             for(sal_Int32 i=1;i<=aNames.getLength();++i)
             {
                 if(i == aNames.getLength())
