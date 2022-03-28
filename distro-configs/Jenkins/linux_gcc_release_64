@@ -5,3 +5,5 @@ CXX=/opt/rh/devtoolset-7/root/usr/bin/g++
 --with-jdk-home=/etc/alternatives/java_sdk_11
 --enable-odk
 --enable-mergelibs
+--disable-dconf
+--enable-python=internal
