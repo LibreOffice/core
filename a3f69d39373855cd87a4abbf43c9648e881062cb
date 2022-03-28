@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b4dc3ade_0aef0485",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-28T14:31:28Z",
+      "side": 1,
+      "message": "Adding you as you opened tdf#143193",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "fcf96f95_4a392236",
         "filename": "basic/source/sbx/sbxscan.cxx",
         "patchSetId": 6
