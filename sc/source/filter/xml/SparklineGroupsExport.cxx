@@ -187,11 +187,8 @@ void SparklineGroupsExport::addSparklineGroup(SparklineGroup* pSparklineGroup)
 {
     auto const& rAttributes = pSparklineGroup->getAttributes();
 
-    OUString sID = pSparklineGroup->getID();
-    if (!sID.isEmpty())
-    {
-        m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_ID, sID);
-    }
+    OUString sID = pSparklineGroup->getID().getOUString();
+    m_rExport.AddAttribute(XML_NAMESPACE_CALC_EXT, XML_ID, sID);
 
     addSparklineGroupAttributes(rAttributes);
 

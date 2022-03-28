@@ -67,11 +67,11 @@ enum class EEHorizontalTextDirection;
 namespace editeng { class SvxBorderLine; }
 namespace formula { struct VectorRefArray; }
 namespace svl {
-
 class SharedString;
 class SharedStringPool;
-
 }
+
+namespace tools { class Guid; }
 
 namespace sc {
 
@@ -205,6 +205,7 @@ struct ScFilterEntries;
 typedef o3tl::sorted_vector<sal_uInt32> ScCondFormatIndexes;
 struct ScSheetLimits;
 struct ScDataAreaExtras;
+
 
 namespace sc {
 
@@ -1247,6 +1248,8 @@ public:
     SC_DLLPUBLIC sc::SparklineList* GetSparklineList(SCTAB nTab);
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rPosition);
     SC_DLLPUBLIC bool HasOneSparklineGroup(ScRange const& rRange);
+    SC_DLLPUBLIC std::shared_ptr<sc::SparklineGroup> SearchSparklineGroup(tools::Guid const& rGuid);
+
     /** Notes **/
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
