@@ -424,7 +424,7 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 ScRange aRange(pRefHint->GetRange());
                 if ((nX < 0) || (nY < 0))
                 {
-                    OSL_ENSURE(!((nX < 0) && (nY < 0)), "should not be possible to remove row and column at the same time");
+                    assert(!((nX < 0) && (nY < 0)) && "should not be possible to remove row and column at the same time");
                     nId = AccessibleTableModelChangeType::DELETE;
                     if (nX < 0)
                     {
@@ -439,13 +439,13 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 }
                 else if ((nX > 0) || (nY > 0))
                 {
-                    OSL_ENSURE(!((nX > 0) && (nY > 0)), "should not be possible to add row and column at the same time");
+                    assert(!((nX > 0) && (nY > 0)) && "should not be possible to add row and column at the same time");
                     nId = AccessibleTableModelChangeType::INSERT;
                     nX = aRange.aEnd.Col() - aRange.aStart.Col();
                 }
                 else
                 {
-                    OSL_FAIL("is it a deletion or an insertion?");
+                    assert(false && "is it a deletion or an insertion?");
                 }
 
                 CommitTableModelChange(pRefHint->GetRange().aStart.Row(),
