@@ -39,7 +39,7 @@ class CxnListContext
 {
 public:
     CxnListContext( ContextHandler2Helper const & rParent,
-                    dgm::Connections & aConnections )
+                    svx::diagram::Connections & aConnections )
         : ContextHandler2( rParent )
         , mrConnection( aConnections )
         {
@@ -54,9 +54,9 @@ public:
                 case DGM_TOKEN( cxn ):
                 {
                     mrConnection.emplace_back( );
-                    dgm::Connection& rConnection=mrConnection.back();
+                    svx::diagram::Connection& rConnection=mrConnection.back();
 
-                    rConnection.mnType = rAttribs.getToken( XML_type, XML_parOf );
+                    rConnection.mnXMLType = static_cast<svx::diagram::TypeConstant>(rAttribs.getToken( XML_type, XML_parOf ));
                     rConnection.msModelId = rAttribs.getString( XML_modelId ).get();
                     rConnection.msSourceId = rAttribs.getString( XML_srcId ).get();
                     rConnection.msDestId  = rAttribs.getString( XML_destId ).get();
@@ -76,7 +76,7 @@ public:
             return this;
         }
 private:
-    dgm::Connections& mrConnection;
+    svx::diagram::Connections& mrConnection;
 };
 
 // CT_presLayoutVars
@@ -85,7 +85,7 @@ class PresLayoutVarsContext
 {
 public:
     PresLayoutVarsContext( ContextHandler2Helper const & rParent,
-                           dgm::Point & rPoint ) :
+                           svx::diagram::Point & rPoint ) :
         ContextHandler2( rParent ),
         mrPoint( rPoint )
     {
@@ -113,8 +113,13 @@ public:
                 mrPoint.mnDirection = rAttribs.getToken( XML_val, XML_norm );
                 break;
             case DGM_TOKEN( hierBranch ):
-                mrPoint.moHierarchyBranch = rAttribs.getToken( XML_val );
+            {
+                // need to convert from oox::OptValue to std::optional since 1st is not available in svx
+                const OptValue< sal_Int32 > aOptVal(rAttribs.getToken( XML_val ));
+                if(aOptVal.has())
+                    mrPoint.moHierarchyBranch = aOptVal.get();
                 break;
+            }
             case DGM_TOKEN( orgChart ):
                 mrPoint.mbOrgChartEnabled = rAttribs.getBool( XML_val, false );
                 break;
@@ -129,7 +134,7 @@ public:
     }
 
 private:
-    dgm::Point& mrPoint;
+    svx::diagram::Point& mrPoint;
 };
 
 // CT_prSet
@@ -138,7 +143,7 @@ class PropertiesContext
 {
 public:
     PropertiesContext( ContextHandler2Helper const & rParent,
-                       dgm::Point & rPoint,
+                       svx::diagram::Point & rPoint,
                        const AttributeList& rAttribs ) :
         ContextHandler2( rParent ),
         mrPoint( rPoint )
@@ -193,7 +198,7 @@ public:
         }
 
 private:
-    dgm::Point& mrPoint;
+    svx::diagram::Point& mrPoint;
 };
 
 // CL_Pt
@@ -203,7 +208,7 @@ class PtContext
 public:
     PtContext( ContextHandler2Helper const & rParent,
                const AttributeList& rAttribs,
-               dgm::Point & rPoint,
+               svx::diagram::Point & rPoint,
                DiagramData& rDiagramData):
         ContextHandler2( rParent ),
         mrPoint( rPoint ),
@@ -213,7 +218,7 @@ public:
 
         // the default type is XML_node
         const sal_Int32 nType  = rAttribs.getToken( XML_type, XML_node );
-        mrPoint.mnType = nType;
+        mrPoint.mnXMLType = static_cast<svx::diagram::TypeConstant>(nType);
 
         // ignore the cxnId unless it is this type. See 5.15.3.1.3 in Primer
         if( ( nType == XML_parTrans ) || ( nType == XML_sibTrans ) )
@@ -249,7 +254,7 @@ public:
         }
 
 private:
-    dgm::Point& mrPoint;
+    svx::diagram::Point& mrPoint;
     DiagramData& mrDiagramData;
 };
 
@@ -258,7 +263,7 @@ class PtListContext
     : public ContextHandler2
 {
 public:
-    PtListContext( ContextHandler2Helper const & rParent,  dgm::Points& rPoints, DiagramData& rDiagramData) :
+    PtListContext( ContextHandler2Helper const & rParent,  svx::diagram::Points& rPoints, DiagramData& rDiagramData) :
         ContextHandler2( rParent ),
         mrPoints( rPoints ),
         mrDiagramData( rDiagramData )
@@ -282,7 +287,7 @@ public:
         }
 
 private:
-    dgm::Points& mrPoints;
+    svx::diagram::Points& mrPoints;
     DiagramData& mrDiagramData;
 };
 

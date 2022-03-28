@@ -26,130 +26,21 @@
 
 #include <rtl/ustring.hxx>
 
+#include <svx/diagram/datamodel.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/token/tokens.hxx>
 
 namespace oox::drawingml {
 
-namespace dgm {
-
-/** A Connection
- */
-struct Connection
-{
-    Connection() :
-        mnType( 0 ),
-        mnSourceOrder( 0 ),
-        mnDestOrder( 0 )
-    {}
-
-    void dump() const;
-
-    sal_Int32 mnType;
-    OUString msModelId;
-    OUString msSourceId;
-    OUString msDestId;
-    OUString msParTransId;
-    OUString msPresId;
-    OUString msSibTransId;
-    sal_Int32 mnSourceOrder;
-    sal_Int32 mnDestOrder;
-
-};
-
-typedef std::vector< Connection > Connections;
-
-/** A point
- */
-struct Point
-{
-    Point() :
-        mnType(0),
-        mnMaxChildren(-1),
-        mnPreferredChildren(-1),
-        mnDirection(XML_norm),
-        mnResizeHandles(XML_rel),
-        mnCustomAngle(-1),
-        mnPercentageNeighbourWidth(-1),
-        mnPercentageNeighbourHeight(-1),
-        mnPercentageOwnWidth(-1),
-        mnPercentageOwnHeight(-1),
-        mnIncludeAngleScale(-1),
-        mnRadiusScale(-1),
-        mnWidthScale(-1),
-        mnHeightScale(-1),
-        mnWidthOverride(-1),
-        mnHeightOverride(-1),
-        mnLayoutStyleCount(-1),
-        mnLayoutStyleIndex(-1),
-
-        mbOrgChartEnabled(false),
-        mbBulletEnabled(false),
-        mbCoherent3DOffset(false),
-        mbCustomHorizontalFlip(false),
-        mbCustomVerticalFlip(false),
-        mbCustomText(false),
-        mbIsPlaceholder(false)
-    {}
-
-    void dump(const Shape* pShape) const;
-
-    OUString msCnxId;
-    OUString msModelId;
-    OUString msColorTransformCategoryId;
-    OUString msColorTransformTypeId;
-    OUString msLayoutCategoryId;
-    OUString msLayoutTypeId;
-    OUString msPlaceholderText;
-    OUString msPresentationAssociationId;
-    OUString msPresentationLayoutName;
-    OUString msPresentationLayoutStyleLabel;
-    OUString msQuickStyleCategoryId;
-    OUString msQuickStyleTypeId;
-
-    sal_Int32     mnType;
-    sal_Int32     mnMaxChildren;
-    sal_Int32     mnPreferredChildren;
-    sal_Int32     mnDirection;
-    OptValue<sal_Int32> moHierarchyBranch;
-    sal_Int32     mnResizeHandles;
-    sal_Int32     mnCustomAngle;
-    sal_Int32     mnPercentageNeighbourWidth;
-    sal_Int32     mnPercentageNeighbourHeight;
-    sal_Int32     mnPercentageOwnWidth;
-    sal_Int32     mnPercentageOwnHeight;
-    sal_Int32     mnIncludeAngleScale;
-    sal_Int32     mnRadiusScale;
-    sal_Int32     mnWidthScale;
-    sal_Int32     mnHeightScale;
-    sal_Int32     mnWidthOverride;
-    sal_Int32     mnHeightOverride;
-    sal_Int32     mnLayoutStyleCount;
-    sal_Int32     mnLayoutStyleIndex;
-
-    bool          mbOrgChartEnabled;
-    bool          mbBulletEnabled;
-    bool          mbCoherent3DOffset;
-    bool          mbCustomHorizontalFlip;
-    bool          mbCustomVerticalFlip;
-    bool          mbCustomText;
-    bool          mbIsPlaceholder;
-};
-
-typedef std::vector< Point >        Points;
-
-}
-
-// class DiagramData : public DiagramDataInterface
 class DiagramData
 {
 public:
     typedef std::map< OUString, ShapePtr > PointShapeMap;
     typedef std::map< OUString, TextBodyPtr > PointTextMap;
-    typedef std::map< OUString, dgm::Point* > PointNameMap;
-    typedef std::map< OUString, std::vector<dgm::Point*> > PointsNameMap;
-    typedef std::map< OUString, const dgm::Connection* > ConnectionNameMap;
+    typedef std::map< OUString, svx::diagram::Point* > PointNameMap;
+    typedef std::map< OUString, std::vector< svx::diagram::Point* > > PointsNameMap;
+    typedef std::map< OUString, const svx::diagram::Connection* > ConnectionNameMap;
 
     struct SourceIdAndDepth
     {
@@ -168,9 +59,9 @@ public:
 
     FillPropertiesPtr & getFillProperties()
         { return mpFillProperties; }
-    dgm::Connections & getConnections()
+    svx::diagram::Connections & getConnections()
         { return maConnections; }
-    dgm::Points & getPoints()
+    svx::diagram::Points & getPoints()
         { return maPoints; }
     StringMap & getPresOfNameMap()
         { return maPresOfNameMap; }
@@ -180,7 +71,7 @@ public:
         { return maPointsPresNameMap; }
     ::std::vector<OUString> &getExtDrawings()
         { return maExtDrawings; }
-    const dgm::Point* getRootPoint() const;
+    const svx::diagram::Point* getRootPoint() const;
     void dump() const;
 
     OUString getString() const;
@@ -188,28 +79,28 @@ public:
     OUString addNode(const OUString& rText);
     bool removeNode(const OUString& rNodeId);
 
-    Shape* getOrCreateAssociatedShape(const dgm::Point& rPoint, bool bCreateOnDemand = false) const;
+    Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 
     // get/set data between Diagram DataModel and oox::drawingml::Shape
     void secureDataFromShapeToModelAfterDiagramImport();
-    void restoreDataFromModelToShapeAfterReCreation(const dgm::Point& rPoint, Shape& rNewShape) const;
+    void restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape) const;
 
 private:
-    void getChildrenString(OUStringBuffer& rBuf, const dgm::Point* pPoint, sal_Int32 nLevel) const;
-    void addConnection(sal_Int32 nType, const OUString& sSourceId, const OUString& sDestId);
+    void getChildrenString(OUStringBuffer& rBuf, const svx::diagram::Point* pPoint, sal_Int32 nLevel) const;
+    void addConnection(svx::diagram::TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
 
     // evtl. existing alternative imported visualization identifier
     ::std::vector<OUString>  maExtDrawings;
 
     // the model definition,
     // - FillStyle
-    // - Texts for oox::drawingml::Points/dgm::Points, associated by ModelId
+    // - Texts for oox::drawingml::Points/svx::diagram::Points, associated by ModelId
     // - logic connections/associations
     // - data point entries
     FillPropertiesPtr mpFillProperties;
     PointTextMap      maPointTextMap;
-    dgm::Connections  maConnections;
-    dgm::Points       maPoints;
+    svx::diagram::Connections  maConnections;
+    svx::diagram::Points       maPoints;
 
     // temporary processing data
     PointShapeMap     maPointShapeMap;
