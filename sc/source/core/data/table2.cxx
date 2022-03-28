@@ -2615,13 +2615,14 @@ bool ScTable::HasBlockMatrixFragment( const SCCOL nCol1, SCROW nRow1, const SCCO
 bool ScTable::HasSelectionMatrixFragment( const ScMarkData& rMark ) const
 {
     std::vector<sc::ColRowSpan> aSpans = rMark.GetMarkedColSpans();
+    ScRangeList rangeList = rMark.GetMarkedRanges();
 
     for (const sc::ColRowSpan & aSpan : aSpans)
     {
         SCCOL nEndCol = ClampToAllocatedColumns(aSpan.mnEnd);
         for ( SCCOLROW j=aSpan.mnStart; j<=nEndCol; j++ )
         {
-            if ( aCol[j].HasSelectionMatrixFragment(rMark) )
+            if ( aCol[j].HasSelectionMatrixFragment(rMark, rangeList) )
                 return true;
         }
     }
@@ -2639,8 +2640,6 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
             *pOnlyNotBecauseOfMatrix = false;
         return false;
     }
-    nCol1 = ClampToAllocatedColumns(nCol1);
-    nCol2 = ClampToAllocatedColumns(nCol2);
 
     bool bIsEditable = true;
     if ( nLockCount )

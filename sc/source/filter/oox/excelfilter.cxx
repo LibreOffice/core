@@ -33,11 +33,6 @@
 #include <document.hxx>
 #include <docsh.hxx>
 #include <scerrors.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/weld.hxx>
-#include <svtools/sfxecode.hxx>
-#include <svtools/ehdl.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 
 namespace oox::xls {
@@ -108,66 +103,23 @@ bool ExcelFilter::importDocument()
         WorkbookGlobalsRef xBookGlob(WorkbookHelper::constructGlobals(*this));
         if (xBookGlob)
         {
-            rtl::Reference<FragmentHandler> xWorkbookFragment( new WorkbookFragment(*xBookGlob, aWorkbookPath));
+            rtl::Reference<WorkbookFragment> xWorkbookFragment( new WorkbookFragment(*xBookGlob, aWorkbookPath));
 
-            const WorkbookFragment* pWF = static_cast<const WorkbookFragment*>(xWorkbookFragment.get());
-            const ScDocument& rDoc = pWF->getScDocument();
-            if (ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell()))
-                pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
+            ScDocument& rDoc = xWorkbookFragment->getScDocument();
+            ScDocShell* pDocSh = static_cast<ScDocShell*>(rDoc.GetDocumentShell());
+            assert( pDocSh );
+            pDocSh->SetInitialLinkUpdate( pDocSh->GetMedium());
 
             bool bRet = importFragment( xWorkbookFragment);
-            if (bRet)
+            if (bRet && !pDocSh->GetErrorCode())
             {
-                const AddressConverter& rAC = pWF->getAddressConverter();
-                if (rAC.isTabOverflow() || rAC.isColOverflow() || rAC.isRowOverflow())
-                {
-                    if (rDoc.IsUserInteractionEnabled())
-                    {
-                        // Show data loss warning.
-
-                        INetURLObject aURL( getFileUrl());
-                        SfxErrorContext aContext( ERRCTX_SFX_OPENDOC,
-                                aURL.getName( INetURLObject::LAST_SEGMENT, true,
-                                    INetURLObject::DecodeMechanism::WithCharset),
-                                nullptr, RID_ERRCTX);
-
-                        OUString aWarning;
-                        aContext.GetString( ERRCODE_NONE.MakeWarning(), aWarning);
-                        aWarning += ":\n";
-
-                        OUString aMsg;
-                        if (rAC.isTabOverflow())
-                        {
-                            if (ErrorHandler::GetErrorString( SCWARN_IMPORT_SHEET_OVERFLOW, aMsg))
-                                aWarning += aMsg;
-                        }
-                        if (rAC.isColOverflow())
-                        {
-                            if (!aMsg.isEmpty())
-                                aWarning += "\n";
-                            if (ErrorHandler::GetErrorString( SCWARN_IMPORT_COLUMN_OVERFLOW, aMsg))
-                                aWarning += aMsg;
-                        }
-                        if (rAC.isRowOverflow())
-                        {
-                            if (!aMsg.isEmpty())
-                                aWarning += "\n";
-                            if (ErrorHandler::GetErrorString( SCWARN_IMPORT_ROW_OVERFLOW, aMsg))
-                                aWarning += aMsg;
-                        }
-
-                        /* XXX displaying a dialog here is ugly and should
-                         * rather happen at UI level instead of at the filter
-                         * level, but it seems there's no way to transport
-                         * detailed information other than returning true or
-                         * false at this point? */
-
-                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
-                                                                   VclMessageType::Warning, VclButtonsType::Ok,
-                                                                   aWarning));
-                        xWarn->run();
-                    }
-                }
+                const AddressConverter& rAC = xWorkbookFragment->getAddressConverter();
+                if (rAC.isTabOverflow())
+                    pDocSh->SetError(SCWARN_IMPORT_SHEET_OVERFLOW);
+                else if (rAC.isColOverflow())
+                    pDocSh->SetError(SCWARN_IMPORT_COLUMN_OVERFLOW);
+                else if (rAC.isRowOverflow())
+                    pDocSh->SetError(SCWARN_IMPORT_ROW_OVERFLOW);
             }
             return bRet;
         }
