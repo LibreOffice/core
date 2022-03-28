@@ -276,7 +276,6 @@ void ScMultiSel::Set( ScRangeList const & rList )
     std::vector<std::vector<ScMarkEntry>> aMarkEntriesPerCol(mrSheetLimits.mnMaxCol+1);
 
     SCCOL nMaxCol = -1;
-    int i = 0;
     for (const ScRange& rRange : aNewList)
     {
         SCCOL nStartCol = rRange.aStart.Col();
@@ -309,7 +308,6 @@ void ScMultiSel::Set( ScRangeList const & rList )
             }
             nMaxCol = std::max(nMaxCol, nEndCol);
         }
-        ++i;
     }
 
     aMultiSelContainer.resize(nMaxCol+1, ScMarkArray(mrSheetLimits));
