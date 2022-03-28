@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f648e76_6da25214",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-28T06:38:37Z",
+      "side": 1,
+      "message": "Problems with this patch:\n1. The file is a part of an external library, so should not be changed. I added a note to the pragma once easy hack now https://bugs.documentfoundation.org/show_bug.cgi?id\u003d143148#c27\n2. You changed the wrong lines\n3. The commit message is bad\n\nPlease change your patch to be about a different file https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Cherry_picking_yourself_out_of_trouble\n",
+      "revId": "fa264af655c7764805b8ca11b5279ee32dfd40b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
