@@ -418,7 +418,7 @@ void SingleValFields::walkPotentialAssign( const DeclaratorDecl* fieldOrVarDecl,
         {
             break;
         }
-        else if ( isa<ArrayInitLoopExpr>(parent) || isa<GCCAsmStmt>(parent) || isa<VAArgExpr>(parent))
+        else if ( isa<ArrayInitLoopExpr>(parent) || isa<AtomicExpr>(parent) || isa<GCCAsmStmt>(parent) || isa<VAArgExpr>(parent))
         {
             bPotentiallyAssignedTo = true;
             break;
