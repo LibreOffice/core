@@ -3986,8 +3986,6 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
     {
         const SwFrameFormat *pFormatN = rFlyN.GetFormat();
         const SwFormatChain &rChain = pFormatN->GetChain();
-        int nCnt = int(nullptr != rChain.GetPrev());
-        nCnt += rChain.GetNext() ? 1: 0;
         size_t k = 0;
         for (const auto& rFlyK : aSet)
         {
@@ -3996,13 +3994,11 @@ void DocumentContentOperationsManager::CopyFlyInFlyImpl(
             {
                 ::lcl_ChainFormats( static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]),
                                  static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[n]) );
-                --nCnt;
             }
             else if ( rChain.GetNext() == pFormatK )
             {
                 ::lcl_ChainFormats( static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[n]),
                                  static_cast< SwFlyFrameFormat* >(aVecSwFrameFormat[k]) );
-                --nCnt;
             }
             ++k;
         }
