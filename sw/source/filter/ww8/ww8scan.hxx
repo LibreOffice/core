@@ -220,11 +220,11 @@ struct WW8PLCFxSave1
 class WW8PLCFspecial        // iterator for PLCFs
 {
 private:
-    std::unique_ptr<sal_Int32[]> pPLCF_PosArray;  ///< pointer to Pos-array and to the whole structure
-    sal_uInt8*  pPLCF_Contents;  ///< pointer to content-array-part of Pos-array
-    tools::Long nIMax;             ///< number of elements
-    tools::Long nIdx;              ///< marker where we currently are
-    sal_uInt32 nStru;
+    std::unique_ptr<sal_Int32[]> m_pPLCF_PosArray;  ///< pointer to Pos-array and to the whole structure
+    sal_uInt8*  m_pPLCF_Contents;  ///< pointer to content-array-part of Pos-array
+    tools::Long m_nIMax;             ///< number of elements
+    tools::Long m_nIdx;              ///< marker where we currently are
+    sal_uInt32 m_nStru;
 
     WW8PLCFspecial(const WW8PLCFspecial&) = delete;
     WW8PLCFspecial& operator=(const WW8PLCFspecial&) = delete;
@@ -232,29 +232,29 @@ private:
 public:
     WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
         sal_uInt32 nStruct);
-    tools::Long GetIdx() const { return nIdx; }
-    void SetIdx( tools::Long nI ) { nIdx = nI; }
-    tools::Long GetIMax() const { return nIMax; }
+    tools::Long GetIdx() const { return m_nIdx; }
+    void SetIdx( tools::Long nI ) { m_nIdx = nI; }
+    tools::Long GetIMax() const { return m_nIMax; }
     bool SeekPos(tools::Long nPos);            // walks over FC- or CP-value
                                         // resp. next biggest value
     bool SeekPosExact(tools::Long nPos);
     sal_Int32 Where() const
-        { return ( nIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nIdx]; }
+        { return ( m_nIdx >= m_nIMax ) ? SAL_MAX_INT32 : m_pPLCF_PosArray[m_nIdx]; }
     bool Get(WW8_CP& rStart, void*& rpValue) const;
     bool GetData(tools::Long nIdx, WW8_CP& rPos, void*& rpValue) const;
 
     const void* GetData( tools::Long nInIdx ) const
     {
-        return ( nInIdx >= nIMax ) ? nullptr
-            : static_cast<const void*>(&pPLCF_Contents[nInIdx * nStru]);
+        return ( nInIdx >= m_nIMax ) ? nullptr
+            : static_cast<const void*>(&m_pPLCF_Contents[nInIdx * m_nStru]);
     }
     sal_Int32 GetPos( tools::Long nInIdx ) const
-        { return ( nInIdx >= nIMax ) ? SAL_MAX_INT32 : pPLCF_PosArray[nInIdx]; }
+        { return ( nInIdx >= m_nIMax ) ? SAL_MAX_INT32 : m_pPLCF_PosArray[nInIdx]; }
 
     void advance()
     {
-        if (nIdx <= nIMax)
-            ++nIdx;
+        if (m_nIdx <= m_nIMax)
+            ++m_nIdx;
     }
 };
 
@@ -341,10 +341,10 @@ class WW8PLCFpcd
 {
     friend class WW8PLCFpcd_Iter;
 
-    std::unique_ptr<WW8_CP[]> pPLCF_PosArray;  // pointer to Pos-array and the whole structure
-    sal_uInt8*  pPLCF_Contents;  // pointer to content-array-part of Pos-array
-    sal_Int32 nIMax;
-    sal_uInt32 nStru;
+    std::unique_ptr<WW8_CP[]> m_pPLCF_PosArray;  // pointer to Pos-array and the whole structure
+    sal_uInt8*  m_pPLCF_Contents;  // pointer to content-array-part of Pos-array
+    sal_Int32 m_nIMax;
+    sal_uInt32 m_nStru;
 
     WW8PLCFpcd(const WW8PLCFpcd&) = delete;
     WW8PLCFpcd& operator=(const WW8PLCFpcd&) = delete;
@@ -360,24 +360,24 @@ public:
 class WW8PLCFpcd_Iter
 {
 private:
-    WW8PLCFpcd& rPLCF;
-    tools::Long nIdx;
+    WW8PLCFpcd& m_rPLCF;
+    tools::Long m_nIdx;
 
     WW8PLCFpcd_Iter(const WW8PLCFpcd_Iter&) = delete;
     WW8PLCFpcd_Iter& operator=(const WW8PLCFpcd_Iter&) = delete;
 
 public:
     WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, tools::Long nStartPos = -1 );
-    tools::Long GetIdx() const { return nIdx; }
-    void SetIdx( tools::Long nI ) { nIdx = nI; }
-    tools::Long GetIMax() const { return rPLCF.nIMax; }
+    tools::Long GetIdx() const { return m_nIdx; }
+    void SetIdx( tools::Long nI ) { m_nIdx = nI; }
+    tools::Long GetIMax() const { return m_rPLCF.m_nIMax; }
     bool SeekPos(tools::Long nPos);
     sal_Int32 Where() const;
     bool Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const;
     void advance()
     {
-        if( nIdx < rPLCF.nIMax )
-            ++nIdx;
+        if( m_nIdx < m_rPLCF.m_nIMax )
+            ++m_nIdx;
     }
 };
 
@@ -394,9 +394,9 @@ class WW8PLCFx              // virtual iterator for Piece Table Exceptions
 {
 private:
     const WW8Fib& mrFib;
-    bool bIsSprm;           // PLCF of Sprms or other stuff ( Footnote, ... )
-    WW8_FC nStartFc;
-    bool bDirty;
+    bool m_bIsSprm;           // PLCF of Sprms or other stuff ( Footnote, ... )
+    WW8_FC m_nStartFc;
+    bool m_bDirty;
 
     WW8PLCFx(const WW8PLCFx&) = delete;
     WW8PLCFx& operator=(const WW8PLCFx&) = delete;
@@ -404,13 +404,13 @@ private:
 public:
     WW8PLCFx(const WW8Fib& rFib, bool bSprm)
         : mrFib(rFib)
-        , bIsSprm(bSprm)
-        , nStartFc(-1)
-        , bDirty(false)
+        , m_bIsSprm(bSprm)
+        , m_nStartFc(-1)
+        , m_bDirty(false)
     {
     }
     virtual ~WW8PLCFx() {}
-    bool IsSprm() const { return bIsSprm; }
+    bool IsSprm() const { return m_bIsSprm; }
     virtual sal_uInt32 GetIdx() const = 0;
     virtual void SetIdx(sal_uInt32 nIdx) = 0;
     virtual sal_uInt32 GetIdx2() const;
@@ -425,10 +425,10 @@ public:
     virtual void Restore( const WW8PLCFxSave1& rSave );
     ww::WordVersion GetFIBVersion() const;
     const WW8Fib& GetFIB() const { return mrFib; }
-    void SetStartFc( WW8_FC nFc ) { nStartFc = nFc; }
-    WW8_FC GetStartFc() const { return nStartFc; }
-    void SetDirty(bool bIn) {bDirty=bIn;}
-    bool GetDirty() const {return bDirty;}
+    void SetStartFc( WW8_FC nFc ) { m_nStartFc = nFc; }
+    WW8_FC GetStartFc() const { return m_nStartFc; }
+    void SetDirty(bool bIn) {m_bDirty=bIn;}
+    bool GetDirty() const {return m_bDirty;}
 };
 
 class WW8PLCFx_PCDAttrs : public WW8PLCFx

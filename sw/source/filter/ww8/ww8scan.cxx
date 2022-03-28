@@ -2137,7 +2137,7 @@ sal_Int32 WW8ScannerBase::WW8ReadString( SvStream& rStrm, OUString& rStr,
 
 WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     sal_uInt32 nPLCF, sal_uInt32 nStruct)
-    : nIdx(0), nStru(nStruct)
+    : m_nIdx(0), m_nStru(nStruct)
 {
     const sal_uInt32 nValidMin=4;
 
@@ -2150,23 +2150,23 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<std::size_t>(nPLCF)) : nValidMin;
 
     // Pointer to Pos- and Struct-array
-    pPLCF_PosArray.reset( new sal_Int32[ ( nPLCF + 3 ) / 4 ] );
-    pPLCF_PosArray[0] = 0;
+    m_pPLCF_PosArray.reset( new sal_Int32[ ( nPLCF + 3 ) / 4 ] );
+    m_pPLCF_PosArray[0] = 0;
 
-    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray.get(), nPLCF) : nValidMin;
+    nPLCF = bValid ? pSt->ReadBytes(m_pPLCF_PosArray.get(), nPLCF) : nValidMin;
 
     nPLCF = std::max(nPLCF, nValidMin);
 
-    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
+    m_nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
     for( nIdx = 0; nIdx <= nIMax; nIdx++ )
         pPLCF_PosArray[nIdx] = OSL_SWAPDWORD( pPLCF_PosArray[nIdx] );
     nIdx = 0;
 #endif // OSL_BIGENDIAN
     if( nStruct ) // Pointer to content array
-        pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
+        m_pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&m_pPLCF_PosArray[m_nIMax + 1]);
     else
-        pPLCF_Contents = nullptr;                         // no content
+        m_pPLCF_Contents = nullptr;                         // no content
 
     pSt->Seek(nOldPos);
 }
@@ -2177,33 +2177,33 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
 // the position nPos.
 bool WW8PLCFspecial::SeekPos(tools::Long nP)
 {
-    if( nP < pPLCF_PosArray[0] )
+    if( nP < m_pPLCF_PosArray[0] )
     {
-        nIdx = 0;
+        m_nIdx = 0;
         return false;   // Not found: nP less than smallest entry
     }
 
     // Search from beginning?
-    if ((nIdx < 1) || (nP < pPLCF_PosArray[nIdx - 1]))
-        nIdx = 1;
+    if ((m_nIdx < 1) || (nP < m_pPLCF_PosArray[m_nIdx - 1]))
+        m_nIdx = 1;
 
-    tools::Long nI   = nIdx;
-    tools::Long nEnd = nIMax;
+    tools::Long nI   = m_nIdx;
+    tools::Long nEnd = m_nIMax;
 
-    for(int n = (1==nIdx ? 1 : 2); n; --n )
+    for(int n = (1==m_nIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)
         {                                   // search with an index that is incremented by 1
-            if( nP < pPLCF_PosArray[nI] )
+            if( nP < m_pPLCF_PosArray[nI] )
             {                               // found position
-                nIdx = nI - 1;              // nI - 1 is the correct index
+                m_nIdx = nI - 1;              // nI - 1 is the correct index
                 return true;                // done
             }
         }
         nI   = 1;
-        nEnd = nIdx-1;
+        nEnd = m_nIdx-1;
     }
-    nIdx = nIMax;               // not found, greater than all entries
+    m_nIdx = m_nIMax;               // not found, greater than all entries
     return false;
 }
 
@@ -2212,49 +2212,49 @@ bool WW8PLCFspecial::SeekPos(tools::Long nP)
 // Is used for fields and bookmarks.
 bool WW8PLCFspecial::SeekPosExact(tools::Long nP)
 {
-    if( nP < pPLCF_PosArray[0] )
+    if( nP < m_pPLCF_PosArray[0] )
     {
-        nIdx = 0;
+        m_nIdx = 0;
         return false;       // Not found: nP less than smallest entry
     }
     // Search from beginning?
-    if( nP <=pPLCF_PosArray[nIdx] )
-        nIdx = 0;
+    if( nP <=m_pPLCF_PosArray[m_nIdx] )
+        m_nIdx = 0;
 
-    tools::Long nI   = nIdx ? nIdx-1 : 0;
-    tools::Long nEnd = nIMax;
+    tools::Long nI   = m_nIdx ? m_nIdx-1 : 0;
+    tools::Long nEnd = m_nIMax;
 
-    for(int n = (0==nIdx ? 1 : 2); n; --n )
+    for(int n = (0==m_nIdx ? 1 : 2); n; --n )
     {
         for( ; nI < nEnd; ++nI)
         {
-            if( nP <=pPLCF_PosArray[nI] )
+            if( nP <=m_pPLCF_PosArray[nI] )
             {                           // found position
-                nIdx = nI;              // nI is the correct index
+                m_nIdx = nI;              // nI is the correct index
                 return true;            // done
             }
         }
         nI   = 0;
-        nEnd = nIdx;
+        nEnd = m_nIdx;
     }
-    nIdx = nIMax;               // Not found, greater than all entries
+    m_nIdx = m_nIMax;               // Not found, greater than all entries
     return false;
 }
 
 bool WW8PLCFspecial::Get(WW8_CP& rPos, void*& rpValue) const
 {
-    return GetData( nIdx, rPos, rpValue );
+    return GetData( m_nIdx, rPos, rpValue );
 }
 
 bool WW8PLCFspecial::GetData(tools::Long nInIdx, WW8_CP& rPos, void*& rpValue) const
 {
-    if ( nInIdx >= nIMax )
+    if ( nInIdx >= m_nIMax )
     {
         rPos = WW8_CP_MAX;
         return false;
     }
-    rPos = pPLCF_PosArray[nInIdx];
-    rpValue = pPLCF_Contents ? static_cast<void*>(&pPLCF_Contents[nInIdx * nStru]) : nullptr;
+    rPos = m_pPLCF_PosArray[nInIdx];
+    rpValue = m_pPLCF_Contents ? static_cast<void*>(&m_pPLCF_Contents[nInIdx * m_nStru]) : nullptr;
     return true;
 }
 
@@ -2374,7 +2374,7 @@ namespace
 
 void WW8PLCFpcd::TruncToSortedRange()
 {
-    nIMax = ::TruncToSortedRange(pPLCF_PosArray.get(), nIMax);
+    m_nIMax = ::TruncToSortedRange(m_pPLCF_PosArray.get(), m_nIMax);
 }
 
 void WW8PLCF::TruncToSortedRange()
@@ -2525,7 +2525,7 @@ WW8_CP WW8PLCF::Where() const
 
 WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
     sal_uInt32 nPLCF, sal_uInt32 nStruct)
-    : nStru( nStruct )
+    : m_nStru( nStruct )
 {
     const sal_uInt32 nValidMin=4;
 
@@ -2537,20 +2537,20 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
         bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<std::size_t>(nPLCF)) : nValidMin;
 
-    pPLCF_PosArray.reset( new WW8_CP[ ( nPLCF + 3 ) / 4 ] );    // Pointer to Pos-array
-    pPLCF_PosArray[0] = 0;
+    m_pPLCF_PosArray.reset( new WW8_CP[ ( nPLCF + 3 ) / 4 ] );    // Pointer to Pos-array
+    m_pPLCF_PosArray[0] = 0;
 
-    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray.get(), nPLCF) : nValidMin;
+    nPLCF = bValid ? pSt->ReadBytes(m_pPLCF_PosArray.get(), nPLCF) : nValidMin;
     nPLCF = std::max(nPLCF, nValidMin);
 
-    nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
+    m_nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
 #ifdef OSL_BIGENDIAN
     for( tools::Long nI = 0; nI <= nIMax; nI++ )
       pPLCF_PosArray[nI] = OSL_SWAPDWORD( pPLCF_PosArray[nI] );
 #endif // OSL_BIGENDIAN
 
     // Pointer to content array
-    pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
+    m_pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&m_pPLCF_PosArray[m_nIMax + 1]);
     TruncToSortedRange();
 
     pSt->Seek( nOldPos );
@@ -2558,7 +2558,7 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
 
 // If nStartPos < 0, the first element of PLCFs will be taken
 WW8PLCFpcd_Iter::WW8PLCFpcd_Iter( WW8PLCFpcd& rPLCFpcd, tools::Long nStartPos )
-    :rPLCF( rPLCFpcd ), nIdx( 0 )
+    :m_rPLCF( rPLCFpcd ), m_nIdx( 0 )
 {
     if( nStartPos >= 0 )
         SeekPos( nStartPos );
@@ -2568,54 +2568,54 @@ bool WW8PLCFpcd_Iter::SeekPos(tools::Long nPos)
 {
     tools::Long nP = nPos;
 
-    if( nP < rPLCF.pPLCF_PosArray[0] )
+    if( nP < m_rPLCF.m_pPLCF_PosArray[0] )
     {
-        nIdx = 0;
+        m_nIdx = 0;
         return false;       // not found: nPos less than smallest entry
     }
     // Search from beginning?
-    if ((nIdx < 1) || (nP < rPLCF.pPLCF_PosArray[nIdx - 1]))
-        nIdx = 1;
+    if ((m_nIdx < 1) || (nP < m_rPLCF.m_pPLCF_PosArray[m_nIdx - 1]))
+        m_nIdx = 1;
 
-    tools::Long nI   = nIdx;
-    tools::Long nEnd = rPLCF.nIMax;
+    tools::Long nI   = m_nIdx;
+    tools::Long nEnd = m_rPLCF.m_nIMax;
 
-    for(int n = (1==nIdx ? 1 : 2); n; --n )
+    for(int n = (1==m_nIdx ? 1 : 2); n; --n )
     {
         for( ; nI <=nEnd; ++nI)
         {                               // search with an index that is incremented by 1
-            if( nP < rPLCF.pPLCF_PosArray[nI] )
+            if( nP < m_rPLCF.m_pPLCF_PosArray[nI] )
             {                           // found position
-                nIdx = nI - 1;          // nI - 1 is the correct index
+                m_nIdx = nI - 1;          // nI - 1 is the correct index
                 return true;            // done
             }
         }
         nI   = 1;
-        nEnd = nIdx-1;
+        nEnd = m_nIdx-1;
     }
-    nIdx = rPLCF.nIMax;         // not found, greater than all entries
+    m_nIdx = m_rPLCF.m_nIMax;         // not found, greater than all entries
     return false;
 }
 
 bool WW8PLCFpcd_Iter::Get(WW8_CP& rStart, WW8_CP& rEnd, void*& rpValue) const
 {
-    if( nIdx >= rPLCF.nIMax )
+    if( m_nIdx >= m_rPLCF.m_nIMax )
     {
         rStart = rEnd = WW8_CP_MAX;
         return false;
     }
-    rStart = rPLCF.pPLCF_PosArray[nIdx];
-    rEnd = rPLCF.pPLCF_PosArray[nIdx + 1];
-    rpValue = static_cast<void*>(&rPLCF.pPLCF_Contents[nIdx * rPLCF.nStru]);
+    rStart = m_rPLCF.m_pPLCF_PosArray[m_nIdx];
+    rEnd = m_rPLCF.m_pPLCF_PosArray[m_nIdx + 1];
+    rpValue = static_cast<void*>(&m_rPLCF.m_pPLCF_Contents[m_nIdx * m_rPLCF.m_nStru]);
     return true;
 }
 
 sal_Int32 WW8PLCFpcd_Iter::Where() const
 {
-    if ( nIdx >= rPLCF.nIMax )
+    if ( m_nIdx >= m_rPLCF.m_nIMax )
         return SAL_MAX_INT32;
 
-    return rPLCF.pPLCF_PosArray[nIdx];
+    return m_rPLCF.m_pPLCF_PosArray[m_nIdx];
 }
 
 bool WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator<
