@@ -1572,7 +1572,6 @@ Reference< XShape > const & Shape::createAndInsert(
             if (!aEffectProperties.m_Effects.empty())
             {
                 std::vector<beans::PropertyValue> aEffects;
-                sal_uInt32 i = 0;
                 for (auto const& it : aEffectProperties.m_Effects)
                 {
                     PropertyValue aEffect = it->getEffect();
@@ -1598,7 +1597,6 @@ Reference< XShape > const & Shape::createAndInsert(
                             aEffectsGrabBag.push_back(comphelper::makePropertyValue("SchemeClrTransformations", aColor.getTransformations()));
                         }
                         aEffects.push_back(comphelper::makePropertyValue(aEffect.Name, comphelper::containerToSequence(aEffectsGrabBag)));
-                        ++i;
                     }
                 }
                 putPropertyToGrabBag("EffectProperties", uno::Any(comphelper::containerToSequence(aEffects)));
