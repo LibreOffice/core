@@ -23,6 +23,8 @@
 #include <sal/log.hxx>
 
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
+#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 #include <com/sun/star/accessibility/TextSegment.hpp>
 
 #include <QtGui/QAccessible>
@@ -132,6 +134,42 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
             QAccessible::updateAccessibility(
                 new QAccessibleEvent(pQAccessibleInterface, QAccessible::TableColumnHeaderChanged));
             return;
+        case AccessibleEventId::TABLE_MODEL_CHANGED:
+        {
+            AccessibleTableModelChange aChange;
+            aEvent.NewValue >>= aChange;
+
+            QAccessibleTableModelChangeEvent::ModelChangeType nType;
+            switch (aChange.Type)
+            {
+                case AccessibleTableModelChangeType::COLUMNS_INSERTED:
+                    nType = QAccessibleTableModelChangeEvent::ColumnsInserted;
+                    break;
+                case AccessibleTableModelChangeType::COLUMNS_REMOVED:
+                    nType = QAccessibleTableModelChangeEvent::ColumnsRemoved;
+                    break;
+                case AccessibleTableModelChangeType::ROWS_INSERTED:
+                    nType = QAccessibleTableModelChangeEvent::RowsInserted;
+                    break;
+                case AccessibleTableModelChangeType::ROWS_REMOVED:
+                    nType = QAccessibleTableModelChangeEvent::RowsRemoved;
+                    break;
+                case AccessibleTableModelChangeType::UPDATE:
+                    nType = QAccessibleTableModelChangeEvent::DataChanged;
+                    break;
+                default:
+                    assert(false && "Unhandled AccessibleTableModelChangeType");
+                    return;
+            }
+            QAccessibleTableModelChangeEvent* pTableEvent
+                = new QAccessibleTableModelChangeEvent(pQAccessibleInterface, nType);
+            pTableEvent->setFirstRow(aChange.FirstRow);
+            pTableEvent->setLastRow(aChange.LastRow);
+            pTableEvent->setFirstColumn(aChange.FirstColumn);
+            pTableEvent->setLastColumn(aChange.LastColumn);
+            QAccessible::updateAccessibility(pTableEvent);
+            return;
+        }
         case AccessibleEventId::TABLE_ROW_DESCRIPTION_CHANGED:
             QAccessible::updateAccessibility(new QAccessibleEvent(
                 pQAccessibleInterface, QAccessible::TableRowDescriptionChanged));
@@ -197,7 +235,6 @@ void QtAccessibleEventListener::notifyEvent(const css::accessibility::Accessible
         case AccessibleEventId::LABELED_BY_RELATION_CHANGED:
         case AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
         case AccessibleEventId::SUB_WINDOW_OF_RELATION_CHANGED:
-        case AccessibleEventId::TABLE_MODEL_CHANGED:
         case AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
         case AccessibleEventId::LISTBOX_ENTRY_COLLAPSED:
         case AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS:
