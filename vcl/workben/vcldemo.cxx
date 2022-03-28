@@ -1027,7 +1027,7 @@ public:
                 tools::Rectangle aOuter = aRegions[3];
                 std::vector<tools::Rectangle> aPieces(DemoRenderer::partition(aOuter, 2, 2));
                 bool bDone = false;
-                for (int j = 0; !bDone; ++j)
+                while (!bDone)
                 {
                     rDev.Push(vcl::PushFlags::CLIPREGION);
 
