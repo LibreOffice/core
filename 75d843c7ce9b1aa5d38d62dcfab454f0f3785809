@@ -16,6 +16,23 @@
       "message": "Won\u0027t bother waiting for Jenkins. The risk that it will fail because of some spurious unrelated reason is too large.",
       "revId": "75d843c7ce9b1aa5d38d62dcfab454f0f3785809",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7dc8adb9_85f5b923",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-28T13:05:49Z",
+      "side": 1,
+      "message": "(Jenkins has managed to build for desktop OSes, that is enough for this change.)",
+      "revId": "75d843c7ce9b1aa5d38d62dcfab454f0f3785809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
