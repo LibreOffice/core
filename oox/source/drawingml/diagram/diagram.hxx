@@ -39,12 +39,10 @@ class Diagram;
 class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 class LayoutAtom;
-typedef std::shared_ptr<LayoutAtom> LayoutAtomPtr;
-
+typedef std::shared_ptr< LayoutAtom > LayoutAtomPtr;
 typedef std::map< OUString, css::uno::Reference<css::xml::dom::XDocument> > DiagramDomMap;
-
-typedef std::map<OUString, LayoutAtomPtr> LayoutAtomMap;
-typedef std::map<const dgm::Point*, ShapePtr> PresPointShapeMap;
+typedef std::map< OUString, LayoutAtomPtr > LayoutAtomMap;
+typedef std::map< const svx::diagram::Point*, ShapePtr > PresPointShapeMap;
 
 class DiagramLayout
 {

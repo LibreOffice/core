@@ -857,7 +857,7 @@ OUString navigate(LayoutNode& rLayoutNode, sal_Int32 nType, std::u16string_view 
     return OUString();
 }
 
-sal_Int32 calcMaxDepth(std::u16string_view rNodeName, const dgm::Connections& rConnections)
+sal_Int32 calcMaxDepth(std::u16string_view rNodeName, const svx::diagram::Connections& rConnections)
 {
     sal_Int32 nMaxLength = 0;
     for (auto const& aCxn : rConnections)
@@ -868,7 +868,7 @@ sal_Int32 calcMaxDepth(std::u16string_view rNodeName, const dgm::Connections& rC
 }
 }
 
-sal_Int32 ConditionAtom::getNodeCount(const dgm::Point* pPresPoint) const
+sal_Int32 ConditionAtom::getNodeCount(const svx::diagram::Point* pPresPoint) const
 {
     sal_Int32 nCount = 0;
     OUString sNodeId = pPresPoint->msPresentationAssociationId;
@@ -887,7 +887,7 @@ sal_Int32 ConditionAtom::getNodeCount(const dgm::Point* pPresPoint) const
     return nCount;
 }
 
-bool ConditionAtom::getDecision(const dgm::Point* pPresPoint) const
+bool ConditionAtom::getDecision(const svx::diagram::Point* pPresPoint) const
 {
     if (mIsElse)
         return true;
@@ -902,8 +902,8 @@ bool ConditionAtom::getDecision(const dgm::Point* pPresPoint) const
             return compareResult(maCond.mnOp, pPresPoint->mnDirection, maCond.mnVal);
         else if (maCond.mnArg == XML_hierBranch)
         {
-            sal_Int32 nHierarchyBranch = pPresPoint->moHierarchyBranch.get(XML_std);
-            if (!pPresPoint->moHierarchyBranch.has())
+            sal_Int32 nHierarchyBranch = pPresPoint->moHierarchyBranch.value_or(XML_std);
+            if (!pPresPoint->moHierarchyBranch.has_value())
             {
                 // If <dgm:hierBranch> is missing in the current presentation
                 // point, ask the parent.
@@ -914,9 +914,9 @@ bool ConditionAtom::getDecision(const dgm::Point* pPresPoint) const
                 auto it = rPointNameMap.find(aParent);
                 if (it != rPointNameMap.end())
                 {
-                    const dgm::Point* pParent = it->second;
-                    if (pParent->moHierarchyBranch.has())
-                        nHierarchyBranch = pParent->moHierarchyBranch.get();
+                    const svx::diagram::Point* pParent = it->second;
+                    if (pParent->moHierarchyBranch.has_value())
+                        nHierarchyBranch = pParent->moHierarchyBranch.value();
                 }
             }
             return compareResult(maCond.mnOp, nHierarchyBranch, maCond.mnVal);
@@ -1080,7 +1080,7 @@ bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
     const DiagramData::PointNameMap& rPointNameMap
         = rLayoutNode.getDiagram().getData()->getPointNameMap();
     // Get the first presentation node of the shape.
-    const dgm::Point* pPresNode = nullptr;
+    const svx::diagram::Point* pPresNode = nullptr;
     for (const auto& rPair : rPresPointShapeMap)
     {
         if (rPair.second == rShape)
@@ -1090,7 +1090,7 @@ bool HasCustomText(const ShapePtr& rShape, LayoutNode& rLayoutNode)
         }
     }
     // Get the first data node of the presentation node.
-    dgm::Point* pDataNode = nullptr;
+    svx::diagram::Point* pDataNode = nullptr;
     if (pPresNode)
     {
         auto itPresToData = rPresOfNameMap.find(pPresNode->msModelId);
@@ -1866,7 +1866,7 @@ void LayoutNode::accept( LayoutAtomVisitor& rVisitor )
     rVisitor.visit(*this);
 }
 
-bool LayoutNode::setupShape( const ShapePtr& rShape, const dgm::Point* pPresNode, sal_Int32 nCurrIdx ) const
+bool LayoutNode::setupShape( const ShapePtr& rShape, const svx::diagram::Point* pPresNode, sal_Int32 nCurrIdx ) const
 {
     SAL_INFO(
         "oox.drawingml",

@@ -31,7 +31,7 @@ class ShapeCreationVisitor : public LayoutAtomVisitorBase
 {
 public:
     ShapeCreationVisitor(const Diagram& rDgm,
-                         const dgm::Point* pRootPoint,
+                         const svx::diagram::Point* pRootPoint,
                          const ShapePtr& rParentShape) :
         LayoutAtomVisitorBase(rDgm, pRootPoint),
         mpParentShape(rParentShape)
@@ -51,7 +51,7 @@ private:
 class ShapeTemplateVisitor : public LayoutAtomVisitorBase
 {
 public:
-    ShapeTemplateVisitor(const Diagram& rDgm, const dgm::Point* pRootPoint)
+    ShapeTemplateVisitor(const Diagram& rDgm, const svx::diagram::Point* pRootPoint)
         : LayoutAtomVisitorBase(rDgm, pRootPoint)
     {}
 
@@ -73,7 +73,7 @@ private:
 class ShapeLayoutingVisitor : public LayoutAtomVisitorBase
 {
 public:
-    ShapeLayoutingVisitor(const Diagram& rDgm, const dgm::Point* pRootPoint) :
+    ShapeLayoutingVisitor(const Diagram& rDgm, const svx::diagram::Point* pRootPoint) :
         LayoutAtomVisitorBase(rDgm, pRootPoint)
     {}
 

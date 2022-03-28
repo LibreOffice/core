@@ -5949,6 +5949,7 @@ include/svx/sdgmoitm.hxx
 include/svx/sdmetitm.hxx
 include/svx/sdooitm.hxx
 include/svx/sdprcitm.hxx
+include/svx/diagram/datamodel.hxx
 include/svx/sdr/animation/animationstate.hxx
 include/svx/sdr/animation/objectanimator.hxx
 include/svx/sdr/animation/scheduler.hxx
@@ -11512,6 +11513,7 @@ svx/source/customshapes/EnhancedCustomShapeGeometry.cxx
 svx/source/customshapes/EnhancedCustomShapeHandle.cxx
 svx/source/customshapes/EnhancedCustomShapeHandle.hxx
 svx/source/customshapes/EnhancedCustomShapeTypeNames.cxx
+svx/source/diagram/datamodel.cxx
 svx/source/dialog/ClassificationDialog.cxx
 svx/source/dialog/ClassificationEditView.cxx
 svx/source/dialog/ClassificationEditView.hxx
