@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75959bea_9a5d711e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-03-28T08:45:11Z",
+      "side": 1,
+      "message": "Checked this does not break the Windows disable-pch build.",
+      "revId": "6d04eb93183a4e5ffccf616ec734b7f264ad4b8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
