@@ -16,8 +16,7 @@
  *   except in compliance with the License. You may obtain a copy of
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
-#ifndef INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
-#define INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
+#pragma once
 
 #include <connectivity/dbtoolsdllapi.hxx>
 #include <com/sun/star/sdbc/XBlob.hpp>
@@ -38,7 +37,5 @@ namespace connectivity
         virtual ::sal_Int64 SAL_CALL positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& pattern, ::sal_Int64 start ) override;
     };
 }
-
-#endif // INCLUDED_CONNECTIVITY_BLOBHELPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
