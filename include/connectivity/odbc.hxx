@@ -18,8 +18,8 @@
  */
 
 
-#ifndef INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONDEFS_HXX
-#define INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONDEFS_HXX
+#pragma once
+
 
 #if defined(_WIN32)
 
@@ -94,7 +94,7 @@
 #endif
 #endif
 
-#endif // INCLUDED_CONNECTIVITY_SOURCE_INC_ODBC_OFUNCTIONDEFS_HXX
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
