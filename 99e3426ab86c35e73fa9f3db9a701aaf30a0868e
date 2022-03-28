@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9f44097_61b19156",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-28T19:17:12Z",
+      "side": 1,
+      "message": "I just tested the 2 options of Outline Folding appeared in Tools/Options/Writer/View:\n- Show outline-folding buttons\n  - include sub levels\n\nNow I don\u0027t know if it\u0027s indeed ready to put this on non experimental, I don\u0027t use it.",
+      "revId": "99e3426ab86c35e73fa9f3db9a701aaf30a0868e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
