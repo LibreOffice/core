@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02e41553_f2aa8860",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T14:15:04Z",
+      "side": 1,
+      "message": "I confirm that hypot is slower than sqrt(x*x+y*y); however, it has very important benefit of strong guarantee that the naïve implementation lacks; and premature optimization is IMO not a good thing: if this shows in profiling, we can try to optimize specific call sites - but otherwise, the more robust implementation is better.",
+      "parentUuid": "c3f15620_6e57e5da",
+      "revId": "a8392680c73be2c2fcad016e60b4deb99ca5a41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bbda185_23321935",
