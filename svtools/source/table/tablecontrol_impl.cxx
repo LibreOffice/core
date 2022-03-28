@@ -325,7 +325,7 @@ namespace svt::table
         if ( impl_isAccessibleAlive() )
         {
             impl_commitAccessibleEvent( AccessibleEventId::TABLE_MODEL_CHANGED,
-                makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::INSERT, i_first, i_last, 0, m_pModel->getColumnCount() ) )
+                makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::ROWS_INSERTED, i_first, i_last, -1, -1 ) )
             );
         }
 
@@ -395,11 +395,11 @@ namespace svt::table
             commitTableEvent(
                 AccessibleEventId::TABLE_MODEL_CHANGED,
                 makeAny( AccessibleTableModelChange(
-                    AccessibleTableModelChangeType::DELETE,
+                    AccessibleTableModelChangeType::ROWS_REMOVED,
                     firstRemovedRow,
                     lastRemovedRow,
-                    0,
-                    m_pModel->getColumnCount()
+                    -1,
+                    -1
                 ) ),
                 Any()
             );

@@ -312,7 +312,9 @@ void AccessibleGridControlTable::commitEvent(sal_Int16 nEventId, const css::uno:
         AccessibleTableModelChange aChange;
         if (rNewValue >>= aChange)
         {
-            if (aChange.Type == AccessibleTableModelChangeType::DELETE)
+            assert(aChange.Type != AccessibleTableModelChangeType::COLUMNS_REMOVED);
+
+            if (aChange.Type == AccessibleTableModelChangeType::ROWS_REMOVED)
             {
                 int nColCount = m_aTable.GetColumnCount();
                 // check valid index - entries are inserted lazily
