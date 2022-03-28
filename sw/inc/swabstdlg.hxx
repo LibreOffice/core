@@ -228,6 +228,11 @@ public:
 
 };
 
+/**
+ * Interface for the insert -> more breaks -> manual break dialog. It's implemented by
+ * AbstractSwBreakDlg_Impl, but SwTextShell only knows about this interface and the
+ * SwAbstractDialogFactory::CreateSwBreakDlg() factory.
+ */
 class AbstractSwBreakDlg
 {
 protected:
