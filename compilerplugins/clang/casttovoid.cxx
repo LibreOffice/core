@@ -202,6 +202,9 @@ public:
         if (var == nullptr) {
             return true;
         }
+        if (var->getType().isVolatileQualified()) {
+            return true;
+        }
         auto & usage = vars_[var->getCanonicalDecl()];
         if (!castToVoid_.empty() && castToVoid_.top().sub == expr) {
             usage.castToVoid.push_back(castToVoid_.top().cast);
@@ -504,6 +507,9 @@ private:
         }
         auto const var = dyn_cast<VarDecl>(dre->getDecl());
         if (var == nullptr) {
+            return;
+        }
+        if (var->getType().isVolatileQualified()) {
             return;
         }
         auto & usage = vars_[var->getCanonicalDecl()];
