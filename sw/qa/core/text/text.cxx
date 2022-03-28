@@ -320,6 +320,58 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "1024");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
+{
+    // Given a document with two anchored objects (left height is 5cm, right height is 7.5cm) and a
+    // clearing break (type=left):
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    {
+        uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xShape->setSize(awt::Size(5000, 5000));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        xShapeProps->setPropertyValue("AnchorType",
+                                      uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+        uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
+        xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
+    }
+    {
+        uno::Reference<drawing::XShape> xShape(
+            xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
+        xShape->setSize(awt::Size(5000, 7500));
+        uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+        xShapeProps->setPropertyValue("AnchorType",
+                                      uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+        xShapeProps->setPropertyValue("HoriOrientPosition", uno::makeAny(sal_Int32(10000)));
+        uno::Reference<text::XTextContent> xShapeContent2(xShape, uno::UNO_QUERY);
+        xText->insertTextContent(xCursor, xShapeContent2, /*bAbsorb=*/false);
+    }
+    uno::Reference<text::XTextContent> xLineBreak(
+        xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
+    auto eClear = static_cast<sal_Int16>(SwLineBreakClear::LEFT);
+    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
+    xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
+    xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
+
+    // When laying out that document:
+    calcLayout();
+
+    // Then make sure the "bar" jumps down below the left shape, but not below the right shape (due
+    // to type=left):
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2837
+    // - Actual  : 4254
+    // i.e. any non-none type was handled as type=all, and this was jumping below both shapes.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "2837");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
