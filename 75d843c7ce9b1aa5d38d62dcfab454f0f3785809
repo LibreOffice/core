@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "265d2ccb_fe4ed839",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-03-28T13:05:19Z",
+      "side": 1,
+      "message": "Won\u0027t bother waiting for Jenkins. The risk that it will fail because of some spurious unrelated reason is too large.",
+      "revId": "75d843c7ce9b1aa5d38d62dcfab454f0f3785809",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
