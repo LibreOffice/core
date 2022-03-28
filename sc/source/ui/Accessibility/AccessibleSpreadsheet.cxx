@@ -418,6 +418,11 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 // ignore next SfxHintId::ScDataChanged notification
                 mbDelIns = true;
 
+                SCROW nFirstRow = -1;
+                SCROW nLastRow = -1;
+                SCCOL nFirstCol = -1;
+                SCCOL nLastCol = -1;
+
                 sal_Int16 nId(0);
                 SCCOL nX(pRefHint->GetDx());
                 SCROW nY(pRefHint->GetDy());
@@ -425,33 +430,47 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 if ((nX < 0) || (nY < 0))
                 {
                     assert(!((nX < 0) && (nY < 0)) && "should not be possible to remove row and column at the same time");
-                    nId = AccessibleTableModelChangeType::DELETE;
+
+                    // Range in the update hint is the range after the removed rows/columns;
+                    // calculate indices for the removed ones from that
                     if (nX < 0)
                     {
-                        nX = -nX;
-                        nY = aRange.aEnd.Row() - aRange.aStart.Row();
+                        nId = AccessibleTableModelChangeType::COLUMNS_REMOVED;
+                        nFirstCol = aRange.aStart.Col() + nX;
+                        nLastCol = aRange.aStart.Col() - 1;
                     }
                     else
                     {
-                        nY = -nY;
-                        nX = aRange.aEnd.Col() - aRange.aStart.Col();
+                        nId = AccessibleTableModelChangeType::ROWS_REMOVED;
+                        nFirstRow = aRange.aStart.Row() + nY;
+                        nLastRow = aRange.aStart.Row() - 1;
                     }
                 }
                 else if ((nX > 0) || (nY > 0))
                 {
                     assert(!((nX > 0) && (nY > 0)) && "should not be possible to add row and column at the same time");
-                    nId = AccessibleTableModelChangeType::INSERT;
-                    nX = aRange.aEnd.Col() - aRange.aStart.Col();
+
+                    // Range in the update hint is from first inserted row/column to last one in spreadsheet;
+                    // calculate indices for the inserted ones from that
+                    if (nX > 0)
+                    {
+                        nId = AccessibleTableModelChangeType::COLUMNS_INSERTED;
+                        nFirstCol = aRange.aStart.Col();
+                        nLastCol = aRange.aStart.Col() + nX - 1;
+                    }
+                    else
+                    {
+                        nId = AccessibleTableModelChangeType::ROWS_INSERTED;
+                        nFirstRow = aRange.aStart.Row();
+                        nLastRow = aRange.aStart.Row() + nY -1;
+                    }
                 }
                 else
                 {
                     assert(false && "is it a deletion or an insertion?");
                 }
 
-                CommitTableModelChange(pRefHint->GetRange().aStart.Row(),
-                    pRefHint->GetRange().aStart.Col(),
-                    pRefHint->GetRange().aStart.Row() + nY,
-                    pRefHint->GetRange().aStart.Col() + nX, nId);
+                CommitTableModelChange(nFirstRow, nFirstCol, nLastRow, nLastCol, nId);
 
                 AccessibleEventObject aEvent;
                 aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
