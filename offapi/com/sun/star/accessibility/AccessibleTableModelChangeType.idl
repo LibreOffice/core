@@ -44,29 +44,6 @@ module com { module sun { module star { module accessibility {
 */
 constants AccessibleTableModelChangeType
 {
-    /** One or more rows and/or columns have been inserted.
-
-        <p>Use the fields of the AccessibleTableModelChange
-        structure to determine the indices of the rows and/or columns that
-        have been inserted.</p>
-
-        @deprecated: use ROWS_INSERTED/COLUMNS_INSERTED instead.
-        This constant will be removed once all remaining uses have been
-        ported.
-    */
-    const short INSERT = 1;
-
-    /** One or more rows and/or columns have been deleted.
-
-        <p>The affected area of the table is stored in the fields of the
-        AccessibleTableModelChange structure.</p>
-
-        @deprecated: use ROWS_REMOVED/COLUMNS_REMOVED instead.
-        This constant will be removed once all remaining uses have been
-        ported.
-     */
-    const short DELETE = 2;
-
     /** Some of the table data has changed.
 
         <p>The number of rows and columns remains unchanged.  Only (some of)

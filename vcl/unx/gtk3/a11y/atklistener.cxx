@@ -625,28 +625,8 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             sal_Int32 nRowsChanged = aChange.LastRow - aChange.FirstRow + 1;
             sal_Int32 nColumnsChanged = aChange.LastColumn - aChange.FirstColumn + 1;
 
-            static const struct {
-                    const char *row;
-                    const char *col;
-            } aSignalNames[] =
-            {
-                { nullptr, nullptr }, // dummy
-                { "row_inserted", "column_inserted" }, // INSERT = 1
-                { "row_deleted", "column_deleted" } // DELETE = 2
-            };
             switch( aChange.Type )
             {
-                case accessibility::AccessibleTableModelChangeType::INSERT:
-                case accessibility::AccessibleTableModelChangeType::DELETE:
-                    if( nRowsChanged > 0 )
-                        g_signal_emit_by_name( G_OBJECT( atk_obj ),
-                                               aSignalNames[aChange.Type].row,
-                                               aChange.FirstRow, nRowsChanged );
-                    if( nColumnsChanged > 0 )
-                        g_signal_emit_by_name( G_OBJECT( atk_obj ),
-                                               aSignalNames[aChange.Type].col,
-                                               aChange.FirstColumn, nColumnsChanged );
-                    break;
                 case accessibility::AccessibleTableModelChangeType::COLUMNS_INSERTED:
                     g_signal_emit_by_name(G_OBJECT(atk_obj), "column-inserted",
                                           aChange.FirstColumn, nColumnsChanged);

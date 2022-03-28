@@ -42,9 +42,7 @@ static NSString * getTableNotification( const AccessibleEventObject& aEvent )
 
     if( (aEvent.NewValue >>= aChange) &&
         (aChange.Type == AccessibleTableModelChangeType::ROWS_INSERTED ||
-         aChange.Type == AccessibleTableModelChangeType::ROWS_REMOVED ||
-        (( AccessibleTableModelChangeType::INSERT == aChange.Type || AccessibleTableModelChangeType::DELETE == aChange.Type ) &&
-        aChange.FirstRow != aChange.LastRow )))
+         aChange.Type == AccessibleTableModelChangeType::ROWS_REMOVED))
     {
         notification = NSAccessibilityRowCountChangedNotification;
     }
