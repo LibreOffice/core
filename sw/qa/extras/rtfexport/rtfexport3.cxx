@@ -55,10 +55,9 @@ DECLARE_RTFEXPORT_TEST(testTdf108949, "tdf108949_footnoteCharFormat.odt")
     uno::Reference<text::XText> xFootnoteText;
     xFootnotes->getByIndex(0) >>= xFootnoteText;
     // This was green (0x00A800), the character property of the footnote character, not the footnote text
-    CPPUNIT_ASSERT_MESSAGE(
-        "Footnote Text color",
-        sal_Int32(0x000000) >= getProperty<sal_Int32>(
-                                   getRun(getParagraphOfText(1, xFootnoteText), 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "Footnote Text color", COL_AUTO,
+        getProperty<Color>(getRun(getParagraphOfText(1, xFootnoteText), 1), "CharColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf141964_numId0, "tdf141964_numId0.rtf")
@@ -80,9 +79,8 @@ DECLARE_RTFEXPORT_TEST(testTdf108949_footnote, "tdf108949_footnote.rtf")
     uno::Reference<text::XFootnote> xFootnote;
     xFootnotes->getByIndex(0) >>= xFootnote;
     // The color of the footnote anchor was black (0x000000)
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "Footnote Character color", Color(0xFF0000),
-        Color(ColorTransparency, getProperty<sal_Int32>(xFootnote->getAnchor(), "CharColor")));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Footnote Character color", Color(0xFF0000),
+                                 getProperty<Color>(xFootnote->getAnchor(), "CharColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf130817, "tdf130817.rtf")
@@ -109,8 +107,7 @@ DECLARE_RTFEXPORT_TEST(testTdf137683_charHighlightNone, "tdf137683_charHighlight
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 1), uno::UNO_QUERY_THROW);
     // This test was failing with a brown charHighlight of 8421376 (0x808000), instead of COL_TRANSPARENT (0xFFFFFFFF)
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_AUTO),
-                         getProperty<sal_Int32>(xRun, "CharHighlight"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xRun, "CharHighlight"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground.odt")
@@ -122,15 +119,12 @@ DECLARE_RTFEXPORT_TEST(testTdf116436_tableBackground, "tdf116436_tableBackground
     uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
     if (mbExported)
-        CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C),
-                             Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
+        CPPUNIT_ASSERT_EQUAL(Color(0xF8DF7C), getProperty<Color>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("A6"));
-    CPPUNIT_ASSERT_EQUAL(Color(0x81D41A),
-                         Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x81D41A), getProperty<Color>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("B6"));
     if (mbExported)
-        CPPUNIT_ASSERT_EQUAL(Color(0xFFFBCC),
-                             Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
+        CPPUNIT_ASSERT_EQUAL(Color(0xFFFBCC), getProperty<Color>(xCell, "BackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTdf122589_firstSection, "tdf122589_firstSection.odt")

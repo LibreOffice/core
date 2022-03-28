@@ -568,9 +568,9 @@ DECLARE_WW8EXPORT_TEST(testTdf132094_transparentPageImage, "tdf132094_transparen
 
 DECLARE_WW8EXPORT_TEST(testTdf112618_textbox_no_bg, "tdf112618_textbox_no_bg.doc")
 {
-    sal_uInt16 nTransparence = getProperty<sal_Int16>(getShape(2), "FillTransparence");
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(100), nTransparence);
-    CPPUNIT_ASSERT_EQUAL(nTransparence, getProperty<sal_uInt16>(getShape(2), "BackColorTransparency"));
+    Color nTransparence = getProperty<Color>(getShape(2), "FillTransparence");
+    CPPUNIT_ASSERT_EQUAL(Color(0x000064), nTransparence);
+    CPPUNIT_ASSERT_EQUAL(nTransparence, getProperty<Color>(getShape(2), "BackColorTransparency"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf101826_xattrTextBoxFill, "tdf101826_xattrTextBoxFill.doc")
