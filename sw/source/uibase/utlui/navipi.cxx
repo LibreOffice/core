@@ -541,6 +541,7 @@ SwNavigationPI::SwNavigationPI(weld::Widget* pParent,
             m_xContent2Dispatch->GetControllerForCommand(".uno:NavElement");
     NavElementToolBoxControl* pToolBoxControl =
             dynamic_cast<NavElementToolBoxControl*>(xController.get());
+    assert(pToolBoxControl);
     m_pNavigateByComboBox = pToolBoxControl->GetComboBox();
 
     // Restore content tree settings before calling UpdateInitShow. UpdateInitShow calls Fillbox,
