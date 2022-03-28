@@ -70,6 +70,24 @@
       "parentUuid": "a93c3d31_9138dc61",
       "revId": "7faf6b3dd0bb29adaf558645c7da90787edf486c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6c8981a0_397e66ad",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T05:09:20Z",
+      "side": 1,
+      "message": "I do small cleanups in separate changes every time something looks odd to me. Please feel free to make code more readable, even if it\u0027s just a one-liner.",
+      "parentUuid": "fc73d27c_7a0f8596",
+      "revId": "7faf6b3dd0bb29adaf558645c7da90787edf486c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
