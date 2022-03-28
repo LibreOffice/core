@@ -16,6 +16,24 @@
       "message": "Is adding the new constants in this change and then removing the (then unused) ones in https://gerrit.libreoffice.org/c/core/+/132221 (\"a11y: Drop unused, deprecated table model change event types\") a proper way to do this from a UNO API perspective, given that the a11y API has been unpublished in\n\n    commit 70626249cd247d9acdad417b8eaf252bae22c059\n    Date:   Thu Nov 29 00:27:03 2012 +0100\n\n        API CHANGE a11y unpublishing and add/removeListener rename.\n        \n        The a11y API has never really been picked up by tools vendors, let\u0027s\n        not tie ourselves up here for no good reason.\n        \n        This unpublishes all css::accessibility, and dependend API.\n        \n        With that, we can change the rather unfortunately-named add/\n        removeEventListener to be add/removeAccessibleEventListener, thus\n        not conflicting with the XComponent methods of the same name.\n        \n        Change-Id: I595598c3a8e46415f80b2780f333333174865fe4\n\n?",
       "revId": "bb2670edb450e7c27ae034490fc8d1ad36beaa7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e728244e_4447b235",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-28T14:42:57Z",
+      "side": 1,
+      "message": "Sounds good, the chance that some external code uses that a11y-related stuff after all is probably (close to) zero.  (You could even do it in one go, but splitting it is equally fine.)",
+      "parentUuid": "9302a4d0_a99aaa32",
+      "revId": "bb2670edb450e7c27ae034490fc8d1ad36beaa7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
