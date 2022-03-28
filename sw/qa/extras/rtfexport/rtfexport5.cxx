@@ -139,8 +139,7 @@ DECLARE_RTFEXPORT_TEST(testN825305, "n825305.rtf")
 {
     // The problem was that the textbox wasn't transparent, due to unimplemented fFilled == 0.
     uno::Reference<beans::XPropertyState> xPropertyState(getShape(2), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(100),
-                         getProperty<sal_Int32>(getShape(2), "BackColorTransparency"));
+    CPPUNIT_ASSERT_EQUAL(Color(0x000064), getProperty<Color>(getShape(2), "BackColorTransparency"));
     beans::PropertyState ePropertyState = xPropertyState->getPropertyState("BackColorTransparency");
     // Was beans::PropertyState_DEFAULT_VALUE.
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, ePropertyState);
@@ -373,8 +372,7 @@ DECLARE_RTFEXPORT_TEST(testNestedTable, "rhbz1065629.rtf")
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid, getProperty<table::BorderLine2>(xCell, "TopBorder"));
     CPPUNIT_ASSERT_BORDER_EQUAL(fullPtSolid,
                                 getProperty<table::BorderLine2>(xCell, "BottomBorder"));
-    CPPUNIT_ASSERT_EQUAL(Color(0xCC0000),
-                         Color(ColorTransparency, getProperty<sal_Int32>(xCell, "BackColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xCC0000), getProperty<Color>(xCell, "BackColor"));
     xCell.set(xTable->getCellByName("A2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xCell.is());
     table::BorderLine2 halfPtSolid(sal_Int32(COL_BLACK), 0, 18, 0, table::BorderLineStyle::SOLID,
@@ -517,11 +515,9 @@ DECLARE_RTFEXPORT_TEST(testShpzDhgt, "shpz-dhgt.rtf")
 {
     // Test that shpz has priority over dhgt and not the other way around.
     // Drawpage is sorted by ZOrder, so first should be red (back).
-    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), Color(ColorTransparency,
-                                                getProperty<sal_Int32>(getShape(1), "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getProperty<Color>(getShape(1), "FillColor"));
     // Second (front) should be green.
-    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), Color(ColorTransparency,
-                                                getProperty<sal_Int32>(getShape(2), "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getProperty<Color>(getShape(2), "FillColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testLevelfollow, "levelfollow.rtf")
@@ -554,9 +550,7 @@ DECLARE_RTFEXPORT_TEST(testLevelfollow, "levelfollow.rtf")
 DECLARE_RTFEXPORT_TEST(testCharColor, "char-color.rtf")
 {
     // This was -1: character color wasn't set.
-    CPPUNIT_ASSERT_EQUAL(
-        Color(0x365F91),
-        Color(ColorTransparency, getProperty<sal_Int32>(getParagraph(1), "CharColor")));
+    CPPUNIT_ASSERT_EQUAL(Color(0x365F91), getProperty<Color>(getParagraph(1), "CharColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo69289, "fdo69289.rtf")
@@ -725,8 +719,7 @@ DECLARE_RTFEXPORT_TEST(testFdo86761, "fdo86761.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo82859, "fdo82859.rtf")
 {
     // This was 0: "0xffffff" was converted to 0, i.e. the background was black instead of the default.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1),
-                         getProperty<sal_Int32>(getShape(1), "BackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getShape(1), "BackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo82076, "fdo82076.rtf")
@@ -827,8 +820,9 @@ DECLARE_RTFEXPORT_TEST(testTdf91074, "tdf91074.rtf")
 {
     // The file failed to load, as the border color was imported using the LineColor UNO property.
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(COL_LIGHTRED),
-                         getProperty<table::BorderLine2>(xShape, "TopBorder").Color);
+    CPPUNIT_ASSERT_EQUAL(
+        COL_LIGHTRED,
+        Color(ColorTransparency, getProperty<table::BorderLine2>(xShape, "TopBorder").Color));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf90260Nopar)
@@ -1340,7 +1334,7 @@ DECLARE_RTFEXPORT_TEST(testTdf131234, "tdf131234.rtf")
     // Ensure that text has default font attrs in spite of style referenced
     // E.g. 12pt, Times New Roman, black, no bold, no italic, no underline
     CPPUNIT_ASSERT_EQUAL(12.f, getProperty<float>(xRun, "CharHeight"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun, "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xRun, "CharColor"));
     CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"), getProperty<OUString>(xRun, "CharFontName"));
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::NORMAL, getProperty<float>(xRun, "CharWeight"));
     CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::NONE, getProperty<sal_Int16>(xRun, "CharUnderline"));

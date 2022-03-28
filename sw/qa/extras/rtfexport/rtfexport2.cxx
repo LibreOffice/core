@@ -368,7 +368,7 @@ DECLARE_RTFEXPORT_TEST(testFdo48037, "fdo48037.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo47764, "fdo47764.rtf")
 {
     // \cbpat with zero argument should mean the auto (-1) color, not a default color (black)
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), getProperty<sal_Int32>(getParagraph(1), "ParaBackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getParagraph(1), "ParaBackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo38786, "fdo38786.rtf")
@@ -409,8 +409,7 @@ DECLARE_RTFEXPORT_TEST(testFdo49271, "fdo49271.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo50539, "fdo50539.rtf")
 {
     // \chcbpat with zero argument should mean the auto (-1) color, not a default color (black)
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1),
-                         getProperty<sal_Int32>(getRun(getParagraph(1), 1), "CharBackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getRun(getParagraph(1), 1), "CharBackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo50665, "fdo50665.rtf")
@@ -572,8 +571,7 @@ DECLARE_RTFEXPORT_TEST(testFdo62805, "fdo62805.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo52475, "fdo52475.rtf")
 {
     // The problem was that \chcbpat0 resulted in no color, instead of COL_AUTO.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1),
-                         getProperty<sal_Int32>(getRun(getParagraph(1), 3), "CharBackColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(getRun(getParagraph(1), 3), "CharBackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo55493, "fdo55493.rtf")
@@ -686,7 +684,7 @@ DECLARE_RTFEXPORT_TEST(testDoDhgt, "do-dhgt.rtf")
     CPPUNIT_ASSERT_EQUAL(3, nShapes);
     for (int i = 0; i < nShapes; ++i)
     {
-        sal_Int32 nFillColor = getProperty<sal_Int32>(getShape(i + 1), "FillColor");
+        Color nFillColor = getProperty<Color>(getShape(i + 1), "FillColor");
         if (nFillColor == 0xc0504d) // red
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(getShape(i + 1), "ZOrder"));
         else if (nFillColor == 0x9bbb59) // green
@@ -914,8 +912,7 @@ DECLARE_RTFEXPORT_TEST(testDoDhgtOld, "do-dhgt-old.rtf")
 
     xShape.set(getShape(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), getProperty<sal_Int32>(xShape, "ZOrder"));
-    CPPUNIT_ASSERT_EQUAL(COL_BLACK,
-                         Color(ColorTransparency, getProperty<sal_uInt32>(xShape, "FillColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(xShape, "FillColor"));
 
     xShape.set(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(xShape, "ZOrder"));
@@ -928,8 +925,7 @@ DECLARE_RTFEXPORT_TEST(testFdo61909, "fdo61909.rtf")
     // Was the Writer default font.
     CPPUNIT_ASSERT_EQUAL(OUString("Courier New"),
                          getProperty<OUString>(xTextRange, "CharFontName"));
-    CPPUNIT_ASSERT_EQUAL(
-        COL_AUTO, Color(ColorTransparency, getProperty<sal_uInt32>(xTextRange, "CharBackColor")));
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, getProperty<Color>(xTextRange, "CharBackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo62288, "fdo62288.rtf")
