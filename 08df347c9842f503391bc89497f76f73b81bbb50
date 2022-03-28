@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a1e451b_40a48956",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T06:19:16Z",
+      "side": 1,
+      "message": "We should not generally refer to the comments in Gerrit from commit messages. If there is some important info in the comments, that could help potential future readers of the code (and of the commit message), that info should be provided either in the commit message itself, or directly in the code comments. Because we don\u0027t rely on infinite availability of the code review pages (at some point, it could be replaced with something else, with unknown fidelity of archiving of the existing content).\n\n(I don\u0027t see what can be added to your commit message, though, other than simply dropping this confusing line.)",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 26
+      },
+      "revId": "08df347c9842f503391bc89497f76f73b81bbb50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "95b5f934_a08781aa",
