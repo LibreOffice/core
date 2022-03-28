@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69c3d59e_1315aea0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-28T07:51:41Z",
+      "side": 1,
+      "message": "\u003e Uploaded patch set 2.\n\n[manually resolved merge conflict]",
+      "revId": "208154666c93a7a16e25cab72fb678cb5a485f21",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
