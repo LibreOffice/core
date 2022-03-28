@@ -34,6 +34,24 @@
       "parentUuid": "9302a4d0_a99aaa32",
       "revId": "bb2670edb450e7c27ae034490fc8d1ad36beaa7b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28dadd18_7dbf6508",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-03-28T14:46:39Z",
+      "side": 1,
+      "message": "Thanks. I\u0027ve split that because the old constants are only actually unused after all internal uses have been ported to the new ones, which the commits in between the 2 changes do.",
+      "parentUuid": "e728244e_4447b235",
+      "revId": "bb2670edb450e7c27ae034490fc8d1ad36beaa7b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
