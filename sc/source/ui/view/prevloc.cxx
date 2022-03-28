@@ -428,14 +428,12 @@ tools::Rectangle ScPreviewLocationData::GetNoteInRangeOutputRect(const tools::Re
 {
     ScPreviewLocationType eType = bNoteMarks ? SC_PLOC_NOTEMARK : SC_PLOC_NOTETEXT;
 
-    sal_uLong nPos = 0;
     for (auto const& it : m_Entries)
     {
         if ( it->eType == eType && it->aPixelRect.Overlaps( rVisiblePixel ) )
         {
             if ( aCellPos == it->aCellRange.aStart )
                 return it->aPixelRect;
-            ++nPos;
         }
     }
 
