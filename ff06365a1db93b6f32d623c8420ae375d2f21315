@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "749d2062_81494fb4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-03-28T20:39:22Z",
+      "side": 1,
+      "message": "Hi Heiko! This change still needs a unit test which I may deliever in the next days. Could you please test/check if it fits all the scenarios so the unit test will be complete:\n\nEmpty cell -\u003e Link and text should be inserted.\nCell with text (no link) -\u003e Text preselected -\u003e Entire cell replaced\nCell with text (link) -\u003e Text/Link preselected -\u003e Entire cell replaced\nCell with text (link) and another text (no link) -\u003e Both texts preselected -\u003e Entire cell replaced\nCell with text (link) and another text (link) -\u003e Both texts preselected -\u003e Entire cell replaced\n\nThank you very much!",
+      "revId": "ff06365a1db93b6f32d623c8420ae375d2f21315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
