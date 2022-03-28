@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "101f9d4a_9df747c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-28T14:29:43Z",
+      "side": 1,
+      "message": "I can\u0027t get 20x slower runtime as that question claims. For 10 million uses, sqrt seems to be 3-4x faster for me. But there\u0027s no reason IMO to prefer sqrt outside of hot code and after a profiler shows significant slowdown.",
+      "parentUuid": "02e41553_f2aa8860",
+      "revId": "a8392680c73be2c2fcad016e60b4deb99ca5a41c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8bbda185_23321935",
