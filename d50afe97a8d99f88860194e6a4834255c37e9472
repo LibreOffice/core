@@ -51,6 +51,24 @@
       "parentUuid": "844c9b6d_2c63b257",
       "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60b8c2f8_4fc490e8",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-28T09:16:23Z",
+      "side": 1,
+      "message": "FTR, I believe that [dcl.init.list] points to [dcl.init.aggr], where clause (5.2) discusses the initialization of not explicitly initialized element:\n\n\u003e if the element is not a reference, the element is copy-initialized from an empty initializer list (9.4.4)\n\n... which to me looks like (P1331R2) couldn\u0027t be applicable to the original initialization, *but* *possibly* it could be applicable to the new form, *if* the empty brace list after \u0027more\u0027 is removed, and the \u0027more\u0027 is made the first union element - in which case, (5.5) would apply:\n\n\u003e the first member of the union (if any) is copy-initialized from an empty initializer list\n\n(but empty initializer list, again, seems to zero-init everything not initialized explicitly ... 😞)",
+      "parentUuid": "2522241a_2df95988",
+      "revId": "d50afe97a8d99f88860194e6a4834255c37e9472",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
