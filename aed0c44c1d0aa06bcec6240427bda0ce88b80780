@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f2edfd8_6e890869",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-28T14:50:34Z",
+      "side": 1,
+      "message": "should the commented-out code be removed completely in a follow-up commit?",
+      "revId": "aed0c44c1d0aa06bcec6240427bda0ce88b80780",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
