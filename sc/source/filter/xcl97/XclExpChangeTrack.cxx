@@ -1430,7 +1430,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
         OUString sLastUsername;
         DateTime aLastDateTime( DateTime::EMPTY );
         sal_uInt32 nIndex = 1;
-        sal_Int32 nLogNumber = 1;
         sal_uInt8 aGUID[ 16 ]; // GUID for action info records
         bool bValidGUID = false;
         while( !aActionStack.empty() )
@@ -1446,7 +1445,6 @@ XclExpChangeTrack::XclExpChangeTrack( const XclExpRoot& rRoot ) :
                 sLastUsername = pAction->GetUsername();
                 aLastDateTime = pAction->GetDateTime();
 
-                nLogNumber++;
                 maRecList.push_back( std::unique_ptr<ExcRecord>(new XclExpChTrInfo(sLastUsername, aLastDateTime, aGUID)) );
                 maRecList.push_back(  std::unique_ptr<ExcRecord>(new XclExpChTrTabId(pAction->GetTabIdBuffer())) );
                 pHeader->SetGUID( aGUID );
