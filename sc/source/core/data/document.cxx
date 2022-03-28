@@ -86,6 +86,7 @@
 #include <tokenstringcontext.hxx>
 #include <compressedarray.hxx>
 #include <recursionhelper.hxx>
+#include <SparklineGroup.hxx>
 
 #include <formula/vectortoken.hxx>
 
@@ -6632,6 +6633,21 @@ bool ScDocument::HasOneSparklineGroup(ScRange const& rRange)
         }
     }
     return true;
+}
+
+std::shared_ptr<sc::SparklineGroup> ScDocument::SearchSparklineGroup(tools::Guid const& rGuid)
+{
+    for (auto const& rTable : maTabs)
+    {
+        for (auto const& pSparkline : rTable->GetSparklineList().getSparklines())
+        {
+            auto const& pGroup = pSparkline->getSparklineGroup();
+            if (pGroup->getID() == rGuid)
+                return pGroup;
+        }
+    }
+
+    return std::shared_ptr<sc::SparklineGroup>();
 }
 
 // Notes

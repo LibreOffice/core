@@ -2037,9 +2037,10 @@ public:
         auto const& pSparkline = pCell->getSparkline();
         auto const& pGroup = pCell->getSparklineGroup();
 
-        auto pNewSparklineGroup = std::make_shared<sc::SparklineGroup>(*pGroup); // Copy the group
-        auto pNewSparkline = std::make_shared<sc::Sparkline>(mrDestColumn.GetCol(), nDestRow, pNewSparklineGroup);
-
+        auto pDestinationGroup = mrDestColumn.GetDoc().SearchSparklineGroup(pGroup->getID());
+        if (!pDestinationGroup)
+            pDestinationGroup = std::make_shared<sc::SparklineGroup>(*pGroup); // Copy the group
+        auto pNewSparkline = std::make_shared<sc::Sparkline>(mrDestColumn.GetCol(), nDestRow, pDestinationGroup);
         pNewSparkline->setInputRange(pSparkline->getInputRange());
 
         miDestPosition = mrDestSparkline.set(miDestPosition, nDestRow, new sc::SparklineCell(pNewSparkline));
