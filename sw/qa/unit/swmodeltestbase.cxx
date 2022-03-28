@@ -220,9 +220,9 @@ xmlDocUniquePtr SwModelTestBase::parseLayoutDump()
     if (!mpXmlBuffer)
         dumpLayout(mxComponent);
 
-    return xmlDocUniquePtr(
-        xmlParseMemory(reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer)),
-                       xmlBufferLength(mpXmlBuffer)));
+    auto pBuffer = reinterpret_cast<const char*>(xmlBufferContent(mpXmlBuffer));
+    SAL_INFO("sw", "SwModelTestBase::parseLayoutDump: pBuffer is '" << pBuffer << "'");
+    return xmlDocUniquePtr(xmlParseMemory(pBuffer, xmlBufferLength(mpXmlBuffer)));
 }
 
 OUString SwModelTestBase::parseDump(const OString& aXPath, const OString& aAttribute)

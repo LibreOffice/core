@@ -182,7 +182,7 @@ bool SwBreakPortion::Format( SwTextFormatInfo &rInf )
         SwTextFly& rTextFly = rInf.GetTextFly();
         if (rTextFly.IsOn())
         {
-            SwTwips nHeight = rTextFly.GetMaxBottom() - rInf.Y();
+            SwTwips nHeight = rTextFly.GetMaxBottom(*this, rInf) - rInf.Y();
             if (nHeight > Height())
             {
                 Height(nHeight, /*bText=*/false);
