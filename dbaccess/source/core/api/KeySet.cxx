@@ -463,7 +463,6 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
     std::vector<sal_Int32> aIndexColumnPositions;
 
     const sal_Int32 nOldLength = aSql.getLength();
-    sal_Int32 i = 1;
     // here we build the condition part for the update statement
     for (auto const& columnName : *m_pColumnNames)
     {
@@ -499,7 +498,6 @@ void OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOrigi
         {
             aSql.append(::dbtools::quoteName( aQuote,columnName.second.sRealName) + aPara);
         }
-        ++i;
     }
 
     if( aSql.getLength() != nOldLength )
