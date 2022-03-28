@@ -653,7 +653,6 @@ void ScFilterDlg::UpdateColorList(size_t nList)
     else
         return;
 
-    sal_Int32 i = 1;
     maColorLbArr[nPos]->clear();
     for (const auto& rColor : aColors)
     {
@@ -679,8 +678,6 @@ void ScFilterDlg::UpdateColorList(size_t nList)
         {
             maColorLbArr[nPos]->set_active_id(sId);
         }
-
-        i++;
     }
 }
 
