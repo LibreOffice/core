@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "201d4b59_9bbd5831",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 21
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-29T11:36:58Z",
+      "side": 1,
+      "message": "@Attila: very nice and important fix! Many thanks for it! This will be one of the most useful interoperability fix of LO 7.4, I\u0027m sure!\n\nI\u0027ve found only a few typos, see the list.",
+      "revId": "b21588bf79b8b75a5373003606553e19c6c71d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6b989fd_a05cdf81",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 4654,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-29T11:36:58Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4654,
+        "startChar": 52,
+        "endLine": 4654,
+        "endChar": 57
+      },
+      "revId": "b21588bf79b8b75a5373003606553e19c6c71d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cd6a482_a2c66f07",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 21
+      },
+      "lineNbr": 4691,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-29T11:36:58Z",
+      "side": 1,
+      "message": "typo",
+      "range": {
+        "startLine": 4691,
+        "startChar": 25,
+        "endLine": 4691,
+        "endChar": 33
+      },
+      "revId": "b21588bf79b8b75a5373003606553e19c6c71d97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
