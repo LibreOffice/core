@@ -316,6 +316,30 @@ const SwPageFrame *SwViewShellImp::GetFirstVisPage(OutputDevice const * pRenderC
     return m_pFirstVisiblePage;
 }
 
+const SwPageFrame* SwViewShellImp::GetLastVisPage(const OutputDevice* pRenderContext) const
+{
+    const SwViewOption* pSwViewOption = m_pShell->GetViewOptions();
+    const bool bBookMode = pSwViewOption->IsViewLayoutBookMode();
+    const SwPageFrame* pPage = GetFirstVisPage(pRenderContext);
+    const SwPageFrame* pLastVisPage = pPage;
+    SwRect aPageRect = pPage->GetBoundRect(pRenderContext);
+    while (pPage && (pPage->IsEmptyPage() || aPageRect.Overlaps(m_pShell->VisArea())))
+    {
+        pLastVisPage = pPage;
+        pPage = static_cast<const SwPageFrame*>(pPage->GetNext());
+        if (pPage)
+        {
+            aPageRect = pPage->GetBoundRect(pRenderContext);
+            if (bBookMode && pPage->IsEmptyPage())
+            {
+                const SwPageFrame& rFormatPage = pPage->GetFormatPage();
+                aPageRect.SSize(rFormatPage.GetBoundRect(pRenderContext).SSize());
+            }
+        }
+    }
+    return pLastVisPage;
+}
+
 // create page preview layout
 void SwViewShellImp::InitPagePreviewLayout()
 {
