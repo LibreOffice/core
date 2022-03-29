@@ -48,9 +48,7 @@
                 <data android:mimeType="application/vnd.oasis.opendocument.text-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.graphics-flat-xml" />
                 <data android:mimeType="application/vnd.oasis.opendocument.presentation-flat-xml" />
-                <!-- TODO: opening FODS documents crashes currently
                 <data android:mimeType="application/vnd.oasis.opendocument.spreadsheet-flat-xml" />
-                -->
 
                 <!-- ODF templates -->
                 <data android:mimeType="application/vnd.oasis.opendocument.text-template"/>
