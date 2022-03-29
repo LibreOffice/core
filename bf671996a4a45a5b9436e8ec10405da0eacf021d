@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ccfc80b7_581c69e7",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T12:22:50Z",
+      "side": 1,
+      "message": "I could, but then the existing JumpList (if there is one) would still be there and the user would not know why his call to update the Jump List did not succeed.\n\nIf the expected outcome in this case is, that the JumpList will be empty, then I  would have to call DeleteList.\n\nIn that case our API would work different than the MS API, but if you feel this is the way to go, I can implement it this way.",
+      "parentUuid": "b6f8c5be_658ae824",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "74d6099f_6f2d8ca4",
         "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
         "patchSetId": 16
