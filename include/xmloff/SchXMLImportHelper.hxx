@@ -21,6 +21,7 @@
 
 #include <com/sun/star/uno/Reference.hxx>
 #include <salhelper/simplereferenceobject.hxx>
+#include <xmloff/dllapi.h>
 #include <xmloff/families.hxx>
 
 namespace com::sun::star::chart { class XChartDocument; }
@@ -106,6 +107,8 @@ public:
                     const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
                     const css::uno::Reference< css::chart2::XChartDocument > & xDoc );
 };
+
+XMLOFF_DLLPUBLIC void setDataProvider(css::uno::Reference<css::chart2::XChartDocument> const & xChartDoc, OUString const & sDataPilotSource);
 
 #endif // INCLUDED_XMLOFF_SCHXMLIMPORTHELPER_HXX
 
