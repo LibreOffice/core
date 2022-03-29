@@ -33,6 +33,24 @@
       "message": "Interesting, why we exchange every element, instead of a single std::swap(aMatN[r], aMatN[c])?",
       "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c2731f9_05354e81",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-29T12:31:48Z",
+      "side": 1,
+      "message": "Ah I missed that p is indeed the size of the array, which means we can just swap the two. I guess that\u0027s why single letter variables are bad haha. Should I make a new patch for this? Or can I edit an already merged one?",
+      "parentUuid": "d9d5ca84_0c0fd2ca",
+      "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
