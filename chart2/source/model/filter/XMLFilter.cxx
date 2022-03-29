@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -50,6 +51,7 @@
 #include <com/sun/star/document/GraphicStorageHandler.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <xmloff/SchXMLImportHelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -449,6 +451,14 @@ ErrCode XMLFilter::impl_ImportStream(
                 {
                     try
                     {
+                        // tdf#117162 reportbuilder expects setDataProvider to be called before ctor
+                        if (m_sDocumentHandler == "com.sun.star.comp.report.ImportDocumentHandler")
+                        {
+                            css::uno::Reference<css::chart2::XChartDocument> xChart(m_xTargetDoc, uno::UNO_QUERY);
+                            if (xChart)
+                                setDataProvider(xChart, OUString());
+                        }
+
                         uno::Sequence< uno::Any > aArgs{
                             uno::Any(beans::NamedValue("DocumentHandler", uno::Any(xFilter))),
                             uno::Any(beans::NamedValue("Model", uno::Any(m_xTargetDoc)))
