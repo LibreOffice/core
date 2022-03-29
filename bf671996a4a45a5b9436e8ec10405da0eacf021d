@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9590ba09_eafd6e5d",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T12:04:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94228dce_ee36f93a",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c3504ae3_f837ec51",
@@ -31,6 +49,24 @@
       "writtenOn": "2022-03-29T09:43:36Z",
       "side": 1,
       "message": "* either items removed by the user are silently ignored, or an exception is thrown if all the given items have been removed by the user, but both cannot be true\n\n* double \"or or\"",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84d1e057_7e447f99",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T12:04:59Z",
+      "side": 1,
+      "message": "\u003e either items removed by the user are silently ignored, or an exception is thrown if all the given items have been removed by the user, but both cannot be true\n\nThe Windows API requires the the list to have at least one entry. So when the list contains only items which were removed by the user, the list I pass down to Windows API is empty, and the AppendCategory call fails.\n\nhttps://docs.microsoft.com/en-us/windows/win32/api/shobjidl_core/nf-shobjidl_core-icustomdestinationlist-appendcategory#parameters\n\n\u003e double \"or or\"\n\nFixed.",
+      "parentUuid": "c3504ae3_f837ec51",
       "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -58,6 +94,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "164866aa_8aaf4770",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T12:04:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74d6099f_6f2d8ca4",
+      "range": {
+        "startLine": 66,
+        "startChar": 33,
+        "endLine": 66,
+        "endChar": 49
+      },
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db3cd311_1784ac92",
@@ -71,6 +131,24 @@
       "writtenOn": "2022-03-29T09:43:36Z",
       "side": 1,
       "message": "do you still expect client code to call this method, or should it better be removed now that the behavior of appendCategory has been changed?",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b89ecec9_be1433b8",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T12:04:59Z",
+      "side": 1,
+      "message": "In my use case the client has its own data store with these destinations and it needs to know when the user removed one entry (the data store can also be viewed/edited from other places).\nSo I think this method should stay.",
+      "parentUuid": "db3cd311_1784ac92",
       "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

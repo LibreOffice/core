@@ -1024,6 +1024,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2196504_75bb2515",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T12:04:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2fcab19f_e33b8e82",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 97
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c52866fb_d00b3443",
