@@ -33,6 +33,23 @@
       "message": "Ah - I see Stephan already took care.",
       "revId": "5b53dd0514c25f907c80d523b078387db71f859b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef5bfb2e_93d2e16f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-29T12:31:06Z",
+      "side": 1,
+      "message": "Sorry for the merge.\n\nI\u0027m reading these:\nhttps://quuxplusone.github.io/blog/2018/03/19/customization-points-for-functions/\nhttps://akrzemi1.wordpress.com/2016/01/16/a-customizable-framework/\n\nWhat do you think about this one, with a comment:\n\n // needed to add std::swap to the scope in order to call the std::swap customization point.\n using std::swap;\n swap(ta, tb);",
+      "revId": "5b53dd0514c25f907c80d523b078387db71f859b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
