@@ -5550,25 +5550,25 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
 
             //TODO: pass on ?
 
-            ScAttrArray* pAttrArray = maTabs[nTab]->aCol[nOldCol].pAttrArray.get();
+            const ScAttrArray& pAttrArray = maTabs[nTab]->ColumnData(nOldCol).AttrArray();
             SCSIZE nIndex;
-            if ( pAttrArray->Count() )
-                pAttrArray->Search( nOldRow, nIndex );
+            if ( pAttrArray.Count() )
+                pAttrArray.Search( nOldRow, nIndex );
             else
                 nIndex = 0;
             SCROW nAttrPos = nOldRow;
             while (nAttrPos<=nEndRow)
             {
-                OSL_ENSURE( nIndex < pAttrArray->Count(), "Wrong index in AttrArray" );
+                OSL_ENSURE( nIndex < pAttrArray.Count(), "Wrong index in AttrArray" );
 
                 bool bHorOverlapped;
-                if ( pAttrArray->Count() )
-                    bHorOverlapped = pAttrArray->mvData[nIndex].pPattern->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
+                if ( pAttrArray.Count() )
+                    bHorOverlapped = pAttrArray.mvData[nIndex].pPattern->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
                 else
                     bHorOverlapped = GetDefPattern()->GetItem(ATTR_MERGE_FLAG).IsHorOverlapped();
                 if ( bHorOverlapped )
                 {
-                    SCROW nEndRowSeg = (pAttrArray->Count()) ? pAttrArray->mvData[nIndex].nEndRow : MaxRow();
+                    SCROW nEndRowSeg = (pAttrArray.Count()) ? pAttrArray.mvData[nIndex].nEndRow : MaxRow();
                     SCROW nLoopEndRow = std::min( nEndRow, nEndRowSeg );
                     for (SCROW nAttrRow = nAttrPos; nAttrRow <= nLoopEndRow; nAttrRow++)
                     {
@@ -5580,9 +5580,9 @@ void ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
                             rStartCol = nTempCol;
                     }
                 }
-                if ( pAttrArray->Count() )
+                if ( pAttrArray.Count() )
                 {
-                    nAttrPos = pAttrArray->mvData[nIndex].nEndRow + 1;
+                    nAttrPos = pAttrArray.mvData[nIndex].nEndRow + 1;
                     ++nIndex;
                 }
                 else
