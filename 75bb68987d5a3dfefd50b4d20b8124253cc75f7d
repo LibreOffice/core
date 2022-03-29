@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "100ff4ef_390b9735",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-29T10:59:45Z",
+      "side": 1,
+      "message": "@Tünde: very nice fix! \n\nI suggest to add an unit test for this commit, e.g. checking the missing p:pic. (It\u0027s enough to put in your next commit or after that.)\n",
+      "revId": "75bb68987d5a3dfefd50b4d20b8124253cc75f7d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
