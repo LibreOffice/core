@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33897642_71a5583e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-29T19:33:05Z",
+      "side": 1,
+      "message": "this (with the follow up patch) seems to work for the given example, but I\u0027m vague on if it\u0027s really the best solution",
+      "revId": "fc79db3e1311c95b615b808df4f32926b1e354df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
