@@ -52,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac65140_785e1a83",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-29T12:44:05Z",
+      "side": 1,
+      "message": "Will look into that.\n\nOn another note, there\u0027s many spots in the code where variables called \"*Help\" are used to swap like this. A search for \"Help \u003d \" discovered a few, and there\u0027s probably other names given to temporary variables like this (eg. fTemp). I think a good easy hack (easy difficulty) would be to replace such occurrences with std::swap.",
+      "parentUuid": "26e97f04_95dda044",
+      "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9d5ca84_0c0fd2ca",
@@ -83,6 +101,24 @@
       "side": 1,
       "message": "Ah I missed that p is indeed the size of the array, which means we can just swap the two. I guess that\u0027s why single letter variables are bad haha. Should I make a new patch for this? Or can I edit an already merged one?",
       "parentUuid": "d9d5ca84_0c0fd2ca",
+      "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0115cb05_b4a1a0de",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-29T12:44:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c2731f9_05354e81",
       "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
