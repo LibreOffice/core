@@ -244,7 +244,7 @@ static bool lcl_hasServiceName(Reference<lang::XMultiServiceFactory> const & xFa
     return std::find(aServiceNames.begin(), aServiceNames.end(), rServiceName) != aServiceNames.end();
 }
 
-static void lcl_setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, OUString const & sDataPilotSource)
+void setDataProvider(uno::Reference<chart2::XChartDocument> const & xChartDoc, OUString const & sDataPilotSource)
 {
     if (!xChartDoc.is())
         return;
@@ -392,7 +392,7 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
     uno::Reference<chart::XChartDocument> xDoc = mrImportHelper.GetChartDocument();
     uno::Reference<chart2::XChartDocument> xNewDoc(xDoc, uno::UNO_QUERY);
 
-    lcl_setDataProvider(xNewDoc, msDataPilotSource);
+    setDataProvider(xNewDoc, msDataPilotSource);
 
     if( aOldChartTypeName.isEmpty() )
     {
