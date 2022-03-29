@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14659170_42524e8b",
+        "filename": "sc/source/filter/excel/export/SparklineExt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-29T09:17:41Z",
+      "side": 1,
+      "message": "Could this leak memory? I looked around in the XclExpRecordList class and could not find a delete. Sorry if I missed it, was just wondering.",
+      "revId": "565f8e3711572e807f147f80bc9d57d57307a093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
