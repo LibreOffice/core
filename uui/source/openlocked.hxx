@@ -20,15 +20,32 @@
 
 #include <vcl/weld.hxx>
 
-class OpenLockedQueryBox
+namespace vcl
 {
-private:
-    std::unique_ptr<weld::MessageDialog> m_xQueryBox;
+class OpenLockedQueryBox;
+}
 
+namespace vcl
+{
+class OpenLockedQueryBox final : public weld::GenericDialogController
+{
 public:
-    OpenLockedQueryBox(weld::Window* pParent, const std::locale& rResLocale,
-                       const OUString& rMessage, bool bEnableOverride);
-    short run() { return m_xQueryBox->run(); }
-};
+    OpenLockedQueryBox(weld::Window* pParent, const OUString& rHiddenData, bool bEnableOverride);
 
+private:
+    std::unique_ptr<weld::Image> mxQuestionMarkImage;
+
+    std::unique_ptr<weld::Button> mxOpenReadOnlyBtn;
+    std::unique_ptr<weld::Button> mxOpenCopyBtn;
+    std::unique_ptr<weld::Button> mxOpenBtn;
+    std::unique_ptr<weld::Button> mxCancelBtn;
+
+    std::unique_ptr<weld::CheckButton> mxNotifyBtn;
+
+    std::unique_ptr<weld::Label> mxHiddenText;
+
+    DECL_LINK(ClickHdl, weld::Button&, void);
+    DECL_LINK(ToggleHdl, weld::Toggleable&, void);
+};
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
