@@ -3122,7 +3122,7 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
     //  After RemoveAdjust, the EditView must not be repainted (has wrong font size etc).
     //  SetUpdateLayout must come after CompleteOnlineSpelling.
     //  The view is hidden in any case below (Broadcast).
-    mpEditEngine->SetUpdateLayout( false );
+    const bool bUpdateLayout = mpEditEngine->SetUpdateLayout( false );
 
     if ( bModified && !bForget ) // What is being entered (text/object)?
     {
@@ -3360,6 +3360,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
 
     bInOwnChange = false;
     bInEnterHandler = false;
+    if (bUpdateLayout)
+        mpEditEngine->SetUpdateLayout( true );
 }
 
 void ScInputHandler::CancelHandler()
