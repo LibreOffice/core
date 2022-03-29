@@ -1580,28 +1580,131 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     {
         switch( nWhich )
         {
-            case FN_STAT_PAGE: {
-                // number of pages, log. page number
-                sal_uInt16 nPage, nLogPage;
-                OUString sDisplay;
-                rShell.GetPageNumber( -1, rShell.IsCursorVisible(), nPage, nLogPage, sDisplay );
-                bool bExtendedTooltip(!sDisplay.isEmpty() &&
-                                      std::u16string_view(OUString::number(nPage)) != sDisplay &&
-                                      nPage != nLogPage);
-                OUString aTooltip = bExtendedTooltip ? SwResId(STR_BOOKCTRL_HINT_EXTENDED)
-                                                     : SwResId(STR_BOOKCTRL_HINT);
+            case FN_STAT_PAGE:
+            {
+                OUString aTooltip;
+                OUString aPageStr;
+
+                SwVisiblePageNumbers aVisiblePageNumbers;
+                m_pWrtShell->GetFirstLastVisPageNumbers(aVisiblePageNumbers);
+
+                // convert to strings and define references
+                OUString sFirstPhy = OUString::number(aVisiblePageNumbers.nFirstPhy);
+                OUString sLastPhy = OUString::number(aVisiblePageNumbers.nLastPhy);
+                OUString sFirstVirt = OUString::number(aVisiblePageNumbers.nFirstVirt);
+                OUString sLastVirt = OUString::number(aVisiblePageNumbers.nLastVirt);
+                OUString& sFirstCustomPhy = aVisiblePageNumbers.sFirstCustomPhy;
+                OUString& sLastCustomPhy = aVisiblePageNumbers.sLastCustomPhy;
+                OUString& sFirstCustomVirt = aVisiblePageNumbers.sFirstCustomVirt;
+                OUString& sLastCustomVirt = aVisiblePageNumbers.sLastCustomVirt;
+                OUString sPageCount = OUString::number(m_pWrtShell->GetPageCount());
+
+                if (aVisiblePageNumbers.nFirstPhy == aVisiblePageNumbers.nFirstVirt)
+                {
+                    aTooltip = SwResId(STR_BOOKCTRL_HINT);
+                    if (aVisiblePageNumbers.nFirstPhy != aVisiblePageNumbers.nLastPhy)
+                    {
+                        if (sFirstPhy == sFirstCustomPhy && sLastPhy == sLastCustomPhy)
+                        {
+                            aPageStr = SwResId(STR_PAGES_COUNT);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sLastPhy);
+                            aPageStr = aPageStr.replaceFirst("%3", sPageCount);
+                        }
+                        else
+                        {
+                            aPageStr = SwResId(STR_PAGES_COUNT_CUSTOM);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sLastPhy);
+                            aPageStr = aPageStr.replaceFirst("%3", sFirstCustomPhy);
+                            aPageStr = aPageStr.replaceFirst("%4", sLastCustomPhy);
+                            aPageStr = aPageStr.replaceFirst("%5", sPageCount);
+                        }
+                    }
+                    else
+                    {
+                        if (sFirstPhy == sFirstCustomPhy && sLastPhy == sLastCustomPhy)
+                        {
+                            aPageStr = SwResId(STR_PAGE_COUNT);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sPageCount);
+                        }
+                        else
+                        {
+                            aPageStr = SwResId(STR_PAGE_COUNT_CUSTOM);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sFirstCustomPhy);
+                            aPageStr = aPageStr.replaceFirst("%3", sPageCount);
+                        }
+                    }
+                }
+                else
+                {
+                    aTooltip = SwResId(STR_BOOKCTRL_HINT_EXTENDED);
+                    if (aVisiblePageNumbers.nFirstPhy != aVisiblePageNumbers.nLastPhy)
+                    {
+                        if (sFirstPhy == sFirstCustomPhy && sLastPhy == sLastCustomPhy)
+                        {
+                            aPageStr = SwResId(STR_PAGES_COUNT_EXTENDED);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sLastPhy);
+                            aPageStr = aPageStr.replaceFirst("%3", sPageCount);
+                            aPageStr = aPageStr.replaceFirst("%4", sFirstVirt);
+                            aPageStr = aPageStr.replaceFirst("%5", sLastVirt);
+                        }
+                        else
+                        {
+                            aPageStr = SwResId(STR_PAGES_COUNT_CUSTOM_EXTENDED);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sLastPhy);
+                            aPageStr = aPageStr.replaceFirst("%3", sFirstCustomPhy);
+                            aPageStr = aPageStr.replaceFirst("%4", sLastCustomPhy);
+                            aPageStr = aPageStr.replaceFirst("%5", sPageCount);
+                            aPageStr = aPageStr.replaceFirst("%6", sFirstVirt);
+                            aPageStr = aPageStr.replaceFirst("%7", sLastVirt);
+                            aPageStr = aPageStr.replaceFirst("%8", sFirstCustomVirt);
+                            aPageStr = aPageStr.replaceFirst("%9", sLastCustomVirt);
+                        }
+                    }
+                    else
+                    {
+                        if (sFirstPhy == sFirstCustomPhy && sLastPhy == sLastCustomPhy)
+                        {
+                            aPageStr = SwResId(STR_PAGE_COUNT_EXTENDED);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sPageCount);
+                            aPageStr = aPageStr.replaceFirst("%3", sFirstVirt);
+                        }
+                        else
+                        {
+                            aPageStr = SwResId(STR_PAGE_COUNT_CUSTOM_EXTENDED);
+                            aPageStr = aPageStr.replaceFirst("%1", sFirstPhy);
+                            aPageStr = aPageStr.replaceFirst("%2", sFirstCustomPhy);
+                            aPageStr = aPageStr.replaceFirst("%3", sPageCount);
+                            aPageStr = aPageStr.replaceFirst("%4", sFirstVirt);
+                            aPageStr = aPageStr.replaceFirst("%5", sFirstCustomVirt);
+                        }
+                    }
+                }
+
+                // replace range indicator with two pages conjunction if applicable
+                if ((aVisiblePageNumbers.nLastPhy - aVisiblePageNumbers.nFirstPhy) == 1)
+                    aPageStr = aPageStr.replaceAll("-", SwResId(STR_PAGES_TWO_CONJUNCTION));
+
+                // status bar bookmark control string and tooltip
                 std::vector<OUString> aStringList
                 {
-                    GetPageStr(nPage, nLogPage, sDisplay),
+                    aPageStr,
                     aTooltip
                 };
                 rSet.Put(SfxStringListItem(FN_STAT_PAGE, &aStringList));
+
                 //if existing page number is not equal to old page number, send out this event.
-                if (m_nOldPageNum != nLogPage )
+                if (m_nOldPageNum != aVisiblePageNumbers.nFirstPhy)
                 {
                     if (m_nOldPageNum != 0)
-                        SwCursorShell::FirePageChangeEvent(m_nOldPageNum, nLogPage);
-                    m_nOldPageNum = nLogPage;
+                        SwCursorShell::FirePageChangeEvent(m_nOldPageNum, aVisiblePageNumbers.nFirstPhy);
+                    m_nOldPageNum = aVisiblePageNumbers.nFirstPhy;
                 }
                 const sal_uInt16 nCnt = GetWrtShell().GetPageCnt();
                 if (m_nPageCnt != nCnt)   // notify Basic
