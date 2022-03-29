@@ -3133,6 +3133,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
     }
 
     std::vector<editeng::MisspellRanges> aMisspellRanges;
+    // UpdateLayout must be true during CompleteOnlineSpelling
+    const bool bUpdateLayout = mpEditEngine->SetUpdateLayout( true );
     mpEditEngine->CompleteOnlineSpelling();
     bool bSpellErrors = !bFormulaMode && mpEditEngine->HasOnlineSpellErrors();
     if ( bSpellErrors )
@@ -3399,6 +3401,8 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInL
 
     bInOwnChange = false;
     bInEnterHandler = false;
+    if (bUpdateLayout)
+        mpEditEngine->SetUpdateLayout( true );
 }
 
 void ScInputHandler::CancelHandler()
