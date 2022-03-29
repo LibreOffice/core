@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "021a45e9_c2a4b9b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-29T10:12:02Z",
+      "side": 1,
+      "message": "Tünde: very nice fix! I\u0027ve solved the merge conflict.",
+      "revId": "6c1abb2c90dc328a7eab837fe976e43c33926833",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
