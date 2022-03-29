@@ -20,23 +20,60 @@
 #include <strings.hrc>
 #include "openlocked.hxx"
 #include <officecfg/Office/Common.hxx>
-#include <unotools/resmgr.hxx>
-#include <vcl/stdtext.hxx>
-#include <vcl/svapp.hxx>
+#include <vcl/weldutils.hxx>
 
-OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const std::locale& rResLocale, const OUString& rMessage, bool bEnableOverride)
-    : m_xQueryBox(Application::CreateMessageDialog(pParent, VclMessageType::Question, VclButtonsType::NONE, rMessage))
+using namespace vcl;
+
+IMPL_LINK(OpenLockedQueryBox, ClickHdl, weld::Button&, rButton, void)
 {
-    m_xQueryBox->set_title(Translate::get(STR_OPENLOCKED_TITLE, rResLocale));
-    m_xQueryBox->add_button(Translate::get(STR_OPENLOCKED_OPENREADONLY_BTN, rResLocale), RET_YES);
-    m_xQueryBox->add_button(Translate::get(STR_OPENLOCKED_OPENREADONLY_NOTIFY_BTN, rResLocale), RET_RETRY);
-    m_xQueryBox->add_button(Translate::get(STR_OPENLOCKED_OPENCOPY_BTN, rResLocale), RET_NO);
-    if (bEnableOverride && officecfg::Office::Common::Misc::AllowOverrideLocking::get())
+    if (&rButton == mxOpenReadOnlyBtn.get())
     {
-        // Present option to ignore the (stale?) lock file and open the document
-        m_xQueryBox->add_button(Translate::get(STR_ALREADYOPEN_OPEN_BTN, rResLocale), RET_IGNORE);
+        if (mxNotifyBtn->get_active())
+            m_xDialog->response(RET_RETRY);
+        else
+            m_xDialog->response(RET_YES);
     }
-    m_xQueryBox->add_button(GetStandardText(StandardButtonType::Cancel), RET_CANCEL);
+    else if (&rButton == mxOpenCopyBtn.get())
+    {
+        m_xDialog->response(RET_NO);
+    }
+    else if (&rButton == mxOpenBtn.get())
+    {
+        m_xDialog->response(RET_IGNORE);
+    }
+    else if (&rButton == mxCancelBtn.get())
+    {
+        m_xDialog->response(RET_CANCEL);
+    }
+}
+
+OpenLockedQueryBox::OpenLockedQueryBox(weld::Window* pParent, const OUString& rHiddenData, bool bEnableOverride)
+    : GenericDialogController(pParent, "vcl/ui/openlockedquerybox.ui", "OpenLockedQueryBox")
+    , mxQuestionMarkImage(m_xBuilder->weld_image("questionmark"))
+    , mxOpenReadOnlyBtn(m_xBuilder->weld_button("readonly"))
+    , mxOpenCopyBtn(m_xBuilder->weld_button("opencopy"))
+    , mxOpenBtn(m_xBuilder->weld_button("open"))
+    , mxCancelBtn(m_xBuilder->weld_button("cancel"))
+    , mxNotifyBtn(m_xBuilder->weld_check_button("notify"))
+    , mxHiddenText(m_xBuilder->weld_label("hiddentext"))
+{
+    //set up the image
+    mxQuestionMarkImage->set_from_icon_name(u"vcl/res/help.png");
+
+    //setup click hdl
+    mxOpenReadOnlyBtn->connect_clicked(LINK(this, OpenLockedQueryBox, ClickHdl));
+    mxOpenCopyBtn->connect_clicked(LINK(this, OpenLockedQueryBox, ClickHdl));
+    mxOpenBtn->connect_clicked(LINK(this, OpenLockedQueryBox, ClickHdl));
+    mxCancelBtn->connect_clicked(LINK(this, OpenLockedQueryBox, ClickHdl));
+
+    if (!(bEnableOverride && officecfg::Office::Common::Misc::AllowOverrideLocking::get()))
+    {
+        //disable option to ignore the (stale?) lock file and open the document
+        mxOpenBtn->set_sensitive(false);
+    }
+
+    mxHiddenText->set_label(rHiddenData);
+    m_xDialog->set_centered_on_parent(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
