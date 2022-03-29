@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aee0f32_01edd905",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-29T10:24:47Z",
+      "side": 1,
+      "message": "@Attila: using in a recent master, it seems, the patch didn\u0027t solve the problem, selecting the frame of the first picture, Ctrl-X and Ctrl-Z still results an empty frame. By the way, after moving the frame, the problem doesn\u0027t appear again (without the patch, too).",
+      "revId": "b818e1076c2133c7912d09e35ae19bf55c388f88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
