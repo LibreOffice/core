@@ -34,6 +34,24 @@
       "parentUuid": "79e98276_49b0a355",
       "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dba2cf0d_d0256cc9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T16:40:23Z",
+      "side": 1,
+      "message": "I meant not the names, but the images themselves - the TDF page logo with green rectangle inside with \"X\", the TDF page logo with blue rectangle with \"W\"",
+      "parentUuid": "9e8a85b3_b2f9c150",
+      "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
