@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b6f8c5be_658ae824",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-29T12:18:24Z",
+      "side": 1,
+      "message": "\u003e \u003e either items removed by the user are silently ignored, or an exception is thrown if all the given items have been removed by the user, but both cannot be true\n\u003e \n\u003e The Windows API requires the the list to have at least one entry. So when the list contains only items which were removed by the user, the list I pass down to Windows API is empty, and the AppendCategory call fails.\n\ncan\u0027t you silently suppress the calls to ICustomDestinationList::AppendCategory/CommitList in that case?",
+      "parentUuid": "84d1e057_7e447f99",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "74d6099f_6f2d8ca4",
         "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
         "patchSetId": 16
