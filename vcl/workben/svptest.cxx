@@ -115,13 +115,13 @@ MyWin::MyWin( vcl::Window* pParent, WinBits nWinStyle ) :
     {
         for( int nY = 0; nY < 256; nY++ )
         {
-            double fRed = 255.0-1.5*sqrt(static_cast<double>(nX*nX+nY*nY));
+            double fRed = 255.0-1.5*std::hypot(nX, nY);
             if( fRed < 0.0 )
                 fRed = 0.0;
-            double fGreen = 255.0-1.5*sqrt(static_cast<double>((255-nX)*(255-nX)+nY*nY));
+            double fGreen = 255.0-1.5*std::hypot(255-nX, nY);
             if( fGreen < 0.0 )
                 fGreen = 0.0;
-            double fBlue = 255.0-1.5*sqrt(static_cast<double>((128-nX)*(128-nX)+(255-nY)*(255-nY)));
+            double fBlue = 255.0-1.5*std::hypot(128-nX, 255-nY);
             if( fBlue < 0.0 )
                 fBlue = 0.0;
             pAcc->SetPixel( nY, nX, BitmapColor( sal_uInt8(fRed), sal_uInt8(fGreen), sal_uInt8(fBlue) ) );

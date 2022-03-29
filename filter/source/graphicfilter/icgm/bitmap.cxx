@@ -216,12 +216,12 @@ void CGMBitmap::ImplGetBitmap( CGMBitmapDescriptor& rDesc )
         double nX = rDesc.mnR.X - rDesc.mnQ.X;
         double nY = rDesc.mnR.Y - rDesc.mnQ.Y;
 
-        rDesc.mndy = sqrt( nX * nX + nY * nY );
+        rDesc.mndy = std::hypot(nX, nY);
 
         nX = rDesc.mnR.X - rDesc.mnP.X;
         nY = rDesc.mnR.Y - rDesc.mnP.Y;
 
-        rDesc.mndx = sqrt( nX * nX + nY * nY );
+        rDesc.mndx = std::hypot(nX, nY);
 
         nX = rDesc.mnR.X - rDesc.mnP.X;
         nY = rDesc.mnR.Y - rDesc.mnP.Y;

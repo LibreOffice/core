@@ -800,10 +800,10 @@ double SAL_CALL rtl_math_asinh(double fX) SAL_THROW_EXTERN_C()
     }
 
     if ( fX < 0.125 )
-        return fSign * rtl_math_log1p( fX + fX*fX / (1.0 + sqrt( 1.0 + fX*fX)));
+        return fSign * rtl_math_log1p( fX + fX*fX / (1.0 + std::hypot(1.0, fX)));
 
     if ( fX < 1.25e7 )
-        return fSign * log( fX + sqrt( 1.0 + fX*fX));
+        return fSign * log( fX + std::hypot(1.0, fX));
 
     return fSign * log( 2.0*fX);
 }
