@@ -2,13 +2,25 @@
 <!-- Generated with glade 3.38.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
+  <object class="GtkAdjustment" id="adjustment-custom-max">
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-custom-min">
+    <property name="step-increment">1</property>
+    <property name="page-increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment-line-width">
+    <property name="lower">0.5</property>
+    <property name="upper">8</property>
+    <property name="value">1</property>
+    <property name="step-increment">0.25</property>
+    <property name="page-increment">1</property>
+  </object>
   <object class="GtkDialog" id="SparklineDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
     <property name="title" translatable="yes" context="SparklineDialog">Sparkline Dialog</property>
-    <property name="resizable">False</property>
-    <property name="default-width">0</property>
-    <property name="default-height">0</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -214,7 +226,7 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <!-- n-columns=6 n-rows=5 -->
+              <!-- n-columns=1 n-rows=6 -->
               <object class="GtkGrid">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
@@ -225,384 +237,29 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="label-series">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-series">Series:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="color-button-series"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label-negative">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-negative">Negative Points:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="color-button-negative"/>
-                      <relation type="label-for" target="check-negative"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="color-button-series">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-series"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="color-button-negative">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-negative"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="check-negative">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="image-position">right</property>
-                    <property name="always-show-image">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-negative"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label-low">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-low">Low Points:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="color-button-low"/>
-                      <relation type="label-for" target="check-low"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="color-button-high">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-high"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="color-button-low">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-low"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">2</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="check-low">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="image-position">right</property>
-                    <property name="always-show-image">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-low"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label-high">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-high">High Points:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="color-button-high"/>
-                      <relation type="label-for" target="check-high"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="check-high">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="image-position">right</property>
-                    <property name="always-show-image">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-high"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label-marker">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-marker">Marker:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="check-marker"/>
-                      <relation type="label-for" target="color-button-marker"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="check-marker">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="image-position">right</property>
-                    <property name="always-show-image">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-marker"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">4</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="color-button-marker">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-marker"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">5</property>
-                    <property name="top-attach">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="color-button-first">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-first"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">5</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkMenuButton" id="color-button-last">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-last"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">5</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="check-first">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="image-position">right</property>
-                    <property name="always-show-image">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-first"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">4</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="check-last">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="image-position">right</property>
-                    <property name="always-show-image">True</property>
-                    <property name="draw-indicator">True</property>
-                    <child>
-                      <placeholder/>
-                    </child>
-                    <accessibility>
-                      <relation type="labelled-by" target="label-last"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">4</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label-first">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-first">First Points:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="color-button-first"/>
-                      <relation type="label-for" target="check-first"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label-last">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-last">Last Points:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="color-button-last"/>
-                      <relation type="label-for" target="check-last"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">3</property>
-                    <property name="top-attach">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label-type">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes" context="SparklineDialog|label-type">Type:</property>
-                    <property name="xalign">0</property>
-                    <accessibility>
-                      <relation type="label-for" target="line-radiobutton"/>
-                      <relation type="label-for" target="column-radiobutton"/>
-                      <relation type="label-for" target="stacked-radiobutton"/>
-                    </accessibility>
-                  </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
-                </child>
-                <child>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
                     <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="label-type">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-type">Type:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="line-radiobutton"/>
+                          <relation type="label-for" target="column-radiobutton"/>
+                          <relation type="label-for" target="stacked-radiobutton"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
                     <child>
                       <object class="GtkRadioButton" id="line-radiobutton">
                         <property name="label" translatable="yes" context="SparklineDialog|line-radiobutton">Line</property>
@@ -619,7 +276,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -638,7 +295,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -657,27 +314,736 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <!-- n-columns=6 n-rows=4 -->
+                  <object class="GtkGrid">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="label-series">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-series">Series:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="color-button-series"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">0</property>
+                        <property name="width">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="color-button-series">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="hexpand">False</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-series"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label-negative">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-negative">Negative Points:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="check-negative"/>
+                          <relation type="label-for" target="color-button-negative"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label-high">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-high">High Points:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="check-high"/>
+                          <relation type="label-for" target="color-button-high"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-negative">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-negative"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-high">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-high"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="color-button-negative">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-negative"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="color-button-high">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-high"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label-low">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-low">Low Points:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="check-low"/>
+                          <relation type="label-for" target="color-button-low"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">0</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-low">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-low"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">1</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="color-button-low">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-low"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">2</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label-last">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-last">Last Points:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="check-last"/>
+                          <relation type="label-for" target="color-button-last"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label-first">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-first">First Points:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="check-first"/>
+                          <relation type="label-for" target="color-button-first"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label-marker">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="hexpand">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-marker">Marker:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="check-marker"/>
+                          <relation type="label-for" target="color-button-marker"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-marker">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-marker"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">4</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-first">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-first"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">4</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-last">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-last"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">4</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="color-button-marker">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-marker"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">5</property>
+                        <property name="top-attach">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="color-button-first">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-first"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">5</property>
+                        <property name="top-attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="color-button-last">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="draw-indicator">True</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-last"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="left-attach">5</property>
+                        <property name="top-attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkFixed">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="left-attach">3</property>
+                        <property name="top-attach">0</property>
+                        <property name="width">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="hexpand">True</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkCheckButton" id="check-display-x-axis">
+                        <property name="label" translatable="yes" context="SparklineDialog|check-display-x-axis">Display X Axis</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-display-hidden">
+                        <property name="label" translatable="yes" context="SparklineDialog|check-display-hidden">Display Hidden</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check-right-to-left">
+                        <property name="label" translatable="yes" context="SparklineDialog|check-right-to-left">Right To Left</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="image-position">right</property>
+                        <property name="always-show-image">True</property>
+                        <property name="draw-indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">True</property>
+                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                    <property name="width">5</property>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
                   </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkLabel" id="label-display-empty-cells-as">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-type">Display Empty Cells As:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="display-empty-radiobutton-gap"/>
+                          <relation type="label-for" target="display-empty-radiobutton-zero"/>
+                          <relation type="label-for" target="display-empty-radiobutton-span"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="display-empty-radiobutton-gap">
+                        <property name="label" translatable="yes" context="SparklineDialog|line-radiobutton">Gap</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-display-empty-cells-as"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="display-empty-radiobutton-zero">
+                        <property name="label" translatable="yes" context="SparklineDialog|line-radiobutton">Zero</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">display-empty-radiobutton-gap</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-display-empty-cells-as"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="display-empty-radiobutton-span">
+                        <property name="label" translatable="yes" context="SparklineDialog|line-radiobutton">Span</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">False</property>
+                        <property name="hexpand">True</property>
+                        <property name="active">True</property>
+                        <property name="draw-indicator">True</property>
+                        <property name="group">display-empty-radiobutton-gap</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-display-empty-cells-as"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">4</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
+                  <object class="GtkExpander">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="hexpand">True</property>
+                    <property name="expanded">True</property>
+                    <property name="label-fill">True</property>
+                    <property name="resize-toplevel">True</property>
+                    <child>
+                      <!-- n-columns=3 n-rows=2 -->
+                      <object class="GtkGrid">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="label-minimum">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="xpad">12</property>
+                            <property name="label" translatable="yes" context="SparklineDialog|label-series">Minimum Value:</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                              <relation type="label-for" target="combo-min-axis-type"/>
+                              <relation type="label-for" target="spin-custom-min"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label-maximum">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="xpad">12</property>
+                            <property name="label" translatable="yes" context="SparklineDialog|label-series">Maximum Value:</property>
+                            <property name="xalign">0</property>
+                            <accessibility>
+                              <relation type="label-for" target="combo-max-axis-type"/>
+                              <relation type="label-for" target="spin-custom-max"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left-attach">0</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="combo-min-axis-type">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="active">0</property>
+                            <items>
+                              <item id="0" translatable="yes" context="SparklineDialog|combo-min-axis-type_0">Individual</item>
+                              <item id="1" translatable="yes" context="SparklineDialog|combo-min-axis-type_1">Group</item>
+                              <item id="2" translatable="yes" context="SparklineDialog|combo-min-axis-type_2">Custom</item>
+                            </items>
+                            <accessibility>
+                              <relation type="labelled-by" target="label-minimum"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="combo-max-axis-type">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="active">0</property>
+                            <items>
+                              <item id="0" translatable="yes" context="SparklineDialog|combo-max-axis-type_0">Individual</item>
+                              <item id="1" translatable="yes" context="SparklineDialog|combo-max-axis-type_1">Group</item>
+                              <item id="2" translatable="yes" context="SparklineDialog|combo-max-axis-type_2">Custom</item>
+                            </items>
+                            <accessibility>
+                              <relation type="labelled-by" target="label-maximum"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left-attach">1</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="spin-custom-min">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="activates-default">True</property>
+                            <property name="width-chars">10</property>
+                            <property name="truncate-multiline">True</property>
+                            <property name="adjustment">adjustment-custom-min</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label-minimum"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="spin-custom-max">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="hexpand">True</property>
+                            <property name="activates-default">True</property>
+                            <property name="width-chars">10</property>
+                            <property name="truncate-multiline">True</property>
+                            <property name="adjustment">adjustment-custom-max</property>
+                            <accessibility>
+                              <relation type="labelled-by" target="label-maximum"/>
+                            </accessibility>
+                          </object>
+                          <packing>
+                            <property name="left-attach">2</property>
+                            <property name="top-attach">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="label">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-vertical-axis">Vertical Axis</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">5</property>
+                  </packing>
                 </child>
                 <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <child>
+                      <object class="GtkLabel" id="label-line-width">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-line-width">Line Width:</property>
+                        <property name="xalign">0</property>
+                        <accessibility>
+                          <relation type="label-for" target="spin-line-width"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spin-line-width">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="hexpand">True</property>
+                        <property name="input-purpose">number</property>
+                        <property name="adjustment">adjustment-line-width</property>
+                        <property name="climb-rate">0.25</property>
+                        <property name="digits">2</property>
+                        <property name="snap-to-ticks">True</property>
+                        <property name="numeric">True</property>
+                        <property name="value">1</property>
+                        <accessibility>
+                          <relation type="labelled-by" target="label-line-width"/>
+                        </accessibility>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
                 </child>
               </object>
             </child>
@@ -705,5 +1071,20 @@
       <action-widget response="-6">cancel</action-widget>
       <action-widget response="-11">help</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="cell-range-label"/>
+      <widget name="output-range-label"/>
+      <widget name="label-type"/>
+      <widget name="label-series"/>
+      <widget name="label-negative"/>
+      <widget name="label-high"/>
+      <widget name="label-low"/>
+      <widget name="label-display-empty-cells-as"/>
+      <widget name="label-minimum"/>
+      <widget name="label-maximum"/>
+      <widget name="label-line-width"/>
+    </widgets>
   </object>
 </interface>
