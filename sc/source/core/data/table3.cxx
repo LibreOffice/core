@@ -1734,6 +1734,7 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const
         do
         {
             SCCOL nCol = static_cast<SCCOL>(aSortParam.maKeyState[nSort].nField);
+            CreateColumnIfNotExists(nCol);
             ScRefCellValue aCell1 = aCol[nCol].GetCellValue(nIndex1);
             ScRefCellValue aCell2 = aCol[nCol].GetCellValue(nIndex2);
             nRes = CompareCell(nSort, aCell1, nCol, nIndex1, aCell2, nCol, nIndex2);
@@ -1741,6 +1742,7 @@ short ScTable::Compare(SCCOLROW nIndex1, SCCOLROW nIndex2) const
     }
     else
     {
+        CreateColumnIfNotExists(std::max(nIndex1, nIndex2));
         do
         {
             SCROW nRow = aSortParam.maKeyState[nSort].nField;
