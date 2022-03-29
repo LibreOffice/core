@@ -581,16 +581,15 @@ void SplineCalculater::CalculateCubicSplines(
             pOld[ 0 ].PositionZ == pOld[nMaxIndexPoints].PositionZ &&
             nMaxIndexPoints >=2 )
         {   // periodic spline
-            aSplineX.reset(new lcl_SplineCalculation( std::move(aInputX)));
-            aSplineY.reset(new lcl_SplineCalculation( std::move(aInputY)));
-            // aSplineZ = new lcl_SplineCalculation( aInputZ) ;
+            aSplineX = std::make_unique<lcl_SplineCalculation>(std::move(aInputX));
+            aSplineY = std::make_unique<lcl_SplineCalculation>(std::move(aInputY));
         }
         else // generate the kind "natural spline"
         {
             double fXDerivation = std::numeric_limits<double>::infinity();
             double fYDerivation = std::numeric_limits<double>::infinity();
-            aSplineX.reset(new lcl_SplineCalculation( std::move(aInputX), fXDerivation, fXDerivation ));
-            aSplineY.reset(new lcl_SplineCalculation( std::move(aInputY), fYDerivation, fYDerivation ));
+            aSplineX = std::make_unique<lcl_SplineCalculation>(std::move(aInputX), fXDerivation, fXDerivation);
+            aSplineY = std::make_unique<lcl_SplineCalculation>(std::move(aInputY), fYDerivation, fYDerivation);
         }
 
         // fill result polygon with calculated values
@@ -679,29 +678,23 @@ void SplineCalculater::CalculateBSplines(
             continue; // need at least 2 points, degree p needs at least n+1 points
                       // next piece of series
 
-        std::unique_ptr<double[]> t(new double [n+1]);
-        if (!createParameterT(aPointsIn, t.get()))
+        std::vector<double> t(n + 1);
+        if (!createParameterT(aPointsIn, t.data()))
         {
             continue; // next piece of series
         }
 
         lcl_tSizeType m = n + p + 1;
-        std::unique_ptr<double[]> u(new double [m+1]);
-        createKnotVector(n, p, t.get(), u.get());
+        std::vector<double> u(m + 1);
+        createKnotVector(n, p, t.data(), u.data());
 
         // The matrix N contains the B-spline basis functions applied to parameters.
         // In each row only p+1 adjacent elements are non-zero. The starting
         // column in a higher row is equal or greater than in the lower row.
         // To store this matrix the non-zero elements are shifted to column 0
         // and the amount of shifting is remembered in an array.
-        std::unique_ptr<double*[]> aMatN(new double*[n+1]);
-        for (lcl_tSizeType row = 0; row <=n; ++row)
-        {
-            aMatN[row] = new double[p+1];
-            for (sal_uInt32 col = 0; col <= p; ++col)
-            aMatN[row][col] = 0.0;
-        }
-        std::unique_ptr<lcl_tSizeType[]> aShift(new lcl_tSizeType[n+1]);
+        std::vector<std::vector<double>> aMatN(n + 1, std::vector<double>(p + 1));
+        std::vector<lcl_tSizeType> aShift(n + 1);
         aMatN[0][0] = 1.0; //all others are zero
         aShift[0] = 0;
         aMatN[n][0] = 1.0;
@@ -721,7 +714,7 @@ void SplineCalculater::CalculateBSplines(
             // index in reduced matrix aMatN = (index in full matrix N) - (i-p)
             aShift[k] = i - p;
 
-            applyNtoParameterT(i, t[k], p, u.get(), aMatN[k]);
+            applyNtoParameterT(i, t[k], p, u.data(), aMatN[k].data());
         } // next row k
 
         // Get matrix C of control points from the matrix equation aMatN * C = aPointsIn
@@ -750,10 +743,7 @@ void SplineCalculater::CalculateBSplines(
                 // exchange total row r with total row c if necessary
                 if (r != c)
                 {
-                    for ( sal_uInt32 i = 0; i <= p ; ++i)
-                    {
-                        std::swap( aMatN[r][i], aMatN[c][i] );
-                    }
+                    std::swap( aMatN[r], aMatN[c] );
                     std::swap( aPointsIn[r], aPointsIn[c] );
                     std::swap( aShift[r], aShift[c] );
                 }
@@ -823,7 +813,7 @@ void SplineCalculater::CalculateBSplines(
             pNew[nNewSize -1 ].PositionX = aPointsIn[n].first;
             pNew[nNewSize -1 ].PositionY = aPointsIn[n].second;
             pNew[nNewSize -1 ].PositionZ = fZCoordinate;
-            std::unique_ptr<double[]> aP(new double[m+1]);
+            std::vector<double> aP(m + 1);
             lcl_tSizeType nLow = 0;
             for ( lcl_tSizeType nTIndex = 0; nTIndex <= n-1; ++nTIndex)
             {
@@ -874,10 +864,6 @@ void SplineCalculater::CalculateBSplines(
                     pNew[nNewIndex].PositionZ = fZCoordinate;
                 }
             }
-        }
-        for (lcl_tSizeType row = 0; row <=n; ++row)
-        {
-            delete[] aMatN[row];
         }
     } // next piece of the series
 }
