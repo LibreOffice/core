@@ -34,6 +34,24 @@
       "parentUuid": "ebe1896e_d0022d10",
       "revId": "c7380fa84f0e7c7a9a6dab5a450b5a44eda0efa0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb166948_087c5b23",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T07:18:37Z",
+      "side": 1,
+      "message": "Please see tdf#145630.",
+      "parentUuid": "45c138ec_781f9b15",
+      "revId": "c7380fa84f0e7c7a9a6dab5a450b5a44eda0efa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
