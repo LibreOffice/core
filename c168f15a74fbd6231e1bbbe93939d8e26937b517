@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fb3f599_25c9a5ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-29T07:00:24Z",
+      "side": 1,
+      "message": "Just for the future, the way I time file load is \u0027OOO_EXIT_POST_STARTUP\u003d1 OOO_DISABLE_RECOVERY\u003d1 /soffice.bin --nologo /path/to/file.rtf\", that seems to still work. :-)",
+      "revId": "c168f15a74fbd6231e1bbbe93939d8e26937b517",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
