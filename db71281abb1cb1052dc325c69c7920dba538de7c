@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d26e093d_8f6d6159",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000863
+      },
+      "writtenOn": "2022-03-29T07:32:41Z",
+      "side": 1,
+      "message": "For the record, this is only relevant to LibreOfficeKit, and not to LibreOffice.",
+      "revId": "db71281abb1cb1052dc325c69c7920dba538de7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
