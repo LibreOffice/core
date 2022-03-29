@@ -158,11 +158,8 @@ public:
     const ScRangeList& GetRightEnvelope() const  { return aRightEnvelope;  }
 
     // iterators for table access
-    typedef std::set<SCTAB>::iterator iterator;
     typedef std::set<SCTAB>::const_iterator const_iterator;
     typedef std::set<SCTAB>::const_reverse_iterator const_reverse_iterator;
-    iterator begin() { return maTabMarked.begin(); }
-    iterator end() { return maTabMarked.end(); }
     const_iterator begin() const { return maTabMarked.begin(); }
     const_iterator end() const { return maTabMarked.end(); }
     const_reverse_iterator rbegin() const { return maTabMarked.rbegin(); }
