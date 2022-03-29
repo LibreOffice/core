@@ -29,6 +29,7 @@ $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/querydialog \
 	vcl/uiconfig/ui/screenshotparent \
 	vcl/uiconfig/ui/wizard \
+	vcl/uiconfig/ui/openlockedquerybox \
 ))
 
 $(eval $(call gb_UIConfig_add_a11yerrors_uifiles,vcl,\
