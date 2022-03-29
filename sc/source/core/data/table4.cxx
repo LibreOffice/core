@@ -2364,6 +2364,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 bOverflow = isOverflow( nVal, nMaxValue, nStepValue, nStartVal, eFillCmd);
                         }
 
+                        CreateColumnIfNotExists(nCol);
                         if (bError)
                             aCol[nCol].SetError(static_cast<SCROW>(nRow), FormulaError::NoValue);
                         else if (!bOverflow && bNonEmpty)
