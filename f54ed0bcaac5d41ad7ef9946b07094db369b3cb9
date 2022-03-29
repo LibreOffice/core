@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19d6f56d_c71fa4e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T11:57:08Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9d5ca84_0c0fd2ca",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 755,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T11:57:08Z",
+      "side": 1,
+      "message": "Interesting, why we exchange every element, instead of a single std::swap(aMatN[r], aMatN[c])?",
+      "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
