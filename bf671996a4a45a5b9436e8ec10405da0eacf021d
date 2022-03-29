@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94228dce_ee36f93a",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-29T09:43:36Z",
+      "side": 1,
+      "message": "here and elsewhere (also note the backslashes in the example Windows-style pathname for the icon): are you sure that these backslashes survive doxygen?",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3504ae3_f837ec51",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-29T09:43:36Z",
+      "side": 1,
+      "message": "* either items removed by the user are silently ignored, or an exception is thrown if all the given items have been removed by the user, but both cannot be true\n\n* double \"or or\"",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74d6099f_6f2d8ca4",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-29T09:43:36Z",
+      "side": 1,
+      "message": "nitpick, here and elsewhere: \"empty\" implies \"invalid\", so doesn\u0027t need to be singled out here",
+      "range": {
+        "startLine": 66,
+        "startChar": 33,
+        "endLine": 66,
+        "endChar": 49
+      },
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db3cd311_1784ac92",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-29T09:43:36Z",
+      "side": 1,
+      "message": "do you still expect client code to call this method, or should it better be removed now that the behavior of appendCategory has been changed?",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

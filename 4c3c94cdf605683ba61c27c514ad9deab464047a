@@ -1002,6 +1002,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2fcab19f_e33b8e82",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-29T09:43:36Z",
+      "side": 1,
+      "message": "...but the WeakComponentImplHelper base class still outlives the m_aMutex member",
+      "parentUuid": "75f27d29_29ab8a7a",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 97
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c52866fb_d00b3443",
         "filename": "shell/source/win32/jumplist/JumpList.cxx",
         "patchSetId": 12
