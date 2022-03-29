@@ -299,7 +299,10 @@ public:
 
     SCSIZE             VisibleCount( SCROW nStartRow, SCROW nEndRow ) const;
     sc::MatrixEdge     GetBlockMatrixEdges(SCROW nRow1, SCROW nRow2, sc::MatrixEdge nMask, bool bNoMatrixAtAll ) const;
-    bool    HasSelectionMatrixFragment(const ScMarkData& rMark) const;
+    // Repeated calls to HasSelectionMatrixFragment() repeatedly call rMark.GetMarkedRanges(),
+    // which may be quite slow. For that reason first save the result of rMark.GetMarkedRanges()
+    // pass that to HasSelectionMatrixFragment() calls.
+    bool    HasSelectionMatrixFragment(const ScMarkData& rMark, const ScRangeList& rRangeList) const;
 
     bool    GetFirstVisibleAttr( SCROW& rFirstRow ) const;
     bool    GetLastVisibleAttr( SCROW& rLastRow ) const;
