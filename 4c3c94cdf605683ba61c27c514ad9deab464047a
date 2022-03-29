@@ -106,6 +106,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "786e86b0_1a4108fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T09:14:40Z",
+      "side": 1,
+      "message": "Not sure how to write a test for this, can\u0027t really test the result.\nI thought I would add some paragraph to the DevGuide with some Basic sample.",
+      "parentUuid": "8bb037c2_071b3396",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "badca558_0b8ac8a7",
@@ -346,6 +364,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b716eb5c_1ae50bcc",
+        "filename": "offapi/com/sun/star/system/windows/JumpListItem.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T09:14:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d99a540_0208af07",
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf60904f_4b6dc8fe",
@@ -505,6 +541,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d1fdb0_43ed3c9c",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T09:14:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c8c4b90_2506b55b",
+      "range": {
+        "startLine": 34,
+        "startChar": 8,
+        "endLine": 35,
+        "endChar": 75
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fcace964_701a67c7",
@@ -601,6 +661,30 @@
       "side": 1,
       "message": "but not as a response for this",
       "parentUuid": "b4136296_3ff06c70",
+      "range": {
+        "startLine": 53,
+        "startChar": 25,
+        "endLine": 53,
+        "endChar": 34
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e889b031_869bc899",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 12
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T09:14:40Z",
+      "side": 1,
+      "message": "No longer needed since these are now filtered out.",
+      "parentUuid": "ffb12536_4ff6d166",
       "range": {
         "startLine": 53,
         "startChar": 25,
@@ -892,6 +976,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "75f27d29_29ab8a7a",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T09:14:40Z",
+      "side": 1,
+      "message": "Should be done in the current patch set.",
+      "parentUuid": "84ffa1cf_fe4cae1a",
+      "range": {
+        "startLine": 42,
+        "startChar": 6,
+        "endLine": 42,
+        "endChar": 97
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c52866fb_d00b3443",
@@ -1025,6 +1133,30 @@
       "side": 1,
       "message": "Argh, sorry, I just picked the first .getStr() I found for my \"here and elsewhere\" comment, but it indeed doesn\u0027t make any sense for this particular case.  It only makes sense for those strings that get passed in: sCategory, item.name, item.description, item.arguments, and item.iconPath.",
       "parentUuid": "35dcf6af_2dce0a81",
+      "range": {
+        "startLine": 96,
+        "startChar": 45,
+        "endLine": 96,
+        "endChar": 68
+      },
+      "revId": "4c3c94cdf605683ba61c27c514ad9deab464047a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00ceb7eb_e9c5f4e2",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T09:14:40Z",
+      "side": 1,
+      "message": "Done (except for icon path, NULs are forbidden in paths anyway).",
+      "parentUuid": "af405cae_8d212862",
       "range": {
         "startLine": 96,
         "startChar": 45,
