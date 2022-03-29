@@ -343,13 +343,9 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY);
     if ( !m_xDatabaseDataProvider.is() )
     {
-        static constexpr OUStringLiteral s_sDatabaseDataProvider = u"com.sun.star.chart2.data.DatabaseDataProvider";
-        m_xDatabaseDataProvider.set(m_xContext->getServiceManager()->createInstanceWithContext(s_sDatabaseDataProvider
-            ,m_xContext),uno::UNO_QUERY_THROW);
-        m_xDatabaseDataProvider->setRowLimit(10);
-
-        uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
-        xReceiver->attachDataProvider(m_xDatabaseDataProvider);
+        // tdf#117162 reportbuilder needs the DataProvider to exist to progress further
+        setDataProvider(m_xModel, OUString());
+        m_xDatabaseDataProvider.set(m_xModel->getDataProvider(), uno::UNO_QUERY_THROW);
     }
 
     m_aArguments = m_xDatabaseDataProvider->detectArguments(nullptr);
