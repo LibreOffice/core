@@ -583,11 +583,9 @@ VclPtr<InterimItemWindow> SwJumpToSpecificPageControl::CreateItemWindow( vcl::Wi
 }
 
 NavElementBox_Base::NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox,
-                                       const uno::Reference<frame::XFrame>& xFrame,
-                                       NavElementToolBoxControl& rCtrl)
+                                       const uno::Reference<frame::XFrame>& xFrame)
     : m_xComboBox(std::move(xComboBox))
     ,m_xFrame(xFrame)
-    ,m_pCtrl(&rCtrl)
     ,m_bRelease(true)
 {
     m_xComboBox->set_size_request(150, -1);
@@ -604,10 +602,9 @@ NavElementBox_Base::NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox
 }
 
 NavElementBox_Impl::NavElementBox_Impl(vcl::Window* pParent,
-                                       const uno::Reference<frame::XFrame>& xFrame,
-                                       NavElementToolBoxControl& rCtrl)
+                                       const uno::Reference<frame::XFrame>& xFrame)
     : InterimItemWindow(pParent, "modules/swriter/ui/combobox.ui", "ComboBox")
-    ,NavElementBox_Base(m_xBuilder->weld_combo_box("combobox"), xFrame, rCtrl)
+    ,NavElementBox_Base(m_xBuilder->weld_combo_box("combobox"), xFrame)
 {
     SetSizePixel(m_xContainer->get_preferred_size());
 }
@@ -781,7 +778,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
 
         xItemWindow = css::uno::Reference<css::awt::XWindow>(new weld::TransportAsXWindow(xWidget.get()));
 
-        m_xWeldBox.reset(new NavElementBox_Base(std::move(xWidget), m_xFrame, *this));
+        m_xWeldBox.reset(new NavElementBox_Base(std::move(xWidget), m_xFrame));
         m_pBox = m_xWeldBox.get();
     }
     else
@@ -790,7 +787,7 @@ uno::Reference< awt::XWindow > SAL_CALL NavElementToolBoxControl::createItemWind
         if ( pParent )
         {
             SolarMutexGuard aSolarMutexGuard;
-            m_xVclBox = VclPtr<NavElementBox_Impl>::Create( pParent, m_xFrame, *this );
+            m_xVclBox = VclPtr<NavElementBox_Impl>::Create( pParent, m_xFrame );
             m_pBox = m_xVclBox.get();
             xItemWindow = VCLUnoHelper::GetInterface(m_xVclBox);
         }

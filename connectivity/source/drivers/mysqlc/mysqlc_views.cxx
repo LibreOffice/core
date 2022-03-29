@@ -31,7 +31,6 @@ connectivity::mysqlc::Views::Views(const css::uno::Reference<css::sdbc::XConnect
     : sdbcx::OCollection(_rParent, true, _rMutex, _rVector)
     , m_xConnection(_rxConnection)
     , m_xMetaData(_rxConnection->getMetaData())
-    , m_bInDrop(false)
 {
 }
 
@@ -64,9 +63,6 @@ connectivity::sdbcx::ObjectType connectivity::mysqlc::Views::appendObject(
 // XDrop
 void connectivity::mysqlc::Views::dropObject(sal_Int32 _nPos, const OUString& /*_sElementName*/)
 {
-    if (m_bInDrop)
-        return;
-
     css::uno::Reference<XInterface> xObject(getObject(_nPos));
     bool bIsNew = connectivity::sdbcx::ODescriptor::isNew(xObject);
     if (!bIsNew)

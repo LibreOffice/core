@@ -103,8 +103,7 @@ class NavElementBox_Base
 {
 public:
     NavElementBox_Base(std::unique_ptr<weld::ComboBox> xComboBox,
-                       const uno::Reference<frame::XFrame>& xFrame,
-                       NavElementToolBoxControl& rCtrl);
+                       const uno::Reference<frame::XFrame>& xFrame);
 
     virtual ~NavElementBox_Base() {}
 
@@ -118,7 +117,6 @@ public:
 protected:
     std::unique_ptr<weld::ComboBox> m_xComboBox;
     uno::Reference< frame::XFrame > m_xFrame;
-    NavElementToolBoxControl* m_pCtrl;
     bool m_bRelease;
 
     virtual bool DoKeyInput(const KeyEvent& /*rKEvt*/);
@@ -133,8 +131,7 @@ class NavElementBox_Impl final : public InterimItemWindow, public NavElementBox_
 {
 public:
     NavElementBox_Impl(vcl::Window* pParent,
-                       const uno::Reference<frame::XFrame>& xFrame,
-                       NavElementToolBoxControl& rCtrl);
+                       const uno::Reference<frame::XFrame>& xFrame);
 
     virtual void dispose() override
     {
