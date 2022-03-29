@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "213ea7a4_faadc326",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T10:28:39Z",
+      "side": 1,
+      "message": "Nice!\n\nPlease consider these further enhancements:\n\n1. Please make footnotes and endnotes separate nodes in the tree. Use of \"-------\" with a \"above footnotes, below endnotes\" is unnatural.\n2. Please make it sorted in document order. The alphabetic sort makes very little sense here, given that most of the time, the first characters are numbers. In case of roman number, it makes very strange ordering ;-) see bugdoc in tdf#147963 for an example.",
+      "revId": "fc44168ebe840fa2e772f034232fed15460e4977",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
