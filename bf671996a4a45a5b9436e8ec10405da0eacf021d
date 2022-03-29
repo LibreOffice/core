@@ -125,6 +125,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf28d4e4_9daad13f",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-29T12:59:16Z",
+      "side": 1,
+      "message": "Ok, I would probably keep it this way.",
+      "parentUuid": "73f33e91_0d498a0e",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74d6099f_6f2d8ca4",
