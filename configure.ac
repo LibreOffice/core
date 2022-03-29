@@ -14350,9 +14350,13 @@ dnl from consteval constructor initializing const variable",
 dnl <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98752> "wrong 'error: ‘this’ is not a constant
 dnl expression' with consteval constructor", <https://bugs.llvm.org/show_bug.cgi?id=50063> "code
 dnl using consteval: 'clang/lib/CodeGen/Address.h:38: llvm::Value*
-dnl clang::CodeGen::Address::getPointer() const: Assertion `isValid()' failed.'", or
+dnl clang::CodeGen::Address::getPointer() const: Assertion `isValid()' failed.'",
 dnl <https://developercommunity.visualstudio.com/t/1581879> "Bogus error C7595 with consteval
-dnl constructor in ternary expression (/std:c++latest)":
+dnl constructor in ternary expression (/std:c++latest)", or
+dnl <https://github.com/llvm/llvm-project/issues/54612> "C++20, consteval, anonymous union:
+dnl llvm/lib/IR/Instructions.cpp:1491: void llvm::StoreInst::AssertOK(): Assertion
+dnl `cast<PointerType>(getOperand(1)->getType())->isOpaqueOrPointeeTypeMatches(getOperand(0)->getType())
+dnl && "Ptr must be a pointer to Val type!"' failed.":
 AC_LANG_PUSH([C++])
 save_CXX=$CXX
 if test "$COM" = MSC && test "$COM_IS_CLANG" != TRUE; then
@@ -14384,6 +14388,16 @@ AC_RUN_IFELSE([AC_LANG_PROGRAM([
 
         struct S4 { consteval S4() = default; };
         void f4(bool b) { b ? S4() : S4(); }
+
+        struct S5 {
+            consteval S5() { c = 0; }
+            char * f() { return &c; }
+            union {
+                char c;
+                int i;
+            };
+        };
+        auto s5 = S5().f();
     ], [
         return (s.i == 1) ? 0 : 1;
     ])], [
