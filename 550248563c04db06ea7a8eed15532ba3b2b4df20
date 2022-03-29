@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c248d61_540de8fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-29T06:16:31Z",
+      "side": 1,
+      "message": "Now you removed all the empty lines. Please leave one empty line in the places you changed.",
+      "revId": "550248563c04db06ea7a8eed15532ba3b2b4df20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
