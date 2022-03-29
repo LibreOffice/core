@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c526b740_e15698e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-29T10:44:03Z",
+      "side": 1,
+      "message": "You still kept include/connectivity/odbc.hxx.\nYou didn\u0027t change the task ID.",
+      "revId": "0e210d7d541f39caa9e2fd35519f0a3917fbc13a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
