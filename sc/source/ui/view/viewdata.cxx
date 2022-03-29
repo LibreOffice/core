@@ -1022,7 +1022,7 @@ void ScViewData::SetZoomType( SvxZoomType eNew, bool bAll )
     std::vector< SCTAB > vTabs; // Empty for all tabs
     if ( !bAll ) // get selected tabs
     {
-        ScMarkData::iterator itr = maMarkData.begin(), itrEnd = maMarkData.end();
+        ScMarkData::const_iterator itr = maMarkData.begin(), itrEnd = maMarkData.end();
         vTabs.insert(vTabs.begin(), itr, itrEnd);
     }
     SetZoomType( eNew, vTabs );
@@ -1096,7 +1096,7 @@ void ScViewData::SetZoom( const Fraction& rNewX, const Fraction& rNewY, bool bAl
     std::vector< SCTAB > vTabs;
     if ( !bAll ) // get selected tabs
     {
-        ScMarkData::iterator itr = maMarkData.begin(), itrEnd = maMarkData.end();
+        ScMarkData::const_iterator itr = maMarkData.begin(), itrEnd = maMarkData.end();
         vTabs.insert(vTabs.begin(), itr, itrEnd);
     }
     SetZoom( rNewX, rNewY, vTabs );
