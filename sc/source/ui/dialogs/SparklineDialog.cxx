@@ -16,6 +16,7 @@
 #include <docfunc.hxx>
 
 #include <svx/colorbox.hxx>
+#include <vcl/formatter.hxx>
 
 namespace sc
 {
@@ -56,9 +57,20 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     , mxCheckButtonLow(m_xBuilder->weld_check_button("check-low"))
     , mxCheckButtonFirst(m_xBuilder->weld_check_button("check-first"))
     , mxCheckButtonLast(m_xBuilder->weld_check_button("check-last"))
+    , mxSpinLineWidth(m_xBuilder->weld_spin_button("spin-line-width"))
     , mxRadioLine(m_xBuilder->weld_radio_button("line-radiobutton"))
     , mxRadioColumn(m_xBuilder->weld_radio_button("column-radiobutton"))
     , mxRadioStacked(m_xBuilder->weld_radio_button("stacked-radiobutton"))
+    , mxCheckDisplayXAxis(m_xBuilder->weld_check_button("check-display-x-axis"))
+    , mxCheckDisplayHidden(m_xBuilder->weld_check_button("check-display-hidden"))
+    , mxCheckRightToLeft(m_xBuilder->weld_check_button("check-right-to-left"))
+    , mxRadioDisplayEmptyGap(m_xBuilder->weld_radio_button("display-empty-radiobutton-gap"))
+    , mxRadioDisplayEmptyZero(m_xBuilder->weld_radio_button("display-empty-radiobutton-zero"))
+    , mxRadioDisplayEmptySpan(m_xBuilder->weld_radio_button("display-empty-radiobutton-span"))
+    , mxComboMinAxisType(m_xBuilder->weld_combo_box("combo-min-axis-type"))
+    , mxComboMaxAxisType(m_xBuilder->weld_combo_box("combo-max-axis-type"))
+    , mxSpinCustomMin(m_xBuilder->weld_formatted_spin_button("spin-custom-min"))
+    , mxSpinCustomMax(m_xBuilder->weld_formatted_spin_button("spin-custom-max"))
     , mbEditMode(false)
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeLabel.get());
@@ -94,6 +106,9 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     mxRadioLine->connect_toggled(aRadioButtonLink);
     mxRadioColumn->connect_toggled(aRadioButtonLink);
     mxRadioStacked->connect_toggled(aRadioButtonLink);
+    mxRadioDisplayEmptyGap->connect_toggled(aRadioButtonLink);
+    mxRadioDisplayEmptyZero->connect_toggled(aRadioButtonLink);
+    mxRadioDisplayEmptySpan->connect_toggled(aRadioButtonLink);
 
     Link<weld::Toggleable&, void> aLink = LINK(this, SparklineDialog, ToggleHandler);
     mxCheckButtonNegative->connect_toggled(aLink);
@@ -102,6 +117,26 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     mxCheckButtonLow->connect_toggled(aLink);
     mxCheckButtonFirst->connect_toggled(aLink);
     mxCheckButtonLast->connect_toggled(aLink);
+    mxCheckDisplayXAxis->connect_toggled(aLink);
+    mxCheckDisplayHidden->connect_toggled(aLink);
+    mxCheckRightToLeft->connect_toggled(aLink);
+
+    mxSpinLineWidth->connect_value_changed(LINK(this, SparklineDialog, SpinLineWidthChanged));
+
+    mxComboMinAxisType->connect_changed(LINK(this, SparklineDialog, ComboValueChanged));
+    mxComboMaxAxisType->connect_changed(LINK(this, SparklineDialog, ComboValueChanged));
+
+    mxSpinCustomMin->connect_value_changed(LINK(this, SparklineDialog, SpinCustomChanged));
+    Formatter& rSpinCustomMinFormatter = mxSpinCustomMin->GetFormatter();
+    rSpinCustomMinFormatter.ClearMinValue();
+    rSpinCustomMinFormatter.ClearMaxValue();
+    rSpinCustomMinFormatter.UseInputStringForFormatting();
+
+    mxSpinCustomMax->connect_value_changed(LINK(this, SparklineDialog, SpinCustomChanged));
+    Formatter& rSpinCustomMaxFormatter = mxSpinCustomMax->GetFormatter();
+    rSpinCustomMaxFormatter.ClearMinValue();
+    rSpinCustomMaxFormatter.ClearMaxValue();
+    rSpinCustomMaxFormatter.UseInputStringForFormatting();
 
     setupValues();
 
@@ -145,7 +180,7 @@ void SparklineDialog::setupValues()
 
     setInputSelection();
 
-    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
+    auto const& rAttribute = mpLocalSparklineGroup->getAttributes();
 
     switch (rAttribute.getType())
     {
@@ -157,6 +192,19 @@ void SparklineDialog::setupValues()
             break;
         case sc::SparklineType::Stacked:
             mxRadioStacked->set_active(true);
+            break;
+    }
+
+    switch (rAttribute.getDisplayEmptyCellsAs())
+    {
+        case sc::DisplayEmptyCellsAs::Gap:
+            mxRadioDisplayEmptyGap->set_active(true);
+            break;
+        case sc::DisplayEmptyCellsAs::Zero:
+            mxRadioDisplayEmptyZero->set_active(true);
+            break;
+        case sc::DisplayEmptyCellsAs::Span:
+            mxRadioDisplayEmptySpan->set_active(true);
             break;
     }
 
@@ -174,6 +222,48 @@ void SparklineDialog::setupValues()
     mxCheckButtonLow->set_active(rAttribute.isLow());
     mxCheckButtonFirst->set_active(rAttribute.isFirst());
     mxCheckButtonLast->set_active(rAttribute.isLast());
+
+    mxSpinLineWidth->set_value(sal_Int64(rAttribute.getLineWeight() * 100.0));
+
+    mxCheckDisplayXAxis->set_active(rAttribute.shouldDisplayXAxis());
+    mxCheckDisplayHidden->set_active(rAttribute.shouldDisplayHidden());
+    mxCheckRightToLeft->set_active(rAttribute.isRightToLeft());
+
+    switch (rAttribute.getMinAxisType())
+    {
+        case sc::AxisType::Individual:
+            mxComboMinAxisType->set_active(0);
+            mxSpinCustomMin->GetFormatter().SetValue(0.0);
+            break;
+        case sc::AxisType::Group:
+            mxComboMinAxisType->set_active(1);
+            mxSpinCustomMin->GetFormatter().SetValue(0.0);
+            break;
+        case sc::AxisType::Custom:
+            mxComboMinAxisType->set_active(2);
+            if (rAttribute.getManualMin())
+                mxSpinCustomMin->GetFormatter().SetValue(*rAttribute.getManualMin());
+            break;
+    }
+    ComboValueChanged(*mxComboMinAxisType);
+
+    switch (rAttribute.getMaxAxisType())
+    {
+        case sc::AxisType::Individual:
+            mxComboMaxAxisType->set_active(0);
+            mxSpinCustomMax->GetFormatter().SetValue(0.0);
+            break;
+        case sc::AxisType::Group:
+            mxComboMaxAxisType->set_active(1);
+            mxSpinCustomMax->GetFormatter().SetValue(0.0);
+            break;
+        case sc::AxisType::Custom:
+            mxComboMaxAxisType->set_active(2);
+            if (rAttribute.getManualMin())
+                mxSpinCustomMax->GetFormatter().SetValue(*rAttribute.getManualMax());
+            break;
+    }
+    ComboValueChanged(*mxComboMaxAxisType);
 }
 
 void SparklineDialog::Close() { DoClose(sc::SparklineDialogWrapper::GetChildWindowId()); }
@@ -329,6 +419,12 @@ IMPL_LINK(SparklineDialog, ToggleHandler, weld::Toggleable&, rToggle, void)
         rAttribute.setFirst(mxCheckButtonFirst->get_active());
     if (mxCheckButtonLast.get() == &rToggle)
         rAttribute.setLast(mxCheckButtonLast->get_active());
+    if (mxCheckDisplayXAxis.get() == &rToggle)
+        rAttribute.setDisplayXAxis(mxCheckDisplayXAxis->get_active());
+    if (mxCheckDisplayHidden.get() == &rToggle)
+        rAttribute.setDisplayHidden(mxCheckDisplayHidden->get_active());
+    if (mxCheckRightToLeft.get() == &rToggle)
+        rAttribute.setRightToLeft(mxCheckRightToLeft->get_active());
 }
 
 IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
@@ -341,6 +437,82 @@ IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
         rAttribute.setType(sc::SparklineType::Column);
     else if (mxRadioStacked->get_active())
         rAttribute.setType(sc::SparklineType::Stacked);
+
+    if (mxRadioDisplayEmptyGap->get_active())
+        rAttribute.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Gap);
+    else if (mxRadioDisplayEmptyZero->get_active())
+        rAttribute.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Zero);
+    else if (mxRadioDisplayEmptySpan->get_active())
+        rAttribute.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Span);
+}
+
+IMPL_LINK_NOARG(SparklineDialog, SpinLineWidthChanged, weld::SpinButton&, void)
+{
+    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
+
+    double value = mxSpinLineWidth->get_value() / 100.0;
+    rAttribute.setLineWeight(value);
+}
+
+IMPL_LINK(SparklineDialog, SpinCustomChanged, weld::FormattedSpinButton&, rFormatted, void)
+{
+    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
+
+    if (mxSpinCustomMin.get() == &rFormatted)
+    {
+        rAttribute.setManualMin(rFormatted.GetFormatter().GetValue());
+    }
+    else if (mxSpinCustomMax.get() == &rFormatted)
+    {
+        rAttribute.setManualMax(rFormatted.GetFormatter().GetValue());
+    }
+}
+
+IMPL_LINK(SparklineDialog, ComboValueChanged, weld::ComboBox&, rComboBox, void)
+{
+    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
+    int nActive = rComboBox.get_active();
+
+    if (mxComboMinAxisType.get() == &rComboBox)
+    {
+        switch (nActive)
+        {
+            case 0:
+                rAttribute.setMinAxisType(sc::AxisType::Individual);
+                mxSpinCustomMin->set_sensitive(false);
+                break;
+            case 1:
+                rAttribute.setMinAxisType(sc::AxisType::Group);
+                mxSpinCustomMin->set_sensitive(false);
+                break;
+            case 2:
+                rAttribute.setMinAxisType(sc::AxisType::Custom);
+                mxSpinCustomMin->set_sensitive(true);
+                break;
+            default:
+                break;
+        }
+    }
+    else if (mxComboMaxAxisType.get() == &rComboBox)
+    {
+        switch (nActive)
+        {
+            case 0:
+                rAttribute.setMaxAxisType(sc::AxisType::Individual);
+                mxSpinCustomMax->set_sensitive(false);
+                break;
+            case 1:
+                rAttribute.setMaxAxisType(sc::AxisType::Group);
+                mxSpinCustomMax->set_sensitive(false);
+                break;
+            case 2:
+                rAttribute.setMaxAxisType(sc::AxisType::Custom);
+                mxSpinCustomMax->set_sensitive(true);
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 bool SparklineDialog::checkValidInputOutput()
