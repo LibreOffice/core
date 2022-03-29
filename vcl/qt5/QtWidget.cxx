@@ -637,7 +637,7 @@ QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
         setFocusPolicy(Qt::ClickFocus);
 }
 
-static ExtTextInputAttr lcl_MapUndrelineStyle(QTextCharFormat::UnderlineStyle us)
+static ExtTextInputAttr lcl_MapUnderlineStyle(QTextCharFormat::UnderlineStyle us)
 {
     switch (us)
     {
@@ -684,7 +684,7 @@ void QtWidget::inputMethodEvent(QInputMethodEvent* pEvent)
                     if (aCharFormat.isValid())
                     {
                         ExtTextInputAttr aETIP
-                            = lcl_MapUndrelineStyle(aCharFormat.underlineStyle());
+                            = lcl_MapUnderlineStyle(aCharFormat.underlineStyle());
                         if (aCharFormat.hasProperty(QTextFormat::BackgroundBrush))
                             aETIP |= ExtTextInputAttr::Highlight;
                         if (aCharFormat.fontStrikeOut())
