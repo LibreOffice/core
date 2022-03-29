@@ -16,6 +16,24 @@
       "message": "Could this leak memory? I looked around in the XclExpRecordList class and could not find a delete. Sorry if I missed it, was just wondering.",
       "revId": "565f8e3711572e807f147f80bc9d57d57307a093",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3f8648d_4fcb57f0",
+        "filename": "sc/source/filter/excel/export/SparklineExt.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-03-29T23:58:57Z",
+      "side": 1,
+      "message": "Good question - I copied this from other part of the code so I assumed it doesn\u0027t introduce a memory leak or we would already catch it. \n\nIf I look where the the pointer is used (AddRecord, AppendRecord) I eventually get to the place where it is stored into a rtl::Reference, which is similar to std::shared_ptr (ref-counted container), so that one will manage the life-cycle of the object and delete it when it is not used anymore. \nIt would be better that it would be added into a rtl::Reference right away instead of passing it around as a raw pointer, so it is clear that it is safe to not delete it, but I\u0027m not fixing that :)",
+      "parentUuid": "14659170_42524e8b",
+      "revId": "565f8e3711572e807f147f80bc9d57d57307a093",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
