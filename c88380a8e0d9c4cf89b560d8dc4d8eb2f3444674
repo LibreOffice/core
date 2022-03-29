@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b60cd5b0_cbe7c456",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-29T10:10:42Z",
+      "side": 1,
+      "message": "mike, I think the latest version of this patch fixes the problem",
+      "revId": "c88380a8e0d9c4cf89b560d8dc4d8eb2f3444674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
