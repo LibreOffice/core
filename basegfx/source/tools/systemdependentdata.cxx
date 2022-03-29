@@ -8,6 +8,7 @@
  */
 
 #include <basegfx/utils/systemdependentdata.hxx>
+#include <config_fuzzers.h>
 #include <math.h>
 
 namespace basegfx
@@ -47,7 +48,12 @@ namespace basegfx
             // For the future, a more sophisticated differentiation may be added
             if(nBytes > 450)
             {
-                const sal_uInt32 nSeconds = 60; // HoldCyclesInSeconds
+                // HoldCyclesInSeconds
+#if !ENABLE_FUZZERS
+                const sal_uInt32 nSeconds = 60;
+#else
+                const sal_uInt32 nSeconds = 1;
+#endif
 
                 // default is Seconds (minimal is one)
                 sal_uInt32 nResult(0 == nSeconds ? 1 : nSeconds);
