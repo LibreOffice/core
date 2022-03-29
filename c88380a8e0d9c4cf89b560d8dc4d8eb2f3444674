@@ -16,6 +16,24 @@
       "message": "mike, I think the latest version of this patch fixes the problem",
       "revId": "c88380a8e0d9c4cf89b560d8dc4d8eb2f3444674",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "862c9a10_fb74b5bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T10:12:23Z",
+      "side": 1,
+      "message": "Thank you!\nUnfortunately no; and I added notes with attachments to the bug (in the hope it could somehow help you).",
+      "parentUuid": "b60cd5b0_cbe7c456",
+      "revId": "c88380a8e0d9c4cf89b560d8dc4d8eb2f3444674",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
