@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faf0c063_c09bce64",
+        "filename": "chart2/source/view/charttypes/Splines.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 585,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-29T14:55:38Z",
+      "side": 1,
+      "message": "The std::make_unique changes are not necessary but this is a clearer way to do this IMO, as aSplineX/Y has not been assigned before (in order to need a reset())",
+      "revId": "fa9678f56a12dd2da630a718f9427bfe57d2b9a5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
