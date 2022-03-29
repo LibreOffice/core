@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73f33e91_0d498a0e",
+        "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
+        "patchSetId": 16
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-29T12:28:21Z",
+      "side": 1,
+      "message": "\u003e I could, but then the existing JumpList (if there is one) would still be there and the user would not know why his call to update the Jump List did not succeed.\n\nah, right, the behavior would be unexpected if there was already an existing list with item A and removed item B, and you now call appendCategory with just B\n\n\u003e If the expected outcome in this case is, that the JumpList will be empty, then I  would have to call DeleteList.\n\u003e \n\u003e In that case our API would work different than the MS API, but if you feel this is the way to go, I can implement it this way.\n\nI have no actual domain-level input here, just naively tried to drill down to a UNO interface that brings as few unexpected surprises as possible :)   if you think the current state is good, that\u0027s totally fine with me",
+      "parentUuid": "ccfc80b7_581c69e7",
+      "revId": "bf671996a4a45a5b9436e8ec10405da0eacf021d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "74d6099f_6f2d8ca4",
         "filename": "offapi/com/sun/star/system/windows/XJumpList.idl",
         "patchSetId": 16
