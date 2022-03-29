@@ -34,6 +34,8 @@
 #include <vcl/introwin.hxx>
 #include <vcl/virdev.hxx>
 
+#include <mutex>
+
 #define NOT_LOADED  (tools::Long(-1))
 #define NOT_LOADED_COLOR  (Color(ColorTransparency, 0xffffffff))
 
@@ -72,8 +74,6 @@ private:
     void updateStatus();
     void SetScreenBitmap(BitmapEx &rBitmap);
     static void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
-
-    static osl::Mutex _aMutex;
 
     BitmapEx        _aIntroBmp;
     Color           _cProgressFrameColor;
@@ -243,7 +243,8 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
 void SAL_CALL
 SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
 {
-    osl::MutexGuard  aGuard( _aMutex );
+    static std::mutex aMutex;
+    std::lock_guard  aGuard( aMutex );
     if (!aArguments.hasElements())
         return;
 
@@ -615,10 +616,6 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     }
     rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev);
 }
-
-
-// get service instance...
-osl::Mutex SplashScreen::_aMutex;
 
 }
 
