@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26e97f04_95dda044",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T12:37:39Z",
+      "side": 1,
+      "message": "I\u0027d even suggest to replace unique_ptrs with std::vectors, with their convenient constructors allowing you e.g. construct a full 2-d vector of doubles (0.0) with one line.\n\n    std::vector\u003cstd::vector\u003cdouble\u003e\u003e aMatN(n + 1, std::vector\u003cdouble\u003e(p + 1));",
+      "revId": "f54ed0bcaac5d41ad7ef9946b07094db369b3cb9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9d5ca84_0c0fd2ca",
