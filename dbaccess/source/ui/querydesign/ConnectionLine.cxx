@@ -307,7 +307,7 @@ static double dist_Euklid(const Point &p1, const Point& p2,const Point& pM, Poin
 {
     Point v(p2 - p1);
     Point w(pM - p1);
-    double a = sqrt(static_cast<double>(v.X()*v.X() + v.Y()*v.Y()));
+    double a = std::hypot(v.X(), v.Y());
     double l = (v.X() * w.Y() - v.Y() * w.X()) / a;
     double a2 = w.X()*v.X()+w.Y()*v.Y();
     a = a2 / (a * a);

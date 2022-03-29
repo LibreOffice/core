@@ -89,10 +89,10 @@ bool CGM::ImplGetEllipse( FloatPoint& rCenter, FloatPoint& rRadius, double& rAng
     rAngle = ImplGetOrientation( rCenter, aPoint1 );
     aPoint1.X -= rCenter.X;
     aPoint1.Y -= rCenter.Y;
-    rRadius.X = sqrt( aPoint1.X * aPoint1.X + aPoint1.Y * aPoint1.Y );
+    rRadius.X = std::hypot(aPoint1.X, aPoint1.Y);
     aPoint2.X -= rCenter.X;
     aPoint2.Y -= rCenter.Y;
-    rRadius.Y = sqrt( aPoint2.X * aPoint2.X + aPoint2.Y * aPoint2.Y );
+    rRadius.Y = std::hypot(aPoint2.X, aPoint2.Y);
 
     if ( fRot1 > fRot2 )
     {
@@ -418,7 +418,7 @@ void CGM::ImplDoClass4()
                         fStartAngle = fEndAngle;
                         fEndAngle = fG;
                     }
-                    double fRadius = sqrt( pow( ( aStartingPoint.X - aCenterPoint.X ), 2 ) + pow( ( aStartingPoint.Y - aCenterPoint.Y ), 2 ) ) ;
+                    double fRadius = std::hypot(aStartingPoint.X - aCenterPoint.X, aStartingPoint.Y - aCenterPoint.Y);
 
                     if ( mbFigure )
                     {
@@ -508,7 +508,7 @@ void CGM::ImplDoClass4()
                         fEndAngle = fG;
                     }
                     FloatPoint fRadius;
-                    fRadius.Y = fRadius.X = sqrt( pow( ( aStartingPoint.X - aCenterPoint.X ), 2 ) + pow( ( aStartingPoint.Y - aCenterPoint.Y ), 2 ) ) ;
+                    fRadius.Y = fRadius.X = std::hypot(aStartingPoint.X - aCenterPoint.X, aStartingPoint.Y - aCenterPoint.Y);
 
                     sal_uInt32 nType = ImplGetUI16();
                     if ( nType == 0 )
@@ -548,9 +548,9 @@ void CGM::ImplDoClass4()
                 bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
                 if (!bUseless)
                 {
-                    const double fStartSqrt = sqrt(vector[0] * vector[ 0 ] + vector[1] * vector[1]);
+                    const double fStartSqrt = std::hypot(vector[0], vector[1]);
                     fStartAngle = fStartSqrt != 0.0 ? basegfx::rad2deg(acos(vector[0] / fStartSqrt)) : 0.0;
-                    const double fEndSqrt = sqrt(vector[2] * vector[ 2 ] + vector[3] * vector[3]);
+                    const double fEndSqrt = std::hypot(vector[2], vector[3]);
                     fEndAngle = fEndSqrt != 0.0 ? basegfx::rad2deg(acos(vector[ 2 ] / fEndSqrt)) : 0.0;
 
                     if ( vector[ 1 ] > 0 )
@@ -626,9 +626,9 @@ void CGM::ImplDoClass4()
                 bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
                 if (!bUseless)
                 {
-                    const double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+                    const double fStartSqrt = std::hypot(vector[0], vector[1]);
                     double fStartAngle = fStartSqrt ? basegfx::rad2deg(acos(vector[0] / fStartSqrt)) : 0.0;
-                    const double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
+                    const double fEndSqrt = std::hypot(vector[2], vector[3]);
                     double fEndAngle = fEndSqrt ? basegfx::rad2deg(acos(vector[2] / fEndSqrt)) : 0.0;
 
                     if ( vector[ 1 ] > 0 )
@@ -683,9 +683,9 @@ void CGM::ImplDoClass4()
                 bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
                 if (!bUseless)
                 {
-                    double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+                    double fStartSqrt = std::hypot(vector[0], vector[1]);
                     fStartAngle = fStartSqrt ? basegfx::rad2deg(acos(vector[0] / fStartSqrt)) : 0.0;
-                    double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
+                    double fEndSqrt = std::hypot(vector[2], vector[3]);
                     fEndAngle = fEndSqrt ? basegfx::rad2deg(acos(vector[2] / fEndSqrt)) : 0.0;
 
                     if ( vector[ 1 ] > 0 )
@@ -719,9 +719,9 @@ void CGM::ImplDoClass4()
                 bool bUseless = useless(vector[0]) || useless(vector[1]) || useless(vector[2]) || useless(vector[3]);
                 if (!bUseless)
                 {
-                    double fStartSqrt = sqrt(vector[0] * vector[0] + vector[1] * vector[1]);
+                    double fStartSqrt = std::hypot(vector[0], vector[1]);
                     fStartAngle = fStartSqrt ? basegfx::rad2deg(acos(vector[0] / fStartSqrt)) : 0.0;
-                    double fEndSqrt = sqrt(vector[2] * vector[2] + vector[3] * vector[3]);
+                    double fEndSqrt = std::hypot(vector[2], vector[3]);
                     fEndAngle = fEndSqrt ? basegfx::rad2deg(acos(vector[2] / fEndSqrt)) : 0.0;
 
                     if ( vector[ 1 ] > 0 )
