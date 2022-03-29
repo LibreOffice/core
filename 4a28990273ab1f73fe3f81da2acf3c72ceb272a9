@@ -16,6 +16,24 @@
       "message": "Hmm, looking at these images, I suspect some confusion about their meaning.\nThe \"x\" and \"w\" in the icons seem to suggest \"word\"/\"excel\"? If so, it\u0027s misconception - e.g., res/lx03126.png is for BMP_CALC_LC, and latter is mapped to SvImageId::Calc - i.e., \"generic Calc icon\" (i.e., not a specialized variant available specifically for its native file, ODS).",
       "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e8a85b3_b2f9c150",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-03-29T16:38:22Z",
+      "side": 1,
+      "message": "No such file with lw* naming. I don\u0027t get it",
+      "parentUuid": "79e98276_49b0a355",
+      "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
