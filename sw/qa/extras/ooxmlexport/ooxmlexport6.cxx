@@ -31,15 +31,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf133701)
@@ -152,8 +143,9 @@ DECLARE_OOXMLEXPORT_TEST(testDMLSolidfillAlpha, "dml-solidfill-alpha.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int16(20), getProperty<sal_Int16>(xShape, "FillTransparence"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testDMLTextFrameNoFill, "frame.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testDMLTextFrameNoFill)
 {
+    loadAndReload("frame.fodt");
     // Problem is that default text frame background is white in Writer and transparent in Word
     uno::Reference<beans::XPropertySet> xShape1(getShape(1), uno::UNO_QUERY);
 // it is re-imported as solid
