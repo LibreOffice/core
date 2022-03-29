@@ -474,6 +474,7 @@ std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray( const sc::Reorder
         pArray->SetKeepQuery(rParam.mbHiddenFiltered);
         pArray->SetUpdateRefs(rParam.mbUpdateRefs);
 
+        CreateColumnIfNotExists(nCol2);
         initDataRows( *pArray, *this, aCol, nCol1, nRow1, nCol2, nRow2, rParam.mbHiddenFiltered,
                 rParam.maDataAreaExtras.mbCellFormats, true, true, false);
     }
@@ -517,6 +518,7 @@ std::unique_ptr<ScSortInfoArray> ScTable::CreateSortInfoArray(
             }
         }
 
+        CreateColumnIfNotExists(rSortParam.nCol2);
         initDataRows( *pArray, *this, aCol, rSortParam.nCol1, nInd1, rSortParam.nCol2, nInd2, bKeepQuery,
                 rSortParam.aDataAreaExtras.mbCellFormats, true, true, false);
     }
@@ -904,6 +906,7 @@ void ScTable::SortReorderAreaExtrasByRow( ScSortInfoArray* pArray,
     for (SCCOL nCol = rDataAreaExtras.mnStartCol; nCol < nDataCol1; nCol += nChunkCols)
     {
         const SCCOL nEndCol = std::min<SCCOL>( nCol + nChunkCols - 1, nDataCol1 - 1);
+        CreateColumnIfNotExists(nEndCol);
         initDataRows( *pArray, *this, aCol, nCol, nRow1, nEndCol, nLastRow, false,
                 rDataAreaExtras.mbCellFormats, rDataAreaExtras.mbCellNotes, rDataAreaExtras.mbCellDrawObjects, true);
         SortReorderByRow( pArray, nCol, nEndCol, pProgress, true);
@@ -912,6 +915,7 @@ void ScTable::SortReorderAreaExtrasByRow( ScSortInfoArray* pArray,
     for (SCCOL nCol = nDataCol2 + 1; nCol <= rDataAreaExtras.mnEndCol; nCol += nChunkCols)
     {
         const SCCOL nEndCol = std::min<SCCOL>( nCol + nChunkCols - 1, rDataAreaExtras.mnEndCol);
+        CreateColumnIfNotExists(nEndCol);
         initDataRows( *pArray, *this, aCol, nCol, nRow1, nEndCol, nLastRow, false,
                 rDataAreaExtras.mbCellFormats, rDataAreaExtras.mbCellNotes, rDataAreaExtras.mbCellDrawObjects, true);
         SortReorderByRow( pArray, nCol, nEndCol, pProgress, true);
