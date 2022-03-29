@@ -424,10 +424,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf135923, "tdf135923-min.docx")
     uno::Reference<text::XText> xShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xShape);
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_WHITE),
-                         getProperty<sal_Int32>(getRun(xParagraph, 1), "CharColor"));
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(COL_BLACK),
-                         getProperty<sal_Int32>(getRun(xParagraph, 2), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(xParagraph, 1), "CharColor"));
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, getProperty<Color>(getRun(xParagraph, 2), "CharColor"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
