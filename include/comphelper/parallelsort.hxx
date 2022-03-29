@@ -147,7 +147,8 @@ template <class RandItr> struct Sampler
         for (size_t nIdx = 0; nIdx < nSamples; ++nIdx)
         {
             size_t nSel = aGenerator() % nLen--;
-            std::swap(*(aBegin + nSel), *(aBegin + nLen));
+            using namespace std;
+            swap(*(aBegin + nSel), *(aBegin + nLen));
             pSamples[nIdx] = *(aBegin + nLen);
         }
     }
