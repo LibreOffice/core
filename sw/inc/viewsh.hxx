@@ -79,6 +79,14 @@ typedef std::shared_ptr<SwRootFrame> SwRootFramePtr;
 
 typedef struct _xmlTextWriter* xmlTextWriterPtr;
 
+struct SwVisiblePageNumbers
+{
+    sal_uInt16 nFirstPhy, nLastPhy;
+    sal_uInt16 nFirstVirt, nLastVirt;
+    OUString sFirstCustomPhy, sLastCustomPhy;
+    OUString sFirstCustomVirt, sLastCustomVirt;
+};
+
 class SW_DLLPUBLIC SwViewShell : public sw::Ring<SwViewShell>
 {
     friend void SetOutDev( SwViewShell *pSh, OutputDevice *pOut );
@@ -572,6 +580,8 @@ public:
     void setOutputToWindow(bool bOutputToWindow);
     bool isOutputToWindow() const;
     void OnGraphicArrived(const SwRect&);
+
+    void GetFirstLastVisPageNumbers(SwVisiblePageNumbers& rVisiblePageNumbers);
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };

@@ -147,6 +147,8 @@ public:
           SwPageFrame *GetFirstVisPage(OutputDevice const * pRenderContext);
     void SetFirstVisPageInvalid() { m_bFirstPageInvalid = true; }
 
+    const SwPageFrame* GetLastVisPage(const OutputDevice* pRenderContext) const;
+
     bool AddPaintRect( const SwRect &rRect );
     bool HasPaintRegion()      { return static_cast<bool>(m_pPaintRegion); }
     std::unique_ptr<SwRegionRects> TakePaintRegion() { return std::move(m_pPaintRegion); }
