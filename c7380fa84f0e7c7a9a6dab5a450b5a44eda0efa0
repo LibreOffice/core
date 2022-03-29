@@ -16,6 +16,24 @@
       "message": "Is it possible to convert this to atan2?",
       "revId": "c7380fa84f0e7c7a9a6dab5a450b5a44eda0efa0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45c138ec_781f9b15",
+        "filename": "emfio/source/reader/mtftools.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1743,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-03-29T07:15:42Z",
+      "side": 1,
+      "message": "Yes, I think we could consider to do that (of course with additional test coverage, as this part of code is not covered by tests).\n\nHow usage of `atan2` should looks like?\n\nI would prepare separate Change for that, as here I would like to focus only on std::hypot switching.",
+      "parentUuid": "ebe1896e_d0022d10",
+      "revId": "c7380fa84f0e7c7a9a6dab5a450b5a44eda0efa0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
