@@ -50,6 +50,24 @@
       "message": "Sorry for the merge.\n\nI\u0027m reading these:\nhttps://quuxplusone.github.io/blog/2018/03/19/customization-points-for-functions/\nhttps://akrzemi1.wordpress.com/2016/01/16/a-customizable-framework/\n\nWhat do you think about this one, with a comment:\n\n // needed to add std::swap to the scope in order to call the std::swap customization point.\n using std::swap;\n swap(ta, tb);",
       "revId": "5b53dd0514c25f907c80d523b078387db71f859b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45824ce1_c51eea42",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T12:35:25Z",
+      "side": 1,
+      "message": "\u0027using namespace std;\u0027 in such a scope is *idiomatic* way in C++ to write exactly \"this is the customization point\". The comment would be intended for C++ developers who don\u0027t know C++ - very similar to\n\n    // Increase i\n    ++i;",
+      "parentUuid": "ef5bfb2e_93d2e16f",
+      "revId": "5b53dd0514c25f907c80d523b078387db71f859b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
