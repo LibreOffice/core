@@ -16,6 +16,23 @@
       "message": "You modified a file that somebody had already sent a patch for: https://gerrit.libreoffice.org/c/core/+/132156\nYou could also use tdf#143148 as that is the open report at the moment.\nPick some other file and update your patch: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version",
       "revId": "76d82e3462bf96fb49837ab8c7f88ce72f6521f0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c22def3_5ea2724c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-29T06:19:29Z",
+      "side": 1,
+      "message": "Also, leaving one empty line is enough in the places you changed. Now you left two and four empty lines.",
+      "revId": "76d82e3462bf96fb49837ab8c7f88ce72f6521f0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
