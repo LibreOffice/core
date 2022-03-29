@@ -190,7 +190,7 @@ sc::MatrixEdge ScColumn::GetBlockMatrixEdges( SCROW nRow1, SCROW nRow2, sc::Matr
     return nEdges;
 }
 
-bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
+bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark, const ScRangeList& rRangeList) const
 {
     using namespace sc;
 
@@ -201,7 +201,7 @@ bool ScColumn::HasSelectionMatrixFragment(const ScMarkData& rMark) const
     ScAddress aCurOrigin = aOrigin;
 
     bool bOpen = false;
-    ScRangeList aRanges = rMark.GetMarkedRanges();
+    ScRangeList aRanges = rRangeList; // cached rMark.GetMarkedRanges(), for performance reasons (tdf#148147)
     for (size_t i = 0, n = aRanges.size(); i < n; ++i)
     {
         const ScRange& r = aRanges[i];
