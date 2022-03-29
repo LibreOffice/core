@@ -1739,8 +1739,11 @@ bool ImpEditView::MouseButtonDown( const MouseEvent& rMouseEvent )
     nTravelXPos         = TRAVEL_X_DONTKNOW;
     nExtraCursorFlags   = GetCursorFlags::NONE;
     nCursorBidiLevel    = CURSOR_BIDILEVEL_DONTKNOW;
+    bool bPrevUpdateLayout = pEditEngine->pImpEditEngine->SetUpdateLayout(true);
     bClickedInSelection = IsSelectionAtPoint( rMouseEvent.GetPosPixel() );
-    return pEditEngine->pImpEditEngine->MouseButtonDown( rMouseEvent, GetEditViewPtr() );
+    bool bRet = pEditEngine->pImpEditEngine->MouseButtonDown( rMouseEvent, GetEditViewPtr() );
+    pEditEngine->pImpEditEngine->SetUpdateLayout(bPrevUpdateLayout);
+    return bRet;
 }
 
 bool ImpEditView::MouseMove( const MouseEvent& rMouseEvent )
