@@ -301,8 +301,7 @@ void SVGAttributeWriter::AddGradientDef( const tools::Rectangle& rObjRect, const
             {
                 const double    fCenterX = rObjRect.Left() + rObjRect.GetWidth() * rGradient.GetOfsX() * 0.01;
                 const double    fCenterY = rObjRect.Top() + rObjRect.GetHeight() * rGradient.GetOfsY() * 0.01;
-                const double    fRadius = sqrt( static_cast< double >( rObjRect.GetWidth() ) * rObjRect.GetWidth() +
-                                                rObjRect.GetHeight() * rObjRect.GetHeight() ) * 0.5;
+                const double    fRadius = std::hypot(rObjRect.GetWidth(), rObjRect.GetHeight()) * 0.5;
 
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits, "userSpaceOnUse" );
                 mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrCX, OUString::number( ImplRound( fCenterX ) ) );
