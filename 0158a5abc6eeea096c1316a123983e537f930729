@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c37c932_976f4972",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-29T06:21:09Z",
+      "side": 1,
+      "message": "You don\u0027t need to abandon these. You can just update them: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version\nIt is kind of leaving trash behind what you are doing.",
+      "revId": "0158a5abc6eeea096c1316a123983e537f930729",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
