@@ -148,6 +148,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 		shell/source/backends/wininetbe/wininetbe1 \
 		shell/source/win32/simplemail/smplmail \
 		shell/source/win32/syssh \
+		shell/source/win32/jumplist/jumplist \
 		vcl/vcl.windows \
 	) \
 	$(if $(DISABLE_GUI), \

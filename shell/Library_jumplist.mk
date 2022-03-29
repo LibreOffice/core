@@ -26,7 +26,7 @@ $(eval $(call gb_Library_use_system_win32_libs,jumplist,\
 	shell32 \
 ))
 
-$(eval $(call gb_Library_set_componentfile,jumplist,shell/source/win32/jumplist/jumplist,services))
+$(eval $(call gb_Library_set_componentfile,jumplist,shell/source/win32/jumplist/jumplist))
 
 $(eval $(call gb_Library_add_exception_objects,jumplist,\
 	shell/source/win32/jumplist/JumpList \
