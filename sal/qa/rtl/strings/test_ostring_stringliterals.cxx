@@ -27,6 +27,7 @@ class StringLiterals: public CppUnit::TestFixture
 {
 private:
     void checkCtors();
+    void checkConstexprCtor();
     void checkUsage();
     void checkNonConstUsage();
     void checkBuffer();
@@ -36,8 +37,12 @@ private:
     static const char bad5[];
     static char bad6[];
 
+    // Check that OStringLiteral ctor is actually constexpr:
+    static constexpr rtlunittest::OStringLiteral dummy{"dummy"};
+
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
+CPPUNIT_TEST(checkConstexprCtor);
 CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkNonConstUsage);
 CPPUNIT_TEST(checkBuffer);
@@ -108,6 +113,20 @@ void test::ostring::StringLiterals::testcall( const char str[] )
     // MSVC just errors out on this for some reason, which is fine as well
     (void)str;
 #endif
+}
+
+void test::ostring::StringLiterals::checkConstexprCtor()
+{
+#if __cplusplus >= 202002L
+    static constinit
+#endif
+    rtl::OString s(dummy);
+    CPPUNIT_ASSERT_EQUAL(oslInterlockedCount(0x40000000), s.pData->refCount);
+        // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), s.getLength());
+    CPPUNIT_ASSERT_EQUAL(rtl::OString("dummy"), s);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<void const *>(dummy.getStr()), static_cast<void const *>(s.getStr()));
 }
 
 void test::ostring::StringLiterals::checkUsage()

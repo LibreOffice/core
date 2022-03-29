@@ -34,6 +34,7 @@ class StringLiterals: public CppUnit::TestFixture
 {
 private:
     void checkCtors();
+    void checkConstexprCtor();
     void checkUsage();
     void checkBuffer();
     void checkOUStringLiteral();
@@ -48,6 +49,7 @@ private:
 
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
+CPPUNIT_TEST(checkConstexprCtor);
 CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkBuffer);
 CPPUNIT_TEST(checkOUStringLiteral);
@@ -116,6 +118,20 @@ void test::oustring::StringLiterals::testcall( const char str[] )
 {
     CPPUNIT_ASSERT(
         !VALID_CONVERSION_CALL([&str]() { return rtl::OUString(str); }));
+}
+
+void test::oustring::StringLiterals::checkConstexprCtor()
+{
+#if __cplusplus >= 202002L
+    static constinit
+#endif
+    rtl::OUString s(dummy);
+    CPPUNIT_ASSERT_EQUAL(oslInterlockedCount(0x40000000), s.pData->refCount);
+        // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5), s.getLength());
+    CPPUNIT_ASSERT_EQUAL(rtl::OUString("dummy"), s);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<void const *>(dummy.getStr()), static_cast<void const *>(s.getStr()));
 }
 
 void test::oustring::StringLiterals::checkUsage()

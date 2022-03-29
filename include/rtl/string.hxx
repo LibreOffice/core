@@ -135,18 +135,17 @@ private:
         static_assert(offsetof(OStringLiteral, str.buffer) == offsetof(OStringLiteral, more.buffer));
     }
 
+    struct Data {
+        Data() = default;
+
+        oslInterlockedCount refCount = 0x40000000; // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
+        sal_Int32 length = N - 1;
+        char buffer[N] = {}; //TODO: drop initialization for C++20 (P1331R2)
+    };
+
     union {
         rtl_String str;
-        struct {
-            oslInterlockedCount refCount;
-            sal_Int32 length;
-            char buffer[N];
-        } more =
-            {
-                0x40000000, // SAL_STRING_STATIC_FLAG (sal/rtl/strimp.hxx)
-                N - 1,
-                {} //TODO: drop initialization for C++20 (P1331R2)
-            };
+        Data more = {};
     };
 };
 #endif
