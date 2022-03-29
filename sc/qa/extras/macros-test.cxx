@@ -16,6 +16,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 
+#include <conditio.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
 #include <scitems.hxx>
@@ -67,6 +68,7 @@ public:
     void testTdf105558();
     void testTdf143582();
     void testTdf144085();
+    void testTdf125800();
     void testTdf130307();
     void testTdf146742();
     void testMacroButtonFormControlXlsxExport();
@@ -100,6 +102,7 @@ public:
     CPPUNIT_TEST(testTdf105558);
     CPPUNIT_TEST(testTdf143582);
     CPPUNIT_TEST(testTdf144085);
+    CPPUNIT_TEST(testTdf125800);
     CPPUNIT_TEST(testTdf130307);
     CPPUNIT_TEST(testTdf146742);
     CPPUNIT_TEST(testMacroButtonFormControlXlsxExport);
@@ -920,6 +923,51 @@ void ScMacrosTest::testTdf144085()
     // - Expected: $Sheet1.$B$5:$E$17
     // - Actual  : $Sheet1.$B$5:$C$10
     CPPUNIT_ASSERT_EQUAL(OUString("$Sheet1.$B$5:$E$17"), aReturnValue);
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+void ScMacrosTest::testTdf125800()
+{
+    OUString aFileName;
+    createFileURL(u"tdf125800.ods", aFileName);
+    auto xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    css::uno::Any aRet;
+    css::uno::Sequence<css::uno::Any> aParams;
+    css::uno::Sequence<css::uno::Any> aOutParam;
+    css::uno::Sequence<sal_Int16> aOutParamIndex;
+
+    SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+    ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+    ScDocument& rDoc = pDocSh->GetDocument();
+
+    ScConditionalFormat* pFormat = rDoc.GetCondFormat(1, 2, 0);
+    CPPUNIT_ASSERT(!pFormat);
+
+    // Without the fix in place, this test would have failed with
+    // - Expression: false
+    // - Unexpected dialog:  Error: Inadmissible value or data type. Index out of defined range.
+    SfxObjectShell::CallXScript(
+        xComponent,
+        "vnd.sun.Star.script:Standard.cf.doItForThisSheetindexThisRange?language=Basic&location=document",
+        aParams, aRet, aOutParamIndex, aOutParam);
+
+    OUString aReturnValue;
+    aRet >>= aReturnValue;
+
+    pFormat = rDoc.GetCondFormat(1, 2, 0);
+    CPPUNIT_ASSERT(pFormat);
+
+    const ScFormatEntry* pEntry = pFormat->GetEntry(0);
+    CPPUNIT_ASSERT(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScFormatEntry::Type::Condition, pEntry->GetType());
+
+    const ScCondFormatEntry* pCondition = static_cast<const ScCondFormatEntry*>(pEntry);
+    CPPUNIT_ASSERT_EQUAL(ScConditionMode::Direct, pCondition->GetOperation());
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);
