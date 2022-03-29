@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba37eb4a_4e1d97c1",
+        "filename": "sc/source/ui/app/inputhdl.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-29T06:37:19Z",
+      "side": 0,
+      "message": "Is this call still needed?",
+      "revId": "8a734ba9287f8d25c3c3df50b4efc91b9035127d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
