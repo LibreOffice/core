@@ -26,7 +26,6 @@ class Views final : public connectivity::sdbcx::OCollection
 {
     css::uno::Reference<css::sdbc::XConnection> m_xConnection;
     css::uno::Reference<css::sdbc::XDatabaseMetaData> m_xMetaData;
-    bool m_bInDrop;
 
     // OCollection
     virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
