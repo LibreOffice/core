@@ -189,6 +189,13 @@ void RtfFilter::setSourceDocument(const uno::Reference<lang::XComponent>& xDoc)
 void RtfFilter::setTargetDocument(const uno::Reference<lang::XComponent>& xDoc)
 {
     m_xDstDoc = xDoc;
+
+    // Set some compatibility options that are valid for the RTF format
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xDoc, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xSettings(
+        xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
+
+    xSettings->setPropertyValue("TableRowKeep", uno::makeAny(true));
 }
 
 void RtfFilter::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
