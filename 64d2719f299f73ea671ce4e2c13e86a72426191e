@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08d3a053_87773c15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-03-30T13:20:00Z",
+      "side": 1,
+      "message": "Thanks Miklos - can we have in cp-6.4 too if it\u0027s needed ?",
+      "revId": "64d2719f299f73ea671ce4e2c13e86a72426191e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
