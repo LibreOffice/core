@@ -142,11 +142,6 @@ void SigningTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
-    mxDesktop.set(frame::Desktop::create(mxComponentContext));
-    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
-    mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
-
 #ifndef _WIN32
     // Set up cert8.db in workdir/CppunitTest/
     OUString aSourceDir = m_directories.getURLFromSrc(DATA_DIRECTORY);
@@ -158,6 +153,12 @@ void SigningTest::setUp()
     osl::FileBase::getSystemPathFromFileURL(aTargetDir, aTargetPath);
     setenv("MOZILLA_CERTIFICATE_FOLDER", aTargetPath.toUtf8().getStr(), 1);
 #endif
+
+    // Initialize crypto after setting up the environment variables.
+    mxComponentContext.set(comphelper::getComponentContext(getMultiServiceFactory()));
+    mxDesktop.set(frame::Desktop::create(mxComponentContext));
+    mxSEInitializer = xml::crypto::SEInitializer::create(mxComponentContext);
+    mxSecurityContext = mxSEInitializer->createSecurityContext(OUString());
 }
 
 void SigningTest::tearDown()
