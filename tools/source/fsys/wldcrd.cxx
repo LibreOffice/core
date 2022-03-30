@@ -27,14 +27,13 @@
  */
 bool WildCard::ImpMatch( std::u16string_view aWild, std::u16string_view aStr )
 {
-    int    pos=0;
-    int    flag=0;
+    const sal_Unicode* pPosAfterAsterisk = nullptr;
     const sal_Unicode* pWild = aWild.data();
     const sal_Unicode* pWildEnd = aWild.data() + aWild.size();
     const sal_Unicode* pStr = aStr.data();
     const sal_Unicode* pStrEnd = aStr.data() + aStr.size();
 
-    while ( pWild != pWildEnd || flag )
+    while ( pWild != pWildEnd )
     {
         switch (*pWild)
         {
@@ -42,52 +41,56 @@ bool WildCard::ImpMatch( std::u16string_view aWild, std::u16string_view aStr )
                 if ( pStr == pStrEnd )
                     return false;
                 break;
-
-            default:
-                if ( (*pWild == '\\') && (pWild + 1 != pWildEnd) && ((*(pWild+1)=='?') || (*(pWild+1) == '*')) )
+            case '\\': // Escaping '?' and '*'; don't we need to escape '\\'?
+                if ((pWild + 1 != pWildEnd) && ((*(pWild + 1) == '?') || (*(pWild + 1) == '*')))
                     pWild++;
-                if ( *pWild != *pStr )
-                    if ( !pos )
-                        return false;
-                    else
-                        pWild += pos;
-                else
+                [[fallthrough]];
+            default: // No wildcard, literal match
+                if (pStr == pStrEnd)
+                    return false;
+                if (*pWild == *pStr)
                     break;
-                // WARNING/TODO: may cause execution of next case in some
-                // circumstances!
+                if (!pPosAfterAsterisk)
+                    return false;
+                pWild = pPosAfterAsterisk;
                 [[fallthrough]];
             case '*':
                 while ( pWild != pWildEnd && *pWild == '*' )
                     pWild++;
                 if ( pWild == pWildEnd )
                     return true;
-                flag = 1;
-                pos  = 0;
+                // Consider strange things like "**?*?*"
+                while (*pWild == '?')
+                {
+                    if (pStr == pStrEnd)
+                        return false;
+                    pWild++;
+                    pStr++;
+                    while (pWild != pWildEnd && *pWild == '*')
+                        pWild++;
+                    if (pWild == pWildEnd)
+                        return true;
+                }
+                // At this point, we are past wildcards, and see a literal match in wildcard string
                 if ( pStr == pStrEnd )
                     return false;
-                while ( pStr != pStrEnd && *pStr != *pWild )
+                pPosAfterAsterisk = pWild;
+                while (*pStr != *pWild)
                 {
-                    if ( *pWild == '?' ) {
-                        pWild++;
-                        while ( pWild != pWildEnd && *pWild == '*' )
-                            pWild++;
-                    }
                     pStr++;
                     if ( pStr == pStrEnd )
-                        return pWild == pWildEnd;
+                        return false;
                 }
                 break;
         }
-        if ( pWild != pWildEnd )
-            pWild++;
-        if ( pStr != pStrEnd )
-            pStr++;
-        else
-            flag = 0;
-        if ( flag )
-            pos--;
+        assert(pWild != pWildEnd);
+        pWild++;
+        assert(pStr != pStrEnd);
+        pStr++;
+        if (pWild == pWildEnd && pPosAfterAsterisk && pStr != pStrEnd)
+            pWild = pPosAfterAsterisk; // Try again on the rest of pStr
     }
-    return ( pStr == pStrEnd ) && ( pWild == pWildEnd );
+    return pStr == pStrEnd;
 }
 
 bool WildCard::Matches( std::u16string_view rString ) const
