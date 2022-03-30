@@ -1654,30 +1654,28 @@ Reference< XShape > const & Shape::createAndInsert(
 
         if (bIsConnectorShape)
         {
-            ConnectorType aConnectorType;
             sal_Int32 nType = mpCustomShapePropertiesPtr->getShapePresetType();
             switch (nType)
             {
             case XML_line:
             case XML_straightConnector1:
-                aConnectorType = ConnectorType_LINE;
+                xSet->setPropertyValue("EdgeKind", Any(ConnectorType_LINE));
                 break;
             case XML_bentConnector2:
             case XML_bentConnector3:
             case XML_bentConnector4:
             case XML_bentConnector5:
-                aConnectorType = ConnectorType_STANDARD;
+                xSet->setPropertyValue("EdgeKind", Any(ConnectorType_STANDARD));
                 break;
             case XML_curvedConnector2:
             case XML_curvedConnector3:
             case XML_curvedConnector4:
             case XML_curvedConnector5:
-                aConnectorType = ConnectorType_CURVE;
+                xSet->setPropertyValue("EdgeKind", Any(ConnectorType_CURVE));
                 break;
             default:
                 break;
             }
-            xSet->setPropertyValue("EdgeKind", Any(aConnectorType));
         }
 
         if( bIsCustomShape )
