@@ -391,6 +391,7 @@ certain functionality.
 
 @li @c svx
 @li @c svx.chaining
+@li @c svx.diagram - Diagram ModelData
 @li @c svx.dialog
 @li @c svx.fmcomp
 @li @c svx.form
