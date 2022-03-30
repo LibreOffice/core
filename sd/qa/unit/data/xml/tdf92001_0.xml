@@ -24,16 +24,52 @@
    <PropertyValue name="Path">
     <Path>
      <PropertyValue name="Coordinates">
-      <Coordinates/>
+      <Coordinates>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="5677" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8631" type="0"/>
+        <Second value="5677" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8631" type="0"/>
+        <Second value="0" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="21600" type="0"/>
+        <Second value="10800" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8631" type="0"/>
+        <Second value="21600" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="8631" type="0"/>
+        <Second value="15923" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+       <EnhancedCustomShapeParameterPair>
+        <First value="0" type="0"/>
+        <Second value="15923" type="0"/>
+       </EnhancedCustomShapeParameterPair>
+      </Coordinates>
      </PropertyValue>
      <PropertyValue name="Segments">
-      <Segments/>
+      <Segments>
+       <EnhancedCustomShapeSegment command="1" count="1"/>
+       <EnhancedCustomShapeSegment command="2" count="6"/>
+       <EnhancedCustomShapeSegment command="4" count="0"/>
+       <EnhancedCustomShapeSegment command="5" count="0"/>
+      </Segments>
      </PropertyValue>
+     <PropertyValue name="SubViewSize" handle="0" propertyState="DIRECT_VALUE"/>
+     <PropertyValue name="TextFrames" handle="0" propertyState="DIRECT_VALUE"/>
     </Path>
    </PropertyValue>
    <PropertyValue name="Type" value="ooxml-non-primitive" handle="0" propertyState="DIRECT_VALUE"/>
    <PropertyValue name="ViewBox">
-    <ViewBox x="0" y="0" width="7040880" height="4663440"/>
+    <ViewBox x="0" y="0" width="0" height="0"/>
    </PropertyValue>
   </CustomShapeGeometry>
  </XShape>

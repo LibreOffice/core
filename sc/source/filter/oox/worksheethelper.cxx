@@ -75,7 +75,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
-#include <tools/UnitConversion.hxx>
+#include <tools/gen.hxx>
 
 namespace oox::xls {
 
@@ -94,6 +94,18 @@ void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double f
 {
     if( rxProgressBar )
         rxProgressBar->setPosition( fPosition );
+}
+
+// TODO Needed because input might be >32-bit (in 64-bit builds),
+//  or a negative, already overflown value (in 32-bit builds)
+sal_Int32 lclClampToNonNegativeInt32( tools::Long aVal )
+{
+    if ( aVal > SAL_MAX_INT32 || aVal < 0 )
+    {
+        SAL_WARN( "sc.filter", "Overflow detected, " << aVal << " does not fit into sal_Int32, or is negative." );
+        return SAL_MAX_INT32;
+    }
+    return static_cast<sal_Int32>( aVal );
 }
 
 } // namespace
@@ -538,9 +550,9 @@ const awt::Size& WorksheetGlobals::getDrawPageSize() const
 
 awt::Point WorksheetGlobals::getCellPosition( sal_Int32 nCol, sal_Int32 nRow ) const
 {
-    awt::Point aPoint;
-    PropertySet aCellProp( getCell( ScAddress( nCol, nRow, getSheetIndex() ) ) );
-    aCellProp.getProperty( aPoint, PROP_Position );
+    const tools::Rectangle aMMRect( getScDocument().GetMMRect( nCol, nRow, nCol, nRow, getSheetIndex() ) );
+    awt::Point aPoint( lclClampToNonNegativeInt32( aMMRect.Left() ),
+                       lclClampToNonNegativeInt32( aMMRect.Top() ) );
     return aPoint;
 }
 
@@ -1360,8 +1372,9 @@ void WorksheetGlobals::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLa
 void WorksheetGlobals::finalizeDrawings()
 {
     // calculate the current drawing page size (after rows/columns are imported)
-    PropertySet aRangeProp( getCellRange( ScRange( 0, 0, getSheetIndex(), mrMaxApiPos.Col(), mrMaxApiPos.Row(), getSheetIndex() ) ) );
-    aRangeProp.getProperty( maDrawPageSize, PROP_Size );
+    const Size aPageSize( getScDocument().GetMMRect( 0, 0, mrMaxApiPos.Col(), mrMaxApiPos.Row(), getSheetIndex() ).GetSize() );
+    maDrawPageSize.Width = lclClampToNonNegativeInt32( aPageSize.Width() );
+    maDrawPageSize.Height = lclClampToNonNegativeInt32( aPageSize.Height() );
 
     // import DML and VML
     if( !maDrawingPath.isEmpty() )

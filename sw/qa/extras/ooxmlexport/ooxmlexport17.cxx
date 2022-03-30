@@ -181,6 +181,34 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146851_2, "tdf146851_2.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Schedule"), xTextField->getPresentation(false));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    std::vector<OUString> aExpectedValues = {
+        // These field values are NOT in order in document: getTextFields did provide
+        // fields in a strange but fixed order
+        "Title", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Placeholder", "Placeholder", "Placeholder",
+        "Placeholder", "Title", "Title", "Title",
+        "Title", "Title", "Title", "Title"
+    };
+
+    sal_uInt16 nIndex = 0;
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(aExpectedValues[nIndex++], xTextField->getPresentation(false));
+    }
+
+    // No more fields
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
@@ -236,6 +264,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144668, "tdf144668.odt")
 
     uno::Reference<beans::XPropertySet> xPara2(getParagraph(2, u"level2"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("[001]"), getProperty<OUString>(xPara2, "ListLabelString"));
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
+{
+    load(DATA_DIRECTORY, "tdf147978_enhancedPath_commandABVW.odt");
+    CPPUNIT_ASSERT(mxComponent);
+    save("Office Open XML Text", maTempFile);
+    mxComponent->dispose();
+    mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
+    // Make sure the new implemented export for commands A,B,V and W use the correct arc between
+    // the given two points, here the short one.
+    for (sal_Int16 i = 1 ; i <= 4; ++i)
+    {
+        uno::Reference<drawing::XShape> xShape = getShape(i);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(506), getProperty<awt::Rectangle>(xShape, "BoundRect").Height);
+    }
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

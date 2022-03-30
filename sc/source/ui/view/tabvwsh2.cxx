@@ -265,6 +265,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_TEXT_MARQUEE:
         case SID_DRAW_NOTEEDIT:
             pTabView->SetDrawFuncPtr(new FuText(*this, pWin, pView, pDoc, aNewReq));
+            bCreateDirectly = comphelper::LibreOfficeKit::isActive();
             break;
 
         case SID_FM_CREATE_CONTROL:
@@ -335,7 +336,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     }
     else
     {
-        GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SfxCallMode::ASYNCHRON);
         ScViewData& rViewData = GetViewData();
         aInsertPos = rViewData.getLOKVisibleArea().Center();
         if (comphelper::LibreOfficeKit::isCompatFlagSet(
@@ -370,13 +370,20 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     // insert into page
     pView->InsertObjectAtView(pObj.release(), *pPageView);
 
-    if ( nNewId == SID_DRAW_CAPTION || nNewId == SID_DRAW_CAPTION_VERTICAL )
+    switch ( nNewId )
     {
+    case SID_DRAW_CAPTION:
+    case SID_DRAW_CAPTION_VERTICAL:
+    case SID_DRAW_TEXT:
+    case SID_DRAW_TEXT_VERTICAL:
         //  use KeyInput to start edit mode (FuText is created).
         //  For FuText objects, edit mode is handled within CreateDefaultObject.
         //  KEY_F2 is handled in FuDraw::KeyInput.
 
         pFuActual->KeyInput( KeyEvent( 0, vcl::KeyCode( KEY_F2 ) ) );
+        break;
+    default:
+        break;
     }
 }
 

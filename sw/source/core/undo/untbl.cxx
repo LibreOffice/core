@@ -34,6 +34,8 @@
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentStylePoolAccess.hxx>
+#include <IDocumentLayoutAccess.hxx>
+#include <rootfrm.hxx>
 #include <editsh.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
@@ -936,6 +938,12 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 {
     m_bModifyBox = bMdfyBox;
 
+    FndBox_ aTmpBox( nullptr, nullptr );
+    bool bHideChanges = rTable.GetFrameFormat()->GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout()->IsHideRedlines();
+    // TODO delete/make frames only at changing line attribute TextChangesOnly (RES_PRINT) to true again
+    if ( bHideChanges )
+        aTmpBox.DelFrames( rTable );
+
     // first, get back attributes of TableFrameFormat
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
     SfxItemSet& rFormatSet  = const_cast<SfxItemSet&>(static_cast<SfxItemSet const &>(pFormat->GetAttrSet()));
@@ -944,14 +952,20 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 
     pFormat->InvalidateInSwCache(RES_ATTRSET_CHG);
 
+    // table without table frame
+    bool bHiddenTable = true;
+
     // for safety, invalidate all TableFrames
     SwIterator<SwTabFrame,SwFormat> aIter( *pFormat );
     for( SwTabFrame* pLast = aIter.First(); pLast; pLast = aIter.Next() )
+    {
         if( pLast->GetTable() == &rTable )
         {
             pLast->InvalidateAll();
             pLast->SetCompletePaint();
+            bHiddenTable = false;
         }
+    }
 
     // fill FrameFormats with defaults (0)
     pFormat = nullptr;
@@ -976,6 +990,21 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
 
     m_aFrameFormats.clear();
     m_bModifyBox = false;
+
+    if ( bHideChanges )
+    {
+        if ( bHiddenTable )
+        {
+            SwTableNode* pTableNode = rTable.GetTableNode();
+            pTableNode->DelFrames();
+            SwNodeIndex aTableIdx( *pTableNode->EndOfSectionNode(), 1 );
+            pTableNode->MakeOwnFrames(&aTableIdx);
+        }
+        else
+        {
+            aTmpBox.MakeFrames( rTable );
+        }
+    }
 }
 
 void SaveTable::SaveContentAttrs( SwDoc* pDoc )

@@ -346,26 +346,6 @@ tools::Polygon lcl_CreateContourPolygon(SdrObject* pSdrObj)
             basegfx::B2DHomMatrix aScale(basegfx::utils::createScaleB2DHomMatrix(fScaleX, fScaleY));
             aPolyPolygon.transform(aScale);
 
-            // ToDo: In some cases (see ShapeExport::WriteCustomShape()) flip is suppressed when
-            // calling WriteShapeTransformation(), because the path in custGeom contains already
-            // flipped coordinates. In such cases the wrap polygon needs to contain flipped
-            // coordinates too. That is missing here.
-
-            // "moon" and "msp-spt89" (up-right-arrow) are currently mirrored horizontally. But
-            // that is removed on export in shapes.cxx. So need to remove it in wrap polygon too.
-            uno::Reference<drawing::XShape> xShape(pSdrObj->getUnoShape(), uno::UNO_QUERY);
-            uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY);
-            comphelper::SequenceAsHashMap aCustomShapeGeometry(
-                xProps->getPropertyValue("CustomShapeGeometry"));
-            auto it = aCustomShapeGeometry.find("Type");
-            if (it != aCustomShapeGeometry.end()
-                && (aCustomShapeGeometry["Type"].get<OUString>() == "moon"
-                    || aCustomShapeGeometry["Type"].get<OUString>() == "mso-spt89"))
-            {
-                basegfx::B2DHomMatrix aFlipH(basegfx::utils::createScaleB2DHomMatrix(-1.0, 1.0));
-                aPolyPolygon.transform(aFlipH);
-            }
-
             basegfx::B2DHomMatrix aTranslateToCenter(
                 basegfx::utils::createTranslateB2DHomMatrix(10800.0, 10800.0));
             aPolyPolygon.transform(aTranslateToCenter);
