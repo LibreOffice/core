@@ -16,6 +16,23 @@
       "message": "This would add these two new translatable strings to 7-3",
       "revId": "bc7a8276ebbed9163f2b0b02d61f1d0205c6b6bd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9944eb57_c662237b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-03-30T17:30:46Z",
+      "side": 1,
+      "message": "As Olivier said once, Weblate’s sync feature helps a lot, but we need to ensure the new strings are available in both trunk and 7.3 at the same time to take advantage of it, so this needs to be merged quickly. Here’s my +1 as a translator.",
+      "revId": "bc7a8276ebbed9163f2b0b02d61f1d0205c6b6bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
