@@ -425,14 +425,13 @@ void TypeSerializer::writeGraphic(const Graphic& rGraphic)
     }
 }
 
-bool TooLargeScaleForMapMode(const Fraction& rScale)
+bool TooLargeScaleForMapMode(const Fraction& rScale, int nDPI)
 {
     // ImplLogicToPixel will multiply its values by this numerator * dpi and then double that
     // result before dividing
-    constexpr sal_Int32 nTypicalDPI = 96;
-    if (rScale.GetNumerator() > std::numeric_limits<sal_Int32>::max() / nTypicalDPI / 2)
+    if (rScale.GetNumerator() > std::numeric_limits<sal_Int32>::max() / nDPI / 2)
         return true;
-    if (rScale.GetNumerator() < std::numeric_limits<sal_Int32>::min() / nTypicalDPI / 2)
+    if (rScale.GetNumerator() < std::numeric_limits<sal_Int32>::min() / nDPI / 2)
         return true;
     return false;
 }
@@ -441,7 +440,7 @@ static bool UselessScaleForMapMode(const Fraction& rScale)
 {
     if (!rScale.IsValid())
         return true;
-    if (TooLargeScaleForMapMode(rScale))
+    if (TooLargeScaleForMapMode(rScale, 96))
         return true;
     if (static_cast<double>(rScale) < 0.0)
         return true;
