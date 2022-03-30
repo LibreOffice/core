@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c741563c_0989904c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-03-30T17:29:06Z",
+      "side": 1,
+      "message": "On the (off-topic) topic of alluding visual items, IANAL either, but I think we’re on the safe side with the letters; they’re not copyrighteable, or, in the Wikimedia Commons parlance, they are “below the threshold of originality”.",
+      "revId": "95e85730ad850a66879a639d9f5936fa67549ab7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
