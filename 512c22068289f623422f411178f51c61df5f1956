@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5e35d33_46442fa0",
+        "filename": "sw/inc/frmfmt.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-03-30T17:05:34Z",
+      "side": 1,
+      "message": "this can return \n    const std::shared_ptr\u003c SwTextBoxNode \u003e \u0026\nwhich will avoid making a copy just for reading the data",
+      "revId": "512c22068289f623422f411178f51c61df5f1956",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
