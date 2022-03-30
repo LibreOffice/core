@@ -640,7 +640,7 @@ private:
     ColorModel          eCM;
 
     Color               aPreviousColor;
-    Color               aCurrentColor;
+    svx::NamedThemedColor aCurrentColor;
 
     css::uno::Reference< css::uno::XComponentContext > m_context;
 
@@ -698,7 +698,7 @@ private:
     DECL_LINK(SelectPaletteLBHdl, weld::ComboBox&, void);
     DECL_LINK( SelectValSetHdl_Impl, ValueSet*, void );
     DECL_LINK( SelectColorModeHdl_Impl, weld::Toggleable&, void );
-    void ChangeColor(const Color &rNewColor, bool bUpdatePreset = true);
+    void ChangeColor(const svx::NamedThemedColor &rNewColor, bool bUpdatePreset = true);
     void SetColorModel(ColorModel eModel);
     void ChangeColorModel();
     void UpdateColorValues( bool bUpdatePreset = true );
