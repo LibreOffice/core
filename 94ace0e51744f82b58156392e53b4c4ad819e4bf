@@ -70,6 +70,24 @@
       "parentUuid": "da121d52_c67b13f7",
       "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "27b72b27_55f00108",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-30T21:12:20Z",
+      "side": 1,
+      "message": "...and same for \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/110896/\u003e on tb76-maggie:\n\n  [...]\n  checking for llvm-ar... llvm-ar\n  checking for llvm-nm... llvm-nm\n  checking for llvm-ranlib... llvm-ranlib\n  checking for llvm-objdump... llvm-objdump\n  checking for llvm-readelf... no\n  checking for readelf... readelf\n  checking for llvm-strip... no\n  checking for strip... strip\n  [...]\n  [build LNK] StaticLibrary/libfindsofficepath.a\n  /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/solenv/gbuild/LinkTarget.mk:849: recipe for target \u0027/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/LinkTarget/StaticLibrary/libfindsofficepath.a\u0027 failed\n  make[1]: *** [/home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_clang_dbgutil_64/workdir/LinkTarget/StaticLibrary/libfindsofficepath.a] Error 1\n  [...]\n\netc.",
+      "parentUuid": "49d62baa_cfb3e194",
+      "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
