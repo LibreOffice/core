@@ -46,4 +46,8 @@ $(eval $(call gb_CppunitTest_use_custom_headers,vcl_filter_ipdf,\
 
 $(eval $(call gb_CppunitTest_use_configuration,vcl_filter_ipdf))
 
+ifeq ($(ENABLE_POPPLER),TRUE)
+$(eval $(call gb_CppunitTest_use_executable,vcl_filter_ipdf,xpdfimport))
+endif
+
 # vim: set noet sw=4 ts=4:
