@@ -37,6 +37,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tools_test, \
     tools/qa/cppunit/test_cpu_runtime_detection_AVX2 \
     tools/qa/cppunit/test_cpu_runtime_detection_SSE2 \
     tools/qa/cppunit/test_cpu_runtime_detection_SSSE3 \
+    tools/qa/cppunit/test_Wildcard \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,tools_test,\
