@@ -22,13 +22,15 @@
 
 #include <vector>
 #include <optional>
+#include <map>
 
 #include <svx/svxdllapi.h>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 
 namespace svx::diagram {
 
-enum TypeConstant {
+enum SVXCORE_DLLPUBLIC TypeConstant {
     XML_none = 0,
     XML_type = 395,
     XML_asst = 680,
@@ -113,6 +115,73 @@ struct SVXCORE_DLLPUBLIC Point
 };
 
 typedef std::vector< Point >        Points;
+
+/** The collected Diagram ModelData
+ */
+class SVXCORE_DLLPUBLIC DiagramData
+{
+public:
+    typedef std::map< OUString, Point* > PointNameMap;
+    typedef std::map< OUString, std::vector< Point* > > PointsNameMap;
+    typedef std::map< OUString, const Connection* > ConnectionNameMap;
+
+    struct SourceIdAndDepth
+    {
+        OUString msSourceId;
+        sal_Int32 mnDepth = 0;
+    };
+
+    /// Tracks connections: destination id -> {destination order, details} map.
+    typedef std::map< OUString, std::map<sal_Int32, SourceIdAndDepth > > StringMap;
+
+protected:
+    // Make constructor protected to signal that this anyways pure virual class
+    // shall not be incarnated - target to use is oox::drawingml::DiagramData
+    DiagramData();
+
+public:
+    virtual ~DiagramData();
+
+    // creates temporary processing data from model data
+    virtual void build(bool bClearOoxShapes) = 0;
+
+    Connections& getConnections() { return maConnections; }
+    Points& getPoints() { return maPoints; }
+    StringMap& getPresOfNameMap() { return maPresOfNameMap; }
+    PointNameMap& getPointNameMap() { return maPointNameMap; }
+    PointsNameMap& getPointsPresNameMap() { return maPointsPresNameMap; }
+    ::std::vector<OUString>& getExtDrawings() { return maExtDrawings; }
+    const Point* getRootPoint() const;
+
+    virtual void dump() const = 0;
+
+    OUString getString() const;
+    virtual std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const = 0;
+    virtual OUString addNode(const OUString& rText) = 0;
+    bool removeNode(const OUString& rNodeId);
+
+protected:
+    virtual void getChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel) const = 0;
+    void addConnection(TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
+
+    // evtl. existing alternative imported visualization identifier
+    ::std::vector<OUString>  maExtDrawings;
+
+    // The model definition, the parts available in svx.
+    // See evtl. parts in oox::drawingml::DiagramData that may need t obe accessed
+    // - logic connections/associations
+    // - data point entries
+    Connections maConnections;
+    Points maPoints;
+
+    // temporary processing data, deleted when using build()
+    PointNameMap      maPointNameMap;
+    PointsNameMap     maPointsPresNameMap;
+    ConnectionNameMap maConnectionNameMap;
+    StringMap         maPresOfNameMap;
+};
+
+typedef std::shared_ptr< DiagramData > DiagramDataPtr;
 
 }
 

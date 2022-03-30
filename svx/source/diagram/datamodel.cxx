@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <unordered_set>
+#include <algorithm>
+
 #include <svx/diagram/datamodel.hxx>
 #include <sal/log.hxx>
 
@@ -26,7 +29,8 @@ Connection::Connection()
 : mnXMLType( XML_none )
 , mnSourceOrder( 0 )
 , mnDestOrder( 0 )
-{}
+{
+}
 
 Point::Point()
 : mnXMLType(XML_none)
@@ -54,7 +58,100 @@ Point::Point()
 , mbCustomVerticalFlip(false)
 , mbCustomText(false)
 , mbIsPlaceholder(false)
-{}
+{
+}
+
+DiagramData::DiagramData()
+{
+}
+
+DiagramData::~DiagramData()
+{
+}
+
+const Point* DiagramData::getRootPoint() const
+{
+    for (const auto & aCurrPoint : maPoints)
+        if (aCurrPoint.mnXMLType == TypeConstant::XML_doc)
+            return &aCurrPoint;
+
+    SAL_WARN("svx.diagram", "No root point");
+    return nullptr;
+}
+
+OUString DiagramData::getString() const
+{
+    OUStringBuffer aBuf;
+    const Point* pPoint = getRootPoint();
+    getChildrenString(aBuf, pPoint, 0);
+    return aBuf.makeStringAndClear();
+}
+
+bool DiagramData::removeNode(const OUString& rNodeId)
+{
+    // check if it doesn't have children
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnXMLType == TypeConstant::XML_parOf && aCxn.msSourceId == rNodeId)
+        {
+            SAL_WARN("svx.diagram", "Node has children - can't be removed");
+            return false;
+        }
+
+    Connection aParCxn;
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnXMLType == TypeConstant::XML_parOf && aCxn.msDestId == rNodeId)
+            aParCxn = aCxn;
+
+    std::unordered_set<OUString> aIdsToRemove;
+    aIdsToRemove.insert(rNodeId);
+    if (!aParCxn.msParTransId.isEmpty())
+        aIdsToRemove.insert(aParCxn.msParTransId);
+    if (!aParCxn.msSibTransId.isEmpty())
+        aIdsToRemove.insert(aParCxn.msSibTransId);
+
+    for (const Point& rPoint : maPoints)
+        if (aIdsToRemove.count(rPoint.msPresentationAssociationId))
+            aIdsToRemove.insert(rPoint.msModelId);
+
+    // insert also transition nodes
+    for (const auto& aCxn : maConnections)
+        if (aIdsToRemove.count(aCxn.msSourceId) || aIdsToRemove.count(aCxn.msDestId))
+            if (!aCxn.msPresId.isEmpty())
+                aIdsToRemove.insert(aCxn.msPresId);
+
+    // remove connections
+    maConnections.erase(std::remove_if(maConnections.begin(), maConnections.end(),
+                                       [aIdsToRemove](const Connection& rCxn) {
+                                           return aIdsToRemove.count(rCxn.msSourceId) || aIdsToRemove.count(rCxn.msDestId);
+                                       }),
+                        maConnections.end());
+
+    // remove data and presentation nodes
+    maPoints.erase(std::remove_if(maPoints.begin(), maPoints.end(),
+                                  [aIdsToRemove](const Point& rPoint) {
+                                      return aIdsToRemove.count(rPoint.msModelId);
+                                  }),
+                   maPoints.end());
+
+    // TODO: fix source/dest order
+
+    build(true);
+    return true;
+}
+
+void DiagramData::addConnection(svx::diagram::TypeConstant nType, const OUString& sSourceId, const OUString& sDestId)
+{
+    sal_Int32 nMaxOrd = -1;
+    for (const auto& aCxn : maConnections)
+        if (aCxn.mnXMLType == nType && aCxn.msSourceId == sSourceId)
+            nMaxOrd = std::max(nMaxOrd, aCxn.mnSourceOrder);
+
+    svx::diagram::Connection& rCxn = maConnections.emplace_back();
+    rCxn.mnXMLType = nType;
+    rCxn.msSourceId = sSourceId;
+    rCxn.msDestId = sDestId;
+    rCxn.mnSourceOrder = nMaxOrd + 1;
+}
 
 }
 

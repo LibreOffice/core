@@ -206,9 +206,9 @@ class PtContext
     : public ContextHandler2
 {
 public:
-    PtContext( ContextHandler2Helper const & rParent,
+    PtContext( ContextHandler2Helper const& rParent,
                const AttributeList& rAttribs,
-               svx::diagram::Point & rPoint,
+               svx::diagram::Point& rPoint,
                DiagramData& rDiagramData):
         ContextHandler2( rParent ),
         mrPoint( rPoint ),
@@ -296,7 +296,7 @@ class BackgroundFormattingContext
     : public ContextHandler2
 {
 public:
-    BackgroundFormattingContext( ContextHandler2Helper const & rParent, DiagramDataPtr const & pModel )
+    BackgroundFormattingContext( ContextHandler2Helper const & rParent, OoxDiagramDataPtr const& pModel )
         : ContextHandler2( rParent )
         , mpDataModel( pModel )
         {
@@ -329,13 +329,13 @@ public:
             return this;
         }
 private:
-    DiagramDataPtr mpDataModel;
+    OoxDiagramDataPtr mpDataModel;
 };
 
 }
 
-DataModelContext::DataModelContext( ContextHandler2Helper const & rParent,
-                                    const DiagramDataPtr & pDataModel )
+DataModelContext::DataModelContext( ContextHandler2Helper const& rParent,
+                                    const OoxDiagramDataPtr& pDataModel )
     : ContextHandler2( rParent )
     , mpDataModel( pDataModel )
 {
