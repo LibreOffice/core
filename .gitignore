@@ -143,11 +143,12 @@ DerivedData
 *.VC.db
 LibreOffice.VC.VC.opendb
 
-# QtCreator specific
+# Qt Creator specific
 *.pro
 *.pro.shared
 *.pro.user
 *.pro.user.*
+.qtc_clangd
 
 # doxygen output
 /docs
