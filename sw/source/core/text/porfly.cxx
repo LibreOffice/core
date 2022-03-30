@@ -364,7 +364,7 @@ void SwFlyCntPortion::SetBase( const SwTextFrame& rFrame, const Point &rBase,
 
     if (auto pFormat = FindFrameFormat(pSdrObj))
     {
-        if (pFormat->GetOtherTextBoxFormat())
+        if (pFormat->GetOtherTextBoxFormats())
         {
             const bool bModified = pFormat->GetDoc()->getIDocumentState().IsEnableSetModified();
             pFormat->GetDoc()->getIDocumentState().SetEnableSetModified(false);
