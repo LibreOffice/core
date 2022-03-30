@@ -16,6 +16,24 @@
       "message": "Hi,\nyou pushed the sample file of the unittest to master but the unittest is missing. Please, add the unittest",
       "revId": "bc72514f90d90e1ab3fed8167663e835edf03508",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb0cdc89_2e2fe9d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-03-30T07:44:03Z",
+      "side": 1,
+      "message": "Hi László, Tünde,\nPlease, do not forget about the message above. Thanks in advance",
+      "parentUuid": "32ad7354_5fcee903",
+      "revId": "bc72514f90d90e1ab3fed8167663e835edf03508",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
