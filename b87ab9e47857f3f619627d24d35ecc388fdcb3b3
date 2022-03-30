@@ -33,6 +33,24 @@
       "message": "Nit: would it make sense to avoid this duplication and enable TableRowKeep in SettingsTable::ApplyProperties() instead? I think RtfFilter should only enable flags which are specific to RTF and this affects both DOCX and RTF.",
       "revId": "b87ab9e47857f3f619627d24d35ecc388fdcb3b3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ef2e10d_dced87c6",
+        "filename": "writerfilter/source/filter/RtfFilter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-03-30T14:30:22Z",
+      "side": 1,
+      "message": "I was thinking with idea of explicit setting value. But yes, it is not of much sense here. Good proposal",
+      "parentUuid": "7bc1876e_259b7065",
+      "revId": "b87ab9e47857f3f619627d24d35ecc388fdcb3b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
