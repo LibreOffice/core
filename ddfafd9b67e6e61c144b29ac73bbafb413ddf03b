@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37be1c33_7c5131bc",
+        "filename": "sw/source/core/attr/swatrset.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-03-30T12:23:08Z",
+      "side": 1,
+      "message": "hmm it isnt expected that there is no style handle, maybe there\u0027s a bug somewhere else.",
+      "revId": "ddfafd9b67e6e61c144b29ac73bbafb413ddf03b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
