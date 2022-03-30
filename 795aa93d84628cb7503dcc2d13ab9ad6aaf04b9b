@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d46f41c_12542e39",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-30T16:16:37Z",
+      "side": 1,
+      "message": "@Tünde: very nice and useful fix! Thanks for it!\n\n@Tünde, Miklós: Using only checksum for recognizing image duplication is a regression, because it results image loss at checksum collision. So I suggest a byte for byte comparison for the images with the same checksum using Graphic class operator \u003d\u003d, to avoid of the very unlikely, but potential image loss.\n\nIt would be fine to fix the patches listed in the commit descriptions, too. I suggest to file new bugs for those.\n\nI think, the extra time of the comparison is not so high: images linked multiply in the document are mostly small. But the gain is extremely important, guaranteed lossless OOXML export, as before.\n\nWhat is your opinion, Miklós?\n",
+      "revId": "795aa93d84628cb7503dcc2d13ab9ad6aaf04b9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
