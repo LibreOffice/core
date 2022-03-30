@@ -2604,8 +2604,6 @@ bool ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
             *pOnlyNotBecauseOfMatrix = false;
         return false;
     }
-    nCol1 = ClampToAllocatedColumns(nCol1);
-    nCol2 = ClampToAllocatedColumns(nCol2);
 
     bool bIsEditable = true;
     if ( nLockCount )
