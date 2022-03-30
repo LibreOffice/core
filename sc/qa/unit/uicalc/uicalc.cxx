@@ -1409,6 +1409,23 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
     CPPUNIT_ASSERT_EQUAL(OUString(""), pDoc->GetString(ScAddress(0, 2, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf86166)
+{
+    ScModelObj* pModelObj = createDoc("tdf86166.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(2), pDoc->GetTableCount());
+
+    uno::Sequence<beans::PropertyValue> aArgs(
+        comphelper::InitPropertySequence({ { "Index", uno::Any(sal_uInt16(0)) } }));
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Remove", aArgs);
+
+    CPPUNIT_ASSERT_EQUAL(static_cast<SCTAB>(1), pDoc->GetTableCount());
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf108292)
 {
     ScModelObj* pModelObj = createDoc("tdf108292.ods");
