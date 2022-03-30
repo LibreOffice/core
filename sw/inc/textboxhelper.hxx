@@ -214,7 +214,7 @@ public:
     ~SwTextBoxNode();
 
     // default copy ctor is enough
-    SwTextBoxNode(SwTextBoxNode&) = default;
+    SwTextBoxNode(const SwTextBoxNode&) = default;
 
     // This method adds a textbox entry to the shape
     // Parameters:
@@ -225,7 +225,12 @@ public:
     // This will remove the textbox entry.
     // Parameters:
     //     pDrawObject: The shape which have the textbox to be deleted.
-    void DelTextBox(const SdrObject* pDrawObject);
+    void DelTextBox(const SdrObject* pDrawObject, bool bDelFromDoc = false);
+
+    // This will remove the textbox entry.
+    // Parameters:
+    //     pTextBox: The textbox what have to be deleted.
+    void DelTextBox(const SwFrameFormat* pTextBox, bool bDelFromDoc = false);
 
     // This will return with the frame format of the textbox what belongs
     // to the given shape (pDrawObject)
