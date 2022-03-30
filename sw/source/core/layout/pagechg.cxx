@@ -1339,13 +1339,19 @@ namespace
 
         pPage->PreparePage( bFootnote );
         // If the sibling has no body text, destroy it as long as it is no footnote page.
-        if ( pSibling && !pSibling->IsFootnotePage() &&
-             !pSibling->FindFirstBodyContent() &&
-             (!pRefPage || !isDeleteForbidden(pSibling)) )
+        if (!pSibling)
+            return true;
+        if (pSibling->IsFootnotePage())
+            return true;
+        if (pSibling->FindFirstBodyContent())
+            return true;
+
+        if (!pRefPage || !isDeleteForbidden(pSibling))
         {
             pRoot->RemovePage( pRefSibling, SwRemoveResult::Next ) ;
             return false;
         }
+
         return true;
     }
 }
