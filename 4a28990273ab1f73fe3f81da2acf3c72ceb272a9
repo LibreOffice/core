@@ -70,6 +70,24 @@
       "parentUuid": "dba2cf0d_d0256cc9",
       "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd57ceea_7d491a02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T06:13:09Z",
+      "side": 1,
+      "message": "\u003e the initial name was my design initiave\n\nSorry, didn\u0027t quite understand this. Do you mean that \"BMP_CALC_LC\" was the name that you created? Or \"SvImageId::Calc\"? Or \"lx03126\"?\n\nIt is indeed not related to this specific change, but I ask you please revert any change where you started to use Word and Excel in our icons.",
+      "parentUuid": "b4e24085_ca21e6a0",
+      "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
