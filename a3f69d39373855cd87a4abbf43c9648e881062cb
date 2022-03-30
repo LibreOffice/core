@@ -35,6 +35,91 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "60bb340e_a556b817",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T05:54:41Z",
+      "side": 1,
+      "message": "\"Drop something\" is not a valid comment in the code. Comments must tell what the code does, to help reader understand the logic, not describe what used to be here long, long time ago...\n\nIn case you want to discuss something, add comment (like this one I write) with the questions/clarifications.",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d609bf33_cdf0fddb",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T05:54:41Z",
+      "side": 1,
+      "message": "How Format(23) is related to testing of Null?",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6d027e9_7cc3fa73",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T05:54:41Z",
+      "side": 1,
+      "message": "For such case, you can provide a custom error handler that would set some variable; make that handler active for the duration of one statement, restoring it after it; and test that the variable is set.",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccaf3a84_12d3739f",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T05:54:41Z",
+      "side": 1,
+      "message": "How the last two tests (\";;;NNN\" vs \";;;123ABCDEFGHIJ123\") differ logically?",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f519a65_fcfe1012",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T05:54:41Z",
+      "side": 1,
+      "message": "Not quite clear, what it means. The Format(Null) is not null format string; so does this line belong to format string or to value?",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "fcf96f95_4a392236",

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fdf1874_cc1d57b6",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T05:54:41Z",
+      "side": 0,
+      "message": "This would be a breaking change ... Do you see a way to keep this behavior, while simplifying the implementation?",
+      "range": {
+        "startLine": 72,
+        "startChar": 68,
+        "endLine": 72,
+        "endChar": 69
+      },
+      "revId": "2816f498505bab01bc0f17ef0962ece663c607c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
