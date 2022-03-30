@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d07e7fa_d30cf1b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-30T13:21:51Z",
+      "side": 1,
+      "message": "\u003e Patch Set 3:\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/111328/ : FAILURE\n\u003e \n\u003e the cppunit test CppunitTest_sal_rtl failed ( https://ci.libreoffice.org/job/gerrit_windows/123452/ )\n\nFor the record so we don\u0027t forget: Mike asked about this weirdness in Visual Studio community site: https://developercommunity.visualstudio.com/t/std::hypot1-123-gives-wrong-result/10000537?entry\u003dproblem",
+      "revId": "83837dd8f4d29e80f99775a8d0364e2bf4a5a5ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
