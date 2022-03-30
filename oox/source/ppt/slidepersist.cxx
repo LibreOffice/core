@@ -347,6 +347,8 @@ void SlidePersist::createConnectorShapeConnection()
     for (sal_Int32 i = 0; i < nConnectorShapeCount; i++)
     {
         const auto& pIt = maShapeMap.find(maConnectorShapeId[i]);
+        if (pIt == maShapeMap.end())
+            continue;
         oox::drawingml::ConnectorShapePropertiesList aConnectorShapeProperties
             = pIt->second->getConnectorShapeProperties();
         uno::Reference<drawing::XShape> xConnector(pIt->second->getXShape(), uno::UNO_QUERY);
