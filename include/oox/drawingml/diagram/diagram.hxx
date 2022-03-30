@@ -30,9 +30,6 @@
 
 namespace oox::drawingml {
 
-class DiagramData;
-typedef std::shared_ptr<DiagramData> DiagramDataPtr;
-
 /** load diagram data, and put resulting graphic into shape
 
     This method loads the diagram data fragments from the given paths,
