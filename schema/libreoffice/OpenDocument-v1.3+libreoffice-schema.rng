@@ -2621,7 +2621,7 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
-  <!-- TODO no proposal for clearing breaks -->
+  <!-- https://issues.oasis-open.org/browse/OFFICE-4124 -->
   <rng:define name="paragraph-content" combine="choice">
     <rng:element name="text:line-break">
       <rng:optional>
