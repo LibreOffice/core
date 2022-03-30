@@ -93,19 +93,14 @@ void DiagramData::secureDataFromShapeToModelAfterDiagramImport()
     // more easily.
 }
 
-DiagramData::DiagramData() :
-    mpFillProperties( std::make_shared<FillProperties>() )
+DiagramData::DiagramData()
+: svx::diagram::DiagramData()
+, mpFillProperties( std::make_shared<FillProperties>() )
 {
 }
 
-const svx::diagram::Point* DiagramData::getRootPoint() const
+DiagramData::~DiagramData()
 {
-    for (const auto & aCurrPoint : maPoints)
-        if (aCurrPoint.mnXMLType == svx::diagram::TypeConstant::XML_doc)
-            return &aCurrPoint;
-
-    SAL_WARN("oox.drawingml", "No root point");
-    return nullptr;
 }
 
 static void Connection_dump(const svx::diagram::Connection& rConnection)
@@ -175,14 +170,6 @@ void DiagramData::getChildrenString(
         getChildrenString(rBuf, pChild, nLevel + 1);
 }
 
-OUString DiagramData::getString() const
-{
-    OUStringBuffer aBuf;
-    const svx::diagram::Point* pPoint = getRootPoint();
-    getChildrenString(aBuf, pPoint, 0);
-    return aBuf.makeStringAndClear();
-}
-
 std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUString& rParentId) const
 {
     const OUString sModelId = rParentId.isEmpty() ? getRootPoint()->msModelId : rParentId;
@@ -208,20 +195,6 @@ std::vector<std::pair<OUString, OUString>> DiagramData::getChildren(const OUStri
                     aChildren.end());
 
     return aChildren;
-}
-
-void DiagramData::addConnection(svx::diagram::TypeConstant nType, const OUString& sSourceId, const OUString& sDestId)
-{
-    sal_Int32 nMaxOrd = -1;
-    for (const auto& aCxn : maConnections)
-        if (aCxn.mnXMLType == nType && aCxn.msSourceId == sSourceId)
-            nMaxOrd = std::max(nMaxOrd, aCxn.mnSourceOrder);
-
-    svx::diagram::Connection& rCxn = maConnections.emplace_back();
-    rCxn.mnXMLType = nType;
-    rCxn.msSourceId = sSourceId;
-    rCxn.msDestId = sDestId;
-    rCxn.mnSourceOrder = nMaxOrd + 1;
 }
 
 OUString DiagramData::addNode(const OUString& rText)
@@ -285,58 +258,6 @@ OUString DiagramData::addNode(const OUString& rText)
 
     build(true);
     return sNewNodeId;
-}
-
-bool DiagramData::removeNode(const OUString& rNodeId)
-{
-    // check if it doesn't have children
-    for (const auto& aCxn : maConnections)
-        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msSourceId == rNodeId)
-        {
-            SAL_WARN("oox.drawingml", "Node has children - can't be removed");
-            return false;
-        }
-
-    svx::diagram::Connection aParCxn;
-    for (const auto& aCxn : maConnections)
-        if (aCxn.mnXMLType == svx::diagram::TypeConstant::XML_parOf && aCxn.msDestId == rNodeId)
-            aParCxn = aCxn;
-
-    std::unordered_set<OUString> aIdsToRemove;
-    aIdsToRemove.insert(rNodeId);
-    if (!aParCxn.msParTransId.isEmpty())
-        aIdsToRemove.insert(aParCxn.msParTransId);
-    if (!aParCxn.msSibTransId.isEmpty())
-        aIdsToRemove.insert(aParCxn.msSibTransId);
-
-    for (const svx::diagram::Point& rPoint : maPoints)
-        if (aIdsToRemove.count(rPoint.msPresentationAssociationId))
-            aIdsToRemove.insert(rPoint.msModelId);
-
-    // insert also transition nodes
-    for (const auto& aCxn : maConnections)
-        if (aIdsToRemove.count(aCxn.msSourceId) || aIdsToRemove.count(aCxn.msDestId))
-            if (!aCxn.msPresId.isEmpty())
-                aIdsToRemove.insert(aCxn.msPresId);
-
-    // remove connections
-    maConnections.erase(std::remove_if(maConnections.begin(), maConnections.end(),
-                                       [aIdsToRemove](const svx::diagram::Connection& rCxn) {
-                                           return aIdsToRemove.count(rCxn.msSourceId) || aIdsToRemove.count(rCxn.msDestId);
-                                       }),
-                        maConnections.end());
-
-    // remove data and presentation nodes
-    maPoints.erase(std::remove_if(maPoints.begin(), maPoints.end(),
-                                  [aIdsToRemove](const svx::diagram::Point& rPoint) {
-                                      return aIdsToRemove.count(rPoint.msModelId);
-                                  }),
-                   maPoints.end());
-
-    // TODO: fix source/dest order
-
-    build(true);
-    return true;
 }
 
 #ifdef DEBUG_OOX_DIAGRAM

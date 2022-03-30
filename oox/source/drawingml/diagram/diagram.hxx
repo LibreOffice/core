@@ -66,13 +66,13 @@ public:
         { return mpNode; }
     const LayoutNodePtr & getNode() const
         { return mpNode; }
-    DiagramDataPtr & getSampData()
+    OoxDiagramDataPtr& getSampData()
         { return mpSampData; }
-    const DiagramDataPtr & getSampData() const
+    const OoxDiagramDataPtr& getSampData() const
         { return mpSampData; }
-    DiagramDataPtr & getStyleData()
+    OoxDiagramDataPtr& getStyleData()
         { return mpStyleData; }
-    const DiagramDataPtr & getStyleData() const
+    const OoxDiagramDataPtr& getStyleData() const
         { return mpStyleData; }
     LayoutAtomMap & getLayoutAtomMap()
         { return maLayoutAtomMap; }
@@ -88,8 +88,8 @@ private:
     OUString msTitle;
     OUString msDesc;
     LayoutNodePtr  mpNode;
-    DiagramDataPtr mpSampData;
-    DiagramDataPtr mpStyleData;
+    OoxDiagramDataPtr mpSampData;
+    OoxDiagramDataPtr mpStyleData;
     // TODO
     // catLst
     // clrData
@@ -129,9 +129,9 @@ class Diagram
 {
 public:
     explicit Diagram();
-    void setData( const DiagramDataPtr & pData )
+    void setData( OoxDiagramDataPtr& pData )
         { mpData = pData; }
-    const DiagramDataPtr& getData() const
+    const OoxDiagramDataPtr& getData() const
         { return mpData; }
     void setLayout( const DiagramLayoutPtr & pLayout )
         { mpLayout = pLayout; }
@@ -154,7 +154,7 @@ private:
     // This contains groups of shapes: automatic font size is the same in each group.
     oox::core::NamedShapePairs maDiagramFontHeights;
 
-    DiagramDataPtr                 mpData;
+    OoxDiagramDataPtr              mpData;
     DiagramLayoutPtr               mpLayout;
     DiagramQStyleMap               maStyles;
     DiagramColorMap                maColors;
