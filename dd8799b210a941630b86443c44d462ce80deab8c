@@ -33,6 +33,24 @@
       "message": "hmm this is typically called after RemoveFollowFlowLine() so there is some risk that we end up with a bad layout... but then again, it was already checking for IsJoinLocked() before so it was already broken...",
       "revId": "dd8799b210a941630b86443c44d462ce80deab8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ce2561c_51532674",
+        "filename": "sw/source/core/layout/tabfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1389,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-30T10:56:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "8fc4c4fc_26118cf0",
+      "revId": "dd8799b210a941630b86443c44d462ce80deab8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
