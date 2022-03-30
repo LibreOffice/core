@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d16135ac_f54380e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-30T21:09:14Z",
+      "side": 1,
+      "message": "I noticed that this same check was used for \"IsAttrAtPos::Ftn\" case but I got no real understanding.",
+      "revId": "f3bbc08acf4e55e00b371bf14474742c648758e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
