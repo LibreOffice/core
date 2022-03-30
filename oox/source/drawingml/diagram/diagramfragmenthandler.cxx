@@ -33,7 +33,7 @@ namespace oox::drawingml {
 
 DiagramDataFragmentHandler::DiagramDataFragmentHandler( XmlFilterBase& rFilter,
                                                         const OUString& rFragmentPath,
-                                                        const DiagramDataPtr& rDataPtr )
+                                                        const OoxDiagramDataPtr& rDataPtr )
     : FragmentHandler2( rFilter, rFragmentPath )
     , mpDataPtr( rDataPtr )
 {

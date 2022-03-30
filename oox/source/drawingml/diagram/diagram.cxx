@@ -298,7 +298,7 @@ void loadDiagram( ShapePtr const & pShape,
 {
     DiagramPtr pDiagram = std::make_shared<Diagram>();
 
-    DiagramDataPtr pData = std::make_shared<DiagramData>();
+    OoxDiagramDataPtr pData = std::make_shared<DiagramData>();
     pDiagram->setData( pData );
 
     DiagramLayoutPtr pLayout = std::make_shared<DiagramLayout>(*pDiagram);

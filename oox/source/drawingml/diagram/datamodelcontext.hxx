@@ -29,13 +29,13 @@ namespace oox::drawingml {
 class DataModelContext final : public ::oox::core::ContextHandler2
 {
 public:
-    DataModelContext( ::oox::core::ContextHandler2Helper const & rParent, const DiagramDataPtr & pDataModelPtr );
+    DataModelContext( ::oox::core::ContextHandler2Helper const& rParent, const OoxDiagramDataPtr& pDataModelPtr );
     virtual ~DataModelContext() override;
 
     virtual ::oox::core::ContextHandlerRef onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
 
 private:
-    DiagramDataPtr mpDataModel;
+    OoxDiagramDataPtr mpDataModel;
 };
 
 }
