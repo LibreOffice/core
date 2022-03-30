@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5363732e_f07f3f26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-30T06:00:20Z",
+      "side": 1,
+      "message": "License statement in case someone is wondering https://lists.freedesktop.org/archives/libreoffice/2021-February/086837.html",
+      "revId": "c03b09e502bf178ae3b6752408e4f9813d4a49a8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
