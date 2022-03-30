@@ -3473,6 +3473,7 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_TXTATR_CJK_RUBY */           nullptr,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  nullptr,
 /* RES_TXTATR_INPUTFIELD */         nullptr,
+/* RES_TXTATR_CONTENTCONTROL */     nullptr,
 
 /* RES_TXTATR_FIELD */              nullptr,
 /* RES_TXTATR_FLYCNT */             nullptr,
@@ -3480,7 +3481,6 @@ SwAttrFnTab const aCSS1AttrFnTab = {
 /* RES_TXTATR_ANNOTATION */         nullptr,
 /* RES_TXTATR_LINEBREAK */          nullptr,
 /* RES_TXTATR_DUMMY1 */             nullptr, // Dummy:
-/* RES_TXTATR_DUMMY2 */             nullptr, // Dummy:
 
 /* RES_PARATR_LINESPACING   */      OutCSS1_SvxLineSpacing,
 /* RES_PARATR_ADJUST    */          OutCSS1_SvxAdjust,
