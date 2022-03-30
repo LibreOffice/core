@@ -11,6 +11,7 @@
 
 #include <string_view>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -312,6 +313,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
         uno::Reference<drawing::XShape> xShape = getShape(i);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(506), getProperty<awt::Rectangle>(xShape, "BoundRect").Height);
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148273_sectionBulletFormatLeak, "tdf148273_sectionBulletFormatLeak.docx")
+{
+    // get a paragraph with bullet point after section break
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(4);
+    uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
+
+    // Make sure that the bullet has no ListAutoFormat inherited from
+    // the empty paragraph before the section break
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. empty paragraph formats from the first section leaked to the bullet's formatting
+    uno::Any aValue = xProps->getPropertyValue("ListAutoFormat");
+    CPPUNIT_ASSERT_EQUAL(false, aValue.hasValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
