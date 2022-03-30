@@ -1345,14 +1345,10 @@ namespace
             return true;
         if (pSibling->FindFirstBodyContent())
             return true;
-
-        if (!pRefPage || !isDeleteForbidden(pSibling))
-        {
-            pRoot->RemovePage( pRefSibling, SwRemoveResult::Next ) ;
-            return false;
-        }
-
-        return true;
+        if (isDeleteForbidden(pSibling))
+            return true;
+        pRoot->RemovePage(pRefSibling, SwRemoveResult::Next);
+        return false;
     }
 }
 
