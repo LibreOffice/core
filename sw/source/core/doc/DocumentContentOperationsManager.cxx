@@ -1563,7 +1563,7 @@ namespace //local functions originally from docfmt.cxx
                 SfxItemSetFixed<
                         RES_TXTATR_REFMARK, RES_TXTATR_METAFIELD,
                         RES_TXTATR_CJK_RUBY, RES_TXTATR_CJK_RUBY,
-                        RES_TXTATR_INPUTFIELD, RES_TXTATR_INPUTFIELD>
+                        RES_TXTATR_INPUTFIELD, RES_TXTATR_CONTENTCONTROL>
                      aTextSet(rDoc.GetAttrPool());
 
                 aTextSet.Put( rChgSet );

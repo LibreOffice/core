@@ -100,6 +100,7 @@
 #include <fmtline.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtmeta.hxx>
+#include <formatcontentcontrol.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrfmrk.hxx>
@@ -315,6 +316,7 @@ SfxItemInfo aSlotTab[] =
     { SID_ATTR_CHAR_CJK_RUBY, false },          // RES_TXTATR_CJK_RUBY
     { 0, true },                           // RES_TXTATR_UNKNOWN_CONTAINER
     { 0, false },                               // RES_TXTATR_INPUTFIELD
+    { 0, false },                               // RES_TXTATR_CONTENTCONTROL
 
     { 0, false },                               // RES_TXTATR_FIELD
     { 0, false },                               // RES_TXTATR_FLYCNT
@@ -322,7 +324,6 @@ SfxItemInfo aSlotTab[] =
     { 0, false },                               // RES_TXTATR_ANNOTATION
     { 0, false },                               // RES_TXTATR_LINEBREAK
     { 0, true },                           // RES_TXTATR_DUMMY1
-    { 0, true },                           // RES_TXTATR_DUMMY2
 
     { SID_ATTR_PARA_LINESPACE, true },     // RES_PARATR_LINESPACING
     { SID_ATTR_PARA_ADJUST, true },        // RES_PARATR_ADJUST
@@ -513,6 +514,7 @@ void InitCore()
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] =      new SwFormatRuby( OUString() );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] = new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
     aAttrTab[ RES_TXTATR_INPUTFIELD - POOLATTR_BEGIN ] = new SwFormatField( RES_TXTATR_INPUTFIELD );
+    aAttrTab[ RES_TXTATR_CONTENTCONTROL - POOLATTR_BEGIN ] = new SwFormatContentControl( RES_TXTATR_CONTENTCONTROL );
 
     aAttrTab[ RES_TXTATR_FIELD- POOLATTR_BEGIN ] =          new SwFormatField( RES_TXTATR_FIELD );
     aAttrTab[ RES_TXTATR_FLYCNT - POOLATTR_BEGIN ] =        new SwFormatFlyCnt( nullptr );
@@ -522,7 +524,6 @@ void InitCore()
 
 // TextAttr - Dummies
     aAttrTab[ RES_TXTATR_DUMMY1 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY1 );
-    aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] =        new SfxBoolItem( RES_TXTATR_DUMMY2 );
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] =    new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
     aAttrTab[ RES_PARATR_ADJUST- POOLATTR_BEGIN ] =         new SvxAdjustItem( SvxAdjust::Left, RES_PARATR_ADJUST );

@@ -3281,6 +3281,7 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_CJK_RUBY */           nullptr,
 /* RES_TXTATR_UNKNOWN_CONTAINER */  nullptr,
 /* RES_TXTATR_INPUTFIELD */         OutHTML_SwFormatField,
+/* RES_TXTATR_CONTENTCONTROL */     nullptr,
 
 /* RES_TXTATR_FIELD */              OutHTML_SwFormatField,
 /* RES_TXTATR_FLYCNT */             OutHTML_SwFlyCnt,
@@ -3288,7 +3289,6 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_ANNOTATION */         OutHTML_SwFormatField,
 /* RES_TXTATR_LINEBREAK */          OutHTML_SwFormatLineBreak,
 /* RES_TXTATR_DUMMY1 */             nullptr, // Dummy:
-/* RES_TXTATR_DUMMY2 */             nullptr, // Dummy:
 
 /* RES_PARATR_LINESPACING   */      nullptr,
 /* RES_PARATR_ADJUST    */          OutHTML_SvxAdjust,
