@@ -34,6 +34,24 @@
       "parentUuid": "80146041_49bee592",
       "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da121d52_c67b13f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-03-30T19:35:44Z",
+      "side": 1,
+      "message": "There\u0027s no actual error in the log, and I don\u0027t see why this should fail under normal circumstances. The best I can think of is a setup error, with recent Clang used for the build but the /usr/bin/ Clang presumably being horribly old. And the comment at https://gerrit.libreoffice.org/c/core/+/132309/3/configure.ac#6481 seems to be quite clear about that case. I don\u0027t know how to verify or do something about that either.",
+      "parentUuid": "a0ded213_afb543bd",
+      "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
