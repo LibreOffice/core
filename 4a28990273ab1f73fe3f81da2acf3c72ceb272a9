@@ -122,6 +122,24 @@
       "message": "Thanks for the archaeology, Mike. I reckon distinguishing the MS formats from the other files we can open was a useful feature.",
       "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0a7652e_626abb8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T12:14:19Z",
+      "side": 1,
+      "message": ":-D I tend to agree; but it\u0027s something different, right? It could be an enhancement request (with some doubt if we are permitted to use elements of their design in our icons - ... IANAL). But these specific icon images (these specific files) discussed here should be generic, do you agree?",
+      "parentUuid": "6cb7a1a2_8b72f7bf",
+      "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
