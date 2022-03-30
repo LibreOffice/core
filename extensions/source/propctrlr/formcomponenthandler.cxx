@@ -243,6 +243,10 @@ namespace pcr
     {
         const PropertyId nPropId( impl_getPropertyId_throwUnknownProperty( _rPropertyName ) );
 
+        // tdf#117159 crash with chart in database report
+        if (!m_xComponent)
+            return Any();
+
         Any aPropertyValue( m_xComponent->getPropertyValue( _rPropertyName ) );
 
         Reference< resource::XStringResourceResolver > xStringResourceResolver

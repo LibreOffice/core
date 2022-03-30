@@ -182,7 +182,8 @@ uno::Any SAL_CALL DataProviderHandler::getPropertyValue(const OUString & Propert
             //}
             break;
         case PROPERTY_ID_PREVIEW_COUNT:
-            aPropertyValue <<= m_xDataProvider->getRowLimit();
+            if (m_xDataProvider) // tdf#117159 crash with chart in database report otherwise
+                aPropertyValue <<= m_xDataProvider->getRowLimit();
             break;
         default:
             aPropertyValue = m_xFormComponentHandler->getPropertyValue( PropertyName );
