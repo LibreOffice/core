@@ -152,6 +152,7 @@ public:
     void testTextColumns_tdf140852();
     void testTextColumns_3columns();
     void testTdf59323_slideFooters();
+    void testTdf53970();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest2);
 
@@ -218,6 +219,7 @@ public:
     CPPUNIT_TEST(testTextColumns_tdf140852);
     CPPUNIT_TEST(testTextColumns_3columns);
     CPPUNIT_TEST(testTdf59323_slideFooters);
+    CPPUNIT_TEST(testTdf53970);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1806,6 +1808,19 @@ void SdOOXMLExportTest2::testTdf59323_slideFooters()
     // - Expected: 1
     // - Actual  : 0
     assertXPath(pXmlDocSlide1, "/p:sld/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:fld/a:rPr");
+
+    xDocShRef->DoClose();
+}
+
+void SdOOXMLExportTest2::testTdf53970()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf53970.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+
+    // Without fix in place, the media shape was lost on export.
+    CPPUNIT_ASSERT(getPage(0, xDocShRef)->hasElements());
 
     xDocShRef->DoClose();
 }
