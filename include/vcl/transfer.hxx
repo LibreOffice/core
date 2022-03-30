@@ -176,7 +176,7 @@ protected:
     const css::uno::Reference< css::datatransfer::clipboard::XClipboard >&
         getOwnClipboard() const { return mxClipboard; }
 
-private:
+public:
 
     // XTransferable
     virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& rFlavor ) override;
@@ -187,6 +187,8 @@ private:
     virtual css::uno::Any SAL_CALL getTransferData2(
         const css::datatransfer::DataFlavor& rFlavor, const OUString& rDestDoc ) override;
     virtual sal_Bool SAL_CALL isComplex() override;
+
+private:
 
     // XEventListener
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;

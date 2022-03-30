@@ -399,7 +399,8 @@ void SwAttrSet::CopyToModify( sw::BroadcastingModify& rMod ) const
             }
 
             if (pSrcDoc != pDstDoc &&
-                SfxItemState::SET == GetItemState(RES_PARATR_LIST_AUTOFMT, false, &pItem))
+                SfxItemState::SET == GetItemState(RES_PARATR_LIST_AUTOFMT, false, &pItem) &&
+                static_cast<SwFormatAutoFormat const&>(*pItem).GetStyleHandle())
             {
                 SfxItemSet const& rAutoStyle(*static_cast<SwFormatAutoFormat const&>(*pItem).GetStyleHandle());
                 std::shared_ptr<SfxItemSet> const pNewSet(
