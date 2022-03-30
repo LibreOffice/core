@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <memory>
 #include <stdlib.h>
 
@@ -1952,8 +1953,17 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
     switch( pExpr->GetType() )
     {
     case CSS1_LENGTH:
-        nIndent = static_cast<short>(pExpr->GetSLength());
-        bSet = true;
+        {
+            double n = std::round(pExpr->GetNumber());
+            SAL_WARN_IF(
+                n < std::numeric_limits<short>::min() || n > std::numeric_limits<short>::max(),
+                "sw.html", "clamping length " << n << " to short range");
+            nIndent = static_cast<short>(
+                std::clamp(
+                    n, double(std::numeric_limits<short>::min()),
+                    double(std::numeric_limits<short>::max())));
+            bSet = true;
+        }
         break;
     case CSS1_PIXLENGTH:
         {
