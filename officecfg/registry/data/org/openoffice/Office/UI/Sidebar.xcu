@@ -904,12 +904,41 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            DrawImpress, DrawPage,        visible, .uno:PageSetup  ;
+            Impress,     DrawPage,        visible, .uno:PageSetup  ;
             DrawImpress, default,         visible, .uno:PageSetup  ;
             DrawImpress, HandoutPage,     visible, .uno:PageSetup  ;
             DrawImpress, NotesPage,       visible, .uno:PageSetup  ;
             DrawImpress, SlidesorterPage, visible, .uno:PageSetup  ;
             DrawImpress, MasterPage,      visible, .uno:PageSetup  ;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SdPanelFactory/SlideBackgroundPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
+      <node oor:name="DrawPageDeck" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Page</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>DrawPageDeck</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>PropertyDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Draw,        DrawPage,        visible, .uno:PageSetup  ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
