@@ -4699,6 +4699,7 @@ if test "$enable_ld" != "no"; then
     fi
 fi
 AC_SUBST(USE_LD)
+AC_SUBST(LD)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes" -a "$_os" != Emscripten ; then
@@ -6471,6 +6472,9 @@ dnl ===================================================================
 if test "$_os" != "WINNT"; then
     PKG_PROG_PKG_CONFIG
 fi
+AC_SUBST(PKG_CONFIG)
+AC_SUBST(PKG_CONFIG_PATH)
+AC_SUBST(PKG_CONFIG_LIBDIR)
 
 if test "$_os" != "WINNT"; then
 
@@ -6478,27 +6482,20 @@ if test "$_os" != "WINNT"; then
     # /path/to/compiler/foo-gcc" you need to set the AR etc env vars
     # explicitly. Or put /path/to/compiler in PATH yourself.
 
-    # Use wrappers for LTO
-    if test "$ENABLE_LTO" = "TRUE" -a "$COM_IS_CLANG" != "TRUE"; then
-        AC_CHECK_TOOL(AR,gcc-ar)
-        AC_CHECK_TOOL(NM,gcc-nm)
-        AC_CHECK_TOOL(RANLIB,gcc-ranlib)
-    else
-        AC_CHECK_TOOL(AR,ar)
-        AC_CHECK_TOOL(NM,nm)
-        AC_CHECK_TOOL(RANLIB,ranlib)
+    toolprefix=gcc
+    if test "$COM_IS_CLANG" = "TRUE"; then
+        toolprefix=llvm
     fi
-    AC_CHECK_TOOL(OBJDUMP,objdump)
-    AC_CHECK_TOOL(READELF,readelf)
-    AC_CHECK_TOOL(STRIP,strip)
+    AC_CHECK_TOOLS(AR,$toolprefix-ar ar)
+    AC_CHECK_TOOLS(NM,$toolprefix-nm nm)
+    AC_CHECK_TOOLS(RANLIB,$toolprefix-ranlib ranlib)
+    AC_CHECK_TOOLS(OBJDUMP,$toolprefix-objdump objdump)
+    AC_CHECK_TOOLS(READELF,$toolprefix-readelf readelf)
+    AC_CHECK_TOOLS(STRIP,$toolprefix-strip strip)
 fi
 AC_SUBST(AR)
-AC_SUBST(LD)
 AC_SUBST(NM)
 AC_SUBST(OBJDUMP)
-AC_SUBST(PKG_CONFIG)
-AC_SUBST(PKG_CONFIG_PATH)
-AC_SUBST(PKG_CONFIG_LIBDIR)
 AC_SUBST(RANLIB)
 AC_SUBST(READELF)
 AC_SUBST(STRIP)
