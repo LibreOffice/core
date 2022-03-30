@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8fd159f_1e575122",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-30T20:37:00Z",
+      "side": 1,
+      "message": "I runned \"make connectivity.clean \u0026\u0026 make connectivity\", no pb.\nNevertheless, I may have missed something. (Jenkins may help here).\nDon\u0027t hesitate to tell if I\u0027m wrong and explain the use of this file.\n\nIf Jenkins is ok and no feedback, I\u0027ll push this in 24/48h.\n\nAs usual, it can be reverted quickly if someone finds a pb with it.\n\nI don\u0027t plan to cherry-pick this on 7.3 branch since it fixes nothing (and may bring some regression).\n\nMy goal is to remove \"sdbc:mysqlc:\" and \"DST_MYSQL_NATIVE_DIRECT\" to simplify and keep only \"sdbc:mysql:mysqlc:\" and \"DST_MYSQL_NATIVE\"\n\nAgain, perhaps I miss something.",
+      "revId": "cffaa0ef93002c578b03f164023349c9b5552de4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
