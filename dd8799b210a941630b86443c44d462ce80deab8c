@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "075ac378_c60172c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-03-30T08:52:28Z",
+      "side": 1,
+      "message": "tragically this one has a merge conflict",
+      "revId": "dd8799b210a941630b86443c44d462ce80deab8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8fc4c4fc_26118cf0",
