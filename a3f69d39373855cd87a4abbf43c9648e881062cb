@@ -1,6 +1,52 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c0d8625_0d173085",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T06:57:59Z",
+      "side": 1,
+      "message": "The \"changes according to the easyhack\" is not an appropriate commit message wording.\n\nThe commit may (and should) only refer to the bug tracker by using its number (as you did); everything else must be explanation that does not rely on the reader having access to the bug.\n\nOne simple appropriate title would be just \"tdf#143193 Format function cleanup\"; if you want to expand, you need to use something explaining the change (like, \"minimize ad-hoc logic\" or something).",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 69
+      },
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6022cce2_8cd8d559",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T06:57:59Z",
+      "side": 1,
+      "message": "Here, the \"as requested\" is also inappropriate. Of course, you try to make changes suggested in the easyhack; but you are not a robot, and you need to understand why you do that. Some suggested changes may be wrong; you are expected to do some investigation, and if needed, disagree with the change; if you *do implement*it, you are expected to explain the rationale behind the change (as if it was your idea, since at this time, it should already become an idea that you share). Your wording looks like \"it is requested, and I obeyed\" ;-)",
+      "range": {
+        "startLine": 9,
+        "startChar": 40,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1fcabb86_78c183f2",
