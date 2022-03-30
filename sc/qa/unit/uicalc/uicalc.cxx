@@ -1334,6 +1334,34 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf146994)
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.D3:Sheet1.D4"), aMarkedAreaString);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf45020)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    goToCell("A2:A3");
+
+    dispatchCommand(mxComponent, ".uno:HideRow", {});
+
+    goToCell("A1");
+
+    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_SHIFT | KEY_DOWN);
+    Scheduler::ProcessEventsToIdle();
+
+    ScRangeList aMarkedArea = ScDocShell::GetViewData()->GetMarkData().GetMarkedRanges();
+    OUString aMarkedAreaString;
+    ScRangeStringConverter::GetStringFromRangeList(aMarkedAreaString, &aMarkedArea, pDoc,
+                                                   formula::FormulaGrammar::CONV_OOO);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Sheet1.A1:Sheet1.A4
+    // - Actual  : Sheet1.A1:Sheet1.A2
+    CPPUNIT_ASSERT_EQUAL(OUString("Sheet1.A1:Sheet1.A4"), aMarkedAreaString);
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf117706)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
