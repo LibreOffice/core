@@ -1943,15 +1943,15 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testUnallocatedColumnsAttributes)
     ScDocument* pDoc = pModelObj->GetDocument();
     CPPUNIT_ASSERT(pDoc);
 
-    // If this check fails, this entire test needs adjusting.
-    CPPUNIT_ASSERT_EQUAL(SCCOL(64), pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, pDoc->GetAllocatedColumnsCount(0));
 
-    // Except for first 10 cells make the entire first row bold.
-    goToCell("K1:" + pDoc->MaxColAsString() + "1");
+    // Except for first 1 cell make the entire first row bold.
+    assert(INITIALCOLCOUNT >= 1);
+    goToCell("B1:" + pDoc->MaxColAsString() + "1");
     dispatchCommand(mxComponent, ".uno:Bold", {});
 
     // That shouldn't need allocating more columns, just changing the default attribute.
-    CPPUNIT_ASSERT_EQUAL(SCCOL(64), pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
     pDoc->GetPattern(pDoc->MaxCol(), 0, 0)->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
