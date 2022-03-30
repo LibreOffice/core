@@ -33,6 +33,7 @@ class SwUpdateAttr;
 class SwAttrSetChg;
 class SwDocPosUpdate;
 class SwFormatMeta;
+class SwFormatContentControl;
 class SvXMLAttrContainerItem;
 class SwMsgPoolItem;
 class SwPtrMsgPoolItem;
@@ -276,17 +277,17 @@ constexpr TypedWhichId<SwFormatCharFormat> RES_TXTATR_CHARFMT(52);
 constexpr TypedWhichId<SwFormatRuby> RES_TXTATR_CJK_RUBY(53);
 constexpr TypedWhichId<SvXMLAttrContainerItem> RES_TXTATR_UNKNOWN_CONTAINER(54);
 constexpr TypedWhichId<SwFormatField> RES_TXTATR_INPUTFIELD(55);
-constexpr sal_uInt16 RES_TXTATR_WITHEND_END(56);
+constexpr TypedWhichId<SwFormatContentControl> RES_TXTATR_CONTENTCONTROL(56);
+constexpr sal_uInt16 RES_TXTATR_WITHEND_END(57);
 
 // all TextAttributes without an end
 constexpr sal_uInt16 RES_TXTATR_NOEND_BEGIN(RES_TXTATR_WITHEND_END);
-constexpr TypedWhichId<SwFormatField> RES_TXTATR_FIELD(RES_TXTATR_NOEND_BEGIN); // 56
-constexpr TypedWhichId<SwFormatFlyCnt> RES_TXTATR_FLYCNT(57);
-constexpr TypedWhichId<SwFormatFootnote> RES_TXTATR_FTN(58);
-constexpr TypedWhichId<SwFormatField> RES_TXTATR_ANNOTATION(59);
-constexpr TypedWhichId<SwFormatLineBreak> RES_TXTATR_LINEBREAK(60);
-constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY1(61);
-constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY2(62);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_FIELD(RES_TXTATR_NOEND_BEGIN); // 57
+constexpr TypedWhichId<SwFormatFlyCnt> RES_TXTATR_FLYCNT(58);
+constexpr TypedWhichId<SwFormatFootnote> RES_TXTATR_FTN(59);
+constexpr TypedWhichId<SwFormatField> RES_TXTATR_ANNOTATION(60);
+constexpr TypedWhichId<SwFormatLineBreak> RES_TXTATR_LINEBREAK(61);
+constexpr TypedWhichId<SfxBoolItem> RES_TXTATR_DUMMY1(62);
 constexpr sal_uInt16 RES_TXTATR_NOEND_END(63);
 constexpr sal_uInt16 RES_TXTATR_END(RES_TXTATR_NOEND_END);
 

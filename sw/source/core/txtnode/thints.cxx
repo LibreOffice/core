@@ -52,6 +52,8 @@
 #include <ftnidx.hxx>
 #include <fmtruby.hxx>
 #include <fmtmeta.hxx>
+#include <formatcontentcontrol.hxx>
+#include <textcontentcontrol.hxx>
 #include <breakit.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -104,7 +106,8 @@ SwpHints::SwpHints(const SwTextNode& rParent)
 static void TextAttrDelete( SwDoc & rDoc, SwTextAttr * const pAttr )
 {
     if (RES_TXTATR_META == pAttr->Which() ||
-        RES_TXTATR_METAFIELD == pAttr->Which())
+        RES_TXTATR_METAFIELD == pAttr->Which() ||
+        pAttr->Which() == RES_TXTATR_CONTENTCONTROL)
     {
         static_txtattr_cast<SwTextMeta *>(pAttr)->ChgTextNode(nullptr); // prevents ASSERT
     }
@@ -160,7 +163,8 @@ bool isSelfNestable(const sal_uInt16 nWhich)
         (RES_TXTATR_INPUTFIELD == nWhich))
         return false;
     assert((RES_TXTATR_META  == nWhich) ||
-           (RES_TXTATR_METAFIELD  == nWhich));
+           (RES_TXTATR_METAFIELD  == nWhich) ||
+           (RES_TXTATR_CONTENTCONTROL  == nWhich));
     return true;
 }
 
@@ -172,7 +176,8 @@ bool isSplittable(const sal_uInt16 nWhich)
         return true;
     assert((RES_TXTATR_META  == nWhich) ||
            (RES_TXTATR_METAFIELD  == nWhich) ||
-           (RES_TXTATR_INPUTFIELD  == nWhich));
+           (RES_TXTATR_INPUTFIELD  == nWhich) ||
+           (RES_TXTATR_CONTENTCONTROL  == nWhich));
     return false;
 }
 
@@ -299,7 +304,8 @@ void SwpHints::InsertNesting(SwTextAttrNesting & rNewHint)
 /**
 
 The following hints correspond to well-formed XML elements in ODF:
-RES_TXTATR_INETFMT, RES_TXTATR_CJK_RUBY, RES_TXTATR_META, RES_TXTATR_METAFIELD
+RES_TXTATR_INETFMT, RES_TXTATR_CJK_RUBY, RES_TXTATR_META, RES_TXTATR_METAFIELD,
+RES_TXTATR_CONTENTCONTROL
 
 The writer core must ensure that these do not overlap; if they did,
 the document would not be storable as ODF.
@@ -322,6 +328,8 @@ It is possible to split Hyperlink and Ruby into multiple portions, such that
 the result is properly nested.
 
 meta and meta-field must not be split, because they have xml:id.
+
+content controls should not split, either.
 
 These constraints result in the following design:
 
@@ -376,6 +384,7 @@ SwpHints::TryInsertNesting( SwTextNode & rNode, SwTextAttrNesting & rNewHint )
             (RES_TXTATR_CJK_RUBY  == nNewWhich) ||
             (RES_TXTATR_META      == nNewWhich) ||
             (RES_TXTATR_METAFIELD == nNewWhich) ||
+            (RES_TXTATR_CONTENTCONTROL == nNewWhich) ||
             (RES_TXTATR_INPUTFIELD == nNewWhich));
 
     NestList_t OverlappingExisting; // existing hints to be split
@@ -1143,6 +1152,11 @@ SwTextAttr* MakeTextAttr(
     case RES_TXTATR_LINEBREAK:
         pNew = new SwTextLineBreak(static_cast<SwFormatLineBreak&>(rNew), nStt);
         break;
+    case RES_TXTATR_CONTENTCONTROL:
+        pNew = SwTextContentControl::CreateTextContentControl(
+            pTextNode, static_cast<SwFormatContentControl&>(rNew), nStt, nEnd,
+            bIsCopy == CopyOrNewType::Copy);
+        break;
     default:
         assert(RES_TXTATR_AUTOFMT == rNew.Which());
         pNew = new SwTextAttrEnd( rNew, nStt, nEnd );
@@ -1270,6 +1284,11 @@ void SwTextNode::DestroyAttr( SwTextAttr* pAttr )
         static_txtattr_cast<SwTextMeta*>(pAttr)->ChgTextNode(nullptr);
     }
         break;
+    case RES_TXTATR_CONTENTCONTROL:
+    {
+        static_txtattr_cast<SwTextContentControl*>(pAttr)->ChgTextNode(nullptr);
+        break;
+    }
 
     default:
         break;
@@ -3164,6 +3183,10 @@ bool SwpHints::TryInsertHint(
         static_txtattr_cast<SwTextMeta *>(pHint)->ChgTextNode( &rNode );
         break;
 
+    case RES_TXTATR_CONTENTCONTROL:
+        static_txtattr_cast<SwTextContentControl*>(pHint)->ChgTextNode( &rNode );
+        break;
+
     case RES_CHRATR_HIDDEN:
         rNode.SetCalcHiddenCharFlags();
         break;
@@ -3469,6 +3492,7 @@ sal_Unicode GetCharOfTextAttr( const SwTextAttr& rAttr )
         case RES_TXTATR_FTN:
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
+        case RES_TXTATR_CONTENTCONTROL:
         {
             cRet = CH_TXTATR_BREAKWORD;
         }

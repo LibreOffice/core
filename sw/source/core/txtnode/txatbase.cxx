@@ -165,6 +165,8 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
             break;
         case RES_TXTATR_META:
             break;
+        case RES_TXTATR_CONTENTCONTROL:
+            break;
         default:
             SAL_WARN("sw.core", "Unhandled TXTATR");
             break;
