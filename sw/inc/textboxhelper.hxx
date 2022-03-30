@@ -213,7 +213,7 @@ public:
     ~SwTextBoxNode();
 
     // default copy ctor is enough
-    SwTextBoxNode(SwTextBoxNode&) = default;
+    SwTextBoxNode(const SwTextBoxNode&) = default;
 
     // This method adds a textbox entry to the shape
     // Parameters:
