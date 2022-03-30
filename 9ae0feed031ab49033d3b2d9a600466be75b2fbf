@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10b0bf2a_9ad646d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-30T11:25:55Z",
+      "side": 1,
+      "message": "online.git calc/image_operation_spec.js failed, resume.",
+      "revId": "9ae0feed031ab49033d3b2d9a600466be75b2fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
