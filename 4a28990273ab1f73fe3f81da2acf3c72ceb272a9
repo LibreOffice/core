@@ -88,6 +88,23 @@
       "parentUuid": "b4e24085_ca21e6a0",
       "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a64aacc7_eef36cad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T06:44:03Z",
+      "side": 1,
+      "message": "FTR:\n\nhttps://git.libreoffice.org/core/+/dab21daeebe4907bc621b4304d1a10ef364be01e was the commit from 2010 where *old* \"word\"/\"excel\" resource identifiers were dropped (e.g., IMG_EXCEL), and their positions were merged with pre-existing *generic* resource identifiers (e.g., IMG_CALC). So again: the icons should be *generic*, not specific to some external app, since they mean \"anything that e.g. Calc can open\".",
+      "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
