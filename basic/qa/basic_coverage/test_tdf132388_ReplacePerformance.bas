@@ -21,7 +21,7 @@ Sub TestReplacePerformance()
     t = Now
     s = Replace(s, " ", "*", 1, -1, 1)
     t = Now - t
-    TestUtil.Assert(t <= TimeSerial(0, 1, 0), "TestReplacePerformance", Format(t, """t = ""[s]"" s"""))
+    TestUtil.Assert(t <= TimeSerial(0, 2, 0), "TestReplacePerformance", Format(t, """t = ""[s]"" s"""))
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("TestReplacePerformance", Err, Error$, Erl)
