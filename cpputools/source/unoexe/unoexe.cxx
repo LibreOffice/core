@@ -18,6 +18,7 @@
  */
 
 #include <stdio.h>
+#include <mutex>
 #include <string_view>
 
 #include <sal/main.h>
@@ -229,7 +230,7 @@ class OInstanceProvider
 {
     Reference< XComponentContext > _xContext;
 
-    Mutex                             _aSingleInstanceMutex;
+    std::mutex                        _aSingleInstanceMutex;
     Reference< XInterface >           _xSingleInstance;
     bool                              _bSingleInstance;
 
@@ -296,7 +297,7 @@ Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
             {
                 if (! _xSingleInstance.is())
                 {
-                    MutexGuard aGuard( _aSingleInstanceMutex );
+                    std::lock_guard aGuard( _aSingleInstanceMutex );
                     if (! _xSingleInstance.is())
                     {
                         _xSingleInstance = createInstance();
