@@ -16,6 +16,24 @@
       "message": "you can use cppu::BaseMutex (cppuhelper/basemutex.hxx) instead",
       "revId": "eac46a8f175ec65f6d50ac445c4d90e027b8cb2c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "711b8d5d_4834e0bf",
+        "filename": "shell/source/win32/jumplist/JumpList.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-03-30T09:43:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af4e1cff_b76e794a",
+      "revId": "eac46a8f175ec65f6d50ac445c4d90e027b8cb2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
