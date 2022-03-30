@@ -83,7 +83,7 @@ inline std::basic_ostream<charT, traits> & operator <<(
     return rStream;
 }
 
-bool TooLargeScaleForMapMode(const Fraction& rScale);
+bool TooLargeScaleForMapMode(const Fraction& rScale, int nDPI);
 
 #endif // INCLUDED_VCL_MAPMOD_HXX
 

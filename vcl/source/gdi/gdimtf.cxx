@@ -486,11 +486,12 @@ void GDIMetaFile::Play(OutputDevice& rOut, const Point& rPos,
     aScaleY *= aDrawMap.GetScaleY();
     // try reducing inaccurary first and abandon if the scaling
     // still cannot be achieved
-    if (TooLargeScaleForMapMode(aScaleX))
+    if (TooLargeScaleForMapMode(aScaleX, rOut.GetDPIX()))
         aScaleX.ReduceInaccurate(10);
-    if (TooLargeScaleForMapMode(aScaleY))
+    if (TooLargeScaleForMapMode(aScaleY, rOut.GetDPIY()))
         aScaleY.ReduceInaccurate(10);
-    if (TooLargeScaleForMapMode(aScaleX) || TooLargeScaleForMapMode(aScaleY))
+    if (TooLargeScaleForMapMode(aScaleX, rOut.GetDPIX()) ||
+        TooLargeScaleForMapMode(aScaleY, rOut.GetDPIY()))
     {
         SAL_WARN("vcl", "GDIMetaFile Scaling is too high");
         return;
