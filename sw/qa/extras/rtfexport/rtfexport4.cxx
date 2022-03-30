@@ -26,6 +26,7 @@
 #include <fmtanchr.hxx>
 #include <frameformats.hxx>
 #include <formatlinebreak.hxx>
+#include <wrtsh.hxx>
 
 using namespace css;
 
@@ -401,6 +402,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf126309)
     CPPUNIT_ASSERT_EQUAL(
         style::ParagraphAdjust_RIGHT,
         static_cast<style::ParagraphAdjust>(getProperty<sal_Int16>(getParagraph(1), "ParaAdjust")));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf116358, "tdf116358.rtf")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwWrtShell* pWrtShell = pTextDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // Insert a paragraph break
+    pWrtShell->SplitNode(false);
+
+    // Entire table should go to page 2, no remains on first page
+    xmlDocUniquePtr pDump = parseLayoutDump();
+    {
+        xmlXPathObjectPtr pXmlObj = getXPathNode(pDump, "/root/page[1]/body/tab");
+        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+        sal_Int32 tablesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
+        xmlXPathFreeObject(pXmlObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(0), tablesOnPage);
+    }
+
+    {
+        xmlXPathObjectPtr pXmlObj = getXPathNode(pDump, "/root/page[2]/body/tab");
+        xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+        sal_Int32 tablesOnPage = xmlXPathNodeSetGetLength(pXmlNodes);
+        xmlXPathFreeObject(pXmlObj);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), tablesOnPage);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testGutterLeft)

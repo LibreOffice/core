@@ -539,11 +539,13 @@ static bool lcl_isDefault(const uno::Reference<beans::XPropertyState>& xProperty
 void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& xDoc)
 {
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
+    uno::Reference<lang::XMultiServiceFactory> xTextFactory(xDoc, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDocumentSettings(xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
+
+    xDocumentSettings->setPropertyValue("TableRowKeep", uno::makeAny(true));
 
     if (GetWordCompatibilityMode() <= 14)
     {
-        uno::Reference<lang::XMultiServiceFactory> xTextFactory(xDoc, uno::UNO_QUERY_THROW);
-        uno::Reference<beans::XPropertySet> xDocumentSettings(xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
         xDocumentSettings->setPropertyValue("MsWordCompMinLineHeightByFly", uno::makeAny(true));
         xDocumentSettings->setPropertyValue("TabOverMargin", uno::makeAny(true));
     }

@@ -421,8 +421,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 nParam = NS_ooxml::LN_CT_PPrBase_keepLines;
             break;
         case RTFKeyword::KEEPN:
-            if (m_aStates.top().getCurrentBuffer() != &m_aTableBufferStack.back())
-                nParam = NS_ooxml::LN_CT_PPrBase_keepNext;
+            nParam = NS_ooxml::LN_CT_PPrBase_keepNext;
             break;
         case RTFKeyword::INTBL:
         {
