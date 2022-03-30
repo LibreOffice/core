@@ -176,6 +176,24 @@
       "parentUuid": "a64aacc7_eef36cad",
       "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e19050e9_8f8c8c65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-30T12:55:05Z",
+      "side": 1,
+      "message": "You see the same commit message that I see ;-P\n\nIt mentions the \"obsolete img_s\", implying that these images were already unused at the time of that commit - meaning that, *if* they were ever used, some changes *prior* to that one could drop their usage. But I stopped digging after found that one, because that was the point that mage it clear that these specific icons that we are talking about in this gerrit change are used for both MS- and non-MS filetypes.\n\nAs I mentioned in response to Adolfo, I can see a benefit of recognizing MS filetypes - but that is, again, unrelated to the problem we discuss: *if* there appears an enhancement request to differentiate, and *if* it\u0027s accepted, then it must be implemented by adding *new* icons, and the accompanying *new* code to use those new icons in selected cases; while *these* icons must stay generic.\n\nPlease let us focus on a specific problem; it feels like we are slowly drift away, and start discussing unrelated stuff :-)",
+      "parentUuid": "59abef63_c0ce8e9b",
+      "revId": "4a28990273ab1f73fe3f81da2acf3c72ceb272a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
