@@ -16,6 +16,24 @@
       "message": "this and\n   https://gerrit.libreoffice.org/c/core/+/131841\nlook like they may address the same problem?",
       "revId": "e550b8d129d76df43369a7d6d9905ac96b94cc02",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "698f30d9_d09c7260",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-30T11:23:38Z",
+      "side": 1,
+      "message": "Hmm, I still get a crash in my testcase with that applied (and the code change in this change excluded), so I guess best is if the two co-exist.",
+      "parentUuid": "78594f4a_7de070b9",
+      "revId": "e550b8d129d76df43369a7d6d9905ac96b94cc02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
