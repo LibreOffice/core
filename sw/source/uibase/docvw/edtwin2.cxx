@@ -156,9 +156,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #ifdef DBG_UTIL
             case IsAttrAtPos::TableBoxValue:
             {
-                sText = OStringToOUString(OString::number(
-                            static_cast<const SwTableBoxValue*>(aContentAtPos.aFnd.pAttr)->GetValue()),
-                            osl_getThreadTextEncoding());
+                if(aContentAtPos.aFnd.pAttr)
+                {
+                    sText = OStringToOUString(OString::number(
+                                static_cast<const SwTableBoxValue*>(aContentAtPos.aFnd.pAttr)->GetValue()),
+                                osl_getThreadTextEncoding());
+                }
                 break;
             }
             case IsAttrAtPos::CurrAttrs:
