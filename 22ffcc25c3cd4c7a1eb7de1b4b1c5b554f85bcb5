@@ -22,6 +22,30 @@
       },
       "revId": "22ffcc25c3cd4c7a1eb7de1b4b1c5b554f85bcb5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf37ded5_c283601d",
+        "filename": "oox/source/export/drawingml.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1249,
+      "author": {
+        "id": 1001967
+      },
+      "writtenOn": "2022-03-30T09:40:43Z",
+      "side": 1,
+      "message": "Yes, the 797fef38612fb2fd62d1f6591619b9361e526bca will be revocable, if I will add this fix for docx. I will do that in a second patch.",
+      "parentUuid": "638952fa_b1e385f6",
+      "range": {
+        "startLine": 1249,
+        "startChar": 48,
+        "endLine": 1249,
+        "endChar": 77
+      },
+      "revId": "22ffcc25c3cd4c7a1eb7de1b4b1c5b554f85bcb5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
