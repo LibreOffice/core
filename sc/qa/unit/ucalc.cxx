@@ -1411,48 +1411,55 @@ void Test::testIteratorsUnallocatedColumnsAttributes()
 {
     m_pDoc->InsertTab(0, "Tab1");
 
+    // Set values in first two columns, to ensure allocation of those columns.
+    m_pDoc->SetValue(ScAddress(0,1,0), 1);
+    m_pDoc->SetValue(ScAddress(1,1,0), 2);
+    constexpr SCCOL allocatedColsCount = 2;
+    assert( allocatedColsCount >= INITIALCOLCOUNT );
+    CPPUNIT_ASSERT_EQUAL(allocatedColsCount, m_pDoc->GetAllocatedColumnsCount(0));
+
     // Make entire second row and third row bold.
     ScPatternAttr boldAttr(m_pDoc->GetPool());
     boldAttr.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD, ATTR_FONT_WEIGHT));
     m_pDoc->ApplyPatternAreaTab(0, 1, m_pDoc->MaxCol(), 2, 0, boldAttr);
 
     // That shouldn't need allocating more columns, just changing the default attribute.
-    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), m_pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT_EQUAL(allocatedColsCount, m_pDoc->GetAllocatedColumnsCount(0));
     vcl::Font aFont;
     const ScPatternAttr* pattern = m_pDoc->GetPattern(m_pDoc->MaxCol(), 1, 0);
     pattern->GetFont(aFont, SC_AUTOCOL_RAW);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("font should be bold", WEIGHT_BOLD, aFont.GetWeight());
 
     // Test iterators.
-    ScDocAttrIterator docit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    ScDocAttrIterator docit( *m_pDoc, 0, allocatedColsCount - 1, 1, allocatedColsCount, 2 );
     SCCOL col1, col2;
     SCROW row1, row2;
     CPPUNIT_ASSERT_EQUAL( pattern, docit.GetNext( col1, row1, row2 ));
-    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( SCCOL(allocatedColsCount - 1), col1 );
     CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
     CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
     CPPUNIT_ASSERT_EQUAL( pattern, docit.GetNext( col1, row1, row2 ));
-    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col1 );
+    CPPUNIT_ASSERT_EQUAL( allocatedColsCount, col1 );
     CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
     CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
     CPPUNIT_ASSERT( docit.GetNext( col1, row1, row2 ) == nullptr );
 
-    ScAttrRectIterator rectit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    ScAttrRectIterator rectit( *m_pDoc, 0, allocatedColsCount - 1, 1, allocatedColsCount, 2 );
     CPPUNIT_ASSERT_EQUAL( pattern, rectit.GetNext( col1, col2, row1, row2 ));
-    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
-    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCCOL(allocatedColsCount - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( allocatedColsCount, col2 );
     CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
     CPPUNIT_ASSERT_EQUAL( SCROW(2), row2 );
     CPPUNIT_ASSERT( rectit.GetNext( col1, col2, row1, row2 ) == nullptr );
 
-    ScHorizontalAttrIterator horit( *m_pDoc, 0, INITIALCOLCOUNT - 1, 1, INITIALCOLCOUNT, 2 );
+    ScHorizontalAttrIterator horit( *m_pDoc, 0, allocatedColsCount - 1, 1, allocatedColsCount, 2 );
     CPPUNIT_ASSERT_EQUAL( pattern, horit.GetNext( col1, col2, row1 ));
-    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
-    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCCOL(allocatedColsCount - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( allocatedColsCount, col2 );
     CPPUNIT_ASSERT_EQUAL( SCROW(1), row1 );
     CPPUNIT_ASSERT_EQUAL( pattern, horit.GetNext( col1, col2, row1 ));
-    CPPUNIT_ASSERT_EQUAL( SCCOL(INITIALCOLCOUNT - 1), col1 );
-    CPPUNIT_ASSERT_EQUAL( INITIALCOLCOUNT, col2 );
+    CPPUNIT_ASSERT_EQUAL( SCCOL(allocatedColsCount - 1), col1 );
+    CPPUNIT_ASSERT_EQUAL( allocatedColsCount, col2 );
     CPPUNIT_ASSERT_EQUAL( SCROW(2), row1 );
     CPPUNIT_ASSERT( horit.GetNext( col1, col2, row1 ) == nullptr );
 
@@ -1514,12 +1521,13 @@ void Test::testLastChangedColFlagsWidth()
     m_pDoc->InsertTab(0, "Tab1");
 
     constexpr SCCOL firstChangedCol = 100;
-    assert( firstChangedCol > INITIALCOLCOUNT );
+    assert( firstChangedCol > m_pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, m_pDoc->GetAllocatedColumnsCount(0));
     for( SCCOL col = firstChangedCol; col <= m_pDoc->MaxCol(); ++col )
         m_pDoc->SetColWidth( col, 0, 10 );
 
     // That shouldn't need allocating more columns, just changing column flags.
-    CPPUNIT_ASSERT_EQUAL(SCCOL(INITIALCOLCOUNT), m_pDoc->GetAllocatedColumnsCount(0));
+    CPPUNIT_ASSERT_EQUAL(INITIALCOLCOUNT, m_pDoc->GetAllocatedColumnsCount(0));
     // But the flags are changed.
     CPPUNIT_ASSERT_EQUAL(m_pDoc->MaxCol(), m_pDoc->GetLastChangedColFlagsWidth(0));
 
