@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83868b29_3541eaad",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 876,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:29:53Z",
+      "side": 1,
+      "message": "We located the ! character because it can exist in the middle of the format string and still flip.",
+      "revId": "26526107cc4d2f8898247ab1943c1e4642676000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0899a01b_9fc997e4",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1142,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:29:53Z",
+      "side": 1,
+      "message": "Because VBANUM_PLACEHOLDER_NOZERO doesn\u0027t exist here, Format(42, \"foo#bar\") produces 42 instead of VBAs foo42bar. If we simply add it, it works, but then something like \nFormat(1.09837555, \"#.#####E+###\") errors\nbecause it goes through the basic format function, when it wants to go through the SxNumberFormatter",
+      "revId": "26526107cc4d2f8898247ab1943c1e4642676000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31862135_a2d78b60",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1152,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:29:53Z",
+      "side": 1,
+      "message": "How far are we willing to push this function? There may be other numeric chars (except VBANUM_PLACEHOLDER_(NO)ZERO) that trigger this. Complete 100% emulation of VBAs format function should not be necessary - already support for Format(..., \"foo@bar#etc\") is probably never going to be needed really.",
+      "revId": "26526107cc4d2f8898247ab1943c1e4642676000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c65677e_0ab00afc",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:29:53Z",
+      "side": 1,
+      "message": "Apparently (as discussed with Mike) order matters in format strings\nFormat(42, \"foo@b#ar\") will return foo4b#ar2 while Format(42, \"foo#b@ar\") will return foo42b@ar. eType !\u003d sbxString here, but when a @ is first, the input is treated as a string.",
+      "revId": "26526107cc4d2f8898247ab1943c1e4642676000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d85ac587_81fcded2",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 543,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:29:53Z",
+      "side": 1,
+      "message": "Checking for Option VBASupport functionality was not added - it\u0027s not clear to me what the format function would do then. Because if VBASupport 0 means \u0027@\u0027 is not handled, then \u0027\u0026\u0027 is not too. And ! as well. Stuff like \"Standard\" and \"Fixed\" and \"#\"/\"0\" are also supported by VBA. So wouldn\u0027t disabling VBASupport just disable the whole function?",
+      "revId": "26526107cc4d2f8898247ab1943c1e4642676000",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
