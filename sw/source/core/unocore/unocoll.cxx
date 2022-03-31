@@ -56,6 +56,7 @@
 #include <unobookmark.hxx>
 #include <unorefmark.hxx>
 #include <unometa.hxx>
+#include <unocontentcontrol.hxx>
 #include <docsh.hxx>
 #include <hints.hxx>
 #include <frameformats.hxx>
@@ -455,7 +456,8 @@ const ProvNamesId_Type aProvNamesId[] =
     { CSS_TEXT_FIELDMASTER_BIBLIOGRAPHY,              SwServiceType::FieldMasterBibliography },
     { "com.sun.star.style.TableStyle",                SwServiceType::StyleTable },
     { "com.sun.star.style.CellStyle",                 SwServiceType::StyleCell },
-    { "com.sun.star.text.LineBreak",                  SwServiceType::LineBreak }
+    { "com.sun.star.text.LineBreak",                  SwServiceType::LineBreak },
+    { "com.sun.star.text.ContentControl",             SwServiceType::ContentControl }
 };
 
 const SvEventDescription* sw_GetSupportedMacroItems()
@@ -828,6 +830,9 @@ SwXServiceProvider::MakeInstance(SwServiceType nObjectType, SwDoc & rDoc)
         case SwServiceType::LineBreak:
             xRet = SwXLineBreak::CreateXLineBreak(nullptr);
             break;
+        case SwServiceType::ContentControl:
+            xRet = SwXContentControl::CreateXContentControl(rDoc);
+        break;
         default:
             throw uno::RuntimeException();
     }

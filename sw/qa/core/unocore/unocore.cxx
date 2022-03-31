@@ -25,6 +25,7 @@
 #include <docsh.hxx>
 #include <ndtxt.hxx>
 #include <textlinebreak.hxx>
+#include <textcontentcontrol.hxx>
 
 using namespace ::com::sun::star;
 
@@ -307,6 +308,33 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserFieldTooltip)
     // - the property is of unexpected type or void: Title
     // i.e. reading of the tooltip was broken.
     CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(xFieldProps, "Title"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a content control around one or more text portions:
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // Then make sure that the text attribute is inserted:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    SwTextNode* pTextNode = pDoc->GetNodes()[nIndex]->GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    // Without the accompanying fix in place, this test would have failed, as the
+    // SwXContentControl::attach() implementation was missing.
+    CPPUNIT_ASSERT(pAttr);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -100,6 +100,7 @@ public:
 
     SwUnoCursor& GetCursor();
     bool IsAtEndOfMeta() const;
+    bool IsAtEndOfContentControl() const;
 
     void DeleteAndInsert(OUString const& rText,
                 const bool bForceExpandHints);

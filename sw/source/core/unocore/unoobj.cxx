@@ -54,6 +54,7 @@
 #include <unomap.hxx>
 #include <unoprnms.hxx>
 #include <unometa.hxx>
+#include <unocontentcontrol.hxx>
 #include <unotext.hxx>
 #include <com/sun/star/text/TextMarkupType.hpp>
 #include <vcl/svapp.hxx>
@@ -804,6 +805,42 @@ bool SwXTextCursor::IsAtEndOfMeta() const
                     pXMeta->SetContentRange(pTextNode, nStart, nEnd) );
             OSL_ENSURE(bSuccess, "no pam?");
             if (bSuccess)
+            {
+                const SwPosition end(*pTextNode, nEnd);
+                if (   (*pCursor->GetPoint() == end)
+                    || (*pCursor->GetMark()  == end))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool SwXTextCursor::IsAtEndOfContentControl() const
+{
+    if (CursorType::ContentControl == m_eType)
+    {
+        auto pCursor( m_pUnoCursor );
+        auto pXContentControl(
+                dynamic_cast<SwXContentControl*>(m_xParentText.get()) );
+        if (!pXContentControl)
+        {
+            SAL_WARN("sw.core", "SwXTextCursor::IsAtEndOfContentControl: no content control");
+        }
+        if (pCursor && pXContentControl)
+        {
+            SwTextNode * pTextNode;
+            sal_Int32 nStart;
+            sal_Int32 nEnd;
+            const bool bSuccess(
+                    pXContentControl->SetContentRange(pTextNode, nStart, nEnd) );
+            if (!bSuccess)
+            {
+                SAL_WARN("sw.core", "SwXTextCursor::IsAtEndOfContentControl: no pam");
+            }
+            else
             {
                 const SwPosition end(*pTextNode, nEnd);
                 if (   (*pCursor->GetPoint() == end)
