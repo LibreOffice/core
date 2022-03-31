@@ -114,6 +114,30 @@
       },
       "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996a77f1_6551f23b",
+        "filename": "uui/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-31T14:11:02Z",
+      "side": 1,
+      "message": "Yes; in my machine, it replaced ARG1 with STR_OPENLOCKED_ALLOWIGNORE_MSG.",
+      "parentUuid": "12175b64_d3c0b147",
+      "range": {
+        "startLine": 51,
+        "startChar": 288,
+        "endLine": 51,
+        "endChar": 296
+      },
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
