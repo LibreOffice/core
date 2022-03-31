@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77fbc06b_3f70f6a9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-31T06:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62ed7cce_28687d4f",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 12
+      },
+      "revId": "5023cbdf61e5d6f6e40fc47014d0f201aaa6dc4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2bc28f59_f292ea4f",
@@ -41,6 +65,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f9c9515_1cedc546",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedObject2.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-31T06:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2bc28f59_f292ea4f",
+      "revId": "5023cbdf61e5d6f6e40fc47014d0f201aaa6dc4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9736557c_534649e8",
@@ -54,6 +96,24 @@
       "writtenOn": "2022-03-30T13:55:13Z",
       "side": 1,
       "message": "* please also add /** */ documentation and a @since tag for the interface itself (and then the redundant @since tag for the UpdateOleObject method should be removed)\n\n* at least for the single place that uses XEmbeddedObject2 now (in EmbeddedObjectRef::UpdateOleObject in svtools/source/misc/embedhlp.cxx), there is no convenience benefit of having XEmbeddedObject2 derive from XEmbeddedObject, so you might consider not deriving this interface from XEmbeddedObject (and probably giving it a different name then)",
+      "revId": "5023cbdf61e5d6f6e40fc47014d0f201aaa6dc4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54f30e8e_458de7bd",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedObject2.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-31T06:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9736557c_534649e8",
       "revId": "5023cbdf61e5d6f6e40fc47014d0f201aaa6dc4d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -81,6 +141,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4add46d4_a37b45a9",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedObject2.idl",
+        "patchSetId": 13
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-31T06:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8bf00501_9f24ca28",
+      "range": {
+        "startLine": 26,
+        "startChar": 9,
+        "endLine": 26,
+        "endChar": 24
+      },
+      "revId": "5023cbdf61e5d6f6e40fc47014d0f201aaa6dc4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "53604278_6a7ffc40",
@@ -94,6 +178,30 @@
       "writtenOn": "2022-03-30T13:55:13Z",
       "side": 1,
       "message": "this should use queryInterface (i.e., css::uno::Reference QUERY_INTERFACE) rather than dynamic_cast",
+      "range": {
+        "startLine": 897,
+        "startChar": 36,
+        "endLine": 897,
+        "endChar": 97
+      },
+      "revId": "5023cbdf61e5d6f6e40fc47014d0f201aaa6dc4d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed2b852c_191ec7f7",
+        "filename": "svtools/source/misc/embedhlp.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 897,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-03-31T06:26:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53604278_6a7ffc40",
       "range": {
         "startLine": 897,
         "startChar": 36,
