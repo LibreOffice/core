@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c6e0c80_9c37b9b2",
+        "filename": "include/rtl/ustrbuf.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-31T12:50:50Z",
+      "side": 1,
+      "message": "nitpick, just a typo ConstCharArrayDetector",
+      "range": {
+        "startLine": 352,
+        "startChar": 65,
+        "endLine": 352,
+        "endChar": 88
+      },
+      "revId": "30cd2958065a89cad77cf981f403a2c0850750f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
