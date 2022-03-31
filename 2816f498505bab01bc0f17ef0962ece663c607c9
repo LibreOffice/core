@@ -22,6 +22,30 @@
       },
       "revId": "2816f498505bab01bc0f17ef0962ece663c607c9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0471ba8_8af68f39",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:31:53Z",
+      "side": 0,
+      "message": "Done, added a bool that checks for this",
+      "parentUuid": "0fdf1874_cc1d57b6",
+      "range": {
+        "startLine": 72,
+        "startChar": 68,
+        "endLine": 72,
+        "endChar": 69
+      },
+      "revId": "2816f498505bab01bc0f17ef0962ece663c607c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "051a8937_55b8b651",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:31:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c0d8625_0d173085",
+      "range": {
+        "startLine": 7,
+        "startChar": 36,
+        "endLine": 7,
+        "endChar": 69
+      },
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6022cce2_8cd8d559",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-03-30T06:57:59Z",
       "side": 1,
       "message": "Here, the \"as requested\" is also inappropriate. Of course, you try to make changes suggested in the easyhack; but you are not a robot, and you need to understand why you do that. Some suggested changes may be wrong; you are expected to do some investigation, and if needed, disagree with the change; if you *do implement*it, you are expected to explain the rationale behind the change (as if it was your idea, since at this time, it should already become an idea that you share). Your wording looks like \"it is requested, and I obeyed\" ;-)",
+      "range": {
+        "startLine": 9,
+        "startChar": 40,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3c3b14_31027c19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:31:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6022cce2_8cd8d559",
       "range": {
         "startLine": 9,
         "startChar": 40,
@@ -98,6 +146,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a062995e_226920f8",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:31:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "60bb340e_a556b817",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d609bf33_cdf0fddb",
@@ -111,6 +177,24 @@
       "writtenOn": "2022-03-30T05:54:41Z",
       "side": 1,
       "message": "How Format(23) is related to testing of Null?",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b3bd052_d563a787",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:31:53Z",
+      "side": 1,
+      "message": "Done, removed",
+      "parentUuid": "d609bf33_cdf0fddb",
       "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -149,6 +233,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ac7f109_0f399a9f",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 6
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:31:53Z",
+      "side": 1,
+      "message": "Done, removed.",
+      "parentUuid": "ccaf3a84_12d3739f",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0f519a65_fcfe1012",
@@ -162,6 +264,24 @@
       "writtenOn": "2022-03-30T05:54:41Z",
       "side": 1,
       "message": "Not quite clear, what it means. The Format(Null) is not null format string; so does this line belong to format string or to value?",
+      "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92317107_c23c6080",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-03-31T21:31:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f519a65_fcfe1012",
       "revId": "a3f69d39373855cd87a4abbf43c9648e881062cb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
