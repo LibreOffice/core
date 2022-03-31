@@ -541,6 +541,7 @@
 #define STR_INDENTCELL                          NC_("STR_INDENTCELL", "Indent: ")
 #define STR_UNDO_INSERT_SPARKLINE_GROUP         NC_("STR_UNDO_INSERT_SPARKLINE", "Insert Sparkline Group")
 #define STR_UNDO_DELETE_SPARKLINE               NC_("STR_UNDO_DELETE_SPARKLINE", "Delete Sparkline")
+#define STR_UNDO_EDIT_SPARKLINE_GROUP           NC_("STR_UNDO_EDIT_SPARKLINE_GROUP", "Edit Sparkline Group")
 
 #endif
 
