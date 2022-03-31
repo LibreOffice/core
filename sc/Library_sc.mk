@@ -555,6 +555,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/undo/undotab \
     sc/source/ui/undo/undoutil \
     sc/source/ui/undo/UndoInsertSparkline \
+    sc/source/ui/undo/UndoEditSparklineGroup \
     sc/source/ui/undo/UndoDeleteSparkline \
     sc/source/ui/unoobj/ChartRangeSelectionListener \
     sc/source/ui/unoobj/addruno \
