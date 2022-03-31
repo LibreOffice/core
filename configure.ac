@@ -7763,7 +7763,11 @@ else
     SYSTEM_ZLIB=
     BUILD_TYPE="$BUILD_TYPE ZLIB"
     ZLIB_CFLAGS="-I${WORKDIR}/UnpackedTarball/zlib"
-    ZLIB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lzlib"
+    if test "$COM" = "MSC"; then
+        ZLIB_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/zlib.lib"
+    else
+        ZLIB_LIBS="-L${WORKDIR}/LinkTarget/StaticLibrary -lzlib"
+    fi
 fi
 AC_SUBST(ZLIB_CFLAGS)
 AC_SUBST(ZLIB_LIBS)
