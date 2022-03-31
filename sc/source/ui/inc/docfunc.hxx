@@ -54,6 +54,7 @@ enum class CreateNameFlags;
 namespace sc
 {
     struct ColRowSpan;
+    class SparklineAttributes;
     class SparklineGroup;
 }
 
@@ -240,6 +241,9 @@ public:
                                        std::shared_ptr<sc::SparklineGroup> pSparklineGroup);
 
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rAddress);
+
+    SC_DLLPUBLIC bool ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGroup> const& pExistingSparklineGroup,
+                                                     sc::SparklineAttributes const& rNewAttributes);
 
 private:
     void ProtectDocument(const ScDocProtection& rProtect);
