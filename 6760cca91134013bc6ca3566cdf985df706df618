@@ -34,6 +34,24 @@
       "parentUuid": "b5016103_eea4da33",
       "revId": "6760cca91134013bc6ca3566cdf985df706df618",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8bd44c6_c5de005a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-03-31T11:57:32Z",
+      "side": 1,
+      "message": "Ah thanks; it seems that the last comment by Cloph at https://gerrit.libreoffice.org/c/core/+/132309 means it\u0027s fixed?",
+      "parentUuid": "08b14fe5_5efb894b",
+      "revId": "6760cca91134013bc6ca3566cdf985df706df618",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
