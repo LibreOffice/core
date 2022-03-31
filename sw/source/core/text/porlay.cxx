@@ -794,12 +794,12 @@ void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
     }
 }
 
-void SwLineLayout::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwLineLayout::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                             TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwLineLayout"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-
-    SwTextPortion::dumpAsXml(pWriter);
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
 
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -2586,12 +2586,12 @@ const SwDropPortion *SwParaPortion::FindDropPortion() const
     return nullptr;
 }
 
-void SwParaPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwParaPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                              TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwParaPortion"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-
-    SwLineLayout::dumpAsXml(pWriter);
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
 
     (void)xmlTextWriterEndElement(pWriter);
 }

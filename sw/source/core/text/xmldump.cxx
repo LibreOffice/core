@@ -486,19 +486,22 @@ void SwFrame::dumpAsXml( xmlTextWriterPtr writer ) const
             if (const SwParaPortion* pPara = pTextFrame->GetPara())
             {
                 (void)xmlTextWriterStartElement(writer, BAD_CAST("SwParaPortion"));
-                (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pPara);
+                TextFrameIndex nOffset(0);
+                const OUString& rText = pTextFrame->GetText();
+                pPara->dumpAsXmlAttributes(writer, rText, nOffset);
                 const SwLineLayout* pLine = pPara;
+                if (pTextFrame->IsFollow())
+                {
+                    nOffset += pTextFrame->GetOffset();
+                }
                 while (pLine)
                 {
                     (void)xmlTextWriterStartElement(writer, BAD_CAST("SwLineLayout"));
-                    (void)xmlTextWriterWriteFormatAttribute(writer, BAD_CAST("ptr"), "%p", pLine);
-                    (void)xmlTextWriterWriteAttribute(
-                        writer, BAD_CAST("height"),
-                        BAD_CAST(OString::number(pLine->Height()).getStr()));
+                    pLine->dumpAsXmlAttributes(writer, rText, nOffset);
                     const SwLinePortion* pPor = pLine->GetFirstPortion();
                     while (pPor)
                     {
-                        pPor->dumpAsXml(writer);
+                        pPor->dumpAsXml(writer, rText, nOffset);
                         pPor = pPor->GetNextPortion();
                     }
                     (void)xmlTextWriterEndElement(writer);

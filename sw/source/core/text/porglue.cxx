@@ -129,14 +129,14 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
     delete pVictim;
 }
 
-void SwGluePortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwGluePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                              TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwGluePortion"));
-    SwLinePortion::dumpAsXml(pWriter);
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
 
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("fix-width"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(OString::number(m_nFixWidth).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fix-width"), BAD_CAST(OString::number(m_nFixWidth).getStr()));
 
     (void)xmlTextWriterEndElement(pWriter);
 }
@@ -157,15 +157,14 @@ SwFixPortion::SwFixPortion()
     SetWhichPor( PortionType::Fix );
 }
 
-void SwFixPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwFixPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFixPortion"));
-    SwGluePortion::dumpAsXml(pWriter);
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
 
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("fix"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("fix"),
                                       BAD_CAST(OString::number(m_nFix).getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }

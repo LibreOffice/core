@@ -173,7 +173,10 @@ public:
     void SetJoinBorderWithPrev( const bool bJoinPrev ) { m_bJoinBorderWithPrev = bJoinPrev; }
     void SetJoinBorderWithNext( const bool bJoinNext ) { m_bJoinBorderWithNext = bJoinNext; }
 
-    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                           TextFrameIndex& rOffset) const;
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer, const OUString& rText,
+                             TextFrameIndex nOffset) const;
 };
 
 inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)

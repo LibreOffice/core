@@ -355,6 +355,16 @@ void SwHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), OUString('-'), GetWhichPor() );
 }
 
+void SwHyphPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                              TextFrameIndex& nOffset) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwHyphPortion"));
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 bool SwHyphPortion::Format( SwTextFormatInfo &rInf )
 {
     const SwLinePortion *pLast = rInf.GetLast();

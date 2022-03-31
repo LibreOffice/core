@@ -472,14 +472,14 @@ void SwFieldPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), m_aExpand, GetWhichPor(), nH, nW, m_pFont.get() );
 }
 
-void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                               TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFieldPortion"));
-    SwExpandPortion::dumpAsXml(pWriter);
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
 
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("expand"));
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"), BAD_CAST(m_aExpand.toUtf8().getStr()));
-    (void)xmlTextWriterEndElement(pWriter);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("expand"), BAD_CAST(m_aExpand.toUtf8().getStr()));
 
     (void)xmlTextWriterEndElement(pWriter);
 }

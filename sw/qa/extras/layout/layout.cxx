@@ -1435,9 +1435,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testNoLineBreakAtSlash)
                                                     pXmlObj->nodesetval->nodeTab[0]->name)));
     xmlXPathFreeObject(pXmlObj);
 
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[1]", "Portion", "Blah blah bla bla bla ");
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[2]", "Portion", "Foostrasse");
-    assertXPath(pLayout, "/root/page[1]/body/txt[1]/Text[3]", "Portion", "13/c/2, etc.");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[1]", "portion",
+                "Blah blah bla bla bla ");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]/SwLinePortion[1]",
+                "portion", "Foostrasse");
+    assertXPath(pLayout, "/root/page[1]/body/txt[1]/SwParaPortion/SwLineLayout[2]/SwLinePortion[2]",
+                "portion", "13/c/2, etc.");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf106153)
