@@ -34,6 +34,24 @@
       "parentUuid": "d16135ac_f54380e8",
       "revId": "f3bbc08acf4e55e00b371bf14474742c648758e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f01f0f6f_4dc0c27c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-03-31T10:05:45Z",
+      "side": 1,
+      "message": "Indeed, I submitted an updated version.\nThank you for the feedback!",
+      "parentUuid": "504d3b36_9653b75a",
+      "revId": "f3bbc08acf4e55e00b371bf14474742c648758e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
