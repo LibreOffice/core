@@ -500,7 +500,6 @@ static void printStack( CONTEXT* ctx )
 #else
     STACKFRAME          stack;
 #endif
-    ULONG               frame;
     DWORD64             displacement;
     DWORD disp;
     char buffer[sizeof(SYMBOL_INFO) + MAX_SYM_NAME * sizeof(TCHAR)];
@@ -535,7 +534,7 @@ static void printStack( CONTEXT* ctx )
     line->SizeOfStruct = sizeof(IMAGEHLP_LINE);
 #endif
 
-    for( frame = 0; ; frame++ )
+    for( ; ; )
     {
         //get next call from stack
 #ifdef _M_AMD64
