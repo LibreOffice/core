@@ -30,9 +30,11 @@ $(call gb_ExternalProject_get_state_target,nss,build): $(call gb_ExternalProject
 	$(call gb_ExternalProject_run,build,\
 		$(if $(MSVC_USE_DEBUG_RUNTIME),USE_DEBUG_RTL=1,BUILD_OPT=1) \
 		OS_TARGET=WIN95 \
+		NSS_DISABLE_AVX2=1 \
+		USE_SYSTEM_ZLIB=1 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		LIB="$(ILIB)" \
-		XCFLAGS="-arch:SSE $(SOLARINC)" \
+		XCFLAGS="-arch:SSE $(SOLARINC) $(ZLIB_CFLAGS)" \
 		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 	,nss)
