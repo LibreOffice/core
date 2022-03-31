@@ -16,6 +16,24 @@
       "message": "Why we changed `weld::MessageDialog` into normal `Dialog` aka `DuplicateNameDialog`?\n\nI think we should avoid adding new dialogs which are simply the basic message dialogs",
       "revId": "066076255277261898278102b49cf91fdd3d2881",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17cdf7b0_6c651df3",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-03-31T09:31:30Z",
+      "side": 0,
+      "message": "can we reuse `weld::MessageDialogController` ?",
+      "parentUuid": "dcfe5916_e04f037e",
+      "revId": "066076255277261898278102b49cf91fdd3d2881",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
