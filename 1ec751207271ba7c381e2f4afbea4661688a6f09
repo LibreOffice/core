@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "969d85e4_cf7af273",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-31T06:22:47Z",
+      "side": 1,
+      "message": "Hi. This is Patch 1 of the implementation of OpenLockedQueryBox. I\u0027ve implemented the box as a UI dialog; for now, I\u0027ve not put any icon in the dialog image (I wanted it to be a question mark icon, just like in the original dialog). But it seems like LO doesn\u0027t have support for that icon yet. \n\nSo, I can remove the icon all together if it isn\u0027t needed, or I can add another question mark icon to the dialog; but I will need some assistance on how to do that.\n\nFor a preview of the dialog, I\u0027ve uploaded an image on Bugzilla: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d141026. Kindly refer to the image for a preview of the dialog.\n\nAny suggestions will be great.",
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
