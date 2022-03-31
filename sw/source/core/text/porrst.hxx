@@ -77,7 +77,8 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                   TextFrameIndex& nOffset) const override;
 
     static constexpr OUStringLiteral S_NOBREAK_FOR_REDLINE = u"\u00A0";
     void SetRedline( const RedlineType eRedline ) { m_eRedline = eRedline; }

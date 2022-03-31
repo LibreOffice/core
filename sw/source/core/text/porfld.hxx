@@ -108,7 +108,8 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const override;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                   TextFrameIndex& nOffset) const override;
 };
 
 /**

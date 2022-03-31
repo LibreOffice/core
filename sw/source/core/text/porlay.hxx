@@ -241,7 +241,8 @@ public:
                            const SwLinePortion* _pDontConsiderPortion = nullptr,
                            const bool _bNoFlyCntPorAndLinePor = false ) const;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                   TextFrameIndex& nOffset) const override;
 };
 
 /// Collection of SwLineLayout instances, represents the paragraph text in Writer layout.
@@ -324,7 +325,8 @@ public:
 
     const SwDropPortion *FindDropPortion() const;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                   TextFrameIndex& nOffset) const override;
 };
 
 inline void SwParaPortion::ResetPreps()

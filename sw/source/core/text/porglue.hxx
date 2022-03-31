@@ -45,7 +45,7 @@ public:
     virtual SwPosSize GetTextSize( const SwTextSizeInfo &rInfo ) const override;
     virtual bool GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) const override;
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const override;
 };
 
 class SwFixPortion : public SwGluePortion
@@ -57,7 +57,7 @@ public:
     void   SetFix( const sal_uInt16 nNewFix ) { m_nFix = nNewFix; }
     sal_uInt16 GetFix() const { return m_nFix; }
 
-    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
+    void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const override;
 };
 
 class SwMarginPortion : public SwGluePortion

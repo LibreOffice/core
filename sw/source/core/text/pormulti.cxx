@@ -134,15 +134,26 @@ void SwMultiPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-void SwMultiPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwMultiPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
+                               TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwMultiPortion"));
-    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
-    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"),  BAD_CAST(typeid(*this).name()));
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    // Indentionally not incrementing nOffset here, one of the child portions will do that.
 
-    for (const SwLineLayout* pLine = &GetRoot(); pLine; pLine = pLine->GetNext())
+    const SwLineLayout* pLine = &GetRoot();
+    while (pLine)
     {
-        pLine->dumpAsXml(pWriter);
+        (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwLineLayout"));
+        pLine->dumpAsXmlAttributes(pWriter, rText, nOffset);
+        const SwLinePortion* pPor = pLine->GetFirstPortion();
+        while (pPor)
+        {
+            pPor->dumpAsXml(pWriter, rText, nOffset);
+            pPor = pPor->GetNextPortion();
+        }
+        (void)xmlTextWriterEndElement(pWriter);
+        pLine = pLine->GetNext();
     }
 
     (void)xmlTextWriterEndElement(pWriter);

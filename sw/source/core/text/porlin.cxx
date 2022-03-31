@@ -317,9 +317,17 @@ void SwLinePortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Special( GetLen(), OUString(), GetWhichPor(), Height(), Width() );
 }
 
-void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex& nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwLinePortion"));
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
+void SwLinePortion::dumpAsXmlAttributes(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex nOffset) const
+{
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
     (void)xmlTextWriterWriteAttribute(
@@ -334,7 +342,11 @@ void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("type"),
         BAD_CAST(sw::PortionTypeToString(GetWhichPor())));
-    (void)xmlTextWriterEndElement(pWriter);
+    OUString aText = rText.copy(sal_Int32(nOffset), sal_Int32(GetLen()));
+    for (int i = 0; i < 32; ++i)
+        aText = aText.replace(i, '*');
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("portion"),
+                                      BAD_CAST(aText.toUtf8().getStr()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

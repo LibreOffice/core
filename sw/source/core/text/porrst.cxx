@@ -202,13 +202,15 @@ void SwBreakPortion::HandlePortion( SwPortionHandler& rPH ) const
     rPH.Text( GetLen(), GetWhichPor() );
 }
 
-void SwBreakPortion::dumpAsXml(xmlTextWriterPtr pWriter) const
+void SwBreakPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex&
+        nOffset) const
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwBreakPortion"));
+    dumpAsXmlAttributes(pWriter, rText, nOffset);
+    nOffset += GetLen();
+
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("text-height"),
                                       BAD_CAST(OString::number(m_nTextHeight).getStr()));
-
-    SwLinePortion::dumpAsXml(pWriter);
 
     (void)xmlTextWriterEndElement(pWriter);
 }
