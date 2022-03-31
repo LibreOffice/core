@@ -123,6 +123,42 @@
       "message": "I removed the llvm package from the old TDF bots that had it installed (lilith/pollux/maggie)",
       "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3360185_853bfc9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-31T12:18:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8b93946_75ad1338",
+      "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a3d6c48_2aae1353",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-31T12:18:19Z",
+      "side": 1,
+      "message": "(and, for the record, I see that tb91 is currently out of the way at \u003chttps://ci.libreoffice.org/label/linux_clang_dbgutil_64_wait_for_llvm_uninstall/\u003e)",
+      "parentUuid": "1a90ac6d_046807e9",
+      "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
