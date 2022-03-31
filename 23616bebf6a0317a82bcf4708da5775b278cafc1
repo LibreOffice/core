@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62ec3997_dee95ff8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-31T12:35:39Z",
+      "side": 1,
+      "message": "As you have changed the parameter type for some functions, you have to take a look at the invocations.\nOther than the places listed in the comments, please also take a look at sw/source/filter/ww8/ww8graf.cxx:3023. You can use your IDE to find such function calls.",
+      "revId": "23616bebf6a0317a82bcf4708da5775b278cafc1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

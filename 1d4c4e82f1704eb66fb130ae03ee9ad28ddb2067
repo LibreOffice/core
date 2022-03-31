@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c85f2012_f331dd5f",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 5643,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-31T12:35:39Z",
+      "side": 0,
+      "message": "As you have changed StoreShapeOrder() parameter types, you should also change this line.",
+      "revId": "1d4c4e82f1704eb66fb130ae03ee9ad28ddb2067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76cc5b5c_0572a54f",
+        "filename": "sw/source/filter/ww8/ww8par.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1089,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-03-31T12:35:39Z",
+      "side": 0,
+      "message": "Also this line and line #1075.",
+      "revId": "1d4c4e82f1704eb66fb130ae03ee9ad28ddb2067",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
