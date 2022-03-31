@@ -13,6 +13,7 @@
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <o3tl/cppunittraitshelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 
@@ -66,6 +67,10 @@ private:
         b4 = OUStringLiteral(u"1") + "234567890123456";
         CPPUNIT_ASSERT_EQUAL(s3, b4.toString());
         CPPUNIT_ASSERT_EQUAL(sal_Int32(32), b4.getCapacity());
+        b4 = OUStringChar('a');
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), b4.getLength());
+        CPPUNIT_ASSERT_EQUAL(u'a', b4.getStr()[0]);
+        CPPUNIT_ASSERT_EQUAL(u'\0', b4.getStr()[1]);
     }
 
     CPPUNIT_TEST_SUITE(Test);
