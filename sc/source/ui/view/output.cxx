@@ -62,9 +62,8 @@
 #include <validat.hxx>
 #include <detfunc.hxx>
 
+#include <SparklineRenderer.hxx>
 #include <colorscale.hxx>
-#include <Sparkline.hxx>
-#include <SparklineGroup.hxx>
 
 #include <math.h>
 #include <memory>
@@ -2304,242 +2303,25 @@ void ScOutputData::DrawChangeTrack()
     }
 }
 
-namespace
-{
-
-struct SparklineMarker
-{
-    basegfx::B2DPolygon maPolygon;
-    Color maColor;
-};
-
-void createMarker(std::vector<SparklineMarker> & rMarkers, double x, double y, Color const & rColor)
-{
-    auto & rMarker = rMarkers.emplace_back();
-    basegfx::B2DRectangle aRectangle(x - 2, y - 2, x + 2, y + 2);
-    rMarker.maPolygon = basegfx::utils::createPolygonFromRect(aRectangle);
-    rMarker.maColor = rColor;
-}
-
-/** Draw a line chart into the rectangle bounds */
-void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
-                std::vector<double> const& rValues, double nMin, double nMax,
-                sc::SparklineAttributes const& rAttributes)
-{
-    basegfx::B2DPolygon aPolygon;
-    double numebrOfSteps = rValues.size() - 1;
-    double xStep = 0;
-    double nDelta = nMax - nMin;
-
-    std::vector<SparklineMarker> aMarkers;
-    sal_Int64 nValueIndex = 0;
-    sal_Int64 nValuesSize = rValues.size();
-
-    for (double nValue : rValues)
-    {
-        double nP = (nValue - nMin) / nDelta;
-        double x = rRectangle.GetWidth() * (xStep / numebrOfSteps);
-        double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
-
-        aPolygon.append({ x, y } );
-
-        if (rAttributes.isFirst() && nValueIndex == 0)
-        {
-            createMarker(aMarkers, x, y, rAttributes.getColorFirst());
-        }
-        else if (rAttributes.isLast() && nValueIndex == (nValuesSize - 1))
-        {
-            createMarker(aMarkers, x, y, rAttributes.getColorLast());
-        }
-        else if (rAttributes.isHigh() && nValue == nMax)
-        {
-            createMarker(aMarkers, x, y, rAttributes.getColorHigh());
-        }
-        else if (rAttributes.isLow() && nValue == nMin)
-        {
-            createMarker(aMarkers, x, y, rAttributes.getColorLow());
-        }
-        else if (rAttributes.isNegative() && nValue < 0.0)
-        {
-            createMarker(aMarkers, x, y, rAttributes.getColorNegative());
-        }
-
-        xStep++;
-        nValueIndex++;
-    }
-
-    basegfx::B2DHomMatrix aMatrix;
-    aMatrix.translate(rRectangle.Left(), rRectangle.Top());
-    aPolygon.transform(aMatrix);
-
-    rRenderContext.SetLineColor(rAttributes.getColorSeries());
-    rRenderContext.DrawPolyLine(aPolygon);
-
-    for (auto const & rMarker : aMarkers)
-    {
-        rRenderContext.SetLineColor(rMarker.maColor);
-        rRenderContext.SetFillColor(rMarker.maColor);
-        aPolygon = rMarker.maPolygon;
-        aPolygon.transform(aMatrix);
-        rRenderContext.DrawPolygon(aPolygon);
-    }
-}
-
-void setFillAndLineColor(vcl::RenderContext& rRenderContext, sc::SparklineAttributes const& rAttributes,
-                         double nValue, sal_Int64 nValueIndex, sal_Int64 nValuesSize, double nMin, double nMax)
-{
-    if (rAttributes.isFirst() && nValueIndex == 0)
-    {
-        rRenderContext.SetLineColor(rAttributes.getColorFirst());
-        rRenderContext.SetFillColor(rAttributes.getColorFirst());
-    }
-    else if (rAttributes.isLast() && nValueIndex == (nValuesSize - 1))
-    {
-        rRenderContext.SetLineColor(rAttributes.getColorLast());
-        rRenderContext.SetFillColor(rAttributes.getColorLast());
-    }
-    else if (rAttributes.isHigh() && nValue == nMax)
-    {
-        rRenderContext.SetLineColor(rAttributes.getColorHigh());
-        rRenderContext.SetFillColor(rAttributes.getColorHigh());
-    }
-    else if (rAttributes.isLow() && nValue == nMin)
-    {
-        rRenderContext.SetLineColor(rAttributes.getColorLow());
-        rRenderContext.SetFillColor(rAttributes.getColorLow());
-    }
-    else if (rAttributes.isNegative() && nValue < 0.0)
-    {
-        rRenderContext.SetLineColor(rAttributes.getColorNegative());
-        rRenderContext.SetFillColor(rAttributes.getColorNegative());
-    }
-    else
-    {
-        rRenderContext.SetLineColor(rAttributes.getColorSeries());
-        rRenderContext.SetFillColor(rAttributes.getColorSeries());
-    }
-}
-
-/** Draw a column chart into the rectangle bounds */
-void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const & rRectangle,
-                std::vector<double> const & rValues, double nMin, double nMax,
-                sc::SparklineAttributes const & rAttributes)
-{
-    basegfx::B2DPolygon aPolygon;
-
-    double xStep = 0;
-    double numberOfSteps = rValues.size();
-    double nDelta = nMax - nMin;
-
-    double nColumnSize = rRectangle.GetWidth() / numberOfSteps;
-    nColumnSize = nColumnSize - (nColumnSize * 0.3);
-
-    double nZero = (0 - nMin) / nDelta;
-    double nZeroPosition;
-    if (nZero >= 0)
-        nZeroPosition = rRectangle.GetHeight() - rRectangle.GetHeight() * nZero;
-    else
-        nZeroPosition = rRectangle.GetHeight();
-
-    sal_Int64 nValueIndex = 0;
-
-    for (double nValue : rValues)
-    {
-        if (nValue != 0.0)
-        {
-            setFillAndLineColor(rRenderContext, rAttributes, nValue, nValueIndex, sal_Int64(rValues.size()), nMax, nMin);
-
-            double nP = (nValue - nMin) / nDelta;
-            double x = rRectangle.GetWidth() * (xStep / numberOfSteps);
-            double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
-
-            basegfx::B2DRectangle aRectangle(x, y, x + nColumnSize, nZeroPosition);
-            aPolygon = basegfx::utils::createPolygonFromRect(aRectangle);
-
-            basegfx::B2DHomMatrix aMatrix;
-            aMatrix.translate(rRectangle.Left(), rRectangle.Top());
-            aPolygon.transform(aMatrix);
-            rRenderContext.DrawPolygon(aPolygon);
-        }
-        xStep++;
-        nValueIndex++;
-    }
-}
-
-void drawSparkline(std::shared_ptr<sc::Sparkline> const& pSparkline, vcl::RenderContext& rRenderContext, ScDocument* pDocument,
-                                 tools::Rectangle const & rRectangle)
-{
-    auto const & rRangeList = pSparkline->getInputRange();
-
-    if (rRangeList.empty())
-        return;
-
-    auto pSparklineGroup = pSparkline->getSparklineGroup();
-    auto const& rAttributes = pSparklineGroup->getAttributes();
-
-    rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
-
-    ScRange aRange = rRangeList[0];
-
-    std::vector<double> aValues;
-
-    double nMin = std::numeric_limits<double>::max();
-    double nMax = std::numeric_limits<double>::min();
-
-    if (aRange.aStart.Row() == aRange.aEnd.Row())
-    {
-        ScAddress aAddress = aRange.aStart;
-
-        while (aAddress.Col() <= aRange.aEnd.Col())
-        {
-            double fCellValue = pDocument->GetValue(aAddress);
-            aValues.push_back(fCellValue);
-            if (fCellValue < nMin)
-                nMin = fCellValue;
-            if (fCellValue > nMax)
-                nMax = fCellValue;
-            aAddress.IncCol();
-        }
-    }
-    else if (aRange.aStart.Col() == aRange.aEnd.Col())
-    {
-        ScAddress aAddress = aRange.aStart;
-
-        while (aAddress.Row() <= aRange.aEnd.Row())
-        {
-            double fCellValue = pDocument->GetValue(aAddress);
-            aValues.push_back(fCellValue);
-            if (fCellValue < nMin)
-                nMin = fCellValue;
-            if (fCellValue > nMax)
-                nMax = fCellValue;
-            aAddress.IncRow();
-        }
-    }
-
-    if (rAttributes.getType() == sc::SparklineType::Column)
-    {
-        drawColumn(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup->getAttributes());
-    }
-    else if (rAttributes.getType() == sc::SparklineType::Stacked)
-    {
-        // transform the data to 1, -1
-        for (auto & rValue : aValues)
-        {
-            if (rValue != 0.0)
-                rValue = rValue > 0.0 ? 1.0 : -1.0;
-        }
-        drawColumn(rRenderContext, rRectangle, aValues, -1, 1, pSparklineGroup->getAttributes());
-    }
-    else if (rAttributes.getType() == sc::SparklineType::Line)
-    {
-        drawLine(rRenderContext, rRectangle, aValues, nMin, nMax, pSparklineGroup->getAttributes());
-    }
-}
-} // end anonymous namespace
-
 void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
 {
+    Size aOnePixel = rRenderContext.PixelToLogic(Size(1,1));
+    tools::Long nOneXLogic = aOnePixel.Width();
+    tools::Long nOneYLogic = aOnePixel.Height();
+
+    // See more about bWorksInPixels in ScOutputData::DrawGrid
+    bool bWorksInPixels = false;
+    if (eType == OUTTYPE_WINDOW)
+        bWorksInPixels = true;
+
+    tools::Long nOneX = 1;
+    tools::Long nOneY = 1;
+    if (!bWorksInPixels)
+    {
+        nOneX = nOneXLogic;
+        nOneY = nOneYLogic;
+    }
+
     tools::Long nInitPosX = nScrX;
     if ( bLayoutRTL )
         nInitPosX += nMirrorW - 1;              // always in pixels
@@ -2573,16 +2355,14 @@ void ScOutputData::DrawSparklines(vcl::RenderContext& rRenderContext)
                 if (!mpDoc->ColHidden(nX, nTab) && (pSparkline = mpDoc->GetSparkline(aCurrentAddress))
                     && (bIsMerged || (!pInfo->bHOverlapped && !pInfo->bVOverlapped)))
                 {
-                    constexpr tools::Long constMarginX = 6;
-                    constexpr tools::Long constMarginY = 3;
-
                     const tools::Long nWidth = pRowInfo[0].basicCellInfo(nX).nWidth;
                     const tools::Long nHeight = pThisRowInfo->nHeight;
 
-                    Point aPoint(nPosX + constMarginX , nPosY + constMarginY);
-                    Size aSize(nWidth - 2 * constMarginX, nHeight - 2 * constMarginY);
+                    Point aPoint(nPosX, nPosY);
+                    Size aSize(nWidth, nHeight);
 
-                    drawSparkline(pSparkline, rRenderContext, mpDoc, tools::Rectangle(aPoint, aSize));
+                    sc::SparklineRenderer renderer(*mpDoc);
+                    renderer.render(pSparkline, rRenderContext, tools::Rectangle(aPoint, aSize), nOneX, nOneY, double(aZoomX), double(aZoomY));
                 }
 
                 nPosX += pRowInfo[0].basicCellInfo(nX).nWidth * nLayoutSign;
