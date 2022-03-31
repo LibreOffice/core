@@ -88,6 +88,24 @@
       "parentUuid": "49d62baa_cfb3e194",
       "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8b93946_75ad1338",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-03-31T06:16:28Z",
+      "side": 1,
+      "message": "or we could add\n\n  export AR\u003d/usr/bin/ar\n\netc. to lode\u0027s bin/linux_clang_dbgutil_64.env (and update the affect Jenkins machines\u0027 lode checkout)",
+      "parentUuid": "27b72b27_55f00108",
+      "revId": "94ace0e51744f82b58156392e53b4c4ad819e4bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
