@@ -9,6 +9,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -71,6 +73,12 @@ private:
         CPPUNIT_ASSERT_EQUAL(sal_Int32(1), b4.getLength());
         CPPUNIT_ASSERT_EQUAL(u'a', b4.getStr()[0]);
         CPPUNIT_ASSERT_EQUAL(u'\0', b4.getStr()[1]);
+        b4 = std::u16string_view(u"abc").substr(
+            0, 2); // avoid the string_view accidentally being NUL-terminated
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(2), b4.getLength());
+        CPPUNIT_ASSERT_EQUAL(u'a', b4.getStr()[0]);
+        CPPUNIT_ASSERT_EQUAL(u'b', b4.getStr()[1]);
+        CPPUNIT_ASSERT_EQUAL(u'\0', b4.getStr()[2]);
     }
 
     CPPUNIT_TEST_SUITE(Test);
