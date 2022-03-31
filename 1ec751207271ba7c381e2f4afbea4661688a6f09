@@ -70,6 +70,41 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "325149c2_856659a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-31T15:30:45Z",
+      "side": 1,
+      "message": "Regarding #3, if have this in mind https://i.imgur.com/FiukqVu.png",
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f3ccd95_2c985c57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-31T15:30:45Z",
+      "side": 1,
+      "message": "1) You need to build for kf5 (--enable-kf5) and run per \"SAL_USE_VCLPLUGIN\u003dkf5 soffice\". Instead of kf5 you could also try gen, which sometimes has the same issues as kf5.\n\n2) Replacing a variable is a piece of cake. Anyway, not my field of expertise :-).",
+      "parentUuid": "755ec890_013a7cc4",
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "12175b64_d3c0b147",
