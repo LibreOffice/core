@@ -16,6 +16,23 @@
       "message": "Hi. This is Patch 1 of the implementation of OpenLockedQueryBox. I\u0027ve implemented the box as a UI dialog; for now, I\u0027ve not put any icon in the dialog image (I wanted it to be a question mark icon, just like in the original dialog). But it seems like LO doesn\u0027t have support for that icon yet. \n\nSo, I can remove the icon all together if it isn\u0027t needed, or I can add another question mark icon to the dialog; but I will need some assistance on how to do that.\n\nFor a preview of the dialog, I\u0027ve uploaded an image on Bugzilla: https://bugs.documentfoundation.org/show_bug.cgi?id\u003d141026. Kindly refer to the image for a preview of the dialog.\n\nAny suggestions will be great.",
       "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d51f0542_b13c1232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-31T12:29:28Z",
+      "side": 1,
+      "message": "Looks very promising.\n\nSome issues: \n* buttons should be located at the bottom of the dialog\n* with kf5 I don\u0027t see anything expanded (or it\u0027s always expanded), see https://i.imgur.com/jgSxqNR.png\n* the static info text must not have a mnemonic\n* left-align text text with proper margin, see https://wiki.documentfoundation.org/Design/Guidelines/PropertyDialog\n* take care of spacing for the other controls as well\n* questionmark image seems to be missing (I like these tiny design elements, it shows that we put love in the work we do)\n* might be easier to put the strings into the ui\n\nThis button wall bothers me anyway. How about a checkbox \"[ ] Notify if editable\" with the Open Read-Only option? Can we hide Open, as to my understanding this would never be enabled? How about placing the extra functions next to the options, eg. Use this option to open the document read only [Open R/O]; with the new ui-based design it\u0027s much easier to play with the layout.",
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
