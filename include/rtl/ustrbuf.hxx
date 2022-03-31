@@ -294,7 +294,8 @@ public:
         }
         std::memcpy(
             pData->buffer, string.data(),
-            (n + 1) * sizeof (sal_Unicode));
+            n * sizeof (sal_Unicode));
+        pData->buffer[n] = '\0';
         pData->length = n;
         return *this;
     }

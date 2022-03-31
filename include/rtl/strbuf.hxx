@@ -277,7 +277,8 @@ public:
         if (n >= nCapacity) {
             ensureCapacity(n + 16); //TODO: check for overflow
         }
-        std::memcpy(pData->buffer, string.data(), n + 1);
+        std::memcpy(pData->buffer, string.data(), n);
+        pData->buffer[n] = '\0';
         pData->length = n;
         return *this;
     }
