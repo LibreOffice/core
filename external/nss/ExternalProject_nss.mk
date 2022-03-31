@@ -26,9 +26,10 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			MOZ_DEBUG_FLAGS=" " \
 			OPT_CODE_SIZE=0) \
 		OS_TARGET=WIN95 \
+		USE_SYSTEM_ZLIB=1 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		LIB="$(ILIB)" \
-		XCFLAGS="-arch:SSE $(SOLARINC)" \
+		XCFLAGS="-arch:SSE $(SOLARINC) $(ZLIB_CFLAGS)" \
 		$(MAKE) nss_build_all RC="rc.exe $(SOLARINC)" \
 			NSINSTALL='$(call gb_ExternalExecutable_get_command,python) $(SRCDIR)/external/nss/nsinstall.py' \
 			NSS_DISABLE_GTESTS=1 \
