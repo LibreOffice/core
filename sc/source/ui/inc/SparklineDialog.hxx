@@ -13,6 +13,9 @@
 #include "anyrefdg.hxx"
 #include "viewdata.hxx"
 
+#include <SparklineGroup.hxx>
+#include <SparklineAttributes.hxx>
+
 class ColorListBox;
 
 namespace sc
@@ -88,7 +91,8 @@ private:
     DECL_LINK(SpinLineWidthChanged, weld::SpinButton&, void);
     DECL_LINK(SpinCustomChanged, weld::FormattedSpinButton&, void);
 
-    std::shared_ptr<sc::SparklineGroup> mpLocalSparklineGroup;
+    std::shared_ptr<sc::SparklineGroup> mpSparklineGroup;
+    sc::SparklineAttributes maAttributes;
 
     bool mbEditMode;
 
