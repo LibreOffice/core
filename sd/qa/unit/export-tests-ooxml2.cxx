@@ -1814,15 +1814,30 @@ void SdOOXMLExportTest2::testTdf59323_slideFooters()
 
 void SdOOXMLExportTest2::testTdf53970()
 {
-    ::sd::DrawDocShellRef xDocShRef
-        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf53970.odp"), ODP);
-    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+    // Embedded media file
+    {
+        ::sd::DrawDocShellRef xDocShRef
+            = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf53970.odp"), ODP);
+        xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
 
+        // Without fix in place, the media shape was lost on export.
+        CPPUNIT_ASSERT(getPage(0, xDocShRef)->hasElements());
 
-    // Without fix in place, the media shape was lost on export.
-    CPPUNIT_ASSERT(getPage(0, xDocShRef)->hasElements());
+        xDocShRef->DoClose();
+    }
 
-    xDocShRef->DoClose();
+    // Linked media file
+    {
+        ::sd::DrawDocShellRef xDocShRef = loadURL(
+            m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf53970_linked.odp"), ODP);
+        utl::TempFile tempFile;
+        xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+        xDocShRef->DoClose();
+
+        xmlDocUniquePtr pXmlRels = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
+        CPPUNIT_ASSERT(pXmlRels);
+        assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@TargetMode='External']", 2);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest2);
