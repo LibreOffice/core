@@ -52,6 +52,7 @@ enum class CursorType
                         // a text range or cursor
     SelectionInTable,
     Meta,         // meta/meta-field
+    ContentControl,
 };
 
 /*
