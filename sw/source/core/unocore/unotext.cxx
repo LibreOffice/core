@@ -70,6 +70,7 @@
 #include <SwRewriter.hxx>
 #include <strings.hrc>
 #include <frameformats.hxx>
+#include <unocontentcontrol.hxx>
 
 using namespace ::com::sun::star;
 
@@ -593,13 +594,14 @@ SwXText::insertTextContent(
         comphelper::getFromUnoTunnel<SwXReferenceMark>(xContentTunnel);
     SwXMeta *const pMeta =
         comphelper::getFromUnoTunnel<SwXMeta>(xContentTunnel);
+    auto* pContentControl = comphelper::getFromUnoTunnel<SwXContentControl>(xContentTunnel);
     SwXTextField* pTextField =
         comphelper::getFromUnoTunnel<SwXTextField>(xContentTunnel);
     if (pTextField && pTextField->GetServiceId() != SwServiceType::FieldTypeAnnotation)
         pTextField = nullptr;
 
     const bool bAttribute = pBookmark || pDocumentIndexMark
-        || pSection || pReferenceMark || pMeta || pTextField;
+        || pSection || pReferenceMark || pMeta || pContentControl || pTextField;
 
     if (bAbsorb && !bAttribute)
     {

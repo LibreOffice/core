@@ -177,6 +177,7 @@ enum class SwServiceType {
     StyleTable                      = 114,
     StyleCell                       = 115,
     LineBreak                       = 116,
+    ContentControl                  = 117,
 
     Invalid                         = USHRT_MAX
 };
