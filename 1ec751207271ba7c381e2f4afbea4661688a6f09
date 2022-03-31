@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "755ec890_013a7cc4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-03-31T14:08:41Z",
+      "side": 1,
+      "message": "Thank you for the suggestions. I have some questions about these:\n\n1) How do I test this dialog with kf5? \n\n2) I didn\u0027t put the string in the UI because in iahndl-locking.cxx (line 120), the string STR_OPENLOCKED_ALLOWIGNORE_MSG is added based on bAllowOverride (I\u0027m not sure if this is ever false; if not, we can definitely add the string to the UI). \n\n3) In the old code, the \"Open\" button is allowed if bAllowOverride is true (lines 34-38 in the old openlocked.cxx). \n\nI didn\u0027t fully understand the last bit about \"placing the extra functions next to the options\", can you explain what that means?",
+      "parentUuid": "d51f0542_b13c1232",
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "12175b64_d3c0b147",
         "filename": "uui/inc/strings.hrc",
         "patchSetId": 1
