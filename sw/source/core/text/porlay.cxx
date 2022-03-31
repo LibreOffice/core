@@ -66,6 +66,34 @@ using namespace i18n::ScriptType;
 #include <i18nutil/scripttypedetector.hxx>
 #include <i18nutil/unicode.hxx>
 
+/*
+   https://www.khtt.net/en/page/1821/the-big-kashida-secret
+
+   the rules of priorities that govern the addition of kashidas in Arabic text
+   made ... for ... Explorer 5.5 browser.
+
+   The kashida justification is based on a connection priority scheme that
+   decides where kashidas are put automatically.
+
+   This is how the software decides on kashida-inserting priorities:
+   1. First it looks for characters with the highest priority in each word,
+   which means kashida-extensions will only been used in one position in each
+   word. Not more.
+   2. The kashida will be connected to the character with the highest priority.
+   3. If kashida connection opportunities are found with an equal level of
+   priority in one word, the kashida will be placed towards the end of the
+   word.
+
+   The priority list of characters and the positioning is as follows:
+   1. after a kashida that is manually placed in the text by the user,
+   2. after a Seen or Sad (initial and medial form),
+   3. before the final form of Taa Marbutah, Haa, Dal,
+   4. before the final form of Alef, Tah Lam, Kaf and Gaf,
+   5. before the preceding medial Baa of Ra, Ya and Alef Maqsurah,
+   6. before the final form of Waw, Ain, Qaf and Fa,
+   7. before the final form of other characters that can be connected.
+*/
+
 #define IS_JOINING_GROUP(c, g) ( u_getIntPropertyValue( (c), UCHAR_JOINING_GROUP ) == U_JG_##g )
 #define isAinChar(c)        IS_JOINING_GROUP((c), AIN)
 #define isAlefChar(c)       IS_JOINING_GROUP((c), ALEF)
