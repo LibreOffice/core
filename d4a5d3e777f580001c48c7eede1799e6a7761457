@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd6de72b_5ed997b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-03-31T09:27:10Z",
+      "side": 1,
+      "message": "Looks good in general, but I have concern if we really need to create \u0027DuplicateNameDialog\u0027",
+      "revId": "d4a5d3e777f580001c48c7eede1799e6a7761457",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
