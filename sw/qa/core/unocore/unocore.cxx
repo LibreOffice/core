@@ -337,6 +337,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
     CPPUNIT_ASSERT(pAttr);
 }
 
+CPPUNIT_TEST_FIXTURE(SwModelTestBase, testImageTooltip)
+{
+    // Given a document with an image and a hyperlink on it:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xImage(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xImage, /*bAbsorb=*/false);
+    uno::Reference<beans::XPropertySet> xImageProps(xImage, uno::UNO_QUERY);
+    xImageProps->setPropertyValue("HyperLinkURL", uno::makeAny(OUString("http://www.example.com")));
+
+    // When setting a tooltip on the image:
+    OUString aExpected("first line\nsecond line");
+    xImageProps->setPropertyValue("Tooltip", uno::makeAny(aExpected));
+
+    // Then make sure that the tooltip we read back matches the one previously specified:
+    // Without the accompanying fix in place, this test would have failed with:
+    // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
+    // i.e. reading/writing of the tooltip was broken.
+    CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(xImageProps, "Tooltip"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

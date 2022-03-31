@@ -1529,6 +1529,13 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const ::uno::Any&
             GetOrCreateSdrObject(rFlyFormat);
             rFlyFormat.GetDoc()->SetFlyFrameTitle(rFlyFormat, sTitle);
         }
+        else if (pEntry->nWID == FN_UNO_TOOLTIP)
+        {
+            SwFlyFrameFormat& rFlyFormat = dynamic_cast<SwFlyFrameFormat&>(*pFormat);
+            OUString sTooltip;
+            aValue >>= sTooltip;
+            rFlyFormat.SetObjTooltip(sTooltip);
+        }
         // New attribute Description
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
         {
@@ -2162,6 +2169,11 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             // assure that <SdrObject> instance exists.
             GetOrCreateSdrObject(rFlyFormat);
             aAny <<= rFlyFormat.GetObjTitle();
+        }
+        else if (pEntry->nWID == FN_UNO_TOOLTIP)
+        {
+            SwFlyFrameFormat& rFlyFormat = dynamic_cast<SwFlyFrameFormat&>(*pFormat);
+            aAny <<= rFlyFormat.GetObjTooltip();
         }
         // New attribute Description
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )

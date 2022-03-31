@@ -329,6 +329,7 @@
     { u"" UNO_NAME_WRAP_INFLUENCE_ON_POSITION, RES_WRAP_INFLUENCE_ON_OBJPOS, cppu::UnoType<sal_Int8>::get(), PROPERTY_NONE, MID_WRAP_INFLUENCE}, \
     { u"" UNO_NAME_ALLOW_OVERLAP, RES_WRAP_INFLUENCE_ON_OBJPOS, cppu::UnoType<bool>::get(), PROPERTY_NONE, MID_ALLOW_OVERLAP}, \
     { u"" UNO_NAME_TITLE, FN_UNO_TITLE, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0}, \
+    { u"" UNO_NAME_TOOLTIP, FN_UNO_TOOLTIP, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0}, \
     { u"" UNO_NAME_DESCRIPTION, FN_UNO_DESCRIPTION, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0}, \
     { u"" UNO_NAME_LAYOUT_SIZE, WID_LAYOUT_SIZE, cppu::UnoType<css::awt::Size>::get(), PropertyAttribute::MAYBEVOID | PropertyAttribute::READONLY, 0 }, \
     { u"" UNO_NAME_LINE_STYLE, RES_BOX, cppu::UnoType<css::drawing::LineStyle>::get(),  0, LINE_STYLE }, \

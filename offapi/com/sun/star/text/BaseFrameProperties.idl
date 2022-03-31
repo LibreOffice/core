@@ -372,6 +372,12 @@ published service BaseFrameProperties
         @since LibreOffice 6.4
     */
     [optional, property] boolean AllowOverlap;
+
+    /** Contains popup text for the frame, used to for tooltip purposes if it's non-empty.
+
+        @since LibreOffice 7.4
+    */
+    [optional, property] string Tooltip;
 };
 
 
