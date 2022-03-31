@@ -28,11 +28,14 @@ public:
     SparklineAttributes& getAttributes() { return m_aAttributes; }
     SparklineAttributes const& getAttributes() const { return m_aAttributes; }
 
+    void setAttributes(SparklineAttributes const& rAttributes) { m_aAttributes = rAttributes; };
+
     tools::Guid& getID() { return m_aGUID; }
 
     void setID(tools::Guid const& rGuid) { m_aGUID = rGuid; }
 
     SparklineGroup();
+    SparklineGroup(SparklineAttributes const& rSparklineAttributes);
 
     SparklineGroup(SparklineGroup const& pOtherSparkline);
 

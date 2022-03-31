@@ -53,6 +53,7 @@ public:
     void testUndoRedoInsertSparkline();
     void testUndoRedoDeleteSparkline();
     void testUndoRedoClearContentForSparkline();
+    void testUndoRedoEditSparklineGroup();
 
     CPPUNIT_TEST_SUITE(SparklineTest);
     CPPUNIT_TEST(testAddSparkline);
@@ -62,6 +63,7 @@ public:
     CPPUNIT_TEST(testUndoRedoInsertSparkline);
     CPPUNIT_TEST(testUndoRedoDeleteSparkline);
     CPPUNIT_TEST(testUndoRedoClearContentForSparkline);
+    CPPUNIT_TEST(testUndoRedoEditSparklineGroup);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -423,6 +425,73 @@ void SparklineTest::testUndoRedoClearContentForSparkline()
     CPPUNIT_ASSERT(!pSparkline);
 
     CPPUNIT_ASSERT(!rDocument.HasSparkline(aRange.aStart));
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testUndoRedoEditSparklineGroup()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto& rDocFunc = xDocSh->GetDocFunc();
+
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    {
+        sc::SparklineAttributes& rAttibutes = pSparklineGroup->getAttributes();
+        rAttibutes.setType(sc::SparklineType::Column);
+        rAttibutes.setColorSeries(COL_YELLOW);
+        rAttibutes.setColorAxis(COL_GREEN);
+    }
+
+    rDocument.CreateSparkline(ScAddress(0, 6, 0), pSparklineGroup);
+
+    sc::SparklineAttributes aNewAttributes;
+    aNewAttributes.setType(sc::SparklineType::Stacked);
+    aNewAttributes.setColorSeries(COL_BLACK);
+    aNewAttributes.setColorAxis(COL_BLUE);
+
+    sc::SparklineAttributes aInitialAttibutes(pSparklineGroup->getAttributes());
+
+    CPPUNIT_ASSERT(aNewAttributes != aInitialAttibutes);
+
+    CPPUNIT_ASSERT_EQUAL(true, aInitialAttibutes == pSparklineGroup->getAttributes());
+    CPPUNIT_ASSERT_EQUAL(false, aNewAttributes == pSparklineGroup->getAttributes());
+
+    CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->getAttributes().getType());
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pSparklineGroup->getAttributes().getColorSeries());
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN, pSparklineGroup->getAttributes().getColorAxis());
+
+    rDocFunc.ChangeSparklineGroupAttributes(pSparklineGroup, aNewAttributes);
+
+    CPPUNIT_ASSERT_EQUAL(false, aInitialAttibutes == pSparklineGroup->getAttributes());
+    CPPUNIT_ASSERT_EQUAL(true, aNewAttributes == pSparklineGroup->getAttributes());
+
+    CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked, pSparklineGroup->getAttributes().getType());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pSparklineGroup->getAttributes().getColorSeries());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis());
+
+    rDocument.GetUndoManager()->Undo();
+
+    CPPUNIT_ASSERT_EQUAL(true, aInitialAttibutes == pSparklineGroup->getAttributes());
+    CPPUNIT_ASSERT_EQUAL(false, aNewAttributes == pSparklineGroup->getAttributes());
+
+    CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Column, pSparklineGroup->getAttributes().getType());
+    CPPUNIT_ASSERT_EQUAL(COL_YELLOW, pSparklineGroup->getAttributes().getColorSeries());
+    CPPUNIT_ASSERT_EQUAL(COL_GREEN, pSparklineGroup->getAttributes().getColorAxis());
+
+    rDocument.GetUndoManager()->Redo();
+
+    CPPUNIT_ASSERT_EQUAL(false, aInitialAttibutes == pSparklineGroup->getAttributes());
+    CPPUNIT_ASSERT_EQUAL(true, aNewAttributes == pSparklineGroup->getAttributes());
+
+    CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked, pSparklineGroup->getAttributes().getType());
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pSparklineGroup->getAttributes().getColorSeries());
+    CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis());
 
     xDocSh->DoClose();
 }
