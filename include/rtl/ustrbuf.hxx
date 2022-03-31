@@ -349,10 +349,14 @@ public:
         if (n >= nCapacity) {
             ensureCapacity(n + 16); //TODO: check for overflow
         }
+        // For OUStringChar, which is covered by this template's ConstCharArrayDetector TypeUtf16
+        // check, toPointer does not return a NUL-terminated string, so we can't just memcpy n+1
+        // elements but rather need to add the terminating NUL manually:
         std::memcpy(
             pData->buffer,
             libreoffice_internal::ConstCharArrayDetector<T>::toPointer(literal),
-            (n + 1) * sizeof (sal_Unicode)); //TODO: check for overflow
+            n * sizeof (sal_Unicode));
+        pData->buffer[n] = '\0';
         pData->length = n;
         return *this;
     }
