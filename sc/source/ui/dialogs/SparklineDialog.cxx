@@ -163,7 +163,8 @@ void SparklineDialog::setupValues()
     {
         if (auto pSparkline = mrDocument.GetSparkline(aSelectionRange.aStart))
         {
-            mpLocalSparklineGroup = pSparkline->getSparklineGroup();
+            mpSparklineGroup = pSparkline->getSparklineGroup();
+            maAttributes = mpSparklineGroup->getAttributes();
             mxFrameData->set_visible(false);
             mbEditMode = true;
         }
@@ -173,16 +174,9 @@ void SparklineDialog::setupValues()
         maInputRange = aSelectionRange;
     }
 
-    if (!mpLocalSparklineGroup)
-    {
-        mpLocalSparklineGroup = std::make_shared<sc::SparklineGroup>();
-    }
-
     setInputSelection();
 
-    auto const& rAttribute = mpLocalSparklineGroup->getAttributes();
-
-    switch (rAttribute.getType())
+    switch (maAttributes.getType())
     {
         case sc::SparklineType::Line:
             mxRadioLine->set_active(true);
@@ -195,7 +189,7 @@ void SparklineDialog::setupValues()
             break;
     }
 
-    switch (rAttribute.getDisplayEmptyCellsAs())
+    switch (maAttributes.getDisplayEmptyCellsAs())
     {
         case sc::DisplayEmptyCellsAs::Gap:
             mxRadioDisplayEmptyGap->set_active(true);
@@ -208,28 +202,28 @@ void SparklineDialog::setupValues()
             break;
     }
 
-    mxColorSeries->SelectEntry(rAttribute.getColorSeries());
-    mxColorNegative->SelectEntry(rAttribute.getColorNegative());
-    mxColorMarker->SelectEntry(rAttribute.getColorMarkers());
-    mxColorHigh->SelectEntry(rAttribute.getColorHigh());
-    mxColorLow->SelectEntry(rAttribute.getColorLow());
-    mxColorFirst->SelectEntry(rAttribute.getColorFirst());
-    mxColorLast->SelectEntry(rAttribute.getColorLast());
+    mxColorSeries->SelectEntry(maAttributes.getColorSeries());
+    mxColorNegative->SelectEntry(maAttributes.getColorNegative());
+    mxColorMarker->SelectEntry(maAttributes.getColorMarkers());
+    mxColorHigh->SelectEntry(maAttributes.getColorHigh());
+    mxColorLow->SelectEntry(maAttributes.getColorLow());
+    mxColorFirst->SelectEntry(maAttributes.getColorFirst());
+    mxColorLast->SelectEntry(maAttributes.getColorLast());
 
-    mxCheckButtonNegative->set_active(rAttribute.isNegative());
-    mxCheckButtonMarker->set_active(rAttribute.isMarkers());
-    mxCheckButtonHigh->set_active(rAttribute.isHigh());
-    mxCheckButtonLow->set_active(rAttribute.isLow());
-    mxCheckButtonFirst->set_active(rAttribute.isFirst());
-    mxCheckButtonLast->set_active(rAttribute.isLast());
+    mxCheckButtonNegative->set_active(maAttributes.isNegative());
+    mxCheckButtonMarker->set_active(maAttributes.isMarkers());
+    mxCheckButtonHigh->set_active(maAttributes.isHigh());
+    mxCheckButtonLow->set_active(maAttributes.isLow());
+    mxCheckButtonFirst->set_active(maAttributes.isFirst());
+    mxCheckButtonLast->set_active(maAttributes.isLast());
 
-    mxSpinLineWidth->set_value(sal_Int64(rAttribute.getLineWeight() * 100.0));
+    mxSpinLineWidth->set_value(sal_Int64(maAttributes.getLineWeight() * 100.0));
 
-    mxCheckDisplayXAxis->set_active(rAttribute.shouldDisplayXAxis());
-    mxCheckDisplayHidden->set_active(rAttribute.shouldDisplayHidden());
-    mxCheckRightToLeft->set_active(rAttribute.isRightToLeft());
+    mxCheckDisplayXAxis->set_active(maAttributes.shouldDisplayXAxis());
+    mxCheckDisplayHidden->set_active(maAttributes.shouldDisplayHidden());
+    mxCheckRightToLeft->set_active(maAttributes.isRightToLeft());
 
-    switch (rAttribute.getMinAxisType())
+    switch (maAttributes.getMinAxisType())
     {
         case sc::AxisType::Individual:
             mxComboMinAxisType->set_active(0);
@@ -241,13 +235,13 @@ void SparklineDialog::setupValues()
             break;
         case sc::AxisType::Custom:
             mxComboMinAxisType->set_active(2);
-            if (rAttribute.getManualMin())
-                mxSpinCustomMin->GetFormatter().SetValue(*rAttribute.getManualMin());
+            if (maAttributes.getManualMin())
+                mxSpinCustomMin->GetFormatter().SetValue(*maAttributes.getManualMin());
             break;
     }
     ComboValueChanged(*mxComboMinAxisType);
 
-    switch (rAttribute.getMaxAxisType())
+    switch (maAttributes.getMaxAxisType())
     {
         case sc::AxisType::Individual:
             mxComboMaxAxisType->set_active(0);
@@ -259,8 +253,8 @@ void SparklineDialog::setupValues()
             break;
         case sc::AxisType::Custom:
             mxComboMaxAxisType->set_active(2);
-            if (rAttribute.getManualMin())
-                mxSpinCustomMax->GetFormatter().SetValue(*rAttribute.getManualMax());
+            if (maAttributes.getManualMin())
+                mxSpinCustomMax->GetFormatter().SetValue(*maAttributes.getManualMax());
             break;
     }
     ComboValueChanged(*mxComboMaxAxisType);
@@ -405,72 +399,63 @@ IMPL_LINK(SparklineDialog, ButtonClicked, weld::Button&, rButton, void)
 
 IMPL_LINK(SparklineDialog, ToggleHandler, weld::Toggleable&, rToggle, void)
 {
-    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
-
     if (mxCheckButtonNegative.get() == &rToggle)
-        rAttribute.setNegative(mxCheckButtonNegative->get_active());
+        maAttributes.setNegative(mxCheckButtonNegative->get_active());
     if (mxCheckButtonMarker.get() == &rToggle)
-        rAttribute.setMarkers(mxCheckButtonMarker->get_active());
+        maAttributes.setMarkers(mxCheckButtonMarker->get_active());
     if (mxCheckButtonHigh.get() == &rToggle)
-        rAttribute.setHigh(mxCheckButtonHigh->get_active());
+        maAttributes.setHigh(mxCheckButtonHigh->get_active());
     if (mxCheckButtonLow.get() == &rToggle)
-        rAttribute.setLow(mxCheckButtonLow->get_active());
+        maAttributes.setLow(mxCheckButtonLow->get_active());
     if (mxCheckButtonFirst.get() == &rToggle)
-        rAttribute.setFirst(mxCheckButtonFirst->get_active());
+        maAttributes.setFirst(mxCheckButtonFirst->get_active());
     if (mxCheckButtonLast.get() == &rToggle)
-        rAttribute.setLast(mxCheckButtonLast->get_active());
+        maAttributes.setLast(mxCheckButtonLast->get_active());
     if (mxCheckDisplayXAxis.get() == &rToggle)
-        rAttribute.setDisplayXAxis(mxCheckDisplayXAxis->get_active());
+        maAttributes.setDisplayXAxis(mxCheckDisplayXAxis->get_active());
     if (mxCheckDisplayHidden.get() == &rToggle)
-        rAttribute.setDisplayHidden(mxCheckDisplayHidden->get_active());
+        maAttributes.setDisplayHidden(mxCheckDisplayHidden->get_active());
     if (mxCheckRightToLeft.get() == &rToggle)
-        rAttribute.setRightToLeft(mxCheckRightToLeft->get_active());
+        maAttributes.setRightToLeft(mxCheckRightToLeft->get_active());
 }
 
 IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
 {
-    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
-
     if (mxRadioLine->get_active())
-        rAttribute.setType(sc::SparklineType::Line);
+        maAttributes.setType(sc::SparklineType::Line);
     else if (mxRadioColumn->get_active())
-        rAttribute.setType(sc::SparklineType::Column);
+        maAttributes.setType(sc::SparklineType::Column);
     else if (mxRadioStacked->get_active())
-        rAttribute.setType(sc::SparklineType::Stacked);
+        maAttributes.setType(sc::SparklineType::Stacked);
 
     if (mxRadioDisplayEmptyGap->get_active())
-        rAttribute.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Gap);
+        maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Gap);
     else if (mxRadioDisplayEmptyZero->get_active())
-        rAttribute.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Zero);
+        maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Zero);
     else if (mxRadioDisplayEmptySpan->get_active())
-        rAttribute.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Span);
+        maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Span);
 }
 
 IMPL_LINK_NOARG(SparklineDialog, SpinLineWidthChanged, weld::SpinButton&, void)
 {
-    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
-
     double value = mxSpinLineWidth->get_value() / 100.0;
-    rAttribute.setLineWeight(value);
+    maAttributes.setLineWeight(value);
 }
 
 IMPL_LINK(SparklineDialog, SpinCustomChanged, weld::FormattedSpinButton&, rFormatted, void)
 {
-    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
-
     if (mxSpinCustomMin.get() == &rFormatted)
     {
-        rAttribute.setManualMin(rFormatted.GetFormatter().GetValue());
+        maAttributes.setManualMin(rFormatted.GetFormatter().GetValue());
     }
     else if (mxSpinCustomMax.get() == &rFormatted)
     {
-        rAttribute.setManualMax(rFormatted.GetFormatter().GetValue());
+        maAttributes.setManualMax(rFormatted.GetFormatter().GetValue());
     }
 }
 
 IMPL_LINK(SparklineDialog, ComboValueChanged, weld::ComboBox&, rComboBox, void)
 {
-    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
     int nActive = rComboBox.get_active();
 
     if (mxComboMinAxisType.get() == &rComboBox)
@@ -478,15 +463,15 @@ IMPL_LINK(SparklineDialog, ComboValueChanged, weld::ComboBox&, rComboBox, void)
         switch (nActive)
         {
             case 0:
-                rAttribute.setMinAxisType(sc::AxisType::Individual);
+                maAttributes.setMinAxisType(sc::AxisType::Individual);
                 mxSpinCustomMin->set_sensitive(false);
                 break;
             case 1:
-                rAttribute.setMinAxisType(sc::AxisType::Group);
+                maAttributes.setMinAxisType(sc::AxisType::Group);
                 mxSpinCustomMin->set_sensitive(false);
                 break;
             case 2:
-                rAttribute.setMinAxisType(sc::AxisType::Custom);
+                maAttributes.setMinAxisType(sc::AxisType::Custom);
                 mxSpinCustomMin->set_sensitive(true);
                 break;
             default:
@@ -498,15 +483,15 @@ IMPL_LINK(SparklineDialog, ComboValueChanged, weld::ComboBox&, rComboBox, void)
         switch (nActive)
         {
             case 0:
-                rAttribute.setMaxAxisType(sc::AxisType::Individual);
+                maAttributes.setMaxAxisType(sc::AxisType::Individual);
                 mxSpinCustomMax->set_sensitive(false);
                 break;
             case 1:
-                rAttribute.setMaxAxisType(sc::AxisType::Group);
+                maAttributes.setMaxAxisType(sc::AxisType::Group);
                 mxSpinCustomMax->set_sensitive(false);
                 break;
             case 2:
-                rAttribute.setMaxAxisType(sc::AxisType::Custom);
+                maAttributes.setMaxAxisType(sc::AxisType::Custom);
                 mxSpinCustomMax->set_sensitive(true);
                 break;
             default:
@@ -540,20 +525,27 @@ bool SparklineDialog::checkValidInputOutput()
 
 void SparklineDialog::perform()
 {
-    auto& rAttribute = mpLocalSparklineGroup->getAttributes();
-
-    rAttribute.setColorSeries(mxColorSeries->GetSelectEntryColor());
-    rAttribute.setColorNegative(mxColorNegative->GetSelectEntryColor());
-    rAttribute.setColorMarkers(mxColorMarker->GetSelectEntryColor());
-    rAttribute.setColorHigh(mxColorHigh->GetSelectEntryColor());
-    rAttribute.setColorLow(mxColorLow->GetSelectEntryColor());
-    rAttribute.setColorFirst(mxColorFirst->GetSelectEntryColor());
-    rAttribute.setColorLast(mxColorLast->GetSelectEntryColor());
+    maAttributes.setColorSeries(mxColorSeries->GetSelectEntryColor());
+    maAttributes.setColorNegative(mxColorNegative->GetSelectEntryColor());
+    maAttributes.setColorMarkers(mxColorMarker->GetSelectEntryColor());
+    maAttributes.setColorHigh(mxColorHigh->GetSelectEntryColor());
+    maAttributes.setColorLow(mxColorLow->GetSelectEntryColor());
+    maAttributes.setColorFirst(mxColorFirst->GetSelectEntryColor());
+    maAttributes.setColorLast(mxColorLast->GetSelectEntryColor());
 
     auto& rDocFunc = mrViewData.GetDocShell()->GetDocFunc();
 
-    rDocFunc.InsertSparklines(maInputRange, maOutputRange, mpLocalSparklineGroup);
+    if (mpSparklineGroup)
+    {
+        rDocFunc.ChangeSparklineGroupAttributes(mpSparklineGroup, maAttributes);
+    }
+    else
+    {
+        auto pNewSparklineGroup = std::make_shared<sc::SparklineGroup>(maAttributes);
+        rDocFunc.InsertSparklines(maInputRange, maOutputRange, pNewSparklineGroup);
+    }
 }
-}
+
+} // end sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

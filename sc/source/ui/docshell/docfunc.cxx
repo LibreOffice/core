@@ -95,9 +95,11 @@
 #include <columnspanset.hxx>
 #include <validat.hxx>
 #include <SparklineGroup.hxx>
+#include <SparklineAttributes.hxx>
 #include <SparklineData.hxx>
 #include <undo/UndoInsertSparkline.hxx>
 #include <undo/UndoDeleteSparkline.hxx>
+#include <undo/UndoEditSparklineGroup.hxx>
 #include <config_features.h>
 
 #include <memory>
@@ -5854,6 +5856,16 @@ bool ScDocFunc::DeleteSparkline(ScAddress const& rAddress)
     pUndoDeleteSparkline->Redo();
     rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoDeleteSparkline));
 
+    return true;
+}
+
+bool ScDocFunc::ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGroup> const& pExistingSparklineGroup,
+                                               sc::SparklineAttributes const& rNewAttributes)
+{
+    auto pUndo = std::make_unique<sc::UndoEditSparklneGroup>(rDocShell, pExistingSparklineGroup, rNewAttributes);
+    // change sparkline group attributes by "redoing"
+    pUndo->Redo();
+    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
     return true;
 }
 
