@@ -32,7 +32,6 @@
 #include <controls/formattedcontrol.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 #include <toolkit/helper/property.hxx>
-#include <helper/servicenames.hxx>
 #include <toolkit/helper/macros.hxx>
 
 // for introspection
@@ -43,7 +42,6 @@
 #include <comphelper/propertyvalue.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <vcl/window.hxx>
 
 #include <algorithm>
 

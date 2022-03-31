@@ -18,10 +18,8 @@
  */
 
 #include <awt/vclxregion.hxx>
-#include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 
 

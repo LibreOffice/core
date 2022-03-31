@@ -22,7 +22,6 @@
 
 #include <sal/config.h>
 #include <com/sun/star/uno/Reference.hxx>
-#include <com/sun/star/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <osl/diagnose.hxx>
 #include <sal/types.h>

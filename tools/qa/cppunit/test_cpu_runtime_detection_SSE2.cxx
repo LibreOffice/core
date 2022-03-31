@@ -7,14 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <tools/simdsupport.hxx>
-
 #include "test_cpu_runtime_detection_x86_checks.hxx"
 
-#include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include <cppunit/plugin/TestPlugIn.h>
 
 #include <tools/cpuid.hxx>
 

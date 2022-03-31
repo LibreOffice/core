@@ -23,7 +23,7 @@
 #include <comphelper/accimplaccess.hxx>
 #include <comphelper/uno3.hxx>
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <vcl/vclptr.hxx>
+#include <rtl/ref.hxx>
 
 namespace vcl { class Window; }
 namespace com::sun::star::awt { class XWindow; }

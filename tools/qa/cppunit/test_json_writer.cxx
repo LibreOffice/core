@@ -9,13 +9,10 @@
 
 #include <sal/config.h>
 
-#include <cstdlib>
-
 #include <cppunit/extensions/HelperMacros.h>
 #include <o3tl/deleter.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <rtl/ustring.hxx>
-#include <tools/stream.hxx>
 #include <tools/json_writer.hxx>
 
 namespace

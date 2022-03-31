@@ -25,11 +25,9 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <vcl/font.hxx>
 #include <vcl/rendercontext/RasterOp.hxx>
-#include <vcl/vclenum.hxx>
 #include <vcl/vclptr.hxx>
 
 #include <com/sun/star/awt/XGraphics2.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 
 #include <memory>

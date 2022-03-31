@@ -17,13 +17,12 @@
 #include <set>
 #include <sstream>
 #include <cassert>
+#include <cmath>
 #include <vector>
 
 #if USE_CPPUNIT
 #include <cppunit/TestAssert.h>
 #endif
-
-#include <rtl/math.hxx>
 
 namespace {
 

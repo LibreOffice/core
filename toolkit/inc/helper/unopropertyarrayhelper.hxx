@@ -20,7 +20,6 @@
 #ifndef INCLUDED_TOOLKIT_INC_HELPER_UNOPROPERTYARRAYHELPER_HXX
 #define INCLUDED_TOOLKIT_INC_HELPER_UNOPROPERTYARRAYHELPER_HXX
 
-#include <toolkit/dllapi.h>
 #include <cppuhelper/propshlp.hxx>
 
 #include <vector>

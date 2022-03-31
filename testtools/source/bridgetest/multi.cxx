@@ -22,7 +22,6 @@
 
 #include "multi.hxx"
 
-#include <rtl/string.hxx>
 #include <rtl/textenc.h>
 #include <rtl/ustring.hxx>
 

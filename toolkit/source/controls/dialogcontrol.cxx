@@ -43,7 +43,6 @@
 #include <unordered_map>
 
 #include <vcl/tabctrl.hxx>
-#include <toolkit/awt/vclxwindows.hxx>
 #include <toolkit/controls/unocontrols.hxx>
 
 #include <awt/vclxwindows.hxx>

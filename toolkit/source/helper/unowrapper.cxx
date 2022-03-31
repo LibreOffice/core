@@ -29,8 +29,6 @@
 #include <toolkit/dllapi.h>
 #include <vcl/menu.hxx>
 
-#include <tools/debug.hxx>
-
 #include <helper/unowrapper.hxx>
 
 using namespace ::com::sun::star;
