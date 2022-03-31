@@ -22,7 +22,6 @@
 #include <cassert>
 
 #include <sal/types.h>
-#include <rtl/strbuf.hxx>
 #include <tools/inetmsg.hxx>
 #include <tools/inetstrm.hxx>
 

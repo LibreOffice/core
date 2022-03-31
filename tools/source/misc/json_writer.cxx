@@ -9,7 +9,6 @@
 
 #include <tools/json_writer.hxx>
 #include <stdio.h>
-#include <algorithm>
 #include <cstring>
 #include <rtl/math.hxx>
 

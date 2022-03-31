@@ -26,8 +26,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <tools/link.hxx>
 
-#include <memory>
-
 namespace osl
 {
     class Mutex;

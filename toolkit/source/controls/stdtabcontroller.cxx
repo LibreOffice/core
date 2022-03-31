@@ -23,7 +23,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <controls/stdtabcontroller.hxx>
-#include <helper/servicenames.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/supportsservice.hxx>

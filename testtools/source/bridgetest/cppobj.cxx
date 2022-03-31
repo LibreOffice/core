@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
 #include <utility>
 
 #include <cppu/unotype.hxx>
@@ -25,7 +24,6 @@
 #include <osl/diagnose.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
-#include <osl/time.h>
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/factory.hxx>

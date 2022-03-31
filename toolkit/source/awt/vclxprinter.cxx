@@ -26,9 +26,7 @@
 #include <vcl/jobset.hxx>
 #include <vcl/oldprintadaptor.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 
-#include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 

@@ -18,14 +18,12 @@
  */
 
 #include <sal/config.h>
-#include <sal/log.hxx>
+#include <rtl/string.hxx>
 
 #include <algorithm>
-#include <cassert>
-#include <sstream>
+#include <tuple>
 #include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
-#include <tools/stream.hxx>
 
 OString Pair::toString() const
 {

@@ -24,8 +24,6 @@
 #include <comphelper/sequence.hxx>
 #include <toolkit/awt/vclxfont.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>

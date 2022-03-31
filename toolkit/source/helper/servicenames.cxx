@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
 #include <helper/servicenames.hxx>
 
 const char szServiceName_UnoControlDialog[] = "stardiv.vcl.control.Dialog";

@@ -34,7 +34,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <controls/unocontrolcontainer.hxx>
 #include <cppuhelper/propshlp.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <comphelper/interfacecontainer3.hxx>

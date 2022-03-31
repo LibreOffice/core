@@ -9,7 +9,10 @@
 
 #include <sal/types.h>
 #include <test/xmltesttools.hxx>
-#include <unotest/bootstrapfixturebase.hxx>
+
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 class TestXPath : public CppUnit::TestFixture, public XmlTestTools
 {

@@ -9,10 +9,10 @@
 
 #include <test/bootstrapfixture.hxx>
 
-#include <com/sun/star/awt/UnoControlDialog.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>

@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <sal/types.h>
-
 extern const char szServiceName_UnoControlDialog[];
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

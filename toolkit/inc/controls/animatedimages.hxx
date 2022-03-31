@@ -22,7 +22,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <com/sun/star/awt/XAnimatedImages.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <memory>
 
 namespace com::sun::star::container { class XContainerListener; }
 namespace com::sun::star::uno { class XComponentContext; }
