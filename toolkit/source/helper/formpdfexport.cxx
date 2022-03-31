@@ -39,7 +39,6 @@
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
-#include <vcl/outdev.hxx>
 
 #include <algorithm>
 #include <iterator>

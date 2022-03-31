@@ -30,7 +30,6 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/processfactory.hxx>
 #include <o3tl/safeint.hxx>
-#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <vcl/toolkit/throbber.hxx>

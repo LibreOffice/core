@@ -33,7 +33,6 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/Date.hpp>
 
-#include <svl/numuno.hxx>
 #include <tools/lineend.hxx>
 
 #include <awt/vclxtopwindow.hxx>

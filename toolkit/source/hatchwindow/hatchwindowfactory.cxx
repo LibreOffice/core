@@ -24,7 +24,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/window.hxx>
 
 #include "hatchwindow.hxx"
 

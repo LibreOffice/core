@@ -64,7 +64,7 @@ excludelist:
     - com/sun/star/script/XScriptEventsSupplier.hpp
     - com/sun/star/util/XCloneable.hpp
     # Needed for template classes
-    - toolkit/controls/geometrycontrolmodel_impl.hxx
+    - controls/geometrycontrolmodel_impl.hxx
     toolkit/inc/controls/roadmapcontrol.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XItemEventBroadcaster.hpp
@@ -89,3 +89,15 @@ excludelist:
     - com/sun/star/container/XContainer.hpp
     - com/sun/star/container/XIdentifierContainer.hpp
     - toolkit/controls/unocontrolbase.hxx
+    toolkit/source/controls/animatedimages.cxx:
+    # Actually used
+    - com/sun/star/beans/XPropertySetInfo.hpp
+    toolkit/source/awt/vclxwindow.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx
+    toolkit/source/hatchwindow/hatchwindow.cxx:
+    # Actually used
+    - com/sun/star/embed/XHatchWindowController.hpp
+    toolkit/source/helper/servicenames.cxx:
+    # Needed for extern
+    - helper/servicenames.hxx

@@ -9,7 +9,6 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 #include <test/bootstrapfixture.hxx>
-#include <rtl/ustring.hxx>
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 

@@ -22,7 +22,6 @@
 
 #include <controls/stdtabcontrollermodel.hxx>
 #include <toolkit/helper/macros.hxx>
-#include <helper/servicenames.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 

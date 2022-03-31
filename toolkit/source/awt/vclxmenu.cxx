@@ -19,14 +19,12 @@
 
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/convert.hxx>
-#include <helper/servicenames.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/dialoghelper.hxx>
 #include <vcl/graph.hxx>

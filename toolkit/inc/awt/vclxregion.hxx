@@ -21,7 +21,6 @@
 
 
 #include <com/sun/star/awt/XRegion.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>

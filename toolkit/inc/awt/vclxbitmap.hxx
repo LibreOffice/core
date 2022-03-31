@@ -21,7 +21,6 @@
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDisplayBitmap.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/util/XAccounting.hpp>
 #include <comphelper/servicehelper.hxx>

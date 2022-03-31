@@ -52,9 +52,6 @@
 #include <osl/thread.h>
 #include <rtl/strbuf.hxx>
 
-#include <cstdlib>
-#include <typeinfo>
-
 #include <tools/diagnose_ex.h>
 
 #if defined __GLIBCXX__

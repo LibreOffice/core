@@ -22,7 +22,6 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include <tools/helpers.hxx>
 #include <tools/UnitConversion.hxx>
 
 class UnitConversionTest : public CppUnit::TestFixture

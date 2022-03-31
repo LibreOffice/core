@@ -18,8 +18,6 @@
  */
 
 #include <awt/vclxbitmap.hxx>
-#include <toolkit/helper/macros.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <tools/stream.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/BitmapTools.hxx>

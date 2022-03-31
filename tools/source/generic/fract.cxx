@@ -19,7 +19,6 @@
 
 #include <tools/fract.hxx>
 #include <tools/debug.hxx>
-#include <tools/stream.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>

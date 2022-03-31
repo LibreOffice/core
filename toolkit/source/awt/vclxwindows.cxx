@@ -31,8 +31,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
-#include <com/sun/star/system/SystemShellExecute.hpp>
-#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/XItemList.hpp>
@@ -44,7 +42,6 @@
 #include <awt/vclxwindows.hxx>
 #include <controls/filectrl.hxx>
 #include <controls/svmedit.hxx>
-#include <svl/zforlist.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/fmtfield.hxx>
 #include <vcl/graph.hxx>

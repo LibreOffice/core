@@ -19,13 +19,11 @@
 
 #include <controls/tkscrollbar.hxx>
 #include <toolkit/helper/property.hxx>
-#include <helper/servicenames.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
 #include <toolkit/awt/vclxwindows.hxx>
-#include <vcl/window.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 

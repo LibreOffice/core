@@ -18,7 +18,6 @@
  */
 
 #include <tools/gen.hxx>
-#include <basegfx/numeric/ftools.hxx>
 
 void Point::RotateAround( Point& rPoint,
                           Degree10 nOrientation ) const

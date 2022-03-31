@@ -7,12 +7,20 @@ excludelist:
     - cppunit/plugin/TestPlugIn.h
     - tools/pathutils.hxx
     - cwchar
+    tools/qa/cppunit/test_cpu_runtime_detection_AVX2_check.cxx:
+    # Needed for LO_AVX2_AVAILABLE case
+    - sal/types.h
+    - tools/simdsupport.hxx
+    - stdlib.h
+    tools/qa/cppunit/test_cpu_runtime_detection_SSSE3_check.cxx:
+    # Needed for LO_SSSE3_AVAILABLE case
+    - tools/simdsupport.hxx
+    - stdlib.h
     tools/source/debug/debug.cxx:
     # Needed for linker visibility
     - tools/diagnose_ex.h
-    tools/source/generic/poly.cxx:
-    # OSL_BIGENDIAN is being checked
-    - osl/endian.h
+    # Keep for commented out "if defined __GLIBCXX__" path
+    - cxxabi.h
     tools/source/misc/extendapplicationenvironment.cxx:
     # Needed on MACOSX
     - config_folders.h

@@ -26,7 +26,6 @@
 #include <o3tl/any.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
-#include <osl/time.h>
 #include <sal/types.h>
 #include <typelib/typedescription.hxx>
 #include <uno/dispatcher.hxx>
@@ -40,7 +39,6 @@
 #include <cppuhelper/supportsservice.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMain.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/bridge/UnoUrlResolver.hpp>
@@ -52,7 +50,6 @@
 #include <test/testtools/bridgetest/TestPolyStruct.hpp>
 #include <test/testtools/bridgetest/XBridgeTest.hpp>
 #include <test/testtools/bridgetest/XBridgeTest2.hpp>
-#include <test/testtools/bridgetest/XMulti.hpp>
 
 #include "currentcontextchecker.hxx"
 #include "multi.hxx"
