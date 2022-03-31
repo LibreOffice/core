@@ -33,6 +33,69 @@
       "message": "Looks very promising.\n\nSome issues: \n* buttons should be located at the bottom of the dialog\n* with kf5 I don\u0027t see anything expanded (or it\u0027s always expanded), see https://i.imgur.com/jgSxqNR.png\n* the static info text must not have a mnemonic\n* left-align text text with proper margin, see https://wiki.documentfoundation.org/Design/Guidelines/PropertyDialog\n* take care of spacing for the other controls as well\n* questionmark image seems to be missing (I like these tiny design elements, it shows that we put love in the work we do)\n* might be easier to put the strings into the ui\n\nThis button wall bothers me anyway. How about a checkbox \"[ ] Notify if editable\" with the Open Read-Only option? Can we hide Open, as to my understanding this would never be enabled? How about placing the extra functions next to the options, eg. Use this option to open the document read only [Open R/O]; with the new ui-based design it\u0027s much easier to play with the layout.",
       "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0218830f_4e843f78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-31T12:31:55Z",
+      "side": 1,
+      "message": "Adding Hossein for the code review.",
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12175b64_d3c0b147",
+        "filename": "uui/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-31T12:31:55Z",
+      "side": 1,
+      "message": "Wonder if this is still in use.",
+      "range": {
+        "startLine": 51,
+        "startChar": 288,
+        "endLine": 51,
+        "endChar": 296
+      },
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8da190c7_8dc948ee",
+        "filename": "uui/inc/strings.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-03-31T12:31:55Z",
+      "side": 1,
+      "message": "Would use the first sentence for the GtkLabel lbTitle and the second for lbSubTitle, both in the ui.",
+      "range": {
+        "startLine": 51,
+        "startChar": 132,
+        "endLine": 51,
+        "endChar": 136
+      },
+      "revId": "1ec751207271ba7c381e2f4afbea4661688a6f09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
