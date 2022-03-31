@@ -315,17 +315,6 @@ void ScTabView::TabChanged( bool bSameTabButMoved )
         }
     }
 
-    for (int i = 0; i < 4; i++)
-    {
-        if (pGridWin[i])
-        {
-            pGridWin[i]->initiatePageBreaks();
-            // Trigger calculating page breaks only once.
-            break;
-        }
-    }
-
-
     if (comphelper::LibreOfficeKit::isActive())
     {
         ScDocShell* pDocSh = GetViewData().GetDocShell();
