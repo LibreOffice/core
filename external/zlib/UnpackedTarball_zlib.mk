@@ -18,8 +18,4 @@ $(eval $(call gb_UnpackedTarball_set_post_action,zlib,\
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,zlib,0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,zlib, \
-    external/zlib/ubsan.patch \
-))
-
 # vim: set noet sw=4 ts=4:
