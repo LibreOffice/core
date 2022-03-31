@@ -16,6 +16,24 @@
       "message": "I noticed that this same check was used for \"IsAttrAtPos::Ftn\" case but I got no real understanding.",
       "revId": "f3bbc08acf4e55e00b371bf14474742c648758e4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "504d3b36_9653b75a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-03-31T07:50:40Z",
+      "side": 1,
+      "message": "I imagine the lesser check as seen in IsAttrAtPos::RefMark is enough here?",
+      "parentUuid": "d16135ac_f54380e8",
+      "revId": "f3bbc08acf4e55e00b371bf14474742c648758e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
