@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f3348f6_364f150a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-03-31T14:34:00Z",
+      "side": 1,
+      "message": "As Emanuele tested this with MS Word, we could merge this.",
+      "revId": "7b1f6cce03932e3a0762ec4017b942ff0582768c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
