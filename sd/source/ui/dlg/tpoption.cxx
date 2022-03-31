@@ -215,7 +215,8 @@ SdTpOptionsMisc::SdTpOptionsMisc(weld::Container* pPage, weld::DialogController*
         eFUnit = SfxModule::GetCurrentFieldUnit();
 
     SetFieldUnit( *m_xMtrFldTabstop , eFUnit );
-
+    // tdf#148292 - avoid right frame to change position depending on width of this control
+    m_xMtrFldTabstop->set_size_request(150, -1);
     // Impress is default mode, let' hide the entire scale frame etc.
     m_xCbxDistort->hide();
     m_xScaleFrame->hide();
