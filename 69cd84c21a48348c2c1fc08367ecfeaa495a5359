@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4ac4b90_d0f7e517",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-03-31T14:22:27Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! I\u0027m compiling the patch for verifying.\n\n@Noel: many thanks for your review!",
+      "revId": "69cd84c21a48348c2c1fc08367ecfeaa495a5359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
