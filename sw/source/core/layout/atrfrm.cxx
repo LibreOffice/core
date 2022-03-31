@@ -3201,6 +3201,16 @@ OUString SwFlyFrameFormat::GetObjTitle() const
         return msTitle;
 }
 
+void SwFlyFrameFormat::SetObjTooltip(const OUString& rTooltip)
+{
+    msTooltip = rTooltip;
+}
+
+OUString SwFlyFrameFormat::GetObjTooltip() const
+{
+    return msTooltip;
+}
+
 void SwFlyFrameFormat::SetObjDescription( const OUString& rDescription, bool bBroadcast )
 {
     SdrObject* pMasterObject = FindSdrObject();

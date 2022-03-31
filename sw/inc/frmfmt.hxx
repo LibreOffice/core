@@ -191,6 +191,8 @@ class SW_DLLPUBLIC SwFlyFrameFormat final : public SwFrameFormat
     friend class SwDoc;
     OUString msTitle;
     OUString msDesc;
+    /// A tooltip has priority over an SwFormatURL and is not persisted to files.
+    OUString msTooltip;
 
     /** Both not existent.
        it stores the previous position of Prt rectangle from RequestObjectResize
@@ -220,6 +222,10 @@ public:
 
     OUString GetObjTitle() const;
     void SetObjTitle( const OUString& rTitle, bool bBroadcast = false );
+
+    OUString GetObjTooltip() const;
+    void SetObjTooltip(const OUString& rTooltip);
+
     OUString GetObjDescription() const;
     void SetObjDescription( const OUString& rDescription, bool bBroadcast = false );
 

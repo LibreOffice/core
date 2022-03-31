@@ -862,6 +862,7 @@ class SwUINumRuleItem;
 #define FN_SET_FRM_ALT_NAME             TypedWhichId<SfxStringItem>(FN_FRAME + 18)
 #define FN_UNO_TITLE                    (FN_FRAME + 19)
 #define FN_UNO_DESCRIPTION              TypedWhichId<SfxStringItem>(FN_FRAME + 20)
+#define FN_UNO_TOOLTIP                  (FN_FRAME + 21)
 
 #define SID_ATTR_PAGE_COLUMN            (FN_SIDEBAR + 0)
 #define SID_ATTR_PAGE_HEADER            (FN_SIDEBAR + 3)
