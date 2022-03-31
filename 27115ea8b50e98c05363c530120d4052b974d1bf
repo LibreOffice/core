@@ -16,6 +16,23 @@
       "message": "Hi Miklos,\nI\u0027d appreciate it if you could review this patch :)",
       "revId": "27115ea8b50e98c05363c530120d4052b974d1bf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cbef507_f0c1c5b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-31T13:31:58Z",
+      "side": 1,
+      "message": "This looks sensible to me. Later way may find that other type of properties also need a reset, but let\u0027s add that when we see an actual need.",
+      "revId": "27115ea8b50e98c05363c530120d4052b974d1bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
