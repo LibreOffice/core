@@ -90,7 +90,7 @@ using namespace i18n::ScriptType;
 #define isWawChar(c)        IS_JOINING_GROUP((c), WAW)
 #define isSeenOrSadChar(c)  (IS_JOINING_GROUP((c), SAD) || IS_JOINING_GROUP((c), SEEN))
 
-// Beh and charters that behave like Beh in medial form.
+// Beh and characters that behave like Beh in medial form.
 static bool isBehChar(sal_Unicode cCh)
 {
     bool bRet = false;
@@ -115,7 +115,7 @@ static bool isBehChar(sal_Unicode cCh)
     return bRet;
 }
 
-// Yeh and charters that behave like Yeh in final form.
+// Yeh and characters that behave like Yeh in final form.
 static bool isYehChar(sal_Unicode cCh)
 {
     bool bRet = false;
