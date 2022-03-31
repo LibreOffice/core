@@ -159,6 +159,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         SwVirtFlyDrawObj* pDrawObj = dynamic_cast<SwVirtFlyDrawObj*>(pObj);
         OUString sText;
         tools::Rectangle aPixRect;
+        bool bTooltip = false;
         if (pDrawObj)
         {
             SwFlyFrame *pFly = pDrawObj->GetFlyFrame();
@@ -166,7 +167,13 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
             aPixRect = pWindow->LogicToPixel(pFly->getFrameArea().SVRect());
 
             const SwFormatURL &rURL = pFly->GetFormat()->GetURL();
-            if( rURL.GetMap() )
+            if (!pFly->GetFormat()->GetObjTooltip().isEmpty())
+            {
+                // Tooltips have priority over URLs.
+                sText = pFly->GetFormat()->GetObjTooltip();
+                bTooltip = true;
+            }
+            else if( rURL.GetMap() )
             {
                 IMapObject *pTmpObj = pFly->GetFormat()->GetIMapObject( aPos, pFly );
                 if( pTmpObj )
@@ -215,7 +222,7 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
         {
             // #i80029#
             bool bExecHyperlinks = pDoc->GetDocShell()->IsReadOnly();
-            if (!bExecHyperlinks)
+            if (!bExecHyperlinks && !bTooltip)
                 sText = SfxHelp::GetURLHelpText(sText);
 
             // then display the help:
