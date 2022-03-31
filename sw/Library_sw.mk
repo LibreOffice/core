@@ -481,6 +481,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/unocore/unobkm \
     sw/source/core/unocore/unochart \
     sw/source/core/unocore/unocoll \
+    sw/source/core/unocore/unocontentcontrol \
     sw/source/core/unocore/unocrsr \
     sw/source/core/unocore/unocrsrhelper \
     sw/source/core/unocore/unodraw \
