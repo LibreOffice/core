@@ -16,6 +16,23 @@
       "message": "Thanks Miklos - can we have in cp-6.4 too if it\u0027s needed ?",
       "revId": "64d2719f299f73ea671ce4e2c13e86a72426191e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e7d83e8_49899403",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-03-31T09:45:28Z",
+      "side": 1,
+      "message": "Yunusemre says the aborts should go away if you rebase on top of a4e7cc2a12ca3ea90ec21de96aa038f2447b40f8, let\u0027s do that.",
+      "revId": "64d2719f299f73ea671ce4e2c13e86a72426191e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
