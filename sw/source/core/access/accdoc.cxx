@@ -322,6 +322,8 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
         {
             throw uno::RuntimeException("no Window", static_cast<cppu::OWeakObject*>(this));
         }
+        if (pWin->isDisposed()) // tdf#147967
+            return nullptr;
 
         Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
         if( mpChildWin->GetWindowExtentsRelative( pWin ).Contains( aPixPoint ) )
