@@ -16,6 +16,23 @@
       "message": "@Attila: very nice fix! I\u0027m compiling the patch for verifying.\n\n@Noel: many thanks for your review!",
       "revId": "69cd84c21a48348c2c1fc08367ecfeaa495a5359",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e92e37e3_55d6a41e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-01T06:01:36Z",
+      "side": 1,
+      "message": "@Attila: it works perfectly!",
+      "revId": "69cd84c21a48348c2c1fc08367ecfeaa495a5359",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
