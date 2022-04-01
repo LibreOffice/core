@@ -32,6 +32,7 @@
 #include <formula/errorcodes.hxx>
 #include "document.hxx"
 #include "drwlayer.hxx"
+#include "SparklineList.hxx"
 
 #include <algorithm>
 #include <atomic>

@@ -54,42 +54,6 @@ public:
     SCROW getRow() const { return m_nRow; }
 };
 
-/** Contains a list of all created sparklines */
-class SC_DLLPUBLIC SparklineList
-{
-private:
-    std::vector<std::weak_ptr<Sparkline>> m_pSparklines;
-
-public:
-    SparklineList() {}
-
-    void addSparkline(std::shared_ptr<Sparkline> const& pSparkline)
-    {
-        m_pSparklines.push_back(pSparkline);
-    }
-
-    std::vector<std::shared_ptr<Sparkline>> getSparklines()
-    {
-        std::vector<std::shared_ptr<Sparkline>> toReturn;
-
-        std::vector<std::weak_ptr<Sparkline>>::iterator aIter;
-        for (aIter = m_pSparklines.begin(); aIter != m_pSparklines.end();)
-        {
-            if (auto aSparkline = aIter->lock())
-            {
-                toReturn.push_back(aSparkline);
-                aIter++;
-            }
-            else
-            {
-                aIter = m_pSparklines.erase(aIter);
-            }
-        }
-
-        return toReturn;
-    }
-};
-
 } // end sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
