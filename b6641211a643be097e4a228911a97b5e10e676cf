@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bdfcdb5a_44debb80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-01T06:45:51Z",
+      "side": 1,
+      "message": "CI run for PS1 OK: 00-LO-BuildAll/2599\nOnly commit msg was changed in PS2.",
+      "revId": "b6641211a643be097e4a228911a97b5e10e676cf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
