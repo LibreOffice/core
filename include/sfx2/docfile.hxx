@@ -251,7 +251,7 @@ public:
     SAL_DLLPRIVATE void DoBackup_Impl();
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent );
     SAL_DLLPRIVATE void DoInternalBackup_Impl( const ::ucbhelper::Content& aOriginalContent,
-                                                const OUString& aPrefix,
+                                                std::u16string_view aPrefix,
                                                 const OUString& aExtension,
                                                 const OUString& aDestDir );
 

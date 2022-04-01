@@ -35,13 +35,13 @@ using namespace com::sun::star::beans;
 
 namespace {
 
-OUString supportedByType( const OUString& clipBoardFormat,  const OUString& resultString, const OUString& checkType)
+OUString supportedByType( const OUString& clipBoardFormat, std::u16string_view resultString, const OUString& checkType)
 {
     OUString sTypeName;
     if ( clipBoardFormat.match("doctype:") )
     {
-        OUString tryStr = clipBoardFormat.copy(8);
-        if (resultString.indexOf(tryStr) >= 0)
+        std::u16string_view tryStr = clipBoardFormat.subView(8);
+        if (resultString.find(tryStr) != std::u16string_view::npos)
         {
             sTypeName = checkType;
         }

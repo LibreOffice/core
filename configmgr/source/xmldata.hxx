@@ -38,8 +38,8 @@ Type parseType(
 bool parseBoolean(xmlreader::Span const & text);
 
 OUString parseTemplateReference(
-    OUString const & component, bool hasNodeType,
-    OUString const & nodeType, OUString const * defaultTemplateName);
+    std::u16string_view component, bool hasNodeType,
+    std::u16string_view nodeType, OUString const * defaultTemplateName);
 
 }
 

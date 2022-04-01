@@ -58,7 +58,7 @@ struct Data {
         bool * setElement, OUString * templateName);
 
     static OUString fullTemplateName(
-        OUString const & component, OUString const & name);
+        std::u16string_view component, std::u16string_view name);
 
     //TODO: better rules under which circumstances a short template name matches
     static bool equalTemplateNames(

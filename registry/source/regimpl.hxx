@@ -102,7 +102,7 @@ public:
     friend class ORegKey;
 
 private:
-    RegError    eraseKey(ORegKey* pKey, const OUString& keyName);
+    RegError    eraseKey(ORegKey* pKey, std::u16string_view keyName);
 
     RegError    deleteSubkeysAndValues(ORegKey* pKey);
 

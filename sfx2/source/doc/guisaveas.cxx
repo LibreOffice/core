@@ -863,14 +863,14 @@ bool ModelData_Impl::OutputFileDialog( sal_Int16 nStoreMode,
             // this is a PDF export
             // the filter options has been shown already
             const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() );
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, "pdf", rStandardDir, rDenyList, pFrameWin ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, u"pdf", rStandardDir, rDenyList, pFrameWin ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else if ((nStoreMode & EPUBEXPORT_REQUESTED) && !aPreselectedFilterPropsHM.empty())
         {
             // This is an EPUB export, the filter options has been shown already.
             const OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault( "UIName", OUString() );
-            pFileDlg.reset(new sfx2::FileDialogHelper(aDialogMode, aDialogFlags, aFilterUIName, "epub", rStandardDir, rDenyList, pFrameWin));
+            pFileDlg.reset(new sfx2::FileDialogHelper(aDialogMode, aDialogFlags, aFilterUIName, u"epub", rStandardDir, rDenyList, pFrameWin));
             pFileDlg->SetCurrentFilter(aFilterUIName);
         }
         else

@@ -55,12 +55,14 @@ InspectorTextPanel::InspectorTextPanel(weld::Widget* pParent)
     mpListBoxStyles->set_column_fixed_widths(aWidths);
 }
 
-static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, OUString& rString)
+static bool GetPropertyValues(std::u16string_view rPropName, const uno::Any& rAny,
+                              OUString& rString)
 {
     // Hide Asian and Complex properties
-    if (!SvtCJKOptions::IsCJKFontEnabled() && rPropName.indexOf("Asian") != -1)
+    if (!SvtCJKOptions::IsCJKFontEnabled() && rPropName.find(u"Asian") != std::u16string_view::npos)
         return false;
-    if (!SvtCTLOptions().IsCTLFontEnabled() && rPropName.indexOf("Complex") != -1)
+    if (!SvtCTLOptions().IsCTLFontEnabled()
+        && rPropName.find(u"Complex") != std::u16string_view::npos)
         return false;
 
     if (bool bValue; rAny >>= bValue)
@@ -77,14 +79,14 @@ static bool GetPropertyValues(const OUString& rPropName, const uno::Any& rAny, O
     }
     else if (tools::Long nValueLong; rAny >>= nValueLong)
     {
-        if (rPropName.indexOf("Color") != -1)
+        if (rPropName.find(u"Color") != std::u16string_view::npos)
             rString = "0x" + OUString::number(nValueLong, 16);
         else
             rString = OUString::number(nValueLong);
     }
     else if (double fValue; rAny >>= fValue)
     {
-        if (rPropName.indexOf("Weight") != -1)
+        if (rPropName.find(u"Weight") != std::u16string_view::npos)
             rString = SvxResId(fValue > 100 ? RID_BOLD : RID_NORMAL);
         else
             rString = OUString::number((round(fValue * 100)) / 100.00);

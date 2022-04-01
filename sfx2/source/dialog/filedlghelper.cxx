@@ -2398,7 +2398,7 @@ FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     FileDialogFlags nFlags,
     const OUString& aFilterUIName,
-    const OUString& aExtName,
+    std::u16string_view aExtName,
     const OUString& rStandardDir,
     const css::uno::Sequence< OUString >& rDenyList,
     weld::Window* pPreferredParent )
@@ -2407,9 +2407,9 @@ FileDialogHelper::FileDialogHelper(
 {
     // the wildcard here is expected in form "*.extension"
     OUString aWildcard;
-    if ( aExtName.indexOf( '*' ) != 0 )
+    if ( aExtName.find( '*' ) != 0 )
     {
-        if ( !aExtName.isEmpty() && aExtName.indexOf( '.' ) != 0 )
+        if ( !aExtName.empty() && aExtName.find( '.' ) != 0 )
             aWildcard = "*.";
         else
             aWildcard = "*";
@@ -2848,7 +2848,7 @@ ErrCode FileOpenDialog_Impl( weld::Window* pParent,
     // read-only to discourage editing (which would invalidate existing
     // signatures).
     if (nFlags & FileDialogFlags::SignPDF)
-        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), "pdf", rStandardDir, rDenyList, pParent));
+        pDialog.reset(new FileDialogHelper(nDialogType, nFlags, SfxResId(STR_SFX_FILTERNAME_PDF), u"pdf", rStandardDir, rDenyList, pParent));
     else
         pDialog.reset(new FileDialogHelper(nDialogType, nFlags, OUString(), nDialog, SfxFilterFlags::NONE, SfxFilterFlags::NONE, rStandardDir, rDenyList, pParent));
 

@@ -120,9 +120,9 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
     return true;
 }
 
-bool isTemplate(const OUString& rType)
+bool isTemplate(std::u16string_view rType)
 {
-    return rType.indexOf("_VorlageTemplate") != -1;
+    return rType.find(u"_VorlageTemplate") != std::u16string_view::npos;
 }
 
 }

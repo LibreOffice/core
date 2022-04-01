@@ -65,25 +65,25 @@ public:
 /** Use a heuristic based on the URL of a top-level template folder to
     assign a priority that is used to sort the folders.
 */
-int Classify (const OUString& rsURL)
+int Classify (std::u16string_view rsURL)
 {
     int nPriority (0);
 
-    if (rsURL.isEmpty())
+    if (rsURL.empty())
         nPriority = 100;
-    else if (rsURL.indexOf("presnt")>=0)
+    else if (rsURL.find(u"presnt") != std::u16string_view::npos)
     {
         nPriority = 30;
     }
-    else if (rsURL.indexOf("layout")>=0)
+    else if (rsURL.find(u"layout") != std::u16string_view::npos)
     {
         nPriority = 20;
     }
-    else if (rsURL.indexOf("educate")>=0)
+    else if (rsURL.find(u"educate") != std::u16string_view::npos)
     {
         nPriority = 40;
     }
-    else if (rsURL.indexOf("finance")>=0)
+    else if (rsURL.find(u"finance")  != std::u16string_view::npos)
     {
         nPriority = 40;
     }

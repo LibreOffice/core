@@ -1617,7 +1617,7 @@ bool DateFormatter::ImplAllowMalformedInput() const
     return !IsEnforceValidValue();
 }
 
-int DateFormatter::GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper)
+int DateFormatter::GetDateArea(ExtDateFieldFormat eFormat, std::u16string_view rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper)
 {
     sal_Int8 nDateArea = 0;
 
@@ -1629,12 +1629,12 @@ int DateFormatter::GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText
     else
     {
         // search area
-        sal_Int32 nPos = 0;
+        size_t nPos = 0;
         OUString aDateSep = ImplGetDateSep(rLocaleDataWrapper, eFormat);
         for ( sal_Int8 i = 1; i <= 3; i++ )
         {
-            nPos = rText.indexOf( aDateSep, nPos );
-            if (nPos < 0 || nPos >= nCursor)
+            nPos = rText.find( aDateSep, nPos );
+            if (nPos == std::u16string_view::npos || static_cast<sal_Int32>(nPos) >= nCursor)
             {
                 nDateArea = i;
                 break;
@@ -2581,7 +2581,7 @@ bool TimeFormatter::ImplAllowMalformedInput() const
     return !IsEnforceValidValue();
 }
 
-int TimeFormatter::GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, int nCursor,
+int TimeFormatter::GetTimeArea(TimeFieldFormat eFormat, std::u16string_view rText, int nCursor,
                                      const LocaleDataWrapper& rLocaleDataWrapper)
 {
     int nTimeArea = 0;
@@ -2590,18 +2590,18 @@ int TimeFormatter::GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, i
     if (eFormat != TimeFieldFormat::F_SEC_CS)
     {
         //Which area is the cursor in of HH:MM:SS.TT
-        for ( sal_Int32 i = 1, nPos = 0; i <= 4; i++ )
+        for ( size_t i = 1, nPos = 0; i <= 4; i++ )
         {
-            sal_Int32 nPos1 = rText.indexOf(rLocaleDataWrapper.getTimeSep(), nPos);
-            sal_Int32 nPos2 = rText.indexOf(rLocaleDataWrapper.getTime100SecSep(), nPos);
+            size_t nPos1 = rText.find(rLocaleDataWrapper.getTimeSep(), nPos);
+            size_t nPos2 = rText.find(rLocaleDataWrapper.getTime100SecSep(), nPos);
             //which ever comes first, bearing in mind that one might not be there
-            if (nPos1 >= 0 && nPos2 >= 0)
+            if (nPos1 != std::u16string_view::npos && nPos2 != std::u16string_view::npos)
                 nPos = std::min(nPos1, nPos2);
-            else if (nPos1 >= 0)
+            else if (nPos1 != std::u16string_view::npos)
                 nPos = nPos1;
             else
                 nPos = nPos2;
-            if (nPos < 0 || nPos >= nCursor)
+            if (nPos == std::u16string_view::npos || static_cast<sal_Int32>(nPos) >= nCursor)
             {
                 nTimeArea = i;
                 break;
@@ -2612,8 +2612,8 @@ int TimeFormatter::GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, i
     }
     else
     {
-        sal_Int32 nPos = rText.indexOf(rLocaleDataWrapper.getTime100SecSep());
-        if (nPos < 0 || nPos >= nCursor)
+        size_t nPos = rText.find(rLocaleDataWrapper.getTime100SecSep());
+        if (nPos == std::u16string_view::npos || static_cast<sal_Int32>(nPos) >= nCursor)
             nTimeArea = 3;
         else
             nTimeArea = 4;
@@ -2623,7 +2623,7 @@ int TimeFormatter::GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, i
 }
 
 tools::Time TimeFormatter::SpinTime(bool bUp, const tools::Time& rTime, TimeFieldFormat eFormat,
-                                    bool bDuration, const OUString& rText, int nCursor,
+                                    bool bDuration, std::u16string_view rText, int nCursor,
                                     const LocaleDataWrapper& rLocaleDataWrapper)
 {
     tools::Time aTime(rTime);

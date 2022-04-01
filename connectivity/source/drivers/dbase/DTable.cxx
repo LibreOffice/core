@@ -1015,7 +1015,7 @@ bool ODbaseTable::CreateImpl()
 {
     OSL_ENSURE(!m_pFileStream, "SequenceError");
 
-    if ( m_pConnection->isCheckEnabled() && ::dbtools::convertName2SQLName(m_Name,OUString()) != m_Name )
+    if ( m_pConnection->isCheckEnabled() && ::dbtools::convertName2SQLName(m_Name, u"") != m_Name )
     {
         const OUString sError( getConnection()->getResources().getResourceStringWithSubstitution(
                 STR_SQL_NAME_ERROR,

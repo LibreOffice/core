@@ -395,7 +395,7 @@ namespace dbaui
 
         OUString convertColumnName(  const TColumnFindFunctor&   _rCmpFunctor,
                                             const OUString&  _sColumnName,
-                                            const OUString&  _sExtraChars,
+                                            std::u16string_view  _sExtraChars,
                                             sal_Int32               _nMaxNameLen);
         TOTypeInfoSP convertType(const TOTypeInfoSP&_pType, bool& _bNotConvert);
 

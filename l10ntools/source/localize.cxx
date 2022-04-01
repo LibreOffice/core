@@ -117,13 +117,13 @@ void handleCommand(
 
 void InitPoFile(
     std::string_view rProject, const OString& rInPath,
-    const OString& rPotDir, const OString& rOutPath )
+    std::string_view rPotDir, const OString& rOutPath )
 {
     //Create directory for po file
     {
         OUString outDir =
             OStringToOUString(
-                rPotDir.subView(0,rPotDir.lastIndexOf('/')), RTL_TEXTENCODING_UTF8);
+                rPotDir.substr(0,rPotDir.rfind('/')), RTL_TEXTENCODING_UTF8);
         OUString outDirUrl;
         if (osl::FileBase::getFileURLFromSystemPath(outDir, outDirUrl)
             != osl::FileBase::E_None)
@@ -174,7 +174,7 @@ bool fileExists(const OString& fileName)
 
 OString gDestRoot;
 
-bool handleFile(std::string_view rProject, const OUString& rUrl, const OString& rPotDir)
+bool handleFile(std::string_view rProject, const OUString& rUrl, std::string_view rPotDir)
 {
     struct Command {
         std::u16string_view extension;
@@ -216,7 +216,7 @@ bool handleFile(std::string_view rProject, const OUString& rUrl, const OString& 
                 if (bSimpleModuleCase)
                     sOutPath = gDestRoot + "/" + rProject + "/messages.pot";
                 else
-                    sOutPath = rPotDir + ".pot";
+                    sOutPath = OString::Concat(rPotDir) + ".pot";
 
                 if (!fileExists(sOutPath))
                 {
@@ -280,7 +280,7 @@ bool handleFile(std::string_view rProject, const OUString& rUrl, const OString& 
 
 void handleFilesOfDir(
     std::vector<OUString>& aFiles, std::string_view rProject,
-    const OString& rPotDir )
+    std::string_view rPotDir )
 {
     ///Handle files in lexical order
     std::sort(aFiles.begin(), aFiles.end());

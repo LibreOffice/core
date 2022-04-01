@@ -750,11 +750,11 @@ RegError ORegistry::deleteKey(RegKeyHandle hKey, std::u16string_view keyName)
     return eraseKey(m_openKeyTable[ROOT], sFullKeyName);
 }
 
-RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
+RegError ORegistry::eraseKey(ORegKey* pKey, std::u16string_view keyName)
 {
     RegError _ret = RegError::NO_ERROR;
 
-    if (keyName.isEmpty())
+    if (keyName.empty())
     {
         return RegError::INVALID_KEYNAME;
     }
@@ -762,18 +762,18 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     OUString     sFullKeyName(pKey->getName());
     OUString     sFullPath(sFullKeyName);
     OUString     sRelativKey;
-    sal_Int32    lastIndex = keyName.lastIndexOf('/');
+    size_t    lastIndex = keyName.rfind('/');
 
-    if (lastIndex >= 0)
+    if (lastIndex != std::u16string_view::npos)
     {
-        sRelativKey += keyName.subView(lastIndex + 1);
+        sRelativKey += keyName.substr(lastIndex + 1);
 
         if (sFullKeyName.getLength() > 1)
             sFullKeyName += keyName;
         else
-            sFullKeyName += keyName.subView(1);
+            sFullKeyName += keyName.substr(1);
 
-        sFullPath = sFullKeyName.copy(0, keyName.lastIndexOf('/') + 1);
+        sFullPath = sFullKeyName.copy(0, keyName.rfind('/') + 1);
     } else
     {
         if (sFullKeyName.getLength() > 1)

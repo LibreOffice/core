@@ -281,15 +281,14 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 }
 
 // Check if the context string matches the provided xModel context
-bool AddonMenuManager::IsCorrectContext( std::u16string_view rModuleIdentifier, const OUString& rContext )
+bool AddonMenuManager::IsCorrectContext( std::u16string_view rModuleIdentifier, std::u16string_view rContext )
 {
-    if ( rContext.isEmpty() )
+    if ( rContext.empty() )
         return true;
 
     if ( !rModuleIdentifier.empty() )
     {
-        sal_Int32 nIndex = rContext.indexOf( rModuleIdentifier );
-        return ( nIndex >= 0 );
+        return rContext.find( rModuleIdentifier ) != std::u16string_view::npos;
     }
 
     return false;

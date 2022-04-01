@@ -71,10 +71,10 @@ OUString InputOutputHelper::convertFileNameToUrl( const OUString& rFileName )
     return OUString();
 }
 
-sal_Int32 InputOutputHelper::getFileNamePos( const OUString& rFileUrl )
+sal_Int32 InputOutputHelper::getFileNamePos( std::u16string_view rFileUrl )
 {
-    sal_Int32 nSepPos = rFileUrl.lastIndexOf( '/' );
-    return (nSepPos < 0) ? 0 : (nSepPos + 1);
+    size_t nSepPos = rFileUrl.find( '/' );
+    return (nSepPos == std::u16string_view::npos) ? 0 : (nSepPos + 1);
 }
 
 OUString InputOutputHelper::getFileNameExtension( const OUString& rFileUrl )

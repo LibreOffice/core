@@ -1107,9 +1107,9 @@ void ScInputHandler::HideTipBelow()
 namespace
 {
 
-bool lcl_hasSingleToken(const OUString& s, sal_Unicode c)
+bool lcl_hasSingleToken(std::u16string_view s, sal_Unicode c)
 {
-    return !s.isEmpty() && s.indexOf(c)<0;
+    return !s.empty() && s.find(c) == std::u16string_view::npos;
 }
 
 }

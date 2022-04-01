@@ -247,17 +247,17 @@ namespace
 };
 
 static OUString lcl_createName(
-    const OUString& rLeadingChars, Tokens & tokens, const OUString* pExtension,
+    std::u16string_view rLeadingChars, Tokens & tokens, const OUString* pExtension,
     const OUString* pParent, bool bDirectory, bool bKeep, bool bLock,
     bool bCreateParentDirs )
 {
     OUString aName = ConstructTempDir_Impl( pParent, bCreateParentDirs );
     if ( bCreateParentDirs )
     {
-        sal_Int32 nOffset = rLeadingChars.lastIndexOf("/");
+        size_t nOffset = rLeadingChars.rfind(u"/");
         OUString aDirName;
-        if (-1 != nOffset)
-            aDirName = aName + rLeadingChars.subView( 0, nOffset );
+        if (std::u16string_view::npos != nOffset)
+            aDirName = aName + rLeadingChars.substr( 0, nOffset );
         else
             aDirName = aName;
         TempDirCreatedObserver observer;
@@ -365,7 +365,7 @@ TempFile::TempFile( const OUString* pParent, bool bDirectory )
     aName = CreateTempName_Impl( pParent, true, bDirectory );
 }
 
-TempFile::TempFile( const OUString& rLeadingChars, bool _bStartWithZero,
+TempFile::TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero,
                     const OUString* pExtension, const OUString* pParent,
                     bool bCreateParentDirs )
     : bIsDirectory( false )
