@@ -2137,6 +2137,37 @@ bool DocumentContentOperationsManager::DelFullPara( SwPaM& rPam )
                 return false;
             }
         }
+
+        // must delete all fieldmarks before CorrAbs(), or they'll remain
+        // moved to wrong node without their CH_TXT_ATR_FIELD*
+        // (note: deleteMarks() doesn't help here, in case of partially
+        // selected fieldmarks; let's delete these as re-inserting their chars
+        // elsewhere looks difficult)
+        ::std::set<::sw::mark::IFieldmark*> fieldmarks;
+        for (SwNodeIndex i = aRg.aStart; i <= aRg.aEnd; ++i)
+        {
+            if (SwTextNode *const pTextNode = i.GetNode().GetTextNode())
+            {
+                for (sal_Int32 j = 0; j < pTextNode->GetText().getLength(); ++j)
+                {
+                    switch (pTextNode->GetText()[j])
+                    {
+                        case CH_TXT_ATR_FIELDSTART:
+                        case CH_TXT_ATR_FIELDEND:
+                            fieldmarks.insert(m_rDoc.getIDocumentMarkAccess()->getFieldmarkAt(SwPosition(*pTextNode, j)));
+                        break;
+                        case CH_TXT_ATR_FIELDSEP:
+                            fieldmarks.insert(m_rDoc.getIDocumentMarkAccess()->getFieldmarkFor(SwPosition(*pTextNode, j)));
+                        break;
+                    }
+                }
+            }
+        }
+        for (auto const pFieldMark : fieldmarks)
+        {
+            m_rDoc.getIDocumentMarkAccess()->deleteMark(pFieldMark);
+        }
+
         // move bookmarks, redlines etc.
         if (aRg.aStart == aRg.aEnd) // only first CorrAbs variant handles this
         {
