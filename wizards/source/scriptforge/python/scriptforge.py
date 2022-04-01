@@ -1784,6 +1784,12 @@ class SFDialogs:
         def Activate(self):
             return self.ExecMethod(self.vbMethod, 'Activate')
 
+        def Center(self, parent = ScriptForge.cstSymMissing):
+            parentclasses = (SFDocuments.SF_Document, SFDocuments.SF_Base, SFDocuments.SF_Calc, SFDocuments.SF_Writer,
+                                                          SFDialogs.SF_Dialog)
+            parentobj = parent.objectreference if isinstance(parent, parentclasses) else parent
+            return self.ExecMethod(self.vbMethod + self.flgObject, 'Center', parentobj)
+
         def Controls(self, controlname = ''):
             return self.ExecMethod(self.vbMethod + self.flgArrayRet, 'Controls', controlname)
 
@@ -1796,6 +1802,9 @@ class SFDialogs:
         def GetTextsFromL10N(self, l10n):
             l10nobj = l10n.objectreference if isinstance(l10n, SFScriptForge.SF_L10N) else l10n
             return self.ExecMethod(self.vbMethod + self.flgObject, 'GetTextsFromL10N', l10nobj)
+
+        def Resize(self, left = -1, top = -1, width = -1, height = -1):
+            return self.ExecMethod(self.vbMethod, 'Resize', left, top, width, height)
 
         def Terminate(self):
             return self.ExecMethod(self.vbMethod, 'Terminate')
