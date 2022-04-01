@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01327b68_b6e4cbb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-01T14:16:46Z",
+      "side": 1,
+      "message": "Any ideas as to right way to fix this invalid read as seen in the commit message of this test case. \n\nI see that ScRefCellValue::hasNumeric causes attribute modification but the patterns apparently aren\u0027t expected to change during ScOutputData::LayoutStrings. git log shows this sort of thing has happened before wrt 37f6e5de1e72d209b0892734f4de5c4d8a849885 tdf#114710 : Fixes crash when pasting as GDI metafile",
+      "revId": "8fccf4d47e2e93f70dcb12bc4c986563e0a855b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
