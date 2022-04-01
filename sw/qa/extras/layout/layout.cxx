@@ -310,6 +310,13 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
 }
 #endif
 
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint98)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint98.html");
+}
+#endif
+
 //just care it doesn't crash/assert
 void SwLayoutWriter::testTdf147485Forcepoint()
 {
