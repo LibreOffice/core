@@ -1249,16 +1249,23 @@ public:
      */
     sc::MultiDataCellState HasMultipleDataCells( const ScRange& rRange ) const;
 
-    /** Spaklines */
+    // Spaklines
+    /** Returns sparkline at the addrss if it exists */
     SC_DLLPUBLIC std::shared_ptr<sc::Sparkline> GetSparkline(ScAddress const & rPosition);
     SC_DLLPUBLIC bool HasSparkline(ScAddress const & rPosition);
     SC_DLLPUBLIC sc::Sparkline* CreateSparkline(ScAddress const & rPosition, std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup);
     SC_DLLPUBLIC sc::SparklineList* GetSparklineList(SCTAB nTab);
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rPosition);
+
+    /**
+     * Returns true if the whole range covers one and the same sparkline
+     * group and returns the group via out parameter
+     */
+    SC_DLLPUBLIC bool GetSparklineGroupInRange(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup>& rGroup);
     SC_DLLPUBLIC bool HasOneSparklineGroup(ScRange const& rRange);
     SC_DLLPUBLIC std::shared_ptr<sc::SparklineGroup> SearchSparklineGroup(tools::Guid const& rGuid);
 
-    /** Notes **/
+    // Notes
     SC_DLLPUBLIC ScPostIt*       GetNote(const ScAddress& rPos);
     SC_DLLPUBLIC ScPostIt*       GetNote(SCCOL nCol, SCROW nRow, SCTAB nTab);
     void                         SetNote(const ScAddress& rPos, std::unique_ptr<ScPostIt> pNote);

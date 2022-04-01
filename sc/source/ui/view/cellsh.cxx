@@ -190,6 +190,7 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
 
             case SID_DELETE_SPARKLINE:
             case SID_EDIT_SPARKLINE_GROUP:
+            case SID_DELETE_SPARKLINE_GROUP:
             {
                 bDisable = !rDoc.HasOneSparklineGroup(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab));
             }

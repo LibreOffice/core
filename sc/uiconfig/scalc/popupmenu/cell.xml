@@ -67,6 +67,7 @@
     <menu:menupopup>
       <menu:menuitem menu:id=".uno:InsertSparkline"/>
       <menu:menuitem menu:id=".uno:DeleteSparkline"/>
+      <menu:menuitem menu:id=".uno:DeleteSparklineGroup"/>
       <menu:menuitem menu:id=".uno:EditSparklineGroup"/>
     </menu:menupopup>
   </menu:menu>
