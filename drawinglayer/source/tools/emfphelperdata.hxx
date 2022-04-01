@@ -213,6 +213,7 @@ namespace emfplushelper
         /// data holders
         wmfemfhelper::TargetHolders&    mrTargetHolders;
         wmfemfhelper::PropertyHolders&  mrPropertyHolders;
+        wmfemfhelper::PropertyHolder    aGetDCState;
         bool                            bIsGetDCProcessing;
 
         // readers
