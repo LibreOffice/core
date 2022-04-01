@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bc3ff9f_7e6b0ede",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-01T08:25:32Z",
+      "side": 1,
+      "message": "I notice a number of recent commits of yours that introduce uses of `std::lock_guard` and wanted to make you aware of \u003chttps://git.libreoffice.org/core/+/9376f65a26240441bf9dd6ae1f69886dc9fa60fa%5E!/\u003e \"Consolidate on C++17 std::scoped_lock instead of std::lock_guard\" and the rationale given in its commit message.",
+      "revId": "8fa40be492f4ae85eb3f0db363bd8d2cf7c214a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
