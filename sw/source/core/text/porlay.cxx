@@ -401,7 +401,9 @@ void SwLineLayout::CalcLine( SwTextFormatter &rLine, SwTextFormatInfo &rInf )
                         if( !GetAscent() )
                             SetAscent( pPos->GetAscent() );
                     }
-                    delete pLast->Cut( pPos );
+                    SwLinePortion* pPortion = pLast->Cut( pPos );
+                    rLine.ClearIfIsFirstOfBorderMerge(pPortion);
+                    delete pPortion;
                     pPos = pLast->GetNextPortion();
                     continue;
                 }
