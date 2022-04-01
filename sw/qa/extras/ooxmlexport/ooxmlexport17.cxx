@@ -327,6 +327,32 @@ DECLARE_OOXMLEXPORT_TEST(testTdf81507, "tdf81507.docx")
     xmlXPathFreeObject(pXmlObj);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf139948, "tdf139948.docx")
+{
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(1, "No border"), "TopBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(2, "Border below"), "TopBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88),
+        getProperty<table::BorderLine2>(getParagraph(3, "Borders below and above"), "TopBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(88),
+        getProperty<table::BorderLine2>(getParagraph(4, "Border above"), "TopBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(5, "No border"), "TopBorder").LineWidth);
+
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(1), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(2), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(3), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(4), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(5), "BottomBorder").LineWidth);
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);

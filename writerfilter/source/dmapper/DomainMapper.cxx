@@ -1492,7 +1492,16 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
                 break;
             case NS_ooxml::LN_CT_PBdr_between:
-                //not supported
+                if (m_pImpl->handlePreviousParagraphBorderInBetween())
+                {
+                    // If previous paragraph also had border in between property
+                    // then it is possible to emulate this border as top border
+                    // for current paragraph
+                    eBorderId = PROP_TOP_BORDER;
+                    eBorderDistId = PROP_TOP_BORDER_DISTANCE;
+                }
+                // Since there are borders in between, each paragraph will have own borders. No more joining
+                rContext->Insert(PROP_PARA_CONNECT_BORDERS, uno::makeAny(false));
                 break;
             default:;
             }

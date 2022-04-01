@@ -603,6 +603,38 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     verify();
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf139948, "tdf139948.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(1, "No border"), "TopBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(2, "Border below"), "TopBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(88),
+        getProperty<table::BorderLine2>(getParagraph(3, "Borders below and above"), "TopBorder")
+            .LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(88),
+        getProperty<table::BorderLine2>(getParagraph(4, "Border above"), "TopBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0),
+        getProperty<table::BorderLine2>(getParagraph(5, "No border"), "TopBorder").LineWidth);
+
+    // And let's ensure that there are no other horizontal borders
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0), getProperty<table::BorderLine2>(getParagraph(1), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0), getProperty<table::BorderLine2>(getParagraph(2), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0), getProperty<table::BorderLine2>(getParagraph(3), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0), getProperty<table::BorderLine2>(getParagraph(4), "BottomBorder").LineWidth);
+    CPPUNIT_ASSERT_EQUAL(
+        sal_uInt32(0), getProperty<table::BorderLine2>(getParagraph(5), "BottomBorder").LineWidth);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
