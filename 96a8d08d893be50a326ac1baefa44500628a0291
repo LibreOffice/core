@@ -16,6 +16,23 @@
       "message": "Any ideas on the sw::mark::FindFieldSep assert on this tiny little rtf example with a \\chpgn field and a following table? I\u0027m guessing the field end char is split or deleted by something related to the table creation.",
       "revId": "96a8d08d893be50a326ac1baefa44500628a0291",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96623ebe_2992865b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-01T12:35:12Z",
+      "side": 1,
+      "message": "Michael may have a better idea, but my understanding is that all of the start/separator/end characters of a fieldmark are real characters inside text nodes, so in case the start and end of the fieldmark is the same, then we can assume that its dummy characters are already removed.\n\nI.e. something like this in lcl_RemoveFieldMarks():\n\n diff --git a/sw/source/core/crsr/bookmark.cxx b/sw/source/core/crsr/bookmark.cxx\n index a33cb1c1eab0..b833b47880bb 100644\n --- a/sw/source/core/crsr/bookmark.cxx\n +++ b/sw/source/core/crsr/bookmark.cxx\n @@ -230,6 +230,12 @@ namespace\n          const sal_Unicode aStartMark,\n          const sal_Unicode aEndMark)\n      {\n +        if (rField.GetMarkStart() \u003d\u003d rField.GetMarkEnd())\n +        {\n +            // Already removed.\n +            return;\n +        }\n +\n          io_rDoc.GetIDocumentUndoRedo().StartUndo(SwUndoId::UI_REPLACE, nullptr);\n  \n          const SwPosition\u0026 rStart \u003d rField.GetMarkStart();\n\nwould avoid the immediate problem you run into. Now why we try to remove those dummy characters when they\u0027re already gone is less clear to me.",
+      "revId": "96a8d08d893be50a326ac1baefa44500628a0291",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
