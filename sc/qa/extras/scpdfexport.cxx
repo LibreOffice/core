@@ -55,12 +55,16 @@ private:
 public:
     void testExportRange_Tdf120161();
     void testExportFitToPage_Tdf103516();
+    void testForcepoint97();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
     CPPUNIT_TEST(testExportFitToPage_Tdf103516);
+    CPPUNIT_TEST(testForcepoint97);
     CPPUNIT_TEST_SUITE_END();
 };
+
+char const DATA_DIRECTORY[] = "/sc/qa/extras/testdocuments/";
 
 void ScPDFExportTest::setUp()
 {
@@ -356,6 +360,18 @@ void ScPDFExportTest::testExportFitToPage_Tdf103516()
         CPPUNIT_ASSERT(hasTextInPdf(pPDFFile, "/Count 1>>", bFound));
         CPPUNIT_ASSERT_EQUAL(true, bFound);
     }
+}
+
+// just needs to not crash on export to pdf
+void ScPDFExportTest::testForcepoint97()
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "forcepoint97.xlsx",
+                                  "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:H81
+    ScRange range1(0, 0, 0, 7, 81, 0);
+    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);
