@@ -612,9 +612,9 @@ void SAL_CALL OPreparedStatement::setClob(sal_Int32 nParameterIndex, const Refer
     sal_Int64 nCharWritten = 1; // XClob is indexed from 1
     ISC_STATUS aErr = 0;
     sal_Int64 nLen = xClob->length();
-    while ( nLen > nCharWritten )
+    while ( nLen >= nCharWritten )
     {
-        sal_Int64 nCharRemain = nLen - nCharWritten;
+        sal_Int64 nCharRemain = nLen - nCharWritten + 1;
         constexpr sal_uInt16 MAX_SIZE = SAL_MAX_UINT16 / 4;
         sal_uInt16 nWriteSize = std::min<sal_Int64>(nCharRemain, MAX_SIZE);
         OString sData = OUStringToOString(
