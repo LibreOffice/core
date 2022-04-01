@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 
 #include <cppuhelper/weakref.hxx>
+#include <sal/types.h>
 #include <svl/poolitem.hxx>
 
 #include "calbck.hxx"
@@ -32,7 +33,7 @@ class SwTextNode;
 class SwXContentControl;
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
-class SwFormatContentControl final : public SfxPoolItem
+class SAL_DLLPUBLIC_RTTI SwFormatContentControl final : public SfxPoolItem
 {
     std::shared_ptr<SwContentControl> m_pContentControl;
     SwTextContentControl* m_pTextAttr;
@@ -66,7 +67,7 @@ public:
 };
 
 /// Stores the properties of a content control.
-class SwContentControl : public sw::BroadcastingModify
+class SAL_DLLPUBLIC_RTTI SwContentControl : public sw::BroadcastingModify
 {
     css::uno::WeakReference<css::text::XTextContent> m_wXContentControl;
 
