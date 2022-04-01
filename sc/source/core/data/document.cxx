@@ -6608,10 +6608,15 @@ sc::SparklineList* ScDocument::GetSparklineList(SCTAB nTab)
     return nullptr;
 }
 
-
 bool ScDocument::HasOneSparklineGroup(ScRange const& rRange)
 {
-    sc::SparklineGroup* pGroup = nullptr;
+    std::shared_ptr<sc::SparklineGroup> pSparklineGroup;
+    return GetSparklineGroupInRange(rRange, pSparklineGroup);
+}
+
+bool ScDocument::GetSparklineGroupInRange(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup>& rGroup)
+{
+    std::shared_ptr<sc::SparklineGroup> pFoundGroup;
     SCTAB nTab = rRange.aStart.Tab();
 
     for (SCCOL nX = rRange.aStart.Col(); nX <= rRange.aEnd.Col(); nX++)
@@ -6623,16 +6628,18 @@ bool ScDocument::HasOneSparklineGroup(ScRange const& rRange)
             {
                 return false;
             }
-            else if (!pGroup)
+            else if (!pFoundGroup)
             {
-               pGroup = pSparkline->getSparklineGroup().get();
+               pFoundGroup = pSparkline->getSparklineGroup();
             }
-            else if (pGroup != pSparkline->getSparklineGroup().get())
+            else if (pFoundGroup != pSparkline->getSparklineGroup())
             {
                 return false;
             }
         }
     }
+
+    rGroup = pFoundGroup;
     return true;
 }
 

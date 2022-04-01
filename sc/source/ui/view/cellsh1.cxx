@@ -1072,6 +1072,22 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         }
         break;
 
+        case SID_DELETE_SPARKLINE_GROUP:
+        {
+            ScRange aMarkRange;
+            ScMarkType eMarkType = GetViewData().GetSimpleArea(aMarkRange);
+            if (eMarkType == SC_MARK_SIMPLE)
+            {
+                std::shared_ptr<sc::SparklineGroup> pSparklineGroup;
+                if (GetViewData().GetDocument().GetSparklineGroupInRange(aMarkRange, pSparklineGroup) && pSparklineGroup)
+                {
+                    GetViewData().GetDocShell()->GetDocFunc().DeleteSparklineGroup(pSparklineGroup, GetViewData().GetTabNo());
+                }
+            }
+            rReq.Done();
+        }
+        break;
+
         //  disposal (Outlines)
         //  SID_AUTO_OUTLINE, SID_OUTLINE_DELETEALL in Execute (in docsh.idl)
 
