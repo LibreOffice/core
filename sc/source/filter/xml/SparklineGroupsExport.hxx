@@ -25,21 +25,18 @@ namespace sc
 class SparklineGroupsExport
 {
     ScXMLExport& m_rExport;
-    std::vector<SparklineGroup*> m_aSparklineGroups;
-    std::unordered_map<SparklineGroup*, std::vector<std::shared_ptr<Sparkline>>>
-        m_aSparklineGroupMap;
     SCTAB m_nTable;
 
     void addSparklineGroupAttributes(sc::SparklineAttributes const& rAttributes);
-    void addSparklineGroup(SparklineGroup* pSparklineGroup);
+    void addSparklineGroup(std::shared_ptr<SparklineGroup> const& pSparklineGroup,
+                           std::vector<std::shared_ptr<Sparkline>> const& rSparklines);
     void addSparklineAttributes(Sparkline const& rSparkline);
 
     void insertColor(Color aColor, xmloff::token::XMLTokenEnum eToken);
     void insertBool(bool bValue, xmloff::token::XMLTokenEnum eToken);
 
 public:
-    SparklineGroupsExport(ScXMLExport& rExport, SCTAB nTable,
-                          std::vector<std::shared_ptr<Sparkline>> const& rSparklines);
+    SparklineGroupsExport(ScXMLExport& rExport, SCTAB nTable);
 
     void write();
 };
