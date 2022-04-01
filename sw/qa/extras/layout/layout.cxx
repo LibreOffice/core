@@ -2548,6 +2548,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint98)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint98.html");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
 {
     createSwDoc(DATA_DIRECTORY, "tdf128611.fodt");
