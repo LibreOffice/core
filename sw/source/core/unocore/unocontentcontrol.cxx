@@ -35,6 +35,8 @@
 #include <unotextrange.hxx>
 #include <doc.hxx>
 #include <unoport.hxx>
+#include <unomap.hxx>
+#include <unoprnms.hxx>
 
 using namespace com::sun::star;
 
@@ -153,6 +155,7 @@ public:
     uno::Reference<text::XText> m_xParentText;
     rtl::Reference<SwXContentControlText> m_xText;
     SwContentControl* m_pContentControl;
+    bool m_bShowingPlaceHolder;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          const uno::Reference<text::XText>& xParentText,
@@ -163,6 +166,7 @@ public:
         , m_xParentText(xParentText)
         , m_xText(new SwXContentControlText(rDoc, rThis))
         , m_pContentControl(pContentControl)
+        , m_bShowingPlaceHolder(false)
     {
         if (m_pContentControl)
         {
@@ -500,6 +504,9 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
                                    : SetAttrMode::DONTEXPAND;
 
     auto pContentControl = std::make_shared<SwContentControl>(nullptr);
+
+    pContentControl->SetShowingPlaceHolder(m_pImpl->m_bShowingPlaceHolder);
+
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
         = pDoc->getIDocumentContentOperations().InsertPoolItem(aPam, aContentControl, nInsertFlags);
@@ -633,6 +640,94 @@ SwXContentControl::removeTextContent(const uno::Reference<text::XTextContent>& x
 {
     SolarMutexGuard g;
     return m_pImpl->m_xText->removeTextContent(xContent);
+}
+
+// XPropertySet
+uno::Reference<beans::XPropertySetInfo> SAL_CALL SwXContentControl::getPropertySetInfo()
+{
+    SolarMutexGuard aGuard;
+
+    static uno::Reference<beans::XPropertySetInfo> xRet
+        = aSwMapProvider.GetPropertySet(PROPERTY_MAP_CONTENTCONTROL)->getPropertySetInfo();
+    return xRet;
+}
+
+void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
+                                                  const css::uno::Any& rValue)
+{
+    SolarMutexGuard aGuard;
+
+    if (rPropertyName == UNO_NAME_SHOWING_PLACE_HOLDER)
+    {
+        bool bValue;
+        if (rValue >>= bValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_bShowingPlaceHolder = bValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetShowingPlaceHolder(bValue);
+            }
+        }
+    }
+    else
+    {
+        throw beans::UnknownPropertyException();
+    }
+}
+
+uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyName)
+{
+    SolarMutexGuard aGuard;
+
+    uno::Any aRet;
+    if (rPropertyName == UNO_NAME_SHOWING_PLACE_HOLDER)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_bShowingPlaceHolder;
+        }
+        else
+        {
+            m_pImpl->m_pContentControl->GetShowingPlaceHolder();
+        }
+    }
+    else
+    {
+        throw beans::UnknownPropertyException();
+    }
+
+    return aRet;
+}
+
+void SAL_CALL SwXContentControl::addPropertyChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXContentControl::addPropertyChangeListener: not implemented");
+}
+
+void SAL_CALL SwXContentControl::removePropertyChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XPropertyChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXContentControl::removePropertyChangeListener: not implemented");
+}
+
+void SAL_CALL SwXContentControl::addVetoableChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXContentControl::addVetoableChangeListener: not implemented");
+}
+
+void SAL_CALL SwXContentControl::removeVetoableChangeListener(
+    const OUString& /*rPropertyName*/,
+    const uno::Reference<beans::XVetoableChangeListener>& /*xListener*/)
+{
+    SAL_WARN("sw.uno", "SwXContentControl::removeVetoableChangeListener: not implemented");
 }
 
 // XElementAccess

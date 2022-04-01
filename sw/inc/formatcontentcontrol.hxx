@@ -61,6 +61,8 @@ public:
     void NotifyChangeTextNode(SwTextNode* pTextNode);
     static SwFormatContentControl* CreatePoolDefault(sal_uInt16 nWhich);
     SwContentControl* GetContentControl() { return m_pContentControl.get(); }
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 /// Stores the properties of a content control.
@@ -72,6 +74,9 @@ class SwContentControl : public sw::BroadcastingModify
 
     /// Can be nullptr if not in a document for undo purposes.
     SwTextNode* m_pTextNode;
+
+    /// Current content is placeholder text.
+    bool m_bShowingPlaceHolder = false;
 
 public:
     SwTextContentControl* GetTextAttr() const;
@@ -99,6 +104,15 @@ public:
     explicit SwContentControl(SwFormatContentControl* pFormat);
 
     virtual ~SwContentControl() override;
+
+    void SetShowingPlaceHolder(bool bShowingPlaceHolder)
+    {
+        m_bShowingPlaceHolder = bShowingPlaceHolder;
+    }
+
+    bool GetShowingPlaceHolder() const { return m_bShowingPlaceHolder; }
+
+    virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
