@@ -2993,7 +2993,7 @@ static void lcl_SelectionToEnd( EditView* pView )
     }
 }
 
-void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
+void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInLOK )
 {
     if (!mbDocumentDisposing && comphelper::LibreOfficeKit::isActive()
         && pActiveViewSh != SfxViewShell::Current())
@@ -3071,6 +3071,16 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                 {
                     if (ScViewSelectionEngine* pSelEngine = pView->GetSelEngine())
                         pSelEngine->ReleaseMouse();
+                }
+
+                if (bBeforeSavingInLOK)
+                {
+                    // Invalid entry but not applied to the document model.
+                    // Exit to complete the "save", leaving the edit view as it is
+                    // for the user to continue after save.
+                    bInOwnChange = false;
+                    bInEnterHandler = false;
+                    return;
                 }
 
                 if (pData->DoError(pActiveViewSh->GetFrameWeld(), aString, aCursorPos))
