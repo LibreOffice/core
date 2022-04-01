@@ -16,6 +16,24 @@
       "message": "Hmm - so ... a few ideas:\n\n* we want the validation dialog to be asynchronous even when we are not saving; so - I wonder if we should do that too ? perhaps as a next-step.\n\n* auto-save happens randomly - we don\u0027t want users working with data-validation to \nrandomly loose what they are typing; that needs to be stored and restored afterwards (without marking the document \u0027modified\u0027 to avoid another type of burn-CPU-on-headless-exit loop \u003d)\n\n* how do you distinguish comphelper::LibreOfficeKit::isActive() (ie. we are using Online) from special-casing something during save ?\n\nThanks ! \u003d)",
       "revId": "69fb3048cd4bcdbe6783404fa229529530ff5db4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98894a7a_e58030b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-04-01T10:47:53Z",
+      "side": 1,
+      "message": "Regarding the third question, bAllowErrorDialog is set to true only in the case of `saving + lok`. The saving part is implicit because the call is made from ScTabViewShell::ExecuteSave().\n\nRegarding the second point, is it possible to distinguish in core between an auto save and a normal save (The problem is triggered via a normal Ctrl+S save too).\n\nRegarding the first, I might need a few code pointers or patches regarding \u0027asynchronous\u0027 dialogs to understand this better.\n\nThanks!",
+      "parentUuid": "92dfb808_db5510cd",
+      "revId": "69fb3048cd4bcdbe6783404fa229529530ff5db4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
