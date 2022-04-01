@@ -16,6 +16,23 @@
       "message": "\u003e Commit message was updated.\n\n[patch set 7 had been rebased unnecessarily, by accident, but which made me realize that the commit message should be fixed in patch set 8]",
       "revId": "3e7895c03e4fccf328d3c0a5a4f1597859728a3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eadfe4b_3ebe949e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-01T15:31:20Z",
+      "side": 1,
+      "message": "\u003e Patch Set 7:\n\u003e \n\u003e A polite ping, still working on this patch?\n\nwill only be submitted towards LO 7.5",
+      "revId": "3e7895c03e4fccf328d3c0a5a4f1597859728a3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
