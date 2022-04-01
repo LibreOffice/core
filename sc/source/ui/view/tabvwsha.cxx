@@ -759,9 +759,16 @@ void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     // Finish entering unless 'DontTerminateEdit' is specified, even if a formula is being processed
     if (bCommitChanges)
     {
-        SC_MOD()->InputEnterHandler();
+        bool bLOKActive = comphelper::LibreOfficeKit::isActive();
 
-        if (comphelper::LibreOfficeKit::isActive())
+        // Disable error dialog box when about to save in lok mode as
+        // this ultimately invokes SvpSalInstance::DoYield() when we want
+        // to save immediately discarding any erroneous input in possibly
+        // a cell with validation rules.
+        bool bAllowErrorDialog = !bLOKActive;
+        SC_MOD()->InputEnterHandler(ScEnterMode::NORMAL, bAllowErrorDialog);
+
+        if (bLOKActive)
         {
             // Normally this isn't needed, but in Calc when editing a cell formula
             // and manually saving (without changing cells or hitting enter), while

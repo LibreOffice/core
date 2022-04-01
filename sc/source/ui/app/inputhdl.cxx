@@ -2934,7 +2934,7 @@ static void lcl_SelectionToEnd( EditView* pView )
     }
 }
 
-void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
+void ScInputHandler::EnterHandler( ScEnterMode nBlockMode, bool bAllowErrorDialog )
 {
     if (!mbDocumentDisposing && comphelper::LibreOfficeKit::isActive()
         && pActiveViewSh != SfxViewShell::Current())
@@ -3016,14 +3016,21 @@ void ScInputHandler::EnterHandler( ScEnterMode nBlockMode )
                     }
                 }
 
-                vcl::Window* pParent = nullptr;
-                if (pActiveViewSh)
-                    pParent = &pActiveViewSh->GetViewFrame()->GetWindow();
-                else
-                    pParent = Application::GetDefDialogParent();
+                if (bAllowErrorDialog)
+                {
+                    vcl::Window* pParent = nullptr;
+                    if (pActiveViewSh)
+                        pParent = &pActiveViewSh->GetViewFrame()->GetWindow();
+                    else
+                        pParent = Application::GetDefDialogParent();
 
-                if (pData->DoError(pParent ? pParent->GetFrameWeld() : nullptr, aString, aCursorPos))
-                    bForget = true;                 // Do not take over input
+                    if (pData->DoError(pParent ? pParent->GetFrameWeld() : nullptr, aString, aCursorPos))
+                        bForget = true;                 // Do not take over input
+                }
+                else
+                {
+                    bForget = true;
+                }
             }
         }
     }
