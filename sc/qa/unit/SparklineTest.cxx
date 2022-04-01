@@ -15,6 +15,7 @@
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
+#include <SparklineList.hxx>
 
 using namespace css;
 
@@ -54,6 +55,7 @@ public:
     void testUndoRedoDeleteSparkline();
     void testUndoRedoClearContentForSparkline();
     void testUndoRedoEditSparklineGroup();
+    void testSparklineList();
 
     CPPUNIT_TEST_SUITE(SparklineTest);
     CPPUNIT_TEST(testAddSparkline);
@@ -64,6 +66,7 @@ public:
     CPPUNIT_TEST(testUndoRedoDeleteSparkline);
     CPPUNIT_TEST(testUndoRedoClearContentForSparkline);
     CPPUNIT_TEST(testUndoRedoEditSparklineGroup);
+    CPPUNIT_TEST(testSparklineList);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -113,10 +116,12 @@ void SparklineTest::testAddSparkline()
 
     CPPUNIT_ASSERT_EQUAL(pGetSparkline.get(), pSparkline);
 
-    sc::SparklineList* pList = rDocument.GetSparklineList(0);
+    sc::SparklineList* pList = rDocument.GetSparklineList(SCTAB(0));
     CPPUNIT_ASSERT(pList);
 
-    std::vector<std::shared_ptr<sc::Sparkline>> aSparklineVector = pList->getSparklines();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pList->getSparklineGroups().size());
+
+    auto const& aSparklineVector = pList->getSparklinesFor(pGetSparkline->getSparklineGroup());
     CPPUNIT_ASSERT_EQUAL(size_t(1), aSparklineVector.size());
     CPPUNIT_ASSERT_EQUAL(aSparklineVector[0].get(), pSparkline);
 
@@ -492,6 +497,65 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked, pSparklineGroup->getAttributes().getType());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pSparklineGroup->getAttributes().getColorSeries());
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis());
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testSparklineList()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+
+    rDocument.CreateSparkline(ScAddress(0, 6, 0), pSparklineGroup);
+
+    {
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklineGroups.size());
+
+        auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklines.size());
+    }
+    rDocument.CreateSparkline(ScAddress(1, 6, 0), pSparklineGroup);
+    rDocument.CreateSparkline(ScAddress(2, 6, 0), pSparklineGroup);
+
+    {
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklineGroups.size());
+
+        auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pSparklines.size());
+    }
+
+    {
+        auto pSparklineGroup2 = std::make_shared<sc::SparklineGroup>();
+        rDocument.CreateSparkline(ScAddress(3, 6, 0), pSparklineGroup2);
+
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pSparklineGroups.size());
+
+        auto pSparklines2 = pSparklineList->getSparklinesFor(pSparklineGroup2);
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklines2.size());
+    }
+
+    rDocument.DeleteSparkline(ScAddress(3, 6, 0));
+
+    {
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklineGroups.size());
+
+        auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pSparklines.size());
+    }
 
     xDocSh->DoClose();
 }
