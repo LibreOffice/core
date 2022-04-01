@@ -34,12 +34,15 @@ class tdf57523(UITestCase):
                 replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"BBB"}))
                 regexp = xDialog.getChild("regexp")
 
-                if get_state_as_dict(regexp)['Selected'] == 'false':
-                    regexp.executeAction("CLICK", tuple())
+                regexp.executeAction("CLICK", tuple())
                 self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
 
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
+
+                # Deselect regex button, otherwise it might affect other tests
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("false", get_state_as_dict(regexp)['Selected'])
 
 
             # Without the fix in place, this test would have failed with

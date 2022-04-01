@@ -38,9 +38,14 @@ class tdf44398(UITestCase):
                 replaceterm = xDialog.getChild("replaceterm")
                 replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"$1"})) #replace textbox
                 regexp = xDialog.getChild("regexp")
-                regexp.executeAction("CLICK", tuple())   #regular expressions
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
+
+                # Deselect regex button, otherwise it might affect other tests
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("false", get_state_as_dict(regexp)['Selected'])
 
             #verify 3. A1 => 123456
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), "123456")
@@ -69,14 +74,17 @@ class tdf44398(UITestCase):
                 replaceterm = xDialog.getChild("replaceterm")
                 replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":" $1"})) #replace textbox
                 regexp = xDialog.getChild("regexp")
-                if (get_state_as_dict(regexp)["Selected"]) == "false":
-                    regexp.executeAction("CLICK", tuple())   #regular expressions
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
                 matchcase = xDialog.getChild("matchcase")
                 matchcase.executeAction("CLICK", tuple())   #case
 
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
 
+                # Deselect regex button, otherwise it might affect other tests
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("false", get_state_as_dict(regexp)['Selected'])
 
             #verify A1 => ' Var Number A'
             self.assertEqual(get_cell_by_position(document, 0, 0, 0).getString(), " Var Number A")
