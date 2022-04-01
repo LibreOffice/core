@@ -282,7 +282,13 @@ void DocumentLayoutManager::DelLayoutFormat( SwFrameFormat *pFormat )
         {
             SwNode *pNode = &pCntIdx->GetNode();
             const_cast<SwFormatContent&>(pFormat->GetFormatAttr( RES_CNTNT )).SetNewContentIdx( nullptr );
+            SwDeleteListener aDeleteListener(*pFormat);
             m_rDoc.getIDocumentContentOperations().DeleteSection( pNode );
+            if (aDeleteListener.WasDeleted())
+            {
+                SAL_WARN_IF("sw.core", "pFormat was deleted, abandon early");
+                return;
+            }
         }
 
         // Delete the character for FlyFrames anchored as char (if necessary)
