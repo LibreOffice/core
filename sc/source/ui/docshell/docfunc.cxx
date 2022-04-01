@@ -99,6 +99,7 @@
 #include <SparklineData.hxx>
 #include <undo/UndoInsertSparkline.hxx>
 #include <undo/UndoDeleteSparkline.hxx>
+#include <undo/UndoDeleteSparklineGroup.hxx>
 #include <undo/UndoEditSparklineGroup.hxx>
 #include <config_features.h>
 
@@ -5856,6 +5857,23 @@ bool ScDocFunc::DeleteSparkline(ScAddress const& rAddress)
     pUndoDeleteSparkline->Redo();
     rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndoDeleteSparkline));
 
+    return true;
+}
+
+bool ScDocFunc::DeleteSparklineGroup(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup, SCTAB nTab)
+{
+    if (!pSparklineGroup)
+        return false;
+
+    auto& rDocument = rDocShell.GetDocument();
+
+    if (!rDocument.HasTable(nTab))
+        return false;
+
+    auto pUndo = std::make_unique<sc::UndoDeleteSparklineGroup>(rDocShell, pSparklineGroup, nTab);
+    // delete sparkline group  by "redoing"
+    pUndo->Redo();
+    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
     return true;
 }
 
