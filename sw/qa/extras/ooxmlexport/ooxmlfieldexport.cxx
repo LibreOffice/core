@@ -342,7 +342,7 @@ CPPUNIT_TEST_FIXTURE(Test, testGenericTextField)
     xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
     xmlNodePtr pXmlNode = pXmlNodes->nodeTab[0];
     OUString contents = OUString::createFromAscii(reinterpret_cast<char*>((pXmlNode->children[0]).content));
-    CPPUNIT_ASSERT(contents.match("PRINTDATE   \\* MERGEFORMAT"));
+    CPPUNIT_ASSERT(contents.match(" PRINTDATE "));
     xmlXPathFreeObject(pXmlObj);
 }
 

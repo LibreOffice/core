@@ -100,6 +100,24 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_modifiedField, "tdf148380_modifiedField.d
                                  OUString("Charles Brown"), xField->getPresentation(false));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf132475_printField, "tdf132475_printField.docx")
+{
+    // The last printed date field: formatted two diferent ways
+    getParagraph(2, "Thursday, March 17, 2022");
+    getParagraph(3, "17-Mar-22");
+    // Time zone affects the displayed time in MS Word. LO shows GMT time. Word only updated by F9
+    getParagraph(5, "12:49");
+    getParagraph(6, "12:49:00 PM");
+
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("Thursday, March 17, 2022"), xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Last printed"), xField->getPresentation(true));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
     loadAndReload("tdf135906.docx");
