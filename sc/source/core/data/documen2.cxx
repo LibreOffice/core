@@ -190,6 +190,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbTrackFormulasPending(false),
         mbFinalTrackFormulas(false),
         mbDocShellRecalc(false),
+        mbLayoutStrings(false),
         mnMutationGuardFlags(0)
 {
     maPreviewSelection = { *mxSheetLimits };
