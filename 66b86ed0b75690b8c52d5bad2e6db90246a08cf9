@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe00ee68_ef173a7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-01T15:42:35Z",
+      "side": 1,
+      "message": "Just for info, I did a \"make clean \u0026\u0026 make\" (to be sure, I\u0027m starting from scratch), I could open an already existing odb file with Mysql/MariaDB connection and I also could create a brand new odb file with Mysql/MariaDB connection.",
+      "revId": "66b86ed0b75690b8c52d5bad2e6db90246a08cf9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
