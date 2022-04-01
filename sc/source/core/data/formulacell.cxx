@@ -2140,7 +2140,8 @@ void ScFormulaCell::InterpretTail( ScInterpreterContext& rContext, ScInterpretTa
             // XXX if mbNeedsNumberFormat was set even if the current format
             // was not General then we'd have to obtain the current format here
             // and check at least the types.
-            if (bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0)))
+            const bool bSetNumberFormat = bSetFormat && (bForceNumberFormat || ((nFormatIndex % SV_COUNTRY_LANGUAGE_OFFSET) != 0));
+            if (bSetNumberFormat && !pDocument->IsInLayoutStrings())
             {
                 // set number format explicitly
                 if (!pDocument->IsThreadedGroupCalcInProgress())

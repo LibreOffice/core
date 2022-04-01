@@ -558,6 +558,8 @@ private:
     bool                mbFinalTrackFormulas    : 1;
     // This indicates if a ScDocShell::DoRecalc() or ScDocShell::DoHardRecalc() is in progress.
     bool                mbDocShellRecalc        : 1;
+    // This indicates if a ScOutputData::LayoutStrings() is in progress.
+    bool                mbLayoutStrings         : 1;
 
     size_t              mnMutationGuardFlags;
 
@@ -2501,6 +2503,9 @@ public:
 
     bool IsInDocShellRecalc() const   { return mbDocShellRecalc; }
     void SetDocShellRecalc(bool bSet) { mbDocShellRecalc = bSet; }
+
+    bool IsInLayoutStrings() const   { return mbLayoutStrings; }
+    void SetLayoutStrings(bool bSet) { mbLayoutStrings = bSet; }
 
 private:
 

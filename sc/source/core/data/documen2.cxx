@@ -166,6 +166,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mbTrackFormulasPending(false),
         mbFinalTrackFormulas(false),
         mbDocShellRecalc(false),
+        mbLayoutStrings(false),
         mnMutationGuardFlags(0)
 {
     SetStorageGrammar( formula::FormulaGrammar::GRAM_STORAGE_DEFAULT);
