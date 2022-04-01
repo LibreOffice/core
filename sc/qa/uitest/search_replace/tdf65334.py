@@ -35,6 +35,10 @@ class tdf65334(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 xExpander = xDialog.getChild("OptionsExpander")
 
+                # tdf#129629: Without the fix in place, this test would have failed with
+                # AssertionError: 'false' != 'true'
+                self.assertEqual("false", get_state_as_dict(xExpander)['Expanded'])
+
                 xExpander.executeAction("EXPAND", tuple())
                 self.assertEqual("true", get_state_as_dict(xExpander)['Expanded'])
 
@@ -56,7 +60,9 @@ class tdf65334(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
                 xSearchterm = xDialog.getChild("searchterm")
                 xCalcsearchin = xDialog.getChild("calcsearchin")
+                xExpander = xDialog.getChild("OptionsExpander")
 
+                self.assertEqual("false", get_state_as_dict(xExpander)['Expanded'])
                 self.assertEqual("Comment", get_state_as_dict(xSearchterm)['Text'])
                 self.assertEqual("Comments", get_state_as_dict(xCalcsearchin)['SelectEntryText'])
 

@@ -25,6 +25,11 @@ class tdf57523(UITestCase):
             gridwin.executeAction("SELECT", mkPropertyValues({"RANGE": "A1:A4"}))
 
             with self.ui_test.execute_modeless_dialog_through_command(".uno:SearchDialog", close_button="close") as xDialog:
+
+                # More Options is expanded when there is a selection with data
+                xExpander = xDialog.getChild("OptionsExpander")
+                self.assertEqual("true", get_state_as_dict(xExpander)['Expanded'])
+
                 searchterm = xDialog.getChild("searchterm")
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
                 searchterm.executeAction("TYPE", mkPropertyValues({"KEYCODE":"BACKSPACE"}))
