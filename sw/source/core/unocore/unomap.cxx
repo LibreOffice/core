@@ -1558,6 +1558,11 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetPropertyMapEntries(s
                 m_aMapEntriesArr[nPropertyId] = GetLineBreakPropertyMap();
             }
             break;
+            case PROPERTY_MAP_CONTENTCONTROL:
+            {
+                m_aMapEntriesArr[nPropertyId] = GetContentControlPropertyMap();
+            }
+            break;
 
             default:
                 OSL_FAIL( "unexpected property map ID" );
