@@ -81,8 +81,9 @@ namespace writerfilter::rtftok
 {
 Id getParagraphBorder(sal_uInt32 nIndex)
 {
-    static const Id aBorderIds[] = { NS_ooxml::LN_CT_PBdr_top, NS_ooxml::LN_CT_PBdr_left,
-                                     NS_ooxml::LN_CT_PBdr_bottom, NS_ooxml::LN_CT_PBdr_right };
+    static const Id aBorderIds[]
+        = { NS_ooxml::LN_CT_PBdr_top, NS_ooxml::LN_CT_PBdr_left, NS_ooxml::LN_CT_PBdr_bottom,
+            NS_ooxml::LN_CT_PBdr_right, NS_ooxml::LN_CT_PBdr_between };
 
     return aBorderIds[nIndex];
 }

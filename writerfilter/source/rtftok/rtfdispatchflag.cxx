@@ -672,6 +672,7 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTFKeyword::BRDRL:
         case RTFKeyword::BRDRB:
         case RTFKeyword::BRDRR:
+        case RTFKeyword::BRDRBTW:
         {
             RTFSprms aAttributes;
             RTFSprms aSprms;
@@ -689,6 +690,9 @@ RTFError RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     break;
                 case RTFKeyword::BRDRR:
                     nParam = getParagraphBorder(3);
+                    break;
+                case RTFKeyword::BRDRBTW:
+                    nParam = getParagraphBorder(4);
                     break;
                 default:
                     break;
