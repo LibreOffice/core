@@ -325,6 +325,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
     xCursor->gotoEnd(/*bExpand=*/true);
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    // Set a custom property on the content control:
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::makeAny(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // Then make sure that the text attribute is inserted:
@@ -335,6 +338,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
     // Without the accompanying fix in place, this test would have failed, as the
     // SwXContentControl::attach() implementation was missing.
     CPPUNIT_ASSERT(pAttr);
+    // Also verify that the custom property was set:
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    SwContentControl* pContentControl = rFormatContentControl.GetContentControl();
+    CPPUNIT_ASSERT(pContentControl->GetShowingPlaceHolder());
 }
 
 CPPUNIT_TEST_FIXTURE(SwModelTestBase, testImageTooltip)

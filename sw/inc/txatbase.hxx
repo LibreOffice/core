@@ -29,6 +29,7 @@
 #include "fmtflcnt.hxx"
 #include "fmtftn.hxx"
 #include "formatlinebreak.hxx"
+#include "formatcontentcontrol.hxx"
 #include "fchrfmt.hxx"
 #include "tox.hxx"
 #include "ndhints.hxx"
@@ -39,7 +40,7 @@ class SfxItemPool;
  * A wrapper around SfxPoolItem to store the start position of (usually) a text portion, with an
  * optional end.
  */
-class SAL_DLLPUBLIC_RTTI SwTextAttr
+class SW_DLLPUBLIC SwTextAttr
 {
 friend class SwpHints;
 private:
@@ -121,6 +122,7 @@ public:
     inline const SwFormatField               &GetFormatField() const;
     inline const SwFormatFootnote               &GetFootnote() const;
     inline const SwFormatLineBreak& GetLineBreak() const;
+    inline const SwFormatContentControl& GetContentControl() const;
     inline const SwFormatFlyCnt            &GetFlyCnt() const;
     inline const SwTOXMark              &GetTOXMark() const;
     inline const SwFormatRefMark           &GetRefMark() const;
@@ -213,6 +215,12 @@ inline const SwFormatLineBreak& SwTextAttr::GetLineBreak() const
 {
     assert(m_pAttr && m_pAttr->Which() == RES_TXTATR_LINEBREAK);
     return static_cast<const SwFormatLineBreak&>(*m_pAttr);
+}
+
+inline const SwFormatContentControl& SwTextAttr::GetContentControl() const
+{
+    assert(m_pAttr && m_pAttr->Which() == RES_TXTATR_CONTENTCONTROL);
+    return static_cast<const SwFormatContentControl&>(*m_pAttr);
 }
 
 inline const SwFormatFlyCnt& SwTextAttr::GetFlyCnt() const

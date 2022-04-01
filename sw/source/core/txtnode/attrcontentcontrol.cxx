@@ -19,6 +19,8 @@
 
 #include <formatcontentcontrol.hxx>
 
+#include <libxml/xmlwriter.h>
+
 #include <sal/log.hxx>
 
 #include <ndtxt.hxx>
@@ -139,6 +141,21 @@ void SwFormatContentControl::DoCopy(SwTextNode& rTargetTextNode)
     m_pContentControl->NotifyChangeTextNode(&rTargetTextNode);
 }
 
+void SwFormatContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwFormatContentControl"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("m_pTextAttr"), "%p", m_pTextAttr);
+    SfxPoolItem::dumpAsXml(pWriter);
+
+    if (m_pContentControl)
+    {
+        m_pContentControl->dumpAsXml(pWriter);
+    }
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwContentControl::SwContentControl(SwFormatContentControl* pFormat)
     : sw::BroadcastingModify()
     , m_pFormat(pFormat)
@@ -188,6 +205,16 @@ void SwContentControl::SwClientNotify(const SwModify&, const SfxHint& rHint)
     }
 }
 
+void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwContentControl"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteFormatAttribute(
+        pWriter, BAD_CAST("showing-place-holder"), "%s",
+        BAD_CAST(OString::boolean(m_bShowingPlaceHolder).getStr()));
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
 SwTextContentControl* SwTextContentControl::CreateTextContentControl(SwTextNode* pTargetTextNode,
                                                                      SwFormatContentControl& rAttr,
                                                                      sal_Int32 nStart,
@@ -232,6 +259,15 @@ void SwTextContentControl::ChgTextNode(SwTextNode* pNode)
     {
         rFormatContentControl.NotifyChangeTextNode(pNode);
     }
+}
+
+void SwTextContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwTextContentControl"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    SwTextAttr::dumpAsXml(pWriter);
+
+    (void)xmlTextWriterEndElement(pWriter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
