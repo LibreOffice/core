@@ -107,12 +107,16 @@ class findReplace(UITestCase):
                     xSimilarity.executeAction("CLICK", tuple())
 
                 regexp = xDialog.getChild("regexp")
-                if get_state_as_dict(regexp)['Selected'] == 'false':
-                    regexp.executeAction("CLICK", tuple())   #regular expressions
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
                 #verify
                 self.assertEqual(document.Text.String[0:27], "replacedest number1 testnot")
+
+                # Deselect regex button, otherwise it might affect other tests
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("false", get_state_as_dict(regexp)['Selected'])
 
         #tdf116242  ţ ț
     def test_tdf116242_replace_t_with_cedilla(self):
