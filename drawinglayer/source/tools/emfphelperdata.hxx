@@ -213,6 +213,7 @@ namespace emfplushelper
         /// data holders
         wmfemfhelper::TargetHolders&    mrTargetHolders;
         wmfemfhelper::PropertyHolders&  mrPropertyHolders;
+        wmfemfhelper::PropertyHolder    aGetDCState;
         bool                            bIsGetDCProcessing;
 
         // readers
@@ -224,7 +225,7 @@ namespace emfplushelper
 
         // stack actions
         void GraphicStatePush(GraphicStateMap& map, sal_Int32 index);
-        void GraphicStatePop (GraphicStateMap& map, sal_Int32 index, wmfemfhelper::PropertyHolder& rState);
+        void GraphicStatePop(GraphicStateMap& map, sal_Int32 index);
 
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);
