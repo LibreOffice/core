@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a50beed_1cf4f54e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-01T12:10:27Z",
+      "side": 1,
+      "message": "The follow-up https://gerrit.libreoffice.org/c/core/+/132401 passed Jenkins.",
+      "revId": "005a5bc307fbc6465a9d28c06fe4d68613a0357f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
