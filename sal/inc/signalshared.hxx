@@ -21,7 +21,6 @@
 
 #include <sal/config.h>
 #include <osl/signal.h>
-#include <osl/mutex.h>
 
 struct oslSignalHandlerImpl
 {
@@ -29,8 +28,6 @@ struct oslSignalHandlerImpl
     void*                       pData;
     oslSignalHandlerImpl*       pNext;
 };
-
-extern bool                     bInitSignal;
 
 oslSignalAction callSignalHandler(oslSignalInfo* pInfo);
 

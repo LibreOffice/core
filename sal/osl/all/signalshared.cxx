@@ -24,28 +24,17 @@
 #include <signalshared.hxx>
 
 #include <osl/diagnose.h>
-
-bool bInitSignal = false;
+#include <mutex>
 
 namespace
 {
 oslSignalHandlerImpl* SignalList;
-oslMutex SignalListMutex;
+bool bInitSignal = false;
 
-bool initSignal()
+std::mutex& getSignalMutex()
 {
-    SignalListMutex = osl_createMutex();
-
-    return onInitSignal();
-}
-
-bool deInitSignal()
-{
-    bool bRet = onDeInitSignal();
-
-    osl_destroyMutex(SignalListMutex);
-
-    return bRet;
+    static std::mutex aMutex;
+    return aMutex;
 }
 }
 
@@ -70,23 +59,21 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler,
     if (!handler)
         return nullptr;
 
-    if (!bInitSignal)
-        bInitSignal = initSignal();
-
     oslSignalHandlerImpl* pHandler
         = static_cast<oslSignalHandlerImpl*>(calloc(1, sizeof(oslSignalHandlerImpl)));
+
+    std::scoped_lock aGuard(getSignalMutex());
+
+    if (!bInitSignal)
+        bInitSignal = onInitSignal();
 
     if (pHandler)
     {
         pHandler->Handler = handler;
         pHandler->pData = pData;
 
-        osl_acquireMutex(SignalListMutex);
-
         pHandler->pNext = SignalList;
         SignalList = pHandler;
-
-        osl_releaseMutex(SignalListMutex);
 
         return pHandler;
     }
@@ -96,10 +83,10 @@ oslSignalHandler SAL_CALL osl_addSignalHandler(oslSignalHandlerFunction handler,
 
 sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
 {
-    if (!bInitSignal)
-        bInitSignal = initSignal();
+    std::scoped_lock aGuard(getSignalMutex());
 
-    osl_acquireMutex(SignalListMutex);
+    if (!bInitSignal)
+        bInitSignal = onInitSignal();
 
     oslSignalHandlerImpl* pHandler = SignalList;
     oslSignalHandlerImpl* pPrevious = nullptr;
@@ -113,10 +100,8 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
             else
                 SignalList = pHandler->pNext;
 
-            osl_releaseMutex(SignalListMutex);
-
-            if (!SignalList)
-                bInitSignal = deInitSignal();
+            if (SignalList == nullptr)
+                bInitSignal = onDeInitSignal();
 
             free(pHandler);
 
@@ -127,17 +112,15 @@ sal_Bool SAL_CALL osl_removeSignalHandler(oslSignalHandler handler)
         pHandler = pHandler->pNext;
     }
 
-    osl_releaseMutex(SignalListMutex);
-
     return false;
 }
 
 oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
 {
-    if (!bInitSignal)
-        bInitSignal = initSignal();
+    std::scoped_lock aGuard(getSignalMutex());
 
-    osl_acquireMutex(SignalListMutex);
+    if (!bInitSignal)
+        bInitSignal = onInitSignal();
 
     oslSignalInfo info;
     info.Signal = osl_Signal_User;
@@ -145,8 +128,6 @@ oslSignalAction SAL_CALL osl_raiseSignal(sal_Int32 userSignal, void* userData)
     info.UserData = userData;
 
     oslSignalAction action = callSignalHandler(&info);
-
-    osl_releaseMutex(SignalListMutex);
 
     return action;
 }
