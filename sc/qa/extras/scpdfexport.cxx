@@ -71,6 +71,7 @@ public:
     void testTdf143978();
     void testTdf84012();
     void testTdf78897();
+    void testForcepoint97();
 
     CPPUNIT_TEST_SUITE(ScPDFExportTest);
     CPPUNIT_TEST(testExportRange_Tdf120161);
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testTdf143978);
     CPPUNIT_TEST(testTdf84012);
     CPPUNIT_TEST(testTdf78897);
+    CPPUNIT_TEST(testForcepoint97);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -556,6 +558,18 @@ void ScPDFExportTest::testTdf78897()
     // - Expected:  11.00 11.00
     // - Actual  :  11.00 ###
     CPPUNIT_ASSERT_EQUAL(OUString(" 11.00 11.00 "), aActualText);
+}
+
+// just needs to not crash on export to pdf
+void ScPDFExportTest::testForcepoint97()
+{
+    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + "forcepoint97.xlsx",
+                                  "com.sun.star.sheet.SpreadsheetDocument");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+
+    // A1:H81
+    ScRange range1(0, 0, 0, 7, 81, 0);
+    std::shared_ptr<utl::TempFile> pPDFFile = exportToPDF(xModel, range1);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ScPDFExportTest);
