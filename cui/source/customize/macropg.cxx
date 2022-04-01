@@ -288,11 +288,11 @@ namespace
         return aPureMethod;
     }
 
-    OUString GetEventDisplayImage(const OUString &rURL)
+    OUString GetEventDisplayImage(std::u16string_view rURL)
     {
-        if (rURL.isEmpty())
+        if (rURL.empty())
             return OUString();
-        sal_Int32 nIndex = rURL.indexOf(aVndSunStarUNO);
+        size_t nIndex = rURL.find(aVndSunStarUNO);
         bool bUNO = nIndex == 0;
         return bUNO ? OUString(RID_SVXBMP_COMPONENT) : OUString(RID_SVXBMP_MACRO);
     }

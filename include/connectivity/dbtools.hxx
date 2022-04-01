@@ -519,7 +519,7 @@ namespace dbtools
 
         @see isValidSQLName
     */
-    OOO_DLLPUBLIC_DBTOOLS OUString convertName2SQLName(const OUString& _rName,const OUString& _rSpecials);
+    OOO_DLLPUBLIC_DBTOOLS OUString convertName2SQLName(const OUString& _rName, std::u16string_view _rSpecials);
 
     /** checks whether the given name is a valid SQL name
 
@@ -528,7 +528,7 @@ namespace dbtools
 
         @see convertName2SQLName
     */
-    OOO_DLLPUBLIC_DBTOOLS bool isValidSQLName( const OUString& _rName, const OUString& _rSpecials );
+    OOO_DLLPUBLIC_DBTOOLS bool isValidSQLName( const OUString& _rName, std::u16string_view _rSpecials );
 
     OOO_DLLPUBLIC_DBTOOLS
     void showError( const SQLExceptionInfo& _rInfo,

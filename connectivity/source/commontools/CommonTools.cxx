@@ -165,15 +165,15 @@ namespace connectivity
 namespace dbtools
 {
 
-static bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
+static bool isCharOk(sal_Unicode c, std::u16string_view _rSpecials)
 {
 
     return ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
-          c == '_' || _rSpecials.indexOf(c) != -1);
+          c == '_' || _rSpecials.find(c) != std::u16string_view::npos);
 }
 
 
-bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
+bool isValidSQLName(const OUString& rName, std::u16string_view _rSpecials)
 {
     // Test for correct naming (in SQL sense)
     // This is important for table names for example
@@ -202,7 +202,7 @@ bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
 }
 
 // Creates a new name if necessary
-OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
+OUString convertName2SQLName(const OUString& rName, std::u16string_view _rSpecials)
 {
     if(isValidSQLName(rName,_rSpecials))
         return rName;

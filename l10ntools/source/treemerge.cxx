@@ -58,7 +58,7 @@ namespace
 
     // Update id and content of the topic
     xmlNodePtr lcl_UpdateTopic(
-        const xmlNodePtr pCurrent, const OString& rXhpRoot )
+        const xmlNodePtr pCurrent, std::string_view rXhpRoot )
     {
         xmlNodePtr pReturn = pCurrent;
         xmlChar* pID = xmlGetProp(pReturn, reinterpret_cast<const xmlChar*>("id"));
@@ -71,7 +71,7 @@ namespace
         {
             OString sNewID =
                 OString::Concat(sID.subView( 0, nFirstSlash + 1 )) +
-                rXhpRoot.subView( rXhpRoot.lastIndexOf('/') + 1 ) +
+                rXhpRoot.substr( rXhpRoot.rfind('/') + 1 ) +
                 sID.subView( sID.indexOf( '/', nFirstSlash + 1 ) );
             xmlSetProp(
                 pReturn, reinterpret_cast<const xmlChar*>("id"),
@@ -79,7 +79,7 @@ namespace
         }
 
         const OString sXhpPath =
-            rXhpRoot +
+            OString::Concat(rXhpRoot) +
             sID.subView(sID.indexOf('/', nFirstSlash + 1));
         xmlDocPtr pXhpFile = xmlParseFile( sXhpPath.getStr() );
         // if xhpfile is missing than put this topic into comment

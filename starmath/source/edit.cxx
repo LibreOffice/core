@@ -662,9 +662,9 @@ void SmEditWindow::SelPrevMark()
 }
 
 // returns true iff 'rText' contains a mark
-static bool HasMark(const OUString& rText)
+static bool HasMark(std::u16string_view rText)
 {
-    return rText.indexOf("<?>") != -1;
+    return rText.find(u"<?>") != std::u16string_view::npos;
 }
 
 ESelection SmEditWindow::GetSelection() const

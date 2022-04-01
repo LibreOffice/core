@@ -60,7 +60,7 @@ void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal
 }
 
 
-static bool ImpStrChr( const OUString& str, sal_Unicode c ) { return str.indexOf(c) >= 0; }
+static bool ImpStrChr( std::u16string_view str, sal_Unicode c ) { return str.find(c) != std::u16string_view::npos; }
 
 
 // scanning a string according to BASIC-conventions

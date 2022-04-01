@@ -49,7 +49,7 @@ namespace dbaui
                                 OFieldDescription const * _pSrcField,
                                 std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
-                                const OUString&  _sExtraChars,
+                                std::u16string_view  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
                                 const ::comphelper::UStringMixEqual& _aCase);
 
@@ -57,7 +57,7 @@ namespace dbaui
                                 weld::TreeView const * _pLeft,
                                 std::vector< OUString>& _rRightColumns,
                                 const OUString&  _sColumnName,
-                                const OUString&  _sExtraChars,
+                                std::u16string_view  _sExtraChars,
                                 sal_Int32               _nMaxNameLen,
                                 const ::comphelper::UStringMixEqual& _aCase);
 

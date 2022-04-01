@@ -159,18 +159,18 @@ namespace sdbtools
         {
         }
 
-        static ::connectivity::ErrorCondition validateName_getErrorCondition( const OUString& _rName )
+        static ::connectivity::ErrorCondition validateName_getErrorCondition( std::u16string_view _rName )
         {
-            if  (   ( _rName.indexOf( u'"'      ) >= 0 )
-                ||  ( _rName.indexOf( u'\''     ) >= 0 )
-                ||  ( _rName.indexOf( u'`'      ) >= 0 )
-                ||  ( _rName.indexOf( u'\x0091' ) >= 0 )
-                ||  ( _rName.indexOf( u'\x0092' ) >= 0 )
-                ||  ( _rName.indexOf( u'\x00B4' ) >= 0 )  // removed unparsable chars
+            if  (   ( _rName.find( u'"'      ) != std::u16string_view::npos )
+                ||  ( _rName.find( u'\''     ) != std::u16string_view::npos )
+                ||  ( _rName.find( u'`'      ) != std::u16string_view::npos )
+                ||  ( _rName.find( u'\x0091' ) != std::u16string_view::npos )
+                ||  ( _rName.find( u'\x0092' ) != std::u16string_view::npos )
+                ||  ( _rName.find( u'\x00B4' ) != std::u16string_view::npos )  // removed unparsable chars
                 )
                 return ErrorCondition::DB_QUERY_NAME_WITH_QUOTES;
 
-            if ( _rName.indexOf( '/') >= 0 )
+            if ( _rName.find( '/') != std::u16string_view::npos )
                 return ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES;
 
             return 0;

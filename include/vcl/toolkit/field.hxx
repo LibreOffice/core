@@ -315,10 +315,10 @@ protected:
 public:
     static OUString         FormatTime(const tools::Time& rNewTime, TimeFieldFormat eFormat, TimeFormat eHourFormat, bool bDuration, const LocaleDataWrapper& rLocaleData);
     static bool             TextToTime(std::u16string_view rStr, tools::Time& rTime, TimeFieldFormat eFormat, bool bDuration, const LocaleDataWrapper& rLocaleDataWrapper, bool _bSkipInvalidCharacters = true);
-    static int              GetTimeArea(TimeFieldFormat eFormat, const OUString& rText, int nCursor,
+    static int              GetTimeArea(TimeFieldFormat eFormat, std::u16string_view rText, int nCursor,
                                         const LocaleDataWrapper& rLocaleDataWrapper);
     static tools::Time      SpinTime(bool bUp, const tools::Time& rTime, TimeFieldFormat eFormat,
-                                     bool bDuration, const OUString& rText, int nCursor,
+                                     bool bDuration, std::u16string_view rText, int nCursor,
                                      const LocaleDataWrapper& rLocaleDataWrapper);
 
     virtual                 ~TimeFormatter() override;
@@ -423,7 +423,7 @@ protected:
 public:
     static OUString         FormatDate(const Date& rNewDate, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleData, const Formatter::StaticFormatter& rStaticFormatter);
     static bool             TextToDate(const OUString& rStr, Date& rTime, ExtDateFieldFormat eFormat, const LocaleDataWrapper& rLocaleDataWrapper, const CalendarWrapper& rCalendarWrapper);
-    static int              GetDateArea(ExtDateFieldFormat eFormat, const OUString& rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper);
+    static int              GetDateArea(ExtDateFieldFormat eFormat, std::u16string_view rText, int nCursor, const LocaleDataWrapper& rLocaleDataWrapper);
 
     virtual                 ~DateFormatter() override;
 

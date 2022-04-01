@@ -19,19 +19,19 @@
 
 #include <rtl/ustring.hxx>
 #include <xmlmultiimagehelper.hxx>
-
+#include <o3tl/string_view.hxx>
 #include <comphelper/graphicmimetype.hxx>
 
 using namespace ::com::sun::star;
 
 namespace
 {
-    OUString getMimeTypeForURL(const OUString& rString)
+    OUString getMimeTypeForURL(std::u16string_view rString)
     {
         OUString sMimeType;
-        if (rString.startsWith("vnd.sun.star.Package"))
+        if (o3tl::starts_with(rString, u"vnd.sun.star.Package"))
         {
-            OString aExtension = OUStringToOString(rString.subView(rString.lastIndexOf(".") + 1), RTL_TEXTENCODING_ASCII_US);
+            OString aExtension = OUStringToOString(rString.substr(rString.rfind('.') + 1), RTL_TEXTENCODING_ASCII_US);
             sMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aExtension);
         }
         return sMimeType;

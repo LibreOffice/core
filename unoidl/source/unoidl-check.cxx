@@ -886,10 +886,10 @@ void checkMap(
     }
 }
 
-bool valid(OUString const & identifier) {
-    for (sal_Int32 i = 0;; ++i) {
-        i = identifier.indexOf('_', i);
-        if (i == -1) {
+bool valid(std::u16string_view identifier) {
+    for (size_t i = 0;; ++i) {
+        i = identifier.find('_', i);
+        if (i == std::u16string_view::npos) {
             return true;
         }
         if (!rtl::isAsciiUpperCase(identifier[0]) || identifier[i - 1] == '_') {

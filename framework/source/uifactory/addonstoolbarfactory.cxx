@@ -83,15 +83,14 @@ AddonsToolBarFactory::AddonsToolBarFactory(
 {
 }
 
-bool IsCorrectContext( std::u16string_view rModuleIdentifier, const OUString& aContextList )
+bool IsCorrectContext( std::u16string_view rModuleIdentifier, std::u16string_view aContextList )
 {
-    if ( aContextList.isEmpty() )
+    if ( aContextList.empty() )
         return true;
 
     if ( !rModuleIdentifier.empty() )
     {
-        sal_Int32 nIndex = aContextList.indexOf( rModuleIdentifier );
-        return ( nIndex >= 0 );
+        return aContextList.find( rModuleIdentifier ) != std::u16string_view::npos;
     }
 
     return false;

@@ -102,7 +102,7 @@ public:
     // file names -------------------------------------------------------------
 
     static OUString convertFileNameToUrl( const OUString& rFileName );
-    static sal_Int32    getFileNamePos( const OUString& rFileUrl );
+    static sal_Int32    getFileNamePos( std::u16string_view rFileUrl );
     static OUString getFileNameExtension( const OUString& rFileUrl );
 
     // input streams ----------------------------------------------------------

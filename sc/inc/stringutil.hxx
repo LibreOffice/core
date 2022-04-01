@@ -153,7 +153,7 @@ public:
     static OUString  SC_DLLPUBLIC GetQuotedToken(const OUString &rIn, sal_Int32 nToken, const OUString& rQuotedPairs,
                                         sal_Unicode cTok,  sal_Int32& rIndex );
 
-    static bool SC_DLLPUBLIC isMultiline( const OUString& rStr );
+    static bool SC_DLLPUBLIC isMultiline( std::u16string_view rStr );
 
     static ScInputStringType parseInputString(
         SvNumberFormatter& rFormatter, const OUString& rStr, LanguageType eLang );
