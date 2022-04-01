@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5acd4d9e_697a1caf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-01T12:01:18Z",
+      "side": 1,
+      "message": "Any ideas on the sw::mark::FindFieldSep assert on this tiny little rtf example with a \\chpgn field and a following table? I\u0027m guessing the field end char is split or deleted by something related to the table creation.",
+      "revId": "96a8d08d893be50a326ac1baefa44500628a0291",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
