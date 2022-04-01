@@ -2863,7 +2863,8 @@ void SwRootFrame::DeleteEmptySct_()
         mpDestroy->erase( mpDestroy->begin() );
         OSL_ENSURE( !pSect->IsColLocked() && !pSect->IsJoinLocked(),
                 "DeleteEmptySct: Locked SectionFrame" );
-        if( !pSect->getFrameArea().HasArea() && !pSect->ContainsContent() )
+        SAL_WARN_IF(pSect->IsDeleteForbidden(), "sw.layout", "not allowed delete SwFrame");
+        if( !pSect->getFrameArea().HasArea() && !pSect->ContainsContent() && !pSect->IsDeleteForbidden() )
         {
             SwLayoutFrame* pUp = pSect->GetUpper();
             pSect->RemoveFromLayout();
