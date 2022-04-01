@@ -241,6 +241,7 @@ public:
                                        std::shared_ptr<sc::SparklineGroup> pSparklineGroup);
 
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rAddress);
+    SC_DLLPUBLIC bool DeleteSparklineGroup(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup, SCTAB nTab);
 
     SC_DLLPUBLIC bool ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGroup> const& pExistingSparklineGroup,
                                                      sc::SparklineAttributes const& rNewAttributes);
