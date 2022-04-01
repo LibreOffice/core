@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a22f7940_23f6a488",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001306
+      },
+      "writtenOn": "2022-04-01T14:57:00Z",
+      "side": 1,
+      "message": "looks like optional header is now added with the latest hash so no need for this anymore",
+      "revId": "e374036a1b02b49cfaa50777d5e49418f981dd63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
