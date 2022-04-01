@@ -36,6 +36,7 @@ class SvTreeListEntry;
 class SpinButton;
 class SpinField;
 class VerticalTabControl;
+class VclExpander;
 class VclDrawingArea;
 class VclMultiLineEdit;
 class MenuButton;
@@ -233,6 +234,27 @@ private:
 
     virtual OUString get_name() const override;
 };
+
+class ExpanderUIObject : public WindowUIObject
+{
+    VclPtr<VclExpander> mxExpander;
+
+public:
+
+    ExpanderUIObject(const VclPtr<VclExpander>& xExpander);
+    virtual ~ExpanderUIObject() override;
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    virtual StringMap get_state() override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+private:
+
+    virtual OUString get_name() const override;
+};
+
 
 // TODO: moggi: maybe let it inherit from the button case
 class CheckBoxUIObject final : public WindowUIObject

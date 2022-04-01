@@ -470,6 +470,7 @@ public:
     virtual void StateChanged(StateChangedType nType) override;
     void  SetExpandedHdl( const Link<VclExpander&,void>& rLink ) { maExpandedHdl = rLink; }
     virtual void DumpAsPropertyTree(tools::JsonWriter& rJsonWriter) override;
+    virtual FactoryFunction GetUITestFactory() const override;
 private:
     virtual Size calculateRequisition() const override;
     virtual void setAllocation(const Size &rAllocation) override;
