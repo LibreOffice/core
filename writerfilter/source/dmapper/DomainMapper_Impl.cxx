@@ -5112,6 +5112,7 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
         {"NEXTIF",          {"DatabaseNextSet",         FIELD_NEXTIF        }},
         {"PAGE",            {"PageNumber",              FIELD_PAGE          }},
         {"PAGEREF",         {"GetReference",            FIELD_PAGEREF       }},
+        {"PRINTDATE",       {"DocInfo.PrintDateTime",   FIELD_PRINTDATE     }},
         {"REF",             {"GetReference",            FIELD_REF           }},
         {"REVNUM",          {"DocInfo.Revision",        FIELD_REVNUM        }},
         {"SAVEDATE",        {"DocInfo.Change",          FIELD_SAVEDATE      }},
@@ -6313,6 +6314,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
                 break;
                 case FIELD_CREATEDATE  :
+                case FIELD_PRINTDATE:
                 {
                     if (pContext->IsFieldLocked())
                     {
