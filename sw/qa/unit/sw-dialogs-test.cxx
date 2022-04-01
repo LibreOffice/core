@@ -15,6 +15,7 @@
 #include <tools/svlibrary.h>
 #include <sfx2/app.hxx>
 #include <vcl/abstdlg.hxx>
+#include <osl/module.hxx>
 
 #include <swabstdlg.hxx>
 
