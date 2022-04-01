@@ -2331,6 +2331,14 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
 }
 #endif
 
+//just care it doesn't crash/assert
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint99)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint99.html");
+}
+#endif
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
