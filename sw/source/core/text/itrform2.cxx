@@ -149,6 +149,16 @@ sal_uInt16 SwTextFormatter::GetFrameRstHeight() const
         return sal_uInt16( nHeight );
 }
 
+bool SwTextFormatter::ClearIfIsFirstOfBorderMerge(const SwLinePortion* pPortion)
+{
+    if (pPortion == m_pFirstOfBorderMerge)
+    {
+        m_pFirstOfBorderMerge = nullptr;
+        return true;
+    }
+    return false;
+}
+
 SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
 {
     // Save values and initialize rInf
@@ -277,11 +287,8 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
     SwLinePortion* pNext = pPor->GetNextPortion();
     while (pNext)
     {
-        if (pNext == m_pFirstOfBorderMerge)
-        {
-            m_pFirstOfBorderMerge = nullptr;
+        if (ClearIfIsFirstOfBorderMerge(pNext))
             break;
-        }
         pNext = pNext->GetNextPortion();
     }
     pPor->Truncate();
