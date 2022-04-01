@@ -16,6 +16,23 @@
       "message": "Patchset 3 makes the page number change sooner by not including pages with only bottom or top margin visible.   ",
       "revId": "5302a00826c431b047b5aafd7f43b757d8ae6a2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7306b4fc_b37a48cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-04-01T21:23:33Z",
+      "side": 1,
+      "message": "I feel like this notation of brackets and parentheses is getting unwieldy (it was already, before your patch, to be fair 😄)\nShouldn’t this syntax of meanings be exposed to users in a tooltip, instead of remaining just in the commit message? Maybe in the help?",
+      "revId": "5302a00826c431b047b5aafd7f43b757d8ae6a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
