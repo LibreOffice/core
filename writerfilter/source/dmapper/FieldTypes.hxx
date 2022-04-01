@@ -161,6 +161,7 @@ enum FieldId
      */
     ,FIELD_PAGE
     ,FIELD_PAGEREF
+    ,FIELD_PRINTDATE
     /* REF targetbkm \f \* MERGEFORMAT ->
         imports a ShowVariable (bookmarkname)?
         \h hyperlink to paragraph
