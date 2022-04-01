@@ -5110,6 +5110,7 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
         {"NEXTIF",          {"DatabaseNextSet",         FIELD_NEXTIF        }},
         {"PAGE",            {"PageNumber",              FIELD_PAGE          }},
         {"PAGEREF",         {"GetReference",            FIELD_PAGEREF       }},
+        {"PRINTDATE",       {"DocInfo.PrintDateTime",   FIELD_TIME          }},
         {"REF",             {"GetReference",            FIELD_REF           }},
         {"REVNUM",          {"DocInfo.Revision",        FIELD_REVNUM        }},
         {"SAVEDATE",        {"DocInfo.Change",          FIELD_SAVEDATE      }},
