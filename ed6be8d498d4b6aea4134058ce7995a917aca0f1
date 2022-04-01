@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c908b5fe_058a6b79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-01T16:09:01Z",
+      "side": 1,
+      "message": "this is a bit of a bodge, but it does seem to solve the immediate problem",
+      "revId": "ed6be8d498d4b6aea4134058ce7995a917aca0f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
