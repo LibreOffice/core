@@ -3971,10 +3971,8 @@ void SbRtl_LBound(StarBASIC *, SbxArray & rPar, bool)
 {
     const sal_uInt32 nParCount = rPar.Count();
     if ( nParCount != 3 && nParCount != 2 )
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        return;
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
+
     SbxBase* pParObj = rPar.Get(1)->GetObject();
     SbxDimArray* pArr = dynamic_cast<SbxDimArray*>( pParObj );
     if( pArr )
@@ -3982,22 +3980,20 @@ void SbRtl_LBound(StarBASIC *, SbxArray & rPar, bool)
         sal_Int32 nLower, nUpper;
         short nDim = (nParCount == 3) ? static_cast<short>(rPar.Get(2)->GetInteger()) : 1;
         if (!pArr->GetDim(nDim, nLower, nUpper))
-            StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
-        else
-            rPar.Get(0)->PutLong(nLower);
+            return StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
+        rPar.Get(0)->PutLong(nLower);
     }
     else
-        StarBASIC::Error( ERRCODE_BASIC_MUST_HAVE_DIMS );
+    {
+        return StarBASIC::Error( ERRCODE_BASIC_MUST_HAVE_DIMS );
+    }
 }
 
 void SbRtl_UBound(StarBASIC *, SbxArray & rPar, bool)
 {
     const sal_uInt32 nParCount = rPar.Count();
     if ( nParCount != 3 && nParCount != 2 )
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        return;
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     SbxBase* pParObj = rPar.Get(1)->GetObject();
     SbxDimArray* pArr = dynamic_cast<SbxDimArray*>( pParObj );
@@ -4006,21 +4002,19 @@ void SbRtl_UBound(StarBASIC *, SbxArray & rPar, bool)
         sal_Int32 nLower, nUpper;
         short nDim = (nParCount == 3) ? static_cast<short>(rPar.Get(2)->GetInteger()) : 1;
         if (!pArr->GetDim(nDim, nLower, nUpper))
-            StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
-        else
-            rPar.Get(0)->PutLong(nUpper);
+            return StarBASIC::Error( ERRCODE_BASIC_OUT_OF_RANGE );
+        rPar.Get(0)->PutLong(nUpper);
     }
     else
-        StarBASIC::Error( ERRCODE_BASIC_MUST_HAVE_DIMS );
+    {
+        return StarBASIC::Error( ERRCODE_BASIC_MUST_HAVE_DIMS );
+    }
 }
 
 void SbRtl_RGB(StarBASIC *, SbxArray & rPar, bool)
 {
     if (rPar.Count() != 4)
-    {
-        StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
-        return;
-    }
+        return StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
 
     sal_Int32 nRed = rPar.Get(1)->GetInteger() & 0xFF;
     sal_Int32 nGreen = rPar.Get(2)->GetInteger() & 0xFF;
