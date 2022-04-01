@@ -33,6 +33,24 @@
       "message": "I feel like this notation of brackets and parentheses is getting unwieldy (it was already, before your patch, to be fair 😄)\nShouldn’t this syntax of meanings be exposed to users in a tooltip, instead of remaining just in the commit message? Maybe in the help?",
       "revId": "5302a00826c431b047b5aafd7f43b757d8ae6a2e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88d4904a_3ca1879b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-04-01T21:48:38Z",
+      "side": 1,
+      "message": "Hi Adolfo,\nYes, I just went with the notation that was already in place. Probably best to bring this up for discussion in the bugzilla ticket. Including the notation of brackets in the tooltip when they are present sounds like a good idea to me and in the help as well.",
+      "parentUuid": "7306b4fc_b37a48cd",
+      "revId": "5302a00826c431b047b5aafd7f43b757d8ae6a2e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
