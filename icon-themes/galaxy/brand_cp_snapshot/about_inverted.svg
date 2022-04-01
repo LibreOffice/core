@@ -143,7 +143,7 @@
     <linearGradient
        id="linearGradient1091">
       <stop
-         style="stop-color:#504999;stop-opacity:1"
+         style="stop-color:#5c2983;stop-opacity:1"
          offset="0"
          id="stop1087" />
       <stop
@@ -207,15 +207,15 @@
              id="stop4574" />
           <stop
              path="c 0,10.0787  0,20.1575  0,30.2362"
-             style="stop-color:#504999;stop-opacity:1"
+             style="stop-color:#5c2983;stop-opacity:1"
              id="stop4576" />
           <stop
              path="c -12.7849,0  -25.5698,0  -38.3547,0"
-             style="stop-color:#504999;stop-opacity:1"
+             style="stop-color:#5c2983;stop-opacity:1"
              id="stop4578" />
           <stop
              path="c 0,-10.0787  0,-20.1575  0,-30.2362"
-             style="stop-color:#504999;stop-opacity:1"
+             style="stop-color:#5c2983;stop-opacity:1"
              id="stop4580" />
         </meshpatch>
       </meshrow>
@@ -236,7 +236,7 @@
          offset="0"
          id="stop4560" />
       <stop
-         style="stop-color:#504999;stop-opacity:1"
+         style="stop-color:#5c2983;stop-opacity:1"
          offset="1"
          id="stop4562" />
     </linearGradient>
@@ -390,7 +390,7 @@
          offset="0"
          id="stop1077-6" />
       <stop
-         style="stop-color:#504999;stop-opacity:1"
+         style="stop-color:#5c2983;stop-opacity:1"
          offset="1"
          id="stop1079-1" />
     </linearGradient>
