@@ -26,11 +26,8 @@ namespace xcl::exp
 {
 class SparklineExt : public XclExpExt
 {
-    std::map<sc::SparklineGroup*, std::vector<std::shared_ptr<sc::Sparkline>>> m_aSparklineGroupMap;
-
 public:
-    SparklineExt(const XclExpRoot& rRoot,
-                 std::vector<std::shared_ptr<sc::Sparkline>> const& pSparklines);
+    SparklineExt(const XclExpRoot& rRoot);
 
     void SaveXml(XclExpXmlStream& rStream) override;
     void addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGroup& rSparklineGroup,
