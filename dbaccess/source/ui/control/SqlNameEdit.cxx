@@ -21,12 +21,12 @@
 
 namespace dbaui
 {
-    static bool isCharOk(sal_Unicode _cChar,bool _bFirstChar, const OUString& _sAllowedChars)
+    static bool isCharOk(sal_Unicode _cChar,bool _bFirstChar, std::u16string_view _sAllowedChars)
     {
         return  (
                  (_cChar >= 'A' && _cChar <= 'Z') ||
                  _cChar == '_' ||
-                 _sAllowedChars.indexOf(_cChar) != -1 ||
+                 _sAllowedChars.find(_cChar) != std::u16string_view::npos ||
                  (!_bFirstChar && (_cChar >= '0' && _cChar <= '9')) ||
                  (_cChar >= 'a' && _cChar <= 'z')
                 );

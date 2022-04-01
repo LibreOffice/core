@@ -1547,7 +1547,7 @@ sal_uInt16 SwHTMLWriter::GetHTMLFontSize( sal_uInt32 nHeight ) const
 
 // Paragraphs with Table of Contents and other index styles will be typeset with
 // dot leaders at the position of the last tabulator in PrintLayout (CSS2) mode
-sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rStr )
+sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, std::u16string_view rStr )
 {
     if (m_bCfgPrintLayout && ((nPoolId >= RES_POOLCOLL_TOX_CNTNT1 && nPoolId <= RES_POOLCOLL_TOX_CNTNT5) ||
         (nPoolId >= RES_POOLCOLL_TOX_IDX1 && nPoolId <= RES_POOLCOLL_TOX_IDX3) ||
@@ -1555,9 +1555,9 @@ sal_Int32 SwHTMLWriter::indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& r
         nPoolId == RES_POOLCOLL_TOX_ILLUS1 || nPoolId == RES_POOLCOLL_TOX_TABLES1 ||
         nPoolId == RES_POOLCOLL_TOX_OBJECT1 ||
         (nPoolId >= RES_POOLCOLL_TOX_AUTHORITIES1 && nPoolId <= RES_POOLCOLL_TOX_USER10))) {
-             sal_Int32 i = rStr.lastIndexOf('\t');
+             size_t i = rStr.rfind('\t');
              // there are only ASCII (Latin-1) characters after the tabulator
-             if (i > -1 && OUStringToOString(rStr.subView(i + 1), RTL_TEXTENCODING_ASCII_US).indexOf('?') == -1)
+             if (i != std::u16string_view::npos && OUStringToOString(rStr.substr(i + 1), RTL_TEXTENCODING_ASCII_US).indexOf('?') == -1)
                  return i;
     }
     return -1;

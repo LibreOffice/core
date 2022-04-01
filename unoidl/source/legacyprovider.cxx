@@ -26,9 +26,9 @@ namespace unoidl::detail {
 
 namespace {
 
-std::vector< OUString > translateAnnotations(OUString const & documentation) {
+std::vector< OUString > translateAnnotations(std::u16string_view documentation) {
     std::vector< OUString > ans;
-    if (documentation.indexOf("@deprecated") != -1) {
+    if (documentation.find(u"@deprecated") != std::u16string_view::npos) {
         //TODO: this check is somewhat crude
         ans.push_back("deprecated");
     }

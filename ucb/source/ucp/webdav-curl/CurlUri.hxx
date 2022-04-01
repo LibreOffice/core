@@ -87,7 +87,7 @@ public:
 
 OUString EncodeSegment(OUString const& rSegment);
 OUString DecodeURI(OUString const& rURI);
-OUString ConnectionEndPointString(OUString const& rHost, sal_uInt16 nPort);
+OUString ConnectionEndPointString(std::u16string_view rHost, sal_uInt16 nPort);
 
 } // namespace http_dav_ucp
 

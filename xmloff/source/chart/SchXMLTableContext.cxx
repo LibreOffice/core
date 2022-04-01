@@ -181,13 +181,13 @@ bool lcl_mapContainsRange(
 }
 
 bool lcl_tableOfRangeMatches(
-    const OUString & rRange,
+    std::u16string_view rRange,
     std::u16string_view rTableName )
 {
     // both strings are non-empty and the table name is part of the range
-    return ( !rRange.isEmpty() &&
+    return ( !rRange.empty() &&
              !rTableName.empty() &&
-             (rRange.indexOf( rTableName ) != -1 ));
+             (rRange.find( rTableName ) != std::u16string_view::npos ));
 }
 
 } // anonymous namespace

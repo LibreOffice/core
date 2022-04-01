@@ -136,7 +136,7 @@ class InternetProxyDecider_Impl :
     mutable HostnameCache                    m_aHostnames;
 
 private:
-    bool shouldUseProxy( const OUString & rHost,
+    bool shouldUseProxy( std::u16string_view rHost,
                          sal_Int32 nPort,
                          bool bUseFullyQualified ) const;
 public:
@@ -399,13 +399,13 @@ void InternetProxyDecider_Impl::dispose()
 }
 
 
-bool InternetProxyDecider_Impl::shouldUseProxy( const OUString & rHost,
+bool InternetProxyDecider_Impl::shouldUseProxy( std::u16string_view rHost,
                                                 sal_Int32 nPort,
                                                 bool bUseFullyQualified ) const
 {
     OUStringBuffer aBuffer;
 
-    if ( ( rHost.indexOf( ':' ) != -1 ) &&
+    if ( ( rHost.find( ':' ) != std::u16string_view::npos ) &&
          ( rHost[ 0 ] != '[' ) )
     {
         // host is given as numeric IPv6 address

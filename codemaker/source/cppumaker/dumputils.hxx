@@ -20,6 +20,7 @@
 #pragma once
 
 #include <sal/config.h>
+#include <string_view>
 
 namespace rtl
 {
@@ -31,9 +32,9 @@ namespace codemaker::cppumaker
 {
 bool dumpNamespaceOpen(FileStream& out, rtl::OUString const& entityName, bool fullModuleType);
 
-bool dumpNamespaceClose(FileStream& out, rtl::OUString const& entityName, bool fullModuleType);
+bool dumpNamespaceClose(FileStream& out, std::u16string_view entityName, bool fullModuleType);
 
-void dumpTypeIdentifier(FileStream& out, rtl::OUString const& entityName);
+void dumpTypeIdentifier(FileStream& out, std::u16string_view entityName);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

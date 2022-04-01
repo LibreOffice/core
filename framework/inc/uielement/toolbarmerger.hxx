@@ -62,7 +62,7 @@ struct ReferenceToolbarPathInfo
 class ToolBarMerger
 {
     public:
-        static bool       IsCorrectContext( const OUString& aContext, std::u16string_view aModuleIdentifier );
+        static bool       IsCorrectContext( std::u16string_view aContext, std::u16string_view aModuleIdentifier );
 
         static void       ConvertSeqSeqToVector( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence,
                                                  AddonToolbarItemContainer& rContainer );

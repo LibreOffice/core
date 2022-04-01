@@ -24,11 +24,11 @@ namespace
 {
     //Find ascii escaped unicode
     sal_Int32 lcl_IndexOfUnicode(
-        const OString& rSource, const sal_Int32 nFrom = 0 )
+        std::string_view rSource, const sal_Int32 nFrom = 0 )
     {
         const OString sHexDigits = "0123456789abcdefABCDEF";
-        sal_Int32 nIndex = rSource.indexOf( "\\u", nFrom );
-        if( nIndex == -1 )
+        size_t nIndex = rSource.find( "\\u", nFrom );
+        if( nIndex == std::string_view::npos )
         {
             return -1;
         }

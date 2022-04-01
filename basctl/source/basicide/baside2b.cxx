@@ -971,20 +971,14 @@ void EditorWindow::SetSourceInBasic()
 
 // Returns the position of the last character of any of the following
 // EOL char combinations: CR, CR/LF, LF, return -1 if no EOL is found
-sal_Int32 searchEOL( const OUString& rStr, sal_Int32 fromIndex )
+sal_Int32 searchEOL( std::u16string_view rStr, sal_Int32 fromIndex )
 {
-    sal_Int32 iRetPos = -1;
+    size_t iLF = rStr.find( LINE_SEP, fromIndex );
+    if( iLF != std::u16string_view::npos )
+        return iLF;
 
-    sal_Int32 iLF = rStr.indexOf( LINE_SEP, fromIndex );
-    if( iLF != -1 )
-    {
-        iRetPos = iLF;
-    }
-    else
-    {
-        iRetPos = rStr.indexOf( LINE_SEP_CR, fromIndex );
-    }
-    return iRetPos;
+    size_t iCR = rStr.find( LINE_SEP_CR, fromIndex );
+    return iCR == std::u16string_view::npos ? -1 : iCR;
 }
 
 void EditorWindow::CreateEditEngine()

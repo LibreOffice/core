@@ -78,7 +78,7 @@ OUString lcl_CheckFileName( const OUString& rNewFilePath,
 
     OUString rSG = SwGlossaries::GetExtension();
     //generate generic name
-    utl::TempFile aTemp("group", true, &rSG, &rNewFilePath);
+    utl::TempFile aTemp(u"group", true, &rSG, &rNewFilePath);
     aTemp.EnableKillingFile();
 
     INetURLObject aTempURL( aTemp.GetURL() );

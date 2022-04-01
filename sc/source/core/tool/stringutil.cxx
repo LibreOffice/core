@@ -421,12 +421,12 @@ OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, con
     }
 }
 
-bool ScStringUtil::isMultiline( const OUString& rStr )
+bool ScStringUtil::isMultiline( std::u16string_view rStr )
 {
-    if (rStr.indexOf('\n') != -1)
+    if (rStr.find('\n') != std::u16string_view::npos)
         return true;
 
-    if (rStr.indexOf('\r') != -1)
+    if (rStr.find('\r') != std::u16string_view::npos)
         return true;
 
     return false;

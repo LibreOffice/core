@@ -60,7 +60,7 @@ struct ReferencePathInfo
 namespace MenuBarMerger
 {
         bool       IsCorrectContext(
-            const OUString& aContext, std::u16string_view aModuleIdentifier );
+            std::u16string_view aContext, std::u16string_view aModuleIdentifier );
 
         void       RetrieveReferencePath( const OUString&,
                                                  std::vector< OUString >& aReferencePath );

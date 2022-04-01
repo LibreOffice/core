@@ -172,7 +172,7 @@ public:
                             FileDialogHelper(sal_Int16 nDialogType,
                                              FileDialogFlags nFlags,
                                              const OUString& aFilterUIName,
-                                             const OUString& aExtName,
+                                             std::u16string_view aExtName,
                                              const OUString& rStandardDir,
                                              const css::uno::Sequence< OUString >& rDenyList,
                                              weld::Window* pPreferredParent);

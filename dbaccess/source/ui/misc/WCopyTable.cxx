@@ -1359,7 +1359,7 @@ void OCopyTableWizard::setOperation( const sal_Int16 _nOperation )
 
 OUString OCopyTableWizard::convertColumnName(const TColumnFindFunctor&   _rCmpFunctor,
                                                     const OUString&  _sColumnName,
-                                                    const OUString&  _sExtraChars,
+                                                    std::u16string_view  _sExtraChars,
                                                     sal_Int32               _nMaxNameLen)
 {
     OUString sAlias = _sColumnName;

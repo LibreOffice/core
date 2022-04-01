@@ -298,12 +298,12 @@ OUString DecodeURI(OUString const& rURI)
     return rtl::Uri::decode(rURI, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
 }
 
-OUString ConnectionEndPointString(OUString const& rHostName, sal_uInt16 const nPort)
+OUString ConnectionEndPointString(std::u16string_view rHostName, sal_uInt16 const nPort)
 {
     OUStringBuffer aBuf;
 
     // Is host a numeric IPv6 address?
-    if ((rHostName.indexOf(':') != -1) && (rHostName[0] != '['))
+    if ((rHostName.find(':') != std::u16string_view::npos) && (rHostName[0] != '['))
     {
         aBuf.append("[");
         aBuf.append(rHostName);
