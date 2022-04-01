@@ -11,6 +11,8 @@
 #include "SparklineGroupsExport.hxx"
 #include "xmlexprt.hxx"
 #include <rangeutl.hxx>
+#include <SparklineList.hxx>
+#include <document.hxx>
 
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -25,27 +27,10 @@ using namespace xmloff::token;
 
 namespace sc
 {
-SparklineGroupsExport::SparklineGroupsExport(
-    ScXMLExport& rExport, SCTAB nTable, std::vector<std::shared_ptr<Sparkline>> const& rSparklines)
+SparklineGroupsExport::SparklineGroupsExport(ScXMLExport& rExport, SCTAB nTable)
     : m_rExport(rExport)
     , m_nTable(nTable)
 {
-    for (auto const& pSparkline : rSparklines)
-    {
-        auto* pGroupPointer = pSparkline->getSparklineGroup().get();
-        auto aIterator = m_aSparklineGroupMap.find(pGroupPointer);
-        if (aIterator == m_aSparklineGroupMap.end())
-        {
-            m_aSparklineGroups.push_back(pGroupPointer);
-            std::vector<std::shared_ptr<sc::Sparkline>> aSparklineVector;
-            aSparklineVector.push_back(pSparkline);
-            m_aSparklineGroupMap.emplace(pGroupPointer, aSparklineVector);
-        }
-        else
-        {
-            aIterator->second.push_back(pSparkline);
-        }
-    }
 }
 
 void SparklineGroupsExport::insertColor(Color aColor, XMLTokenEnum eToken)
@@ -183,7 +168,9 @@ void SparklineGroupsExport::addSparklineGroupAttributes(SparklineAttributes cons
     insertColor(rAttributes.getColorLow(), XML_COLOR_LOW);
 }
 
-void SparklineGroupsExport::addSparklineGroup(SparklineGroup* pSparklineGroup)
+void SparklineGroupsExport::addSparklineGroup(
+    std::shared_ptr<SparklineGroup> const& pSparklineGroup,
+    std::vector<std::shared_ptr<Sparkline>> const& rSparklines)
 {
     auto const& rAttributes = pSparklineGroup->getAttributes();
 
@@ -197,7 +184,8 @@ void SparklineGroupsExport::addSparklineGroup(SparklineGroup* pSparklineGroup)
 
     SvXMLElementExport aElementSparklines(m_rExport, XML_NAMESPACE_CALC_EXT, XML_SPARKLINES, true,
                                           true);
-    for (auto const& rSparkline : m_aSparklineGroupMap[pSparklineGroup])
+
+    for (auto const& rSparkline : rSparklines)
     {
         addSparklineAttributes(*rSparkline);
         SvXMLElementExport aElementSparkline(m_rExport, XML_NAMESPACE_CALC_EXT, XML_SPARKLINE, true,
@@ -207,13 +195,24 @@ void SparklineGroupsExport::addSparklineGroup(SparklineGroup* pSparklineGroup)
 
 void SparklineGroupsExport::write()
 {
-    SvXMLElementExport aElement(m_rExport, XML_NAMESPACE_CALC_EXT, XML_SPARKLINE_GROUPS, true,
-                                true);
-    for (auto* pSparklineGroup : m_aSparklineGroups)
+    auto* pDocument = m_rExport.GetDocument();
+    if (sc::SparklineList* pSparklineList = pDocument->GetSparklineList(m_nTable))
     {
-        addSparklineGroup(pSparklineGroup);
+        auto const& aSparklineGroups = pSparklineList->getSparklineGroups();
+        if (!aSparklineGroups.empty())
+        {
+            SvXMLElementExport aElement(m_rExport, XML_NAMESPACE_CALC_EXT, XML_SPARKLINE_GROUPS,
+                                        true, true);
+
+            for (auto const& pSparklineGroup : aSparklineGroups)
+            {
+                auto const& aSparklines = pSparklineList->getSparklinesFor(pSparklineGroup);
+                addSparklineGroup(pSparklineGroup, aSparklines);
+            }
+        }
     }
 }
-}
+
+} // end sc
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

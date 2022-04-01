@@ -68,6 +68,7 @@
 #include <datamapper.hxx>
 #include <datatransformation.hxx>
 #include "SparklineGroupsExport.hxx"
+#include <SparklineList.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -4520,15 +4521,8 @@ void ScXMLExport::WriteNamedRange(ScRangeName* pRangeName)
 
 void ScXMLExport::exportSparklineGroups(SCTAB nTable)
 {
-    if (sc::SparklineList* pSparklineList = pDoc->GetSparklineList(nTable))
-    {
-        auto pSparklines = pSparklineList->getSparklines();
-        if (!pSparklines.empty())
-        {
-            sc::SparklineGroupsExport aSparklineGroupExport(*this, nTable, pSparklines);
-            aSparklineGroupExport.write();
-        }
-    }
+    sc::SparklineGroupsExport aSparklineGroupExport(*this, nTable);
+    aSparklineGroupExport.write();
 }
 
 namespace {
