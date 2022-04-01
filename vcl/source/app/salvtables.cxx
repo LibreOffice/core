@@ -1351,7 +1351,7 @@ void SalInstanceWidget::DoRecursivePaint(vcl::Window* pWindow, const Point& rRen
             = pChild->GetOutDev()->GetOutOffYPixel() - pWindow->GetOutDev()->GetOutOffYPixel();
 
         Point aPos(rRenderLogicPos);
-        aPos += rOutput.PixelToLogic(Point(nDeltaX, nDeltaY));
+        aPos += Point(nDeltaX, nDeltaY);
 
         DoRecursivePaint(pChild, aPos, rOutput);
     }
