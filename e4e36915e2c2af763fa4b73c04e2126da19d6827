@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42bce3a2_372e457c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-01T17:08:13Z",
+      "side": 1,
+      "message": "Jenkins would not compile the old patch, and after 9 tries I decided to start a new patch.",
+      "revId": "e4e36915e2c2af763fa4b73c04e2126da19d6827",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26ca3e40_c78ec984",
+        "filename": "basic/qa/vba_tests/format.vb",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-01T17:08:13Z",
+      "side": 1,
+      "message": "Mike: \"For such case, you can provide a custom error handler that would set some variable; make that handler active for the duration of one statement, restoring it after it; and test that the variable is set.\"\n\nI will either look into this at the end of the patch, when everything else is reviewed and passable, or make a new patch for this in the future. Leaving this as unresolved for now.",
+      "revId": "e4e36915e2c2af763fa4b73c04e2126da19d6827",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf9cb888_4d01e73b",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1146,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-01T17:08:13Z",
+      "side": 1,
+      "message": "Because VBANUM_PLACEHOLDER_NOZERO doesn\u0027t exist here, Format(42, \"foo#bar\") produces 42 instead of VBAs foo42bar. If we simply add it, it works, but then something like \nFormat(1.09837555, \"#.#####E+###\") errors\nbecause it goes through the basic format function, when it wants to go through the SxNumberFormatter",
+      "revId": "e4e36915e2c2af763fa4b73c04e2126da19d6827",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ac8be3f_5d8baff7",
+        "filename": "basic/source/sbx/sbxform.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1155,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-01T17:08:13Z",
+      "side": 1,
+      "message": "How far are we willing to push this function? There may be other numeric chars (except VBANUM_PLACEHOLDER_(NO)ZERO) that trigger this. Complete 100% emulation of VBAs format function should not be necessary - already support for Format(..., \"foo@bar#etc\") is probably never going to be needed really.",
+      "revId": "e4e36915e2c2af763fa4b73c04e2126da19d6827",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9e54213_19eea384",
+        "filename": "basic/source/sbx/sbxscan.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 542,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-01T17:08:13Z",
+      "side": 1,
+      "message": "Checking for Option VBASupport functionality was not added - it\u0027s not clear to me what the format function would do then. Because if VBASupport 0 means \u0027@\u0027 is not handled, then \u0027\u0026\u0027 is not too. And ! as well. Stuff like \"Standard\" and \"Fixed\" and \"#\"/\"0\" are also supported by VBA. So wouldn\u0027t disabling VBASupport just disable the whole function?",
+      "revId": "e4e36915e2c2af763fa4b73c04e2126da19d6827",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
