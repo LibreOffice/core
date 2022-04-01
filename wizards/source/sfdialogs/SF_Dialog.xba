@@ -73,6 +73,12 @@ Private _DialogModel		As Object		&apos; com.sun.star.awt.XControlModel - stardiv
 Private _Displayed			As Boolean		&apos; True after Execute()
 Private _Modal				As Boolean		&apos; Set by Execute()
 
+&apos;	Dialog position and dimensions
+Private _Left				As Long
+Private _Top				As Long
+Private _Width				As Long
+Private _Height				As Long
+
 &apos;	Persistent storage for controls
 Private _ControlCache		As Variant		&apos; Array of control objects sorted like ElementNames of the Dialog model
 
@@ -98,6 +104,10 @@ Private Sub Class_Initialize()
 	Set _DialogModel = Nothing
 	_Displayed = False
 	_Modal = True
+	_Left = -1
+	_Top = -1
+	_Width = -1
+	_Height = -1
 	_ControlCache = Array()
 End Sub		&apos;	SFDialogs.SF_Dialog Constructor
 
@@ -300,6 +310,97 @@ Finally:
 Catch:
 	GoTo Finally
 End Function	&apos;	SFDialogs.SF_Dialog.Activate
+
+REM -----------------------------------------------------------------------------
+Public Function Center(Optional ByRef Parent As Variant) As Boolean
+&apos;&apos;&apos;	Center the actual dialog instance in the middle of a parent window
+&apos;&apos;&apos;	Without arguments, the method centers the dialog in the middle of the current window
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Parent: an object, either
+&apos;&apos;&apos;			- a ScriptForge dialog object
+&apos;&apos;&apos;			- a ScriptForge document (Calc, Base, ...) object
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Sub TriggerEvent(oEvent As Object)
+&apos;&apos;&apos;		Dim oDialog1 As Object, oDialog2 As Object, lExec As Long
+&apos;&apos;&apos;		Set oDialog1 = CreateScriptService(&quot;DialogEvent&quot;, oEvent)	&apos;	The dialog having caused the event
+&apos;&apos;&apos;		Set oDialog2 = CreateScriptService(&quot;Dialog&quot;, ...)			&apos;	Open a second dialog
+&apos;&apos;&apos;		oDialog2.Center(oDialog1)
+&apos;&apos;&apos;		lExec = oDialog2.Execute()
+&apos;&apos;&apos;		Select Case lExec
+&apos;&apos;&apos;			...
+&apos;&apos;&apos;		End Sub
+
+Dim bCenter As Boolean				&apos;	Return value
+Dim oSession As Object				&apos;	ScriptForge.SF_Session
+Dim oUi As Object					&apos;	ScriptForge.SF_UI
+Dim sObjectType As String			&apos;	Can be uno or sf object type
+Dim oParent As Object				&apos;	UNO alias of parent
+Dim oParentPosSize As Object		&apos;	Parent com.sun.star.awt.Rectangle
+Dim lParentX As Long				&apos;	X position of parent dialog
+Dim lParentY As Long				&apos;	Y position of parent dialog
+Dim oPosSize As Object				&apos;	Dialog com.sun.star.awt.Rectangle
+Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize conatnts
+Const cstThisSub = &quot;SFDialogs.Dialog.Center&quot;
+Const cstSubArgs = &quot;[Parent]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bCenter = False
+
+Check:
+	If IsMissing(Parent) Or IsEmpty(Parent) Then Set Parent = Nothing
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Parent, &quot;Parent&quot;, ScriptForge.V_OBJECT) Then GoTo Finally
+	End If
+
+	Set oParentPosSize = Nothing
+	lParentX = 0	:	lParentY = 0
+	Set oSession = CreateScriptService(&quot;Session&quot;)
+	If IsNull(Parent) Then
+		Set oUi = CreateScriptService(&quot;UI&quot;)
+		Set oParentPosSize = oUi._PosSize()	&apos;	Return the position and dimensions of the active window
+	Else
+		&apos;	Determine the object type
+		sObjectType = oSession.UnoObjectType(Parent)
+		If sObjectType = &quot;com.sun.star.script.NativeObjectWrapper&quot; Then		&apos;	Basic object
+			sObjectType = Parent.ObjectType
+			&apos;	Document or dialog ?
+			If Not ScriptForge.SF_Array.Contains(Array(&quot;BASE&quot;, &quot;CALC&quot;, &quot;DIALOG&quot;, &quot;DOCUMENT&quot;, &quot;WRITER&quot;), sObjectType, CaseSensitive := True) Then GoTo Finally
+			If sObjectType = &quot;DIALOG&quot; Then
+				Set oParent = Parent._DialogControl
+				Set oParentPosSize = oParent.getPosSize()
+				lParentX = oParentPosSize.X
+				lParentY = oParentPosSize.Y
+			Else
+				Set oParent = Parent._Component.getCurrentController().Frame.getComponentWindow()
+				Set oParentPosSize = oParent.getPosSize()
+			End If
+		Else
+			GoTo Finally		&apos;	UNO object, do nothing
+		End If
+	End If
+	If IsNull(oParentPosSize) Then GoTo Finally
+
+Try:
+	Set oPosSize = _DialogControl.getPosSize()
+	With oPosSize
+		_DialogControl.setPosSize( _
+					lParentX + CLng((oParentPosSize.Width - .Width) \ 2) _
+					, lParentY + CLng((oParentPosSize.Height - .Height) \ 2) _
+					, .Width _
+					, .Height _
+					, com.sun.star.awt.PosSize.POSSIZE)
+	End With
+	bCenter = True
+
+Finally:
+	Center = bCenter
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Dialog.Center
 
 REM -----------------------------------------------------------------------------
 Public Function Controls(Optional ByVal ControlName As Variant) As Variant
@@ -634,6 +735,78 @@ Public Function Properties() As Variant
 End Function	&apos;	SFDialogs.SF_Dialog.Properties
 
 REM -----------------------------------------------------------------------------
+Public Function Resize(Optional ByVal Left As Variant _
+								, Optional ByVal Top As Variant _
+								, Optional ByVal Width As Variant _
+								, Optional ByVal Height As Variant _
+								) As Boolean
+&apos;&apos;&apos;	Move the topleft corner of a dialog to new coordinates and/or modify its dimensions
+&apos;&apos;&apos;	All distances are expressed in 1/100th mm
+&apos;&apos;&apos;	Without arguments, the method resets the initial dimensions
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		Left : the vertical distance from the topleft corner
+&apos;&apos;&apos;		Top : the horizontal distance from the topleft corner
+&apos;&apos;&apos;		Width : the horizontal width of the rectangle containing the Dialog
+&apos;&apos;&apos;		Height : the vertical height of the rectangle containing the Dialog
+&apos;&apos;&apos;		Negative or missing arguments are left unchanged
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		True when successful
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		oDialog.Resize(1000, 2000, Height := 6000)	&apos;	Width is not changed
+
+Dim bResize As Boolean				&apos;	Return value
+Dim oPosSize As Object				&apos;	com.sun.star.awt.Rectangle
+Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize conatnts
+Const cstThisSub = &quot;SFDialogs.Dialog.Resize&quot;
+Const cstSubArgs = &quot;[Left], [Top], [Width], [Height]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	bResize = False
+
+Check:
+	If IsMissing(Left) Or IsEmpty(Left) Then Left = -1
+	If IsMissing(Top) Or IsEmpty(Top) Then Top = -1
+	If IsMissing(Height) Or IsEmpty(Height) Then Height = -1
+	If IsMissing(Width) Or IsEmpty(Width) Then Width = -1
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not ScriptForge.SF_Utils._Validate(Left, &quot;Left&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Top, &quot;Top&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Width, &quot;Width&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(Height, &quot;Height&quot;, ScriptForge.V_NUMERIC) Then GoTo Finally
+	End If
+
+Try:
+	With _DialogControl
+		Set oPosSize = .getPosSize()
+		&apos;	Reset factory settings
+		If Left = -1 And Top = -1 And Width = -1 And Height = -1 Then
+			&apos;Left = _Left		&apos;	Initial positions determination is unstable
+			&apos;Top = _Top
+			Width = _Width
+			Height = _Height
+		End If
+		&apos;	Trace the elements to change
+		iFlags = 0
+		With com.sun.star.awt.PosSize
+			If Left &gt;= 0	Then iFlags = iFlags + .X		Else Left = oPosSize.X
+			If Top &gt;= 0	Then iFlags = iFlags + .Y		Else Top = oPosSize.Y
+			If Width &gt; 0	Then iFlags = iFlags + .WIDTH	Else Width = oPosSize.Width
+			If Height &gt; 0	Then iFlags = iFlags + .HEIGHT	Else Height = oPosSize.Height
+		End With
+		&apos;	Rewrite
+		If iFlags &gt; 0 Then .setPosSize(CLng(Left), CLng(Top), CLng(Width), CLng(Height), iFlags)
+	End With
+	bResize = True
+
+Finally:
+	Resize = bResize
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function	&apos;	SF_Documents.SF_Dialog.Resize
+
+REM -----------------------------------------------------------------------------
 Public Function SetProperty(Optional ByVal PropertyName As Variant _
 								, Optional ByRef Value As Variant _
 								) As Boolean
@@ -755,9 +928,20 @@ Public Sub _Initialize()
 &apos;&apos;&apos;		- Addition of the new object in the Dialogs buffer
 &apos;&apos;&apos;		- Initialisation of persistent storage for controls
 
+Dim oPosSize As Object		&apos;	com.sun.star.awt.Rectangle
+
 Try:
 	&apos;	Keep reference to model
 	Set _DialogModel = _DialogControl.Model
+
+	&apos;	Store initial position and dimensions
+	Set oPosSize = _DialogControl.getPosSize()
+	With oPosSize
+		_Left = .X
+		_Top = .Y
+		_Width = .Width
+		_Height = .Height
+	End With
 
 	&apos;	Add dialog reference to cache
 	_CacheIndex = SF_Register._AddDialogToCache(_DialogControl, [Me])

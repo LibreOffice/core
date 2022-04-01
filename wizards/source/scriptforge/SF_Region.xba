@@ -13,7 +13,7 @@ Option Explicit
 &apos;&apos;&apos;	=========
 &apos;&apos;&apos;		Singleton class implementing the &quot;ScriptForge.Region&quot; service
 &apos;&apos;&apos;		Implemented as a usual Basic module
-&apos;&apos;&apos;	
+&apos;&apos;&apos;
 &apos;&apos;&apos;		A collection of functions about languages, countries and timezones
 &apos;&apos;&apos;			- Locales
 &apos;&apos;&apos;			- Currencies
@@ -72,7 +72,7 @@ REM ================================================================== PROPERTIE
 REM -----------------------------------------------------------------------------
 Property Get Country(Optional ByVal Region As Variant) As String
 &apos;&apos;&apos;	Returns the english country name applicable in the given region.
-&apos;&apos;&apos;	The region expressed either as a 
+&apos;&apos;&apos;	The region expressed either as a
 &apos;&apos;&apos;		- locale combining language-COUNTRY (la-CO)
 &apos;&apos;&apos;		- country only (CO)
 &apos;&apos;&apos;	Example:
@@ -83,7 +83,7 @@ End Property	&apos;	ScriptForge.SF_Region.Country (get)
 REM -----------------------------------------------------------------------------
 Property Get Currency(Optional ByVal Region As Variant) As String
 &apos;&apos;&apos;	Returns the currency applicable in the given region.
-&apos;&apos;&apos;	The region is expressed either as a 
+&apos;&apos;&apos;	The region is expressed either as a
 &apos;&apos;&apos;		- locale combining language-COUNTRY (la-CO)
 &apos;&apos;&apos;		- country only (CO)
 &apos;&apos;&apos;	Example:
@@ -169,7 +169,7 @@ End Property	&apos;	ScriptForge.SF_Region.Language (get)
 
 REM -----------------------------------------------------------------------------
 Property Get ListSeparator(Optional ByVal Region As Variant) As String
-&apos;&apos;&apos;	Returns the separator used in list applicable in the given region.
+&apos;&apos;&apos;	Returns the separator used in lists applicable in the given region.
 &apos;&apos;&apos;	The region is expressed as a locale combining language-COUNTRY (la-CO)
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		MsgBox Regio.ListSeparator(&quot;it-IT&quot;)	&apos;	;
