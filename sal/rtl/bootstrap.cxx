@@ -40,6 +40,8 @@
 
 #include <vector>
 #include <algorithm>
+#include <cstddef>
+#include <string_view>
 #include <unordered_map>
 
 #ifdef ANDROID
@@ -92,11 +94,11 @@ struct ExpandRequestLink {
 };
 
 OUString expandMacros(
-    Bootstrap_Impl const * file, OUString const & text, LookupMode mode,
+    Bootstrap_Impl const * file, std::u16string_view text, LookupMode mode,
     ExpandRequestLink const * requestStack);
 
 OUString recursivelyExpandMacros(
-    Bootstrap_Impl const * file, OUString const & text, LookupMode mode,
+    Bootstrap_Impl const * file, std::u16string_view text, LookupMode mode,
     Bootstrap_Impl const * requestFile, OUString const & requestKey,
     ExpandRequestLink const * requestStack)
 {
@@ -806,14 +808,14 @@ int hex(sal_Unicode c)
         c >= 'a' && c <= 'f' ? c - 'a' + 10 : -1;
 }
 
-sal_Unicode read(OUString const & text, sal_Int32 * pos, bool * escaped)
+sal_Unicode read(std::u16string_view text, std::size_t * pos, bool * escaped)
 {
-    OSL_ASSERT(pos && *pos >= 0 && *pos < text.getLength() && escaped);
+    OSL_ASSERT(pos && *pos < text.length() && escaped);
     sal_Unicode c = text[(*pos)++];
     if (c == '\\')
     {
         int n1, n2, n3, n4;
-        if (*pos < text.getLength() - 4 && text[*pos] == 'u' &&
+        if (*pos < text.length() - 4 && text[*pos] == 'u' &&
             ((n1 = hex(text[*pos + 1])) >= 0) &&
             ((n2 = hex(text[*pos + 2])) >= 0) &&
             ((n3 = hex(text[*pos + 3])) >= 0) &&
@@ -825,7 +827,7 @@ sal_Unicode read(OUString const & text, sal_Int32 * pos, bool * escaped)
                 (n1 << 12) | (n2 << 8) | (n3 << 4) | n4);
         }
 
-        if (*pos < text.getLength())
+        if (*pos < text.length())
         {
             *escaped = true;
             return text[(*pos)++];
@@ -847,13 +849,13 @@ OUString lookup(
 }
 
 OUString expandMacros(
-    Bootstrap_Impl const * file, OUString const & text, LookupMode mode,
+    Bootstrap_Impl const * file, std::u16string_view text, LookupMode mode,
     ExpandRequestLink const * requestStack)
 {
-    SAL_INFO("sal.bootstrap", "expandMacros called with: " << text);
+    SAL_INFO("sal.bootstrap", "expandMacros called with: " << OUString(text));
     OUStringBuffer buf(2048);
 
-    for (sal_Int32 i = 0; i < text.getLength();)
+    for (std::size_t i = 0; i < text.length();)
     {
         bool escaped;
         sal_Unicode c = read(text, &i, &escaped);
@@ -863,17 +865,17 @@ OUString expandMacros(
         }
         else
         {
-            if (i < text.getLength() && text[i] == '{')
+            if (i < text.length() && text[i] == '{')
             {
                 ++i;
-                sal_Int32 p = i;
+                std::size_t p = i;
                 sal_Int32 nesting = 0;
                 OUString seg[3];
                 int n = 0;
 
-                while (i < text.getLength())
+                while (i < text.length())
                 {
-                    sal_Int32 j = i;
+                    std::size_t j = i;
                     c = read(text, &i, &escaped);
 
                     if (!escaped)
@@ -886,7 +888,7 @@ OUString expandMacros(
                             case '}':
                                 if (nesting == 0)
                                 {
-                                    seg[n++] = text.copy(p, j - p);
+                                    seg[n++] = text.substr(p, j - p);
                                     goto done;
                                 }
                                 else
@@ -897,7 +899,7 @@ OUString expandMacros(
                             case ':':
                                 if (nesting == 0 && n < 2)
                                 {
-                                    seg[n++] = text.copy(p, j - p);
+                                    seg[n++] = text.substr(p, j - p);
                                     p = i;
                                 }
                                 break;
@@ -953,10 +955,10 @@ OUString expandMacros(
             }
             else
             {
-                OUStringBuffer kbuf(text.getLength());
-                for (; i < text.getLength();)
+                OUStringBuffer kbuf(sal_Int32(text.length()));
+                for (; i < text.length();)
                 {
-                    sal_Int32 j = i;
+                    std::size_t j = i;
                     c = read(text, &j, &escaped);
                     if (!escaped &&
                         (c == ' ' || c == '$' || c == '-' || c == '/' ||
