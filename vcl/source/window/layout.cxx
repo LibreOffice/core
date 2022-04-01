@@ -1798,6 +1798,11 @@ void VclExpander::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
     rJsonWriter.put("type", "expander");
 }
 
+FactoryFunction VclExpander::GetUITestFactory() const
+{
+    return ExpanderUIObject::create;
+}
+
 IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
 {
     vcl::Window *pChild = get_child();

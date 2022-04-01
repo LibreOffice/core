@@ -894,6 +894,49 @@ std::unique_ptr<UIObject> MultiLineEditUIObject::create(vcl::Window* pWindow)
     return std::unique_ptr<UIObject>(new MultiLineEditUIObject(pEdit));
 }
 
+ExpanderUIObject::ExpanderUIObject(const VclPtr<VclExpander>& xExpander)
+    : WindowUIObject(xExpander)
+    , mxExpander(xExpander)
+{
+}
+
+ExpanderUIObject::~ExpanderUIObject()
+{
+}
+
+void ExpanderUIObject::execute(const OUString& rAction, const StringMap& rParameters)
+{
+    if (rAction == "EXPAND")
+    {
+        mxExpander->set_expanded(true);
+    }
+    else if (rAction == "COLLAPSE")
+    {
+        mxExpander->set_expanded(false);
+    }
+    else
+        WindowUIObject::execute(rAction, rParameters);
+}
+
+StringMap ExpanderUIObject::get_state()
+{
+    StringMap aMap = WindowUIObject::get_state();
+    aMap["Expanded"] = OUString::boolean(mxExpander->get_expanded());
+    return aMap;
+}
+
+OUString ExpanderUIObject::get_name() const
+{
+    return "ExpanderUIObject";
+}
+
+std::unique_ptr<UIObject> ExpanderUIObject::create(vcl::Window* pWindow)
+{
+    VclExpander* pVclExpander = dynamic_cast<VclExpander*>(pWindow);
+    assert(pVclExpander);
+    return std::unique_ptr<UIObject>(new ExpanderUIObject(pVclExpander));
+}
+
 CheckBoxUIObject::CheckBoxUIObject(const VclPtr<CheckBox>& xCheckbox):
     WindowUIObject(xCheckbox),
     mxCheckBox(xCheckbox)
