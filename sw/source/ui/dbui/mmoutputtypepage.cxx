@@ -74,7 +74,10 @@ IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl, weld::Toggleable&, void
 struct SwSendMailDialog_Impl
 {
     friend class SwSendMailDialog;
-    std::mutex                                  aDescriptorMutex;
+    // The mutex is locked in SwSendMailDialog_Impl::GetNextDescriptor, which may be called
+    // both with mutex unlocked (inside SwSendMailDialog::SendMails), and with mutex locked
+    // (inside SwSendMailDialog::AddDocument).
+    std::recursive_mutex                        aDescriptorMutex;
 
     std::vector< SwMailDescriptor >             aDescriptors;
     sal_uInt32                                  nCurrentDescriptor;
