@@ -34,10 +34,14 @@ class tdf44861(UITestCase):
                 replaceterm = xDialog.getChild("replaceterm")
                 replaceterm.executeAction("TYPE", mkPropertyValues({"TEXT":"$1.$2"})) #replace textbox
                 regexp = xDialog.getChild("regexp")
-                if (get_state_as_dict(regexp)["Selected"]) == "false":
-                    regexp.executeAction("CLICK", tuple())   #regular expressions
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("true", get_state_as_dict(regexp)['Selected'])
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
+
+                # Deselect regex button, otherwise it might affect other tests
+                regexp.executeAction("CLICK", tuple())
+                self.assertEqual("false", get_state_as_dict(regexp)['Selected'])
 
             #Expected: instead of 1345-1430 appears 13.45-14.30
             self.assertEqual(get_cell_by_position(calc_doc, 0, 0, 0).getString(), "13.45-14.30")

@@ -31,8 +31,7 @@ class tdf143759(UITestCase):
                 xSearchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"^$"}))
 
                 xRegexp = xDialog.getChild("regexp")
-                if get_state_as_dict(xRegexp)['Selected'] == 'false':
-                    xRegexp.executeAction("CLICK", tuple())
+                xRegexp.executeAction("CLICK", tuple())
                 self.assertEqual("true", get_state_as_dict(xRegexp)['Selected'])
 
                 xSelection = xDialog.getChild("selection")
@@ -47,5 +46,8 @@ class tdf143759(UITestCase):
                     # AssertionError: 13 != 0
                     self.assertEqual(13, len(dialog.getChild("results").getChildren()))
 
+                # Deselect regex button, otherwise it might affect other tests
+                xRegexp.executeAction("CLICK", tuple())
+                self.assertEqual("false", get_state_as_dict(xRegexp)['Selected'])
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
