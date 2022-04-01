@@ -64,7 +64,7 @@
        inkscape:collect="always"
        id="linearGradient1202">
       <stop
-         style="stop-color:#504999;stop-opacity:1"
+         style="stop-color:#5c2983;stop-opacity:1"
          offset="0"
          id="stop1198" />
       <stop
@@ -105,7 +105,7 @@
     <linearGradient
        id="linearGradient1091">
       <stop
-         style="stop-color:#504999;stop-opacity:1"
+         style="stop-color:#5c2983;stop-opacity:1"
          offset="0"
          id="stop1087" />
       <stop
@@ -120,7 +120,7 @@
          offset="0"
          id="stop1077" />
       <stop
-         style="stop-color:#504999;stop-opacity:1"
+         style="stop-color:#5c2983;stop-opacity:1"
          offset="1"
          id="stop1079" />
     </linearGradient>
@@ -169,15 +169,15 @@
              id="stop4574" />
           <stop
              path="c 0,10.0787  0,20.1575  0,30.2362"
-             style="stop-color:#504999;stop-opacity:1"
+             style="stop-color:#5c2983;stop-opacity:1"
              id="stop4576" />
           <stop
              path="c -12.7849,0  -25.5698,0  -38.3547,0"
-             style="stop-color:#504999;stop-opacity:1"
+             style="stop-color:#5c2983;stop-opacity:1"
              id="stop4578" />
           <stop
              path="c 0,-10.0787  0,-20.1575  0,-30.2362"
-             style="stop-color:#504999;stop-opacity:1"
+             style="stop-color:#5c2983;stop-opacity:1"
              id="stop4580" />
         </meshpatch>
       </meshrow>
@@ -198,7 +198,7 @@
          offset="0"
          id="stop4560" />
       <stop
-         style="stop-color:#504999;stop-opacity:1"
+         style="stop-color:#5c2983;stop-opacity:1"
          offset="1"
          id="stop4562" />
     </linearGradient>
@@ -1396,11 +1396,11 @@
      id="path1159"
      sodipodi:nodetypes="ccccccc" />
   <path
-     style="fill:#504999;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     style="fill:#5c2983;fill-opacity:1;stroke:none;stroke-width:0.264583;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      d="M 170.53454,78.309176 92.106415,123.59239 v 11.31934 124.51861 L 170.53454,214.15297 V 89.628518 Z"
      id="path4413" />
   <path
-     style="fill:#504999;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:#5c2983;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 55.765745,102.60615 44.483795,-24.198544 34.9997,20.207086 14.39673,14.396728 -37.93215,21.90013 -19.418507,5.20317 z"
      id="path1161" />
   <path
@@ -1420,7 +1420,7 @@
      d="m 121.51727,242.45186 19.60686,-11.32004 9.80345,5.66002 -19.6069,11.32003 z"
      id="path4441" />
   <path
-     style="fill:#504999;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     style="fill:#5c2983;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 111.71382,168.87165 39.21376,-22.64007 19.60686,11.32003 -39.21376,22.64007 z"
      id="path4483" />
   <path
