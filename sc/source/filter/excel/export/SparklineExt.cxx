@@ -13,37 +13,28 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <SparklineGroup.hxx>
+#include <SparklineList.hxx>
 
 using namespace oox;
 
 namespace xcl::exp
 {
-SparklineExt::SparklineExt(const XclExpRoot& rRoot,
-                           std::vector<std::shared_ptr<sc::Sparkline>> const& pSparklines)
+SparklineExt::SparklineExt(const XclExpRoot& rRoot)
     : XclExpExt(rRoot)
 {
     maURI = "{05C60535-1F16-4fd2-B633-F4F36F0B64E0}";
-
-    for (auto const& pSparkline : pSparklines)
-    {
-        auto* pGroupPointer = pSparkline->getSparklineGroup().get();
-
-        auto aIterator = m_aSparklineGroupMap.find(pGroupPointer);
-        if (aIterator == m_aSparklineGroupMap.end())
-        {
-            std::vector<std::shared_ptr<sc::Sparkline>> aSparklineVector;
-            aSparklineVector.push_back(pSparkline);
-            m_aSparklineGroupMap.emplace(pGroupPointer, aSparklineVector);
-        }
-        else
-        {
-            aIterator->second.push_back(pSparkline);
-        }
-    }
 }
 
 void SparklineExt::SaveXml(XclExpXmlStream& rStream)
 {
+    auto& rDocument = GetDoc();
+
+    auto* pSparklineList = rDocument.GetSparklineList(GetCurrScTab());
+    if (!pSparklineList)
+        return;
+
+    auto const& rSparklineGroups = pSparklineList->getSparklineGroups();
+
     sax_fastparser::FSHelperPtr& rWorksheet = rStream.GetCurrentStream();
     rWorksheet->startElement(XML_ext, FSNS(XML_xmlns, XML_x14),
                              rStream.getNamespaceURL(OOX_NS(xls14Lst)), XML_uri, maURI);
@@ -51,8 +42,9 @@ void SparklineExt::SaveXml(XclExpXmlStream& rStream)
     rWorksheet->startElementNS(XML_x14, XML_sparklineGroups, FSNS(XML_xmlns, XML_xm),
                                rStream.getNamespaceURL(OOX_NS(xm)));
 
-    for (auto const & [ pSparklineGroup, rSparklineVector ] : m_aSparklineGroupMap)
+    for (auto const& pSparklineGroup : rSparklineGroups)
     {
+        auto const& rSparklineVector = pSparklineList->getSparklinesFor(pSparklineGroup);
         addSparklineGroup(rStream, *pSparklineGroup, rSparklineVector);
     }
 
@@ -238,14 +230,7 @@ void SparklineExt::addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGrou
 SparklineBuffer::SparklineBuffer(const XclExpRoot& rRoot, XclExtLstRef const& xExtLst)
     : XclExpRoot(rRoot)
 {
-    if (sc::SparklineList* pSparklineList = GetDoc().GetSparklineList(GetCurrScTab()))
-    {
-        auto pSparklines = pSparklineList->getSparklines();
-        if (!pSparklines.empty())
-        {
-            xExtLst->AddRecord(new xcl::exp::SparklineExt(GetRoot(), pSparklines));
-        }
-    }
+    xExtLst->AddRecord(new xcl::exp::SparklineExt(GetRoot()));
 }
 
 } // end namespace xcl::exp
