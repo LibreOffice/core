@@ -676,8 +676,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 aFont.SetAlignment( static_cast<TextAlign>(nAlign) );
                 aFont.SetWeight( ( nWeight == 1 ) ? WEIGHT_LIGHT : ( nWeight == 2 ) ? WEIGHT_NORMAL :
                                  ( nWeight == 3 ) ? WEIGHT_BOLD : WEIGHT_DONTKNOW );
-                aFont.SetUnderline( static_cast<FontLineStyle>(nUnderline) );
-                aFont.SetStrikeout( static_cast<FontStrikeout>(nStrikeout) );
+                aFont.SetUnderline( static_cast<FontLineStyle>(nUnderline & SAL_MAX_ENUM) );
+                aFont.SetStrikeout( static_cast<FontStrikeout>(nStrikeout & SAL_MAX_ENUM) );
                 aFont.SetItalic( bItalic ? ITALIC_NORMAL : ITALIC_NONE );
                 aFont.SetOutline( bOutline );
                 aFont.SetShadow( bShadow );
@@ -1187,8 +1187,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                 rIStm.ReadInt32(nWidth ).ReadUInt32(nStrikeout).ReadUInt32(nUnderline).ReadInt32(nFollowingActionCount);
                 ImplSkipActions(rIStm, nFollowingActionCount);
                 rMtf.AddAction( new MetaTextLineAction( aStartPt, nWidth,
-                                                        static_cast<FontStrikeout>(nStrikeout),
-                                                        static_cast<FontLineStyle>(nUnderline),
+                                                        static_cast<FontStrikeout>(nStrikeout & SAL_MAX_ENUM),
+                                                        static_cast<FontLineStyle>(nUnderline & SAL_MAX_ENUM),
                                                         LINESTYLE_NONE ) );
 
                 i = SkipActions(i, nFollowingActionCount, nActions);
