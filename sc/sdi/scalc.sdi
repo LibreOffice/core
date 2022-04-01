@@ -2338,6 +2338,23 @@ SfxVoidItem EditSparklineGroup SID_EDIT_SPARKLINE_GROUP
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem DeleteSparklineGroup SID_DELETE_SPARKLINE_GROUP
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 SfxVoidItem SearchResultsDialog SID_SEARCH_RESULTS_DIALOG
 (SfxBoolItem Visible SID_SEARCH_RESULTS_DIALOG)
 [
