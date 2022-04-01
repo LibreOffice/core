@@ -8294,6 +8294,31 @@ void DomainMapper_Impl::commentProps(const OUString& sId, const CommentPropertie
     m_aCommentProps[sId] = rProps;
 }
 
+
+bool DomainMapper_Impl::handlePreviousParagraphBorderInBetween() const
+{
+    if (!m_xPreviousParagraph.is())
+        return false;
+
+    // Connected borders ("ParaIsConnectBorder") are always on by default
+    // and never changed by DomainMapper. Except one case when border in
+    // between is used. So this is not the best, but easiest way to check
+    // is previous paragraph has border in between.
+    bool bConnectBorders = true;
+    m_xPreviousParagraph->getPropertyValue(getPropertyName(PROP_PARA_CONNECT_BORDERS)) >>= bConnectBorders;
+
+    if (bConnectBorders)
+        return false;
+
+    // Previous paragraph has border in between. Current one also has (since this
+    // method is called). So current paragraph will get border above, but
+    // also need to ensure, that no unexpected bottom border are remaining in previous
+    // paragraph: since ParaIsConnectBorder=false it will be displayed in unexpected way.
+    m_xPreviousParagraph->setPropertyValue(getPropertyName(PROP_BOTTOM_BORDER), uno::makeAny(table::BorderLine2()));
+
+    return true;
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
