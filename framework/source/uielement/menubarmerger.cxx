@@ -56,9 +56,9 @@ namespace framework
 
 */
 bool MenuBarMerger::IsCorrectContext(
-    const OUString& rContext, std::u16string_view rModuleIdentifier )
+    std::u16string_view rContext, std::u16string_view rModuleIdentifier )
 {
-    return ( rContext.isEmpty() || ( rContext.indexOf( rModuleIdentifier ) >= 0 ));
+    return ( rContext.empty() || ( rContext.find( rModuleIdentifier ) != std::u16string_view::npos ));
 }
 
 void MenuBarMerger::RetrieveReferencePath(

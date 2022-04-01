@@ -82,7 +82,7 @@ class TargetHelper
             @param  sName
                     the new frame name, which should be checked.
          */
-        static bool isValidNameForFrame(const OUString& sName);
+        static bool isValidNameForFrame(std::u16string_view sName);
 };
 
 } // namespace framework

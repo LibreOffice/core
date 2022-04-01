@@ -595,7 +595,7 @@ public:
 
     FieldUnit GetCSS1Unit() const { return m_eCSS1Unit; }
 
-    sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, const OUString& rText );
+    sal_Int32 indexOfDotLeaders( sal_uInt16 nPoolId, std::u16string_view rText );
 
     /// Determines the prefix string needed to respect the requested namespace alias.
     OString GetNamespace() const;

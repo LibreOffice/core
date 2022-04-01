@@ -148,14 +148,14 @@ sal_Int32 Data::parseSegment(
 }
 
 OUString Data::fullTemplateName(
-    OUString const & component, OUString const & name)
+    std::u16string_view component, std::u16string_view name)
 {
-    if (component.indexOf(':') != -1 || name.indexOf(':') != -1) {
+    if (component.find(':') != std::u16string_view::npos || name.find(':') != std::u16string_view::npos) {
         throw css::uno::RuntimeException(
-            "bad component/name pair containing colon " + component + "/" +
+            OUString::Concat("bad component/name pair containing colon ") + component + "/" +
             name);
     }
-    return component + ":" + name;
+    return OUString::Concat(component) + ":" + name;
 }
 
 bool Data::equalTemplateNames(

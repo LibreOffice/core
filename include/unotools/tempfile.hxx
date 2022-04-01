@@ -68,7 +68,7 @@ public:
                         @param  bCreateParentDirs If rLeadingChars contains a slash, this will create the required
                                 parent directories.
                     */
-                    TempFile( const OUString& rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr,
+                    TempFile( std::u16string_view rLeadingChars, bool _bStartWithZero=true, const OUString* pExtension=nullptr,
                               const OUString* pParent=nullptr, bool bCreateParentDirs=false );
 
                     TempFile(TempFile && other) noexcept;

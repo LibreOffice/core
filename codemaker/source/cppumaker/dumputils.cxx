@@ -48,16 +48,16 @@ bool dumpNamespaceOpen(
 }
 
 bool dumpNamespaceClose(
-    FileStream & out, OUString const & entityName, bool fullModuleType)
+    FileStream & out, std::u16string_view entityName, bool fullModuleType)
 {
     bool bOutput = false;
     bool bFirst = true;
-    for (sal_Int32 i = 0; i >= 0;) {
-        i = entityName.indexOf('.', i);
-        if (i >= 0) {
+    for (size_t i = 0; i != std::u16string_view::npos;) {
+        i = entityName.find('.', i);
+        if (i != std::u16string_view::npos) {
             ++i;
         }
-        if (fullModuleType || i >= 0) {
+        if (fullModuleType || i != std::u16string_view::npos) {
             if (!bFirst) {
                 out << " ";
             }
@@ -69,8 +69,8 @@ bool dumpNamespaceClose(
     return bOutput;
 }
 
-void dumpTypeIdentifier(FileStream & out, OUString const & entityName) {
-    out << entityName.subView(entityName.lastIndexOf('.') + 1);
+void dumpTypeIdentifier(FileStream & out, std::u16string_view entityName) {
+    out << entityName.substr(entityName.rfind('.') + 1);
 }
 
 }

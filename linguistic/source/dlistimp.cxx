@@ -673,13 +673,13 @@ uno::Sequence< OUString > SAL_CALL DicList::getSupportedServiceNames(  )
 
 
 static sal_Int32 lcl_GetToken( OUString &rToken,
-            const OUString &rText, sal_Int32 nPos, const OUString &rDelim )
+            const OUString &rText, sal_Int32 nPos, std::u16string_view rDelim )
 {
     sal_Int32 nRes = -1;
 
     if (rText.isEmpty() ||  nPos >= rText.getLength())
         rToken.clear();
-    else if (rDelim.isEmpty())
+    else if (rDelim.empty())
     {
         rToken = rText;
         if (!rToken.isEmpty())
@@ -690,7 +690,7 @@ static sal_Int32 lcl_GetToken( OUString &rToken,
         sal_Int32 i;
         for (i = nPos; i < rText.getLength(); ++i)
         {
-            if (-1 != rDelim.indexOf( rText[i] ))
+            if (std::string_view::npos != rDelim.find( rText[i] ))
                 break;
         }
 
