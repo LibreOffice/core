@@ -7,8 +7,6 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 from uitest.framework import UITestCase
-from uitest.uihelper.common import select_pos
-from uitest.uihelper.common import select_by_text
 from uitest.uihelper.calc import enter_text_to_cell
 from libreoffice.calc.document import get_cell_by_position
 from libreoffice.uno.propertyvalue import mkPropertyValues
@@ -32,7 +30,7 @@ class tdf35020(UITestCase):
                 allsheets = xDialog.getChild("allsheets")
                 allsheets.executeAction("CLICK", tuple())
                 calcsearchin = xDialog.getChild("calcsearchin")
-                select_by_text(calcsearchin, "Formulas")
+                self.assertEqual("Formulas", get_state_as_dict(calcsearchin)['SelectEntryText'])
                 replaceall = xDialog.getChild("replaceall")
                 replaceall.executeAction("CLICK", tuple())
 
