@@ -239,6 +239,8 @@ public:
      * @param   rInf        contain information
     **/
     void MergeCharacterBorder( SwLinePortion& rPortion, SwLinePortion const *pPrev, SwTextFormatInfo& rInf );
+
+    bool ClearIfIsFirstOfBorderMerge(SwLinePortion const *pPortion);
 };
 
 #endif

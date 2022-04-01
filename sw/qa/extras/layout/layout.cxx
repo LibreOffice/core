@@ -300,6 +300,14 @@ void SwLayoutWriter::testTdf118058()
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
 }
 
+//just care it doesn't crash/assert
+#if 0 // no createSwWebDoc
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint99)
+{
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint99.html");
+}
+#endif
+
 void SwLayoutWriter::testTdf117188()
 {
     createDoc("tdf117188.docx");
