@@ -527,7 +527,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                 if ( bStringFormatOverrides )
                 {
                     OUString aTemp = GetOUString();
-                    rRes = rAppData.pBasicFormater->BasicFormat( aTemp, *pFmt );
+                    rRes = SbxBasicFormater::BasicFormat( aTemp, *pFmt );
                 }
                 else
                 {
