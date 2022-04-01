@@ -1421,7 +1421,7 @@ void Window::ImplPaintToDevice( OutputDevice* i_pTargetOutDev, const Point& i_rP
                 if( bHasMirroredGraphics )
                     nDeltaX = GetOutDev()->mnOutWidth - nDeltaX - pChild->GetOutDev()->mnOutWidth;
 
-                tools::Long nDeltaY = pChild->GetOutDev()->mnOutOffY - GetOutDev()->mnOutOffY;
+                tools::Long nDeltaY = pChild->GetOutOffYPixel() - GetOutOffYPixel();
 
                 Point aPos( i_rPos );
                 aPos += Point(nDeltaX, nDeltaY);
