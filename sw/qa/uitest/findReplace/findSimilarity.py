@@ -26,11 +26,6 @@ class findSimilarities(UITestCase):
                 searchterm.executeAction("TYPE", mkPropertyValues({"TEXT":"seco"}))  #seco
                 # check similarities, button similarities, set values = 1; close dialog with OK
 
-                # Deselect regex before selecting similarity
-                xRegexp = xDialog.getChild("regexp")
-                if get_state_as_dict(xRegexp)['Selected'] == 'true':
-                    xRegexp.executeAction("CLICK", tuple())
-
                 similarity = xDialog.getChild("similarity")
                 if get_state_as_dict(similarity)['Selected'] == 'false':
                     similarity.executeAction("CLICK", tuple())
