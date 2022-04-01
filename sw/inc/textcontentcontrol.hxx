@@ -36,6 +36,8 @@ public:
     ~SwTextContentControl() override;
 
     void ChgTextNode(SwTextNode* pNode);
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

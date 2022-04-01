@@ -29,6 +29,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextField.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <cppuhelper/implbase.hxx>
 
@@ -47,7 +48,7 @@ class SwContentControl;
 class SwXContentControl
     : public cppu::WeakImplHelper<css::lang::XUnoTunnel, css::lang::XServiceInfo,
                                   css::container::XEnumerationAccess, css::text::XTextContent,
-                                  css::text::XText>
+                                  css::text::XText, css::beans::XPropertySet>
 {
 public:
     class Impl;
@@ -134,6 +135,24 @@ public:
                                     sal_Bool bAbsorb) override;
     void SAL_CALL
     removeTextContent(const css::uno::Reference<css::text::XTextContent>& xContent) override;
+
+    // XPropertySet
+    css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() override;
+    void SAL_CALL setPropertyValue(const OUString& rPropertyName,
+                                   const css::uno::Any& rValue) override;
+    css::uno::Any SAL_CALL getPropertyValue(const OUString& rPropertyName) override;
+    void SAL_CALL addPropertyChangeListener(
+        const OUString& rPropertyName,
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+    void SAL_CALL removePropertyChangeListener(
+        const OUString& rPropertyName,
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+    void SAL_CALL addVetoableChangeListener(
+        const OUString& rPropertyName,
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& xListener) override;
+    void SAL_CALL removeVetoableChangeListener(
+        const OUString& rPropertyName,
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& xListener) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
