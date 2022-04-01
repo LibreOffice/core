@@ -541,6 +541,8 @@ private:
 
     bool                mbTrackFormulasPending  : 1;
     bool                mbFinalTrackFormulas    : 1;
+    // This indicates if a ScOutputData::LayoutStrings() is in progress.
+    bool                mbLayoutStrings         : 1;
 
     size_t              mnMutationGuardFlags;
 
@@ -2428,6 +2430,9 @@ public:
     bool                TableExists( SCTAB nTab ) const;
 
     SC_DLLPUBLIC ScColumnsRange GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
+
+    bool IsInLayoutStrings() const   { return mbLayoutStrings; }
+    void SetLayoutStrings(bool bSet) { mbLayoutStrings = bSet; }
 
 private:
 
