@@ -1377,7 +1377,12 @@ static PyObject* PyUNO_getattr (PyObject* self, char* name)
 
         OUString attrName( OUString::createFromAscii( name ) );
         //We need to find out if it's a method...
-        if (me->members->xInvocation->hasMethod (attrName))
+        bool isMethod;
+        {
+            PyThreadDetach antiguard;
+            isMethod = me->members->xInvocation->hasMethod (attrName);
+        }
+        if (isMethod)
         {
             //Create a callable object to invoke this...
             PyRef ret = PyUNO_callable_new (
@@ -1389,14 +1394,19 @@ static PyObject* PyUNO_getattr (PyObject* self, char* name)
         }
 
         //or a property
-        if (me->members->xInvocation->hasProperty ( attrName))
+        bool isProperty;
+        Any anyRet;
         {
-            //Return the value of the property
-            Any anyRet;
+            PyThreadDetach antiguard;
+            isProperty = me->members->xInvocation->hasProperty ( attrName);
+            if (isProperty)
             {
-                PyThreadDetach antiguard;
+                //Return the value of the property
                 anyRet = me->members->xInvocation->getValue (attrName);
             }
+        }
+        if (isProperty)
+        {
             PyRef ret = runtime.any2PyObject(anyRet);
             Py_XINCREF( ret.get() );
             return ret.get();
