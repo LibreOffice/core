@@ -73,8 +73,9 @@ OUString CallSaveAsDialog(weld::Window* pParent, OUString& rFilter)
 
 /*
     simple address check: check for '@'
-                            for at least one '.' after the '@'
-                            and for at least two characters before and after the dot
+                            for at least one '.' after the '@',
+                            for at least one character before the dot
+                            and for at least two characters after the dot
 */
 bool CheckMailAddress( const OUString& rMailAddress )
 {
@@ -82,7 +83,7 @@ bool CheckMailAddress( const OUString& rMailAddress )
     if (nPosAt<0 || rMailAddress.lastIndexOf('@')!=nPosAt)
         return false;
     const sal_Int32 nPosDot = rMailAddress.indexOf('.', nPosAt);
-    return !(nPosDot<0 || nPosDot-nPosAt<3 || rMailAddress.getLength()-nPosDot<3);
+    return !(nPosDot<0 || nPosDot-nPosAt<2 || rMailAddress.getLength()-nPosDot<3);
 }
 
 uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
