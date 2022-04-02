@@ -148,7 +148,7 @@ private:
     VclPtr<OutputDevice>    mpDev2;
     std::vector<std::unique_ptr<ImplFontListNameInfo>> m_Entries;
 
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( const OUString& rSearchName, sal_uInt32* pIndex ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( std::u16string_view rSearchName, sal_uInt32* pIndex ) const;
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const OUString& rStr ) const;
     SVT_DLLPRIVATE void                     ImplInsertFonts(OutputDevice* pDev, bool bInsertData);
 

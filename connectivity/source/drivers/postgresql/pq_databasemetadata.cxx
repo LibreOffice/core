@@ -1185,30 +1185,30 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
 namespace
 {
     // sort no schema first, then "public", then normal schemas, then internal schemas
-    int compare_schema(const OUString &nsA, std::u16string_view nsB)
+    int compare_schema(std::u16string_view nsA, std::u16string_view nsB)
     {
-        if (nsA.isEmpty())
+        if (nsA.empty())
         {
             return nsB.empty() ? 0 : -1;
         }
         else if (nsB.empty())
         {
-            assert(!nsA.isEmpty());
+            assert(!nsA.empty());
             return 1;
         }
-        else if(nsA == "public")
+        else if(nsA == u"public")
         {
             return (nsB == u"public") ? 0 : -1;
         }
         else if(nsB == u"public")
         {
-            assert(nsA != "public");
+            assert(nsA != u"public");
             return 1;
         }
-        else if(nsA.startsWith("pg_"))
+        else if(o3tl::starts_with(nsA, u"pg_"))
         {
             if(o3tl::starts_with(nsB, u"pg_"))
-                return nsA.compareTo(nsB);
+                return nsA.compare(nsB);
             else
                 return 1;
         }
@@ -1218,7 +1218,7 @@ namespace
         }
         else
         {
-            return nsA.compareTo(nsB);
+            return nsA.compare(nsB);
         }
     }
 
