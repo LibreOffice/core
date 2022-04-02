@@ -33,6 +33,24 @@
       "message": "Works like a charm.\n\nAdditional to your test cases I tried the dialog onto a cell with \"\u003dHYPERLINK(\"http://libreoffice.org\";\"lo\")\" which was before Err:509 for \"\u003dHYPERLINK(\"http://libreoffice.org\";\"lo\")http://foo.bar/\" and becomes now \"loYPERLINK(\"http://libreoffice.org\";\"lo\")\" with \"lo\" as clickable link.\n\nMixed content like \"\u003ca href\u003eLibreOffice\u003c/a\u003e \u003ca href\u003eTest\u003c/a\u003e\" with different targets will show the whole text but only the hyperlink from the first url. Works well.\n\nThe dialog can also deal with document targets, for example \u003d\"sheet 2\" targeting $Sheet2. Adding text to the content (\"\u003ca\u003esheet 2\u003c/a\u003e test\") makes the dialog not recognizing the document target anymore - this happens also before the patch. And not a bug IMO.",
       "revId": "ff06365a1db93b6f32d623c8420ae375d2f21315",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ae01b95_e2732df7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-02T17:21:49Z",
+      "side": 1,
+      "message": "Should we do something in this case? Like replacing the text of the entire cell, or keeping the current behaviour, if the cell contains formula?",
+      "parentUuid": "e8b8a264_c646c09d",
+      "revId": "ff06365a1db93b6f32d623c8420ae375d2f21315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
