@@ -171,7 +171,6 @@ $(eval $(call gb_Package_add_files_with_dir,odk_examples,$(SDKDIRNAME)/examples,
     DevelopersGuide/Extensions/DialogWithHelp/help/en/com.foocorp.foo-ext/page1.xhp \
     DevelopersGuide/Extensions/DialogWithHelp/help/en/com.foocorp.foo-ext/page2.xhp \
     DevelopersGuide/Extensions/DialogWithHelp/help/en/com.foocorp.foo-ext/subfolder/anotherpage.xhp \
-    DevelopersGuide/FirstSteps/FirstConnection.java \
     DevelopersGuide/FirstSteps/FirstLoadComponent.java \
     DevelopersGuide/FirstSteps/FirstUnoContact.java \
     DevelopersGuide/FirstSteps/HelloTextTableShape.java \
