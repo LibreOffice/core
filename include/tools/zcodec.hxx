@@ -23,6 +23,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/long.hxx>
 #include <memory>
+#include <optional>
 
 #define ZCODEC_NO_COMPRESSION       0
 #define ZCODEC_DEFAULT_COMPRESSION  6
@@ -59,6 +60,8 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ZCodec
 public:
                     ZCodec( size_t nInBufSize = 32768, size_t nOutBufSize = 32768 );
                     ~ZCodec();
+
+    std::optional<sal_uInt32> IsZCompressed( SvStream& rIStm );
 
     void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool gzLib = false );
     tools::Long            EndCompression();
