@@ -1079,59 +1079,19 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectWMF( SvStream&, bool )
 {
-    bool bRet = aPathExt.startsWith( "wmf" );
+    bool bRet = aPathExt.startsWith( "wmf" ) || aPathExt.startsWith( "wmz" );
     if (bRet)
         nFormat = GraphicFileFormat::WMF;
 
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectEMF( SvStream& rStm, bool bExtendedInfo )
+bool GraphicDescriptor::ImpDetectEMF( SvStream&, bool )
 {
-    sal_uInt32 nRecordType = 0;
-    bool bRet = false;
+    bool bRet = aPathExt.startsWith( "emf" ) || aPathExt.startsWith( "emz" );
+    if (bRet)
+        nFormat = GraphicFileFormat::EMF;
 
-    sal_Int32 nStmPos = rStm.Tell();
-    rStm.SetEndian( SvStreamEndian::LITTLE );
-    rStm.ReadUInt32( nRecordType );
-
-    if ( nRecordType == 0x00000001 )
-    {
-        sal_uInt32 nHeaderSize = 0;
-        sal_Int32 nBoundLeft = 0, nBoundTop = 0, nBoundRight = 0, nBoundBottom = 0;
-        sal_Int32 nFrameLeft = 0, nFrameTop = 0, nFrameRight = 0, nFrameBottom = 0;
-        sal_uInt32 nSignature = 0;
-
-        rStm.ReadUInt32( nHeaderSize );
-        rStm.ReadInt32( nBoundLeft );
-        rStm.ReadInt32( nBoundTop );
-        rStm.ReadInt32( nBoundRight );
-        rStm.ReadInt32( nBoundBottom );
-        rStm.ReadInt32( nFrameLeft );
-        rStm.ReadInt32( nFrameTop );
-        rStm.ReadInt32( nFrameRight );
-        rStm.ReadInt32( nFrameBottom );
-        rStm.ReadUInt32( nSignature );
-
-        if ( nSignature == 0x464d4520 )
-        {
-            nFormat = GraphicFileFormat::EMF;
-            bRet = true;
-
-            if ( bExtendedInfo )
-            {
-                // size in pixels
-                aPixSize.setWidth( nBoundRight - nBoundLeft + 1 );
-                aPixSize.setHeight( nBoundBottom - nBoundTop + 1 );
-
-                // size in 0.01mm units
-                aLogSize.setWidth( nFrameRight - nFrameLeft + 1 );
-                aLogSize.setHeight( nFrameBottom - nFrameTop + 1 );
-            }
-        }
-    }
-
-    rStm.Seek( nStmPos );
     return bRet;
 }
 
