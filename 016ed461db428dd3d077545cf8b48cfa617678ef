@@ -34,6 +34,23 @@
       "parentUuid": "096f6ad7_1c8c379e",
       "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35f529d7_a557c43c",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-02T13:17:27Z",
+      "side": 1,
+      "message": "Might as well skip this check, since we now check IsZCompressed before this function is called.",
+      "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
