@@ -2127,7 +2127,14 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         setFramePrintAreaValid(false);
                         Format( getRootFrame()->GetCurrShell()->GetOut(), pAttrs );
                     }
+
+                    pAccess.reset();
+
                     lcl_RecalcTable( *this, nullptr, aNotify );
+
+                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                    pAttrs = pAccess->Get();
+
                     m_bLowersFormatted = true;
                     if ( bKeep && KEEPTAB )
                     {
@@ -2557,9 +2564,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
 
                             GetFollow()->MakeAll(pRenderContext);
 
-                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                            pAttrs = pAccess->Get();
-
                             GetFollow()->SetLowersFormatted(false);
                             // #i43913# - lock follow table
                             // to avoid its formatting during the format of
@@ -2602,6 +2606,9 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                                     }
                                 }
                             }
+
+                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                            pAttrs = pAccess->Get();
                             --nStack;
                         }
                         else if ( GetFollow() == GetNext() )
