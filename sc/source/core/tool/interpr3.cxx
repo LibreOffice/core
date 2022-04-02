@@ -4633,6 +4633,7 @@ void ScInterpreter::ScSTEYX()
 {
     CalculatePearsonCovar( true, true, false );
 }
+
 void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
 {
     if ( !MustHaveParamCount( GetByte(), 2 ) )
@@ -4654,53 +4655,10 @@ void ScInterpreter::CalculateSlopeIntercept(bool bSlope)
         return;
     }
     // #i78250# numerical stability improved
-    double fCount           = 0.0;
-    KahanSum fSumX          = 0.0;
-    KahanSum fSumY          = 0.0;
 
-    for (SCSIZE i = 0; i < nC1; i++)
-    {
-        for (SCSIZE j = 0; j < nR1; j++)
-        {
-            if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-            {
-                fSumX += pMat1->GetDouble(i,j);
-                fSumY += pMat2->GetDouble(i,j);
-                fCount++;
-            }
-        }
-    }
-    if (fCount < 1.0)
-        PushNoValue();
-    else
-    {
-        KahanSum fSumDeltaXDeltaY = 0.0; // sum of (ValX-MeanX)*(ValY-MeanY)
-        KahanSum fSumSqrDeltaX    = 0.0; // sum of (ValX-MeanX)^2
-        double fMeanX = fSumX.get() / fCount;
-        double fMeanY = fSumY.get() / fCount;
-        for (SCSIZE i = 0; i < nC1; i++)
-        {
-            for (SCSIZE j = 0; j < nR1; j++)
-            {
-                if (!pMat1->IsStringOrEmpty(i,j) && !pMat2->IsStringOrEmpty(i,j))
-                {
-                    double fValX = pMat1->GetDouble(i,j);
-                    double fValY = pMat2->GetDouble(i,j);
-                    fSumDeltaXDeltaY += (fValX - fMeanX) * (fValY - fMeanY);
-                    fSumSqrDeltaX    += (fValX - fMeanX) * (fValX - fMeanX);
-                }
-            }
-        }
-        if (fSumSqrDeltaX == 0.0)
-            PushError( FormulaError::DivisionByZero);
-        else
-        {
-            if ( bSlope )
-                PushDouble( fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get());
-            else
-                PushDouble( fMeanY - fSumDeltaXDeltaY.get() / fSumSqrDeltaX.get() * fMeanX);
-        }
-    }
+    double fVal = pMat1->CalcSlopeIntercept(pMat2, bSlope);
+    PushDouble(fVal);
+
 }
 
 void ScInterpreter::ScSlope()

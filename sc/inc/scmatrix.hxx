@@ -30,6 +30,11 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <string>
+#include <ostream>
+#include <memory>
+
+using namespace std;
 
 #define DEBUG_MATRIX 0
 
@@ -378,7 +383,7 @@ public:
     double GetMinValue( bool bTextAsZero, bool bIgnoreErrorValues = false ) const ;
     double GetGcd() const ;
     double GetLcm() const ;
-
+    double CalcSlopeIntercept( const ScMatrixRef& mpMat2, bool bSlope ) const ;
     ScMatrixRef CompareMatrix(
         sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const ;
 

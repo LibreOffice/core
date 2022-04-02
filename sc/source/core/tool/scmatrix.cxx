@@ -38,6 +38,7 @@
 #include <utility>
 #include <vector>
 #include <limits>
+#include <cstdlib>
 
 #include <mdds/multi_type_matrix.hpp>
 #include <mdds/multi_type_vector/types.hpp>
@@ -315,6 +316,7 @@ public:
     double GetMinValue( bool bTextAsZero, bool bIgnoreErrorValues ) const;
     double GetGcd() const;
     double GetLcm() const;
+    double CalcSlopeIntercept( ScMatrixRef& mpMat2, bool bSlope ) const;
 
     ScMatrixRef CompareMatrix( sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const;
 
@@ -1630,6 +1632,130 @@ public:
     }
 };
 
+template<typename _Blk>
+void push_to_buffer(const MatrixImplType::element_block_node_type& node, std::vector<string>& buf)
+{
+    auto it = node.begin<_Blk>();
+    auto ite = node.end<_Blk>();
+    std::for_each(it, ite, [&](const typename _Blk::value_type& v) {
+        ostringstream os;
+        os << v;
+        buf.push_back(os.str());
+    });
+}
+
+template<>
+void push_to_buffer<MatrixImplType::boolean_block_type>(
+    const MatrixImplType::element_block_node_type& node, std::vector<string>& buf)
+{
+    using blk_type = MatrixImplType::boolean_block_type;
+    auto it = node.begin<blk_type>();
+    auto ite = node.end<blk_type>();
+    std::for_each(it, ite, [&](bool v) {
+        ostringstream os;
+        os << (v ? 1.0 : 0.0);
+        buf.push_back(os.str());
+    });
+}
+
+// template<typename Op>
+class slopeIntercept
+{
+
+    double mfVal, mfCount, mfMeanX, mfMeanY;
+    bool mbSlope;
+    KahanSum mfSumX, mfSumY, mfSumDeltaXDeltaY, mfSumSqrDeltaX;
+    using strlist_type = std::vector<string>;
+    std::shared_ptr<strlist_type> m_ls;
+    std::shared_ptr<strlist_type> m_rs;
+
+    void process_node(const MatrixImplType::element_block_node_type& node, strlist_type& buf)
+    {
+        switch (node.type)
+        {
+            case mdds::mtm::element_boolean:
+                push_to_buffer<MatrixImplType::boolean_block_type>(node, buf);
+                break;
+            case mdds::mtm::element_string:
+            case mdds::mtm::element_numeric:
+                push_to_buffer<MatrixImplType::numeric_block_type>(node, buf);
+                break;
+            case mdds::mtm::element_empty:
+            default:
+                ;
+        }
+    }
+
+public:
+    slopeIntercept(bool bSlope) :
+        mfCount(0.0), mfSumX(0.0), mfSumY(0.0), mbSlope(bSlope), m_ls(std::make_shared<strlist_type>()), m_rs(std::make_shared<strlist_type>())
+    {}
+    slopeIntercept(const slopeIntercept& other) :
+        mfCount(other.mfCount), mfSumX(other.mfSumX), mfSumY(other.mfSumY), mbSlope(other.mbSlope), m_ls(other.m_ls), m_rs(other.m_rs)
+    {}
+    slopeIntercept(slopeIntercept&& other) :
+        mfCount(std::move(other.mfCount)),mfSumX(std::move(other.mfSumX)), mfSumY(std::move(other.mfSumY)), mbSlope(std::move(other.mbSlope)), m_ls(std::move(other.m_ls)), m_rs(std::move(other.m_rs))
+    {}
+
+    slopeIntercept& operator=(slopeIntercept other)
+    {
+        swap(other);
+        return *this;
+    }
+
+    void swap(slopeIntercept& other)
+    {
+       m_ls.swap(other.m_ls);
+       m_rs.swap(other.m_rs);
+    }
+
+    double getValue() const { return mfVal; }
+
+    double operator() (const MatrixImplType::element_block_node_type& pMat1, const MatrixImplType::element_block_node_type& pMat2)
+    {
+        process_node(pMat1, *m_ls);
+        process_node(pMat2, *m_rs);
+        //once this is done, we can process both strings using iterator. So, let us
+        auto it = m_ls->begin();
+        auto it1 = m_rs->begin();
+        auto ite = m_ls->end();
+        for (; it != ite; ++it, ++it1)
+        {
+            mfSumX += std::stod(*it);
+            mfSumY += std::stod(*it1);
+            mfCount++;
+        }
+
+        if(mfCount < 1.0)
+            mfVal = CreateDoubleError(FormulaError::NoValue);
+        else
+        {
+            mfMeanX = mfSumX.get() / mfCount;
+            mfMeanY = mfSumY.get() / mfCount;
+            auto it = m_ls->begin();
+            auto it1 = m_rs->begin();
+            auto ite = m_ls->end();
+            for (; it != ite; ++it, ++it1)
+            {
+                double mfValX = std::stod(*it);
+                double mfValY = std::stod(*it1);
+                mfSumDeltaXDeltaY += (mfValX - mfMeanX) * (mfValY - mfMeanY);
+                mfSumSqrDeltaX    += (mfValX - mfMeanX) * (mfValX - mfMeanX);
+            }
+
+            if (mfSumSqrDeltaX == 0.0)
+                mfVal =  CreateDoubleError(FormulaError::DivisionByZero);
+            else
+            {
+                if ( mbSlope )
+                    mfVal = ( mfSumDeltaXDeltaY.get() / mfSumSqrDeltaX.get() );
+                else
+                    mfVal = ( mfMeanY - mfSumDeltaXDeltaY.get() / mfSumSqrDeltaX.get() * mfMeanX );
+            }
+        }
+    }
+};
+
 double evaluate( double fVal, ScQueryOp eOp )
 {
     if (!std::isfinite(fVal))
@@ -2127,6 +2253,13 @@ double ScMatrixImpl::GetLcm() const
     CalcGcdLcm<Lcm> aFunc;
     aFunc = maMat.walk(aFunc);
     return aFunc.getResult();
+}
+
+double ScMatrixImpl::CalcSlopeIntercept(ScMatrixRef& mpMat2, bool bSlope ) const
+{
+    slopeIntercept aFunc( bSlope );
+    aFunc = maMat.walk(aFunc, mpMat2);
+    return aFunc.getValue();
 }
 
 ScMatrixRef ScMatrixImpl::CompareMatrix(
@@ -3233,6 +3366,10 @@ double ScMatrix::GetLcm() const
     return pImpl->GetLcm();
 }
 
+double ScMatrix::CalcSlopeIntercept(ScMatrixRef& mpMat2, bool bSlope) const
+{
+    return pImpl->CalcSlopeIntercept(mpMat2, bSlope);
+}
 
 ScMatrixRef ScMatrix::CompareMatrix(
     sc::Compare& rComp, size_t nMatPos, sc::CompareOptions* pOptions ) const
