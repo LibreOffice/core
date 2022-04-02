@@ -36,7 +36,7 @@
 #define GZ_COMMENT      0x10 /* bit 4 set: file comment present */
 #define GZ_RESERVED     0xE0 /* bits 5..7: reserved */
 
-const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
+constexpr sal_uInt16 GZ_MAGIC_BYTES_LE = 0x8B1F; /* gzip magic bytes, little endian */
 
 ZCodec::ZCodec( size_t nInBufSize, size_t nOutBufSize )
     : meState(STATE_INIT)
@@ -56,6 +56,16 @@ ZCodec::~ZCodec()
 {
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
     delete pStream;
+}
+
+bool ZCodec::IsZCompressed( SvStream& rIStm )
+{
+    sal_uInt64 nCurPos = rIStm.Tell();
+    rIStm.Seek( 0 );
+    sal_uInt16 nFirstTwoBytes = 0;
+    rIStm.ReadUInt16( nFirstTwoBytes );
+    rIStm.Seek( nCurPos );
+    return nFirstTwoBytes == GZ_MAGIC_BYTES_LE;
 }
 
 void ZCodec::BeginCompression( int nCompressLevel, bool gzLib )
@@ -272,12 +282,11 @@ void ZCodec::InitDecompress(SvStream & inStream)
     if ( mbStatus &&  mbGzLib )
     {
         sal_uInt8 j, nMethod, nFlags;
-        for (int i : gz_magic)   // gz - magic number
-        {
-            inStream.ReadUChar( j );
-            if ( j != i )
-                mbStatus = false;
-        }
+        sal_uInt16 nFirstTwoBytes;
+        inStream.Seek( 0 );
+        inStream.ReadUInt16( nFirstTwoBytes );
+        if ( nFirstTwoBytes != GZ_MAGIC_BYTES_LE )
+            mbStatus = false;
         inStream.ReadUChar( nMethod );
         inStream.ReadUChar( nFlags );
         if ( nMethod != Z_DEFLATED )
