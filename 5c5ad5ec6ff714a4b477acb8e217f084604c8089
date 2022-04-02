@@ -34,6 +34,24 @@
       "parentUuid": "8493e96f_d046cac7",
       "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6889c596_4014c3c7",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3988,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-04-02T08:16:17Z",
+      "side": 1,
+      "message": "Do you mean hot path pessimization? It could be but I don\u0027t know if it matters here.",
+      "parentUuid": "01656ac1_ff1636a0",
+      "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
