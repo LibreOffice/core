@@ -143,9 +143,9 @@ public:
 
 struct alphaSort
 {
-    bool operator()( const OUString& a, std::u16string_view b )
+    bool operator()( std::u16string_view a, std::u16string_view b )
     {
-        return a.compareTo( b ) < 0;
+        return a.compare( b ) < 0;
     }
 };
 class LocationBrowseNode :

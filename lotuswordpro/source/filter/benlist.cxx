@@ -56,7 +56,7 @@
 #include "first.hxx"
 namespace OpenStormBento
 {
-CBenNamedObject* FindNamedObject(CUtList* pList, const OString& rName, CUtListElmt** ppPrev)
+CBenNamedObject* FindNamedObject(CUtList* pList, std::string_view rName, CUtListElmt** ppPrev)
 {
     CUtListElmt& rTerminating = pList->GetTerminating();
     for (CUtListElmt* pCurr = pList->GetLast(); pCurr != &rTerminating; pCurr = pCurr->GetPrev())
@@ -64,7 +64,7 @@ CBenNamedObject* FindNamedObject(CUtList* pList, const OString& rName, CUtListEl
         CBenNamedObjectListElmt* pCurrNamedObjectListElmt
             = static_cast<CBenNamedObjectListElmt*>(pCurr);
 
-        sal_Int32 Comp = rName.compareTo(pCurrNamedObjectListElmt->GetNamedObject()->GetName());
+        sal_Int32 Comp = rName.compare(pCurrNamedObjectListElmt->GetNamedObject()->GetName());
 
         if (Comp == 0)
             return pCurrNamedObjectListElmt->GetNamedObject();

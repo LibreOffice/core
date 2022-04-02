@@ -166,7 +166,7 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
     return ImplMakeSearchString(rStr.getToken( 0, ';' ));
 }
 
-ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uInt32* pIndex) const
+ImplFontListNameInfo* FontList::ImplFind(std::u16string_view rSearchName, sal_uInt32* pIndex) const
 {
     // Append if there is no entry in the list or if the entry is larger
     // then the last one. We only compare to the last entry as the list of VCL
@@ -181,7 +181,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uInt32
     else
     {
         const ImplFontListNameInfo* pCmpData = m_Entries.back().get();
-        sal_Int32 nComp = rSearchName.compareTo( pCmpData->maSearchName );
+        sal_Int32 nComp = rSearchName.compare( pCmpData->maSearchName );
         if (nComp > 0)
         {
             if ( pIndex )
@@ -203,7 +203,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uInt32
     {
         nMid = (nLow + nHigh) / 2;
         pCompareData = m_Entries[nMid].get();
-        sal_Int32 nComp = rSearchName.compareTo(pCompareData->maSearchName);
+        sal_Int32 nComp = rSearchName.compare(pCompareData->maSearchName);
         if (nComp < 0)
         {
             if ( !nMid )
@@ -225,7 +225,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uInt32
 
     if ( pIndex )
     {
-        sal_Int32 nComp = rSearchName.compareTo(pCompareData->maSearchName);
+        sal_Int32 nComp = rSearchName.compare(pCompareData->maSearchName);
         if (nComp > 0)
             *pIndex = (nMid+1);
         else

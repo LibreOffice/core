@@ -94,9 +94,9 @@ class   OUStringComparison
 {
 public:
     /// Compare two strings.  Returns true if the first is before the second.
-    bool    operator()  (const OUString & a, std::u16string_view b) const
+    bool    operator()  (std::u16string_view a, std::u16string_view b) const
     {
-        return (a.compareTo (b) < 0);
+        return (a.compare (b) < 0);
     }
 };
 
