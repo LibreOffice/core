@@ -70,6 +70,24 @@
       "parentUuid": "6889c596_4014c3c7",
       "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f0803c1_140b65ba",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3988,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-04-02T16:28:27Z",
+      "side": 1,
+      "message": "I guess I wasn\u0027t clear enough, sorry. I mean this flattening\n    if( !pArr )\n        return StarBASIC::Error( ERRCODE_BASIC_MUST_HAVE_DIMS );\n    \n    sal_Int32 nLower, nUpper;\n    ...",
+      "parentUuid": "a8b7bebe_6cec3b60",
+      "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
