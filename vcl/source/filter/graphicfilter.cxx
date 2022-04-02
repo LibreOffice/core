@@ -891,10 +891,29 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
         {
             nGraphicContentSize = nStreamLength;
             pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
-
             rIStream.Seek(nStreamBegin);
-            rIStream.ReadBytes(pGraphicContent.get(), nStreamLength);
+            if (ZCodec::IsZCompressed(rIStream))
+            {
+                ZCodec aCodec;
+                SvMemoryStream aMemStream;
+                tools::Long nMemoryLength;
+                aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true);
+                nMemoryLength = aCodec.Decompress(rIStream, aMemStream);
+                aCodec.EndCompression();
 
+                if (!rIStream.GetError() && nMemoryLength >= 0)
+                {
+                    nGraphicContentSize = nMemoryLength;
+                    pGraphicContent.reset(new sal_uInt8[nGraphicContentSize]);
+
+                    aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
+                    aMemStream.ReadBytes(pGraphicContent.get(), nGraphicContentSize);
+                }
+            }
+            else
+            {
+                rIStream.ReadBytes(pGraphicContent.get(), nStreamLength);
+            }
             if (!rIStream.GetError())
             {
                 eLinkType = GfxLinkType::NativeWmf;
@@ -1148,15 +1167,22 @@ ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLi
     // use new UNO API service, do not directly import but create a
     // Graphic that contains the original data and decomposes to
     // primitives on demand
-
+    sal_uInt32 nStreamLength(rStream.remainingSize());
+    SvStream* aNewStream = &rStream;
     ErrCode aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
-
-    const sal_uInt32 nStreamLength(rStream.remainingSize());
+    SvMemoryStream aMemStream;
+    if (ZCodec::IsZCompressed(rStream))
+    {
+        ZCodec aCodec;
+        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true);
+        nStreamLength = aCodec.Decompress(rStream, aMemStream);
+        aCodec.EndCompression();
+        aNewStream = &aMemStream;
+    }
     VectorGraphicDataArray aNewData(nStreamLength);
-
-    rStream.ReadBytes(aNewData.getArray(), nStreamLength);
-
-    if (!rStream.GetError())
+    aNewStream->Seek(STREAM_SEEK_TO_BEGIN);
+    aNewStream->ReadBytes(aNewData.getArray(), nStreamLength);
+    if (!aNewStream->GetError())
     {
         const VectorGraphicDataType aDataType(eType);
         BinaryDataContainer aDataContainer(reinterpret_cast<const sal_uInt8*>(aNewData.getConstArray()), aNewData.getLength());
