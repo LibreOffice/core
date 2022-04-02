@@ -92,7 +92,7 @@ public:
         DrawViewWrapper const & rDrawViewWrapper,
         bool bGetDiagramInsteadOf_Wall=false );
 
-    static bool isRotateableObject( const OUString& rCID
+    static bool isRotateableObject( std::u16string_view rCID
                     , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     explicit SelectionHelper( SdrObject* pSelectedObj );

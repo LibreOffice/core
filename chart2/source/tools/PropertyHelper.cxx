@@ -23,6 +23,7 @@
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -67,9 +68,9 @@ struct lcl_StringMatches
             m_aCmpStr( rCmpStr )
     {}
 
-    bool operator() ( const OUString & rStr )
+    bool operator() ( std::u16string_view rStr )
     {
-        return rStr.match( m_aCmpStr );
+        return o3tl::starts_with( rStr, m_aCmpStr );
     }
 
 private:

@@ -154,7 +154,7 @@ void lcl_insertMenuCommand(
     xMenu->setCommand( nId, rCommand );
 }
 
-OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
+OUString lcl_getFormatCommandForObjectCID( std::u16string_view rCID )
 {
     OUString aDispatchCommand( ".uno:FormatSelection" );
 

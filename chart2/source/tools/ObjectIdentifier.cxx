@@ -47,6 +47,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 namespace com::sun::star::drawing { class XShape; }
 
@@ -58,10 +59,10 @@ using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-const char m_aMultiClick[] = "MultiClick";
+const sal_Unicode m_aMultiClick[] = u"MultiClick";
 const char m_aDragMethodEquals[] = "DragMethod=";
 const char m_aDragParameterEquals[] = "DragParameter=";
-const char m_aProtocol[] = "CID/";
+const sal_Unicode m_aProtocol[] = u"CID/";
 const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDragging");
 
 namespace
@@ -425,14 +426,14 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifierForParticle(
-        const OUString& rParticle )
+         std::u16string_view rParticle )
 {
-    return ObjectIdentifier::createClassifiedIdentifierForParticles( rParticle, OUString() );
+    return ObjectIdentifier::createClassifiedIdentifierForParticles( rParticle, u"" );
 }
 
 OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
-            const OUString& rParentParticle
-          , const OUString& rChildParticle
+            std::u16string_view rParentParticle
+          , std::u16string_view rChildParticle
           , std::u16string_view rDragMethodServiceName
           , std::u16string_view rDragParameterString )
 {
@@ -442,13 +443,13 @@ OUString ObjectIdentifier::createClassifiedIdentifierForParticles(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(aRet.getLength() > static_cast<sal_Int32>(strlen(m_aProtocol)))
+    if(aRet.getLength() > static_cast<sal_Int32>(std::size(m_aProtocol)-1))
         aRet.append("/");
 
-    if(!rParentParticle.isEmpty())
+    if(!rParentParticle.empty())
     {
         aRet.append(rParentParticle);
-        if( !rChildParticle.isEmpty() )
+        if( !rChildParticle.empty() )
             aRet.append(":");
     }
     aRet.append(rChildParticle);
@@ -566,7 +567,7 @@ OUString ObjectIdentifier::createClassifiedIdentifierWithParent(
 
     OUStringBuffer aRet( m_aProtocol );
     aRet.append( lcl_createClassificationStringForType( eObjectType, rDragMethodServiceName, rDragParameterString ));
-    if(aRet.getLength() > static_cast<sal_Int32>(strlen(m_aProtocol)))
+    if(aRet.getLength() > static_cast<sal_Int32>(std::size(m_aProtocol)-1))
         aRet.append("/");
     aRet.append(rParentPartical);
     if(!rParentPartical.empty())
@@ -716,7 +717,7 @@ bool ObjectIdentifier::isDragableObject() const
     return bReturn;
 }
 
-bool ObjectIdentifier::isRotateableObject( const OUString& rClassifiedIdentifier )
+bool ObjectIdentifier::isRotateableObject( std::u16string_view rClassifiedIdentifier )
 {
     bool bReturn = false;
     ObjectType eObjectType = ObjectIdentifier::getObjectType( rClassifiedIdentifier );
@@ -733,7 +734,7 @@ bool ObjectIdentifier::isRotateableObject( const OUString& rClassifiedIdentifier
     return bReturn;
 }
 
-bool ObjectIdentifier::isMultiClickObject( const OUString& rClassifiedIdentifier )
+bool ObjectIdentifier::isMultiClickObject( std::u16string_view rClassifiedIdentifier )
 {
     //the name of a shape is it's ClassifiedIdentifier
 
@@ -742,7 +743,7 @@ bool ObjectIdentifier::isMultiClickObject( const OUString& rClassifiedIdentifier
     //was selected before;
 
     //!!!!! by definition the name of a MultiClickObject starts with "CID/MultiClick:"
-    bool bRet = rClassifiedIdentifier.match( m_aMultiClick, strlen(m_aProtocol) );
+    bool bRet = o3tl::starts_with(rClassifiedIdentifier.substr( std::size(m_aProtocol)-1 ), m_aMultiClick);
     return bRet;
 }
 
@@ -877,69 +878,70 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
     return aRet;
 }
 
-ObjectType ObjectIdentifier::getObjectType( const OUString& rCID )
+ObjectType ObjectIdentifier::getObjectType( std::u16string_view aCID )
 {
     ObjectType eRet;
-    sal_Int32 nLastSign = rCID.lastIndexOf( ':' );//last sign before the type string
-    if(nLastSign==-1)
-        nLastSign = rCID.lastIndexOf( '/' );
-    if(nLastSign==-1)
+    size_t nLastSign = aCID.rfind( ':' );//last sign before the type string
+    if(nLastSign == std::u16string_view::npos)
+        nLastSign = aCID.rfind( '/' );
+    if(nLastSign == std::u16string_view::npos)
     {
-        sal_Int32 nEndIndex = rCID.lastIndexOf( '=' );
-        if(nEndIndex==-1)
+        size_t nEndIndex = aCID.rfind( '=' );
+        if(nEndIndex == std::u16string_view::npos)
             return OBJECTTYPE_UNKNOWN;
         nLastSign = 0;
     }
     if( nLastSign>0 )
         nLastSign++;
 
-    if( rCID.match("Page",nLastSign) )
+    aCID = aCID.substr(nLastSign);
+    if( o3tl::starts_with(aCID, u"Page") )
         eRet = OBJECTTYPE_PAGE;
-    else if( rCID.match("Title",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Title") )
         eRet = OBJECTTYPE_TITLE;
-    else if( rCID.match("LegendEntry",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"LegendEntry") )
         eRet = OBJECTTYPE_LEGEND_ENTRY;
-    else if( rCID.match("Legend",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Legend") )
         eRet = OBJECTTYPE_LEGEND;
-    else if( rCID.match("DiagramWall",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"DiagramWall") )
         eRet = OBJECTTYPE_DIAGRAM_WALL;
-    else if( rCID.match("DiagramFloor",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"DiagramFloor") )
         eRet = OBJECTTYPE_DIAGRAM_FLOOR;
-    else if( rCID.match("D=",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"D=") )
         eRet = OBJECTTYPE_DIAGRAM;
-    else if( rCID.match("AxisUnitLabel",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"AxisUnitLabel") )
         eRet = OBJECTTYPE_AXIS_UNITLABEL;
-    else if( rCID.match("Axis",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Axis") )
         eRet = OBJECTTYPE_AXIS;
-    else if( rCID.match("Grid",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Grid") )
         eRet = OBJECTTYPE_GRID;
-    else if( rCID.match("SubGrid",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"SubGrid") )
         eRet = OBJECTTYPE_SUBGRID;
-    else if( rCID.match("Series",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Series") )
         eRet = OBJECTTYPE_DATA_SERIES;
-    else if( rCID.match("Point",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Point") )
         eRet = OBJECTTYPE_DATA_POINT;
-    else if( rCID.match("DataLabels",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"DataLabels") )
         eRet = OBJECTTYPE_DATA_LABELS;
-    else if( rCID.match("DataLabel",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"DataLabel") )
         eRet = OBJECTTYPE_DATA_LABEL;
-    else if( rCID.match("ErrorsX",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"ErrorsX") )
         eRet = OBJECTTYPE_DATA_ERRORS_X;
-    else if( rCID.match("ErrorsY",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"ErrorsY") )
         eRet = OBJECTTYPE_DATA_ERRORS_Y;
-    else if( rCID.match("ErrorsZ",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"ErrorsZ") )
         eRet = OBJECTTYPE_DATA_ERRORS_Z;
-    else if( rCID.match("Curve",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Curve") )
         eRet = OBJECTTYPE_DATA_CURVE;
-    else if( rCID.match("Equation",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Equation") )
         eRet = OBJECTTYPE_DATA_CURVE_EQUATION;
-    else if( rCID.match("Average",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"Average") )
         eRet = OBJECTTYPE_DATA_AVERAGE_LINE;
-    else if( rCID.match("StockRange",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"StockRange") )
         eRet = OBJECTTYPE_DATA_STOCK_RANGE;
-    else if( rCID.match("StockLoss",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"StockLoss") )
         eRet = OBJECTTYPE_DATA_STOCK_LOSS;
-    else if( rCID.match("StockGain",nLastSign) )
+    else if( o3tl::starts_with(aCID, u"StockGain") )
         eRet = OBJECTTYPE_DATA_STOCK_GAIN;
     else
         eRet = OBJECTTYPE_UNKNOWN;
@@ -1009,7 +1011,7 @@ sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const OUString& rParticle
 }
 
 OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType
-                    , const OUString& rSeriesParticle
+                    , std::u16string_view rSeriesParticle
                     , std::u16string_view rDragMethodServiceName
                     , std::u16string_view rDragParameterString )
 {
@@ -1067,9 +1069,9 @@ OUString ObjectIdentifier::getObjectID( const OUString& rCID )
     return aRet;
 }
 
-bool ObjectIdentifier::isCID( const OUString& rName )
+bool ObjectIdentifier::isCID( std::u16string_view rName )
 {
-    return !rName.isEmpty() && rName.match( m_aProtocol );
+    return !rName.empty() && o3tl::starts_with( rName, m_aProtocol );
 }
 
 Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(

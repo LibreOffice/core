@@ -41,7 +41,7 @@ public:
 
     bool operator()(const ThumbnailViewItem* pItem);
 
-    static bool isFilteredCategory(FILTER_CATEGORY filter, const OUString& rCategory);
+    static bool isFilteredCategory(FILTER_CATEGORY filter, std::u16string_view rCategory);
 
 private:
     FILTER_CATEGORY mCategory;

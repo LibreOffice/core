@@ -39,6 +39,7 @@
 #include <filter/msfilter/msdffimp.hxx>
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/escherex.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -203,11 +204,11 @@ void VMLExport::AddShape( sal_uInt32 nShapeType, ShapeFlag nShapeFlags, sal_uInt
     }
 }
 
-bool VMLExport::IsWaterMarkShape(const OUString& rStr)
+bool VMLExport::IsWaterMarkShape(std::u16string_view rStr)
 {
-     if (rStr.isEmpty() )  return false;
+     if (rStr.empty() )  return false;
 
-     return rStr.match("PowerPlusWaterMarkObject") || rStr.match("WordPictureWatermark");
+     return o3tl::starts_with(rStr, u"PowerPlusWaterMarkObject") || o3tl::starts_with(rStr, u"WordPictureWatermark");
 }
 
 void VMLExport::OverrideShapeIDGen(bool bOverrideShapeIdGen, const OString& sShapeIDPrefix)
