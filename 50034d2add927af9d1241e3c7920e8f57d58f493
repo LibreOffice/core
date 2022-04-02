@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "469f7503_cbeee6b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-02T10:34:43Z",
+      "side": 1,
+      "message": "noting that patch4 should fix the stacktrace that mike reported in the associated bug",
+      "revId": "50034d2add927af9d1241e3c7920e8f57d58f493",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
