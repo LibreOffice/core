@@ -1079,15 +1079,21 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectWMF( SvStream&, bool )
 {
-    bool bRet = aPathExt.startsWith( "wmf" );
+    bool bRet = aPathExt.startsWith( "wmf" ) || aPathExt.startsWith( "wmz" );
     if (bRet)
         nFormat = GraphicFileFormat::WMF;
 
     return bRet;
 }
 
-bool GraphicDescriptor::ImpDetectEMF( SvStream& rStm, bool bExtendedInfo )
+bool GraphicDescriptor::ImpDetectEMF( SvStream&, bool )
 {
+    bool bRet = aPathExt.startsWith( "emf" ) || aPathExt.startsWith( "emz" );
+    if (bRet)
+        nFormat = GraphicFileFormat::EMF;
+
+    return bRet;
+    /*
     sal_uInt32 nRecordType = 0;
     bool bRet = false;
 
@@ -1133,6 +1139,7 @@ bool GraphicDescriptor::ImpDetectEMF( SvStream& rStm, bool bExtendedInfo )
 
     rStm.Seek( nStmPos );
     return bRet;
+    */
 }
 
 bool GraphicDescriptor::ImpDetectSVG( SvStream& /*rStm*/, bool /*bExtendedInfo*/ )
