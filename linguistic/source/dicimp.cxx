@@ -92,14 +92,14 @@ static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
     return xRes;
 }
 
-static bool getTag(std::string_view rLine, const char *pTagName,
+static bool getTag(std::string_view rLine, std::string_view rTagName,
     OString &rTagValue)
 {
-    size_t nPos = rLine.find(pTagName);
+    size_t nPos = rLine.find(rTagName);
     if (nPos == std::string_view::npos)
         return false;
 
-    rTagValue = comphelper::string::strip(rLine.substr(nPos + strlen(pTagName)),
+    rTagValue = comphelper::string::strip(rLine.substr(nPos + rTagName.size()),
         ' ');
     return true;
 }
