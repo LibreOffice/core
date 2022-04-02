@@ -2170,7 +2170,14 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         setFramePrintAreaValid(false);
                         Format( getRootFrame()->GetCurrShell()->GetOut(), pAttrs );
                     }
+
+                    oAccess.reset();
+
                     lcl_RecalcTable( *this, nullptr, aNotify );
+
+                    oAccess.emplace(SwFrame::GetCache(), this);
+                    pAttrs = oAccess->Get();
+
                     m_bLowersFormatted = true;
                     if ( bKeep && KEEPTAB )
                     {
