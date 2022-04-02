@@ -2023,8 +2023,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     pAccess.reset();
                     m_bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrame( *this ) );
-                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                    pAttrs = pAccess->Get();
                 }
 
                 setFramePrintAreaValid(false);
@@ -2059,6 +2057,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             const tools::Long nOldPrtWidth = aRectFnSet.GetWidth(getFramePrintArea());
             const tools::Long nOldFrameWidth = aRectFnSet.GetWidth(getFrameArea());
             const Point aOldPrtPos  = aRectFnSet.GetPos(getFramePrintArea());
+
+            if (!pAccess)
+            {
+                pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                pAttrs = pAccess->Get();
+            }
             Format( getRootFrame()->GetCurrShell()->GetOut(), pAttrs );
 
             SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
@@ -2069,8 +2073,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 pAccess.reset();
                 m_bCalcLowers |= pLayout->Resize(
                     pLayout->GetBrowseWidthByTabFrame( *this ) );
-                pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                pAttrs = pAccess->Get();
             }
             if ( aOldPrtPos != aRectFnSet.GetPos(getFramePrintArea()) )
                 aNotify.SetLowersComplete( false );
@@ -2119,15 +2121,22 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             pAccess.reset();
                             m_bCalcLowers |= pHTMLLayout->Resize(
                                 pHTMLLayout->GetBrowseWidthByTabFrame( *this ) );
-
-                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                            pAttrs = pAccess->Get();
                         }
 
                         setFramePrintAreaValid(false);
+
+                        if (!pAccess)
+                        {
+                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                            pAttrs = pAccess->Get();
+                        }
                         Format( getRootFrame()->GetCurrShell()->GetOut(), pAttrs );
                     }
+
+                    pAccess.reset();
+
                     lcl_RecalcTable( *this, nullptr, aNotify );
+
                     m_bLowersFormatted = true;
                     if ( bKeep && KEEPTAB )
                     {
@@ -2291,11 +2300,18 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // 6. There is no section change behind the table (see IsKeep)
                     // 7. The last table row wants to keep with its next.
                     const SwRowFrame* pLastRow = static_cast<const SwRowFrame*>(GetLastLower());
-                    if (pLastRow
-                        && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
-                        && pLastRow->ShouldRowKeepWithNext())
+                    if (pLastRow)
                     {
-                        bFormat = true;
+                        if (!pAccess)
+                        {
+                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
+                            pAttrs = pAccess->Get();
+                        }
+                        if (IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
+                            && pLastRow->ShouldRowKeepWithNext())
+                        {
+                            bFormat = true;
+                        }
                     }
                 }
 
@@ -2308,9 +2324,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // Thus, find next content, table or section and, if a section
                     // is found, get its first content.
                     const SwFrame* pTmpNxt = sw_FormatNextContentForKeep( this );
-
-                    pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                    pAttrs = pAccess->Get();
 
                     // The last row wants to keep with the frame behind the table.
                     // Check if the next frame is on a different page and valid.
@@ -2556,9 +2569,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             pAccess.reset();
 
                             GetFollow()->MakeAll(pRenderContext);
-
-                            pAccess = std::make_unique<SwBorderAttrAccess>(SwFrame::GetCache(), this);
-                            pAttrs = pAccess->Get();
 
                             GetFollow()->SetLowersFormatted(false);
                             // #i43913# - lock follow table
