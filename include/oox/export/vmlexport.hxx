@@ -149,7 +149,7 @@ public:
             const bool bOOxmlExport = false );
     OString const & AddInlineSdrObject( const SdrObject& rObj, const bool bOOxmlExport );
     virtual void  AddSdrObjectVMLObject( const SdrObject& rObj) override;
-    static bool IsWaterMarkShape(const OUString& rStr);
+    static bool IsWaterMarkShape(std::u16string_view rStr);
 
     void    SetSkipwzName(bool bSkipwzName) { m_bSkipwzName = bSkipwzName; }
     void    SetHashMarkForType(bool bUseHashMarkForType) { m_bUseHashMarkForType = bUseHashMarkForType; }

@@ -24,6 +24,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <crossrefbookmark.hxx>
 #include <ndtxt.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace
 {
@@ -73,9 +74,9 @@ namespace sw::mark
         : CrossRefBookmark(rPaM, rCode, rName, OUStringConcatenation(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix()+"_Toc"))
     { }
 
-    bool CrossRefHeadingBookmark::IsLegalName(const OUString& rName)
+    bool CrossRefHeadingBookmark::IsLegalName(std::u16string_view rName)
     {
-        return rName.match(IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
+        return o3tl::starts_with(rName, IDocumentMarkAccess::GetCrossRefHeadingBookmarkNamePrefix());
     }
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
@@ -84,9 +85,9 @@ namespace sw::mark
         : CrossRefBookmark(rPaM, rCode, rName, CrossRefNumItemBookmark_NamePrefix)
     { }
 
-    bool CrossRefNumItemBookmark::IsLegalName(const OUString& rName)
+    bool CrossRefNumItemBookmark::IsLegalName(std::u16string_view rName)
     {
-        return rName.match(CrossRefNumItemBookmark_NamePrefix);
+        return o3tl::starts_with(rName, CrossRefNumItemBookmark_NamePrefix);
     }
 }
 

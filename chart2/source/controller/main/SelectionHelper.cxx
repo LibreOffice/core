@@ -443,7 +443,7 @@ OUString SelectionHelper::getHitObjectCID(
     // \\- solar mutex
 }
 
-bool SelectionHelper::isRotateableObject( const OUString& rCID
+bool SelectionHelper::isRotateableObject( std::u16string_view rCID
                     , const rtl::Reference<::chart::ChartModel>& xChartModel )
 {
     if( !ObjectIdentifier::isRotateableObject( rCID ) )

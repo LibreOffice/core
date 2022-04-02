@@ -28,6 +28,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <svl/inettype.hxx>
 #include <memory>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::uno;
@@ -35,12 +36,12 @@ using namespace com::sun::star::beans;
 
 namespace {
 
-OUString supportedByType( const OUString& clipBoardFormat, std::u16string_view resultString, const OUString& checkType)
+OUString supportedByType( std::u16string_view clipBoardFormat, std::u16string_view resultString, const OUString& checkType)
 {
     OUString sTypeName;
-    if ( clipBoardFormat.match("doctype:") )
+    if ( o3tl::starts_with(clipBoardFormat, u"doctype:") )
     {
-        std::u16string_view tryStr = clipBoardFormat.subView(8);
+        std::u16string_view tryStr = clipBoardFormat.substr(8);
         if (resultString.find(tryStr) != std::u16string_view::npos)
         {
             sTypeName = checkType;

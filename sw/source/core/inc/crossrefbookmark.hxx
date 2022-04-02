@@ -69,7 +69,7 @@ namespace sw::mark {
             CrossRefHeadingBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName);
-            static bool IsLegalName(const OUString& rName);
+            static bool IsLegalName(std::u16string_view rName);
         };
 
         class CrossRefNumItemBookmark final
@@ -79,7 +79,7 @@ namespace sw::mark {
             CrossRefNumItemBookmark(const SwPaM& rPaM,
                 const vcl::KeyCode& rCode,
                 const OUString& rName);
-            static bool IsLegalName(const OUString& rName);
+            static bool IsLegalName(std::u16string_view rName);
         };
 }
 

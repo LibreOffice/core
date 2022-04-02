@@ -17,6 +17,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/event.hxx>
 #include <vcl/weldutils.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <orcus/json_document_tree.hpp>
 #include <orcus/config.hpp>
@@ -26,28 +27,28 @@
 
 using namespace ::com::sun::star;
 
-bool ViewFilter_Category::isFilteredCategory(FILTER_CATEGORY filter, const OUString &rCategory)
+bool ViewFilter_Category::isFilteredCategory(FILTER_CATEGORY filter, std::u16string_view rCategory)
 {
     bool bRet = true;
 
     if (filter == FILTER_CATEGORY::PEOPLE)
-        bRet = rCategory.match("people");
+        bRet = o3tl::starts_with(rCategory, u"people");
     else if (filter == FILTER_CATEGORY::NATURE)
-        bRet = rCategory.match("nature");
+        bRet = o3tl::starts_with(rCategory, u"nature");
     else if (filter == FILTER_CATEGORY::FOOD)
-        bRet = rCategory.match("food");
+        bRet = o3tl::starts_with(rCategory, u"food");
     else if (filter == FILTER_CATEGORY::ACTIVITY)
-        bRet = rCategory.match("activity");
+        bRet = o3tl::starts_with(rCategory, u"activity");
     else if (filter == FILTER_CATEGORY::TRAVEL)
-        bRet = rCategory.match("travel");
+        bRet = o3tl::starts_with(rCategory, u"travel");
     else if (filter == FILTER_CATEGORY::OBJECTS)
-        bRet = rCategory.match("objects");
+        bRet = o3tl::starts_with(rCategory, u"objects");
     else if (filter == FILTER_CATEGORY::SYMBOLS)
-        bRet = rCategory.match("symbols");
+        bRet = o3tl::starts_with(rCategory, u"symbols");
     else if (filter == FILTER_CATEGORY::FLAGS)
-        bRet = rCategory.match("flags");
+        bRet = o3tl::starts_with(rCategory, u"flags");
     else if (filter == FILTER_CATEGORY::UNICODE9)
-        bRet = rCategory.match("unicode9");
+        bRet = o3tl::starts_with(rCategory, u"unicode9");
 
     return bRet;
 }

@@ -118,11 +118,11 @@ public:
         , const rtl::Reference<::chart::ChartModel>& xChartModel );
 
     static OUString createClassifiedIdentifierForParticle(
-        const OUString& rParticle );
+        std::u16string_view rParticle );
 
     static OUString createClassifiedIdentifierForParticles(
-            const OUString& rParentParticle
-          , const OUString& rChildParticle
+            std::u16string_view rParentParticle
+          , std::u16string_view rChildParticle
           , std::u16string_view rDragMethodServiceName = std::u16string_view()
           , std::u16string_view rDragParameterString = std::u16string_view() );
 
@@ -165,22 +165,22 @@ public:
         , std::u16string_view rDragParameterString = std::u16string_view()
         );
 
-    static bool isCID( const OUString& rName );
+    static bool isCID( std::u16string_view rName );
     static OUString getDragMethodServiceName( const OUString& rClassifiedIdentifier );
     static OUString getDragParameterString( const OUString& rCID );
     static bool isDragableObject( const OUString& rClassifiedIdentifier );
     bool isDragableObject() const;
-    static bool isRotateableObject( const OUString& rClassifiedIdentifier );
-    static bool isMultiClickObject( const OUString& rClassifiedIdentifier );
+    static bool isRotateableObject( std::u16string_view rClassifiedIdentifier );
+    static bool isMultiClickObject( std::u16string_view rClassifiedIdentifier );
     static bool areSiblings( const OUString& rCID1, const OUString& rCID2 );//identical object is no sibling
     static bool areIdenticalObjects( const OUString& rCID1, const OUString& rCID2 );
 
     static OUString getStringForType( ObjectType eObjectType );
-    static ObjectType    getObjectType( const OUString& rCID );
+    static ObjectType getObjectType( std::u16string_view rCID );
     ObjectType getObjectType() const;
 
     static OUString createSeriesSubObjectStub( ObjectType eSubObjectType
-                    , const OUString& rSeriesParticle
+                    , std::u16string_view rSeriesParticle
                     , std::u16string_view rDragMethodServiceName = std::u16string_view()
                     , std::u16string_view rDragParameterString = std::u16string_view() );
     static OUString createPointCID( std::u16string_view rPointCID_Stub, sal_Int32 nIndex  );
