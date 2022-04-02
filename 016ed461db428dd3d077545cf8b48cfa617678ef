@@ -16,6 +16,24 @@
       "message": "Currently",
       "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1e58e57_7ae45ba7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-02T13:04:59Z",
+      "side": 1,
+      "message": "Currently when opening SVGZ files we don\u0027t check that the CRC32 at the footer matches. This will be changed later, as we should check for bad CRC32. My image viewer on my OS for example fails to open svgz files with bad CRC32.",
+      "parentUuid": "096f6ad7_1c8c379e",
+      "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
