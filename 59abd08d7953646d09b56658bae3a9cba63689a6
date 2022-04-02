@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8015f489_5dbe4d26",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-02T12:55:40Z",
+      "side": 1,
+      "message": "This is the first patchset for my gsoc proposal. In this patchset I introduce the IsZCompressed functions first version, as explained in my proposal document.\n\nCRC32 checking is not implemented yet, I don\u0027t want to get too deep into development without the idea first being approved by the mentor. This patchset is mostly to get started with the idea.\n\nThis patch will go public if my proposal gets accepted.",
+      "revId": "59abd08d7953646d09b56658bae3a9cba63689a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
