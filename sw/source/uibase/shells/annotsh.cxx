@@ -134,7 +134,8 @@ SwAnnotationShell::SwAnnotationShell( SwView& r )
 
 SwAnnotationShell::~SwAnnotationShell()
 {
-    m_rView.GetWrtShell().Edit();
+    if (m_rView.GetWrtShell().CanInsert())
+        m_rView.ShowCursor(true);
 }
 
 SfxUndoManager* SwAnnotationShell::GetUndoManager()
