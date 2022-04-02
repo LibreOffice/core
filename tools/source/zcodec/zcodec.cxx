@@ -36,7 +36,8 @@
 #define GZ_COMMENT      0x10 /* bit 4 set: file comment present */
 #define GZ_RESERVED     0xE0 /* bits 5..7: reserved */
 
-const int gz_magic[2] = { 0x1f, 0x8b }; /* gzip magic header */
+constexpr sal_uInt32 GZ_MIN_SIZE = 0x12;
+constexpr sal_uInt16 GZ_MAGIC_BYTES_LE = 0x8B1F; /* gzip magic header, little endian */
 
 ZCodec::ZCodec( size_t nInBufSize, size_t nOutBufSize )
     : meState(STATE_INIT)
@@ -56,6 +57,28 @@ ZCodec::~ZCodec()
 {
     auto pStream = static_cast<z_stream*>(mpsC_Stream);
     delete pStream;
+}
+
+std::optional<sal_uInt32> ZCodec::IsZCompressed( SvStream& rIStm )
+{
+    rIStm.Seek( 0 );
+    sal_uInt64 nSize = rIStm.remainingSize();
+    if ( nSize > GZ_MIN_SIZE )
+    {
+        sal_uInt16 nFirstTwoBytes;
+        rIStm.ReadUInt16( nFirstTwoBytes );
+        if ( nFirstTwoBytes == GZ_MAGIC_BYTES_LE )
+        {
+            // Extract 4 first bytes of footer which is the CRC32
+            sal_uInt32 nChk;
+            rIStm.Seek( nSize - 8 );
+            rIStm.ReadUInt32( nChk );
+            // CRC32 is already storred in little endian in the footer
+            // so we don't need to flip the bytes
+            return nChk;
+        }
+    }
+    return std::nullopt;
 }
 
 void ZCodec::BeginCompression( int nCompressLevel, bool gzLib )
@@ -272,12 +295,11 @@ void ZCodec::InitDecompress(SvStream & inStream)
     if ( mbStatus &&  mbGzLib )
     {
         sal_uInt8 j, nMethod, nFlags;
-        for (int i : gz_magic)   // gz - magic number
-        {
-            inStream.ReadUChar( j );
-            if ( j != i )
-                mbStatus = false;
-        }
+        sal_uInt16 nFirstTwoBytes;
+        inStream.Seek( 0 );
+        inStream.ReadUInt16( nFirstTwoBytes );
+        if ( nFirstTwoBytes != GZ_MAGIC_BYTES_LE )
+            mbStatus = false;
         inStream.ReadUChar( nMethod );
         inStream.ReadUChar( nFlags );
         if ( nMethod != Z_DEFLATED )
