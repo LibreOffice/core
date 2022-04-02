@@ -59,6 +59,12 @@ class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ZCodec
 public:
                     ZCodec( size_t nInBufSize = 32768, size_t nOutBufSize = 32768 );
                     ~ZCodec();
+    /**
+     * @brief Checks whether a stream is Z compressed
+     *
+     * @param rIStm the stream to check
+     */
+    static bool IsZCompressed( SvStream& rIStm );
 
     void            BeginCompression( int nCompressLevel = ZCODEC_DEFAULT_COMPRESSION, bool gzLib = false );
     tools::Long            EndCompression();
