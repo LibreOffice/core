@@ -52,6 +52,24 @@
       "parentUuid": "01656ac1_ff1636a0",
       "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8b7bebe_6cec3b60",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3988,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-02T16:17:58Z",
+      "side": 1,
+      "message": "Yes - but also I think there\u0027s no reason replacing the else with another if, apart from sacrificing (IMO) some readability for 1 LOC.",
+      "parentUuid": "6889c596_4014c3c7",
+      "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
