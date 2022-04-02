@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04a5f2ed_66db36ae",
+        "filename": "testtools/IwyuFilter_testtools.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-02T21:32:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17b779d2_3b39d0ea",
+      "range": {
+        "startLine": 5,
+        "startChar": 4,
+        "endLine": 6,
+        "endChar": 58
+      },
+      "revId": "893805416f4532918b24196e5bdb04918dabed09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3402eda_3d6a6af4",
