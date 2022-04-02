@@ -16,6 +16,24 @@
       "message": "This could be flattened a little more with\n  if (!pArr)\n    return StarBASIC::Error();",
       "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01656ac1_ff1636a0",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3988,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-02T07:33:42Z",
+      "side": 1,
+      "message": "Wouldn\u0027t that be a pessimization? I don\u0027t know which looks more readable.",
+      "parentUuid": "8493e96f_d046cac7",
+      "revId": "5c5ad5ec6ff714a4b477acb8e217f084604c8089",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
