@@ -35,6 +35,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectMET();
     void testDetectBMP();
     void testDetectWMF();
+    void testDetectWMZ();
     void testDetectPCX();
     void testDetectJPG();
     void testDetectPNG();
@@ -49,6 +50,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     void testDetectPDF();
     void testDetectEPS();
     void testDetectWEBP();
+    void testDetectEMF();
+    void testDetectEMZ();
     void testMatchArray();
     void testCheckArrayForMatchingStrings();
 
@@ -56,6 +59,7 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectMET);
     CPPUNIT_TEST(testDetectBMP);
     CPPUNIT_TEST(testDetectWMF);
+    CPPUNIT_TEST(testDetectWMZ);
     CPPUNIT_TEST(testDetectPCX);
     CPPUNIT_TEST(testDetectJPG);
     CPPUNIT_TEST(testDetectPNG);
@@ -70,6 +74,8 @@ class GraphicFormatDetectorTest : public test::BootstrapFixtureBase
     CPPUNIT_TEST(testDetectPDF);
     CPPUNIT_TEST(testDetectEPS);
     CPPUNIT_TEST(testDetectWEBP);
+    CPPUNIT_TEST(testDetectEMF);
+    CPPUNIT_TEST(testDetectEMZ);
     CPPUNIT_TEST(testMatchArray);
     CPPUNIT_TEST(testCheckArrayForMatchingStrings);
     CPPUNIT_TEST_SUITE_END();
@@ -108,6 +114,21 @@ void GraphicFormatDetectorTest::testDetectBMP()
 void GraphicFormatDetectorTest::testDetectWMF()
 {
     SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.wmf"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, "WMF");
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(OUString("WMF"), rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectWMZ()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.wmz"), StreamMode::READ);
     vcl::GraphicFormatDetector aDetector(aFileStream, "WMF");
 
     CPPUNIT_ASSERT(aDetector.detect());
@@ -328,6 +349,36 @@ void GraphicFormatDetectorTest::testDetectWEBP()
     OUString rFormatExtension;
     CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
     CPPUNIT_ASSERT_EQUAL(OUString("WEBP"), rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectEMF()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.emf"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, "EMF");
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(OUString("EMF"), rFormatExtension);
+}
+
+void GraphicFormatDetectorTest::testDetectEMZ()
+{
+    SvFileStream aFileStream(getFullUrl(u"TypeDetectionExample.emz"), StreamMode::READ);
+    vcl::GraphicFormatDetector aDetector(aFileStream, "EMF");
+
+    CPPUNIT_ASSERT(aDetector.detect());
+    CPPUNIT_ASSERT(aDetector.checkWMForEMF());
+
+    aFileStream.Seek(aDetector.mnStreamPosition);
+
+    OUString rFormatExtension;
+    CPPUNIT_ASSERT(vcl::peekGraphicFormat(aFileStream, rFormatExtension, false));
+    CPPUNIT_ASSERT_EQUAL(OUString("EMF"), rFormatExtension);
 }
 
 void GraphicFormatDetectorTest::testMatchArray()

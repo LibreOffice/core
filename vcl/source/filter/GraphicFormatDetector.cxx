@@ -26,6 +26,9 @@
 #include <tools/solar.h>
 #include <tools/zcodec.hxx>
 
+constexpr sal_uInt32 SVG_CHECK_SIZE = 2048;
+constexpr sal_uInt32 WMF_EMF_CHECK_SIZE = 44;
+
 namespace vcl
 {
 bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest)
@@ -66,7 +69,8 @@ bool peekGraphicFormat(SvStream& rStream, OUString& rFormatExtension, bool bTest
         }
     }
 
-    if (!bTest || rFormatExtension.startsWith("WMF") || rFormatExtension.startsWith("EMF"))
+    if (!bTest || rFormatExtension.startsWith("WMF") || rFormatExtension.startsWith("EMF")
+        || rFormatExtension.startsWith("WMZ") || rFormatExtension.startsWith("EMZ"))
     {
         bSomethingTested = true;
         if (aDetector.checkWMForEMF())
@@ -450,13 +454,19 @@ bool GraphicFormatDetector::checkBMP()
 
 bool GraphicFormatDetector::checkWMForEMF()
 {
+    sal_uInt64 nCheckSize = std::min<sal_uInt64>(mnStreamLength, 256);
+    sal_uInt8 sExtendedOrDecompressedFirstBytes[WMF_EMF_CHECK_SIZE];
+    sal_uInt64 nDecompressedSize = nCheckSize;
+    // check if it is gzipped -> wmz/emz
+    sal_uInt8* pCheckArray = checkAndUncompressBuffer(sExtendedOrDecompressedFirstBytes,
+                                                      WMF_EMF_CHECK_SIZE, nDecompressedSize);
     if (mnFirstLong == 0xd7cdc69a || mnFirstLong == 0x01000900)
     {
         msDetectedFormat = "WMF";
         return true;
     }
-    else if (mnFirstLong == 0x01000000 && maFirstBytes[40] == 0x20 && maFirstBytes[41] == 0x45
-             && maFirstBytes[42] == 0x4d && maFirstBytes[43] == 0x46)
+    else if (mnFirstLong == 0x01000000 && pCheckArray[40] == 0x20 && pCheckArray[41] == 0x45
+             && pCheckArray[42] == 0x4d && pCheckArray[43] == 0x46)
     {
         msDetectedFormat = "EMF";
         return true;
@@ -696,34 +706,16 @@ bool GraphicFormatDetector::checkXBM()
 
 bool GraphicFormatDetector::checkSVG()
 {
-    sal_uInt8* pCheckArray = maFirstBytes.data();
     sal_uInt64 nCheckSize = std::min<sal_uInt64>(mnStreamLength, 256);
-
-    sal_uInt8 sExtendedOrDecompressedFirstBytes[2048];
+    sal_uInt8 sExtendedOrDecompressedFirstBytes[SVG_CHECK_SIZE];
     sal_uInt64 nDecompressedSize = nCheckSize;
-
-    bool bIsGZip(false);
-
     // check if it is gzipped -> svgz
-    if (maFirstBytes[0] == 0x1F && maFirstBytes[1] == 0x8B)
-    {
-        ZCodec aCodec;
-        mrStream.Seek(mnStreamPosition);
-        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/ true);
-        auto nDecompressedOut = aCodec.Read(mrStream, sExtendedOrDecompressedFirstBytes, 2048);
-        // ZCodec::Decompress returns -1 on failure
-        nDecompressedSize = nDecompressedOut < 0 ? 0 : nDecompressedOut;
-        nCheckSize = std::min<sal_uInt64>(nDecompressedSize, 256);
-        aCodec.EndCompression();
-        pCheckArray = sExtendedOrDecompressedFirstBytes;
-
-        bIsGZip = true;
-    }
-
+    sal_uInt8* pCheckArray = checkAndUncompressBuffer(sExtendedOrDecompressedFirstBytes,
+                                                      SVG_CHECK_SIZE, nDecompressedSize);
+    nCheckSize = std::min<sal_uInt64>(nDecompressedSize, 256);
     bool bIsSvg(false);
-
+    bool bIsGZip = (nDecompressedSize > 0);
     const char* pCheckArrayAsCharArray = reinterpret_cast<char*>(pCheckArray);
-
     // check for XML
     // #119176# SVG files which have no xml header at all have shown up this is optional
     // check for "xml" then "version" then "DOCTYPE" and "svg" tags
@@ -836,6 +828,30 @@ bool GraphicFormatDetector::checkWEBP()
         return true;
     }
     return false;
+}
+
+sal_uInt8* GraphicFormatDetector::checkAndUncompressBuffer(sal_uInt8* aUncompressedBuffer,
+                                                           sal_uInt32 nSize, sal_uInt64& nRetSize)
+{
+    if (ZCodec::IsZCompressed(mrStream))
+    {
+        ZCodec aCodec;
+        mrStream.Seek(mnStreamPosition);
+        aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/ true);
+        auto nDecompressedOut = aCodec.Read(mrStream, aUncompressedBuffer, nSize);
+        // ZCodec::Decompress returns -1 on failure
+        nRetSize = nDecompressedOut < 0 ? 0 : nDecompressedOut;
+        aCodec.EndCompression();
+        // Recalculate first/second long
+        for (int i = 0; i < 4; ++i)
+        {
+            mnFirstLong = (mnFirstLong << 8) | sal_uInt32(aUncompressedBuffer[i]);
+            mnSecondLong = (mnSecondLong << 8) | sal_uInt32(aUncompressedBuffer[i + 4]);
+        }
+        return aUncompressedBuffer;
+    }
+    nRetSize = 0;
+    return maFirstBytes.data();
 }
 
 } // vcl namespace
