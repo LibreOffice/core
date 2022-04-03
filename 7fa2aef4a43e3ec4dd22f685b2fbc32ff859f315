@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07286ed1_c430012f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-03T16:10:48Z",
+      "side": 1,
+      "message": "I\u0027ve trimmed this down to a small fodt that triggers an assert. Maybe its more obvious to you than me what should happen here.",
+      "revId": "7fa2aef4a43e3ec4dd22f685b2fbc32ff859f315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
