@@ -16,6 +16,23 @@
       "message": "License statement:\nhttps://lists.freedesktop.org/archives/libreoffice/2022-April/088703.html",
       "revId": "9d130d26f51b5019ec6bd7990943269287269b63",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1553eda1_2dfe3e2b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-03T20:14:27Z",
+      "side": 1,
+      "message": "Looks good to me.",
+      "revId": "9d130d26f51b5019ec6bd7990943269287269b63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
