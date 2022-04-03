@@ -426,7 +426,7 @@ void XMLFilterTestDialog::doExport( const Reference< XComponent >& xComp )
             if( pAppInfo )
             {
                 File aOutputFile( aTempFileURL );
-                /* File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
+                (void)aOutputFile.open( osl_File_OpenFlag_Write );
 
                 // create xslt exporter
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
@@ -586,7 +586,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
             if( xImporter.is() )
             {
                 osl::File aInputFile( rURL );
-                aInputFile.open( osl_File_OpenFlag_Read );
+                (void)aInputFile.open( osl_File_OpenFlag_Read );
 
                 Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 
@@ -599,7 +599,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 Reference< XWriter > xWriter = Writer::create( mxContext );
 
                 File aOutputFile( aTempFileURL );
-                aOutputFile.open( osl_File_OpenFlag_Write );
+                (void)aOutputFile.open( osl_File_OpenFlag_Write );
 
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
                 xWriter->setOutputStream( xOS );
