@@ -2958,7 +2958,13 @@ bool SwTextFrame::Prepare( const PrepareHint ePrep, const void* pVoid,
                         if( aTextFly.IsOn() )
                         {
                             // Does any free-flying frame overlap?
-                            bFormat = aTextFly.Relax() || IsUndersized();
+                            const bool bRelaxed = aTextFly.Relax();
+                            bFormat = bRelaxed || IsUndersized();
+                            if (bRelaxed)
+                            {
+                                // It's possible that pPara was deleted above; retrieve it again
+                                pPara = aAccess.GetPara();
+                            }
                         }
                     }
                 }
