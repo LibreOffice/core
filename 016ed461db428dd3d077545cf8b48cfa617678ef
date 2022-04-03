@@ -94,6 +94,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2488de9_ac3884db",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-03T08:29:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a4ae2ff_65b3eb96",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
+      },
+      "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35f529d7_a557c43c",
@@ -125,6 +149,24 @@
       "side": 1,
       "message": "What if I don\u0027t calls \"IsZCompressed\"? There is nothing preventing me not to call it.",
       "parentUuid": "35f529d7_a557c43c",
+      "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28a1403d_38cfb4ee",
+        "filename": "tools/source/zcodec/zcodec.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 299,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-03T08:29:30Z",
+      "side": 1,
+      "message": "This is true, we shouldn\u0027t rely on the user to call IsZCompressed and instead do the check inside ZCodec (or the wrapper for zlib?). I will leave it as is for now however, because as you said it\u0027s too early.",
+      "parentUuid": "277bcf30_56a673fc",
       "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
