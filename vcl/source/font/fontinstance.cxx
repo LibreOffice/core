@@ -152,4 +152,41 @@ bool LogicalFontInstance::IsGraphiteFont()
     return *m_xbIsGraphiteFont;
 }
 
+bool LogicalFontInstance::NeedOffsetCorrection(sal_Int32 nYOffset)
+{
+    if (!m_xeFontFamilyEnum)
+    {
+        char familyname[10];
+        unsigned int familyname_size = 10;
+
+        m_xeFontFamilyEnum = FontFamilyEnum::Unclassified;
+
+        if (hb_ot_name_get_utf8 (hb_font_get_face(GetHbFont()),
+                HB_OT_NAME_ID_FONT_FAMILY , HB_LANGUAGE_INVALID, &familyname_size, familyname) == 8)
+        {
+            // DFKai-SB (ukai.ttf) is a built-in font under tradtional Chinese
+            // Windows. It has wrong extent values in glyf table. The problem results
+            // in wrong positioning of glyphs in vertical writing.
+            // Check https://github.com/harfbuzz/harfbuzz/issues/3521 for reference.
+            if (!strncmp("DFKai-SB", familyname, 8))
+                m_xeFontFamilyEnum = FontFamilyEnum::DFKaiSB;
+        }
+    }
+
+    bool bRet = true;
+
+    switch (*m_xeFontFamilyEnum)
+    {
+        case FontFamilyEnum::DFKaiSB:
+        // -839: optimization for one third of ukai.ttf
+        if (nYOffset == -839)
+            bRet = false;
+        break;
+        default:
+            bRet = false;
+    }
+
+    return bRet;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
