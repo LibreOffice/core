@@ -56,6 +56,8 @@ public:
     void testUndoRedoDeleteSparklineGroup();
     void testUndoRedoClearContentForSparkline();
     void testUndoRedoEditSparklineGroup();
+    void testUndoRedoUngroupSparklines();
+    void testUndoRedoGroupSparklines();
     void testSparklineList();
 
     CPPUNIT_TEST_SUITE(SparklineTest);
@@ -68,6 +70,8 @@ public:
     CPPUNIT_TEST(testUndoRedoDeleteSparklineGroup);
     CPPUNIT_TEST(testUndoRedoClearContentForSparkline);
     CPPUNIT_TEST(testUndoRedoEditSparklineGroup);
+    CPPUNIT_TEST(testUndoRedoUngroupSparklines);
+    CPPUNIT_TEST(testUndoRedoGroupSparklines);
     CPPUNIT_TEST(testSparklineList);
     CPPUNIT_TEST_SUITE_END();
 };
@@ -562,6 +566,241 @@ void SparklineTest::testUndoRedoEditSparklineGroup()
     CPPUNIT_ASSERT_EQUAL(sc::SparklineType::Stacked, pSparklineGroup->getAttributes().getType());
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, pSparklineGroup->getAttributes().getColorSeries());
     CPPUNIT_ASSERT_EQUAL(COL_BLUE, pSparklineGroup->getAttributes().getColorAxis());
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testUndoRedoUngroupSparklines()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto& rDocFunc = xDocSh->GetDocFunc();
+
+    // insert test data - A1:A6
+    insertTestData(rDocument);
+
+    // Sparkline range
+    ScRange aDataRange(0, 0, 0, 3, 5, 0); //A1:D6
+    ScRange aRange(0, 6, 0, 3, 6, 0); // A7:D7
+
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    CPPUNIT_ASSERT(rDocFunc.InsertSparklines(aDataRange, aRange, pSparklineGroup));
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup2);
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup3);
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup4);
+        CPPUNIT_ASSERT_EQUAL(pGroup3, pGroup4);
+    }
+
+    CPPUNIT_ASSERT(rDocFunc.UngroupSparklines(ScRange(2, 6, 0, 3, 6, 0)));
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup2);
+        CPPUNIT_ASSERT(pGroup1 != pGroup3);
+        CPPUNIT_ASSERT(pGroup1 != pGroup4);
+        CPPUNIT_ASSERT(pGroup3 != pGroup4);
+    }
+
+    // Undo
+    rDocument.GetUndoManager()->Undo();
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup2);
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup3);
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup4);
+        CPPUNIT_ASSERT_EQUAL(pGroup3, pGroup4);
+    }
+
+    // Redo
+    rDocument.GetUndoManager()->Redo();
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup2);
+        CPPUNIT_ASSERT(pGroup1 != pGroup3);
+        CPPUNIT_ASSERT(pGroup1 != pGroup4);
+        CPPUNIT_ASSERT(pGroup3 != pGroup4);
+    }
+
+    xDocSh->DoClose();
+}
+
+void SparklineTest::testUndoRedoGroupSparklines()
+{
+    ScDocShellRef xDocSh = loadEmptyDocument();
+    CPPUNIT_ASSERT(xDocSh);
+
+    ScDocument& rDocument = xDocSh->GetDocument();
+    ScTabViewShell* pViewShell = xDocSh->GetBestViewShell(false);
+    CPPUNIT_ASSERT(pViewShell);
+
+    auto& rDocFunc = xDocSh->GetDocFunc();
+
+    // insert test data - A1:A6
+    insertTestData(rDocument);
+
+    // Sparkline range
+    ScRange aDataRange(0, 0, 0, 3, 5, 0); //A1:D6
+    ScRange aRange(0, 6, 0, 3, 6, 0); // A7:D7
+
+    auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
+    CPPUNIT_ASSERT(rDocFunc.InsertSparklines(aDataRange, aRange, pSparklineGroup));
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup2);
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup3);
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup4);
+        CPPUNIT_ASSERT_EQUAL(pGroup3, pGroup4);
+    }
+
+    CPPUNIT_ASSERT(rDocFunc.UngroupSparklines(ScRange(2, 6, 0, 3, 6, 0)));
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup2);
+        CPPUNIT_ASSERT(pGroup1 != pGroup3);
+        CPPUNIT_ASSERT(pGroup1 != pGroup4);
+        CPPUNIT_ASSERT(pGroup3 != pGroup4);
+    }
+
+    {
+        auto pGroup = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+        CPPUNIT_ASSERT(rDocFunc.GroupSparklines(ScRange(1, 6, 0, 3, 6, 0), pGroup));
+    }
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT(pGroup1 != pGroup2);
+        CPPUNIT_ASSERT(pGroup1 != pGroup3);
+        CPPUNIT_ASSERT(pGroup1 != pGroup4);
+        CPPUNIT_ASSERT_EQUAL(pGroup2, pGroup3);
+        CPPUNIT_ASSERT_EQUAL(pGroup2, pGroup4);
+        CPPUNIT_ASSERT_EQUAL(pGroup3, pGroup4);
+    }
+
+    // Undo
+    rDocument.GetUndoManager()->Undo();
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT_EQUAL(pGroup1, pGroup2);
+        CPPUNIT_ASSERT(pGroup1 != pGroup3);
+        CPPUNIT_ASSERT(pGroup1 != pGroup4);
+        CPPUNIT_ASSERT(pGroup3 != pGroup4);
+    }
+
+    // Redo
+    rDocument.GetUndoManager()->Redo();
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(0, 6, 0))); // A7
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT_EQUAL(true, rDocument.HasSparkline(ScAddress(3, 6, 0))); // D7
+
+        auto pGroup1 = rDocument.GetSparkline(ScAddress(0, 6, 0))->getSparklineGroup();
+        auto pGroup2 = rDocument.GetSparkline(ScAddress(1, 6, 0))->getSparklineGroup();
+        auto pGroup3 = rDocument.GetSparkline(ScAddress(2, 6, 0))->getSparklineGroup();
+        auto pGroup4 = rDocument.GetSparkline(ScAddress(3, 6, 0))->getSparklineGroup();
+
+        CPPUNIT_ASSERT(pGroup1 != pGroup2);
+        CPPUNIT_ASSERT(pGroup1 != pGroup3);
+        CPPUNIT_ASSERT(pGroup1 != pGroup4);
+        CPPUNIT_ASSERT_EQUAL(pGroup2, pGroup3);
+        CPPUNIT_ASSERT_EQUAL(pGroup2, pGroup4);
+        CPPUNIT_ASSERT_EQUAL(pGroup3, pGroup4);
+    }
 
     xDocSh->DoClose();
 }

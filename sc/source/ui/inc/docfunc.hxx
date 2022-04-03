@@ -242,9 +242,10 @@ public:
 
     SC_DLLPUBLIC bool DeleteSparkline(ScAddress const& rAddress);
     SC_DLLPUBLIC bool DeleteSparklineGroup(std::shared_ptr<sc::SparklineGroup> const& pSparklineGroup, SCTAB nTab);
-
     SC_DLLPUBLIC bool ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGroup> const& pExistingSparklineGroup,
                                                      sc::SparklineAttributes const& rNewAttributes);
+    SC_DLLPUBLIC bool GroupSparklines(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup> const& rpGroup);
+    SC_DLLPUBLIC bool UngroupSparklines(ScRange const& rRange);
 
 private:
     void ProtectDocument(const ScDocProtection& rProtect);
