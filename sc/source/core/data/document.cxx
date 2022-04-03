@@ -6596,6 +6596,9 @@ std::shared_ptr<sc::SparklineGroup> ScDocument::SearchSparklineGroup(tools::Guid
 {
     for (auto const& rTable : maTabs)
     {
+        if (!rTable)
+            continue;
+
         auto& rSparklineList = rTable->GetSparklineList();
 
         for (auto const& pSparklineGroup : rSparklineList.getSparklineGroups())
