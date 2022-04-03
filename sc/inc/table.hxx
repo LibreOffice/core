@@ -482,6 +482,7 @@ public:
 
     sc::SparklineList& GetSparklineList();
     void CopySparklinesToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, ScTable* pDestTab);
+    void FillSparkline(bool bVertical, SCCOLROW nFixed, SCCOLROW nIteratingStart, SCCOLROW nIteratingEnd, SCCOLROW nFillStart, SCCOLROW nFillEnd);
 
     // Notes / Comments
     std::unique_ptr<ScPostIt> ReleaseNote( SCCOL nCol, SCROW nRow );
