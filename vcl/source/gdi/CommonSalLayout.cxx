@@ -342,6 +342,11 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
         pTextLayout = &*oNewScriptRun;
     }
 
+
+    // bCorrectYOffset is set here to indicate we may need to recaculate
+    // offset_y value.
+    bool bCorrectYOffset = false;
+
     // nBaseOffset is used to align vertical text to the center of rotated
     // horizontal text. That is the offset from original baseline to
     // the center of EM box. Maybe we can use OpenType base table to improve this
@@ -352,6 +357,22 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
         hb_font_extents_t extents;
         if (hb_font_get_h_extents(pHbFont, &extents))
             nBaseOffset = ( extents.ascender + extents.descender ) / 2;
+
+        char familyname[10];
+        unsigned int familyname_size = 10;
+        if (hb_ot_name_get_utf8 (hb_font_get_face(pHbFont),
+                HB_OT_NAME_ID_FONT_FAMILY , HB_LANGUAGE_INVALID, &familyname_size, familyname) == 8)
+        {
+            // DFKai-SB (ukai.ttf) is a built-in font under tradtional Chinese
+            // Windows. It has wrong extent values in glyf table. The problem results
+            // in wrong positioning of glyphs in vertical writing.
+            // Check https://github.com/harfbuzz/harfbuzz/issues/3521 for reference.
+            if (!strncmp("DFKai-SB", familyname, 8))
+            {
+                bCorrectYOffset = true;
+                familyname[8] = 0;
+            }
+        }
     }
 
     hb_buffer_t* pHbBuffer = hb_buffer_create();
@@ -621,6 +642,21 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset = -pHbPositions[i].y_offset;
                     nYOffset = -pHbPositions[i].x_offset - nBaseOffset;
+
+                    // For tricky Windows font ukai.ttf.
+                    // Don't fix it if the value is -839 ( optimization for one third of the fonts. )
+                    if (bCorrectYOffset && pHbPositions[i].y_offset != -839)
+                    {
+                        // We need glyph's advance, top bearing, and height to
+                        // correct y offset.
+                        tools::Rectangle aRect;
+                        // Get cached bound rect value for the font,
+                        GetFont().GetGlyphBoundRect(nGlyphIndex, aRect, true);
+
+                        nXOffset = -(aRect.Top() / nXScale  + ( pHbPositions[i].y_advance
+                                    + ( aRect.GetHeight() / nXScale ) ) / 2 );
+                    }
+
                 }
                 else
                 {
