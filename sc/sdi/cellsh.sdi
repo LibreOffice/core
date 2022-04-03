@@ -239,6 +239,8 @@ interface CellSelection
     SID_DELETE_SPARKLINE                [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_EDIT_SPARKLINE_GROUP            [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
     SID_DELETE_SPARKLINE_GROUP          [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_GROUP_SPARKLINES                [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
+    SID_UNGROUP_SPARKLINES              [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
 
     SID_THESAURUS   [ ExecMethod = ExecuteEdit; StateMethod = GetCellState; ]
     SID_SPELL_DIALOG [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
