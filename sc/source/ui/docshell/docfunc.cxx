@@ -101,6 +101,8 @@
 #include <undo/UndoDeleteSparkline.hxx>
 #include <undo/UndoDeleteSparklineGroup.hxx>
 #include <undo/UndoEditSparklineGroup.hxx>
+#include <undo/UndoUngroupSparklines.hxx>
+#include <undo/UndoGroupSparklines.hxx>
 #include <config_features.h>
 
 #include <memory>
@@ -5882,6 +5884,24 @@ bool ScDocFunc::ChangeSparklineGroupAttributes(std::shared_ptr<sc::SparklineGrou
 {
     auto pUndo = std::make_unique<sc::UndoEditSparklneGroup>(rDocShell, pExistingSparklineGroup, rNewAttributes);
     // change sparkline group attributes by "redoing"
+    pUndo->Redo();
+    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
+    return true;
+}
+
+bool ScDocFunc::GroupSparklines(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup> const& rpGroup)
+{
+    auto pUndo = std::make_unique<sc::UndoGroupSparklines>(rDocShell, rRange, rpGroup);
+    // ungroup sparklines by "redoing"
+    pUndo->Redo();
+    rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
+    return true;
+}
+
+bool ScDocFunc::UngroupSparklines(ScRange const& rRange)
+{
+    auto pUndo = std::make_unique<sc::UndoUngroupSparklines>(rDocShell, rRange);
+    // ungroup sparklines by "redoing"
     pUndo->Redo();
     rDocShell.GetUndoManager()->AddUndoAction(std::move(pUndo));
     return true;

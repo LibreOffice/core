@@ -187,6 +187,12 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
                 bDisable = !bSimpleArea;
             }
             break;
+            case SID_GROUP_SPARKLINES:
+            case SID_UNGROUP_SPARKLINES:
+            {
+                bDisable = !bSimpleArea;
+            }
+            break;
 
             case SID_DELETE_SPARKLINE:
             case SID_EDIT_SPARKLINE_GROUP:
