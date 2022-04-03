@@ -60,6 +60,7 @@
 #include <mdiexp.hxx>
 #include <sectfrm.hxx>
 #include <acmplwrd.hxx>
+#include <deletelistener.hxx>
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <fntcache.hxx>
@@ -1694,7 +1695,10 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             // We do this so we don't have to search later on.
             const bool bNxtCnt = IsCalcLayout() && !pContent->GetFollow();
             const SwContentFrame *pContentNext = bNxtCnt ? pContent->GetNextContentFrame() : nullptr;
-            const SwContentFrame *pContentPrev = pContent->GetPrev() ? pContent->GetPrevContentFrame() : nullptr;
+            SwContentFrame* const pContentPrev = pContent->GetPrev() ? pContent->GetPrevContentFrame() : nullptr;
+            std::optional<SfxDeleteListener> oPrevDeleteListener;
+            if (pContentPrev)
+                oPrevDeleteListener.emplace(*pContentPrev);
 
             const SwLayoutFrame*pOldUpper  = pContent->GetUpper();
             const SwTabFrame *pTab = pContent->FindTabFrame();
@@ -1773,6 +1777,12 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
             bool bSetContent = true;
             if ( pContentPrev )
             {
+                if (oPrevDeleteListener->WasDeleted())
+                {
+                    SAL_WARN("sw", "ContentPrev was deleted");
+                    return false;
+                }
+
                 if ( !pContentPrev->isFrameAreaDefinitionValid() && pPage->IsAnLower( pContentPrev ) )
                 {
                     pPage->InvalidateContent();
