@@ -58,6 +58,8 @@ namespace std
     };
 }
 
+enum class TrickyFontEnum { None, DFKaiSB };
+
 // TODO: allow sharing of metrics for related fonts
 
 class VCL_PLUGIN_PUBLIC LogicalFontInstance : public salhelper::SimpleReferenceObject
@@ -86,6 +88,9 @@ public: // TODO: make data members private
 
     inline hb_font_t* GetHbFont();
     bool IsGraphiteFont();
+    // NeedOffsetCorrection: Return if the font need offset correction in TTB direction.
+    // nYOffset is the original offset. It is used to check if the correction is necessary.
+    bool NeedOffsetCorrection(sal_Int32 nYOffset);
     void SetAverageWidthFactor(double nFactor) { m_nAveWidthFactor = std::abs(nFactor); }
     double GetAverageWidthFactor() const { return m_nAveWidthFactor; }
     const vcl::font::FontSelectPattern& GetFontSelectPattern() const { return m_aFontSelData; }
@@ -129,6 +134,8 @@ private:
     double m_nAveWidthFactor;
     rtl::Reference<vcl::font::PhysicalFontFace> m_pFontFace;
     std::optional<bool> m_xbIsGraphiteFont;
+    // The value is initialized and used in NeedOffsetCorrection().
+    std::optional<TrickyFontEnum> m_xeTrickyFontEnum;
 };
 
 inline hb_font_t* LogicalFontInstance::GetHbFont()
