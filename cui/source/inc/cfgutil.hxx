@@ -230,7 +230,7 @@ public:
     void                GroupSelected();
 #if HAVE_FEATURE_SCRIPTING
     void                SelectMacro(const SfxMacroInfoItem*);
-    void                SelectMacro(std::u16string_view, const OUString&);
+    void                SelectMacro(std::u16string_view, std::u16string_view);
 #endif
     void                SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };

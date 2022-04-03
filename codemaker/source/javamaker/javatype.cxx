@@ -44,6 +44,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <unoidl/unoidl.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "classfile.hxx"
 #include "javaoptions.hxx"
@@ -108,14 +109,18 @@ bool isSpecialType(SpecialType special) {
 }
 
 OString translateUnoidlEntityNameToJavaFullyQualifiedName(
-    OUString const & name, std::string_view prefix)
+    std::u16string_view name, std::string_view prefix)
 {
-    assert(!name.startsWith("[]"));
-    assert(name.indexOf('<') == -1);
-    sal_Int32 i = name.lastIndexOf('.') + 1;
-    return codemaker::convertString(name.copy(0, i)).replace('.', '/')
+    assert(!o3tl::starts_with(name, u"[]"));
+    assert(name.find('<') == std::string_view::npos);
+    size_t i = name.rfind('.');
+    if (i == std::string_view::npos)
+        i = 0;
+    else
+        ++i;
+    return codemaker::convertString(OUString(name.substr(0, i))).replace('.', '/')
         + codemaker::java::translateUnoToJavaIdentifier(
-            codemaker::convertString(name.copy(i)), prefix);
+            codemaker::convertString(OUString(name.substr(i))), prefix);
 }
 
 struct PolymorphicUnoType {

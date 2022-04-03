@@ -164,16 +164,16 @@ ScriptingFrameworkURIHelper::initBaseURI()
 }
 
 OUString
-ScriptingFrameworkURIHelper::getLanguagePart(const OUString& rStorageURI)
+ScriptingFrameworkURIHelper::getLanguagePart(std::u16string_view rStorageURI)
 {
     OUString result;
 
-    sal_Int32 idx = rStorageURI.indexOf(m_sBaseURI);
+    size_t idx = rStorageURI.find(m_sBaseURI);
     sal_Int32 len = m_sBaseURI.getLength() + 1;
 
-    if ( idx != -1 )
+    if ( idx != std::u16string_view::npos )
     {
-        result = rStorageURI.copy(idx + len);
+        result = rStorageURI.substr(idx + len);
         result = result.replace('/', '|');
     }
     return result;

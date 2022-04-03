@@ -175,7 +175,7 @@ public:
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
                            TextFrameIndex& rOffset) const;
-    void dumpAsXmlAttributes(xmlTextWriterPtr writer, const OUString& rText,
+    void dumpAsXmlAttributes(xmlTextWriterPtr writer, std::u16string_view rText,
                              TextFrameIndex nOffset) const;
 };
 

@@ -84,7 +84,7 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
         xContainer->removeContainerListener(m_xConfigListener);
 }
 
-OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( std::u16string_view rType, const OUString& rName, std::u16string_view rModule ) const
+OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( std::u16string_view rType, std::u16string_view rName, std::u16string_view rModule ) const
 {
     // SAFE
     std::unique_lock g(m_aMutex);
@@ -102,10 +102,10 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
         else
         {
             // Support factories which uses a defined prefix before the ui name.
-            sal_Int32 nIndex = rName.indexOf( '_' );
-            if ( nIndex > 0 )
+            size_t nIndex = rName.find( '_' );
+            if ( nIndex > 0 && nIndex != std::u16string_view::npos)
             {
-                OUString aName = rName.copy( 0, nIndex+1 );
+                std::u16string_view aName = rName.substr( 0, nIndex+1 );
                 pIter = m_aFactoryManagerMap.find( getHashKeyFromStrings( rType, aName, std::u16string_view() ));
                 if ( pIter != m_aFactoryManagerMap.end() )
                     return pIter->second;

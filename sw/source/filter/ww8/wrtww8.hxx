@@ -1646,7 +1646,7 @@ public:
 sal_Int16 GetWordFirstLineOffset(const SwNumFormat &rFormat);
 // A bit of a bag on the side for now
 OUString FieldString(ww::eField eIndex);
-OUString BookmarkToWord(const OUString &rBookmark, bool* pIsMove = nullptr, bool* pIsFrom = nullptr);
+OUString BookmarkToWord(std::u16string_view rBookmark, bool* pIsMove = nullptr, bool* pIsFrom = nullptr);
 
 class WW8SHDLong
 {
