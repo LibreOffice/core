@@ -36,6 +36,7 @@ public:
     SparklineList();
 
     void addSparkline(std::shared_ptr<Sparkline> const& pSparkline);
+    void removeSparkline(std::shared_ptr<Sparkline> const& pSparkline);
 
     std::vector<std::shared_ptr<SparklineGroup>> getSparklineGroups();
 

@@ -458,47 +458,109 @@ void SparklineTest::testUndoRedoClearContentForSparkline()
     insertTestData(rDocument);
 
     // Sparkline range
-    ScRange aRange(0, 6, 0, 0, 6, 0);
+    ScRange aDataRange(0, 0, 0, 3, 5, 0); //A1:D6
+    ScRange aRange(0, 6, 0, 3, 6, 0); // A7:D7
 
-    // Check Sparkline at cell A7 doesn't exists
-    auto pSparkline = rDocument.GetSparkline(aRange.aStart);
-    CPPUNIT_ASSERT(!pSparkline);
+    // Check Sparklines - none should exist
+    {
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(0, 6, 0)));
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(3, 6, 0)));
+    }
 
     auto pSparklineGroup = std::make_shared<sc::SparklineGroup>();
-    CPPUNIT_ASSERT(rDocFunc.InsertSparklines(ScRange(0, 0, 0, 0, 5, 0), aRange, pSparklineGroup));
+    CPPUNIT_ASSERT(rDocFunc.InsertSparklines(aDataRange, aRange, pSparklineGroup));
 
-    // Check Sparkline at cell A7 exists
-    pSparkline = rDocument.GetSparkline(aRange.aStart);
-    CPPUNIT_ASSERT(pSparkline);
-    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
-    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(0, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        // D7 exists
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(3, 6, 0)));
 
-    // Clear content - including sparkline
-    ScMarkData aMark(rDocument.GetSheetLimits());
-    aMark.SetMarkArea(aRange.aStart);
-    rDocFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
+        // Check D7
+        auto pSparkline = rDocument.GetSparkline(ScAddress(3, 6, 0));
+        CPPUNIT_ASSERT_EQUAL(SCCOL(3), pSparkline->getColumn());
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
 
-    // Check Sparkline at cell A7 doesn't exists
-    pSparkline = rDocument.GetSparkline(aRange.aStart);
-    CPPUNIT_ASSERT(!pSparkline);
+        // Check collections
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklineGroups.size());
+
+        auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), pSparklines.size());
+    }
+
+    // Clear content of cell D7 - including sparkline
+    {
+        ScMarkData aMark(rDocument.GetSheetLimits());
+        aMark.SetMarkArea(ScAddress(3, 6, 0));
+        rDocFunc.DeleteContents(aMark, InsertDeleteFlags::CONTENTS, true, true);
+    }
+
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        // D7 is gone
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(3, 6, 0)));
+
+        // Check collections
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklineGroups.size());
+
+        auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pSparklines.size());
+    }
 
     // Undo
     rDocument.GetUndoManager()->Undo();
 
-    // Check Sparkline at cell A7 exists
-    pSparkline = rDocument.GetSparkline(aRange.aStart);
-    CPPUNIT_ASSERT(pSparkline);
-    CPPUNIT_ASSERT_EQUAL(SCCOL(0), pSparkline->getColumn());
-    CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+    // Check Sparkline
+    {
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(0, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        // D7 exists - again
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(3, 6, 0)));
+
+        // Check D7
+        auto pSparkline = rDocument.GetSparkline(ScAddress(3, 6, 0));
+        CPPUNIT_ASSERT_EQUAL(SCCOL(3), pSparkline->getColumn());
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), pSparkline->getRow());
+
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklineGroups.size());
+
+        auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
+        CPPUNIT_ASSERT_EQUAL(size_t(4), pSparklines.size());
+    }
 
     // Redo
     rDocument.GetUndoManager()->Redo();
 
-    // Check Sparkline at cell A7 doesn't exists
-    pSparkline = rDocument.GetSparkline(aRange.aStart);
-    CPPUNIT_ASSERT(!pSparkline);
+    // Check Sparklines
+    {
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(1, 6, 0)));
+        CPPUNIT_ASSERT(rDocument.HasSparkline(ScAddress(2, 6, 0)));
+        // D7 is gone - again
+        CPPUNIT_ASSERT(!rDocument.HasSparkline(ScAddress(3, 6, 0)));
 
-    CPPUNIT_ASSERT(!rDocument.HasSparkline(aRange.aStart));
+        // Check collections
+        auto* pSparklineList = rDocument.GetSparklineList(SCTAB(0));
+        auto pSparklineGroups = pSparklineList->getSparklineGroups();
+        CPPUNIT_ASSERT_EQUAL(size_t(1), pSparklineGroups.size());
+
+        auto pSparklines = pSparklineList->getSparklinesFor(pSparklineGroups[0]);
+        CPPUNIT_ASSERT_EQUAL(size_t(3), pSparklines.size());
+    }
 
     xDocSh->DoClose();
 }
