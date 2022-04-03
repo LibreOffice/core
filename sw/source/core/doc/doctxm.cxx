@@ -935,8 +935,9 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
 
     // find the first layout node for this TOX, if it only find the content
     // in his own chapter
-    const SwTextNode* pOwnChapterNode = IsFromChapter()
-        ? ::lcl_FindChapterNode( *pSectNd, pLayout, pSectNd->FindSectionNode()->GetSectionLevel() + 1 )
+    const SwSectionNode* pChapterSectNd = IsFromChapter() ? pSectNd->FindSectionNode() : nullptr;
+    const SwTextNode* pOwnChapterNode = pChapterSectNd
+        ? ::lcl_FindChapterNode( *pSectNd, pLayout, pChapterSectNd->GetSectionLevel() + 1 )
         : nullptr;
 
     SwNode2LayoutSaveUpperFrames aN2L(*pSectNd);
