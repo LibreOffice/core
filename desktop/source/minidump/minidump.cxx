@@ -169,12 +169,12 @@ static bool uploadContent(std::map<std::string, std::string>& parameters, std::s
 
     CURLcode cc = curl_easy_perform(curl);
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
-#ifndef NDEBUG
-    if (cc != CURLE_OK)
-        fprintf(stderr, "Failed to send http request to %s, error: %s\n",
-                url.c_str(),
-                curl_easy_strerror(cc));
-#endif
+    SAL_WARN_IF(cc != CURLE_OK, "desktop",
+            "Failed to send http request to " <<
+            url.c_str() <<
+            ", error: " <<
+            curl_easy_strerror(cc)) <<
+            "\n");
 
     if (formpost != nullptr)
     {
