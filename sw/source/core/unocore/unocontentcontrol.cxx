@@ -689,7 +689,7 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         }
         else
         {
-            m_pImpl->m_pContentControl->GetShowingPlaceHolder();
+            aRet <<= m_pImpl->m_pContentControl->GetShowingPlaceHolder();
         }
     }
     else
