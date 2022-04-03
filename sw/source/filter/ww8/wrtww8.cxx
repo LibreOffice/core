@@ -3942,7 +3942,7 @@ MSWordSections& WW8Export::Sections() const
     return *m_pSepx;
 }
 
-SwWW8Writer::SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL)
+SwWW8Writer::SwWW8Writer(std::u16string_view rFltName, const OUString& rBaseURL)
     : m_pExport( nullptr ),
       mpMedium( nullptr )
 {
@@ -3961,7 +3961,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 SaveOrDelMSVBAStorage_ww8( SfxObjectS
     return sal_uInt32(aTmp.SaveOrDelMSVBAStorage( bSaveInto, rStorageName ));
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT void ExportDOC( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
+extern "C" SAL_DLLPUBLIC_EXPORT void ExportDOC( std::u16string_view rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwWW8Writer( rFltName, rBaseURL );
 }

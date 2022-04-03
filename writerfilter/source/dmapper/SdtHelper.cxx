@@ -144,7 +144,7 @@ void SdtHelper::loadPropertiesXMLs()
     m_bPropertiesXMLsLoaded = true;
 }
 
-static void lcl_registerNamespaces(const OUString& sNamespaceString,
+static void lcl_registerNamespaces(std::u16string_view sNamespaceString,
                                    const uno::Reference<XXPathAPI>& xXPathAPI)
 {
     // Split namespaces and register it in XPathAPI

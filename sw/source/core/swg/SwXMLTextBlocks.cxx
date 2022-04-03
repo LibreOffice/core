@@ -267,7 +267,7 @@ ErrCode SwXMLTextBlocks::PutBlock()
     SwXmlFlags nCommitFlags = m_nFlags;
 
     WriterRef xWrt;
-    ::GetXMLWriter ( OUString(), GetBaseURL(), xWrt);
+    ::GetXMLWriter ( std::u16string_view(), GetBaseURL(), xWrt);
     SwWriter aWriter (m_xRoot, *m_xDoc );
 
     xWrt->m_bBlock = true;

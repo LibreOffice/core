@@ -943,7 +943,7 @@ friend void WW8_WrtRedlineAuthor::Write(Writer &rWrt);
     SfxMedium *mpMedium;
 
 public:
-    SwWW8Writer(const OUString& rFltName, const OUString& rBaseURL);
+    SwWW8Writer(std::u16string_view rFltName, const OUString& rBaseURL);
     virtual ~SwWW8Writer() override;
 
     virtual ErrCode WriteStorage() override;

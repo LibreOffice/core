@@ -33,7 +33,7 @@ class SwASCWriter : public Writer
     virtual ErrCode WriteStream() override;
 
 public:
-    SwASCWriter(const OUString& rFilterName);
+    SwASCWriter(std::u16string_view rFilterName);
     virtual ~SwASCWriter() override;
 
     void SetupFilterOptions(SfxMedium& rMedium) override;

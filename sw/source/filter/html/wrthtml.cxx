@@ -93,7 +93,7 @@ using namespace css;
 static char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
-SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions )
+SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilterOptions )
     : m_pNumRuleInfo(new SwHTMLNumRuleInfo)
     , m_nHTMLMode(0)
     , m_eCSS1Unit(FieldUnit::NONE)
@@ -206,24 +206,24 @@ void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)
     SetupFilterFromPropertyValues(aArgs);
 }
 
-void SwHTMLWriter::SetupFilterOptions(const OUString& rFilterOptions)
+void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
 {
     comphelper::SequenceAsHashMap aStoreMap;
-    if (rFilterOptions.indexOf("SkipImages") >= 0)
+    if (rFilterOptions.find(u"SkipImages") != std::u16string_view::npos)
     {
         aStoreMap["SkipImages"] <<= true;
     }
-    else if (rFilterOptions.indexOf("SkipHeaderFooter") >= 0)
+    else if (rFilterOptions.find(u"SkipHeaderFooter") != std::u16string_view::npos)
     {
         aStoreMap["SkipHeaderFooter"] <<= true;
     }
-    else if (rFilterOptions.indexOf("EmbedImages") >= 0)
+    else if (rFilterOptions.find(u"EmbedImages") != std::u16string_view::npos)
     {
         aStoreMap["EmbedImages"] <<= true;
     }
 
     // this option can be "on" together with any of above
-    if (rFilterOptions.indexOf("NoLineLimit") >= 0)
+    if (rFilterOptions.find(u"NoLineLimit") != std::u16string_view::npos)
     {
         aStoreMap["NoLineLimit"] <<= true;
     }
@@ -1652,7 +1652,7 @@ HTMLSaveData::~HTMLSaveData()
     }
 }
 
-void GetHTMLWriter( const OUString& rFilterOptions, const OUString& rBaseURL, WriterRef& xRet )
+void GetHTMLWriter( std::u16string_view rFilterOptions, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwHTMLWriter( rBaseURL, rFilterOptions );
 }

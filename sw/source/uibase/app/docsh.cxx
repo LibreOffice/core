@@ -291,7 +291,7 @@ bool SwDocShell::Save()
         case SfxObjectCreateMode::ORGANIZER:
             {
                 WriterRef xWrt;
-                ::GetXMLWriter(OUString(), GetMedium()->GetBaseURL(true), xWrt);
+                ::GetXMLWriter(std::u16string_view(), GetMedium()->GetBaseURL(true), xWrt);
                 xWrt->SetOrganizerMode( true );
                 SwWriter aWrt( *GetMedium(), *m_xDoc );
                 nErr = aWrt.Write( xWrt );
@@ -319,7 +319,7 @@ bool SwDocShell::Save()
                     m_pWrtShell->EndAllTableBoxEdit();
 
                 WriterRef xWrt;
-                ::GetXMLWriter(OUString(), GetMedium()->GetBaseURL(true), xWrt);
+                ::GetXMLWriter(std::u16string_view(), GetMedium()->GetBaseURL(true), xWrt);
 
                 bool bLockedView(false);
                 if (m_pWrtShell)
@@ -533,7 +533,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
                             SfxObjectCreateMode::EMBEDDED == GetCreateMode() );
 
         WriterRef xWrt;
-        ::GetXMLWriter(OUString(), rMedium.GetBaseURL(true), xWrt);
+        ::GetXMLWriter(std::u16string_view(), rMedium.GetBaseURL(true), xWrt);
 
         bool bLockedView(false);
         if (m_pWrtShell)

@@ -78,7 +78,7 @@ Reader* SwReaderWriterEntry::GetReader()
     return nullptr;
 }
 
-void SwReaderWriterEntry::GetWriter( const OUString& rNm, const OUString& rBaseURL, WriterRef& xWrt ) const
+void SwReaderWriterEntry::GetWriter( std::u16string_view rNm, const OUString& rBaseURL, WriterRef& xWrt ) const
 {
     if ( fnGetWriter )
         (*fnGetWriter)( rNm, rBaseURL, xWrt );
@@ -156,7 +156,7 @@ Reader* GetDOCXReader()
     return aReaderWriter[READER_WRITER_DOCX].GetReader();
 }
 
-void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
+void GetWriter( std::u16string_view rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
     for( int n = 0; n < MAXFILTER; ++n )
         if ( aFilterDetect[n].IsFilter( rFltName ) )
@@ -627,9 +627,9 @@ void SwAsciiOptions::WriteUserData(OUString& rStr) const
 
 extern "C" {
     Reader *ImportRTF();
-    void ExportRTF( const OUString&, const OUString& rBaseURL, WriterRef& );
+    void ExportRTF( std::u16string_view, const OUString& rBaseURL, WriterRef& );
     Reader *ImportDOC();
-    void ExportDOC( const OUString&, const OUString& rBaseURL, WriterRef& );
+    void ExportDOC( std::u16string_view, const OUString& rBaseURL, WriterRef& );
     Reader *ImportDOCX();
     sal_uInt32 SaveOrDelMSVBAStorage_ww8( SfxObjectShell&, SotStorage&, sal_Bool, const OUString& );
     sal_uInt32 GetSaveWarningOfMSVBAStorage_ww8( SfxObjectShell& );
@@ -653,7 +653,7 @@ Reader* GetRTFReader()
 
 }
 
-void GetRTFWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
+void GetRTFWriter( std::u16string_view rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
 #ifndef DISABLE_DYNLOADING
     FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportRTF" ) );
@@ -681,7 +681,7 @@ Reader* GetWW8Reader()
 #endif
 }
 
-void GetWW8Writer( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xRet )
+void GetWW8Writer( std::u16string_view rFltName, const OUString& rBaseURL, WriterRef& xRet )
 {
 #ifndef DISABLE_DYNLOADING
     FnGetWriter pFunction = reinterpret_cast<FnGetWriter>( SwGlobals::getFilters().GetMswordLibSymbol( "ExportDOC" ) );
