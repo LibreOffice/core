@@ -579,7 +579,7 @@ bool SwXMLWriter::WriteThroughComponent(
 }
 
 void GetXMLWriter(
-    [[maybe_unused]] const OUString& /*rName*/, const OUString& rBaseURL, WriterRef& xRet )
+    [[maybe_unused]] std::u16string_view /*rName*/, const OUString& rBaseURL, WriterRef& xRet )
 {
     xRet = new SwXMLWriter( rBaseURL );
 }

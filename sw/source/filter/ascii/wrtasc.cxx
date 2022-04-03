@@ -32,17 +32,19 @@
 
 #include <strings.hrc>
 
-SwASCWriter::SwASCWriter( const OUString& rFltNm )
+SwASCWriter::SwASCWriter( std::u16string_view rFltNm )
 {
     SwAsciiOptions aNewOpts;
 
-    switch( 5 <= rFltNm.getLength() ? rFltNm[4] : 0 )
+    switch( 5 <= rFltNm.size() ? rFltNm[4] : 0 )
     {
     case 'D':
                 aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );
                 aNewOpts.SetParaFlags( LINEEND_CRLF );
-                if( 5 < rFltNm.getLength() )
-                    switch( rFltNm.copy( 5 ).toInt32() )
+                if( 5 < rFltNm.size() )
+                {
+                    std::u16string_view aFilterNum = rFltNm.substr( 5 );
+                    switch( rtl_ustr_toInt64_WithLength(aFilterNum.data(), 10, aFilterNum.size()) )
                     {
                     case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );  break;
                     case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );  break;
@@ -51,6 +53,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
                     case 863: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_863 );  break;
                     case 865: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_865 );  break;
                     }
+                }
                 break;
 
     case 'A':
@@ -73,7 +76,7 @@ SwASCWriter::SwASCWriter( const OUString& rFltNm )
                 break;
 
     default:
-        if( rFltNm.getLength() >= 4 && rFltNm.subView( 4 )==u"_DLG" )
+        if( rFltNm.size() >= 4 && rFltNm.substr( 4 )==u"_DLG" )
         {
             // use the options
             aNewOpts = GetAsciiOptions();
@@ -222,7 +225,7 @@ void SwASCWriter::SetupFilterOptions(SfxMedium& rMedium)
 }
 
 void GetASCWriter(
-    const OUString& rFltNm, [[maybe_unused]] const OUString& /*rBaseURL*/, WriterRef& xRet )
+    std::u16string_view rFltNm, [[maybe_unused]] const OUString& /*rBaseURL*/, WriterRef& xRet )
 {
   xRet = new SwASCWriter( rFltNm );
 }

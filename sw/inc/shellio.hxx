@@ -527,7 +527,7 @@ public:
 };
 
 typedef Reader* (*FnGetReader)();
-typedef void (*FnGetWriter)(const OUString&, const OUString& rBaseURL, WriterRef&);
+typedef void (*FnGetWriter)(std::u16string_view, const OUString& rBaseURL, WriterRef&);
 ErrCode SaveOrDelMSVBAStorage( SfxObjectShell&, SotStorage&, bool, const OUString& );
 ErrCode GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocS );
 
@@ -546,7 +546,7 @@ struct SwReaderWriterEntry
     Reader* GetReader();
 
     /// Get access to the writer.
-    void GetWriter( const OUString& rNm, const OUString& rBaseURL, WriterRef& xWrt ) const;
+    void GetWriter( std::u16string_view rNm, const OUString& rBaseURL, WriterRef& xWrt ) const;
 };
 
 namespace SwReaderWriter
@@ -558,13 +558,13 @@ namespace SwReaderWriter
     Reader* GetReader( const OUString& rFltName );
 
     /// Return writer based on the name.
-    SW_DLLPUBLIC void GetWriter( const OUString& rFltName, const OUString& rBaseURL, WriterRef& xWrt );
+    SW_DLLPUBLIC void GetWriter( std::u16string_view rFltName, const OUString& rBaseURL, WriterRef& xWrt );
 }
 
-void GetRTFWriter( const OUString&, const OUString&, WriterRef& );
-void GetASCWriter(const OUString&, const OUString&, WriterRef&);
-void GetHTMLWriter( const OUString&, const OUString&, WriterRef& );
-void GetXMLWriter( const OUString&, const OUString&, WriterRef& );
+void GetRTFWriter( std::u16string_view, const OUString&, WriterRef& );
+void GetASCWriter( std::u16string_view, const OUString&, WriterRef&);
+void GetHTMLWriter( std::u16string_view, const OUString&, WriterRef& );
+void GetXMLWriter( std::u16string_view, const OUString&, WriterRef& );
 
 #endif
 

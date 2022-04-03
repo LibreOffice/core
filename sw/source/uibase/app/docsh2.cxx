@@ -760,7 +760,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 {
                     WriterRef xWrt;
                     // mba: looks as if relative URLs don't make sense here
-                    ::GetRTFWriter(OUString(), OUString(), xWrt);
+                    ::GetRTFWriter(std::u16string_view(), OUString(), xWrt);
                     SvMemoryStream *pStrm = new SvMemoryStream();
                     pStrm->SetBufferSize( 16348 );
                     SwWriter aWrt( *pStrm, *pSmryDoc );
@@ -818,7 +818,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 EnableSetModified( false );
                 WriterRef xWrt;
                 // mba: looks as if relative URLs don't make sense here
-                ::GetRTFWriter( OUString('O'), OUString(), xWrt );
+                ::GetRTFWriter( u"O", OUString(), xWrt );
                 std::unique_ptr<SvMemoryStream> pStrm (new SvMemoryStream());
                 pStrm->SetBufferSize( 16348 );
                 SwWriter aWrt( *pStrm, *GetDoc() );

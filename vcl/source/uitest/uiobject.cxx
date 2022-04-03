@@ -189,7 +189,7 @@ bool isFunctionKey(const OUString& rStr, sal_uInt16& rKeyCode)
     return true;
 }
 
-std::vector<KeyEvent> generate_key_events_from_keycode(const OUString& rStr)
+std::vector<KeyEvent> generate_key_events_from_keycode(std::u16string_view rStr)
 {
     std::vector<KeyEvent> aEvents;
 

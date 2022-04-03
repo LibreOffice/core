@@ -271,7 +271,7 @@ class SW_DLLPUBLIC SwHTMLWriter : public Writer
     void AddLinkTarget( const OUString& rURL );
     void CollectLinkTargets();
 
-    void SetupFilterOptions(const OUString& rFilterOptions);
+    void SetupFilterOptions(std::u16string_view rFilterOptions);
 
 protected:
     ErrCode WriteStream() override;
@@ -422,7 +422,7 @@ public:
 
     /// Construct an instance of SwHTMLWriter and optionally give it
     /// the filter options directly, which can also be set via SetupFilterOptions().
-    explicit SwHTMLWriter( const OUString& rBaseURL, const OUString& rFilterOptions = "" );
+    explicit SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilterOptions = std::u16string_view() );
     virtual ~SwHTMLWriter() override;
 
     void Out_SwDoc( SwPaM* );       // write the marked range

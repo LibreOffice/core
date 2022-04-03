@@ -23,7 +23,7 @@ private:
     OUString m_sTableName;
 
 protected:
-    void parseColumnPart(const OUString& sColumnPart);
+    void parseColumnPart(std::u16string_view sColumnPart);
     void parsePrimaryKeys(const OUString& sPrimaryPart);
 
 public:

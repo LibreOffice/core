@@ -38,7 +38,7 @@ std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode 
     return aRet;
 }
 
-void lcl_convertRectangle(const OUString& rString, tools::Rectangle& rRectangle)
+void lcl_convertRectangle(std::u16string_view rString, tools::Rectangle& rRectangle)
 {
     uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(rString);
     CPPUNIT_ASSERT(aSeq.getLength() == 4 || aSeq.getLength() == 5);
