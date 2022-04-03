@@ -3857,6 +3857,77 @@ sal_Int32 GetCustomGeometryPointValue(const css::drawing::EnhancedCustomShapePar
 
     return nValue;
 }
+
+struct TextAreaRect
+{
+    OString left;
+    OString top;
+    OString right;
+    OString bottom;
+};
+
+struct Guide
+{
+    OString sName;
+    OString sFormula;
+};
+
+void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
+                    std::vector<Guide>& rGuideList, TextAreaRect& rTextAreaRect)
+{
+    tools::Rectangle aODFTextArea(rEnhancedCustomShape2d.GetTextRect());
+    tools::Rectangle aODFLogicRect(rEnhancedCustomShape2d.GetLogicRect());
+    if (aODFTextArea == aODFLogicRect)
+    {
+        rTextAreaRect.left = "l";
+        rTextAreaRect.top = "t";
+        rTextAreaRect.right = "r";
+        rTextAreaRect.bottom = "b";
+        return;
+    }
+    Guide aGuide;
+    // horizontal
+    const sal_Int32 nWidth = aODFLogicRect.Right() - aODFLogicRect.Left();
+    const OString sWidth = OString::number(oox::drawingml::convertHmmToEmu(nWidth));
+
+    // left
+    aGuide.sName = "textAreaLeft";
+    sal_Int32 nHelp = aODFTextArea.Left() - aODFLogicRect.Left();
+    const OString sLeft = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
+    aGuide.sFormula = "*/ " + sLeft + " w " + sWidth;
+    rTextAreaRect.left = aGuide.sName;
+    rGuideList.push_back(aGuide);
+
+    // right
+    aGuide.sName = "textAreaRight";
+    nHelp = aODFTextArea.Right() - aODFLogicRect.Left();
+    const OString sRight = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
+    aGuide.sFormula = "*/ " + sRight + " w " + sWidth;
+    rTextAreaRect.right = aGuide.sName;
+    rGuideList.push_back(aGuide);
+
+    // vertical
+    const sal_Int32 nHeight = aODFLogicRect.Bottom() - aODFLogicRect.Top();
+    const OString sHeight = OString::number(oox::drawingml::convertHmmToEmu(nHeight));
+
+    // top
+    aGuide.sName = "textAreaTop";
+    nHelp = aODFTextArea.Top() - aODFLogicRect.Top();
+    const OString sTop = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
+    aGuide.sFormula = "*/ " + sTop + " h " + sHeight;
+    rTextAreaRect.top = aGuide.sName;
+    rGuideList.push_back(aGuide);
+
+    // bottom
+    aGuide.sName = "textAreaBottom";
+    nHelp = aODFTextArea.Bottom() - aODFLogicRect.Top();
+    const OString sBottom = OString::number(oox::drawingml::convertHmmToEmu(nHelp));
+    aGuide.sFormula = "*/ " + sBottom + " h " + sHeight;
+    rTextAreaRect.bottom = aGuide.sName;
+    rGuideList.push_back(aGuide);
+
+    return;
+}
 }
 
 bool DrawingML::WriteCustomGeometry(
@@ -3933,12 +4004,27 @@ bool DrawingML::WriteCustomGeometry(
     // entire method.
     const EnhancedCustomShape2d aCustomShape2d(const_cast<SdrObjCustomShape&>(rSdrObjCustomShape));
 
+    TextAreaRect aTextAreaRect;
+    std::vector<Guide> aGuideList; // for now only for <a:rect>
+    prepareTextArea(aCustomShape2d, aGuideList, aTextAreaRect);
     mpFS->startElementNS(XML_a, XML_custGeom);
     mpFS->singleElementNS(XML_a, XML_avLst);
-    mpFS->singleElementNS(XML_a, XML_gdLst);
+    if (aGuideList.empty())
+    {
+        mpFS->singleElementNS(XML_a, XML_gdLst);
+    }
+    else
+    {
+        mpFS->startElementNS(XML_a, XML_gdLst);
+        for (auto const& elem: aGuideList)
+        {
+            mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
+        }
+        mpFS->endElementNS(XML_a, XML_gdLst);
+    }
     mpFS->singleElementNS(XML_a, XML_ahLst);
-    // ToDO: use draw:TextAreas for <a:rect>
-    mpFS->singleElementNS(XML_a, XML_rect, XML_l, "l", XML_t, "t", XML_r, "r", XML_b, "b");
+    mpFS->singleElementNS(XML_a, XML_rect, XML_l, aTextAreaRect.left, XML_t, aTextAreaRect.top,
+                          XML_r, aTextAreaRect.right, XML_b, aTextAreaRect.bottom);
     mpFS->startElementNS(XML_a, XML_pathLst);
 
     // Prepare width and height for <a:path>
