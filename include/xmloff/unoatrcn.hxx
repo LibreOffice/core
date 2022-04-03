@@ -45,7 +45,7 @@ class XMLOFF_DLLPUBLIC SvUnoAttributeContainer final :
 private:
     std::unique_ptr<SvXMLAttrContainerData> mpContainer;
 
-    SAL_DLLPRIVATE sal_uInt16 getIndexByName(const OUString& aName )
+    SAL_DLLPRIVATE sal_uInt16 getIndexByName(std::u16string_view aName )
         const;
 
 public:

@@ -23,6 +23,7 @@
 #include "createparser.hxx"
 #include "utils.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
+#include <o3tl/string_view.hxx>
 
 using namespace ::comphelper;
 using namespace css::sdbc;
@@ -31,16 +32,17 @@ namespace
 {
 /// Returns substring of sSql from the first occurrence of '(' until the
 /// last occurrence of ')' (excluding the parenthesis)
-OUString lcl_getColumnPart(const OUString& sSql)
+std::u16string_view lcl_getColumnPart(std::u16string_view sSql)
 {
-    sal_Int32 nBeginIndex = sSql.indexOf("(") + 1;
-    if (nBeginIndex < 0)
+    size_t nBeginIndex = sSql.find('(');
+    if (nBeginIndex == std::u16string_view::npos)
     {
         SAL_WARN("dbaccess", "No column definitions found");
-        return OUString();
+        return std::u16string_view();
     }
-    sal_Int32 nCount = sSql.lastIndexOf(")") - nBeginIndex;
-    return sSql.copy(nBeginIndex, nCount);
+    sal_Int32 nCount = sSql.rfind(')') - nBeginIndex - 1;
+    auto sPart = sSql.substr(nBeginIndex + 1, nCount);
+    return sPart;
 }
 
 /// Constructs a vector of strings that represents the definitions of each
@@ -80,10 +82,10 @@ sal_Int32 lcl_getAutoIncrementDefault(std::u16string_view sColumnDef)
     return -1;
 }
 
-OUString lcl_getDefaultValue(std::u16string_view sColumnDef)
+std::u16string_view lcl_getDefaultValue(std::u16string_view sColumnDef)
 {
     constexpr std::u16string_view DEFAULT_KW = u"DEFAULT";
-    auto nDefPos = sColumnDef.find(DEFAULT_KW);
+    size_t nDefPos = sColumnDef.find(DEFAULT_KW);
     if (nDefPos > 0 && nDefPos != std::u16string_view::npos
         && lcl_getAutoIncrementDefault(sColumnDef) < 0)
     {
@@ -91,12 +93,12 @@ OUString lcl_getDefaultValue(std::u16string_view sColumnDef)
             = o3tl::trim(sColumnDef.substr(nDefPos + DEFAULT_KW.size()));
 
         // next word is the value
-        auto nNextSpace = fromDefault.find(' ');
-        return OUString((nNextSpace > 0 && nNextSpace != std::u16string_view::npos)
-                            ? fromDefault.substr(0, nNextSpace)
-                            : fromDefault);
+        size_t nNextSpace = fromDefault.find(' ');
+        return (nNextSpace > 0 && nNextSpace != std::u16string_view::npos)
+                   ? fromDefault.substr(0, nNextSpace)
+                   : fromDefault;
     }
-    return OUString{};
+    return std::u16string_view();
 }
 
 bool lcl_isNullable(std::u16string_view sColumnDef)
@@ -175,15 +177,15 @@ struct ColumnTypeParts
  * Separates full type descriptions (e.g. NUMERIC(5,4)) to type name (NUMERIC) and
  * parameters (5,4)
  */
-ColumnTypeParts lcl_getColumnTypeParts(const OUString& sFullTypeName)
+ColumnTypeParts lcl_getColumnTypeParts(std::u16string_view sFullTypeName)
 {
     ColumnTypeParts parts;
-    auto nParenPos = sFullTypeName.indexOf("(");
-    if (nParenPos > 0)
+    auto nParenPos = sFullTypeName.find('(');
+    if (nParenPos > 0 && nParenPos != std::u16string_view::npos)
     {
-        parts.typeName = o3tl::trim(sFullTypeName.subView(0, nParenPos));
-        OUString sParamStr
-            = sFullTypeName.copy(nParenPos + 1, sFullTypeName.indexOf(")") - nParenPos - 1);
+        parts.typeName = o3tl::trim(sFullTypeName.substr(0, nParenPos));
+        std::u16string_view sParamStr
+            = sFullTypeName.substr(nParenPos + 1, sFullTypeName.find(')') - nParenPos - 1);
         auto sParams = string::split(sParamStr, sal_Unicode(u','));
         for (const auto& sParam : sParams)
         {
@@ -192,7 +194,7 @@ ColumnTypeParts lcl_getColumnTypeParts(const OUString& sFullTypeName)
     }
     else
     {
-        parts.typeName = sFullTypeName.trim();
+        parts.typeName = o3tl::trim(sFullTypeName);
         lcl_addDefaultParameters(parts.params, lcl_getDataTypeFromHsql(parts.typeName));
     }
     return parts;
@@ -204,13 +206,13 @@ namespace dbahsql
 {
 CreateStmtParser::CreateStmtParser() {}
 
-void CreateStmtParser::parsePrimaryKeys(const OUString& sPrimaryPart)
+void CreateStmtParser::parsePrimaryKeys(std::u16string_view sPrimaryPart)
 {
-    sal_Int32 nParenPos = sPrimaryPart.indexOf("(");
-    if (nParenPos > 0)
+    size_t nParenPos = sPrimaryPart.find('(');
+    if (nParenPos > 0 && nParenPos != std::u16string_view::npos)
     {
-        OUString sParamStr
-            = sPrimaryPart.copy(nParenPos + 1, sPrimaryPart.lastIndexOf(")") - nParenPos - 1);
+        std::u16string_view sParamStr
+            = sPrimaryPart.substr(nParenPos + 1, sPrimaryPart.rfind(')') - nParenPos - 1);
         auto sParams = string::split(sParamStr, sal_Unicode(u','));
         for (const auto& sParam : sParams)
         {
@@ -271,23 +273,23 @@ void CreateStmtParser::parseColumnPart(std::u16string_view sColumnPart)
                                  std::move(typeParts.params), isPrimaryKey,
                                  lcl_getAutoIncrementDefault(sColumnWithoutName),
                                  lcl_isNullable(sColumnWithoutName), bCaseInsensitive,
-                                 lcl_getDefaultValue(sColumnWithoutName));
+                                 OUString(lcl_getDefaultValue(sColumnWithoutName)));
 
         m_aColumns.push_back(aColDef);
     }
 }
 
-void CreateStmtParser::parse(const OUString& sSql)
+void CreateStmtParser::parse(std::u16string_view sSql)
 {
     // TODO Foreign keys
-    if (!sSql.startsWith("CREATE"))
+    if (!o3tl::starts_with(sSql, u"CREATE"))
     {
         SAL_WARN("dbaccess", "Not a create statement");
         return;
     }
 
     m_sTableName = utils::getTableNameFromStmt(sSql);
-    OUString sColumnPart = lcl_getColumnPart(sSql);
+    std::u16string_view sColumnPart = lcl_getColumnPart(sSql);
     parseColumnPart(sColumnPart);
 }
 

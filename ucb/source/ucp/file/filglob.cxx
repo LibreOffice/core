@@ -183,17 +183,17 @@ namespace fileaccess {
     }
 
 
-    OUString getTitle( const OUString& aPath )
+    std::u16string_view getTitle( std::u16string_view aPath )
     {
-        sal_Int32 lastIndex = aPath.lastIndexOf( '/' );
-        return aPath.copy( lastIndex + 1 );
+        size_t lastIndex = aPath.rfind( '/' );
+        return aPath.substr( lastIndex + 1 );
     }
 
 
-    OUString getParentName( const OUString& aFileName )
+    OUString getParentName( std::u16string_view aFileName )
     {
-        sal_Int32 lastIndex = aFileName.lastIndexOf( '/' );
-        OUString aParent = aFileName.copy( 0,lastIndex );
+        size_t lastIndex = aFileName.rfind( '/' );
+        OUString aParent( aFileName.substr( 0,lastIndex ) );
 
         if( aParent.endsWith(":") && aParent.getLength() == 6 )
             aParent += "/";
@@ -561,7 +561,7 @@ namespace fileaccess {
             prop.Handle = -1;
             OUString aClashingName(
                 rtl::Uri::decode(
-                    getTitle(aUncPath),
+                    OUString(getTitle(aUncPath)),
                     rtl_UriDecodeWithCharset,
                     RTL_TEXTENCODING_UTF8));
             prop.Value <<= aClashingName;

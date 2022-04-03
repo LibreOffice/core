@@ -1922,7 +1922,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     DoWriteBookmarkEndIfExist(nPos);
 }
 
-void DocxAttributeOutput::DoWriteBookmarkTagStart(const OUString & bookmarkName)
+void DocxAttributeOutput::DoWriteBookmarkTagStart(std::u16string_view bookmarkName)
 {
     m_pSerializer->singleElementNS(XML_w, XML_bookmarkStart,
         FSNS(XML_w, XML_id), OString::number(m_nNextBookmarkId),
@@ -2068,8 +2068,8 @@ void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permissi
         const std::u16string_view permissionName = permissionIdAndName.substr(separatorIndex + 1);
 
         m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), BookmarkToWord(OUString(permissionId)),
-            FSNS(XML_w, XML_edGrp), BookmarkToWord(OUString(permissionName)));
+            FSNS(XML_w, XML_id), BookmarkToWord(permissionId),
+            FSNS(XML_w, XML_edGrp), BookmarkToWord(permissionName));
     }
     else
     {
@@ -2082,8 +2082,8 @@ void DocxAttributeOutput::DoWritePermissionTagStart(std::u16string_view permissi
         const std::u16string_view permissionName = permissionIdAndName.substr(separatorIndex + 1);
 
         m_pSerializer->singleElementNS(XML_w, XML_permStart,
-            FSNS(XML_w, XML_id), BookmarkToWord(OUString(permissionId)),
-            FSNS(XML_w, XML_ed), BookmarkToWord(OUString(permissionName)));
+            FSNS(XML_w, XML_id), BookmarkToWord(permissionId),
+            FSNS(XML_w, XML_ed), BookmarkToWord(permissionName));
     }
 }
 
@@ -2108,7 +2108,7 @@ void DocxAttributeOutput::DoWritePermissionTagEnd(std::u16string_view permission
     const std::u16string_view permissionId   = permissionIdAndName.substr(0, separatorIndex);
 
     m_pSerializer->singleElementNS(XML_w, XML_permEnd,
-        FSNS(XML_w, XML_id), BookmarkToWord(OUString(permissionId)));
+        FSNS(XML_w, XML_id), BookmarkToWord(permissionId));
 }
 
 /// Write the start permissions
@@ -2503,7 +2503,7 @@ void DocxAttributeOutput::DoWriteCmd( std::u16string_view rCmd )
     std::u16string_view sCmd = o3tl::trim(rCmd);
     if (o3tl::starts_with(sCmd, u"SEQ"))
     {
-        OUString sSeqName = msfilter::util::findQuotedText(OUString(sCmd), "SEQ ", '\\').trim();
+        OUString sSeqName( o3tl::trim(msfilter::util::findQuotedText(sCmd, "SEQ ", '\\')) );
         m_aSeqBookmarksNames[sSeqName].push_back(m_sLastOpenedBookmark);
     }
     // Write the Field command

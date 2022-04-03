@@ -172,7 +172,7 @@ namespace svt
 
         css::uno::Sequence< OUString > m_rDenyList;
 
-        bool URLOnDenyList ( const OUString& sRealURL );
+        bool URLOnDenyList ( std::u16string_view sRealURL );
 
     public:
         /** constructs an enumerator instance

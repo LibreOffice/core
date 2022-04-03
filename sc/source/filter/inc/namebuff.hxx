@@ -100,7 +100,7 @@ public:
     void                    Add( const ScDocument& rDoc, const OUString& rName, const ScComplexRefData& rCRD );
     inline void             Add( const ScDocument& rDoc, const OUString& rName, const ScRange& aScRange );
     bool                    FindRel( const OUString& rRef, sal_uInt16& rIndex );
-    bool                    FindAbs( const OUString& rRef, sal_uInt16& rIndex );
+    bool                    FindAbs( std::u16string_view rRef, sal_uInt16& rIndex );
 };
 
 inline void RangeNameBufferWK3::Add( const ScDocument& rDoc, const OUString& rName, const ScRange& aScRange )

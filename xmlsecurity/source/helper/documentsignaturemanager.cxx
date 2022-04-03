@@ -41,6 +41,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/datetime.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <certificate.hxx>
 #include <biginteger.hxx>
@@ -166,7 +167,7 @@ bool DocumentSignatureManager::readManifest()
     The parameter is an encoded uri. However, the manifest contains paths. Therefore
     the path is encoded as uri, so they can be compared.
 */
-bool DocumentSignatureManager::isXML(const OUString& rURI)
+bool DocumentSignatureManager::isXML(std::u16string_view rURI)
 {
     SAL_WARN_IF(!mxStore.is(), "xmlsecurity.helper", "empty storage reference");
 
@@ -207,11 +208,11 @@ bool DocumentSignatureManager::isXML(const OUString& rURI)
         //Files can only be encrypted if they are in the manifest.xml.
         //That is, the current file cannot be encrypted, otherwise bPropsAvailable
         //would be true.
-        sal_Int32 nSep = rURI.lastIndexOf('.');
-        if (nSep != -1)
+        size_t nSep = rURI.rfind('.');
+        if (nSep != std::u16string_view::npos)
         {
-            OUString aExt = rURI.copy(nSep + 1);
-            if (aExt.equalsIgnoreAsciiCase("XML"))
+            std::u16string_view aExt = rURI.substr(nSep + 1);
+            if (o3tl::equalsIgnoreAsciiCase(aExt, u"XML"))
                 bIsXML = true;
         }
     }

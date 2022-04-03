@@ -70,7 +70,7 @@ protected:
     virtual void getBackground( css::uno::Any& rValue );
 
     OUString getBookmarkURL() const;
-    void setBookmarkURL( OUString const & rURL );
+    void setBookmarkURL( std::u16string_view rURL );
 
     void SetLeftBorder( sal_Int32 nValue );
     void SetRightBorder( sal_Int32 nValue );

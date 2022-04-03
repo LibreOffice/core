@@ -70,6 +70,7 @@
 #include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::chart::wrapper;
@@ -473,21 +474,21 @@ sal_Int32 lcl_getNewAPIIndexForOldAPIIndex(
     return nNewAPIIndex;
 }
 
-OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
+OUString lcl_getDiagramType( std::u16string_view rTemplateServiceName )
 {
     static const OUStringLiteral aPrefix(u"com.sun.star.chart2.template.");
 
-    if( rTemplateServiceName.match( aPrefix ))
+    if( o3tl::starts_with(rTemplateServiceName, aPrefix) )
     {
-        const OUString aName( rTemplateServiceName.copy( aPrefix.getLength()));
+        const std::u16string_view aName( rTemplateServiceName.substr( aPrefix.getLength()));
 
         // "Area" "StackedArea" "PercentStackedArea" "ThreeDArea"
         // "StackedThreeDArea" "PercentStackedThreeDArea"
-        if( aName.indexOf( "Area" ) != -1 )
+        if( aName.find( u"Area" ) != std::u16string_view::npos )
             return "com.sun.star.chart.AreaDiagram";
 
         // "Pie" "PieAllExploded" "ThreeDPie" "ThreeDPieAllExploded"
-        if( aName.indexOf( "Pie" ) != -1 )
+        if( aName.find( u"Pie" ) != std::u16string_view::npos )
             return "com.sun.star.chart.PieDiagram";
 
         // "Column" "StackedColumn" "PercentStackedColumn" "ThreeDColumnDeep"
@@ -496,33 +497,33 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "PercentStackedBar" "ThreeDBarDeep" "ThreeDBarFlat"
         // "StackedThreeDBarFlat" "PercentStackedThreeDBarFlat" "ColumnWithLine"
         // "StackedColumnWithLine"
-        if( aName.indexOf( "Column" ) != -1 || aName.indexOf( "Bar" ) != -1 )
+        if( aName.find( u"Column" ) != std::u16string_view::npos || aName.find( u"Bar" ) != std::u16string_view::npos )
             return "com.sun.star.chart.BarDiagram";
 
         // "Donut" "DonutAllExploded" "ThreeDDonut" "ThreeDDonutAllExploded"
-        if( aName.indexOf( "Donut" ) != -1 )
+        if( aName.find( u"Donut" ) != std::u16string_view::npos )
             return "com.sun.star.chart.DonutDiagram";
 
         // "ScatterLineSymbol" "ScatterLine" "ScatterSymbol" "ThreeDScatter"
-        if( aName.indexOf( "Scatter" ) != -1 )
+        if( aName.find( u"Scatter" ) != std::u16string_view::npos )
             return "com.sun.star.chart.XYDiagram";
 
         // "FilledNet" "StackedFilledNet" "PercentStackedFilledNet"
-        if( aName.indexOf( "FilledNet" ) != -1 )
+        if( aName.find( u"FilledNet" ) != std::u16string_view::npos )
             return "com.sun.star.chart.FilledNetDiagram";
 
         // "Net" "NetSymbol" "NetLine" "StackedNet" "StackedNetSymbol"
         // "StackedNetLine" "PercentStackedNet" "PercentStackedNetSymbol"
         // "PercentStackedNetLine"
-        if( aName.indexOf( "Net" ) != -1 )
+        if( aName.find( u"Net" ) != std::u16string_view::npos )
             return "com.sun.star.chart.NetDiagram";
 
         // "StockLowHighClose" "StockOpenLowHighClose" "StockVolumeLowHighClose"
         // "StockVolumeOpenLowHighClose"
-        if( aName.indexOf( "Stock" ) != -1 )
+        if( aName.find( u"Stock" ) != std::u16string_view::npos )
             return "com.sun.star.chart.StockDiagram";
 
-        if( aName.indexOf( "Bubble" ) != -1 )
+        if( aName.find( u"Bubble" ) != std::u16string_view::npos )
             return "com.sun.star.chart.BubbleDiagram";
 
         // Note: this must be checked after Bar, Net and Scatter
@@ -531,7 +532,7 @@ OUString lcl_getDiagramType( const OUString & rTemplateServiceName )
         // "PercentStackedLine" "LineSymbol" "StackedLineSymbol"
         // "PercentStackedLineSymbol" "ThreeDLine" "StackedThreeDLine"
         // "PercentStackedThreeDLine" "ThreeDLineDeep"
-        if( aName.indexOf( "Line" ) != -1 || aName.indexOf( "Symbol" ) != -1 )
+        if( aName.find( u"Line" ) != std::u16string_view::npos || aName.find( u"Symbol" ) != std::u16string_view::npos )
             return "com.sun.star.chart.LineDiagram";
 
         OSL_FAIL( "unknown template" );
