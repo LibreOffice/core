@@ -530,6 +530,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
     assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "h", "80");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
+{
+    // The document has a custom shape of type "non-primitive" to trigger the custGeom export
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf100391_TextAreaRect.odp";
+    // When saving to PPTX the textarea rect was set to default instead of using the actual area
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Verify the markup. Without fix the values were l="l", t="t", r="r", b="b"
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "l", "textAreaLeft");
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "t", "textAreaTop");
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "r", "textAreaRight");
+    assertXPath(pXmlDoc, "//a:custGeom/a:rect", "b", "textAreaBottom");
+    // The values are calculated in guides, for example
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[1]", "name", "textAreaLeft");
+    assertXPath(pXmlDoc, "//a:custGeom/a:gdLst/a:gd[1]", "fmla", "*/ 1440000 w 2880000");
+    // The test reflects the state of Apr 2022. It needs to be adapted when export of handles and
+    // guides is implemented.
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
 {
     // The odp file contains an "Octagon Bevel" shape. Such has shading not in commands H,I,J,K
