@@ -2548,6 +2548,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         }
                     }
 
+                    oAccess.reset();
                     const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed) ) );
 
                     // tdf#130639 don't start table on a new page after the fallback "switch off repeating header"
