@@ -543,6 +543,8 @@
 #define STR_UNDO_DELETE_SPARKLINE               NC_("STR_UNDO_DELETE_SPARKLINE", "Delete Sparkline")
 #define STR_UNDO_DELETE_SPARKLINE_GROUP         NC_("STR_UNDO_DELETE_SPARKLINE_GROUP", "Delete Sparkline Group")
 #define STR_UNDO_EDIT_SPARKLINE_GROUP           NC_("STR_UNDO_EDIT_SPARKLINE_GROUP", "Edit Sparkline Group")
+#define STR_UNDO_GROUP_SPARKLINES               NC_("STR_UNDO_GROUP_SPARKLINES", "Group Sparklines")
+#define STR_UNDO_UNGROUP_SPARKLINES             NC_("STR_UNDO_UNGROUP_SPARKLINES", "Ungroup Sparklines")
 
 #endif
 
