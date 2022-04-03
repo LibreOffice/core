@@ -1204,7 +1204,63 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 nProgress = pProgress->GetState();
         }
 
+        if (bVertical)
+            FillSparkline(bVertical, nCol, nRow1, nRow2, nIStart, nIEnd);
+        else
+            FillSparkline(bVertical, nRow, nCol1, nCol2, nIStart, nIEnd);
+
         nActFormCnt += nMaxFormCnt;
+    }
+}
+
+void  ScTable::FillSparkline(bool bVertical, SCCOLROW nFixed,
+                             SCCOLROW nStart, SCCOLROW nEnd,
+                             SCCOLROW nFillStart, SCCOLROW nFillEnd)
+{
+    bool bHasSparklines = false;
+    std::vector<std::shared_ptr<sc::Sparkline>> aSparklineSeries;
+
+    for (SCROW nCurrent = nStart; nCurrent <= nEnd; nCurrent++)
+    {
+        auto pSparkline = bVertical ? GetSparkline(nFixed, nCurrent) : GetSparkline(nCurrent, nFixed);
+        bHasSparklines = bHasSparklines || bool(pSparkline);
+        aSparklineSeries.push_back(pSparkline);
+    }
+
+    if (bHasSparklines)
+    {
+        for (SCCOLROW nCurrent = nFillStart; nCurrent <= nFillEnd; nCurrent++)
+        {
+            size_t nIndex = size_t(nFillStart - nCurrent) % aSparklineSeries.size();
+            if (auto& rpSparkline = aSparklineSeries[nIndex])
+            {
+                auto pGroup = rpSparkline->getSparklineGroup();
+
+                auto* pNewSparkline = bVertical ? CreateSparkline(nFixed, nCurrent, pGroup)
+                                                : CreateSparkline(nCurrent, nFixed, pGroup);
+                if (pNewSparkline)
+                {
+                    SCCOLROW nPosition = bVertical ? rpSparkline->getRow()
+                                                   : rpSparkline->getColumn();
+                    SCCOLROW nDelta = nCurrent - nPosition;
+                    ScRangeList aRangeList(rpSparkline->getInputRange());
+                    for (ScRange& rRange : aRangeList)
+                    {
+                        if (bVertical)
+                        {
+                            rRange.aStart.IncRow(nDelta);
+                            rRange.aEnd.IncRow(nDelta);
+                        }
+                        else
+                        {
+                            rRange.aStart.IncCol(nDelta);
+                            rRange.aEnd.IncCol(nDelta);
+                        }
+                    }
+                    pNewSparkline->setInputRange(aRangeList);
+                }
+            }
+        }
     }
 }
 
