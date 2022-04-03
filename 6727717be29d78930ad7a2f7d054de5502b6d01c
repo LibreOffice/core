@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d62fc3f9_3841ed53",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-03T12:14:40Z",
+      "side": 1,
+      "message": "Please no \u0027using namespace std\u0027 (except in specific customization points). And generally avoid \u0027using namespace\u0027.",
+      "revId": "6727717be29d78930ad7a2f7d054de5502b6d01c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51679fe7_9c3f68cb",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1669,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-03T12:14:40Z",
+      "side": 1,
+      "message": "What is the reason to use std::shared_ptr here?",
+      "revId": "6727717be29d78930ad7a2f7d054de5502b6d01c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

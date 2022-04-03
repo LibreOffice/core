@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17838c82_2c862b9f",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-03T12:14:40Z",
+      "side": 0,
+      "message": "Please do not remove trailing newline.",
+      "revId": "a3b141624930b6eb96b3273fee8396476db6d116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
