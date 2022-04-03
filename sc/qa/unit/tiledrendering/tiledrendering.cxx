@@ -846,9 +846,9 @@ void ScTiledRenderingTest::testViewLock()
     CPPUNIT_ASSERT(!aView1.m_bViewLock);
 }
 
-void lcl_extractHandleParameters(const OString& selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
+void lcl_extractHandleParameters(std::string_view selection, sal_uInt32& id, sal_uInt32& x, sal_uInt32& y)
 {
-    OString extraInfo = selection.copy(selection.indexOf("{"));
+    OString extraInfo( selection.substr(selection.find("{")) );
     std::stringstream aStream(extraInfo.getStr());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);

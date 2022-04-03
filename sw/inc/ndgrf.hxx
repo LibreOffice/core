@@ -66,7 +66,7 @@ class SW_DLLPUBLIC SwGrfNode final: public SwNoTextNode
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );
 
-    void InsertLink( const OUString& rGrfName, const OUString& rFltName );
+    void InsertLink( std::u16string_view rGrfName, const OUString& rFltName );
 
     /// allow reaction on change of content of GraphicObject, so always call
     /// when GraphicObject content changes

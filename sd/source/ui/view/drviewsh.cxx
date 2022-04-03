@@ -29,7 +29,7 @@
 
 namespace sd {
 
-void DrawViewShell::GotoBookmark(const OUString& rBookmark)
+void DrawViewShell::GotoBookmark(std::u16string_view rBookmark)
 {
     ::sd::DrawDocShell* pDocSh = GetDocSh();
     if( pDocSh )
