@@ -126,18 +126,18 @@ namespace
     }
 
 
-    OUString GetFsysExtension_Impl( const OUString& rFile, const OUString& rLastFilterExt )
+    OUString GetFsysExtension_Impl( std::u16string_view rFile, const OUString& rLastFilterExt )
     {
-        sal_Int32 nDotPos = rFile.lastIndexOf( '.' );
-        if ( nDotPos != -1 )
+        size_t nDotPos = rFile.rfind( '.' );
+        if ( nDotPos != std::u16string_view::npos )
         {
             if ( !rLastFilterExt.isEmpty() )
             {
-                if ( rFile.copy( nDotPos + 1 ).equalsIgnoreAsciiCase( rLastFilterExt ) )
+                if ( OUString(rFile.substr( nDotPos + 1 )).equalsIgnoreAsciiCase( rLastFilterExt ) )
                     return rLastFilterExt;
             }
             else
-                return rFile.copy( nDotPos );
+                return OUString(rFile.substr( nDotPos ));
         }
         return OUString();
     }

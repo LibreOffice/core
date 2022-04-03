@@ -309,19 +309,19 @@ const ApiPaperSize& PaperSizeConv::getApiSizeForMSPaperSizeIndex( sal_Int32 nMSO
     return spPaperSizeTable[ nMSOPaperIndex ];
 }
 
-OUString findQuotedText( const OUString& rCommand,
+std::u16string_view findQuotedText( std::u16string_view rCommand,
                 const char* cStartQuote, const sal_Unicode uEndQuote )
 {
-    OUString sRet;
+    std::u16string_view sRet;
     OUString sStartQuote( OUString::createFromAscii(cStartQuote) );
-    sal_Int32 nStartIndex = rCommand.indexOf( sStartQuote );
-    if( nStartIndex >= 0 )
+    size_t nStartIndex = rCommand.find( sStartQuote );
+    if( nStartIndex != std::u16string_view::npos )
     {
         sal_Int32 nStartLength = sStartQuote.getLength();
-        sal_Int32 nEndIndex = rCommand.indexOf( uEndQuote, nStartIndex + nStartLength);
-        if( nEndIndex > nStartIndex )
+        size_t nEndIndex = rCommand.find( uEndQuote, nStartIndex + nStartLength);
+        if( nEndIndex != std::u16string_view::npos && nEndIndex > nStartIndex )
         {
-            sRet = rCommand.copy( nStartIndex + nStartLength, nEndIndex - nStartIndex - nStartLength);
+            sRet = rCommand.substr( nStartIndex + nStartLength, nEndIndex - nStartIndex - nStartLength);
         }
     }
     return sRet;

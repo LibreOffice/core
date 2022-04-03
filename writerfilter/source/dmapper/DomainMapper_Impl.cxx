@@ -4176,7 +4176,7 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
     else
         command = rCommand;
 
-    return msfilter::util::findQuotedText(command, "\\@\"", '\"');
+    return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
@@ -4324,25 +4324,25 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
     return std::make_tuple(sType, arguments, switches);
 }
 
-static OUString lcl_ExtractVariableAndHint( const OUString& rCommand, OUString& rHint )
+static std::u16string_view lcl_ExtractVariableAndHint( std::u16string_view rCommand, std::u16string_view& rHint )
 {
     // the first word after "ASK " is the variable
     // the text after the variable and before a '\' is the hint
     // if no hint is set the variable is used as hint
     // the quotes of the hint have to be removed
-    sal_Int32 nIndex = rCommand.indexOf( ' ', 2); //find last space after 'ASK'
-    if (nIndex == -1)
-        return OUString();
+    size_t nIndex = rCommand.find( ' ', 2); //find last space after 'ASK'
+    if (nIndex == std::u16string_view::npos)
+        return std::u16string_view();
     while(rCommand[nIndex] == ' ')
         ++nIndex;
-    OUString sShortCommand( rCommand.copy( nIndex ) ); //cut off the " ASK "
+    std::u16string_view sShortCommand( rCommand.substr( nIndex ) ); //cut off the " ASK "
 
-    sShortCommand = sShortCommand.getToken(0, '\\');
-    nIndex = 0;
-    OUString sRet = sShortCommand.getToken( 0, ' ', nIndex);
-    if( nIndex > 0)
-        rHint = sShortCommand.copy( nIndex );
-    if( rHint.isEmpty() )
+    sShortCommand = comphelper::string::getToken(sShortCommand, 0, '\\');
+    sal_Int32 nIndex2 = 0;
+    std::u16string_view sRet = comphelper::string::getToken(sShortCommand, 0, ' ', nIndex2);
+    if( nIndex2 > 0)
+        rHint = sShortCommand.substr( nIndex2 );
+    if( rHint.empty() )
         rHint = sRet;
     return sRet;
 }
@@ -5162,17 +5162,17 @@ void DomainMapper_Impl::handleFieldSet
      uno::Reference< uno::XInterface > const & xFieldInterface,
      uno::Reference< beans::XPropertySet > const& xFieldProperties)
 {
-    OUString sVariable, sHint;
+    std::u16string_view sVariable, sHint;
 
     sVariable = lcl_ExtractVariableAndHint(pContext->GetCommand(), sHint);
 
     // remove surrounding "" if exists
-    if(sHint.getLength() >= 2)
+    if(sHint.size() >= 2)
     {
-        OUString sTmp = sHint.trim();
-        if (sTmp.startsWith("\"") && sTmp.endsWith("\""))
+        std::u16string_view sTmp = comphelper::string::trim(sHint);
+        if (o3tl::starts_with(sTmp, "\"") && o3tl::ends_with(sTmp, "\""))
         {
-            sHint = sTmp.copy(1, sTmp.getLength() - 2);
+            sHint = sTmp.substr(1, sTmp.size() - 2);
         }
     }
 
@@ -6657,13 +6657,13 @@ void DomainMapper_Impl::CloseFieldCommand()
                     // command looks like: " SEQ Table \* ARABIC "
                     OUString sCmd(pContext->GetCommand());
                     // find the sequence name, e.g. "SEQ"
-                    OUString sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\');
-                    sSeqName = sSeqName.trim();
+                    std::u16string_view sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\');
+                    sSeqName = comphelper::string::trim(sSeqName);
 
                     // create a sequence field master using the sequence name
                     uno::Reference< beans::XPropertySet > xMaster = FindOrCreateFieldMaster(
                                 "com.sun.star.text.FieldMaster.SetExpression",
-                                sSeqName);
+                                OUString(sSeqName));
 
                     xMaster->setPropertyValue(
                         getPropertyName(PROP_SUB_TYPE),
@@ -6678,7 +6678,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                     xDependentField->attachTextFieldMaster( xMaster );
 
-                    OUString sFormula = sSeqName + "+1";
+                    OUString sFormula = OUString::Concat(sSeqName) + "+1";
                     OUString sValue;
                     if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
                     {

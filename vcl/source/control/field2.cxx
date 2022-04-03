@@ -521,7 +521,7 @@ namespace
 
 static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEvent& rKEvt,
                                         const OString& rEditMask,
-                                        const OUString& rLiteralMask,
+                                        std::u16string_view rLiteralMask,
                                         bool bStrictFormat,
                                         bool bSameMask,
                                         bool& rbInKeyInput )
@@ -618,8 +618,8 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
                     aStr.remove( static_cast<sal_Int32>(aSel.Min()), static_cast<sal_Int32>(aSel.Len()) );
                 else
                 {
-                    OUString aRep = rLiteralMask.copy( static_cast<sal_Int32>(aSel.Min()), static_cast<sal_Int32>(aSel.Len()) );
-                    aStr.remove( aSel.Min(), aRep.getLength() );
+                    std::u16string_view aRep = rLiteralMask.substr( static_cast<sal_Int32>(aSel.Min()), static_cast<sal_Int32>(aSel.Len()) );
+                    aStr.remove( aSel.Min(), aRep.size() );
                     aStr.insert( aSel.Min(), aRep );
                 }
             }
@@ -748,7 +748,7 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
             {
                 // possibly extend string until cursor position
                 if ( aStr.getLength() < nNewPos )
-                    aStr.append( rLiteralMask.subView(aStr.getLength(), nNewPos-aStr.getLength()) );
+                    aStr.append( rLiteralMask.substr(aStr.getLength(), nNewPos-aStr.getLength()) );
                 if ( nNewPos < aStr.getLength() )
                     aStr.insert( cChar, nNewPos );
                 else if ( nNewPos < rEditMask.getLength() )
@@ -763,8 +763,8 @@ static bool ImplPatternProcessKeyInput( IEditImplementation& rEdit, const KeyEve
             if ( aSel.Len() )
             {
                 // delete selection
-                OUString aRep = rLiteralMask.copy( aSel.Min(), aSel.Len() );
-                aStr.remove( aSel.Min(), aRep.getLength() );
+                std::u16string_view aRep = rLiteralMask.substr( aSel.Min(), aSel.Len() );
+                aStr.remove( aSel.Min(), aRep.size() );
                 aStr.insert( aSel.Min(), aRep );
             }
 

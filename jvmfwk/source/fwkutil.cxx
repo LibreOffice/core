@@ -136,10 +136,10 @@ rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data)
     return ret;
 }
 
-OUString getDirFromFile(const OUString& usFilePath)
+OUString getDirFromFile(std::u16string_view usFilePath)
 {
-    sal_Int32 index = usFilePath.lastIndexOf('/');
-    return usFilePath.copy(0, index);
+    size_t index = usFilePath.rfind('/');
+    return OUString(usFilePath.substr(0, index));
 }
 
 OUString getLibraryLocation()

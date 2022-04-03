@@ -96,7 +96,7 @@ public:
         Modifications * modifications);
 
     css::beans::Optional< css::uno::Any >
-    getExternalValue(OUString const & descriptor);
+    getExternalValue(std::u16string_view descriptor);
 
 private:
     Components(const Components&) = delete;

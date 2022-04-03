@@ -139,7 +139,7 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
         auto const n = i->getName();
         if (n == "endsWith" || n == "isEmpty" || n == "startsWith" || n == "subView"
             || n == "indexOf" || n == "lastIndexOf" || n == "compareTo" || n == "match"
-            || n == "trim")
+            || n == "trim" || n == "copy")
         {
             good = true;
         }

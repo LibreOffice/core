@@ -138,12 +138,12 @@ bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 
     return ImplGetTransliterationWrapper().isMatch( aStr1, aStr2 );
 }
 
-bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const
+bool vcl::I18nHelper::MatchMnemonic( std::u16string_view rString, sal_Unicode cMnemonicChar ) const
 {
-    sal_Int32 n = rString.indexOf( '~' );
-    if ( n == -1 )
+    size_t n = rString.find( '~' );
+    if ( n == std::u16string_view::npos )
         return false;
-    OUString aMatchStr = rString.copy( n+1 );   // not only one char, because of transliteration...
+    OUString aMatchStr( rString.substr( n+1 ) );   // not only one char, because of transliteration...
     return MatchString( OUString(cMnemonicChar), aMatchStr );
 }
 

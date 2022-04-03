@@ -108,8 +108,8 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const OUString
         , m_bComplexCategoriesAxis( false )
         , m_nNbPoints( 0 )
 {
-    OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
-    m_bAffectsMultipleObjects = (aParticleID == "ALLELEMENTS");
+    std::u16string_view aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
+    m_bAffectsMultipleObjects = (aParticleID == u"ALLELEMENTS");
 }
 ObjectPropertiesDialogParameter::~ObjectPropertiesDialogParameter()
 {

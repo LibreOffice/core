@@ -392,26 +392,26 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
 }
 
 //static
-bool INetContentTypes::GetExtensionFromURL(OUString const & rURL,
+bool INetContentTypes::GetExtensionFromURL(std::u16string_view rURL,
                                            OUString & rExtension)
 {
-    sal_Int32 nSlashPos = 0;
-    sal_Int32 i = 0;
+    size_t nSlashPos = 0;
+    size_t i = 0;
     while (i >= 0)
     {
         nSlashPos = i;
-        i = rURL.indexOf('/', i + 1);
+        i = rURL.find('/', i + 1);
     }
     if (nSlashPos != 0)
     {
-        sal_Int32 nLastDotPos = i = rURL.indexOf('.', nSlashPos);
-        while (i >= 0)
+        size_t nLastDotPos = i = rURL.find('.', nSlashPos);
+        while (i != std::u16string_view::npos)
         {
             nLastDotPos = i;
-            i = rURL.indexOf('.', i + 1);
+            i = rURL.find('.', i + 1);
         }
         if (nLastDotPos >- 0)
-            rExtension = rURL.copy(nLastDotPos + 1);
+            rExtension = rURL.substr(nLastDotPos + 1);
         return true;
     }
     return false;

@@ -311,7 +311,7 @@ public:
     // 3 and 9 characters long, that is a chunk of text starting with a whitespace or with a word's
     // first character, and ending at the current cursor position or empty string if no such string
     // exists
-    static std::vector<OUString> GetChunkForAutoText(const OUString& rTxt, sal_Int32 nPos);
+    static std::vector<OUString> GetChunkForAutoText(std::u16string_view rTxt, sal_Int32 nPos);
 
     // Search for the words in the replacement table.
     // rText - check in this text the words of the list
@@ -405,7 +405,7 @@ public:
     bool FnChgOrdinalNumber( SvxAutoCorrDoc&, const OUString&,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
-    bool FnChgToEnEmDash( SvxAutoCorrDoc&, const OUString&,
+    bool FnChgToEnEmDash( SvxAutoCorrDoc&, std::u16string_view,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang );
     bool FnAddNonBrkSpace( SvxAutoCorrDoc&, const OUString&,

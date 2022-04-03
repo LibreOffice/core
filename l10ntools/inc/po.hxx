@@ -46,7 +46,7 @@ public:
     enum Exception { NOSOURCFILE, NORESTYPE, NOGROUPID, NOSTRING, WRONGHELPTEXT };
 
                     PoEntry();
-                    PoEntry( const OString& rSourceFile, std::string_view rResType, std::string_view rGroupId,
+                    PoEntry( std::string_view rSourceFile, std::string_view rResType, std::string_view rGroupId,
                              std::string_view rLocalId, const OString& rHelpText, const OString& rText,
                              const TYPE eType );
                     ~PoEntry();

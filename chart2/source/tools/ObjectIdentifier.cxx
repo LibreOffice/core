@@ -48,6 +48,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <o3tl/string_view.hxx>
+#include <comphelper/string.hxx>
 
 namespace com::sun::star::drawing { class XShape; }
 
@@ -60,8 +61,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
 const sal_Unicode m_aMultiClick[] = u"MultiClick";
-const char m_aDragMethodEquals[] = "DragMethod=";
-const char m_aDragParameterEquals[] = "DragParameter=";
+const sal_Unicode m_aDragMethodEquals[] = u"DragMethod=";
+const sal_Unicode m_aDragParameterEquals[] = u"DragParameter=";
 const sal_Unicode m_aProtocol[] = u"CID/";
 const OUString m_aPieSegmentDragMethodServiceName("PieSegmentDragging");
 
@@ -631,57 +632,57 @@ bool ObjectIdentifier::parsePieSegmentDragParameterString(
     return nCharacterIndex >= 0;
 }
 
-OUString ObjectIdentifier::getDragMethodServiceName( const OUString& rCID )
+std::u16string_view ObjectIdentifier::getDragMethodServiceName( std::u16string_view rCID )
 {
-    OUString aRet;
+    std::u16string_view aRet;
 
-    sal_Int32 nIndexStart = rCID.indexOf( m_aDragMethodEquals );
-    if( nIndexStart != -1 )
+    size_t nIndexStart = rCID.find( m_aDragMethodEquals );
+    if( nIndexStart != std::u16string_view::npos )
     {
-        nIndexStart = rCID.indexOf( '=', nIndexStart );
-        if( nIndexStart != -1 )
+        nIndexStart = rCID.find( '=', nIndexStart );
+        if( nIndexStart != std::u16string_view::npos )
         {
             nIndexStart++;
-            sal_Int32 nNextSlash = rCID.indexOf( '/', nIndexStart );
-            if( nNextSlash != -1 )
+            size_t nNextSlash = rCID.find( '/', nIndexStart );
+            if( nNextSlash != std::u16string_view::npos )
             {
                 sal_Int32 nIndexEnd = nNextSlash;
-                sal_Int32 nNextColon = rCID.indexOf( ':', nIndexStart );
-                if( nNextColon < nNextSlash )
+                size_t nNextColon = rCID.find( ':', nIndexStart );
+                if( nNextColon == std::u16string_view::npos || nNextColon < nNextSlash )
                     nIndexEnd = nNextColon;
-                aRet = rCID.copy(nIndexStart,nIndexEnd-nIndexStart);
+                aRet = rCID.substr(nIndexStart,nIndexEnd-nIndexStart);
             }
         }
     }
     return aRet;
 }
 
-OUString ObjectIdentifier::getDragParameterString( const OUString& rCID )
+std::u16string_view ObjectIdentifier::getDragParameterString( std::u16string_view rCID )
 {
-    OUString aRet;
+    std::u16string_view aRet;
 
-    sal_Int32 nIndexStart = rCID.indexOf( m_aDragParameterEquals );
-    if( nIndexStart != -1 )
+    size_t nIndexStart = rCID.find( m_aDragParameterEquals );
+    if( nIndexStart != std::u16string_view::npos )
     {
-        nIndexStart = rCID.indexOf( '=', nIndexStart );
-        if( nIndexStart != -1 )
+        nIndexStart = rCID.find( '=', nIndexStart );
+        if( nIndexStart != std::u16string_view::npos )
         {
             nIndexStart++;
-            sal_Int32 nNextSlash = rCID.indexOf( '/', nIndexStart );
-            if( nNextSlash != -1 )
+            size_t nNextSlash = rCID.find( '/', nIndexStart );
+            if( nNextSlash != std::u16string_view::npos )
             {
                 sal_Int32 nIndexEnd = nNextSlash;
-                sal_Int32 nNextColon = rCID.indexOf( ':', nIndexStart );
-                if( nNextColon < nNextSlash )
+                size_t nNextColon = rCID.find( ':', nIndexStart );
+                if( nNextColon == std::u16string_view::npos || nNextColon < nNextSlash )
                     nIndexEnd = nNextColon;
-                aRet = rCID.copy(nIndexStart,nIndexEnd-nIndexStart);
+                aRet = rCID.substr(nIndexStart,nIndexEnd-nIndexStart);
             }
         }
     }
     return aRet;
 }
 
-bool ObjectIdentifier::isDragableObject( const OUString& rClassifiedIdentifier )
+bool ObjectIdentifier::isDragableObject( std::u16string_view rClassifiedIdentifier )
 {
     bool bReturn = false;
     ObjectType eObjectType = ObjectIdentifier::getObjectType( rClassifiedIdentifier );
@@ -1027,27 +1028,27 @@ OUString ObjectIdentifier::createPointCID( std::u16string_view rPointCID_Stub, s
     return rPointCID_Stub + OUString::number( nIndex );
 }
 
-OUString ObjectIdentifier::getParticleID( const OUString& rCID )
+std::u16string_view ObjectIdentifier::getParticleID( std::u16string_view rCID )
 {
-    OUString aRet;
-    sal_Int32 nLast = rCID.lastIndexOf('=');
-    if(nLast>=0)
-        aRet = rCID.copy(++nLast);
+    std::u16string_view aRet;
+    size_t nLast = rCID.rfind('=');
+    if(nLast != std::u16string_view::npos)
+        aRet = rCID.substr(++nLast);
     return aRet;
 }
 
-OUString ObjectIdentifier::getFullParentParticle( const OUString& rCID )
+std::u16string_view ObjectIdentifier::getFullParentParticle( std::u16string_view rCID )
 {
-    OUString aRet;
+    std::u16string_view aRet;
 
-    sal_Int32 nStartPos = rCID.lastIndexOf('/');
-    if( nStartPos>=0 )
+    size_t nStartPos = rCID.rfind('/');
+    if( nStartPos != std::u16string_view::npos )
     {
         nStartPos++;
-        sal_Int32 nEndPos = rCID.lastIndexOf(':');
-        if( nEndPos>=0 && nStartPos < nEndPos )
+        size_t nEndPos = rCID.rfind(':');
+        if( nEndPos != std::u16string_view::npos && nStartPos < nEndPos )
         {
-            aRet = rCID.copy(nStartPos,nEndPos-nStartPos);
+            aRet = rCID.substr(nStartPos,nEndPos-nStartPos);
         }
     }
 
@@ -1088,7 +1089,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
     try
     {
         ObjectType eObjectType = ObjectIdentifier::getObjectType( rObjectCID );
-        OUString aParticleID = ObjectIdentifier::getParticleID( rObjectCID );
+        std::u16string_view aParticleID = ObjectIdentifier::getParticleID( rObjectCID );
 
         rtl::Reference< Diagram > xDiagram;
         rtl::Reference< BaseCoordinateSystem > xCooSys;
@@ -1177,7 +1178,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         rObjectCID, xChartModel );
                     if(xSeries.is())
                     {
-                        sal_Int32 nIndex = aParticleID.toInt32();
+                        sal_Int32 nIndex = comphelper::string::toInt32(aParticleID);
                         xObjectProperties = xSeries->getDataPointByIndex( nIndex );
                     }
                     break;
@@ -1213,7 +1214,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         rObjectCID, xChartModel );
                     if(xRegressionContainer.is())
                     {
-                        sal_Int32 nIndex = aParticleID.toInt32();
+                        sal_Int32 nIndex = comphelper::string::toInt32(aParticleID);
                         const std::vector< rtl::Reference< RegressionCurveModel > > & aCurveList =
                             xRegressionContainer->getRegressionCurves2();
                         if( nIndex >= 0 && nIndex < static_cast<sal_Int32>(aCurveList.size()) )
@@ -1304,11 +1305,11 @@ rtl::Reference< Diagram > ObjectIdentifier::getDiagramForCID(
     return xDiagram;
 }
 
-TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( const OUString& rCID )
+TitleHelper::eTitleType ObjectIdentifier::getTitleTypeForCID( std::u16string_view rCID )
 {
     TitleHelper::eTitleType eRet( TitleHelper::MAIN_TITLE );
 
-    OUString aParentParticle = ObjectIdentifier::getFullParentParticle( rCID );
+    std::u16string_view aParentParticle = ObjectIdentifier::getFullParentParticle( rCID );
     const tTitleMap& rMap = lcl_getTitleMap();
     tTitleMap::const_iterator aIt = std::find_if(rMap.begin(), rMap.end(),
         [&aParentParticle](tTitleMap::const_reference rEntry) { return aParentParticle == rEntry.second; });

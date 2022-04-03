@@ -63,7 +63,7 @@ public:
     sal_Int32   CompareString( const OUString& rStr1, const OUString& rStr2 ) const;
 
     bool    MatchString( const OUString& rStr1, const OUString& rStr2 ) const;
-    bool    MatchMnemonic( const OUString& rString, sal_Unicode cMnemonicChar ) const;
+    bool    MatchMnemonic( std::u16string_view rString, sal_Unicode cMnemonicChar ) const;
 
     OUString    GetNum( tools::Long nNumber, sal_uInt16 nDecimals, bool bUseThousandSep = true, bool bTrailingZeros = true ) const;
 

@@ -32,6 +32,7 @@
 #include <svx/svxids.hrc>
 #include <strings.hrc>
 #include <comphelper/namedvaluecollection.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -269,21 +270,20 @@ bool SvxMacroTabPage_::IsReadOnly() const
 
 namespace
 {
-    OUString GetEventDisplayText(const OUString &rURL)
+    std::u16string_view GetEventDisplayText(std::u16string_view rURL)
     {
-        if (rURL.isEmpty())
-            return OUString();
-        sal_Int32 nIndex = rURL.indexOf(aVndSunStarUNO);
-        bool bUNO = nIndex == 0;
-        OUString aPureMethod;
+        if (rURL.empty())
+            return std::u16string_view();
+        bool bUNO = o3tl::starts_with(rURL, aVndSunStarUNO);
+        std::u16string_view aPureMethod;
         if (bUNO)
         {
-            aPureMethod = rURL.copy(aVndSunStarUNO.getLength());
+            aPureMethod = rURL.substr(aVndSunStarUNO.getLength());
         }
         else
         {
-            aPureMethod = rURL.copy(strlen("vnd.sun.star.script:"));
-            aPureMethod = aPureMethod.copy( 0, aPureMethod.indexOf( '?' ) );
+            aPureMethod = rURL.substr(strlen("vnd.sun.star.script:"));
+            aPureMethod = aPureMethod.substr( 0, aPureMethod.find( '?' ) );
         }
         return aPureMethod;
     }
@@ -344,7 +344,7 @@ void SvxMacroTabPage_::DisplayAppEvents( bool appEvents)
         int nRow = mpImpl->xEventLB->n_children();
         mpImpl->xEventLB->append(sEventName, displayName);
         mpImpl->xEventLB->set_image(nRow, GetEventDisplayImage(eventURL), 1);
-        mpImpl->xEventLB->set_text(nRow, GetEventDisplayText(eventURL), 2);
+        mpImpl->xEventLB->set_text(nRow, OUString(GetEventDisplayText(eventURL)), 2);
     }
 
     mpImpl->xEventLB->thaw();
@@ -478,7 +478,7 @@ void SvxMacroTabPage_::GenericHandler_Impl(SvxMacroTabPage_* pThis, const weld::
     }
 
     rListBox.set_image(nEntry, GetEventDisplayImage(sEventURL), 1);
-    rListBox.set_text(nEntry, GetEventDisplayText(sEventURL), 2);
+    rListBox.set_text(nEntry, OUString(GetEventDisplayText(sEventURL)), 2);
 
     rListBox.select(nEntry );
     rListBox.scroll_to_row(nEntry);

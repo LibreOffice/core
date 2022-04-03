@@ -41,13 +41,13 @@ bool VbaHelper::readDirRecord( sal_uInt16& rnRecId, StreamDataSequence& rRecData
     return !rInStrm.isEof() && (rInStrm.readData( rRecData, nRecSize ) == nRecSize);
 }
 
-bool VbaHelper::extractKeyValue( OUString& rKey, OUString& rValue, const OUString& rKeyValue )
+bool VbaHelper::extractKeyValue( OUString& rKey, OUString& rValue, std::u16string_view rKeyValue )
 {
-    sal_Int32 nEqSignPos = rKeyValue.indexOf( '=' );
-    if( nEqSignPos > 0 )
+    size_t nEqSignPos = rKeyValue.find( '=' );
+    if( nEqSignPos > 0 && nEqSignPos != std::u16string_view::npos)
     {
-        rKey = rKeyValue.copy( 0, nEqSignPos ).trim();
-        rValue = rKeyValue.copy( nEqSignPos + 1 ).trim();
+        rKey = OUString(rKeyValue.substr( 0, nEqSignPos )).trim();
+        rValue = OUString(rKeyValue.substr( nEqSignPos + 1 )).trim();
         return !rKey.isEmpty() && !rValue.isEmpty();
     }
     return false;

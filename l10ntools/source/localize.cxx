@@ -116,7 +116,7 @@ void handleCommand(
 }
 
 void InitPoFile(
-    std::string_view rProject, const OString& rInPath,
+    std::string_view rProject, std::string_view rInPath,
     std::string_view rPotDir, const OString& rOutPath )
 {
     //Create directory for po file
@@ -150,9 +150,9 @@ void InitPoFile(
         throw false; //TODO
     }
 
-    const sal_Int32 nProjectInd = rInPath.indexOf(rProject);
-    const OString relativPath =
-        rInPath.copy(nProjectInd, rInPath.lastIndexOf('/')- nProjectInd);
+    const size_t nProjectInd = rInPath.find(rProject);
+    const std::string_view relativPath =
+        rInPath.substr(nProjectInd, rInPath.rfind('/')- nProjectInd);
 
     PoHeader aTmp(relativPath);
     aPoOutPut.writeHeader(aTmp);

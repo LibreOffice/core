@@ -1022,10 +1022,10 @@ Reference<VendorBase> createInstance(createInstance_func pFunc,
     return aBase;
 }
 
-inline OUString getDirFromFile(const OUString& usFilePath)
+inline OUString getDirFromFile(std::u16string_view usFilePath)
 {
-    sal_Int32 index = usFilePath.lastIndexOf('/');
-    return usFilePath.copy(0, index);
+    size_t index = usFilePath.rfind('/');
+    return OUString(usFilePath.substr(0, index));
 }
 
 void addJavaInfosFromPath(

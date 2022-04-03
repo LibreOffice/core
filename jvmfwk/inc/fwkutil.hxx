@@ -46,7 +46,7 @@ osl::Mutex& FwkMutex();
 rtl::ByteSequence encodeBase16(const rtl::ByteSequence& rawData);
 rtl::ByteSequence decodeBase16(const rtl::ByteSequence& data);
 
-OUString getDirFromFile(const OUString& usFilePath);
+OUString getDirFromFile(std::u16string_view usFilePath);
 
 enum FileStatus
 {

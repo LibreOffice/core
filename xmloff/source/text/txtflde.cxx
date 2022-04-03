@@ -2847,19 +2847,19 @@ void XMLTextFieldExport::ExportDataBaseElement(
 
 // explode a field master name into field type and field name
 void XMLTextFieldExport::ExplodeFieldMasterName(
-    const OUString& sMasterName, OUString& sFieldType, OUString& sVarName)
+    std::u16string_view sMasterName, OUString& sFieldType, OUString& sVarName)
 {
     sal_Int32 nLength = gsFieldMasterPrefix.getLength();
-    sal_Int32 nSeparator = sMasterName.indexOf('.', nLength);
+    size_t nSeparator = sMasterName.find('.', nLength);
 
     // '.' found?
-    if (nSeparator <= nLength) {
+    if (nSeparator == std::u16string_view::npos) {
         SAL_WARN("xmloff.text", "no field var name!");
     }
     else
     {
-        sFieldType = sMasterName.copy(nLength, nSeparator-nLength);
-        sVarName = sMasterName.copy(nSeparator+1);
+        sFieldType = sMasterName.substr(nLength, nSeparator-nLength);
+        sVarName = sMasterName.substr(nSeparator+1);
     }
 }
 

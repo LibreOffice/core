@@ -404,15 +404,15 @@ void Components::insertModificationXcuFile(
 }
 
 css::beans::Optional< css::uno::Any > Components::getExternalValue(
-    OUString const & descriptor)
+    std::u16string_view descriptor)
 {
-    sal_Int32 i = descriptor.indexOf(' ');
-    if (i <= 0) {
+    size_t i = descriptor.find(' ');
+    if (i == 0 || i == std::u16string_view::npos) {
         throw css::uno::RuntimeException(
-            "bad external value descriptor " + descriptor);
+            OUString::Concat("bad external value descriptor ") + descriptor);
     }
     //TODO: Do not make calls with mutex locked:
-    OUString name(descriptor.copy(0, i));
+    OUString name(descriptor.substr(0, i));
     ExternalServices::iterator j(externalServices_.find(name));
     if (j == externalServices_.end()) {
         css::uno::Reference< css::uno::XInterface > service;
@@ -438,11 +438,11 @@ css::beans::Optional< css::uno::Any > Components::getExternalValue(
     css::beans::Optional< css::uno::Any > value;
     if (j->second.is()) {
         try {
-            if (!(j->second->getPropertyValue(descriptor.copy(i + 1)) >>=
+            if (!(j->second->getPropertyValue(OUString(descriptor.substr(i + 1))) >>=
                   value))
             {
                 throw css::uno::RuntimeException(
-                    "cannot obtain external value through " + descriptor);
+                    OUString::Concat("cannot obtain external value through ") + descriptor);
             }
         } catch (css::beans::UnknownPropertyException & e) {
             throw css::uno::RuntimeException(

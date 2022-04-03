@@ -412,7 +412,7 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& )
     }
 }
 
-std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, const OUString& aIV, const OUString& aMasterPasswd, css::task::PasswordRequestMode mode )
+std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, std::u16string_view aIV, const OUString& aMasterPasswd, css::task::PasswordRequestMode mode )
 {
     if( !aMasterPasswd.isEmpty() )
     {
@@ -428,10 +428,13 @@ std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLin
                 code[ ind ] = static_cast<char>(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
 
             unsigned char iv[RTL_DIGEST_LENGTH_MD5] = {0};
-            if (!aIV.isEmpty())
+            if (!aIV.empty())
             {
                 for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                    iv[ ind ] = static_cast<char>(aIV.copy( ind*2, 2 ).toUInt32(16));
+                {
+                    auto tmp = aIV.substr( ind*2, 2 );
+                    iv[ ind ] = static_cast<char>(rtl_ustr_toInt64_WithLength(tmp.data(), 16, tmp.size()));
+                }
             }
 
             rtlCipherError result = rtl_cipher_init (
@@ -469,7 +472,7 @@ std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLin
         "Can't decode!", css::uno::Reference<css::uno::XInterface>(), mode);
 }
 
-OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, const OUString& aIV, const OUString& aMasterPasswd)
+OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, const OUString& aMasterPasswd)
 {
     if( !aMasterPasswd.isEmpty() )
     {
@@ -487,10 +490,13 @@ OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines
                 code[ ind ] = static_cast<char>(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
 
             unsigned char iv[RTL_DIGEST_LENGTH_MD5] = {0};
-            if (!aIV.isEmpty())
+            if (!aIV.empty())
             {
                 for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                    iv[ ind ] = static_cast<char>(aIV.copy( ind*2, 2 ).toUInt32(16));
+                {
+                    auto tmp = aIV.substr( ind*2, 2 );
+                    iv[ ind ] = static_cast<char>(rtl_ustr_toInt64_WithLength(tmp.data(), 16, tmp.size()));
+                }
             }
 
             rtlCipherError result = rtl_cipher_init (
@@ -837,12 +843,13 @@ OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode,
 }
 
 // Mangle the key to match an old bug
-static OUString ReencodeAsOldHash(const OUString& rPass)
+static OUString ReencodeAsOldHash(std::u16string_view rPass)
 {
     OUStringBuffer aBuffer;
     for (int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ++ind)
     {
-        unsigned char i = static_cast<char>(rPass.copy(ind * 2, 2).toUInt32(16));
+        auto tmp = rPass.substr(ind * 2, 2);
+        unsigned char i = static_cast<char>(rtl_ustr_toInt64_WithLength(tmp.data(), 16, tmp.size()));
         aBuffer.append(static_cast< sal_Unicode >('a' + (i >> 4)));
         aBuffer.append(static_cast< sal_Unicode >('a' + (i & 15)));
     }

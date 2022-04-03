@@ -104,7 +104,7 @@ void lcl_getXMLStringForCell( const ::chart::XMLRangeHelper::Cell & rCell, OUStr
 }
 
 void lcl_getSingleCellAddressFromXMLString(
-    const OUString& rXMLString,
+    std::u16string_view rXMLString,
     sal_Int32 nStartPos, sal_Int32 nEndPos,
     ::chart::XMLRangeHelper::Cell & rOutCell )
 {
@@ -112,7 +112,7 @@ void lcl_getSingleCellAddressFromXMLString(
     static const sal_Unicode aDollar( '$' );
     static const sal_Unicode aLetterA( 'A' );
 
-    OUString aCellStr = rXMLString.copy( nStartPos, nEndPos - nStartPos + 1 ).toAsciiUpperCase();
+    OUString aCellStr = OUString(rXMLString.substr( nStartPos, nEndPos - nStartPos + 1 )).toAsciiUpperCase();
     const sal_Unicode* pStrArray = aCellStr.getStr();
     sal_Int32 nLength = aCellStr.getLength();
     sal_Int32 i = nLength - 1, nColumn = 0;

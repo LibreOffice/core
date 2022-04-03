@@ -357,16 +357,16 @@ double get_time(timeval* time)
     return nTime;
 }
 
-OString generateTestName(const OUString& rPath)
+OString generateTestName(std::u16string_view rPath)
 {
-    sal_Int32 nPathSep = rPath.lastIndexOf("/");
-    OUString aTestName = rPath.copy(nPathSep+1);
+    size_t nPathSep = rPath.rfind('/');
+    std::u16string_view aTestName = rPath.substr(nPathSep+1);
     return OUStringToOString(aTestName, RTL_TEXTENCODING_UTF8);
 }
 
-void reportResourceUsage(const OUString& rPath)
+void reportResourceUsage(std::u16string_view rPath)
 {
-    OUString aFullPath = rPath + ".resource.log";
+    OUString aFullPath = OUString::Concat(rPath) + ".resource.log";
     rusage resource_usage;
     getrusage(RUSAGE_SELF, &resource_usage);
 

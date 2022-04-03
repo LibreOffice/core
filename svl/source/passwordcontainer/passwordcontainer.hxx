@@ -316,10 +316,10 @@ private:
                               const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
     /// @throws css::uno::RuntimeException
-    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aIV, const OUString& aMasterPassword, css::task::PasswordRequestMode mode );
+    static ::std::vector< OUString > DecodePasswords( const OUString& aLine, std::u16string_view aIV, const OUString& aMasterPassword, css::task::PasswordRequestMode mode );
 
     /// @throws css::uno::RuntimeException
-    static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aIV, const OUString& aMasterPassword );
+    static OUString EncodePasswords(const std::vector< OUString >& lines, std::u16string_view aIV, const OUString& aMasterPassword );
 
 public:
     PasswordContainer( const css::uno::Reference< css::uno::XComponentContext >& );

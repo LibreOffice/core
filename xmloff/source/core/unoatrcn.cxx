@@ -56,12 +56,12 @@ sal_Bool SAL_CALL SvUnoAttributeContainer::hasElements()
     return mpContainer->GetAttrCount() != 0;
 }
 
-sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
+sal_uInt16 SvUnoAttributeContainer::getIndexByName(std::u16string_view aName ) const
 {
     const sal_uInt16 nAttrCount = mpContainer->GetAttrCount();
 
-    sal_Int32 nPos = aName.indexOf( ':' );
-    if( nPos == -1 )
+    size_t nPos = aName.find( ':' );
+    if( nPos == std::u16string_view::npos )
     {
         for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
         {
@@ -72,8 +72,8 @@ sal_uInt16 SvUnoAttributeContainer::getIndexByName(const OUString& aName ) const
     }
     else
     {
-        const OUString aPrefix( aName.copy( 0L, nPos ) );
-        const OUString aLName( aName.copy( nPos+1 ) );
+        const std::u16string_view aPrefix( aName.substr( 0L, nPos ) );
+        const std::u16string_view aLName( aName.substr( nPos+1 ) );
 
         for( sal_uInt16 nAttr = 0; nAttr < nAttrCount; nAttr++ )
         {

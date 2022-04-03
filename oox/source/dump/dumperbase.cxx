@@ -77,13 +77,13 @@ sal_Int32 InputOutputHelper::getFileNamePos( std::u16string_view rFileUrl )
     return (nSepPos == std::u16string_view::npos) ? 0 : (nSepPos + 1);
 }
 
-OUString InputOutputHelper::getFileNameExtension( const OUString& rFileUrl )
+std::u16string_view InputOutputHelper::getFileNameExtension( std::u16string_view rFileUrl )
 {
     sal_Int32 nNamePos = getFileNamePos( rFileUrl );
-    sal_Int32 nExtPos = rFileUrl.lastIndexOf( '.' );
-    if( nExtPos >= nNamePos )
-        return rFileUrl.copy( nExtPos + 1 );
-    return OUString();
+    size_t nExtPos = rFileUrl.rfind( '.' );
+    if( nExtPos != std::u16string_view::npos && static_cast<sal_Int32>(nExtPos) >= nNamePos )
+        return rFileUrl.substr( nExtPos + 1 );
+    return std::u16string_view();
 }
 
 // input streams --------------------------------------------------------------
@@ -2367,7 +2367,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
         matching start/end elements and the element text on the same line. */
     OUStringBuffer aOldStartElem;
     // special handling for VML
-    bool bIsVml = InputOutputHelper::getFileNameExtension( maSysFileName ).equalsIgnoreAsciiCase("vml");
+    bool bIsVml = OUString(InputOutputHelper::getFileNameExtension( maSysFileName )).equalsIgnoreAsciiCase("vml");
 
     while( !rTextStrm.isEof() )
     {

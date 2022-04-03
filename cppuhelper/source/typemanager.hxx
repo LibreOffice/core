@@ -100,7 +100,7 @@ private:
         OUString const & name, sal_Int32 separator);
 
     css::uno::Any getInterfaceMember(
-        OUString const & name, sal_Int32 separator);
+        std::u16string_view name, sal_Int32 separator);
 
     css::uno::Any getNamed(
         OUString const & name,

@@ -1113,7 +1113,7 @@ OUString FormatErrorString(
     std::u16string_view type,
     std::u16string_view message )
 {
-    OUString result = unformatted.copy( 0 );
+    OUString result = unformatted;
 
     result = ReplaceString(result, "%LANGUAGENAME", language );
     result = ReplaceString(result, "%SCRIPTNAME", script );

@@ -2148,15 +2148,15 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
 }
 
 css::uno::Any cppuhelper::TypeManager::getInterfaceMember(
-    OUString const & name, sal_Int32 separator)
+    std::u16string_view name, sal_Int32 separator)
 {
-    assert(name.indexOf("::") == separator && separator != -1);
+    assert(static_cast<sal_Int32>(name.find(u"::")) == separator && separator != -1);
     css::uno::Reference< css::reflection::XInterfaceTypeDescription2 > ifc(
-        resolveTypedefs(find(name.copy(0, separator))), css::uno::UNO_QUERY);
+        resolveTypedefs(find(OUString(name.substr(0, separator)))), css::uno::UNO_QUERY);
     if (!ifc.is()) {
         return css::uno::Any();
     }
-    OUString member(name.copy(separator + std::strlen("::")));
+    std::u16string_view member = name.substr(separator + std::strlen("::"));
     const css::uno::Sequence<
         css::uno::Reference<
             css::reflection::XInterfaceMemberTypeDescription > > mems(

@@ -61,6 +61,7 @@
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 
 #include <memory>
 
@@ -92,8 +93,8 @@ wrapper::ItemConverter* createItemConverter(
         return nullptr;
     }
 
-    OUString aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
-    bool bAffectsMultipleObjects = aParticleID == "ALLELEMENTS";
+    std::u16string_view aParticleID = ObjectIdentifier::getParticleID( aObjectCID );
+    bool bAffectsMultipleObjects = aParticleID == u"ALLELEMENTS";
     if( !bAffectsMultipleObjects )
     {
         uno::Reference< beans::XPropertySet > xObjectProperties =
@@ -218,7 +219,7 @@ wrapper::ItemConverter* createItemConverter(
                 sal_Int32 nPointIndex = -1; /*-1 for whole series*/
                 if(!bDataSeries)
                 {
-                    nPointIndex = aParticleID.toInt32();
+                    nPointIndex = comphelper::string::toInt32(aParticleID);
                     bool bVaryColorsByPoint = false;
                     if( xSeries.is() &&
                         (xSeries->getPropertyValue("VaryColorsByPoint") >>= bVaryColorsByPoint) &&
@@ -530,7 +531,7 @@ OUString lcl_getObjectCIDForCommand( std::string_view rDispatchCommand, const rt
             return rSelectedCID;
         else
         {
-            sal_Int32 nPointIndex = ObjectIdentifier::getParticleID( rSelectedCID ).toInt32();
+            sal_Int32 nPointIndex = comphelper::string::toInt32(ObjectIdentifier::getParticleID( rSelectedCID ));
             if( nPointIndex>=0 )
             {
                 OUString aSeriesParticle = ObjectIdentifier::getSeriesParticleFromCID( rSelectedCID );

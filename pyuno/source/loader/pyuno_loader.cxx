@@ -133,25 +133,25 @@ static void setPythonHome ( const OUString & pythonHome )
     Py_SetPythonHome(wide);
 }
 
-static void prependPythonPath( const OUString & pythonPathBootstrap )
+static void prependPythonPath( std::u16string_view pythonPathBootstrap )
 {
     OUStringBuffer bufPYTHONPATH( 256 );
     bool bAppendSep = false;
     sal_Int32 nIndex = 0;
     while( true )
     {
-        sal_Int32 nNew = pythonPathBootstrap.indexOf( ' ', nIndex );
-        OUString fileUrl;
-        if( nNew == -1 )
+        size_t nNew = pythonPathBootstrap.find( ' ', nIndex );
+        std::u16string_view fileUrl;
+        if( nNew == std::u16string_view::npos )
         {
-            fileUrl = pythonPathBootstrap.copy(nIndex);
+            fileUrl = pythonPathBootstrap.substr(nIndex);
         }
         else
         {
-            fileUrl = pythonPathBootstrap.copy(nIndex, nNew - nIndex);
+            fileUrl = pythonPathBootstrap.substr(nIndex, nNew - nIndex);
         }
         OUString systemPath;
-        osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
+        osl_getSystemPathFromFileURL( OUString(fileUrl).pData, &(systemPath.pData) );
         if (!systemPath.isEmpty())
         {
             if (bAppendSep)
@@ -159,7 +159,7 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
             bufPYTHONPATH.append(systemPath);
             bAppendSep = true;
         }
-        if( nNew == -1 )
+        if( nNew == std::u16string_view::npos )
             break;
         nIndex = nNew + 1;
     }

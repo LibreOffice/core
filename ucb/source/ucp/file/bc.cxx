@@ -1087,7 +1087,7 @@ void BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
             XInteractionRequestImpl aRequestImpl(
                     rtl::Uri::decode(
-                        getTitle(m_aUncPath),
+                        OUString(getTitle(m_aUncPath)),
                         rtl_UriDecodeWithCharset,
                         RTL_TEXTENCODING_UTF8),
                     static_cast<cppu::OWeakObject*>(this),

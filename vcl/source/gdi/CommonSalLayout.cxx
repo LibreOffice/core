@@ -73,7 +73,7 @@ GenericSalLayout::~GenericSalLayout()
 {
 }
 
-void GenericSalLayout::ParseFeatures(const OUString& aName)
+void GenericSalLayout::ParseFeatures(std::u16string_view aName)
 {
     vcl::font::FeatureParser aParser(aName);
     const OUString& sLanguage = aParser.getLanguage();

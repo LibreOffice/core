@@ -52,6 +52,7 @@
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <tools/diagnose_ex.h>
+#include <comphelper/string.hxx>
 
 namespace chart
 {
@@ -506,7 +507,7 @@ OUString ObjectNameProvider::getHelpText( const OUString& rObjectCID, const rtl:
         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartModel );
         if( xDiagram.is() && xSeries.is() )
         {
-            sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
+            sal_Int32 nPointIndex = comphelper::string::toInt32(ObjectIdentifier::getParticleID(rObjectCID));
 
             //replace data point index
             OUString aWildcard(  "%POINTNUMBER" );
@@ -728,7 +729,7 @@ OUString ObjectNameProvider::getSelectedObjectText( const OUString & rObjectCID,
         rtl::Reference< DataSeries > xSeries = ObjectIdentifier::getDataSeriesForCID( rObjectCID , xChartDocument );
         if( xDiagram.is() && xSeries.is() )
         {
-            sal_Int32 nPointIndex( ObjectIdentifier::getParticleID(rObjectCID).toInt32() );
+            sal_Int32 nPointIndex = comphelper::string::toInt32( ObjectIdentifier::getParticleID(rObjectCID) );
 
             // replace data point index
             replaceParamterInString( aRet, "%POINTNUMBER", OUString::number( nPointIndex + 1 ));

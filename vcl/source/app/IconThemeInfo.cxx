@@ -23,13 +23,13 @@ constexpr OUStringLiteral KARASA_JAGA_DISPLAY_NAME(u"Karasa Jaga");
 constexpr OUStringLiteral HELPIMG_FAKE_THEME(u"helpimg");
 
 OUString
-filename_from_url(const OUString& url)
+filename_from_url(std::u16string_view url)
 {
-    sal_Int32 slashPosition = url.lastIndexOf( '/' );
-    if (slashPosition < 0) {
+    size_t slashPosition = url.rfind( '/' );
+    if (slashPosition == std::u16string_view::npos) {
         return OUString();
     }
-    OUString filename = url.copy( slashPosition+1 );
+    OUString filename( url.substr( slashPosition+1 ) );
     return filename;
 }
 
@@ -37,9 +37,9 @@ filename_from_url(const OUString& url)
 
 namespace vcl {
 
-const char ICON_THEME_PACKAGE_PREFIX[] = "images_";
+const sal_Unicode ICON_THEME_PACKAGE_PREFIX[] = u"images_";
 
-const char EXTENSION_FOR_ICON_PACKAGES[] = ".zip";
+const sal_Unicode EXTENSION_FOR_ICON_PACKAGES[] = u".zip";
 
 IconThemeInfo::IconThemeInfo()
 {
@@ -70,7 +70,7 @@ IconThemeInfo::SizeByThemeName(std::u16string_view themeName)
 }
 
 /*static*/ bool
-IconThemeInfo::UrlCanBeParsed(const OUString& url)
+IconThemeInfo::UrlCanBeParsed(std::u16string_view url)
 {
     OUString fname = filename_from_url(url);
     if (fname.isEmpty()) {
@@ -93,19 +93,19 @@ IconThemeInfo::UrlCanBeParsed(const OUString& url)
 }
 
 /*static*/ OUString
-IconThemeInfo::FileNameToThemeId(const OUString& filename)
+IconThemeInfo::FileNameToThemeId(std::u16string_view filename)
 {
     OUString r;
-    sal_Int32 positionOfLastDot = filename.lastIndexOf(EXTENSION_FOR_ICON_PACKAGES);
-    if (positionOfLastDot < 0) { // -1 means index not found
+    size_t positionOfLastDot = filename.rfind(EXTENSION_FOR_ICON_PACKAGES);
+    if (positionOfLastDot == std::u16string_view::npos) { // means index not found
         throw std::runtime_error("IconThemeInfo::FileNameToThemeId() called with invalid filename.");
     }
-    sal_Int32 positionOfFirstUnderscore = filename.indexOf(ICON_THEME_PACKAGE_PREFIX);
-    if (positionOfFirstUnderscore < 0) { // -1 means index not found. Use the whole name instead
+    size_t positionOfFirstUnderscore = filename.find(ICON_THEME_PACKAGE_PREFIX);
+    if (positionOfFirstUnderscore == std::u16string_view::npos) { // means index not found. Use the whole name instead
         throw std::runtime_error("IconThemeInfo::FileNameToThemeId() called with invalid filename.");
     }
     positionOfFirstUnderscore += RTL_CONSTASCII_LENGTH(ICON_THEME_PACKAGE_PREFIX);
-    r = filename.copy(positionOfFirstUnderscore, positionOfLastDot - positionOfFirstUnderscore);
+    r = filename.substr(positionOfFirstUnderscore, positionOfLastDot - positionOfFirstUnderscore);
     return r;
 }
 

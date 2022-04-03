@@ -93,7 +93,7 @@ class SbxBasicFormater {
         String containing the formatted output
     */
     OUString  BasicFormat( double dNumber, const OUString& sFormatStrg );
-    static OUString BasicFormatNull( const OUString& sFormatStrg );
+    static OUString BasicFormatNull( std::u16string_view sFormatStrg );
 
     static  bool isBasicFormat( const OUString& sFormatStrg );
 
@@ -112,10 +112,10 @@ class SbxBasicFormater {
     short  GetDigitAtPosExpScan( double dNewExponent, short nPos,
                                                   bool& bFoundFirstDigit );
     short  GetDigitAtPosExpScan( short nPos, bool& bFoundFirstDigit );
-    static OUString GetPosFormatString( const OUString& sFormatStrg, bool & bFound );
-    static OUString GetNegFormatString( const OUString& sFormatStrg, bool & bFound );
-    static OUString Get0FormatString( const OUString& sFormatStrg, bool & bFound );
-    static OUString GetNullFormatString( const OUString& sFormatStrg, bool & bFound );
+    static OUString GetPosFormatString( std::u16string_view sFormatStrg, bool & bFound );
+    static OUString GetNegFormatString( std::u16string_view sFormatStrg, bool & bFound );
+    static OUString Get0FormatString( std::u16string_view sFormatStrg, bool & bFound );
+    static OUString GetNullFormatString( std::u16string_view sFormatStrg, bool & bFound );
     static void AnalyseFormatString( const OUString& sFormatStrg,
                                                  short& nNoOfDigitsLeft, short& nNoOfDigitsRight,
                                                  short& nNoOfOptionalDigitsLeft,

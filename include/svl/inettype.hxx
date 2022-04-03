@@ -252,7 +252,7 @@ public:
 
     static INetContentType GetContentTypeFromURL(OUString const& rURL);
 
-    static bool GetExtensionFromURL(OUString const& rURL, OUString& rExtension);
+    static bool GetExtensionFromURL(std::u16string_view rURL, OUString& rExtension);
 
     static bool parse(OUString const& rMediaType, OUString& rType, OUString& rSubType,
                       INetContentTypeParameterList* pParameters = nullptr);

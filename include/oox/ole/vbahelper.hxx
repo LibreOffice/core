@@ -80,7 +80,7 @@ namespace VbaHelper
     bool         extractKeyValue(
                             OUString& rKey,
                             OUString& rValue,
-                            const OUString& rKeyValue );
+                            std::u16string_view rKeyValue );
 }
 
 

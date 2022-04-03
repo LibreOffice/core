@@ -24,7 +24,7 @@ private:
 
 protected:
     void parseColumnPart(std::u16string_view sColumnPart);
-    void parsePrimaryKeys(const OUString& sPrimaryPart);
+    void parsePrimaryKeys(std::u16string_view sPrimaryPart);
 
 public:
     CreateStmtParser();
@@ -56,7 +56,7 @@ public:
      *
      * @param SQL "CREATE" statement
      */
-    void parse(const OUString& sSql);
+    void parse(std::u16string_view sSql);
 
     /**
      * Recreate the sql statement.

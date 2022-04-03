@@ -265,11 +265,11 @@ public:
     bool                                                mbExportTextNumberElement;
     bool                                                mbNullDateInitialized;
 
-    void SetSchemeOf( const OUString& rOrigFileName )
+    void SetSchemeOf( std::u16string_view rOrigFileName )
     {
-        sal_Int32 nSep = rOrigFileName.indexOf(':');
-        if( nSep != -1 )
-            msPackageURIScheme = rOrigFileName.copy( 0, nSep );
+        size_t nSep = rOrigFileName.find(':');
+        if( nSep != std::u16string_view::npos )
+            msPackageURIScheme = rOrigFileName.substr( 0, nSep );
     }
 };
 

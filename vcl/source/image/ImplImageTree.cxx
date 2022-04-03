@@ -54,7 +54,7 @@
 #include <vcl/filter/PngImageReader.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/pngwrite.hxx>
-
+#include <o3tl/string_view.hxx>
 #include <bitmap/BitmapLightenFilter.hxx>
 
 using namespace css;
@@ -83,17 +83,18 @@ sal_Int32 ImageRequestParameters::scalePercentage()
 namespace
 {
 
-OUString convertLcTo32Path(OUString const & rPath)
+OUString convertLcTo32Path(std::u16string_view rPath)
 {
     OUString aResult;
-    if (rPath.lastIndexOf('/') != -1)
+    size_t nSlashPos = rPath.rfind('/');
+    if (nSlashPos != std::u16string_view::npos)
     {
-        sal_Int32 nCopyFrom = rPath.lastIndexOf('/') + 1;
-        OUString sFile = rPath.copy(nCopyFrom);
-        OUString sDir = rPath.copy(0, rPath.lastIndexOf('/'));
-        if (!sFile.isEmpty() && sFile.startsWith("lc_"))
+        sal_Int32 nCopyFrom = nSlashPos + 1;
+        std::u16string_view sFile = rPath.substr(nCopyFrom);
+        std::u16string_view sDir = rPath.substr(0, nSlashPos);
+        if (!sFile.empty() && o3tl::starts_with(sFile, u"lc_"))
         {
-            aResult = sDir + "/32/" + sFile.subView(3);
+            aResult = OUString::Concat(sDir) + "/32/" + sFile.substr(3);
         }
     }
     return aResult;
@@ -128,10 +129,10 @@ bool urlExists(OUString const & sUrl)
     return osl::FileBase::E_None == eRC;
 }
 
-OUString getNameNoExtension(OUString const & sName)
+OUString getNameNoExtension(std::u16string_view sName)
 {
-    sal_Int32 nDotPosition = sName.lastIndexOf('.');
-    return sName.copy(0, nDotPosition);
+    size_t nDotPosition = sName.rfind('.');
+    return OUString(sName.substr(0, nDotPosition));
 }
 
 std::shared_ptr<SvMemoryStream> wrapStream(uno::Reference<io::XInputStream> const & rInputStream)

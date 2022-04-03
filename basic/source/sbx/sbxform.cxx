@@ -295,71 +295,71 @@ short SbxBasicFormater::GetDigitAtPosExpScan( double dNewExponent, short nPos,
 
 // Copies the respective part of the format-string, if existing, and returns it.
 // So a new string is created, which has to be freed by the caller later.
-OUString SbxBasicFormater::GetPosFormatString( const OUString& sFormatStrg, bool & bFound )
+OUString SbxBasicFormater::GetPosFormatString( std::u16string_view sFormatStrg, bool & bFound )
 {
     bFound = false;     // default...
-    sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
+    size_t nPos = sFormatStrg.find( FORMAT_SEPARATOR );
 
-    if( nPos >= 0 )
+    if( nPos != std::u16string_view::npos )
     {
         bFound = true;
         // the format-string for positive numbers is
         // everything before the first ';'
-        return sFormatStrg.copy( 0,nPos );
+        return OUString(sFormatStrg.substr( 0,nPos ));
     }
 
     return OUString();
 }
 
 // see also GetPosFormatString()
-OUString SbxBasicFormater::GetNegFormatString( const OUString& sFormatStrg, bool & bFound )
+OUString SbxBasicFormater::GetNegFormatString( std::u16string_view sFormatStrg, bool & bFound )
 {
     bFound = false;     // default...
-    sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
+    size_t nPos = sFormatStrg.find( FORMAT_SEPARATOR );
 
-    if( nPos >= 0)
+    if( nPos != std::u16string_view::npos)
     {
         // the format-string for negative numbers is
         // everything between the first and the second ';'
-        OUString sTempStrg = sFormatStrg.copy( nPos+1 );
-        nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
+        std::u16string_view sTempStrg = sFormatStrg.substr( nPos+1 );
+        nPos = sTempStrg.find( FORMAT_SEPARATOR );
         bFound = true;
-        if( nPos < 0 )
+        if( nPos == std::u16string_view::npos )
         {
-            return sTempStrg;
+            return OUString(sTempStrg);
         }
         else
         {
-            return sTempStrg.copy( 0,nPos );
+            return OUString(sTempStrg.substr( 0,nPos ));
         }
     }
     return OUString();
 }
 
 // see also GetPosFormatString()
-OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, bool & bFound )
+OUString SbxBasicFormater::Get0FormatString( std::u16string_view sFormatStrg, bool & bFound )
 {
     bFound = false;     // default...
-    sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
+    size_t nPos = sFormatStrg.find( FORMAT_SEPARATOR );
 
-    if( nPos >= 0 )
+    if( nPos != std::u16string_view::npos )
     {
         // the format string for the zero is
         // everything after the second ';'
-        OUString sTempStrg = sFormatStrg.copy( nPos+1 );
-        nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
-        if( nPos >= 0 )
+        std::u16string_view sTempStrg = sFormatStrg.substr( nPos+1 );
+        nPos = sTempStrg.find( FORMAT_SEPARATOR );
+        if( nPos != std::u16string_view::npos )
         {
             bFound = true;
-            sTempStrg = sTempStrg.copy( nPos+1 );
-            nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
-            if( nPos < 0 )
+            sTempStrg = sTempStrg.substr( nPos+1 );
+            nPos = sTempStrg.find( FORMAT_SEPARATOR );
+            if( nPos == std::u16string_view::npos )
             {
-                return sTempStrg;
+                return OUString(sTempStrg);
             }
             else
             {
-                return sTempStrg.copy( 0,nPos );
+                return OUString(sTempStrg.substr( 0,nPos ));
             }
         }
     }
@@ -368,25 +368,25 @@ OUString SbxBasicFormater::Get0FormatString( const OUString& sFormatStrg, bool &
 }
 
 // see also GetPosFormatString()
-OUString SbxBasicFormater::GetNullFormatString( const OUString& sFormatStrg, bool & bFound )
+OUString SbxBasicFormater::GetNullFormatString( std::u16string_view sFormatStrg, bool & bFound )
 {
     bFound = false;     // default...
-    sal_Int32 nPos = sFormatStrg.indexOf( FORMAT_SEPARATOR );
+    size_t nPos = sFormatStrg.find( FORMAT_SEPARATOR );
 
-    if( nPos >= 0 )
+    if( nPos != std::u16string_view::npos )
     {
         // the format-string for the Null is
         // everything after the third ';'
-        OUString sTempStrg = sFormatStrg.copy( nPos+1 );
-        nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
-        if( nPos >= 0 )
+        std::u16string_view sTempStrg = sFormatStrg.substr( nPos+1 );
+        nPos = sTempStrg.find( FORMAT_SEPARATOR );
+        if( nPos != std::u16string_view::npos )
         {
-            sTempStrg = sTempStrg.copy( nPos+1 );
-            nPos = sTempStrg.indexOf( FORMAT_SEPARATOR );
-            if( nPos >= 0 )
+            sTempStrg = sTempStrg.substr( nPos+1 );
+            nPos = sTempStrg.find( FORMAT_SEPARATOR );
+            if( nPos != std::u16string_view::npos )
             {
                 bFound = true;
-                return sTempStrg.copy( nPos+1 );
+                return OUString(sTempStrg.substr( nPos+1 ));
             }
         }
     }
@@ -840,7 +840,7 @@ void SbxBasicFormater::ScanFormatString( double dNumber,
     sReturnStrgFinal = sReturnStrg.makeStringAndClear();
 }
 
-OUString SbxBasicFormater::BasicFormatNull( const OUString& sFormatStrg )
+OUString SbxBasicFormater::BasicFormatNull( std::u16string_view sFormatStrg )
 {
     bool bNullFormatFound;
     OUString sNullFormatStrg = GetNullFormatString( sFormatStrg, bNullFormatFound );

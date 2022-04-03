@@ -395,7 +395,7 @@ private:
 
     /// explode a field master name into field type and field name
     static void ExplodeFieldMasterName(
-        const OUString& sMasterName, /// name as returned by SO API
+        std::u16string_view sMasterName, /// name as returned by SO API
         OUString& sFieldType,        /// out: field type
         OUString& sVarName);         /// out: variable name
 

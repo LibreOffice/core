@@ -79,14 +79,14 @@ static bool FileMove_Impl( const OUString & rFile1, const OUString & rFile2, boo
 
 //This function gets a system path to a file [fname], creates a temp file in
 //the same folder as [fname] and returns the system path of the temp file.
-static OUString tempFileHelper(OUString const & fname)
+static OUString tempFileHelper(std::u16string_view fname)
 {
     OUString aTmpFile;
 
-    sal_Int32 delimIndex = fname.lastIndexOf( '/' );
-    if( delimIndex > 0 )
+    size_t delimIndex = fname.rfind( '/' );
+    if( delimIndex > 0 && delimIndex != std::u16string_view::npos)
     {
-        OUString aTmpDir( fname.copy( 0,  delimIndex ) );
+        OUString aTmpDir( fname.substr( 0,  delimIndex ) );
         osl::FileBase::getFileURLFromSystemPath( aTmpDir, aTmpDir );
         osl::FileBase::createTempFile( &aTmpDir, nullptr, &aTmpFile );
         osl::FileBase::getSystemPathFromFileURL( aTmpFile, aTmpFile );

@@ -92,7 +92,7 @@ namespace chelp {
             KeywordElement( Databases const * pDatabases,
                             helpdatafileproxy::Hdf* pHdf,
                             OUString const & key,
-                            OUString const & ids );
+                            std::u16string_view ids );
 
         private:
 
@@ -101,7 +101,7 @@ namespace chelp {
             css::uno::Sequence< OUString > listAnchor;
             css::uno::Sequence< OUString > listTitle;
 
-            void init( Databases const *pDatabases,helpdatafileproxy::Hdf* pHdf,const OUString& ids );
+            void init( Databases const *pDatabases,helpdatafileproxy::Hdf* pHdf, std::u16string_view ids );
         };
 
         explicit KeywordInfo( const std::vector< KeywordElement >& aVector );
@@ -192,7 +192,7 @@ namespace chelp {
          */
 
         css::uno::Reference< css::container::XHierarchicalNameAccess >
-        jarFile( const OUString& jar,
+        jarFile( std::u16string_view jar,
                  const OUString& Language );
 
         css::uno::Reference< css::container::XHierarchicalNameAccess >
@@ -422,7 +422,7 @@ namespace chelp {
         {}
 
         OUString nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary );
-        void deleteTempIndexFolder( const OUString& aIndexFolder );
+        void deleteTempIndexFolder( std::u16string_view aIndexFolder );
 
     private:
         OUString implGetIndexFolderFromPackage( bool& o_rbTemporary,

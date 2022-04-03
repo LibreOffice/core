@@ -138,6 +138,48 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::string_view rIn, char cTok);
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicode cTok);
 
+/**
+  Returns a token in the string.
+
+  Example:
+    sal_Int32 nIndex = 0;
+    do
+    {
+        ...
+        OUString aToken = aStr.getToken( 0, ';', nIndex );
+        ...
+    }
+    while ( nIndex >= 0 );
+
+  @param    token       the number of the token to return
+  @param    cTok        the character which separate the tokens.
+  @param    index       the position at which the token is searched in the
+                        string.
+                        The index must not be greater than the length of the
+                        string.
+                        This param is set to the position of the
+                        next token or to -1, if it is the last token.
+  @return   the token; if either token or index is negative, an empty token
+            is returned (and index is set to -1)
+*/
+COMPHELPER_DLLPUBLIC std::u16string_view getToken( std::u16string_view str, sal_Int32 token, sal_Unicode cTok, sal_Int32& index );
+
+/**
+  Returns a token from the string.
+
+  The same as getToken(sal_Int32, sal_Unicode, sal_Int32 &), but always
+  passing in 0 as the start index in the third argument.
+
+  @param count  the number of the token to return, starting with 0
+  @param separator  the character which separates the tokens
+
+  @return  the given token, or an empty string
+ */
+std::u16string_view getToken(std::u16string_view str, sal_Int32 count, sal_Unicode separator) {
+    sal_Int32 n = 0;
+    return getToken(str, count, separator, n);
+}
+
 /** Reverse an OUString
 
   @param    rIn     the input OUString
@@ -358,6 +400,32 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
                     true otherwise, including for empty string
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
+
+/**
+  Returns a new string_view resulting from removing white space from both ends
+  of the string_view.
+
+  All characters that have codes less than or equal to
+  32 (the space character), and Unicode General Punctuation area Space
+  and some Control characters are considered to be white space (see
+  rtl_ImplIsWhitespace).
+
+  @return   the string_view, with white space removed from the front and end.
+*/
+COMPHELPER_DLLPUBLIC std::u16string_view trim(std::u16string_view str);
+
+/**
+  Returns a new string_view resulting from removing white space from both ends
+  of the string_view.
+
+  All characters that have codes less than or equal to
+  32 (the space character), and Unicode General Punctuation area Space
+  and some Control characters are considered to be white space (see
+  rtl_ImplIsWhitespace).
+
+  @return   the string, with white space removed from the front and end.
+*/
+COMPHELPER_DLLPUBLIC std::string_view trim(std::string_view str);
 
 /** Interpret a string as a long integer.
 

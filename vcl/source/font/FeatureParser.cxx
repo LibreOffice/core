@@ -23,14 +23,14 @@ OUString trimFontNameFeatures(OUString const& rFontName)
     return rFontName.copy(0, nPrefixIdx);
 }
 
-FeatureParser::FeatureParser(OUString const& rFontName)
+FeatureParser::FeatureParser(std::u16string_view rFontName)
 {
-    sal_Int32 nPrefixIdx{ rFontName.indexOf(vcl::font::FeaturePrefix) };
+    size_t nPrefixIdx{ rFontName.find(vcl::font::FeaturePrefix) };
 
-    if (nPrefixIdx < 0)
+    if (nPrefixIdx == std::u16string_view::npos)
         return;
 
-    OUString sName = rFontName.copy(++nPrefixIdx);
+    OUString sName(rFontName.substr(++nPrefixIdx));
     sal_Int32 nIndex = 0;
     do
     {

@@ -647,50 +647,50 @@ bool SdrMarkView::ImpIsFrameHandles() const
 
 namespace
 {
-OUString lcl_getDragMethodServiceName( const OUString& rCID )
+std::u16string_view lcl_getDragMethodServiceName( std::u16string_view rCID )
 {
-    OUString aRet;
+    std::u16string_view aRet;
 
-    sal_Int32 nIndexStart = rCID.indexOf( "DragMethod=" );
-    if( nIndexStart != -1 )
+    size_t nIndexStart = rCID.find( u"DragMethod=" );
+    if( nIndexStart != std::u16string_view::npos )
     {
-        nIndexStart = rCID.indexOf( '=', nIndexStart );
-        if( nIndexStart != -1 )
+        nIndexStart = rCID.find( '=', nIndexStart );
+        if( nIndexStart != std::u16string_view::npos )
         {
             nIndexStart++;
-            sal_Int32 nNextSlash = rCID.indexOf( '/', nIndexStart );
-            if( nNextSlash != -1 )
+            size_t nNextSlash = rCID.find( '/', nIndexStart );
+            if( nNextSlash != std::u16string_view::npos )
             {
                 sal_Int32 nIndexEnd = nNextSlash;
-                sal_Int32 nNextColon = rCID.indexOf( ':', nIndexStart );
-                if( nNextColon < nNextSlash )
+                size_t nNextColon = rCID.find( ':', nIndexStart );
+                if( nNextColon == std::u16string_view::npos || nNextColon < nNextSlash )
                     nIndexEnd = nNextColon;
-                aRet = rCID.copy(nIndexStart,nIndexEnd-nIndexStart);
+                aRet = rCID.substr(nIndexStart,nIndexEnd-nIndexStart);
             }
         }
     }
     return aRet;
 }
 
-OUString lcl_getDragParameterString( const OUString& rCID )
+std::u16string_view lcl_getDragParameterString( std::u16string_view rCID )
 {
-    OUString aRet;
+    std::u16string_view aRet;
 
-    sal_Int32 nIndexStart = rCID.indexOf( "DragParameter=" );
-    if( nIndexStart != -1 )
+    size_t nIndexStart = rCID.find( u"DragParameter=" );
+    if( nIndexStart != std::u16string_view::npos )
     {
-        nIndexStart = rCID.indexOf( '=', nIndexStart );
-        if( nIndexStart != -1 )
+        nIndexStart = rCID.find( '=', nIndexStart );
+        if( nIndexStart != std::u16string_view::npos )
         {
             nIndexStart++;
-            sal_Int32 nNextSlash = rCID.indexOf( '/', nIndexStart );
-            if( nNextSlash != -1 )
+            size_t nNextSlash = rCID.find( '/', nIndexStart );
+            if( nNextSlash != std::u16string_view::npos )
             {
                 sal_Int32 nIndexEnd = nNextSlash;
-                sal_Int32 nNextColon = rCID.indexOf( ':', nIndexStart );
-                if( nNextColon < nNextSlash )
+                size_t nNextColon = rCID.find( ':', nIndexStart );
+                if( nNextColon == std::u16string_view::npos || nNextColon < nNextSlash )
                     nIndexEnd = nNextColon;
-                aRet = rCID.copy(nIndexStart,nIndexEnd-nIndexStart);
+                aRet = rCID.substr(nIndexStart,nIndexEnd-nIndexStart);
             }
         }
     }
@@ -905,29 +905,28 @@ void SdrMarkView::SetMarkHandlesForLOKit(tools::Rectangle const & rRect, const S
                             aExtraInfo.append(OString::boolean(aObjectCID[nPos] == '1'));
                         }
 
-                        OUString sDragMethod = lcl_getDragMethodServiceName(aValue);
-                        if (sDragMethod == "PieSegmentDragging")
+                        std::u16string_view sDragMethod = lcl_getDragMethodServiceName(aValue);
+                        if (sDragMethod == u"PieSegmentDragging")
                         {
                             // old initial offset inside the CID returned by xSelectionSupplier->getSelection()
                             // after a pie segment dragging; using SdrObject::GetName for getting a CID with the updated offset
                             aValue = pO->GetName();
-                            OUString sDragParameters = lcl_getDragParameterString(aValue);
-                            if (!sDragParameters.isEmpty())
+                            std::u16string_view sDragParameters = lcl_getDragParameterString(aValue);
+                            if (!sDragParameters.empty())
                             {
                                 aExtraInfo.append(", \"dragInfo\": { ");
                                 aExtraInfo.append("\"dragMethod\": \"");
-                                aExtraInfo.append(sDragMethod.toUtf8());
+                                aExtraInfo.append(OUString(sDragMethod).toUtf8());
                                 aExtraInfo.append("\"");
 
-                                OUString sParam;
                                 sal_Int32 nStartIndex = 0;
                                 std::array<int, 5> aDragParameters;
                                 for (auto& rParam : aDragParameters)
                                 {
-                                    sParam = sDragParameters.getToken(0, ',', nStartIndex);
-                                    if (sParam.isEmpty())
+                                    std::u16string_view sParam = comphelper::string::getToken(sDragParameters, 0, ',', nStartIndex);
+                                    if (sParam.empty())
                                         break;
-                                    rParam = sParam.toInt32();
+                                    rParam = comphelper::string::toInt32(sParam);
                                 }
 
                                 // initial offset in %

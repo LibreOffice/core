@@ -240,12 +240,12 @@ PoEntry::PoEntry()
 }
 
 PoEntry::PoEntry(
-    const OString& rSourceFile, std::string_view rResType, std::string_view rGroupId,
+    std::string_view rSourceFile, std::string_view rResType, std::string_view rGroupId,
     std::string_view rLocalId, const OString& rHelpText,
     const OString& rText, const TYPE eType )
     : m_bIsInitialized( false )
 {
-    if( rSourceFile.isEmpty() )
+    if( rSourceFile.empty() )
         throw NOSOURCFILE;
     else if ( rResType.empty() )
         throw NORESTYPE;
@@ -257,7 +257,7 @@ PoEntry::PoEntry(
         throw WRONGHELPTEXT;
 
     m_pGenPo.reset( new GenPoEntry() );
-    OString sReference = rSourceFile.copy(rSourceFile.lastIndexOf('/')+1);
+    OString sReference(rSourceFile.substr(rSourceFile.rfind('/')+1));
     m_pGenPo->setReference(sReference);
 
     OString sMsgCtxt =
