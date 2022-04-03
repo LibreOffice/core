@@ -543,7 +543,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
 
 // Replace dashes
 bool SvxAutoCorrect::FnChgToEnEmDash(
-                                SvxAutoCorrDoc& rDoc, const OUString& rTxt,
+                                SvxAutoCorrDoc& rDoc, std::u16string_view rTxt,
                                 sal_Int32 nSttPos, sal_Int32 nEndPos,
                                 LanguageType eLang )
 {
@@ -629,7 +629,7 @@ bool SvxAutoCorrect::FnChgToEnEmDash(
     bool bEnDash = (eLang == LANGUAGE_HUNGARIAN || eLang == LANGUAGE_FINNISH);
     if( 4 <= nEndPos - nSttPos )
     {
-        OUString sTmp( rTxt.copy( nSttPos, nEndPos - nSttPos ) );
+        OUString sTmp( rTxt.substr( nSttPos, nEndPos - nSttPos ) );
         sal_Int32 nFndPos = sTmp.indexOf("--");
         if( nFndPos != -1 && nFndPos &&
             nFndPos + 2 < sTmp.getLength() &&
@@ -1744,7 +1744,7 @@ OUString SvxAutoCorrect::GetPrevAutoCorrWord(SvxAutoCorrDoc const& rDoc, const O
 }
 
 // static
-std::vector<OUString> SvxAutoCorrect::GetChunkForAutoText(const OUString& rTxt,
+std::vector<OUString> SvxAutoCorrect::GetChunkForAutoText(std::u16string_view rTxt,
                                                           const sal_Int32 nPos)
 {
     constexpr sal_Int32 nMinLen = 3;
@@ -1761,7 +1761,7 @@ std::vector<OUString> SvxAutoCorrect::GetChunkForAutoText(const OUString& rTxt,
         }
         if (nBegin + nMinLen <= nPos)
         {
-            OUString sRes = rTxt.copy(nBegin, nPos - nBegin);
+            OUString sRes( rTxt.substr(nBegin, nPos - nBegin) );
             aRes.push_back(sRes);
             bool bLastStartedWithDelim = IsWordDelim(sRes[0]);
             for (sal_Int32 i = 1; i <= sRes.getLength() - nMinLen; ++i)

@@ -44,9 +44,12 @@ namespace oox::crypto {
 
 namespace {
 
-OUString stripNamespacePrefix(OUString const & rsInputName)
+std::u16string_view stripNamespacePrefix(std::u16string_view rsInputName)
 {
-    return rsInputName.copy(rsInputName.indexOf(":") + 1);
+    size_t idx = rsInputName.find(':');
+    if (idx == std::u16string_view::npos)
+        return rsInputName;
+    return rsInputName.substr(idx + 1);
 }
 
 class AgileTokenHandler : public sax_fastparser::FastTokenHandlerBase
@@ -85,79 +88,79 @@ public:
 
     void SAL_CALL startUnknownElement( const OUString& /*aNamespace*/, const OUString& rName, const Reference< XFastAttributeList >& aAttributeList ) override
     {
-        const OUString& rLocalName = stripNamespacePrefix(rName);
+        std::u16string_view rLocalName = stripNamespacePrefix(rName);
 
         const css::uno::Sequence<Attribute> aUnknownAttributes = aAttributeList->getUnknownAttributes();
         for (const Attribute& rAttribute : aUnknownAttributes)
         {
-            const OUString& rAttrLocalName = stripNamespacePrefix(rAttribute.Name);
+            std::u16string_view rAttrLocalName = stripNamespacePrefix(rAttribute.Name);
 
-            if (rAttrLocalName == "spinCount")
+            if (rAttrLocalName == u"spinCount")
             {
                 ::sax::Converter::convertNumber(mInfo.spinCount, rAttribute.Value);
             }
-            else if (rAttrLocalName == "saltSize")
+            else if (rAttrLocalName == u"saltSize")
             {
                 ::sax::Converter::convertNumber(mInfo.saltSize, rAttribute.Value);
             }
-            else if (rAttrLocalName == "blockSize")
+            else if (rAttrLocalName == u"blockSize")
             {
                 ::sax::Converter::convertNumber(mInfo.blockSize, rAttribute.Value);
             }
-            else if (rAttrLocalName == "keyBits")
+            else if (rAttrLocalName == u"keyBits")
             {
                 ::sax::Converter::convertNumber(mInfo.keyBits, rAttribute.Value);
             }
-            else if (rAttrLocalName == "hashSize")
+            else if (rAttrLocalName == u"hashSize")
             {
                 ::sax::Converter::convertNumber(mInfo.hashSize, rAttribute.Value);
             }
-            else if (rAttrLocalName == "cipherAlgorithm")
+            else if (rAttrLocalName == u"cipherAlgorithm")
             {
                 mInfo.cipherAlgorithm = rAttribute.Value;
             }
-            else if (rAttrLocalName == "cipherChaining")
+            else if (rAttrLocalName == u"cipherChaining")
             {
                 mInfo.cipherChaining = rAttribute.Value;
             }
-            else if (rAttrLocalName == "hashAlgorithm")
+            else if (rAttrLocalName == u"hashAlgorithm")
             {
                 mInfo.hashAlgorithm = rAttribute.Value;
             }
-            else if (rAttrLocalName == "saltValue")
+            else if (rAttrLocalName == u"saltValue")
             {
                 Sequence<sal_Int8> saltValue;
                 comphelper::Base64::decode(saltValue, rAttribute.Value);
-                if (rLocalName == "encryptedKey")
+                if (rLocalName == u"encryptedKey")
                     mInfo.saltValue = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(saltValue);
-                else if (rLocalName == "keyData")
+                else if (rLocalName == u"keyData")
                     mInfo.keyDataSalt = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(saltValue);
             }
-            else if (rAttrLocalName == "encryptedVerifierHashInput")
+            else if (rAttrLocalName == u"encryptedVerifierHashInput")
             {
                 Sequence<sal_Int8> encryptedVerifierHashInput;
                 comphelper::Base64::decode(encryptedVerifierHashInput, rAttribute.Value);
                 mInfo.encryptedVerifierHashInput = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(encryptedVerifierHashInput);
             }
-            else if (rAttrLocalName == "encryptedVerifierHashValue")
+            else if (rAttrLocalName == u"encryptedVerifierHashValue")
             {
                 Sequence<sal_Int8> encryptedVerifierHashValue;
                 comphelper::Base64::decode(encryptedVerifierHashValue, rAttribute.Value);
                 mInfo.encryptedVerifierHashValue = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(encryptedVerifierHashValue);
             }
-            else if (rAttrLocalName == "encryptedKeyValue")
+            else if (rAttrLocalName == u"encryptedKeyValue")
             {
                 Sequence<sal_Int8> encryptedKeyValue;
                 comphelper::Base64::decode(encryptedKeyValue, rAttribute.Value);
                 mInfo.encryptedKeyValue = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(encryptedKeyValue);
             }
-            if (rAttrLocalName == "encryptedHmacKey")
+            if (rAttrLocalName == u"encryptedHmacKey")
             {
                 Sequence<sal_Int8> aValue;
                 comphelper::Base64::decode(aValue, rAttribute.Value);
                 mInfo.hmacEncryptedKey = comphelper::sequenceToContainer<std::vector<sal_uInt8>>(aValue);
             }
-            if (rAttrLocalName == "encryptedHmacValue")
+            if (rAttrLocalName == u"encryptedHmacValue")
             {
                 Sequence<sal_Int8> aValue;
                 comphelper::Base64::decode(aValue, rAttribute.Value);

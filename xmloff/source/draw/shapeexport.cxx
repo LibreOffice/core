@@ -90,6 +90,7 @@
 
 #include <o3tl/any.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -2408,22 +2409,22 @@ void XMLShapeExport::ImpExportPolygonShape(
 namespace
 {
 
-OUString getNameFromStreamURL(OUString const & rURL)
+OUString getNameFromStreamURL(std::u16string_view rURL)
 {
-    static const OUStringLiteral sPackageURL(u"vnd.sun.star.Package:");
+    static constexpr std::u16string_view sPackageURL(u"vnd.sun.star.Package:");
 
     OUString sResult;
 
-    if (rURL.match(sPackageURL))
+    if (o3tl::starts_with(rURL, sPackageURL))
     {
-        OUString sRequestedName = rURL.copy(sPackageURL.getLength());
-        sal_Int32 nLastIndex = sRequestedName.lastIndexOf('/') + 1;
-        if ((nLastIndex > 0) && (nLastIndex < sRequestedName.getLength()))
-            sRequestedName = sRequestedName.copy(nLastIndex);
-        nLastIndex = sRequestedName.lastIndexOf('.');
-        if (nLastIndex >= 0)
-            sRequestedName = sRequestedName.copy(0, nLastIndex);
-        if (!sRequestedName.isEmpty())
+        std::u16string_view sRequestedName = rURL.substr(sPackageURL.size());
+        size_t nLastIndex = sRequestedName.rfind('/') + 1;
+        if ((nLastIndex > 0) && (nLastIndex < sRequestedName.size()))
+            sRequestedName = sRequestedName.substr(nLastIndex);
+        nLastIndex = sRequestedName.rfind('.');
+        if (nLastIndex >= 0 && nLastIndex != std::u16string_view::npos)
+            sRequestedName = sRequestedName.substr(0, nLastIndex);
+        if (!sRequestedName.empty())
             sResult = sRequestedName;
     }
 

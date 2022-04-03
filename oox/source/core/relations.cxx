@@ -28,9 +28,12 @@ namespace oox::core {
 
 namespace {
 
-OUString lclRemoveFileName( const OUString& rPath )
+std::u16string_view lclRemoveFileName( std::u16string_view rPath )
 {
-    return rPath.copy( 0, ::std::max< sal_Int32 >( rPath.lastIndexOf( '/' ), 0 ) );
+    size_t idx = rPath.rfind( '/' );
+    if (idx == std::u16string_view::npos)
+        return rPath;
+    return rPath.substr( 0, idx );
 }
 
 OUString lclAppendFileName( std::u16string_view rPath, const OUString& rFileName )
@@ -108,7 +111,7 @@ OUString Relations::getFragmentPathFromRelation( const Relation& rRelation ) con
         return rRelation.maTarget;
 
     // resolve relative target path according to base path
-    OUString aPath = lclRemoveFileName( maFragmentPath );
+    std::u16string_view aPath = lclRemoveFileName( maFragmentPath );
     sal_Int32 nStartPos = 0;
     while( nStartPos < rRelation.maTarget.getLength() )
     {
@@ -123,7 +126,7 @@ OUString Relations::getFragmentPathFromRelation( const Relation& rRelation ) con
         nStartPos = nSepPos + 1;
     }
 
-    return aPath;
+    return OUString(aPath);
 }
 
 OUString Relations::getFragmentPathFromRelId( const OUString& rRelId ) const

@@ -144,7 +144,7 @@ bool lcl_deleteDataCurve(
     {
         uno::Reference< chart2::XRegressionCurveContainer > xRegressionCurveContainer(
             ObjectIdentifier::getObjectPropertySet(
-                ObjectIdentifier::getFullParentParticle( rCID ), xModel), uno::UNO_QUERY );
+                OUString(ObjectIdentifier::getFullParentParticle( rCID )), xModel), uno::UNO_QUERY );
 
         if( xRegressionCurveContainer.is())
         {
@@ -662,7 +662,7 @@ bool ChartController::executeDispatch_Delete()
             {
                 uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
                     ObjectIdentifier::getObjectPropertySet(
-                        ObjectIdentifier::getFullParentParticle( aCID ), getChartModel()), uno::UNO_QUERY );
+                        OUString(ObjectIdentifier::getFullParentParticle( aCID )), getChartModel()), uno::UNO_QUERY );
                 if( xRegCurveCnt.is())
                 {
                     UndoGuard aUndoGuard(

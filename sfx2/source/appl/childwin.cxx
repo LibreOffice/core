@@ -121,12 +121,12 @@ bool GetPosSizeFromString( std::u16string_view rStr, Point& rPos, Size& rSize )
     return rSize.Width() >= 0 && rSize.Height() >= 0;
 }
 
-bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
+bool GetSplitSizeFromString( std::u16string_view rStr, Size& rSize )
 {
-    sal_Int32 nIndex = rStr.indexOf( ',' );
-    if ( nIndex != -1 )
+    size_t nIndex = rStr.find( ',' );
+    if ( nIndex != std::u16string_view::npos )
     {
-        OUString aStr = rStr.copy( nIndex+1 );
+        std::u16string_view aStr = rStr.substr( nIndex+1 );
 
         sal_Int32 nCount = comphelper::string::getTokenCount(aStr, ';');
         if ( nCount != 2 )

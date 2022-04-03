@@ -478,11 +478,11 @@ bool RangeNameBufferWK3::FindRel( const OUString& rRef, sal_uInt16& rIndex )
     return false;
 }
 
-bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
+bool RangeNameBufferWK3::FindAbs( std::u16string_view rRef, sal_uInt16& rIndex )
 {
-    if (rRef.isEmpty())
+    if (rRef.empty())
         return false;
-    StringHashEntry aRef(rRef.copy(1)); // search w/o '$'!
+    StringHashEntry aRef(OUString(rRef.substr(1))); // search w/o '$'!
 
     std::vector<Entry>::iterator itr = std::find_if(maEntries.begin(), maEntries.end(),
         [&aRef](const Entry& rEntry) { return aRef == rEntry.aStrHashEntry; });

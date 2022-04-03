@@ -86,15 +86,15 @@ OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame::XMod
     return aGenerator;
 }
 
-sal_Int32 lcl_getBuildIDFromGenerator( const OUString& rGenerator )
+sal_Int32 lcl_getBuildIDFromGenerator( std::u16string_view rGenerator )
 {
     //returns -1 if nothing found
     sal_Int32 nBuildId = -1;
     static const OUStringLiteral sBuildCompare(  u"$Build-"  );
-    sal_Int32 nBegin = rGenerator.indexOf( sBuildCompare );
-    if( nBegin >= 0 )
+    size_t nBegin = rGenerator.find( sBuildCompare );
+    if( nBegin != std::u16string_view::npos )
     {
-        OUString sBuildId( rGenerator.copy( nBegin + sBuildCompare.getLength() ) );
+        OUString sBuildId( rGenerator.substr( nBegin + sBuildCompare.getLength() ) );
         nBuildId = sBuildId.toInt32();
     }
     return nBuildId;

@@ -115,9 +115,9 @@ T_DRIVERTYPE lcl_getDriverType(std::u16string_view _sUrl)
     return eRet;
 }
 
-OUString transformUrl(const OUString& _sUrl)
+OUString transformUrl(std::u16string_view _sUrl)
 {
-    OUString sNewUrl = _sUrl.copy(11);
+    OUString sNewUrl(_sUrl.substr(11));
     if (isOdbcUrl(_sUrl))
         sNewUrl = "sdbc:" + sNewUrl;
     else if (isNativeUrl(_sUrl))
@@ -187,7 +187,7 @@ Sequence<PropertyValue> lcl_convertProperties(T_DRIVERTYPE _eType,
 }
 }
 
-Reference<XDriver> ODriverDelegator::loadDriver(const OUString& url,
+Reference<XDriver> ODriverDelegator::loadDriver(std::u16string_view url,
                                                 const Sequence<PropertyValue>& info)
 {
     Reference<XDriver> xDriver;

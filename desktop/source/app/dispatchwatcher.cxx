@@ -243,16 +243,16 @@ void scriptCat(const Reference< XModel >& xDoc )
 }
 
 // Perform batch print
-void batchPrint( const OUString &rPrinterName, const Reference< XPrintable > &xDoc,
+void batchPrint( std::u16string_view rPrinterName, const Reference< XPrintable > &xDoc,
                  const INetURLObject &aObj, const OUString &aName )
 {
     OUString aFilterOut;
     OUString aPrinterName;
-    sal_Int32 nPathIndex =  rPrinterName.lastIndexOf( ';' );
-    if( nPathIndex != -1 )
-        aFilterOut=rPrinterName.copy( nPathIndex+1 );
+    size_t nPathIndex =  rPrinterName.rfind( ';' );
+    if( nPathIndex != std::u16string_view::npos )
+        aFilterOut=rPrinterName.substr( nPathIndex+1 );
     if( nPathIndex != 0 )
-        aPrinterName=rPrinterName.copy( 0, nPathIndex );
+        aPrinterName=rPrinterName.substr( 0, nPathIndex );
 
     INetURLObject aOutFilename( aObj );
     aOutFilename.SetExtension( u"pdf" );

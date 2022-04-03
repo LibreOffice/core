@@ -1336,15 +1336,15 @@ OUString SwCalc::GetColumnName(const OUString& rName)
     return rName;
 }
 
-OUString SwCalc::GetDBName(const OUString& rName)
+OUString SwCalc::GetDBName(std::u16string_view rName)
 {
-    sal_Int32 nPos = rName.indexOf(DB_DELIM);
-    if( -1 != nPos )
+    size_t nPos = rName.find(DB_DELIM);
+    if( std::u16string_view::npos != nPos )
     {
-        nPos = rName.indexOf(DB_DELIM, nPos + 1);
+        nPos = rName.find(DB_DELIM, nPos + 1);
 
-        if( -1 != nPos )
-            return rName.copy( 0, nPos );
+        if( std::u16string_view::npos != nPos )
+            return OUString(rName.substr( 0, nPos ));
     }
     SwDBData aData = m_rDoc.GetDBData();
     return aData.sDataSource + OUStringChar(DB_DELIM) + aData.sCommand;

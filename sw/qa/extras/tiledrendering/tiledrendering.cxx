@@ -3259,9 +3259,9 @@ void SwTiledRenderingTest::testDropDownFormFieldButtonNoSelection()
     }
 }
 
-static void lcl_extractHandleParameters(const OString& selection, sal_Int32& id, sal_Int32& x, sal_Int32& y)
+static void lcl_extractHandleParameters(std::string_view selection, sal_Int32& id, sal_Int32& x, sal_Int32& y)
 {
-    OString extraInfo = selection.copy(selection.indexOf("{"));
+    OString extraInfo( selection.substr(selection.find("{")) );
     std::stringstream aStream(extraInfo.getStr());
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);

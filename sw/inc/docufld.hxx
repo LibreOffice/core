@@ -330,7 +330,7 @@ public:
 
     void         SetValue(bool bHidden)  { m_bIsHidden = bHidden; }
     static OUString     GetColumnName(const OUString& rName);
-    static OUString     GetDBName(const OUString& rName, SwDoc& rDoc);
+    static OUString     GetDBName(std::u16string_view rName, SwDoc& rDoc);
 
     /// Condition
     virtual void        SetPar1(const OUString& rStr) override;
