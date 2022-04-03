@@ -3085,7 +3085,7 @@ void writeContent(
 }
 
 void flushParagraph(
-    ScXMLExport& rExport, const OUString& rParaText,
+    ScXMLExport& rExport, std::u16string_view rParaText,
     rtl::Reference<XMLPropertySetMapper> const & xMapper, rtl::Reference<SvXMLAutoStylePoolP> const & xStylePool,
     const ScXMLEditAttributeMap& rAttrMap,
     std::vector<editeng::Section>::const_iterator it, std::vector<editeng::Section>::const_iterator const & itEnd )
@@ -3098,7 +3098,7 @@ void flushParagraph(
     {
         const editeng::Section& rSec = *it;
 
-        OUString aContent(rParaText.copy(rSec.mnStart, rSec.mnEnd - rSec.mnStart));
+        OUString aContent(rParaText.substr(rSec.mnStart, rSec.mnEnd - rSec.mnStart));
 
         std::vector<XMLPropertyState> aPropStates;
         const SvxFieldData* pField = toXMLPropertyStates(aPropStates, rSec.maAttributes, xMapper, rAttrMap);

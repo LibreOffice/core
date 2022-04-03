@@ -115,11 +115,11 @@ class ChartTest : public test::BootstrapFixture, public unotest::MacrosTest, pub
 {
 public:
     ChartTest():mbSkipValidation(false) {}
-    void load( std::u16string_view rDir, const OUString& rFileName );
+    void load( std::u16string_view rDir, std::u16string_view rFileName );
     std::shared_ptr<utl::TempFile> save( const OUString& rFileName );
     std::shared_ptr<utl::TempFile> reload( const OUString& rFileName );
     uno::Sequence < OUString > getImpressChartColumnDescriptions( std::u16string_view pDir, const char* pName );
-    OUString getFileExtension( const OUString& rFileName );
+    std::u16string_view getFileExtension( std::u16string_view rFileName );
 
     uno::Reference< chart::XChartDocument > getChartDocFromImpress( std::u16string_view pDir, const char* pName );
 
@@ -147,25 +147,25 @@ protected:
     xmlDocUniquePtr parseExport(const OUString& rDir, const OUString& rFilterFormat);
 };
 
-OUString ChartTest::getFileExtension( const OUString& aFileName )
+std::u16string_view ChartTest::getFileExtension( std::u16string_view aFileName )
 {
-    sal_Int32 nDotLocation = aFileName.lastIndexOf('.');
-    CPPUNIT_ASSERT(nDotLocation != -1);
-    return aFileName.copy(nDotLocation+1); // Skip the dot.
+    size_t nDotLocation = aFileName.rfind('.');
+    CPPUNIT_ASSERT(nDotLocation != std::u16string_view::npos);
+    return aFileName.substr(nDotLocation+1); // Skip the dot.
 }
 
-void ChartTest::load( std::u16string_view aDir, const OUString& aName )
+void ChartTest::load( std::u16string_view aDir, std::u16string_view aName )
 {
-    OUString extension = getFileExtension(aName);
-    if (extension == "ods" || extension == "xlsx" || extension == "fods")
+    std::u16string_view extension = getFileExtension(aName);
+    if (extension == u"ods" || extension == u"xlsx" || extension == u"fods")
     {
         maServiceName = "com.sun.star.sheet.SpreadsheetDocument";
     }
-    else if (extension == "docx")
+    else if (extension == u"docx")
     {
         maServiceName = "com.sun.star.text.TextDocument";
     }
-    else if (extension == "odg")
+    else if (extension == u"odg")
     {
         maServiceName = "com.sun.star.drawing.DrawingDocument";
     }

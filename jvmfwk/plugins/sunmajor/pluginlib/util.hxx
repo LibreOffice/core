@@ -37,7 +37,7 @@ void addJREInfoFromBinPath(
     const OUString& path,
     std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos);
-inline OUString getDirFromFile(const OUString& usFilePath);
+inline OUString getDirFromFile(std::u16string_view usFilePath);
 void addJavaInfosFromPath(
     std::vector<rtl::Reference<VendorBase>> & allInfos,
     std::vector<rtl::Reference<VendorBase>> & addedInfos);

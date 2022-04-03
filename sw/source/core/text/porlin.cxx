@@ -326,7 +326,7 @@ void SwLinePortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText, T
     (void)xmlTextWriterEndElement(pWriter);
 }
 
-void SwLinePortion::dumpAsXmlAttributes(xmlTextWriterPtr pWriter, const OUString& rText, TextFrameIndex nOffset) const
+void SwLinePortion::dumpAsXmlAttributes(xmlTextWriterPtr pWriter, std::u16string_view rText, TextFrameIndex nOffset) const
 {
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("symbol"), BAD_CAST(typeid(*this).name()));
@@ -342,7 +342,7 @@ void SwLinePortion::dumpAsXmlAttributes(xmlTextWriterPtr pWriter, const OUString
     (void)xmlTextWriterWriteAttribute(
         pWriter, BAD_CAST("type"),
         BAD_CAST(sw::PortionTypeToString(GetWhichPor())));
-    OUString aText = rText.copy(sal_Int32(nOffset), sal_Int32(GetLen()));
+    OUString aText( rText.substr(sal_Int32(nOffset), sal_Int32(GetLen())) );
     for (int i = 0; i < 32; ++i)
         aText = aText.replace(i, '*');
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("portion"),

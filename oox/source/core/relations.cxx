@@ -126,7 +126,7 @@ OUString Relations::getFragmentPathFromRelation( const Relation& rRelation ) con
         nStartPos = nSepPos + 1;
     }
 
-    return aPath;
+    return OUString(aPath);
 }
 
 OUString Relations::getFragmentPathFromRelId( const OUString& rRelId ) const

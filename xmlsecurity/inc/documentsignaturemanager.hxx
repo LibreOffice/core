@@ -84,7 +84,7 @@ public:
      * Checks if a particular stream is a valid xml stream. Those are treated
      * differently when they are signed (c14n transformation)
      */
-    bool isXML(const OUString& rURI);
+    bool isXML(std::u16string_view rURI);
     bool readManifest();
 
     SignatureStreamHelper ImplOpenSignatureStream(sal_Int32 nStreamOpenMode, bool bTempStream);

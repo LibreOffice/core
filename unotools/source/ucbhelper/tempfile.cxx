@@ -47,14 +47,14 @@ namespace
 namespace utl
 {
 
-static OUString getParentName( const OUString& aFileName )
+static OUString getParentName( std::u16string_view aFileName )
 {
-    sal_Int32 lastIndex = aFileName.lastIndexOf( '/' );
+    size_t lastIndex = aFileName.rfind( '/' );
     OUString aParent;
 
-    if (lastIndex > -1)
+    if (lastIndex != std::u16string_view::npos)
     {
-        aParent = aFileName.copy(0, lastIndex);
+        aParent = aFileName.substr(0, lastIndex);
 
         if (aParent.endsWith(":") && aParent.getLength() == 6)
             aParent += "/";

@@ -54,6 +54,7 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <sfx2/sidebar/ResourceManager.hxx>
 #include <sfx2/sidebar/Context.hxx>
@@ -1027,22 +1028,23 @@ void CuiConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 }
 
 void CuiConfigGroupListBox::SelectMacro( std::u16string_view rBasic,
-         const OUString& rMacro )
+         std::u16string_view rMacro )
 {
     const OUString aBasicName(OUString::Concat(rBasic) + " " + xImp->m_sMacros);
-    sal_Int32 nIdx {rMacro.lastIndexOf('.')};
-    const OUString aMethod( rMacro.copy(nIdx+1) );
-    OUString aLib;
-    OUString aModule;
-    if ( nIdx>0 )
+    size_t nIdx {rMacro.rfind('.')};
+    const std::u16string_view aMethod( rMacro.substr(nIdx == std::u16string_view::npos ? 0 : nIdx + 1) );
+    std::u16string_view aLib;
+    std::u16string_view aModule;
+    if ( nIdx>0 && nIdx != std::u16string_view::npos )
     {
         // string contains at least 2 tokens
-        nIdx = rMacro.lastIndexOf('.', nIdx);
-        if (nIdx>=0)
+        nIdx = rMacro.rfind('.', nIdx);
+        if (nIdx != std::u16string_view::npos)
         {
             // string contains at least 3 tokens
-            aLib = rMacro.getToken( 0, '.' );
-            aModule = rMacro.getToken( 0, '.', ++nIdx );
+            aLib = o3tl::getToken(rMacro, 0, '.' );
+            sal_Int32 nIdx2 = nIdx + 1;
+            aModule = o3tl::getToken(rMacro, 0, '.', nIdx2 );
         }
     }
 
