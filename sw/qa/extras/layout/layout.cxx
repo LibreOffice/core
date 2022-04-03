@@ -2531,9 +2531,9 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint94)
 }
 
 //just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf147485Forcepoint)
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint98)
 {
-    createSwDoc(DATA_DIRECTORY, "tdf147485-forcepoint.doc");
+    createSwWebDoc(DATA_DIRECTORY, "forcepoint98.html");
 }
 
 //just care it doesn't crash/assert
@@ -2542,17 +2542,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint100)
     createSwWebDoc(DATA_DIRECTORY, "forcepoint100.html");
 }
 
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint102)
+{
+    createSwDoc(DATA_DIRECTORY, "forcepoint102.rtf");
+}
+
+//just care it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf147485Forcepoint)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf147485-forcepoint.doc");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf118058)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf118058.fodt");
     // This resulted in a layout loop.
     pDoc->getIDocumentLayoutAccess().GetCurrentViewShell()->CalcLayout();
-}
-
-//just care it doesn't crash/assert
-CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint98)
-{
-    createSwWebDoc(DATA_DIRECTORY, "forcepoint98.html");
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testTdf128611)
