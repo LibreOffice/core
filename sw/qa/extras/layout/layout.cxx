@@ -37,6 +37,7 @@ public:
     void testForcepoint90();
     void testForcepoint92();
     void testForcepoint93();
+    void testForcepoint102();
     void testTdf147485Forcepoint();
     void testTdf118058();
     void testTdf117188();
@@ -63,6 +64,7 @@ public:
     CPPUNIT_TEST(testForcepoint90);
     CPPUNIT_TEST(testForcepoint92);
     CPPUNIT_TEST(testForcepoint93);
+    CPPUNIT_TEST(testForcepoint102);
     CPPUNIT_TEST(testTdf147485Forcepoint);
     CPPUNIT_TEST(testTdf118058);
     CPPUNIT_TEST(testTdf117188);
@@ -316,6 +318,12 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testForcepoint98)
     createSwWebDoc(DATA_DIRECTORY, "forcepoint98.html");
 }
 #endif
+
+//just care it doesn't crash/assert
+void SwLayoutWriter::testForcepoint102()
+{
+    createDoc("forcepoint102.rtf");
+}
 
 //just care it doesn't crash/assert
 void SwLayoutWriter::testTdf147485Forcepoint()
