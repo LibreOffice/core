@@ -1427,6 +1427,8 @@ void ScViewFunc::FillSeries( FillDir eDir, FillCmd eCmd, FillDateCmd eDateCmd,
 void ScViewFunc::FillAuto( FillDir eDir, SCCOL nStartCol, SCROW nStartRow,
                             SCCOL nEndCol, SCROW nEndRow, sal_uLong nCount )
 {
+    printf ("FillAuto\n");
+
     SCTAB nTab = GetViewData().GetTabNo();
     ScRange aRange( nStartCol,nStartRow,nTab, nEndCol,nEndRow,nTab );
     ScRange aSourceRange( aRange );

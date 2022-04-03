@@ -87,6 +87,7 @@
 #include <formulacell.hxx>
 #include <gridwin.hxx>
 #include <searchresults.hxx>
+#include <Sparkline.hxx>
 
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -1083,6 +1084,34 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     GetViewData().GetDocShell()->GetDocFunc().DeleteSparklineGroup(pSparklineGroup, GetViewData().GetTabNo());
                 }
+            }
+            rReq.Done();
+        }
+        break;
+
+        case SID_GROUP_SPARKLINES:
+        {
+            ScRange aRange;
+            if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+            {
+                ScAddress aCursorAddress(GetViewData().GetCurX(), GetViewData().GetCurY(), GetViewData().GetTabNo());
+                auto pSparkline = GetViewData().GetDocument().GetSparkline(aCursorAddress);
+                if (pSparkline)
+                {
+                    auto const& rpSparklineGroup = pSparkline->getSparklineGroup();
+                    GetViewData().GetDocShell()->GetDocFunc().GroupSparklines(aRange, rpSparklineGroup);
+                }
+            }
+            rReq.Done();
+        }
+        break;
+
+        case SID_UNGROUP_SPARKLINES:
+        {
+            ScRange aRange;
+            if (GetViewData().GetSimpleArea(aRange) == SC_MARK_SIMPLE)
+            {
+                GetViewData().GetDocShell()->GetDocFunc().UngroupSparklines(aRange);
             }
             rReq.Done();
         }
