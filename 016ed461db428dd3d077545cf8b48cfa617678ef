@@ -36,6 +36,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d580813_38489739",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-04-03T01:16:06Z",
+      "side": 1,
+      "message": "This is great(!), but I would\u0027ve prefer if you don\u0027t implement anything for the idea before it is accepted. This is also why I don\u0027t like too much details in proposals as the main time to think about this is when you are accepted. If you solve most of the things before the GSoC starts, what will you do afterwards? - you still have to burn off those 350h 😂\n\nIt\u0027s better to solve easy hacks now, or fix some non-easy hack bugs or even improve some functionality in LO that isn\u0027t a bug but is a pain (something that others agree of course).",
+      "revId": "016ed461db428dd3d077545cf8b48cfa617678ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "35f529d7_a557c43c",
