@@ -289,7 +289,7 @@ COMPHELPER_DLLPUBLIC sal_uInt32 decimalStringToNumber(
     OUString const & str );
 
 COMPHELPER_DLLPUBLIC std::vector<OUString>
-    split(const OUString& rString, const sal_Unicode cSeparator);
+    split(std::u16string_view rString, const sal_Unicode cSeparator);
 
 /** Convert a single comma separated string to a sequence of strings.
 
@@ -301,7 +301,7 @@ COMPHELPER_DLLPUBLIC std::vector<OUString>
                     string at ',' tokens and stripping whitespace.
  */
 COMPHELPER_DLLPUBLIC css::uno::Sequence< OUString >
-    convertCommaSeparated( OUString const & i_rString );
+    convertCommaSeparated( std::u16string_view i_rString );
 
 /**
   Compares two strings using natural order.

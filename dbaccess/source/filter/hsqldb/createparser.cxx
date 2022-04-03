@@ -47,7 +47,7 @@ OUString lcl_getColumnPart(const OUString& sSql)
 ///
 /// @param sColumnPart part of the create statement inside the parenthesis
 /// containing the column definitions
-std::vector<OUString> lcl_splitColumnPart(const OUString& sColumnPart)
+std::vector<OUString> lcl_splitColumnPart(std::u16string_view sColumnPart)
 {
     std::vector<OUString> sParts = string::split(sColumnPart, sal_Unicode(u','));
     std::vector<OUString> sReturn;
@@ -214,7 +214,7 @@ void CreateStmtParser::parsePrimaryKeys(const OUString& sPrimaryPart)
     }
 }
 
-void CreateStmtParser::parseColumnPart(const OUString& sColumnPart)
+void CreateStmtParser::parseColumnPart(std::u16string_view sColumnPart)
 {
     auto sColumns = lcl_splitColumnPart(sColumnPart);
     for (const OUString& sColumn : sColumns)

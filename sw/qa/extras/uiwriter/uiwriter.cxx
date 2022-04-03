@@ -486,7 +486,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testExportRTF)
 
     // And finally export it as RTF.
     WriterRef xWrt;
-    SwReaderWriter::GetWriter("RTF", OUString(), xWrt);
+    SwReaderWriter::GetWriter(u"RTF", OUString(), xWrt);
     SvMemoryStream aStream;
     SwWriter aWrt(aStream, *xClpDoc);
     aWrt.Write(xWrt);

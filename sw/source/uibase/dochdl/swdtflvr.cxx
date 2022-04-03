@@ -793,11 +793,11 @@ bool SwTransferable::WriteObject( tools::SvRef<SotTempStream>& xStream,
 
     case SWTRANSFER_OBJECTTYPE_RTF:
     case SWTRANSFER_OBJECTTYPE_RICHTEXT:
-        GetRTFWriter(OUString(), OUString(), xWrt);
+        GetRTFWriter(std::u16string_view(), OUString(), xWrt);
         break;
 
     case SWTRANSFER_OBJECTTYPE_STRING:
-        GetASCWriter(OUString(), OUString(), xWrt);
+        GetASCWriter(std::u16string_view(), OUString(), xWrt);
         if( xWrt.is() )
         {
             SwAsciiOptions aAOpt;

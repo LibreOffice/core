@@ -806,7 +806,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             SfxMedium aMedium( sFileURL,StreamMode::READWRITE );
             SwWriter aWriter( aMedium, *pDocShell->GetDoc() );
             WriterRef xWriter;
-            ::GetHTMLWriter(OUString(), aMedium.GetBaseURL( true ), xWriter);
+            ::GetHTMLWriter(std::u16string_view(), aMedium.GetBaseURL( true ), xWriter);
             const OUString sWriteName = pDocShell->HasName()
                 ? pMedium->GetName()
                 : sFileURL;
