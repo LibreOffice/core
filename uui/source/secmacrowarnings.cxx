@@ -38,22 +38,22 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    OUString GetContentPart( const OUString& _rRawString, const OUString& _rPartId )
+    std::u16string_view GetContentPart( std::u16string_view _rRawString, const OUString& _rPartId )
     {
-        OUString      s;
+        std::u16string_view      s;
 
-        sal_Int32  nContStart = _rRawString.indexOf( _rPartId );
-        if( nContStart != -1 )
+        size_t  nContStart = _rRawString.find( _rPartId );
+        if( nContStart != std::u16string_view::npos )
         {
             nContStart = nContStart + _rPartId.getLength();
             ++nContStart;                   // now its start of content, directly after Id
 
-            sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
+            size_t  nContEnd = _rRawString.find( ',', nContStart );
 
-            if ( nContEnd != -1 )
-                s = _rRawString.copy( nContStart, nContEnd - nContStart );
+            if ( nContEnd != std::u16string_view::npos )
+                s = _rRawString.substr( nContStart, nContEnd - nContStart );
             else
-                s = _rRawString.copy( nContStart );
+                s = _rRawString.substr( nContStart );
         }
 
         return s;
@@ -195,7 +195,7 @@ void MacroWarning::SetCertificate( const css::uno::Reference< css::security::XCe
     mxCert = _rxCert;
     if( mxCert.is() )
     {
-        OUString s = GetContentPart( mxCert->getSubjectName(), "CN" );
+        OUString s( GetContentPart( mxCert->getSubjectName(), "CN" ) );
         mxSignsFI->set_label(s);
         mxViewSignsBtn->set_sensitive(true);
     }

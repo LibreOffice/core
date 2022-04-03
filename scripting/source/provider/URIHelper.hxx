@@ -50,7 +50,7 @@ private:
     OUString SCRIPTS_PART;
 
     bool initBaseURI();
-    OUString getLanguagePart(const OUString& rStorageURI);
+    OUString getLanguagePart(std::u16string_view rStorageURI);
     static OUString getLanguagePath(const OUString& rLanguagePart);
 
 public:

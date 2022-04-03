@@ -225,11 +225,11 @@ Transliteration_titlecase::Transliteration_titlecase()
 
 /// @throws RuntimeException
 static OUString transliterate_titlecase_Impl(
-    const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+    std::u16string_view inStr, sal_Int32 startPos, sal_Int32 nCount,
     const Locale &rLocale,
     Sequence< sal_Int32 >* pOffset )
 {
-    const OUString aText( inStr.copy( startPos, nCount ) );
+    const OUString aText( inStr.substr( startPos, nCount ) );
 
     OUString aRes;
     if (!aText.isEmpty())

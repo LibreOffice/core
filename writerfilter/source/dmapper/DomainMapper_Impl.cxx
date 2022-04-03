@@ -4324,27 +4324,27 @@ std::tuple<OUString, std::vector<OUString>, std::vector<OUString> > splitFieldCo
     return std::make_tuple(sType, arguments, switches);
 }
 
-static OUString lcl_ExtractVariableAndHint( const OUString& rCommand, OUString& rHint )
+static OUString lcl_ExtractVariableAndHint( std::u16string_view rCommand, OUString& rHint )
 {
     // the first word after "ASK " is the variable
     // the text after the variable and before a '\' is the hint
     // if no hint is set the variable is used as hint
     // the quotes of the hint have to be removed
-    sal_Int32 nIndex = rCommand.indexOf( ' ', 2); //find last space after 'ASK'
-    if (nIndex == -1)
+    size_t nIndex = rCommand.find( ' ', 2); //find last space after 'ASK'
+    if (nIndex == std::u16string_view::npos)
         return OUString();
     while(rCommand[nIndex] == ' ')
         ++nIndex;
-    OUString sShortCommand( rCommand.copy( nIndex ) ); //cut off the " ASK "
+    std::u16string_view sShortCommand( rCommand.substr( nIndex ) ); //cut off the " ASK "
 
-    sShortCommand = sShortCommand.getToken(0, '\\');
-    nIndex = 0;
-    OUString sRet = sShortCommand.getToken( 0, ' ', nIndex);
-    if( nIndex > 0)
-        rHint = sShortCommand.copy( nIndex );
+    sShortCommand = o3tl::getToken(sShortCommand, 0, '\\');
+    sal_Int32 nIndex2 = 0;
+    std::u16string_view sRet = o3tl::getToken(sShortCommand, 0, ' ', nIndex2);
+    if( nIndex2 > 0)
+        rHint = sShortCommand.substr( nIndex2 );
     if( rHint.isEmpty() )
         rHint = sRet;
-    return sRet;
+    return OUString(sRet);
 }
 
 
@@ -5169,17 +5169,17 @@ void DomainMapper_Impl::handleFieldSet
     // remove surrounding "" if exists
     if(sHint.getLength() >= 2)
     {
-        OUString sTmp = sHint.trim();
-        if (sTmp.startsWith("\"") && sTmp.endsWith("\""))
+        std::u16string_view sTmp = o3tl::trim(sHint);
+        if (o3tl::starts_with(sTmp, u"\"") && o3tl::ends_with(sTmp, u"\""))
         {
-            sHint = sTmp.copy(1, sTmp.getLength() - 2);
+            sHint = sTmp.substr(1, sTmp.size() - 2);
         }
     }
 
     // determine field master name
     uno::Reference< beans::XPropertySet > xMaster =
         FindOrCreateFieldMaster
-        ("com.sun.star.text.FieldMaster.SetExpression", sVariable );
+        ("com.sun.star.text.FieldMaster.SetExpression", sVariable);
 
     // a set field is a string
     xMaster->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
@@ -5189,8 +5189,9 @@ void DomainMapper_Impl::handleFieldSet
         ( xFieldInterface, uno::UNO_QUERY_THROW );
     xDependentField->attachTextFieldMaster( xMaster );
 
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_HINT), uno::makeAny( sHint ));
-    xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), uno::makeAny( sHint ));
+    uno::Any aAnyHint = uno::makeAny(sHint);
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_HINT), aAnyHint);
+    xFieldProperties->setPropertyValue(getPropertyName(PROP_CONTENT), aAnyHint);
     xFieldProperties->setPropertyValue(getPropertyName(PROP_SUB_TYPE), uno::makeAny(text::SetVariableType::STRING));
 
     // Mimic MS Word behavior (hide the SET)
@@ -6657,13 +6658,13 @@ void DomainMapper_Impl::CloseFieldCommand()
                     // command looks like: " SEQ Table \* ARABIC "
                     OUString sCmd(pContext->GetCommand());
                     // find the sequence name, e.g. "SEQ"
-                    OUString sSeqName( msfilter::util::findQuotedText(sCmd, "SEQ ", '\\') );
-                    sSeqName = sSeqName.trim();
+                    std::u16string_view sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\');
+                    sSeqName = o3tl::trim(sSeqName);
 
                     // create a sequence field master using the sequence name
                     uno::Reference< beans::XPropertySet > xMaster = FindOrCreateFieldMaster(
                                 "com.sun.star.text.FieldMaster.SetExpression",
-                                sSeqName);
+                                OUString(sSeqName));
 
                     xMaster->setPropertyValue(
                         getPropertyName(PROP_SUB_TYPE),
@@ -6678,7 +6679,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     uno::Reference< text::XDependentTextField > xDependentField( xFieldInterface, uno::UNO_QUERY_THROW );
                     xDependentField->attachTextFieldMaster( xMaster );
 
-                    OUString sFormula = sSeqName + "+1";
+                    OUString sFormula = OUString::Concat(sSeqName) + "+1";
                     OUString sValue;
                     if( lcl_FindInCommand( pContext->GetCommand(), 'c', sValue ))
                     {

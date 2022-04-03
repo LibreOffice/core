@@ -36,7 +36,7 @@ namespace skeletonmaker::cpp {
 static void printType(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    codemaker::UnoType::Sort sort, std::u16string_view nucleus, sal_Int32 rank,
     std::vector< OUString > const & arguments,
     rtl::Reference< unoidl::Entity > const & entity, short referenceType,
     bool defaultvalue)
@@ -67,7 +67,7 @@ static void printType(
         if (sort == codemaker::UnoType::Sort::Enum) {
             auto pEnumTypeEntity(dynamic_cast<unoidl::EnumTypeEntity *>(entity.get()));
             assert(pEnumTypeEntity);
-            o << nucleus.copy(nucleus.lastIndexOf('.') + 1) << "_"
+            o << OUString(nucleus.substr(nucleus.rfind('.') + 1)) << "_"
               << pEnumTypeEntity->getMembers()[0].name;
         }
         return;
@@ -261,10 +261,10 @@ static void printConstructor(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort,
-    rtl::Reference< unoidl::Entity > const & entity, OUString const & name,
+    rtl::Reference< unoidl::Entity > const & entity, std::u16string_view name,
     std::vector< OUString > const & arguments)
 {
-    o << "public " << name.copy(name.lastIndexOf('.') + 1) << '(';
+    o << "public " << OUString(name.substr(name.rfind('.') + 1)) << '(';
     printConstructorParameters(
         o, options, manager, sort, entity, name, arguments);
     o << ");\n";
@@ -713,7 +713,7 @@ static void printServiceMembers(
 static void printMapsToCppType(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
-    codemaker::UnoType::Sort sort, OUString const & nucleus, sal_Int32 rank,
+    codemaker::UnoType::Sort sort, std::u16string_view nucleus, sal_Int32 rank,
     std::vector< OUString > const & arguments,
     rtl::Reference< unoidl::Entity > const & entity, const char * cppTypeSort)
 {
@@ -722,7 +722,7 @@ static void printMapsToCppType(
         o << cppTypeSort << ' ';
 
     o << "type \"";
-    if (rank == 0 && nucleus == "com.sun.star.uno.XInterface") {
+    if (rank == 0 && nucleus == u"com.sun.star.uno.XInterface") {
         o << "Reference< com::sun::star::uno::XInterface >";
     } else {
         printType(

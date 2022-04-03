@@ -54,7 +54,7 @@ using namespace com::sun::star;
 namespace {
 
 OUString
-getContentPart( const OUString& _rRawString )
+getContentPart( std::u16string_view _rRawString )
 {
     // search over some parts to find a string
     static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", nullptr };
@@ -63,15 +63,15 @@ getContentPart( const OUString& _rRawString )
     while ( aIDs[i] )
     {
         OUString sPartId = OUString::createFromAscii( aIDs[i++] );
-        sal_Int32 nContStart = _rRawString.indexOf( sPartId );
-        if ( nContStart != -1 )
+        size_t nContStart = _rRawString.find( sPartId );
+        if ( nContStart != std::u16string_view::npos )
         {
             nContStart += sPartId.getLength();
-            sal_Int32 nContEnd = _rRawString.indexOf( ',', nContStart );
-            if ( nContEnd != -1 )
-                sPart = _rRawString.copy( nContStart, nContEnd - nContStart );
+            size_t nContEnd = _rRawString.find( ',', nContStart );
+            if ( nContEnd != std::u16string_view::npos )
+                sPart = _rRawString.substr( nContStart, nContEnd - nContStart );
             else
-                sPart = _rRawString.copy( nContStart );
+                sPart = _rRawString.substr( nContStart );
             break;
         }
     }
