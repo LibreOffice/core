@@ -1848,8 +1848,8 @@ sc::Sparkline* ScTable::CreateSparkline(SCCOL nCol, SCROW nRow, std::shared_ptr<
     ScColumn& rColumn = CreateColumnIfNotExists(nCol);
 
     std::shared_ptr<sc::Sparkline> pSparkline(new sc::Sparkline(nCol, nRow, pSparklineGroup));
-    maSparklineList.addSparkline(pSparkline);
     rColumn.CreateSparklineCell(nRow, pSparkline);
+
     return pSparkline.get();
 }
 

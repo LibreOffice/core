@@ -25,6 +25,30 @@ void SparklineList::addSparkline(std::shared_ptr<Sparkline> const& pSparkline)
         m_aSparklineGroups.push_back(pWeakGroup);
 }
 
+void SparklineList::removeSparkline(std::shared_ptr<Sparkline> const& pSparkline)
+{
+    auto pWeakGroup = std::weak_ptr<SparklineGroup>(pSparkline->getSparklineGroup());
+    auto iteratorGroup = m_aSparklineGroupMap.find(pWeakGroup);
+    if (iteratorGroup != m_aSparklineGroupMap.end())
+    {
+        auto& rWeakSparklines = iteratorGroup->second;
+
+        for (auto iterator = rWeakSparklines.begin(); iterator != rWeakSparklines.end();)
+        {
+            auto pCurrentSparkline = iterator->lock();
+
+            if (pCurrentSparkline && pCurrentSparkline != pSparkline)
+            {
+                iterator++;
+            }
+            else
+            {
+                iterator = rWeakSparklines.erase(iterator);
+            }
+        }
+    }
+}
+
 std::vector<std::shared_ptr<SparklineGroup>> SparklineList::getSparklineGroups()
 {
     std::vector<std::shared_ptr<SparklineGroup>> toReturn;
