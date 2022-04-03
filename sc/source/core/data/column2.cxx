@@ -43,6 +43,7 @@
 #include <tokenstringcontext.hxx>
 #include <sortparam.hxx>
 #include <SparklineGroup.hxx>
+#include <SparklineList.hxx>
 
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
@@ -1996,6 +1997,29 @@ void ScColumn::DeleteEmptyBroadcasters()
 
 // Sparklines
 
+namespace
+{
+
+class DeletingSparklinesHandler
+{
+    ScDocument& m_rDocument;
+    SCTAB m_nTab;
+
+public:
+    DeletingSparklinesHandler(ScDocument& rDocument, SCTAB nTab)
+        : m_rDocument(rDocument)
+        , m_nTab(nTab)
+    {}
+
+    void operator() (size_t /*nRow*/, const sc::SparklineCell* pCell)
+    {
+        auto* pList = m_rDocument.GetSparklineList(m_nTab);
+        pList->removeSparkline(pCell->getSparkline());
+    }
+};
+
+} // end anonymous ns
+
 sc::SparklineCell* ScColumn::GetSparklineCell(SCROW nRow)
 {
     return maSparklines.get<sc::SparklineCell*>(nRow);
@@ -2003,11 +2027,16 @@ sc::SparklineCell* ScColumn::GetSparklineCell(SCROW nRow)
 
 void ScColumn::CreateSparklineCell(SCROW nRow, std::shared_ptr<sc::Sparkline> const& pSparkline)
 {
+    auto* pList = GetDoc().GetSparklineList(GetTab());
+    pList->addSparkline(pSparkline);
     maSparklines.set(nRow, new sc::SparklineCell(pSparkline));
 }
 
 void ScColumn::DeleteSparklineCells(sc::ColumnBlockPosition& rBlockPos, SCROW nRow1, SCROW nRow2)
 {
+    DeletingSparklinesHandler aFunction(GetDoc(), nTab);
+    sc::ParseSparkline(maSparklines.begin(), maSparklines, nRow1, nRow2, aFunction);
+
     rBlockPos.miSparklinePos = maSparklines.set_empty(rBlockPos.miSparklinePos, nRow1, nRow2);
 }
 
@@ -2015,6 +2044,9 @@ bool ScColumn::DeleteSparkline(SCROW nRow)
 {
     if (!GetDoc().ValidRow(nRow))
         return false;
+
+    DeletingSparklinesHandler aFunction(GetDoc(), nTab);
+    sc::ParseSparkline(maSparklines.begin(), maSparklines, nRow, nRow, aFunction);
 
     maSparklines.set_empty(nRow, nRow);
     return true;
@@ -2056,15 +2088,20 @@ public:
     void operator() (size_t nRow, const sc::SparklineCell* pCell)
     {
         SCROW nDestRow = nRow + mnDestOffset;
+        SCTAB nDestTab = mrDestColumn.GetCol();
 
         auto const& pSparkline = pCell->getSparkline();
         auto const& pGroup = pCell->getSparklineGroup();
 
-        auto pDestinationGroup = mrDestColumn.GetDoc().SearchSparklineGroup(pGroup->getID());
+        auto& rDestDoc = mrDestColumn.GetDoc();
+        auto pDestinationGroup = rDestDoc.SearchSparklineGroup(pGroup->getID());
         if (!pDestinationGroup)
             pDestinationGroup = std::make_shared<sc::SparklineGroup>(*pGroup); // Copy the group
-        auto pNewSparkline = std::make_shared<sc::Sparkline>(mrDestColumn.GetCol(), nDestRow, pDestinationGroup);
+        auto pNewSparkline = std::make_shared<sc::Sparkline>(nDestTab, nDestRow, pDestinationGroup);
         pNewSparkline->setInputRange(pSparkline->getInputRange());
+
+        auto* pList = rDestDoc.GetSparklineList(nDestTab);
+        pList->addSparkline(pNewSparkline);
 
         miDestPosition = mrDestSparkline.set(miDestPosition, nDestRow, new sc::SparklineCell(pNewSparkline));
     }
