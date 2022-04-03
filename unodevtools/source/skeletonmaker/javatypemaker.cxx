@@ -248,10 +248,15 @@ static void printConstructor(
     std::ostream & o, ProgramOptions const & options,
     rtl::Reference< TypeManager > const & manager,
     codemaker::UnoType::Sort sort,
-    rtl::Reference< unoidl::Entity > const & entity, OUString const & name,
+    rtl::Reference< unoidl::Entity > const & entity, std::u16string_view name,
     std::vector< OUString > const & arguments)
 {
-    o << "public " << name.copy(name.lastIndexOf('.') + 1) << '(';
+    size_t idx = name.rfind('.');
+    if (idx == std::u16string_view::npos)
+        idx = 0;
+    else
+        ++idx;
+    o << "public " << name.substr(idx) << '(';
     printConstructorParameters(
         o, options, manager, sort, entity, name, arguments);
     o << ");\n";

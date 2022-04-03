@@ -32,11 +32,11 @@ using namespace ::codemaker::java;
 
 namespace skeletonmaker::java {
 
-static void generatePackage(std::ostream & o, const OString & implname)
+static void generatePackage(std::ostream & o, std::string_view implname)
 {
-    sal_Int32 index = implname.lastIndexOf('.');
-    if (index != -1)
-        o << "package " << implname.copy(0, index) << ";\n\n";
+    size_t index = implname.rfind('.');
+    if (index != std::string_view::npos)
+        o << "package " << implname.substr(0, index) << ";\n\n";
 }
 
 static void generateImports(std::ostream & o, ProgramOptions const & options,

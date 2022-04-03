@@ -1514,15 +1514,15 @@ OUString SwHiddenTextField::GetColumnName(const OUString& rName)
     return rName;
 }
 
-OUString SwHiddenTextField::GetDBName(const OUString& rName, SwDoc& rDoc)
+OUString SwHiddenTextField::GetDBName(std::u16string_view rName, SwDoc& rDoc)
 {
-    sal_Int32 nPos = rName.indexOf(DB_DELIM);
-    if( nPos>=0 )
+    size_t nPos = rName.find(DB_DELIM);
+    if( nPos != std::u16string_view::npos )
     {
-        nPos = rName.indexOf(DB_DELIM, nPos + 1);
+        nPos = rName.find(DB_DELIM, nPos + 1);
 
-        if( nPos>=0 )
-            return rName.copy(0, nPos);
+        if( nPos != std::u16string_view::npos )
+            return OUString(rName.substr(0, nPos));
     }
 
     SwDBData aData = rDoc.GetDBData();

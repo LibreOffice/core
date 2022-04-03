@@ -76,8 +76,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 // Some constants
-const char DELIM[] = "::";
-const sal_Int32 DELIMLEN = strlen(DELIM);
+constexpr std::u16string_view DELIM = u"::";
+constexpr sal_Int32 DELIMLEN = DELIM.size();
 
 static bool isKeyEventOk( awt::KeyEvent& evt, const Sequence< Any >& params )
 {
@@ -295,7 +295,7 @@ private:
 }
 
 static bool
-eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& evtDesc, const OUString& sCodeName )
+eventMethodToDescriptor( std::u16string_view rEventMethod, ScriptEventDescriptor& evtDesc, const OUString& sCodeName )
 {
     // format of ControlListener is TypeName::methodname e.g.
     // "com.sun.star.awt.XActionListener::actionPerformed" or
@@ -303,13 +303,13 @@ eventMethodToDescriptor( const OUString& rEventMethod, ScriptEventDescriptor& ev
 
     OUString sMethodName;
     OUString sTypeName;
-    sal_Int32 nDelimPos = rEventMethod.indexOf( DELIM );
-    if ( nDelimPos == -1 )
+    size_t nDelimPos = rEventMethod.find( DELIM );
+    if ( nDelimPos == std::u16string_view::npos )
     {
         return false;
     }
-    sMethodName = rEventMethod.copy( nDelimPos + DELIMLEN );
-    sTypeName = rEventMethod.copy( 0, nDelimPos );
+    sMethodName = rEventMethod.substr( nDelimPos + DELIMLEN );
+    sTypeName = rEventMethod.substr( 0, nDelimPos );
 
     EventInfoHash& infos = getEventTransInfo();
 

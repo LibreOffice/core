@@ -268,7 +268,7 @@ static OUString GetRangeRepFromTableAndCells( std::u16string_view rTableName,
 }
 
 static bool GetTableAndCellsFromRangeRep(
-        const OUString &rRangeRepresentation,
+        std::u16string_view rRangeRepresentation,
         OUString &rTableName,
         OUString &rStartCell,
         OUString &rEndCell,
@@ -279,16 +279,16 @@ static bool GetTableAndCellsFromRangeRep(
     OUString aTableName;    // table name
     OUString aStartCell;  // name of top left cell
     OUString aEndCell;    // name of bottom right cell
-    sal_Int32 nIdx = rRangeRepresentation.indexOf( '.' );
-    if (nIdx >= 0)
+    size_t nIdx = rRangeRepresentation.find( '.' );
+    if (nIdx != std::u16string_view::npos)
     {
-        aTableName = rRangeRepresentation.copy( 0, nIdx );
-        OUString aRange = rRangeRepresentation.copy( nIdx + 1 ); // cell range
-        sal_Int32 nPos = aRange.indexOf( ':' );
-        if (nPos >= 0) // a cell-range like "Table1.A2:D4"
+        aTableName = rRangeRepresentation.substr( 0, nIdx );
+        std::u16string_view aRange = rRangeRepresentation.substr( nIdx + 1 ); // cell range
+        size_t nPos = aRange.find( ':' );
+        if (nPos != std::u16string_view::npos) // a cell-range like "Table1.A2:D4"
         {
-            aStartCell = aRange.copy( 0, nPos );
-            aEndCell   = aRange.copy( nPos + 1 );
+            aStartCell = aRange.substr( 0, nPos );
+            aEndCell   = aRange.substr( nPos + 1 );
 
             // need to switch start and end cell ?
             // (does not check for normalization here)
@@ -340,7 +340,7 @@ static void GetTableByName( const SwDoc &rDoc, std::u16string_view rTableName,
 
 static void GetFormatAndCreateCursorFromRangeRep(
         const SwDoc    *pDoc,
-        const OUString &rRangeRepresentation,   // must be a single range (i.e. so called sub-range)
+        std::u16string_view rRangeRepresentation,   // must be a single range (i.e. so called sub-range)
         SwFrameFormat    **ppTableFormat,     // will be set to the table format of the table used in the range representation
         std::shared_ptr<SwUnoCursor>&   rpUnoCursor )   // will be set to cursor spanning the cell range (cursor will be created!)
 {
@@ -928,10 +928,10 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL SwChartDataProvider::create
  * contains multiple ranges.
  */
 OUString SwChartDataProvider::GetBrokenCellRangeForExport(
-    const OUString &rCellRangeRepresentation )
+    std::u16string_view rCellRangeRepresentation )
 {
     // check that we do not have multiple ranges
-    if (-1 == rCellRangeRepresentation.indexOf( ';' ))
+    if (std::u16string_view::npos == rCellRangeRepresentation.find( ';' ))
     {
         // get current cell and table names
         OUString aTableName, aStartCell, aEndCell;
@@ -1289,7 +1289,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
 }
 
 uno::Reference< chart2::data::XDataSequence > SwChartDataProvider::Impl_createDataSequenceByRangeRepresentation(
-        const OUString& rRangeRepresentation, bool bTestOnly )
+        std::u16string_view rRangeRepresentation, bool bTestOnly )
 {
     if (m_bDisposed)
         throw lang::DisposedException();

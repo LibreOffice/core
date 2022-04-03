@@ -4727,24 +4727,25 @@ bool SwXTextCellStyle::IsPhysical() const
     return m_bPhysical;
 }
 
-SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, const OUString& sName, OUString* pParentName)
+SwBoxAutoFormat* SwXTextCellStyle::GetBoxAutoFormat(SwDocShell* pDocShell, std::u16string_view sName, OUString* pParentName)
 {
-    if (sName.isEmpty())
+    if (sName.empty())
         return nullptr;
 
     SwBoxAutoFormat* pBoxAutoFormat = pDocShell->GetDoc()->GetCellStyles().GetBoxFormat(sName);
     if (!pBoxAutoFormat)
     {
-        sal_Int32 nSeparatorIndex, nTemplateIndex;
-        OUString sParentName, sCellSubName;
+        sal_Int32 nTemplateIndex;
+        OUString sParentName;
+        std::u16string_view sCellSubName;
 
-        nSeparatorIndex = sName.lastIndexOf('.');
-        if (0 >= nSeparatorIndex)
+        size_t nSeparatorIndex = sName.rfind('.');
+        if (nSeparatorIndex == std::u16string_view::npos)
             return nullptr;
 
-        sParentName = sName.copy(0, nSeparatorIndex);
-        sCellSubName = sName.copy(nSeparatorIndex+1);
-        nTemplateIndex = sCellSubName.toInt32()-1; // -1 because cell styles names start from 1, but internally are indexed from 0
+        sParentName = sName.substr(0, nSeparatorIndex);
+        sCellSubName = sName.substr(nSeparatorIndex+1);
+        nTemplateIndex = o3tl::toInt32(sCellSubName)-1; // -1 because cell styles names start from 1, but internally are indexed from 0
         if (0 > nTemplateIndex)
             return nullptr;
 
