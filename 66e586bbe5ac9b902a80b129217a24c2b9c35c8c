@@ -16,6 +16,24 @@
       "message": "i don\u0027t see a check to only export this if the ODF version is \"extended\" - guess it could go here?",
       "revId": "66e586bbe5ac9b902a80b129217a24c2b9c35c8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa6cce69_418f87a7",
+        "filename": "sc/source/filter/xml/xmlexprt.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4517,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-04-04T09:49:57Z",
+      "side": 1,
+      "message": "There is a check around where this method is called, or did I misunderstood that check?\n\nif (getSaneDefaultVersion() \u0026 SvtSaveOptions::ODFSVER_EXTENDED)\n{...}",
+      "parentUuid": "75d39a2c_1b54fc2d",
+      "revId": "66e586bbe5ac9b902a80b129217a24c2b9c35c8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
