@@ -119,8 +119,7 @@ void XMLTextShapeImportHelper::addShape(
     // anchor type
     xPropSet->setPropertyValue( gsAnchorType, Any(eAnchorType) );
 
-    // page number (must be set after the frame is inserted, because it
-    // will be overwritten then inserting the frame.
+    // page number must be set before the frame is inserted
     switch( eAnchorType )
     {
     case TextContentAnchorType_AT_PAGE:
