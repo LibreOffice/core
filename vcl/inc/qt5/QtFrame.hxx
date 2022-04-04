@@ -132,7 +132,6 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     int menuBarOffset() const;
 
     void fixICCCMwindowGroup();
-    void modalReparent(bool bVisible);
 
 public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
@@ -216,6 +215,8 @@ public:
 
     void setInputLanguage(LanguageType);
     inline bool isPopup() const;
+
+    static void SetSystemEnvDataPlatform(SystemEnvData&);
     static void FillSystemEnvData(SystemEnvData&, sal_IntPtr pWindow, QWidget* pWidget);
 };
 
