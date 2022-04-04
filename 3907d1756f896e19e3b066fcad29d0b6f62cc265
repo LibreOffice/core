@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb5c87de_be3bc5ee",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-04T11:55:22Z",
+      "side": 1,
+      "message": "what is that?",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af0cc85a_be48fd48",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-04T11:55:22Z",
+      "side": 1,
+      "message": "This line should be a general description of the interface.\n\nBug references here are probably not very helpful. You might instead explain in which circumstances the interface is useful.\n\nThis documentation is public for all extension developers, so should be written with that audience in mind.",
+      "range": {
+        "startLine": 15,
+        "startChar": 55,
+        "endLine": 15,
+        "endChar": 70
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "25aa0b3a_4a3b06c4",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-04T11:55:22Z",
+      "side": 1,
+      "message": "I don\u0027t understand what that means.",
+      "range": {
+        "startLine": 21,
+        "startChar": 8,
+        "endLine": 21,
+        "endChar": 59
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35920fb_8c81ae94",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-04T11:55:22Z",
+      "side": 1,
+      "message": "And when false?",
+      "range": {
+        "startLine": 24,
+        "startChar": 12,
+        "endLine": 24,
+        "endChar": 56
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab66f3b7_b5b5537c",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-04T11:55:22Z",
+      "side": 1,
+      "message": "Ole or OLE?",
+      "range": {
+        "startLine": 26,
+        "startChar": 15,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
