@@ -16,6 +16,24 @@
       "message": "should this be non-nillable (which requires an explicit oor:nillable\u003d\"false\"), or should there be a semantic distinction between nil and empty string values (but in which case it would look somewhat odd to specify a default value of empty string instead of nil here)?",
       "revId": "9471cb6df8a12b76a3af654a72bb94cea77bf500",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4582e7d1_ae09e126",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-04-04T11:26:04Z",
+      "side": 1,
+      "message": "The default value is needed because otherwise the advanced settings editor in Tools-\u003eConfigure-\u003eAdvanced claims the type is \u0027void\u0027 and doesn\u0027t allow editing it. But I suppose I can make this non-nillable.",
+      "parentUuid": "0d393c7d_ee317734",
+      "revId": "9471cb6df8a12b76a3af654a72bb94cea77bf500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
