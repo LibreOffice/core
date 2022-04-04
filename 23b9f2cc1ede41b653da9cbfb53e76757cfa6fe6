@@ -70,6 +70,24 @@
       "parentUuid": "9e24fd40_9d9ac388",
       "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7584cfee_6e90de6f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-04T09:37:13Z",
+      "side": 1,
+      "message": "Accidentally \"removed myself from reviewers\" - thick fingers :-)\n\n\u003e I\u0027m not convinced that stashing a function call that is only made for its side effects into a return statement is a net readability win.\n\nLet me disagree. TL;DR: I suppose that there are cases that express \"this is the function result\" idea neatly, like here.\n\nCompare to this imaginary sample:\n\n  void CloseHandle(HANDLE);\n  void WriteToFile(char* filename)\n  {\n    HANDLE hFile \u003d OpenFile(filename);\n    // Write to the file represented by handle\n    return CloseHandle(hFile);\n  }\n\nIMO, *this* example would be the pure \"stashing a function call that is only made for its side effects\" that you meant. But in the discussed gerrit change, the used syntax means that \"the error, set in some state instead of returned from function, *is* the function\u0027s result in this case\". And I believe it is a real readability win.",
+      "parentUuid": "cd1303f2_512ff639",
+      "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
