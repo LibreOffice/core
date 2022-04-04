@@ -4442,7 +4442,7 @@ void HwpReader::makeHidden(Hidden * hbox)
 
     while (para)
     {
-        for (int n = 0; n < para->nch && para->hhstr[n]->hh;
+        for (int n = 0; n < para->nch && para->hhstr.count(n) && para->hhstr[n]->hh;
             n += para->hhstr[n]->WSize())
         {
               res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
