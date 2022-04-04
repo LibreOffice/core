@@ -635,6 +635,7 @@
 #define FN_UNO_TRANSFORMED_GRAPHIC          (FN_EXTRA2 + 127)
 #define FN_UNO_GRAPHIC_PREVIEW              (FN_EXTRA2 + 128)
 #define FN_UNO_LINEBREAK (FN_EXTRA2 + 129)
+#define FN_UNO_CONTENT_CONTROL (FN_EXTRA2 + 130)
 
 // Area: Help
 // Region: Traveling & Selection
