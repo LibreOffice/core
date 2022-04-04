@@ -410,7 +410,7 @@ void loadDiagram( ShapePtr const & pShape,
 
     // collect data, init maps
     // for Diagram import, do - for now - NOT clear all oox::drawingml::Shape
-    pData->build(false);
+    pData->buildDiagramDataModel(false);
 
     // diagram loaded. now lump together & attach to shape
     pDiagram->addTo(pShape);
