@@ -80,6 +80,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestRoundRect();
     void TestCreatePen();
     void TestPdfInEmf();
+    void TestStockObject();
 
     Primitive2DSequence parseEmf(std::u16string_view aSource);
 
@@ -124,6 +125,7 @@ public:
     CPPUNIT_TEST(TestRoundRect);
     CPPUNIT_TEST(TestCreatePen);
     CPPUNIT_TEST(TestPdfInEmf);
+    CPPUNIT_TEST(TestStockObject);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -1346,6 +1348,22 @@ void Test::TestPdfInEmf()
     Size size = aBitmapEx.GetSizePixel();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt8>(0),
                          aBitmapEx.GetAlpha(size.Width() / 2, size.Height() / 2));
+}
+
+void Test::TestStockObject()
+{
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestStockObject.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+
+    drawinglayer::Primitive2dXmlDump dumper;
+    Primitive2DContainer aContainer(aSequence);
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(aContainer);
+    CPPUNIT_ASSERT(pDocument);
+
+    //   Without the fix in place, this test would have failed with
+    // - Expected: #000000 (Black)
+    // - Actual  : #FFFFFF (White)
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor[2]", "color", "#000000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
