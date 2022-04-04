@@ -168,6 +168,8 @@ inline constexpr OStringLiteral HID_SELECTTABLES = "SC_HID_SELECTTABLES";
 #define HID_AAI_FUNC_IMSECH                                     "SC_HID_AAI_FUNC_IMSECH"
 #define HID_AAI_FUNC_IMCSCH                                     "SC_HID_AAI_FUNC_IMCSCH"
 
+#define HID_UPDATE_LINK_WARNING                                 "cui/ui/baselinksdialog/UPDATE_NOW"
+
 // DateFunc Addin Functions (max.20) -----------------------------------------
 #define HID_DAI_FUNC_DAYSINMONTH                                "SC_HID_DAI_FUNC_DAYSINMONTH"
 #define HID_DAI_FUNC_DAYSINYEAR                                 "SC_HID_DAI_FUNC_DAYSINYEAR"
