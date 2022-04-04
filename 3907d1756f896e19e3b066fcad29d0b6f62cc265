@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0026f9b9_97b84ed0",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:39:19Z",
+      "side": 1,
+      "message": "This interface is not public, but i want improve",
+      "parentUuid": "af0cc85a_be48fd48",
+      "range": {
+        "startLine": 15,
+        "startChar": 55,
+        "endLine": 15,
+        "endChar": 70
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "25aa0b3a_4a3b06c4",
         "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
         "patchSetId": 17
@@ -106,6 +130,30 @@
       "writtenOn": "2022-04-04T11:55:22Z",
       "side": 1,
       "message": "Ole or OLE?",
+      "range": {
+        "startLine": 26,
+        "startChar": 15,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad309557_7ae474a5",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:39:19Z",
+      "side": 1,
+      "message": "that was reviewed from Stephan, and it was okay!?",
+      "parentUuid": "ab66f3b7_b5b5537c",
       "range": {
         "startLine": 26,
         "startChar": 15,
