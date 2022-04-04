@@ -25,6 +25,7 @@
 
 #include <com/sun/star/frame/CommandGroup.hpp>
 #include <o3tl/unsafe_downcast.hxx>
+#include <o3tl/string_view.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/eeitem.hxx>
@@ -534,8 +535,8 @@ bool DrawCommandDispatch::parseCommandURL( const OUString& rCommandURL, sal_uInt
     OUString aType;
 
     sal_Int32 nIndex = std::min(sal_Int32(1), rCommandURL.getLength());
-    OUString aToken = rCommandURL.getToken( 0, '.', nIndex );
-    if ( nIndex == -1 || aToken.isEmpty() )
+    std::u16string_view aToken = o3tl::getToken(rCommandURL, 0, '.', nIndex );
+    if ( nIndex == -1 || aToken.empty() )
     {
         aBaseCommand = rCommandURL;
         SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.find( aBaseCommand );

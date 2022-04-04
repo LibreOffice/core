@@ -50,6 +50,7 @@
 #include <comphelper/SetFlagContextHelper.hxx>
 #include <comphelper/documentinfo.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
@@ -1048,7 +1049,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     sal_Int32 nIndex = 0;
     while (nIndex != -1)
     {
-        OUString aTmp( aStoredEntry.getToken( 0, ';', nIndex ) );
+        std::u16string_view aTmp( o3tl::getToken(aStoredEntry, 0, ';', nIndex ) );
 
         bool bTmpEntry;
         if (!xEntry)

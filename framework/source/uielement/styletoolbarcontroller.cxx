@@ -13,6 +13,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/status/Template.hpp>
@@ -92,21 +93,21 @@ StyleDispatcher::StyleDispatcher( const css::uno::Reference< css::frame::XFrame 
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aParam = aParams.getToken( 0, '&', nIndex );
+        std::u16string_view aParam = o3tl::getToken(aParams, 0, '&', nIndex );
 
         sal_Int32 nParamIndex = 0;
-        OUString aParamName = aParam.getToken( 0, '=', nParamIndex );
+        std::u16string_view aParamName = o3tl::getToken(aParam, 0, '=', nParamIndex );
         if ( nParamIndex < 0 )
             break;
 
-        if ( aParamName == "Style:string" )
+        if ( aParamName == u"Style:string" )
         {
-            OUString aValue = aParam.getToken( 0, '=', nParamIndex );
+            std::u16string_view aValue = o3tl::getToken(aParam, 0, '=', nParamIndex );
             aStyleName = INetURLObject::decode( aValue, INetURLObject::DecodeMechanism::WithCharset );
         }
-        else if ( aParamName == "FamilyName:string" )
+        else if ( aParamName == u"FamilyName:string" )
         {
-            aFamilyName = aParam.getToken( 0, '=', nParamIndex );
+            aFamilyName = o3tl::getToken(aParam, 0, '=', nParamIndex );
         }
 
     } while ( nIndex >= 0 );

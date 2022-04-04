@@ -640,19 +640,19 @@ static SwTextNode* lcl_FindOutlineNum(const SwOutlineNodes& rOutlNds,
     //  (Number followed by a period, with 5 repetitions)
     //  i.e.: "1.1.", "1.", "1.1.1."
     sal_Int32 nPos = 0;
-    OUString sNum = rName.getToken( 0, '.', nPos );
+    std::u16string_view sNum = o3tl::getToken(rName, 0, '.', nPos );
     if( -1 == nPos )
         return nullptr;           // invalid number!
 
     sal_uInt16 nLevelVal[ MAXLEVEL ];       // numbers of all levels
     memset( nLevelVal, 0, MAXLEVEL * sizeof( nLevelVal[0] ));
     int nLevel = 0;
-    OUString sName( rName );
+    std::u16string_view sName( rName );
 
     while( -1 != nPos )
     {
         sal_uInt16 nVal = 0;
-        for( sal_Int32 n = 0; n < sNum.getLength(); ++n )
+        for( size_t n = 0; n < sNum.size(); ++n )
         {
             const sal_Unicode c {sNum[ n ]};
             if( '0' <= c && c <= '9' )
@@ -669,9 +669,9 @@ static SwTextNode* lcl_FindOutlineNum(const SwOutlineNodes& rOutlNds,
         if( MAXLEVEL > nLevel )
             nLevelVal[ nLevel++ ] = nVal;
 
-        sName = sName.copy( nPos );
+        sName = sName.substr( nPos );
         nPos = 0;
-        sNum = sName.getToken( 0, '.', nPos );
+        sNum = o3tl::getToken(sName, 0, '.', nPos );
         // #i4533# without this check all parts delimited by a dot are treated as outline numbers
         if(!comphelper::string::isdigitAsciiString(sNum))
             break;
@@ -752,8 +752,8 @@ bool SwDoc::GotoOutline(SwPosition& rPos, const OUString& rName, SwRootFrame con
             while(!sExpandedText.isEmpty())
             {
                 sal_Int32 nPos = 0;
-                OUString sTempNum = sExpandedText.getToken(0, '.', nPos);
-                if( sTempNum.isEmpty() || -1 == nPos ||
+                std::u16string_view sTempNum = o3tl::getToken(sExpandedText, 0, '.', nPos);
+                if( sTempNum.empty() || -1 == nPos ||
                     !comphelper::string::isdigitAsciiString(sTempNum))
                     break;
                 sExpandedText = sExpandedText.copy(nPos);

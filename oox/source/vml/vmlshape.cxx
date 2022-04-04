@@ -881,12 +881,12 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             sal_Int32 nIndex = 0;
             do
             {
-                OUString aToken = maTypeModel.maAdjustments.getToken(0, ',', nIndex);
+                std::u16string_view aToken = o3tl::getToken(maTypeModel.maAdjustments, 0, ',', nIndex);
                 drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue;
-                if (aToken.isEmpty())
+                if (aToken.empty())
                     aAdjustmentValue.State = css::beans::PropertyState::PropertyState_DEFAULT_VALUE;
                 else
-                    aAdjustmentValue.Value <<= aToken.toInt32();
+                    aAdjustmentValue.Value <<= o3tl::toInt32(aToken);
                 aAdjustmentValues.push_back(aAdjustmentValue);
             } while (nIndex >= 0);
 

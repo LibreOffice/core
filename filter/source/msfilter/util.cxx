@@ -10,6 +10,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustring.hxx>
+#include <comphelper/string.hxx>
 #include <unotools/fontcvt.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/BitmapPalette.hxx>
@@ -485,10 +486,10 @@ bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal
         const OUString sParams( GetResult() );
 
         sal_Int32 nIndex = 0;
-        const OUString sStart( sParams.getToken(0, '-', nIndex) );
+        const std::u16string_view sStart = o3tl::getToken(sParams, 0, '-', nIndex);
         if (nIndex>=0)
         {
-            nStart = sStart.toInt32();
+            nStart = o3tl::toInt32(sStart);
             nEnd   = o3tl::toInt32(sParams.subView(nIndex));
         }
     }

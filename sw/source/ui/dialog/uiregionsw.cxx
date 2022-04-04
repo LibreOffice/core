@@ -232,9 +232,9 @@ void SectRepr::SetFile( std::u16string_view rFile )
     OUString sNewFile( INetURLObject::decode( rFile,
                                            INetURLObject::DecodeMechanism::Unambiguous ));
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
-    const OUString sSub( sOldFileName.getToken( 2, sfx2::cTokenSeparator ) );
+    const std::u16string_view sSub( o3tl::getToken(sOldFileName, 2, sfx2::cTokenSeparator ) );
 
-    if( !rFile.empty() || !sSub.isEmpty() )
+    if( !rFile.empty() || !sSub.empty() )
     {
         sNewFile += OUStringChar(sfx2::cTokenSeparator);
         if( !rFile.empty() ) // Filter only with FileName
@@ -245,7 +245,7 @@ void SectRepr::SetFile( std::u16string_view rFile )
 
     m_SectionData.SetLinkFileName( sNewFile );
 
-    if( !rFile.empty() || !sSub.isEmpty() )
+    if( !rFile.empty() || !sSub.empty() )
     {
         m_SectionData.SetType( SectionType::FileLink );
     }
@@ -260,13 +260,13 @@ void SectRepr::SetFilter( std::u16string_view rFilter )
     OUString sNewFile;
     const OUString sOldFileName( m_SectionData.GetLinkFileName() );
     sal_Int32 nIdx{ 0 };
-    const OUString sFile( sOldFileName.getToken( 0, sfx2::cTokenSeparator, nIdx ) ); // token 0
-    const OUString sSub( sOldFileName.getToken( 1, sfx2::cTokenSeparator, nIdx ) );  // token 2
+    const std::u16string_view sFile( o3tl::getToken(sOldFileName, 0, sfx2::cTokenSeparator, nIdx ) ); // token 0
+    const std::u16string_view sSub( o3tl::getToken(sOldFileName, 1, sfx2::cTokenSeparator, nIdx ) );  // token 2
 
-    if( !sFile.isEmpty() )
+    if( !sFile.empty() )
         sNewFile = sFile + OUStringChar(sfx2::cTokenSeparator) +
                    rFilter + OUStringChar(sfx2::cTokenSeparator) + sSub;
-    else if( !sSub.isEmpty() )
+    else if( !sSub.empty() )
         sNewFile = OUStringChar(sfx2::cTokenSeparator) + OUStringChar(sfx2::cTokenSeparator) + sSub;
 
     m_SectionData.SetLinkFileName( sNewFile );
@@ -282,16 +282,16 @@ void SectRepr::SetSubRegion(std::u16string_view rSubRegion)
     OUString sNewFile;
     sal_Int32 n(0);
     const OUString sLinkFileName(m_SectionData.GetLinkFileName());
-    const OUString sOldFileName( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
-    const OUString sFilter( sLinkFileName.getToken( 0, sfx2::cTokenSeparator, n ) );
+    const std::u16string_view sOldFileName( o3tl::getToken(sLinkFileName, 0, sfx2::cTokenSeparator, n ) );
+    const std::u16string_view sFilter( o3tl::getToken(sLinkFileName, 0, sfx2::cTokenSeparator, n ) );
 
-    if( !rSubRegion.empty() || !sOldFileName.isEmpty() )
+    if( !rSubRegion.empty() || !sOldFileName.empty() )
         sNewFile = sOldFileName + OUStringChar(sfx2::cTokenSeparator) +
                    sFilter + OUStringChar(sfx2::cTokenSeparator) + rSubRegion;
 
     m_SectionData.SetLinkFileName( sNewFile );
 
-    if( !rSubRegion.empty() || !sOldFileName.isEmpty() )
+    if( !rSubRegion.empty() || !sOldFileName.empty() )
     {
         m_SectionData.SetType( SectionType::FileLink );
     }
