@@ -1166,6 +1166,12 @@ sal_Int32 SAL_CALL rtl_ustr_toInt32(const sal_Unicode* pStr, sal_Int16 nRadix) S
     return rtl::str::toInt<sal_Int32>(rtl::str::null_terminated(pStr), nRadix);
 }
 
+sal_Int32 SAL_CALL rtl_ustr_toInt32_WithLength(const sal_Unicode* pStr, sal_Int16 nRadix,
+                                               sal_Int32 nStrLength) SAL_THROW_EXTERN_C()
+{
+    return rtl::str::toInt<sal_Int32>(rtl::str::with_length(pStr, nStrLength), nRadix);
+}
+
 sal_Int64 SAL_CALL rtl_ustr_toInt64(const sal_Unicode* pStr, sal_Int16 nRadix) SAL_THROW_EXTERN_C()
 {
     return rtl::str::toInt<sal_Int64>(rtl::str::null_terminated(pStr), nRadix);

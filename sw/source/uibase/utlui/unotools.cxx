@@ -499,7 +499,7 @@ void SwOneExampleFrame::PopupHdl(std::string_view rId)
     std::string_view sZoomValue;
     if (o3tl::starts_with(rId, "zoom", &sZoomValue))
     {
-        sal_Int16 nZoom = rtl_str_toInt64_WithLength(sZoomValue.data(), 10, sZoomValue.length());
+        sal_Int16 nZoom = comphelper::string::toInt32(sZoomValue);
         uno::Reference< view::XViewSettingsSupplier >  xSettings(m_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 

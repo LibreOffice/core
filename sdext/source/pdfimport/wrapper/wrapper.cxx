@@ -36,6 +36,7 @@
 #include <sal/log.hxx>
 
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/rendering/PathCapType.hpp>
@@ -254,25 +255,19 @@ std::string_view LineParser::readNextToken()
 void LineParser::readInt32( sal_Int32& o_Value )
 {
     std::string_view tok = readNextToken();
-    sal_Int64 n = rtl_str_toInt64_WithLength(tok.data(), 10, tok.size());
-    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
-        n = 0;
-    o_Value = n;
+    o_Value = comphelper::string::toInt32(tok);
 }
 
 sal_Int32 LineParser::readInt32()
 {
     std::string_view tok = readNextToken();
-    sal_Int64 n =rtl_str_toInt64_WithLength(tok.data(), 10, tok.size());
-    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
-        n = 0;
-    return n;
+    return comphelper::string::toInt32(tok);
 }
 
 void LineParser::readInt64( sal_Int64& o_Value )
 {
     std::string_view tok = readNextToken();
-    o_Value = rtl_str_toInt64_WithLength(tok.data(), 10, tok.size());
+    o_Value = comphelper::string::toInt64(tok);
 }
 
 void LineParser::readDouble( double& o_Value )

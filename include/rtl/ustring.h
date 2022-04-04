@@ -1077,6 +1077,32 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_ustr_toBoolean(
 SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_toInt32(
         const sal_Unicode * str, sal_Int16 radix ) SAL_THROW_EXTERN_C();
 
+#ifdef LIBO_INTERNAL_ONLY
+/** Interpret a string as an integer.
+
+    This function cannot be used for language-specific conversion.
+
+    @param str
+    a string.
+
+    @param radix
+    the radix.  Must be between RTL_USTR_MIN_RADIX (2) and RTL_USTR_MAX_RADIX
+    (36), inclusive.
+
+    @param nStrLength
+    number of chars to process
+
+    @return
+    the integer value represented by the string, or 0 if the string does not
+    represent an integer.
+
+    @internal
+    @since LibreOffice 7.5
+ */
+SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_ustr_toInt32_WithLength(
+        const sal_Unicode * str, sal_Int16 radix, sal_Int32 nStrLength ) SAL_THROW_EXTERN_C();
+#endif
+
 /** Interpret a string as an unsigned integer.
 
     This function cannot be used for language-specific conversion.  The string
