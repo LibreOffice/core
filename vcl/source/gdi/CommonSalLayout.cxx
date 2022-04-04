@@ -437,7 +437,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                             }
                         }
 
-                        // Charters with U and Tu vertical orientation should
+                        // Characters with U and Tu vertical orientation should
                         // be shaped in vertical direction. But characters
                         // with Tr should be shaped in vertical direction
                         // only if they have vertical alternates, otherwise

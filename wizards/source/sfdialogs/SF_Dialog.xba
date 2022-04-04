@@ -341,7 +341,7 @@ Dim oParentPosSize As Object		&apos;	Parent com.sun.star.awt.Rectangle
 Dim lParentX As Long				&apos;	X position of parent dialog
 Dim lParentY As Long				&apos;	Y position of parent dialog
 Dim oPosSize As Object				&apos;	Dialog com.sun.star.awt.Rectangle
-Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize conatnts
+Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize constants
 Const cstThisSub = &quot;SFDialogs.Dialog.Center&quot;
 Const cstSubArgs = &quot;[Parent]&quot;
 
@@ -756,7 +756,7 @@ Public Function Resize(Optional ByVal Left As Variant _
 
 Dim bResize As Boolean				&apos;	Return value
 Dim oPosSize As Object				&apos;	com.sun.star.awt.Rectangle
-Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize conatnts
+Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize constants
 Const cstThisSub = &quot;SFDialogs.Dialog.Resize&quot;
 Const cstSubArgs = &quot;[Left], [Top], [Width], [Height]&quot;
 

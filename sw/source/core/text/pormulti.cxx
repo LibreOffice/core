@@ -139,7 +139,7 @@ void SwMultiPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,
 {
     (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwMultiPortion"));
     dumpAsXmlAttributes(pWriter, rText, nOffset);
-    // Indentionally not incrementing nOffset here, one of the child portions will do that.
+    // Intentionally not incrementing nOffset here, one of the child portions will do that.
 
     const SwLineLayout* pLine = &GetRoot();
     while (pLine)
