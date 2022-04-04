@@ -1552,6 +1552,11 @@ tools::Rectangle ScOutputData::LayoutStrings(bool bPixelToLogic, bool bPaint, co
     const SfxItemSet* pOldCondSet = nullptr;
     SvtScriptType nOldScript = SvtScriptType::NONE;
 
+    // Try to limit interpreting to only visible cells. Calling e.g. IsValue()
+    // on a formula cell that needs interpreting would call Interpret()
+    // for the entire formula group, which could be large.
+    mpDoc->InterpretCellsIfNeeded( ScRange( nX1, nY1, nTab, nX2, nY2, nTab ));
+
     // alternative pattern instances in case we need to modify the pattern
     // before processing the cell value.
     std::vector<std::unique_ptr<ScPatternAttr> > aAltPatterns;
