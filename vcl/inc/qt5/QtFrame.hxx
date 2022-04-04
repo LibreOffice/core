@@ -133,7 +133,6 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     int menuBarOffset() const;
 
     void fixICCCMwindowGroup();
-    void modalReparent(bool bVisible);
 
 public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);

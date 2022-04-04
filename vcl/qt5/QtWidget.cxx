@@ -618,16 +618,14 @@ void QtWidget::focusOutEvent(QFocusEvent*)
 }
 
 QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
-    : QWidget(!rFrame.GetTopLevelWindow() && rFrame.GetParent()
-                  ? static_cast<QtFrame*>(rFrame.GetParent())->asChild()
-                  : Q_NULLPTR,
-              f)
+    // if you try to set the QWidget parent via the QtFrame, instead of using the Q_NULLPTR, at
+    // least test Wayland popups; these horribly broke last time doing this (read commits)!
+    : QWidget(Q_NULLPTR, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
     , m_nDeltaX(0)
     , m_nDeltaY(0)
 {
-    create();
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
 }
