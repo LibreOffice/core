@@ -184,6 +184,7 @@ typedef cppu::ImplInheritanceHelper< SwXBookmark,
         css::text::XTextField
     > SwXFieldmark_Base;
 
+/// UNO wrapper around an sw::mark::IFieldmark.
 class SwXFieldmark final
     : public SwXFieldmark_Base
 {
