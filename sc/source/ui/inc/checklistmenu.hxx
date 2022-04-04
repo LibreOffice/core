@@ -224,8 +224,6 @@ private:
 
     void CreateDropDown();
 
-    void NotifyCloseLOK();
-
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(TriStateHdl, weld::Toggleable&, void);
 
@@ -302,7 +300,6 @@ private:
 
     ImplSVEvent* mnAsyncPostPopdownId;
     ImplSVEvent* mnAsyncSetDropdownPosId;
-    vcl::ILibreOfficeKitNotifier* mpNotifier;
 
     bool mbHasDates;
     bool mbIsPoppedUp;
@@ -368,7 +365,6 @@ private:
     std::unique_ptr<ScCheckListMenuControl::Action> mxPopupStartAction;
     std::vector<ScCheckListMenuControl::MenuItemData> maMenuItems;
     ScCheckListMenuControl& mrParentControl;
-    vcl::ILibreOfficeKitNotifier* mpNotifier;
     int mnBackColorMenuPrefHeight;
     int mnTextColorMenuPrefHeight;
     bool mbColorMenu;
@@ -379,7 +375,6 @@ private:
 
     void SetupMenu(weld::TreeView& rMenu);
 
-    void NotifyCloseLOK();
     void executeMenuItem(ScCheckListMenuControl::Action* pAction);
     void addItem(ScCheckListMenuControl::Action* pAction);
 };
