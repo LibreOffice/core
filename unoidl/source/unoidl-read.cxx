@@ -448,7 +448,7 @@ OUString openModulesFor(std::vector<OUString> & modules, OUString const & name)
 {
     std::vector<OUString>::iterator i(modules.begin());
     for (sal_Int32 j = 0;;) {
-        OUString id(name.getToken(0, '.', j));
+        OUString id(name.getTokenX(0, '.', j));
         if (j == -1) {
             closeModules(
                 modules,

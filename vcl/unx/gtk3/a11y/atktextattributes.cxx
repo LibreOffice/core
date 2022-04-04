@@ -38,6 +38,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/UnitConversion.hxx>
+#include <comphelper/string.hxx>
 
 #include <stdio.h>
 #include <string.h>
@@ -1227,12 +1228,12 @@ attribute_set_new_from_extended_attributes(
     sal_Int32 nIndex = 0;
     do
     {
-        OUString sProperty = sExtendedAttrs.getToken( 0, ';', nIndex );
+        std::u16string_view sProperty = sExtendedAttrs.getTokenView( 0, ';', nIndex );
 
         sal_Int32 nColonPos = 0;
-        OString sPropertyName = OUStringToOString( sProperty.getToken( 0, ':', nColonPos ),
+        OString sPropertyName = OUStringToOString( comphelper::string::getTokenView(sProperty, 0, ':', nColonPos ),
                                                    RTL_TEXTENCODING_UTF8 );
-        OString sPropertyValue = OUStringToOString( sProperty.getToken( 0, ':', nColonPos ),
+        OString sPropertyValue = OUStringToOString( comphelper::string::getTokenView(sProperty, 0, ':', nColonPos ),
                                                     RTL_TEXTENCODING_UTF8 );
 
         pSet = attribute_set_prepend( pSet,

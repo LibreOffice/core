@@ -118,8 +118,8 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
     sal_Int32 index = 0;
     do
     {
-        OUString token( unoName.getToken( 0, '.', index ) );
-        buf.append( token.getLength() );
+        std::u16string_view token( unoName.getTokenView( 0, '.', index ) );
+        buf.append( static_cast<sal_Int32>(token.size()) );
         OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
         buf.append( c_token );
     }

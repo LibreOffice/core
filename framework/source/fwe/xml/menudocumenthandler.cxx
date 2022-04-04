@@ -360,7 +360,7 @@ void SAL_CALL OReadMenuBarHandler::startElement(
                     sal_Int32 nIndex = 0;
                     do
                     {
-                        OUString aToken = aValue.getToken( 0, '+', nIndex );
+                        OUString aToken = aValue.getTokenX( 0, '+', nIndex );
                         if ( !aToken.isEmpty() )
                         {
                             if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
@@ -560,7 +560,7 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    OUString aToken = aValue.getToken( 0, '+', nIndex );
+                    OUString aToken = aValue.getTokenX( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )
@@ -616,7 +616,7 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    OUString aToken = aValue.getToken( 0, '+', nIndex );
+                    OUString aToken = aValue.getTokenX( 0, '+', nIndex );
                     if ( !aToken.isEmpty() )
                     {
                         if ( aToken == ATTRIBUTE_ITEMSTYLE_TEXT )

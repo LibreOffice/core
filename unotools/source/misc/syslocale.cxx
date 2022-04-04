@@ -107,7 +107,7 @@ std::vector<OUString> SvtSysLocale_Impl::getDateAcceptancePatternsConfig() const
     ::std::vector< OUString > aVec;
     for (sal_Int32 nIndex = 0; nIndex >= 0; /*nop*/)
     {
-        OUString aTok( aStr.getToken( 0, ';', nIndex));
+        OUString aTok( aStr.getTokenX( 0, ';', nIndex));
         if (!aTok.isEmpty())
             aVec.push_back( aTok);
     }

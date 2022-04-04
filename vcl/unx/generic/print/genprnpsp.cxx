@@ -65,6 +65,7 @@
 #include <salptype.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <o3tl/string_view.hxx>
 
 using namespace psp;
 using namespace com::sun::star;
@@ -74,11 +75,11 @@ static bool getPdfDir( const PrinterInfo& rInfo, OUString &rDir )
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( aToken.startsWith( "pdf=" ) )
+        std::u16string_view aToken( rInfo.m_aFeatures.getTokenView( 0, ',', nIndex ) );
+        if( o3tl::starts_with(aToken, u"pdf=" ) )
         {
             sal_Int32 nPos = 0;
-            rDir = aToken.getToken( 1, '=', nPos );
+            rDir = comphelper::string::getTokenView(aToken, 1, '=', nPos );
             if( rDir.isEmpty() && getenv( "HOME" ) )
                 rDir = OUString( getenv( "HOME" ), strlen( getenv( "HOME" ) ), osl_getThreadTextEncoding() );
             return true;
@@ -337,7 +338,7 @@ static std::vector<OUString> getFaxNumbers()
     if (QueryFaxNumber(aNewNr))
     {
         for (sal_Int32 nIndex {0}; nIndex >= 0; )
-            aFaxNumbers.push_back(aNewNr.getToken( 0, ';', nIndex ));
+            aFaxNumbers.push_back(aNewNr.getTokenX( 0, ';', nIndex ));
     }
 
     return aFaxNumbers;

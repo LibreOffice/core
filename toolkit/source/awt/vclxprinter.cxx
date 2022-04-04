@@ -20,7 +20,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <awt/vclxprinter.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
+#include <comphelper/string.hxx>
 
 #include <vcl/print.hxx>
 #include <vcl/jobset.hxx>
@@ -200,7 +200,7 @@ void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription )
     ::osl::MutexGuard aGuard( Mutex );
 
     sal_uInt16 nPaperBin = sal::static_int_cast< sal_uInt16 >(
-        rFormDescription.getToken( 3, ';' ).toInt32());
+        comphelper::string::toInt32(rFormDescription.getTokenView( 3, ';' )));
     GetPrinter()->SetPaperBin( nPaperBin );
 }
 

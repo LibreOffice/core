@@ -24,14 +24,14 @@ static bool lcl_textMimeInfo(const OUString& rMimeString, bool& bHaveNoCharset, 
                              bool& bHaveUTF8)
 {
     sal_Int32 nIndex = 0;
-    if (rMimeString.getToken(0, ';', nIndex) == "text/plain")
+    if (rMimeString.getTokenView(0, ';', nIndex) == u"text/plain")
     {
-        OUString aToken(rMimeString.getToken(0, ';', nIndex));
-        if (aToken == "charset=utf-16")
+        std::u16string_view aToken(rMimeString.getTokenView(0, ';', nIndex));
+        if (aToken == u"charset=utf-16")
             bHaveUTF16 = true;
-        else if (aToken == "charset=utf-8")
+        else if (aToken == u"charset=utf-8")
             bHaveUTF8 = true;
-        else if (aToken.isEmpty())
+        else if (aToken.empty())
             bHaveNoCharset = true;
         else // we just handle UTF-16 and UTF-8, everything else is "bytes"
             return false;

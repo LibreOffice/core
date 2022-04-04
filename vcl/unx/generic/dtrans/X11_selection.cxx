@@ -64,6 +64,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/solarmutex.hxx>
+#include <comphelper/string.hxx>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <algorithm>
@@ -170,7 +171,7 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
     rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
     OUString aMimeType( rMimeType.toAsciiLowerCase() );
     sal_Int32 nIndex = 0;
-    if( aMimeType.getToken( 0, ';', nIndex ) == "text/plain" )
+    if( aMimeType.getTokenView( 0, ';', nIndex ) == u"text/plain" )
     {
         if( aMimeType.getLength() == 10 ) // only "text/plain"
             aEncoding = RTL_TEXTENCODING_ISO_8859_1;
@@ -178,11 +179,11 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
         {
             while( nIndex != -1 )
             {
-                OUString aToken = aMimeType.getToken( 0, ';', nIndex );
+                std::u16string_view aToken = aMimeType.getTokenView( 0, ';', nIndex );
                 sal_Int32 nPos = 0;
-                if( aToken.getToken( 0, '=', nPos ) == "charset" )
+                if( comphelper::string::getTokenView(aToken, 0, '=', nPos ) == u"charset" )
                 {
-                    OString aEncToken = OUStringToOString( aToken.getToken( 0, '=', nPos ), RTL_TEXTENCODING_ISO_8859_1 );
+                    OString aEncToken = OUStringToOString( comphelper::string::getTokenView(aToken, 0, '=', nPos ), RTL_TEXTENCODING_ISO_8859_1 );
                     aEncoding = rtl_getTextEncodingFromUnixCharset( aEncToken.getStr() );
                     if( aEncoding == RTL_TEXTENCODING_DONTKNOW )
                     {
@@ -606,9 +607,9 @@ bool SelectionManager::convertData(
         aFlavor.MimeType = convertTypeFromNative( nType, nSelection, rFormat );
 
         sal_Int32 nIndex = 0;
-        if( aFlavor.MimeType.getToken( 0, ';', nIndex ) == "text/plain" )
+        if( aFlavor.MimeType.getTokenView( 0, ';', nIndex ) == u"text/plain" )
         {
-            if( aFlavor.MimeType.getToken( 0, ';', nIndex ) == "charset=utf-16" )
+            if( aFlavor.MimeType.getTokenView( 0, ';', nIndex ) == u"charset=utf-16" )
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
             else
                 aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
@@ -1322,22 +1323,22 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 pFlavors->MimeType = convertTypeFromNative( *pAtoms, selection, nFormat );
                 pFlavors->DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
                 sal_Int32 nIndex = 0;
-                if( pFlavors->MimeType.getToken( 0, ';', nIndex ) == "text/plain" )
+                if( pFlavors->MimeType.getTokenView( 0, ';', nIndex ) == u"text/plain" )
                 {
-                    OUString aToken(pFlavors->MimeType.getToken( 0, ';', nIndex ));
+                    std::u16string_view aToken(pFlavors->MimeType.getTokenView( 0, ';', nIndex ));
                     // omit text/plain;charset=unicode since it is not well defined
-                    if( aToken == "charset=unicode" )
+                    if( aToken == u"charset=unicode" )
                     {
                         pAtoms++;
                         continue;
                     }
                     bHaveText = true;
-                    if( aToken == "charset=utf-16" )
+                    if( aToken == u"charset=utf-16" )
                     {
                         bHaveUTF16 = true;
                         pFlavors->DataType = cppu::UnoType<OUString>::get();
                     }
-                    else if( aToken == "charset=utf-8" )
+                    else if( aToken == u"charset=utf-8" )
                     {
                         aUTF8Type = *pAtoms;
                     }

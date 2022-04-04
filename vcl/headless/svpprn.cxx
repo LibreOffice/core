@@ -35,6 +35,8 @@
 
 #include <headless/svpprn.hxx>
 #include <headless/svpinst.hxx>
+#include <o3tl/string_view.hxx>
+#include <comphelper/string.hxx>
 
 using namespace psp;
 
@@ -48,11 +50,11 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-        if( aToken.startsWith( "pdf=" ) )
+        std::u16string_view aToken( rInfo.m_aFeatures.getTokenView( 0, ',', nIndex ) );
+        if( o3tl::starts_with(aToken, u"pdf=" ) )
         {
             sal_Int32 nPos = 0;
-            aDir = aToken.getToken( 1, '=', nPos );
+            aDir = comphelper::string::getTokenView(aToken, 1, '=', nPos );
             if( aDir.isEmpty() )
                 if (auto const env = getenv( "HOME" )) {
                     aDir = OStringToOUString(
@@ -230,8 +232,8 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
         {
-            OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
-            if( aToken.startsWith( "pdf=" ) )
+            std::u16string_view aToken( rInfo.m_aFeatures.getTokenView( 0, ',', nIndex ) );
+            if( o3tl::starts_with(aToken, u"pdf=" ) )
             {
                 pInfo->maLocation = getPdfDir( rInfo );
                 break;

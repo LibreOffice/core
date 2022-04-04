@@ -709,7 +709,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     {
         aActivatorUrl = xActivatorKey->getAsciiValue();
 
-        aActivatorName = aActivatorUrl.getToken(0, ':');
+        aActivatorName = aActivatorUrl.getTokenX(0, ':');
 
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
             "/UNO/LOCATION" );

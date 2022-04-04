@@ -24,7 +24,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <rtl/locale.h>
-
+#include <comphelper/string.hxx>
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <sal/macros.h>
@@ -827,8 +827,8 @@ bool WMAdaptor::getNetWmName()
                                     {
                                         OUString aMetaVersion( reinterpret_cast<char*>(pProperty), nItems, RTL_TEXTENCODING_UTF8 );
                                         sal_Int32 nIdx {0};
-                                        nVersionMajor = aMetaVersion.getToken(0, '.', nIdx).toInt32();
-                                        nVersionMinor = aMetaVersion.getToken(0, '.', nIdx).toInt32();
+                                        nVersionMajor = comphelper::string::toInt32(aMetaVersion.getTokenView(0, '.', nIdx));
+                                        nVersionMinor = comphelper::string::toInt32(aMetaVersion.getTokenView(0, '.', nIdx));
                                     }
                                     if( pProperty )
                                     {

@@ -166,8 +166,8 @@ static OUString getPrefix(OUString const & str1, OUString const & str2)
 
     do
     {
-        token1 = str1.getToken(0, ':', nIndex1);
-        token2 = str2.getToken(0, ':', nIndex2);
+        token1 = str1.getTokenView(0, ':', nIndex1);
+        token2 = str2.getTokenView(0, ':', nIndex2);
 
         if (token1 == token2)
             sim += token1.getLength() + 1;

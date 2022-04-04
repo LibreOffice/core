@@ -311,7 +311,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
 {
     INetContentType eTypeID = CONTENT_TYPE_UNKNOWN;
     sal_Int32 nIdx{ 0 };
-    OUString aToken = rURL.getToken(0, ':', nIdx);
+    OUString aToken( rURL.getTokenX(0, ':', nIdx) );
     if (!aToken.isEmpty())
     {
         if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_FILE))
@@ -341,13 +341,13 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
             eTypeID = CONTENT_TYPE_TEXT_HTML;
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_PRIVATE))
         {
-            aToken = rURL.getToken(0, '/', nIdx);
+            aToken = rURL.getTokenX(0, '/', nIdx);
             if (aToken == "factory")
             {
-                aToken = rURL.getToken(0, '/', nIdx);
+                aToken = rURL.getTokenX(0, '/', nIdx);
                 if (aToken == "swriter")
                 {
-                    aToken = rURL.getToken(0, '/', nIdx);
+                    aToken = rURL.getTokenX(0, '/', nIdx);
                     eTypeID = aToken == "web" ?
                                   CONTENT_TYPE_APP_VND_WRITER_WEB :
                               aToken == "GlobalDocument" ?
@@ -378,7 +378,7 @@ INetContentType INetContentTypes::GetContentTypeFromURL(OUString const & rURL)
             eTypeID = CONTENT_TYPE_APP_MACRO;
         else if (aToken.equalsIgnoreAsciiCase(INETTYPE_URL_PROT_DATA))
         {
-            aToken = rURL.getToken(0, ',', nIdx);
+            aToken = rURL.getTokenX(0, ',', nIdx);
             eTypeID = GetContentType(aToken);
         }
     }

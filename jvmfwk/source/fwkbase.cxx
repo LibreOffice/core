@@ -82,7 +82,7 @@ OUString getParamFirstUrl(OUString const & name)
     // Some parameters can consist of multiple URLs (separated by space
     // characters, although trim() harmlessly also removes other white-space),
     // of which only the first is used:
-    return getParam(name).trim().getToken(0, ' ');
+    return getParam(name).trim().getTokenX(0, ' ');
 }
 
 }//blind namespace
@@ -429,7 +429,7 @@ OUString getApplicationClassPath()
     sal_Int32 index = 0;
     do
     {
-        OUString token( sParams.getToken( 0, ' ', index ).trim() );
+        OUString token( sParams.getTokenX( 0, ' ', index ).trim() );
         if (!token.isEmpty())
         {
             OUString systemPathElement;

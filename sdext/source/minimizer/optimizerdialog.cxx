@@ -708,9 +708,9 @@ namespace
 
 bool lcl_mapResolution(OUString& rResolution, const OUString& rImageResolution)
 {
-    if (rImageResolution.getToken(1, ';')!=rResolution)
+    if (rImageResolution.getTokenView(1, ';')!=rResolution)
         return false;
-    rResolution = rImageResolution.getToken(0, ';');
+    rResolution = rImageResolution.getTokenX(0, ';');
     return true;
 }
 

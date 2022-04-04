@@ -54,7 +54,7 @@ static sal_Int32 makeMask(
     sal_Int32 n = 0;
     do
     {
-        OUString item( items.getToken( 0, ',', n ).trim() );
+        OUString item( OUString(items.getToken( 0, ',', n )).trim() );
         if ( item.isEmpty())
             continue;
         sal_Int32 nPos = 0;

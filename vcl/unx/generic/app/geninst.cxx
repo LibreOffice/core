@@ -61,13 +61,13 @@ OUString SalGenericInstance::getOSVersion()
         {
             aKernelVer = OUString::createFromAscii( aVerBuffer );
             // "Linux version 3.16.7-29-desktop ..."
-            OUString aVers = aKernelVer.getToken( 2, ' ' );
+            std::u16string_view aVers = aKernelVer.getTokenView( 2, ' ' );
             // "3.16.7-29-desktop ..."
-            sal_Int32 nTooDetailed = aVers.indexOf( '.', 2);
-            if (nTooDetailed < 1 || nTooDetailed > 8)
+            size_t nTooDetailed = aVers.find( '.', 2);
+            if (nTooDetailed == std::u16string_view::npos || nTooDetailed < 1 || nTooDetailed > 8)
                 aKernelVer = "Linux (misparsed version)";
             else // "3.16.7-29-desktop ..."
-                aKernelVer = OUString::Concat("Linux ") + aVers.subView(0, nTooDetailed);
+                aKernelVer = OUString::Concat("Linux ") + aVers.substr(0, nTooDetailed);
         }
         fclose( pVersion );
     }

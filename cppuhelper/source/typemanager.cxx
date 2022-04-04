@@ -2025,7 +2025,7 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
 
 void cppuhelper::TypeManager::init(OUString const & rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        OUString uri(rdbUris.getToken(0, ' ', i));
+        OUString uri(rdbUris.getTokenX(0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }

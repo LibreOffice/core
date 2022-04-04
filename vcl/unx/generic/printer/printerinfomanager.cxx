@@ -553,8 +553,8 @@ bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const 
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
-        OUString aOuterToken = rPrinterInfo.m_aFeatures.getToken( 0, ',', nIndex );
-        if( aOuterToken.getToken( 0, '=' ).equalsIgnoreAsciiCaseAscii( pToken ) )
+        OUString aOuterToken = rPrinterInfo.m_aFeatures.getTokenX( 0, ',', nIndex );
+        if( aOuterToken.getTokenX( 0, '=' ).equalsIgnoreAsciiCaseAscii( pToken ) )
             return true;
     }
     return false;

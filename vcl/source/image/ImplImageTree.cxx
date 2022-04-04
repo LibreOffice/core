@@ -479,7 +479,7 @@ void ImplImageTree::createStyle()
         sal_Int32 nIndex = 0;
         do
         {
-            aPaths.push_front(paths.getToken(0, ';', nIndex));
+            aPaths.push_front(paths.getTokenX(0, ';', nIndex));
         }
         while (nIndex >= 0);
 

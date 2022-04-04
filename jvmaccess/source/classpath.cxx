@@ -56,7 +56,7 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
     }
     ::std::vector< jobject > urls;
     for (::sal_Int32 i = 0; i != -1;) {
-        OUString url(classPath.getToken(0, ' ', i));
+        OUString url(classPath.getTokenX(0, ' ', i));
         if (!url.isEmpty()) {
             css::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
                 expUrl(

@@ -73,8 +73,8 @@ void ThesaurusMenuController::statusChanged( const css::frame::FeatureStateEvent
 void ThesaurusMenuController::fillPopupMenu()
 {
     sal_Int32 nIdx{ 0 };
-    OUString aText = m_aLastWord.getToken(0, '#', nIdx);
-    OUString aIsoLang = m_aLastWord.getToken(0, '#', nIdx);
+    OUString aText = m_aLastWord.getTokenX(0, '#', nIdx);
+    OUString aIsoLang = m_aLastWord.getTokenX(0, '#', nIdx);
     if ( aText.isEmpty() || aIsoLang.isEmpty() )
         return;
 

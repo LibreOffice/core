@@ -52,7 +52,7 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
     do
     {
         // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
-        OUString sToken = sURL.getToken(0, JOBURL_PART_SEPARATOR, t);
+        OUString sToken = sURL.getTokenX(0, JOBURL_PART_SEPARATOR, t);
         OUString sPartValue;
         OUString sPartArguments;
 

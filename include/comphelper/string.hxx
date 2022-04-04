@@ -138,6 +138,38 @@ COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::string_view rIn, char cTok);
 */
 COMPHELPER_DLLPUBLIC sal_Int32 getTokenCount(std::u16string_view rIn, sal_Unicode cTok);
 
+/**
+  Returns a token in the string.
+
+  Example:
+    sal_Int32 nIndex = 0;
+    do
+    {
+        ...
+        OUString aToken = aStr.getToken( 0, ';', nIndex );
+        ...
+    }
+    while ( nIndex >= 0 );
+
+  @param    token       the number of the token to return
+  @param    cTok        the character which separate the tokens.
+  @param    index       the position at which the token is searched in the
+                        string.
+                        The index must not be greater than the length of the
+                        string.
+                        This param is set to the position of the
+                        next token or to -1, if it is the last token.
+  @return   the token; if either token or index is negative, an empty token
+            is returned (and index is set to -1)
+*/
+COMPHELPER_DLLPUBLIC std::u16string_view getTokenView( std::u16string_view str, sal_Int32 token, sal_Unicode cTok, sal_Int32& index );
+
+inline std::u16string_view getTokenView(std::u16string_view str, sal_Int32 count, sal_Unicode separator)
+{
+    sal_Int32 n = 0;
+    return getTokenView(str, count, separator, n);
+}
+
 /** Reverse an OUString
 
   @param    rIn     the input OUString

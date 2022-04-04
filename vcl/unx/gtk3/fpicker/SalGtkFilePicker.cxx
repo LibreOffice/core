@@ -47,6 +47,8 @@
 
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 #include <set>
@@ -401,15 +403,15 @@ static bool
 isFilterString( const OUString &rFilterString, const char *pMatch )
 {
         sal_Int32 nIndex = 0;
-        OUString aToken;
+        std::u16string_view aToken;
         bool bIsFilter = true;
 
         OUString aMatch(OUString::createFromAscii(pMatch));
 
         do
         {
-            aToken = rFilterString.getToken( 0, ';', nIndex );
-            if( !aToken.match( aMatch ) )
+            aToken = rFilterString.getTokenView( 0, ';', nIndex );
+            if( !o3tl::starts_with(aToken, aMatch) )
             {
                 bIsFilter = false;
                 break;
@@ -787,13 +789,13 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
             {
                 if( aSelectedFiles[nIndex].indexOf('.') > 0 )
                 {
-                    OUString sExtension;
+                    std::u16string_view sExtension;
                     nTokenIndex = 0;
                     do
-                        sExtension = aSelectedFiles[nIndex].getToken( 0, '.', nTokenIndex );
+                        sExtension = aSelectedFiles[nIndex].getTokenView( 0, '.', nTokenIndex );
                     while( nTokenIndex >= 0 );
 
-                    if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
+                    if( sExtension.size() >= 3 ) // 3 = typical/minimum extension length
                     {
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
@@ -801,7 +803,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         if ( m_pFilterVector)
                             for (auto const& filter : *m_pFilterVector)
                             {
-                                if( lcl_matchFilter( filter.getFilter(), "*." + sExtension ) )
+                                if( lcl_matchFilter( filter.getFilter(), OUString::Concat("*.") + sExtension ) )
                                 {
                                     if( aNewFilter.isEmpty() )
                                         aNewFilter = filter.getTitle();
@@ -845,23 +847,23 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                     aFilter = aVectorIter->getFilter();
 
                 nTokenIndex = 0;
-                OUString sToken;
+                std::u16string_view sToken;
                 do
                 {
-                    sToken = aFilter.getToken( 0, '.', nTokenIndex );
+                    sToken = aFilter.getTokenView( 0, '.', nTokenIndex );
 
-                    if ( sToken.lastIndexOf( ';' ) != -1 )
+                    if ( sToken.rfind( ';' ) != std::u16string_view::npos )
                     {
-                        sToken = sToken.getToken(0, ';');
+                        sToken = comphelper::string::getTokenView(sToken, 0, ';');
                         break;
                     }
                 }
                 while( nTokenIndex >= 0 );
 
-                if( !bExtensionTypedIn && ( sToken != "*" ) )
+                if( !bExtensionTypedIn && ( sToken != u"*" ) )
                 {
                     //if the filename does not already have the auto extension, stick it on
-                    OUString sExtension = "." + sToken;
+                    OUString sExtension = OUString::Concat(".") + sToken;
                     OUString &rBase = aSelectedFilesRange[nIndex];
                     sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
                     SAL_INFO(
@@ -1916,12 +1918,12 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
         sal_Int32 nIndex = 0;
         do
         {
-            OUString aToken = rType.getToken( 0, ';', nIndex );
+            std::u16string_view aToken = rType.getTokenView( 0, ';', nIndex );
             // Assume all have the "*.<extn>" syntax
-            sal_Int32 nStarDot = aToken.lastIndexOf( "*." );
-            if (nStarDot >= 0)
-                aToken = aToken.copy( nStarDot + 2 );
-            if (!aToken.isEmpty())
+            size_t nStarDot = aToken.rfind( u"*." );
+            if (nStarDot != std::u16string_view::npos)
+                aToken = aToken.substr( nStarDot + 2 );
+            if (!aToken.empty())
             {
                 if (!aTokens.isEmpty())
                     aTokens.append(",");
@@ -1935,14 +1937,14 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
                     g_free );
 #endif
 
-                SAL_INFO( "vcl.gtk", "fustering with " << aToken );
+                SAL_INFO( "vcl.gtk", "fustering with " << OUString(aToken) );
             }
 #if OSL_DEBUG_LEVEL > 0
             else
             {
                 g_warning( "Duff filter token '%s'\n",
                     OUStringToOString(
-                        rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ).getStr() );
+                        rType.getTokenView( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ).getStr() );
             }
 #endif
         }

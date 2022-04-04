@@ -2287,15 +2287,15 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         sal_Int32 nIndex = 0;
 
         // Skip the persona slug, name, and preview
-        aHeader = aPersonaSettings.getToken( 3, ';', nIndex );
+        aHeader = aPersonaSettings.getTokenX( 3, ';', nIndex );
 
         if ( nIndex > 0 )
-            aFooter = aPersonaSettings.getToken( 0, ';', nIndex );
+            aFooter = aPersonaSettings.getTokenX( 0, ';', nIndex );
 
         // change menu text color, advance nIndex to skip the '#'
         if ( nIndex > 0 )
         {
-            OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
+            OUString aColor = aPersonaSettings.getTokenX( 0, ';', ++nIndex );
             rMenuBarTextColor = Color( ColorTransparency, aColor.toUInt32( 16 ) );
         }
     }

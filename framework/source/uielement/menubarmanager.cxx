@@ -302,8 +302,8 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                 else if ( Event.State >>= aItemText )
                 {
                     INetURLObject aURL( aFeatureURL );
-                    OUString aEnumPart = aURL.GetURLPath().getToken( 1, '.' );
-                    if ( !aEnumPart.isEmpty() && aURL.GetProtocol() == INetProtocol::Uno )
+                    std::u16string_view aEnumPart = aURL.GetURLPath().getTokenView( 1, '.' );
+                    if ( !aEnumPart.empty() && aURL.GetProtocol() == INetProtocol::Uno )
                     {
                         // Checkmark or RadioButton
                         m_pVCLMenu->CheckItem( menuItemHandler->nItemId, aItemText == aEnumPart );

@@ -64,14 +64,14 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
         {
             OUString sINetImg = read_zeroTerminated_uInt8s_ToOUString(rIStm, RTL_TEXTENCODING_UTF8);
             sal_Int32 nStart = 0;
-            aImageURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
-            aTargetURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
-            aTargetFrame = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
-            /*aAlternateText =*/ sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
-            aSizePixel.setWidth( sINetImg.getToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).toInt32() );
-            aSizePixel.setHeight( sINetImg.getToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).toInt32() );
+            aImageURL = sINetImg.getTokenX( 0, TOKEN_SEPARATOR, nStart );
+            aTargetURL = sINetImg.getTokenX( 0, TOKEN_SEPARATOR, nStart );
+            aTargetFrame = sINetImg.getTokenX( 0, TOKEN_SEPARATOR, nStart );
+            /*aAlternateText =*/ sINetImg.getTokenX( 0, TOKEN_SEPARATOR, nStart );
+            aSizePixel.setWidth( comphelper::string::toInt32(sINetImg.getTokenView( 0, TOKEN_SEPARATOR,
+                                                    nStart )) );
+            aSizePixel.setHeight( comphelper::string::toInt32(sINetImg.getTokenView( 0, TOKEN_SEPARATOR,
+                                                    nStart )) );
             bRet = !sINetImg.isEmpty();
         }
         break;

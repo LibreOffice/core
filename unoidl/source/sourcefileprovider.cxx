@@ -84,7 +84,7 @@ SourceFileProvider::SourceFileProvider(
             assert(i.second.entity->getSort() != Entity::SORT_MODULE);
             std::map< OUString, rtl::Reference<Entity> > * map = &rootMap_;
             for (sal_Int32 j = 0;;) {
-                OUString id(i.first.getToken(0, '.', j));
+                OUString id(i.first.getTokenX(0, '.', j));
                 if (j == -1) {
                     map->insert(std::make_pair(id, i.second.entity));
                     break;
@@ -110,7 +110,7 @@ rtl::Reference<Entity> SourceFileProvider::findEntity(OUString const & name)
 {
     std::map< OUString, rtl::Reference<Entity> > const * map = &rootMap_;
     for (sal_Int32 i = 0;;) {
-        OUString id(name.getToken(0, '.', i));
+        OUString id(name.getTokenX(0, '.', i));
         std::map< OUString, rtl::Reference<Entity> >::const_iterator j(
             map->find(id));
         if (j == map->end()) {

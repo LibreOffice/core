@@ -369,7 +369,7 @@ void mapEntities(
             std::exit(EXIT_FAILURE);
         }
         for (sal_Int32 i = 0; i != -1;) {
-            OUString t(s2.getToken(0, ' ', i));
+            OUString t(s2.getTokenX(0, ' ', i));
             if (!t.isEmpty()) {
                 rtl::Reference< unoidl::Entity > ent(manager->findEntity(t));
                 if (!ent.is()) {
@@ -386,7 +386,7 @@ void mapEntities(
                 }
                 std::map< OUString, Item > * map2 = &map;
                 for (sal_Int32 j = 0;;) {
-                    OUString id(t.getToken(0, '.', j));
+                    OUString id(t.getTokenX(0, '.', j));
                     if (j == -1) {
                         map2->insert(std::make_pair(id, Item(ent)));
                         break;

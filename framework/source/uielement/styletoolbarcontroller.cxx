@@ -92,21 +92,21 @@ StyleDispatcher::StyleDispatcher( const css::uno::Reference< css::frame::XFrame 
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aParam = aParams.getToken( 0, '&', nIndex );
+        std::u16string_view aParam = aParams.getTokenView( 0, '&', nIndex );
 
         sal_Int32 nParamIndex = 0;
-        OUString aParamName = aParam.getToken( 0, '=', nParamIndex );
+        std::u16string_view aParamName = comphelper::string::getTokenView(aParam, 0, '=', nParamIndex );
         if ( nParamIndex < 0 )
             break;
 
-        if ( aParamName == "Style:string" )
+        if ( aParamName == u"Style:string" )
         {
-            OUString aValue = aParam.getToken( 0, '=', nParamIndex );
+            std::u16string_view aValue = comphelper::string::getTokenView(aParam, 0, '=', nParamIndex );
             aStyleName = INetURLObject::decode( aValue, INetURLObject::DecodeMechanism::WithCharset );
         }
         else if ( aParamName == "FamilyName:string" )
         {
-            aFamilyName = aParam.getToken( 0, '=', nParamIndex );
+            aFamilyName = aParam.getTokenView( 0, '=', nParamIndex );
         }
 
     } while ( nIndex >= 0 );

@@ -101,7 +101,7 @@ static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const
 
     sal_Int32 nIdx{0};
     do {
-        const sal_Int32 nPos = rEntryList.FindEntry(comphelper::string::strip(rText.getToken(0, cTokenSep, nIdx), ' '));
+        const sal_Int32 nPos = rEntryList.FindEntry(comphelper::string::strip(rText.getTokenView(0, cTokenSep, nIdx), ' '));
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             rSelectedPos.insert( nPos );
     } while (nIdx>=0);
@@ -370,8 +370,8 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
             while ( nIndex >= 0 )
             {
                 sal_Int32  nPrevIndex = nIndex;
-                OUString   aToken = aText.getToken( 0, m_cMultiSep, nIndex );
-                sal_Int32  nTokenLen = aToken.getLength();
+                std::u16string_view aToken = aText.getTokenView( 0, m_cMultiSep, nIndex );
+                sal_Int32  nTokenLen = aToken.size();
                 aToken = comphelper::string::strip(aToken, ' ');
                 sal_Int32 nP = m_pImplLB->GetEntryList().FindEntry( aToken );
                 if ((nP != LISTBOX_ENTRY_NOTFOUND) && (!m_pImplLB->GetEntryList().IsEntryPosSelected(nP)))
