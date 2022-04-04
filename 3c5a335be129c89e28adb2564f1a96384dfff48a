@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b35d2282_98ee4a5c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-04T13:20:37Z",
+      "side": 1,
+      "message": "Just FYI, in case you get a mail from the failing WASM TB.",
+      "revId": "3c5a335be129c89e28adb2564f1a96384dfff48a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
