@@ -620,16 +620,12 @@ void QtWidget::focusOutEvent(QFocusEvent*)
 }
 
 QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
-    : QWidget(!rFrame.GetTopLevelWindow() && rFrame.GetParent()
-                  ? static_cast<QtFrame*>(rFrame.GetParent())->asChild()
-                  : Q_NULLPTR,
-              f)
+    : QWidget(Q_NULLPTR, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
     , m_nDeltaX(0)
     , m_nDeltaY(0)
 {
-    create();
     setMouseTracking(true);
     if (!rFrame.isPopup())
         setFocusPolicy(Qt::StrongFocus);
