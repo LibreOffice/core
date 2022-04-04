@@ -20,6 +20,7 @@
 #include "FullScreenPane.hxx"
 #include <vcl/vclevent.hxx>
 #include <vcl/wrkwin.hxx>
+#include <o3tl/string_view.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -211,11 +212,11 @@ void FullScreenPane::ExtractArguments (
     const util::URL aURL = rxPaneId->getFullResourceURL();
     for (sal_Int32 nIndex{ 0 }; nIndex >= 0; )
     {
-        const OUString aToken = aURL.Arguments.getToken(0, '&', nIndex);
-        OUString sValue;
-        if (aToken.startsWith("ScreenNumber=", &sValue))
+        const std::u16string_view aToken = o3tl::getToken(aURL.Arguments, 0, '&', nIndex);
+        std::u16string_view sValue;
+        if (o3tl::starts_with(aToken, u"ScreenNumber=", &sValue))
         {
-            rnScreenNumberReturnValue = sValue.toInt32();
+            rnScreenNumberReturnValue = o3tl::toInt32(sValue);
         }
     }
 }

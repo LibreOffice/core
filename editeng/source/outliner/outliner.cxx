@@ -428,7 +428,7 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
         // handle empty strings.
         while( nIdx>=0 && nIdx<aText.getLength() )
         {
-            OUString aStr = aText.getToken( 0, '\x0A', nIdx );
+            std::u16string_view aStr = o3tl::getToken(aText, 0, '\x0A', nIdx );
 
             sal_Int16 nCurDepth;
             if( nPos )
@@ -445,11 +445,11 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
                 ( GetOutlinerMode() == OutlinerMode::OutlineView ) )
             {
                 // Extract Tabs
-                sal_Int32 nTabs = 0;
-                while ( ( nTabs < aStr.getLength() ) && ( aStr[nTabs] == '\t' ) )
+                size_t nTabs = 0;
+                while ( ( nTabs < aStr.size() ) && ( aStr[nTabs] == '\t' ) )
                     nTabs++;
                 if ( nTabs )
-                    aStr = aStr.copy(nTabs);
+                    aStr = aStr.substr(nTabs);
 
                 // Keep depth?  (see Outliner::Insert)
                 if( !(pPara->nFlags & ParaFlag::HOLDDEPTH) )
@@ -463,13 +463,13 @@ void Outliner::SetText( const OUString& rText, Paragraph* pPara )
             if( nPos ) // not with the first paragraph
             {
                 pParaList->Insert( std::unique_ptr<Paragraph>(pPara), nInsPos );
-                pEditEngine->InsertParagraph( nInsPos, aStr );
+                pEditEngine->InsertParagraph( nInsPos, OUString(aStr) );
                 ParagraphInsertedHdl(pPara);
             }
             else
             {
                 nInsPos--;
-                pEditEngine->SetText( nInsPos, aStr );
+                pEditEngine->SetText( nInsPos, OUString(aStr) );
             }
             ImplInitDepth( nInsPos, nCurDepth, false );
             nInsPos++;

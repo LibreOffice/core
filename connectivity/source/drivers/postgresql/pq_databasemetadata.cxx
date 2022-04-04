@@ -2086,45 +2086,45 @@ namespace
                 OUString nameB;
                 a[0 /*TYPE_NAME*/] >>= nameA;
                 b[0 /*TYPE_NAME*/] >>= nameB;
-                OUString nsA, tnA, nsB, tnB;
+                std::u16string_view nsA, tnA, nsB, tnB;
 
                 // parse typename into schema and typename
                 sal_Int32 nIndex=0;
-                nsA = nameA.getToken(0, '.', nIndex);
+                nsA = o3tl::getToken(nameA, 0, '.', nIndex);
                 if (nIndex<0)
                 {
                     tnA = nsA;
-                    nsA.clear();
+                    nsA = std::u16string_view();
                 }
                 else
                 {
-                    tnA = nameA.getToken(0, '.', nIndex);
+                    tnA = o3tl::getToken(nameA, 0, '.', nIndex);
                     assert(nIndex < 0);
                 }
 
                 nIndex=0;
-                nsB = nameB.getToken(0, '.', nIndex);
+                nsB = o3tl::getToken(nameB, 0, '.', nIndex);
                 if (nIndex<0)
                 {
                     tnB = nsB;
-                    nsB.clear();
+                    nsB = std::u16string_view();
                 }
                 else
                 {
-                    tnB = nameB.getToken(0, '.', nIndex);
+                    tnB = o3tl::getToken(nameB, 0, '.', nIndex);
                     assert(nIndex < 0);
                 }
 
                 const int ns_comp = compare_schema(nsA, nsB);
                 if(ns_comp == 0)
                 {
-                    if(nsA.isEmpty())
+                    if(nsA.empty())
                     {
-                        assert(nsB.isEmpty());
+                        assert(nsB.empty());
                         // within each type category, sort privileged choice first
-                        if( tnA == "int4" || tnA == "varchar" || tnA == "char" || tnA == "text")
+                        if( tnA == u"int4" || tnA == u"varchar" || tnA == u"char" || tnA == u"text")
                             return true;
-                        if( tnB == "int4" || tnB == "varchar" || tnB == "char" || tnB == "text")
+                        if( tnB == u"int4" || tnB == u"varchar" || tnB == u"char" || tnB == u"text")
                             return false;
                     }
                     return nameA.compareTo( nameB ) < 0;

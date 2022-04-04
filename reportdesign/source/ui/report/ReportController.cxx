@@ -1353,34 +1353,34 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 URL aUrl = getURLForId(_nId);
                 sal_Int32 nIndex = 1;
-                OUString sType = aUrl.Complete.getToken(0,'.',nIndex);
-                if ( nIndex == -1 || sType.isEmpty() )
+                std::u16string_view sType = o3tl::getToken(aUrl.Complete, 0,'.',nIndex);
+                if ( nIndex == -1 || sType.empty() )
                 {
                     switch(_nId)
                     {
                         case SID_DRAWTBX_CS_SYMBOL:
-                            sType = "smiley";
+                            sType = u"smiley";
                             break;
                         case SID_DRAWTBX_CS_ARROW:
-                            sType = "left-right-arrow";
+                            sType = u"left-right-arrow";
                             break;
                         case SID_DRAWTBX_CS_FLOWCHART:
-                            sType = "flowchart-internal-storage";
+                            sType = u"flowchart-internal-storage";
                             break;
                         case SID_DRAWTBX_CS_CALLOUT:
-                            sType = "round-rectangular-callout";
+                            sType = u"round-rectangular-callout";
                             break;
                         case SID_DRAWTBX_CS_STAR:
-                            sType = "star5";
+                            sType = u"star5";
                             break;
                         default:
-                            sType = "diamond";
+                            sType = u"diamond";
                     }
                 }
                 else
-                    sType = aUrl.Complete.getToken(0,'.',nIndex);
+                    sType = o3tl::getToken(aUrl.Complete, 0,'.',nIndex);
 
-                getDesignView()->SetInsertObj( SdrObjKind::CustomShape ,sType);
+                getDesignView()->SetInsertObj( SdrObjKind::CustomShape, OUString(sType));
                 createDefaultControl(aArgs);
             }
             InvalidateAll();

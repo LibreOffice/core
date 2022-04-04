@@ -51,10 +51,10 @@ static bool checkOutputPath(const OString& completeName)
         return true;
 
     sal_Int32 nIndex = 0;
-    OString token(sysPathName.getToken(0, SEPARATOR, nIndex));
-    if (token.startsWith("..")
-        || (token.getLength() >= 2 && token[1] == ':')
-        || token.startsWith("."))
+    std::string_view token(o3tl::getToken(sysPathName, 0, SEPARATOR, nIndex));
+    if (o3tl::starts_with(token, "..")
+        || (token.size() >= 2 && token[1] == ':')
+        || o3tl::starts_with(token, "."))
     {
         buffer.append(token);
         buffer.append(SEPARATOR);

@@ -175,8 +175,8 @@ std::unique_ptr<SwTextBlocks> SwGlossaries::GetGroupDoc(const OUString &rName,
 // so that groups remain there later (without access).
 bool SwGlossaries::NewGroupDoc(OUString& rGroupName, const OUString& rTitle)
 {
-    const OUString sNewPath(rGroupName.getToken(1, GLOS_DELIM));
-    sal_uInt16 nNewPath = o3tl::narrowing<sal_uInt16>(sNewPath.toInt32());
+    const std::u16string_view sNewPath(o3tl::getToken(rGroupName, 1, GLOS_DELIM));
+    sal_uInt16 nNewPath = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sNewPath));
     if (static_cast<size_t>(nNewPath) >= m_PathArr.size())
         return false;
     const OUString sNewFilePath(m_PathArr[nNewPath]);

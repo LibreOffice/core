@@ -1528,12 +1528,12 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
             // "Macroname.Modulname.Libname.Documentname" or
             // "Macroname.Modulname.Libname.Applicationname"
             sal_Int32 nIdx{ 0 };
-            const OUString aMacroName = aMacro.getToken(0, '.', nIdx);
-            const OUString aModulName = aMacro.getToken(0, '.', nIdx);
+            const std::u16string_view aMacroName = o3tl::getToken(aMacro, 0, '.', nIdx);
+            const std::u16string_view aModulName = o3tl::getToken(aMacro, 0, '.', nIdx);
 
             // todo: is the limitation still given that only
             // Modulname+Macroname can be used here?
-            OUString aExecMacro = aModulName + "." + aMacroName;
+            OUString aExecMacro = OUString::Concat(aModulName) + "." + aMacroName;
             mpDocSh->GetBasic()->Call(aExecMacro);
         }
     }

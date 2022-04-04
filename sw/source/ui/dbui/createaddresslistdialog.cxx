@@ -33,6 +33,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <com/sun/star/ui/dialogs/XFilePicker3.hpp>
 #include <tools/urlobj.hxx>
+#include <o3tl/string_view.hxx>
 #include <strings.hrc>
 #include <map>
 
@@ -262,13 +263,13 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
                 sal_Int32 nIndex = 0;
                 do
                 {
-                    const OUString sHeader = sLine.getToken( 0, '\t', nIndex );
-                    OSL_ENSURE(sHeader.getLength() > 2 &&
-                            sHeader.startsWith("\"") && sHeader.endsWith("\""),
+                    const std::u16string_view sHeader = o3tl::getToken(sLine, 0, '\t', nIndex );
+                    OSL_ENSURE(sHeader.size() > 2 &&
+                            o3tl::starts_with(sHeader, u"\"") && o3tl::ends_with(sHeader, u"\""),
                             "Wrong format of header");
-                    if(sHeader.getLength() > 2)
+                    if(sHeader.size() > 2)
                     {
-                        m_pCSVData->aDBColumnHeaders.push_back( sHeader.copy(1, sHeader.getLength() -2));
+                        m_pCSVData->aDBColumnHeaders.push_back( OUString(sHeader.substr(1, sHeader.size() -2)));
                     }
                 }
                 while (nIndex > 0);
