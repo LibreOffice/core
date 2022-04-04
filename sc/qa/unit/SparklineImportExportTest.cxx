@@ -187,7 +187,7 @@ void SparklineImportExportTest::testSparklinesExportODS()
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_ODS);
     xmlDocUniquePtr pXmlDoc = XPathHelper::parseExport(pXPathFile, m_xSFactory, "content.xml");
 
-    // We have 3 sparkline groups = 3 tables that contain spakrlines
+    // We have 3 sparkline groups = 3 tables that contain sparklines
     assertXPath(pXmlDoc, "//table:table/calcext:sparkline-groups", 3);
 
     // Check the number of sparkline groups in table[1]
