@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a8a4462_b8db5c11",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-04T19:21:01Z",
+      "side": 1,
+      "message": "Hi Tünde, László,\nAs far as I can see, this patch doesn\u0027t fix tdf#144996.\nI was wondering, is this patch good for anything or should it be reverted ?",
+      "revId": "f138cc8fff47c4bb4fc361698bc788dd360a7dd7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
