@@ -1359,6 +1359,8 @@ public:
     void              SetDirty( const ScRange&, bool bIncludeEmptyCells );
     void              SetTableOpDirty( const ScRange& );  // for Interpreter TableOp
     void              InterpretDirtyCells( const ScRangeList& rRanges );
+    // Interprets cells that have NeedsInterpret(), i.e. the same like calling MaybeInterpret() on them.
+    void              InterpretCellsIfNeeded( const ScRangeList& rRanges );
     SC_DLLPUBLIC void CalcAll();
     SC_DLLPUBLIC void CalcAfterLoad( bool bStartListening = true );
     void              CompileAll();

@@ -3935,6 +3935,23 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
     mpFormulaGroupCxt.reset();
 }
 
+void ScDocument::InterpretCellsIfNeeded( const ScRangeList& rRanges )
+{
+    for (size_t nPos=0, nRangeCount = rRanges.size(); nPos < nRangeCount; nPos++)
+    {
+        const ScRange& rRange = rRanges[nPos];
+        for (SCTAB nTab = rRange.aStart.Tab(); nTab <= rRange.aEnd.Tab(); ++nTab)
+        {
+            ScTable* pTab = FetchTable(nTab);
+            if (!pTab)
+                return;
+
+            pTab->InterpretCellsIfNeeded(
+                rRange.aStart.Col(), rRange.aStart.Row(), rRange.aEnd.Col(), rRange.aEnd.Row());
+        }
+    }
+}
+
 void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 {
     if (m_TableOpList.empty())
