@@ -41,6 +41,7 @@ QtObject::QtObject(QtFrame* pParent, bool bShow)
     if (bShow)
         m_pQWidget->show();
 
+    QtFrame::SetSystemEnvDataPlatform(m_aSystemData);
     QtFrame::FillSystemEnvData(m_aSystemData, reinterpret_cast<sal_IntPtr>(this), m_pQWidget);
 }
 
