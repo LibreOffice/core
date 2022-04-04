@@ -50,11 +50,11 @@ public:
 class SvtDeleteListener final : public SvtListener
 {
 private:
-    bool bObjectDeleted;
+    bool m_bObjectDeleted;
 
 public:
     explicit SvtDeleteListener(SvtBroadcaster& rNotifier)
-        : bObjectDeleted(false)
+        : m_bObjectDeleted(false)
     {
         StartListening(rNotifier);
     }
@@ -62,20 +62,20 @@ public:
     virtual void Notify(const SfxHint& rHint) override
     {
         if (rHint.GetId() == SfxHintId::Dying)
-            bObjectDeleted = true;
+            m_bObjectDeleted = true;
     }
 
-    bool WasDeleted() const { return bObjectDeleted; }
+    bool WasDeleted() const { return m_bObjectDeleted; }
 };
 
 class SfxDeleteListener final : public SfxListener
 {
 private:
-    bool bObjectDeleted;
+    bool m_bObjectDeleted;
 
 public:
     explicit SfxDeleteListener(SfxBroadcaster& rNotifier)
-        : bObjectDeleted(false)
+        : m_bObjectDeleted(false)
     {
         StartListening(rNotifier);
     }
@@ -83,10 +83,10 @@ public:
     virtual void Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint) override
     {
         if (rHint.GetId() == SfxHintId::Dying)
-            bObjectDeleted = true;
+            m_bObjectDeleted = true;
     }
 
-    bool WasDeleted() const { return bObjectDeleted; }
+    bool WasDeleted() const { return m_bObjectDeleted; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

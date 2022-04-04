@@ -750,12 +750,12 @@ enum eBookStatus { BOOK_NORMAL = 0, BOOK_IGNORE = 0x1, BOOK_FIELD = 0x2 };
 class WW8PLCFx_Book : public WW8PLCFx
 {
 private:
-    std::unique_ptr<WW8PLCFspecial> pBook[2];           // Start and End Position
-    std::vector<OUString> aBookNames;   // Name
-    std::vector<eBookStatus> aStatus;
-    tools::Long nIMax;                         // Number of Booknotes
-    sal_uInt16 nIsEnd;
-    sal_Int32 nBookmarkId; // counter incremented by GetUniqueBookmarkName.
+    std::unique_ptr<WW8PLCFspecial> m_pBook[2];           // Start and End Position
+    std::vector<OUString> m_aBookNames;   // Name
+    std::vector<eBookStatus> m_aStatus;
+    tools::Long m_nIMax;                         // Number of Booknotes
+    sal_uInt16 m_nIsEnd;
+    sal_Int32 m_nBookmarkId; // counter incremented by GetUniqueBookmarkName.
 
     WW8PLCFx_Book(const WW8PLCFx_Book&) = delete;
     WW8PLCFx_Book& operator=(const WW8PLCFx_Book&) = delete;
@@ -763,7 +763,7 @@ private:
 public:
     WW8PLCFx_Book(SvStream* pTableSt,const WW8Fib& rFib);
     virtual ~WW8PLCFx_Book() override;
-    tools::Long GetIMax() const { return nIMax; }
+    tools::Long GetIMax() const { return m_nIMax; }
     virtual sal_uInt32 GetIdx() const override;
     virtual void SetIdx(sal_uInt32 nI) override;
     virtual sal_uInt32 GetIdx2() const override;
@@ -774,9 +774,9 @@ public:
     virtual void advance() override;
     const OUString* GetName() const;
     WW8_CP GetStartPos() const
-        { return nIsEnd ? WW8_CP_MAX : pBook[0]->Where(); }
+        { return m_nIsEnd ? WW8_CP_MAX : m_pBook[0]->Where(); }
     tools::Long GetLen() const;
-    bool GetIsEnd() const { return nIsEnd != 0; }
+    bool GetIsEnd() const { return m_nIsEnd != 0; }
     tools::Long GetHandle() const;
     void SetStatus( sal_uInt16 nIndex, eBookStatus eStat );
     void MapName(OUString& rName);
@@ -792,7 +792,7 @@ private:
     /// Start and end positions.
     std::unique_ptr<WW8PLCFspecial> m_pBook[2];
     /// Number of annotation marks
-    sal_Int32 nIMax;
+    sal_Int32 m_nIMax;
     bool m_bIsEnd;
 
     WW8PLCFx_AtnBook(const WW8PLCFx_AtnBook&) = delete;

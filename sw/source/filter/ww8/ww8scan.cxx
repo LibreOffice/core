@@ -4281,31 +4281,31 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, sal_uInt32 nStart, sal_Int32 nLen
 }
 
 WW8PLCFx_Book::WW8PLCFx_Book(SvStream* pTableSt, const WW8Fib& rFib)
-    : WW8PLCFx(rFib, false), nIsEnd(0), nBookmarkId(1)
+    : WW8PLCFx(rFib, false), m_nIsEnd(0), m_nBookmarkId(1)
 {
     if( !rFib.m_fcPlcfbkf || !rFib.m_lcbPlcfbkf || !rFib.m_fcPlcfbkl ||
         !rFib.m_lcbPlcfbkl || !rFib.m_fcSttbfbkmk || !rFib.m_lcbSttbfbkmk )
     {
-        nIMax = 0;
+        m_nIMax = 0;
     }
     else
     {
-        pBook[0].reset( new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkf,rFib.m_lcbPlcfbkf,4) );
+        m_pBook[0].reset( new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkf,rFib.m_lcbPlcfbkf,4) );
 
-        pBook[1].reset( new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkl,rFib.m_lcbPlcfbkl,0) );
+        m_pBook[1].reset( new WW8PLCFspecial(pTableSt,rFib.m_fcPlcfbkl,rFib.m_lcbPlcfbkl,0) );
 
         rtl_TextEncoding eStructChrSet = WW8Fib::GetFIBCharset(rFib.m_chseTables, rFib.m_lid);
 
         WW8ReadSTTBF( (7 < rFib.m_nVersion), *pTableSt, rFib.m_fcSttbfbkmk,
-            rFib.m_lcbSttbfbkmk, 0, eStructChrSet, aBookNames );
+            rFib.m_lcbSttbfbkmk, 0, eStructChrSet, m_aBookNames );
 
-        nIMax = aBookNames.size();
+        m_nIMax = m_aBookNames.size();
 
-        if( pBook[0]->GetIMax() < nIMax )   // Count of Bookmarks
-            nIMax = pBook[0]->GetIMax();
-        if( pBook[1]->GetIMax() < nIMax )
-            nIMax = pBook[1]->GetIMax();
-        aStatus.resize(nIMax);
+        if( m_pBook[0]->GetIMax() < m_nIMax )   // Count of Bookmarks
+            m_nIMax = m_pBook[0]->GetIMax();
+        if( m_pBook[1]->GetIMax() < m_nIMax )
+            m_nIMax = m_pBook[1]->GetIMax();
+        m_aStatus.resize(m_nIMax);
     }
 }
 
@@ -4315,44 +4315,44 @@ WW8PLCFx_Book::~WW8PLCFx_Book()
 
 sal_uInt32 WW8PLCFx_Book::GetIdx() const
 {
-    return nIMax ? pBook[0]->GetIdx() : 0;
+    return m_nIMax ? m_pBook[0]->GetIdx() : 0;
 }
 
 void WW8PLCFx_Book::SetIdx(sal_uInt32 nI)
 {
-    if( nIMax )
-        pBook[0]->SetIdx( nI );
+    if( m_nIMax )
+        m_pBook[0]->SetIdx( nI );
 }
 
 sal_uInt32 WW8PLCFx_Book::GetIdx2() const
 {
-    return nIMax ? ( pBook[1]->GetIdx() | ( nIsEnd ? 0x80000000 : 0 ) ) : 0;
+    return m_nIMax ? ( m_pBook[1]->GetIdx() | ( m_nIsEnd ? 0x80000000 : 0 ) ) : 0;
 }
 
 void WW8PLCFx_Book::SetIdx2(sal_uInt32 nI)
 {
-    if( nIMax )
+    if( m_nIMax )
     {
-        pBook[1]->SetIdx( nI & 0x7fffffff );
-        nIsEnd = o3tl::narrowing<sal_uInt16>( ( nI >> 31 ) & 1 );  // 0 or 1
+        m_pBook[1]->SetIdx( nI & 0x7fffffff );
+        m_nIsEnd = o3tl::narrowing<sal_uInt16>( ( nI >> 31 ) & 1 );  // 0 or 1
     }
 }
 
 bool WW8PLCFx_Book::SeekPos(WW8_CP nCpPos)
 {
-    if( !pBook[0] )
+    if( !m_pBook[0] )
         return false;
 
-    bool bOk = pBook[0]->SeekPosExact( nCpPos );
-    bOk &= pBook[1]->SeekPosExact( nCpPos );
-    nIsEnd = 0;
+    bool bOk = m_pBook[0]->SeekPosExact( nCpPos );
+    bOk &= m_pBook[1]->SeekPosExact( nCpPos );
+    m_nIsEnd = 0;
 
     return bOk;
 }
 
 WW8_CP WW8PLCFx_Book::Where()
 {
-    return pBook[nIsEnd]->Where();
+    return m_pBook[m_nIsEnd]->Where();
 }
 
 tools::Long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
@@ -4361,14 +4361,14 @@ tools::Long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& 
     rEnd = WW8_CP_MAX;
     rLen = 0;
 
-    if (!pBook[0] || !pBook[1] || !nIMax || (pBook[nIsEnd]->GetIdx()) >= nIMax)
+    if (!m_pBook[0] || !m_pBook[1] || !m_nIMax || (m_pBook[m_nIsEnd]->GetIdx()) >= m_nIMax)
     {
         rStart = rEnd = WW8_CP_MAX;
         return -1;
     }
 
-    (void)pBook[nIsEnd]->Get( rStart, pData );    // query position
-    return pBook[nIsEnd]->GetIdx();
+    (void)m_pBook[m_nIsEnd]->Get( rStart, pData );    // query position
+    return m_pBook[m_nIsEnd]->GetIdx();
 }
 
 // The operator ++ has a pitfall: If 2 bookmarks adjoin each other,
@@ -4386,74 +4386,74 @@ tools::Long WW8PLCFx_Book::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& 
 
 void WW8PLCFx_Book::advance()
 {
-    if( !(pBook[0] && pBook[1] && nIMax) )
+    if( !(m_pBook[0] && m_pBook[1] && m_nIMax) )
         return;
 
-    (*pBook[nIsEnd]).advance();
+    (*m_pBook[m_nIsEnd]).advance();
 
-    sal_uLong l0 = pBook[0]->Where();
-    sal_uLong l1 = pBook[1]->Where();
+    sal_uLong l0 = m_pBook[0]->Where();
+    sal_uLong l1 = m_pBook[1]->Where();
     if( l0 < l1 )
-        nIsEnd = 0;
+        m_nIsEnd = 0;
     else if( l1 < l0 )
-        nIsEnd = 1;
+        m_nIsEnd = 1;
     else
     {
-        const void * p = pBook[0]->GetData(pBook[0]->GetIdx());
+        const void * p = m_pBook[0]->GetData(m_pBook[0]->GetIdx());
         tools::Long nPairFor = (p == nullptr) ? 0 : SVBT16ToUInt16(*static_cast<SVBT16 const *>(p));
-        if (nPairFor == pBook[1]->GetIdx())
-            nIsEnd = 0;
+        if (nPairFor == m_pBook[1]->GetIdx())
+            m_nIsEnd = 0;
         else
-            nIsEnd = nIsEnd ? 0 : 1;
+            m_nIsEnd = m_nIsEnd ? 0 : 1;
     }
 }
 
 tools::Long WW8PLCFx_Book::GetLen() const
 {
-    if( nIsEnd )
+    if( m_nIsEnd )
     {
         OSL_ENSURE( false, "Incorrect call (1) of PLCF_Book::GetLen()" );
         return 0;
     }
     void * p;
     WW8_CP nStartPos;
-    if( !pBook[0]->Get( nStartPos, p ) )
+    if( !m_pBook[0]->Get( nStartPos, p ) )
     {
         OSL_ENSURE( false, "Incorrect call (2) of PLCF_Book::GetLen()" );
         return 0;
     }
     const sal_uInt16 nEndIdx = SVBT16ToUInt16( *static_cast<SVBT16*>(p) );
-    tools::Long nNum = pBook[1]->GetPos( nEndIdx );
+    tools::Long nNum = m_pBook[1]->GetPos( nEndIdx );
     nNum -= nStartPos;
     return nNum;
 }
 
 void WW8PLCFx_Book::SetStatus(sal_uInt16 nIndex, eBookStatus eStat)
 {
-    SAL_WARN_IF(nIndex >= nIMax, "sw.ww8",
+    SAL_WARN_IF(nIndex >= m_nIMax, "sw.ww8",
                 "bookmark index " << nIndex << " invalid");
-    eBookStatus eStatus = aStatus.at(nIndex);
-    aStatus[nIndex] = static_cast<eBookStatus>(eStatus | eStat);
+    eBookStatus eStatus = m_aStatus.at(nIndex);
+    m_aStatus[nIndex] = static_cast<eBookStatus>(eStatus | eStat);
 }
 
 eBookStatus WW8PLCFx_Book::GetStatus() const
 {
-    if (aStatus.empty())
+    if (m_aStatus.empty())
         return BOOK_NORMAL;
     tools::Long nEndIdx = GetHandle();
-    return ( nEndIdx < nIMax ) ? aStatus[nEndIdx] : BOOK_NORMAL;
+    return ( nEndIdx < m_nIMax ) ? m_aStatus[nEndIdx] : BOOK_NORMAL;
 }
 
 tools::Long WW8PLCFx_Book::GetHandle() const
 {
-    if( !pBook[0] || !pBook[1] )
+    if( !m_pBook[0] || !m_pBook[1] )
         return LONG_MAX;
 
-    if( nIsEnd )
-        return pBook[1]->GetIdx();
+    if( m_nIsEnd )
+        return m_pBook[1]->GetIdx();
     else
     {
-        if (const void* p = pBook[0]->GetData(pBook[0]->GetIdx()))
+        if (const void* p = m_pBook[0]->GetData(m_pBook[0]->GetIdx()))
             return SVBT16ToUInt16( *static_cast<SVBT16 const *>(p) );
         else
             return LONG_MAX;
@@ -4464,15 +4464,15 @@ OUString WW8PLCFx_Book::GetBookmark(tools::Long nStart,tools::Long nEnd, sal_uIn
 {
     bool bFound = false;
     sal_uInt16 i = 0;
-    if (pBook[0] && pBook[1])
+    if (m_pBook[0] && m_pBook[1])
     {
         WW8_CP nStartCurrent, nEndCurrent;
-        while (sal::static_int_cast<decltype(aBookNames)::size_type>(i) < aBookNames.size())
+        while (sal::static_int_cast<decltype(m_aBookNames)::size_type>(i) < m_aBookNames.size())
         {
             void* p;
             sal_uInt16 nEndIdx;
 
-            if( pBook[0]->GetData( i, nStartCurrent, p ) && p )
+            if( m_pBook[0]->GetData( i, nStartCurrent, p ) && p )
                 nEndIdx = SVBT16ToUInt16( *static_cast<SVBT16*>(p) );
             else
             {
@@ -4480,7 +4480,7 @@ OUString WW8PLCFx_Book::GetBookmark(tools::Long nStart,tools::Long nEnd, sal_uIn
                 nEndIdx = i;
             }
 
-            nEndCurrent = pBook[1]->GetPos( nEndIdx );
+            nEndCurrent = m_pBook[1]->GetPos( nEndIdx );
 
             if ((nStartCurrent >= nStart) && (nEndCurrent <= nEnd))
             {
@@ -4491,22 +4491,22 @@ OUString WW8PLCFx_Book::GetBookmark(tools::Long nStart,tools::Long nEnd, sal_uIn
             ++i;
         }
     }
-    return bFound ? aBookNames[i] : OUString();
+    return bFound ? m_aBookNames[i] : OUString();
 }
 
 OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
 {
     OUString aRet(rSuggestedName.isEmpty() ? OUString("Unnamed") : rSuggestedName);
     size_t i = 0;
-    while (i < aBookNames.size())
+    while (i < m_aBookNames.size())
     {
-        if (aRet == aBookNames[i])
+        if (aRet == m_aBookNames[i])
         {
             sal_Int32 len = aRet.getLength();
             sal_Int32 p = len - 1;
             while (p > 0 && aRet[p] >= '0' && aRet[p] <= '9')
                 --p;
-            aRet = aRet.subView(0, p+1) + OUString::number(nBookmarkId++);
+            aRet = aRet.subView(0, p+1) + OUString::number(m_nBookmarkId++);
             i = 0; // start search from beginning
         }
         else
@@ -4517,15 +4517,15 @@ OUString WW8PLCFx_Book::GetUniqueBookmarkName(const OUString &rSuggestedName)
 
 void WW8PLCFx_Book::MapName(OUString& rName)
 {
-    if( !pBook[0] || !pBook[1] )
+    if( !m_pBook[0] || !m_pBook[1] )
         return;
 
     size_t i = 0;
-    while (i < aBookNames.size())
+    while (i < m_aBookNames.size())
     {
-        if (rName.equalsIgnoreAsciiCase(aBookNames[i]))
+        if (rName.equalsIgnoreAsciiCase(m_aBookNames[i]))
         {
-            rName = aBookNames[i];
+            rName = m_aBookNames[i];
             break;
         }
         ++i;
@@ -4535,8 +4535,8 @@ void WW8PLCFx_Book::MapName(OUString& rName)
 const OUString* WW8PLCFx_Book::GetName() const
 {
     const OUString *pRet = nullptr;
-    if (!nIsEnd && (pBook[0]->GetIdx() < nIMax))
-        pRet = &(aBookNames[pBook[0]->GetIdx()]);
+    if (!m_nIsEnd && (m_pBook[0]->GetIdx() < m_nIMax))
+        pRet = &(m_aBookNames[m_pBook[0]->GetIdx()]);
     return pRet;
 }
 
@@ -4546,16 +4546,16 @@ WW8PLCFx_AtnBook::WW8PLCFx_AtnBook(SvStream* pTableSt, const WW8Fib& rFib)
 {
     if (!rFib.m_fcPlcfAtnbkf || !rFib.m_lcbPlcfAtnbkf || !rFib.m_fcPlcfAtnbkl || !rFib.m_lcbPlcfAtnbkl)
     {
-        nIMax = 0;
+        m_nIMax = 0;
     }
     else
     {
         m_pBook[0].reset( new WW8PLCFspecial(pTableSt, rFib.m_fcPlcfAtnbkf, rFib.m_lcbPlcfAtnbkf, 4) );
         m_pBook[1].reset( new WW8PLCFspecial(pTableSt, rFib.m_fcPlcfAtnbkl, rFib.m_lcbPlcfAtnbkl, 0) );
 
-        nIMax = m_pBook[0]->GetIMax();
-        if (m_pBook[1]->GetIMax() < nIMax)
-            nIMax = m_pBook[1]->GetIMax();
+        m_nIMax = m_pBook[0]->GetIMax();
+        if (m_pBook[1]->GetIMax() < m_nIMax)
+            m_nIMax = m_pBook[1]->GetIMax();
     }
 }
 
@@ -4565,18 +4565,18 @@ WW8PLCFx_AtnBook::~WW8PLCFx_AtnBook()
 
 sal_uInt32 WW8PLCFx_AtnBook::GetIdx() const
 {
-    return nIMax ? m_pBook[0]->GetIdx() : 0;
+    return m_nIMax ? m_pBook[0]->GetIdx() : 0;
 }
 
 void WW8PLCFx_AtnBook::SetIdx(sal_uInt32 nI)
 {
-    if( nIMax )
+    if( m_nIMax )
         m_pBook[0]->SetIdx( nI );
 }
 
 sal_uInt32 WW8PLCFx_AtnBook::GetIdx2() const
 {
-    if (nIMax)
+    if (m_nIMax)
         return m_pBook[1]->GetIdx() | ( m_bIsEnd ? 0x80000000 : 0 );
     else
         return 0;
@@ -4584,7 +4584,7 @@ sal_uInt32 WW8PLCFx_AtnBook::GetIdx2() const
 
 void WW8PLCFx_AtnBook::SetIdx2(sal_uInt32 nI)
 {
-    if( nIMax )
+    if( m_nIMax )
     {
         m_pBook[1]->SetIdx( nI & 0x7fffffff );
         m_bIsEnd = static_cast<bool>(( nI >> 31 ) & 1);
@@ -4614,7 +4614,7 @@ tools::Long WW8PLCFx_AtnBook::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int3
     rEnd = WW8_CP_MAX;
     rLen = 0;
 
-    if (!m_pBook[0] || !m_pBook[1] || !nIMax || (m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx()) >= nIMax)
+    if (!m_pBook[0] || !m_pBook[1] || !m_nIMax || (m_pBook[static_cast<int>(m_bIsEnd)]->GetIdx()) >= m_nIMax)
     {
         rStart = rEnd = WW8_CP_MAX;
         return -1;
@@ -4626,7 +4626,7 @@ tools::Long WW8PLCFx_AtnBook::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int3
 
 void WW8PLCFx_AtnBook::advance()
 {
-    if( !(m_pBook[0] && m_pBook[1] && nIMax) )
+    if( !(m_pBook[0] && m_pBook[1] && m_nIMax) )
         return;
 
     (*m_pBook[static_cast<int>(m_bIsEnd)]).advance();
