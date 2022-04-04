@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dad46134_6f4a72d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-04T10:35:13Z",
+      "side": 1,
+      "message": "What is the meaning of this patch? Please change it to something useful.",
+      "revId": "6fe671233a6db3103366e75c5edfb5a85a3436f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
