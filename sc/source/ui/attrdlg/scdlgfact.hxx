@@ -677,7 +677,8 @@ public:
                                                             double          fMax,
                                                             SCSIZE          nSelectHeight,
                                                             SCSIZE          nSelectWidth,
-                                                            sal_uInt16       nPossDir) override;
+                                                            sal_uInt16      nPossDir,
+                                                            sal_uInt32      nPrivFormat) override;
     virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) override;
 
     virtual VclPtr<AbstractScInsertCellDlg> CreateScInsertCellDlg(weld::Window* pParent,
