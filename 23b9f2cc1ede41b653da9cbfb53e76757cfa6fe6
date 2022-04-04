@@ -52,6 +52,24 @@
       "parentUuid": "61dc8822_532906c9",
       "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd1303f2_512ff639",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-04T08:53:08Z",
+      "side": 1,
+      "message": "It\u0027s a rather uncommon construct in C++, so my first reaction upon seeing it here was (a) checking that this code actually compiles (and is not e.g. something rotten in an #if 0 block), and (b) checking that StarBasic::Error is a function that indeed returns void and is only called for its side effect.\n\nI\u0027m not convinced that stashing a function call that is only made for its side effects into a return statement is a net readability win.",
+      "parentUuid": "9e24fd40_9d9ac388",
+      "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
