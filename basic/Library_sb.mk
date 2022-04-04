@@ -66,7 +66,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/basmgr/vbahelper \
 	basic/source/classes/codecompletecache \
 	basic/source/classes/eventatt \
-	basic/source/classes/global \
 	basic/source/classes/image \
 	basic/source/classes/propacc \
 	basic/source/classes/sb \
@@ -104,6 +103,7 @@ endif
 
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/basrdll \
+	basic/source/classes/global \
 	basic/source/runtime/methods \
 	basic/source/runtime/methods1 \
 	basic/source/classes/sbintern \
