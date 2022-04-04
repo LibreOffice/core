@@ -85,7 +85,7 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Use the Backspace key instead of Delete in Calc. You can choose what to delete."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Best way to fix bad-looking MS Word table cells via Table ▸ Size ▸ Optimal Row Height / Column Width."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To repeat a table heading when a table spans over a page, use Table ▸ Table Properties ▸ Text Flow ▸ Repeat heading."), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "To quickly insert or delete rows, select the desired number of rows (or columns) and press %MOD1+ to add or %MOD1- to delete."), "", "tipoftheday_c.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Want to quickly insert or delete rows? Select the desired number of rows (or columns) and press %MOD1+Plus sign (+) to add or %MOD1+Minus sign (-) to delete."), "modules/scalc/ui/insertcells/InsertCellsDialog", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To repeat rows/columns on every pages use Format ▸ Print Ranges ▸ Edit."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Insert images and photos into shapes in Draw and Impress. Right-click on a shape, choose Area ▸ Image ▸ Add/Import, and use Options to adjust appearance."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to insert the date in a spreadsheet cell? Type %MOD1+; or Shift+%MOD1+; to insert the time."), "", "tipoftheday_c.png"},
