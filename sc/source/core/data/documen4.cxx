@@ -274,9 +274,9 @@ void ScDocument::InsertMatrixFormula(SCCOL nCol1, SCROW nRow1,
     if (utl::ConfigManager::IsFuzzing())
     {
         // just too slow
-        if (nCol2 - nCol1 > 256)
+        if (nCol2 - nCol1 > 128)
             return;
-        if (nRow2 - nRow1 > 256)
+        if (nRow2 - nRow1 > 128)
             return;
     }
     assert( ValidColRow( nCol1, nRow1) && ValidColRow( nCol2, nRow2));
