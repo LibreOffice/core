@@ -34,6 +34,24 @@
       "parentUuid": "febd4f3a_f7732ac2",
       "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e24fd40_9d9ac388",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-04T07:14:16Z",
+      "side": 1,
+      "message": "\u003e consider its use of `return call_function_returning_void()` as \"too clever\"\n\nPlease don\u0027t! :-) Is there a compelling reason to do?",
+      "parentUuid": "61dc8822_532906c9",
+      "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
