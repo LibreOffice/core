@@ -248,6 +248,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
     StarBASIC*       m_pComListenerParentBasic = nullptr;
     std::unique_ptr<SfxBroadcaster>  mpBroadcaster; // Broadcaster, if needed
     OUString         maName;            // Name, if available
+    mutable OUString maNameCI;          // Name, case insentitive - cached for fast comparison
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     sal_uInt16       nHash = 0;         // Hash-ID for search
 
@@ -308,9 +309,8 @@ public:
         const auto first6 = aName.substr(0, 6);
         for (const auto& c : first6)
         {
-            // If we have a filthy non-ASCII character, break!!
-            if (c >= 0x80)
-                return 0;
+            if (!rtl::isAscii(c))
+                continue; // Just skip it to let non-ASCII strings have some hash variance
             n = static_cast<sal_uInt16>((n << 3) + rtl::toAsciiUpperCase(c));
         }
         return n;

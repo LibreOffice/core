@@ -30,6 +30,8 @@
 #include <sbunoobj.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <global.hxx>
+#include <unotools/transliterationwrapper.hxx>
 
 #include <com/sun/star/uno/XInterface.hpp>
 using namespace com::sun::star::uno;
@@ -183,6 +185,7 @@ void SbxVariable::SetName( const OUString& rName )
 {
     maName = rName;
     nHash = MakeHashCode( rName );
+    maNameCI.clear();
 }
 
 const OUString& SbxVariable::GetName( SbxNameType t ) const
@@ -191,6 +194,12 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     if( t == SbxNameType::NONE )
     {
         return maName;
+    }
+    if (t == SbxNameType::CaseInsensitive)
+    {
+        if (maNameCI.isEmpty() && !maName.isEmpty())
+            maNameCI = SbGlobal::GetTransliteration().transliterate(maName, 0, maName.getLength());
+        return maNameCI;
     }
     // Request parameter-information (not for objects)
     const_cast<SbxVariable*>(this)->GetInfo();
