@@ -77,6 +77,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf145731)
     CPPUNIT_ASSERT_EQUAL(1, getPages());
 }
 
+//just care it doesn't crash/asser
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148336)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf148336.odt");
+
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139843)
 {
     createSwDoc(DATA_DIRECTORY, "tdf139843.odt");
