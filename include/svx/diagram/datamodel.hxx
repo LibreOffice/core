@@ -28,6 +28,9 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+
 namespace svx::diagram {
 
 enum SVXCORE_DLLPUBLIC TypeConstant {
@@ -66,11 +69,31 @@ struct SVXCORE_DLLPUBLIC Connection
 
 typedef std::vector< Connection > Connections;
 
+/** Text and properies for a point
+ * For proof of concept to make TextData available in svx level this
+ * is in a first run pretty simple, but may need to be extended accodingly
+ * up to similar data as in oox::drawingml::TextBody. Pls have a look at
+ * secureDataFromShapeToModelAfterDiagramImport() resp.
+ * restoreDataFromModelToShapeAfterReCreation() on it's usage/purpose
+ */
+struct SVXCORE_DLLPUBLIC TextBody
+{
+    // text from 1st paragraph (1st run)
+    OUString msText;
+
+    // attributes from TextBody::getTextProperties()
+    css::uno::Sequence< css::beans::PropertyValue > maTextProps;
+};
+
+typedef std::shared_ptr< TextBody > TextBodyPtr;
+
 /** A point
  */
 struct SVXCORE_DLLPUBLIC Point
 {
     Point();
+
+    TextBodyPtr msTextBody;
 
     OUString msCnxId;
     OUString msModelId;
@@ -143,7 +166,7 @@ public:
     virtual ~DiagramData();
 
     // creates temporary processing data from model data
-    virtual void build(bool bClearOoxShapes) = 0;
+    virtual void buildDiagramDataModel(bool bClearOoxShapes);
 
     Connections& getConnections() { return maConnections; }
     Points& getPoints() { return maPoints; }
@@ -156,12 +179,12 @@ public:
     virtual void dump() const = 0;
 
     OUString getString() const;
-    virtual std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const = 0;
-    virtual OUString addNode(const OUString& rText) = 0;
+    std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const;
+    OUString addNode(const OUString& rText);
     bool removeNode(const OUString& rNodeId);
 
 protected:
-    virtual void getChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel) const = 0;
+    void getChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel) const;
     void addConnection(TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
 
     // evtl. existing alternative imported visualization identifier

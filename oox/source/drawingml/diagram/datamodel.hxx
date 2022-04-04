@@ -37,19 +37,15 @@ class DiagramData : public svx::diagram::DiagramData
 {
 public:
     typedef std::map< OUString, ShapePtr > PointShapeMap;
-    typedef std::map< OUString, TextBodyPtr > PointTextMap;
 
     DiagramData();
     virtual ~DiagramData();
 
     // creates temporary processing data from model data
-    virtual void build(bool bClearOoxShapes);
+    virtual void buildDiagramDataModel(bool bClearOoxShapes);
 
     FillPropertiesPtr& getFillProperties() { return mpFillProperties; }
     virtual void dump() const;
-
-    virtual std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const;
-    virtual OUString addNode(const OUString& rText);
 
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
 
@@ -58,14 +54,10 @@ public:
     void restoreDataFromModelToShapeAfterReCreation(const svx::diagram::Point& rPoint, Shape& rNewShape) const;
 
 protected:
-    virtual void getChildrenString(OUStringBuffer& rBuf, const svx::diagram::Point* pPoint, sal_Int32 nLevel) const;
-
     // The model definition, the parts *only* available in oox. Also look for already
     // defined ModelData in svx::diagram::DiagramData
     // - FillStyle
-    // - Texts for oox::drawingml::Points/svx::diagram::Points, associated by ModelId
     FillPropertiesPtr mpFillProperties;
-    PointTextMap      maPointTextMap;
 
     // temporary processing data, deleted when using build()
     PointShapeMap     maPointShapeMap;
