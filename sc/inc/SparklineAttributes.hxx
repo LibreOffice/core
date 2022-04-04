@@ -93,7 +93,7 @@ public:
     AxisType getMaxAxisType() const;
     void setMaxAxisType(AxisType eAxisType);
 
-    /** Line weigth or width in points */
+    /** Line weight or width in points */
     double getLineWeight() const;
     void setLineWeight(double nWeight);
 

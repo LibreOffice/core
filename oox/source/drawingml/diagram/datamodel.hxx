@@ -71,8 +71,8 @@ protected:
     PointShapeMap     maPointShapeMap;
 };
 
-// Oox-lcal definiitkion of DiagramData. Doing and using this onm Oox
-// allows to do much less static_cast(s) - if at all  from svx::diagram::DiagramData
+// Oox-local definition of DiagramData. Doing and using this on Oox
+// allows to do much less static_cast(s) - if at all from svx::diagram::DiagramData
 typedef std::shared_ptr< DiagramData > OoxDiagramDataPtr;
 
 }
