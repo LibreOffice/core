@@ -123,8 +123,7 @@ public:
     };
 
     ScCheckListMenuControl(weld::Widget* pParent, ScViewData& rViewData,
-                           bool bTreeMode, int nWidth,
-                           vcl::ILibreOfficeKitNotifier* pNotifier);
+                           bool bTreeMode, int nWidth);
     ~ScCheckListMenuControl();
 
     void addMenuItem(const OUString& rText, Action* pAction);
@@ -224,8 +223,6 @@ private:
 
     void CreateDropDown();
 
-    void NotifyCloseLOK();
-
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(TriStateHdl, weld::Toggleable&, void);
 
@@ -302,7 +299,6 @@ private:
 
     ImplSVEvent* mnAsyncPostPopdownId;
     ImplSVEvent* mnAsyncSetDropdownPosId;
-    vcl::ILibreOfficeKitNotifier* mpNotifier;
 
     bool mbHasDates;
     bool mbIsPoppedUp;
@@ -329,7 +325,7 @@ private:
 class ScListSubMenuControl final
 {
 public:
-    ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bColorMenu, vcl::ILibreOfficeKitNotifier* pNotifier);
+    ScListSubMenuControl(weld::Widget* pParent, ScCheckListMenuControl& rParentControl, bool bColorMenu);
 
     void setPopupStartAction(ScCheckListMenuControl::Action* p);
 
@@ -368,7 +364,6 @@ private:
     std::unique_ptr<ScCheckListMenuControl::Action> mxPopupStartAction;
     std::vector<ScCheckListMenuControl::MenuItemData> maMenuItems;
     ScCheckListMenuControl& mrParentControl;
-    vcl::ILibreOfficeKitNotifier* mpNotifier;
     int mnBackColorMenuPrefHeight;
     int mnTextColorMenuPrefHeight;
     bool mbColorMenu;
@@ -379,7 +374,6 @@ private:
 
     void SetupMenu(weld::TreeView& rMenu);
 
-    void NotifyCloseLOK();
     void executeMenuItem(ScCheckListMenuControl::Action* pAction);
     void addItem(ScCheckListMenuControl::Action* pAction);
 };
