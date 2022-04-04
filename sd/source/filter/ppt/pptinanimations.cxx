@@ -855,13 +855,13 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
                 sal_Int32 nIndex = 0;
                 while( (nElements--) && (nIndex >= 0) )
                 {
-                    const OUString aToken( aString.getToken( 0, ';', nIndex ) );
+                    const std::u16string_view aToken( o3tl::getToken(aString, 0, ';', nIndex ) );
 
-                    sal_Int32 nPos = aToken.indexOf( ',' );
-                    if( nPos >= 0 )
+                    size_t nPos = aToken.find( ',' );
+                    if( nPos != std::u16string_view::npos )
                     {
-                        pValues->Time = o3tl::toDouble(aToken.subView( 0, nPos ));
-                        pValues->Progress = o3tl::toDouble(aToken.subView( nPos+1 ));
+                        pValues->Time = o3tl::toDouble(aToken.substr( 0, nPos ));
+                        pValues->Progress = o3tl::toDouble(aToken.substr( nPos+1 ));
                     }
                     pValues++;
                 }

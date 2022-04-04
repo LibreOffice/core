@@ -1761,8 +1761,8 @@ XclExpDV::XclExpDV( const XclExpRoot& rRoot, sal_uLong nScHandle ) :
                         sal_Int32 nStringIx = 0;
                         for(;;)
                         {
-                            const OUString aToken( aString.getToken( 0, '\n', nStringIx ) );
-                            if (aToken.indexOf(",") != -1)
+                            const std::u16string_view aToken( o3tl::getToken(aString, 0, '\n', nStringIx ) );
+                            if (aToken.find(',') != std::u16string_view::npos)
                             {
                                 sListBuf.append('"');
                                 sListBuf.append(aToken);

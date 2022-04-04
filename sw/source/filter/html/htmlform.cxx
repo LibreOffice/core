@@ -753,9 +753,9 @@ static bool lcl_html_setEvents(
     for( const auto &rStr : rUnoMacroTable )
     {
         sal_Int32 nIndex = 0;
-        if( rStr.getToken( 0, '-', nIndex ).isEmpty() || -1 == nIndex )
+        if( o3tl::getToken(rStr, 0, '-', nIndex ).empty() || -1 == nIndex )
             continue;
-        if( rStr.getToken( 0, '-', nIndex ).isEmpty() || -1 == nIndex )
+        if( o3tl::getToken(rStr, 0, '-', nIndex ).empty() || -1 == nIndex )
             continue;
         if( nIndex < rStr.getLength() )
             nEvents++;

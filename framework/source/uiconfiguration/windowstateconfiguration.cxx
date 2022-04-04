@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <comphelper/compbase.hxx>
+#include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysequence.hxx>
@@ -636,11 +637,11 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                     if ( a >>= aString )
                     {
                         sal_Int32 nToken( 0 );
-                        OUString aXStr = aString.getToken( 0, ',', nToken );
+                        std::u16string_view aXStr = o3tl::getToken(aString, 0, ',', nToken );
                         if ( nToken > 0 )
                         {
                             css::awt::Point aPos;
-                            aPos.X = aXStr.toInt32();
+                            aPos.X = o3tl::toInt32(aXStr);
                             aPos.Y = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
 
                             if ( i == PROPERTY_POS )
@@ -668,11 +669,11 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                     if ( a >>= aString )
                     {
                         sal_Int32 nToken( 0 );
-                        OUString aStr = aString.getToken( 0, ',', nToken );
+                        std::u16string_view aStr = o3tl::getToken(aString, 0, ',', nToken );
                         if ( nToken > 0 )
                         {
                             css::awt::Size aSize;
-                            aSize.Width = aStr.toInt32();
+                            aSize.Width = o3tl::toInt32(aStr);
                             aSize.Height = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
                             if ( i == PROPERTY_SIZE )
                             {
@@ -829,11 +830,11 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                     if ( a >>= aString )
                     {
                         sal_Int32 nToken( 0 );
-                        OUString aXStr = aString.getToken( 0, ',', nToken );
+                        std::u16string_view aXStr = o3tl::getToken(aString, 0, ',', nToken );
                         if ( nToken > 0 )
                         {
                             css::awt::Point aPos;
-                            aPos.X = aXStr.toInt32();
+                            aPos.X = o3tl::toInt32(aXStr);
                             aPos.Y = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
 
                             if ( i == PROPERTY_POS )
@@ -858,11 +859,11 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                     if ( a >>= aString )
                     {
                         sal_Int32 nToken( 0 );
-                        OUString aStr = aString.getToken( 0, ',', nToken );
+                        std::u16string_view aStr = o3tl::getToken(aString, 0, ',', nToken );
                         if ( nToken > 0 )
                         {
                             css::awt::Size aSize;
-                            aSize.Width  = aStr.toInt32();
+                            aSize.Width  = o3tl::toInt32(aStr);
                             aSize.Height = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
                             if ( i == PROPERTY_SIZE )
                             {

@@ -52,6 +52,7 @@
 #include "bibconfig.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -174,7 +175,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
 
     m_pBibMod = OpenBibModul();
 
-    OUString aPartName = rURL.getToken( 1, '/' );
+    std::u16string_view aPartName = o3tl::getToken(rURL, 1, '/' );
     Reference<XPropertySet> xPrSet(rFrame, UNO_QUERY);
     if(xPrSet.is())
     {
@@ -182,7 +183,7 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
         aTitle <<= BibResId(RID_BIB_STR_FRAME_TITLE);
         xPrSet->setPropertyValue("Title", aTitle);
     }
-    if(aPartName == "View" || aPartName == "View1")
+    if(aPartName == u"View" || aPartName == u"View1")
     {
         loadView(rFrame, rListener);
     }

@@ -5863,7 +5863,7 @@ void DomainMapper_Impl::handleToc
         else
         {
             sal_Int32 nIndex = 0;
-            sValue.getToken( 0, '-', nIndex );
+            o3tl::getToken(sValue, 0, '-', nIndex );
             nMaxLevel = static_cast<sal_Int16>(nIndex != -1 ? o3tl::toInt32(sValue.subView(nIndex)) : 0);
         }
     }

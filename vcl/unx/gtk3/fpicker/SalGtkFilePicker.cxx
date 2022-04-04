@@ -45,6 +45,7 @@
 
 #include <vcl/svapp.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <o3tl/string_view.hxx>
@@ -787,13 +788,13 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
             {
                 if( aSelectedFiles[nIndex].indexOf('.') > 0 )
                 {
-                    OUString sExtension;
+                    std::u16string_view sExtension;
                     nTokenIndex = 0;
                     do
-                        sExtension = aSelectedFiles[nIndex].getToken( 0, '.', nTokenIndex );
+                        sExtension = o3tl::getToken(aSelectedFiles[nIndex], 0, '.', nTokenIndex );
                     while( nTokenIndex >= 0 );
 
-                    if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
+                    if( sExtension.size() >= 3 ) // 3 = typical/minimum extension length
                     {
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
@@ -801,7 +802,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         if ( m_pFilterVector)
                             for (auto const& filter : *m_pFilterVector)
                             {
-                                if( lcl_matchFilter( filter.getFilter(), "*." + sExtension ) )
+                                if( lcl_matchFilter( filter.getFilter(), OUString::Concat("*.") + sExtension ) )
                                 {
                                     if( aNewFilter.isEmpty() )
                                         aNewFilter = filter.getTitle();

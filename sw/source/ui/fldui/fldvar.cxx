@@ -160,8 +160,8 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
         sal_Int32 nIdx{ 0 };
         if(!IsRefresh() && o3tl::equalsIgnoreAsciiCase(o3tl::getToken(sUserData, 0, ';', nIdx), u"" USER_DATA_VERSION_1))
         {
-            OUString sVal = sUserData.getToken(0, ';', nIdx);
-            sal_uInt16 nVal = o3tl::narrowing<sal_uInt16>(sVal.toInt32());
+            std::u16string_view sVal = o3tl::getToken(sUserData, 0, ';', nIdx);
+            sal_uInt16 nVal = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sVal));
             if (USHRT_MAX != nVal)
             {
                 for (sal_Int32 i = 0, nEntryCount = m_xTypeLB->n_children(); i < nEntryCount; i++)

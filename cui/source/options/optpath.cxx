@@ -363,7 +363,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
             do
             {
                 bool bFound = false;
-                const OUString sOnePath = aOldPath.getToken( 0, MULTIPATH_DELIMITER, nOldPos );
+                const std::u16string_view sOnePath = o3tl::getToken(aOldPath, 0, MULTIPATH_DELIMITER, nOldPos );
                 if ( !sInternal.isEmpty() )
                 {
                     sal_Int32 nInternalPos = 0;

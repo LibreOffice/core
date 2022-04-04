@@ -1258,14 +1258,14 @@ bool CSS1Expression::GetColor( Color &rColor ) const
             sal_Int32 nPos = 4; // start after "rgb("
             for ( int nCol = 0; nCol < 3 && nPos > 0; ++nCol )
             {
-                const OUString aNumber = aValue.getToken(0, ',', nPos);
+                const std::u16string_view aNumber = o3tl::getToken(aValue, 0, ',', nPos);
 
-                sal_Int32 nNumber = aNumber.toInt32();
+                sal_Int32 nNumber = o3tl::toInt32(aNumber);
                 if( nNumber<0 )
                 {
                     nNumber = 0;
                 }
-                else if( aNumber.indexOf('%') >= 0 )
+                else if( aNumber.find('%') != std::u16string_view::npos )
                 {
                     if( nNumber > 100 )
                         nNumber = 100;

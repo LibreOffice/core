@@ -371,8 +371,8 @@ IMPL_LINK_NOARG(ComboBox::Impl, ImplSelectHdl, LinkParamNone*, void)
             while ( nIndex >= 0 )
             {
                 sal_Int32  nPrevIndex = nIndex;
-                OUString   aToken = aText.getToken( 0, m_cMultiSep, nIndex );
-                sal_Int32  nTokenLen = aToken.getLength();
+                std::u16string_view aToken = o3tl::getToken(aText, 0, m_cMultiSep, nIndex );
+                sal_Int32  nTokenLen = aToken.size();
                 aToken = comphelper::string::strip(aToken, ' ');
                 sal_Int32 nP = m_pImplLB->GetEntryList().FindEntry( aToken );
                 if ((nP != LISTBOX_ENTRY_NOTFOUND) && (!m_pImplLB->GetEntryList().IsEntryPosSelected(nP)))

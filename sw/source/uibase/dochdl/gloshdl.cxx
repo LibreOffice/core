@@ -117,8 +117,8 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
                     break;
                 }
             }
-            const OUString sPath = sGroup.getToken(1, GLOS_DELIM);
-            sal_uInt16 nComparePath = o3tl::narrowing<sal_uInt16>(sPath.toInt32());
+            const std::u16string_view sPath = o3tl::getToken(sGroup, 1, GLOS_DELIM);
+            sal_uInt16 nComparePath = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sPath));
             if(nCurrentPath == nComparePath &&
                 o3tl::getToken(sGroup, 0, GLOS_DELIM) == sCurBase)
                 bPathEqual = true;

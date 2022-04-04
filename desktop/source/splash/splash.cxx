@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>

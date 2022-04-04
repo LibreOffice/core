@@ -2586,13 +2586,13 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
     {
         for (;;)
         {
-            OUString sLine( data.getToken( 0, '\n', nLineIdx ) );
+            std::u16string_view sLine( o3tl::getToken(data, 0, '\n', nLineIdx ) );
             if (nLineIdx<0)
                 break;  // skip last line
 
-            if ( !sLine.isEmpty() )
+            if ( !sLine.empty() )
             {
-                OUString displayValue  = sLine.getToken( 1, '>' );
+                OUString displayValue( o3tl::getToken(sLine, 1, '>' ) );
                 if ( displayValue.getLength() )
                 {
                     // Really we should be using a proper html parser
@@ -2602,7 +2602,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
                     displayValue = displayValue.replaceAll( "&quot;", "\"" );
                     displayValue = displayValue.replaceAll( "&amp;", "&" );
                     listValues.push_back( displayValue );
-                    if( sLine.indexOf( "OPTION SELECTED" ) != -1 )
+                    if( sLine.find( u"OPTION SELECTED" ) != std::u16string_view::npos )
                         selectedIndices.push_back( static_cast< sal_Int16 >( listValues.size() ) - 1 );
                 }
             }

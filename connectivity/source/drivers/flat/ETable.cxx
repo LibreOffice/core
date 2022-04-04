@@ -265,8 +265,8 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString const & aFirs
                     if (bNumeric && cThousandDelimiter)
                     {
                         // Is the delimiter correct?
-                        const OUString aValue = aField2.getToken(0,cDecimalDelimiter);
-                        for( sal_Int32 j = aValue.getLength() - 4; j >= 0; j -= 4)
+                        const std::u16string_view aValue = o3tl::getToken(aField2, 0, cDecimalDelimiter);
+                        for( sal_Int32 j = static_cast<sal_Int32>(aValue.size()) - 4; j >= 0; j -= 4)
                         {
                             const sal_Unicode c = aValue[j];
                             // just digits, decimal- and thousands-delimiter?

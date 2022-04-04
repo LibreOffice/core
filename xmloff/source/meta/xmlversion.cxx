@@ -27,6 +27,7 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
