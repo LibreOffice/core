@@ -92,13 +92,13 @@ inline void RetrieveTypeNameFromResourceURL( const OUString& aResourceURL, OUStr
         while (nIdx<aResourceURL.getLength() && aResourceURL[nIdx]=='/') ++nIdx;
         if (nIdx>=aResourceURL.getLength())
             return;
-        aType = aResourceURL.getToken(0, '/', nIdx);
+        aType = aResourceURL.getTokenX(0, '/', nIdx);
         if (nIdx<0)
             return;
         while (nIdx<aResourceURL.getLength() && aResourceURL[nIdx]=='/') ++nIdx;
         if (nIdx>=aResourceURL.getLength())
             return;
-        aName = aResourceURL.getToken(0, '/', nIdx);
+        aName = aResourceURL.getTokenX(0, '/', nIdx);
     }
 }
 

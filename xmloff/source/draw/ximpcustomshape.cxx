@@ -447,7 +447,7 @@ static void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest, 
     do
     {
         double fAttrDouble;
-        OUString aToken( rValue.getToken( 0, ',', nIndex ) );
+        std::u16string_view aToken( rValue.getToken( 0, ',', nIndex ) );
         if (!::sax::Converter::convertDouble( fAttrDouble, aToken ))
             break;
         else
@@ -472,7 +472,7 @@ static void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
     do
     {
         sal_Int32 n;
-        OUString aToken( rValue.getToken( 0, ' ', nIndex ) );
+        std::u16string_view aToken( rValue.getToken( 0, ' ', nIndex ) );
         if (!::sax::Converter::convertNumber( n, aToken ))
             break;
         else

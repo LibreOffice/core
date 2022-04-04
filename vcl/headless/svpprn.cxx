@@ -48,11 +48,11 @@ static OUString getPdfDir( const PrinterInfo& rInfo )
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
-        OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+        OUString aToken( rInfo.m_aFeatures.getTokenX( 0, ',', nIndex ) );
         if( aToken.startsWith( "pdf=" ) )
         {
             sal_Int32 nPos = 0;
-            aDir = aToken.getToken( 1, '=', nPos );
+            aDir = aToken.getTokenX( 1, '=', nPos );
             if( aDir.isEmpty() )
                 if (auto const env = getenv( "HOME" )) {
                     aDir = OStringToOUString(
@@ -230,7 +230,7 @@ void SvpSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
         {
-            OUString aToken( rInfo.m_aFeatures.getToken( 0, ',', nIndex ) );
+            OUString aToken( rInfo.m_aFeatures.getTokenX( 0, ',', nIndex ) );
             if( aToken.startsWith( "pdf=" ) )
             {
                 pInfo->maLocation = getPdfDir( rInfo );

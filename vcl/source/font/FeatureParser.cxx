@@ -34,14 +34,14 @@ FeatureParser::FeatureParser(OUString const& rFontName)
     sal_Int32 nIndex = 0;
     do
     {
-        OUString sToken = sName.getToken(0, vcl::font::FeatureSeparator, nIndex);
+        OUString sToken = sName.getTokenX(0, vcl::font::FeatureSeparator, nIndex);
 
         sal_Int32 nInnerIdx{ 0 };
-        OUString sID = sToken.getToken(0, '=', nInnerIdx);
+        std::u16string_view sID = sToken.getToken(0, '=', nInnerIdx);
 
-        if (sID == "lang")
+        if (sID == u"lang")
         {
-            m_sLanguage = sToken.getToken(0, '=', nInnerIdx);
+            m_sLanguage = sToken.getTokenX(0, '=', nInnerIdx);
         }
         else
         {

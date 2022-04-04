@@ -45,6 +45,7 @@
 
 #include <vcl/svapp.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <o3tl/string_view.hxx>
@@ -402,15 +403,14 @@ static bool
 isFilterString( const OUString &rFilterString, const char *pMatch )
 {
         sal_Int32 nIndex = 0;
-        OUString aToken;
         bool bIsFilter = true;
 
         OUString aMatch(OUString::createFromAscii(pMatch));
 
         do
         {
-            aToken = rFilterString.getToken( 0, ';', nIndex );
-            if( !aToken.match( aMatch ) )
+            std::u16string_view aToken = rFilterString.getToken( 0, ';', nIndex );
+            if( !o3tl::starts_with(aToken, aMatch) )
             {
                 bIsFilter = false;
                 break;
@@ -788,13 +788,13 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
             {
                 if( aSelectedFiles[nIndex].indexOf('.') > 0 )
                 {
-                    OUString sExtension;
+                    std::u16string_view sExtension;
                     nTokenIndex = 0;
                     do
                         sExtension = aSelectedFiles[nIndex].getToken( 0, '.', nTokenIndex );
                     while( nTokenIndex >= 0 );
 
-                    if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
+                    if( sExtension.size() >= 3 ) // 3 = typical/minimum extension length
                     {
                         OUString aNewFilter;
                         OUString aOldFilter = getCurrentFilter();
@@ -802,7 +802,7 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                         if ( m_pFilterVector)
                             for (auto const& filter : *m_pFilterVector)
                             {
-                                if( lcl_matchFilter( filter.getFilter(), "*." + sExtension ) )
+                                if( lcl_matchFilter( filter.getFilter(), OUString::Concat("*.") + sExtension ) )
                                 {
                                     if( aNewFilter.isEmpty() )
                                         aNewFilter = filter.getTitle();
@@ -849,11 +849,11 @@ uno::Sequence<OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles()
                 OUString sToken;
                 do
                 {
-                    sToken = aFilter.getToken( 0, '.', nTokenIndex );
+                    sToken = aFilter.getTokenX( 0, '.', nTokenIndex );
 
                     if ( sToken.lastIndexOf( ';' ) != -1 )
                     {
-                        sToken = sToken.getToken(0, ';');
+                        sToken = sToken.getTokenX(0, ';');
                         break;
                     }
                 }
@@ -1917,7 +1917,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
         sal_Int32 nIndex = 0;
         do
         {
-            OUString aToken = rType.getToken( 0, ';', nIndex );
+            OUString aToken = rType.getTokenX( 0, ';', nIndex );
             // Assume all have the "*.<extn>" syntax
             sal_Int32 nStarDot = aToken.lastIndexOf( "*." );
             if (nStarDot >= 0)

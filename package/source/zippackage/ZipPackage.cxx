@@ -607,19 +607,19 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                     sal_Int32 nIndex = 0;
                     do
                     {
-                        OUString aCommand = aParam.getToken( 0, '&', nIndex );
-                        if ( aCommand == "repairpackage" )
+                        std::u16string_view aCommand = aParam.getToken( 0, '&', nIndex );
+                        if ( aCommand == u"repairpackage" )
                         {
                             m_bForceRecovery = true;
                             break;
                         }
-                        else if ( aCommand == "purezip" )
+                        else if ( aCommand == u"purezip" )
                         {
                             m_nFormat = embed::StorageFormats::ZIP;
                             m_xRootFolder->setPackageFormat_Impl( m_nFormat );
                             break;
                         }
-                        else if ( aCommand == "ofopxml" )
+                        else if ( aCommand == u"ofopxml" )
                         {
                             m_nFormat = embed::StorageFormats::OFOPXML;
                             m_xRootFolder->setPackageFormat_Impl( m_nFormat );

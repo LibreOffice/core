@@ -63,7 +63,7 @@ sal_uInt16 ScDelimiterTable::GetCode( std::u16string_view rDel ) const
             while (nIdx>0 && rDel != o3tl::getToken(theDelTab, 1, cSep, nIdx ));
 
         if (nIdx>0)
-            return static_cast<sal_Unicode>(theDelTab.getToken( 0, cSep, nIdx ).toInt32());
+            return static_cast<sal_Unicode>(comphelper::string::toInt32(theDelTab.getToken( 0, cSep, nIdx )));
     }
 
     return 0;
@@ -78,7 +78,7 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
         do
         {
             sal_Int32 nPrevIdx {nIdx};
-            if (nCode == static_cast<sal_Unicode>(theDelTab.getToken( 1, cSep, nIdx ).toInt32()))
+            if (nCode == static_cast<sal_Unicode>(comphelper::string::toInt32(theDelTab.getToken( 1, cSep, nIdx ))))
                 return theDelTab.getToken( 0, cSep, nPrevIdx );
         }
         while (nIdx>0);

@@ -158,7 +158,7 @@ void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
 
     for(sal_Int32 nIndex{ 0 }; nIndex>=0;)
     {
-        nValues[nI] = rAnchor.getToken( 0, ',', nIndex ).toInt32();
+        nValues[nI] = comphelper::string::toInt32(rAnchor.getToken( 0, ',', nIndex ));
         if (++nI==8)
         {
             maFrom.mnCol       = nValues[0];

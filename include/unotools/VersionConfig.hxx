@@ -25,11 +25,11 @@ namespace utl
 static bool isProductVersionUpgraded(bool aUpdateVersion)
 {
     OUString sSetupVersion = utl::ConfigManager::getProductVersion();
-    sal_Int32 iCurrent
-        = sSetupVersion.getToken(0, '.').toInt32() * 10 + sSetupVersion.getToken(1, '.').toInt32();
+    sal_Int32 iCurrent = comphelper::string::toInt32(sSetupVersion.getTokenViewX(0, '.')) * 10
+                         + comphelper::string::toInt32(sSetupVersion.getTokenViewX(1, '.'));
     OUString sLastVersion = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
-    sal_Int32 iLast
-        = sLastVersion.getToken(0, '.').toInt32() * 10 + sLastVersion.getToken(1, '.').toInt32();
+    sal_Int32 iLast = comphelper::string::toInt32(sLastVersion.getTokenViewX(0, '.').toInt32() * 10
+                                                  + sLastVersion.getTokenX(1, '.'));
     if (iCurrent > iLast)
     {
         if (aUpdateVersion)

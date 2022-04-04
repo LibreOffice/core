@@ -408,7 +408,7 @@ int main()
         }
         for(sal_Int32 i = 1;;++i) // skip en-US
         {
-             OString aLanguage = aLanguages.getToken(i,' ');
+             OString aLanguage = aLanguages.getTokenX(i,' ');
              if( aLanguage.isEmpty() )
                  break;
              if( aLanguage == "qtz" )

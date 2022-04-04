@@ -70,6 +70,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include "fpinteraction.hxx"
 #include <osl/process.h>
+#include <o3tl/string_view.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -1033,7 +1034,7 @@ SvtFileDialogFilter_Impl* SvtFileDialog::FindFilter_Impl
             sal_Int32 nIdx = 0;
             while ( !pFoundFilter && nIdx != -1 )
             {
-                const OUString aSingleType = rType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
+                const OUString aSingleType = rType.getTokenX( 0, FILEDIALOG_DEF_EXTSEP, nIdx );
 #ifdef UNX
                 if ( aSingleType == rFilter )
 #else
@@ -2266,10 +2267,10 @@ void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
     {
         if (nPos+1<aType.getLength() && aType[nPos]=='*') // take care of a leading *
             ++nPos;
-        const OUString aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
-        if (aExt.isEmpty())
+        const std::u16string_view aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
+        if (aExt.empty())
             continue;
-        if (aTemp.endsWith(aExt))
+        if (o3tl::ends_with(aTemp, aExt))
             return;
     }
     while (nPos>=0);

@@ -387,7 +387,7 @@ SdrObjectUniquePtr FmFormView::CreateFieldControl(const OUString& rFieldDesc) co
     sal_Int32 nIdx{ 0 };
     OUString sDataSource     = rFieldDesc.getToken(0, u'\x000B', nIdx);
     OUString sObjectName     = rFieldDesc.getToken(0, u'\x000B', nIdx);
-    sal_uInt16 nObjectType   = static_cast<sal_uInt16>(rFieldDesc.getToken(0, u'\x000B', nIdx).toInt32());
+    sal_uInt16 nObjectType   = static_cast<sal_uInt16>(comphelper::string::toInt32(rFieldDesc.getToken(0, u'\x000B', nIdx)));
     OUString sFieldName      = rFieldDesc.getToken(0, u'\x000B', nIdx);
 
     if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())

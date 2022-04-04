@@ -214,7 +214,7 @@ void PackageRegistryImpl::insertBackend(
             {
                 sal_Int32 nIndex = 0;
                 do {
-                    OUString token( fileFilter.getToken( 0, ';', nIndex ) );
+                    OUString token( fileFilter.getTokenX( 0, ';', nIndex ) );
                     if (token.match( "*." ))
                         token = token.copy( 1 );
                     if (token.isEmpty())

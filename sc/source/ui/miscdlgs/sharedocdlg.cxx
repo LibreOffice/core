@@ -141,12 +141,12 @@ void ScShareDocumentDlg::UpdateView()
                         OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         nIndex = 0;
-                        sal_uInt16 nDay = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
-                        sal_uInt16 nMonth = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
-                        sal_uInt16 nYear = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        sal_uInt16 nDay = sal::static_int_cast< sal_uInt16 >( comphelper::string::toInt32(aDateStr.getToken( 0, '.', nIndex )) );
+                        sal_uInt16 nMonth = sal::static_int_cast< sal_uInt16 >( comphelper::string::toInt32(aDateStr.getToken( 0, '.', nIndex )) );
+                        sal_uInt16 nYear = sal::static_int_cast< sal_uInt16 >( comphelper::string::toInt32(aDateStr.getToken( 0, '.', nIndex )) );
                         nIndex = 0;
-                        sal_uInt16 nHours = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
-                        sal_uInt16 nMinutes = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
+                        sal_uInt16 nHours = sal::static_int_cast< sal_uInt16 >( comphelper::string::toInt32(aTimeStr.getToken( 0, ':', nIndex )) );
+                        sal_uInt16 nMinutes = sal::static_int_cast< sal_uInt16 >( comphelper::string::toInt32(aTimeStr.getToken( 0, ':', nIndex )) );
                         Date aDate( nDay, nMonth, nYear );
                         tools::Time aTime( nHours, nMinutes );
                         DateTime aDateTime( aDate, aTime );

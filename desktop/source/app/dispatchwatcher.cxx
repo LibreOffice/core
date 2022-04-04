@@ -475,7 +475,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
             {
                 sal_Int32 nFilterOptionsIndex = 0;
                 aArgs.emplace_back("FilterName", 0,
-                                   Any(aForcedInputFilter.getToken(0, ':', nFilterOptionsIndex)),
+                                   Any(aForcedInputFilter.getTokenX(0, ':', nFilterOptionsIndex)),
                                    PropertyState_DIRECT_VALUE);
 
                 if (0 < nFilterOptionsIndex)
@@ -633,7 +633,7 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
                                         // filename concatenated with the sheet name. So even if
                                         // that is a single file, the multi file target mechanism is
                                         // used.
-                                        const OUString aTok(sFilterOptions.getToken(11, ',', nIdx));
+                                        const OUString aTok(sFilterOptions.getTokenX(11, ',', nIdx));
                                         // Actual validity is checked in Calc, here just check for
                                         // presence of numeric value at start.
                                         bMultiFileTarget = (!aTok.isEmpty() && aTok.toInt32() != 0);

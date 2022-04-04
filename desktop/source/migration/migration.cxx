@@ -657,7 +657,7 @@ void MigrationImpl::copyConfig()
                 buf.append("/user/registry/data");
                 sal_Int32 n = 0;
                 do {
-                    OUString seg(comp.first.getToken(0, '.', n));
+                    OUString seg(comp.first.getTokenX(0, '.', n));
                     OUString enc(
                         rtl::Uri::encode(
                             seg, rtl_UriCharClassPchar, rtl_UriEncodeStrict,
@@ -941,7 +941,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         OUString sParentNodeName = elem.m_sParentNodeName;
         sal_Int32 nIndex = 0;
         do {
-            OUString sToken = sParentNodeName.getToken(0, '|', nIndex).trim();
+            OUString sToken = sParentNodeName.getTokenX(0, '|', nIndex).trim();
             if (sToken.isEmpty())
                 break;
 

@@ -288,20 +288,20 @@ namespace oox::ppt {
                         Color aColor;
                         sal_Int32 index = 0;
                         aColor.SetRed(
-                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                            static_cast<sal_uInt8>(comphelper::string::toInt32(aString.getToken(0, ',', index))));
                         aColor.SetGreen(
-                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                            static_cast<sal_uInt8>(comphelper::string::toInt32(aString.getToken(0, ',', index))));
                         aColor.SetRed(
-                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                            static_cast<sal_uInt8>(comphelper::string::toInt32(aString.getToken(0, ',', index))));
                         rValue <<= aColor;
                         bRet = true;
                     }
                     else if (aString.startsWith("hsl("))
                     {
                         sal_Int32 index = 0;
-                        sal_Int32 nA = aString.getToken(0, ',', index).toInt32();
-                        sal_Int32 nB = aString.getToken(0, ',', index).toInt32();
-                        sal_Int32 nC = aString.getToken(0, ',', index).toInt32();
+                        sal_Int32 nA = comphelper::string::toInt32(aString.getToken(0, ',', index));
+                        sal_Int32 nB = comphelper::string::toInt32(aString.getToken(0, ',', index));
+                        sal_Int32 nC = comphelper::string::toInt32(aString.getToken(0, ',', index));
                         css::uno::Sequence<double> aHSL
                         {
                             nA * 360.0 / 255.0,

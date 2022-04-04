@@ -295,7 +295,7 @@ namespace dbtools
         OUString sReturn = _rPredicateValue;
         OUString sError;
         sal_Int32 nIndex = 0;
-        OUString sField = _sField.getToken(0, '(', nIndex);
+        OUString sField = _sField.getTokenX(0, '(', nIndex);
         if(nIndex == -1)
             sField = _sField;
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sField,&m_aParser.getContext());

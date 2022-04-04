@@ -23,6 +23,7 @@
 #include <uno/lbnames.h>
 #include <uno/mapping.hxx>
 #include <uno/dispatcher.h>
+#include <o3tl/string_view.hxx>
 
 #include <cppu/EnvDcp.hxx>
 
@@ -155,7 +156,7 @@ extern "C" { static void s_MediatorMapping_free(uno_Mapping * pMapping)
 }}
 
 
-static OUString getPrefix(OUString const & str1, OUString const & str2)
+static OUString getPrefix(OUString const & str1, std::u16string_view str2)
 {
     sal_Int32 nIndex1 = 0;
     sal_Int32 nIndex2 = 0;
@@ -166,8 +167,8 @@ static OUString getPrefix(OUString const & str1, OUString const & str2)
 
     do
     {
-        token1 = str1.getToken(0, ':', nIndex1);
-        token2 = str2.getToken(0, ':', nIndex2);
+        token1 = o3tl::getToken(str1, 0, ':', nIndex1);
+        token2 = o3tl::getToken(str2, 0, ':', nIndex2);
 
         if (token1 == token2)
             sim += token1.getLength() + 1;

@@ -102,7 +102,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 1: Text separator.
     if ( nPos >= 0 )
     {
-        const sal_Int32 nVal = rString.getToken(0, ',', nPos).toInt32();
+        const sal_Int32 nVal = comphelper::string::toInt32(rString.getToken(0, ',', nPos));
         cTextSep = static_cast<sal_Unicode>(nVal);
     }
 
@@ -115,7 +115,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 3: Number of start row.
     if ( nPos >= 0 )
     {
-        nStartRow = rString.getToken(0, ',', nPos).toInt32();
+        nStartRow = comphelper::string::toInt32(rString.getToken(0, ',', nPos));
     }
 
     // Token 4: Column info.
@@ -128,15 +128,15 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
         sal_Int32 nP = 0;
         for (sal_Int32 nInfo=0; nInfo<nInfoCount; ++nInfo)
         {
-            mvColStart[nInfo]  = aToken.getToken(0, '/', nP).toInt32();
-            mvColFormat[nInfo] = static_cast<sal_uInt8>(aToken.getToken(0, '/', nP).toInt32());
+            mvColStart[nInfo]  = comphelper::string::toInt32(aToken.getToken(0, '/', nP));
+            mvColFormat[nInfo] = static_cast<sal_uInt8>(comphelper::string::toInt32(aToken.getToken(0, '/', nP)));
         }
     }
 
     // Token 5: Language.
     if (nPos >= 0)
     {
-        eLang = static_cast<LanguageType>(rString.getToken(0, ',', nPos).toInt32());
+        eLang = static_cast<LanguageType>(comphelper::string::toInt32(rString.getToken(0, ',', nPos)));
     }
 
     // Token 6: Import quoted field as text.

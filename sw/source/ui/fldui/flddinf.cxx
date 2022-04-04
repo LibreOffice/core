@@ -125,7 +125,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     sal_Int32 nIdx{ 0 };
     if (sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
     {
-        nSelEntryData = sUserData.getToken(0, ';', nIdx).toInt32();
+        nSelEntryData = comphelper::string::toInt32(sUserData.getToken(0, ';', nIdx));
     }
 
     std::vector<OUString> aLst;

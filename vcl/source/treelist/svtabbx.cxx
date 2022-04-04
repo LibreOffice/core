@@ -319,7 +319,7 @@ sal_uInt32 SvTabListBox::GetEntryPos( const SvTreeListEntry* pEntry ) const
 // static
 OUString SvTabListBox::GetToken( const OUString &sStr, sal_Int32& nIndex )
 {
-    return sStr.getToken(0, '\t', nIndex);
+    return sStr.getTokenX(0, '\t', nIndex);
 }
 
 OUString SvTabListBox::GetTabEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const

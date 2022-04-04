@@ -1032,8 +1032,8 @@ void CuiConfigGroupListBox::SelectMacro( std::u16string_view rBasic,
     const OUString aBasicName(OUString::Concat(rBasic) + " " + xImp->m_sMacros);
     sal_Int32 nIdx {rMacro.lastIndexOf('.')};
     const OUString aMethod( rMacro.copy(nIdx+1) );
-    OUString aLib;
-    OUString aModule;
+    std::u16string_view aLib;
+    std::u16string_view aModule;
     if ( nIdx>0 )
     {
         // string contains at least 2 tokens

@@ -2689,7 +2689,7 @@ public:
       @return   the token; if either token or index is negative, an empty token
                 is returned (and index is set to -1)
     */
-    OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const
+    OUString getTokenX( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const
     {
         rtl_uString * pNew = NULL;
         index = rtl_uString_getToken( &pNew, pData, token, cTok, index );
@@ -2709,9 +2709,9 @@ public:
 
       @since LibreOffice 3.6
      */
-    OUString getToken(sal_Int32 count, sal_Unicode separator) const {
+    OUString getTokenX(sal_Int32 count, sal_Unicode separator) const {
         sal_Int32 n = 0;
-        return getToken(count, separator, n);
+        return getTokenX(count, separator, n);
     }
 
     /**

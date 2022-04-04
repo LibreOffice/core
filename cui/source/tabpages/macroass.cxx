@@ -68,7 +68,7 @@ static OUString ConvertToUIName_Impl( SvxMacro const *pMacro )
     if ( pMacro->GetLanguage() != "JavaScript" )
     {
         const sal_Int32 nCount = comphelper::string::getTokenCount(aName, '.');
-        OUString aEntry = aName.getToken( nCount-1, '.' );
+        OUString aEntry = aName.getTokenX( nCount-1, '.' );
         if ( nCount > 2 )
         {
             aEntry += OUString::Concat("(") + o3tl::getToken(aName, 0, '.' ) + "." + o3tl::getToken(aName, nCount-2, '.' ) + ")";

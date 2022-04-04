@@ -690,7 +690,7 @@ namespace pcr
                 sal_Int32 nIdx {0};
                 do
                 {
-                    *stringItem = _rCompsedTextWithLineBreaks.getToken( 0, '\n', nIdx );
+                    *stringItem = _rCompsedTextWithLineBreaks.getTokenX( 0, '\n', nIdx );
                     ++stringItem;
                 }
                 while (nIdx>0);

@@ -1324,7 +1324,7 @@ void cppuhelper::ServiceManager::removeEventListenerFromComponent(
 
 void cppuhelper::ServiceManager::init(OUString const & rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        OUString uri(rdbUris.getToken(0, ' ', i));
+        OUString uri(rdbUris.getTokenX(0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }
@@ -1846,7 +1846,7 @@ void cppuhelper::ServiceManager::preloadImplementations() {
         OUString aDisable(pDisable, strlen(pDisable), RTL_TEXTENCODING_UTF8);
         for (sal_Int32 i = 0; i >= 0; )
         {
-            OUString tok = aDisable.getToken(0, ' ', i);
+            OUString tok( aDisable.getTokenX(0, ' ', i) );
             tok = tok.trim();
             if (!tok.isEmpty())
                 aDisabled.push_back(tok);

@@ -534,9 +534,9 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     // singular or plural?
     if ( 1 == pThm->GetObjectCount() )
-        aObjStr = aObjStr.getToken( 0, ';' );
+        aObjStr = aObjStr.getTokenX( 0, ';' );
     else
-        aObjStr = aObjStr.getToken( 1, ';' );
+        aObjStr = aObjStr.getTokenX( 1, ';' );
 
     aOutStr += " " + aObjStr;
 
@@ -716,7 +716,7 @@ void TPGalleryThemeProperties::FillFilterList()
             OUString aFilterWildcard( aWildcard );
 
             std::unique_ptr<FilterEntry> pFilterEntry(new FilterEntry);
-            pFilterEntry->aFilterName = aFilter.second.getToken( 0, ';', nIndex );
+            pFilterEntry->aFilterName = aFilter.second.getTokenX( 0, ';', nIndex );
             aFilterWildcard += pFilterEntry->aFilterName;
             m_xCbbFileType->append_text(addExtension(aFilter.first, aFilterWildcard));
             aFilterEntryList.push_back( std::move(pFilterEntry) );

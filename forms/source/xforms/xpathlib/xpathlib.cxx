@@ -297,12 +297,12 @@ static bool parseDateTime(std::u16string_view aString, DateTime& aDateTime)
         return false;
 
     sal_Int32 nIndex = 0;
-    sal_Int32 nYear = aDateTimeString.getToken(0, '-', nIndex).toInt32();
-    sal_Int32 nMonth = aDateTimeString.getToken(0, '-', nIndex).toInt32();
-    sal_Int32 nDay = aDateTimeString.getToken(0, 'T', nIndex).toInt32();
-    sal_Int32 nHour = aDateTimeString.getToken(0, ':', nIndex).toInt32();
-    sal_Int32 nMinute = aDateTimeString.getToken(0, ':', nIndex).toInt32();
-    sal_Int32 nSecond = aDateTimeString.getToken(0, 'Z', nIndex).toInt32();
+    sal_Int32 nYear = comphelper::string::toInt32(aDateTimeString.getToken(0, '-', nIndex));
+    sal_Int32 nMonth = comphelper::string::toInt32(aDateTimeString.getToken(0, '-', nIndex));
+    sal_Int32 nDay = comphelper::string::toInt32(aDateTimeString.getToken(0, 'T', nIndex));
+    sal_Int32 nHour = comphelper::string::toInt32(aDateTimeString.getToken(0, ':', nIndex));
+    sal_Int32 nMinute = comphelper::string::toInt32(aDateTimeString.getToken(0, ':', nIndex));
+    sal_Int32 nSecond = comphelper::string::toInt32(aDateTimeString.getToken(0, 'Z', nIndex));
 
     Date tmpDate(static_cast<sal_uInt16>(nDay), static_cast<sal_uInt16>(nMonth), static_cast<sal_uInt16>(nYear));
     tools::Time tmpTime(nHour, nMinute, nSecond);

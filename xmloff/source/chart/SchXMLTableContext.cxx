@@ -32,6 +32,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -946,7 +947,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                 if( xLabel.is() )
                                 {
                                     aRange = xLabel->getSourceRangeRepresentation();
-                                    const sal_Int32 nId {aRange.getToken(1, ' ').toInt32()};
+                                    const sal_Int32 nId = comphelper::string::toInt32(aRange.getToken(1, ' '));
                                     if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), nId ) == rTable.aHiddenColumns.end() )
                                         bHasUnhiddenColumns = true;
                                 }
@@ -986,9 +987,9 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                             if( xLabel.is() )
                             {
                                 aRange = xLabel->getSourceRangeRepresentation();
-                                OUString aSecondToken = aRange.getToken(1, ' ');
-                                if( !aSecondToken.isEmpty() )
-                                    aUsageMap[aSecondToken.toInt32()] = true;
+                                std::u16string_view aSecondToken = aRange.getToken(1, ' ');
+                                if( !aSecondToken.empty() )
+                                    aUsageMap[comphelper::string::toInt32(aSecondToken)] = true;
                             }
                         }
 

@@ -1253,7 +1253,7 @@ void ImplementationRegistration::prepareRegister(
 
     if (!implementationLoaderUrl.isEmpty())
     {
-        activatorName = implementationLoaderUrl.getToken(0, ':');
+        activatorName = implementationLoaderUrl.getTokenX(0, ':');
     } else
     {
         // check locationUrl to find out what kind of loader is needed
@@ -1384,7 +1384,7 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 
     if (!implementationLoaderUrl.isEmpty())
     {
-        activatorName = implementationLoaderUrl.getToken(0, ':');
+        activatorName = implementationLoaderUrl.getTokenX(0, ':');
     } else
     {
         // check locationUrl to find out what kind of loader is needed

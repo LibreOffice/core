@@ -714,7 +714,7 @@ void SwGlossaryDlg::Init()
         std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
         m_xCategoryBox->append(xEntry.get());
         m_xCategoryBox->set_text(*xEntry, sTitle, 0);
-        const sal_Int32 nPath = sGroupName.getToken( 0, GLOS_DELIM, nIdx ).toInt32();
+        const sal_Int32 nPath = comphelper::string::toInt32(sGroupName.getToken( 0, GLOS_DELIM, nIdx ));
 
         GroupUserData* pData = new GroupUserData;
         pData->sGroupName = sName;

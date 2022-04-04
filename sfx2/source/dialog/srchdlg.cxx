@@ -70,10 +70,10 @@ void SearchDialog::LoadConfig()
             DBG_ASSERT( comphelper::string::getTokenCount(sUserData, ';') == 5, "invalid config data" );
             sal_Int32 nIdx = 0;
             OUString sSearchText = sUserData.getToken( 0, ';', nIdx );
-            m_xWholeWordsBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
-            m_xMatchCaseBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
-            m_xWrapAroundBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
-            m_xBackwardsBox->set_active( sUserData.getToken( 0, ';', nIdx ).toInt32() == 1 );
+            m_xWholeWordsBox->set_active( comphelper::string::toInt32(sUserData.getToken( 0, ';', nIdx )) == 1 );
+            m_xMatchCaseBox->set_active( comphelper::string::toInt32(sUserData.getToken( 0, ';', nIdx )) == 1 );
+            m_xWrapAroundBox->set_active( comphelper::string::toInt32(sUserData.getToken( 0, ';', nIdx )) == 1 );
+            m_xBackwardsBox->set_active( comphelper::string::toInt32(sUserData.getToken( 0, ';', nIdx )) == 1 );
 
             nIdx = 0;
             while ( nIdx != -1 )

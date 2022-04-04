@@ -976,7 +976,7 @@ std::vector<OUString> PathSettings::impl_convertOldStyle2Path(const OUString& sO
     sal_Int32    nToken = 0;
     do
     {
-        OUString sToken = sOldStylePath.getToken(0, ';', nToken);
+        OUString sToken = sOldStylePath.getTokenX(0, ';', nToken);
         if (!sToken.isEmpty())
             lList.push_back(sToken);
     }

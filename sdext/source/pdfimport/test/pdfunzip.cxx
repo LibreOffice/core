@@ -478,9 +478,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                         sal_Int32 nObject = 0;
                         sal_Int32 nGeneration = 0;
                         sal_Int32 nGenIndex = 0;
-                        nObject = aToken.getToken( 0, ':', nGenIndex ).toInt32();
+                        nObject = comphelper::string::toInt32(aToken.getToken( 0, ':', nGenIndex ));
                         if( nGenIndex != -1 )
-                            nGeneration = aToken.getToken( 0, ':', nGenIndex ).toInt32();
+                            nGeneration = comphelper::string::toInt32(aToken.getToken( 0, ':', nGenIndex ));
                         s_aEmitObjects.push_back( std::pair<sal_Int32,sal_Int32>(nObject,nGeneration) );
                     }
                 }

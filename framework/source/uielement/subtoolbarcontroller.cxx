@@ -116,9 +116,9 @@ SubToolBarController::SubToolBarController(
             sal_Int32 nIdx{ 0 };
             OUString aValue;
             aPropValue.Value >>= aValue;
-            m_aSubTbName = aValue.getToken(0, ';', nIdx);
+            m_aSubTbName = aValue.getTokenX(0, ';', nIdx);
             m_aCommandURL = m_aSubTbName;
-            m_aLastCommand = aValue.getToken(0, ';', nIdx);
+            m_aLastCommand = aValue.getTokenX(0, ';', nIdx);
             break;
         }
     }

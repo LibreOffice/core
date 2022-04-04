@@ -751,7 +751,7 @@ void BackendImpl::unorc_verify_init(
         {
             sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
+                OUString token( line.getTokenX( 0, ' ', index ).trim() );
                 if (!token.isEmpty())
                 {
                     if (create_ucb_content(
@@ -772,7 +772,7 @@ void BackendImpl::unorc_verify_init(
                       RTL_TEXTENCODING_UTF8 )) {
             sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
+                OUString token( line.getTokenX( 0, ' ', index ).trim() );
                 if (!token.isEmpty())
                 {
                     if (token[ 0 ] == '?')
@@ -806,7 +806,7 @@ void BackendImpl::unorc_verify_init(
             for (sal_Int32 i = RTL_CONSTASCII_LENGTH("UNO_SERVICES=");
                  i >= 0;)
             {
-                OUString token(line.getToken(0, ' ', i));
+                OUString token(line.getTokenX(0, ' ', i));
                 if (!token.isEmpty())
                 {
                     if (state == 1 && token.match("?$ORIGIN/"))

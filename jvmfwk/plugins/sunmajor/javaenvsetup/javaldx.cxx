@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/byteseq.hxx>
 #include <jvmfwk/framework.hxx>
+#include <o3tl/string_view.hxx>
 
 
 static bool hasOption(char const * szOption, int argc, char** argv);
@@ -118,7 +119,7 @@ OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
     OUString sData(chars, len / 2);
     //the runtime lib is on the first line
     sal_Int32 index = 0;
-    OUString aToken = sData.getToken( 1, '\n', index);
+    std::u16string_view aToken = o3tl::getToken(sData, 1, '\n', index);
 
     OString paths =
         OUStringToOString(aToken, osl_getThreadTextEncoding());

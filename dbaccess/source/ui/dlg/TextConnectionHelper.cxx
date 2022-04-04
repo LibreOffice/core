@@ -360,7 +360,7 @@ namespace dbaui
 
         if ( m_xTextSeparator.get() != &rBox || nPos != (rBox.get_count()-1) )
             return OUString(
-                static_cast< sal_Unicode >( rList.getToken((nPos*2)+1, nTok ).toInt32() ));
+                static_cast< sal_Unicode >( comphelper::string::toInt32(rList.getToken((nPos*2)+1, nTok )) ));
         // somewhat strange ... translates for instance an "32" into " "
         return OUString();
     }
@@ -373,7 +373,7 @@ namespace dbaui
             for(sal_Int32 nIdx {0}; nIdx>=0;)
             {
                 sal_Int32 nPrevIdx {nIdx};
-                if (static_cast<sal_Unicode>(rList.getToken(1, '\t', nIdx).toInt32()) == nVal)
+                if (static_cast<sal_Unicode>(comphelper::string::toInt32(rList.getToken(1, '\t', nIdx))) == nVal)
                 {
                     rBox.set_entry_text(rList.getToken(0, '\t', nPrevIdx));
                     return;

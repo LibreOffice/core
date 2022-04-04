@@ -97,20 +97,20 @@ void OConnection::construct(const OUString& url, const Sequence<PropertyValue>& 
         nIndex = 18;
     }
 
-    token = url.getToken(0, '/', nIndex);
+    token = url.getTokenX(0, '/', nIndex);
     if (!token.isEmpty())
     {
         sal_Int32 nIndex1 = 0;
-        OUString hostandport = token.getToken(0, ':', nIndex1);
+        OUString hostandport = token.getTokenX(0, ':', nIndex1);
         if (!hostandport.isEmpty())
         {
             aHostName = hostandport;
-            hostandport = token.getToken(0, ':', nIndex1);
+            hostandport = token.getTokenX(0, ':', nIndex1);
             if (!hostandport.isEmpty() && nIndex1)
             {
                 nPort = hostandport.toInt32();
             }
-            token = url.getToken(0, '/', nIndex);
+            token = url.getTokenX(0, '/', nIndex);
             if (!token.isEmpty() && nIndex)
             {
                 aDbName = token;

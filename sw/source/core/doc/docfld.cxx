@@ -614,7 +614,7 @@ void SwDoc::ChangeDBFields( const std::vector<OUString>& rOldNames,
     sal_Int32 nIdx{ 0 };
     aNewDBData.sDataSource = rNewName.getToken(0, DB_DELIM, nIdx);
     aNewDBData.sCommand = rNewName.getToken(0, DB_DELIM, nIdx);
-    aNewDBData.nCommandType = rNewName.getToken(0, DB_DELIM, nIdx).toInt32();
+    aNewDBData.nCommandType = comphelper::string::toInt32(rNewName.getToken(0, DB_DELIM, nIdx));
 
     SwSectionFormats& rArr = GetSections();
     for (auto n = rArr.size(); n; )

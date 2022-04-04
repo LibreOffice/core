@@ -20,6 +20,7 @@
 #include <astdeclaration.hxx>
 #include <astscope.hxx>
 #include <rtl/strbuf.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 constexpr OStringLiteral sGlobal("::");
@@ -30,8 +31,8 @@ static OString convertName(const OString& name)
     sal_Int32 nIndex = 0;
     do
     {
-        OString token( name.getToken( 0, ':', nIndex ) );
-        if( !token.isEmpty() )
+        std::string_view token( o3tl::getToken(name, 0, ':', nIndex ) );
+        if( !token.empty() )
         {
             nameBuffer.append('/');
             nameBuffer.append( token );

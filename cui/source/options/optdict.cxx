@@ -527,10 +527,10 @@ void SvxEditDictionaryDialog::ShowWords_Impl( sal_uInt16 nId )
     int nRow = 0;
     for (OUString const & rStr : aSortedDicEntries)
     {
-        m_pWordsLB->append_text(rStr.getToken(0, '\t'));
+        m_pWordsLB->append_text(rStr.getTokenX(0, '\t'));
         if (m_pWordsLB == m_xDoubleColumnLB.get())
         {
-            OUString sReplace = rStr.getToken(1, '\t');
+            OUString sReplace = rStr.getTokenX(1, '\t');
             m_pWordsLB->set_text(nRow, sReplace, 1);
             ++nRow;
         }

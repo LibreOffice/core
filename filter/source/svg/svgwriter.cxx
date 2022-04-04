@@ -438,7 +438,7 @@ void SVGAttributeWriter::setFontFamily()
     else
     {
         const OUString& rsFontName = rCurFont.GetFamilyName();
-        OUString sFontFamily( rsFontName.getToken( 0, ';' ) );
+        OUString sFontFamily( rsFontName.getTokenX( 0, ';' ) );
         FontPitch ePitch = rCurFont.GetPitch();
         if( ePitch == PITCH_FIXED )
         {
@@ -912,7 +912,7 @@ void SVGTextWriter::addFontAttributes( bool bIsTextContainer )
 void SVGTextWriter::implSetFontFamily()
 {
     const OUString& rsFontName = maCurrentFont.GetFamilyName();
-    OUString sFontFamily( rsFontName.getToken( 0, ';' ) );
+    OUString sFontFamily( rsFontName.getTokenX( 0, ';' ) );
     FontPitch ePitch = maCurrentFont.GetPitch();
     if( ePitch == PITCH_FIXED )
     {

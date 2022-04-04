@@ -145,7 +145,7 @@ static OUString Convert_Impl( const OUString& rValue )
     OUStringBuffer aReturn;
     for (;;)
     {
-        OUString aValue = rValue.getToken( 0, MULTIPATH_DELIMITER, nPos );
+        OUString aValue = rValue.getTokenX( 0, MULTIPATH_DELIMITER, nPos );
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INetProtocol::File )
             aReturn.append(aObj.PathToFileName());
@@ -363,7 +363,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
             do
             {
                 bool bFound = false;
-                const OUString sOnePath = aOldPath.getToken( 0, MULTIPATH_DELIMITER, nOldPos );
+                const std::u16string_view sOnePath = aOldPath.getToken( 0, MULTIPATH_DELIMITER, nOldPos );
                 if ( !sInternal.isEmpty() )
                 {
                     sal_Int32 nInternalPos = 0;
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
                 sal_Int32 nNextPos = 0;
                 for (;;)
                 {
-                    const OUString sToken = sTemp.getToken( 0, MULTIPATH_DELIMITER, nNextPos );
+                    const OUString sToken = sTemp.getTokenX( 0, MULTIPATH_DELIMITER, nNextPos );
                     if ( nNextPos<0 )
                     {
                         // Last token need a different handling
@@ -511,7 +511,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl, weld::Button&, void)
                 sal_Int32 nNextPos = 0;
                 for (;;)
                 {
-                    const OUString sToken(sNewPath.getToken( 0, MULTIPATH_DELIMITER, nNextPos ));
+                    const OUString sToken(sNewPath.getTokenX( 0, MULTIPATH_DELIMITER, nNextPos ));
                     if ( nNextPos<0 )
                     {
                         // Last token need a different handling
@@ -678,7 +678,7 @@ void SvxPathTabPage::SetPathList(
         OUString* pArray = aPathSeq.getArray();
         sal_Int32 nPos = 0;
         for ( sal_Int32 i = 0; i < nCount; ++i )
-            pArray[i] = _rUserPath.getToken( 0, MULTIPATH_DELIMITER, nPos );
+            pArray[i] = _rUserPath.getTokenX( 0, MULTIPATH_DELIMITER, nPos );
         Any aValue( aPathSeq );
         pImpl->m_xPathSettings->setPropertyValue(
             sCfgName + POSTFIX_USER, aValue);

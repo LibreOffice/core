@@ -31,7 +31,7 @@ OUString getElement(OUString const & version, ::sal_Int32 * index)
     while (*index < version.getLength() && version[*index] == '0') {
         ++*index;
     }
-    return version.getToken(0, '.', *index);
+    return version.getTokenX(0, '.', *index);
 }
 
 }

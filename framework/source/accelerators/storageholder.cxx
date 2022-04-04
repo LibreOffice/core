@@ -433,7 +433,7 @@ std::vector<OUString> StorageHolder::impl_st_parsePath(const OUString& sPath)
     sal_Int32    i  = 0;
     while (true)
     {
-        OUString sToken = sPath.getToken(0, PATH_SEPARATOR_UNICODE, i);
+        OUString sToken = sPath.getTokenX(0, PATH_SEPARATOR_UNICODE, i);
         if (i < 0)
             break;
         lToken.push_back(sToken);

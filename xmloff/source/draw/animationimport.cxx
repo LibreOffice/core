@@ -295,7 +295,7 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
         // fill the sequence
         Any* pValues = aValues.getArray();
         for (sal_Int32 nIndex = 0; nIndex >= 0; )
-            *pValues++ = convertValue( eAttributeName, rValue.getToken( 0, ';', nIndex ) );
+            *pValues++ = convertValue( eAttributeName, rValue.getTokenX( 0, ';', nIndex ) );
     }
 
     return aValues;
@@ -369,7 +369,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
             Sequence< Any > aValues( nElements );
             Any* pValues = aValues.getArray();
             for (sal_Int32 nIndex = 0; nIndex >= 0; )
-                *pValues++ = convertTiming( rValue.getToken( 0, ';', nIndex ) );
+                *pValues++ = convertTiming( rValue.getTokenX( 0, ';', nIndex ) );
 
             aAny <<= aValues;
         }
@@ -387,7 +387,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& 
     {
         double* pValues = aKeyTimes.getArray();
         for (sal_Int32 nIndex = 0; nIndex >= 0; )
-            *pValues++ = rValue.getToken( 0, ';', nIndex ).toDouble();
+            *pValues++ = rValue.getTokenX( 0, ';', nIndex ).toDouble();
     }
 
     return aKeyTimes;
@@ -404,15 +404,15 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
         TimeFilterPair* pValues = aTimeFilter.getArray();
         for (sal_Int32 nIndex = 0; nIndex >= 0; )
         {
-            const OUString aToken( rValue.getToken( 0, ';', nIndex ) );
+            const std::u16string_view aToken( rValue.getToken( 0, ';', nIndex ) );
 
-            sal_Int32 nPos = aToken.indexOf( ',' );
-            if( nPos >= 0 )
+            size_t nPos = aToken.find( ',' );
+            if( nPos != std::u16string_view::npos )
             {
                 pValues->Time = rtl_math_uStringToDouble(
-                    aToken.getStr(), aToken.getStr() + nPos, '.', 0, nullptr, nullptr);
+                    aToken.data(), aToken.data() + nPos, '.', 0, nullptr, nullptr);
                 pValues->Progress = rtl_math_uStringToDouble(
-                    aToken.getStr() + nPos + 1, aToken.getStr() + aToken.getLength(), '.', 0,
+                    aToken.data() + nPos + 1, aToken.data() + aToken.size(), '.', 0,
                     nullptr, nullptr);
             }
             pValues++;

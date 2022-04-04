@@ -112,7 +112,7 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                 uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
                 xProps->getPropertyValue("Title") >>= aName;
-                aName = aName.getToken(0, '-').trim();
+                aName = aName.getTokenX(0, '-').trim();
                 if( sMacroURLOrPath.lastIndexOf( aName ) >= 0 )
                 {
                     pFoundShell = pShell;

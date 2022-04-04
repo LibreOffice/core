@@ -241,7 +241,7 @@ void ExtendedColorConfig_Impl::Load(const OUString& rScheme)
         OUString sComponentDisplayName;
         if ( aComponentDisplayNamesValue.hasElements() && (aComponentDisplayNamesValue[0] >>= sComponentDisplayName) )
         {
-            m_aComponentDisplayNames.emplace(componentName.getToken(1, '/'),sComponentDisplayName);
+            m_aComponentDisplayNames.emplace(componentName.getTokenX(1, '/'),sComponentDisplayName);
         }
 
         componentName += "/Entries";
@@ -343,7 +343,7 @@ void ExtendedColorConfig_Impl::FillComponentColors(const uno::Sequence < OUStrin
                     OUString sTemp = sName.copy(0,sName.lastIndexOf(sColor));
 
                     TDisplayNames::const_iterator aFind = _rDisplayNames.find(sTemp);
-                    sName = sName.getToken(2, '/');
+                    sName = sName.getTokenX(2, '/');
                     OSL_ENSURE(aFind != _rDisplayNames.end(),"DisplayName is not in EntryNames config list!");
                     if ( aFind != _rDisplayNames.end() )
                         sDisplayName = aFind->second;

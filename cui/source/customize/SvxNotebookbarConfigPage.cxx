@@ -328,7 +328,7 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                 else if (sClassId == "svtlo-ManagedMenuButton")
                 {
                     sal_Int32 rPos = 1;
-                    sSecondVal = sUIItemId.getToken(rPos, ':', rPos);
+                    sSecondVal = sUIItemId.getTokenX(rPos, ':', rPos);
                     if (!sSecondVal.isEmpty())
                     {
                         aCategoryEntry.sDisplayName
@@ -426,7 +426,7 @@ void SvxNotebookbarConfigPage::SelectElement()
         {
             aTempEntries.push_back(aEntries[nIdx]);
             sal_Int32 rPos = 1;
-            sActiveCategory = aEntries[nIdx].sUIItemId.getToken(rPos, ':', rPos);
+            sActiveCategory = aEntries[nIdx].sUIItemId.getTokenX(rPos, ':', rPos);
             FillFunctionsList(pNodePtr, aTempEntries, aCategoryList, sActiveCategory);
         }
         else
@@ -482,7 +482,7 @@ static void EditRegistryFile(std::u16string_view sUIItemId, const OUString& sSet
     for (int nIdx = 0; nIdx < aOldEntries.getLength(); nIdx++)
     {
         sal_Int32 rPos = 0;
-        OUString sFirstValue = aOldEntries[nIdx].getToken(rPos, ',', rPos);
+        std::u16string_view sFirstValue = aOldEntries[nIdx].getToken(rPos, ',', rPos);
         if (sFirstValue == sUIItemId)
         {
             aOldEntries.getArray()[nIdx] = sSetEntry;

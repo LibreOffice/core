@@ -933,9 +933,9 @@ SearchTabPage_Impl::SearchTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow
         if ( aUserItem >>= aUserData )
         {
             sal_Int32 nIdx {0};
-            bool bChecked = aUserData.getToken(0, ';', nIdx).toInt32() == 1;
+            bool bChecked = comphelper::string::toInt32(aUserData.getToken(0, ';', nIdx)) == 1;
             m_xFullWordsCB->set_active(bChecked);
-            bChecked = aUserData.getToken(0, ';', nIdx).toInt32() == 1;
+            bChecked = comphelper::string::toInt32(aUserData.getToken(0, ';', nIdx)) == 1;
             m_xScopeCB->set_active(bChecked);
 
             while ( nIdx > 0 )
@@ -2257,13 +2257,13 @@ void SfxHelpWindow_Impl::LoadConfig()
     {
         DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
         sal_Int32 nIdx = 0;
-        nIndexSize = aUserData.getToken( 0, ';', nIdx ).toInt32();
+        nIndexSize = comphelper::string::toInt32(aUserData.getToken( 0, ';', nIdx ));
         aUserData.getToken(0, ';', nIdx); // ignore nTextSize
-        sal_Int32 nOldWidth = aUserData.getToken( 0, ';', nIdx ).toInt32();
-        sal_Int32 nOldHeight = aUserData.getToken( 0, ';', nIdx ).toInt32();
+        sal_Int32 nOldWidth = comphelper::string::toInt32(aUserData.getToken( 0, ';', nIdx ));
+        sal_Int32 nOldHeight = comphelper::string::toInt32(aUserData.getToken( 0, ';', nIdx ));
         aWinSize = Size(nOldWidth, nOldHeight);
-        aWinPos.setX( aUserData.getToken( 0, ';', nIdx ).toInt32() );
-        aWinPos.setY( aUserData.getToken( 0, ';', nIdx ).toInt32() );
+        aWinPos.setX( comphelper::string::toInt32(aUserData.getToken( 0, ';', nIdx )) );
+        aWinPos.setY( comphelper::string::toInt32(aUserData.getToken( 0, ';', nIdx )) );
     }
 
     pTextWin->ToggleIndex( bIndex );

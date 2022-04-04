@@ -612,7 +612,7 @@ namespace svt
         sal_Int32 nIndex = 0;
         do
         {
-            OUString sTemplatePath( aDirs.getToken(0, ';', nIndex) );
+            OUString sTemplatePath( aDirs.getTokenX(0, ';', nIndex) );
             sTemplatePath = aPathOptions.ExpandMacros( sTemplatePath );
 
             // Make sure excess ".." path segments (from expanding bootstrap

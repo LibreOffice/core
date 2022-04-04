@@ -27,14 +27,15 @@
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <sstream>
 
 namespace
 {
-    bool checkAllNumber(const OUString& rString)
+    bool checkAllNumber(std::u16string_view rString)
     {
         sal_Int32 nPos = 0;
-        sal_Int32 nLen = rString.getLength();
+        sal_Int32 nLen = rString.size();
 
         // skip white space
         while( nPos < nLen && ' ' == rString[nPos] )
@@ -56,7 +57,7 @@ namespace
 
     /** convert string to number with optional min and max values */
     bool convertNumber32(sal_Int32& rValue,
-                         const OUString& rString,
+                         std::u16string_view rString,
                          sal_Int32 /*nMin*/ = -1, sal_Int32 /*nMax*/ = -1)
     {
         if (!checkAllNumber(rString))
@@ -65,7 +66,7 @@ namespace
             return false;
         }
 
-        rValue = rString.toInt32();
+        rValue = rtl_ustr_toInt64_WithLength(rString.data(), 10, rString.size());
         return true;
     }
 
@@ -350,13 +351,13 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
     sal_Int32 nDay     = 30;
 
     sal_Int32 nIdx {0};
-    if ( !convertNumber32( nYear, aDateStr.getToken( 0, '-', nIdx ), 0, 9999 ) )
+    if ( !convertNumber32( nYear, o3tl::getToken(aDateStr, 0, '-', nIdx ), 0, 9999 ) )
         return false;
     if ( nDateTokens >= 2 )
-        if ( !convertNumber32( nMonth, aDateStr.getToken( 0, '-', nIdx ), 0, 12 ) )
+        if ( !convertNumber32( nMonth, o3tl::getToken(aDateStr, 0, '-', nIdx ), 0, 12 ) )
             return false;
     if ( nDateTokens >= 3 )
-        if ( !convertNumber32( nDay, aDateStr.getToken( 0, '-', nIdx ), 0, 31 ) )
+        if ( !convertNumber32( nDay, o3tl::getToken(aDateStr, 0, '-', nIdx ), 0, 31 ) )
             return false;
 
     rDate.Year = static_cast<sal_uInt16>(nYear);

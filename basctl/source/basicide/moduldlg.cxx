@@ -670,7 +670,7 @@ IMPL_LINK(ObjectPage, ButtonHdl, weld::Button&, rButton, void)
                 // extract the module name from the string like "Sheet1 (Example1)"
                 if( aDesc.GetLibSubName() == IDEResId(RID_STR_DOCUMENT_OBJECTS) )
                 {
-                    aModName = aModName.getToken( 0, ' ' );
+                    aModName = aModName.getTokenX( 0, ' ' );
                 }
                 SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(),
                                   aModName, SbTreeListBox::ConvertType( aDesc.GetType() ) );

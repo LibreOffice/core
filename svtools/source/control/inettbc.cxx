@@ -1093,7 +1093,7 @@ void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::v
         OUString sToken;
         do
         {
-            sToken = _rFilterList.getToken( 0, ';', nIndex );
+            sToken = _rFilterList.getTokenX( 0, ';', nIndex );
             if ( !sToken.isEmpty() )
             {
                 _rFilters.emplace_back( sToken.toAsciiUpperCase() );

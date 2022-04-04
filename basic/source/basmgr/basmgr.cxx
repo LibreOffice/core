@@ -761,13 +761,13 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     INetURLObject aCurStorage( aStorName, INetProtocol::File );
     sal_Int32 nLibPos {0};
     do {
-        const OUString aLibInfo(aLibs.getToken(0, LIB_SEP, nLibPos));
+        const OUString aLibInfo(aLibs.getTokenX(0, LIB_SEP, nLibPos));
         sal_Int32 nInfoPos {0};
-        const OUString aLibName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+        const OUString aLibName( aLibInfo.getTokenX( 0, LIBINFO_SEP, nInfoPos ) );
         DBG_ASSERT( nInfoPos >= 0, "Invalid Lib-Info!" );
-        const OUString aLibAbsStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+        const OUString aLibAbsStorageName( aLibInfo.getTokenX( 0, LIBINFO_SEP, nInfoPos ) );
         // TODO: fail also here if there are no more tokens?
-        const OUString aLibRelStorageName( aLibInfo.getToken( 0, LIBINFO_SEP, nInfoPos ) );
+        const OUString aLibRelStorageName( aLibInfo.getTokenX( 0, LIBINFO_SEP, nInfoPos ) );
         DBG_ASSERT( nInfoPos < 0, "Invalid Lib-Info!" );
         INetURLObject aLibAbsStorage( aLibAbsStorageName, INetProtocol::File );
 
@@ -1439,8 +1439,8 @@ namespace
     SbMethod* lcl_queryMacro( BasicManager* i_manager, OUString const& i_fullyQualifiedName )
     {
         sal_Int32 nLast = 0;
-        const OUString sLibName {i_fullyQualifiedName.getToken( 0, '.', nLast )};
-        const OUString sModule {i_fullyQualifiedName.getToken( 0, '.', nLast )};
+        const OUString sLibName {i_fullyQualifiedName.getTokenX( 0, '.', nLast )};
+        const OUString sModule {i_fullyQualifiedName.getTokenX( 0, '.', nLast )};
         OUString sMacro;
         if(nLast >= 0)
         {

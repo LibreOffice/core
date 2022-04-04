@@ -315,8 +315,8 @@ GenericPopupToolbarController::GenericPopupToolbarController(
             sal_Int32 nIdx{ 0 };
             OUString aValue;
             aPropValue.Value >>= aValue;
-            m_aPopupCommand = aValue.getToken(0, ';', nIdx);
-            m_bReplaceWithLast = aValue.getToken(0, ';', nIdx).toBoolean();
+            m_aPopupCommand = aValue.getTokenX(0, ';', nIdx);
+            m_bReplaceWithLast = aValue.getTokenX(0, ';', nIdx).toBoolean();
             break;
         }
     }

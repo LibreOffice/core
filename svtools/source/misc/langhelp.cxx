@@ -122,7 +122,7 @@ OUString getInstalledLocaleForSystemUILanguage(const css::uno::Sequence<OUString
             sal_Int32 nIndex = 0;
             do
             {
-                aAvailable.emplace_back(sAvailableLocales.getToken(0, ' ', nIndex));
+                aAvailable.emplace_back(sAvailableLocales.getTokenX(0, ' ', nIndex));
             }
             while (nIndex >= 0);
             // See which one matches the desired ui locale

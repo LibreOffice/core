@@ -130,7 +130,7 @@ void SvxAreaTabDialog::SavePalettes()
     sal_Int32 nIndex = 0;
     do
     {
-        aPath = aPalettePath.getToken(0, ';', nIndex);
+        aPath = aPalettePath.getTokenX(0, ';', nIndex);
     }
     while (nIndex >= 0);
 

@@ -378,8 +378,8 @@ static SvImageId GetImageId_Impl(
     if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
     {
         OUString aURLPath = sURL.copy( strlen(URL_PREFIX_PRIV_SOFFICE) );
-        OUString aType = aURLPath.getToken( 0, '/' );
-        if ( aType == "factory" )
+        std::u16string_view aType = aURLPath.getToken( 0, '/' );
+        if ( aType == u"factory" )
         {
             // detect an image id for our "private:factory" urls
             aExt = GetImageExtensionByFactory_Impl( sURL );
@@ -387,8 +387,8 @@ static SvImageId GetImageId_Impl(
                 nImage = GetImageId_Impl( aExt );
             return nImage;
         }
-        else if ( aType == "image" )
-            nImage = static_cast<SvImageId>(aURLPath.getToken( 1, '/' ).toInt32());
+        else if ( aType == u"image" )
+            nImage = static_cast<SvImageId>(comphelper::string::toInt32(aURLPath.getToken( 1, '/' )));
     }
     else
     {
@@ -757,8 +757,8 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
         if ( rObject.GetProtocol() == INetProtocol::PrivSoffice )
         {
             OUString aURLPath = sURL.copy( strlen(URL_PREFIX_PRIV_SOFFICE) );
-            OUString aType = aURLPath.getToken( 0, '/' );
-            if ( aType == "factory" )
+            std::u16string_view aType = aURLPath.getToken( 0, '/' );
+            if ( aType == u"factory" )
             {
                 sDescription = GetDescriptionByFactory_Impl( aURLPath.copy( aURLPath.indexOf( '/' ) + 1 ) );
                 bDetected = true;

@@ -719,7 +719,7 @@ void Components::parseFileList(
     bool recordAdditions)
 {
     for (sal_Int32 i = 0;;) {
-        OUString url(urls.getToken(0, ' ', i));
+        OUString url(urls.getTokenX(0, ' ', i));
         if (!url.isEmpty()) {
             Additions * adds = nullptr;
             if (recordAdditions) {

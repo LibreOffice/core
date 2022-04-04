@@ -207,7 +207,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     {
         sal_Int32 nPos {0};
         do {
-            m_plbField->append_text(strVisibleFields.getToken(0, ';', nPos));
+            m_plbField->append_text(strVisibleFields.getTokenX(0, ';', nPos));
         } while (nPos>=0);
     }
 
@@ -468,7 +468,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
             "FmSearchDialog::InitContext : invalid context description supplied !");
         sal_Int32 nPos {0};
         do {
-            m_plbField->append_text(fmscContext.sFieldDisplayNames.getToken(0, ';', nPos));
+            m_plbField->append_text(fmscContext.sFieldDisplayNames.getTokenX(0, ';', nPos));
         } while (nPos>=0);
     }
     else if (!fmscContext.strUsedFields.isEmpty())
@@ -476,7 +476,7 @@ void FmSearchDialog::InitContext(sal_Int16 nContext)
         // else use the field names
         sal_Int32 nPos {0};
         do {
-            m_plbField->append_text(fmscContext.strUsedFields.getToken(0, ';', nPos));
+            m_plbField->append_text(fmscContext.strUsedFields.getTokenX(0, ';', nPos));
         } while (nPos>=0);
     }
 

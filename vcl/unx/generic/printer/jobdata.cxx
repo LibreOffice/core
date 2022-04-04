@@ -242,10 +242,10 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         {
             bMargin = true;
             sal_Int32 nIdx {RTL_CONSTASCII_LENGTH(marginadjustmentEquals)};
-            rJobData.m_nLeftMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
-            rJobData.m_nRightMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
-            rJobData.m_nTopMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
-            rJobData.m_nBottomMarginAdjust = aLine.getToken(0, ',', nIdx).toInt32();
+            rJobData.m_nLeftMarginAdjust = comphelper::string::toInt32(aLine.getToken(0, ',', nIdx));
+            rJobData.m_nRightMarginAdjust = comphelper::string::toInt32(aLine.getToken(0, ',', nIdx));
+            rJobData.m_nTopMarginAdjust = comphelper::string::toInt32(aLine.getToken(0, ',', nIdx));
+            rJobData.m_nBottomMarginAdjust = comphelper::string::toInt32(aLine.getToken(0, ',', nIdx));
         }
         else if (aLine.startsWith(colordepthEquals))
         {

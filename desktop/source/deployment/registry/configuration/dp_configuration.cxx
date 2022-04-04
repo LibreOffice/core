@@ -385,7 +385,7 @@ void BackendImpl::configmgrini_verify_init(
         {
             sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
+                OUString token( line.getTokenX( 0, ' ', index ).trim() );
                 if (!token.isEmpty()) {
                     //The  file may not exist anymore if a shared or bundled
                     //extension was removed, but it can still be in the configmgrini.
@@ -400,7 +400,7 @@ void BackendImpl::configmgrini_verify_init(
                       RTL_TEXTENCODING_UTF8 )) {
             sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
+                OUString token( line.getTokenX( 0, ' ', index ).trim() );
                 if (!token.isEmpty())
                 {
                     if (token[ 0 ] == '?')

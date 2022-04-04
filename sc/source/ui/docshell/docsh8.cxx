@@ -511,7 +511,7 @@ void lcl_GetColumnTypes(
                 }
                 if ( bTypeDefined && !nFieldLen && nIdx>0 )
                 {
-                    nFieldLen = aString.getToken( 0, ',', nIdx ).toInt32();
+                    nFieldLen = comphelper::string::toInt32(aString.getToken( 0, ',', nIdx ));
                     if ( !bPrecDefined && nIdx>0 )
                     {
                         OUString aTmp( aString.getToken( 0, ',', nIdx ) );

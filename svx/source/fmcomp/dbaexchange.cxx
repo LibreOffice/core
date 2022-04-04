@@ -329,7 +329,7 @@ namespace svx
         sal_Int32 nIdx{ 0 };
         _rDatasource    = sFieldDescription.getToken(0, cSeparator, nIdx);
         _rCommand       = sFieldDescription.getToken(0, cSeparator, nIdx);
-        _nCommandType   = sFieldDescription.getToken(0, cSeparator, nIdx).toInt32();
+        _nCommandType   = comphelper::string::toInt32(sFieldDescription.getToken(0, cSeparator, nIdx));
         _rFieldName     = sFieldDescription.getToken(0, cSeparator, nIdx);
 
         return true;

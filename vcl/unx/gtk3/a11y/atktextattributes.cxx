@@ -1228,7 +1228,7 @@ attribute_set_new_from_extended_attributes(
     sal_Int32 nIndex = 0;
     do
     {
-        OUString sProperty = sExtendedAttrs.getToken( 0, ';', nIndex );
+        OUString sProperty = sExtendedAttrs.getTokenX( 0, ';', nIndex );
 
         sal_Int32 nColonPos = 0;
         OString sPropertyName = OUStringToOString( o3tl::getToken(sProperty, 0, ':', nColonPos ),

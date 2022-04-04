@@ -33,6 +33,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <typelib/typedescription.h>
+#include <o3tl/string_view.hxx>
 
 #include "rtti.hxx"
 #include "share.hxx"
@@ -118,8 +119,8 @@ std::type_info * RTTI::getRTTI(typelib_TypeDescription const & pTypeDescr)
     sal_Int32 index = 0;
     do
     {
-        OUString token( unoName.getToken( 0, '.', index ) );
-        buf.append( token.getLength() );
+        std::u16string_view token( o3tl::getToken(unoName, 0, '.', index ) );
+        buf.append( static_cast<sal_Int32>(token.size()) );
         OString c_token( OUStringToOString( token, RTL_TEXTENCODING_ASCII_US ) );
         buf.append( c_token );
     }

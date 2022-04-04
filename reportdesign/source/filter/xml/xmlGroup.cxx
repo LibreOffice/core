@@ -101,22 +101,22 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                             if ( aFind != aFunctions.end() )
                             {
                                 const OUString sCompleteFormula = aFind->second->getFormula();
-                                OUString sExpression = sCompleteFormula.getToken(1,'[');
-                                sExpression = sExpression.getToken(0,']');
+                                OUString sExpression = sCompleteFormula.getTokenX(1,'[');
+                                sExpression = sExpression.getTokenX(0,']');
                                 sal_Int32 nIndex = 0;
-                                const OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
+                                const std::u16string_view sFormula = sCompleteFormula.getToken(0,'(',nIndex);
                                 ::sal_Int16 nGroupOn = report::GroupOn::DEFAULT;
 
-                                if ( sFormula == "rpt:LEFT")
+                                if ( sFormula == u"rpt:LEFT")
                                 {
                                     nGroupOn = report::GroupOn::PREFIX_CHARACTERS;
-                                    OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
-                                    sInterval = sInterval.getToken(0,')');
+                                    OUString sInterval = sCompleteFormula.getTokenX(1,';',nIndex);
+                                    sInterval = sInterval.getTokenX(0,')');
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
-                                else if ( sFormula == "rpt:YEAR")
+                                else if ( sFormula == u"rpt:YEAR")
                                     nGroupOn = report::GroupOn::YEAR;
-                                else if ( sFormula == "rpt:MONTH")
+                                else if ( sFormula == u"rpt:MONTH")
                                 {
                                     nGroupOn = report::GroupOn::MONTH;
                                 }
@@ -125,21 +125,21 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 {
                                     nGroupOn = report::GroupOn::QUARTAL;
                                 }
-                                else if ( sFormula == "rpt:WEEK")
+                                else if ( sFormula == u"rpt:WEEK")
                                     nGroupOn = report::GroupOn::WEEK;
-                                else if ( sFormula == "rpt:DAY")
+                                else if ( sFormula == u"rpt:DAY")
                                     nGroupOn = report::GroupOn::DAY;
-                                else if ( sFormula == "rpt:HOUR")
+                                else if ( sFormula == u"rpt:HOUR")
                                     nGroupOn = report::GroupOn::HOUR;
-                                else if ( sFormula == "rpt:MINUTE")
+                                else if ( sFormula == u"rpt:MINUTE")
                                     nGroupOn = report::GroupOn::MINUTE;
-                                else if ( sFormula == "rpt:INT")
+                                else if ( sFormula == u"rpt:INT")
                                 {
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);
                                     sExpression = sExpression.copy(OUString("INT_count_").getLength());
-                                    OUString sInterval = sCompleteFormula.getToken(1,'/');
-                                    sInterval = sInterval.getToken(0,')');
+                                    OUString sInterval = sCompleteFormula.getTokenX(1,'/');
+                                    sInterval = sInterval.getTokenX(0,')');
                                     m_xGroup->setGroupInterval(sInterval.toInt32());
                                 }
 

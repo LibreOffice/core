@@ -26,6 +26,7 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
@@ -368,16 +369,16 @@ void SplashScreen::loadConfig()
     {
         sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
-        sal_Int32 temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
+        sal_Int32 temp = comphelper::string::toInt32(sProgressFrameColor.getToken( 0, ',', idx ));
         if ( idx != -1 )
         {
             nRed = static_cast< sal_uInt8 >( temp );
-            temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
+            temp = comphelper::string::toInt32(sProgressFrameColor.getToken( 0, ',', idx ));
         }
         if ( idx != -1 )
         {
             sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
-            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( comphelper::string::toInt32(sProgressFrameColor.getToken( 0, ',', idx )) );
             _cProgressFrameColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -386,16 +387,16 @@ void SplashScreen::loadConfig()
     {
         sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
-        sal_Int32 temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
+        sal_Int32 temp = comphelper::string::toInt32(sProgressBarColor.getToken( 0, ',', idx ));
         if ( idx != -1 )
         {
             nRed = static_cast< sal_uInt8 >( temp );
-            temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
+            temp = comphelper::string::toInt32(sProgressBarColor.getToken( 0, ',', idx ));
         }
         if ( idx != -1 )
         {
             sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
-            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( comphelper::string::toInt32(sProgressBarColor.getToken( 0, ',', idx )) );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -404,16 +405,16 @@ void SplashScreen::loadConfig()
     {
         sal_uInt8 nRed = 0;
         sal_Int32 idx = 0;
-        sal_Int32 temp = sProgressTextColor.getToken( 0, ',', idx ).toInt32();
+        sal_Int32 temp = comphelper::string::toInt32(sProgressTextColor.getToken( 0, ',', idx ));
         if ( idx != -1 )
         {
             nRed = static_cast< sal_uInt8 >( temp );
-            temp = sProgressTextColor.getToken( 0, ',', idx ).toInt32();
+            temp = comphelper::string::toInt32(sProgressTextColor.getToken( 0, ',', idx ));
         }
         if ( idx != -1 )
         {
             sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
-            sal_uInt8 nBlue = static_cast< sal_uInt8 >( sProgressTextColor.getToken( 0, ',', idx ).toInt32() );
+            sal_uInt8 nBlue = static_cast< sal_uInt8 >( comphelper::string::toInt32(sProgressTextColor.getToken( 0, ',', idx )) );
             _cProgressTextColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -431,11 +432,11 @@ void SplashScreen::loadConfig()
     if ( !sSize.isEmpty() )
     {
         sal_Int32 idx = 0;
-        sal_Int32 temp = sSize.getToken( 0, ',', idx ).toInt32();
+        sal_Int32 temp = comphelper::string::toInt32(sSize.getToken( 0, ',', idx ));
         if ( idx != -1 )
         {
             _barwidth = temp;
-            _barheight = sSize.getToken( 0, ',', idx ).toInt32();
+            _barheight = comphelper::string::toInt32(sSize.getToken( 0, ',', idx ));
         }
     }
 
@@ -445,11 +446,11 @@ void SplashScreen::loadConfig()
     if ( !sPosition.isEmpty() )
     {
         sal_Int32 idx = 0;
-        sal_Int32 temp = sPosition.getToken( 0, ',', idx ).toInt32();
+        sal_Int32 temp = comphelper::string::toInt32(sPosition.getToken( 0, ',', idx ));
         if ( idx != -1 )
         {
             _tlx = temp;
-            _tly = sPosition.getToken( 0, ',', idx ).toInt32();
+            _tly = comphelper::string::toInt32(sPosition.getToken( 0, ',', idx ));
         }
     }
 }
@@ -535,22 +536,22 @@ void SplashScreen::determineProgressRatioValues(
                 if ( !sFullScreenProgressPos.isEmpty() )
                 {
                     sal_Int32 idx = 0;
-                    double temp = sFullScreenProgressPos.getToken( 0, ',', idx ).toDouble();
+                    double temp = sFullScreenProgressPos.getTokenX( 0, ',', idx ).toDouble();
                     if ( idx != -1 )
                     {
                         rXRelPos = temp;
-                        rYRelPos = sFullScreenProgressPos.getToken( 0, ',', idx ).toDouble();
+                        rYRelPos = sFullScreenProgressPos.getTokenX( 0, ',', idx ).toDouble();
                     }
                 }
 
                 if ( !sFullScreenProgressSize.isEmpty() )
                 {
                     sal_Int32 idx = 0;
-                    double temp = sFullScreenProgressSize.getToken( 0, ',', idx ).toDouble();
+                    double temp = sFullScreenProgressSize.getTokenX( 0, ',', idx ).toDouble();
                     if ( idx != -1 )
                     {
                         rRelWidth  = temp;
-                        rRelHeight = sFullScreenProgressSize.getToken( 0, ',', idx ).toDouble();
+                        rRelHeight = sFullScreenProgressSize.getTokenX( 0, ',', idx ).toDouble();
                     }
                 }
             }

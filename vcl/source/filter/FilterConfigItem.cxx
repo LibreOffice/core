@@ -53,7 +53,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
 
         // creation arguments: nodepath
         PropertyValue aPathArgument = comphelper::makePropertyValue("nodepath",
-                                                                    rTree.getToken(0, '/', nIdx));
+                                                                    rTree.getTokenX(0, '/', nIdx));
         Sequence< Any > aArguments{ Any(aPathArgument) };
 
         Reference< XInterface > xReadAccess;
@@ -79,7 +79,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory > const & rXCfgP
                     bAvailable = false;
                 else
                 {
-                    const OUString aNode( rTree.getToken(0, '/', nIdx) );
+                    const OUString aNode( rTree.getTokenX(0, '/', nIdx) );
                     if ( !xHierarchicalNameAccess->hasByHierarchicalName( aNode ) )
                         bAvailable = false;
                     else

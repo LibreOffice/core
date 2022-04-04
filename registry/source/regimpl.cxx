@@ -639,7 +639,7 @@ RegError ORegistry::createKey(RegKeyHandle hKey, std::u16string_view keyName,
     sal_Int32 nIndex = 0;
     do
     {
-        token = sFullKeyName.getToken(0, '/', nIndex);
+        token = sFullKeyName.getTokenX(0, '/', nIndex);
         if (!token.isEmpty())
         {
             if (rStoreDir.create(pKey->getStoreFile(), sFullPath.toString(), token, storeAccessMode::Create))

@@ -310,7 +310,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
 
                             do
                             {
-                                OUString aToken  = aTemp.getToken( 0, ' ', nIndex );
+                                OUString aToken  = aTemp.getTokenX( 0, ' ', nIndex );
                                 if ( !aToken.isEmpty() )
                                 {
                                     sal_Int32 nHashCode = aToken.hashCode();

@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -480,9 +481,9 @@ namespace
 bool lcl_getResolutionText(OUString& rResolutionText, const OUString& rImageResolution, sal_Int32 nTargetRes)
 {
     sal_Int32 nIdx{ 0 };
-    if (rImageResolution.getToken(0, ';', nIdx).toInt32()!=nTargetRes)
+    if (comphelper::string::toInt32(rImageResolution.getToken(0, ';', nIdx)) != nTargetRes)
         return false;
-    rResolutionText = rImageResolution.getToken(0, ';', nIdx);
+    rResolutionText = rImageResolution.getTokenX(0, ';', nIdx);
     return true;
 }
 
@@ -518,10 +519,10 @@ void OptimizerDialog::UpdateControlStatesPage2()
 void OptimizerDialog::InitPage2()
 {
     Sequence< OUString > aResolutionItemList{
-        getString( STR_IMAGE_RESOLUTION_0 ).getToken( 1, ';' ),
-        getString( STR_IMAGE_RESOLUTION_1 ).getToken( 1, ';' ),
-        getString( STR_IMAGE_RESOLUTION_2 ).getToken( 1, ';' ),
-        getString( STR_IMAGE_RESOLUTION_3 ).getToken( 1, ';' )
+        getString( STR_IMAGE_RESOLUTION_0 ).getTokenX( 1, ';' ),
+        getString( STR_IMAGE_RESOLUTION_1 ).getTokenX( 1, ';' ),
+        getString( STR_IMAGE_RESOLUTION_2 ).getTokenX( 1, ';' ),
+        getString( STR_IMAGE_RESOLUTION_3 ).getTokenX( 1, ';' )
     };
 
     std::vector< OUString > aControlList

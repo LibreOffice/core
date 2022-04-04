@@ -855,7 +855,7 @@ void FontSubstConfiguration::fillSubstVector( const css::uno::Reference< XNameAc
                 sal_Int32 nIndex = 0;
                 while( nIndex != -1 )
                 {
-                    OUString aSubst( pLine->getToken( 0, ';', nIndex ) );
+                    OUString aSubst( pLine->getTokenX( 0, ';', nIndex ) );
                     if( !aSubst.isEmpty() )
                     {
                         auto itPair = maSubstHash.insert( aSubst );
@@ -944,7 +944,7 @@ ImplFontAttrs FontSubstConfiguration::getSubstType( const css::uno::Reference< X
         sal_Int32 nIndex = 0;
         while( nIndex != -1 )
         {
-            OUString aToken( pLine->getToken( 0, ',', nIndex ) );
+            OUString aToken( pLine->getTokenX( 0, ',', nIndex ) );
             for( int k = 0; k < 32; k++ )
                 if( aToken.equalsIgnoreAsciiCaseAscii( pAttribNames[k] ) )
                 {

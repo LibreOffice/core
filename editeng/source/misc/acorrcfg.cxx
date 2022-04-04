@@ -48,8 +48,8 @@ SvxAutoCorrCfg::SvxAutoCorrCfg() :
     OUString sSharePath, sUserPath;
     OUString const & sAutoPath( aPathOpt.GetAutoCorrectPath() );
 
-    sSharePath = sAutoPath.getToken(0, ';');
-    sUserPath = sAutoPath.getToken(1, ';');
+    sSharePath = sAutoPath.getTokenX(0, ';');
+    sUserPath = sAutoPath.getTokenX(1, ';');
 
     //fdo#67743 ensure the userdir exists so that any later attempt to copy the
     //shared autocorrect file into the user dir will succeed

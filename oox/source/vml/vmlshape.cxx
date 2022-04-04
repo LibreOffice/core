@@ -1156,11 +1156,11 @@ awt::Rectangle LineShape::getRelRectangle() const
     awt::Rectangle aShapeRect;
     sal_Int32 nIndex = 0;
 
-    aShapeRect.X = maShapeModel.maFrom.getToken(0, ',', nIndex).toInt32();
-    aShapeRect.Y = maShapeModel.maFrom.getToken(0, ',', nIndex).toInt32();
+    aShapeRect.X = maShapeModel.comphelper::string::toInt32(maFrom.getToken(0, ',', nIndex));
+    aShapeRect.Y = maShapeModel.comphelper::string::toInt32(maFrom.getToken(0, ',', nIndex));
     nIndex = 0;
-    aShapeRect.Width = maShapeModel.maTo.getToken(0, ',', nIndex).toInt32() - aShapeRect.X;
-    aShapeRect.Height = maShapeModel.maTo.getToken(0, ',', nIndex).toInt32() - aShapeRect.Y;
+    aShapeRect.Width = maShapeModel.comphelper::string::toInt32(maTo.getToken(0, ',', nIndex)) - aShapeRect.X;
+    aShapeRect.Height = maShapeModel.comphelper::string::toInt32(maTo.getToken(0, ',', nIndex)) - aShapeRect.Y;
     return aShapeRect;
 }
 

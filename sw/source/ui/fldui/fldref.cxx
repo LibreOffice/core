@@ -241,7 +241,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
         if(!IsRefresh() && sUserData.getToken(0, ';', nIdx).
                                 equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            const sal_uInt16 nVal = static_cast< sal_uInt16 >(sUserData.getToken(0, ';', nIdx).toInt32());
+            const sal_uInt16 nVal = static_cast< sal_uInt16 >(comphelper::string::toInt32(sUserData.getToken(0, ';', nIdx)));
             if(nVal != USHRT_MAX)
             {
                 for(sal_Int32 i = 0, nEntryCount = m_xTypeLB->n_children(); i < nEntryCount; ++i)
@@ -254,7 +254,7 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
                 }
                 if (nIdx>=0 && nIdx<sUserData.getLength())
                 {
-                    nFormatBoxPosition = static_cast< sal_uInt16 >(sUserData.getToken(0, ';', nIdx).toInt32());
+                    nFormatBoxPosition = static_cast< sal_uInt16 >(comphelper::string::toInt32(sUserData.getToken(0, ';', nIdx)));
                 }
             }
         }

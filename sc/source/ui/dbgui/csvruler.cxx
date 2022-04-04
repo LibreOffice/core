@@ -55,7 +55,7 @@ static void load_FixedWidthList(ScCsvSplits &rSplits)
     sal_Int32 nIdx {0};
     for(;;)
     {
-        const sal_Int32 n {sFixedWidthLists.getToken(0, ';', nIdx).toInt32()};
+        const sal_Int32 n {comphelper::string::toInt32(sFixedWidthLists.getToken(0, ';', nIdx))};
         if (nIdx<0)
         {
             // String ends with a semi-colon so there

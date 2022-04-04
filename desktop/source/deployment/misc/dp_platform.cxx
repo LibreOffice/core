@@ -173,7 +173,7 @@ bool platform_fits( OUString const & platform_string )
     for (;;)
     {
         const OUString token(
-            platform_string.getToken( 0, ',', index ).trim() );
+            platform_string.getTokenX( 0, ',', index ).trim() );
         // check if this platform:
         if (token.equalsIgnoreAsciiCase( StrPlatform::get() ) ||
             (token.indexOf( '_' ) < 0 && /* check OS part only */

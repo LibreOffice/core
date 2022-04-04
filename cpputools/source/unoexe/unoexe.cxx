@@ -441,11 +441,11 @@ SAL_IMPLEMENT_MAIN()
 
             sal_Int32 nIndex = 4; // skip initial "uno:"
             bool bTooFewTokens {false};
-            const OUString aConnectDescr{ aUnoUrl.getToken( 0, ';', nIndex ) }; // uno:CONNECTDESCR;iiop;InstanceName
+            const OUString aConnectDescr{ aUnoUrl.getTokenX( 0, ';', nIndex ) }; // uno:CONNECTDESCR;iiop;InstanceName
             if (nIndex<0) bTooFewTokens = true;
-            const OUString aUnoUrlToken{ aUnoUrl.getToken( 0, ';', nIndex ) };
+            const OUString aUnoUrlToken{ aUnoUrl.getTokenX( 0, ';', nIndex ) };
             if (nIndex<0) bTooFewTokens = true;
-            const OUString aInstanceName{ aUnoUrl.getToken( 0, ';', nIndex ) };
+            const OUString aInstanceName{ aUnoUrl.getTokenX( 0, ';', nIndex ) };
 
             // Exactly 3 tokens are required
             if (bTooFewTokens || nIndex>0)

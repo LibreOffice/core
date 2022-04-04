@@ -70,7 +70,7 @@ SVGFontExport::GlyphSet& SVGFontExport::implGetGlyphSet( const vcl::Font& rFont 
     if( rFont.GetItalic() != ITALIC_NONE )
         eItalic = ITALIC_NORMAL;
 
-    return( maGlyphTree[ aFontName.getToken( 0, ';' ) ][ eWeight ][ eItalic ] );
+    return( maGlyphTree[ aFontName.getTokenX( 0, ';' ) ][ eWeight ][ eItalic ] );
 }
 
 
@@ -309,7 +309,7 @@ void SVGFontExport::EmbedFonts()
 
 OUString SVGFontExport::GetMappedFontName( const OUString& rFontName ) const
 {
-    OUString aRet( rFontName.getToken( 0, ';' ) );
+    OUString aRet( rFontName.getTokenX( 0, ';' ) );
 
     if( mnCurFontId )
         aRet += " embedded";

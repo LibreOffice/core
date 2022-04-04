@@ -711,7 +711,7 @@ bool lcl_mapResolution(OUString& rResolution, const OUString& rImageResolution)
 {
     if (o3tl::getToken(rImageResolution, 1, ';')!=rResolution)
         return false;
-    rResolution = rImageResolution.getToken(0, ';');
+    rResolution = rImageResolution.getTokenX(0, ';');
     return true;
 }
 

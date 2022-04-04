@@ -22,6 +22,7 @@
 #include <rtl/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cassert>
 #include <vector>
@@ -115,8 +116,8 @@ uno::Sequence<OUString> ServiceDecl::getSupportedServiceNames() const
     OString const str(m_pServiceNames);
     sal_Int32 nIndex = 0;
     do {
-        OString const token( str.getToken( 0, cDelim, nIndex ) );
-        vec.emplace_back( token.getStr(), token.getLength(),
+        std::string_view const token( o3tl::getToken(str, 0, cDelim, nIndex ) );
+        vec.emplace_back( token.data(), token.size(),
                                       RTL_TEXTENCODING_ASCII_US );
     }
     while (nIndex >= 0);
@@ -129,8 +130,8 @@ bool ServiceDecl::supportsService( OUString const& name ) const
     OString const str(m_pServiceNames);
     sal_Int32 nIndex = 0;
     do {
-        OString const token( str.getToken( 0, cDelim, nIndex ) );
-        if (name.equalsAsciiL( token.getStr(), token.getLength() ))
+        std::string_view const token( o3tl::getToken(str, 0, cDelim, nIndex ) );
+        if (name.equalsAsciiL( token.data(), token.size() ))
             return true;
     }
     while (nIndex >= 0);

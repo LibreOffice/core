@@ -27,6 +27,7 @@
 #include <iostream>
 #include <memory>
 #include <rtl/strbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <helper.hxx>
 #include <export.hxx>
@@ -177,8 +178,8 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         case ANYTOKEN:
         case CFG_TEXT_START:
         {
-            sTokenName = sToken.getToken(1, '<').getToken(0, '>').
-                getToken(0, ' ');
+            sTokenName = sToken.getTokenX(1, '<').getTokenX(0, '>').
+                getTokenX(0, ' ');
 
             if ( !IsTokenClosed( sToken )) {
                 OString sSearch;
@@ -208,8 +209,8 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                         }
                         sCurrentResTyp = sTokenName;
 
-                        OString sTemp = sToken.copy( sToken.indexOf( "xml:lang=" ));
-                        sCurrentIsoLang = sTemp.getToken(1, '"');
+                        std::string_view sTemp = sToken.subView( sToken.indexOf( "xml:lang=" ));
+                        sCurrentIsoLang = OString(o3tl::getToken(sTemp, 1, '"'));
 
                         if ( sCurrentIsoLang == NO_TRANSLATE_ISO )
                             bLocalize = false;
@@ -223,8 +224,8 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                 OString sTokenId;
                 if ( !sSearch.isEmpty())
                 {
-                    OString sTemp = sToken.copy( sToken.indexOf( sSearch ));
-                    sTokenId = sTemp.getToken(1, '"');
+                    std::string_view sTemp = sToken.subView( sToken.indexOf( sSearch ));
+                    sTokenId = OString(o3tl::getToken(sTemp, 1, '"'));
                 }
                 pStackData = aStack.Push( sTokenName, sTokenId );
 
@@ -244,8 +245,8 @@ void CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
         break;
         case CFG_CLOSETAG:
         {
-            sTokenName = sToken.getToken(1, '/').getToken(0, '>').
-                getToken(0, ' ');
+            sTokenName = sToken.getTokenX(1, '/').getTokenX(0, '>').
+                getTokenX(0, ' ');
             if ( aStack.GetStackData() && ( aStack.GetStackData()->GetTagType() == sTokenName ))
             {
                 if (sCurrentText.isEmpty())

@@ -483,7 +483,7 @@ void SvxCharacterMap::init()
         sal_Int32 nIndex = 0;
         do
         {
-            OUString aToken = aDefStr.getToken(0, ';', nIndex);
+            OUString aToken = aDefStr.getTokenX(0, ';', nIndex);
             if (m_xFontLB->find_text(aToken) != -1)
             {
                 aDefStr = aToken;

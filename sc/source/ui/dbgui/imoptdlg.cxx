@@ -58,14 +58,14 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
         bFixedWidth = true;
     else
         nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
-    nTextSepCode  = static_cast<sal_Unicode>(rStr.getToken(0, ',', nIdx).toInt32());
+    nTextSepCode  = static_cast<sal_Unicode>(comphelper::string::toInt32(rStr.getToken(0, ',', nIdx)));
     aStrFont      = rStr.getToken(0, ',', nIdx);
     eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
 
     if ( nTokenCount == 4 )
     {
         // compatibility with old options string: "Save as shown" as 4th token, numeric
-        bSaveAsShown = rStr.getToken(0, ',', nIdx).toInt32() != 0;
+        bSaveAsShown = comphelper::string::toInt32(rStr.getToken(0, ',', nIdx)) != 0;
         bQuoteAllText = true;   // use old default then
     }
     else

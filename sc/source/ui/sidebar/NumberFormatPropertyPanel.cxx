@@ -233,7 +233,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 sal_Int32 aFormat[4] = {0};
                 for (sal_Int32 & rn : aFormat)
                 {
-                    rn = aCode.getToken(0, ',', nIndex).toInt32();
+                    rn = comphelper::string::toInt32(aCode.getToken(0, ',', nIndex));
                     if (nIndex<0)
                         break;
                 }

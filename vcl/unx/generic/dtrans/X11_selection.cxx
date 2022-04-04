@@ -179,7 +179,7 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
         {
             while( nIndex != -1 )
             {
-                OUString aToken = aMimeType.getToken( 0, ';', nIndex );
+                OUString aToken = aMimeType.getTokenX( 0, ';', nIndex );
                 sal_Int32 nPos = 0;
                 if( o3tl::getToken(aToken, 0, '=', nPos ) == u"charset" )
                 {
@@ -1325,20 +1325,20 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 sal_Int32 nIndex = 0;
                 if( o3tl::getToken(pFlavors->MimeType, 0, ';', nIndex ) == u"text/plain" )
                 {
-                    OUString aToken(pFlavors->MimeType.getToken( 0, ';', nIndex ));
+                    std::u16string_view aToken(pFlavors->MimeType.getToken( 0, ';', nIndex ));
                     // omit text/plain;charset=unicode since it is not well defined
-                    if( aToken == "charset=unicode" )
+                    if( aToken == u"charset=unicode" )
                     {
                         pAtoms++;
                         continue;
                     }
                     bHaveText = true;
-                    if( aToken == "charset=utf-16" )
+                    if( aToken == u"charset=utf-16" )
                     {
                         bHaveUTF16 = true;
                         pFlavors->DataType = cppu::UnoType<OUString>::get();
                     }
-                    else if( aToken == "charset=utf-8" )
+                    else if( aToken == u"charset=utf-8" )
                     {
                         aUTF8Type = *pAtoms;
                     }

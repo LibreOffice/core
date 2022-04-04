@@ -232,8 +232,8 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
             case SvBaseLinkObjectType::ClientOle:
                 {
                     sal_Int32 nPos = 0;
-                    OUString sFile( sLNm.getToken( 0, ::sfx2::cTokenSeparator, nPos ) );
-                    OUString sRange( sLNm.getToken( 0, ::sfx2::cTokenSeparator, nPos ) );
+                    OUString sFile( sLNm.getTokenX( 0, ::sfx2::cTokenSeparator, nPos ) );
+                    OUString sRange( sLNm.getTokenX( 0, ::sfx2::cTokenSeparator, nPos ) );
 
                     if( pFile )
                         *pFile = sFile;
@@ -256,8 +256,8 @@ bool LinkManager::GetDisplayNames( const SvBaseLink * pLink,
             case SvBaseLinkObjectType::ClientDde:
                 {
                     sal_Int32 nTmp = 0;
-                    OUString sServer( sLNm.getToken( 0, cTokenSeparator, nTmp ) );
-                    OUString sTopic( sLNm.getToken( 0, cTokenSeparator, nTmp ) );
+                    OUString sServer( sLNm.getTokenX( 0, cTokenSeparator, nTmp ) );
+                    OUString sTopic( sLNm.getTokenX( 0, cTokenSeparator, nTmp ) );
 
                     if( pType )
                         *pType = sServer;

@@ -302,7 +302,7 @@ void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
                 else if ( Event.State >>= aItemText )
                 {
                     INetURLObject aURL( aFeatureURL );
-                    OUString aEnumPart = aURL.GetURLPath().getToken( 1, '.' );
+                    OUString aEnumPart = aURL.GetURLPath().getTokenX( 1, '.' );
                     if ( !aEnumPart.isEmpty() && aURL.GetProtocol() == INetProtocol::Uno )
                     {
                         // Checkmark or RadioButton

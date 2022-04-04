@@ -2651,10 +2651,10 @@ void SvxCharPositionPage::Reset( const SfxItemSet* rSet )
     if ( !sUser.isEmpty() )
     {
         sal_Int32 nIdx {0};
-        m_nSuperEsc = static_cast<short>(sUser.getToken( 0, ';', nIdx ).toInt32());
-        m_nSubEsc = static_cast<short>(sUser.getToken( 0, ';', nIdx ).toInt32());
-        m_nSuperProp = static_cast<sal_uInt8>(sUser.getToken( 0, ';', nIdx ).toInt32());
-        m_nSubProp = static_cast<sal_uInt8>(sUser.getToken( 0, ';', nIdx ).toInt32());
+        m_nSuperEsc = static_cast<short>(comphelper::string::toInt32(sUser.getToken( 0, ';', nIdx )));
+        m_nSubEsc = static_cast<short>(comphelper::string::toInt32(sUser.getToken( 0, ';', nIdx )));
+        m_nSuperProp = static_cast<sal_uInt8>(comphelper::string::toInt32(sUser.getToken( 0, ';', nIdx )));
+        m_nSubProp = static_cast<sal_uInt8>(comphelper::string::toInt32(sUser.getToken( 0, ';', nIdx )));
 
         m_xHighLowMF->set_max(MAX_ESC_POS, FieldUnit::PERCENT);
 

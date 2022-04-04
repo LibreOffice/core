@@ -290,7 +290,7 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
         sal_Int32 nToken = 0;
         do
         {
-            OUString sToken = aPathList.getToken(0, SAL_PATHSEPARATOR, nToken);
+            OUString sToken = aPathList.getTokenX(0, SAL_PATHSEPARATOR, nToken);
             if (!sToken.isEmpty() &&
                 osl::FileBase::getFileURLFromSystemPath( sToken, aTmp ) ==
                 osl::FileBase::RC::E_None )

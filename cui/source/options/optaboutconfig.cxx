@@ -8,6 +8,7 @@
  */
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include "optaboutconfig.hxx"
 
 #include <comphelper/processfactory.hxx>
@@ -538,10 +539,10 @@ std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( const OUSt
     sal_Int32 index = 0;
     do
     {
-        OUString word = rCommaSepString.getToken(0, u',', index);
-        word = word.trim();
-        if( !word.isEmpty())
-            tempVector.push_back(word);
+        std::u16string_view word = rCommaSepString.getToken(0, u',', index);
+        word = o3tl::trim(word);
+        if( !word.empty())
+            tempVector.push_back(OUString(word));
     }while( index >= 0 );
     return tempVector;
 }

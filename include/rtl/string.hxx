@@ -1771,7 +1771,7 @@ public:
       @return   the token; if either token or index is negative, an empty token
                 is returned (and index is set to -1)
     */
-    OString getToken( sal_Int32 token, char cTok, sal_Int32& index ) const
+    OString getTokenX( sal_Int32 token, char cTok, sal_Int32& index ) const
     {
         rtl_String * pNew = NULL;
         index = rtl_string_getToken( &pNew, pData, token, cTok, index );
@@ -1791,9 +1791,9 @@ public:
 
       @since LibreOffice 3.6
      */
-    OString getToken(sal_Int32 count, char separator) const {
+    OString getTokenX(sal_Int32 count, char separator) const {
         sal_Int32 n = 0;
-        return getToken(count, separator, n);
+        return getTokenX(count, separator, n);
     }
 
     /**

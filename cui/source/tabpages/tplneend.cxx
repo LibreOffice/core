@@ -499,7 +499,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickLoadHdl_Impl, weld::Button&, void)
         sal_Int32 nIndex = 0;
         do
         {
-            aLastDir = aPalettePath.getToken(0, ';', nIndex);
+            aLastDir = aPalettePath.getTokenX(0, ';', nIndex);
         }
         while (nIndex >= 0);
 
@@ -567,7 +567,7 @@ IMPL_LINK_NOARG(SvxLineEndDefTabPage, ClickSaveHdl_Impl, weld::Button&, void)
     sal_Int32 nIndex = 0;
     do
     {
-        aLastDir = aPalettePath.getToken(0, ';', nIndex);
+        aLastDir = aPalettePath.getTokenX(0, ';', nIndex);
     }
     while (nIndex >= 0);
 

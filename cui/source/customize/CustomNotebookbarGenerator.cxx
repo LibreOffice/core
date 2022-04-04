@@ -187,7 +187,7 @@ void CustomNotebookbarGenerator::modifyCustomizedUIFile(const Sequence<OUString>
         for (sal_Int32 aIndex = 0; aIndex < aUIPropertiesCount; aIndex++)
         {
             sal_Int32 nPos = aIndex;
-            OUString sToken = aValue.getToken(nPos, ',', nPos);
+            std::u16string_view sToken = aValue.getToken(nPos, ',', nPos);
             aProperties[aIndex] = OUStringToOString(sToken, RTL_TEXTENCODING_UTF8);
         }
         xmlDocPtr doc = notebookbarXMLParser(sCustomizedUIPath, aProperties[0], aProperties[1],

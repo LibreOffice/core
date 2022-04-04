@@ -30,6 +30,7 @@
 #include <string.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/character.hxx>
 
 #if defined _MSC_VER
@@ -411,7 +412,7 @@ published       return IDL_PUBLISHED;
                 docu = docu.trim();
                 sal_Int32 nIndex = 0;
                 int count = 0;
-                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+                do { o3tl::getToken(docu, 0, '\n', nIndex ); count++; } while( nIndex != -1 );
                 idlc()->setLineNumber( beginLine + count - 1);
                 BEGIN( INITIAL );
             }
@@ -444,7 +445,7 @@ published       return IDL_PUBLISHED;
                 docu = docu.trim();
                 sal_Int32 nIndex = 0;
                 int count = 0;
-                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+                do { o3tl::getToken(docu, 0, '\n', nIndex ); count++; } while( nIndex != -1 );
                 idlc()->setLineNumber( beginLine + count - 1);                
                 if ( (nIndex = docu.indexOf("/*")) >= 0 || (nIndex = docu.indexOf("///")) >= 0 )
                 {
@@ -461,7 +462,7 @@ published       return IDL_PUBLISHED;
                 docu = docu.trim();
                 sal_Int32 nIndex = 0;
                 int count = 0;
-                do { docu.getToken( 0, '\n', nIndex ); count++; } while( nIndex != -1 );
+                do { o3tl::getToken(docu, 0, '\n', nIndex ); count++; } while( nIndex != -1 );
                 idlc()->setLineNumber( beginLine + count - 1);
                 if ( docu.indexOf("/*") >= 0 || docu.indexOf("//") >= 0 )
                 {

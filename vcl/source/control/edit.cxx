@@ -2838,8 +2838,8 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
     mpDDInfo->bIsStringSupported = std::any_of(rFlavors.begin(), rFlavors.end(),
         [](const css::datatransfer::DataFlavor& rFlavor) {
             sal_Int32 nIndex = 0;
-            const OUString aMimetype = rFlavor.MimeType.getToken( 0, ';', nIndex );
-            return aMimetype == "text/plain";
+            const std::u16string_view aMimetype = rFlavor.MimeType.getToken( 0, ';', nIndex );
+            return aMimetype == u"text/plain";
         });
 }
 

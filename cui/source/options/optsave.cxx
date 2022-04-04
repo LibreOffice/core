@@ -551,7 +551,7 @@ IMPL_LINK( SvxSaveTabPage, FilterHdl_Impl, weld::ComboBox&, rBox, void )
                     std::shared_ptr<const SfxFilter> pFilter = matcher.GetFilter4FilterName(rFilters[nFilter]);
                     if (pFilter)
                     {
-                        extension = pFilter->GetWildcard().getGlob().getToken(0, ';');
+                        extension = pFilter->GetWildcard().getGlob().getTokenX(0, ';');
                     }
                     Sequence<PropertyValue> aProperties;
                     aProps >>= aProperties;

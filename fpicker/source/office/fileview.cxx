@@ -1101,16 +1101,16 @@ OUString SvtFileView::GetConfigString() const
 void SvtFileView::SetConfigString(const OUString& rCfgStr)
 {
     sal_Int32 nIdx = 0;
-    sal_uInt16 nSortColumn = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
-    bool bAscending = static_cast<bool>(static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32()));
+    sal_uInt16 nSortColumn = static_cast<sal_uInt16>(comphelper::string::toInt32(rCfgStr.getToken( 0, ';', nIdx )));
+    bool bAscending = static_cast<bool>(static_cast<sal_uInt16>(comphelper::string::toInt32(rCfgStr.getToken( 0, ';', nIdx ))));
 
     std::vector<int> aWidths(mpImpl->mxView->TypeColumnVisible() ? 4 : 3, -1);
 
     while ( nIdx != -1 )
     {
-        sal_uInt16 nItemId = static_cast<sal_uInt16>(rCfgStr.getToken( 0, ';', nIdx ).toInt32());
+        sal_uInt16 nItemId = static_cast<sal_uInt16>(comphelper::string::toInt32(rCfgStr.getToken( 0, ';', nIdx )));
 
-        int nWidth = rCfgStr.getToken( 0, ';', nIdx ).toInt32();
+        int nWidth = comphelper::string::toInt32(rCfgStr.getToken( 0, ';', nIdx ));
 
         // skip "TYPE"
         if (!mpImpl->mxView->TypeColumnVisible() && nItemId != COLUMN_TITLE)

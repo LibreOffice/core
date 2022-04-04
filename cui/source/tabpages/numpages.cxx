@@ -898,7 +898,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
         return;
 
     OUString aPath = SvtPathOptions().GetGalleryPath();
-    OUString aPathToken = aPath.getToken( 1 , SEARCHPATH_DELIMITER );
+    std::u16string_view aPathToken = aPath.getToken( 1 , SEARCHPATH_DELIMITER );
 
     OUString aUserImageURL = aFileDialog.GetPath();
 
@@ -909,7 +909,7 @@ IMPL_LINK_NOARG(SvxBitmapPickTabPage, ClickAddBrowseHdl_Impl, weld::Button&, voi
     else if (nPos<aUserImageURL.getLength())
         aFileName = aUserImageURL.copy(nPos);
 
-    OUString aUserGalleryURL = aPathToken + "/" + aFileName;
+    OUString aUserGalleryURL = OUString::Concat(aPathToken) + "/" + aFileName;
     INetURLObject aURL( aUserImageURL );
     DBG_ASSERT( aURL.GetProtocol() != INetProtocol::NotValid, "invalid URL" );
 

@@ -2153,7 +2153,7 @@ std::vector<OUString> FilterCache::impl_tokenizeString(const OUString& sData    
     sal_Int32    nToken = 0;
     do
     {
-        OUString sToken = sData.getToken(0, cSeparator, nToken);
+        OUString sToken = sData.getTokenX(0, cSeparator, nToken);
         lData.push_back(sToken);
     }
     while(nToken >= 0);

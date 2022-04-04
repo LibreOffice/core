@@ -165,7 +165,7 @@ namespace svt
         sal_Int32 nIndex = 0;
         do
         {
-            OUString aToken = sLogicalFieldNames.getToken(0, ';', nIndex);
+            OUString aToken = sLogicalFieldNames.getTokenX(0, ';', nIndex);
             aKnownNames.insert(aToken);
         }
         while ( nIndex >= 0);
@@ -611,7 +611,7 @@ void AssignmentPersistentData::ImplCommit()
         m_pImpl->aLogicalFieldNames.reserve(nAdjustedTokenCount);
         sal_Int32 nIdx{ 0 };
         for (sal_Int32 i = 0; i<nAdjustedTokenCount; ++i)
-            m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.getToken(0, ';', nIdx));
+            m_pImpl->aLogicalFieldNames.push_back(sLogicalFieldNames.getTokenX(0, ';', nIdx));
 
         Application::PostUserEvent(LINK(this, AddressBookSourceDialog, OnDelayedInitialize), nullptr, false);
 

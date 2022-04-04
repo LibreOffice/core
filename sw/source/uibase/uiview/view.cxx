@@ -1195,17 +1195,17 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
 
     // No it is *not* a good idea to call GetToken within Point constr. immediately,
     // because which parameter is evaluated first?
-    tools::Long nX = rUserData.getToken( 0, ';', nPos ).toInt32(),
-         nY = rUserData.getToken( 0, ';', nPos ).toInt32();
+    tools::Long nX = comphelper::string::toInt32(rUserData.getToken( 0, ';', nPos )),
+         nY = comphelper::string::toInt32(rUserData.getToken( 0, ';', nPos ));
     Point aCursorPos( nX, nY );
 
     sal_uInt16 nZoomFactor =
-        static_cast< sal_uInt16 >( rUserData.getToken(0, ';', nPos ).toInt32() );
+        static_cast< sal_uInt16 >( comphelper::string::toInt32(rUserData.getToken(0, ';', nPos )) );
 
-    tools::Long nLeft  = rUserData.getToken(0, ';', nPos ).toInt32(),
-         nTop   = rUserData.getToken(0, ';', nPos ).toInt32(),
-         nRight = rUserData.getToken(0, ';', nPos ).toInt32(),
-         nBottom= rUserData.getToken(0, ';', nPos ).toInt32();
+    tools::Long nLeft  = comphelper::string::toInt32(rUserData.getToken(0, ';', nPos )),
+         nTop   = comphelper::string::toInt32(rUserData.getToken(0, ';', nPos )),
+         nRight = comphelper::string::toInt32(rUserData.getToken(0, ';', nPos )),
+         nBottom= comphelper::string::toInt32(rUserData.getToken(0, ';', nPos ));
 
     const tools::Long nAdd = m_pWrtShell->GetViewOptions()->getBrowseMode() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
     if ( nBottom > (m_pWrtShell->GetDocSize().Height()+nAdd) )
@@ -1218,14 +1218,14 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     sal_Int32 nOff = 0;
     SvxZoomType eZoom;
     if( !m_pWrtShell->GetViewOptions()->getBrowseMode() )
-        eZoom = static_cast<SvxZoomType>(o3tl::narrowing<sal_uInt16>(rUserData.getToken(nOff, ';', nPos ).toInt32()));
+        eZoom = static_cast<SvxZoomType>(o3tl::narrowing<sal_uInt16>(comphelper::string::toInt32(rUserData.getToken(nOff, ';', nPos ))));
     else
     {
         eZoom = SvxZoomType::PERCENT;
         ++nOff;
     }
 
-    bool bSelectObj = (0 != rUserData.getToken( nOff, ';', nPos ).toInt32())
+    bool bSelectObj = (0 != comphelper::string::toInt32(rUserData.getToken( nOff, ';', nPos )))
                         && m_pWrtShell->IsObjSelectable( aCursorPos );
 
     // restore editing position
@@ -1265,8 +1265,8 @@ void SwView::ReadUserData( const OUString &rUserData, bool bBrowse )
     if( !m_sNewCursorPos.isEmpty() )
     {
         sal_Int32 nIdx{ 0 };
-        const tools::Long nXTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
-        const tools::Long nYTmp = m_sNewCursorPos.getToken( 0, ';', nIdx ).toInt32();
+        const tools::Long nXTmp = comphelper::string::toInt32(m_sNewCursorPos.getToken( 0, ';', nIdx ));
+        const tools::Long nYTmp = comphelper::string::toInt32(m_sNewCursorPos.getToken( 0, ';', nIdx ));
         Point aCursorPos2( nXTmp, nYTmp );
         bSelectObj = m_pWrtShell->IsObjSelectable( aCursorPos2 );
 

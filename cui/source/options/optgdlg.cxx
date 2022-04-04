@@ -1705,7 +1705,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, weld::Entry&, rEd, void )
     {
         for (sal_Int32 nIndex=0; nIndex >= 0 && bValid; ++nChar)
         {
-            const OUString aPat( aPatterns.getToken( 0, ';', nIndex));
+            const OUString aPat( aPatterns.getTokenX( 0, ';', nIndex));
             if (aPat.isEmpty() && nIndex < 0)
             {
                 // Indicating failure when about to append a pattern is too

@@ -26,6 +26,7 @@
 #include <rtl/math.hxx>
 #include <sal/log.hxx>
 #include <unotools/datetime.hxx>
+#include <comphelper/string.hxx>
 #include <sstream>
 #include <iomanip>
 
@@ -412,12 +413,12 @@ namespace dbtools
         sal_uInt16  nYear   = 0,
                     nMonth  = 0,
                     nDay    = 0;
-        nYear   = static_cast<sal_uInt16>(_sSQLString.getToken(0,sDateSep,nIndex).toInt32());
+        nYear   = static_cast<sal_uInt16>(comphelper::string::toInt32(_sSQLString.getToken(0,sDateSep,nIndex)));
         if(nIndex != -1)
         {
-            nMonth = static_cast<sal_uInt16>(_sSQLString.getToken(0,sDateSep,nIndex).toInt32());
+            nMonth = static_cast<sal_uInt16>(comphelper::string::toInt32(_sSQLString.getToken(0,sDateSep,nIndex)));
             if(nIndex != -1)
-                nDay = static_cast<sal_uInt16>(_sSQLString.getToken(0,sDateSep,nIndex).toInt32());
+                nDay = static_cast<sal_uInt16>(comphelper::string::toInt32(_sSQLString.getToken(0,sDateSep,nIndex)));
         }
 
         return css::util::Date(nDay,nMonth,nYear);

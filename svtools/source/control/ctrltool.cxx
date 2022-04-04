@@ -162,8 +162,8 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
     // check for features before alternate font separator
     if (sal_Int32 nColon = rStr.indexOf(':'); nColon != -1)
         if (sal_Int32 nSemiColon = rStr.indexOf(';'); nSemiColon == -1 || nColon < nSemiColon)
-            return ImplMakeSearchString(rStr.getToken( 0, ':' ));
-    return ImplMakeSearchString(rStr.getToken( 0, ';' ));
+            return ImplMakeSearchString(rStr.getTokenX( 0, ':' ));
+    return ImplMakeSearchString(rStr.getTokenX( 0, ';' ));
 }
 
 ImplFontListNameInfo* FontList::ImplFind(std::u16string_view rSearchName, sal_uInt32* pIndex) const

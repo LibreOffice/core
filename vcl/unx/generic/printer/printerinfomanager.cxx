@@ -225,10 +225,10 @@ void PrinterInfoManager::initialize()
             if (!aValue.isEmpty())
             {
                 sal_Int32 nIdx {0};
-                m_aGlobalDefaults.m_nLeftMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.getToken(0, ',', nIdx).toInt32();
-                m_aGlobalDefaults.m_nTopMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                m_aGlobalDefaults.m_nLeftMarginAdjust = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
+                m_aGlobalDefaults.m_nRightMarginAdjust  = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
+                m_aGlobalDefaults.m_nTopMarginAdjust = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
+                m_aGlobalDefaults.m_nBottomMarginAdjust = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
             }
 
             aValue = aConfig.ReadKey( "ColorDepth", "24" );
@@ -409,10 +409,10 @@ void PrinterInfoManager::initialize()
                 if (!aValue.isEmpty())
                 {
                     sal_Int32 nIdx {0};
-                    aPrinter.m_aInfo.m_nLeftMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                    aPrinter.m_aInfo.m_nRightMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                    aPrinter.m_aInfo.m_nTopMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                    aPrinter.m_aInfo.m_nBottomMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                    aPrinter.m_aInfo.m_nLeftMarginAdjust = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
+                    aPrinter.m_aInfo.m_nRightMarginAdjust = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
+                    aPrinter.m_aInfo.m_nTopMarginAdjust = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
+                    aPrinter.m_aInfo.m_nBottomMarginAdjust = comphelper::string::toInt32(aValue.getToken(0, ',', nIdx));
                 }
 
                 aValue = aConfig.ReadKey( "ColorDepth" );
@@ -553,8 +553,8 @@ bool PrinterInfoManager::checkFeatureToken( const OUString& rPrinterName, const 
     sal_Int32 nIndex = 0;
     while( nIndex != -1 )
     {
-        OUString aOuterToken = rPrinterInfo.m_aFeatures.getToken( 0, ',', nIndex );
-        if( aOuterToken.getToken( 0, '=' ).equalsIgnoreAsciiCaseAscii( pToken ) )
+        OUString aOuterToken = rPrinterInfo.m_aFeatures.getTokenX( 0, ',', nIndex );
+        if( aOuterToken.getTokenX( 0, '=' ).equalsIgnoreAsciiCaseAscii( pToken ) )
             return true;
     }
     return false;

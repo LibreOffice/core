@@ -2731,7 +2731,7 @@ void SwView::GenerateFormLetter(bool bUseCurrentDocument)
             sal_Int32 nIdx {0};
             aData.sDataSource = sDBName.getToken(0, DB_DELIM, nIdx);
             aData.sCommand = sDBName.getToken(0, DB_DELIM, nIdx);
-            aData.nCommandType = sDBName.getToken(0, DB_DELIM, nIdx).toInt32();
+            aData.nCommandType = comphelper::string::toInt32(sDBName.getToken(0, DB_DELIM, nIdx));
         }
         rSh.EnterStdMode(); // force change in text shell; necessary for mixing DB fields
         AttrChangedNotify(nullptr);

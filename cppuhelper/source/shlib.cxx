@@ -38,6 +38,7 @@
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "loadsharedlibcomponentfactory.hxx"
 
@@ -54,9 +55,9 @@ css::uno::Environment cppuhelper::detail::getEnvironment(
         if (log != nullptr && *log != 0) {
             OString imps(log);
             for (sal_Int32 i = 0; i != -1;) {
-                OString imp(imps.getToken(0, ';', i));
+                std::string_view imp(o3tl::getToken(imps, 0, ';', i));
                 //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
-                if (implementation.equalsAsciiL(imp.getStr(), imp.getLength()))
+                if (implementation.equalsAsciiL(imp.data(), imp.size()))
                 {
                     n += ":log";
                     break;

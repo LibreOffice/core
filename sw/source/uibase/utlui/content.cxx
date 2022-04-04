@@ -5054,8 +5054,8 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData )
         sal_Int32 nPos = 0;
         m_aUrl    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
         m_aDescription  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        m_nDefaultDrag= static_cast<RegionMode>( sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32() );
-        m_nDocSh  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
+        m_nDefaultDrag= static_cast<RegionMode>( comphelper::string::toInt32(sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos )) );
+        m_nDocSh  = comphelper::string::toInt32(sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ));
     }
     return bRet;
 }

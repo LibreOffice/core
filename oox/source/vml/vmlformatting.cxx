@@ -581,7 +581,7 @@ void lclGetDmlLineDash( OptValue< sal_Int32 >& oroPresetDash, LineProperties::Da
             ::std::vector< sal_Int32 > aValues;
             sal_Int32 nIndex = 0;
             while( nIndex >= 0 )
-                aValues.push_back( rDashStyle.getToken( 0, ' ', nIndex ).toInt32() );
+                aValues.push_back( comphelper::string::toInt32(rDashStyle.getToken( 0, ' ', nIndex )) );
             size_t nPairs = aValues.size() / 2; // ignore last value if size is odd
             for( size_t nPairIdx = 0; nPairIdx < nPairs; ++nPairIdx )
                 orCustomDash.emplace_back( aValues[ 2 * nPairIdx ], aValues[ 2 * nPairIdx + 1 ] );

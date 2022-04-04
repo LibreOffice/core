@@ -478,9 +478,9 @@ bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, cons
 
             Sequence< double > aHSL
             {
-                aTmp.getToken( 0, ',', nIndex ).toDouble(),
-                aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0,
-                aTmp.getToken( 0, ',', nIndex ).toDouble() / 100.0
+                aTmp.getTokenX( 0, ',', nIndex ).toDouble(),
+                aTmp.getTokenX( 0, ',', nIndex ).toDouble() / 100.0,
+                aTmp.getTokenX( 0, ',', nIndex ).toDouble() / 100.0
             };
             rValue <<= aHSL;
             bRet = true;

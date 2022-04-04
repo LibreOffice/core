@@ -122,8 +122,8 @@ void SvxPersonalizationTabPage::LoadDefaultImages()
 
         aStream.ReadLine(aLine);
         aPersonaSetting = OStringToOUString(aLine, RTL_TEXTENCODING_UTF8);
-        aName = aPersonaSetting.getToken(1, ';', nParseIndex);
-        aPreviewFile = aPersonaSetting.getToken(0, ';', nParseIndex);
+        aName = aPersonaSetting.getTokenX(1, ';', nParseIndex);
+        aPreviewFile = aPersonaSetting.getTokenX(0, ';', nParseIndex);
 
         if (aPreviewFile.isEmpty())
             break;

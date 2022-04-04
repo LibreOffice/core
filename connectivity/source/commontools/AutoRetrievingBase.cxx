@@ -39,7 +39,7 @@ namespace connectivity
             { // we need a table name
                 sal_Int32 nIntoIndex = sStmt.indexOf("INTO ") + 5;
                 while (nIntoIndex<sStmt.getLength() && sStmt[nIntoIndex]==' ') ++nIntoIndex;
-                const OUString sTableName = sStmt.getToken(0, ' ', nIntoIndex);
+                const std::u16string_view sTableName = sStmt.getToken(0, ' ', nIntoIndex);
                 return m_sGeneratedValueStatement.replaceAt(nTableIndex, strlen(sTable), sTableName);
             }
             return m_sGeneratedValueStatement;

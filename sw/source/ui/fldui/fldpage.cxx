@@ -146,7 +146,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                 aReq.AppendItem(SfxStringItem
                         (FN_PARAM_1,rPar1.getToken(0, DB_DELIM, nIdx)));
                 aReq.AppendItem(SfxInt32Item
-                        (FN_PARAM_3,rPar1.getToken(0, DB_DELIM, nIdx).toInt32()));
+                        (FN_PARAM_3,comphelper::string::toInt32(rPar1.getToken(0, DB_DELIM, nIdx))));
                 aReq.AppendItem(SfxStringItem
                         (FN_PARAM_2,rPar1.getToken(0, DB_DELIM, nIdx)));
             }
@@ -188,7 +188,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
 
                 aData.sDataSource = rPar1.getToken(0, DB_DELIM, nPos);
                 aData.sCommand = rPar1.getToken(0, DB_DELIM, nPos);
-                aData.nCommandType = rPar1.getToken(0, DB_DELIM, nPos).toInt32();
+                aData.nCommandType = comphelper::string::toInt32(rPar1.getToken(0, DB_DELIM, nPos));
                 sPar1 = rPar1.copy(nPos);
 
                 static_cast<SwDBNameInfField*>(pTmpField.get())->SetDBData(aData);
@@ -201,7 +201,7 @@ void SwFieldPage::InsertField(SwFieldTypesEnum nTypeId, sal_uInt16 nSubType, con
                 sal_Int32 nIdx{ 0 };
                 aData.sDataSource = rPar1.getToken(0, DB_DELIM, nIdx);
                 aData.sCommand = rPar1.getToken(0, DB_DELIM, nIdx);
-                aData.nCommandType = rPar1.getToken(0, DB_DELIM, nIdx).toInt32();
+                aData.nCommandType = comphelper::string::toInt32(rPar1.getToken(0, DB_DELIM, nIdx));
                 OUString sColumn = rPar1.getToken(0, DB_DELIM, nIdx);
 
                 auto pOldType = static_cast<SwDBFieldType*>(pTmpField->GetTyp());

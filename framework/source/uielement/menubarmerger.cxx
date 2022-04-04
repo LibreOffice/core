@@ -71,7 +71,7 @@ void MenuBarMerger::RetrieveReferencePath(
     sal_Int32 nIndex( 0 );
     do
     {
-        OUString aToken = rReferencePathString.getToken( 0, aDelimiter, nIndex );
+        OUString aToken = rReferencePathString.getTokenX( 0, aDelimiter, nIndex );
         if ( !aToken.isEmpty() )
             rReferencePath.push_back( aToken );
     }

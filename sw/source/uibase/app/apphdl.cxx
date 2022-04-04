@@ -283,7 +283,7 @@ std::shared_ptr<SwMailMergeConfigItem> SwView::EnsureMailMergeConfigItem(const S
                 sal_Int32 nIdx{ 0 };
                 aDBData.sDataSource = sDBName.getToken(0, DB_DELIM, nIdx);
                 aDBData.sCommand = sDBName.getToken(0, DB_DELIM, nIdx);
-                aDBData.nCommandType = sDBName.getToken(0, DB_DELIM, nIdx).toInt32();
+                aDBData.nCommandType = comphelper::string::toInt32(sDBName.getToken(0, DB_DELIM, nIdx));
                 //set the currently used database for the wizard
                 xMMConfig->SetCurrentDBData(aDBData);
             }

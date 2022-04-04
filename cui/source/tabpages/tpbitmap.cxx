@@ -739,7 +739,7 @@ IMPL_LINK_NOARG(SvxBitmapTabPage, ClickImportHdl, weld::Button&, void)
         INetURLObject   aURL( aDlg.GetPath() );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         ScopedVclPtr<AbstractSvxNameDialog> pDlg(pFact->CreateSvxNameDialog(
-            pDialogFrameWeld, aURL.GetLastName().getToken(0, '.'), aDesc));
+            pDialogFrameWeld, aURL.GetLastName().getTokenX(0, '.'), aDesc));
         nError = ErrCode(1);
 
         while( pDlg->Execute() == RET_OK )

@@ -64,7 +64,7 @@ std::vector<OUString> OHierarchyHolder_Impl::GetListPathFromString( const OUStri
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aName = aPath.getToken( 0, '/', nIndex );
+        OUString aName = aPath.getTokenX( 0, '/', nIndex );
         if ( aName.isEmpty() )
             throw lang::IllegalArgumentException();
 

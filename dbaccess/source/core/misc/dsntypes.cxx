@@ -42,7 +42,7 @@ namespace dbaccess
             {
                 sal_Int32 nPos {0};
                 _sHostname   = _sUrl.getToken(0, ':', nPos);
-                _nPortNumber = _sUrl.getToken(0, ':', nPos).toInt32();
+                _nPortNumber = comphelper::string::toInt32(_sUrl.getToken(0, ':', nPos));
             }
         }
     }

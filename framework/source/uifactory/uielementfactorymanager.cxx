@@ -165,19 +165,19 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
 
             aSeqSeq.realloc( aSeqSeq.getLength() + 1 );
             Sequence< PropertyValue > aSeq{ comphelper::makePropertyValue(
-                m_aPropType, aFactory.getToken( 0, '^', nToken )) };
+                m_aPropType, aFactory.getTokenX( 0, '^', nToken )) };
             if ( nToken > 0 )
             {
                 aSeq.realloc( 2 );
                 aSeq.getArray()[1]
                     = comphelper::makePropertyValue(m_aPropName,
-                                                    aFactory.getToken( 0, '^', nToken ));
+                                                    aFactory.getTokenX( 0, '^', nToken ));
                 if ( nToken > 0 )
                 {
                     aSeq.realloc( 3 );
                     aSeq.getArray()[2]
                         = comphelper::makePropertyValue(m_aPropModule,
-                                                        aFactory.getToken( 0, '^', nToken ));
+                                                        aFactory.getTokenX( 0, '^', nToken ));
                 }
             }
 

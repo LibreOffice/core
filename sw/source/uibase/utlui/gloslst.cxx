@@ -252,7 +252,7 @@ void SwGlossaryList::Update()
         {
             OUString sGrpName = pGlossaries->GetGroupName(i);
             const size_t nPath = static_cast<size_t>(
-                sGrpName.getToken(1, GLOS_DELIM).toInt32());
+                comphelper::string::toInt32(sGrpName.getToken(1, GLOS_DELIM)));
             if( nPath < rPathArr.size() )
             {
                 std::unique_ptr<AutoTextGroup> pGroup(new AutoTextGroup);
@@ -312,7 +312,7 @@ void SwGlossaryList::Update()
                 // maybe remove deleted groups
                 AutoTextGroup* pGroup = m_aGroupArr[i].get();
                 const size_t nGroupPath = static_cast<size_t>(
-                    pGroup->sName.getToken( 1, GLOS_DELIM).toInt32());
+                    pGroup->comphelper::string::toInt32(sName.getToken( 1, GLOS_DELIM)));
                 // Only the groups will be checked which are registered
                 // for the current subpath.
                 if( nGroupPath == nPath )

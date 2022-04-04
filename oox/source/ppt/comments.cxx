@@ -33,7 +33,7 @@ void CommentAuthorList::setValues(const CommentAuthorList& list)
 void Comment::setDateTime(const OUString& sDateTime)
 {
     sal_Int32 nIdx{ 0 };
-    aDateTime.Year = sDateTime.getToken(0, '-', nIdx).toInt32();
+    aDateTime.Year = comphelper::string::toInt32(sDateTime.getToken(0, '-', nIdx));
     aDateTime.Month = sDateTime.getToken(0, '-', nIdx).toUInt32();
     aDateTime.Day = sDateTime.getToken(0, 'T', nIdx).toUInt32();
     aDateTime.Hours = sDateTime.getToken(0, ':', nIdx).toUInt32();

@@ -29,6 +29,7 @@
 #include <osl/process.h>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <comphelper/string.hxx>
 #include <configsettings.hxx>
 
 #include <unx/wmadaptor.hxx>
@@ -827,8 +828,8 @@ bool WMAdaptor::getNetWmName()
                                     {
                                         OUString aMetaVersion( reinterpret_cast<char*>(pProperty), nItems, RTL_TEXTENCODING_UTF8 );
                                         sal_Int32 nIdx {0};
-                                        nVersionMajor = aMetaVersion.getToken(0, '.', nIdx).toInt32();
-                                        nVersionMinor = aMetaVersion.getToken(0, '.', nIdx).toInt32();
+                                        nVersionMajor = comphelper::string::toInt32(aMetaVersion.getToken(0, '.', nIdx));
+                                        nVersionMinor = comphelper::string::toInt32(aMetaVersion.getToken(0, '.', nIdx));
                                     }
                                     if( pProperty )
                                     {

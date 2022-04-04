@@ -275,9 +275,9 @@ namespace connectivity
                                 if (!sVersionString.isEmpty())
                                 {
                                     sal_Int32 nIdx {0};
-                                    const sal_Int32 nMajor = sVersionString.getToken(0, '.', nIdx).toInt32();
-                                    const sal_Int32 nMinor = sVersionString.getToken(0, '.', nIdx).toInt32();
-                                    const sal_Int32 nMicro = sVersionString.getToken(0, '.', nIdx).toInt32();
+                                    const sal_Int32 nMajor = comphelper::string::toInt32(sVersionString.getToken(0, '.', nIdx));
+                                    const sal_Int32 nMinor = comphelper::string::toInt32(sVersionString.getToken(0, '.', nIdx));
+                                    const sal_Int32 nMicro = comphelper::string::toInt32(sVersionString.getToken(0, '.', nIdx));
                                     if (     nMajor > 1
                                         || ( nMajor == 1 && nMinor > 8 )
                                         || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )

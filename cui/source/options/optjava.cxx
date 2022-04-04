@@ -944,7 +944,7 @@ void SvxJavaClassPathDlg::SetClassPath( const OUString& _rPath )
         sal_Int32 nIdx = 0;
         do
         {
-            OUString sToken = _rPath.getToken( 0, CLASSPATH_DELIMITER, nIdx );
+            OUString sToken = _rPath.getTokenX( 0, CLASSPATH_DELIMITER, nIdx );
             OUString sURL;
             osl::FileBase::getFileURLFromSystemPath(sToken, sURL); // best effort
             INetURLObject aURL( sURL );

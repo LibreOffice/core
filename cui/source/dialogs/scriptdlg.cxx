@@ -1048,7 +1048,7 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
     sal_Int32 nIndex = 0;
     while (nIndex != -1)
     {
-        OUString aTmp( aStoredEntry.getToken( 0, ';', nIndex ) );
+        std::u16string_view aTmp( aStoredEntry.getToken( 0, ';', nIndex ) );
 
         bool bTmpEntry;
         if (!xEntry)

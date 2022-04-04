@@ -921,8 +921,8 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
     if (!rData.isEmpty())
     {
         sal_Int32 nIndex = 0;
-        pPreview->SetZoom(static_cast<sal_uInt16>(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32()));
-        pPreview->SetPageNo(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
+        pPreview->SetZoom(static_cast<sal_uInt16>(comphelper::string::toInt32(rData.getToken(0, SC_USERDATA_SEP, nIndex))));
+        pPreview->SetPageNo(comphelper::string::toInt32(rData.getToken(0, SC_USERDATA_SEP, nIndex)));
         eZoom = SvxZoomType::PERCENT;
     }
 }

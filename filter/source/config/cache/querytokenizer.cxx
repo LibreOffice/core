@@ -31,12 +31,12 @@ QueryTokenizer::QueryTokenizer(const OUString& sQuery)
     sal_Int32 token = 0;
     while(token != -1)
     {
-        OUString sToken = sQuery.getToken(0, ':', token);
+        OUString sToken = sQuery.getTokenX(0, ':', token);
         if (!sToken.isEmpty())
         {
             sal_Int32 nIdx{ 0 };
-            const OUString sKey{ sToken.getToken(0, '=', nIdx) };
-            const OUString sVal{ sToken.getToken(0, ':', nIdx) };
+            const OUString sKey{ sToken.getTokenX(0, '=', nIdx) };
+            const OUString sVal{ sToken.getTokenX(0, ':', nIdx) };
 
             if (sKey.isEmpty())
                 m_bValid = false;

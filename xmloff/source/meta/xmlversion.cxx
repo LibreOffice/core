@@ -26,6 +26,7 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -236,17 +237,17 @@ bool XMLVersionContext::ParseISODateTimeString(
     else
     {
         sal_Int32 n = 0;
-        nYear = aDateStr.getToken( 0, '-', n ).toInt32();
+        nYear = comphelper::string::toInt32(aDateStr.getToken( 0, '-', n ));
         if ( nYear > 9999 )
             bSuccess = false;
         else if ( nDateTokens >= 2 )
         {
-            nMonth = aDateStr.getToken( 0, '-', n ).toInt32();
+            nMonth = comphelper::string::toInt32(aDateStr.getToken( 0, '-', n ));
             if ( nMonth > 12 )
                 bSuccess = false;
             else if ( nDateTokens >= 3 )
             {
-                nDay = aDateStr.getToken( 0, '-', n ).toInt32();
+                nDay = comphelper::string::toInt32(aDateStr.getToken( 0, '-', n ));
                 if ( nDay > 31 )
                     bSuccess = false;
             }
@@ -268,17 +269,17 @@ bool XMLVersionContext::ParseISODateTimeString(
         else
         {
             sal_Int32 n = 0;
-            nHour = aTimeStr.getToken( 0, ':', n ).toInt32();
+            nHour = comphelper::string::toInt32(aTimeStr.getToken( 0, ':', n ));
             if ( nHour > 23 )
                 bSuccess = false;
             else if ( nTimeTokens >= 2 )
             {
-                nMin = aTimeStr.getToken( 0, ':', n ).toInt32();
+                nMin = comphelper::string::toInt32(aTimeStr.getToken( 0, ':', n ));
                 if ( nMin > 59 )
                     bSuccess = false;
                 else if ( nTimeTokens >= 3 )
                 {
-                    nSec = aTimeStr.getToken( 0, ':', n ).toInt32();
+                    nSec = comphelper::string::toInt32(aTimeStr.getToken( 0, ':', n ));
                     if ( nSec > 59 )
                         bSuccess = false;
                 }

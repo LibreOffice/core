@@ -93,24 +93,28 @@ lcl_parseEnhancedCustomShapeParameterPair(const OString& rValue)
         = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
     assert(rValue.startsWith(aExpectedFVPrefix));
     sal_Int32 nIndex = strlen(aExpectedFVPrefix);
-    aPair.First.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.First.Value
+        <<= static_cast<sal_uInt32>(comphelper::string::toInt32(rValue.getToken(0, '}', nIndex)));
 
     static const char aExpectedFTPrefix[] = ", Type = (short) ";
     assert(nIndex >= 0 && rValue.match(aExpectedFTPrefix, nIndex));
     nIndex += strlen(aExpectedFTPrefix);
-    aPair.First.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.First.Type
+        = static_cast<sal_uInt16>(comphelper::string::toInt32(rValue.getToken(0, '}', nIndex)));
 
     static const char aExpectedSVPrefix[] = ", Second = "
                                             "(com.sun.star.drawing.EnhancedCustomShapeParameter) { "
                                             "Value = (any) { (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedSVPrefix, nIndex));
     nIndex += strlen(aExpectedSVPrefix);
-    aPair.Second.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.Second.Value
+        <<= static_cast<sal_uInt32>(comphelper::string::toInt32(rValue.getToken(0, '}', nIndex)));
 
     static const char aExpectedSTPrefix[] = ", Type = (short) ";
     assert(nIndex >= 0 && rValue.match(aExpectedSTPrefix, nIndex));
     nIndex += strlen(aExpectedSTPrefix);
-    aPair.Second.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.Second.Type
+        = static_cast<sal_uInt16>(comphelper::string::toInt32(rValue.getToken(0, '}', nIndex)));
     return aPair;
 }
 
@@ -121,12 +125,14 @@ drawing::EnhancedCustomShapeSegment lcl_parseEnhancedCustomShapeSegment(const OS
     static const char aExpectedCommandPrefix[] = "Command = (short) ";
     assert(rValue.startsWith(aExpectedCommandPrefix));
     sal_Int32 nIndex = strlen(aExpectedCommandPrefix);
-    aSegment.Command = static_cast<sal_Int16>(rValue.getToken(0, ',', nIndex).toInt32());
+    aSegment.Command
+        = static_cast<sal_Int16>(comphelper::string::toInt32(rValue.getToken(0, ',', nIndex)));
 
     static const char aExpectedCountPrefix[] = " Count = (short) ";
     assert(nIndex >= 0 && rValue.match(aExpectedCountPrefix, nIndex));
     nIndex += strlen(aExpectedCountPrefix);
-    aSegment.Count = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
+    aSegment.Count
+        = static_cast<sal_Int16>(comphelper::string::toInt32(rValue.getToken(0, '}', nIndex)));
     return aSegment;
 }
 
@@ -137,17 +143,17 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     static const char aExpectedXPrefix[] = "X = (long) ";
     assert(rValue.startsWith(aExpectedXPrefix));
     sal_Int32 nIndex = strlen(aExpectedXPrefix);
-    aRectangle.X = rValue.getToken(0, ',', nIndex).toInt32();
+    aRectangle.X = comphelper::string::toInt32(rValue.getToken(0, ',', nIndex));
 
     static const char aExpectedYPrefix[] = " Y = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedYPrefix, nIndex));
     nIndex += strlen(aExpectedYPrefix);
-    aRectangle.Y = rValue.getToken(0, ',', nIndex).toInt32();
+    aRectangle.Y = comphelper::string::toInt32(rValue.getToken(0, ',', nIndex));
 
     static const char aExpectedWidthPrefix[] = " Width = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedWidthPrefix, nIndex));
     nIndex += strlen(aExpectedWidthPrefix);
-    aRectangle.Width = rValue.getToken(0, ',', nIndex).toInt32();
+    aRectangle.Width = comphelper::string::toInt32(rValue.getToken(0, ',', nIndex));
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
@@ -164,7 +170,7 @@ awt::Size lcl_parseSize(const OString& rValue)
     static const char aExpectedWidthPrefix[] = "Width = (long) ";
     assert(rValue.startsWith(aExpectedWidthPrefix));
     sal_Int32 nIndex = strlen(aExpectedWidthPrefix);
-    aSize.Width = rValue.getToken(0, ',', nIndex).toInt32();
+    aSize.Width = comphelper::string::toInt32(rValue.getToken(0, ',', nIndex));
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
@@ -305,12 +311,13 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
                 static const char aExpectedVPrefix[] = "Value = (any) { (long) ";
                 assert(rValue.match(aExpectedVPrefix, nIndex));
                 nIndex += strlen(aExpectedVPrefix);
-                aParameter.Value <<= rValue.getToken(0, '}', nIndex).toInt32();
+                aParameter.Value <<= comphelper::string::toInt32(rValue.getToken(0, '}', nIndex));
 
                 static const char aExpectedTPrefix[] = ", Type = (short) ";
                 assert(nIndex >= 0 && rValue.match(aExpectedTPrefix, nIndex));
                 nIndex += strlen(aExpectedTPrefix);
-                aParameter.Type = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
+                aParameter.Type = static_cast<sal_Int16>(
+                    comphelper::string::toInt32(rValue.getToken(0, '}', nIndex)));
 
                 beans::PropertyValue aPropertyValue;
                 aPropertyValue.Name = rName;
@@ -339,7 +346,7 @@ void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OStrin
         beans::PropertyValue aPropertyValue;
         aPropertyValue.Name = rName;
         // We only expect a Value here
-        aPropertyValue.Value <<= rValue.getToken(0, '}', nIndex).toInt32();
+        aPropertyValue.Value <<= comphelper::string::toInt32(rValue.getToken(0, '}', nIndex));
         rHandle.push_back(aPropertyValue);
     }
     else

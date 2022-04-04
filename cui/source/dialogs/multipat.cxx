@@ -271,7 +271,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
         sal_Int32 nIndex = 0;
         do
         {
-            const OUString sPath = rPath.getToken( 0, cDelim, nIndex );
+            const OUString sPath = rPath.getTokenX( 0, cDelim, nIndex );
             OUString sSystemPath;
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
@@ -299,7 +299,7 @@ void SvxPathSelectDialog::SetPath(const OUString& rPath)
         sal_Int32 nIndex = 0;
         do
         {
-            const OUString sPath = rPath.getToken( 0, SVT_SEARCHPATH_DELIMITER, nIndex );
+            const OUString sPath = rPath.getTokenX( 0, SVT_SEARCHPATH_DELIMITER, nIndex );
             OUString sSystemPath;
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
