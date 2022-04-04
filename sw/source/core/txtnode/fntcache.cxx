@@ -2001,11 +2001,12 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     else
         rInf.SetKanaDiff( 0 );
 
-    aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
-
-
-    if ( rInf.GetKern() && nLn )
-        aTextSize.AdjustWidth((sal_Int32(nLn) - 1) * rInf.GetKern());
+    if (nLn)
+    {
+        aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+        if (rInf.GetKern())
+            aTextSize.AdjustWidth((sal_Int32(nLn) - 1) * rInf.GetKern());
+    }
 
     OSL_ENSURE( !rInf.GetShell() ||
             ( USHRT_MAX != GetGuessedLeading() && USHRT_MAX != GetExternalLeading() ),
