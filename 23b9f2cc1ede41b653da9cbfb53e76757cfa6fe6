@@ -16,6 +16,24 @@
       "message": "Thanks!\n\nWrt hotpath pessimization:\nWe can always use C++20 [[likely]]/[[unlikely]] attributes [1]; given that starting with C++17, \"All attributes unknown to an implementation are ignored without causing an error\" [2], it doesn\u0027t require any #idfed\u0027ing.\n\nHowever, that must *only* be used *iif* we know for sure that one branch is really more likely than the other, and is pessimized without the attribute, so that this optimization is a reasonable one, and not a wishful thinking.\n\n[1] https://en.cppreference.com/w/cpp/language/attributes/likely\n[2] https://en.cppreference.com/w/cpp/language/attributes",
       "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61dc8822_532906c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-04T06:41:37Z",
+      "side": 1,
+      "message": "[this change came to my attention when I wondered whether one should consider its use of `return call_function_returning_void()` as \"too clever\"]\n\n\u003e Wrt hotpath pessimization:\n\u003e We can always use C++20 [[likely]]/[[unlikely]] attributes [1]; given that starting with C++17, \"All attributes unknown to an implementation are ignored without causing an error\" [2], it doesn\u0027t require any #idfed\u0027ing.\n\n* see \u003chttps://blog.aaronballman.com/2020/08/dont-use-the-likely-or-unlikely-attributes/\u003e\n* note that compilers generally warn about attributes they don\u0027t know (for arguably good reason, to catch mistypings)",
+      "parentUuid": "febd4f3a_f7732ac2",
+      "revId": "23b9f2cc1ede41b653da9cbfb53e76757cfa6fe6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
