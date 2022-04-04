@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5bc89b1_afdcd178",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-04T23:37:20Z",
+      "side": 1,
+      "message": "Leave the -2 for now; need to verify WASM tomorrow.",
+      "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
