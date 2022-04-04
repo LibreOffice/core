@@ -22,6 +22,30 @@
       },
       "revId": "ef32c3b4f9b80918d6018e14297fa41245afd381",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9841c22c_2d4fe198",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2072,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-04T06:58:33Z",
+      "side": 1,
+      "message": "I will create a follow-up patch. Thx for the hint.",
+      "parentUuid": "935bbbcf_23c00c61",
+      "range": {
+        "startLine": 2072,
+        "startChar": 57,
+        "endLine": 2072,
+        "endChar": 72
+      },
+      "revId": "ef32c3b4f9b80918d6018e14297fa41245afd381",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
