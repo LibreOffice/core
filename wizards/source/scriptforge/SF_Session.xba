@@ -873,8 +873,7 @@ Public Function UnoObjectType(Optional ByRef UnoObject As Variant) As String
 &apos;&apos;&apos;		com.sun.star. ... as a string
 &apos;&apos;&apos;		a zero-length string if identification was not successful
 
-Dim oService As Object			&apos;	com.sun.star.reflection.CoreReflection
-Dim vClass as Variant			&apos;	com.sun.star.reflection.XIdlClass
+Dim oObjDesc As Object			&apos;	_ObjectDescriptor type
 Dim sObjectType As String		&apos;	Return value
 Const cstThisSub = &quot;Session.UnoObjectType&quot;
 Const cstSubArgs = &quot;UnoObject&quot;
@@ -887,15 +886,8 @@ Check:
 	If IsNull(UnoObject) Then GoTo Finally
 
 Try:
-	On Local Error Resume Next
-	&apos;	Try usual ImplementationName method
-	sObjectType = UnoObject.getImplementationName()
-	If sObjectType = &quot;&quot; Then
-		&apos;	Now try CoreReflection trick
-		Set oService = SF_Utils._GetUNOService(&quot;CoreReflection&quot;)
-		vClass = oService.getType(UnoObject)
-		If vClass.TypeClass &gt;= com.sun.star.uno.TypeClass.STRUCT  Then sObjectType = vClass.Name
-	End If
+	Set oObjDesc = SF_Utils._VarTypeObj(UnoObject)
+	If oObjDesc.iVarType = V_UNOOBJECT Then sObjectType = oObjDesc.sObjectType
 
 Finally:
 	UnoObjectType = sObjectType
