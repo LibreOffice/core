@@ -90,8 +90,9 @@ bool isBuilderEnabledForPopup(std::u16string_view rUIFile)
         || rUIFile == u"svx/ui/floatinglineend.ui"
         || rUIFile == u"svx/ui/fontworkalignmentcontrol.ui"
         || rUIFile == u"svx/ui/fontworkcharacterspacingcontrol.ui"
-        || rUIFile == u"svx/ui/floatingareastyle.ui"
-        || rUIFile == u"modules/scalc/ui/filterlist.ui")
+        || rUIFile == u"svx/ui/floatingareastyle.ui" || rUIFile == u"modules/scalc/ui/filterlist.ui"
+        || rUIFile == u"modules/scalc/ui/filterdropdown.ui"
+        || rUIFile == u"modules/scalc/ui/filtersubdropdown.ui")
         return true;
 
     return false;
