@@ -846,14 +846,10 @@ void ScGridWindow::LaunchAutoFilterMenu(SCCOL nCol, SCROW nRow)
     ScFilterEntries aFilterEntries;
     rDoc.GetFilterEntries(nCol, nRow, nTab, aFilterEntries);
 
-    vcl::ILibreOfficeKitNotifier* pNotifier = nullptr;
-    if (bLOKActive)
-        pNotifier = SfxViewShell::Current();
-
     weld::Window* pPopupParent = GetFrameWeld();
     int nColWidth = ScViewData::ToPixel(rDoc.GetColWidth(nCol, nTab), mrViewData.GetPPTX());
     mpAutoFilterPopup.reset(new ScCheckListMenuControl(pPopupParent, mrViewData,
-                                                       aFilterEntries.mbHasDates, nColWidth, pNotifier));
+                                                       aFilterEntries.mbHasDates, nColWidth));
 
     int nMaxTextWidth = 0;
     if (aFilterEntries.size() <= 10)
