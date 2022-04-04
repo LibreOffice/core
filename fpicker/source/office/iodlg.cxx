@@ -2267,10 +2267,10 @@ void SvtFileDialog::appendDefaultExtension(OUString& rFileName,
     {
         if (nPos+1<aType.getLength() && aType[nPos]=='*') // take care of a leading *
             ++nPos;
-        const OUString aExt(aType.getToken( 0, FILEDIALOG_DEF_EXTSEP, nPos ));
-        if (aExt.isEmpty())
+        const std::u16string_view aExt(o3tl::getToken(aType, 0, FILEDIALOG_DEF_EXTSEP, nPos ));
+        if (aExt.empty())
             continue;
-        if (aTemp.endsWith(aExt))
+        if (o3tl::ends_with(aTemp, aExt))
             return;
     }
     while (nPos>=0);

@@ -20,7 +20,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <awt/vclxprinter.hxx>
 #include <cppuhelper/supportsservice.hxx>
-
+#include <comphelper/string.hxx>
 
 #include <vcl/print.hxx>
 #include <vcl/jobset.hxx>

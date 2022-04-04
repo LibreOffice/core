@@ -678,8 +678,8 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
         if (o3tl::getToken(aFlavor.MimeType, 0, ';', nIndex) == u"text/plain")
         {
             bHaveText = true;
-            OUString aToken(aFlavor.MimeType.getToken(0, ';', nIndex));
-            if (aToken == "charset=utf-16")
+            std::u16string_view aToken(o3tl::getToken(aFlavor.MimeType, 0, ';', nIndex));
+            if (aToken == u"charset=utf-16")
             {
                 bHaveUTF16 = true;
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
@@ -1421,8 +1421,8 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
         if (o3tl::getToken(rFlavor.MimeType, 0, ';', nIndex) == u"text/plain")
         {
             bHaveText = true;
-            OUString aToken(rFlavor.MimeType.getToken(0, ';', nIndex));
-            if (aToken == "charset=utf-8")
+            std::u16string_view aToken(o3tl::getToken(rFlavor.MimeType, 0, ';', nIndex));
+            if (aToken == u"charset=utf-8")
             {
                 bHaveUTF8 = true;
             }

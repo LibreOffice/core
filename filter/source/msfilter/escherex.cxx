@@ -19,6 +19,7 @@
 
 #include "eschesdo.hxx"
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <svx/svdxcgv.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/xflftrit.hxx>
@@ -929,16 +930,16 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                 if ( !bIsMapped && comphelper::string::getTokenCount(aArrowStartName, ' ') == 2 )
                 {
                     sal_Int32 nIdx{ 0 };
-                    OUString aArrowName( aArrowStartName.getToken( 0, ' ', nIdx ) );
-                    if (  aArrowName == "msArrowEnd" )
+                    std::u16string_view aArrowName( o3tl::getToken(aArrowStartName, 0, ' ', nIdx ) );
+                    if (  aArrowName == u"msArrowEnd" )
                         reLineEnd = ESCHER_LineArrowEnd;
-                    else if (  aArrowName == "msArrowOpenEnd" )
+                    else if (  aArrowName == u"msArrowOpenEnd" )
                         reLineEnd = ESCHER_LineArrowOpenEnd;
-                    else if ( aArrowName == "msArrowStealthEnd" )
+                    else if ( aArrowName == u"msArrowStealthEnd" )
                         reLineEnd = ESCHER_LineArrowStealthEnd;
-                    else if ( aArrowName == "msArrowDiamondEnd" )
+                    else if ( aArrowName == u"msArrowDiamondEnd" )
                         reLineEnd = ESCHER_LineArrowDiamondEnd;
-                    else if ( aArrowName == "msArrowOvalEnd" )
+                    else if ( aArrowName == u"msArrowOvalEnd" )
                         reLineEnd = ESCHER_LineArrowOvalEnd;
                     else
                         nIdx = -1;
@@ -946,8 +947,8 @@ bool EscherPropertyContainer::GetLineArrow( const bool bLineStart,
                     // now we have the arrow, and try to determine the arrow size;
                     if ( nIdx>0 )
                     {
-                        OUString aArrowSize( aArrowStartName.getToken( 0, ' ', nIdx ) );
-                        sal_Int32 nArrowSize = aArrowSize.toInt32();
+                        std::u16string_view aArrowSize = o3tl::getToken(aArrowStartName, 0, ' ', nIdx );
+                        sal_Int32 nArrowSize = o3tl::toInt32(aArrowSize);
                         rnArrowWidth = ( nArrowSize - 1 ) / 3;
                         rnArrowLength = nArrowSize - ( rnArrowWidth * 3 ) - 1;
                     }

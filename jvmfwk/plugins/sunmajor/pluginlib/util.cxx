@@ -1043,7 +1043,7 @@ void addJavaInfosFromPath(
     sal_Int32 nIndex = 0;
     do
     {
-        OUString usToken = usAllPath.getToken( 0, SAL_PATHSEPARATOR, nIndex );
+        OUString usToken( usAllPath.getToken( 0, SAL_PATHSEPARATOR, nIndex ) );
         OUString usTokenUrl;
         if(File::getFileURLFromSystemPath(usToken, usTokenUrl) == File::E_None)
         {

@@ -3833,11 +3833,11 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
                 pToInsert->sPrimKey     = sLine.getToken(0, ';', nSttPos );
                 pToInsert->sSecKey      = sLine.getToken(0, ';', nSttPos );
 
-                OUString sStr = sLine.getToken(0, ';', nSttPos );
-                pToInsert->bCase = !sStr.isEmpty() && sStr != "0";
+                std::u16string_view sStr = o3tl::getToken(sLine, 0, ';', nSttPos );
+                pToInsert->bCase = !sStr.empty() && sStr != u"0";
 
-                sStr = sLine.getToken(0, ';', nSttPos );
-                pToInsert->bWord = !sStr.isEmpty() && sStr != "0";
+                sStr = o3tl::getToken(sLine, 0, ';', nSttPos );
+                pToInsert->bWord = !sStr.empty() && sStr != u"0";
 
                 m_Entries.push_back(std::unique_ptr<AutoMarkEntry>(pToInsert));
                 pToInsert = nullptr;

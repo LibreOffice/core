@@ -8,6 +8,7 @@
  */
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include "optaboutconfig.hxx"
 
 #include <comphelper/processfactory.hxx>

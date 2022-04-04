@@ -14,6 +14,7 @@
 #include <o3tl/runtimetooustring.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <o3tl/string_view.hxx>
 #include <memory>
 
 #include "LuceneHelper.hxx"
@@ -76,8 +77,8 @@ bool HelpIndexer::indexDocuments()
 
     try
     {
-        OUString sLang = d_lang.getToken(0, '-');
-        bool bUseCJK = sLang == "ja" || sLang == "ko" || sLang == "zh";
+        std::u16string_view sLang = o3tl::getToken(d_lang, 0, '-');
+        bool bUseCJK = sLang == u"ja" || sLang == u"ko" || sLang == u"zh";
 
         // Construct the analyzer appropriate for the given language
         std::unique_ptr<lucene::analysis::Analyzer> analyzer;

@@ -851,9 +851,9 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
 
     sal_Int32 nIdx{ 0 };
     eRet.sCharStyleName = sToken.getToken( 0, ',', nIdx );
-    OUString sTmp( sToken.getToken( 0, ',', nIdx ));
-    if( !sTmp.isEmpty() )
-        eRet.nPoolId = o3tl::narrowing<sal_uInt16>(sTmp.toInt32());
+    std::u16string_view sTmp( o3tl::getToken(sToken, 0, ',', nIdx ));
+    if( !sTmp.empty() )
+        eRet.nPoolId = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp));
 
     switch( eTokenType )
     {
@@ -861,12 +861,12 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
     case TOKEN_CHAPTER_INFO:
 //i53420
     case TOKEN_ENTRY_NO:
-        sTmp = sToken.getToken( 0, ',', nIdx ); // token 2
-        if( !sTmp.isEmpty() )
-            eRet.nChapterFormat = o3tl::narrowing<sal_uInt16>(sTmp.toInt32());
-        sTmp = sToken.getToken( 0, ',', nIdx ); // token 3
-        if( !sTmp.isEmpty() )
-            eRet.nOutlineLevel = o3tl::narrowing<sal_uInt16>(sTmp.toInt32()); //the maximum outline level to examine
+        sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 2
+        if( !sTmp.empty() )
+            eRet.nChapterFormat = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp));
+        sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 3
+        if( !sTmp.empty() )
+            eRet.nOutlineLevel = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sTmp)); //the maximum outline level to examine
         break;
 
     case TOKEN_TEXT:
@@ -886,21 +886,21 @@ lcl_BuildToken(const OUString & sPattern, sal_Int32 & nCurPatternPos)
         break;
 
     case TOKEN_TAB_STOP:
-        sTmp = sToken.getToken( 0, ',', nIdx ); // token 2
-        if( !sTmp.isEmpty() )
-            eRet.nTabStopPosition = sTmp.toInt32();
+        sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 2
+        if( !sTmp.empty() )
+            eRet.nTabStopPosition = o3tl::toInt32(sTmp);
 
-        sTmp = sToken.getToken( 0, ',', nIdx ); // token 3
-        if( !sTmp.isEmpty() )
-            eRet.eTabAlign = static_cast<SvxTabAdjust>(sTmp.toInt32());
+        sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 3
+        if( !sTmp.empty() )
+            eRet.eTabAlign = static_cast<SvxTabAdjust>(o3tl::toInt32(sTmp));
 
-        sTmp = sToken.getToken( 0, ',', nIdx ); // token 4
-        if( !sTmp.isEmpty() )
+        sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 4
+        if( !sTmp.empty() )
             eRet.cTabFillChar = sTmp[0];
 
-        sTmp = sToken.getToken( 0, ',', nIdx ); // token 5
-        if( !sTmp.isEmpty() )
-            eRet.bWithTab = 0 != sTmp.toInt32();
+        sTmp = o3tl::getToken(sToken, 0, ',', nIdx ); // token 5
+        if( !sTmp.empty() )
+            eRet.bWithTab = 0 != o3tl::toInt32(sTmp);
         break;
 
     case TOKEN_AUTHORITY:

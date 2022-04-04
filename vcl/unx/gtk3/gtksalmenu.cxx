@@ -20,6 +20,7 @@
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 #include <window.h>
 #include <strings.hrc>
 
@@ -74,7 +75,7 @@ namespace
 {
     MenuAndId decode_command(const gchar *action_name)
     {
-        OString sCommand(action_name);
+        std::string_view sCommand(action_name);
 
         sal_Int32 nIndex = 0;
         std::string_view sWindow = o3tl::getToken(sCommand, 0, '-', nIndex);

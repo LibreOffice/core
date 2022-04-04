@@ -21,6 +21,7 @@
 #include <ooo/vba/excel/XlColorIndex.hpp>
 #include <ooo/vba/excel/XlUnderlineStyle.hpp>
 #include <svl/itemset.hxx>
+#include <o3tl/string_view.hxx>
 #include "excelvbahelper.hxx"
 #include "vbafont.hxx"
 #include "vbapalette.hxx"
@@ -134,14 +135,14 @@ ScVbaFont::setFontStyle( const uno::Any& aValue )
 
     for (sal_Int32 nIdx{ 0 }; nIdx>=0; )
     {
-        const OUString aToken{ aStyles.getToken( 0, ' ', nIdx ) };
-        if (aToken.equalsIgnoreAsciiCase("Bold"))
+        const std::u16string_view aToken{ o3tl::getToken(aStyles, 0, ' ', nIdx ) };
+        if (o3tl::equalsIgnoreAsciiCase(aToken, u"Bold"))
         {
             bBold = true;
             if (bItalic)
                 break;
         }
-        else if (aToken.equalsIgnoreAsciiCase("Italic"))
+        else if (o3tl::equalsIgnoreAsciiCase(aToken, u"Italic"))
         {
             bItalic = true;
             if (bBold)

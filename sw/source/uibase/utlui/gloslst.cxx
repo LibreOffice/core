@@ -317,7 +317,7 @@ void SwGlossaryList::Update()
                 // for the current subpath.
                 if( nGroupPath == nPath )
                 {
-                    OUString sCompareGroup = pGroup->sName.getToken(0, GLOS_DELIM);
+                    std::u16string_view sCompareGroup = o3tl::getToken(pGroup->sName, 0, GLOS_DELIM);
                     bool bFound = std::any_of(aFoundGroupNames.begin(), aFoundGroupNames.end(),
                         [&sCompareGroup](const OUString& rGroupName) { return sCompareGroup == rGroupName; });
 

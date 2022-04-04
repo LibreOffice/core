@@ -1341,7 +1341,7 @@ void SfxHelpIndexWindow_Impl::Initialize()
     {
         sal_Int32 nIdx = 0;
         OUString aTitle = rRow.getToken( 0, '\t', nIdx ); // token 0
-        OUString aURL = rRow.getToken( 1, '\t', nIdx ); // token 2
+        std::u16string_view aURL = o3tl::getToken(rRow, 1, '\t', nIdx ); // token 2
         OUString aFactory(INetURLObject(aURL).GetHost());
         m_xActiveLB->append(aFactory, aTitle);
     }
@@ -2262,7 +2262,7 @@ void SfxHelpWindow_Impl::LoadConfig()
         DBG_ASSERT( comphelper::string::getTokenCount(aUserData, ';') == 6, "invalid user data" );
         sal_Int32 nIdx = 0;
         nIndexSize = o3tl::toInt32(o3tl::getToken(aUserData, 0, ';', nIdx ));
-        aUserData.getToken(0, ';', nIdx); // ignore nTextSize
+        o3tl::getToken(aUserData, 0, ';', nIdx); // ignore nTextSize
         sal_Int32 nOldWidth = o3tl::toInt32(o3tl::getToken(aUserData, 0, ';', nIdx ));
         sal_Int32 nOldHeight = o3tl::toInt32(o3tl::getToken(aUserData, 0, ';', nIdx ));
         aWinSize = Size(nOldWidth, nOldHeight);
@@ -2327,18 +2327,18 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, LinkParamNone*, void)
         sHelpURL = aEntry;
     else
     {
-        OUString aId;
+        std::u16string_view aId;
         OUString aAnchor('#');
         if ( comphelper::string::getTokenCount(aEntry, '#') == 2 )
         {
             sal_Int32 nIdx{ 0 };
-            aId = aEntry.getToken( 0, '#', nIdx );
+            aId = o3tl::getToken(aEntry, 0, '#', nIdx );
             aAnchor += o3tl::getToken(aEntry, 0, '#', nIdx );
         }
         else
             aId = aEntry;
 
-        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), OUStringConcatenation("/" + aId), aAnchor);
+        sHelpURL = SfxHelpWindow_Impl::buildHelpURL(xIndexWin->GetFactory(), OUStringConcatenation(OUString::Concat("/") + aId), aAnchor);
     }
 
     loadHelpContent(sHelpURL);

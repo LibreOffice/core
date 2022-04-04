@@ -482,7 +482,7 @@ static void EditRegistryFile(std::u16string_view sUIItemId, const OUString& sSet
     for (int nIdx = 0; nIdx < aOldEntries.getLength(); nIdx++)
     {
         sal_Int32 rPos = 0;
-        OUString sFirstValue = aOldEntries[nIdx].getToken(rPos, ',', rPos);
+        std::u16string_view sFirstValue = o3tl::getToken(aOldEntries[nIdx], rPos, ',', rPos);
         if (sFirstValue == sUIItemId)
         {
             aOldEntries.getArray()[nIdx] = sSetEntry;

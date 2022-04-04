@@ -21,6 +21,7 @@
 #include <DrawDocShell.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svxdlg.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <helpids.h>
 #include <ViewShell.hxx>
@@ -315,32 +316,32 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
         rInOutPageName.getLength() > aStrPage.getLength())
     {
         sal_Int32 nIdx{ aStrPage.getLength() };
-        OUString sRemainder = rInOutPageName.getToken(0, ' ', nIdx);
-        if (sRemainder[0] >= '0' && sRemainder[0] <= '9')
+        std::u16string_view sRemainder = o3tl::getToken(rInOutPageName, 0, ' ', nIdx);
+        if (!sRemainder.empty() && sRemainder[0] >= '0' && sRemainder[0] <= '9')
         {
             // check for arabic numbering
 
-            sal_Int32 nIndex = 1;
+            size_t nIndex = 1;
             // skip all following numbers
-            while (nIndex < sRemainder.getLength() &&
+            while (nIndex < sRemainder.size() &&
                    sRemainder[nIndex] >= '0' && sRemainder[nIndex] <= '9')
             {
                 nIndex++;
             }
 
             // EOL? Reserved name!
-            if (nIndex >= sRemainder.getLength())
+            if (nIndex >= sRemainder.size())
             {
                 bIsStandardName = true;
             }
         }
-        else if (sRemainder.getLength() == 1 &&
+        else if (sRemainder.size() == 1 &&
                  rtl::isAsciiLowerCase(sRemainder[0]))
         {
             // lower case, single character: reserved
             bIsStandardName = true;
         }
-        else if (sRemainder.getLength() == 1 &&
+        else if (sRemainder.size() == 1 &&
                  rtl::isAsciiUpperCase(sRemainder[0]))
         {
             // upper case, single character: reserved
@@ -355,15 +356,15 @@ bool DrawDocShell::IsNewPageNameValid( OUString & rInOutPageName, bool bResetStr
             if (sReserved.indexOf(sRemainder[0]) == -1)
                 sReserved = sReserved.toAsciiUpperCase();
 
-            sal_Int32 nIndex = 0;
-            while (nIndex < sRemainder.getLength() &&
+            size_t nIndex = 0;
+            while (nIndex < sRemainder.size() &&
                    sReserved.indexOf(sRemainder[nIndex]) != -1)
             {
                 nIndex++;
             }
 
             // EOL? Reserved name!
-            if (nIndex >= sRemainder.getLength())
+            if (nIndex >= sRemainder.size())
             {
                 bIsStandardName = true;
             }

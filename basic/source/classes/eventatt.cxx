@@ -184,13 +184,13 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         if( comphelper::string::getTokenCount(aMacro, '.') == 3 )
         {
             sal_Int32 nLast = 0;
-            OUString aFullLibName = aMacro.getToken( 0, '.', nLast );
+            std::u16string_view aFullLibName = o3tl::getToken(aMacro, 0, '.', nLast );
 
-            sal_Int32 nIndex = aFullLibName.indexOf( ':' );
-            if (nIndex >= 0)
+            size_t nIndex = aFullLibName.find( ':' );
+            if (nIndex != std::u16string_view::npos)
             {
-                aLocation = aFullLibName.copy( 0, nIndex );
-                aLibName = aFullLibName.copy( nIndex + 1 );
+                aLocation = aFullLibName.substr( 0, nIndex );
+                aLibName = aFullLibName.substr( nIndex + 1 );
             }
 
             aMacro = aMacro.copy( nLast );

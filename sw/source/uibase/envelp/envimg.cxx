@@ -18,6 +18,7 @@
  */
 
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <editeng/paperinf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -57,34 +58,34 @@ OUString MakeSender()
     sal_Int32 nSttPos = 0;
     bool bLastLength = true;
     do {
-        OUString sToken = sSenderToken.getToken( 0, ';', nSttPos );
-        if (sToken == "COMPANY")
+        std::u16string_view sToken = o3tl::getToken(sSenderToken, 0, ';', nSttPos );
+        if (sToken == u"COMPANY")
         {
             sal_Int32 nOldLen = sRet.getLength();
             sRet.append(rUserOpt.GetCompany());
             bLastLength = sRet.getLength() != nOldLen;
         }
-        else if (sToken == "CR")
+        else if (sToken == u"CR")
         {
             if(bLastLength)
                 sRet.append(NEXTLINE);
             bLastLength = true;
         }
-        else if (sToken == "FIRSTNAME")
+        else if (sToken == u"FIRSTNAME")
             sRet.append(rUserOpt.GetFirstName());
-        else if (sToken == "LASTNAME")
+        else if (sToken == u"LASTNAME")
             sRet.append(rUserOpt.GetLastName());
-        else if (sToken == "ADDRESS")
+        else if (sToken == u"ADDRESS")
             sRet.append(rUserOpt.GetStreet());
-        else if (sToken == "COUNTRY")
+        else if (sToken == u"COUNTRY")
             sRet.append(rUserOpt.GetCountry());
-        else if (sToken == "POSTALCODE")
+        else if (sToken == u"POSTALCODE")
             sRet.append(rUserOpt.GetZip());
-        else if (sToken == "CITY")
+        else if (sToken == u"CITY")
             sRet.append(rUserOpt.GetCity());
-        else if (sToken == "STATEPROV")
+        else if (sToken == u"STATEPROV")
             sRet.append(rUserOpt.GetState());
-        else if (!sToken.isEmpty()) //spaces
+        else if (!sToken.empty()) //spaces
             sRet.append(sToken);
     } while (nSttPos>=0);
     return sRet.makeStringAndClear();
