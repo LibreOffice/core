@@ -69,6 +69,7 @@
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <wrtsh.hxx>
+#include <rootfrm.hxx>
 #include <fldbas.hxx>
 #include <viewopt.hxx>
 #include <globdoc.hxx>
@@ -1296,6 +1297,39 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 break;
             }
 
+            // tables with tracked deletion need Show Changes
+            bool bHideChanges = pWrtShell && pWrtShell->GetLayout() &&
+                                pWrtShell->GetLayout()->IsHideRedlines();
+            bool bChangedHideChanges = false;
+            if ( bHideChanges )
+            {
+                SwTableNode* pOldTableNd = nullptr;
+                const SwRedlineTable& aRedlineTable = rRedlineAccess.GetRedlineTable();
+                for (SwRedlineTable::size_type n = 0; n < aRedlineTable.size(); ++n)
+                {
+                    const SwRangeRedline* pRedline = aRedlineTable[n];
+                    if ( pRedline->GetType() == RedlineType::Delete )
+                    {
+                        SwTableNode* pTableNd =
+                            pRedline->GetPoint()->nNode.GetNode().FindTableNode();
+                        if ( pTableNd && pTableNd !=
+                                pOldTableNd && pTableNd->GetTable().HasDeletedRow() )
+                        {
+                            SfxBoolItem aShow(FN_REDLINE_SHOW, true);
+                            SfxViewShell* pViewShell = GetView()
+                                    ? GetView()
+                                    : SfxViewShell::Current();
+                            pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+                                    FN_REDLINE_SHOW, SfxCallMode::SYNCHRON|SfxCallMode::RECORD,
+                                    { &aShow });
+                            bChangedHideChanges = true;
+                            break;
+                        }
+                        pOldTableNd = pTableNd;
+                    }
+                }
+            }
+
             if (pWrtShell)
             {
                 pWrtShell->StartAllAction();
@@ -1306,6 +1340,14 @@ void SwDocShell::Execute(SfxRequest& rReq)
             if (pWrtShell)
             {
                 pWrtShell->EndAllAction();
+            }
+
+            if ( bChangedHideChanges )
+            {
+                SfxBoolItem aShow(FN_REDLINE_SHOW, false);
+                SfxViewShell* pViewShell = GetView()? GetView(): SfxViewShell::Current();
+                pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+                        FN_REDLINE_SHOW, SfxCallMode::SYNCHRON|SfxCallMode::RECORD, { &aShow });
             }
 
             Broadcast(SfxHint(SfxHintId::RedlineChanged));
