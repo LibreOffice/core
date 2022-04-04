@@ -143,6 +143,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Bookmark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name"));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
+{
+    // Refresh fields and ensure cross-reference to numbered para is okay
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+
+    uno::Reference<text::XTextField> xTextField1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), xTextField1->getPresentation(false));
+
+    uno::Reference<text::XTextField> xTextField2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("[Type text]"), xTextField2->getPresentation(false));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
 {
     uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
