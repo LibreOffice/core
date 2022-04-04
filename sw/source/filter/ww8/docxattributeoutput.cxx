@@ -5360,65 +5360,10 @@ void DocxAttributeOutput::WriteSrcRect(
          XML_b, OString::number(bottom) );
 }
 
-void DocxAttributeOutput::PushRelIdCache()
-{
-    m_aRelIdCache.emplace();
-    m_aSdrRelIdCache.emplace();
-}
-
-OUString DocxAttributeOutput::FindRelId(BitmapChecksum nChecksum)
-{
-    OUString aRet;
-
-    if (!m_aSdrRelIdCache.empty() && m_aSdrRelIdCache.top().find(nChecksum) != m_aSdrRelIdCache.top().end())
-        aRet = m_aSdrRelIdCache.top()[nChecksum].first;
-
-    return aRet;
-}
-
-OUString DocxAttributeOutput::FindFileName(BitmapChecksum nChecksum)
-{
-    OUString aRet;
-
-    if (!m_aSdrRelIdCache.empty() && m_aSdrRelIdCache.top().find(nChecksum) != m_aSdrRelIdCache.top().end())
-        aRet = m_aSdrRelIdCache.top()[nChecksum].second;
-
-    return aRet;
-}
-
-void DocxAttributeOutput::CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId, const OUString& rFileName)
-{
-    if (!m_aSdrRelIdCache.empty())
-        m_aSdrRelIdCache.top()[nChecksum] = std::pair(rRelId, rFileName);
-}
-
 uno::Reference<css::text::XTextFrame> DocxAttributeOutput::GetUnoTextFrame(
     css::uno::Reference<css::drawing::XShape> xShape)
 {
     return SwTextBoxHelper::getUnoTextFrame(xShape);
-}
-
-std::pair<OString, OUString> DocxAttributeOutput::getExistingGraphicRelId(BitmapChecksum nChecksum)
-{
-    std::pair<OString, OUString> aResult;
-
-    if (m_aRelIdCache.empty())
-        return aResult;
-
-    auto pIterator = m_aRelIdCache.top().find(nChecksum);
-
-    if (pIterator != m_aRelIdCache.top().end())
-    {
-        aResult = pIterator->second;
-    }
-
-    return aResult;
-}
-
-void DocxAttributeOutput::cacheGraphicRelId(BitmapChecksum nChecksum, OString const & rRelId, OUString const & rFileName)
-{
-    if (!m_aRelIdCache.empty())
-        m_aRelIdCache.top().emplace(nChecksum, std::pair(rRelId, rFileName));
 }
 
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size& rSize, const SwFlyFrameFormat* pOLEFrameFormat, SwOLENode* pOLENode, const SdrObject* pSdrObj )
@@ -5466,31 +5411,9 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode* pGrfNode, const Size
         else
             aGraphic = *pOLENode->GetGraphic();
 
-        BitmapChecksum aChecksum = aGraphic.GetChecksum();
-        OUString aFileName;
-        std::tie(aRelId, aFileName) = getExistingGraphicRelId(aChecksum);
-        OUString aImageId;
-
-        if (aRelId.isEmpty())
-        {
-            // Not in cache, then need to write it.
-            m_rDrawingML.SetFS( m_pSerializer ); // to be sure that we write to the right stream
-
-            aImageId = m_rDrawingML.WriteImage(aGraphic, false, &aFileName);
-
-            aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
-            cacheGraphicRelId(aChecksum, aRelId, aFileName);
-        }
-        else
-        {
-            // Include the same relation again. This makes it possible to
-            // reuse an image across different headers.
-            aImageId = m_rDrawingML.GetFB()->addRelation( m_pSerializer->getOutputStream(),
-                oox::getRelationship(Relationship::IMAGE),
-                aFileName );
-
-            aRelId = OUStringToOString( aImageId, RTL_TEXTENCODING_UTF8 );
-        }
+        m_rDrawingML.SetFS(m_pSerializer); // to be sure that we write to the right stream
+        OUString aImageId = m_rDrawingML.WriteImage(aGraphic, false);
+        aRelId = OUStringToOString(aImageId, RTL_TEXTENCODING_UTF8);
 
         nImageType = XML_embed;
     }
@@ -10396,10 +10319,6 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, const FSHelperPtr
       m_nParaAfterSpacing(0)
     , m_nStateOfFlyFrame( FLY_NOT_PROCESSED )
 {
-    // Push initial items to the RelId cache. In case the document contains no
-    // special streams (headers, footers, etc.) then these items are used
-    // during the full export.
-    PushRelIdCache();
 }
 
 DocxAttributeOutput::~DocxAttributeOutput()

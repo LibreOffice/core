@@ -399,7 +399,6 @@ public:
     void WriteBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds, const SwRedlineData* pRedlineData = nullptr );
     void WriteFinalBookmarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
     void WriteAnnotationMarks_Impl( std::vector< OUString >& rStarts, std::vector< OUString >& rEnds );
-    void PushRelIdCache();
     /// End possibly opened paragraph sdt block.
     void EndParaSdtBlock();
 
@@ -1019,15 +1018,6 @@ private:
     // store hardcoded value which was set during import.
     sal_Int32 m_nParaBeforeSpacing,m_nParaAfterSpacing;
 
-    std::pair<OString, OUString> getExistingGraphicRelId(BitmapChecksum aChecksum);
-    void cacheGraphicRelId(BitmapChecksum nChecksum, OString const & rRelId, OUString const & rFileName);
-
-    /// RelId <-> Graphic* cache, so that in case of alternate content, the same graphic only gets written once.
-    std::stack< std::map<BitmapChecksum, std::pair<OString, OUString>> > m_aRelIdCache;
-
-    /// RelId <-> BitmapChecksum cache, similar to m_aRelIdCache, but used for non-Writer graphics, handled in oox.
-    std::stack< std::map<BitmapChecksum, std::pair<OUString, OUString>> > m_aSdrRelIdCache;
-
     SdtBlockHelper m_aParagraphSdt;
     SdtBlockHelper m_aRunSdt;
 
@@ -1078,9 +1068,6 @@ public:
     virtual void WriteVMLTextBox(css::uno::Reference<css::drawing::XShape> xShape) override;
     /// DMLTextExport
     virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) override;
-    virtual OUString FindRelId(BitmapChecksum nChecksum) override;
-    virtual OUString FindFileName(BitmapChecksum nChecksum) override;
-    virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId, const OUString& rFileName) override;
     virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
         css::uno::Reference<css::drawing::XShape> xShape) override;
     virtual oox::drawingml::DrawingML& GetDrawingML() override;
