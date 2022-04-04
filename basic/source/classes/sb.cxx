@@ -2065,26 +2065,26 @@ sal_Int32 BasicCollection::implGetIndex( SbxVariable const * pIndexVar )
     return nIndex;
 }
 
-sal_Int32 BasicCollection::implGetIndexForName(std::u16string_view rName)
+sal_Int32 BasicCollection::implGetIndexForName(const OUString& rName)
 {
-    sal_Int32 nIndex = -1;
     sal_Int32 nCount = xItemArray->Count();
     sal_Int32 nNameHash = MakeHashCode( rName );
 
     // tdf#144245 - case-insensitive operation for non-ASCII characters
-    utl::TransliterationWrapper& rTransliteration = SbGlobal::GetTransliteration();
+    OUString aNameCI; // Only initialize when matching hash found
 
     for( sal_Int32 i = 0 ; i < nCount ; i++ )
     {
         SbxVariable* pVar = xItemArray->Get(i);
-        if (pVar->GetHashCode() == nNameHash
-            && rTransliteration.isEqual(pVar->GetName(), OUString(rName)))
+        if (pVar->GetHashCode() == nNameHash)
         {
-            nIndex = i;
-            break;
+            if (aNameCI.isEmpty() && !rName.isEmpty())
+                aNameCI = SbGlobal::GetTransliteration().transliterate(rName, 0, rName.getLength());
+            if (aNameCI == pVar->GetName(SbxNameType::CaseInsensitive))
+                return i;
         }
     }
-    return nIndex;
+    return -1;
 }
 
 void BasicCollection::CollAdd( SbxArray* pPar_ )
