@@ -38,6 +38,7 @@
 #include <unotools/configmgr.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include "pdfexport.hxx"
 #include <strings.hrc>
@@ -479,10 +480,15 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 }
             }
             // getting the string for the producer
-            aContext.DocumentInfo.Producer =
-                utl::ConfigManager::getProductName() +
-                " " +
-                utl::ConfigManager::getProductVersion();
+            std::optional<OUString> aProducerOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
+            if( aProducerOverride.has_value() && !aProducerOverride.value().isEmpty())
+                aContext.DocumentInfo.Producer = aProducerOverride.value();
+            else
+                aContext.DocumentInfo.Producer =
+                    utl::ConfigManager::getProductName() +
+                    " " +
+                    utl::ConfigManager::getProductVersion();
+
             aContext.DocumentInfo.Creator = aCreator;
 
             OUString aSignCertificateSubjectName;
