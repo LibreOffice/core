@@ -95,6 +95,54 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d4cff8a_1cfb022c",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:59:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb5c87de_be3bc5ee",
+      "range": {
+        "startLine": 15,
+        "startChar": 33,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2b365b5_40b41afe",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:59:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05407d4d_8401f36a",
+      "range": {
+        "startLine": 15,
+        "startChar": 55,
+        "endLine": 15,
+        "endChar": 70
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25aa0b3a_4a3b06c4",
@@ -118,6 +166,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d909409_ec1f772f",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:59:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25aa0b3a_4a3b06c4",
+      "range": {
+        "startLine": 21,
+        "startChar": 8,
+        "endLine": 21,
+        "endChar": 59
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b35920fb_8c81ae94",
@@ -131,6 +203,30 @@
       "writtenOn": "2022-04-04T11:55:22Z",
       "side": 1,
       "message": "And when false?",
+      "range": {
+        "startLine": 24,
+        "startChar": 12,
+        "endLine": 24,
+        "endChar": 56
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43ef2e5e_e9f4871e",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:59:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b35920fb_8c81ae94",
       "range": {
         "startLine": 24,
         "startChar": 12,
@@ -226,6 +322,30 @@
       "side": 1,
       "message": "Not sure which one is right, I\u0027ve seen both in the public API.\nI would prefer OLE, but if Stephan is OK with Ole, no problem.",
       "parentUuid": "db0d1402_999d1e5f",
+      "range": {
+        "startLine": 26,
+        "startChar": 15,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9df35355_26295337",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:59:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0289d817_3e4373ef",
       "range": {
         "startLine": 26,
         "startChar": 15,
