@@ -5153,7 +5153,7 @@ static bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         if ( (nTextLen > 0) || !(lParam & GCS_RESULTSTR) )
         {
             // End the mode, if the last character is deleted
-            if ( !nTextLen && !pFrame->mbCandidateMode )
+            if ( !nTextLen )
             {
                 pFrame->CallCallback( SalEvent::ExtTextInput, &aEvt );
                 pFrame->CallCallback( SalEvent::EndExtTextInput, nullptr );
@@ -5238,7 +5238,10 @@ static bool ImplHandleIMEEndComposition( HWND hWnd )
     if ( pFrame && pFrame->mbHandleIME )
     {
         if ( pFrame->mbAtCursorIME )
+        {
+            pFrame->mbCandidateMode = false;
             bDef = false;
+        }
     }
 
     ImplSalYieldMutexRelease();
