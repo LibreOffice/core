@@ -75,7 +75,8 @@ enum SwTextPortionType
     PORTION_FIELD_START_END,
     PORTION_ANNOTATION,
     PORTION_ANNOTATION_END,
-    PORTION_LINEBREAK
+    PORTION_LINEBREAK,
+    PORTION_CONTENT_CONTROL
 };
 
 class SwXTextPortion : public cppu::WeakImplHelper
@@ -109,6 +110,7 @@ private:
     css::uno::Reference< css::text::XTextContent >
         m_xMeta;
     css::uno::Reference<css::text::XTextContent> m_xLineBreak;
+    css::uno::Reference<css::text::XTextContent> m_xContentControl;
     std::unique_ptr< css::uno::Any > m_pRubyText;
     std::unique_ptr< css::uno::Any > m_pRubyStyle;
     std::unique_ptr< css::uno::Any > m_pRubyAdjust;
@@ -227,6 +229,11 @@ public:
     void SetLineBreak(css::uno::Reference<css::text::XTextContent> const& xLineBreak)
     {
         m_xLineBreak = xLineBreak;
+    }
+
+    void SetContentControl(const css::uno::Reference<css::text::XTextContent>& xContentControl)
+    {
+        m_xContentControl = xContentControl;
     }
 
     void SetCollapsed(bool bSet)        { m_bIsCollapsed = bSet;}

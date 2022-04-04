@@ -253,6 +253,9 @@ void SwXTextPortion::GetPropertyValue(
             case PORTION_LINEBREAK:
                 pRet = "LineBreak";
                 break;
+            case PORTION_CONTENT_CONTROL:
+                pRet = UNO_NAME_CONTENT_CONTROL;
+                break;
             default:
                 pRet = nullptr;
             }
@@ -285,6 +288,9 @@ void SwXTextPortion::GetPropertyValue(
         break;
         case FN_UNO_LINEBREAK:
             rVal <<= m_xLineBreak;
+            break;
+        case FN_UNO_CONTENT_CONTROL:
+            rVal <<= m_xContentControl;
             break;
         case FN_UNO_IS_COLLAPSED:
         {

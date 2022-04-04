@@ -43,6 +43,7 @@
 #include <unofield.hxx>
 #include <unometa.hxx>
 #include <unolinebreak.hxx>
+#include <unocontentcontrol.hxx>
 #include <fmtfld.hxx>
 #include <fldbas.hxx>
 #include <fmtmeta.hxx>
@@ -548,6 +549,21 @@ lcl_CreateMetaPortion(
     return pPortion;
 }
 
+/// Creates a text portion that has a non-empty ContentControl property.
+static uno::Reference<text::XTextRange>
+lcl_CreateContentControlPortion(const uno::Reference<text::XText>& xParent,
+                                const SwUnoCursor* pUnoCursor, SwTextAttr& rAttr,
+                                std::unique_ptr<const TextRangeList_t>&& pPortions)
+{
+    uno::Reference<text::XTextContent> xContentControl = SwXContentControl::CreateXContentControl(
+        *static_cast<SwFormatContentControl&>(rAttr.GetAttr()).GetContentControl(), xParent,
+        std::move(pPortions));
+    rtl::Reference<SwXTextPortion> pPortion;
+    pPortion = new SwXTextPortion(pUnoCursor, xParent, PORTION_CONTENT_CONTROL);
+    pPortion->SetContentControl(xContentControl);
+    return pPortion;
+}
+
 /**
  * Exports all bookmarks from rBkmArr into rPortions that have the same start
  * or end position as nIndex.
@@ -704,7 +720,7 @@ lcl_ExportHints(
     bool & o_rbCursorMoved,
     sal_Int32 & o_rNextAttrPosition)
 {
-    // if the attribute has a dummy character, then xRef is set (except META)
+    // if the attribute has a dummy character, then xRef is set (except META and CONTENT_CONTROL)
     // otherwise, the portion for the attribute is inserted into rPortions!
     Reference<XTextRange> xRef;
     SwDoc& rDoc = pUnoCursor->GetDoc();
@@ -780,6 +796,39 @@ lcl_ExportHints(
                             const uno::Reference<text::XTextRange> xPortion(
                                 lcl_CreateMetaPortion(xParent, pUnoCursor,
                                                       *pAttr, std::move(pCurrentPortions)));
+                            rPortionStack.top().first->push_back(xPortion);
+                        }
+                    }
+                    break;
+                    case RES_TXTATR_CONTENTCONTROL:
+                    {
+                        if (pAttr->GetStart() == *pAttr->GetEnd())
+                        {
+                            SAL_WARN("sw.core", "lcl_ExportHints: empty content control");
+                        }
+                        if ((i_nStartPos > 0) && (pAttr->GetStart() < i_nStartPos))
+                        {
+                            // If the start pos is the start of the content of the content control,
+                            // skip it: it'll be handled in SwXContentControl::createEnumeration().
+                            if (pAttr->GetStart() + 1 == i_nStartPos)
+                            {
+                                nEndIndex = pHints->Count() - 1;
+                            }
+                            break;
+                        }
+                        PortionList_t Top = rPortionStack.top();
+                        if (Top.second != pAttr)
+                        {
+                            SAL_WARN("sw.core", "lcl_ExportHints: content control is not at the "
+                                                "top of the portion stack");
+                        }
+                        else
+                        {
+                            std::unique_ptr<const TextRangeList_t> pCurrentPortions(Top.first);
+                            rPortionStack.pop();
+                            uno::Reference<text::XTextRange> xPortion(
+                                lcl_CreateContentControlPortion(xParent, pUnoCursor, *pAttr,
+                                                                std::move(pCurrentPortions)));
                             rPortionStack.top().first->push_back(xPortion);
                         }
                     }
@@ -937,6 +986,7 @@ lcl_ExportHints(
                 break;
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
+                case RES_TXTATR_CONTENTCONTROL:
                     if (pAttr->GetStart() != *pAttr->GetEnd())
                     {
                         if (!bRightMoveForbidden)
