@@ -642,6 +642,7 @@ class SwUINumRuleItem;
 #define FN_UNO_TRANSFORMED_GRAPHIC          (FN_EXTRA2 + 129)
 #define FN_UNO_GRAPHIC_PREVIEW              (FN_EXTRA2 + 130)
 #define FN_UNO_LINEBREAK (FN_EXTRA2 + 131)
+#define FN_UNO_CONTENT_CONTROL (FN_EXTRA2 + 132)
 
 // Area: Help
 // Region: Traveling & Selection
