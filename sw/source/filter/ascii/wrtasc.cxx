@@ -29,6 +29,7 @@
 #include <frameformats.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <comphelper/string.hxx>
 
 #include <strings.hrc>
 
@@ -44,7 +45,7 @@ SwASCWriter::SwASCWriter( std::u16string_view rFltNm )
                 if( 5 < rFltNm.size() )
                 {
                     std::u16string_view aFilterNum = rFltNm.substr( 5 );
-                    switch( rtl_ustr_toInt64_WithLength(aFilterNum.data(), 10, aFilterNum.size()) )
+                    switch( comphelper::string::toInt32(aFilterNum) )
                     {
                     case 437: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_437 );  break;
                     case 850: aNewOpts.SetCharSet( RTL_TEXTENCODING_IBM_850 );  break;
