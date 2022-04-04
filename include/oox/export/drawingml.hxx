@@ -130,12 +130,6 @@ public:
     virtual void WriteOutliner(const OutlinerParaObject& rParaObj) = 0;
     /// Write the contents of the textbox that is associated to this shape.
     virtual void WriteTextBox(css::uno::Reference<css::drawing::XShape> xShape) = 0;
-    /// Look up the RelId of a graphic based on its checksum.
-    virtual OUString FindRelId(BitmapChecksum nChecksum) = 0;
-    /// Look up the filename of a graphic based on its checksum.
-    virtual OUString FindFileName(BitmapChecksum nChecksum) = 0;
-    /// Store the RelId and filename of a graphic based on its checksum.
-    virtual void CacheRelId(BitmapChecksum nChecksum, const OUString& rRelId, const OUString& rFileName) = 0;
     ///  Get textbox which belongs to the shape.
     virtual css::uno::Reference<css::text::XTextFrame> GetUnoTextFrame(
         css::uno::Reference<css::drawing::XShape> xShape) = 0;
@@ -224,7 +218,7 @@ public:
 
     void SetBackgroundDark(bool bIsDark) { mbIsBackgroundDark = bIsDark; }
     /// If bRelPathToMedia is true add "../" to image folder path while adding the image relationship
-    OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false, OUString* pFileName = nullptr );
+    OUString WriteImage( const Graphic &rGraphic , bool bRelPathToMedia = false );
 
     void WriteColor( ::Color nColor, sal_Int32 nAlpha = MAX_PERCENT );
     void WriteColor( const OUString& sColorSchemeName, const css::uno::Sequence< css::beans::PropertyValue >& aTransformations, sal_Int32 nAlpha = MAX_PERCENT );

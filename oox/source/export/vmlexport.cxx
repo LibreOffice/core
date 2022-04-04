@@ -718,15 +718,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         const uno::Reference<graphic::XGraphic>& xGraphic
                             = pSdrGrafObj->getSignatureLineUnsignedGraphic();
                         Graphic aGraphic(xGraphic);
-
-                        BitmapChecksum nChecksum = aGraphic.GetChecksum();
-                        OUString aImageId = m_pTextExport->FindRelId(nChecksum);
-                        if (aImageId.isEmpty())
-                        {
-                            OUString aFileName;
-                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false, &aFileName);
-                            m_pTextExport->CacheRelId(nChecksum, aImageId, aFileName);
-                        }
+                        OUString aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false);
                         pAttrList->add(FSNS(XML_r, XML_id), aImageId);
                         imageData = true;
                     }
@@ -740,15 +732,7 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const tools::Rectangle&
                         aStream.Seek(0);
                         Graphic aGraphic;
                         GraphicConverter::Import(aStream, aGraphic);
-
-                        BitmapChecksum nChecksum = aGraphic.GetChecksum();
-                        OUString aImageId = m_pTextExport->FindRelId(nChecksum);
-                        if (aImageId.isEmpty())
-                        {
-                            OUString aFileName;
-                            aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false, &aFileName);
-                            m_pTextExport->CacheRelId(nChecksum, aImageId, aFileName);
-                        }
+                        OUString aImageId = m_pTextExport->GetDrawingML().WriteImage(aGraphic, false);
                         pAttrList->add(FSNS(XML_r, XML_id), aImageId);
                         imageData = true;
                     }
