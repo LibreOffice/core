@@ -119,11 +119,7 @@ void XMLTextShapeImportHelper::addShape(
     // anchor type
     xPropSet->setPropertyValue( gsAnchorType, Any(eAnchorType) );
 
-    Reference < XTextContent > xTxtCntnt( rShape, UNO_QUERY );
-    xTxtImport->InsertTextContent( xTxtCntnt );
-
-    // page number (must be set after the frame is inserted, because it
-    // will be overwritten then inserting the frame.
+    // page number must be set before the frame is inserted
     switch( eAnchorType )
     {
     case TextContentAnchorType_AT_PAGE:
@@ -133,6 +129,15 @@ void XMLTextShapeImportHelper::addShape(
             xPropSet->setPropertyValue( gsAnchorPageNo, Any(nPage) );
         }
         break;
+    default:
+        break;
+    }
+
+    Reference < XTextContent > xTxtCntnt( rShape, UNO_QUERY );
+    xTxtImport->InsertTextContent( xTxtCntnt );
+
+    switch( eAnchorType )
+    {
     case TextContentAnchorType_AS_CHARACTER:
         xPropSet->setPropertyValue( gsVertOrientPosition, Any(nY) );
         break;
