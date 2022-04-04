@@ -210,6 +210,30 @@
       },
       "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0289d817_3e4373ef",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-04T12:54:23Z",
+      "side": 1,
+      "message": "Not sure which one is right, I\u0027ve seen both in the public API.\nI would prefer OLE, but if Stephan is OK with Ole, no problem.",
+      "parentUuid": "db0d1402_999d1e5f",
+      "range": {
+        "startLine": 26,
+        "startChar": 15,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
