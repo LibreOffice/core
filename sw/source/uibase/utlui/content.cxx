@@ -4480,13 +4480,18 @@ void SwContentTree::DeleteOutlineSelections()
 
 void SwContentTree::SetOutlineLevel(sal_uInt8 nSet)
 {
+    if (nSet == m_nOutlineLevel)
+        return;
     m_nOutlineLevel = nSet;
     m_pConfig->SetOutlineLevel( m_nOutlineLevel );
     std::unique_ptr<SwContentType>& rpContentT = (State::ACTIVE == m_eState)
             ? m_aActiveContentArr[ContentTypeId::OUTLINE]
             : m_aHiddenContentArr[ContentTypeId::OUTLINE];
     if(rpContentT)
+    {
         rpContentT->SetOutlineLevel(m_nOutlineLevel);
+        rpContentT->FillMemberList();
+    }
     Display(State::ACTIVE == m_eState);
 }
 
