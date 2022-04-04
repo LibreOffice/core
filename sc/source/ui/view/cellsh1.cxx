@@ -712,7 +712,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                                             rDoc,
                                                             eFillDir, eFillCmd, eFillDateCmd,
                                                             aStartStr, fIncVal, fMaxVal,
-                                                            nSelectHeight, nSelectWidth, nPossDir));
+                                                            nSelectHeight, nSelectWidth, nPossDir, nPrivFormat));
 
                     if ( nStartCol != nEndCol && nStartRow != nEndRow )
                     {

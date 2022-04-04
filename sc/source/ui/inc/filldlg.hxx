@@ -37,7 +37,8 @@ public:
                      double         fMax,
                      SCSIZE       nSelectHeight,
                      SCSIZE       nSelectWidth,
-                     sal_uInt16     nPossDir );
+                     sal_uInt16     nPossDir,
+                     sal_uInt32     nPrivFormat);
     virtual ~ScFillSeriesDlg() override;
 
     FillDir     GetFillDir() const          { return theFillDir; }
@@ -64,6 +65,7 @@ private:
     double      fEndVal;
     const SCSIZE m_nSelectHeight;
     const SCSIZE m_nSelectWidth;
+    const sal_uInt32 m_nPrivFormat;
 
     std::unique_ptr<weld::Label> m_xFtStartVal;
     std::unique_ptr<weld::Entry> m_xEdStartVal;
