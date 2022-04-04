@@ -39,6 +39,7 @@
 #include <strings.hrc>
 #include <osl/diagnose.h>
 #include <com/sun/star/task/XStatusIndicator.hpp>
+#include <officecfg/Office/Common.hxx>
 
 #include <cstdlib>
 #include <memory>
@@ -449,8 +450,13 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
     ImplWriteLine( "%%Pages: 0" );
-    OUString aCreator( "%%Creator: " + utl::ConfigManager::getProductName() + " " +
-                       utl::ConfigManager::getProductVersion() );
+    OUString aCreator;
+    OUString aCreatorOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
+    if( !aCreatorOverride.isEmpty())
+        aCreator = aCreatorOverride;
+    else
+        aCreator = "%%Creator: " + utl::ConfigManager::getProductName() + " " +
+                   utl::ConfigManager::getProductVersion();
     ImplWriteLine( OUStringToOString( aCreator, RTL_TEXTENCODING_UTF8 ).getStr() );
     ImplWriteLine( "%%Title: none" );
     ImplWriteLine( "%%CreationDate: none" );
