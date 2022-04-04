@@ -135,6 +135,8 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     m_nStyle = nStyle;
     m_pParent = pParent;
 
+    SetSystemEnvDataPlatform(m_aSystemData);
+
     Qt::WindowFlags aWinFlags(Qt::Widget);
     if (!(nStyle & SalFrameStyleFlags::SYSTEMCHILD))
     {
@@ -147,15 +149,23 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
             aWinFlags = Qt::Tool | Qt::FramelessWindowHint;
         else if (nStyle & SalFrameStyleFlags::TOOLTIP)
             aWinFlags = Qt::ToolTip;
-        // Can't use Qt::Popup, because it grabs the input focus and generates
-        // a focus-out event, reaching the combo box. This used to map to
-        // Qt::ToolTip, which doesn't feel that correct...
         else if (isPopup())
-#ifdef EMSCRIPTEN
-            aWinFlags = Qt::ToolTip | Qt::FramelessWindowHint;
-#else
-            aWinFlags = Qt::Window | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
-#endif
+        {
+            // Can't use Qt::Popup, because it grabs the input focus and generates
+            // a focus-out event. This instantly auto-closes LO editable ComboBox popup!
+            switch (m_aSystemData.platform)
+            {
+                case SystemEnvData::Platform::Wayland:
+                case SystemEnvData::Platform::WASM:
+                    // the only working "popup" variants on these platforms
+                    aWinFlags = Qt::ToolTip | Qt::FramelessWindowHint;
+                    break;
+                default:
+                    // at least avoid marking the popup as a tooltip; not sure it's worth it
+                    aWinFlags = Qt::Window | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
+                    break;
+            }
+        }
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
             aWinFlags = Qt::Tool;
         // top level windows can't be transient in Qt, so make them dialogs, if they have a parent. At least
@@ -170,7 +180,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     if (aWinFlags == Qt::Window)
     {
         m_pTopLevel = new QtMainWindow(*this, aWinFlags);
-        m_pQWidget = new QtWidget(*this, aWinFlags);
+        m_pQWidget = new QtWidget(*this);
         m_pTopLevel->setCentralWidget(m_pQWidget);
         m_pTopLevel->setFocusProxy(m_pQWidget);
     }
@@ -192,7 +202,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     fixICCCMwindowGroup();
 }
 
-void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget)
+void QtFrame::SetSystemEnvDataPlatform(SystemEnvData& rData)
 {
     if (QGuiApplication::platformName() == "wayland")
         rData.platform = SystemEnvData::Platform::Wayland;
@@ -207,7 +217,10 @@ void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidge
                  "Unsupported qt VCL platform: " << toOUString(QGuiApplication::platformName()));
         std::abort();
     }
+}
 
+void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget)
+{
     rData.toolkit = SystemEnvData::Toolkit::Qt;
     rData.aShellWindow = pWindow;
     rData.pWidget = pWidget;

@@ -216,6 +216,8 @@ public:
 
     void setInputLanguage(LanguageType);
     inline bool isPopup() const;
+
+    static void SetSystemEnvDataPlatform(SystemEnvData&);
     static void FillSystemEnvData(SystemEnvData&, sal_IntPtr pWindow, QWidget* pWidget);
 };
 
