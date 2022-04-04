@@ -762,8 +762,8 @@ static bool IsHeadingContained(const SwTextNode* pChptrNd, const SwNode& rNd)
             Point aPt(0, 0);
             std::pair<Point, bool> const tmp(aPt, false);
 
-            const SwFrame* pChptrFrame = pChptrNd->getLayoutFrame(
-                pChptrNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
+            const SwFrame* pChptrFrame = pChptrNd ? pChptrNd->getLayoutFrame(
+                pChptrNd->GetDoc().getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp) : nullptr;
             const SwPageFrame* pChptrPgFrame = pChptrFrame ? pChptrFrame->FindPageFrame() : nullptr;
             const SwFrame* pNdFrame
                 = pCNd ? pCNd->getLayoutFrame(
