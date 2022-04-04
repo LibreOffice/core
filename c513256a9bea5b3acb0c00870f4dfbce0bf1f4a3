@@ -33,6 +33,24 @@
       "message": "without looking in detail now, but is this probably a reincarnation of what has been covered already at \u003chttps://git.libreoffice.org/core/+/9230c189ebc5bcfd6303bfa7eebcd35488037d00%5E!/\u003e \"Use existing rtl_str_toInt64_WithLength\"?",
       "revId": "c513256a9bea5b3acb0c00870f4dfbce0bf1f4a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "779d79b4_d96fc2fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-04T12:59:24Z",
+      "side": 1,
+      "message": "I don\u0027t understand the resistance to adding a new entrypoint, especially since it is internal only. We can certainly duplicate code and re-use the existing toInt64 entrypoint, but why? The code in sal/ is already there - we\u0027re just adding another way of calling it and making the whole API more symmetric in the process.",
+      "parentUuid": "309ac781_4e9efac9",
+      "revId": "c513256a9bea5b3acb0c00870f4dfbce0bf1f4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
