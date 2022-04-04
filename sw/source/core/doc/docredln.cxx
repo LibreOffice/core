@@ -58,6 +58,7 @@
 #include <txtfld.hxx>
 
 #include <flowfrm.hxx>
+#include <txtfrm.hxx>
 
 using namespace com::sun::star;
 
@@ -287,6 +288,14 @@ void lcl_LOKInvalidateFrames(const sw::BroadcastingModify& rMod, const SwRootFra
             if (pPoint)
             {
                 pTmpFrame->InvalidateSize();
+
+                // Also empty the text portion cache, so it gets rebuilt, taking the new redlines
+                // into account.
+                if (pTmpFrame->IsTextFrame())
+                {
+                    auto pTextFrame = static_cast<SwTextFrame*>(pTmpFrame);
+                    pTextFrame->ClearPara();
+                }
             }
         }
     }
