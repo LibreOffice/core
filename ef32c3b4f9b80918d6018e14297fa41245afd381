@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "935bbbcf_23c00c61",
+        "filename": "basic/source/classes/sb.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 2072,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-04T05:43:49Z",
+      "side": 1,
+      "message": "Creating an OUString (allocating memory) in a loop looks sub-optimal ;)",
+      "range": {
+        "startLine": 2072,
+        "startChar": 57,
+        "endLine": 2072,
+        "endChar": 72
+      },
+      "revId": "ef32c3b4f9b80918d6018e14297fa41245afd381",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
