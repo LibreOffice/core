@@ -4703,7 +4703,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
             if(nMode == EditEntryMode::DELETE)
             {
                 IDocumentMarkAccess* const pMarkAccess = m_pActiveShell->getIDocumentMarkAccess();
-                pMarkAccess->deleteMark( pMarkAccess->findMark(pCnt->GetName()) );
+                pMarkAccess->deleteMark(pMarkAccess->findMark(pCnt->GetName()), false);
             }
             else if(nMode == EditEntryMode::RENAME)
             {

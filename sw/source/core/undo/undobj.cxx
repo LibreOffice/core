@@ -1192,7 +1192,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                  && ( bSaveOtherPos
                       || !pBkmk->IsExpanded() ) )
             {
-                pMarkAccess->deleteMark(pMarkAccess->getAllMarksBegin()+n);
+                pMarkAccess->deleteMark(pMarkAccess->getAllMarksBegin()+n, false);
                 n--;
             }
         }
