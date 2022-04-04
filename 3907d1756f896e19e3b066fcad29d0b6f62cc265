@@ -354,6 +354,30 @@
       },
       "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b8e4e31_76bea048",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-04T13:16:52Z",
+      "side": 1,
+      "message": "yeah, there\u0027s fair amounts of uses of both styles, so as long as we\u0027re consistent at least per source file, either should be fine",
+      "parentUuid": "9df35355_26295337",
+      "range": {
+        "startLine": 26,
+        "startChar": 15,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
