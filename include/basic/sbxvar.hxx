@@ -248,7 +248,7 @@ class BASIC_DLLPUBLIC SbxVariable : public SbxValue
     StarBASIC*       m_pComListenerParentBasic = nullptr;
     std::unique_ptr<SfxBroadcaster>  mpBroadcaster; // Broadcaster, if needed
     OUString         maName;            // Name, if available
-    mutable OUString maNameCI;          // Name, case insentitive - cached for fast comparison
+    mutable OUString maNameCI;          // Name, case insensitive - cached for fast comparison
     SbxArrayRef      mpPar;             // Parameter-Array, if set
     sal_uInt16       nHash = 0;         // Hash-ID for search
 
