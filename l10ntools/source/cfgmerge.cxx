@@ -27,6 +27,7 @@
 #include <iostream>
 #include <memory>
 #include <rtl/strbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <helper.hxx>
 #include <export.hxx>

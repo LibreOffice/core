@@ -29,6 +29,7 @@
 #include <osl/process.h>
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <comphelper/string.hxx>
 #include <configsettings.hxx>
 #include <o3tl/string_view.hxx>
 

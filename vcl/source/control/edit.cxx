@@ -61,6 +61,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/unohelp2.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <tools/json_writer.hxx>
 
@@ -2838,8 +2839,8 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
     mpDDInfo->bIsStringSupported = std::any_of(rFlavors.begin(), rFlavors.end(),
         [](const css::datatransfer::DataFlavor& rFlavor) {
             sal_Int32 nIndex = 0;
-            const OUString aMimetype = rFlavor.MimeType.getToken( 0, ';', nIndex );
-            return aMimetype == "text/plain";
+            const std::u16string_view aMimetype = o3tl::getToken(rFlavor.MimeType, 0, ';', nIndex );
+            return aMimetype == u"text/plain";
         });
 }
 

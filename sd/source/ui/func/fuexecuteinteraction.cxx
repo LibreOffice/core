@@ -33,6 +33,7 @@
 #include <svl/stritem.hxx>
 #include <svl/urihelper.hxx>
 #include <tools/urlobj.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <DrawViewShell.hxx>
 #include <GraphicDocShell.hxx>
@@ -216,11 +217,11 @@ void FuExecuteInteraction::DoExecute(SfxRequest&)
                 // "Macroname.Modulname.Libname.Documentname" or
                 // "Macroname.Modulname.Libname.Applicationname"
                 sal_Int32 nIdx{ 0 };
-                const OUString aMacroName = aMacro.getToken(0, '.', nIdx);
-                const OUString aModulName = aMacro.getToken(0, '.', nIdx);
+                const std::u16string_view aMacroName = o3tl::getToken(aMacro, 0, '.', nIdx);
+                const std::u16string_view aModulName = o3tl::getToken(aMacro, 0, '.', nIdx);
 
                 // Currently the "Call" method only resolves modulename+macroname
-                mpDocSh->GetBasic()->Call(aModulName + "." + aMacroName);
+                mpDocSh->GetBasic()->Call(OUString::Concat(aModulName) + "." + aMacroName);
             }
         }
         break;

@@ -43,6 +43,7 @@
 #include <vcl/TypeSerializer.hxx>
 #include <osl/thread.h>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <comphelper/automationinvokedzone.hxx>
 #include <comphelper/lok.hxx>
@@ -732,8 +733,8 @@ bool ScViewFunc::PasteLink( const uno::Reference<datatransfer::XTransferable>& r
             if (!aDataStr.isEmpty())
             {
                 nRows = comphelper::string::getTokenCount(aDataStr, '\n');
-                OUString aLine = aDataStr.getToken( 0, '\n' );
-                if (!aLine.isEmpty())
+                std::u16string_view aLine = o3tl::getToken(aDataStr, 0, '\n' );
+                if (!aLine.empty())
                     nCols = comphelper::string::getTokenCount(aLine, '\t');
             }
         }

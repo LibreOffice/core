@@ -20,6 +20,7 @@
 #include <astdeclaration.hxx>
 #include <astscope.hxx>
 #include <rtl/strbuf.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
 

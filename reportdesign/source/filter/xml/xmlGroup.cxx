@@ -28,6 +28,7 @@
 #include "xmlEnums.hxx"
 #include <com/sun/star/report/GroupOn.hpp>
 #include <com/sun/star/report/KeepTogether.hpp>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
@@ -104,19 +105,19 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 OUString sExpression = sCompleteFormula.getToken(1,'[');
                                 sExpression = sExpression.getToken(0,']');
                                 sal_Int32 nIndex = 0;
-                                const OUString sFormula = sCompleteFormula.getToken(0,'(',nIndex);
+                                const std::u16string_view sFormula = o3tl::getToken(sCompleteFormula, 0,'(',nIndex);
                                 ::sal_Int16 nGroupOn = report::GroupOn::DEFAULT;
 
-                                if ( sFormula == "rpt:LEFT")
+                                if ( sFormula == u"rpt:LEFT")
                                 {
                                     nGroupOn = report::GroupOn::PREFIX_CHARACTERS;
-                                    OUString sInterval = sCompleteFormula.getToken(1,';',nIndex);
-                                    sInterval = sInterval.getToken(0,')');
-                                    m_xGroup->setGroupInterval(sInterval.toInt32());
+                                    std::u16string_view sInterval = o3tl::getToken(sCompleteFormula, 1,';',nIndex);
+                                    sInterval = o3tl::getToken(sInterval, 0,')');
+                                    m_xGroup->setGroupInterval(o3tl::toInt32(sInterval));
                                 }
-                                else if ( sFormula == "rpt:YEAR")
+                                else if ( sFormula == u"rpt:YEAR")
                                     nGroupOn = report::GroupOn::YEAR;
-                                else if ( sFormula == "rpt:MONTH")
+                                else if ( sFormula == u"rpt:MONTH")
                                 {
                                     nGroupOn = report::GroupOn::MONTH;
                                 }
@@ -125,15 +126,15 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
                                 {
                                     nGroupOn = report::GroupOn::QUARTAL;
                                 }
-                                else if ( sFormula == "rpt:WEEK")
+                                else if ( sFormula == u"rpt:WEEK")
                                     nGroupOn = report::GroupOn::WEEK;
-                                else if ( sFormula == "rpt:DAY")
+                                else if ( sFormula == u"rpt:DAY")
                                     nGroupOn = report::GroupOn::DAY;
-                                else if ( sFormula == "rpt:HOUR")
+                                else if ( sFormula == u"rpt:HOUR")
                                     nGroupOn = report::GroupOn::HOUR;
-                                else if ( sFormula == "rpt:MINUTE")
+                                else if ( sFormula == u"rpt:MINUTE")
                                     nGroupOn = report::GroupOn::MINUTE;
-                                else if ( sFormula == "rpt:INT")
+                                else if ( sFormula == u"rpt:INT")
                                 {
                                     nGroupOn = report::GroupOn::INTERVAL;
                                     _rImport.removeFunction(sExpression);

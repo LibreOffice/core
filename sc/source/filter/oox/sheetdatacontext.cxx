@@ -291,16 +291,16 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
     {
-        OUString aColSpanToken = aColSpansText.getToken( 0, ' ', nIndex );
-        sal_Int32 nSepPos = aColSpanToken.indexOf( ':' );
-        if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.getLength()) )
+        std::u16string_view aColSpanToken = o3tl::getToken(aColSpansText, 0, ' ', nIndex );
+        size_t nSepPos = aColSpanToken.find( ':' );
+        if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.size()) )
         {
             // OOXML uses 1-based integer column indexes, row model expects 0-based colspans
-            const sal_Int32 nCol1 = o3tl::toInt32(aColSpanToken.subView( 0, nSepPos )) - 1;
+            const sal_Int32 nCol1 = o3tl::toInt32(aColSpanToken.substr( 0, nSepPos )) - 1;
             const bool bValid1 = mrAddressConv.checkCol( nCol1, true);
             if (bValid1)
             {
-                const sal_Int32 nCol2 = o3tl::toInt32(aColSpanToken.subView( nSepPos + 1 )) - 1;
+                const sal_Int32 nCol2 = o3tl::toInt32(aColSpanToken.substr( nSepPos + 1 )) - 1;
                 mrAddressConv.checkCol( nCol2, true);
                 aModel.insertColSpan( ValueRange( nCol1, ::std::min( nCol2, nMaxCol )));
             }

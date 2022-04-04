@@ -21,6 +21,7 @@
 #include <fmprop.hxx>
 #include <fmvwimp.hxx>
 #include <fmpgeimp.hxx>
+#include <o3tl/string_view.hxx>
 #include <svx/fmview.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svdovirt.hxx>
@@ -424,8 +425,8 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
     sal_Int32 nTokIndex = 0;
     do
     {
-        OUString aToken = sAccessPath.getToken( 0, '\\', nTokIndex );
-        sal_uInt16 nIndex = static_cast<sal_uInt16>(aToken.toInt32());
+        std::u16string_view aToken = o3tl::getToken(sAccessPath, 0, '\\', nTokIndex );
+        sal_uInt16 nIndex = static_cast<sal_uInt16>(o3tl::toInt32(aToken));
 
         // get the DSS of the source form (we have to find an equivalent for)
         DBG_ASSERT(nIndex<xSourceContainer->getCount(), "FmFormObj::ensureModelEnv : invalid access path !");

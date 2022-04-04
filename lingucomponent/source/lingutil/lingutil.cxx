@@ -207,7 +207,7 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
         sal_Int32 nIndex = 0;
         do
         {
-            OUString aSystem = aSearchPath.getToken(0, ':', nIndex);
+            OUString aSystem( aSearchPath.getToken(0, ':', nIndex) );
             OUString aCWD;
             OUString aRelative;
             OUString aAbsolute;
