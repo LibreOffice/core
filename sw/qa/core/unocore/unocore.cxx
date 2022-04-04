@@ -371,6 +371,41 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testImageTooltip)
     CPPUNIT_ASSERT_EQUAL(aExpected, getProperty<OUString>(xImageProps, "Tooltip"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
+{
+    // Given a document with a content control around one or more text portions:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When enumerating the text portions of the only paragraph in the document:
+    uno::Reference<css::text::XTextRange> xTextPortion = getRun(getParagraph(1), 1);
+
+    // Then make sure that the text portion type is correct + the content can be read:
+    auto aPortionType = getProperty<OUString>(xTextPortion, "TextPortionType");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ContentControl
+    // - Actual  : Text
+    // i.e. the content control text attribute was ignored.
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    xContentControl
+        = getProperty<uno::Reference<text::XTextContent>>(xTextPortion, "ContentControl");
+    uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
+    xText = xContentControlRange->getText();
+    uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xContent->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
