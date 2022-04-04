@@ -330,10 +330,6 @@ void ScCheckListMenuControl::launchSubMenu()
 
     mxMenu->select(*mxScratchIter);
     pSubMenu->GrabFocus();
-
-    // TODO: still needed?
-    //if (comphelper::LibreOfficeKit::isActive())
-    //    jsdialog::SendFullUpdate(std::to_string(pSubMenu->GetLOKWindowId()), "toggle_all");
 }
 
 IMPL_LINK_NOARG(ScCheckListMenuControl, PostPopdownHdl, void*, void)

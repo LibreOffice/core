@@ -242,8 +242,6 @@ public:
     JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                       const css::uno::Reference<css::frame::XFrame>& rFrame,
                       sal_uInt64 nWindowId = 0);
-    /// for autofilter dropdown
-    JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile);
 
     static std::unique_ptr<JSInstanceBuilder>
     CreateDialogBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
@@ -251,9 +249,6 @@ public:
     CreateNotebookbarBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                              const css::uno::Reference<css::frame::XFrame>& rFrame,
                              sal_uInt64 nWindowId = 0);
-    static std::unique_ptr<JSInstanceBuilder>
-    CreateAutofilterWindowBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                  const OUString& rUIFile);
     static std::unique_ptr<JSInstanceBuilder> CreateSidebarBuilder(weld::Widget* pParent,
                                                                    const OUString& rUIRoot,
                                                                    const OUString& rUIFile,

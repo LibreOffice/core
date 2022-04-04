@@ -137,26 +137,6 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateFullUpdate() cons
     aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
     aJsonWriter->put("jsontype", m_sTypeOfJSON);
 
-    if (m_sTypeOfJSON == "autofilter")
-    {
-        vcl::Window* pWindow = m_aContentWindow.get();
-        DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pWindow);
-        while (pWindow && !pDockingWindow)
-        {
-            pWindow = pWindow->GetParent();
-            pDockingWindow = dynamic_cast<DockingWindow*>(pWindow);
-        }
-
-        if (pDockingWindow)
-        {
-            Point aPos = pDockingWindow->GetFloatingPos();
-            aJsonWriter->put("posx", aPos.getX());
-            aJsonWriter->put("posy", aPos.getY());
-            if (!pDockingWindow->IsVisible())
-                aJsonWriter->put("visible", "false");
-        }
-    }
-
     return aJsonWriter;
 }
 
@@ -231,7 +211,27 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
         }
     }
 
-    aJsonWriter->put("jsontype", "dialog");
+    if (m_sTypeOfJSON == "autofilter")
+    {
+        vcl::Window* pVclWindow = pWindow.get();
+        DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pVclWindow);
+        while (pVclWindow && !pDockingWindow)
+        {
+            pVclWindow = pVclWindow->GetParent();
+            pDockingWindow = dynamic_cast<DockingWindow*>(pVclWindow);
+        }
+
+        if (pDockingWindow)
+        {
+            Point aPos = pDockingWindow->GetFloatingPos();
+            aJsonWriter->put("posx", aPos.getX());
+            aJsonWriter->put("posy", aPos.getY());
+            if (!pDockingWindow->IsVisible())
+                aJsonWriter->put("visible", "false");
+        }
+    }
+
+    aJsonWriter->put("jsontype", (m_sTypeOfJSON == "autofilter") ? "autofilter" : "dialog");
     aJsonWriter->put("type", "modalpopup");
     aJsonWriter->put("cancellable", true);
     aJsonWriter->put("popupParent", sParentId);
@@ -497,6 +497,9 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_bIsNotebookbar(false)
     , m_aWindowToRelease(nullptr)
 {
+    if (rUIFile == "modules/scalc/ui/filterdropdown.ui")
+        m_sTypeOfJSON = "autofilter";
+
     // when it is a popup we initialize sender in weld_popover
     if (bPopup)
         return;
@@ -585,32 +588,6 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
-// used for autofilter dropdown
-JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                     const OUString& rUIFile)
-    : SalInstanceBuilder(pParent, rUIRoot, rUIFile)
-    , m_nWindowId(0)
-    , m_aParentDialog(nullptr)
-    , m_aContentWindow(nullptr)
-    , m_sTypeOfJSON("autofilter")
-    , m_bHasTopLevelDialog(false)
-    , m_bIsNotebookbar(false)
-    , m_aWindowToRelease(nullptr)
-{
-    vcl::Window* pRoot = m_xBuilder->get_widget_root();
-    m_aContentWindow = pParent;
-    if (pRoot && pRoot->GetParent())
-    {
-        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
-        if (m_aParentDialog)
-            m_nWindowId = m_aParentDialog->GetLOKWindowId();
-        InsertWindowToMap(getMapIdFromWindowId());
-    }
-
-    initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
-    sendFullUpdate();
-}
-
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
                                                                           const OUString& rUIRoot,
                                                                           const OUString& rUIFile)
@@ -623,13 +600,6 @@ std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateNotebookbarBuilder(
     const css::uno::Reference<css::frame::XFrame>& rFrame, sal_uInt64 nWindowId)
 {
     return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, rFrame, nWindowId);
-}
-
-std::unique_ptr<JSInstanceBuilder>
-JSInstanceBuilder::CreateAutofilterWindowBuilder(vcl::Window* pParent, const OUString& rUIRoot,
-                                                 const OUString& rUIFile)
-{
-    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile);
 }
 
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateSidebarBuilder(weld::Widget* pParent,
