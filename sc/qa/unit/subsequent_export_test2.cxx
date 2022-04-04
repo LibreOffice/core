@@ -139,6 +139,7 @@ public:
 
     void testXltxExport();
     void testRotatedImageODS();
+    void testTdf85553();
     void testTdf128976();
     void testTdf143979();
     void testTdf120502();
@@ -259,6 +260,7 @@ public:
 
     CPPUNIT_TEST(testXltxExport);
     CPPUNIT_TEST(testRotatedImageODS);
+    CPPUNIT_TEST(testTdf85553);
     CPPUNIT_TEST(testTdf128976);
     CPPUNIT_TEST(testTdf143979);
     CPPUNIT_TEST(testTdf120502);
@@ -1761,6 +1763,25 @@ void ScExportTest2::testRotatedImageODS()
     const OUString sY(sTranslate.getToken(1, ' '));
     CPPUNIT_ASSERT(sX.endsWith("mm"));
     CPPUNIT_ASSERT(sY.endsWith("mm"));
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf85553()
+{
+    ScDocShellRef xShell = loadDoc(u"tdf85553.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xShell.is());
+
+    ScDocShellRef xDocSh = saveAndReload(*xShell, FORMAT_XLS);
+    xShell->DoClose();
+    CPPUNIT_ASSERT(xDocSh.is());
+
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 4.5
+    // - Actual  : #N/A
+    CPPUNIT_ASSERT_EQUAL(OUString("4.5"), rDoc.GetString(ScAddress(2, 2, 0)));
 
     xDocSh->DoClose();
 }
