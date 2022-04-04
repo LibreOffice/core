@@ -224,8 +224,6 @@ private:
 
     void CreateDropDown();
 
-    void NotifyCloseLOK();
-
     DECL_LINK(ButtonHdl, weld::Button&, void);
     DECL_LINK(TriStateHdl, weld::Toggleable&, void);
 
@@ -379,7 +377,6 @@ private:
 
     void SetupMenu(weld::TreeView& rMenu);
 
-    void NotifyCloseLOK();
     void executeMenuItem(ScCheckListMenuControl::Action* pAction);
     void addItem(ScCheckListMenuControl::Action* pAction);
 };

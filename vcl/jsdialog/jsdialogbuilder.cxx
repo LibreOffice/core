@@ -211,7 +211,7 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
         }
     }
 
-    if (m_sTypeOfJSON == "autofilter")
+    // try to get the position eg. for the autofilter
     {
         vcl::Window* pVclWindow = pWindow.get();
         DockingWindow* pDockingWindow = dynamic_cast<DockingWindow*>(pVclWindow);
@@ -231,7 +231,7 @@ JSDialogNotifyIdle::generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString s
         }
     }
 
-    aJsonWriter->put("jsontype", (m_sTypeOfJSON == "autofilter") ? "autofilter" : "dialog");
+    aJsonWriter->put("jsontype", "dialog");
     aJsonWriter->put("type", "modalpopup");
     aJsonWriter->put("cancellable", true);
     aJsonWriter->put("popupParent", sParentId);
@@ -497,9 +497,6 @@ JSInstanceBuilder::JSInstanceBuilder(weld::Widget* pParent, const OUString& rUIR
     , m_bIsNotebookbar(false)
     , m_aWindowToRelease(nullptr)
 {
-    if (rUIFile == "modules/scalc/ui/filterdropdown.ui")
-        m_sTypeOfJSON = "autofilter";
-
     // when it is a popup we initialize sender in weld_popover
     if (bPopup)
         return;

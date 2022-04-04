@@ -439,9 +439,6 @@ void ScCheckListMenuControl::StartPopupMode(weld::Widget* pParent, const tools::
 
 void ScCheckListMenuControl::terminateAllPopupMenus()
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        NotifyCloseLOK();
-
     EndPopupMode();
 }
 
@@ -1439,27 +1436,11 @@ void ScCheckListMenuControl::launch(weld::Widget* pWidget, const tools::Rectangl
     StartPopupMode(pWidget, aRect);
 }
 
-void ScCheckListMenuControl::NotifyCloseLOK()
-{
-    if (mpNotifier)
-    {
-        tools::JsonWriter aJsonWriter;
-        aJsonWriter.put("jsontype", "autofilter");
-        aJsonWriter.put("action", "close");
-
-        const std::string message = aJsonWriter.extractAsStdString();
-        mpNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
-    }
-}
-
 void ScCheckListMenuControl::close(bool bOK)
 {
     if (bOK && mxOKAction)
         mxOKAction->execute();
     EndPopupMode();
-
-    if (comphelper::LibreOfficeKit::isActive())
-        NotifyCloseLOK();
 }
 
 void ScCheckListMenuControl::setExtendedData(std::unique_ptr<ExtendedData> p)
@@ -1490,9 +1471,6 @@ IMPL_LINK_NOARG(ScCheckListMenuControl, PopupModeEndHdl, weld::Popover&, void)
         mxPopupEndAction->execute();
 
     DropPendingEvents();
-
-    if (comphelper::LibreOfficeKit::isActive())
-        NotifyCloseLOK();
 }
 
 int ScCheckListMenuControl::GetTextWidth(const OUString& rsName) const
@@ -1754,24 +1732,8 @@ void ScListSubMenuControl::setPopupStartAction(ScCheckListMenuControl::Action* p
 
 void ScListSubMenuControl::terminateAllPopupMenus()
 {
-    if (comphelper::LibreOfficeKit::isActive())
-        NotifyCloseLOK();
-
     EndPopupMode();
     mrParentControl.terminateAllPopupMenus();
-}
-
-void ScListSubMenuControl::NotifyCloseLOK()
-{
-    if (mpNotifier)
-    {
-        tools::JsonWriter aJsonWriter;
-        aJsonWriter.put("jsontype", "autofilter");
-        aJsonWriter.put("action", "close");
-
-        const std::string message = aJsonWriter.extractAsStdString();
-        mpNotifier->libreOfficeKitViewCallback(LOK_CALLBACK_JSDIALOG, message.c_str());
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
