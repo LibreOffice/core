@@ -102,13 +102,46 @@ void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
 
 namespace {
 
-struct DirtyCellInterpreter
+class DirtyCellInterpreter
 {
+public:
     void operator() (size_t, ScFormulaCell* p)
     {
-        if (p->GetDirty())
+        if(!p->GetDirty())
+            return;
+        // Interpret() takes a range in a formula group, so group those together.
+        if( firstCell != nullptr && p->GetCellGroup() == p->GetCellGroup()
+            && p->aPos.Row() == lastPos.Row() + 1 )
+        {
+            assert( p->aPos.Tab() == lastPos.Tab() && p->aPos.Col() == lastPos.Col());
+            lastPos = p->aPos; // Extend range.
+            return;
+        }
+        flushPending();
+        if( !p->GetCellGroup())
+        {
             p->Interpret();
+            return;
+        }
+        firstCell = p;
+        lastPos = p->aPos;
+
     }
+    ~DirtyCellInterpreter()
+    {
+        flushPending();
+    }
+private:
+    void flushPending()
+    {
+        if(firstCell == nullptr)
+            return;
+        SCROW firstRow = firstCell->GetCellGroup()->mpTopCell->aPos.Row();
+        firstCell->Interpret(firstCell->aPos.Row() - firstRow, lastPos.Row() - firstRow);
+        firstCell = nullptr;
+    }
+    ScFormulaCell* firstCell = nullptr;
+    ScAddress lastPos;
 };
 
 }
