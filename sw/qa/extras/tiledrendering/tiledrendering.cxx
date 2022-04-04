@@ -164,6 +164,7 @@ public:
     void testBulletMultiDeleteInvalidation();
     void testCondCollCopy();
     void testMoveShapeHandle();
+    void testRedlinePortions();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -249,6 +250,7 @@ public:
     CPPUNIT_TEST(testBulletMultiDeleteInvalidation);
     CPPUNIT_TEST(testCondCollCopy);
     CPPUNIT_TEST(testMoveShapeHandle);
+    CPPUNIT_TEST(testRedlinePortions);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3529,6 +3531,43 @@ void SwTiledRenderingTest::testCondCollCopy()
     CPPUNIT_ASSERT(xTransferable->isDataFlavorSupported(aFlavor));
     // Without the accompanying fix in place, this test would have crashed.
     xTransferable->getTransferData(aFlavor);
+}
+
+void SwTiledRenderingTest::testRedlinePortions()
+{
+    // Given a document with 3 portions: before insert redline (foo), the insert redline (ins) and after insert
+    // redline (bar):
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    SwView* pView = pDocShell->GetView();
+    pView->SetRedlineAuthor("first");
+    pDocShell->SetView(pView);
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    pWrtShell->Insert("foo");
+    pDocShell->SetChangeRecording(true);
+    pWrtShell->Insert("ins");
+    pDocShell->SetChangeRecording(false);
+    pWrtShell->Insert("bar after");
+
+    // When deleting "fooinsbar":
+    pView->SetRedlineAuthor("second");
+    pDocShell->SetView(pView);
+    pWrtShell->SttEndDoc(/*bStt*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, /*nCount=*/9, /*bBasicCall=*/false);
+    pDocShell->SetChangeRecording(true);
+    pWrtShell->Delete();
+
+    // Then make sure that the portion list is updated, so "bar" can be marked as deleted without
+    // marking " after" as well:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[1]", "portion", "foo");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "portion", "ins");
+    // Without the accompanying fix in place, this test would have failed width:
+    // - Expected: bar
+    // - Actual  : bar after
+    // i.e. the portion list was outdated, even " after" was marked as deleted.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[3]", "portion", "bar");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[4]", "portion", " after");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
