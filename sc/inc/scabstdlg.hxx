@@ -444,7 +444,8 @@ public:
                                                             double          fMax,
                                                             SCSIZE          nSelectHeight,
                                                             SCSIZE          nSelectWidth,
-                                                            sal_uInt16          nPossDir) = 0;
+                                                            sal_uInt16      nPossDir,
+                                                            sal_uInt32      nPrivFormat) = 0;
 
     virtual VclPtr<AbstractScGroupDlg> CreateAbstractScGroupDlg(weld::Window* pParent, bool bUnGroup = false) = 0;
 
