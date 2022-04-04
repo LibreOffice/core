@@ -866,6 +866,7 @@ void FloatingWindow::StartPopupMode( ToolBox* pBox, FloatWinPopupFlags nFlags )
 
 void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPtr<vcl::Window>& xFocusId )
 {
+    SAL_DEBUG(__func__);
     if ( !mbInPopupMode )
         return;
 
@@ -948,6 +949,7 @@ void FloatingWindow::ImplEndPopupMode( FloatWinPopupEndFlags nFlags, const VclPt
 
 void FloatingWindow::EndPopupMode( FloatWinPopupEndFlags nFlags )
 {
+    SAL_DEBUG(__func__);
     ImplEndPopupMode(nFlags, mxPrevFocusWin);
 }
 

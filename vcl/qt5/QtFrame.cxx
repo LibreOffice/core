@@ -151,11 +151,8 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         // a focus-out event, reaching the combo box. This used to map to
         // Qt::ToolTip, which doesn't feel that correct...
         else if (isPopup())
-#ifdef EMSCRIPTEN
+//            aWinFlags = Qt::Window | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
             aWinFlags = Qt::ToolTip | Qt::FramelessWindowHint;
-#else
-            aWinFlags = Qt::Window | Qt::FramelessWindowHint | Qt::BypassWindowManagerHint;
-#endif
         else if (nStyle & SalFrameStyleFlags::TOOLWINDOW)
             aWinFlags = Qt::Tool;
         // top level windows can't be transient in Qt, so make them dialogs, if they have a parent. At least
@@ -170,12 +167,26 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     if (aWinFlags == Qt::Window)
     {
         m_pTopLevel = new QtMainWindow(*this, aWinFlags);
+#ifndef EMSCRIPTEN
+#if 0
+        m_pTopLevel->setAttribute(Qt::WA_NativeWindow);
+//        m_pTopLevel->setAttribute(Qt::WA_DontCreateNativeAncestors);
+#endif
+#endif
         m_pQWidget = new QtWidget(*this, aWinFlags);
         m_pTopLevel->setCentralWidget(m_pQWidget);
         m_pTopLevel->setFocusProxy(m_pQWidget);
     }
     else
+    {
         m_pQWidget = new QtWidget(*this, aWinFlags);
+#ifndef EMSCRIPTEN
+#if 0
+        m_pQWidget->setAttribute(Qt::WA_NativeWindow);
+//        m_pQWidget->setAttribute(Qt::WA_DontCreateNativeAncestors);
+#endif
+#endif
+    }
 
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
@@ -355,10 +366,7 @@ QWindow* QtFrame::windowHandle() const
     // set attribute 'Qt::WA_NativeWindow' first to make sure a window handle actually exists
     QWidget* pChild = asChild();
     assert(pChild->window() == pChild);
-#ifndef EMSCRIPTEN
-    // no idea, why this breaks the menubar for EMSCRIPTEN
     pChild->setAttribute(Qt::WA_NativeWindow);
-#endif
     return pChild->windowHandle();
 }
 
@@ -434,6 +442,8 @@ void QtFrame::modalReparent(bool bVisible)
     assert(!asChild()->isVisible());
     assert(asChild()->isModal());
 #endif
+
+    SAL_DEBUG(__func__);
 
     if (!bVisible)
     {
@@ -1365,8 +1375,11 @@ void QtFrame::ResolveWindowHandle(SystemEnvData& rData) const
 {
     if (!rData.pWidget)
         return;
-    if (rData.platform != SystemEnvData::Platform::Wayland)
-        rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());
+    if (rData.platform == SystemEnvData::Platform::Wayland)
+        return;
+    if (rData.GetWindowHandle(this))
+	return;
+    rData.SetWindowHandle(static_cast<QWidget*>(rData.pWidget)->winId());
 }
 
 // Drag'n'drop foo

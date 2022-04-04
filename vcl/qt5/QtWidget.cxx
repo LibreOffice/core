@@ -597,13 +597,18 @@ void QtWidget::keyReleaseEvent(QKeyEvent* pEvent)
         QWidget::keyReleaseEvent(pEvent);
 }
 
-void QtWidget::focusInEvent(QFocusEvent*) { m_rFrame.CallCallback(SalEvent::GetFocus, nullptr); }
+void QtWidget::focusInEvent(QFocusEvent*)
+{
+    SAL_DEBUG(__func__);
+    m_rFrame.CallCallback(SalEvent::GetFocus, nullptr);
+}
 
 void QtWidget::closePopup()
 {
     VclPtr<FloatingWindow> pFirstFloat = ImplGetSVData()->mpWinData->mpFirstFloat;
     if (pFirstFloat && !(pFirstFloat->GetPopupModeFlags() & FloatWinPopupFlags::NoAppFocusClose))
     {
+	SAL_DEBUG(__func__);
         SolarMutexGuard aGuard;
         pFirstFloat->EndPopupMode(FloatWinPopupEndFlags::Cancel | FloatWinPopupEndFlags::CloseAll);
     }
@@ -611,6 +616,7 @@ void QtWidget::closePopup()
 
 void QtWidget::focusOutEvent(QFocusEvent*)
 {
+    SAL_DEBUG(__func__);
 #if CHECK_ANY_QT_USING_X11
     m_rFrame.m_nKeyModifiers = ModKeyFlags::NONE;
 #endif
@@ -629,6 +635,7 @@ QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
     , m_nDeltaX(0)
     , m_nDeltaY(0)
 {
+    SAL_DEBUG(__func__ << " " << (int) f);
     create();
     setMouseTracking(true);
     if (!rFrame.isPopup())
