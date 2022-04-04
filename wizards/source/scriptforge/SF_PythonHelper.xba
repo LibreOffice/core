@@ -192,7 +192,7 @@ Public Function PyDateAdd(ByVal Add As Variant _
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;		Add: The unit to add
 &apos;&apos;&apos;		Count: how many times to add (might be negative)
-&apos;&apos;&apos;		DateArg: a date as a string in iso format
+&apos;&apos;&apos;		DateArg: a date as a com.sun.star.util.DateTime UNO structure
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The new date as a string in iso format
 &apos;&apos;&apos;	Example: (Python code)
@@ -597,6 +597,7 @@ Dim sServiceName As String			&apos;	Alias of BasicObject.ServiceName
 Dim bBasicClass As Boolean			&apos;	True when BasicObject is a class
 Dim sLibrary As String				&apos;	Library where the object belongs to
 Dim bUno As Boolean					&apos;	Return value is a UNO object
+Dim oObjDesc As Object				&apos;	_ObjectDescriptor type
 Dim iDims As Integer				&apos;	# of dims of vReturn
 Dim sess As Object					:	Set sess = ScriptForge.SF_Session
 Dim i As Long, j As Long
@@ -901,7 +902,8 @@ Try:
 		&apos;	Uno or not Uno ?
 		bUno = False
 		If (CallType And cstUno) = cstUno Then		&apos;	UNO considered only when pre-announced in CallType
-			If Len(sess.UnoObjectType(vReturn)) &gt; 0 Then bUno = True
+			Set oObjDesc = SF_Utils._VarTypeObj(vReturn)
+			bUno = ( oObjDesc.iVarType = V_UNOOBJECT )
 		End If
 		If bUno Then
 			ReDim vReturnArray(0 To 2)

@@ -333,8 +333,8 @@ Public Function Center(Optional ByRef Parent As Variant) As Boolean
 &apos;&apos;&apos;		End Sub
 
 Dim bCenter As Boolean				&apos;	Return value
-Dim oSession As Object				&apos;	ScriptForge.SF_Session
 Dim oUi As Object					&apos;	ScriptForge.SF_UI
+Dim oObjDesc As Object				&apos;	_ObjectDescriptor type
 Dim sObjectType As String			&apos;	Can be uno or sf object type
 Dim oParent As Object				&apos;	UNO alias of parent
 Dim oParentPosSize As Object		&apos;	Parent com.sun.star.awt.Rectangle
@@ -356,15 +356,14 @@ Check:
 
 	Set oParentPosSize = Nothing
 	lParentX = 0	:	lParentY = 0
-	Set oSession = CreateScriptService(&quot;Session&quot;)
 	If IsNull(Parent) Then
 		Set oUi = CreateScriptService(&quot;UI&quot;)
 		Set oParentPosSize = oUi._PosSize()	&apos;	Return the position and dimensions of the active window
 	Else
 		&apos;	Determine the object type
-		sObjectType = oSession.UnoObjectType(Parent)
-		If sObjectType = &quot;com.sun.star.script.NativeObjectWrapper&quot; Then		&apos;	Basic object
-			sObjectType = Parent.ObjectType
+		Set oObjDesc = ScriptForge.SF_Utils._VarTypeObj(Parent)
+		If oObjDesc.iVarType = ScriptForge.V_SFOBJECT Then		&apos;	ScriptForge object
+			sObjectType = oObjDesc.sObjectType
 			&apos;	Document or dialog ?
 			If Not ScriptForge.SF_Array.Contains(Array(&quot;BASE&quot;, &quot;CALC&quot;, &quot;DIALOG&quot;, &quot;DOCUMENT&quot;, &quot;WRITER&quot;), sObjectType, CaseSensitive := True) Then GoTo Finally
 			If sObjectType = &quot;DIALOG&quot; Then

@@ -24,26 +24,36 @@ Global _SF_		As Variant		&apos;	SF_Root (Basic) object)
 Const SF_Version = &quot;7.4&quot;
 
 &apos;&apos;&apos;	Standard symbolic names for VarTypes
-&apos;				V_EMPTY = 0
-&apos;				V_NULL = 1
-&apos;				V_INTEGER = 2
-&apos;				V_LONG = 3
-&apos;				V_SINGLE = 4
-&apos;				V_DOUBLE = 5
-&apos;				V_CURRENCY = 6
-&apos;				V_DATE = 7
-&apos;				V_STRING = 8
+&apos;				V_EMPTY			= 0
+&apos;				V_NULL			= 1
+&apos;				V_INTEGER		= 2
+&apos;				V_LONG			= 3
+&apos;				V_SINGLE		= 4
+&apos;				V_DOUBLE		= 5
+&apos;				V_CURRENCY		= 6
+&apos;				V_DATE			= 7
+&apos;				V_STRING		= 8
 &apos;&apos;&apos;	Additional symbolic names for VarTypes
-Global Const	V_OBJECT = 9
-Global Const	V_BOOLEAN = 11
-Global Const	V_VARIANT = 12
-Global Const	V_BYTE = 17
-Global Const	V_USHORT = 18
-Global Const	V_ULONG = 19
-Global Const	V_BIGINT = 35
-Global Const	V_DECIMAL = 37
-Global Const	V_ARRAY = 8192
-Global Const	V_NUMERIC = 99		&apos; Fictive VarType synonym of any numeric value
+Global Const	V_OBJECT		= 9
+Global Const	V_BOOLEAN		= 11
+Global Const	V_VARIANT		= 12
+Global Const	V_BYTE			= 17
+Global Const	V_USHORT		= 18
+Global Const	V_ULONG			= 19
+Global Const	V_BIGINT		= 35
+Global Const	V_DECIMAL		= 37
+Global Const	V_ARRAY			= 8192
+&apos;&apos;&apos;	Fictive VarTypes
+Global Const	V_NUMERIC		= 99	&apos; Synonym of any numeric value [returned by _VarTypeExt()]
+Global Const	V_NOTHING		= 101	&apos; Object categories [returned by _VarTypeObj()]		Null object
+Global Const	V_UNOOBJECT		= 102	&apos;													Uno object or Uno structure
+Global Const	V_SFOBJECT		= 103	&apos;													ScriptForge object: has ObjectType and ServiceName properties
+Global Const	V_BASICOBJECT	= 104	&apos;													User Basic object
+
+Type _ObjectDescriptor					&apos; Returned by the _VarTypeObj() method
+	iVarType	As Integer				&apos; One of the V_NOTHING, V_xxxOBJECT constants
+	sObjectType	As String				&apos; Either &quot;&quot; or &quot;com.sun.star...&quot; or a ScriptForge object type (ex. &quot;SF_SESSION&quot; or &quot;DICTIONARY&quot;)
+End Type
 
 REM ================================================================== EXCEPTIONS
 
@@ -545,8 +555,7 @@ Public Function _Repr(ByVal pvArg As Variant, Optional ByVal plMax As Long) As S
 
 Dim sArg As String			&apos;	Return value
 Dim oObject As Object		&apos;	Alias of argument to avoid &quot;Object variable not set&quot;
-Dim sObject As String		&apos;	Object representation
-Dim sObjectType As String	&apos;	ObjectType attribute of Basic objects
+Dim oObjectDesc As Object	&apos;	Object descriptor
 Dim sLength As String		&apos;	String length as a string
 Dim i As Long
 Const cstBasicObject = &quot;com.sun.star.script.NativeObjectWrapper&quot;
@@ -564,28 +573,22 @@ Const cstEtc = &quot; … &quot;
 			Case V_EMPTY			:		sArg = &quot;[EMPTY]&quot;
 			Case V_NULL				:		sArg = &quot;[NULL]&quot;
 			Case V_OBJECT
-				If IsNull(pvArg) Then
-					sArg = &quot;[NULL]&quot;
-				Else
-					sObject = SF_Session.UnoObjectType(pvArg)
-					If sObject = &quot;&quot; Or sObject = cstBasicObject Then	&apos;	Not a UNO object
-						&apos;	Test if argument is a ScriptForge object
-						sObjectType = &quot;&quot;
-						On Local Error Resume Next
-						Set oObject = pvArg
-						sObjectType = oObject.ObjectType
-						On Error GoTo 0
-						If sObjectType = &quot;&quot; Then
+				Set oObjectDesc = SF_Utils._VarTypeObj(pvArg)
+				With oObjectDesc
+					Select Case .iVarType
+						Case V_NOTHING		:	sArg = &quot;[NOTHING]&quot;
+						Case V_OBJECT, V_BASICOBJECT
 							sArg = &quot;[OBJECT]&quot;
-						ElseIf Left(sObjectType, 3) = &quot;SF_&quot; Then
-							sArg = &quot;[&quot; &amp; sObjectType &amp; &quot;]&quot;
-						Else
-							sArg = oObject._Repr()
-						End If
-					Else
-						sArg = &quot;[&quot; &amp; sObject &amp; &quot;]&quot;
-					End If
-				End If
+						Case V_UNOOBJECT	:	sArg = &quot;[&quot; &amp; .sObjectType &amp; &quot;]&quot;
+						Case V_SFOBJECT
+							If Left(.sObjectType, 3) = &quot;SF_&quot; Then	&apos;	Standard module
+								sArg = &quot;[&quot; &amp; .sObjectType &amp; &quot;]&quot;
+							Else									&apos;	Class module must have a _Repr() method
+								Set oObject = pvArg
+								sArg = oObject._Repr()
+							End If
+					End Select
+				End With
 			Case V_VARIANT			:		sArg = &quot;[VARIANT]&quot;
 			Case V_STRING
 				sArg = SF_String._Repr(pvArg)
@@ -734,9 +737,9 @@ Public Function _Validate(Optional ByRef pvArgument As Variant _
 &apos;&apos;&apos;	Exceptions:
 &apos;&apos;&apos;		ARGUMENTERROR
 
-Dim iVarType As Integer		&apos;	Extended VarType of argument
-Dim bValid As Boolean		&apos;	Returned value
-Dim oArgument As Variant	&apos;	Workaround &quot;Object variable not set&quot; error on 1st executable statement
+Dim iVarType As Integer			&apos;	Extended VarType of argument
+Dim bValid As Boolean			&apos;	Returned value
+Dim oObjectDescriptor As Object	&apos;	_ObjectDescriptor type
 Const cstMaxLength = 256	&apos;	Maximum length of readable value
 Const cstMaxValues = 10		&apos;	Maximum number of allowed items to list in an error message 
 
@@ -772,8 +775,10 @@ Try:
 		End If
 		&apos;	Check instance types
 		If bValid And Len(pvObjectType) &gt; 0 And iVarType = V_OBJECT Then
-			Set oArgument = pvArgument
-			bValid = ( pvObjectType = oArgument.ObjectType )
+			&apos;Set oArgument = pvArgument
+			Set oObjectDescriptor = SF_Utils._VarTypeObj(pvArgument)
+			bValid = ( oObjectDescriptor.iVarType = V_SFOBJECT )
+			If bValid Then bValid = ( oObjectDescriptor.sObjectType = pvObjectType )
 		End If
 	End If
 
@@ -1033,6 +1038,73 @@ Dim iType As Integer	&apos;	VarType of argument
 	End Select
 
 End Function	&apos;	ScriptForge.SF_Utils._VarTypeExt
+
+REM -----------------------------------------------------------------------------
+Public Function _VarTypeObj(ByRef pvValue As Variant) As Object
+&apos;&apos;&apos;	Inspect the argument that is supposed to be an Object
+&apos;&apos;&apos;	Return the internal type of object as one of the values
+&apos;&apos;&apos;		V_NOTHING		Null object
+&apos;&apos;&apos;		V_UNOOBJECT		Uno object or Uno structure
+&apos;&apos;&apos;		V_SFOBJECT		ScriptForge object: has ObjectType and ServiceName properties
+&apos;&apos;&apos;		V_BASICOBJECT	User Basic object
+&apos;&apos;&apos;	coupled withe object type as a string (&quot;com.sun.star...&quot; or &quot;SF_...&quot; or &quot;... ScriptForge class ...&quot;)
+&apos;&apos;&apos;	When the argument is not an Object, return the usual VarType() of the argument
+
+Dim oObjDesc As _ObjectDescriptor	&apos;	Return value
+Dim oValue As Object				&apos;	Alias of pvValue used to avoid &quot;Object variable not set&quot; error
+Dim sObjType As String				&apos;	The type of object is first derived as a string
+Dim oReflection As Object			&apos;	com.sun.star.reflection.CoreReflection
+Dim vClass As Variant				&apos;	com.sun.star.reflection.XIdlClass
+Dim bUno As Boolean					&apos;	True when object recognized as UNO object
+
+Const cstBasicClass = &quot;com.sun.star.script.NativeObjectWrapper&quot;		&apos;	Way to recognize Basic objects
+
+	On Local Error Resume Next	&apos;	Object type is established by trial and error
+
+Try:
+	With oObjDesc
+		.iVarType = VarType(pvValue)
+		.sObjectType = &quot;&quot;
+		bUno = False
+		If .iVarType = V_OBJECT Then
+			If IsNull(pvValue) Then
+				.iVarType = V_NOTHING
+			Else
+				Set oValue = pvValue
+				&apos;	Try UNO type with usual ImplementationName property
+				.sObjectType = oValue.getImplementationName()
+				If .sObjectType = &quot;&quot; Then
+					&apos;	Try UNO type with alternative CoreReflection trick
+					Set oReflection = SF_Utils._GetUNOService(&quot;CoreReflection&quot;)
+					vClass = oReflection.getType(oValue)
+					If vClass.TypeClass &gt;= com.sun.star.uno.TypeClass.STRUCT  Then
+						.sObjectType = vClass.Name
+						bUno = True
+					End If
+				Else
+					bUno = True
+				End If
+				&apos;	Identify Basic objects
+				If .sObjectType = cstBasicClass Then
+					bUno = False
+					&apos;	Try if the Basic object has an ObjectType property
+					.sObjectType = oValue.ObjectType
+				End If
+				&apos;	Derive the return value from the object type
+				Select Case True
+					Case Len(.sObjectType) = 0			&apos;	Do nothing (return V_OBJECT)
+					Case .sObjectType = cstBasicClass	:	.iVarType = V_BASICOBJECT
+					Case bUno							:	.iVarType = V_UNOOBJECT
+					Case Else							:	.iVarType = V_SFOBJECT
+				End Select
+			End If
+		End If
+	End With
+
+Finally:
+	Set _VarTypeObj = oObjDesc
+	Exit Function
+End Function	&apos;	ScriptForge.SF_Utils._VarTypeObj
 
 REM ================================================= END OF SCRIPTFORGE.SF_UTILS
 </script:module>

@@ -93,6 +93,7 @@ Try:
 			Set oFrame = StarDesktop.CurrentComponent.CurrentController.Frame	&apos;	A menu has been clicked necessarily in the current window
 			Set oDispatcher = ScriptForge.SF_Utils._GetUNOService(&quot;DispatchHelper&quot;)
 			oDispatcher.executeDispatch(oFrame, sCommand, &quot;&quot;, 0, oArgs())
+			oFrame.activate()
 		Else
 			&apos;	Execute script
 			Set oSession = ScriptForge.SF_Services.CreateScriptService(&quot;Session&quot;)

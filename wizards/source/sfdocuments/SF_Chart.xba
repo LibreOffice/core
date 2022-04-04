@@ -429,10 +429,9 @@ Public Function Resize(Optional ByVal XPos As Variant _
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
 &apos;&apos;&apos;	Examples:
-&apos;&apos;&apos;		oChart.Resize(1000, 2000, Height = 6000)	&apos;	Width is not changed
+&apos;&apos;&apos;		oChart.Resize(1000, 2000, Height := 6000)	&apos;	Width is not changed
 
 Dim bResize As Boolean				&apos;	Return value
-Dim oAddress As Object				&apos;	Alias of Range
 Dim oPosition As Object				&apos;	com.sun.star.awt.Point
 Dim oSize As Object					&apos;	com.sun.star.awt.Size
 Const cstThisSub = &quot;SFDocuments.Chart.Resize&quot;
