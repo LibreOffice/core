@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16bf42a0_8279ad1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2022-04-04T21:40:21Z",
+      "side": 1,
+      "message": "Thanks for the quick fix. I have some comments/questions...",
+      "revId": "a3a433f1f75aaafb0bfe5b268a3a7245a0e3beda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ad7733f_f4aaeff7",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4487,
+      "author": {
+        "id": 1002975
+      },
+      "writtenOn": "2022-04-04T21:40:21Z",
+      "side": 1,
+      "message": "This doesn\u0027t actually need the unique pointer, does it? A plain pointer, or, in fact, a non-const reference to the pointer-to-object would do.\n\nAlso, I\u0027m betting that these few lines get duplicated elsewhere.\n\nI might expect this code to look something like:\n\ninvoke_for_content_type(\n  *this,\n  ContentTypeId::OUTLINE, \n  [nSet](auto\u0026 contentT){\n      contentT.SetOutlineLevel(nSet);\n      contentT.FillMemberList();\n  }\n);\n\nor if it\u0027s a member\n\ninvoke_for_content_type(\n  ContentTypeId::OUTLINE, \n  [nSet](auto\u0026 contentT){\n      contentT.SetOutlineLevel(nSet);\n      contentT.FillMemberList();\n  }\n);\n\nAlso - when you set the online level of these SwContentT things - don\u0027t you always need to \"fill the member list\"? Or perhaps, an extra boolean parameter for updating the member list?\n\nJust asking.",
+      "revId": "a3a433f1f75aaafb0bfe5b268a3a7245a0e3beda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
