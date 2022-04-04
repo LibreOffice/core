@@ -40,7 +40,8 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
                                   double        fMax,
                                   const SCSIZE  nSelectHeight,
                                   const SCSIZE  nSelectWidth,
-                                  sal_uInt16        nPossDir )
+                                  sal_uInt16        nPossDir,
+                                  sal_uInt32     nPrivFormat)
     : GenericDialogController(pParent, "modules/scalc/ui/filldlg.ui", "FillSeriesDialog")
     , aStartStrVal(aStartStr)
     , aErrMsgInvalidVal(ScResId(SCSTR_VALERR))
@@ -52,6 +53,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( weld::Window*       pParent,
     , fEndVal(fMax)
     , m_nSelectHeight(nSelectHeight)
     , m_nSelectWidth(nSelectWidth)
+    , m_nPrivFormat(nPrivFormat)
     , m_xFtStartVal(m_xBuilder->weld_label("startL"))
     , m_xEdStartVal(m_xBuilder->weld_entry("startValue"))
     , m_xFtEndVal(m_xBuilder->weld_label("endL"))
@@ -174,7 +176,7 @@ void ScFillSeriesDlg::Init( sal_uInt16 nPossDir )
 
     OUString aEndTxt;
     if ( fEndVal != MAXDOUBLE )
-        rDoc.GetFormatTable()->GetInputLineString( fEndVal, 0, aEndTxt );
+        rDoc.GetFormatTable()->GetInputLineString( fEndVal, m_nPrivFormat, aEndTxt );
     m_xEdEndVal->set_text( aEndTxt );
 }
 
@@ -183,18 +185,19 @@ weld::Entry* ScFillSeriesDlg::CheckValues()
     OUString aStartStr = m_xEdStartVal->get_text();
     OUString aIncStr = m_xEdIncrement->get_text();
     OUString aEndStr = m_xEdEndVal->get_text();
-    sal_uInt32 nKey = 0;
+    sal_uInt32 nDataKey = m_nPrivFormat;
+    sal_uInt32 nIncrementKey = 0;
 
     // If entry is filled, capture value before handling special cases.
     if ( !aStartStr.isEmpty()
          && theFillCmd != FILL_AUTO
-         && !rDoc.GetFormatTable()->IsNumberFormat( aStartStr, nKey, fStartVal ) )
+         && !rDoc.GetFormatTable()->IsNumberFormat( aStartStr, nDataKey, fStartVal ) )
         return m_xEdStartVal.get();
     if ( !aIncStr.isEmpty()
-         && !rDoc.GetFormatTable()->IsNumberFormat( aIncStr, nKey, fIncrement ) )
+         && !rDoc.GetFormatTable()->IsNumberFormat( aIncStr, nIncrementKey, fIncrement ) )
         return m_xEdIncrement.get();
     if ( !aEndStr.isEmpty()
-         && !rDoc.GetFormatTable()->IsNumberFormat( aEndStr, nKey, fEndVal ) )
+         && !rDoc.GetFormatTable()->IsNumberFormat( aEndStr, nDataKey, fEndVal ) )
         return m_xEdEndVal.get();
 
     if ( theFillCmd == FILL_LINEAR && !aEndStr.isEmpty()
