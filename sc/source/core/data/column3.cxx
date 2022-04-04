@@ -103,13 +103,11 @@ void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
 
 namespace {
 
-class DirtyCellInterpreter
+class CellInterpreterBase
 {
-public:
-    void operator() (size_t, ScFormulaCell* p)
+protected:
+    void Interpret(ScFormulaCell* p)
     {
-        if(!p->GetDirty())
-            return;
         // Interpret() takes a range in a formula group, so group those together.
         if( firstCell != nullptr && p->GetCellGroup() == p->GetCellGroup()
             && p->aPos.Row() == lastPos.Row() + 1 )
@@ -128,7 +126,7 @@ public:
         lastPos = p->aPos;
 
     }
-    ~DirtyCellInterpreter()
+    ~CellInterpreterBase()
     {
         flushPending();
     }
@@ -145,6 +143,26 @@ private:
     ScAddress lastPos;
 };
 
+class DirtyCellInterpreter : public CellInterpreterBase
+{
+public:
+    void operator() (size_t, ScFormulaCell* p)
+    {
+        if(p->GetDirty())
+            Interpret(p);
+    }
+};
+
+class NeedsInterpretCellInterpreter : public CellInterpreterBase
+{
+public:
+    void operator() (size_t, ScFormulaCell* p)
+    {
+        if(p->NeedsInterpret())
+            Interpret(p);
+    }
+};
+
 }
 
 void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
@@ -153,6 +171,15 @@ void ScColumn::InterpretDirtyCells( SCROW nRow1, SCROW nRow2 )
         return;
 
     DirtyCellInterpreter aFunc;
+    sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
+}
+
+void ScColumn::InterpretCellsIfNeeded( SCROW nRow1, SCROW nRow2 )
+{
+    if (!GetDoc().ValidRow(nRow1) || !GetDoc().ValidRow(nRow2) || nRow1 > nRow2)
+        return;
+
+    NeedsInterpretCellInterpreter aFunc;
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
 }
 
