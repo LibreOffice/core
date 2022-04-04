@@ -88,6 +88,24 @@
       "parentUuid": "56d87e0c_9110ce12",
       "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80523253_227d6194",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-04T07:23:52Z",
+      "side": 0,
+      "message": "I think you should not do this, because using atan2() instead of atan() is meant to make the code more clear and compact, avoiding several checks for different situations. Those checks are usually done internally by atan2().\nBut in this case, using extra conditions in addition to atan2() makes things more complex, so my suggestion is that:\n1. Either find out why are those checks were done in the original code, and answer the question: \"should we keep them\"?\n2. Keep the code as it was, and forget about using atan2().",
+      "parentUuid": "08f7a6b9_1dfb3507",
+      "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
