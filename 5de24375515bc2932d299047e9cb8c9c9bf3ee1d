@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d5159aa_5584bbaa",
+        "filename": "comphelper/source/misc/string.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-04T12:08:27Z",
+      "side": 1,
+      "message": "Pity, it seems that code hierarchy doesn\u0027t allow us to drop the code from sal, and use the one from here 😊",
+      "revId": "5de24375515bc2932d299047e9cb8c9c9bf3ee1d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
