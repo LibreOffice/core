@@ -186,6 +186,30 @@
       },
       "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db0d1402_999d1e5f",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 17
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-04T12:53:09Z",
+      "side": 1,
+      "message": "Can you give me a hint how to change it right?",
+      "parentUuid": "ad309557_7ae474a5",
+      "range": {
+        "startLine": 26,
+        "startChar": 15,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3907d1756f896e19e3b066fcad29d0b6f62cc265",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
