@@ -33,6 +33,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -987,9 +988,9 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                             if( xLabel.is() )
                             {
                                 aRange = xLabel->getSourceRangeRepresentation();
-                                OUString aSecondToken = aRange.getToken(1, ' ');
-                                if( !aSecondToken.isEmpty() )
-                                    aUsageMap[aSecondToken.toInt32()] = true;
+                                std::u16string_view aSecondToken = o3tl::getToken(aRange, 1, ' ');
+                                if( !aSecondToken.empty() )
+                                    aUsageMap[o3tl::toInt32(aSecondToken)] = true;
                             }
                         }
 

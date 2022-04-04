@@ -330,7 +330,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         return;
     if( '[' == rLine[0] )   // section: FrameIds, type or function
     {
-        OString aTmp = rLine.getToken(0, ']');
+        std::string_view aTmp = o3tl::getToken(rLine, 0, ']');
         if (aTmp == "[frmid")      // section FrameIds
         {
             m_nInitFile = 1;
@@ -362,7 +362,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         }
         else
             m_nInitFile = 0; // oops: unknown section?
-        rLine = rLine.copy(aTmp.getLength() + 1);
+        rLine = rLine.copy(aTmp.size() + 1);
     }
 
     // spaces (or tabs) are the delimiter

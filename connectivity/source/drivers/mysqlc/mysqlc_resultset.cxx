@@ -294,22 +294,21 @@ Date SAL_CALL OResultSet::getDate(sal_Int32 column)
 
     OString dateStr = m_aRows[m_nRowPosition][column - 1];
 
-    OString dateString(dateStr);
-    OString token;
+    std::string_view dateString(dateStr);
     sal_Int32 nIndex = 0, i = 0;
     do
     {
-        token = dateString.getToken(0, '-', nIndex);
+        std::string_view token = o3tl::getToken(dateString, 0, '-', nIndex);
         switch (i)
         {
             case 0:
-                d.Year = static_cast<sal_uInt16>(token.toUInt32());
+                d.Year = static_cast<sal_uInt16>(o3tl::toUInt32(token));
                 break;
             case 1:
-                d.Month = static_cast<sal_uInt16>(token.toUInt32());
+                d.Month = static_cast<sal_uInt16>(o3tl::toUInt32(token));
                 break;
             case 2:
-                d.Day = static_cast<sal_uInt16>(token.toUInt32());
+                d.Day = static_cast<sal_uInt16>(o3tl::toUInt32(token));
                 break;
             default:;
         }
@@ -469,23 +468,22 @@ Time SAL_CALL OResultSet::getTime(sal_Int32 column)
 
     OString sVal = m_aRows[m_nRowPosition][column - 1];
     OString timeString{ sVal.getStr(), getDataLength(column) };
-    OString token;
     sal_Int32 nIndex, i = 0;
 
     nIndex = timeString.indexOf(' ') + 1;
     do
     {
-        token = timeString.getToken(0, ':', nIndex);
+        std::string_view token = o3tl::getToken(timeString, 0, ':', nIndex);
         switch (i)
         {
             case 0:
-                t.Hours = static_cast<sal_uInt16>(token.toUInt32());
+                t.Hours = static_cast<sal_uInt16>(o3tl::toUInt32(token));
                 break;
             case 1:
-                t.Minutes = static_cast<sal_uInt16>(token.toUInt32());
+                t.Minutes = static_cast<sal_uInt16>(o3tl::toUInt32(token));
                 break;
             case 2:
-                t.Seconds = static_cast<sal_uInt16>(token.toUInt32());
+                t.Seconds = static_cast<sal_uInt16>(o3tl::toUInt32(token));
                 break;
         }
         i++;

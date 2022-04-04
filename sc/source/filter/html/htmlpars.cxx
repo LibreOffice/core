@@ -1428,7 +1428,7 @@ void ScHTMLLayoutParser::FontOn( HtmlImportInfo* pInfo )
                 {
                     // Font list, VCL uses the semicolon as separator
                     // HTML uses the comma
-                    OUString aFName = rFace.getToken( 0, ',', nPos );
+                    std::u16string_view aFName = o3tl::getToken(rFace, 0, ',', nPos );
                     aFName = comphelper::string::strip(aFName, ' ');
                     if( !aFontName.isEmpty() )
                         aFontName.append(";");

@@ -312,7 +312,7 @@ void OHTMLReader::TableFontOn(FontDescriptor& _rFont, Color &_rTextColor)
                 while( nPos != -1 )
                 {
                     // list of fonts, VCL: semicolon as separator, HTML: comma
-                    OUString aFName = rFace.getToken( 0, ',', nPos );
+                    std::u16string_view aFName = o3tl::getToken(rFace, 0, ',', nPos );
                     aFName = comphelper::string::strip(aFName, ' ');
                     if( !aFontName.isEmpty() )
                         aFontName.append(";");

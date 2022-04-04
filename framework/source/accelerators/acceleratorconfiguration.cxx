@@ -51,6 +51,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 constexpr OUStringLiteral PRESET_DEFAULT = u"default";
 constexpr OUStringLiteral TARGET_CURRENT = u"current";
@@ -1009,8 +1010,8 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
             css::awt::KeyEvent aKeyEvent;
 
             sal_Int32 nIndex = 0;
-            OUString sKeyCommand = sKey.getToken(0, '_', nIndex);
-            aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_" + sKeyCommand);
+            std::u16string_view sKeyCommand = o3tl::getToken(sKey, 0, '_', nIndex);
+            aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode(OUString::Concat("KEY_") + sKeyCommand);
 
             const sal_Int32 nToken = 4;
             bool bValid = true;
@@ -1020,20 +1021,20 @@ void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css:
                 if (nIndex < 0)
                     break;
 
-                OUString sToken = sKey.getToken(0, '_', nIndex);
-                if (sToken.isEmpty())
+                std::u16string_view sToken = o3tl::getToken(sKey, 0, '_', nIndex);
+                if (sToken.empty())
                 {
                     bValid = false;
                     break;
                 }
 
-                if ( sToken == "SHIFT" )
+                if ( sToken == u"SHIFT" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
-                else if ( sToken == "MOD1" )
+                else if ( sToken == u"MOD1" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
-                else if ( sToken == "MOD2" )
+                else if ( sToken == u"MOD2" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-                else if ( sToken == "MOD3" )
+                else if ( sToken == u"MOD3" )
                     aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
                 else
                 {
@@ -1219,11 +1220,10 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
     }
 
     css::awt::KeyEvent aKeyEvent;
-    OUString sKeyIdentifier;
 
     sal_Int32 nIndex = 0;
-    sKeyIdentifier = sKey.getToken(0, '_', nIndex);
-    aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode("KEY_"+sKeyIdentifier);
+    std::u16string_view sKeyIdentifier = o3tl::getToken(sKey, 0, '_', nIndex);
+    aKeyEvent.KeyCode = KeyMapping::get().mapIdentifierToCode(OUString::Concat("KEY_") + sKeyIdentifier);
 
     const int nToken = 4;
     for (sal_Int32 i = 0; i < nToken; ++i)
@@ -1231,14 +1231,14 @@ void XCUBasedAcceleratorConfiguration::reloadChanged( const OUString& sPrimarySe
         if ( nIndex < 0 )
             break;
 
-        OUString sToken = sKey.getToken(0, '_', nIndex);
-        if ( sToken == "SHIFT" )
+        std::u16string_view sToken = o3tl::getToken(sKey, 0, '_', nIndex);
+        if ( sToken == u"SHIFT" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::SHIFT;
-        else if ( sToken == "MOD1" )
+        else if ( sToken == u"MOD1" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD1;
-        else if ( sToken == "MOD2" )
+        else if ( sToken == u"MOD2" )
             aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD2;
-        else if ( sToken == "MOD3" )
+        else if ( sToken == u"MOD3" )
              aKeyEvent.Modifiers |= css::awt::KeyModifier::MOD3;
     }
 

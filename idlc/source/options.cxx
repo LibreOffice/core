@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/file.hxx>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/string_view.hxx>
 
 #ifdef _WIN32
 #   if !defined WIN32_LEAN_AND_MEAN
@@ -266,7 +267,7 @@ bool Options::initOptions(std::vector< std::string > & rArgs)
 #ifdef _WIN32
             OString incpath = convertIncPathtoShortWindowsPath(param.getToken(0, ';', k));
 #else
-            OString incpath = param.getToken(0, ';', k);
+            std::string_view incpath = o3tl::getToken(param, 0, ';', k);
 #endif
             buffer.append(incpath);
 //          buffer.append("\"");

@@ -19,6 +19,7 @@
 
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 #include <window.h>
 #include <strings.hrc>
 
@@ -73,19 +74,19 @@ namespace
 {
     MenuAndId decode_command(const gchar *action_name)
     {
-        OString sCommand(action_name);
+        std::string_view sCommand(action_name);
 
         sal_Int32 nIndex = 0;
-        OString sWindow = sCommand.getToken(0, '-', nIndex);
-        OString sGtkSalMenu = sCommand.getToken(0, '-', nIndex);
-        OString sItemId = sCommand.getToken(0, '-', nIndex);
+        std::string_view sWindow = o3tl::getToken(sCommand, 0, '-', nIndex);
+        std::string_view sGtkSalMenu = o3tl::getToken(sCommand, 0, '-', nIndex);
+        std::string_view sItemId = o3tl::getToken(sCommand, 0, '-', nIndex);
 
-        GtkSalMenu* pSalSubMenu = reinterpret_cast<GtkSalMenu*>(sGtkSalMenu.toInt64());
+        GtkSalMenu* pSalSubMenu = reinterpret_cast<GtkSalMenu*>(o3tl::toInt64(sGtkSalMenu));
 
         assert(sWindow == "window" && pSalSubMenu);
         (void) sWindow;
 
-        return MenuAndId(pSalSubMenu, sItemId.toInt32());
+        return MenuAndId(pSalSubMenu, o3tl::toInt32(sItemId));
     }
 }
 

@@ -139,8 +139,8 @@ void ScShareDocumentDlg::UpdateView()
                         // parse the edit time string of the format "DD.MM.YYYY hh:mm"
                         OUString aDateTimeStr = aUsersData[i][LockFileComponent::EDITTIME];
                         sal_Int32 nIndex = 0;
-                        OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
-                        OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );
+                        std::u16string_view aDateStr = o3tl::getToken(aDateTimeStr, 0, ' ', nIndex );
+                        std::u16string_view aTimeStr = o3tl::getToken(aDateTimeStr, 0, ' ', nIndex );
                         nIndex = 0;
                         sal_uInt16 nDay = sal::static_int_cast< sal_uInt16 >( o3tl::toInt32(o3tl::getToken(aDateStr, 0, '.', nIndex )) );
                         sal_uInt16 nMonth = sal::static_int_cast< sal_uInt16 >( o3tl::toInt32(o3tl::getToken(aDateStr, 0, '.', nIndex )) );

@@ -1349,17 +1349,12 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
             else
             {
                 sal_Int32 nIdx{ 0 };
-                const OUString aLibName   = aStrMacro.getToken(0, '.', nIdx);
-                const OUString aModulName = aStrMacro.getToken(0, '.', nIdx);
-                const OUString aMacroName = aStrMacro.getToken(0, '.', nIdx);
+                const std::u16string_view aLibName   = o3tl::getToken(aStrMacro, 0, '.', nIdx);
+                const std::u16string_view aModulName = o3tl::getToken(aStrMacro, 0, '.', nIdx);
+                const std::u16string_view aMacroName = o3tl::getToken(aStrMacro, 0, '.', nIdx);
 
-                OUStringBuffer sBuffer;
-                sBuffer.append( aMacroName );
-                sBuffer.append( '.' );
-                sBuffer.append( aModulName );
-                sBuffer.append( '.' );
-                sBuffer.append( aLibName );
-                sBuffer.append( '.' );
+                OUStringBuffer sBuffer(
+                    OUString::Concat(aMacroName) + OUStringChar('.') + aModulName + OUStringChar('.') + aLibName + OUStringChar('.') );
 
                 if ( aStrLibrary == "StarOffice" )
                 {
@@ -1464,11 +1459,11 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
             // "Macroname.Modulname.Libname.Documentname" or
             // "Macroname.Modulname.Libname.Applicationname"
             sal_Int32 nIdx{ 0 };
-            const OUString aMacroName = aMacro.getToken(0, '.', nIdx);
-            const OUString aModulName = aMacro.getToken(0, '.', nIdx);
-            const OUString aLibName   = aMacro.getToken(0, '.', nIdx);
+            const std::u16string_view aMacroName = o3tl::getToken(aMacro, 0, '.', nIdx);
+            const std::u16string_view aModulName = o3tl::getToken(aMacro, 0, '.', nIdx);
+            const std::u16string_view aLibName   = o3tl::getToken(aMacro, 0, '.', nIdx);
 
-            OUString sBuffer = aLibName +
+            OUString sBuffer = OUString::Concat(aLibName) +
                 "."  +
                 aModulName  +
                 "."  +

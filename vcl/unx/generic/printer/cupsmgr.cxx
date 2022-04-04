@@ -26,6 +26,7 @@
 
 #include <unx/cupsmgr.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <osl/thread.h>
 #include <osl/file.h>
 #include <osl/conditn.hxx>
@@ -811,12 +812,12 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
             sal_Int32 nIndex = 0;
             do
             {
-                OUString aToken = aInfo.m_aAuthInfoRequired.getToken(0, ',', nIndex);
-                if (aToken == "domain")
+                std::u16string_view aToken = o3tl::getToken(aInfo.m_aAuthInfoRequired, 0, ',', nIndex);
+                if (aToken == u"domain")
                     bDomain = true;
-                else if (aToken == "username")
+                else if (aToken == u"username")
                     bUser = true;
-                else if (aToken == "password")
+                else if (aToken == u"password")
                     bPass = true;
             }
             while (nIndex >= 0);

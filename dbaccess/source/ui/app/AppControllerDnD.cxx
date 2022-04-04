@@ -852,10 +852,10 @@ IMPL_LINK_NOARG( OApplicationController, OnAsyncDrop, void*, void )
             std::vector< OUString> aList;
             sal_Int32 nIndex = 0;
             OUString sName = xContent->getIdentifier()->getContentIdentifier();
-            OUString sErase = sName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
+            std::u16string_view sErase = o3tl::getToken(sName,0,'/',nIndex); // we don't want to have the "private:forms" part
             if ( nIndex != -1 )
             {
-                aList.push_back(sName.copy(sErase.getLength() + 1));
+                aList.push_back(sName.copy(sErase.size() + 1));
                 deleteObjects( m_aAsyncDrop.nType, aList, false );
             }
         }
