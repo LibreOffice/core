@@ -2778,6 +2778,7 @@ void SwXFrame::attachToRange(uno::Reference<text::XTextRange> const& xTextRange,
                  0 == static_cast<const SwFormatAnchor*>(pItem)->GetPageNum() )
         {
             SwFormatAnchor aAnchor( *static_cast<const SwFormatAnchor*>(pItem) );
+            aAnchor.SetType(RndStdIds::FLY_AT_CHAR); // convert invalid at-page
             aAnchor.SetAnchor( aPam.GetPoint() );
             aFrameSet.Put(aAnchor);
         }

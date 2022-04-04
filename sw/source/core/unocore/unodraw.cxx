@@ -668,9 +668,11 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
         {
                     aAnchor.SetType(RndStdIds::FLY_AS_CHAR);
         }
-        else if (RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId())
+        else if (RndStdIds::FLY_AT_PAGE == aAnchor.GetAnchorId()
+                    && 0 == aAnchor.GetPageNum())
         {
             aAnchor.SetAnchor(pInternalPam->Start());
+            aAnchor.SetType(RndStdIds::FLY_AT_CHAR); // convert invalid at-page
         }
 
     }
