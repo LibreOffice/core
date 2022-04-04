@@ -40,6 +40,7 @@ using namespace ::com::sun::star;
 #include <svx/ofaitem.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
+#include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <svx/dataaccessdescriptor.hxx>
@@ -204,6 +205,21 @@ IMPL_LINK_NOARG( ScDocShell, ReloadAllLinksHdl, weld::Button&, void )
     if (pViewFrame)
         pViewFrame->RemoveInfoBar(u"enablecontent");
     SAL_WARN_IF(!pViewFrame, "sc", "expected there to be a ViewFrame");
+}
+
+namespace
+{
+    class LinkHelp
+    {
+    public:
+        DECL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, void);
+    };
+}
+
+IMPL_STATIC_LINK(LinkHelp, DispatchHelpLinksHdl, weld::Button&, rBtn, void)
+{
+    if (Help* pHelp = Application::GetHelp())
+        pHelp->Start(HID_UPDATE_LINK_WARNING, &rBtn);
 }
 
 void ScDocShell::Execute( SfxRequest& rReq )
@@ -525,8 +541,12 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         auto pInfoBar = pViewFrame->AppendInfoBar("enablecontent", "", ScResId(STR_RELOAD_TABLES), InfobarType::WARNING);
                         if (pInfoBar)
                         {
+                            weld::Button& rHelpBtn = pInfoBar->addButton();
+                            rHelpBtn.set_label(GetStandardText(StandardButtonType::Help).replaceFirst("~", ""));
+                            rHelpBtn.connect_clicked(LINK(nullptr, LinkHelp, DispatchHelpLinksHdl));
                             weld::Button& rBtn = pInfoBar->addButton();
                             rBtn.set_label(ScResId(STR_ENABLE_CONTENT));
+                            rBtn.set_tooltip_text(ScResId(STR_ENABLE_CONTENT_TOOLTIP));
                             rBtn.connect_clicked(LINK(this, ScDocShell, ReloadAllLinksHdl));
                         }
                     }
