@@ -1334,5 +1334,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146597)
     // This was creashed before.
 }
 
+// just care that it doesn't crash/assert
+CPPUNIT_TEST_FIXTURE(Test, testForcepoint101)
+{
+    load(mpTestDocumentPath, "forcepoint101.fodt");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
