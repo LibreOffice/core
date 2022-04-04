@@ -1291,6 +1291,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145274)
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf66597_1)
 {
 #if HAVE_MORE_FONTS
+    return;
     // This requires Amiri font, if it is missing the test will fail.
     vcl::filter::PDFDocument aDocument;
     load(u"tdf66597-1.odt", aDocument);
