@@ -22,6 +22,7 @@
 #include <unotools/bootstrap.hxx>
 #include <unotools/docinfohelper.hxx>
 #include <rtl/bootstrap.hxx>
+#include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
 
@@ -30,6 +31,10 @@ namespace utl
 
 OUString DocInfoHelper::GetGeneratorString()
 {
+    OUString aResultOverride = officecfg::Office::Common::Save::Document::GeneratorOverride::get();
+    if( !aResultOverride.isEmpty())
+        return aResultOverride;
+
     OUStringBuffer aResult(128);
 
     // First product: branded name + version

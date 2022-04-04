@@ -2391,6 +2391,14 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="GeneratorOverride" oor:type="xs:string" oor:nillable="false">
+          <info>
+            <desc>If set, the value will be used as the generator information saved
+            in documents. Note that the generator information may affect document import
+            and using an inappropriate value here may change how the document is imported.</desc>
+          </info>
+          <value></value>
+        </prop>
       </group>
       <group oor:name="Graphic">
         <info>
