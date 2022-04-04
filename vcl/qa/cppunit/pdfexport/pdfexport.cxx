@@ -3168,6 +3168,39 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageAnnots)
     // i.e. not only the hyperlink but also the 2 comments were exported, leading to duplication.
     CPPUNIT_ASSERT_EQUAL(1, pPdfPage->getAnnotationCount());
 }
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148359)
+{
+    aMediaDescriptor["FilterName"] <<= OUString("impress_pdf_Export");
+    saveAsPDF(u"stockobject.rtf");
+
+    std::unique_ptr<vcl::pdf::PDFiumDocument> pPdfDocument = parseExport();
+    CPPUNIT_ASSERT(pPdfDocument);
+
+    // The document has one page.
+    CPPUNIT_ASSERT_EQUAL(1, pPdfDocument->getPageCount());
+
+    std::unique_ptr<vcl::pdf::PDFiumPage> pPdfPage = pPdfDocument->openPage(/*nIndex=*/0);
+    CPPUNIT_ASSERT(pPdfPage);
+    int nPageObjectCount = pPdfPage->getObjectCount();
+
+    // Objects can be viewed by opening the PDF file in LibreOffice Draw, by
+    // opening the "Navigator" sidebar
+    CPPUNIT_ASSERT_EQUAL(35, nPageObjectCount);
+
+    // This object is visible as "Shape 2" in the "Navigator" sidebar
+    auto pObject = pPdfPage->getObject(2);
+    CPPUNIT_ASSERT_MESSAGE("no object", pObject != nullptr);
+
+    // tdf#148359: The symptom is that the shape is not visible, although the
+    //   same number of objects in the same position are available in the same
+    //   position as before.
+    //   Without the fix in place, this test would have failed with
+    // - Expected: COL_BLACK
+    // - Actual  : COL_WHITE
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, pObject->getFillColor());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
