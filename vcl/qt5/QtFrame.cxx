@@ -871,7 +871,7 @@ void QtFrame::SetPointerPos(tools::Long nX, tools::Long nY)
 {
     // some cursor already exists (and it has m_ePointerStyle shape)
     // so here we just reposition it
-    QCursor::setPos(asChild()->mapToGlobal(QPoint(nX, nY)));
+    QCursor::setPos(m_pQWidget->mapToGlobal(QPoint(nX, nY) / devicePixelRatioF()));
 }
 
 void QtFrame::Flush()
