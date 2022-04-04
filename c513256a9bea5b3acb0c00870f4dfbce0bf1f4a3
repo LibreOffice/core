@@ -16,6 +16,23 @@
       "message": "adding API to sal",
       "revId": "c513256a9bea5b3acb0c00870f4dfbce0bf1f4a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "309ac781_4e9efac9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-04T12:49:02Z",
+      "side": 1,
+      "message": "without looking in detail now, but is this probably a reincarnation of what has been covered already at \u003chttps://git.libreoffice.org/core/+/9230c189ebc5bcfd6303bfa7eebcd35488037d00%5E!/\u003e \"Use existing rtl_str_toInt64_WithLength\"?",
+      "revId": "c513256a9bea5b3acb0c00870f4dfbce0bf1f4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
