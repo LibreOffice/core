@@ -111,6 +111,9 @@ class SdtHelper final : public virtual SvRefBase
 
     void loadPropertiesXMLs();
 
+    /// Clear all collected attributes for futher reuse
+    void clear();
+
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
                        css::uno::Reference<css::uno::XComponentContext> const& xContext);
