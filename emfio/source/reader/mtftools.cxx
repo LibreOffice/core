@@ -750,7 +750,7 @@ namespace emfio
         if ( nIndex & ENHMETA_STOCK_OBJECT )
         {
             SAL_INFO ( "emfio", "\t\t ENHMETA_STOCK_OBJECT, StockObject Enumeration: 0x" << std::hex  << nIndex );
-            StockObject nStockId = static_cast<StockObject>(nIndex);
+            StockObject nStockId = static_cast<StockObject>(nIndex & 0xFF);
             switch( nStockId )
             {
                 case StockObject::WHITE_BRUSH :
