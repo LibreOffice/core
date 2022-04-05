@@ -119,7 +119,7 @@ There are 2 cases:
     with known size of the content). In this case ConstCharArrayDetector is used to ensure the function
     is called only with const char[N] arguments. There's no other plain C string type overload.
     (Note that OUStringChar is also covered by ConstCharArrayDetector's TypeUtf16 check, but
-    provides a pointer to a string that is not NUL-termianted, unlike the char16_t const[N] arrays
+    provides a pointer to a string that is not NUL-terminated, unlike the char16_t const[N] arrays
     normally covered by that check, and which are assumed to represent NUL-terminated string
     literals.)
 2) All plain C string types are wanted, and const char[N] needs to be handled differently.
