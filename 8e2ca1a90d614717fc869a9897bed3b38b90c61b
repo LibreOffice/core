@@ -65,6 +65,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "058a730f_4c1b76f1",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T09:28:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5d2ee4d6_ac6e7481",
+      "range": {
+        "startLine": 130,
+        "startChar": 86,
+        "endLine": 130,
+        "endChar": 2
+      },
+      "revId": "8e2ca1a90d614717fc869a9897bed3b38b90c61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e14d1452_9968646c",
