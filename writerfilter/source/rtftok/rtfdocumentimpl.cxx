@@ -50,6 +50,7 @@
 #include "rtfskipdestination.hxx"
 #include "rtftokenizer.hxx"
 #include "rtflookahead.hxx"
+#include "rtfcharsets.hxx"
 
 using namespace com::sun::star;
 
@@ -1370,14 +1371,48 @@ void RTFDocumentImpl::text(OUString& rString)
                     case Destination::FONTTABLE:
                     case Destination::FONTENTRY:
                     {
-                        m_aFontNames[m_nCurrentFontIndex] = aName;
+                        // Old documents can contain no encoding information in fontinfo,
+                        // but there can be font name suffixes: Arial CE is not a special
+                        // font, it is ordinal Arial, but with used cp 1250 encoding.
+                        // Moreover these suffixes have priority over \cpgN and \fcharsetN
+                        // in MS Word.
+                        OUString aFontSuffix;
+                        OUString aNameNoSuffix(aName);
+                        sal_Int32 nLastSpace = aName.lastIndexOf(' ');
+                        if (nLastSpace >= 0)
+                        {
+                            aFontSuffix = aName.copy(nLastSpace + 1);
+                            aNameNoSuffix = aName.copy(0, nLastSpace);
+                            sal_Int32 nEncoding = RTL_TEXTENCODING_DONTKNOW;
+                            for (int i = 0;
+                                 aRTFFontNameSuffixes[i].codepage != RTL_TEXTENCODING_DONTKNOW; i++)
+                            {
+                                if (aFontSuffix.equalsAscii(aRTFFontNameSuffixes[i].suffix))
+                                {
+                                    nEncoding = aRTFFontNameSuffixes[i].codepage;
+                                    break;
+                                }
+                            }
+                            if (nEncoding > RTL_TEXTENCODING_DONTKNOW)
+                            {
+                                m_nCurrentEncoding = nEncoding;
+                                m_aStates.top().setCurrentEncoding(m_nCurrentEncoding);
+                            }
+                            else
+                            {
+                                // Unknown suffix: looks like it is just a part of font name, restore it
+                                aNameNoSuffix = aName;
+                            }
+                        }
+
+                        m_aFontNames[m_nCurrentFontIndex] = aNameNoSuffix;
                         if (m_nCurrentEncoding >= 0)
                         {
                             m_aFontEncodings[m_nCurrentFontIndex] = m_nCurrentEncoding;
                             m_nCurrentEncoding = -1;
                         }
                         m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Font_name,
-                                                                 new RTFValue(aName));
+                                                                 new RTFValue(aNameNoSuffix));
 
                         writerfilter::Reference<Properties>::Pointer_t const pProp(
                             new RTFReferenceProperties(m_aStates.top().getTableAttributes(),
