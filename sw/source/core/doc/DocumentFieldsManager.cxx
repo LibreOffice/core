@@ -33,6 +33,7 @@
 #include <SwUndoField.hxx>
 #include <flddat.hxx>
 #include <cntfrm.hxx>
+#include <node2lay.hxx>
 #include <section.hxx>
 #include <docufld.hxx>
 #include <calbck.hxx>
@@ -752,9 +753,12 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                         {
                             SwPosition aPos( *pTableNd );
                             if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
+                            {
                                 FieldsToCalc( *pCalc, SetGetExpField(
-                                    aPos.nNode, pFormatField->GetTextField(),
-                                    &aPos.nContent), pLayout);
+                                        aPos.nNode, pFormatField->GetTextField(),
+                                        &aPos.nContent, pFrame->GetPhyPageNum()),
+                                    pLayout);
+                            }
                             else
                                 pFrame = nullptr;
                         }
@@ -763,8 +767,11 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     {
                         // create index to determine the TextNode
                         SwNodeIndex aIdx( rTextNd );
+                        SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(rTextNd);
                         FieldsToCalc( *pCalc,
-                            SetGetExpField(aIdx, pFormatField->GetTextField()),
+                            SetGetExpField(aIdx, pFormatField->GetTextField(),
+                                nullptr,
+                                pFrame2 ? pFrame2->GetPhyPageNum() : 0),
                             pLayout);
                     }
 
@@ -824,8 +831,11 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                             {
                                 SwPosition aPos( *pCNd );
                                 if( GetBodyTextNode( m_rDoc, aPos, *pFrame ) )
-                                    FieldsToCalc(*pCalc, SetGetExpField(aPos.nNode),
-                                            pLayout);
+                                {
+                                    FieldsToCalc(*pCalc, SetGetExpField(aPos.nNode,
+                                            nullptr, nullptr, pFrame->GetPhyPageNum()),
+                                        pLayout);
+                                }
                                 else
                                     pFrame = nullptr;
                             }
@@ -835,7 +845,10 @@ void DocumentFieldsManager::UpdateTableFields( SfxPoolItem* pHt )
                     {
                         // create index to determine the TextNode
                         SwNodeIndex aIdx( *pTableNd );
-                        FieldsToCalc(*pCalc, SetGetExpField(aIdx), pLayout);
+                        SwFrame const*const pFrame2 = ::sw::FindNeighbourFrameForNode(*pTableNd);
+                        FieldsToCalc(*pCalc, SetGetExpField(aIdx, nullptr, nullptr,
+                                pFrame2 ? pFrame2->GetPhyPageNum() : 0),
+                            pLayout);
                     }
 
                     SwTableCalcPara aPara(*pCalc, pTableNd->GetTable(), pLayout);

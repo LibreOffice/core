@@ -31,7 +31,9 @@
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentState.hxx>
 #include <IDocumentLayoutAccess.hxx>
+#include <node2lay.hxx>
 #include <cntfrm.hxx>
+#include <pagefrm.hxx>
 #include <txtfrm.hxx>
 #include <notxtfrm.hxx>
 #include <pam.hxx>
@@ -61,7 +63,9 @@ using namespace ::com::sun::star::uno;
 SetGetExpField::SetGetExpField(
     const SwNodeIndex& rNdIdx,
     const SwTextField* pField,
-    const SwIndex* pIdx )
+    const SwIndex* pIdx,
+    sal_uInt16 const nPageNumber)
+    : m_nPageNumber(nPageNumber)
 {
     m_eSetGetExpFieldType = TEXTFIELD;
     m_CNTNT.pTextField = pField;
@@ -87,7 +91,9 @@ SetGetExpField::SetGetExpField( const SwNodeIndex& rNdIdx,
 // these always have content position 0xffffffff!
 // There is never a field on this, only up to COMPLETE_STRING possible
 SetGetExpField::SetGetExpField( const SwSectionNode& rSectNd,
-                                const SwPosition* pPos )
+                                const SwPosition* pPos,
+                                sal_uInt16 const nPageNumber)
+    : m_nPageNumber(nPageNumber)
 {
     m_eSetGetExpFieldType = SECTIONNODE;
     m_CNTNT.pSection = &rSectNd.GetSection();
@@ -200,6 +206,10 @@ bool SetGetExpField::operator==( const SetGetExpField& rField ) const
 
 bool SetGetExpField::operator<( const SetGetExpField& rField ) const
 {
+    if (m_nPageNumber != 0 && rField.m_nPageNumber != 0 && m_nPageNumber != rField.m_nPageNumber)
+    {
+        return m_nPageNumber < rField.m_nPageNumber;
+    }
     if( m_nNode < rField.m_nNode || ( m_nNode == rField.m_nNode && m_nContent < rField.m_nContent ))
         return true;
     else if( m_nNode != rField.m_nNode || m_nContent != rField.m_nContent )
@@ -990,8 +1000,10 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
     // always the first! (in tab headline, header-/footer)
     Point aPt;
     std::pair<Point, bool> const tmp(aPt, false);
-    const SwContentFrame* pFrame = rTextNd.getLayoutFrame(
-        rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), nullptr, &tmp);
+    // need pos to get the frame on the correct page
+    SwPosition const pos(const_cast<SwTextNode&>(rTextNd), rTField.GetStart());
+    const SwFrame* pFrame = rTextNd.getLayoutFrame(
+        rDoc.getIDocumentLayoutAccess().GetCurrentLayout(), &pos, &tmp);
 
     std::unique_ptr<SetGetExpField> pNew;
     bool bIsInBody = false;
@@ -1006,8 +1018,16 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         // in frames whose anchor is in redline. However, we do want to update
         // fields in hidden sections. So: In order to be updated, a field 1)
         // must have a frame, or 2) it must be in the document body.
+        if (pFrame == nullptr && bIsInBody)
+        {   // try harder to get a frame for the page number
+            pFrame = ::sw::FindNeighbourFrameForNode(rTextNd);
+            // possibly there is no layout at all, happens in mail merge
+        }
         if( (pFrame != nullptr) || bIsInBody )
-            pNew.reset(new SetGetExpField( aIdx, &rTField ));
+        {
+            pNew.reset(new SetGetExpField(aIdx, &rTField, nullptr,
+                pFrame ? pFrame->GetPhyPageNum() : 0));
+        }
     }
     else
     {
@@ -1015,7 +1035,8 @@ void SwDocUpdateField::GetBodyNode( const SwTextField& rTField, SwFieldIds nFiel
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
         bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
         OSL_ENSURE(bResult, "where is the Field");
-        pNew.reset(new SetGetExpField( aPos.nNode, &rTField, &aPos.nContent ));
+        pNew.reset(new SetGetExpField(aPos.nNode, &rTField, &aPos.nContent,
+            pFrame->GetPhyPageNum()));
     }
 
     // always set the BodyTextFlag in GetExp or DB fields
@@ -1063,13 +1084,17 @@ void SwDocUpdateField::GetBodyNode( const SwSectionNode& rSectNd )
 
             bool const bResult = GetBodyTextNode( rDoc, aPos, *pFrame );
             OSL_ENSURE(bResult, "where is the Field");
-            pNew.reset(new SetGetExpField( rSectNd, &aPos ));
+            pNew.reset(new SetGetExpField(rSectNd, &aPos, pFrame->GetPhyPageNum()));
 
         } while( false );
     }
 
     if( !pNew )
-        pNew.reset(new SetGetExpField( rSectNd ));
+    {
+        // try harder to get a frame for the page number
+        SwFrame const*const pFrame = ::sw::FindNeighbourFrameForNode(rSectNd);
+        pNew.reset(new SetGetExpField(rSectNd, nullptr, pFrame ? pFrame->GetPhyPageNum() : 0));
+    }
 
     m_pFieldSortList->insert( std::move(pNew) );
 }

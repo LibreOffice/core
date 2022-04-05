@@ -20,6 +20,7 @@
 #include <calbck.hxx>
 #include <node.hxx>
 #include <ndindex.hxx>
+#include <pam.hxx>
 #include <swtable.hxx>
 #include <ftnfrm.hxx>
 #include <sectfrm.hxx>
@@ -57,7 +58,7 @@ public:
     SwFrame* GetFrame( const Point* pDocPos ) const;
 };
 
-static SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
+static SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx, SwFlowFrame const**const ppFrame)
 {
     if( pIdx->GetIndex() >= rNodes.Count() - 1 )
         return nullptr;
@@ -67,20 +68,27 @@ static SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
     while( aTmp < rNodes.Count()-1 )
     {
         pNd = &aTmp.GetNode();
-        bool bFound = false;
+        SwFrame const* pFound(nullptr);
         if ( pNd->IsContentNode() )
             // sw_redlinehide: assume that it's OK to find a node with the same
             // frame as the caller's one
-            bFound = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<SwContentNode*>(pNd)).First();
+            pFound = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<SwContentNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
-            bFound = SwIterator<SwFrame,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First() ;
+            pFound = SwIterator<SwFrame,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First() ;
         else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
         {
             pNd = nullptr;
             break;
         }
-        if ( bFound )
-                break;
+        if (pFound != nullptr)
+        {
+            if (ppFrame)
+            {
+                *ppFrame = SwFlowFrame::CastFlowFrame(pFound);
+                assert(*ppFrame);
+            }
+            break;
+        }
         ++aTmp;
     }
 
@@ -91,7 +99,7 @@ static SwNode* GoNextWithFrame(const SwNodes& rNodes, SwNodeIndex *pIdx)
     return pNd;
 }
 
-static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
+static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx, SwFlowFrame const**const ppFrame)
 {
     if( !pIdx->GetIndex() )
         return nullptr;
@@ -101,20 +109,27 @@ static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
     while( aTmp.GetIndex() )
     {
         pNd = &aTmp.GetNode();
-        bool bFound = false;
+        SwFrame const* pFound(nullptr);
         if ( pNd->IsContentNode() )
             // sw_redlinehide: assume that it's OK to find a node with the same
             // frame as the caller's one
-            bFound = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<SwContentNode*>(pNd)).First();
+            pFound = SwIterator<SwFrame, SwContentNode, sw::IteratorMode::UnwrapMulti>(*static_cast<SwContentNode*>(pNd)).First();
         else if ( pNd->IsTableNode() )
-            bFound = SwIterator<SwFrame,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First();
+            pFound = SwIterator<SwFrame,SwFormat>(*static_cast<SwTableNode*>(pNd)->GetTable().GetFrameFormat()).First();
         else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
         {
             pNd = nullptr;
             break;
         }
-        if ( bFound )
-                break;
+        if (pFound != nullptr)
+        {
+            if (ppFrame)
+            {
+                *ppFrame = SwFlowFrame::CastFlowFrame(pFound);
+                assert(*ppFrame);
+            }
+            break;
+        }
         --aTmp;
     }
 
@@ -123,6 +138,40 @@ static SwNode* GoPreviousWithFrame(SwNodeIndex *pIdx)
     else if( pNd )
         (*pIdx) = aTmp;
     return pNd;
+}
+
+namespace sw {
+
+SwFrame const* FindNeighbourFrameForNode(SwNode const& rNode)
+{
+    SwNodeIndex idx(rNode);
+    SwFlowFrame const* pFlow(nullptr);
+    if (SwNode *const pNode = GoPreviousWithFrame(&idx, &pFlow))
+    {
+        if (::CheckNodesRange(rNode, idx, true))
+        {
+            while (pFlow->HasFollow())
+            {   // try to get the one on the current page
+                pFlow = pFlow->GetFollow();
+            }
+            return &pFlow->GetFrame();
+        }
+    }
+    idx = rNode;
+    if (SwNode *const pNode = GoNextWithFrame(idx.GetNodes(), &idx, &pFlow))
+    {
+        if (::CheckNodesRange(rNode, idx, true))
+        {
+            while (pFlow->IsFollow())
+            {   // try to get the one on the current page
+                pFlow = pFlow->GetPrecede();
+            }
+            return &pFlow->GetFrame();
+        }
+    }
+    return nullptr;
+}
+
 }
 
 /**
@@ -145,7 +194,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
         if( !bSearch && rNode.GetIndex() < mnIndex )
         {
             SwNodeIndex aTmp( *rNode.EndOfSectionNode(), +1 );
-            pNd = GoPreviousWithFrame( &aTmp );
+            pNd = GoPreviousWithFrame(&aTmp, nullptr);
             if( pNd && rNode.GetIndex() > pNd->GetIndex() )
                 pNd = nullptr; // Do not go over the limits
             mbMaster = false;
@@ -153,7 +202,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
         else
         {
             SwNodeIndex aTmp( rNode, -1 );
-            pNd = GoNextWithFrame( rNode.GetNodes(), &aTmp );
+            pNd = GoNextWithFrame(rNode.GetNodes(), &aTmp, nullptr);
             mbMaster = true;
             if( !bSearch && pNd && rNode.EndOfSectionIndex() < pNd->GetIndex() )
                 pNd = nullptr; // Do not go over the limits

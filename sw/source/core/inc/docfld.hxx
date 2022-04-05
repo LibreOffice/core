@@ -43,6 +43,8 @@ enum class SwFieldIds : sal_uInt16;
 // Update expression fields
 class SetGetExpField
 {
+    // TODO: in case of multiple layouts, storing this only once isn't going to work (although already a problem for cached field value)
+    sal_uInt16 m_nPageNumber = 0;
     sal_uLong m_nNode;
     union {
         const SwTextField* pTextField;
@@ -62,12 +64,14 @@ class SetGetExpField
 
 public:
     SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextField* pField = nullptr,
-                    const SwIndex* pIdx = nullptr );
+                    const SwIndex* pIdx = nullptr,
+                    sal_uInt16 nPageNumber = 0);
 
     SetGetExpField( const SwNodeIndex& rNdIdx, const SwTextINetFormat& rINet );
 
     SetGetExpField( const SwSectionNode& rSectNode,
-                    const SwPosition* pPos = nullptr  );
+                    const SwPosition* pPos = nullptr,
+                    sal_uInt16 nPageNumber = 0);
 
     SetGetExpField( const SwTableBox& rTableBox  );
 

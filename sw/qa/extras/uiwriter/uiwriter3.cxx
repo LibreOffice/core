@@ -54,6 +54,79 @@ class SwUiWriterTest3 : public SwModelTestBase
 {
 };
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testVariableFieldTableRowSplitHeader)
+{
+    SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "variable-field-table-row-split-header.fodt");
+
+    // finish layout
+    Scheduler::ProcessEventsToIdle();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // the fields in cell are: variable-get variable-set variable-get
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[1]", "rText", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[2]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[3]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/Special[1]", "rText", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/Special[1]", "rText", "1");
+    // here the header had shown the wrong value
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/Special[1]", "rText", "2");
+
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/Special[1]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/Special[1]", "rText", "3");
+
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/Special[1]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/Special[1]", "rText", "4");
+
+    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/Special[1]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/Special[1]", "rText", "4");
+
+    discardDumpedLayout();
+    // update and check again
+    pDoc->getIDocumentFieldsAccess().UpdateFields(true);
+    Scheduler::ProcessEventsToIdle();
+    pXmlDoc = parseLayoutDump();
+
+    // the fields in cell are: variable-get variable-set variable-get
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[1]", "rText", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[2]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[2]/txt[1]/Special[3]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[1]/header/txt[1]/Special[1]", "rText", "0");
+    assertXPath(pXmlDoc, "/root/page[1]/footer/txt[1]/Special[1]", "rText", "1");
+    // here the header had shown the wrong value
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[2]/header/txt[1]/Special[1]", "rText", "1");
+    assertXPath(pXmlDoc, "/root/page[2]/footer/txt[1]/Special[1]", "rText", "2");
+
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[3]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[3]/header/txt[1]/Special[1]", "rText", "2");
+    assertXPath(pXmlDoc, "/root/page[3]/footer/txt[1]/Special[1]", "rText", "3");
+
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[1]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[2]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[4]/body/tab/row[2]/cell[2]/txt[1]/Special[3]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[4]/header/txt[1]/Special[1]", "rText", "3");
+    assertXPath(pXmlDoc, "/root/page[4]/footer/txt[1]/Special[1]", "rText", "4");
+
+    assertXPath(pXmlDoc, "/root/page[5]/header/txt[1]/Special[1]", "rText", "4");
+    assertXPath(pXmlDoc, "/root/page[5]/footer/txt[1]/Special[1]", "rText", "4");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf129382)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf129382.docx");
