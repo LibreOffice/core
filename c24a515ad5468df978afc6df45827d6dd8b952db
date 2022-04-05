@@ -16,6 +16,24 @@
       "message": "@jmux:  Can you please take a look at how the new JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD is set?  We only need the *_FOR_BUILD value in external/hsqldb/ExternalProject_hsqldb.mk, so I didn\u0027t add the non--*_FOR_BUILD variable itself to config_host.mk.in.  Things appear to already work as intended for non--cross-compiling builds, but there\u0027s most likely further modifications necessary for cross-compiling builds.",
       "revId": "c24a515ad5468df978afc6df45827d6dd8b952db",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "836d715b_17486c38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-05T09:11:44Z",
+      "side": 1,
+      "message": "This is missing an entry in DIRECT_FOR_BUILD_SETTINGS, so in case of a cross build the setting from the build / cross-toolset configure run is actually copied as _FOR_BUILD into the config_host.mk.in.\n\nCurrently JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD is just set in the case of non-cross build, where you copy that value explicitly. There is no JDK_SECURITYMANAGER_DISALLOWED value exported, because the cross-toolset doesn\u0027t need to call any Java tooling, just the host (build).",
+      "parentUuid": "36b4783f_fd7a688e",
+      "revId": "c24a515ad5468df978afc6df45827d6dd8b952db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
