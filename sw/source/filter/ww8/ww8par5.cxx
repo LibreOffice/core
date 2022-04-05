@@ -1710,10 +1710,12 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             nSub = DI_COMMENT;
             break;
         case 20:
-            nSub = DI_CHANGE;
+            // MS Word never updates this automatically, so mark as fixed for best compatibility
+            nSub = DI_CHANGE | DI_SUB_FIXED;
             nReg = DI_SUB_AUTHOR;
             break;
         case 21:
+            // The real create date can never change, so mark as fixed for best compatibility
             nSub = DI_CREATE | DI_SUB_FIXED;
             nReg = DI_SUB_DATE;
             bDateTime = true;

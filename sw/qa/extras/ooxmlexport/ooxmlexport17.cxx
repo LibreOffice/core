@@ -85,8 +85,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_createField, "tdf148380_createField.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148380_modifiedField, "tdf148380_modifiedField.docx")
 {
-    getParagraph(2, "4/5/2022 4:29:00 PM"); // default (unspecified) date format
-
     // Verify that these are fields, and not just plain text
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -94,10 +92,11 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_modifiedField, "tdf148380_modifiedField.d
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
     // unspecified SAVEDATE gets default US formatting because style.xml has w:lang w:val="en-US"
     //CPPUNIT_ASSERT_EQUAL(OUString("4/5/2022 4:29:00 PM"), xField->getPresentation(false));
-    //xField.set(xFields->nextElement(), uno::UNO_QUERY);
-    // FIXME: This was hand-modified and really should be Charlie Brown
-    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix me? I really should be Charlie Brown (or a date)",
-                                 OUString("Charles Brown"), xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix me? Ideally date/time like M:d:yyyy H:mm:ss AM/PM",
+                                 OUString("04/05/2022"), xField->getPresentation(false));
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    // This was hand-modified and really should be Charlie Brown
+    CPPUNIT_ASSERT_EQUAL(OUString("Charlie Brown"), xField->getPresentation(false));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf148380_printField, "tdf148380_printField.docx")
@@ -109,8 +108,8 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_printField, "tdf148380_printField.docx")
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
     // unspecified SAVEDATE gets default GB formatting because stylele.xml has w:lang w:val="en-GB"
     //CPPUNIT_ASSERT_EQUAL(OUString("08/04/2022 07:10:00 AM"), xField->getPresentation(false));
-    //CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Modified"), xField->getPresentation(true));
-    //xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Modified"), xField->getPresentation(true));
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
     // MS Word actually shows "8 o'clock-ish" until the document is reprinted,
     // but it seems best to actually show the real last-printed date since it can't be FIXEDFLD
     //CPPUNIT_ASSERT_EQUAL(OUString("08/04/2022 6:47:00 AM"), xField->getPresentation(false));
