@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "728db876_7042e04a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-05T08:44:38Z",
+      "side": 1,
+      "message": "hopefully not controversial to merge for 7-3",
+      "revId": "3a599d6fe4ef0a5843e294000d414882e102c9ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
