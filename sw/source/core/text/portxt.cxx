@@ -419,8 +419,11 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     else
     {
         bool bFirstPor = rInf.GetLineStart() == rInf.GetIdx();
+        const bool bBreakLineIfHasFly
+            = rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML);
         if (aGuess.BreakPos() != TextFrameIndex(COMPLETE_STRING) &&
-            aGuess.BreakPos() != rInf.GetLineStart() &&
+            (aGuess.BreakPos() != rInf.GetLineStart() || bBreakLineIfHasFly) &&
             ( !bFirstPor || rInf.GetFly() || rInf.GetLast()->IsFlyPortion() ||
               rInf.IsFirstMulti() ) &&
             ( !rInf.GetLast()->IsBlankPortion() ||
@@ -429,8 +432,10 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             BreakUnderflow( rInf );
         }
         else
-             // case C2, last exit
-            BreakCut( rInf, aGuess );
+        {
+            // case C2, last exit
+            BreakCut(rInf, aGuess);
+        }
     }
 
     return bFull;
