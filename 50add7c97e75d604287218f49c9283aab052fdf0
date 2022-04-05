@@ -166,6 +166,30 @@
       },
       "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "113bc875_a6300505",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-04-05T11:22:17Z",
+      "side": 0,
+      "message": "It\u0027s not her suggestion, it\u0027s the actual content in line 130, but you commented there about icon theme, also commented here (line 62). See, line 130 is about UI chooser while line 62 is about icon theme.",
+      "parentUuid": "88c48244_1cf23797",
+      "range": {
+        "startLine": 62,
+        "startChar": 34,
+        "endLine": 62,
+        "endChar": 144
+      },
+      "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
