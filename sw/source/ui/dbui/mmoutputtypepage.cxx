@@ -215,7 +215,7 @@ SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem&
     , m_pImpl(new SwSendMailDialog_Impl)
     , m_pConfigItem(&rConfigItem)
     , m_nExpectedCount(0)
-    , m_nSendCount(0)
+    , m_nProcessedCount(0)
     , m_nErrorCount(0)
     , m_xTransferStatus(m_xBuilder->weld_label("transferstatus"))
     , m_xPaused(m_xBuilder->weld_label("paused"))
@@ -395,10 +395,10 @@ void  SwSendMailDialog::IterateMails()
         {
             OUString sMessage = m_sSendingTo;
             m_xStatus->append();
-            m_xStatus->set_image(m_nSendCount, RID_BMP_FORMULA_CANCEL, 0);
-            m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", pCurrentMailDescriptor->sEMail), 1);
-            m_xStatus->set_text(m_nSendCount, m_sAddressInvalid, 2);
-            ++m_nSendCount;
+            m_xStatus->set_image(m_nProcessedCount, RID_BMP_FORMULA_CANCEL, 0);
+            m_xStatus->set_text(m_nProcessedCount, sMessage.replaceFirst("%1", pCurrentMailDescriptor->sEMail), 1);
+            m_xStatus->set_text(m_nProcessedCount, m_sAddressInvalid, 2);
+            ++m_nProcessedCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
             pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
@@ -479,10 +479,10 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
 
     OUString sMessage = m_sSendingTo;
     m_xStatus->append();
-    m_xStatus->set_image(m_nSendCount, sInsertImg, 0);
-    m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", xMessage->getRecipients()[0]), 1);
-    m_xStatus->set_text(m_nSendCount, bResult ? m_sCompleted : m_sFailed, 2);
-    ++m_nSendCount;
+    m_xStatus->set_image(m_nProcessedCount, sInsertImg, 0);
+    m_xStatus->set_text(m_nProcessedCount, sMessage.replaceFirst("%1", xMessage->getRecipients()[0]), 1);
+    m_xStatus->set_text(m_nProcessedCount, bResult ? m_sCompleted : m_sFailed, 2);
+    ++m_nProcessedCount;
     if(!bResult)
         ++m_nErrorCount;
 
@@ -498,7 +498,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
 void SwSendMailDialog::UpdateTransferStatus()
 {
     OUString sStatus( m_sTransferStatus );
-    sStatus = sStatus.replaceFirst("%1", OUString::number(m_nSendCount) );
+    sStatus = sStatus.replaceFirst("%1", OUString::number(m_nProcessedCount) );
     sStatus = sStatus.replaceFirst("%2", OUString::number(m_nExpectedCount));
     m_xTransferStatus->set_label(sStatus);
 
@@ -508,7 +508,7 @@ void SwSendMailDialog::UpdateTransferStatus()
     if (!m_pImpl->aDescriptors.empty())
     {
         assert(m_nExpectedCount && "div-by-zero");
-        m_xProgressBar->set_percentage(m_nSendCount * 100 / m_nExpectedCount);
+        m_xProgressBar->set_percentage(m_nProcessedCount * 100 / m_nExpectedCount);
     }
     else
         m_xProgressBar->set_percentage(0);
@@ -516,7 +516,7 @@ void SwSendMailDialog::UpdateTransferStatus()
 
 void SwSendMailDialog::AllMailsSent()
 {
-    if (m_nSendCount == m_nExpectedCount)
+    if (m_nProcessedCount == m_nExpectedCount)
     {
         m_xStop->set_sensitive(false);
         m_xCancel->set_label(m_sClose);

@@ -154,7 +154,7 @@ class SwSendMailDialog final : public weld::GenericDialogController
     std::unique_ptr<SwSendMailDialog_Impl> m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;
     sal_Int32               m_nExpectedCount;
-    sal_Int32               m_nSendCount;
+    sal_Int32               m_nProcessedCount;
     sal_Int32               m_nErrorCount;
 
     std::unique_ptr<weld::Label> m_xTransferStatus;
