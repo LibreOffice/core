@@ -396,6 +396,7 @@ IndexTabPage_Impl::IndexTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow_I
     , bIsActivated(false)
     , nRowHeight(m_xIndexList->get_height_rows(1))
     , nAllHeight(0)
+    , nLastCharCode(0)
 {
     m_xIndexList->set_size_request(m_xIndexList->get_approximate_digit_width() * 30, -1);
 
@@ -465,7 +466,19 @@ IMPL_LINK_NOARG(IndexTabPage_Impl, TreeChangeHdl, weld::TreeView&, void)
 
 IMPL_LINK_NOARG(IndexTabPage_Impl, EntryChangeHdl, weld::Entry&, void)
 {
-    aAutoCompleteIdle.Start();
+    switch (nLastCharCode)
+    {
+        case css::awt::Key::DELETE_WORD_BACKWARD:
+        case css::awt::Key::DELETE_WORD_FORWARD:
+        case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+        case css::awt::Key::DELETE_TO_END_OF_LINE:
+        case KEY_BACKSPACE:
+        case KEY_DELETE:
+            break;
+        default:
+            aAutoCompleteIdle.Start();
+            break;
+    }
 }
 
 IMPL_LINK(IndexTabPage_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
@@ -530,6 +543,8 @@ IMPL_LINK(IndexTabPage_Impl, KeyInputHdl, const KeyEvent&, rKEvt, bool)
 //        m_bTreeChange = false;
         return true;
     }
+
+    nLastCharCode = nCode;
     return false;
 }
 
