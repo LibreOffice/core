@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55d8f948_168a6aad",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-04-05T09:05:31Z",
+      "side": 1,
+      "message": "Very nice! \n\nHere LibO get new UI tell \"left\" and \"right\" label in new Line Break UI. Just curious, how users with RTL (Arab, Persian, Hebrew) deal with these?",
+      "revId": "e799ebfd7a2deab13b47092807335670abb7b485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
