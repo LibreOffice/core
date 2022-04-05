@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ddc3717_8a42e2aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-05T13:30:07Z",
+      "side": 1,
+      "message": "CI run OK (build 2608)",
+      "revId": "d41d2a3f451ea496a77197bd4f94d65f5d23c7f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
