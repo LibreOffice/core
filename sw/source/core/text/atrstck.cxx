@@ -123,6 +123,7 @@ const sal_uInt8 StackPos[ RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN + 1 ] =
     42, // RES_TXTATR_CJK_RUBY,                  // 53
      0, // RES_TXTATR_UNKNOWN_CONTAINER,         // 54
     43, // RES_TXTATR_INPUTFIELD                 // 55
+    44, // RES_TXTATR_CONTENTCONTROL             // 56
 };
 
 namespace CharFormat
@@ -517,6 +518,10 @@ void SwAttrHandler::ActivateTop( SwFont& rFnt, const sal_uInt16 nAttr )
     {
         rFnt.GetMeta()--;
     }
+    else if (nAttr == RES_TXTATR_CONTENTCONTROL)
+    {
+        rFnt.GetContentControl()--;
+    }
     else if ( RES_TXTATR_CJK_RUBY == nAttr )
     {
         // ruby stack has no more attributes
@@ -810,6 +815,16 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, bool bPush )
                 rFnt.GetMeta()++;
             else
                 rFnt.GetMeta()--;
+            break;
+        case RES_TXTATR_CONTENTCONTROL:
+            if (bPush)
+            {
+                rFnt.GetContentControl()++;
+            }
+            else
+            {
+                rFnt.GetContentControl()--;
+            }
             break;
         case RES_TXTATR_INPUTFIELD :
             if ( bPush )
