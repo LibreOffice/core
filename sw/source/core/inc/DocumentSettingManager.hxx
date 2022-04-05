@@ -174,6 +174,8 @@ class DocumentSettingManager final :
     bool mbFootnoteInColumnToPageEnd;
     sal_Int32 mnImagePreferredDPI;
     bool mbAutoFirstLineIndentDisregardLineSpace;
+    // If this is on as_char flys wrapping will be handled the same like in Word
+    bool mbWrapAsCharFlysLikeInOOXML;
 
 public:
 

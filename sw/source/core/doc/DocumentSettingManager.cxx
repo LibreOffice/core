@@ -105,7 +105,8 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbGutterAtTop(false),
     mbFootnoteInColumnToPageEnd(false),
     mnImagePreferredDPI(0),
-    mbAutoFirstLineIndentDisregardLineSpace(true)
+    mbAutoFirstLineIndentDisregardLineSpace(true),
+    mbWrapAsCharFlysLikeInOOXML(false)
 
     // COMPATIBILITY FLAGS END
 {
@@ -244,6 +245,7 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::FOOTNOTE_IN_COLUMN_TO_PAGEEND: return mbFootnoteInColumnToPageEnd;
         case DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
             return mbAutoFirstLineIndentDisregardLineSpace;
+        case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML: return mbWrapAsCharFlysLikeInOOXML;
         default:
             OSL_FAIL("Invalid setting id");
     }
@@ -420,6 +422,10 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
 
         case DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE:
             mbAutoFirstLineIndentDisregardLineSpace = value;
+            break;
+
+        case DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML:
+            mbWrapAsCharFlysLikeInOOXML = value;
             break;
 
         // COMPATIBILITY FLAGS END
