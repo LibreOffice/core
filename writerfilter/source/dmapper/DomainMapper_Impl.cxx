@@ -5449,11 +5449,11 @@ void DomainMapper_Impl::handleAuthor
      uno::Reference< beans::XPropertySet > const& xFieldProperties,
      FieldId  eFieldId )
 {
-    if ( eFieldId != FIELD_USERINITIALS )
+    if (eFieldId == FIELD_USERNAME)
         xFieldProperties->setPropertyValue
             ( getPropertyName(PROP_FULL_NAME), uno::makeAny( true ));
 
-    if (!rFirstParam.empty())
+    if (!rFirstParam.empty() || eFieldId == FIELD_AUTHOR)
     {
         xFieldProperties->setPropertyValue(
                 getPropertyName( PROP_IS_FIXED ),
