@@ -51,6 +51,24 @@
       "parentUuid": "91939952_63171da5",
       "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba7b871_a9248639",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-05T16:37:49Z",
+      "side": 1,
+      "message": "\u003e It works fine initially, but once I click to open the \"Character highlighting Color\" popup button in the Writer toolbar, behaviour is and remains broken. 3 or 4 clicks are needed to open the \"normal\" comboboxes after that as well (and hovering is broken as described in tdf#122293 - maybe sth triggers use of native widgets?).\n\n-\u003e (platform-)\"native *windows*\", not widgets, of course\nIn fact, commenting `pChild-\u003esetAttribute(Qt::WA_NativeWindow)` in `QtFrame::windowHandle` makes things work here, but makes Impress full screen mode crash.",
+      "parentUuid": "7093b981_2be7f594",
+      "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
