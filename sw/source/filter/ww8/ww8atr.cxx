@@ -2935,8 +2935,12 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case DI_CREATE:
                     if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
                         eField = ww::eAUTHOR;
-                    else if (GetExport().GetNumberFormat(*pField, sStr))
+                    else if (GetExport().GetNumberFormat(*pField, sStr) || sStr.isEmpty())
                         eField = ww::eCREATEDATE;
+
+                    // Create author/time are always imported as fixed. Safe to ignore on export
+                    if (GetExport().GetExportFormat() != MSWordExportBase::DOC)
+                        bWriteExpand = false;
                     break;
 
                 case DI_CHANGE:
