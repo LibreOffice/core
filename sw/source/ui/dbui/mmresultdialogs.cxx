@@ -444,7 +444,8 @@ void SwMMResultEmailDialog::FillInEmailSettings()
     Sequence< OUString> aAssignment = xConfigItem->GetColumnAssignment(xConfigItem->GetCurrentDBData());
     if (aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
         sEMailColumn = aAssignment[MM_PART_E_MAIL];
-    m_xMailToLB->set_active_text(sEMailColumn);
+    if (int pos = m_xMailToLB->find_text(sEMailColumn); pos >= 0)
+        m_xMailToLB->set_active(pos);
 
     // HTML format pre-selected
     m_xSendAsLB->set_active(3);
