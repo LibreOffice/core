@@ -51,6 +51,24 @@
       "parentUuid": "309ac781_4e9efac9",
       "revId": "c513256a9bea5b3acb0c00870f4dfbce0bf1f4a3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91298d68_8da01cee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-05T07:47:29Z",
+      "side": 1,
+      "message": "The sad truth is that even if we add symbols only to nominally PRIVATE_* sections in sal/util/sal.map, we would presumably not be able to change or remove the corresponding functions again later without doing an SONAME bump of Library_sal, which is something that at least Linux distros would arguably like to avoid.  Hence the resistance to changes to sal.map (compared to include-file--only #if LIBO_INTERNAL_ONLY additions).",
+      "parentUuid": "779d79b4_d96fc2fb",
+      "revId": "c513256a9bea5b3acb0c00870f4dfbce0bf1f4a3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
