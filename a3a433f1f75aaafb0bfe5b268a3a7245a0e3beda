@@ -33,6 +33,24 @@
       "message": "This doesn\u0027t actually need the unique pointer, does it? A plain pointer, or, in fact, a non-const reference to the pointer-to-object would do.\n\nAlso, I\u0027m betting that these few lines get duplicated elsewhere.\n\nI might expect this code to look something like:\n\ninvoke_for_content_type(\n  *this,\n  ContentTypeId::OUTLINE, \n  [nSet](auto\u0026 contentT){\n      contentT.SetOutlineLevel(nSet);\n      contentT.FillMemberList();\n  }\n);\n\nor if it\u0027s a member\n\ninvoke_for_content_type(\n  ContentTypeId::OUTLINE, \n  [nSet](auto\u0026 contentT){\n      contentT.SetOutlineLevel(nSet);\n      contentT.FillMemberList();\n  }\n);\n\nAlso - when you set the online level of these SwContentT things - don\u0027t you always need to \"fill the member list\"? Or perhaps, an extra boolean parameter for updating the member list?\n\nJust asking.",
       "revId": "a3a433f1f75aaafb0bfe5b268a3a7245a0e3beda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f82e438f_8c7e8703",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 4487,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-04-05T00:17:57Z",
+      "side": 1,
+      "message": "\u0027This doesn\u0027t actually need the unique pointer, does it? A plain pointer, or, in fact, a non-const reference to the pointer-to-object would do.\u0027\n\nm_aActiveContentArray is defined as:\n\no3tl::enumarray\u003cContentTypeId,std::unique_ptr\u003cSwContentType\u003e\u003e  m_aActiveContentArr;\n\nso the enumarray holds unique_ptr\u0027s to SwContentType which is what the std::unique_ptr reference is set to in the std::unique_ptr\u003cSwContentType\u003e\u0026 rpContentT \u003d .. line.\n\nGit change history shows it was introduce by commit 4b46826ec2219935ebcf86ed6e6db73910122e72\n\nPrevious to this these lines of code looked like this:\n\n    SwContentType** ppContentT \u003d (State::ACTIVE \u003d\u003d m_eState)\n            ? \u0026m_aActiveContentArr[ContentTypeId::OUTLINE]\n            : \u0026m_aHiddenContentArr[ContentTypeId::OUTLINE];\n    if(*ppContentT)\n    {\n        (*ppContentT)-\u003eSetOutlineLevel(m_nOutlineLevel);\n        (*ppContentT)-\u003eInit();\n    }\n\n\u0027Also, I\u0027m betting that these few lines get duplicated elsewhere.\u0027\n\nAs far as I know this is the only place these lines of code are used.\n\n\u0027Also - when you set the online level of these SwContentT things - don\u0027t you always need to \"fill the member list\"?\u0027\n\nOnly if the outline level is changed do you need to fill the outline content member list here.",
+      "parentUuid": "2ad7733f_f4aaeff7",
+      "revId": "a3a433f1f75aaafb0bfe5b268a3a7245a0e3beda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
