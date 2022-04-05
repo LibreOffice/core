@@ -16,6 +16,23 @@
       "message": "Again just a bandaid, if you\u0027ve got a better way to fix this, don\u0027t hesitate of course! :-)",
       "revId": "6f1a630301a5ac38cf12ec7cad3a55b606506ec5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d706d1d_901048d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-05T20:59:47Z",
+      "side": 1,
+      "message": "LGTM",
+      "revId": "6f1a630301a5ac38cf12ec7cad3a55b606506ec5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
