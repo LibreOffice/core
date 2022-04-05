@@ -345,6 +345,22 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "2837");
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakHeader)
+{
+    // Given a document with a shape in the header and a clearing break in the body text:
+    createSwDoc(DATA_DIRECTORY, "clearing-break-header.fodt");
+
+    // When laying out that document:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // Then make sure that the shape from the header is ignored while calculating the line height:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 276
+    // - Actual  : 15398
+    // i.e. the shape was in the background, but we failed to ignore it for the break portion.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout[1]", "height", "276");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

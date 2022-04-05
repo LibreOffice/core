@@ -1012,6 +1012,13 @@ SwTwips SwTextFly::GetMaxBottom(const SwBreakPortion& rPortion, const SwTextForm
     for (size_t i = 0; i < nCount; ++i)
     {
         const SwAnchoredObject* pAnchoredObj = (*mpAnchoredObjList)[i];
+
+        if (pAnchoredObj->GetAnchorFrame()->FindFooterOrHeader())
+        {
+            // Anchored in the header or footer, ignore it for clearing break purposes.
+            continue;
+        }
+
         SwRect aRect(pAnchoredObj->GetObjRectWithSpaces());
         if (rPortion.GetClear() == SwLineBreakClear::LEFT)
         {
