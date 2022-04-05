@@ -67,6 +67,21 @@ DECLARE_OOXMLEXPORT_TEST(testTdf147861_customField, "tdf147861_customField.docx"
     CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xField->getPresentation(true));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148380_createField, "tdf148380_createField.docx")
+{
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    if (mbExported)
+        return;
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    // This should NOT be "Lorenzo Chavez", or a real date since the user hand-modified the result.
+    CPPUNIT_ASSERT_EQUAL(OUString("Myself - that's who"), xField->getPresentation(false));
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("yesterday at noon"), xField->getPresentation(false));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
     loadAndReload("tdf135906.docx");
