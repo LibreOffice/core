@@ -392,7 +392,7 @@ void  SwSendMailDialog::IterateMails()
             m_xStatus->append();
             m_xStatus->set_image(m_nSendCount, RID_BMP_FORMULA_CANCEL, 0);
             m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", pCurrentMailDescriptor->sEMail), 1);
-            m_xStatus->set_text(m_nSendCount, m_sFailed, 1);
+            m_xStatus->set_text(m_nSendCount, m_sFailed, 2);
             ++m_nSendCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
@@ -476,7 +476,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
     m_xStatus->append();
     m_xStatus->set_image(m_nSendCount, sInsertImg, 0);
     m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", xMessage->getRecipients()[0]), 1);
-    m_xStatus->set_text(m_nSendCount, bResult ? m_sCompleted : m_sFailed, 1);
+    m_xStatus->set_text(m_nSendCount, bResult ? m_sCompleted : m_sFailed, 2);
     ++m_nSendCount;
     if(!bResult)
         ++m_nErrorCount;
