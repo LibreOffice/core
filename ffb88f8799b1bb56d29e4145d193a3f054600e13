@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b1a95a9_7151169b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-05T13:50:51Z",
+      "side": 1,
+      "message": "Makes sense to me. Would be ideal to actually implement this in code, but this is better than nothing, I guess.",
+      "revId": "ffb88f8799b1bb56d29e4145d193a3f054600e13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
