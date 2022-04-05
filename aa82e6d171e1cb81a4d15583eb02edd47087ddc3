@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d680f99b_7cae4e88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-05T20:20:28Z",
+      "side": 1,
+      "message": "You couldn\u0027t rebase directly since there\u0027s a merge conflict.\n\nHere what I did (but perhaps there are other ways):\n1) synchronize my local repo with master sources\n2) use download/cherry-pick to retrieve the patch\n\u003d\u003e git detects a conflict\n3) fix the conflict by editing the files impacted (in this case there was only include/svx/diagram/datamodel.hxx) and the conflict was:\n++\u003c\u003c\u003c\u003c\u003c\u003c\u003c HEAD\n +    // Make constructor protected to signal that this anyways pure virtual class\n++\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n+     // Make constructor protected to signal that this anyway pure virtual class\n++\u003e\u003e\u003e\u003e\u003e\u003e\u003e 5c6288c48b0a (Fix typos)\n\n4) once fixed (I kept the second line), use \"git commit -a\" (do not use \"amend\" option here)\n\n5) ./logerrit submit from core directory",
+      "revId": "aa82e6d171e1cb81a4d15583eb02edd47087ddc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
