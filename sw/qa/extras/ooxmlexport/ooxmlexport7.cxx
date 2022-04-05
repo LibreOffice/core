@@ -27,14 +27,6 @@ public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
 
 protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
-    }
-
     // We import OOXML's EMUs into integral mm100 internal representation, then export back into
     // EMUs. This results in inaccuracies.
     void assertXPathHasApproxEMU(const xmlDocUniquePtr& pXmlDoc, const OString& rXPath,
@@ -731,8 +723,9 @@ CPPUNIT_TEST_FIXTURE(Test, testAbsolutePositionOffsetValue)
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(testRubyHyperlink, "rubyhyperlink.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testRubyHyperlink)
 {
+    loadAndReload("rubyhyperlink.fodt");
     // test that export doesn't assert with overlapping ruby / hyperlink attr
 }
 
