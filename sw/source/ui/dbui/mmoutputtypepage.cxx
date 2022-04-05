@@ -205,9 +205,11 @@ public:
 SwSendMailDialog::SwSendMailDialog(weld::Window *pParent, SwMailMergeConfigItem& rConfigItem)
     : GenericDialogController(pParent, "modules/swriter/ui/mmsendmails.ui", "SendMailsDialog")
     , m_sContinue(SwResId( ST_CONTINUE ))
+    , m_sClose(SwResId(ST_CLOSE_DIALOG))
     , m_sSendingTo(   SwResId(ST_SENDINGTO ))
     , m_sCompleted(   SwResId(ST_COMPLETED ))
     , m_sFailed(      SwResId(ST_FAILED     ))
+    , m_sAddressInvalid(SwResId(ST_ADDRESS_INVALID))
     , m_bCancel(false)
     , m_bDestructionEnabled(false)
     , m_pImpl(new SwSendMailDialog_Impl)
@@ -395,7 +397,7 @@ void  SwSendMailDialog::IterateMails()
             m_xStatus->append();
             m_xStatus->set_image(m_nSendCount, RID_BMP_FORMULA_CANCEL, 0);
             m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", pCurrentMailDescriptor->sEMail), 1);
-            m_xStatus->set_text(m_nSendCount, m_sFailed, 2);
+            m_xStatus->set_text(m_nSendCount, m_sAddressInvalid, 2);
             ++m_nSendCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
@@ -517,6 +519,7 @@ void SwSendMailDialog::AllMailsSent()
     if (m_nSendCount == m_nExpectedCount)
     {
         m_xStop->set_sensitive(false);
+        m_xCancel->set_label(m_sClose);
         // Leave open if some kind of error occurred
         if (m_nErrorCount == 0)
         {
