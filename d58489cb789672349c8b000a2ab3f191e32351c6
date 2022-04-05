@@ -69,6 +69,24 @@
       "parentUuid": "7093b981_2be7f594",
       "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abb9f3ce_054b2340",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-05T17:25:07Z",
+      "side": 1,
+      "message": "\u003e In fact, commenting `pChild-\u003esetAttribute(Qt::WA_NativeWindow)` in `QtFrame::windowHandle` makes things work here, but makes Impress full screen mode crash.\n\nI think what should work is to take the idea from 0e3c3b842e14b9646d3697cf1266be21359e0f13 (\"tdf#122293 qt5: Use \"alien widgets\" by default on Wayland\") further and try harder to avoid creating native windows, e.g. by adding a \u0027bool bCreate\u0027 param to \u0027QtFrame::windowHandle\u0027 and only do `pChild-\u003esetAttribute(Qt::WA_NativeWindow)` for `bCreate\u003dtrue`, then adapt all callers, depending on whether a window handle should be created if there\u0027s none or they\u0027re just fine having none (and just need to do something if there\u0027s a native window anyway).\nIf so, it would probably make sense to do that in a separate commit. What do you think?",
+      "parentUuid": "3ba7b871_a9248639",
+      "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
