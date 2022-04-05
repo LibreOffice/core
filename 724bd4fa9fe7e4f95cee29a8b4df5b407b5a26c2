@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "994c502a_3f7aa7a4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-05T14:48:05Z",
+      "side": 1,
+      "message": "Fixed.\nThe new commit message should be better.",
+      "parentUuid": "f469f312_f57dc67e",
+      "revId": "724bd4fa9fe7e4f95cee29a8b4df5b407b5a26c2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "795bb602_cddb4c15",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 3
