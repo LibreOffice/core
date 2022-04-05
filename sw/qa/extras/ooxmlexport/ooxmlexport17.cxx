@@ -73,8 +73,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_createField, "tdf148380_createField.docx"
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-    if (mbExported)
-        return;
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
     // This should NOT be "Lorenzo Chavez", or a real date since the user hand-modified the result.
     CPPUNIT_ASSERT_EQUAL(OUString("Myself - that's who"), xField->getPresentation(false));

@@ -737,6 +737,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf83309, "tdf83309.docx")
     // behave same way)
     OUString sNodeType = parseDump("/root/page[1]/body/txt[1]/Text[1]", "nType");
     CPPUNIT_ASSERT_EQUAL(OUString("PortionType::Text"), sNodeType);
+
+    // tdf148380: creation-date field in header.xml was unsupported on export
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("8/31/14 10:26 AM"), xField->getPresentation(false));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf121661)
