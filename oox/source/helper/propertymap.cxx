@@ -228,7 +228,7 @@ sal_Int32 PropertyMap::getPropertyId( std::u16string_view sPropName )
 {
     // This may use a std::map to get faster from String to ID in the
     // future, inside the [0..PROP_COUNT[ entries. Since it is currently
-    // only used for Diagram re-creation I opted fo less mem usage here
+    // only used for Diagram re-creation I opted for less memory usage here
     if(sPropName.empty())
         return -1;
 
