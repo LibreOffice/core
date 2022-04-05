@@ -15,12 +15,18 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/UnknownPropertyException.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/container/XHierarchicalName.hpp>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/uno/Type.hxx>
+#include <com/sun/star/uno/TypeClass.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/util/SearchAlgorithms2.hpp>
+#include <cppu/unotype.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unotools/textsearch.hxx>
 #include <vcl/event.hxx>
@@ -582,6 +588,39 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
     OUString sPropertyType = m_xPrefBox->get_text(*m_xScratchIter, 2);
     OUString sPropertyValue = m_xPrefBox->get_text(*m_xScratchIter, 3);
 
+    // If the configuration property has a nil value, determine its static type:
+    if (sPropertyType == "void")
+    {
+        css::uno::Reference<css::beans::XPropertySetInfo> info(
+            CuiAboutConfigTabPage::getConfigAccess(pUserData->sPropertyPath, false),
+            css::uno::UNO_QUERY_THROW);
+        css::uno::Type t;
+        try {
+            t = info->getPropertyByName(sPropertyName).Type;
+        } catch (css::beans::UnknownPropertyException &) {
+            TOOLS_WARN_EXCEPTION("cui.options", pUserData->sPropertyPath << " " << sPropertyName);
+        }
+        // If the configuration property is of type any (or an UnknownPropertyException was caught
+        // above), stick to "void" for now (ideally, properties of type any would allow setting
+        // values of arbitrary type, regardless of their current value, in this dialog anyway):
+        if (t != cppu::UnoType<void>::get()) {
+            sPropertyType = t.getTypeName();
+            switch (t.getTypeClass()) {
+            case css::uno::TypeClass_BOOLEAN:
+                sPropertyValue = "false";
+                break;
+            case css::uno::TypeClass_SHORT:
+            case css::uno::TypeClass_LONG:
+            case css::uno::TypeClass_HYPER:
+            case css::uno::TypeClass_DOUBLE:
+                sPropertyValue = "0";
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
     auto pProperty  = std::make_shared<Prop_Impl>( pUserData->sPropertyPath, sPropertyName, Any( sPropertyValue ) );
     bool bSaveChanges = false;
 
@@ -741,6 +780,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl, weld::Button&, void )
             AddToModifiedVector( pProperty );
 
             //update listbox value.
+            m_xPrefBox->set_text(*m_xScratchIter, sPropertyType, 2);
             m_xPrefBox->set_text(*m_xScratchIter, sDialogValue, 3);
             //update m_prefBoxEntries
             auto it = std::find_if(m_prefBoxEntries.begin(), m_prefBoxEntries.end(),
