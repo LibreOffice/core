@@ -158,7 +158,7 @@ public:
     typedef std::map< OUString, std::map<sal_Int32, SourceIdAndDepth > > StringMap;
 
 protected:
-    // Make constructor protected to signal that this anyways pure virual class
+    // Make constructor protected to signal that this anyways pure virtual class
     // shall not be incarnated - target to use is oox::drawingml::DiagramData
     DiagramData();
 
