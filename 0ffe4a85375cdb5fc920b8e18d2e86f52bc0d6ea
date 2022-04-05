@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a19f862b_bc2e6b9f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-05T09:08:46Z",
+      "side": 1,
+      "message": "something has gotten terribly mangled here and I haven\u0027t a notion what the right direction to solve it is",
+      "revId": "0ffe4a85375cdb5fc920b8e18d2e86f52bc0d6ea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
