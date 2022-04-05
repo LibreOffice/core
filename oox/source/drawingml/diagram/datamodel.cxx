@@ -107,7 +107,7 @@ void DiagramData::secureDataFromShapeToModelAfterDiagramImport()
             // imported one. Report differences to allow extending the mechanism
             // more easily.
 #ifdef DBG_UTIL
-            // The oiginal is pShapeCandidate, re-create potential new oox::drawingml::Shape
+            // The original is pShapeCandidate, re-create potential new oox::drawingml::Shape
             // as aNew to be able to compare these
             ShapePtr aNew(std::make_shared<Shape>());
             restoreDataFromModelToShapeAfterReCreation(point, *aNew);
