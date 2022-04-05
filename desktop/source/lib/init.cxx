@@ -3115,6 +3115,7 @@ static void doc_iniUnoCommands ()
         OUString(".uno:InsertCaptionDialog"),
         OUString(".uno:FormatGroup"),
         OUString(".uno:SplitTable"),
+        OUString(".uno:SplitCell"),
         OUString(".uno:MergeCells"),
         OUString(".uno:DeleteNote"),
         OUString(".uno:AcceptChanges"),
