@@ -51,6 +51,24 @@
       "parentUuid": "e8b8a264_c646c09d",
       "revId": "ff06365a1db93b6f32d623c8420ae375d2f21315",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3446183f_e0e20784",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-05T11:46:26Z",
+      "side": 1,
+      "message": "Would keep it as it is. One issue per patch.",
+      "parentUuid": "8ae01b95_e2732df7",
+      "revId": "ff06365a1db93b6f32d623c8420ae375d2f21315",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
