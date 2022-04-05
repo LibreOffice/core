@@ -4288,7 +4288,7 @@ bool SwTransferDdeLink::WriteData( SvStream& rStrm )
         // remove mark
         rServerObject.SetNoServer(); // this removes the connection between SwServerObject and mark
         // N.B. ppMark was not loaded from file and cannot have xml:id
-        pMarkAccess->deleteMark(ppMark);
+        pMarkAccess->deleteMark(ppMark, false);
 
         // recreate as Bookmark
         ::sw::mark::IMark* const pNewMark = pMarkAccess->makeMark(
@@ -4323,7 +4323,7 @@ void SwTransferDdeLink::Disconnect( bool bRemoveDataAdvise )
         bool bIsModified = pDoc->getIDocumentState().IsModified();
 
         IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
-        pMarkAccess->deleteMark(pMarkAccess->findMark(sName));
+        pMarkAccess->deleteMark(pMarkAccess->findMark(sName), false);
 
         if( !bIsModified )
             pDoc->getIDocumentState().ResetModified();

@@ -1980,7 +1980,7 @@ void SwUiWriterTest::testBookmarkUndo()
     CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
 
-    pMarkAccess->deleteMark( pMarkAccess->findMark("Mark_") );
+    pMarkAccess->deleteMark(pMarkAccess->findMark("Mark_"), false);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());
     rUndoManager.Undo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), pMarkAccess->getAllMarksCount());
@@ -2285,7 +2285,7 @@ void SwUiWriterTest::testTdf51741()
     CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
     //Modification 7
-    pMarkAccess->deleteMark( pMarkAccess->findMark("Mark_") );
+    pMarkAccess->deleteMark(pMarkAccess->findMark("Mark_"), false);
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), pMarkAccess->getAllMarksCount());

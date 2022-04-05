@@ -55,7 +55,7 @@ void SwUndoBookmark::ResetInDoc( SwDoc& rDoc )
     {
         if ( m_pHistoryBookmark->IsEqualBookmark( **ppBkmk ) )
         {
-            pMarkAccess->deleteMark( ppBkmk );
+            pMarkAccess->deleteMark(ppBkmk, false);
             break;
         }
     }
