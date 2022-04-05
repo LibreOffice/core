@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e769d2cf_1f016482",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-04-05T14:37:38Z",
+      "side": 1,
+      "message": "I think, that it is the wrong place to fix it. There is the method lcl_IsOnAllowlist() which has all LO preset shapes where it is known, that no suitable preset exists in OOXML. That method could be used in the condition where DMLPresetShapeExporter is called.\n\nThere is a related problem with shape \"heart\". OOXML has a shape with name \"heart\", but that has a different outline. Therefore \"heart\" is on \u0027Allowlist\u0027 too. If you save a \"heart\" to DOCX and reopen it, then you get a different looking shape. When saving to PPTX, you get a same looking shape because for PPTX DMLPresetShapeExporter is not used. ",
+      "revId": "b3bc2d102b885812c4306689880f9f53d533b4bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
