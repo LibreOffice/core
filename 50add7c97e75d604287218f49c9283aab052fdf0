@@ -94,6 +94,30 @@
       },
       "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b0b67a6_868f6d24",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T09:56:51Z",
+      "side": 0,
+      "message": "I was referring to the OP in tdf#143265.  Maybe you should add a note in tdf#143265 that rewording is not needed.",
+      "parentUuid": "050e3a87_db500a54",
+      "range": {
+        "startLine": 62,
+        "startChar": 34,
+        "endLine": 62,
+        "endChar": 144
+      },
+      "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
