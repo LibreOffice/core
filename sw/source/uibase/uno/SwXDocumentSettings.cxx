@@ -152,6 +152,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND,
     HANDLE_IMAGE_PREFERRED_DPI,
     HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE,
+    HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS
 };
 
 }
@@ -250,6 +251,7 @@ static rtl::Reference<MasterPropertySetInfo> lcl_createSettingsInfo()
         { OUString("FootnoteInColumnToPageEnd"), HANDLE_FOOTNOTE_IN_COLUMN_TO_PAGEEND, cppu::UnoType<bool>::get(), 0 },
         { OUString("ImagePreferredDPI"), HANDLE_IMAGE_PREFERRED_DPI, cppu::UnoType<sal_Int32>::get(), 0 },
         { OUString("AutoFirstLineIndentDisregardLineSpace"), HANDLE_AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE, cppu::UnoType<bool>::get(), 0 },
+        { OUString("WordLikeWrapForAsCharFlys"), HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS, cppu::UnoType<bool>::get(), 0 },
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -1049,6 +1051,14 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                 mpDoc->getIDocumentSettingAccess().set(
                     DocumentSettingId::AUTO_FIRST_LINE_INDENT_DISREGARD_LINE_SPACE, bTmp);
             }
+        }
+        break;
+        case HANDLE_WORD_LIKE_WRAP_FOR_AS_CHAR_FLYS:
+        {
+            bool bValue = false;
+            if (rValue >>= bValue)
+                mpDoc->getIDocumentSettingAccess().set(
+                    DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML, bValue);
         }
         break;
         default:

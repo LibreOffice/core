@@ -429,8 +429,27 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
             BreakUnderflow( rInf );
         }
         else
-             // case C2, last exit
-            BreakCut( rInf, aGuess );
+        {
+            auto pLinePortion = static_cast<SwLinePortion*>(rInf.GetParaPortion());
+            bool bThisLineHasObj = false;
+            while (pLinePortion)
+            {
+                if (pLinePortion->IsFlyCntPortion()
+                    && rInf.GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(
+                        DocumentSettingId::WRAP_AS_CHAR_FLYS_LIKE_IN_OOXML))
+                {
+                    bThisLineHasObj = true;
+                    break;
+                }
+                else
+                    pLinePortion = pLinePortion->GetNextPortion();
+            }
+            if (bThisLineHasObj)
+                BreakUnderflow(rInf);
+            else
+                // case C2, last exit
+                BreakCut(rInf, aGuess);
+        }
     }
 
     return bFull;
