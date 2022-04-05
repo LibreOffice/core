@@ -181,6 +181,12 @@ void SbxVariable::SetParameters( SbxArray* p )
 
 // Name of the variables
 
+// static
+OUString SbxVariable::NameToCaseInsensitiveName(const OUString& rName)
+{
+    return SbGlobal::GetTransliteration().transliterate(rName, 0, rName.getLength());
+}
+
 void SbxVariable::SetName( const OUString& rName )
 {
     maName = rName;
@@ -198,7 +204,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     if (t == SbxNameType::CaseInsensitive)
     {
         if (maNameCI.isEmpty() && !maName.isEmpty())
-            maNameCI = SbGlobal::GetTransliteration().transliterate(maName, 0, maName.getLength());
+            maNameCI = NameToCaseInsensitiveName(maName);
         return maNameCI;
     }
     // Request parameter-information (not for objects)
