@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32a4f7b3_943a88ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-04-05T19:44:46Z",
+      "side": 1,
+      "message": "Thanks a lot Julien. Sending new version",
+      "revId": "dfd595860b0d2a23dacccfc400f0df8f2d89da74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e82776d3_88ff43db",
@@ -14,6 +31,30 @@
       "writtenOn": "2022-04-05T16:26:38Z",
       "side": 1,
       "message": "For character, it\u0027s ok too to use \"NUL\" (see https://en.wikipedia.org/wiki/Null_character)",
+      "range": {
+        "startLine": 122,
+        "startChar": 47,
+        "endLine": 122,
+        "endChar": 51
+      },
+      "revId": "dfd595860b0d2a23dacccfc400f0df8f2d89da74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db219237_a48aafd6",
+        "filename": "include/rtl/stringutils.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-04-05T19:44:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e82776d3_88ff43db",
       "range": {
         "startLine": 122,
         "startChar": 47,
