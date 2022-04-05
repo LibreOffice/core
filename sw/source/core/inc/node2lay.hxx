@@ -79,6 +79,12 @@ public:
     void RestoreUpperFrames(SwNodes& rNds, SwNodeOffset nStt, SwNodeOffset nEnd);
 };
 
+namespace sw
+{
+SwFrame const* FindNeighbourFrameForNode(SwNode const& rNode);
+
+} // namespace sw
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
