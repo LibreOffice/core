@@ -2796,6 +2796,35 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107952)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "B1", "=SUM(A1:A2)");
+
+    goToCell("D10");
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 3
+    // - Incorrect Column in position B1
+    lcl_AssertCurrentCursorPosition(*pDoc, "B1");
+
+    goToCell("D10");
+
+    dispatchCommand(mxComponent, ".uno:Redo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    lcl_AssertCurrentCursorPosition(*pDoc, "B1");
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
