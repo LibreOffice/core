@@ -151,7 +151,9 @@ ChartModel::ChartModel( const ChartModel & rOther )
 
         Reference< util::XModifyListener > xListener;
         Reference< chart2::XTitle > xNewTitle = CreateRefClone< chart2::XTitle >()( rOther.m_xTitle );
-        rtl::Reference< ::chart::Diagram > xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
+        rtl::Reference< ::chart::Diagram > xNewDiagram;
+        if (rOther.m_xDiagram.is())
+            xNewDiagram = new ::chart::Diagram( *rOther.m_xDiagram );
         rtl::Reference< ::chart::PageBackground > xNewPageBackground = new PageBackground( *rOther.m_xPageBackground );
         rtl::Reference< ::chart::ChartTypeManager > xChartTypeManager; // does not implement XCloneable
         rtl::Reference< ::chart::NameContainer > xXMLNamespaceMap = new NameContainer( *rOther.m_xXMLNamespaceMap );
