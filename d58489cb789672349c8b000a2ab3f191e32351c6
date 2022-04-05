@@ -16,6 +16,23 @@
       "message": "Leave the -2 for now; need to verify WASM tomorrow.",
       "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91939952_63171da5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-05T09:36:11Z",
+      "side": 1,
+      "message": "Just tested the WASM build. It works for me in \"kwin_wayland --xwayland\" in Debian Buster, with a minor glitch, in comparison to WASM and xcb: if I open a combo box and click on the menu bar, it doesn\u0027t open the menu popup. I must click two more times on the menu bar entry. But that already happened with 7.1.7.\n\n@all: I would like to get some feedback from someone with a more recent Wayland KDE setup.",
+      "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
