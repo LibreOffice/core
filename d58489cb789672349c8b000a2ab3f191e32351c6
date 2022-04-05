@@ -87,6 +87,24 @@
       "parentUuid": "3ba7b871_a9248639",
       "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3045350a_405fa93c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-05T19:02:39Z",
+      "side": 1,
+      "message": "I forgot that QtFrame::SetParent independently tried to set QWidget parents. As you can see I now completely reverted my workaround for tdf#145363. Setting the correct modal hierarchy, implemented by Caolan for the two breaking dialogs in later patches to the bug reports, avoids the problem altogether. AFAIK the whole QWidget parent setting is the main problem. The \"wrong\" Qt::ToolTip setting for LO\u0027s popup widgets is comparably a minor problem. I don\u0027t want to remember, how many hours the whole problem has really burned over the time. Didn\u0027t help that these two changes seemingly produced these problems together in even more variants... I\u0027m almost reminded of the whole Qt async clipboard handling…\n\nAnd I decided to just stay with Qt::ToolTip on all platforms. It worked before, and the minor improvement for accessibility, not advertising the popups as tooltips but windows on X11, but OTOH this critical behavior encoded by insufficient Qt widget / window types, shifted my decision in this direction.",
+      "parentUuid": "abb9f3ce_054b2340",
+      "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
