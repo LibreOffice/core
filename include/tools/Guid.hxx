@@ -13,7 +13,6 @@
 #include <rtl/uuid.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include <rtl/ustring.hxx>
 #include <algorithm>
 #include <stdio.h>
 #include <cctype>
