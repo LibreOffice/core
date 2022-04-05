@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52152161_5f63ce4b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-04-05T08:41:49Z",
+      "side": 1,
+      "message": "@Xisco: Hi, sorry for bad id. ",
+      "revId": "4a6b718fb0f1fe475628a0562f5c3ab101dbbb68",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -16,6 +16,24 @@
       "message": "wrong bug id",
       "revId": "dcabe45121bb216886b4a4cb196b21f20b5573f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afe9f128_3ec8da85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-04-05T08:41:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "452ca32d_5133e906",
+      "revId": "dcabe45121bb216886b4a4cb196b21f20b5573f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
