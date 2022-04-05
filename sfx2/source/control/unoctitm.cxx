@@ -1168,6 +1168,7 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "InsertCaptionDialog" ||
              aEvent.FeatureURL.Path == "MergeCells" ||
              aEvent.FeatureURL.Path == "SplitTable" ||
+             aEvent.FeatureURL.Path == "SplitCell" ||
              aEvent.FeatureURL.Path == "DeleteNote" ||
              aEvent.FeatureURL.Path == "AcceptChanges" ||
              aEvent.FeatureURL.Path == "SetDefault" ||
