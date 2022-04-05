@@ -19,6 +19,19 @@ struct RTFEncoding
 };
 extern RTFEncoding const aRTFEncodings[];
 extern int nRTFEncodings;
+
+/// Font name can contain special suffixes used
+/// to determine encoding for given font table entry
+/// For example "Arial CE" is "Arial" with CP1250 encoding
+/// List of these suffixes is not official and detected in a empirical
+/// way thus may be inexact and incomplete.
+struct RTFFontNameSuffix
+{
+    const char* suffix;
+    sal_Int32 codepage;
+};
+extern RTFFontNameSuffix const aRTFFontNameSuffixes[];
+
 } // namespace writerfilter::rtftok
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
