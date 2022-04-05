@@ -95,7 +95,7 @@ int FontFeaturesDialog::fillGrid(std::vector<vcl::font::Feature> const& rFontFea
         if (rFontFeature.m_aDefinition)
             aDefinition = rFontFeature.m_aDefinition;
         if (!aDefinition)
-            aDefinition = { nFontFeatureCode, nullptr };
+            aDefinition = { nFontFeatureCode, "" };
 
         m_aFeatureItems.emplace_back(m_xContentGrid.get());
 
