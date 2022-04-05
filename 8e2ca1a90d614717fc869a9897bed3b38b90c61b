@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae445ec0_b94a5445",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T08:38:25Z",
+      "side": 1,
+      "message": "Hi Rizal -- by coincidence I started to work on ToD yesterday, so I have noticed this patch. Have added a few comments here....Meanwhile...thanks for all your work on updating the icons...",
+      "revId": "8e2ca1a90d614717fc869a9897bed3b38b90c61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7fc9479_97ad6033",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T08:38:25Z",
+      "side": 1,
+      "message": "this does not appear in LO 7.4  \n\nand why drop Tools \u003e Options ?",
+      "range": {
+        "startLine": 130,
+        "startChar": 86,
+        "endLine": 130,
+        "endChar": 2
+      },
+      "revId": "8e2ca1a90d614717fc869a9897bed3b38b90c61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e14d1452_9968646c",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T08:38:25Z",
+      "side": 1,
+      "message": "Put this string:  cui/ui/optlanguagespage/datepatterns   between the \"\"\n\nThat will give ToD a link to: https://help.libreoffice.org/latest/en-US/text/shared/optionen/01140000.html?HID\u003dcui/ui/optlanguagespage/datepatterns#bm_id9471429\n\nwhere there is highly detailed, accurate information about date acceptance patterns.",
+      "range": {
+        "startLine": 184,
+        "startChar": 186,
+        "endLine": 184,
+        "endChar": 188
+      },
+      "revId": "8e2ca1a90d614717fc869a9897bed3b38b90c61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
