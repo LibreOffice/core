@@ -190,6 +190,30 @@
       },
       "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da1e7e51_f3a61125",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T12:30:37Z",
+      "side": 0,
+      "message": "Thanks for the clarification.  I was misled because the OP mentions \"Tools ▸ Options ▸ %PRODUCTNAME ▸ View\" in the proposed change.  I understand the situation now and agree with your interpretation.\n\nIn relation to this line 62, what do you think about this suggestion, which changes the tip into a question style.\n\nWant a different appearance for command icons? Choose a new theme at Tools ▸ Options ▸ %PRODUCTNAME ▸ View ▸ Icon Theme.",
+      "parentUuid": "113bc875_a6300505",
+      "range": {
+        "startLine": 62,
+        "startChar": 34,
+        "endLine": 62,
+        "endChar": 144
+      },
+      "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
