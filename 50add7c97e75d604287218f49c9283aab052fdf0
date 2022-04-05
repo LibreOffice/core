@@ -142,6 +142,30 @@
       },
       "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88c48244_1cf23797",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T11:12:09Z",
+      "side": 0,
+      "message": "OP \u003d Original poster (in bugzilla, it would be either the author or the text in Comment 0).\n\nNotice in comment 0 that Sophie suggests starting the tip with:  You can change the look ...\n\nI think she was trying to avoid a technical term \"icon set\" that might not be familiar for tip readers.  My proposal was trying to respond to that request.\n\nDoes that clarify the issue?",
+      "parentUuid": "122942a0_d84ceadc",
+      "range": {
+        "startLine": 62,
+        "startChar": 34,
+        "endLine": 62,
+        "endChar": 144
+      },
+      "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
