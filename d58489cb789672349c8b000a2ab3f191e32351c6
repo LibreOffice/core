@@ -33,6 +33,24 @@
       "message": "Just tested the WASM build. It works for me in \"kwin_wayland --xwayland\" in Debian Buster, with a minor glitch, in comparison to WASM and xcb: if I open a combo box and click on the menu bar, it doesn\u0027t open the menu popup. I must click two more times on the menu bar entry. But that already happened with 7.1.7.\n\n@all: I would like to get some feedback from someone with a more recent Wayland KDE setup.",
       "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7093b981_2be7f594",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-05T14:30:42Z",
+      "side": 1,
+      "message": "\u003e Just tested the WASM build. It works for me in \"kwin_wayland --xwayland\" in Debian Buster, with a minor glitch, in comparison to WASM and xcb: if I open a combo box and click on the menu bar, it doesn\u0027t open the menu popup. I must click two more times on the menu bar entry. But that already happened with 7.1.7.\n\nWhat exactly are you clicking on in the menu bar?\n\nI\u0027m seeing the following on Debian testing, Plasma Wayland, but I\u0027m not sure whether it\u0027s the same:\nIt works fine initially, but once I click to open the \"Character highlighting Color\" popup button in the Writer toolbar, behaviour is and remains broken. 3 or 4 clicks are needed to open the \"normal\" comboboxes after that as well (and hovering is broken as described in tdf#122293 - maybe sth triggers use of native widgets?).\n\nscreencast: https://nextcloud.documentfoundation.org/s/XTbPNMsJtwRtY7f\n(when comboboxes show up for a longer time without being clicked, everything\u0027s fine, I just didn\u0027t select an entry)\n\nIt works fine when using the TDF-provided LO 7.2.6 instead.",
+      "parentUuid": "91939952_63171da5",
+      "revId": "d58489cb789672349c8b000a2ab3f191e32351c6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
