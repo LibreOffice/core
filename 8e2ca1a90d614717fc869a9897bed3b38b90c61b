@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d2ee4d6_ac6e7481",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-04-05T08:56:21Z",
+      "side": 1,
+      "message": "The UI chooser or .uno:ToolbarModeUI is different with the one in Tools \u003e Options",
+      "parentUuid": "d7fc9479_97ad6033",
+      "range": {
+        "startLine": 130,
+        "startChar": 86,
+        "endLine": 130,
+        "endChar": 2
+      },
+      "revId": "8e2ca1a90d614717fc869a9897bed3b38b90c61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e14d1452_9968646c",
         "filename": "cui/inc/tipoftheday.hrc",
         "patchSetId": 1
@@ -54,6 +78,30 @@
       "writtenOn": "2022-04-05T08:38:25Z",
       "side": 1,
       "message": "Put this string:  cui/ui/optlanguagespage/datepatterns   between the \"\"\n\nThat will give ToD a link to: https://help.libreoffice.org/latest/en-US/text/shared/optionen/01140000.html?HID\u003dcui/ui/optlanguagespage/datepatterns#bm_id9471429\n\nwhere there is highly detailed, accurate information about date acceptance patterns.",
+      "range": {
+        "startLine": 184,
+        "startChar": 186,
+        "endLine": 184,
+        "endChar": 188
+      },
+      "revId": "8e2ca1a90d614717fc869a9897bed3b38b90c61b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3cababb_513ca92d",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-04-05T08:56:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e14d1452_9968646c",
       "range": {
         "startLine": 184,
         "startChar": 186,
