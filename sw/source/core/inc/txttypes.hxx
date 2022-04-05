@@ -49,6 +49,7 @@ enum class PortionType
     Ref         = 0x808b,
     IsoRef      = 0x808c,
     Meta        = 0x808d,
+    ContentControl = 0x808e,
 
     Expand      = 0xc080,
     Blank       = 0xc081,

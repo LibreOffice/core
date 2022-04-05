@@ -79,6 +79,8 @@ const char* sw::PortionTypeToString(PortionType nType)
             return "PortionType::IsoRef";
         case PortionType::Meta:
             return "PortionType::Meta";
+        case PortionType::ContentControl:
+            return "PortionType::ContentControl";
         case PortionType::FieldMark:
             return "PortionType::FieldMark";
         case PortionType::FieldFormCheckbox:
