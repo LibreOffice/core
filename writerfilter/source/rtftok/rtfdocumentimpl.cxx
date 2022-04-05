@@ -1352,84 +1352,121 @@ void RTFDocumentImpl::text(OUString& rString)
         case Destination::LISTNAME:
         case Destination::REVISIONENTRY:
         {
-            // ; is the end of the entry
-            bool bEnd = false;
+            // ";" is the end of the entry, but not essential practically
             if (rString.endsWith(";"))
             {
                 rString = rString.copy(0, rString.getLength() - 1);
-                bEnd = true;
             }
             m_aStates.top().appendDestinationText(rString);
-            if (bEnd)
+
+            // always clear, necessary in case of group-less fonttable
+            OUString const aName
+                = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
+            switch (m_aStates.top().getDestination())
             {
-                // always clear, necessary in case of group-less fonttable
-                OUString const aName
-                    = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
-                switch (m_aStates.top().getDestination())
+                case Destination::FONTTABLE:
+                case Destination::FONTENTRY:
                 {
-                    case Destination::FONTTABLE:
-                    case Destination::FONTENTRY:
+                    // Old documents can contain no encoding information in fontinfo,
+                    // but there can be font name suffixes: Arial CE is not a special
+                    // font, it is ordinal Arial, but with used cp 1250 encoding.
+                    // Moreover these suffixes have priority over \cpgN and \fcharsetN
+                    // in MS Word.
+                    // List of these suffixes is not official and detected in a empirical
+                    // way thus may be inexact and incomplete.
+                    OUString aFontSuffix;
+                    OUString aNameNoSuffix(aName);
+                    sal_Int32 nLastSpace = aName.lastIndexOf(' ');
+                    if (nLastSpace >= 0)
                     {
-                        m_aFontNames[m_nCurrentFontIndex] = aName;
-                        if (m_nCurrentEncoding >= 0)
+                        aFontSuffix = aName.copy(nLastSpace + 1);
+                        aNameNoSuffix = aName.copy(0, nLastSpace);
+                        sal_Int32 nEncoding = RTL_TEXTENCODING_DONTKNOW;
+
+                        if (aFontSuffix.equalsAscii("Baltic"))
+                            nEncoding = RTL_TEXTENCODING_MS_1257;
+                        else if (aFontSuffix.equalsAscii("CE"))
+                            nEncoding = RTL_TEXTENCODING_MS_1250;
+                        else if (aFontSuffix.equalsAscii("Cyr"))
+                            nEncoding = RTL_TEXTENCODING_MS_1251;
+                        else if (aFontSuffix.equalsAscii("Greek"))
+                            nEncoding = RTL_TEXTENCODING_MS_1253;
+                        else if (aFontSuffix.equalsAscii("Tur"))
+                            nEncoding = RTL_TEXTENCODING_MS_1254;
+                        else if (aFontSuffix.equalsAscii("(Hebrew)"))
+                            nEncoding = RTL_TEXTENCODING_MS_1255;
+                        else if (aFontSuffix.equalsAscii("(Arabic)"))
+                            nEncoding = RTL_TEXTENCODING_MS_1256;
+                        else if (aFontSuffix.equalsAscii("(Vietnamese)"))
+                            nEncoding = RTL_TEXTENCODING_MS_1258;
+                        else
+                            // Unknown suffix: looks like it is just a part of font name, restore it
+                            aNameNoSuffix = aName;
+
+                        if (nEncoding > RTL_TEXTENCODING_DONTKNOW)
                         {
-                            m_aFontEncodings[m_nCurrentFontIndex] = m_nCurrentEncoding;
-                            m_nCurrentEncoding = -1;
+                            m_nCurrentEncoding = nEncoding;
+                            m_aStates.top().setCurrentEncoding(m_nCurrentEncoding);
                         }
-                        m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Font_name,
-                                                                 new RTFValue(aName));
+                    }
+
+                    m_aFontNames[m_nCurrentFontIndex] = aNameNoSuffix;
+                    if (m_nCurrentEncoding >= 0)
+                    {
+                        m_aFontEncodings[m_nCurrentFontIndex] = m_nCurrentEncoding;
+                        m_nCurrentEncoding = -1;
+                    }
+                    m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Font_name,
+                                                             new RTFValue(aNameNoSuffix));
+
+                    writerfilter::Reference<Properties>::Pointer_t const pProp(
+                        new RTFReferenceProperties(m_aStates.top().getTableAttributes(),
+                                                   m_aStates.top().getTableSprms()));
+
+                    //See fdo#47347 initial invalid font entry properties are inserted first,
+                    //so when we attempt to insert the correct ones, there's already an
+                    //entry in the map for them, so the new ones aren't inserted.
+                    auto lb = m_aFontTableEntries.lower_bound(m_nCurrentFontIndex);
+                    if (lb != m_aFontTableEntries.end()
+                        && !(m_aFontTableEntries.key_comp()(m_nCurrentFontIndex, lb->first)))
+                        lb->second = pProp;
+                    else
+                        m_aFontTableEntries.insert(lb, std::make_pair(m_nCurrentFontIndex, pProp));
+                }
+                break;
+                case Destination::STYLEENTRY:
+                {
+                    RTFValue::Pointer_t pType
+                        = m_aStates.top().getTableAttributes().find(NS_ooxml::LN_CT_Style_type);
+                    if (pType)
+                    {
+                        // Word strips whitespace around style names.
+                        m_aStyleNames[m_nCurrentStyleIndex] = aName.trim();
+                        m_aStyleTypes[m_nCurrentStyleIndex] = pType->getInt();
+                        auto pValue = new RTFValue(aName.trim());
+                        m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_styleId,
+                                                                 pValue);
+                        m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_name, pValue);
 
                         writerfilter::Reference<Properties>::Pointer_t const pProp(
-                            new RTFReferenceProperties(m_aStates.top().getTableAttributes(),
-                                                       m_aStates.top().getTableSprms()));
-
-                        //See fdo#47347 initial invalid font entry properties are inserted first,
-                        //so when we attempt to insert the correct ones, there's already an
-                        //entry in the map for them, so the new ones aren't inserted.
-                        auto lb = m_aFontTableEntries.lower_bound(m_nCurrentFontIndex);
-                        if (lb != m_aFontTableEntries.end()
-                            && !(m_aFontTableEntries.key_comp()(m_nCurrentFontIndex, lb->first)))
-                            lb->second = pProp;
-                        else
-                            m_aFontTableEntries.insert(lb,
-                                                       std::make_pair(m_nCurrentFontIndex, pProp));
+                            createStyleProperties());
+                        m_pStyleTableEntries->insert(std::make_pair(m_nCurrentStyleIndex, pProp));
                     }
+                    else
+                        SAL_INFO("writerfilter.rtf", "no RTF style type defined, ignoring");
                     break;
-                    case Destination::STYLEENTRY:
-                    {
-                        RTFValue::Pointer_t pType
-                            = m_aStates.top().getTableAttributes().find(NS_ooxml::LN_CT_Style_type);
-                        if (pType)
-                        {
-                            // Word strips whitespace around style names.
-                            m_aStyleNames[m_nCurrentStyleIndex] = aName.trim();
-                            m_aStyleTypes[m_nCurrentStyleIndex] = pType->getInt();
-                            auto pValue = new RTFValue(aName.trim());
-                            m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Style_styleId,
-                                                                     pValue);
-                            m_aStates.top().getTableSprms().set(NS_ooxml::LN_CT_Style_name, pValue);
-
-                            writerfilter::Reference<Properties>::Pointer_t const pProp(
-                                createStyleProperties());
-                            m_pStyleTableEntries->insert(
-                                std::make_pair(m_nCurrentStyleIndex, pProp));
-                        }
-                        else
-                            SAL_INFO("writerfilter.rtf", "no RTF style type defined, ignoring");
-                        break;
-                    }
-                    case Destination::LISTNAME:
-                        // TODO: what can be done with a list name?
-                        break;
-                    case Destination::REVISIONENTRY:
-                        m_aAuthors[m_aAuthors.size()] = aName;
-                        break;
-                    default:
-                        break;
                 }
-                resetAttributes();
-                resetSprms();
+                case Destination::LISTNAME:
+                    // TODO: what can be done with a list name?
+                    break;
+                case Destination::REVISIONENTRY:
+                    m_aAuthors[m_aAuthors.size()] = aName;
+                    break;
+                default:
+                    break;
             }
+            resetAttributes();
+            resetSprms();
         }
         break;
         case Destination::LEVELTEXT:
