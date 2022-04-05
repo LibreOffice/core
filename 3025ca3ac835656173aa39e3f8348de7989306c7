@@ -16,6 +16,24 @@
       "message": "The layout dump on co-2021 is based on accessibility (compared to master, which has a dedicated dumper), so this test will fail.\n\nCould you please update the asserts as the co-22.05 did it at https://gerrit.libreoffice.org/c/core/+/132557 ? Thanks.",
       "revId": "3025ca3ac835656173aa39e3f8348de7989306c7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ebf5792_d4ef9d45",
+        "filename": "sw/qa/extras/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3563,
+      "author": {
+        "id": 1001306
+      },
+      "writtenOn": "2022-04-05T07:53:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85051b2e_dfa4f1f3",
+      "revId": "3025ca3ac835656173aa39e3f8348de7989306c7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
