@@ -52,6 +52,24 @@
       "parentUuid": "4582e7d1_ae09e126",
       "revId": "9471cb6df8a12b76a3af654a72bb94cea77bf500",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71ee0f23_c52e6208",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-05T12:51:09Z",
+      "side": 1,
+      "message": "\u003e The default value is needed because otherwise the advanced settings editor in Tools-\u003eConfigure-\u003eAdvanced claims the type is \u0027void\u0027 and doesn\u0027t allow editing it.\n\nthat\u0027s a bug, see \u003chttps://gerrit.libreoffice.org/c/core/+/132575\u003e \"Expert Configuration: Allow modifying nil values\"",
+      "parentUuid": "3d23d28f_78b11940",
+      "revId": "9471cb6df8a12b76a3af654a72bb94cea77bf500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
