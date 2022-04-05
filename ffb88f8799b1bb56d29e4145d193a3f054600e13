@@ -16,6 +16,24 @@
       "message": "Makes sense to me. Would be ideal to actually implement this in code, but this is better than nothing, I guess.",
       "revId": "ffb88f8799b1bb56d29e4145d193a3f054600e13",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af644aaf_ff448a29",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-04-05T13:58:30Z",
+      "side": 1,
+      "message": "Yeah, better this emulation than ignoring \u0026 losing this data on export.\nNormal implementation will require changes in writer core, UI extension, ODT extension for this feature. Not now",
+      "parentUuid": "4b1a95a9_7151169b",
+      "revId": "ffb88f8799b1bb56d29e4145d193a3f054600e13",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
