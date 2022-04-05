@@ -56,6 +56,7 @@ public:
     void testTdf99402();
     void testTdf39894();
     void testETO_PDY();
+    void testStockObject();
 
     CPPUNIT_TEST_SUITE(WmfTest);
     CPPUNIT_TEST(testNonPlaceableWmf);
@@ -69,6 +70,7 @@ public:
     CPPUNIT_TEST(testTdf99402);
     CPPUNIT_TEST(testTdf39894);
     CPPUNIT_TEST(testETO_PDY);
+    CPPUNIT_TEST(testStockObject);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -387,6 +389,29 @@ void WmfTest::testETO_PDY()
         CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), y2.toInt32() < y1.toInt32());
         CPPUNIT_ASSERT_MESSAGE(file.toUtf8().getStr(), y3.toInt32() < y2.toInt32());
     }
+}
+
+void WmfTest::testStockObject()
+{
+    SvFileStream aFileStream(getFullUrl(u"stockobject.emf"), StreamMode::READ);
+    GDIMetaFile aGDIMetaFile;
+    ReadWindowMetafile(aFileStream, aGDIMetaFile);
+
+    MetafileXmlDump dumper;
+    xmlDocUniquePtr pDoc = dumpAndParse(dumper, aGDIMetaFile);
+
+    CPPUNIT_ASSERT(pDoc);
+
+    //   Without the fix in place, this test would have failed with
+    // - Expected: 42
+    // - Actual  : 37
+    assertXPathChildren(pDoc, "/metafile/push[2]", 42);
+
+    //   Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // - In <>, XPath '/metafile/push[2]/fillcolor[2]' number of nodes is incorrect
+    assertXPath(pDoc, "/metafile/push[2]/fillcolor[2]", "color", "#000000");
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WmfTest);
