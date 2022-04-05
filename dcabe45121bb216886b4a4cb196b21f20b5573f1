@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "452ca32d_5133e906",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-05T08:26:05Z",
+      "side": 1,
+      "message": "wrong bug id",
+      "revId": "dcabe45121bb216886b4a4cb196b21f20b5573f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
