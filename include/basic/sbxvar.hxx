@@ -271,6 +271,7 @@ public:
     void SetName( const OUString& );
     const OUString& GetName( SbxNameType = SbxNameType::NONE ) const;
     sal_uInt16 GetHashCode() const          { return nHash; }
+    static OUString NameToCaseInsensitiveName(const OUString& rName);
 
     virtual void SetModified( bool ) override;
 

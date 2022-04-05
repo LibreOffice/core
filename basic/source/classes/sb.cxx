@@ -47,9 +47,6 @@
 #include <memory>
 #include <unordered_map>
 
-#include <global.hxx>
-#include <unotools/transliterationwrapper.hxx>
-
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 
@@ -2079,7 +2076,7 @@ sal_Int32 BasicCollection::implGetIndexForName(const OUString& rName)
         if (pVar->GetHashCode() == nNameHash)
         {
             if (aNameCI.isEmpty() && !rName.isEmpty())
-                aNameCI = SbGlobal::GetTransliteration().transliterate(rName, 0, rName.getLength());
+                aNameCI = SbxVariable::NameToCaseInsensitiveName(rName);
             if (aNameCI == pVar->GetName(SbxNameType::CaseInsensitive))
                 return i;
         }
