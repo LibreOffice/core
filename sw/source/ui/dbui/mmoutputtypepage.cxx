@@ -511,12 +511,15 @@ void SwSendMailDialog::UpdateTransferStatus()
 
 void SwSendMailDialog::AllMailsSent()
 {
-    // Leave open if some kind of error occurred
     if (m_nSendCount == m_nExpectedCount)
     {
         m_xStop->set_sensitive(false);
-        m_xDialog->hide();
-        m_xDialog->response(RET_CANCEL);
+        // Leave open if some kind of error occurred
+        if (m_nErrorCount == 0)
+        {
+            m_xDialog->hide();
+            m_xDialog->response(RET_CANCEL);
+        }
     }
 }
 
