@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fddd82e9_2fc9cb62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T14:30:56Z",
+      "side": 1,
+      "message": "I understand that you are satisfied with the compromise solution. I am also. Does not look so bad.\n\nHave also added a link to the help page.  Should be good to go now.",
+      "revId": "4d85337e495b40164d742493a247020ad1c7ac7f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
