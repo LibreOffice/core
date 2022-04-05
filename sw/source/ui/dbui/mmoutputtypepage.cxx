@@ -463,8 +463,8 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
                                         bool bResult,
                                         const OUString* pError )
 {
-    //sending should stop on send errors
-    if(pError &&
+    //sending should stop on send errors, except after last error - it will stop in AllMailsSent
+    if (pError && m_nProcessedCount + 1 < m_nExpectedCount &&
         m_pImpl->xMailDispatcher.is() && m_pImpl->xMailDispatcher->isStarted())
     {
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
