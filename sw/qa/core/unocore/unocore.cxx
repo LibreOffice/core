@@ -404,6 +404,18 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xContent->getString());
+
+    // Also test the generated layout:
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwFieldPortion", "expand", "");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: PortionType::ContentControl
+    // - Actual  : PortionType::Text
+    // i.e. SwContentControl generated a plain text portion, not a dedicated content control
+    // portion.
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion", "type",
+                "PortionType::ContentControl");
+    assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion", "portion", "test");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

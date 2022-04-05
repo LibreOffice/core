@@ -18,7 +18,7 @@
  */
 
 #pragma once
-#define NUM_ATTRIBUTE_STACKS 44
+#define NUM_ATTRIBUTE_STACKS 45
 
 #include <vector>
 #include <swfntcch.hxx>
