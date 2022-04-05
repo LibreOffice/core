@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "36b4783f_fd7a688e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-05T07:04:00Z",
+      "side": 1,
+      "message": "@jmux:  Can you please take a look at how the new JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD is set?  We only need the *_FOR_BUILD value in external/hsqldb/ExternalProject_hsqldb.mk, so I didn\u0027t add the non--*_FOR_BUILD variable itself to config_host.mk.in.  Things appear to already work as intended for non--cross-compiling builds, but there\u0027s most likely further modifications necessary for cross-compiling builds.",
+      "revId": "c24a515ad5468df978afc6df45827d6dd8b952db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
