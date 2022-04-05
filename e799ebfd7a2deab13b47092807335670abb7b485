@@ -16,6 +16,23 @@
       "message": "Very nice! \n\nHere LibO get new UI tell \"left\" and \"right\" label in new Line Break UI. Just curious, how users with RTL (Arab, Persian, Hebrew) deal with these?",
       "revId": "e799ebfd7a2deab13b47092807335670abb7b485",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e20909ef_ed3e624a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-05T09:47:23Z",
+      "side": 1,
+      "message": "As far as I see, \"left\" and \"right\" means really that. I.e. start/end would be an abstraction, where start means left for LTR and right for RTL, but here left is independent from LTR vs RTL.\n\nFWIW it seems that Word only provides UI to insert the type\u003dall and type\u003dnone cases, I could only test the left and right cases by editing a docx file manually. The type\u003dall case is layout -\u003e breaks -\u003e text wrapping on their ribbon.",
+      "revId": "e799ebfd7a2deab13b47092807335670abb7b485",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
