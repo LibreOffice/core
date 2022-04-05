@@ -510,6 +510,7 @@ static bool CanSkipOverRedline(
                 case RES_TXTATR_INETFMT:
                 case RES_TXTATR_CJK_RUBY:
                 case RES_TXTATR_INPUTFIELD:
+                case RES_TXTATR_CONTENTCONTROL:
                     {
                         if (!isTheAnswerYes) return false; // always break
                     }
@@ -600,6 +601,7 @@ static bool CanSkipOverRedline(
                 case RES_TXTATR_INETFMT:
                 case RES_TXTATR_CJK_RUBY:
                 case RES_TXTATR_INPUTFIELD:
+                case RES_TXTATR_CONTENTCONTROL:
                     {
                         if (!isTheAnswerYes) return false;
                     }

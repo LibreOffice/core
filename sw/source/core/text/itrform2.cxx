@@ -863,6 +863,16 @@ public:
     void SetShadowColor(const Color& rCol ) { m_aShadowColor = rCol; }
 };
 
+/// A content control portion is a text portion that is inside RES_TXTATR_CONTENTCONTROL.
+class SwContentControlPortion : public SwTextPortion
+{
+    Color m_aShadowColor;
+
+public:
+    SwContentControlPortion() { SetWhichPor(PortionType::ContentControl); }
+    virtual void Paint(const SwTextPaintInfo& rInf) const override;
+    void SetShadowColor(const Color& rCol) { m_aShadowColor = rCol; }
+};
 }
 
 void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
@@ -876,6 +886,15 @@ void SwMetaPortion::Paint( const SwTextPaintInfo &rInf ) const
                     : &m_aShadowColor );
 
         SwTextPortion::Paint( rInf );
+    }
+}
+
+void SwContentControlPortion::Paint(const SwTextPaintInfo& rInf) const
+{
+    if (Width())
+    {
+        rInf.DrawViewOpt(*this, PortionType::ContentControl);
+        SwTextPortion::Paint(rInf);
     }
 }
 
@@ -994,6 +1013,10 @@ SwTextPortion *SwTextFormatter::WhichTextPor( SwTextFormatInfo &rInf ) const
                 }
             }
             pPor = pMetaPor;
+        }
+        else if (GetFnt()->IsContentControl())
+        {
+            pPor = new SwContentControlPortion;
         }
         else
         {

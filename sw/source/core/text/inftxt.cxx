@@ -1318,6 +1318,7 @@ void SwTextPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
     case PortionType::Tox:
     case PortionType::Ref:
     case PortionType::Meta:
+    case PortionType::ContentControl:
     case PortionType::ControlChar:
         if ( !GetOpt().IsPagePreview()
              && !GetOpt().IsReadonly()
