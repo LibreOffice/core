@@ -9,6 +9,7 @@
 
 #include "rtfcharsets.hxx"
 #include <array>
+#include <rtl/textenc.h>
 
 namespace writerfilter::rtftok
 {
@@ -49,6 +50,14 @@ RTFEncoding const aRTFEncodings[] = {
 };
 
 int nRTFEncodings = std::size(aRTFEncodings);
+
+RTFFontNameSuffix const aRTFFontNameSuffixes[] = {
+    { "Baltic", RTL_TEXTENCODING_MS_1257 },   { "CE", RTL_TEXTENCODING_MS_1250 },
+    { "Cyr", RTL_TEXTENCODING_MS_1251 },      { "Greek", RTL_TEXTENCODING_MS_1253 },
+    { "Tur", RTL_TEXTENCODING_MS_1254 },      { "(Hebrew)", RTL_TEXTENCODING_MS_1255 },
+    { "(Arabic)", RTL_TEXTENCODING_MS_1256 }, { "(Vietnamese)", RTL_TEXTENCODING_MS_1258 },
+    { "", RTL_TEXTENCODING_DONTKNOW } // End of array
+};
 
 } // namespace writerfilter::rtftok
 
