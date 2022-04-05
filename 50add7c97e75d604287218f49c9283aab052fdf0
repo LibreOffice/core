@@ -214,6 +214,30 @@
       },
       "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8b8d8a2_d4d18e5e",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-04-05T22:13:11Z",
+      "side": 0,
+      "message": "I have no strong opinion. Current wording has clear message, not too technical and straightforward. But for your wording, can we ommit \"command\" and change \"a new theme\" to \"another theme\". I would add further \"Tight Integration\" feature here like. \"You can even install new one with the button right from icon theme list\" or something like that.\n\n@heiko, what\u0027s your stand here?",
+      "parentUuid": "da1e7e51_f3a61125",
+      "range": {
+        "startLine": 62,
+        "startChar": 34,
+        "endLine": 62,
+        "endChar": 144
+      },
+      "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
