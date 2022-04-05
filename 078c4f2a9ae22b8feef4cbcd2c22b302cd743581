@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc3ccb6d_50ac3a67",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-05T12:10:27Z",
+      "side": 1,
+      "message": "This would replace the entire formula to a link. Is there a bug report already?",
+      "revId": "078c4f2a9ae22b8feef4cbcd2c22b302cd743581",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
