@@ -49,7 +49,7 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
 {
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME offers a variety of user interface options to make you feel at home"), ".uno:ToolbarModeUI", "toolbarmode.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to allow changes to parts of a read-only document in Writer? Insert frames or sections that can authorize changes."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/section_edit.html", "tipoftheday_w.png"}, //local help missing
-     { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File ▸ Print ▸ Impress tab and select Notes under Document ▸ Type."), "", "printnote.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "To print the notes of your slides go to File ▸ Print ▸ %PRODUCTNAME Impress tab and select Notes under Document ▸ Type."), "", "printnote.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To start temporarily with a fresh user profile, or to restore a non-working %PRODUCTNAME, use Help ▸ Restart in Safe Mode."), "svx/ui/safemodedialog/SafeModeDialog", ""}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/01/profile_safe_mode.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Writing a book? %PRODUCTNAME master document lets you manage large documents as a container for individual %PRODUCTNAME Writer files."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/globaldoc.html", "tipoftheday_w.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "You can create editable Hybrid PDFs with %PRODUCTNAME."), "https://wiki.documentfoundation.org/Documentation/HowTo/CreateAHybridPDF", "hybrid_pdf.png"},
@@ -59,13 +59,13 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Cannot see all the text in a cell? Expand the input line in the formula bar and you can scroll."), "", "expand_formula_bar.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Optimize your table layout with Table ▸ Size ▸ Distribute Rows / Columns Evenly."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Find all expressions in brackets per Edit ▸ Find and Replace ▸ Find ▸ \\([^)]+\\) (check “Regular expressions”)"), "", "tipoftheday_w.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools ▸ Options ▸ %PRODUCTNAME ▸ View ▸ User Interface ▸ Icon Theme."), "", "icon_sets.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can display a number as a fraction (0.125 = 1/8): Format ▸ Cells, Number ▸ Fraction."), "", "fraction.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Select a different icon set from Tools ▸ Options ▸ %PRODUCTNAME ▸ View ▸ Icon Theme."), "", "icon_sets.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can display a number as a fraction (0.125 = 1/8): Format ▸ Cells, under Numbers tab in the Category select Fraction."), "", "fraction.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove a hyperlink but keep its text, right-click on the hyperlink, and use “Remove Hyperlink”."), "", "remove_hyperlink.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To remove several hyperlinks at once, select the text with the hyperlinks, then right-click and use “Remove Hyperlink”."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To zoom a selection to fit the entire window in Draw, use the / (divide key) on the number pad."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Click a column field (row) PivotTable and press F12 to group data. Choices adapt to content: Date (month, quarter, year), number (classes)"), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can restart the slide show after a pause specified at Slide Show ▸ Slide Show Settings ▸ Loop and repeat."), "", "tipoftheday_i.png"},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can restart the slide show after a pause specified at Slide Show ▸ Slide Show Settings ▸ Loop and repeat after."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To distribute some text in multi-columns select the text and apply Format ▸ Columns."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use View ▸ Value Highlighting to display cell contents in colors: Text/black, Formulas/green, Numbers/blue, Protected cells/grey background."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/03080000.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "You can create different master pages in a presentation template: View ▸ Master Slide and Slide ▸ New Master (or per toolbar or right click in slide pane)."), "", "masterdocument.png"},
@@ -87,7 +87,7 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "To repeat a table heading when a table spans over a page, use Table ▸ Table Properties ▸ Text Flow ▸ Repeat heading."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To quickly insert or delete rows, select the desired number of rows (or columns) and press %MOD1+ to add or %MOD1- to delete."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "To repeat rows/columns on every pages use Format ▸ Print Ranges ▸ Edit."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Insert images and photos into shapes in Draw and Impress. Right-click on a shape, choose Area ▸ Image ▸ Add/Import, and use Options to adjust appearance."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Insert images and photos into shapes in Draw and Impress. Right-click on a shape, choose Area ▸ Image ▸ Add / Import, and use Options to adjust appearance."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Need to insert the date in a spreadsheet cell? Type %MOD1+; or Shift+%MOD1+; to insert the time."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Insert your metadata in your document with Insert ▸ Fields ▸ More Fields… ▸ Document or DocInformation."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Get help from the community via the Ask portal."), "https://ask.libreoffice.org", ""},
@@ -127,7 +127,7 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to have two or more columns for just a part of a %PRODUCTNAME Writer page? Insert ▸ Section, set with Columns tab, and place text in that section."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Use Data ▸ Statistics for sampling, descriptive statistics, analysis of variance, correlation, and much more in %PRODUCTNAME Calc."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can copy from one sheet to another without the clipboard. Select the area to copy, %MOD1+click the target sheet’s tab and use Sheet ▸ Fill Cells ▸ Fill Sheets."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can change the look of %PRODUCTNAME via Tools ▸ Options ▸ View ▸ User Interface."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can change the look of %PRODUCTNAME via View ▸ User Interface...."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "In %PRODUCTNAME Impress, use Insert ▸ Media ▸ Photo Album to create a slideshow from a series of pictures with the “Photo Album” feature."), "", "tipoftheday_i.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "You can show formulas instead of results with View ▸ Show Formula (or Tools ▸ Options ▸ %PRODUCTNAME Calc ▸ View ▸ Display ▸ Formulas)."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "%PRODUCTNAME is developed by a friendly community, made up of hundreds of contributors around the world. Join us with your skills beyond coding."), "https://www.libreoffice.org/community/get-involved/", ""},
@@ -157,7 +157,7 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Citation management? Use a 3rd party extension."), "https://wiki.documentfoundation.org/Referencing_Systems_in_LibreOffice", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to insert a value in the same place on several sheets? Select the sheets: hold down %MOD1 key and click their tabs before entering."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to hide some text in a document? Select the text. Insert ▸ Section, and select “Hide”."), "modules/swriter/ui/editsectiondialog/hide", "tipoftheday_w.png"},  // online help is different https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/swriter/guide/hidden_text.html#hd_id3148675
-     { NC_("RID_CUI_TIPOFTHEDAY", "You can customize the middle mouse button per Tools ▸ Options ▸ %PRODUCTNAME ▸ View ▸ Middle Mouse button."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "You can customize the middle mouse button per Tools ▸ Options ▸ %PRODUCTNAME ▸ View ▸ Mouse ▸ Middle button:."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to print two portrait pages on a landscape one (reducing A4 to A5)? File ▸ Print and select 2 at “Pages per sheet”."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "For quick access to your document bookmarks, right-click on the page number of the status bar (lower-left corner of document window)."), "", "tipoftheday_w.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Select an object in the document background via the Select tool in the Drawing toolbar to surround the object to select."), "", ""},
@@ -176,12 +176,12 @@ const std::tuple<TranslateId, OUString, OUString> TIPOFTHEDAY_STRINGARRAY[] =
      { NC_("RID_CUI_TIPOFTHEDAY", "Use your Android or iPhone to remotely control your Impress presentation."), "https://help.libreoffice.org/%PRODUCTVERSION/he/text/simpress/guide/impress_remote.html", "tipoftheday_i.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to know how many days there are in the current month? Use the DAYSINMONTH(TODAY()) function."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Your numbers are displayed as ### in your spreadsheet? The column is too narrow to display all digits."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Enable massive parallel calculations of formula cells via Tools ▸ Options ▸ OpenCL."), "cui/ui/optopenclpage/OptOpenCLPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/optionen/opencl.html
+     { NC_("RID_CUI_TIPOFTHEDAY", "Enable massive parallel calculations of formula cells via Tools ▸ Options ▸ %PRODUCTNAME ▸ OpenCL."), "cui/ui/optopenclpage/OptOpenCLPage", "tipoftheday_c.png"}, //https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/shared/optionen/opencl.html
      { NC_("RID_CUI_TIPOFTHEDAY", "Use the Connector tool from the Drawing toolbar in Draw/Impress to create nice flow charts and optionally copy/paste the object into Writer."), "", "tipoftheday_d.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "Your donations support our worldwide community."), "https://www.libreoffice.org/donate/", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "You want to add x months to a date? Use =EDATE(date;months)."), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/scalc/01/func_edate.html", "tipoftheday_c.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "To select a contiguous range of cells containing data and bounded by empty row and columns use %MOD1+* (numeric key pad)."), "", "tipoftheday_c.png"},
-     { NC_("RID_CUI_TIPOFTHEDAY", "Your date acceptance pattern is inappropriate? Use Tools ▸ Options ▸ Language Settings ▸ Language ▸ Date acceptance patterns to tweak the pattern."), "", ""},
+     { NC_("RID_CUI_TIPOFTHEDAY", "Your date acceptance pattern is inappropriate? Use Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Date acceptance patterns to tweak the pattern."), "", ""},
      { NC_("RID_CUI_TIPOFTHEDAY", "Want to export formulas to CSV? File ▸ Save As ▸ Type:Text CSV, check “Edit filter settings”, and check “Save cell formulas” in the next dialog."), "", "tipoftheday_c.png"},
      { NC_("RID_CUI_TIPOFTHEDAY", "The presenter console is a great feature when working with %PRODUCTNAME Impress. Have you checked it out?"), "https://help.libreoffice.org/%PRODUCTVERSION/%LANGUAGENAME/text/simpress/guide/presenter_console.html", "tipoftheday_i.png"}, //local help missing
      { NC_("RID_CUI_TIPOFTHEDAY", "To delete multiple comments, select cells with comments and use Sheet ▸ Cell Comments ▸ Delete Comment."), "", "tipoftheday_c.png"},
