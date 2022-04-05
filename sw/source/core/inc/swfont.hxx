@@ -158,6 +158,7 @@ class SwFont
     sal_uInt8   m_nToxCount;        // counts the nesting depth of the Tox
     sal_uInt8   m_nRefCount;        // counts the nesting depth of the Refs
     sal_uInt8   m_nMetaCount;   // count META/METAFIELD
+    sal_uInt8 m_nContentControlCount; // count CONTENTCONTROL
     sal_uInt8   m_nInputFieldCount; // count INPUTFIELD
 
     SwFontScript m_nActual;        // actual font (Latin, CJK or CTL)
@@ -250,6 +251,8 @@ public:
     bool IsRef() const { return ( 0 != m_nRefCount ); }
     sal_uInt8 &GetMeta() { return m_nMetaCount; }
     bool IsMeta() const { return (0 != m_nMetaCount); }
+    sal_uInt8& GetContentControl() { return m_nContentControlCount; }
+    bool IsContentControl() const { return m_nContentControlCount != 0; }
     sal_uInt8 &GetInputField() { return m_nInputFieldCount; }
     bool IsInputField() const { return (0 != m_nInputFieldCount); }
     inline void SetGreyWave( const bool bNew );
