@@ -223,6 +223,8 @@ bool DMLPresetShapeExporter::WriteShape()
         if (!m_bHasHandleValues)
         {
             OUString sShapeType = GetShapeType();
+            if (sShapeType == "puzzle")
+                return false;
             const OString& sPresetShape = msfilter::util::GetOOXMLPresetGeometry(sShapeType);
             m_pDMLexporter->WriteShapeTransformation(m_xShape, XML_a, IsXFlipped(), IsYFlipped(),
                                                      false, false);
