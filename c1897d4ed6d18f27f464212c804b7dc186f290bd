@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a645171f_2b08981c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-05T07:29:49Z",
+      "side": 1,
+      "message": "Please fine a respective bug report first. Then edit the commit message to mention the bug report number, like in\n\n  tdf#NNN: Pass and use ...\n\nso that the bug report and the fix are connected.\n\nThat allows to check and evaluate the report, have a central place to mark other related reports duplicated, and generally manage the issue in a sensible way.\n\nThank you!",
+      "revId": "c1897d4ed6d18f27f464212c804b7dc186f290bd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
