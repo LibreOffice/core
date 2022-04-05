@@ -34,6 +34,24 @@
       "parentUuid": "0d393c7d_ee317734",
       "revId": "9471cb6df8a12b76a3af654a72bb94cea77bf500",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d23d28f_78b11940",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Common.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 2394,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-05T09:39:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4582e7d1_ae09e126",
+      "revId": "9471cb6df8a12b76a3af654a72bb94cea77bf500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
