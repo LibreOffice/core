@@ -2796,6 +2796,35 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf144022)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf99386)
+{
+    mxComponent = loadFromDesktop("private:factory/scalc");
+    ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
+    CPPUNIT_ASSERT(pModelObj);
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    insertStringToCell(*pModelObj, "B1", "This");
+    insertStringToCell(*pModelObj, "B2", "=B1");
+
+    goToCell("A1:B1");
+
+    dispatchCommand(mxComponent, ".uno:ToggleMergeCells", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("0"), pDoc->GetString(ScAddress(1, 1, 0)));
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_EQUAL(OUString("This"), pDoc->GetString(ScAddress(1, 0, 0)));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: This
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(OUString("This"), pDoc->GetString(ScAddress(1, 1, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf126926)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
