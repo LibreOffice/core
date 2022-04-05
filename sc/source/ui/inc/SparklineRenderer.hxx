@@ -36,7 +36,7 @@ struct SparklineValue
     {
         None, // No action on the value
         Skip, // Skip the value
-        Interpolate // Intrpolate the value
+        Interpolate // Interpolate the value
     };
 
     double maValue;
@@ -163,9 +163,9 @@ public:
     void reverse() { std::reverse(maValueList.begin(), maValueList.end()); }
 };
 
-/** Iterator to traverse the addresses in a range if the range is one dimesional.
+/** Iterator to traverse the addresses in a range if the range is one dimensional.
  *
- * The direction to traverse is detcted automatically or hasNext returns
+ * The direction to traverse is detected automatically or hasNext returns
  * false if it is not possible to detect.
  *
  */
