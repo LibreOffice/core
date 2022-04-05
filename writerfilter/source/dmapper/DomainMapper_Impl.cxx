@@ -5192,7 +5192,7 @@ static const FieldConversionMap_t & lcl_GetFieldConversion()
         {"PRINTDATE",       {"DocInfo.PrintDateTime",   FIELD_PRINTDATE     }},
         {"REF",             {"GetReference",            FIELD_REF           }},
         {"REVNUM",          {"DocInfo.Revision",        FIELD_REVNUM        }},
-        {"SAVEDATE",        {"DocInfo.Change",          FIELD_SAVEDATE      }},
+        {"SAVEDATE",        {"DocInfo.ChangeDateTime",  FIELD_SAVEDATE      }},
 //      {"SECTION",         {"",                        FIELD_SECTION       }},
 //      {"SECTIONPAGES",    {"",                        FIELD_SECTIONPAGES  }},
         {"SEQ",             {"SetExpression",           FIELD_SEQ           }},
@@ -6393,6 +6393,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_CREATEDATE  :
                 case FIELD_PRINTDATE:
+                case FIELD_SAVEDATE:
                 {
                     xFieldProperties->setPropertyValue(
                         getPropertyName( PROP_IS_DATE ), uno::makeAny( true ));
@@ -6621,7 +6622,10 @@ void DomainMapper_Impl::CloseFieldCommand()
                     }
                 }
                 break;
-                case FIELD_LASTSAVEDBY  : break;
+                case FIELD_LASTSAVEDBY :
+                    xFieldProperties->setPropertyValue(
+                        getPropertyName(PROP_IS_FIXED), uno::makeAny(true));
+                    break;
                 case FIELD_MACROBUTTON:
                 {
                     //extract macro name
@@ -6727,9 +6731,6 @@ void DomainMapper_Impl::CloseFieldCommand()
                 }
                 break;
                 case FIELD_REVNUM       : break;
-                case FIELD_SAVEDATE     :
-                    SetNumberFormat( pContext->GetCommand(), xFieldProperties );
-                break;
                 case FIELD_SECTION      : break;
                 case FIELD_SECTIONPAGES : break;
                 case FIELD_SEQ          :
