@@ -34,6 +34,24 @@
       "parentUuid": "ba0e4230_29dbf874",
       "revId": "d6a2e8bc16d517c3ee6a823890ece3cc98ba239e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "973f2aab_e2999a3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-05T11:44:54Z",
+      "side": 1,
+      "message": "\u003eMaybe Ctrl+Plus sign (+)   to be less ambiguous and more verbose?\n\nYes, good compromise until we can use rich text.",
+      "parentUuid": "78a879b4_be81bd0f",
+      "revId": "d6a2e8bc16d517c3ee6a823890ece3cc98ba239e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
