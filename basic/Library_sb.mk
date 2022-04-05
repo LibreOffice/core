@@ -106,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/classes/global \
 	basic/source/runtime/methods \
 	basic/source/runtime/methods1 \
+	basic/source/classes/global \
 	basic/source/classes/sbintern \
 	basic/source/sbx/sbxarray \
 	basic/source/sbx/sbxbool \
