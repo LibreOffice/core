@@ -718,7 +718,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if ( pItem )
             {
                 IDocumentMarkAccess* const pMarkAccess = rWrtSh.getIDocumentMarkAccess();
-                pMarkAccess->deleteMark( pMarkAccess->findMark(static_cast<const SfxStringItem*>(pItem)->GetValue()) );
+                pMarkAccess->deleteMark(pMarkAccess->findMark(static_cast<const SfxStringItem*>(pItem)->GetValue()), false);
             }
             break;
         }

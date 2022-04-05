@@ -235,9 +235,12 @@ class IDocumentMarkAccess
 
             @param ppMark
             [in] an iterator pointing to the Mark to be deleted.
+            @param isMoveNodes
+            [in] the mark is deleted only temporarily for a node move, do not
+                 remove fieldmark chars.
         */
         virtual std::unique_ptr<ILazyDeleter>
-            deleteMark(const IDocumentMarkAccess::const_iterator_t& ppMark) =0;
+            deleteMark(const IDocumentMarkAccess::const_iterator_t& ppMark, bool isMoveNodes) =0;
 
         /** Deletes a mark.
 

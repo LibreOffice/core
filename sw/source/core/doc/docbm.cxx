@@ -1112,7 +1112,7 @@ namespace sw { namespace mark
                   pppMark != vMarksToDelete.rend();
                   ++pppMark )
             {
-                vDelay.push_back(deleteMark(*pppMark));
+                vDelay.push_back(deleteMark(*pppMark, pSaveBkmk != nullptr));
             }
         } // scope to kill vDelay
 
@@ -1131,8 +1131,9 @@ namespace sw { namespace mark
     {
         std::unique_ptr<Fieldmark> m_pFieldmark;
         SwDoc * m_pDoc;
-        LazyFieldmarkDeleter(Fieldmark* pMark, SwDoc *const pDoc)
-            : m_pFieldmark(pMark), m_pDoc(pDoc)
+        bool const m_isMoveNodes;
+        LazyFieldmarkDeleter(Fieldmark* pMark, SwDoc *const pDoc, bool const isMoveNodes)
+            : m_pFieldmark(pMark), m_pDoc(pDoc), m_isMoveNodes(isMoveNodes)
         {
             assert(m_pFieldmark);
         }
@@ -1142,12 +1143,15 @@ namespace sw { namespace mark
             // command *cannot* be deleted here as it would create a separate
             // SwUndoDelete that's interleaved with the SwHistory of the outer
             // one - only delete the CH_TXT_ATR_FIELD*!
-            m_pFieldmark->ReleaseDoc(m_pDoc);
+            if (!m_isMoveNodes)
+            {
+                m_pFieldmark->ReleaseDoc(m_pDoc);
+            }
         }
     };
 
     std::unique_ptr<IDocumentMarkAccess::ILazyDeleter>
-        MarkManager::deleteMark(const const_iterator_t& ppMark)
+        MarkManager::deleteMark(const const_iterator_t& ppMark, bool const isMoveNodes)
     {
         std::unique_ptr<ILazyDeleter> ret;
         if (ppMark.get() == m_vAllMarks.end())
@@ -1185,7 +1189,7 @@ namespace sw { namespace mark
                             ClearFieldActivation();
 
                         m_vFieldmarks.erase(ppFieldmark);
-                        ret.reset(new LazyFieldmarkDeleter(dynamic_cast<Fieldmark*>(pMark), m_pDoc));
+                        ret.reset(new LazyFieldmarkDeleter(dynamic_cast<Fieldmark*>(pMark), m_pDoc, isMoveNodes));
                     }
                     else
                     {
@@ -1242,7 +1246,7 @@ namespace sw { namespace mark
         for ( ; it != endIt; ++it)
             if (*it == pMark)
             {
-                deleteMark(iterator(it));
+                deleteMark(iterator(it), false);
                 break;
             }
     }
@@ -1341,7 +1345,7 @@ namespace sw { namespace mark
         if (!pFieldmark)
             return;
 
-        deleteMark(lcl_FindMark(m_vAllMarks, pFieldmark));
+        deleteMark(lcl_FindMark(m_vAllMarks, pFieldmark), false);
     }
 
     ::sw::mark::IFieldmark* MarkManager::changeFormFieldmarkType(::sw::mark::IFieldmark* pFieldmark, const OUString& rNewType)
@@ -1739,7 +1743,7 @@ void SaveBookmark::SetInDoc(
     {
         ::sw::mark::IBookmark* const pBookmark = dynamic_cast<::sw::mark::IBookmark*>(
             pDoc->getIDocumentMarkAccess()->makeMark(aPam, m_aName,
-                m_eOrigBkmType, sw::mark::InsertMode::New));
+                m_eOrigBkmType, sw::mark::InsertMode::CopyText));
         if(pBookmark)
         {
             pBookmark->SetKeyCode(m_aCode);
