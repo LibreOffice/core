@@ -69,9 +69,9 @@ struct SVXCORE_DLLPUBLIC Connection
 
 typedef std::vector< Connection > Connections;
 
-/** Text and properies for a point
+/** Text and properties for a point
  * For proof of concept to make TextData available in svx level this
- * is in a first run pretty simple, but may need to be extended accodingly
+ * is in a first run pretty simple, but may need to be extended accordingly
  * up to similar data as in oox::drawingml::TextBody. Pls have a look at
  * secureDataFromShapeToModelAfterDiagramImport() resp.
  * restoreDataFromModelToShapeAfterReCreation() on it's usage/purpose
@@ -158,7 +158,7 @@ public:
     typedef std::map< OUString, std::map<sal_Int32, SourceIdAndDepth > > StringMap;
 
 protected:
-    // Make constructor protected to signal that this anyways pure virtual class
+    // Make constructor protected to signal that this anyway pure virtual class
     // shall not be incarnated - target to use is oox::drawingml::DiagramData
     DiagramData();
 

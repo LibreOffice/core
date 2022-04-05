@@ -1047,7 +1047,7 @@ Public Function _VarTypeObj(ByRef pvValue As Variant) As Object
 &apos;&apos;&apos;		V_UNOOBJECT		Uno object or Uno structure
 &apos;&apos;&apos;		V_SFOBJECT		ScriptForge object: has ObjectType and ServiceName properties
 &apos;&apos;&apos;		V_BASICOBJECT	User Basic object
-&apos;&apos;&apos;	coupled withe object type as a string (&quot;com.sun.star...&quot; or &quot;SF_...&quot; or &quot;... ScriptForge class ...&quot;)
+&apos;&apos;&apos;	coupled with object type as a string (&quot;com.sun.star...&quot; or &quot;SF_...&quot; or &quot;... ScriptForge class ...&quot;)
 &apos;&apos;&apos;	When the argument is not an Object, return the usual VarType() of the argument
 
 Dim oObjDesc As _ObjectDescriptor	&apos;	Return value

@@ -102,7 +102,7 @@ class SdtHelper final : public virtual SvRefBase
 
     void loadPropertiesXMLs();
 
-    /// Clear all collected attributes for futher reuse
+    /// Clear all collected attributes for further reuse
     void clear();
 
 public:
