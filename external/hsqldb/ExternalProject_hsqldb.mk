@@ -13,10 +13,17 @@ $(eval $(call gb_ExternalProject_register_targets,hsqldb,\
 	build \
 ))
 
+# ANT_OPTS -Djava.security.manager=allow allows latest Apache Ant 1.10.12 to still run under
+# Java 18, where java.lang.System.setSecurityManager (as called from
+# org.apache.tools.ant.types.Permissions.setSecurityManager) would otherwise throw an
+# UnsupportedOperationException (see <https://openjdk.java.net/jeps/411> "Deprecate the Security
+# Manager for Removal"):
 $(call gb_ExternalProject_get_state_target,hsqldb,build) :
 	$(call gb_Trace_StartRange,hsqldb,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		JAVA_HOME=$(JAVA_HOME_FOR_BUILD) \
+		$(if $(JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD), \
+		    ANT_OPTS="$$ANT_OPTS -Djava.security.manager=allow") \
 		$(ICECREAM_RUN) "$(ANT)" \
 			$(if $(verbose),-v,-q) \
 			-f build/build.xml \

@@ -8594,6 +8594,7 @@ dnl ===================================================================
 
 # Whether all the complexity here actually is needed any more or not, no idea.
 
+JDK_SECURITYMANAGER_DISALLOWED=
 if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     _gij_longver=0
     AC_MSG_CHECKING([the installed JDK])
@@ -8619,6 +8620,12 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
             fi
             if test "$_jdk_ver" -gt 10900; then
                 JAVA_CLASSPATH_NOT_SET=TRUE
+            fi
+            dnl TODO: Presumably, the Security Manager will not merely be disallowed, but be
+            dnl completely removed in some Java version > 18 (see
+            dnl <https://openjdk.java.net/jeps/411> "Deprecate the Security Manager for Removal"):
+            if test "$_jdk_ver" -ge 180000; then
+                JDK_SECURITYMANAGER_DISALLOWED=TRUE
             fi
 
             JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
@@ -8928,6 +8935,7 @@ if test "$ENABLE_JAVA" != "" -a "$cross_compiling" != "yes"; then
     JAVA_HOME_FOR_BUILD=$JAVA_HOME
     JAVAIFLAGS_FOR_BUILD=$JAVAIFLAGS
     JDK_FOR_BUILD=$JDK
+    JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD=$JDK_SECURITYMANAGER_DISALLOWED
 fi
 
 AC_SUBST(JAVACFLAGS)
@@ -8940,6 +8948,7 @@ AC_SUBST(JAVA_HOME)
 AC_SUBST(JAVA_HOME_FOR_BUILD)
 AC_SUBST(JDK)
 AC_SUBST(JDK_FOR_BUILD)
+AC_SUBST(JDK_SECURITYMANAGER_DISALLOWED_FOR_BUILD)
 AC_SUBST(JAVA_SOURCE_VER)
 AC_SUBST(JAVA_TARGET_VER)
 
