@@ -512,7 +512,7 @@ void SwNavigationPI::MakeMark()
     // nAutoMarkIdx rotates through the available MarkNames
     // this assumes that IDocumentMarkAccess generates Names in ascending order
     if(vNavMarkNames.size() == MAX_MARKS)
-        pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[m_nAutoMarkIdx]));
+        pMarkAccess->deleteMark(pMarkAccess->findMark(vNavMarkNames[m_nAutoMarkIdx]), false);
 
     rSh.SetBookmark(vcl::KeyCode(), OUString(), IDocumentMarkAccess::MarkType::NAVIGATOR_REMINDER);
     SwView::SetActMark( m_nAutoMarkIdx );
