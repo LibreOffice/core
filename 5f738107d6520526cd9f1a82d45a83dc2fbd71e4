@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb968abe_c4a3b8ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-04-05T19:50:26Z",
+      "side": 1,
+      "message": "I rebase this to fix merge conflict. Let\u0027s see\n",
+      "revId": "5f738107d6520526cd9f1a82d45a83dc2fbd71e4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
