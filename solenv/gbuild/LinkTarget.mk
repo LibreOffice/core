@@ -896,7 +896,6 @@ $(dir $(call gb_LinkTarget_get_dep_target,%))/.dir :
 ifeq ($(ENABLE_CUSTOMTARGET_COMPONENTS),TRUE)
 ifeq (,$(gb_PARTIAL_BUILD))
 
-define gb_LinkTarget__static_dep_x_template
 
 define gb_LinkTarget__command_dep_$(1)
 $$(call gb_Output_announce,LNK:$$(2).d.$(1),$$(true),DEP,1)
@@ -905,8 +904,9 @@ TEMPFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,\
 	$$(call gb_LinkTarget__get_all_$(1),$$(2))) && \
 	$$(call gb_Helper_replace_if_different_and_touch,$$$${TEMPFILE},$$(1))
 
-#endef
+endef
 
+define gb_LinkTarget__static_dep_x_template
 $$(call gb_LinkTarget_get_dep_$(1)_target,%) : ;
 	$$(call gb_LinkTarget__command_dep_$(1),$$@,$$*)
 
