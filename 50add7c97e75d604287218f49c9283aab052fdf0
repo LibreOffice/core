@@ -118,6 +118,30 @@
       },
       "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "122942a0_d84ceadc",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1001872
+      },
+      "writtenOn": "2022-04-05T10:17:30Z",
+      "side": 0,
+      "message": "What\u0027s OP? One Piece? Sorry I hardly understand many abbreviations.\n\nIn tdf#143265 Sophie talked about UI chooser in his report as the content of ToTd is basically about it. Not icon theme. But in Comment 3 you jump out to Icon Theme which is different.",
+      "parentUuid": "2b0b67a6_868f6d24",
+      "range": {
+        "startLine": 62,
+        "startChar": 34,
+        "endLine": 62,
+        "endChar": 144
+      },
+      "revId": "50add7c97e75d604287218f49c9283aab052fdf0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
