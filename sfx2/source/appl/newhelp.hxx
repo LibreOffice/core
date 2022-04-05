@@ -102,6 +102,7 @@ private:
     bool                bIsActivated;
     int                 nRowHeight;
     int                 nAllHeight;
+    sal_uInt16          nLastCharCode;
 
     void                InitializeIndex();
     void                ClearIndex();
