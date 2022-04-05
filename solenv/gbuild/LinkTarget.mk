@@ -905,7 +905,7 @@ TEMPFILE=$$(call gb_var2file,$$(shell $$(gb_MKTEMP)),200,\
 	$$(call gb_LinkTarget__get_all_$(1),$$(2))) && \
 	$$(call gb_Helper_replace_if_different_and_touch,$$$${TEMPFILE},$$(1))
 
-endef
+#endef
 
 $$(call gb_LinkTarget_get_dep_$(1)_target,%) : ;
 	$$(call gb_LinkTarget__command_dep_$(1),$$@,$$*)
