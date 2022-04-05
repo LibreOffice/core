@@ -16,6 +16,24 @@
       "message": "This \"++\" is no easy read. How about %MOD1 + Plus resp. %MOD1 + Minus?",
       "revId": "d6a2e8bc16d517c3ee6a823890ece3cc98ba239e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a879b4_be81bd0f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-05T08:06:04Z",
+      "side": 1,
+      "message": "Willing to reconsider. Think all the variations are less than ideal.\n\nAs noted in BZ, chose to follow the appearance in the UI. Also, other shortcuts use %MOD1+, or %MOD1+;  so it seemed inconsistent to use words with Plus and Minus.  \n\nHave seen (in different Help pages) \n    Ctrl+Plus key\n    Ctrl+Plus sign\n    Plus(+) key\n    Ctrl+Plus Sign (+)\n\nMy resistance to Ctrl+Plus is that the meaning is not immediately obvious, like Ctrl+A (because there is no symbol).\n\nDo these reflections give any inspiration?\n\nMaybe Ctrl+Plus sign (+)   to be less ambiguous and more verbose?",
+      "parentUuid": "ba0e4230_29dbf874",
+      "revId": "d6a2e8bc16d517c3ee6a823890ece3cc98ba239e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
