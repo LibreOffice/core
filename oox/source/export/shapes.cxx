@@ -928,7 +928,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // as preset ones with parameters. Try that with this converter class.
     if (!sShapeType.startsWith("ooxml") && sShapeType != "non-primitive"
         && GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes
-        && xShape->getShapeType() == "com.sun.star.drawing.CustomShape")
+        && xShape->getShapeType() == "com.sun.star.drawing.CustomShape"
+        && !lcl_IsOnAllowlist(sShapeType))
     {
         DMLPresetShapeExporter aCustomShapeConverter(this, xShape);
         bPresetWriteSuccessful = aCustomShapeConverter.WriteShape();

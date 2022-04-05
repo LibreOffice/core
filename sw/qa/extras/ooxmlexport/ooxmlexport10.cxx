@@ -1292,6 +1292,36 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(TestPuzzleExport, "TestPuzzleExport.odt")
+{
+    // See tdf#148342 fo details
+    // Get the doc
+    uno::Reference< text::XTextDocument > xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
+    auto pSwDoc = dynamic_cast<SwXTextDocument*>(xTextDoc.get());
+    CPPUNIT_ASSERT(pSwDoc);
+    // Create a metafile
+    auto pMeta = pSwDoc->GetDocShell()->GetPreviewMetaFile();
+    CPPUNIT_ASSERT(pMeta);
+    MetafileXmlDump aDumper;
+    auto pMetaXml = dumpAndParse(aDumper, *pMeta);
+    CPPUNIT_ASSERT(pMetaXml);
+    // After parsing check that node...
+    auto pXNode = getXPathNode(pMetaXml, "/metafile/push/push/push/push[4]/push/push/polypolygon/polygon");
+    CPPUNIT_ASSERT(pXNode);
+    auto pNode = pXNode->nodesetval->nodeTab[0];
+    CPPUNIT_ASSERT(pNode);
+    auto it = pNode->children;
+    int nCount = 0;
+    // .. and count the children
+    while (it != nullptr)
+    {
+        nCount++;
+        it = it->next;
+    }
+    // In case of puzzle thre will be so many... Without the fix there was a rectangle with 4 points.
+    CPPUNIT_ASSERT_GREATER(300, nCount);
+}
+
 // tdf#106742 for DOCX with compatibility level <= 14 (MS Word up to and incl. ver.2010), we should use cell margins when calculating table left border position
 DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
 {
