@@ -94,7 +94,7 @@ public:
         sal_uInt8 pArray1[16] = { 1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 5, 5, 5, 5 };
         Guid aGuid1(pArray1);
 
-        // test copy contructor
+        // test copy constructor
         Guid aGuid2(aGuid1);
         CPPUNIT_ASSERT_EQUAL(aGuid1, aGuid2);
         CPPUNIT_ASSERT(std::equal(aGuid1.cbegin(), aGuid1.cend(), aGuid2.cbegin(), aGuid2.cend()));
