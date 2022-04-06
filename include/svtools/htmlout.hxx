@@ -44,12 +44,12 @@ struct HTMLOutEvent
 struct HTMLOutFuncs
 {
     SVT_DLLPUBLIC static OString ConvertStringToHTML( const OUString& sSrc,
-                        OUString *pNonConvertableChars );
+                        OUString *pNonConvertableChars = nullptr );
 
     SVT_DLLPUBLIC static SvStream& Out_AsciiTag( SvStream&, std::string_view rStr,
                                    bool bOn = true);
     SVT_DLLPUBLIC static SvStream& Out_Char( SvStream&, sal_uInt32 cChar,
-                        OUString *pNonConvertableChars );
+                        OUString *pNonConvertableChars = nullptr );
     SVT_DLLPUBLIC static SvStream& Out_String( SvStream&, const OUString&,
                         OUString *pNonConvertableChars = nullptr );
     SVT_DLLPUBLIC static SvStream& Out_Hex( SvStream&, sal_uInt32 nHex, sal_uInt8 nLen );
@@ -77,7 +77,7 @@ struct HTMLOutFuncs
     // by an entry that consists only of 0s
     SVT_DLLPUBLIC static SvStream& Out_Events( SvStream&, const SvxMacroTableDtor&,
                                     const HTMLOutEvent*, bool bOutStarBasic,
-                                    OUString *pNonConvertableChars );
+                                    OUString *pNonConvertableChars = nullptr );
 
     // <TD SDVAL="..." SDNUM="...">
     SVT_DLLPUBLIC static OString CreateTableDataOptionsValNum(

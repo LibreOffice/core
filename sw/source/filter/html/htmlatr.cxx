@@ -895,8 +895,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                     break;
                 }
             }
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aClass,
-                                      &rHWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aClass );
             sOut += "\"";
         }
         rWrt.Strm().WriteOString( sOut );
@@ -2258,8 +2257,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
         // it for now.
 
         if( !aOutlineText.isEmpty() )
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineText,
-                                         &rHTMLWrt.m_aNonConvertableCharacters);
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineText );
 
         if( rHTMLWrt.m_pFormatFootnote )
         {
@@ -2490,8 +2488,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
                         if (!bConsumed)
                         {
-                            HTMLOutFuncs::Out_Char(rWrt.Strm(), c,
-                                                   &rHTMLWrt.m_aNonConvertableCharacters);
+                            HTMLOutFuncs::Out_Char(rWrt.Strm(), c);
                         }
                     }
 
@@ -2709,8 +2706,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span
                            " " OOO_STRING_SVTOOLS_HTML_O_style "=\"font-family: ";
             rWrt.Strm().WriteOString(sOut);
-            HTMLOutFuncs::Out_String(rWrt.Strm(), aNames,
-                                     &rHTMLWrt.m_aNonConvertableCharacters)
+            HTMLOutFuncs::Out_String(rWrt.Strm(), aNames)
                 .WriteCharPtr("\">");
         }
         else
@@ -2718,7 +2714,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font " "
                 OOO_STRING_SVTOOLS_HTML_O_face "=\"";
             rWrt.Strm().WriteOString( sOut );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, &rHTMLWrt.m_aNonConvertableCharacters )
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aNames )
                .WriteCharPtr( "\">" );
         }
     }
@@ -3028,8 +3024,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     {
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
         rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFormat.GetName(),
-                                  &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFormat.GetName() );
         sOut = "\"";
     }
 
@@ -3038,7 +3033,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     {
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
         rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget );
         sOut = "\"";
     }
 
@@ -3050,8 +3045,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
 
     if( bEvents )
         HTMLOutFuncs::Out_Events( rWrt.Strm(), *pMacTable, aAnchorEventTable,
-                                  rHTMLWrt.m_bCfgStarBasic,
-                                     &rHTMLWrt.m_aNonConvertableCharacters    );
+                                  rHTMLWrt.m_bCfgStarBasic );
     rWrt.Strm().WriteCharPtr( ">" );
 
     return rWrt;
@@ -3160,8 +3154,7 @@ static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
                     break;
                 }
             }
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aClass,
-                                          &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aClass );
             sOut = "\"";
         }
         sOut += ">";

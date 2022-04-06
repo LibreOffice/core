@@ -1062,11 +1062,8 @@ OUString HtmlExport::DocumentMetadata() const
         xDocProps.set(xDPS->getDocumentProperties());
     }
 
-    OUString aNonConvertableCharacters;
-
     SfxFrameHTMLWriter::Out_DocInfo(aStream, maDocFileName, xDocProps,
-            "  ",
-            &aNonConvertableCharacters);
+            "  ");
 
     const sal_uInt64 nLen = aStream.GetSize();
     OSL_ENSURE(nLen < o3tl::make_unsigned(SAL_MAX_INT32), "Stream can't fit in OString");

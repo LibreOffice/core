@@ -527,7 +527,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
             (nFrameOpts & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         sOut.append(OString::Concat(" ") + pStr + "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName(), &m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName() );
         sOut.append('\"');
     }
 
@@ -544,7 +544,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_alt "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rAlternateText, &m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), rAlternateText );
         sOut.append('\"');
     }
 
@@ -1176,16 +1176,14 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
             HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), aScaledIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.m_bCfgStarBasic,
-                                        SAL_NEWLINE_STRING, pIndArea, pIndMap,
-                                        &rHTMLWrt.m_aNonConvertableCharacters );
+                                        SAL_NEWLINE_STRING, pIndArea, pIndMap );
         }
         else
         {
             HTMLOutFuncs::Out_ImageMap( rHTMLWrt.Strm(), rHTMLWrt.GetBaseURL(), *pIMap, aIMapName,
                                         aIMapEventTable,
                                         rHTMLWrt.m_bCfgStarBasic,
-                                        SAL_NEWLINE_STRING, pIndArea, pIndMap,
-                                        &rHTMLWrt.m_aNonConvertableCharacters );
+                                        SAL_NEWLINE_STRING, pIndArea, pIndMap );
         }
     }
     return aIMapName;
@@ -1494,14 +1492,14 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_src "=\"");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aLink, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aLink );
     }
     else
     {
         sOut.append("list-style-image: url("
                 OOO_STRING_SVTOOLS_HTML_O_data ":");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64 );
         sOut.append(");");
     }
     sOut.append('\"');

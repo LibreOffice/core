@@ -452,8 +452,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     if( bNumFormat || bValue )
     {
         sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValue, nValue,
-            nNumFormat, *rWrt.m_pDoc->GetNumberFormatter(),
-            &rWrt.m_aNonConvertableCharacters));
+            nNumFormat, *rWrt.m_pDoc->GetNumberFormatter()));
     }
     sOut.append('>');
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
@@ -718,7 +717,7 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
                .append(bTopCaption ? OOO_STRING_SVTOOLS_HTML_VA_top : OOO_STRING_SVTOOLS_HTML_VA_bottom)
                .append("\"");
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + sOutStr) );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption, &rWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), *pCaption );
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_caption), false );
     }
 

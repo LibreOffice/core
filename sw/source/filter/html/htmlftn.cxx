@@ -305,14 +305,14 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     OString aTag = rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor;
     sOut.append("<" + aTag + " " OOO_STRING_SVTOOLS_HTML_O_class "=\"");
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, &rHTMLWrt.m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sClass );
     sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, &rHTMLWrt.m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor "\" "
                 OOO_STRING_SVTOOLS_HTML_O_href "=\"#");
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName, &rHTMLWrt.m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol "\"");
     if( !rFormatFootnote.GetNumStr().isEmpty() )
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdfixed);
@@ -320,8 +320,7 @@ Writer& OutHTML_SwFormatFootnote( Writer& rWrt, const SfxPoolItem& rHt )
     rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript ));
 
-    HTMLOutFuncs::Out_String( rWrt.Strm(), rFormatFootnote.GetViewNumStr(*rWrt.m_pDoc, nullptr),
-                                 &rHTMLWrt.m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), rFormatFootnote.GetViewNumStr(*rWrt.m_pDoc, nullptr) );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_superscript), false );
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
 
@@ -361,7 +360,7 @@ void SwHTMLWriter::OutFootEndNotes()
             "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_division
             " " OOO_STRING_SVTOOLS_HTML_O_id "=\"";
         Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( Strm(), sFootnoteName, &m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), sFootnoteName );
         Strm().WriteCharPtr( "\">" );
 
         m_bLFPossible = true;
@@ -468,18 +467,18 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFormatFootnote& rFormatFootnote,
     sOut.append("<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor " "
             OOO_STRING_SVTOOLS_HTML_O_class "=\"");
     Strm().WriteOString( sOut.makeStringAndClear() );
-    HTMLOutFuncs::Out_String( Strm(), sClass, &m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sClass );
     sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
     Strm().WriteOString( sOut.makeStringAndClear() );
-    HTMLOutFuncs::Out_String( Strm(), sFootnoteName, &m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sFootnoteName );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol "\" "
             OOO_STRING_SVTOOLS_HTML_O_href "=\"#");
     Strm().WriteOString( sOut.makeStringAndClear() );
-    HTMLOutFuncs::Out_String( Strm(), sFootnoteName, &m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sFootnoteName );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_anchor "\">");
     Strm().WriteOString( sOut.makeStringAndClear() );
 
-    HTMLOutFuncs::Out_String( Strm(), rNum, &m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), rNum );
     HTMLOutFuncs::Out_AsciiTag( Strm(), OStringConcatenation(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
 }
 
@@ -539,7 +538,7 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString const *pParts,
         OOO_STRING_SVTOOLS_HTML_O_name "=\"" + pName +
         "\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"";
     rWrt.Strm().WriteOString( sOut );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent.makeStringAndClear(), &rHTMLWrt.m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aContent.makeStringAndClear() );
     rWrt.Strm().WriteCharPtr( "\">" );
 }
 

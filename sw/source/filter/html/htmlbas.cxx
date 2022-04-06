@@ -292,8 +292,7 @@ void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
             Strm().WriteCharPtr( SAL_NEWLINE_STRING );   // don't indent!
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource32(),
                                      sLang, STARBASIC, OUString(),
-                                     &rLibName, &rModName,
-                                     &m_aNonConvertableCharacters );
+                                     &rLibName, &rModName );
         }
     }
 #endif
@@ -325,7 +324,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
 
     if( !aDocTable.empty() )
         HTMLOutFuncs::Out_Events( Strm(), aDocTable, aBodyEventTable,
-                                  m_bCfgStarBasic, &m_aNonConvertableCharacters );
+                                  m_bCfgStarBasic );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -286,14 +286,14 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aName, &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aName );
             sOut.append('\"');
         }
         if( !aValue.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aValue );
             sOut.append('\"');
         }
         if( bNumFormat )
@@ -301,8 +301,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             OSL_ENSURE( nFormat, "number format is 0" );
             sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
                 bNumValue, dNumValue, nFormat,
-                *rHTMLWrt.m_pDoc->GetNumberFormatter(),
-                &rHTMLWrt.m_aNonConvertableCharacters));
+                *rHTMLWrt.m_pDoc->GetNumberFormatter()));
         }
         if( bFixed )
         {
@@ -408,8 +407,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                     }
                 }
 
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ),
-                    &rHTMLWrt.m_aNonConvertableCharacters );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ) );
 
                 rHTMLWrt.m_bTagOn = false;
                 while( nItems )
@@ -418,8 +416,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             }
             else
             {
-                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ),
-                    &rHTMLWrt.m_aNonConvertableCharacters );
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ) );
             }
             nPos = nEndPos;
         }
@@ -427,8 +424,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     }
     else
     {
-        HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand,
-              &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand );
     }
 
     // Output the closing tag.
@@ -531,7 +527,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         // otherwise is the script content itself. Since only JavaScript
         // is in fields, it must be JavaScript ...:)
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
-                                 aURL, nullptr, nullptr, &rHTMLWrt.m_aNonConvertableCharacters );
+                                 aURL, nullptr, nullptr );
 
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine( true );

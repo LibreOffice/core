@@ -350,10 +350,9 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
         // for STYLE-Option encode string
         Strm().WriteOString( sOut.makeStringAndClear() );
         if( !sVal.empty() )
-            HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(sVal),
-                                      &m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(sVal) );
         else if( pSVal )
-            HTMLOutFuncs::Out_String( Strm(), *pSVal, &m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( Strm(), *pSVal );
     }
     else
     {

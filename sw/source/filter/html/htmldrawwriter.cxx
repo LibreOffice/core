@@ -273,8 +273,7 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     aOutliner.SetText( *pOutlinerParaObj );
     OUString aText( aOutliner.GetText( aOutliner.GetParagraph(0),
                                      aOutliner.GetParagraphCount() ) );
-    HTMLOutFuncs::Out_String( rWrt.Strm(), aText,
-                                &rHTMLWrt.m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( rWrt.Strm(), aText );
 
     HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_marquee), false );
 
