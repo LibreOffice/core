@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3eec94e9_68cda1d1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-06T11:08:14Z",
+      "side": 1,
+      "message": "Hi Hossein,\nDo you have rights to submit this patch ?",
+      "revId": "6c0c80385133f68c81342db4451860e859503e31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
