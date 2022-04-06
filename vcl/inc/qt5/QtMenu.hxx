@@ -49,7 +49,6 @@ private:
     std::unique_ptr<QMenu> mpOwnedQMenu;
     // pointer to QMenu owned by the corresponding QtMenuItem or self (-> mpOwnedQMenu)
     QMenu* mpQMenu;
-    QPushButton* mpCloseButton;
 
     void DoFullMenuUpdate(Menu* pMenuBar);
     static void NativeItemText(OUString& rItemText);
