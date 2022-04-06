@@ -765,7 +765,7 @@ void SwTextFrame::SplitFrame(TextFrameIndex const nTextPos)
 
 void SwTextFrame::SetOffset_(TextFrameIndex const nNewOfst)
 {
-    // We do not need to invalidate out Follow.
+    // We do not need to invalidate our Follow.
     // We are a Follow, get formatted right away and call
     // SetOffset() from there
     mnOffset = nNewOfst;
