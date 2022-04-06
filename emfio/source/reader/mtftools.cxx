@@ -179,7 +179,7 @@ namespace emfio
         aFont.SetCharSet( eCharSet );
         aFont.SetFamilyName( rFont.alfFaceName );
         FontFamily eFamily;
-        switch ( rFont.lfPitchAndFamily & 0xf0 )
+        switch ( rFont.lfPitchAndFamily >> 4 & 0x0f )
         {
             case FamilyFont::FF_ROMAN:
                 eFamily = FAMILY_ROMAN;

@@ -336,7 +336,7 @@ void WmfTest::testTdf99402()
     logfontw.lfUnderline = 0;
     logfontw.lfStrikeOut = 0;
     logfontw.lfCharSet = emfio::CharacterSet::OEM_CHARSET;
-    logfontw.lfPitchAndFamily = +emfio::FamilyFont::FF_ROMAN | +emfio::PitchFont::DEFAULT_PITCH;
+    logfontw.lfPitchAndFamily = emfio::FamilyFont::FF_ROMAN << 4 | emfio::PitchFont::DEFAULT_PITCH;
     logfontw.alfFaceName = "Symbol";
 
     emfio::WinMtfFontStyle fontStyle(logfontw);

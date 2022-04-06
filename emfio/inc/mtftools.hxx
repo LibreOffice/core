@@ -275,7 +275,7 @@ namespace emfio
     };
 
     /* [MS-WMF] - v20210625 - pages 33,  */
-    enum FamilyFont : sal_uInt32
+    enum FamilyFont : sal_uInt8
     {
         FF_DONTCARE   = 0x00,
         FF_ROMAN      = 0x01,
