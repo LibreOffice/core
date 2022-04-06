@@ -34,6 +34,24 @@
       "parentUuid": "ee26217e_89c04165",
       "revId": "c7f955ca52cf46fd6f9752ca8d690cb912cf23b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66c34681_a66193e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-06T14:37:44Z",
+      "side": 1,
+      "message": "\u003e i.e. avoiding having Qt do the conversion instead of doing it inside of LO ourselves?\n\nyes\n\nThe QMimeData code is not Wayland specific; those functions like text() are used on all platforms. LO charset conversion functions should work since ages. My reasoning was simply, that LO should do the stuff it is supposed to do already. Nobody defines what kind of \"text/plain;*\" either a toolkit or other clipboard tools should provide. I actually tried to find some docs, if Wayland has some spec for the \"text/plain\" clipboard encoding. That then would be Wayland specific.\n\nJust adding the utf8 conversion using LO code would be my preference from this reasoning, but I can also understand the \"use Qt abstraction where possible\" point. That is the point of the separate qt VCL plugin, which made the WASM port at all possible. \n\nI don\u0027t really think there is a clearly best solution.",
+      "parentUuid": "136b34a2_c8ab20b9",
+      "revId": "c7f955ca52cf46fd6f9752ca8d690cb912cf23b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
