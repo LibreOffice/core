@@ -20,6 +20,8 @@
 #pragma once
 
 #include <sal/types.h>
+#include <rtl/ustring.hxx>
+#include <o3tl/hash_combine.hxx>
 
 #include <vcl/dllapi.h>
 
@@ -47,6 +49,36 @@ class VCL_DLLPUBLIC TextLayoutCache
 public:
     std::vector<vcl::text::Run> runs;
     TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd);
+};
+
+struct FirstCharsStringHash
+{
+    size_t operator()(const OUString& str) const
+    {
+        // Strings passed to GenericSalLayout::CreateTextLayoutCache() may be very long,
+        // and computing an entire hash could almost negate the gain of hashing. Hash just first
+        // characters, that should be good enough.
+        size_t hash
+            = rtl_ustr_hashCode_WithLength(str.getStr(), std::min<size_t>(100, str.getLength()));
+        o3tl::hash_combine(hash, str.getLength());
+        return hash;
+    }
+};
+
+struct FastStringCompareEqual
+{
+    bool operator()(const OUString& str1, const OUString& str2) const
+    {
+        // Strings passed to GenericSalLayout::CreateTextLayoutCache() may be very long,
+        // and OUString operator == compares backwards and using hard-written code, while
+        // memcmp() compares much faster.
+        if (str1.getLength() != str2.getLength())
+            return false;
+        if (str1.getStr() == str2.getStr())
+            return true;
+        return memcmp(str1.getStr(), str2.getStr(), str1.getLength() * sizeof(str1.getStr()[0]))
+               == 0;
+    }
 };
 }
 
