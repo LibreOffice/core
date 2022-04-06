@@ -21,6 +21,7 @@
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/vcllayout.hxx>
 #include <tools/stream.hxx>
+#include <TextLayoutCache.hxx>
 
 SalLayoutGlyphs::SalLayoutGlyphs() {}
 
@@ -146,7 +147,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     SvMemoryStream stream;
     WriteFont(stream, outputDevice->GetFont());
     o3tl::hash_combine(hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
-    o3tl::hash_combine(hashValue, text);
+    o3tl::hash_combine(hashValue, vcl::text::FirstCharsStringHash()(text));
     o3tl::hash_combine(hashValue, index);
     o3tl::hash_combine(hashValue, len);
     o3tl::hash_combine(hashValue, logicPos.X());
@@ -158,7 +159,8 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
 {
     return hashValue == other.hashValue && outputDevice == other.outputDevice
            && index == other.index && len == other.len && logicPos == other.logicPos
-           && logicWidth == other.logicWidth && text == other.text;
+           && logicWidth == other.logicWidth
+           && vcl::text::FastStringCompareEqual()(text, other.text);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
