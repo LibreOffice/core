@@ -959,6 +959,38 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testCharColorTheme)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(8000), nCharColorLumOff);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testFillColorTheme)
+{
+    // Given an Impress document with a selected shape:
+    mxComponent = loadFromDesktop("private:factory/simpress",
+                                  "com.sun.star.presentation.PresentationDocument");
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XSelectionSupplier> xController(xModel->getCurrentController(),
+                                                         uno::UNO_QUERY);
+    xController->select(uno::makeAny(xShape));
+
+    // When setting the fill color of that shape, with theme metadata:
+    uno::Sequence<beans::PropertyValue> aColorArgs = {
+        comphelper::makePropertyValue("FillColor", static_cast<sal_Int32>(0xed7d31)), // orange
+        comphelper::makePropertyValue("ColorThemeIndex", static_cast<sal_Int16>(4)), // accent 1
+    };
+    dispatchCommand(mxComponent, ".uno:FillColor", aColorArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the theme index is not lost when the sidebar sets it:
+    sal_Int16 nFillColorTheme{};
+    xShape->getPropertyValue("FillColorTheme") >>= nFillColorTheme;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 4
+    // - Actual  : -1
+    // i.e. the theme index was lost during the dispatch of the command.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nFillColorTheme);
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf127696)
 {
     mxComponent = loadFromDesktop("private:factory/simpress",
