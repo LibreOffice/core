@@ -59,6 +59,7 @@
 #include <svtools/optionsdrawinglayer.hxx>
 #include <cellfrm.hxx>
 #include <wrtsh.hxx>
+#include <textcontentcontrol.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
 // MapMode. This is done so that on ShowCursor the same size does not have to be
@@ -350,6 +351,7 @@ SwSelPaintRects::SwSelPaintRects( const SwCursorShell& rCSh )
     : m_pCursorShell( &rCSh )
 #if HAVE_FEATURE_DESKTOP
     , m_bShowTextInputFieldOverlay(true)
+    , m_bShowContentControlOverlay(true)
 #endif
 {
 }
@@ -368,6 +370,8 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
     std::swap(m_pCursorOverlay, rSwap.m_pCursorOverlay);
     std::swap(m_bShowTextInputFieldOverlay, rSwap.m_bShowTextInputFieldOverlay);
     std::swap(m_pTextInputFieldOverlay, rSwap.m_pTextInputFieldOverlay);
+    std::swap(m_bShowContentControlOverlay, rSwap.m_bShowContentControlOverlay);
+    std::swap(m_pContentControlOverlay, rSwap.m_pContentControlOverlay);
 #endif
 }
 
@@ -376,6 +380,7 @@ void SwSelPaintRects::Hide()
 #if HAVE_FEATURE_DESKTOP
     m_pCursorOverlay.reset();
     m_pTextInputFieldOverlay.reset();
+    m_pContentControlOverlay.reset();
 #endif
 
     SwRects::clear();
@@ -466,6 +471,7 @@ void SwSelPaintRects::Show(std::vector<OString>* pSelectionRectangles)
     }
 
     HighlightInputField();
+    HighlightContentControl();
 #endif
 
     // Tiled editing does not expose the draw and writer cursor, it just
@@ -622,6 +628,78 @@ void SwSelPaintRects::HighlightInputField()
     else
     {
         m_pTextInputFieldOverlay.reset();
+    }
+}
+
+void SwSelPaintRects::HighlightContentControl()
+{
+    std::vector<basegfx::B2DRange> aContentControlRanges;
+
+    if (m_bShowContentControlOverlay)
+    {
+        const SwPosition* pStart = GetShell()->GetCursor()->Start();
+        SwTextNode* pTextNode = pStart->nNode.GetNode().GetTextNode();
+        SwTextContentControl* pCurContentControlAtCursor = nullptr;
+        if (pTextNode)
+        {
+            // SwTextNode::PARENT because this way we highlight when the cursor is on the right side
+            // of the dummy character: ideally the end of the range would have the same behavior.
+            SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
+                pStart->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+            if (pAttr)
+            {
+                pCurContentControlAtCursor = static_txtattr_cast<SwTextContentControl*>(pAttr);
+            }
+        }
+        if (pCurContentControlAtCursor)
+        {
+            auto pCursorForContentControl = std::make_unique<SwShellCursor>(
+                *GetShell(), SwPosition(*pTextNode, pCurContentControlAtCursor->GetStart()));
+            pCursorForContentControl->SetMark();
+            pCursorForContentControl->GetMark()->nNode = *pTextNode;
+            pCursorForContentControl->GetMark()->nContent.Assign(
+                pTextNode, *(pCurContentControlAtCursor->End()));
+
+            pCursorForContentControl->FillRects();
+            SwRects* pRects = pCursorForContentControl.get();
+            for (const auto& rRect : *pRects)
+            {
+                tools::Rectangle aRect(rRect.SVRect());
+
+                aContentControlRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right() + 1,
+                                                   aRect.Bottom() + 1);
+            }
+        }
+    }
+
+    if (!aContentControlRanges.empty())
+    {
+        if (m_pContentControlOverlay)
+        {
+            m_pContentControlOverlay->setRanges(std::move(aContentControlRanges));
+        }
+        else
+        {
+            SdrView* pView = const_cast<SdrView*>(GetShell()->GetDrawView());
+            SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
+            const rtl::Reference<sdr::overlay::OverlayManager>& xTargetOverlay
+                = pCandidate->GetOverlayManager();
+
+            if (xTargetOverlay.is())
+            {
+                // Use the system's highlight color with decreased luminance as highlight color.
+                Color aHighlight(SvtOptionsDrawinglayer::getHilightColor());
+                aHighlight.DecreaseLuminance(128);
+
+                m_pContentControlOverlay.reset(new sw::overlay::OverlayRangesOutline(
+                    aHighlight, std::move(aContentControlRanges)));
+                xTargetOverlay->add(*m_pContentControlOverlay);
+            }
+        }
+    }
+    else
+    {
+        m_pContentControlOverlay.reset();
     }
 }
 
