@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "948f9fa1_0e2cd2c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-06T09:59:05Z",
+      "side": 1,
+      "message": "You maybe right, the GNU Make version is just 3.8.1, I will try a newer version. Thank you.",
+      "parentUuid": "20ec8057_b6b03369",
+      "revId": "f098a442bc0a336cbe89217c402ec997aa882a86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e61851c7_4386956c",
