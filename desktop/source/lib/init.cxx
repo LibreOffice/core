@@ -2540,7 +2540,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
              Application::SetDialogCancelMode(DialogCancelMode::LOKSilent);
         }
 
-        uno::Sequence<css::beans::PropertyValue> aFilterOptions(3);
+        uno::Sequence<css::beans::PropertyValue> aFilterOptions(4);
         aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
                                                        0,
                                                        uno::makeAny(aOptions),
@@ -2586,6 +2586,13 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
         aFilterOptions[3].Name = "UpdateDocMode";
         aFilterOptions[3].Value <<= nUpdateDoc;
         */
+
+        // set this explicitly false to be able to load template files
+        // as regular files, otherwise we cannot save them; it will try
+        // to bring saveas dialog which cannot work with LOK case
+        aFilterOptions[3].Name = "AsTemplate";
+        aFilterOptions[3].Value <<= false;
+
 
         const int nThisDocumentId = nDocumentIdCounter++;
         SfxViewShell::SetCurrentDocId(ViewShellDocId(nThisDocumentId));
