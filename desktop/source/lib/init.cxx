@@ -2575,10 +2575,14 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
             document::MacroExecMode::NEVER_EXECUTE;
 #endif
 
+        // set AsTemplate explicitly false to be able to load template files
+        // as regular files, otherwise we cannot save them; it will try
+        // to bring saveas dialog which cannot work with LOK case
         uno::Sequence<css::beans::PropertyValue> aFilterOptions{
             comphelper::makePropertyValue("FilterOptions", sFilterOptions),
             comphelper::makePropertyValue("InteractionHandler", xInteraction),
-            comphelper::makePropertyValue("MacroExecutionMode", nMacroExecMode)
+            comphelper::makePropertyValue("MacroExecutionMode", nMacroExecMode),
+            comphelper::makePropertyValue("AsTemplate", false)
         };
 
         /* TODO
