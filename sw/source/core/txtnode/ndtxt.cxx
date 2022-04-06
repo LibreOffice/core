@@ -1715,6 +1715,7 @@ SwTextNode::GetTextAttrAt(sal_Int32 const nIndex, sal_uInt16 const nWhich,
             || (nWhich == RES_TXTATR_INETFMT)
             || (nWhich == RES_TXTATR_CJK_RUBY)
             || (nWhich == RES_TXTATR_UNKNOWN_CONTAINER)
+            || (nWhich == RES_TXTATR_CONTENTCONTROL)
             || (nWhich == RES_TXTATR_INPUTFIELD ) );
             // "GetTextAttrAt() will give wrong result for this hint!")
 
