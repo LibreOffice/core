@@ -135,6 +135,12 @@ void QtWidget::resizeEvent(QResizeEvent* pEvent)
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
+void QtWidget::fakeResize()
+{
+    QResizeEvent aEvent(size(), QSize());
+    resizeEvent(&aEvent);
+}
+
 void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
                                          const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
                                          SalAbstractMouseEvent& aSalEvent)
