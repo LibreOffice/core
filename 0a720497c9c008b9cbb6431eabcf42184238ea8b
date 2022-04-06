@@ -16,6 +16,24 @@
       "message": "covered (among other things) by \u003chttps://gerrit.libreoffice.org/c/core/+/132623\u003e \"Fix --enable-breakpad builds\" now\n\n(when you send Gerrit changes, please always make sure that you actually successfully built the modifications locally first, using relevant configure options where necessary)",
       "revId": "0a720497c9c008b9cbb6431eabcf42184238ea8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d204b4ee_d6abc3ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-06T09:17:15Z",
+      "side": 1,
+      "message": "Well the patch did build successfully locally and make check passed, I am not aware of other configure options and which ones to use for each instance.",
+      "parentUuid": "9cdc9b59_6df57ee6",
+      "revId": "0a720497c9c008b9cbb6431eabcf42184238ea8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
