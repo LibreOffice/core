@@ -44,7 +44,7 @@ public:
     // creates temporary processing data from model data
     virtual void buildDiagramDataModel(bool bClearOoxShapes);
 
-    FillPropertiesPtr& getFillProperties() { return mpFillProperties; }
+    FillPropertiesPtr& getBackgroundFillProperties() { return mpBackgroundFillProperties; }
     virtual void dump() const;
 
     Shape* getOrCreateAssociatedShape(const svx::diagram::Point& rPoint, bool bCreateOnDemand = false) const;
@@ -56,10 +56,12 @@ public:
 protected:
     // The model definition, the parts *only* available in oox. Also look for already
     // defined ModelData in svx::diagram::DiagramData
-    // - FillStyle
-    FillPropertiesPtr mpFillProperties;
 
-    // temporary processing data, deleted when using build()
+    // - FillStyle for Diagram Background (empty constructed, may stay empty)
+    FillPropertiesPtr mpBackgroundFillProperties;
+
+    // temporary processing data, deleted when using build(). Association
+    // map between oox::drawingml::Shape and svx::diagram::Point ModelData
     PointShapeMap     maPointShapeMap;
 };
 

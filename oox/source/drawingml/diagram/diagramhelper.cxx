@@ -69,7 +69,6 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     oox::drawingml::ShapePtr pShapePtr = std::make_shared<Shape>( "com.sun.star.drawing.GroupShape" );
     pShapePtr->setDiagramType();
     pShapePtr->setSize(maImportSize);
-    pShapePtr->getFillProperties() = *mpDiagramPtr->getData()->getFillProperties();
 
     // Re-create the oox::Shapes for the diagram content
     mpDiagramPtr->addTo(pShapePtr);
@@ -99,7 +98,11 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     uno::Reference< uno::XInterface > const & rUnoModel(rModel.getUnoModel());
     css::uno::Reference<css::uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
     rtl::Reference<oox::shape::ShapeFilterBase> xFilter(new oox::shape::ShapeFilterBase(xContext));
+
+    // set oox::Theme at Filter. All LineStyle/FillStyle/Colors/Attributes
+    // will be taken from there
     xFilter->setCurrentTheme(mpThemePtr);
+
     css::uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
     xFilter->setTargetDocument(aComponentModel);
 

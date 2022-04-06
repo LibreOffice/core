@@ -126,7 +126,7 @@ void DiagramData::secureDataFromShapeToModelAfterDiagramImport()
 
 DiagramData::DiagramData()
 : svx::diagram::DiagramData()
-, mpFillProperties( std::make_shared<FillProperties>() )
+, mpBackgroundFillProperties( std::make_shared<FillProperties>() )
 {
 }
 

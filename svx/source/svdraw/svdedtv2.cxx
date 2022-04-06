@@ -1915,25 +1915,43 @@ void SdrEditView::UnGroupMarked()
             const bool bIsDiagram(nullptr != pGroup && pGroup->isDiagram());
 
             // If the Group is a Diagram, it has a filler BG object to guarantee
-            // the Diagam's dimensions. Identify that shape & delete it, it is not
-            // useful for any further processing
+            // the Diagam's dimensions. Identify that shape
             if(bIsDiagram && nObjCount)
             {
                 SdrObject* pObj(pSrcLst->GetObj(0));
 
                 if(nullptr != pObj && !pObj->IsGroupObject() &&
-                    !pObj->HasFillStyle() && !pObj->HasLineStyle() &&
+                    !pObj->HasLineStyle() &&
                     pObj->IsMoveProtect() && pObj->IsResizeProtect())
                 {
-                    if( bUndo )
-                        AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
+                    if(pObj->HasFillStyle())
+                    {
+                        // If it has FillStyle it is a useful object representing that possible
+                        // defined fill from oox import. In this case, we should remove the
+                        // Move/Resize protection to allow seamless further processing.
 
-                    pObj = pSrcLst->RemoveObject(0);
+                        // Undo of these is handled by SdrUndoGeoObj which holds a SdrObjGeoData,
+                        // creae one
+                        if( bUndo )
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 
-                    if( !bUndo )
-                        SdrObject::Free(pObj);
+                        pObj->SetMoveProtect(false);
+                        pObj->SetResizeProtect(false);
+                    }
+                    else
+                    {
+                        // If it has no FillStyle it is not useful for any further processing
+                        // but only was used as a placeholder, get directly rid of it
+                        if( bUndo )
+                            AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoDeleteObject(*pObj));
 
-                    nObjCount = pSrcLst->GetObjCount();
+                        pObj = pSrcLst->RemoveObject(0);
+
+                        if( !bUndo )
+                            SdrObject::Free(pObj);
+
+                        nObjCount = pSrcLst->GetObjCount();
+                    }
                 }
             }
 
