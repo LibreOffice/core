@@ -22,6 +22,30 @@
       },
       "revId": "c9b69e412b9646f7d49f500d47a078c2ea155c8c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c51b0db6_41a236a4",
+        "filename": "desktop/source/minidump/minidump.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-04-06T08:51:24Z",
+      "side": 1,
+      "message": "Thanks!\n\nAddressed in https://gerrit.libreoffice.org/c/core/+/132621",
+      "parentUuid": "d91278d2_8f3fd023",
+      "range": {
+        "startLine": 177,
+        "startChar": 12,
+        "endLine": 177,
+        "endChar": 16
+      },
+      "revId": "c9b69e412b9646f7d49f500d47a078c2ea155c8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
