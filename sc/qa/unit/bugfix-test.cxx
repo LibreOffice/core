@@ -146,7 +146,6 @@ void ScFiltersTest::testTdf137576_Measureline()
 
     // Get document
     ScDocShellRef xDocSh = loadDoc(u"tdf137576_Measureline.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137576_Measureline.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get shape
@@ -191,7 +190,6 @@ void ScFiltersTest::testTdf137216_HideCol()
 
     // Get document
     ScDocShellRef xDocSh = loadDoc(u"tdf137216_HideCol.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137216_HideCol.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get shape
@@ -216,7 +214,6 @@ void ScFiltersTest::testTdf137044_CoverHiddenRows()
 
     // Get document
     ScDocShellRef xDocSh = loadDoc(u"tdf137044_CoverHiddenRows.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137044_CoverHiddenRows.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get shape
@@ -263,7 +260,6 @@ void ScFiltersTest::testTdf137020_FlipVertical()
 {
     // Get document
     ScDocShellRef xDocSh = loadDoc(u"tdf137020_FlipVertical.", FORMAT_ODS);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load tdf137020_FlipVertical.ods", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Get shape
@@ -580,7 +576,6 @@ void ScFiltersTest::testTdf129789()
 {
 
     ScDocShellRef xDocSh = loadDoc(u"tdf129789.", FORMAT_ODS, true);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     {
@@ -719,7 +714,6 @@ void ScFiltersTest::testTdf130725()
 void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
 {
     ScDocShellRef xShell = loadDoc(u"tdf104502_hiddenColsCountedInPageCount.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xShell.is());
 
     ScDocument& rDoc = xShell->GetDocument();
 

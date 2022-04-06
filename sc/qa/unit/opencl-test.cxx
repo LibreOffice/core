@@ -517,11 +517,9 @@ bool ScOpenCLTest::initTestEnv(std::u16string_view fileName, sal_Int32 nFormat,
         return false;
 
     xDocSh = loadDoc(fileName, nFormat, bReadWrite);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.is());
     enableOpenCL();
 
     xDocShRes = loadDoc(fileName, nFormat, bReadWrite);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.is());
 
     return true;
 }

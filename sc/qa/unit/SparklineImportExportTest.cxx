@@ -166,7 +166,6 @@ void checkSparklines(ScDocument& rDocument)
 void SparklineImportExportTest::testSparklinesRoundtripXLSX()
 {
     ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh);
 
     checkSparklines(xDocSh->GetDocument());
 
@@ -181,7 +180,6 @@ void SparklineImportExportTest::testSparklinesExportODS()
 {
     // Load the document containing sparklines
     ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh);
 
     // Save as ODS and check content.xml with XPath
     std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_ODS);
@@ -229,7 +227,6 @@ void SparklineImportExportTest::testSparklinesExportODS()
 void SparklineImportExportTest::testSparklinesRoundtripODS()
 {
     ScDocShellRef xDocSh = loadDoc(u"Sparklines.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh);
 
     checkSparklines(xDocSh->GetDocument());
 
