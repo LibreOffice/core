@@ -1,6 +1,363 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3dd88e6b_f945ddee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "see inline comments",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c7b9416_cc45970c",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "odd alignment?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9607389c_82564a59",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "not sure this comment helps me understand the line, what\u0027s the underlying issue? The other properties have plains strings, too?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45cd67a1_8cc04b02",
+        "filename": "embeddedobj/source/commonembedding/embedobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "class seems to generally guard write access via mutex, might be needed here too?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7998fb22_d582be3e",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "odd alignment again",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cd09101_4e0cd1a5",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "nit - seems the spacing for if-statements diverges a lot in this file? can this be made consistent, at least for the lines touched?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70ff707b_9864a07b",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "extra space, and mixing singular name with plural verb",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31d8041b_0e8ef0bf",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "same",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "387e57e3_7751da22",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "same",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9fd7ee21_8725c69f",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "unclear comment to me - or perhaps redundant? just not doing something here on else, obviously?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18532c8c_19b6c5dd",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "redundant comment",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7861dead_960af307",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "redundant comment",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "813d3be4_94526840",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "don\u0027t change data on save ?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8ed431d_13f96b50",
+        "filename": "embeddedobj/source/commonembedding/persistence.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "unclear comment (or perhaps redundant?)",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5640304_dfa32b1d",
+        "filename": "embeddedobj/source/commonembedding/persistence.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "Unclear comment (or perhaps redundant?)",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bbe02ed_5811198e",
+        "filename": "embeddedobj/source/inc/commonembobj.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "perhaps this can be improved, to be more self-documenting on call sites?\n\ne.g.: handleLinkedOLE(CopyBackToOLELink) or something? see review on the comments at the HandleLinkAndTempFileSave call sites",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c841f988_163dcb17",
+        "filename": "embeddedobj/source/inc/commonembobj.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "odd alignment",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87a5a87e_015ab431",
+        "filename": "embeddedobj/source/inc/strings.hrc",
+        "patchSetId": 18
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "sure?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "591f6678_3a3ad4a5",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 3010,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "missing space, and slightly redundant comment (or be more explanatory?)",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af368398_edb0990f",
+        "filename": "include/svtools/embedhlp.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "default bool parameters are evil. at the very least, this now lacks a parameter documentation",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03f2efc2_a82bfac8",
+        "filename": "include/svtools/filechangedchecker.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "default bool params are evil. at the very least, this now lacks documentation for the new parameter",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "711ecb6a_0d7f397f",
@@ -66,6 +423,23 @@
         "endLine": 28,
         "endChar": 48
       },
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73291f5b_be75f39b",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-06T00:26:07Z",
+      "side": 1,
+      "message": "extraneous space, for this source file",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
