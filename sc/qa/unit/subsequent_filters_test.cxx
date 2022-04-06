@@ -2974,6 +2974,7 @@ void ScFiltersTest::testImportCrashes() {
     testImportCrash(u"tdf139782.", FORMAT_ODS);
     testImportCrash(u"tdf136551.", FORMAT_ODS);
     testImportCrash(u"tdf90391.", FORMAT_ODS);
+    testImportCrash(u"tdf121887.", FORMAT_XLSX); // 'Maximum number of rows per sheet' warning
 }
 
 void ScFiltersTest::testTdf129681()
