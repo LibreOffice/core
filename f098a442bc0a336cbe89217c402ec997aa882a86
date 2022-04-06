@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e313779_c17ffbee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-06T08:42:36Z",
+      "side": 1,
+      "message": "i believe this nesting is intentional",
+      "revId": "f098a442bc0a336cbe89217c402ec997aa882a86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e61851c7_4386956c",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-06T08:42:36Z",
+      "side": 1,
+      "message": "this use of an argument variable here clearly indicates that this is supposed to be inside another \"define\", as now there is nothing that can ever set this variable.",
+      "range": {
+        "startLine": 900,
+        "startChar": 34,
+        "endLine": 900,
+        "endChar": 38
+      },
+      "revId": "f098a442bc0a336cbe89217c402ec997aa882a86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
