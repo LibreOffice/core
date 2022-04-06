@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee26217e_89c04165",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-06T13:13:33Z",
+      "side": 1,
+      "message": "I was also assuming a problem for \"text/plain\", but couldn\u0027t get Firefox to start in my \"kwin_wayland --xwayland\" session to verify. And then just saw your link to Gerrit. Originally I wanted to avoid any text conversation by Qt. Preferring utf8 over unspecified \"text/plain\" would definitely be an improvement too.\n\nI have no idea, what the real minimal Qt 5 requirement is. We still compile with qt5_minimal_minor\u003d\"6\". No idea what Qt 5 is used for the TDF builds.\n\nYour mentioned patch is in Qt 5.13 … hmmm. LO could do the utf-8 conversation itself. ",
+      "revId": "c7f955ca52cf46fd6f9752ca8d690cb912cf23b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
