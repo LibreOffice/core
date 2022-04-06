@@ -87,6 +87,24 @@
       "parentUuid": "5a167f0a_542cb4e4",
       "revId": "3bd9c96d13398f5732879e5662981181a6521142",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7733780_629a678f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-04-06T10:47:14Z",
+      "side": 1,
+      "message": "To modify a patch, you can simply modify it locally, do git commit --amend, then do ./logerrit submit \u003cbranch\u003e. The Change-Id as shown in the commit message should be kept the same, so that after submit gerrit knows that it is a revision to an existing patch.",
+      "parentUuid": "06d1a87b_883d91a9",
+      "revId": "3bd9c96d13398f5732879e5662981181a6521142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
