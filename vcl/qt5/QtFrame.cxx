@@ -118,6 +118,7 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     , m_nKeyModifiers(ModKeyFlags::NONE)
 #endif
     , m_nInputLanguage(LANGUAGE_DONTKNOW)
+    , m_bInToTopGrabFocus(false)
 {
     QtInstance* pInst = GetQtInstance();
     pInst->insertFrame(this);
@@ -799,8 +800,14 @@ void QtFrame::ToTop(SalFrameToTop nFlags)
         pWidget->activateWindow();
     else if ((nFlags & SalFrameToTop::GrabFocus) || (nFlags & SalFrameToTop::GrabFocusOnly))
     {
-        pWidget->activateWindow();
-        pWidget->setFocus();
+        if (!(nFlags & SalFrameToTop::GrabFocusOnly))
+            pWidget->activateWindow();
+        if (!m_bInToTopGrabFocus)
+        {
+            m_bInToTopGrabFocus = true;
+            pWidget->setFocus(Qt::OtherFocusReason);
+            m_bInToTopGrabFocus = false;
+        }
     }
 }
 
