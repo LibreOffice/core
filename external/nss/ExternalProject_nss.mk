@@ -15,6 +15,10 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 	build \
 ))
 
+$(eval $(call gb_ExternalProject_use_externals,nss,\
+	zlib \
+))
+
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
