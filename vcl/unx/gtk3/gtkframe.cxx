@@ -3901,12 +3901,6 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
 
     if (GTK_IS_WINDOW(pThis->m_pWindow))
     {
-        // tdf#144846 If this is registered as a menubar mnemonic then ensure
-        // that any other widget won't be considered as a candidate by taking
-        // over the task of launch the menubar menu outself
-        if (pThis->HandleMenubarMnemonic(pEvent->state, pEvent->keyval))
-            return true;
-
         GtkWidget* pFocusWindow = gtk_window_get_focus(GTK_WINDOW(pThis->m_pWindow));
         bFocusInAnotherGtkWidget = pFocusWindow && pFocusWindow != GTK_WIDGET(pThis->m_pFixedContainer);
         if (bFocusInAnotherGtkWidget)
@@ -4058,6 +4052,20 @@ gboolean GtkSalFrame::signalKey(GtkWidget* pWidget, GdkEventKey* pEvent, gpointe
                                                   sal_Unicode(gdk_keyval_to_unicode( pEvent->keyval )),
                                                   (pEvent->type == GDK_KEY_PRESS),
                                                   false);
+
+        // tdf#144846 If this is registered as a menubar mnemonic then ensure
+        // that any other widget won't be considered as a candidate by taking
+        // over the task of launch the menubar menu outself
+        // The code was moved here from its original position at beginning
+        // of this function in order to resolve tdf#146174.
+        if (!bStopProcessingKey && // module key handler did not process key
+            pEvent->type == GDK_KEY_PRESS &&  // module key handler handles only GDK_KEY_PRESS
+            GTK_IS_WINDOW(pThis->m_pWindow) &&
+            pThis->HandleMenubarMnemonic(pEvent->state, pEvent->keyval))
+        {
+            return true;
+        }
+
         if (!aDel.isDeleted())
         {
             pThis->m_nKeyModifiers = ModKeyFlags::NONE;
