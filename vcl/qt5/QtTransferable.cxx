@@ -42,7 +42,7 @@ static bool lcl_textMimeInfo(const OUString& rMimeString, bool& bHaveNoCharset, 
 
 QtTransferable::QtTransferable(const QMimeData* pMimeData)
     : m_pMimeData(pMimeData)
-    , m_bConvertFromLocale(false)
+    , m_bProvideUTF16FromOtherEncoding(false)
 {
     assert(pMimeData);
 }
@@ -62,7 +62,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
     QStringList aFormatList(m_pMimeData->formats());
     // we might add the UTF-16 mime text variant later
     const int nMimeTypeSeqSize = aFormatList.size() + 1;
-    bool bHaveNoCharset = false, bHaveUTF16 = false;
+    bool bHaveNoCharset = false, bHaveUTF16 = false, bHaveUTF8 = false;
     css::uno::Sequence<css::datatransfer::DataFlavor> aMimeTypeSeq(nMimeTypeSeqSize);
     auto pMimeTypeSeq = aMimeTypeSeq.getArray();
 
@@ -85,6 +85,7 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         {
             bHaveNoCharset |= bIsNoCharset;
             bHaveUTF16 |= bIsUTF16;
+            bHaveUTF8 |= bIsUTF8;
             if (bIsUTF16)
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
             else
@@ -99,8 +100,8 @@ css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL QtTransferable::getTr
         nMimeTypeCount++;
     }
 
-    m_bConvertFromLocale = bHaveNoCharset && !bHaveUTF16;
-    if (m_bConvertFromLocale)
+    m_bProvideUTF16FromOtherEncoding = (bHaveNoCharset || bHaveUTF8) && !bHaveUTF16;
+    if (m_bProvideUTF16FromOtherEncoding)
     {
         aFlavor.MimeType = "text/plain;charset=utf-16";
         aFlavor.DataType = cppu::UnoType<OUString>::get();
@@ -133,11 +134,19 @@ css::uno::Any SAL_CALL QtTransferable::getTransferData(const css::datatransfer::
     if (rFlavor.MimeType == "text/plain;charset=utf-16")
     {
         OUString aString;
-        if (m_bConvertFromLocale)
+        if (m_bProvideUTF16FromOtherEncoding)
         {
-            QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain")));
-            aString = OUString(reinterpret_cast<const char*>(aByteData.data()), aByteData.size(),
-                               osl_getThreadTextEncoding());
+            if (m_pMimeData->hasFormat("text/plain;charset=utf-8"))
+            {
+                QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain;charset=utf-8")));
+                aString = OUString::fromUtf8(reinterpret_cast<const char*>(aByteData.data()));
+            }
+            else
+            {
+                QByteArray aByteData(m_pMimeData->data(QStringLiteral("text/plain")));
+                aString = OUString(reinterpret_cast<const char*>(aByteData.data()),
+                                   aByteData.size(), osl_getThreadTextEncoding());
+            }
         }
         else
         {
