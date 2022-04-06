@@ -34,6 +34,24 @@
       "parentUuid": "9cdc9b59_6df57ee6",
       "revId": "0a720497c9c008b9cbb6431eabcf42184238ea8b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fbd7684_457aaf97",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-06T09:28:02Z",
+      "side": 1,
+      "message": "the code is only compiled when you specify the non-default --enable-breakpad configure option\n\n(if you are unsure whether a modification you make will actually be covered by your local `make check`, one way is to temporarily add a deliberate syntax error to your local modification and verify that the compiler actually catches it)",
+      "parentUuid": "d204b4ee_d6abc3ed",
+      "revId": "0a720497c9c008b9cbb6431eabcf42184238ea8b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
