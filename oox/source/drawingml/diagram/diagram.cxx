@@ -131,7 +131,7 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     pBackground->setSubType(XML_rect);
     pBackground->getCustomShapeProperties()->setShapePresetType(XML_rect);
     pBackground->setSize(pParentShape->getSize());
-    pBackground->getFillProperties() = *mpData->getFillProperties();
+    pBackground->getFillProperties() = *mpData->getBackgroundFillProperties();
     pBackground->setLocked(true);
     auto& aChildren = pParentShape->getChildren();
     aChildren.insert(aChildren.begin(), pBackground);
