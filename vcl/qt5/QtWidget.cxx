@@ -625,6 +625,7 @@ QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
     : QWidget(Q_NULLPTR, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
+    , m_bInInputMethodQueryCursorRectangle(false)
     , m_nDeltaX(0)
     , m_nDeltaY(0)
 {
@@ -800,11 +801,18 @@ QVariant QtWidget::inputMethodQuery(Qt::InputMethodQuery property) const
         }
         case Qt::ImCursorRectangle:
         {
-            const qreal fRatio = m_rFrame.devicePixelRatioF();
-            SalExtTextInputPosEvent aPosEvent;
-            m_rFrame.CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
-            return QVariant(QRect(aPosEvent.mnX / fRatio, aPosEvent.mnY / fRatio,
-                                  aPosEvent.mnWidth / fRatio, aPosEvent.mnHeight / fRatio));
+            if (!m_bInInputMethodQueryCursorRectangle)
+            {
+                m_bInInputMethodQueryCursorRectangle = true;
+                SalExtTextInputPosEvent aPosEvent;
+                m_rFrame.CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
+                const qreal fRatio = m_rFrame.devicePixelRatioF();
+                m_aImCursorRectangle.setRect(aPosEvent.mnX / fRatio, aPosEvent.mnY / fRatio,
+                                             aPosEvent.mnWidth / fRatio,
+                                             aPosEvent.mnHeight / fRatio);
+                m_bInInputMethodQueryCursorRectangle = false;
+            }
+            return QVariant(m_aImCursorRectangle);
         }
         case Qt::ImAnchorPosition:
         {

@@ -799,8 +799,9 @@ void QtFrame::ToTop(SalFrameToTop nFlags)
         pWidget->activateWindow();
     else if ((nFlags & SalFrameToTop::GrabFocus) || (nFlags & SalFrameToTop::GrabFocusOnly))
     {
-        pWidget->activateWindow();
-        pWidget->setFocus();
+        if (!(nFlags & SalFrameToTop::GrabFocusOnly))
+            pWidget->activateWindow();
+        pWidget->setFocus(Qt::OtherFocusReason);
     }
 }
 
