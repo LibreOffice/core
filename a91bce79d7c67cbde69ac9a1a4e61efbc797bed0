@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eae9711a_ffd38c15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-06T12:00:32Z",
+      "side": 1,
+      "message": "I\u0027m just throwing things up here as I work on anything I see related to field problems. I don\u0027t fully know the implications of changing plain text into a field, so I\u0027m not ready to pursue this much farther.\n\nFor example, in MS Word a user could hand modify the contents, so making this a LO auto-updating field would \"change\" what is displayed in the document.",
+      "revId": "a91bce79d7c67cbde69ac9a1a4e61efbc797bed0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
