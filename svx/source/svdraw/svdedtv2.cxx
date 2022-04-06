@@ -1931,7 +1931,7 @@ void SdrEditView::UnGroupMarked()
                         // Move/Resize protection to allow seamless further processing.
 
                         // Undo of these is handled by SdrUndoGeoObj which holds a SdrObjGeoData,
-                        // creae one
+                        // create one
                         if( bUndo )
                             AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
 
