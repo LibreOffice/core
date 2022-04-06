@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c10d64bb_0b50f5cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-06T17:08:42Z",
+      "side": 1,
+      "message": "You added generic words that are already in the English dictionaries, for example in http://wordlist.aspell.net/dicts/\n\nSomething like SSL seems fine, but even RAM is already in the general English dictionary. Please cross-check and update accordingly.",
+      "revId": "9d872126d1a804e2f92dd56df23b982e08b0d65f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
