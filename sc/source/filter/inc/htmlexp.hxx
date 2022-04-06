@@ -116,7 +116,6 @@ class ScHTMLExport : public ScExportBase
     VclPtr<OutputDevice> pAppWin;        // for Pixel-work
     FileNameMapPtr   pFileNameMap;        // for CopyLocalFileToINet
     OUString         aNonConvertibleChars;   // collect nonconvertible characters
-    rtl_TextEncoding eDestEnc;
     SCTAB            nUsedTables;
     short            nIndent;
     char             sIndent[nIndentMax+1];

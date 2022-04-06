@@ -284,7 +284,7 @@ void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
                     "=\"text/x-";
                 Strm().WriteOString( sOut );
                 // Entities aren't welcome here
-                Strm().WriteOString( OUStringToOString(sLang, m_eDestEnc) )
+                Strm().WriteOString( OUStringToOString(sLang, RTL_TEXTENCODING_UTF8) )
                    .WriteCharPtr( "\">" );
             }
 
@@ -293,7 +293,7 @@ void SwHTMLWriter::OutBasic(const SwHTMLWriter & rHTMLWrt)
             HTMLOutFuncs::OutScript( Strm(), GetBaseURL(), pModule->GetSource32(),
                                      sLang, STARBASIC, OUString(),
                                      &rLibName, &rModName,
-                                     m_eDestEnc, &m_aNonConvertableCharacters );
+                                     &m_aNonConvertableCharacters );
         }
     }
 #endif
@@ -325,7 +325,7 @@ void SwHTMLWriter::OutBasicBodyEvents()
 
     if( !aDocTable.empty() )
         HTMLOutFuncs::Out_Events( Strm(), aDocTable, aBodyEventTable,
-                                  m_bCfgStarBasic, m_eDestEnc, &m_aNonConvertableCharacters );
+                                  m_bCfgStarBasic, &m_aNonConvertableCharacters );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

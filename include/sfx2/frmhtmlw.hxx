@@ -40,35 +40,30 @@ class SFX2_DLLPUBLIC SfxFrameHTMLWriter
     SAL_DLLPRIVATE static void OutMeta( SvStream& rStrm,
                                 const char *pIndent, const OUString& rName,
                                 const OUString& rContent, bool bHTTPEquiv,
-                                rtl_TextEncoding eDestEnc,
                                 OUString *pNonConvertableChars = nullptr );
     SAL_DLLPRIVATE inline static void OutMeta( SvStream& rStrm,
                                 const char *pIndent, const char *pName,
                                 const OUString& rContent, bool bHTTPEquiv,
-                                rtl_TextEncoding eDestEnc,
                                 OUString *pNonConvertableChars = nullptr );
 
 public:
     static void Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             const css::uno::Reference< css::document::XDocumentProperties>&,
             const char *pIndent,
-            rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
             OUString *pNonConvertableChars = nullptr );
 
     static void Out_FrameDescriptor(
         SvStream&, const OUString& rBaseURL, const css::uno::Reference < css::beans::XPropertySet >& xSet,
-        rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252,
         OUString *pNonConvertableChars = nullptr );
 };
 
 inline void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                             const char *pIndent, const char *pName,
                             const OUString& rContent, bool bHTTPEquiv,
-                            rtl_TextEncoding eDestEnc,
                             OUString *pNonConvertableChars )
 {
     OUString sTmp = OUString::createFromAscii(pName);
-    OutMeta( rStrm, pIndent, sTmp, rContent, bHTTPEquiv, eDestEnc, pNonConvertableChars );
+    OutMeta( rStrm, pIndent, sTmp, rContent, bHTTPEquiv, pNonConvertableChars );
 }
 
 #endif

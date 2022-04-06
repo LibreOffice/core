@@ -353,8 +353,7 @@ void SwHTMLWriter::CollectFlyFrames()
     }
 }
 
-bool SwHTMLWriter::OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx, HtmlPosition nPos,
-                              HTMLOutContext *pContext )
+bool SwHTMLWriter::OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx, HtmlPosition nPos )
 {
     bool bFlysLeft = false; // Are there still Flys left at the current node position?
 
@@ -390,11 +389,7 @@ bool SwHTMLWriter::OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx, Html
                     bRestart = true;    // not really, only exit the loop
                 }
 
-                if( pContext )
-                {
-                    HTMLOutFuncs::FlushToAscii(Strm(), *pContext );
-                    pContext = nullptr; // one time only
-                }
+                HTMLOutFuncs::FlushToAscii(Strm()); // it was once-only; do we still need it?
 
                 OutFrameFormat( pPosFly->GetOutMode(), pPosFly->GetFormat(),
                                 pPosFly->GetSdrObject() );
@@ -532,7 +527,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
             (nFrameOpts & HtmlFrmOpts::Id) ? OOO_STRING_SVTOOLS_HTML_O_id : OOO_STRING_SVTOOLS_HTML_O_name;
         sOut.append(OString::Concat(" ") + pStr + "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName(), m_eDestEnc, &m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), rFrameFormat.GetName(), &m_aNonConvertableCharacters );
         sOut.append('\"');
     }
 
@@ -549,7 +544,7 @@ OString SwHTMLWriter::OutFrameFormatOptions( const SwFrameFormat &rFrameFormat,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_alt "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rAlternateText, m_eDestEnc, &m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), rAlternateText, &m_aNonConvertableCharacters );
         sOut.append('\"');
     }
 
@@ -1182,7 +1177,6 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
                                         aIMapEventTable,
                                         rHTMLWrt.m_bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap,
-                                        rHTMLWrt.m_eDestEnc,
                                         &rHTMLWrt.m_aNonConvertableCharacters );
         }
         else
@@ -1191,7 +1185,6 @@ OUString lclWriteOutImap(SwHTMLWriter& rHTMLWrt, const SfxItemSet& rItemSet, con
                                         aIMapEventTable,
                                         rHTMLWrt.m_bCfgStarBasic,
                                         SAL_NEWLINE_STRING, pIndArea, pIndMap,
-                                         rHTMLWrt.m_eDestEnc,
                                         &rHTMLWrt.m_aNonConvertableCharacters );
         }
     }
@@ -1501,14 +1494,14 @@ Writer& OutHTML_BulletImage( Writer& rWrt,
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_src "=\"");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aLink, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aLink, &rHTMLWrt.m_aNonConvertableCharacters );
     }
     else
     {
         sOut.append("list-style-image: url("
                 OOO_STRING_SVTOOLS_HTML_O_data ":");
         rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), aGraphicInBase64, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut.append(");");
     }
     sOut.append('\"');

@@ -40,7 +40,6 @@ OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xStarBasicWarningCB(m_xBuilder->weld_check_button("starbasicwarning"))
     , m_xPrintExtensionCB(m_xBuilder->weld_check_button("printextension"))
     , m_xSaveGrfLocalCB(m_xBuilder->weld_check_button("savegrflocal"))
-    , m_xCharSetLB(new SvxTextEncodingBox(m_xBuilder->weld_combo_box("charset")))
 {
     // replace placeholder with UI string from language list
     OUString aText(m_xNumbersEnglishUSCB->get_label());
@@ -57,9 +56,6 @@ OfaHtmlTabPage::OfaHtmlTabPage(weld::Container* pPage, weld::DialogController* p
     }
 
     m_xStarBasicCB->connect_toggled(LINK(this, OfaHtmlTabPage, CheckBoxHdl_Impl));
-
-    // initialize the characterset listbox
-    m_xCharSetLB->FillWithMimeAndSelectBest();
 }
 
 OfaHtmlTabPage::~OfaHtmlTabPage()
@@ -125,10 +121,6 @@ bool OfaHtmlTabPage::FillItemSet( SfxItemSet* )
         officecfg::Office::Common::Filter::HTML::Export::PrintLayout::set(
             m_xPrintExtensionCB->get_active(), xChanges);
 
-    if( m_xCharSetLB->GetSelectTextEncoding() != SvxHtmlOptions::GetTextEncoding() )
-        officecfg::Office::Common::Filter::HTML::Export::Encoding::set(
-            m_xCharSetLB->GetSelectTextEncoding(), xChanges );
-
     xChanges->commit();
     return false;
 }
@@ -166,10 +158,6 @@ void OfaHtmlTabPage::Reset( const SfxItemSet* )
     m_xNumbersEnglishUSCB->save_state();
     m_xUnknownTagCB->save_state();
     m_xIgnoreFontNamesCB->save_state();
-
-    if( !SvxHtmlOptions::IsDefaultTextEncoding() &&
-        m_xCharSetLB->GetSelectTextEncoding() != SvxHtmlOptions::GetTextEncoding() )
-        m_xCharSetLB->SelectTextEncoding( SvxHtmlOptions::GetTextEncoding() );
 }
 
 IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, weld::Toggleable&, rBox, void)
