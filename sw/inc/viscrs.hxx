@@ -84,8 +84,11 @@ class SwSelPaintRects : public SwRects
 
     bool m_bShowTextInputFieldOverlay;
     std::unique_ptr<sw::overlay::OverlayRangesOutline> m_pTextInputFieldOverlay;
+    bool m_bShowContentControlOverlay;
+    std::unique_ptr<sw::overlay::OverlayRangesOutline> m_pContentControlOverlay;
 
     void HighlightInputField();
+    void HighlightContentControl();
 
 public:
     SwSelPaintRects( const SwCursorShell& rCSh );
@@ -107,6 +110,8 @@ public:
     {
         m_bShowTextInputFieldOverlay = bShow;
     }
+
+    void SetShowContentControlOverlay(const bool bShow) { m_bShowContentControlOverlay = bShow; }
 
     const SwCursorShell* GetShell() const { return m_pCursorShell; }
     // check current MapMode of the shell and set possibly the static members.

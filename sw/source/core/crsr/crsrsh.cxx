@@ -2402,6 +2402,7 @@ void SwCursorShell::ShowCursor()
 
     m_bSVCursorVis = true;
     m_pCurrentCursor->SetShowTextInputFieldOverlay( true );
+    m_pCurrentCursor->SetShowContentControlOverlay(true);
 
     if (comphelper::LibreOfficeKit::isActive())
     {
@@ -2422,6 +2423,7 @@ void SwCursorShell::HideCursor()
     // possibly reverse selected areas!!
     CurrShell aCurr( this );
     m_pCurrentCursor->SetShowTextInputFieldOverlay( false );
+    m_pCurrentCursor->SetShowContentControlOverlay(false);
     m_pVisibleCursor->Hide();
 
     if (comphelper::LibreOfficeKit::isActive())
