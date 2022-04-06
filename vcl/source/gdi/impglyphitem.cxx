@@ -97,7 +97,8 @@ bool SalLayoutGlyphsImpl::IsValid() const
 const SalLayoutGlyphs*
 SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
                                       sal_Int32 nIndex, sal_Int32 nLen, const Point& rLogicPos,
-                                      tools::Long nLogicWidth) const
+                                      tools::Long nLogicWidth,
+                                      const vcl::text::TextLayoutCache* layoutCache) const
 {
     if (nLen == 0)
         return nullptr;
@@ -112,8 +113,15 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         // So in that case this is a cached failure.
         return nullptr;
     }
-    std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
-        text, nIndex, nLen, rLogicPos, nLogicWidth, {}, SalLayoutFlags::GlyphItemsOnly);
+    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
+    if (layoutCache == nullptr)
+    {
+        tmpLayoutCache = OutputDevice::CreateTextLayoutCache(text);
+        layoutCache = tmpLayoutCache.get();
+    }
+    std::unique_ptr<SalLayout> layout
+        = outputDevice->ImplLayout(text, nIndex, nLen, rLogicPos, nLogicWidth, {},
+                                   SalLayoutFlags::GlyphItemsOnly, layoutCache);
     if (layout)
     {
         mCachedGlyphs.insert(std::make_pair(key, layout->GetGlyphs()));
