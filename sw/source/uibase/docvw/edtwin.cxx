@@ -1744,6 +1744,21 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
                     goto KEYINPUT_CHECKTABLE;
 
 KEYINPUT_CHECKTABLE:
+                    // Resolve bugs 49091, 53190, 93402 and
+                    // https://bz.apache.org/ooo/show_bug.cgi?id=113502
+                    // but provide an option for restoring interactive
+                    // table sizing functionality when needed.
+                    if (
+                      ! (Window::GetIndicatorState() & KeyIndicatorState::CAPSLOCK)
+                      && m_rView.KeyInput( aKeyEvent ) // Keystroke is customized
+                    )
+                    {
+                        bFlushBuffer = true;
+                        bNormalChar = false;
+                        eKeyState = SwKeyState::End;
+                        break ;
+                    }
+
                     if( rSh.IsTableMode() || !rSh.GetTableFormat() )
                     {
                         if(!pFlyFormat && SwKeyState::KeyToView != eFlyState &&
