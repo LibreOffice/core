@@ -1702,7 +1702,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             nReg = DI_SUB_AUTHOR;
             break;
         case 21:
-            nSub = DI_CREATE;
+            nSub = DI_CREATE | DI_SUB_FIXED;
             nReg = DI_SUB_DATE;
             bDateTime = true;
             break;
@@ -1778,8 +1778,9 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
         aData = aData.replaceAll("\"", "");
     }
 
-    SwDocInfoField aField( static_cast<SwDocInfoFieldType*>(
-        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DocInfo )), nSub|nReg, aData, nFormat );
+    const auto pType(static_cast<SwDocInfoFieldType*>(
+        m_rDoc.getIDocumentFieldsAccess().GetSysFieldType(SwFieldIds::DocInfo)));
+    SwDocInfoField aField(pType, nSub|nReg, aData, GetFieldResult(pF), nFormat);
     if (bDateTime)
         ForceFieldLanguage(aField, nLang);
     m_rDoc.getIDocumentContentOperations().InsertPoolItem(*m_pPaM, SwFormatField(aField));
@@ -1787,12 +1788,12 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
     return eF_ResT::OK;
 }
 
-eF_ResT SwWW8ImplReader::Read_F_Author( WW8FieldDesc*, OUString& )
+eF_ResT SwWW8ImplReader::Read_F_Author(WW8FieldDesc* pF, OUString&)
 {
         // SH: The SwAuthorField refers not to the original author but to the current user, better use DocInfo
     SwDocInfoField aField( static_cast<SwDocInfoFieldType*>(
                      m_rDoc.getIDocumentFieldsAccess().GetSysFieldType( SwFieldIds::DocInfo )),
-                     DI_CREATE|DI_SUB_AUTHOR, OUString() );
+                     DI_CREATE|DI_SUB_AUTHOR|DI_SUB_FIXED, OUString(), GetFieldResult(pF));
     m_rDoc.getIDocumentContentOperations().InsertPoolItem( *m_pPaM, SwFormatField( aField ) );
     return eF_ResT::OK;
 }

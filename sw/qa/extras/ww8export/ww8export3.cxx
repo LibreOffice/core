@@ -118,6 +118,19 @@ DECLARE_WW8EXPORT_TEST(testTdf147861_customField, "tdf147861_customField.doc")
     CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Title (fixed)"), xField->getPresentation(true));
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf148380_createField, "tdf148380_createField.doc")
+{
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    // This should NOT be "Lorenzo Chavez", or a real date since the user hand-modified the result.
+    CPPUNIT_ASSERT_EQUAL(OUString("Myself - that's who"), xField->getPresentation(false));
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("yesterday at noon"), xField->getPresentation(false));
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf138345_paraCharHighlight, "tdf138345_paraCharHighlight.doc")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(9), 1, "A side benefit is that "), uno::UNO_QUERY_THROW);
