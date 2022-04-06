@@ -51,6 +51,24 @@
       "parentUuid": "08e7684d_c69d02c8",
       "revId": "3bd9c96d13398f5732879e5662981181a6521142",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5a167f0a_542cb4e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-06T09:02:22Z",
+      "side": 1,
+      "message": "You didn\u0027t modify the commit. You created a new patch. Please don\u0027t do it, if there is no real reason. Usually you should keep amending your patch.",
+      "parentUuid": "02d29c27_f70b8429",
+      "revId": "3bd9c96d13398f5732879e5662981181a6521142",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
