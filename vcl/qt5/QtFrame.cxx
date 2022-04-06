@@ -176,10 +176,12 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     else
         m_pQWidget = new QtWidget(*this, aWinFlags);
 
+    QWindow* pChildWindow = windowHandle();
+    connect(pChildWindow, &QWindow::screenChanged, this, &QtFrame::screenChanged);
+
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
         QWindow* pParentWindow = pParent->windowHandle();
-        QWindow* pChildWindow = windowHandle();
         if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
             pChildWindow->setTransientParent(pParentWindow);
     }
@@ -190,6 +192,8 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     fixICCCMwindowGroup();
 }
+
+void QtFrame::screenChanged(QScreen*) { CallCallback(SalEvent::Resize, nullptr); }
 
 void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget)
 {
