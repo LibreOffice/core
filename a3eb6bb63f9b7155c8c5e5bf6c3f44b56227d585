@@ -383,6 +383,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bf3f8231_7fbac1d0",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T08:09:17Z",
+      "side": 1,
+      "message": "Diese Schnittstelle wird nur dafür benutzt um den oberen Schichten zu signalisieren das es sich um ein OLE-Refresh handelt.",
+      "parentUuid": "711ecb6a_0d7f397f",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91037963_1daf45bb",
         "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
         "patchSetId": 18
@@ -406,6 +430,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b92a4b0c_3e3f9ffd",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 18
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T08:09:17Z",
+      "side": 1,
+      "message": "Mit \"Refresh all\" wird ein OLE-Update und ein Link-Update durchgeführt. \nBei einem OLE-Update wird mit true den oberen Schichten signalsiert, dass ein OLE-Update erfolgt",
+      "parentUuid": "91037963_1daf45bb",
+      "range": {
+        "startLine": 22,
+        "startChar": 8,
+        "endLine": 22,
+        "endChar": 62
+      },
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba37699e_66822304",
         "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
         "patchSetId": 18
@@ -417,6 +465,30 @@
       "writtenOn": "2022-04-05T11:22:47Z",
       "side": 1,
       "message": "Is there a better name for this parameter?\nHaving a method doSomething with a parameter bDoSomething is not the best way to design an API.",
+      "range": {
+        "startLine": 28,
+        "startChar": 38,
+        "endLine": 28,
+        "endChar": 48
+      },
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e35715f8_098002b1",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 18
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T08:09:17Z",
+      "side": 1,
+      "message": "bRefreshOle or bIsOleObj",
+      "parentUuid": "ba37699e_66822304",
       "range": {
         "startLine": 28,
         "startChar": 38,
