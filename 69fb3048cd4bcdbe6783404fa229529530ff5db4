@@ -34,6 +34,24 @@
       "parentUuid": "92dfb808_db5510cd",
       "revId": "69fb3048cd4bcdbe6783404fa229529530ff5db4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12177205_78b1fe7f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-04-06T09:37:31Z",
+      "side": 1,
+      "message": "Second point - we can\u0027t distinguish between autosave and save I\u0027m afraid; but even for save - we would want to preserve the currently edited content I think if we can. The real key is ensuring that as it is restored we don\u0027t (whatever we do) change the modified flag - or we\u0027ll get a repeated failure to save on exit, and massive CPU / WOPI churn as we continually fail to cleanly save \u003d)\n\nThird point - for async-ness see something like this:\nAuthor: Szymon Kłos \u003cszymon.klos@collabora.com\u003e\nDate:   Wed Oct 27 13:04:17 2021 +0200\n\n    Make Certificate not found dialog async\n\ninstead of doing Dialog-\u003eExecute or somesuch, we need to do a runAsync and capture the data in a nice closure; the dialog can still appear to be modal for that user but it lets others get in and collaboratively edit while this is underway.",
+      "parentUuid": "98894a7a_e58030b0",
+      "revId": "69fb3048cd4bcdbe6783404fa229529530ff5db4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
