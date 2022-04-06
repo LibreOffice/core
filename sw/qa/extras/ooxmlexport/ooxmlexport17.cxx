@@ -80,6 +80,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_createField, "tdf148380_createField.docx"
     CPPUNIT_ASSERT_EQUAL(OUString("yesterday at noon"), xField->getPresentation(false));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148380_modifiedField, "tdf148380_modifiedField.docx")
+{
+    getParagraph(2, "4/5/2022 4:29:00 PM"); // default (unspecified) date format
+
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    //CPPUNIT_ASSERT_EQUAL(OUString("4/5/2022 4:29:00 PM"), xField->getPresentation(false));
+    //xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    // FIXME: This was hand-modified and really should be Charles Brown
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Did you fix me? I really should be Charlie Brown (or a date)",
+                                 OUString("Charles Brown"), xField->getPresentation(false));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf135906)
 {
     loadAndReload("tdf135906.docx");

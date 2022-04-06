@@ -2944,13 +2944,13 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case DI_CHANGE:
                     if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
                         eField = ww::eLASTSAVEDBY;
-                    else if (GetExport().GetNumberFormat(*pField, sStr))
+                    else if (GetExport().GetNumberFormat(*pField, sStr) || sStr.isEmpty())
                         eField = ww::eSAVEDATE;
                     break;
 
                 case DI_PRINT:
                     if (DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK) &&
-                        GetExport().GetNumberFormat(*pField, sStr))
+                        (GetExport().GetNumberFormat(*pField, sStr) || sStr.isEmpty()))
                         eField = ww::ePRINTDATE;
                     break;
                 case DI_EDIT:
