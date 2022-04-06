@@ -25,6 +25,7 @@
 #include <vclpluginapi.h>
 
 #include "QtTools.hxx"
+#include "QtWidget.hxx"
 
 #include <headless/svpgdi.hxx>
 #include <vcl/svapp.hxx>
@@ -70,7 +71,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     friend class QtWidget;
 
-    QWidget* m_pQWidget;
+    QtWidget* m_pQWidget;
     QtMainWindow* m_pTopLevel;
 
     const bool m_bUseCairo;
@@ -132,6 +133,9 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
     int menuBarOffset() const;
 
     void fixICCCMwindowGroup();
+
+private Q_SLOTS:
+    void screenChanged(QScreen*);
 
 public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
