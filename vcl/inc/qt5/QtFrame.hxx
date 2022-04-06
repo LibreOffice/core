@@ -108,6 +108,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 #endif
 
     LanguageType m_nInputLanguage;
+    bool m_bInToTopGrabFocus;
 
     void SetDefaultPos();
     Size CalcDefaultSize();
