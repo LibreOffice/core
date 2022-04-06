@@ -675,7 +675,6 @@ ScDocShellRef ScBootstrapFixture::loadDocAndSetupModelViewController(std::u16str
 
     // 1. Open the document
     ScDocShellRef xDocSh = loadDoc(rFileName, nFormat, true);
-    CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocSh.is());
 
     uno::Reference< frame::XModel2 > xModel2 = xDocSh->GetModel();
     CPPUNIT_ASSERT(xModel2.is());
@@ -694,13 +693,21 @@ ScDocShellRef ScBootstrapFixture::loadDocAndSetupModelViewController(std::u16str
 }
 
 ScDocShellRef ScBootstrapFixture::loadDoc(
-    std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite )
+    std::u16string_view rFileName, sal_Int32 nFormat, bool bReadWrite, bool bCheckErrorCode )
 {
     OUString aFileExtension = OUString::fromUtf8(aFileFormats[nFormat].pName);
     OUString aFileName;
     createFileURL( rFileName, aFileExtension, aFileName );
 
-    return load(aFileName, nFormat, bReadWrite);
+    ScDocShellRef xDocShRef = load(aFileName, nFormat, bReadWrite);
+    CPPUNIT_ASSERT_MESSAGE(OString("Failed to load " + OUStringToOString(rFileName, RTL_TEXTENCODING_UTF8)).getStr(), xDocShRef.is());
+
+    if (bCheckErrorCode)
+    {
+        CPPUNIT_ASSERT(!xDocShRef->GetErrorCode());
+    }
+
+    return xDocShRef;
 }
 
 ScBootstrapFixture::ScBootstrapFixture( const OUString& rsBaseString ) : m_aBaseString( rsBaseString ) {}
@@ -871,7 +878,6 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam const * aTestValues, unsi
         int nImportType =  aTestValues[ index ].nImportType;
         int nExportType =  aTestValues[ index ].nExportType;
         ScDocShellRef xShell = loadDoc( sFileName, nImportType );
-        CPPUNIT_ASSERT(xShell.is());
 
         if ( nExportType != -1 )
             xShell = saveAndReload(*xShell, nExportType );

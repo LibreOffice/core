@@ -190,8 +190,6 @@ void ScFiltersTest::testRangeNameODS()
 {
     ScDocShellRef xDocSh = loadDoc(u"named-ranges-global.", FORMAT_ODS);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.*", xDocSh.is());
-
     xDocSh->DoHardRecalc();
 
     ScDocument& rDoc = xDocSh->GetDocument();
@@ -315,8 +313,6 @@ void ScFiltersTest::testContentDIF()
 {
     ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_DIF);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load universal-content.dif", xDocSh.is());
-
     xDocSh->DoClose();
 }
 
@@ -333,7 +329,6 @@ void ScFiltersTest::testContentXLSB()
 void ScFiltersTest::testContentXLS_XML()
 {
     ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_XLS_XML);
-    CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_XLS_XML);
@@ -343,7 +338,6 @@ void ScFiltersTest::testContentXLS_XML()
 void ScFiltersTest::testContentGnumeric()
 {
     ScDocShellRef xDocSh = loadDoc(u"universal-content.", FORMAT_GNUMERIC);
-    CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_GNUMERIC);
@@ -353,7 +347,6 @@ void ScFiltersTest::testContentGnumeric()
 void ScFiltersTest::testSharedFormulaXLS()
 {
     ScDocShellRef xDocSh = loadDoc(u"shared-formula/basic.", FORMAT_XLS);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     xDocSh->DoHardRecalc();
     // Check the results of formula cells in the shared formula range.
@@ -378,7 +371,6 @@ void ScFiltersTest::testSharedFormulaXLS()
     // to handle these wrong ranges that Excel stores.
 
     xDocSh = loadDoc(u"shared-formula/gap.", FORMAT_XLS);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc2 = xDocSh->GetDocument();
     rDoc2.CalcAll();
 
@@ -659,7 +651,6 @@ static void testEnhancedProtectionImpl( const ScDocument& rDoc )
 void ScFiltersTest::testEnhancedProtectionXLS()
 {
     ScDocShellRef xDocSh = loadDoc(u"enhanced-protection.", FORMAT_XLS);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     testEnhancedProtectionImpl( rDoc);
@@ -670,7 +661,6 @@ void ScFiltersTest::testEnhancedProtectionXLS()
 void ScFiltersTest::testEnhancedProtectionXLSX()
 {
     ScDocShellRef xDocSh = loadDoc(u"enhanced-protection.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     testEnhancedProtectionImpl( rDoc);
@@ -681,7 +671,6 @@ void ScFiltersTest::testEnhancedProtectionXLSX()
 void ScFiltersTest::testSortWithSharedFormulasODS()
 {
     ScDocShellRef xDocSh = loadDoc(u"shared-formula/sort-crash.", FORMAT_ODS, true);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // E2:E10 should be shared.
@@ -733,7 +722,6 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
 void ScFiltersTest::testSortWithSheetExternalReferencesODS()
 {
     ScDocShellRef xDocSh = loadDoc(u"sort-with-sheet-external-references.", FORMAT_ODS, true);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn auto calc on.
     rDoc.CalcAll();
@@ -854,7 +842,6 @@ void ScFiltersTest::testSortWithSheetExternalReferencesODS_Impl( ScDocShellRef c
 void ScFiltersTest::testSortWithFormattingXLS()
 {
     ScDocShellRef xDocSh = loadDoc(u"tdf129127.", FORMAT_XLS, true);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // Set as an anonymous database range to sort.

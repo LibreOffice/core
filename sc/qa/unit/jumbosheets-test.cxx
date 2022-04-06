@@ -88,7 +88,6 @@ void ScJumboSheetsTest::testRoundtripColumn2000Xlsx()
 void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, int format)
 {
     ScDocShellRef xDocSh1 = loadDoc(name, format);
-    CPPUNIT_ASSERT(xDocSh1.is());
 
     {
         ScDocument& rDoc = xDocSh1->GetDocument();
@@ -120,7 +119,6 @@ void ScJumboSheetsTest::testRoundtripColumn2000(std::u16string_view name, int fo
 void ScJumboSheetsTest::testRoundtripColumnRange()
 {
     ScDocShellRef xDocSh1 = loadDoc(u"sum-whole-column-row.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xDocSh1.is());
 
     {
         ScDocument& rDoc = xDocSh1->GetDocument();
@@ -172,7 +170,6 @@ void ScJumboSheetsTest::testRoundtripColumnRange()
 void ScJumboSheetsTest::testRoundtripNamedRanges()
 {
     ScDocShellRef xDocSh1 = loadDoc(u"ranges-column-2000.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xDocSh1.is());
 
     std::pair<OUString, OUString> ranges[] = { { "CELLBXX1", "$Sheet1.$BXX$1" },
                                                { "CELLSA4_AMJ4", "$Sheet1.$A$4:$AMJ$4" },
@@ -229,7 +226,6 @@ void ScJumboSheetsTest::testNamedRangeNameConflict()
     // The document contains named ranges named 'num1' and 'num2', that should be still treated
     // as named references even though with 16k columns those are normally NUM1 and NUM2 cells.
     ScDocShellRef xDocSh = loadDoc(u"named-range-conflict.", FORMAT_ODS);
-    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll();
     CPPUNIT_ASSERT_EQUAL(0.0, rDoc.GetValue(10022, 0, 0)); // NUM1
@@ -251,7 +247,6 @@ void ScJumboSheetsTest::testNamedRangeNameConflict()
 void ScJumboSheetsTest::testTdf134553()
 {
     ScDocShellRef xDocSh = loadDocAndSetupModelViewController(u"tdf134553.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh);
 
     ScDocument& rDoc = xDocSh->GetDocument();
 
@@ -299,7 +294,6 @@ void ScJumboSheetsTest::testTdf134392()
 {
     // Without the fix in place, the file would have crashed
     ScDocShellRef xDocSh = loadDoc(u"tdf134392.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
@@ -368,7 +362,6 @@ void ScJumboSheetsTest::testTdf109061()
 {
     // Without the fix in place, the file would have crashed
     ScDocShellRef xDocSh = loadDoc(u"tdf109061.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
     rDoc.CalcAll(); // perform hard re-calculation.
