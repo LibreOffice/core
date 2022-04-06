@@ -48,6 +48,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6bca9c00_20946964",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-06T08:54:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7dff1f50_9924840a",
+      "range": {
+        "startLine": 278,
+        "startChar": 22,
+        "endLine": 278,
+        "endChar": 32
+      },
+      "revId": "3e7dd04dd8ca1baea4b7918eb7a7080c595c4625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a0af2ea_203cb0c1",
@@ -79,6 +103,24 @@
       "side": 1,
       "message": "This is extracted from [MS-WMF] page 33, and I unfortunately didn\u0027t notice the difference here. I\u0027m sending a followup to fix this. I think it would be better to keep the values according to the [MS-WMF], and change the calculations.",
       "parentUuid": "4a0af2ea_203cb0c1",
+      "revId": "3e7dd04dd8ca1baea4b7918eb7a7080c595c4625",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6afad10_51867020",
+        "filename": "emfio/inc/mtftools.hxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-06T08:54:54Z",
+      "side": 1,
+      "message": "seen both comments addressed with \u003chttps://git.libreoffice.org/core/+/51431559bda9a81293d502328982452caeeba6c6%5E%21\u003e \"Fix type, calculation of FamilyFont PitchAndFamily\"",
+      "parentUuid": "a7d820fc_30274e0b",
       "revId": "3e7dd04dd8ca1baea4b7918eb7a7080c595c4625",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
