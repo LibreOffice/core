@@ -36,14 +36,17 @@ Base=
 Base24=
 BeOS=
 Bing
+Bit
 Bitcoin
 Bluetooth
 Boolean
+Boot
 BorderManager
 Broadwell
 Browser
 BSD=
 Cache
+Cad
 CADView=
 Calc=
 Canon
@@ -53,6 +56,7 @@ Carefx
 Cassandra
 CDMA
 CentOS=
+Chip
 Chrome
 Cisco=
 Clickstream=
@@ -61,9 +65,11 @@ Collabora=
 Connect2OracleSelf=
 ConsoleOne
 ConText=
+Cookie
 COREid=
 Corporation
 CouchBase
+CPU=
 Cyber
 Cybercrime
 Cybersecurity
@@ -74,6 +80,7 @@ Dell
 Devices
 Diners Club
 Discover Card
+Disk
 DNS
 DocLink
 Docuflex=
@@ -102,6 +109,7 @@ Flipkart
 Foundation
 Foxconn
 FreeBSD
+FTP=
 Fujitsu
 Gateway
 gcc
@@ -117,6 +125,7 @@ Google
 GPS
 GroupWise
 GSoC
+Hardware=
 Hardy
 HBase
 HDMI
@@ -146,6 +155,7 @@ iOS
 IoT
 iPrint
 ISP
+Java
 JavaScript
 JCB
 Jessie
@@ -220,8 +230,8 @@ OpenText=
 OpenWorld=
 OpenZorg=
 Opera
-OPPO
 Operating
+OPPO
 Optronics
 Oracle=
 P2P
@@ -237,14 +247,19 @@ PNG
 PolyServe
 POP3
 PostgreSQL
+PPM=
 PPPoE
 Precise
 Processor
 Programming
+Protocol
+Python
 Quanta
+RAM=
 ReactJS
 Resolution
 RHEL=
+ROM=
 Rosetta
 RosettaNet=
 rpm
@@ -265,13 +280,16 @@ Skype
 SLED
 SLES
 SMTP
+Software=
 Solaris=
 Sony
 Soyuz
+Spam
 Spamassassin
 SPI
 SQLite
 Squeeze
+SSL=
 StarOffice
 StorageTek=
 SUHD
@@ -310,6 +328,8 @@ Vorbis
 VRML
 Warthog
 Warty
+Web
+WEP=
 Wheezy
 Wi-Fi
 WiMAX
