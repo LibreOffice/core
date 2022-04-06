@@ -85,6 +85,7 @@ public:
 
     QtFrame& frame() const { return m_rFrame; }
     void endExtTextInput();
+    void fakeResize();
 
     static bool handleEvent(QtFrame&, const QWidget&, QEvent*);
     // key events might be propagated further down => call base on false
