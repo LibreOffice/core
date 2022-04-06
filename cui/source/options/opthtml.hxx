@@ -40,7 +40,6 @@ class OfaHtmlTabPage : public SfxTabPage
     std::unique_ptr<weld::CheckButton> m_xStarBasicWarningCB;
     std::unique_ptr<weld::CheckButton> m_xPrintExtensionCB;
     std::unique_ptr<weld::CheckButton> m_xSaveGrfLocalCB;
-    std::unique_ptr<SvxTextEncodingBox> m_xCharSetLB;
 
     DECL_LINK(CheckBoxHdl_Impl, weld::Toggleable&, void);
 

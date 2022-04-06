@@ -1125,10 +1125,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "reqif-chinese.odt";
     mxComponent = loadFromDesktop(aURL, "com.sun.star.text.TextDocument", {});
 
-    // Prevent parseXmlStream guess incompatible encoding and complaint.
-    rtl_TextEncoding eOldEncoding = SvxHtmlOptions::GetTextEncoding();
-    SvxHtmlOptions::SetTextEncoding(RTL_TEXTENCODING_UTF8);
-
     // Export it.
     ExportToReqif();
     SvMemoryStream aStream;
@@ -1138,7 +1134,6 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testChinese)
     // Without the accompanying fix in place, this test would have failed as the output was not
     // well-formed.
     CPPUNIT_ASSERT(pDoc);
-    SvxHtmlOptions::SetTextEncoding(eOldEncoding);
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReqifComment)

@@ -896,7 +896,7 @@ static void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
                 }
             }
             HTMLOutFuncs::Out_String( rWrt.Strm(), aClass,
-                                      rHWrt.m_eDestEnc, &rHWrt.m_aNonConvertableCharacters );
+                                      &rHWrt.m_aNonConvertableCharacters );
             sOut += "\"";
         }
         rWrt.Strm().WriteOString( sOut );
@@ -1134,10 +1134,8 @@ public:
     sal_uInt16 GetScriptAtPos( sal_Int32 nPos,
                                sal_uInt16 nWeak );
 
-    void OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                        HTMLOutContext *pContext = nullptr );
-    void OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                      HTMLOutContext *pContext );
+    void OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos );
+    void OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos );
 
     bool IsHTMLMode(sal_uLong nMode) const { return (m_nHTMLMode & nMode) != 0; }
 };
@@ -1867,8 +1865,7 @@ sal_uInt16 HTMLEndPosLst::GetScriptAtPos( sal_Int32 nPos, sal_uInt16 nWeak )
     return nRet;
 }
 
-void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                                      HTMLOutContext *pContext  )
+void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos )
 {
     rHWrt.m_bTagOn = true;
 
@@ -1914,11 +1911,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             {
                 rHWrt.m_nCSS1Script = GetScriptAtPos( nPos, nCSS1Script );
             }
-            if( pContext )
-            {
-                HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
-                pContext = nullptr; // one time only
-            }
+            HTMLOutFuncs::FlushToAscii( rHWrt.Strm() ); // was one time only - do we still need it?
             Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
             rHWrt.maStartedAttributes[pPos->GetItem()->Which()]++;
             rHWrt.m_nCSS1Script = nCSS1Script;
@@ -1926,8 +1919,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
     }
 }
 
-void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
-                                     HTMLOutContext *pContext = nullptr )
+void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos )
 {
     rHWrt.m_bTagOn = false;
 
@@ -1940,11 +1932,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 
         if( SAL_MAX_INT32 == nPos || nEnd == nPos )
         {
-            if( pContext )
-            {
-                HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
-                pContext = nullptr; // one time only
-            }
+            HTMLOutFuncs::FlushToAscii( rHWrt.Strm() ); // was one time only - do we still need it?
             // Skip closing span if next character span has the same border (border merge)
             bool bSkipOut = false;
             if( pPos->GetItem()->Which() == RES_CHRATR_BOX )
@@ -2271,7 +2259,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
         if( !aOutlineText.isEmpty() )
             HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineText,
-                                         rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters);
+                                         &rHTMLWrt.m_aNonConvertableCharacters);
 
         if( rHTMLWrt.m_pFormatFootnote )
         {
@@ -2344,8 +2332,6 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
     }
 
     {
-        HTMLOutContext aContext( rHTMLWrt.m_eDestEnc );
-
         // Tabs are leading till there is a non-tab since the start of the paragraph.
         bool bLeadingTab = true;
         for( ; nStrPos < nEnd; nStrPos++ )
@@ -2353,10 +2339,9 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
             // output the frames that are anchored to the current position
             if( bFlysLeft )
             {
-                aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
+                aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
                 bFlysLeft = rHTMLWrt.OutFlyFrame( rNode.GetIndex(),
-                                                nStrPos, HtmlPosition::Inside,
-                                                &aContext );
+                                                nStrPos, HtmlPosition::Inside );
             }
 
             bool bOutChar = true;
@@ -2413,8 +2398,8 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                                         rHTMLWrt.m_CharFormatInfos );
             }
 
-            aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
-            aEndPosLst.OutStartAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
+            aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
+            aEndPosLst.OutStartAttrs( rHTMLWrt, nStrPos + nOffset );
 
             if( pTextHt )
             {
@@ -2424,7 +2409,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 sal_uInt16 nCSS1Script = rHTMLWrt.m_nCSS1Script;
                 rHTMLWrt.m_nCSS1Script = aEndPosLst.GetScriptAtPos(
                                                 nStrPos + nOffset, nCSS1Script );
-                HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+                HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
                 Out( aHTMLAttrFnTab, pTextHt->GetAttr(), rHTMLWrt );
                 rHTMLWrt.m_nCSS1Script = nCSS1Script;
                 rHTMLWrt.m_bLFPossible = false;
@@ -2459,7 +2444,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                         (nLineLen >= rHTMLWrt.m_nWishLineLen ||
                         (nLineLen+nWordLen) >= rHTMLWrt.m_nWishLineLen ) )
                     {
-                        HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+                        HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
                         rHTMLWrt.OutNewLine();
                         bOutChar = false;
                     }
@@ -2469,7 +2454,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 {
                     if( 0x0a == c )
                     {
-                        HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+                        HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
                         HtmlWriter aHtml(rWrt.Strm(), rHTMLWrt.maNamespace);
                         aHtml.single(OOO_STRING_SVTOOLS_HTML_linebreak);
                     }
@@ -2505,7 +2490,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
                         if (!bConsumed)
                         {
-                            HTMLOutFuncs::Out_Char(rWrt.Strm(), c, aContext,
+                            HTMLOutFuncs::Out_Char(rWrt.Strm(), c,
                                                    &rHTMLWrt.m_aNonConvertableCharacters);
                         }
                     }
@@ -2521,7 +2506,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
                 }
             }
         }
-        HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
+        HTMLOutFuncs::FlushToAscii( rWrt.Strm() );
     }
 
     aEndPosLst.OutEndAttrs( rHTMLWrt, SAL_MAX_INT32 );
@@ -2724,7 +2709,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span
                            " " OOO_STRING_SVTOOLS_HTML_O_style "=\"font-family: ";
             rWrt.Strm().WriteOString(sOut);
-            HTMLOutFuncs::Out_String(rWrt.Strm(), aNames, rHTMLWrt.m_eDestEnc,
+            HTMLOutFuncs::Out_String(rWrt.Strm(), aNames,
                                      &rHTMLWrt.m_aNonConvertableCharacters)
                 .WriteCharPtr("\">");
         }
@@ -2733,7 +2718,7 @@ static Writer& OutHTML_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut = "<" + rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_font " "
                 OOO_STRING_SVTOOLS_HTML_O_face "=\"";
             rWrt.Strm().WriteOString( sOut );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters )
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aNames, &rHTMLWrt.m_aNonConvertableCharacters )
                .WriteCharPtr( "\">" );
         }
     }
@@ -3044,7 +3029,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
         rWrt.Strm().WriteOString( sOut );
         HTMLOutFuncs::Out_String( rWrt.Strm(), rINetFormat.GetName(),
-                                  rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                  &rHTMLWrt.m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
@@ -3053,7 +3038,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
     {
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
         rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), rTarget, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
@@ -3065,7 +3050,7 @@ Writer& OutHTML_INetFormat( Writer& rWrt, const SwFormatINetFormat& rINetFormat,
 
     if( bEvents )
         HTMLOutFuncs::Out_Events( rWrt.Strm(), *pMacTable, aAnchorEventTable,
-                                  rHTMLWrt.m_bCfgStarBasic, rHTMLWrt.m_eDestEnc,
+                                  rHTMLWrt.m_bCfgStarBasic,
                                      &rHTMLWrt.m_aNonConvertableCharacters    );
     rWrt.Strm().WriteCharPtr( ">" );
 
@@ -3176,7 +3161,7 @@ static Writer& OutHTML_SwTextCharFormat( Writer& rWrt, const SfxPoolItem& rHt )
                 }
             }
             HTMLOutFuncs::Out_String( rWrt.Strm(), aClass,
-                                          rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                          &rHTMLWrt.m_aNonConvertableCharacters );
             sOut = "\"";
         }
         sOut += ">";

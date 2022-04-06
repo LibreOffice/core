@@ -125,7 +125,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilte
     , m_nCSS1OutMode(0)
     , m_nCSS1Script(CSS1_OUTMODE_WESTERN)
     , m_nDirection(SvxFrameDirection::Horizontal_LR_TB)
-    , m_eDestEnc(RTL_TEXTENCODING_MS_1252)
     , m_eLang(LANGUAGE_DONTKNOW)
     , m_bCfgOutStyles( false )
     , m_bCfgPreferStyles( false )
@@ -405,11 +404,6 @@ ErrCode SwHTMLWriter::WriteStream()
 
     m_eCSS1Unit = SW_MOD()->GetMetric( m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) );
 
-    bool bWriteUTF8 = m_bWriteClipboardDoc;
-    m_eDestEnc = bWriteUTF8 ? RTL_TEXTENCODING_UTF8 : SvxHtmlOptions::GetTextEncoding();
-    const char *pCharSet = rtl_getBestMimeCharsetFromTextEncoding( m_eDestEnc );
-    m_eDestEnc = rtl_getTextEncodingFromMimeCharset( pCharSet );
-
     // Only for the MS-IE we favour the export of styles.
     m_bCfgPreferStyles = HTML_CFG_MSIE == m_nExportMode;
 
@@ -518,7 +512,7 @@ ErrCode SwHTMLWriter::WriteStream()
 
                 // save only the tag of section
                 OString aName = HTMLOutFuncs::ConvertStringToHTML(
-                    pSNd->GetSection().GetSectionName(), m_eDestEnc,
+                    pSNd->GetSection().GetSectionName(),
                     &m_aNonConvertableCharacters );
 
                 aStartTags =
@@ -716,7 +710,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_id "=\"");
         rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut.append('\"');
     }
 
@@ -740,13 +734,12 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         bool bURLContainsDelim = (-1 != aEncURL.indexOf( cDelim ) );
 
         HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
-                                  rHTMLWrt.m_eDestEnc,
                                   &rHTMLWrt.m_aNonConvertableCharacters );
         const char* const pDelim = "&#255;";
         if( !aFilter.isEmpty() || !aSection.isEmpty() || bURLContainsDelim )
             rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aFilter.isEmpty() )
-            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter, &rHTMLWrt.m_aNonConvertableCharacters );
         if( !aSection.isEmpty() || bURLContainsDelim  )
                 rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aSection.isEmpty() )
@@ -764,7 +757,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                 nPos = aSection.indexOf( cDelim, nPos+3 );
             }
             HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection,
-                                      rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                      &rHTMLWrt.m_aNonConvertableCharacters );
         }
         sOut.append('\"');
     }
@@ -1102,7 +1095,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         // xDocProps may be null here (when copying)
         SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), xDocProps,
-                                         sIndent.getStr(), m_eDestEnc,
+                                         sIndent.getStr(),
                                          &m_aNonConvertableCharacters );
 
         // comments and meta-tags of first paragraph
@@ -1209,7 +1202,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_name "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rName, m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
+        HTMLOutFuncs::Out_String( Strm(), rName, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
     }
     else
     {
@@ -1217,7 +1210,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         // spaces.
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_id "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_'), m_eDestEnc, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
+        HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_'), &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
     }
     HTMLOutFuncs::Out_AsciiTag( Strm(), OStringConcatenation(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
 }
@@ -1352,7 +1345,7 @@ OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
 void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
 {
     OUString sURL = convertHyperlinkHRefValue(rURL);
-    HTMLOutFuncs::Out_String( Strm(), sURL, m_eDestEnc, &m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sURL, &m_aNonConvertableCharacters );
 }
 
 void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic )
@@ -1382,7 +1375,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
             }
             Strm().WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
             Strm().WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_data ":" );
-            HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64, m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '\"' );
+            HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64, &m_aNonConvertableCharacters ).WriteChar( '\"' );
         }
     }
     else
@@ -1393,7 +1386,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
         }
         OUString s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), GraphicURL));
         Strm().WriteCharPtr(" " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
-        HTMLOutFuncs::Out_String( Strm(), s, m_eDestEnc, &m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), s, &m_aNonConvertableCharacters );
         Strm().WriteCharPtr("\"");
 
     }
@@ -1440,7 +1433,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
     sOut.append("=\"");
     Strm().WriteOString( sOut.makeStringAndClear() );
     HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
-                              m_eDestEnc, &m_aNonConvertableCharacters ).WriteChar( '"' );
+                              &m_aNonConvertableCharacters ).WriteChar( '"' );
 }
 
 SvxFrameDirection SwHTMLWriter::GetHTMLDirection( const SfxItemSet& rItemSet ) const

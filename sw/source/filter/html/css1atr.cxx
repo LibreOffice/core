@@ -329,7 +329,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
         case CSS1_OUTMODE_RULE_ON:
             {
                 OutNewLine();
-                sOut.append(OUStringToOString(m_aCSS1Selector, m_eDestEnc) + " { ");
+                sOut.append(OUStringToOString(m_aCSS1Selector, RTL_TEXTENCODING_UTF8) + " { ");
             }
             break;
 
@@ -351,9 +351,9 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
         Strm().WriteOString( sOut.makeStringAndClear() );
         if( !sVal.empty() )
             HTMLOutFuncs::Out_String( Strm(), OUString::createFromAscii(sVal),
-                                      m_eDestEnc, &m_aNonConvertableCharacters );
+                                      &m_aNonConvertableCharacters );
         else if( pSVal )
-            HTMLOutFuncs::Out_String( Strm(), *pSVal, m_eDestEnc, &m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( Strm(), *pSVal, &m_aNonConvertableCharacters );
     }
     else
     {
@@ -361,7 +361,7 @@ void SwHTMLWriter::OutCSS1_Property( const char *pProp,
         if( !sVal.empty() )
             sOut.append(sVal);
         else if( pSVal )
-            sOut.append(OUStringToOString(*pSVal, m_eDestEnc));
+            sOut.append(OUStringToOString(*pSVal, RTL_TEXTENCODING_UTF8));
     }
 
     if (!sOut.isEmpty())
@@ -1680,7 +1680,7 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rPageDesc,
     if( rHTMLWrt.m_bFirstCSS1Property && bPseudo )
     {
         rHTMLWrt.OutNewLine();
-        OString sTmp(OUStringToOString(aSelector, rHTMLWrt.m_eDestEnc));
+        OString sTmp(OUStringToOString(aSelector, RTL_TEXTENCODING_UTF8));
         rWrt.Strm().WriteOString( sTmp ).WriteCharPtr( " {" );
         rHTMLWrt.m_bFirstCSS1Property = false;
     }
