@@ -16,6 +16,24 @@
       "message": "Please do not remove trailing newline.",
       "revId": "a3b141624930b6eb96b3273fee8396476db6d116",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bebf7073_6af803c0",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1003550
+      },
+      "writtenOn": "2022-04-06T09:07:24Z",
+      "side": 0,
+      "message": "\u003e Please do not remove trailing newline.\n\nApologies, I thought I had added that by mistake and hence removed it, I\u0027ll fix it soon",
+      "parentUuid": "17838c82_2c862b9f",
+      "revId": "a3b141624930b6eb96b3273fee8396476db6d116",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

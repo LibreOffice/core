@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2ecbcab_03530925",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003550
+      },
+      "writtenOn": "2022-04-06T09:07:24Z",
+      "side": 1,
+      "message": "\n\u003e Visual studio complained about error C2679: binary \"\u003c\u003c\": no operator found which takes a right-hand operand of type \"overloaded-function\" (or there is no acceptable conversion) in file C:/cygwin/home/tdf/lode/jenkins/workspace/gerrit_windows/sc/qa/unit/ucalc_formula.cxx(620) ( https://ci.libreoffice.org/job/gerrit_windows/123687/ )\n\nAlso, I do not exactly understand this error, as I did not make any changes in this file, does this mean I failed some unit test?",
+      "revId": "63f66053173ff8346d13cc29f73d161fdf4ec52a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
