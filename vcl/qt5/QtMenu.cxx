@@ -40,7 +40,6 @@ QtMenu::QtMenu(bool bMenuBar)
     , mbMenuBar(bMenuBar)
     , mpQMenuBar(nullptr)
     , mpQMenu(nullptr)
-    , mpCloseButton(nullptr)
 {
 }
 
@@ -430,8 +429,6 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
 
     mpQMenuBar = new QMenuBar();
     pMainWindow->setMenuBar(mpQMenuBar);
-
-    mpCloseButton = nullptr;
     mpQMenu = nullptr;
 
     DoFullMenuUpdate(mpVCLMenu);
@@ -665,7 +662,6 @@ void QtMenu::ShowCloseButton(bool bShow)
         pButton->setToolTip(toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)));
         mpQMenuBar->setCornerWidget(pButton, Qt::TopRightCorner);
         connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
-        mpCloseButton = pButton;
     }
 
     if (bShow)
