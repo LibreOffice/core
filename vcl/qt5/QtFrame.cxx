@@ -30,7 +30,6 @@
 #include <QtSystem.hxx>
 #include <QtTools.hxx>
 #include <QtTransferable.hxx>
-#include <QtWidget.hxx>
 
 #include <QtCore/QMimeData>
 #include <QtCore/QPoint>
@@ -176,10 +175,12 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     else
         m_pQWidget = new QtWidget(*this, aWinFlags);
 
+    QWindow* pChildWindow = windowHandle();
+    connect(pChildWindow, &QWindow::screenChanged, this, &QtFrame::screenChanged);
+
     if (pParent && !(pParent->m_nStyle & SalFrameStyleFlags::PLUG))
     {
         QWindow* pParentWindow = pParent->windowHandle();
-        QWindow* pChildWindow = windowHandle();
         if (pParentWindow && pChildWindow && (pParentWindow != pChildWindow))
             pChildWindow->setTransientParent(pParentWindow);
     }
@@ -190,6 +191,8 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
 
     fixICCCMwindowGroup();
 }
+
+void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
 
 void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget)
 {
@@ -343,7 +346,10 @@ bool QtFrame::PostEvent(std::unique_ptr<ImplSVEvent> pData)
     return true;
 }
 
-QWidget* QtFrame::asChild() const { return m_pTopLevel ? m_pTopLevel : m_pQWidget; }
+QWidget* QtFrame::asChild() const
+{
+    return m_pTopLevel ? static_cast<QWidget*>(m_pTopLevel) : static_cast<QWidget*>(m_pQWidget);
+}
 
 qreal QtFrame::devicePixelRatioF() const { return asChild()->devicePixelRatioF(); }
 
@@ -868,9 +874,8 @@ void QtFrame::SetInputContext(SalInputContext* pContext)
 
 void QtFrame::EndExtTextInput(EndExtTextInputFlags /*nFlags*/)
 {
-    QtWidget* pQtWidget = static_cast<QtWidget*>(m_pQWidget);
-    if (pQtWidget)
-        pQtWidget->endExtTextInput();
+    if (m_pQWidget)
+        m_pQWidget->endExtTextInput();
 }
 
 OUString QtFrame::GetKeyName(sal_uInt16 nKeyCode)
