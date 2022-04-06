@@ -52,6 +52,24 @@
       "parentUuid": "136b34a2_c8ab20b9",
       "revId": "c7f955ca52cf46fd6f9752ca8d690cb912cf23b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a829c1_4c6fbca8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-06T17:30:08Z",
+      "side": 1,
+      "message": "PS6 leaves the conversion to LO again, adding handling for utf-8 there.",
+      "parentUuid": "66c34681_a66193e2",
+      "revId": "c7f955ca52cf46fd6f9752ca8d690cb912cf23b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
