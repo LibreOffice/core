@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d91278d2_8f3fd023",
+        "filename": "desktop/source/minidump/minidump.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-06T08:38:56Z",
+      "side": 1,
+      "message": "the SAL_WARN_IF message is already implicitly terminated by a newline, you should not emit an additional one",
+      "range": {
+        "startLine": 177,
+        "startChar": 12,
+        "endLine": 177,
+        "endChar": 16
+      },
+      "revId": "c9b69e412b9646f7d49f500d47a078c2ea155c8c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
