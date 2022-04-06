@@ -39,6 +39,30 @@
       },
       "revId": "f098a442bc0a336cbe89217c402ec997aa882a86",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67fc859b_a784a853",
+        "filename": "solenv/gbuild/LinkTarget.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 900,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-06T09:12:28Z",
+      "side": 1,
+      "message": "When I make the project on Mac OS 12.3 Apple M1 pro the error occurs:\nLibreoffice/core/solenv/gbuild/LinkTarget.mk:912: *** extraneous `endef\u0027.  Stop.\nmake: *** [build] Error 2\n\nIt makes OK when I corrected it as I committed.",
+      "parentUuid": "e61851c7_4386956c",
+      "range": {
+        "startLine": 900,
+        "startChar": 34,
+        "endLine": 900,
+        "endChar": 38
+      },
+      "revId": "f098a442bc0a336cbe89217c402ec997aa882a86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
