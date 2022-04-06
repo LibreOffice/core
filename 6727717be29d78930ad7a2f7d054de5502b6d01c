@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "35f5a975_97e57d75",
+        "filename": "sc/inc/scmatrix.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-06T09:41:50Z",
+      "side": 1,
+      "message": "Whenever you use a std function, just use\n\n  auto x \u003d std::size(y);",
+      "parentUuid": "54d21515_b7e59cf6",
+      "revId": "6727717be29d78930ad7a2f7d054de5502b6d01c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "51679fe7_9c3f68cb",
         "filename": "sc/source/core/tool/scmatrix.cxx",
         "patchSetId": 1
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "\u003e What is the reason to use std::shared_ptr here?\n\nAs I referred the example code for parallel walk in the mdds library, I tried to use the same syntax as much as I could, as the same variables are used in operator\u003d and walk later on, and I did not know how they would need to be changed accordingly. Is using it not alright?",
       "parentUuid": "51679fe7_9c3f68cb",
+      "revId": "6727717be29d78930ad7a2f7d054de5502b6d01c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71371221_670f149a",
+        "filename": "sc/source/core/tool/scmatrix.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1669,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-06T09:41:50Z",
+      "side": 1,
+      "message": "I don\u0027t actually know if shared_ptr should be used here, and I might be totally wrong thinking it\u0027s unneeded. The only place where the shared pointers are shared is in slopeIntercept copy constructor. So if that constructor is really used, they indeed are necessary.",
+      "parentUuid": "debab84c_1b81dcb2",
       "revId": "6727717be29d78930ad7a2f7d054de5502b6d01c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
