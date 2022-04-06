@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f586962_4052e31c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-04-06T06:36:55Z",
+      "side": 1,
+      "message": "Auto-save or normal save during partial invalid entry to validation-cell completes the save without committing the invalid entry, but lets the user continue with it(invalid entry) after save. Sync vs async dialog seems an orthogonal issue to this which can be done in an follow-up commit.",
+      "revId": "3336d90ab9f864cdf4eca484379f4f77e58a6597",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
