@@ -5789,7 +5789,6 @@ if test "$cross_compiling" = "yes"; then
         ANT
         ANT_HOME
         ANT_LIB
-        HSQLDB_USE_JDBC_4_1
         JAVA_CLASSPATH_NOT_SET
         JAVA_SOURCE_VER
         JAVA_TARGET_VER
@@ -10159,7 +10158,6 @@ dnl ===================================================================
 dnl Check for system hsqldb
 dnl ===================================================================
 if test "$with_java" != "no" -a "$cross_compiling" != "yes"; then
-    HSQLDB_USE_JDBC_4_1=
     AC_MSG_CHECKING([which hsqldb to use])
     if test "$with_system_hsqldb" = "yes"; then
         AC_MSG_RESULT([external])
@@ -10211,14 +10209,6 @@ if test "$with_java" != "no" -a "$cross_compiling" != "yes"; then
         SYSTEM_HSQLDB=
         BUILD_TYPE="$BUILD_TYPE HSQLDB"
         NEED_ANT=TRUE
-        AC_MSG_CHECKING([whether hsqldb should be built with JDBC 4.1])
-        javanumver=`$JAVAINTERPRETER -version 2>&1 | $AWK -v num=true -f $SRC_ROOT/solenv/bin/getcompver.awk`
-        if expr "$javanumver" '>=' 000100060000 > /dev/null; then
-            AC_MSG_RESULT([yes])
-            HSQLDB_USE_JDBC_4_1=TRUE
-        else
-            AC_MSG_RESULT([no])
-        fi
     fi
 else
     if test "$with_java" != "no" -a -z "$HSQLDB_JAR"; then
@@ -10227,7 +10217,6 @@ else
 fi
 AC_SUBST(SYSTEM_HSQLDB)
 AC_SUBST(HSQLDB_JAR)
-AC_SUBST([HSQLDB_USE_JDBC_4_1])
 
 dnl ===================================================================
 dnl Check for PostgreSQL stuff
