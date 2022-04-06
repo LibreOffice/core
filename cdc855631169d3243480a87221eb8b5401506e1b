@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46c5caa7_287605e8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-06T09:29:50Z",
+      "side": 1,
+      "message": "meh, the unittest fails in libreoffice-7-3, probably it depends on another patch. Abandoning for now",
+      "revId": "cdc855631169d3243480a87221eb8b5401506e1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
