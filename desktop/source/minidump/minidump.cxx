@@ -173,8 +173,7 @@ static bool uploadContent(std::map<std::string, std::string>& parameters, std::s
             "Failed to send http request to " <<
             url.c_str() <<
             ", error: " <<
-            curl_easy_strerror(cc)) <<
-            "\n");
+            curl_easy_strerror(cc));
 
     if (formpost != nullptr)
     {
