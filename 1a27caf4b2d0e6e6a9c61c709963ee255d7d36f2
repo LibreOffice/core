@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ea7e53e_ed1ca11c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-06T08:59:20Z",
+      "side": 1,
+      "message": "@Tünde: very nice clean-up! If this is a revert of one of our previous commits, could you add that information to the commit description, please? Thanks!",
+      "revId": "1a27caf4b2d0e6e6a9c61c709963ee255d7d36f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
