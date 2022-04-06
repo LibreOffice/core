@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "20ec8057_b6b03369",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-06T09:36:05Z",
+      "side": 1,
+      "message": "the problem is most likely that version 3.81 of Make does no longer work - please install a newer version and use it.\n\n\u003csberg\u003e mst___, the `/usr/bin/make --version` \"GNU Make 3.81\" I have on macOS does not work to build LO (Some LinkTarget.mk:913 erroneous endef error is the first I encounter)\n\u003cmst___\u003e guess we should require a nweer version in configure?",
+      "revId": "f098a442bc0a336cbe89217c402ec997aa882a86",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e61851c7_4386956c",
