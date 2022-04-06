@@ -16,6 +16,24 @@
       "message": "Hi Hossein,\nDo you have rights to submit this patch ?",
       "revId": "6c0c80385133f68c81342db4451860e859503e31",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63db58c9_91d3b063",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-06T14:39:49Z",
+      "side": 1,
+      "message": "Yes, I can submit.\nI\u0027m going to submit it if there is no objection.",
+      "parentUuid": "3eec94e9_68cda1d1",
+      "revId": "6c0c80385133f68c81342db4451860e859503e31",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
