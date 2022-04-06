@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20f21621_49ae34c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-04-06T19:38:38Z",
+      "side": 1,
+      "message": "Oops, my fault. Bug number in subject line has to be tdf#148342.",
+      "revId": "9592da0a8e596869a1cd0859619dd28a541d7234",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
