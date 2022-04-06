@@ -16,6 +16,24 @@
       "message": "I was also assuming a problem for \"text/plain\", but couldn\u0027t get Firefox to start in my \"kwin_wayland --xwayland\" session to verify. And then just saw your link to Gerrit. Originally I wanted to avoid any text conversation by Qt. Preferring utf8 over unspecified \"text/plain\" would definitely be an improvement too.\n\nI have no idea, what the real minimal Qt 5 requirement is. We still compile with qt5_minimal_minor\u003d\"6\". No idea what Qt 5 is used for the TDF builds.\n\nYour mentioned patch is in Qt 5.13 … hmmm. LO could do the utf-8 conversation itself. ",
       "revId": "c7f955ca52cf46fd6f9752ca8d690cb912cf23b9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "136b34a2_c8ab20b9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-06T13:25:09Z",
+      "side": 1,
+      "message": "\u003e Originally I wanted to avoid any text conversation by Qt. \n\ni.e. avoiding having Qt do the conversion instead of doing it inside of LO ourselves?\n\n\u003e I have no idea, what the real minimal Qt 5 requirement is. We still compile with qt5_minimal_minor\u003d\"6\". No idea what Qt 5 is used for the TDF builds.\n\nhttps://ci.libreoffice.org/job/gerrit_linux_gcc_release/115456/consoleFull shows 5.9.7\n\n\u003e Your mentioned patch is in Qt 5.13 … hmmm. LO could do the utf-8 conversation itself. \n\nI was thinking about that as well, but since it primarily appears to be relevant for Wayland in practice, I thought that requiring Qt \u003e\u003d 5.13 should be OK (Qt \u003c 5.13 lacking a lot of probably critical fixes for Wayland anyway).\n\nHowever, I don\u0027t have a strong opinion here. Do you think we should handle that in LO instead?",
+      "parentUuid": "ee26217e_89c04165",
+      "revId": "c7f955ca52cf46fd6f9752ca8d690cb912cf23b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
