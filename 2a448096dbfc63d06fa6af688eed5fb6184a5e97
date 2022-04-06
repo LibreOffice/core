@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3d6be23_649712b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-06T08:36:56Z",
+      "side": 1,
+      "message": "this looks like a very dangerous idea - the ODF import reads the generator string and the version number encoded in it and applies various workarounds for bugs in old versions.\n\nif the user sets this config to something that doesn\u0027t match the patterns that the ODF import searches for, or sets it with a particular version number and then forgets to update it to a new version number when updating LO, or uses the same user profile with multiple different LO versions, this is going to break.",
+      "revId": "2a448096dbfc63d06fa6af688eed5fb6184a5e97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
