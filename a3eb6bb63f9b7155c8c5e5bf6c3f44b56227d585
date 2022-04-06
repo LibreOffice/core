@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b42c6ee7_365449c5",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "look in line 1130 it is the same alignment\nor give me a hint",
+      "parentUuid": "3c7b9416_cc45970c",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9607389c_82564a59",
         "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
         "patchSetId": 18
@@ -48,6 +66,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "not sure this comment helps me understand the line, what\u0027s the underlying issue? The other properties have plains strings, too?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36073b02_2e65444d",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1235,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9607389c_82564a59",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -69,6 +105,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cac119d_4835f178",
+        "filename": "embeddedobj/source/commonembedding/embedobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "45cd67a1_8cc04b02",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7998fb22_d582be3e",
@@ -82,6 +136,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "odd alignment again",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86cc5bb5_d66a9104",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7998fb22_d582be3e",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -105,6 +177,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88bac783_4e269032",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "have only change my lines, not the others",
+      "parentUuid": "3cd09101_4e0cd1a5",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "70ff707b_9864a07b",
         "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
         "patchSetId": 18
@@ -116,6 +206,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "extra space, and mixing singular name with plural verb",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50fedd68_bfcd8a5a",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70ff707b_9864a07b",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -137,6 +245,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4e27094_16cedc63",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31d8041b_0e8ef0bf",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "387e57e3_7751da22",
@@ -150,6 +276,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "same",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13e67d82_c4b876c0",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 434,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "387e57e3_7751da22",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -171,6 +315,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0aabc8f_e5120471",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9fd7ee21_8725c69f",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18532c8c_19b6c5dd",
@@ -184,6 +346,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "redundant comment",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4530796_7de5b03a",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "18532c8c_19b6c5dd",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -205,6 +385,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06a52f89_03b5bced",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 458,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7861dead_960af307",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "813d3be4_94526840",
@@ -218,6 +416,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "don\u0027t change data on save ?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72a1e1e0_d4e9262e",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "813d3be4_94526840",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -239,6 +455,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef1eaaac_fb7d1327",
+        "filename": "embeddedobj/source/commonembedding/persistence.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 396,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d8ed431d_13f96b50",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5640304_dfa32b1d",
@@ -256,6 +490,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffdb2be4_8a2f9fcb",
+        "filename": "embeddedobj/source/commonembedding/persistence.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1289,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "f5640304_dfa32b1d",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1bbe02ed_5811198e",
@@ -269,6 +521,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "perhaps this can be improved, to be more self-documenting on call sites?\n\ne.g.: handleLinkedOLE(CopyBackToOLELink) or something? see review on the comments at the HandleLinkAndTempFileSave call sites",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45cf94d7_36820245",
+        "filename": "embeddedobj/source/inc/commonembobj.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1bbe02ed_5811198e",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -292,6 +562,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "43ef1e52_acdc01b8",
+        "filename": "embeddedobj/source/inc/commonembobj.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "look in line 318\nor give me a hint",
+      "parentUuid": "c841f988_163dcb17",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "87a5a87e_015ab431",
         "filename": "embeddedobj/source/inc/strings.hrc",
         "patchSetId": 18
@@ -303,6 +591,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "sure?",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d82579df_7bf99933",
+        "filename": "embeddedobj/source/inc/strings.hrc",
+        "patchSetId": 18
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "only copy and past, and find a lot of file,\ngive me a hint for the right header, in TEMPLATE.SOURCECODE.HEADER not found a sample for hrc",
+      "parentUuid": "87a5a87e_015ab431",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -324,6 +630,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0152eca_cc2c0b71",
+        "filename": "framework/source/services/autorecovery.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 3010,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "591f6678_3a3ad4a5",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af368398_edb0990f",
@@ -341,6 +665,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80b9febd_d2ee833e",
+        "filename": "include/svtools/embedhlp.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "af368398_edb0990f",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03f2efc2_a82bfac8",
@@ -354,6 +696,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "default bool params are evil. at the very least, this now lacks documentation for the new parameter",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c293086_1a132fa0",
+        "filename": "include/svtools/filechangedchecker.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "03f2efc2_a82bfac8",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -512,6 +872,24 @@
       "writtenOn": "2022-04-06T00:26:07Z",
       "side": 1,
       "message": "extraneous space, for this source file",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bbf7d9f_a1bcdcdf",
+        "filename": "sw/source/core/view/viewsh.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 760,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-06T13:05:38Z",
+      "side": 1,
+      "message": "I am not sure what you mean, look in line 769 it ist the same with the spaces, \nor give me a hint for resolve the problem",
+      "parentUuid": "73291f5b_be75f39b",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
