@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d51449ba_8f12615e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-06T11:36:32Z",
+      "side": 1,
+      "message": "calc/image_operation_spec.js failed, resume.",
+      "revId": "f5ef563b0108da86be316bd375b06daf0e3482fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
