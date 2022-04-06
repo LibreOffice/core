@@ -1302,7 +1302,7 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
 
 DECLARE_OOXMLEXPORT_TEST(TestPuzzleExport, "TestPuzzleExport.odt")
 {
-    // See tdf#148342 fo details
+    // See tdf#148342 for details
     // Get the doc
     uno::Reference< text::XTextDocument > xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
     auto pSwDoc = dynamic_cast<SwXTextDocument*>(xTextDoc.get());
@@ -1326,7 +1326,7 @@ DECLARE_OOXMLEXPORT_TEST(TestPuzzleExport, "TestPuzzleExport.odt")
         nCount++;
         it = it->next;
     }
-    // In case of puzzle thre will be so many... Without the fix there was a rectangle with 4 points.
+    // In case of puzzle there will be so many... Without the fix there was a rectangle with 4 points.
     CPPUNIT_ASSERT_GREATER(300, nCount);
 }
 
