@@ -44,15 +44,18 @@ public:
         : mCachedGlyphs(size)
     {
     }
-    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
-                                           const OUString& text) const
+    const SalLayoutGlyphs*
+    GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
+                    const vcl::text::TextLayoutCache* layoutCache = nullptr) const
     {
-        return GetLayoutGlyphs(outputDevice, text, 0, text.getLength());
+        return GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), Point(0, 0), 0,
+                               layoutCache);
     }
-    const SalLayoutGlyphs* GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice,
-                                           const OUString& text, sal_Int32 nIndex, sal_Int32 nLen,
-                                           const Point& rLogicPos = Point(0, 0),
-                                           tools::Long nLogicWidth = 0) const;
+    const SalLayoutGlyphs*
+    GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text, sal_Int32 nIndex,
+                    sal_Int32 nLen, const Point& rLogicPos = Point(0, 0),
+                    tools::Long nLogicWidth = 0,
+                    const vcl::text::TextLayoutCache* layoutCache = nullptr) const;
     void clear() { mCachedGlyphs.clear(); }
 
 private:
