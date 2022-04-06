@@ -53,6 +53,7 @@
 #include <comphelper/hash.hxx>
 #include <tools/stream.hxx>
 #include <vcl/BinaryDataContainer.hxx>
+#include <vcl/glyphitemcache.hxx>
 
 #include <vcl/filter/pdfobjectcontainer.hxx>
 #include <pdf/ExternalPDFStreams.hxx>
@@ -763,6 +764,8 @@ private:
     std::set< PDFWriter::ErrorCode >        m_aErrors;
 
     ::comphelper::Hash                      m_DocDigest;
+
+    SalLayoutGlyphsCache                    m_layoutGlyphsCache;
 
 /*
 variables for PDF security
