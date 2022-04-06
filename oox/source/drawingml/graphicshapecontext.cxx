@@ -84,10 +84,12 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
     case XML_wavAudioFile:
         {
             OUString const path(getEmbeddedWAVAudioFile(getRelations(), rAttribs));
-            mpShapePtr->getGraphicProperties().m_xMediaStream =
-                lcl_GetMediaStream(path, getFilter());
-            mpShapePtr->getGraphicProperties().m_sMediaPackageURL =
-                lcl_GetMediaReference(path);
+            Reference<XInputStream> xMediaStream = lcl_GetMediaStream(path, getFilter());
+            if (xMediaStream.is())
+            {
+                mpShapePtr->getGraphicProperties().m_xMediaStream = xMediaStream;
+                mpShapePtr->getGraphicProperties().m_sMediaPackageURL = lcl_GetMediaReference(path);
+            }
         }
         break;
     case XML_audioFile:
@@ -95,10 +97,24 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
         {
             OUString rPath = getRelations().getFragmentPathFromRelId(
                     rAttribs.getString(R_TOKEN(link)).get() );
-            mpShapePtr->getGraphicProperties().m_xMediaStream =
-                lcl_GetMediaStream(rPath, getFilter());
-            mpShapePtr->getGraphicProperties().m_sMediaPackageURL =
-                lcl_GetMediaReference(rPath);
+            if (!rPath.isEmpty())
+            {
+                Reference<XInputStream> xMediaStream = lcl_GetMediaStream(rPath, getFilter());
+                if (xMediaStream.is()) // embedded media file
+                {
+                    mpShapePtr->getGraphicProperties().m_xMediaStream = xMediaStream;
+                    mpShapePtr->getGraphicProperties().m_sMediaPackageURL
+                        = lcl_GetMediaReference(rPath);
+                }
+            }
+            else
+            {
+                rPath = getRelations().getExternalTargetFromRelId(
+                    rAttribs.getString(R_TOKEN(link)).get());
+                if (!rPath.isEmpty()) // linked media file
+                    mpShapePtr->getGraphicProperties().m_sMediaPackageURL
+                        = getFilter().getAbsoluteUrl(rPath);
+            }
         }
         break;
     }

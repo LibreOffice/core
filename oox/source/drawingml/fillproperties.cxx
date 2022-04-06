@@ -963,11 +963,11 @@ void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelpe
         rPropMap.setProperty(PROP_AdjustContrast, nContrast);
 
     // Media content
-    assert(m_xMediaStream.is() != m_sMediaPackageURL.isEmpty());
-    if (m_xMediaStream.is() && !m_sMediaPackageURL.isEmpty())
+    if (!m_sMediaPackageURL.isEmpty())
     {
-        rPropMap.setProperty(PROP_PrivateStream, m_xMediaStream);
         rPropMap.setProperty(PROP_MediaURL, m_sMediaPackageURL);
+        if (m_xMediaStream.is())
+            rPropMap.setProperty(PROP_PrivateStream, m_xMediaStream);
     }
 }
 
