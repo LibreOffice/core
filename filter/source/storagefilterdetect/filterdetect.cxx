@@ -33,6 +33,8 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <utility>
 
+#include <comphelper/lok.hxx>
+
 using namespace ::com::sun::star;
 using utl::MediaDescriptor;
 
@@ -103,6 +105,11 @@ OUString SAL_CALL StorageFilterDetect::detect(uno::Sequence<beans::PropertyValue
         OUString aMediaType;
         xStorageProperties->getPropertyValue( "MediaType" ) >>= aMediaType;
         aTypeName = getInternalFromMediaType( aMediaType );
+        if (comphelper::LibreOfficeKit::isActive() && aTypeName == "draw8_template")
+        {
+            // save it as draw8 instead of template format
+            aTypeName = "draw8";
+        }
     }
 
     catch( const lang::WrappedTargetException& aWrap )
