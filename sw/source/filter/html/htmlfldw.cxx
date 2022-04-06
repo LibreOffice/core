@@ -286,14 +286,14 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aName, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aName, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
         if( !aValue.isEmpty() )
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\"");
             rWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-            HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rWrt.Strm(), aValue, &rHTMLWrt.m_aNonConvertableCharacters );
             sOut.append('\"');
         }
         if( bNumFormat )
@@ -301,7 +301,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             OSL_ENSURE( nFormat, "number format is 0" );
             sOut.append(HTMLOutFuncs::CreateTableDataOptionsValNum(
                 bNumValue, dNumValue, nFormat,
-                *rHTMLWrt.m_pDoc->GetNumberFormatter(), rHTMLWrt.m_eDestEnc,
+                *rHTMLWrt.m_pDoc->GetNumberFormatter(),
                 &rHTMLWrt.m_aNonConvertableCharacters));
         }
         if( bFixed )
@@ -409,7 +409,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
                 }
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ),
-                    rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                    &rHTMLWrt.m_aNonConvertableCharacters );
 
                 rHTMLWrt.m_bTagOn = false;
                 while( nItems )
@@ -419,7 +419,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
             else
             {
                 HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.copy( nPos, nChunkLen ),
-                    rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                    &rHTMLWrt.m_aNonConvertableCharacters );
             }
             nPos = nEndPos;
         }
@@ -428,7 +428,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pField,
     else
     {
         HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand,
-              rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+              &rHTMLWrt.m_aNonConvertableCharacters );
     }
 
     // Output the closing tag.
@@ -459,7 +459,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         // TODO: HTML-Tags are written without entities, that for, characters
         // not contained in the destination encoding are lost!
         OString sTmp(OUStringToOString(rText,
-            static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
+            RTL_TEXTENCODING_UTF8));
         rWrt.Strm().WriteOString( sTmp ).WriteChar( '>' );
     }
     else if( SwFieldIds::Postit == pFieldTyp->Which() )
@@ -480,7 +480,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             // TODO: HTML-Tags are written without entities, that for,
             // characters not contained in the destination encoding are lost!
             OString sTmp(OUStringToOString(sComment,
-                static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
+                RTL_TEXTENCODING_UTF8));
             rWrt.Strm().WriteOString( sTmp );
             bWritten = true;
         }
@@ -496,7 +496,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
                 // characters not contained in the destination encoding are
                 // lost!
                 OString sTmp(OUStringToOString(sComment,
-                    static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc));
+                    RTL_TEXTENCODING_UTF8));
                 rWrt.Strm().WriteOString( sTmp );
                 bWritten = true;
             }
@@ -510,7 +510,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
             OString sOut =
                 "<" OOO_STRING_SVTOOLS_HTML_comment
                 " " +
-                OUStringToOString(sComment, static_cast<SwHTMLWriter&>(rWrt).m_eDestEnc) +
+                OUStringToOString(sComment, RTL_TEXTENCODING_UTF8) +
                 " -->";
             rWrt.Strm().WriteOString( sOut );
         }
@@ -531,7 +531,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         // otherwise is the script content itself. Since only JavaScript
         // is in fields, it must be JavaScript ...:)
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
-                                 aURL, nullptr, nullptr, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                 aURL, nullptr, nullptr, &rHTMLWrt.m_aNonConvertableCharacters );
 
         if( rHTMLWrt.m_bLFPossible )
             rHTMLWrt.OutNewLine( true );

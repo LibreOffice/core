@@ -1123,9 +1123,8 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
             xMailDispatcher->addListener( xMailListener );
             if(!rMergeDescriptor.bSendAsAttachment && rMergeDescriptor.bSendAsHTML)
             {
-                sMailBodyMimeType = "text/html; charset=" + OUString::createFromAscii(
-                                    rtl_getBestMimeCharsetFromTextEncoding( sMailEncoding ));
-                sMailEncoding = SvxHtmlOptions::GetTextEncoding();
+                sMailBodyMimeType = "text/html; charset=utf-8";
+                sMailEncoding = RTL_TEXTENCODING_UTF8;
             }
             else
                 sMailBodyMimeType = "text/plain; charset=UTF-8; format=flowed";

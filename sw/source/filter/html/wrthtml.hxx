@@ -335,7 +335,6 @@ public:
                                       // that is not contained in class names)
     SvxFrameDirection   m_nDirection;     // the current direction
 
-    rtl_TextEncoding    m_eDestEnc;
     LanguageType        m_eLang;
 
     // description of the export configuration
@@ -439,7 +438,7 @@ public:
 
     // output the FlyFrame anchored at current position
     bool OutFlyFrame( SwNodeOffset nNdIdx, sal_Int32 nContentIdx,
-                      HtmlPosition nPos, HTMLOutContext *pContext = nullptr );
+                      HtmlPosition nPos );
     void OutFrameFormat( AllHtmlFlags nType, const SwFrameFormat& rFormat,
                          const SdrObject *pSdrObj );
 

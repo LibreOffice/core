@@ -1065,7 +1065,7 @@ OUString HtmlExport::DocumentMetadata() const
     OUString aNonConvertableCharacters;
 
     SfxFrameHTMLWriter::Out_DocInfo(aStream, maDocFileName, xDocProps,
-            "  ", RTL_TEXTENCODING_UTF8,
+            "  ",
             &aNonConvertableCharacters);
 
     const sal_uInt64 nLen = aStream.GetSize();
@@ -2809,7 +2809,7 @@ OUString HtmlExport::CreateHTMLRectArea( const ::tools::Rectangle& rRect,
 OUString HtmlExport::StringToHTMLString( const OUString& rString )
 {
     SvMemoryStream aMemStm;
-    HTMLOutFuncs::Out_String( aMemStm, rString, RTL_TEXTENCODING_UTF8 );
+    HTMLOutFuncs::Out_String( aMemStm, rString );
     aMemStm.WriteChar( char(0) );
     sal_Int32 nLength = strlen(static_cast<char const *>(aMemStm.GetData()));
     return OUString( static_cast<char const *>(aMemStm.GetData()), nLength, RTL_TEXTENCODING_UTF8 );

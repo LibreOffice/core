@@ -114,7 +114,7 @@ const char ScHTMLExport::sIndentSource[nIndentMax+1] =
 
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( rStrm, tag )
 #define TAG_OFF( tag )      HTMLOutFuncs::Out_AsciiTag( rStrm, tag, false )
-#define OUT_STR( str )      HTMLOutFuncs::Out_String( rStrm, str, eDestEnc, &aNonConvertibleChars )
+#define OUT_STR( str )      HTMLOutFuncs::Out_String( rStrm, str, &aNonConvertibleChars )
 #define OUT_LF()            rStrm.WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() )
 #define TAG_ON_LF( tag )    (TAG_ON( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
 #define TAG_OFF_LF( tag )   (TAG_OFF( tag ).WriteCharPtr( SAL_NEWLINE_STRING ).WriteCharPtr( GetIndentStr() ))
@@ -214,7 +214,6 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const OUString& rBaseURL, ScDocume
     sIndent[0] = 0;
 
     // set HTML configuration
-    eDestEnc = (pDoc->IsClipOrUndo() ? RTL_TEXTENCODING_UTF8 : SvxHtmlOptions::GetTextEncoding());
     bCopyLocalFileToINet = officecfg::Office::Common::Filter::HTML::Export::LocalGraphic::get();
 
     if (rFilterOptions == u"SkipImages")
@@ -314,7 +313,7 @@ void ScHTMLExport::WriteHeader()
 
     if ( pDoc->IsClipOrUndo() )
     {   // no real DocInfo available, but some META information like charset needed
-        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, nullptr, sIndent, eDestEnc, &aNonConvertibleChars );
+        SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, nullptr, sIndent, &aNonConvertibleChars );
     }
     else
     {
@@ -323,7 +322,7 @@ void ScHTMLExport::WriteHeader()
         uno::Reference<document::XDocumentProperties> xDocProps
             = xDPS->getDocumentProperties();
         SfxFrameHTMLWriter::Out_DocInfo( rStrm, aBaseURL, xDocProps,
-            sIndent, eDestEnc, &aNonConvertibleChars );
+            sIndent, &aNonConvertibleChars );
         OUT_LF();
 
         if (!xDocProps->getPrintedBy().isEmpty())
@@ -1105,7 +1104,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
     }
 
     aStrTD.append(HTMLOutFuncs::CreateTableDataOptionsValNum(bValueData, fVal,
-        nFormat, *pFormatter, eDestEnc, &aNonConvertibleChars));
+        nFormat, *pFormatter, &aNonConvertibleChars));
 
     TAG_ON(aStrTD.makeStringAndClear().getStr());
 
@@ -1147,7 +1146,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
                 for (sal_Int32 nPos {0};;)
                 {
                     OString aTmpStr = HTMLOutFuncs::ConvertStringToHTML(
-                        rList.getToken( 0, ';', nPos ), eDestEnc,
+                        rList.getToken( 0, ';', nPos ),
                         &aNonConvertibleChars);
                     aStr.append(aTmpStr);
                     if (nPos<0)
@@ -1192,7 +1191,7 @@ void ScHTMLExport::WriteCell( sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SC
 
     if (bWriteHyperLink)
     {
-        OString aURLStr = HTMLOutFuncs::ConvertStringToHTML(aURL, eDestEnc, &aNonConvertibleChars);
+        OString aURLStr = HTMLOutFuncs::ConvertStringToHTML(aURL, &aNonConvertibleChars);
         OString aStr = OOO_STRING_SVTOOLS_HTML_anchor " " OOO_STRING_SVTOOLS_HTML_O_href "=\"" + aURLStr + "\"";
         TAG_ON(aStr.getStr());
     }

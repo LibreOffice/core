@@ -38,10 +38,6 @@ SVT_DLLPUBLIC sal_uInt16 GetFontSize(sal_uInt16 nPos);
 SVT_DLLPUBLIC sal_uInt16 GetExportMode();
 
 SVT_DLLPUBLIC bool IsPrintLayoutExtension();
-
-SVT_DLLPUBLIC bool IsDefaultTextEncoding();
-SVT_DLLPUBLIC rtl_TextEncoding GetTextEncoding();
-SVT_DLLPUBLIC void SetTextEncoding(rtl_TextEncoding);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

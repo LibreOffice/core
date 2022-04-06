@@ -579,7 +579,7 @@ OHTMLImportExport::OHTMLImportExport(const svx::ODataAccessDescriptor& _aDataDes
 #endif
 {
     // set HTML configuration
-    m_eDestEnc = SvxHtmlOptions::GetTextEncoding();
+    m_eDestEnc = RTL_TEXTENCODING_UTF8;
     strncpy( sIndent, sIndentSource ,std::min(sizeof(sIndent),sizeof(sIndentSource)));
     sIndent[0] = 0;
 }
@@ -630,7 +630,7 @@ void OHTMLImportExport::WriteHeader()
     HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_head).WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
 
     SfxFrameHTMLWriter::Out_DocInfo( (*m_pStream), OUString(),
-        xDocProps, sIndent, osl_getThreadTextEncoding() );
+        xDocProps, sIndent );
     m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
     IncIndent(-1);
     m_pStream->WriteCharPtr(SAL_NEWLINE_STRING).WriteCharPtr(GetIndentStr());
@@ -898,7 +898,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat, sal_Int32 nWidthPixel, sal
     if ( rValue.isEmpty() )
         HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_linebreak);        // no completely empty cell
     else
-        HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
+        HTMLOutFuncs::Out_String( (*m_pStream), rValue );
 
     if ( bStrikeout )   HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_strike, false);
     if ( bUnderline )   HTMLOutFuncs::Out_AsciiTag(*m_pStream, OOO_STRING_SVTOOLS_HTML_underline, false);

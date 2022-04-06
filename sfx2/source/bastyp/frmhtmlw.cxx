@@ -53,7 +53,6 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
                                   const OUString& rName,
                                   const OUString& rContent,
                                   bool bHTTPEquiv,
-                                  rtl_TextEncoding eDestEnc,
                                   OUString *pNonConvertableChars  )
 {
     rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
@@ -65,29 +64,21 @@ void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
         .append(bHTTPEquiv ? OOO_STRING_SVTOOLS_HTML_O_httpequiv : OOO_STRING_SVTOOLS_HTML_O_name).append("=\"");
     rStrm.WriteOString( sOut.makeStringAndClear() );
 
-    HTMLOutFuncs::Out_String( rStrm, rName, eDestEnc, pNonConvertableChars );
+    HTMLOutFuncs::Out_String( rStrm, rName, pNonConvertableChars );
 
     sOut.append("\" " OOO_STRING_SVTOOLS_HTML_O_content "=\"");
     rStrm.WriteOString( sOut.makeStringAndClear() );
 
-    HTMLOutFuncs::Out_String( rStrm, rContent, eDestEnc, pNonConvertableChars ).WriteCharPtr( "\"/>" );
+    HTMLOutFuncs::Out_String( rStrm, rContent, pNonConvertableChars ).WriteCharPtr( "\"/>" );
 }
 
 void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         const uno::Reference<document::XDocumentProperties> & i_xDocProps,
         const char *pIndent,
-        rtl_TextEncoding eDestEnc,
         OUString *pNonConvertableChars    )
 {
-    const char *pCharSet =
-                rtl_getBestMimeCharsetFromTextEncoding( eDestEnc );
-
-    if( pCharSet )
-    {
-        OUString aContentType = "text/html; charset=" + OUString(pCharSet, strlen(pCharSet), RTL_TEXTENCODING_UTF8);
-        OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, aContentType, true,
-                 eDestEnc, pNonConvertableChars );
-    }
+    OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_content_type, "text/html; charset=utf-8", true,
+                 pNonConvertableChars );
 
     // Title (regardless if empty)
     rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
@@ -98,7 +89,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     {
         const OUString& rTitle = i_xDocProps->getTitle();
         if( !rTitle.isEmpty() )
-            HTMLOutFuncs::Out_String( rStrm, rTitle, eDestEnc, pNonConvertableChars );
+            HTMLOutFuncs::Out_String( rStrm, rTitle, pNonConvertableChars );
     }
     HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title, false );
 
@@ -114,7 +105,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
             rStrm.WriteOString( "<" OOO_STRING_SVTOOLS_HTML_base " "
                 OOO_STRING_SVTOOLS_HTML_O_target "=\"" );
-            HTMLOutFuncs::Out_String( rStrm, rTarget, eDestEnc, pNonConvertableChars )
+            HTMLOutFuncs::Out_String( rStrm, rTarget, pNonConvertableChars )
                .WriteCharPtr( "\">" );
         }
     }
@@ -124,7 +115,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     OUString os( "$_OS" );
     ::rtl::Bootstrap::expandMacros(os);
     sGenerator = sGenerator.replaceFirst( "%1", os );
-    OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_generator, sGenerator, false, eDestEnc, pNonConvertableChars );
+    OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_generator, sGenerator, false, pNonConvertableChars );
 
     if( !i_xDocProps.is() )
         return;
@@ -144,14 +135,14 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         }
 
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_refresh, sContent, true,
-                 eDestEnc, pNonConvertableChars );
+                 pNonConvertableChars );
     }
 
     // Author
     const OUString& rAuthor = i_xDocProps->getAuthor();
     if( !rAuthor.isEmpty() )
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_author, rAuthor, false,
-                 eDestEnc, pNonConvertableChars );
+                 pNonConvertableChars );
 
     // created
     ::util::DateTime uDT = i_xDocProps->getCreationDate();
@@ -159,39 +150,39 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT);
 
     OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_created, aBuffer.makeStringAndClear(), false,
-             eDestEnc, pNonConvertableChars );
+             pNonConvertableChars );
 
     // changedby
     const OUString& rChangedBy = i_xDocProps->getModifiedBy();
     if( !rChangedBy.isEmpty() )
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changedby, rChangedBy, false,
-                 eDestEnc, pNonConvertableChars );
+                 pNonConvertableChars );
 
     // changed
     uDT = i_xDocProps->getModificationDate();
     ::sax::Converter::convertTimeOrDateTime(aBuffer, uDT);
 
     OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changed, aBuffer.makeStringAndClear(), false,
-             eDestEnc, pNonConvertableChars );
+             pNonConvertableChars );
 
     // Subject
     const OUString& rTheme = i_xDocProps->getSubject();
     if( !rTheme.isEmpty() )
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_classification, rTheme, false,
-                 eDestEnc, pNonConvertableChars );
+                 pNonConvertableChars );
 
     // Description
     const OUString& rComment = i_xDocProps->getDescription();
     if( !rComment.isEmpty() )
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_description, rComment, false,
-                 eDestEnc, pNonConvertableChars);
+                 pNonConvertableChars);
 
     // Keywords
     OUString Keywords = ::comphelper::string::convertCommaSeparated(
         i_xDocProps->getKeywords());
     if( !Keywords.isEmpty() )
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_keywords, Keywords, false,
-                 eDestEnc, pNonConvertableChars);
+                 pNonConvertableChars);
 
     uno::Reference < script::XTypeConverter > xConverter( script::Converter::create(
         ::comphelper::getProcessComponentContext() ) );
@@ -213,7 +204,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             aStr >>= str;
             OUString valstr(comphelper::string::stripEnd(str, ' '));
             OutMeta( rStrm, pIndent, name, valstr, false,
-                     eDestEnc, pNonConvertableChars );
+                     pNonConvertableChars );
         }
         catch (const uno::Exception&)
         {
@@ -225,7 +216,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
 void SfxFrameHTMLWriter::Out_FrameDescriptor(
     SvStream& rOut, const OUString& rBaseURL, const uno::Reference < beans::XPropertySet >& xSet,
-    rtl_TextEncoding eDestEnc, OUString *pNonConvertableChars )
+    OUString *pNonConvertableChars )
 {
     try
     {
@@ -241,7 +232,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
                     rBaseURL, aURL );
                 sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_src "=\"");
                 rOut.WriteOString( sOut.makeStringAndClear() );
-                HTMLOutFuncs::Out_String( rOut, aURL, eDestEnc, pNonConvertableChars );
+                HTMLOutFuncs::Out_String( rOut, aURL, pNonConvertableChars );
                 sOut.append('\"');
             }
         }
@@ -251,7 +242,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
         {
             sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_name "=\"");
             rOut.WriteOString( sOut.makeStringAndClear() );
-            HTMLOutFuncs::Out_String( rOut, aStr, eDestEnc, pNonConvertableChars );
+            HTMLOutFuncs::Out_String( rOut, aStr, pNonConvertableChars );
             sOut.append('\"');
         }
 

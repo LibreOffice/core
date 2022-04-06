@@ -983,7 +983,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
         case MM_DOCTYPE_HTML:
         {
             bAsBody = true;
-            eEncoding = SvxHtmlOptions::GetTextEncoding();
+            eEncoding = RTL_TEXTENCODING_UTF8;
         }
         break;
         case MM_DOCTYPE_TEXT:

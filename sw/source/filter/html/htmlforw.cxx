@@ -80,7 +80,6 @@ const HtmlFrmOpts HTML_FRMOPTS_IMG_CONTROL_CSS1 =
 static void lcl_html_outEvents( SvStream& rStrm,
                          const uno::Reference< form::XFormComponent >& rFormComp,
                          bool bCfgStarBasic,
-                         rtl_TextEncoding eDestEnc,
                          OUString *pNonConvertableChars )
 {
     uno::Reference< uno::XInterface > xParentIfc = rFormComp->getParent();
@@ -176,7 +175,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
         }
         sOut += "=\"";
         rStrm.WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rStrm, rDesc.ScriptCode, eDestEnc, pNonConvertableChars );
+        HTMLOutFuncs::Out_String( rStrm, rDesc.ScriptCode, pNonConvertableChars );
         rStrm.WriteChar( '\"' );
         if( EXTENDED_STYPE == eScriptType &&
             !rDesc.AddListenerParam.isEmpty() )
@@ -186,7 +185,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
                 OUStringToOString(sMethod, RTL_TEXTENCODING_ASCII_US) + "=\"";
             rStrm.WriteOString( sOut );
             HTMLOutFuncs::Out_String( rStrm, rDesc.AddListenerParam,
-                                      eDestEnc, pNonConvertableChars );
+                                      pNonConvertableChars );
             rStrm.WriteChar( '\"' );
         }
     }
@@ -458,7 +457,7 @@ void SwHTMLWriter::OutForm( bool bOn,
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
             Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( Strm(), *s,
-                                      m_eDestEnc, &m_aNonConvertableCharacters );
+                                      &m_aNonConvertableCharacters );
             sOut = "\"";
         }
     }
@@ -472,7 +471,7 @@ void SwHTMLWriter::OutForm( bool bOn,
             Strm().WriteOString( sOut );
             OUString aURL
                 = URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), *s);
-            HTMLOutFuncs::Out_String( Strm(), aURL, m_eDestEnc, &m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( Strm(), aURL, &m_aNonConvertableCharacters );
             sOut = "\"";
         }
     }
@@ -517,14 +516,14 @@ void SwHTMLWriter::OutForm( bool bOn,
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_target "=\"";
             Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( Strm(), *s,
-                                      m_eDestEnc, &m_aNonConvertableCharacters );
+                                      &m_aNonConvertableCharacters );
             sOut = "\"";
         }
     }
 
     Strm().WriteOString( sOut );
     uno::Reference< form::XFormComponent > xFormComp( rFormComps, uno::UNO_QUERY );
-    lcl_html_outEvents( Strm(), xFormComp, m_bCfgStarBasic, m_eDestEnc, &m_aNonConvertableCharacters );
+    lcl_html_outEvents( Strm(), xFormComp, m_bCfgStarBasic, &m_aNonConvertableCharacters );
     Strm().WriteChar( '>' );
 
     IncIndentLevel(); // indent content of form
@@ -587,7 +586,7 @@ void SwHTMLWriter::OutHiddenControls(
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
                     Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( Strm(), *s,
-                                              m_eDestEnc, &m_aNonConvertableCharacters );
+                                              &m_aNonConvertableCharacters );
                     sOut = "\"";
                 }
             }
@@ -599,7 +598,7 @@ void SwHTMLWriter::OutHiddenControls(
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
                     Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( Strm(), *s,
-                                              m_eDestEnc, &m_aNonConvertableCharacters );
+                                              &m_aNonConvertableCharacters );
                     sOut = "\"";
                 }
             }
@@ -940,7 +939,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             sOut += " " OOO_STRING_SVTOOLS_HTML_O_name "=\"";
             rWrt.Strm().WriteOString( sOut );
             HTMLOutFuncs::Out_String( rWrt.Strm(), *s,
-                                      rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                      &rHTMLWrt.m_aNonConvertableCharacters );
             sOut = "\"";
         }
     }
@@ -958,7 +957,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
     {
         sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
         rWrt.Strm().WriteOString( sOut );
-        HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), sValue, &rHTMLWrt.m_aNonConvertableCharacters );
         sOut = "\"";
     }
 
@@ -976,7 +975,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(),
                             URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(), *s),
-                            rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                            &rHTMLWrt.m_aNonConvertableCharacters );
                 sOut = "\"";
             }
         }
@@ -1147,7 +1146,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
 
     uno::Reference< form::XFormComponent >  xFormComp( xControlModel, uno::UNO_QUERY );
     lcl_html_outEvents( rWrt.Strm(), xFormComp, rHTMLWrt.m_bCfgStarBasic,
-                        rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                        &rHTMLWrt.m_aNonConvertableCharacters );
 
     rWrt.Strm().WriteChar( '>' );
 
@@ -1207,7 +1206,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     sOut += " " OOO_STRING_SVTOOLS_HTML_O_value "=\"";
                     rWrt.Strm().WriteOString( sOut );
                     HTMLOutFuncs::Out_String( rWrt.Strm(), sVal,
-                        rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                        &rHTMLWrt.m_aNonConvertableCharacters );
                     sOut = "\"";
                 }
                 if( bSelected )
@@ -1217,7 +1216,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                 rWrt.Strm().WriteOString( sOut );
 
                 HTMLOutFuncs::Out_String( rWrt.Strm(), pStrings[i],
-                                          rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                          &rHTMLWrt.m_aNonConvertableCharacters );
             }
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_option), false );
 
@@ -1248,7 +1247,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
                     rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
                 OUString aLine = sVal.getToken( 0, 0x0A, nPos );
                 HTMLOutFuncs::Out_String( rWrt.Strm(), aLine,
-                                        rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters );
+                                        &rHTMLWrt.m_aNonConvertableCharacters );
             }
         }
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OStringConcatenation(rHTMLWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_textarea), false );
@@ -1261,7 +1260,7 @@ Writer& OutHTML_DrawFrameFormatAsControl( Writer& rWrt,
             if( !s->isEmpty() )
             {
                 HTMLOutFuncs::Out_String( rWrt.Strm(), *s,
-                    rHTMLWrt.m_eDestEnc, &rHTMLWrt.m_aNonConvertableCharacters ).WriteChar( ' ' );
+                    &rHTMLWrt.m_aNonConvertableCharacters ).WriteChar( ' ' );
             }
         }
     }
