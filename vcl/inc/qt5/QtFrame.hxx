@@ -25,6 +25,7 @@
 #include <vclpluginapi.h>
 
 #include "QtTools.hxx"
+#include "QtWidget.hxx"
 
 #include <headless/svpgdi.hxx>
 #include <vcl/svapp.hxx>
@@ -55,6 +56,7 @@ class QtInstance;
 class QtMainWindow;
 class QtMenu;
 class QtSvpGraphics;
+class QtWidget;
 
 class QDragMoveEvent;
 class QDropEvent;
@@ -70,7 +72,7 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     friend class QtWidget;
 
-    QWidget* m_pQWidget;
+    QtWidget* m_pQWidget;
     QtMainWindow* m_pTopLevel;
 
     const bool m_bUseCairo;
@@ -133,11 +135,14 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     void fixICCCMwindowGroup();
 
+private Q_SLOTS:
+    void screenChanged(QScreen*);
+
 public:
     QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
     virtual ~QtFrame() override;
 
-    QWidget* GetQWidget() const { return m_pQWidget; }
+    QWidget* GetQWidget() const { return static_cast<QWidget*>(m_pQWidget); }
     QtMainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
     QWidget* asChild() const;
     qreal devicePixelRatioF() const;
