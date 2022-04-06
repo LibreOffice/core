@@ -294,7 +294,6 @@ public:
     std::optional<std::vector<SwTextFootnote*>> m_xFootEndNotes;
 
     OUString m_aCSS1Selector;           // style selector
-    OUString m_aNonConvertableCharacters;
     OUString m_aBulletGrfs[MAXLEVEL];   // list graphics
 
     css::uno::Reference<css::container::XIndexContainer> mxFormComps; // current form

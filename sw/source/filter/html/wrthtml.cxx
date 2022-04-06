@@ -512,8 +512,7 @@ ErrCode SwHTMLWriter::WriteStream()
 
                 // save only the tag of section
                 OString aName = HTMLOutFuncs::ConvertStringToHTML(
-                    pSNd->GetSection().GetSectionName(),
-                    &m_aNonConvertableCharacters );
+                    pSNd->GetSection().GetSectionName() );
 
                 aStartTags =
                     "<" + GetNamespace() + OOO_STRING_SVTOOLS_HTML_division
@@ -622,8 +621,6 @@ ErrCode SwHTMLWriter::WriteStream()
     for(OUString & s : m_aBulletGrfs)
         s.clear();
 
-    m_aNonConvertableCharacters.clear();
-
     if( m_bShowProgress )
         ::EndProgress( m_pDoc->GetDocShell() );
 
@@ -710,7 +707,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
     {
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_id "=\"");
         rHTMLWrt.Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName, &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), rName );
         sOut.append('\"');
     }
 
@@ -733,13 +730,12 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
         sal_Unicode cDelim = 255U;
         bool bURLContainsDelim = (-1 != aEncURL.indexOf( cDelim ) );
 
-        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL,
-                                  &rHTMLWrt.m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aEncURL );
         const char* const pDelim = "&#255;";
         if( !aFilter.isEmpty() || !aSection.isEmpty() || bURLContainsDelim )
             rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aFilter.isEmpty() )
-            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter, &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aFilter );
         if( !aSection.isEmpty() || bURLContainsDelim  )
                 rHTMLWrt.Strm().WriteCharPtr( pDelim );
         if( !aSection.isEmpty() )
@@ -756,8 +752,7 @@ static void lcl_html_OutSectionStartTag( SwHTMLWriter& rHTMLWrt,
                 aSection = aSection.replaceAt(nPos, 1, u"%FF" );
                 nPos = aSection.indexOf( cDelim, nPos+3 );
             }
-            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection,
-                                      &rHTMLWrt.m_aNonConvertableCharacters );
+            HTMLOutFuncs::Out_String( rHTMLWrt.Strm(), aSection );
         }
         sOut.append('\"');
     }
@@ -1095,8 +1090,7 @@ const SwPageDesc *SwHTMLWriter::MakeHeader( sal_uInt16 &rHeaderAttrs )
 
         // xDocProps may be null here (when copying)
         SfxFrameHTMLWriter::Out_DocInfo( Strm(), GetBaseURL(), xDocProps,
-                                         sIndent.getStr(),
-                                         &m_aNonConvertableCharacters );
+                                         sIndent.getStr() );
 
         // comments and meta-tags of first paragraph
         rHeaderAttrs = OutHeaderAttrs();
@@ -1202,7 +1196,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
     {
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_name "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rName, &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
+        HTMLOutFuncs::Out_String( Strm(), rName ).WriteCharPtr( "\">" );
     }
     else
     {
@@ -1210,7 +1204,7 @@ void SwHTMLWriter::OutAnchor( const OUString& rName )
         // spaces.
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_id "=\"");
         Strm().WriteOString( sOut.makeStringAndClear() );
-        HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_'), &m_aNonConvertableCharacters ).WriteCharPtr( "\">" );
+        HTMLOutFuncs::Out_String( Strm(), rName.replace(' ', '_') ).WriteCharPtr( "\">" );
     }
     HTMLOutFuncs::Out_AsciiTag( Strm(), OStringConcatenation(GetNamespace() + OOO_STRING_SVTOOLS_HTML_anchor), false );
 }
@@ -1345,7 +1339,7 @@ OUString SwHTMLWriter::convertHyperlinkHRefValue(const OUString& rURL)
 void SwHTMLWriter::OutHyperlinkHRefValue( const OUString& rURL )
 {
     OUString sURL = convertHyperlinkHRefValue(rURL);
-    HTMLOutFuncs::Out_String( Strm(), sURL, &m_aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), sURL );
 }
 
 void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic )
@@ -1375,7 +1369,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
             }
             Strm().WriteCharPtr( " " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
             Strm().WriteCharPtr( OOO_STRING_SVTOOLS_HTML_O_data ":" );
-            HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64, &m_aNonConvertableCharacters ).WriteChar( '\"' );
+            HTMLOutFuncs::Out_String( Strm(), aGraphicInBase64 ).WriteChar( '\"' );
         }
     }
     else
@@ -1386,7 +1380,7 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
         }
         OUString s( URIHelper::simpleNormalizedMakeRelative( GetBaseURL(), GraphicURL));
         Strm().WriteCharPtr(" " OOO_STRING_SVTOOLS_HTML_O_background "=\"" );
-        HTMLOutFuncs::Out_String( Strm(), s, &m_aNonConvertableCharacters );
+        HTMLOutFuncs::Out_String( Strm(), s );
         Strm().WriteCharPtr("\"");
 
     }
@@ -1432,8 +1426,7 @@ void SwHTMLWriter::OutLanguage( LanguageType nLang )
         sOut.append(OOO_STRING_SVTOOLS_HTML_O_lang);
     sOut.append("=\"");
     Strm().WriteOString( sOut.makeStringAndClear() );
-    HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang),
-                              &m_aNonConvertableCharacters ).WriteChar( '"' );
+    HTMLOutFuncs::Out_String( Strm(), LanguageTag::convertToBcp47(nLang) ).WriteChar( '"' );
 }
 
 SvxFrameDirection SwHTMLWriter::GetHTMLDirection( const SfxItemSet& rItemSet ) const
