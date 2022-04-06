@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c8ed7d1_b3772796",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-06T17:37:46Z",
+      "side": 1,
+      "message": "So I rediscovered this bug. Maybe you have an alternative idea to break the recursion.",
+      "revId": "d8d63d91fc2fd7ad2f15ec5b2ca38b840bf270ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
