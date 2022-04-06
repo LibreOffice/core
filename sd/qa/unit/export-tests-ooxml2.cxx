@@ -1832,11 +1832,28 @@ void SdOOXMLExportTest2::testTdf53970()
             m_directories.getURLFromSrc(u"/sd/qa/unit/data/odp/tdf53970_linked.odp"), ODP);
         utl::TempFile tempFile;
         xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
-        xDocShRef->DoClose();
 
         xmlDocUniquePtr pXmlRels = parseExport(tempFile, "ppt/slides/_rels/slide1.xml.rels");
         CPPUNIT_ASSERT(pXmlRels);
         assertXPath(pXmlRels, "/rels:Relationships/rels:Relationship[@TargetMode='External']", 2);
+
+        uno::Reference<beans::XPropertySet> xShape(getShape(0, getPage(0, xDocShRef)));
+        CPPUNIT_ASSERT(xShape.is());
+        OUString sVideoURL;
+
+        // Without fix in place, the media shape was imported as an image after export.
+        try
+        {
+            CPPUNIT_ASSERT_MESSAGE("MediaURL property is not set",
+                                   xShape->getPropertyValue("MediaURL") >>= sVideoURL);
+        }
+        catch (const beans::UnknownPropertyException&)
+        {
+            CPPUNIT_FAIL("Error: MediaURL is unknown property");
+        }
+        CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
+
+        xDocShRef->DoClose();
     }
 }
 
