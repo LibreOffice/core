@@ -34,6 +34,24 @@
       "parentUuid": "0825169b_357f8fab",
       "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16e4a6f0_06b27422",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-07T06:02:22Z",
+      "side": 1,
+      "message": "Both screens have a resolution of 1920x1080.",
+      "parentUuid": "3652e5b3_83e78124",
+      "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
