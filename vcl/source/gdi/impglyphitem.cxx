@@ -135,32 +135,46 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
 SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const OutputDevice>& d,
                                                        const OUString& t, sal_Int32 i, sal_Int32 l,
                                                        const Point& p, tools::Long w)
-    : outputDevice(d)
-    , text(t)
+    : text(t)
     , index(i)
     , len(l)
     , logicPos(p)
     , logicWidth(w)
+    , outputDevice(d)
+    // we also need to save things used in OutputDevice::ImplPrepareLayoutArgs(), in case they
+    // change in the output device
+    // TODO there is still something missing, otherwise it wouldn't be necessary to compare
+    // also the OutputDevice pointers
+    , font(outputDevice->GetFont())
+    , rtl(outputDevice->IsRTLEnabled())
+    , layoutMode(outputDevice->GetLayoutMode())
+    , digitLanguage(outputDevice->GetDigitLanguage())
 {
     hashValue = 0;
-    o3tl::hash_combine(hashValue, outputDevice.get());
-    SvMemoryStream stream;
-    WriteFont(stream, outputDevice->GetFont());
-    o3tl::hash_combine(hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
     o3tl::hash_combine(hashValue, vcl::text::FirstCharsStringHash()(text));
     o3tl::hash_combine(hashValue, index);
     o3tl::hash_combine(hashValue, len);
     o3tl::hash_combine(hashValue, logicPos.X());
     o3tl::hash_combine(hashValue, logicPos.Y());
     o3tl::hash_combine(hashValue, logicWidth);
+
+    o3tl::hash_combine(hashValue, outputDevice.get());
+    SvMemoryStream stream;
+    WriteFont(stream, font);
+    o3tl::hash_combine(hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
+    o3tl::hash_combine(hashValue, rtl);
+    o3tl::hash_combine(hashValue, layoutMode);
+    o3tl::hash_combine(hashValue, digitLanguage.get());
 }
 
 inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphsKey& other) const
 {
-    return hashValue == other.hashValue && outputDevice == other.outputDevice
-           && index == other.index && len == other.len && logicPos == other.logicPos
-           && logicWidth == other.logicWidth
-           && vcl::text::FastStringCompareEqual()(text, other.text);
+    return hashValue == other.hashValue && index == other.index && len == other.len && logicPos == other.logicPos
+           && logicWidth == other.logicWidth && outputDevice == other.outputDevice
+           && rtl == other.rtl && layoutMode == other.layoutMode
+           && digitLanguage == other.digitLanguage
+           // slower things here
+           && font == other.font && vcl::text::FastStringCompareEqual()(text, other.text);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
