@@ -16840,7 +16840,7 @@ private:
     void set_text_background_color(const Color& rColor)
     {
         guint16 nRed = rColor.GetRed() << 8;
-        guint16 nGreen = rColor.GetRed() << 8;
+        guint16 nGreen = rColor.GetGreen() << 8;
         guint16 nBlue = rColor.GetBlue() << 8;
 
         PangoAttrType aFilterAttrs[] = {PANGO_ATTR_BACKGROUND, PANGO_ATTR_INVALID};
@@ -16857,7 +16857,7 @@ private:
     void set_text_foreground_color(const Color& rColor, bool bSetBold)
     {
         guint16 nRed = rColor.GetRed() << 8;
-        guint16 nGreen = rColor.GetRed() << 8;
+        guint16 nGreen = rColor.GetGreen() << 8;
         guint16 nBlue = rColor.GetBlue() << 8;
 
         PangoAttrType aFilterAttrs[] = {PANGO_ATTR_FOREGROUND, PANGO_ATTR_WEIGHT, PANGO_ATTR_INVALID};
