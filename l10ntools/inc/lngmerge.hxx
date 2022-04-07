@@ -44,7 +44,7 @@ private:
     OString sSource;
     std::vector<OString> aLanguages;
 
-    static bool isNextGroup(OString &sGroup_out, const OString &sLine_in);
+    static bool isNextGroup(OString &sGroup_out, std::string_view sLine_in);
     static void ReadLine(const OString &rLine_in,
         OStringHashMap &rText_inout);
     static void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
