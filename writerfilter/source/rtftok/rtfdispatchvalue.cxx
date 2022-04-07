@@ -762,6 +762,10 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (m_aStates.top().getDestination() == Destination::FONTTABLE
                 || m_aStates.top().getDestination() == Destination::FONTENTRY)
             {
+                // Some text in buffer? It is font name. So previous font definition is complete
+                if (m_aStates.top().getCurrentDestinationText()->getLength())
+                    handleFontTableEntry();
+
                 m_aFontIndexes.push_back(nParam);
                 m_nCurrentFontIndex = getFontIndex(nParam);
             }

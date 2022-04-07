@@ -1332,6 +1332,74 @@ void RTFDocumentImpl::singleChar(sal_uInt8 nValue, bool bRunProps)
     }
 }
 
+void RTFDocumentImpl::handleFontTableEntry()
+{
+    OUString aName = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
+
+    if (aName.isEmpty())
+        return;
+
+    if (aName.endsWith(";"))
+    {
+        aName = aName.copy(0, aName.getLength() - 1);
+    }
+
+    // Old documents can contain no encoding information in fontinfo,
+    // but there can be font name suffixes: Arial CE is not a special
+    // font, it is ordinal Arial, but with used cp 1250 encoding.
+    // Moreover these suffixes have priority over \cpgN and \fcharsetN
+    // in MS Word.
+    OUString aFontSuffix;
+    OUString aNameNoSuffix(aName);
+    sal_Int32 nLastSpace = aName.lastIndexOf(' ');
+    if (nLastSpace >= 0)
+    {
+        aFontSuffix = aName.copy(nLastSpace + 1);
+        aNameNoSuffix = aName.copy(0, nLastSpace);
+        sal_Int32 nEncoding = RTL_TEXTENCODING_DONTKNOW;
+        for (int i = 0; aRTFFontNameSuffixes[i].codepage != RTL_TEXTENCODING_DONTKNOW; i++)
+        {
+            if (aFontSuffix.equalsAscii(aRTFFontNameSuffixes[i].suffix))
+            {
+                nEncoding = aRTFFontNameSuffixes[i].codepage;
+                break;
+            }
+        }
+        if (nEncoding > RTL_TEXTENCODING_DONTKNOW)
+        {
+            m_nCurrentEncoding = nEncoding;
+            m_aStates.top().setCurrentEncoding(m_nCurrentEncoding);
+        }
+        else
+        {
+            // Unknown suffix: looks like it is just a part of font name, restore it
+            aNameNoSuffix = aName;
+        }
+    }
+
+    m_aFontNames[m_nCurrentFontIndex] = aNameNoSuffix;
+    if (m_nCurrentEncoding >= 0)
+    {
+        m_aFontEncodings[m_nCurrentFontIndex] = m_nCurrentEncoding;
+        m_nCurrentEncoding = -1;
+    }
+    m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Font_name,
+                                             new RTFValue(aNameNoSuffix));
+
+    writerfilter::Reference<Properties>::Pointer_t const pProp(new RTFReferenceProperties(
+        m_aStates.top().getTableAttributes(), m_aStates.top().getTableSprms()));
+
+    //See fdo#47347 initial invalid font entry properties are inserted first,
+    //so when we attempt to insert the correct ones, there's already an
+    //entry in the map for them, so the new ones aren't inserted.
+    auto lb = m_aFontTableEntries.lower_bound(m_nCurrentFontIndex);
+    if (lb != m_aFontTableEntries.end()
+        && !(m_aFontTableEntries.key_comp()(m_nCurrentFontIndex, lb->first)))
+        lb->second = pProp;
+    else
+        m_aFontTableEntries.insert(lb, std::make_pair(m_nCurrentFontIndex, pProp));
+}
+
 void RTFDocumentImpl::text(OUString& rString)
 {
     if (rString.getLength() == 1 && m_aStates.top().getDestination() != Destination::DOCCOMM)
@@ -1345,10 +1413,7 @@ void RTFDocumentImpl::text(OUString& rString)
     bool bRet = true;
     switch (m_aStates.top().getDestination())
     {
-        // Note: in fonttbl there may or may not be groups; in stylesheet
-        // and revtbl groups are mandatory
-        case Destination::FONTTABLE:
-        case Destination::FONTENTRY:
+        // Note: in stylesheet and revtbl groups are mandatory
         case Destination::STYLEENTRY:
         case Destination::LISTNAME:
         case Destination::REVISIONENTRY:
@@ -1368,68 +1433,6 @@ void RTFDocumentImpl::text(OUString& rString)
                     = m_aStates.top().getCurrentDestinationText()->makeStringAndClear();
                 switch (m_aStates.top().getDestination())
                 {
-                    case Destination::FONTTABLE:
-                    case Destination::FONTENTRY:
-                    {
-                        // Old documents can contain no encoding information in fontinfo,
-                        // but there can be font name suffixes: Arial CE is not a special
-                        // font, it is ordinal Arial, but with used cp 1250 encoding.
-                        // Moreover these suffixes have priority over \cpgN and \fcharsetN
-                        // in MS Word.
-                        OUString aFontSuffix;
-                        OUString aNameNoSuffix(aName);
-                        sal_Int32 nLastSpace = aName.lastIndexOf(' ');
-                        if (nLastSpace >= 0)
-                        {
-                            aFontSuffix = aName.copy(nLastSpace + 1);
-                            aNameNoSuffix = aName.copy(0, nLastSpace);
-                            sal_Int32 nEncoding = RTL_TEXTENCODING_DONTKNOW;
-                            for (int i = 0;
-                                 aRTFFontNameSuffixes[i].codepage != RTL_TEXTENCODING_DONTKNOW; i++)
-                            {
-                                if (aFontSuffix.equalsAscii(aRTFFontNameSuffixes[i].suffix))
-                                {
-                                    nEncoding = aRTFFontNameSuffixes[i].codepage;
-                                    break;
-                                }
-                            }
-                            if (nEncoding > RTL_TEXTENCODING_DONTKNOW)
-                            {
-                                m_nCurrentEncoding = nEncoding;
-                                m_aStates.top().setCurrentEncoding(m_nCurrentEncoding);
-                            }
-                            else
-                            {
-                                // Unknown suffix: looks like it is just a part of font name, restore it
-                                aNameNoSuffix = aName;
-                            }
-                        }
-
-                        m_aFontNames[m_nCurrentFontIndex] = aNameNoSuffix;
-                        if (m_nCurrentEncoding >= 0)
-                        {
-                            m_aFontEncodings[m_nCurrentFontIndex] = m_nCurrentEncoding;
-                            m_nCurrentEncoding = -1;
-                        }
-                        m_aStates.top().getTableAttributes().set(NS_ooxml::LN_CT_Font_name,
-                                                                 new RTFValue(aNameNoSuffix));
-
-                        writerfilter::Reference<Properties>::Pointer_t const pProp(
-                            new RTFReferenceProperties(m_aStates.top().getTableAttributes(),
-                                                       m_aStates.top().getTableSprms()));
-
-                        //See fdo#47347 initial invalid font entry properties are inserted first,
-                        //so when we attempt to insert the correct ones, there's already an
-                        //entry in the map for them, so the new ones aren't inserted.
-                        auto lb = m_aFontTableEntries.lower_bound(m_nCurrentFontIndex);
-                        if (lb != m_aFontTableEntries.end()
-                            && !(m_aFontTableEntries.key_comp()(m_nCurrentFontIndex, lb->first)))
-                            lb->second = pProp;
-                        else
-                            m_aFontTableEntries.insert(lb,
-                                                       std::make_pair(m_nCurrentFontIndex, pProp));
-                    }
-                    break;
                     case Destination::STYLEENTRY:
                     {
                         RTFValue::Pointer_t pType
@@ -1467,6 +1470,8 @@ void RTFDocumentImpl::text(OUString& rString)
             }
         }
         break;
+        case Destination::FONTTABLE:
+        case Destination::FONTENTRY:
         case Destination::LEVELTEXT:
         case Destination::SHAPEPROPERTYNAME:
         case Destination::SHAPEPROPERTYVALUE:
@@ -2216,17 +2221,26 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
 {
     switch (rState.getDestination())
     {
+        //Note: in fonttbl there may or may not be groups, so process it as no groups
         case Destination::FONTTABLE:
+        case Destination::FONTENTRY:
         {
-            writerfilter::Reference<Table>::Pointer_t const pTable(
-                new RTFReferenceTable(m_aFontTableEntries));
-            Mapper().table(NS_ooxml::LN_FONTTABLE, pTable);
-            if (m_nDefaultFontIndex >= 0)
+            // Some text unhandled? Seems it is last font name
+            if (m_aStates.top().getCurrentDestinationText()->getLength())
+                handleFontTableEntry();
+
+            if (rState.getDestination() == Destination::FONTTABLE)
             {
-                auto pValue = new RTFValue(m_aFontNames[getFontIndex(m_nDefaultFontIndex)]);
-                putNestedAttribute(m_aDefaultState.getCharacterSprms(),
-                                   NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii,
-                                   pValue);
+                writerfilter::Reference<Table>::Pointer_t const pTable(
+                    new RTFReferenceTable(m_aFontTableEntries));
+                Mapper().table(NS_ooxml::LN_FONTTABLE, pTable);
+                if (m_nDefaultFontIndex >= 0)
+                {
+                    auto pValue = new RTFValue(m_aFontNames[getFontIndex(m_nDefaultFontIndex)]);
+                    putNestedAttribute(m_aDefaultState.getCharacterSprms(),
+                                       NS_ooxml::LN_EG_RPrBase_rFonts, NS_ooxml::LN_CT_Fonts_ascii,
+                                       pValue);
+                }
             }
         }
         break;
