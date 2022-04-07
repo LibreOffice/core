@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a54cf3_d4844e79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-07T16:13:07Z",
+      "side": 1,
+      "message": "following commits pass, so no real problem with Jenkins.\n",
+      "revId": "4810fec727e44a61c7efbfd85b2fb64470116fa6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
