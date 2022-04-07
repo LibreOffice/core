@@ -768,7 +768,7 @@ private:
     void WriteSdtEnd();
 
     void StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun = false );
-    void DoWriteCmd( const OUString& rCmd );
+    void DoWriteCmd( std::u16string_view rCmd );
     void CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun );
     void CmdEndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, bool bWriteRun );
     void EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos& rInfos );

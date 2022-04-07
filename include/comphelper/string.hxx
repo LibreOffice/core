@@ -417,6 +417,6 @@ inline sal_Int32 toInt32( std::string_view str, sal_Int16 radix = 10 )
 }
 
 
-}
+} // namespace comphelper::string
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
