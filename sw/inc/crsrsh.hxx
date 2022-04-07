@@ -89,9 +89,10 @@ enum class IsAttrAtPos
     ,CurrAttrs       = 0x4000        ///< only for debugging
     ,TableBoxValue   = 0x8000        ///< only for debugging
 #endif
+    , ContentControl = 0x10000
 };
 namespace o3tl {
-    template<> struct typed_flags<IsAttrAtPos> : is_typed_flags<IsAttrAtPos, 0xffff> {};
+    template<> struct typed_flags<IsAttrAtPos> : is_typed_flags<IsAttrAtPos, 0x1ffff> {};
 }
 
 struct SwContentAtPos
@@ -702,6 +703,8 @@ public:
         const bool bAddSetExpressionFieldsToInputFields = true );
 
     bool GotoFormatField( const SwFormatField& rField );
+
+    bool GotoFormatContentControl(const SwFormatContentControl& rContentControl);
 
     static SwTextField* GetTextFieldAtPos(
         const SwPosition* pPos,

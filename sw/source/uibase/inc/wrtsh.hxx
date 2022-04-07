@@ -54,6 +54,7 @@ enum class SvMacroItemId : sal_uInt16;
 class SwFieldMgr;
 class SfxRequest;
 enum class SwLineBreakClear;
+class SwContentControl;
 
 namespace i18nutil {
     struct SearchOptions2;
@@ -423,6 +424,8 @@ typedef bool (SwWrtShell::*FNSimpleMove)();
     bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark);
 
     bool GotoField( const SwFormatField& rField );
+
+    bool GotoContentControl(const SwFormatContentControl& rContentControl);
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics

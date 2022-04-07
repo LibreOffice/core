@@ -241,6 +241,10 @@ SwTextContentControl::SwTextContentControl(SwFormatContentControl& rAttr, sal_In
 {
     rAttr.SetTextAttr(this);
     SetHasDummyChar(true);
+
+    // If the user types at the end of the content control, expand the text attr to the right.
+    SetLockExpandFlag(false);
+    SetDontExpand(false);
 }
 
 SwTextContentControl::~SwTextContentControl()

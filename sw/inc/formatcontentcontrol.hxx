@@ -61,6 +61,7 @@ public:
     void NotifyChangeTextNode(SwTextNode* pTextNode);
     static SwFormatContentControl* CreatePoolDefault(sal_uInt16 nWhich);
     SwContentControl* GetContentControl() { return m_pContentControl.get(); }
+    const SwContentControl* GetContentControl() const { return m_pContentControl.get(); }
 
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
