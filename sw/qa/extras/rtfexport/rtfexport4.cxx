@@ -553,6 +553,18 @@ DECLARE_RTFEXPORT_TEST(testTdf95706, "tdf95706.rtf")
     CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun16, "CharFontName"));
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf95706_2, "tdf95706_2.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"),
+                         getProperty<OUString>(getRun(getParagraph(1), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Impact"),
+                         getProperty<OUString>(getRun(getParagraph(2), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Times New Roman"),
+                         getProperty<OUString>(getRun(getParagraph(3), 1), "CharFontName"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Tahoma"),
+                         getProperty<OUString>(getRun(getParagraph(4), 1), "CharFontName"));
+}
+
 DECLARE_RTFEXPORT_TEST(testTdf111851, "tdf111851.rtf")
 {
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);

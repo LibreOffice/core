@@ -777,6 +777,7 @@ private:
     writerfilter::Reference<Properties>::Pointer_t
     getProperties(const RTFSprms& rAttributes, RTFSprms const& rSprms, Id nStyleType);
     void checkNeedPap();
+    void handleFontTableEntry();
     void sectBreak(bool bFinal = false);
     void prepareProperties(RTFParserState& rState,
                            writerfilter::Reference<Properties>::Pointer_t& o_rpParagraphProperties,
