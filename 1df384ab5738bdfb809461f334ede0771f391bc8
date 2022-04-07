@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0825169b_357f8fab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-07T05:32:55Z",
+      "side": 1,
+      "message": "Don\u0027t know, if you still can test. It might be sufficient as a workaround.\n\nThere are a few problems, like my commit ea4fb1559f7b99a0bfaf18f26cb3b6972c9cde1c / fix for tdf#136918, which uses the global scaling instead of the RenderContext / SalFrame specific one.",
+      "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
