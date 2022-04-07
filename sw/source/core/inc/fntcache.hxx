@@ -53,36 +53,9 @@ public:
     void Flush();
 };
 
-/// Clears the pre-calculated text glyphs in all SwFntObj instances.
-void SwClearFntCacheTextGlyphs();
-
 // Font cache, global variable, created/destroyed in txtinit.cxx
 extern SwFntCache *pFntCache;
 extern SwFntObj *pLastFont;
-
-/**
- * Defines a substring on a given output device, to be used as an std::unordered_map<>
- * key.
- */
-struct SwTextGlyphsKey
-{
-    VclPtr<const OutputDevice> m_pOutputDevice;
-    OUString m_aText;
-    sal_Int32 m_nIndex;
-    sal_Int32 m_nLength;
-    size_t mnHashCode;
-
-    SwTextGlyphsKey(const OutputDevice* pOutputDevice, const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength);
-    bool operator==(SwTextGlyphsKey const & rhs) const;
-};
-struct SwTextGlyphsKeyHash
-{
-    size_t operator()(SwTextGlyphsKey const & rKey) const { return rKey.mnHashCode; }
-};
-/**
- * Glyphs for the given SwTextGlyphsKey.
- */
-typedef std::unordered_map<SwTextGlyphsKey, SalLayoutGlyphs, SwTextGlyphsKeyHash> SwTextGlyphsMap;
 
 class SwFntObj final : public SwCacheObj
 {
@@ -105,12 +78,9 @@ class SwFntObj final : public SwCacheObj
     bool m_bSymbol : 1;
     bool m_bPaintBlank : 1;
 
-    /// Cache of already calculated layout glyphs and text widths.
-    SwTextGlyphsMap m_aTextGlyphs;
-
     void GetTextArray(const OutputDevice& rOutputDevice, const OUString& rStr,
                       std::vector<sal_Int32>& rDXAry, sal_Int32 nIndex, sal_Int32 nLen,
-                      bool bCaching, const vcl::text::TextLayoutCache* layoutCache = nullptr);
+                      const vcl::text::TextLayoutCache* layoutCache = nullptr);
     void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry,
                       sal_Int32 nLen);
     void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry);
@@ -143,8 +113,9 @@ public:
     sal_uInt16   GetPropWidth() const { return m_nPropWidth; }
     bool     IsSymbol() const { return m_bSymbol; }
 
-    SalLayoutGlyphs* GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* layoutCache);
-    void ClearCachedTextGlyphs();
+    const SalLayoutGlyphs* GetCachedSalLayoutGlyphs(const OutputDevice* pOutputDevice,
+        const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength,
+        const vcl::text::TextLayoutCache* layoutCache);
 
     void   DrawText( SwDrawTextInfo &rInf );
     /// determine the TextSize (of the printer)

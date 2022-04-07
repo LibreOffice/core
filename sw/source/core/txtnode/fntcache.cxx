@@ -26,11 +26,11 @@
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/lazydelete.hxx>
+#include <vcl/glyphitemcache.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <breakit.hxx>
-#include <config_fuzzers.h>
 #include <paintfrm.hxx>
 #include <viewsh.hxx>
 #include <viewopt.hxx>
@@ -70,34 +70,6 @@ constexpr Color gWaveCol(COL_GRAY);
 tools::Long SwFntObj::s_nPixWidth;
 MapMode* SwFntObj::s_pPixMap = nullptr;
 static vcl::DeleteOnDeinit< VclPtr<OutputDevice> > s_pFntObjPixOut {};
-
-/**
- * Defines a substring on a given output device, to be used as an std::unordered_map<>
- * key.
- */
-SwTextGlyphsKey::SwTextGlyphsKey(const OutputDevice* pOutputDevice, const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength)
-    : m_pOutputDevice(pOutputDevice), m_aText(sText), m_nIndex(nIndex), m_nLength(nLength)
-{
-    mnHashCode = 0;
-    o3tl::hash_combine(mnHashCode, pOutputDevice);
-    o3tl::hash_combine(mnHashCode, m_nIndex);
-    o3tl::hash_combine(mnHashCode, m_nLength);
-    if(m_nLength >= 0 && m_nIndex >= 0 && m_nIndex + m_nLength <= m_aText.getLength())
-        o3tl::hash_combine(mnHashCode, m_aText.getStr() + m_nIndex, m_nLength);
-}
-bool SwTextGlyphsKey::operator==(SwTextGlyphsKey const & rhs) const
-{
-    bool b = m_pOutputDevice.get() == rhs.m_pOutputDevice.get()
-            && m_nIndex == rhs.m_nIndex
-            && m_nLength == rhs.m_nLength
-            && m_aText.getLength() == rhs.m_aText.getLength();
-    if (!b)
-        return false;
-    if(m_nLength >= 0 && m_nIndex >= 0 && m_nIndex + m_nLength <= m_aText.getLength())
-        return m_aText.subView(m_nIndex,m_nLength) == rhs.m_aText.subView(m_nIndex, m_nLength);
-    return m_aText == rhs.m_aText;
-}
-
 
 namespace
 {
@@ -188,64 +160,12 @@ void SwFntObj::CreatePrtFont( const OutputDevice& rPrt )
 
 }
 
-#if !ENABLE_FUZZERS
-const SalLayoutFlags eGlyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly;
-#else
-// ofz#39150 skip detecting bidi directions
-const SalLayoutFlags eGlyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly | SalLayoutFlags::BiDiStrong;
-#endif
-
-/**
- * Pre-calculates glyph items for the rendered subset of rKey's text, assuming
- * outdev state does not change between the outdev calls.
- */
-static SalLayoutGlyphs* lcl_CreateLayout(const SwTextGlyphsKey& rKey, SwTextGlyphsMap::iterator it,
-                                         const vcl::text::TextLayoutCache* layoutCache)
+const SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const OutputDevice* pOutputDevice,
+    const OUString & sText, sal_Int32 nIndex, sal_Int32 nLength,
+    const vcl::text::TextLayoutCache* layoutCache)
 {
-    assert (!it->second.IsValid());
-
-    if (rKey.m_nIndex >= rKey.m_aText.getLength())
-        // Same as in OutputDevice::GetTextArray().
-        return nullptr;
-
-    // Calculate glyph items.
-    std::unique_ptr<SalLayout> pLayout
-        = rKey.m_pOutputDevice->ImplLayout(rKey.m_aText, rKey.m_nIndex, rKey.m_nLength, Point(0, 0), 0,
-                                           {}, eGlyphItemsOnlyLayout, layoutCache);
-    if (!pLayout)
-        return nullptr;
-
-    // Remember the calculation result.
-    it->second = pLayout->GetGlyphs();
-
-    return &it->second;
-}
-
-SalLayoutGlyphs* SwFntObj::GetCachedSalLayoutGlyphs(const SwTextGlyphsKey& key, const vcl::text::TextLayoutCache* layoutCache)
-{
-    SwTextGlyphsMap::iterator it = m_aTextGlyphs.find(key);
-    if(it != m_aTextGlyphs.end())
-    {
-        if( it->second.IsValid())
-            return &it->second;
-        // Do not try to create the layout here. If a cache item exists, it's already
-        // been attempted and the layout was invalid (this happens with MultiSalLayout).
-        // So in that case this is a cached failure.
-        return nullptr;
-    }
-    it = m_aTextGlyphs.insert_or_assign( it, key, SalLayoutGlyphs());
-    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
-    if( layoutCache == nullptr )
-    {
-        tmpLayoutCache = OutputDevice::CreateTextLayoutCache( key.m_aText );
-        layoutCache = tmpLayoutCache.get();
-    }
-    return lcl_CreateLayout(key, it, layoutCache);
-}
-
-void SwFntObj::ClearCachedTextGlyphs()
-{
-    m_aTextGlyphs.clear();
+    return SalLayoutGlyphsCache::self()->GetLayoutGlyphs(pOutputDevice, sText, nIndex, nLength,
+        0, layoutCache);
 }
 
 /*
@@ -845,33 +765,23 @@ static void lcl_DrawLineForWrongListData(
 }
 
 void SwFntObj::GetTextArray(const OutputDevice& rDevice, const OUString& rStr, std::vector<sal_Int32>& rDXAry,
-                            sal_Int32 nIndex, sal_Int32 nLen, bool bCaching, const vcl::text::TextLayoutCache* layoutCache)
+                            sal_Int32 nIndex, sal_Int32 nLen, const vcl::text::TextLayoutCache* layoutCache)
 {
-    SalLayoutGlyphs* pLayoutCache = nullptr;
-    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
-    if (bCaching)
-    {
-        SwTextGlyphsKey aGlyphsKey{&rDevice, rStr, nIndex, nLen};
-        pLayoutCache = GetCachedSalLayoutGlyphs(aGlyphsKey, layoutCache);
-        if(pLayoutCache == nullptr)
-        {   // Try to create at least the lower-level cache if possible.
-            tmpLayoutCache = OutputDevice::CreateTextLayoutCache( rStr );
-            layoutCache = tmpLayoutCache.get();
-        }
-    }
+    const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rDevice, rStr, nIndex, nLen,
+        0, layoutCache);
     rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, layoutCache, pLayoutCache);
 }
 
 void SwFntObj::GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry)
 {
-    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(), true, rInf.GetVclCache());
+    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(), rInf.GetVclCache());
 }
 
 void SwFntObj::GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry, sal_Int32 nLen)
 {
     // Substring is fine.
     assert( nLen <= rInf.GetLen().get());
-    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen, true, rInf.GetVclCache());
+    return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), nLen, rInf.GetVclCache());
 }
 
 void SwFntObj::DrawText( SwDrawTextInfo &rInf )
@@ -1818,8 +1728,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 sal_Int32 nTmpIdx = bBullet
                             ? (rInf.GetIdx() ? 1 : 0)
                             : sal_Int32(rInf.GetIdx());
-                SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pStr, nTmpIdx, nLen };
-                SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(aGlyphsKey, nullptr);
+                const SalLayoutGlyphs* pGlyphs = GetCachedSalLayoutGlyphs(&rInf.GetOut(),
+                     *pStr, nTmpIdx, nLen, nullptr);
                 rInf.GetOut().DrawTextArray( aTextOriginPos, *pStr, aKernArray,
                                              nTmpIdx , nLen, SalLayoutFlags::NONE, pGlyphs );
                 if (bBullet)
@@ -1982,7 +1892,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             rInf.GetOut().SetFont( *m_pScrFont );
 
         GetTextArray(*m_pPrinter, rInf.GetText(), aKernArray,
-                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn), false);
+                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
     }
     else
     {
@@ -2449,8 +2359,8 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
         {
             SwFntAccess aFntAccess(m_aSub[m_nActual].m_nFontCacheId, m_aSub[m_nActual].m_nFontIndex,
                                    &m_aSub[m_nActual], rInf.GetShell());
-            SwTextGlyphsKey aGlyphsKey{ &rInf.GetOut(), *pTmpText, sal_Int32(nTmpIdx), sal_Int32(nTmpLen) };
-            SalLayoutGlyphs* pGlyphs = aFntAccess.Get()->GetCachedSalLayoutGlyphs(aGlyphsKey, nullptr);
+            const SalLayoutGlyphs* pGlyphs = aFntAccess.Get()->GetCachedSalLayoutGlyphs(&rInf.GetOut(),
+                *pTmpText, nTmpIdx.get(), nTmpLen.get(), nullptr);
             nTextBreak = TextFrameIndex(rInf.GetOut().GetTextBreak(
                              *pTmpText, nTextWidth,
                              sal_Int32(nTmpIdx), sal_Int32(nTmpLen),
@@ -2643,12 +2553,6 @@ bool SwDrawTextInfo::ApplyAutoColor( vcl::Font* pFont )
     }
 
     return false;
-}
-
-void SwClearFntCacheTextGlyphs()
-{
-    for (SwFntObj* pFntObj = pFntCache->First(); pFntObj; pFntObj = SwFntCache::Next(pFntObj))
-        pFntObj->ClearCachedTextGlyphs();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
