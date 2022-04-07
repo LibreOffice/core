@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f4a8c26a_222d547b",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-07T23:01:04Z",
+      "side": 1,
+      "message": "well but lets get lines we touch right. 2nd line is not aligned with first one.",
+      "parentUuid": "b42c6ee7_365449c5",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9607389c_82564a59",
         "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
         "patchSetId": 18
@@ -189,6 +207,24 @@
       "side": 1,
       "message": "have only change my lines, not the others",
       "parentUuid": "3cd09101_4e0cd1a5",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "53db896d_f26c83e0",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-07T23:01:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88bac783_4e269032",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -578,6 +614,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "99aa0e0c_f7cfd5a8",
+        "filename": "embeddedobj/source/inc/commonembobj.hxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-07T23:01:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43ef1e52_acdc01b8",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87a5a87e_015ab431",
@@ -609,6 +663,24 @@
       "side": 1,
       "message": "only copy and past, and find a lot of file,\ngive me a hint for the right header, in TEMPLATE.SOURCECODE.HEADER not found a sample for hrc",
       "parentUuid": "87a5a87e_015ab431",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23017572_115e0e97",
+        "filename": "embeddedobj/source/inc/strings.hrc",
+        "patchSetId": 18
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-07T23:01:04Z",
+      "side": 1,
+      "message": "but hrc is essentially a c/c++ header - so the \u0027For C/C++/Java/IDL etc.\u0027 snippet from TEMPLATE.SOURCECODE.HEADER would do",
+      "parentUuid": "d82579df_7bf99933",
       "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
