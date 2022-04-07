@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8da1b2b_4bdfe016",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-07T16:09:36Z",
+      "side": 1,
+      "message": "No idea what might be suitable on windows, but could toggle off dark-mode on/off at least and SetWarningColor() with something that is probably readable.",
+      "revId": "b1afa9720c4d4e5be58350df2b2a4d4c5fca3d41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
