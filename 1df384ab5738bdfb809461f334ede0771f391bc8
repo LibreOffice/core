@@ -52,6 +52,24 @@
       "parentUuid": "3652e5b3_83e78124",
       "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33a520e9_7beff73d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-07T08:42:30Z",
+      "side": 1,
+      "message": "So what to do? And what happens, if you start LO on the 175% screen? Is that initially scaled correctly?",
+      "parentUuid": "16e4a6f0_06b27422",
+      "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
