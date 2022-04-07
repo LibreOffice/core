@@ -16,6 +16,24 @@
       "message": "So I rediscovered this bug. Maybe you have an alternative idea to break the recursion.",
       "revId": "d8d63d91fc2fd7ad2f15ec5b2ca38b840bf270ca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dd3772a_61540314",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-07T11:49:15Z",
+      "side": 1,
+      "message": "Looks good to me and works fine here, too (on the laptop that shows the problem otherwise). I don\u0027t have any other ideas at this point.",
+      "parentUuid": "8c8ed7d1_b3772796",
+      "revId": "d8d63d91fc2fd7ad2f15ec5b2ca38b840bf270ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
