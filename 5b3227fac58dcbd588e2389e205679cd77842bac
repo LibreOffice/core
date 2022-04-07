@@ -34,6 +34,24 @@
       "parentUuid": "977e5d4d_f0efc78d",
       "revId": "5b3227fac58dcbd588e2389e205679cd77842bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97ac9758_a61bc459",
+        "filename": "vcl/qt5/QtTransferable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-07T06:56:20Z",
+      "side": 1,
+      "message": "At a quick glance at https://code.qt.io/cgit/qt/qtbase.git/tree/src/corelib/kernel/qmimedata.cpp#n595 (in particular QMimeData::setData, QMimeDataPrivate::setData, QMimeData::hasFormat), I see no preprocessing at least on that Qt level, so we\u0027d presumably be out of luck then.\nOn the other hand, most Qt applications probably just use QMimeData::text() (mentioned as an alternative in the commit msg) to retrieve the data and would - as I understand it - thus fail the same way, so I\u0027m wondering whether it would actually make sense to try all kinds of variants here on LO side?\n(That\u0027s a serious question, not trying to indirectly say \"It doesn\u0027t make sense.\".)\n\nI think at least in theory, sane behavior should be ensured somewhere on \"lower levels\", ideally a spec that all implementations adhere to, then things being implemented on Qt level that can just be reused from here.\n\nFor Wayland, I found https://wayland.freedesktop.org/docs/html/ch04.html#sect-Protocol-data-sharing - which has this:\n\n\"MIME is defined in RFC\u0027s 2045-2049. A registry of MIME types [1] is maintained by the Internet Assigned Numbers Authority (IANA).\"\n[1] https://www.iana.org/assignments/media-types/media-types.xhtml\n\nOne would probably have to read the RFCs completely, but at least quickly searching for \"charset\" shows all kinds of variants that are used (upper/lower case, with/without space after the semicolon) and RFC6657 (\"Update to MIME regarding \"charset\" Parameter Handling in Textual Media Types.\", linked from the registry of MIME types linked above) uses uppercase values in its text...\n\nSo the short answer is probably that pretty much all places in QtTransferable currently expect lowercase and no space, which seems to be working in practice, but might not match everything that could be possible...\n(More research on lower levels would be needed to give a more definite answer.)",
+      "parentUuid": "da453f55_09f8df24",
+      "revId": "5b3227fac58dcbd588e2389e205679cd77842bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
