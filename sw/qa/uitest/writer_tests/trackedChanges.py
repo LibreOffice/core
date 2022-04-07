@@ -7,6 +7,7 @@
 
 from uitest.framework import UITestCase
 from uitest.uihelper.common import get_state_as_dict, get_url_for_data_file, type_text
+from libreoffice.uno.propertyvalue import mkPropertyValues
 
 class trackedchanges(UITestCase):
 
@@ -318,5 +319,34 @@ class trackedchanges(UITestCase):
 
             tables = document.getTextTables()
             self.assertEqual(3, len(tables))
+
+    def test_tdf147179(self):
+        with self.ui_test.load_file(get_url_for_data_file("TC-table-del-add.docx")) as document:
+            xWriterDoc = self.xUITest.getTopFocusWindow()
+            xWriterEdit = xWriterDoc.getChild("writer_edit")
+
+            tables = document.getTextTables()
+            self.assertEqual(3, len(tables))
+
+            # Select text of the tracked row, not only text of its first cell
+            with self.ui_test.execute_modeless_dialog_through_command(".uno:AcceptTrackedChanges", close_button="close") as xTrackDlg:
+                changesList = xTrackDlg.getChild("writerchanges")
+
+                # select second tracked table row in tree list
+                changesList.executeAction("TYPE", mkPropertyValues({"KEYCODE": "DOWN"}))
+                xToolkit = self.xContext.ServiceManager.createInstance('com.sun.star.awt.Toolkit')
+                while get_state_as_dict(xWriterEdit)["SelectedText"] != 'klj':
+                    xToolkit.processEventsToIdle()
+
+                # this was "j" (only text of the first cell was selected, not text of the row)
+                self.assertEqual(get_state_as_dict(xWriterEdit)["SelectedText"], "klj" )
+
+                # select first tracked table row in tree list
+                changesList.executeAction("TYPE", mkPropertyValues({"KEYCODE": "UP"}))
+                while get_state_as_dict(xWriterEdit)["SelectedText"] != 'bca':
+                    xToolkit.processEventsToIdle()
+
+                # this was "a" (only text of the first cell was selected, not text of the row)
+                self.assertEqual(get_state_as_dict(xWriterEdit)["SelectedText"], "bca" )
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
