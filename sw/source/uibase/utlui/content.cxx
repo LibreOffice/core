@@ -5074,9 +5074,8 @@ void SwContentTree::SelectContentType(std::u16string_view rContentTypeName)
     {
         if (m_xTreeView->get_text(*xIter) == rContentTypeName)
         {
-            m_xTreeView->unselect_all();
-            m_xTreeView->select(*xIter);
-            m_xTreeView->scroll_to_row(*xIter);
+            m_xTreeView->set_cursor(*xIter);
+            Select();
             break;
         }
     } while (m_xTreeView->iter_next_sibling(*xIter));
