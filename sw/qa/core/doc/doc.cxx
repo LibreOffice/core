@@ -82,6 +82,34 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTextboxTextRotateAngle)
     ErrorRegistry::Reset();
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testImageHyperlinkStyle)
+{
+    // Given a document with an image with a hyperlink:
+    loadURL("private:factory/swriter", nullptr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    uno::Reference<text::XTextContent> xImage(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xImage, /*bAbsorb=*/false);
+    uno::Reference<beans::XPropertySet> xImageProps(xImage, uno::UNO_QUERY);
+    OUString aExpected = "http://www.example.com";
+    xImageProps->setPropertyValue("HyperLinkURL", uno::makeAny(aExpected));
+
+    // When applying a frame style on it:
+    xImageProps->setPropertyValue("FrameStyleName", uno::makeAny(OUString("Frame")));
+
+    // Then make sure that the hyperlink is not lost:
+    auto aActual = getProperty<OUString>(xImageProps, "HyperLinkURL");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: http://www.example.com
+    // - Actual  :
+    // i.e. the link was lost, even if the frame style dialog doesn't allow specifying a link on
+    // frames.
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
