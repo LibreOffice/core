@@ -121,7 +121,6 @@ class ScDrawStringsVars
     tools::Long                nExpWidth;
 
     ScRefCellValue      maLastCell;
-    mutable SalLayoutGlyphsCache mCachedGlyphs;
     sal_uLong           nValueFormat;
     bool                bLineBreak;
     bool                bRepeat;
@@ -189,7 +188,7 @@ public:
     // to lay out the text, which is relatively slow, so cache that operation.
     const SalLayoutGlyphs*  GetLayoutGlyphs(const OUString& rString) const
     {
-        return mCachedGlyphs.GetLayoutGlyphs(pOutput->pFmtDevice, rString);
+        return SalLayoutGlyphsCache::self()->GetLayoutGlyphs(pOutput->pFmtDevice, rString);
     }
 
 private:
@@ -307,7 +306,6 @@ void ScDrawStringsVars::SetPattern(
     nSignWidth     = 0;
     nDotWidth      = 0;
     nExpWidth      = 0;
-    mCachedGlyphs.clear();
 
     pPattern = pNew;
     pCondSet = pSet;
@@ -462,7 +460,6 @@ void ScDrawStringsVars::SetPatternSimple( const ScPatternAttr* pNew, const SfxIt
     nSignWidth     = 0;
     nDotWidth      = 0;
     nExpWidth      = 0;
-    mCachedGlyphs.clear();
 
     // Is called, when the font variables do not change (!StringDiffer)
 

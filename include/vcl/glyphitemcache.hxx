@@ -40,10 +40,6 @@ If something more changes, call clear().
 class VCL_DLLPUBLIC SalLayoutGlyphsCache final
 {
 public:
-    SalLayoutGlyphsCache(int size = 1000)
-        : mCachedGlyphs(size)
-    {
-    }
     const SalLayoutGlyphs*
     GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
                     const vcl::text::TextLayoutCache* layoutCache = nullptr) const
@@ -55,6 +51,12 @@ public:
                     sal_Int32 nLen, tools::Long nLogicWidth = 0,
                     const vcl::text::TextLayoutCache* layoutCache = nullptr) const;
     void clear() { mCachedGlyphs.clear(); }
+
+    static SalLayoutGlyphsCache* self();
+    SalLayoutGlyphsCache(int size) // needs to be public for vcl::DeleteOnDeinit
+        : mCachedGlyphs(size)
+    {
+    }
 
 private:
     struct CachedGlyphsKey
