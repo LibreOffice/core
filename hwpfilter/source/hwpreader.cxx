@@ -2750,7 +2750,7 @@ void HwpReader::make_text_p1(HWPPara * para,bool bParaStart)
 void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
 {
     hchar_string str;
-    int n, res;
+    int res;
     hchar dest[3];
     unsigned char firstspace = 0;
     bool pstart = bParaStart;
@@ -2804,10 +2804,15 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         d->bInHeader = false;
     }
 
-    for (n = 0; n < para->nch && para->hhstr[n]->hh;
-        n += para->hhstr[n]->WSize())
+    int n = 0;
+    while (n < para->nch)
     {
-        if( para->hhstr[n]->hh == CH_END_PARA )
+        const auto& box = para->hhstr[n];
+
+        if (!box->hh)
+            break;
+
+        if (box->hh == CH_END_PARA)
         {
             if (!str.empty())
             {
@@ -2820,7 +2825,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             if( pstart ){ ENDP(); }
             break;
         }
-        else if( para->hhstr[n]->hh == CH_SPACE  && !firstspace)
+        else if (box->hh == CH_SPACE  && !firstspace)
         {
             if( !pstart ) {STARTP(); }
             if( !tstart ) {STARTT(n);}
@@ -2829,7 +2834,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
             mxList->clear();
             endEl("text:s");
         }
-        else if ( para->hhstr[n]->hh >= CH_SPACE )
+        else if (box->hh >= CH_SPACE)
         {
             if( n > 0 )
                 if( para->GetCharShape(n)->index != para->GetCharShape(n-1)->index && !infield )
@@ -2839,19 +2844,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                          makeChars(str);
                          ENDT();
                 }
-            if( para->hhstr[n]->hh == CH_SPACE )
+            if (box->hh == CH_SPACE)
                 firstspace = 0;
             else
                 firstspace = 1;
-            res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
+            res = hcharconv(box->hh, dest, UNICODE);
             for( int j = 0 ; j < res; j++ )
             {
                 str.push_back(dest[j]);
             }
         }
-        else if (para->hhstr[n]->hh == CH_FIELD)
+        else if (box->hh == CH_FIELD)
         {
-            FieldCode *hbox = static_cast<FieldCode*>(para->hhstr[n].get());
+            FieldCode *hbox = static_cast<FieldCode*>(box.get());
             if( hbox->location_info == 1)
             {
                 if( !pstart ) {STARTP(); }
@@ -2881,13 +2886,13 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
         }
         else
         {
-            switch (para->hhstr[n]->hh)
+            switch (box->hh)
             {
                 case CH_BOOKMARK:
                     if( !pstart ) {STARTP(); }
                     if( !tstart ) {STARTT(n);}
                     makeChars(str);
-                    makeBookmark(static_cast<Bookmark*>(para->hhstr[n].get()));
+                    makeBookmark(static_cast<Bookmark*>(box.get()));
                     break;
                 case CH_DATE_FORM:                // 7
                     break;
@@ -2895,7 +2900,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP(); }
                     if( !tstart ) {STARTT(n);}
                     makeChars(str);
-                    makeDateCode(static_cast<DateCode*>(para->hhstr[n].get()));
+                    makeDateCode(static_cast<DateCode*>(box.get()));
                     break;
                 case CH_TAB:                      // 9
                     if( !pstart ) {STARTP(); }
@@ -2909,7 +2914,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 case CH_TEXT_BOX:                 /* 10 - ordered by Table/text box/formula/button/hypertext */
                 {
                     /* produce tables first, and treat formula as being in text:p. */
-                    TxtBox *hbox = static_cast<TxtBox*>(para->hhstr[n].get());
+                    TxtBox *hbox = static_cast<TxtBox*>(box.get());
 
                     if( hbox->style.anchor_type == 0 )
                     {
@@ -2943,7 +2948,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 }
                 case CH_PICTURE:                  // 11
                 {
-                    Picture *hbox = static_cast<Picture*>(para->hhstr[n].get());
+                    Picture *hbox = static_cast<Picture*>(box.get());
                     if( hbox->style.anchor_type == 0 )
                     {
                         if( !pstart ) {STARTP(); }
@@ -2981,19 +2986,19 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP();}
                     if( !tstart ) {STARTT(n);}
                     makeChars(str);
-                    makeHidden(static_cast<Hidden*>(para->hhstr[n].get()));
+                    makeHidden(static_cast<Hidden*>(box.get()));
                     break;
                 case CH_FOOTNOTE:                 // 17
                     if( !pstart ) {STARTP();}
                     if( !tstart ) {STARTT(n);}
                     makeChars(str);
-                    makeFootnote(static_cast<Footnote*>(para->hhstr[n].get()));
+                    makeFootnote(static_cast<Footnote*>(box.get()));
                     break;
                 case CH_AUTO_NUM:                 // 18
                     if( !pstart ) {STARTP();}
                     if( !tstart ) {STARTT(n);}
                     makeChars(str);
-                    makeAutoNum(static_cast<AutoNum*>(para->hhstr[n].get()));
+                    makeAutoNum(static_cast<AutoNum*>(box.get()));
                     break;
                 case CH_NEW_NUM:                  // 19 -skip
                     break;
@@ -3003,7 +3008,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP();}
                     if( !tstart ) {STARTT(n);}
                     makeChars(str);
-                    makeMailMerge(static_cast<MailMerge*>(para->hhstr[n].get()));
+                    makeMailMerge(static_cast<MailMerge*>(box.get()));
                     break;
                 case CH_COMPOSE:                  /* 23 - overlapping letters */
                     break;
@@ -3023,7 +3028,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                     if( !pstart ) {STARTP();}
                     if( !tstart ) {STARTT(n);}
                     makeChars(str);
-                    makeOutline(static_cast<Outline *>(para->hhstr[n].get()));
+                    makeOutline(static_cast<Outline *>(box.get()));
                     break;
                      case CH_FIXED_SPACE:
                      case CH_KEEP_SPACE:
@@ -3031,6 +3036,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                           break;
                 }
         }
+        n += box->WSize();
     }
 }
 
