@@ -4849,9 +4849,11 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
     }
     if(EditEntryMode::DELETE == nMode)
     {
+        auto nPos = m_xTreeView->vadjustment_get_value();
         m_bViewHasChanged = true;
         TimerUpdate(&m_aUpdTimer);
         grab_focus();
+        m_xTreeView->vadjustment_set_value(nPos);
     }
 }
 
