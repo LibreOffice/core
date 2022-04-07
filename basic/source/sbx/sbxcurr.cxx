@@ -21,6 +21,7 @@
 
 #include <basic/sberrors.hxx>
 #include <basic/sbxvar.hxx>
+#include <o3tl/string_view.hxx>
 #include "sbxconv.hxx"
 
 
@@ -85,7 +86,7 @@ static OUString ImpCurrencyToString( sal_Int64 rVal )
 }
 
 
-static sal_Int64 ImpStringToCurrency( const OUString &rStr )
+static sal_Int64 ImpStringToCurrency( std::u16string_view rStr )
 {
 
     sal_Int32   nFractDigit = 4;
@@ -99,16 +100,16 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     // we should share some existing ( possibly from calc is there a currency
     // conversion there ? #TODO check )
 
-    OUString sTmp( rStr.trim() );
-    const sal_Unicode* p =  sTmp.getStr();
+    std::u16string_view sTmp = o3tl::trim( rStr );
+    auto p = sTmp.begin();
 
     // normalise string number by removing thousand & decimal point separators
-    OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
+    OUStringBuffer sNormalisedNumString( static_cast<sal_Int32>(sTmp.size()) + nFractDigit );
 
     if ( *p == '-'  || *p == '+' )
         sNormalisedNumString.append( *p++ );
 
-    while ( *p >= '0' && *p <= '9' )
+    while ( p != sTmp.end() && *p >= '0' && *p <= '9' )
     {
         sNormalisedNumString.append( *p++ );
         // #TODO in vba mode set runtime error when a space ( or other )
@@ -122,27 +123,23 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     if( *p == cDeciPnt )
     {
         p++;
-        while( nFractDigit && *p >= '0' && *p <= '9' )
+        while( nFractDigit && p != sTmp.end() && *p >= '0' && *p <= '9' )
         {
             sNormalisedNumString.append( *p++ );
             nFractDigit--;
         }
         // Consume trailing content
-        if ( p != nullptr )
-        {
-            // Round up if necessary
-            if( *p >= '5' && *p <= '9' )
-                bRoundUp = true;
-            while( *p >= '0' && *p <= '9' )
-                p++;
-        }
-
+        // Round up if necessary
+        if( *p >= '5' && *p <= '9' )
+            bRoundUp = true;
+        while( p != sTmp.end() && *p >= '0' && *p <= '9' )
+            p++;
     }
     // can we raise error here ? ( previous behaviour was more forgiving )
     // so... not sure that could break existing code, let's see if anyone
     // complains.
 
-    if ( p != sTmp.getStr() + sTmp.getLength() )
+    if ( p != sTmp.end() )
         SbxBase::SetError( ERRCODE_BASIC_CONVERSION );
     while( nFractDigit )
     {

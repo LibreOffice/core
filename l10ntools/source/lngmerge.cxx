@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <o3tl/string_view.hxx>
+
 #include <cstddef>
 #include <iostream>
 #include <memory>
@@ -30,11 +32,11 @@
 
 namespace {
 
-bool lcl_isNextGroup(OString &sGroup_out, const OString &sLineTrim)
+bool lcl_isNextGroup(OString &sGroup_out, std::string_view sLineTrim)
 {
-    if (sLineTrim.startsWith("[") && sLineTrim.endsWith("]"))
+    if (o3tl::starts_with(sLineTrim, "[") && o3tl::ends_with(sLineTrim, "]"))
     {
-        sGroup_out = sLineTrim.getToken(1, '[').getToken(0, ']').trim();
+        sGroup_out = OString(sLineTrim).getToken(1, '[').getToken(0, ']').trim();
         return true;
     }
     return false;
@@ -125,9 +127,9 @@ void LngParser::WritePO(PoOfstream &aPOStream,
         rID, OString(), rText_inout.count("x-comment") ? rText_inout["x-comment"] : OString(), rText_inout["en-US"]);
 }
 
-bool LngParser::isNextGroup(OString &sGroup_out, const OString &sLine_in)
+bool LngParser::isNextGroup(OString &sGroup_out, std::string_view sLine_in)
 {
-    return lcl_isNextGroup(sGroup_out, sLine_in.trim());
+    return lcl_isNextGroup(sGroup_out, o3tl::trim(sLine_in));
 }
 
 void LngParser::ReadLine(const OString &rLine_in,

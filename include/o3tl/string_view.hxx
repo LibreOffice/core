@@ -238,6 +238,72 @@ constexpr bool ends_with(std::u16string_view sv, std::u16string_view x,
 {
     return ends_with<char16_t>(sv, x, rest);
 }
+
+namespace internal
+{
+// copy of rtl_ImplIsWhitespace from sal/rtl/strimp.cxx
+inline bool rtl_ImplIsWhitespace(sal_Unicode c)
+{
+    /* Space or Control character? */
+    if ((c <= 32) && c)
+        return true;
+
+    /* Only in the General Punctuation area Space or Control characters are included? */
+    if ((c < 0x2000) || (c > 0x206F))
+        return false;
+
+    if (((c >= 0x2000) && (c <= 0x200B)) || /* All Spaces           */
+        (c == 0x2028) || /* LINE SEPARATOR       */
+        (c == 0x2029)) /* PARAGRAPH SEPARATOR  */
+        return true;
+
+    return false;
+}
+} // namespace internal
+
+// Like OUString::trim, but for std::u16string_view:
+// copy of the trimView code from sal/rtl/strtmpl.hxx
+inline std::u16string_view trim(std::u16string_view str)
+{
+    sal_Int32 nLen = str.size();
+    sal_Int32 nPreSpaces = 0;
+    sal_Int32 nPostSpaces = 0;
+    sal_Int32 nIndex = str.size() - 1;
+
+    while ((nPreSpaces < nLen) && internal::rtl_ImplIsWhitespace(*(str.data() + nPreSpaces)))
+        nPreSpaces++;
+
+    while ((nIndex > nPreSpaces) && internal::rtl_ImplIsWhitespace(*(str.data() + nIndex)))
+    {
+        nPostSpaces++;
+        nIndex--;
+    }
+
+    return std::u16string_view{ str.data() + nPreSpaces,
+                                static_cast<size_t>(nLen - nPostSpaces - nPreSpaces) };
+}
+
+// Like OString::trim, but for std::string_view:
+// copy of the trimView code from sal/rtl/strtmpl.hxx
+inline std::string_view trim(std::string_view str)
+{
+    sal_Int32 nLen = str.size();
+    sal_Int32 nPreSpaces = 0;
+    sal_Int32 nPostSpaces = 0;
+    sal_Int32 nIndex = str.size() - 1;
+
+    while ((nPreSpaces < nLen) && internal::rtl_ImplIsWhitespace(*(str.data() + nPreSpaces)))
+        nPreSpaces++;
+
+    while ((nIndex > nPreSpaces) && internal::rtl_ImplIsWhitespace(*(str.data() + nIndex)))
+    {
+        nPostSpaces++;
+        nIndex--;
+    }
+
+    return std::string_view{ str.data() + nPreSpaces,
+                             static_cast<size_t>(nLen - nPostSpaces - nPreSpaces) };
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

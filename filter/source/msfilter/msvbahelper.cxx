@@ -38,7 +38,8 @@
 #include <unotools/pathoptions.hxx>
 #include <rtl/character.hxx>
 #include <sfx2/objsh.hxx>
-
+#include <o3tl/string_view.hxx>
+#include <o3tl/string_view.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -66,13 +67,13 @@ OUString extractMacroName( const OUString& rMacroUrl )
     return OUString();
 }
 
-static OUString trimMacroName( const OUString& rMacroName )
+static std::u16string_view trimMacroName( std::u16string_view rMacroName )
 {
     // the name may contain whitespaces and may be enclosed in apostrophs
-    OUString aMacroName = rMacroName.trim();
-    sal_Int32 nMacroLen = aMacroName.getLength();
+    std::u16string_view aMacroName = o3tl::trim(rMacroName);
+    size_t nMacroLen = aMacroName.size();
     if( (nMacroLen >= 2) && (aMacroName[ 0 ] == '\'') && (aMacroName[ nMacroLen - 1 ] == '\'') )
-        aMacroName = aMacroName.copy( 1, nMacroLen - 2 ).trim();
+        aMacroName = o3tl::trim(aMacroName.substr( 1, nMacroLen - 2 ));
     return aMacroName;
 }
 
@@ -290,34 +291,34 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
         return MacroResolvedInfo();
 
     // the name may be enclosed in apostrophs
-    OUString aMacroName = trimMacroName( MacroName );
+    std::u16string_view aMacroName = trimMacroName( MacroName );
 
     // parse the macro name
-    sal_Int32 nDocSepIndex = aMacroName.indexOf( '!' );
-    if( nDocSepIndex > 0 )
+    size_t nDocSepIndex = aMacroName.find( '!' );
+    if( nDocSepIndex > 0 && nDocSepIndex != std::u16string_view::npos )
     {
         // macro specified by document name
         // find document shell for document name and call ourselves
         // recursively
 
         // assume for now that the document name is *this* document
-        OUString sDocUrlOrPath = aMacroName.copy( 0, nDocSepIndex );
-        aMacroName = aMacroName.copy( nDocSepIndex + 1 );
+        std::u16string_view sDocUrlOrPath = aMacroName.substr( 0, nDocSepIndex );
+        aMacroName = aMacroName.substr( nDocSepIndex + 1 );
         SAL_INFO("filter.ms", "doc search, current shell is " << pShell);
         SfxObjectShell* pFoundShell = nullptr;
         if( bSearchGlobalTemplates )
         {
             SvtPathOptions aPathOpt;
             const OUString& aAddinPath = aPathOpt.GetAddinPath();
-            if( sDocUrlOrPath.startsWith( aAddinPath ) )
+            if( o3tl::starts_with(sDocUrlOrPath, aAddinPath) )
                 pFoundShell = pShell;
         }
         if( !pFoundShell )
-            pFoundShell = findShellForUrl( sDocUrlOrPath );
+            pFoundShell = findShellForUrl( OUString(sDocUrlOrPath) );
         SAL_INFO(
             "filter.ms",
             "doc search, after find, found shell is " << pFoundShell);
-        return resolveVBAMacro( pFoundShell, aMacroName );
+        return resolveVBAMacro( pFoundShell, OUString(aMacroName) );
     }
 
     // macro is contained in 'this' document ( or code imported from a template
@@ -328,7 +329,7 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& Macro
 
     // macro format = Container.Module.Procedure
     OUString sContainer, sModule, sProcedure;
-    parseMacro( aMacroName, sContainer, sModule, sProcedure );
+    parseMacro( OUString(aMacroName), sContainer, sModule, sProcedure );
 
 #if 0
     // As long as service VBAProjectNameProvider isn't supported in the model, disable the createInstance call
@@ -553,7 +554,7 @@ OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& 
         throw uno::RuntimeException();
 
     // the name may be enclosed in apostrophs
-    OUString aMacroName = trimMacroName( rVBAMacroName );
+    OUString aMacroName( trimMacroName( rVBAMacroName ) );
     if( aMacroName.isEmpty() )
         throw lang::IllegalArgumentException();
 
