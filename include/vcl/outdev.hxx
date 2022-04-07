@@ -1074,7 +1074,8 @@ public:
                                               sal_Unicode nExtraChar, sal_Int32& rExtraCharPos,
                                               sal_Int32 nIndex, sal_Int32 nLen,
                                               tools::Long nCharExtra,
-                                              vcl::text::TextLayoutCache const* = nullptr) const;
+                                              vcl::text::TextLayoutCache const* = nullptr,
+                                              const SalLayoutGlyphs* pGlyphs = nullptr) const;
     static std::shared_ptr<const vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
 
 protected:
