@@ -16,6 +16,24 @@
       "message": "Just curious, if QtMimeData::hasFormat is case-insensitive (or maybe operates on pre-processed data) - what if the content type string is provided as \";charset\u003dUTF-8\" by the other party?",
       "revId": "5b3227fac58dcbd588e2389e205679cd77842bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da453f55_09f8df24",
+        "filename": "vcl/qt5/QtTransferable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-07T05:57:52Z",
+      "side": 1,
+      "message": "... and/or has a space between \u0027;\u0027 and \u0027charset\u0027.",
+      "parentUuid": "977e5d4d_f0efc78d",
+      "revId": "5b3227fac58dcbd588e2389e205679cd77842bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
