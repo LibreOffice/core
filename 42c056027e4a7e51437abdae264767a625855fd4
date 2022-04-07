@@ -16,6 +16,24 @@
       "message": "I\u0027m thinking perhaps I should be putting some of the string_view methods into o3tl? \n\nThen we won\u0027t have issues with include/linking to comphelper",
       "revId": "42c056027e4a7e51437abdae264767a625855fd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61425574_df9872c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-07T08:54:43Z",
+      "side": 1,
+      "message": "\u003e I\u0027m thinking perhaps I should be putting some of the string_view methods into o3tl? \n\nyeah, we already have include/o3tl/string_view.hxx, both for temporary proxies for functionality from later C++ standards (e.g., o3tl::starts_with) and for our own idiosyncratic functionality (e.g., o3tl::equalsIgnoreAsciiCase)",
+      "parentUuid": "1feec6bf_e97f1f8d",
+      "revId": "42c056027e4a7e51437abdae264767a625855fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
