@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1feec6bf_e97f1f8d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-07T08:48:28Z",
+      "side": 1,
+      "message": "I\u0027m thinking perhaps I should be putting some of the string_view methods into o3tl? \n\nThen we won\u0027t have issues with include/linking to comphelper",
+      "revId": "42c056027e4a7e51437abdae264767a625855fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
