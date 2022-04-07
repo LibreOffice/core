@@ -145,6 +145,7 @@
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
 #include <strings.hrc>
+#include <textcontentcontrol.hxx>
 
 using namespace sw::mark;
 using namespace ::com::sun::star;
@@ -4732,7 +4733,8 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
 
                         SwContentAtPos aContentAtPos( IsAttrAtPos::Field |
                                                     IsAttrAtPos::InetAttr |
-                                                    IsAttrAtPos::SmartTag  | IsAttrAtPos::FormControl);
+                                                    IsAttrAtPos::SmartTag  | IsAttrAtPos::FormControl |
+                                                    IsAttrAtPos::ContentControl);
 
                         if( rSh.GetContentAtPos( aDocPt, aContentAtPos ) )
                         {
@@ -4786,6 +4788,15 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 {
                                     rSh.LeaveAddMode();
                                 }
+                            }
+                            else if (aContentAtPos.eContentAtPos == IsAttrAtPos::ContentControl)
+                            {
+                                auto pTextContentControl
+                                    = static_txtattr_cast<const SwTextContentControl*>(
+                                        aContentAtPos.pFndTextAttr);
+                                const SwFormatContentControl& rFormatContentControl
+                                    = pTextContentControl->GetContentControl();
+                                rSh.GotoContentControl(rFormatContentControl);
                             }
                             else if ( IsAttrAtPos::SmartTag == aContentAtPos.eContentAtPos )
                             {

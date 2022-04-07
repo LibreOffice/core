@@ -83,6 +83,26 @@ bool SwWrtShell::GotoField( const SwFormatField& rField )
     return bRet;
 }
 
+bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentControl)
+{
+    (this->*m_fnKillSel)(nullptr, false);
+
+    bool bRet = SwCursorShell::GotoFormatContentControl(rContentControl);
+    if (bRet && IsSelFrameMode())
+    {
+        UnSelectFrame();
+        LeaveSelFrameMode();
+    }
+
+    if (IsSelection())
+    {
+        m_fnKillSel = &SwWrtShell::ResetSelect;
+        m_fnSetCursor = &SwWrtShell::SetCursorKillSel;
+    }
+
+    return bRet;
+}
+
 bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 {
     (this->*m_fnKillSel)( nullptr, false );
