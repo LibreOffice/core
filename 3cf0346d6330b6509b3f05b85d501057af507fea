@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5aee22f2_036b39c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-07T17:58:21Z",
+      "side": 1,
+      "message": "Take over Verified+1 from PS1, only commit msg update in PS2",
+      "revId": "3cf0346d6330b6509b3f05b85d501057af507fea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
