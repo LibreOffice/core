@@ -60,6 +60,7 @@
 #include <com/sun/star/util/InvalidStateException.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/enumhelper.hxx>
+#include <comphelper/string.hxx>
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/multicontainer2.hxx>
@@ -3558,7 +3559,7 @@ static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< cont
             GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
             if ( nIndex >= 0 && aCommand.startsWith( "slot:" ) )
             {
-                const sal_uInt16 nSlot = aCommand.copy( 5 ).toInt32();
+                const sal_uInt16 nSlot = comphelper::string::toInt32(aCommand.subView( 5 ));
 
                 // We have to replace the old "slot-Command" with our new ".uno:-Command"
                 const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( nSlot );

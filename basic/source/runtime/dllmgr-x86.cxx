@@ -584,7 +584,7 @@ ErrCode getProcData(HMODULE handle, OUString const & name, ProcData * proc)
 {
     assert(proc != 0);
     if ( !name.isEmpty() && name[0] == '@' ) { //TODO: "@" vs. "#"???
-        sal_Int32 n = name.copy(1).toInt32(); //TODO: handle bad input
+        sal_Int32 n = comphelper::string::toInt32(name.subView(1)); //TODO: handle bad input
         if (n <= 0 || n > 0xFFFF) {
             return ERRCODE_BASIC_BAD_ARGUMENT; //TODO: more specific errcode?
         }

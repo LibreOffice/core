@@ -789,7 +789,7 @@ static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )
     }
     else
     {
-        nRet = rStr.copy( 0, nPos ).toInt32();
+        nRet = comphelper::string::toInt32(rStr.subView( 0, nPos ));
         rStr = rStr.copy( nPos+1 );
     }
     return nRet;

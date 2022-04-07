@@ -63,6 +63,7 @@
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
 #include <tools/diagnose_ex.h>
+#include <comphelper/string.hxx>
 
 namespace oox::ole {
 
@@ -837,8 +838,8 @@ void AxControlModelBase::importProperty( sal_Int32 nPropId, const OUString& rVal
             OSL_ENSURE( nSepPos >= 0, "AxControlModelBase::importProperty - missing separator in 'Size' property" );
             if( nSepPos >= 0 )
             {
-                maSize.first = rValue.copy( 0, nSepPos ).toInt32();
-                maSize.second = rValue.copy( nSepPos + 1 ).toInt32();
+                maSize.first = comphelper::string::toInt32(rValue.subView( 0, nSepPos ));
+                maSize.second = comphelper::string::toInt32(rValue.subView( nSepPos + 1 ));
             }
         }
         break;

@@ -62,6 +62,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/namecontainer.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/extract.hxx>
@@ -1829,11 +1830,11 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
         sal_Int32 nIndex = aBuildId.indexOf('$');
         if (nIndex != -1)
         {
-            rUPD = aBuildId.copy( 0, nIndex ).toInt32();
+            rUPD = comphelper::string::toInt32(aBuildId.subView( 0, nIndex ));
             sal_Int32 nIndexEnd = aBuildId.indexOf(';', nIndex);
             rBuild = (nIndexEnd == -1)
-                ? aBuildId.copy(nIndex + 1).toInt32()
-                : aBuildId.copy(nIndex + 1, nIndexEnd - nIndex - 1).toInt32();
+                ? comphelper::string::toInt32(aBuildId.subView(nIndex + 1))
+                : comphelper::string::toInt32(aBuildId.subView(nIndex + 1, nIndexEnd - nIndex - 1));
             bRet = true;
         }
     }

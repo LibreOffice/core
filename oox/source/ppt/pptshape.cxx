@@ -42,6 +42,7 @@
 #include <oox/ppt/slidepersist.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/token/properties.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::oox::core;
 using namespace ::oox::drawingml;
@@ -473,7 +474,7 @@ void PPTShape::addShape(
                             if (xNamed->getName().startsWith(aTitleText, &sRest)
                                 && (sRest.isEmpty()
                                     || (sRest.startsWith(" (") && sRest.endsWith(")")
-                                        && sRest.copy(2, sRest.getLength() - 3).toInt32() > 0)))
+                                        && comphelper::string::toInt32(sRest.subView(2, sRest.getLength() - 3)) > 0)))
                                 nCount++;
                         }
                         Reference<container::XNamed> xName(rSlidePersist.getPage(), UNO_QUERY_THROW);
@@ -620,7 +621,7 @@ void PPTShape::addShape(
                             sal_Int32 nPageNumber = 0;
                             static const OUStringLiteral sSlide = u"Slide ";
                             if (sURL.match(sSlide))
-                                nPageNumber = sURL.copy(sSlide.getLength()).toInt32();
+                                nPageNumber = comphelper::string::toInt32(sURL.subView(sSlide.getLength()));
                             Reference<drawing::XDrawPagesSupplier> xDPS(rFilterBase.getModel(),
                                                                         uno::UNO_QUERY_THROW);
                             Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(),

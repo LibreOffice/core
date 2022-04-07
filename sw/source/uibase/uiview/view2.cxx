@@ -116,6 +116,7 @@
 #include <dbmgr.hxx>
 #include <reffld.hxx>
 #include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
 
 #include <PostItMgr.hxx>
 
@@ -2159,7 +2160,7 @@ auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
         SAL_WARN("sw.ui", "JumpToTOXMark: missing separator");
         return std::optional<std::pair<SwTOXMark, sal_Int32>>();
     }
-    sal_Int32 const counter(rName.copy(0, first).toInt32());
+    sal_Int32 const counter(comphelper::string::toInt32(rName.subView(0, first)));
     if (counter <= 0)
     {
         SAL_WARN("sw.ui", "JumpToTOXMark: invalid counter");
@@ -2306,7 +2307,7 @@ bool SwView::JumpToSwMark( std::u16string_view rMark )
                 sal_Int32 nNoPos = sName.indexOf( cSequenceMarkSeparator );
                 if ( nNoPos != -1 )
                 {
-                    sal_uInt16 nSeqNo = sName.copy( nNoPos + 1 ).toInt32();
+                    sal_uInt16 nSeqNo = comphelper::string::toInt32(sName.subView( nNoPos + 1 ));
                     sName = sName.copy( 0, nNoPos );
                     bRet = m_pWrtShell->GotoRefMark(sName, REF_SEQUENCEFLD, nSeqNo);
                 }

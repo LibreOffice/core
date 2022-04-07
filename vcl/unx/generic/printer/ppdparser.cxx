@@ -1527,11 +1527,11 @@ void PPDParser::getResolutionFromString(
         const sal_Int32 nPos {rString.indexOf( 'x' )};
         if( nPos >=0 )
         {
-            rXRes = rString.copy( 0, nPos ).toInt32();
-            rYRes = rString.copy(nPos+1, nDPIPos - nPos - 1).toInt32();
+            rXRes = comphelper::string::toInt32(rString.subView( 0, nPos ));
+            rYRes = comphelper::string::toInt32(rString.subView(nPos+1, nDPIPos - nPos - 1));
         }
         else
-            rXRes = rYRes = rString.copy( 0, nDPIPos ).toInt32();
+            rXRes = rYRes = comphelper::string::toInt32(rString.subView( 0, nDPIPos ));
     }
 }
 

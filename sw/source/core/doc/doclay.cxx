@@ -83,6 +83,7 @@
 #include <strings.hrc>
 #include <frameformats.hxx>
 #include <tools/datetimeutils.hxx>
+#include <comphelper/string.hxx>
 
 #include <sortedobjs.hxx>
 
@@ -1277,7 +1278,7 @@ static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 
     if (rName.startsWith(rCmpName))
     {
         // Only get and set the Flag
-        const sal_Int32 nNum = rName.copy(nNmLen).toInt32() - 1;
+        const sal_Int32 nNum = comphelper::string::toInt32(rName.subView(nNmLen)) - 1;
         if (nNum >= 0)
             rSetFlags.push_back(nNum);
     }
@@ -1483,7 +1484,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
                 if ( pNum )
                 {
-                    const sal_Int32 nNewLen = aNm.copy( nLen ).toInt32();
+                    const sal_Int32 nNewLen = comphelper::string::toInt32(aNm.subView( nLen ));
                     if (*pNum < nNewLen)
                         *pNum = nNewLen;
                 }

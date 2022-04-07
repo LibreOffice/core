@@ -21,6 +21,7 @@
 
 #include <o3tl/safeint.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/string.hxx>
 
 #include <sfx2/mieclip.hxx>
 
@@ -48,13 +49,13 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
             nIndex = 0;
             OString sTmp(sLine.getToken(0, ':', nIndex));
             if (sTmp == "StartHTML")
-                nStt = sLine.copy(nIndex).toInt32();
+                nStt = comphelper::string::toInt32(sLine.subView(nIndex));
             else if (sTmp == "EndHTML")
-                nEnd = sLine.copy(nIndex).toInt32();
+                nEnd = comphelper::string::toInt32(sLine.subView(nIndex));
             else if (sTmp == "StartFragment")
-                nFragStart = sLine.copy(nIndex).toInt32();
+                nFragStart = comphelper::string::toInt32(sLine.subView(nIndex));
             else if (sTmp == "EndFragment")
-                nFragEnd = sLine.copy(nIndex).toInt32();
+                nFragEnd = comphelper::string::toInt32(sLine.subView(nIndex));
             else if (sTmp == "SourceURL")
                 sBaseURL = OStringToOUString( sLine.subView(nIndex), RTL_TEXTENCODING_UTF8 );
 
