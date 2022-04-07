@@ -696,7 +696,7 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
     rFormat.ResetFormatAttr( RES_PRINT, RES_SURROUND );
     rFormat.ResetFormatAttr( RES_LR_SPACE, RES_UL_SPACE );
     rFormat.ResetFormatAttr( RES_BACKGROUND, RES_COL );
-    rFormat.ResetFormatAttr( RES_URL, RES_EDIT_IN_READONLY );
+    rFormat.ResetFormatAttr( RES_EDIT_IN_READONLY );
 
     if( !bFrameSz )
         rFormat.SetFormatAttr( aFrameSz );
