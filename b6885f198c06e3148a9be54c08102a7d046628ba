@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "70703a1f_dded9c9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-07T10:15:11Z",
+      "side": 1,
+      "message": "IRRELEVANT NOTE: Page 3 page-style needs to be landscape, although I don\u0027t see how this can be done for only one page. (It was already like this when introduced in 7.0.) [It can\u0027t be done. That\u0027s bug 49787.]\n\nI\u0027m not really sure what to look for in Draw/Impress stuff. I didn\u0027t notice anything obviously wrong when I opened the template.",
+      "revId": "b6885f198c06e3148a9be54c08102a7d046628ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0f582d7_24fee286",
