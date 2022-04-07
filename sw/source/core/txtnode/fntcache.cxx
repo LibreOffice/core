@@ -2340,19 +2340,21 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
 
         if( rInf.GetHyphPos() ) {
             sal_Int32 nHyphPos = sal_Int32(*rInf.GetHyphPos());
+            const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(
+                &rInf.GetOut(), *pTmpText, nTmpIdx.get(), nTmpLen.get(), 0, rInf.GetVclCache());
             nTextBreak = TextFrameIndex(rInf.GetOut().GetTextBreak(
                              *pTmpText, nTextWidth,
                              u'-', nHyphPos,
                              sal_Int32(nTmpIdx), sal_Int32(nTmpLen),
-                             nKern, rInf.GetVclCache()));
+                             nKern, rInf.GetVclCache(), pGlyphs));
             *rInf.GetHyphPos() = TextFrameIndex((nHyphPos == -1) ? COMPLETE_STRING : nHyphPos);
         }
         else
         {
             SwFntAccess aFntAccess(m_aSub[m_nActual].m_nFontCacheId, m_aSub[m_nActual].m_nFontIndex,
                                    &m_aSub[m_nActual], rInf.GetShell());
-            const SalLayoutGlyphs* pGlyphs = aFntAccess.Get()->GetCachedSalLayoutGlyphs(&rInf.GetOut(),
-                *pTmpText, nTmpIdx.get(), nTmpLen.get(), nullptr);
+            const SalLayoutGlyphs* pGlyphs = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rInf.GetOut(),
+                *pTmpText, nTmpIdx.get(), nTmpLen.get(), 0, rInf.GetVclCache());
             nTextBreak = TextFrameIndex(rInf.GetOut().GetTextBreak(
                              *pTmpText, nTextWidth,
                              sal_Int32(nTmpIdx), sal_Int32(nTmpLen),

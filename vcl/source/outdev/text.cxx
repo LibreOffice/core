@@ -1508,12 +1508,13 @@ sal_Int32 OutputDevice::GetTextBreak( const OUString& rStr, tools::Long nTextWid
                                        sal_Unicode nHyphenChar, sal_Int32& rHyphenPos,
                                        sal_Int32 nIndex, sal_Int32 nLen,
                                        tools::Long nCharExtra,
-         vcl::text::TextLayoutCache const*const pLayoutCache) const
+         vcl::text::TextLayoutCache const*const pLayoutCache,
+         const SalLayoutGlyphs* pGlyphs) const
 {
     rHyphenPos = -1;
 
     std::unique_ptr<SalLayout> pSalLayout = ImplLayout( rStr, nIndex, nLen,
-            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache);
+            Point(0,0), 0, {}, eDefaultLayout, pLayoutCache, pGlyphs);
     sal_Int32 nRetVal = -1;
     if( pSalLayout )
     {
