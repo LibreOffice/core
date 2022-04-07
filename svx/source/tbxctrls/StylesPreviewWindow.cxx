@@ -27,6 +27,7 @@
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewsh.hxx>
+#include <vcl/glyphitemcache.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/settings.hxx>
 
@@ -354,7 +355,7 @@ void StyleItemController::DrawHighlight(vcl::RenderContext& rRenderContext, Colo
 void StyleItemController::DrawText(vcl::RenderContext& rRenderContext)
 {
     const SalLayoutGlyphs* layoutGlyphs
-        = m_GlyphsCache.GetLayoutGlyphs(&rRenderContext, m_aStyleName.second);
+        = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rRenderContext, m_aStyleName.second);
     tools::Rectangle aTextRect;
     rRenderContext.GetTextBoundRect(aTextRect, m_aStyleName.second, 0, 0, -1, 0, {}, layoutGlyphs);
 
