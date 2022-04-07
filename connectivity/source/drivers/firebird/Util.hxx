@@ -86,7 +86,7 @@ public:
          * for such shorter strings, however any trailing padding makes the gui
          * editing of such names harder, hence we remove all trailing whitespace.
          */
-        OUString sanitizeIdentifier(const OUString& rIdentifier);
+        OUString sanitizeIdentifier(std::u16string_view rIdentifier);
 
         inline bool IndicatesError(const ISC_STATUS_ARRAY& rStatusVector)
         {

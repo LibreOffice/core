@@ -2472,12 +2472,12 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     }
 }
 
-void DocxAttributeOutput::DoWriteCmd( const OUString& rCmd )
+void DocxAttributeOutput::DoWriteCmd( std::u16string_view rCmd )
 {
-    OUString sCmd = rCmd.trim();
-    if (sCmd.startsWith("SEQ"))
+    std::u16string_view sCmd = o3tl::trim(rCmd);
+    if (o3tl::starts_with(sCmd, u"SEQ"))
     {
-        OUString sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\').trim();
+        OUString sSeqName = msfilter::util::findQuotedText(OUString(sCmd), "SEQ ", '\\').trim();
         m_aSeqBookmarksNames[sSeqName].push_back(m_sLastOpenedBookmark);
     }
     // Write the Field command
