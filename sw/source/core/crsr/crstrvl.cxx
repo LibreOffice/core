@@ -74,6 +74,7 @@
 #include <frameformats.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
+#include <textcontentcontrol.hxx>
 
 using namespace ::com::sun::star;
 
@@ -852,6 +853,47 @@ bool SwCursorShell::GotoFootnoteAnchor(const SwTextFootnote& rTextFootnote)
     return bRet;
 }
 
+bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rContentControl)
+{
+    bool bRet = false;
+    auto pContentControl = const_cast<SwContentControl*>(rContentControl.GetContentControl());
+    if (!pContentControl->GetShowingPlaceHolder())
+    {
+        return bRet;
+    }
+
+    const SwTextContentControl* pTextContentControl = pContentControl->GetTextAttr();
+    if (pTextContentControl)
+    {
+        CurrShell aCurr(this);
+        SwCallLink aLink(*this);
+
+        SwCursor* pCursor = getShellCursor(true);
+        SwCursorSaveState aSaveState(*pCursor);
+
+        pCursor->SetMark();
+        SwTextNode* pTextNode = pContentControl->GetTextNode();
+        pCursor->GetPoint()->nNode = *pTextNode;
+        // Don't select the text attribute itself at the start.
+        sal_Int32 nStart = pTextContentControl->GetStart() + 1;
+        pCursor->GetPoint()->nContent.Assign(pTextNode, nStart);
+        pCursor->GetMark()->nNode = *pTextNode;
+        pCursor->GetMark()->nContent.Assign(pTextNode, *(pTextContentControl->End()));
+
+        // Assume that once the placeholder is selected, the content is no longer the placeholder.
+        pContentControl->SetShowingPlaceHolder(false);
+
+        bRet = !pCursor->IsSelOvr();
+        if (bRet)
+        {
+            UpdateCursor(SwCursorShell::SCROLLWIN | SwCursorShell::CHKRANGE
+                         | SwCursorShell::READONLY);
+        }
+    }
+
+    return bRet;
+}
+
 bool SwCursorShell::GotoFormatField( const SwFormatField& rField )
 {
     bool bRet = false;
@@ -1461,6 +1503,18 @@ bool SwCursorShell::GetContentAtPos( const Point& rPt,
                         rContentAtPos.eContentAtPos = IsAttrAtPos::FormControl;
                         rContentAtPos.aFnd.pFieldmark = pFieldBookmark;
                         bRet=true;
+                    }
+                }
+
+                if (!bRet && rContentAtPos.eContentAtPos & IsAttrAtPos::ContentControl)
+                {
+                    SwTextAttr* pAttr = pTextNd->GetTextAttrAt(
+                        aPos.nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                    if (pAttr)
+                    {
+                        rContentAtPos.eContentAtPos = IsAttrAtPos::ContentControl;
+                        rContentAtPos.pFndTextAttr = pAttr;
+                        bRet = true;
                     }
                 }
 

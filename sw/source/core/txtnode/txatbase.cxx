@@ -94,6 +94,8 @@ void SwTextAttr::dumpAsXml(xmlTextWriterPtr pWriter) const
                                       BAD_CAST(typeid(*this).name()));
 
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("start"), BAD_CAST(OString::number(m_nStart).getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("dont-expand"),
+                                      BAD_CAST(OString::boolean(m_bDontExpand).getStr()));
     if (End())
         (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("end"), BAD_CAST(OString::number(*End()).getStr()));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("whichId"), BAD_CAST(OString::number(Which()).getStr()));
