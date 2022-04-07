@@ -2366,7 +2366,7 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
         // Expand unsupported fields
-        RunText( rInfos.pField->GetFieldName() );
+        RunText(rInfos.pField->ExpandField(/*bCached=*/true, nullptr));
         return;
     }
     else if ( rInfos.eType == ww::eFORMDATE )
