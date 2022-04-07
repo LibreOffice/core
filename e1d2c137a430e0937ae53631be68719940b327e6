@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52364494_f572a164",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-07T07:16:43Z",
+      "side": 1,
+      "message": "Thank you Attila for your feedback.\nTypo fixed now, let\u0027s push this one.",
+      "revId": "e1d2c137a430e0937ae53631be68719940b327e6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
