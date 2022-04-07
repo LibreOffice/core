@@ -21,6 +21,7 @@
 #include <string.h>
 
 #include <comphelper/servicehelper.hxx>
+#include <comphelper/string.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <rtl/string.hxx>
@@ -284,12 +285,12 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
     xmlXPathReturnString(ctxt, pString);
 }
 
-static bool parseDateTime(const OUString& aString, DateTime& aDateTime)
+static bool parseDateTime(std::u16string_view aString, DateTime& aDateTime)
 {
     // take apart a canonical literal xsd:dateTime string
     //CCYY-MM-DDThh:mm:ss(Z)
 
-    OUString aDateTimeString = aString.trim();
+    OUString aDateTimeString( comphelper::string::trim(aString) );
 
     // check length
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
@@ -306,7 +307,7 @@ static bool parseDateTime(const OUString& aString, DateTime& aDateTime)
     Date tmpDate(static_cast<sal_uInt16>(nDay), static_cast<sal_uInt16>(nMonth), static_cast<sal_uInt16>(nYear));
     tools::Time tmpTime(nHour, nMinute, nSecond);
     DateTime tmpDateTime(tmpDate, tmpTime);
-    if (aString.lastIndexOf('Z') < 0)
+    if (aString.rfind('Z') == std::u16string_view::npos)
         tmpDateTime.ConvertToUTC();
 
     aDateTime = tmpDateTime;

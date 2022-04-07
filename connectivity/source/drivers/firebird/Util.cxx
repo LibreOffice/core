@@ -13,6 +13,7 @@
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/SQLException.hpp>
+#include <comphelper/string.hxx>
 
 using namespace ::connectivity;
 
@@ -22,12 +23,12 @@ using namespace ::com::sun::star::uno;
 
 using namespace firebird;
 
-OUString firebird::sanitizeIdentifier(const OUString& rIdentifier)
+OUString firebird::sanitizeIdentifier(std::u16string_view rIdentifier)
 {
-    OUString sRet = rIdentifier.trim();
-    assert(sRet.getLength() <= 31); // Firebird identifiers cannot be longer than this.
+    std::u16string_view sRet = comphelper::string::trim(rIdentifier);
+    assert(sRet.size() <= 31); // Firebird identifiers cannot be longer than this.
 
-    return sRet;
+    return OUString(sRet);
 }
 
 OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,

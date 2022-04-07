@@ -359,6 +359,32 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
 
+/**
+  Returns a new string_view resulting from removing white space from both ends
+  of the string_view.
+
+  All characters that have codes less than or equal to
+  32 (the space character), and Unicode General Punctuation area Space
+  and some Control characters are considered to be white space (see
+  rtl_ImplIsWhitespace).
+
+  @return   the string_view, with white space removed from the front and end.
+*/
+COMPHELPER_DLLPUBLIC std::u16string_view trim(std::u16string_view str);
+
+/**
+  Returns a new string_view resulting from removing white space from both ends
+  of the string_view.
+
+  All characters that have codes less than or equal to
+  32 (the space character), and Unicode General Punctuation area Space
+  and some Control characters are considered to be white space (see
+  rtl_ImplIsWhitespace).
+
+  @return   the string, with white space removed from the front and end.
+*/
+COMPHELPER_DLLPUBLIC std::string_view trim(std::string_view str);
+
 /** Interpret a string as a long integer.
 
     This function cannot be used for language-specific conversion.
@@ -417,6 +443,6 @@ inline sal_Int32 toInt32( std::string_view str, sal_Int16 radix = 10 )
 }
 
 
-}
+} // namespace comphelper::string
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -16,6 +16,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
+#include <comphelper/string.hxx>
 #include <editeng/unoprnms.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -157,12 +158,12 @@ protected:
         return OUString(sTemp.data(), sTemp.length(), RTL_TEXTENCODING_UTF8);
     }
 
-    void writeActual(const OUString& sActualValue, const OUString& sCheck)
+    void writeActual(std::u16string_view sActualValue, const OUString& sCheck)
     {
         assert(m_bDumpMode);
         assert(m_aDumpFile.is_open());
         m_aDumpFile << "// " << sCheck << "\n";   // Add check string to make dump file readable
-        m_aDumpFile << sActualValue.trim() << "\n";      // Write out the checked value, will be used as reference later
+        m_aDumpFile << OUString(sActualValue) << "\n";      // Write out the checked value, will be used as reference later
     }
 
     void readNote(std::u16string_view sNote)

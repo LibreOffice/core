@@ -42,6 +42,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
+#include <comphelper/string.hxx>
 
 #include <cassert>
 #include <cstdlib>
@@ -1236,7 +1237,7 @@ static void AddConversionsToDispatchList(
     const OUString& rPrinterName,
     const OUString& rFactory,
     const OUString& rParamOut,
-    const OUString& rImgOut,
+    std::u16string_view rImgOut,
     const bool isTextCat,
     const bool isScriptCat )
 {
@@ -1263,7 +1264,7 @@ static void AddConversionsToDispatchList(
     }
 
     OUString aOutDir( rParamOut.trim() );
-    OUString aImgOut( rImgOut.trim() );
+    std::u16string_view aImgOut = comphelper::string::trim(rImgOut);
     OUString aPWD;
     if (cwdUrl)
     {
@@ -1287,8 +1288,8 @@ static void AddConversionsToDispatchList(
         aParam += ";" + aPWD;
     }
 
-    if( !rImgOut.trim().isEmpty() )
-        aParam += "|" + aImgOut;
+    if( !rImgOut.empty() )
+        aParam += OUString::Concat("|") + aImgOut;
 
     for (auto const& request : rRequestList)
     {

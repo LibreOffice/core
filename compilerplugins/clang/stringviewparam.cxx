@@ -138,7 +138,8 @@ DeclRefExpr const* relevantCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     {
         auto const n = i->getName();
         if (n == "endsWith" || n == "isEmpty" || n == "startsWith" || n == "subView"
-            || n == "indexOf" || n == "lastIndexOf" || n == "compareTo" || n == "match")
+            || n == "indexOf" || n == "lastIndexOf" || n == "compareTo" || n == "match"
+            || n == "trim")
         {
             good = true;
         }
@@ -481,6 +482,12 @@ private:
         StringRef fn(handler.getMainFileName());
         // leave the string QA tests alone
         if (loplugin::hasPathnamePrefix(fn, SRCDIR "/sal/qa/"))
+        {
+            return;
+        }
+        // I cannot convert LngParser::isNextGroup because that means using compheper::string::trim()
+        // and I cannot even include the header file here, let alone link against comphelper
+        if (loplugin::hasPathnamePrefix(fn, SRCDIR "/l10ntools/source/lngmerge.cxx"))
         {
             return;
         }
