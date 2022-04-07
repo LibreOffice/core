@@ -345,6 +345,9 @@ public:
     void                            SetDisableColor( const Color& rColor );
     const Color&                    GetDisableColor() const;
 
+    void                            SetWarningColor( const Color& rColor );
+    const Color&                    GetWarningColor() const;
+
     void                            SetHelpColor( const Color& rColor );
     const Color&                    GetHelpColor() const;
 

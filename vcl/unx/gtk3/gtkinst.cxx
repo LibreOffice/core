@@ -16909,7 +16909,7 @@ public:
                 gtk_label_set_attributes(m_pLabel, nullptr);
                 break;
             case weld::LabelType::Warning:
-                set_text_background_color(COL_YELLOW);
+                set_text_background_color(Application::GetSettings().GetStyleSettings().GetWarningColor());
                 break;
             case weld::LabelType::Error:
                 set_text_background_color(Application::GetSettings().GetStyleSettings().GetHighlightColor());

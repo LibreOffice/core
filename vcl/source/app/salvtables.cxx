@@ -5727,7 +5727,8 @@ void SalInstanceLabel::set_label_type(weld::LabelType eType)
             break;
         case weld::LabelType::Warning:
             m_xLabel->SetControlForeground();
-            m_xLabel->SetControlBackground(COL_YELLOW);
+            m_xLabel->SetControlBackground(
+                m_xLabel->GetSettings().GetStyleSettings().GetWarningColor());
             break;
         case weld::LabelType::Error:
             m_xLabel->SetControlForeground();
