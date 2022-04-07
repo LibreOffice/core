@@ -52,6 +52,24 @@
       "parentUuid": "da453f55_09f8df24",
       "revId": "5b3227fac58dcbd588e2389e205679cd77842bac",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7003d095_edf09001",
+        "filename": "vcl/qt5/QtTransferable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-07T10:10:29Z",
+      "side": 1,
+      "message": "I\u0027ve used the following sample program to validate my assumptions: \n\n#include \u003cQApplication\u003e\n#include \u003cQClipboard\u003e\n#include \u003cQDebug\u003e\n#include \u003cQString\u003e\n#include \u003cQThread\u003e\n#include \u003cQtGlobal\u003e\n#include \u003cQMimeData\u003e\n\nint main(int argc, char *argv[])\n{\n    QApplication a(argc, argv);\n\n    QString mimeTypeLowercase(\"text/plain;charset\u003dutf-8\");\n    QString mimeTypeUppercase(\"text/plain;charset\u003dUTF-8\");\n    QString mimeTypeLowercaseWithSpace(\"text/plain; charset\u003dutf-8\");\n    auto types \u003d {mimeTypeLowercase, mimeTypeUppercase, mimeTypeLowercaseWithSpace};\n    QString text(\"维基百科，自由的百科全书\");\n\n    QClipboard* clipboard \u003d QApplication::clipboard();\n\n\n    for (const QString\u0026 charset : types)\n    {\n        clipboard-\u003eclear();\n        // dummy text\n        clipboard-\u003esetText(\"hello\");\n        QMimeData* data \u003d new QMimeData;\n        data-\u003esetData(charset, text.toUtf8());\n        clipboard-\u003esetMimeData(data);\n\n        for (const QString\u0026 type : types)\n        {\n            const QMimeData* clipboardData \u003d clipboard-\u003emimeData();\n            if (clipboardData \u0026\u0026 clipboardData-\u003ehasFormat(type))\n            {\n                QString clipboardText \u003d QString::fromUtf8(clipboard-\u003emimeData()-\u003edata(type));\n                qDebug() \u003c\u003c type \u003c\u003c \": \" \u003c\u003c clipboardText;\n            }\n            else\n                qDebug() \u003c\u003c \"no data for \" \u003c\u003c type;\n        }\n        qDebug() \u003c\u003c \"-----------------------------\";\n    }\n\n    return a.exec();\n}\n\nThe result of running that on Plasma X11 matches my expectation in light of what I wrote earlier; output:\n\n\"text/plain;charset\u003dutf-8\" :  \"维基百科，自由的百科全书\"\nno data for  \"text/plain;charset\u003dUTF-8\"\nno data for  \"text/plain; charset\u003dutf-8\"\n-----------------------------\nno data for  \"text/plain;charset\u003dutf-8\"\n\"text/plain;charset\u003dUTF-8\" :  \"维基百科，自由的百科全书\"\nno data for  \"text/plain; charset\u003dutf-8\"\n-----------------------------\nno data for  \"text/plain;charset\u003dutf-8\"\nno data for  \"text/plain;charset\u003dUTF-8\"\n\"text/plain; charset\u003dutf-8\" :  \"维基百科，自由的百科全书\"\n-----------------------------\n\n\nand when pasting into kate or gedit after running the program, this only works when using \"text/plain;charset\u003dutf-8\", not the other two variants. (I\u0027ve changed the order of `types` between runs to test that.)\n\nIt could still be that Klipper (the KDE clipboard manager) somehow interferes at some stage and behavior on GNOME would be different.\n\n(On Wayland, pasting into kate or gedit doesn\u0027t work at all, probably by some security design.)",
+      "parentUuid": "97ac9758_a61bc459",
+      "revId": "5b3227fac58dcbd588e2389e205679cd77842bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
