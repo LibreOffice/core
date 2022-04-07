@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0f582d7_24fee286",
+        "filename": "extras/source/templates/draw/bpmn/content.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-07T08:52:43Z",
+      "side": 1,
+      "message": "Think we can drop the 11pt for CTL/CJK but otherwise a p is missing here.",
+      "range": {
+        "startLine": 525,
+        "startChar": 72,
+        "endLine": 525,
+        "endChar": 75
+      },
+      "revId": "b6885f198c06e3148a9be54c08102a7d046628ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfa4bbec_8ce4cc3b",
+        "filename": "extras/source/templates/draw/bpmn/content.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-07T08:52:43Z",
+      "side": 1,
+      "message": "Woot? ;-)",
+      "range": {
+        "startLine": 534,
+        "startChar": 61,
+        "endLine": 534,
+        "endChar": 62
+      },
+      "revId": "b6885f198c06e3148a9be54c08102a7d046628ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5a44f29_401f8960",
+        "filename": "extras/source/templates/draw/bpmn/styles.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-07T08:52:43Z",
+      "side": 1,
+      "message": "Also German",
+      "range": {
+        "startLine": 24,
+        "startChar": 30,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "b6885f198c06e3148a9be54c08102a7d046628ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
