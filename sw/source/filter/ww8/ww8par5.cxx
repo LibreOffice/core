@@ -590,9 +590,21 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                 break;
             case ww::eMERGEINC:
             case ww::eINCLUDETEXT:
+            {
                 //Move outside the section associated with this type of field
-                *m_pPaM->GetPoint() = m_aFieldStack.back().maStartPos;
+                SwPosition aRestorePos(m_aFieldStack.back().maStartPos);
+
+                SwContentNode* pNd = aRestorePos.nNode.GetNode().GetContentNode();
+                sal_Int32 nMaxValidIndex = pNd ? pNd->Len() : 0;
+                if (aRestorePos.nContent.GetIndex() > nMaxValidIndex)
+                {
+                    SAL_WARN("sw.ww8", "Attempt to restore to invalid content position");
+                    aRestorePos.nContent.Assign(pNd, nMaxValidIndex);
+                }
+
+                *m_pPaM->GetPoint() = aRestorePos;
                 break;
+            }
             case ww::eIF: // IF-field
             {
                 // conditional field parameters
