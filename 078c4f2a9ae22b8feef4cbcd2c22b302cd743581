@@ -16,6 +16,24 @@
       "message": "This would replace the entire formula to a link. Is there a bug report already?",
       "revId": "078c4f2a9ae22b8feef4cbcd2c22b302cd743581",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8cf69841_2b1ef03c",
+        "filename": "sc/source/ui/view/tabvwshe.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-07T08:59:39Z",
+      "side": 1,
+      "message": "Not aware of a ticket but META bug 107733 and bug 120543 are extensive.",
+      "parentUuid": "dc3ccb6d_50ac3a67",
+      "revId": "078c4f2a9ae22b8feef4cbcd2c22b302cd743581",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
