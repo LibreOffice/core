@@ -15,8 +15,6 @@
 #include <wrtsh.hxx>
 #include <drawdoc.hxx>
 #include <view.hxx>
-#include <swacorr.hxx>
-#include <editeng/acorrcfg.hxx>
 #include <com/sun/star/text/XTextColumns.hpp>
 
 #include <svx/svdpage.hxx>
@@ -41,6 +39,7 @@
 #include <test/htmltesttools.hxx>
 #include <wrthtml.hxx>
 #include <dbmgr.hxx>
+#include <rootfrm.hxx>
 #include <unotxdoc.hxx>
 
 namespace
@@ -1728,6 +1727,129 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
     lcl_insertString(*pXTextDocument, L"„idézőjel” ");
     sReplaced += u"⹂𐳐𐳇𐳋𐳯𐳟𐳒𐳉𐳖‟ ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testAutoCorr)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    //Normal AutoCorrect
+    lcl_insertString(*pXTextDocument, L"tset ");
+    CPPUNIT_ASSERT_EQUAL(OUString("Test "), getParagraph(1)->getString());
+
+    //AutoCorrect with change style to bolt
+    lcl_insertString(*pXTextDocument, L"Bolt ");
+    const uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 2);
+    CPPUNIT_ASSERT_EQUAL(OUString("Bolt"), xRun->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("Arial"), getProperty<OUString>(xRun, "CharFontName"));
+
+    //AutoCorrect inserts Table with 2 rows and 3 columns
+    lcl_insertString(*pXTextDocument, L"4xx ");
+    const uno::Reference<text::XTextTable> xTable(getParagraphOrTable(2), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTable->getRows()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTable->getColumns()->getCount());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf130274)
+{
+    SwDoc* const pDoc(createSwDoc());
+    SwWrtShell* const pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    CPPUNIT_ASSERT(!pWrtShell->GetLayout()->IsHideRedlines());
+    CPPUNIT_ASSERT(
+        !IDocumentRedlineAccess::IsRedlineOn(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+
+    // "tset" may be replaced by the AutoCorrect in the test profile
+    lcl_insertString(*pXTextDocument, L"tset");
+    // select from left to right
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 4, /*bBasicCall=*/false);
+
+    pWrtShell->SetRedlineFlags(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
+    // this would crash in AutoCorrect
+    lcl_insertString(*pXTextDocument, L".");
+
+    CPPUNIT_ASSERT(!pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf83260)
+{
+    SwDoc* const pDoc(createSwDoc(DATA_DIRECTORY, "tdf83260-1.odt"));
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+
+    // enabled but not shown
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+#if 0
+    CPPUNIT_ASSERT(IDocumentRedlineAccess::IsHideChanges(
+            pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+#endif
+    CPPUNIT_ASSERT(
+        IDocumentRedlineAccess::IsRedlineOn(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(!pDoc->getIDocumentRedlineAccess().GetRedlineTable().empty());
+
+    // the document contains redlines that are combined with CompressRedlines()
+    // if that happens during AutoCorrect then indexes in Undo are off -> crash
+    lcl_insertString(*pXTextDocument, L"tset ");
+    sw::UndoManager& rUndoManager = pDoc->GetUndoManager();
+    auto const nActions(rUndoManager.GetUndoActionCount());
+    for (auto i = nActions; 0 < i; --i)
+    {
+        rUndoManager.Undo();
+    }
+    // check that every text node has a layout frame
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwTextNode const* const pNode = pDoc->GetNodes()[i]->GetTextNode())
+        {
+            CPPUNIT_ASSERT(pNode->getLayoutFrame(nullptr, nullptr, nullptr));
+        }
+    }
+    for (auto i = nActions; 0 < i; --i)
+    {
+        rUndoManager.Redo();
+    }
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwTextNode const* const pNode = pDoc->GetNodes()[i]->GetTextNode())
+        {
+            CPPUNIT_ASSERT(pNode->getLayoutFrame(nullptr, nullptr, nullptr));
+        }
+    }
+    for (auto i = nActions; 0 < i; --i)
+    {
+        rUndoManager.Undo();
+    }
+    for (SwNodeOffset i(0); i < pDoc->GetNodes().Count(); ++i)
+    {
+        if (SwTextNode const* const pNode = pDoc->GetNodes()[i]->GetTextNode())
+        {
+            CPPUNIT_ASSERT(pNode->getLayoutFrame(nullptr, nullptr, nullptr));
+        }
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf74363)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
+    //testing autocorrect of initial capitals on start of first paragraph
+    //Inserting one all-lowercase word into the first paragraph
+    lcl_insertString(*pXTextDocument, L"testing ");
+    //The word should be capitalized due to autocorrect
+    CPPUNIT_ASSERT_EQUAL(OUString("Testing "), getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143176)
