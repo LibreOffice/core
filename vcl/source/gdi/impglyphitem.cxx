@@ -97,13 +97,12 @@ bool SalLayoutGlyphsImpl::IsValid() const
 
 const SalLayoutGlyphs*
 SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
-                                      sal_Int32 nIndex, sal_Int32 nLen, const Point& rLogicPos,
-                                      tools::Long nLogicWidth,
+                                      sal_Int32 nIndex, sal_Int32 nLen, tools::Long nLogicWidth,
                                       const vcl::text::TextLayoutCache* layoutCache) const
 {
     if (nLen == 0)
         return nullptr;
-    const CachedGlyphsKey key(outputDevice, text, nIndex, nLen, rLogicPos, nLogicWidth);
+    const CachedGlyphsKey key(outputDevice, text, nIndex, nLen, nLogicWidth);
     auto it = mCachedGlyphs.find(key);
     if (it != mCachedGlyphs.end())
     {
@@ -121,7 +120,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         layoutCache = tmpLayoutCache.get();
     }
     std::unique_ptr<SalLayout> layout
-        = outputDevice->ImplLayout(text, nIndex, nLen, rLogicPos, nLogicWidth, {},
+        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
                                    SalLayoutFlags::GlyphItemsOnly, layoutCache);
     if (layout)
     {
@@ -134,11 +133,10 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
 
 SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const OutputDevice>& d,
                                                        const OUString& t, sal_Int32 i, sal_Int32 l,
-                                                       const Point& p, tools::Long w)
+                                                       tools::Long w)
     : text(t)
     , index(i)
     , len(l)
-    , logicPos(p)
     , logicWidth(w)
     , outputDevice(d)
     // we also need to save things used in OutputDevice::ImplPrepareLayoutArgs(), in case they
@@ -154,8 +152,6 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     o3tl::hash_combine(hashValue, vcl::text::FirstCharsStringHash()(text));
     o3tl::hash_combine(hashValue, index);
     o3tl::hash_combine(hashValue, len);
-    o3tl::hash_combine(hashValue, logicPos.X());
-    o3tl::hash_combine(hashValue, logicPos.Y());
     o3tl::hash_combine(hashValue, logicWidth);
 
     o3tl::hash_combine(hashValue, outputDevice.get());
@@ -170,9 +166,8 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
 inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphsKey& other) const
 {
     return hashValue == other.hashValue && index == other.index && len == other.len
-           && logicPos == other.logicPos && logicWidth == other.logicWidth
-           && outputDevice == other.outputDevice && rtl == other.rtl
-           && layoutMode == other.layoutMode
+           && logicWidth == other.logicWidth && outputDevice == other.outputDevice
+           && rtl == other.rtl && layoutMode == other.layoutMode
            && digitLanguage == other.digitLanguage
            // slower things here
            && font == other.font && vcl::text::FastStringCompareEqual()(text, other.text);
