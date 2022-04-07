@@ -24,7 +24,6 @@
 #include <svl/style.hxx>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <sfx2/sfxstatuslistener.hxx>
-#include <vcl/glyphitemcache.hxx>
 
 class StylesPreviewWindow_Base;
 
@@ -60,7 +59,6 @@ class StyleItemController
 
     SfxStyleFamily m_eStyleFamily;
     std::pair<OUString, OUString> m_aStyleName;
-    SalLayoutGlyphsCache m_GlyphsCache;
 
 public:
     StyleItemController(const std::pair<OUString, OUString>& aStyleName);

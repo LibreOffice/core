@@ -2397,9 +2397,6 @@ SwLayIdle::SwLayIdle( SwRootFrame *pRt, SwViewShellImp *pI ) :
             m_pRoot->ResetIdleFormat();
             SfxObjectShell* pDocShell = m_pImp->GetShell()->GetDoc()->GetDocShell();
             pDocShell->Broadcast( SfxEventHint( SfxEventHintId::SwEventLayoutFinished, SwDocShell::GetEventName(STR_SW_EVENT_LAYOUT_FINISHED), pDocShell ) );
-            // Limit lifetime of the text glyphs cache to a single run of the
-            // layout.
-            SwClearFntCacheTextGlyphs();
         }
     }
 
