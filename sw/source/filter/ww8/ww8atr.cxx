@@ -2932,6 +2932,9 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                 case DI_DOCNO:
                     eField = ww::eREVNUM;
                     break;
+                case DI_EDIT:
+                    eField = ww::eEDITTIME;
+                    break;
                 case DI_CREATE:
                     if (DI_SUB_AUTHOR == (nSubType & DI_SUB_MASK))
                         eField = ww::eAUTHOR;
@@ -2953,13 +2956,6 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
                     if (DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK) &&
                         GetExport().GetNumberFormat(*pField, sStr))
                         eField = ww::ePRINTDATE;
-                    break;
-                case DI_EDIT:
-                    if( DI_SUB_AUTHOR != (nSubType & DI_SUB_MASK ) &&
-                        GetExport().GetNumberFormat( *pField, sStr ))
-                        eField = ww::eSAVEDATE;
-                    else
-                        eField = ww::eEDITTIME;
                     break;
                 case DI_CUSTOM:
                     eField = ww::eDOCPROPERTY;
