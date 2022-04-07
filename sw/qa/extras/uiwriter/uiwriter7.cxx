@@ -1307,22 +1307,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf74230)
     aTempFile.EnableKillingFile();
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf74363)
-{
-    SwDoc* pDoc = createSwDoc();
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    //testing autocorrect of initial capitals on start of first paragraph
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    //Inserting one all-lowercase word into the first paragraph
-    pWrtShell->Insert("testing");
-    const sal_Unicode cChar = ' ';
-    pWrtShell->AutoCorrect(corr, cChar);
-    //The word should be capitalized due to autocorrect
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(OUString("Testing "),
-                         static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest7, testTdf80663)
 {
     SwDoc* pDoc = createSwDoc();
