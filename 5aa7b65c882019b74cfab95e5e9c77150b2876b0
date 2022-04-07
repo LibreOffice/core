@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dedec7b9_91384358",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-04-07T14:18:36Z",
+      "side": 1,
+      "message": "Vincent, I didn\u0027t find your license statement. Did you send it?",
+      "revId": "5aa7b65c882019b74cfab95e5e9c77150b2876b0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
