@@ -22,6 +22,30 @@
       },
       "revId": "94fb550d5e84bcbf5a45374c0a84fd3e1a76d004",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3bf61a4_44309c62",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1329,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-04-07T07:01:25Z",
+      "side": 1,
+      "message": "Yes it should be there, sorry its a typo, thanks for fixing it.",
+      "parentUuid": "a708f28e_af9e7cbf",
+      "range": {
+        "startLine": 1329,
+        "startChar": 25,
+        "endLine": 1329,
+        "endChar": 30
+      },
+      "revId": "94fb550d5e84bcbf5a45374c0a84fd3e1a76d004",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
