@@ -48,13 +48,11 @@ public:
     GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
                     const vcl::text::TextLayoutCache* layoutCache = nullptr) const
     {
-        return GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), Point(0, 0), 0,
-                               layoutCache);
+        return GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), 0, layoutCache);
     }
     const SalLayoutGlyphs*
     GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text, sal_Int32 nIndex,
-                    sal_Int32 nLen, const Point& rLogicPos = Point(0, 0),
-                    tools::Long nLogicWidth = 0,
+                    sal_Int32 nLen, tools::Long nLogicWidth = 0,
                     const vcl::text::TextLayoutCache* layoutCache = nullptr) const;
     void clear() { mCachedGlyphs.clear(); }
 
@@ -64,7 +62,6 @@ private:
         OUString text;
         sal_Int32 index;
         sal_Int32 len;
-        Point logicPos;
         tools::Long logicWidth;
         VclPtr<const OutputDevice> outputDevice;
         vcl::Font font;
@@ -73,7 +70,7 @@ private:
         LanguageType digitLanguage;
         size_t hashValue;
         CachedGlyphsKey(const VclPtr<const OutputDevice>& dev, const OUString& t, sal_Int32 i,
-                        sal_Int32 l, const Point& p, tools::Long w);
+                        sal_Int32 l, tools::Long w);
         bool operator==(const CachedGlyphsKey& other) const;
     };
     struct CachedGlyphsHash
