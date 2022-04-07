@@ -127,6 +127,7 @@ public:
     void testSheetViewDataCrash();
     void testTextBoxInsert();
     void testCommentCellCopyPaste();
+    void testInvalidEntrySave();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -182,6 +183,7 @@ public:
     CPPUNIT_TEST(testSheetViewDataCrash);
     CPPUNIT_TEST(testTextBoxInsert);
     CPPUNIT_TEST(testCommentCellCopyPaste);
+    CPPUNIT_TEST(testInvalidEntrySave);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -2701,18 +2703,25 @@ void ScTiledRenderingTest::testSortAscendingDescending()
     CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
 }
 
-void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView, ScModelObj* pModelObj)
+void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
+    ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true)
 {
-    pView->SetCursor(nCol, nRow);
+    if (!bInEdit)
+        pView->SetCursor(nCol, nRow);
+
     for (const char& cChar : aStr)
     {
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
         Scheduler::ProcessEventsToIdle();
     }
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
-    Scheduler::ProcessEventsToIdle();
+
+    if (bCommit)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
 }
 
 void ScTiledRenderingTest::testAutoInputExactMatch()
@@ -3017,6 +3026,44 @@ void ScTiledRenderingTest::testCommentCellCopyPaste()
         }
     }
     comphelper::LibreOfficeKit::setTiledAnnotations(true);
+}
+
+void ScTiledRenderingTest::testInvalidEntrySave()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("validity.xlsx");
+    const ScDocument* pDoc = pModelObj->GetDocument();
+    ViewCallback aView;
+    int nView = SfxLokHelper::getView();
+
+    SfxLokHelper::setView(nView);
+
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pTabViewShell);
+
+    // Type partial date "7/8" of "7/8/2013" that
+    // the validation cell at A8 can accept
+    lcl_typeCharsInCell("7/8", 0, 7, pTabViewShell, pModelObj,
+        false /* bInEdit */, false /* bCommit */); // Type "7/8" in A8
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    comphelper::dispatchCommand(".uno:Save", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("Should not be marked modified after save", !pDocSh->IsModified());
+
+    // Complete the date in A8 by appending "/2013" and commit.
+    lcl_typeCharsInCell("/2013", 0, 7, pTabViewShell, pModelObj,
+        true /* bInEdit */, true /* bCommit */);
+
+    // This would hang if the date entered "7/8/2013" is not acceptable.
+    Scheduler::ProcessEventsToIdle();
+
+    // Ensure that the correct date is recorded in the document.
+    CPPUNIT_ASSERT_EQUAL(double(41463), pDoc->GetValue(ScAddress(0, 7, 0)));
 }
 
 }
