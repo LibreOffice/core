@@ -18,6 +18,7 @@
 #include <swacorr.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <com/sun/star/text/XTextColumns.hpp>
+#include <comphelper/scopeguard.hxx>
 
 #include <svx/svdpage.hxx>
 #include <svx/svdview.hxx>
@@ -29,6 +30,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <UndoManager.hxx>
+#include <unotools/syslocaleoptions.hxx>
 
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -60,6 +62,16 @@ sal_Int32 lcl_getAttributeIDFromHints(const SwpHints& hints)
         }
     }
     return -1;
+}
+
+void emulateTyping(SwXTextDocument& rXTextDocument, const std::u16string_view& rStr)
+{
+    for (const char16_t c : rStr)
+    {
+        rXTextDocument.postKeyEvent(LOK_KEYEVENT_KEYINPUT, c, 0);
+        rXTextDocument.postKeyEvent(LOK_KEYEVENT_KEYUP, c, 0);
+        Scheduler::ProcessEventsToIdle();
+    }
 }
 } //namespace
 
@@ -1335,6 +1347,9 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
 
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
 
     // show tracked deletion with enabled change tracking
     RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
@@ -1345,13 +1360,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     CPPUNIT_ASSERT_MESSAGE("redlining should be on",
                            pDoc->getIDocumentRedlineAccess().IsRedlineOn());
 
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->AutoCorrect(corr, ' ');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u" ");
 
     // tdf#83419 This was "Ts " removing the deletion of "t" silently by sentence capitalization
     OUString sReplaced("ts ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // hide delete redlines
     pWrtShell->SetRedlineFlags(nMode & ~RedlineFlags::ShowDelete);
@@ -1359,60 +1372,53 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect)
     // repeat it with not visible redlining
     dispatchCommand(mxComponent, ".uno:Undo", {});
 
-    pWrtShell->AutoCorrect(corr, ' ');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u" ");
 
     sReplaced = "S ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // show delete redlines
     pWrtShell->SetRedlineFlags(nMode);
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     // This still keep the tracked deletion, capitalize only the visible text "s"
     // with tracked deletion of the original character
     sReplaced = "tsS ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // repeat it with visible redlining and word auto replacement of "tset"
     dispatchCommand(mxComponent, ".uno:Undo", {});
     dispatchCommand(mxComponent, ".uno:Undo", {});
 
-    pWrtShell->Insert("et");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"et ");
     // This was "Ttest" removing the tracked deletion silently.
     // Don't replace, if a redline starts or ends within the text.
     sReplaced = "tset ";
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Otherwise replace it
-    pWrtShell->Insert("tset");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"tset ");
     sReplaced = "tset test ";
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Including capitalization
-    pWrtShell->Insert("end. word");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"end. word ");
     sReplaced = "tset test end. Word ";
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // tracked deletions after the correction point doesn't affect autocorrect
     dispatchCommand(mxComponent, ".uno:GoToStartOfDoc", {});
-    pWrtShell->Insert("a");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"a ");
     sReplaced = "A tset test end. Word ";
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "redline-autocorrect2.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
 
     dispatchCommand(mxComponent, ".uno:GoToEndOfDoc", {});
 
@@ -1422,41 +1428,34 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testRedlineAutoCorrect2)
     pWrtShell->SetRedlineFlags(nMode);
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
 
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert("...");
-    pWrtShell->AutoCorrect(corr, ' ');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u"... ");
 
     // This was "LoremLorem,…," (duplicating the deleted comma, but without deletion)
     // Don't replace, if a redline starts or ends within the text.
     OUString sReplaced = "Lorem,... ";
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // Continue it:
-    pWrtShell->Insert("Lorem,...");
-    pWrtShell->AutoCorrect(corr, ' ');
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u"Lorem,... ");
     sReplaced = u"Lorem,... Lorem,… ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "redline-autocorrect2.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
 
     // Emoji replacement (:snowman: -> ☃)
 
     // without change tracking
     CPPUNIT_ASSERT(!(pWrtShell->GetRedlineFlags() & RedlineFlags::On));
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(":snowman");
-    pWrtShell->AutoCorrect(corr, ':');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u":snowman:");
     OUString sReplaced = u"☃Lorem,";
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // with change tracking (showing redlines)
     RedlineFlags const nMode(pWrtShell->GetRedlineFlags() | RedlineFlags::On);
@@ -1465,241 +1464,226 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testEmojiAutoCorrect)
     CPPUNIT_ASSERT(nMode & RedlineFlags::On);
     CPPUNIT_ASSERT(nMode & RedlineFlags::ShowDelete);
 
-    pWrtShell->Insert(":snowman");
-    pWrtShell->AutoCorrect(corr, ':');
+    emulateTyping(*pXTextDocument, u":snowman:");
     sReplaced = u"☃☃Lorem,";
-    nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
 
     // tdf#140674 This was ":snowman:" instead of autocorrect
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108423)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // testing autocorrect of i' -> I' on start of first paragraph
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert("i");
-    const sal_Unicode cChar = '\'';
-    pWrtShell->AutoCorrect(corr, cChar);
+    emulateTyping(*pXTextDocument, u"i'");
     // The word "i" should be capitalized due to autocorrect, followed by a typographical apostrophe
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
     OUString sIApostrophe(u"I\u2019");
-    CPPUNIT_ASSERT_EQUAL(sIApostrophe,
-                         static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-    pWrtShell->Insert(" i");
-    pWrtShell->AutoCorrect(corr, cChar);
+    CPPUNIT_ASSERT_EQUAL(sIApostrophe, getParagraph(1)->getString());
+    emulateTyping(*pXTextDocument, u" i'");
     OUString sText(sIApostrophe + u" " + sIApostrophe);
-    CPPUNIT_ASSERT_EQUAL(sText, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sText, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf106164)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // testing autocorrect of we're -> We're on start of first paragraph
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"we\u2019re");
-    const sal_Unicode cChar = ' ';
-    pWrtShell->AutoCorrect(corr, cChar);
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(OUString(u"We\u2019re "),
-                         static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    emulateTyping(*pXTextDocument, u"we're ");
+    CPPUNIT_ASSERT_EQUAL(OUString(u"We\u2019re "), getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf54409)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // testing autocorrect of "tset -> "test with typographical double quotation mark U+201C
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"\u201Ctset");
-    const sal_Unicode cChar = ' ';
-    pWrtShell->AutoCorrect(corr, cChar);
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u"\"test ");
     OUString sReplaced(u"\u201Ctest ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // testing autocorrect of test" -> test" with typographical double quotation mark U+201D
-    pWrtShell->Insert(u"and tset\u201D");
-    pWrtShell->AutoCorrect(corr, cChar);
+    emulateTyping(*pXTextDocument, u"and tset\" ");
     OUString sReplaced2(sReplaced + u"and test\u201D ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
     // testing autocorrect of "tset" -> "test" with typographical double quotation mark U+201C and U+201D
-    pWrtShell->Insert(u"\u201Ctset\u201D");
-    pWrtShell->AutoCorrect(corr, cChar);
+    emulateTyping(*pXTextDocument, u"\"tset\" ");
     OUString sReplaced3(sReplaced2 + u"\u201Ctest\u201D ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced3, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced3, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf38394)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf38394.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // testing autocorrect of French l'" -> l'« (instead of l'»)
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"l\u2019");
-    const sal_Unicode cChar = '"';
-    pWrtShell->AutoCorrect(corr, cChar);
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u"l'\"");
     OUString sReplaced(u"l\u2019« ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // tdf#132301 autocorrect of qu'«
-    pWrtShell->Insert(u" qu\u2019");
-    pWrtShell->AutoCorrect(corr, cChar);
+    emulateTyping(*pXTextDocument, u" qu'\"");
     sReplaced += u" qu\u2019« ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf59666)
 {
     SwDoc* pDoc = createSwDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // testing missing autocorrect of single Greek letters
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"\u03C0");
-    const sal_Unicode cChar = ' ';
-    pWrtShell->AutoCorrect(corr, cChar);
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\u03C0 "),
-                         static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    emulateTyping(*pXTextDocument, u"π ");
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\u03C0 "), getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133524)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf133524.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // 1. Testing autocorrect of >> and <<
     // Example: »word«
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    // >>
-    pWrtShell->Insert(u">");
-    pWrtShell->AutoCorrect(corr, '>');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u">>");
     OUString sReplaced(u"»");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // <<
-    pWrtShell->Insert(u"word<");
-    pWrtShell->AutoCorrect(corr, '<');
+    emulateTyping(*pXTextDocument, u"word<<");
     sReplaced += u"word«";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // 2. Testing autocorrect of " to >> and << inside „...”
     // Example: „Sentence and »word«.”
     // opening primary level quote
-    pWrtShell->Insert(u" ");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u" \"");
     sReplaced += u" „";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // opening second level quote
-    pWrtShell->Insert(u"Sentence and ");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u"Sentence and \"");
     sReplaced += u"Sentence and »";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // closing second level quote
-    pWrtShell->Insert(u"word");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u"word\"");
     sReplaced += u"word«";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // closing primary level quote
-    pWrtShell->Insert(u".");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u".\"");
     sReplaced += u".”";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // tdf#134940 avoid premature replacement of "--" in "-->"
-    pWrtShell->Insert(u" --");
-    pWrtShell->AutoCorrect(corr, '>');
+    emulateTyping(*pXTextDocument, u" -->");
     OUString sReplaced2(sReplaced + u" -->");
     // This was "–>" instead of "-->"
-    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-    pWrtShell->AutoCorrect(corr, ' ');
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
+    emulateTyping(*pXTextDocument, u" ");
     sReplaced += u" → ";
     // This was "–>" instead of "→"
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133524_Romanian)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf133524_ro.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // 1. Testing autocorrect of " to << and >> inside „...”
     // Example: „Sentence and «word».”
     // opening primary level quote
-    pWrtShell->AutoCorrect(corr, '"');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u"\"");
     OUString sReplaced(u"„");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // opening second level quote
-    pWrtShell->Insert(u"Sentence and ");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u"Sentence and \"");
     sReplaced += u"Sentence and «";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // closing second level quote
-    pWrtShell->Insert(u"word");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u"word\"");
     sReplaced += u"word»";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // closing primary level quote
-    pWrtShell->Insert(u".");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u".\"");
     sReplaced += u".”";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // 2. Testing recognition of closing double quotation mark ”
-    pWrtShell->Insert(u" ");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u" \"");
     sReplaced += u" „";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // 3. Testing recognition of alternative closing double quotation mark “
-    pWrtShell->Insert(u"Alternative.“ ");
-    pWrtShell->AutoCorrect(corr, '"');
+    emulateTyping(*pXTextDocument, u"Alternative.“ \"");
     sReplaced += u"Alternative.“ „";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf128860)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf128860.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // Second level ending quote: ‚word' -> ,word‘
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"‚word");
-    pWrtShell->AutoCorrect(corr, '\'');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
-    OUString sReplaced(u"‚word‘");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    emulateTyping(*pXTextDocument, u",word'");
+    OUString sReplaced(u",word\u2019");
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // Us apostrophe without preceding starting quote: word' -> word’
-    pWrtShell->Insert(u" word");
-    pWrtShell->AutoCorrect(corr, '\'');
-    sReplaced += u" word’";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    emulateTyping(*pXTextDocument, u" word'");
+    sReplaced += u" word\u2019";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // But only after letters: word.' -> word.‘
-    pWrtShell->Insert(u" word.");
-    pWrtShell->AutoCorrect(corr, '\'');
+    emulateTyping(*pXTextDocument, u" word.'");
     sReplaced += u" word.‘";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf123786)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf123786.fodt");
+
+    // Set the system locale to Russian
+    // On Windows, it will detect that system input language is en-US (despite "typing" e.g. Cyrillic characters),
+    // and will change Russian into English (US); in the latter language,
+    // the replacement from single quote will not become “, but ’.
+    SvtSysLocaleOptions aOptions;
+    OUString sLocaleConfigString = aOptions.GetLanguageTag().getBcp47();
+    aOptions.SetLocaleConfigString("ru-RU");
+    aOptions.Commit();
+    comphelper::ScopeGuard g([&aOptions, &sLocaleConfigString] {
+        aOptions.SetLocaleConfigString(sLocaleConfigString);
+        aOptions.Commit();
+    });
+
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // Second level ending quote: „word' -> „word“
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"„слово");
-    pWrtShell->AutoCorrect(corr, '\'');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u"„слово'");
     OUString sReplaced(u"„слово“");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // Us apostrophe without preceding starting quote: word' -> word’
-    pWrtShell->Insert(u" слово");
-    pWrtShell->AutoCorrect(corr, '\'');
+    emulateTyping(*pXTextDocument, u" слово'");
     sReplaced += u" слово’";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // But only after letters: word.' -> word.“
-    pWrtShell->Insert(u" слово.");
-    pWrtShell->AutoCorrect(corr, '\'');
+    emulateTyping(*pXTextDocument, u" слово.'");
     sReplaced += u" слово.“";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
@@ -1707,66 +1691,59 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf133589)
     // Hungarian test document with right-to-left paragraph setting
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf133589.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     // translitere words to Old Hungarian
-    SwAutoCorrect corr(*SvxAutoCorrCfg::Get().GetAutoCorrect());
-    pWrtShell->Insert(u"székely");
-    pWrtShell->AutoCorrect(corr, ' ');
-    SwNodeOffset nIndex = pWrtShell->GetCursor()->GetNode().GetIndex();
+    emulateTyping(*pXTextDocument, u"székely ");
     OUString sReplaced(u"𐳥𐳋𐳓𐳉𐳗 ");
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // disambiguate consonants: asszony -> asz|szony
-    pWrtShell->Insert(u"asszony");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"asszony ");
     sReplaced += u"𐳀𐳥𐳥𐳛𐳚 ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // disambiguate consonants: kosszarv -> kos|szarv
     // (add explicit ZWSP temporarily for consonant disambiguation, because the requested
     // hu_HU hyphenation dictionary isn't installed on all testing platform)
     // pWrtShell->Insert(u"kosszarv");
-    pWrtShell->Insert(u"kos​szarv");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"kos\u200Bszarv ");
     sReplaced += u"𐳓𐳛𐳤𐳥𐳀𐳢𐳮 ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // transliterate numbers to Old Hungarian
-    pWrtShell->Insert(u"2020");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"2020 ");
     sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 
     // tdf#147546 transliterate punctuation marks
 
     // question mark
-    pWrtShell->Insert(u"Kérdőjel");
-    pWrtShell->AutoCorrect(corr, '?');
+    emulateTyping(*pXTextDocument, u"Kérdőjel?");
     sReplaced += u"𐲓𐳋𐳢𐳇𐳟𐳒𐳉𐳖";
     OUString sReplaced2(sReplaced + "?");
-    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-    pWrtShell->AutoCorrect(corr, ' ');
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
+    emulateTyping(*pXTextDocument, u" ");
     sReplaced += u"⸮ ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // comma
-    pWrtShell->Insert(u"Vessző");
-    pWrtShell->AutoCorrect(corr, ',');
+    emulateTyping(*pXTextDocument, u"Vessző,");
     sReplaced += u"𐲮𐳉𐳥𐳥𐳟";
     sReplaced2 = sReplaced + ",";
-    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-    pWrtShell->AutoCorrect(corr, ' ');
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
+    emulateTyping(*pXTextDocument, u" ");
     sReplaced += u"⹁ ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // semicolon
-    pWrtShell->Insert(u"pontosvessző");
-    pWrtShell->AutoCorrect(corr, ';');
+    emulateTyping(*pXTextDocument, u"pontosvessző;");
     sReplaced += u"𐳠𐳛𐳙𐳦𐳛𐳤𐳮𐳉𐳥𐳥𐳟";
     sReplaced2 = sReplaced + ";";
-    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
-    pWrtShell->AutoCorrect(corr, ' ');
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, getParagraph(1)->getString());
+    emulateTyping(*pXTextDocument, u" ");
     sReplaced += u"⁏ ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
     // quotation marks
-    pWrtShell->Insert(u"„idézőjel”");
-    pWrtShell->AutoCorrect(corr, ' ');
+    emulateTyping(*pXTextDocument, u"„idézőjel” ");
     sReplaced += u"⹂𐳐𐳇𐳋𐳯𐳟𐳒𐳉𐳖‟ ";
-    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    CPPUNIT_ASSERT_EQUAL(sReplaced, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf143176)
