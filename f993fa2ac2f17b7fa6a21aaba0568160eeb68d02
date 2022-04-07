@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "819d9c80_ce3dab68",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-07T12:29:02Z",
+      "side": 1,
+      "message": "At least Baltic matches 1257 from the rtf spec... :-)",
+      "revId": "f993fa2ac2f17b7fa6a21aaba0568160eeb68d02",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
