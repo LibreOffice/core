@@ -16,6 +16,24 @@
       "message": "Don\u0027t know, if you still can test. It might be sufficient as a workaround.\n\nThere are a few problems, like my commit ea4fb1559f7b99a0bfaf18f26cb3b6972c9cde1c / fix for tdf#136918, which uses the global scaling instead of the RenderContext / SalFrame specific one.",
       "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3652e5b3_83e78124",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-07T06:01:24Z",
+      "side": 1,
+      "message": "The patch itself looks reasonable to me; I don\u0027t really know what to make of what I see when testing...\nScreencast (unfortunately the video is quite blurry): https://nextcloud.documentfoundation.org/s/pTfyn9466RCN6gT\n\nThe left screen uses scaling of 100% (no scaling), the right one 175%\n\nOn first LO start, master is used.\nInterestingly, when the Writer Window opens on the left screen, some scaling appears to be applied (despite the left screen using 100% scaling) as can be seen well for the comboboxes in the menu bar (but that makes it look weird, because scaling is not applied everywhere; might be related to the mentioned ea4fb1559f7b99a0bfaf18f26cb3b6972c9cde1c). Unmaximizing and maximizing again makes no difference.\nAfter moving to the other screen, unmaximizing and maximizing again, full UI area is used, but UI elements are not scaled more than they were on screen one. (After recording, I tested with a window that had the same height as a combobox on screen 1. It was much higher than the combobox after moving LO window and the other one to screen 2.)\n\nFor the second LO start (around 00:40), this Gerrit change is applied. LO correctly opens on screen 1 without scaling. Unmaximizing and maximizing again makes no difference. After moving to screen 2, the problem that not the whole area is still there. After maximizing, unmaximizing, maximizing, scaling does not seem to be applied (only for the Qt-native menu bar).",
+      "parentUuid": "0825169b_357f8fab",
+      "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
