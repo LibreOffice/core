@@ -319,9 +319,12 @@ CPPUNIT_TEST_FIXTURE(Test, testOldComplexMergeTableInTable)
 
 CPPUNIT_TEST_FIXTURE(Test, testHyperlinkContainingPlaceholderField)
 {
-    loadAndSave("hyperlink-field.odt");
+    loadAndReload("hyperlink-field.odt");
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
     parseExport("word/document.xml");
+
+    // tdf#148380 output unknown field contents("") instead of field name("Sender" aka e-mail)
+    CPPUNIT_ASSERT(getParagraph(1)->getString().indexOf("Sender") == -1);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTablePreferredWidth)

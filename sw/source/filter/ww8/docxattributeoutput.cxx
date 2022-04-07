@@ -2403,7 +2403,9 @@ void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nP
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
     {
         // Expand unsupported fields
-        RunText( rInfos.pField->GetFieldName() );
+        RunText(rInfos.pField->ExpandField(/*bCached=*/true, nullptr));
+SAL_WARN("JCL","::StartField_Impl GetFieldName["<<rInfos.pField->GetFieldName()<<"] expands to["<<rInfos.pField->ExpandField(/*bCached=*/true, nullptr)<<"]");
+assert(rInfos.pField->GetFieldName() == "Sender");
         return;
     }
     else if ( rInfos.eType == ww::eFORMDATE )
