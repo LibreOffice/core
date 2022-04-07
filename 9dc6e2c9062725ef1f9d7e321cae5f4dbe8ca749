@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92d5007f_c0a2d810",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-07T06:30:22Z",
+      "side": 1,
+      "message": "Possibly related (although still different): tdf#72096",
+      "revId": "9dc6e2c9062725ef1f9d7e321cae5f4dbe8ca749",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
