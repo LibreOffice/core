@@ -131,6 +131,7 @@ struct ImplStyleData
     Color                           maMonoColor;
     Color                           maRadioCheckTextColor;
     Color                           maShadowColor;
+    Color                           maWarningColor;
     Color                           maVisitedLinkColor;
     Color                           maToolTextColor;
     Color                           maWindowColor;
@@ -551,6 +552,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maMonoColor( rData.maMonoColor ),
     maRadioCheckTextColor( rData.maRadioCheckTextColor ),
     maShadowColor( rData.maShadowColor ),
+    maWarningColor( rData.maWarningColor ),
     maVisitedLinkColor( rData.maVisitedLinkColor ),
     maToolTextColor( rData.maToolTextColor ),
     maWindowColor( rData.maWindowColor ),
@@ -650,6 +652,8 @@ void ImplStyleData::SetStandardStyles()
     maLightBorderColor          = COL_LIGHTGRAY;
     maShadowColor               = COL_GRAY;
     maDarkShadowColor           = COL_BLACK;
+
+    maWarningColor              = COL_YELLOW;
 
     maDefaultButtonTextColor                      = COL_BLACK;
     maButtonTextColor                             = COL_BLACK;
@@ -782,6 +786,19 @@ const Color&
 StyleSettings::GetLightBorderColor() const
 {
     return mxData->maLightBorderColor;
+}
+
+void
+StyleSettings::SetWarningColor( const Color& rColor )
+{
+    CopyData();
+    mxData->maWarningColor = rColor;
+}
+
+const Color&
+StyleSettings::GetWarningColor() const
+{
+    return mxData->maWarningColor;
 }
 
 void
@@ -2429,6 +2446,7 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
          (mxData->maLightBorderColor        == rSet.mxData->maLightBorderColor)         &&
          (mxData->maShadowColor             == rSet.mxData->maShadowColor)              &&
          (mxData->maDarkShadowColor         == rSet.mxData->maDarkShadowColor)          &&
+         (mxData->maWarningColor            == rSet.mxData->maWarningColor)             &&
          (mxData->maButtonTextColor         == rSet.mxData->maButtonTextColor)          &&
          (mxData->maDefaultActionButtonTextColor == rSet.mxData->maDefaultActionButtonTextColor) &&
          (mxData->maActionButtonTextColor   == rSet.mxData->maActionButtonTextColor)    &&
