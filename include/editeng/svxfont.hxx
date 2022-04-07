@@ -36,8 +36,6 @@ class Printer;
 class Point;
 namespace tools { class Rectangle; }
 class Size;
-class SalLayoutGlyphsCache;
-
 class EDITENG_DLLPUBLIC SvxFont : public vcl::Font
 {
     SvxCaseMap   eCaseMap;      // Text Markup
@@ -97,12 +95,12 @@ public:
                      const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32) const;
 
     void QuickDrawText( OutputDevice *pOut, const Point &rPos, const OUString &rTxt,
-                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32, o3tl::span<const sal_Int32> pDXArray = {},
-                        SalLayoutGlyphsCache* cache = nullptr ) const;
+                        const sal_Int32 nIdx = 0, const sal_Int32 nLen = SAL_MAX_INT32,
+                        o3tl::span<const sal_Int32> pDXArray = {} ) const;
 
     Size QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
-                         const sal_Int32 nIdx, const sal_Int32 nLen, std::vector<sal_Int32>* pDXArray = nullptr,
-                         SalLayoutGlyphsCache* cache = nullptr ) const;
+                           const sal_Int32 nIdx, const sal_Int32 nLen,
+                           std::vector<sal_Int32>* pDXArray = nullptr ) const;
 
     void DrawPrev( OutputDevice* pOut, Printer* pPrinter,
                    const Point &rPos, const OUString &rTxt,
