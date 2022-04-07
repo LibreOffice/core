@@ -38,6 +38,7 @@
 #include <oox/vml/vmlshapecontainer.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/gen.hxx>
+#include <comphelper/string.hxx>
 
 namespace oox::vml {
 
@@ -65,7 +66,7 @@ OUString lclGetShapeId( sal_Int32 nShapeId )
 sal_Int32 lclGetShapeId( const OUString& rShapeId )
 {
     // identifier consists of a literal NUL character, a lowercase 's', and the id
-    return ((rShapeId.getLength() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? rShapeId.copy( 2 ).toInt32() : -1;
+    return ((rShapeId.getLength() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? comphelper::string::toInt32(rShapeId.subView( 2 )) : -1;
 }
 
 } // namespace

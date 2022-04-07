@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/module.hxx>
+#include <comphelper/string.hxx>
 
 #include <global.hxx>
 #include <docsh.hxx>
@@ -1257,8 +1258,8 @@ static bool lcl_PutString(
         {
             using namespace ::com::sun::star;
             bool bSecondCal = false;
-            sal_uInt16 nDay  = static_cast<sal_uInt16>(rStr.copy( nStart[nDP], nEnd[nDP]+1-nStart[nDP] ).toInt32());
-            sal_uInt16 nYear = static_cast<sal_uInt16>(rStr.copy( nStart[nYP], nEnd[nYP]+1-nStart[nYP] ).toInt32());
+            sal_uInt16 nDay  = static_cast<sal_uInt16>(comphelper::string::toInt32(rStr.subView( nStart[nDP], nEnd[nDP]+1-nStart[nDP] )));
+            sal_uInt16 nYear = static_cast<sal_uInt16>(comphelper::string::toInt32(rStr.subView( nStart[nYP], nEnd[nYP]+1-nStart[nYP] )));
             OUString aMStr = rStr.copy( nStart[nMP], nEnd[nMP]+1-nStart[nMP] );
             sal_Int16 nMonth = static_cast<sal_Int16>(aMStr.toInt32());
             if (!nMonth)
@@ -1323,11 +1324,11 @@ static bool lcl_PutString(
                 // time fields to zero (ICU calendar instance defaults to current date/time)
                 nHour = nMinute = nSecond = 0;
                 if (nFound > 3)
-                    nHour = static_cast<sal_Int16>(rStr.copy( nStart[3], nEnd[3]+1-nStart[3]).toInt32());
+                    nHour = static_cast<sal_Int16>(comphelper::string::toInt32(rStr.subView( nStart[3], nEnd[3]+1-nStart[3])));
                 if (nFound > 4)
-                    nMinute = static_cast<sal_Int16>(rStr.copy( nStart[4], nEnd[4]+1-nStart[4]).toInt32());
+                    nMinute = static_cast<sal_Int16>(comphelper::string::toInt32(rStr.subView( nStart[4], nEnd[4]+1-nStart[4])));
                 if (nFound > 5)
-                    nSecond = static_cast<sal_Int16>(rStr.copy( nStart[5], nEnd[5]+1-nStart[5]).toInt32());
+                    nSecond = static_cast<sal_Int16>(comphelper::string::toInt32(rStr.subView( nStart[5], nEnd[5]+1-nStart[5])));
                 // do not use calendar's milliseconds, to avoid fractional part truncation
                 double fFrac = 0.0;
                 if (nFound > 6)

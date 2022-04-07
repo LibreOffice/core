@@ -36,6 +36,7 @@
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <ucbhelper/proxydecider.hxx>
+#include <comphelper/string.hxx>
 
 #ifdef _WIN32
 #include <o3tl/char16_t2wchar_t.hxx>
@@ -518,7 +519,7 @@ DWORD WINAPI GetPACProxyThread(_In_ LPVOID lpParameter)
             sal_Int32 nPortSepPos = sProxyResult.indexOf(':');
             if (nPortSepPos != -1)
             {
-                pData->m_ProxyServer.nPort = sProxyResult.copy(nPortSepPos + 1).toInt32();
+                pData->m_ProxyServer.nPort = comphelper::string::toInt32(sProxyResult.subView(nPortSepPos + 1));
                 sProxyResult = sProxyResult.copy(0, nPortSepPos);
             }
             else
@@ -590,7 +591,7 @@ InternetProxyServer GetUnixSystemProxy(const OUString & rProtocol)
     sal_Int32 x = tmp.indexOf(':');
     if (x == -1)
         return aProxy;
-    int nPort = tmp.copy(x + 1).toInt32();
+    int nPort = comphelper::string::toInt32(tmp.subView(x + 1));
     if (nPort == 0)
         return aProxy;
     aProxy.aName = tmp.copy(0, x);

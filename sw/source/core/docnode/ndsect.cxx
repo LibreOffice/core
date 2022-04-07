@@ -60,6 +60,7 @@
 #include <memory>
 #include "ndsect.hxx"
 #include <tools/datetimeutils.hxx>
+#include <comphelper/string.hxx>
 
 // #i21457# - new implementation of local method <lcl_IsInSameTableBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
@@ -1434,7 +1435,7 @@ OUString SwDoc::GetUniqueSectionName( const OUString* pChkStr ) const
             if (rNm.startsWith( aName ))
             {
                 // Calculate the Number and reset the Flag
-                nNum = rNm.copy( aName.getLength() ).toInt32();
+                nNum = comphelper::string::toInt32(rNm.subView( aName.getLength() ));
                 if( nNum-- && nNum < mpSectionFormatTable->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
