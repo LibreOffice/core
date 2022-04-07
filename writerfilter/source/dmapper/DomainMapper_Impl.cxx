@@ -112,6 +112,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <unicode/errorcode.h>
@@ -4367,11 +4368,11 @@ static bool lcl_FindInCommand(
     return bRet;
 }
 
-static OUString lcl_trim(const OUString& sValue)
+static OUString lcl_trim(std::u16string_view sValue)
 {
     // it seems, all kind of quotation marks are allowed around index type identifiers
     // TODO apply this on bookmarks, too, if needed
-    return sValue.trim().replaceAll("\"","").replaceAll(u"“", "").replaceAll(u"”", "");
+    return OUString(o3tl::trim(sValue)).replaceAll("\"","").replaceAll(u"“", "").replaceAll(u"”", "");
 }
 
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
