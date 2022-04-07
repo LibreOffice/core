@@ -20,8 +20,10 @@
 #include <impglyphitem.hxx>
 #include <vcl/glyphitemcache.hxx>
 #include <vcl/vcllayout.hxx>
+#include <vcl/lazydelete.hxx>
 #include <tools/stream.hxx>
 #include <TextLayoutCache.hxx>
+#include <config_fuzzers.h>
 
 SalLayoutGlyphs::SalLayoutGlyphs() {}
 
@@ -95,6 +97,12 @@ bool SalLayoutGlyphsImpl::IsValid() const
     return true;
 }
 
+SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
+{
+    static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(1000);
+    return cache.get();
+}
+
 const SalLayoutGlyphs*
 SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
                                       sal_Int32 nIndex, sal_Int32 nLen, tools::Long nLogicWidth,
@@ -119,9 +127,15 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         tmpLayoutCache = OutputDevice::CreateTextLayoutCache(text);
         layoutCache = tmpLayoutCache.get();
     }
-    std::unique_ptr<SalLayout> layout
-        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
-                                   SalLayoutFlags::GlyphItemsOnly, layoutCache);
+#if !ENABLE_FUZZERS
+    const SalLayoutFlags glyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly;
+#else
+    // ofz#39150 skip detecting bidi directions
+    const SalLayoutFlags glyphItemsOnlyLayout
+        = SalLayoutFlags::GlyphItemsOnly | SalLayoutFlags::BiDiStrong;
+#endif
+    std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
+        text, nIndex, nLen, Point(0, 0), nLogicWidth, {}, glyphItemsOnlyLayout, layoutCache);
     if (layout)
     {
         mCachedGlyphs.insert(std::make_pair(key, layout->GetGlyphs()));

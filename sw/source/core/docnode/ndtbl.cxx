@@ -2886,7 +2886,6 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
     ::ClearFEShellTabCols(*this, nullptr);
-    SwClearFntCacheTextGlyphs();
     getIDocumentState().SetModified();
 }
 
