@@ -40,6 +40,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/property.hxx>
+#include <comphelper/string.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <limits>
@@ -825,7 +826,7 @@ Reference< chart2::data::XDataSequence > SAL_CALL InternalDataProvider::createDa
     else if( aRangeRepresentation.match( lcl_aLabelRangePrefix ))
     {
         // label
-        sal_Int32 nIndex = aRangeRepresentation.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
+        sal_Int32 nIndex = comphelper::string::toInt32(aRangeRepresentation.subView( strlen(lcl_aLabelRangePrefix)));
         return createDataSequenceAndAddToMap( lcl_aLabelRangePrefix + OUString::number( nIndex ));
     }
     else if ( aRangeRepresentation == "last" )
@@ -869,7 +870,7 @@ sal_Bool SAL_CALL InternalDataProvider::hasDataByRangeRepresentation( const OUSt
     }
     else if( aRange.match( lcl_aLabelRangePrefix ))
     {
-        sal_Int32 nIndex = aRange.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
+        sal_Int32 nIndex = comphelper::string::toInt32(aRange.subView( strlen(lcl_aLabelRangePrefix)));
         bResult = (nIndex < (m_bDataInColumns ? m_aInternalData.getColumnCount(): m_aInternalData.getRowCount()));
     }
     else
@@ -905,7 +906,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     }
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
-        sal_Int32 nLevel = aRange.copy( strlen(lcl_aCategoriesLevelRangeNamePrefix) ).toInt32();
+        sal_Int32 nLevel = comphelper::string::toInt32(aRange.subView( strlen(lcl_aCategoriesLevelRangeNamePrefix) ));
         vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         if( nLevel < lcl_getInnerLevelCount( aCategories ) )
         {
@@ -957,7 +958,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     auto aNewVector( comphelper::sequenceToContainer<vector< uno::Any >>(aNewData) );
     if( aRange.match( lcl_aLabelRangePrefix ) )
     {
-        sal_uInt32 nIndex = aRange.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
+        sal_uInt32 nIndex = comphelper::string::toInt32(aRange.subView( strlen(lcl_aLabelRangePrefix)));
         if( m_bDataInColumns )
             m_aInternalData.setComplexColumnLabel( nIndex, std::move(aNewVector) );
         else
@@ -965,7 +966,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     }
     else if( aRange.match( lcl_aCategoriesPointRangeNamePrefix ) )
     {
-        sal_Int32 nPointIndex = aRange.copy( strlen(lcl_aCategoriesLevelRangeNamePrefix)).toInt32();
+        sal_Int32 nPointIndex = comphelper::string::toInt32(aRange.subView( strlen(lcl_aCategoriesLevelRangeNamePrefix)));
         if( m_bDataInColumns )
             m_aInternalData.setComplexRowLabel( nPointIndex, std::move(aNewVector) );
         else
@@ -973,7 +974,7 @@ void SAL_CALL InternalDataProvider::setDataByRangeRepresentation(
     }
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
-        sal_Int32 nLevel = aRange.copy( strlen(lcl_aCategoriesLevelRangeNamePrefix)).toInt32();
+        sal_Int32 nLevel = comphelper::string::toInt32(aRange.subView( strlen(lcl_aCategoriesLevelRangeNamePrefix)));
         vector< vector< uno::Any > > aComplexCategories = m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels();
 
         //ensure equal length
@@ -1190,7 +1191,7 @@ OUString SAL_CALL InternalDataProvider::convertRangeToXML( const OUString& aRang
     }
     else if( aRangeRepresentation.match( lcl_aLabelRangePrefix ))
     {
-        sal_Int32 nIndex = aRangeRepresentation.copy( strlen(lcl_aLabelRangePrefix)).toInt32();
+        sal_Int32 nIndex = comphelper::string::toInt32(aRangeRepresentation.subView( strlen(lcl_aLabelRangePrefix)));
         aRange.aUpperLeft.bIsEmpty = false;
         aRange.aLowerRight.bIsEmpty = true;
         if( m_bDataInColumns )

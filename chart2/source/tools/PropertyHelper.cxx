@@ -21,6 +21,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <o3tl/string_view.hxx>
@@ -86,7 +87,7 @@ struct lcl_OUStringRestToInt32
     {
         if( m_nPrefixLength > rStr.getLength() )
             return 0;
-        return rStr.copy( m_nPrefixLength ).toInt32();
+        return comphelper::string::toInt32(rStr.subView( m_nPrefixLength ));
     }
 private:
     sal_Int32 m_nPrefixLength;

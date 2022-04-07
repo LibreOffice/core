@@ -35,6 +35,7 @@
 
 #include <osl/diagnose.h>
 #include <filter/msfilter/escherex.hxx>
+#include <comphelper/string.hxx>
 
 namespace oox::vml {
 
@@ -299,7 +300,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
         if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
         {
             mrTypeModel.maShapeId = mrTypeModel.maShapeName;
-            mrTypeModel.moShapeType = mrTypeModel.maShapeName.copy(sShapeTypePrefix.getLength()).toInt32();
+            mrTypeModel.moShapeType = comphelper::string::toInt32(mrTypeModel.maShapeName.subView(sShapeTypePrefix.getLength()));
         }
         else if (mrTypeModel.maShapeName.startsWith("_x0000_t", &tmp))
         {

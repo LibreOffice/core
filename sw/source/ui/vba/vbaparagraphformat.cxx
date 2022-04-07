@@ -27,6 +27,7 @@
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "vbatabstops.hxx"
+#include <comphelper/string.hxx>
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -187,7 +188,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel()
     if( aHeading.startsWith( HEADING ) )
     {
         // get the sub string after "Heading"
-        nLevel = aHeading.copy( HEADING.getLength() ).toInt32();
+        nLevel = comphelper::string::toInt32(aHeading.subView( HEADING.getLength() ));
     }
     return nLevel;
 }

@@ -1515,23 +1515,22 @@ OUString PPDParser::getDefaultInputSlot() const
     return OUString();
 }
 
-void PPDParser::getResolutionFromString(
-                                        const OUString& rString,
+void PPDParser::getResolutionFromString(std::u16string_view rString,
                                         int& rXRes, int& rYRes )
 {
     rXRes = rYRes = 300;
 
-    const sal_Int32 nDPIPos {rString.indexOf( "dpi" )};
-    if( nDPIPos != -1 )
+    const size_t nDPIPos {rString.find( u"dpi" )};
+    if( nDPIPos != std::u16string_view::npos )
     {
-        const sal_Int32 nPos {rString.indexOf( 'x' )};
-        if( nPos >=0 )
+        const size_t nPos {rString.find( 'x' )};
+        if( nPos != std::u16string_view::npos )
         {
-            rXRes = rString.copy( 0, nPos ).toInt32();
-            rYRes = rString.copy(nPos+1, nDPIPos - nPos - 1).toInt32();
+            rXRes = comphelper::string::toInt32(rString.substr( 0, nPos ));
+            rYRes = comphelper::string::toInt32(rString.substr(nPos+1, nDPIPos - nPos - 1));
         }
         else
-            rXRes = rYRes = rString.copy( 0, nDPIPos ).toInt32();
+            rXRes = rYRes = comphelper::string::toInt32(rString.substr( 0, nDPIPos ));
     }
 }
 

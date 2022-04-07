@@ -28,6 +28,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -116,7 +117,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                             break;
                         nLength++;
                     }
-                    sal_Int32 nPageNumber = sHref.copy( nIndex2, nLength ).toInt32();
+                    sal_Int32 nPageNumber = comphelper::string::toInt32(sHref.subView( nIndex2, nLength ));
                     if ( nPageNumber )
                     {
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );

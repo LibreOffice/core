@@ -83,6 +83,8 @@
 #include <strings.hrc>
 #include <frameformats.hxx>
 #include <tools/datetimeutils.hxx>
+#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <sortedobjs.hxx>
 
@@ -1272,12 +1274,12 @@ SwFlyFrameFormat* SwDoc::InsertDrawLabel(
     return pNewFormat;
 }
 
-static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, const OUString& rName, std::u16string_view rCmpName)
+static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 nNmLen, std::u16string_view rName, std::u16string_view rCmpName)
 {
-    if (rName.startsWith(rCmpName))
+    if (o3tl::starts_with(rName, rCmpName))
     {
         // Only get and set the Flag
-        const sal_Int32 nNum = rName.copy(nNmLen).toInt32() - 1;
+        const sal_Int32 nNum = comphelper::string::toInt32(rName.substr(nNmLen)) - 1;
         if (nNum >= 0)
             rSetFlags.push_back(nNum);
     }
@@ -1483,7 +1485,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
                 if ( pNum )
                 {
-                    const sal_Int32 nNewLen = aNm.copy( nLen ).toInt32();
+                    const sal_Int32 nNewLen = comphelper::string::toInt32(aNm.subView( nLen ));
                     if (*pNum < nNewLen)
                         *pNum = nNewLen;
                 }

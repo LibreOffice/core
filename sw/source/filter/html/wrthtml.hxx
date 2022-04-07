@@ -571,7 +571,7 @@ public:
     static void GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                       const SdrObject *pObj );
 
-    static sal_uInt16 GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId );
+    static sal_uInt16 GetDefListLvl( std::u16string_view rNm, sal_uInt16 nPoolId );
 
     sal_uInt32 GetHTMLMode() const
     {

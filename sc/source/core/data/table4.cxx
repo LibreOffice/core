@@ -80,7 +80,7 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
     // Otherwise, use the number at the end, to enable things like IP addresses.
     if ( nNum > nSign && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(OUString(cLast)) ) )
     {   // number at the beginning
-        nVal = rValue.copy( 0, nNum ).toInt32();
+        nVal = comphelper::string::toInt32(rValue.subView( 0, nNum ));
         //  any number with a leading zero sets the minimum number of digits
         if ( p[nSign] == '0' && pMinDigits && ( nNum - nSign > *pMinDigits ) )
             *pMinDigits = nNum - nSign;
@@ -100,7 +100,7 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
         }
         if ( nNum < nEnd - nSign )
         {   // number at the end
-            nVal = rValue.copy( nNum + 1 ).toInt32();
+            nVal = comphelper::string::toInt32(rValue.subView( nNum + 1 ));
             //  any number with a leading zero sets the minimum number of digits
             if ( p[nNum+1+nSign] == '0' && pMinDigits && ( nEnd - nNum - nSign > *pMinDigits ) )
                 *pMinDigits = nEnd - nNum - nSign;
