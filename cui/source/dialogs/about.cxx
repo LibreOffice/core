@@ -216,12 +216,12 @@ OUString AboutDialog::GetMiscString() {
     sMisc = EXTRA_BUILDID "\n";
   }
 
-  OUString aCalcMode = "Calc: "; // Calc calculation mode
+  OUString aCalcMode; // Calc calculation mode
 
 #if HAVE_FEATURE_OPENCL
   bool bOpenCL = openclwrapper::GPUEnv::isOpenCLEnabled();
   if (bOpenCL)
-    aCalcMode += "CL";
+    aCalcMode += " CL";
 #else
   const bool bOpenCL = false;
 #endif
@@ -232,18 +232,17 @@ OUString AboutDialog::GetMiscString() {
       UseThreadedCalculationForFormulaGroups::get();
 
   if (!bThreadingProhibited && !bOpenCL && bThreadedCalc) {
-    if (!aCalcMode.endsWith(" "))
-      aCalcMode += " ";
-    aCalcMode += "threaded";
+    aCalcMode += " threaded";
   }
 
   if (officecfg::Office::Calc::Defaults::Sheet::JumboSheets::get())
   {
-    if (!aCalcMode.endsWith(" "))
-      aCalcMode += " ";
-    aCalcMode += "Jumbo";
+    aCalcMode += " Jumbo";
   }
-  sMisc += aCalcMode;
+
+  if (aCalcMode.isEmpty())
+      aCalcMode = " default";
+  sMisc += "Calc:" + aCalcMode;
 
   return sMisc;
 }
