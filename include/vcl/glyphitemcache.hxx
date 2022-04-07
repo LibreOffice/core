@@ -61,12 +61,16 @@ public:
 private:
     struct CachedGlyphsKey
     {
-        VclPtr<const OutputDevice> outputDevice;
         OUString text;
         sal_Int32 index;
         sal_Int32 len;
         Point logicPos;
         tools::Long logicWidth;
+        VclPtr<const OutputDevice> outputDevice;
+        vcl::Font font;
+        bool rtl;
+        vcl::text::ComplexTextLayoutFlags layoutMode;
+        LanguageType digitLanguage;
         size_t hashValue;
         CachedGlyphsKey(const VclPtr<const OutputDevice>& dev, const OUString& t, sal_Int32 i,
                         sal_Int32 l, const Point& p, tools::Long w);
