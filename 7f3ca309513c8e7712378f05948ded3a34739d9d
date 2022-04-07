@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aec6e93e_84ca298f",
+        "filename": "cui/source/dialogs/about.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 320,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-07T08:26:47Z",
+      "side": 1,
+      "message": "Interesting, if \u0027if constexpr\u0027 would be another way - would it silence the warning?",
+      "revId": "7f3ca309513c8e7712378f05948ded3a34739d9d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
