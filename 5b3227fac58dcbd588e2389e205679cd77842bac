@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "977e5d4d_f0efc78d",
+        "filename": "vcl/qt5/QtTransferable.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-07T05:56:36Z",
+      "side": 1,
+      "message": "Just curious, if QtMimeData::hasFormat is case-insensitive (or maybe operates on pre-processed data) - what if the content type string is provided as \";charset\u003dUTF-8\" by the other party?",
+      "revId": "5b3227fac58dcbd588e2389e205679cd77842bac",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
