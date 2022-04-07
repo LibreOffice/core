@@ -70,6 +70,24 @@
       "parentUuid": "16e4a6f0_06b27422",
       "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49cf7950_3066eca4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-07T12:55:45Z",
+      "side": 1,
+      "message": "My take would be to merge this. It looks correct and improves the situation, even though it\u0027s not enough to fix tdf#141578 by itself.\n\nhttps://nextcloud.documentfoundation.org/s/ZzEqfPXLPfZKMkT shows what happens when I start LO on the 175% screen with the change in place, which gives a similar result as moving the window.\n\nI tested a bit more. Behavior is unchanged also when logging out + in again from the Plasma session after changing display settings.\n\nThe only thing I was concerned about at first was to see that windowHandle() is now called in the ctor unconditionally, but it doesn\u0027t bring back the behavior described in tdf#122293 because `windowHandle()` calls `asChild()-\u003esetAttribute(Qt::WA_NativeWindow)`, with `asChild()` returning the toplevel if set.\nJust for a plausibility check: The behavior from before 0e3c3b842e14b9646d3697cf1266be21359e0f13 was back when testing with this in place in addition:\n\n--- a/vcl/qt5/QtFrame.cxx\n+++ b/vcl/qt5/QtFrame.cxx\n@@ -361,6 +361,8 @@ QWindow* QtFrame::windowHandle() const\n #ifndef EMSCRIPTEN\n     // no idea, why this breaks the menubar for EMSCRIPTEN\n     pChild-\u003esetAttribute(Qt::WA_NativeWindow);\n+    if (m_pQWidget)\n+        m_pQWidget-\u003esetAttribute(Qt::WA_NativeWindow);",
+      "parentUuid": "33a520e9_7beff73d",
+      "revId": "1df384ab5738bdfb809461f334ede0771f391bc8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
