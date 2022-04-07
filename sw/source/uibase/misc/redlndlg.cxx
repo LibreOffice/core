@@ -1121,6 +1121,33 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
                         pSh->EnterAddMode();
                     }
                 }
+
+                // select all redlines of tracked table rows
+                std::unique_ptr<weld::TreeIter> xChild(rTreeView.make_iterator( &*xActEntry ));
+                if ( rTreeView.iter_children(*xChild) )
+                {
+                    RedlinData *pData = reinterpret_cast<RedlinData*>(rTreeView.get_id(*xChild).toInt64());
+                    // disabled for redline stack, but not for redlines of table rows
+                    if ( !pData->bDisabled )
+                    {
+                        do
+                        {
+                            nPos = GetRedlinePos(*xChild);
+                            if (nPos != SwRedlineTable::npos)
+                            {
+                                const SwRangeRedline& rRedln = pSh->GetRedline( nPos );
+                                bIsNotFormated |= RedlineType::Format != rRedln.GetType();
+
+                                if (pSh->GotoRedline(nPos, true))
+                                {
+                                    pSh->SetInSelect();
+                                    pSh->EnterAddMode();
+                                }
+                            }
+                        }
+                        while ( rTreeView.iter_next_sibling(*xChild) );
+                    }
+                }
                 return false;
             });
 
