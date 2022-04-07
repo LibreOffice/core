@@ -20,6 +20,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 
@@ -151,7 +152,7 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
     nIndex += strlen(aExpectedHeightPrefix);
-    aRectangle.Height = rValue.copy(nIndex).toInt32();
+    aRectangle.Height = comphelper::string::toInt32(rValue.subView(nIndex));
 
     return aRectangle;
 }
@@ -168,7 +169,7 @@ awt::Size lcl_parseSize(const OString& rValue)
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
     nIndex += strlen(aExpectedHeightPrefix);
-    aSize.Height = rValue.copy(nIndex).toInt32();
+    aSize.Height = comphelper::string::toInt32(rValue.subView(nIndex));
 
     return aSize;
 }

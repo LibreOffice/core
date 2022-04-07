@@ -31,6 +31,7 @@
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <comphelper/sequence.hxx>
+#include <comphelper/string.hxx>
 #include <sal/log.hxx>
 
 #include <algorithm>
@@ -150,7 +151,7 @@ void CustomShapeProperties::pushToPropSet(
                             {
                                 if ( adjustmentGuide.maName.getLength() > 3 )
                                 {
-                                    sal_Int32 nAdjustmentIndex = adjustmentGuide.maName.copy( 3 ).toInt32() - 1;
+                                    sal_Int32 nAdjustmentIndex = comphelper::string::toInt32(adjustmentGuide.maName.subView( 3 )) - 1;
                                     if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
                                     {
                                         EnhancedCustomShapeAdjustmentValue aAdjustmentVal;

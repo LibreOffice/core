@@ -26,6 +26,7 @@
 #include <comphelper/fileformat.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/string.hxx>
 
 #include <sal/log.hxx>
 #include <edtwin.hxx>
@@ -1080,7 +1081,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             }
                             else if ( sTmpl.startsWith(aOutline) )
                             {
-                                nTemplateOutlineLevel = sTmpl.copy(aOutline.getLength()).toInt32(); //get string behind "Outline: Level  ";
+                                nTemplateOutlineLevel = comphelper::string::toInt32(sTmpl.subView(aOutline.getLength())); //get string behind "Outline: Level  ";
                                 bCreateByOutlineLevel = true;
                             }
 

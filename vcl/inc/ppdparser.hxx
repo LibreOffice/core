@@ -214,7 +214,7 @@ public:
 
     void            getDefaultResolution( int& rXRes, int& rYRes ) const;
     // values in dpi
-    static void     getResolutionFromString( const OUString&, int&, int& );
+    static void     getResolutionFromString( std::u16string_view, int&, int& );
     // helper function
 
     OUString   translateKey( const OUString& i_rKey ) const;

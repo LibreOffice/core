@@ -28,6 +28,7 @@
 #include <sal/log.hxx>
 #include <rtl/character.hxx>
 #include <rtl/math.hxx>
+#include <comphelper/string.hxx>
 
 #include <global.hxx>
 #include <rangeutl.hxx>
@@ -448,7 +449,7 @@ Label_fallback_to_unambiguous:
                     const sal_Int32 nLimit[done] = {0,12,31,0,59,59,0};
                     State eState = (bDate ? month : minute);
                     rCurFmtType = (bDate ? SvNumFormatType::DATE : SvNumFormatType::TIME);
-                    nUnit[eState-1] = rStr.copy( 0, nParseEnd).toInt32();
+                    nUnit[eState-1] = comphelper::string::toInt32(rStr.subView( 0, nParseEnd));
                     const sal_Unicode* pLastStart = p;
                     // Ensure there's no preceding sign. Negative dates
                     // currently aren't handled correctly. Also discard
@@ -474,7 +475,7 @@ Label_fallback_to_unambiguous:
                             // We had at least one digit.
                             if (eState < done)
                             {
-                                nUnit[eState] = rStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
+                                nUnit[eState] = comphelper::string::toInt32(rStr.subView( pLastStart - pStart, p - pLastStart));
                                 if (nLimit[eState] && nLimit[eState] < nUnit[eState])
                                     rError = nStringNoValueError;
                             }
@@ -545,7 +546,7 @@ Label_fallback_to_unambiguous:
                         // Catch the very last unit at end of string.
                         if (p > pLastStart && eState < done)
                         {
-                            nUnit[eState] = rStr.copy( pLastStart - pStart, p - pLastStart).toInt32();
+                            nUnit[eState] = comphelper::string::toInt32(rStr.subView( pLastStart - pStart, p - pLastStart));
                             if (nLimit[eState] && nLimit[eState] < nUnit[eState])
                                 rError = nStringNoValueError;
                         }

@@ -76,6 +76,7 @@
 #include <deque>
 
 #include <svtools/HtmlWriter.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <memory>
 #include <algorithm>
@@ -92,7 +93,7 @@ HTMLOutEvent const aAnchorEventTable[] =
 
 static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt );
 
-sal_uInt16 SwHTMLWriter::GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId )
+sal_uInt16 SwHTMLWriter::GetDefListLvl( std::u16string_view rNm, sal_uInt16 nPoolId )
 {
     if( nPoolId == RES_POOLCOLL_HTML_DD )
     {
@@ -104,14 +105,14 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId 
     }
 
     OUString sDTDD = OOO_STRING_SVTOOLS_HTML_dt " ";
-    if( rNm.startsWith(sDTDD) )
+    if( o3tl::starts_with(rNm, sDTDD) )
         // DefinitionList - term
-        return o3tl::narrowing<sal_uInt16>(rNm.copy( sDTDD.getLength() ).toInt32()) | HTML_DLCOLL_DT;
+        return o3tl::narrowing<sal_uInt16>(comphelper::string::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DT;
 
     sDTDD = OOO_STRING_SVTOOLS_HTML_dd " ";
-    if( rNm.startsWith(sDTDD) )
+    if( o3tl::starts_with(rNm, sDTDD) )
         // DefinitionList - definition
-        return o3tl::narrowing<sal_uInt16>(rNm.copy( sDTDD.getLength() ).toInt32()) | HTML_DLCOLL_DD;
+        return o3tl::narrowing<sal_uInt16>(comphelper::string::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DD;
 
     return 0;
 }

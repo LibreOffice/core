@@ -21,6 +21,7 @@
 #include <jobdata.hxx>
 #include <printerinfomanager.hxx>
 #include <tools/stream.hxx>
+#include <comphelper/string.hxx>
 
 #include <rtl/strbuf.hxx>
 #include <memory>
@@ -231,7 +232,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         else if (aLine.startsWith(copiesEquals))
         {
             bCopies = true;
-            rJobData.m_nCopies = aLine.copy(RTL_CONSTASCII_LENGTH(copiesEquals)).toInt32();
+            rJobData.m_nCopies = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(copiesEquals)));
         }
         else if (aLine.startsWith(collateEquals))
         {
@@ -249,22 +250,22 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         else if (aLine.startsWith(colordepthEquals))
         {
             bColorDepth = true;
-            rJobData.m_nColorDepth = aLine.copy(RTL_CONSTASCII_LENGTH(colordepthEquals)).toInt32();
+            rJobData.m_nColorDepth = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(colordepthEquals)));
         }
         else if (aLine.startsWith(colordeviceEquals))
         {
             bColorDevice = true;
-            rJobData.m_nColorDevice = aLine.copy(RTL_CONSTASCII_LENGTH(colordeviceEquals)).toInt32();
+            rJobData.m_nColorDevice = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(colordeviceEquals)));
         }
         else if (aLine.startsWith(pslevelEquals))
         {
             bPSLevel = true;
-            rJobData.m_nPSLevel = aLine.copy(RTL_CONSTASCII_LENGTH(pslevelEquals)).toInt32();
+            rJobData.m_nPSLevel = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pslevelEquals)));
         }
         else if (aLine.startsWith(pdfdeviceEquals))
         {
             bPDFDevice = true;
-            rJobData.m_nPDFDevice = aLine.copy(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)).toInt32();
+            rJobData.m_nPDFDevice = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)));
         }
         else if (aLine == "PPDContextData" && bPrinter)
         {

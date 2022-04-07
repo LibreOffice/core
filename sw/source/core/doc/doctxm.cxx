@@ -21,6 +21,7 @@
 #include <hintids.hxx>
 #include <editeng/formatbreakitem.hxx>
 #include <comphelper/classids.hxx>
+#include <comphelper/string.hxx>
 #include <docsh.hxx>
 #include <ndole.hxx>
 #include <txttxmrk.hxx>
@@ -667,7 +668,7 @@ OUString SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
             if ( rNm.startsWith(aName) )
             {
                 // Calculate number and set the Flag
-                nNum = rNm.copy( nNmLen ).toInt32();
+                nNum = comphelper::string::toInt32(rNm.subView( nNmLen ));
                 if( nNum-- && nNum < mpSectionFormatTable->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }

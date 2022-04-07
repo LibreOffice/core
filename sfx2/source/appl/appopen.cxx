@@ -46,6 +46,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
+#include <comphelper/string.hxx>
 #include <comphelper/synchronousdispatch.hxx>
 
 #include <svl/intitem.hxx>
@@ -595,7 +596,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         {
             if ( aCommand.startsWith("slot:") )
             {
-                sal_uInt16 nSlotId = static_cast<sal_uInt16>(aCommand.copy(5).toInt32());
+                sal_uInt16 nSlotId = static_cast<sal_uInt16>(comphelper::string::toInt32(aCommand.subView(5)));
                 if ( nSlotId == SID_OPENDOC )
                     pFileNameItem = nullptr;
             }

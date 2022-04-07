@@ -28,6 +28,7 @@
 #include <TPrivilegesResultSet.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <comphelper/string.hxx>
 
 using namespace connectivity::odbc;
 using namespace com::sun::star::uno;
@@ -1241,7 +1242,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) try
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.copy(0,aValue.indexOf('.')).toInt32();
+    return comphelper::string::toInt32(aValue.subView(0,aValue.indexOf('.')));
 }
 catch (const SQLException &)
 {
@@ -1277,7 +1278,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) try
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return aValue.copy(0,aValue.lastIndexOf('.')).toInt32();
+    return comphelper::string::toInt32(aValue.subView(0,aValue.lastIndexOf('.')));
 }
 catch (const SQLException &)
 {

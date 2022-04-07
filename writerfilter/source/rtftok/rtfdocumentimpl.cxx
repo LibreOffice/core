@@ -63,14 +63,14 @@ util::DateTime getDateTimeFromUserProp(const OUString& rString)
     sal_Int32 nLen = rString.getLength();
     if (nLen >= 4)
     {
-        aRet.Year = rString.copy(0, 4).toInt32();
+        aRet.Year = comphelper::string::toInt32(rString.subView(0, 4));
 
         if (nLen >= 8 && rString.match(". ", 4))
         {
-            aRet.Month = rString.copy(6, 2).toInt32();
+            aRet.Month = comphelper::string::toInt32(rString.subView(6, 2));
 
             if (nLen >= 12 && rString.match(". ", 8))
-                aRet.Day = rString.copy(10, 2).toInt32();
+                aRet.Day = comphelper::string::toInt32(rString.subView(10, 2));
         }
     }
     return aRet;

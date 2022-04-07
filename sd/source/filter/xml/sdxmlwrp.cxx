@@ -26,6 +26,7 @@
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/string.hxx>
 #include <editeng/outlobj.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
@@ -695,11 +696,11 @@ bool SdXMLFilter::Import( ErrCode& nError )
                     sal_Int32 nIndex = sBuildId.indexOf('$');
                     if( nIndex != -1 )
                     {
-                        sal_Int32 nUPD = sBuildId.copy( 0, nIndex ).toInt32();
+                        sal_Int32 nUPD = comphelper::string::toInt32(sBuildId.subView( 0, nIndex ));
 
                         if( nUPD == 300 )
                         {
-                            sal_Int32 nBuildId = sBuildId.copy( nIndex+1 ).toInt32();
+                            sal_Int32 nBuildId = comphelper::string::toInt32(sBuildId.subView( nIndex+1 ));
                             if( (nBuildId > 0) && (nBuildId < 9316) )
                                 bTransform = true; // treat OOo 3.0 beta1 as OOo 2.x
                         }

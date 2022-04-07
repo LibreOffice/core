@@ -45,6 +45,7 @@
 #include <oox/token/tokens.hxx>
 #include <svx/svdtrans.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/string.hxx>
 #include <vcl/virdev.hxx>
 
 namespace oox::vml {
@@ -274,7 +275,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     // try palette colors enclosed in brackets
     if( (aColorIndex.getLength() >= 3) && (aColorIndex[ 0 ] == '[') && (aColorIndex[ aColorIndex.getLength() - 1 ] == ']') )
     {
-        aDmlColor.setPaletteClr( aColorIndex.copy( 1, aColorIndex.getLength() - 2 ).toInt32() );
+        aDmlColor.setPaletteClr( comphelper::string::toInt32(aColorIndex.subView( 1, aColorIndex.getLength() - 2 )) );
         return aDmlColor;
     }
 
@@ -291,7 +292,7 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
                 case XML_darken:    nModToken = XML_shade;break;
                 case XML_lighten:   nModToken = XML_tint;
             }
-            sal_Int32 nValue = aColorIndex.copy( nOpenParen + 1, nCloseParen - nOpenParen - 1 ).toInt32();
+            sal_Int32 nValue = comphelper::string::toInt32(aColorIndex.subView( nOpenParen + 1, nCloseParen - nOpenParen - 1 ));
             if( (nModToken != XML_TOKEN_INVALID) && (0 <= nValue) && (nValue < 255) )
             {
                 /*  Simulate this modifier color by a color with related transformation.
@@ -336,7 +337,7 @@ void ConversionHelper::decodeVmlPath( ::std::vector< ::std::vector< Point > >& r
             if ( state != START && state != UNSUPPORTED )
             {
                 if ( nTokenLen > 0 )
-                    aCoordList.push_back( rPath.copy( nTokenStart, nTokenLen ).toInt32() );
+                    aCoordList.push_back( comphelper::string::toInt32(rPath.subView( nTokenStart, nTokenLen )) );
                 else
                     aCoordList.push_back( 0 );
                 nTokenLen = 0;

@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <comphelper/string.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -287,14 +288,13 @@ static void lcl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource 
 {
     struct CountWithPrefixSort
     {
-        bool operator() ( const OUString& s1 ,
-                         const OUString& s2 ) const
+        bool operator() ( std::u16string_view s1, std::u16string_view s2 ) const
         {
             // Get order numbers from entry name without prefix.
             // e.g. "m10" => 10
             //      "m5"  => 5
-            sal_Int32 n1 = s1.copy( 1 ).toInt32();
-            sal_Int32 n2 = s2.copy( 1 ).toInt32();
+            sal_Int32 n1 = comphelper::string::toInt32(s1.substr( 1 ));
+            sal_Int32 n2 = comphelper::string::toInt32(s2.substr( 1 ));
             // MUST be in [0,1] ... because it's a difference between
             // insert-positions of given entries in sorted list!
             return( n1<n2 );

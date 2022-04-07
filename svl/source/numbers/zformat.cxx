@@ -1614,7 +1614,7 @@ static bool lcl_matchKeywordAndGetNumber( const OUString & rString, const sal_In
 {
     if (0 <= nPos && nPos + rKeyword.getLength() < rString.getLength() && rString.matchIgnoreAsciiCase( rKeyword, nPos))
     {
-        nNumber = rString.copy( nPos + rKeyword.getLength()).toInt32();
+        nNumber = comphelper::string::toInt32(rString.subView( nPos + rKeyword.getLength()));
         return true;
     }
     else
