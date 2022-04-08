@@ -6264,57 +6264,6 @@ _make_version=`$GNUMAKE --version | grep GNU | $GREP -v GPL | $SED -e 's@^[[^0-9
 _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 if test "$_make_longver" -ge "038200"; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
-
-elif test "$_make_longver" -ge "038100"; then
-    if test "$build_os" = "cygwin"; then
-        AC_MSG_ERROR([failed ($GNUMAKE version >= 3.82 needed])
-    fi
-    AC_MSG_RESULT([$GNUMAKE $_make_version])
-
-    dnl ===================================================================
-    dnl Search all the common names for sha1sum
-    dnl ===================================================================
-    AC_CHECK_PROGS(SHA1SUM, sha1sum sha1 shasum openssl)
-    if test -z "$SHA1SUM"; then
-        AC_MSG_ERROR([install the appropriate SHA-1 checksumming program for this OS])
-    elif test "$SHA1SUM" = "openssl"; then
-        SHA1SUM="openssl sha1"
-    fi
-    AC_MSG_CHECKING([for GNU Make bug 20033])
-    TESTGMAKEBUG20033=`mktemp -d tmp.XXXXXX`
-    $SED -e "s/<TAB>/$TAB/g" > $TESTGMAKEBUG20033/Makefile << EOF
-A := \$(wildcard *.a)
-
-.PHONY: all
-all: \$(A:.a=.b)
-<TAB>@echo survived bug20033.
-
-.PHONY: setup
-setup:
-<TAB>@touch 1.a 2.a 3.a 4.a 5.a 6.a
-
-define d1
-@echo lala \$(1)
-@sleep 1
-endef
-
-define d2
-@echo tyty \$(1)
-@sleep 1
-endef
-
-%.b : %.a
-<TAB>\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
-<TAB>\$(call d1,\$(CHECKSUM)),\
-<TAB>\$(call d2,\$(CHECKSUM)))
-EOF
-    if test -z "`(cd $TESTGMAKEBUG20033 && $GNUMAKE setup && $GNUMAKE -j)|grep survived`"; then
-        no_parallelism_make="YES"
-        AC_MSG_RESULT([yes, disable parallelism])
-    else
-        AC_MSG_RESULT([no, keep parallelism enabled])
-    fi
-    rm -rf $TESTGMAKEBUG20033
 else
     AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi
@@ -14296,16 +14245,6 @@ else
 
         # If we hit the catch-all case, but /proc/cpuinfo doesn't exist or has an
         # unexpected format, 'wc -l' will have returned 0 (and we won't use -j at all).
-    fi
-fi
-
-if test "$no_parallelism_make" = "YES" && test $PARALLELISM -gt 1; then
-    if test -z "$with_parallelism"; then
-            AC_MSG_WARN([gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this.])
-            add_warning "gmake 3.81 crashes with parallelism > 1, reducing it to 1. upgrade to 3.82 to avoid this."
-            PARALLELISM="1"
-    else
-        add_warning "make 3.81 is prone to crashes with parallelism > 1. Since --with-parallelism was explicitly given, it is honored, but do not complain when make segfaults on you."
     fi
 fi
 
