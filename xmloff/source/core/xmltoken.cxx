@@ -3490,6 +3490,9 @@ namespace xmloff::token {
         TOKEN("color-lum-mod",       XML_COLOR_LUM_MOD ),
         TOKEN("color-lum-off",       XML_COLOR_LUM_OFF ),
 
+        TOKEN("content-control",     XML_CONTENT_CONTROL ),
+        TOKEN("showing-place-holder", XML_SHOWING_PLACE_HOLDER ),
+
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }
