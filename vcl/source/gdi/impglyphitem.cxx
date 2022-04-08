@@ -88,6 +88,54 @@ void SalLayoutGlyphs::AppendImpl(SalLayoutGlyphsImpl* pImpl)
 
 SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::clone() const { return new SalLayoutGlyphsImpl(*this); }
 
+// Clone, but only glyphs in the given range in the original text string.
+// It is possible the given range may not be cloned, in which case this returns nullptr.
+SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_Int32 length) const
+{
+    std::unique_ptr<SalLayoutGlyphsImpl> copy(new SalLayoutGlyphsImpl(*GetFont()));
+    copy->SetFlags(GetFlags());
+    copy->reserve(std::min<size_t>(size(), length));
+    size_t pos = 0;
+    // Skip glyphs that are in the string before the given index.
+    while (pos < size() && (*this)[pos].charPos() < index)
+        ++pos;
+    // If there's no glyph at the starting index, bail out. It's possible that getting glyphs
+    // from that position would give a different result than when getting glyphs for the entire
+    // string (SdSVGFilterTest::testSVGExportJavascriptURL() can trigger this).
+    if (pos >= size() || (*this)[pos].charPos() != index)
+        return nullptr;
+    DevicePoint startPoint = (*this)[pos].linearPos();
+    // Add and adjust all glyphs until the given length.
+    while (pos < size() && (*this)[pos].charPos() < index + length)
+    {
+        copy->push_back((*this)[pos]);
+        // LinearPos needs adjusting to start at zero for the first item.
+        copy->back().setLinearPos(copy->back().linearPos() - startPoint);
+        ++pos;
+    }
+    return copy.release();
+}
+
+#ifdef DBG_UTIL
+bool SalLayoutGlyphsImpl::isEqual(const SalLayoutGlyphsImpl* other) const
+{
+    if (GetFont()->mxFontMetric != other->GetFont()->mxFontMetric)
+        return false;
+    if (GetFlags() != other->GetFlags())
+        return false;
+    if (empty() || other->empty())
+        return empty() == other->empty();
+    if (size() != other->size())
+        return false;
+    for (size_t pos = 0; pos < size(); ++pos)
+    {
+        if ((*this)[pos] != (*other)[pos])
+            return false;
+    }
+    return true;
+}
+#endif
+
 bool SalLayoutGlyphsImpl::IsValid() const
 {
     if (!m_rFontInstance.is())
@@ -103,15 +151,50 @@ SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
     return cache.get();
 }
 
+static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source, sal_Int32 index,
+                                        sal_Int32 len)
+{
+    SalLayoutGlyphs ret;
+    for (int level = 0;; ++level)
+    {
+        const SalLayoutGlyphsImpl* sourceLevel = source.Impl(level);
+        if (sourceLevel == nullptr)
+            break;
+        SalLayoutGlyphsImpl* cloned = sourceLevel->cloneCharRange(index, len);
+        // If the glyphs range cannot be cloned, bail out.
+        if (cloned == nullptr)
+            return SalLayoutGlyphs();
+        ret.AppendImpl(cloned);
+    }
+    return ret;
+}
+
+#ifdef DBG_UTIL
+static void checkGlyphsEqual(const SalLayoutGlyphs& g1, const SalLayoutGlyphs& g2)
+{
+    for (int level = 0;; ++level)
+    {
+        const SalLayoutGlyphsImpl* l1 = g1.Impl(level);
+        const SalLayoutGlyphsImpl* l2 = g2.Impl(level);
+        if (l1 == nullptr || l2 == nullptr)
+        {
+            assert(l1 == l2);
+            break;
+        }
+        assert(l1->isEqual(l2));
+    }
+}
+#endif
+
 const SalLayoutGlyphs*
 SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, const OUString& text,
                                       sal_Int32 nIndex, sal_Int32 nLen, tools::Long nLogicWidth,
-                                      const vcl::text::TextLayoutCache* layoutCache) const
+                                      const vcl::text::TextLayoutCache* layoutCache)
 {
     if (nLen == 0)
         return nullptr;
     const CachedGlyphsKey key(outputDevice, text, nIndex, nLen, nLogicWidth);
-    auto it = mCachedGlyphs.find(key);
+    GlyphsCache::const_iterator it = mCachedGlyphs.find(key);
     if (it != mCachedGlyphs.end())
     {
         if (it->second.IsValid())
@@ -121,12 +204,6 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         // So in that case this is a cached failure.
         return nullptr;
     }
-    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
-    if (layoutCache == nullptr)
-    {
-        tmpLayoutCache = OutputDevice::CreateTextLayoutCache(text);
-        layoutCache = tmpLayoutCache.get();
-    }
 #if !ENABLE_FUZZERS
     const SalLayoutFlags glyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly;
 #else
@@ -134,6 +211,42 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     const SalLayoutFlags glyphItemsOnlyLayout
         = SalLayoutFlags::GlyphItemsOnly | SalLayoutFlags::BiDiStrong;
 #endif
+    if (nIndex != 0 || nLen != text.getLength())
+    {
+        // The glyphs functions are often called first for an entire string
+        // and then with an increasing starting index until the end of the string.
+        // Which means it's possible to get the glyphs faster by just copying
+        // a subset of the full glyphs and adjusting as necessary.
+        if (mLastTemporaryKey.has_value() && mLastTemporaryKey == key)
+            return &mLastTemporaryGlyphs;
+        const CachedGlyphsKey keyWhole(outputDevice, text, 0, text.getLength(), nLogicWidth);
+        GlyphsCache::const_iterator itWhole = mCachedGlyphs.find(keyWhole);
+        if (itWhole != mCachedGlyphs.end() && itWhole->second.IsValid())
+        {
+            mLastTemporaryGlyphs = makeGlyphsSubset(itWhole->second, nIndex, nLen);
+            if (mLastTemporaryGlyphs.IsValid())
+            {
+                mLastTemporaryKey = std::move(key);
+#ifdef DBG_UTIL
+                // TODO: I'm not entirely certain makeGlyphsSubset() handles properly 100% of cases,
+                // so check if the subset result really matches what we would get normally.
+                // If this is too slow, it can probably be eventually removed.
+                std::unique_ptr<SalLayout> layout
+                    = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
+                                               glyphItemsOnlyLayout, layoutCache);
+                assert(layout);
+                checkGlyphsEqual(mLastTemporaryGlyphs, layout->GetGlyphs());
+#endif
+                return &mLastTemporaryGlyphs;
+            }
+        }
+    }
+    std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
+    if (layoutCache == nullptr)
+    {
+        tmpLayoutCache = OutputDevice::CreateTextLayoutCache(text);
+        layoutCache = tmpLayoutCache.get();
+    }
     std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
         text, nIndex, nLen, Point(0, 0), nLogicWidth, {}, glyphItemsOnlyLayout, layoutCache);
     if (layout)

@@ -96,8 +96,19 @@ public:
 
     void setNewWidth(sal_Int32 width) { m_nNewWidth = width; }
     void addNewWidth(sal_Int32 width) { m_nNewWidth += width; }
+    void setLinearPos(const DevicePoint& point) { m_aLinearPos = point; }
     void setLinearPosX(double x) { m_aLinearPos.setX(x); }
     void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
+#ifdef DBG_UTIL
+    bool operator==(const GlyphItem& other) const
+    {
+        return m_aLinearPos == other.m_aLinearPos && m_nOrigWidth == other.m_nOrigWidth
+               && m_nCharPos == other.m_nCharPos && m_nXOffset == other.m_nXOffset
+               && m_nNewWidth == other.m_nNewWidth && m_aGlyphId == other.m_aGlyphId
+               && m_nCharCount == other.m_nCharCount && m_nFlags == other.m_nFlags;
+    }
+    bool operator!=(const GlyphItem& other) const { return !(*this == other); }
+#endif
 };
 
 bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
@@ -126,10 +137,14 @@ public:
     {
     }
     SalLayoutGlyphsImpl* clone() const;
+    SalLayoutGlyphsImpl* cloneCharRange(sal_Int32 index, sal_Int32 length) const;
     const rtl::Reference<LogicalFontInstance>& GetFont() const { return m_rFontInstance; }
     bool IsValid() const;
     void SetFlags(SalLayoutFlags flags) { mnFlags = flags; }
     SalLayoutFlags GetFlags() const { return mnFlags; }
+#ifdef DBG_UTIL
+    bool isEqual(const SalLayoutGlyphsImpl* other) const;
+#endif
 
 private:
     rtl::Reference<LogicalFontInstance> m_rFontInstance;
