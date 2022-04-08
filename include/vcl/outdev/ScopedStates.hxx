@@ -15,6 +15,7 @@
 
 namespace vcl
 {
+/** Change the antialiasing to another value for the life-time the object */
 class ScopedAntialiasing
 {
 private:
@@ -33,6 +34,31 @@ public:
     }
 
     ~ScopedAntialiasing() { m_rOutputDevice.SetAntialiasing(m_nPreviousAAState); }
+};
+
+/** Change the MapMode to another value for the life-time the object */
+template <typename T> class ScopedMapMode
+{
+private:
+    T& m_rOutputDevice;
+    MapMode m_aOldMapMode;
+    MapMode m_aNewMapMode;
+
+public:
+    ScopedMapMode(T& rOutputDevice, MapMode const& aNewMapMode)
+        : m_rOutputDevice(rOutputDevice)
+        , m_aOldMapMode(m_rOutputDevice.GetMapMode())
+        , m_aNewMapMode(aNewMapMode)
+    {
+        if (m_aOldMapMode != m_aNewMapMode)
+            m_rOutputDevice.SetMapMode(m_aNewMapMode);
+    }
+
+    ~ScopedMapMode()
+    {
+        if (m_aOldMapMode != m_aNewMapMode)
+            m_rOutputDevice.SetMapMode(m_aOldMapMode);
+    }
 };
 }
 

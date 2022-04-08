@@ -141,6 +141,7 @@
 #include <svx/sdr/overlay/overlayselection.hxx>
 #include <comphelper/lok.hxx>
 #include <sfx2/lokhelper.hxx>
+#include <vcl/outdev/ScopedStates.hxx>
 
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
@@ -6331,11 +6332,7 @@ void updateLibreOfficeKitAutoFill(const ScViewData& rViewData, tools::Rectangle 
 void ScGridWindow::UpdateCursorOverlay()
 {
     ScDocument& rDoc = mrViewData.GetDocument();
-
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    vcl::ScopedMapMode<ScGridWindow> aMapmode(*this, GetDrawMapMode());
 
     // Existing OverlayObjects may be transformed in later versions.
     // For now, just re-create them.
@@ -6494,9 +6491,6 @@ void ScGridWindow::UpdateCursorOverlay()
             }
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::GetCellSelection(std::vector<tools::Rectangle>& rLogicRects)
@@ -6518,10 +6512,7 @@ void ScGridWindow::DeleteSelectionOverlay()
 
 void ScGridWindow::UpdateSelectionOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    vcl::ScopedMapMode<ScGridWindow> aMapmode(*this, GetDrawMapMode());
 
     DeleteSelectionOverlay();
     std::vector<tools::Rectangle> aRects;
@@ -6593,9 +6584,6 @@ void ScGridWindow::UpdateSelectionOverlay()
             ScInputHandler::SendReferenceMarks(pViewShell, aReferenceMarks);
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteAutoFillOverlay()
@@ -6606,10 +6594,7 @@ void ScGridWindow::DeleteAutoFillOverlay()
 
 void ScGridWindow::UpdateAutoFillOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    vcl::ScopedMapMode<ScGridWindow> aMapmode(*this, GetDrawMapMode());
 
     DeleteAutoFillOverlay();
 
@@ -6688,9 +6673,6 @@ void ScGridWindow::UpdateAutoFillOverlay()
         mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
         mpOOAutoFill->append(std::move(pOverlay));
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteDragRectOverlay()
@@ -6703,10 +6685,7 @@ void ScGridWindow::UpdateDragRectOverlay()
     bool bInPrintTwips = comphelper::LibreOfficeKit::isCompatFlagSet(
         comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
 
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    vcl::ScopedMapMode<ScGridWindow> aMapmode(*this, GetDrawMapMode());
 
     DeleteDragRectOverlay();
 
@@ -6859,9 +6838,6 @@ void ScGridWindow::UpdateDragRectOverlay()
             pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_TEXT_SELECTION, aRectsString.getStr());
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteHeaderOverlay()
@@ -6871,10 +6847,7 @@ void ScGridWindow::DeleteHeaderOverlay()
 
 void ScGridWindow::UpdateHeaderOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    vcl::ScopedMapMode<ScGridWindow> aMapmode(*this, GetDrawMapMode());
 
     DeleteHeaderOverlay();
 
@@ -6905,9 +6878,6 @@ void ScGridWindow::UpdateHeaderOverlay()
             mpOOHeader->append(std::move(pOverlay));
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteShrinkOverlay()
@@ -6917,10 +6887,7 @@ void ScGridWindow::DeleteShrinkOverlay()
 
 void ScGridWindow::UpdateShrinkOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-    MapMode aOldMode = GetMapMode();
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aDrawMode );
+    vcl::ScopedMapMode<ScGridWindow> aMapmode(*this, GetDrawMapMode());
 
     DeleteShrinkOverlay();
 
@@ -6972,9 +6939,6 @@ void ScGridWindow::UpdateShrinkOverlay()
             mpOOShrink->append(std::move(pOverlay));
         }
     }
-
-    if ( aOldMode != aDrawMode )
-        SetMapMode( aOldMode );
 }
 
 void ScGridWindow::DeleteSparklineGroupOverlay()
@@ -6984,60 +6948,53 @@ void ScGridWindow::DeleteSparklineGroupOverlay()
 
 void ScGridWindow::UpdateSparklineGroupOverlay()
 {
-    MapMode aDrawMode = GetDrawMapMode();
-
-    MapMode aOldMode = GetMapMode();
-    if (aOldMode != aDrawMode)
-        SetMapMode(aDrawMode);
+    vcl::ScopedMapMode<ScGridWindow> aMapmode(*this, GetDrawMapMode());
 
     DeleteSparklineGroupOverlay();
 
     ScAddress aCurrentAddress = mrViewData.GetCurPos();
-
     ScDocument& rDocument = mrViewData.GetDocument();
-    if (auto pSparkline = rDocument.GetSparkline(aCurrentAddress))
+
+    auto pSparkline = rDocument.GetSparkline(aCurrentAddress);
+    if (!pSparkline)
+        return;
+
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
+    if (!xOverlayManager.is())
+        return;
+
+    auto* pList = rDocument.GetSparklineList(aCurrentAddress.Tab());
+    if (!pList)
+        return;
+
+    auto const& pSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
+
+    Color aColor = SvtOptionsDrawinglayer::getHilightColor();
+
+    std::vector<basegfx::B2DRange> aRanges;
+    const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
+
+    for (auto const& pCurrentSparkline : pSparklines)
     {
-        mpOOSparklineGroup.reset(new sdr::overlay::OverlayObjectList);
+        SCCOL nColumn = pCurrentSparkline->getColumn();
+        SCROW nRow = pCurrentSparkline->getRow();
 
-        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
-        if (xOverlayManager.is())
-        {
-            auto* pList = rDocument.GetSparklineList(aCurrentAddress.Tab());
-            if (pList)
-            {
-                auto const& pSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
+        Point aStart = mrViewData.GetScrPos(nColumn, nRow, eWhich);
+        Point aEnd = mrViewData.GetScrPos(nColumn + 1, nRow + 1, eWhich);
 
-                Color aColor = SvtOptionsDrawinglayer::getHilightColor();
+        basegfx::B2DRange aRange(aStart.X(), aStart.Y(), aEnd.X(), aEnd.Y());
 
-                std::vector<basegfx::B2DRange> aRanges;
-                const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
-
-                for (auto const& pCurrentSparkline : pSparklines)
-                {
-                    SCCOL nColumn = pCurrentSparkline->getColumn();
-                    SCROW nRow = pCurrentSparkline->getRow();
-
-                    Point aStart = mrViewData.GetScrPos(nColumn, nRow, eWhich);
-                    Point aEnd = mrViewData.GetScrPos(nColumn + 1, nRow + 1, eWhich);
-
-                    basegfx::B2DRange aRange(aStart.X(), aStart.Y(), aEnd.X(), aEnd.Y());
-
-                    aRange.transform(aTransform);
-                    aRanges.push_back(aRange);
-                }
-
-                std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
-                        sdr::overlay::OverlayType::Transparent,
-                        aColor, std::move(aRanges), true));
-
-                xOverlayManager->add(*pOverlay);
-                mpOOSparklineGroup->append(std::move(pOverlay));
-            }
-        }
+        aRange.transform(aTransform);
+        aRanges.push_back(aRange);
     }
 
-    if (aOldMode != aDrawMode)
-        SetMapMode(aOldMode);
+    std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
+            sdr::overlay::OverlayType::Transparent,
+            aColor, std::move(aRanges), true));
+
+    xOverlayManager->add(*pOverlay);
+    mpOOSparklineGroup.reset(new sdr::overlay::OverlayObjectList);
+    mpOOSparklineGroup->append(std::move(pOverlay));
 }
 
 // #i70788# central method to get the OverlayManager safely
