@@ -29,7 +29,7 @@
 #include "fontinstance.hxx"
 #include "glyphid.hxx"
 
-enum class GlyphItemFlags : sal_uInt8
+enum class GlyphItemFlags : sal_uInt16
 {
     NONE = 0,
     IS_IN_CLUSTER = 0x01,
@@ -39,11 +39,12 @@ enum class GlyphItemFlags : sal_uInt8
     IS_SPACING = 0x10,
     ALLOW_KASHIDA = 0x20,
     IS_DROPPED = 0x40,
-    IS_CLUSTER_START = 0x80
+    IS_CLUSTER_START = 0x80,
+    IS_UNSAFE_TO_BREAK = 0x100 // HB_GLYPH_FLAG_UNSAFE_TO_BREAK from harfbuzz
 };
 namespace o3tl
 {
-template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 0xff>
+template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 0x1ff>
 {
 };
 };
@@ -54,22 +55,24 @@ class VCL_DLLPUBLIC GlyphItem
     sal_Int32 m_nOrigWidth; // original glyph width
     sal_Int32 m_nCharPos; // index in string
     sal_Int32 m_nXOffset;
+    sal_Int32 m_nYOffset;
     sal_Int32 m_nNewWidth; // width after adjustments
     sal_GlyphId m_aGlyphId;
-    sal_Int8 m_nCharCount; // number of characters making up this glyph
     GlyphItemFlags m_nFlags;
+    sal_Int8 m_nCharCount; // number of characters making up this glyph
 
 public:
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const DevicePoint& rLinearPos,
-              GlyphItemFlags nFlags, int nOrigWidth, int nXOffset)
+              GlyphItemFlags nFlags, int nOrigWidth, int nXOffset, int nYOffset)
         : m_aLinearPos(rLinearPos)
         , m_nOrigWidth(nOrigWidth)
         , m_nCharPos(nCharPos)
         , m_nXOffset(nXOffset)
+        , m_nYOffset(nYOffset)
         , m_nNewWidth(nOrigWidth)
         , m_aGlyphId(aGlyphId)
-        , m_nCharCount(nCharCount)
         , m_nFlags(nFlags)
+        , m_nCharCount(nCharCount)
     {
     }
 
@@ -81,6 +84,7 @@ public:
     bool AllowKashida() const { return bool(m_nFlags & GlyphItemFlags::ALLOW_KASHIDA); }
     bool IsDropped() const { return bool(m_nFlags & GlyphItemFlags::IS_DROPPED); }
     bool IsClusterStart() const { return bool(m_nFlags & GlyphItemFlags::IS_CLUSTER_START); }
+    bool IsUnsafeToBreak() const { return bool(m_nFlags & GlyphItemFlags::IS_UNSAFE_TO_BREAK); }
 
     inline bool GetGlyphBoundRect(const LogicalFontInstance*, tools::Rectangle&) const;
     inline bool GetGlyphOutline(const LogicalFontInstance*, basegfx::B2DPolyPolygon&) const;
@@ -91,13 +95,26 @@ public:
     int origWidth() const { return m_nOrigWidth; }
     int charPos() const { return m_nCharPos; }
     int xOffset() const { return m_nXOffset; }
+    int yOffset() const { return m_nYOffset; }
     sal_Int32 newWidth() const { return m_nNewWidth; }
     const DevicePoint& linearPos() const { return m_aLinearPos; }
 
     void setNewWidth(sal_Int32 width) { m_nNewWidth = width; }
     void addNewWidth(sal_Int32 width) { m_nNewWidth += width; }
+    void setLinearPos(const DevicePoint& point) { m_aLinearPos = point; }
     void setLinearPosX(double x) { m_aLinearPos.setX(x); }
     void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
+#ifdef DBG_UTIL
+    bool operator==(const GlyphItem& other) const
+    {
+        return m_aLinearPos == other.m_aLinearPos && m_nOrigWidth == other.m_nOrigWidth
+               && m_nCharPos == other.m_nCharPos && m_nXOffset == other.m_nXOffset
+               && m_nYOffset == other.m_nYOffset && m_nNewWidth == other.m_nNewWidth
+               && m_aGlyphId == other.m_aGlyphId && m_nCharCount == other.m_nCharCount
+               && m_nFlags == other.m_nFlags;
+    }
+    bool operator!=(const GlyphItem& other) const { return !(*this == other); }
+#endif
 };
 
 bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
@@ -126,10 +143,14 @@ public:
     {
     }
     SalLayoutGlyphsImpl* clone() const;
+    SalLayoutGlyphsImpl* cloneCharRange(sal_Int32 index, sal_Int32 length) const;
     const rtl::Reference<LogicalFontInstance>& GetFont() const { return m_rFontInstance; }
     bool IsValid() const;
     void SetFlags(SalLayoutFlags flags) { mnFlags = flags; }
     SalLayoutFlags GetFlags() const { return mnFlags; }
+#ifdef DBG_UTIL
+    bool isEqual(const SalLayoutGlyphsImpl* other) const;
+#endif
 
 private:
     rtl::Reference<LogicalFontInstance> m_rFontInstance;

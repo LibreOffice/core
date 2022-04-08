@@ -3900,7 +3900,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     // make sure OpenSymbol is embedded, and includes our checkmark
     const sal_Unicode cMark=0x2713;
     const GlyphItem aItem(0, 0, pMap->GetGlyphIndex(cMark),
-                          DevicePoint(), GlyphItemFlags::NONE, 0, 0);
+                          DevicePoint(), GlyphItemFlags::NONE, 0, 0, 0);
     const std::vector<sal_Ucs> aCodeUnits={ cMark };
     sal_uInt8 nMappedGlyph;
     sal_Int32 nMappedFontObject;
