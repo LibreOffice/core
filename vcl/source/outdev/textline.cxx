@@ -837,7 +837,7 @@ void OutputDevice::ImplDrawTextLines( SalLayout& rSalLayout, FontStrikeout eStri
                 }
 
                 // update the length of the textline
-                nWidth += pGlyph->m_nNewWidth;
+                nWidth += pGlyph->newWidth();
             }
             else if( nWidth > 0 )
             {
