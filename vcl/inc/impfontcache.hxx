@@ -25,9 +25,9 @@
 #include <o3tl/lru_map.hxx>
 #include <o3tl/hash_combine.hxx>
 #include <tools/gen.hxx>
-#include <vcl/glyphitem.hxx>
 
 #include "font/FontSelectPattern.hxx"
+#include "glyphid.hxx"
 
 class Size;
 namespace vcl { class Font; }

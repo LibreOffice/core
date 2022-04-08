@@ -28,10 +28,10 @@
 #include <tools/gen.hxx>
 #include <tools/fontenum.hxx>
 #include <tools/degree.hxx>
-#include <vcl/glyphitem.hxx>
 
 #include "font/FontSelectPattern.hxx"
 #include "impfontmetricdata.hxx"
+#include "glyphid.hxx"
 
 #include <optional>
 #include <unordered_map>
