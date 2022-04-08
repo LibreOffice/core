@@ -58,6 +58,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fedfcbc1_e22cc921",
+        "filename": "vcl/inc/qt5/QtFrame.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-08T14:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a482d7e_d82dea4a",
+      "range": {
+        "startLine": 144,
+        "startChar": 41,
+        "endLine": 144,
+        "endChar": 63
+      },
+      "revId": "f0866f084c1c23220419c9124385114bb659138f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad6c17db_07b8d23b",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-04-08T11:53:02Z",
       "side": 1,
       "message": "I\u0027d find that a little more straightforward/readable without the cast:\n\n    if (m_pTopLevel)\n        return m_pTopLevel;\n    return m_pQWidget;",
+      "range": {
+        "startLine": 351,
+        "startChar": 4,
+        "endLine": 351,
+        "endChar": 96
+      },
+      "revId": "f0866f084c1c23220419c9124385114bb659138f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d32c0fa_61b66d42",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-08T14:30:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad6c17db_07b8d23b",
       "range": {
         "startLine": 351,
         "startChar": 4,
