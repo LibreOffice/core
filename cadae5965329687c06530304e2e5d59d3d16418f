@@ -16,6 +16,24 @@
       "message": "Would there e a reason to always run the unoidl-write test?\n\nIt looks like unoidl-write, like unoidl-check, otherwise is just used for ODK. If not, we can just use the first revision of this patch, which always builds unoidl-write.",
       "revId": "cadae5965329687c06530304e2e5d59d3d16418f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73e5c4eb_8fbc11f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-08T11:03:01Z",
+      "side": 1,
+      "message": "unoidl-write is used during the build ever since \u003chttps://git.libreoffice.org/core/+/6db34b6b33ba8e3b13683efd05df8441b87e9c92%5E!/\u003e \"Directly build UNOIDL .rdb files from .idl files\" (and has recently also become part of the SDK); thus CustomTarget_unoidl-write_test should also be run as part of every build.",
+      "parentUuid": "69617a7d_acacbb34",
+      "revId": "cadae5965329687c06530304e2e5d59d3d16418f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
