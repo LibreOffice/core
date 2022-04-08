@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "76c3ca04_8640c1af",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-08T07:21:31Z",
+      "side": 1,
+      "message": "Please use some more telling name, like \"emulateTyping\" or something. lcl_ is not needed here (it doesn\u0027t help no one, esp. in unnamed namespace inside a unit test source); and \"insertString\" doesn\u0027t allow to understand what is this for (the main thing, as you explain in the commit message, is to mimic user interaction).",
+      "range": {
+        "startLine": 65,
+        "startChar": 5,
+        "endLine": 65,
+        "endChar": 21
+      },
+      "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c6b5621a_95a5f2b0",
         "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
         "patchSetId": 1
