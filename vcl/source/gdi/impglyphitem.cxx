@@ -142,7 +142,12 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         assert(mCachedGlyphs.find(key) == mCachedGlyphs.begin()); // newly inserted item is first
         return &mCachedGlyphs.begin()->second;
     }
-    return nullptr;
+    else
+    {
+        // Failure, cache it too as invalid glyphs.
+        mCachedGlyphs.insert(std::make_pair(key, SalLayoutGlyphs()));
+        return nullptr;
+    }
 }
 
 SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const OutputDevice>& d,
