@@ -34,6 +34,24 @@
       "parentUuid": "c6b5621a_95a5f2b0",
       "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac8fcd0_04808cd4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-08T07:09:23Z",
+      "side": 1,
+      "message": "SvtSysLocaleOptions().SetIgnoreLanguageChange(true);",
+      "parentUuid": "468160f5_223cd3cd",
+      "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
