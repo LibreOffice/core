@@ -38,6 +38,7 @@
 #include <workwin.hxx>
 
 #include <sfx2/sfxsids.hrc>
+#include <o3tl/string_view.hxx>
 
 const sal_uInt16 nVersion = 2;
 
@@ -389,7 +390,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     // Read version
     char cToken = ',';
     sal_Int32 nPos = aWinData.indexOf( cToken );
-    sal_uInt16 nActVersion = static_cast<sal_uInt16>(comphelper::string::toInt32(aWinData.subView( 0, nPos + 1 )));
+    sal_uInt16 nActVersion = static_cast<sal_uInt16>(o3tl::toInt32(aWinData.subView( 0, nPos + 1 )));
     if ( nActVersion != nVersion )
         return;
 
@@ -406,12 +407,12 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
     if ( nNextPos != -1 )
     {
         // there is extra information
-        rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(comphelper::string::toInt32(aWinData.subView( nPos+1, nNextPos - nPos - 1 ))));
+        rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(o3tl::toInt32(aWinData.subView( nPos+1, nNextPos - nPos - 1 ))));
         aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, u"" );
         rInfo.aExtraString = aWinData;
     }
     else
-        rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(comphelper::string::toInt32(aWinData.subView( nPos+1 ))));
+        rInfo.nFlags = static_cast<SfxChildWindowFlags>(static_cast<sal_uInt16>(o3tl::toInt32(aWinData.subView( nPos+1 ))));
 }
 
 bool ParentIsFloatingWindow(const vcl::Window *pParent)

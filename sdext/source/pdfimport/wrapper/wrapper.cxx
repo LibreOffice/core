@@ -255,19 +255,19 @@ std::string_view LineParser::readNextToken()
 void LineParser::readInt32( sal_Int32& o_Value )
 {
     std::string_view tok = readNextToken();
-    o_Value = comphelper::string::toInt32(tok);
+    o_Value = o3tl::toInt32(tok);
 }
 
 sal_Int32 LineParser::readInt32()
 {
     std::string_view tok = readNextToken();
-    return comphelper::string::toInt32(tok);
+    return o3tl::toInt32(tok);
 }
 
 void LineParser::readInt64( sal_Int64& o_Value )
 {
     std::string_view tok = readNextToken();
-    o_Value = comphelper::string::toInt64(tok);
+    o_Value = o3tl::toInt64(tok);
 }
 
 void LineParser::readDouble( double& o_Value )

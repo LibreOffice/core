@@ -304,6 +304,32 @@ inline std::string_view trim(std::string_view str)
     return std::string_view{ str.data() + nPreSpaces,
                              static_cast<size_t>(nLen - nPostSpaces - nPreSpaces) };
 }
+
+// Like OString::toInt32, but for std::string_view:
+inline sal_Int32 toInt32(std::u16string_view str, sal_Int16 radix = 10)
+{
+    sal_Int64 n = rtl_ustr_toInt64_WithLength(str.data(), radix, str.size());
+    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
+        n = 0;
+    return n;
+}
+inline sal_Int32 toInt32(std::string_view str, sal_Int16 radix = 10)
+{
+    sal_Int64 n = rtl_str_toInt64_WithLength(str.data(), radix, str.size());
+    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
+        n = 0;
+    return n;
+}
+
+// Like OString::toInt64, but for std::string_view:
+inline sal_Int64 toInt64(std::u16string_view str, sal_Int16 radix = 10)
+{
+    return rtl_ustr_toInt64_WithLength(str.data(), radix, str.size());
+}
+inline sal_Int64 toInt64(std::string_view str, sal_Int16 radix = 10)
+{
+    return rtl_str_toInt64_WithLength(str.data(), radix, str.size());
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

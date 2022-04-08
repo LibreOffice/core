@@ -73,6 +73,7 @@
 #include <unotools/fontcvt.hxx>
 #include <fasttokenhandler.hxx>
 #include <vcl/GraphicExternalLink.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/rdf/XMetadatable.hpp>
 #include <com/sun/star/rdf/XRepositorySupplier.hpp>
@@ -1830,11 +1831,11 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
         sal_Int32 nIndex = aBuildId.indexOf('$');
         if (nIndex != -1)
         {
-            rUPD = comphelper::string::toInt32(aBuildId.subView( 0, nIndex ));
+            rUPD = o3tl::toInt32(aBuildId.subView( 0, nIndex ));
             sal_Int32 nIndexEnd = aBuildId.indexOf(';', nIndex);
             rBuild = (nIndexEnd == -1)
-                ? comphelper::string::toInt32(aBuildId.subView(nIndex + 1))
-                : comphelper::string::toInt32(aBuildId.subView(nIndex + 1, nIndexEnd - nIndex - 1));
+                ? o3tl::toInt32(aBuildId.subView(nIndex + 1))
+                : o3tl::toInt32(aBuildId.subView(nIndex + 1, nIndexEnd - nIndex - 1));
             bRet = true;
         }
     }

@@ -23,7 +23,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sax/fastattribs.hxx>
 #include <oox/token/tokenmap.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace oox {
 
@@ -254,12 +254,12 @@ OptValue< util::DateTime > AttributeList::getDateTime( sal_Int32 nAttrToken ) co
         (aValue[ 10 ] == 'T') && (aValue[ 13 ] == ':') && (aValue[ 16 ] == ':');
     if( bValid )
     {
-        aDateTime.Year    = static_cast< sal_uInt16 >( comphelper::string::toInt32(aValue.subView( 0, 4 )) );
-        aDateTime.Month   = static_cast< sal_uInt16 >( comphelper::string::toInt32(aValue.subView( 5, 2 )) );
-        aDateTime.Day     = static_cast< sal_uInt16 >( comphelper::string::toInt32(aValue.subView( 8, 2 )) );
-        aDateTime.Hours   = static_cast< sal_uInt16 >( comphelper::string::toInt32(aValue.subView( 11, 2 )) );
-        aDateTime.Minutes = static_cast< sal_uInt16 >( comphelper::string::toInt32(aValue.subView( 14, 2 )) );
-        aDateTime.Seconds = static_cast< sal_uInt16 >( comphelper::string::toInt32(aValue.subView( 17, 2 )) );
+        aDateTime.Year    = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 0, 4 )) );
+        aDateTime.Month   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 5, 2 )) );
+        aDateTime.Day     = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 8, 2 )) );
+        aDateTime.Hours   = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 11, 2 )) );
+        aDateTime.Minutes = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 14, 2 )) );
+        aDateTime.Seconds = static_cast< sal_uInt16 >( o3tl::toInt32(aValue.subView( 17, 2 )) );
     }
     return OptValue< util::DateTime >( bValid, aDateTime );
 }

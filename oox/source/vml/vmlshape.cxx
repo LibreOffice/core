@@ -69,7 +69,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
@@ -314,7 +314,7 @@ void ShapeBase::finalizeFragmentImport()
         static const OUStringLiteral sShapeTypePrefix = u"shapetype_";
         OUString tmp;
         if (aType.startsWith(sShapeTypePrefix)) {
-            maTypeModel.moShapeType = comphelper::string::toInt32(aType.subView(sShapeTypePrefix.getLength()));
+            maTypeModel.moShapeType = o3tl::toInt32(aType.subView(sShapeTypePrefix.getLength()));
         }
         else if (aType.startsWith("_x0000_t", &tmp)) {
             maTypeModel.moShapeType = tmp.toInt32();
@@ -378,8 +378,8 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
                     if (idPos < seqPos)
                     {
                         auto idPosEnd = idPos+2;
-                        id = comphelper::string::toInt32(sLinkChainName.subView(idPosEnd, seqPos - idPosEnd));
-                        seq = comphelper::string::toInt32(sLinkChainName.subView(seqPos+2));
+                        id = o3tl::toInt32(sLinkChainName.subView(idPosEnd, seqPos - idPosEnd));
+                        seq = o3tl::toInt32(sLinkChainName.subView(seqPos+2));
                     }
                 }
 

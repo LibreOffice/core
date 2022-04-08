@@ -1279,7 +1279,7 @@ static void lcl_collectUsedNums(std::vector<unsigned int>& rSetFlags, sal_Int32 
     if (o3tl::starts_with(rName, rCmpName))
     {
         // Only get and set the Flag
-        const sal_Int32 nNum = comphelper::string::toInt32(rName.substr(nNmLen)) - 1;
+        const sal_Int32 nNum = o3tl::toInt32(rName.substr(nNmLen)) - 1;
         if (nNum >= 0)
             rSetFlags.push_back(nNum);
     }
@@ -1485,7 +1485,7 @@ void SwDoc::SetAllUniqueFlyNames()
 
                 if ( pNum )
                 {
-                    const sal_Int32 nNewLen = comphelper::string::toInt32(aNm.subView( nLen ));
+                    const sal_Int32 nNewLen = o3tl::toInt32(aNm.subView( nLen ));
                     if (*pNum < nNewLen)
                         *pNum = nNewLen;
                 }

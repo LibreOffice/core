@@ -37,7 +37,7 @@
 #include <com/sun/star/rendering/XCanvas.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -370,11 +370,11 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
     sal_Int32 nDistance (0);
     if (rsDistance.endsWith("px"))
     {
-        nDistance = comphelper::string::toInt32(rsDistance.subView(0,rsDistance.getLength()-2));
+        nDistance = o3tl::toInt32(rsDistance.subView(0,rsDistance.getLength()-2));
     }
     else if (rsDistance.endsWith("l"))
     {
-        const sal_Int32 nLines (comphelper::string::toInt32(rsDistance.subView(0,rsDistance.getLength()-1)));
+        const sal_Int32 nLines (o3tl::toInt32(rsDistance.subView(0,rsDistance.getLength()-1)));
         // Take the height of the first line as the height of every line.
         const sal_uInt32 nFirstLineHeight (mpEditEngine->GetLineHeight(0));
         nDistance = nFirstLineHeight * nLines;

@@ -476,7 +476,7 @@ OUString DomainMapper_Impl::GetUnusedPageStyleName()
         {
             if ( rStyleName.startsWith( DEFAULT_STYLE ) )
             {
-                sal_Int32 nIndex = comphelper::string::toInt32(rStyleName.subView( strlen( DEFAULT_STYLE ) ));
+                sal_Int32 nIndex = o3tl::toInt32(rStyleName.subView( strlen( DEFAULT_STYLE ) ));
                 if ( nIndex > nMaxIndex )
                     nMaxIndex = nIndex;
             }
@@ -5760,7 +5760,7 @@ void DomainMapper_Impl::handleToc
         {
             sal_Int32 nIndex = 0;
             sValue.getToken( 0, '-', nIndex );
-            nMaxLevel = static_cast<sal_Int16>(nIndex != -1 ? comphelper::string::toInt32(sValue.subView(nIndex)) : 0);
+            nMaxLevel = static_cast<sal_Int16>(nIndex != -1 ? o3tl::toInt32(sValue.subView(nIndex)) : 0);
         }
     }
 //                  \p Defines the separator between the table entry and its page number
@@ -6370,7 +6370,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                 if (nStartIndex > 0 && nEndIndex > 0)
                                 {
                                     // nDown is the requested "lower by" value in points.
-                                    sal_Int32 nDown = comphelper::string::toInt32(aCommand.subView(0, nStartIndex));
+                                    sal_Int32 nDown = o3tl::toInt32(aCommand.subView(0, nStartIndex));
                                     OUString aContent = aCommand.copy(nStartIndex + 1, nEndIndex - nStartIndex - 1);
                                     PropertyMapPtr pCharContext = GetTopContext();
                                     // dHeight is the font size of the current style.
