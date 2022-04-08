@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39f42732_1da501df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-08T05:03:25Z",
+      "side": 1,
+      "message": "Hi Miklos. This patch starts another series that finishes up something from you a year ago - importing DOCX createdata as fixed field. This adds CreateAuthor, DOC, and export support, plus a few other nearby-code-related fixes.",
+      "revId": "93a5ba15c05ace4feb4dc3696386bc69200ac239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
