@@ -2604,6 +2604,29 @@ bool ImpSvNumberInputScan::ScanMidString( const OUString& rString, sal_uInt16 nS
         SkipBlanks(rString, nPos);
         bDate = SkipString( rDate, rString, nPos);      // 10.  10-  10/
     }
+    if (!bDate && nStringPos == 1 && mpFormat && (mpFormat->GetType() & SvNumFormatType::DATE))
+    {
+        // If a DMY format was given and a mid string starts with a literal
+        // ". " dot+space and could contain a following month name and ends
+        // with a space or LongDateMonthSeparator, like it's scanned in
+        // `14". AUG "18`, then it may be a date as well. Regardless whether
+        // defined such by the locale or not.
+        // This *could* check for presence of ". "MMM or ". "MMMM in the actual
+        // format code for further restriction to match only if present, but..
+
+        const sal_uInt32 nExactDateOrder = mpFormat->GetExactDateOrder();
+        // Exactly DMY.
+        if (((nExactDateOrder & 0xff) == 'Y') && (((nExactDateOrder >> 8) & 0xff) == 'M')
+                && (((nExactDateOrder >> 16) & 0xff) == 'D'))
+        {
+            const sal_Int32 nTmpPos = nPos;
+            if (SkipChar('.', rString, nPos) && SkipBlanks(rString, nPos) && nPos + 2 < rString.getLength()
+                    && (rString.endsWith(" ") || rString.endsWith( pLoc->getLongDateMonthSep())))
+                bDate = true;
+            else
+                nPos = nTmpPos;
+        }
+    }
     if (bDate || ((MayBeIso8601() || MayBeMonthDate()) &&    // 1999-12-31  31-Dec-1999
                   SkipChar( '-', rString, nPos)))
     {
