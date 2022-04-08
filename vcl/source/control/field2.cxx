@@ -24,7 +24,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
@@ -1195,7 +1195,7 @@ static sal_uInt16 ImplCutNumberFromString( OUString& rStr )
     while (i2 != rStr.getLength() && rStr[i2] >= '0' && rStr[i2] <= '9') {
         ++i2;
     }
-    sal_Int32 nValue = comphelper::string::toInt32(rStr.subView(i1, i2-i1));
+    sal_Int32 nValue = o3tl::toInt32(rStr.subView(i1, i2-i1));
     rStr = rStr.copy(std::min(i2+1, rStr.getLength()));
     return nValue;
 }
@@ -2410,7 +2410,7 @@ bool TimeFormatter::TextToTime(std::u16string_view rStr, tools::Time& rTime,
     }
     else
     {
-        nSecond = static_cast<short>(comphelper::string::toInt32(aStr.subView( 0, nSepPos )));
+        nSecond = static_cast<short>(o3tl::toInt32(aStr.subView( 0, nSepPos )));
         aStr.remove( 0, nSepPos+1 );
 
         nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
@@ -2419,7 +2419,7 @@ bool TimeFormatter::TextToTime(std::u16string_view rStr, tools::Time& rTime,
         if ( nSepPos >= 0 )
         {
             nMinute = nSecond;
-            nSecond = static_cast<short>(comphelper::string::toInt32(aStr.subView( 0, nSepPos )));
+            nSecond = static_cast<short>(o3tl::toInt32(aStr.subView( 0, nSepPos )));
             aStr.remove( 0, nSepPos+1 );
 
             nSepPos = aStr.indexOf( rLocaleDataWrapper.getTimeSep() );
@@ -2429,7 +2429,7 @@ bool TimeFormatter::TextToTime(std::u16string_view rStr, tools::Time& rTime,
             {
                 nHour   = nMinute;
                 nMinute = nSecond;
-                nSecond = static_cast<short>(comphelper::string::toInt32(aStr.subView( 0, nSepPos )));
+                nSecond = static_cast<short>(o3tl::toInt32(aStr.subView( 0, nSepPos )));
                 aStr.remove( 0, nSepPos+1 );
             }
             else

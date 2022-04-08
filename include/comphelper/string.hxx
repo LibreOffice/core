@@ -359,64 +359,6 @@ COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::string_view rString);
  */
 COMPHELPER_DLLPUBLIC bool isdigitAsciiString(std::u16string_view rString);
 
-/** Interpret a string as a long integer.
-
-    This function cannot be used for language-specific conversion.
-
-    @param str
-    a string.
-
-    @param radix
-    the radix.  Must be between RTL_USTR_MIN_RADIX (2) and RTL_USTR_MAX_RADIX
-    (36), inclusive.
-
-    @param nStrLength
-    number of chars to process
-
-    @return
-    the long integer value represented by the string, or 0 if the string does
-    not represent a long integer.
-*/
-inline sal_Int64 toInt64(std::u16string_view str, sal_Int16 radix = 10 )
-{
-    return rtl_ustr_toInt64_WithLength(str.data(), radix, str.size());
-}
-inline sal_Int64 toInt64(std::string_view str, sal_Int16 radix = 10 )
-{
-    return rtl_str_toInt64_WithLength(str.data(), radix, str.size());
-}
-
-/** Interpret a string as an integer.
-
-    This function cannot be used for language-specific conversion.
-
-    @param radix
-    the radix.  Must be between RTL_USTR_MIN_RADIX (2) and RTL_USTR_MAX_RADIX
-    (36), inclusive.
-
-    @param nStrLength
-    number of chars to process
-
-    @return
-    the integer value represented by the string, or 0 if the string does not
-    represent an integer.
- */
-inline sal_Int32 toInt32( std::u16string_view str, sal_Int16 radix = 10 )
-{
-    sal_Int64 n = rtl_ustr_toInt64_WithLength(str.data(), radix, str.size());
-    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
-        n = 0;
-    return n;
-}
-inline sal_Int32 toInt32( std::string_view str, sal_Int16 radix = 10 )
-{
-    sal_Int64 n = rtl_str_toInt64_WithLength(str.data(), radix, str.size());
-    if (n < SAL_MIN_INT32 || n > SAL_MAX_INT32)
-        n = 0;
-    return n;
-}
-
-
 } // namespace comphelper::string
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

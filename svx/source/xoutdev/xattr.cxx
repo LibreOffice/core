@@ -32,7 +32,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/any.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/memberids.h>
@@ -213,7 +213,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
                         const OUString& aEntryName = pEntry->GetName();
                         if(aEntryName.getLength() >= aUser.getLength())
                         {
-                            sal_Int32 nThisIndex = comphelper::string::toInt32(aEntryName.subView( aUser.getLength() ));
+                            sal_Int32 nThisIndex = o3tl::toInt32(aEntryName.subView( aUser.getLength() ));
                             if( nThisIndex >= nUserIndex )
                                 nUserIndex = nThisIndex + 1;
                         }

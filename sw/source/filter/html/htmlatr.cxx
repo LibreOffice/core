@@ -107,12 +107,12 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( std::u16string_view rNm, sal_uInt16 nPoo
     OUString sDTDD = OOO_STRING_SVTOOLS_HTML_dt " ";
     if( o3tl::starts_with(rNm, sDTDD) )
         // DefinitionList - term
-        return o3tl::narrowing<sal_uInt16>(comphelper::string::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DT;
+        return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DT;
 
     sDTDD = OOO_STRING_SVTOOLS_HTML_dd " ";
     if( o3tl::starts_with(rNm, sDTDD) )
         // DefinitionList - definition
-        return o3tl::narrowing<sal_uInt16>(comphelper::string::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DD;
+        return o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rNm.substr( sDTDD.getLength() ))) | HTML_DLCOLL_DD;
 
     return 0;
 }

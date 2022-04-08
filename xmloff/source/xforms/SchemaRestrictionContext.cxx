@@ -38,7 +38,7 @@
 #include <com/sun/star/xsd/DataTypeClass.hpp>
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
 
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -151,11 +151,11 @@ static Any xforms_date( const OUString& rValue )
     {
         util::Date aDate;
         aDate.Year = static_cast<sal_uInt16>(
-                     comphelper::string::toInt32(rValue.subView( 0, nPos1 )) );
+                     o3tl::toInt32(rValue.subView( 0, nPos1 )) );
         aDate.Month = static_cast<sal_uInt16>(
-                      comphelper::string::toInt32(rValue.subView( nPos1 + 1, nPos2 - nPos1 - 1 )) );
+                      o3tl::toInt32(rValue.subView( nPos1 + 1, nPos2 - nPos1 - 1 )) );
         aDate.Day   = static_cast<sal_uInt16>(
-                      comphelper::string::toInt32(rValue.subView( nPos2 + 1 )) );
+                      o3tl::toInt32(rValue.subView( nPos2 + 1 )) );
         aAny <<= aDate;
     }
     return aAny;

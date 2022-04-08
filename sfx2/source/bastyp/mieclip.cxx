@@ -49,13 +49,13 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
             nIndex = 0;
             OString sTmp(sLine.getToken(0, ':', nIndex));
             if (sTmp == "StartHTML")
-                nStt = comphelper::string::toInt32(sLine.subView(nIndex));
+                nStt = o3tl::toInt32(sLine.subView(nIndex));
             else if (sTmp == "EndHTML")
-                nEnd = comphelper::string::toInt32(sLine.subView(nIndex));
+                nEnd = o3tl::toInt32(sLine.subView(nIndex));
             else if (sTmp == "StartFragment")
-                nFragStart = comphelper::string::toInt32(sLine.subView(nIndex));
+                nFragStart = o3tl::toInt32(sLine.subView(nIndex));
             else if (sTmp == "EndFragment")
-                nFragEnd = comphelper::string::toInt32(sLine.subView(nIndex));
+                nFragEnd = o3tl::toInt32(sLine.subView(nIndex));
             else if (sTmp == "SourceURL")
                 sBaseURL = OStringToOUString( sLine.subView(nIndex), RTL_TEXTENCODING_UTF8 );
 

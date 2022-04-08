@@ -49,7 +49,7 @@
 #include <document.hxx>
 #include <biffhelper.hxx>
 #include <filter/msfilter/util.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace oox::xls {
 
@@ -851,8 +851,8 @@ void HeaderFooterParser::convertFontColor( const OUString& rColor )
     if( (rColor[ 2 ] == '+') || (rColor[ 2 ] == '-') )
         // theme color: TTSNNN (TT = decimal theme index, S = +/-, NNN = decimal tint/shade in percent)
         maFontModel.maColor.setTheme(
-            comphelper::string::toInt32(rColor.subView( 0, 2 )),
-            static_cast< double >( comphelper::string::toInt32(rColor.subView( 2 )) ) / 100.0 );
+            o3tl::toInt32(rColor.subView( 0, 2 )),
+            static_cast< double >( o3tl::toInt32(rColor.subView( 2 )) ) / 100.0 );
     else
         // RGB color: RRGGBB
         maFontModel.maColor.setRgb( ::Color(ColorTransparency, rColor.toUInt32( 16 )) );

@@ -20,7 +20,7 @@
 #include <comphelper/anytostring.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/multisel.hxx>
 #include <tools/diagnose_ex.h>
@@ -132,10 +132,10 @@ static void ResolveTextFields( XmlFilterBase const & rFilter )
                 bool bNotes = false;
                 sal_Int32 nPageNumber = 0;
                 if ( aURL.match( sSlide ) )
-                    nPageNumber = comphelper::string::toInt32(aURL.subView( sSlide.getLength() ));
+                    nPageNumber = o3tl::toInt32(aURL.subView( sSlide.getLength() ));
                 else if ( aURL.match( sNotes ) )
                 {
-                    nPageNumber = comphelper::string::toInt32(aURL.subView( sNotes.getLength() ));
+                    nPageNumber = o3tl::toInt32(aURL.subView( sNotes.getLength() ));
                     bNotes = true;
                 }
                 if ( nPageNumber )
@@ -193,7 +193,7 @@ void PresentationFragmentHandler::importCustomSlideShow(std::vector<CustomShow>&
                 OUString sCustomSlide = rCustomShowList[i].maSldLst[j];
                 sal_Int32 nPageNumber = 0;
                 if (sCustomSlide.match(sSlide))
-                    nPageNumber = comphelper::string::toInt32(sCustomSlide.subView(sSlide.getLength()));
+                    nPageNumber = o3tl::toInt32(sCustomSlide.subView(sSlide.getLength()));
 
                 Reference<XDrawPage> xPage;
                 xDrawPages->getByIndex(nPageNumber - 1) >>= xPage;

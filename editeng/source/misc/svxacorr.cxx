@@ -43,7 +43,7 @@
 #include <unotools/transliterationwrapper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <editeng/editids.hrc>
 #include <sot/storage.hxx>
 #include <editeng/udlnitem.hxx>
@@ -510,7 +510,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
         }
 
         if (bFoundEnd && isValidNumber) {
-            sal_Int32 nNum = comphelper::string::toInt32(rTxt.subView(nSttPos, nNumEnd - nSttPos + 1));
+            sal_Int32 nNum = o3tl::toInt32(rTxt.subView(nSttPos, nNumEnd - nSttPos + 1));
 
             // Check if the characters after that number correspond to the ordinal suffix
             uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix
