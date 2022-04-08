@@ -15,6 +15,7 @@
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
@@ -61,6 +62,7 @@ private:
     CPPUNIT_TEST(testEndsWith);
     CPPUNIT_TEST(testEndsWithRest);
     CPPUNIT_TEST(testEqualsIgnoreAsciiCase);
+    CPPUNIT_TEST(testGetToken);
     CPPUNIT_TEST_SUITE_END();
 
     void testStartsWith()
@@ -596,6 +598,111 @@ private:
         CPPUNIT_ASSERT_EQUAL(0, o3tl::compareToIgnoreAsciiCase(u"test"sv, u"test"sv));
         CPPUNIT_ASSERT_GREATER(0, o3tl::compareToIgnoreAsciiCase(u"zest"sv, u"test"sv));
         CPPUNIT_ASSERT_LESS(0, o3tl::compareToIgnoreAsciiCase(u"test"sv, u"test2"sv));
+    }
+
+    void testGetToken()
+    {
+        {
+            OUString suTokenStr;
+            sal_Int32 nIndex = 0;
+            do
+            {
+                o3tl::getToken(suTokenStr, 0, ';', nIndex);
+            } while (nIndex >= 0);
+            // should not GPF
+        }
+        {
+            OUString suTokenStr("a;b");
+
+            sal_Int32 nIndex = 0;
+
+            std::u16string_view suToken = o3tl::getToken(suTokenStr, 0, ';', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be a 'a'", std::u16string_view(u"a"),
+                                         suToken);
+
+            suToken = o3tl::getToken(suTokenStr, 0, ';', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be a 'b'", std::u16string_view(u"b"),
+                                         suToken);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("index should be negative", static_cast<sal_Int32>(-1),
+                                         nIndex);
+        }
+        {
+            std::u16string_view suTokenStr(u"a;b.c");
+
+            sal_Int32 nIndex = 0;
+
+            std::u16string_view suToken = o3tl::getToken(suTokenStr, 0, ';', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be a 'a'", std::u16string_view(u"a"),
+                                         suToken);
+
+            suToken = o3tl::getToken(suTokenStr, 0, '.', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be a 'b'", std::u16string_view(u"b"),
+                                         suToken);
+
+            suToken = o3tl::getToken(suTokenStr, 0, '.', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be a 'c'", std::u16string_view(u"c"),
+                                         suToken);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("index should be negative", static_cast<sal_Int32>(-1),
+                                         nIndex);
+        }
+        {
+            std::u16string_view suTokenStr(u"a;;b");
+
+            sal_Int32 nIndex = 0;
+
+            std::u16string_view suToken = o3tl::getToken(suTokenStr, 0, ';', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be a 'a'", std::u16string_view(u"a"),
+                                         suToken);
+
+            suToken = o3tl::getToken(suTokenStr, 0, ';', nIndex);
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.empty());
+
+            suToken = o3tl::getToken(suTokenStr, 0, ';', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be a 'b'", std::u16string_view(u"b"),
+                                         suToken);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("index should be negative", static_cast<sal_Int32>(-1),
+                                         nIndex);
+        }
+        {
+            std::u16string_view suTokenStr(u"longer.then.ever.");
+
+            sal_Int32 nIndex = 0;
+
+            std::u16string_view suToken = o3tl::getToken(suTokenStr, 0, '.', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be 'longer'", std::u16string_view(u"longer"),
+                                         suToken);
+
+            suToken = o3tl::getToken(suTokenStr, 0, '.', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be 'then'", std::u16string_view(u"then"),
+                                         suToken);
+
+            suToken = o3tl::getToken(suTokenStr, 0, '.', nIndex);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("Token should be 'ever'", std::u16string_view(u"ever"),
+                                         suToken);
+
+            suToken = o3tl::getToken(suTokenStr, 0, '.', nIndex);
+            CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.empty());
+
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("index should be negative", static_cast<sal_Int32>(-1),
+                                         nIndex);
+        }
+        {
+            std::u16string_view ab(u"ab");
+            sal_Int32 n = 0;
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("token should be 'ab'", ab, o3tl::getToken(ab, 0, '-', n));
+            CPPUNIT_ASSERT_EQUAL_MESSAGE("n should be -1", static_cast<sal_Int32>(-1), n);
+            CPPUNIT_ASSERT_MESSAGE("token should be empty", o3tl::getToken(ab, 0, '-', n).empty());
+        }
+        {
+            std::u16string_view suTokenStr;
+            auto pTokenStr = suTokenStr.data();
+            sal_uInt64 n64 = reinterpret_cast<sal_uInt64>(pTokenStr) / sizeof(sal_Unicode);
+            // Point either to 0x0, or to some random address -4GiB away from this string
+            sal_Int32 n = n64 > o3tl::make_unsigned(SAL_MAX_INT32) ? -SAL_MAX_INT32
+                                                                   : -static_cast<sal_Int32>(n64);
+            o3tl::getToken(suTokenStr, 0, ';', n);
+            // should not GPF with negative index
+        }
     }
 };
 
