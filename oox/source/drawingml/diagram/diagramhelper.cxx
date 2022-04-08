@@ -26,6 +26,8 @@
 #include <drawingml/fillproperties.hxx>
 #include <svx/svdmodel.hxx>
 #include <comphelper/processfactory.hxx>
+#include <oox/drawingml/themefragmenthandler.hxx>
+#include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>
 
 using namespace ::com::sun::star;
 
@@ -101,7 +103,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
 
     // set oox::Theme at Filter. All LineStyle/FillStyle/Colors/Attributes
     // will be taken from there
-    xFilter->setCurrentTheme(mpThemePtr);
+    xFilter->setCurrentTheme(getOrCreateThemePtr(xFilter));
 
     css::uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
     xFilter->setTargetDocument(aComponentModel);
@@ -181,6 +183,37 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
     mpDiagramPtr->syncDiagramFontHeights();
 
     anchorToSdrObjGroup(rTarget);
+}
+
+std::shared_ptr< ::oox::drawingml::Theme > AdvancedDiagramHelper::getOrCreateThemePtr(
+    rtl::Reference< oox::shape::ShapeFilterBase >& rxFilter) const
+{
+    static bool bForceThemePtrReceation(false);
+
+    // (Re-)Use already existing Theme if existing/imported if possible.
+    // If not, re-import Theme if data is available and thus possible
+    if(hasDiagramData() && (bForceThemePtrReceation || !mpThemePtr))
+    {
+        // get the originally imported dom::XDocument
+        const uno::Reference< css::xml::dom::XDocument >& xThemeDocument(mpDiagramPtr->getData()->getThemeDocument());
+
+        if(xThemeDocument)
+        {
+            // reset local Theme ModelData *always* to get rid of former data that would
+            // else be added additionally
+            const_cast<AdvancedDiagramHelper*>(this)->mpThemePtr = std::make_shared<oox::drawingml::Theme>();
+
+            // import Theme ModelData
+            rxFilter->importFragment(
+                new ThemeFragmentHandler(
+                    *rxFilter, OUString(), *mpThemePtr ),
+                uno::Reference< css::xml::sax::XFastSAXSerializable >(
+                    xThemeDocument,
+                    uno::UNO_QUERY_THROW));
+        }
+    }
+
+    return mpThemePtr;
 }
 
 }

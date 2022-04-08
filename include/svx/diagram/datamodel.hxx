@@ -30,6 +30,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 
 namespace svx::diagram {
 
@@ -183,6 +184,9 @@ public:
     OUString addNode(const OUString& rText);
     bool removeNode(const OUString& rNodeId);
 
+    const css::uno::Reference< css::xml::dom::XDocument >& getThemeDocument() const { return mxThemeDocument; }
+    void setThemeDocument( const css::uno::Reference< css::xml::dom::XDocument >& xRef ) { mxThemeDocument = xRef; }
+
 protected:
     void getChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel) const;
     void addConnection(TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
@@ -194,8 +198,15 @@ protected:
     // See evtl. parts in oox::drawingml::DiagramData that may need t obe accessed
     // - logic connections/associations
     // - data point entries
+    // - Theme definition as css::xml::dom::XDocument
+    //    Note: I decided to use dom::XDocument which is already in use, instead of a
+    //          temp file what is also possible (implemented that for POC) but would
+    //          need to be created in PresentationFragmentHandler::importSlide. If
+    //          this needs to be written to a File, please refer to
+    //          fileDocxExport::WriteTheme(), look for "OOXTheme"
     Connections maConnections;
     Points maPoints;
+    css::uno::Reference< css::xml::dom::XDocument > mxThemeDocument;
 
     // temporary processing data, deleted when using build()
     PointNameMap      maPointNameMap;

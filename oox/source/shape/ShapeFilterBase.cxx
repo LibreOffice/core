@@ -132,29 +132,6 @@ GraphicHelper* ShapeFilterBase::implCreateGraphicHelper() const
     return nColor;
 }
 
-void ShapeFilterBase::importTheme()
-{
-    drawingml::ThemePtr pTheme = std::make_shared<drawingml::Theme>();
-    uno::Reference<beans::XPropertySet> xPropSet(getModel(), uno::UNO_QUERY_THROW);
-    uno::Sequence<beans::PropertyValue> aGrabBag;
-    xPropSet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
-
-    for (const auto& rProp : std::as_const(aGrabBag))
-    {
-        if (rProp.Name == "OOXTheme")
-        {
-            uno::Reference<xml::sax::XFastSAXSerializable> xDoc;
-            if (rProp.Value >>= xDoc)
-            {
-                rtl::Reference<core::FragmentHandler> xFragmentHandler(
-                    new drawingml::ThemeFragmentHandler(*this, OUString(), *pTheme));
-                importFragment(xFragmentHandler, xDoc);
-                setCurrentTheme(pTheme);
-            }
-        }
-    }
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -70,8 +70,6 @@ public:
 
     ::Color getSchemeColor( sal_Int32 nToken ) const;
 
-    void importTheme();
-
     void setGraphicMapper(css::uno::Reference<css::graphic::XGraphicMapper> const & rxGraphicMapper)
     {
         mxGraphicMapper = rxGraphicMapper;
