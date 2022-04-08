@@ -183,8 +183,11 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
            && logicWidth == other.logicWidth && outputDevice == other.outputDevice
            && rtl == other.rtl && layoutMode == other.layoutMode
            && digitLanguage == other.digitLanguage
-           // slower things here
-           && font == other.font && vcl::text::FastStringCompareEqual()(text, other.text);
+           // Need to use EqualIgnoreColor, because sometimes the color changes, but it's irrelevant
+           // for text layout (and also obsolete in vcl::Font).
+           && font.EqualIgnoreColor(other.font)
+           && vcl::text::FastStringCompareEqual()(text, other.text);
+    // Slower things last in the comparison.
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

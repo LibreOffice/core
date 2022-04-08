@@ -92,6 +92,7 @@ public:
     void                SetCalculatedAverageFontWidth(tools::Long nNew) { mnCalculatedAverageFontWidth = nNew; }
 
     bool                operator==( const ImplFont& ) const;
+    bool                EqualIgnoreColor( const ImplFont& ) const;
 
 private:
     friend class vcl::Font;
