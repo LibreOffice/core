@@ -6341,7 +6341,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
                     if( !nWidth )
                         aStartPt = Point(aPos.getX(), aPos.getY());
 
-                    nWidth += pGlyph->m_nNewWidth;
+                    nWidth += pGlyph->newWidth();
                 }
                 else if( nWidth > 0 )
                 {
@@ -6434,7 +6434,7 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const OUString& rText, bool 
         if (pGlyph->IsSpacing())
         {
             Point aAdjOffset = aOffset;
-            aAdjOffset.AdjustX((pGlyph->m_nNewWidth - nEmphWidth) / 2 );
+            aAdjOffset.AdjustX((pGlyph->newWidth() - nEmphWidth) / 2 );
             aAdjOffset = aRotScale.transform( aAdjOffset );
 
             aAdjOffset -= Point( nEmphWidth2, nEmphHeight2 );

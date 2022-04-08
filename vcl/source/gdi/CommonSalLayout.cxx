@@ -649,7 +649,7 @@ void GenericSalLayout::GetCharWidths(std::vector<DeviceCoordinate>& rCharWidths)
         const int nIndex = aGlyphItem.charPos() - mnMinCharPos;
         if (nIndex >= nCharCount)
             continue;
-        rCharWidths[nIndex] += aGlyphItem.m_nNewWidth;
+        rCharWidths[nIndex] += aGlyphItem.newWidth();
     }
 }
 
@@ -722,15 +722,15 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
         {
             // Adjust the width and position of the first (leftmost) glyph in
             // the cluster.
-            m_GlyphItems[i].m_nNewWidth += nDiff;
-            m_GlyphItems[i].m_aLinearPos.adjustX(nDelta);
+            m_GlyphItems[i].addNewWidth(nDiff);
+            m_GlyphItems[i].adjustLinearPosX(nDelta);
 
             // Adjust the position of the rest of the glyphs in the cluster.
             while (++i < m_GlyphItems.size())
             {
                 if (!m_GlyphItems[i].IsInCluster())
                     break;
-                m_GlyphItems[i].m_aLinearPos.adjustX(nDelta);
+                m_GlyphItems[i].adjustLinearPosX(nDelta);
             }
         }
         else if (m_GlyphItems[i].IsInCluster())
@@ -744,8 +744,8 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
             // Adjust the width and position of the first (rightmost) glyph in
             // the cluster.
             // For RTL, we put all the adjustment to the left of the glyph.
-            m_GlyphItems[i].m_nNewWidth += nDiff;
-            m_GlyphItems[i].m_aLinearPos.adjustX(nDelta + nDiff);
+            m_GlyphItems[i].addNewWidth(nDiff);
+            m_GlyphItems[i].adjustLinearPosX(nDelta + nDiff);
 
             // Adjust the X position of all glyphs in the cluster.
             size_t j = i;
@@ -754,7 +754,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
                 --j;
                 if (!m_GlyphItems[j].IsInCluster())
                     break;
-                m_GlyphItems[j].m_aLinearPos.adjustX(nDelta + nDiff);
+                m_GlyphItems[j].adjustLinearPosX(nDelta + nDiff);
             }
 
             // If this glyph is Kashida-justifiable, then mark this as a
@@ -771,7 +771,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
                 {
                     if (!m_GlyphItems[j].IsDiacritic())
                         break;
-                    m_GlyphItems[j--].m_aLinearPos.adjustX(nDiff);
+                    m_GlyphItems[j--].adjustLinearPosX(nDiff);
                 }
             }
             i++;
@@ -813,7 +813,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
                 nOverlap = nExcess / (nCopies - 1);
         }
 
-        DevicePoint aPos(pGlyphIter->m_aLinearPos.getX() - nTotalWidth, 0);
+        DevicePoint aPos(pGlyphIter->linearPos().getX() - nTotalWidth, 0);
         int nCharPos = pGlyphIter->charPos();
         GlyphItemFlags const nFlags = GlyphItemFlags::IS_IN_CLUSTER | GlyphItemFlags::IS_RTL_GLYPH;
         while (nCopies--)

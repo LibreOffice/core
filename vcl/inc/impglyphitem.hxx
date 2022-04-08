@@ -50,27 +50,26 @@ template <> struct typed_flags<GlyphItemFlags> : is_typed_flags<GlyphItemFlags, 
 
 class VCL_DLLPUBLIC GlyphItem
 {
+    DevicePoint m_aLinearPos; // absolute position of non rotated string
     sal_Int32 m_nOrigWidth; // original glyph width
     sal_Int32 m_nCharPos; // index in string
     sal_Int32 m_nXOffset;
+    sal_Int32 m_nNewWidth; // width after adjustments
     sal_GlyphId m_aGlyphId;
     sal_Int8 m_nCharCount; // number of characters making up this glyph
     GlyphItemFlags m_nFlags;
 
 public:
-    DevicePoint m_aLinearPos; // absolute position of non rotated string
-    sal_Int32 m_nNewWidth; // width after adjustments
-
     GlyphItem(int nCharPos, int nCharCount, sal_GlyphId aGlyphId, const DevicePoint& rLinearPos,
               GlyphItemFlags nFlags, int nOrigWidth, int nXOffset)
-        : m_nOrigWidth(nOrigWidth)
+        : m_aLinearPos(rLinearPos)
+        , m_nOrigWidth(nOrigWidth)
         , m_nCharPos(nCharPos)
         , m_nXOffset(nXOffset)
+        , m_nNewWidth(nOrigWidth)
         , m_aGlyphId(aGlyphId)
         , m_nCharCount(nCharCount)
         , m_nFlags(nFlags)
-        , m_aLinearPos(rLinearPos)
-        , m_nNewWidth(nOrigWidth)
     {
     }
 
@@ -92,6 +91,13 @@ public:
     int origWidth() const { return m_nOrigWidth; }
     int charPos() const { return m_nCharPos; }
     int xOffset() const { return m_nXOffset; }
+    sal_Int32 newWidth() const { return m_nNewWidth; }
+    const DevicePoint& linearPos() const { return m_aLinearPos; }
+
+    void setNewWidth(sal_Int32 width) { m_nNewWidth = width; }
+    void addNewWidth(sal_Int32 width) { m_nNewWidth += width; }
+    void setLinearPosX(double x) { m_aLinearPos.setX(x); }
+    void adjustLinearPosX(double diff) { m_aLinearPos.adjustX(diff); }
 };
 
 bool GlyphItem::GetGlyphBoundRect(const LogicalFontInstance* pFontInstance,
