@@ -34,6 +34,24 @@
       "parentUuid": "40dbe0f4_f0bb535e",
       "revId": "0faff61f670d1d81f08b62f840c3b380f4d7b9aa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41d68546_25bd659e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-08T11:47:23Z",
+      "side": 1,
+      "message": "Nice. Nothing I can do easily for the real problem. Maybe register all Qt*Graphics and then invalidate them and update their scaling factor. I didn\u0027t try that yet, but then my results with Weston are totally different from yours with the \"same\" kwin-based setup.",
+      "parentUuid": "23965202_43ffd8e8",
+      "revId": "0faff61f670d1d81f08b62f840c3b380f4d7b9aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

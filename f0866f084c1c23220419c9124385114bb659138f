@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e06fb506_4fd330e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-08T11:47:23Z",
+      "side": 1,
+      "message": "Sorry for the noise - updated the wrong patch, so had to re-remove the class QtWidget.",
+      "revId": "f0866f084c1c23220419c9124385114bb659138f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
