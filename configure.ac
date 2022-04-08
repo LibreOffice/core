@@ -6650,7 +6650,7 @@ find_msms()
 
     case "$VCVER" in
         16.0 | 17.0)
-        my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm ${my_msm_files}"
+        my_msm_files="Microsoft_VC141_CRT_x86.msm Microsoft_VC142_CRT_x86.msm Microsoft_VC143_CRT_x86.msm ${my_msm_files}"
         ;;
     esac
     for f in $my_msm_files; do
