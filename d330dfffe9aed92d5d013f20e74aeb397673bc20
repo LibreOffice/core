@@ -117,6 +117,24 @@
       "parentUuid": "eac8fcd0_04808cd4",
       "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "445dbb5c_f767989d",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-08T08:58:16Z",
+      "side": 1,
+      "message": "\u003e I still have to use std::wstring\n\nWhy? Isn\u0027t std::u16string_view, used widely in the codebase these days, suitable - and even not requiring to allocate?",
+      "parentUuid": "c3a7bd91_4fadfc7f",
+      "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
