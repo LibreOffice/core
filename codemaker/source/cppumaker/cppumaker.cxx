@@ -32,6 +32,7 @@
 #include <sal/main.h>
 #include <sal/types.h>
 #include <unoidl/unoidl.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "cppuoptions.hxx"
 #include "cpputype.hxx"
@@ -57,13 +58,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv) {
         if (options.isValid("-T")) {
             OUString names(b2u(options.getOption("-T")));
             for (sal_Int32 i = 0; i != -1;) {
-                OUString name(names.getToken(0, ';', i));
-                if (!name.isEmpty()) {
+                std::u16string_view name(o3tl::getToken(names, 0, ';', i));
+                if (!name.empty()) {
                     produce(
-                        (name == "*"
-                         ? ""
-                         : name.endsWith(".*")
-                         ? name.copy(0, name.getLength() - std::strlen(".*"))
+                        OUString(name == u"*"
+                         ? u""
+                         : o3tl::ends_with(name, u".*")
+                         ? name.substr(0, name.size() - std::strlen(".*"))
                          : name),
                         typeMgr, generated, options);
                 }

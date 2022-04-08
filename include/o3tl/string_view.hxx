@@ -59,6 +59,50 @@ inline std::string_view getToken(std::string_view sv, char delimiter, std::size_
     return t;
 }
 
+// Similar to OUString::getToken
+inline std::u16string_view getToken(std::u16string_view pStr, sal_Int32 nToken, sal_Unicode cTok,
+                                    sal_Int32& rnIndex)
+{
+    assert(rnIndex <= static_cast<sal_Int32>(pStr.size()));
+
+    // Return an empty string and set rnIndex to -1 if either nToken or rnIndex is
+    // negative:
+    if (rnIndex >= 0 && nToken >= 0)
+    {
+        const sal_Unicode* pOrgCharStr = pStr.data();
+        const sal_Unicode* pCharStr = pOrgCharStr + rnIndex;
+        sal_Int32 nLen = pStr.size() - rnIndex;
+        sal_Int32 nTokCount = 0;
+        const sal_Unicode* pCharStrStart = pCharStr;
+        while (nLen > 0)
+        {
+            if (*pCharStr == cTok)
+            {
+                nTokCount++;
+
+                if (nTokCount > nToken)
+                    break;
+                if (nTokCount == nToken)
+                    pCharStrStart = pCharStr + 1;
+            }
+
+            pCharStr++;
+            nLen--;
+        }
+        if (nTokCount >= nToken)
+        {
+            if (nLen > 0)
+                rnIndex = pCharStr - pOrgCharStr + 1;
+            else
+                rnIndex = -1;
+            return std::u16string_view(pCharStrStart, pCharStr - pCharStrStart);
+        }
+    }
+
+    rnIndex = -1;
+    return std::u16string_view();
+}
+
 // Implementations of C++20 std::basic_string_view::starts_with and
 // std::basic_string_view::ends_with, until we can use those directly on all platforms:
 template <typename charT, typename traits = std::char_traits<charT>>

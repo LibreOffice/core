@@ -30,7 +30,7 @@ class FileStream;
 
 namespace codemaker::cppumaker
 {
-bool dumpNamespaceOpen(FileStream& out, rtl::OUString const& entityName, bool fullModuleType);
+bool dumpNamespaceOpen(FileStream& out, std::u16string_view entityName, bool fullModuleType);
 
 bool dumpNamespaceClose(FileStream& out, std::u16string_view entityName, bool fullModuleType);
 

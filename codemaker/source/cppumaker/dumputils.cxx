@@ -24,17 +24,18 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 
 namespace codemaker::cppumaker {
 
 bool dumpNamespaceOpen(
-    FileStream & out, OUString const & entityName, bool fullModuleType)
+    FileStream & out, std::u16string_view entityName, bool fullModuleType)
 {
     bool bOutput = false;
     bool bFirst = true;
     for (sal_Int32 i = 0; i >= 0;) {
-        OUString id(entityName.getToken(0, '.', i));
+        std::u16string_view id(o3tl::getToken(entityName, 0, '.', i));
         if (fullModuleType || i >= 0) {
             if (!bFirst) {
                 out << " ";
