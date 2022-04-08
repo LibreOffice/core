@@ -2212,6 +2212,10 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             {
                 exportMeta(xPropSet, bAutoStyles, bIsProgress, rPrevCharIsSpace);
             }
+            else if (sType == "ContentControl")
+            {
+                ExportContentControl(xPropSet, bAutoStyles, bIsProgress, rPrevCharIsSpace);
+            }
             else if (sType == gsTextFieldStart)
             {
                 Reference< css::text::XFormField > xFormField(xPropSet->getPropertyValue(gsBookmark), UNO_QUERY);
@@ -3840,6 +3844,43 @@ void XMLTextParagraphExport::exportMeta(
 
     // recurse to export content
     exportTextRangeEnumeration(xTextEnum, i_bAutoStyles, i_isProgress, rPrevCharIsSpace);
+}
+
+void XMLTextParagraphExport::ExportContentControl(
+    const uno::Reference<beans::XPropertySet>& xPortion, bool bAutoStyles, bool isProgress,
+    bool& rPrevCharIsSpace)
+{
+    // Do not export the element in the autostyle case.
+    bool bExport = !bAutoStyles;
+    if (!(GetExport().getSaneDefaultVersion() & SvtSaveOptions::ODFSVER_EXTENDED))
+    {
+        bExport = false;
+    }
+
+    uno::Reference<text::XTextContent> xTextContent(xPortion->getPropertyValue("ContentControl"),
+                                                    uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumerationAccess> xEA(xTextContent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XEnumeration> xTextEnum = xEA->createEnumeration();
+
+    if (bExport)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY_THROW);
+        bool bShowingPlaceHolder = false;
+        xPropertySet->getPropertyValue("ShowingPlaceHolder") >>= bShowingPlaceHolder;
+        if (bShowingPlaceHolder)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bShowingPlaceHolder);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_SHOWING_PLACE_HOLDER,
+                                     aBuffer.makeStringAndClear());
+        }
+    }
+
+    SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,
+                             false);
+
+    // Recurse to export content.
+    exportTextRangeEnumeration(xTextEnum, bAutoStyles, isProgress, rPrevCharIsSpace);
 }
 
 void XMLTextParagraphExport::PreventExportOfControlsInMuteSections(

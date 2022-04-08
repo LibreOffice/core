@@ -3470,6 +3470,9 @@ namespace xmloff::token {
 
         TOKEN("linked-style-name",   XML_LINKED_STYLE_NAME ),
 
+        TOKEN("content-control",     XML_CONTENT_CONTROL ),
+        TOKEN("showing-place-holder", XML_SHOWING_PLACE_HOLDER ),
+
 
 #if OSL_DEBUG_LEVEL > 0
         { 0, nullptr, std::nullopt,               XML_TOKEN_END }

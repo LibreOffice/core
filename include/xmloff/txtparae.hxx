@@ -368,6 +368,10 @@ protected:
         const css::uno::Reference< css::beans::XPropertySet> & i_xPortion,
         bool i_bAutoStyles, bool i_isProgress, bool & rPrevCharIsSpace);
 
+    /// Exports a <loext:content-control> element.
+    void ExportContentControl(const css::uno::Reference<css::beans::XPropertySet>& xPortion,
+                              bool bAutoStyles, bool isProgress, bool& rPrevCharIsSpace);
+
     bool isAutoStylesCollected() const { return mbCollected; }
 
     virtual void exportTableAutoStyles();

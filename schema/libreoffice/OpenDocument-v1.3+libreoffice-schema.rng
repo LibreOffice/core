@@ -2763,6 +2763,21 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
     </rng:element>
   </rng:define>
 
+  <!-- TODO(vmiklos) no proposal -->
+  <rng:define name="paragraph-content" combine="choice">
+    <rng:element name="loext:content-control">
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:showing-place-holder">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:zeroOrMore>
+        <rng:ref name="paragraph-content-or-hyperlink"/>
+      </rng:zeroOrMore>
+    </rng:element>
+  </rng:define>
+
   <!-- TODO no proposal -->
   <rng:define name="animation-element" combine="choice">
     <rng:choice>
