@@ -87,7 +87,7 @@ public:
             checkLRU();
     }
 
-    void insert(key_value_pair_t& rPair)
+    iterator insert(key_value_pair_t& rPair)
     {
         map_iterator_t i = mLruMap.find(rPair.first);
 
@@ -99,6 +99,7 @@ public:
             auto it = mLruList.begin();
             mLruMap[it->first] = it;
             checkLRU();
+            return it;
         }
         else // already exists -> replace value
         {
@@ -106,10 +107,11 @@ public:
             i->second->second = rPair.second;
             // bring to front of the lru list
             mLruList.splice(mLruList.begin(), mLruList, i->second);
+            return i->second;
         }
     }
 
-    void insert(key_value_pair_t&& rPair)
+    iterator insert(key_value_pair_t&& rPair)
     {
         map_iterator_t i = mLruMap.find(rPair.first);
 
@@ -121,6 +123,7 @@ public:
             auto it = mLruList.begin();
             mLruMap[it->first] = it;
             checkLRU();
+            return it;
         }
         else // already exists -> replace value
         {
@@ -128,16 +131,17 @@ public:
             i->second->second = std::move(rPair.second);
             // push to back of the lru list
             mLruList.splice(mLruList.begin(), mLruList, i->second);
+            return i->second;
         }
     }
 
-    list_const_iterator_t find(const Key& key)
+    iterator find(const Key& key)
     {
         const map_iterator_t i = mLruMap.find(key);
         if (i == mLruMap.cend()) // can't find entry for the key
         {
             // return empty iterator
-            return mLruList.cend();
+            return mLruList.end();
         }
         else
         {
@@ -163,9 +167,9 @@ public:
         }
     }
 
-    list_const_iterator_t begin() const { return mLruList.cbegin(); }
+    const_iterator begin() const { return mLruList.cbegin(); }
 
-    list_const_iterator_t end() const { return mLruList.cend(); }
+    const_iterator end() const { return mLruList.cend(); }
 
     size_t size() const
     {
