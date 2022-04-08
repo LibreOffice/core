@@ -52,6 +52,24 @@
       "parentUuid": "23965202_43ffd8e8",
       "revId": "0faff61f670d1d81f08b62f840c3b380f4d7b9aa",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "342fabc8_25cbef84",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-08T12:01:48Z",
+      "side": 1,
+      "message": "\u003e I didn\u0027t try that yet, but then my results with Weston are totally different from yours with the \"same\" kwin-based setup.\n\nI didn\u0027t investigate too much, but it looked like even if I started LO on the scaled screen, the \"unscaled\" DPI of 96 was initially used, and a screenChanged() signal was received shortly after without actually changing the screen (at which point the correct DPI would have been returned when manually calling `Qt{Svp,}Graphics::GetResolution()`. (had some SAL_WARNs in `QtGraphics::GetResolution`, `QtSvpGraphics::GetResolution` and a call to `pWindow-\u003eImplGetWindowImpl()-\u003emxOutDev-\u003eGetGraphics()-\u003eGetResolution(...)` in `ImplWindowFrameProc` in `vcl/source/window/winproc.cxx`.",
+      "parentUuid": "41d68546_25bd659e",
+      "revId": "0faff61f670d1d81f08b62f840c3b380f4d7b9aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
