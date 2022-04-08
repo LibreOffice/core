@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c80116c_fdf82f9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-08T14:52:25Z",
+      "side": 1,
+      "message": "I commented Basic code in relation with tdf#148466. Please advise if comments should be removed.",
+      "revId": "9043cc480eb5be9382df5e0cd1f21ddb6951f82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
