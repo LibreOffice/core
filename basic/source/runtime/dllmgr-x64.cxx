@@ -31,6 +31,7 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
+#include <comphelper/string.hxx>
 #include <runtime.hxx>
 #include <osl/thread.h>
 #include <osl/diagnose.h>
