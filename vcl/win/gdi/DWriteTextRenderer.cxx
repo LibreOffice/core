@@ -262,7 +262,7 @@ bool D2DWriteTextOutRenderer::performRender(GenericSalLayout const & rLayout, Sa
         while (rLayout.GetNextGlyph(&pGlyph, aPos, nStart))
         {
             UINT16 glyphIndices[] = { pGlyph->glyphId() };
-            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->m_nNewWidth) / fHScale };
+            FLOAT glyphAdvances[] = { static_cast<FLOAT>(pGlyph->newWidth()) / fHScale };
             DWRITE_GLYPH_OFFSET glyphOffsets[] = { { 0.0f, 0.0f }, };
             D2D1_POINT_2F baseline = { static_cast<FLOAT>(aPos.getX() - bounds.Left()) / fHScale,
                                        static_cast<FLOAT>(aPos.getY() - bounds.Top()) };

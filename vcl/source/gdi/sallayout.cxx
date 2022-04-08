@@ -277,10 +277,10 @@ DeviceCoordinate GenericSalLayout::GetTextWidth() const
     for (auto const& aGlyphItem : m_GlyphItems)
     {
         // update the text extent with the glyph extent
-        DeviceCoordinate nXPos = aGlyphItem.m_aLinearPos.getX();
+        DeviceCoordinate nXPos = aGlyphItem.linearPos().getX();
         if( nMinPos > nXPos )
             nMinPos = nXPos;
-        nXPos += aGlyphItem.m_nNewWidth - aGlyphItem.xOffset();
+        nXPos += aGlyphItem.newWidth() - aGlyphItem.xOffset();
         if( nMaxPos < nXPos )
             nMaxPos = nXPos;
     }
@@ -322,7 +322,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
     if( nNewWidth < nMaxGlyphWidth)
         nNewWidth = nMaxGlyphWidth;
     nNewWidth -= pGlyphIterRight->origWidth();
-    pGlyphIterRight->m_aLinearPos.setX( nNewWidth );
+    pGlyphIterRight->setLinearPosX( nNewWidth );
 
     // justify glyph widths and positions
     int nDiffWidth = nNewWidth - nOldWidth;
@@ -333,7 +333,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
         {
             // move glyph to justified position
-            pGlyphIter->m_aLinearPos.adjustX(nDeltaSum);
+            pGlyphIter->adjustLinearPosX(nDeltaSum);
 
             // do not stretch non-stretchable glyphs
             if( pGlyphIter->IsDiacritic() || (nStretchable <= 0) )
@@ -342,7 +342,7 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
             // distribute extra space equally to stretchable glyphs
             int nDeltaWidth = nDiffWidth / nStretchable--;
             nDiffWidth     -= nDeltaWidth;
-            pGlyphIter->m_nNewWidth += nDeltaWidth;
+            pGlyphIter->addNewWidth(nDeltaWidth);
             nDeltaSum      += nDeltaWidth;
         }
     }
@@ -354,14 +354,14 @@ void GenericSalLayout::Justify( DeviceCoordinate nNewWidth )
         {
             for( pGlyphIter = m_GlyphItems.begin(); ++pGlyphIter != pGlyphIterRight;)
             {
-                int nX = pGlyphIter->m_aLinearPos.getX();
+                int nX = pGlyphIter->linearPos().getX();
                 nX = static_cast<int>(nX * fSqueeze);
-                pGlyphIter->m_aLinearPos.setX( nX );
+                pGlyphIter->setLinearPosX( nX );
             }
         }
         // adjust glyph widths to new positions
         for( pGlyphIter = m_GlyphItems.begin(); pGlyphIter != pGlyphIterRight; ++pGlyphIter )
-            pGlyphIter->m_nNewWidth = pGlyphIter[1].m_aLinearPos.getX() - pGlyphIter[0].m_aLinearPos.getX();
+            pGlyphIter->setNewWidth( pGlyphIter[1].linearPos().getX() - pGlyphIter[0].linearPos().getX());
     }
 }
 
@@ -442,14 +442,14 @@ void GenericSalLayout::ApplyAsianKerning(const OUString& rStr)
             {
                 nDelta = (nDelta * pGlyphIter->origWidth() + 2) / 4;
                 if( pGlyphIter+1 == pGlyphIterEnd )
-                    pGlyphIter->m_nNewWidth += nDelta;
+                    pGlyphIter->addNewWidth( nDelta );
                 nOffset += nDelta;
             }
         }
 
         // adjust the glyph positions to the new glyph widths
         if( pGlyphIter+1 != pGlyphIterEnd )
-            pGlyphIter->m_aLinearPos.adjustX(nOffset);
+            pGlyphIter->adjustLinearPosX(nOffset);
     }
 }
 
@@ -462,7 +462,7 @@ void GenericSalLayout::GetCaretPositions( int nMaxIndex, sal_Int32* pCaretXArray
     // calculate caret positions using glyph array
     for (auto const& aGlyphItem : m_GlyphItems)
     {
-        tools::Long nXPos = aGlyphItem.m_aLinearPos.getX();
+        tools::Long nXPos = aGlyphItem.linearPos().getX();
         tools::Long nXRight = nXPos + aGlyphItem.origWidth();
         int n = aGlyphItem.charPos();
         int nCurrIdx = 2 * (n - mnMinCharPos);
@@ -532,7 +532,7 @@ bool GenericSalLayout::GetNextGlyph(const GlyphItem** pGlyph,
         *ppGlyphFont = m_GlyphItems.GetFont().get();
 
     // calculate absolute position in pixel units
-    DevicePoint aRelativePos = pGlyphIter->m_aLinearPos;
+    DevicePoint aRelativePos = pGlyphIter->linearPos();
 
     aRelativePos.setX( aRelativePos.getX() / mnUnitsPerPixel );
     aRelativePos.setY( aRelativePos.getY() / mnUnitsPerPixel );
@@ -553,15 +553,15 @@ void GenericSalLayout::MoveGlyph( int nStart, tools::Long nNewXPos )
     // as RTL-glyphs are right justified in their cell
     // the cell position needs to be adjusted to the glyph position
     if( pGlyphIter->IsRTLGlyph() )
-        nNewXPos += pGlyphIter->m_nNewWidth - pGlyphIter->origWidth();
+        nNewXPos += pGlyphIter->newWidth() - pGlyphIter->origWidth();
     // calculate the x-offset to the old position
-    tools::Long nXDelta = nNewXPos - pGlyphIter->m_aLinearPos.getX() + pGlyphIter->xOffset();
+    tools::Long nXDelta = nNewXPos - pGlyphIter->linearPos().getX() + pGlyphIter->xOffset();
     // adjust all following glyph positions if needed
     if( nXDelta != 0 )
     {
         for( std::vector<GlyphItem>::iterator pGlyphIterEnd = m_GlyphItems.end(); pGlyphIter != pGlyphIterEnd; ++pGlyphIter )
         {
-            pGlyphIter->m_aLinearPos.adjustX(nXDelta);
+            pGlyphIter->adjustLinearPosX(nXDelta);
         }
     }
 }
@@ -856,7 +856,7 @@ void MultiSalLayout::ImplAdjustMultiLayout(vcl::text::ImplLayoutArgs& rArgs,
         bool bKeepNotDef = (nFBLevel >= nLevel);
         for(;;)
         {
-            nRunAdvance += pGlyphs[n]->m_nNewWidth;
+            nRunAdvance += pGlyphs[n]->newWidth();
 
             // proceed to next glyph
             nStartOld[n] = nStartNew[n];
