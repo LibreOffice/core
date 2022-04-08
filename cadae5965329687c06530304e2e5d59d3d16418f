@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69617a7d_acacbb34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-08T10:29:52Z",
+      "side": 1,
+      "message": "Would there e a reason to always run the unoidl-write test?\n\nIt looks like unoidl-write, like unoidl-check, otherwise is just used for ODK. If not, we can just use the first revision of this patch, which always builds unoidl-write.",
+      "revId": "cadae5965329687c06530304e2e5d59d3d16418f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
