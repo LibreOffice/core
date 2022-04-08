@@ -756,20 +756,20 @@ static void lcl_DrawLineForWrongListData(
         rInf.GetOut().Pop();
 }
 
-void SwFntObj::GetTextArray(const OutputDevice& rDevice, const OUString& rStr, std::vector<sal_Int32>& rDXAry,
-                            sal_Int32 nIndex, sal_Int32 nLen, const vcl::text::TextLayoutCache* layoutCache)
+static void GetTextArray(const OutputDevice& rDevice, const OUString& rStr, std::vector<sal_Int32>& rDXAry,
+                         sal_Int32 nIndex, sal_Int32 nLen, const vcl::text::TextLayoutCache* layoutCache = nullptr)
 {
     const SalLayoutGlyphs* pLayoutCache = SalLayoutGlyphsCache::self()->GetLayoutGlyphs(&rDevice, rStr, nIndex, nLen,
         0, layoutCache);
     rDevice.GetTextArray(rStr, &rDXAry, nIndex, nLen, layoutCache, pLayoutCache);
 }
 
-void SwFntObj::GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry)
+static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry)
 {
     return GetTextArray(rOutputDevice, rInf.GetText(), rDXAry, rInf.GetIdx().get(), rInf.GetLen().get(), rInf.GetVclCache());
 }
 
-void SwFntObj::GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry, sal_Int32 nLen)
+static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry, sal_Int32 nLen)
 {
     // Substring is fine.
     assert( nLen <= rInf.GetLen().get());
@@ -2246,7 +2246,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             const sal_uInt16 nGridWidth = GetGridWidth(*pGrid, *pDoc);
 
             std::vector<sal_Int32> aKernArray;
-            rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
+            GetTextArray( rInf.GetOut(), rInf.GetText(), aKernArray,
                     sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
 
             tools::Long nAvgWidthPerChar = aKernArray[sal_Int32(rInf.GetLen()) - 1] / sal_Int32(rInf.GetLen());
@@ -2277,7 +2277,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
             const tools::Long nGridWidthAdd = EvalGridWidthAdd( pGrid, rInf );
 
             std::vector<sal_Int32> aKernArray;
-            rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
+            GetTextArray( rInf.GetOut(), rInf.GetText(), aKernArray,
                         sal_Int32(rInf.GetIdx()), sal_Int32(rInf.GetLen()));
             tools::Long nCurrPos = aKernArray[sal_Int32(nTextBreak)] + nGridWidthAdd;
             while (++nTextBreak < rInf.GetLen() && nTextWidth >= nCurrPos)
@@ -2394,7 +2394,7 @@ TextFrameIndex SwFont::GetTextBreak(SwDrawTextInfo const & rInf, tools::Long nTe
         else if (nLn > nTextBreak2 + nTextBreak2)
             nLn = nTextBreak2 + nTextBreak2;
         std::vector<sal_Int32> aKernArray;
-        rInf.GetOut().GetTextArray( rInf.GetText(), &aKernArray,
+        GetTextArray( rInf.GetOut(), rInf.GetText(), aKernArray,
                                     sal_Int32(rInf.GetIdx()), sal_Int32(nLn));
         if( rInf.GetScriptInfo()->Compress( aKernArray.data(), rInf.GetIdx(), nLn,
                             rInf.GetKanaComp(), o3tl::narrowing<sal_uInt16>(GetHeight( m_nActual )),

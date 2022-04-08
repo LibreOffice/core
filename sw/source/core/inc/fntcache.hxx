@@ -78,13 +78,6 @@ class SwFntObj final : public SwCacheObj
     bool m_bSymbol : 1;
     bool m_bPaintBlank : 1;
 
-    static void GetTextArray(const OutputDevice& rOutputDevice, const OUString& rStr,
-                             std::vector<sal_Int32>& rDXAry, sal_Int32 nIndex, sal_Int32 nLen,
-                             const vcl::text::TextLayoutCache* layoutCache = nullptr);
-    static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry,
-                             sal_Int32 nLen);
-    static void GetTextArray(const OutputDevice& rOutputDevice, const SwDrawTextInfo& rInf, std::vector<sal_Int32>& rDXAry);
-
     static tools::Long s_nPixWidth;
     static MapMode *s_pPixMap;
 
