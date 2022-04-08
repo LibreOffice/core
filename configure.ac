@@ -6265,7 +6265,7 @@ _make_longver=`echo $_make_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 if test "$_make_longver" -ge "038200"; then
     AC_MSG_RESULT([$GNUMAKE $_make_version])
 else
-    AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
+    AC_MSG_ERROR([failed ($GNUMAKE version >= 3.82 needed])
 fi
 
 # find if gnumake support file function
