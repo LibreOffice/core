@@ -327,6 +327,11 @@ bool Font::operator==( const vcl::Font& rFont ) const
     return mpImplFont == rFont.mpImplFont;
 }
 
+bool Font::EqualIgnoreColor( const vcl::Font& rFont ) const
+{
+    return mpImplFont->EqualIgnoreColor( *rFont.mpImplFont );
+}
+
 void Font::Merge( const vcl::Font& rFont )
 {
     if ( !rFont.GetFamilyName().isEmpty() )
@@ -961,6 +966,18 @@ ImplFont::ImplFont( const ImplFont& rImplFont ) :
 
 bool ImplFont::operator==( const ImplFont& rOther ) const
 {
+    if(!EqualIgnoreColor( rOther ))
+        return false;
+
+    if( (maColor        != rOther.maColor)
+    ||  (maFillColor    != rOther.maFillColor) )
+        return false;
+
+    return true;
+}
+
+bool ImplFont::EqualIgnoreColor( const ImplFont& rOther ) const
+{
     // equality tests split up for easier debugging
     if( (meWeight   != rOther.meWeight)
     ||  (meItalic   != rOther.meItalic)
@@ -981,10 +998,6 @@ bool ImplFont::operator==( const ImplFont& rOther ) const
 
     if( (maFamilyName   != rOther.maFamilyName)
     ||  (maStyleName    != rOther.maStyleName) )
-        return false;
-
-    if( (maColor        != rOther.maColor)
-    ||  (maFillColor    != rOther.maFillColor) )
         return false;
 
     if( (meUnderline    != rOther.meUnderline)
