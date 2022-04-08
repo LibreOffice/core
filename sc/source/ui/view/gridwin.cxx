@@ -128,6 +128,7 @@
 #include <datamapper.hxx>
 #include <inputopt.hxx>
 #include <queryparam.hxx>
+#include <SparklineList.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -6027,6 +6028,7 @@ void ScGridWindow::CursorChanged()
     // now, just re-create them
 
     UpdateCursorOverlay();
+    UpdateSparklineGroupOverlay();
 }
 
 void ScGridWindow::ImpCreateOverlayObjects()
@@ -6038,6 +6040,7 @@ void ScGridWindow::ImpCreateOverlayObjects()
     UpdateDragRectOverlay();
     UpdateHeaderOverlay();
     UpdateShrinkOverlay();
+    UpdateSparklineGroupOverlay();
 }
 
 void ScGridWindow::ImpDestroyOverlayObjects()
@@ -6049,6 +6052,7 @@ void ScGridWindow::ImpDestroyOverlayObjects()
     DeleteDragRectOverlay();
     DeleteHeaderOverlay();
     DeleteShrinkOverlay();
+    DeleteSparklineGroupOverlay();
 }
 
 void ScGridWindow::UpdateAllOverlays()
@@ -6964,6 +6968,73 @@ void ScGridWindow::UpdateShrinkOverlay()
 
     if ( aOldMode != aDrawMode )
         SetMapMode( aOldMode );
+}
+
+void ScGridWindow::DeleteSparklineGroupOverlay()
+{
+    mpOOSparklineGroup.reset();
+}
+
+void ScGridWindow::UpdateSparklineGroupOverlay()
+{
+    MapMode aDrawMode = GetDrawMapMode();
+
+    MapMode aOldMode = GetMapMode();
+    if (aOldMode != aDrawMode)
+        SetMapMode(aDrawMode);
+
+    DeleteSparklineGroupOverlay();
+
+    ScAddress aCurrentAddress = mrViewData.GetCurPos();
+
+    ScDocument& rDocument = mrViewData.GetDocument();
+    if (auto pSparkline = rDocument.GetSparkline(aCurrentAddress))
+    {
+        auto* pList = rDocument.GetSparklineList(aCurrentAddress.Tab());
+        if (pList)
+        {
+            auto const& pSparklines = pList->getSparklinesFor(pSparkline->getSparklineGroup());
+
+            Color aColor = SvtOptionsDrawinglayer::getHilightColor();
+
+            mpOOSparklineGroup.reset(new sdr::overlay::OverlayObjectList);
+            rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
+            if (xOverlayManager.is())
+            {
+                std::vector<basegfx::B2DRange> aRanges;
+
+                for (auto const& pCurrentSparkline : pSparklines)
+                {
+                    SCCOL nColumn = pCurrentSparkline->getColumn();
+                    SCROW nRow = pCurrentSparkline->getRow();
+
+                    Point aStart = mrViewData.GetScrPos(nColumn, nRow, eWhich);
+                    Point aEnd = mrViewData.GetScrPos(nColumn + 1, nRow + 1, eWhich);
+                    aEnd.AdjustX(-1);
+                    aEnd.AdjustY(-1);
+
+                    tools::Rectangle aPixRect = tools::Rectangle(aStart, aEnd);
+
+                    const basegfx::B2DHomMatrix aTransform(GetOutDev()->GetInverseViewTransformation());
+                    basegfx::B2DRange aRB(aPixRect.Left(), aPixRect.Top(), aPixRect.Right() + 1, aPixRect.Bottom() + 1);
+
+                    aRB.transform(aTransform);
+                    aRanges.push_back(aRB);
+                }
+
+                std::unique_ptr<sdr::overlay::OverlayObject> pOverlay(new sdr::overlay::OverlaySelection(
+                        sdr::overlay::OverlayType::Transparent,
+                        aColor, std::move(aRanges), true));
+
+
+                xOverlayManager->add(*pOverlay);
+                mpOOSparklineGroup->append(std::move(pOverlay));
+            }
+        }
+    }
+
+    if (aOldMode != aDrawMode)
+        SetMapMode(aOldMode);
 }
 
 // #i70788# central method to get the OverlayManager safely
