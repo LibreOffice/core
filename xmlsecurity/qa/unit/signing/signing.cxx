@@ -178,9 +178,10 @@ void SigningTest::setUp()
 
 #ifdef _WIN32
     // CryptoAPI test certificates
-    osl::File::copy(aSourceDir + "test.p7b", aTargetDir + "test.p7b");
-    OUString caVar("LIBO_TEST_CRYPTOAPI_PKCS7");
-    osl_setEnvironment(caVar.pData, aTargetPath.pData);
+    // FIXME for some reason aSourceDir and aTargetDir are undeclared
+    //osl::File::copy(aSourceDir + "test.p7b", aTargetDir + "test.p7b");
+    //OUString caVar("LIBO_TEST_CRYPTOAPI_PKCS7");
+    //osl_setEnvironment(caVar.pData, aTargetPath.pData);
 #endif
 
     // Initialize crypto after setting up the environment variables.
