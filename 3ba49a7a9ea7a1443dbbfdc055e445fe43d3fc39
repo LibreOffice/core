@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f47f20b2_b6d36a1d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-08T13:35:28Z",
+      "side": 1,
+      "message": "can\u0027t we take an approach like \u003chttps://git.libreoffice.org/core/+/eca89ece45ede76605a6102c94b3b67e1f8ff5aa%5E!/\u003e \"Replace rtl_string_getTokenView with o3tl::getToken\" here?",
+      "revId": "3ba49a7a9ea7a1443dbbfdc055e445fe43d3fc39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
