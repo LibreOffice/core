@@ -24,7 +24,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/basedlgs.hxx>
 #include <vcl/commandevent.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <acredlin.hxx>
 #include <global.hxx>
@@ -1651,7 +1651,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
         else
         {
-            int nDialogCol = comphelper::string::toInt32(sCommand.subView(8));
+            int nDialogCol = o3tl::toInt32(sCommand.subView(8));
             pTheView->HeaderBarClick(nDialogCol);
         }
     }

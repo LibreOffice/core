@@ -87,7 +87,7 @@ struct lcl_OUStringRestToInt32
     {
         if( m_nPrefixLength > rStr.getLength() )
             return 0;
-        return comphelper::string::toInt32(rStr.subView( m_nPrefixLength ));
+        return o3tl::toInt32(rStr.subView( m_nPrefixLength ));
     }
 private:
     sal_Int32 m_nPrefixLength;

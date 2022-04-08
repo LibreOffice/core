@@ -293,8 +293,8 @@ static void lcl_SortAndExpandPropertyNames( const Sequence< OUString >& lSource 
             // Get order numbers from entry name without prefix.
             // e.g. "m10" => 10
             //      "m5"  => 5
-            sal_Int32 n1 = comphelper::string::toInt32(s1.substr( 1 ));
-            sal_Int32 n2 = comphelper::string::toInt32(s2.substr( 1 ));
+            sal_Int32 n1 = o3tl::toInt32(s1.substr( 1 ));
+            sal_Int32 n2 = o3tl::toInt32(s2.substr( 1 ));
             // MUST be in [0,1] ... because it's a difference between
             // insert-positions of given entries in sorted list!
             return( n1<n2 );

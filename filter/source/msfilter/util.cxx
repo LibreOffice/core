@@ -15,7 +15,7 @@
 #include <vcl/BitmapPalette.hxx>
 #include <filter/msfilter/escherex.hxx>
 #include <filter/msfilter/util.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 #include <unordered_map>
 
@@ -489,7 +489,7 @@ bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal
         if (nIndex>=0)
         {
             nStart = sStart.toInt32();
-            nEnd   = comphelper::string::toInt32(sParams.subView(nIndex));
+            nEnd   = o3tl::toInt32(sParams.subView(nIndex));
         }
     }
     if( pFrom ) *pFrom = nStart;

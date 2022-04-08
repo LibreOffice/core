@@ -1081,7 +1081,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                             }
                             else if ( sTmpl.startsWith(aOutline) )
                             {
-                                nTemplateOutlineLevel = comphelper::string::toInt32(sTmpl.subView(aOutline.getLength())); //get string behind "Outline: Level  ";
+                                nTemplateOutlineLevel = o3tl::toInt32(sTmpl.subView(aOutline.getLength())); //get string behind "Outline: Level  ";
                                 bCreateByOutlineLevel = true;
                             }
 

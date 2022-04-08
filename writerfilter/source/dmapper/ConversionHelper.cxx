@@ -27,7 +27,7 @@
 #include <tools/color.hxx>
 #include <tools/mapunit.hxx>
 #include <tools/UnitConversion.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 
@@ -674,13 +674,13 @@ util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
     aDateTime.Year = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
     aDateTime.Month = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
     if (nIndex != -1)
-        aDateTime.Day = sal_uInt16( comphelper::string::toInt32(sDate.subView( nIndex )) );
+        aDateTime.Day = sal_uInt16( o3tl::toInt32(sDate.subView( nIndex )) );
 
     nIndex = 0;
     aDateTime.Hours = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
     aDateTime.Minutes = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
     if (nIndex != -1)
-        aDateTime.Seconds = sal_uInt16( comphelper::string::toInt32(sTime.subView( nIndex )) );
+        aDateTime.Seconds = sal_uInt16( o3tl::toInt32(sTime.subView( nIndex )) );
 
     return aDateTime;
 }
