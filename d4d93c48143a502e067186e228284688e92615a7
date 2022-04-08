@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49fe45f8_a0f3da0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-08T10:06:35Z",
+      "side": 1,
+      "message": "I\u0027ve debugged this crash for a while without great success, this patch dumps some info on the problem string to illustrate the problem\n\ninteresting case: str %n%ne%nl%nn0*ebmhגfiחחda240IATA No. len 35 initial portion is 0x5f24a70, GetStart() is 0\nportion lengths are: 0 12 1 4 1 2 0 0 0 \n\ninteresting case: str %n%ne%nl%nn0*ebmhגfiחחda240IATA No. len 35 initial portion is 0x5f260d0, GetStart() is 20\nportion lengths are: 0 12 1 4 1 2 2 5 8 0 \n\nit looks to me that the 2nd case with the GetStart() of 20 has a portion chain suitable instead for drawing from the start of the text so I\u0027m inclined to think we should enter here with a state of.\n\nGetStart() is 20\nportion lengths are: 0 2 5 8 0 ",
+      "revId": "d4d93c48143a502e067186e228284688e92615a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
