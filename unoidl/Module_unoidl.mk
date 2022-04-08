@@ -17,12 +17,10 @@ $(eval $(call gb_Module_add_targets,unoidl, \
     $(if $(filter DESKTOP,$(BUILD_TYPE)), \
         Executable_unoidl-read) \
     $(if $(or $(filter ODK,$(BUILD_TYPE)),$(call gb_not,$(CROSS_COMPILING))), \
-        Executable_unoidl-check) \
+        Executable_unoidl-check \
+        Executable_unoidl-write \
+    ) \
     Library_unoidl \
-))
-
-$(eval $(call gb_Module_add_targets_for_build,unoidl, \
-    Executable_unoidl-write \
 ))
 
 $(eval $(call gb_Module_add_check_targets,unoidl, \
