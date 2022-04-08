@@ -16,6 +16,69 @@
       "message": "Sorry for the noise - updated the wrong patch, so had to re-remove the class QtWidget.",
       "revId": "f0866f084c1c23220419c9124385114bb659138f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9b43c7d_2b0f1dde",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-08T11:53:02Z",
+      "side": 1,
+      "message": "I\u0027d personally find it a little nicer without the explicit casts, but that might be a matter of taste...",
+      "revId": "f0866f084c1c23220419c9124385114bb659138f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a482d7e_d82dea4a",
+        "filename": "vcl/inc/qt5/QtFrame.hxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-08T11:53:02Z",
+      "side": 1,
+      "message": "explicit cast should be unnecessary here",
+      "range": {
+        "startLine": 144,
+        "startChar": 41,
+        "endLine": 144,
+        "endChar": 63
+      },
+      "revId": "f0866f084c1c23220419c9124385114bb659138f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad6c17db_07b8d23b",
+        "filename": "vcl/qt5/QtFrame.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-08T11:53:02Z",
+      "side": 1,
+      "message": "I\u0027d find that a little more straightforward/readable without the cast:\n\n    if (m_pTopLevel)\n        return m_pTopLevel;\n    return m_pQWidget;",
+      "range": {
+        "startLine": 351,
+        "startChar": 4,
+        "endLine": 351,
+        "endChar": 96
+      },
+      "revId": "f0866f084c1c23220419c9124385114bb659138f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
