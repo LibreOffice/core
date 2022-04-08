@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0e931fc_8907ab65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-08T09:16:00Z",
+      "side": 1,
+      "message": "I hope that we could move everything from string implementation to header-only o3tl, and then use that in string implementation, deduplicating the code...",
+      "revId": "3a88b513fd90f4793b6de7a7412fa33369542f40",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
