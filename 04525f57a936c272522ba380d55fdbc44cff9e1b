@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d43daf96_71711100",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-08T06:27:19Z",
+      "side": 1,
+      "message": "Although not necessary to backport to Collabora, it is probably nice to keep this follow-up patch along with the others - just to keep the full set of patches from the one bug report together.",
+      "revId": "04525f57a936c272522ba380d55fdbc44cff9e1b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
