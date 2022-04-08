@@ -3487,6 +3487,9 @@ namespace xmloff::token {
         XML_COLOR_LUM_MOD,
         XML_COLOR_LUM_OFF,
 
+        XML_CONTENT_CONTROL,
+        XML_SHOWING_PLACE_HOLDER,
+
         XML_TOKEN_END
     };
 
