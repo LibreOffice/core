@@ -416,6 +416,12 @@ void loadDiagram( ShapePtr const & pShape,
     pDiagram->addTo(pShape);
     pShape->setDiagramDoms(pDiagram->getDomsAsPropertyValues());
 
+    // Get the oox::Theme definition and - if available - move/secure the
+    // original ImportData directly to the Diagram ModelData
+    std::shared_ptr<::oox::drawingml::Theme> aTheme(rFilter.getCurrentThemePtr());
+    if(aTheme)
+        pData->setThemeDocument(aTheme->getFragment()); //getTempFile());
+
     // Prepare support for the advanced DiagramHelper using Diagram & Theme data
     pShape->prepareDiagramHelper(pDiagram, rFilter.getCurrentThemePtr());
 }

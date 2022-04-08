@@ -22,6 +22,7 @@
 
 #include <rtl/ustring.hxx>
 #include <oox/drawingml/theme.hxx>
+#include <oox/shape/ShapeFilterBase.hxx>
 #include <svx/svdogrp.hxx>
 
 namespace oox::drawingml {
@@ -43,8 +44,8 @@ class Diagram;
 // - im/export Diagram model to other representations
 class AdvancedDiagramHelper final : public IDiagramHelper
 {
-    const std::shared_ptr< Diagram >                mpDiagramPtr;
-    const std::shared_ptr<::oox::drawingml::Theme>  mpThemePtr;
+    const std::shared_ptr< Diagram >            mpDiagramPtr;
+    std::shared_ptr<::oox::drawingml::Theme>    mpThemePtr;
 
     css::awt::Size maImportSize;
 
@@ -73,6 +74,8 @@ public:
     virtual bool removeNode(const OUString& rNodeId) override;
 
     void doAnchor(SdrObjGroup& rTarget);
+    std::shared_ptr< ::oox::drawingml::Theme > getOrCreateThemePtr(
+        rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 };
 
 }
