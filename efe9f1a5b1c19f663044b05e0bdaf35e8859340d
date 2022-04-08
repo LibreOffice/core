@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9293342_163078f5",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1658,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-08T09:01:39Z",
+      "side": 1,
+      "message": "I am unsure if this is what I wrote about. The locale of the program has no effect on the configuration I mentioned. System input language is related to keyboard and IME. Additionally, the Cyrillic test that I debugged is only one of the failing tests; other may have different languages expected.",
+      "revId": "efe9f1a5b1c19f663044b05e0bdaf35e8859340d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
