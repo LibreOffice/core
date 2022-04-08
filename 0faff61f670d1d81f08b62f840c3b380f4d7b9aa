@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40dbe0f4_f0bb535e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-08T10:21:44Z",
+      "side": 1,
+      "message": "If tried to find some solution, but the results didn\u0027t change for my Weston setup at all. This should be more correct, because it\u0027ll reset the cairo surface and update the LO window sizes correctly. Maybe this prevents the needed min/max calls for you?",
+      "revId": "0faff61f670d1d81f08b62f840c3b380f4d7b9aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
