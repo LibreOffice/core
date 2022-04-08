@@ -42,7 +42,7 @@ struct StaticDebugBaseAddressFilter
             sal_Int32 nIndex = 0;
             do {
                 vec.push_back( OUStringToOString(
-                                   str.getToken( 0, ';', nIndex ),
+                                   str.getTokenView( 0, ';', nIndex ),
                                    RTL_TEXTENCODING_ASCII_US ) );
             }
             while (nIndex >= 0);

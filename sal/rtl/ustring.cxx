@@ -1321,4 +1321,49 @@ sal_Int32 SAL_CALL rtl_uString_getToken(rtl_uString** ppThis, rtl_uString* pStr,
     return rtl::str::getToken(ppThis, pStr, nToken, cTok, nIndex);
 }
 
+sal_Int32 SAL_CALL rtl_uString_getToken2(sal_Unicode const ** resultStr, sal_Int32* resultLen, rtl_uString* pStr, sal_Int32 nToken,
+                                        sal_Unicode cTok, sal_Int32 nIndex) SAL_THROW_EXTERN_C()
+{
+    assert(nIndex <= pStr->length);
+
+    // Set ppThis to an empty string and return -1 if either nToken or nIndex is
+    // negative:
+    if (nIndex >= 0 && nToken >= 0)
+    {
+        const auto* pOrgCharStr = pStr->buffer;
+        const auto* pCharStr = pOrgCharStr + nIndex;
+        sal_Int32 nLen = pStr->length - nIndex;
+        sal_Int32 nTokCount = 0;
+        const auto* pCharStrStart = pCharStr;
+        while (nLen > 0)
+        {
+            if (*pCharStr == cTok)
+            {
+                nTokCount++;
+
+                if (nTokCount > nToken)
+                    break;
+                if (nTokCount == nToken)
+                    pCharStrStart = pCharStr + 1;
+            }
+
+            pCharStr++;
+            nLen--;
+        }
+        if (nTokCount >= nToken)
+        {
+            *resultStr = pCharStrStart;
+            *resultLen = pCharStr - pCharStrStart;
+            if (nLen > 0)
+                return pCharStr - pOrgCharStr + 1;
+            else
+                return -1;
+        }
+    }
+
+    *resultStr = nullptr;
+    *resultLen = 0;
+    return -1;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

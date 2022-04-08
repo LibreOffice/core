@@ -34,7 +34,7 @@ bool dumpNamespaceOpen(
     bool bOutput = false;
     bool bFirst = true;
     for (sal_Int32 i = 0; i >= 0;) {
-        OUString id(entityName.getToken(0, '.', i));
+        std::u16string_view id(entityName.getTokenView(0, '.', i));
         if (fullModuleType || i >= 0) {
             if (!bFirst) {
                 out << " ";
