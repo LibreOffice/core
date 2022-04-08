@@ -16,6 +16,23 @@
       "message": "Hi Miklos. This patch starts another series that finishes up something from you a year ago - importing DOCX createdata as fixed field. This adds CreateAuthor, DOC, and export support, plus a few other nearby-code-related fixes.",
       "revId": "93a5ba15c05ace4feb4dc3696386bc69200ac239",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed3472a0_8d6c8b4e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-08T06:14:32Z",
+      "side": 1,
+      "message": "Oh, thanks. I completely forgot about this. I now see that this is constant is indeed used only during the Word export, so no problem here.",
+      "revId": "93a5ba15c05ace4feb4dc3696386bc69200ac239",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
