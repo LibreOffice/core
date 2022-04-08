@@ -1081,7 +1081,22 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 RemoveFootnote( nOld, nEnd - nOld );
             ChangeOffset( GetFollow(), nEnd );
             if( !bDelta )
+            {
+                auto nOldOffset = GetFollow()->GetOffset();
                 GetFollow()->ManipOfst( nEnd );
+
+                if (nOldOffset != nEnd && nEnd.get() == 20 && GetFollow()->GetPara()->GetLen().get() == 35)
+                {
+                    fprintf(stderr, "offset manipulated to %d portion lengths are: ", GetFollow()->GetOffset().get());
+                    SwLinePortion* pTmp = GetFollow()->GetPara();
+                    while (pTmp)
+                    {
+                        fprintf(stderr, "%d ", pTmp->GetLen().get());
+                        pTmp = pTmp->GetNextPortion();
+                    }
+                    fprintf(stderr, "\nat this point AdjustFollow_ won't do anything because the offset now already matches nEnd, but clearly the portions are for a different layout that doesn't match anymore\n");
+                }
+            }
         }
     }
     else
