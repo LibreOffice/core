@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e3e3bed_8562b87b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-08T09:22:51Z",
+      "side": 1,
+      "message": "Hm agreed, we need to be bug-compat there.",
+      "revId": "41e8fa48d7d509077811692a8f682aa8fcaac12f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
