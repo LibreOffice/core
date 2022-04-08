@@ -23,11 +23,11 @@
 #include <o3tl/typed_flags_set.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/glyphitem.hxx>
 #include <vcl/outdev.hxx>
 #include <vector>
 
 #include "fontinstance.hxx"
+#include "glyphid.hxx"
 
 enum class GlyphItemFlags : sal_uInt8
 {

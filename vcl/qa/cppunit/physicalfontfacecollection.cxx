@@ -17,7 +17,6 @@
 
 #include <vcl/fontcapabilities.hxx>
 #include <vcl/fontcharmap.hxx>
-#include <vcl/glyphitem.hxx>
 #include <vcl/virdev.hxx>
 
 #include "fontmocks.hxx"

@@ -325,7 +325,6 @@
 #include <vcl/font.hxx>
 #include <vcl/formatter.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/glyphitem.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>

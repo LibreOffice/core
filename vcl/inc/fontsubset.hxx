@@ -25,7 +25,8 @@
 #include <o3tl/typed_flags_set.hxx>
 
 #include <vcl/dllapi.h>
-#include <vcl/glyphitem.hxx>
+
+#include "glyphid.hxx"
 
 namespace vcl { class TrueTypeFont; } ///< SFT's idea of a TTF font
 

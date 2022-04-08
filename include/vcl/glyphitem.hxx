@@ -26,8 +26,6 @@
 #include <vector>
 #include <memory>
 
-typedef sal_uInt16 sal_GlyphId;
-
 class SalLayoutGlyphsImpl;
 
 class VCL_DLLPUBLIC SalLayoutGlyphs final

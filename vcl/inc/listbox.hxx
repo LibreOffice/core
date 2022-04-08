@@ -26,8 +26,9 @@
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/floatwin.hxx>
 #include <vcl/quickselectionengine.hxx>
-#include <vcl/glyphitem.hxx>
 #include <vcl/vcllayout.hxx>
+
+#include "glyphid.hxx"
 
 #include <set>
 #include <vector>
