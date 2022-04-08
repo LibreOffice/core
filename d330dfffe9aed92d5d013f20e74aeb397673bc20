@@ -16,6 +16,24 @@
       "message": "Hi Mike,\nit seems I can\u0027t use std::wstring and wchar_t here because it fails on windows. Any suggestion on how to implement it differently ?",
       "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "468160f5_223cd3cd",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-08T06:55:53Z",
+      "side": 1,
+      "message": "The problem is not with wchar_t (even though I do not understand why you decide to use that awful variable type instead of char16_t and u\"\" notation); the problem is in the Options-\u003eLanguage Settings-\u003eLanguages-\u003eIgnore System Input Language (*not* enabled by default), which is only implemented on Windows and on Qt5. On all other platforms, typing will not consider current input language, and that means that current language will not change. On Windows, OTOH, it will detect that system input language is en-US (despite \"typing\" e.g. Cyrillic characters), and will change Russian into English (US); in the latter language, the replacement from single quote will not become “, but ’.\n\nSo the solution would be to make sure that we use the \"Ignore System Input Language\" for the tests.",
+      "parentUuid": "c6b5621a_95a5f2b0",
+      "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
