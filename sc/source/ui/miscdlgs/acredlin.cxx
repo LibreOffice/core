@@ -1651,7 +1651,7 @@ IMPL_LINK(ScAcceptChgDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
         }
         else
         {
-            int nDialogCol = comphelper::string::toInt32(sCommand.subView(8));
+            int nDialogCol = o3tl::toInt32(sCommand.subView(8));
             pTheView->HeaderBarClick(nDialogCol);
         }
     }

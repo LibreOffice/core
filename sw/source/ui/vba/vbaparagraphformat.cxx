@@ -188,7 +188,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel()
     if( aHeading.startsWith( HEADING ) )
     {
         // get the sub string after "Heading"
-        nLevel = comphelper::string::toInt32(aHeading.subView( HEADING.getLength() ));
+        nLevel = o3tl::toInt32(aHeading.subView( HEADING.getLength() ));
     }
     return nLevel;
 }

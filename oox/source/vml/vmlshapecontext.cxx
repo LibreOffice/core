@@ -300,7 +300,7 @@ ShapeTypeContext::ShapeTypeContext(ContextHandler2Helper const & rParent,
         if( mrTypeModel.maShapeName.startsWith( sShapeTypePrefix ) )
         {
             mrTypeModel.maShapeId = mrTypeModel.maShapeName;
-            mrTypeModel.moShapeType = comphelper::string::toInt32(mrTypeModel.maShapeName.subView(sShapeTypePrefix.getLength()));
+            mrTypeModel.moShapeType = o3tl::toInt32(mrTypeModel.maShapeName.subView(sShapeTypePrefix.getLength()));
         }
         else if (mrTypeModel.maShapeName.startsWith("_x0000_t", &tmp))
         {

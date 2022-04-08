@@ -369,7 +369,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
                     {
                         // if yes, make sure we generate a unique name with a higher number
                         // this is dump but fast
-                        sal_Int32 nNumber = comphelper::string::toInt32(aInterfaceName.subView( rInterfaceName.getLength() ));
+                        sal_Int32 nNumber = o3tl::toInt32(aInterfaceName.subView( rInterfaceName.getLength() ));
                         if( nNumber >= nDefaultNumber )
                             nDefaultNumber = nNumber + 1;
                     }

@@ -1288,7 +1288,7 @@ IMPL_LINK(SwRedlineAcceptDlg, CommandHdl, const CommandEvent&, rCEvt, bool)
     }
     else if (!sCommand.isEmpty())
     {
-        int nSortMode = comphelper::string::toInt32(sCommand.subView(10));
+        int nSortMode = o3tl::toInt32(sCommand.subView(10));
 
         if (nSortMode == 4 && nColumn == 4)
             return true;  // we already have it

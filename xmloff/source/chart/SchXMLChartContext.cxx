@@ -181,7 +181,7 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const OUString& rStr
         nPos = rStr.indexOf( aSpace, nLastPos );
         if( nPos > nLastPos )
         {
-            aVec.push_back( comphelper::string::toInt32(rStr.subView( nLastPos, (nPos - nLastPos) )) );
+            aVec.push_back( o3tl::toInt32(rStr.subView( nLastPos, (nPos - nLastPos) )) );
         }
         if( nPos != -1 )
             nLastPos = nPos + 1;
@@ -190,7 +190,7 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const OUString& rStr
     if( nLastPos != 0 &&
         rStr.getLength() > nLastPos )
     {
-        aVec.push_back( comphelper::string::toInt32(rStr.subView( nLastPos )) );
+        aVec.push_back( o3tl::toInt32(rStr.subView( nLastPos )) );
     }
 
     const sal_Int32 nVecSize = aVec.size();

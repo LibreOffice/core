@@ -1233,7 +1233,7 @@ bool SwFieldMgr::InsertField(
                     nExpPos = rData.m_sPar1.indexOf(DB_DELIM, nCmdTypePos);
                     if (nExpPos>=0)
                     {
-                        aDBData.nCommandType = comphelper::string::toInt32(rData.m_sPar1.subView(nCmdTypePos, nExpPos++ - nCmdTypePos));
+                        aDBData.nCommandType = o3tl::toInt32(rData.m_sPar1.subView(nCmdTypePos, nExpPos++ - nCmdTypePos));
                     }
                 }
             }
@@ -1631,7 +1631,7 @@ void SwFieldMgr::UpdateCurField(sal_uInt32 nFormat,
                 static_cast<SwGetRefField*>(pTmpField.get())->SetSubType( o3tl::narrowing<sal_uInt16>(rPar2.toInt32()) );
                 const sal_Int32 nPos = rPar2.indexOf( '|' );
                 if( nPos>=0 )
-                    static_cast<SwGetRefField*>(pTmpField.get())->SetSeqNo( o3tl::narrowing<sal_uInt16>(comphelper::string::toInt32(rPar2.subView( nPos + 1 ))));
+                    static_cast<SwGetRefField*>(pTmpField.get())->SetSeqNo( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(rPar2.subView( nPos + 1 ))));
             }
             break;
         case SwFieldTypesEnum::Dropdown:

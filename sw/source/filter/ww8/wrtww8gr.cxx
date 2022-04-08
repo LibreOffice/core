@@ -340,7 +340,7 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
     // Output the cPicLocation attribute
     std::unique_ptr<ww::bytes> pBuf( new ww::bytes );
     SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CPicLocation::val );
-    SwWW8Writer::InsUInt32( *pBuf, comphelper::string::toInt32(rOleId.subView( 1 )) );
+    SwWW8Writer::InsUInt32( *pBuf, o3tl::toInt32(rOleId.subView( 1 )) );
 
     SwWW8Writer::InsUInt16( *pBuf, NS_sprm::CFOle2::val );
     pBuf->push_back( 1 );

@@ -140,7 +140,7 @@ static void InsertSubMenuItems(const Reference<XPopupMenu>& rSubMenu, sal_uInt16
                             // command url but uses the item id as a unique identifier. These entries
                             // got a special url during conversion from menu=>actiontriggercontainer.
                             // Now we have to extract this special url and set the correct item id!!!
-                            nNewItemId = static_cast<sal_uInt16>(comphelper::string::toInt32(aCommandURL.subView( nIndex+aSlotURL.getLength() )));
+                            nNewItemId = static_cast<sal_uInt16>(o3tl::toInt32(aCommandURL.subView( nIndex+aSlotURL.getLength() )));
                             rSubMenu->insertItem(nNewItemId, aLabel, 0, i);
                         }
                         else

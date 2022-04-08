@@ -117,7 +117,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                             break;
                         nLength++;
                     }
-                    sal_Int32 nPageNumber = comphelper::string::toInt32(sHref.subView( nIndex2, nLength ));
+                    sal_Int32 nPageNumber = o3tl::toInt32(sHref.subView( nIndex2, nLength ));
                     if ( nPageNumber )
                     {
                         const OUString aSlideType( sHref.copy( 0, nIndex2 ) );

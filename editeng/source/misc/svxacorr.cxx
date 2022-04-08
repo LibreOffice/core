@@ -510,7 +510,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
         }
 
         if (bFoundEnd && isValidNumber) {
-            sal_Int32 nNum = comphelper::string::toInt32(rTxt.subView(nSttPos, nNumEnd - nSttPos + 1));
+            sal_Int32 nNum = o3tl::toInt32(rTxt.subView(nSttPos, nNumEnd - nSttPos + 1));
 
             // Check if the characters after that number correspond to the ordinal suffix
             uno::Reference< i18n::XOrdinalSuffix > xOrdSuffix

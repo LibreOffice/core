@@ -751,8 +751,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         sal_Int32 nCharMaxLen = xRow->getShort(6);
         bool bIsCharMax = !xRow->wasNull();
         if (sDataType.equalsIgnoreAsciiCase("year"))
-            nColumnSize
-                = comphelper::string::toInt32(sColumnType.subView(6, 1)); // 'year(' length is 5
+            nColumnSize = o3tl::toInt32(sColumnType.subView(6, 1)); // 'year(' length is 5
         else if (sDataType.equalsIgnoreAsciiCase("date"))
             nColumnSize = 10;
         else if (sDataType.equalsIgnoreAsciiCase("time"))

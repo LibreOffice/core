@@ -952,9 +952,9 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
                         (*_rRow)[i]->setNull();
                         break;
                     }
-                    const sal_uInt16  nYear   = static_cast<sal_uInt16>(comphelper::string::toInt32(aStr.subView( 0, 4 )));
-                    const sal_uInt16  nMonth  = static_cast<sal_uInt16>(comphelper::string::toInt32(aStr.subView( 4, 2 )));
-                    const sal_uInt16  nDay    = static_cast<sal_uInt16>(comphelper::string::toInt32(aStr.subView( 6, 2 )));
+                    const sal_uInt16  nYear   = static_cast<sal_uInt16>(o3tl::toInt32(aStr.subView( 0, 4 )));
+                    const sal_uInt16  nMonth  = static_cast<sal_uInt16>(o3tl::toInt32(aStr.subView( 4, 2 )));
+                    const sal_uInt16  nDay    = static_cast<sal_uInt16>(o3tl::toInt32(aStr.subView( 6, 2 )));
 
                     const css::util::Date aDate(nDay,nMonth,nYear);
                     *(*_rRow)[i] = aDate;

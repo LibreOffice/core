@@ -296,11 +296,11 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
         if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.getLength()) )
         {
             // OOXML uses 1-based integer column indexes, row model expects 0-based colspans
-            const sal_Int32 nCol1 = comphelper::string::toInt32(aColSpanToken.subView( 0, nSepPos )) - 1;
+            const sal_Int32 nCol1 = o3tl::toInt32(aColSpanToken.subView( 0, nSepPos )) - 1;
             const bool bValid1 = mrAddressConv.checkCol( nCol1, true);
             if (bValid1)
             {
-                const sal_Int32 nCol2 = comphelper::string::toInt32(aColSpanToken.subView( nSepPos + 1 )) - 1;
+                const sal_Int32 nCol2 = o3tl::toInt32(aColSpanToken.subView( nSepPos + 1 )) - 1;
                 mrAddressConv.checkCol( nCol2, true);
                 aModel.insertColSpan( ValueRange( nCol1, ::std::min( nCol2, nMaxCol )));
             }

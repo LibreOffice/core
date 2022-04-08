@@ -66,7 +66,7 @@ OUString lclGetShapeId( sal_Int32 nShapeId )
 sal_Int32 lclGetShapeId( const OUString& rShapeId )
 {
     // identifier consists of a literal NUL character, a lowercase 's', and the id
-    return ((rShapeId.getLength() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? comphelper::string::toInt32(rShapeId.subView( 2 )) : -1;
+    return ((rShapeId.getLength() >= 3) && (rShapeId[ 0 ] == '\0') && (rShapeId[ 1 ] == 's')) ? o3tl::toInt32(rShapeId.subView( 2 )) : -1;
 }
 
 } // namespace

@@ -152,7 +152,7 @@ awt::Rectangle lcl_parseRectangle(const OString& rValue)
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
     nIndex += strlen(aExpectedHeightPrefix);
-    aRectangle.Height = comphelper::string::toInt32(rValue.subView(nIndex));
+    aRectangle.Height = o3tl::toInt32(rValue.subView(nIndex));
 
     return aRectangle;
 }
@@ -169,7 +169,7 @@ awt::Size lcl_parseSize(const OString& rValue)
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
     assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
     nIndex += strlen(aExpectedHeightPrefix);
-    aSize.Height = comphelper::string::toInt32(rValue.subView(nIndex));
+    aSize.Height = o3tl::toInt32(rValue.subView(nIndex));
 
     return aSize;
 }

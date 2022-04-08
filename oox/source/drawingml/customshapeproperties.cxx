@@ -151,7 +151,7 @@ void CustomShapeProperties::pushToPropSet(
                             {
                                 if ( adjustmentGuide.maName.getLength() > 3 )
                                 {
-                                    sal_Int32 nAdjustmentIndex = comphelper::string::toInt32(adjustmentGuide.maName.subView( 3 )) - 1;
+                                    sal_Int32 nAdjustmentIndex = o3tl::toInt32(adjustmentGuide.maName.subView( 3 )) - 1;
                                     if ( ( nAdjustmentIndex >= 0 ) && ( nAdjustmentIndex < aAdjustmentSeq.getLength() ) )
                                     {
                                         EnhancedCustomShapeAdjustmentValue aAdjustmentVal;

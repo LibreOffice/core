@@ -3661,7 +3661,7 @@ void SfxMedium::AddVersion_Impl( util::RevisionTag& rRevision )
     sal_Int32 nLength = pImpl->aVersions.getLength();
     for ( const auto& rVersion : std::as_const(pImpl->aVersions) )
     {
-        sal_uInt32 nVer = static_cast<sal_uInt32>( comphelper::string::toInt32(rVersion.Identifier.subView(7)));
+        sal_uInt32 nVer = static_cast<sal_uInt32>( o3tl::toInt32(rVersion.Identifier.subView(7)));
         size_t n;
         for ( n=0; n<aLongs.size(); ++n )
             if ( nVer<aLongs[n] )

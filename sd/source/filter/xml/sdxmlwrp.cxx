@@ -696,11 +696,11 @@ bool SdXMLFilter::Import( ErrCode& nError )
                     sal_Int32 nIndex = sBuildId.indexOf('$');
                     if( nIndex != -1 )
                     {
-                        sal_Int32 nUPD = comphelper::string::toInt32(sBuildId.subView( 0, nIndex ));
+                        sal_Int32 nUPD = o3tl::toInt32(sBuildId.subView( 0, nIndex ));
 
                         if( nUPD == 300 )
                         {
-                            sal_Int32 nBuildId = comphelper::string::toInt32(sBuildId.subView( nIndex+1 ));
+                            sal_Int32 nBuildId = o3tl::toInt32(sBuildId.subView( nIndex+1 ));
                             if( (nBuildId > 0) && (nBuildId < 9316) )
                                 bTransform = true; // treat OOo 3.0 beta1 as OOo 2.x
                         }

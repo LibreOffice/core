@@ -838,8 +838,8 @@ void AxControlModelBase::importProperty( sal_Int32 nPropId, const OUString& rVal
             OSL_ENSURE( nSepPos >= 0, "AxControlModelBase::importProperty - missing separator in 'Size' property" );
             if( nSepPos >= 0 )
             {
-                maSize.first = comphelper::string::toInt32(rValue.subView( 0, nSepPos ));
-                maSize.second = comphelper::string::toInt32(rValue.subView( nSepPos + 1 ));
+                maSize.first = o3tl::toInt32(rValue.subView( 0, nSepPos ));
+                maSize.second = o3tl::toInt32(rValue.subView( nSepPos + 1 ));
             }
         }
         break;

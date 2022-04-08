@@ -489,7 +489,7 @@ bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal
         if (nIndex>=0)
         {
             nStart = sStart.toInt32();
-            nEnd   = comphelper::string::toInt32(sParams.subView(nIndex));
+            nEnd   = o3tl::toInt32(sParams.subView(nIndex));
         }
     }
     if( pFrom ) *pFrom = nStart;

@@ -232,7 +232,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         else if (aLine.startsWith(copiesEquals))
         {
             bCopies = true;
-            rJobData.m_nCopies = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(copiesEquals)));
+            rJobData.m_nCopies = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(copiesEquals)));
         }
         else if (aLine.startsWith(collateEquals))
         {
@@ -250,22 +250,22 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         else if (aLine.startsWith(colordepthEquals))
         {
             bColorDepth = true;
-            rJobData.m_nColorDepth = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(colordepthEquals)));
+            rJobData.m_nColorDepth = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(colordepthEquals)));
         }
         else if (aLine.startsWith(colordeviceEquals))
         {
             bColorDevice = true;
-            rJobData.m_nColorDevice = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(colordeviceEquals)));
+            rJobData.m_nColorDevice = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(colordeviceEquals)));
         }
         else if (aLine.startsWith(pslevelEquals))
         {
             bPSLevel = true;
-            rJobData.m_nPSLevel = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pslevelEquals)));
+            rJobData.m_nPSLevel = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pslevelEquals)));
         }
         else if (aLine.startsWith(pdfdeviceEquals))
         {
             bPDFDevice = true;
-            rJobData.m_nPDFDevice = comphelper::string::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)));
+            rJobData.m_nPDFDevice = o3tl::toInt32(aLine.subView(RTL_CONSTASCII_LENGTH(pdfdeviceEquals)));
         }
         else if (aLine == "PPDContextData" && bPrinter)
         {

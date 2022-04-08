@@ -95,7 +95,7 @@ bool UnoInterfaceToUniqueIdentifierMapper::registerReference( const OUString& rI
         // the identifier is a pure integer value
         // so we make sure we will never generate
         // an integer value like this one
-        sal_Int32 nId = comphelper::string::toInt32(rIdentifier.subView(2));
+        sal_Int32 nId = o3tl::toInt32(rIdentifier.subView(2));
         if (nId > 0 && mnNextId <= o3tl::make_unsigned(nId))
             mnNextId = nId + 1;
 

@@ -387,7 +387,7 @@ void SwXTextTable::GetCellPosition(const OUString& rCellName, sal_Int32& o_rColu
     }
 
     o_rColumn = nColIdx;
-    o_rRow    = comphelper::string::toInt32(rCellName.subView(nRowPos)) - 1; // - 1 because indices ought to be 0 based
+    o_rRow    = o3tl::toInt32(rCellName.subView(nRowPos)) - 1; // - 1 because indices ought to be 0 based
 }
 
 /** compare position of two cells (check rows first)

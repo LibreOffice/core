@@ -582,12 +582,12 @@ util::DateTime PDFiumSignatureImpl::getTime()
     OString aM(aTimeBuf.data(), aTimeBuf.size() - 1);
     if (aM.startsWith("D:") && aM.getLength() >= 16)
     {
-        aRet.Year = comphelper::string::toInt32(aM.subView(2, 4));
-        aRet.Month = comphelper::string::toInt32(aM.subView(6, 2));
-        aRet.Day = comphelper::string::toInt32(aM.subView(8, 2));
-        aRet.Hours = comphelper::string::toInt32(aM.subView(10, 2));
-        aRet.Minutes = comphelper::string::toInt32(aM.subView(12, 2));
-        aRet.Seconds = comphelper::string::toInt32(aM.subView(14, 2));
+        aRet.Year = o3tl::toInt32(aM.subView(2, 4));
+        aRet.Month = o3tl::toInt32(aM.subView(6, 2));
+        aRet.Day = o3tl::toInt32(aM.subView(8, 2));
+        aRet.Hours = o3tl::toInt32(aM.subView(10, 2));
+        aRet.Minutes = o3tl::toInt32(aM.subView(12, 2));
+        aRet.Seconds = o3tl::toInt32(aM.subView(14, 2));
     }
     return aRet;
 }

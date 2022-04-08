@@ -1242,7 +1242,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMajorVersion(  ) try
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return comphelper::string::toInt32(aValue.subView(0,aValue.indexOf('.')));
+    return o3tl::toInt32(aValue.subView(0,aValue.indexOf('.')));
 }
 catch (const SQLException &)
 {
@@ -1278,7 +1278,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getDriverMinorVersion(  ) try
 {
     OUString aValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_DRIVER_VER,aValue,*this,m_pConnection->getTextEncoding());
-    return comphelper::string::toInt32(aValue.subView(0,aValue.lastIndexOf('.')));
+    return o3tl::toInt32(aValue.subView(0,aValue.lastIndexOf('.')));
 }
 catch (const SQLException &)
 {

@@ -1526,11 +1526,11 @@ void PPDParser::getResolutionFromString(std::u16string_view rString,
         const size_t nPos {rString.find( 'x' )};
         if( nPos != std::u16string_view::npos )
         {
-            rXRes = comphelper::string::toInt32(rString.substr( 0, nPos ));
-            rYRes = comphelper::string::toInt32(rString.substr(nPos+1, nDPIPos - nPos - 1));
+            rXRes = o3tl::toInt32(rString.substr( 0, nPos ));
+            rYRes = o3tl::toInt32(rString.substr(nPos+1, nDPIPos - nPos - 1));
         }
         else
-            rXRes = rYRes = comphelper::string::toInt32(rString.substr( 0, nDPIPos ));
+            rXRes = rYRes = o3tl::toInt32(rString.substr( 0, nDPIPos ));
     }
 }
 

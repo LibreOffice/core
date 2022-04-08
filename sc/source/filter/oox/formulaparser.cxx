@@ -1146,7 +1146,7 @@ const FunctionInfo* FormulaParserImpl::resolveBadFuncName( const OUString& rToke
     sal_Int32 nExclamation = rTokenData.indexOf( '!' );
     if( (0 == nBracketOpen) && (nBracketOpen + 1 < nBracketClose) && (nBracketClose + 1 == nExclamation) && (nExclamation + 1 < rTokenData.getLength()) )
     {
-        sal_Int32 nRefId = comphelper::string::toInt32(rTokenData.subView( nBracketOpen + 1, nBracketClose - nBracketOpen - 1 ));
+        sal_Int32 nRefId = o3tl::toInt32(rTokenData.subView( nBracketOpen + 1, nBracketClose - nBracketOpen - 1 ));
         const ExternalLink* pExtLink = getExternalLinks().getExternalLink( nRefId ).get();
         if( pExtLink && (pExtLink->getLinkType() == ExternalLinkType::Library) )
         {
@@ -1740,7 +1740,7 @@ bool lclExtractRefId( sal_Int32& rnRefId, OUString& rRemainder, const OUString& 
         sal_Int32 nBracketClose = rFormulaString.indexOf( ']', 1 );
         if( nBracketClose >= 2 )
         {
-            rnRefId = comphelper::string::toInt32(rFormulaString.subView( 1, nBracketClose - 1 ));
+            rnRefId = o3tl::toInt32(rFormulaString.subView( 1, nBracketClose - 1 ));
             rRemainder = rFormulaString.copy( nBracketClose + 1 );
             return !rRemainder.isEmpty();
         }
