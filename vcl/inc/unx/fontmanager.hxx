@@ -24,10 +24,11 @@
 
 #include <tools/fontenum.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/glyphitem.hxx>
 #include <vcl/timer.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 #include <unx/fc_fontoptions.hxx>
+
+#include <glyphid.hxx>
 
 #include <map>
 #include <set>

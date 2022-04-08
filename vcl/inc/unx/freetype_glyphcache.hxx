@@ -24,7 +24,8 @@
 #include <unx/glyphcache.hxx>
 #include <font/PhysicalFontFace.hxx>
 #include <fontinstance.hxx>
-#include <vcl/glyphitem.hxx>
+
+#include <glyphid.hxx>
 
 class CmapResult;
 

@@ -22,7 +22,8 @@
 #include <osl/file.hxx>
 
 #include <rtl/string.hxx>
-#include <vcl/glyphitem.hxx>
+
+#include <glyphid.hxx>
 
 #include <string_view>
 #include <vector>

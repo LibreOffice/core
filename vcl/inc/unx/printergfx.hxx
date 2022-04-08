@@ -23,7 +23,6 @@
 #include <osl/file.hxx>
 #include <tools/gen.hxx>
 #include <vcl/dllapi.h>
-#include <vcl/glyphitem.hxx>
 
 #include <impglyphitem.hxx>
 
