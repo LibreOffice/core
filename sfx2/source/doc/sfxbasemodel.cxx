@@ -70,6 +70,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -3559,7 +3560,7 @@ static void ConvertSlotsToCommands( SfxObjectShell const * pDoc, Reference< cont
             GetCommandFromSequence( aCommand, nIndex, aSeqPropValue );
             if ( nIndex >= 0 && aCommand.startsWith( "slot:" ) )
             {
-                const sal_uInt16 nSlot = comphelper::string::toInt32(aCommand.subView( 5 ));
+                const sal_uInt16 nSlot = o3tl::toInt32(aCommand.subView( 5 ));
 
                 // We have to replace the old "slot-Command" with our new ".uno:-Command"
                 const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( nSlot );

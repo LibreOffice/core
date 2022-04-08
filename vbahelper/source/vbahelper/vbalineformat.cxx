@@ -104,7 +104,7 @@ ScVbaLineFormat::getBeginArrowheadStyle()
     {
         sal_Int32 nIndex = sLineName.indexOf( ' ' );
         OUString sName = sLineName.copy( 0, nIndex );
-        //sal_Int32 nSize = comphelper::string::toInt32(sLineName.subView( nIndex + 1 ));
+        //sal_Int32 nSize = o3tl::toInt32(sLineName.subView( nIndex + 1 ));
         nLineType = convertLineStartEndNameToArrowheadStyle( sName );
     }
     else

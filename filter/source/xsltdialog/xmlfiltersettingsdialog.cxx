@@ -26,7 +26,7 @@
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -369,7 +369,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
                     {
                         // if yes, make sure we generate a unique name with a higher number
                         // this is dump but fast
-                        sal_Int32 nNumber = comphelper::string::toInt32(aInterfaceName.subView( rInterfaceName.getLength() ));
+                        sal_Int32 nNumber = o3tl::toInt32(aInterfaceName.subView( rInterfaceName.getLength() ));
                         if( nNumber >= nDefaultNumber )
                             nDefaultNumber = nNumber + 1;
                     }

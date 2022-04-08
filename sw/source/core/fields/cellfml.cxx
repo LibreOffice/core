@@ -44,6 +44,7 @@
 #include <ndindex.hxx>
 #include <frameformats.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
@@ -789,7 +790,7 @@ static sal_Int32 lcl_GetLongBoxNum( OUString& rStr )
     }
     else
     {
-        nRet = comphelper::string::toInt32(rStr.subView( 0, nPos ));
+        nRet = o3tl::toInt32(rStr.subView( 0, nPos ));
         rStr = rStr.copy( nPos+1 );
     }
     return nRet;

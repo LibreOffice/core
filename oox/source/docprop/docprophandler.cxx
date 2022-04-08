@@ -24,7 +24,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
-#include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <osl/time.h>
@@ -99,25 +99,25 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
     const sal_Int32 nLen = aChars.getLength();
     if ( nLen >= 4 )
     {
-        aOslDTime.Year = static_cast<sal_Int16>(comphelper::string::toInt32(aChars.subView( 0, 4 )));
+        aOslDTime.Year = static_cast<sal_Int16>(o3tl::toInt32(aChars.subView( 0, 4 )));
 
         if ( nLen >= 7 && aChars[4] == '-' )
         {
-            aOslDTime.Month = static_cast<sal_uInt16>(comphelper::string::toInt32(aChars.subView( 5, 2 )));
+            aOslDTime.Month = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 5, 2 )));
 
             if ( nLen >= 10 && aChars[7] == '-' )
             {
-                aOslDTime.Day = static_cast<sal_uInt16>(comphelper::string::toInt32(aChars.subView( 8, 2 )));
+                aOslDTime.Day = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 8, 2 )));
 
                 if ( nLen >= 16 && aChars[10] == 'T' && aChars[13] == ':' )
                 {
-                    aOslDTime.Hours = static_cast<sal_uInt16>(comphelper::string::toInt32(aChars.subView( 11, 2 )));
-                    aOslDTime.Minutes = static_cast<sal_uInt16>(comphelper::string::toInt32(aChars.subView( 14, 2 )));
+                    aOslDTime.Hours = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 11, 2 )));
+                    aOslDTime.Minutes = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 14, 2 )));
 
                     sal_Int32 nOptTime = 0;
                     if ( nLen >= 19 && aChars[16] == ':' )
                     {
-                        aOslDTime.Seconds = static_cast<sal_uInt16>(comphelper::string::toInt32(aChars.subView( 17, 2 )));
+                        aOslDTime.Seconds = static_cast<sal_uInt16>(o3tl::toInt32(aChars.subView( 17, 2 )));
                         nOptTime += 3;
                         if ( nLen >= 20 && aChars[19] == '.' )
                         {
@@ -163,8 +163,8 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                         if ( ( aChars[16 + nOptTime] == '+' || aChars[16 + nOptTime] == '-' )
                           && aChars[16 + nOptTime + 3] == ':' )
                         {
-                            nModif = comphelper::string::toInt32(aChars.subView( 16 + nOptTime + 1, 2 )) * 3600;
-                            nModif += comphelper::string::toInt32(aChars.subView( 16 + nOptTime + 4, 2 )) * 60;
+                            nModif = o3tl::toInt32(aChars.subView( 16 + nOptTime + 1, 2 )) * 3600;
+                            nModif += o3tl::toInt32(aChars.subView( 16 + nOptTime + 4, 2 )) * 60;
                             if ( aChars[16 + nOptTime] == '-' )
                                 nModif *= -1;
                         }

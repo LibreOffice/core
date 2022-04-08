@@ -20,7 +20,9 @@
 #include <stdio.h>
 #include <string_view>
 
+#include <o3tl/string_view.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/long.hxx>
@@ -1614,7 +1616,7 @@ static bool lcl_matchKeywordAndGetNumber( const OUString & rString, const sal_In
 {
     if (0 <= nPos && nPos + rKeyword.getLength() < rString.getLength() && rString.matchIgnoreAsciiCase( rKeyword, nPos))
     {
-        nNumber = comphelper::string::toInt32(rString.subView( nPos + rKeyword.getLength()));
+        nNumber = o3tl::toInt32(rString.subView( nPos + rKeyword.getLength()));
         return true;
     }
     else

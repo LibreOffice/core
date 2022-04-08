@@ -49,6 +49,7 @@
 #include <comphelper/string.hxx>
 #include <comphelper/random.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/datetimeutils.hxx>
 
@@ -2610,7 +2611,7 @@ OUString SwDoc::GetUniqueNumRuleName( const OUString* pChkStr, bool bAutoNum ) c
             if( sNm.startsWith( aName ) )
             {
                 // Determine Number and set the Flag
-                nNum = o3tl::narrowing<sal_uInt16>(comphelper::string::toInt32(sNm.subView( nNmLen )));
+                nNum = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(sNm.subView( nNmLen )));
                 if( nNum-- && nNum < mpNumRuleTable->size() )
                     pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
             }
