@@ -213,14 +213,7 @@ bool SwDateTimeField::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
             util::DateTime aDateTimeValue;
             if(!(rVal >>= aDateTimeValue))
                 return false;
-            DateTime aDateTime( DateTime::EMPTY );
-            aDateTime.SetNanoSec(aDateTimeValue.NanoSeconds);
-            aDateTime.SetSec(aDateTimeValue.Seconds);
-            aDateTime.SetMin(aDateTimeValue.Minutes);
-            aDateTime.SetHour(aDateTimeValue.Hours);
-            aDateTime.SetDay(aDateTimeValue.Day);
-            aDateTime.SetMonth(aDateTimeValue.Month);
-            aDateTime.SetYear(aDateTimeValue.Year);
+            DateTime aDateTime(aDateTimeValue);
             SetDateTime(aDateTime);
         }
         break;
