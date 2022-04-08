@@ -16,6 +16,23 @@
       "message": "I\u0027ve debugged this crash for a while without great success, this patch dumps some info on the problem string to illustrate the problem\n\ninteresting case: str %n%ne%nl%nn0*ebmhגfiחחda240IATA No. len 35 initial portion is 0x5f24a70, GetStart() is 0\nportion lengths are: 0 12 1 4 1 2 0 0 0 \n\ninteresting case: str %n%ne%nl%nn0*ebmhגfiחחda240IATA No. len 35 initial portion is 0x5f260d0, GetStart() is 20\nportion lengths are: 0 12 1 4 1 2 2 5 8 0 \n\nit looks to me that the 2nd case with the GetStart() of 20 has a portion chain suitable instead for drawing from the start of the text so I\u0027m inclined to think we should enter here with a state of.\n\nGetStart() is 20\nportion lengths are: 0 2 5 8 0 ",
       "revId": "d4d93c48143a502e067186e228284688e92615a7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69b1c476_2e00a48e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-08T12:33:13Z",
+      "side": 1,
+      "message": "Some observations:\n\n1) The document is not valid, even Word says \"Word cannot read the formatting in this document.\" when I try to open it.\n\n2) I agree that it would be ideal to understand how it can happen that SwTextPaintInfo::DrawText_() gets an index+length that is not inside the bounds of the text. However, if that does not work out, then adding two bailouts seems to at least avoid the crash/asserts:\n\n diff --git a/sw/source/core/text/inftxt.cxx b/sw/source/core/text/inftxt.cxx \n index 5f4cbb95b6fc..7b3bd8f1525f 100644 \n --- a/sw/source/core/text/inftxt.cxx \n +++ b/sw/source/core/text/inftxt.cxx \n @@ -592,7 +592,7 @@ void SwTextPaintInfo::DrawText_( const OUString \u0026rText, const SwLinePortion \u0026rPo \n                                  const bool bSmartTag, \n                                  const bool bGrammarCheck ) \n  { \n -    if( !nLength ) \n +    if( !nLength || (nStart + nLength).get() \u003e rText.getLength() ) \n          return; \n   \n      // The SwScriptInfo is useless if we are inside a field portion \n @@ -1141,6 +1141,11 @@ void SwTextPaintInfo::DrawBackground( const SwLinePortion \u0026rPor, const Color *pC \n   \n  void SwTextPaintInfo::DrawBackBrush( const SwLinePortion \u0026rPor ) const \n  { \n +    if (sal_Int32(GetIdx()) \u003e\u003d GetText().getLength()) \n +    { \n +        return; \n +    } \n + \n      { \n          SwRect aIntersect; \n          CalcRect( rPor, \u0026aIntersect, nullptr, true ); ",
+      "revId": "d4d93c48143a502e067186e228284688e92615a7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
