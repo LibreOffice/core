@@ -164,7 +164,7 @@ bool LogicalFontInstance::NeedOffsetCorrection(sal_Int32 nYOffset)
         if (hb_ot_name_get_utf8 (hb_font_get_face(GetHbFont()),
                 HB_OT_NAME_ID_FONT_FAMILY , HB_LANGUAGE_INVALID, &familyname_size, familyname) == 8)
         {
-            // DFKai-SB (ukai.ttf) is a built-in font under tradtional Chinese
+            // DFKai-SB (ukai.ttf) is a built-in font under traditional Chinese
             // Windows. It has wrong extent values in glyf table. The problem results
             // in wrong positioning of glyphs in vertical writing.
             // Check https://github.com/harfbuzz/harfbuzz/issues/3521 for reference.
