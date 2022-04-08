@@ -142,6 +142,20 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
 
     SwLinePortion *pPor = bEndPor ? m_pCurr->GetFirstPortion() : CalcPaintOfst( rPaint );
 
+    if (GetInfo().GetText().getLength() == 35 && GetInfo().GetText().endsWith("240IATA No."))
+    {
+        fprintf(stderr, "interesting case: str %s len %d initial portion is %p, GetStart() is %d\n",
+                GetInfo().GetText().toUtf8().getStr(), GetInfo().GetText().getLength(), pPor, GetStart().get());
+        fprintf(stderr, "portion lengths are: ");
+        SwLinePortion* pTmp = pPor;
+        while (pTmp)
+        {
+            fprintf(stderr, "%d ", pTmp->GetLen().get());
+            pTmp = pTmp->GetNextPortion();
+        }
+        fprintf(stderr, "\n");
+    }
+
     // Optimization!
     SwTwips nMaxRight = std::min<SwTwips>( rPaint.Right(), Right() );
     const SwTwips nTmpLeft = GetInfo().X();

@@ -1081,7 +1081,22 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
                 RemoveFootnote( nOld, nEnd - nOld );
             ChangeOffset( GetFollow(), nEnd );
             if( !bDelta )
+            {
+                auto nOldOffset = GetFollow()->GetOffset();
                 GetFollow()->ManipOfst( nEnd );
+
+                if (nOldOffset != nEnd && nEnd.get() == 20 && GetFollow()->GetPara()->GetLen().get() == 35)
+                {
+                    fprintf(stderr, "offset manipulated to %d portion lengths are: ", GetFollow()->GetOffset().get());
+                    SwLinePortion* pTmp = GetFollow()->GetPara();
+                    while (pTmp)
+                    {
+                        fprintf(stderr, "%d ", pTmp->GetLen().get());
+                        pTmp = pTmp->GetNextPortion();
+                    }
+                    fprintf(stderr, "\nat this point AdjustFollow_ won't do anything because the offset now already matches nEnd, but clearly the portions are for a different layout that doesn't match anymore\n");
+                }
+            }
         }
     }
     else
@@ -1302,6 +1317,14 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     // Calculating the good ol' nDelta
     const sal_Int32 nDiff = sal_Int32(pNew->GetLen()) - sal_Int32(nOldLen);
     pPara->SetDelta(pPara->GetDelta() - nDiff);
+
+    if (nDiff != 0 && pPara->GetDelta() > 0)
+    {
+        fprintf(stderr, "delta changed by %d to %ld with offset %d but text length is %d for text %s\n",
+                nDiff, pPara->GetDelta(), GetOffset().get(),
+                GetText().getLength(), GetText().toUtf8().getStr());
+        fprintf(stderr, "this looks dubious ?\n");
+    }
 
     // Stop!
     if( rLine.IsStop() )

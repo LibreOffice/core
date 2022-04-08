@@ -726,6 +726,9 @@ void SwTextFrame::PaintSwFrame(vcl::RenderContext& rRenderContext, SwRect const&
         }
         aInf.GetTextFly().SetTopRule();
 
+        if (GetText().getLength() == 35 && GetText().endsWith("240IATA No."))
+            fprintf(stderr, "the interesting case\n");
+
         SwTextPainter  aLine( const_cast<SwTextFrame*>(this), &aInf );
         // Optimization: if no free flying Frame overlaps into our line, the
         // SwTextFly just switches off
