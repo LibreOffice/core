@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "934cb585_8e7f4d2e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-08T06:22:46Z",
+      "side": 1,
+      "message": "Jenkins approved the following patches, so this was fine.",
+      "revId": "ba1972068c193d9c5a122663d3b92ce85ea61ec7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
