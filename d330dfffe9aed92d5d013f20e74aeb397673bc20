@@ -135,6 +135,24 @@
       "parentUuid": "c3a7bd91_4fadfc7f",
       "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "111efc58_53d7d8b4",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-08T09:07:43Z",
+      "side": 1,
+      "message": "indeed. thanks",
+      "parentUuid": "445dbb5c_f767989d",
+      "revId": "d330dfffe9aed92d5d013f20e74aeb397673bc20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
