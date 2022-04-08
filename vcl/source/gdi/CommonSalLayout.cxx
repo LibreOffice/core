@@ -585,6 +585,14 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
                     rArgs.mnFlags |= SalLayoutFlags::KashidaJustification;
                 }
 
+#if HB_VERSION_ATLEAST(1, 5, 0)
+                if (hb_glyph_info_get_glyph_flags(&pHbGlyphInfos[i]) & HB_GLYPH_FLAG_UNSAFE_TO_BREAK)
+                    nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
+#else
+                // If support is not present, then always prevent breaking.
+                nGlyphFlags |= GlyphItemFlags::IS_UNSAFE_TO_BREAK;
+#endif
+
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
@@ -620,7 +628,7 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
                 DevicePoint aNewPos(aCurrPos.getX() + nXOffset, aCurrPos.getY() + nYOffset);
                 const GlyphItem aGI(nCharPos, nCharCount, nGlyphIndex, aNewPos, nGlyphFlags,
-                                    nAdvance, nXOffset);
+                                    nAdvance, nXOffset, nYOffset);
                 m_GlyphItems.push_back(aGI);
 
                 aCurrPos.adjustX(nAdvance);
@@ -818,7 +826,7 @@ void GenericSalLayout::ApplyDXArray(const DC* pDXArray, SalLayoutFlags nLayoutFl
         GlyphItemFlags const nFlags = GlyphItemFlags::IS_IN_CLUSTER | GlyphItemFlags::IS_RTL_GLYPH;
         while (nCopies--)
         {
-            GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0);
+            GlyphItem aKashida(nCharPos, 0, nKashidaIndex, aPos, nFlags, nKashidaWidth, 0, 0);
             pGlyphIter = m_GlyphItems.insert(pGlyphIter, aKashida);
             aPos.adjustX(nKashidaWidth - nOverlap);
             ++pGlyphIter;
