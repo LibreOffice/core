@@ -851,7 +851,7 @@ bool implImportDialog(weld::Window* pWin, const ScriptDocument& rDocument, const
     xFP->appendFilter( IDEResId(RID_STR_FILTER_ALLFILES), FilterMask_All );
     xFP->setCurrentFilter( aDialogStr );
 
-    if( aDlg.Execute() != ERRCODE_NONE )
+    if( aDlg.Execute() == ERRCODE_NONE )
     {
         Sequence< OUString > aPaths = xFP->getSelectedFiles();
 
