@@ -105,6 +105,7 @@ class SAL_DLLPUBLIC_RTTI ScGridWindow : public vcl::Window, public DropTargetHel
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOODragRect;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOHeader;
     std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOShrink;
+    std::unique_ptr<sdr::overlay::OverlayObjectList> mpOOSparklineGroup;
 
     std::optional<tools::Rectangle> mpAutoFillRect;
 
@@ -461,6 +462,8 @@ public:
     const std::vector<editeng::MisspellRanges>* GetAutoSpellData( SCCOL nPosX, SCROW nPosY );
     bool InsideVisibleRange( SCCOL nPosX, SCROW nPosY );
 
+    void UpdateSparklineGroupOverlay();
+    void DeleteSparklineGroupOverlay();
     void            DeleteCopySourceOverlay();
     void            UpdateCopySourceOverlay();
     void            DeleteCursorOverlay();
