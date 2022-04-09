@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5daf3da4_a909bf53",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 7
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-09T19:36:14Z",
+      "side": 1,
+      "message": "Hmm, but you simply exchanged the padding from before the number to after the number. Please just make it\n\n    TestUtil.AssertEqual(Choose(-4, \"Moon\", ,\"Earth\"),  Null, \"Choose(-4, \"\"Moon\"\", ,\"\"Earth\"\")\")",
+      "range": {
+        "startLine": 28,
+        "startChar": 35,
+        "endLine": 28,
+        "endChar": 43
+      },
+      "revId": "75adfe2babb4682ca020fe2e76b2ac4c8030681e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
