@@ -26,6 +26,8 @@
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
+#include <i18nutil/unicode.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
@@ -90,6 +92,22 @@ public:
                             }
 
 };
+
+sal_Int32 ImplCompareSearchName(std::u16string_view rSearchName1,std::u16string_view rSearchName2, bool bCJKIdeographSort)
+{
+    if (bCJKIdeographSort && rSearchName1.length() && rSearchName2.length())
+    {
+        bool bIdeo1 = unicode::isCJKIVSCharacter(rSearchName1[0]);
+        bool bIdeo2 = unicode::isCJKIVSCharacter(rSearchName2[0]);
+
+        if (bIdeo1 && !bIdeo2)
+            return -1;
+        else if (!bIdeo1 && bIdeo2)
+            return 1;
+    }
+
+    return rSearchName1.compare(rSearchName2);
+}
 
 enum class FontListFontNameType
 {
@@ -181,7 +199,7 @@ ImplFontListNameInfo* FontList::ImplFind(std::u16string_view rSearchName, sal_uI
     else
     {
         const ImplFontListNameInfo* pCmpData = m_Entries.back().get();
-        sal_Int32 nComp = rSearchName.compare( pCmpData->maSearchName );
+        sal_Int32 nComp = ImplCompareSearchName(rSearchName, pCmpData->maSearchName, mbCJKIdeographSort);
         if (nComp > 0)
         {
             if ( pIndex )
@@ -203,7 +221,7 @@ ImplFontListNameInfo* FontList::ImplFind(std::u16string_view rSearchName, sal_uI
     {
         nMid = (nLow + nHigh) / 2;
         pCompareData = m_Entries[nMid].get();
-        sal_Int32 nComp = rSearchName.compare(pCompareData->maSearchName);
+        sal_Int32 nComp = ImplCompareSearchName(rSearchName, pCompareData->maSearchName, mbCJKIdeographSort);
         if (nComp < 0)
         {
             if ( !nMid )
@@ -225,7 +243,7 @@ ImplFontListNameInfo* FontList::ImplFind(std::u16string_view rSearchName, sal_uI
 
     if ( pIndex )
     {
-        sal_Int32 nComp = rSearchName.compare(pCompareData->maSearchName);
+        sal_Int32 nComp = ImplCompareSearchName(rSearchName, pCompareData->maSearchName, mbCJKIdeographSort);
         if (nComp > 0)
             *pIndex = (nMid+1);
         else
@@ -350,6 +368,8 @@ FontList::FontList(OutputDevice* pDevice, OutputDevice* pDevice2)
     maBoldItalic    = SvtResId(STR_SVT_STYLE_BOLD_ITALIC);
     maBlack         = SvtResId(STR_SVT_STYLE_BLACK);
     maBlackItalic   = SvtResId(STR_SVT_STYLE_BLACK_ITALIC);
+
+    mbCJKIdeographSort = officecfg::Office::Common::Font::View::CJKIdeographSort::get();
 
     ImplInsertFonts(pDevice, true);
 

@@ -2031,6 +2031,13 @@
           </info>
           <value>true</value>
         </prop>
+        <prop oor:name="CJKIdeographSort" oor:type="xs:boolean" oor:nillable="false">
+          <!-- UIHints: Tools - Options - General - View -->
+          <info>
+            <desc>Sort the font list to show the fonts with CJK ideograph names first.</desc>
+          </info>
+          <value>false</value>
+        </prop>
       </group>
       <group oor:name="SourceViewFont">
         <info>

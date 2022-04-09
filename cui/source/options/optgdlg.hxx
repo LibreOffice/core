@@ -100,6 +100,7 @@ private:
     std::unique_ptr<weld::ComboBox> m_xContextMenuShortcutsLB;
 
     std::unique_ptr<weld::CheckButton> m_xFontShowCB;
+    std::unique_ptr<weld::CheckButton> m_xCJKIdeographSort;
 
     std::unique_ptr<weld::CheckButton> m_xUseHardwareAccell;
     std::unique_ptr<weld::CheckButton> m_xUseAntiAliase;

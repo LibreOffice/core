@@ -715,6 +715,26 @@
                     <property name="top-attach">2</property>
                   </packing>
                 </child>
+                <child>
+                  <object class="GtkCheckButton" id="cjkideographsort">
+                    <property name="label" translatable="yes" context="optviewpage|cjkideographsort">List fonts with CJK ideograph names first.</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                    <child internal-child="accessible">
+                      <object class="AtkObject" id="cjkideographsort-atkobject">
+                        <property name="AtkObject::accessible-description" translatable="yes" context="extended_tip | cjkideographsort">List fonts with CJK ideograph names first.</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">3</property>
+                  </packing>
+                </child>
               </object>
             </child>
             <child type="label">

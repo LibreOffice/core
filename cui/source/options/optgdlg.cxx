@@ -537,6 +537,7 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     , m_xMenuIconsLB(m_xBuilder->weld_combo_box("menuicons"))
     , m_xContextMenuShortcutsLB(m_xBuilder->weld_combo_box("contextmenushortcuts"))
     , m_xFontShowCB(m_xBuilder->weld_check_button("showfontpreview"))
+    , m_xCJKIdeographSort(m_xBuilder->weld_check_button("cjkideographsort"))
     , m_xUseHardwareAccell(m_xBuilder->weld_check_button("useaccel"))
     , m_xUseAntiAliase(m_xBuilder->weld_check_button("useaa"))
     , m_xUseSkia(m_xBuilder->weld_check_button("useskia"))
@@ -582,6 +583,10 @@ OfaViewTabPage::OfaViewTabPage(weld::Container* pPage, weld::DialogController* p
     m_xMoreIcons->set_from_icon_name("cmd/sc_additionsdialog.png");
     m_xMoreIcons->connect_clicked(LINK(this, OfaViewTabPage, OnMoreIconsClick));
     m_xRunGPTests->connect_clicked( LINK( this, OfaViewTabPage, OnRunGPTestClick));
+
+    if (!officecfg::Office::Common::Misc::ExperimentalMode::get() &&
+            !officecfg::Office::Common::Font::View::CJKIdeographSort::get())
+        m_xCJKIdeographSort->set_visible(false);
 }
 
 OfaViewTabPage::~OfaViewTabPage()
@@ -667,6 +672,7 @@ std::unique_ptr<SfxTabPage> OfaViewTabPage::Create( weld::Container* pPage, weld
 
 bool OfaViewTabPage::FillItemSet( SfxItemSet* )
 {
+    std::optional<svtools::RestartReason> xRestartReason;
     bool bModified = false;
     bool bMenuOptModified = false;
     bool bRepaintWindows(false);
@@ -773,6 +779,13 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         bModified = true;
     }
 
+    if (m_xCJKIdeographSort->get_state_changed_from_saved())
+    {
+        officecfg::Office::Common::Font::View::CJKIdeographSort::set(m_xCJKIdeographSort->get_active(), xChanges);
+        xRestartReason = svtools::RESTART_REASON_UI_CHANGE;
+        bModified = true;
+    }
+
     if (m_xMenuIconsLB->get_value_changed_from_saved())
     {
         officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::set(m_xMenuIconsLB->get_active() == 0, xChanges);
@@ -820,6 +833,7 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
     {
         officecfg::Office::Common::VCL::UseSkia::set(m_xUseSkia->get_active(), xChanges);
         officecfg::Office::Common::VCL::ForceSkiaRaster::set(m_xForceSkiaRaster->get_active(), xChanges);
+        xRestartReason = svtools::RESTART_REASON_SKIA;
         bModified = true;
     }
 
@@ -852,13 +866,12 @@ bool OfaViewTabPage::FillItemSet( SfxItemSet* )
         }
     }
 
-    if (m_xUseSkia->get_state_changed_from_saved() ||
-        m_xForceSkiaRaster->get_state_changed_from_saved())
+    if (xRestartReason)
     {
         SolarMutexGuard aGuard;
         if( svtools::executeRestartDialog(
                 comphelper::getProcessComponentContext(), nullptr,
-                svtools::RESTART_REASON_SKIA))
+                *xRestartReason) )
             GetDialogController()->response(RET_OK);
     }
 
@@ -926,6 +939,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
 
     // WorkingSet
     m_xFontShowCB->set_active(officecfg::Office::Common::Font::View::ShowFontBoxWYSIWYG::get());
+    m_xCJKIdeographSort->set_active(officecfg::Office::Common::Font::View::CJKIdeographSort::get());
     bool bSystemMenuIcons = officecfg::Office::Common::View::Menu::IsSystemIconsInMenus::get();
     bool bMenuIcons = officecfg::Office::Common::View::Menu::ShowIconsInMenues::get();
     m_xMenuIconsLB->set_active(bSystemMenuIcons ? 0 : (bMenuIcons ? 2 : 1));
@@ -961,6 +975,7 @@ void OfaViewTabPage::Reset( const SfxItemSet* )
     m_xFontAntiAliasing->save_state();
     m_xAAPointLimit->save_value();
     m_xFontShowCB->save_state();
+    m_xCJKIdeographSort->save_state();
 
     OnAntialiasingToggled(*m_xFontAntiAliasing);
     UpdateSkiaStatus();
