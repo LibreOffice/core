@@ -100,6 +100,23 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_modifiedField, "tdf148380_modifiedField.d
                                  OUString("Charles Brown"), xField->getPresentation(false));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148380_printField, "tdf148380_printField.docx")
+{
+    // Verify that these are fields, and not just plain text
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    // unspecified SAVEDATE gets default GB formatting because stylele.xml has w:lang w:val="en-GB"
+    //CPPUNIT_ASSERT_EQUAL(OUString("08/04/2022 07:10:00 AM"), xField->getPresentation(false));
+    //CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Modified"), xField->getPresentation(true));
+    //xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    // MS Word actually shows "8 o'clock-ish" until the document is reprinted,
+    // but it seems best to actually show the real last-printed date since it can't be FIXEDFLD
+    CPPUNIT_ASSERT_EQUAL(OUString("08/04/2022 06:47:00 AM"), xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Last printed"), xField->getPresentation(true));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf132475_printField, "tdf132475_printField.docx")
 {
     // The last printed date field: formatted two different ways
