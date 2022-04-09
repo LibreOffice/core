@@ -179,6 +179,8 @@ public:
         return mbIsAction;
     }
 
+    void DumpAsPropertyTree(tools::JsonWriter&) override;
+
 protected:
     PushButtonDropdownStyle mnDDStyle;
     bool            mbIsActive;
