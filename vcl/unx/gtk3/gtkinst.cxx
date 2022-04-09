@@ -71,6 +71,7 @@
 #include <officecfg/Office/Common.hxx>
 #include <rtl/bootstrap.hxx>
 #include <o3tl/unreachable.hxx>
+#include <o3tl/string_view.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <tools/helpers.hxx>
@@ -674,7 +675,7 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
         aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
 
         sal_Int32 nIndex(0);
-        if (aFlavor.MimeType.getToken(0, ';', nIndex) == "text/plain")
+        if (o3tl::getToken(aFlavor.MimeType, 0, ';', nIndex) == u"text/plain")
         {
             bHaveText = true;
             OUString aToken(aFlavor.MimeType.getToken(0, ';', nIndex));
@@ -1417,7 +1418,7 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
     for (const css::datatransfer::DataFlavor& rFlavor : rFormats)
     {
         sal_Int32 nIndex(0);
-        if (rFlavor.MimeType.getToken(0, ';', nIndex) == "text/plain")
+        if (o3tl::getToken(rFlavor.MimeType, 0, ';', nIndex) == u"text/plain")
         {
             bHaveText = true;
             OUString aToken(rFlavor.MimeType.getToken(0, ';', nIndex));

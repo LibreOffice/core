@@ -32,6 +32,7 @@
 #include <dbfld.hxx>
 #include <dbmgr.hxx>
 #include <unofldmid.h>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star;
@@ -226,9 +227,9 @@ OUString SwDBField::GetFieldName() const
     if (sContent.getLength() > 1)
     {
         sContent += OUStringChar(DB_DELIM)
-            + rDBName.getToken(1, DB_DELIM)
+            + o3tl::getToken(rDBName, 1, DB_DELIM)
             + OUStringChar(DB_DELIM)
-            + rDBName.getToken(2, DB_DELIM);
+            + o3tl::getToken(rDBName, 2, DB_DELIM);
     }
     return lcl_DBSeparatorConvert(sContent);
 }

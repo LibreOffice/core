@@ -42,6 +42,7 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -611,7 +612,7 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sNa
         sal_Int32 index = sName.getLength();
         OUString sMessage(
             DBA_RES(RID_STR_NO_SUB_FOLDER).replaceFirst("$folder$",
-                _sName.getToken(0,'/',index)));
+                o3tl::getToken(_sName, 0,'/',index)));
         throw IllegalArgumentException( sMessage, *this, 1 );
     }
 

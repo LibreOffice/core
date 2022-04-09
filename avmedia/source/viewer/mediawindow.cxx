@@ -40,6 +40,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <memory>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #define AVMEDIA_FRAMEGRABBER_DEFAULTFRAME_MEDIATIME 3.0
 
@@ -231,7 +232,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
             if( !aAllTypes.isEmpty() )
                 aAllTypes.append(aSeparator);
 
-            aAllTypes.append(aWildcard + filter.second.getToken( 0, ';', nIndex ));
+            aAllTypes.append(OUString::Concat(aWildcard) + o3tl::getToken(filter.second, 0, ';', nIndex ));
         }
     }
 
@@ -247,7 +248,7 @@ bool MediaWindow::executeMediaURLDialog(weld::Window* pParent, OUString& rURL, b
             if( !aTypes.isEmpty() )
                 aTypes.append(aSeparator);
 
-            aTypes.append(aWildcard + filter.second.getToken( 0, ';', nIndex ));
+            aTypes.append(OUString::Concat(aWildcard) + o3tl::getToken(filter.second, 0, ';', nIndex ));
         }
 
         // add single filters
@@ -348,7 +349,7 @@ bool MediaWindow::isMediaURL(const OUString& rURL, const OUString& rReferer, boo
         {
             for( sal_Int32 nIndex = 0; nIndex >= 0; )
             {
-                if( aExt.equalsIgnoreAsciiCase( filter.second.getToken( 0, ';', nIndex ) ) )
+                if( aExt.equalsIgnoreAsciiCase( o3tl::getToken(filter.second, 0, ';', nIndex ) ) )
                     return true;
             }
         }

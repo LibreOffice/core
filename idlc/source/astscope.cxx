@@ -161,7 +161,7 @@ AstDeclaration* AstScope::lookupByName(const OString& scopedName)
         pScope = declAsScope(pDecl);
         if( pScope )
         {
-            pDecl = pScope->lookupByNameLocal(scopedName.getToken(nOffset, ':', i ));
+            pDecl = pScope->lookupByNameLocal(o3tl::getToken(scopedName, nOffset, ':', i ));
             nOffset = 1;
         }
         if( !pDecl )

@@ -42,6 +42,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <unotools/streamwrap.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -1679,7 +1680,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf115967)
         if (pPageObject->getType() != vcl::pdf::PDFPageObjectType::Text)
             continue;
         OUString sChar = pPageObject->getText(pTextPage);
-        sText += sChar.trim();
+        sText += o3tl::trim(sChar);
     }
     CPPUNIT_ASSERT_EQUAL(OUString("m=750abc"), sText);
 }

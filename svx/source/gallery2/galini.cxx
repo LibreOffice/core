@@ -21,6 +21,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 
 OUString GalleryBinaryEngineEntry::ReadStrFromIni(std::u16string_view aKeyName ) const
@@ -54,9 +55,9 @@ OUString GalleryBinaryEngineEntry::ReadStrFromIni(std::u16string_view aKeyName )
             if( ( n = aLine.indexOf( '=' ) ) >= 1)
             {
                 aKey = OStringToOUString(
-                    aLine.copy( 0, n ).trim(), RTL_TEXTENCODING_ASCII_US );
+                    o3tl::trim(aLine.subView( 0, n )), RTL_TEXTENCODING_ASCII_US );
                 aValue = OStringToOUString(
-                    aLine.copy( n + 1 ).trim(), RTL_TEXTENCODING_UTF8 );
+                    o3tl::trim(aLine.subView( n + 1 )), RTL_TEXTENCODING_UTF8 );
 
                 if( ( n = aKey.indexOf( '[' ) ) >= 1 )
                 {

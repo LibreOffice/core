@@ -24,6 +24,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <document.hxx>
 #include <tabvwsh.hxx>
@@ -284,7 +285,7 @@ void ScTpUserLists::MakeListStr( OUString& rListStr )
 
     for(sal_Int32 nIdx=0; nIdx>=0;)
     {
-        aStr.append(comphelper::string::strip(rListStr.getToken(0, LF, nIdx), ' '));
+        aStr.append(comphelper::string::strip(o3tl::getToken(rListStr, 0, LF, nIdx), ' '));
         aStr.append(cDelimiter);
     }
 
@@ -591,9 +592,9 @@ IMPL_LINK( ScTpUserLists, BtnClickHdl, weld::Button&, rBtn, void )
         if ( mxLbLists->n_children() > 0 )
         {
             sal_Int32 nRemovePos   = mxLbLists->get_selected_index();
-            OUString aMsg = aStrQueryRemove.getToken( 0, '#' )
+            OUString aMsg = o3tl::getToken(aStrQueryRemove, 0, '#' )
                           + mxLbLists->get_text( nRemovePos )
-                          + aStrQueryRemove.getToken( 1, '#' );
+                          + o3tl::getToken(aStrQueryRemove, 1, '#' );
 
             std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(GetFrameWeld(),
                                                            VclMessageType::Question, VclButtonsType::YesNo,

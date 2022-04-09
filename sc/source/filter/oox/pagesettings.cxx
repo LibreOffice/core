@@ -423,7 +423,7 @@ private:
     /** Sets the passed font name if it is valid. */
     void                convertFontName( const OUString& rStyle );
     /** Converts a font style given as string. */
-    void                convertFontStyle( const OUString& rStyle );
+    void                convertFontStyle( std::u16string_view rStyle );
     /** Converts a font color given as string. */
     void                convertFontColor( const OUString& rColor );
 
@@ -827,14 +827,14 @@ void HeaderFooterParser::convertFontName( const OUString& rName )
     }
 }
 
-void HeaderFooterParser::convertFontStyle( const OUString& rStyle )
+void HeaderFooterParser::convertFontStyle( std::u16string_view rStyle )
 {
     maFontModel.mbBold = maFontModel.mbItalic = false;
-    if (rStyle.isEmpty())
+    if (rStyle.empty())
         return;
     for( sal_Int32 nPos{ 0 }; nPos>=0; )
     {
-        OString aToken = OUStringToOString( rStyle.getToken( 0, ' ', nPos ), RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
+        OString aToken = OUStringToOString( o3tl::getToken(rStyle, 0, ' ', nPos ), RTL_TEXTENCODING_UTF8 ).toAsciiLowerCase();
         if( !aToken.isEmpty() )
         {
             if( maBoldNames.count( aToken ) > 0 )

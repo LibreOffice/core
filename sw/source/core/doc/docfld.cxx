@@ -28,6 +28,7 @@
 #ifndef UNX
 #include <unotools/transliterationwrapper.hxx>
 #endif
+#include <o3tl/string_view.hxx>
 #include <doc.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
@@ -583,7 +584,7 @@ void SwDoc::AddUsedDBToList( std::vector<OUString>& rDBNameList, const OUString&
 
 #ifdef UNX
     for( const auto &sName : rDBNameList )
-        if( rDBName == sName.getToken(0, ';') )
+        if( rDBName == o3tl::getToken(sName, 0, ';') )
             return;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();

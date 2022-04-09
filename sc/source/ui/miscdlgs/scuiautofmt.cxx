@@ -23,6 +23,7 @@
 #include <vcl/weld.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxresid.hxx>
+#include <o3tl/string_view.hxx>
 #include <strings.hrc>
 #include <global.hxx>
 #include <globstr.hrc>
@@ -243,9 +244,9 @@ IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl, weld::Button&, void)
 {
     if ( (nIndex > 0) && (m_xLbFormat->n_children() > 0) )
     {
-        OUString aMsg = aStrDelMsg.getToken( 0, '#' )
+        OUString aMsg = o3tl::getToken(aStrDelMsg, 0, '#' )
                       + m_xLbFormat->get_selected_text()
-                      + aStrDelMsg.getToken( 1, '#' );
+                      + o3tl::getToken(aStrDelMsg, 1, '#' );
 
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                        VclMessageType::Question, VclButtonsType::YesNo,

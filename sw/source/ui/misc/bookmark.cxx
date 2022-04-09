@@ -22,6 +22,7 @@
 #include <svl/stritem.hxx>
 #include <unotools/viewoptions.hxx>
 #include <vcl/weld.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <officecfg/Office/Common.hxx>
@@ -501,7 +502,7 @@ OUString BookmarkTable::GetNameProposal() const
         sw::mark::IMark* pBookmark = weld::fromId<sw::mark::IMark*>(m_xControl->get_id(i));
         const OUString& sName = pBookmark->GetName();
         sal_Int32 nIndex = 0;
-        if (sName.getToken(0, ' ', nIndex) == sDefaultBookmarkName)
+        if (o3tl::getToken(sName, 0, ' ', nIndex) == sDefaultBookmarkName)
         {
             sal_Int32 nCurrBookmarkId = sName.getToken(0, ' ', nIndex).toInt32();
             nHighestBookmarkId = std::max<sal_Int32>(nHighestBookmarkId, nCurrBookmarkId);

@@ -21,6 +21,7 @@
 
 #include <comphelper/lok.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <sfx2/app.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/justifyitem.hxx>
@@ -5235,7 +5236,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             else
             {
                 OUString aTemplate = ScResId( STR_CREATENAME_REPLACE );
-                OUString aMessage = aTemplate.getToken( 0, '#' ) + aName + aTemplate.getToken( 1, '#' );
+                OUString aMessage = o3tl::getToken(aTemplate, 0, '#' ) + aName + o3tl::getToken(aTemplate, 1, '#' );
 
                 std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(ScDocShell::GetActiveDialogParent(),
                                                                VclMessageType::Question, VclButtonsType::YesNo,

@@ -25,6 +25,7 @@
 #include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/opengl/OpenGLHelper.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 static std::vector<GLXContext> g_vShareList;
 static bool g_bAnyCurrent;
@@ -492,7 +493,7 @@ GLX11Window::GLX11Window()
 bool GLX11Window::HasGLXExtension( const char* name ) const
 {
     for (sal_Int32 i = 0; i != -1;) {
-        if (GLXExtensions.getToken(0, ' ', i) == name) {
+        if (o3tl::getToken(GLXExtensions, 0, ' ', i) == name) {
             return true;
         }
     }

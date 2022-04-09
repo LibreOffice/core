@@ -34,6 +34,7 @@
 #include <listbox.hxx>
 #include <comphelper/lok.hxx>
 #include <tools/json_writer.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace {
 
@@ -94,14 +95,14 @@ struct ComboBox::Impl
 };
 
 
-static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, const OUString& rText, sal_Unicode cTokenSep, const ImplEntryList& rEntryList )
+static void lcl_GetSelectedEntries( ::std::set< sal_Int32 >& rSelectedPos, std::u16string_view rText, sal_Unicode cTokenSep, const ImplEntryList& rEntryList )
 {
-    if (rText.isEmpty())
+    if (rText.empty())
         return;
 
     sal_Int32 nIdx{0};
     do {
-        const sal_Int32 nPos = rEntryList.FindEntry(comphelper::string::strip(rText.getToken(0, cTokenSep, nIdx), ' '));
+        const sal_Int32 nPos = rEntryList.FindEntry(comphelper::string::strip(o3tl::getToken(rText, 0, cTokenSep, nIdx), ' '));
         if ( nPos != LISTBOX_ENTRY_NOTFOUND )
             rSelectedPos.insert( nPos );
     } while (nIdx>=0);

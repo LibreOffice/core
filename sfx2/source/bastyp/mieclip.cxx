@@ -43,7 +43,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     rStream.ResetError();
 
     if( rStream.ReadLine( sLine ) &&
-        sLine.getToken( 0, ':', nIndex ) == "Version" )
+        o3tl::getToken(sLine, 0, ':', nIndex ) == "Version" )
     {
         while( rStream.ReadLine( sLine ) )
         {

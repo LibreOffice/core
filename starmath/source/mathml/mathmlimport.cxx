@@ -59,6 +59,7 @@ one go*/
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <mathmlattr.hxx>
 #include <xparsmlbase.hxx>
@@ -1520,7 +1521,7 @@ void SmXMLSpaceContext_Impl::startFastElement(
         switch (aIter.getToken())
         {
             case XML_WIDTH:
-                if (!ParseMathMLAttributeLengthValue(sValue.trim(), aLV)
+                if (!ParseMathMLAttributeLengthValue(o3tl::trim(sValue), aLV)
                     || !lcl_CountBlanks(aLV, &nWide, &nNarrow))
                     SAL_WARN("starmath", "ignore mspace's width: " << sValue);
                 break;

@@ -35,6 +35,7 @@
 #include <editeng/sizeitem.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <uitool.hxx>
 #include <IMark.hxx>
@@ -220,7 +221,7 @@ void SectRepr::SetFile( std::u16string_view rFile )
     {
         sNewFile += OUStringChar(sfx2::cTokenSeparator);
         if( !rFile.empty() ) // Filter only with FileName
-            sNewFile += sOldFileName.getToken( 1, sfx2::cTokenSeparator );
+            sNewFile += o3tl::getToken(sOldFileName, 1, sfx2::cTokenSeparator );
 
         sNewFile += OUStringChar(sfx2::cTokenSeparator) + sSub;
     }
@@ -297,7 +298,7 @@ OUString SectRepr::GetFile() const
         return sLinkFile.replaceFirst( OUStringChar(sfx2::cTokenSeparator), " ", &n )
                         .replaceFirst( OUStringChar(sfx2::cTokenSeparator), " ", &n );
     }
-    return INetURLObject::decode( sLinkFile.getToken( 0, sfx2::cTokenSeparator ),
+    return INetURLObject::decode( o3tl::getToken(sLinkFile, 0, sfx2::cTokenSeparator ),
                                   INetURLObject::DecodeMechanism::Unambiguous );
 }
 

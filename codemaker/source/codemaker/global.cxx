@@ -22,6 +22,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/thread.h>
 #include <osl/file.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <string.h>
 #include <string_view>
@@ -115,7 +116,7 @@ OString createFileNameFromType( const OString& destination,
     sal_Int32 nIndex = 0;
     do
     {
-        buffer.append(fileName.getToken(0, token, nIndex));
+        buffer.append(o3tl::getToken(fileName, 0, token, nIndex));
         if( nIndex == -1 )
             break;
 

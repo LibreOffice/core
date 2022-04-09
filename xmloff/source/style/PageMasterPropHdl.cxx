@@ -29,6 +29,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <comphelper/types.hxx>
 #include <comphelper/extract.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -287,7 +288,7 @@ bool XMLPMPropHdl_Print::importXML(
 
     do
     {
-        bFound = (sAttrValue == rStrImpValue.getToken( 0, ' ', nTokenIndex ));
+        bFound = (sAttrValue == o3tl::getToken(rStrImpValue, 0, ' ', nTokenIndex ));
     }
     while ( (nTokenIndex >= 0) && !bFound );
 

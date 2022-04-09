@@ -22,6 +22,7 @@
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
+#include <o3tl/string_view.hxx>
 
 #if defined(_WIN32)
 #include <io.h>
@@ -63,7 +64,7 @@ static bool checkOutputPath(const OString& completeName)
 
     do
     {
-        buffer.append(sysPathName.getToken(0, SEPARATOR, nIndex));
+        buffer.append(o3tl::getToken(sysPathName, 0, SEPARATOR, nIndex));
 
         if ( !buffer.isEmpty() && nIndex != -1 )
         {

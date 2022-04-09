@@ -25,6 +25,7 @@
 #include <crnrdlg.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 
 namespace
@@ -570,9 +571,9 @@ IMPL_LINK_NOARG(ScColRowNameRangesDlg, RemoveBtnHdl, weld::Button&, void)
         return;
 
     OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
-    OUString aMsg       = aStrDelMsg.getToken( 0, '#' )
+    OUString aMsg       = o3tl::getToken(aStrDelMsg, 0, '#' )
                         + aRangeStr
-                        + aStrDelMsg.getToken( 1, '#' );
+                        + o3tl::getToken(aStrDelMsg, 1, '#' );
 
     if (RET_YES != QUERYBOX(m_xDialog.get(), aMsg))
         return;

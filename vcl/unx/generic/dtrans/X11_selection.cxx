@@ -45,6 +45,7 @@
 #include "bmp.hxx"
 
 #include <vcl/svapp.hxx>
+#include <o3tl/string_view.hxx>
 
 // pointer bitmaps
 #include "copydata_curs.h"
@@ -170,7 +171,7 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
     rtl_TextEncoding aEncoding = RTL_TEXTENCODING_DONTKNOW;
     OUString aMimeType( rMimeType.toAsciiLowerCase() );
     sal_Int32 nIndex = 0;
-    if( aMimeType.getToken( 0, ';', nIndex ) == "text/plain" )
+    if( o3tl::getToken(aMimeType, 0, ';', nIndex ) == u"text/plain" )
     {
         if( aMimeType.getLength() == 10 ) // only "text/plain"
             aEncoding = RTL_TEXTENCODING_ISO_8859_1;
@@ -180,9 +181,9 @@ rtl_TextEncoding x11::getTextPlainEncoding( const OUString& rMimeType )
             {
                 OUString aToken = aMimeType.getToken( 0, ';', nIndex );
                 sal_Int32 nPos = 0;
-                if( aToken.getToken( 0, '=', nPos ) == "charset" )
+                if( o3tl::getToken(aToken, 0, '=', nPos ) == u"charset" )
                 {
-                    OString aEncToken = OUStringToOString( aToken.getToken( 0, '=', nPos ), RTL_TEXTENCODING_ISO_8859_1 );
+                    OString aEncToken = OUStringToOString( o3tl::getToken(aToken, 0, '=', nPos ), RTL_TEXTENCODING_ISO_8859_1 );
                     aEncoding = rtl_getTextEncodingFromUnixCharset( aEncToken.getStr() );
                     if( aEncoding == RTL_TEXTENCODING_DONTKNOW )
                     {
@@ -606,9 +607,9 @@ bool SelectionManager::convertData(
         aFlavor.MimeType = convertTypeFromNative( nType, nSelection, rFormat );
 
         sal_Int32 nIndex = 0;
-        if( aFlavor.MimeType.getToken( 0, ';', nIndex ) == "text/plain" )
+        if( o3tl::getToken(aFlavor.MimeType, 0, ';', nIndex ) == u"text/plain" )
         {
-            if( aFlavor.MimeType.getToken( 0, ';', nIndex ) == "charset=utf-16" )
+            if( o3tl::getToken(aFlavor.MimeType, 0, ';', nIndex ) == u"charset=utf-16" )
                 aFlavor.DataType = cppu::UnoType<OUString>::get();
             else
                 aFlavor.DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
@@ -1322,7 +1323,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
                 pFlavors->MimeType = convertTypeFromNative( *pAtoms, selection, nFormat );
                 pFlavors->DataType = cppu::UnoType<Sequence< sal_Int8 >>::get();
                 sal_Int32 nIndex = 0;
-                if( pFlavors->MimeType.getToken( 0, ';', nIndex ) == "text/plain" )
+                if( o3tl::getToken(pFlavors->MimeType, 0, ';', nIndex ) == u"text/plain" )
                 {
                     OUString aToken(pFlavors->MimeType.getToken( 0, ';', nIndex ));
                     // omit text/plain;charset=unicode since it is not well defined

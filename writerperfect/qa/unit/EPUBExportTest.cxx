@@ -29,6 +29,7 @@
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 
@@ -150,7 +151,7 @@ OUString EPUBExportTest::getCss(std::map<OUString, std::vector<OUString>>& rCss,
         OUString aKeyValue = rKeyValue.trim();
         std::vector<OUString> aTokens = comphelper::string::split(aKeyValue, ':');
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aTokens.size());
-        if (aTokens[0].trim() == rKey)
+        if (o3tl::trim(aTokens[0]) == rKey)
         {
             aRet = aTokens[1].trim();
             if (aRet.endsWith(";"))

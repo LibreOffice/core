@@ -24,6 +24,7 @@
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <document.hxx>
 #include <table.hxx>
@@ -1190,9 +1191,9 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             GetName( nThisTab, aTabName );
             OUString aTemplate = ScResId(STR_PROGRESS_COMPARING);
             sal_Int32 nIndex = 0;
-            OUString aProText = aTemplate.getToken( 0, '#', nIndex ) +
+            OUString aProText = o3tl::getToken(aTemplate, 0, '#', nIndex ) +
                 aTabName +
-                aTemplate.getToken( 0, '#', nIndex );
+                o3tl::getToken(aTemplate, 0, '#', nIndex );
             ScProgress aProgress( GetDocumentShell(), aProText, 3*nThisEndRow, true );  // 2x FindOrder, 1x here
             tools::Long nProgressStart = 2*nThisEndRow;                    // start for here
 
