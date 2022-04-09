@@ -4072,6 +4072,8 @@ static void lcl_sendDialogEvent(unsigned long long int nWindowId, const char* pA
             bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "sidebar", sControlId, aMap);
         if (!bFoundWeldedControl)
             bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "notebookbar", sControlId, aMap);
+        if (!bFoundWeldedControl)
+            bFoundWeldedControl = jsdialog::ExecuteAction(std::to_string(nCurrentShellId) + "formulabar", sControlId, aMap);
         if (!bFoundWeldedControl && !SfxViewShell::Current())
         {
             // this is needed for dialogs shown before document is loaded: MacroWarning dialog, etc...

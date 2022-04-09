@@ -482,7 +482,8 @@ void JSDropTarget::fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEn
 
 std::string JSInstanceBuilder::getMapIdFromWindowId() const
 {
-    if (m_sTypeOfJSON == "sidebar" || m_sTypeOfJSON == "notebookbar")
+    if (m_sTypeOfJSON == "sidebar" || m_sTypeOfJSON == "notebookbar"
+        || m_sTypeOfJSON == "formulabar")
         return std::to_string(m_nWindowId) + m_sTypeOfJSON;
     else
         return std::to_string(m_nWindowId);
@@ -588,6 +589,30 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
 }
 
+// used for formulabar
+JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                     const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+    : SalInstanceBuilder(pParent, rUIRoot, rUIFile)
+    , m_nWindowId(nLOKWindowId)
+    , m_aParentDialog(nullptr)
+    , m_aContentWindow(nullptr)
+    , m_sTypeOfJSON("formulabar")
+    , m_bHasTopLevelDialog(false)
+    , m_bIsNotebookbar(false)
+    , m_aWindowToRelease(nullptr)
+{
+    vcl::Window* pRoot = m_xBuilder->get_widget_root();
+    m_aContentWindow = pParent;
+    if (pRoot && pRoot->GetParent())
+    {
+        m_aParentDialog = pRoot->GetParent()->GetParentWithLOKNotifier();
+        InsertWindowToMap(getMapIdFromWindowId());
+    }
+
+    initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
+    sendFullUpdate();
+}
+
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
                                                                           const OUString& rUIRoot,
                                                                           const OUString& rUIFile)
@@ -615,6 +640,13 @@ std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreatePopupBuilder(weld::W
                                                                          const OUString& rUIFile)
 {
     return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, true);
+}
+
+std::unique_ptr<JSInstanceBuilder>
+JSInstanceBuilder::CreateFormulabarBuilder(vcl::Window* pParent, const OUString& rUIRoot,
+                                           const OUString& rUIFile, sal_uInt64 nLOKWindowId)
+{
+    return std::make_unique<JSInstanceBuilder>(pParent, rUIRoot, rUIFile, nLOKWindowId);
 }
 
 JSInstanceBuilder::~JSInstanceBuilder()
