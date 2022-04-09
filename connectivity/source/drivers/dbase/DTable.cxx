@@ -915,7 +915,7 @@ bool ODbaseTable::fetchRow(OValueRefRow& _rRow, const OSQLColumns & _rCols, bool
             {
                 case DataType::DATE:
                 {
-                    if (aStr.getLength() != nLen)
+                    if (nLen < 8 || aStr.getLength() != nLen)
                     {
                         (*_rRow)[i]->setNull();
                         break;
