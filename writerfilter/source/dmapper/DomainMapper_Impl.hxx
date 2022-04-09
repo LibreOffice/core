@@ -614,7 +614,6 @@ private:
     bool m_bAnnotationResolved = false;
     std::unordered_map< sal_Int32, AnnotationPosition > m_aAnnotationPositions;
 
-    void GetCurrentLocale(css::lang::Locale& rLocale);
     void SetNumberFormat(const OUString& rCommand, css::uno::Reference<css::beans::XPropertySet> const& xPropertySet, bool bDetectFormat = false);
     /// @throws css::uno::Exception
     css::uno::Reference<css::beans::XPropertySet> FindOrCreateFieldMaster(const char* pFieldMasterService, const OUString& rFieldMasterName);
