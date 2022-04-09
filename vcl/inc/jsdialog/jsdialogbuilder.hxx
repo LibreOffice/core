@@ -243,6 +243,9 @@ public:
     JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
                       const css::uno::Reference<css::frame::XFrame>& rFrame,
                       sal_uInt64 nWindowId = 0);
+    /// used for formulabar
+    JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRoot, const OUString& rUIFile,
+                      sal_uInt64 nLOKWindowId);
 
     static std::unique_ptr<JSInstanceBuilder>
     CreateDialogBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
@@ -256,6 +259,10 @@ public:
                                                                    sal_uInt64 nLOKWindowId = 0);
     static std::unique_ptr<JSInstanceBuilder>
     CreatePopupBuilder(weld::Widget* pParent, const OUString& rUIRoot, const OUString& rUIFile);
+    static std::unique_ptr<JSInstanceBuilder> CreateFormulabarBuilder(vcl::Window* pParent,
+                                                                      const OUString& rUIRoot,
+                                                                      const OUString& rUIFile,
+                                                                      sal_uInt64 nLOKWindowId);
 
     virtual ~JSInstanceBuilder() override;
     virtual std::unique_ptr<weld::MessageDialog> weld_message_dialog(const OString& id) override;
