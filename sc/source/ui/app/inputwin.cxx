@@ -309,11 +309,8 @@ void ScInputWindow::dispose()
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        if(const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-        {
-            pNotifier->notifyWindow(GetLOKWindowId(), "close");
+        if (GetLOKNotifier())
             ReleaseLOKNotifier();
-        }
     }
 
     mxTextWindow.disposeAndClear();
@@ -420,24 +417,6 @@ void ScInputWindow::Select()
     }
 }
 
-void ScInputWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect)
-{
-    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
-        return;
-
-    ToolBox::Paint(rRenderContext, rRect);
-
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        // draw a line at the bottom to distinguish that from the grid
-        // const StyleSettings& rStyleSettings = rRenderContext.GetSettings().GetStyleSettings();
-        // rRenderContext.SetLineColor(rStyleSettings.GetShadowColor());
-        // Size aSize = GetSizePixel();
-        // rRenderContext.DrawLine(Point(0, aSize.Height() - 1),
-        //                        Point(aSize.Width() - 1, aSize.Height() - 1));
-    }
-}
-
 void ScInputWindow::PixelInvalidate(const tools::Rectangle* pRectangle)
 {
     if (comphelper::LibreOfficeKit::isDialogPainting() || !comphelper::LibreOfficeKit::isActive())
@@ -477,20 +456,6 @@ void ScInputWindow::SetSizePixel( const Size& rNewSize )
     ToolBox::SetSizePixel(rNewSize);
 }
 
-void ScInputWindow::setPosSizePixel(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, PosSizeFlags nFlags)
-{
-    ToolBox::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back("size", GetSizePixel().toString());
-        aItems.emplace_back("lines", OString::number(mxTextWindow->GetNumLines()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
-        Invalidate();
-    }
-}
-
 void ScInputWindow::Resize()
 {
     ToolBox::Resize();
@@ -521,15 +486,6 @@ void ScInputWindow::Resize()
     }
     SetSizePixel(aSize);
 
-    if (const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back("size", GetSizePixel().toString());
-        aItems.emplace_back("lines", OString::number(mxTextWindow->GetNumLines()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "size_changed", aItems);
-    }
-
     Invalidate();
 }
 
@@ -537,21 +493,6 @@ void ScInputWindow::NotifyLOKClient()
 {
     if (comphelper::LibreOfficeKit::isActive() && !GetLOKNotifier() && mpViewShell)
         SetLOKNotifier(mpViewShell);
-
-    const vcl::ILibreOfficeKitNotifier* pNotifier = GetLOKNotifier();
-    if (!pNotifier)
-        return;
-
-    Size aSize = GetSizePixel();
-    if (!aSize.IsEmpty())
-    {
-        std::vector<vcl::LOKPayloadItem> aItems;
-        aItems.emplace_back("type", "calc-input-win");
-        aItems.emplace_back(std::make_pair("position", Point(GetOutOffXPixel(), GetOutOffYPixel()).toString()));
-        aItems.emplace_back(std::make_pair("size", aSize.toString()));
-        aItems.emplace_back("lines", OString::number(mxTextWindow->GetNumLines()));
-        pNotifier->notifyWindow(GetLOKWindowId(), "created", aItems);
-    }
 }
 
 void ScInputWindow::SetFuncString( const OUString& rString, bool bDoEdit )
@@ -882,7 +823,7 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 }
 
 ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
-    : InterimItemWindow(pParent, "modules/scalc/ui/inputbar.ui", "InputBar")
+    : InterimItemWindow(pParent, "modules/scalc/ui/inputbar.ui", "InputBar", true, reinterpret_cast<sal_uInt64>(pViewSh))
     , mxBackground(m_xBuilder->weld_container("background"))
     , mxTextWndGroup(new ScTextWndGroup(*this, pViewSh))
     , mxButtonUp(m_xBuilder->weld_button("up"))
@@ -1277,9 +1218,6 @@ IMPL_LINK_NOARG(ScTextWndGroup, Impl_ScrollHdl, weld::ScrolledWindow&, void)
 
 void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect )
 {
-    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isDialogPainting())
-        return;
-
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
     rRenderContext.SetBackground(aBgColor);
@@ -1308,26 +1246,6 @@ void ScTextWnd::Paint( vcl::RenderContext& rRenderContext, const tools::Rectangl
     }
     else
         WeldEditView::Paint(rRenderContext, rRect);
-
-    if (!comphelper::LibreOfficeKit::isActive())
-        return;
-
-    bool bIsFocused = false;
-    if (HasFocus())
-    {
-        vcl::Cursor* pCursor = m_xEditView->GetCursor();
-        if (pCursor)
-            bIsFocused = true;
-    }
-
-    VclPtr<vcl::Window> pParent = mrGroupBar.GetVclParent().GetParentWithLOKNotifier();
-    if (!pParent)
-        return;
-
-    const vcl::ILibreOfficeKitNotifier* pNotifier = pParent->GetLOKNotifier();
-    std::vector<vcl::LOKPayloadItem> aItems;
-    aItems.emplace_back("visible", bIsFocused ? "true" : "false");
-    pNotifier->notifyWindow(pParent->GetLOKWindowId(), "cursor_visible", aItems);
 }
 
 EditView* ScTextWnd::GetEditView() const
