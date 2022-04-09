@@ -22,7 +22,6 @@
 
 #include <o3tl/string_view.hxx>
 #include <comphelper/string.hxx>
-#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <tools/long.hxx>
