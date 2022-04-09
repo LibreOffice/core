@@ -58,6 +58,7 @@ using namespace ::com::sun::star;
 #include <sal/log.hxx>
 #include <unotools/charclass.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -330,9 +331,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 if (!bIsNewArea)
                 {
                     OUString aTemplate = ScResId( STR_IMPORT_REPLACE );
-                    OUString aMessage = aTemplate.getToken( 0, '#' )
+                    OUString aMessage = o3tl::getToken(aTemplate, 0, '#' )
                         + sTarget
-                        + aTemplate.getToken( 1, '#' );
+                        + o3tl::getToken(aTemplate, 1, '#' );
 
                     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(nullptr,
                                                                    VclMessageType::Question, VclButtonsType::YesNo,

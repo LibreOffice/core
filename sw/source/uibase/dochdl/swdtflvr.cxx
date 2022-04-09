@@ -1497,7 +1497,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             const sal_Int32 nRows = nNewlines ? nNewlines-1 : 0;
             if ( nRows == 1 )
             {
-                const sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
+                const sal_Int32 nCols = comphelper::string::getTokenCount(o3tl::getToken(aExpand, 0, '\n'), '\t');
                 if (nCols == 1)
                     bSingleCellTable = true;
             }
@@ -2668,7 +2668,7 @@ bool SwTransferable::PasteDDE( const TransferableDataHelper& rData,
                 sal_Int32 nRows = nNewlines ? nNewlines-1 : 0;
                 if (!aExpand.endsWith("\n"))
                     ++nRows;    // last row has no newline, e.g. one single cell
-                const sal_Int32 nCols = comphelper::string::getTokenCount(aExpand.getToken(0, '\n'), '\t');
+                const sal_Int32 nCols = comphelper::string::getTokenCount(o3tl::getToken(aExpand, 0, '\n'), '\t');
 
                 // don't try to insert tables that are too large for writer
                 if (nRows > SAL_MAX_UINT16 || nCols > SAL_MAX_UINT16)

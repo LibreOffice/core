@@ -31,6 +31,7 @@
 #include <basic/sbmod.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <basic/sberrors.hxx>
 #include <basic/sbuno.hxx>
@@ -1538,7 +1539,7 @@ ErrCode BasicManager::ExecuteMacro( OUString const& i_fullyQualifiedName, std::u
             for (;;)
             {
                 aBuff.append( "\"" );
-                aBuff.append( sArgs2.getToken(0, ',', nPos) );
+                aBuff.append( o3tl::getToken(sArgs2, 0, ',', nPos) );
                 aBuff.append( "\"" );
                 if (nPos<0)
                     break;

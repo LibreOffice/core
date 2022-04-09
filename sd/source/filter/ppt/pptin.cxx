@@ -40,6 +40,7 @@
 #include <svx/xlineit0.hxx>
 
 #include <sfx2/docinf.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <strings.hrc>
 #include <strings.hxx>
@@ -425,7 +426,7 @@ bool ImplSdPPTImport::Import()
                                             do
                                             {
                                                 aStringAry[nTokenCount] =
-                                                    OUStringToOString(aString.getToken( 0, ',', nPos ), RTL_TEXTENCODING_UTF8);
+                                                    OUStringToOString(o3tl::getToken(aString, 0, ',', nPos ), RTL_TEXTENCODING_UTF8);
                                             }
                                             while ( ++nTokenCount < SAL_N_ELEMENTS(aStringAry) && nPos >= 0 );
 

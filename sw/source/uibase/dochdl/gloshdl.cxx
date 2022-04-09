@@ -24,6 +24,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <o3tl/string_view.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <view.hxx>
@@ -119,7 +120,7 @@ void SwGlossaryHdl::SetCurGroup(const OUString &rGrp, bool bApi, bool bAlwaysCre
             const OUString sPath = sGroup.getToken(1, GLOS_DELIM);
             sal_uInt16 nComparePath = o3tl::narrowing<sal_uInt16>(sPath.toInt32());
             if(nCurrentPath == nComparePath &&
-                sGroup.getToken(0, GLOS_DELIM) == sCurBase)
+                o3tl::getToken(sGroup, 0, GLOS_DELIM) == sCurBase)
                 bPathEqual = true;
         }
 

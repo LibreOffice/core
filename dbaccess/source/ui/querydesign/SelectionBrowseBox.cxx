@@ -49,6 +49,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 using namespace ::svt;
 using namespace ::dbaui;
@@ -74,8 +75,8 @@ namespace
         if ( !bAsterisk )
         {
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(_sFieldName, '.');
-            if (    (nTokenCount == 2 && _sFieldName.getToken(1,'.')[0] == '*' )
-                ||  (nTokenCount == 3 && _sFieldName.getToken(2,'.')[0] == '*' ) )
+            if (    (nTokenCount == 2 && o3tl::getToken(_sFieldName,1,'.')[0] == '*' )
+                ||  (nTokenCount == 3 && o3tl::getToken(_sFieldName,2,'.')[0] == '*' ) )
             {
                 bAsterisk = true;
             }
@@ -146,7 +147,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
 
     const OUString aTxt(DBA_RES(STR_QUERY_SORTTEXT));
     for (sal_Int32 nIdx {0}; nIdx>=0;)
-        rOrderBox.append_text(aTxt.getToken(0, ';', nIdx));
+        rOrderBox.append_text(OUString(o3tl::getToken(aTxt, 0, ';', nIdx)));
 
     m_bVisibleRow.insert(m_bVisibleRow.end(), BROW_ROW_CNT, true);
 
@@ -492,7 +493,7 @@ void OSelectionBrowseBox::InitController(CellControllerRef& /*rController*/, sal
             getDesignView()->fillValidFields(aTable, rComboBox);
 
             // replace with alias.*
-            if (aField.trim() == "*")
+            if (o3tl::trim(aField) == u"*")
             {
                 aField = aTable + ".*";
             }

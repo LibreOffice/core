@@ -55,6 +55,7 @@
 #include <vcl/settings.hxx>
 #include <svtools/rtfout.hxx>
 #include <svtools/htmlcfg.hxx>
+#include <o3tl/string_view.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 #include <memory>
 
@@ -351,7 +352,7 @@ bool ORTFImportExport::Write()
             m_pStream->WriteCharPtr( "\\f" );
             m_pStream->WriteInt32AsString(++nTok);
             m_pStream->WriteCharPtr( "\\fcharset0\\fnil " );
-            m_pStream->WriteOString( aFonts.getToken(0, ';', nIdx) );
+            m_pStream->WriteOString( o3tl::getToken(aFonts, 0, ';', nIdx) );
             m_pStream->WriteChar( ';' );
         } while (nIdx>=0);
     }

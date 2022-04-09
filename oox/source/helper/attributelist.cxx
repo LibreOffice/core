@@ -349,7 +349,7 @@ std::vector<sal_Int32> AttributeList::getTokenList(sal_Int32 nAttrToken) const
     sal_Int32 nIndex = 0;
     do
     {
-        aValues.push_back(AttributeConversion::decodeToken(sValue.getToken(0, ' ', nIndex)));
+        aValues.push_back(AttributeConversion::decodeToken(o3tl::getToken(sValue, 0, ' ', nIndex)));
     } while (nIndex >= 0);
 
     return aValues;

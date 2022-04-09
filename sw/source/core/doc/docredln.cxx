@@ -30,6 +30,7 @@
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
 #include <unotools/datetime.hxx>
 #include <sfx2/viewsh.hxx>
+#include <o3tl/string_view.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include <docredln.hxx>
@@ -835,7 +836,7 @@ bool SwRedlineTable::isMoved( size_type rPos ) const
 
         // pair at tracked moving: same text by trimming trailing white spaces
         if ( abs(pPaM->GetText().getLength() - pPairPaM->GetText().getLength()) <= 2 &&
-            sTrimmed == pPairPaM->GetText().trim() )
+            sTrimmed == o3tl::trim(pPairPaM->GetText()) )
         {
             pRedline->SetMoved();
             pPair->SetMoved();

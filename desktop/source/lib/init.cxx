@@ -44,6 +44,7 @@
 #include <vcl/lok.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <osl/process.h>
 #include <osl/thread.h>
@@ -4509,9 +4510,9 @@ static bool getFromTransferrable(
     // Take care of UTF-8 text here.
     bool bConvert = false;
     sal_Int32 nIndex = 0;
-    if (aMimeType.getToken(0, ';', nIndex) == "text/plain")
+    if (o3tl::getToken(aMimeType, 0, ';', nIndex) == "text/plain")
     {
-        if (aMimeType.getToken(0, ';', nIndex) == "charset=utf-8")
+        if (o3tl::getToken(aMimeType, 0, ';', nIndex) == "charset=utf-8")
         {
             aMimeType = "text/plain;charset=utf-16";
             bConvert = true;

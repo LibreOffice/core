@@ -28,6 +28,7 @@
 #include <rtl/tencinfo.h>
 #include <imoptdlg.hxx>
 #include <svx/txencbox.hxx>
+#include <o3tl/string_view.hxx>
 
 // ScDelimiterTable
 
@@ -58,8 +59,8 @@ sal_uInt16 ScDelimiterTable::GetCode( std::u16string_view rDel ) const
         sal_Int32 nIdx {0};
 
         // Check even tokens: start from 0 and then skip 1 token at each iteration
-        if (rDel != theDelTab.getToken( 0, cSep, nIdx ))
-            while (nIdx>0 && rDel != theDelTab.getToken( 1, cSep, nIdx ));
+        if (rDel != o3tl::getToken(theDelTab, 0, cSep, nIdx ))
+            while (nIdx>0 && rDel != o3tl::getToken(theDelTab, 1, cSep, nIdx ));
 
         if (nIdx>0)
             return static_cast<sal_Unicode>(theDelTab.getToken( 0, cSep, nIdx ).toInt32());

@@ -27,6 +27,7 @@
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <o3tl/safeint.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <salframe.hxx>
 #include <salinst.hxx>
@@ -3493,7 +3494,7 @@ int SalInstanceTreeView::to_external_model(int col) const
 
 bool SalInstanceTreeView::IsDummyEntry(SvTreeListEntry* pEntry) const
 {
-    return m_xTreeView->GetEntryText(pEntry).trim() == "<dummy>";
+    return o3tl::trim(m_xTreeView->GetEntryText(pEntry)) == u"<dummy>";
 }
 
 SvTreeListEntry* SalInstanceTreeView::GetPlaceHolderChild(SvTreeListEntry* pEntry) const

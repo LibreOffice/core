@@ -38,6 +38,7 @@
 
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/UnitConversion.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <stdio.h>
 #include <string.h>
@@ -1230,9 +1231,9 @@ attribute_set_new_from_extended_attributes(
         OUString sProperty = sExtendedAttrs.getToken( 0, ';', nIndex );
 
         sal_Int32 nColonPos = 0;
-        OString sPropertyName = OUStringToOString( sProperty.getToken( 0, ':', nColonPos ),
+        OString sPropertyName = OUStringToOString( o3tl::getToken(sProperty, 0, ':', nColonPos ),
                                                    RTL_TEXTENCODING_UTF8 );
-        OString sPropertyValue = OUStringToOString( sProperty.getToken( 0, ':', nColonPos ),
+        OString sPropertyValue = OUStringToOString( o3tl::getToken(sProperty, 0, ':', nColonPos ),
                                                     RTL_TEXTENCODING_UTF8 );
 
         pSet = attribute_set_prepend( pSet,

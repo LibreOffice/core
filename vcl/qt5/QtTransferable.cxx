@@ -12,6 +12,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <QtWidgets/QApplication>
 
@@ -24,7 +25,7 @@ static bool lcl_textMimeInfo(const OUString& rMimeString, bool& bHaveNoCharset, 
                              bool& bHaveUTF8)
 {
     sal_Int32 nIndex = 0;
-    if (rMimeString.getToken(0, ';', nIndex) == "text/plain")
+    if (o3tl::getToken(rMimeString, 0, ';', nIndex) == u"text/plain")
     {
         OUString aToken(rMimeString.getToken(0, ';', nIndex));
         if (aToken == "charset=utf-16")

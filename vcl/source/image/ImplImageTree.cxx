@@ -56,6 +56,7 @@
 #include <vcl/pngwrite.hxx>
 
 #include <bitmap/BitmapLightenFilter.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 
@@ -593,8 +594,8 @@ void ImplImageTree::parseLinkFile(std::shared_ptr<SvStream> const & xStream)
             continue;
 
         sal_Int32 nIndex = 0;
-        aLink = OStringToOUString(aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8);
-        aOriginal = OStringToOUString(aLine.getToken(0, ' ', nIndex), RTL_TEXTENCODING_UTF8);
+        aLink = OStringToOUString(o3tl::getToken(aLine, 0, ' ', nIndex), RTL_TEXTENCODING_UTF8);
+        aOriginal = OStringToOUString(o3tl::getToken(aLine, 0, ' ', nIndex), RTL_TEXTENCODING_UTF8);
 
         // skip comments, or incomplete entries
         if (aLink.isEmpty() || aLink[0] == '#' || aOriginal.isEmpty())

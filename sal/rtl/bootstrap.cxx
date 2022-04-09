@@ -37,6 +37,7 @@
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
 #include <o3tl/lru_map.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <vector>
 #include <algorithm>
@@ -350,8 +351,8 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
             if (nIndex >= 1)
             {
                 struct rtl_bootstrap_NameValue nameValue;
-                nameValue.sName = OStringToOUString(line.copy(0,nIndex).trim(), RTL_TEXTENCODING_ASCII_US);
-                nameValue.sValue = OStringToOUString(line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8);
+                nameValue.sName = OStringToOUString(o3tl::trim(line.subView(0,nIndex)), RTL_TEXTENCODING_ASCII_US);
+                nameValue.sValue = OStringToOUString(o3tl::trim(line.subView(nIndex+1)), RTL_TEXTENCODING_UTF8);
 
                 SAL_INFO("sal.bootstrap", "pushing: name=" << nameValue.sName << " value=" << nameValue.sValue);
 

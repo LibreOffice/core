@@ -44,6 +44,7 @@
 #include <sfx2/filedlghelper.hxx>
 #include <svx/drawitem.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <View.hxx>
 #include <sdresid.hxx>
 #include <tpaction.hxx>
@@ -314,7 +315,7 @@ void SdTPAction::Reset( const SfxItemSet* rAttrs )
         case presentation::ClickAction_DOCUMENT:
         {
             if( comphelper::string::getTokenCount(aFileName, DOCUMENT_TOKEN) == 2 )
-                m_xLbTreeDocument->SelectEntry( aFileName.getToken( 1, DOCUMENT_TOKEN ) );
+                m_xLbTreeDocument->SelectEntry( o3tl::getToken(aFileName, 1, DOCUMENT_TOKEN ) );
         }
         break;
 

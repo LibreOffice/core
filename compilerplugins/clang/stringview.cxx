@@ -282,6 +282,31 @@ void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
         }
         return;
     }
+    if (auto const dc2 = dc1.Function("getToken"))
+    {
+        if (dc2.Class("OString").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUString").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace())
+        {
+            report(DiagnosticsEngine::Warning,
+                   "rather than getToken, pass with a view using o3tl::getToken()",
+                   expr->getExprLoc())
+                << expr->getSourceRange();
+        }
+        return;
+    }
+    if (auto const dc2 = dc1.Function("trim"))
+    {
+        if (dc2.Class("OString").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUString").Namespace("rtl").GlobalNamespace()
+            || dc2.Class("OUStringBuffer").Namespace("rtl").GlobalNamespace())
+        {
+            report(DiagnosticsEngine::Warning,
+                   "rather than trim, pass with a view using o3tl::trim()", expr->getExprLoc())
+                << expr->getSourceRange();
+        }
+        return;
+    }
     if (auto const dc2 = dc1.Function("makeStringAndClear"))
     {
         if (dc2.Class("OStringBuffer").Namespace("rtl").GlobalNamespace()
