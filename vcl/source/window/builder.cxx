@@ -198,6 +198,8 @@ std::unique_ptr<weld::Builder> Application::CreateInterimBuilder(vcl::Window* pP
     // Notebookbar sub controls
     if (comphelper::LibreOfficeKit::isActive() && jsdialog::isInterimBuilderEnabledForNotebookbar(rUIFile))
         return JSInstanceBuilder::CreateNotebookbarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, css::uno::Reference<css::frame::XFrame>(), nLOKWindowId);
+    else if (rUIFile == u"modules/scalc/ui/inputbar.ui")
+        return JSInstanceBuilder::CreateFormulabarBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile);
 
     return ImplGetSVData()->mpDefInst->CreateInterimBuilder(pParent, AllSettings::GetUIRootDir(), rUIFile, bAllowCycleFocusOut, nLOKWindowId);
 }
