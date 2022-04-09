@@ -157,6 +157,13 @@ private:
     SparklineDialogWrapper() = delete;
 };
 
+class SparklineDataRangeDialogWrapper :
+    public ChildControllerWrapper<SID_SPARKLINE_DATA_RANGE_DIALOG>
+{
+private:
+    SparklineDataRangeDialogWrapper() = delete;
+};
+
 }
 
 class ScAcceptChgDlgWrapper : public SfxChildWindow
