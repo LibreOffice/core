@@ -35,6 +35,7 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
@@ -1184,6 +1185,15 @@ uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr
     {
         std::optional<PropertyMap::Property> aProperty = rContext->getProperty(eId);
         if ( aProperty )
+            return aProperty->second;
+    }
+
+    // then look whether it was directly applied as a paragraph property
+    PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
+    if (pParaContext && rContext != pParaContext)
+    {
+        std::optional<PropertyMap::Property> aProperty = pParaContext->getProperty(eId);
+        if (aProperty)
             return aProperty->second;
     }
 
@@ -4462,10 +4472,48 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     aUSLocale.Language = "en";
     aUSLocale.Country = "US";
 
-    //determine current locale - todo: is it necessary to initialize this locale?
-    lang::Locale aCurrentLocale = aUSLocale;
-    GetCurrentLocale( aCurrentLocale );
+    lang::Locale aCurrentLocale;
+    GetAnyProperty(PROP_CHAR_LOCALE, GetTopContext()) >>= aCurrentLocale;
+
+    if (sFormatString.isEmpty())
+    {
+        // No format specified. MS Word uses different formats depending on w:lang,
+        // "M/d/yyyy H:mm:ss AM/PM" for en-US, and "dd/MM/yyyy H:mm:ss AM/PM" for en-GB.
+        // ALSO SEE: ww8par5's GetWordDefaultDateStringAsUS.
+        sal_Int32 nPos = rCommand.indexOf(" \\");
+        OUString sCommand = nPos == -1 ? rCommand.trim() : rCommand.copy(0, nPos).trim();
+SAL_WARN("JCL","sFormatString is empty. command["<<sCommand<<"]");
+        if (sCommand.equals("CREATEDATE") ||
+            sCommand.equals("PRINTDATE") ||
+            sCommand.equals("SAVEDATE"))
+        {
+            try
+            {
+                uno::Reference< util::XNumberFormatsSupplier > xNumberSupplier(m_xTextDocument,
+                    uno::UNO_QUERY_THROW);
+SAL_WARN("JCL","Amazing - thrown either by m_xTextDocument or getByKey["<<css::i18n::NumberFormatIndex::DATE_SYSTEM_SHORT<<"]");
+                uno::Reference<beans::XPropertySet> xProp(
+                    xNumberSupplier->getNumberFormats()->getByKey(
+                        css::i18n::NumberFormatIndex::DATE_SYSTEM_SHORT), uno::UNO_QUERY);
+//sFormatString = xNumberSupplier->getNumberFormats()->generateFormat(css::i18n::NumberFormatIndex::DATE_SYSTEM_SHORT|SV_COUNTRY_LANGUAGE_OFFSET, aCurrentLocale, false, false, 0, 0);
+
+SAL_WARN("JCL","GetByKey["<<css::i18n::NumberFormatIndex::DATE_SYSTEM_SHORT<<"] xProp.is["<<xProp.is()<<"]");
+SAL_WARN("JCL","---formatString["<<xProp->getPropertyValue("FormatString")<<"]");
+                xProp->getPropertyValue("FormatString") >>= sFormatString;
+                nPos = sFormatString.indexOf("YYYY");
+                if (nPos == -1)
+                    sFormatString = sFormatString.replaceFirst("YY", "YYYY");
+                sFormatString += " H:mm:ss AM/PM";
+SAL_WARN("JCL","no format given, so derive from DATE_SYSTEM_SHORT to get["<<sFormatString<<"]");
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+            }
+        }
+    }
     OUString sFormat = ConversionHelper::ConvertMSFormatStringToSO( sFormatString, aCurrentLocale, bHijri);
+SAL_WARN("JCL","::SetNumberFormat aCurrentLocale["<<aCurrentLocale.Language<<"]["<<aCurrentLocale.Country<<"] command["<<rCommand<<"] format["<<sFormat<<"] formatString["<<sFormatString<<"]");
     //get the number formatter and convert the string to a format value
     try
     {
@@ -4480,6 +4528,10 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
         else
         {
             nKey = xNumberSupplier->getNumberFormats()->addNewConverted( sFormat, aUSLocale, aCurrentLocale );
+uno::Reference<beans::XPropertySet> xProp(xNumberSupplier->getNumberFormats()->getByKey(nKey), uno::UNO_QUERY);
+OUString sNewformat;
+xProp->getPropertyValue("FormatString") >>= sNewformat;
+SAL_WARN("JCL","---nKey["<<nKey<<"]["<<sNewformat<<"] from formatString["<<sFormatString<<"]");
         }
         xPropertySet->setPropertyValue(
             getPropertyName(PROP_NUMBER_FORMAT),
