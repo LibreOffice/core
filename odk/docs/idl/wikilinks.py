@@ -22,7 +22,7 @@ allkinds = {}
 
 # unfortunately we need to know what kind of entity to declare...
 # generate this file like so:
-# solver/unxlngx6/bin/regview solver/unxlngx6/bin/types.rdb | grep -A1 "type class:" | awk '/type class:/ { class = $NF } /type name:/ { gsub("/", ".", $NF); gsub("\"", "", $NF); print class, $NF }' > /tmp/kinds
+# cat <(make -s cmd cmd='LD_LIBRARY_PATH=$(INSTDIR_FOR_BUILD)/program $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/unoidl-read --summary $(INSTDIR)/program/types.rdb') <(make -s cmd cmd='LD_LIBRARY_PATH=$(INSTDIR_FOR_BUILD)/program $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/unoidl-read --summary $(INSTDIR)/program/types.rdb $(INSTDIR)/program/types/offapi.rdb') | LC_ALL=C sort | LC_ALL=C uniq > /tmp/kinds
 for line in open("/tmp/kinds") :
     (kind,_,name) = line.strip().partition(" ")
     allkinds[name] = kind
