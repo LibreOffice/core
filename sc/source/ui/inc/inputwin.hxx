@@ -288,10 +288,7 @@ public:
     virtual         ~ScInputWindow() override;
     virtual void    dispose() override;
 
-    virtual void    Paint( vcl::RenderContext& rRenderContext, const tools::Rectangle& rRect ) override;
     virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
-    virtual void    setPosSizePixel( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                     PosSizeFlags nFlags = PosSizeFlags::All ) override;
     virtual void    SetSizePixel( const Size& rNewSize ) override;
     virtual void    Resize() override;
     virtual void    Select() override;
