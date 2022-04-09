@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5741209_a3817dcd",
+        "filename": "sfx2/source/dialog/backingwindow.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-09T19:47:35Z",
+      "side": 1,
+      "message": "Please rename it to \"clear unavailable\". Because this has nothing to do with \"deleted\", and will trick users into believing that LibreOffice will use some magic to know which were deleted (and would naively assume that e.g. files on temporarily detached USB sticks or disconnected network are still there).",
+      "range": {
+        "startLine": 609,
+        "startChar": 26,
+        "endLine": 609,
+        "endChar": 33
+      },
+      "revId": "18c5c35e43d1a4cd12dcfead6e21f3149a1f9d39",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
