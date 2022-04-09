@@ -32,6 +32,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <edit.hxx>
 #include <smmod.hxx>
@@ -305,7 +306,7 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
     SmModule *pMod = SM_MOD();
     if (pMod && !pMod->GetConfig()->IsAutoCloseBrackets())
         autoClose = false;
-    else if (selected.trim() == "<?>")
+    else if (o3tl::trim(selected) == u"<?>")
         autoClose = true;
     else if (selected.isEmpty() && !aSelection.HasRange())
     {

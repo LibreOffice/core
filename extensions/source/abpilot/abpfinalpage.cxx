@@ -27,6 +27,7 @@
 #include <unotools/pathoptions.hxx>
 #include <svl/filenotation.hxx>
 #include <sfx2/docfilt.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace abp
 {
@@ -101,7 +102,7 @@ namespace abp
             if ( pFilter )
             {
                 OUString sExt = pFilter->GetDefaultExtension();
-                sPath += sExt.getToken(1,'*');
+                sPath += o3tl::getToken(sExt,1,'*');
             }
 
             aURL.SetURL(sPath);

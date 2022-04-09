@@ -3508,7 +3508,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl, weld::Button&, void)
     if (nLevPos == -1 || nTemplPos == -1)
         return;
 
-    const OUString aStr(m_xLevelLB->get_text(nLevPos).getToken(0, aDeliStart)
+    const OUString aStr(o3tl::getToken(m_xLevelLB->get_text(nLevPos), 0, aDeliStart)
         + OUStringChar(aDeliStart)
         + m_xParaLayLB->get_selected_text()
         + OUStringChar(aDeliEnd));

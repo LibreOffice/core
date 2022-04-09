@@ -36,6 +36,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/functional.hxx>
+#include <o3tl/string_view.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -372,7 +373,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         const bool bIsAcceleratedImpl(
             std::any_of(aAccelImpls.begin(), aAccelImpls.end(),
                          [&aCurrName](OUString const& src)
-                         { return aCurrName == src.trim(); }
+                         { return aCurrName == o3tl::trim(src); }
                 ));
 
         // check whether given canvas service is listed in the
@@ -380,7 +381,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
         const bool bIsAAImpl(
             std::any_of(aAAImpls.begin(), aAAImpls.end(),
                          [&aCurrName](OUString const& src)
-                         { return aCurrName == src.trim(); }
+                         { return aCurrName == o3tl::trim(src); }
                 ));
 
         // try to instantiate canvas *only* if either accel and AA

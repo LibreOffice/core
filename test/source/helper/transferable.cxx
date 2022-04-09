@@ -9,6 +9,7 @@
 
 #include <test/helper/transferable.hxx>
 #include <com/sun/star/datatransfer/UnsupportedFlavorException.hpp>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 
@@ -23,9 +24,9 @@ OString OOO_DLLPUBLIC_TEST getTextSelection(
     // Take care of UTF-8 text here.
     bool bConvert = false;
     sal_Int32 nIndex = 0;
-    if (mimeType.getToken(0, ';', nIndex) == "text/plain")
+    if (o3tl::getToken(mimeType, 0, ';', nIndex) == "text/plain")
     {
-        if (mimeType.getToken(0, ';', nIndex) == "charset=utf-8")
+        if (o3tl::getToken(mimeType, 0, ';', nIndex) == "charset=utf-8")
         {
             mimeType = "text/plain;charset=utf-16";
             bConvert = true;

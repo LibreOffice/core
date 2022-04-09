@@ -41,11 +41,13 @@ inline int compareToIgnoreAsciiCase(std::u16string_view s1, std::u16string_view 
 // given position (and if needed, it can be turned into a template to also cover std::u16string_view
 // etc., or extended to return the n'th token instead of just the first, or support an initial
 // position of npos):
-inline std::string_view getToken(std::string_view sv, char delimiter, std::size_t& position)
+template <typename charT, typename traits = std::char_traits<charT>>
+inline std::basic_string_view<charT, traits> getToken(std::basic_string_view<charT, traits> sv,
+                                                      charT delimiter, std::size_t& position)
 {
     assert(position <= sv.size());
     auto const n = sv.find(delimiter, position);
-    std::string_view t;
+    std::basic_string_view<charT, traits> t;
     if (n == std::string_view::npos)
     {
         t = sv.substr(position);
@@ -58,10 +60,20 @@ inline std::string_view getToken(std::string_view sv, char delimiter, std::size_
     }
     return t;
 }
+inline std::string_view getToken(std::string_view sv, char delimiter, std::size_t& position)
+{
+    return getToken<char>(sv, delimiter, position);
+}
+inline std::u16string_view getToken(std::u16string_view sv, char delimiter, std::size_t& position)
+{
+    return getToken<char16_t>(sv, delimiter, position);
+}
 
 // Similar to OUString::getToken
-inline std::u16string_view getToken(std::u16string_view pStr, sal_Int32 nToken, sal_Unicode cTok,
-                                    sal_Int32& rnIndex)
+template <typename charT, typename traits = std::char_traits<charT>>
+inline std::basic_string_view<charT, traits> getToken(std::basic_string_view<charT, traits> pStr,
+                                                      sal_Int32 nToken, charT cTok,
+                                                      sal_Int32& rnIndex)
 {
     assert(rnIndex <= static_cast<sal_Int32>(pStr.size()));
 
@@ -69,11 +81,11 @@ inline std::u16string_view getToken(std::u16string_view pStr, sal_Int32 nToken, 
     // negative:
     if (rnIndex >= 0 && nToken >= 0)
     {
-        const sal_Unicode* pOrgCharStr = pStr.data();
-        const sal_Unicode* pCharStr = pOrgCharStr + rnIndex;
+        const charT* pOrgCharStr = pStr.data();
+        const charT* pCharStr = pOrgCharStr + rnIndex;
         sal_Int32 nLen = pStr.size() - rnIndex;
         sal_Int32 nTokCount = 0;
-        const sal_Unicode* pCharStrStart = pCharStr;
+        const charT* pCharStrStart = pCharStr;
         while (nLen > 0)
         {
             if (*pCharStr == cTok)
@@ -95,12 +107,32 @@ inline std::u16string_view getToken(std::u16string_view pStr, sal_Int32 nToken, 
                 rnIndex = pCharStr - pOrgCharStr + 1;
             else
                 rnIndex = -1;
-            return std::u16string_view(pCharStrStart, pCharStr - pCharStrStart);
+            return std::basic_string_view<charT, traits>(pCharStrStart, pCharStr - pCharStrStart);
         }
     }
 
     rnIndex = -1;
-    return std::u16string_view();
+    return std::basic_string_view<charT, traits>();
+}
+inline std::string_view getToken(std::string_view sv, sal_Int32 nToken, char cTok,
+                                 sal_Int32& rnIndex)
+{
+    return getToken<char>(sv, nToken, cTok, rnIndex);
+}
+inline std::u16string_view getToken(std::u16string_view sv, sal_Int32 nToken, char16_t cTok,
+                                    sal_Int32& rnIndex)
+{
+    return getToken<char16_t>(sv, nToken, cTok, rnIndex);
+}
+inline std::string_view getToken(std::string_view sv, sal_Int32 nToken, char cTok)
+{
+    sal_Int32 nIndex;
+    return getToken<char>(sv, nToken, cTok, nIndex);
+}
+inline std::u16string_view getToken(std::u16string_view sv, sal_Int32 nToken, char16_t cTok)
+{
+    sal_Int32 nIndex;
+    return getToken<char16_t>(sv, nToken, cTok, nIndex);
 }
 
 // Implementations of C++20 std::basic_string_view::starts_with and

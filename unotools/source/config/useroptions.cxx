@@ -38,6 +38,7 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace utl;
@@ -218,7 +219,7 @@ OUString SvtUserOptions::Impl::GetFullName () const
         sFullName = GetToken(UserOptToken::FirstName).trim();
         if (!sFullName.isEmpty())
             sFullName += " ";
-        sFullName += GetToken(UserOptToken::FathersName).trim();
+        sFullName += o3tl::trim(GetToken(UserOptToken::FathersName));
         if (!sFullName.isEmpty())
             sFullName += " ";
         sFullName += GetToken(UserOptToken::LastName);

@@ -22,6 +22,7 @@
 #include <osl/file.h>
 #include <rtl/byteseq.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 IniParser::IniParser(OUString const & rIniName)
 {
@@ -62,9 +63,9 @@ IniParser::IniParser(OUString const & rIniName)
                 ini_Section *aSection = &mAllSection[sectionName];
                 struct ini_NameValue nameValue;
                 nameValue.sName = OStringToOUString(
-                    line.copy(0,nIndex).trim(), RTL_TEXTENCODING_ASCII_US );
+                    o3tl::trim(line.subView(0,nIndex)), RTL_TEXTENCODING_ASCII_US );
                 nameValue.sValue = OStringToOUString(
-                    line.copy(nIndex+1).trim(), RTL_TEXTENCODING_UTF8 );
+                    o3tl::trim(line.subView(nIndex+1)), RTL_TEXTENCODING_UTF8 );
 
                 aSection->vVector.push_back(nameValue);
 
@@ -76,7 +77,7 @@ IniParser::IniParser(OUString const & rIniName)
                 if ( nIndexEnd > nIndexStart && nIndexStart >=0)
                 {
                     sectionName =  OStringToOUString(
-                        line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
+                        o3tl::trim(line.subView(nIndexStart + 1,nIndexEnd - nIndexStart -1)), RTL_TEXTENCODING_ASCII_US );
                     if (sectionName.isEmpty())
                         sectionName = "no name section";
                 }

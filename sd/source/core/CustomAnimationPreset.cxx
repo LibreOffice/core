@@ -36,6 +36,7 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <tools/stream.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -192,7 +193,7 @@ bool CustomAnimationPreset::hasProperty( std::u16string_view rProperty )const
     sal_Int32 nPos = 0;
     do
     {
-        if (maProperty.getToken(0, ';', nPos) == rProperty)
+        if (o3tl::getToken(maProperty, 0, ';', nPos) == rProperty)
             return true;
     }
     while (nPos >= 0);

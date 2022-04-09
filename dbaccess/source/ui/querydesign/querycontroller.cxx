@@ -68,6 +68,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <osl/mutex.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 #include <vector>
 
@@ -874,7 +875,7 @@ OUString OQueryController::getPrivateTitle( ) const
             SolarMutexGuard aSolarGuard;
             ::osl::MutexGuard aGuard( getMutex() );
             OUString aDefaultName = DBA_RES(editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE);
-            return aDefaultName.getToken(0, ' ') + OUString::number(getCurrentStartNumber());
+            return o3tl::getToken(aDefaultName, 0, ' ') + OUString::number(getCurrentStartNumber());
         }
     }
     return m_sName;

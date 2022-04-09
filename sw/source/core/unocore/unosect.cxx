@@ -62,6 +62,7 @@
 #include <editeng/lrspitem.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 
@@ -697,7 +698,7 @@ void SwXTextSection::Impl::SetPropertyValues_Impl(
                     const OUString sFileName(
                         sTmp + OUStringChar(sfx2::cTokenSeparator) +
                         aLink.FilterName + OUStringChar(sfx2::cTokenSeparator) +
-                        pSectionData->GetLinkFileName().getToken(2, sfx2::cTokenSeparator));
+                        o3tl::getToken(pSectionData->GetLinkFileName(), 2, sfx2::cTokenSeparator));
                     pSectionData->SetLinkFileName(sFileName);
                     if (sFileName.getLength() < 3)
                     {

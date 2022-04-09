@@ -19,6 +19,7 @@
 
 #include <macroass.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
@@ -70,7 +71,7 @@ static OUString ConvertToUIName_Impl( SvxMacro const *pMacro )
         OUString aEntry = aName.getToken( nCount-1, '.' );
         if ( nCount > 2 )
         {
-            aEntry += "(" + aName.getToken( 0, '.' ) + "." + aName.getToken( nCount-2, '.' ) + ")";
+            aEntry += OUString::Concat("(") + o3tl::getToken(aName, 0, '.' ) + "." + o3tl::getToken(aName, nCount-2, '.' ) + ")";
         }
         return aEntry;
     }

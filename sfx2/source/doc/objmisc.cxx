@@ -1469,7 +1469,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
     {
         sal_Int32 nIdx{ 0 };
         const sal_Int32 nTime{ aValue.getToken( 0, ';', nIdx ).toInt32() };
-        const OUString aURL{ comphelper::string::strip(aValue.getToken( 0, ';', nIdx ), ' ') };
+        const OUString aURL{ comphelper::string::strip(o3tl::getToken(aValue, 0, ';', nIdx ), ' ') };
         uno::Reference<document::XDocumentProperties> xDocProps(
             pDoc->getDocProperties());
         if( aURL.startsWithIgnoreAsciiCase( "url=" ) )

@@ -2579,7 +2579,7 @@ HtmlSelectModel::importBinaryModel( BinaryInputStream& rInStrm )
     // Ultra hacky parser for the info
     sal_Int32 nLineIdx {0};
     // first line will tell us if multiselect is enabled
-    if (data.getToken( 0, '\n', nLineIdx )=="<SELECT MULTIPLE")
+    if (o3tl::getToken(data, 0, '\n', nLineIdx ) == u"<SELECT MULTIPLE")
         mnMultiSelect = AX_SELECTION_MULTI;
     // skip first and last lines, no data there
     if (nLineIdx>0)

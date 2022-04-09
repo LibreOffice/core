@@ -28,6 +28,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sot/exchange.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <fmtinfmt.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -596,10 +597,10 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
     else
     {
         SwSectionData aSection( SectionType::FileLink, GetUniqueSectionName() );
-        OUString aLinkFile = rBkmk.GetURL().getToken(0, '#')
+        OUString aLinkFile = o3tl::getToken(rBkmk.GetURL(), 0, '#')
             + OUStringChar(sfx2::cTokenSeparator)
             + OUStringChar(sfx2::cTokenSeparator)
-            + rBkmk.GetURL().getToken(1, '#');
+            + o3tl::getToken(rBkmk.GetURL(), 1, '#');
         aSection.SetLinkFileName( aLinkFile );
         aSection.SetProtectFlag( true );
         const SwSection* pIns = InsertSection( aSection );

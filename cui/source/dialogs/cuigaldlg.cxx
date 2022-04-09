@@ -52,6 +52,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/strings.hrc>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 using namespace ::ucbhelper;
 using namespace ::cppu;
@@ -754,7 +755,7 @@ void TPGalleryThemeProperties::FillFilterList()
         {
             if ( !aExtensions.isEmpty() )
                 aExtensions += ";";
-            aExtensions += aWildcard + aFilter.second.getToken( 0, ';', nIndex );
+            aExtensions += OUString::Concat(aWildcard) + o3tl::getToken(aFilter.second, 0, ';', nIndex );
         }
     }
 #endif

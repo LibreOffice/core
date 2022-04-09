@@ -47,6 +47,7 @@
 
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 #include <set>
@@ -1942,7 +1943,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
             {
                 g_warning( "Duff filter token '%s'\n",
                     OUStringToOString(
-                        rType.getToken( 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ).getStr() );
+                        o3tl::getToken(rType, 0, ';', nIndex ), RTL_TEXTENCODING_UTF8 ).getStr() );
             }
 #endif
         }

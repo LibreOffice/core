@@ -40,6 +40,7 @@
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 
 namespace uno = com::sun::star::uno;
@@ -317,8 +318,9 @@ void SvxNotebookbarConfigPage::searchNodeandAttribute(std::vector<NotebookbarEnt
                     {
                         sal_Int32 rPos = 0;
                         aCategoryEntry.sDisplayName
-                            = aCurItemEntry.sDisplayName.getToken(rPos, ' ', rPos) + " | "
-                              + sUIItemId;
+                            = OUString::Concat(
+                                  o3tl::getToken(aCurItemEntry.sDisplayName, rPos, ' ', rPos))
+                              + " | " + sUIItemId;
                     }
                     aCategoryList.push_back(aCategoryEntry);
                     aCurItemEntry = aCategoryEntry;

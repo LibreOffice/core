@@ -33,6 +33,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/sequence.hxx>
 #include <ucbhelper/content.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/uno/DeploymentException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -152,12 +153,12 @@ PackageRegistryImpl::~PackageRegistryImpl()
 }
 
 
-OUString normalizeMediaType( OUString const & mediaType )
+OUString normalizeMediaType( std::u16string_view mediaType )
 {
     OUStringBuffer buf;
     sal_Int32 index = 0;
     for (;;) {
-        buf.append( mediaType.getToken( 0, '/', index ).trim() );
+        buf.append( o3tl::trim(o3tl::getToken(mediaType, 0, '/', index )) );
         if (index < 0)
             break;
         buf.append( '/' );
@@ -491,7 +492,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
                 iFind = m_mediaType2backend.find(
                     normalizeMediaType(
                         // cut parameters:
-                        mediaType.copy( 0, q ) ) );
+                        mediaType.subView( 0, q ) ) );
             }
         }
         if (iFind == m_mediaType2backend.end()) {

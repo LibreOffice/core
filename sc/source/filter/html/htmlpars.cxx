@@ -48,6 +48,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <rtl/tencinfo.h>
 
@@ -2933,7 +2934,7 @@ void ScHTMLQueryParser::FontOn( const HtmlImportInfo& rInfo )
                 while( nPos != -1 )
                 {
                     // font list separator: VCL = ';' HTML = ','
-                    OUString aFName = comphelper::string::strip(rFace.getToken(0, ',', nPos), ' ');
+                    OUString aFName = comphelper::string::strip(o3tl::getToken(rFace, 0, ',', nPos), ' ');
                     aFontName = ScGlobal::addToken(aFontName, aFName, ';');
                 }
                 if ( !aFontName.isEmpty() )

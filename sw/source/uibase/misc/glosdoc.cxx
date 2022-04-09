@@ -32,6 +32,7 @@
 #include <svl/fstathelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/tempfile.hxx>
+#include <o3tl/string_view.hxx>
 #include <swtypes.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
@@ -109,7 +110,7 @@ bool SwGlossaries::FindGroupName(OUString& rGroup)
     for(size_t i = 0; i < nCount; ++i)
     {
         const OUString sTemp(GetGroupName(i));
-        if (rGroup==sTemp.getToken(0, GLOS_DELIM))
+        if (rGroup == o3tl::getToken(sTemp, 0, GLOS_DELIM))
         {
             rGroup = sTemp;
             return true;
@@ -200,7 +201,7 @@ bool    SwGlossaries::RenameGroupDoc(
         return false;
 
     const OUString sOldFileURL =
-        lcl_FullPathName(m_PathArr[nOldPath], rOldGroup.getToken(0, GLOS_DELIM));
+        lcl_FullPathName(m_PathArr[nOldPath], o3tl::getToken(rOldGroup, 0, GLOS_DELIM));
 
     if (!FStatHelper::IsDocument( sOldFileURL ))
     {
@@ -274,7 +275,7 @@ std::unique_ptr<SwTextBlocks> SwGlossaries::GetGlosDoc( const OUString &rName, b
     if (static_cast<size_t>(nPath) < m_PathArr.size())
     {
         const OUString sFileURL =
-            lcl_FullPathName(m_PathArr[nPath], rName.getToken(0, GLOS_DELIM));
+            lcl_FullPathName(m_PathArr[nPath], o3tl::getToken(rName, 0, GLOS_DELIM));
 
         bool bExist = false;
         if(!bCreate)
@@ -490,7 +491,7 @@ OUString SwGlossaries::GetCompleteGroupName( const OUString& rGroupName )
         }
         else
         {
-            if (sGroupName == sGrpName.getToken(0, GLOS_DELIM))
+            if (sGroupName == o3tl::getToken(sGrpName, 0, GLOS_DELIM))
                 return sGrpName;
         }
     }

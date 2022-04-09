@@ -163,7 +163,7 @@ void LngParser::Merge(
 
     // seek to next group
     while ( nPos < mvLines.size() && !bGroup )
-        bGroup = lcl_isNextGroup(sGroup, mvLines[nPos++].trim());
+        bGroup = lcl_isNextGroup(sGroup, o3tl::trim(mvLines[nPos++]));
 
     while ( nPos < mvLines.size()) {
         OStringHashMap Text;

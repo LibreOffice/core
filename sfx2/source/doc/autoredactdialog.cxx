@@ -149,7 +149,7 @@ OUString TargetsTable::GetNameProposal() const
         RedactionTarget* pTarget = weld::fromId<RedactionTarget*>(m_xControl->get_id(i));
         const OUString& sName = pTarget->sName;
         sal_Int32 nIndex = 0;
-        if (sName.getToken(0, ' ', nIndex) == sDefaultTargetName)
+        if (o3tl::getToken(sName, 0, ' ', nIndex) == sDefaultTargetName)
         {
             sal_Int32 nCurrTargetId = sName.getToken(0, ' ', nIndex).toInt32();
             nHighestTargetId = std::max<sal_Int32>(nHighestTargetId, nCurrTargetId);

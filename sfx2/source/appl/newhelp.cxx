@@ -220,7 +220,7 @@ void ContentTabPage_Impl::InitRoot()
         sal_Int32 nIdx = 0;
         OUString aTitle = aRow.getToken( 0, '\t', nIdx );
         OUString aURL = aRow.getToken( 0, '\t', nIdx );
-        sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
+        sal_Unicode cFolder = o3tl::getToken(aRow, 0, '\t', nIdx )[0];
         bool bIsFolder = ( '1' == cFolder );
         OUString sId;
         if (bIsFolder)
@@ -259,7 +259,7 @@ IMPL_LINK(ContentTabPage_Impl, ExpandingHdl, const weld::TreeIter&, rIter, bool)
                     sal_Int32 nIdx = 0;
                     OUString aTitle = aRow.getToken( 0, '\t', nIdx );
                     OUString aURL = aRow.getToken( 0, '\t', nIdx );
-                    sal_Unicode cFolder = aRow.getToken( 0, '\t', nIdx )[0];
+                    sal_Unicode cFolder = o3tl::getToken(aRow, 0, '\t', nIdx )[0];
                     bool bIsFolder = ( '1' == cFolder );
                     if ( bIsFolder )
                     {
@@ -940,7 +940,7 @@ SearchTabPage_Impl::SearchTabPage_Impl(weld::Widget* pParent, SfxHelpIndexWindow
             while ( nIdx > 0 )
             {
                 m_xSearchED->append_text( INetURLObject::decode(
-                    aUserData.getToken(0, ';', nIdx),
+                    o3tl::getToken(aUserData, 0, ';', nIdx),
                     INetURLObject::DecodeMechanism::WithCharset ) );
             }
         }
@@ -2328,7 +2328,7 @@ IMPL_LINK_NOARG(SfxHelpWindow_Impl, OpenHdl, LinkParamNone*, void)
         {
             sal_Int32 nIdx{ 0 };
             aId = aEntry.getToken( 0, '#', nIdx );
-            aAnchor += aEntry.getToken( 0, '#', nIdx );
+            aAnchor += o3tl::getToken(aEntry, 0, '#', nIdx );
         }
         else
             aId = aEntry;

@@ -26,6 +26,7 @@
 #include <unotools/charclass.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <reffact.hxx>
 #include <document.hxx>
@@ -509,7 +510,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl, weld::Button&, void)
         return;
 
     OUString aStrDelMsg = ScResId( STR_QUERY_DELENTRY );
-    OUString sMsg{ aStrDelMsg.getToken(0, '#') + aStrEntry + aStrDelMsg.getToken(1, '#') };
+    OUString sMsg{ o3tl::getToken(aStrDelMsg, 0, '#') + aStrEntry + o3tl::getToken(aStrDelMsg, 1, '#') };
     std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_xDialog.get(),
                                                    VclMessageType::Question, VclButtonsType::YesNo,
                                                    sMsg));

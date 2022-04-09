@@ -42,6 +42,7 @@
 #include <com/sun/star/util/thePathSettings.hpp>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 using namespace css::beans;
@@ -368,7 +369,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl, weld::Button&, void)
                     sal_Int32 nInternalPos = 0;
                     do
                     {
-                        if ( sInternal.getToken( 0, MULTIPATH_DELIMITER, nInternalPos ) == sOnePath )
+                        if ( o3tl::getToken(sInternal, 0, MULTIPATH_DELIMITER, nInternalPos ) == sOnePath )
                             bFound = true;
                     }
                     while ( !bFound && nInternalPos >= 0 );
