@@ -35,6 +35,8 @@
 #include <com/sun/star/document/IndexedPropertyValues.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <com/sun/star/i18n/NumberFormatMapper.hpp>
+#include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
@@ -1184,6 +1186,15 @@ uno::Any DomainMapper_Impl::GetAnyProperty(PropertyIds eId, const PropertyMapPtr
     {
         std::optional<PropertyMap::Property> aProperty = rContext->getProperty(eId);
         if ( aProperty )
+            return aProperty->second;
+    }
+
+    // then look whether it was directly applied as a paragraph property
+    PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
+    if (pParaContext && rContext != pParaContext)
+    {
+        std::optional<PropertyMap::Property> aProperty = pParaContext->getProperty(eId);
+        if (aProperty)
             return aProperty->second;
     }
 
@@ -4430,23 +4441,6 @@ static OUString lcl_trim(std::u16string_view sValue)
     return OUString(o3tl::trim(sValue)).replaceAll("\"","").replaceAll(u"“", "").replaceAll(u"”", "");
 }
 
-void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
-{
-    PropertyMapPtr pTopContext = GetTopContext();
-    std::optional<PropertyMap::Property> pLocale = pTopContext->getProperty(PROP_CHAR_LOCALE);
-    if( pLocale )
-        pLocale->second >>= rLocale;
-    else
-    {
-        PropertyMapPtr pParaContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
-        pLocale = pParaContext->getProperty(PROP_CHAR_LOCALE);
-        if( pLocale )
-        {
-            pLocale->second >>= rLocale;
-        }
-    }
-}
-
 /*-------------------------------------------------------------------------
     extract the number format from the command and apply the resulting number
     format to the XPropertySet
@@ -4462,9 +4456,39 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
     aUSLocale.Language = "en";
     aUSLocale.Country = "US";
 
-    //determine current locale - todo: is it necessary to initialize this locale?
-    lang::Locale aCurrentLocale = aUSLocale;
-    GetCurrentLocale( aCurrentLocale );
+    lang::Locale aCurrentLocale;
+    GetAnyProperty(PROP_CHAR_LOCALE, GetTopContext()) >>= aCurrentLocale;
+
+    if (sFormatString.isEmpty())
+    {
+        // No format specified. MS Word uses different formats depending on w:lang,
+        // "M/d/yyyy h:mm:ss AM/PM" for en-US, and "dd/MM/yyyy hh:mm:ss AM/PM" for en-GB.
+        // ALSO SEE: ww8par5's GetWordDefaultDateStringAsUS.
+        sal_Int32 nPos = rCommand.indexOf(" \\");
+        OUString sCommand = nPos == -1 ? rCommand.trim()
+                                       : OUString(o3tl::trim(rCommand.subView(0, nPos)));
+        if (sCommand == "CREATEDATE" || sCommand == "PRINTDATE" || sCommand == "SAVEDATE")
+        {
+            try
+            {
+                css::uno::Reference<css::i18n::XNumberFormatCode> const& xNumberFormatCode =
+                    i18n::NumberFormatMapper::create(m_xComponentContext);
+                sFormatString = xNumberFormatCode->getFormatCode(
+                    css::i18n::NumberFormatIndex::DATE_SYSTEM_SHORT, aCurrentLocale).Code;
+                nPos = sFormatString.indexOf("YYYY");
+                if (nPos == -1)
+                    sFormatString = sFormatString.replaceFirst("YY", "YYYY");
+                if (aCurrentLocale == aUSLocale)
+                    sFormatString += " h:mm:ss AM/PM";
+                else
+                    sFormatString += " hh:mm:ss AM/PM";
+            }
+            catch(const uno::Exception&)
+            {
+                DBG_UNHANDLED_EXCEPTION("writerfilter.dmapper");
+            }
+        }
+    }
     OUString sFormat = ConversionHelper::ConvertMSFormatStringToSO( sFormatString, aCurrentLocale, bHijri);
     //get the number formatter and convert the string to a format value
     try
