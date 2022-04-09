@@ -146,6 +146,8 @@ private:
     OUString                maBlackItalic;
     VclPtr<OutputDevice>    mpDev;
     VclPtr<OutputDevice>    mpDev2;
+    bool                    mbCJKIdeographSort;
+
     std::vector<std::unique_ptr<ImplFontListNameInfo>> m_Entries;
 
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( std::u16string_view rSearchName, sal_uInt32* pIndex ) const;
