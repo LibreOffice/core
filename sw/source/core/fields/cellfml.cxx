@@ -755,7 +755,7 @@ const SwTable* SwTableFormula::FindTable( SwDoc& rDoc, std::u16string_view rNm )
         SwFrameFormat* pFormat = rTableFormats[ --nFormatCnt ];
         // if we are called from Sw3Writer, a number is dependent on the format name
         SwTableBox* pFBox;
-        if ( rNm == pFormat->GetName().getToken(0, 0x0a) &&
+        if ( rNm == o3tl::getToken(pFormat->GetName(), 0, 0x0a) &&
             nullptr != ( pTmpTable = SwTable::FindTable( pFormat ) ) &&
             nullptr != (pFBox = pTmpTable->GetTabSortBoxes()[0] ) &&
             pFBox->GetSttNd() &&

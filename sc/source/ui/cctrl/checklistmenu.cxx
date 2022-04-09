@@ -19,6 +19,7 @@
 
 #include <checklistmenu.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <globstr.hrc>
 #include <scresid.hxx>
 
@@ -1030,7 +1031,7 @@ void ScCheckListMenuControl::addMember(const OUString& rName, const double nVal,
 {
     ScCheckListMember aMember;
     // tdf#46062 - indicate hidden whitespaces using quotes
-    aMember.maName = rName.trim() != rName ? "\"" + rName + "\"" : rName;
+    aMember.maName = o3tl::trim(rName) != rName ? "\"" + rName + "\"" : rName;
     aMember.maRealName = rName;
     aMember.mnValue = nVal;
     aMember.mbDate = false;

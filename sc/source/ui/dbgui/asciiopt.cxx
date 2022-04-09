@@ -21,6 +21,7 @@
 #include <asciiopt.hxx>
 #include <comphelper/string.hxx>
 #include <osl/thread.h>
+#include <o3tl/string_view.hxx>
 
 const char pStrFix[] = "FIX";
 const char pStrMrg[] = "MRG";
@@ -141,13 +142,13 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 6: Import quoted field as text.
     if (nPos >= 0)
     {
-        bQuotedFieldAsText = rString.getToken(0, ',', nPos) == "true";
+        bQuotedFieldAsText = o3tl::getToken(rString, 0, ',', nPos) == u"true";
     }
 
     // Token 7: Detect special numbers.
     if (nPos >= 0)
     {
-        bDetectSpecialNumber = rString.getToken(0, ',', nPos) == "true";
+        bDetectSpecialNumber = o3tl::getToken(rString, 0, ',', nPos) == u"true";
     }
     else
         bDetectSpecialNumber = true;    // default of versions that didn't add the parameter
@@ -155,7 +156,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 8: used for "Save as shown" in export options
     if ( nPos >= 0 )
     {
-        bSaveAsShown = rString.getToken(0, ',', nPos) == "true";
+        bSaveAsShown = o3tl::getToken(rString, 0, ',', nPos) == u"true";
     }
     else
         bSaveAsShown = true;    // default value
@@ -163,7 +164,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 9: used for "Save cell formulas" in export options
     if ( nPos >= 0 )
     {
-        bSaveFormulas = rString.getToken(0, ',', nPos) == "true";
+        bSaveFormulas = o3tl::getToken(rString, 0, ',', nPos) == u"true";
     }
     else
         bSaveFormulas = false;
@@ -171,7 +172,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 10: Boolean for Trim spaces.
     if (nPos >= 0)
     {
-        bRemoveSpace = rString.getToken(0, ',', nPos) == "true";
+        bRemoveSpace = o3tl::getToken(rString, 0, ',', nPos) == u"true";
     }
     else
         bRemoveSpace = false;
@@ -187,7 +188,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     if (nPos >= 0)
     {
         // If present, defaults to "false".
-        bEvaluateFormulas = rString.getToken(0, ',', nPos) == "true";
+        bEvaluateFormulas = o3tl::getToken(rString, 0, ',', nPos) == u"true";
     }
     else
         bEvaluateFormulas = true;   // default of versions that didn't add the parameter

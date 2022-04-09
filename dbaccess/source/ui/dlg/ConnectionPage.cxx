@@ -35,6 +35,7 @@
 #include <svl/filenotation.hxx>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <connectivity/CommonTools.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace dbaui
 {
@@ -247,7 +248,7 @@ namespace dbaui
             {
                 ::rtl::Reference< jvmaccess::VirtualMachine > xJVM = ::connectivity::getJavaVM( m_pAdminDialog->getORB() );
                 m_xJavaDriver->set_text(m_xJavaDriver->get_text().trim()); // fdo#68341
-                bSuccess = ::connectivity::existsJavaClassByName(xJVM,m_xJavaDriver->get_text().trim());
+                bSuccess = ::connectivity::existsJavaClassByName(xJVM, o3tl::trim(m_xJavaDriver->get_text()));
             }
         }
         catch(Exception&)

@@ -78,6 +78,7 @@
 #include <editeng/paperinf.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflgrit.hxx>
+#include <o3tl/string_view.hxx>
 #include <fmtfld.hxx>
 #include <fchrfmt.hxx>
 #include <fmtfsize.hxx>
@@ -3310,7 +3311,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
     case SwFieldIds::Table:
         {
             ww::eField eField = ww::eEquals;
-            OUString aExpand = " =" + pField->GetFieldName().trim();
+            OUString aExpand = OUString::Concat(" =") + o3tl::trim(pField->GetFieldName());
             GetExport().OutputField(pField, eField, aExpand);
         }
         break;

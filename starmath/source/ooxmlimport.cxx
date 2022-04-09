@@ -19,6 +19,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace oox::formulaimport;
 
@@ -602,7 +603,7 @@ OUString SmOoxmlImport::handleR()
             {
                 XmlStream::Tag rtag = m_rStream.ensureOpeningTag( M_TOKEN( t ));
                 if( rtag.attribute( OOX_TOKEN( xml, space )) != "preserve" )
-                    text.append(rtag.text.trim());
+                    text.append(o3tl::trim(rtag.text));
                 else
                     text.append(rtag.text);
                 m_rStream.ensureClosingTag( M_TOKEN( t ));

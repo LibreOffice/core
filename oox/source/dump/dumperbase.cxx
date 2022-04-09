@@ -32,6 +32,7 @@
 #include <oox/helper/binaryoutputstream.hxx>
 #include <oox/helper/textinputstream.hxx>
 #include <tools/time.hxx>
+#include <o3tl/string_view.hxx>
 
 #ifdef DBG_UTIL
 
@@ -2381,7 +2382,7 @@ void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
         {
             while( (nPos < aElem.getLength()) && (aElem[ nPos ] >= 32) ) ++nPos;
             if( nPos < aElem.getLength() )
-                aElem = aElem.subView( 0, nPos ) + OUStringChar(' ') + aElem.copy( nPos ).trim();
+                aElem = aElem.subView( 0, nPos ) + OUStringChar(' ') + o3tl::trim(aElem.subView( nPos ));
             ++nPos;
         }
 

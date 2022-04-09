@@ -25,6 +25,7 @@
 #include <vcl/split.hxx>
 #include <tools/diagnose_ex.h>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -919,7 +920,7 @@ namespace
                     {
                         aWorkStr += quoteTableAlias(bMulti,field->GetAlias(),aQuote) + ::dbtools::quoteName(aQuote, aColumnName);
                     }
-                    aWorkStr += " " + OUString( ";ASC;DESC" ).getToken( static_cast<sal_uInt16>(eOrder), ';' ) + ",";
+                    aWorkStr += OUString::Concat(" ") + o3tl::getToken( u";ASC;DESC", static_cast<sal_uInt16>(eOrder), ';' ) + ",";
                 }
             }
 
@@ -2171,7 +2172,7 @@ namespace
                         if ( SQL_ISRULE(pColumnRef,general_set_fct) )
                         {
                             aInfo->SetFunctionType(nFunctionType|FKT_AGGREGATE);
-                            aInfo->SetFunction(comphelper::string::stripEnd(aColumns.getToken(0,'('), ' '));
+                            aInfo->SetFunction(comphelper::string::stripEnd(o3tl::getToken(aColumns,0,'('), ' '));
                         }
                         else
                             aInfo->SetFunctionType(nFunctionType|FKT_OTHER);

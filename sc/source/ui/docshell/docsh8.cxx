@@ -35,6 +35,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -477,7 +478,7 @@ void lcl_GetColumnTypes(
             if ( nIdx>0 )
             {
                 aString = aString.replaceAll(" ", "");
-                switch ( aString.getToken( 0, ',', nIdx )[0] )
+                switch ( o3tl::getToken(aString, 0, ',', nIdx )[0] )
                 {
                     case 'L' :
                         nDbType = sdbc::DataType::BIT;

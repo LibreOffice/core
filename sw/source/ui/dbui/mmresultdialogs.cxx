@@ -1210,7 +1210,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
                 sAttachment += ".";
                 sAttachment = comphelper::string::setToken(sAttachment, nTokenCount, '.', sExtension);
             }
-            else if (sAttachment.getToken( nTokenCount - 1, '.') != sExtension)
+            else if (o3tl::getToken(sAttachment, nTokenCount - 1, '.') != sExtension)
                 sAttachment += sExtension;
             aDesc.sAttachmentName = sAttachment;
             aDesc.sMimeType = sMimeType;

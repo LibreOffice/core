@@ -2530,7 +2530,7 @@ void DocxAttributeOutput::CmdField_Impl( const SwTextNode* pNode, sal_Int32 nPos
                     const std::map<OUString, uno::Any>& rGrabBag = pItem->GetGrabBag();
                     std::map<OUString, uno::Any>::const_iterator aStoredFormula = rGrabBag.find("CellFormulaConverted");
                     if ( aStoredFormula != rGrabBag.end() && sActualFormula.indexOf('=') == 0 &&
-                                    sActualFormula.copy(1).trim() == aStoredFormula->second.get<OUString>().trim() )
+                                    o3tl::trim(sActualFormula.subView(1)) == o3tl::trim(aStoredFormula->second.get<OUString>()) )
                     {
                         aStoredFormula = rGrabBag.find("CellFormula");
                         if ( aStoredFormula != rGrabBag.end() )

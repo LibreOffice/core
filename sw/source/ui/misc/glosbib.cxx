@@ -24,6 +24,7 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/pathoptions.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <swtypes.hxx>
 #include <glosbib.hxx>
@@ -151,7 +152,7 @@ void SwGlossaryGroupDlg::Apply()
             }
         }
         const OUString sMsg(SwResId(STR_QUERY_DELETE_GROUP1)
-                            + removedStr.getToken(0, '\t', nIdx)
+                            + o3tl::getToken(removedStr, 0, '\t', nIdx)
                             + SwResId(STR_QUERY_DELETE_GROUP2));
 
         std::unique_ptr<weld::MessageDialog> xQueryBox(Application::CreateMessageDialog(m_pParent,
@@ -265,7 +266,7 @@ IMPL_LINK( SwGlossaryGroupDlg, DeleteHdl, weld::Button&, rButton, void )
     if(bDelete)
     {
         it = std::find_if(m_RenamedArr.begin(), m_RenamedArr.end(),
-            [&sEntry](OUString& s) { return s.getToken(0, RENAME_TOKEN_DELIM) == sEntry; });
+            [&sEntry](OUString& s) { return o3tl::getToken(s, 0, RENAME_TOKEN_DELIM) == sEntry; });
         if (it != m_RenamedArr.end())
         {
             m_RenamedArr.erase(it);

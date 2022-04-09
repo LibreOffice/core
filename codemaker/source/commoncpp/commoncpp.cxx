@@ -29,6 +29,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 #include <vector>
 
@@ -50,7 +51,7 @@ OString scopedCppName(OString const & type, bool ns_alias)
     nPos = 0;
     do
     {
-        tmpBuf.append("::" + type.getToken(0, c, nPos));
+        tmpBuf.append(OString::Concat("::") + o3tl::getToken(type, 0, c, nPos));
     } while( nPos != -1 );
 
     OString s(tmpBuf.makeStringAndClear());

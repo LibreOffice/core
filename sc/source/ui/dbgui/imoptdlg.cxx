@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <unotools/charclass.hxx>
 #include <osl/thread.h>
+#include <o3tl/string_view.hxx>
 #include <global.hxx>
 
 const char pStrFix[] = "FIX";
@@ -71,15 +72,15 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     {
         // look at the same positions as in ScAsciiOptions
         if ( nTokenCount >= 7 )
-            bQuoteAllText = rStr.getToken(3, ',', nIdx) == "true";  // 7th token
+            bQuoteAllText = o3tl::getToken(rStr, 3, ',', nIdx) == u"true";  // 7th token
         if ( nTokenCount >= 8 )
-            bSaveNumberAsSuch = rStr.getToken(0, ',', nIdx) == "true";
+            bSaveNumberAsSuch = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
         if ( nTokenCount >= 9 )
-            bSaveAsShown = rStr.getToken(0, ',', nIdx) == "true";
+            bSaveAsShown = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
         if ( nTokenCount >= 10 )
-            bSaveFormulas = rStr.getToken(0, ',', nIdx) == "true";
+            bSaveFormulas = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
         if ( nTokenCount >= 11 )
-            bRemoveSpace = rStr.getToken(0, ',', nIdx) == "true";
+            bRemoveSpace = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
         if ( nTokenCount >= 12 )
         {
             const OUString aTok(rStr.getToken(0, ',', nIdx));
@@ -92,7 +93,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
         }
         if ( nTokenCount >= 13 )
             // If present, defaults to "false".
-            bEvaluateFormulas = rStr.getToken(0, ',', nIdx) == "true";
+            bEvaluateFormulas = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
     }
 }
 

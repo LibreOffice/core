@@ -53,6 +53,7 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 #include <functional>
@@ -1443,7 +1444,7 @@ OUString OTableController::getPrivateTitle() const
         if ( sTitle.isEmpty() )
         {
             OUString aName = DBA_RES(STR_TBL_TITLE);
-            sTitle = aName.getToken(0,' ') + OUString::number(getCurrentStartNumber());
+            sTitle = o3tl::getToken(aName,0,' ') + OUString::number(getCurrentStartNumber());
         }
     }
     catch( const Exception& )

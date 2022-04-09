@@ -22,6 +22,7 @@
 #include <unotools/pathoptions.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <swtypes.hxx>
 #include <swmodule.hxx>
 #include <shellio.hxx>
@@ -259,7 +260,7 @@ void SwGlossaryList::Update()
 
                 FillGroup(pGroup.get(), pGlossaries);
                 OUString sName = rPathArr[nPath] + "/" +
-                    pGroup->sName.getToken(0, GLOS_DELIM) + sExt;
+                    o3tl::getToken(pGroup->sName, 0, GLOS_DELIM) + sExt;
                 FStatHelper::GetModifiedDateTimeOfFile( sName,
                                                 &pGroup->aDateModified,
                                                 &pGroup->aDateModified );

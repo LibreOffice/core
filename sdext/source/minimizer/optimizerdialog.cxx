@@ -41,6 +41,7 @@
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 #include <tools/urlobj.hxx>
+#include <o3tl/string_view.hxx>
 #include <bitmaps.hlst>
 
 using namespace ::com::sun::star::io;
@@ -708,7 +709,7 @@ namespace
 
 bool lcl_mapResolution(OUString& rResolution, const OUString& rImageResolution)
 {
-    if (rImageResolution.getToken(1, ';')!=rResolution)
+    if (o3tl::getToken(rImageResolution, 1, ';')!=rResolution)
         return false;
     rResolution = rImageResolution.getToken(0, ';');
     return true;

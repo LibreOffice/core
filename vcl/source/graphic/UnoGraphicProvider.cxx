@@ -127,7 +127,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
-    if( rResourceURL.getToken( 0, '/', nIndex ) == "private:memorygraphic" )
+    if( o3tl::getToken(rResourceURL, 0, '/', nIndex ) == u"private:memorygraphic" )
     {
         sal_Int64 nGraphicAddress = rResourceURL.getToken( 0, '/', nIndex ).toInt64();
 

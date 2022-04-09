@@ -21,6 +21,7 @@
 #include <editeng/eeitem.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/string_view.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <editeng/adjustitem.hxx>
@@ -3323,7 +3324,7 @@ void ScViewData::ReadUserData(const OUString& rData)
     sal_Int32 nIdx {0};
 
     OUString aZoomStr = rData.getToken(0, ';', nMainIdx);       // Zoom/PageZoom/Mode
-    sal_Unicode cMode = aZoomStr.getToken(2, '/', nIdx)[0];     // 0 or "0"/"1"
+    sal_Unicode cMode = o3tl::getToken(aZoomStr, 2, '/', nIdx)[0];     // 0 or "0"/"1"
     SetPagebreakMode( cMode == '1' );
     // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 

@@ -37,6 +37,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -3701,7 +3702,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                     // Both the pattern and the rectangle are embedded in a <defs> element.
                     // The comment content has the following format: "SLIDE_BACKGROUND <background-id>"
                     const OString& sComment = pA->GetComment();
-                    OUString sRefId = "#" + OUString::fromUtf8( sComment.getToken(1, ' ') );
+                    OUString sRefId = "#" + OUString::fromUtf8( o3tl::getToken(sComment, 1, ' ') );
                     mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, sRefId );
 
                     SvXMLElementExport aRefElem( mrExport, XML_NAMESPACE_NONE, "use", true, true );
