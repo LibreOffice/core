@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf32f11d_b9208c15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-09T15:51:59Z",
+      "side": 1,
+      "message": "2nd review 🙏",
+      "revId": "9043cc480eb5be9382df5e0cd1f21ddb6951f82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7129b01a_d2c94eae",
@@ -71,6 +88,54 @@
       "writtenOn": "2022-04-08T15:25:55Z",
       "side": 1,
       "message": "Why not use usual title case convention for Null and Empty?",
+      "range": {
+        "startLine": 28,
+        "startChar": 63,
+        "endLine": 28,
+        "endChar": 67
+      },
+      "revId": "9043cc480eb5be9382df5e0cd1f21ddb6951f82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c361ae01_44274da0",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-09T15:51:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7129b01a_d2c94eae",
+      "range": {
+        "startLine": 28,
+        "startChar": 32,
+        "endLine": 28,
+        "endChar": 39
+      },
+      "revId": "9043cc480eb5be9382df5e0cd1f21ddb6951f82c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffade6e2_e41ecbca",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 4
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-09T15:51:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d5afc709_89e4d097",
       "range": {
         "startLine": 28,
         "startChar": 63,
