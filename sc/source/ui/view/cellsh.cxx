@@ -194,6 +194,12 @@ void ScCellShell::GetBlockState( SfxItemSet& rSet )
             }
             break;
 
+            case SID_EDIT_SPARKLINE:
+            {
+                bDisable = !rDoc.HasSparkline(GetViewData().GetCurPos());
+            }
+            break;
+
             case SID_DELETE_SPARKLINE:
             case SID_EDIT_SPARKLINE_GROUP:
             case SID_DELETE_SPARKLINE_GROUP:
