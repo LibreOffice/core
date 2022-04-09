@@ -578,6 +578,46 @@ FactoryFunction Button::GetUITestFactory() const
     return ButtonUIObject::create;
 }
 
+namespace
+{
+
+const char* symbolTypeName(SymbolType eSymbolType)
+{
+    switch (eSymbolType)
+    {
+        case SymbolType::DONTKNOW:         return "DONTKNOW";
+        case SymbolType::IMAGE:            return "IMAGE";
+        case SymbolType::ARROW_UP:         return "ARROW_UP";
+        case SymbolType::ARROW_DOWN:       return "ARROW_DOWN";
+        case SymbolType::ARROW_LEFT:       return "ARROW_LEFT";
+        case SymbolType::ARROW_RIGHT:      return "ARROW_RIGHT";
+        case SymbolType::SPIN_UP:          return "SPIN_UP";
+        case SymbolType::SPIN_DOWN:        return "SPIN_DOWN";
+        case SymbolType::SPIN_LEFT:        return "SPIN_LEFT";
+        case SymbolType::SPIN_RIGHT:       return "SPIN_RIGHT";
+        case SymbolType::FIRST:            return "FIRST";
+        case SymbolType::LAST:             return "LAST";
+        case SymbolType::PREV:             return "PREV";
+        case SymbolType::NEXT:             return "NEXT";
+        case SymbolType::PAGEUP:           return "PAGEUP";
+        case SymbolType::PAGEDOWN:         return "PAGEDOWN";
+        case SymbolType::PLAY:             return "PLAY";
+        case SymbolType::STOP:             return "STOP";
+        case SymbolType::CLOSE:            return "CLOSE";
+        case SymbolType::CHECKMARK:        return "CHECKMARK";
+        case SymbolType::RADIOCHECKMARK:   return "RADIOCHECKMARK";
+        case SymbolType::FLOAT:            return "FLOAT";
+        case SymbolType::DOCK:             return "DOCK";
+        case SymbolType::HIDE:             return "HIDE";
+        case SymbolType::HELP:             return "HELP";
+        case SymbolType::PLUS:             return "PLUS";
+    }
+
+    return "UNKNOWN";
+}
+
+}
+
 void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 {
     Control::DumpAsPropertyTree(rJsonWriter);
@@ -596,6 +636,13 @@ void Button::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
 
     if (GetStyle() & WB_DEFBUTTON)
         rJsonWriter.put("has_default", true);
+}
+
+void PushButton::DumpAsPropertyTree(tools::JsonWriter& rJsonWriter)
+{
+    Button::DumpAsPropertyTree(rJsonWriter);
+    if (GetSymbol() != SymbolType::DONTKNOW)
+        rJsonWriter.put("symbol", symbolTypeName(GetSymbol()));
 }
 
 IMPL_STATIC_LINK( Button, dispatchCommandHandler, Button*, pButton, void )
