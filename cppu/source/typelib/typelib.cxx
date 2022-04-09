@@ -35,6 +35,7 @@
 #include <osl/diagnose.h>
 #include <typelib/typedescription.h>
 #include <uno/any2.h>
+#include <o3tl/string_view.hxx>
 #include "typelib.hxx"
 
 using namespace osl;
@@ -1984,8 +1985,8 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
                         &pInterface, name.copy(i4 + 1).pData);
                     if (!createDerivedInterfaceMemberDescription(
                             ppRet, name, pBaseRef, pBase, pInterface,
-                            name.copy(i2, i3 - i2).toInt32(),
-                            name.copy(i3 + 1, i4 - i3 - 1).toInt32()))
+                            o3tl::toInt32(name.subView(i2, i3 - i2)),
+                            o3tl::toInt32(name.subView(i3 + 1, i4 - i3 - 1))))
                     {
                         if (pInterface != nullptr) {
                             typelib_typedescription_release(pInterface);

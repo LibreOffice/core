@@ -27,6 +27,7 @@
 #include <rtl/string.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/security/RuntimePermission.hpp>
 #include <com/sun/star/security/AllPermission.hpp>
@@ -148,20 +149,20 @@ SocketPermission::SocketPermission(
     sal_Int32 minus = m_host.indexOf( '-', colon +1 );
     if (minus < 0)
     {
-        m_lowerPort = m_upperPort = m_host.copy( colon +1 ).toInt32();
+        m_lowerPort = m_upperPort = o3tl::toInt32(m_host.subView( colon +1 ));
     }
     else if (minus == (colon +1)) // -N
     {
-        m_upperPort = m_host.copy( minus +1 ).toInt32();
+        m_upperPort = o3tl::toInt32(m_host.subView( minus +1 ));
     }
     else if (minus == (m_host.getLength() -1)) // N-
     {
-        m_lowerPort = m_host.copy( colon +1, m_host.getLength() -1 -colon -1 ).toInt32();
+        m_lowerPort = o3tl::toInt32(m_host.subView( colon +1, m_host.getLength() -1 -colon -1 ));
     }
     else // A-B
     {
-        m_lowerPort = m_host.copy( colon +1, minus - colon -1 ).toInt32();
-        m_upperPort = m_host.copy( minus +1 ).toInt32();
+        m_lowerPort = o3tl::toInt32(m_host.subView( colon +1, minus - colon -1 ));
+        m_upperPort = o3tl::toInt32(m_host.subView( minus +1 ));
     }
     m_host = m_host.copy( 0, colon );
 }
