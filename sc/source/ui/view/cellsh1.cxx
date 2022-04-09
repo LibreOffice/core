@@ -1065,6 +1065,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
         }
         break;
 
+        case SID_EDIT_SPARKLINE:
+        {
+            sal_uInt16 nId  = sc::SparklineDataRangeDialogWrapper::GetChildWindowId();
+            SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
+            SfxChildWindow* pWindow = pViewFrame->GetChildWindow(nId);
+            pScMod->SetRefDialog(nId, pWindow == nullptr);
+            rReq.Done();
+        }
+        break;
+
         case SID_DELETE_SPARKLINE:
         {
             pTabViewShell->DeleteContents(InsertDeleteFlags::SPARKLINES);

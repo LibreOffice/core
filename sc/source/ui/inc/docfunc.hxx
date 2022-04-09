@@ -56,6 +56,7 @@ namespace sc
     struct ColRowSpan;
     class SparklineAttributes;
     class SparklineGroup;
+    class Sparkline;
 }
 
 class ScDocFunc
@@ -246,6 +247,7 @@ public:
                                                      sc::SparklineAttributes const& rNewAttributes);
     SC_DLLPUBLIC bool GroupSparklines(ScRange const& rRange, std::shared_ptr<sc::SparklineGroup> const& rpGroup);
     SC_DLLPUBLIC bool UngroupSparklines(ScRange const& rRange);
+    SC_DLLPUBLIC bool ChangeSparkline(std::shared_ptr<sc::Sparkline> const& rpSparkline, SCTAB nTab, ScRangeList const& rDataRange);
 
 private:
     void ProtectDocument(const ScDocProtection& rProtect);

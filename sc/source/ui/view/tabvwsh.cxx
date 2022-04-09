@@ -98,6 +98,7 @@ void ScTabViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(ScFourierAnalysisDialogWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(ScCondFormatDlgWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(sc::SparklineDialogWrapper::GetChildWindowId());
+    GetStaticInterface()->RegisterChildWindow(sc::SparklineDataRangeDialogWrapper::GetChildWindowId());
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY( ScTabViewShell, "Default" )

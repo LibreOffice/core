@@ -70,6 +70,7 @@
 
 #include <PivotLayoutDialog.hxx>
 #include <SparklineDialog.hxx>
+#include <SparklineDataRangeDialog.hxx>
 
 #include <comphelper/lok.hxx>
 #include <o3tl/make_shared.hxx>
@@ -240,6 +241,11 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
         case SID_SPARKLINE_DIALOG:
         {
             xResult = std::make_shared<sc::SparklineDialog>(pB, pCW, pParent, GetViewData());
+            break;
+        }
+        case SID_SPARKLINE_DATA_RANGE_DIALOG:
+        {
+            xResult = std::make_shared<sc::SparklineDataRangeDialog>(pB, pCW, pParent, GetViewData());
             break;
         }
         case SID_DEFINE_DBNAME:
