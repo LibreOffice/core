@@ -33,7 +33,7 @@
 
 namespace svx::diagram {
 
-enum SVXCORE_DLLPUBLIC TypeConstant {
+enum TypeConstant {
     XML_none = 0,
     XML_type = 395,
     XML_asst = 680,
