@@ -308,8 +308,8 @@ bool XMLFilterJarHelper::copyFile( const Reference< XHierarchicalNameAccess >& x
     {
         OUString szPackagePath( encodeZipUri( rURL.copy( sVndSunStarPackage.getLength() ) ) );
 
-        if ( ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, ".." )
-          || ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, "." ) )
+        if ( ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, u".." )
+          || ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, u"." ) )
             throw lang::IllegalArgumentException();
 
         if( xIfc->hasByHierarchicalName( szPackagePath ) )

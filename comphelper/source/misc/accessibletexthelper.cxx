@@ -215,9 +215,9 @@ namespace comphelper
     }
 
 
-    sal_Unicode OCommonAccessibleText::implGetCharacter( const OUString& rText, sal_Int32 nIndex )
+    sal_Unicode OCommonAccessibleText::implGetCharacter( std::u16string_view rText, sal_Int32 nIndex )
     {
-        if ( !implIsValidIndex( nIndex, rText.getLength() ) )
+        if ( !implIsValidIndex( nIndex, rText.size() ) )
             throw IndexOutOfBoundsException();
 
         return rText[nIndex];

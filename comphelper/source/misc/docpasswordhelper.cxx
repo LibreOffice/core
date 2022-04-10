@@ -197,7 +197,7 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, 
 
 
 sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
-                const OUString& aUString )
+                std::u16string_view aUString )
 {
     static const sal_uInt16 pInitialCode[] = {
         0xE1F0, // 1
@@ -236,7 +236,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
     };
 
     sal_uInt32 nResult = 0;
-    sal_uInt32 nLen = aUString.getLength();
+    size_t nLen = aUString.size();
 
     if ( nLen )
     {
@@ -246,7 +246,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
         sal_uInt16 nHighResult = pInitialCode[nLen - 1];
         sal_uInt16 nLowResult = 0;
 
-        for ( sal_uInt32 nInd = 0; nInd < nLen; nInd++ )
+        for ( size_t nInd = 0; nInd < nLen; nInd++ )
         {
             // NO Encoding during conversion!
             // The specification says that the low byte should be used in case it is not NULL

@@ -118,7 +118,7 @@ private:
         const OString &rIsoLang,
         const OString &rResTyp );
 
-    static bool IsTokenClosed(const OString &rToken);
+    static bool IsTokenClosed(std::string_view rToken);
 
 public:
     CfgParser();

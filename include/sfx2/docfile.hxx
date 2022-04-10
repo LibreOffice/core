@@ -294,7 +294,7 @@ public:
     static bool CallApproveHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler, const css::uno::Any& rRequest, bool bAllowAbort);
 
     static bool         SetWritableForUserOnly( const OUString& aURL );
-    static sal_uInt32   CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter );
+    static sal_uInt32   CreatePasswordToModifyHash( std::u16string_view aPasswd, bool bWriter );
 
 private:
     enum class ShowLockResult { NoLock, Succeeded, Try };
