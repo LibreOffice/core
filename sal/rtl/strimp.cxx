@@ -27,36 +27,6 @@
 #include "alloc_impl.hxx"
 #include "alloc_arena.hxx"
 
-sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix )
-{
-    sal_Int16 n = -1;
-    if ( (ch >= '0') && (ch <= '9') )
-        n = ch-'0';
-    else if ( (ch >= 'a') && (ch <= 'z') )
-        n = ch-'a'+10;
-    else if ( (ch >= 'A') && (ch <= 'Z') )
-        n = ch-'A'+10;
-    return (n < nRadix) ? n : -1;
-}
-
-bool rtl_ImplIsWhitespace( sal_Unicode c )
-{
-    /* Space or Control character? */
-    if ( (c <= 32) && c )
-        return true;
-
-    /* Only in the General Punctuation area Space or Control characters are included? */
-    if ( (c < 0x2000) || (c > 0x206F) )
-        return false;
-
-    if ( ((c >= 0x2000) && (c <= 0x200B)) ||    /* All Spaces           */
-         (c == 0x2028) ||                       /* LINE SEPARATOR       */
-         (c == 0x2029) )                        /* PARAGRAPH SEPARATOR  */
-        return true;
-
-    return false;
-}
-
 /*
  * TODO: add a slower, more awful, but more space efficient
  * custom allocator for the pre-init phase. Existing slab
