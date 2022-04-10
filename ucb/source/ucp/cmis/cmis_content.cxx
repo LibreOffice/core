@@ -7,7 +7,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <cstdio>
 #include <string_view>
 
 #include <boost/make_shared.hpp>

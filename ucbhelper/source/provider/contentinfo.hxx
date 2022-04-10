@@ -22,7 +22,6 @@
 
 #include <optional>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
-#include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <memory>
 #include <vector>
 
 #include "basecontrol.hxx"

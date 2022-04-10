@@ -22,14 +22,7 @@
 #include <sal/log.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/configmgr.hxx>
-#include <unotools/configitem.hxx>
-#include <tools/debug.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/uno/Sequence.hxx>
 
-#include <osl/diagnose.h>
-#include <osl/mutex.hxx>
-#include <officecfg/Office/Recovery.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace utl;

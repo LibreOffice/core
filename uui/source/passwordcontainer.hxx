@@ -22,7 +22,6 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/task/XInteractionHandler2.hpp>
 #include <com/sun/star/task/XPasswordContainer2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -30,9 +29,6 @@
 namespace com {
     namespace sun {
         namespace star {
-            namespace lang {
-                class XMultiServiceFactory;
-            }
             namespace ucb {
                 class AuthenticationRequest;
                 class XInteractionSupplyAuthentication;

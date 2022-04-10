@@ -19,7 +19,6 @@
 
 #include <strings.hrc>
 #include "reloadeditable.hxx"
-#include <officecfg/Office/Common.hxx>
 #include <unotools/resmgr.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>

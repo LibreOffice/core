@@ -20,15 +20,12 @@
 #include <sal/config.h>
 
 #include <o3tl/string_view.hxx>
-#include <sal/log.hxx>
 #include <unotools/dynamicmenuoptions.hxx>
 #include <tools/debug.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
-#include <comphelper/string.hxx>
 
 #include <vector>
 #include <algorithm>

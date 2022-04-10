@@ -22,7 +22,6 @@
 #include <unotools/useroptions.hxx>
 #include <unotools/syslocale.hxx>
 #include <com/sun/star/uno/Any.hxx>
-#include <osl/mutex.hxx>
 #include "itemholder1.hxx"
 
 #include <cppuhelper/implbase.hxx>

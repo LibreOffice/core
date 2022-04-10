@@ -23,7 +23,6 @@
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <codemaker/typemanager.hxx>
-#include <codemaker/unotype.hxx>
 #include <unoidl/unoidl.hxx>
 
 #include <fstream>

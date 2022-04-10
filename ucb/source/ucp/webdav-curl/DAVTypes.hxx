@@ -21,10 +21,8 @@
 #pragma once
 
 #include <memory>
-#include <list>
 #include <map>
 #include <mutex>
-#include <rtl/uri.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Any.hxx>
 

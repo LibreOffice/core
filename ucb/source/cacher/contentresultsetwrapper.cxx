@@ -23,7 +23,6 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <cppuhelper/queryinterface.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 
 using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;

@@ -25,7 +25,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XView.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <osl/mutex.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <rtl/ref.hxx>

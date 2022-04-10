@@ -27,7 +27,6 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
 
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/xml/dom/XSAXDocumentBuilder2.hpp>
 #include <com/sun/star/xml/dom/SAXDocumentBuilderState.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>

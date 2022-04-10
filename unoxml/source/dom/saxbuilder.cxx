@@ -21,7 +21,6 @@
 
 #include <com/sun/star/xml/dom/DocumentBuilder.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
-#include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sax/fastattribs.hxx>
 #include <xmloff/xmlimp.hxx>

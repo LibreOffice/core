@@ -24,8 +24,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#include <limits.h>
-
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

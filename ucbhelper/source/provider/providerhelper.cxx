@@ -28,10 +28,8 @@
 #include <com/sun/star/ucb/XPropertySetRegistry.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include <ucbhelper/providerhelper.hxx>
-#include <ucbhelper/macros.hxx>
 
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>

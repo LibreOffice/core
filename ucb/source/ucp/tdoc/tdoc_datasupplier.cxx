@@ -25,7 +25,6 @@
  *************************************************************************/
 
 #include <optional>
-#include <vector>
 
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/ResultSetException.hpp>

@@ -30,6 +30,7 @@
 
 #include <osl/time.h>
 #include <sal/log.hxx>
+#include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <config_version.h>
@@ -37,7 +38,6 @@
 #include <map>
 #include <optional>
 #include <tuple>
-#include <vector>
 
 using namespace ::com::sun::star;
 

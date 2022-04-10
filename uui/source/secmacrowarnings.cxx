@@ -22,7 +22,6 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
-#include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
 #include <tools/debug.hxx>
 #include <unotools/securityoptions.hxx>
