@@ -16,6 +16,24 @@
       "message": "Your email address is still unchanged.",
       "revId": "c040b7d0f2c4ad590d3417b9a2699521acfaa452",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1c33cf_cab88a36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T20:30:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "657143a1_bded86ff",
+      "revId": "c040b7d0f2c4ad590d3417b9a2699521acfaa452",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
