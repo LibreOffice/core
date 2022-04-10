@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cab0b3cb_5fe38a1e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T21:57:32Z",
+      "side": 1,
+      "message": "Nice! This is a really huge commit.\n\nPlease look at the results:\n $ git grep -l wiki.openoffice.org/wiki/Documentation/DevGuide odk\n odk/docs/idl/generated_idl_chapter_refs.idl\n odk/docs/install.html\n odk/docs/tools.html\n odk/examples/DevelopersGuide/examples.html\n odk/examples/examples.html\n odk/index.html\n odk/settings/platform.mk",
+      "revId": "13d3d4c99c214ed4a8e18b41cd277904a20c2ec9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
