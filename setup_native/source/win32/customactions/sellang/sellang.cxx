@@ -49,7 +49,7 @@ static bool GetMsiPropA( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
         ZeroMemory( buff, nbytes );
         MsiGetPropertyA( hMSI, pPropName, buff, &sz );
         *ppValue = buff;
-        return ( strlen(buff) > 0 );
+        return ( buff[0] != '\0' );
     }
     return false;
 }
