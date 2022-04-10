@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "813f3ef4_f04b8abf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-10T06:29:25Z",
+      "side": 1,
+      "message": "You commented out lines instead of removing them. Please update your patch locally to correct it, then git commit --amend and submit again",
+      "revId": "4bd33785d502764c5df7a4e82849b1d5aef4e6ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
