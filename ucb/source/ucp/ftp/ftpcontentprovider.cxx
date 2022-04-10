@@ -26,7 +26,6 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/weak.hxx>
 #include "ftpcontentprovider.hxx"
 #include "ftpcontent.hxx"

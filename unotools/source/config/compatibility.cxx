@@ -31,7 +31,6 @@
 #include "itemholder1.hxx"
 
 #include <algorithm>
-#include <vector>
 
 using namespace ::std;
 using namespace ::utl;

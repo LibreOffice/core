@@ -11,7 +11,6 @@
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <rtl/ref.hxx>
 
 using namespace com::sun::star;
 using uno::Reference;

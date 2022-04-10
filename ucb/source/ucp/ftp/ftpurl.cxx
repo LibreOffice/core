@@ -26,8 +26,6 @@
 #include <sal/config.h>
 #include <sal/log.hxx>
 
-#include <vector>
-
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <string.h>

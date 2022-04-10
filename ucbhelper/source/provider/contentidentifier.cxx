@@ -24,8 +24,6 @@
 
  *************************************************************************/
 #include <ucbhelper/contentidentifier.hxx>
-#include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/queryinterface.hxx>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;

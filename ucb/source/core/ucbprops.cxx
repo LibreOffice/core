@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/ucb/CrossReference.hpp>
 #include <com/sun/star/util/DateTime.hpp>
@@ -34,8 +33,9 @@
 #include <com/sun/star/ucb/SynchronizePolicy.hpp>
 #include <com/sun/star/ucb/VerificationMode.hpp>
 #include <com/sun/star/ucb/XDataContainer.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 
 #include "ucbprops.hxx"
 

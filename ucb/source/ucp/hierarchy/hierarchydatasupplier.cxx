@@ -24,8 +24,6 @@
 
  *************************************************************************/
 
-#include <vector>
-
 #include <com/sun/star/ucb/IllegalIdentifierException.hpp>
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <ucbhelper/contentidentifier.hxx>

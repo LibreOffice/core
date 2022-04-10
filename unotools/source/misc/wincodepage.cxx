@@ -12,7 +12,6 @@
 #include <string_view>
 
 #include <unotools/wincodepage.hxx>
-#include <rtl/string.h>
 #include <rtl/textenc.h>
 
 namespace{

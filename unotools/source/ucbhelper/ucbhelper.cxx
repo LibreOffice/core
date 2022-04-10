@@ -41,12 +41,10 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/processfactory.hxx>
-#include <cppuhelper/exc_hlp.hxx>
 #include <comphelper/simplefileaccessinteraction.hxx>
 #include <osl/file.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
-#include <sal/types.h>
 #include <tools/datetime.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>

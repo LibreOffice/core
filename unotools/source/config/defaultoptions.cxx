@@ -20,11 +20,8 @@
 #include <sal/config.h>
 
 #include <osl/file.hxx>
-#include <sal/log.hxx>
 #include <unotools/defaultoptions.hxx>
 #include <unotools/pathoptions.hxx>
-#include <tools/debug.hxx>
-#include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <officecfg/Office/Common.hxx>

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
 
 // Definitions for the commands supported by the UCB.
 

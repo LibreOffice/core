@@ -22,7 +22,6 @@
 
 #include <vector>
 #include <rtl/ref.hxx>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include "DAVAuthListener.hxx"
 
 namespace http_dav_ucp

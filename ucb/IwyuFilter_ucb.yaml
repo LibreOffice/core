@@ -17,10 +17,14 @@ excludelist:
     # Needed for UnoType
     - com/sun/star/beans/XPropertySetInfo.hpp
     - com/sun/star/ucb/XCommandInfo.hpp
+    # Needed for boost::make_shared
+    - boost/make_shared.hpp
     ucb/source/ucp/cmis/cmis_repo_content.cxx:
     # Needed for UnoType
     - com/sun/star/ucb/XCommandInfo.hpp
     - com/sun/star/beans/XPropertySetInfo.hpp
+    # Needed for boost::make_shared
+    - boost/make_shared.hpp
     ucb/source/ucp/ext/ucpext_content.cxx:
     # Needed for UnoType
     - com/sun/star/beans/XPropertySetInfo.hpp
@@ -60,4 +64,11 @@ excludelist:
     - com/sun/star/util/DateTime.hpp
     ucb/source/ucp/webdav-curl/webdavcontent.cxx:
     # Needed for UnoType
+    - com/sun/star/ucb/XCommandInfo.hpp
+    ucb/source/ucp/webdav-curl/CurlSession.cxx:
+    # Actually used
+    - comphelper/scopeguard.hxx
+    ucb/source/ucp/webdav-curl/webdavcontent.cxx:
+    # Actually used
+    - com/sun/star/uno/XComponentContext.hpp
     - com/sun/star/ucb/XCommandInfo.hpp

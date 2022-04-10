@@ -25,7 +25,6 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/lok.hxx>
-#include <comphelper/sequence.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/locale.h>
 #include <osl/thread.h>

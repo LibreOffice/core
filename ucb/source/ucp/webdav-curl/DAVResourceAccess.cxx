@@ -23,7 +23,6 @@
 
 #include <ucbhelper/simpleauthenticationrequest.hxx>
 #include <comphelper/seekableinput.hxx>
-#include <sal/log.hxx>
 
 #include "DAVAuthListenerImpl.hxx"
 #include "DAVResourceAccess.hxx"

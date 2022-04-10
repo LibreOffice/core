@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "ucpext_content.hxx"
+
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 

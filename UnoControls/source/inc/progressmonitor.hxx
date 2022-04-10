@@ -25,7 +25,6 @@
 #include <rtl/ref.hxx>
 
 #include <vector>
-#include <memory>
 
 #include <basecontainercontrol.hxx>
 

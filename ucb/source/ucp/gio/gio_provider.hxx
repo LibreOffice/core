@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <ucbhelper/providerhelper.hxx>
 
 namespace gio
