@@ -211,7 +211,7 @@ wchar_t*
 #else
 char*
 #endif
-cppuhelper_detail_findSofficePath()
+cppuhelper_detail_findSofficePath(void)
 {
     return platformSpecific();
 }
