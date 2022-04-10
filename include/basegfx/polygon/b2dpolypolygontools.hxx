@@ -150,7 +150,7 @@ namespace basegfx::utils
          */
         BASEGFX_DLLPUBLIC bool importFromSvgD(
             B2DPolyPolygon& o_rPolyPoly,
-            const OUString& rSvgDAttribute,
+            std::u16string_view rSvgDAttribute,
             bool bHandleRelativeNextPointCompatible,
             PointIndexSet* pHelpPointIndexSet);
 

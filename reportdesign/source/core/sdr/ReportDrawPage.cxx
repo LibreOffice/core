@@ -104,7 +104,7 @@ uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj
                 OUString sName;
                 xObj = pObj->getSdrModelFromSdrObject().GetPersist()->getEmbeddedObjectContainer().CreateEmbeddedObject(
                     ::comphelper::MimeConfigurationHelper::GetSequenceClassIDRepresentation(
-                    "80243D39-6741-46C5-926E-069164FF87BB"), sName );
+                    u"80243D39-6741-46C5-926E-069164FF87BB"), sName );
                 OSL_ENSURE(xObj.is(),"Embedded Object could not be created!");
 
                 /**************************************************

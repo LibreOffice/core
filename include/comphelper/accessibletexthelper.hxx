@@ -54,7 +54,7 @@ namespace comphelper
         static bool                      implIsValidBoundary( css::i18n::Boundary const & rBoundary, sal_Int32 nLength );
         static bool                      implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
         static bool                      implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
-        static sal_Unicode               implGetCharacter( const OUString& rText, sal_Int32 nIndex );
+        static sal_Unicode               implGetCharacter( std::u16string_view rText, sal_Int32 nIndex );
         static OUString                  implGetTextRange( const OUString& rText, sal_Int32 nStartIndex, sal_Int32 nEndIndex );
         virtual OUString                 implGetText() = 0;
         virtual css::lang::Locale        implGetLocale() = 0;

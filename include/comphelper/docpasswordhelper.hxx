@@ -145,8 +145,7 @@ public:
             The hash represented by sal_uInt32
       */
 
-    static sal_uInt32 GetWordHashAsUINT32(
-                const OUString& aString );
+    static sal_uInt32 GetWordHashAsUINT32( std::u16string_view aString );
 
 
     /** This helper function generates the hash code based on the algorithm

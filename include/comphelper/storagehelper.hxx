@@ -180,7 +180,7 @@ public:
     static bool IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed );
     static bool IsValidZipEntryFileName( const sal_Unicode *pChar, sal_Int32 nLength, bool bSlashAllowed );
 
-    static bool PathHasSegment( const OUString& aPath, const OUString& aSegment );
+    static bool PathHasSegment( std::u16string_view aPath, std::u16string_view aSegment );
 
     // Methods to allow easy use of hierarchical names inside storages
 

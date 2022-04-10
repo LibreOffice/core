@@ -200,7 +200,7 @@ namespace slideshow::internal
             class PathAnimation : public NumberAnimation
             {
             public:
-                PathAnimation( const OUString&       rSVGDPath,
+                PathAnimation( std::u16string_view          rSVGDPath,
                                sal_Int16                    nAdditive,
                                const ShapeManagerSharedPtr& rShapeManager,
                                const ::basegfx::B2DVector&  rSlideSize,
