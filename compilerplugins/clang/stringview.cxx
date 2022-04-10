@@ -46,7 +46,8 @@ public:
         return !(
             loplugin::isSamePathname(fn, SRCDIR "/sal/qa/OStringBuffer/rtl_OStringBuffer.cxx")
             || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_ostring_concat.cxx")
-            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx"));
+            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/strings/test_oustring_concat.cxx")
+            || loplugin::isSamePathname(fn, SRCDIR "/sal/qa/rtl/oustring/rtl_OUString2.cxx"));
     }
 
     virtual void run() override
@@ -336,33 +337,44 @@ void StringView::handleCXXMemberCallExpr(CXXMemberCallExpr const* expr)
     }
 }
 
-/** check for calls to O[U]StringBuffer::append that could be passed as a
-    std::u16string_view */
 bool StringView::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
 {
     if (ignoreLocation(expr))
     {
         return true;
     }
-    if (!loplugin::TypeCheck(expr->getType())
-             .Class("OUStringBuffer")
-             .Namespace("rtl")
-             .GlobalNamespace()
-        && !loplugin::TypeCheck(expr->getType())
-                .Class("OStringBuffer")
-                .Namespace("rtl")
-                .GlobalNamespace())
+    /** check for calls to O[U]StringBuffer::append that could be passed as a
+        std::u16string_view */
+    if (loplugin::TypeCheck(expr->getType())
+            .Class("OUStringBuffer")
+            .Namespace("rtl")
+            .GlobalNamespace()
+        || loplugin::TypeCheck(expr->getType())
+               .Class("OStringBuffer")
+               .Namespace("rtl")
+               .GlobalNamespace())
     {
-        return true;
+        auto const dc = loplugin::DeclCheck(expr->getMethodDecl());
+        if (dc.Function("append") || dc.Function("indexOf") || dc.Function("lastIndexOf"))
+        {
+            handleSubExprThatCouldBeView(expr->getArg(0));
+        }
+        else if (dc.Function("insert"))
+        {
+            handleSubExprThatCouldBeView(expr->getArg(1));
+        }
     }
-    auto const dc = loplugin::DeclCheck(expr->getMethodDecl());
-    if (dc.Function("append") || dc.Function("indexOf") || dc.Function("lastIndexOf"))
+
+    // rather than getToken...toInt32, use o3tl::toInt(o3tl::getToken(...)
+    auto tc = loplugin::TypeCheck(expr->getImplicitObjectArgument()->getType());
+    if (tc.Class("OUString").Namespace("rtl").GlobalNamespace()
+        || tc.Class("OString").Namespace("rtl").GlobalNamespace())
     {
-        handleSubExprThatCouldBeView(expr->getArg(0));
-    }
-    else if (dc.Function("insert"))
-    {
-        handleSubExprThatCouldBeView(expr->getArg(1));
+        auto const dc = loplugin::DeclCheck(expr->getMethodDecl());
+        if (dc.Function("toInt32") || dc.Function("toInt64"))
+        {
+            handleSubExprThatCouldBeView(expr->getImplicitObjectArgument());
+        }
     }
     return true;
 }

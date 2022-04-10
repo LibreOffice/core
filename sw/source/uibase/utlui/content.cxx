@@ -31,6 +31,7 @@
 #include <vcl/commandevent.hxx>
 #include <vcl/weldutils.hxx>
 #include <sot/formats.hxx>
+#include <o3tl/string_view.hxx>
 #include <uiitems.hxx>
 #include <fmtanchr.hxx>
 #include <fmtinfmt.hxx>
@@ -5054,8 +5055,8 @@ bool NaviContentBookmark::Paste( const TransferableDataHelper& rData )
         sal_Int32 nPos = 0;
         m_aUrl    = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
         m_aDescription  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos );
-        m_nDefaultDrag= static_cast<RegionMode>( sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32() );
-        m_nDocSh  = sStr.getToken(0, NAVI_BOOKMARK_DELIM, nPos ).toInt32();
+        m_nDefaultDrag= static_cast<RegionMode>( o3tl::toInt32(o3tl::getToken(sStr, 0, NAVI_BOOKMARK_DELIM, nPos )) );
+        m_nDocSh  = o3tl::toInt32(o3tl::getToken(sStr, 0, NAVI_BOOKMARK_DELIM, nPos ));
     }
     return bRet;
 }

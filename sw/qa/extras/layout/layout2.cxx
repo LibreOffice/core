@@ -17,6 +17,7 @@
 #include <comphelper/sequence.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
@@ -966,15 +967,11 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf69648)
         const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
         const auto nComaPos3 = sDrawRect.indexOf(',', nComaPos2 + 1);
 
-        const auto nDraw1 = OUString(sDrawRect.subView(0, nComaPos1).data()).toInt64();
-        const auto nDraw2
-            = OUString(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1).data()).toInt64();
-        const auto nDraw3
-            = OUString(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2).data()).toInt64();
-        const auto nDraw4
-            = OUString(
-                  sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1).data())
-                  .toInt64();
+        const auto nDraw1 = o3tl::toInt64(sDrawRect.subView(0, nComaPos1));
+        const auto nDraw2 = o3tl::toInt64(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1));
+        const auto nDraw3 = o3tl::toInt64(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2));
+        const auto nDraw4 = o3tl::toInt64(
+            sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1));
         const auto aChildShape = SwRect(nDraw1, nDraw2, nDraw3, nDraw4);
 
         const auto nFlyLeft = getXPath(pXmlDoc, sFrameXPath[i], "left").toInt64();

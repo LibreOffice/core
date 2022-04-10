@@ -27,6 +27,7 @@
 #include "transporttypes.hxx"
 #include <XMLStringBufferImportContext.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -946,7 +947,7 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                 if( xLabel.is() )
                                 {
                                     aRange = xLabel->getSourceRangeRepresentation();
-                                    const sal_Int32 nId {aRange.getToken(1, ' ').toInt32()};
+                                    const sal_Int32 nId = o3tl::toInt32(o3tl::getToken(aRange, 1, ' '));
                                     if( ::std::find( rTable.aHiddenColumns.begin(), rTable.aHiddenColumns.end(), nId ) == rTable.aHiddenColumns.end() )
                                         bHasUnhiddenColumns = true;
                                 }

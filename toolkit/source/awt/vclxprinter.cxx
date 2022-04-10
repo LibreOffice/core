@@ -29,6 +29,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <toolkit/awt/vclxdevice.hxx>
 
@@ -200,7 +201,7 @@ void VCLXPrinterPropertySet::selectForm( const OUString& rFormDescription )
     ::osl::MutexGuard aGuard( Mutex );
 
     sal_uInt16 nPaperBin = sal::static_int_cast< sal_uInt16 >(
-        rFormDescription.getToken( 3, ';' ).toInt32());
+        o3tl::toInt32(o3tl::getToken(rFormDescription, 3, ';' )));
     GetPrinter()->SetPaperBin( nPaperBin );
 }
 

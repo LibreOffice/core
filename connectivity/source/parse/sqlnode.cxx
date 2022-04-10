@@ -210,7 +210,7 @@ SQLParseNodeParameter::SQLParseNodeParameter( const Reference< XConnection >& _r
 {
 }
 
-OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString)
+OUString OSQLParseNode::convertDateString(const SQLParseNodeParameter& rParam, std::u16string_view rString)
 {
     Date aDate = DBTypeConversion::toDate(rString);
     Reference< XNumberFormatsSupplier > xSupplier(rParam.xFormatter->getNumberFormatsSupplier());

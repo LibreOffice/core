@@ -30,6 +30,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 
@@ -73,17 +74,17 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
             if (aTypeClass == uno::TypeClass_VOID)
                 aAny.clear();
             else if (aTypeClass == uno::TypeClass_BYTE)
-                aAny <<= static_cast<sal_Int8>(OString(rValue.c_str()).toInt32());
+                aAny <<= static_cast<sal_Int8>(o3tl::toInt32(rValue));
             else if (aTypeClass == uno::TypeClass_BOOLEAN)
                 aAny <<= OString(rValue.c_str()).toBoolean();
             else if (aTypeClass == uno::TypeClass_SHORT)
-                aAny <<= static_cast<sal_Int16>(OString(rValue.c_str()).toInt32());
+                aAny <<= static_cast<sal_Int16>(o3tl::toInt32(rValue));
             else if (aTypeClass == uno::TypeClass_UNSIGNED_SHORT)
                 aAny <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
             else if (aTypeClass == uno::TypeClass_LONG)
-                aAny <<= OString(rValue.c_str()).toInt32();
+                aAny <<= o3tl::toInt32(rValue);
             else if (aTypeClass == uno::TypeClass_UNSIGNED_LONG)
-                aAny <<= static_cast<sal_uInt32>(OString(rValue.c_str()).toInt32());
+                aAny <<= static_cast<sal_uInt32>(o3tl::toInt32(rValue));
             else if (aTypeClass == uno::TypeClass_FLOAT)
                 aAny <<= OString(rValue.c_str()).toFloat();
             else if (aTypeClass == uno::TypeClass_DOUBLE)
@@ -326,17 +327,17 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         else if (rType == "float")
             aValue.Value <<= OString(rValue.c_str()).toFloat();
         else if (rType == "long")
-            aValue.Value <<= OString(rValue.c_str()).toInt32();
+            aValue.Value <<= o3tl::toInt32(rValue);
         else if (rType == "short")
-            aValue.Value <<= sal_Int16(OString(rValue.c_str()).toInt32());
+            aValue.Value <<= sal_Int16(o3tl::toInt32(rValue));
         else if (rType == "unsigned short")
             aValue.Value <<= sal_uInt16(OString(rValue.c_str()).toUInt32());
         else if (rType == "int64")
-            aValue.Value <<= OString(rValue.c_str()).toInt64();
+            aValue.Value <<= o3tl::toInt64(rValue);
         else if (rType == "int32")
-            aValue.Value <<= OString(rValue.c_str()).toInt32();
+            aValue.Value <<= o3tl::toInt32(rValue);
         else if (rType == "int16")
-            aValue.Value <<= sal_Int16(OString(rValue.c_str()).toInt32());
+            aValue.Value <<= sal_Int16(o3tl::toInt32(rValue));
         else if (rType == "uint64")
             aValue.Value <<= OString(rValue.c_str()).toUInt64();
         else if (rType == "uint32")

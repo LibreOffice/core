@@ -23,6 +23,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 using namespace css;
@@ -233,7 +234,7 @@ void NumberFormatPropertyPanel::NotifyItemUpdate(
                 sal_Int32 aFormat[4] = {0};
                 for (sal_Int32 & rn : aFormat)
                 {
-                    rn = aCode.getToken(0, ',', nIndex).toInt32();
+                    rn = o3tl::toInt32(o3tl::getToken(aCode, 0, ',', nIndex));
                     if (nIndex<0)
                         break;
                 }

@@ -2086,7 +2086,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'X':
                         {
                             bInvalidCol = false;
-                            bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
+                            bool bFail = o3tl::checked_add<SCCOL>(o3tl::toInt32(std::u16string_view(p)), nStartCol - 1, nCol);
                             if (bFail || nCol < 0 || rDoc.MaxCol() < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
@@ -2098,7 +2098,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'Y':
                         {
                             bInvalidRow = false;
-                            bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
+                            bool bFail = o3tl::checked_add(o3tl::toInt32(std::u16string_view(p)), nStartRow - 1, nRow);
                             if (bFail || nRow < 0 || nMaxImportRow < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);
@@ -2110,7 +2110,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'C':
                         {
                             bInvalidRefCol = false;
-                            bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nRefCol);
+                            bool bFail = o3tl::checked_add<SCCOL>(o3tl::toInt32(std::u16string_view(p)), nStartCol - 1, nRefCol);
                             if (bFail || nRefCol < 0 || rDoc.MaxCol() < nRefCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;C invalid nRefCol=" << nRefCol);
@@ -2122,7 +2122,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'R':
                         {
                             bInvalidRefRow = false;
-                            bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRefRow);
+                            bool bFail = o3tl::checked_add(o3tl::toInt32(std::u16string_view(p)), nStartRow - 1, nRefRow);
                             if (bFail || nRefRow < 0 || nMaxImportRow < nRefRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;R invalid nRefRow=" << nRefRow);
@@ -2247,7 +2247,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'X':
                         {
                             bInvalidCol = false;
-                            bool bFail = o3tl::checked_add<SCCOL>(OUString(p).toInt32(), nStartCol - 1, nCol);
+                            bool bFail = o3tl::checked_add<SCCOL>(o3tl::toInt32(std::u16string_view(p)), nStartCol - 1, nCol);
                             if (bFail || nCol < 0 || rDoc.MaxCol() < nCol)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;X invalid nCol=" << nCol);
@@ -2259,7 +2259,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                         case 'Y':
                         {
                             bInvalidRow = false;
-                            bool bFail = o3tl::checked_add(OUString(p).toInt32(), nStartRow - 1, nRow);
+                            bool bFail = o3tl::checked_add(o3tl::toInt32(std::u16string_view(p)), nStartRow - 1, nRow);
                             if (bFail || nRow < 0 || nMaxImportRow < nRow)
                             {
                                 SAL_WARN("sc.ui","ScImportExport::Sylk2Doc - ;Y invalid nRow=" << nRow);

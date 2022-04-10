@@ -162,7 +162,7 @@ public:
 
                             // save and load column size and sort order
     OUString                GetConfigString() const;
-    void                    SetConfigString( const OUString& rCfgStr );
+    void                    SetConfigString( std::u16string_view rCfgStr );
 
     void                    EndInplaceEditing();
 

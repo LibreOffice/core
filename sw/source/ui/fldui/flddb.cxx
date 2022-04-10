@@ -25,6 +25,7 @@
 #include "flddb.hxx"
 #include <dbconfig.hxx>
 #include <dbmgr.hxx>
+#include <o3tl/string_view.hxx>
 
 #define USER_DATA_VERSION_1     "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
@@ -154,7 +155,7 @@ void SwFieldDBPage::Reset(const SfxItemSet*)
         sal_Int32 nIdx{ 0 };
         if (sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
         {
-            const sal_uInt16 nVal = o3tl::narrowing<sal_uInt16>(sUserData.getToken(0, ';', nIdx).toInt32());
+            const sal_uInt16 nVal = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(sUserData, 0, ';', nIdx)));
             if (nVal != USHRT_MAX)
             {
                 for (sal_Int32 i = 0, nEntryCount = m_xTypeLB->n_children(); i < nEntryCount; ++i)

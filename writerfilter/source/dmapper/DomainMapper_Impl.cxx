@@ -5354,7 +5354,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
     if (nIndex != -1)
     {
         nIndex += 5;
-        sal_uInt32  nJc = rCommand.getToken(0, ' ',nIndex).toInt32();
+        sal_uInt32  nJc = o3tl::toInt32(o3tl::getToken(rCommand, 0, ' ',nIndex));
         const   sal_Int32   aRubyAlignValues[] =
         {
             NS_ooxml::LN_Value_ST_RubyAlign_center,
@@ -5373,7 +5373,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
     if (nIndex != -1)
     {
         nIndex += 6;
-        aInfo.nHps = rCommand.getToken(0, ' ',nIndex).toInt32();
+        aInfo.nHps = o3tl::toInt32(o3tl::getToken(rCommand, 0, ' ',nIndex));
     }
 
     nIndex = rCommand.indexOf("\\o");
@@ -5863,7 +5863,7 @@ void DomainMapper_Impl::handleToc
                                 //empty tokens should be skipped
                 while( sStyleName.isEmpty() && nPosition > 0 )
                     sStyleName = sTemplate.getToken( 0, ',', nPosition );
-                nLevel = sTemplate.getToken( 0, ',', nPosition ).toInt32();
+                nLevel = o3tl::toInt32(o3tl::getToken(sTemplate, 0, ',', nPosition ));
                 if( !nLevel )
                     nLevel = 1;
                 if( !sStyleName.isEmpty() )

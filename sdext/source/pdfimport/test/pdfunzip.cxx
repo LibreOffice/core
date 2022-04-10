@@ -27,6 +27,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <pdfparse.hxx>
 
@@ -478,9 +479,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                         sal_Int32 nObject = 0;
                         sal_Int32 nGeneration = 0;
                         sal_Int32 nGenIndex = 0;
-                        nObject = aToken.getToken( 0, ':', nGenIndex ).toInt32();
+                        nObject = o3tl::toInt32( o3tl::getToken( aToken, 0, ':', nGenIndex ) );
                         if( nGenIndex != -1 )
-                            nGeneration = aToken.getToken( 0, ':', nGenIndex ).toInt32();
+                            nGeneration = o3tl::toInt32( o3tl::getToken(aToken, 0, ':', nGenIndex ));
                         s_aEmitObjects.push_back( std::pair<sal_Int32,sal_Int32>(nObject,nGeneration) );
                     }
                 }

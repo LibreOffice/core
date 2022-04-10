@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <sal/macros.h>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::uno;
@@ -480,7 +481,7 @@ namespace
 bool lcl_getResolutionText(OUString& rResolutionText, const OUString& rImageResolution, sal_Int32 nTargetRes)
 {
     sal_Int32 nIdx{ 0 };
-    if (rImageResolution.getToken(0, ';', nIdx).toInt32()!=nTargetRes)
+    if (o3tl::toInt32(o3tl::getToken(rImageResolution, 0, ';', nIdx))!=nTargetRes)
         return false;
     rResolutionText = rImageResolution.getToken(0, ';', nIdx);
     return true;
