@@ -11,6 +11,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <rtl/math.h>
 #include <rtl/math.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace oox::ppt
 {
@@ -33,7 +34,7 @@ void CommentAuthorList::setValues(const CommentAuthorList& list)
 void Comment::setDateTime(const OUString& sDateTime)
 {
     sal_Int32 nIdx{ 0 };
-    aDateTime.Year = sDateTime.getToken(0, '-', nIdx).toInt32();
+    aDateTime.Year = o3tl::toInt32(o3tl::getToken(sDateTime, 0, '-', nIdx));
     aDateTime.Month = sDateTime.getToken(0, '-', nIdx).toUInt32();
     aDateTime.Day = sDateTime.getToken(0, 'T', nIdx).toUInt32();
     aDateTime.Hours = sDateTime.getToken(0, ':', nIdx).toUInt32();

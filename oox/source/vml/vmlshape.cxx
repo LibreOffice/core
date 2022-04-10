@@ -1020,7 +1020,7 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
     if ( !sArcsize.isEmpty( ) )
     {
         sal_Unicode cLastChar = sArcsize[sArcsize.getLength() - 1];
-        sal_Int32 nValue = sArcsize.copy( 0, sArcsize.getLength() - 1 ).toInt32( );
+        sal_Int32 nValue = o3tl::toInt32(sArcsize.subView( 0, sArcsize.getLength() - 1 ));
         // Get the smallest half-side
         double size = std::min( rShapeRect.Height, rShapeRect.Width ) / 2.0;
         sal_Int32 nRadius = 0;
@@ -1156,11 +1156,11 @@ awt::Rectangle LineShape::getRelRectangle() const
     awt::Rectangle aShapeRect;
     sal_Int32 nIndex = 0;
 
-    aShapeRect.X = maShapeModel.maFrom.getToken(0, ',', nIndex).toInt32();
-    aShapeRect.Y = maShapeModel.maFrom.getToken(0, ',', nIndex).toInt32();
+    aShapeRect.X = o3tl::toInt32(o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex));
+    aShapeRect.Y = o3tl::toInt32(o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex));
     nIndex = 0;
-    aShapeRect.Width = maShapeModel.maTo.getToken(0, ',', nIndex).toInt32() - aShapeRect.X;
-    aShapeRect.Height = maShapeModel.maTo.getToken(0, ',', nIndex).toInt32() - aShapeRect.Y;
+    aShapeRect.Width = o3tl::toInt32(o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex)) - aShapeRect.X;
+    aShapeRect.Height = o3tl::toInt32(o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex)) - aShapeRect.Y;
     return aShapeRect;
 }
 

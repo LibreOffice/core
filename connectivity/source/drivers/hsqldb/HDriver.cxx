@@ -51,6 +51,7 @@
 #include <resource/sharedresources.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <memory>
 
@@ -275,9 +276,9 @@ namespace connectivity
                                 if (!sVersionString.isEmpty())
                                 {
                                     sal_Int32 nIdx {0};
-                                    const sal_Int32 nMajor = sVersionString.getToken(0, '.', nIdx).toInt32();
-                                    const sal_Int32 nMinor = sVersionString.getToken(0, '.', nIdx).toInt32();
-                                    const sal_Int32 nMicro = sVersionString.getToken(0, '.', nIdx).toInt32();
+                                    const sal_Int32 nMajor = o3tl::toInt32(o3tl::getToken(sVersionString, 0, '.', nIdx));
+                                    const sal_Int32 nMinor = o3tl::toInt32(o3tl::getToken(sVersionString, 0, '.', nIdx));
+                                    const sal_Int32 nMicro = o3tl::toInt32(o3tl::getToken(sVersionString, 0, '.', nIdx));
                                     if (     nMajor > 1
                                         || ( nMajor == 1 && nMinor > 8 )
                                         || ( nMajor == 1 && nMinor == 8 && nMicro > 0 ) )

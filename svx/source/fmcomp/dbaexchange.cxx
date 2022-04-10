@@ -27,6 +27,7 @@
 #include <comphelper/extract.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
+#include <o3tl/string_view.hxx>
 
 
 namespace svx
@@ -329,7 +330,7 @@ namespace svx
         sal_Int32 nIdx{ 0 };
         _rDatasource    = sFieldDescription.getToken(0, cSeparator, nIdx);
         _rCommand       = sFieldDescription.getToken(0, cSeparator, nIdx);
-        _nCommandType   = sFieldDescription.getToken(0, cSeparator, nIdx).toInt32();
+        _nCommandType   = o3tl::toInt32(o3tl::getToken(sFieldDescription, 0, cSeparator, nIdx));
         _rFieldName     = sFieldDescription.getToken(0, cSeparator, nIdx);
 
         return true;

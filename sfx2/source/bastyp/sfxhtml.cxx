@@ -323,7 +323,7 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
     if ( comphelper::string::getTokenCount(aNumStr, ';') > 2 )
     {
         sal_Int32 nIdx {0};
-        eNumLang = LanguageType(aNumStr.getToken( 1, ';', nIdx ).toInt32());
+        eNumLang = LanguageType(o3tl::toInt32(o3tl::getToken(aNumStr, 1, ';', nIdx )));
         OUString aFormat( aNumStr.copy( nIdx ) );
         sal_Int32 nCheckPos;
         SvNumFormatType nType;

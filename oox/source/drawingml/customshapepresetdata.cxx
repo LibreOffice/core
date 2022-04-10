@@ -85,91 +85,96 @@ void lcl_parseAdjustmentValues(
 }
 
 drawing::EnhancedCustomShapeParameterPair
-lcl_parseEnhancedCustomShapeParameterPair(const OString& rValue)
+lcl_parseEnhancedCustomShapeParameterPair(std::string_view rValue)
 {
     drawing::EnhancedCustomShapeParameterPair aPair;
     // We expect the following here: First.Value, First.Type, Second.Value, Second.Type
     static const char aExpectedFVPrefix[]
         = "First = (com.sun.star.drawing.EnhancedCustomShapeParameter) { Value = (any) { (long) ";
-    assert(rValue.startsWith(aExpectedFVPrefix));
+    assert(o3tl::starts_with(rValue, aExpectedFVPrefix));
     sal_Int32 nIndex = strlen(aExpectedFVPrefix);
-    aPair.First.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.First.Value
+        <<= static_cast<sal_uInt32>(o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex)));
 
     static const char aExpectedFTPrefix[] = ", Type = (short) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedFTPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedFTPrefix));
     nIndex += strlen(aExpectedFTPrefix);
-    aPair.First.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.First.Type
+        = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex)));
 
     static const char aExpectedSVPrefix[] = ", Second = "
                                             "(com.sun.star.drawing.EnhancedCustomShapeParameter) { "
                                             "Value = (any) { (long) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedSVPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedSVPrefix));
     nIndex += strlen(aExpectedSVPrefix);
-    aPair.Second.Value <<= static_cast<sal_uInt32>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.Second.Value
+        <<= static_cast<sal_uInt32>(o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex)));
 
     static const char aExpectedSTPrefix[] = ", Type = (short) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedSTPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedSTPrefix));
     nIndex += strlen(aExpectedSTPrefix);
-    aPair.Second.Type = static_cast<sal_uInt16>(rValue.getToken(0, '}', nIndex).toInt32());
+    aPair.Second.Type
+        = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex)));
     return aPair;
 }
 
-drawing::EnhancedCustomShapeSegment lcl_parseEnhancedCustomShapeSegment(const OString& rValue)
+drawing::EnhancedCustomShapeSegment lcl_parseEnhancedCustomShapeSegment(std::string_view rValue)
 {
     drawing::EnhancedCustomShapeSegment aSegment;
     // We expect the following here: Command, Count
     static const char aExpectedCommandPrefix[] = "Command = (short) ";
-    assert(rValue.startsWith(aExpectedCommandPrefix));
+    assert(o3tl::starts_with(rValue, aExpectedCommandPrefix));
     sal_Int32 nIndex = strlen(aExpectedCommandPrefix);
-    aSegment.Command = static_cast<sal_Int16>(rValue.getToken(0, ',', nIndex).toInt32());
+    aSegment.Command
+        = static_cast<sal_Int16>(o3tl::toInt32(o3tl::getToken(rValue, 0, ',', nIndex)));
 
     static const char aExpectedCountPrefix[] = " Count = (short) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedCountPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedCountPrefix));
     nIndex += strlen(aExpectedCountPrefix);
-    aSegment.Count = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
+    aSegment.Count = static_cast<sal_Int16>(o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex)));
     return aSegment;
 }
 
-awt::Rectangle lcl_parseRectangle(const OString& rValue)
+awt::Rectangle lcl_parseRectangle(std::string_view rValue)
 {
     awt::Rectangle aRectangle;
     // We expect the following here: X, Y, Width, Height
     static const char aExpectedXPrefix[] = "X = (long) ";
-    assert(rValue.startsWith(aExpectedXPrefix));
+    assert(o3tl::starts_with(rValue, aExpectedXPrefix));
     sal_Int32 nIndex = strlen(aExpectedXPrefix);
-    aRectangle.X = rValue.getToken(0, ',', nIndex).toInt32();
+    aRectangle.X = o3tl::toInt32(o3tl::getToken(rValue, 0, ',', nIndex));
 
     static const char aExpectedYPrefix[] = " Y = (long) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedYPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedYPrefix));
     nIndex += strlen(aExpectedYPrefix);
-    aRectangle.Y = rValue.getToken(0, ',', nIndex).toInt32();
+    aRectangle.Y = o3tl::toInt32(o3tl::getToken(rValue, 0, ',', nIndex));
 
     static const char aExpectedWidthPrefix[] = " Width = (long) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedWidthPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedWidthPrefix));
     nIndex += strlen(aExpectedWidthPrefix);
-    aRectangle.Width = rValue.getToken(0, ',', nIndex).toInt32();
+    aRectangle.Width = o3tl::toInt32(o3tl::getToken(rValue, 0, ',', nIndex));
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedHeightPrefix));
     nIndex += strlen(aExpectedHeightPrefix);
-    aRectangle.Height = o3tl::toInt32(rValue.subView(nIndex));
+    aRectangle.Height = o3tl::toInt32(rValue.substr(nIndex));
 
     return aRectangle;
 }
 
-awt::Size lcl_parseSize(const OString& rValue)
+awt::Size lcl_parseSize(std::string_view rValue)
 {
     awt::Size aSize;
     // We expect the following here: Width, Height
     static const char aExpectedWidthPrefix[] = "Width = (long) ";
-    assert(rValue.startsWith(aExpectedWidthPrefix));
+    assert(o3tl::starts_with(rValue, aExpectedWidthPrefix));
     sal_Int32 nIndex = strlen(aExpectedWidthPrefix);
-    aSize.Width = rValue.getToken(0, ',', nIndex).toInt32();
+    aSize.Width = o3tl::toInt32(o3tl::getToken(rValue, 0, ',', nIndex));
 
     static const char aExpectedHeightPrefix[] = " Height = (long) ";
-    assert(nIndex >= 0 && rValue.match(aExpectedHeightPrefix, nIndex));
+    assert(nIndex >= 0 && o3tl::starts_with(rValue.substr(nIndex), aExpectedHeightPrefix));
     nIndex += strlen(aExpectedHeightPrefix);
-    aSize.Height = o3tl::toInt32(rValue.subView(nIndex));
+    aSize.Height = o3tl::toInt32(rValue.substr(nIndex));
 
     return aSize;
 }
@@ -305,12 +310,13 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
                 static const char aExpectedVPrefix[] = "Value = (any) { (long) ";
                 assert(rValue.match(aExpectedVPrefix, nIndex));
                 nIndex += strlen(aExpectedVPrefix);
-                aParameter.Value <<= rValue.getToken(0, '}', nIndex).toInt32();
+                aParameter.Value <<= o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex));
 
                 static const char aExpectedTPrefix[] = ", Type = (short) ";
                 assert(nIndex >= 0 && rValue.match(aExpectedTPrefix, nIndex));
                 nIndex += strlen(aExpectedTPrefix);
-                aParameter.Type = static_cast<sal_Int16>(rValue.getToken(0, '}', nIndex).toInt32());
+                aParameter.Type
+                    = static_cast<sal_Int16>(o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex)));
 
                 beans::PropertyValue aPropertyValue;
                 aPropertyValue.Name = rName;
@@ -339,7 +345,7 @@ void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OStrin
         beans::PropertyValue aPropertyValue;
         aPropertyValue.Name = rName;
         // We only expect a Value here
-        aPropertyValue.Value <<= rValue.getToken(0, '}', nIndex).toInt32();
+        aPropertyValue.Value <<= o3tl::toInt32(o3tl::getToken(rValue, 0, '}', nIndex));
         rHandle.push_back(aPropertyValue);
     }
     else
@@ -459,7 +465,7 @@ void lcl_parsePathCoordinateValues(std::vector<beans::PropertyValue>& rPath, con
             nLevel--;
             if (!nLevel)
                 aPairs.push_back(lcl_parseEnhancedCustomShapeParameterPair(
-                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                    rValue.subView(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 
@@ -526,7 +532,7 @@ void lcl_parsePathGluePointsValues(std::vector<beans::PropertyValue>& rPath, con
             nLevel--;
             if (!nLevel)
                 aPairs.push_back(lcl_parseEnhancedCustomShapeParameterPair(
-                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                    rValue.subView(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 
@@ -591,7 +597,7 @@ void lcl_parsePathSegmentValues(std::vector<beans::PropertyValue>& rPath, const 
             nLevel--;
             if (!nLevel)
                 aSegments.push_back(lcl_parseEnhancedCustomShapeSegment(
-                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                    rValue.subView(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 
@@ -724,8 +730,8 @@ void lcl_parsePathSubViewSizeValues(std::vector<beans::PropertyValue>& rPath, co
         {
             nLevel--;
             if (!nLevel)
-                aSizes.push_back(
-                    lcl_parseSize(rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },"))));
+                aSizes.push_back(lcl_parseSize(
+                    rValue.subView(nStart + strlen("{ "), i - nStart - strlen(" },"))));
         }
     }
 

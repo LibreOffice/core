@@ -694,7 +694,7 @@ void SwGlossaryDlg::Init()
     const size_t nCnt = m_pGlossaryHdl->GetGroupCnt();
     std::unique_ptr<weld::TreeIter> xSelEntry;
     const OUString sSelStr(::GetCurrGlosGroup().getToken(0, GLOS_DELIM));
-    const sal_Int32 nSelPath = ::GetCurrGlosGroup().getToken(1, GLOS_DELIM).toInt32();
+    const sal_Int32 nSelPath = o3tl::toInt32(o3tl::getToken(::GetCurrGlosGroup(), 1, GLOS_DELIM));
     // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
     static const OUStringLiteral sMyAutoTextEnglish(u"My AutoText");
     const OUString sMyAutoTextTranslated(SwResId(STR_MY_AUTOTEXT));
@@ -714,7 +714,7 @@ void SwGlossaryDlg::Init()
         std::unique_ptr<weld::TreeIter> xEntry = m_xCategoryBox->make_iterator();
         m_xCategoryBox->append(xEntry.get());
         m_xCategoryBox->set_text(*xEntry, sTitle, 0);
-        const sal_Int32 nPath = sGroupName.getToken( 0, GLOS_DELIM, nIdx ).toInt32();
+        const sal_Int32 nPath = o3tl::toInt32(o3tl::getToken(sGroupName, 0, GLOS_DELIM, nIdx ));
 
         GroupUserData* pData = new GroupUserData;
         pData->sGroupName = sName;

@@ -42,6 +42,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <string_view>
 #include <unordered_map>
@@ -640,7 +641,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                         {
                             css::awt::Point aPos;
                             aPos.X = aXStr.toInt32();
-                            aPos.Y = aString.getToken( 0, ',', nToken ).toInt32();
+                            aPos.Y = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
 
                             if ( i == PROPERTY_POS )
                             {
@@ -672,7 +673,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
                         {
                             css::awt::Size aSize;
                             aSize.Width = aStr.toInt32();
-                            aSize.Height = aString.getToken( 0, ',', nToken ).toInt32();
+                            aSize.Height = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
                             if ( i == PROPERTY_SIZE )
                             {
                                 aWindowStateInfo.aSize = aSize;
@@ -833,7 +834,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                         {
                             css::awt::Point aPos;
                             aPos.X = aXStr.toInt32();
-                            aPos.Y = aString.getToken( 0, ',', nToken ).toInt32();
+                            aPos.Y = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
 
                             if ( i == PROPERTY_POS )
                             {
@@ -862,7 +863,7 @@ ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowStat
                         {
                             css::awt::Size aSize;
                             aSize.Width  = aStr.toInt32();
-                            aSize.Height = aString.getToken( 0, ',', nToken ).toInt32();
+                            aSize.Height = o3tl::toInt32(o3tl::getToken(aString, 0, ',', nToken ));
                             if ( i == PROPERTY_SIZE )
                             {
                                 aWindowStateInfo.aSize = aSize;

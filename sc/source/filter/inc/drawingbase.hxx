@@ -90,7 +90,7 @@ public:
     /** Sets an attribute of the cell-dependent anchor position from xdr:from and xdr:to elements. */
     void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue );
     /** Imports the client anchor settings from a VML element. */
-    void                importVmlAnchor( const OUString& rAnchor );
+    void                importVmlAnchor( std::u16string_view rAnchor );
 
     /** Checks whether the shape is visible based on the anchor
 

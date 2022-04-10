@@ -106,16 +106,16 @@ class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener
 
 }
 
-bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
+bool GetPosSizeFromString( std::u16string_view rStr, Point& rPos, Size& rSize )
 {
     if ( comphelper::string::getTokenCount(rStr, '/') != 4 )
         return false;
 
     sal_Int32 nIdx = 0;
-    rPos.setX( rStr.getToken(0, '/', nIdx).toInt32() );
-    rPos.setY( rStr.getToken(0, '/', nIdx).toInt32() );
-    rSize.setWidth( rStr.getToken(0, '/', nIdx).toInt32() );
-    rSize.setHeight( rStr.getToken(0, '/', nIdx).toInt32() );
+    rPos.setX( o3tl::toInt32(o3tl::getToken(rStr, 0, '/', nIdx)) );
+    rPos.setY( o3tl::toInt32(o3tl::getToken(rStr, 0, '/', nIdx)) );
+    rSize.setWidth( o3tl::toInt32(o3tl::getToken(rStr, 0, '/', nIdx)) );
+    rSize.setHeight( o3tl::toInt32(o3tl::getToken(rStr, 0, '/', nIdx)) );
 
     // negative sizes are invalid
     return rSize.Width() >= 0 && rSize.Height() >= 0;
@@ -133,8 +133,8 @@ bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
             return false;
 
         sal_Int32 nIdx{ 0 };
-        rSize.setWidth( aStr.getToken(0, ';', nIdx ).toInt32() );
-        rSize.setHeight( aStr.getToken(0, ';', nIdx ).toInt32() );
+        rSize.setWidth( o3tl::toInt32(o3tl::getToken(aStr, 0, ';', nIdx )) );
+        rSize.setHeight( o3tl::toInt32(o3tl::getToken(aStr, 0, ';', nIdx )) );
 
         // negative sizes are invalid
         return rSize.Width() >= 0 && rSize.Height() >= 0;

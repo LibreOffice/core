@@ -103,7 +103,7 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(weld::Window * pParent,
             pData->sGroupTitle = SwResId(STR_MY_AUTOTEXT);
         else
             pData->sGroupTitle = sTitle;
-        pData->sPath = m_xPathLB->get_text(sGroup.getToken(1, GLOS_DELIM).toInt32());
+        pData->sPath = m_xPathLB->get_text(o3tl::toInt32(o3tl::getToken(sGroup, 1, GLOS_DELIM)));
         const OUString sId(weld::toId(pData));
         m_xGroupTLB->append(sId, pData->sGroupTitle);
         int nEntry = m_xGroupTLB->find_id(sId);

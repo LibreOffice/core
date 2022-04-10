@@ -41,6 +41,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewfac.hxx>
 #include <o3tl/unit_conversion.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <drwlayer.hxx>
 #include <prevwsh.hxx>
@@ -921,8 +922,8 @@ void ScPreviewShell::ReadUserData(const OUString& rData, bool /* bBrowse */)
     if (!rData.isEmpty())
     {
         sal_Int32 nIndex = 0;
-        pPreview->SetZoom(static_cast<sal_uInt16>(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32()));
-        pPreview->SetPageNo(rData.getToken(0, SC_USERDATA_SEP, nIndex).toInt32());
+        pPreview->SetZoom(static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(rData, 0, SC_USERDATA_SEP, nIndex))));
+        pPreview->SetPageNo(o3tl::toInt32(o3tl::getToken(rData, 0, SC_USERDATA_SEP, nIndex)));
         eZoom = SvxZoomType::PERCENT;
     }
 }

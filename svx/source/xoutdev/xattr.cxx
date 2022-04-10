@@ -235,7 +235,7 @@ OUString NameOrIndex::CheckNamedItem( const NameOrIndex* pCheckItem, const sal_u
 
                     if( pNameOrIndex->GetName().startsWith( aUser ) )
                     {
-                        sal_Int32 nThisIndex = pNameOrIndex->GetName().copy( aUser.getLength() ).toInt32();
+                        sal_Int32 nThisIndex = o3tl::toInt32(pNameOrIndex->GetName().subView( aUser.getLength() ));
                         if( nThisIndex >= nUserIndex )
                             nUserIndex = nThisIndex + 1;
                     }
@@ -1236,7 +1236,7 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
 
                     if (pItem->GetName().startsWith(aUser))
                     {
-                        sal_Int32 nThisIndex = pItem->GetName().copy(aUser.getLength()).toInt32();
+                        sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
                         if (nThisIndex >= nUserIndex)
                             nUserIndex = nThisIndex + 1;
                     }
@@ -1258,7 +1258,7 @@ std::unique_ptr<XLineStartItem> XLineStartItem::checkForUniqueItem( SdrModel* pM
 
                     if (pItem->GetName().startsWith(aUser))
                     {
-                        sal_Int32 nThisIndex = pItem->GetName().copy(aUser.getLength()).toInt32();
+                        sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
                         if (nThisIndex >= nUserIndex)
                             nUserIndex = nThisIndex + 1;
                     }
@@ -1475,7 +1475,7 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
 
                     if (pItem->GetName().startsWith(aUser))
                     {
-                        sal_Int32 nThisIndex = pItem->GetName().copy(aUser.getLength()).toInt32();
+                        sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
                         if (nThisIndex >= nUserIndex)
                             nUserIndex = nThisIndex + 1;
                     }
@@ -1497,7 +1497,7 @@ std::unique_ptr<XLineEndItem> XLineEndItem::checkForUniqueItem( SdrModel* pModel
 
                     if (pItem->GetName().startsWith(aUser))
                     {
-                        sal_Int32 nThisIndex = pItem->GetName().copy(aUser.getLength()).toInt32();
+                        sal_Int32 nThisIndex = o3tl::toInt32(pItem->GetName().subView(aUser.getLength()));
                         if (nThisIndex >= nUserIndex)
                             nUserIndex = nThisIndex + 1;
                     }

@@ -1175,7 +1175,7 @@ bool SwFieldMgr::InsertField(
                 sal_Int32 nIdx{ 0 };
                 aDBData.sDataSource = rData.m_sPar1.getToken(0, DB_DELIM, nIdx);
                 aDBData.sCommand = rData.m_sPar1.getToken(0, DB_DELIM, nIdx);
-                aDBData.nCommandType = rData.m_sPar1.getToken(0, DB_DELIM, nIdx).toInt32();
+                aDBData.nCommandType = o3tl::toInt32(o3tl::getToken(rData.m_sPar1, 0, DB_DELIM, nIdx));
                 sPar1 = rData.m_sPar1.getToken(0, DB_DELIM, nIdx);
             }
 

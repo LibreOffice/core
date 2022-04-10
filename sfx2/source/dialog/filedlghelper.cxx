@@ -2201,12 +2201,12 @@ void FileDialogHelper_Impl::loadConfig()
             try
             {
                 // respect the last "insert as link" state
-                bool bLink = aUserData.getToken( 0, ' ' ).toInt32();
+                bool bLink = o3tl::toInt32(o3tl::getToken(aUserData, 0, ' ' ));
                 aValue <<= bLink;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, aValue );
 
                 // respect the last "show preview" state
-                bool bShowPreview = aUserData.getToken( 1, ' ' ).toInt32();
+                bool bShowPreview = o3tl::toInt32(o3tl::getToken(aUserData, 1, ' ' ));
                 aValue <<= bShowPreview;
                 xDlg->setValue( ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, aValue );
 
@@ -2250,7 +2250,7 @@ void FileDialogHelper_Impl::loadConfig()
 
         if ( mbHasAutoExt )
         {
-            sal_Int32 nFlag = aUserData.getToken( 0, ' ' ).toInt32();
+            sal_Int32 nFlag = o3tl::toInt32(o3tl::getToken(aUserData, 0, ' ' ));
             aValue <<= static_cast<bool>(nFlag);
             try
             {
@@ -2261,7 +2261,7 @@ void FileDialogHelper_Impl::loadConfig()
 
         if( mbHasSelectionBox )
         {
-            sal_Int32 nFlag = aUserData.getToken( 2, ' ' ).toInt32();
+            sal_Int32 nFlag = o3tl::toInt32(o3tl::getToken(aUserData, 2, ' ' ));
             aValue <<= static_cast<bool>(nFlag);
             try
             {

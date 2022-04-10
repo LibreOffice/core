@@ -27,6 +27,7 @@
 
 #include <unotools/viewoptions.hxx>
 #include <svtools/unitconv.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <sdattr.hrc>
 #include <View.hxx>
@@ -162,12 +163,12 @@ void CopyDlg::Reset()
     else
     {
         sal_Int32 nIdx {0};
-        m_xNumFldCopies->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64());
-        m_xMtrFldMoveX->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
-        m_xMtrFldMoveY->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
-        m_xMtrFldAngle->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
-        m_xMtrFldWidth->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
-        m_xMtrFldHeight->set_value(aStr.getToken(0, TOKEN, nIdx).toInt64(), FieldUnit::NONE);
+        m_xNumFldCopies->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)));
+        m_xMtrFldMoveX->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
+        m_xMtrFldMoveY->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
+        m_xMtrFldAngle->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
+        m_xMtrFldWidth->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
+        m_xMtrFldHeight->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
         m_xLbStartColor->SelectEntry( Color( ColorTransparency, aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
         m_xLbEndColor->SelectEntry( Color( ColorTransparency, aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
     }

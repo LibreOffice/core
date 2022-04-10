@@ -3367,12 +3367,12 @@ void ScViewData::ReadUserData(const OUString& rData)
         if (cTabSep)
         {
             nIdx = 0;
-            maTabData[nPos]->nCurX = mrDoc.SanitizeCol(static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
-            maTabData[nPos]->nCurY = mrDoc.SanitizeRow(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
-            maTabData[nPos]->eHSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
-            maTabData[nPos]->eVSplitMode = static_cast<ScSplitMode>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
+            maTabData[nPos]->nCurX = mrDoc.SanitizeCol(static_cast<SCCOL>(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx))));
+            maTabData[nPos]->nCurY = mrDoc.SanitizeRow(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx)));
+            maTabData[nPos]->eHSplitMode = static_cast<ScSplitMode>(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx)));
+            maTabData[nPos]->eVSplitMode = static_cast<ScSplitMode>(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx)));
 
-            sal_Int32 nTmp{ aTabOpt.getToken(0, cTabSep, nIdx).toInt32() };
+            sal_Int32 nTmp = o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx));
             if ( maTabData[nPos]->eHSplitMode == SC_SPLIT_FIX )
             {
                 maTabData[nPos]->nFixPosX = mrDoc.SanitizeCol(static_cast<SCCOL>(nTmp));
@@ -3381,7 +3381,7 @@ void ScViewData::ReadUserData(const OUString& rData)
             else
                 maTabData[nPos]->nHSplitPos = nTmp;
 
-            nTmp = aTabOpt.getToken(0, cTabSep, nIdx).toInt32();
+            nTmp = o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx));
             if ( maTabData[nPos]->eVSplitMode == SC_SPLIT_FIX )
             {
                 maTabData[nPos]->nFixPosY = mrDoc.SanitizeRow(nTmp);
@@ -3390,11 +3390,11 @@ void ScViewData::ReadUserData(const OUString& rData)
             else
                 maTabData[nPos]->nVSplitPos = nTmp;
 
-            maTabData[nPos]->eWhichActive = static_cast<ScSplitPos>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
-            maTabData[nPos]->nPosX[0] = mrDoc.SanitizeCol(static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
-            maTabData[nPos]->nPosX[1] = mrDoc.SanitizeCol(static_cast<SCCOL>(aTabOpt.getToken(0, cTabSep, nIdx).toInt32()));
-            maTabData[nPos]->nPosY[0] = mrDoc.SanitizeRow(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
-            maTabData[nPos]->nPosY[1] = mrDoc.SanitizeRow(aTabOpt.getToken(0, cTabSep, nIdx).toInt32());
+            maTabData[nPos]->eWhichActive = static_cast<ScSplitPos>(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx)));
+            maTabData[nPos]->nPosX[0] = mrDoc.SanitizeCol(static_cast<SCCOL>(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx))));
+            maTabData[nPos]->nPosX[1] = mrDoc.SanitizeCol(static_cast<SCCOL>(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx))));
+            maTabData[nPos]->nPosY[0] = mrDoc.SanitizeRow(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx)));
+            maTabData[nPos]->nPosY[1] = mrDoc.SanitizeRow(o3tl::toInt32(o3tl::getToken(aTabOpt, 0, cTabSep, nIdx)));
 
             maTabData[nPos]->eWhichActive = maTabData[nPos]->SanitizeWhichActive();
         }

@@ -30,6 +30,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/acorrcfg.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <swwait.hxx>
 #include <fmtpdsc.hxx>
@@ -1620,7 +1621,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 {
                     SwNumFormat aFormat( aRule.Get( nLvl ) );
                     aFormat.SetPrefix( aPrefix.getToken( 0, u'\x0001', nPrefixIdx ));
-                    aFormat.SetStart( o3tl::narrowing<sal_uInt16>(aPrefix.getToken( 0, u'\x0001', nPrefixIdx ).toInt32()));
+                    aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx ))));
                     aFormat.SetSuffix( aPostfix.getToken( 0, u'\x0001' ));
                     aFormat.SetIncludeUpperLevels( 0 );
 
@@ -1645,7 +1646,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
 
                         if( !n )
                             aFormat.SetPrefix( aPrefix.getToken( 0, u'\x0001', nPrefixIdx )); // token 0, read only on first loop
-                        aFormat.SetStart( o3tl::narrowing<sal_uInt16>(aPrefix.getToken( 0, u'\x0001', nPrefixIdx ).toInt32() ));
+                        aFormat.SetStart( o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aPrefix, 0, u'\x0001', nPrefixIdx )) ));
                         aFormat.SetSuffix( aPostfix.getToken( 0, u'\x0001', nPostfixIdx ));
                         aFormat.SetIncludeUpperLevels( MAXLEVEL );
                         if( n < aNumTypes.getLength() )

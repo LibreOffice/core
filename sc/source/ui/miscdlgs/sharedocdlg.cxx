@@ -24,6 +24,7 @@
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/useroptions.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <docsh.hxx>
 
@@ -141,12 +142,12 @@ void ScShareDocumentDlg::UpdateView()
                         OUString aDateStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         OUString aTimeStr = aDateTimeStr.getToken( 0, ' ', nIndex );
                         nIndex = 0;
-                        sal_uInt16 nDay = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
-                        sal_uInt16 nMonth = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
-                        sal_uInt16 nYear = sal::static_int_cast< sal_uInt16 >( aDateStr.getToken( 0, '.', nIndex ).toInt32() );
+                        sal_uInt16 nDay = sal::static_int_cast< sal_uInt16 >( o3tl::toInt32(o3tl::getToken(aDateStr, 0, '.', nIndex )) );
+                        sal_uInt16 nMonth = sal::static_int_cast< sal_uInt16 >( o3tl::toInt32(o3tl::getToken(aDateStr, 0, '.', nIndex )) );
+                        sal_uInt16 nYear = sal::static_int_cast< sal_uInt16 >( o3tl::toInt32(o3tl::getToken(aDateStr, 0, '.', nIndex )) );
                         nIndex = 0;
-                        sal_uInt16 nHours = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
-                        sal_uInt16 nMinutes = sal::static_int_cast< sal_uInt16 >( aTimeStr.getToken( 0, ':', nIndex ).toInt32() );
+                        sal_uInt16 nHours = sal::static_int_cast< sal_uInt16 >( o3tl::toInt32(o3tl::getToken(aTimeStr, 0, ':', nIndex )) );
+                        sal_uInt16 nMinutes = sal::static_int_cast< sal_uInt16 >( o3tl::toInt32(o3tl::getToken(aTimeStr, 0, ':', nIndex )) );
                         Date aDate( nDay, nMonth, nYear );
                         tools::Time aTime( nHours, nMinutes );
                         DateTime aDateTime( aDate, aTime );

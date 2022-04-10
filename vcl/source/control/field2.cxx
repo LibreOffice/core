@@ -2393,17 +2393,17 @@ bool TimeFormatter::TextToTime(std::u16string_view rStr, tools::Time& rTime,
                     return false;
                 if ( !aStr.isEmpty() && aStr[0] == '-' )
                     bNegative = true;
-                nNanoSec = aStr.toString().toInt64();
+                nNanoSec = o3tl::toInt64(aStr);
             }
             else
-                nSecond = static_cast<short>(aStr.toString().toInt32());
+                nSecond = static_cast<short>(o3tl::toInt32(aStr));
         }
         else
-            nMinute = static_cast<short>(aStr.toString().toInt32());
+            nMinute = static_cast<short>(o3tl::toInt32(aStr));
     }
     else if ( nSepPos < 0 )
     {
-        nSecond = static_cast<short>(aStr.toString().toInt32());
+        nSecond = static_cast<short>(o3tl::toInt32(aStr));
         nMinute += nSecond / 60;
         nSecond %= 60;
         nHour += nMinute / 60;
@@ -2446,7 +2446,7 @@ bool TimeFormatter::TextToTime(std::u16string_view rStr, tools::Time& rTime,
             nHour += nMinute / 60;
             nMinute %= 60;
         }
-        nNanoSec = aStr.toString().toInt64();
+        nNanoSec = o3tl::toInt64(aStr);
     }
 
     if ( nNanoSec )

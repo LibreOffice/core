@@ -28,6 +28,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/mnemonic.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace
 {
@@ -350,7 +351,7 @@ namespace dbaui
         return sExtension;
     }
 
-    OUString OTextConnectionHelper::GetSeparator(const weld::ComboBox& rBox, const OUString& rList)
+    OUString OTextConnectionHelper::GetSeparator(const weld::ComboBox& rBox, std::u16string_view rList)
     {
         sal_Unicode const nTok = '\t';
         int nPos(rBox.find_text(rBox.get_active_text()));
@@ -360,7 +361,7 @@ namespace dbaui
 
         if ( m_xTextSeparator.get() != &rBox || nPos != (rBox.get_count()-1) )
             return OUString(
-                static_cast< sal_Unicode >( rList.getToken((nPos*2)+1, nTok ).toInt32() ));
+                static_cast< sal_Unicode >( o3tl::toInt32(o3tl::getToken(rList, (nPos*2)+1, nTok )) ));
         // somewhat strange ... translates for instance an "32" into " "
         return OUString();
     }
@@ -373,7 +374,7 @@ namespace dbaui
             for(sal_Int32 nIdx {0}; nIdx>=0;)
             {
                 sal_Int32 nPrevIdx {nIdx};
-                if (static_cast<sal_Unicode>(rList.getToken(1, '\t', nIdx).toInt32()) == nVal)
+                if (static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rList, 1, '\t', nIdx))) == nVal)
                 {
                     rBox.set_entry_text(rList.getToken(0, '\t', nPrevIdx));
                     return;

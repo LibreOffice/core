@@ -504,7 +504,7 @@ OUString BookmarkTable::GetNameProposal() const
         sal_Int32 nIndex = 0;
         if (o3tl::getToken(sName, 0, ' ', nIndex) == sDefaultBookmarkName)
         {
-            sal_Int32 nCurrBookmarkId = sName.getToken(0, ' ', nIndex).toInt32();
+            sal_Int32 nCurrBookmarkId = o3tl::toInt32(o3tl::getToken(sName, 0, ' ', nIndex));
             nHighestBookmarkId = std::max<sal_Int32>(nHighestBookmarkId, nCurrBookmarkId);
         }
     }

@@ -21,6 +21,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <swtypes.hxx>
 #include <flddinf.hrc>
@@ -125,7 +126,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     sal_Int32 nIdx{ 0 };
     if (sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
     {
-        nSelEntryData = sUserData.getToken(0, ';', nIdx).toInt32();
+        nSelEntryData = o3tl::toInt32(o3tl::getToken(sUserData, 0, ';', nIdx));
     }
 
     std::vector<OUString> aLst;
