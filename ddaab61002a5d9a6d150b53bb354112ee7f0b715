@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf0863c4_6b38bf9b",
+        "filename": "sw/qa/extras/uiwriter/uiwriter6.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 1400,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-10T10:21:51Z",
+      "side": 1,
+      "message": "seen this fail (for a completely unrelated Gerrit change) at \u003chttps://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/111553/consoleFull#-127541517d893063f-7f3d-4b7e-b56f-4e0f225817cd\u003e,\n\n  uiwriter6.cxx:1399:Assertion\n  Test name: testRedlineAutoCorrect::TestBody\n  equality assertion failed\n  - Expected: tset test \n  - Actual  : tset tset",
+      "revId": "ddaab61002a5d9a6d150b53bb354112ee7f0b715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
