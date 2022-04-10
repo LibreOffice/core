@@ -32,6 +32,7 @@
 
 #include <string.h>
 
+#include <cstddef>
 #include <cassert>
 #include <memory>
 #include <string_view>
@@ -464,34 +465,34 @@ javaPluginError jfw_plugin_getJavaInfosFromPath(
 // think it should be, do nothing, and just let the implicit loading
 // that happens when loading the JVM take care of it.
 
-static void load_msvcr(OUString const & jvm_dll, std::u16string_view msvcr)
+static void load_msvcr(std::u16string_view jvm_dll, std::u16string_view msvcr)
 {
     // First check if msvcr71.dll is in the same folder as jvm.dll. It
     // normally isn't, at least up to 1.6.0_22, but who knows if it
     // might be in the future.
-    sal_Int32 slash = jvm_dll.lastIndexOf('\\');
+    std::size_t slash = jvm_dll.rfind('\\');
 
-    if (slash == -1)
+    if (slash == std::u16string_view::npos)
     {
         // Huh, weird path to jvm.dll. Oh well.
-        SAL_WARN("jfw", "JVM pathname <" + jvm_dll + "> w/o backslash");
+        SAL_WARN("jfw", "JVM pathname <" << OUString(jvm_dll) << "> w/o backslash");
         return;
     }
 
     if (LoadLibraryW(
-            o3tl::toW(OUString(OUString::Concat(jvm_dll.subView(0, slash+1)) + msvcr).getStr())))
+            o3tl::toW(OUString(OUString::Concat(jvm_dll.substr(0, slash+1)) + msvcr).getStr())))
         return;
 
     // Then check if msvcr71.dll is in the parent folder of where
     // jvm.dll is. That is currently (1.6.0_22) as far as I know the
     // normal case.
-    slash = jvm_dll.lastIndexOf('\\', slash);
+    slash = jvm_dll.rfind('\\', slash);
 
-    if (slash == -1)
+    if (slash == std::u16string_view::npos)
         return;
 
     (void)LoadLibraryW(
-        o3tl::toW(OUString(OUString::Concat(jvm_dll.subView(0, slash+1)) + msvcr).getStr()));
+        o3tl::toW(OUString(OUString::Concat(jvm_dll.substr(0, slash+1)) + msvcr).getStr()));
 }
 
 // Check if the jvm DLL imports msvcr71.dll, and in that case try
