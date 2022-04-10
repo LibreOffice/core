@@ -33,7 +33,6 @@
 
 #include "tdoc_storage.hxx"
 
-#include <memory>
 #include <mutex>
 
 namespace tdoc_ucp {

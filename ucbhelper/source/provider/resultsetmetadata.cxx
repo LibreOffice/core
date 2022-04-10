@@ -38,9 +38,7 @@
 #include <com/sun/star/util/Time.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/ucb/PropertiesManager.hpp>
-#include <ucbhelper/macros.hxx>
 #include <ucbhelper/resultsetmetadata.hxx>
-#include <cppuhelper/queryinterface.hxx>
 #include <mutex>
 
 using namespace com::sun::star::beans;

@@ -29,7 +29,6 @@
 #include "hierarchydatasource.hxx"
 #include <osl/diagnose.h>
 
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/weak.hxx>

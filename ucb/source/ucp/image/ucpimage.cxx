@@ -18,7 +18,6 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/ImageTree.hxx>

@@ -22,7 +22,6 @@
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
 #include <optional>
-#include <memory>
 #include <vector>
 #include <string_view>
 

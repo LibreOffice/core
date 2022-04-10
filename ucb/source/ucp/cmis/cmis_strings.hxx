@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include <rtl/ustring.hxx>
+
 inline constexpr OUStringLiteral CMIS_TYPE_STRING = u"String";
 inline constexpr OUStringLiteral CMIS_TYPE_INTEGER = u"Integer";
 inline constexpr OUStringLiteral CMIS_TYPE_DECIMAL = u"Decimal";

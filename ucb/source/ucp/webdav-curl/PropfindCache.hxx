@@ -13,7 +13,6 @@
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
 #include <mutex>
-#include <list>
 #include <map>
 #include <vector>
 

@@ -51,9 +51,7 @@
 #include <boost/locale.hpp>
 #include <boost/locale/gnu_gettext.hpp>
 
-#include <array>
 #include <unordered_map>
-#include <memory>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>

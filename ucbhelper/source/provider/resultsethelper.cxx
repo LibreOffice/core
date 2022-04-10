@@ -32,10 +32,8 @@
 #include <com/sun/star/ucb/WelcomeDynamicResultSetStruct.hpp>
 #include <com/sun/star/ucb/CachedDynamicResultSetStubFactory.hpp>
 #include <com/sun/star/ucb/XSourceInitialization.hpp>
-#include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/queryinterface.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/resultsethelper.hxx>
-#include <ucbhelper/macros.hxx>
 
 #include <osl/diagnose.h>
 

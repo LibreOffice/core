@@ -32,7 +32,6 @@
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
-#include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/ucb/DuplicateProviderException.hpp>
@@ -44,9 +43,9 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
-#include <ucbhelper/macros.hxx>
 #include <tools/diagnose_ex.h>
 #include "identify.hxx"
 #include "ucbcmds.hxx"

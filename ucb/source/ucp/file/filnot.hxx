@@ -19,13 +19,11 @@
 #pragma once
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/beans/PropertyChangeEvent.hpp>
 #include <com/sun/star/beans/XPropertySetInfoChangeListener.hpp>
 #include <com/sun/star/beans/XPropertiesChangeListener.hpp>
 #include <com/sun/star/ucb/XContentIdentifier.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <memory>
 #include <optional>
 #include <unordered_map>
 #include <vector>

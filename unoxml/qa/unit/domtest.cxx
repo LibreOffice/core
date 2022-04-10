@@ -26,7 +26,7 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <test/bootstrapfixture.hxx>
 
-#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/XSAXSerializable.hpp>
 #include <com/sun/star/xml/sax/XFastSAXSerializable.hpp>

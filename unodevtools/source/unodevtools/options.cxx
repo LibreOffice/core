@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <stdio.h>
-
 #include <codemaker/global.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>

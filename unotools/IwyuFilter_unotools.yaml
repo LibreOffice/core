@@ -38,4 +38,6 @@ excludelist:
     unotools/source/ucbhelper/ucbstreamhelper.cxx:
     # Needed for direct member access
     - com/sun/star/beans/PropertyValue.hpp
-
+    unotools/source/misc/datetime.cxx:
+    # Needed for rtl::math::round
+    - rtl/math.hxx

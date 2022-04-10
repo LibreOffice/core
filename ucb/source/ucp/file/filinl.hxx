@@ -18,6 +18,10 @@
  */
 #pragma once
 
+#include "filtask.hxx"
+
+using namespace fileaccess;
+
 inline const bool& TaskManager::MyProperty::IsNative() const
 {
     return isNative;

@@ -30,7 +30,6 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <cppuhelper/interfacecontainer.h>
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>
 #include <memory>

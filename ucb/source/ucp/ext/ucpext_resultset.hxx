@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include "ucpext_content.hxx"
+
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultsethelper.hxx>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>

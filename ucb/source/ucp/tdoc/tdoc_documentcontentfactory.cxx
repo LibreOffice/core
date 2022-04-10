@@ -24,8 +24,6 @@
 
  *************************************************************************/
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <cppuhelper/factory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 

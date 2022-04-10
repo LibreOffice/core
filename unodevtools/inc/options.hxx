@@ -23,7 +23,7 @@
 
 #include <string_view>
 
-#include <rtl/ustrbuf.hxx>
+#include <rtl/ustring.hxx>
 
 namespace unodevtools {
 

@@ -23,7 +23,6 @@
 
 #include <sal/log.hxx>
 #include <unotools/localedatawrapper.hxx>
-#include <unotools/calendarwrapper.hxx>
 #include <unotools/digitgroupingiterator.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
@@ -32,8 +31,6 @@
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
 #include <com/sun/star/i18n/LocaleData2.hpp>
-#include <com/sun/star/i18n/CalendarFieldIndex.hpp>
-#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 
@@ -41,6 +38,8 @@
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <tools/date.hxx>
+#include <tools/time.hxx>
 
 const sal_uInt16 nCurrFormatDefault = 0;
 

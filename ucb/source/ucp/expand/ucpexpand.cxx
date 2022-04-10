@@ -19,10 +19,7 @@
 
 
 #include <rtl/uri.hxx>
-#include <osl/mutex.hxx>
 #include <comphelper/compbase.hxx>
-#include <cppuhelper/factory.hxx>
-#include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>

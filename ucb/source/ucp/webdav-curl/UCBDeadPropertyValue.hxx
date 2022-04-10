@@ -23,7 +23,6 @@
 #include <optional>
 #include <utility>
 
-#include <rtl/string.hxx>
 #include <com/sun/star/uno/Any.hxx>
 
 namespace http_dav_ucp

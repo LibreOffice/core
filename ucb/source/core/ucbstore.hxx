@@ -21,7 +21,6 @@
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/ucb/XPropertySetRegistryFactory.hpp>
@@ -36,6 +35,7 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/compbase.hxx>
+#include <rtl/ref.hxx>
 #include <unordered_map>
 
 
