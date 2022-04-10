@@ -598,8 +598,9 @@ public:
         if (nSlot == SID_ATTR_FILL_COLOR)
         {
             // Merge the color parameters to the color itself.
-            XFillColorItem aColorItem(
-                *static_cast<const XFillColorItem*>(pArgs->GetItem(SID_ATTR_FILL_COLOR)));
+            const XFillColorItem* pColorItem = static_cast<const XFillColorItem*>(pArgs->GetItem(SID_ATTR_FILL_COLOR));
+            assert(pColorItem);
+            XFillColorItem aColorItem(*pColorItem);
             if (pArgs->GetItemState(SID_ATTR_COLOR_THEME_INDEX, false, &pItem) == SfxItemState::SET)
             {
                 auto pIntItem = static_cast<const SfxInt16Item*>(pItem);
