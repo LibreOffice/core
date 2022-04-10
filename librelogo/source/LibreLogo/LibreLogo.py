@@ -203,6 +203,7 @@ from com.sun.star.drawing.CircleKind import CUT as __CUT__
 from com.sun.star.drawing.CircleKind import ARC as __ARC__
 from com.sun.star.awt.FontSlant import NONE as __Slant_NONE__
 from com.sun.star.awt.FontSlant import ITALIC as __Slant_ITALIC__
+from com.sun.star.awt.FontUnderline import SINGLE as __Underline_SINGLE__
 from com.sun.star.awt import Size as __Size__
 from com.sun.star.awt import WindowDescriptor as __WinDesc__
 from com.sun.star.awt.WindowClass import MODALTOP as __MODALTOP__
@@ -1270,8 +1271,55 @@ def label(st):
     _.shapecache[__ACTUAL__] = actual
     return z
 
-def text(shape, st):
+def __get_HTML_format__(orig_st):
+  "Process HTML-like tags, and return with text and formatting vector"
+  st = orig_st.replace('&lt;', '\uE000')
+  if not ('<' in st and '>' in st):
+      return st.replace('\uE000', '<'), None
+  tex = "" # characters without HTML tags
+  pat = [] # bit vectors of the previous characters
+  # 1st bit: bold
+  # 2nd bit: italic
+  # 3rd bit: underline
+  f = 0
+  tags = ['<b>', '</b>', '<i>', '</i>', '<u>', '</u>']
+  # store embedding level of the same element to disable it
+  # only at the most outer closing tag, e.g. <i>a <i>double</i> italic here, too</i>
+  bit_level = {0: 0, 1: 0, 2: 0}
+  i = 0
+  while i < len(st):
+      is_tag = False
+      for j in range(len(tags)):
+          if st[i:i + 4].lower().startswith(tags[j]):
+              bit = j // 2
+              # opening tag
+              if j % 2 == 0:
+                  f |= (1 << bit)
+                  bit_level[bit] += 1
+              else:
+                  if bit_level[bit] > 0:
+                      bit_level[bit] -= 1
+                  if bit_level[bit] == 0:
+                      f &= ~(1 << bit)
+              i += len(tags[j]) - 1
+              is_tag = True
+              break
+
+      if not is_tag:
+          tex = tex + st[i]
+          pat.append(f)
+      i += 1
+
+  # no tags
+  if len(st) == len(tex):
+      pat = None
+
+  return tex.replace('\uE000', '<'), pat
+
+def text(shape, orig_st):
     if shape:
+        # analyse HTML
+        st, formatting = __get_HTML_format__(orig_st)
         shape.setString(__string__(st, _.decimal))
         c = shape.createTextCursor()
         c.gotoStart(False)
@@ -1281,6 +1329,27 @@ def text(shape, st):
         c.CharWeight = __fontweight__(_.fontweight)
         c.CharPosture = __fontstyle__(_.fontstyle)
         c.CharFontName = _.fontfamily
+        # has HTML-like formatting
+        if formatting != None:
+            prev_format = 0
+            c.collapseToStart()
+            n = 0 # length of the previous text span
+            formatting.append(0) # add terminating 0 to process last span
+            for i in formatting:
+                if i != prev_format:
+                    do_formatting = prev_format != 0
+                    c.goRight(n, do_formatting) # move cursor with optional selection
+                    if do_formatting:
+                        if prev_format & (1 << 0):
+                            c.CharWeight = 150
+                        if prev_format & (1 << 1):
+                            c.CharPosture = __Slant_ITALIC__
+                        if prev_format & (1 << 2):
+                            c.CharUnderline = __Underline_SINGLE__
+                    c.collapseToEnd()
+                    n = 0
+                n += 1
+                prev_format = i
 
 def sleep(t):
     _.time = _.time + t
