@@ -22,6 +22,7 @@
 
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <unitconverter.hxx>
 #include <oox/token/namespaces.hxx>
@@ -148,7 +149,7 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
     }
 }
 
-void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
+void ShapeAnchor::importVmlAnchor( std::u16string_view rAnchor )
 {
     meAnchorType = ANCHOR_VML;
     meCellAnchorType = CellAnchorType::Pixel;
@@ -158,7 +159,7 @@ void ShapeAnchor::importVmlAnchor( const OUString& rAnchor )
 
     for(sal_Int32 nIndex{ 0 }; nIndex>=0;)
     {
-        nValues[nI] = rAnchor.getToken( 0, ',', nIndex ).toInt32();
+        nValues[nI] = o3tl::toInt32(o3tl::getToken(rAnchor, 0, ',', nIndex ));
         if (++nI==8)
         {
             maFrom.mnCol       = nValues[0];

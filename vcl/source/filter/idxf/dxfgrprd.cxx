@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <rtl/strbuf.hxx>
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 #include "dxfgrprd.hxx"
 
 // we use an own ReadLine function, because Stream::ReadLine stops if
@@ -182,7 +183,7 @@ tools::Long DXFGroupReader::ReadI()
         return 0;
     }
 
-    return aNumber.toString().toInt32();
+    return o3tl::toInt32(aNumber);
 }
 
 double DXFGroupReader::ReadF()

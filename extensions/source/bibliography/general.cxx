@@ -27,6 +27,7 @@
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vcl/event.hxx>
@@ -72,7 +73,7 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
         return false;
     }
 
-    nPageNumber = xUriRef->getFragment().copy(aPagePrefix.getLength()).toInt32();
+    nPageNumber = o3tl::toInt32(xUriRef->getFragment().subView(aPagePrefix.getLength()));
     xUriRef->clearFragment();
     rUrl = xUriRef->getUriReference();
     return true;

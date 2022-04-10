@@ -19,6 +19,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 OpenCLConfig::OpenCLConfig() :
     mbUseOpenCL(true)
@@ -80,7 +81,7 @@ OUString getToken(const OUString& string, sal_Int32& index)
             result.append(token.subView(i, p - i));
         if (p < token.getLength() - 2)
         {
-            result.append(sal_Unicode(token.copy(p+1, 2).toInt32(16)));
+            result.append(sal_Unicode(o3tl::toInt32(token.subView(p+1, 2), 16)));
             i = p + 3;
         }
         else

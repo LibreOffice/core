@@ -248,7 +248,7 @@ void RemoteFilesDialog::InitSize()
         sal_Int32 nPos2{ sCfgStr.indexOf('|', nPos1+1 ) };
         if (nPos2<0)
             return;
-        m_xFileView->SetConfigString( sCfgStr.copy(nPos2+1) );
+        m_xFileView->SetConfigString( sCfgStr.subView(nPos2+1) );
     }
 }
 

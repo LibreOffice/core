@@ -13,6 +13,7 @@
 
 #include <vcl/gdimtf.hxx>
 #include <svx/svdpage.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <wrtsh.hxx>
 #include <docsh.hxx>
@@ -446,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
     {
         xmlNodePtr pXmlNode = pXmlNodes->nodeTab[i];
         xmlChar* pValue = xmlGetProp(pXmlNode, BAD_CAST("y"));
-        sal_Int32 nValue = OString(reinterpret_cast<char const*>(pValue)).toInt32();
+        sal_Int32 nValue = o3tl::toInt32(reinterpret_cast<char const*>(pValue));
         aBorderPositions.push_back(nValue);
     }
     xmlXPathFreeObject(pXmlObj);
@@ -461,11 +462,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testVerticallyMergedCellBorder)
         if (i == 0)
         {
             xmlChar* pValue = xmlGetProp(pXmlNode, BAD_CAST("top"));
-            sal_Int32 nValue = OString(reinterpret_cast<char const*>(pValue)).toInt32();
+            sal_Int32 nValue = o3tl::toInt32(reinterpret_cast<char const*>(pValue));
             aLayoutPositions.push_back(nValue);
         }
         xmlChar* pValue = xmlGetProp(pXmlNode, BAD_CAST("bottom"));
-        sal_Int32 nValue = OString(reinterpret_cast<char const*>(pValue)).toInt32();
+        sal_Int32 nValue = o3tl::toInt32(reinterpret_cast<char const*>(pValue));
         aLayoutPositions.push_back(nValue);
     }
     xmlXPathFreeObject(pXmlObj);
@@ -548,8 +549,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
         xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
         xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
         xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
-        sal_Int32 nStartY = OString(reinterpret_cast<char const*>(pStartY)).toInt32();
-        sal_Int32 nEndY = OString(reinterpret_cast<char const*>(pEndY)).toInt32();
+        sal_Int32 nStartY = o3tl::toInt32(reinterpret_cast<char const*>(pStartY));
+        sal_Int32 nEndY = o3tl::toInt32(reinterpret_cast<char const*>(pEndY));
         if (nStartY != nEndY)
         {
             // Vertical border.
@@ -557,8 +558,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testInnerCellBorderIntersect)
         }
         xmlChar* pStartX = xmlGetProp(pStart, BAD_CAST("x"));
         xmlChar* pEndX = xmlGetProp(pEnd, BAD_CAST("x"));
-        sal_Int32 nStartX = OString(reinterpret_cast<char const*>(pStartX)).toInt32();
-        sal_Int32 nEndX = OString(reinterpret_cast<char const*>(pEndX)).toInt32();
+        sal_Int32 nStartX = o3tl::toInt32(reinterpret_cast<char const*>(pStartX));
+        sal_Int32 nEndX = o3tl::toInt32(reinterpret_cast<char const*>(pEndX));
         aBorderStartEnds.emplace_back(nStartX, nEndX);
     }
     xmlXPathFreeObject(pXmlObj);
@@ -602,15 +603,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderVertical)
         xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
         xmlChar* pStartX = xmlGetProp(pStart, BAD_CAST("x"));
         xmlChar* pEndX = xmlGetProp(pEnd, BAD_CAST("x"));
-        sal_Int32 nStartX = OString(reinterpret_cast<char const*>(pStartX)).toInt32();
-        sal_Int32 nEndX = OString(reinterpret_cast<char const*>(pEndX)).toInt32();
+        sal_Int32 nStartX = o3tl::toInt32(reinterpret_cast<char const*>(pStartX));
+        sal_Int32 nEndX = o3tl::toInt32(reinterpret_cast<char const*>(pEndX));
         if (nStartX != nEndX)
         {
             // Horizontal border.
             continue;
         }
         xmlChar* pWidth = xmlGetProp(pStart->parent, BAD_CAST("width"));
-        sal_Int32 nWidth = OString(reinterpret_cast<char const*>(pWidth)).toInt32();
+        sal_Int32 nWidth = o3tl::toInt32(reinterpret_cast<char const*>(pWidth));
         aBorderWidths[nStartX] = nWidth;
     }
     xmlXPathFreeObject(pXmlObj);
@@ -650,15 +651,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoubleBorderHorizontal)
         xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
         xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
         xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
-        sal_Int32 nStartY = OString(reinterpret_cast<char const*>(pStartY)).toInt32();
-        sal_Int32 nEndY = OString(reinterpret_cast<char const*>(pEndY)).toInt32();
+        sal_Int32 nStartY = o3tl::toInt32(reinterpret_cast<char const*>(pStartY));
+        sal_Int32 nEndY = o3tl::toInt32(reinterpret_cast<char const*>(pEndY));
         if (nStartY != nEndY)
         {
             // Vertical border.
             continue;
         }
         xmlChar* pWidth = xmlGetProp(pStart->parent, BAD_CAST("width"));
-        sal_Int32 nWidth = OString(reinterpret_cast<char const*>(pWidth)).toInt32();
+        sal_Int32 nWidth = o3tl::toInt32(reinterpret_cast<char const*>(pWidth));
         aBorderWidths[nStartY] = nWidth;
     }
     xmlXPathFreeObject(pXmlObj);
@@ -718,15 +719,15 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testDoublePageBorder)
         xmlNodePtr pEnd = pXmlNodes->nodeTab[i + 1];
         xmlChar* pStartY = xmlGetProp(pStart, BAD_CAST("y"));
         xmlChar* pEndY = xmlGetProp(pEnd, BAD_CAST("y"));
-        sal_Int32 nStartY = OString(reinterpret_cast<char const*>(pStartY)).toInt32();
-        sal_Int32 nEndY = OString(reinterpret_cast<char const*>(pEndY)).toInt32();
+        sal_Int32 nStartY = o3tl::toInt32(reinterpret_cast<char const*>(pStartY));
+        sal_Int32 nEndY = o3tl::toInt32(reinterpret_cast<char const*>(pEndY));
         if (nStartY != nEndY)
         {
             // Vertical border.
             continue;
         }
         xmlChar* pWidth = xmlGetProp(pStart->parent, BAD_CAST("width"));
-        sal_Int32 nWidth = OString(reinterpret_cast<char const*>(pWidth)).toInt32();
+        sal_Int32 nWidth = o3tl::toInt32(reinterpret_cast<char const*>(pWidth));
         aBorderWidths[nStartY] = nWidth;
     }
     xmlXPathFreeObject(pXmlObj);

@@ -36,6 +36,7 @@
 #include <dialmgr.hxx>
 #include "dbregisterednamesconfig.hxx"
 #include <svx/databaseregistrationui.hxx>
+#include <o3tl/string_view.hxx>
 
 #define COL_TYPE       0
 
@@ -179,11 +180,11 @@ void DbRegistrationOptionsPage::Reset( const SfxItemSet* rSet )
     // restore column width
     std::vector<int> aWidths
     {
-        aUserData.getToken(0, ';', nIdx).toInt32()
+        o3tl::toInt32(o3tl::getToken(aUserData, 0, ';', nIdx))
     };
     m_xPathBox->set_column_fixed_widths(aWidths);
     // restore sort direction
-    bool bUp = aUserData.getToken(0, ';', nIdx).toInt32() != 0;
+    bool bUp = o3tl::toInt32(o3tl::getToken(aUserData, 0, ';', nIdx)) != 0;
     m_xPathBox->set_sort_order(bUp);
     m_xPathBox->set_sort_indicator(bUp ? TRISTATE_TRUE : TRISTATE_FALSE, COL_TYPE);
 }

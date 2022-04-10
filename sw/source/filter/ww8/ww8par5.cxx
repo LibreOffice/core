@@ -2922,12 +2922,12 @@ static void lcl_toxMatchTSwitch(SwWW8ImplReader const & rReader, SwTOXBase& rBas
     {
         sal_Int32 nOldIndex=nIndex;
         sal_uInt16 nLevel = o3tl::narrowing<sal_uInt16>(
-            sParams.getToken(0, ';', nIndex).toInt32());
+            o3tl::toInt32(o3tl::getToken(sParams, 0, ';', nIndex)));
         if( -1 == nIndex )
         {
             nIndex = nOldIndex;
             nLevel = o3tl::narrowing<sal_uInt16>(
-                sParams.getToken(0, ',', nIndex).toInt32());
+                o3tl::toInt32(o3tl::getToken(sParams, 0, ',', nIndex)));
         }
 
         if( (0 < nLevel) && (MAXLEVEL >= nLevel) )

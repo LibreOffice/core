@@ -45,6 +45,7 @@
 #include <xmloff/SchXMLSeriesHelper.hxx>
 #include <rtl/math.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <limits>
 #include <vector>
@@ -772,7 +773,7 @@ struct lcl_SequenceToMapElement
             nIndex = aRangeRep.toInt32();
         }
         else if( rContent.first.is()) //has labels
-            nIndex = rContent.first->getSourceRangeRepresentation().copy( sizeof("label ")).toInt32();
+            nIndex = o3tl::toInt32(rContent.first->getSourceRangeRepresentation().subView( sizeof("label ")));
         return std::make_pair(nIndex, rContent);
     }
 };

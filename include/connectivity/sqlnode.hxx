@@ -425,7 +425,7 @@ namespace connectivity
 
         bool addDateValue(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
         static OUString convertDateTimeString(const SQLParseNodeParameter& rParam, const OUString& rString);
-        static OUString convertDateString(const SQLParseNodeParameter& rParam, const OUString& rString);
+        static OUString convertDateString(const SQLParseNodeParameter& rParam, std::u16string_view rString);
         static OUString convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString);
         void parseLeaf(OUStringBuffer& rString, const SQLParseNodeParameter& rParam) const;
     };

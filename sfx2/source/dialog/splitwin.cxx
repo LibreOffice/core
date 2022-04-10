@@ -34,6 +34,7 @@
 #include <splitwin.hxx>
 #include <workwin.hxx>
 #include <sfx2/dockwin.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <memory>
 #include <vector>
@@ -233,23 +234,23 @@ SfxSplitWindow::SfxSplitWindow( vcl::Window* pParent, SfxChildAlignment eAl,
         if ( aWinData.startsWith("V") )
         {
             sal_Int32 nIdx{ 0 };
-            pEmptyWin->nState = static_cast<sal_uInt16>(aWinData.getToken( 1, ',', nIdx ).toInt32());
+            pEmptyWin->nState = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aWinData, 1, ',', nIdx )));
             if ( pEmptyWin->nState & 2 )
                 pEmptyWin->bFadeIn = true;
             bPinned = true; // always assume pinned - floating mode not used anymore
 
-            const sal_Int32 nCount{ aWinData.getToken(0, ',', nIdx).toInt32() };
+            const sal_Int32 nCount{ o3tl::toInt32(o3tl::getToken(aWinData, 0, ',', nIdx)) };
             for ( sal_Int32 n=0; n<nCount; ++n )
             {
                 std::unique_ptr<SfxDock_Impl> pDock(new SfxDock_Impl);
                 pDock->pWin = nullptr;
                 pDock->bNewLine = false;
                 pDock->bHide = true;
-                pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(0, ',', nIdx).toInt32());
+                pDock->nType = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aWinData, 0, ',', nIdx)));
                 if ( !pDock->nType )
                 {
                     // could mean NewLine
-                    pDock->nType = static_cast<sal_uInt16>(aWinData.getToken(0, ',', nIdx).toInt32());
+                    pDock->nType = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aWinData, 0, ',', nIdx)));
                     if ( !pDock->nType )
                     {
                         // Read error

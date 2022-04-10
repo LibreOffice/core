@@ -671,14 +671,14 @@ util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
     // and writes it as Z (=UTC+0)
     OUString sTime = rDateTime.getToken( 0, 'Z', nIndex );
     nIndex = 0;
-    aDateTime.Year = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
-    aDateTime.Month = sal_uInt16( sDate.getToken( 0, '-', nIndex ).toInt32() );
+    aDateTime.Year = sal_uInt16( o3tl::toInt32(o3tl::getToken(sDate, 0, '-', nIndex )) );
+    aDateTime.Month = sal_uInt16( o3tl::toInt32(o3tl::getToken(sDate, 0, '-', nIndex )) );
     if (nIndex != -1)
         aDateTime.Day = sal_uInt16( o3tl::toInt32(sDate.subView( nIndex )) );
 
     nIndex = 0;
-    aDateTime.Hours = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
-    aDateTime.Minutes = sal_uInt16( sTime.getToken( 0, ':', nIndex ).toInt32() );
+    aDateTime.Hours = sal_uInt16( o3tl::toInt32(o3tl::getToken(sTime, 0, ':', nIndex )) );
+    aDateTime.Minutes = sal_uInt16( o3tl::toInt32(o3tl::getToken(sTime, 0, ':', nIndex )) );
     if (nIndex != -1)
         aDateTime.Seconds = sal_uInt16( o3tl::toInt32(sTime.subView( nIndex )) );
 

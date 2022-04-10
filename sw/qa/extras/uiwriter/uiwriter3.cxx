@@ -28,6 +28,7 @@
 #include <tools/json_writer.hxx>
 #include <unotools/streamwrap.hxx>
 #include <sfx2/linkmgr.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -274,15 +275,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
         const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
         const auto nComaPos3 = sDrawRect.indexOf(',', nComaPos2 + 1);
 
-        const auto nDraw1 = OUString(sDrawRect.subView(0, nComaPos1).data()).toInt64();
-        const auto nDraw2
-            = OUString(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1).data()).toInt64();
-        const auto nDraw3
-            = OUString(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2).data()).toInt64();
-        const auto nDraw4
-            = OUString(
-                  sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1).data())
-                  .toInt64();
+        const auto nDraw1 = o3tl::toInt64(sDrawRect.subView(0, nComaPos1));
+        const auto nDraw2 = o3tl::toInt64(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1));
+        const auto nDraw3 = o3tl::toInt64(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2));
+        const auto nDraw4 = o3tl::toInt64(
+            sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1));
 
         CPPUNIT_ASSERT_GREATER(nDraw1, nFlyLeft);
         CPPUNIT_ASSERT_GREATER(nDraw2, nFlyTop);
@@ -342,15 +339,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147126)
         const auto nComaPos2 = sDrawRect.indexOf(',', nComaPos1 + 1);
         const auto nComaPos3 = sDrawRect.indexOf(',', nComaPos2 + 1);
 
-        const auto nDraw1 = OUString(sDrawRect.subView(0, nComaPos1).data()).toInt64();
-        const auto nDraw2
-            = OUString(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1).data()).toInt64();
-        const auto nDraw3
-            = OUString(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2).data()).toInt64();
-        const auto nDraw4
-            = OUString(
-                  sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1).data())
-                  .toInt64();
+        const auto nDraw1 = o3tl::toInt64(sDrawRect.subView(0, nComaPos1));
+        const auto nDraw2 = o3tl::toInt64(sDrawRect.subView(nComaPos1 + 1, nComaPos2 - nComaPos1));
+        const auto nDraw3 = o3tl::toInt64(sDrawRect.subView(nComaPos2 + 1, nComaPos3 - nComaPos2));
+        const auto nDraw4 = o3tl::toInt64(
+            sDrawRect.subView(nComaPos3 + 1, sDrawRect.getLength() - nComaPos3 - 1));
 
         CPPUNIT_ASSERT_GREATER(nDraw1, nFlyLeft);
         CPPUNIT_ASSERT_GREATER(nDraw2, nFlyTop);

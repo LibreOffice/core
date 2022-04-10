@@ -11,6 +11,7 @@
 
 #include <officecfg/Setup.hxx>
 #include <unotools/configmgr.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
@@ -25,11 +26,11 @@ namespace utl
 static bool isProductVersionUpgraded(bool aUpdateVersion)
 {
     OUString sSetupVersion = utl::ConfigManager::getProductVersion();
-    sal_Int32 iCurrent
-        = sSetupVersion.getToken(0, '.').toInt32() * 10 + sSetupVersion.getToken(1, '.').toInt32();
+    sal_Int32 iCurrent = o3tl::toInt32(o3tl::getToken(sSetupVersion, 0, '.')) * 10
+                         + o3tl::toInt32(o3tl::getToken(sSetupVersion, 1, '.'));
     OUString sLastVersion = officecfg::Setup::Product::ooSetupLastVersion::get().value_or("0.0");
-    sal_Int32 iLast
-        = sLastVersion.getToken(0, '.').toInt32() * 10 + sLastVersion.getToken(1, '.').toInt32();
+    sal_Int32 iLast = o3tl::toInt32(o3tl::getToken(sLastVersion, 0, '.')) * 10
+                      + o3tl::toInt32(o3tl::getToken(sLastVersion, 1, '.'));
     if (iCurrent > iLast)
     {
         if (aUpdateVersion)

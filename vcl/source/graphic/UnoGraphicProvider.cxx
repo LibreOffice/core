@@ -82,7 +82,7 @@ protected:
 
 private:
 
-    static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( const OUString& rResourceURL );
+    static css::uno::Reference< css::graphic::XGraphic > implLoadMemory( std::u16string_view rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( std::u16string_view rResourceURL );
     static css::uno::Reference< css::graphic::XGraphic > implLoadBitmap( const css::uno::Reference< css::awt::XBitmap >& rBitmap );
     static css::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( std::u16string_view rResourceURL );
@@ -122,14 +122,14 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUString& rResourceURL )
+uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( std::u16string_view rResourceURL )
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     sal_Int32                               nIndex = 0;
 
     if( o3tl::getToken(rResourceURL, 0, '/', nIndex ) == u"private:memorygraphic" )
     {
-        sal_Int64 nGraphicAddress = rResourceURL.getToken( 0, '/', nIndex ).toInt64();
+        sal_Int64 nGraphicAddress = o3tl::toInt64(o3tl::getToken(rResourceURL, 0, '/', nIndex ));
 
         if( nGraphicAddress )
         {

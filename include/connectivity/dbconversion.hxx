@@ -89,7 +89,7 @@ namespace dbtools::DBTypeConversion
                                         sal_Int16 nKeyType);
 
         OOO_DLLPUBLIC_DBTOOLS css::util::Date     toDate(double dVal, const css::util::Date& _rNullDate = getStandardDate());
-        OOO_DLLPUBLIC_DBTOOLS css::util::Date     toDate(const OUString& _sSQLDate);
+        OOO_DLLPUBLIC_DBTOOLS css::util::Date     toDate(std::u16string_view _sSQLDate);
         OOO_DLLPUBLIC_DBTOOLS css::util::Time     toTime(double dVal, short nDigits = 9);
         OOO_DLLPUBLIC_DBTOOLS css::util::Time     toTime(const OUString& _sSQLDate);
         OOO_DLLPUBLIC_DBTOOLS css::util::DateTime toDateTime(double dVal, const css::util::Date& _rNullDate = getStandardDate());

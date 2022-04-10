@@ -19,6 +19,7 @@
 
 #include <vcl/filter/PDFiumLibrary.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 
@@ -47,8 +48,8 @@ bool isCompatible(SvStream& rInStream, sal_uInt64 nPos, sal_uInt64 nSize)
         || aFirstBytes[3] != 'F' || aFirstBytes[4] != '-')
         return false;
 
-    sal_Int32 nMajor = OString(char(aFirstBytes[5])).toInt32();
-    sal_Int32 nMinor = OString(char(aFirstBytes[7])).toInt32();
+    sal_Int32 nMajor = o3tl::toInt32(std::string_view(reinterpret_cast<char*>(&aFirstBytes[5]), 1));
+    sal_Int32 nMinor = o3tl::toInt32(std::string_view(reinterpret_cast<char*>(&aFirstBytes[7]), 1));
     return !(nMajor > 1 || (nMajor == 1 && nMinor > 6));
 }
 
