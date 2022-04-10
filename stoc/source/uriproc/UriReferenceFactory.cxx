@@ -53,10 +53,10 @@
 
 namespace {
 
-bool equalIgnoreEscapeCase(OUString const & s1, OUString const & s2) {
-    if (s1.getLength() == s2.getLength()) {
-        for (sal_Int32 i = 0; i < s1.getLength();) {
-            if (s1[i] == '%' && s2[i] == '%' && s1.getLength() - i > 2
+bool equalIgnoreEscapeCase(std::u16string_view s1, std::u16string_view s2) {
+    if (s1.size() == s2.size()) {
+        for (size_t i = 0; i < s1.size();) {
+            if (s1[i] == '%' && s2[i] == '%' && s1.size() - i > 2
                 && rtl::isAsciiHexDigit(s1[i + 1])
                 && rtl::isAsciiHexDigit(s1[i + 2])
                 && rtl::isAsciiHexDigit(s2[i + 1])
@@ -77,9 +77,9 @@ bool equalIgnoreEscapeCase(OUString const & s1, OUString const & s2) {
     }
 }
 
-sal_Int32 parseScheme(OUString const & uriReference) {
-    if (uriReference.getLength() >= 2 && rtl::isAsciiAlpha(uriReference[0])) {
-        for (sal_Int32 i = 0; i < uriReference.getLength(); ++i) {
+sal_Int32 parseScheme(std::u16string_view uriReference) {
+    if (uriReference.size() >= 2 && rtl::isAsciiAlpha(uriReference[0])) {
+        for (size_t i = 0; i < uriReference.size(); ++i) {
             sal_Unicode c = uriReference[i];
             if (c == ':') {
                 return i;

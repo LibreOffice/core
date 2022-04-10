@@ -51,7 +51,7 @@ namespace basegfx::internal
 
         bool importDoubleAndSpaces(double&          o_fRetval,
                                    sal_Int32&       io_rPos,
-                                   const OUString&  rStr,
+                                   std::u16string_view  rStr,
                                    const sal_Int32  nLen );
 
         bool importFlagAndSpaces(sal_Int32&      o_nRetval,

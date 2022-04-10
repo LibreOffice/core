@@ -507,7 +507,7 @@ namespace basegfx::utils
             @return true, if the string was successfully parsed
          */
         BASEGFX_DLLPUBLIC bool importFromSvgPoints( B2DPolygon&            o_rPoly,
-                                  const OUString& rSvgPointsAttribute );
+                                  std::u16string_view rSvgPointsAttribute );
 
         /** Write poly-polygon to SVG.
 

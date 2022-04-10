@@ -134,9 +134,9 @@ CfgParser::~CfgParser()
 {
 }
 
-bool CfgParser::IsTokenClosed(const OString &rToken)
+bool CfgParser::IsTokenClosed(std::string_view rToken)
 {
-    return rToken[rToken.getLength() - 2] == '/';
+    return rToken[rToken.size() - 2] == '/';
 }
 
 void CfgParser::AddText(
