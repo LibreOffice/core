@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <sal/types.h>
-#include <unotools/configmgr.hxx>
 #include <vcl/fontcharmap.hxx>
 #include <basegfx/range/b2ibox.hxx>
 #include <headless/svpgdi.hxx>
@@ -95,8 +94,6 @@ void SvpSalGraphics::GetGlyphWidths( const vcl::font::PhysicalFontFace* pFont,
 
 std::unique_ptr<GenericSalLayout> SvpSalGraphics::GetTextLayout(int nFallbackLevel)
 {
-    if (utl::ConfigManager::IsFuzzing())
-        return nullptr;
     return m_aTextRenderImpl.GetTextLayout(nFallbackLevel);
 }
 
