@@ -183,14 +183,14 @@ bool isSimpleType(std::u16string_view type) {
 //  <other> ::= <capital> | "a"--"z" | "0"--"9"
 //  <capital> ::= "A"--"Z"
 //
-bool isIdentifier(OUString const & type, bool scoped) {
-    if (type.isEmpty()) {
+bool isIdentifier(std::u16string_view type, bool scoped) {
+    if (type.empty()) {
         return false;
     }
-    for (sal_Int32 i = 0; i != type.getLength(); ++i) {
+    for (size_t i = 0; i != type.size(); ++i) {
         sal_Unicode c = type[i];
         if (c == '.') {
-            if (!scoped || i == 0 || i == type.getLength() - 1
+            if (!scoped || i == 0 || i == type.size() - 1
                 || type[i - 1] == '.')
             {
                 return false;
@@ -247,11 +247,11 @@ void checkTypeName(
 }
 
 void checkEntityName(
-    rtl::Reference< MappedFile > const & file, OUString const & name)
+    rtl::Reference< MappedFile > const & file, std::u16string_view name)
 {
     if (isSimpleType(name) || !isIdentifier(name, false)) {
         throw FileFormatException(
-            file->uri, "UNOIDL format: bad entity name \"" + name + "\"");
+            file->uri, OUString::Concat("UNOIDL format: bad entity name \"") + name + "\"");
     }
 }
 

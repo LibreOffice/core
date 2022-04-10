@@ -12,6 +12,7 @@
 #include <libxml/parser.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 
 #include <helper.hxx>
@@ -19,16 +20,16 @@
 namespace helper {
 
 OString escapeAll(
-    const OString& rText, const OString& rUnEscaped, const OString& rEscaped )
+    std::string_view rText, std::string_view rUnEscaped, std::string_view rEscaped )
 {
-    assert( rEscaped.getLength() == 2*rUnEscaped.getLength() );
+    assert( rEscaped.size() == 2*rUnEscaped.size() );
     OStringBuffer sReturn;
-    for ( sal_Int32 nIndex = 0; nIndex < rText.getLength(); ++nIndex )
+    for ( size_t nIndex = 0; nIndex < rText.size(); ++nIndex )
     {
-        sal_Int32 nUnEscapedOne = rUnEscaped.indexOf(rText[nIndex]);
-        if( nUnEscapedOne != -1 )
+        size_t nUnEscapedOne = rUnEscaped.find(rText[nIndex]);
+        if( nUnEscapedOne != std::string_view::npos )
         {
-            sReturn.append(rEscaped.subView(nUnEscapedOne*2,2));
+            sReturn.append(rEscaped.substr(nUnEscapedOne*2,2));
         }
         else
             sReturn.append(rText[nIndex]);
@@ -38,17 +39,17 @@ OString escapeAll(
 
 
 OString unEscapeAll(
-    const OString& rText, const OString& rEscaped, std::string_view rUnEscaped)
+    std::string_view rText, std::string_view rEscaped, std::string_view rUnEscaped)
 {
-    assert( o3tl::make_unsigned(rEscaped.getLength()) == 2*rUnEscaped.length() );
+    assert( rEscaped.size() == 2*rUnEscaped.length() );
     OStringBuffer sReturn;
-    const sal_Int32 nLength = rText.getLength();
-    for ( sal_Int32 nIndex = 0; nIndex < nLength; ++nIndex )
+    const size_t nLength = rText.size();
+    for ( size_t nIndex = 0; nIndex < nLength; ++nIndex )
     {
         if( rText[nIndex] == '\\' && nIndex+1 < nLength )
         {
-            sal_Int32 nEscapedOne = rEscaped.indexOf(rText.subView(nIndex,2));
-            if( nEscapedOne != -1 )
+            size_t nEscapedOne = rEscaped.find(rText.substr(nIndex,2));
+            if( nEscapedOne != std::string_view::npos )
             {
                 sReturn.append(rUnEscaped[nEscapedOne/2]);
                 ++nIndex;
@@ -65,10 +66,10 @@ OString unEscapeAll(
 }
 
 
-OString QuotHTML(const OString &rString)
+OString QuotHTML(std::string_view rString)
 {
     OStringBuffer sReturn;
-    for (sal_Int32 i = 0; i < rString.getLength(); ++i)
+    for (size_t i = 0; i < rString.size(); ++i)
     {
         switch (rString[i])
         {
@@ -85,7 +86,7 @@ OString QuotHTML(const OString &rString)
             sReturn.append("&apos;");
             break;
         case '&':
-            if (rString.match("&amp;", i))
+            if (o3tl::starts_with(rString.substr(i), "&amp;"))
                 sReturn.append('&');
             else
                 sReturn.append("&amp;");
@@ -98,23 +99,24 @@ OString QuotHTML(const OString &rString)
     return sReturn.makeStringAndClear();
 }
 
-OString UnQuotHTML( const OString& rString )
+OString UnQuotHTML( std::string_view rString )
 {
     OStringBuffer sReturn;
-    for (sal_Int32 i = 0; i != rString.getLength();) {
-        if (rString.match("&amp;", i)) {
+    for (size_t i = 0; i != rString.size();) {
+        auto tmp = rString.substr(i);
+        if (o3tl::starts_with(tmp, "&amp;")) {
             sReturn.append('&');
             i += RTL_CONSTASCII_LENGTH("&amp;");
-        } else if (rString.match("&lt;", i)) {
+        } else if (o3tl::starts_with(tmp, "&lt;")) {
             sReturn.append('<');
             i += RTL_CONSTASCII_LENGTH("&lt;");
-        } else if (rString.match("&gt;", i)) {
+        } else if (o3tl::starts_with(tmp, "&gt;")) {
             sReturn.append('>');
             i += RTL_CONSTASCII_LENGTH("&gt;");
-        } else if (rString.match("&quot;", i)) {
+        } else if (o3tl::starts_with(tmp, "&quot;")) {
             sReturn.append('"');
             i += RTL_CONSTASCII_LENGTH("&quot;");
-        } else if (rString.match("&apos;", i)) {
+        } else if (o3tl::starts_with(tmp, "&apos;")) {
             sReturn.append('\'');
             i += RTL_CONSTASCII_LENGTH("&apos;");
         } else {

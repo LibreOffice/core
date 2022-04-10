@@ -33,6 +33,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <o3tl/safeint.hxx>
 
 #include <string_view>
 
@@ -49,8 +50,8 @@ int getHexWeight(sal_Unicode c) {
         : -1;
 }
 
-int parseEscaped(OUString const & part, sal_Int32 * index) {
-    if (part.getLength() - *index < 3 || part[*index] != '%') {
+int parseEscaped(std::u16string_view part, sal_Int32 * index) {
+    if (part.size() - *index < 3 || part[*index] != '%') {
         return -1;
     }
     int n1 = getHexWeight(part[*index + 1]);
@@ -63,10 +64,10 @@ int parseEscaped(OUString const & part, sal_Int32 * index) {
 }
 
 OUString parsePart(
-    OUString const & part, bool namePart, sal_Int32 * index)
+    std::u16string_view part, bool namePart, sal_Int32 * index)
 {
     OUStringBuffer buf(64);
-    while (*index < part.getLength()) {
+    while (o3tl::make_unsigned(*index) < part.size()) {
         sal_Unicode c = part[*index];
         if (namePart ? c == '?' : c == '&' || c == '=') {
             break;
@@ -150,25 +151,25 @@ OUString encodeNameOrParamFragment(OUString const & fragment) {
         RTL_TEXTENCODING_UTF8);
 }
 
-bool parseSchemeSpecificPart(OUString const & part) {
-    sal_Int32 len = part.getLength();
+bool parseSchemeSpecificPart(std::u16string_view part) {
+    size_t len = part.size();
     sal_Int32 i = 0;
     if (parsePart(part, true, &i).isEmpty() || part[0] == '/') {
         return false;
     }
-    if (i == len) {
+    if (o3tl::make_unsigned(i) == len) {
         return true;
     }
     for (;;) {
         ++i; // skip '?' or '&'
-        if (parsePart(part, false, &i).isEmpty() || i == len
+        if (parsePart(part, false, &i).isEmpty() || o3tl::make_unsigned(i) == len
             || part[i] != '=')
         {
             return false;
         }
         ++i;
         parsePart(part, false, &i);
-        if (i == len) {
+        if (o3tl::make_unsigned(i) == len) {
             return true;
         }
         if (part[i] != '&') {

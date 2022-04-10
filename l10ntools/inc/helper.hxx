@@ -25,15 +25,15 @@ namespace helper {
 
 /// Escape all given character in the text
 OString escapeAll(
-    const OString& rText, const OString& rUnEscaped, const OString& rEscaped );
+    std::string_view rText, std::string_view rUnEscaped, std::string_view rEscaped );
 /// Unescape all given character in the text
 OString unEscapeAll(
-    const OString& rText, const OString& rEscaped, std::string_view rUnEscaped  );
+    std::string_view rText, std::string_view rEscaped, std::string_view rUnEscaped  );
 
 /// Convert special characters to XML entity references
-OString QuotHTML( const OString &rString );
+OString QuotHTML( std::string_view rString );
 /// Convert XML entity references to single characters
-OString UnQuotHTML( const OString& rString );
+OString UnQuotHTML( std::string_view rString );
 
 /// Check whether text is a valid XML expression
 bool isWellFormedXML( std::string_view text );

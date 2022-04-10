@@ -81,18 +81,18 @@ static sal_uInt8 GetDigit_Impl( char aChar )
 }
 
 
-uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentation( const OUString& aClassID )
+uno::Sequence< sal_Int8 > MimeConfigurationHelper::GetSequenceClassIDRepresentation( std::u16string_view aClassID )
 {
-    sal_Int32 nLength = aClassID.getLength();
+    size_t nLength = aClassID.size();
     if ( nLength == 36 )
     {
         OString aCharClassID = OUStringToOString( aClassID, RTL_TEXTENCODING_ASCII_US );
         uno::Sequence< sal_Int8 > aResult( 16 );
         auto pResult = aResult.getArray();
 
-        sal_Int32 nStrPointer = 0;
+        size_t nStrPointer = 0;
         sal_Int32 nSeqInd = 0;
-        while( nSeqInd < 16 && nStrPointer + 1 < nLength )
+        while( nSeqInd < 16 && nStrPointer + 1U < nLength )
         {
             sal_uInt8 nDigit1 = GetDigit_Impl( aCharClassID[nStrPointer++] );
             sal_uInt8 nDigit2 = GetDigit_Impl( aCharClassID[nStrPointer++] );

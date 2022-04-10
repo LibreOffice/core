@@ -80,9 +80,9 @@ public:
 namespace
 {
     // Convert a normal string to msg/po output string
-    OString lcl_GenMsgString(const OString& rString)
+    OString lcl_GenMsgString(std::string_view rString)
     {
-        if ( rString.isEmpty() )
+        if ( rString.empty() )
             return "\"\"";
 
         OString sResult =
@@ -107,11 +107,11 @@ namespace
     }
 
     // Convert msg string to normal form
-    OString lcl_GenNormString(const OString& rString)
+    OString lcl_GenNormString(std::string_view rString)
     {
         return
             helper::unEscapeAll(
-                rString.copy(1,rString.getLength()-2),
+                rString.substr(1,rString.size()-2),
                 "\\n""\\t""\\r""\\\\""\\\"",
                 "\n""\t""\r""\\""\"");
     }
@@ -150,7 +150,7 @@ void GenPoEntry::writeToFile(std::ofstream& rOFStream) const
                   << std::endl;
     if ( !m_sMsgStrPlural.empty() )
         for(auto & line : m_sMsgStrPlural)
-            rOFStream << line.copy(0,10) << lcl_GenMsgString(line.copy(10)) << std::endl;
+            rOFStream << line.copy(0,10) << lcl_GenMsgString(line.subView(10)) << std::endl;
     else
         rOFStream << "msgstr "
                   << lcl_GenMsgString(m_sMsgStr) << std::endl;
@@ -192,29 +192,29 @@ void GenPoEntry::readFromFile(std::ifstream& rIFStream)
         }
         else if (sLine.startsWith("msgctxt "))
         {
-            m_sMsgCtxt = lcl_GenNormString(sLine.copy(8));
+            m_sMsgCtxt = lcl_GenNormString(sLine.subView(8));
             pLastMsg = &m_sMsgCtxt;
         }
         else if (sLine.startsWith("msgid "))
         {
-            m_sMsgId = lcl_GenNormString(sLine.copy(6));
+            m_sMsgId = lcl_GenNormString(sLine.subView(6));
             pLastMsg = &m_sMsgId;
         }
         else if (sLine.startsWith("msgid_plural "))
         {
-            m_sMsgIdPlural = lcl_GenNormString(sLine.copy(13));
+            m_sMsgIdPlural = lcl_GenNormString(sLine.subView(13));
             pLastMsg = &m_sMsgIdPlural;
         }
         else if (sLine.startsWith("msgstr "))
         {
-            m_sMsgStr = lcl_GenNormString(sLine.copy(7));
+            m_sMsgStr = lcl_GenNormString(sLine.subView(7));
             pLastMsg = &m_sMsgStr;
         }
         else if (sLine.startsWith("msgstr["))
         {
             // assume there are no more than 10 plural forms...
             // and that plural strings are never split to multi-line in po
-            m_sMsgStrPlural.push_back(sLine.subView(0,10) + lcl_GenNormString(sLine.copy(10)));
+            m_sMsgStrPlural.push_back(sLine.subView(0,10) + lcl_GenNormString(sLine.subView(10)));
         }
         else if (sLine.startsWith("\"") && pLastMsg)
         {
@@ -241,7 +241,7 @@ PoEntry::PoEntry()
 
 PoEntry::PoEntry(
     const OString& rSourceFile, std::string_view rResType, std::string_view rGroupId,
-    std::string_view rLocalId, const OString& rHelpText,
+    std::string_view rLocalId, std::string_view rHelpText,
     const OString& rText, const TYPE eType )
     : m_bIsInitialized( false )
 {
@@ -253,7 +253,7 @@ PoEntry::PoEntry(
         throw NOGROUPID;
     else if ( rText.isEmpty() )
         throw NOSTRING;
-    else if ( rHelpText.getLength() == 5 )
+    else if ( rHelpText.size() == 5 )
         throw WRONGHELPTEXT;
 
     m_pGenPo.reset( new GenPoEntry() );
@@ -277,7 +277,7 @@ PoEntry::PoEntry(
     m_pGenPo->setMsgCtxt(sMsgCtxt);
     m_pGenPo->setMsgId(rText);
     m_pGenPo->setExtractCom(OStringConcatenation(
-        ( !rHelpText.isEmpty() ?  rHelpText + "\n" : OString()) +
+        ( !rHelpText.empty() ?  OString::Concat(rHelpText) + "\n" : OString()) +
         genKeyId( m_pGenPo->getReference().front() + rGroupId + rLocalId + rResType + rText ) ));
     m_bIsInitialized = true;
 }

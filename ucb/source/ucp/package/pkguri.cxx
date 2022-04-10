@@ -185,8 +185,8 @@ void PackageUri::init() const
             if ( m_aPath.indexOf( "//" ) != -1
               || m_aPath.indexOf( "%2F" ) != -1
               || m_aPath.indexOf( "%2f" ) != -1
-              || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, ".." )
-              || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, "." ) )
+              || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, u".." )
+              || ::comphelper::OStorageHelper::PathHasSegment( m_aPath, u"." ) )
             {
                 // error, but remember that we did an init().
                 m_aPath = "/";

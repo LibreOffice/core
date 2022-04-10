@@ -55,7 +55,7 @@ public:
 
     static OUString GetStringClassIDRepresentation( const css::uno::Sequence< sal_Int8 >& aClassID );
 
-    static css::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( const OUString& aClassID );
+    static css::uno::Sequence< sal_Int8 > GetSequenceClassIDRepresentation( std::u16string_view aClassID );
 
 
     css::uno::Reference< css::container::XNameAccess > GetObjConfiguration();

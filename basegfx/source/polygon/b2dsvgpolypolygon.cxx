@@ -74,12 +74,12 @@ namespace basegfx::utils
 
         bool importFromSvgD(
             B2DPolyPolygon& o_rPolyPolygon,
-            const OUString& rSvgDStatement,
+            std::u16string_view rSvgDStatement,
             bool bHandleRelativeNextPointCompatible,
             PointIndexSet* pHelpPointIndexSet)
         {
             o_rPolyPolygon.clear();
-            const sal_Int32 nLen(rSvgDStatement.getLength());
+            const sal_Int32 nLen(rSvgDStatement.size());
             sal_Int32 nPos(0);
             double nLastX( 0.0 );
             double nLastY( 0.0 );
@@ -664,10 +664,10 @@ namespace basegfx::utils
         }
 
         bool importFromSvgPoints( B2DPolygon&            o_rPoly,
-                                  const OUString& rSvgPointsAttribute )
+                                  std::u16string_view rSvgPointsAttribute )
         {
             o_rPoly.clear();
-            const sal_Int32 nLen(rSvgPointsAttribute.getLength());
+            const sal_Int32 nLen(rSvgPointsAttribute.size());
             sal_Int32 nPos(0);
             double nX, nY;
 
