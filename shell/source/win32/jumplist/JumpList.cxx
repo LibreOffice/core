@@ -46,13 +46,14 @@ using namespace css::system::windows;
 using namespace osl;
 using namespace sal::systools;
 
+namespace
+{
 class JumpListImpl : public BaseMutex, public WeakComponentImplHelper<XJumpList, XServiceInfo>
 {
     Reference<XComponentContext> m_xContext;
 
 public:
     explicit JumpListImpl(const Reference<XComponentContext>& xContext);
-    ~JumpListImpl();
 
     // XJumpList
     virtual void SAL_CALL appendCategory(const OUString& sCategory,
@@ -73,10 +74,6 @@ JumpListImpl::JumpListImpl(const Reference<XComponentContext>& xContext)
 {
 }
 
-JumpListImpl::~JumpListImpl() {}
-
-namespace
-{
 // Determines if the provided IShellLinkItem is listed in the array of items that the user has removed
 bool lcl_isItemInArray(COMReference<IShellLinkW> pShellLinkItem,
                        COMReference<IObjectArray> poaRemoved)
@@ -155,7 +152,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
         COMReference<IObjectCollection> aCollection(CLSID_EnumerableObjectCollection, nullptr,
                                                     CLSCTX_INPROC_SERVER);
 
-        for (auto item : aJumpListItems)
+        for (auto const& item : aJumpListItems)
         {
             if (item.name.isEmpty())
                 continue;
@@ -178,20 +175,21 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
 
                     PropVariantClear(&propvar);
                 }
-                ThrowIfFailed(
-                    pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
-                    OString("Setting description '" + item.description.toUtf8() + "' failed."));
-
-                ThrowIfFailed(pShellLinkItem->SetPath(o3tl::toW(sofficePath.getStr())),
-                              OString("Setting path '" + sofficePath.toUtf8() + "' failed."));
+                ThrowIfFailed(pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
+                              OStringConcatenation("Setting description '"
+                                                   + item.description.toUtf8() + "' failed."));
 
                 ThrowIfFailed(
-                    pShellLinkItem->SetArguments(o3tl::toW(item.arguments.getStr())),
-                    OString("Setting arguments '" + item.arguments.toUtf8() + "' failed."));
+                    pShellLinkItem->SetPath(o3tl::toW(sofficePath.getStr())),
+                    OStringConcatenation("Setting path '" + sofficePath.toUtf8() + "' failed."));
 
-                ThrowIfFailed(
-                    pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
-                    OString("Setting icon path '" + item.iconPath.toUtf8() + "' failed."));
+                ThrowIfFailed(pShellLinkItem->SetArguments(o3tl::toW(item.arguments.getStr())),
+                              OStringConcatenation("Setting arguments '" + item.arguments.toUtf8()
+                                                   + "' failed."));
+
+                ThrowIfFailed(pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
+                              OStringConcatenation("Setting icon path '" + item.iconPath.toUtf8()
+                                                   + "' failed."));
 
                 if (lcl_isItemInArray(pShellLinkItem, removed))
                 {
