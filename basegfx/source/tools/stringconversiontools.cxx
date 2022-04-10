@@ -46,9 +46,10 @@ namespace basegfx::internal
 
         static bool getDoubleChar(double&         o_fRetval,
                            sal_Int32&      io_rPos,
-                           const OUString& rStr)
+                           std::u16string_view rStr)
         {
-            sal_Unicode aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+            const sal_Int64 nStrSize = rStr.size();
+            sal_Unicode aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
             OUStringBuffer sNumberString;
 
             // sign
@@ -63,7 +64,7 @@ namespace basegfx::internal
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
-                aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+                aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
             }
 
             // point
@@ -71,7 +72,7 @@ namespace basegfx::internal
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
-                aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+                aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
             }
 
             // numbers after point
@@ -79,7 +80,7 @@ namespace basegfx::internal
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
-                aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+                aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
             }
 
             // 'e'
@@ -87,14 +88,14 @@ namespace basegfx::internal
             {
                 sNumberString.append(rStr[io_rPos]);
                 io_rPos++;
-                aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+                aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
 
                 // sign for 'e'
                 if(aChar == '+' || aChar == '-')
                 {
                     sNumberString.append(rStr[io_rPos]);
                     io_rPos++;
-                    aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+                    aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
                 }
 
                 // number for 'e'
@@ -102,7 +103,7 @@ namespace basegfx::internal
                 {
                     sNumberString.append(rStr[io_rPos]);
                     io_rPos++;
-                    aChar = io_rPos < rStr.getLength() ? rStr[io_rPos] : 0;
+                    aChar = io_rPos < nStrSize ? rStr[io_rPos] : 0;
                 }
             }
 
@@ -121,7 +122,7 @@ namespace basegfx::internal
 
         bool importDoubleAndSpaces(double&         o_fRetval,
                                    sal_Int32&      io_rPos,
-                                   const OUString& rStr,
+                                   std::u16string_view rStr,
                                    const sal_Int32 nLen )
         {
             if( !getDoubleChar(o_fRetval, io_rPos, rStr) )

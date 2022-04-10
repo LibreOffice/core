@@ -3044,11 +3044,11 @@ const std::shared_ptr<const SfxFilter>& SfxMedium::GetFilter() const
     return pImpl->m_pFilter;
 }
 
-sal_uInt32 SfxMedium::CreatePasswordToModifyHash( const OUString& aPasswd, bool bWriter )
+sal_uInt32 SfxMedium::CreatePasswordToModifyHash( std::u16string_view aPasswd, bool bWriter )
 {
     sal_uInt32 nHash = 0;
 
-    if ( !aPasswd.isEmpty() )
+    if ( !aPasswd.empty() )
     {
         if ( bWriter )
         {

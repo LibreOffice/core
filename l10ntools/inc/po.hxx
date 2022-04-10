@@ -47,7 +47,7 @@ public:
 
                     PoEntry();
                     PoEntry( const OString& rSourceFile, std::string_view rResType, std::string_view rGroupId,
-                             std::string_view rLocalId, const OString& rHelpText, const OString& rText,
+                             std::string_view rLocalId, std::string_view rHelpText, const OString& rText,
                              const TYPE eType );
                     ~PoEntry();
 

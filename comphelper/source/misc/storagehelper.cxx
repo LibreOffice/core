@@ -56,6 +56,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <o3tl/string_view.hxx>
 
 #if HAVE_FEATURE_GPGME
 # include <context.h>
@@ -561,27 +562,27 @@ bool OStorageHelper::IsValidZipEntryFileName(
 }
 
 
-bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSegment )
+bool OStorageHelper::PathHasSegment( std::u16string_view aPath, std::u16string_view aSegment )
 {
     bool bResult = false;
-    const sal_Int32 nPathLen = aPath.getLength();
-    const sal_Int32 nSegLen = aSegment.getLength();
+    const size_t nPathLen = aPath.size();
+    const size_t nSegLen = aSegment.size();
 
-    if ( !aSegment.isEmpty() && nPathLen >= nSegLen )
+    if ( !aSegment.empty() && nPathLen >= nSegLen )
     {
-        OUString aEndSegment = "/" + aSegment;
+        OUString aEndSegment = OUString::Concat("/") + aSegment;
         OUString aInternalSegment = aEndSegment + "/";
 
-        if ( aPath.indexOf( aInternalSegment ) >= 0 )
+        if ( aPath.find( aInternalSegment ) != std::u16string_view::npos )
             bResult = true;
 
-        if ( !bResult && aPath.startsWith( aSegment ) )
+        if ( !bResult && o3tl::starts_with(aPath, aSegment ) )
         {
             if ( nPathLen == nSegLen || aPath[nSegLen] == '/' )
                 bResult = true;
         }
 
-        if ( !bResult && nPathLen > nSegLen && aPath.subView( nPathLen - nSegLen - 1, nSegLen + 1 ) == aEndSegment )
+        if ( !bResult && nPathLen > nSegLen && aPath.substr( nPathLen - nSegLen - 1, nSegLen + 1 ) == aEndSegment )
             bResult = true;
     }
 

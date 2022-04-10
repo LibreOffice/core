@@ -17,6 +17,7 @@
 #include <sal/config.h>
 
 #include <o3tl/unreachable.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <unoidl/unoidl.hxx>
 
@@ -165,11 +166,11 @@ template<typename T> rtl::Reference<T> getCurrentPad(
     return pad;
 }
 
-bool nameHasSameIdentifierAs(OUString const & name, OUString const & identifier)
+bool nameHasSameIdentifierAs(std::u16string_view name, std::u16string_view identifier)
 {
-    sal_Int32 i = name.lastIndexOf('.') + 1;
-    return identifier.getLength() == name.getLength() - i
-        && name.match(identifier, i);
+    size_t i = name.rfind('.') + 1;
+    return identifier.size() == name.size() - i
+        && o3tl::starts_with(name.substr(i), identifier);
 }
 
 bool coerce(

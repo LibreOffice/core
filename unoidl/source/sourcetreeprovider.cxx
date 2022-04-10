@@ -126,9 +126,9 @@ private:
     OUString uri_;
 };
 
-bool isValidFileName(OUString const & name, bool directory) {
-    for (sal_Int32 i = 0;; ++i) {
-        if (i == name.getLength()) {
+bool isValidFileName(std::u16string_view name, bool directory) {
+    for (size_t i = 0;; ++i) {
+        if (i == name.size()) {
             if (i == 0) {
                 return false;
             }
@@ -139,7 +139,7 @@ bool isValidFileName(OUString const & name, bool directory) {
             if (i == 0 || name[i - 1] == '_') {
                 return false;
             }
-            return !directory && name.subView(i + 1) == u"idl";
+            return !directory && name.substr(i + 1) == u"idl";
         } else if (c == '_') {
             //TODO: Ignore case of name[0] only for case-insensitive file systems:
             if (i == 0 || name[i - 1] == '_') {
