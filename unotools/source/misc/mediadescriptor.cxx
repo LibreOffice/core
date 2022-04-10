@@ -28,7 +28,6 @@
 
 #include <com/sun/star/ucb/ContentCreationException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XActiveDataSink.hpp>

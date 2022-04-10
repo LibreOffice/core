@@ -23,7 +23,6 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <memory>
 
 namespace com::sun::star {
     namespace container {

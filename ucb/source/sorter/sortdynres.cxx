@@ -18,7 +18,6 @@
  */
 
 #include "sortdynres.hxx"
-#include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/weak.hxx>
 #include <com/sun/star/ucb/ContentResultSetCapability.hpp>

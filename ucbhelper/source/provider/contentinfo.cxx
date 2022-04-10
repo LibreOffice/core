@@ -27,11 +27,8 @@
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 
-#include <cppuhelper/queryinterface.hxx>
-#include <osl/mutex.hxx>
 #include <ucbhelper/contenthelper.hxx>
 #include "contentinfo.hxx"
-#include <ucbhelper/macros.hxx>
 
 using namespace com::sun::star;
 

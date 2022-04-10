@@ -10,3 +10,9 @@ excludelist:
     UnoControls/source/controls/framecontrol.cxx:
     # Needed for use in cppu::UnoType template
     - com/sun/star/awt/XControlContainer.hpp
+    UnoControls/source/controls/progressbar.cxx:
+    # Actually used
+    - com/sun/star/awt/XGraphics.hpp
+    UnoControls/source/controls/progressmonitor.cxx:
+    # Actually used
+    - com/sun/star/awt/XGraphics.hpp

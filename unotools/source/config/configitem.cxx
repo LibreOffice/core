@@ -38,7 +38,6 @@
 #include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/solarmutex.hxx>
-#include <rtl/ref.hxx>
 #include <tools/diagnose_ex.h>
 
 using namespace utl;

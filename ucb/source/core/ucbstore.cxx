@@ -30,7 +30,6 @@
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ref.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/beans/IllegalTypeException.hpp>
@@ -44,9 +43,9 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
-#include <ucbhelper/macros.hxx>
 #include "ucbstore.hxx"
 
 using namespace com::sun::star::beans;
