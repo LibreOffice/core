@@ -46,10 +46,6 @@
 #define SAL_STRING_IS_INTERN(a) ((a)->refCount & SAL_STRING_INTERN_FLAG)
 #define SAL_STRING_IS_STATIC(a) ((a)->refCount & SAL_STRING_STATIC_FLAG)
 
-sal_Int16 rtl_ImplGetDigit( sal_Unicode ch, sal_Int16 nRadix );
-
-bool rtl_ImplIsWhitespace( sal_Unicode c );
-
 rtl_uString* rtl_uString_ImplAlloc( sal_Int32 nLen );
 
 rtl_String* rtl_string_ImplAlloc( sal_Int32 nLen );

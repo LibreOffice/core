@@ -139,6 +139,36 @@ inline void Copy(sal_Unicode* _pDest, const char* _pSrc, sal_Int32 _nCount)
                    });
 }
 
+inline sal_Int16 implGetDigit(sal_Unicode ch, sal_Int16 nRadix)
+{
+    sal_Int16 n = -1;
+    if ((ch >= '0') && (ch <= '9'))
+        n = ch - '0';
+    else if ((ch >= 'a') && (ch <= 'z'))
+        n = ch - 'a' + 10;
+    else if ((ch >= 'A') && (ch <= 'Z'))
+        n = ch - 'A' + 10;
+    return (n < nRadix) ? n : -1;
+}
+
+inline bool implIsWhitespace(sal_Unicode c)
+{
+    /* Space or Control character? */
+    if ((c <= 32) && c)
+        return true;
+
+    /* Only in the General Punctuation area Space or Control characters are included? */
+    if ((c < 0x2000) || (c > 0x206F))
+        return false;
+
+    if (((c >= 0x2000) && (c <= 0x200B)) ||    /* All Spaces           */
+        (c == 0x2028) ||                       /* LINE SEPARATOR       */
+        (c == 0x2029))                         /* PARAGRAPH SEPARATOR  */
+        return true;
+
+    return false;
+}
+
 /* ======================================================================= */
 /* C-String functions which could be used without the String-Class         */
 /* ======================================================================= */
@@ -549,10 +579,10 @@ std::basic_string_view<IMPL_RTL_STRCODE> trimView( IMPL_RTL_STRCODE* pStr, sal_I
     sal_Int32 nPostSpaces   = 0;
     sal_Int32 nIndex        = nLen-1;
 
-    while ( (nPreSpaces < nLen) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nPreSpaces)) ) )
+    while ( (nPreSpaces < nLen) && implIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nPreSpaces)) ) )
         nPreSpaces++;
 
-    while ( (nIndex > nPreSpaces) && rtl_ImplIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nIndex)) ) )
+    while ( (nIndex > nPreSpaces) && implIsWhitespace( IMPL_RTL_USTRCODE(*(pStr+nIndex)) ) )
     {
         nPostSpaces++;
         nIndex--;
@@ -751,7 +781,7 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
     const auto end = str.end();
 
     /* Skip whitespaces */
-    while (pStr != end && rtl_ImplIsWhitespace(IMPL_RTL_USTRCODE(*pStr)))
+    while (pStr != end && implIsWhitespace(IMPL_RTL_USTRCODE(*pStr)))
         pStr++;
     if (pStr == end)
         return 0;
@@ -763,7 +793,7 @@ template <typename T, class S> T toInt(S str, sal_Int16 nRadix)
     std::make_unsigned_t<T> n = 0;
     while (pStr != end)
     {
-        sal_Int16 nDigit = rtl_ImplGetDigit(IMPL_RTL_USTRCODE(*pStr), nRadix);
+        sal_Int16 nDigit = implGetDigit(IMPL_RTL_USTRCODE(*pStr), nRadix);
         if ( nDigit < 0 )
             break;
         if (static_cast<std::make_unsigned_t<T>>(nMod < nDigit ? nDiv - 1 : nDiv) < n)
