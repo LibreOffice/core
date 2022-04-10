@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc44d04b_7326b3ea",
+        "filename": "test/source/text/xfootnote.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T01:31:29Z",
+      "side": 1,
+      "message": "Where do you invoke these tests? You need to have CPPUNIT_TEST() for them.\nPlease see other commits for the same issue.\nFor an example, take a look at: sc/qa/extras/sccellobj.cxx",
+      "revId": "e72fea53cd5b2eef0cf8b33885352b0748acecfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5eda76e7_d9d5e943",
+        "filename": "test/source/text/xfootnote.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T01:31:29Z",
+      "side": 1,
+      "message": "testSetLabel() and testGetLabel() would be better names.",
+      "revId": "e72fea53cd5b2eef0cf8b33885352b0748acecfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c10cc5f_7d745c0c",
+        "filename": "test/source/text/xfootnote.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T01:31:29Z",
+      "side": 1,
+      "message": "You are comparing the same things; This is not OK.\nPlease take a closer look at the Java tests, and try to do the similar things in C++. I see that you have tried to do this in the previous patch sets, but in order to fix the build problems, you have reached to this point.",
+      "revId": "e72fea53cd5b2eef0cf8b33885352b0748acecfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
