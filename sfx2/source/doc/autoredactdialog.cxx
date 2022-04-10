@@ -152,7 +152,7 @@ OUString TargetsTable::GetNameProposal() const
         sal_Int32 nIndex = 0;
         if (o3tl::getToken(sName, 0, ' ', nIndex) == sDefaultTargetName)
         {
-            sal_Int32 nCurrTargetId = sName.getToken(0, ' ', nIndex).toInt32();
+            sal_Int32 nCurrTargetId = o3tl::toInt32(o3tl::getToken(sName, 0, ' ', nIndex));
             nHighestTargetId = std::max<sal_Int32>(nHighestTargetId, nCurrTargetId);
         }
     }
@@ -729,7 +729,7 @@ SfxAddTargetDialog::SfxAddTargetDialog(weld::Window* pParent, const OUString& sN
     if (eTargetType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
         SelectTypeHdl(*m_xPredefContent);
-        m_xPredefContent->set_active(sContent.getToken(0, ';').toInt32());
+        m_xPredefContent->set_active(o3tl::toInt32(o3tl::getToken(sContent, 0, ';')));
     }
     else
     {

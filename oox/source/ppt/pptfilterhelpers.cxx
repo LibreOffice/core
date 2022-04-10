@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <oox/ppt/pptfilterhelpers.hxx>
 #include <tools/color.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace {
     int lcl_gethex(int nChar)
@@ -288,20 +289,20 @@ namespace oox::ppt {
                         Color aColor;
                         sal_Int32 index = 0;
                         aColor.SetRed(
-                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                            static_cast<sal_uInt8>(o3tl::toInt32(o3tl::getToken(aString, 0, ',', index))));
                         aColor.SetGreen(
-                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                            static_cast<sal_uInt8>(o3tl::toInt32(o3tl::getToken(aString, 0, ',', index))));
                         aColor.SetRed(
-                            static_cast<sal_uInt8>(aString.getToken(0, ',', index).toInt32()));
+                            static_cast<sal_uInt8>(o3tl::toInt32(o3tl::getToken(aString, 0, ',', index))));
                         rValue <<= aColor;
                         bRet = true;
                     }
                     else if (aString.startsWith("hsl("))
                     {
                         sal_Int32 index = 0;
-                        sal_Int32 nA = aString.getToken(0, ',', index).toInt32();
-                        sal_Int32 nB = aString.getToken(0, ',', index).toInt32();
-                        sal_Int32 nC = aString.getToken(0, ',', index).toInt32();
+                        sal_Int32 nA = o3tl::toInt32(o3tl::getToken(aString, 0, ',', index));
+                        sal_Int32 nB = o3tl::toInt32(o3tl::getToken(aString, 0, ',', index));
+                        sal_Int32 nC = o3tl::toInt32(o3tl::getToken(aString, 0, ',', index));
                         css::uno::Sequence<double> aHSL
                         {
                             nA * 360.0 / 255.0,

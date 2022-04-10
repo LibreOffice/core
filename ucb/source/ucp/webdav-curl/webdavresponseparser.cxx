@@ -36,6 +36,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 using namespace http_dav_ucp;
@@ -684,7 +685,7 @@ namespace
                                 if (sTimeout == "Infinite")
                                     maLock.Timeout = -1;
                                 else if (sTimeout.startsWith("Second-"))
-                                    maLock.Timeout = sTimeout.copy(7).toInt64();
+                                    maLock.Timeout = o3tl::toInt64(sTimeout.subView(7));
                                 break;
                             }
                             case WebDAVName_locktoken:

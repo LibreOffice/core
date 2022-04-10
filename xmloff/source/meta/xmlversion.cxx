@@ -23,6 +23,7 @@
 #include <xmloff/xmlmetae.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <xmloff/xmltoken.hxx>
 #include <comphelper/processfactory.hxx>
@@ -236,17 +237,17 @@ bool XMLVersionContext::ParseISODateTimeString(
     else
     {
         sal_Int32 n = 0;
-        nYear = aDateStr.getToken( 0, '-', n ).toInt32();
+        nYear = o3tl::toInt32(o3tl::getToken(aDateStr, 0, '-', n ));
         if ( nYear > 9999 )
             bSuccess = false;
         else if ( nDateTokens >= 2 )
         {
-            nMonth = aDateStr.getToken( 0, '-', n ).toInt32();
+            nMonth = o3tl::toInt32(o3tl::getToken(aDateStr, 0, '-', n ));
             if ( nMonth > 12 )
                 bSuccess = false;
             else if ( nDateTokens >= 3 )
             {
-                nDay = aDateStr.getToken( 0, '-', n ).toInt32();
+                nDay = o3tl::toInt32(o3tl::getToken(aDateStr, 0, '-', n ));
                 if ( nDay > 31 )
                     bSuccess = false;
             }
@@ -268,17 +269,17 @@ bool XMLVersionContext::ParseISODateTimeString(
         else
         {
             sal_Int32 n = 0;
-            nHour = aTimeStr.getToken( 0, ':', n ).toInt32();
+            nHour = o3tl::toInt32(o3tl::getToken(aTimeStr, 0, ':', n ));
             if ( nHour > 23 )
                 bSuccess = false;
             else if ( nTimeTokens >= 2 )
             {
-                nMin = aTimeStr.getToken( 0, ':', n ).toInt32();
+                nMin = o3tl::toInt32(o3tl::getToken(aTimeStr, 0, ':', n ));
                 if ( nMin > 59 )
                     bSuccess = false;
                 else if ( nTimeTokens >= 3 )
                 {
-                    nSec = aTimeStr.getToken( 0, ':', n ).toInt32();
+                    nSec = o3tl::toInt32(o3tl::getToken(aTimeStr, 0, ':', n ));
                     if ( nSec > 59 )
                         bSuccess = false;
                 }

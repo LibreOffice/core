@@ -22,6 +22,7 @@
 #include <tools/stream.hxx>
 
 #include <vcl/inetimg.hxx>
+#include <o3tl/string_view.hxx>
 
 const sal_Unicode TOKEN_SEPARATOR = '\001';
 
@@ -68,10 +69,10 @@ bool INetImage::Read( SvStream& rIStm, SotClipboardFormatId nFormat )
             aTargetURL = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
             aTargetFrame = sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
             /*aAlternateText =*/ sINetImg.getToken( 0, TOKEN_SEPARATOR, nStart );
-            aSizePixel.setWidth( sINetImg.getToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).toInt32() );
-            aSizePixel.setHeight( sINetImg.getToken( 0, TOKEN_SEPARATOR,
-                                                    nStart ).toInt32() );
+            aSizePixel.setWidth( o3tl::toInt32(o3tl::getToken(sINetImg, 0, TOKEN_SEPARATOR,
+                                                    nStart )) );
+            aSizePixel.setHeight(o3tl::toInt32(o3tl::getToken( sINetImg, 0, TOKEN_SEPARATOR,
+                                                    nStart )) );
             bRet = !sINetImg.isEmpty();
         }
         break;

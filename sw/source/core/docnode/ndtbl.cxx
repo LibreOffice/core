@@ -90,6 +90,7 @@
 #include <fntcache.hxx>
 #include <frameformats.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/string_view.hxx>
 #include <svl/numformat.hxx>
 #include <tools/datetimeutils.hxx>
 #include <sal/log.hxx>
@@ -3913,7 +3914,7 @@ OUString SwDoc::GetUniqueTableName() const
         {
             // Get number and set the Flag
             const sal_Int32 nNmLen = aName.getLength();
-            size_t nNum = pFormat->GetName().copy( nNmLen ).toInt32();
+            size_t nNum = o3tl::toInt32(pFormat->GetName().subView( nNmLen ));
             if( nNum-- && nNum < mpTableFrameFormatTable->size() )
                 pSetFlags[ nNum / 8 ] |= (0x01 << ( nNum & 0x07 ));
         }

@@ -213,4 +213,9 @@ void f5(OUString s)
     s += OUString(std::u16string_view(u"foo"));
 }
 
+void f6(OUString s)
+{
+    // expected-error@+1 {{rather than getToken, pass with a view using o3tl::getToken() [loplugin:stringview]}}
+    s.getToken(1, ' ').toInt32();
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

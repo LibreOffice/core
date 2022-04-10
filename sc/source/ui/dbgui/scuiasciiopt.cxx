@@ -38,6 +38,7 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <comphelper/lok.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <unicode/ucsdet.h>
 
@@ -119,7 +120,7 @@ static void lcl_FillCombo(weld::ComboBox& rCombo, const OUString& rList, sal_Uni
         {
             const OUString sEntry {rList.getToken(0, '\t', nIdx)};
             rCombo.append_text(sEntry);
-            if (nIdx>0 && static_cast<sal_Unicode>(rList.getToken(0, '\t', nIdx).toInt32()) == cSelect)
+            if (nIdx>0 && static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rList, 0, '\t', nIdx))) == cSelect)
                 aStr = sEntry;
         }
         while (nIdx>0);
@@ -147,7 +148,7 @@ static sal_Unicode lcl_CharFromCombo(const weld::ComboBox& rCombo, const OUStrin
             if ( ScGlobal::GetTransliteration().isEqual( aStr, sToken ) )
             {
                 sal_Int32 nTmpIdx {nIdx};
-                c = static_cast<sal_Unicode>(rList.getToken(0, '\t', nTmpIdx).toInt32());
+                c = static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rList, 0, '\t', nTmpIdx)));
             }
             // Skip to next token at even position
             sToken = rList.getToken(1, '\t', nIdx);

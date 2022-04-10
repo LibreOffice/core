@@ -32,6 +32,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
 #include <osl/mutex.hxx>
+#include <o3tl/string_view.hxx>
 
 // filename of configuration files
 constexpr OUStringLiteral PRINT_FILENAME = u"psprint.conf";
@@ -225,10 +226,10 @@ void PrinterInfoManager::initialize()
             if (!aValue.isEmpty())
             {
                 sal_Int32 nIdx {0};
-                m_aGlobalDefaults.m_nLeftMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                m_aGlobalDefaults.m_nRightMarginAdjust  = aValue.getToken(0, ',', nIdx).toInt32();
-                m_aGlobalDefaults.m_nTopMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                m_aGlobalDefaults.m_nBottomMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                m_aGlobalDefaults.m_nLeftMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
+                m_aGlobalDefaults.m_nRightMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
+                m_aGlobalDefaults.m_nTopMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
+                m_aGlobalDefaults.m_nBottomMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
             }
 
             aValue = aConfig.ReadKey( "ColorDepth", "24" );
@@ -409,10 +410,10 @@ void PrinterInfoManager::initialize()
                 if (!aValue.isEmpty())
                 {
                     sal_Int32 nIdx {0};
-                    aPrinter.m_aInfo.m_nLeftMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                    aPrinter.m_aInfo.m_nRightMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                    aPrinter.m_aInfo.m_nTopMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
-                    aPrinter.m_aInfo.m_nBottomMarginAdjust = aValue.getToken(0, ',', nIdx).toInt32();
+                    aPrinter.m_aInfo.m_nLeftMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
+                    aPrinter.m_aInfo.m_nRightMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
+                    aPrinter.m_aInfo.m_nTopMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
+                    aPrinter.m_aInfo.m_nBottomMarginAdjust = o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx));
                 }
 
                 aValue = aConfig.ReadKey( "ColorDepth" );

@@ -47,6 +47,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdobj.hxx>
 #include <tools/UnitConversion.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <dmapper/GraphicZOrderHelper.hxx>
 #include "rtfdocumentimpl.hxx"
@@ -497,8 +498,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     // The coordinates are in an (x,y) form.
                     aToken = aToken.copy(1, aToken.getLength() - 2);
                     sal_Int32 nI = 0;
-                    sal_Int32 nX = aToken.getToken(0, ',', nI).toInt32();
-                    sal_Int32 nY = (nI >= 0) ? aToken.getToken(0, ',', nI).toInt32() : 0;
+                    sal_Int32 nX = o3tl::toInt32(o3tl::getToken(aToken, 0, ',', nI));
+                    sal_Int32 nY
+                        = (nI >= 0) ? o3tl::toInt32(o3tl::getToken(aToken, 0, ',', nI)) : 0;
                     drawing::EnhancedCustomShapeParameterPair aPair;
                     aPair.First.Value <<= nX;
                     aPair.Second.Value <<= nY;
@@ -517,7 +519,8 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             sal_Int32 nCharIndex = 0;
             do
             {
-                sal_Int32 nSeg = rProperty.second.getToken(0, ';', nCharIndex).toInt32();
+                sal_Int32 nSeg
+                    = o3tl::toInt32(o3tl::getToken(rProperty.second, 0, ';', nCharIndex));
                 if (!nSize)
                     nSize = nSeg;
                 else if (!nCount)
@@ -842,8 +845,9 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
                     // The coordinates are in an (x,y) form.
                     aToken = aToken.copy(1, aToken.getLength() - 2);
                     sal_Int32 nI = 0;
-                    sal_Int32 nX = aToken.getToken(0, ',', nI).toInt32();
-                    sal_Int32 nY = (nI >= 0) ? aToken.getToken(0, ',', nI).toInt32() : 0;
+                    sal_Int32 nX = o3tl::toInt32(o3tl::getToken(aToken, 0, ',', nI));
+                    sal_Int32 nY
+                        = (nI >= 0) ? o3tl::toInt32(o3tl::getToken(aToken, 0, ',', nI)) : 0;
                     RTFSprms aPathAttributes;
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_x, new RTFValue(nX));
                     aPathAttributes.set(NS_ooxml::LN_CT_Point2D_y, new RTFValue(nY));

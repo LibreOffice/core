@@ -36,6 +36,7 @@
 #include <ucbhelper/content.hxx>
 #include <svtools/strings.hrc>
 #include <svtools/svtresid.hxx>
+#include <o3tl/string_view.hxx>
 #include <bitmaps.hlst>
 #include <strings.hxx>
 
@@ -388,7 +389,7 @@ static SvImageId GetImageId_Impl(
             return nImage;
         }
         else if ( aType == "image" )
-            nImage = static_cast<SvImageId>(aURLPath.getToken( 1, '/' ).toInt32());
+            nImage = static_cast<SvImageId>(o3tl::toInt32(o3tl::getToken(aURLPath, 1, '/' )));
     }
     else
     {

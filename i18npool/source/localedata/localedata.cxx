@@ -33,6 +33,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <sal/macros.h>
+#include <o3tl/string_view.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -1079,7 +1080,7 @@ LocaleDataImpl::getUnicodeScripts( const Locale& rLocale )
         Sequence< UnicodeScript > seq(scriptCount);
         auto seqRange = asNonConstRange(seq);
         for(sal_Int16 i = 0; i < scriptCount; i++) {
-            seqRange[i] = UnicodeScript( OUString(scriptArray[i]).toInt32() );
+            seqRange[i] = UnicodeScript( o3tl::toInt32(std::u16string_view(scriptArray[i], 1)) );
         }
         return seq;
     }

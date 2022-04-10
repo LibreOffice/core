@@ -51,6 +51,7 @@
 #include <svx/svxids.hrc>
 #include <vcl/i18nhelp.hxx>
 #include <vcl/window.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -387,7 +388,7 @@ SdrObjectUniquePtr FmFormView::CreateFieldControl(const OUString& rFieldDesc) co
     sal_Int32 nIdx{ 0 };
     OUString sDataSource     = rFieldDesc.getToken(0, u'\x000B', nIdx);
     OUString sObjectName     = rFieldDesc.getToken(0, u'\x000B', nIdx);
-    sal_uInt16 nObjectType   = static_cast<sal_uInt16>(rFieldDesc.getToken(0, u'\x000B', nIdx).toInt32());
+    sal_uInt16 nObjectType   = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(rFieldDesc, 0, u'\x000B', nIdx)));
     OUString sFieldName      = rFieldDesc.getToken(0, u'\x000B', nIdx);
 
     if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())
