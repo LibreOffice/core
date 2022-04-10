@@ -2086,6 +2086,12 @@ class SFDocuments:
         def ClearValues(self, range):
             return self.ExecMethod(self.vbMethod, 'ClearValues', range)
 
+        def CompactLeft(self, range, wholecolumn = False, filterformula = ''):
+            return self.ExecMethod(self.vbMethod, 'CompactLeft', range, wholecolumn, filterformula)
+
+        def CompactUp(self, range, wholerow = False, filterformula = ''):
+            return self.ExecMethod(self.vbMethod, 'CompactUp', range, wholerow, filterformula)
+
         def CopySheet(self, sheetname, newname, beforesheet = 32768):
             sheet = (sheetname.objectreference if isinstance(sheetname, SFDocuments.SF_CalcReference) else sheetname)
             return self.ExecMethod(self.vbMethod + self.flgObject, 'CopySheet', sheet, newname, beforesheet)
