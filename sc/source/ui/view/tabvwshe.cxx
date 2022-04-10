@@ -92,7 +92,8 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord )
             }
 
             ScImportExport aObj( rDoc, aRange );
-            aObj.SetFormulas( GetViewData().GetOptions().GetOption( VOPT_FORMULAS ) );
+            // tdf#148437 - if cell contains a formula, overwrite entire content of the cell
+            aObj.SetFormulas(true);
             OUString aExportOUString;
             /* TODO: STRING_TSVC under some circumstances? */
             aObj.ExportString( aExportOUString, SotClipboardFormatId::STRING );
