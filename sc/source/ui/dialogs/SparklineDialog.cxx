@@ -253,7 +253,7 @@ void SparklineDialog::setupValues()
             break;
         case sc::AxisType::Custom:
             mxComboMaxAxisType->set_active(2);
-            if (maAttributes.getManualMin())
+            if (maAttributes.getManualMax())
                 mxSpinCustomMax->GetFormatter().SetValue(*maAttributes.getManualMax());
             break;
     }
