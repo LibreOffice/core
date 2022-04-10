@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39c9f019_8aaa1a62",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T21:07:42Z",
+      "side": 1,
+      "message": "1. The parent of this commit is not OK! You should fix this. I suggest that you work on master branch, and only create a single commit, then resubmit it with the same Change-Id.\n2. If you want to know more about the CI errors in gerrit_linux_clang_dbgutil, read this:\nhttps://wiki.documentfoundation.org/Development/clang-format\n3. Please use Shady Mohamed instead of shady_mohamed as your name. You can use:\n $ git config --global user.name \"Shady Mohamed\"\n $ git config --global user.email shadimabdrawy1999@gmail.com",
+      "revId": "1755b833573ffcefc84c447a09eb283d47bc025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "738327e4_e9a8e099",
+        "filename": "sal/osl/w32/file_error.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T21:07:42Z",
+      "side": 1,
+      "message": "You should remove these extra blank lines.",
+      "revId": "1755b833573ffcefc84c447a09eb283d47bc025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78137fb9_6fa010be",
+        "filename": "sal/osl/w32/file_error.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T21:07:42Z",
+      "side": 1,
+      "message": "Also remove this extra blank line.",
+      "revId": "1755b833573ffcefc84c447a09eb283d47bc025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f29ac739_a9f72210",
+        "filename": "sal/osl/w32/nlsupport.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T21:07:42Z",
+      "side": 1,
+      "message": "Please also remove extra spaces and blank lines.",
+      "revId": "1755b833573ffcefc84c447a09eb283d47bc025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22a3a2fc_36ec7be7",
+        "filename": "sal/osl/w32/nlsupport.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-10T21:07:42Z",
+      "side": 1,
+      "message": "Also remove this.",
+      "revId": "1755b833573ffcefc84c447a09eb283d47bc025f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
