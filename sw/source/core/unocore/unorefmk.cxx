@@ -596,9 +596,13 @@ SwXMetaText::createTextCursorByRange(
     return xCursor;
 }
 
-// the Meta has a cached list of text portions for its contents
-// this list is created by SwXTextPortionEnumeration
-// the Meta listens at the SwTextNode and throws away the cache when it changes
+/**
+ * the Meta has a cached list of text portions for its contents
+ * this list is created by SwXTextPortionEnumeration
+ * the Meta listens at the SwTextNode and throws away the cache when it changes
+ *
+ * This inner part of SwXMeta is deleted with a locked SolarMutex.
+ */
 class SwXMeta::Impl : public SvtListener
 {
 public:
