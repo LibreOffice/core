@@ -1320,7 +1320,7 @@ void ScInputHandler::ShowTip( const OUString& rText )
     Point aPos;
     if (pInputWin && pInputWin->GetEditView() == pActiveView)
     {
-        pTipVisibleParent = pInputWin->GetEditWindow();
+        // TODO: pTipVisibleParent = pInputWin->GetEditWindow();
         aPos = pInputWin->GetCursorScreenPixelPos();
     }
     else
@@ -1348,7 +1348,7 @@ void ScInputHandler::ShowTipBelow( const OUString& rText )
     Point aPos;
     if (pInputWin && pInputWin->GetEditView() == pActiveView)
     {
-        pTipVisibleSecParent = pInputWin->GetEditWindow();
+        // TODO: pTipVisibleSecParent = pInputWin->GetEditWindow();
         aPos = pInputWin->GetCursorScreenPixelPos(true);
     }
     else
