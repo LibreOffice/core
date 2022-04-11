@@ -324,6 +324,14 @@
       </object>
     </child>
     <child>
+      <object class="GtkCheckMenuItem" id="endnotetracking">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="label" translatable="yes" context="navigatorcontextmenu|STR_ENDNOTE_TRACKING">Endnote Tracking</property>
+        <property name="use-underline">True</property>
+      </object>
+    </child>
+    <child>
       <object class="GtkCheckMenuItem" id="sort">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
