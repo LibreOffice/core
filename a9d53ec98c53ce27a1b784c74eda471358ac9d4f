@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a0aed47_659a9315",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-11T13:20:13Z",
+      "side": 1,
+      "message": "\u003e Uploaded patch set 9.\n\nmanually fixed merge conflicts of this relation chain against master",
+      "revId": "a9d53ec98c53ce27a1b784c74eda471358ac9d4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
