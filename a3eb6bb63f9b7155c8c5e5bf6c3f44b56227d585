@@ -89,6 +89,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05258a81_8dbd45dd",
+        "filename": "comphelper/source/container/embeddedobjectcontainer.cxx",
+        "patchSetId": 18
+      },
+      "lineNbr": 1162,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-11T14:45:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a2e3bc0_1462ab74",
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9607389c_82564a59",
