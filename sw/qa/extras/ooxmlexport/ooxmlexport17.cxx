@@ -319,6 +319,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf146851_2, "tdf146851_2.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("Schedule"), xTextField->getPresentation(false));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148052, "tdf148052.docx")
+{
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+
+    uno::Reference<text::XTextField> xTextField(xFields->nextElement(), uno::UNO_QUERY);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 14. Aug 18
+    // - Actual  : 11. Apr 22
+    CPPUNIT_ASSERT_EQUAL(OUString("14. Aug 18"), xTextField->getPresentation(false));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148111, "tdf148111.docx")
 {
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
