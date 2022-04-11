@@ -2670,6 +2670,8 @@ sw/res/nc20008.png cmd/sc_insertreferencefield.png
 sw/res/nc20009.png cmd/sc_insertindexesentry.png
 sw/res/nc20010.png cmd/sc_shownote.png
 sw/res/nc20011.png sd/res/sf01.png
+sw/res/nc20012.png cmd/sc_insertfootnote.png
+sw/res/nc20013.png cmd/sc_insertendnote.png
 sw/res/sc20244.png sw/res/sc20234.png
 
 sw/res/re01.png cmd/lc_unsetcellsreadonly.png
