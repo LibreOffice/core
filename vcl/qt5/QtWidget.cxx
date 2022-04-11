@@ -42,6 +42,7 @@
 #include <QtGui/QTextCharFormat>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QToolTip>
 #include <QtWidgets/QWidget>
 
 #include <cairo.h>
@@ -562,7 +563,7 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
     return bStopProcessingKey;
 }
 
-bool QtWidget::handleEvent(QtFrame& rFrame, const QWidget& rWidget, QEvent* pEvent)
+bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
 {
     if (pEvent->type() == QEvent::ShortcutOverride)
     {
@@ -588,6 +589,22 @@ bool QtWidget::handleEvent(QtFrame& rFrame, const QWidget& rWidget, QEvent* pEve
         if (handleKeyEvent(rFrame, rWidget, static_cast<QKeyEvent*>(pEvent),
                            ButtonKeyState::Pressed))
             return true;
+    }
+    else if (pEvent->type() == QEvent::ToolTip)
+    {
+        // Qt's POV on focus is wrong for our fake popup windows, so check LO's state.
+        // Otherwise Qt will continue handling ToolTip events from the "parent" window.
+        const vcl::Window* pFocusWin = Application::GetFocusWindow();
+        if (!rFrame.m_aTooltipText.isEmpty() && pFocusWin
+            && pFocusWin->GetFrameWindow() == rFrame.GetWindow())
+            QToolTip::showText(QCursor::pos(), toQString(rFrame.m_aTooltipText), &rWidget,
+                               rFrame.m_aTooltipArea);
+        else
+        {
+            QToolTip::hideText();
+            pEvent->ignore();
+        }
+        return true;
     }
     return false;
 }

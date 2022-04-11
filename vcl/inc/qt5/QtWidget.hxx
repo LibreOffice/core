@@ -87,7 +87,7 @@ public:
     void endExtTextInput();
     void fakeResize();
 
-    static bool handleEvent(QtFrame&, const QWidget&, QEvent*);
+    static bool handleEvent(QtFrame&, QWidget&, QEvent*);
     // key events might be propagated further down => call base on false
     static inline bool handleKeyReleaseEvent(QtFrame&, const QWidget&, QKeyEvent*);
     // mouse events are always accepted
