@@ -206,6 +206,10 @@ $(call gb_ExternalProject_get_preparation_target,$(1)) : \
 
 endef
 
+# Returns flags to include in CFLAGS/CXXFLAGS to enable optimizations and/or debugging.
+# gb_ExternalProject_get_build_flags project
+gb_ExternalProject_get_build_flags = $(call gb_LinkTarget__get_debugflags,ExternalProject_$(1))
+
 # Run a target command
 #
 # This provides a wrapper that changes to the right directory,

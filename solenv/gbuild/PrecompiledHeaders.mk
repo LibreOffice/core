@@ -21,7 +21,7 @@
 # PrecompiledHeader class
 
 # Use different PCH file depending on whether we use debugging symbols.
-gb_PrecompiledHeader__get_debugdir = $(if $(call gb_LinkTarget__symbols_enabled,$(1)),debug,nodebug)
+gb_PrecompiledHeader__get_debugdir = $(if $(call gb_target_symbols_enabled,$(1)),debug,nodebug)
 
 # $(call gb_PrecompiledHeader_generate_timestamp_rule,linktargetmakefilename)
 define gb_PrecompiledHeader_generate_timestamp_rule

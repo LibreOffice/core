@@ -21,7 +21,7 @@ $(eval $(call gb_ExternalProject_use_externals,libwps,\
 
 libwps_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
-libwps_CXXFLAGS=$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))
+libwps_CXXFLAGS=$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libwps)
 
 libwps_LDFLAGS=
 ifeq ($(OS),LINUX)

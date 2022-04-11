@@ -51,7 +51,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(HAVE_GCC_FNO_SIZED_DEALLOCATION),-fno-sized-deallocation -fno-delete-null-pointer-checks) \
 			$(CXXFLAGS_CXX11) \
 			$(if $(filter TRUE,$(COM_IS_CLANG)), -Wno-c++11-narrowing) \
-			$(if $(call gb_Module__symbols_enabled,firebird),$(gb_DEBUGINFO_FLAGS)) \
+			$(call gb_ExternalProject_get_build_flags,firebird) \
 			$(if $(ENABLE_DEBUG),$(if $(filter MSC,$(COM)),-Od -Z7)) \
 		" \
 		&& export LDFLAGS=" \
