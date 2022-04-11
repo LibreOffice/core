@@ -26,7 +26,10 @@ $(call gb_ExternalProject_get_state_target,freetype,build) :
 			--without-png \
 			--prefix=$(call gb_UnpackedTarball_get_dir,freetype/instdir) \
 			$(gb_CONFIGURE_PLATFORMS) \
-			CFLAGS="$(CFLAGS) $(if $(debug),-g) $(gb_VISIBILITY_FLAGS) $(gb_EMSCRIPTEN_CPPFLAGS)" \
+			CFLAGS="$(CFLAGS) \
+				$(call gb_ExternalProject_get_build_flags,freetype) \
+				$(gb_VISIBILITY_FLAGS) \
+				$(gb_EMSCRIPTEN_CPPFLAGS)" \
 		&& $(MAKE) install \
 		&& touch $@	)
 	$(call gb_Trace_EndRange,freetype,EXTERNAL)

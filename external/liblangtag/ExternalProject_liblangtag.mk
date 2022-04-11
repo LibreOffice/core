@@ -30,9 +30,7 @@ $(call gb_ExternalProject_get_state_target,liblangtag,build):
 		$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		$(if $(filter TRUE,$(HAVE_GCC_BUILTIN_ATOMIC)),"lt_cv_has_atomic=yes","lt_cv_has_atomic=no") \
 		CFLAGS='$(CFLAGS) -pthread \
-				$(if $(ENABLE_OPTIMIZED), \
-					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(if $(call gb_Module__symbols_enabled,liblangtag),$(gb_DEBUGINFO_FLAGS))' \
+			$(call gb_ExternalProject_get_build_flags,liblangtag)' \
 		$(gb_CONFIGURE_PLATFORMS) \
 		$(if $(CROSS_COMPILING),$(if $(filter WNT,$(OS)),"lt_cv_c99_vsnprintf=yes" "ac_cv_va_copy=yes","ac_cv_va_copy=no")) \
 		LIBXML2_CFLAGS="$(LIBXML_CFLAGS)" \

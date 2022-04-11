@@ -150,6 +150,13 @@ ifeq ($(gb_ENABLE_SYMBOLS_FOR),no)
 gb_ENABLE_SYMBOLS_FOR :=
 endif
 
+# Detect whether symbols should be enabled for the given gbuild target.
+# enable if: no "-TARGET" defined AND [module is enabled OR "TARGET" defined]
+gb_target_symbols_enabled = \
+ $(and $(if $(filter -$(1),$(ENABLE_SYMBOLS_FOR)),,$(true)),\
+       $(or $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),\
+            $(filter $(1),$(ENABLE_SYMBOLS_FOR))))
+
 ifeq ($(BLOCK_PCH),)
 gb_ENABLE_PCH := $(ENABLE_PCH)
 else

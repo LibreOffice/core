@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,libabw,build) :
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			$(if $(gb_FULLDEPS),,--disable-dependency-tracking) \
-			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libabw)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
