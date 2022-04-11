@@ -253,7 +253,7 @@ static OUString CreateMD5FromString( const OUString& aMsg )
         rtl_digest_destroy( handle );
 
         // Create hex-value string from the MD5 value to keep the string size minimal
-        OUStringBuffer aBuffer( nMD5KeyLen * 2 + 1 );
+        OUStringBuffer aBuffer( sal_Int32(nMD5KeyLen * 2 + 1) );
         for ( sal_uInt32 i = 0; i < nMD5KeyLen; i++ )
             aBuffer.append( static_cast<sal_Int32>(pMD5KeyBuffer[i]), 16 );
 

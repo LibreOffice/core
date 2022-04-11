@@ -100,28 +100,13 @@ public:
 
         @param      length   the initial capacity.
      */
-    explicit OUStringBuffer(int length)
+    explicit OUStringBuffer(sal_Int32 length)
         : pData(NULL)
         , nCapacity( length )
     {
         rtl_uString_new_WithLength( &pData, length );
     }
 #if __cplusplus >= 201103L
-    explicit OUStringBuffer(unsigned int length)
-        : OUStringBuffer(static_cast<int>(length))
-    {
-    }
-#if SAL_TYPES_SIZEOFLONG == 4
-    // additional overloads for sal_Int32 sal_uInt32
-    explicit OUStringBuffer(long length)
-        : OUStringBuffer(static_cast<int>(length))
-    {
-    }
-    explicit OUStringBuffer(unsigned long length)
-        : OUStringBuffer(static_cast<int>(length))
-    {
-    }
-#endif
     // avoid obvious bugs
     explicit OUStringBuffer(char) = delete;
     explicit OUStringBuffer(sal_Unicode) = delete;

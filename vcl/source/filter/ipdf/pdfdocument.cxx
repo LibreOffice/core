@@ -2061,7 +2061,7 @@ OUString PDFDocument::DecodeHexStringUTF16BE(PDFHexStringElement const& rElement
     {
         return {};
     }
-    OUStringBuffer buf(static_cast<unsigned int>(encoded.size() - 2));
+    OUStringBuffer buf(static_cast<sal_Int32>(encoded.size() - 2));
     for (size_t i = 2; i < encoded.size(); i += 2)
     {
         buf.append(sal_Unicode((static_cast<sal_uInt16>(encoded[i]) << 8) | encoded[i + 1]));
