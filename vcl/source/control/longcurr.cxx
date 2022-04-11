@@ -48,7 +48,7 @@ BigInt ImplPower10( sal_uInt16 n )
     return nValue;
 }
 
-OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, const OUString& rCurrSymbol, bool bShowThousandSep )
+OUString ImplGetCurr( const LocaleDataWrapper& rLocaleDataWrapper, const BigInt &rNumber, sal_uInt16 nDigits, std::u16string_view rCurrSymbol, bool bShowThousandSep )
 {
     SAL_WARN_IF( nDigits >= 10, "vcl", "LongCurrency may only have 9 decimal places" );
 

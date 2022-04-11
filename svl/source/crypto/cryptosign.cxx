@@ -879,10 +879,10 @@ static int AsHex(char ch)
     return nRet;
 }
 
-std::vector<unsigned char> DecodeHexString(const OString& rHex)
+std::vector<unsigned char> DecodeHexString(std::string_view rHex)
 {
     std::vector<unsigned char> aRet;
-    size_t nHexLen = rHex.getLength();
+    size_t nHexLen = rHex.size();
     {
         int nByte = 0;
         int nCount = 2;

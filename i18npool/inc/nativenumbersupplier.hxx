@@ -68,7 +68,7 @@ public:
                                        const css::lang::Locale& rLocale,
                                        sal_Int16 nNativeNumberMode,
                                        css::uno::Sequence<sal_Int32>* pOffset,
-                                       const OUString& rNativeNumberParams = OUString());
+                                       std::u16string_view rNativeNumberParams = std::u16string_view());
         /// @throws css::uno::RuntimeException
         static sal_Unicode getNativeNumberChar( const sal_Unicode inChar,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) ;

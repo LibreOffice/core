@@ -63,10 +63,10 @@ class DictionaryNeo :
 
     ErrCode                     loadEntries(const OUString &rMainURL);
     ErrCode                     saveEntries(const OUString &rMainURL);
-    static int                  cmpDicEntry(const OUString &rWord1,
-                                        const OUString &rWord2,
+    static int                  cmpDicEntry(std::u16string_view rWord1,
+                                        std::u16string_view rWord2,
                                         bool bSimilarOnly = false);
-    bool                        seekEntry(const OUString &rWord, sal_Int32 *pPos,
+    bool                        seekEntry(std::u16string_view rWord, sal_Int32 *pPos,
                                         bool bSimilarOnly = false);
     bool                        isSorted();
 

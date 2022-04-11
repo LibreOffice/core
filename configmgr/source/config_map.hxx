@@ -19,12 +19,12 @@
 
 struct LengthContentsCompare
 {
-    bool operator()(const OUString& a, const OUString& b) const
+    bool operator()(std::u16string_view a, std::u16string_view b) const
     {
-        if (a.getLength() == b.getLength())
+        if (a.size() == b.size())
             return a < b;
         else
-            return a.getLength() < b.getLength();
+            return a.size() < b.size();
     }
 };
 

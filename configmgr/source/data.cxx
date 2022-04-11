@@ -30,6 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 #include "additions.hxx"
 #include "data.hxx"
@@ -43,23 +44,23 @@ namespace configmgr {
 namespace {
 
 bool decode(
-    OUString const & encoded, sal_Int32 begin, sal_Int32 end,
+    std::u16string_view encoded, sal_Int32 begin, sal_Int32 end,
     OUString * decoded)
 {
     assert(
-        begin >= 0 && begin <= end && end <= encoded.getLength() &&
+        begin >= 0 && begin <= end && end <= static_cast<sal_Int32>(encoded.size()) &&
         decoded != nullptr);
     OUStringBuffer buf(end - begin);
     while (begin != end) {
         sal_Unicode c = encoded[begin++];
         if (c == '&') {
-            if (encoded.match("amp;", begin)) {
+            if (o3tl::starts_with(encoded.substr(begin), u"amp;")) {
                 buf.append('&');
                 begin += RTL_CONSTASCII_LENGTH("amp;");
-            } else if (encoded.match("quot;", begin)) {
+            } else if (o3tl::starts_with(encoded.substr(begin), u"quot;")) {
                 buf.append('"');
                 begin += RTL_CONSTASCII_LENGTH("quot;");
-            } else if (encoded.match("apos;", begin)) {
+            } else if (o3tl::starts_with(encoded.substr(begin), u"apos;")) {
                 buf.append('\'');
                 begin += RTL_CONSTASCII_LENGTH("apos;");
             } else {

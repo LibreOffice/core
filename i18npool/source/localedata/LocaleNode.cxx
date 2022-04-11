@@ -266,7 +266,7 @@ void LCInfoNode::generateCode (const OFileWriter &of) const
         of.writeParameter("Variant", aVariant);
     }
     else
-        of.writeParameter("Variant", OUString());
+        of.writeParameter("Variant", std::u16string_view());
     of.writeAsciiString("\nstatic const sal_Unicode* LCInfoArray[] = {\n");
     of.writeAsciiString("\tlangID,\n");
     of.writeAsciiString("\tlangDefaultName,\n");
@@ -822,7 +822,7 @@ void LCFormatNode::generateCode (const OFileWriter &of) const
         if (n)
             of.writeParameter("FormatDefaultName", n->getValue(), formatCount);
         else
-            of.writeParameter("FormatDefaultName", OUString(), formatCount);
+            of.writeParameter("FormatDefaultName", std::u16string_view(), formatCount);
 
     }
 
@@ -1613,7 +1613,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && daysNode == nullptr) {
-            of.writeParameter("dayRef", "ref", i);
+            of.writeParameter("dayRef", u"ref", i);
             of.writeParameter("dayRefName", ref_name, i);
             nbOfDays[i] = 0;
         } else {
@@ -1646,7 +1646,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && monthsNode == nullptr) {
-            of.writeParameter("monthRef", "ref", i);
+            of.writeParameter("monthRef", u"ref", i);
             of.writeParameter("monthRefName", ref_name, i);
             nbOfMonths[i] = 0;
         } else {
@@ -1682,7 +1682,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && genitiveMonthsNode == nullptr) {
-            of.writeParameter("genitiveMonthRef", "ref", i);
+            of.writeParameter("genitiveMonthRef", u"ref", i);
             of.writeParameter("genitiveMonthRefName", ref_name, i);
             nbOfGenitiveMonths[i] = 0;
         } else {
@@ -1719,7 +1719,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && partitiveMonthsNode == nullptr) {
-            of.writeParameter("partitiveMonthRef", "ref", i);
+            of.writeParameter("partitiveMonthRef", u"ref", i);
             of.writeParameter("partitiveMonthRefName", ref_name, i);
             nbOfPartitiveMonths[i] = 0;
         } else {
@@ -1752,7 +1752,7 @@ void LCCalendarNode::generateCode (const OFileWriter &of) const
             }
         }
         if (!ref_name.isEmpty() && erasNode == nullptr) {
-            of.writeParameter("eraRef", "ref", i);
+            of.writeParameter("eraRef", u"ref", i);
             of.writeParameter("eraRefName", ref_name, i);
             nbOfEras[i] = 0;
         } else {
@@ -2118,9 +2118,9 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
          of.writeParameter( "forbiddenEnd", forbidNode -> getChildAt(1)->getValue());
          of.writeParameter( "hangingChars", forbidNode -> getChildAt(2)->getValue());
     } else {
-         of.writeParameter( "forbiddenBegin", OUString());
-         of.writeParameter( "forbiddenEnd", OUString());
-         of.writeParameter( "hangingChars", OUString());
+         of.writeParameter( "forbiddenBegin", std::u16string_view());
+         of.writeParameter( "forbiddenEnd", std::u16string_view());
+         of.writeParameter( "hangingChars", std::u16string_view());
     }
     of.writeAsciiString("\nstatic const sal_Unicode* LCForbiddenCharactersArray[] = {\n");
     of.writeAsciiString("\tforbiddenBegin,\n");
@@ -2136,11 +2136,11 @@ void LCMiscNode::generateCode (const OFileWriter &of) const
          of.writeParameter( "CharacterMode", breakNode -> getChildAt(3)->getValue());
          of.writeParameter( "LineMode", breakNode -> getChildAt(4)->getValue());
     } else {
-         of.writeParameter( "EditMode", OUString());
-         of.writeParameter( "DictionaryMode", OUString());
-         of.writeParameter( "WordCountMode", OUString());
-         of.writeParameter( "CharacterMode", OUString());
-         of.writeParameter( "LineMode", OUString());
+         of.writeParameter( "EditMode", std::u16string_view());
+         of.writeParameter( "DictionaryMode", std::u16string_view());
+         of.writeParameter( "WordCountMode", std::u16string_view());
+         of.writeParameter( "CharacterMode", std::u16string_view());
+         of.writeParameter( "LineMode", std::u16string_view());
     }
     of.writeAsciiString("\nstatic const sal_Unicode* LCBreakIteratorRulesArray[] = {\n");
     of.writeAsciiString("\tEditMode,\n");

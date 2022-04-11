@@ -96,11 +96,11 @@ bool LinguIsUnspecified( LanguageType nLanguage )
 // For mappings between language code string and LanguageType see
 // i18nlangtag/source/isolang/isolang.cxx
 
-bool LinguIsUnspecified( const OUString & rBcp47 )
+bool LinguIsUnspecified( std::u16string_view rBcp47 )
 {
-    if (rBcp47.getLength() != 3)
+    if (rBcp47.size() != 3)
         return false;
-    return rBcp47 == "zxx" || rBcp47 == "und" || rBcp47 == "mul";
+    return rBcp47 == u"zxx" || rBcp47 == u"und" || rBcp47 == u"mul";
 }
 
 static sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
@@ -139,10 +139,10 @@ sal_Int32 & IntArray2D::Value( int i, int k  )
     return pData[ i * n2 + k ];
 }
 
-sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 )
+sal_Int32 LevDistance( std::u16string_view rTxt1, std::u16string_view rTxt2 )
 {
-    sal_Int32 nLen1 = rTxt1.getLength();
-    sal_Int32 nLen2 = rTxt2.getLength();
+    sal_Int32 nLen1 = rTxt1.size();
+    sal_Int32 nLen2 = rTxt2.size();
 
     if (nLen1 == 0)
         return nLen2;
@@ -463,9 +463,9 @@ static bool GetAltSpelling( sal_Int16 &rnChgPos, sal_Int16 &rnChgLen, OUString &
     return bRes;
 }
 
-static sal_Int16 GetOrigWordPos( const OUString &rOrigWord, sal_Int16 nPos )
+static sal_Int16 GetOrigWordPos( std::u16string_view rOrigWord, sal_Int16 nPos )
 {
-    sal_Int32 nLen = rOrigWord.getLength();
+    sal_Int32 nLen = rOrigWord.size();
     sal_Int32 i = -1;
     while (nPos >= 0  &&  i++ < nLen)
     {
@@ -477,10 +477,10 @@ static sal_Int16 GetOrigWordPos( const OUString &rOrigWord, sal_Int16 nPos )
     return sal::static_int_cast< sal_Int16 >((0 <= i  &&  i < nLen) ? i : -1);
 }
 
-sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos )
+sal_Int32 GetPosInWordToCheck( std::u16string_view rTxt, sal_Int32 nPos )
 {
     sal_Int32 nRes = -1;
-    sal_Int32 nLen = rTxt.getLength();
+    sal_Int32 nLen = rTxt.size();
     if (0 <= nPos  &&  nPos < nLen)
     {
         nRes = 0;
@@ -645,12 +645,12 @@ bool HasDigits( const OUString &rText )
     return false;
 }
 
-bool IsNumeric( const OUString &rText )
+bool IsNumeric( std::u16string_view rText )
 {
     bool bRes = false;
-    if (!rText.isEmpty())
+    if (!rText.empty())
     {
-        sal_Int32 nLen = rText.getLength();
+        sal_Int32 nLen = rText.size();
         bRes = true;
         for(sal_Int32 i = 0; i < nLen; ++i)
         {

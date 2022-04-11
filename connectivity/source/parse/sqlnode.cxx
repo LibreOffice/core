@@ -234,7 +234,7 @@ OUString OSQLParseNode::convertDateTimeString(const SQLParseNodeParameter& rPara
 }
 
 
-OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, const OUString& rString)
+OUString OSQLParseNode::convertTimeString(const SQLParseNodeParameter& rParam, std::u16string_view rString)
 {
     css::util::Time aTime = DBTypeConversion::toTime(rString);
     Reference< XNumberFormatsSupplier >  xSupplier(rParam.xFormatter->getNumberFormatsSupplier());

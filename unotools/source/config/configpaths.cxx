@@ -25,6 +25,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 namespace utl
 {
@@ -182,22 +183,22 @@ OUString extractFirstFromConfigurationPath(OUString const& _sInPath, OUString* _
 }
 
 // find the position after the prefix in the nested path
-static sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const& _sPrefixPath)
+static sal_Int32 lcl_findPrefixEnd(std::u16string_view _sNestedPath, std::u16string_view _sPrefixPath)
 {
     // TODO: currently handles only exact prefix matches
-    sal_Int32 nPrefixLength = _sPrefixPath.getLength();
+    size_t nPrefixLength = _sPrefixPath.size();
 
     OSL_ENSURE(nPrefixLength == 0 || _sPrefixPath[nPrefixLength-1] != '/',
                 "Cannot handle slash-terminated prefix paths");
 
     bool bIsPrefix;
-    if (_sNestedPath.getLength() > nPrefixLength)
+    if (_sNestedPath.size() > nPrefixLength)
     {
         bIsPrefix = _sNestedPath[nPrefixLength] == '/' &&
-                    _sNestedPath.startsWith(_sPrefixPath);
+                    o3tl::starts_with(_sNestedPath, _sPrefixPath);
         ++nPrefixLength;
     }
-    else if (_sNestedPath.getLength() == nPrefixLength)
+    else if (_sNestedPath.size() == nPrefixLength)
     {
         bIsPrefix = _sNestedPath == _sPrefixPath;
     }
@@ -209,14 +210,14 @@ static sal_Int32 lcl_findPrefixEnd(OUString const& _sNestedPath, OUString const&
     return bIsPrefix ? nPrefixLength : 0;
 }
 
-bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
-                                     OUString const& _sPrefixPath)
+bool isPrefixOfConfigurationPath(std::u16string_view _sNestedPath,
+                                     std::u16string_view _sPrefixPath)
 {
-    return _sPrefixPath.isEmpty() || lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) != 0;
+    return _sPrefixPath.empty() || lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) != 0;
 }
 
 OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
-                                         OUString const& _sPrefixPath)
+                                         std::u16string_view _sPrefixPath)
 {
     if ( sal_Int32 nPrefixEnd = lcl_findPrefixEnd(_sNestedPath,_sPrefixPath) )
     {
@@ -224,7 +225,7 @@ OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
     }
     else
     {
-        OSL_ENSURE(_sPrefixPath.isEmpty(),  "Path does not start with expected prefix");
+        OSL_ENSURE(_sPrefixPath.empty(),  "Path does not start with expected prefix");
 
         return _sNestedPath;
     }

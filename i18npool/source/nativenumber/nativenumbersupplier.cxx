@@ -26,6 +26,7 @@
 #include "data/numberchar.h"
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/string_view.hxx>
 #include <map>
 #include <mutex>
 #include <memory>
@@ -637,7 +638,7 @@ OUString getNumberText(const Locale& rLocale, const OUString& rNumberString,
 OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNumberString, const Locale& rLocale,
                                                             sal_Int16 nNativeNumberMode,
                                                             Sequence<sal_Int32>* pOffset,
-                                                            const OUString& rNativeNumberParams)
+                                                            std::u16string_view rNativeNumberParams)
 {
     if (!isValidNatNumImpl(rLocale, nNativeNumberMode))
         return aNumberString;
@@ -672,17 +673,17 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
         size_t nCasing;
         for (nCasing = 0; nCasing < SAL_N_ELEMENTS(Casings); ++nCasing)
         {
-            if (rNativeNumberParams.startsWith( Casings[nCasing].aLiteral))
+            if (o3tl::starts_with(rNativeNumberParams, Casings[nCasing].aLiteral))
             {
                 nStripCase = Casings[nCasing].aLiteral.size();
                 break;
             }
         }
 
-        if (nStripCase > 0 && (rNativeNumberParams.getLength() == nStripCase ||
+        if (nStripCase > 0 && (static_cast<sal_Int32>(rNativeNumberParams.size()) == nStripCase ||
                     rNativeNumberParams[nStripCase++] == ' '))
         {
-            OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.subView(nStripCase));
+            OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.substr(nStripCase));
 
             if (!xCharClass.is())
                 xCharClass = CharacterClassification::create(comphelper::getProcessComponentContext());

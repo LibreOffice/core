@@ -105,7 +105,7 @@ static bool lcl_GetPassword(
 }
 
 
-static bool lcl_IsPasswordCorrect( const OUString &rPassword )
+static bool lcl_IsPasswordCorrect( std::u16string_view rPassword )
 {
     bool bRes = false;
 

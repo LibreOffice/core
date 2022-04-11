@@ -165,11 +165,11 @@ static OUString getAsciiLine( const ::rtl::ByteSequence& buf )
 }
 
 
-static ::rtl::ByteSequence getBufFromAsciiLine( const OUString& line )
+static ::rtl::ByteSequence getBufFromAsciiLine( std::u16string_view line )
 {
-    OSL_ENSURE( line.getLength() % 2 == 0, "Wrong syntax!" );
+    OSL_ENSURE( line.size() % 2 == 0, "Wrong syntax!" );
     OString tmpLine = OUStringToOString( line, RTL_TEXTENCODING_ASCII_US );
-    ::rtl::ByteSequence aResult(line.getLength()/2);
+    ::rtl::ByteSequence aResult(line.size()/2);
 
     for( int ind = 0; ind < tmpLine.getLength()/2; ind++ )
     {
@@ -412,7 +412,7 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& )
     }
 }
 
-std::vector< OUString > PasswordContainer::DecodePasswords( const OUString& aLine, const OUString& aIV, const OUString& aMasterPasswd, css::task::PasswordRequestMode mode )
+std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view aLine, const OUString& aIV, const OUString& aMasterPasswd, css::task::PasswordRequestMode mode )
 {
     if( !aMasterPasswd.isEmpty() )
     {

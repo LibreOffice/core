@@ -58,13 +58,13 @@ Sequence< OUString > SAL_CALL
 #define NUMBER_ZERO 0x30
 
 OUString
-transliteration_Numeric::transliterateBullet( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
+transliteration_Numeric::transliterateBullet( std::u16string_view inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >* pOffset ) const
 {
     sal_Int32 number = -1, j = 0, endPos = startPos + nCount;
 
-    if (endPos >  inStr.getLength())
-        endPos = inStr.getLength();
+    if (endPos > static_cast<sal_Int32>(inStr.size()))
+        endPos = inStr.size();
 
     rtl_uString* pStr = rtl_uString_alloc(nCount);
     sal_Unicode* out = pStr->buffer;
