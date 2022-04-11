@@ -25,6 +25,7 @@
 #include <oox/token/tokens.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace oox::vml {
 
@@ -213,7 +214,7 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& 
     while( nIndex >= 0 )
     {
         OUString aName, aValue;
-        if( ConversionHelper::separatePair( aName, aValue, sStyle.getToken( 0, ';', nIndex ), ':' ) )
+        if( ConversionHelper::separatePair( aName, aValue, o3tl::getToken(sStyle, 0, ';', nIndex ), ':' ) )
         {
             if( aName == "layout-flow" )      rTextBox.maLayoutFlow = aValue;
             else if (aName == "mso-fit-shape-to-text")

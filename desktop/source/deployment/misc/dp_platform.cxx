@@ -23,6 +23,7 @@
 #include <rtl/instance.hxx>
 #include <rtl/bootstrap.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 constexpr OUStringLiteral PLATFORM_ALL = u"all";
 
@@ -167,13 +168,13 @@ OUString const & getPlatformString()
     return StrPlatform::get();
 }
 
-bool platform_fits( OUString const & platform_string )
+bool platform_fits( std::u16string_view platform_string )
 {
     sal_Int32 index = 0;
     for (;;)
     {
         const OUString token(
-            platform_string.getToken( 0, ',', index ).trim() );
+            o3tl::trim(o3tl::getToken(platform_string, 0, ',', index )) );
         // check if this platform:
         if (token.equalsIgnoreAsciiCase( StrPlatform::get() ) ||
             (token.indexOf( '_' ) < 0 && /* check OS part only */

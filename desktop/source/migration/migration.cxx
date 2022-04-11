@@ -941,7 +941,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         OUString sParentNodeName = elem.m_sParentNodeName;
         sal_Int32 nIndex = 0;
         do {
-            OUString sToken = sParentNodeName.getToken(0, '|', nIndex).trim();
+            OUString sToken( o3tl::trim(o3tl::getToken(sParentNodeName, 0, '|', nIndex)) );
             if (sToken.isEmpty())
                 break;
 

@@ -25,6 +25,7 @@
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
+#include <o3tl/string_view.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/storagebase.hxx>
@@ -237,7 +238,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg )
                             procInfo.nPos = aSourceCode.getLength();
                         }
                     }
-                    else if ( mbExecutable && aCodeLine.trim().match("End Sub") )
+                    else if ( mbExecutable && o3tl::starts_with(o3tl::trim(aCodeLine), u"End Sub") )
                     {
                         // un-matched End Sub
                         if ( !procInfo.bInProcedure )

@@ -24,6 +24,7 @@
 #include <tools/urlobj.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <sax/tools/converter.hxx>
 
@@ -296,14 +297,14 @@ void SdXMLEventContextData::ApplyProperties()
                 const OUString& rApp = GetXMLToken( XML_APPLICATION );
                 const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
                 if( msMacroName.getLength() > rApp.getLength()+1 &&
-                    msMacroName.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
+                    o3tl::equalsIgnoreAsciiCase(msMacroName.subView(0,rApp.getLength()), rApp) &&
                     ':' == msMacroName[rApp.getLength()] )
                 {
                     sLibrary = "StarOffice";
                     msMacroName = msMacroName.copy( rApp.getLength()+1 );
                 }
                 else if( msMacroName.getLength() > rDoc.getLength()+1 &&
-                    msMacroName.copy(0,rDoc.getLength()).equalsIgnoreAsciiCase( rDoc ) &&
+                    o3tl::equalsIgnoreAsciiCase(msMacroName.subView(0,rDoc.getLength()), rDoc) &&
                     ':' == msMacroName[rDoc.getLength()] )
                 {
                     sLibrary = rDoc;

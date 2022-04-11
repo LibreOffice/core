@@ -24,6 +24,7 @@
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <swtypes.hxx>
@@ -500,7 +501,7 @@ OUString SwAuthorityField::ConditionalExpandAuthIdentifier(
         {
             OUString sIdentifier(m_xAuthEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER));
             // tdf#107784 Use title if it's a ooxml citation
-            if (sIdentifier.trim().startsWith("CITATION"))
+            if (o3tl::starts_with(o3tl::trim(sIdentifier), u"CITATION"))
                 return m_xAuthEntry->GetAuthorField(AUTH_FIELD_TITLE);
             else
                 sRet += sIdentifier;

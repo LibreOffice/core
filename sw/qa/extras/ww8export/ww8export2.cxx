@@ -32,6 +32,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <docsh.hxx>
 #include <unotxdoc.hxx>
+#include <o3tl/string_view.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -41,7 +42,7 @@ public:
     bool mustTestImportOf(const char* filename) const override
     {
         // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".doc");
+        return o3tl::ends_with(filename, ".doc");
     }
 
 };

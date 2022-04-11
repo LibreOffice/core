@@ -27,6 +27,7 @@
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <basegfx/curve/b2dbeziertools.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace svgio::svgreader
 {
@@ -149,7 +150,7 @@ namespace svgio::svgreader
                 if(basegfx::fTools::more(fSnippetWidth, 0.0))
                 {
                     const OUString aText(getSource().getText());
-                    const OUString aTrimmedChars(aText.copy(nIndex, nLength).trim());
+                    const OUString aTrimmedChars(o3tl::trim(aText.subView(nIndex, nLength)));
                     const double fEndPos(mfPosition + fSnippetWidth);
 
                     if(!aTrimmedChars.isEmpty() && (mfPosition < mfBasegfxPathLength || fEndPos > 0.0))

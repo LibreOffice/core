@@ -203,15 +203,15 @@ protected:
         // Convert string back to a transformation;
         drawing::HomogenMatrix3 aExpectedTransform;
         sal_Int32 nIdx {0};
-        aExpectedTransform.Line1.Column1 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line1.Column2 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line1.Column3 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line2.Column1 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line2.Column2 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line2.Column3 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line3.Column1 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line3.Column2 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
-        aExpectedTransform.Line3.Column3 = rExpectedTransform.getToken(0, ';', nIdx).toDouble();
+        aExpectedTransform.Line1.Column1 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line1.Column2 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line1.Column3 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line2.Column1 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line2.Column2 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line2.Column3 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line3.Column1 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line3.Column2 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
+        aExpectedTransform.Line3.Column3 = o3tl::toDouble(o3tl::getToken(rExpectedTransform, 0, ';', nIdx));
 
         // Check the equality of the two transformation
         return (std::abs(aExpectedTransform.Line1.Column1 - rTransform.Line1.Column1) < fEPS &&

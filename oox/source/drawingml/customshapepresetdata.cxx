@@ -29,13 +29,13 @@ namespace
 // Parses a string like: Value = (any) { (long) 19098 }, State = (com.sun.star.beans.PropertyState) DIRECT_VALUE, Name = "adj"
 void lcl_parseAdjustmentValue(
     std::vector<drawing::EnhancedCustomShapeAdjustmentValue>& rAdjustmentValues,
-    const OString& rValue)
+    std::string_view rValue)
 {
     sal_Int32 nIndex = 0;
     drawing::EnhancedCustomShapeAdjustmentValue aAdjustmentValue;
     do
     {
-        OString aToken = rValue.getToken(0, ',', nIndex).trim();
+        OString aToken(o3tl::trim(o3tl::getToken(rValue, 0, ',', nIndex)));
         static const char aNamePrefix[] = "Name = \"";
         static const char aValuePrefix[] = "Value = (any) { (long) ";
         if (aToken.startsWith(aNamePrefix))
@@ -78,7 +78,7 @@ void lcl_parseAdjustmentValues(
             {
                 lcl_parseAdjustmentValue(
                     rAdjustmentValues,
-                    rValue.copy(nStart + strlen("{ "), i - nStart - strlen(" },")));
+                    rValue.subView(nStart + strlen("{ "), i - nStart - strlen(" },")));
             }
         }
     }
