@@ -357,6 +357,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/text/txtstyle \
     xmloff/source/text/txtstyli \
     xmloff/source/text/txtvfldi \
+    xmloff/source/text/xmlcontentcontrolcontext \
     xmloff/source/xforms/SchemaContext \
     xmloff/source/xforms/SchemaRestrictionContext \
     xmloff/source/xforms/SchemaSimpleTypeContext \
