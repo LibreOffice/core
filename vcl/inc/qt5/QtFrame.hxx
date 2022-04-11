@@ -110,6 +110,9 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     LanguageType m_nInputLanguage;
 
+    OUString m_aTooltipText;
+    tools::Rectangle m_aTooltipArea;
+
     void SetDefaultPos();
     Size CalcDefaultSize();
     void SetDefaultSize();
