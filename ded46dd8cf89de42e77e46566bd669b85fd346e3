@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29041d5b_0292e486",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-11T17:50:21Z",
+      "side": 1,
+      "message": "I should have started reading the QMainWindow::setMenuBar code earlier; would have saved me quite some debugging time...",
+      "revId": "ded46dd8cf89de42e77e46566bd669b85fd346e3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
