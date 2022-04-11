@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c020bb99_e2496fff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-11T14:41:41Z",
+      "side": 1,
+      "message": "after a `make check`, `git diff` now reports\n\n  diff --git a/sc/qa/unit/tiledrendering/data/validity.xlsx b/sc/qa/unit/tiledrendering/data/validity.xlsx\n  index 54a92acd5979..ae2e220c147a 100644\n  Binary files a/sc/qa/unit/tiledrendering/data/validity.xlsx and b/sc/qa/unit/tiledrendering/data/validity.xlsx differ\n\nfor me---mells like the test might modify the file in place?!?",
+      "revId": "388b4fc1085074da759903a9b1768bded43dd0d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0e8349d_6f903e4d",
         "filename": "sc/qa/unit/tiledrendering/tiledrendering.cxx",
         "patchSetId": 2
