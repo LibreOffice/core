@@ -15,6 +15,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <comphelper/scopeguard.hxx>
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
@@ -494,6 +495,8 @@ public:
                 tools::Long nOneX, tools::Long nOneY, double fScaleX, double fScaleY)
     {
         rRenderContext.Push();
+        comphelper::ScopeGuard aPushPopGuard([&rRenderContext]() { rRenderContext.Pop(); });
+
         rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
         rRenderContext.SetClipRegion(vcl::Region(rRectangle));
 
@@ -508,7 +511,9 @@ public:
         auto const& rRangeList = pSparkline->getInputRange();
 
         if (rRangeList.empty())
+        {
             return;
+        }
 
         auto pSparklineGroup = pSparkline->getSparklineGroup();
         auto const& rAttributes = pSparklineGroup->getAttributes();
@@ -564,7 +569,6 @@ public:
             drawLine(rRenderContext, aOutputRectangle, aSparklineValues,
                      pSparklineGroup->getAttributes());
         }
-        rRenderContext.Pop();
     }
 };
 }
