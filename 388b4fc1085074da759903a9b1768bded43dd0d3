@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0e8349d_6f903e4d",
+        "filename": "sc/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-11T08:14:50Z",
+      "side": 1,
+      "message": "Do you think you could work in a copy when you save? Currently you make changes to the git-tracked file as the test runs, none of the exiting tests do this. Thanks!",
+      "revId": "388b4fc1085074da759903a9b1768bded43dd0d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
