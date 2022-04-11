@@ -101,7 +101,7 @@ private:
                                               const SalBitmap& rSalBitmap,
                                               const SalBitmap& rTransparentBitmap );
 
-    void drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry, bool bClose );
+    void internalDrawPolyLine( sal_uInt32 nPoints, const Point* pPtAry, bool bClose );
 
 public:
 
