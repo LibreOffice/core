@@ -23,6 +23,7 @@
 #include <libxml/xpathInternals.h>
 #include <osl/file.hxx>
 #include <osl/thread.hxx>
+#include <o3tl/string_view.hxx>
 #include "framework.hxx"
 #include <fwkutil.hxx>
 #include <elements.hxx>
@@ -429,7 +430,7 @@ OUString getApplicationClassPath()
     sal_Int32 index = 0;
     do
     {
-        OUString token( sParams.getToken( 0, ' ', index ).trim() );
+        OUString token( o3tl::trim(o3tl::getToken(sParams, 0, ' ', index )) );
         if (!token.isEmpty())
         {
             OUString systemPathElement;

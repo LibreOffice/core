@@ -24,6 +24,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <o3tl/string_view.hxx>
 
 
 using namespace ::xmloff::token;
@@ -66,14 +67,14 @@ SvXMLImportContext* XMLStarBasicContextFactory::CreateContext(
     const OUString& rApp = GetXMLToken( XML_APPLICATION );
     const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
     if( sMacroNameVal.getLength() > rApp.getLength()+1 &&
-        sMacroNameVal.copy(0,rApp.getLength()).equalsIgnoreAsciiCase( rApp ) &&
+        o3tl::equalsIgnoreAsciiCase(sMacroNameVal.subView(0,rApp.getLength()), rApp ) &&
         ':' == sMacroNameVal[rApp.getLength()] )
     {
         sLibraryVal = "StarOffice";
         sMacroNameVal = sMacroNameVal.copy( rApp.getLength()+1 );
     }
     else if( sMacroNameVal.getLength() > rDoc.getLength()+1 &&
-        sMacroNameVal.copy(0,rDoc.getLength()).equalsIgnoreAsciiCase( rDoc ) &&
+        o3tl::equalsIgnoreAsciiCase(sMacroNameVal.subView(0,rDoc.getLength()), rDoc ) &&
         ':' == sMacroNameVal[rDoc.getLength()] )
     {
         sLibraryVal = rDoc;

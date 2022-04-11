@@ -59,6 +59,7 @@
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <svx/svdotext.hxx>
 #include <editeng/outlobj.hxx>
@@ -859,8 +860,8 @@ void AnimationImporter::fillNode( Reference< XAnimationNode > const & xNode, con
                     sal_Int32 nPos = aToken.indexOf( ',' );
                     if( nPos >= 0 )
                     {
-                        pValues->Time = aToken.copy( 0, nPos ).toDouble();
-                        pValues->Progress = aToken.copy( nPos+1 ).toDouble();
+                        pValues->Time = o3tl::toDouble(aToken.subView( 0, nPos ));
+                        pValues->Progress = o3tl::toDouble(aToken.subView( nPos+1 ));
                     }
                     pValues++;
                 }

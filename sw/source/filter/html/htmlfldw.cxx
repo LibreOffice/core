@@ -22,6 +22,7 @@
 #include <svtools/htmlkywd.hxx>
 #include <svtools/htmlout.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <fmtfld.hxx>
 #include <doc.hxx>
 #include <breakit.hxx>
@@ -466,7 +467,7 @@ Writer& OutHTML_SwFormatField( Writer& rWrt, const SfxPoolItem& rHt )
         bool bWritten = false;
 
         if( (rComment.getLength() >= 6 && rComment.startsWith("<") && rComment.endsWith(">") &&
-             rComment.copy( 1, 4 ).equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_meta) ) ||
+             o3tl::equalsIgnoreAsciiCase(rComment.subView( 1, 4 ), u"" OOO_STRING_SVTOOLS_HTML_meta) ) ||
             (rComment.getLength() >= 7 &&
              rComment.startsWith( "<!--" ) &&
              rComment.endsWith( "-->" )) )

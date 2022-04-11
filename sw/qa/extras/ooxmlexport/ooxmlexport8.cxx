@@ -35,6 +35,7 @@
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <xmloff/odffields.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <IDocumentMarkAccess.hxx>
 #include <bordertest.hxx>

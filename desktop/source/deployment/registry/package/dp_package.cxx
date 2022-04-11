@@ -1487,7 +1487,7 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
     // check for platform paths:
     const OUString title( StrTitle::getTitle( ucbContent ) );
     if (title.endsWithIgnoreAsciiCase( ".plt" ) &&
-        !platform_fits( title.copy( 0, title.getLength() - 4 ) )) {
+        !platform_fits( title.subView( 0, title.getLength() - 4 ) )) {
         return;
     }
     if (title.endsWithIgnoreAsciiCase("skip_registration") )

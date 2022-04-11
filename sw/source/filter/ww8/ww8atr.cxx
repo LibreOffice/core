@@ -1816,7 +1816,7 @@ void WW8Export::OutputField( const SwField* pField, ww::eField eFieldType,
             break;
         case ww::eCITATION:
             eFieldType = ww::eQUOTE;
-            assert(rFieldCmd.trim().startsWith("CITATION"));
+            assert(o3tl::starts_with(o3tl::trim(rFieldCmd), u"CITATION"));
             sFieldCmd = rFieldCmd.replaceFirst(FieldString(ww::eCITATION),
                                                FieldString(ww::eQUOTE));
             break;
@@ -3060,7 +3060,7 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         // FIXME: DomainMapper_Impl::CloseFieldCommand() stuffs fully formed
         // field instructions in here, but if the field doesn't originate
         // from those filters it won't have that
-        if (!sRet.trim().startsWith("CITATION"))
+        if (!o3tl::starts_with(o3tl::trim(sRet), u"CITATION"))
         {
             sRet = FieldString(ww::eCITATION) + " \"" + sRet + "\"";
         }

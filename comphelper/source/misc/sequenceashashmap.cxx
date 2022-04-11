@@ -88,7 +88,7 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
             else if (aTypeClass == uno::TypeClass_FLOAT)
                 aAny <<= OString(rValue.c_str()).toFloat();
             else if (aTypeClass == uno::TypeClass_DOUBLE)
-                aAny <<= OString(rValue.c_str()).toDouble();
+                aAny <<= o3tl::toDouble(rValue);
             else if (aTypeClass == uno::TypeClass_STRING)
                 aAny <<= OUString::fromUtf8(rValue.c_str());
         }

@@ -37,6 +37,7 @@
 #include <sal/config.h>
 
 #include <o3tl/any.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
@@ -361,7 +362,7 @@ OUString extractTableFromInsert( const OUString & sql )
                     }
                 }
             }
-            ret = sql.copy(start, i - start ).trim();
+            ret = o3tl::trim(sql.subView(start, i - start ));
 //             printf( "pq_statement: parsed table name %s from insert\n" ,
 //                     OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr() );
         }

@@ -29,6 +29,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/fltrcfg.hxx>
 #include <unoprnms.hxx>
+#include <o3tl/string_view.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/extras/ooxmlexport/data/";
 
@@ -61,7 +62,7 @@ protected:
      */
     bool mustTestImportOf(const char* filename) const override {
         // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
+        return o3tl::ends_with(filename, ".docx");
     }
 };
 
