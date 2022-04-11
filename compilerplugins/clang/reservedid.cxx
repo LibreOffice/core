@@ -215,6 +215,8 @@ bool ReservedId::VisitNamedDecl(NamedDecl const * decl) {
             && s != "_NotifyingLayout" // vcl/unx/gtk4/notifyinglayout.cxx
             && s != "_SurfacePaintable" // vcl/unx/gtk3/gtkinst.cxx
             && s != "_SurfacePaintableClass" // vcl/unx/gtk3/gtkinst.cxx
+            && s != "_SurfaceCellRenderer" // vcl/unx/gtk4/surfacecellrenderer.cxx
+            && s != "_SurfaceCellRendererClass" // vcl/unx/gtk4/surfacecellrenderer.cxx
             && s != "_TransferableContent" // vcl/unx/gtk4/transferableprovider.cxx
             && s != "_TransferableContentClass" // vcl/unx/gtk4/transferableprovider.cxx
             && s != "_XRegion" // vcl/unx/generic/gdi/x11cairotextrender.cxx
