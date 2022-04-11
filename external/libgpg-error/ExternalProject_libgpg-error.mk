@@ -39,6 +39,7 @@ $(call gb_ExternalProject_get_state_target,libgpg-error,build):
 			--disable-rpath \
 			--disable-languages \
 			--disable-doc \
+			CFLAGS=" $(CFLAGS) $(call gb_ExternalProject_get_build_flags,libgpg-error)" \
 			CPPFLAGS=" $(SOLARINC)" \
 			$(if $(filter MSC,$(COM)),--force_use_syscfg=true) \
 			$(gb_CONFIGURE_PLATFORMS) \

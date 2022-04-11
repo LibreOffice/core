@@ -36,9 +36,7 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build): $(call gb_Executable_
 		   --disable-g13-test \
            $(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 		   CFLAGS='$(CFLAGS) \
-				$(if $(ENABLE_OPTIMIZED), \
-					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(if $(call gb_Module__symbols_enabled,gpgmepp),$(gb_DEBUGINFO_FLAGS))' \
+				$(call gb_ExternalProject_get_build_flags,gpgmepp)' \
 		   $(gb_WIN_GPG_platform_switches) \
 		   MAKE=$(MAKE) \
 	    && $(MAKE) \
@@ -60,14 +58,10 @@ $(call gb_ExternalProject_get_state_target,gpgmepp,build):
 		   LIBASSUAN_CFLAGS="$(LIBASSUAN_CFLAGS)" \
 		   LIBASSUAN_LIBS="$(LIBASSUAN_LIBS)" \
 		   CFLAGS='$(CFLAGS) \
-				$(if $(ENABLE_OPTIMIZED), \
-					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(if $(call gb_Module__symbols_enabled,gpgmepp),$(gb_DEBUGINFO_FLAGS))' \
+				$(call gb_ExternalProject_get_build_flags,gpgmepp)' \
 		   CXXFLAGS='$(CXXFLAGS) \
-				$(if $(ENABLE_OPTIMIZED), \
-					$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-				$(gb_COMPILERDEFS_STDLIB_DEBUG) \
-				$(if $(call gb_Module__symbols_enabled,gpgmepp),$(gb_DEBUGINFO_FLAGS))' \
+				$(call gb_ExternalProject_get_build_flags,gpgmepp) \
+				$(gb_COMPILERDEFS_STDLIB_DEBUG)' \
 		   $(if $(filter LINUX,$(OS)), \
 				'LDFLAGS=-Wl$(COMMA)-z$(COMMA)origin \
 					-Wl$(COMMA)-rpath$(COMMA)\$$$$ORIGIN') \

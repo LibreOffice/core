@@ -51,7 +51,7 @@ $(call gb_ExternalProject_get_state_target,xmlsec,build) :
 		&& $(gb_RUN_CONFIGURE) ./configure \
 			--with-pic --disable-shared --disable-crypto-dl --without-libxslt --without-gnutls --without-gcrypt --disable-apps --disable-docs \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CFLAGS="$(CFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(gb_VISIBILITY_FLAGS)" \
+			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,xmlsec) $(gb_VISIBILITY_FLAGS)" \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________OOO) \
 			$(if $(ENABLE_NSS), \
 				--without-openssl \

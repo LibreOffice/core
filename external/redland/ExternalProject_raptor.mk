@@ -19,7 +19,9 @@ $(call gb_ExternalProject_get_state_target,raptor,build):
 	$(call gb_Trace_StartRange,raptor,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		$(if $(filter iOS,$(OS)),LIBS="-liconv") \
-		CFLAGS="$(CFLAGS) $(if $(debug),-g,-O) $(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
+		CFLAGS="$(CFLAGS) \
+			$(call gb_ExternalProject_get_build_flags,raptor) \
+			$(if $(filter TRUE,$(DISABLE_DYNLOADING)),-fvisibility=hidden) \
 			$(if $(filter GCCLINUXPOWERPC64,$(COM)$(OS)$(CPUNAME)),-mminimal-toc)" \
 		LDFLAGS=" \
 			$(if $(filter LINUX FREEBSD,$(OS)),-Wl$(COMMA)-z$(COMMA)origin -Wl$(COMMA)-rpath$(COMMA)\\"\$$\$$ORIGIN") \

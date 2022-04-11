@@ -43,18 +43,11 @@
 # FYI: on Windows, gb_Library_use_system_win32_libs also calls gb_LinkTarget_add_libs; easy to miss.
 gb_LinkTarget__syslib = %@
 
-# Detect whether symbols should be enabled for the given gbuild target.
-# enable if: no "-TARGET" defined AND [module is enabled OR "TARGET" defined]
-gb_LinkTarget__symbols_enabled = \
- $(and $(if $(filter -$(1),$(ENABLE_SYMBOLS_FOR)),,$(true)),\
-       $(or $(gb_Module_CURRENTMODULE_SYMBOLS_ENABLED),\
-            $(filter $(1),$(ENABLE_SYMBOLS_FOR))))
-
 # debug flags, if the LinkTarget is named in the list of libraries of ENABLE_SYMBOLS_FOR
 gb_LinkTarget__get_debugflags= \
     $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS), \
         $(if $(ENABLE_OPTIMIZED_DEBUG),$(gb_COMPILERDEBUGOPTFLAGS),$(gb_COMPILERNOOPTFLAGS))) \
-    $(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS))
+    $(if $(call gb_target_symbols_enabled,$(1)),$(gb_DEBUGINFO_FLAGS))
 
 # T_LDFLAGS is just expanded once. Override the flags here, so that the linker and compiler use the same.
 ifeq (EMSCRIPTEN,$(OS))
@@ -64,7 +57,7 @@ else
 # but moreover strip debug from libraries for which debuginfo is not wanted
 # (some libraries reuse .o files from other libraries, notably unittests)
 gb_LinkTarget__get_stripldflags=$(if $(strip $(CFLAGS)$(CXXFLAGS)$(OBJCFLAGS)$(OBJCXXFLAGS)$(LDFLAGS)),,$(gb_LINKERSTRIPDEBUGFLAGS))
-gb_LinkTarget__get_debugldflags=$(if $(call gb_LinkTarget__symbols_enabled,$(1)),$(gb_LINKER_DEBUGINFO_FLAGS),$(gb_LINKEROPTFLAGS) $(call gb_LinkTarget__get_stripldflags,$(1)))
+gb_LinkTarget__get_debugldflags=$(if $(call gb_target_symbols_enabled,$(1)),$(gb_LINKER_DEBUGINFO_FLAGS),$(gb_LINKEROPTFLAGS) $(call gb_LinkTarget__get_stripldflags,$(1)))
 endif
 
 # generic cflags/cxxflags to use (optimization flags, debug flags)
@@ -1061,7 +1054,7 @@ $(call gb_LinkTarget_get_target,$(1)) : PLUGIN_WARNINGS_AS_ERRORS :=
 $(call gb_LinkTarget_get_target,$(1)) : EXTERNAL_CODE :=
 $(call gb_LinkTarget_get_target,$(1)) : SOVERSIONSCRIPT :=
 $(call gb_LinkTarget_get_target,$(1)) : COMPILER_TEST :=
-$(call gb_LinkTarget_get_target,$(1)) : T_SYMBOLS := $(if $(call gb_LinkTarget__symbols_enabled,$(2)),$(true),$(false))
+$(call gb_LinkTarget_get_target,$(1)) : T_SYMBOLS := $(if $(call gb_target_symbols_enabled,$(2)),$(true),$(false))
 $(call gb_LinkTarget_get_target,$(1)) : T_FORCE_COMPILE := $(if $(call gb_LinkTarget__force_compile,$(2)),$(true),$(false))
 $(call gb_LinkTarget_get_target,$(1)) : T_CC :=
 $(call gb_LinkTarget_get_target,$(1)) : T_CXX :=
