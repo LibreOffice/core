@@ -21,15 +21,16 @@ class specialCharacter(UITestCase):
 
             # Insert a font including a font feature into the font name combobox
             xFontName = xWriterDoc.getChild("fontnamecombobox")
-            xFontName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
-            xFontName.executeAction("TYPE", mkPropertyValues({"TEXT":"Liberation Sans:smcp"}))
+            fontName = get_state_as_dict(xFontName)["Text"]
+            xFontName.executeAction("TYPE", mkPropertyValues({"KEYCODE": "CTRL+A"}))
+            xFontName.executeAction("TYPE", mkPropertyValues({"TEXT": fontName + ":smcp"}))
             xFontName.executeAction("TYPE", mkPropertyValues({"KEYCODE": "RETURN"}))
 
             # Open special character dialog and check selected font name
             with self.ui_test.execute_dialog_through_command(".uno:InsertSymbol", close_button="cancel") as xDialog:
                 xComboFont = xDialog.getChild("fontlb")
                 # Without the fix in place, no font would be selected
-                self.assertEqual(get_state_as_dict(xComboFont)["Text"], "Liberation Sans")
+                self.assertEqual(get_state_as_dict(xComboFont)["Text"], fontName)
 
     def test_special_character(self):
         with self.ui_test.create_doc_in_start_center("writer") as document:
