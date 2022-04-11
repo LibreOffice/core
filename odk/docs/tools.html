@@ -84,6 +84,12 @@
             </tr>
             <tr valign="top">
               <td class="content3"><img src="images/arrow-1.gif"/></td>
+              <td><a href="#unoidl-read" title="link to the unoidl-read tool description">unoidl-read</a></td>
+              <td class="content87">Tool to view type library data
+			  in a human readable manner.</td>
+            </tr>
+            <tr valign="top">
+              <td class="content3"><img src="images/arrow-1.gif"/></td>
               <td><a href="#cppumaker" title="link to the cppumaker tool description">cppumaker</a></td>
               <td class="content87">Tool for generating C++ code for the UNOIDL
 			  types stored in a type library.</td>
@@ -452,6 +458,55 @@
 		</tr>
       </table>
     </td>
+    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
+  </tr>
+  <tr>
+    <td colspan="3"><img class="line" src="images/sdk_line-1.gif"/></td>
+  </tr>
+  <tr>
+    <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
+    <td>
+      <table class="table2">
+        <tr>
+          <td colspan="2" class="head1"><a name="unoidl-read"/>unoidl-read</td>
+          <td align="right">
+            <a href="#tools" title="link to the tools overview"><img class="navigate" src="images/nav_up.png"/></a>
+            <a href="../index.html" title="link to the SDK start page"><img class="navigate" src="images/nav_home.png"/></a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <p>'unoidl-read' is a tool to show the contents of a type library.  The tool writes the
+              content in a human readable manner to stdout.</p>
+            <p class="head2">Usage:</p>
+            <blockquote>
+              <b><code>unoidl-read [--published] [--summary] &lt;registries&gt;</code></b>
+            </blockquote>
+            <p class="head2">Options:</p>
+            <table class="table4">
+              <tr>
+                <td class="cell15"><code>--published</code></td>
+                <td class="cell85">if specified, only published entities (plus any non-published
+                  entities referenced from published via any unpublished optional bases) are written
+                  out.</td>
+              </tr>
+              <tr>
+                <td class="cell15"><code>--summary</code></td>
+                <td class="cell85">if specified, only a short summary is written, with the type and
+                  name of one entity per line.</td>
+              </tr>
+              <tr>
+                <td class="cell15"><code>&lt;registries&gt;</code></td>
+                <td class="cell85">one or more <code>&lt;registry&gt;</code> elements, where each
+                  is either a new- or legacy-format .rdb file, a single .idl file, or a root
+                  directory of an .idl file tree.  The content of the last
+                  <code>&lt;registry&gt;</code> is written out.  The other
+                  <code>&lt;registry&gt;</code> elements are only used to look up dependencies.</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     <td class="content1"><img class="nothing8" src="images/nada.gif"/></td>
   </tr>
   <tr>
