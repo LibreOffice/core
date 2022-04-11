@@ -39,7 +39,8 @@ dialogs = [
         # tested in sw/qa/uitest/writer_tests2/exchangeDatabase.py
     # {"command": ".uno:InsertBreak", "closeButton": "cancel"},
         # tested in uitest/writer_tests/insertBreakDialog.py
-    {"command": ".uno:InsertObject", "closeButton": "cancel"},
+    # {"command": ".uno:InsertObject", "closeButton": "cancel"},
+        # tested in sw/qa/uitest/writer_tests4/tdf148395.py
     # {"command": ".uno:InsertSection", "closeButton": "cancel"},
         # tested in sw/qa/uitest/writer_tests7/tdf140863.py
     {"command": ".uno:InsertFrame", "closeButton": "cancel"},
