@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a6974d2_b2e081f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-11T07:52:38Z",
+      "side": 1,
+      "message": "\u003e /bin/sh: /home/tdf/lode/jenkins/workspace/lo_gerrit/Config/linux_gcc_release_64/solenv/bin/gdb-core-bt.sh: No such file or directory\n\nresume",
+      "revId": "bfc23b440db0b4c9b59822e88a12b7fd485597a1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
