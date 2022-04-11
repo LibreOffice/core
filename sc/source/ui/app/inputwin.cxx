@@ -78,10 +78,10 @@ namespace com::sun::star::accessibility { class XAccessible; }
 
 const tools::Long THESIZE = 1000000;            // Should be more than enough!
 const tools::Long INPUTLINE_INSET_MARGIN = 2;   // Space between border and interior widgets of input line
-const tools::Long LEFT_OFFSET = 5;              // Left offset of input line
+//const tools::Long LEFT_OFFSET = 5;              // Left offset of input line
 //TODO const long BUTTON_OFFSET = 2;            // Space between input line and button to expand/collapse
 const tools::Long INPUTWIN_MULTILINES = 6;      // Initial number of lines within multiline dropdown
-const tools::Long TOOLBOX_WINDOW_HEIGHT = 22;   // Height of toolbox window in pixels - TODO: The same on all systems?
+//const tools::Long TOOLBOX_WINDOW_HEIGHT = 22;   // Height of toolbox window in pixels - TODO: The same on all systems?
 const tools::Long POSITION_COMBOBOX_WIDTH = 18; // Width of position combobox in characters
 
 using com::sun::star::uno::Reference;
@@ -92,11 +92,11 @@ using com::sun::star::beans::XPropertySet;
 
 namespace {
 
-constexpr ToolBoxItemId SID_INPUT_FUNCTION (SC_VIEW_START + 47);
-constexpr ToolBoxItemId SID_INPUT_SUM     (SC_VIEW_START + 48);
-constexpr ToolBoxItemId SID_INPUT_EQUAL   (SC_VIEW_START + 49);
-constexpr ToolBoxItemId SID_INPUT_CANCEL  (SC_VIEW_START + 50);
-constexpr ToolBoxItemId SID_INPUT_OK      (SC_VIEW_START + 51);
+#define SID_INPUT_FUNCTION "SID_INPUT_FUNCTION"
+#define SID_INPUT_SUM      "SID_INPUT_SUM"
+#define SID_INPUT_EQUAL    "SID_INPUT_EQUAL"
+#define SID_INPUT_CANCEL   "SID_INPUT_CANCEL"
+#define SID_INPUT_OK       "SID_INPUT_OK"
 
 enum ScNameInputType
 {
@@ -123,12 +123,21 @@ ScInputWindowWrapper::ScInputWindowWrapper( vcl::Window*          pParentP,
                                             SfxChildWinInfo* /* pInfo */ )
     :   SfxChildWindow( pParentP, nId )
 {
-    VclPtr<ScInputWindow> pWin = VclPtr<ScInputWindow>::Create( pParentP, pBindings );
+    ScTabViewShell* pViewSh = nullptr;
+    SfxDispatcher* pDisp = pBindings->GetDispatcher();
+    if ( pDisp )
+    {
+        SfxViewFrame* pViewFrm = pDisp->GetFrame();
+        if ( pViewFrm )
+            pViewSh = dynamic_cast<ScTabViewShell*>( pViewFrm->GetViewShell()  );
+    }
+
+    VclPtr<ScInputWindow> pWin = VclPtr<ScInputWindow>::Create( pParentP, pBindings, reinterpret_cast<sal_uInt64>(pViewSh) );
     SetWindow( pWin );
 
     pWin->Show();
 
-    pWin->SetSizePixel( pWin->CalcWindowSizePixel() );
+    pWin->SetSizePixel( pWin->get_preferred_size() );
 
     SetAlignment(SfxChildAlignment::LOWESTTOP);
     pBindings->Invalidate( FID_TOGGLEINPUTLINE );
@@ -143,8 +152,7 @@ SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
     return aInfo;
 }
 
-
-static VclPtr<ScInputBarGroup> lcl_chooseRuntimeImpl( vcl::Window* pParent, const SfxBindings* pBind )
+static ScInputBarGroup* lcl_chooseRuntimeImpl( InterimItemWindow& rParent, weld::Builder* pBuilder, const SfxBindings* pBind )
 {
     ScTabViewShell* pViewSh = nullptr;
     SfxDispatcher* pDisp = pBind->GetDispatcher();
@@ -155,20 +163,29 @@ static VclPtr<ScInputBarGroup> lcl_chooseRuntimeImpl( vcl::Window* pParent, cons
             pViewSh = dynamic_cast<ScTabViewShell*>( pViewFrm->GetViewShell()  );
     }
 
-    return VclPtr<ScInputBarGroup>::Create( pParent, pViewSh );
+    return new ScInputBarGroup( rParent, pBuilder, pViewSh );
 }
 
-ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
+ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind, sal_uInt64 nWindowId ) :
         // With WB_CLIPCHILDREN otherwise we get flickering
-        ToolBox         ( pParent, WinBits(WB_CLIPCHILDREN | WB_BORDER | WB_NOSHADOW) ),
-        aWndPos         ( !comphelper::LibreOfficeKit::isActive() ? VclPtr<ScPosWnd>::Create(this) : nullptr ),
-        mxTextWindow    ( lcl_chooseRuntimeImpl( this, pBind ) ),
+        InterimItemWindow         ( pParent, "modules/scalc/ui/inputbar.ui", "InputBar", nWindowId ),
+        //mxBackground    ( m_xBuilder->weld_container("background")),
+        aWndPos         ( new ScPosWnd( *this, m_xBuilder.get()) ),
+        mxTextWindow    ( lcl_chooseRuntimeImpl( *this, m_xBuilder.get(), pBind ) ),
+        mxToolbar       ( m_xBuilder->weld_toolbar( "inputbar" ) ),
+        mxMenuBuilder   ( Application::CreateBuilder( mxToolbar.get(), "modules/scalc/ui/autosum.ui" ) ),
+        mxSumMenu       ( mxMenuBuilder->weld_menu( "menu" ) ),
         pInputHdl       ( nullptr ),
         mpViewShell     ( nullptr ),
-        mnMaxY          (0),
-        bIsOkCancelMode ( false ),
-        bInResize       ( false )
+        //mnMaxY          (0),
+        bIsOkCancelMode ( false )
+        //bInResize       ( false )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+        mxToolbar->set_item_visible("pos", false);
+    else
+        mxToolbar->set_item_visible("pos", true);
+
     // #i73615# don't rely on SfxViewShell::Current while constructing the input line
     // (also for GetInputHdl below)
     ScTabViewShell* pViewSh = nullptr;
@@ -183,69 +200,68 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
 
     mpViewShell = pViewSh;
 
-    // Position window, 3 buttons, input window
-    if (!comphelper::LibreOfficeKit::isActive())
-    {
-        InsertWindow    (ToolBoxItemId(1), aWndPos.get(), ToolBoxItemBits::NONE, 0);
-        InsertSeparator (1);
-        InsertItem      (SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION), ToolBoxItemBits::NONE, 2);
-    }
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    SetPaintTransparent(false);
+    SetBackground(rStyleSettings.GetFaceColor());
+
+    // match to bg used in ScTextWnd::SetDrawingArea to the margin area is drawn with the
+    // same desired bg
+    //mxBackground->set_background(rStyleSettings.GetWindowColor());
+
+    mxToolbar->set_item_image(SID_INPUT_FUNCTION, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION)).GetXGraphic());
 
     const bool bIsLOKMobilePhone = mpViewShell && mpViewShell->isLOKMobilePhone();
 
     // sigma and equal buttons
     if (!bIsLOKMobilePhone)
     {
-        InsertItem      (SID_INPUT_SUM,      Image(StockImage::Yes, RID_BMP_INPUT_SUM), ToolBoxItemBits::DROPDOWNONLY, 3);
-        InsertItem      (SID_INPUT_EQUAL,    Image(StockImage::Yes, RID_BMP_INPUT_EQUAL), ToolBoxItemBits::NONE, 4);
-        InsertItem      (SID_INPUT_CANCEL,   Image(StockImage::Yes, RID_BMP_INPUT_CANCEL), ToolBoxItemBits::NONE, 5);
-        InsertItem      (SID_INPUT_OK,       Image(StockImage::Yes, RID_BMP_INPUT_OK), ToolBoxItemBits::NONE, 6);
+        mxToolbar->set_item_image(SID_INPUT_SUM, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_SUM)).GetXGraphic());
+        mxToolbar->set_item_image(SID_INPUT_EQUAL, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_EQUAL)).GetXGraphic());
+        mxToolbar->set_item_image(SID_INPUT_CANCEL, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_CANCEL)).GetXGraphic());
+        mxToolbar->set_item_image(SID_INPUT_OK, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_OK)).GetXGraphic());
     }
 
-    InsertWindow    (ToolBoxItemId(7), mxTextWindow.get(), ToolBoxItemBits::NONE, 7);
-    SetDropdownClickHdl( LINK( this, ScInputWindow, DropdownClickHdl ));
+    mxToolbar->set_item_menu(SID_INPUT_SUM, mxSumMenu.get());
+    mxSumMenu->connect_activate(LINK(this, ScInputWindow, MenuHdl));
 
     if (!comphelper::LibreOfficeKit::isActive())
     {
-        aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
-        aWndPos   ->SetHelpId       (HID_INSWIN_POS);
+    //     aWndPos   ->SetQuickHelpText(ScResId(SCSTR_QHELP_POSWND));
+    //     aWndPos   ->SetHelpId       (HID_INSWIN_POS);
 
-        mxTextWindow->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
-        mxTextWindow->SetHelpId       (HID_INSWIN_INPUT);
+    //     mxTextWindow->SetQuickHelpText(ScResId(SCSTR_QHELP_INPUTWND));
+    //     mxTextWindow->SetHelpId       (HID_INSWIN_INPUT);
 
-        // No SetHelpText: the helptexts come from the Help
-        SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
-        SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
-    }
+    //     // No SetHelpText: the helptexts come from the Help
+    //     SetItemText (SID_INPUT_FUNCTION, ScResId(SCSTR_QHELP_BTNCALC));
+    //     SetHelpId   (SID_INPUT_FUNCTION, HID_INSWIN_CALC);
+    // }
 
-    // sigma and equal buttons
-    if (!bIsLOKMobilePhone)
-    {
-        SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
-        SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
-        SetHelpId   (SID_INPUT_CANCEL, HID_INSWIN_CANCEL);
-        SetHelpId   (SID_INPUT_OK, HID_INSWIN_OK);
+    // // sigma and equal buttons
+    // if (!bIsLOKMobilePhone)
+    // {
+    //     SetHelpId   (SID_INPUT_SUM, HID_INSWIN_SUMME);
+    //     SetHelpId   (SID_INPUT_EQUAL, HID_INSWIN_FUNC);
+    //     SetHelpId   (SID_INPUT_CANCEL, HID_INSWIN_CANCEL);
+    //     SetHelpId   (SID_INPUT_OK, HID_INSWIN_OK);
 
         if (!comphelper::LibreOfficeKit::isActive())
         {
-            SetItemText ( SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
-            SetItemText ( SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
-            SetItemText ( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
-            SetItemText ( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
+            mxToolbar->set_item_label( SID_INPUT_SUM, ScResId( SCSTR_QHELP_BTNSUM ) );
+            mxToolbar->set_item_label( SID_INPUT_EQUAL, ScResId( SCSTR_QHELP_BTNEQUAL ) );
+            mxToolbar->set_item_label( SID_INPUT_CANCEL, ScResId( SCSTR_QHELP_BTNCANCEL ) );
+            mxToolbar->set_item_label( SID_INPUT_OK, ScResId( SCSTR_QHELP_BTNOK ) );
         }
 
-        EnableItem( SID_INPUT_CANCEL, false );
-        EnableItem( SID_INPUT_OK, false );
+        mxToolbar->set_item_sensitive( SID_INPUT_CANCEL, false );
+        mxToolbar->set_item_sensitive( SID_INPUT_OK, false );
 
-        HideItem( SID_INPUT_CANCEL );
-        HideItem( SID_INPUT_OK );
+        mxToolbar->set_item_visible( SID_INPUT_CANCEL, false );
+        mxToolbar->set_item_visible( SID_INPUT_OK, false );
     }
 
     SetHelpId( HID_SC_INPUTWIN ); // For the whole input row
-
-    if (!comphelper::LibreOfficeKit::isActive())
-        aWndPos   ->Show();
-    mxTextWindow->Show();
 
     pInputHdl = SC_MOD()->GetInputHdl( pViewSh, false ); // use own handler even if ref-handler is set
     if (pInputHdl)
@@ -274,9 +290,11 @@ ScInputWindow::ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind ) :
         pViewSh->UpdateInputHandler(true, bStopEditing); // Absolutely necessary update
     }
 
-    SetToolbarLayoutMode( ToolBoxLayoutMode::Locked );
+    mxToolbar->connect_clicked(LINK(this, ScInputWindow, ClickHdl));
 
     SetAccessibleName(ScResId(STR_ACC_TOOLBAR_FORMULA));
+
+    //SetSizePixel(m_xContainer->get_preferred_size());
 }
 
 ScInputWindow::~ScInputWindow()
@@ -286,6 +304,10 @@ ScInputWindow::~ScInputWindow()
 
 void ScInputWindow::dispose()
 {
+    mxToolbar->set_item_menu(SID_INPUT_SUM, nullptr);
+    mxSumMenu.reset();
+    mxMenuBuilder.reset();
+
     bool bDown = !ScGlobal::oSysLocale; // after Clear?
 
     //  if any view's input handler has a pointer to this input window, reset it
@@ -315,10 +337,11 @@ void ScInputWindow::dispose()
         }
     }
 
-    mxTextWindow.disposeAndClear();
-    aWndPos.disposeAndClear();
+    mxTextWindow.reset();
+    aWndPos.reset();
+    mxBackground.reset();
 
-    ToolBox::dispose();
+    InterimItemWindow::dispose();
 }
 
 void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
@@ -334,13 +357,11 @@ void ScInputWindow::SetInputHandler( ScInputHandler* pNew )
     }
 }
 
-void ScInputWindow::Select()
+IMPL_LINK(ScInputWindow, ClickHdl, const OString&, rId, void)
 {
     ScModule* pScMod = SC_MOD();
-    ToolBox::Select();
 
-    ToolBoxItemId curItemId = GetCurItemId();
-    if (curItemId == SID_INPUT_FUNCTION)
+    if (rId == SID_INPUT_FUNCTION)
     {
         //! new method at ScModule to query if function autopilot is open
         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
@@ -354,18 +375,18 @@ void ScInputWindow::Select()
 //                  SetOkCancelMode();
         }
     }
-    else if (curItemId == SID_INPUT_CANCEL)
+    else if (rId == SID_INPUT_CANCEL)
     {
         pScMod->InputCancelHandler();
         SetSumAssignMode();
     }
-    else if (curItemId == SID_INPUT_OK)
+    else if (rId == SID_INPUT_OK)
     {
         pScMod->InputEnterHandler();
         SetSumAssignMode();
-        mxTextWindow->Invalidate(); // Or else the Selection remains
+        //mxTextWindow->Invalidate(); // Or else the Selection remains
     }
-    else if (curItemId == SID_INPUT_EQUAL)
+    else if (rId == SID_INPUT_EQUAL)
     {
         mxTextWindow->StartEditEngine();
         if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
@@ -455,37 +476,39 @@ void ScInputWindow::SetSizePixel( const Size& rNewSize )
         }
     }
 
-    ToolBox::SetSizePixel(rNewSize);
+    InterimItemWindow::SetSizePixel(rNewSize);
 }
 
 void ScInputWindow::Resize()
 {
-    ToolBox::Resize();
+    InterimItemWindow::Resize();
 
     Size aSize = GetSizePixel();
 
+    // TODO: SIZE
     //(-10) to allow margin between sidebar and formulabar
-    tools::Long margin = (comphelper::LibreOfficeKit::isActive()) ? 10 : 0;
-    Size aTextWindowSize(aSize.Width() - mxTextWindow->GetPosPixel().X() - LEFT_OFFSET - margin,
-                         mxTextWindow->GetPixelHeightForLines());
-    mxTextWindow->SetSizePixel(aTextWindowSize);
+    // tools::Long margin = (comphelper::LibreOfficeKit::isActive()) ? 10 : 0;
+    // Size aTextWindowSize(aSize.Width() - mxTextWindow->GetPosPixel().X() - LEFT_OFFSET - margin,
+    //                      mxTextWindow->GetPixelHeightForLines());
+    // mxTextWindow->SetSizePixel(aTextWindowSize);
 
-    aSize.setHeight(CalcWindowSizePixel().Height() + 1);
-    ScInputBarGroup* pGroupBar = mxTextWindow.get();
-    if (pGroupBar)
-    {
-        // To ensure smooth display and prevent the items in the toolbar being
-        // repositioned (vertically) we lock the vertical positioning of the toolbox
-        // items when we are displaying > 1 line.
-        // So, we need to adjust the height of the toolbox accordingly. If we don't
-        // then the largest item (e.g. the GroupBar window) will actually be
-        // positioned such that the toolbar will cut off the bottom of that item
-        if (pGroupBar->GetNumLines() > 1)
-        {
-            Size aGroupBarSize = pGroupBar->GetSizePixel();
-            aSize.setHeight(aGroupBarSize.Height() + 2 * (pGroupBar->GetVertOffset() + 1));
-        }
-    }
+    aSize.setHeight(mxToolbar->get_preferred_size().Height() + 1);
+
+    // ScInputBarGroup* pGroupBar = mxTextWindow.get();
+    // if (pGroupBar)
+    // {
+    //     // To ensure smooth display and prevent the items in the toolbar being
+    //     // repositioned (vertically) we lock the vertical positioning of the toolbox
+    //     // items when we are displaying > 1 line.
+    //     // So, we need to adjust the height of the toolbox accordingly. If we don't
+    //     // then the largest item (e.g. the GroupBar window) will actually be
+    //     // positioned such that the toolbar will cut off the bottom of that item
+    //     if (pGroupBar->GetNumLines() > 1)
+    //     {
+    //         Size aGroupBarSize = pGroupBar->GetSizePixel();
+    //         aSize.setHeight(aGroupBarSize.Height() + 2 * (pGroupBar->GetVertOffset() + 1));
+    //     }
+    // }
     SetSizePixel(aSize);
 
     Invalidate();
@@ -553,15 +576,15 @@ void ScInputWindow::SetOkCancelMode()
     if (bIsOkCancelMode)
         return;
 
-    EnableItem  ( SID_INPUT_SUM,   false );
-    EnableItem  ( SID_INPUT_EQUAL, false );
-    HideItem    ( SID_INPUT_SUM );
-    HideItem    ( SID_INPUT_EQUAL );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_SUM,   false );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_EQUAL, false );
+    mxToolbar->set_item_visible ( SID_INPUT_SUM,   false );
+    mxToolbar->set_item_visible ( SID_INPUT_EQUAL, false );
 
-    ShowItem    ( SID_INPUT_CANCEL, true );
-    ShowItem    ( SID_INPUT_OK,     true );
-    EnableItem  ( SID_INPUT_CANCEL, true );
-    EnableItem  ( SID_INPUT_OK,     true );
+    mxToolbar->set_item_visible ( SID_INPUT_CANCEL, true );
+    mxToolbar->set_item_visible ( SID_INPUT_OK,     true );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_CANCEL, true );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_OK,     true );
 
     bIsOkCancelMode = true;
 }
@@ -575,15 +598,15 @@ void ScInputWindow::SetSumAssignMode()
     if (!bIsOkCancelMode)
         return;
 
-    EnableItem  ( SID_INPUT_CANCEL, false );
-    EnableItem  ( SID_INPUT_OK,     false );
-    HideItem    ( SID_INPUT_CANCEL );
-    HideItem    ( SID_INPUT_OK );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_CANCEL, false );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_OK,     false );
+    mxToolbar->set_item_visible ( SID_INPUT_CANCEL, false );
+    mxToolbar->set_item_visible ( SID_INPUT_OK,     false );
 
-    ShowItem    ( SID_INPUT_SUM,    true );
-    ShowItem    ( SID_INPUT_EQUAL,  true );
-    EnableItem  ( SID_INPUT_SUM,    true );
-    EnableItem  ( SID_INPUT_EQUAL,  true );
+    mxToolbar->set_item_visible ( SID_INPUT_SUM,    true );
+    mxToolbar->set_item_visible ( SID_INPUT_EQUAL,  true );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_SUM,    true );
+    mxToolbar->set_item_sensitive  ( SID_INPUT_EQUAL,  true );
 
     bIsOkCancelMode = false;
 
@@ -607,9 +630,9 @@ EditView* ScInputWindow::GetEditView()
     return mxTextWindow->GetEditView();
 }
 
-vcl::Window* ScInputWindow::GetEditWindow()
+ScInputBarGroup* ScInputWindow::GetEditWindow()
 {
-    return mxTextWindow;
+    return mxTextWindow.get();
 }
 
 Point ScInputWindow::GetCursorScreenPixelPos(bool bBelow)
@@ -634,7 +657,8 @@ void ScInputWindow::TextGrabFocus()
 
 void ScInputWindow::TextInvalidate()
 {
-    mxTextWindow->Invalidate();
+    // TODO: TEXT INVALIDATE
+    // mxTextWindow->Invalidate();
 }
 
 void ScInputWindow::SwitchToTextWin()
@@ -668,15 +692,15 @@ void ScInputWindow::EnableButtons( bool bEnable )
     if ( bEnable && !IsEnabled() )
         Enable();
 
-    EnableItem( SID_INPUT_FUNCTION,                                   bEnable );
-    EnableItem( bIsOkCancelMode ? SID_INPUT_CANCEL : SID_INPUT_SUM,   bEnable );
-    EnableItem( bIsOkCancelMode ? SID_INPUT_OK     : SID_INPUT_EQUAL, bEnable );
+    mxToolbar->set_item_sensitive( SID_INPUT_FUNCTION,                                   bEnable );
+    mxToolbar->set_item_sensitive( bIsOkCancelMode ? SID_INPUT_CANCEL : SID_INPUT_SUM,   bEnable );
+    mxToolbar->set_item_sensitive( bIsOkCancelMode ? SID_INPUT_OK     : SID_INPUT_EQUAL, bEnable );
 //  Invalidate();
 }
 
 void ScInputWindow::StateChanged( StateChangedType nType )
 {
-    ToolBox::StateChanged( nType );
+    InterimItemWindow::StateChanged( nType );
 
     if ( nType == StateChangedType::InitShow ) Resize();
 }
@@ -686,20 +710,20 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( rDCEvt.GetType() == DataChangedEventType::SETTINGS && (rDCEvt.GetFlags() & AllSettingsFlags::STYLE) )
     {
         //  update item images
-        SetItemImage(SID_INPUT_FUNCTION, Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION));
+        mxToolbar->set_item_image(SID_INPUT_FUNCTION, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_FUNCTION)).GetXGraphic());
         if ( bIsOkCancelMode )
         {
-            SetItemImage(SID_INPUT_CANCEL, Image(StockImage::Yes, RID_BMP_INPUT_CANCEL));
-            SetItemImage(SID_INPUT_OK,     Image(StockImage::Yes, RID_BMP_INPUT_OK));
+            mxToolbar->set_item_image(SID_INPUT_CANCEL, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_CANCEL)).GetXGraphic());
+            mxToolbar->set_item_image(SID_INPUT_OK,     Graphic(Image(StockImage::Yes, RID_BMP_INPUT_OK)).GetXGraphic());
         }
         else
         {
-            SetItemImage(SID_INPUT_SUM,   Image(StockImage::Yes, RID_BMP_INPUT_SUM));
-            SetItemImage(SID_INPUT_EQUAL, Image(StockImage::Yes, RID_BMP_INPUT_EQUAL));
+            mxToolbar->set_item_image(SID_INPUT_SUM,   Graphic(Image(StockImage::Yes, RID_BMP_INPUT_SUM)).GetXGraphic());
+            mxToolbar->set_item_image(SID_INPUT_EQUAL, Graphic(Image(StockImage::Yes, RID_BMP_INPUT_EQUAL)).GetXGraphic());
         }
     }
 
-    ToolBox::DataChanged( rDCEvt );
+    InterimItemWindow::DataChanged( rDCEvt );
 }
 
 bool ScInputWindow::IsPointerAtResizePos()
@@ -707,85 +731,86 @@ bool ScInputWindow::IsPointerAtResizePos()
     return GetOutputSizePixel().Height() - GetPointerPosPixel().Y() <= 4;
 }
 
-void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
-{
-    Point aPosPixel = GetPointerPosPixel();
+// TODO: MOUSE HANDLING
+// void ScInputWindow::MouseMove( const MouseEvent& rMEvt )
+// {
+//     Point aPosPixel = GetPointerPosPixel();
 
-    ScInputBarGroup* pGroupBar = mxTextWindow.get();
+//     ScInputBarGroup* pGroupBar = nullptr;//mxTextWindow.get();
 
-    if (bInResize || IsPointerAtResizePos())
-        SetPointer(PointerStyle::WindowSSize);
-    else
-        SetPointer(PointerStyle::Arrow);
+//     if (bInResize || IsPointerAtResizePos())
+//         SetPointer(PointerStyle::WindowSSize);
+//     else
+//         SetPointer(PointerStyle::Arrow);
 
-    if (bInResize)
-    {
-        // detect direction
-        tools::Long nResizeThreshold = tools::Long(TOOLBOX_WINDOW_HEIGHT * 0.7);
-        bool bResetPointerPos = false;
+//     if (bInResize)
+//     {
+//         // detect direction
+//         tools::Long nResizeThreshold = tools::Long(TOOLBOX_WINDOW_HEIGHT * 0.7);
+//         bool bResetPointerPos = false;
 
-        // Detect attempt to expand toolbar too much
-        if (aPosPixel.Y() >= mnMaxY)
-        {
-            bResetPointerPos = true;
-            aPosPixel.setY( mnMaxY );
-        } // or expanding down
-        else if (GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold)
-        {
-            pGroupBar->IncrementVerticalSize();
-            bResetPointerPos = true;
-        } // or shrinking up
-        else if ((GetOutputSizePixel().Height() - aPosPixel.Y()) > nResizeThreshold)
-        {
-            bResetPointerPos = true;
-            pGroupBar->DecrementVerticalSize();
-        }
+//         // Detect attempt to expand toolbar too much
+//         if (aPosPixel.Y() >= mnMaxY)
+//         {
+//             bResetPointerPos = true;
+//             aPosPixel.setY( mnMaxY );
+//         } // or expanding down
+//         else if (GetOutputSizePixel().Height() - aPosPixel.Y() < -nResizeThreshold)
+//         {
+//             pGroupBar->IncrementVerticalSize();
+//             bResetPointerPos = true;
+//         } // or shrinking up
+//         else if ((GetOutputSizePixel().Height() - aPosPixel.Y()) > nResizeThreshold)
+//         {
+//             bResetPointerPos = true;
+//             pGroupBar->DecrementVerticalSize();
+//         }
 
-        if (bResetPointerPos)
-        {
-            aPosPixel.setY(  GetOutputSizePixel().Height() );
-            SetPointerPosPixel(aPosPixel);
-        }
-    }
+//         if (bResetPointerPos)
+//         {
+//             aPosPixel.setY(  GetOutputSizePixel().Height() );
+//             SetPointerPosPixel(aPosPixel);
+//         }
+//     }
 
-    ToolBox::MouseMove(rMEvt);
-}
+//     ToolBox::MouseMove(rMEvt);
+// }
 
-void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    if (rMEvt.IsLeft())
-    {
-        if (IsPointerAtResizePos())
-        {
-            // Don't leave the mouse pointer leave *this* window
-            CaptureMouse();
-            bInResize = true;
+// void ScInputWindow::MouseButtonDown( const MouseEvent& rMEvt )
+// {
+//     if (rMEvt.IsLeft())
+//     {
+//         if (IsPointerAtResizePos())
+//         {
+//             // Don't leave the mouse pointer leave *this* window
+//             CaptureMouse();
+//             bInResize = true;
 
-            // find the height of the gridwin, we don't want to be
-            // able to expand the toolbar too far so we need to
-            // calculate an upper limit
-            // I'd prefer to leave at least a single column header and a
-            // row but I don't know how to get that value in pixels.
-            // Use TOOLBOX_WINDOW_HEIGHT for the moment
-            ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
-            mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP)
-                   + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TOOLBOX_WINDOW_HEIGHT;
-        }
-    }
+//             // find the height of the gridwin, we don't want to be
+//             // able to expand the toolbar too far so we need to
+//             // calculate an upper limit
+//             // I'd prefer to leave at least a single column header and a
+//             // row but I don't know how to get that value in pixels.
+//             // Use TOOLBOX_WINDOW_HEIGHT for the moment
+//             ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
+//             mnMaxY = GetOutputSizePixel().Height() + (pViewSh->GetGridHeight(SC_SPLIT_TOP)
+//                    + pViewSh->GetGridHeight(SC_SPLIT_BOTTOM)) - TOOLBOX_WINDOW_HEIGHT;
+//         }
+//     }
 
-    ToolBox::MouseButtonDown( rMEvt );
-}
-void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
-{
-    ReleaseMouse();
-    if ( rMEvt.IsLeft() )
-    {
-        bInResize = false;
-        mnMaxY = 0;
-    }
+//     ToolBox::MouseButtonDown( rMEvt );
+// }
+// void ScInputWindow::MouseButtonUp( const MouseEvent& rMEvt )
+// {
+//     ReleaseMouse();
+//     if ( rMEvt.IsLeft() )
+//     {
+//         bInResize = false;
+//         mnMaxY = 0;
+//     }
 
-    ToolBox::MouseButtonUp( rMEvt );
-}
+//     ToolBox::MouseButtonUp( rMEvt );
+// }
 
 void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
 {
@@ -824,25 +849,14 @@ void ScInputWindow::AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode )
     }
 }
 
-ScInputBarGroup::ScInputBarGroup(vcl::Window* pParent, ScTabViewShell* pViewSh)
-    : InterimItemWindow(pParent, "modules/scalc/ui/inputbar.ui", "InputBar", reinterpret_cast<sal_uInt64>(pViewSh))
-    , mxBackground(m_xBuilder->weld_container("background"))
-    , mxTextWndGroup(new ScTextWndGroup(*this, pViewSh))
-    , mxButtonUp(m_xBuilder->weld_button("up"))
-    , mxButtonDown(m_xBuilder->weld_button("down"))
+ScInputBarGroup::ScInputBarGroup(InterimItemWindow& rParent, weld::Builder* xBuilder, ScTabViewShell* pViewSh)
+    : m_rParent(rParent)
+    , m_xBuilder(xBuilder)
+    , mxTextWndGroup(new ScTextWndGroup(rParent, xBuilder, pViewSh))
+    , mxButtonUp(xBuilder->weld_button("up"))
+    , mxButtonDown(xBuilder->weld_button("down"))
     , mnVertOffset(0)
 {
-    InitControlBase(m_xContainer.get());
-
-    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-
-    SetPaintTransparent(false);
-    SetBackground(rStyleSettings.GetFaceColor());
-
-    // match to bg used in ScTextWnd::SetDrawingArea to the margin area is drawn with the
-    // same desired bg
-    mxBackground->set_background(rStyleSettings.GetWindowColor());
-
     mxButtonUp->connect_clicked(LINK(this, ScInputBarGroup, ClickHdl));
     mxButtonDown->connect_clicked(LINK(this, ScInputBarGroup, ClickHdl));
 
@@ -869,16 +883,9 @@ Point ScInputBarGroup::GetCursorScreenPixelPos(bool bBelow)
 
 ScInputBarGroup::~ScInputBarGroup()
 {
-    disposeOnce();
-}
-
-void ScInputBarGroup::dispose()
-{
     mxTextWndGroup.reset();
     mxButtonUp.reset();
     mxButtonDown.reset();
-    mxBackground.reset();
-    InterimItemWindow::dispose();
 }
 
 void ScInputBarGroup::InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData )
@@ -904,7 +911,6 @@ void ScInputBarGroup::SetTextString( const OUString& rString )
 void ScInputBarGroup::Resize()
 {
     mxTextWndGroup->SetScrollPolicy();
-    InterimItemWindow::Resize();
 }
 
 void ScInputBarGroup::StopEditEngine(bool bAll)
@@ -957,50 +963,36 @@ void ScInputBarGroup::DecrementVerticalSize()
     }
 }
 
-void ScInputWindow::MenuHdl(std::string_view command)
+IMPL_LINK(ScInputWindow, MenuHdl, const OString&, rMenuId, void)
 {
-    if (command.empty())
+    if (rMenuId.isEmpty())
         return;
 
     bool bSubTotal = false;
     bool bRangeFinder = false;
     OpCode eCode = ocSum;
-    if ( command ==  "sum" )
+    if ( rMenuId ==  "sum" )
     {
         eCode = ocSum;
     }
-    else if ( command == "average" )
+    else if ( rMenuId == "average" )
     {
         eCode = ocAverage;
     }
-    else if ( command == "max" )
+    else if ( rMenuId == "max" )
     {
         eCode = ocMax;
     }
-    else if ( command == "min" )
+    else if ( rMenuId == "min" )
     {
         eCode = ocMin;
     }
-    else if ( command == "count" )
+    else if ( rMenuId == "count" )
     {
         eCode = ocCount;
     }
 
     AutoSum( bRangeFinder, bSubTotal, eCode );
-}
-
-IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
-{
-    ToolBoxItemId nCurID = GetCurItemId();
-    EndSelection();
-    if (nCurID == SID_INPUT_SUM)
-    {
-        tools::Rectangle aRect(GetItemRect(SID_INPUT_SUM));
-        weld::Window* pPopupParent = weld::GetPopupParent(*this, aRect);
-        std::unique_ptr<weld::Builder> xBuilder(Application::CreateBuilder(pPopupParent, "modules/scalc/ui/autosum.ui"));
-        std::unique_ptr<weld::Menu> xPopMenu(xBuilder->weld_menu("menu"));
-        MenuHdl(xPopMenu->popup_at_rect(pPopupParent, aRect));
-    }
 }
 
 IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl, weld::Button&, void)
@@ -1027,15 +1019,16 @@ IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl, weld::Button&, void)
 
 void ScInputBarGroup::TriggerToolboxLayout()
 {
-    vcl::Window *w=GetParent();
+    vcl::Window *w = &m_rParent;
     ScInputWindow &rParent = dynamic_cast<ScInputWindow&>(*w);
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
 
+    // TODO: SIZE OF ITEM
     // Capture the vertical position of this window in the toolbar, when we increase
     // the size of the toolbar to accommodate expanded line input we need to take this
     // into account
-    if ( !mnVertOffset )
-        mnVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
+    //if ( !mnVertOffset )
+    //    mnVertOffset = rParent.GetItemPosRect( rParent.GetItemCount() - 1 ).Top();
 
     if ( !pViewFrm )
         return;
@@ -1080,10 +1073,10 @@ void ScInputBarGroup::TextGrabFocus()
 constexpr tools::Long gnBorderWidth = (INPUTLINE_INSET_MARGIN + 1) * 2;
 constexpr tools::Long gnBorderHeight = INPUTLINE_INSET_MARGIN + 1;
 
-ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh)
+ScTextWndGroup::ScTextWndGroup(InterimItemWindow& rParent, weld::Builder* pBuilder, ScTabViewShell* pViewSh)
     : mxTextWnd(new ScTextWnd(*this, pViewSh))
-    , mxScrollWin(rParent.GetBuilder().weld_scrolled_window("scrolledwindow", true))
-    , mxTextWndWin(new weld::CustomWeld(rParent.GetBuilder(), "sc_input_window", *mxTextWnd))
+    , mxScrollWin(pBuilder->weld_scrolled_window("scrolledwindow", true))
+    , mxTextWndWin(new weld::CustomWeld(*pBuilder, "sc_input_window", *mxTextWnd))
     , mrParent(rParent)
 {
     mxScrollWin->connect_vadjustment_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
@@ -1694,7 +1687,8 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
                 }
                 if (IsMouseCaptured())
                     ReleaseMouse();
-                pViewFrm->GetDispatcher()->ExecutePopup("formulabar", &mrGroupBar.GetVclParent(), &aPos);
+                // TODO: POPUP
+                // pViewFrm->GetDispatcher()->ExecutePopup("formulabar", &mrGroupBar.GetVclParent(), &aPos);
             }
         }
         else if ( nCommand == CommandEventId::Wheel )
@@ -2027,6 +2021,15 @@ void ScTextWnd::ImplInitSettings()
 
 void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
 {
+    Size aSize(pDrawingArea->get_size_request());
+    if (aSize.Width() == -1)
+        aSize.setWidth(500);
+    if (aSize.Height() == -1)
+        aSize.setHeight(100);
+    pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
+
+    SetOutputSizePixel(aSize);
+
     // bypass WeldEditView::SetDrawingArea
     weld::CustomWidgetController::SetDrawingArea(pDrawingArea);
 
@@ -2065,7 +2068,7 @@ void ScTextWnd::SetDrawingArea(weld::DrawingArea* pDrawingArea)
     aTextFont.SetColor(aTxtColor);
     aTextFont.SetWeight(WEIGHT_NORMAL);
 
-    Size aSize(1, GetPixelHeightForLines(1));
+    aSize = Size(500, GetPixelHeightForLines(1));
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
 
     rDevice.SetBackground(aBgColor);
@@ -2110,22 +2113,18 @@ void ScTextWnd::TextGrabFocus()
 }
 
 // Position window
-ScPosWnd::ScPosWnd(vcl::Window* pParent)
-    : InterimItemWindow(pParent, "modules/scalc/ui/posbox.ui", "PosBox")
-    , m_xWidget(m_xBuilder->weld_combo_box("pos_window"))
+ScPosWnd::ScPosWnd(InterimItemWindow& rParent, weld::Builder* pBuilder)
+    : m_xWidget(pBuilder->weld_combo_box("pos_window"))
     , m_nAsyncGetFocusId(nullptr)
     , nTipVisible(nullptr)
     , bFormulaMode(false)
 {
-    InitControlBase(m_xWidget.get());
-
     // Use calculation according to tdf#132338 to align combobox width to width of fontname combobox within formatting toolbar;
     // formatting toolbar is placed above formulabar when using multiple toolbars typically
 
     m_xWidget->set_entry_width_chars(1);
-    Size aSize(LogicToPixel(Size(POSITION_COMBOBOX_WIDTH * 4, 0), MapMode(MapUnit::MapAppFont)));
+    Size aSize(rParent.LogicToPixel(Size(POSITION_COMBOBOX_WIDTH * 4, 0), MapMode(MapUnit::MapAppFont)));
     m_xWidget->set_size_request(aSize.Width(), -1);
-    SetSizePixel(m_xContainer->get_preferred_size());
 
     FillRangeNames();
 
@@ -2140,11 +2139,6 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent)
 
 ScPosWnd::~ScPosWnd()
 {
-    disposeOnce();
-}
-
-void ScPosWnd::dispose()
-{
     EndListening( *SfxGetpApp() );
 
     HideTip();
@@ -2155,8 +2149,6 @@ void ScPosWnd::dispose()
         m_nAsyncGetFocusId = nullptr;
     }
     m_xWidget.reset();
-
-    InterimItemWindow::dispose();
 }
 
 void ScPosWnd::SetFormulaMode( bool bSet )
@@ -2298,9 +2290,15 @@ void ScPosWnd::HideTip()
 {
     if (nTipVisible)
     {
-        Help::HidePopover(this, nTipVisible);
+        // TODO: TIP
+        // Help::HidePopover(this, nTipVisible);
         nTipVisible = nullptr;
     }
+}
+
+void ScPosWnd::GrabFocus()
+{
+    m_xWidget->grab_focus();
 }
 
 static ScNameInputType lcl_GetInputType( const OUString& rText )
@@ -2408,17 +2406,20 @@ IMPL_LINK_NOARG(ScPosWnd, ModifyHdl, weld::ComboBox&, void)
     if (!pStrId)
         return;
 
-    // show the help tip at the text cursor position
-    Point aPos;
-    vcl::Cursor* pCur = GetCursor();
-    if (pCur)
-        aPos = LogicToPixel( pCur->GetPos() );
-    aPos = OutputToScreenPixel( aPos );
-    tools::Rectangle aRect( aPos, aPos );
+    // TODO: TIP
 
-    OUString aText = ScResId(pStrId);
-    QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
-    nTipVisible = Help::ShowPopover(this, aRect, aText, nAlign);
+    // show the help tip at the text cursor position
+    //Point aPos;
+
+    // vcl::Cursor* pCur = GetCursor();
+    // if (pCur)
+    //     aPos = LogicToPixel( pCur->GetPos() );
+    // aPos = OutputToScreenPixel( aPos );
+    // tools::Rectangle aRect( aPos, aPos );
+
+    // OUString aText = ScResId(pStrId);
+    // QuickHelpFlags const nAlign = QuickHelpFlags::Left|QuickHelpFlags::Bottom;
+    //nTipVisible = Help::ShowPopover(this, aRect, aText, nAlign);
 }
 
 void ScPosWnd::DoEnter()
@@ -2559,7 +2560,7 @@ IMPL_LINK(ScPosWnd, KeyInputHdl, const KeyEvent&, rKEvt, bool)
             break;
     }
 
-    return bHandled || ChildKeyInput(rKEvt);
+    return bHandled;
 }
 
 IMPL_LINK_NOARG(ScPosWnd, OnAsyncGetFocus, void*, void)

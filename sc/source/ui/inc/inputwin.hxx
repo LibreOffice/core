@@ -158,7 +158,7 @@ private:
     bool mbInvalidate;
 };
 
-class ScPosWnd final : public InterimItemWindow, public SfxListener        // Display position
+class ScPosWnd final : public SfxListener        // Display position
 {
 private:
     std::unique_ptr<weld::ComboBox> m_xWidget;
@@ -170,13 +170,13 @@ private:
     bool            bFormulaMode;
 
 public:
-                    ScPosWnd( vcl::Window* pParent );
-    virtual         ~ScPosWnd() override;
-    virtual void    dispose() override;
+                    ScPosWnd( InterimItemWindow& rParent, weld::Builder* pBuilder );
+    virtual         ~ScPosWnd();
 
     void            SetPos( const OUString& rPosStr );        // Displayed Text
     void            SetFormulaMode( bool bSet );
 
+    void            GrabFocus();
     static OUString createLocalRangeName(std::u16string_view rName, std::u16string_view rTableName);
 
 private:
@@ -201,7 +201,7 @@ private:
 class ScTextWndGroup : public ScTextWndBase
 {
 public:
-    ScTextWndGroup(ScInputBarGroup& pParent, ScTabViewShell* pViewSh);
+    ScTextWndGroup(InterimItemWindow& rParent, weld::Builder* pBuilder, ScTabViewShell* pViewSh);
     virtual ~ScTextWndGroup() override;
 
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
@@ -225,24 +225,22 @@ public:
     virtual void            StopEditEngine(bool bAll) override;
     virtual void            TextGrabFocus() override;
 
-    vcl::Window&            GetVclParent() { return mrParent; }
+    InterimItemWindow&            GetVclParent() { return mrParent; }
 
 private:
     std::unique_ptr<ScTextWnd> mxTextWnd;
     std::unique_ptr<weld::ScrolledWindow> mxScrollWin;
     std::unique_ptr<weld::CustomWeld> mxTextWndWin;
-    vcl::Window& mrParent;
+    InterimItemWindow& mrParent;
 
     DECL_LINK(Impl_ScrollHdl, weld::ScrolledWindow&, void);
 };
 
-class ScInputBarGroup : public InterimItemWindow
-                      , public ScTextWndBase
+class ScInputBarGroup : public ScTextWndBase
 {
 public:
-                            ScInputBarGroup(vcl::Window* Parent, ScTabViewShell* pViewSh);
+                            ScInputBarGroup(InterimItemWindow& rParent, weld::Builder* xBuilder, ScTabViewShell* pViewSh);
     virtual                 ~ScInputBarGroup() override;
-    virtual void            dispose() override;
     virtual void            InsertAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     virtual void            RemoveAccessibleTextData(ScAccessibleEditLineTextData& rTextData) override;
     void                    SetTextString(const OUString& rString) override;
@@ -250,7 +248,7 @@ public:
     virtual EditView*       GetEditView() const override;
     virtual bool            HasEditView() const override;
     Point                   GetCursorScreenPixelPos(bool bBelowLine);
-    virtual void            Resize() override;
+    void                    Resize();
     virtual const OUString& GetTextString() const override;
     virtual void            StopEditEngine(bool bAll) override;
     virtual void            TextGrabFocus() override;
@@ -272,7 +270,8 @@ public:
 private:
     void            TriggerToolboxLayout();
 
-    std::unique_ptr<weld::Container> mxBackground;
+    InterimItemWindow&            m_rParent;
+    weld::Builder*                m_xBuilder;
     std::unique_ptr<ScTextWndGroup> mxTextWndGroup;
     std::unique_ptr<weld::Button> mxButtonUp;
     std::unique_ptr<weld::Button> mxButtonDown;
@@ -281,17 +280,16 @@ private:
     DECL_LINK(ClickHdl, weld::Button&, void);
 };
 
-class ScInputWindow final : public ToolBox                        // Parent toolbox
+class ScInputWindow final : public InterimItemWindow
 {
 public:
-                    ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind );
+                    ScInputWindow( vcl::Window* pParent, const SfxBindings* pBind, sal_uInt64 nWindowId );
     virtual         ~ScInputWindow() override;
     virtual void    dispose() override;
 
     virtual void    PixelInvalidate(const tools::Rectangle* pRectangle) override;
     virtual void    SetSizePixel( const Size& rNewSize ) override;
     virtual void    Resize() override;
-    virtual void    Select() override;
 
     void            SetFuncString( const OUString& rString, bool bDoEdit = true );
     void            SetPosString( const OUString& rStr );
@@ -305,11 +303,11 @@ public:
 
     bool            IsInputActive();
     EditView*       GetEditView();
-    vcl::Window*    GetEditWindow();
+    ScInputBarGroup* GetEditWindow();
     Point           GetCursorScreenPixelPos(bool bBelowLine = false);
 
     void            TextGrabFocus();
-    void            TextInvalidate();
+    static void     TextInvalidate(); // TODO: remove
     void            SwitchToTextWin();
 
     void            PosGrabFocus();
@@ -325,27 +323,31 @@ public:
 
     void            StateChanged( StateChangedType nType ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
-    virtual void    MouseMove( const MouseEvent& rMEvt ) override;
+    // virtual void    MouseButtonUp( const MouseEvent& rMEvt ) override;
+    // virtual void    MouseButtonDown( const MouseEvent& rMEvt ) override;
+    // virtual void    MouseMove( const MouseEvent& rMEvt ) override;
 
     void            NotifyLOKClient();
 
-    void MenuHdl(std::string_view command);
-    DECL_LINK( DropdownClickHdl, ToolBox*, void );
+    DECL_LINK(MenuHdl, const OString&, void);
+    DECL_LINK(ClickHdl, const OString&, void);
 
     void            AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode );
 
 private:
     bool IsPointerAtResizePos();
 
-    VclPtr<ScPosWnd>  aWndPos;
-    VclPtr<ScInputBarGroup> mxTextWindow;
+    std::unique_ptr<weld::Container> mxBackground;
+    std::unique_ptr<ScPosWnd>  aWndPos;
+    std::unique_ptr<ScInputBarGroup> mxTextWindow;
+    std::unique_ptr<weld::Toolbar> mxToolbar;
+    std::unique_ptr<weld::Builder> mxMenuBuilder;
+    std::unique_ptr<weld::Menu> mxSumMenu;
     ScInputHandler* pInputHdl;
     ScTabViewShell* mpViewShell;
-    tools::Long            mnMaxY;
+    //tools::Long            mnMaxY;
     bool            bIsOkCancelMode;
-    bool            bInResize;
+    //bool            bInResize;
 };
 
 class ScInputWindowWrapper : public SfxChildWindow
