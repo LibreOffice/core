@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b49687_cb25917d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-04-11T01:22:56Z",
+      "side": 1,
+      "message": "I have made a patch to split footnotes and endnotes into two categories in Navigator.",
+      "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
