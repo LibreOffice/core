@@ -1137,11 +1137,11 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
 
 WW8PLCFx_PCD::WW8PLCFx_PCD(const WW8Fib& rFib, WW8PLCFpcd* pPLCFpcd,
     WW8_CP nStartCp, bool bVer67P)
-    : WW8PLCFx(rFib, false), nClipStart(-1)
+    : WW8PLCFx(rFib, false), m_nClipStart(-1)
 {
     // construct own iterator
-    pPcdI.reset( new WW8PLCFpcd_Iter(*pPLCFpcd, nStartCp) );
-    bVer67= bVer67P;
+    m_pPcdI.reset( new WW8PLCFpcd_Iter(*pPLCFpcd, nStartCp) );
+    m_bVer67= bVer67P;
 }
 
 WW8PLCFx_PCD::~WW8PLCFx_PCD()
@@ -1150,28 +1150,28 @@ WW8PLCFx_PCD::~WW8PLCFx_PCD()
 
 sal_uInt32 WW8PLCFx_PCD::GetIMax() const
 {
-    return pPcdI ? pPcdI->GetIMax() : 0;
+    return m_pPcdI ? m_pPcdI->GetIMax() : 0;
 }
 
 sal_uInt32 WW8PLCFx_PCD::GetIdx() const
 {
-    return pPcdI ? pPcdI->GetIdx() : 0;
+    return m_pPcdI ? m_pPcdI->GetIdx() : 0;
 }
 
 void WW8PLCFx_PCD::SetIdx(sal_uInt32 nIdx)
 {
-    if (pPcdI)
-        pPcdI->SetIdx( nIdx );
+    if (m_pPcdI)
+        m_pPcdI->SetIdx( nIdx );
 }
 
 bool WW8PLCFx_PCD::SeekPos(WW8_CP nCpPos)
 {
-    return pPcdI && pPcdI->SeekPos( nCpPos );
+    return m_pPcdI && m_pPcdI->SeekPos( nCpPos );
 }
 
 WW8_CP WW8PLCFx_PCD::Where()
 {
-    return pPcdI ? pPcdI->Where() : WW8_CP_MAX;
+    return m_pPcdI ? m_pPcdI->Where() : WW8_CP_MAX;
 }
 
 tools::Long WW8PLCFx_PCD::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& rLen )
@@ -1179,19 +1179,19 @@ tools::Long WW8PLCFx_PCD::GetNoSprms( WW8_CP& rStart, WW8_CP& rEnd, sal_Int32& r
     void* pData;
     rLen = 0;
 
-    if ( !pPcdI || !pPcdI->Get(rStart, rEnd, pData) )
+    if ( !m_pPcdI || !m_pPcdI->Get(rStart, rEnd, pData) )
     {
         rStart = rEnd = WW8_CP_MAX;
         return -1;
     }
-    return pPcdI->GetIdx();
+    return m_pPcdI->GetIdx();
 }
 
 void WW8PLCFx_PCD::advance()
 {
-    OSL_ENSURE(pPcdI , "missing pPcdI");
-    if (pPcdI)
-        pPcdI->advance();
+    OSL_ENSURE(m_pPcdI , "missing pPcdI");
+    if (m_pPcdI)
+        m_pPcdI->advance();
 }
 
 WW8_FC WW8PLCFx_PCD::CurrentPieceStartCp2Fc( WW8_CP nCp )
@@ -1199,7 +1199,7 @@ WW8_FC WW8PLCFx_PCD::CurrentPieceStartCp2Fc( WW8_CP nCp )
     WW8_CP nCpStart, nCpEnd;
     void* pData;
 
-    if ( !pPcdI->Get(nCpStart, nCpEnd, pData) )
+    if ( !m_pPcdI->Get(nCpStart, nCpEnd, pData) )
     {
         OSL_ENSURE( false, "CurrentPieceStartCp2Fc() with false Cp found (1)" );
         return WW8_FC_MAX;
@@ -1215,7 +1215,7 @@ WW8_FC WW8PLCFx_PCD::CurrentPieceStartCp2Fc( WW8_CP nCp )
 
     bool bIsUnicode = false;
     WW8_FC nFC = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
-    if( !bVer67 )
+    if( !m_bVer67 )
         nFC = WW8PLCFx_PCD::TransformPieceAddress( nFC, bIsUnicode );
 
     WW8_CP nDistance;
@@ -1262,14 +1262,14 @@ WW8_CP WW8PLCFx_PCD::CurrentPieceStartFc2Cp( WW8_FC nStartPos )
 {
     WW8_CP nCpStart, nCpEnd;
     void* pData;
-    if ( !pPcdI->Get( nCpStart, nCpEnd, pData ) )
+    if ( !m_pPcdI->Get( nCpStart, nCpEnd, pData ) )
     {
         OSL_ENSURE( false, "CurrentPieceStartFc2Cp() - error" );
         return WW8_CP_MAX;
     }
     bool bIsUnicode = false;
     sal_Int32 nFcStart  = SVBT32ToUInt32( static_cast<WW8_PCD*>(pData)->fc );
-    if( !bVer67 )
+    if( !m_bVer67 )
         nFcStart = WW8PLCFx_PCD::TransformPieceAddress( nFcStart, bIsUnicode );
 
     sal_Int32 nUnicodeFactor = bIsUnicode ? 2 : 1;
@@ -2656,7 +2656,7 @@ void WW8PLCFx_Fc_FKP::WW8Fkp::FillEntry(WW8PLCFx_Fc_FKP::WW8Fkp::Entry &rEntry,
 WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
     SvStream* pDataSt, tools::Long _nFilePos, tools::Long nItemSiz, ePLCFT ePl,
     WW8_FC nStartFc)
-    : nItemSize(nItemSiz), nFilePos(_nFilePos), mnIdx(0), ePLCF(ePl)
+    : m_nItemSize(nItemSiz), m_nFilePos(_nFilePos), mnIdx(0), m_ePLCF(ePl)
     , mnMustRemainCached(0), maSprmParser(rFib)
 {
     memset(maRawData, 0, 512);
@@ -2665,7 +2665,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
 
     sal_uInt64 const nOldPos = pSt->Tell();
 
-    bool bCouldSeek = checkSeek(*pSt, nFilePos);
+    bool bCouldSeek = checkSeek(*pSt, m_nFilePos);
     bool bCouldRead = bCouldSeek && checkRead(*pSt, maRawData, 512);
 
     mnIMax = bCouldRead ? maRawData[511] : 0;
@@ -2676,7 +2676,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
 
     for (mnIdx = 0; mnIdx < mnIMax; ++mnIdx)
     {
-        const size_t nRawDataOffset = nRawDataStart + mnIdx * nItemSize;
+        const size_t nRawDataOffset = nRawDataStart + mnIdx * m_nItemSize;
 
         //clip to available data, corrupt fkp
         if (nRawDataOffset >= 511)
@@ -2692,7 +2692,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
 
         if (nOfs)
         {
-            switch (ePLCF)
+            switch (m_ePLCF)
             {
                 case CHP:
                 {
@@ -2705,7 +2705,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(const WW8Fib& rFib, SvStream* pSt,
 
                     if (aEntry.mnLen && eVersion <= ww::eWW2)
                     {
-                        Word2CHPX aChpx = ReadWord2Chpx(*pSt, nFilePos + nOfs + 1, static_cast< sal_uInt8 >(aEntry.mnLen));
+                        Word2CHPX aChpx = ReadWord2Chpx(*pSt, m_nFilePos + nOfs + 1, static_cast< sal_uInt8 >(aEntry.mnLen));
                         std::vector<sal_uInt8> aSprms = ChpxToSprms(aChpx);
                         aEntry.mnLen = static_cast< sal_uInt16 >(aSprms.size());
                         if (aEntry.mnLen)
@@ -3096,32 +3096,32 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
             return false;
     }
 
-    if (!pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ))
+    if (!m_pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ))
     {
-        pFkp = nullptr;
+        m_pFkp = nullptr;
         return false;                           // PLCF completely processed
     }
-    pPLCF->advance();
+    m_pPLCF->advance();
     tools::Long nPo = SVBT16ToUInt16( static_cast<sal_uInt8 *>(pPage) );
     nPo <<= 9;                                  // shift as LONG
 
-    tools::Long nCurrentFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
+    tools::Long nCurrentFkpFilePos = m_pFkp ? m_pFkp->GetFilePos() : -1;
     if (nCurrentFkpFilePos == nPo)
-        pFkp->Reset(GetStartFc());
+        m_pFkp->Reset(GetStartFc());
     else
     {
         auto aIter =
             std::find_if(maFkpCache.begin(), maFkpCache.end(), SamePos(nPo));
         if (aIter != maFkpCache.end())
         {
-            pFkp = aIter->get();
-            pFkp->Reset(GetStartFc());
+            m_pFkp = aIter->get();
+            m_pFkp->Reset(GetStartFc());
         }
         else
         {
-            pFkp = new WW8Fkp(GetFIB(), pFKPStrm, pDataStrm, nPo,
-                pFkpSizeTab[ ePLCF ], ePLCF, GetStartFc());
-            maFkpCache.push_back(std::unique_ptr<WW8Fkp>(pFkp));
+            m_pFkp = new WW8Fkp(GetFIB(), m_pFKPStrm, m_pDataStrm, nPo,
+                pFkpSizeTab[ m_ePLCF ], m_ePLCF, GetStartFc());
+            maFkpCache.push_back(std::unique_ptr<WW8Fkp>(m_pFkp));
 
             if (maFkpCache.size() > eMaxCache)
             {
@@ -3140,19 +3140,19 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
 
 WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTableSt,
     SvStream* pDataSt, const WW8Fib& rFib, ePLCFT ePl, WW8_FC nStartFcL)
-    : WW8PLCFx(rFib, true), pFKPStrm(pSt), pDataStrm(pDataSt)
-    , pFkp(nullptr), ePLCF(ePl)
+    : WW8PLCFx(rFib, true), m_pFKPStrm(pSt), m_pDataStrm(pDataSt)
+    , m_pFkp(nullptr), m_ePLCF(ePl)
 {
     SetStartFc(nStartFcL);
     tools::Long nLenStruct = (8 > rFib.m_nVersion) ? 2 : 4;
     if (ePl == CHP)
     {
-        pPLCF.reset(new WW8PLCF(*pTableSt, rFib.m_fcPlcfbteChpx, rFib.m_lcbPlcfbteChpx,
+        m_pPLCF.reset(new WW8PLCF(*pTableSt, rFib.m_fcPlcfbteChpx, rFib.m_lcbPlcfbteChpx,
             nLenStruct, GetStartFc(), rFib.m_pnChpFirst, rFib.m_cpnBteChp));
     }
     else
     {
-        pPLCF.reset(new WW8PLCF(*pTableSt, rFib.m_fcPlcfbtePapx, rFib.m_lcbPlcfbtePapx,
+        m_pPLCF.reset(new WW8PLCF(*pTableSt, rFib.m_fcPlcfbtePapx, rFib.m_lcbPlcfbtePapx,
             nLenStruct, GetStartFc(), rFib.m_pnPapFirst, rFib.m_cpnBtePap));
     }
 }
@@ -3160,15 +3160,15 @@ WW8PLCFx_Fc_FKP::WW8PLCFx_Fc_FKP(SvStream* pSt, SvStream* pTableSt,
 WW8PLCFx_Fc_FKP::~WW8PLCFx_Fc_FKP()
 {
     maFkpCache.clear();
-    pPLCF.reset();
-    pPCDAttrs.reset();
+    m_pPLCF.reset();
+    m_pPCDAttrs.reset();
 }
 
 sal_uInt32 WW8PLCFx_Fc_FKP::GetIdx() const
 {
-    sal_uInt32 u = pPLCF->GetIdx() << 8;
-    if (pFkp)
-        u |= pFkp->GetIdx();
+    sal_uInt32 u = m_pPLCF->GetIdx() << 8;
+    if (m_pFkp)
+        u |= m_pFkp->GetIdx();
     return u;
 }
 
@@ -3176,17 +3176,17 @@ void WW8PLCFx_Fc_FKP::SetIdx(sal_uInt32 nIdx)
 {
     if( !( nIdx & 0xffffff00L ) )
     {
-        pPLCF->SetIdx( nIdx >> 8 );
-        pFkp = nullptr;
+        m_pPLCF->SetIdx( nIdx >> 8 );
+        m_pFkp = nullptr;
     }
     else
     {                                   // there was a Fkp
         // Set PLCF one position back to retrieve the address of the Fkp
-        pPLCF->SetIdx( ( nIdx >> 8 ) - 1 );
+        m_pPLCF->SetIdx( ( nIdx >> 8 ) - 1 );
         if (NewFkp())                       // read Fkp again
         {
             sal_uInt8 nFkpIdx = static_cast<sal_uInt8>(nIdx & 0xff);
-            pFkp->SetIdx(nFkpIdx);          // set Fkp-Pos again
+            m_pFkp->SetIdx(nFkpIdx);          // set Fkp-Pos again
         }
     }
 }
@@ -3197,32 +3197,32 @@ bool WW8PLCFx_Fc_FKP::SeekPos(WW8_FC nFcPos)
     SetStartFc( nFcPos );
 
     // find StartPos for next pPLCF->Get()
-    bool bRet = pPLCF->SeekPos(nFcPos);
+    bool bRet = m_pPLCF->SeekPos(nFcPos);
 
     // make FKP invalid?
     WW8_CP nPLCFStart, nPLCFEnd;
     void* pPage;
-    if( pFkp && pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ) )
+    if( m_pFkp && m_pPLCF->Get( nPLCFStart, nPLCFEnd, pPage ) )
     {
         tools::Long nPo = SVBT16ToUInt16( static_cast<sal_uInt8 *>(pPage) );
         nPo <<= 9;                                          // shift as LONG
-        if (nPo != pFkp->GetFilePos())
-            pFkp = nullptr;
+        if (nPo != m_pFkp->GetFilePos())
+            m_pFkp = nullptr;
         else
-            pFkp->SeekPos( nFcPos );
+            m_pFkp->SeekPos( nFcPos );
     }
     return bRet;
 }
 
 WW8_FC WW8PLCFx_Fc_FKP::Where()
 {
-    if( !pFkp && !NewFkp() )
+    if( !m_pFkp && !NewFkp() )
         return WW8_FC_MAX;
-    WW8_FC nP = pFkp ? pFkp->Where() : WW8_FC_MAX;
+    WW8_FC nP = m_pFkp ? m_pFkp->Where() : WW8_FC_MAX;
     if( nP != WW8_FC_MAX )
         return nP;
 
-    pFkp = nullptr;                   // FKP finished -> get new
+    m_pFkp = nullptr;                   // FKP finished -> get new
     return Where();                     // easiest way: do it recursively
 }
 
@@ -3231,13 +3231,13 @@ sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int
     rLen = 0;                               // Default
     rStart = rEnd = WW8_FC_MAX;
 
-    if( !pFkp )     // Fkp not there ?
+    if( !m_pFkp )     // Fkp not there ?
     {
         if( !NewFkp() )
             return nullptr;
     }
 
-    sal_uInt8* pPos = pFkp ? pFkp->Get( rStart, rEnd, rLen ) : nullptr;
+    sal_uInt8* pPos = m_pFkp ? m_pFkp->Get( rStart, rEnd, rLen ) : nullptr;
     if( rStart == WW8_FC_MAX )    //Not found
         return nullptr;
     return pPos;
@@ -3245,42 +3245,42 @@ sal_uInt8* WW8PLCFx_Fc_FKP::GetSprmsAndPos(WW8_FC& rStart, WW8_FC& rEnd, sal_Int
 
 void WW8PLCFx_Fc_FKP::advance()
 {
-    if( !pFkp && !NewFkp() )
+    if( !m_pFkp && !NewFkp() )
         return;
 
-    if (!pFkp)
+    if (!m_pFkp)
         return;
 
-    pFkp->advance();
-    if( pFkp->Where() == WW8_FC_MAX )
+    m_pFkp->advance();
+    if( m_pFkp->Where() == WW8_FC_MAX )
         (void)NewFkp();
 }
 
 sal_uInt16 WW8PLCFx_Fc_FKP::GetIstd() const
 {
-    return pFkp ? pFkp->GetIstd() : 0xFFFF;
+    return m_pFkp ? m_pFkp->GetIstd() : 0xFFFF;
 }
 
 void WW8PLCFx_Fc_FKP::GetPCDSprms( WW8PLCFxDesc& rDesc )
 {
     rDesc.pMemPos   = nullptr;
     rDesc.nSprmsLen = 0;
-    if( pPCDAttrs )
+    if( m_pPCDAttrs )
     {
-        if( !pFkp )
+        if( !m_pFkp )
         {
             OSL_FAIL("+Problem: GetPCDSprms: NewFkp necessary (not possible!)" );
             if( !NewFkp() )
                 return;
         }
-        pPCDAttrs->GetSprms(&rDesc);
+        m_pPCDAttrs->GetSprms(&rDesc);
     }
 }
 
 SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, bool bFindFirst)
 {
     // const would be nicer, but for that, NewFkp() would need to be replaced or eliminated
-    if( !pFkp )
+    if( !m_pFkp )
     {
         OSL_FAIL( "+Motz: HasSprm: NewFkp needed ( no const possible )" );
         // happens in BugDoc 31722
@@ -3288,10 +3288,10 @@ SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, bool bFindFirst)
             return SprmResult();
     }
 
-    if (!pFkp)
+    if (!m_pFkp)
         return SprmResult();
 
-    SprmResult aRes = pFkp->HasSprm(nId, bFindFirst);
+    SprmResult aRes = m_pFkp->HasSprm(nId, bFindFirst);
 
     if (!aRes.pSprm)
     {
@@ -3301,7 +3301,7 @@ SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, bool bFindFirst)
         if (aDesc.pMemPos)
         {
             WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen,
-                pFkp->GetSprmParser());
+                m_pFkp->GetSprmParser());
             aRes = aIter.FindSprm(nId, bFindFirst);
         }
     }
@@ -3312,7 +3312,7 @@ SprmResult WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, bool bFindFirst)
 void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
 {
     // const would be nicer, but for that, NewFkp() would need to be replaced or eliminated
-    if (!pFkp)
+    if (!m_pFkp)
     {
        OSL_FAIL( "+Motz: HasSprm: NewFkp needed ( no const possible )" );
        // happens in BugDoc 31722
@@ -3320,10 +3320,10 @@ void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
            return;
     }
 
-    if (!pFkp)
+    if (!m_pFkp)
         return;
 
-    pFkp->HasSprm(nId, rResult);
+    m_pFkp->HasSprm(nId, rResult);
 
     WW8PLCFxDesc aDesc;
     GetPCDSprms( aDesc );
@@ -3331,7 +3331,7 @@ void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
     if (!aDesc.pMemPos)
         return;
 
-    const wwSprmParser &rSprmParser = pFkp->GetSprmParser();
+    const wwSprmParser &rSprmParser = m_pFkp->GetSprmParser();
     WW8SprmIter aIter(aDesc.pMemPos, aDesc.nSprmsLen, rSprmParser);
     while(aIter.GetSprms())
     {
@@ -3348,14 +3348,14 @@ void WW8PLCFx_Fc_FKP::HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult)
 WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     SvStream* pDataSt, const WW8ScannerBase& rBase, ePLCFT ePl )
     : WW8PLCFx_Fc_FKP(pSt, pTableSt, pDataSt, *rBase.m_pWw8Fib, ePl,
-    rBase.WW8Cp2Fc(0)), rSBase(rBase), nAttrStart(-1), nAttrEnd(-1),
-    bLineEnd(false),
-    bComplex( (7 < rBase.m_pWw8Fib->m_nVersion) || rBase.m_pWw8Fib->m_fComplex )
+    rBase.WW8Cp2Fc(0)), m_rSBase(rBase), m_nAttrStart(-1), m_nAttrEnd(-1),
+    m_bLineEnd(false),
+    m_bComplex( (7 < rBase.m_pWw8Fib->m_nVersion) || rBase.m_pWw8Fib->m_fComplex )
 {
     ResetAttrStartEnd();
 
-    if (rSBase.m_pPiecePLCF)
-        pPcd.reset( new WW8PLCFx_PCD(GetFIB(), rBase.m_pPiecePLCF.get(), 0, IsSevenMinus(GetFIBVersion())) );
+    if (m_rSBase.m_pPiecePLCF)
+        m_pPcd.reset( new WW8PLCFx_PCD(GetFIB(), rBase.m_pPiecePLCF.get(), 0, IsSevenMinus(GetFIBVersion())) );
 
     /*
     Make a copy of the piece attributes for so that the calls to HasSprm on a
@@ -3363,13 +3363,13 @@ WW8PLCFx_Cp_FKP::WW8PLCFx_Cp_FKP( SvStream* pSt, SvStream* pTableSt,
     despite the fact that such attributes can only be found through a cp based
     mechanism.
     */
-    if (pPcd)
+    if (m_pPcd)
     {
-        pPCDAttrs.reset( rSBase.m_pPLCFx_PCDAttrs ? new WW8PLCFx_PCDAttrs(
-            *rSBase.m_pWw8Fib, pPcd.get(), &rSBase) : nullptr);
+        m_pPCDAttrs.reset( m_rSBase.m_pPLCFx_PCDAttrs ? new WW8PLCFx_PCDAttrs(
+            *m_rSBase.m_pWw8Fib, m_pPcd.get(), &m_rSBase) : nullptr);
     }
 
-    pPieceIter = rSBase.m_pPieceIter.get();
+    m_pPieceIter = m_rSBase.m_pPieceIter.get();
 }
 
 WW8PLCFx_Cp_FKP::~WW8PLCFx_Cp_FKP()
@@ -3378,36 +3378,36 @@ WW8PLCFx_Cp_FKP::~WW8PLCFx_Cp_FKP()
 
 void WW8PLCFx_Cp_FKP::ResetAttrStartEnd()
 {
-    nAttrStart = -1;
-    nAttrEnd   = -1;
-    bLineEnd   = false;
+    m_nAttrStart = -1;
+    m_nAttrEnd   = -1;
+    m_bLineEnd   = false;
 }
 
 sal_uInt32 WW8PLCFx_Cp_FKP::GetPCDIdx() const
 {
-    return pPcd ? pPcd->GetIdx() : 0;
+    return m_pPcd ? m_pPcd->GetIdx() : 0;
 }
 
 bool WW8PLCFx_Cp_FKP::SeekPos(WW8_CP nCpPos)
 {
-    if( pPcd )  // Complex
+    if( m_pPcd )  // Complex
     {
-        if( !pPcd->SeekPos( nCpPos ) )  // set piece
+        if( !m_pPcd->SeekPos( nCpPos ) )  // set piece
             return false;
-        if (pPCDAttrs && !pPCDAttrs->GetIter()->SeekPos(nCpPos))
+        if (m_pPCDAttrs && !m_pPCDAttrs->GetIter()->SeekPos(nCpPos))
             return false;
-        return WW8PLCFx_Fc_FKP::SeekPos(pPcd->CurrentPieceStartCp2Fc(nCpPos));
+        return WW8PLCFx_Fc_FKP::SeekPos(m_pPcd->CurrentPieceStartCp2Fc(nCpPos));
     }
                                     // NO piece table !!!
-    return WW8PLCFx_Fc_FKP::SeekPos( rSBase.WW8Cp2Fc(nCpPos) );
+    return WW8PLCFx_Fc_FKP::SeekPos( m_rSBase.WW8Cp2Fc(nCpPos) );
 }
 
 WW8_CP WW8PLCFx_Cp_FKP::Where()
 {
     WW8_FC nFc = WW8PLCFx_Fc_FKP::Where();
-    if( pPcd )
-        return pPcd->CurrentPieceStartFc2Cp( nFc ); // identify piece
-    return rSBase.WW8Fc2Cp( nFc );      // NO piece table !!!
+    if( m_pPcd )
+        return m_pPcd->CurrentPieceStartFc2Cp( nFc ); // identify piece
+    return m_rSBase.WW8Fc2Cp( nFc );      // NO piece table !!!
 }
 
 void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
@@ -3432,23 +3432,23 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
         Otherwise our cool fastsave algorithm can be brought to bear on the
         problem.
         */
-        if( !pPieceIter )
+        if( !m_pPieceIter )
             return;
-        const sal_uInt32 nOldPos = pPieceIter->GetIdx();
-        bool bOk = pPieceIter->SeekPos(nOrigCp);
-        pPieceIter->SetIdx(nOldPos);
+        const sal_uInt32 nOldPos = m_pPieceIter->GetIdx();
+        bool bOk = m_pPieceIter->SeekPos(nOrigCp);
+        m_pPieceIter->SetIdx(nOldPos);
         if (!bOk)
             return;
     }
 
-    if( pPcd )  // piece table available
+    if( m_pPcd )  // piece table available
     {
         // Init ( no ++ called, yet )
-        if( (nAttrStart >  nAttrEnd) || (nAttrStart == -1) )
+        if( (m_nAttrStart >  m_nAttrEnd) || (m_nAttrStart == -1) )
         {
-            p->bRealLineEnd = (ePLCF == PAP);
+            p->bRealLineEnd = (m_ePLCF == PAP);
 
-            if ( ((ePLCF == PAP ) || (ePLCF == CHP)) && (nOrigCp != WW8_CP_MAX) )
+            if ( ((m_ePLCF == PAP ) || (m_ePLCF == CHP)) && (nOrigCp != WW8_CP_MAX) )
             {
                 bool bIsUnicode=false;
                 /*
@@ -3461,9 +3461,9 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
 
                 //We set the piece iterator to the piece that contains the
                 //character, now we have the correct piece for this character
-                sal_uInt32 nOldPos = pPieceIter->GetIdx();
+                sal_uInt32 nOldPos = m_pPieceIter->GetIdx();
                 p->nStartPos = nOrigCp;
-                pPieceIter->SeekPos( p->nStartPos);
+                m_pPieceIter->SeekPos( p->nStartPos);
 
                 //This is the FC assigned to the character, but we already
                 //have the result of the next stage, so we can skip this step
@@ -3485,11 +3485,11 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 */
                 WW8_CP nCpStart, nCpEnd;
                 void* pData=nullptr;
-                bool bOk = pPieceIter->Get(nCpStart, nCpEnd, pData);
+                bool bOk = m_pPieceIter->Get(nCpStart, nCpEnd, pData);
 
                 if (!bOk)
                 {
-                    pPieceIter->SetIdx(nOldPos);
+                    m_pPieceIter->SetIdx(nOldPos);
                     return;
                 }
 
@@ -3508,7 +3508,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 {
                     SAL_WARN("sw.ww8", "broken offset, ignoring");
                     p->nStartPos = p->nEndPos = WW8_FC_MAX;
-                    pPieceIter->SetIdx(nOldPos);
+                    m_pPieceIter->SetIdx(nOldPos);
                     return;
                 }
 
@@ -3519,7 +3519,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                     {
                         SAL_WARN("sw.ww8", "broken offset, ignoring");
                         p->nStartPos = p->nEndPos = WW8_FC_MAX;
-                        pPieceIter->SetIdx(nOldPos);
+                        m_pPieceIter->SetIdx(nOldPos);
                         return;
                     }
                 }
@@ -3529,7 +3529,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 {
                     SAL_WARN("sw.ww8", "broken offset, ignoring");
                     p->nStartPos = p->nEndPos = WW8_FC_MAX;
-                    pPieceIter->SetIdx(nOldPos);
+                    m_pPieceIter->SetIdx(nOldPos);
                     return;
                 }
 
@@ -3540,7 +3540,7 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                     {
                         SAL_WARN("sw.ww8", "broken offset, ignoring");
                         p->nStartPos = p->nEndPos = WW8_FC_MAX;
-                        pPieceIter->SetIdx(nOldPos);
+                        m_pPieceIter->SetIdx(nOldPos);
                         return;
                     }
 
@@ -3551,13 +3551,13 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                     {
                         SAL_WARN("sw.ww8", "broken offset, ignoring");
                         p->nStartPos = p->nEndPos = WW8_FC_MAX;
-                        pPieceIter->SetIdx(nOldPos);
+                        m_pPieceIter->SetIdx(nOldPos);
                         return;
                     }
                 }
                 else
                 {
-                    if (ePLCF == CHP)
+                    if (m_ePLCF == CHP)
                         p->nEndPos = nCpEnd;
                     else
                     {
@@ -3579,12 +3579,12 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         FKP fc
                         */
 
-                        pPieceIter->advance();
+                        m_pPieceIter->advance();
 
-                        for (;pPieceIter->GetIdx() < pPieceIter->GetIMax();
-                            pPieceIter->advance())
+                        for (;m_pPieceIter->GetIdx() < m_pPieceIter->GetIMax();
+                            m_pPieceIter->advance())
                         {
-                            if( !pPieceIter->Get( nCpStart, nCpEnd, pData ) )
+                            if( !m_pPieceIter->Get( nCpStart, nCpEnd, pData ) )
                             {
                                 OSL_ENSURE( false, "piece iter broken!" );
                                 break;
@@ -3666,23 +3666,23 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                         }
                     }
                 }
-                pPieceIter->SetIdx( nOldPos );
+                m_pPieceIter->SetIdx( nOldPos );
             }
             else
-                WW8PLCFx_PCD::CurrentPieceFc2Cp( p->nStartPos, p->nEndPos,&rSBase );
+                WW8PLCFx_PCD::CurrentPieceFc2Cp( p->nStartPos, p->nEndPos,&m_rSBase );
         }
         else
         {
-            p->nStartPos = nAttrStart;
-            p->nEndPos = nAttrEnd;
-            p->bRealLineEnd = bLineEnd;
+            p->nStartPos = m_nAttrStart;
+            p->nEndPos = m_nAttrEnd;
+            p->bRealLineEnd = m_bLineEnd;
         }
     }
     else        // NO piece table !!!
     {
-        p->nStartPos = rSBase.WW8Fc2Cp( p->nStartPos );
-        p->nEndPos   = rSBase.WW8Fc2Cp( p->nEndPos );
-        p->bRealLineEnd = ePLCF == PAP;
+        p->nStartPos = m_rSBase.WW8Fc2Cp( p->nStartPos );
+        p->nEndPos   = m_rSBase.WW8Fc2Cp( p->nEndPos );
+        p->bRealLineEnd = m_ePLCF == PAP;
     }
 }
 
@@ -3690,21 +3690,21 @@ void WW8PLCFx_Cp_FKP::advance()
 {
     WW8PLCFx_Fc_FKP::advance();
     // !pPcd: emergency break
-    if ( !bComplex || !pPcd )
+    if ( !m_bComplex || !m_pPcd )
         return;
 
-    if( GetPCDIdx() >= pPcd->GetIMax() )           // End of PLCF
+    if( GetPCDIdx() >= m_pPcd->GetIMax() )           // End of PLCF
     {
-        nAttrStart = nAttrEnd = WW8_CP_MAX;
+        m_nAttrStart = m_nAttrEnd = WW8_CP_MAX;
         return;
     }
 
     sal_Int32 nFkpLen;                               // Fkp entry
     // get Fkp entry
-    WW8PLCFx_Fc_FKP::GetSprmsAndPos(nAttrStart, nAttrEnd, nFkpLen);
+    WW8PLCFx_Fc_FKP::GetSprmsAndPos(m_nAttrStart, m_nAttrEnd, nFkpLen);
 
-    WW8PLCFx_PCD::CurrentPieceFc2Cp( nAttrStart, nAttrEnd, &rSBase );
-    bLineEnd = (ePLCF == PAP);
+    WW8PLCFx_PCD::CurrentPieceFc2Cp( m_nAttrStart, m_nAttrEnd, &m_rSBase );
+    m_bLineEnd = (m_ePLCF == PAP);
 }
 
 WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTableSt,
@@ -3990,7 +3990,7 @@ void WW8PLCFx_SubDoc::advance()
 
 // fields
 WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
-    : WW8PLCFx(rMyFib, true), rFib(rMyFib)
+    : WW8PLCFx(rMyFib, true), m_rFib(rMyFib)
 {
     WW8_FC nFc;
     sal_Int32 nLen;
@@ -3998,37 +3998,37 @@ WW8PLCFx_FLD::WW8PLCFx_FLD( SvStream* pSt, const WW8Fib& rMyFib, short nType)
     switch( nType )
     {
     case MAN_HDFT:
-        nFc = rFib.m_fcPlcffldHdr;
-        nLen = rFib.m_lcbPlcffldHdr;
+        nFc = m_rFib.m_fcPlcffldHdr;
+        nLen = m_rFib.m_lcbPlcffldHdr;
         break;
     case MAN_FTN:
-        nFc = rFib.m_fcPlcffldFootnote;
-        nLen = rFib.m_lcbPlcffldFootnote;
+        nFc = m_rFib.m_fcPlcffldFootnote;
+        nLen = m_rFib.m_lcbPlcffldFootnote;
         break;
     case MAN_EDN:
-        nFc = rFib.m_fcPlcffldEdn;
-        nLen = rFib.m_lcbPlcffldEdn;
+        nFc = m_rFib.m_fcPlcffldEdn;
+        nLen = m_rFib.m_lcbPlcffldEdn;
         break;
     case MAN_AND:
-        nFc = rFib.m_fcPlcffldAtn;
-        nLen = rFib.m_lcbPlcffldAtn;
+        nFc = m_rFib.m_fcPlcffldAtn;
+        nLen = m_rFib.m_lcbPlcffldAtn;
         break;
     case MAN_TXBX:
-        nFc = rFib.m_fcPlcffldTxbx;
-        nLen = rFib.m_lcbPlcffldTxbx;
+        nFc = m_rFib.m_fcPlcffldTxbx;
+        nLen = m_rFib.m_lcbPlcffldTxbx;
         break;
     case MAN_TXBX_HDFT:
-        nFc = rFib.m_fcPlcffldHdrTxbx;
-        nLen = rFib.m_lcbPlcffldHdrTxbx;
+        nFc = m_rFib.m_fcPlcffldHdrTxbx;
+        nLen = m_rFib.m_lcbPlcffldHdrTxbx;
         break;
     default:
-        nFc = rFib.m_fcPlcffldMom;
-        nLen = rFib.m_lcbPlcffldMom;
+        nFc = m_rFib.m_fcPlcffldMom;
+        nLen = m_rFib.m_lcbPlcffldMom;
         break;
     }
 
     if( nLen )
-        pPLCF.reset( new WW8PLCFspecial( pSt, nFc, nLen, 2 ) );
+        m_pPLCF.reset( new WW8PLCFspecial( pSt, nFc, nLen, 2 ) );
 }
 
 WW8PLCFx_FLD::~WW8PLCFx_FLD()
@@ -4037,51 +4037,51 @@ WW8PLCFx_FLD::~WW8PLCFx_FLD()
 
 sal_uInt32 WW8PLCFx_FLD::GetIdx() const
 {
-    return pPLCF ? pPLCF->GetIdx() : 0;
+    return m_pPLCF ? m_pPLCF->GetIdx() : 0;
 }
 
 void WW8PLCFx_FLD::SetIdx(sal_uInt32 nIdx)
 {
-    if( pPLCF )
-        pPLCF->SetIdx( nIdx );
+    if( m_pPLCF )
+        m_pPLCF->SetIdx( nIdx );
 }
 
 bool WW8PLCFx_FLD::SeekPos(WW8_CP nCpPos)
 {
-    return pPLCF && pPLCF->SeekPosExact( nCpPos );
+    return m_pPLCF && m_pPLCF->SeekPosExact( nCpPos );
 }
 
 WW8_CP WW8PLCFx_FLD::Where()
 {
-    return pPLCF ? pPLCF->Where() : WW8_CP_MAX;
+    return m_pPLCF ? m_pPLCF->Where() : WW8_CP_MAX;
 }
 
 bool WW8PLCFx_FLD::StartPosIsFieldStart()
 {
     void* pData;
     sal_Int32 nTest;
-    return pPLCF && pPLCF->Get(nTest, pData) && ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) == 0x13);
+    return m_pPLCF && m_pPLCF->Get(nTest, pData) && ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) == 0x13);
 }
 
 bool WW8PLCFx_FLD::EndPosIsFieldEnd(WW8_CP& nCP)
 {
     bool bRet = false;
 
-    if (pPLCF)
+    if (m_pPLCF)
     {
-        tools::Long n = pPLCF->GetIdx();
+        tools::Long n = m_pPLCF->GetIdx();
 
-        pPLCF->advance();
+        m_pPLCF->advance();
 
         void* pData;
         sal_Int32 nTest;
-        if ( pPLCF->Get(nTest, pData) && ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) == 0x15) )
+        if ( m_pPLCF->Get(nTest, pData) && ((static_cast<sal_uInt8*>(pData)[0] & 0x1f) == 0x15) )
         {
             nCP = nTest;
             bRet = true;
         }
 
-        pPLCF->SetIdx(n);
+        m_pPLCF->SetIdx(n);
     }
 
     return bRet;
@@ -4094,17 +4094,17 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
     p->nSprmsLen = 0;
     p->bRealLineEnd = false;
 
-    if (!pPLCF)
+    if (!m_pPLCF)
     {
         p->nStartPos = WW8_CP_MAX;                    // there are no fields
         return;
     }
 
-    tools::Long n = pPLCF->GetIdx();
+    tools::Long n = m_pPLCF->GetIdx();
 
     sal_Int32 nP;
     void *pData;
-    if (!pPLCF->Get(nP, pData))             // end of PLCFspecial?
+    if (!m_pPLCF->Get(nP, pData))             // end of PLCFspecial?
     {
         p->nStartPos = WW8_CP_MAX;            // PLCF completely processed
         return;
@@ -4112,8 +4112,8 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 
     p->nStartPos = nP;
 
-    pPLCF->advance();
-    if (!pPLCF->Get(nP, pData))             // end of PLCFspecial?
+    m_pPLCF->advance();
+    if (!m_pPLCF->Get(nP, pData))             // end of PLCFspecial?
     {
         p->nStartPos = WW8_CP_MAX;            // PLCF completely processed
         return;
@@ -4121,31 +4121,31 @@ void WW8PLCFx_FLD::GetSprms(WW8PLCFxDesc* p)
 
     p->nEndPos = nP;
 
-    pPLCF->SetIdx(n);
+    m_pPLCF->SetIdx(n);
 
-    p->nCp2OrIdx = pPLCF->GetIdx();
+    p->nCp2OrIdx = m_pPLCF->GetIdx();
 }
 
 void WW8PLCFx_FLD::advance()
 {
-    SAL_WARN_IF(!pPLCF, "sw.ww8", "Call without PLCFspecial field");
-    if( !pPLCF )
+    SAL_WARN_IF(!m_pPLCF, "sw.ww8", "Call without PLCFspecial field");
+    if( !m_pPLCF )
         return;
-    pPLCF->advance();
+    m_pPLCF->advance();
 }
 
 bool WW8PLCFx_FLD::GetPara(tools::Long nIdx, WW8FieldDesc& rF)
 {
-    SAL_WARN_IF(!pPLCF, "sw.ww8", "Call without PLCFspecial field");
-    if( !pPLCF )
+    SAL_WARN_IF(!m_pPLCF, "sw.ww8", "Call without PLCFspecial field");
+    if( !m_pPLCF )
         return false;
 
-    tools::Long n = pPLCF->GetIdx();
-    pPLCF->SetIdx(nIdx);
+    tools::Long n = m_pPLCF->GetIdx();
+    m_pPLCF->SetIdx(nIdx);
 
-    bool bOk = WW8GetFieldPara(*pPLCF, rF);
+    bool bOk = WW8GetFieldPara(*m_pPLCF, rF);
 
-    pPLCF->SetIdx(n);
+    m_pPLCF->SetIdx(n);
     return bOk;
 }
 
@@ -5638,31 +5638,31 @@ sal_uInt32 WW8PLCFx_Cp_FKP::GetIdx2() const
 
 void WW8PLCFx_Cp_FKP::SetIdx2(sal_uInt32 nIdx)
 {
-    if( pPcd )
-        pPcd->SetIdx( nIdx );
+    if( m_pPcd )
+        m_pPcd->SetIdx( nIdx );
 }
 
 void WW8PLCFx_Cp_FKP::Save( WW8PLCFxSave1& rSave ) const
 {
-    if (pFkp)
-        pFkp->IncMustRemainCache();
+    if (m_pFkp)
+        m_pFkp->IncMustRemainCache();
     WW8PLCFx::Save( rSave );
 
-    rSave.nAttrStart = nAttrStart;
-    rSave.nAttrEnd   = nAttrEnd;
-    rSave.bLineEnd   = bLineEnd;
+    rSave.nAttrStart = m_nAttrStart;
+    rSave.nAttrEnd   = m_nAttrEnd;
+    rSave.bLineEnd   = m_bLineEnd;
 }
 
 void WW8PLCFx_Cp_FKP::Restore( const WW8PLCFxSave1& rSave )
 {
     WW8PLCFx::Restore( rSave );
 
-    nAttrStart = rSave.nAttrStart;
-    nAttrEnd   = rSave.nAttrEnd;
-    bLineEnd   = rSave.bLineEnd;
+    m_nAttrStart = rSave.nAttrStart;
+    m_nAttrEnd   = rSave.nAttrEnd;
+    m_bLineEnd   = rSave.bLineEnd;
 
-    if (pFkp)
-        pFkp->DecMustRemainCache();
+    if (m_pFkp)
+        m_pFkp->DecMustRemainCache();
 }
 
 void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const

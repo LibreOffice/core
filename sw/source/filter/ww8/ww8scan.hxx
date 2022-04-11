@@ -459,9 +459,9 @@ public:
 class WW8PLCFx_PCD : public WW8PLCFx            // iterator for Piece table
 {
 private:
-    std::unique_ptr<WW8PLCFpcd_Iter> pPcdI;
-    bool bVer67;
-    WW8_CP nClipStart;
+    std::unique_ptr<WW8PLCFpcd_Iter> m_pPcdI;
+    bool m_bVer67;
+    WW8_CP m_nClipStart;
 
     WW8PLCFx_PCD(const WW8PLCFx_PCD&) = delete;
     WW8PLCFx_PCD& operator=(const WW8PLCFx_PCD&) = delete;
@@ -481,9 +481,9 @@ public:
     WW8_FC CurrentPieceStartCp2Fc( WW8_CP nCp );
     static void CurrentPieceFc2Cp(WW8_CP& rStartPos, WW8_CP& rEndPos,
         const WW8ScannerBase *pSBase);
-    WW8PLCFpcd_Iter* GetPLCFIter() { return pPcdI.get(); }
-    void SetClipStart(WW8_CP nIn) { nClipStart = nIn; }
-    WW8_CP GetClipStart() const { return nClipStart; }
+    WW8PLCFpcd_Iter* GetPLCFIter() { return m_pPcdI.get(); }
+    void SetClipStart(WW8_CP nIn) { m_nClipStart = nIn; }
+    WW8_CP GetClipStart() const { return m_nClipStart; }
 
     static sal_Int32 TransformPieceAddress(tools::Long nfc, bool& bIsUnicodeAddress)
     {
@@ -523,12 +523,12 @@ public:
         sal_uInt8 maRawData[512];
         std::vector<Entry> maEntries;
 
-        tools::Long nItemSize;     // either 1 Byte or a complete BX
+        tools::Long m_nItemSize;     // either 1 Byte or a complete BX
 
         // Offset in Stream where last read of 512 bytes took place
-        tools::Long nFilePos;
+        tools::Long m_nFilePos;
         sal_uInt8 mnIdx;         // Pos marker
-        ePLCFT ePLCF;
+        ePLCFT m_ePLCF;
         sal_uInt8 mnIMax;         // number of entries
         int mnMustRemainCached;  // after SaveAllPLCFx, before RestoreAllPLCFx
 
@@ -542,7 +542,7 @@ public:
             SvStream* pDataStrm, tools::Long _nFilePos, tools::Long nItemSiz, ePLCFT ePl,
             WW8_FC nStartFc);
         void Reset(WW8_FC nPos);
-        tools::Long GetFilePos() const { return nFilePos; }
+        tools::Long GetFilePos() const { return m_nFilePos; }
         sal_uInt8 GetIdx() const { return mnIdx; }
         void SetIdx(sal_uInt8 nI);
         bool SeekPos(WW8_FC nFc);
@@ -581,11 +581,11 @@ public:
     };
 
 private:
-    SvStream* pFKPStrm;         // input file
-    SvStream* pDataStrm;        // input file
-    std::unique_ptr<WW8PLCF> pPLCF;
+    SvStream* m_pFKPStrm;         // input file
+    SvStream* m_pDataStrm;        // input file
+    std::unique_ptr<WW8PLCF> m_pPLCF;
 protected:
-    WW8Fkp* pFkp;
+    WW8Fkp* m_pFkp;
 private:
 
     /*
@@ -609,8 +609,8 @@ private:
     WW8PLCFx_Fc_FKP& operator=(const WW8PLCFx_Fc_FKP&) = delete;
 
 protected:
-    ePLCFT ePLCF;
-    std::unique_ptr<WW8PLCFx_PCDAttrs> pPCDAttrs;
+    ePLCFT m_ePLCF;
+    std::unique_ptr<WW8PLCFx_PCDAttrs> m_pPCDAttrs;
 
 public:
     WW8PLCFx_Fc_FKP( SvStream* pSt, SvStream* pTableSt, SvStream* pDataSt,
@@ -626,19 +626,19 @@ public:
     void GetPCDSprms( WW8PLCFxDesc& rDesc );
     SprmResult HasSprm(sal_uInt16 nId, bool bFindFirst = true);
     void HasSprm(sal_uInt16 nId, std::vector<SprmResult> &rResult);
-    bool HasFkp() const { return (nullptr != pFkp); }
+    bool HasFkp() const { return (nullptr != m_pFkp); }
 };
 
 /// iterator for Piece Table Exceptions of Fkps works on CPs (high-level)
 class WW8PLCFx_Cp_FKP : public WW8PLCFx_Fc_FKP
 {
 private:
-    const WW8ScannerBase& rSBase;
-    std::unique_ptr<WW8PLCFx_PCD> pPcd;
-    WW8PLCFpcd_Iter *pPieceIter;
-    WW8_CP nAttrStart, nAttrEnd;
-    bool bLineEnd : 1;
-    bool bComplex : 1;
+    const WW8ScannerBase& m_rSBase;
+    std::unique_ptr<WW8PLCFx_PCD> m_pPcd;
+    WW8PLCFpcd_Iter *m_pPieceIter;
+    WW8_CP m_nAttrStart, m_nAttrEnd;
+    bool m_bLineEnd : 1;
+    bool m_bComplex : 1;
 
     WW8PLCFx_Cp_FKP(const WW8PLCFx_Cp_FKP&) = delete;
     WW8PLCFx_Cp_FKP& operator=(const WW8PLCFx_Cp_FKP&) = delete;
@@ -725,8 +725,8 @@ public:
 class WW8PLCFx_FLD : public WW8PLCFx
 {
 private:
-    std::unique_ptr<WW8PLCFspecial> pPLCF;
-    const WW8Fib& rFib;
+    std::unique_ptr<WW8PLCFspecial> m_pPLCF;
+    const WW8Fib& m_rFib;
     WW8PLCFx_FLD(const WW8PLCFx_FLD&) = delete;
     WW8PLCFx_FLD& operator=(const WW8PLCFx_FLD &) = delete;
 
