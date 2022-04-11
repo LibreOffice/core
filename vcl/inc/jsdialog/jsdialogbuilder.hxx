@@ -582,6 +582,8 @@ public:
               bool bTakeOwnership);
 
     virtual void set_menu_item_active(const OString& rIdent, bool bActive) override;
+    virtual void set_item_active(const OString& rIdent, bool bActive) override;
+    virtual void set_item_visible(const OString& rIdent, bool bVisible) override;
     virtual void set_item_sensitive(const OString& rIdent, bool bSensitive) override;
     virtual void set_item_icon_name(const OString& rIdent, const OUString& rIconName) override;
 };

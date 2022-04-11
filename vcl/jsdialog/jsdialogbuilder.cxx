@@ -1438,6 +1438,18 @@ void JSToolbar::set_menu_item_active(const OString& rIdent, bool bActive)
     }
 }
 
+void JSToolbar::set_item_active(const OString& rIdent, bool bActive)
+{
+    SalInstanceToolbar::set_item_active(rIdent, bActive);
+    sendUpdate();
+}
+
+void JSToolbar::set_item_visible(const OString& rIdent, bool bVisible)
+{
+    SalInstanceToolbar::set_item_visible(rIdent, bVisible);
+    sendUpdate();
+}
+
 void JSToolbar::set_item_sensitive(const OString& rIdent, bool bSensitive)
 {
     SalInstanceToolbar::set_item_sensitive(rIdent, bSensitive);
