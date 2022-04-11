@@ -859,7 +859,8 @@ bool QtFrame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpAr
     QRect aHelpArea(toQRect(rHelpArea));
     if (QGuiApplication::isRightToLeft())
         aHelpArea.moveLeft(maGeometry.nWidth - aHelpArea.width() - aHelpArea.left() - 1);
-    QToolTip::showText(QCursor::pos(), toQString(rText), m_pQWidget, aHelpArea);
+    m_aTooltipText = rText;
+    m_aTooltipArea = aHelpArea;
     return true;
 }
 
