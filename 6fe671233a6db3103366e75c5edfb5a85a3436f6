@@ -16,6 +16,23 @@
       "message": "What is the meaning of this patch? Please change it to something useful.",
       "revId": "6fe671233a6db3103366e75c5edfb5a85a3436f6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c421ede6_375bc5e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-11T04:53:22Z",
+      "side": 1,
+      "message": "If you\u0027re having trouble getting to this, maybe this helps: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Cherry_picking_yourself_out_of_trouble",
+      "revId": "6fe671233a6db3103366e75c5edfb5a85a3436f6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
