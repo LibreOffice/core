@@ -66,6 +66,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 	) \
 	treex \
 	ulfex \
+	unoidl-check \
 	unoidl-read \
 	xrmex \
 	$(if $(filter-out ANDROID iOS WNT,$(OS)), \
@@ -93,7 +94,6 @@ $(eval $(call gb_Helper_register_executables_for_install,SDK,sdk, \
     $(call gb_CondExeSp2bv,sp2bv) \
 	$(if $(filter UCPP,$(BUILD_TYPE)),ucpp) \
 	$(if $(filter ODK,$(BUILD_TYPE)),unoapploader) \
-	unoidl-check \
 	unoidl-write \
 	$(if $(filter ODK,$(BUILD_TYPE)),uno-skeletonmaker) \
 ))
