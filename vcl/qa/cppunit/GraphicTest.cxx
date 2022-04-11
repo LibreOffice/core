@@ -1152,7 +1152,7 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithGfxLink()
 
     // Get the declared byte size of the graphic
     sal_uLong rByteSize = aGraphic.GetSizeBytes();
-    CPPUNIT_ASSERT_EQUAL(sal_uLong(89552), rByteSize);
+    CPPUNIT_ASSERT_EQUAL(sal_uLong(50373), rByteSize);
 
     // Make sure we don't have a file
     CPPUNIT_ASSERT_EQUAL(true, aGraphic.ImplGetImpGraphic()->getSwapFileURL().isEmpty());
@@ -1228,10 +1228,10 @@ void GraphicTest::testSwappingAnimationGraphic_GIF_WithoutGfxLink()
         CPPUNIT_ASSERT_EQUAL(true, bool(xStream));
 
         // Check size of the stream
-        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15139), xStream->remainingSize());
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(15183), xStream->remainingSize());
 
         std::vector<unsigned char> aHash = calculateHash(xStream);
-        CPPUNIT_ASSERT_EQUAL(std::string("ecae5354edd9cf98553eb3153e44181f56d35338"),
+        CPPUNIT_ASSERT_EQUAL(std::string("deb13fdf0ffa0b58ce92fff0a6ca9e98c5d26ed9"),
                              toHexString(aHash));
     }
 
