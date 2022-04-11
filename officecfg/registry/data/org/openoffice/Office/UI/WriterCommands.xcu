@@ -3265,9 +3265,6 @@
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Clone Formatting</value>
         </prop>
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Clone Formatting (double click and Ctrl or Cmd to alter behavior)</value>
-        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
         </prop>
