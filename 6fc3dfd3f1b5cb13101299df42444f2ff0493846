@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecc702cb_38e4aaa2",
+        "filename": "configmgr/source/data.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-11T16:13:51Z",
+      "side": 1,
+      "message": "(it would have been nice if the input block would have been kept sorted)",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b050b287_04666644",
+        "filename": "configmgr/source/data.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-11T16:13:51Z",
+      "side": 1,
+      "message": "I don\u0027t think such odd mixtures of a string_view on the one hand and sal_Int32 indexes that are supposed to point into it on the other hand are useful",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
