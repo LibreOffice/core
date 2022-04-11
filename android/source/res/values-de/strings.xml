@@ -25,7 +25,6 @@
 
     <string name="browser_app_name">LibreOffice Browser</string>
     <string name="menu_search">Suchen</string>
-    <string name="filter">Filtern nach</string>
     <string name="search_not_found">Suchbegriff nicht gefunden</string>
     <string name="menu_preferences">Einstellungen</string>
     <string name="file_icon_desc">Datei-Icon</string>
