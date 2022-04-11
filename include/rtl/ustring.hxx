@@ -2652,7 +2652,7 @@ public:
       All characters that have codes less than or equal to
       32 (the space character), and Unicode General Punctuation area Space
       and some Control characters are considered to be white space (see
-      rtl_ImplIsWhitespace).
+      implIsWhitespace).
       If the string doesn't contain white spaces at both ends,
       then the new string is assigned with str.
 
