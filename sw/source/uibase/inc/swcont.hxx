@@ -42,7 +42,8 @@ enum class ContentTypeId
     DRAWOBJECT     = 11,
     TEXTFIELD      = 12,
     FOOTNOTE       = 13,
-    LAST           = FOOTNOTE,
+    ENDNOTE        = 14,
+    LAST           = ENDNOTE,
     UNKNOWN        = -1
 };
 
