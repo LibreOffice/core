@@ -239,7 +239,8 @@ const TranslateId STR_CONTENT_TYPE_ARY[] =
     STR_CONTENT_TYPE_POSTIT,
     STR_CONTENT_TYPE_DRAWOBJECT,
     STR_CONTENT_TYPE_TEXTFIELD,
-    STR_CONTENT_TYPE_FOOTNOTE
+    STR_CONTENT_TYPE_FOOTNOTE,
+    STR_CONTENT_TYPE_ENDNOTE
 };
 
 const TranslateId STR_CONTENT_TYPE_SINGLE_ARY[] =
@@ -257,7 +258,8 @@ const TranslateId STR_CONTENT_TYPE_SINGLE_ARY[] =
     STR_CONTENT_TYPE_SINGLE_POSTIT,
     STR_CONTENT_TYPE_SINGLE_DRAWOBJECT,
     STR_CONTENT_TYPE_SINGLE_TEXTFIELD,
-    STR_CONTENT_TYPE_SINGLE_FOOTNOTE
+    STR_CONTENT_TYPE_SINGLE_FOOTNOTE,
+    STR_CONTENT_TYPE_SINGLE_ENDNOTE
 };
 
 namespace
@@ -340,6 +342,7 @@ SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 
             m_bDelete = true;
         break;
         case ContentTypeId::FOOTNOTE:
+        case ContentTypeId::ENDNOTE:
             m_bEdit = true;
             m_bDelete = false;
         break;
@@ -621,12 +624,14 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             }
         }
         break;
+        // We will separate footnotes and endnotes here.
         case ContentTypeId::FOOTNOTE:
+        case ContentTypeId::ENDNOTE:
         {
             const SwFootnoteIdxs& rFootnoteIdxs = m_pWrtShell->GetDoc()->GetFootnoteIdxs();
             if (rFootnoteIdxs.size() == 0)
                 break;
-            size_t nFootnoteCount = 0;
+            /* size_t nFootnoteCount = 0;
             for (const SwTextFootnote* pTextFootnote : rFootnoteIdxs)
                 if (!pTextFootnote->GetFootnote().IsEndNote())
                     ++nFootnoteCount;
@@ -634,19 +639,27 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             auto pSeparatorBar(make_unique<SwTextFootnoteContent>(this,
                 "-------------------------------", nullptr, nFootnoteCount + 1));
             pSeparatorBar->SetInvisible();
-            m_pMember->insert(std::move(pSeparatorBar));
+            m_pMember->insert(std::move(pSeparatorBar));*/
             // insert footnotes and endnotes
             tools::Long nPos = 0;
             for (const SwTextFootnote* pTextFootnote : rFootnoteIdxs)
             {
-                const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
-                const OUString& sText = rFormatFootnote.GetViewNumStr(*m_pWrtShell->GetDoc(),
-                    m_pWrtShell->GetLayout(), true) + " " + lcl_GetFootnoteText(*pTextFootnote);
-                auto pCnt(make_unique<SwTextFootnoteContent>(this, sText, pTextFootnote,
-                    rFormatFootnote.IsEndNote() ? nPos + nFootnoteCount + 2 : ++nPos));
-                if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
-                    pCnt->SetInvisible();
-                m_pMember->insert(std::move(pCnt));
+                if ((!pTextFootnote->GetFootnote().IsEndNote()
+                     && m_nContentType == ContentTypeId::FOOTNOTE)
+                    || (pTextFootnote->GetFootnote().IsEndNote()
+                        && m_nContentType == ContentTypeId::ENDNOTE))
+                {
+                    const SwFormatFootnote& rFormatFootnote = pTextFootnote->GetFootnote();
+                    const OUString& sText
+                        = rFormatFootnote.GetViewNumStr(*m_pWrtShell->GetDoc(),
+                                                        m_pWrtShell->GetLayout(), true)
+                          + " " + lcl_GetFootnoteText(*pTextFootnote);
+                    auto pCnt(make_unique<SwTextFootnoteContent>(
+                        this, sText, pTextFootnote, nPos));
+                    if (!pTextFootnote->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
+                        pCnt->SetInvisible();
+                    m_pMember->insert(std::move(pCnt));
+                }
             }
         }
         break;
@@ -1440,6 +1453,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
     bool bRemoveDrawingObjectTracking = true;
     bool bRemoveFieldTracking = true;
     bool bRemoveFootnoteTracking = true;
+    bool bRemoveEndnoteTracking = true;
 
     bool bRemoveSortEntry = true;
 
@@ -1453,7 +1467,8 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                         m_xTreeView->get_id(*xEntry))->GetParent();
         const ContentTypeId nContentType = pType->GetType();
 
-        if (nContentType != ContentTypeId::FOOTNOTE && nContentType != ContentTypeId::POSTIT)
+        if (nContentType != ContentTypeId::FOOTNOTE && nContentType != ContentTypeId::ENDNOTE
+            && nContentType != ContentTypeId::POSTIT)
         {
             bRemoveSortEntry = false;
             xPop->set_active("sort", pType->GetSortType());
@@ -1514,6 +1529,10 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                 aIdent = "footnotetracking";
                 bRemoveFootnoteTracking = false;
             break;
+            case ContentTypeId::ENDNOTE:
+                aIdent = "endnotetracking";
+                bRemoveEndnoteTracking = false;
+            break;
             default: break;
         }
         if (!aIdent.isEmpty())
@@ -1543,7 +1562,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
                      ContentTypeId::INDEX == nContentType ||
                      ContentTypeId::DRAWOBJECT == nContentType);
 
-            if (ContentTypeId::FOOTNOTE == nContentType)
+            if (ContentTypeId::FOOTNOTE == nContentType || ContentTypeId::ENDNOTE == nContentType)
             {
                 void* pUserData = weld::fromId<void*>(m_xTreeView->get_id(*xEntry));
                 const SwTextFootnote* pFootnote =
@@ -2130,6 +2149,9 @@ namespace
                 break;
             case ContentTypeId::FOOTNOTE:
                 sResId = RID_BMP_NAVI_FOOTNOTE;
+                break;
+            case ContentTypeId::ENDNOTE:
+                sResId = RID_BMP_NAVI_ENDNOTE;
                 break;
             case ContentTypeId::UNKNOWN:
                 SAL_WARN("sw.ui", "ContentTypeId::UNKNOWN has no bitmap preview");
@@ -3285,6 +3307,7 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
         switch( nType )
         {
             case ContentTypeId::FOOTNOTE:
+            case ContentTypeId::ENDNOTE:
             {
                 assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pUserData)));
                 SwTextFootnoteContent* pCnt = static_cast<SwTextFootnoteContent*>(pUserData);
@@ -3543,11 +3566,15 @@ void SwContentTree::UpdateTracking()
         }
         // footnotes and endnotes
         if (SwContentAtPos aContentAtPos(IsAttrAtPos::Ftn);
-                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) &&
-                !(m_bIsRoot && m_nRootType != ContentTypeId::FOOTNOTE))
+                m_pActiveShell->GetContentAtPos(m_pActiveShell->GetCursorDocPos(), aContentAtPos) && !(m_bIsRoot
+                 && (m_nRootType != ContentTypeId::FOOTNOTE
+                     && m_nRootType != ContentTypeId::ENDNOTE)))
         {
             if (mTrackContentType[ContentTypeId::FOOTNOTE])
                 lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::FOOTNOTE,
+                                                  aContentAtPos.pFndTextAttr);
+            if (mTrackContentType[ContentTypeId::ENDNOTE])
+                lcl_SelectByContentTypeAndAddress(this, *m_xTreeView, ContentTypeId::ENDNOTE,
                                                   aContentAtPos.pFndTextAttr);
             return;
         }
@@ -4132,12 +4159,13 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
             }
             break;
             case ContentTypeId::FOOTNOTE:
+            case ContentTypeId::ENDNOTE:
             {
                 assert(dynamic_cast<SwTextFootnoteContent*>(static_cast<SwTypeNumber*>(pUserData)));
                 const SwTextFootnote* pFootnote =
                         static_cast<const SwTextFootnoteContent*>(pUserData)->GetTextFootnote();
-                if (!pFootnote)
-                    return SwResId(STR_FOOTNOTE_ENDNOTE_SEPARATOR_TIP);
+                /*  if (!pFootnote)
+                    return SwResId(STR_FOOTNOTE_ENDNOTE_SEPARATOR_TIP);*/
                 sEntry = pFootnote->GetFootnote().IsEndNote() ? SwResId(STR_CONTENT_ENDNOTE) :
                                                                 SwResId(STR_CONTENT_FOOTNOTE);
             }
@@ -4154,8 +4182,8 @@ IMPL_LINK(SwContentTree, QueryTooltipHdl, const weld::TreeIter&, rEntry, OUStrin
     else
     {
         size_t nMemberCount = static_cast<SwContentType*>(pUserData)->GetMemberCount();
-        if (nMemberCount && nType == ContentTypeId::FOOTNOTE)
-            --nMemberCount; // account for horizontal footnote endnote separator entry
+        /* if (nMemberCount && nType == ContentTypeId::FOOTNOTE)
+            --nMemberCount; // account for horizontal footnote endnote separator entry*/
         sEntry = OUString::number(nMemberCount) + " " +
             (nMemberCount == 1
                     ? static_cast<SwContentType*>(pUserData)->GetSingleName()
@@ -4199,7 +4227,8 @@ void SwContentTree::ExecuteContextMenuAction(const OString& rSelectedPopupEntry)
             {"commenttracking", ContentTypeId::POSTIT},
             {"drawingobjecttracking", ContentTypeId::DRAWOBJECT},
             {"fieldtracking", ContentTypeId::TEXTFIELD},
-            {"footnotetracking", ContentTypeId::FOOTNOTE}
+            {"footnotetracking", ContentTypeId::FOOTNOTE},
+            {"endnotetracking", ContentTypeId::ENDNOTE}
         };
 
         if (mPopupEntryToContentTypeId.count(rSelectedPopupEntry))
@@ -4816,6 +4845,7 @@ void SwContentTree::EditEntry(const weld::TreeIter& rEntry, EditEntryMode nMode)
                 nSlot = FN_NAME_SHAPE;
         break;
         case ContentTypeId::FOOTNOTE:
+        case ContentTypeId::ENDNOTE:
             if (EditEntryMode::EDIT == nMode)
                 nSlot = FN_FORMAT_FOOTNOTE_DLG;
         break;
@@ -4981,6 +5011,7 @@ void SwContentTree::GotoContent(const SwContent* pCnt)
         }
         break;
         case ContentTypeId::FOOTNOTE:
+        case ContentTypeId::ENDNOTE:
         {
             const SwTextFootnote* pFootnote =
                     static_cast<const SwTextFootnoteContent*>(pCnt)->GetTextFootnote();
