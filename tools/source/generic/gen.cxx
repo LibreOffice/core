@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <tuple>
+#include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
 #include <tools/gen.hxx>
 
@@ -31,6 +32,14 @@ OString Pair::toString() const
     // format is parsed by external code (passed in callbacks to
     // LibreOfficeKit clients). So don't change.
     return OString::number(A()) + ", " + OString::number(B());
+}
+
+size_t Pair::GetHashValue() const
+{
+    size_t hash = 0;
+    o3tl::hash_combine( hash, nA );
+    o3tl::hash_combine( hash, nB );
+    return hash;
 }
 
 void tools::Rectangle::SetSize( const Size& rSize )

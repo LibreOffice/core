@@ -72,6 +72,9 @@ public:
 
     void            ReduceInaccurate( unsigned nSignificantBits );
 
+    // Compute value usable as hash.
+    size_t GetHashValue() const;
+
     TOOLS_DLLPUBLIC friend Fraction operator+( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend Fraction operator-( const Fraction& rVal1, const Fraction& rVal2 );
     TOOLS_DLLPUBLIC friend Fraction operator*( const Fraction& rVal1, const Fraction& rVal2 );

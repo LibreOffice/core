@@ -19,6 +19,7 @@
 
 #include <vcl/mapmod.hxx>
 
+#include <o3tl/hash_combine.hxx>
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <tools/stream.hxx>
@@ -133,6 +134,17 @@ bool MapMode::operator==( const MapMode& rMapMode ) const
 bool MapMode::IsDefault() const
 {
     return mpImplMapMode.same_object(GetGlobalDefault());
+}
+
+size_t MapMode::GetHashValue() const
+{
+    size_t hash = 0;
+    o3tl::hash_combine( hash, mpImplMapMode->meUnit );
+    o3tl::hash_combine( hash, mpImplMapMode->maOrigin.GetHashValue());
+    o3tl::hash_combine( hash, mpImplMapMode->maScaleX.GetHashValue());
+    o3tl::hash_combine( hash, mpImplMapMode->maScaleY.GetHashValue());
+    o3tl::hash_combine( hash, mpImplMapMode->mbSimple );
+    return hash;
 }
 
 MapUnit MapMode::GetMapUnit() const { return mpImplMapMode->meUnit; }
