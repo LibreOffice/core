@@ -64,16 +64,16 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
 
     if( pColormap )
     {
-        m_pColormap = pColormap;
+        maX11Common.m_pColormap = pColormap;
         if( bDeleteColormap )
             m_pDeleteColormap.reset(pColormap);
     }
     else if( nDeviceDepth == nVisualDepth )
-        m_pColormap = &pDisplay->GetColormap( m_nXScreen );
+        maX11Common.m_pColormap = &pDisplay->GetColormap( m_nXScreen );
     else if( nDeviceDepth == 1 )
     {
         m_pDeleteColormap.reset(new SalColormap());
-        m_pColormap = m_pDeleteColormap.get();
+        maX11Common.m_pColormap = m_pDeleteColormap.get();
     }
 
     m_pVDev      = pDevice;

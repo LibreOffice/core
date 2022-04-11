@@ -21,7 +21,7 @@ void X11SalGraphics::Init(X11SkiaSalVirtualDevice* pDevice)
     SalDisplay* pDisplay = pDevice->GetDisplay();
 
     m_nXScreen = pDevice->GetXScreenNumber();
-    m_pColormap = &pDisplay->GetColormap(m_nXScreen);
+    maX11Common.m_pColormap = &pDisplay->GetColormap(m_nXScreen);
 
     m_pVDev = pDevice;
     m_pFrame = nullptr;
