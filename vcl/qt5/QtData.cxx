@@ -228,7 +228,7 @@ QCursor& QtData::getCursor(PointerStyle ePointerStyle)
             MAP_BUILTIN(PointerStyle::HSizeBar, Qt::SizeHorCursor);
             MAP_BUILTIN(PointerStyle::VSizeBar, Qt::SizeVerCursor);
 
-            MAP_BUILTIN(PointerStyle::RefHand, Qt::OpenHandCursor);
+            MAP_BUILTIN(PointerStyle::RefHand, Qt::PointingHandCursor);
             MAP_BUILTIN(PointerStyle::Hand, Qt::OpenHandCursor);
 #if 0
             MAP_BUILTIN( PointerStyle::Pen, GDK_PENCIL );
