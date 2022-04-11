@@ -167,7 +167,7 @@ XID X11SalGraphicsImpl::GetXRenderPicture()
         if( !pXRenderFormat )
             return 0;
         // get the matching xrender target for drawable
-        mrParent.m_aXRenderPicture = rRenderPeer.CreatePicture( mrParent.hDrawable_, pXRenderFormat, 0, nullptr );
+        mrParent.m_aXRenderPicture = rRenderPeer.CreatePicture( mrParent.GetDrawable(), pXRenderFormat, 0, nullptr );
     }
 
     {
@@ -211,8 +211,8 @@ GC X11SalGraphicsImpl::CreateGC( Drawable hDrawable, unsigned long nMask )
     XGCValues values;
 
     values.graphics_exposures   = False;
-    values.foreground           = mrParent.m_pColormap->GetBlackPixel()
-                                  ^ mrParent.m_pColormap->GetWhitePixel();
+    values.foreground           = mrParent.GetColormap().GetBlackPixel()
+                                  ^ mrParent.GetColormap().GetWhitePixel();
     values.function             = GXxor;
     values.line_width           = 1;
     values.fill_style           = FillStippled;
@@ -244,8 +244,8 @@ GC X11SalGraphicsImpl::GetTrackingGC()
         XGCValues     values;
 
         values.graphics_exposures   = False;
-        values.foreground           = mrParent.m_pColormap->GetBlackPixel()
-                                      ^ mrParent.m_pColormap->GetWhitePixel();
+        values.foreground           = mrParent.GetColormap().GetBlackPixel()
+                                      ^ mrParent.GetColormap().GetWhitePixel();
         values.function             = GXxor;
         values.line_width           = 1;
         values.line_style           = LineOnOffDash;
@@ -291,8 +291,8 @@ GC X11SalGraphicsImpl::GetInvert50GC()
         XGCValues values;
 
         values.graphics_exposures   = False;
-        values.foreground           = mrParent.m_pColormap->GetWhitePixel();
-        values.background           = mrParent.m_pColormap->GetBlackPixel();
+        values.foreground           = mrParent.GetColormap().GetWhitePixel();
+        values.background           = mrParent.GetColormap().GetBlackPixel();
         values.function             = GXinvert;
         values.line_width           = 1;
         values.line_style           = LineSolid;
@@ -353,7 +353,7 @@ GC X11SalGraphicsImpl::SelectBrush()
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = False;
 
-        mpBrushGC = XCreateGC( pDisplay, mrParent.hDrawable_,
+        mpBrushGC = XCreateGC( pDisplay, mrParent.GetDrawable(),
                                GCSubwindowMode | GCFillRule | GCGraphicsExposures,
                                &values );
     }
@@ -390,7 +390,7 @@ GC X11SalGraphicsImpl::SelectPen()
         values.fill_rule            = EvenOddRule;      // Pict import/ Gradient
         values.graphics_exposures   = False;
 
-        mpPenGC = XCreateGC( pDisplay, mrParent.hDrawable_,
+        mpPenGC = XCreateGC( pDisplay, mrParent.GetDrawable(),
                              GCSubwindowMode | GCFillRule | GCGraphicsExposures,
                              &values );
     }
@@ -742,7 +742,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
     // create source Picture
     int nDepth = mrParent.m_pVDev ? static_cast< X11SalVirtualDevice* >(mrParent.m_pVDev)->GetDepth() : rSalVis.GetDepth();
     const X11SalBitmap& rSrcX11Bmp = static_cast<const X11SalBitmap&>( rSrcBitmap );
-    ImplSalDDB* pSrcDDB = rSrcX11Bmp.ImplGetDDB( mrParent.hDrawable_, mrParent.m_nXScreen, nDepth, rTR );
+    ImplSalDDB* pSrcDDB = rSrcX11Bmp.ImplGetDDB( mrParent.GetDrawable(), mrParent.m_nXScreen, nDepth, rTR );
     if( !pSrcDDB )
         return false;
 
@@ -804,7 +804,7 @@ bool X11SalGraphicsImpl::drawAlphaBitmap( const SalTwoRect& rTR,
         pAlphaBits, pAlphaBuffer->mnWidth, pAlphaBuffer->mnHeight,
         pAlphaFormat->depth, pAlphaBuffer->mnScanlineSize );
 
-    Pixmap aAlphaPM = limitXCreatePixmap( pXDisplay, mrParent.hDrawable_,
+    Pixmap aAlphaPM = limitXCreatePixmap( pXDisplay, mrParent.GetDrawable(),
         rTR.mnDestWidth, rTR.mnDestHeight, 8 );
 
     XGCValues aAlphaGCV;
@@ -1184,10 +1184,10 @@ void X11SalGraphicsImpl::drawRect( tools::Long nX, tools::Long nY, tools::Long n
 
 void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry )
 {
-    drawPolyLine( nPoints, pPtAry, false );
+    internalDrawPolyLine( nPoints, pPtAry, false );
 }
 
-void X11SalGraphicsImpl::drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry, bool bClose )
+void X11SalGraphicsImpl::internalDrawPolyLine( sal_uInt32 nPoints, const Point *pPtAry, bool bClose )
 {
     if( mnPenColor != SALCOLOR_NONE )
     {
@@ -1307,7 +1307,7 @@ void X11SalGraphicsImpl::drawPolyPolygon( sal_uInt32 nPoly,
 
     if( mnPenColor != SALCOLOR_NONE )
         for( sal_uInt32 i = 0; i < nPoly; i++ )
-            drawPolyLine( pPoints[i], pPtAry[i], true );
+            internalDrawPolyLine( pPoints[i], pPtAry[i], true );
 }
 
 bool X11SalGraphicsImpl::drawPolyLineBezier( sal_uInt32, const Point*, const PolyFlags* )
@@ -1486,7 +1486,7 @@ bool X11SalGraphicsImpl::drawFilledTrapezoids( const basegfx::B2DTrapezoid* pB2D
     {
         Display* pXDisplay = mrParent.GetXDisplay();
 
-        rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, mrParent.hDrawable_, 1, 1, 32 );
+        rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, mrParent.GetDrawable(), 1, 1, 32 );
         XRenderPictureAttributes aAttr;
         aAttr.repeat = int(true);
 
@@ -1558,7 +1558,7 @@ bool X11SalGraphicsImpl::drawFilledTriangles(
     {
         Display* pXDisplay = mrParent.GetXDisplay();
 
-        rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, mrParent.hDrawable_, 1, 1, 32 );
+        rEntry.m_aPixmap = limitXCreatePixmap( pXDisplay, mrParent.GetDrawable(), 1, 1, 32 );
         XRenderPictureAttributes aAttr;
         aAttr.repeat = int(true);
 

@@ -62,6 +62,29 @@ namespace basegfx {
     class B2DTrapezoid;
 }
 
+class X11Common
+{
+public:
+    Drawable m_hDrawable;
+    const SalColormap* m_pColormap;
+    cairo_surface_t* m_pExternalSurface;
+
+    X11Common();
+
+    cairo_t* getCairoContext();
+
+    static void releaseCairoContext(cairo_t* cr);
+
+    bool SupportsCairo() const;
+
+    const SalColormap& GetColormap() const { return *m_pColormap; }
+    const SalDisplay* GetDisplay() const { return GetColormap().GetDisplay(); }
+    const SalVisual& GetVisual() const { return GetColormap().GetVisual(); }
+    Display* GetXDisplay() const { return GetColormap().GetXDisplay(); }
+    Pixel GetPixel(Color nColor) const { return GetColormap().GetPixel(nColor); }
+    Drawable GetDrawable() const { return m_hDrawable; }
+};
+
 class X11SalGraphics final : public SalGraphicsAutoDelegateToImpl
 {
     friend class X11SalGraphicsImpl;
@@ -78,18 +101,10 @@ public:
     void                            DeInit();
 
     virtual SalGraphicsImpl*        GetImpl() const override;
-    inline  const SalDisplay*       GetDisplay() const;
-    inline  Display*                GetXDisplay() const;
-    inline  const SalVisual&        GetVisual() const;
     SalGeometryProvider*            GetGeometryProvider() const;
-    Drawable                        GetDrawable() const { return hDrawable_; }
     void                            SetDrawable(Drawable d, cairo_surface_t* surface, SalX11Screen nXScreen);
     XRenderPictFormat*              GetXRenderFormat() const;
     void                    SetXRenderFormat( XRenderPictFormat* pXRenderFormat ) { m_pXRenderFormat = pXRenderFormat; }
-    const SalColormap&      GetColormap() const { return *m_pColormap; }
-
-    using SalGraphics::GetPixel;
-    inline  Pixel                   GetPixel( Color nColor ) const;
 
     const SalX11Screen&             GetScreenNumber() const { return m_nXScreen; }
 
@@ -97,17 +112,6 @@ public:
 
     // override all pure virtual methods
     virtual void                    GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-    virtual sal_uInt16              GetBitCount() const override;
-    virtual tools::Long                    GetGraphicsWidth() const override;
-
-    virtual void                    ResetClipRegion() override;
-    virtual bool                    setClipRegion( const vcl::Region& ) override;
-
-    virtual void                    SetLineColor() override;
-    virtual void                    SetLineColor( Color nColor ) override;
-    virtual void                    SetFillColor() override;
-
-    virtual void                    SetFillColor( Color nColor ) override;
 
     virtual void                    SetTextColor( Color nColor ) override;
     virtual void                    SetFont(LogicalFontInstance*, int nFallbackLevel) override;
@@ -140,23 +144,6 @@ public:
                                     GetTextLayout(int nFallbackLevel) override;
     virtual void                    DrawTextLayout( const GenericSalLayout& ) override;
 
-
-    virtual bool                    drawPolyPolygon(
-                                        const basegfx::B2DHomMatrix& rObjectToDevice,
-                                        const basegfx::B2DPolyPolygon&,
-                                        double fTransparency) override;
-
-    virtual bool                    drawPolyLine(
-                                        const basegfx::B2DHomMatrix& rObjectToDevice,
-                                        const basegfx::B2DPolygon&,
-                                        double fTransparency,
-                                        double fLineWidth,
-                                        const std::vector< double >* pStroke, // MM01
-                                        basegfx::B2DLineJoin,
-                                        css::drawing::LineCap,
-                                        double fMiterMinimumAngle,
-                                        bool bPixelSnapHairline) override;
-
     virtual SystemGraphicsData      GetGraphicsData() const override;
 
 #if ENABLE_CAIRO_CANVAS
@@ -183,57 +170,39 @@ public:
 
 
 private:
-    using SalGraphicsAutoDelegateToImpl::drawPolyPolygon;
-    using SalGraphicsAutoDelegateToImpl::drawPolyLine;
-
-    using SalGraphics::SetClipRegion;
+    using SalGraphics::GetPixel;
     void                            SetClipRegion( GC pGC, Region pXReg = nullptr ) const;
     bool                            GetDitherPixmap ( Color nColor );
-
-    using SalGraphics::DrawBitmap;
 
     void                            freeResources();
 
     SalFrame*                       m_pFrame; // the SalFrame which created this Graphics or NULL
     SalVirtualDevice*               m_pVDev;  // the SalVirtualDevice which created this Graphics or NULL
 
-    const SalColormap*              m_pColormap;
+
     std::unique_ptr<SalColormap>    m_pDeleteColormap;
-    Drawable                        hDrawable_;     // use
-    cairo_surface_t*                m_pExternalSurface;
+
     SalX11Screen                    m_nXScreen;
     mutable XRenderPictFormat*      m_pXRenderFormat;
     XID                             m_aXRenderPicture;
 
     Region                          mpClipRegion;
-#if ENABLE_CAIRO_CANVAS
-    vcl::Region                     maClipRegion;
-    Color                           mnPenColor;
-    Color                           mnFillColor;
-#endif // ENABLE_CAIRO_CANVAS
-
     Pixmap                          hBrush_;        // Dither
 
     bool                            bWindow_ : 1;       // is Window
     bool                            bVirDev_ : 1;       // is VirDev
-    bool                            m_bSkia  : 1;
 
-private:
     std::unique_ptr<SalGraphicsImpl> mxImpl;
     std::unique_ptr<TextRenderImpl> mxTextRenderImpl;
+    X11Common maX11Common;
 
+public:
+    Drawable GetDrawable() const { return maX11Common.GetDrawable(); }
+    const SalColormap& GetColormap() const { return maX11Common.GetColormap(); }
+    const SalDisplay* GetDisplay() const { return maX11Common.GetDisplay(); }
+    const SalVisual& GetVisual() const { return maX11Common.GetVisual(); }
+    Display* GetXDisplay() const { return maX11Common.GetXDisplay(); }
+    Pixel GetPixel(Color nColor) const { return maX11Common.GetPixel(nColor); }
 };
-
-inline const SalDisplay *X11SalGraphics::GetDisplay() const
-{ return GetColormap().GetDisplay(); }
-
-inline const SalVisual& X11SalGraphics::GetVisual() const
-{ return GetColormap().GetVisual(); }
-
-inline Display *X11SalGraphics::GetXDisplay() const
-{ return GetColormap().GetXDisplay(); }
-
-inline Pixel X11SalGraphics::GetPixel( Color nColor ) const
-{ return GetColormap().GetPixel( nColor ); }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
