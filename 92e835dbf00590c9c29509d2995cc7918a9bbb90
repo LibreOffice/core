@@ -106,6 +106,24 @@
       "parentUuid": "08f7a6b9_1dfb3507",
       "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bbbd8de_4159c258",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1003528
+      },
+      "writtenOn": "2022-04-11T17:58:06Z",
+      "side": 0,
+      "message": "Though atan2() should have done the changes on it own.The behaviour change was mainly happening when the values of (x,y) x and y \u003c0 (also on some cases of y\u003d\u003d0,x\u003c0 and x\u003d0,y\u003c0).So I made changes according to it.\n\nThe main benefit we can have is that atan2() returns the value in range wider than atan().\n\nAnd so if there should be no extra conditions when using  atan2 then should I abandon it?",
+      "parentUuid": "80523253_227d6194",
+      "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
