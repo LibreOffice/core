@@ -473,6 +473,7 @@ void PDFSigningTest::testBadCertP1()
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p1.pdf", 1,
                  /*rExpectedSubFilter=*/OString());
     CPPUNIT_ASSERT(!aInfos.empty());
+#ifdef _WIN32
     SignatureInformation& rInformation = aInfos[0];
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0 (SecurityOperationStatus_UNKNOWN)
@@ -480,6 +481,7 @@ void PDFSigningTest::testBadCertP1()
     // i.e. annotation after a P1 signature was not considered as a bad modification.
     CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
                          rInformation.nStatus);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP3Stamp)
@@ -488,6 +490,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP3Stamp)
         = verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "bad-cert-p3-stamp.pdf", 1,
                  /*rExpectedSubFilter=*/OString());
     CPPUNIT_ASSERT(!aInfos.empty());
+#ifdef _WIN32
     SignatureInformation& rInformation = aInfos[0];
 
     // Without the accompanying fix in place, this test would have failed with:
@@ -496,6 +499,7 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testBadCertP3Stamp)
     // i.e. adding a stamp annotation was not considered as a bad modification.
     CPPUNIT_ASSERT_EQUAL(xml::crypto::SecurityOperationStatus::SecurityOperationStatus_UNKNOWN,
                          rInformation.nStatus);
+#endif
 }
 
 /// Test writing a PAdES signature.
