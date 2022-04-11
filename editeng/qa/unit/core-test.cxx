@@ -99,6 +99,8 @@ public:
 
     void testTdf147196();
 
+    void testTdf148148();
+
     DECL_STATIC_LINK( Test, CalcFieldValueHdl, EditFieldInfo*, void );
 
     CPPUNIT_TEST_SUITE(Test);
@@ -122,6 +124,7 @@ public:
     CPPUNIT_TEST(testLargeParaCopyPaste);
     CPPUNIT_TEST(testTransliterate);
     CPPUNIT_TEST(testTdf147196);
+    CPPUNIT_TEST(testTdf148148);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -1889,6 +1892,88 @@ void Test::testTdf147196()
     CPPUNIT_ASSERT_EQUAL(OUString("2.2 Publication Of Information - Caa\nSection 4.2 Of A Ca\'s Certificate Policy And/Or Certification Practice Statement Shall State The Ca\'s Policy Or Practice On Processing Caa Records For Fully Qualified Domain Names; That Policy Shall Be Consistent With These Requirements. \n\nIt Shall Clearly Specify The Set Of Issuer Domain Names That The Ca Recognises In Caa \"Issue\" Or \"Issuewild\" Records As Permitting It To Issue. The Ca Shall Log All Actions Taken, If Any, Consistent With Its Processing Practice."), editEng.GetText());
 }
 
+void Test::testTdf148148()
+{
+    using TF = TransliterationFlags;
+    EditEngine editEng( mpItemPool.get() );
+
+    /* Test what happens when node contains text but selection does not contain any text */
+    int selStart = 0;
+    int selEnd = 3;
+    ESelection esel(0, selStart, 0, selEnd);
+    const OUString sText1("   text");
+    editEng.SetText(sText1);
+    CPPUNIT_ASSERT_EQUAL(OUString("   "), editEng.GetText(esel));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(editEng, sText1, esel, TF::UPPERCASE_LOWERCASE));
+
+    selStart = 4;
+    selEnd = 8;
+    esel = ESelection(0, selStart, 0, selEnd);
+    const OUString sText2("text    ");
+    editEng.SetText(sText2);
+    CPPUNIT_ASSERT_EQUAL(OUString("    "), editEng.GetText(esel));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("text    "), lcl_translitTest(editEng, sText2, esel, TF::UPPERCASE_LOWERCASE));
+
+    /* Test what happens when node contains only non-word text but selection does not contain any text */
+    selStart = 0;
+    selEnd = 3;
+    esel = ESelection(0, selStart, 0, selEnd);
+    const OUString sText3("   -1");
+    editEng.SetText(sText3);
+    CPPUNIT_ASSERT_EQUAL(OUString("   "), editEng.GetText(esel));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText3, esel, TF::UPPERCASE_LOWERCASE));
+
+    selStart = 2;
+    selEnd = 6;
+    esel = ESelection(0, selStart, 0, selEnd);
+    const OUString sText4("-1    ");
+    editEng.SetText(sText4);
+    CPPUNIT_ASSERT_EQUAL(OUString("    "), editEng.GetText(esel));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1    "), lcl_translitTest(editEng, sText4, esel, TF::UPPERCASE_LOWERCASE));
+
+    /* Test what happens when node and selection contains only non-word text */
+    selStart = 0;
+    selEnd = 5;
+    esel = ESelection(0, selStart, 0, selEnd);
+    const OUString sText5("   -1");
+    editEng.SetText(sText3);
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), editEng.GetText(esel));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(editEng, sText5, esel, TF::UPPERCASE_LOWERCASE));
+
+    selStart = 0;
+    selEnd = 5;
+    esel = ESelection(0, selStart, 0, selEnd);
+    const OUString sText6("-1   ");
+    editEng.SetText(sText4);
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), editEng.GetText(esel));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(editEng, sText6, esel, TF::UPPERCASE_LOWERCASE));
+
+
+}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
 
