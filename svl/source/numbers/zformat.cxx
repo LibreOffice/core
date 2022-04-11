@@ -919,7 +919,7 @@ SvNumberformat::SvNumberformat(OUString& rString,
                         sal_Int32 nSpacePos = sStr.indexOf(' ');
                         if (nSpacePos >= 0)
                         {
-                            sParams = sStr.copy(nSpacePos+1).trim();
+                            sParams = o3tl::trim(sStr.subView(nSpacePos+1));
                         }
                         //! eSymbolType is negative
                         sal_uInt8 nNum = static_cast<sal_uInt8>(0 - (eSymbolType - BRACKET_SYMBOLTYPE_NATNUM0));

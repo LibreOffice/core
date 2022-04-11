@@ -61,10 +61,10 @@ OUString GalleryBinaryEngineEntry::ReadStrFromIni(std::u16string_view aKeyName )
 
                 if( ( n = aKey.indexOf( '[' ) ) >= 1 )
                 {
-                    aLocale = aKey.copy( n + 1 ).trim();
-                    aKey = aKey.copy( 0, n ).trim();
+                    aLocale = o3tl::trim(aKey.subView( n + 1 ));
+                    aKey = o3tl::trim(aKey.subView( 0, n ));
                     if( (n = aLocale.indexOf( ']' ) ) >= 1 )
-                        aLocale = aLocale.copy( 0, n ).trim();
+                        aLocale = o3tl::trim(aLocale.subView( 0, n ));
                 }
             }
             SAL_INFO("svx", "ini file has '" << aKey << "' [ '" << aLocale << "' ] = '" << aValue << "'");

@@ -34,6 +34,7 @@
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
 #include <vcl/EnumContext.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/ui/XSidebarPanel.hpp>
@@ -495,7 +496,7 @@ void ResourceManager::ReadContextList (
     for (const OUString& sValue : std::as_const(aValues))
     {
         sal_Int32 nCharacterIndex (0);
-        const OUString sApplicationName (sValue.getToken(0, ',', nCharacterIndex).trim());
+        const OUString sApplicationName (o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex)));
         if (nCharacterIndex < 0)
         {
             if (sApplicationName.getLength() == 0)
@@ -512,20 +513,20 @@ void ResourceManager::ReadContextList (
             }
         }
 
-        const OUString sContextName(sValue.getToken(0, ',', nCharacterIndex).trim());
+        const OUString sContextName(o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex)));
         if (nCharacterIndex < 0)
         {
             OSL_FAIL("expecting three or four values per ContextList entry, separated by comma");
             continue;
         }
 
-        const OUString sInitialState(sValue.getToken(0, ',', nCharacterIndex).trim());
+        const OUString sInitialState(o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex)));
 
         // The fourth argument is optional.
         const OUString sMenuCommandOverride(
             nCharacterIndex < 0
                 ? OUString()
-                : sValue.getToken(0, ',', nCharacterIndex).trim());
+                : OUString(o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex))));
 
         const OUString sMenuCommand(
             sMenuCommandOverride.getLength() > 0

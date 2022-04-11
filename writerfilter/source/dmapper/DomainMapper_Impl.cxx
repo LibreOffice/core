@@ -6358,7 +6358,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                         //merge Read_SubF_Ruby into filter/.../util.cxx and reuse that ?
                         sal_Int32 nSpaceIndex = aCommand.indexOf(' ');
                         if(nSpaceIndex > 0)
-                            aCommand = aCommand.copy(nSpaceIndex).trim();
+                            aCommand = o3tl::trim(aCommand.subView(nSpaceIndex));
                         if (aCommand.startsWith("\\s"))
                         {
                             aCommand = aCommand.copy(2);

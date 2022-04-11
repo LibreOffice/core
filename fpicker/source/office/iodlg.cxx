@@ -70,6 +70,7 @@
 #include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include "fpinteraction.hxx"
 #include <osl/process.h>
+#include <o3tl/string_view.hxx>
 
 #include <officecfg/Office/Common.hxx>
 
@@ -133,7 +134,7 @@ namespace
         {
             if ( !rLastFilterExt.isEmpty() )
             {
-                if ( rFile.copy( nDotPos + 1 ).equalsIgnoreAsciiCase( rLastFilterExt ) )
+                if ( o3tl::equalsIgnoreAsciiCase(rFile.subView( nDotPos + 1 ), rLastFilterExt ) )
                     return rLastFilterExt;
             }
             else

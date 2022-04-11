@@ -19,6 +19,7 @@
 #include <graphic/DetectorTools.hxx>
 
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 
@@ -344,24 +345,24 @@ void GraphicFormatDetectorTest::testMatchArray()
     pMatchPointer = vcl::matchArrayWithString(pCompleteStringPointer, nCheckSize, "<?xml");
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(0, int(pMatchPointer - pCompleteStringPointer));
-    CPPUNIT_ASSERT_EQUAL(true, OString(pMatchPointer).startsWith("<?xml"));
+    CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "<?xml"));
 
     // Check middle of the input string
     pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "version");
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(6, int(pMatchPointer - pCompleteStringPointer));
-    CPPUNIT_ASSERT_EQUAL(true, OString(pMatchPointer).startsWith("version"));
+    CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "version"));
 
     pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "<svg");
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(38, int(pMatchPointer - pCompleteStringPointer));
-    CPPUNIT_ASSERT_EQUAL(true, OString(pMatchPointer).startsWith("<svg"));
+    CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "<svg"));
 
     // Check end of the input string
     pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "/svg>");
     CPPUNIT_ASSERT(pMatchPointer != nullptr);
     CPPUNIT_ASSERT_EQUAL(119, int(pMatchPointer - pCompleteStringPointer));
-    CPPUNIT_ASSERT_EQUAL(true, OString(pMatchPointer).startsWith("/svg>"));
+    CPPUNIT_ASSERT_EQUAL(true, o3tl::starts_with(pMatchPointer, "/svg>"));
 
     // Check that non-existing search string
     pMatchPointer = vcl::matchArrayWithString(aString.c_str(), nCheckSize, "none");

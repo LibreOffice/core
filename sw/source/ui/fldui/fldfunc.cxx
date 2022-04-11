@@ -144,7 +144,7 @@ void SwFieldFuncPage::Reset(const SfxItemSet* )
     {
         const OUString sUserData = GetUserData();
         sal_Int32 nIdx{ 0 };
-        if(sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
+        if(o3tl::equalsIgnoreAsciiCase(o3tl::getToken(sUserData, 0, ';', nIdx), u"" USER_DATA_VERSION_1))
         {
             const sal_uInt16 nVal = static_cast< sal_uInt16 >(o3tl::toInt32(o3tl::getToken(sUserData, 0, ';', nIdx)));
             if(nVal != USHRT_MAX)

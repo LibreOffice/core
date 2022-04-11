@@ -124,7 +124,7 @@ void SwFieldDokInfPage::Reset(const SfxItemSet* )
     sal_Int32 nSelEntryData = -1;
     const OUString sUserData = GetUserData();
     sal_Int32 nIdx{ 0 };
-    if (sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
+    if (o3tl::equalsIgnoreAsciiCase(o3tl::getToken(sUserData, 0, ';', nIdx), u"" USER_DATA_VERSION_1))
     {
         nSelEntryData = o3tl::toInt32(o3tl::getToken(sUserData, 0, ';', nIdx));
     }

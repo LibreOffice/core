@@ -57,6 +57,7 @@
 #include <SwGrammarMarkUp.hxx>
 #include <docsh.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <o3tl/string_view.hxx>
 #include <cellfrm.hxx>
 #include <wrtsh.hxx>
 #include <textcontentcontrol.hxx>
@@ -123,7 +124,7 @@ OString buildHyperlinkJSON(const OUString& sText, const OUString& sLink)
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aTree, false);
 
-    return OString(aStream.str().c_str()).trim();
+    return OString(o3tl::trim(aStream.str()));
 }
 
 }

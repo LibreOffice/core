@@ -53,6 +53,7 @@
 #include <rtl/math.h>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 #include <sax/tools/converter.hxx>
 
 #include <vector>
@@ -114,7 +115,7 @@ public:
     Any convertTarget( const OUString& rValue );
     static Any convertPath( const OUString& rValue );
     Any convertTiming( const OUString& rValue );
-    static Sequence< double > convertKeyTimes( const OUString& rValue );
+    static Sequence< double > convertKeyTimes( std::u16string_view rValue );
     static Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
 };
 
@@ -377,7 +378,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
     return aAny;
 }
 
-Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& rValue )
+Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( std::u16string_view rValue )
 {
     const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
 
@@ -387,7 +388,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& 
     {
         double* pValues = aKeyTimes.getArray();
         for (sal_Int32 nIndex = 0; nIndex >= 0; )
-            *pValues++ = rValue.getToken( 0, ';', nIndex ).toDouble();
+            *pValues++ = o3tl::toDouble(o3tl::getToken(rValue, 0, ';', nIndex ));
     }
 
     return aKeyTimes;

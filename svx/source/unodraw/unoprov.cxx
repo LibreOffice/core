@@ -43,6 +43,7 @@
 #include <svx/svxids.hrc>
 #include <svx/svdobjkind.hxx>
 #include <svx/strings.hrc>
+#include <o3tl/string_view.hxx>
 #include <strings.hxx>
 
 #include "shapeimpl.hxx"
@@ -1962,7 +1963,7 @@ static bool SvxUnoConvertResourceStringBuiltInToApi(const TranslateId* pSourceRe
             break;
         nLength--;
     }
-    OUString sStr = rString.copy(0, nLength).trim();
+    std::u16string_view sStr = o3tl::trim(rString.subView(0, nLength));
 
     for(int i = 0; i < nCount; ++i )
     {
@@ -1990,11 +1991,11 @@ static bool SvxUnoConvertResourceStringBuiltInFromApi(rtl::OUStringConstExpr con
             break;
         nLength--;
     }
-    OUString sStr = rString.copy(0, nLength).trim();
+    std::u16string_view sStr = o3tl::trim(rString.subView(0, nLength));
 
     for(int i = 0; i < nCount; ++i )
     {
-        if( sStr == pSourceResIds[i] )
+        if( sStr == pSourceResIds[i].asView() )
         {
             OUString aReplace = SvxResId(pDestResIds[i]);
             rString = rString.replaceAt( 0, OUString(pSourceResIds[i]).getLength(), aReplace );

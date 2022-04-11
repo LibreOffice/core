@@ -36,7 +36,9 @@ bool lcl_isNextGroup(OString &sGroup_out, std::string_view sLineTrim)
 {
     if (o3tl::starts_with(sLineTrim, "[") && o3tl::ends_with(sLineTrim, "]"))
     {
-        sGroup_out = OString(sLineTrim).getToken(1, '[').getToken(0, ']').trim();
+        sLineTrim = o3tl::getToken(sLineTrim, 1, '[');
+        sLineTrim = o3tl::getToken(sLineTrim, 0, ']');
+        sGroup_out = OString(o3tl::trim(sLineTrim));
         return true;
     }
     return false;
@@ -137,7 +139,7 @@ void LngParser::ReadLine(const OString &rLine_in,
 {
     if (!rLine_in.match(" *") && !rLine_in.match("/*"))
     {
-        OString sLang(rLine_in.getToken(0, '=').trim());
+        OString sLang(o3tl::trim(o3tl::getToken(rLine_in, 0, '=')));
         if (!sLang.isEmpty()) {
             OString sText(rLine_in.getToken(1, '"'));
             rText_inout[sLang] = sText;
