@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96801d38_3fcfd8fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-11T13:21:48Z",
+      "side": 1,
+      "message": "\u003e Patch Set 8 was rebased.\n\nmanually fixed merge conflicts of this relation chain against master",
+      "revId": "80de8e6d5bc8182f3edd37bc266bef825e3f3803",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
