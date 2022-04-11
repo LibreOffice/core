@@ -2741,6 +2741,12 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                         nWordType);
             }
 
+            /* Nothing to do if user selection lies entirely outside of word start and end boundary computed above.
+             * Skip this node, because otherwise the below logic for constraining to the selection will fail */
+            if (aSttBndry.startPos >= aSel.Max().GetIndex() || aEndBndry.endPos <= aSel.Min().GetIndex()) {
+                continue;
+            }
+
             // prevent going outside of the user's selection, which may
             // start or end in the middle of a word
             if (nNode == nStartNode) {
@@ -2749,6 +2755,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 aEndBndry.startPos = std::max(aEndBndry.startPos, aSttBndry.startPos);
                 aEndBndry.endPos   = std::min(aEndBndry.endPos,   aSel.Max().GetIndex());
             }
+
             i18n::Boundary aCurWordBndry( aSttBndry );
             while (aCurWordBndry.endPos && aCurWordBndry.startPos <= aEndBndry.startPos)
             {

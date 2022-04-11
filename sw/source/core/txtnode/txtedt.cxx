@@ -1756,6 +1756,12 @@ void SwTextNode::TransliterateText(
                     nWordType);
         }
 
+        /* Nothing to do if user selection lies entirely outside of word start and end boundary computed above.
+         * Skip this node, because otherwise the below logic for constraining to the selection will fail */
+        if (aSttBndry.startPos >= selEnd || aEndBndry.endPos <= selStart) {
+            return;
+        }
+
         // prevent going outside of the user's selection, which may
         // start in the middle of a word
         aSttBndry.startPos = std::max(aSttBndry.startPos, selStart);

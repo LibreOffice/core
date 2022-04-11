@@ -356,6 +356,122 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf147196)
         lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf148148)
+{
+    using TF = TransliterationFlags;
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert("   text");
+
+    /* Test what happens when node contains text but selection does not contain any text */
+    pWrtShell->StartOfSection();
+    SwShellCursor* pCursor = pWrtShell->getShellCursor(false);
+    pCursor->SetMark();
+    for (int i = 0; i < 3; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   text"),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* Test what happens when node contains text but selection does not contain any text */
+    pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert("text   ");
+
+    pWrtShell->StartOfSection();
+    pCursor = pWrtShell->getShellCursor(false);
+    for (int i = 0; i < 4; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+    pCursor->SetMark();
+    for (int i = 0; i < 2; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("text   "), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("text   "), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("text   "),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("text   "),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* Test what happens when node contains only non-word text but selection does not contain any text */
+    pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert("-1   ");
+
+    pWrtShell->StartOfSection();
+    pCursor = pWrtShell->getShellCursor(false);
+    for (int i = 0; i < 2; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+    pCursor->SetMark();
+    for (int i = 0; i < 2; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("-1   "),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert("   -1");
+
+    pWrtShell->StartOfSection();
+    pCursor = pWrtShell->getShellCursor(false);
+    pCursor->SetMark();
+    for (int i = 0; i < 2; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+
+    /* Test what happens when node and selection contains only non-word text */
+    pDoc = createSwDoc();
+    pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->Insert("   -1");
+
+    pWrtShell->StartOfSection();
+    pCursor = pWrtShell->getShellCursor(false);
+    pCursor->SetMark();
+    for (int i = 0; i < 5; i++)
+    {
+        pCursor->Move(fnMoveForward);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::SENTENCE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"), lcl_translitTest(*pDoc, *pCursor, TF::TITLE_CASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
+                         lcl_translitTest(*pDoc, *pCursor, TF::LOWERCASE_UPPERCASE));
+    CPPUNIT_ASSERT_EQUAL(OUString("   -1"),
+                         lcl_translitTest(*pDoc, *pCursor, TF::UPPERCASE_LOWERCASE));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf96943)
 {
     // Enable hide whitespace mode.
