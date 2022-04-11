@@ -101,12 +101,8 @@ public class CalcHeadersView extends View {
                 bottom = -origin.y + zoom*mDimens.get(i);
                 if (top <= getHeight() && bottom >= 0) {
                     inRangeOfVisibleHeaders = true;
-                    if (mCellCursorRect != null && bottom > mCellCursorRect.top - origin.y && top < mCellCursorRect.bottom - origin.y) {
-                        // if cell is within current selected portion
-                        new CalcHeaderCell(0f, top, getWidth(), bottom - top, mLabels.get(i), true).onDraw(canvas);
-                    } else {
-                        new CalcHeaderCell(0f, top, getWidth(), bottom - top, mLabels.get(i), false).onDraw(canvas);
-                    }
+                    boolean isSelected = mCellCursorRect != null && bottom > mCellCursorRect.top - origin.y && top < mCellCursorRect.bottom - origin.y;
+                    new CalcHeaderCell(0f, top, getWidth(), bottom - top, mLabels.get(i), isSelected).onDraw(canvas);
                 } else {
                     if (inRangeOfVisibleHeaders) {
                         break;
@@ -116,12 +112,8 @@ public class CalcHeadersView extends View {
                 left = -origin.x + zoom*mDimens.get(i-1);
                 right = -origin.x + zoom*mDimens.get(i);
                 if (left <= getWidth() && right >= 0) {
-                    if (mCellCursorRect != null && right > mCellCursorRect.left - origin.x && left < mCellCursorRect.right - origin.x) {
-                        // if cell is within current selected portion
-                        new CalcHeaderCell(left, 0f, right - left, getHeight(), mLabels.get(i), true).onDraw(canvas);
-                    } else {
-                        new CalcHeaderCell(left, 0f, right - left, getHeight(), mLabels.get(i), false).onDraw(canvas);
-                    }
+                    boolean isSelected = mCellCursorRect != null && right > mCellCursorRect.left - origin.x && left < mCellCursorRect.right - origin.x;
+                    new CalcHeaderCell(left, 0f, right - left, getHeight(), mLabels.get(i), isSelected).onDraw(canvas);
                 } else {
                     if (inRangeOfVisibleHeaders) {
                         break;
