@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "706ebfc4_1f7c1fac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-11T11:43:23Z",
+      "side": 1,
+      "message": "This is the \"proof of concept\" patch.\n\n The DOC import is also handled in the next follow-up patch. The three other similar situations are dealt with separately in follow-up patches.Finally, the entire idea of writing out the field name as plain text instead of the field contents is handled at the end (after handling all the existing unit test examples that hit bWriteExpand).",
+      "revId": "c773e38e1dd40fc8fe38a6d3aa77a2661dac8a97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
