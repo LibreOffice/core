@@ -355,18 +355,15 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     return nullptr;
 }
 
-SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const OutputDevice>& d,
-                                                       const OUString& t, sal_Int32 i, sal_Int32 l,
-                                                       tools::Long w)
+SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(
+    const VclPtr<const OutputDevice>& outputDevice, const OUString& t, sal_Int32 i, sal_Int32 l,
+    tools::Long w)
     : text(t)
     , index(i)
     , len(l)
     , logicWidth(w)
-    , outputDevice(d)
     // we also need to save things used in OutputDevice::ImplPrepareLayoutArgs(), in case they
-    // change in the output device
-    // TODO there is still something missing, otherwise it wouldn't be necessary to compare
-    // also the OutputDevice pointers
+    // change in the output device, plus mapMode affects the sizes.
     , font(outputDevice->GetFont())
     // TODO It would be possible to get a better hit ratio if mapMode wasn't part of the key
     // and results that differ only in mapmode would have coordinates adjusted based on that.
@@ -385,7 +382,6 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     o3tl::hash_combine(hashValue, index);
     o3tl::hash_combine(hashValue, len);
     o3tl::hash_combine(hashValue, logicWidth);
-
     o3tl::hash_combine(hashValue, outputDevice.get());
     // Need to use IgnoreColor, because sometimes the color changes, but it's irrelevant
     // for text layout (and also obsolete in vcl::Font).
@@ -403,10 +399,10 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
 inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphsKey& other) const
 {
     return hashValue == other.hashValue && index == other.index && len == other.len
-           && logicWidth == other.logicWidth && outputDevice == other.outputDevice
-           && mapMode == other.mapMode && rtl == other.rtl && layoutMode == other.layoutMode
-           && digitLanguage == other.digitLanguage && fontScaleX == other.fontScaleX
-           && fontScaleY == other.fontScaleY && font.EqualIgnoreColor(other.font)
+           && logicWidth == other.logicWidth && mapMode == other.mapMode && rtl == other.rtl
+           && layoutMode == other.layoutMode && digitLanguage == other.digitLanguage
+           && fontScaleX == other.fontScaleX && fontScaleY == other.fontScaleY
+           && font.EqualIgnoreColor(other.font)
            && vcl::text::FastStringCompareEqual()(text, other.text);
     // Slower things last in the comparison.
 }
