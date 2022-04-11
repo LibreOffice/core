@@ -265,7 +265,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
  *         found, or if an error occurred.
  *         Returned pointer must be released with free()
  */
-wchar_t* getPath()
+wchar_t* getPath(void)
 {
     wchar_t* path = cppuhelper_detail_findSofficePath();
 
@@ -400,7 +400,7 @@ void writeError( const char* errstr )
 /*
  * Closes the error file.
  */
-void closeErrorFile()
+void closeErrorFile(void)
 {
     FILE* ferr = getErrorFile( 0 );
     if ( ferr != NULL )

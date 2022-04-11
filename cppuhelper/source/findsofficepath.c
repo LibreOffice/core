@@ -87,7 +87,7 @@ static wchar_t* getPathFromRegistryKey( HKEY hroot, const wchar_t* subKeyName )
  * @return the installation path or NULL, if no installation was found or
  *         if an error occurred
  */
-static wchar_t* platformSpecific()
+static wchar_t* platformSpecific(void)
 {
     const wchar_t* UNOPATHVARNAME = L"UNO_PATH";
 
