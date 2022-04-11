@@ -317,8 +317,8 @@ constexpr bool ends_with(std::u16string_view sv, std::u16string_view x,
 
 namespace internal
 {
-// copy of rtl_ImplIsWhitespace from sal/rtl/strimp.cxx
-inline bool rtl_ImplIsWhitespace(sal_Unicode c)
+// copy of implIsWhitespace from sal/rtl/strimp.cxx
+inline bool implIsWhitespace(sal_Unicode c)
 {
     /* Space or Control character? */
     if ((c <= 32) && c)
@@ -346,10 +346,10 @@ inline std::u16string_view trim(std::u16string_view str)
     sal_Int32 nPostSpaces = 0;
     sal_Int32 nIndex = str.size() - 1;
 
-    while ((nPreSpaces < nLen) && internal::rtl_ImplIsWhitespace(*(str.data() + nPreSpaces)))
+    while ((nPreSpaces < nLen) && internal::implIsWhitespace(*(str.data() + nPreSpaces)))
         nPreSpaces++;
 
-    while ((nIndex > nPreSpaces) && internal::rtl_ImplIsWhitespace(*(str.data() + nIndex)))
+    while ((nIndex > nPreSpaces) && internal::implIsWhitespace(*(str.data() + nIndex)))
     {
         nPostSpaces++;
         nIndex--;
@@ -368,10 +368,10 @@ inline std::string_view trim(std::string_view str)
     sal_Int32 nPostSpaces = 0;
     sal_Int32 nIndex = str.size() - 1;
 
-    while ((nPreSpaces < nLen) && internal::rtl_ImplIsWhitespace(*(str.data() + nPreSpaces)))
+    while ((nPreSpaces < nLen) && internal::implIsWhitespace(*(str.data() + nPreSpaces)))
         nPreSpaces++;
 
-    while ((nIndex > nPreSpaces) && internal::rtl_ImplIsWhitespace(*(str.data() + nIndex)))
+    while ((nIndex > nPreSpaces) && internal::implIsWhitespace(*(str.data() + nIndex)))
     {
         nPostSpaces++;
         nIndex--;
