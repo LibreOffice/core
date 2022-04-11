@@ -102,4 +102,44 @@ public:
 
 };
 
+class XMLHints_Impl;
+class XMLStyleHint_Impl;
+
+class XMLImpSpanContext_Impl : public SvXMLImportContext
+{
+    XMLHints_Impl&      m_rHints;
+    XMLStyleHint_Impl   *pHint;
+
+    bool&                rIgnoreLeadingSpace;
+
+    sal_uInt8            nStarFontsConvFlags;
+
+public:
+
+
+    XMLImpSpanContext_Impl(
+            SvXMLImport& rImport,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            XMLHints_Impl& rHints,
+            bool& rIgnLeadSpace,
+            sal_uInt8 nSFConvFlags
+                          );
+
+    static css::uno::Reference< css::xml::sax::XFastContextHandler > CreateSpanContext(
+            SvXMLImport& rImport,
+            sal_Int32 nElement,
+            const css::uno::Reference< css::xml::sax::XFastAttributeList > & xAttrList,
+            XMLHints_Impl& rHints,
+            bool& rIgnLeadSpace,
+            sal_uInt8 nStarFontsConvFlags = 0
+             );
+
+    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
+        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
+
+    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
+    virtual void SAL_CALL characters( const OUString& rChars ) override;
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

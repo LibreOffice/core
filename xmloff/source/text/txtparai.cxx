@@ -60,6 +60,7 @@
 
 #include "txtparaimphint.hxx"
 #include "xmllinebreakcontext.hxx"
+#include "xmlcontentcontrolcontext.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -287,43 +288,6 @@ XMLEndReferenceContext_Impl::XMLEndReferenceContext_Impl(
 }
 
 namespace {
-
-class XMLImpSpanContext_Impl : public SvXMLImportContext
-{
-    XMLHints_Impl&      m_rHints;
-    XMLStyleHint_Impl   *pHint;
-
-    bool&                rIgnoreLeadingSpace;
-
-    sal_uInt8            nStarFontsConvFlags;
-
-public:
-
-
-    XMLImpSpanContext_Impl(
-            SvXMLImport& rImport,
-            sal_Int32 nElement,
-            const Reference< xml::sax::XFastAttributeList > & xAttrList,
-            XMLHints_Impl& rHints,
-            bool& rIgnLeadSpace,
-            sal_uInt8 nSFConvFlags
-                          );
-
-    static css::uno::Reference< css::xml::sax::XFastContextHandler > CreateSpanContext(
-            SvXMLImport& rImport,
-            sal_Int32 nElement,
-            const Reference< xml::sax::XFastAttributeList > & xAttrList,
-            XMLHints_Impl& rHints,
-            bool& rIgnLeadSpace,
-            sal_uInt8 nStarFontsConvFlags = 0
-             );
-
-    virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL createFastChildContext(
-        sal_Int32 nElement, const css::uno::Reference< css::xml::sax::XFastAttributeList >& AttrList ) override;
-
-    virtual void SAL_CALL endFastElement( sal_Int32 nElement ) override;
-    virtual void SAL_CALL characters( const OUString& rChars ) override;
-};
 
 class XMLImpHyperlinkContext_Impl : public SvXMLImportContext
 {
@@ -1562,6 +1526,10 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLImpSpanContext_Impl
     case XML_ELEMENT(TEXT, XML_META_FIELD):
         pContext = new XMLMetaFieldImportContext(rImport, nElement,
             rHints, rIgnoreLeadingSpace );
+        break;
+
+    case XML_ELEMENT(LO_EXT, XML_CONTENT_CONTROL):
+        pContext = new XMLContentControlContext(rImport, nElement, rHints, rIgnoreLeadingSpace);
         break;
 
     default:

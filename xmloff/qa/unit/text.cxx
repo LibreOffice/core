@@ -352,6 +352,40 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     assertXPath(pXmlDoc, "//loext:content-control", "showing-place-holder", "true");
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlImport)
+{
+    // Given an ODF document with a content control:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the content control is not lost on import:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: ContentControl
+    // - Actual  : Text
+    // i.e. the content control was lost on import.
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xContentControlRange->getText();
+    uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), xContent->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
