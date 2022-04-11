@@ -15,7 +15,7 @@
 # Usage:
 #
 # In core, generate a file letting us know what kinds of entities to declare:
-# cat <(make -s cmd cmd='LD_LIBRARY_PATH=$(INSTDIR_FOR_BUILD)/program $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/unoidl-read --summary $(INSTDIR)/program/types.rdb') <(make -s cmd cmd='LD_LIBRARY_PATH=$(INSTDIR_FOR_BUILD)/program $(WORKDIR_FOR_BUILD)/LinkTarget/Executable/unoidl-read --summary $(INSTDIR)/program/types.rdb $(INSTDIR)/program/types/offapi.rdb') | LC_ALL=C sort | LC_ALL=C uniq > /tmp/kinds
+# cat <(make -s cmd cmd='LD_LIBRARY_PATH=$(INSTDIR)/program $(INSTDIR)/sdk/bin/unoidl-read --summary $(INSTDIR)/program/types.rdb') <(make -s cmd cmd='LD_LIBRARY_PATH=$(INSTDIR)/program $(INSTDIR)/sdk/bin/unoidl-read --summary $(INSTDIR)/program/types.rdb $(INSTDIR)/program/types/offapi.rdb') | LC_ALL=C sort | LC_ALL=C uniq > /tmp/kinds
 #
 # Run the script while feeding it the chapter references and output the fake IDL:
 # python wikilinks.py < idl_chapter_refs.txt > generated_idl_chapter_refs.idl
