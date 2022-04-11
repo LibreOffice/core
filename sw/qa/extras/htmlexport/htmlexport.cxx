@@ -42,6 +42,7 @@
 #include <comphelper/processfactory.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/dibtools.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <swmodule.hxx>
 #include <swdll.hxx>
@@ -237,7 +238,7 @@ private:
             setFilterOptions("XHTML");
         else if (getTestName().indexOf("ReqIf") != -1)
         {
-            if (OString(filename).endsWith(".xhtml"))
+            if (o3tl::ends_with(filename, ".xhtml"))
             {
                 setImportFilterOptions("xhtmlns=reqif-xhtml");
                 // Bypass filter detect.

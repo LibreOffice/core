@@ -241,14 +241,14 @@ static OUString & getIniFileName_Impl()
             // get rid of a potential executable extension
             OUString progExt = ".bin";
             if (fileName.getLength() > progExt.getLength()
-                && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
+                && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
             {
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
             }
 
             progExt = ".exe";
             if (fileName.getLength() > progExt.getLength()
-                && fileName.copy(fileName.getLength() - progExt.getLength()).equalsIgnoreAsciiCase(progExt))
+                && o3tl::equalsIgnoreAsciiCase(fileName.subView(fileName.getLength() - progExt.getLength()), progExt))
             {
                 fileName = fileName.copy(0, fileName.getLength() - progExt.getLength());
             }

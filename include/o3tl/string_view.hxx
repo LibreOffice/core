@@ -17,6 +17,7 @@
 #include <string_view>
 
 #include <rtl/ustring.h>
+#include <rtl/math.h>
 
 namespace o3tl
 {
@@ -28,6 +29,16 @@ inline bool equalsIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2
     if (s1.data() == s2.data())
         return true;
     return rtl_ustr_compareIgnoreAsciiCase_WithLength(s1.data(), s1.size(), s2.data(), s2.size())
+           == 0;
+};
+
+inline bool equalsIgnoreAsciiCase(std::string_view s1, std::string_view s2)
+{
+    if (s1.size() != s2.size())
+        return false;
+    if (s1.data() == s2.data())
+        return true;
+    return rtl_str_compareIgnoreAsciiCase_WithLength(s1.data(), s1.size(), s2.data(), s2.size())
            == 0;
 };
 
@@ -405,6 +416,16 @@ inline sal_Int64 toInt64(std::u16string_view str, sal_Int16 radix = 10)
 inline sal_Int64 toInt64(std::string_view str, sal_Int16 radix = 10)
 {
     return rtl_str_toInt64_WithLength(str.data(), radix, str.size());
+}
+
+// Like OString::toDouble, but for std::string_view:
+inline double toDouble(std::u16string_view str)
+{
+    return rtl_math_uStringToDouble(str.begin(), str.end(), '.', 0, nullptr, nullptr);
+}
+inline double toDouble(std::string_view str)
+{
+    return rtl_math_stringToDouble(str.begin(), str.end(), '.', 0, nullptr, nullptr);
 }
 }
 

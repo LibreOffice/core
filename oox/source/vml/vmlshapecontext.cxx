@@ -157,9 +157,9 @@ ContextHandlerRef ShapeLayoutContext::onCreateContext( sal_Int32 nElement, const
             sal_Int32 nIndex = 0;
             while( nIndex >= 0 )
             {
-                OUString aToken = aBlockIds.getToken( 0, ' ', nIndex ).trim();
-                if( !aToken.isEmpty() )
-                    mrDrawing.registerBlockId( aToken.toInt32() );
+                std::u16string_view aToken = o3tl::trim(o3tl::getToken(aBlockIds, 0, ' ', nIndex ));
+                if( !aToken.empty() )
+                    mrDrawing.registerBlockId( o3tl::toInt32(aToken) );
             }
         }
         break;
@@ -459,13 +459,13 @@ OptValue< OUString > ShapeTypeContext::decodeFragmentPath( const AttributeList& 
     return oFragmentPath;
 }
 
-void ShapeTypeContext::setStyle( const OUString& rStyle )
+void ShapeTypeContext::setStyle( std::u16string_view rStyle )
 {
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
     {
         OUString aName, aValue;
-        if( ConversionHelper::separatePair( aName, aValue, rStyle.getToken( 0, ';', nIndex ), ':' ) )
+        if( ConversionHelper::separatePair( aName, aValue, o3tl::getToken(rStyle, 0, ';', nIndex ), ':' ) )
         {
             if( aName == "position" )      mrTypeModel.maPosition = aValue;
             else if( aName == "z-index" )        mrTypeModel.maZIndex = aValue;

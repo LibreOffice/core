@@ -25,6 +25,7 @@
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/math.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/script/ArrayWrapper.hpp>
 #include <com/sun/star/script/XTypeConverter.hpp>
@@ -866,7 +867,7 @@ protected:
             // always compile it in that grammar. Perhaps
             // css.sheet.FormulaParser should be used in future to directly
             // pass formula tokens when that API stabilizes.
-            if ( m_eGrammar != formula::FormulaGrammar::GRAM_API && ( sFormula.trim().startsWith("=") ) )
+            if ( m_eGrammar != formula::FormulaGrammar::GRAM_API && ( o3tl::starts_with(o3tl::trim(sFormula), u"=") ) )
             {
                 uno::Reference< uno::XInterface > xIf( xCell, uno::UNO_QUERY_THROW );
                 ScCellRangesBase* pUnoRangesBase = dynamic_cast< ScCellRangesBase* >( xIf.get() );

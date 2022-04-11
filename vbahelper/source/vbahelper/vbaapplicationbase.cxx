@@ -42,6 +42,7 @@
 #include "vbacommandbars.hxx"
 
 #include <o3tl/hash_combine.hxx>
+#include <o3tl/string_view.hxx>
 #include <unordered_map>
 
 using namespace ::com::sun::star;
@@ -332,7 +333,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
 {
     OUString aMacroName = MacroName.trim();
     if( aMacroName.startsWith("!") )
-        aMacroName = aMacroName.copy(1).trim();
+        aMacroName = o3tl::trim(aMacroName.subView(1));
 
     uno::Reference< frame::XModel > xModel;
     SbMethod* pMeth = StarBASIC::GetActiveMethod();

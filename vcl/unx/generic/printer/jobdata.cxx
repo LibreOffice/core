@@ -227,7 +227,7 @@ bool JobData::constructFromStreamBuffer( const void* pData, sal_uInt32 bytes, Jo
         else if (aLine.startsWith(orientatationEquals))
         {
             bOrientation = true;
-            rJobData.m_eOrientation = aLine.copy(RTL_CONSTASCII_LENGTH(orientatationEquals)).equalsIgnoreAsciiCase("landscape") ? orientation::Landscape : orientation::Portrait;
+            rJobData.m_eOrientation = o3tl::equalsIgnoreAsciiCase(aLine.subView(RTL_CONSTASCII_LENGTH(orientatationEquals)), "landscape") ? orientation::Landscape : orientation::Portrait;
         }
         else if (aLine.startsWith(copiesEquals))
         {

@@ -49,6 +49,7 @@
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontCollection.hxx>
 #include <font/PhysicalFontFace.hxx>
+#include <o3tl/string_view.hxx>
 #include <sallayout.hxx>
 
 using namespace psp;
@@ -427,7 +428,7 @@ void GenPspGraphics::AnnounceFonts( vcl::font::PhysicalFontCollection* pFontColl
         }
 
         if( pLangBoost )
-            if( aFileName.copy( nPos+1, 3 ).equalsIgnoreAsciiCase( pLangBoost ) )
+            if( o3tl::equalsIgnoreAsciiCase(aFileName.subView( nPos+1, 3 ), pLangBoost ) )
                 nQuality += 10;
     }
 

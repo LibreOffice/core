@@ -26,6 +26,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 using namespace css::bridge;
 using namespace css::connection;
@@ -151,7 +152,7 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
         if (nIndex1 < 0)
             throw IllegalArgumentException(
                     "Invalid accept-string format", m_rContext, 1);
-        m_aConnectString = m_aAcceptString.copy( 0 , nIndex1 ).trim();
+        m_aConnectString = o3tl::trim(m_aAcceptString.subView( 0 , nIndex1 ));
         nIndex1++;
         sal_Int32 nIndex2 = m_aAcceptString.indexOf( ';' , nIndex1 );
         if (nIndex2 < 0) nIndex2 = m_aAcceptString.getLength();

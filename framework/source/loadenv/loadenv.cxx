@@ -673,7 +673,7 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
         }
     }
 
-    if (aURL.isEmpty() || aURL.copy(0,8).equalsIgnoreAsciiCase("private:"))
+    if (aURL.isEmpty() || o3tl::equalsIgnoreAsciiCase(aURL.subView(0,8), u"private:"))
         return false;
 
     // TODO : Type must be set to be generic_Text (or any other type that

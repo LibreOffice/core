@@ -27,6 +27,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/character.hxx>
+#include <o3tl/string_view.hxx>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
 #include <libxslt/security.h>
@@ -452,7 +453,7 @@ bool URLParameter::query()
     if( m_aExpr.isEmpty() )
         return true;
     else if( m_aExpr[0] == '?' )
-        query_ = m_aExpr.copy( 1 ).trim();
+        query_ = o3tl::trim(m_aExpr.subView( 1 ));
     else
         return false;
 
@@ -465,16 +466,16 @@ bool URLParameter::query()
     {
         delimIdx = query_.indexOf( '&' );
         equalIdx = query_.indexOf( '=' );
-        parameter = query_.copy( 0,equalIdx ).trim();
+        parameter = o3tl::trim(query_.subView( 0,equalIdx ));
         if( delimIdx == -1 )
         {
-            value = query_.copy( equalIdx + 1 ).trim();
+            value = o3tl::trim(query_.subView( equalIdx + 1 ));
             query_.clear();
         }
         else
         {
-            value = query_.copy( equalIdx+1,delimIdx - equalIdx - 1 ).trim();
-            query_ = query_.copy( delimIdx+1 ).trim();
+            value = o3tl::trim(query_.subView( equalIdx+1,delimIdx - equalIdx - 1 ));
+            query_ = o3tl::trim(query_.subView( delimIdx+1 ));
         }
 
         if( parameter == "Language" )

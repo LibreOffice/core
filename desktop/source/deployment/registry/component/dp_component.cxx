@@ -36,6 +36,7 @@
 #include <xmlscript/xml_helper.hxx>
 #include <svl/inettype.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/deployment/DeploymentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -751,7 +752,7 @@ void BackendImpl::unorc_verify_init(
         {
             sal_Int32 index = sizeof ("UNO_JAVA_CLASSPATH=") - 1;
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
+                OUString token( o3tl::trim(o3tl::getToken(line, 0, ' ', index )) );
                 if (!token.isEmpty())
                 {
                     if (create_ucb_content(
@@ -772,7 +773,7 @@ void BackendImpl::unorc_verify_init(
                       RTL_TEXTENCODING_UTF8 )) {
             sal_Int32 index = sizeof ("UNO_TYPES=") - 1;
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
+                OUString token( o3tl::trim(o3tl::getToken(line, 0, ' ', index )) );
                 if (!token.isEmpty())
                 {
                     if (token[ 0 ] == '?')

@@ -35,6 +35,7 @@
 #include <sfx2/docfilt.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/UnitConversion.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <docsh.hxx>
 #include <ftninfo.hxx>
@@ -51,7 +52,7 @@ protected:
      */
     bool mustTestImportOf(const char* filename) const override {
         // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
+        return o3tl::ends_with(filename, ".docx");
     }
 };
 

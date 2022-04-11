@@ -33,6 +33,7 @@
 #include <calc.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zformat.hxx>
+#include <o3tl/string_view.hxx>
 #include <strings.hrc>
 
 #define USER_DATA_VERSION_1 "1"
@@ -157,7 +158,7 @@ void SwFieldVarPage::Reset(const SfxItemSet* )
     {
         OUString sUserData = GetUserData();
         sal_Int32 nIdx{ 0 };
-        if(!IsRefresh() && sUserData.getToken(0, ';', nIdx).equalsIgnoreAsciiCase(USER_DATA_VERSION_1))
+        if(!IsRefresh() && o3tl::equalsIgnoreAsciiCase(o3tl::getToken(sUserData, 0, ';', nIdx), u"" USER_DATA_VERSION_1))
         {
             OUString sVal = sUserData.getToken(0, ';', nIdx);
             sal_uInt16 nVal = o3tl::narrowing<sal_uInt16>(sVal.toInt32());

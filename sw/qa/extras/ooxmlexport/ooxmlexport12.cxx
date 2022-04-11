@@ -18,6 +18,7 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <o3tl/string_view.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -34,7 +35,7 @@ protected:
     bool mustTestImportOf(const char* filename) const override
     {
         // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
+        return o3tl::ends_with(filename, ".docx");
     }
 };
 
