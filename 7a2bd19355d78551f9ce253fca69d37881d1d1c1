@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c30bc756_e566d26f",
+        "filename": "sw/qa/uitest/writer_tests3/specialCharacter.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-11T15:46:25Z",
+      "side": 1,
+      "message": "this happened to fail once at \u003chttps://ci.libreoffice.org//job/lo_tb_master_linux_dbg/37567/consoleFull#-8558327469567f988-cbcf-4519-af05-6000b834f13f\u003e,\n\n  \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n  FAIL: test_tdf56363 (specialCharacter.specialCharacter)\n  ----------------------------------------------------------------------\n  Traceback (most recent call last):\n    File \"/home/tdf/lode/jenkins/workspace/lo_tb_master_linux_dbg/sw/qa/uitest/writer_tests3/specialCharacter.py\", line 32, in test_tdf56363\n      self.assertEqual(get_state_as_dict(xComboFont)[\"Text\"], \"Liberation Sans\")\n  AssertionError: \u0027Liberation Serif\u0027 !\u003d \u0027Liberation Sans\u0027\n  - Liberation Serif\n  ?             ^^^^\n  + Liberation Sans\n  ?             ^^^",
+      "revId": "7a2bd19355d78551f9ce253fca69d37881d1d1c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
