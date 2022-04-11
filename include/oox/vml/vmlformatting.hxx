@@ -58,7 +58,7 @@ namespace ConversionHelper
      */
     OOX_DLLPUBLIC bool         separatePair(
                             OUString& orValue1, OUString& orValue2,
-                            const OUString& rValue, sal_Unicode cSep );
+                            std::u16string_view rValue, sal_Unicode cSep );
 
     /** Returns the boolean value from the passed string of a VML attribute.
         Supported values: 'f', 't', 'false', 'true'. False for anything else.

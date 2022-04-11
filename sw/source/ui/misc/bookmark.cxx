@@ -442,7 +442,8 @@ void BookmarkTable::InsertBookmark(sw::mark::IMark* pMark)
     }
     bool bExceedsLength = nBookmarkTextLen > nMaxTextLen;
     nBookmarkTextLen = std::min<sal_Int32>(nMaxTextLen, nBookmarkTextLen);
-    sBookmarkNodeText = sBookmarkNodeText.copy(nBookmarkNodeTextPos, nBookmarkTextLen).trim();
+    sBookmarkNodeText
+        = o3tl::trim(sBookmarkNodeText.subView(nBookmarkNodeTextPos, nBookmarkTextLen));
     if (bExceedsLength)
         sBookmarkNodeText += "...";
     else if (bPulling && !bPulledAll)

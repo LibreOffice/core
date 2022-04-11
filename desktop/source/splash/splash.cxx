@@ -536,22 +536,22 @@ void SplashScreen::determineProgressRatioValues(
                 if ( !sFullScreenProgressPos.isEmpty() )
                 {
                     sal_Int32 idx = 0;
-                    double temp = sFullScreenProgressPos.getToken( 0, ',', idx ).toDouble();
+                    double temp = o3tl::toDouble(o3tl::getToken(sFullScreenProgressPos, 0, ',', idx ));
                     if ( idx != -1 )
                     {
                         rXRelPos = temp;
-                        rYRelPos = sFullScreenProgressPos.getToken( 0, ',', idx ).toDouble();
+                        rYRelPos = o3tl::toDouble(o3tl::getToken(sFullScreenProgressPos, 0, ',', idx ));
                     }
                 }
 
                 if ( !sFullScreenProgressSize.isEmpty() )
                 {
                     sal_Int32 idx = 0;
-                    double temp = sFullScreenProgressSize.getToken( 0, ',', idx ).toDouble();
+                    double temp = o3tl::toDouble(o3tl::getToken(sFullScreenProgressSize, 0, ',', idx ));
                     if ( idx != -1 )
                     {
                         rRelWidth  = temp;
-                        rRelHeight = sFullScreenProgressSize.getToken( 0, ',', idx ).toDouble();
+                        rRelHeight = o3tl::toDouble(o3tl::getToken(sFullScreenProgressSize, 0, ',', idx ));
                     }
                 }
             }

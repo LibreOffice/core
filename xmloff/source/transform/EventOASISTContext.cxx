@@ -27,6 +27,7 @@
 #include "TransformerBase.hxx"
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 // Used to parse Scripting Framework URLs
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
@@ -287,16 +288,14 @@ void XMLEventOASISTransformerContext::StartElement(
                     const OUString& rDoc = GetXMLToken( XML_DOCUMENT );
                     OUString aAttrValue;
                     if( rAttrValue.getLength() > rApp.getLength()+1 &&
-                        rAttrValue.copy(0,rApp.getLength()).
-                            equalsIgnoreAsciiCase( rApp ) &&
+                        o3tl::equalsIgnoreAsciiCase(rAttrValue.subView(0,rApp.getLength()), rApp) &&
                         ':' == rAttrValue[rApp.getLength()] )
                     {
                         aLocation = rApp;
                         aAttrValue = rAttrValue.copy( rApp.getLength()+1 );
                     }
                     else if( rAttrValue.getLength() > rDoc.getLength()+1 &&
-                             rAttrValue.copy(0,rDoc.getLength()).
-                                equalsIgnoreAsciiCase( rDoc ) &&
+                             o3tl::equalsIgnoreAsciiCase(rAttrValue.subView(0,rDoc.getLength()), rDoc) &&
                              ':' == rAttrValue[rDoc.getLength()] )
                     {
                         aLocation= rDoc;

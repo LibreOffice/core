@@ -25,6 +25,7 @@
 #include <cppuhelper/unourl.hxx>
 #include <rtl/malformeduriexception.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
@@ -139,7 +140,7 @@ Reference< XConnection > SAL_CALL OConnector::connect( const OUString& sConnecti
 
             sal_Int32 index = sConnectionDescription.indexOf(',');
 
-            r = xConnector->connect(sConnectionDescription.copy(index + 1).trim());
+            r = xConnector->connect(OUString(o3tl::trim(sConnectionDescription.subView(index + 1))));
         }
         return r;
     }

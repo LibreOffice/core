@@ -62,6 +62,7 @@
 #include <docsh.hxx>
 #include <IDocumentLayoutAccess.hxx>
 #include <rootfrm.hxx>
+#include <o3tl/string_view.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -73,7 +74,7 @@ public:
      */
     bool mustTestImportOf(const char* filename) const override {
         // Only test import of .odt document
-        return OString(filename).endsWith(".odt");
+        return o3tl::ends_with(filename, ".odt");
     }
 
     bool mustValidate(const char* /*filename*/) const override

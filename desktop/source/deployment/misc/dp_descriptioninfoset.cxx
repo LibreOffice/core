@@ -56,6 +56,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <ucbhelper/content.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace {
 
@@ -473,7 +474,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlatforms() const
     sal_Int32 nIndex = 0;
     do
     {
-        const OUString aToken = value.getToken( 0, ',', nIndex ).trim();
+        const OUString aToken( o3tl::trim(o3tl::getToken(value, 0, ',', nIndex )) );
         if (!aToken.isEmpty())
             vec.push_back(aToken);
 
@@ -651,13 +652,13 @@ DescriptionInfoset::getSimpleLicenseAttributes() const
 
             ::std::optional< OUString > suppressOnUpdate = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-on-update");
             if (suppressOnUpdate)
-                attributes.suppressOnUpdate = (*suppressOnUpdate).trim().equalsIgnoreAsciiCase("true");
+                attributes.suppressOnUpdate = o3tl::equalsIgnoreAsciiCase(o3tl::trim(*suppressOnUpdate), u"true");
             else
                 attributes.suppressOnUpdate = false;
 
             ::std::optional< OUString > suppressIfRequired = getOptionalValue("/desc:description/desc:registration/desc:simple-license/@suppress-if-required");
             if (suppressIfRequired)
-                attributes.suppressIfRequired = (*suppressIfRequired).trim().equalsIgnoreAsciiCase("true");
+                attributes.suppressIfRequired = o3tl::equalsIgnoreAsciiCase(o3tl::trim(*suppressIfRequired), u"true");
             else
                 attributes.suppressIfRequired = false;
 

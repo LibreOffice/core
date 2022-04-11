@@ -26,6 +26,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 
 #include <rtl/character.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 using namespace css::animations;
@@ -709,7 +710,7 @@ void SdOOXMLExportTest2::testPresetShapesExport()
     size_t i = 0;
     while(i < SAL_N_ELEMENTS( sShapeTypeAndValues )) {
         OString sType( sShapeTypeAndValues[ i++ ] );
-        for ( size_t j = 1 ; i < SAL_N_ELEMENTS( sShapeTypeAndValues ) && OString(sShapeTypeAndValues[i]).startsWith("adj") ; ++j ) {
+        for ( size_t j = 1 ; i < SAL_N_ELEMENTS( sShapeTypeAndValues ) && o3tl::starts_with(sShapeTypeAndValues[i], "adj") ; ++j ) {
             OString sXPath= sPattern.replaceFirst( sT, sType).replaceFirst( sN, OString::number(j) );
             assertXPath(pXmlDocCT, sXPath, sPropertyName , OUString::createFromAscii(sShapeTypeAndValues[ i++ ]) );
             assertXPath(pXmlDocCT, sXPath, sPropertyFmla , OUString::createFromAscii(sShapeTypeAndValues[ i++ ]) );

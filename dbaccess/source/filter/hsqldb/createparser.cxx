@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include "createparser.hxx"
 #include "utils.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -79,17 +80,21 @@ sal_Int32 lcl_getAutoIncrementDefault(std::u16string_view sColumnDef)
     return -1;
 }
 
-OUString lcl_getDefaultValue(const OUString& sColumnDef)
+OUString lcl_getDefaultValue(std::u16string_view sColumnDef)
 {
-    constexpr char DEFAULT_KW[] = "DEFAULT";
-    auto nDefPos = sColumnDef.indexOf(DEFAULT_KW);
-    if (nDefPos > 0 && lcl_getAutoIncrementDefault(sColumnDef) < 0)
+    constexpr std::u16string_view DEFAULT_KW = u"DEFAULT";
+    auto nDefPos = sColumnDef.find(DEFAULT_KW);
+    if (nDefPos > 0 && nDefPos != std::u16string_view::npos
+        && lcl_getAutoIncrementDefault(sColumnDef) < 0)
     {
-        const OUString& fromDefault = sColumnDef.copy(nDefPos + sizeof(DEFAULT_KW)).trim();
+        std::u16string_view fromDefault
+            = o3tl::trim(sColumnDef.substr(nDefPos + DEFAULT_KW.size()));
 
         // next word is the value
-        auto nNextSpace = fromDefault.indexOf(" ");
-        return nNextSpace > 0 ? fromDefault.copy(0, fromDefault.indexOf(" ")) : fromDefault;
+        auto nNextSpace = fromDefault.find(' ');
+        return OUString((nNextSpace > 0 && nNextSpace != std::u16string_view::npos)
+                            ? fromDefault.substr(0, nNextSpace)
+                            : fromDefault);
     }
     return OUString{};
 }
@@ -176,7 +181,7 @@ ColumnTypeParts lcl_getColumnTypeParts(const OUString& sFullTypeName)
     auto nParenPos = sFullTypeName.indexOf("(");
     if (nParenPos > 0)
     {
-        parts.typeName = sFullTypeName.copy(0, nParenPos).trim();
+        parts.typeName = o3tl::trim(sFullTypeName.subView(0, nParenPos));
         OUString sParamStr
             = sFullTypeName.copy(nParenPos + 1, sFullTypeName.indexOf(")") - nParenPos - 1);
         auto sParams = string::split(sParamStr, sal_Unicode(u','));
@@ -239,7 +244,7 @@ void CreateStmtParser::parseColumnPart(std::u16string_view sColumnPart)
             = bIsQuoteUsedForColumnName ? sColumn.indexOf("\"", 1) + 1 : sColumn.indexOf(" ");
         OUString rColumnName = sColumn.copy(0, nEndColumnName);
 
-        const OUString& sFromTypeName = sColumn.copy(nEndColumnName).trim();
+        const OUString sFromTypeName(o3tl::trim(sColumn.subView(nEndColumnName)));
 
         // Now let's manage the column type
         // search next space to get the whole type name

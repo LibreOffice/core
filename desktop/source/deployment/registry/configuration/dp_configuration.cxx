@@ -38,6 +38,7 @@
 #include <xmlscript/xml_helper.hxx>
 #include <comphelper/lok.hxx>
 #include <svl/inettype.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/configuration/Update.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -385,7 +386,7 @@ void BackendImpl::configmgrini_verify_init(
         {
             sal_Int32 index = RTL_CONSTASCII_LENGTH("SCHEMA=");
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
+                OUString token( o3tl::trim(o3tl::getToken(line, 0, ' ', index )) );
                 if (!token.isEmpty()) {
                     //The  file may not exist anymore if a shared or bundled
                     //extension was removed, but it can still be in the configmgrini.
@@ -400,16 +401,16 @@ void BackendImpl::configmgrini_verify_init(
                       RTL_TEXTENCODING_UTF8 )) {
             sal_Int32 index = RTL_CONSTASCII_LENGTH("DATA=");
             do {
-                OUString token( line.getToken( 0, ' ', index ).trim() );
-                if (!token.isEmpty())
+                std::u16string_view token( o3tl::trim(o3tl::getToken(line, 0, ' ', index )) );
+                if (!token.empty())
                 {
                     if (token[ 0 ] == '?')
-                        token = token.copy( 1 );
+                        token = token.substr( 1 );
                     //The  file may not exist anymore if a shared or bundled
                     //extension was removed, but it can still be in the configmgrini.
                     //After running XExtensionManager::synchronize, the configmgrini is
                     //cleaned up
-                    m_xcu_files.push_back( token );
+                    m_xcu_files.push_back( OUString(token) );
                 }
             }
             while (index >= 0);

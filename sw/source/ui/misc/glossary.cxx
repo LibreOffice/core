@@ -250,7 +250,7 @@ OUString getCurrentGlossary()
     const OUString sTemp{ ::GetCurrGlosGroup() };
 
     // the zeroth path is not being recorded!
-    if (sTemp.getToken(1, GLOS_DELIM).startsWith("0"))
+    if (o3tl::starts_with(o3tl::getToken(sTemp, 1, GLOS_DELIM), u"0"))
         return sTemp.getToken(0, GLOS_DELIM);
 
     return sTemp;

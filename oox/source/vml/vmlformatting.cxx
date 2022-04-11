@@ -76,17 +76,17 @@ bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& r
 } // namespace
 
 bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
-        const OUString& rValue, sal_Unicode cSep )
+        std::u16string_view rValue, sal_Unicode cSep )
 {
-    sal_Int32 nSepPos = rValue.indexOf( cSep );
-    if( nSepPos >= 0 )
+    size_t nSepPos = rValue.find( cSep );
+    if( nSepPos != std::u16string_view::npos )
     {
-        orValue1 = rValue.copy( 0, nSepPos ).trim();
-        orValue2 = rValue.copy( nSepPos + 1 ).trim();
+        orValue1 = o3tl::trim(rValue.substr( 0, nSepPos ));
+        orValue2 = o3tl::trim(rValue.substr( nSepPos + 1 ));
     }
     else
     {
-        orValue1 = rValue.trim();
+        orValue1 = o3tl::trim(rValue);
     }
     return !orValue1.isEmpty() && !orValue2.isEmpty();
 }
@@ -951,7 +951,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         while( nIndex >= 0 )
         {
             OUString aName, aValue;
-            if (ConversionHelper::separatePair(aName, aValue, aStyle.getToken(0, ';', nIndex), ':'))
+            if (ConversionHelper::separatePair(aName, aValue, o3tl::getToken(aStyle, 0, ';', nIndex), ':'))
             {
                 if (aName == "font-family")
                 {

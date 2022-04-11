@@ -18,6 +18,7 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <queue>
 #include <swmodeltestbase.hxx>
@@ -35,7 +36,7 @@ protected:
      */
     bool mustTestImportOf(const char* filename) const override {
         // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
+        return o3tl::ends_with(filename, ".docx");
     }
 };
 

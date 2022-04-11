@@ -8,6 +8,7 @@
  */
 
 #include <swmodeltestbase.hxx>
+#include <o3tl/string_view.hxx>
 
 class Test : public SwModelTestBase
 {
@@ -20,7 +21,7 @@ public:
 protected:
     bool mustTestImportOf(const char* filename) const override
     {
-        return OString(filename).endsWith(".dotx");
+        return o3tl::ends_with(filename, ".dotx");
     }
 };
 

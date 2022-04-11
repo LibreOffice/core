@@ -29,7 +29,7 @@ namespace dp_misc
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC OUString const& getPlatformString();
 
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-bool platform_fits(OUString const& platform_string);
+bool platform_fits(std::u16string_view platform_string);
 
 /** determines if the current platform corresponds to one of the platform strings.
 

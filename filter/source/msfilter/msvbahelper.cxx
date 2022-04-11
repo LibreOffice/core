@@ -112,7 +112,7 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                 uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_SET_THROW );
                 uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
                 xProps->getPropertyValue("Title") >>= aName;
-                aName = aName.getToken(0, '-').trim();
+                aName = o3tl::trim(o3tl::getToken(aName, 0, '-'));
                 if( sMacroURLOrPath.lastIndexOf( aName ) >= 0 )
                 {
                     pFoundShell = pShell;
@@ -727,7 +727,7 @@ void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, c
     {
         OUString aMacroName = MacroName.trim();
         if( aMacroName.startsWith("!") )
-            aMacroName = aMacroName.copy(1).trim();
+            aMacroName = o3tl::trim(aMacroName.subView(1));
         SfxObjectShell* pShell = nullptr;
         if ( rxModel.is() )
         {

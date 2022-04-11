@@ -123,6 +123,7 @@
 #include <svx/scene3d.hxx>
 #include <rtl/character.hxx>
 #include <tools/UnitConversion.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 
@@ -3156,7 +3157,7 @@ void SdrObject::MakeNameUnique(std::unordered_set<OUString>& rNameSet)
     {
         sal_Int32 nPos(sName.getLength() - 1);
         while (nPos > 0 && rtl::isAsciiDigit(sName[--nPos]));
-        sRootName = sName.copy(0, nPos + 1).trim();
+        sRootName = o3tl::trim(sName.subView(0, nPos + 1));
     }
     else
         sName += " 1";
