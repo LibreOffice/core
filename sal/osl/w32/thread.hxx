@@ -7,15 +7,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef INCLUDED_SAL_OSL_W32_THREAD_HXX
-#define INCLUDED_SAL_OSL_W32_THREAD_HXX
+#pragma once
 
 #include <sal/config.h>
 
 #include <sal/types.h>
 
 void osl_callThreadKeyCallbackOnThreadDetach(void);
-
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
