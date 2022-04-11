@@ -65,7 +65,6 @@ private:
         sal_Int32 index;
         sal_Int32 len;
         tools::Long logicWidth;
-        VclPtr<const OutputDevice> outputDevice;
         vcl::Font font;
         MapMode mapMode;
         bool rtl;
