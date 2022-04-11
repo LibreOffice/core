@@ -1357,6 +1357,8 @@ bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     case FIELD_PROP_GRABBAG:
         rAny <<= maGrabBag;
         break;
+    case FIELD_PROP_TITLE:
+        break;
     default:
         assert(false);
     }
@@ -1381,6 +1383,8 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         break;
     case FIELD_PROP_GRABBAG:
         rAny >>= maGrabBag;
+        break;
+    case FIELD_PROP_TITLE:
         break;
     default:
         assert(false);
