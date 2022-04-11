@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8113cb20_e4f30146",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-11T08:06:38Z",
+      "side": 1,
+      "message": "Have you tested the shortcuts locally or just created the patch?",
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b66a3fe9_9644ca2c",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-11T08:06:38Z",
+      "side": 1,
+      "message": "This clashes with the existing shortcuts. \"Toggle Unicode Notation\" is available for keyboard interaction only but not working for me with kf5. Customizing it into the toolbar, for example, works and the function converts the character left of the cursor to unicode like A -\u003e U+0041. Pointless function and definitely not worth occupying a precious shortcut.",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 280,
+        "endChar": 57
+      },
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
