@@ -429,6 +429,10 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
 
     mpQMenuBar = new QMenuBar();
     pMainWindow->setMenuBar(mpQMenuBar);
+
+    QPushButton* pButton = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
+    if (pButton)
+        connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
     mpQMenu = nullptr;
 
     DoFullMenuUpdate(mpVCLMenu);
@@ -647,6 +651,8 @@ void QtMenu::ShowCloseButton(bool bShow)
         return;
 
     QPushButton* pButton = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
+    if (!pButton && !bShow)
+        return;
     if (!pButton)
     {
         QIcon aIcon;
