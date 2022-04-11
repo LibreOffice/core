@@ -58,6 +58,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0f47d816_f88446b3",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-04-11T15:58:22Z",
+      "side": 1,
+      "message": "nPos is now incremented every footnote/endnote.",
+      "parentUuid": "97caa947_6079c886",
+      "range": {
+        "startLine": 661,
+        "startChar": 20,
+        "endLine": 661,
+        "endChar": 55
+      },
+      "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9fad24d1_45af6fea",
@@ -71,6 +95,24 @@
       "writtenOn": "2022-04-11T05:04:06Z",
       "side": 1,
       "message": "Use the set bRemoveEndnoteTracking variable here to determine whether the endnote tracking context menu item should be removed.\n\nTo add the check menu item to the context menu see sw/uiconfig/swriter/ui/navigatorcontextmenu.ui\n\nSee sw/source/uibase/utlui/navicfg.cxx for clue how tracking persistence is handled",
+      "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d94f90d_b0240d85",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1779,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-04-11T15:58:22Z",
+      "side": 1,
+      "message": "I made some changes that I thought should take care of it but it\u0027s not working. I will rebuild and see if it works now.",
+      "parentUuid": "9fad24d1_45af6fea",
       "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
