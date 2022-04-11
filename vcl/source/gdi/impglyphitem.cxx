@@ -163,6 +163,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     // TODO there is still something missing, otherwise it wouldn't be necessary to compare
     // also the OutputDevice pointers
     , font(outputDevice->GetFont())
+    , mapMode(outputDevice->GetMapMode())
     , rtl(outputDevice->IsRTLEnabled())
     , layoutMode(outputDevice->GetLayoutMode())
     , digitLanguage(outputDevice->GetDigitLanguage())
@@ -177,6 +178,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     SvMemoryStream stream;
     WriteFont(stream, font);
     o3tl::hash_combine(hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
+    o3tl::hash_combine(hashValue, mapMode.GetHashValue());
     o3tl::hash_combine(hashValue, rtl);
     o3tl::hash_combine(hashValue, layoutMode);
     o3tl::hash_combine(hashValue, digitLanguage.get());
@@ -186,7 +188,7 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
 {
     return hashValue == other.hashValue && index == other.index && len == other.len
            && logicWidth == other.logicWidth && outputDevice == other.outputDevice
-           && rtl == other.rtl && layoutMode == other.layoutMode
+           && mapMode == other.mapMode && rtl == other.rtl && layoutMode == other.layoutMode
            && digitLanguage == other.digitLanguage
            // Need to use EqualIgnoreColor, because sometimes the color changes, but it's irrelevant
            // for text layout (and also obsolete in vcl::Font).
