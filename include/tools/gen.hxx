@@ -53,6 +53,9 @@ public:
 
     TOOLS_DLLPUBLIC rtl::OString        toString() const;
 
+    // Compute value usable as hash.
+    TOOLS_DLLPUBLIC size_t     GetHashValue() const;
+
 protected:
     tools::Long                nA;
     tools::Long                nB;
@@ -111,6 +114,7 @@ public:
                                  sal_Int64 nMulY, sal_Int64 nDivY) const;
 
     using Pair::toString;
+    using Pair::GetHashValue;
 };
 
 inline void Point::Move( tools::Long nHorzMove, tools::Long nVertMove )
@@ -232,6 +236,7 @@ public:
     Pair &          toPair() { return *this; }
 
     using Pair::toString;
+    using Pair::GetHashValue;
 
     Size&              operator += ( const Size& rSize );
     Size&              operator -= ( const Size& rSize );

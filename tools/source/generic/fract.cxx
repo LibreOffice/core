@@ -19,6 +19,7 @@
 
 #include <tools/fract.hxx>
 #include <tools/debug.hxx>
+#include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -471,6 +472,15 @@ static void rational_ReduceInaccurate(boost::rational<sal_Int32>& rRational, uns
     }
 
     rRational.assign( bNeg ? -nMul : nMul, nDiv );
+}
+
+size_t Fraction::GetHashValue() const
+{
+    size_t hash = 0;
+    o3tl::hash_combine( hash, mnNumerator );
+    o3tl::hash_combine( hash, mnDenominator );
+    o3tl::hash_combine( hash, mbValid );
+    return hash;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
