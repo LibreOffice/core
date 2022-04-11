@@ -59,7 +59,7 @@ void QtMenu::InsertMenuItem(QtMenuItem* pSalMenuItem, unsigned nPos)
     if (mbMenuBar)
     {
         // top-level menu
-        if (mpQMenuBar)
+        if (validateQMenuBar())
         {
             QMenu* pQMenu = new QMenu(toQString(aText), nullptr);
             pSalMenuItem->mpMenu.reset(pQMenu);
@@ -428,20 +428,10 @@ void QtMenu::SetFrame(const SalFrame* pFrame)
     if (!pMainWindow)
         return;
 
-    mpQMenuBar = pMainWindow->menuBar();
-    if (mpQMenuBar)
-    {
-        mpQMenuBar->clear();
-        QPushButton* pButton
-            = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
-        if (pButton && ((mpCloseButton != pButton) || !maCloseButtonConnection))
-        {
-            maCloseButtonConnection
-                = connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
-            mpCloseButton = pButton;
-        }
-    }
+    mpQMenuBar = new QMenuBar();
+    pMainWindow->setMenuBar(mpQMenuBar);
 
+    mpCloseButton = nullptr;
     mpQMenu = nullptr;
 
     DoFullMenuUpdate(mpVCLMenu);
@@ -565,9 +555,22 @@ QtMenu* QtMenu::GetTopLevel()
     return pMenu;
 }
 
+bool QtMenu::validateQMenuBar()
+{
+    if (!mpQMenuBar)
+        return false;
+    assert(mpFrame);
+    QtMainWindow* pMainWindow = mpFrame->GetTopLevelWindow();
+    assert(pMainWindow);
+    const bool bValid = mpQMenuBar == pMainWindow->menuBar();
+    if (!bValid)
+        mpQMenuBar = nullptr;
+    return bValid;
+}
+
 void QtMenu::ShowMenuBar(bool bVisible)
 {
-    if (mpQMenuBar)
+    if (validateQMenuBar())
         mpQMenuBar->setVisible(bVisible);
 }
 
@@ -643,7 +646,7 @@ void QtMenu::slotCloseDocument()
 
 void QtMenu::ShowCloseButton(bool bShow)
 {
-    if (!mpQMenuBar)
+    if (!validateQMenuBar())
         return;
 
     QPushButton* pButton = static_cast<QPushButton*>(mpQMenuBar->cornerWidget(Qt::TopRightCorner));
@@ -661,8 +664,7 @@ void QtMenu::ShowCloseButton(bool bShow)
         pButton->setFocusPolicy(Qt::NoFocus);
         pButton->setToolTip(toQString(VclResId(SV_HELPTEXT_CLOSEDOCUMENT)));
         mpQMenuBar->setCornerWidget(pButton, Qt::TopRightCorner);
-        maCloseButtonConnection
-            = connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
+        connect(pButton, &QPushButton::clicked, this, &QtMenu::slotCloseDocument);
         mpCloseButton = pButton;
     }
 

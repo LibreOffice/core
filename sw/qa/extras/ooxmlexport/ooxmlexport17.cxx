@@ -11,6 +11,7 @@
 
 #include <string_view>
 
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -140,6 +141,22 @@ DECLARE_OOXMLEXPORT_TEST(testTdf123642_BookmarkAtDocEnd, "tdf123642.docx")
        return; // initial import, no further checks
 
     CPPUNIT_ASSERT_EQUAL(OUString("Bookmark1"), getXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:bookmarkStart[1]", "name"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
+{
+    // Refresh fields and ensure cross-reference to numbered para is okay
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
+
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+
+    uno::Reference<text::XTextField> xTextField1(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), xTextField1->getPresentation(false));
+
+    uno::Reference<text::XTextField> xTextField2(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("[Type text]"), xTextField2->getPresentation(false));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")
@@ -280,6 +297,22 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
         uno::Reference<drawing::XShape> xShape = getShape(i);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(506), getProperty<awt::Rectangle>(xShape, "BoundRect").Height);
     }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148273_sectionBulletFormatLeak, "tdf148273_sectionBulletFormatLeak.docx")
+{
+    // get a paragraph with bullet point after section break
+    uno::Reference<text::XTextRange> xParagraph = getParagraph(4);
+    uno::Reference<beans::XPropertySet> xProps(xParagraph, uno::UNO_QUERY);
+
+    // Make sure that the bullet has no ListAutoFormat inherited from
+    // the empty paragraph before the section break
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. empty paragraph formats from the first section leaked to the bullet's formatting
+    uno::Any aValue = xProps->getPropertyValue("ListAutoFormat");
+    CPPUNIT_ASSERT_EQUAL(false, aValue.hasValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

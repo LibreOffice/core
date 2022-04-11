@@ -3963,6 +3963,41 @@ void SwUiWriterTest4::testTdf133589()
     pWrtShell->AutoCorrect(corr, ' ');
     sReplaced += u"𐳺𐳺𐳿𐳼𐳼 ";
     CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+
+    // tdf#147546 transliterate punctuation marks
+
+    // question mark
+    pWrtShell->Insert(u"Kérdőjel");
+    pWrtShell->AutoCorrect(corr, '?');
+    sReplaced += u"𐲓𐳋𐳢𐳇𐳟𐳒𐳉𐳖";
+    OUString sReplaced2(sReplaced + "?");
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced += u"⸮ ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // comma
+    pWrtShell->Insert(u"Vessző");
+    pWrtShell->AutoCorrect(corr, ',');
+    sReplaced += u"𐲮𐳉𐳥𐳥𐳟";
+    sReplaced2 = sReplaced + ",";
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced += u"⹁ ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // semicolon
+    pWrtShell->Insert(u"pontosvessző");
+    pWrtShell->AutoCorrect(corr, ';');
+    sReplaced += u"𐳠𐳛𐳙𐳦𐳛𐳤𐳮𐳉𐳥𐳥𐳟";
+    sReplaced2 = sReplaced + ";";
+    CPPUNIT_ASSERT_EQUAL(sReplaced2, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced += u"⁏ ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
+    // quotation marks
+    pWrtShell->Insert(u"„idézőjel”");
+    pWrtShell->AutoCorrect(corr, ' ');
+    sReplaced += u"⹂𐳐𐳇𐳋𐳯𐳟𐳒𐳉𐳖‟ ";
+    CPPUNIT_ASSERT_EQUAL(sReplaced, static_cast<SwTextNode*>(pDoc->GetNodes()[nIndex])->GetText());
 }
 
 void SwUiWriterTest4::testTdf143176()

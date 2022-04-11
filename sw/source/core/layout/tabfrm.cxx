@@ -1364,13 +1364,30 @@ bool SwTabFrame::Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowK
     return bRet;
 }
 
+namespace
+{
+    bool CanDeleteFollow(SwTabFrame *pFoll)
+    {
+        if (pFoll->IsJoinLocked())
+            return false;
+
+        if (pFoll->IsDeleteForbidden())
+        {
+            SAL_WARN("sw.layout", "Delete Forbidden");
+            return false;
+        }
+
+        return true;
+    }
+}
+
 void SwTabFrame::Join()
 {
     OSL_ENSURE( !HasFollowFlowLine(), "Joining follow flow line" );
 
     SwTabFrame *pFoll = GetFollow();
 
-    if (!pFoll || pFoll->IsJoinLocked())
+    if (!pFoll || !CanDeleteFollow(pFoll))
         return;
 
     SwRectFnSet aRectFnSet(this);
@@ -1599,6 +1616,8 @@ static bool lcl_InnerCalcLayout( SwFrame *pFrame,
         if ( pFrame->IsLayoutFrame() &&
              ( !_bOnlyRowsAndCells || pFrame->IsRowFrame() || pFrame->IsCellFrame() ) )
         {
+            SwFrameDeleteGuard aDeleteGuard(pFrame);
+
             // #130744# An invalid locked table frame will
             // not be calculated => It will not become valid =>
             // Loop in lcl_RecalcRow(). Therefore we do not consider them for bRet.
@@ -1885,7 +1904,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
     // is not locked. Otherwise, join will not be performed and this loop
     // will be endless.
     while ( GetNext() && GetNext() == GetFollow() &&
-            !GetFollow()->IsJoinLocked()
+            CanDeleteFollow(GetFollow())
           )
     {
         if ( HasFollowFlowLine() )
@@ -2040,8 +2059,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     oAccess.reset();
                     m_bCalcLowers |= pLayout->Resize(
                         pLayout->GetBrowseWidthByTabFrame( *this ) );
-                    oAccess.emplace(SwFrame::GetCache(), this);
-                    pAttrs = oAccess->Get();
                 }
 
                 setFramePrintAreaValid(false);
@@ -2076,6 +2093,12 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
             const tools::Long nOldPrtWidth = aRectFnSet.GetWidth(getFramePrintArea());
             const tools::Long nOldFrameWidth = aRectFnSet.GetWidth(getFrameArea());
             const Point aOldPrtPos  = aRectFnSet.GetPos(getFramePrintArea());
+
+            if (!oAccess)
+            {
+                oAccess.emplace(SwFrame::GetCache(), this);
+                pAttrs = oAccess->Get();
+            }
             Format( getRootFrame()->GetCurrShell()->GetOut(), pAttrs );
 
             SwHTMLTableLayout *pLayout = GetTable()->GetHTMLTableLayout();
@@ -2086,8 +2109,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                 oAccess.reset();
                 m_bCalcLowers |= pLayout->Resize(
                     pLayout->GetBrowseWidthByTabFrame( *this ) );
-                oAccess.emplace(SwFrame::GetCache(), this);
-                pAttrs = oAccess->Get();
             }
             if ( aOldPrtPos != aRectFnSet.GetPos(getFramePrintArea()) )
                 aNotify.SetLowersComplete( false );
@@ -2141,15 +2162,22 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             oAccess.reset();
                             m_bCalcLowers |= pHTMLLayout->Resize(
                                 pHTMLLayout->GetBrowseWidthByTabFrame( *this ) );
-
-                            oAccess.emplace(SwFrame::GetCache(), this);
-                            pAttrs = oAccess->Get();
                         }
 
                         setFramePrintAreaValid(false);
+
+                        if (!oAccess)
+                        {
+                            oAccess.emplace(SwFrame::GetCache(), this);
+                            pAttrs = oAccess->Get();
+                        }
                         Format( getRootFrame()->GetCurrShell()->GetOut(), pAttrs );
                     }
+
+                    oAccess.reset();
+
                     lcl_RecalcTable( *this, nullptr, aNotify );
+
                     m_bLowersFormatted = true;
                     if ( bKeep && KEEPTAB )
                     {
@@ -2313,11 +2341,18 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // 6. There is no section change behind the table (see IsKeep)
                     // 7. The last table row wants to keep with its next.
                     const SwRowFrame* pLastRow = static_cast<const SwRowFrame*>(GetLastLower());
-                    if (pLastRow
-                        && IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
-                        && pLastRow->ShouldRowKeepWithNext())
+                    if (pLastRow)
                     {
-                        bFormat = true;
+                        if (!oAccess)
+                        {
+                            oAccess.emplace(SwFrame::GetCache(), this);
+                            pAttrs = oAccess->Get();
+                        }
+                        if (IsKeep(pAttrs->GetAttrSet().GetKeep(), GetBreakItem(), true)
+                            && pLastRow->ShouldRowKeepWithNext())
+                        {
+                            bFormat = true;
+                        }
                     }
                 }
 
@@ -2330,9 +2365,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                     // Thus, find next content, table or section and, if a section
                     // is found, get its first content.
                     const SwFrame* pTmpNxt = sw_FormatNextContentForKeep( this );
-
-                    oAccess.emplace(SwFrame::GetCache(), this);
-                    pAttrs = oAccess->Get();
 
                     // The last row wants to keep with the frame behind the table.
                     // Check if the next frame is on a different page and valid.
@@ -2516,6 +2548,7 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                         }
                     }
 
+                    oAccess.reset();
                     const bool bSplitError = !Split( nDeadLine, bTryToSplit, ( bTableRowKeep && !(bAllowSplitOfRow || bEmulateTableKeepSplitAllowed) ) );
 
                     // tdf#130639 don't start table on a new page after the fallback "switch off repeating header"
@@ -2578,9 +2611,6 @@ void SwTabFrame::MakeAll(vcl::RenderContext* pRenderContext)
                             oAccess.reset();
 
                             GetFollow()->MakeAll(pRenderContext);
-
-                            oAccess.emplace(SwFrame::GetCache(), this);
-                            pAttrs = oAccess->Get();
 
                             GetFollow()->SetLowersFormatted(false);
                             // #i43913# - lock follow table

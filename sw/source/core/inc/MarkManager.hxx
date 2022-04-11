@@ -67,7 +67,7 @@ namespace sw::mark {
 
             // deleters
             virtual std::unique_ptr<ILazyDeleter>
-                deleteMark(const const_iterator_t& ppMark) override;
+                deleteMark(const const_iterator_t& ppMark, bool isMoveNodes) override;
             virtual void deleteMark(const ::sw::mark::IMark* const pMark) override;
             virtual void clearAllMarks() override;
 

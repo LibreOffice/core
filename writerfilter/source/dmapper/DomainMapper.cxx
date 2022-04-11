@@ -3768,10 +3768,10 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 static_cast<ParagraphPropertyMap*>(xContext.get())->SetListId(-1);;
                 xContext->Erase(PROP_NUMBERING_LEVEL);
             }
-            m_pImpl->SetParaSectpr(false);
             finishParagraph(bRemove, bNoNumbering);
             if (bRemove)
                 m_pImpl->RemoveLastParagraph();
+            m_pImpl->SetParaSectpr(false);
         }
         else
         {

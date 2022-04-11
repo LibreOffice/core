@@ -716,6 +716,14 @@ void DomainMapper_Impl::RemoveLastParagraph( )
                 // delete
                 xCursor->setString(OUString());
 
+                // While removing paragraphs that contain section properties, reset list
+                // related attributes to prevent them leaking into the following section's lists
+                if (GetParaSectpr())
+                {
+                    uno::Reference<beans::XPropertySet> XCursorProps(xCursor, uno::UNO_QUERY);
+                    XCursorProps->setPropertyValue("ResetParagraphListAttributes", uno::Any());
+                }
+
                 // call to xCursor->setString possibly did remove final bookmark
                 // from previous paragraph. We need to restore it, if there was any.
                 if (sLastBookmarkName.getLength())

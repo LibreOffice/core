@@ -392,7 +392,7 @@ void  SwSendMailDialog::IterateMails()
             m_xStatus->append();
             m_xStatus->set_image(m_nSendCount, RID_BMP_FORMULA_CANCEL, 0);
             m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", pCurrentMailDescriptor->sEMail), 1);
-            m_xStatus->set_text(m_nSendCount, m_sFailed, 1);
+            m_xStatus->set_text(m_nSendCount, m_sFailed, 2);
             ++m_nSendCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
@@ -463,8 +463,8 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
                                         bool bResult,
                                         const OUString* pError )
 {
-    //sending should stop on send errors
-    if(pError &&
+    //sending should stop on send errors, except after last error - it will stop in AllMailsSent
+    if (pError && m_nSendCount + 1 < m_nExpectedCount &&
         m_pImpl->xMailDispatcher.is() && m_pImpl->xMailDispatcher->isStarted())
     {
         Application::PostUserEvent( LINK( this, SwSendMailDialog,
@@ -476,7 +476,7 @@ void SwSendMailDialog::DocumentSent( uno::Reference< mail::XMailMessage> const &
     m_xStatus->append();
     m_xStatus->set_image(m_nSendCount, sInsertImg, 0);
     m_xStatus->set_text(m_nSendCount, sMessage.replaceFirst("%1", xMessage->getRecipients()[0]), 1);
-    m_xStatus->set_text(m_nSendCount, bResult ? m_sCompleted : m_sFailed, 1);
+    m_xStatus->set_text(m_nSendCount, bResult ? m_sCompleted : m_sFailed, 2);
     ++m_nSendCount;
     if(!bResult)
         ++m_nErrorCount;
@@ -511,12 +511,15 @@ void SwSendMailDialog::UpdateTransferStatus()
 
 void SwSendMailDialog::AllMailsSent()
 {
-    // Leave open if some kind of error occurred
     if (m_nSendCount == m_nExpectedCount)
     {
         m_xStop->set_sensitive(false);
-        m_xDialog->hide();
-        m_xDialog->response(RET_CANCEL);
+        // Leave open if some kind of error occurred
+        if (m_nErrorCount == 0)
+        {
+            m_xDialog->hide();
+            m_xDialog->response(RET_CANCEL);
+        }
     }
 }
 

@@ -331,12 +331,14 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
-    m_xDelegatee = aArgs.getUnpackedValueOrDefault("DocumentHandler",m_xDelegatee);
+    m_xDocumentHandler = aArgs.getUnpackedValueOrDefault("DocumentHandler",m_xDocumentHandler);
     m_xModel = aArgs.getUnpackedValueOrDefault("Model",m_xModel);
 
-    OSL_ENSURE(m_xDelegatee.is(),"No document handler available!");
-    if ( !m_xDelegatee.is() || !m_xModel.is() )
+    OSL_ENSURE(m_xDocumentHandler.is(), "No document handler available!");
+    if (!m_xDocumentHandler.is() || !m_xModel.is())
         throw uno::Exception("no delegatee and no model", nullptr);
+
+    m_xDelegatee.set(new SvXMLLegacyToFastDocHandler(dynamic_cast<SvXMLImport*>(m_xDocumentHandler.get())));
 
     m_xDatabaseDataProvider.set(m_xModel->getDataProvider(),uno::UNO_QUERY);
     if ( !m_xDatabaseDataProvider.is() )

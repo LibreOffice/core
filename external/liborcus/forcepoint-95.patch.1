@@ -1,0 +1,11 @@
+--- a/include/orcus/sax_parser.hpp	2022-03-30 10:54:44.043568760 +0100
++++ b/include/orcus/sax_parser.hpp	2022-03-30 10:54:55.645037322 +0100
+@@ -547,7 +547,7 @@
+ 
+     skip_space_and_control();
+ 
+-    char c = cur_char();
++    char c = cur_char_checked();
+     if (c != '=')
+     {
+         std::ostringstream os;

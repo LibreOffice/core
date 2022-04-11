@@ -135,6 +135,12 @@ void QtWidget::resizeEvent(QResizeEvent* pEvent)
     m_rFrame.CallCallback(SalEvent::Resize, nullptr);
 }
 
+void QtWidget::fakeResize()
+{
+    QResizeEvent aEvent(size(), QSize());
+    resizeEvent(&aEvent);
+}
+
 void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
                                          const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
                                          SalAbstractMouseEvent& aSalEvent)
@@ -618,16 +624,15 @@ void QtWidget::focusOutEvent(QFocusEvent*)
 }
 
 QtWidget::QtWidget(QtFrame& rFrame, Qt::WindowFlags f)
-    : QWidget(!rFrame.GetTopLevelWindow() && rFrame.GetParent()
-                  ? static_cast<QtFrame*>(rFrame.GetParent())->asChild()
-                  : Q_NULLPTR,
-              f)
+    // if you try to set the QWidget parent via the QtFrame, instead of using the Q_NULLPTR, at
+    // least test Wayland popups; these horribly broke last time doing this (read commits)!
+    : QWidget(Q_NULLPTR, f)
     , m_rFrame(rFrame)
     , m_bNonEmptyIMPreeditSeen(false)
+    , m_bInInputMethodQueryCursorRectangle(false)
     , m_nDeltaX(0)
     , m_nDeltaY(0)
 {
-    create();
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
 }
@@ -798,11 +803,18 @@ QVariant QtWidget::inputMethodQuery(Qt::InputMethodQuery property) const
         }
         case Qt::ImCursorRectangle:
         {
-            const qreal fRatio = m_rFrame.devicePixelRatioF();
-            SalExtTextInputPosEvent aPosEvent;
-            m_rFrame.CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
-            return QVariant(QRect(aPosEvent.mnX / fRatio, aPosEvent.mnY / fRatio,
-                                  aPosEvent.mnWidth / fRatio, aPosEvent.mnHeight / fRatio));
+            if (!m_bInInputMethodQueryCursorRectangle)
+            {
+                m_bInInputMethodQueryCursorRectangle = true;
+                SalExtTextInputPosEvent aPosEvent;
+                m_rFrame.CallCallback(SalEvent::ExtTextInputPos, &aPosEvent);
+                const qreal fRatio = m_rFrame.devicePixelRatioF();
+                m_aImCursorRectangle.setRect(aPosEvent.mnX / fRatio, aPosEvent.mnY / fRatio,
+                                             aPosEvent.mnWidth / fRatio,
+                                             aPosEvent.mnHeight / fRatio);
+                m_bInInputMethodQueryCursorRectangle = false;
+            }
+            return QVariant(m_aImCursorRectangle);
         }
         case Qt::ImAnchorPosition:
         {

@@ -15,6 +15,10 @@ $(eval $(call gb_ExternalProject_register_targets,nss,\
 	build \
 ))
 
+$(eval $(call gb_ExternalProject_use_externals,nss,\
+	zlib \
+))
+
 ifeq ($(OS),WNT)
 $(call gb_ExternalProject_get_state_target,nss,build): \
 		$(call gb_ExternalExecutable_get_dependencies,python) \
@@ -27,10 +31,11 @@ $(call gb_ExternalProject_get_state_target,nss,build): \
 			MOZ_DEBUG_FLAGS=" " \
 			OPT_CODE_SIZE=0) \
 		OS_TARGET=WIN95 \
+		USE_SYSTEM_ZLIB=1 \
 		$(if $(filter X86_64,$(CPUNAME)),USE_64=1) \
 		$(if $(filter AARCH64,$(CPUNAME)),USE_64=1 CPU_ARCH=aarch64) \
 		LIB="$(ILIB)" \
-		XCFLAGS="$(SOLARINC)" \
+		XCFLAGS="$(SOLARINC) $(ZLIB_CFLAGS)" \
 		$(if $(CROSS_COMPILING),\
 			CROSS_COMPILE=1 \
 			$(if $(filter AARCH64,$(CPUNAME)),CPU_ARCH=aarch64) \

@@ -1343,6 +1343,11 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
             aMimeType = "audio/mp4";
             eMediaType = Relationship::AUDIO;
         }
+        else if (aExtension.equalsIgnoreAsciiCase(".mp3"))
+        {
+            aMimeType = "audio/mp3";
+            eMediaType = Relationship::AUDIO;
+        }
     }
 
     OUString aVideoFileRelId;
@@ -1373,8 +1378,8 @@ void DrawingML::WriteMediaNonVisualProperties(const css::uno::Reference<css::dra
     }
     else
     {
-        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(eMediaType), rURL);
-        aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), rURL);
+        aVideoFileRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(eMediaType), rURL, true);
+        aMediaRelId = mpFB->addRelation(mpFS->getOutputStream(), oox::getRelationship(Relationship::MEDIA), rURL, true);
     }
 
     GetFS()->startElementNS(XML_p, XML_nvPr);

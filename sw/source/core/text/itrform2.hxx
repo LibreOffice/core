@@ -238,6 +238,8 @@ public:
      * @param   rInf        contain information
     **/
     void MergeCharacterBorder( SwLinePortion& rPortion, SwLinePortion const *pPrev, SwTextFormatInfo& rInf );
+
+    bool ClearIfIsFirstOfBorderMerge(SwLinePortion const *pPortion);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

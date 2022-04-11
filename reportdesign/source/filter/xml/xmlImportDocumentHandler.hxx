@@ -23,12 +23,14 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase3.hxx>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <com/sun/star/xml/sax/XFastDocumentHandler.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDatabaseDataProvider.hpp>
 #include <comphelper/uno3.hxx>
+#include <xmloff/xmlimp.hxx>
 #include <memory>
 
 class SvXMLTokenMap;
@@ -77,6 +79,7 @@ private:
     ::std::vector< OUString>                                          m_aDetailFields;
     css::uno::Sequence< css::beans::PropertyValue >                   m_aArguments;
     css::uno::Reference< css::uno::XComponentContext >                m_xContext;
+    css::uno::Reference<css::xml::sax::XFastDocumentHandler>          m_xDocumentHandler;
     css::uno::Reference< css::xml::sax::XDocumentHandler >            m_xDelegatee;
     css::uno::Reference< css::uno::XAggregation >                     m_xProxy;
     css::uno::Reference< css::lang::XTypeProvider >                   m_xTypeProvider;

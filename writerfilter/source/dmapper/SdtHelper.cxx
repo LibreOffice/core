@@ -264,8 +264,7 @@ void SdtHelper::createDropDownControl()
     }
 
     // clean up
-    m_aDropDownItems.clear();
-    setControlType(SdtControlType::unknown);
+    clear();
 }
 
 void SdtHelper::createPlainTextControl()
@@ -296,8 +295,7 @@ void SdtHelper::createPlainTextControl()
                                    uno::makeAny(getInteropGrabBagAndClear()));
 
     // clean up
-    m_aDropDownItems.clear();
-    setControlType(SdtControlType::unknown);
+    clear();
 }
 
 void SdtHelper::createDateContentControl()
@@ -372,11 +370,11 @@ void SdtHelper::createDateContentControl()
                                                     uno::UNO_QUERY);
     xRefreshable->refresh();
 
-    setControlType(SdtControlType::unknown);
-
     // Store all unused sdt parameters from grabbag
     xNameCont->insertByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
                             uno::makeAny(getInteropGrabBagAndClear()));
+
+    clear();
 }
 
 void SdtHelper::createControlShape(awt::Size aSize,
@@ -421,6 +419,16 @@ bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
     return std::any_of(
         m_aGrabBag.begin(), m_aGrabBag.end(),
         [&rValueName](const beans::PropertyValue& i) { return i.Name == rValueName; });
+}
+
+void SdtHelper::clear()
+{
+    m_aDropDownItems.clear();
+    setControlType(SdtControlType::unknown);
+    m_sDataBindingPrefixMapping.clear();
+    m_sDataBindingXPath.clear();
+    m_sDataBindingStoreItemID.clear();
+    m_aGrabBag.clear();
 }
 
 } // namespace writerfilter::dmapper

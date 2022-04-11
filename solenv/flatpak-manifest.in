@@ -718,11 +718,12 @@
     "finish-args": [
         "--share=network",
         "--share=ipc",
-        "--socket=x11",
+        "--socket=fallback-x11",
         "--socket=wayland",
         "--socket=pulseaudio",
         "--device=dri",
         "--filesystem=xdg-config/gtk-3.0",
+        "--filesystem=xdg-run/gvfsd",
         "--filesystem=host",
         "--env=GIO_EXTRA_MODULES=/app/lib/gio/modules",
         "--env=JAVA_HOME=/app/jre",

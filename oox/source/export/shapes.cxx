@@ -928,7 +928,8 @@ ShapeExport& ShapeExport::WriteCustomShape( const Reference< XShape >& xShape )
     // as preset ones with parameters. Try that with this converter class.
     if (!sShapeType.startsWith("ooxml") && sShapeType != "non-primitive"
         && GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes
-        && xShape->getShapeType() == "com.sun.star.drawing.CustomShape")
+        && xShape->getShapeType() == "com.sun.star.drawing.CustomShape"
+        && !lcl_IsOnAllowlist(sShapeType))
     {
         DMLPresetShapeExporter aCustomShapeConverter(this, xShape);
         bPresetWriteSuccessful = aCustomShapeConverter.WriteShape();
@@ -1657,6 +1658,7 @@ static const NameToConvertMapType& lcl_GetConverters()
         { "com.sun.star.drawing.EllipseShape"              , &ShapeExport::WriteEllipseShape },
         { "com.sun.star.drawing.GraphicObjectShape"        , &ShapeExport::WriteGraphicObjectShape },
         { "com.sun.star.drawing.LineShape"                 , &ShapeExport::WriteLineShape },
+        { "com.sun.star.drawing.MediaShape"                , &ShapeExport::WriteGraphicObjectShape },
         { "com.sun.star.drawing.OpenBezierShape"           , &ShapeExport::WriteOpenPolyPolygonShape },
         { "com.sun.star.drawing.PolyPolygonShape"          , &ShapeExport::WriteClosedPolyPolygonShape },
         { "com.sun.star.drawing.PolyLineShape"             , &ShapeExport::WriteOpenPolyPolygonShape },

@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <QtCore/QRect>
 #include <QtWidgets/QWidget>
 #include <rtl/ustring.hxx>
 
@@ -36,6 +37,8 @@ class QtWidget : public QWidget
 
     QtFrame& m_rFrame;
     bool m_bNonEmptyIMPreeditSeen;
+    mutable bool m_bInInputMethodQueryCursorRectangle;
+    mutable QRect m_aImCursorRectangle;
     int m_nDeltaX;
     int m_nDeltaY;
 
@@ -82,6 +85,7 @@ public:
 
     QtFrame& frame() const { return m_rFrame; }
     void endExtTextInput();
+    void fakeResize();
 
     static bool handleEvent(QtFrame&, const QWidget&, QEvent*);
     // key events might be propagated further down => call base on false

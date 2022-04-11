@@ -50,7 +50,6 @@ private:
     // pointer to QMenu owned by the corresponding QtMenuItem or self (-> mpOwnedQMenu)
     QMenu* mpQMenu;
     QPushButton* mpCloseButton;
-    QMetaObject::Connection maCloseButtonConnection;
 
     void DoFullMenuUpdate(Menu* pMenuBar);
     static void NativeItemText(OUString& rItemText);
@@ -60,6 +59,7 @@ private:
     void ReinitializeActionGroup(unsigned nPos);
     void ResetAllActionGroups();
     void UpdateActionGroupItem(const QtMenuItem* pSalMenuItem);
+    bool validateQMenuBar();
 
 public:
     QtMenu(bool bMenuBar);
