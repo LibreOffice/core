@@ -499,8 +499,8 @@ void DictionaryNeo::launchEvent(sal_Int16 nEvent,
     aDicEvtListeners.notifyEach( &XDictionaryEventListener::processDictionaryEvent, aEvt);
 }
 
-int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
-                               const OUString &rWord2,
+int DictionaryNeo::cmpDicEntry(std::u16string_view rWord1,
+                               std::u16string_view rWord2,
                                bool bSimilarOnly)
 {
     MutexGuard  aGuard( GetLinguMutex() );
@@ -511,8 +511,8 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
 
     int nRes = 0;
 
-    sal_Int32     nLen1 = rWord1.getLength(),
-                  nLen2 = rWord2.getLength();
+    sal_Int32     nLen1 = rWord1.size(),
+                  nLen2 = rWord2.size();
     if (bSimilarOnly)
     {
         const sal_Unicode cChar = '.';
@@ -611,7 +611,7 @@ int DictionaryNeo::cmpDicEntry(const OUString& rWord1,
     return nRes;
 }
 
-bool DictionaryNeo::seekEntry(const OUString &rWord,
+bool DictionaryNeo::seekEntry(std::u16string_view rWord,
                               sal_Int32 *pPos, bool bSimilarOnly)
 {
     // look for entry with binary search.

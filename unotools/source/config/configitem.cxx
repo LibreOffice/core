@@ -819,14 +819,14 @@ bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString > c
     return bRet;
 }
 
-static OUString lcl_extractSetPropertyName( const OUString& rInPath, const OUString& rPrefix )
+static OUString lcl_extractSetPropertyName( const OUString& rInPath, std::u16string_view rPrefix )
 {
     OUString const sSubPath = dropPrefixFromConfigurationPath( rInPath, rPrefix);
     return extractFirstFromConfigurationPath( sSubPath );
 }
 
 static
-Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue >& rValues, const OUString& rPrefix )
+Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue >& rValues, std::u16string_view rPrefix )
 {
     Sequence< OUString > aSubNodeNames(rValues.getLength());
     OUString* pSubNodeNames = aSubNodeNames.getArray();

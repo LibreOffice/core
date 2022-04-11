@@ -63,9 +63,9 @@ static sal_Int16 checkScriptType(sal_Unicode c)
 }
 
 
-static bool TextIsAllScriptType( const OUString &rTxt, sal_Int16 nScriptType )
+static bool TextIsAllScriptType( std::u16string_view rTxt, sal_Int16 nScriptType )
 {
-    for (sal_Int32 i = 0; i < rTxt.getLength(); ++i)
+    for (size_t i = 0; i < rTxt.size(); ++i)
     {
         if (checkScriptType( rTxt[i]) != nScriptType)
             return false;

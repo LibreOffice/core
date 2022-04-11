@@ -685,7 +685,7 @@ LongDateOrder LocaleDataWrapper::getLongDateOrder() const
     return nLongDateOrder;
 }
 
-LongDateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) const
+LongDateOrder LocaleDataWrapper::scanDateOrderImpl( std::u16string_view rCode ) const
 {
     // Only some european versions were translated, the ones with different
     // keyword combinations are:
@@ -693,35 +693,35 @@ LongDateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) cons
     // Dutch DMJ, Finnish PKV
 
     // default is English keywords for every other language
-    sal_Int32 nDay = rCode.indexOf('D');
-    sal_Int32 nMonth = rCode.indexOf('M');
-    sal_Int32 nYear = rCode.indexOf('Y');
-    if (nDay == -1 || nMonth == -1 || nYear == -1)
+    size_t nDay = rCode.find('D');
+    size_t nMonth = rCode.find('M');
+    size_t nYear = rCode.find('Y');
+    if (nDay == std::u16string_view::npos || nMonth == std::u16string_view::npos || nYear == std::u16string_view::npos)
     {   // This algorithm assumes that all three parts (DMY) are present
-        if (nMonth == -1)
+        if (nMonth == std::u16string_view::npos)
         {   // only Finnish has something else than 'M' for month
-            nMonth = rCode.indexOf('K');
-            if (nMonth != -1)
+            nMonth = rCode.find('K');
+            if (nMonth != std::u16string_view::npos)
             {
-                nDay = rCode.indexOf('P');
-                nYear = rCode.indexOf('V');
+                nDay = rCode.find('P');
+                nYear = rCode.find('V');
             }
         }
-        else if (nDay == -1)
+        else if (nDay == std::u16string_view::npos)
         {   // We have a month 'M' if we reach this branch.
             // Possible languages containing 'M' but no 'D':
             // German, French, Italian
-            nDay = rCode.indexOf('T');         // German
-            if (nDay != -1)
-                nYear = rCode.indexOf('J');
+            nDay = rCode.find('T');         // German
+            if (nDay != std::u16string_view::npos)
+                nYear = rCode.find('J');
             else
             {
-                nYear = rCode.indexOf('A');    // French, Italian
-                if (nYear != -1)
+                nYear = rCode.find('A');    // French, Italian
+                if (nYear != std::u16string_view::npos)
                 {
-                    nDay = rCode.indexOf('J'); // French
-                    if (nDay == -1)
-                        nDay = rCode.indexOf('G'); // Italian
+                    nDay = rCode.find('J'); // French
+                    if (nDay == std::u16string_view::npos)
+                        nDay = rCode.find('G'); // Italian
                 }
             }
         }
@@ -729,22 +729,22 @@ LongDateOrder LocaleDataWrapper::scanDateOrderImpl( const OUString& rCode ) cons
         {   // We have a month 'M' and a day 'D'.
             // Possible languages containing 'D' and 'M' but not 'Y':
             // Spanish, Dutch
-            nYear = rCode.indexOf('A');        // Spanish
-            if (nYear == -1)
-                nYear = rCode.indexOf('J');    // Dutch
+            nYear = rCode.find('A');        // Spanish
+            if (nYear == std::u16string_view::npos)
+                nYear = rCode.find('J');    // Dutch
         }
-        if (nDay == -1 || nMonth == -1 || nYear == -1)
+        if (nDay == std::u16string_view::npos || nMonth == std::u16string_view::npos || nYear == std::u16string_view::npos)
         {
             if (areChecksEnabled())
             {
                 outputCheckMessage( appendLocaleInfo( u"LocaleDataWrapper::scanDateOrder: not all DMY present" ) );
             }
-            if (nDay == -1)
-                nDay = rCode.getLength();
-            if (nMonth == -1)
-                nMonth = rCode.getLength();
-            if (nYear == -1)
-                nYear = rCode.getLength();
+            if (nDay == std::u16string_view::npos)
+                nDay = rCode.size();
+            if (nMonth == std::u16string_view::npos)
+                nMonth = rCode.size();
+            if (nYear == std::u16string_view::npos)
+                nYear = rCode.size();
         }
     }
     // compare with <= because each position may equal rCode.getLength()
@@ -1226,14 +1226,14 @@ OUString LocaleDataWrapper::getNum( sal_Int64 nNumber, sal_uInt16 nDecimals,
 }
 
 OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-        const OUString& rCurrencySymbol, bool bUseThousandSep ) const
+        std::u16string_view rCurrencySymbol, bool bUseThousandSep ) const
 {
     sal_Unicode cZeroChar = getCurrZeroChar();
 
     // check if digits and separators will fit into fixed buffer or allocate
     size_t nGuess = ImplGetNumberStringLengthGuess( aLocaleDataItem, nDecimals );
     OUStringBuffer aNumBuf(int(nGuess + 16));
-    OUStringBuffer aBuf(int(rCurrencySymbol.getLength() + nGuess + 20 ));
+    OUStringBuffer aBuf(int(rCurrencySymbol.size() + nGuess + 20 ));
 
     bool bNeg;
     if ( nNumber < 0 )

@@ -107,7 +107,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
                             sal_Int32& nBlank, sal_Int32& nSym ) const;
 
     void                loadDateOrders();
-    LongDateOrder       scanDateOrderImpl( const OUString& rCode ) const;
+    LongDateOrder       scanDateOrderImpl( std::u16string_view rCode ) const;
 
     void                ImplAddFormatNum( rtl::OUStringBuffer& rBuf,
                             sal_Int64 nNumber, sal_uInt16 nDecimals,
@@ -329,7 +329,7 @@ public:
 
                         /// "Secure" currency formatted string.
     OUString       getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
-                            const OUString& rCurrencySymbol,
+                            std::u16string_view rCurrencySymbol,
                             bool bUseThousandSep = true ) const;
 
     // dummy returns, to be implemented

@@ -147,7 +147,7 @@ namespace
     }
 
 
-    css::util::Time lcl_toUNOTime( const OUString& rString )
+    css::util::Time lcl_toUNOTime( std::u16string_view rString )
     {
         css::util::Time aTime;
 
@@ -218,7 +218,7 @@ namespace
         else
         {
             aDate = lcl_toUNODate( rString.copy( 0, nDateTimeSep ) );
-            aTime = lcl_toUNOTime( rString.copy( nDateTimeSep + 1 ) );
+            aTime = lcl_toUNOTime( rString.subView( nDateTimeSep + 1 ) );
         }
         css::util::DateTime aDateTime(
             aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,

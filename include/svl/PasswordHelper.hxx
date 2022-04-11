@@ -30,13 +30,13 @@
 
 class SvPasswordHelper
 {
-    static void     GetHashPasswordLittleEndian(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
-    static void     GetHashPasswordBigEndian(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    static void     GetHashPasswordLittleEndian(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
+    static void     GetHashPasswordBigEndian(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
 
 public:
     SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence <sal_Int8>& rPassHash, const char* pPass, sal_uInt32 nLen);
 
-    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence<sal_Int8>& rPassHash, const OUString& sPass);
+    SVL_DLLPUBLIC static void     GetHashPassword(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
     SVL_DLLPUBLIC static void     GetHashPasswordSHA1UTF8(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
     SVL_DLLPUBLIC static void     GetHashPasswordSHA256(css::uno::Sequence<sal_Int8>& rPassHash, std::u16string_view sPass);
     /**
@@ -47,7 +47,7 @@ public:
     tdf#115483: also check 2 different new ways of hashing that were added in
     ODF 1.2, requiring UTF-8 encoding.
     */
-    SVL_DLLPUBLIC static bool     CompareHashPassword(const css::uno::Sequence<sal_Int8>& rOldPassHash, const OUString& sNewPass);
+    SVL_DLLPUBLIC static bool     CompareHashPassword(const css::uno::Sequence<sal_Int8>& rOldPassHash, std::u16string_view sNewPass);
 };
 
 #endif

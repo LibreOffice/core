@@ -233,9 +233,9 @@ void SvIdlParser::ReadEnum()
     rBase.GetTypeList().push_back( xEnum.get() );
 }
 
-static OString getCommonSubPrefix(const OString &rA, const OString &rB)
+static std::string_view getCommonSubPrefix(std::string_view rA, std::string_view rB)
 {
-    sal_Int32 nMax = std::min(rA.getLength(), rB.getLength());
+    sal_Int32 nMax = std::min(rA.size(), rB.size());
     sal_Int32 nI = 0;
     while (nI < nMax)
     {
@@ -243,7 +243,7 @@ static OString getCommonSubPrefix(const OString &rA, const OString &rB)
             break;
         ++nI;
     }
-    return rA.copy(0, nI);
+    return rA.substr(0, nI);
 }
 
 void SvIdlParser::ReadEnumValue( SvMetaTypeEnum& rEnum )
@@ -257,7 +257,7 @@ void SvIdlParser::ReadEnumValue( SvMetaTypeEnum& rEnum )
     }
     else
     {
-        rEnum.aPrefix = getCommonSubPrefix(rEnum.aPrefix, aEnumVal->GetName());
+        rEnum.aPrefix = OString(getCommonSubPrefix(rEnum.aPrefix, aEnumVal->GetName()));
     }
     rEnum.aEnumValueList.push_back( aEnumVal.get() );
 }

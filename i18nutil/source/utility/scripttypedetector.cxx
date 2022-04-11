@@ -54,11 +54,11 @@ sal_Int16 ScriptTypeDetector::getScriptDirection( std::u16string_view Text, sal_
 }
 
 // return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
-sal_Int32 ScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
+sal_Int32 ScriptTypeDetector::beginOfScriptDirection( std::u16string_view Text, sal_Int32 nPos, sal_Int16 direction )
 {
         sal_Int32 cPos = nPos;
 
-        if (cPos < Text.getLength()) {
+        if (cPos < static_cast<sal_Int32>(Text.size())) {
             for (; cPos >= 0; cPos--) {
                 if (direction != getScriptDirection(Text, cPos, direction))
                     break;
@@ -67,10 +67,10 @@ sal_Int32 ScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_
         return cPos == nPos ? -1 : cPos + 1;
 }
 
-sal_Int32 ScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
+sal_Int32 ScriptTypeDetector::endOfScriptDirection( std::u16string_view Text, sal_Int32 nPos, sal_Int16 direction )
 {
         sal_Int32 cPos = nPos;
-        sal_Int32 len = Text.getLength();
+        sal_Int32 len = Text.size();
 
         if (cPos >=0) {
             for (; cPos < len; cPos++) {
@@ -95,12 +95,12 @@ sal_Int16 ScriptTypeDetector::getCTLScriptType( std::u16string_view Text, sal_In
 }
 
 // Begin of Script Type is inclusive.
-sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
+sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( std::u16string_view Text, sal_Int32 nPos )
 {
     if (nPos < 0)
         return 0;
-    else if (nPos >= Text.getLength())
-        return Text.getLength();
+    else if (nPos >= static_cast<sal_Int32>(Text.size()))
+        return Text.size();
     else {
         sal_Int16 cType = getCTLScriptType(Text, nPos);
         for (nPos--; nPos >= 0; nPos--) {
@@ -112,15 +112,15 @@ sal_Int32 ScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_In
 }
 
 // End of the Script Type is exclusive, the return value pointing to the begin of next script type
-sal_Int32 ScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
+sal_Int32 ScriptTypeDetector::endOfCTLScriptType( std::u16string_view Text, sal_Int32 nPos )
 {
     if (nPos < 0)
         return 0;
-    else if (nPos >= Text.getLength())
-        return Text.getLength();
+    else if (nPos >= static_cast<sal_Int32>(Text.size()))
+        return Text.size();
     else {
         sal_Int16 cType = getCTLScriptType(Text, nPos);
-        sal_Int32 len = Text.getLength();
+        sal_Int32 len = Text.size();
         for (nPos++; nPos < len; nPos++) {
             if (cType != getCTLScriptType(Text, nPos))
                 break;

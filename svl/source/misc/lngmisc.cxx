@@ -26,10 +26,10 @@
 
 namespace linguistic
 {
-    sal_Int32 GetNumControlChars(const OUString &rTxt)
+    sal_Int32 GetNumControlChars(std::u16string_view rTxt)
     {
         sal_Int32 nCnt = 0;
-        for (sal_Int32 i = 0; i < rTxt.getLength(); ++i)
+        for (size_t i = 0; i < rTxt.size(); ++i)
             if (IsControlChar(rTxt[i]))
                 ++nCnt;
         return nCnt;

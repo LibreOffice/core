@@ -76,7 +76,7 @@ LNG_DLLPUBLIC ::osl::Mutex& GetLinguMutex();
 
 const LocaleDataWrapper & GetLocaleDataWrapper( LanguageType nLang );
 
-sal_Int32 LevDistance( const OUString &rTxt1, const OUString &rTxt2 );
+sal_Int32 LevDistance( std::u16string_view rTxt1, std::u16string_view rTxt2 );
 
 /** Convert Locale to LanguageType for legacy handling.
     Linguistic specific handling of an empty locale denoting LANGUAGE_NONE.
@@ -98,7 +98,7 @@ LNG_DLLPUBLIC bool LinguIsUnspecified( LanguageType nLanguage );
 
 /** The same as LinguIsUnspecified(LanguageType) but taking a BCP 47 language
     tag string instead. */
-LNG_DLLPUBLIC bool LinguIsUnspecified( const OUString & rBcp47 );
+LNG_DLLPUBLIC bool LinguIsUnspecified( std::u16string_view rBcp47 );
 
 std::vector< LanguageType >
     LocaleSeqToLangVec( css::uno::Sequence< css::lang::Locale > const &rLocaleSeq );
@@ -120,7 +120,7 @@ std::vector< OUString > GetDictionaryPaths();
 ///     The URL will point to the path given by 'GetDictionaryWriteablePath'
 LNG_DLLPUBLIC OUString  GetWritableDictionaryURL( std::u16string_view rDicName );
 
-LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( const OUString &rTxt, sal_Int32 nPos );
+LNG_DLLPUBLIC sal_Int32 GetPosInWordToCheck( std::u16string_view rTxt, sal_Int32 nPos );
 
 css::uno::Reference< css::linguistic2::XHyphenatedWord >
             RebuildHyphensAndControlChars(
@@ -134,7 +134,7 @@ inline bool        IsUpper( const OUString &rText, LanguageType nLanguage )     
 LNG_DLLPUBLIC CapType capitalType(const OUString&, CharClass const *);
 
 LNG_DLLPUBLIC bool      HasDigits( const OUString &rText );
-LNG_DLLPUBLIC bool      IsNumeric( const OUString &rText );
+LNG_DLLPUBLIC bool      IsNumeric( std::u16string_view rText );
 
 
 LNG_DLLPUBLIC css::uno::Reference< css::linguistic2::XLinguProperties > GetLinguProperties();

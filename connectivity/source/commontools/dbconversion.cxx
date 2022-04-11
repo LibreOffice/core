@@ -441,7 +441,7 @@ namespace dbtools
             const sal_Unicode *const begin = p;
             while (rtl::isAsciiWhiteSpace(*p)) { ++p; }
             nSeparation += p - begin;
-            aTime = toTime( _sSQLString.copy( nSeparation ) );
+            aTime = toTime( _sSQLString.subView( nSeparation ) );
         }
 
         return css::util::DateTime(aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
@@ -449,7 +449,7 @@ namespace dbtools
     }
 
 
-    css::util::Time DBTypeConversion::toTime(const OUString& _sSQLString)
+    css::util::Time DBTypeConversion::toTime(std::u16string_view _sSQLString)
     {
         css::util::Time aTime;
         ::utl::ISO8601parseTime(_sSQLString, aTime);

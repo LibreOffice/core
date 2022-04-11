@@ -95,8 +95,8 @@ namespace utl
             If both paths are equal <TRUE/> is returned.
 
     */
-    bool isPrefixOfConfigurationPath(OUString const& _sNestedPath,
-                                         OUString const& _sPrefixPath);
+    bool isPrefixOfConfigurationPath(std::u16string_view _sNestedPath,
+                                         std::u16string_view _sPrefixPath);
 
     /** get the relative path to a nested node with respect to a parent path.
 
@@ -120,7 +120,7 @@ namespace utl
 
     */
     UNOTOOLS_DLLPUBLIC OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
-                                                    OUString const& _sPrefixPath);
+                                                    std::u16string_view _sPrefixPath);
 
     /** Create a one-level relative configuration path from a set element name
         without a known set element type.

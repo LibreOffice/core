@@ -282,10 +282,10 @@ OUString URIHelper::simpleNormalizedMakeRelative(
 
 namespace {
 
-sal_Int32 nextChar(OUString const & rStr, sal_Int32 nPos)
+sal_Int32 nextChar(std::u16string_view rStr, sal_Int32 nPos)
 {
     return rtl::isHighSurrogate(rStr[nPos])
-           && rStr.getLength() - nPos >= 2
+           && rStr.size() - nPos >= 2
            && rtl::isLowSurrogate(rStr[nPos + 1]) ?
         nPos + 2 : nPos + 1;
 }
