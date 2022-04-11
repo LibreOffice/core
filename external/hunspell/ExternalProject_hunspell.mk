@@ -19,8 +19,7 @@ hunspell_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 hunspell_CXXFLAGS:=$(CXXFLAGS) $(gb_LTOFLAGS) \
        $(gb_EMSCRIPTEN_CPPFLAGS) \
-       $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) \
-       $(if $(debug),$(gb_DEBUGINFO_FLAGS))
+       $(call gb_ExternalProject_get_build_flags,hunspell)
 
 hunspell_LDFLAGS:=$(gb_LTOFLAGS)
 

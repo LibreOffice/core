@@ -30,7 +30,9 @@ $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 			$(if $(libnumbertext_CPPFLAGS),CPPFLAGS='$(libnumbertext_CPPFLAGS)') \
-			CXXFLAGS="$(libnumbertext_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS)) $(if $(debug),$(gb_DEBUGINFO_FLAGS)) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX)" \
+			CXXFLAGS="$(libnumbertext_CXXFLAGS) \
+				$(call gb_ExternalProject_get_build_flags,libnumbertext) \
+				$(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX)" \
 		&& cd src && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,libnumbertext,EXTERNAL)

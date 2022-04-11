@@ -39,7 +39,7 @@ $(call gb_ExternalProject_get_state_target,libebook,build) :
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			--disable-werror \
 			--disable-weffc \
-			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libebook)" \
 			CPPFLAGS="$(CPPFLAGS) $(ICU_UCHAR_TYPE) $(BOOST_CPPFLAGS)" \
 			LANGTAG_CFLAGS="$(LIBLANGTAG_CFLAGS)" \
 			LANGTAG_LIBS="$(LIBLANGTAG_LIBS)" \

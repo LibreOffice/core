@@ -40,7 +40,7 @@ define gb_CliLibrary__command
 		$(CLI_CSCFLAGS) \
 		-target:library \
 		-out:$(1) \
-		$(if $(call gb_LinkTarget__symbols_enabled,$(1)),\
+		$(if $(call gb_target_symbols_enabled,$(1)),\
 			-debug:pdbonly \
 			-pdb:$(call gb_LinkTarget__get_pdb_filename,$(WORKDIR)/LinkTarget/Library/$(notdir $(1)))) \
 		-keyfile:$(CLI_KEYFILE) \

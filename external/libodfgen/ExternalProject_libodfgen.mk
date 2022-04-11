@@ -36,7 +36,7 @@ $(call gb_ExternalProject_get_state_target,libodfgen,build) :
 			--disable-weffc \
 			--without-docs \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CXXFLAGS="$(gb_CXXFLAGS) $(if $(ENABLE_OPTIMIZED),$(gb_COMPILEROPTFLAGS),$(gb_COMPILERNOOPTFLAGS))" \
+			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libodfgen)" \
 			CPPFLAGS="$(CPPFLAGS) $(if $(SYSTEM_REVENGE),,$(if $(filter-out MSC,$(COM)),-DLIBREVENGE_VISIBILITY))" \
 			XML_CFLAGS="$(LIBXML_CFLAGS)" \
 			XML_LIBS="$(LIBXML_LIBS)" \
