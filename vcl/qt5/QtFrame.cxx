@@ -173,7 +173,12 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
         m_pTopLevel->setFocusProxy(m_pQWidget);
     }
     else
+    {
         m_pQWidget = new QtWidget(*this, aWinFlags);
+        // from Qt's POV the popup window doesn't have the input focus, so we must force tooltips...
+        if (isPopup())
+            m_pQWidget->setAttribute(Qt::WA_AlwaysShowToolTips);
+    }
 
     QWindow* pChildWindow = windowHandle();
     connect(pChildWindow, &QWindow::screenChanged, this, &QtFrame::screenChanged);
@@ -859,7 +864,8 @@ bool QtFrame::ShowTooltip(const OUString& rText, const tools::Rectangle& rHelpAr
     QRect aHelpArea(toQRect(rHelpArea));
     if (QGuiApplication::isRightToLeft())
         aHelpArea.moveLeft(maGeometry.nWidth - aHelpArea.width() - aHelpArea.left() - 1);
-    QToolTip::showText(QCursor::pos(), toQString(rText), m_pQWidget, aHelpArea);
+    m_aTooltipText = rText;
+    m_aTooltipArea = aHelpArea;
     return true;
 }
 
