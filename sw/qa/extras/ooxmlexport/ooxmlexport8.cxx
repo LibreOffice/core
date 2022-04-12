@@ -60,15 +60,6 @@ public:
         }
         return nullptr;
     }
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return OString(filename).endsWith(".docx");
-    }
 };
 
 DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
@@ -77,8 +68,9 @@ DECLARE_OOXMLEXPORT_TEST(testN751054, "n751054.docx")
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf48569, "tdf48569.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf48569)
 {
+    loadAndReload("tdf48569.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // File crashing while saving in LO
