@@ -43,7 +43,7 @@ class FontAttributes;
 class SalInfoPrinter;
 class ImplFontMetricData;
 
-class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphicsAutoDelegateToImpl
+class VCL_DLLPUBLIC GenPspGraphics final : public SalGraphics
 {
     std::unique_ptr<GenPspGfxBackend> m_pBackend;
 

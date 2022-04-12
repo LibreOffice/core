@@ -42,7 +42,7 @@
 struct BitmapBuffer;
 class FreetypeFont;
 
-class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
+class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphics
 {
     CairoCommon m_aCairoCommon;
 
