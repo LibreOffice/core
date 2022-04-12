@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3989ceb8_359533a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000521
+      },
+      "writtenOn": "2022-04-12T16:25:12Z",
+      "side": 1,
+      "message": "Concerning the Access2Base and ScriptForge modules, I see 3 types of changes:\n1) Extra space(s) or tab(s) are suppressed \u003d\u003e OK for me.\n2) Review of URL\u0027s referring to OpenOffice wiki to LibreOffice \u003d\u003e OK for me.\n3) Kate adds an extra blank line (or a linefeed) at the bottom of each file. The Basic IDE doesn\u0027t do that. Can this extra line please be avoided ?",
+      "revId": "70fb062f1b8f5c4b472a0c60153e2c82a09f580e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
