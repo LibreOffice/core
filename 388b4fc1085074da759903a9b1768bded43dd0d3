@@ -36,6 +36,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46825b58_14a702d5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-04-12T05:26:09Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/132854 will fix this.",
+      "revId": "388b4fc1085074da759903a9b1768bded43dd0d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0e8349d_6f903e4d",
@@ -49,6 +66,24 @@
       "writtenOn": "2022-04-11T08:14:50Z",
       "side": 1,
       "message": "Do you think you could work in a copy when you save? Currently you make changes to the git-tracked file as the test runs, none of the exiting tests do this. Thanks!",
+      "revId": "388b4fc1085074da759903a9b1768bded43dd0d3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe073d97_5b2d1aea",
+        "filename": "sc/qa/unit/tiledrendering/tiledrendering.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-04-12T05:26:09Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/132854 adds an option in tiledrendering tests to work on a temporary copy of the document and uses this option for testInvalidEntrySave().",
+      "parentUuid": "d0e8349d_6f903e4d",
       "revId": "388b4fc1085074da759903a9b1768bded43dd0d3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
