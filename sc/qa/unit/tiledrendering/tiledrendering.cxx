@@ -37,6 +37,8 @@
 #include <tools/json_writer.hxx>
 #include <docoptio.hxx>
 #include <test/lokcallback.hxx>
+#include <osl/file.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <chrono>
 #include <cstddef>
@@ -182,10 +184,11 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    ScModelObj* createDoc(const char* pName);
+    ScModelObj* createDoc(const char* pName, bool bMakeTempCopy = false);
     void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+    void makeTempCopy(const OUString& rOrigURL);
 
     /// document size changed callback.
     osl::Condition m_aDocSizeCondition;
@@ -193,6 +196,7 @@ private:
 
     uno::Reference<lang::XComponent> mxComponent;
     TestLokCallbackWrapper m_callbackWrapper;
+    std::unique_ptr<utl::TempFile> mpTempFile;
 };
 
 ScTiledRenderingTest::ScTiledRenderingTest()
@@ -231,11 +235,29 @@ void ScTiledRenderingTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
+void ScTiledRenderingTest::makeTempCopy(const OUString& rOrigURL)
+{
+    mpTempFile.reset(new utl::TempFile());
+    mpTempFile->EnableKillingFile();
+    auto const aError = osl::File::copy(rOrigURL, mpTempFile->GetURL());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUString("<" + rOrigURL + "> -> <" + mpTempFile->GetURL() + ">").toUtf8().getStr(),
+        osl::FileBase::E_None, aError);
+}
+
+ScModelObj* ScTiledRenderingTest::createDoc(const char* pName, bool bMakeTempCopy)
 {
     if (mxComponent.is())
         mxComponent->dispose();
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
+
+    OUString aOriginalSrc = m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName);
+    if (bMakeTempCopy)
+        makeTempCopy(aOriginalSrc);
+
+    mxComponent = loadFromDesktop(
+        bMakeTempCopy ? mpTempFile->GetURL() : aOriginalSrc,
+        "com.sun.star.sheet.SpreadsheetDocument");
+
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -2911,7 +2933,7 @@ void ScTiledRenderingTest::testInvalidEntrySave()
     // Load a document
     comphelper::LibreOfficeKit::setActive();
 
-    ScModelObj* pModelObj = createDoc("validity.xlsx");
+    ScModelObj* pModelObj = createDoc("validity.xlsx", true /* bMakeTempCopy */);
     const ScDocument* pDoc = pModelObj->GetDocument();
     ViewCallback aView;
     int nView = SfxLokHelper::getView();
