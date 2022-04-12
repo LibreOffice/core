@@ -55,28 +55,28 @@ public:
     };
 
 private:
-    typedef         std::deque< std::pair<void *, CacheId> > LRUFonts;
+    typedef         std::deque< std::pair<cairo_font_face_t*, CacheId> > LRUFonts;
     static LRUFonts maLRUFonts;
 public:
                                 CairoFontsCache() = delete;
 
-    static void                 CacheFont(void *pFont, const CacheId &rId);
-    static void*                FindCachedFont(const CacheId &rId);
+    static void                 CacheFont(cairo_font_face_t* pFont, const CacheId &rId);
+    static cairo_font_face_t*   FindCachedFont(const CacheId &rId);
 };
 
 CairoFontsCache::LRUFonts CairoFontsCache::maLRUFonts;
 
-void CairoFontsCache::CacheFont(void *pFont, const CairoFontsCache::CacheId &rId)
+void CairoFontsCache::CacheFont(cairo_font_face_t* pFont, const CairoFontsCache::CacheId &rId)
 {
-    maLRUFonts.push_front( std::pair<void*, CairoFontsCache::CacheId>(pFont, rId) );
+    maLRUFonts.push_front( std::pair<cairo_font_face_t*, CairoFontsCache::CacheId>(pFont, rId) );
     if (maLRUFonts.size() > 8)
     {
-        cairo_font_face_destroy(static_cast<cairo_font_face_t*>(maLRUFonts.back().first));
+        cairo_font_face_destroy(maLRUFonts.back().first);
         maLRUFonts.pop_back();
     }
 }
 
-void* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
+cairo_font_face_t* CairoFontsCache::FindCachedFont(const CairoFontsCache::CacheId &rId)
 {
     auto aI = std::find_if(maLRUFonts.begin(), maLRUFonts.end(),
         [&rId](const LRUFonts::value_type& rFont) { return rFont.second == rId; });
@@ -230,7 +230,7 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
         size_t nLen = std::distance(aI, aNext);
 
         aId.mbVerticalMetrics = nGlyphRotation != 0.0;
-        cairo_font_face_t* font_face = static_cast<cairo_font_face_t*>(CairoFontsCache::FindCachedFont(aId));
+        cairo_font_face_t* font_face = CairoFontsCache::FindCachedFont(aId);
         if (!font_face)
         {
             const FontConfigFontOptions *pOptions = aId.mpOptions;
