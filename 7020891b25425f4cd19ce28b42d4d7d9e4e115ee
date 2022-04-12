@@ -16,6 +16,24 @@
       "message": "It should be just VclPtr\u003c...\u003e and then with callback:\n[pDlg](int nResult){ pDlg-\u003edisposeAndClear(); }\n\nScopedVclPtr will be killed after end of this code block - we run it asynchronously without blocking",
       "revId": "7020891b25425f4cd19ce28b42d4d7d9e4e115ee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f82f51c_f513666e",
+        "filename": "sfx2/source/appl/appserv.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 677,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-04-12T13:30:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb119c36_4736db8c",
+      "revId": "7020891b25425f4cd19ce28b42d4d7d9e4e115ee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
