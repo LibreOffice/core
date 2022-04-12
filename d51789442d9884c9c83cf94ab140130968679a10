@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4adda49_f70f57c8",
+        "filename": "sw/source/filter/ww8/ww8par5.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1705,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-12T09:58:53Z",
+      "side": 1,
+      "message": "This seems like it would fit better below on nReg, but nReg can be altered again later. This way was cheap, easy, and accurate enough.",
+      "range": {
+        "startLine": 1705,
+        "startChar": 30,
+        "endLine": 1705,
+        "endChar": 42
+      },
+      "revId": "d51789442d9884c9c83cf94ab140130968679a10",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
