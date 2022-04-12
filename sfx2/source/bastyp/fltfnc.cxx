@@ -137,7 +137,7 @@ OUString const & SfxFilterContainer::GetName() const
     return pImpl->aName;
 }
 
-std::shared_ptr<const SfxFilter> SfxFilterContainer::GetDefaultFilter_Impl( const OUString& rName )
+std::shared_ptr<const SfxFilter> SfxFilterContainer::GetDefaultFilter_Impl( std::u16string_view rName )
 {
     // Try to find out the type of factory.
     // Interpret given name as Service- and ShortName!

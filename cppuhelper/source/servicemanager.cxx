@@ -46,6 +46,7 @@
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "loadsharedlibcomponentfactory.hxx"
 
@@ -1322,9 +1323,9 @@ void cppuhelper::ServiceManager::removeEventListenerFromComponent(
     }
 }
 
-void cppuhelper::ServiceManager::init(OUString const & rdbUris) {
+void cppuhelper::ServiceManager::init(std::u16string_view rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        OUString uri(rdbUris.getToken(0, ' ', i));
+        OUString uri(o3tl::getToken(rdbUris, 0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }

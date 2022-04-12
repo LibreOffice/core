@@ -63,7 +63,7 @@ namespace dbaccess
     // the elements of _rxQueryColumns must have the properties PROPERTY_REALNAME and PROPERTY_TABLENAME
     void getColumnPositions(const css::uno::Reference< css::container::XNameAccess >& _rxQueryColumns,
                             const css::uno::Sequence< OUString >& _rColumnNames,
-                            const OUString& _rsUpdateTableName,
+                            std::u16string_view _rsUpdateTableName,
                             SelectColumnsMetaData& o_rColumnNames /* out */,
                             bool i_bAppendTableName = false);
 

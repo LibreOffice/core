@@ -84,6 +84,7 @@
 #include <basegfx/range/b2drange.hxx>
 #include <svdobjplusdata.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include "presetooxhandleadjustmentrelations.hxx"
 
 using namespace ::com::sun::star;
@@ -3176,27 +3177,27 @@ std::unique_ptr<sdr::contact::ViewContact> SdrObjCustomShape::CreateObjectSpecif
 }
 
 // #i33136#
-bool SdrObjCustomShape::doConstructOrthogonal(const OUString& rName)
+bool SdrObjCustomShape::doConstructOrthogonal(std::u16string_view rName)
 {
     bool bRetval(false);
 
-    if(rName.equalsIgnoreAsciiCase("quadrat"))
+    if(o3tl::equalsIgnoreAsciiCase(rName, u"quadrat"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase("round-quadrat"))
+    else if(o3tl::equalsIgnoreAsciiCase(rName, u"round-quadrat"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase("circle"))
+    else if(o3tl::equalsIgnoreAsciiCase(rName, u"circle"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase("circle-pie"))
+    else if(o3tl::equalsIgnoreAsciiCase(rName, u"circle-pie"))
     {
         bRetval = true;
     }
-    else if(rName.equalsIgnoreAsciiCase("ring"))
+    else if(o3tl::equalsIgnoreAsciiCase(rName, u"ring"))
     {
         bRetval = true;
     }

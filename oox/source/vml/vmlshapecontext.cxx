@@ -591,7 +591,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
     return ShapeTypeContext::onCreateContext( nElement, rAttribs );
 }
 
-void ShapeContext::setPoints(const OUString& rPoints)
+void ShapeContext::setPoints(std::u16string_view rPoints)
 {
     mrShapeModel.maPoints.clear();
     sal_Int32 nIndex = 0;
@@ -599,10 +599,10 @@ void ShapeContext::setPoints(const OUString& rPoints)
     while (nIndex >= 0)
     {
         sal_Int32 nX = ConversionHelper::decodeMeasureToTwip(
-            mrShape.getDrawing().getFilter().getGraphicHelper(), rPoints.getToken(0, ',', nIndex),
+            mrShape.getDrawing().getFilter().getGraphicHelper(), OUString(o3tl::getToken(rPoints, 0, ',', nIndex)),
             0, true, true);
         sal_Int32 nY = ConversionHelper::decodeMeasureToTwip(
-            mrShape.getDrawing().getFilter().getGraphicHelper(), rPoints.getToken(0, ',', nIndex),
+            mrShape.getDrawing().getFilter().getGraphicHelper(), OUString(o3tl::getToken(rPoints, 0, ',', nIndex)),
             0, false, true);
         mrShapeModel.maPoints.emplace_back(nX, nY);
     }

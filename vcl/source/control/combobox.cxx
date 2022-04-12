@@ -1286,7 +1286,7 @@ void ComboBox::AddSeparator( sal_Int32 n )
     m_pImpl->m_pImplLB->AddSeparator( n );
 }
 
-void ComboBox::SetMRUEntries( const OUString& rEntries )
+void ComboBox::SetMRUEntries( std::u16string_view rEntries )
 {
     m_pImpl->m_pImplLB->SetMRUEntries( rEntries, ';' );
 }

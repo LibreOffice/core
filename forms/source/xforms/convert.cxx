@@ -85,7 +85,7 @@ namespace
     }
 
 
-    css::util::Date lcl_toUNODate( const OUString& rString )
+    css::util::Date lcl_toUNODate( std::u16string_view rString )
     {
         css::util::Date aDate( 1, 1, 1900 );
 
@@ -217,7 +217,7 @@ namespace
         }
         else
         {
-            aDate = lcl_toUNODate( rString.copy( 0, nDateTimeSep ) );
+            aDate = lcl_toUNODate( rString.subView( 0, nDateTimeSep ) );
             aTime = lcl_toUNOTime( rString.subView( nDateTimeSep + 1 ) );
         }
         css::util::DateTime aDateTime(

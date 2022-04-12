@@ -1397,7 +1397,7 @@ public:
      *
      * @return false if attribute is unknown
      */
-    bool set_font_attribute(const OString &rKey, const OUString &rValue);
+    bool set_font_attribute(const OString &rKey, std::u16string_view rValue);
 
     /*
      * Adds this widget to the xGroup VclSizeGroup

@@ -23,6 +23,8 @@
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <o3tl/string_view.hxx>
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
@@ -96,7 +98,7 @@ SwXMLTextBlockExport::SwXMLTextBlockExport(
                             XML_NAMESPACE_TEXT );
 }
 
-void SwXMLTextBlockExport::exportDoc(const OUString &rText)
+void SwXMLTextBlockExport::exportDoc(std::u16string_view rText)
 {
     GetDocHandler()->startDocument();
 
@@ -122,7 +124,7 @@ void SwXMLTextBlockExport::exportDoc(const OUString &rText)
                 sal_Int32 nPos = 0;
                 do
                 {
-                    OUString sTemp ( rText.getToken( 0, '\015', nPos ) );
+                    OUString sTemp ( o3tl::getToken(rText, 0, '\015', nPos ) );
                     SvXMLElementExport aPara (*this, XML_NAMESPACE_TEXT, XML_P, true, false);
                     GetDocHandler()->characters(sTemp);
                 } while (-1 != nPos );

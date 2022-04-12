@@ -25,6 +25,7 @@
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <oox/helper/helper.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
@@ -449,7 +450,7 @@ GeomGuideListContext::GeomGuideListContext( ContextHandler2Helper const & rParen
 {
 }
 
-static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperties, const OUString& rSource )
+static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperties, std::u16string_view rSource )
 {
     if ( !pCommandHashMap )
     {
@@ -463,7 +464,7 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aToken( rSource.getToken( 0, ' ', nIndex ) );
+        OUString aToken( o3tl::getToken(rSource, 0, ' ', nIndex ) );
         if ( !aToken.isEmpty() )
             aTokens.push_back( aToken );
     }

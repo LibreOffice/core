@@ -56,7 +56,7 @@ public:
     /** Imports the absolute anchor size from the cdr:ext element. */
     void                importExt( const AttributeList& rAttribs );
     /** Sets the relative anchor position from the cdr:from or cdr:to element. */
-    void                setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue );
+    void                setPos( sal_Int32 nElement, sal_Int32 nParentContext, std::u16string_view rValue );
 
     /** Calculates the resulting shape anchor in EMUs. */
     EmuRectangle        calcAnchorRectEmu( const EmuRectangle& rChartRect ) const;

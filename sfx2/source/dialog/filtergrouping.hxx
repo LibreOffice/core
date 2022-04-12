@@ -54,7 +54,7 @@ namespace sfx2
         const css::uno::Reference< css::ui::dialogs::XFilterManager >& _rFilterManager,
         OUString& /* [out] */ _rFirstNonEmpty,
         FileDialogHelper_Impl& _rFileDlgImpl,
-        const OUString& _rFactory
+        std::u16string_view _rFactory
     );
 
     void appendExportFilters(

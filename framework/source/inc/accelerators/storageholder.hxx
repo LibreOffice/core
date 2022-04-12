@@ -174,7 +174,7 @@ class StorageHolder final
 
             /** @short  TODO
              */
-            static std::vector<OUString> impl_st_parsePath(const OUString& sPath);
+            static std::vector<OUString> impl_st_parsePath(std::u16string_view sPath);
 };
 
 } // namespace framework

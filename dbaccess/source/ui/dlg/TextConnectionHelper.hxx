@@ -72,7 +72,7 @@ namespace dbaui
         DECL_LINK(OnEditModified, weld::Entry&, void);
 
         OUString    GetSeparator(const weld::ComboBox& rBox, std::u16string_view rList);
-        void        SetSeparator(weld::ComboBox& rBox, const OUString& rList, const OUString& rVal);
+        void        SetSeparator(weld::ComboBox& rBox, std::u16string_view rList, const OUString& rVal);
         void        SetExtension(const OUString& _rVal);
 
     public:

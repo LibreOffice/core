@@ -105,19 +105,19 @@ OUString AttributeConversion::decodeXString( const OUString& rValue )
     return aBuffer.makeStringAndClear();
 }
 
-sal_Int32 AttributeConversion::decodeInteger( const OUString& rValue )
+sal_Int32 AttributeConversion::decodeInteger( std::u16string_view rValue )
 {
-    return rValue.toInt32();
+    return o3tl::toInt32(rValue);
 }
 
-sal_uInt32 AttributeConversion::decodeUnsigned( const OUString& rValue )
+sal_uInt32 AttributeConversion::decodeUnsigned( std::u16string_view rValue )
 {
-    return getLimitedValue< sal_uInt32, sal_Int64 >( rValue.toInt64(), 0, SAL_MAX_UINT32 );
+    return getLimitedValue< sal_uInt32, sal_Int64 >( o3tl::toInt64(rValue), 0, SAL_MAX_UINT32 );
 }
 
-sal_Int64 AttributeConversion::decodeHyper( const OUString& rValue )
+sal_Int64 AttributeConversion::decodeHyper( std::u16string_view rValue )
 {
-    return rValue.toInt64();
+    return o3tl::toInt64(rValue);
 }
 
 sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )

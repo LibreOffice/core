@@ -493,10 +493,10 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
 
 namespace
 {
-    bool lcl_queryContent(const OUString& _sName,Reference< XNameContainer >& _xNameContainer,Any& _rRet,OUString& _sSimpleName)
+    bool lcl_queryContent(std::u16string_view _sName,Reference< XNameContainer >& _xNameContainer,Any& _rRet,OUString& _sSimpleName)
     {
         sal_Int32 nIndex = 0;
-        OUString sName = _sName.getToken(0,'/',nIndex);
+        OUString sName( o3tl::getToken(_sName,0,'/',nIndex) );
         bool bRet = _xNameContainer->hasByName(sName);
         if ( bRet )
         {
@@ -504,7 +504,7 @@ namespace
             _rRet = _xNameContainer->getByName(_sSimpleName);
             while ( nIndex != -1 && bRet )
             {
-                sName = _sName.getToken(0,'/',nIndex);
+                sName = o3tl::getToken(_sName,0,'/',nIndex);
                 _xNameContainer.set(_rRet,UNO_QUERY);
                 bRet = _xNameContainer.is();
                 if ( bRet )

@@ -60,7 +60,7 @@ public:
 
     static css::util::DateTime GetDateTimeFromW3CDTF( const OUString& aChars );
     static css::uno::Sequence< OUString > GetKeywordsSet( std::u16string_view aChars );
-    void UpdateDocStatistic( const OUString& aChars );
+    void UpdateDocStatistic( std::u16string_view aChars );
 
     // com.sun.star.xml.sax.XFastDocumentHandler
 

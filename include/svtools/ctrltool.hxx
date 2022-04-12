@@ -149,7 +149,7 @@ private:
     std::vector<std::unique_ptr<ImplFontListNameInfo>> m_Entries;
 
     SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFind( std::u16string_view rSearchName, sal_uInt32* pIndex ) const;
-    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( const OUString& rStr ) const;
+    SVT_DLLPRIVATE ImplFontListNameInfo*    ImplFindByName( std::u16string_view rStr ) const;
     SVT_DLLPRIVATE void                     ImplInsertFonts(OutputDevice* pDev, bool bInsertData);
 
 public:
@@ -174,13 +174,13 @@ public:
                                  FontWeight eWeight,
                                  FontItalic eItalic ) const;
 
-    bool                    IsAvailable( const OUString& rName ) const;
+    bool                    IsAvailable( std::u16string_view rName ) const;
     size_t GetFontNameCount() const
     {
         return m_Entries.size();
     }
     const FontMetric& GetFontName(size_t nFont) const;
-    sal_Handle              GetFirstFontMetric( const OUString& rName ) const;
+    sal_Handle              GetFirstFontMetric( std::u16string_view rName ) const;
     static sal_Handle           GetNextFontMetric( sal_Handle hFontMetric );
     static const FontMetric& GetFontMetric( sal_Handle hFontMetric );
 

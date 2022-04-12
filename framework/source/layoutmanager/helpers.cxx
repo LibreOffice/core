@@ -32,6 +32,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/string_view.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 using namespace com::sun::star;
@@ -185,26 +186,24 @@ WindowAlign ImplConvertAlignment( ui::DockingArea aAlignment )
         return WindowAlign::Bottom;
 }
 
-OUString getElementTypeFromResourceURL( const OUString& aResourceURL )
+std::u16string_view getElementTypeFromResourceURL( std::u16string_view aResourceURL )
 {
-    OUString aUIResourceURL( UIRESOURCE_URL );
-    if ( aResourceURL.startsWith( aUIResourceURL ) )
+    if ( o3tl::starts_with(aResourceURL, UIRESOURCE_URL ) )
     {
-        sal_Int32 nIndex{ aUIResourceURL.getLength() };
-        return aResourceURL.getToken( 1, '/', nIndex );
+        sal_Int32 nIndex{ UIRESOURCE_URL.getLength() };
+        return o3tl::getToken(aResourceURL,  1, '/', nIndex );
     }
 
-    return OUString();
+    return std::u16string_view();
 }
 
-void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName )
+void parseResourceURL( std::u16string_view aResourceURL, OUString& aElementType, OUString& aElementName )
 {
-    OUString aUIResourceURL( UIRESOURCE_URL );
-    if ( aResourceURL.startsWith( aUIResourceURL ) )
+    if ( o3tl::starts_with(aResourceURL, UIRESOURCE_URL) )
     {
-        sal_Int32 nIndex{ aUIResourceURL.getLength() };
-        aElementType = aResourceURL.getToken( 1, '/', nIndex );
-        aElementName = aResourceURL.getToken( 0, '/', nIndex );
+        sal_Int32 nIndex{ UIRESOURCE_URL.getLength() };
+        aElementType = o3tl::getToken(aResourceURL, 1, '/', nIndex );
+        aElementName = o3tl::getToken(aResourceURL, 0, '/', nIndex );
     }
 }
 
@@ -287,9 +286,9 @@ bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFrame )
     return false;
 }
 
-void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName, bool bVisible )
+void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible )
 {
-    sal_Int32 nID    = rDockingWindowName.toInt32();
+    sal_Int32 nID    = o3tl::toInt32(rDockingWindowName);
     sal_Int32 nIndex = nID - DOCKWIN_ID_BASE;
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider(rFrame, css::uno::UNO_QUERY);

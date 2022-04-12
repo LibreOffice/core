@@ -37,6 +37,7 @@
 #include <strings.hrc>
 #include <app.hrc>
 #include <svl/intitem.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -524,32 +525,32 @@ OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
     return OUString::number(nX) + OUStringChar(TOKEN) + OUString::number(nY);
 }
 
-bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
+bool SdTpOptionsMisc::SetScale( std::u16string_view aScale, sal_Int32& rX, sal_Int32& rY )
 {
-    if (aScale.isEmpty())
+    if (aScale.empty())
         return false;
 
     sal_Int32 nIdx {0};
 
-    OUString aTmp(aScale.getToken(0, TOKEN, nIdx));
+    std::u16string_view aTmp(o3tl::getToken(aScale, 0, TOKEN, nIdx));
     if (nIdx<0)
         return false; // we expect another token!
 
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
-    rX = static_cast<tools::Long>(aTmp.toInt32());
+    rX = static_cast<tools::Long>(o3tl::toInt32(aTmp));
     if( rX == 0 )
         return false;
 
-    aTmp = aScale.getToken(0, TOKEN, nIdx);
+    aTmp = o3tl::getToken(aScale, 0, TOKEN, nIdx);
     if (nIdx>=0)
         return false; // we require just 2 tokens!
 
     if (!comphelper::string::isdigitAsciiString(aTmp))
         return false;
 
-    rY = static_cast<tools::Long>(aTmp.toInt32());
+    rY = static_cast<tools::Long>(o3tl::toInt32(aTmp));
     return rY != 0;
 }
 

@@ -53,9 +53,9 @@ public:
     ~ScFormulaReferenceHelper() COVERITY_NOEXCEPT_FALSE;
     void dispose();
 
-    void                ShowSimpleReference(const OUString& rStr);
+    void                ShowSimpleReference(std::u16string_view rStr);
     void                ShowFormulaReference(const OUString& rStr);
-    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument& rDoc );
+    bool                ParseWithNames( ScRangeList& rRanges, std::u16string_view rStr, const ScDocument& rDoc );
     void                Init();
 
     void                ShowReference(const OUString& rStr);
@@ -99,7 +99,7 @@ protected:
     virtual void        RefInputStart( formula::RefEdit* pEdit, formula::RefButton* pButton = nullptr ) override;
     virtual void        RefInputDone( bool bForced = false ) override;
 
-    bool                ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument& pDoc );
+    bool                ParseWithNames( ScRangeList& rRanges, std::u16string_view rStr, const ScDocument& pDoc );
 
 public:
                         ScRefHandler(SfxDialogController &rController, SfxBindings* pB, bool bBindRef);
