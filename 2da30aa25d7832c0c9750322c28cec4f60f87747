@@ -34,6 +34,23 @@
       "parentUuid": "13694de6_a03142ff",
       "revId": "2da30aa25d7832c0c9750322c28cec4f60f87747",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5cc902_bfd25f3a",
+        "filename": "configure.ac",
+        "patchSetId": 1
+      },
+      "lineNbr": 4297,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-12T14:12:33Z",
+      "side": 1,
+      "message": "Then I suggest to *add* the warning to the older error, which should be kept.",
+      "revId": "2da30aa25d7832c0c9750322c28cec4f60f87747",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
