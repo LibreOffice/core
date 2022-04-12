@@ -7571,7 +7571,7 @@ void DocxAttributeOutput::WritePendingPlaceholder()
     if( !pField->GetPar2().isEmpty())
         m_pSerializer->singleElementNS( XML_w, XML_alias,
             FSNS( XML_w, XML_val ), pField->GetPar2().toUtf8() );
-    m_pSerializer->singleElementNS(XML_w, XML_temporary);
+//    m_pSerializer->singleElementNS(XML_w, XML_temporary);
     m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
     m_pSerializer->singleElementNS(XML_w, XML_text);
     m_pSerializer->endElementNS( XML_w, XML_sdtPr );
