@@ -88,7 +88,8 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
         auto &prop = m_aProperties[ nMPLoop ];
         if ( aDelegatorProps.find( prop.Name ) != aDelegatorProps.end() )
         {
-            m_aPropertyAccessors[ prop.Handle ] = OPropertyAccessor( -1, nMPLoop, false );
+            m_aPropertyAccessors.insert_or_assign(
+                prop.Handle, OPropertyAccessor( -1, nMPLoop, false ));
             existingHandles.insert( prop.Handle );
         }
         else
@@ -111,7 +112,8 @@ OPropertyArrayAggregationHelper::OPropertyArrayAggregationHelper(
             }
 
             // remember the accessor for this property
-            m_aPropertyAccessors[ nHandle ] = OPropertyAccessor( prop.Handle, nMPLoop, true );
+            m_aPropertyAccessors.insert_or_assign(
+                nHandle, OPropertyAccessor( prop.Handle, nMPLoop, true ));
             prop.Handle = nHandle;
         }
     }
