@@ -225,6 +225,7 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tpshadow \
     cui/source/tabpages/tptrans \
     cui/source/tabpages/transfrm \
+    cui/source/dialogs/widgettestdlg \
 ))
 
 # vim: set noet sw=4 ts=4:

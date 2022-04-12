@@ -88,6 +88,7 @@
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
 #include <tipofthedaydlg.hxx>
+#include <widgettestdlg.hxx>
 #include <toolbarmodedlg.hxx>
 #include <DiagramDialog.hxx>
 #include <TextColumnsPage.hxx>
@@ -114,6 +115,16 @@ short CuiAbstractTipController_Impl::Execute()
 bool CuiAbstractTipController_Impl::StartExecuteAsync(AsyncContext& rCtx)
 {
     return weld::DialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
+short CuiAbstractWidgetTestController_Impl::Execute()
+{
+    return m_xDlg->run();
+}
+
+bool CuiAbstractWidgetTestController_Impl::StartExecuteAsync(AsyncContext& rCtx)
+{
+    return weld::GenericDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short CuiAbstractSingleTabController_Impl::Execute()
@@ -1698,6 +1709,13 @@ AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
 {
     return VclPtr<CuiAbstractTipController_Impl>::Create(
         std::make_shared<TipOfTheDayDialog>(pParent));
+}
+
+VclPtr<VclAbstractDialog>
+AbstractDialogFactory_Impl::CreateWidgetTestDialog(weld::Window* pParent)
+{
+    return VclPtr<CuiAbstractWidgetTestController_Impl>::Create(
+        std::make_shared<WidgetTestDialog>(pParent));
 }
 
 VclPtr<VclAbstractDialog>
