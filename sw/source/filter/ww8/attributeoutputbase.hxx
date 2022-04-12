@@ -369,6 +369,12 @@ public:
         const OUString &rNumberingString,
         const SvxBrushItem* pBrush) = 0; // #i120928 export graphic of bullet
 
+    /// Output content control start.
+    virtual void StartContentControl(const SwFormatContentControl& /*rFormatContentControl*/) {}
+
+    /// Output content control end.
+    virtual void EndContentControl() {}
+
 protected:
 
     static void GetNumberPara( OUString& rStr, const SwField& rField );
