@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44cb09ed_68b39873",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-12T17:28:31Z",
+      "side": 1,
+      "message": "I have no idea about those CJK font names or why non-normal would be bold, but if it suits things let\u0027s get it in.",
+      "revId": "f6a6a7cdfbabec6b4dafff96ca447b16fbc6a98e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
