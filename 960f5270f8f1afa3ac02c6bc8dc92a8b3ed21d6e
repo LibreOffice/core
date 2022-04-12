@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1faf7d34_3583e625",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-12T05:54:21Z",
+      "side": 1,
+      "message": "Please describe what the patch does, in more detail: instead of \"fix problem foo\", please write something like \"do bar to avoid foo\".\n\nSpecifically here: e.g., \"tdf#141835 Restart slideshow when spacebar is pressed after slideshow is ended\" (note that I made only a cursory glance on the change, and I don\u0027t know this area of code well, so might misunderstand it - so that text is just to give an idea of how the message should look like). That kind of message also allows others to see what you intended to do, and clearly see if some phenomena they see were intended or not - maybe there was an unanticipated regression, and the message would help to see that. (Note that you are welcome to elaborate in additional message lines, as much as you need to explain whatever needs explanation, beyond the ~70 characters in the first line.)",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 57
+      },
+      "revId": "960f5270f8f1afa3ac02c6bc8dc92a8b3ed21d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
