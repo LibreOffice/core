@@ -2690,24 +2690,4 @@ SCSIZE ScAttrArray::Count( SCROW nStartRow, SCROW nEndRow ) const
     return nIndex2 - nIndex1 + 1;
 }
 
-bool ScAttrArray::HasNonDefPattern( SCROW nStartRow, SCROW nEndRow ) const
-{
-    if ( mvData.empty() )
-        return false;
-
-    SCSIZE  nIndex1, nIndex2;
-
-    if( !Search( nStartRow, nIndex1 ) )
-        return false;
-
-    if( !Search( nEndRow, nIndex2 ) )
-        nIndex2 = mvData.size() - 1;
-
-    const ScPatternAttr* defPattern = rDocument.GetDefPattern();
-    for( SCSIZE index = nIndex1; index <= nIndex2; ++index )
-        if( mvData[index].pPattern != defPattern )
-            return true;
-    return false;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

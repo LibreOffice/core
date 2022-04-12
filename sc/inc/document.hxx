@@ -823,11 +823,6 @@ public:
 
     SC_DLLPUBLIC SCCOL ClampToAllocatedColumns(SCTAB nTab, SCCOL nCol) const;
     SC_DLLPUBLIC SCCOL GetAllocatedColumnsCount(SCTAB nTab) const;
-    // Limits nCol to the last column that can possibly have a non-default pattern. The purpose
-    // is to avoid checking unallocated columns if they don't have attributes set, so this is
-    // never less than ClampToAllocatedColumns().
-    SCCOL ClampToMaxNonDefPatternColumn(SCTAB nTab, SCCOL nCol, SCROW nRow1, SCROW nRow2) const;
-    SCCOL GetMaxNonDefPatternColumnsCount(SCTAB nTab, SCROW nRow1, SCROW nRow2) const;
 
     SC_DLLPUBLIC ScDBCollection* GetDBCollection() const { return pDBCollection.get();}
     void                         SetDBCollection( std::unique_ptr<ScDBCollection> pNewDBCollection,
