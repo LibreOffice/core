@@ -2856,6 +2856,11 @@ void EditEngine::DisableAttributeExpanding() {
     pImpEditEngine->GetEditDoc().DisableAttributeExpanding();
 }
 
+void EditEngine::EnableSkipOutsideFormat(bool set)
+{
+    pImpEditEngine->EnableSkipOutsideFormat(set);
+}
+
 void EditEngine::SetLOKSpecialPaperSize(const Size& rSize)
 {
     pImpEditEngine->SetLOKSpecialPaperSize(rSize);

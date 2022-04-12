@@ -604,6 +604,7 @@ private:
     bool            bFirstWordCapitalization:1;   // specifies if auto-correction should capitalize the first word or not
     bool            mbLastTryMerge:1;
     bool            mbReplaceLeadingSingleQuotationMark:1;
+    bool            mbSkipOutsideFormat:1;
 
     bool            mbNbspRunNext;  // can't be a bitfield as it is passed as bool&
 
@@ -1130,6 +1131,8 @@ public:
 
     /** Whether last AutoCorrect inserted a NO-BREAK SPACE that may need to be removed again. */
     bool            IsNbspRunNext() const { return mbNbspRunNext; }
+
+    void EnableSkipOutsideFormat(bool set) { mbSkipOutsideFormat = set; }
 
     void Dispose();
     void SetLOKSpecialPaperSize(const Size& rSize) { aLOKSpecialPaperSize = rSize; }

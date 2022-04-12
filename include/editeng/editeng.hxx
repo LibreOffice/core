@@ -638,6 +638,10 @@ public:
     // spell check dialog doesn't want that behaviour
     void DisableAttributeExpanding();
 
+    // Optimization, if set, formatting will be done only for text lines that fit
+    // in given paper size and exceeding lines will be ignored.
+    void EnableSkipOutsideFormat(bool set);
+
     void SetLOKSpecialPaperSize(const Size& rSize);
     const Size& GetLOKSpecialPaperSize() const;
 
