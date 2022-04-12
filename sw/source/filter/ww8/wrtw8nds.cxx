@@ -1408,6 +1408,14 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                         --nRet;
                     }
                     break;
+                case RES_TXTATR_CONTENTCONTROL:
+                    pEnd = pHt->End();
+                    if (nPos == *pEnd && nPos != pHt->GetStart())
+                    {
+                        m_rExport.AttrOutput().EndContentControl();
+                        --nRet;
+                    }
+                    break;
             }
             if (nPos < pHt->GetAnyEnd())
                 break; // sorted by end
@@ -1461,6 +1469,17 @@ int SwWW8AttrIter::OutAttrWithRange(const SwTextNode& rNode, sal_Int32 nPos)
                         m_rExport.AttrOutput().EndRuby( rNd, nPos );
                         --nRet;
                     }
+                    break;
+                case RES_TXTATR_CONTENTCONTROL:
+                    if (nPos == pHt->GetStart())
+                    {
+                        auto pFormatContentControl
+                            = static_cast<const SwFormatContentControl*>(pItem);
+                        m_rExport.AttrOutput().StartContentControl(*pFormatContentControl);
+                        ++nRet;
+                    }
+                    // We know that the content control is never empty as it has a dummy character
+                    // at least.
                     break;
             }
             if (nPos < pHt->GetStart())

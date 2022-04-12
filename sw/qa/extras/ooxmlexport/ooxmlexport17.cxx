@@ -16,6 +16,8 @@
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 
 #include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -110,6 +112,38 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
     // - Expected:  MACROBUTTON AllCaps Hello World
     // - Actual  :  MACROBUTTONAllCaps Hello World
     assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " MACROBUTTON AllCaps Hello World ");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
+{
+    // Given a document with a content control around one or more text portions:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::makeAny(true));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure the expected markup is used:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // XPath '//w:sdt/w:sdtPr/w:showingPlcHdr' number of nodes is incorrect
+    // i.e. the SDT elements were missing on export.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:showingPlcHdr", 1);
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtContent", 1);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")

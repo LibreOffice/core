@@ -363,6 +363,13 @@ void DocxAttributeOutput::WriteFloatingTable(ww8::Frame const* pParentFrame)
     m_rExport.SetFloatingTableFrame(nullptr);
 }
 
+void DocxAttributeOutput::StartContentControl(const SwFormatContentControl& rFormatContentControl)
+{
+    m_pContentControl = rFormatContentControl.GetContentControl();
+}
+
+void DocxAttributeOutput::EndContentControl() { ++m_nCloseContentControl; }
+
 static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutput)
 {
     const auto& rExport = rDocxAttributeOutput.GetExport();
@@ -1622,6 +1629,12 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         m_bEndCharSdt = false;
     }
 
+    for (; m_nCloseContentControl > 0; --m_nCloseContentControl)
+    {
+        m_pSerializer->endElementNS(XML_w, XML_sdtContent);
+        m_pSerializer->endElementNS(XML_w, XML_sdt);
+    }
+
     if ( m_closeHyperlinkInPreviousRun )
     {
         if ( m_startedHyperlink )
@@ -1717,6 +1730,19 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         m_pSerializer->startElementNS( XML_w, XML_hyperlink, xAttrList );
         m_startedHyperlink = true;
         m_nHyperLinkCount++;
+    }
+
+    if (m_pContentControl)
+    {
+        m_pSerializer->startElementNS(XML_w, XML_sdt);
+        m_pSerializer->startElementNS(XML_w, XML_sdtPr);
+        if (m_pContentControl->GetShowingPlaceHolder())
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
+        }
+        m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+        m_pSerializer->startElementNS(XML_w, XML_sdtContent);
+        m_pContentControl = nullptr;
     }
 
     // if there is some redlining in the document, output it
