@@ -25,6 +25,7 @@
 
 #include <osl/thread.h>
 #include <osl/thread.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <mutex>
 #include <unordered_map>
@@ -140,22 +141,22 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
     }
 }
 
-static OUString s_getPrefix(OUString const & str1, OUString const & str2)
+static OUString s_getPrefix(OUString const & str1, std::u16string_view str2)
 {
     sal_Int32 nIndex1 = 0;
     sal_Int32 nIndex2 = 0;
     sal_Int32 sim = 0;
 
-    OUString token1;
-    OUString token2;
+    std::u16string_view token1;
+    std::u16string_view token2;
 
     do
     {
-        token1 = str1.getToken(0, ':', nIndex1);
-        token2 = str2.getToken(0, ':', nIndex2);
+        token1 = o3tl::getToken(str1, 0, ':', nIndex1);
+        token2 = o3tl::getToken(str2, 0, ':', nIndex2);
 
         if (token1 == token2)
-            sim += token1.getLength() + 1;
+            sim += token1.size() + 1;
     }
     while(nIndex1 == nIndex2 && nIndex1 >= 0 && token1 == token2);
 

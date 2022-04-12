@@ -72,8 +72,8 @@ class PackageRegistryImpl : private cppu::BaseMutex, public t_helper
         }
     };
     struct ci_string_equals {
-        bool operator () ( OUString const & str1, std::u16string_view str2 ) const{
-            return str1.equalsIgnoreAsciiCase( str2 );
+        bool operator () ( std::u16string_view str1, std::u16string_view str2 ) const{
+            return o3tl::equalsIgnoreAsciiCase( str1, str2 );
         }
     };
     typedef std::unordered_map<

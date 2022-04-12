@@ -27,6 +27,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/inettbc.hxx>
 #include <svtools/sfxecode.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <linkarea.hxx>
 #include <docsh.hxx>
@@ -135,7 +136,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
 }
 
 void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rFilter,
-                                        const OUString& rOptions, const OUString& rSource,
+                                        const OUString& rOptions, std::u16string_view rSource,
                                         sal_Int32 nRefreshDelaySeconds )
 {
     LoadDocument( rFile, rFilter, rOptions );
@@ -149,12 +150,12 @@ void ScLinkedAreaDlg::InitFromOldLink( const OUString& rFile, const OUString& rF
 
     UpdateSourceRanges();
 
-    if (!rSource.isEmpty())
+    if (!rSource.empty())
     {
         sal_Int32 nIdx {0};
         do
         {
-            m_xLbRanges->select_text(rSource.getToken(0, ';', nIdx));
+            m_xLbRanges->select_text(OUString(o3tl::getToken(rSource, 0, ';', nIdx)));
         }
         while (nIdx>0);
     }

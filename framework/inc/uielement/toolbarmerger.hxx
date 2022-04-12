@@ -84,7 +84,7 @@ class ToolBarMerger
                                                  CommandToInfoMap&         rCommandMap,
                                                  std::u16string_view       rModuleIdentifier,
                                                  std::u16string_view       rMergeCommand,
-                                                 const OUString&           rMergeCommandParameter,
+                                                 std::u16string_view       rMergeCommandParameter,
                                                  const AddonToolbarItemContainer& rItems );
 
         static bool       ProcessMergeFallback( ToolBox*                         pToolbar,
@@ -112,7 +112,7 @@ class ToolBarMerger
 
         static void       RemoveItems( ToolBox*           pToolbar,
                                        ToolBox::ImplToolItems::size_type nPos,
-                                       const OUString&    rMergeCommandParameter );
+                                       std::u16string_view rMergeCommandParameter );
 
         static rtl::Reference<::cppu::OWeakObject> CreateController(
             const css::uno::Reference< css::uno::XComponentContext > & rxContext,

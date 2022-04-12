@@ -172,12 +172,12 @@ static void LaunchModifiedEvent(
  */
 bool FillRangeDescriptor(
         SwRangeDescriptor &rDesc,
-        const OUString &rCellRangeName )
+        std::u16string_view rCellRangeName )
 {
-    sal_Int32 nToken = -1 == rCellRangeName.indexOf('.') ? 0 : 1;
-    OUString aCellRangeNoTableName( rCellRangeName.getToken( nToken, '.' ) );
-    OUString aTLName( aCellRangeNoTableName.getToken(0, ':') );  // name of top left cell
-    OUString aBRName( aCellRangeNoTableName.getToken(1, ':') );  // name of bottom right cell
+    sal_Int32 nToken = std::u16string_view::npos == rCellRangeName.find('.') ? 0 : 1;
+    std::u16string_view aCellRangeNoTableName( o3tl::getToken(rCellRangeName, nToken, '.' ) );
+    OUString aTLName( o3tl::getToken(aCellRangeNoTableName, 0, ':') );  // name of top left cell
+    OUString aBRName( o3tl::getToken(aCellRangeNoTableName, 1, ':') );  // name of bottom right cell
     if(aTLName.isEmpty() || aBRName.isEmpty())
         return false;
 
@@ -405,7 +405,7 @@ static void GetFormatAndCreateCursorFromRangeRep(
     }
 }
 
-static bool GetSubranges( const OUString &rRangeRepresentation,
+static bool GetSubranges( std::u16string_view rRangeRepresentation,
         uno::Sequence< OUString > &rSubRanges, bool bNormalize )
 {
     bool bRes = true;
@@ -420,7 +420,7 @@ static bool GetSubranges( const OUString &rRangeRepresentation,
         sal_Int32 nPos = 0;
         for( sal_Int32 i = 0; i < nLen && bRes; ++i )
         {
-            const OUString aRange( rRangeRepresentation.getToken( 0, ';', nPos ) );
+            const OUString aRange( o3tl::getToken(rRangeRepresentation, 0, ';', nPos ) );
             if (!aRange.isEmpty())
             {
                 pRanges[nCnt] = aRange;
@@ -2452,7 +2452,8 @@ void SwChartDataSequence::ExtendTo( bool bExtendCol,
 
     SwRangeDescriptor aDesc;
     // note that cell range here takes the newly added rows/cols already into account
-    FillRangeDescriptor( aDesc, aStartBox + ":" + aEndBox );
+    OUString sDescrip = aStartBox + ":" + aEndBox;
+    FillRangeDescriptor( aDesc, sDescrip );
 
     bool bChanged = false;
     OUString aNewStartCell;

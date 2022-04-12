@@ -439,9 +439,9 @@ namespace SwWW8
 {
     struct ltstr
     {
-        bool operator()(const OUString &r1, std::u16string_view r2) const
+        bool operator()(std::u16string_view r1, std::u16string_view r2) const
         {
-            return r1.compareToIgnoreAsciiCase(r2)<0;
+            return o3tl::compareToIgnoreAsciiCase(r1, r2)<0;
         }
     };
 };

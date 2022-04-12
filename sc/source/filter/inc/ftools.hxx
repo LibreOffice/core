@@ -232,9 +232,9 @@ public:
     static OUString       GetNameFromHTMLName( std::u16string_view rTabName );
 
     /** Returns true, if rSource is the built-in range name for an HTML document. */
-    static bool         IsHTMLDocName( const OUString& rSource );
+    static bool         IsHTMLDocName( std::u16string_view rSource );
     /** Returns true, if rSource is the built-in range name for all HTML tables. */
-    static bool         IsHTMLTablesName( const OUString& rSource );
+    static bool         IsHTMLTablesName( std::u16string_view rSource );
     /** Converts a built-in range name to an HTML table name.
         @param rSource  The string to be determined.
         @param rName  The HTML table name.

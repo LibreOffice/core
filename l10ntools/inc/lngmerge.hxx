@@ -45,7 +45,7 @@ private:
     std::vector<OString> aLanguages;
 
     static bool isNextGroup(OString &sGroup_out, std::string_view sLine_in);
-    static void ReadLine(const OString &rLine_in,
+    static void ReadLine(std::string_view rLine_in,
         OStringHashMap &rText_inout);
     static void WritePO(PoOfstream &aPOStream, OStringHashMap &rText_inout,
         const OString &rActFileName, const OString &rID);
@@ -55,7 +55,7 @@ public:
 
     void CreatePO( const OString &rPOFile );
     void Merge(const OString &rPOFile, const OString &rDestinationFile,
-         const OString &rLanguage );
+         std::string_view rLanguage );
 };
 
 #endif // INCLUDED_L10NTOOLS_INC_LNGMERGE_HXX

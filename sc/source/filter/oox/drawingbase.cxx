@@ -123,7 +123,7 @@ void ShapeAnchor::importClientData( const AttributeList& rAttribs )
     maClientData.mbPrintsWithSheet = rAttribs.getBool( XML_fPrintsWithSheet, true );
 }
 
-void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
+void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, std::u16string_view rValue )
 {
     CellAnchorModel* pCellAnchor = nullptr;
     switch( nParentContext )
@@ -141,10 +141,10 @@ void ShapeAnchor::setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, cons
     }
     if( pCellAnchor ) switch( nElement )
     {
-        case XDR_TOKEN( col ):      pCellAnchor->mnCol = rValue.toInt32();          break;
-        case XDR_TOKEN( row ):      pCellAnchor->mnRow = rValue.toInt32();          break;
-        case XDR_TOKEN( colOff ):   pCellAnchor->mnColOffset = rValue.toInt64();    break;
-        case XDR_TOKEN( rowOff ):   pCellAnchor->mnRowOffset = rValue.toInt64();    break;
+        case XDR_TOKEN( col ):      pCellAnchor->mnCol = o3tl::toInt32(rValue);          break;
+        case XDR_TOKEN( row ):      pCellAnchor->mnRow = o3tl::toInt32(rValue);          break;
+        case XDR_TOKEN( colOff ):   pCellAnchor->mnColOffset = o3tl::toInt64(rValue);    break;
+        case XDR_TOKEN( rowOff ):   pCellAnchor->mnRowOffset = o3tl::toInt64(rValue);    break;
         default:    OSL_ENSURE( false, "ShapeAnchor::setCellPos - unexpected element" );
     }
 }

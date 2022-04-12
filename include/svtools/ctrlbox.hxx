@@ -405,7 +405,7 @@ class SVT_DLLPUBLIC FontStyleBox
 public:
     FontStyleBox(std::unique_ptr<weld::ComboBox> p);
 
-    void Fill(const OUString& rName, const FontList* pList);
+    void Fill(std::u16string_view rName, const FontList* pList);
 
     void connect_changed(const Link<weld::ComboBox&, void>& rLink) { m_xComboBox->connect_changed(rLink); }
     OUString get_active_text() const { return m_xComboBox->get_active_text(); }

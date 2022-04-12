@@ -273,7 +273,7 @@ public:
     FmSearchEngine(
         const css::uno::Reference< css::uno::XComponentContext >& _rxContext,
         const css::uno::Reference< css::sdbc::XResultSet >& xCursor,
-        const OUString& strVisibleFields,
+        std::u16string_view strVisibleFields,
         const InterfaceArray& arrFields);
 
     /** the link will be called on every record and after the completion of the search, the parameter is a pointer to
@@ -306,11 +306,11 @@ public:
     /** only valid, if not an (asynchronous) search is running, the next search will then be executed
         on top of the new iterator with the new parameter
     */
-    void SwitchToContext(const css::uno::Reference< css::sdbc::XResultSet >& xCursor, const OUString& strVisibleFields, const InterfaceArray& arrFields,
+    void SwitchToContext(const css::uno::Reference< css::sdbc::XResultSet >& xCursor, std::u16string_view strVisibleFields, const InterfaceArray& arrFields,
         sal_Int32 nFieldIndex);
 
 private:
-    void Init(const OUString& strVisibleFields);
+    void Init(std::u16string_view strVisibleFields);
 
     void SearchNextImpl();
     // this Impl method is running in SearchThread

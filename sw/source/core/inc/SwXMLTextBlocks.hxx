@@ -90,8 +90,8 @@ public:
     ErrCode StartPutBlock( const OUString& rShort, const OUString& rPackageName );
     ErrCode PutBlock();
     ErrCode GetBlockText( std::u16string_view rShort, OUString& rText );
-    ErrCode PutBlockText( const OUString& rShort, const OUString& rText, const OUString& rPackageName );
-    void MakeBlockText( const OUString& rText );
+    ErrCode PutBlockText( const OUString& rShort, std::u16string_view rText, const OUString& rPackageName );
+    void MakeBlockText( std::u16string_view rText );
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

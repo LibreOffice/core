@@ -83,7 +83,7 @@ namespace DocumentSignatureHelper
         const SignatureInformation & sigInfo, const DocumentSignatureAlgorithm alg);
 
     bool equalsReferenceUriManifestPath(
-        const OUString & rUri, const OUString & rPath);
+        std::u16string_view rUri, std::u16string_view rPath);
 
     OUString GetDocumentContentSignatureDefaultStreamName();
     OUString GetScriptingContentSignatureDefaultStreamName();

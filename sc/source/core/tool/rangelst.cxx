@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <unotools/collatorwrapper.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <rangelst.hxx>
 #include <document.hxx>
@@ -88,11 +89,11 @@ ScRangeList::~ScRangeList()
 {
 }
 
-ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument& rDoc,
+ScRefFlags ScRangeList::Parse( std::u16string_view rStr, const ScDocument& rDoc,
                            formula::FormulaGrammar::AddressConvention eConv,
                            SCTAB nDefaultTab, sal_Unicode cDelimiter )
 {
-    if ( !rStr.isEmpty() )
+    if ( !rStr.empty() )
     {
         if (!cDelimiter)
             cDelimiter = ScCompiler::GetNativeSymbolChar(ocSep);
@@ -104,7 +105,7 @@ ScRefFlags ScRangeList::Parse( const OUString& rStr, const ScDocument& rDoc,
         sal_Int32 nPos = 0;
         do
         {
-            const OUString aOne = rStr.getToken( 0, cDelimiter, nPos );
+            const OUString aOne( o3tl::getToken(rStr, 0, cDelimiter, nPos ) );
             aRange.aStart.SetTab( nTab );   // default tab if not specified
             ScRefFlags nRes = aRange.ParseAny( aOne, rDoc, eConv );
             ScRefFlags nEndRangeBits = ScRefFlags::COL2_VALID | ScRefFlags::ROW2_VALID | ScRefFlags::TAB2_VALID;

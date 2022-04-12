@@ -79,11 +79,11 @@ namespace dbaui
 
 namespace
 {
-    bool lcl_findEntry_impl(const TreeListBox& rTree, const OUString& rName, weld::TreeIter& rIter)
+    bool lcl_findEntry_impl(const TreeListBox& rTree, std::u16string_view rName, weld::TreeIter& rIter)
     {
         bool bReturn = false;
         sal_Int32 nIndex = 0;
-        OUString sName( rName.getToken(0,'/',nIndex) );
+        std::u16string_view sName( o3tl::getToken(rName,0,'/',nIndex) );
 
         const weld::TreeView& rTreeView = rTree.GetWidget();
         bool bEntry = true;
@@ -93,7 +93,7 @@ namespace
             {
                 if ( nIndex != -1 )
                 {
-                    sName = rName.getToken(0,'/',nIndex);
+                    sName = o3tl::getToken(rName,0,'/',nIndex);
                     bEntry = rTreeView.iter_children(rIter);
                 }
                 else
@@ -110,11 +110,11 @@ namespace
         return bReturn;
     }
 
-    bool lcl_findEntry(const TreeListBox& rTree, const OUString& rName, weld::TreeIter& rIter)
+    bool lcl_findEntry(const TreeListBox& rTree, std::u16string_view rName, weld::TreeIter& rIter)
     {
         sal_Int32 nIndex = 0;
-        OUString sErase = rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
-        return nIndex != -1 && lcl_findEntry_impl(rTree, rName.copy(sErase.getLength() + 1), rIter);
+        std::u16string_view sErase = o3tl::getToken(rName,0,'/',nIndex); // we don't want to have the "private:forms" part
+        return nIndex != -1 && lcl_findEntry_impl(rTree, rName.substr(sErase.size() + 1), rIter);
     }
 }
 

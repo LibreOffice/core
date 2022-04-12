@@ -26,6 +26,7 @@
 #include <vbahelper/vbahelper.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <map>
 #include <string_view>
 
@@ -161,14 +162,14 @@ uno::Reference< frame::XLayoutManager > VbaCommandBarHelper::getLayoutManager() 
     return xLayoutManager;
 }
 
-bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, const OUString& sName )
+bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, std::u16string_view sName )
 {
     if( m_xDocCfgMgr->hasSettings( sResourceUrl ) )
     {
         OUString sUIName;
         uno::Reference< beans::XPropertySet > xPropertySet( m_xDocCfgMgr->getSettings( sResourceUrl, false ), uno::UNO_QUERY_THROW );
         xPropertySet->getPropertyValue( ITEM_DESCRIPTOR_UINAME ) >>= sUIName;
-        if( sName.equalsIgnoreAsciiCase( sUIName ) )
+        if( o3tl::equalsIgnoreAsciiCase( sName, sUIName ) )
             return true;
     }
     return false;
@@ -200,7 +201,7 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
 }
 
 // if found, return the position of the control. if not found, return -1
-sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const OUString& sName, bool bMenu )
+sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu )
 {
     sal_Int32 nCount = xIndexAccess->getCount();
     css::uno::Sequence< css::beans::PropertyValue > aProps;
@@ -225,7 +226,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
         }
         OUString sNewLabel = aBuffer.makeStringAndClear();
         SAL_INFO("vbahelper", "VbaCommandBarHelper::findControlByName, control name: " << sNewLabel);
-        if( sName.equalsIgnoreAsciiCase( sNewLabel ) )
+        if( o3tl::equalsIgnoreAsciiCase( sName, sNewLabel ) )
             return i;
     }
 

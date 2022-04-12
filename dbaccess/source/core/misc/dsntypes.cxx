@@ -36,12 +36,12 @@ namespace dbaccess
 
     namespace
     {
-        void lcl_extractHostAndPort(const OUString& _sUrl,OUString& _sHostname,sal_Int32& _nPortNumber)
+        void lcl_extractHostAndPort(std::u16string_view _sUrl, OUString& _sHostname, sal_Int32& _nPortNumber)
         {
             if ( comphelper::string::getTokenCount(_sUrl, ':') >= 2 )
             {
                 sal_Int32 nPos {0};
-                _sHostname   = _sUrl.getToken(0, ':', nPos);
+                _sHostname   = o3tl::getToken(_sUrl, 0, ':', nPos);
                 _nPortNumber = o3tl::toInt32(o3tl::getToken(_sUrl, 0, ':', nPos));
             }
         }

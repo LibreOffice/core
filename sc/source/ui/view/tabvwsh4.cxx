@@ -533,7 +533,7 @@ void ScTabViewShell::DoReadUserDataSequence( const uno::Sequence < beans::Proper
 
 // DoReadUserData is also called from ctor when switching from print preview
 
-void ScTabViewShell::DoReadUserData( const OUString& rData )
+void ScTabViewShell::DoReadUserData( std::u16string_view rData )
 {
     vcl::Window* pOldWin = GetActiveWin();
     bool bFocus = pOldWin && pOldWin->HasFocus();

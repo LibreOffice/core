@@ -1181,19 +1181,19 @@ rtl::Reference<LOKClipboard> forceSetClipboardForCurrentView(LibreOfficeKitDocum
 
 #endif
 
-const vcl::Font* FindFont(const OUString& rFontName)
+const vcl::Font* FindFont(std::u16string_view rFontName)
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SvxFontListItem* pFonts
         = static_cast<const SvxFontListItem*>(pDocSh->GetItem(SID_ATTR_CHAR_FONTLIST));
     const FontList* pList = pFonts ? pFonts->GetFontList() : nullptr;
-    if (pList && !rFontName.isEmpty())
+    if (pList && !rFontName.empty())
         if (sal_Handle hMetric = pList->GetFirstFontMetric(rFontName))
             return &FontList::GetFontMetric(hMetric);
     return nullptr;
 }
 
-vcl::Font FindFont_FallbackToDefault(const OUString& rFontName)
+vcl::Font FindFont_FallbackToDefault(std::u16string_view rFontName)
 {
     if (auto pFound = FindFont(rFontName))
         return *pFound;

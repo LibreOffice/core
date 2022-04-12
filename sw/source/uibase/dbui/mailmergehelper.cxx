@@ -490,7 +490,7 @@ bool SwAddressPreview::KeyInput( const KeyEvent& rKEvt )
     return bHandled;
 }
 
-void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const OUString& rAddress,
+void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, std::u16string_view rAddress,
                                      const Point& rTopLeft, const Size& rSize, bool bIsSelected)
 {
     rRenderContext.SetClipRegion(vcl::Region(tools::Rectangle(rTopLeft, rSize)));
@@ -507,7 +507,7 @@ void SwAddressPreview::DrawText_Impl(vcl::RenderContext& rRenderContext, const O
     sal_Int32 nPos = 0;
     do
     {
-        rRenderContext.DrawText(aStart, rAddress.getToken(0, '\n', nPos));
+        rRenderContext.DrawText(aStart, OUString(o3tl::getToken(rAddress, 0, '\n', nPos)));
         aStart.AdjustY(nHeight );
     }
     while (nPos >= 0);

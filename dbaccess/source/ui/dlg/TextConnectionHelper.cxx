@@ -366,7 +366,7 @@ namespace dbaui
         return OUString();
     }
 
-    void OTextConnectionHelper::SetSeparator( weld::ComboBox& rBox, const OUString& rList, const OUString& rVal )
+    void OTextConnectionHelper::SetSeparator( weld::ComboBox& rBox, std::u16string_view rList, const OUString& rVal )
     {
         if (rVal.getLength()==1)
         {
@@ -376,7 +376,7 @@ namespace dbaui
                 sal_Int32 nPrevIdx {nIdx};
                 if (static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rList, 1, '\t', nIdx))) == nVal)
                 {
-                    rBox.set_entry_text(rList.getToken(0, '\t', nPrevIdx));
+                    rBox.set_entry_text(OUString(o3tl::getToken(rList,0, '\t', nPrevIdx)));
                     return;
                 }
             }

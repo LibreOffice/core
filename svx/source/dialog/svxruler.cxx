@@ -42,6 +42,7 @@
 #include <editeng/protitem.hxx>
 #include <osl/diagnose.h>
 #include <rtl/math.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "rlrcitem.hxx"
 #include <memory>
@@ -3270,11 +3271,11 @@ void SvxRuler::MenuSelect(std::string_view ident)
     SetUnit(vcl::EnglishStringToMetric(ident));
 }
 
-void SvxRuler::TabMenuSelect(const OString& rIdent)
+void SvxRuler::TabMenuSelect(std::string_view rIdent)
 {
-    if (rIdent.isEmpty())
+    if (rIdent.empty())
         return;
-    sal_Int32 nId = rIdent.toInt32();
+    sal_Int32 nId = o3tl::toInt32(rIdent);
     /* Handler of the tab menu for setting the type */
     if (mxTabStopItem && mxTabStopItem->Count() > mxRulerImpl->nIdx)
     {

@@ -370,7 +370,7 @@ public:
     void            UpdateInputHandler( bool bForce = false );
 
     void            WriteUserData(OUString& rData);
-    void            ReadUserData(const OUString& rData);
+    void            ReadUserData(std::u16string_view rData);
     void            WriteExtOptions( ScExtDocOptions& rOpt ) const;
     void            ReadExtOptions( const ScExtDocOptions& rOpt );
     void            WriteUserDataSequence(css::uno::Sequence <css::beans::PropertyValue>& rSettings) const;

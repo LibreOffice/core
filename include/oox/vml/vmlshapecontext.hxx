@@ -128,7 +128,7 @@ public:
 
 private:
     /** Processes the 'points' attribute. */
-    void                setPoints( const OUString& rPoints );
+    void                setPoints( std::u16string_view rPoints );
     /** Processes the 'from' attribute. */
     void                setFrom( const OUString& rPoints );
     /** Processes the 'to' attribute. */

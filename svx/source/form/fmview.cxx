@@ -383,13 +383,13 @@ SdrObjectUniquePtr FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rD
 }
 
 
-SdrObjectUniquePtr FmFormView::CreateFieldControl(const OUString& rFieldDesc) const
+SdrObjectUniquePtr FmFormView::CreateFieldControl(std::u16string_view rFieldDesc) const
 {
     sal_Int32 nIdx{ 0 };
-    OUString sDataSource     = rFieldDesc.getToken(0, u'\x000B', nIdx);
-    OUString sObjectName     = rFieldDesc.getToken(0, u'\x000B', nIdx);
+    OUString sDataSource(    o3tl::getToken(rFieldDesc, 0, u'\x000B', nIdx));
+    OUString sObjectName(    o3tl::getToken(rFieldDesc, 0, u'\x000B', nIdx));
     sal_uInt16 nObjectType   = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(rFieldDesc, 0, u'\x000B', nIdx)));
-    OUString sFieldName      = rFieldDesc.getToken(0, u'\x000B', nIdx);
+    OUString sFieldName(      o3tl::getToken(rFieldDesc, 0, u'\x000B', nIdx));
 
     if (sFieldName.isEmpty() || sObjectName.isEmpty() || sDataSource.isEmpty())
         return nullptr;

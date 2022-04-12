@@ -909,7 +909,7 @@ public:
 
     /** Creates and returns the internal control model according to the passed
         MS class identifier. */
-    ControlModelBase*   createModelFromGuid( const OUString& rClassId );
+    ControlModelBase*   createModelFromGuid( std::u16string_view rClassId );
 
     /** Returns true, if the internal control model exists. */
     bool         hasModel() const { return bool(mxModel); }

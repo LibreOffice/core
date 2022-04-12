@@ -4052,7 +4052,7 @@ void DomainMapper_Impl::HandleLineBreak(const PropertyMapPtr& pPropertyMap)
     m_oLineBreakClear.reset();
 }
 
-static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
+static sal_Int16 lcl_ParseNumberingType( std::u16string_view rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;
 
@@ -4060,10 +4060,10 @@ static sal_Int16 lcl_ParseNumberingType( const OUString& rCommand )
     // tdf#132185: but may as well be "PAGE \* Arabic"
     OUString sNumber;
     constexpr OUStringLiteral rSeparator(u"\\* ");
-    if (sal_Int32 nStartIndex = rCommand.indexOf(rSeparator); nStartIndex >= 0)
+    if (size_t nStartIndex = rCommand.find(rSeparator); nStartIndex != std::u16string_view::npos)
     {
-        nStartIndex += rSeparator.getLength();
-        sNumber = rCommand.getToken(0, ' ', nStartIndex);
+        sal_Int32 nStartIndex2 = nStartIndex + rSeparator.getLength();
+        sNumber = o3tl::getToken(rCommand, 0, ' ', nStartIndex2);
     }
 
     if( !sNumber.isEmpty() )

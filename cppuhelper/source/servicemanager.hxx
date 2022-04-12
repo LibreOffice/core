@@ -193,7 +193,7 @@ public:
     using ServiceManagerBase::acquire;
     using ServiceManagerBase::release;
 
-    void init(OUString const & rdbUris);
+    void init(std::u16string_view rdbUris);
 
     void setContext(
         css::uno::Reference< css::uno::XComponentContext > const & context)

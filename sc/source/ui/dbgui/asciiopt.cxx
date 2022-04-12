@@ -23,8 +23,8 @@
 #include <osl/thread.h>
 #include <o3tl/string_view.hxx>
 
-const char pStrFix[] = "FIX";
-const char pStrMrg[] = "MRG";
+constexpr std::u16string_view pStrFix = u"FIX";
+constexpr std::u16string_view pStrMrg = u"MRG";
 
 ScAsciiOptions::ScAsciiOptions() :
     bFixedLen       ( false ),
@@ -57,21 +57,21 @@ void ScAsciiOptions::SetColumnInfo( const ScCsvExpDataVec& rDataVec )
     }
 }
 
-static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeFieldSeps )
+static OUString lcl_decodeSepString( std::u16string_view rSepNums, bool & o_bMergeFieldSeps )
 {
-    if ( rSepNums.isEmpty() )
+    if ( rSepNums.empty() )
         return OUString();
 
     OUStringBuffer aFieldSeps;
     sal_Int32 nPos = 0;
     do
     {
-        const OUString aCode = rSepNums.getToken( 0, '/', nPos );
+        const std::u16string_view aCode = o3tl::getToken(rSepNums, 0, '/', nPos );
         if ( aCode == pStrMrg )
             o_bMergeFieldSeps = true;
         else
         {
-            sal_Int32 nVal = aCode.toInt32();
+            sal_Int32 nVal = o3tl::toInt32(aCode);
             if ( nVal )
                 aFieldSeps.append(sal_Unicode(nVal));
         }
@@ -84,16 +84,16 @@ static OUString lcl_decodeSepString( const OUString & rSepNums, bool & o_bMergeF
 // The options string must not contain semicolons (because of the pick list),
 // use comma as separator.
 
-void ScAsciiOptions::ReadFromString( const OUString& rString )
+void ScAsciiOptions::ReadFromString( std::u16string_view rString )
 {
-    sal_Int32 nPos = rString.isEmpty() ? -1 : 0;
+    sal_Int32 nPos = rString.empty() ? -1 : 0;
 
     // Token 0: Field separator.
     if ( nPos >= 0 )
     {
         bFixedLen = bMergeFieldSeps = false;
 
-        const OUString aToken = rString.getToken(0, ',', nPos);
+        const std::u16string_view aToken = o3tl::getToken(rString, 0, ',', nPos);
         if ( aToken == pStrFix )
             bFixedLen = true;
         aFieldSeps = lcl_decodeSepString( aToken, bMergeFieldSeps);
@@ -109,7 +109,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 2: Text encoding.
     if ( nPos >= 0 )
     {
-        eCharSet = ScGlobal::GetCharsetValue( rString.getToken(0, ',', nPos) );
+        eCharSet = ScGlobal::GetCharsetValue( OUString(o3tl::getToken(rString, 0, ',', nPos)) );
     }
 
     // Token 3: Number of start row.
@@ -121,7 +121,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Token 4: Column info.
     if ( nPos >= 0 )
     {
-        const OUString aToken = rString.getToken(0, ',', nPos);
+        const std::u16string_view aToken = o3tl::getToken(rString, 0, ',', nPos);
         const sal_Int32 nInfoCount = comphelper::string::getTokenCount(aToken, '/')/2;
         mvColStart.resize(nInfoCount);
         mvColFormat.resize(nInfoCount);
@@ -181,7 +181,7 @@ void ScAsciiOptions::ReadFromString( const OUString& rString )
     // Does not need to be evaluated here but may be present.
     if (nPos >= 0)
     {
-        rString.getToken(0, ',', nPos);
+        o3tl::getToken(rString, 0, ',', nPos);
     }
 
     // Token 12: evaluate formulas.
