@@ -225,7 +225,6 @@ public:
     bool    Reserve( SCSIZE nReserve );
     SCSIZE  Count() const { return mvData.size(); }
     SCSIZE  Count( SCROW nRow1, SCROW nRow2 ) const;
-    bool    HasNonDefPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
 private:
     const ScPatternAttr* SetPatternAreaImpl( SCROW nStartRow, SCROW nEndRow, const ScPatternAttr* pPattern,

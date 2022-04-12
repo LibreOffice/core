@@ -166,7 +166,6 @@ public:
     std::unique_ptr<ScAttrIterator> CreateAttrIterator( SCROW nStartRow, SCROW nEndRow ) const;
 
     bool        IsAllAttrEqual( const ScColumnData& rCol, SCROW nStartRow, SCROW nEndRow ) const;
-    bool        HasNonDefPattern( SCROW nStartRow, SCROW nEndRow ) const;
 
     void        ClearSelectionItems( const sal_uInt16* pWhich, const ScMarkData& rMark, SCCOL nCol );
     void        ChangeSelectionIndent( bool bIncrement, const ScMarkData& rMark, SCCOL nCol );
@@ -862,11 +861,6 @@ inline bool ScColumn::IsEmptyAttr() const
 inline bool ScColumnData::IsAllAttrEqual( const ScColumnData& rCol, SCROW nStartRow, SCROW nEndRow ) const
 {
     return pAttrArray->IsAllEqual( *rCol.pAttrArray, nStartRow, nEndRow );
-}
-
-inline bool ScColumnData::HasNonDefPattern( SCROW nStartRow, SCROW nEndRow ) const
-{
-    return pAttrArray->HasNonDefPattern( nStartRow, nEndRow );
 }
 
 inline bool ScColumn::IsVisibleAttrEqual( const ScColumn& rCol, SCROW nStartRow, SCROW nEndRow ) const

@@ -1117,10 +1117,6 @@ public:
     ScColumnsRange GetColumnsRange(SCCOL begin, SCCOL end) const;
     SCCOL ClampToAllocatedColumns(SCCOL nCol) const { return std::min(nCol, static_cast<SCCOL>(aCol.size() - 1)); }
     SCCOL GetAllocatedColumnsCount() const { return aCol.size(); }
-    SCCOL ClampToMaxNonDefPatternColumn(SCCOL nCol, SCROW nRow1, SCROW nRow2) const;
-    SCCOL ClampToMaxNonDefPatternColumn(SCCOL nCol) const
-        { return ClampToMaxNonDefPatternColumn(nCol, 0, rDocument.MaxRow()); }
-    SCCOL GetMaxNonDefPatternColumnsCount(SCROW nRow1, SCROW nRow2) const;
 
     /**
      * Serializes the sheet's geometry data.
