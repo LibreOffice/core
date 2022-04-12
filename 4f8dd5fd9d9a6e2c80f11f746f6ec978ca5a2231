@@ -133,6 +133,24 @@
       "parentUuid": "2d94f90d_b0240d85",
       "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ac58553_d7a6b136",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1779,
+      "author": {
+        "id": 1003482
+      },
+      "writtenOn": "2022-04-12T18:13:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4d7b8102_3e9d1eb4",
+      "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
