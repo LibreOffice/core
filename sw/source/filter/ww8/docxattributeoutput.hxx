@@ -52,6 +52,7 @@ class SwGrfNode;
 class SdrObject;
 enum class SvxBoxItemLine;
 enum class SwLineBreakClear;
+class SwContentControl;
 
 namespace docx { class FootnotesList; }
 namespace oox::drawingml { class DrawingML; }
@@ -403,6 +404,12 @@ public:
     void EndParaSdtBlock();
 
     void WriteFloatingTable(ww8::Frame const* pParentFrame);
+
+    /// See AttributeOutputBase::StartContentControl().
+    void StartContentControl(const SwFormatContentControl& rFormatContentControl) override;
+
+    /// See AttributeOutputBase::EndContentControl().
+    void EndContentControl() override;
 
 private:
     /// Initialize the structures where we are going to collect some of the paragraph properties.
@@ -780,6 +787,7 @@ private:
     rtl::Reference<sax_fastparser::FastAttributeList> m_pSectionSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pParagraphSpacingAttrList;
     rtl::Reference<sax_fastparser::FastAttributeList> m_pHyperlinkAttrList;
+    const SwContentControl* m_pContentControl = nullptr;
     /// If the current SDT around runs should be ended before the current run.
     bool m_bEndCharSdt;
     /// Attributes of the run color
@@ -902,6 +910,8 @@ private:
     std::stack< std::vector<ww8::Frame> > m_aFramesOfParagraph;
     o3tl::sorted_vector<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
+
+    sal_Int32 m_nCloseContentControl = 0;
 
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
