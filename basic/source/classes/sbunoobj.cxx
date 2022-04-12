@@ -3271,14 +3271,14 @@ void VBAConstantHelper::init()
 }
 
 bool
-VBAConstantHelper::isVBAConstantType( const OUString& rName )
+VBAConstantHelper::isVBAConstantType( std::u16string_view rName )
 {
     init();
     bool bConstant = false;
 
     for (auto const& elem : aConstCache)
     {
-        if( rName.equalsIgnoreAsciiCase(elem) )
+        if( o3tl::equalsIgnoreAsciiCase(rName, elem) )
         {
             bConstant = true;
             break;

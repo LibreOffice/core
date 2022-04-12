@@ -891,7 +891,7 @@ class FilterCache : public cppu::BaseMutex
 
 
         /** TODO */
-        static std::vector<OUString> impl_tokenizeString(const OUString& sData     ,
+        static std::vector<OUString> impl_tokenizeString(std::u16string_view sData     ,
                                                sal_Unicode      cSeparator);
 
 

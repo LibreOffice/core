@@ -66,7 +66,7 @@ public:
                         ~SVGFontExport();
 
     void                EmbedFonts();
-    OUString            GetMappedFontName( const OUString& rFontName ) const;
+    OUString            GetMappedFontName( std::u16string_view rFontName ) const;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

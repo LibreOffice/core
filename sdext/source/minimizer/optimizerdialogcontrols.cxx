@@ -478,12 +478,12 @@ void OptimizerDialog::InitPage1()
 namespace
 {
 
-bool lcl_getResolutionText(OUString& rResolutionText, const OUString& rImageResolution, sal_Int32 nTargetRes)
+bool lcl_getResolutionText(OUString& rResolutionText, std::u16string_view rImageResolution, sal_Int32 nTargetRes)
 {
     sal_Int32 nIdx{ 0 };
     if (o3tl::toInt32(o3tl::getToken(rImageResolution, 0, ';', nIdx))!=nTargetRes)
         return false;
-    rResolutionText = rImageResolution.getToken(0, ';', nIdx);
+    rResolutionText = o3tl::getToken(rImageResolution, 0, ';', nIdx);
     return true;
 }
 

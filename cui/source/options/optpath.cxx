@@ -136,16 +136,16 @@ static OUString getCfgName_Impl( SvtPathOptions::Paths _nHandle )
 
 #define MULTIPATH_DELIMITER     ';'
 
-static OUString Convert_Impl( const OUString& rValue )
+static OUString Convert_Impl( std::u16string_view rValue )
 {
-    if (rValue.isEmpty())
+    if (rValue.empty())
         return OUString();
 
     sal_Int32 nPos = 0;
     OUStringBuffer aReturn;
     for (;;)
     {
-        OUString aValue = rValue.getToken( 0, MULTIPATH_DELIMITER, nPos );
+        OUString aValue( o3tl::getToken(rValue, 0, MULTIPATH_DELIMITER, nPos ) );
         INetURLObject aObj( aValue );
         if ( aObj.GetProtocol() == INetProtocol::File )
             aReturn.append(aObj.PathToFileName());
@@ -659,7 +659,7 @@ void SvxPathTabPage::GetPathList(
 
 
 void SvxPathTabPage::SetPathList(
-    SvtPathOptions::Paths _nPathHandle, const OUString& _rUserPath, const OUString& _rWritablePath )
+    SvtPathOptions::Paths _nPathHandle, std::u16string_view _rUserPath, const OUString& _rWritablePath )
 {
     OUString sCfgName = getCfgName_Impl( _nPathHandle );
 
@@ -678,7 +678,7 @@ void SvxPathTabPage::SetPathList(
         OUString* pArray = aPathSeq.getArray();
         sal_Int32 nPos = 0;
         for ( sal_Int32 i = 0; i < nCount; ++i )
-            pArray[i] = _rUserPath.getToken( 0, MULTIPATH_DELIMITER, nPos );
+            pArray[i] = o3tl::getToken(_rUserPath, 0, MULTIPATH_DELIMITER, nPos );
         Any aValue( aPathSeq );
         pImpl->m_xPathSettings->setPropertyValue(
             sCfgName + POSTFIX_USER, aValue);

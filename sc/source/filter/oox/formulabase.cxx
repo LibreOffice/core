@@ -44,6 +44,7 @@
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/token/properties.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace {
 
@@ -1098,11 +1099,11 @@ const FunctionInfo* FunctionProvider::getFuncInfoFromMacroName( const OUString& 
     return mxFuncImpl->maMacroFuncs.get( rFuncName ).get();
 }
 
-FunctionLibraryType FunctionProvider::getFuncLibTypeFromLibraryName( const OUString& rLibraryName )
+FunctionLibraryType FunctionProvider::getFuncLibTypeFromLibraryName( std::u16string_view rLibraryName )
 {
     // the EUROTOOL add-in containing the EUROCONVERT function
-    if(   rLibraryName.equalsIgnoreAsciiCase("EUROTOOL.XLA")
-       || rLibraryName.equalsIgnoreAsciiCase("EUROTOOL.XLAM"))
+    if(   o3tl::equalsIgnoreAsciiCase(rLibraryName, u"EUROTOOL.XLA")
+       || o3tl::equalsIgnoreAsciiCase(rLibraryName, u"EUROTOOL.XLAM"))
         return FUNCLIB_EUROTOOL;
 
     // default: unknown library

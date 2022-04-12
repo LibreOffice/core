@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <svx/fmtools.hxx>
 #include <svx/fmsrccfg.hxx>
 #include <tools/debug.hxx>
@@ -537,7 +538,7 @@ FmSearchEngine::SearchResult FmSearchEngine::SearchRegularApprox(const OUString&
 
 
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
-        const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
+        const Reference< XResultSet > & xCursor, std::u16string_view sVisibleFields,
         const InterfaceArray& arrFields)
     :m_xSearchCursor(xCursor)
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
@@ -629,7 +630,7 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 }
 
 
-void FmSearchEngine::Init(const OUString& sVisibleFields)
+void FmSearchEngine::Init(std::u16string_view sVisibleFields)
 {
     // analyze the fields
     // additionally, create the mapping: because the list of used columns can be shorter than the list
@@ -680,7 +681,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
         sal_Int32 nIndex = 0;
         do
         {
-            sCurrentField = sVisibleFields.getToken(0, ';' , nIndex);
+            sCurrentField = o3tl::getToken(sVisibleFields, 0, ';' , nIndex);
 
             // search in the field collection
             sal_Int32 nFoundIndex = -1;
@@ -926,7 +927,7 @@ void FmSearchEngine::CancelSearch()
 }
 
 
-void FmSearchEngine::SwitchToContext(const Reference< css::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
+void FmSearchEngine::SwitchToContext(const Reference< css::sdbc::XResultSet > & xCursor, std::u16string_view sVisibleFields, const InterfaceArray& arrFields,
     sal_Int32 nFieldIndex)
 {
     DBG_ASSERT(!m_bSearchingCurrently, "FmSearchEngine::SwitchToContext : please do not call while I'm searching !");

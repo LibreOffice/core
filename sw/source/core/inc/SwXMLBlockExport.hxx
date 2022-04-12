@@ -54,7 +54,7 @@ public:
         css::uno::Reference< css::xml::sax::XDocumentHandler> const &rHandler);
 
     ErrCode exportDoc(enum ::xmloff::token::XMLTokenEnum /*eClass*/) override { return ERRCODE_NONE; }
-    void exportDoc(const OUString & rText);
+    void exportDoc(std::u16string_view rText);
     void ExportAutoStyles_() override {}
     void ExportMasterStyles_ () override {}
     void ExportContent_() override {}

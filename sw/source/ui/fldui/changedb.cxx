@@ -25,6 +25,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <view.hxx>
 #include <wrtsh.hxx>
@@ -93,7 +94,7 @@ void SwChangeDBDlg::FillDBPopup()
 
     for(size_t k = 0; k < nCount; k++)
     {
-        std::unique_ptr<weld::TreeIter> xLast = Insert(aDBNameList[k].getToken(0, ';'));
+        std::unique_ptr<weld::TreeIter> xLast = Insert(o3tl::getToken(aDBNameList[k], 0, ';'));
         if (!xFirst)
             xFirst = std::move(xLast);
     }
@@ -106,12 +107,12 @@ void SwChangeDBDlg::FillDBPopup()
     }
 }
 
-std::unique_ptr<weld::TreeIter> SwChangeDBDlg::Insert(const OUString& rDBName)
+std::unique_ptr<weld::TreeIter> SwChangeDBDlg::Insert(std::u16string_view rDBName)
 {
     sal_Int32 nIdx{ 0 };
-    const OUString sDBName(rDBName.getToken(0, DB_DELIM, nIdx));
-    const OUString sTableName(rDBName.getToken(0, DB_DELIM, nIdx));
-    OUString sUserData = rDBName.getToken(0, DB_DELIM, nIdx);
+    const OUString sDBName(o3tl::getToken(rDBName, 0, DB_DELIM, nIdx));
+    const OUString sTableName(o3tl::getToken(rDBName, 0, DB_DELIM, nIdx));
+    OUString sUserData( o3tl::getToken(rDBName, 0, DB_DELIM, nIdx) );
     sal_Int32 nCommandType = sUserData.toInt32();
 
     const OUString & rToInsert ( nCommandType ? RID_BMP_DBQUERY : RID_BMP_DBTABLE );

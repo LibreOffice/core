@@ -2659,23 +2659,23 @@ EmbeddedControl::EmbeddedControl( const OUString& rName ) :
 {
 }
 
-ControlModelBase* EmbeddedControl::createModelFromGuid( const OUString& rClassId )
+ControlModelBase* EmbeddedControl::createModelFromGuid( std::u16string_view rClassId )
 {
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_COMMANDBUTTON ) )     return &createModel< AxCommandButtonModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_LABEL ) )             return &createModel< AxLabelModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_IMAGE ) )             return &createModel< AxImageModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_TOGGLEBUTTON ) )      return &createModel< AxToggleButtonModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_CHECKBOX ) )          return &createModel< AxCheckBoxModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_OPTIONBUTTON ) )      return &createModel< AxOptionButtonModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_TEXTBOX ) )           return &createModel< AxTextBoxModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_LISTBOX ) )           return &createModel< AxListBoxModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_COMBOBOX ) )          return &createModel< AxComboBoxModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_SPINBUTTON ) )        return &createModel< AxSpinButtonModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_SCROLLBAR ) )         return &createModel< AxScrollBarModel >();
-    if( rClassId.equalsIgnoreAsciiCase( AX_GUID_FRAME ) )             return &createModel< AxFrameModel >();
-    if( rClassId.equalsIgnoreAsciiCase( COMCTL_GUID_SCROLLBAR_60 ) )  return &createModel< ComCtlScrollBarModel >( COMCTL_VERSION_60 );
-    if( rClassId.equalsIgnoreAsciiCase( HTML_GUID_SELECT ) )  return &createModel< HtmlSelectModel >();
-    if( rClassId.equalsIgnoreAsciiCase( HTML_GUID_TEXTBOX ) ) return &createModel< HtmlTextBoxModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_COMMANDBUTTON ) )     return &createModel< AxCommandButtonModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_LABEL ) )             return &createModel< AxLabelModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_IMAGE ) )             return &createModel< AxImageModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_TOGGLEBUTTON ) )      return &createModel< AxToggleButtonModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_CHECKBOX ) )          return &createModel< AxCheckBoxModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_OPTIONBUTTON ) )      return &createModel< AxOptionButtonModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_TEXTBOX ) )           return &createModel< AxTextBoxModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_LISTBOX ) )           return &createModel< AxListBoxModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_COMBOBOX ) )          return &createModel< AxComboBoxModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_SPINBUTTON ) )        return &createModel< AxSpinButtonModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_SCROLLBAR ) )         return &createModel< AxScrollBarModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" AX_GUID_FRAME ) )             return &createModel< AxFrameModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" COMCTL_GUID_SCROLLBAR_60 ) )  return &createModel< ComCtlScrollBarModel >( COMCTL_VERSION_60 );
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" HTML_GUID_SELECT ) )  return &createModel< HtmlSelectModel >();
+    if( o3tl::equalsIgnoreAsciiCase(rClassId,  u"" HTML_GUID_TEXTBOX ) ) return &createModel< HtmlTextBoxModel >();
 
     mxModel.reset();
     return nullptr;

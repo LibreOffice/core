@@ -87,7 +87,7 @@ public:
     void                SetDoc(SwDoc* pNewDoc)              { m_pDoc = pNewDoc; }
     SwDoc*              GetDoc(){ return m_pDoc; }
     void                RemoveField(const SwAuthEntry* nHandle);
-    SwAuthEntry*        AddField(const OUString& rFieldContents);
+    SwAuthEntry*        AddField(std::u16string_view rFieldContents);
     void                DelSequenceArray()
                         {
                             m_SequArr.clear();
@@ -167,7 +167,7 @@ public:
     //To handle Citation
     OUString ExpandCitation(ToxAuthorityField eField, SwRootFrame const* pLayout) const;
 
-    SwAuthorityField(SwAuthorityFieldType* pType, const OUString& rFieldContents);
+    SwAuthorityField(SwAuthorityFieldType* pType, std::u16string_view rFieldContents);
     SwAuthorityField(SwAuthorityFieldType* pType, SwAuthEntry* pAuthEntry);
     virtual ~SwAuthorityField() override;
 

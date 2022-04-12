@@ -29,6 +29,7 @@
 #include <sal/log.hxx>
 #include <salhelper/linkhelper.hxx>
 #include <salhelper/thread.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 #include <utility>
 #include <algorithm>
@@ -113,7 +114,7 @@ static bool getSDKInfoFromRegistry(std::vector<OUString> & vecHome);
 static bool getJREInfoFromRegistry(std::vector<OUString>& vecJavaHome);
 #endif
 
-static bool decodeOutput(const OString& s, OUString* out);
+static bool decodeOutput(std::string_view s, OUString* out);
 
 
 namespace
@@ -482,22 +483,22 @@ bool getJavaProps(const OUString & exePath,
     readable strings. The strings are encoded as integer values separated
     by spaces.
  */
-bool decodeOutput(const OString& s, OUString* out)
+bool decodeOutput(std::string_view s, OUString* out)
 {
     OSL_ASSERT(out != nullptr);
     OUStringBuffer buff(512);
     sal_Int32 nIndex = 0;
     do
     {
-        OString aToken = s.getToken( 0, ' ', nIndex );
-        if (!aToken.isEmpty())
+        std::string_view aToken = o3tl::getToken(s, 0, ' ', nIndex );
+        if (!aToken.empty())
         {
-            for (sal_Int32 i = 0; i < aToken.getLength(); ++i)
+            for (size_t i = 0; i < aToken.size(); ++i)
             {
                 if (aToken[i] < '0' || aToken[i] > '9')
                     return false;
             }
-            sal_Unicode value = static_cast<sal_Unicode>(aToken.toInt32());
+            sal_Unicode value = static_cast<sal_Unicode>(o3tl::toInt32(aToken));
             buff.append(value);
         }
     } while (nIndex >= 0);

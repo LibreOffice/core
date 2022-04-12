@@ -36,6 +36,7 @@
 #include <vcl/virdev.hxx>
 
 #include <rtl/strbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <accel.hxx>
 #include <salframe.hxx>
@@ -398,16 +399,15 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
     return mpImplData->maMaxOutSize;
 }
 
-void ImplWindowStateFromStr(WindowStateData& rData,
-    const OString& rStr)
+void ImplWindowStateFromStr(WindowStateData& rData, std::string_view rStr)
 {
     WindowStateMask nValidMask = WindowStateMask::NONE;
     sal_Int32 nIndex      = 0;
 
-    OString aTokenStr = rStr.getToken(0, ',', nIndex);
-    if (!aTokenStr.isEmpty())
+    std::string_view aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetX(aTokenStr.toInt32());
+        rData.SetX(o3tl::toInt32(aTokenStr));
         if( rData.GetX() > -16384 && rData.GetX() < 16384 )
             nValidMask |= WindowStateMask::X;
         else
@@ -415,10 +415,10 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     }
     else
         rData.SetX( 0 );
-    aTokenStr = rStr.getToken(0, ',', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetY(aTokenStr.toInt32());
+        rData.SetY(o3tl::toInt32(aTokenStr));
         if( rData.GetY() > -16384 && rData.GetY() < 16384 )
             nValidMask |= WindowStateMask::Y;
         else
@@ -426,10 +426,10 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     }
     else
         rData.SetY( 0 );
-    aTokenStr = rStr.getToken(0, ',', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetWidth(aTokenStr.toInt32());
+        rData.SetWidth(o3tl::toInt32(aTokenStr));
         if( rData.GetWidth() > 0 && rData.GetWidth() < 16384 )
             nValidMask |= WindowStateMask::Width;
         else
@@ -437,10 +437,10 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     }
     else
         rData.SetWidth( 0 );
-    aTokenStr = rStr.getToken(0, ';', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetHeight(aTokenStr.toInt32());
+        rData.SetHeight(o3tl::toInt32(aTokenStr));
         if( rData.GetHeight() > 0 && rData.GetHeight() < 16384 )
             nValidMask |= WindowStateMask::Height;
         else
@@ -448,12 +448,12 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     }
     else
         rData.SetHeight( 0 );
-    aTokenStr = rStr.getToken(0, ';', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
+    if (!aTokenStr.empty())
     {
         // #94144# allow Minimize again, should be masked out when read from configuration
         // 91625 - ignore Minimize
-        WindowStateState nState = static_cast<WindowStateState>(aTokenStr.toInt32());
+        WindowStateState nState = static_cast<WindowStateState>(o3tl::toInt32(aTokenStr));
         //nState &= ~(WindowStateState::Minimized);
         rData.SetState( nState );
         nValidMask |= WindowStateMask::State;
@@ -462,10 +462,10 @@ void ImplWindowStateFromStr(WindowStateData& rData,
         rData.SetState( WindowStateState::NONE );
 
     // read maximized pos/size
-    aTokenStr = rStr.getToken(0, ',', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetMaximizedX(aTokenStr.toInt32());
+        rData.SetMaximizedX(o3tl::toInt32(aTokenStr));
         if( rData.GetMaximizedX() > -16384 && rData.GetMaximizedX() < 16384 )
             nValidMask |= WindowStateMask::MaximizedX;
         else
@@ -473,10 +473,10 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     }
     else
         rData.SetMaximizedX( 0 );
-    aTokenStr = rStr.getToken(0, ',', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetMaximizedY(aTokenStr.toInt32());
+        rData.SetMaximizedY(o3tl::toInt32(aTokenStr));
         if( rData.GetMaximizedY() > -16384 && rData.GetMaximizedY() < 16384 )
             nValidMask |= WindowStateMask::MaximizedY;
         else
@@ -484,10 +484,10 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     }
     else
         rData.SetMaximizedY( 0 );
-    aTokenStr = rStr.getToken(0, ',', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ',', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetMaximizedWidth(aTokenStr.toInt32());
+        rData.SetMaximizedWidth(o3tl::toInt32(aTokenStr));
         if( rData.GetMaximizedWidth() > 0 && rData.GetMaximizedWidth() < 16384 )
             nValidMask |= WindowStateMask::MaximizedWidth;
         else
@@ -495,10 +495,10 @@ void ImplWindowStateFromStr(WindowStateData& rData,
     }
     else
         rData.SetMaximizedWidth( 0 );
-    aTokenStr = rStr.getToken(0, ';', nIndex);
-    if (!aTokenStr.isEmpty())
+    aTokenStr = o3tl::getToken(rStr, 0, ';', nIndex);
+    if (!aTokenStr.empty())
     {
-        rData.SetMaximizedHeight(aTokenStr.toInt32());
+        rData.SetMaximizedHeight(o3tl::toInt32(aTokenStr));
         if( rData.GetMaximizedHeight() > 0 && rData.GetMaximizedHeight() < 16384 )
             nValidMask |= WindowStateMask::MaximizedHeight;
         else
@@ -833,9 +833,9 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
     }
 }
 
-void SystemWindow::SetWindowState(const OString& rStr)
+void SystemWindow::SetWindowState(std::string_view rStr)
 {
-    if (rStr.isEmpty())
+    if (rStr.empty())
         return;
 
     WindowStateData aData;

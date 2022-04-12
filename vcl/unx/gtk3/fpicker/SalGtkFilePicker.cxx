@@ -399,18 +399,17 @@ void FilterEntry::getSubFilters( css::uno::Sequence< css::beans::StringPair >& _
 }
 
 static bool
-isFilterString( const OUString &rFilterString, const char *pMatch )
+isFilterString( std::u16string_view rFilterString, const char *pMatch )
 {
         sal_Int32 nIndex = 0;
-        OUString aToken;
         bool bIsFilter = true;
 
         OUString aMatch(OUString::createFromAscii(pMatch));
 
         do
         {
-            aToken = rFilterString.getToken( 0, ';', nIndex );
-            if( !aToken.match( aMatch ) )
+            std::u16string_view aToken = o3tl::getToken(rFilterString, 0, ';', nIndex );
+            if( !o3tl::starts_with(aToken, aMatch) )
             {
                 bIsFilter = false;
                 break;
@@ -439,11 +438,11 @@ shrinkFilterName( const OUString &rFilterName, bool bAllowNoStar = false )
             nBracketLen = nBracketEnd - i;
             if( nBracketEnd <= 0 )
                 continue;
-            if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), "*." ) )
+            if( isFilterString( rFilterName.subView( i + 1, nBracketLen - 1 ), "*." ) )
                 aRealName = aRealName.replaceAt( i, nBracketLen + 1, u"" );
             else if (bAllowNoStar)
             {
-                if( isFilterString( rFilterName.copy( i + 1, nBracketLen - 1 ), ".") )
+                if( isFilterString( rFilterName.subView( i + 1, nBracketLen - 1 ), ".") )
                     aRealName = aRealName.replaceAt( i, nBracketLen + 1, u"" );
             }
         }

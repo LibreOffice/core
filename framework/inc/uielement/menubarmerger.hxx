@@ -62,7 +62,7 @@ namespace MenuBarMerger
         bool       IsCorrectContext(
             std::u16string_view aContext, std::u16string_view aModuleIdentifier );
 
-        void       RetrieveReferencePath( const OUString&,
+        void       RetrieveReferencePath( std::u16string_view,
                                                  std::vector< OUString >& aReferencePath );
         ReferencePathInfo FindReferencePath( const std::vector< OUString >& aReferencePath, Menu* pMenu );
         sal_uInt16 FindMenuItem( std::u16string_view rCmd,
@@ -75,7 +75,7 @@ namespace MenuBarMerger
                                                  sal_uInt16                nPos,
                                                  sal_uInt16&               rItemId,
                                                  std::u16string_view rMergeCommand,
-                                                 const OUString&    rMergeCommandParameter,
+                                                 std::u16string_view rMergeCommandParameter,
                                                  const OUString&    rModuleIdentifier,
                                                  const AddonMenuContainer& rAddonMenuItems );
         bool       ProcessFallbackOperation( const ReferencePathInfo&                aRefPathInfo,
@@ -98,7 +98,7 @@ namespace MenuBarMerger
                                            const AddonMenuContainer& rAddonMenuItems );
         bool       RemoveMenuItems( Menu*                     pMenu,
                                            sal_uInt16                nPos,
-                                           const OUString&    rMergeCommandParameter );
+                                           std::u16string_view    rMergeCommandParameter );
         bool       CreateSubMenu( Menu*                     pSubMenu,
                                          sal_uInt16&               nItemId,
                                          const OUString&    rModuleIdentifier,

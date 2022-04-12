@@ -56,6 +56,7 @@
 #include <vcl/cursor.hxx>
 #include <vcl/scheduler.hxx>
 #include <vcl/vclevent.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <chrono>
 #include <cstdlib>
@@ -282,15 +283,14 @@ void SdTiledRenderingTest::callback(int nType, const char* pPayload, void* pData
 namespace
 {
 
-std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode nSeparator)
+std::vector<OUString> lcl_convertSeparated(std::u16string_view rString, sal_Unicode nSeparator)
 {
     std::vector<OUString> aRet;
 
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aToken = rString.getToken(0, nSeparator, nIndex);
-        aToken = aToken.trim();
+        OUString aToken( o3tl::trim(o3tl::getToken(rString, 0, nSeparator, nIndex)) );
         if (!aToken.isEmpty())
             aRet.push_back(aToken);
     }

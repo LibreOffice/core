@@ -3307,9 +3307,9 @@ void ScViewData::WriteUserData(OUString& rData)
     }
 }
 
-void ScViewData::ReadUserData(const OUString& rData)
+void ScViewData::ReadUserData(std::u16string_view rData)
 {
-    if (rData.isEmpty())    // empty string on "reload"
+    if (rData.empty())    // empty string on "reload"
         return;             // then exit without assertion
 
     if ( comphelper::string::getTokenCount(rData, ';') <= 2 )
@@ -3323,24 +3323,24 @@ void ScViewData::ReadUserData(const OUString& rData)
     sal_Int32 nMainIdx {0};
     sal_Int32 nIdx {0};
 
-    OUString aZoomStr = rData.getToken(0, ';', nMainIdx);       // Zoom/PageZoom/Mode
+    std::u16string_view aZoomStr = o3tl::getToken(rData, 0, ';', nMainIdx);       // Zoom/PageZoom/Mode
     sal_Unicode cMode = o3tl::getToken(aZoomStr, 2, '/', nIdx)[0];     // 0 or "0"/"1"
     SetPagebreakMode( cMode == '1' );
     // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 
     // sheet may have become invalid (for instance last version):
-    SCTAB nNewTab = static_cast<SCTAB>(rData.getToken(0, ';', nMainIdx).toUInt32());
+    SCTAB nNewTab = static_cast<SCTAB>(o3tl::toInt64(o3tl::getToken(rData, 0, ';', nMainIdx)));
     if (mrDoc.HasTable(nNewTab))
         SetTabNo(nNewTab);
 
     // if available, get tab bar width:
     const sal_Int32 nMainIdxRef {nMainIdx};
-    OUString aTabOpt = rData.getToken(0, ';', nMainIdx);
+    std::u16string_view aTabOpt = o3tl::getToken(rData, 0, ';', nMainIdx);
 
-    OUString aRest;
-    if (aTabOpt.startsWith(TAG_TABBARWIDTH, &aRest))
+    std::u16string_view aRest;
+    if (o3tl::starts_with(aTabOpt, TAG_TABBARWIDTH, &aRest))
     {
-        pView->SetTabBarWidth(aRest.toInt32());
+        pView->SetTabBarWidth(o3tl::toInt32(aRest));
     }
     else
     {
@@ -3352,7 +3352,7 @@ void ScViewData::ReadUserData(const OUString& rData)
     SCTAB nPos = 0;
     while ( nMainIdx>0 )
     {
-        aTabOpt = rData.getToken(0, ';', nMainIdx);
+        aTabOpt = o3tl::getToken(rData, 0, ';', nMainIdx);
         EnsureTabDataSize(nPos + 1);
         if (!maTabData[nPos])
             maTabData[nPos].reset(new ScViewDataTable(&mrDoc));

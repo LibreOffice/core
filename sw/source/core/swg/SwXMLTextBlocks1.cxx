@@ -320,7 +320,7 @@ ErrCode SwXMLTextBlocks::GetBlockText( std::u16string_view rShort, OUString& rTe
 }
 
 ErrCode SwXMLTextBlocks::PutBlockText( const OUString& rShort,
-                                         const OUString& rText,  const OUString& rPackageName )
+                                         std::u16string_view rText,  const OUString& rPackageName )
 {
     GetIndex ( rShort );
     /*

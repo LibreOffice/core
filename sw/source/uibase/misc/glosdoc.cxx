@@ -245,12 +245,12 @@ bool    SwGlossaries::RenameGroupDoc(
 }
 
 // Deletes a text block group
-bool SwGlossaries::DelGroupDoc(const OUString &rName)
+bool SwGlossaries::DelGroupDoc(std::u16string_view rName)
 {
     sal_uInt16 nPath = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(o3tl::getToken(rName, 1, GLOS_DELIM)));
     if (static_cast<size_t>(nPath) >= m_PathArr.size())
         return false;
-    const OUString sBaseName(rName.getToken(0, GLOS_DELIM));
+    const std::u16string_view sBaseName(o3tl::getToken(rName, 0, GLOS_DELIM));
     const OUString sFileURL = lcl_FullPathName(m_PathArr[nPath], sBaseName);
     const OUString aName = sBaseName + OUStringChar(GLOS_DELIM) + OUString::number(nPath);
     // Even if the file doesn't exist it has to be deleted from
@@ -474,13 +474,13 @@ void SwGlossaries::RemoveFileFromList( const OUString& rGroup )
     m_GlosArr.erase(it);
 }
 
-OUString SwGlossaries::GetCompleteGroupName( const OUString& rGroupName )
+OUString SwGlossaries::GetCompleteGroupName( std::u16string_view rGroupName )
 {
     const size_t nCount = GetGroupCnt();
     // when the group name was created internally the path is here as well
     sal_Int32 nIndex = 0;
-    const OUString sGroupName(rGroupName.getToken(0, GLOS_DELIM, nIndex));
-    const bool bPathLen = !rGroupName.getToken(0, GLOS_DELIM, nIndex).isEmpty();
+    const std::u16string_view sGroupName(o3tl::getToken(rGroupName, 0, GLOS_DELIM, nIndex));
+    const bool bPathLen = !o3tl::getToken(rGroupName, 0, GLOS_DELIM, nIndex).empty();
     for ( size_t i = 0; i < nCount; i++ )
     {
         const OUString sGrpName = GetGroupName(i);
@@ -519,7 +519,7 @@ void SwGlossaries::InvalidateUNOOjects()
     UnoAutoTextEntries().swap(m_aGlossaryEntries);
 }
 
-Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( const OUString& _rGroupName )
+Reference< text::XAutoTextGroup > SwGlossaries::GetAutoTextGroup( std::u16string_view _rGroupName )
 {
     bool _bCreate = true;
     // first, find the name with path-extension

@@ -22,6 +22,7 @@
 
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/string_view.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/time.hxx>
 #include <tools/date.hxx>
@@ -44,9 +45,9 @@ namespace tools { template <typename T> class SvRef; }
 
 struct CompareSvStringsISortDtor
 {
-    bool operator()( OUString const& lhs, std::u16string_view rhs ) const
+    bool operator()( std::u16string_view lhs, std::u16string_view rhs ) const
     {
-        return lhs.compareToIgnoreAsciiCase( rhs ) < 0;
+        return o3tl::compareToIgnoreAsciiCase( lhs, rhs ) < 0;
     }
 };
 

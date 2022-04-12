@@ -53,6 +53,7 @@
 #include <sal/log.hxx>
 #include <sal/macros.h>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 #include <unoidl/unoidl.hxx>
 
@@ -2023,9 +2024,9 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
         depth == css::reflection::TypeDescriptionSearchDepth_INFINITE);
 }
 
-void cppuhelper::TypeManager::init(OUString const & rdbUris) {
+void cppuhelper::TypeManager::init(std::u16string_view rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        OUString uri(rdbUris.getToken(0, ' ', i));
+        OUString uri(o3tl::getToken(rdbUris, 0, ' ', i));
         if (uri.isEmpty()) {
             continue;
         }

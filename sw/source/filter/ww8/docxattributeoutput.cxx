@@ -6857,9 +6857,9 @@ namespace {
 /// Functor to do case-insensitive ordering of OUString instances.
 struct OUStringIgnoreCase
 {
-    bool operator() (const OUString& lhs, std::u16string_view rhs) const
+    bool operator() (std::u16string_view lhs, std::u16string_view rhs) const
     {
-        return lhs.compareToIgnoreAsciiCase(rhs) < 0;
+        return o3tl::compareToIgnoreAsciiCase(lhs, rhs) < 0;
     }
 };
 

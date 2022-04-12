@@ -92,7 +92,7 @@ void OTableWindowListBox::dispose()
     InterimItemWindow::dispose();
 }
 
-int OTableWindowListBox::GetEntryFromText(const OUString& rEntryText)
+int OTableWindowListBox::GetEntryFromText(std::u16string_view rEntryText)
 {
     // iterate through the list
     OJoinDesignView* pView = m_pTabWin->getDesignView();
@@ -111,7 +111,7 @@ int OTableWindowListBox::GetEntryFromText(const OUString& rEntryText)
         for (int nEntry = 0, nCount = m_xTreeView->n_children(); nEntry < nCount; ++nEntry)
         {
             if (bCase ? rEntryText == m_xTreeView->get_text(nEntry)
-                      : rEntryText.equalsIgnoreAsciiCase(m_xTreeView->get_text(nEntry)))
+                      : o3tl::equalsIgnoreAsciiCase(rEntryText, m_xTreeView->get_text(nEntry)))
                 return nEntry;
         }
     }

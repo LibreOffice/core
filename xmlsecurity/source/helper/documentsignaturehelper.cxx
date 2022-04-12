@@ -42,6 +42,7 @@
 #include <svx/xoutbmp.hxx>
 #include <tools/diagnose_ex.h>
 #include <xmloff/attrlist.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <xsecctl.hxx>
 
@@ -478,16 +479,16 @@ bool DocumentSignatureHelper::checkIfAllFilesAreSigned(
   Returns true if both strings are equal.
 */
 bool DocumentSignatureHelper::equalsReferenceUriManifestPath(
-    const OUString & rUri, const OUString & rPath)
+    std::u16string_view rUri, std::u16string_view rPath)
 {
     //split up the uri and path into segments. Both are separated by '/'
     std::vector<OUString> vUriSegments;
     for (sal_Int32 nIndex = 0; nIndex >= 0; )
-        vUriSegments.push_back(rUri.getToken( 0, '/', nIndex ));
+        vUriSegments.push_back(OUString(o3tl::getToken(rUri, 0, '/', nIndex )));
 
     std::vector<OUString> vPathSegments;
     for (sal_Int32 nIndex = 0; nIndex >= 0; )
-        vPathSegments.push_back(rPath.getToken( 0, '/', nIndex ));
+        vPathSegments.push_back(OUString(o3tl::getToken(rPath, 0, '/', nIndex )));
 
     if (vUriSegments.size() != vPathSegments.size())
         return false;

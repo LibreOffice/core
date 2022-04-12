@@ -52,7 +52,7 @@ private:
     bool m_bSorted;
 
     void AddToModifiedVector( const std::shared_ptr< Prop_Impl >& rProp );
-    static std::vector< OUString > commaStringToSequence( const OUString& rCommaSepString );
+    static std::vector< OUString > commaStringToSequence( std::u16string_view rCommaSepString );
     void InsertEntry(const prefBoxEntry& rEntry);
 
     DECL_LINK(StandardHdl_Impl, weld::Button&, void);

@@ -27,6 +27,7 @@
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/app.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <scresid.hxx>
 #include <strings.hrc>
@@ -288,15 +289,15 @@ ScConditionMode lclGetCondModeFromPos( sal_uInt16 nLbPos )
     @descr  Keeps all empty strings.
     Example: abc\ndef\n\nghi -> "abc";"def";"";"ghi".
     @param rFmlaStr  (out-param) The converted formula string. */
-void lclGetFormulaFromStringList( OUString& rFmlaStr, const OUString& rStringList, sal_Unicode cFmlaSep )
+void lclGetFormulaFromStringList( OUString& rFmlaStr, std::u16string_view rStringList, sal_Unicode cFmlaSep )
 {
     rFmlaStr.clear();
-    if (!rStringList.isEmpty())
+    if (!rStringList.empty())
     {
         sal_Int32 nIdx {0};
         do
         {
-            OUString aToken {rStringList.getToken( 0, '\n', nIdx )};
+            OUString aToken {o3tl::getToken(rStringList, 0, '\n', nIdx )};
             ScGlobal::AddQuotes( aToken, '"' );
             rFmlaStr = ScGlobal::addToken(rFmlaStr, aToken, cFmlaSep);
         }

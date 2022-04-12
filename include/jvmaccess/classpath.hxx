@@ -78,7 +78,7 @@ namespace ClassPath
  */
 JVMACCESS_DLLPUBLIC jobjectArray
 translateToUrls(css::uno::Reference<css::uno::XComponentContext> const& context,
-                JNIEnv* environment, OUString const& classPath);
+                JNIEnv* environment, std::u16string_view classPath);
 }
 }
 

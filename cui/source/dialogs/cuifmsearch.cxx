@@ -31,6 +31,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <svx/svxdlg.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css::uno;
 using namespace css::i18n;
@@ -159,7 +160,7 @@ FmSearchDialog::~FmSearchDialog()
     m_pSearchEngine.reset();
 }
 
-void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sInitialText)
+void FmSearchDialog::Init(std::u16string_view strVisibleFields, const OUString& sInitialText)
 {
     //the initialization of all the Controls
     m_prbSearchForText->connect_toggled(LINK(this, FmSearchDialog, OnToggledSearchRadio));
@@ -203,11 +204,11 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     m_plbPosition->set_active(MATCHING_ANYWHERE);
 
     // the field listbox
-    if (!strVisibleFields.isEmpty())
+    if (!strVisibleFields.empty())
     {
         sal_Int32 nPos {0};
         do {
-            m_plbField->append_text(strVisibleFields.getToken(0, ';', nPos));
+            m_plbField->append_text(OUString(o3tl::getToken(strVisibleFields, 0, ';', nPos)));
         } while (nPos>=0);
     }
 
