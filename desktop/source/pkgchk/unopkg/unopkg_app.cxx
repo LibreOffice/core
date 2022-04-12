@@ -107,7 +107,7 @@ u"\n"
 "     <context>\n"
 "\n"
 "To learn more about the Extension Manager and extensions, see:\n"
-"http://wiki.openoffice.org/wiki/Documentation/DevGuide/Extensions/Extensions\n\n";
+"https://wiki.documentfoundation.org/Documentation/DevGuide/Extensions\n\n";
 
 
 const OptionInfo s_option_infos [] = {

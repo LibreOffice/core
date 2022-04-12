@@ -173,7 +173,7 @@ Public Function AddCheckBox(Optional ByVal MenuItem As Variant _
 &apos;&apos;&apos;		Tooltip: The help text to be displayed as a tooltip
 &apos;&apos;&apos;		Command: A menu command like &quot;.uno:About&quot;. The validity of the command is not checked.
 &apos;&apos;&apos;		Script: a Basic or Python script (determined by its URI notation) to be run when the item is clicked
-&apos;&apos;&apos;			Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;			Read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;			Next string argument  will be passed to the called script : a comma-separated string of 4 components:
 &apos;&apos;&apos;				- the menu header
 &apos;&apos;&apos;				- the name of the clicked menu item
@@ -254,7 +254,7 @@ Public Function AddItem(Optional ByVal MenuItem As Variant _
 &apos;&apos;&apos;		Tooltip: The help text to be displayed as a tooltip
 &apos;&apos;&apos;		Command: A menu command like &quot;.uno:About&quot;. The validity of the command is not checked.
 &apos;&apos;&apos;		Script: a Basic or Python script (determined by its URI notation) to be run when the item is clicked
-&apos;&apos;&apos;			Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;			Read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;			Next string argument  will be passed to the called script : a comma-separated string of 4 components:
 &apos;&apos;&apos;				- the menu header
 &apos;&apos;&apos;				- the name of the clicked menu item
@@ -335,7 +335,7 @@ Public Function AddRadioButton(Optional ByVal MenuItem As Variant _
 &apos;&apos;&apos;		Tooltip: The help text to be displayed as a tooltip
 &apos;&apos;&apos;		Command: A menu command like &quot;.uno:About&quot;. The validity of the command is not checked.
 &apos;&apos;&apos;		Script: a Basic or Python script (determined by its URI notation) to be run when the item is clicked
-&apos;&apos;&apos;			Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;			Read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;			Next string argument  will be passed to the called script : a comma-separated string of 4 components:
 &apos;&apos;&apos;				- the menu header
 &apos;&apos;&apos;				- the name of the clicked menu item

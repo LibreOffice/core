@@ -13,7 +13,7 @@ Option Explicit
 &apos;&apos;&apos;	==========
 &apos;&apos;&apos;		Singleton class implementing the &quot;ScriptForge.Session&quot; service
 &apos;&apos;&apos;		Implemented as a usual Basic module
-&apos;&apos;&apos;	
+&apos;&apos;&apos;
 &apos;&apos;&apos;		Gathers diverse general-purpose properties and methods about :
 &apos;&apos;&apos;			- installation/execution environment
 &apos;&apos;&apos;			- UNO introspection utilities
@@ -138,7 +138,7 @@ Public Function ExecuteBasicScript(Optional ByVal Scope As Variant _
 &apos;&apos;&apos;			library =&gt; The library may be not loaded yet
 &apos;&apos;&apos;			module =&gt; Must not be a class module
 &apos;&apos;&apos;			method =&gt; Sub or Function
-&apos;&apos;&apos;			Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;			Read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;		pvArgs: the arguments of the called script
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The value returned by the call to the script
@@ -253,7 +253,7 @@ Public Function ExecutePythonScript(Optional ByVal Scope As Variant _
 &apos;&apos;&apos;			myScript =&gt; The directory containing the python module
 &apos;&apos;&apos;			module.py =&gt; The python module
 &apos;&apos;&apos;			method =&gt; The python function
-&apos;&apos;&apos;			Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;			Read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;		pvArgs: the arguments of the called script
 &apos;&apos;&apos;			Date arguments are converted to iso format. However dates in arrays are not converted
 &apos;&apos;&apos;	Returns:
@@ -323,7 +323,7 @@ Public Function GetPDFExportOptions() As Variant
 &apos;&apos;&apos;	Return the actual values of the PDF export options
 &apos;&apos;&apos;	The PDF options are described on https://wiki.openoffice.org/wiki/API/Tutorials/PDF_export
 &apos;&apos;&apos;	PDF options are set at each use of the Export as ... PDF command by the user and kept
-&apos;&apos;&apos;	permanently until their reset by script or by a new export 
+&apos;&apos;&apos;	permanently until their reset by script or by a new export
 &apos;&apos;&apos;	Args:
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A ScriptForge dictionary instance listing the 40+ properties and their value
@@ -703,7 +703,7 @@ Try:
 
 	&apos;	Send using the mail service
 	oMail.sendSimpleMailMessage(oMessage, lFlag)
-		
+
 Finally:
 	SF_Utils._ExitFunction(cstThisSub)
 	Exit Sub
@@ -767,7 +767,7 @@ Try:
 	Set oDict = PDFOptions
 	oOptions.setPropertyValues(oDict.Keys, oDict.Items)
 	oOptions.commitChanges()
-	
+
 	bSetPDF = True
 
 Finally:
@@ -990,7 +990,7 @@ Private Function _ExecuteScript(ByVal psScript As String _
 									) As Variant
 &apos;&apos;&apos;	Execute the script expressed in the scripting framework_URI notation
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		psScript: read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;		psScript: read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;		pvArg: the unique argument to pass to the called script.
 &apos;&apos;&apos;			It is often an event object that triggered the execution of the script.
 &apos;&apos;&apos;	Returns:
@@ -1035,7 +1035,7 @@ Private Function _GetScript(ByVal psLanguage As String _
 &apos;&apos;&apos;			The SCRIPTISOXT constant is an alias for 2 cases, extension either
 &apos;&apos;&apos;			installed for one user only, or for all users
 &apos;&apos;&apos;			Managed here by trial and error
-&apos;&apos;&apos;		psScript: Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;		psScript: Read https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		A com.sun.star.script.provider.XScript object
 

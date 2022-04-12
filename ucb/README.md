@@ -19,7 +19,7 @@ well as TLS 1.2 or later.
 Our WebDAV `com.sun.star.ucb.ContentProvider` service implementation
 registers the `vnd.sun.star.webdav` and `http` URI schemes (and their
 encrypted TLS variants). See here for the specification:
-https://wiki.openoffice.org/wiki/Documentation/DevGuide/AppendixC/The_WebDAV_Content_Provider
+https://wiki.documentfoundation.org/Documentation/DevGuide/Universal_Content_Providers#The_WebDAV_Content_Provider
 
 Historically, webdav had two ucps, one based on `neon`, the second one
 based on `serf`. Both are superseded by the current `libcurl`

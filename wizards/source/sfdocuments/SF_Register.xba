@@ -15,7 +15,7 @@ Option Explicit
 &apos;&apos;&apos;		The ScriptForge framework includes
 &apos;&apos;&apos;			the master ScriptForge library
 &apos;&apos;&apos;			a number of &quot;associated&quot; libraries SF*
-&apos;&apos;&apos;			any user/contributor extension wanting to fit into the framework 
+&apos;&apos;&apos;			any user/contributor extension wanting to fit into the framework
 &apos;&apos;&apos;
 &apos;&apos;&apos;		The main methods in this module allow the current library to cling to ScriptForge
 &apos;&apos;&apos;			- RegisterScriptServices
@@ -106,14 +106,14 @@ Try:
 		lIndex = lIndex + 1
 		ReDim Preserve vCacheArray(0 To lIndex)
 	End If
-	
+
 	With vCache
 		.Terminated = False
 		Set .XUnoForm = pvUnoForm
 		Set .BasicForm = pvBasicForm
 	End With
 	Set vCacheArray(lIndex) = vCache
-	
+
 	_SF_.SFForms = vCacheArray
 
 Finally:
@@ -140,7 +140,7 @@ Dim vCache As New _FormCache		&apos;	Cleaned entry
 		End With
 		.SFForms(plIndex) = vCache
 	End With
-	
+
 Finally:
 	Exit Sub
 End Sub	&apos;	SFDocuments.SF_Register._CleanCacheEntry
@@ -254,7 +254,7 @@ Try:
 		&apos;	FORM EVENT
 		If oSession.UnoObjectType(vEvent.Source) = &quot;com.sun.star.comp.forms.ODatabaseForm&quot; Then
 			Set oSource = SF_Register._NewForm(vEvent.Source, pbForceInit := True)
-		
+
 		&apos;	CONTROL EVENT
 		Else
 			&apos;	A SF_FormControl instance is always created from its parent, either a form, a subform or a table control
@@ -293,7 +293,7 @@ Public Function _GetEventScriptCode(poObject As Object _
 &apos;&apos;&apos;		psName: the name of the object to be identified from the parent object
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		The script to trigger when psEvent occurs
-&apos;&apos;&apos;		See Scripting Framework URI Specification : https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;		See Scripting Framework URI Specification : https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 
 Dim vEvents As Variant			&apos;	List of available events in the parent object
 								&apos;	Array of com.sun.star.script.ScriptEventDescriptor
@@ -320,7 +320,7 @@ Try:
 		End If
 	Next i
 	If lIndex &lt; 0 Then GoTo Finally		&apos;	Not found, should not happen
-	
+
 	&apos;	Find script triggered by event
 	vEvents = oParent.getScriptEvents(lIndex)				&apos;	Returns an array
 	&apos;	Fix historical typo error
@@ -490,7 +490,7 @@ Public Function _RegisterEventScript(poObject As Object _
 &apos;&apos;&apos;		psEvent: the &quot;On...&quot; name of the event
 &apos;&apos;&apos;		psListener: the listener name corresponding with the event
 &apos;&apos;&apos;		psScriptCode: The script to trigger when psEvent occurs
-&apos;&apos;&apos;			See Scripting Framework URI Specification : https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+&apos;&apos;&apos;			See Scripting Framework URI Specification : https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
 &apos;&apos;&apos;		psName: the name of the object to associate with the event
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		True when successful
@@ -507,7 +507,7 @@ Dim i As Long
 	If Not ScriptForge.SF_Session.HasUnoMethod(poObject, &quot;getParent&quot;) Then GoTo Finally
 
 Try:
-	&apos;	Find object&apos;s internal index i.e. how to reach it via getByIndex() 
+	&apos;	Find object&apos;s internal index i.e. how to reach it via getByIndex()
 	Set oParent = poObject.getParent()
 	lIndex = -1
 	For i = 0 To oParent.getCount() - 1
