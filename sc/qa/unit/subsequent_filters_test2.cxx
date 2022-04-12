@@ -165,6 +165,7 @@ public:
     void testVBAMacroFunctionODS();
     void testAutoheight2Rows();
     void testXLSDefColWidth();
+    void testTdf148423();
     void testPreviewMissingObjLink();
     void testShapeRotationImport();
     void testShapeDisplacementOnRotationImport();
@@ -278,6 +279,7 @@ public:
     CPPUNIT_TEST(testVBAMacroFunctionODS);
     CPPUNIT_TEST(testAutoheight2Rows);
     CPPUNIT_TEST(testXLSDefColWidth);
+    CPPUNIT_TEST(testTdf148423);
     CPPUNIT_TEST(testPreviewMissingObjLink);
     CPPUNIT_TEST(testShapeRotationImport);
     CPPUNIT_TEST(testShapeDisplacementOnRotationImport);
@@ -2424,6 +2426,21 @@ void ScFiltersTest2::testXLSDefColWidth()
     int nWidth = rDoc.GetColWidth(rDoc.MaxCol(), 0, false);
     // This was 1280
     CPPUNIT_ASSERT_EQUAL(1005, nWidth);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest2::testTdf148423()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf148423.", FORMAT_CSV);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    int nWidth = rDoc.GetColWidth(0, 0, false);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 32880
+    // - Actual  : 112
+    CPPUNIT_ASSERT_EQUAL(32880, nWidth);
 
     xDocSh->DoClose();
 }
