@@ -1911,6 +1911,16 @@ bool XFillColorItem::QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId ) cons
             rVal <<= GetThemeColor().GetThemeIndex();
             break;
         }
+        case MID_COLOR_LUM_MOD:
+        {
+            rVal <<= GetThemeColor().GetLumMod();
+            break;
+        }
+        case MID_COLOR_LUM_OFF:
+        {
+            rVal <<= GetThemeColor().GetLumOff();
+            break;
+        }
         default:
         {
             rVal <<= GetColorValue().GetRGBColor();
@@ -1934,6 +1944,22 @@ bool XFillColorItem::PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId )
             GetThemeColor().SetThemeIndex(nIndex);
             break;
         }
+        case MID_COLOR_LUM_MOD:
+        {
+            sal_Int16 nLumMod = -1;
+            if (!(rVal >>= nLumMod))
+                return false;
+            GetThemeColor().SetLumMod(nLumMod);
+        }
+        break;
+        case MID_COLOR_LUM_OFF:
+        {
+            sal_Int16 nLumOff = -1;
+            if (!(rVal >>= nLumOff))
+                return false;
+            GetThemeColor().SetLumOff(nLumOff);
+        }
+        break;
         default:
         {
             Color nValue;

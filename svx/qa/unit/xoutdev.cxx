@@ -129,6 +129,12 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
     sal_Int16 nExpected = 4; // Accent 1
     xShape->setPropertyValue("FillColorTheme", uno::makeAny(nExpected));
 
+    // 80% lighter
+    sal_Int16 nExpectedLumMod = 2000;
+    xShape->setPropertyValue("FillColorLumMod", uno::makeAny(nExpectedLumMod));
+    sal_Int16 nExpectedLumOff = 8000;
+    xShape->setPropertyValue("FillColorLumOff", uno::makeAny(nExpectedLumOff));
+
     // Then make sure the value we read back is the expected one:
     sal_Int16 nActual = -1;
     xShape->getPropertyValue("FillColorTheme") >>= nActual;
@@ -137,6 +143,14 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
     // - Actual  : -1
     // i.e. setting the value was broken.
     CPPUNIT_ASSERT_EQUAL(nExpected, nActual);
+    xShape->getPropertyValue("FillColorLumMod") >>= nActual;
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2000
+    // - Actual  : 8000
+    // i.e. FillColorLumOff was set as FillColor, then getting FillColorLumMod returned FillColor.
+    CPPUNIT_ASSERT_EQUAL(nExpectedLumMod, nActual);
+    xShape->getPropertyValue("FillColorLumOff") >>= nActual;
+    CPPUNIT_ASSERT_EQUAL(nExpectedLumOff, nActual);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
