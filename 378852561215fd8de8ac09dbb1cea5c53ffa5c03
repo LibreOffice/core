@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e0e0c95_bb908b9a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-12T07:04:04Z",
+      "side": 1,
+      "message": "Fits nicely with how tooltips behave e.g. with Kate or Okular, but some tooltips get lost, e.g. the color names are no longer shown when hovering over colors in the \"Character Highlighting Color\" popup in Writer\u0027s formatting toolbar.",
+      "revId": "378852561215fd8de8ac09dbb1cea5c53ffa5c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
