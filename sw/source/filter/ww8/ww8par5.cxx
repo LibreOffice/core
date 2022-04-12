@@ -1548,6 +1548,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
     // RegInfoFormat, DefaultFormat for DocInfoFields
     sal_uInt16 nReg = DI_SUB_AUTHOR;
     bool bDateTime = false;
+    const sal_uInt16 nFldLock = (pF->nOpt & 0x10) ? DI_SUB_FIXED : 0;
 
     if( 85 == pF->nId )
     {
@@ -1721,7 +1722,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             bDateTime = true;
             break;
         case 23:
-            nSub = DI_PRINT;
+            nSub = DI_PRINT | nFldLock;
             nReg = DI_SUB_DATE;
             bDateTime = true;
             break;
@@ -1729,12 +1730,12 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, OUString& rStr )
             nSub = DI_DOCNO;
             break;
         case 22:
-            nSub = DI_CHANGE;
+            nSub = DI_CHANGE | nFldLock;
             nReg = DI_SUB_DATE;
             bDateTime = true;
             break;
         case 25:
-            nSub = DI_CHANGE;
+            nSub = DI_CHANGE | nFldLock;
             nReg = DI_SUB_TIME;
             bDateTime = true;
             break;
