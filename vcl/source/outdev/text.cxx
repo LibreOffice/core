@@ -1678,7 +1678,7 @@ void OutputDevice::ImplDrawText( OutputDevice& rTargetDevice, const tools::Recta
         tools::Long nMnemonicX = 0;
         tools::Long nMnemonicY = 0;
         DeviceCoordinate nMnemonicWidth = 0;
-        if ( nMnemonicPos != -1 )
+        if (nMnemonicPos != -1 && nMnemonicPos < aStr.getLength())
         {
             std::unique_ptr<tools::Long[]> const pCaretXArray(new tools::Long[2 * aStr.getLength()]);
             /*sal_Bool bRet =*/ _rLayout.GetCaretPositions( aStr, pCaretXArray.get(), 0, aStr.getLength() );
