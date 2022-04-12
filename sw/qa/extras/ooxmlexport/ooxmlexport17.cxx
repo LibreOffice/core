@@ -83,6 +83,27 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_createField, "tdf148380_createField.docx"
     CPPUNIT_ASSERT_EQUAL(OUString("yesterday at noon"), xField->getPresentation(false));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148380_fldLocked, "tdf148380_fldLocked.docx")
+{
+    getParagraph(2, "4/5/2022 4:29:00 PM");
+    getParagraph(4, "1/23/4567 8:9:10 PM");
+
+    // Verify that these are fields, and not just plain text
+    // (import only, since export thankfully just dumps these fixed fields as plain text
+    if (mbExported)
+        return;
+    uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
+    uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
+    uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
+    // This should NOT be updated at FILEOPEN to match the last modified time - it is locked.
+    CPPUNIT_ASSERT_EQUAL(OUString("4/5/2022 4:29:00 PM"), xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Modified (fixed)"), xField->getPresentation(true));
+    xField.set(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("1/23/4567 8:9:10 PM"), xField->getPresentation(false));
+    CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Last printed (fixed)"), xField->getPresentation(true));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf148380_modifiedField, "tdf148380_modifiedField.docx")
 {
     getParagraph(2, "4/5/2022 3:29:00 PM"); // default (unspecified) date format
