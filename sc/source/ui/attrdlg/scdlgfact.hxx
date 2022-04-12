@@ -348,13 +348,14 @@ public:
 
 class AbstractScMetricInputDlg_Impl : public AbstractScMetricInputDlg
 {
-    std::unique_ptr<ScMetricInputDlg> m_xDlg;
+    std::shared_ptr<ScMetricInputDlg> m_xDlg;
 public:
-    explicit AbstractScMetricInputDlg_Impl(std::unique_ptr<ScMetricInputDlg> p)
+    explicit AbstractScMetricInputDlg_Impl(std::shared_ptr<ScMetricInputDlg> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext& rCtx) override;
     virtual int GetInputValue() const override;
 };
 
