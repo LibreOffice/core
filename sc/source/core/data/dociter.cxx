@@ -2396,7 +2396,6 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument& rDocument, SCTAB
 
     nRow = nStartRow;
     nCol = nStartCol;
-    bRowEmpty = false;
 
     pIndices.reset( new SCSIZE[nEndCol-nStartCol+1] );
     pNextEnd.reset( new SCROW[nEndCol-nStartCol+1] );
@@ -2412,7 +2411,6 @@ ScHorizontalAttrIterator::~ScHorizontalAttrIterator()
 
 void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
 {
-    bool bEmpty = true;
     nMinNextEnd = rDoc.MaxRow();
     SCCOL nThisHead = 0;
 
@@ -2446,12 +2444,6 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
             {
                 const ScPatternAttr* pPattern = pArray.mvData[nIndex].pPattern;
                 SCROW nThisEnd = pArray.mvData[nIndex].nEndRow;
-
-                if ( IsDefaultItem( pPattern ) )
-                    pPattern = nullptr;
-                else
-                    bEmpty = false; // Found attributes
-
                 pNextEnd[nPos] = nThisEnd;
                 assert( pNextEnd[nPos] >= nRow && "Sequence out of order" );
                 ppPatterns[nPos] = pPattern;
@@ -2463,8 +2455,6 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
                 ppPatterns[nPos] = nullptr;
             }
         }
-        else if ( ppPatterns[nPos] )
-            bEmpty = false; // Area not at the end yet
 
         if ( nMinNextEnd > pNextEnd[nPos] )
             nMinNextEnd = pNextEnd[nPos];
@@ -2477,24 +2467,7 @@ void ScHorizontalAttrIterator::InitForNextRow(bool bInitialization)
         }
     }
 
-    if (bEmpty)
-        nRow = nMinNextEnd; // Skip until end of next section
-    else
-        pHorizEnd[nThisHead] = nEndCol; // set the end position of the last horizontal group, too
-    bRowEmpty = bEmpty;
-}
-
-bool ScHorizontalAttrIterator::InitForNextAttr()
-{
-    if ( !ppPatterns[nCol-nStartCol] ) // Skip default items
-    {
-        assert( pHorizEnd[nCol-nStartCol] < rDoc.MaxCol()+1 && "missing stored data" );
-        nCol = pHorizEnd[nCol-nStartCol] + 1;
-        if ( nCol > nEndCol )
-            return false;
-    }
-
-    return true;
+    pHorizEnd[nThisHead] = nEndCol; // set the end position of the last horizontal group, too
 }
 
 const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow )
@@ -2502,7 +2475,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     for (;;)
     {
-        if ( !bRowEmpty && nCol <= nEndCol && InitForNextAttr() )
+        if ( nCol <= nEndCol )
         {
             const ScPatternAttr* pPat = ppPatterns[nCol-nStartCol];
             rRow = nRow;
@@ -2520,7 +2493,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
             return nullptr; // Found nothing
         nCol = nStartCol; // Start at the left again
 
-        if ( bRowEmpty || nRow > nMinNextEnd )
+        if ( nRow > nMinNextEnd )
             InitForNextRow(false);
     }
 }
