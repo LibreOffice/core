@@ -313,7 +313,7 @@ struct OSAttr
     RasterOp eImgBgMix;
     sal_Int32 nArcP, nArcQ, nArcR, nArcS;
     Degree10  nChrAng;
-    Size     aChrCellSize;
+    sal_Int32 nChrCellHeight;
     sal_uInt32 nChrSet;
     Point    aCurPos;
     PenStyle eLinStyle;
@@ -1035,7 +1035,7 @@ void OS2METReader::ReadChrStr(bool bGivenPos, bool bMove, bool bExtra, sal_uInt1
     if (pF!=nullptr)
         aFont = pF->aFont;
     aFont.SetColor(aAttr.aChrCol);
-    aFont.SetFontSize(Size(0,aAttr.aChrCellSize.Height()));
+    aFont.SetFontSize(Size(0,aAttr.nChrCellHeight));
     if ( aAttr.nChrAng )
         aFont.SetOrientation(aAttr.nChrAng);
 
@@ -2087,12 +2087,12 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             [[fallthrough]];
         case GOrdSChCel: {
             sal_uInt16 nLen=nOrderLen;
-            auto nWidth = ReadCoord(bCoord32);
+            (void) ReadCoord(bCoord32); // Width, unused
             auto nHeight = ReadCoord(bCoord32);
-            if (nWidth < 0 || nHeight < 0)
-                aAttr.aChrCellSize = aDefAttr.aChrCellSize;
+            if (nHeight < 0)
+                aAttr.nChrCellHeight = aDefAttr.nChrCellHeight;
             else
-                aAttr.aChrCellSize = Size(nWidth, nHeight);
+                aAttr.nChrCellHeight = nHeight;
             if (bCoord32) nLen-=8; else nLen-=4;
             if (nLen>=4) {
                 pOS2MET->SeekRel(4); nLen-=4;
@@ -2100,8 +2100,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             if (nLen>=2) {
                 sal_uInt8 nbyte(0);
                 pOS2MET->ReadUChar( nbyte );
-                if ((nbyte&0x80)==0 && aAttr.aChrCellSize==Size(0,0))
-                    aAttr.aChrCellSize = aDefAttr.aChrCellSize;
+                if ((nbyte&0x80)==0 && aAttr.nChrCellHeight == 0)
+                    aAttr.nChrCellHeight = aDefAttr.nChrCellHeight;
             }
             break;
         }
@@ -2757,7 +2757,7 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     aDefAttr.nArcR       =0;
     aDefAttr.nArcS       =0;
     aDefAttr.nChrAng     =0_deg10;
-    aDefAttr.aChrCellSize=Size(12,12);
+    aDefAttr.nChrCellHeight = 12;
     aDefAttr.nChrSet     =0;
     aDefAttr.aCurPos     =Point(0,0);
     aDefAttr.eLinStyle   =PEN_SOLID;
