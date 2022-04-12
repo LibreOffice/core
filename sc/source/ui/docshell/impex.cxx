@@ -2340,7 +2340,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
                     aFormats.push_back( nKey );
                 }
             }
-            else if( cTag == 'I' && *p == 'D' )
+            else if (cTag == 'I' && *p == 'D' && aLine.getLength() > 4)
             {
                 aLine = aLine.copy(4);
                 if (aLine == "CALCOOO32")
