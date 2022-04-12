@@ -15,6 +15,7 @@
 #include <comphelper/processfactory.hxx>
 #include <unx/gtk/gtkdata.hxx>
 #include <vcl/builder.hxx>
+#include <cairo/cairo-gobject.h>
 #include "convert3to4.hxx"
 
 namespace
@@ -1502,6 +1503,17 @@ ConvertResult Convert3To4(const css::uno::Reference<css::xml::dom::XNode>& xNode
     return ConvertResult(bChildCanFocus, bHasVisible, bHasIconSize, bAlwaysShowImage, bUseUnderline,
                          bVertOrientation, bXAlign, eImagePos, xPropertyLabel, xPropertyIconName);
 }
+
+std::once_flag cairo_surface_type_flag;
+
+void ensure_cairo_surface_type()
+{
+    // cairo_gobject_surface_get_type needs to be called at least once for
+    // g_type_from_name to be able to resolve "CairoSurface". In gtk3 there was fallback
+    // mechanism to attempt to resolve such "missing" types which is not in place for
+    // gtk4 so ensure it can be found explicitly
+    std::call_once(cairo_surface_type_flag, []() { cairo_gobject_surface_get_type(); });
+}
 }
 
 void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
@@ -1532,6 +1544,8 @@ void builder_add_from_gtk3_file(GtkBuilder* pBuilder, const OUString& rUri)
     xSerializer->serialize(
         css::uno::Reference<css::xml::sax::XDocumentHandler>(xWriter, css::uno::UNO_QUERY_THROW),
         css::uno::Sequence<css::beans::StringPair>());
+
+    ensure_cairo_surface_type();
 
     // feed it to GtkBuilder
     css::uno::Reference<css::io::XSeekable> xTempSeek(xTempStream, css::uno::UNO_QUERY_THROW);
