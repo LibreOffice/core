@@ -54,8 +54,6 @@ namespace internal
 
         OPropertyAccessor(sal_Int32 _nOriginalHandle, sal_Int32 _nPos, bool _bAggregate)
             :nOriginalHandle(_nOriginalHandle) ,nPos(_nPos) ,bAggregate(_bAggregate) { }
-        OPropertyAccessor()
-            :nOriginalHandle(-1) ,nPos(-1) ,bAggregate(false) { }
 
         bool operator==(const OPropertyAccessor& rOb) const { return nPos == rOb.nPos; }
         bool operator <(const OPropertyAccessor& rOb) const { return nPos < rOb.nPos; }
