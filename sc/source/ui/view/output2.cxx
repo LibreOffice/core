@@ -2169,6 +2169,7 @@ static void lcl_ClearEdit( EditEngine& rEngine )       // text and attributes
     if (rPara.Count())
         rEngine.SetParaAttribs( 0,
                     SfxItemSet( *rPara.GetPool(), rPara.GetRanges() ) );
+    rEngine.EnableSkipOutsideFormat(false);
 }
 
 static bool lcl_SafeIsValue( ScRefCellValue& rCell )
@@ -2920,6 +2921,10 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
 
     rParam.setPatternToEngine(mbUseStyleColor);
     rParam.setAlignmentToEngine();
+    // Don't format unnecessary parts if the text will be drawn from top (Standard will
+    // act that way if text doesn't fit, see below).
+    rParam.mpEngine->EnableSkipOutsideFormat(rParam.meVerJust==SvxCellVerJustify::Top
+        || rParam.meVerJust==SvxCellVerJustify::Standard);
 
     //  Read content from cell
 

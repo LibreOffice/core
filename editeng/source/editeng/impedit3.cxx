@@ -621,9 +621,17 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
         return FinishCreateLines( &rParaPortion );
     }
 
+    sal_Int64 nCurrentPosY = nStartPosY;
+    // If we're allowed to skip parts outside and this cannot possibly fit in the given height,
+    // bail out to avoid possibly formatting a lot of text that will not be used. For the first
+    // paragraph still format at least a bit.
+    if( mbSkipOutsideFormat && nPara != 0
+        && !aStatus.AutoPageHeight() && aPaperSize.Height() < nCurrentPosY )
+    {
+        return false;
+    }
 
     // Initialization...
-
 
     // Always format for 100%:
     bool bMapChanged = ImpCheckRefMapMode();
@@ -1607,6 +1615,7 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
                                         // as nEnd points to the last character!
 
             sal_Int32 nEndPortion = pLine->GetEndPortion();
+            nCurrentPosY += pLine->GetHeight();
 
             // Next line or maybe a new line...
             pLine = nullptr;
@@ -1615,6 +1624,16 @@ bool ImpEditEngine::CreateLines( sal_Int32 nPara, sal_uInt32 nStartPosY )
             if ( pLine && ( nIndex >= pNode->Len() ) )
             {
                 nDelFromLine = nLine;
+                break;
+            }
+            // Stop processing if allowed and this is outside of the paper size height.
+            // Format at least two lines though, in case something detects whether
+            // the text has been wrapped or something similar.
+            if( mbSkipOutsideFormat && nLine > 2
+                && !aStatus.AutoPageHeight() && aPaperSize.Height() < nCurrentPosY )
+            {
+                if ( pLine && ( nIndex >= pNode->Len()) )
+                    nDelFromLine = nLine;
                 break;
             }
             if ( !pLine )
