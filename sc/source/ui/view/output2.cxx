@@ -3092,6 +3092,11 @@ void ScOutputData::DrawEditStandard(DrawEditParam& rParam)
             tools::Long nMarkPixel = static_cast<tools::Long>( SC_CLIPMARK_SIZE * mnPPTX );
             if ( aAreaParam.maClipRect.Right() - nMarkPixel > aAreaParam.maClipRect.Left() )
                 aAreaParam.maClipRect.AdjustRight( -nMarkPixel );
+
+            // Standard is normally treated as Bottom, but if text height is clipped, then
+            // Top looks better and also allows using EditEngine::EnableSkipOutsideFormat().
+            if (rParam.meVerJust==SvxCellVerJustify::Standard)
+                rParam.meVerJust=SvxCellVerJustify::Top;
         }
     }
 
