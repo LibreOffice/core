@@ -290,6 +290,8 @@
     { UNO_NAME_FILLTRANSPARENCEGRADIENTNAME, XATTR_FILLFLOATTRANSPARENCE, ::cppu::UnoType<OUString>::get(), 0, MID_NAME }, \
     { UNO_NAME_FILLCOLOR_2,       XATTR_SECONDARYFILLCOLOR, ::cppu::UnoType<sal_Int32>::get(),          0,     0}, \
     { UNO_NAME_FILLCOLOR_THEME,   XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_THEME_INDEX}, \
+    { UNO_NAME_FILLCOLOR_LUM_MOD, XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_LUM_MOD}, \
+    { UNO_NAME_FILLCOLOR_LUM_OFF, XATTR_FILLCOLOR, ::cppu::UnoType<sal_Int16>::get(),          0,     MID_COLOR_LUM_OFF}, \
     { UNO_NAME_GRAPHIC_GRAPHICCROP, SDRATTR_GRAFCROP      , ::cppu::UnoType<css::text::GraphicCrop>::get(), 0, 0 },
 
 #define EDGERADIUS_PROPERTIES \
