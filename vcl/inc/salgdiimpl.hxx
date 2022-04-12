@@ -82,26 +82,38 @@ public:
 
     virtual bool setClipRegion( const vcl::Region& ) = 0;
 
+    // get the depth of the device
     virtual sal_uInt16 GetBitCount() const = 0;
 
+    // get the width of the device
     virtual tools::Long GetGraphicsWidth() const = 0;
 
+    // set the clip region to empty
     virtual void ResetClipRegion() = 0;
 
+    // set the line color to transparent (= don't draw lines)
     virtual void SetLineColor() = 0;
 
+    // set the line color to a specific color
     virtual void SetLineColor( Color nColor ) = 0;
 
+    // set the fill color to transparent (= don't fill)
     virtual void SetFillColor() = 0;
 
+    // set the fill color to a specific color, shapes will be
+    // filled accordingly
     virtual void SetFillColor( Color nColor ) = 0;
 
+    // enable/disable XOR drawing
     virtual void SetXORMode( bool bSet, bool bInvertOnly ) = 0;
 
+    // set line color for raster operations
     virtual void SetROPLineColor( SalROPColor nROPColor ) = 0;
 
+    // set fill color for raster operations
     virtual void SetROPFillColor( SalROPColor nROPColor ) = 0;
 
+    // draw --> LineColor and FillColor and RasterOp and ClipRegion
     virtual void drawPixel( tools::Long nX, tools::Long nY ) = 0;
     virtual void drawPixel( tools::Long nX, tools::Long nY, Color nColor ) = 0;
 
@@ -147,12 +159,15 @@ public:
                 const Point* const* pPtAry,
                 const PolyFlags* const* pFlgAry ) = 0;
 
+    // CopyArea --> No RasterOp, but ClipRegion
     virtual void copyArea(
                 tools::Long nDestX, tools::Long nDestY,
                 tools::Long nSrcX, tools::Long nSrcY,
                 tools::Long nSrcWidth, tools::Long nSrcHeight,
                 bool bWindowInvalidate ) = 0;
 
+    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
+    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
     virtual void copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) = 0;
 
     virtual void drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
@@ -171,6 +186,7 @@ public:
 
     virtual Color getPixel( tools::Long nX, tools::Long nY ) = 0;
 
+    // invert --> ClipRegion (only Windows or VirDevs)
     virtual void invert(
                 tools::Long nX, tools::Long nY,
                 tools::Long nWidth, tools::Long nHeight,
@@ -184,21 +200,40 @@ public:
                 void* pPtr,
                 sal_uInt32 nSize ) = 0;
 
+
+    /** Blend the bitmap with the current buffer */
     virtual bool blendBitmap(
                 const SalTwoRect&,
                 const SalBitmap& rBitmap ) = 0;
 
+    /** Draw the bitmap by blending using the mask and alpha channel */
     virtual bool blendAlphaBitmap(
                 const SalTwoRect&,
                 const SalBitmap& rSrcBitmap,
                 const SalBitmap& rMaskBitmap,
                 const SalBitmap& rAlphaBitmap ) = 0;
 
+    /** Render bitmap with alpha channel
+
+        @param rSourceBitmap
+        Source bitmap to blit
+
+        @param rAlphaBitmap
+        Alpha channel to use for blitting
+
+        @return true, if the operation succeeded, and false
+        otherwise. In this case, clients should try to emulate alpha
+        compositing themselves
+     */
     virtual bool drawAlphaBitmap(
                 const SalTwoRect&,
                 const SalBitmap& rSourceBitmap,
                 const SalBitmap& rAlphaBitmap ) = 0;
 
+    /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system
+
+      @param fAlpha additional alpha (0 to 1) to apply while drawing
+    */
     virtual bool drawTransformedBitmap(
                 const basegfx::B2DPoint& rNull,
                 const basegfx::B2DPoint& rX,
@@ -207,8 +242,25 @@ public:
                 const SalBitmap* pAlphaBitmap,
                 double fAlpha) = 0;
 
+    /// Returns true if the drawTransformedBitmap() call is fast, and so it should
+    /// be used directly without trying to optimize some calls e.g. by calling drawBitmap()
+    /// instead (which is faster for most VCL backends). These optimizations are not
+    /// done unconditionally because they may be counter-productive for some fast VCL backends
+    /// (for example, some OutputDevice optimizations could try access the pixels, which
+    /// would make performance worse for GPU-backed backends).
+    /// See also tdf#138068.
     virtual bool hasFastDrawTransformedBitmap() const = 0;
 
+    /** Render solid rectangle with given transparency
+     *
+     * @param nX             Top left coordinate of rectangle
+     * @param nY             Bottom right coordinate of rectangle
+     * @param nWidth         Width of rectangle
+     * @param nHeight        Height of rectangle
+     * @param nTransparency  Transparency value (0-255) to use. 0 blits and opaque, 255 a
+     *                       fully transparent rectangle
+     * @returns true if successfully drawn, false if not able to draw rectangle
+     */
     virtual bool drawAlphaRect(
                     tools::Long nX, tools::Long nY,
                     tools::Long nWidth, tools::Long nHeight,

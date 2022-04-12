@@ -85,7 +85,7 @@ public:
     Drawable GetDrawable() const { return m_hDrawable; }
 };
 
-class X11SalGraphics final : public SalGraphicsAutoDelegateToImpl
+class X11SalGraphics final : public SalGraphics
 {
     friend class X11SalGraphicsImpl;
     friend class X11CairoTextRender;

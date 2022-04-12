@@ -451,7 +451,7 @@ public:
     bool supportsOperation(OutDevSupportType eType) const override;
 };
 
-class AquaSalGraphics : public SalGraphicsAutoDelegateToImpl
+class AquaSalGraphics : public SalGraphics
 {
     AquaSharedAttributes maShared;
     std::unique_ptr<AquaGraphicsBackendBase> mpBackend;

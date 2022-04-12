@@ -210,7 +210,7 @@ bool FileDefinitionWidgetDraw::hitTestNativeControl(
     return false;
 }
 
-void FileDefinitionWidgetDraw::drawPolyPolygon(SalGraphics& rGraphics,
+void FileDefinitionWidgetDraw::drawPolyPolygon(SalGraphicsImpl& rGraphics,
                                                const basegfx::B2DHomMatrix& rObjectToDevice,
                                                const basegfx::B2DPolyPolygon& i_rPolyPolygon,
                                                double i_fTransparency)
@@ -219,7 +219,7 @@ void FileDefinitionWidgetDraw::drawPolyPolygon(SalGraphics& rGraphics,
 }
 
 void FileDefinitionWidgetDraw::drawPolyLine(
-    SalGraphics& rGraphics, const basegfx::B2DHomMatrix& rObjectToDevice,
+    SalGraphicsImpl& rGraphics, const basegfx::B2DHomMatrix& rObjectToDevice,
     const basegfx::B2DPolygon& i_rPolygon, double i_fTransparency, double i_fLineWidth,
     const std::vector<double>* i_pStroke, basegfx::B2DLineJoin i_eLineJoin,
     css::drawing::LineCap i_eLineCap, double i_fMiterMinimumAngle, bool bPixelSnapHairline)
@@ -228,20 +228,20 @@ void FileDefinitionWidgetDraw::drawPolyLine(
                            i_eLineJoin, i_eLineCap, i_fMiterMinimumAngle, bPixelSnapHairline);
 }
 
-void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
+void FileDefinitionWidgetDraw::drawBitmap(SalGraphicsImpl& rGraphics, const SalTwoRect& rPosAry,
                                           const SalBitmap& rSalBitmap)
 {
     rGraphics.drawBitmap(rPosAry, rSalBitmap);
 }
 
-void FileDefinitionWidgetDraw::drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
+void FileDefinitionWidgetDraw::drawBitmap(SalGraphicsImpl& rGraphics, const SalTwoRect& rPosAry,
                                           const SalBitmap& rSalBitmap,
                                           const SalBitmap& rTransparentBitmap)
 {
     rGraphics.drawBitmap(rPosAry, rSalBitmap, rTransparentBitmap);
 }
 
-void FileDefinitionWidgetDraw::implDrawGradient(SalGraphics& rGraphics,
+void FileDefinitionWidgetDraw::implDrawGradient(SalGraphicsImpl& rGraphics,
                                                 const basegfx::B2DPolyPolygon& rPolyPolygon,
                                                 const SalGradient& rGradient)
 {
@@ -250,8 +250,8 @@ void FileDefinitionWidgetDraw::implDrawGradient(SalGraphics& rGraphics,
 
 namespace
 {
-void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics, tools::Long nX,
-                          tools::Long nY, tools::Long nWidth, tools::Long nHeight)
+void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphicsImpl& rGraphics,
+                          tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight)
 {
     basegfx::B2DRectangle aSVGRect = rDrawRoot.maRectangle;
 
@@ -403,8 +403,8 @@ void drawFromDrawCommands(gfx::DrawRoot const& rDrawRoot, SalGraphics& rGraphics
 }
 
 void munchDrawCommands(std::vector<std::shared_ptr<WidgetDrawAction>> const& rDrawActions,
-                       SalGraphics& rGraphics, tools::Long nX, tools::Long nY, tools::Long nWidth,
-                       tools::Long nHeight)
+                       SalGraphicsImpl& rGraphics, tools::Long nX, tools::Long nY,
+                       tools::Long nWidth, tools::Long nHeight)
 {
     for (std::shared_ptr<WidgetDrawAction> const& pDrawAction : rDrawActions)
     {
@@ -574,8 +574,8 @@ bool FileDefinitionWidgetDraw::resolveDefinition(ControlType eType, ControlPart 
             // use last defined state
             auto const& pState = aStates.back();
             {
-                munchDrawCommands(pState->mpWidgetDrawActions, m_rGraphics, nX, nY, nWidth,
-                                  nHeight);
+                munchDrawCommands(pState->mpWidgetDrawActions, *m_rGraphics.GetImpl(), nX, nY,
+                                  nWidth, nHeight);
                 bOK = true;
             }
         }

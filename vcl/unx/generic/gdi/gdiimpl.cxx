@@ -521,10 +521,8 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         // #i60699# No chance to handle graphics exposures - we copy
         // to a temp bitmap first, into which no repaints are
         // technically possible.
-        std::shared_ptr<SalBitmap> xDDB(pSrcGraphics->getBitmap( rPosAry.mnSrcX,
-                                                                   rPosAry.mnSrcY,
-                                                                   rPosAry.mnSrcWidth,
-                                                                   rPosAry.mnSrcHeight ));
+        std::shared_ptr<SalBitmap> xDDB(pSrcGraphics->GetImpl()->getBitmap(rPosAry.mnSrcX, rPosAry.mnSrcY,
+                                                                           rPosAry.mnSrcWidth, rPosAry.mnSrcHeight));
 
         if( !xDDB )
         {

@@ -164,7 +164,7 @@ private:
     void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
 };
 
-class QtGraphics final : public SalGraphicsAutoDelegateToImpl, public QtGraphicsBase
+class QtGraphics final : public SalGraphics, public QtGraphicsBase
 {
     friend class QtBitmap;
 

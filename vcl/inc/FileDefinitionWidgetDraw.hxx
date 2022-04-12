@@ -53,24 +53,25 @@ public:
 
     bool updateSettings(AllSettings& rSettings) override;
 
-    static void drawPolyPolygon(SalGraphics& rGraphics,
+    static void drawPolyPolygon(SalGraphicsImpl& rGraphics,
                                 const basegfx::B2DHomMatrix& rObjectToDevice,
                                 const basegfx::B2DPolyPolygon& i_rPolyPolygon,
                                 double i_fTransparency);
 
-    static void drawPolyLine(SalGraphics& rGraphics, const basegfx::B2DHomMatrix& rObjectToDevice,
+    static void drawPolyLine(SalGraphicsImpl& rGraphics,
+                             const basegfx::B2DHomMatrix& rObjectToDevice,
                              const basegfx::B2DPolygon& i_rPolygon, double i_fTransparency,
                              double i_fLineWidth, const std::vector<double>* i_pStroke,
                              basegfx::B2DLineJoin i_eLineJoin, css::drawing::LineCap i_eLineCap,
                              double i_fMiterMinimumAngle, bool bPixelSnapHairline);
 
-    static void drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
+    static void drawBitmap(SalGraphicsImpl& rGraphics, const SalTwoRect& rPosAry,
                            const SalBitmap& rSalBitmap);
 
-    static void drawBitmap(SalGraphics& rGraphics, const SalTwoRect& rPosAry,
+    static void drawBitmap(SalGraphicsImpl& rGraphics, const SalTwoRect& rPosAry,
                            const SalBitmap& rSalBitmap, const SalBitmap& rTransparentBitmap);
 
-    static void implDrawGradient(SalGraphics& rGraphics,
+    static void implDrawGradient(SalGraphicsImpl& rGraphics,
                                  const basegfx::B2DPolyPolygon& rPolyPolygon,
                                  const SalGradient& rGradient);
 };

@@ -112,36 +112,65 @@ public:
     virtual void                GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) = 0;
 
     // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const = 0;
+    sal_uInt16 GetBitCount() const
+    {
+        return GetImpl()->GetBitCount();
+    }
 
     // get the width of the device
-    virtual tools::Long                GetGraphicsWidth() const = 0;
+    tools::Long GetGraphicsWidth() const
+    {
+        return GetImpl()->GetGraphicsWidth();
+    }
 
     // set the clip region to empty
-    virtual void                ResetClipRegion() = 0;
+    void ResetClipRegion()
+    {
+        GetImpl()->ResetClipRegion();
+    }
 
     // set the line color to transparent (= don't draw lines)
-
-    virtual void                SetLineColor() = 0;
+    void SetLineColor()
+    {
+        GetImpl()->SetLineColor();
+    }
 
     // set the line color to a specific color
-    virtual void                SetLineColor( Color nColor ) = 0;
+    void SetLineColor(Color nColor)
+    {
+        GetImpl()->SetLineColor(nColor);
+    }
 
     // set the fill color to transparent (= don't fill)
-    virtual void                SetFillColor() = 0;
+    void SetFillColor()
+    {
+        GetImpl()->SetFillColor();
+    }
 
     // set the fill color to a specific color, shapes will be
     // filled accordingly
-    virtual void                SetFillColor( Color nColor ) = 0;
+    void SetFillColor(Color nColor)
+    {
+        GetImpl()->SetFillColor(nColor);
+    }
 
     // enable/disable XOR drawing
-    virtual void                SetXORMode( bool bSet, bool bInvertOnly ) = 0;
+    void SetXORMode(bool bSet, bool bInvertOnly)
+    {
+        GetImpl()->SetXORMode(bSet, bInvertOnly);
+    }
 
     // set line color for raster operations
-    virtual void                SetROPLineColor( SalROPColor nROPColor ) = 0;
+    void SetROPLineColor(SalROPColor nROPColor)
+    {
+        GetImpl()->SetROPLineColor(nROPColor);
+    }
 
     // set fill color for raster operations
-    virtual void                SetROPFillColor( SalROPColor nROPColor ) = 0;
+    void SetROPFillColor(SalROPColor nROPColor)
+    {
+        GetImpl()->SetROPFillColor(nROPColor);
+    }
 
     // set the text color to a specific color
     virtual void                SetTextColor( Color nColor ) = 0;
@@ -216,7 +245,10 @@ public:
                                 GetTextLayout(int nFallbackLevel) = 0;
     virtual void                DrawTextLayout( const GenericSalLayout& ) = 0;
 
-    virtual bool                supportsOperation( OutDevSupportType ) const = 0;
+    bool supportsOperation(OutDevSupportType eType) const
+    {
+        return GetImpl()->supportsOperation(eType);
+    }
 
     // mirroring specifics
     SalLayoutFlags              GetLayout() const { return m_nLayout; }
@@ -440,7 +472,10 @@ public:
                                     double fAlpha,
                                     const OutputDevice& rOutDev );
 
-    bool                        HasFastDrawTransformedBitmap() const;
+    bool HasFastDrawTransformedBitmap() const
+    {
+        return GetImpl()->hasFastDrawTransformedBitmap();
+    }
 
     bool                        DrawAlphaRect(
                                     tools::Long nX, tools::Long nY,
@@ -467,172 +502,7 @@ public:
 #endif // ENABLE_CAIRO_CANVAS
 
 protected:
-
     friend class vcl::FileDefinitionWidgetDraw;
-
-    virtual bool                setClipRegion( const vcl::Region& ) = 0;
-
-    // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void                drawPixel( tools::Long nX, tools::Long nY ) = 0;
-    virtual void                drawPixel( tools::Long nX, tools::Long nY, Color nColor ) = 0;
-
-    virtual void                drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) = 0;
-
-    virtual void                drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
-
-    virtual void                drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) = 0;
-
-    virtual void                drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) = 0;
-
-    virtual void                drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) = 0;
-
-    virtual bool                drawPolyPolygon(
-                                    const basegfx::B2DHomMatrix& rObjectToDevice,
-                                    const basegfx::B2DPolyPolygon&,
-                                    double fTransparency) = 0;
-
-    virtual bool                drawPolyLine(
-                                    const basegfx::B2DHomMatrix& rObjectToDevice,
-                                    const basegfx::B2DPolygon&,
-                                    double fTransparency,
-                                    double fLineWidth,
-                                    const std::vector< double >* pStroke, // MM01
-                                    basegfx::B2DLineJoin,
-                                    css::drawing::LineCap,
-                                    double fMiterMinimumAngle,
-                                    bool bPixelSnapHairline) = 0;
-
-    virtual bool                drawPolyLineBezier(
-                                    sal_uInt32 nPoints,
-                                    const Point* pPtAry,
-                                    const PolyFlags* pFlgAry ) = 0;
-
-    virtual bool                drawPolygonBezier(
-                                    sal_uInt32 nPoints,
-                                    const Point* pPtAry,
-                                    const PolyFlags* pFlgAry ) = 0;
-
-    virtual bool                drawPolyPolygonBezier(
-                                    sal_uInt32 nPoly,
-                                    const sal_uInt32* pPoints,
-                                    const Point* const* pPtAry,
-                                    const PolyFlags* const* pFlgAry ) = 0;
-
-    virtual bool                drawGradient(
-                                    const tools::PolyPolygon& rPolyPoly,
-                                    const Gradient& rGradient ) = 0;
-
-    virtual bool implDrawGradient(basegfx::B2DPolyPolygon const & /*rPolyPolygon*/,
-                                  SalGradient const & /*rGradient*/)
-    {
-        return false;
-    }
-
-    // CopyArea --> No RasterOp, but ClipRegion
-    virtual void                copyArea(
-                                    tools::Long nDestX, tools::Long nDestY,
-                                    tools::Long nSrcX, tools::Long nSrcY,
-                                    tools::Long nSrcWidth, tools::Long nSrcHeight,
-                                    bool bWindowInvalidate ) = 0;
-
-    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
-    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void                copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) = 0;
-
-    virtual void                drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) = 0;
-
-    virtual void                drawBitmap(
-                                    const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rMaskBitmap ) = 0;
-
-    virtual void                drawMask(
-                                    const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    Color nMaskColor ) = 0;
-
-    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) = 0;
-
-    virtual Color               getPixel( tools::Long nX, tools::Long nY ) = 0;
-
-    // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void                invert(
-                                    tools::Long nX, tools::Long nY,
-                                    tools::Long nWidth, tools::Long nHeight,
-                                    SalInvert nFlags) = 0;
-
-    virtual void                invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) = 0;
-
-    virtual bool                drawEPS(
-                                    tools::Long nX, tools::Long nY,
-                                    tools::Long nWidth, tools::Long nHeight,
-                                    void* pPtr,
-                                    sal_uInt32 nSize ) = 0;
-
-    /** Blend the bitmap with the current buffer */
-    virtual bool                blendBitmap(
-                                    const SalTwoRect&,
-                                    const SalBitmap& rBitmap ) = 0;
-
-    /** Draw the bitmap by blending using the mask and alpha channel */
-    virtual bool                blendAlphaBitmap(
-                                    const SalTwoRect&,
-                                    const SalBitmap& rSrcBitmap,
-                                    const SalBitmap& rMaskBitmap,
-                                    const SalBitmap& rAlphaBitmap ) = 0;
-
-    /** Render bitmap with alpha channel
-
-        @param rSourceBitmap
-        Source bitmap to blit
-
-        @param rAlphaBitmap
-        Alpha channel to use for blitting
-
-        @return true, if the operation succeeded, and false
-        otherwise. In this case, clients should try to emulate alpha
-        compositing themselves
-     */
-    virtual bool                drawAlphaBitmap(
-                                    const SalTwoRect&,
-                                    const SalBitmap& rSourceBitmap,
-                                    const SalBitmap& rAlphaBitmap ) = 0;
-
-    /** draw transformed bitmap (maybe with alpha) where Null, X, Y define the coordinate system
-
-      @param fAlpha additional alpha (0 to 1) to apply while drawing
-    */
-    virtual bool                drawTransformedBitmap(
-                                    const basegfx::B2DPoint& rNull,
-                                    const basegfx::B2DPoint& rX,
-                                    const basegfx::B2DPoint& rY,
-                                    const SalBitmap& rSourceBitmap,
-                                    const SalBitmap* pAlphaBitmap,
-                                    double fAlpha) = 0;
-
-    /// Returns true if the drawTransformedBitmap() call is fast, and so it should
-    /// be used directly without trying to optimize some calls e.g. by calling drawBitmap()
-    /// instead (which is faster for most VCL backends). These optimizations are not
-    /// done unconditionally because they may be counter-productive for some fast VCL backends
-    /// (for example, some OutputDevice optimizations could try access the pixels, which
-    /// would make performance worse for GPU-backed backends).
-    /// See also tdf#138068.
-    virtual bool hasFastDrawTransformedBitmap() const = 0;
-
-    /** Render solid rectangle with given transparency
-     *
-     * @param nX             Top left coordinate of rectangle
-     * @param nY             Bottom right coordinate of rectangle
-     * @param nWidth         Width of rectangle
-     * @param nHeight        Height of rectangle
-     * @param nTransparency  Transparency value (0-255) to use. 0 blits and opaque, 255 a
-     *                       fully transparent rectangle
-     * @returns true if successfully drawn, false if not able to draw rectangle
-     */
-    virtual bool                drawAlphaRect(
-                                    tools::Long nX, tools::Long nY,
-                                    tools::Long nWidth, tools::Long nHeight,
-                                    sal_uInt8 nTransparency ) = 0;
 
 private:
     SalLayoutFlags              m_nLayout; //< 0: mirroring off, 1: mirror x-axis
@@ -695,252 +565,5 @@ bool SalGraphics::UpdateSettings(AllSettings& rSettings)
 }
 
 void SalGraphics::handleDamage(const tools::Rectangle&) {}
-
-
-class VCL_DLLPUBLIC SalGraphicsAutoDelegateToImpl : public SalGraphics
-{
-public:
-    sal_uInt16 GetBitCount() const override
-    {
-        return GetImpl()->GetBitCount();
-    }
-
-    tools::Long GetGraphicsWidth() const override
-    {
-        return GetImpl()->GetGraphicsWidth();
-    }
-
-    void ResetClipRegion() override
-    {
-        GetImpl()->ResetClipRegion();
-    }
-
-    bool setClipRegion( const vcl::Region& i_rClip ) override
-    {
-        return GetImpl()->setClipRegion(i_rClip);
-    }
-
-    void SetLineColor() override
-    {
-        GetImpl()->SetLineColor();
-    }
-
-    void SetLineColor( Color nColor ) override
-    {
-        GetImpl()->SetLineColor(nColor);
-    }
-
-    void SetFillColor() override
-    {
-        GetImpl()->SetFillColor();
-    }
-
-    void SetFillColor( Color nColor ) override
-    {
-        GetImpl()->SetFillColor (nColor);
-    }
-
-    void SetROPLineColor(SalROPColor aColor) override
-    {
-        GetImpl()->SetROPLineColor(aColor);
-    }
-
-    void SetROPFillColor( SalROPColor aColor) override
-    {
-        GetImpl()->SetROPFillColor(aColor);
-    }
-
-    void SetXORMode(bool bSet, bool bInvertOnly) override
-    {
-        GetImpl()->SetXORMode(bSet, bInvertOnly);
-    }
-
-    void drawPixel( tools::Long nX, tools::Long nY ) override
-    {
-        GetImpl()->drawPixel(nX, nY);
-    }
-
-    void drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override
-    {
-        GetImpl()->drawPixel(nX, nY, nColor);
-    }
-
-    void drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override
-    {
-        GetImpl()->drawLine(nX1, nY1, nX2, nY2);
-    }
-
-    void drawRect( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY ) override
-    {
-        GetImpl()->drawRect(nX, nY, nDX, nDY);
-    }
-
-    void drawPolyLine( sal_uInt32 nPoints, const Point *pPtAry ) override
-    {
-        GetImpl()->drawPolyLine(nPoints, pPtAry);
-    }
-
-    void drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override
-    {
-        GetImpl()->drawPolygon(nPoints, pPtAry);
-    }
-
-    void drawPolyPolygon(sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry) override
-    {
-        GetImpl()->drawPolyPolygon (nPoly, pPoints, pPtAry);
-    }
-
-    bool drawPolyPolygon(
-        const basegfx::B2DHomMatrix& rObjectToDevice,
-        const basegfx::B2DPolyPolygon& rPolyPolygon,
-        double fTransparency) override
-    {
-        return GetImpl()->drawPolyPolygon(rObjectToDevice, rPolyPolygon, fTransparency);
-    }
-
-    bool drawPolyLine(
-        const basegfx::B2DHomMatrix& rObjectToDevice,
-        const basegfx::B2DPolygon& rPolygon,
-        double fTransparency,
-        double fLineWidth,
-        const std::vector< double >* pStroke,
-        basegfx::B2DLineJoin eJoin,
-        css::drawing::LineCap eLineCap,
-        double fMiterMinimumAngle,
-        bool bPixelSnapHairline) override
-    {
-        return GetImpl()->drawPolyLine(rObjectToDevice, rPolygon, fTransparency, fLineWidth, pStroke, eJoin, eLineCap, fMiterMinimumAngle, bPixelSnapHairline);
-    }
-
-    bool drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override
-    {
-        return GetImpl()->drawPolyLineBezier(nPoints, pPtAry, pFlgAry);
-    }
-
-    bool drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override
-    {
-        return GetImpl()->drawPolygonBezier(nPoints, pPtAry, pFlgAry);
-    }
-
-    bool drawPolyPolygonBezier( sal_uInt32 nPoly,
-                                                 const sal_uInt32* pPoints,
-                                                 const Point* const* pPtAry,
-                                                 const PolyFlags* const* pFlgAry) override
-    {
-        return GetImpl()->drawPolyPolygonBezier(nPoly, pPoints, pPtAry, pFlgAry);
-    }
-
-    void invert(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
-                                        SalInvert nFlags) override
-    {
-       GetImpl()->invert(nX, nY, nWidth, nHeight, nFlags);
-    }
-
-    void invert(sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags) override
-    {
-       GetImpl()->invert(nPoints, pPtAry, nFlags);
-    }
-
-    bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                   tools::Long nHeight, void* pPtr, sal_uInt32 nSize) override
-    {
-        return GetImpl()->drawEPS(nX, nY, nWidth, nHeight, pPtr, nSize);
-    }
-
-    void copyBits(const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics) override
-    {
-        GetImpl()->copyBits(rPosAry, pSrcGraphics);
-    }
-
-    void copyArea (tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX,
-                                    tools::Long nSrcY, tools::Long nSrcWidth, tools::Long nSrcHeight,
-                                    bool bWindowInvalidate) override
-    {
-        GetImpl()->copyArea(nDestX, nDestY, nSrcX, nSrcY, nSrcWidth, nSrcHeight, bWindowInvalidate);
-    }
-
-    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override
-    {
-        GetImpl()->drawBitmap(rPosAry, rSalBitmap);
-    }
-
-    void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, const SalBitmap& rMaskBitmap) override
-    {
-        GetImpl()->drawBitmap(rPosAry, rSalBitmap, rMaskBitmap);
-    }
-
-    void drawMask(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap, Color nMaskColor) override
-    {
-        GetImpl()->drawMask(rPosAry, rSalBitmap, nMaskColor);
-    }
-
-    std::shared_ptr<SalBitmap> getBitmap(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight) override
-    {
-        return GetImpl()->getBitmap(nX, nY, nWidth, nHeight);
-    }
-
-    Color getPixel(tools::Long nX, tools::Long nY) override
-    {
-        return GetImpl()->getPixel(nX, nY);
-    }
-
-    bool blendBitmap(const SalTwoRect& rPosAry, const SalBitmap& rBitmap) override
-    {
-        return GetImpl()->blendBitmap(rPosAry, rBitmap);
-    }
-
-    bool blendAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
-                                          const SalBitmap& rMaskBitmap, const SalBitmap& rAlphaBitmap) override
-    {
-        return GetImpl()->blendAlphaBitmap(rPosAry, rSourceBitmap, rMaskBitmap, rAlphaBitmap);
-    }
-
-    bool drawAlphaBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSourceBitmap,
-                                         const SalBitmap& rAlphaBitmap) override
-    {
-        return GetImpl()->drawAlphaBitmap(rPosAry, rSourceBitmap, rAlphaBitmap);
-    }
-
-    bool drawTransformedBitmap(const basegfx::B2DPoint& rNull,
-                                                 const basegfx::B2DPoint& rX,
-                                                 const basegfx::B2DPoint& rY,
-                                                 const SalBitmap& rSourceBitmap,
-                                                 const SalBitmap* pAlphaBitmap, double fAlpha) override
-    {
-        return GetImpl()->drawTransformedBitmap(rNull, rX, rY, rSourceBitmap, pAlphaBitmap, fAlpha);
-    }
-
-    bool hasFastDrawTransformedBitmap() const override
-    {
-        return GetImpl()->hasFastDrawTransformedBitmap();
-    }
-
-    bool drawAlphaRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                       tools::Long nHeight, sal_uInt8 nTransparency) override
-    {
-        return GetImpl()->drawAlphaRect(nX, nY, nWidth, nHeight, nTransparency);
-    }
-
-    bool drawGradient(const tools::PolyPolygon& rPolygon, const Gradient& rGradient) override
-    {
-        return GetImpl()->drawGradient(rPolygon, rGradient);
-    }
-
-    bool implDrawGradient(basegfx::B2DPolyPolygon const& rPolyPolygon,
-                                            SalGradient const& rGradient) override
-    {
-        return GetImpl()->implDrawGradient(rPolyPolygon, rGradient);
-    }
-
-    bool supportsOperation(OutDevSupportType eType) const override
-    {
-        return GetImpl()->supportsOperation(eType);
-    }
-
-    OUString getRenderBackendName() const override
-    {
-        return GetImpl()->getRenderBackendName();
-    }
-};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
