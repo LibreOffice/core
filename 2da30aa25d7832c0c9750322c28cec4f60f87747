@@ -16,6 +16,24 @@
       "message": "Why? Doesn\u0027t having the required version mean inability to build?",
       "revId": "2da30aa25d7832c0c9750322c28cec4f60f87747",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32dcfdd1_f9539f3a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-12T14:05:21Z",
+      "side": 1,
+      "message": "16.5 and 16.11 are tested. 16.5 is known not to work, and 16.11 is known to work.\nBut, there is a chance that some versions in between are actually able to build LibreOffice.\nMaking this a warning is suggested as an ESC meeting action item:\nhttps://pad.documentfoundation.org/p/esc",
+      "parentUuid": "13694de6_a03142ff",
+      "revId": "2da30aa25d7832c0c9750322c28cec4f60f87747",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
