@@ -4235,9 +4235,6 @@ bit 3 (0x8): #define UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON 8
         <prop oor:name="ContextLabel" oor:type="xs:string">
           <value xml:lang="en-US">Clone Formatting</value>
         </prop>
-        <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Clone Formatting (double click for multi-selection)</value>
-        </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>9</value>
         </prop>
