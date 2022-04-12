@@ -80,7 +80,6 @@ cui/uiconfig/ui/insertoleobject.ui://GtkEntry[@id='urled'] no-labelled-by
 cui/uiconfig/ui/javastartparametersdialog.ui://GtkLabel[@id='label6'] orphan-label
 cui/uiconfig/ui/lineendstabpage.ui://GtkLabel[@id='FT_LINE_END_STYLE'] orphan-label
 cui/uiconfig/ui/lineendstabpage.ui://GtkComboBox[@id='LB_LINEENDS'] no-labelled-by
-cui/uiconfig/ui/lineendstabpage.ui://GtkLabel[@id='FI_TIP'] orphan-label
 cui/uiconfig/ui/linestyletabpage.ui://GtkSpinButton[@id='NUM_FLD_2'] no-labelled-by
 cui/uiconfig/ui/linestyletabpage.ui://GtkSpinButton[@id='MTR_FLD_LENGTH_2'] no-labelled-by
 cui/uiconfig/ui/macroselectordialog.ui://GtkLabel[@id='helpmacro'] orphan-label
