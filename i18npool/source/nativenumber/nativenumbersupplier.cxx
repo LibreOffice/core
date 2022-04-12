@@ -27,6 +27,7 @@
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/string_view.hxx>
+#include <cstddef>
 #include <map>
 #include <mutex>
 #include <memory>
@@ -669,7 +670,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
             { std::u16string_view(u"title"), TITLE }
         };
 
-        sal_Int32 nStripCase = 0;
+        std::size_t nStripCase = 0;
         size_t nCasing;
         for (nCasing = 0; nCasing < SAL_N_ELEMENTS(Casings); ++nCasing)
         {
@@ -680,7 +681,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
             }
         }
 
-        if (nStripCase > 0 && (static_cast<sal_Int32>(rNativeNumberParams.size()) == nStripCase ||
+        if (nStripCase > 0 && (rNativeNumberParams.size() == nStripCase ||
                     rNativeNumberParams[nStripCase++] == ' '))
         {
             OUString aStr = getNumberText(rLocale, aNumberString, rNativeNumberParams.substr(nStripCase));
