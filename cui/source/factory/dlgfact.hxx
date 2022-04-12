@@ -109,8 +109,33 @@ DECL_ABSTDLG_CLASS_UNIQUE(CuiAbstractController, VclAbstractDialog, weld::Dialog
 DECL_ABSTDLG_CLASS_SHARED_ASYNC(CuiAbstractControllerAsync, VclAbstractDialog, weld::DialogController)
 };
 
+<<<<<<< HEAD   (92e35e cid#1503834: copy-paste)
 // CuiAbstractSingleTabController_Impl
 DECL_ABSTDLG_CLASS_UNIQUE(CuiAbstractSingleTabController, SfxAbstractDialog, SfxSingleTabDialogController)
+=======
+class CuiAbstractWidgetTestController_Impl : public VclAbstractDialog
+{
+    std::shared_ptr<weld::GenericDialogController> m_xDlg;
+
+public:
+    explicit CuiAbstractWidgetTestController_Impl(std::shared_ptr<weld::GenericDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext& rCtx) override;
+};
+
+class CuiAbstractSingleTabController_Impl : public SfxAbstractDialog
+{
+    std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
+public:
+    explicit CuiAbstractSingleTabController_Impl(std::unique_ptr<SfxSingleTabDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+>>>>>>> CHANGE (248b03 jsdialogs: added WidgetTestDialog to test different vcl widg)
     virtual const SfxItemSet*   GetOutputItemSet() const override;
     //From class Window.
     virtual void          SetText( const OUString& rStr ) override;
@@ -603,6 +628,8 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
+
+    virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* pParent) override;
 

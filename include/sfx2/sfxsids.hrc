@@ -276,7 +276,11 @@ class SvxSearchItem;
 #define SID_ADDITIONS_DIALOG                (SID_SFX_START + 1740)
 #define SID_ADDITIONS_TAG                   (SID_SFX_START + 1741)
 #define SID_TOOLBAR_MODE_UI                 (SID_SFX_START + 1742)
+<<<<<<< HEAD   (92e35e cid#1503834: copy-paste)
 #define SID_TOOLBAR_LOCK                    (SID_SFX_START + 1743)
+=======
+#define SID_WIDGET_TEST_DIALOG              (SID_SFX_START + 1743)
+>>>>>>> CHANGE (248b03 jsdialogs: added WidgetTestDialog to test different vcl widg)
 
 //      SID_SFX_free_END                    (SID_SFX_START + 3999)
 

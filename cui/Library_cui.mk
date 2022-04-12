@@ -230,7 +230,11 @@ $(eval $(call gb_Library_add_exception_objects,cui,\
     cui/source/tabpages/tpshadow \
     cui/source/tabpages/tptrans \
     cui/source/tabpages/transfrm \
+<<<<<<< HEAD   (92e35e cid#1503834: copy-paste)
     cui/source/util/FontFeatures \
+=======
+    cui/source/dialogs/widgettestdlg \
+>>>>>>> CHANGE (248b03 jsdialogs: added WidgetTestDialog to test different vcl widg)
 ))
 
 # vim: set noet sw=4 ts=4:

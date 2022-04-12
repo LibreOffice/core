@@ -31,6 +31,7 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         }
     }
 
+<<<<<<< HEAD   (92e35e cid#1503834: copy-paste)
     if (rUIFile == u"modules/scalc/ui/pivottablelayoutdialog.ui"
         || rUIFile == u"modules/scalc/ui/selectsource.ui"
         || rUIFile == u"modules/scalc/ui/managenamesdialog.ui"
@@ -58,6 +59,38 @@ bool isBuilderEnabled(std::u16string_view rUIFile, bool bMobile)
         || rUIFile == u"xmlsec/ui/viewcertdialog.ui" || rUIFile == u"xmlsec/ui/certgeneral.ui"
         || rUIFile == u"xmlsec/ui/certpage.ui" || rUIFile == u"svx/ui/accessibilitycheckdialog.ui"
         || rUIFile == u"svx/ui/accessibilitycheckentry.ui")
+=======
+    // dialogs
+    if (rUIFile == "modules/scalc/ui/pivottablelayoutdialog.ui"
+        || rUIFile == "modules/scalc/ui/selectsource.ui"
+        || rUIFile == "modules/scalc/ui/managenamesdialog.ui"
+        || rUIFile == "modules/scalc/ui/definename.ui"
+        || rUIFile == "modules/scalc/ui/correlationdialog.ui"
+        || rUIFile == "modules/scalc/ui/samplingdialog.ui"
+        || rUIFile == "modules/scalc/ui/descriptivestatisticsdialog.ui"
+        || rUIFile == "modules/scalc/ui/analysisofvariancedialog.ui"
+        || rUIFile == "modules/scalc/ui/covariancedialog.ui"
+        || rUIFile == "modules/scalc/ui/exponentialsmoothingdialog.ui"
+        || rUIFile == "modules/scalc/ui/movingaveragedialog.ui"
+        || rUIFile == "modules/scalc/ui/regressiondialog.ui"
+        || rUIFile == "modules/scalc/ui/ttestdialog.ui"
+        || rUIFile == "modules/scalc/ui/ttestdialog.ui"
+        || rUIFile == "modules/scalc/ui/ztestdialog.ui"
+        || rUIFile == "modules/scalc/ui/chisquaretestdialog.ui"
+        || rUIFile == "modules/scalc/ui/fourieranalysisdialog.ui"
+        || rUIFile == "modules/scalc/ui/datafielddialog.ui"
+        || rUIFile == "modules/scalc/ui/pivotfielddialog.ui"
+        || rUIFile == "modules/scalc/ui/datafieldoptionsdialog.ui"
+        || rUIFile == "svx/ui/fontworkgallerydialog.ui" || rUIFile == "svx/ui/findreplacedialog.ui"
+        || rUIFile == "cui/ui/macroselectordialog.ui" || rUIFile == "uui/ui/macrowarnmedium.ui"
+        || rUIFile == "modules/scalc/ui/textimportcsv.ui"
+        || rUIFile == "xmlsec/ui/digitalsignaturesdialog.ui"
+        || rUIFile == "xmlsec/ui/viewcertdialog.ui" || rUIFile == "xmlsec/ui/certgeneral.ui"
+        || rUIFile == "xmlsec/ui/viewcertdialog.ui" || rUIFile == "xmlsec/ui/certpage.ui"
+        || rUIFile == "svx/ui/accessibilitycheckdialog.ui"
+        || rUIFile == "svx/ui/accessibilitycheckentry.ui"
+        || rUIFile == "cui/ui/widgettestdialog.ui")
+>>>>>>> CHANGE (248b03 jsdialogs: added WidgetTestDialog to test different vcl widg)
     {
         return true;
     }

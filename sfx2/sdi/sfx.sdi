@@ -5769,6 +5769,7 @@ SfxVoidItem AdditionsDialog SID_ADDITIONS_DIALOG
     GroupId = SfxGroupId::Application;
 ]
 
+<<<<<<< HEAD   (92e35e cid#1503834: copy-paste)
 SfxBoolItem ToolbarLock SID_TOOLBAR_LOCK
 [
     AutoUpdate = TRUE,
@@ -5781,6 +5782,21 @@ SfxBoolItem ToolbarLock SID_TOOLBAR_LOCK
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
+=======
+SfxVoidItem WidgetTestDialog SID_WIDGET_TEST_DIALOG
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+>>>>>>> CHANGE (248b03 jsdialogs: added WidgetTestDialog to test different vcl widg)
     ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]
