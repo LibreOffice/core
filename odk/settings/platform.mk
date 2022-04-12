@@ -19,7 +19,7 @@
 
 # Map target platform (extension cfg) and extension platform (SDK settings)
 # See:
-# http://wiki.openoffice.org/wiki/Documentation/DevGuide/Extensions/Target_Platform
+# https://wiki.documentfoundation.org/Documentation/DevGuide/Extensions#Target_Platform
 # odk/settings/settings.mk
 
 # only make version 3.81 or later accepts the multiple else conditions
