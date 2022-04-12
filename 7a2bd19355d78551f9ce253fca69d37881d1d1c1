@@ -34,6 +34,24 @@
       "parentUuid": "c30bc756_e566d26f",
       "revId": "7a2bd19355d78551f9ce253fca69d37881d1d1c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "203698cb_be5c08e5",
+        "filename": "sw/qa/uitest/writer_tests3/specialCharacter.py",
+        "patchSetId": 3
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-12T05:59:05Z",
+      "side": 1,
+      "message": "apparently addressed at \u003chttps://gerrit.libreoffice.org/c/core/+/132712\u003e \"tdf#56363 - UI test fails if the selected font is not present\"",
+      "parentUuid": "b0a9d3c7_d54a129d",
+      "revId": "7a2bd19355d78551f9ce253fca69d37881d1d1c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
