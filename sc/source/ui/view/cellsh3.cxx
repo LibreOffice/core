@@ -687,21 +687,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetRowHeight( rData.GetCurY(),
                                                               rData.GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
                         eMetric, 2, MAX_ROW_HEIGHT));
 
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        tools::Long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
+                    pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
+                        if (nResult == RET_OK)
+                        {
+                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_ROW_HEIGHT);
+                            tools::Long nVal = pDlg->GetInputValue();
+                            pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_ROW_HEIGHT, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
-                        rReq.Done();
-
-                    }
+                            // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                            pRequest.AppendItem( SfxUInt16Item( FID_ROW_HEIGHT, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
+                            pRequest.Done();
+                        }
+                        pDlg->disposeOnce();
+                    });
                 }
             }
             break;
@@ -725,20 +728,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalRowHeightDialog",
                         ScGlobal::nLastRowHeightExtra, 0, eMetric, 2, MAX_EXTRA_HEIGHT));
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        tools::Long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
-                        ScGlobal::nLastRowHeightExtra = nVal;
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_ROW_OPT_HEIGHT, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
-                        rReq.Done();
+                    pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
+                        if ( nResult == RET_OK )
+                        {
+                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_ROW_OPT_HEIGHT);
+                            tools::Long nVal = pDlg->GetInputValue();
+                            pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
+                            ScGlobal::nLastRowHeightExtra = nVal;
 
-                    }
+                            // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                            pRequest.AppendItem( SfxUInt16Item( FID_ROW_OPT_HEIGHT, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
+                            pRequest.Done();
+                        }
+                        pDlg->disposeOnce();
+                    });
                 }
             }
             break;
@@ -786,19 +793,23 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetColWidth( rData.GetCurX(),
                                                              rData.GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "ColWidthDialog", nCurHeight,
                         STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH));
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        tools::Long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_COL_WIDTH, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal))) );
-                        rReq.Done();
+                    pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
+                        if ( nResult == RET_OK )
+                        {
+                            SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_COL_WIDTH);
+                            tools::Long nVal = pDlg->GetInputValue();
+                            pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, static_cast<sal_uInt16>(nVal) );
 
-                    }
+                            // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                            pRequest.AppendItem( SfxUInt16Item( FID_COL_WIDTH, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal))) );
+                            pRequest.Done();
+                        }
+                        pDlg->disposeOnce();
+                    });
                 }
             }
             break;
@@ -822,19 +833,24 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    ScopedVclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
+                    VclPtr<AbstractScMetricInputDlg> pDlg(pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetFrameWeld(), "OptimalColWidthDialog",
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 2, MAX_EXTRA_WIDTH));
-                    if ( pDlg->Execute() == RET_OK )
-                    {
-                        tools::Long nVal = pDlg->GetInputValue();
-                        pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
-                        ScGlobal::nLastColWidthExtra = nVal;
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
-                        rReq.AppendItem( SfxUInt16Item( FID_COL_OPT_WIDTH, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
-                        rReq.Done();
-                    }
+                    pDlg->StartExecuteAsync([pDlg, pTabViewShell](sal_Int32 nResult){
+                        SfxRequest pRequest(pTabViewShell->GetViewFrame(), FID_COL_OPT_WIDTH);
+                        if ( nResult == RET_OK )
+                        {
+                            tools::Long nVal = pDlg->GetInputValue();
+                            pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, static_cast<sal_uInt16>(nVal) );
+                            ScGlobal::nLastColWidthExtra = nVal;
+
+                            // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                            pRequest.AppendItem( SfxUInt16Item( FID_COL_OPT_WIDTH, static_cast<sal_uInt16>(TwipsToEvenHMM(nVal)) ) );
+                            pRequest.Done();
+                        }
+                        pDlg->disposeOnce();
+                    });
                 }
             }
             break;
