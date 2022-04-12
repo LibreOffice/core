@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49054eb0_bcf0ebb9",
+        "filename": "sc/source/ui/view/cellsh3.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 713,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-04-12T14:45:02Z",
+      "side": 1,
+      "message": "I think you can just create new SfxRequest object here:\n`SfxRequest aReq;\naReq.AppendItem(...)\naReq.Done();`\n\nso you don\u0027t have to pass it to the lambda\nhere it worked: https://cgit.freedesktop.org/libreoffice/core/tree/sc/source/ui/view/cellsh2.cxx?id\u003deca978841816f833616b4c2334e65aa976a9fb61#n533",
+      "revId": "ee4a536fb18c108ff0901e3e3733f572c8fe491e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
