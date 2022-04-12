@@ -359,9 +359,12 @@ IMPL_LINK_NOARG(SwFieldDokInfPage, SubTypeHdl, weld::TreeView&, void)
         }
     }
 
-    m_xFormat->set_sensitive(bEnable);
+    // Always allow Fixed Content to be turned off if it is currently on
+    m_xFormat->set_sensitive(bEnable || m_xFixedCB->get_active());
 
-    if (bEnable && m_xFormatLB->get_selected_index() == -1)
+    if (!bEnable)
+        m_xFormatLB->clear();
+    else if (m_xFormatLB->get_selected_index() == -1)
         m_xFormatLB->select(0);
 }
 
