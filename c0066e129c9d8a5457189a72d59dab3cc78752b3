@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "89ff0bfc_762972f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-12T05:57:03Z",
+      "side": 1,
+      "message": "I have no expertise in this area, other than occasionally monitoring the libreoffice-ci.global.libreoffice.org mailing list and filing the failure notification in the comments at \u003chttps://gerrit.libreoffice.org/c/core/+/131953/3#message-e1c7d6746510b1feee4ef8f6bde23003c9ce9a51\u003e \"tdf#56363 - Search font family without the font feature after the colon\".\n\nIf you are convinced that this is a good change, I suggest you submit it yourself, without waiting for review.",
+      "revId": "c0066e129c9d8a5457189a72d59dab3cc78752b3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
