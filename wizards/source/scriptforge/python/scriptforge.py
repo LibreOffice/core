@@ -212,7 +212,7 @@ class ScriptForge(object, metaclass = _Singleton):
             fullscript = script
             paramarray = True
         #    Build the URI specification described in
-        #    https://wiki.openoffice.org/wiki/Documentation/DevGuide/Scripting/Scripting_Framework_URI_Specification
+        #    https://wiki.documentfoundation.org/Documentation/DevGuide/Scripting_Framework#Scripting_Framework_URI_Specification
         elif len(script) > 0:
             # Check ParamArray arguments
             paramarray = False

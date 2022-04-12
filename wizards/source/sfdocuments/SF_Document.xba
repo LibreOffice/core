@@ -711,7 +711,7 @@ Check:
 	If IsMissing(Pages) Or IsEmpty(Pages) Then Pages = &quot;&quot;
 	If IsMissing(Copies) Or IsEmpty(Copies) Then Copies = 1
 	If IsMissing(_Document) Or IsEmpty(_Document) Or IsNull(_Document) Then Set _Document = _Component
-	
+
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		If Not ScriptForge.SF_Utils._Validate(Pages, &quot;Pages&quot;, V_STRING) Then GoTo Finally
@@ -842,7 +842,7 @@ Public Sub RunCommand(Optional ByVal Command As Variant _
 &apos;&apos;&apos;		Command: Case-sensitive. The command itself is not checked.
 &apos;&apos;&apos;			If the command does not contain the &quot;.uno:&quot; prefix, it is added.
 &apos;&apos;&apos;			If nothing happens, then the command is probably wrong
-&apos;&apos;&apos;		Args: Pairs of arguments name (string), value (any)	
+&apos;&apos;&apos;		Args: Pairs of arguments name (string), value (any)
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;	Examples:
 &apos;&apos;&apos;		oDoc.RunCommand(&quot;EditDoc&quot;, &quot;Editable&quot;, False)	&apos;	Toggle edit mode
@@ -1172,7 +1172,7 @@ Check:
 	If IsMissing(Orientation) Or IsEmpty(Orientation) Then Orientation = &quot;&quot;
 	If IsMissing(PaperFormat) Or IsEmpty(PaperFormat) Then PaperFormat = &quot;&quot;
 	If IsMissing(_PrintComponent) Or IsEmpty(_PrintComponent) Then Set _PrintComponent = _Component
-	
+
 	ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs)		&apos;	Unconditional validation
 	If Not _IsStillAlive() Then GoTo Finally
 	If VarType(Printer) = V_STRING Then
@@ -1300,7 +1300,7 @@ Dim sFilter As String				&apos;	A single filter name
 Dim iCount As Integer				&apos;	Filters counter
 Dim vFilter As Variant				&apos;	A filter descriptor as an array of Name/Value pairs
 Dim sType As String					&apos;	The filter type to be compared with the document service
-Dim lFlags As Long					&apos;	Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/OfficeDev/Properties_of_a_Filter
+Dim lFlags As Long					&apos;	Read https://wiki.documentfoundation.org/Documentation/DevGuide/Office_Development#Properties_of_a_Filter
 Dim bExport As Boolean				&apos;	Filter valid for export when True
 Dim bImport As Boolean				&apos;	Filter valid for import when True
 Dim bImportExport As Boolean		&apos;	Filter valid both for import and export when True
@@ -1335,7 +1335,7 @@ Try:
 			End If
 		End If
 	Next sFilter
-	
+
 	If iCount &gt; -1 Then
 		ReDim Preserve vFilters(0 To iCount)
 	End If
