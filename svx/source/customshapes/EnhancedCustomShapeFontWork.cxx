@@ -173,6 +173,8 @@ static void CalculateHorizontalScalingFactor(
     const SvxFontHeightItem& rFontHeight( rSdrObjCustomShape.GetMergedItem( EE_CHAR_FONTHEIGHT ) );
     sal_Int32 nFontSize = rFontHeight.GetHeight();
 
+    SAL_WARN_IF(nFontSize > SAL_MAX_INT16, "svx", "CalculateHorizontalScalingFactor suspiciously large font height: " << nFontSize);
+
     if (rFWData.bScaleX)
         aFont.SetFontHeight( nFontSize );
     else
@@ -236,6 +238,11 @@ static void CalculateHorizontalScalingFactor(
 
         if (fScalingFactor < 1.0)
         {
+            // if we have a ridiculously large font (flagged with the SAL_WARN
+            // above) that will require scaling down to a very small value then
+            // skip directly to a small font size
+            if (nFontSize > SAL_MAX_INT16 && fScalingFactor * nFontSize < 1.0)
+                nFontSize = 16;
             nFontSize--;
             aFont.SetFontHeight( nFontSize );
             pVirDev->SetFont( aFont );
