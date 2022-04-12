@@ -842,7 +842,7 @@ FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)
     m_xComboBox->set_entry_width_chars(std::ceil(nMaxLen / m_xComboBox->get_approximate_digit_width()));
 }
 
-void FontStyleBox::Fill( const OUString& rName, const FontList* pList )
+void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
 {
     m_xComboBox->freeze();
     OUString aOldText = m_xComboBox->get_active_text();

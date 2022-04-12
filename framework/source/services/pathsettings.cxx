@@ -50,6 +50,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <unotools/configpaths.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace framework;
 
@@ -369,7 +370,7 @@ private:
 
     /** converts our new string list schema to the old ";" separated schema ... */
     OUString impl_convertPath2OldStyle(const PathSettings::PathInfo& rPath        ) const;
-    std::vector<OUString> impl_convertOldStyle2Path(const OUString&        sOldStylePath) const;
+    std::vector<OUString> impl_convertOldStyle2Path(std::u16string_view sOldStylePath) const;
 
     /** remove still known paths from the given lList argument.
         So real user defined paths can be extracted from the list of
@@ -970,13 +971,13 @@ OUString PathSettings::impl_convertPath2OldStyle(const PathSettings::PathInfo& r
     return sPathVal.makeStringAndClear();
 }
 
-std::vector<OUString> PathSettings::impl_convertOldStyle2Path(const OUString& sOldStylePath) const
+std::vector<OUString> PathSettings::impl_convertOldStyle2Path(std::u16string_view sOldStylePath) const
 {
     std::vector<OUString> lList;
     sal_Int32    nToken = 0;
     do
     {
-        OUString sToken = sOldStylePath.getToken(0, ';', nToken);
+        OUString sToken( o3tl::getToken(sOldStylePath, 0, ';', nToken) );
         if (!sToken.isEmpty())
             lList.push_back(sToken);
     }

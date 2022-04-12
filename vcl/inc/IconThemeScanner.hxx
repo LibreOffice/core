@@ -31,7 +31,7 @@ public:
     /** Factory method to create the object.
      * Provide a path to search for IconThemes.
      */
-    static std::shared_ptr<IconThemeScanner> Create(const OUString& path);
+    static std::shared_ptr<IconThemeScanner> Create(std::u16string_view path);
 
     /** This method will return the standard path where icon themes are located.
      */
@@ -60,7 +60,7 @@ private:
      * - The directory does not exist
      * - There are no files which match the pattern images_xxx.zip
      */
-    void ScanDirectoryForIconThemes(const OUString& path);
+    void ScanDirectoryForIconThemes(std::u16string_view path);
 
     /** Adds the provided icon theme by path.
      */

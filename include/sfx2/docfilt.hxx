@@ -107,7 +107,7 @@ public:
     const OUString& GetServiceName() const { return aServiceName; }
     const OUString& GetProviderName() const { return maProvider;}
 
-    static std::shared_ptr<const SfxFilter> GetDefaultFilter( const OUString& rName );
+    static std::shared_ptr<const SfxFilter> GetDefaultFilter( std::u16string_view rName );
     static std::shared_ptr<const SfxFilter> GetFilterByName( const OUString& rName );
     static std::shared_ptr<const SfxFilter> GetDefaultFilterFromFactory( const OUString& rServiceName );
 

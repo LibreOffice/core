@@ -122,7 +122,7 @@ private:
         OUString const & url, bool recursive);
 
     void parseFileList(
-        int layer, FileParser * parseFile, OUString const & urls,
+        int layer, FileParser * parseFile, std::u16string_view urls,
         bool recordAdditions);
 
     void parseXcdFiles(int layer, OUString const & url);

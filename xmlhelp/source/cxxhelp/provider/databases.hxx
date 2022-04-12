@@ -29,6 +29,7 @@
 #include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/strbuf.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
@@ -64,11 +65,11 @@ namespace chelp {
         StaticModuleInformation( const OUString& aTitle,
                                  const OUString& aStartId,
                                  const OUString& aProgramSwitch,
-                                 const OUString& aOrder )
+                                 std::u16string_view aOrder )
             : m_aStartId( aStartId ),
               m_aProgramSwitch( aProgramSwitch ),
               m_aTitle( aTitle ),
-              m_nOrder( aOrder.toInt32() )
+              m_nOrder( o3tl::toInt32(aOrder) )
         {
         }
 

@@ -395,7 +395,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
 }
 
 void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
-                    const OUString& _rsTypeNames,
+                    std::u16string_view _rsTypeNames,
                     OTypeInfoMap& _rTypeInfoMap,
                     std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters)
 {
@@ -489,108 +489,108 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
         if( pInfo->nNumPrecRadix <= 1)
             pInfo->nNumPrecRadix = 10;
 
-        OUString aName;
+        std::u16string_view aName;
         switch(pInfo->nType)
         {
             case DataType::CHAR:
-                aName = _rsTypeNames.getToken(TYPE_CHAR, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_CHAR, ';');
                 break;
             case DataType::VARCHAR:
-                aName = _rsTypeNames.getToken(TYPE_TEXT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_TEXT, ';');
                 break;
             case DataType::DECIMAL:
-                aName = _rsTypeNames.getToken(TYPE_DECIMAL, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_DECIMAL, ';');
                 break;
             case DataType::NUMERIC:
-                aName = _rsTypeNames.getToken(TYPE_NUMERIC, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_NUMERIC, ';');
                 break;
             case DataType::BIGINT:
-                aName = _rsTypeNames.getToken(TYPE_BIGINT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_BIGINT, ';');
                 break;
             case DataType::FLOAT:
-                aName = _rsTypeNames.getToken(TYPE_FLOAT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_FLOAT, ';');
                 break;
             case DataType::DOUBLE:
-                aName = _rsTypeNames.getToken(TYPE_DOUBLE, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_DOUBLE, ';');
                 break;
             case DataType::LONGVARCHAR:
-                aName = _rsTypeNames.getToken(TYPE_MEMO, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_MEMO, ';');
                 break;
             case DataType::LONGVARBINARY:
-                aName = _rsTypeNames.getToken(TYPE_IMAGE, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_IMAGE, ';');
                 break;
             case DataType::DATE:
-                aName = _rsTypeNames.getToken(TYPE_DATE, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_DATE, ';');
                 break;
             case DataType::TIME:
-                aName = _rsTypeNames.getToken(TYPE_TIME, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_TIME, ';');
                 break;
             case DataType::TIMESTAMP:
-                aName = _rsTypeNames.getToken(TYPE_DATETIME, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_DATETIME, ';');
                 break;
             case DataType::BIT:
                 if ( !pInfo->aCreateParams.isEmpty() )
                 {
-                    aName = _rsTypeNames.getToken(TYPE_BIT, ';');
+                    aName = o3tl::getToken(_rsTypeNames, TYPE_BIT, ';');
                     break;
                 }
                 [[fallthrough]];
             case DataType::BOOLEAN:
-                aName = _rsTypeNames.getToken(TYPE_BOOL, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_BOOL, ';');
                 break;
             case DataType::TINYINT:
-                aName = _rsTypeNames.getToken(TYPE_TINYINT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_TINYINT, ';');
                 break;
             case DataType::SMALLINT:
-                aName = _rsTypeNames.getToken(TYPE_SMALLINT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_SMALLINT, ';');
                 break;
             case DataType::INTEGER:
-                aName = _rsTypeNames.getToken(TYPE_INTEGER, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_INTEGER, ';');
                 break;
             case DataType::REAL:
-                aName = _rsTypeNames.getToken(TYPE_REAL, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_REAL, ';');
                 break;
             case DataType::BINARY:
-                aName = _rsTypeNames.getToken(TYPE_BINARY, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_BINARY, ';');
                 break;
             case DataType::VARBINARY:
-                aName = _rsTypeNames.getToken(TYPE_VARBINARY, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_VARBINARY, ';');
                 break;
             case DataType::SQLNULL:
-                aName = _rsTypeNames.getToken(TYPE_SQLNULL, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_SQLNULL, ';');
                 break;
             case DataType::OBJECT:
-                aName = _rsTypeNames.getToken(TYPE_OBJECT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_OBJECT, ';');
                 break;
             case DataType::DISTINCT:
-                aName = _rsTypeNames.getToken(TYPE_DISTINCT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_DISTINCT, ';');
                 break;
             case DataType::STRUCT:
-                aName = _rsTypeNames.getToken(TYPE_STRUCT, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_STRUCT, ';');
                 break;
             case DataType::ARRAY:
-                aName = _rsTypeNames.getToken(TYPE_ARRAY, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_ARRAY, ';');
                 break;
             case DataType::BLOB:
-                aName = _rsTypeNames.getToken(TYPE_BLOB, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_BLOB, ';');
                 break;
             case DataType::CLOB:
-                aName = _rsTypeNames.getToken(TYPE_CLOB, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_CLOB, ';');
                 break;
             case DataType::REF:
-                aName = _rsTypeNames.getToken(TYPE_REF, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_REF, ';');
                 break;
             case DataType::OTHER:
-                aName = _rsTypeNames.getToken(TYPE_OTHER, ';');
+                aName = o3tl::getToken(_rsTypeNames, TYPE_OTHER, ';');
                 break;
         }
-        if ( !aName.isEmpty() )
+        if ( !aName.empty() )
         {
             pInfo->aUIName = aName;
             pInfo->aUIName += " [ ";
         }
         pInfo->aUIName += pInfo->aTypeName;
-        if ( !aName.isEmpty() )
+        if ( !aName.empty() )
             pInfo->aUIName += " ]";
         // Now that we have the type info, save it in the multimap
         _rTypeInfoMap.emplace(pInfo->nType,pInfo);

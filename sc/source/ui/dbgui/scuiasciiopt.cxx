@@ -110,15 +110,15 @@ CSVImportOptionsIndex getSkipEmptyCellsIndex( ScImportAsciiCall eCall )
 }
 }
 
-static void lcl_FillCombo(weld::ComboBox& rCombo, const OUString& rList, sal_Unicode cSelect)
+static void lcl_FillCombo(weld::ComboBox& rCombo, std::u16string_view rList, sal_Unicode cSelect)
 {
     OUString aStr;
-    if (!rList.isEmpty())
+    if (!rList.empty())
     {
         sal_Int32 nIdx {0};
         do
         {
-            const OUString sEntry {rList.getToken(0, '\t', nIdx)};
+            const OUString sEntry {o3tl::getToken(rList, 0, '\t', nIdx)};
             rCombo.append_text(sEntry);
             if (nIdx>0 && static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rList, 0, '\t', nIdx))) == cSelect)
                 aStr = sEntry;
@@ -135,14 +135,14 @@ static void lcl_FillCombo(weld::ComboBox& rCombo, const OUString& rList, sal_Uni
     }
 }
 
-static sal_Unicode lcl_CharFromCombo(const weld::ComboBox& rCombo, const OUString& rList)
+static sal_Unicode lcl_CharFromCombo(const weld::ComboBox& rCombo, std::u16string_view rList)
 {
     sal_Unicode c = 0;
     OUString aStr = rCombo.get_active_text();
-    if ( !aStr.isEmpty() && !rList.isEmpty() )
+    if ( !aStr.isEmpty() && !rList.empty() )
     {
         sal_Int32 nIdx {0};
-        OUString sToken {rList.getToken(0, '\t', nIdx)};
+        OUString sToken {o3tl::getToken(rList, 0, '\t', nIdx)};
         while (nIdx>0)
         {
             if ( ScGlobal::GetTransliteration().isEqual( aStr, sToken ) )
@@ -151,7 +151,7 @@ static sal_Unicode lcl_CharFromCombo(const weld::ComboBox& rCombo, const OUStrin
                 c = static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rList, 0, '\t', nTmpIdx)));
             }
             // Skip to next token at even position
-            sToken = rList.getToken(1, '\t', nIdx);
+            sToken = o3tl::getToken(rList, 1, '\t', nIdx);
         }
         if (!c)
         {

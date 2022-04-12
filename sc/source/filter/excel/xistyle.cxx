@@ -77,6 +77,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <svl/numformat.hxx>
+#include <o3tl/string_view.hxx>
 
 using ::std::vector;
 using namespace ::com::sun::star;
@@ -1603,8 +1604,8 @@ namespace {
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
-    bool operator()( const OUString& rName1, std::u16string_view rName2 ) const
-        { return rName1.compareToIgnoreAsciiCase( rName2 ) < 0; }
+    bool operator()( std::u16string_view rName1, std::u16string_view rName2 ) const
+        { return o3tl::compareToIgnoreAsciiCase( rName1, rName2 ) < 0; }
 };
 
 } // namespace

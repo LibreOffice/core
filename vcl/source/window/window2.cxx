@@ -34,6 +34,7 @@
 #include <vcl/dockwin.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/builder.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <window.h>
 #include <svdata.hxx>
@@ -1405,28 +1406,28 @@ namespace
     }
 }
 
-bool Window::set_font_attribute(const OString &rKey, const OUString &rValue)
+bool Window::set_font_attribute(const OString &rKey, std::u16string_view rValue)
 {
     if (rKey == "weight")
     {
         vcl::Font aFont(GetControlFont());
-        if (rValue == "thin")
+        if (rValue == u"thin")
             aFont.SetWeight(WEIGHT_THIN);
-        else if (rValue == "ultralight")
+        else if (rValue == u"ultralight")
             aFont.SetWeight(WEIGHT_ULTRALIGHT);
-        else if (rValue == "light")
+        else if (rValue == u"light")
             aFont.SetWeight(WEIGHT_LIGHT);
-        else if (rValue == "book")
+        else if (rValue == u"book")
             aFont.SetWeight(WEIGHT_SEMILIGHT);
-        else if (rValue == "normal")
+        else if (rValue == u"normal")
             aFont.SetWeight(WEIGHT_NORMAL);
-        else if (rValue == "medium")
+        else if (rValue == u"medium")
             aFont.SetWeight(WEIGHT_MEDIUM);
-        else if (rValue == "semibold")
+        else if (rValue == u"semibold")
             aFont.SetWeight(WEIGHT_SEMIBOLD);
-        else if (rValue == "bold")
+        else if (rValue == u"bold")
             aFont.SetWeight(WEIGHT_BOLD);
-        else if (rValue == "ultrabold")
+        else if (rValue == u"ultrabold")
             aFont.SetWeight(WEIGHT_ULTRABOLD);
         else
             aFont.SetWeight(WEIGHT_BLACK);
@@ -1435,11 +1436,11 @@ bool Window::set_font_attribute(const OString &rKey, const OUString &rValue)
     else if (rKey == "style")
     {
         vcl::Font aFont(GetControlFont());
-        if (rValue == "normal")
+        if (rValue == u"normal")
             aFont.SetItalic(ITALIC_NONE);
-        else if (rValue == "oblique")
+        else if (rValue == u"oblique")
             aFont.SetItalic(ITALIC_OBLIQUE);
-        else if (rValue == "italic")
+        else if (rValue == u"italic")
             aFont.SetItalic(ITALIC_NORMAL);
         SetControlFont(aFont);
     }
@@ -1452,7 +1453,7 @@ bool Window::set_font_attribute(const OString &rKey, const OUString &rValue)
     else if (rKey == "size")
     {
         vcl::Font aFont(GetControlFont());
-        sal_Int32 nHeight = rValue.toInt32() / 1000;
+        sal_Int32 nHeight = o3tl::toInt32(rValue) / 1000;
         aFont.SetFontHeight(nHeight);
         SetControlFont(aFont);
     }

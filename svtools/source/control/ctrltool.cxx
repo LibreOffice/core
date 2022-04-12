@@ -34,6 +34,7 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/string_view.hxx>
 #include <comphelper/lok.hxx>
 
 // Standard fontsizes for scalable Fonts
@@ -157,13 +158,13 @@ static OUString ImplMakeSearchString(const OUString& rStr)
     return rStr.toAsciiLowerCase();
 }
 
-static OUString ImplMakeSearchStringFromName(const OUString& rStr)
+static OUString ImplMakeSearchStringFromName(std::u16string_view rStr)
 {
     // check for features before alternate font separator
-    if (sal_Int32 nColon = rStr.indexOf(':'); nColon != -1)
-        if (sal_Int32 nSemiColon = rStr.indexOf(';'); nSemiColon == -1 || nColon < nSemiColon)
-            return ImplMakeSearchString(rStr.getToken( 0, ':' ));
-    return ImplMakeSearchString(rStr.getToken( 0, ';' ));
+    if (size_t nColon = rStr.find(':'); nColon != std::u16string_view::npos)
+        if (size_t nSemiColon = rStr.find(';'); nSemiColon == std::u16string_view::npos || nColon < nSemiColon)
+            return ImplMakeSearchString(OUString(o3tl::getToken(rStr, 0, ':' )));
+    return ImplMakeSearchString(OUString(o3tl::getToken(rStr, 0, ';' )));
 }
 
 ImplFontListNameInfo* FontList::ImplFind(std::u16string_view rSearchName, sal_uInt32* pIndex) const
@@ -235,7 +236,7 @@ ImplFontListNameInfo* FontList::ImplFind(std::u16string_view rSearchName, sal_uI
     return const_cast<ImplFontListNameInfo*>(pFoundData);
 }
 
-ImplFontListNameInfo* FontList::ImplFindByName(const OUString& rStr) const
+ImplFontListNameInfo* FontList::ImplFindByName(std::u16string_view rStr) const
 {
     OUString aSearchName = ImplMakeSearchStringFromName(rStr);
     return ImplFind( aSearchName, nullptr );
@@ -709,7 +710,7 @@ FontMetric FontList::Get(const OUString& rName,
     return aInfo;
 }
 
-bool FontList::IsAvailable(const OUString& rName) const
+bool FontList::IsAvailable(std::u16string_view rName) const
 {
     return (ImplFindByName( rName ) != nullptr);
 }
@@ -721,7 +722,7 @@ const FontMetric& FontList::GetFontName(size_t const nFont) const
     return *(m_Entries[nFont]->mpFirst);
 }
 
-sal_Handle FontList::GetFirstFontMetric(const OUString& rName) const
+sal_Handle FontList::GetFirstFontMetric(std::u16string_view rName) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rName );
     if ( !pData )

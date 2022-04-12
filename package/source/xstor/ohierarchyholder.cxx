@@ -28,6 +28,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <cppuhelper/exc_hlp.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "ohierarchyholder.hxx"
 
@@ -58,13 +59,13 @@ void OHierarchyHolder_Impl::RemoveStreamHierarchically( std::vector<OUString>& a
 }
 
 // static
-std::vector<OUString> OHierarchyHolder_Impl::GetListPathFromString( const OUString& aPath )
+std::vector<OUString> OHierarchyHolder_Impl::GetListPathFromString( std::u16string_view aPath )
 {
     std::vector<OUString> aResult;
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aName = aPath.getToken( 0, '/', nIndex );
+        OUString aName( o3tl::getToken(aPath, 0, '/', nIndex ) );
         if ( aName.isEmpty() )
             throw lang::IllegalArgumentException();
 

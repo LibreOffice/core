@@ -34,8 +34,8 @@ namespace com::sun::star::frame { class XFrame; }
 class SfxDockingWindow_Impl;
 enum class SplitWindowItemFlags;
 
-void SfxDockingWindowFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
-bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName );
+void SfxDockingWindowFactory( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName );
+bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName );
 
 class SFX2_DLLPUBLIC SfxDockingWindow : public ResizableDockingWindow
 {

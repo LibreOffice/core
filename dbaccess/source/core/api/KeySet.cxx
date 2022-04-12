@@ -1379,7 +1379,7 @@ namespace dbaccess
 
 void getColumnPositions(const Reference<XNameAccess>& _rxQueryColumns,
                             const css::uno::Sequence< OUString >& _aColumnNames,
-                            const OUString& _rsUpdateTableName,
+                            std::u16string_view _rsUpdateTableName,
                             SelectColumnsMetaData& o_rColumnNames,
                             bool i_bAppendTableName)
     {

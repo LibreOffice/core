@@ -61,6 +61,7 @@
 #include <vcl/virdev.hxx>
 #include <sal/log.hxx>
 #include <tools/svborder.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <unotools/streamwrap.hxx>
 
@@ -1145,17 +1146,17 @@ Size SmViewShell::GetTextLineSize(OutputDevice const & rDevice, const OUString& 
     return aSize;
 }
 
-Size SmViewShell::GetTextSize(OutputDevice const & rDevice, const OUString& rText, tools::Long MaxWidth)
+Size SmViewShell::GetTextSize(OutputDevice const & rDevice, std::u16string_view rText, tools::Long MaxWidth)
 {
     Size aSize;
     Size aTextSize;
-    if (rText.isEmpty())
+    if (rText.empty())
         return aTextSize;
 
     sal_Int32 nPos = 0;
     do
     {
-        OUString aLine = rText.getToken(0, '\n', nPos);
+        OUString aLine( o3tl::getToken(rText, 0, '\n', nPos) );
         aLine = aLine.replaceAll("\r", "");
 
         aSize = GetTextLineSize(rDevice, aLine);
@@ -1227,9 +1228,9 @@ void SmViewShell::DrawTextLine(OutputDevice& rDevice, const Point& rPosition, co
         rDevice.DrawText(aPoint, rLine);
 }
 
-void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const OUString& rText, sal_uInt16 MaxWidth)
+void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, std::u16string_view rText, sal_uInt16 MaxWidth)
 {
-    if (rText.isEmpty())
+    if (rText.empty())
         return;
 
     Point aPoint(rPosition);
@@ -1238,7 +1239,7 @@ void SmViewShell::DrawText(OutputDevice& rDevice, const Point& rPosition, const 
     sal_Int32 nPos = 0;
     do
     {
-        OUString aLine = rText.getToken(0, '\n', nPos);
+        OUString aLine( o3tl::getToken(rText, 0, '\n', nPos) );
         aLine = aLine.replaceAll("\r", "");
         aSize = GetTextLineSize(rDevice, aLine);
         if (aSize.Width() > MaxWidth)

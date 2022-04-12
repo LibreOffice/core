@@ -63,6 +63,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <cassert>
 
@@ -102,12 +103,12 @@ public:
 
 namespace
 {
-    int FindEntry(const weld::TreeView& rBox, const OUString& rName)
+    int FindEntry(const weld::TreeView& rBox, std::u16string_view rName)
     {
         int nCount = rBox.n_children();
         for (int i = 0; i < nCount; ++i)
         {
-            if (rName.equalsIgnoreAsciiCase(rBox.get_text(i, 0)))
+            if (o3tl::equalsIgnoreAsciiCase(rName, rBox.get_text(i, 0)))
                 return i;
         }
         return -1;
@@ -1219,7 +1220,7 @@ void LibPage::SetCurLib()
             ImpInsertLibEntry(aLibName, nEntry++);
     }
 
-    int nEntry_ = FindEntry(*m_xLibBox, "Standard");
+    int nEntry_ = FindEntry(*m_xLibBox, u"Standard");
     if (nEntry_ == -1 && m_xLibBox->n_children())
         nEntry_ = 0;
     m_xLibBox->set_cursor(nEntry_);

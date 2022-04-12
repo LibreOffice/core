@@ -71,7 +71,7 @@ public:
         @deprecated
             This method is deprecated. Use the version with an ODataAccessDescriptor instead.
     */
-    SdrObjectUniquePtr CreateFieldControl(const OUString& rFieldDesc) const;
+    SdrObjectUniquePtr CreateFieldControl(std::u16string_view rFieldDesc) const;
 
     /** create a control pair (label/bound control) for the database field description given.
     */

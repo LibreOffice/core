@@ -18,6 +18,7 @@
  */
 
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include "UCBDeadPropertyValue.hxx"
 
 using namespace http_dav_ucp;
@@ -64,25 +65,25 @@ bool UCBDeadPropertyValue::supportsType( const uno::Type & rType )
 
 
 // static
-bool UCBDeadPropertyValue::createFromXML(OUString const& rType,
+bool UCBDeadPropertyValue::createFromXML(std::u16string_view rType,
                                          OUString const& rValue,
                                          uno::Any & rOutData)
 {
     bool success = true;
 
-    if (rType.equalsIgnoreAsciiCase(aTypeString))
+    if (o3tl::equalsIgnoreAsciiCase(rType, aTypeString))
     {
         rOutData <<= rValue;
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeLong))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeLong))
     {
         rOutData <<= rValue.toInt32();
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeShort))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeShort))
     {
         rOutData <<= sal_Int16( rValue.toInt32() );
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeBoolean))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeBoolean))
     {
         if (rValue.equalsIgnoreAsciiCase(u"true"))
         {
@@ -93,23 +94,23 @@ bool UCBDeadPropertyValue::createFromXML(OUString const& rType,
             rOutData <<= false;
         }
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeChar))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeChar))
     {
         rOutData <<= rValue.toChar();
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeByte))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeByte))
     {
         rOutData <<= sal_Int8( rValue.toChar() );
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeHyper))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeHyper))
     {
         rOutData <<= rValue.toInt64();
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeFloat))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeFloat))
     {
         rOutData <<= rValue.toFloat();
     }
-    else if (rType.equalsIgnoreAsciiCase(aTypeDouble))
+    else if (o3tl::equalsIgnoreAsciiCase(rType, aTypeDouble))
     {
         rOutData <<= rValue.toDouble();
     }

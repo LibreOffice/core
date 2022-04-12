@@ -707,11 +707,11 @@ void TextListenerFormattedField0Pg1::disposing( const css::lang::EventObject& /*
 namespace
 {
 
-bool lcl_mapResolution(OUString& rResolution, const OUString& rImageResolution)
+bool lcl_mapResolution(OUString& rResolution, std::u16string_view rImageResolution)
 {
     if (o3tl::getToken(rImageResolution, 1, ';')!=rResolution)
         return false;
-    rResolution = rImageResolution.getToken(0, ';');
+    rResolution = o3tl::getToken(rImageResolution, 0, ';');
     return true;
 }
 

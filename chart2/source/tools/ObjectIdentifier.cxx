@@ -173,12 +173,12 @@ OUString lcl_getIndexStringAfterString( const OUString& rString, const OUString&
     return aRet.makeStringAndClear();
 }
 
-sal_Int32 lcl_StringToIndex( const OUString& rIndexString )
+sal_Int32 lcl_StringToIndex( std::u16string_view rIndexString )
 {
     sal_Int32 nRet = -1;
-    if( !rIndexString.isEmpty() )
+    if( !rIndexString.empty() )
     {
-        nRet = rIndexString.toInt32();
+        nRet = o3tl::toInt32(rIndexString);
         if( nRet < -1 )
             nRet = -1;
     }
@@ -195,8 +195,8 @@ void lcl_parseAxisIndices( sal_Int32& rnDimensionIndex, sal_Int32& rnAxisIndex, 
 {
     OUString aAxisIndexString = lcl_getIndexStringAfterString( rString, ":Axis=" );
     sal_Int32 nCharacterIndex=0;
-    rnDimensionIndex = lcl_StringToIndex( aAxisIndexString.getToken( 0, ',', nCharacterIndex ) );
-    rnAxisIndex = lcl_StringToIndex( aAxisIndexString.getToken( 0, ',', nCharacterIndex ) );
+    rnDimensionIndex = lcl_StringToIndex( o3tl::getToken(aAxisIndexString, 0, ',', nCharacterIndex ) );
+    rnAxisIndex = lcl_StringToIndex( o3tl::getToken(aAxisIndexString, 0, ',', nCharacterIndex ) );
 }
 
 void lcl_parseGridIndices( sal_Int32& rnSubGridIndex, const OUString& rString )
@@ -599,35 +599,35 @@ OUString ObjectIdentifier::createPieSegmentDragParameterString(
 }
 
 bool ObjectIdentifier::parsePieSegmentDragParameterString(
-          const OUString& rDragParameterString
+          std::u16string_view rDragParameterString
         , sal_Int32& rOffsetPercent
         , awt::Point& rMinimumPosition
         , awt::Point& rMaximumPosition )
 {
     sal_Int32 nCharacterIndex = 0;
 
-    OUString aValueString( rDragParameterString.getToken( 0, ',', nCharacterIndex ) );
-    rOffsetPercent = aValueString.toInt32();
+    std::u16string_view aValueString( o3tl::getToken(rDragParameterString, 0, ',', nCharacterIndex ) );
+    rOffsetPercent = o3tl::toInt32(aValueString);
     if( nCharacterIndex < 0 )
         return false;
 
-    aValueString = rDragParameterString.getToken( 0, ',', nCharacterIndex );
-    rMinimumPosition.X = aValueString.toInt32();
+    aValueString = o3tl::getToken(rDragParameterString, 0, ',', nCharacterIndex );
+    rMinimumPosition.X = o3tl::toInt32(aValueString);
     if( nCharacterIndex < 0 )
         return false;
 
-    aValueString = rDragParameterString.getToken( 0, ',', nCharacterIndex );
-    rMinimumPosition.Y = aValueString.toInt32();
+    aValueString = o3tl::getToken(rDragParameterString, 0, ',', nCharacterIndex );
+    rMinimumPosition.Y = o3tl::toInt32(aValueString);
     if( nCharacterIndex < 0 )
         return false;
 
-    aValueString = rDragParameterString.getToken( 0, ',', nCharacterIndex );
-    rMaximumPosition.X = aValueString.toInt32();
+    aValueString = o3tl::getToken(rDragParameterString, 0, ',', nCharacterIndex );
+    rMaximumPosition.X = o3tl::toInt32(aValueString);
     if( nCharacterIndex < 0 )
         return false;
 
-    aValueString = rDragParameterString.getToken( 0, ',', nCharacterIndex );
-    rMaximumPosition.Y = aValueString.toInt32();
+    aValueString = o3tl::getToken(rDragParameterString, 0, ',', nCharacterIndex );
+    rMaximumPosition.Y = o3tl::toInt32(aValueString);
     return nCharacterIndex >= 0;
 }
 
@@ -1007,7 +1007,7 @@ OUString ObjectIdentifier::createChildParticleWithIndex( ObjectType eObjectType,
 sal_Int32 ObjectIdentifier::getIndexFromParticleOrCID( const OUString& rParticleOrCID )
 {
     const OUString aIndexString = lcl_getIndexStringAfterString( rParticleOrCID, "=" );
-    return lcl_StringToIndex( aIndexString.getToken( 0, ',' ) );
+    return lcl_StringToIndex( o3tl::getToken(aIndexString, 0, ',' ) );
 }
 
 OUString ObjectIdentifier::createSeriesSubObjectStub( ObjectType eSubObjectType

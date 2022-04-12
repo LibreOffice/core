@@ -176,7 +176,7 @@ namespace dbaui
         DECL_LINK( InvalidateFieldType, void*, void );
 
         void InitCellController();
-        sal_Int32 HasFieldName( const OUString& rFieldName );
+        sal_Int32 HasFieldName( std::u16string_view rFieldName );
         OUString GenerateName( const OUString& rName );
         bool SetDataPtr( sal_Int32 nRow );
 

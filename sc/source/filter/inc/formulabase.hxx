@@ -553,7 +553,7 @@ public:
 
     /** Returns the library type associated with the passed URL of a function
         library (function add-in). */
-    static FunctionLibraryType getFuncLibTypeFromLibraryName( const OUString& rLibraryName );
+    static FunctionLibraryType getFuncLibTypeFromLibraryName( std::u16string_view rLibraryName );
 
 protected:
     /** Returns the list of all function infos. */

@@ -544,30 +544,30 @@ OUString NameFromCharSet(rtl_TextEncoding nChrSet)
 //      6. Whether to include hidden paragraphs and text - as true/false
 // the delimiter character is ","
 
-void SwAsciiOptions::ReadUserData( const OUString& rStr )
+void SwAsciiOptions::ReadUserData( std::u16string_view rStr )
 {
     sal_Int32 nToken = 0;
-    OUString sToken = rStr.getToken(0, ',', nToken); // 1. Charset name
-    if (!sToken.isEmpty())
-        m_eCharSet = CharSetFromName(sToken);
-    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 2. Line ending type
+    std::u16string_view sToken = o3tl::getToken(rStr, 0, ',', nToken); // 1. Charset name
+    if (!sToken.empty())
+        m_eCharSet = CharSetFromName(OUString(sToken));
+    if (nToken >= 0 && !(sToken = o3tl::getToken(rStr, 0, ',', nToken)).empty()) // 2. Line ending type
     {
-        if (sToken.equalsIgnoreAsciiCase("CRLF"))
+        if (o3tl::equalsIgnoreAsciiCase(sToken, u"CRLF"))
             m_eCRLF_Flag = LINEEND_CRLF;
-        else if (sToken.equalsIgnoreAsciiCase("LF"))
+        else if (o3tl::equalsIgnoreAsciiCase(sToken, u"LF"))
             m_eCRLF_Flag = LINEEND_LF;
         else
             m_eCRLF_Flag = LINEEND_CR;
     }
-    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 3. Font name
+    if (nToken >= 0 && !(sToken = o3tl::getToken(rStr, 0, ',', nToken)).empty()) // 3. Font name
         m_sFont = sToken;
-    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 4. Language tag
-        m_nLanguage = LanguageTag::convertToLanguageTypeWithFallback(sToken);
-    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty()) // 5. Include BOM?
-        m_bIncludeBOM = !(sToken.equalsIgnoreAsciiCase("FALSE"));
+    if (nToken >= 0 && !(sToken = o3tl::getToken(rStr, 0, ',', nToken)).empty()) // 4. Language tag
+        m_nLanguage = LanguageTag::convertToLanguageTypeWithFallback(OUString(sToken));
+    if (nToken >= 0 && !(sToken = o3tl::getToken(rStr, 0, ',', nToken)).empty()) // 5. Include BOM?
+        m_bIncludeBOM = !(o3tl::equalsIgnoreAsciiCase(sToken, u"FALSE"));
     // 6. Include hidden text
-    if (nToken >= 0 && !(sToken = rStr.getToken(0, ',', nToken)).isEmpty())
-        m_bIncludeHidden = !(sToken.equalsIgnoreAsciiCase("FALSE"));
+    if (nToken >= 0 && !(sToken = o3tl::getToken(rStr, 0, ',', nToken)).empty())
+        m_bIncludeHidden = !(o3tl::equalsIgnoreAsciiCase(sToken, u"FALSE"));
 }
 
 void SwAsciiOptions::WriteUserData(OUString& rStr) const

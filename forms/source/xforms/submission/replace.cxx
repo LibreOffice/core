@@ -43,15 +43,15 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::task;
 using namespace com::sun::star::xml::dom;
 
-CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
+CSubmission::SubmissionResult CSubmission::replace(std::u16string_view aReplace, const Reference<XDocument>& aDocument, const Reference<XFrame>& aFrame)
 {
     if (!m_aResultStream.is())
         return CSubmission::UNKNOWN_ERROR;
 
     try {
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
-        if (aReplace.equalsIgnoreAsciiCase("all")
-         || aReplace.equalsIgnoreAsciiCase("document")) {
+        if (o3tl::equalsIgnoreAsciiCase(aReplace, u"all")
+         || o3tl::equalsIgnoreAsciiCase(aReplace, u"document")) {
             Reference< XComponentLoader > xLoader;
             if (aFrame.is())
                 xLoader.set(aFrame, UNO_QUERY);
@@ -73,7 +73,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
 
             return CSubmission::SUCCESS;
 
-        } else if (aReplace.equalsIgnoreAsciiCase("instance")) {
+        } else if (o3tl::equalsIgnoreAsciiCase(aReplace, u"instance")) {
             if (aDocument.is()) {
                 // parse the result stream into a new document
                 Reference< XDocumentBuilder > xBuilder(DocumentBuilder::create(xContext));
@@ -94,7 +94,7 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
                 // nothing to replace
                 return CSubmission::UNKNOWN_ERROR;
             }
-        } else if (aReplace.equalsIgnoreAsciiCase("none")) {
+        } else if (o3tl::equalsIgnoreAsciiCase(aReplace, u"none")) {
             // do nothing \o/
             return CSubmission::SUCCESS;
         }

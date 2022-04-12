@@ -176,7 +176,7 @@ public:
     void            SetMaxOutputSizePixel( const Size& rSize );
     const Size&     GetMaxOutputSizePixel() const;
 
-    void            SetWindowState(const OString& rStr);
+    void            SetWindowState(std::string_view rStr);
     OString         GetWindowState(WindowStateMask nMask = WindowStateMask::All) const;
 
     void            SetMenuBar(MenuBar* pMenuBar);

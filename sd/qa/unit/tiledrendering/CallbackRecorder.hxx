@@ -17,20 +17,20 @@
 #include <osl/conditn.hxx>
 #include <sfx2/viewsh.hxx>
 #include <test/lokcallback.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 
 namespace
 {
-std::vector<OUString> lcl_convertSeparated(const OUString& rString, sal_Unicode nSeparator)
+std::vector<OUString> lcl_convertSeparated(std::u16string_view rString, sal_Unicode nSeparator)
 {
     std::vector<OUString> aRet;
 
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aToken = rString.getToken(0, nSeparator, nIndex);
-        aToken = aToken.trim();
+        OUString aToken(o3tl::trim(o3tl::getToken(rString, 0, nSeparator, nIndex)));
         if (!aToken.isEmpty())
             aRet.push_back(aToken);
     } while (nIndex >= 0);

@@ -34,6 +34,7 @@
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 #include <jni.h>
 
@@ -41,7 +42,7 @@ namespace com::sun::star::uno { class XComponentContext; }
 
 jobjectArray jvmaccess::ClassPath::translateToUrls(
     css::uno::Reference< css::uno::XComponentContext > const & context,
-    JNIEnv * environment, OUString const & classPath)
+    JNIEnv * environment, std::u16string_view classPath)
 {
     assert(context.is());
     assert(environment != nullptr);
@@ -56,7 +57,7 @@ jobjectArray jvmaccess::ClassPath::translateToUrls(
     }
     ::std::vector< jobject > urls;
     for (::sal_Int32 i = 0; i != -1;) {
-        OUString url(classPath.getToken(0, ' ', i));
+        OUString url(o3tl::getToken(classPath, 0, ' ', i));
         if (!url.isEmpty()) {
             css::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
                 expUrl(

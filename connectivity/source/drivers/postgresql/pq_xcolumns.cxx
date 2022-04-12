@@ -75,9 +75,9 @@ using com::sun::star::sdbc::SQLException;
 namespace pq_sdbc_driver
 {
 
-static Any isCurrency( const OUString & typeName )
+static Any isCurrency( std::u16string_view typeName )
 {
-    return Any( typeName.equalsIgnoreAsciiCase("money") );
+    return Any( o3tl::equalsIgnoreAsciiCase(typeName, u"money") );
 }
 
 // static sal_Bool isAutoIncrement8( const OUString & typeName )
