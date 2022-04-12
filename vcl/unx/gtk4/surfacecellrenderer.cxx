@@ -165,6 +165,17 @@ GtkCellRenderer* surface_cell_renderer_new()
     return GTK_CELL_RENDERER(g_object_new(SURFACE_TYPE_CELL_RENDERER, nullptr));
 }
 
+static void get_surface_size(cairo_surface_t* pSurface, int& rWidth, int& rHeight)
+{
+    double x1, x2, y1, y2;
+    cairo_t* cr = cairo_create(pSurface);
+    cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
+    cairo_destroy(cr);
+
+    rWidth = x2 - x1;
+    rHeight = y2 - y1;
+}
+
 bool surface_cell_renderer_get_preferred_size(GtkCellRenderer* cell, GtkOrientation orientation,
                                               gint* minimum_size, gint* natural_size)
 {
@@ -174,15 +185,7 @@ bool surface_cell_renderer_get_preferred_size(GtkCellRenderer* cell, GtkOrientat
     int nHeight = 0;
 
     if (cellsurface->surface)
-    {
-        double x1, x2, y1, y2;
-        cairo_t* cr = cairo_create(cellsurface->surface);
-        cairo_clip_extents(cr, &x1, &y1, &x2, &y2);
-        cairo_destroy(cr);
-
-        nWidth = x2 - x1;
-        nHeight = y2 - y1;
-    }
+        get_surface_size(cellsurface->surface, nWidth, nHeight);
 
     if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -209,7 +212,16 @@ void surface_cell_renderer_render(GtkCellRenderer* cell, cairo_t* cr, GtkWidget*
                                   const GdkRectangle* cell_area, GtkCellRendererState /*flags*/)
 {
     SurfaceCellRenderer* cellsurface = SURFACE_CELL_RENDERER(cell);
-    cairo_set_source_surface(cr, cellsurface->surface, cell_area->x, cell_area->y);
+    if (!cellsurface->surface)
+        return;
+
+    int nWidth, nHeight;
+    get_surface_size(cellsurface->surface, nWidth, nHeight);
+    int nXOffset = (cell_area->width - nWidth) / 2;
+    int nYOffset = (cell_area->height - nHeight) / 2;
+
+    cairo_set_source_surface(cr, cellsurface->surface, cell_area->x + nXOffset,
+                             cell_area->y + nYOffset);
     cairo_paint(cr);
 }
 

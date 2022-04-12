@@ -19189,6 +19189,7 @@ public:
         SAL_WARN_IF(!m_pMenuWindow, "vcl.gtk", "GtkInstanceComboBox: couldn't find popup menu");
 
         bool bHasEntry = gtk_combo_box_get_has_entry(m_pComboBox);
+        bool bPixbufUsedSurface = gtk_tree_model_get_n_columns(m_pTreeModel) == 4;
 
         bool bFindButtonTextRenderer = !bHasEntry;
         GtkCellLayout* pCellLayout = GTK_CELL_LAYOUT(m_pComboBox);
@@ -19204,6 +19205,16 @@ public:
                 m_pButtonTextRenderer = pCellRenderer;
                 bFindButtonTextRenderer = false;
             }
+        }
+
+        // Seeing as GtkCellRendererPixbuf no longer takes a surface, then insert our own replacement
+        // to render that instead here
+        if (bPixbufUsedSurface)
+        {
+            GtkCellRenderer* pSurfaceRenderer = surface_cell_renderer_new();
+            gtk_cell_layout_pack_start(pCellLayout, pSurfaceRenderer, false);
+            gtk_cell_layout_reorder(pCellLayout, pSurfaceRenderer, 0);
+            gtk_cell_layout_set_attributes(pCellLayout, pSurfaceRenderer, "surface", 3, nullptr);
         }
 
         if (bHasEntry)
