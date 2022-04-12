@@ -2991,8 +2991,14 @@ void ScViewData::RecalcPixPos()             // after zoom changes
 
         tools::Long nPixPosY = 0;
         SCROW nPosY = pThisTab->nPosY[eWhich];
+        tools::Long nRowHeight = -1;
+        SCROW nLastSameHeightRow = -1;
         for (SCROW j=0; j<nPosY; j++)
-            nPixPosY -= ToPixel(mrDoc.GetRowHeight(j, nTabNo), nPPTY);
+        {
+            if(nLastSameHeightRow < j)
+                nRowHeight = ToPixel(mrDoc.GetRowHeight(j, nTabNo, nullptr, &nLastSameHeightRow), nPPTY);
+            nPixPosY -= nRowHeight;
+        }
         pThisTab->nPixPosY[eWhich] = nPixPosY;
     }
 }
