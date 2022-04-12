@@ -893,6 +893,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "99cf7d71_161bbc45",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-12T14:31:17Z",
+      "side": 1,
+      "message": "Which top layers? When others read this API documentation, they have no context.\n\nI wonder if we really need this IDL file. Can we do without?\nIDL should only be used, when this is supposed to be used by third party applications. I don\u0027t think that\u0027s the case here?",
+      "parentUuid": "bf3f8231_7fbac1d0",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91037963_1daf45bb",
         "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
         "patchSetId": 18
