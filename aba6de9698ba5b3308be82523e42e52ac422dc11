@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22ab5063_697136a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-12T08:17:06Z",
+      "side": 1,
+      "message": "Thanks Rizal...some comments....",
+      "revId": "aba6de9698ba5b3308be82523e42e52ac422dc11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e2864d_b7ff0924",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 215,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-12T08:17:06Z",
+      "side": 1,
+      "message": "The convention in online Help, for the sake of translation, is to use \"bar\" instead of \"toolbar\".  As long as this tip will have to be retranslated...",
+      "range": {
+        "startLine": 215,
+        "startChar": 82,
+        "endLine": 215,
+        "endChar": 89
+      },
+      "revId": "aba6de9698ba5b3308be82523e42e52ac422dc11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c804cf50_67b961cd",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-12T08:17:06Z",
+      "side": 1,
+      "message": "Again...because this is going to be retranslated....this tip might be better presented as a question....i.e.,\n\nDo you want to specify which non-printing characters are displayed? Select options...",
+      "range": {
+        "startLine": 245,
+        "startChar": 131,
+        "endLine": 245,
+        "endChar": 184
+      },
+      "revId": "aba6de9698ba5b3308be82523e42e52ac422dc11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f806f194_67d529c7",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-12T08:17:06Z",
+      "side": 1,
+      "message": "Not needed.  Reason:  Sheet \u003e Right-to-Left is a valid command (using the menus). You simply describe a \"shortcut\"",
+      "range": {
+        "startLine": 270,
+        "startChar": 147,
+        "endLine": 270,
+        "endChar": 214
+      },
+      "revId": "aba6de9698ba5b3308be82523e42e52ac422dc11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8505c684_457c79e9",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-12T08:17:06Z",
+      "side": 1,
+      "message": "shouldn\u0027t this be \"Complex text layout\" ?",
+      "range": {
+        "startLine": 270,
+        "startChar": 130,
+        "endLine": 270,
+        "endChar": 143
+      },
+      "revId": "aba6de9698ba5b3308be82523e42e52ac422dc11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11bc5233_7b9a113a",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 1
+      },
+      "lineNbr": 270,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-12T08:17:06Z",
+      "side": 1,
+      "message": "Maybe this tip should also be improved. It is not really about scrollbar, but about displaying the sheet R-T-L. Something like: \n\nDo you want Sheets displayed Right-to-Left? Use Sheets \u003e Right-To-Left. (Make sure to enable Tools ▸ Options ▸ Language Settings ▸ Languages ▸ Complex text layout.)\n\n(I wrote it this way because I assume that most users who are interested in this feature will already have ctl enabled).",
+      "range": {
+        "startLine": 270,
+        "startChar": 35,
+        "endLine": 270,
+        "endChar": 71
+      },
+      "revId": "aba6de9698ba5b3308be82523e42e52ac422dc11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
