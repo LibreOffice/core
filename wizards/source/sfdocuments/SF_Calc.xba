@@ -44,7 +44,7 @@ Option Explicit
 &apos;&apos;&apos;				&apos; or Set oDoc = CreateScriptService(&quot;SFDocuments.Calc&quot;, &quot;Untitled 1&quot;)	&apos;	Untitled 1 is presumed a Calc document
 &apos;&apos;&apos;			&apos; The substring &quot;SFDocuments.&quot; in the service name is optional
 &apos;&apos;&apos;
-&apos;&apos;&apos;		Definitions: 
+&apos;&apos;&apos;		Definitions:
 &apos;&apos;&apos;			Many methods require a &quot;Sheet&quot; or a &quot;Range&quot; as argument. (NB: a single cell is considered as a special case of a Range)
 &apos;&apos;&apos;			Usually, within a specific Calc instance, sheets and ranges are given as a string: &quot;SheetX&quot; and &quot;D2:F6&quot;
 &apos;&apos;&apos;			Multiple ranges are not supported in this context.
@@ -517,7 +517,7 @@ Try:
 	If Len(ChartName) &gt; 0 And IsNull(oChart) Then
 		If Not ScriptForge.SF_Utils._Validate(ChartName, &quot;ChartName&quot;, V_STRING, vCharts) Then GoTo Finally
 	End If
-	
+
 Finally:
 	If Len(ChartName) = 0 Then Charts = vCharts Else Set Charts = oChart
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
@@ -1198,7 +1198,7 @@ Try:
 		&apos;	Restore selection in source
 		_RestoreSelections(.Component, oSelect)
 	End With
-	
+
 	sCopy = _Offset(oDestRange, 0, 0, lHeight, lWidth).RangeName
 
 Finally:
@@ -1274,7 +1274,7 @@ Try:
 	Set oChart = Charts(SheetName, ChartName)
 	oChart._Shape.Name = ChartName		&apos;	Both user-defined and internal names match ChartName
 	oChart._Diagram.Wall.FillColor = RGB(255, 255, 255)		&apos;	Align on background color set by the user interface by default
-	
+
 Finally:
 	Set CreateChart = oChart
 	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
@@ -1566,7 +1566,7 @@ Function GetColumnName(Optional ByVal ColumnNumber As Variant) As String
 &apos;&apos;&apos;		If ColumnNumber is not in the allowed range, returns a zero-length string
 &apos;&apos;&apos;	Example:
 &apos;&apos;&apos;		MsgBox oDoc.GetColumnName(1022)	&apos;	&quot;AMH&quot;
-&apos;&apos;&apos;	Adapted from a Python function by sundar nataraj 
+&apos;&apos;&apos;	Adapted from a Python function by sundar nataraj
 &apos;&apos;&apos;	http://stackoverflow.com/questions/23861680/convert-spreadsheet-number-to-column-letter
 
 Dim sCol As String			&apos;	Return value
@@ -1730,7 +1730,7 @@ Public Function ImportFromCSVFile(Optional ByVal FileName As Variant _
 &apos;&apos;&apos;		DestinationCell: the destination of the copied range of cells, as a string
 &apos;&apos;&apos;			If given as range, the destination will be reduced to its top-left cell
 &apos;&apos;&apos;		FilterOptions: The arguments of the CSV input filter.
-&apos;&apos;&apos;			Read https://wiki.openoffice.org/wiki/Documentation/DevGuide/Spreadsheets/Filter_Options#Filter_Options_for_the_CSV_Filter
+&apos;&apos;&apos;			Read https://wiki.documentfoundation.org/Documentation/DevGuide/Spreadsheet_Documents#Filter_Options_for_the_CSV_Filter
 &apos;&apos;&apos;			Default:	input file encoding is UTF8
 &apos;&apos;&apos;						separator = comma, semi-colon or tabulation
 &apos;&apos;&apos;						string delimiter = double quote
@@ -1834,7 +1834,7 @@ Const cstSubArgs = &quot;[FileName=&quot;&quot;&quot;&quot;], [RegistrationName=
 &apos;	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
 
 Check:
-	
+
 	If IsMissing(FileName) Or IsEmpty(FileName) Then FileName = &quot;&quot;
 	If IsMissing(RegistrationName) Or IsEmpty(RegistrationName) Then RegistrationName = &quot;&quot;
 	If IsMissing(DirectSQL) Or IsEmpty(DirectSQL) Then DirectSQL = False
@@ -1852,9 +1852,9 @@ Check:
 		Set oDBContext = ScriptForge.SF_Utils._GetUNOService(&quot;DatabaseContext&quot;)
 		If Not oDBContext.hasRegisteredDatabase(RegistrationName) Then GoTo CatchError
 		FileName = ScriptForge.SF_FileSystem._ConvertFromUrl(oDBContext.getDatabaseLocation(RegistrationName))
-	End If	
+	End If
 	If Not ScriptForge.SF_FileSystem.FileExists(FileName) Then GoTo CatchError
-	
+
 Try:
 	&apos;	Check command type
 	Set oDatabase = ScriptForge.SF_Services.CreateScriptService(&quot;SFDatabases.Database&quot;, FileName, , True)	&apos;	Read-only
@@ -2386,7 +2386,7 @@ Check:
 	If IsMissing(SheetName) Or IsEmpty(SheetName) Then SheetName = &quot;&quot;
 	If IsMissing(Pages) Or IsEmpty(Pages) Then Pages = &quot;&quot;
 	If IsMissing(Copies) Or IsEmpty(Copies) Then Copies = 1
-	
+
 	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
 		If Not _IsStillAlive() Then GoTo Finally
 		If Not _ValidateSheet(SheetName, &quot;SheetName&quot;, , True, True) Then GoTo Finally
@@ -3506,7 +3506,7 @@ Try:
 						For j = 0 To lMax2
 							vArray(i, j) = pvDataArray(i)(j)
 						Next j
-					Next i			
+					Next i
 			End Select
 		End If
 	End If
@@ -3623,7 +3623,7 @@ Try:
 		End Select
 	End If
 	ReDim vDataArray(0 To lRows)
-	
+
 	&apos;	Feed the output array row by row, each row being a vector
 	For i = 0 To lRows
 		ReDim vVector(0 To lCols)
@@ -3656,7 +3656,7 @@ Try:
 
 Finally:
 	_ConvertToDataArray = vDataArray
-	Exit Function	
+	Exit Function
 End Function	&apos;	SF_Documents.SF_Calc._ConvertToDataArray
 
 REM -----------------------------------------------------------------------------
@@ -3721,7 +3721,7 @@ Function _GetColumnName(ByVal plColumnNumber As Long) As String
 &apos;&apos;&apos;		ColumnNumber: the column number, must be in the interval 1 ... 1024
 &apos;&apos;&apos;	Returns:
 &apos;&apos;&apos;		a string representation of the column name, in range &apos;A&apos;..&apos;AMJ&apos;
-&apos;&apos;&apos;	Adapted from a Python function by sundar nataraj 
+&apos;&apos;&apos;	Adapted from a Python function by sundar nataraj
 &apos;&apos;&apos;	http://stackoverflow.com/questions/23861680/convert-spreadsheet-number-to-column-letter
 
 Dim sCol As String			&apos;	Return value
@@ -3911,7 +3911,7 @@ Dim oSelect As Object				&apos;	Current selection
 		.ServiceName = SERVICEREFERENCE
 		.RawAddress = psAddress
 		Set .XSpreadSheet = Nothing	:	Set .XCellRange = Nothing
-		
+
 		&apos;	Remove leading &apos;$&apos;
 		If Left(psAddress, 1) = &quot;$&quot; Then sAddress = Mid(psAddress, 2) Else sAddress = psAddress
 		&apos;	Split in sheet and range components - Check presence of surrounding single quotes or dot
@@ -4130,7 +4130,7 @@ Const cstSubArgs = &quot;&quot;
 			Else
 				If Not _ValidateSheet(pvArg, &quot;SheetName&quot;, , True) Then GoTo Finally
 				Set _PropertyGet = _Component.getSheets.getByName(pvArg)
-			End If			
+			End If
 		Case Else
 			_PropertyGet = Null
 	End Select
@@ -4286,7 +4286,7 @@ Try:
 		End If
 	End If
 	bValid = True
-	
+
 Finally:
 	_ValidateSheet = bValid
 	Exit Function

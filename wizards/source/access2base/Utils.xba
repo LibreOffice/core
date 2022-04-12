@@ -38,16 +38,16 @@ Dim i As Integer, vNewList() As Variant, vNumeric() As Variant, iSize As Integer
 	Else
 		vNewList = Array(pvTypes)
 	End If
-	
+
 	vNumeric = Array(vbInteger, vbLong, vbSingle, vbDouble, vbCurrency, vbBigint, vbDecimal, vbBoolean)
-	
+
 	iSize = UBound(vNewlist)
 	ReDim Preserve vNewList(iSize + UBound(vNumeric) + 1)
 	For i = 0 To UBound(vNumeric)
 		vNewList(iSize + i + 1) = vNumeric(i)
 	Next i
-	
-	_AddNumeric = vNewList		
+
+	_AddNumeric = vNewList
 
 End Function		&apos;	_AddNumeric	V0.8.0
 
@@ -104,7 +104,7 @@ Public Function _CheckArgument(pvItem As Variant _
 &apos;		pvError				If True (default), error handling in this routine. False in _setProperty methods in class modules.
 
 	_CheckArgument = False
-	
+
 Dim iVarType As Integer, bValidIsMissing As Boolean
 	If IsArray(pvType) Then iVarType = VarType(pvType(LBound(pvType))) Else iVarType = VarType(pvType)
 	If iVarType = vbString Then					&apos;	pvType is a pseudo-type string
@@ -114,7 +114,7 @@ Dim iVarType As Integer, bValidIsMissing As Boolean
 		If Not bValidIsMissing Then bValidIsMissing = IsMissing(pvValid)
 		If bValidIsMissing Then _CheckArgument = Utils._IsScalar(pvItem, pvType) Else _CheckArgument = Utils._IsScalar(pvItem, pvType, pvValid)
 	End If
-	
+
 	If VarType(pvItem) = vbCurrency Or VarType(pvItem) = vbDecimal Or VarType(pvItem) = vbBigint Then pvItem = CDbl(pvItem)
 
 Exit_Function:
@@ -201,12 +201,12 @@ Const cstByteLength = 25
 			Case Else				:		sArg = CStr(pvArg)
 		End Select
 	End If
-	If pbShort And Len(sArg) &gt; cstLength Then 
+	If pbShort And Len(sArg) &gt; cstLength Then
 		sLength = &quot;(&quot; &amp; Len(sArg) &amp; &quot;)&quot;
 		sArg = Left(sArg, cstLength - 5 - Len(slength)) &amp; &quot; ... &quot; &amp; sLength
 	End If
 	_CStr = sArg
-	
+
 End Function	&apos;	CStr			V0.9.5
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -276,12 +276,12 @@ End Function
 REM -----------------------------------------------------------------------------------------------------------------------
 Private Function _ExtensionLocation() As String
 &apos;	Return the URL pointing to the location where OO installed the Access2Base extension
-&apos;	Adapted from http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Extensions/Location_of_Installed_Extensions
+&apos;	Adapted from https://wiki.documentfoundation.org/Documentation/DevGuide/Extensions#Location_of_Installed_Extensions
 
 Dim oPip As Object, sLocation As String
 	Set oPip = GetDefaultContext.getByName(&quot;/singletons/com.sun.star.deployment.PackageInformationProvider&quot;)
 	_ExtensionLocation = oPip.getPackageLocation(&quot;Access2Base&quot;)
-	
+
 End Function	&apos;	ExtensionLocation
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -289,7 +289,7 @@ Private Function _GetDialogLib() As Object
 &apos;	Return actual Access2Base dialogs library
 
 Dim oDialogLib As Object
-	 
+
 	Set oDialogLib = DialogLibraries
 	If oDialogLib.hasByName(&quot;Access2BaseDev&quot;) Then
 		If Not oDialogLib.IsLibraryLoaded(&quot;Access2BaseDev&quot;) Then oDialogLib.loadLibrary(&quot;Access2BaseDev&quot;)
@@ -309,7 +309,7 @@ Public Function _GetEventName(ByVal psProperty As String) As String
 &apos;	Corrects the typo on ErrorOccur(r?)ed
 
 	_GetEventName = Replace(LCase(Mid(psProperty, 3, 1)) &amp; Right(psProperty, Len(psProperty) - 3), &quot;errorOccurred&quot;, &quot;errorOccured&quot;)
-	
+
 End Function	&apos;	_GetEventName	V1.7.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -326,7 +326,7 @@ Dim i As Integer, vEvents As Variant, sEvent As String, oParent As Object, iInde
 	_GetEventScriptCode = &quot;&quot;
 	If Not Utils._hasUNOMethod(poObject, &quot;getParent&quot;) Then Exit Function
 
-	&apos;	Find form index i.e. find control via getByIndex() 
+	&apos;	Find form index i.e. find control via getByIndex()
 	If IsMissing(pbExtendName) Then pbExtendName = False
 	Set oParent = poObject.getParent()
 	iIndex = -1
@@ -338,7 +338,7 @@ Dim i As Integer, vEvents As Variant, sEvent As String, oParent As Object, iInde
 		End If
 	Next i
 	If iIndex &lt; 0 Then Exit Function
-	
+
 	&apos;	Find script event
 	vEvents = oParent.getScriptEvents(iIndex)			&apos;	Returns an array
 	sEvent = Utils._GetEventName(psEvent)			&apos;	Targeted event method
@@ -360,7 +360,7 @@ REM Modified from Roberto Benitez&apos;s BaseTools
 REM get the data for the column specified by ColIndex
 REM If pbReturnBinary = False (default) then return length of binary field
 REM get type name from metadata
-	
+
 Dim vValue As Variant, iType As Integer, vDateTime As Variant, oValue As Object
 Dim bNullable As Boolean, lSize As Long
 Const cstMaxTextLength = 65535
@@ -435,9 +435,9 @@ Const cstMaxBinlength = 2 * 65535
 			If poResultSet.wasNull() Then vValue = Null
 		End If
 	End With
-	
+
 	_GetResultSetColumnValue = vValue
-	
+
 End Function	&apos;	GetResultSetColumnValue		V 1.5.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -459,7 +459,7 @@ Dim sComponents() As String, sSubComponents() As String
 		Case Else
 			Exit Function
 	End Select
-	
+
 End Function	&apos;	FinalProperty
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -512,14 +512,14 @@ End Function	&apos;	GetRegistryKeyContent	V0.8.5
 REM -----------------------------------------------------------------------------------------------------------------------
 Public Function _getTempDirectoryURL()	As String
 &apos;	Return the temporary directory defined in the OO Options (Paths)
-Dim sDirectory As String, oSettings As Object, oPathSettings As Object	
+Dim sDirectory As String, oSettings As Object, oPathSettings As Object
 
 	If _ErrorHandler() Then On Local Error Goto Error_Function
-	
+
 	_getTempDirectoryURL = &quot;&quot;
 	oPathSettings = createUnoService( &quot;com.sun.star.util.PathSettings&quot; )
 	sDirectory = oPathSettings.GetPropertyValue( &quot;Temp&quot; )
-	
+
 	_getTempDirectoryURL = sDirectory
 
 Exit_Function:
@@ -583,9 +583,9 @@ Dim sObjectType As String
 	On Local Error Resume Next
 	sObjectType = pvObject.getImplementationName()
 	If sObjectType = &quot;&quot; Then sObjectType =  _getUNOTypeName(pvObject)
-	
+
 	_ImplementationName = sObjectType
-	
+
 End Function		&apos;	ImplementationName
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -645,9 +645,9 @@ Dim iTop As Integer, iBottom As Integer, iFound As Integer
 			End If
 		End If
 	End If
-	
-	Exit Function				
-		
+
+	Exit Function
+
 End Function	&apos;	InList V1.1.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -703,7 +703,7 @@ Public Function _IsPseudo(pvObject As Variant, ByVal pvType As Variant) As Boole
 Dim bIsPseudo As Boolean, bPseudoExists As Boolean, vObject As Variant
 
 	If _ErrorHandler() Then On Local Error Goto Exit_False
-	
+
 	_IsPseudo = False
 	bIsPseudo = False
 	vObject = pvObject					&apos;	To avoid &quot;Object variable not set&quot; error message
@@ -725,12 +725,12 @@ Dim bIsPseudo As Boolean, bPseudoExists As Boolean, vObject As Variant
 				End Select
 			End With
 	End Select
-	
+
 	If Not bIsPseudo Then Goto Exit_Function
-	
+
 Dim oDoc As Object, oForms As Variant
 Const cstSeparator = &quot;\;&quot;
-	
+
 	bPseudoExists = False
 	With vObject
 		Select Case ._Type
@@ -784,7 +784,7 @@ Const cstSeparator = &quot;\;&quot;
 			Case Else
 		End Select
 	End With
-	
+
 	_IsPseudo = ( bIsPseudo And bPseudoExists )
 
 Exit_Function:
@@ -812,9 +812,9 @@ Private Function _IsScalar(ByVal pvArg As Variant, ByVal pvType As Variant, ByVa
 	If Not IsMissing(pvValid) Then
 		If Not _InList(pvArg, pvValid) Then Exit Function
 	End If
-	
+
 	_IsScalar = True
-	
+
 Exit_Function:
 	Exit Function
 End Function	&apos;	IsScalar	V0.7.5
@@ -834,7 +834,7 @@ Dim vSubStrings() As Variant, i As Integer, iLen As Integer
 		End If
 	Next i
 	_PCase = Join(vSubStrings, &quot; &quot;)
-	
+
 End Function	&apos;	PCase		V0.9.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -844,7 +844,7 @@ Private Function _PercentEncode(ByVal psChar As String) As String
 
 Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 	lChar = Asc(psChar)
-	
+
 	Select Case lChar
 		Case 48 To 57, 65 To 90, 97 To 122		&apos;	0-9, A-Z, a-z
 			_PercentEncode = psChar
@@ -868,7 +868,7 @@ Dim lChar As Long, sByte1 As String, sByte2 As String, sByte3 As String
 		Case Else				&apos;	Not supported
 			_PercentEncode = psChar
 	End Select
-	
+
 	Exit Function
 
 End Function	&apos;	_PercentEncode V1.4.0
@@ -905,7 +905,7 @@ Const cstMaxLines = 16000		&apos;	+/- the limit of array sizes in Basic
 	Loop
 	Close #iFile
 
-Exit_Function:	
+Exit_Function:
 	_ReadFileIntoArray() = vLines()
 	Exit Function
 Error_Function:
@@ -1009,7 +1009,7 @@ Dim i As Integer, oEvent As Object, sEvent As String, oParent As Object, iIndex 
 	_RegisterEventScript = False
 	If Not _hasUNOMethod(poObject, &quot;getParent&quot;) Then Exit Function
 
-	&apos;	Find object internal index i.e. how to reach it via getByIndex() 
+	&apos;	Find object internal index i.e. how to reach it via getByIndex()
 	If IsMissing(pbExtendName) Then pbExtendName = False
 	Set oParent = poObject.getParent()
 	iIndex = -1
@@ -1117,11 +1117,11 @@ Public Function _Trim(ByVal psString As String) As String
 Const cstSquareOpen = &quot;[&quot;
 Const cstSquareClose = &quot;]&quot;
 Dim sTrim As String
-	
+
 	sTrim = Trim(Replace(psString, vbTab, &quot; &quot;))
 	_Trim = sTrim
 	If Len(sTrim) &lt;= 2 Then Exit Function
-	
+
 	If Left(sTrim, 1) = cstSquareOpen Then
 		If Right(sTrim, 1) = cstSquareClose Then
 			_Trim = Mid(sTrim, 2, Len(sTrim) - 2)
@@ -1172,7 +1172,7 @@ Private Function _UpdateResultSetColumnValue(piRDBMS As Integer _
 											) As Boolean
 REM store the pvValue for the column specified by ColIndex
 REM get type name from metadata
-	
+
 Dim iType As Integer, vDateTime As Variant, oValue As Object
 Dim bNullable As Boolean, lSize As Long, iValueType As Integer, sValueTypeName As String
 Const cstMaxTextLength = 65535
@@ -1234,9 +1234,9 @@ Const cstMaxBinlength = 2 * 65535
 		End If
 
 	End With
-	
+
 	_UpdateResultSetColumnValue = True
-	
+
 End Function	&apos;	UpdateResultSetColumnValue		V 1.6.0
 
 REM -----------------------------------------------------------------------------------------------------------------------
@@ -1276,7 +1276,7 @@ Dim lCurrentChar As Long, bQuestionMark As Boolean
 				End If
 		End Select
 	Next lCurrentChar
- 
+
 	_URLEncode = sEncoded
 
 End Function	&apos;	_URLEncode V1.4.0
