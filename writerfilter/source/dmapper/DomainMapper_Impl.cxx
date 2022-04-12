@@ -6314,6 +6314,11 @@ void DomainMapper_Impl::CloseFieldCommand()
                 break;
                 case FIELD_CREATEDATE  :
                 {
+                    if (pContext->IsFieldLocked())
+                    {
+                        xFieldProperties->setPropertyValue(
+                            getPropertyName(PROP_IS_FIXED), uno::makeAny( true ));
+                    }
                     xFieldProperties->setPropertyValue(
                         getPropertyName( PROP_IS_DATE ), uno::makeAny( true ));
                     SetNumberFormat( pContext->GetCommand(), xFieldProperties );
