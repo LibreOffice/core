@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "664812d3_2e25440a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-12T10:48:18Z",
+      "side": 1,
+      "message": "that\u0027s weird ... the crash only happens on master, not on libreoffice-7-3 branch?\n\n... oh but obviously the document is displayed wrongly, with this patch it looks correct.\n\n... it looks like it was displayed properly in 6.1 but broken in 6.2 (both tested branches are downstream ones) - guess that matches commit 2f3684b2289a8c46dc6144064a452cc529400f28",
+      "revId": "0766121165632699eafc43f6d94098e46ffaddbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
