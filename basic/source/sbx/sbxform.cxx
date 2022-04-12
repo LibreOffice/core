@@ -24,6 +24,7 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <rtl/character.hxx>
+#include <o3tl/string_view.hxx>
 
 /*
 TODO: are there any Star-Basic characteristics unconsidered?
@@ -957,41 +958,41 @@ OUString SbxBasicFormater::BasicFormat( double dNumber, const OUString& _sFormat
     return sReturnStrg;
 }
 
-bool SbxBasicFormater::isBasicFormat( const OUString& sFormatStrg )
+bool SbxBasicFormater::isBasicFormat( std::u16string_view sFormatStrg )
 {
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_GENERALNUMBER ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_GENERALNUMBER ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_CURRENCY ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_CURRENCY ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_FIXED ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_FIXED ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_STANDARD ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_STANDARD ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_PERCENT ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_PERCENT ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_SCIENTIFIC ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_SCIENTIFIC ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_YESNO ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_YESNO ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_TRUEFALSE ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_TRUEFALSE ) )
     {
         return true;
     }
-    if( sFormatStrg.equalsIgnoreAsciiCase( BASICFORMAT_ONOFF ) )
+    if( o3tl::equalsIgnoreAsciiCase( sFormatStrg, BASICFORMAT_ONOFF ) )
     {
         return true;
     }

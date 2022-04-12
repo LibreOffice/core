@@ -101,7 +101,7 @@ OUString SfxFilter::GetSuffixes() const
     return aRet;
 }
 
-std::shared_ptr<const SfxFilter> SfxFilter::GetDefaultFilter( const OUString& rName )
+std::shared_ptr<const SfxFilter> SfxFilter::GetDefaultFilter( std::u16string_view rName )
 {
     return SfxFilterContainer::GetDefaultFilter_Impl( rName );
 }

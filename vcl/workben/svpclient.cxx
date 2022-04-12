@@ -41,6 +41,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <math.h>
 
@@ -106,7 +107,7 @@ public:
     virtual ~MyWin() override { disposeOnce(); }
     virtual void dispose() override;
 
-    void parseList( const OString& rList );
+    void parseList( std::string_view rList );
     static OString processCommand( const OString& rCommand );
 
     DECL_LINK( ListHdl, Button*, void );
@@ -167,19 +168,19 @@ void MyWin::dispose()
     WorkWindow::dispose();
 }
 
-void MyWin::parseList( const OString& rList )
+void MyWin::parseList( std::string_view rList )
 {
     sal_Int32 nTokenPos = 0;
     OUString aElementType;
     m_aSvpBitmaps->Clear();
     while( nTokenPos >= 0 )
     {
-        OString aLine = rList.getToken( 0, '\n', nTokenPos );
-        if( ! aLine.getLength() || *aLine.getStr() == '#' )
+        std::string_view aLine = o3tl::getToken(rList, 0, '\n', nTokenPos );
+        if( aLine.empty() || aLine[0] == '#' )
             continue;
 
-        if( aLine.startsWith( "ElementType: " ) )
-            aElementType = OStringToOUString( aLine.subView( 13 ), RTL_TEXTENCODING_ASCII_US );
+        if( o3tl::starts_with(aLine, "ElementType: " ) )
+            aElementType = OStringToOUString( aLine.substr( 13 ), RTL_TEXTENCODING_ASCII_US );
         else
         {
             OUString aNewElement =

@@ -28,6 +28,7 @@
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/enumarray.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -938,27 +939,27 @@ OUString SvtModuleOptions::GetModuleName( EModule eModule ) const
     return OUString();
 }
 
-SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(const OUString& sName)
+SvtModuleOptions::EFactory SvtModuleOptions::ClassifyFactoryByShortName(std::u16string_view sName)
 {
-    if ( sName == "swriter" )
+    if ( sName == u"swriter" )
         return EFactory::WRITER;
-    if (sName.equalsIgnoreAsciiCase("swriter/Web")) // sometimes they are registered for swriter/web :-(
+    if (o3tl::equalsIgnoreAsciiCase(sName, u"swriter/Web")) // sometimes they are registered for swriter/web :-(
         return EFactory::WRITERWEB;
-    if (sName.equalsIgnoreAsciiCase("swriter/GlobalDocument")) // sometimes they are registered for swriter/globaldocument :-(
+    if (o3tl::equalsIgnoreAsciiCase(sName, u"swriter/GlobalDocument")) // sometimes they are registered for swriter/globaldocument :-(
         return EFactory::WRITERGLOBAL;
-    if ( sName == "scalc" )
+    if ( sName == u"scalc" )
         return EFactory::CALC;
-    if ( sName == "sdraw" )
+    if ( sName == u"sdraw" )
         return EFactory::DRAW;
-    if ( sName == "simpress" )
+    if ( sName == u"simpress" )
         return EFactory::IMPRESS;
-    if ( sName == "schart" )
+    if ( sName == u"schart" )
         return EFactory::CHART;
-    if ( sName == "smath" )
+    if ( sName == u"smath" )
         return EFactory::MATH;
-    if ( sName == "sbasic" )
+    if ( sName == u"sbasic" )
         return EFactory::BASIC;
-    if ( sName == "sdatabase" )
+    if ( sName == u"sdatabase" )
         return EFactory::DATABASE;
 
     return EFactory::UNKNOWN_FACTORY;

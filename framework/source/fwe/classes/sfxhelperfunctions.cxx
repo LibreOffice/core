@@ -132,7 +132,7 @@ pfunc_createDockingWindow SetDockingWindowCreator( pfunc_createDockingWindow pNe
     return pOldFunc;
 }
 
-void CreateDockingWindow( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rResourceURL )
+void CreateDockingWindow( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rResourceURL )
 {
     pfunc_createDockingWindow pFactory = nullptr;
     {
@@ -153,7 +153,7 @@ pfunc_isDockingWindowVisible SetIsDockingWindowVisible( pfunc_isDockingWindowVis
     return pOldFunc;
 }
 
-bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rResourceURL )
+bool IsDockingWindowVisible( const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rResourceURL )
 {
     pfunc_isDockingWindowVisible pCall = nullptr;
     {

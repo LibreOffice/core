@@ -130,7 +130,7 @@ public:
 
     virtual SubmissionResult submit(const css::uno::Reference< css::task::XInteractionHandler >& ) = 0;
 
-    SubmissionResult replace(const OUString&, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);
+    SubmissionResult replace(std::u16string_view, const css::uno::Reference< css::xml::dom::XDocument >&, const css::uno::Reference< css::frame::XFrame>&);
 
 };
 

@@ -99,7 +99,7 @@ public:
     , m_xChild( new OHierarchyElement_Impl( css::uno::WeakReference< css::embed::XStorage >( xOwnStorage ) ) )
     {}
 
-    static std::vector<OUString> GetListPathFromString( const OUString& aPath );
+    static std::vector<OUString> GetListPathFromString( std::u16string_view aPath );
 
     css::uno::Reference< css::embed::XExtendedStorageStream >
         GetStreamHierarchically( sal_Int32 nStorageMode,

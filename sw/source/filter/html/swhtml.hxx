@@ -536,7 +536,7 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     bool DoPositioning( SfxItemSet &rItemSet,
                         SvxCSS1PropertyInfo &rPropInfo,
                         HTMLAttrContext *pContext );
-    bool CreateContainer( const OUString& rClass, SfxItemSet &rItemSet,
+    bool CreateContainer( std::u16string_view rClass, SfxItemSet &rItemSet,
                           SvxCSS1PropertyInfo &rPropInfo,
                           HTMLAttrContext *pContext );
     bool EndSection( bool bLFStripped=false );
@@ -673,7 +673,7 @@ private:
     // Inserting graphics, plug-ins and applets
 
     // search image maps and link with graphic nodes
-    ImageMap *FindImageMap( const OUString& rURL ) const;
+    ImageMap *FindImageMap( std::u16string_view rURL ) const;
     void ConnectImageMaps();
 
     // find anchor of Fly-Frames and set corresponding attributes

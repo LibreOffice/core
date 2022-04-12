@@ -59,7 +59,7 @@ public:
     virtual ~ScLinkedAreaDlg() override;
 
     void            InitFromOldLink( const OUString& rFile, const OUString& rFilter,
-                                        const OUString& rOptions, const OUString& rSource,
+                                        const OUString& rOptions, std::u16string_view rSource,
                                         sal_Int32 nRefreshDelaySeconds );
 
     OUString       GetURL() const;

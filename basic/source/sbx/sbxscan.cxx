@@ -48,6 +48,7 @@
 #include <rtl/math.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
+#include <o3tl/string_view.hxx>
 
 
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep, sal_Unicode& rcDecimalSepAlt )
@@ -470,12 +471,12 @@ const VbaFormatInfo pFormatInfoTable[] =
     { VbaFormatType::Null,        std::u16string_view(u""),            NF_INDEX_TABLE_ENTRIES, nullptr }
 };
 
-const VbaFormatInfo* getFormatInfo( const OUString& rFmt )
+const VbaFormatInfo* getFormatInfo( std::u16string_view rFmt )
 {
     const VbaFormatInfo* pInfo = pFormatInfoTable;
     while( pInfo->meType != VbaFormatType::Null )
     {
-        if( rFmt.equalsIgnoreAsciiCase( pInfo->mpVbaFormat ) )
+        if( o3tl::equalsIgnoreAsciiCase( rFmt, pInfo->mpVbaFormat ) )
             break;
         ++pInfo;
     }

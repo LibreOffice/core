@@ -26,6 +26,7 @@
 #include <sal/main.h>
 #include <sal/types.h>
 #include <unoidl/unoidl.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace {
 
@@ -458,11 +459,11 @@ void closeModules(
     }
 }
 
-OUString openModulesFor(std::vector<OUString> & modules, OUString const & name)
+OUString openModulesFor(std::vector<OUString> & modules, std::u16string_view name)
 {
     std::vector<OUString>::iterator i(modules.begin());
     for (sal_Int32 j = 0;;) {
-        OUString id(name.getToken(0, '.', j));
+        OUString id(o3tl::getToken(name, 0, '.', j));
         if (j == -1) {
             closeModules(
                 modules,

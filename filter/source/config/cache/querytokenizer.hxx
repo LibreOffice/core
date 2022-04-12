@@ -73,7 +73,7 @@ class QueryTokenizer : public std::unordered_map< OUString, OUString >
             @param  sQuery
                     the query string.
          */
-        explicit QueryTokenizer(const OUString& sQuery);
+        explicit QueryTokenizer(std::u16string_view sQuery);
 
 
         /** @short  destruct an instance of this class.

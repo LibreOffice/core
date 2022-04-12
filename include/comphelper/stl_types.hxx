@@ -27,6 +27,7 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace com::sun::star::uno { template <typename > class Reference; }
 
@@ -40,12 +41,12 @@ struct UStringMixLess
     bool m_bCaseSensitive;
 public:
     UStringMixLess(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
-    bool operator() (const OUString& x, std::u16string_view y) const
+    bool operator() (std::u16string_view x, std::u16string_view y) const
     {
         if (m_bCaseSensitive)
-            return x.compareTo(y) < 0;
+            return x < y;
         else
-            return x.compareToIgnoreAsciiCase(y) < 0;
+            return o3tl::compareToIgnoreAsciiCase(x, y) < 0;
     }
 
     bool isCaseSensitive() const {return m_bCaseSensitive;}
@@ -57,9 +58,9 @@ class UStringMixEqual
 
 public:
     UStringMixEqual(bool bCaseSensitive = true):m_bCaseSensitive(bCaseSensitive){}
-    bool operator() (const OUString& lhs, std::u16string_view rhs) const
+    bool operator() (std::u16string_view lhs, std::u16string_view rhs) const
     {
-        return m_bCaseSensitive ? lhs == rhs : lhs.equalsIgnoreAsciiCase( rhs );
+        return m_bCaseSensitive ? lhs == rhs : o3tl::equalsIgnoreAsciiCase( lhs, rhs );
     }
     bool isCaseSensitive() const {return m_bCaseSensitive;}
 };

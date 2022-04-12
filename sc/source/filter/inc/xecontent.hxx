@@ -391,7 +391,7 @@ public:
     explicit            XclExpWebQuery(
                             const OUString& rRangeName,
                             const OUString& rUrl,
-                            const OUString& rSource,
+                            std::u16string_view rSource,
                             sal_Int32 nRefrSecs );
     virtual             ~XclExpWebQuery() override;
 

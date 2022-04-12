@@ -29,6 +29,7 @@
 #include <vcl/settings.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <xmloff/namespacemap.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -307,9 +308,9 @@ void SVGFontExport::EmbedFonts()
 }
 
 
-OUString SVGFontExport::GetMappedFontName( const OUString& rFontName ) const
+OUString SVGFontExport::GetMappedFontName( std::u16string_view rFontName ) const
 {
-    OUString aRet( rFontName.getToken( 0, ';' ) );
+    OUString aRet( o3tl::getToken(rFontName, 0, ';' ) );
 
     if( mnCurFontId )
         aRet += " embedded";

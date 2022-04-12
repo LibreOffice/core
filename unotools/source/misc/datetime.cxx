@@ -27,6 +27,7 @@
 #include <rtl/math.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <sstream>
 
 namespace
@@ -56,7 +57,7 @@ namespace
 
     /** convert string to number with optional min and max values */
     bool convertNumber32(sal_Int32& rValue,
-                         const OUString& rString,
+                         std::u16string_view rString,
                          sal_Int32 /*nMin*/ = -1, sal_Int32 /*nMax*/ = -1)
     {
         if (!checkAllNumber(rString))
@@ -65,12 +66,12 @@ namespace
             return false;
         }
 
-        rValue = rString.toInt32();
+        rValue = o3tl::toInt32(rString);
         return true;
     }
 
     bool convertNumber64(sal_Int64& rValue,
-                         const OUString& rString,
+                         std::u16string_view rString,
                          sal_Int64 /*nMin*/ = -1, sal_Int64 /*nMax*/ = -1)
     {
         if (!checkAllNumber(rString))
@@ -79,7 +80,7 @@ namespace
             return false;
         }
 
-        rValue = rString.toInt64();
+        rValue = o3tl::toInt64(rString);
         return true;
     }
 
@@ -338,7 +339,7 @@ bool ISO8601parseDateTime(const OUString &rString, css::util::DateTime& rDateTim
 // TODO: supports only calendar dates YYYY-MM-DD
 // MISSING: calendar dates YYYYMMDD YYYY-MM
 //          year, week date, ordinal date
-bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
+bool ISO8601parseDate(std::u16string_view aDateStr, css::util::Date& rDate)
 {
     const sal_Int32 nDateTokens {comphelper::string::getTokenCount(aDateStr, '-')};
 
@@ -350,13 +351,13 @@ bool ISO8601parseDate(const OUString &aDateStr, css::util::Date& rDate)
     sal_Int32 nDay     = 30;
 
     sal_Int32 nIdx {0};
-    if ( !convertNumber32( nYear, aDateStr.getToken( 0, '-', nIdx ), 0, 9999 ) )
+    if ( !convertNumber32( nYear, o3tl::getToken(aDateStr, 0, '-', nIdx ), 0, 9999 ) )
         return false;
     if ( nDateTokens >= 2 )
-        if ( !convertNumber32( nMonth, aDateStr.getToken( 0, '-', nIdx ), 0, 12 ) )
+        if ( !convertNumber32( nMonth, o3tl::getToken(aDateStr, 0, '-', nIdx ), 0, 12 ) )
             return false;
     if ( nDateTokens >= 3 )
-        if ( !convertNumber32( nDay, aDateStr.getToken( 0, '-', nIdx ), 0, 31 ) )
+        if ( !convertNumber32( nDay, o3tl::getToken(aDateStr, 0, '-', nIdx ), 0, 31 ) )
             return false;
 
     rDate.Year = static_cast<sal_uInt16>(nYear);

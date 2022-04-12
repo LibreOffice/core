@@ -56,7 +56,7 @@ private:
     void        GetPathList( SvtPathOptions::Paths _nPathHandle, OUString& _rInternalPath,
                              OUString& _rUserPath, OUString& _rWritablePath, bool& _rReadOnly );
     void        SetPathList( SvtPathOptions::Paths _nPathHandle,
-                             const OUString& _rUserPath, const OUString& _rWritablePath );
+                             std::u16string_view _rUserPath, const OUString& _rWritablePath );
 
 public:
     SvxPathTabPage( weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rSet );

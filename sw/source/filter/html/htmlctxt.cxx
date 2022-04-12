@@ -29,6 +29,7 @@
 #include <svtools/htmltokn.h>
 #include <editeng/boxitem.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <doc.hxx>
 #include <pam.hxx>
@@ -500,13 +501,13 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
     return bRet;
 }
 
-bool SwHTMLParser::CreateContainer( const OUString& rClass,
+bool SwHTMLParser::CreateContainer( std::u16string_view rClass,
                                     SfxItemSet &rItemSet,
                                     SvxCSS1PropertyInfo &rPropInfo,
                                     HTMLAttrContext *pContext )
 {
     bool bRet = false;
-    if( rClass.equalsIgnoreAsciiCase( "sd-abs-pos" ) &&
+    if( o3tl::equalsIgnoreAsciiCase( rClass, u"sd-abs-pos" ) &&
         SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
         // Container class

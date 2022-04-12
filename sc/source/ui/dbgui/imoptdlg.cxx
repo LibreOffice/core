@@ -30,7 +30,7 @@ const char pStrFix[] = "FIX";
 //  The option string can no longer contain a semicolon (because of pick list),
 //  therefore, starting with version 336 comma instead
 
-ScImportOptions::ScImportOptions( const OUString& rStr )
+ScImportOptions::ScImportOptions( std::u16string_view rStr )
 {
     // Use the same string format as ScAsciiOptions,
     // because the import options string is passed here when a CSV file is loaded and saved again.
@@ -53,13 +53,13 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
 
     sal_Int32 nIdx{ 0 };
     // first 3 tokens: common
-    OUString aToken( rStr.getToken( 0, ',', nIdx ) );
+    OUString aToken( o3tl::getToken(rStr, 0, ',', nIdx ) );
     if( aToken.equalsIgnoreAsciiCase( pStrFix ) )
         bFixedWidth = true;
     else
         nFieldSepCode = ScAsciiOptions::GetWeightedFieldSep( aToken, true);
     nTextSepCode  = static_cast<sal_Unicode>(o3tl::toInt32(o3tl::getToken(rStr, 0, ',', nIdx)));
-    aStrFont      = rStr.getToken(0, ',', nIdx);
+    aStrFont      = o3tl::getToken(rStr, 0, ',', nIdx);
     eCharSet      = ScGlobal::GetCharsetValue(aStrFont);
 
     if ( nTokenCount == 4 )
@@ -83,7 +83,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
             bRemoveSpace = o3tl::getToken(rStr, 0, ',', nIdx) == u"true";
         if ( nTokenCount >= 12 )
         {
-            const OUString aTok(rStr.getToken(0, ',', nIdx));
+            const OUString aTok(o3tl::getToken(rStr,0, ',', nIdx));
             if (aTok == "-1")
                 nSheetToExport = -1;    // all
             else if (aTok.isEmpty() || CharClass::isAsciiNumeric(aTok))

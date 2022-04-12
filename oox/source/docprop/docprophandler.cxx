@@ -214,7 +214,7 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( std::u16string_vi
     return uno::Sequence< OUString >();
 }
 
-void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
+void OOXMLDocPropHandler::UpdateDocStatistic( std::u16string_view aChars )
 {
     uno::Sequence< beans::NamedValue > aSet = m_xDocProp->getDocumentStatistics();
     OUString aName;
@@ -257,7 +257,7 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
     if (nInd == aSet.getLength())
         aSet.realloc( nInd + 1 );
 
-    aSet.getArray()[nInd] = { aName, uno::Any(aChars.toInt32()) };
+    aSet.getArray()[nInd] = { aName, uno::Any(o3tl::toInt32(aChars)) };
 
     m_xDocProp->setDocumentStatistics( aSet );
 }

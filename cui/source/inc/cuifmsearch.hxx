@@ -133,7 +133,7 @@ public:
     inline void SetActiveField(const OUString& strField);
 
 private:
-    void Init(const OUString& strVisibleFields, const OUString& strInitialText);
+    void Init(std::u16string_view strVisibleFields, const OUString& strInitialText);
     // only to be used out of the constructors
 
     void OnFound(const css::uno::Any& aCursorPos, sal_Int16 nFieldPos);

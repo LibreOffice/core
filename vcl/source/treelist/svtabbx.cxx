@@ -28,6 +28,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <strings.hrc>
 #include <svdata.hxx>
@@ -171,8 +172,8 @@ void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
     const sal_uInt16 nCount = mvTabList.size() - 1;
     for( sal_uInt16 nToken = 0; nToken < nCount; nToken++ )
     {
-        const OUString aToken = GetToken(aCurEntry, nIndex);
-        pEntry->AddItem(std::make_unique<SvLBoxString>(aToken));
+        const std::u16string_view aToken = GetToken(aCurEntry, nIndex);
+        pEntry->AddItem(std::make_unique<SvLBoxString>(OUString(aToken)));
     }
 }
 
@@ -317,9 +318,9 @@ sal_uInt32 SvTabListBox::GetEntryPos( const SvTreeListEntry* pEntry ) const
 }
 
 // static
-OUString SvTabListBox::GetToken( const OUString &sStr, sal_Int32& nIndex )
+std::u16string_view SvTabListBox::GetToken( std::u16string_view sStr, sal_Int32& nIndex )
 {
-    return sStr.getToken(0, '\t', nIndex);
+    return o3tl::getToken(sStr, 0, '\t', nIndex);
 }
 
 OUString SvTabListBox::GetTabEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const

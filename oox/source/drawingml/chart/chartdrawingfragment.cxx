@@ -31,6 +31,7 @@
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace oox::drawingml::chart {
 
@@ -51,7 +52,7 @@ void ShapeAnchor::importExt( const AttributeList& rAttribs )
     maSize.Height = rAttribs.getHyper( XML_cy, 0 );
 }
 
-void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue )
+void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, std::u16string_view rValue )
 {
     AnchorPosModel* pAnchorPos = nullptr;
     switch( nParentContext )
@@ -68,8 +69,8 @@ void ShapeAnchor::setPos( sal_Int32 nElement, sal_Int32 nParentContext, const OU
     }
     if( pAnchorPos ) switch( nElement )
     {
-        case CDR_TOKEN( x ):    pAnchorPos->mfX = rValue.toDouble();    break;
-        case CDR_TOKEN( y ):    pAnchorPos->mfY = rValue.toDouble();    break;
+        case CDR_TOKEN( x ):    pAnchorPos->mfX = o3tl::toDouble(rValue);    break;
+        case CDR_TOKEN( y ):    pAnchorPos->mfY = o3tl::toDouble(rValue);    break;
         default:    OSL_FAIL( "ShapeAnchor::setPos - unexpected element" );
     }
 }

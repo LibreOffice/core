@@ -113,7 +113,7 @@ class SAL_WARN_UNUSED UNOTOOLS_DLLPUBLIC SvtModuleOptions final : public utl::de
         /** @short  return the corresponding application ID for the given
                     short name.
          */
-        static EFactory ClassifyFactoryByShortName(const OUString& sName);
+        static EFactory ClassifyFactoryByShortName(std::u16string_view sName);
 
         /** @short  return the corresponding application ID for the given properties.
 

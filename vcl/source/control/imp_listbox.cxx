@@ -35,6 +35,7 @@
 
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/string.hxx>
 #include <comphelper/processfactory.hxx>
@@ -2419,7 +2420,7 @@ bool ImplListBox::HandleWheelAsCursorTravel(const CommandEvent& rCEvt, Control& 
     return bDone;
 }
 
-void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
+void ImplListBox::SetMRUEntries( std::u16string_view rEntries, sal_Unicode cSep )
 {
     bool bChanges = GetEntryList().GetMRUCount() != 0;
 
@@ -2431,7 +2432,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
     sal_Int32 nIndex = 0;
     do
     {
-        OUString aEntry = rEntries.getToken( 0, cSep, nIndex );
+        OUString aEntry( o3tl::getToken(rEntries, 0, cSep, nIndex ) );
         // Accept only existing entries
         if ( GetEntryList().FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
         {

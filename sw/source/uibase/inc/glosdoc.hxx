@@ -73,7 +73,7 @@ public:
     */
     css::uno::Reference< css::text::XAutoTextGroup >
                             GetAutoTextGroup(
-                                const OUString& _rGroupName
+                                std::u16string_view _rGroupName
                             );
 
     /** returns the cached AutoTextEntry (if any) for the given group/with the given name
@@ -108,11 +108,11 @@ public:
     static OUString GetDefName();
     static OUString GetExtension();
 
-    OUString        GetCompleteGroupName( const OUString& GroupName );
+    OUString        GetCompleteGroupName( std::u16string_view GroupName );
 
     bool            NewGroupDoc(OUString &rGroupName, const OUString& rTitle);
     bool            RenameGroupDoc(const OUString& sOldGroup, OUString& sNewGroup, const OUString& rNewTitle);
-    bool            DelGroupDoc(const OUString &);
+    bool            DelGroupDoc(std::u16string_view);
     SwDocShellRef   EditGroupDoc(const OUString &rGrpName, const OUString& rShortName, bool bShow = true );
     void            UpdateGlosPath(bool bFull);
     void            ShowError();

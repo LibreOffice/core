@@ -19,6 +19,7 @@
 #include <osl/file.hxx>
 #include <rtl/locale.h>
 #include <tools/long.hxx>
+#include <o3tl/string_view.hxx>
 #include <algorithm>
 #include <map>
 #include <mutex>
@@ -85,9 +86,9 @@ static const KnownTagSet & getKnowns()
 namespace {
 struct compareIgnoreAsciiCaseLess
 {
-    bool operator()( const OUString& r1, std::u16string_view r2 ) const
+    bool operator()( std::u16string_view r1, std::u16string_view r2 ) const
     {
-        return r1.compareToIgnoreAsciiCase( r2) < 0;
+        return o3tl::compareToIgnoreAsciiCase(r1, r2) < 0;
     }
 };
 typedef ::std::map< OUString, LanguageTag::ImplPtr, compareIgnoreAsciiCaseLess > MapBcp47;

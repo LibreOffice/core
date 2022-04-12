@@ -31,6 +31,7 @@
 #include <com/sun/star/reflection/XIdlClass.hpp>
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <rtl/ustring.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <string_view>
 #include <unordered_map>
@@ -65,9 +66,9 @@ class SbUnoStructRefObject final : public SbxObject
 {
     struct caseLessComp
     {
-        bool operator() (const OUString& rProp, std::u16string_view rOtherProp ) const
+        bool operator() (std::u16string_view rProp, std::u16string_view rOtherProp ) const
         {
-            return rProp.compareToIgnoreAsciiCase( rOtherProp ) < 0;
+            return o3tl::compareToIgnoreAsciiCase( rProp, rOtherProp ) < 0;
         }
     };
     typedef std::map< OUString, std::unique_ptr<StructRefInfo>, caseLessComp > StructFieldInfo;
@@ -372,7 +373,7 @@ private:
 public:
     static VBAConstantHelper& instance();
     SbxVariable* getVBAConstant( const OUString& rName );
-    bool isVBAConstantType( const OUString& rName );
+    bool isVBAConstantType( std::u16string_view rName );
 };
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );

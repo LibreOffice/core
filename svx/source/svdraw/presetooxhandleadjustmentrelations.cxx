@@ -287,16 +287,16 @@ const HandleAdjRel aHandleAdjRelArray[]
         { "wedgeRoundRectCallout_0", "RefX|adj1|RefY|adj2" } };
 }
 
-static sal_Int32 lcl_getAdjIndexFromToken(const sal_Int32 nTokenPos, const OUString& rMapValue)
+static sal_Int32 lcl_getAdjIndexFromToken(const sal_Int32 nTokenPos, std::u16string_view rMapValue)
 {
-    OUString sAdjRef = rMapValue.getToken(nTokenPos, '|');
-    OUString sNumber; // number part from "adj1", "adj2" etc.
-    if (sAdjRef.startsWith("adj", &sNumber))
+    std::u16string_view sAdjRef = o3tl::getToken(rMapValue, nTokenPos, '|');
+    std::u16string_view sNumber; // number part from "adj1", "adj2" etc.
+    if (o3tl::starts_with(sAdjRef, u"adj", &sNumber))
     {
-        if (sNumber.isEmpty() || sNumber == "1")
+        if (sNumber.empty() || sNumber == u"1")
             return 0;
         else
-            return sNumber.toInt32() - 1;
+            return o3tl::toInt32(sNumber) - 1;
     }
     else
         return -1;

@@ -170,7 +170,7 @@ private:
 
     SfxShell*       GetMySubShell() const;
 
-    void            DoReadUserData( const OUString& rData );
+    void            DoReadUserData( std::u16string_view rData );
     void            DoReadUserDataSequence( const css::uno::Sequence< css::beans::PropertyValue >& rSettings );
     bool            IsSignatureLineSelected();
     bool            IsSignatureLineSigned();

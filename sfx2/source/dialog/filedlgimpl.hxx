@@ -205,7 +205,7 @@ namespace sfx2
         OUString                getFilterWithExtension( std::u16string_view rFilter ) const;
 
         void                    SetContext( FileDialogHelper::Context _eNewContext );
-        OUString                getInitPath( const OUString& _rFallback, const sal_Int32 _nFallbackToken );
+        OUString                getInitPath( std::u16string_view _rFallback, const sal_Int32 _nFallbackToken );
 
         bool             isAsyncFilePicker() const { return mbAsyncPicker; }
         bool             isPasswordEnabled() const { return mbIsPwdEnabled; }

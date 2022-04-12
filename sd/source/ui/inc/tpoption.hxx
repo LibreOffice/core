@@ -106,7 +106,7 @@ private:
     std::unique_ptr<weld::MetricSpinButton> m_xMtrFldInfo2;
 
     static OUString        GetScale( sal_Int32 nX, sal_Int32 nY );
-    static bool            SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY );
+    static bool            SetScale( std::u16string_view aScale, sal_Int32& rX, sal_Int32& rY );
 
     DECL_LINK( SelectMetricHdl_Impl, weld::ComboBox&, void );
 

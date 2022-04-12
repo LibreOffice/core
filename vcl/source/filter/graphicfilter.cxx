@@ -1208,7 +1208,7 @@ ErrCode GraphicFilter::readTIFF(SvStream & rStream, Graphic & rGraphic, GfxLinkT
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, OUString aFilterName)
+ErrCode GraphicFilter::readWithTypeSerializer(SvStream & rStream, Graphic & rGraphic, GfxLinkType & rLinkType, std::u16string_view aFilterName)
 {
     ErrCode aReturnCode = ERRCODE_GRFILTER_FILTERERROR;
 
@@ -1218,7 +1218,7 @@ ErrCode GraphicFilter::readWithTypeSerializer(SvStream & rStream, Graphic & rGra
 
     if (!rStream.GetError())
     {
-        if (aFilterName.equalsIgnoreAsciiCase(IMP_MOV))
+        if (o3tl::equalsIgnoreAsciiCase(aFilterName, u"" IMP_MOV))
         {
             rGraphic.SetDefaultType();
             rStream.Seek(STREAM_SEEK_TO_END);

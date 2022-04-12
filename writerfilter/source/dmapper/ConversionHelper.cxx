@@ -660,27 +660,27 @@ sal_Int16 ConvertCustomNumberFormat(std::u16string_view rFormat)
     return nRet;
 }
 
-util::DateTime ConvertDateStringToDateTime( const OUString& rDateTime )
+util::DateTime ConvertDateStringToDateTime( std::u16string_view rDateTime )
 {
     util::DateTime aDateTime;
     //xsd::DateTime in the format [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm] example: 2008-01-21T10:42:00Z
     //OUString getToken( sal_Int32 token, sal_Unicode cTok, sal_Int32& index ) const
     sal_Int32 nIndex = 0;
-    OUString sDate = rDateTime.getToken( 0, 'T', nIndex );
+    std::u16string_view sDate = o3tl::getToken(rDateTime, 0, 'T', nIndex );
     // HACK: this is broken according to the spec, but MSOffice always treats the time as local,
     // and writes it as Z (=UTC+0)
-    OUString sTime = rDateTime.getToken( 0, 'Z', nIndex );
+    std::u16string_view sTime = o3tl::getToken(rDateTime, 0, 'Z', nIndex );
     nIndex = 0;
     aDateTime.Year = sal_uInt16( o3tl::toInt32(o3tl::getToken(sDate, 0, '-', nIndex )) );
     aDateTime.Month = sal_uInt16( o3tl::toInt32(o3tl::getToken(sDate, 0, '-', nIndex )) );
     if (nIndex != -1)
-        aDateTime.Day = sal_uInt16( o3tl::toInt32(sDate.subView( nIndex )) );
+        aDateTime.Day = sal_uInt16( o3tl::toInt32(sDate.substr( nIndex )) );
 
     nIndex = 0;
     aDateTime.Hours = sal_uInt16( o3tl::toInt32(o3tl::getToken(sTime, 0, ':', nIndex )) );
     aDateTime.Minutes = sal_uInt16( o3tl::toInt32(o3tl::getToken(sTime, 0, ':', nIndex )) );
     if (nIndex != -1)
-        aDateTime.Seconds = sal_uInt16( o3tl::toInt32(sTime.subView( nIndex )) );
+        aDateTime.Seconds = sal_uInt16( o3tl::toInt32(sTime.substr( nIndex )) );
 
     return aDateTime;
 }

@@ -247,7 +247,7 @@ void SfxObjectFactory::SetStandardTemplate( const OUString& rServiceName, const 
     }
 }
 
-OUString SfxObjectFactory::GetStandardTemplate( const OUString& rServiceName )
+OUString SfxObjectFactory::GetStandardTemplate( std::u16string_view rServiceName )
 {
     SvtModuleOptions::EFactory eFac = SvtModuleOptions::ClassifyFactoryByServiceName(rServiceName);
     if (eFac == SvtModuleOptions::EFactory::UNKNOWN_FACTORY)

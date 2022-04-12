@@ -39,6 +39,7 @@
 #include <sal/log.hxx>
 #include <yesno.hrc>
 #include <comphelper/types.hxx>
+#include <o3tl/string_view.hxx>
 #include "modulepcr.hxx"
 
 #include <algorithm>
@@ -304,9 +305,9 @@ namespace
         {
             return OUString::number( _rIntValue );
         }
-        sal_Int32 operator()( const OUString& _rStringValue ) const
+        sal_Int32 operator()( std::u16string_view _rStringValue ) const
         {
-            return _rStringValue.toInt32();
+            return o3tl::toInt32(_rStringValue);
         }
     };
 
@@ -336,16 +337,16 @@ namespace
     }
 
     template < class ElementType, class Transformer >
-    void splitComposedStringToSequence( const OUString& _rComposed, Sequence< ElementType >& _out_SplitUp, const Transformer& _rTransformer )
+    void splitComposedStringToSequence( std::u16string_view _rComposed, Sequence< ElementType >& _out_SplitUp, const Transformer& _rTransformer )
     {
         _out_SplitUp.realloc( 0 );
-        if ( _rComposed.isEmpty() )
+        if ( _rComposed.empty() )
             return;
         sal_Int32 tokenPos = 0;
         do
         {
             _out_SplitUp.realloc( _out_SplitUp.getLength() + 1 );
-            _out_SplitUp.getArray()[ _out_SplitUp.getLength() - 1 ] = static_cast<ElementType>(_rTransformer( _rComposed.getToken( 0, '\n', tokenPos ) ));
+            _out_SplitUp.getArray()[ _out_SplitUp.getLength() - 1 ] = static_cast<ElementType>(_rTransformer( OUString(o3tl::getToken(_rComposed, 0, '\n', tokenPos )) ));
         }
         while ( tokenPos != -1 );
     }

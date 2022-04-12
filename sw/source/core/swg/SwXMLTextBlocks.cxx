@@ -31,6 +31,7 @@
 #include <tools/urlobj.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/ucbstreamhelper.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <comphelper/storagehelper.hxx>
 #include <doc.hxx>
@@ -496,7 +497,7 @@ ErrCode SwXMLTextBlocks::PutText( const OUString& rShort, const OUString& rName,
     return nRes;
 }
 
-void SwXMLTextBlocks::MakeBlockText( const OUString& rText )
+void SwXMLTextBlocks::MakeBlockText( std::u16string_view rText )
 {
     SwTextNode* pTextNode = m_xDoc->GetNodes()[ m_xDoc->GetNodes().GetEndOfContent().
                                         GetIndex() - 1 ]->GetTextNode();
@@ -511,7 +512,7 @@ void SwXMLTextBlocks::MakeBlockText( const OUString& rText )
             pTextNode = static_cast<SwTextNode*>(pTextNode->AppendNode( SwPosition( *pTextNode ) ));
         }
         SwIndex aIdx( pTextNode );
-        pTextNode->InsertText( rText.getToken( 0, '\015', nPos ), aIdx );
+        pTextNode->InsertText( OUString(o3tl::getToken(rText, 0, '\015', nPos )), aIdx );
     } while ( -1 != nPos );
 }
 

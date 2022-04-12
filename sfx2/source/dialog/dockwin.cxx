@@ -26,6 +26,7 @@
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/debug.hxx>
@@ -320,10 +321,10 @@ static SfxWorkWindow* lcl_getWorkWindowFromXFrame( const uno::Reference< frame::
     The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot range located
     in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
-void SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
+void SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, std::u16string_view rDockingWindowName )
 {
     SolarMutexGuard aGuard;
-    sal_uInt16 nID = sal_uInt16(rDockingWindowName.toInt32());
+    sal_uInt16 nID = sal_uInt16(o3tl::toInt32(rDockingWindowName));
 
     // Check the range of the provided ID otherwise nothing will happen
     if ( !lcl_checkDockingWindowID( nID ))
@@ -345,11 +346,11 @@ void SfxDockingWindowFactory( const uno::Reference< frame::XFrame >& rFrame, con
     a special name. The string rDockingWindowName MUST BE a valid ID! The ID is pre-defined by a certain slot
     range located in sfxsids.hrc (currently SID_DOCKWIN_START = 9800).
 */
-bool IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, const OUString& rDockingWindowName )
+bool IsDockingWindowVisible( const uno::Reference< frame::XFrame >& rFrame, std::u16string_view rDockingWindowName )
 {
     SolarMutexGuard aGuard;
 
-    sal_uInt16 nID = sal_uInt16(rDockingWindowName.toInt32());
+    sal_uInt16 nID = sal_uInt16(o3tl::toInt32(rDockingWindowName));
 
     // Check the range of the provided ID otherwise nothing will happen
     if ( lcl_checkDockingWindowID( nID ))

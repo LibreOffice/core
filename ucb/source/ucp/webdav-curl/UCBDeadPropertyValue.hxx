@@ -33,7 +33,7 @@ class UCBDeadPropertyValue
 public:
     static bool supportsType( const css::uno::Type & rType );
 
-    static bool createFromXML(OUString const& rType,
+    static bool createFromXML(std::u16string_view rType,
                               OUString const& rValue,
                               css::uno::Any & rOutData);
     static ::std::optional<::std::pair<OUString, OUString>>

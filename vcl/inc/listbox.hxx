@@ -484,7 +484,7 @@ public:
     bool            IsSelectionChanged() const                  { return maLBWindow->IsSelectionChanged(); }
     sal_uInt16      GetSelectModifier() const                   { return maLBWindow->GetSelectModifier(); }
 
-    void            SetMRUEntries( const OUString& rEntries, sal_Unicode cSep );
+    void            SetMRUEntries( std::u16string_view rEntries, sal_Unicode cSep );
     OUString        GetMRUEntries( sal_Unicode cSep ) const;
     void            SetMaxMRUCount( sal_Int32  n )                  { maLBWindow->GetEntryList().SetMaxMRUCount( n ); }
     sal_Int32       GetMaxMRUCount() const                      { return maLBWindow->GetEntryList().GetMaxMRUCount(); }

@@ -40,7 +40,7 @@ public:
     virtual ~SvxMultiPathDialog() override;
 
     OUString        GetPath() const;
-    void            SetPath(const OUString& rPath);
+    void            SetPath(std::u16string_view rPath);
     void            SetTitle(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
 };
 
@@ -59,7 +59,7 @@ public:
     SvxPathSelectDialog(weld::Window* pParent);
 
     OUString        GetPath() const;
-    void            SetPath( const OUString& rPath );
+    void            SetPath( std::u16string_view rPath );
     void            SetTitle(const OUString& rTitle) { m_xDialog->set_title(rTitle); }
 };
 

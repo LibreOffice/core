@@ -175,7 +175,7 @@ protected:
 
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
                                   css::uno::Reference< css::form::XFormComponent > & rxFormComp,
-                                  const OUString& rGuidString );
+                                  std::u16string_view rGuidString );
     bool importControlFromStream( ::oox::BinaryInputStream& rInStrm,
                                   css::uno::Reference< css::form::XFormComponent > & rxFormComp,
                                   const OUString& rGuidString,

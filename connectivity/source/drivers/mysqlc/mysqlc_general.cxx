@@ -20,6 +20,7 @@
 
 #include <sal/log.hxx>
 #include <rtl/ustring.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 
@@ -192,50 +193,58 @@ sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept
     return css::sdbc::DataType::VARCHAR;
 }
 
-sal_Int32 mysqlStrToOOOType(const OUString& sType)
+sal_Int32 mysqlStrToOOOType(std::u16string_view sType)
 {
     // TODO other types.
-    if (sType.equalsIgnoreAsciiCase("tiny") || sType.equalsIgnoreAsciiCase("tinyint"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"tiny")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"tinyint"))
         return css::sdbc::DataType::TINYINT;
-    if (sType.equalsIgnoreAsciiCase("smallint") || sType.equalsIgnoreAsciiCase("year"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"smallint")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"year"))
         return css::sdbc::DataType::SMALLINT;
-    if (sType.equalsIgnoreAsciiCase("int") || sType.equalsIgnoreAsciiCase("mediumint"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"int")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"mediumint"))
         return css::sdbc::DataType::INTEGER;
-    if (sType.equalsIgnoreAsciiCase("varchar") || sType.equalsIgnoreAsciiCase("set")
-        || sType.equalsIgnoreAsciiCase("enum"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"varchar") || o3tl::equalsIgnoreAsciiCase(sType, u"set")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"enum"))
         return css::sdbc::DataType::VARCHAR;
-    if (sType.equalsIgnoreAsciiCase("bigint"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"bigint"))
         return css::sdbc::DataType::BIGINT;
-    if (sType.equalsIgnoreAsciiCase("blob") || sType.equalsIgnoreAsciiCase("longblob")
-        || sType.equalsIgnoreAsciiCase("tinyblob") || sType.equalsIgnoreAsciiCase("mediumblob"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"blob")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"longblob")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"tinyblob")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"mediumblob"))
         return css::sdbc::DataType::BLOB;
-    if (sType.equalsIgnoreAsciiCase("varbinary"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"varbinary"))
         return css::sdbc::DataType::VARBINARY;
-    if (sType.equalsIgnoreAsciiCase("char"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"char"))
         return css::sdbc::DataType::CHAR;
-    if (sType.equalsIgnoreAsciiCase("tinytext"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"tinytext"))
         return css::sdbc::DataType::VARCHAR;
-    if (sType.equalsIgnoreAsciiCase("text"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"text"))
         return css::sdbc::DataType::LONGVARCHAR;
-    if (sType.equalsIgnoreAsciiCase("mediumtext") || sType.equalsIgnoreAsciiCase("longtext"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"mediumtext")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"longtext"))
         return css::sdbc::DataType::CLOB;
-    if (sType.equalsIgnoreAsciiCase("binary"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"binary"))
         return css::sdbc::DataType::BINARY;
-    if (sType.equalsIgnoreAsciiCase("time"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"time"))
         return css::sdbc::DataType::TIME;
-    if (sType.equalsIgnoreAsciiCase("date"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"date"))
         return css::sdbc::DataType::DATE;
-    if (sType.equalsIgnoreAsciiCase("datetime") || sType.equalsIgnoreAsciiCase("timestamp"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"datetime")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"timestamp"))
         return css::sdbc::DataType::TIMESTAMP;
-    if (sType.equalsIgnoreAsciiCase("decimal"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"decimal"))
         return css::sdbc::DataType::DECIMAL;
-    if (sType.equalsIgnoreAsciiCase("real") || sType.equalsIgnoreAsciiCase("float"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"real") || o3tl::equalsIgnoreAsciiCase(sType, u"float"))
         return css::sdbc::DataType::REAL;
-    if (sType.equalsIgnoreAsciiCase("double"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"double"))
         return css::sdbc::DataType::DOUBLE;
-    if (sType.equalsIgnoreAsciiCase("bit"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"bit"))
         return css::sdbc::DataType::BIT;
-    if (sType.equalsIgnoreAsciiCase("bool") || sType.equalsIgnoreAsciiCase("boolean"))
+    if (o3tl::equalsIgnoreAsciiCase(sType, u"bool")
+        || o3tl::equalsIgnoreAsciiCase(sType, u"boolean"))
         return css::sdbc::DataType::BOOLEAN;
     OSL_FAIL("Unknown type name from string, failing back to varchar.");
     return css::sdbc::DataType::VARCHAR;

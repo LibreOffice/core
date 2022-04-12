@@ -59,11 +59,11 @@ typedef void ( *pfunc_getRefreshToolbars)(
 
 typedef void ( *pfunc_createDockingWindow)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
-    const OUString& rResourceURL );
+    std::u16string_view rResourceURL );
 
 typedef bool ( *pfunc_isDockingWindowVisible)(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
-    const OUString& rResourceURL );
+    std::u16string_view rResourceURL );
 
 
 namespace framework
@@ -96,12 +96,12 @@ FWK_DLLPUBLIC void RefreshToolbars(
 FWK_DLLPUBLIC pfunc_createDockingWindow SetDockingWindowCreator( pfunc_createDockingWindow pCreateDockingWindow );
 FWK_DLLPUBLIC void CreateDockingWindow(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
-    const OUString& rResourceURL );
+    std::u16string_view rResourceURL );
 
 FWK_DLLPUBLIC pfunc_isDockingWindowVisible SetIsDockingWindowVisible( pfunc_isDockingWindowVisible pIsDockingWindowVisible );
 FWK_DLLPUBLIC bool IsDockingWindowVisible(
     const css::uno::Reference< css::frame::XFrame >& rFrame,
-    const OUString& rResourceURL );
+    std::u16string_view rResourceURL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,6 +32,7 @@
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 #include <memory>
@@ -531,14 +532,14 @@ void CuiAboutConfigTabPage::AddToModifiedVector( const std::shared_ptr< Prop_Imp
     //property is not modified before
 }
 
-std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( const OUString& rCommaSepString )
+std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( std::u16string_view rCommaSepString )
 {
     std::vector<OUString> tempVector;
 
     sal_Int32 index = 0;
     do
     {
-        OUString word = rCommaSepString.getToken(0, u',', index);
+        OUString word( o3tl::getToken(rCommaSepString, 0, u',', index) );
         word = word.trim();
         if( !word.isEmpty())
             tempVector.push_back(word);

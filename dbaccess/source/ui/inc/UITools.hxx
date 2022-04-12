@@ -115,7 +115,7 @@ namespace dbaui
         @param  _rTypeInfoIters the vector filled with map iterators
     */
     void fillTypeInfo(  const css::uno::Reference< css::sdbc::XConnection>& _rxConnection,
-                        const OUString& _rsTypeNames,
+                        std::u16string_view _rsTypeNames,
                         OTypeInfoMap& _rTypeInfoMap,
                         std::vector<OTypeInfoMap::iterator>& _rTypeInfoIters);
 

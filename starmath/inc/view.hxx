@@ -258,14 +258,14 @@ class SmViewShell final : public SfxViewShell
     static Size GetTextLineSize(OutputDevice const & rDevice,
                          const OUString& rLine);
     static Size GetTextSize(OutputDevice const & rDevice,
-                     const OUString& rText,
+                     std::u16string_view rText,
                      tools::Long          MaxWidth);
     static void DrawTextLine(OutputDevice& rDevice,
                       const Point&  rPosition,
                       const OUString& rLine);
     static void DrawText(OutputDevice& rDevice,
                   const Point&  rPosition,
-                  const OUString& rText,
+                  std::u16string_view rText,
                   sal_uInt16        MaxWidth);
 
     virtual SfxPrinter *GetPrinter(bool bCreate = false) override;

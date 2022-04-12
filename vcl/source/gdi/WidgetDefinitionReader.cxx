@@ -13,6 +13,7 @@
 #include <sal/config.h>
 #include <osl/file.hxx>
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 #include <unordered_map>
 
 namespace vcl
@@ -69,77 +70,77 @@ OString getValueOrAny(OString const& rInputString)
     return rInputString;
 }
 
-ControlPart xmlStringToControlPart(OString const& sPart)
+ControlPart xmlStringToControlPart(std::string_view sPart)
 {
-    if (sPart.equalsIgnoreAsciiCase("NONE"))
+    if (o3tl::equalsIgnoreAsciiCase(sPart, "NONE"))
         return ControlPart::NONE;
-    else if (sPart.equalsIgnoreAsciiCase("Entire"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "Entire"))
         return ControlPart::Entire;
-    else if (sPart.equalsIgnoreAsciiCase("ListboxWindow"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "ListboxWindow"))
         return ControlPart::ListboxWindow;
-    else if (sPart.equalsIgnoreAsciiCase("Button"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "Button"))
         return ControlPart::Button;
-    else if (sPart.equalsIgnoreAsciiCase("ButtonUp"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "ButtonUp"))
         return ControlPart::ButtonUp;
-    else if (sPart.equalsIgnoreAsciiCase("ButtonDown"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "ButtonDown"))
         return ControlPart::ButtonDown;
-    else if (sPart.equalsIgnoreAsciiCase("ButtonLeft"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "ButtonLeft"))
         return ControlPart::ButtonLeft;
-    else if (sPart.equalsIgnoreAsciiCase("ButtonRight"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "ButtonRight"))
         return ControlPart::ButtonRight;
-    else if (sPart.equalsIgnoreAsciiCase("AllButtons"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "AllButtons"))
         return ControlPart::AllButtons;
-    else if (sPart.equalsIgnoreAsciiCase("SeparatorHorz"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "SeparatorHorz"))
         return ControlPart::SeparatorHorz;
-    else if (sPart.equalsIgnoreAsciiCase("SeparatorVert"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "SeparatorVert"))
         return ControlPart::SeparatorVert;
-    else if (sPart.equalsIgnoreAsciiCase("TrackHorzLeft"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "TrackHorzLeft"))
         return ControlPart::TrackHorzLeft;
-    else if (sPart.equalsIgnoreAsciiCase("TrackVertUpper"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "TrackVertUpper"))
         return ControlPart::TrackVertUpper;
-    else if (sPart.equalsIgnoreAsciiCase("TrackHorzRight"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "TrackHorzRight"))
         return ControlPart::TrackHorzRight;
-    else if (sPart.equalsIgnoreAsciiCase("TrackVertLower"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "TrackVertLower"))
         return ControlPart::TrackVertLower;
-    else if (sPart.equalsIgnoreAsciiCase("TrackHorzArea"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "TrackHorzArea"))
         return ControlPart::TrackHorzArea;
-    else if (sPart.equalsIgnoreAsciiCase("TrackVertArea"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "TrackVertArea"))
         return ControlPart::TrackVertArea;
-    else if (sPart.equalsIgnoreAsciiCase("Arrow"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "Arrow"))
         return ControlPart::Arrow;
-    else if (sPart.equalsIgnoreAsciiCase("ThumbHorz"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "ThumbHorz"))
         return ControlPart::ThumbHorz;
-    else if (sPart.equalsIgnoreAsciiCase("ThumbVert"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "ThumbVert"))
         return ControlPart::ThumbVert;
-    else if (sPart.equalsIgnoreAsciiCase("MenuItem"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "MenuItem"))
         return ControlPart::MenuItem;
-    else if (sPart.equalsIgnoreAsciiCase("MenuItemCheckMark"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "MenuItemCheckMark"))
         return ControlPart::MenuItemCheckMark;
-    else if (sPart.equalsIgnoreAsciiCase("MenuItemRadioMark"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "MenuItemRadioMark"))
         return ControlPart::MenuItemRadioMark;
-    else if (sPart.equalsIgnoreAsciiCase("Separator"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "Separator"))
         return ControlPart::Separator;
-    else if (sPart.equalsIgnoreAsciiCase("SubmenuArrow"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "SubmenuArrow"))
         return ControlPart::SubmenuArrow;
-    else if (sPart.equalsIgnoreAsciiCase("SubEdit"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "SubEdit"))
         return ControlPart::SubEdit;
-    else if (sPart.equalsIgnoreAsciiCase("DrawBackgroundHorz"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "DrawBackgroundHorz"))
         return ControlPart::DrawBackgroundHorz;
-    else if (sPart.equalsIgnoreAsciiCase("DrawBackgroundVert"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "DrawBackgroundVert"))
         return ControlPart::DrawBackgroundVert;
-    else if (sPart.equalsIgnoreAsciiCase("TabsDrawRtl"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "TabsDrawRtl"))
         return ControlPart::TabsDrawRtl;
-    else if (sPart.equalsIgnoreAsciiCase("HasBackgroundTexture"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "HasBackgroundTexture"))
         return ControlPart::HasBackgroundTexture;
-    else if (sPart.equalsIgnoreAsciiCase("HasThreeButtons"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "HasThreeButtons"))
         return ControlPart::HasThreeButtons;
-    else if (sPart.equalsIgnoreAsciiCase("BackgroundWindow"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "BackgroundWindow"))
         return ControlPart::BackgroundWindow;
-    else if (sPart.equalsIgnoreAsciiCase("BackgroundDialog"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "BackgroundDialog"))
         return ControlPart::BackgroundDialog;
-    else if (sPart.equalsIgnoreAsciiCase("Border"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "Border"))
         return ControlPart::Border;
-    else if (sPart.equalsIgnoreAsciiCase("Focus"))
+    else if (o3tl::equalsIgnoreAsciiCase(sPart, "Focus"))
         return ControlPart::Focus;
     return ControlPart::NONE;
 }

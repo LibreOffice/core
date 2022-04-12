@@ -78,6 +78,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/string_view.hxx>
 #include <avmedia/mediawindow.hxx>
 #include <svtools/colrdlg.hxx>
 #include <DrawDocShell.hxx>
@@ -2049,7 +2050,7 @@ IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl, void*, void)
         resume();
 }
 
-void SlideshowImpl::ContextMenuSelectHdl(const OString& rMenuId)
+void SlideshowImpl::ContextMenuSelectHdl(std::string_view rMenuId)
 {
     if (rMenuId == "prev")
     {
@@ -2169,9 +2170,9 @@ void SlideshowImpl::ContextMenuSelectHdl(const OString& rMenuId)
         }
         endPresentation();
     }
-    else if (!rMenuId.isEmpty())
+    else if (!rMenuId.empty())
     {
-        sal_Int32 nPageNumber = rMenuId.toInt32() - CM_SLIDES;
+        sal_Int32 nPageNumber = o3tl::toInt32(rMenuId) - CM_SLIDES;
         const ShowWindowMode eMode = mpShowWindow->GetShowWindowMode();
         if( (eMode == SHOWWINDOWMODE_END) || (eMode == SHOWWINDOWMODE_PAUSE) || (eMode == SHOWWINDOWMODE_BLANK) )
         {

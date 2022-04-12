@@ -108,7 +108,7 @@ sal_Int32 mysqlToOOOType(int eType, int charsetnr) noexcept;
 
 OUString mysqlTypeToStr(unsigned mysql_type, unsigned mysql_flags);
 
-sal_Int32 mysqlStrToOOOType(const OUString& sType);
+sal_Int32 mysqlStrToOOOType(std::u16string_view sType);
 
 OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding);
 }

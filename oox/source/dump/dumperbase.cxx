@@ -526,9 +526,9 @@ void StringHelper::appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx )
     rStr.append( '[' ).append( aToken.makeStringAndClear() ).append( ']' );
 }
 
-OUString StringHelper::getToken( const OUString& rData, sal_Int32& rnPos, sal_Unicode cSep )
+std::u16string_view StringHelper::getToken( std::u16string_view rData, sal_Int32& rnPos, sal_Unicode cSep )
 {
-    return trimSpaces( rData.getToken( 0, cSep, rnPos ) );
+    return trimSpaces( o3tl::getToken(rData, 0, cSep, rnPos ) );
 }
 
 void StringHelper::enclose( OUStringBuffer& rStr, sal_Unicode cOpen, sal_Unicode cClose )
@@ -599,15 +599,15 @@ OUString lclTrimQuotedStringList( const OUString& rStr )
 
 } // namespace
 
-OUString StringHelper::trimSpaces( const OUString& rStr )
+std::u16string_view StringHelper::trimSpaces( std::u16string_view rStr )
 {
-    sal_Int32 nBeg = 0;
-    while( (nBeg < rStr.getLength()) && ((rStr[ nBeg ] == ' ') || (rStr[ nBeg ] == '\t')) )
+    size_t nBeg = 0;
+    while( (nBeg < rStr.size()) && ((rStr[ nBeg ] == ' ') || (rStr[ nBeg ] == '\t')) )
         ++nBeg;
-    sal_Int32 nEnd = rStr.getLength();
+    size_t nEnd = rStr.size();
     while( (nEnd > nBeg) && ((rStr[ nEnd - 1 ] == ' ') || (rStr[ nEnd - 1 ] == '\t')) )
         --nEnd;
-    return rStr.copy( nBeg, nEnd - nBeg );
+    return rStr.substr( nBeg, nEnd - nBeg );
 }
 
 OUString StringHelper::trimTrailingNul( const OUString& rStr )
@@ -667,10 +667,10 @@ FormatType StringHelper::convertToFormatType( std::u16string_view rStr )
     return eType;
 }
 
-bool StringHelper::convertFromDec( sal_Int64& ornData, const OUString& rData )
+bool StringHelper::convertFromDec( sal_Int64& ornData, std::u16string_view rData )
 {
-    sal_Int32 nPos = 0;
-    sal_Int32 nLen = rData.getLength();
+    size_t nPos = 0;
+    size_t nLen = rData.size();
     bool bNeg = false;
     if( (nLen > 0) && (rData[ 0 ] == '-') )
     {
@@ -690,10 +690,10 @@ bool StringHelper::convertFromDec( sal_Int64& ornData, const OUString& rData )
     return true;
 }
 
-bool StringHelper::convertFromHex( sal_Int64& ornData, const OUString& rData )
+bool StringHelper::convertFromHex( sal_Int64& ornData, std::u16string_view rData )
 {
     ornData = 0;
-    for( sal_Int32 nPos = 0, nLen = rData.getLength(); nPos < nLen; ++nPos )
+    for( size_t nPos = 0, nLen = rData.size(); nPos < nLen; ++nPos )
     {
         sal_Unicode cChar = rData[ nPos ];
         if( ('0' <= cChar) && (cChar <= '9') )
@@ -709,26 +709,32 @@ bool StringHelper::convertFromHex( sal_Int64& ornData, const OUString& rData )
     return true;
 }
 
-bool StringHelper::convertStringToInt( sal_Int64& ornData, const OUString& rData )
+bool StringHelper::convertStringToInt( sal_Int64& ornData, std::u16string_view rData )
 {
-    if( (rData.getLength() > 2) && (rData[ 0 ] == '0') && ((rData[ 1 ] == 'X') || (rData[ 1 ] == 'x')) )
-        return convertFromHex( ornData, rData.copy( 2 ) );
+    if( (rData.size() > 2) && (rData[ 0 ] == '0') && ((rData[ 1 ] == 'X') || (rData[ 1 ] == 'x')) )
+        return convertFromHex( ornData, rData.substr( 2 ) );
     return convertFromDec( ornData, rData );
 }
 
-bool StringHelper::convertStringToDouble( double& orfData, const OUString& rData )
+bool StringHelper::convertStringToDouble( double& orfData, std::u16string_view rData )
 {
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nSize = 0;
-    orfData = rtl::math::stringToDouble( rData, '.', '\0', &eStatus, &nSize );
-    return (eStatus == rtl_math_ConversionStatus_Ok) && (nSize == rData.getLength());
+    sal_Unicode const * pBegin = rData.data();
+    sal_Unicode const * pEnd;
+    orfData = rtl_math_uStringToDouble(pBegin,
+                                             pBegin + rData.size(),
+                                             '.', '\0',
+                                             &eStatus, &pEnd);
+    nSize = static_cast<sal_Int32>(pEnd - pBegin);
+    return (eStatus == rtl_math_ConversionStatus_Ok) && (nSize == static_cast<sal_Int32>(rData.size()));
 }
 
-bool StringHelper::convertStringToBool( const OUString& rData )
+bool StringHelper::convertStringToBool( std::u16string_view rData )
 {
-    if ( rData == "true" )
+    if ( rData == u"true" )
         return true;
-    if ( rData == "false" )
+    if ( rData == u"false" )
         return false;
     sal_Int64 nData;
     return convertStringToInt( nData, rData ) && (nData != 0);
@@ -746,8 +752,8 @@ OUStringPair StringHelper::convertStringToPair( const OUString& rString, sal_Uni
         }
         else
         {
-            aPair.first = StringHelper::trimSpaces( rString.copy( 0, nEqPos ) );
-            aPair.second = StringHelper::trimSpaces( rString.copy( nEqPos + 1 ) );
+            aPair.first = StringHelper::trimSpaces( rString.subView( 0, nEqPos ) );
+            aPair.second = StringHelper::trimSpaces( rString.subView( nEqPos + 1 ) );
         }
     }
     return aPair;
@@ -761,9 +767,9 @@ void StringHelper::convertStringToStringList( OUStringVector& orVec, const OUStr
     sal_Int32 nLen = aUnquotedData.getLength();
     while( (0 <= nPos) && (nPos < nLen) )
     {
-        OUString aToken = getToken( aUnquotedData, nPos, OOX_DUMP_LF );
-        if( !bIgnoreEmpty || !aToken.isEmpty() )
-            orVec.push_back( aToken );
+        std::u16string_view aToken = getToken( aUnquotedData, nPos, OOX_DUMP_LF );
+        if( !bIgnoreEmpty || !aToken.empty() )
+            orVec.push_back( OUString(aToken) );
     }
 }
 

@@ -90,7 +90,7 @@ namespace dbaui
         virtual void Command(const CommandEvent& rEvt) override;
 
         OTableWindow* GetTabWin(){ return m_pTabWin; }
-        int GetEntryFromText( const OUString& rEntryText );
+        int GetEntryFromText( std::u16string_view rEntryText );
     };
 
     class TableWindowListBoxHelper final : public DropTargetHelper

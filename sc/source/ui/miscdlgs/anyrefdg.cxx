@@ -25,6 +25,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <anyrefdg.hxx>
 #include <sc.hrc>
@@ -108,7 +109,7 @@ void ScFormulaReferenceHelper::enableInput( bool bEnable )
     }
 }
 
-void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
+void ScFormulaReferenceHelper::ShowSimpleReference(std::u16string_view rStr)
 {
     if (!m_bEnableColorRef)
         return;
@@ -137,11 +138,11 @@ void ScFormulaReferenceHelper::ShowSimpleReference(const OUString& rStr)
     }
 }
 
-bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument& rDoc )
+bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, std::u16string_view rStr, const ScDocument& rDoc )
 {
     rRanges.RemoveAll();
 
-    if (rStr.isEmpty())
+    if (rStr.empty())
         return true;
 
     ScAddress::Details aDetails(rDoc.GetAddressConvention(), 0, 0);
@@ -151,7 +152,7 @@ bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const OUStr
     do
     {
         ScRange aRange;
-        OUString aRangeStr( rStr.getToken( 0, ';', nIdx ) );
+        OUString aRangeStr( o3tl::getToken(rStr, 0, ';', nIdx ) );
 
         ScRefFlags nFlags = aRange.ParseAny( aRangeStr, rDoc, aDetails );
         if ( nFlags & ScRefFlags::VALID )
@@ -755,7 +756,7 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
 
-bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, const OUString& rStr, const ScDocument& rDoc )
+bool ScRefHandler::ParseWithNames( ScRangeList& rRanges, std::u16string_view rStr, const ScDocument& rDoc )
 {
     return m_aHelper.ParseWithNames( rRanges, rStr, rDoc );
 }

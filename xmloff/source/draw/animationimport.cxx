@@ -110,13 +110,13 @@ public:
     explicit AnimationsImportHelperImpl( SvXMLImport& rImport );
 
     Any convertValue( XMLTokenEnum eAttributeName, const OUString& rValue );
-    Sequence< Any > convertValueSequence( XMLTokenEnum eAttributeName, const OUString& rValue );
+    Sequence< Any > convertValueSequence( XMLTokenEnum eAttributeName, std::u16string_view rValue );
 
     Any convertTarget( const OUString& rValue );
     static Any convertPath( const OUString& rValue );
     Any convertTiming( const OUString& rValue );
     static Sequence< double > convertKeyTimes( std::u16string_view rValue );
-    static Sequence< TimeFilterPair > convertTimeFilter( const OUString& rValue );
+    static Sequence< TimeFilterPair > convertTimeFilter( std::u16string_view rValue );
 };
 
 AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
@@ -283,7 +283,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
     }
 }
 
-Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum eAttributeName, const OUString& rValue )
+Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum eAttributeName, std::u16string_view rValue )
 {
     Sequence< Any > aValues;
 
@@ -296,7 +296,7 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
         // fill the sequence
         Any* pValues = aValues.getArray();
         for (sal_Int32 nIndex = 0; nIndex >= 0; )
-            *pValues++ = convertValue( eAttributeName, rValue.getToken( 0, ';', nIndex ) );
+            *pValues++ = convertValue( eAttributeName, OUString(o3tl::getToken(rValue, 0, ';', nIndex )) );
     }
 
     return aValues;
@@ -394,7 +394,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( std::u16string_v
     return aKeyTimes;
 }
 
-Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const OUString& rValue )
+Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( std::u16string_view rValue )
 {
     const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
 
@@ -405,15 +405,15 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
         TimeFilterPair* pValues = aTimeFilter.getArray();
         for (sal_Int32 nIndex = 0; nIndex >= 0; )
         {
-            const OUString aToken( rValue.getToken( 0, ';', nIndex ) );
+            const std::u16string_view aToken( o3tl::getToken(rValue, 0, ';', nIndex ) );
 
-            sal_Int32 nPos = aToken.indexOf( ',' );
-            if( nPos >= 0 )
+            size_t nPos = aToken.find( ',' );
+            if( nPos != std::u16string_view::npos )
             {
                 pValues->Time = rtl_math_uStringToDouble(
-                    aToken.getStr(), aToken.getStr() + nPos, '.', 0, nullptr, nullptr);
+                    aToken.data(), aToken.data() + nPos, '.', 0, nullptr, nullptr);
                 pValues->Progress = rtl_math_uStringToDouble(
-                    aToken.getStr() + nPos + 1, aToken.getStr() + aToken.getLength(), '.', 0,
+                    aToken.data() + nPos + 1, aToken.data() + aToken.size(), '.', 0,
                     nullptr, nullptr);
             }
             pValues++;

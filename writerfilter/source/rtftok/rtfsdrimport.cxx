@@ -190,7 +190,7 @@ void RTFSdrImport::resolveFLine(uno::Reference<beans::XPropertySet> const& xProp
 }
 
 void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
-                                 std::u16string_view aKey, const OUString& aValue) const
+                                 std::u16string_view aKey, std::u16string_view aValue) const
 {
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     sal_Int16 nHoriOrient = 0;
@@ -200,7 +200,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
 
     if (aKey == u"posh")
     {
-        switch (aValue.toInt32())
+        switch (o3tl::toInt32(aValue))
         {
             case 1:
                 nHoriOrient = text::HoriOrientation::LEFT;
@@ -223,7 +223,7 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
     }
     else if (aKey == u"posv")
     {
-        switch (aValue.toInt32())
+        switch (o3tl::toInt32(aValue))
         {
             case 1:
                 nVertOrient = text::VertOrientation::TOP;
@@ -239,14 +239,14 @@ void RTFSdrImport::applyProperty(uno::Reference<drawing::XShape> const& xShape,
         }
     }
     else if (aKey == u"fFitShapeToText")
-        obFitShapeToText = aValue.toInt32() == 1;
+        obFitShapeToText = o3tl::toInt32(aValue) == 1;
     else if (aKey == u"fFilled")
-        bFilled = aValue.toInt32() == 1;
+        bFilled = o3tl::toInt32(aValue) == 1;
     else if (aKey == u"rotation")
     {
         // See DffPropertyReader::Fix16ToAngle(): in RTF, positive rotation angles are clockwise, we have them as counter-clockwise.
         // Additionally, RTF type is 0..360*2^16, our is 0..360*100.
-        sal_Int32 nRotation = aValue.toInt32() * 100 / RTF_MULTIPLIER;
+        sal_Int32 nRotation = o3tl::toInt32(aValue) * 100 / RTF_MULTIPLIER;
         uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY);
         if (!xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
             xPropertySet->setPropertyValue(
@@ -1166,12 +1166,12 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
 
 void RTFSdrImport::close() { m_rImport.Mapper().endShape(); }
 
-void RTFSdrImport::append(std::u16string_view aKey, const OUString& aValue)
+void RTFSdrImport::append(std::u16string_view aKey, std::u16string_view aValue)
 {
     applyProperty(m_xShape, aKey, aValue);
 }
 
-void RTFSdrImport::appendGroupProperty(std::u16string_view aKey, const OUString& aValue)
+void RTFSdrImport::appendGroupProperty(std::u16string_view aKey, std::u16string_view aValue)
 {
     if (m_aParents.empty())
         return;

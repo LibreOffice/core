@@ -37,6 +37,7 @@
 
 #include <com/sun/star/graphic/SvgTools.hpp>
 #include <basegfx/DrawCommands.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 
@@ -90,13 +91,13 @@ getWidgetDefinitionForTheme(std::u16string_view rThemenName)
     return spDefinition;
 }
 
-int getSettingValueInteger(OString const& rValue, int nDefault)
+int getSettingValueInteger(std::string_view rValue, int nDefault)
 {
-    if (rValue.isEmpty())
+    if (rValue.empty())
         return nDefault;
     if (!comphelper::string::isdigitAsciiString(rValue))
         return nDefault;
-    return rValue.toInt32();
+    return o3tl::toInt32(rValue);
 }
 
 bool getSettingValueBool(std::string_view rValue, bool bDefault)

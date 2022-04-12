@@ -40,6 +40,7 @@
 #include <unotools/eventcfg.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <fmtornt.hxx>
 #include <fmturl.hxx>
@@ -92,7 +93,7 @@ HTMLOptionEnum<sal_Int16> const aHTMLImgVAlignTable[] =
     { nullptr,                                0                   }
 };
 
-ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
+ImageMap *SwHTMLParser::FindImageMap( std::u16string_view rName ) const
 {
     OSL_ENSURE( rName[0] != '#', "FindImageMap: name begins with '#'!" );
 
@@ -100,7 +101,7 @@ ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
     {
         for (const auto &rpIMap : *m_pImageMaps)
         {
-            if (rName.equalsIgnoreAsciiCase(rpIMap->GetName()))
+            if (o3tl::equalsIgnoreAsciiCase(rName, rpIMap->GetName()))
             {
                 return rpIMap.get();
             }

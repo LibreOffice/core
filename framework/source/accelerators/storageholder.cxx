@@ -26,6 +26,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 
@@ -427,13 +428,13 @@ OUString StorageHolder::impl_st_normPath(const OUString& sPath)
     return sNormedPath;
 }
 
-std::vector<OUString> StorageHolder::impl_st_parsePath(const OUString& sPath)
+std::vector<OUString> StorageHolder::impl_st_parsePath(std::u16string_view sPath)
 {
     std::vector<OUString> lToken;
     sal_Int32    i  = 0;
     while (true)
     {
-        OUString sToken = sPath.getToken(0, PATH_SEPARATOR_UNICODE, i);
+        OUString sToken( o3tl::getToken(sPath, 0, PATH_SEPARATOR_UNICODE, i) );
         if (i < 0)
             break;
         lToken.push_back(sToken);

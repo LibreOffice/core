@@ -61,7 +61,7 @@ public:
                             const css::uno::Reference< css::container::XNameAccess >& xTypeCFG,
                             const css::uno::Reference< css::container::XNameAccess >& xFilterCFG,
                             bool bUpdate );
-    SAL_DLLPRIVATE static std::shared_ptr<const SfxFilter> GetDefaultFilter_Impl( const OUString& );
+    SAL_DLLPRIVATE static std::shared_ptr<const SfxFilter> GetDefaultFilter_Impl( std::u16string_view );
 };
 
 class SfxFilterMatcher_Impl;

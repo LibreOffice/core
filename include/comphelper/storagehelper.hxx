@@ -186,10 +186,10 @@ public:
 
     static css::uno::Reference< css::embed::XStorage > GetStorageAtPath(
         const css::uno::Reference< css::embed::XStorage > &xStorage,
-        const OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy const &rNastiness );
+        std::u16string_view aPath, sal_uInt32 nOpenMode, LifecycleProxy const &rNastiness );
     static css::uno::Reference< css::io::XStream > GetStreamAtPath(
         const css::uno::Reference< css::embed::XStorage > &xStorage,
-        const OUString& aPath, sal_uInt32 nOpenMode, LifecycleProxy const &rNastiness );
+        std::u16string_view aPath, sal_uInt32 nOpenMode, LifecycleProxy const &rNastiness );
     static css::uno::Reference< css::io::XStream > GetStreamAtPackageURL(
         const css::uno::Reference< css::embed::XStorage > &xStorage,
         const OUString& rURL, sal_uInt32 const nOpenMode,

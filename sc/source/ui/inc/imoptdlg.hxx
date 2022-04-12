@@ -26,7 +26,7 @@
 class SC_DLLPUBLIC ScImportOptions
 {
 public:
-        ScImportOptions( const OUString& rStr );
+        ScImportOptions( std::u16string_view rStr );
 
         ScImportOptions( sal_Unicode nFieldSep, sal_Unicode nTextSep, rtl_TextEncoding nEnc )
             : nFieldSepCode(nFieldSep), nTextSepCode(nTextSep),

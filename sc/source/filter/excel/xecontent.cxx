@@ -55,6 +55,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/relationship.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::oox;
 
@@ -2032,7 +2033,7 @@ void XclExpDval::WriteBody( XclExpStream& rStrm )
 XclExpWebQuery::XclExpWebQuery(
         const OUString& rRangeName,
         const OUString& rUrl,
-        const OUString& rSource,
+        std::u16string_view rSource,
         sal_Int32 nRefrSecs ) :
     maDestRange( rRangeName ),
     maUrl( rUrl ),
@@ -2044,12 +2045,12 @@ XclExpWebQuery::XclExpWebQuery(
     OUString aNewTables;
     OUString aAppendTable;
     bool bExitLoop = false;
-    if (!rSource.isEmpty())
+    if (!rSource.empty())
     {
         sal_Int32 nStringIx = 0;
         do
         {
-            OUString aToken( rSource.getToken( 0, ';', nStringIx ) );
+            OUString aToken( o3tl::getToken(rSource, 0, ';', nStringIx ) );
             mbEntireDoc = ScfTools::IsHTMLDocName( aToken );
             bExitLoop = mbEntireDoc || ScfTools::IsHTMLTablesName( aToken );
             if( !bExitLoop && ScfTools::GetHTMLNameFromName( aToken, aAppendTable ) )

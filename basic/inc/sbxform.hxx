@@ -95,7 +95,7 @@ class SbxBasicFormater {
     OUString  BasicFormat( double dNumber, const OUString& sFormatStrg );
     static OUString BasicFormatNull( const OUString& sFormatStrg );
 
-    static  bool isBasicFormat( const OUString& sFormatStrg );
+    static  bool isBasicFormat( std::u16string_view sFormatStrg );
 
   private:
     static inline void ShiftString( OUStringBuffer& sStrg, sal_uInt16 nStartPos );

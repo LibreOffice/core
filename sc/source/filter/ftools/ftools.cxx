@@ -26,6 +26,7 @@
 #include <svl/itemset.hxx>
 #include <svl/poolitem.hxx>
 #include <sot/storage.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <math.h>
 #include <global.hxx>
@@ -318,14 +319,14 @@ OUString ScfTools::GetNameFromHTMLName( std::u16string_view rTabName )
     return GetHTMLNamePrefix() + rTabName;
 }
 
-bool ScfTools::IsHTMLDocName( const OUString& rSource )
+bool ScfTools::IsHTMLDocName( std::u16string_view rSource )
 {
-    return rSource.equalsIgnoreAsciiCase( GetHTMLDocName() );
+    return o3tl::equalsIgnoreAsciiCase( rSource, GetHTMLDocName() );
 }
 
-bool ScfTools::IsHTMLTablesName( const OUString& rSource )
+bool ScfTools::IsHTMLTablesName( std::u16string_view rSource )
 {
-    return rSource.equalsIgnoreAsciiCase( GetHTMLTablesName() );
+    return o3tl::equalsIgnoreAsciiCase( rSource, GetHTMLTablesName() );
 }
 
 bool ScfTools::GetHTMLNameFromName( const OUString& rSource, OUString& rName )

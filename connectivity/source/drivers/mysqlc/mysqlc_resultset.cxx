@@ -30,6 +30,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/seqstream.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace rtl;
 
@@ -51,14 +52,13 @@ namespace
 {
 // copied from string misc, it should be replaced when library is not an
 // extension anymore
-std::vector<OString> lcl_split(const OString& rStr, char cSeparator)
+std::vector<OString> lcl_split(std::string_view rStr, char cSeparator)
 {
     std::vector<OString> vec;
     sal_Int32 idx = 0;
     do
     {
-        OString kw = rStr.getToken(0, cSeparator, idx);
-        kw = kw.trim();
+        OString kw(o3tl::trim(o3tl::getToken(rStr, 0, cSeparator, idx)));
         if (!kw.isEmpty())
         {
             vec.push_back(kw);
@@ -507,7 +507,7 @@ DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 column)
 
     // YY-MM-DD HH:MM:SS
     std::vector<OString> dateAndTime
-        = lcl_split(OString{ sVal.getStr(), getDataLength(column) }, ' ');
+        = lcl_split(std::string_view(sVal.getStr(), getDataLength(column)), ' ');
 
     auto dateParts = lcl_split(dateAndTime.at(0), '-');
     auto timeParts = lcl_split(dateAndTime.at(1), ':');

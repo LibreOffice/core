@@ -33,6 +33,7 @@
 #include <uielement/togglebuttontoolbarcontroller.hxx>
 #include <uielement/FixedTextToolbarController.hxx>
 #include <uielement/FixedImageToolbarController.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace framework
 {
@@ -307,7 +308,7 @@ bool ToolBarMerger::ProcessMergeOperation(
     CommandToInfoMap&                      rCommandMap,
     std::u16string_view                    rModuleIdentifier,
     std::u16string_view                    rMergeCommand,
-    const OUString&                        rMergeCommandParameter,
+    std::u16string_view                    rMergeCommandParameter,
     const AddonToolbarItemContainer&       rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )
@@ -544,9 +545,9 @@ void ToolBarMerger::ReplaceItem(
 void ToolBarMerger::RemoveItems(
     ToolBox*                  pToolbar,
     ToolBox::ImplToolItems::size_type nPos,
-    const OUString&    rMergeCommandParameter )
+    std::u16string_view rMergeCommandParameter )
 {
-    sal_Int32 nCount = rMergeCommandParameter.toInt32();
+    sal_Int32 nCount = o3tl::toInt32(rMergeCommandParameter);
     if ( nCount > 0 )
     {
         for ( sal_Int32 i = 0; i < nCount; i++ )

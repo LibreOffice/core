@@ -27,6 +27,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <htmlimp.hxx>
 #include <htmlpars.hxx>
@@ -199,9 +200,9 @@ OUString ScFormatFilterPluginImpl::GetHTMLRangeNameList( ScDocument& rDoc, const
     return ScHTMLImport::GetHTMLRangeNameList( rDoc, rOrigName );
 }
 
-OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument& rDoc, const OUString& rOrigName )
+OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument& rDoc, std::u16string_view rOrigName )
 {
-    if (rOrigName.isEmpty())
+    if (rOrigName.empty())
         return OUString();
 
     OUString aNewName;
@@ -210,7 +211,7 @@ OUString ScHTMLImport::GetHTMLRangeNameList( const ScDocument& rDoc, const OUStr
     sal_Int32 nStringIx = 0;
     do
     {
-        OUString aToken( rOrigName.getToken( 0, ';', nStringIx ) );
+        OUString aToken( o3tl::getToken(rOrigName, 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
         {   // build list with all HTML tables
             sal_uLong nIndex = 1;

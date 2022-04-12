@@ -45,6 +45,7 @@
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <sax/tools/converter.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 #include <string_view>
 #include <unordered_map>
@@ -440,14 +441,14 @@ static void GetPosition3D( std::vector< css::beans::PropertyValue >& rDest,     
 }
 
 static void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
-                        const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< double > vDirection;
     sal_Int32 nIndex = 0;
     do
     {
         double fAttrDouble;
-        OUString aToken( rValue.getToken( 0, ',', nIndex ) );
+        std::u16string_view aToken( o3tl::getToken(rValue, 0, ',', nIndex ) );
         if (!::sax::Converter::convertDouble( fAttrDouble, aToken ))
             break;
         else
@@ -465,14 +466,14 @@ static void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest, 
 }
 
 static void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
-                      const OUString& rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                      std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< sal_Int32 > vNum;
     sal_Int32 nIndex = 0;
     do
     {
         sal_Int32 n;
-        OUString aToken( rValue.getToken( 0, ' ', nIndex ) );
+        std::u16string_view aToken( o3tl::getToken(rValue, 0, ' ', nIndex ) );
         if (!::sax::Converter::convertNumber( n, aToken ))
             break;
         else

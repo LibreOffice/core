@@ -29,6 +29,7 @@
 #include <xmlreader/xmlreader.hxx>
 #include <comphelper/sequence.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -163,7 +164,7 @@ void SwLabelConfig::ImplCommit() {}
 
 void SwLabelConfig::Notify( const css::uno::Sequence< OUString >& ) {}
 
-static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeasure, const OUString& rManufacturer)
+static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, std::u16string_view rMeasure, const OUString& rManufacturer)
 {
     std::unique_ptr<SwLabRec> pNewRec(new SwLabRec);
     pNewRec->m_aMake = rManufacturer;
@@ -173,11 +174,11 @@ static std::unique_ptr<SwLabRec> lcl_CreateSwLabRec(const OUString& rType, const
     //all values are contained as colon-separated 1/100 mm values
     //except for the continuous flag ('C'/'S') and nCols, nRows (sal_Int32)
     sal_Int32 nTok{0};
-    sal_Int32 nIdx{rMeasure.isEmpty() ? -1 : 0};
+    sal_Int32 nIdx{rMeasure.empty() ? -1 : 0};
     while (nIdx>=0)
     {
-        const OUString sToken(rMeasure.getToken(0, ';', nIdx));
-        int nVal = sToken.toInt32();
+        const std::u16string_view sToken(o3tl::getToken(rMeasure, 0, ';', nIdx));
+        int nVal = o3tl::toInt32(sToken);
         switch(nTok++)
         {
             case  0 : pNewRec->m_bCont = sToken[0] == 'C'; break;

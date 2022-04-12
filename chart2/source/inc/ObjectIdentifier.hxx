@@ -223,7 +223,7 @@ public:
           sal_Int32 nOffsetPercent
         , const css::awt::Point& rMinimumPosition
         , const css::awt::Point& rMaximumPosition );
-    static bool parsePieSegmentDragParameterString( const OUString& rDragParameterString
+    static bool parsePieSegmentDragParameterString( std::u16string_view rDragParameterString
         , sal_Int32& rOffsetPercent
         , css::awt::Point& rMinimumPosition
         , css::awt::Point& rMaximumPosition );

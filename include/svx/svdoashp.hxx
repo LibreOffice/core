@@ -243,7 +243,7 @@ public:
     virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
 
     // #i33136#
-    static bool doConstructOrthogonal(const OUString& rName);
+    static bool doConstructOrthogonal(std::u16string_view rName);
 
     using SdrTextObj::NbcSetOutlinerParaObject;
 

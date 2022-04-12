@@ -40,6 +40,7 @@
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
+#include <o3tl/string_view.hxx>
 
 const sal_uInt16 nCurrFormatDefault = 0;
 
@@ -384,10 +385,10 @@ const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
     return aReservedWords[nWord];
 }
 
-MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( const OUString& rMS ) const
+MeasurementSystem LocaleDataWrapper::mapMeasurementStringToEnum( std::u16string_view rMS ) const
 {
 //! TODO: could be cached too
-    if ( rMS.equalsIgnoreAsciiCase( "metric" ) )
+    if ( o3tl::equalsIgnoreAsciiCase( rMS, u"metric" ) )
         return MeasurementSystem::Metric;
 //! TODO: other measurement systems? => extend enum MeasurementSystem
     return MeasurementSystem::US;

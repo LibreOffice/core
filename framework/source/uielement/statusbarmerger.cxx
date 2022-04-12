@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <uielement/statusbarmerger.hxx>
+#include <o3tl/string_view.hxx>
 
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::uno::Sequence;
@@ -135,9 +136,9 @@ bool lcl_ReplaceItem( StatusBar* pStatusbar,
 
 bool lcl_RemoveItems( StatusBar* pStatusbar,
                              sal_uInt16 nPos,
-                             const OUString& rMergeCommandParameter )
+                             std::u16string_view rMergeCommandParameter )
 {
-    sal_Int32 nCount = rMergeCommandParameter.toInt32();
+    sal_Int32 nCount = o3tl::toInt32(rMergeCommandParameter);
     if ( nCount > 0 )
     {
         for ( sal_Int32 i = 0; i < nCount; i++ )
@@ -190,7 +191,7 @@ bool StatusbarMerger::ProcessMergeOperation(
     sal_uInt16 nPos,
     sal_uInt16& rItemId,
     std::u16string_view rMergeCommand,
-    const OUString& rMergeCommandParameter,
+    std::u16string_view rMergeCommandParameter,
     const AddonStatusbarItemContainer& rItems )
 {
     if ( rMergeCommand == MERGECOMMAND_ADDAFTER )

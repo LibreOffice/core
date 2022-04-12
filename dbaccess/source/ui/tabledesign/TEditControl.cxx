@@ -477,7 +477,7 @@ void OTableEditorCtrl::CursorMoved()
     OTableRowView::CursorMoved();
 }
 
-sal_Int32 OTableEditorCtrl::HasFieldName( const OUString& rFieldName )
+sal_Int32 OTableEditorCtrl::HasFieldName( std::u16string_view rFieldName )
 {
 
     Reference<XConnection> xCon = GetView()->getController().getConnection();

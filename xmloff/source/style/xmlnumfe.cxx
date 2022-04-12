@@ -45,6 +45,7 @@
 #include <svl/nfsymbol.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <float.h>
 #include <set>
@@ -348,16 +349,16 @@ void SvXMLNumFmtExport::WriteColorElement_Impl( const Color& rColor )
 }
 
 void SvXMLNumFmtExport::WriteCurrencyElement_Impl( const OUString& rString,
-                                                    const OUString& rExt )
+                                                    std::u16string_view rExt )
 {
     FinishTextElement_Impl();
 
-    if ( !rExt.isEmpty() )
+    if ( !rExt.empty() )
     {
         // rExt should be a 16-bit hex value max FFFF which may contain a
         // leading "-" separator (that is not a minus sign, but toInt32 can be
         // used to parse it, with post-processing as necessary):
-        sal_Int32 nLang = rExt.toInt32(16);
+        sal_Int32 nLang = o3tl::toInt32(rExt, 16);
         if ( nLang < 0 )
             nLang = -nLang;
         AddLanguageAttr_Impl( LanguageType(nLang) );          // adds to pAttrList
@@ -903,7 +904,7 @@ bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
             AddToTextElement_Impl( rString.subView( 0, nPos ) );
         }
         //  currency symbol (empty string -> default)
-        WriteCurrencyElement_Impl( "", "" );
+        WriteCurrencyElement_Impl( "", u"" );
         bRet = true;
 
         //  text after currency symbol
@@ -1478,7 +1479,7 @@ void SvXMLNumFmtExport::ExportPart_Impl( const SvNumberformat& rFormat, sal_uInt
                             //! but should still be empty (meaning automatic)
                             //  pElemStr is "CCC"
 
-                            WriteCurrencyElement_Impl( *pElemStr, OUString() );
+                            WriteCurrencyElement_Impl( *pElemStr, u"" );
                             bAnyContent = true;
                             bCurrencyWritten = true;
                         }

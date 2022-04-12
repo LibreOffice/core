@@ -421,7 +421,7 @@ MSConvertOCXControls::~MSConvertOCXControls()
 }
 
 bool
-MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, const OUString& rGuidString )
+MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rInStrm, Reference< XFormComponent >& rxFormComp, std::u16string_view rGuidString )
 {
     ::oox::ole::EmbeddedControl aControl( "Unknown" );
     if( ::oox::ole::ControlModelBase* pModel = aControl.createModelFromGuid( rGuidString  ) )

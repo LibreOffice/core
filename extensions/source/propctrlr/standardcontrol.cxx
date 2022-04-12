@@ -38,6 +38,7 @@
 
 #include <tools/datetime.hxx>
 #include <unotools/datetime.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <limits>
 #include <memory>
@@ -680,7 +681,7 @@ namespace pcr
     namespace
     {
 
-        StlSyntaxSequence< OUString > lcl_convertMultiLineToList( const OUString& _rCompsedTextWithLineBreaks )
+        StlSyntaxSequence< OUString > lcl_convertMultiLineToList( std::u16string_view _rCompsedTextWithLineBreaks )
         {
             sal_Int32 nLines = comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n');
             StlSyntaxSequence< OUString > aStrings( nLines );
@@ -690,7 +691,7 @@ namespace pcr
                 sal_Int32 nIdx {0};
                 do
                 {
-                    *stringItem = _rCompsedTextWithLineBreaks.getToken( 0, '\n', nIdx );
+                    *stringItem = o3tl::getToken(_rCompsedTextWithLineBreaks, 0, '\n', nIdx );
                     ++stringItem;
                 }
                 while (nIdx>0);

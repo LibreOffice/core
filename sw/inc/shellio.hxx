@@ -94,7 +94,7 @@ public:
         m_bIncludeHidden = true;
     }
     // for the automatic conversion (mail/news/...)
-    void ReadUserData( const OUString& );
+    void ReadUserData( std::u16string_view );
     void WriteUserData( OUString& ) const;
 
     SwAsciiOptions() { Reset(); }

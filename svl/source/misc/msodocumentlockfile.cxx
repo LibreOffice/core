@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <ucbhelper/content.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/io/IOException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -21,22 +22,23 @@ namespace svt
 {
 namespace
 {
-bool isWordFormat(const OUString& sExt)
+bool isWordFormat(std::u16string_view sExt)
 {
-    return sExt.equalsIgnoreAsciiCase("DOC") || sExt.equalsIgnoreAsciiCase("DOCX")
-           || sExt.equalsIgnoreAsciiCase("RTF") || sExt.equalsIgnoreAsciiCase("ODT");
+    return o3tl::equalsIgnoreAsciiCase(sExt, u"DOC") || o3tl::equalsIgnoreAsciiCase(sExt, u"DOCX")
+           || o3tl::equalsIgnoreAsciiCase(sExt, u"RTF")
+           || o3tl::equalsIgnoreAsciiCase(sExt, u"ODT");
 }
 
-bool isExcelFormat(const OUString& sExt)
+bool isExcelFormat(std::u16string_view sExt)
 {
     return //sExt.equalsIgnoreAsciiCase("XLS") || // MSO does not create lockfile for XLS
-        sExt.equalsIgnoreAsciiCase("XLSX") || sExt.equalsIgnoreAsciiCase("ODS");
+        o3tl::equalsIgnoreAsciiCase(sExt, u"XLSX") || o3tl::equalsIgnoreAsciiCase(sExt, u"ODS");
 }
 
-bool isPowerPointFormat(const OUString& sExt)
+bool isPowerPointFormat(std::u16string_view sExt)
 {
-    return sExt.equalsIgnoreAsciiCase("PPTX") || sExt.equalsIgnoreAsciiCase("PPT")
-           || sExt.equalsIgnoreAsciiCase("ODP");
+    return o3tl::equalsIgnoreAsciiCase(sExt, u"PPTX") || o3tl::equalsIgnoreAsciiCase(sExt, u"PPT")
+           || o3tl::equalsIgnoreAsciiCase(sExt, u"ODP");
 }
 
 // Need to generate different lock file name for MSO.

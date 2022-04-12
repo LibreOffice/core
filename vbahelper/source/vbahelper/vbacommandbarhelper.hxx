@@ -59,7 +59,7 @@ private:
     /// @throws css::uno::RuntimeException
     void Init();
     /// @throws css::uno::RuntimeException
-    bool hasToolbar( const OUString& sResourceUrl, const OUString& sName );
+    bool hasToolbar( const OUString& sResourceUrl, std::u16string_view sName );
 public:
     /// @throws css::uno::RuntimeException
     VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel );
@@ -85,7 +85,7 @@ public:
     /// @throws css::uno::RuntimeException
     OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName );
     /// @throws css::uno::RuntimeException
-    static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const OUString& sName, bool bMenu );
+    static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, std::u16string_view sName, bool bMenu );
     static OUString generateCustomURL();
 };
 

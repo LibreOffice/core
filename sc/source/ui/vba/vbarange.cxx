@@ -1146,7 +1146,7 @@ public:
 }
 
 bool
-ScVbaRange::getCellRangesForAddress( ScRefFlags& rResFlags, const OUString& sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention eConv, char cDelimiter )
+ScVbaRange::getCellRangesForAddress( ScRefFlags& rResFlags, std::u16string_view sAddress, ScDocShell* pDocSh, ScRangeList& rCellRanges, formula::FormulaGrammar::AddressConvention eConv, char cDelimiter )
 {
 
     if ( pDocSh )

@@ -88,7 +88,7 @@ public:
     /** Imports the shape client data from the xdr:clientData element. */
     void                importClientData( const AttributeList& rAttribs );
     /** Sets an attribute of the cell-dependent anchor position from xdr:from and xdr:to elements. */
-    void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, const OUString& rValue );
+    void                setCellPos( sal_Int32 nElement, sal_Int32 nParentContext, std::u16string_view rValue );
     /** Imports the client anchor settings from a VML element. */
     void                importVmlAnchor( std::u16string_view rAnchor );
 

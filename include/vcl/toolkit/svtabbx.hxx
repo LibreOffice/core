@@ -46,7 +46,7 @@ private:
     OUString                    aCurEntry;
 
 protected:
-    static OUString             GetToken( const OUString &sStr, sal_Int32 &nIndex );
+    static std::u16string_view  GetToken( std::u16string_view sStr, sal_Int32 &nIndex );
 
     virtual void                SetTabs() override;
     virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;

@@ -62,7 +62,7 @@ class ExcelFilter;
 /** Functor for case-insensitive string comparison, usable in maps etc. */
 struct IgnoreCaseCompare
 {
-    bool operator()( const OUString& rName1, std::u16string_view rName2 ) const;
+    bool operator()( std::u16string_view rName1, std::u16string_view rName2 ) const;
 };
 
 class AddressConverter;

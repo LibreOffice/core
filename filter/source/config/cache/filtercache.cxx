@@ -51,6 +51,7 @@
 #include <i18nlangtag/languagetag.hxx>
 
 #include <officecfg/Setup.hxx>
+#include <o3tl/string_view.hxx>
 
 
 namespace filter::config{
@@ -2146,14 +2147,14 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
 }
 
 
-std::vector<OUString> FilterCache::impl_tokenizeString(const OUString& sData     ,
+std::vector<OUString> FilterCache::impl_tokenizeString(std::u16string_view sData     ,
                                                     sal_Unicode      cSeparator)
 {
     std::vector<OUString> lData  ;
     sal_Int32    nToken = 0;
     do
     {
-        OUString sToken = sData.getToken(0, cSeparator, nToken);
+        OUString sToken( o3tl::getToken(sData, 0, cSeparator, nToken) );
         lData.push_back(sToken);
     }
     while(nToken >= 0);

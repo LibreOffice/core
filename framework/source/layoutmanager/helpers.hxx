@@ -52,14 +52,14 @@ bool equalRectangles( const css::awt::Rectangle& rRect1, const css::awt::Rectang
 bool lcl_checkUIElement(const css::uno::Reference< css::ui::XUIElement >& xUIElement,css::awt::Rectangle& _rPosSize, css::uno::Reference< css::awt::XWindow >& _xWindow);
 css::uno::Reference< css::awt::XWindowPeer > createToolkitWindow( const css::uno::Reference< css::uno::XComponentContext >& rxContext, const css::uno::Reference< css::awt::XWindowPeer >& rParent, const char* pService );
 WindowAlign ImplConvertAlignment( css::ui::DockingArea aAlignment );
-OUString getElementTypeFromResourceURL( const OUString& aResourceURL );
-void parseResourceURL( const OUString& aResourceURL, OUString& aElementType, OUString& aElementName );
+std::u16string_view getElementTypeFromResourceURL( std::u16string_view aResourceURL );
+void parseResourceURL( std::u16string_view aResourceURL, OUString& aElementType, OUString& aElementName );
 ::tools::Rectangle putAWTToRectangle( const css::awt::Rectangle& rRect );
 css::awt::Rectangle putRectangleValueToAWT( const ::tools::Rectangle& rRect );
 css::uno::Reference< css::frame::XModel > impl_getModelFromFrame( const css::uno::Reference< css::frame::XFrame >& rFrame );
 bool implts_isPreviewModel( const css::uno::Reference< css::frame::XModel >& xModel );
 bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame::XFrame >& xFrame );
-void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, const OUString& rDockingWindowName, bool bVisible );
+void impl_setDockingWindowVisibility( const css::uno::Reference< css::uno::XComponentContext>& rxContext, const css::uno::Reference< css::frame::XFrame >& rFrame, std::u16string_view rDockingWindowName, bool bVisible );
 void impl_addWindowListeners( const css::uno::Reference< css::uno::XInterface >& xThis, const css::uno::Reference< css::ui::XUIElement >& xUIElement );
 
 }

@@ -607,11 +607,10 @@ void LifecycleProxy::commitStorages()
         });
 }
 
-static void splitPath( std::vector<OUString> &rElems,
-                       const OUString& rPath )
+static void splitPath( std::vector<OUString> &rElems, std::u16string_view rPath )
 {
     for (sal_Int32 i = 0; i >= 0;)
-        rElems.push_back( rPath.getToken( 0, '/', i ) );
+        rElems.push_back( OUString(o3tl::getToken(rPath, 0, '/', i )) );
 }
 
 static uno::Reference< embed::XStorage > LookupStorageAtPath(
@@ -631,7 +630,7 @@ static uno::Reference< embed::XStorage > LookupStorageAtPath(
 
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
         const uno::Reference< embed::XStorage > &xStorage,
-        const OUString& rPath, sal_uInt32 nOpenMode,
+        std::u16string_view rPath, sal_uInt32 nOpenMode,
         LifecycleProxy const &rNastiness )
 {
     std::vector<OUString> aElems;
@@ -641,7 +640,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageAtPath(
 
 uno::Reference< io::XStream > OStorageHelper::GetStreamAtPath(
         const uno::Reference< embed::XStorage > &xParentStorage,
-        const OUString& rPath, sal_uInt32 nOpenMode,
+        std::u16string_view rPath, sal_uInt32 nOpenMode,
         LifecycleProxy const &rNastiness )
 {
     std::vector<OUString> aElems;

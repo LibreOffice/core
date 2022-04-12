@@ -26,6 +26,7 @@
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/util/SortField.hpp>
 
@@ -162,10 +163,10 @@ void SAL_CALL ScXMLSortContext::endFastElement( sal_Int32 /*nElement*/ )
     pDatabaseRangeContext->SetSortSequence(aSortDescriptor);
 }
 
-void ScXMLSortContext::AddSortField(const OUString& sFieldNumber, const OUString& sDataType, std::u16string_view sOrder)
+void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, const OUString& sDataType, std::u16string_view sOrder)
 {
     util::SortField aSortField;
-    aSortField.Field = sFieldNumber.toInt32();
+    aSortField.Field = o3tl::toInt32(sFieldNumber);
     if (IsXMLToken(sOrder, XML_ASCENDING))
         aSortField.SortAscending = true;
     else

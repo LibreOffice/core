@@ -18,6 +18,7 @@
 #include <salhelper/linkhelper.hxx>
 #include <unotools/pathoptions.hxx>
 #include <vcl/IconThemeInfo.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace vcl {
 
@@ -59,7 +60,7 @@ OUString convert_to_absolute_path(const OUString& path)
 IconThemeScanner::IconThemeScanner()
 {}
 
-void IconThemeScanner::ScanDirectoryForIconThemes(const OUString& paths)
+void IconThemeScanner::ScanDirectoryForIconThemes(std::u16string_view paths)
 {
     mFoundIconThemes.clear();
 
@@ -68,7 +69,7 @@ void IconThemeScanner::ScanDirectoryForIconThemes(const OUString& paths)
     sal_Int32 nIndex = 0;
     do
     {
-        aPaths.push_front(paths.getToken(0, ';', nIndex));
+        aPaths.push_front(OUString(o3tl::getToken(paths, 0, ';', nIndex)));
     }
     while (nIndex >= 0);
 
@@ -168,7 +169,7 @@ IconThemeScanner::IconThemeIsInstalled(const OUString& themeId) const
 }
 
 /*static*/ std::shared_ptr<IconThemeScanner>
-IconThemeScanner::Create(const OUString &path)
+IconThemeScanner::Create(std::u16string_view path)
 {
     std::shared_ptr<IconThemeScanner> retval(new IconThemeScanner);
     retval->ScanDirectoryForIconThemes(path);

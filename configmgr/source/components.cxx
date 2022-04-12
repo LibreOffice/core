@@ -51,6 +51,7 @@
 #include <salhelper/thread.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/backupfilehelper.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "additions.hxx"
 #include "components.hxx"
@@ -715,11 +716,11 @@ void Components::parseFiles(
 }
 
 void Components::parseFileList(
-    int layer, FileParser * parseFile, OUString const & urls,
+    int layer, FileParser * parseFile, std::u16string_view urls,
     bool recordAdditions)
 {
     for (sal_Int32 i = 0;;) {
-        OUString url(urls.getToken(0, ' ', i));
+        OUString url(o3tl::getToken(urls, 0, ' ', i));
         if (!url.isEmpty()) {
             Additions * adds = nullptr;
             if (recordAdditions) {

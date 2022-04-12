@@ -63,7 +63,7 @@ public:
 
     // Filter
     std::shared_ptr<const SfxFilter> GetTemplateFilter() const;
-    static OUString GetStandardTemplate( const OUString& rServiceName );
+    static OUString GetStandardTemplate( std::u16string_view rServiceName );
     static void     SetStandardTemplate( const OUString& rServiceName, const OUString& rTemplateName );
     static void     SetSystemTemplate( const OUString& rServiceName, const OUString& rTemplateName );
 

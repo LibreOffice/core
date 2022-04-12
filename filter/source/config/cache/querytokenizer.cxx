@@ -20,23 +20,24 @@
 #include "querytokenizer.hxx"
 
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 
 namespace filter::config{
 
 
-QueryTokenizer::QueryTokenizer(const OUString& sQuery)
+QueryTokenizer::QueryTokenizer(std::u16string_view sQuery)
     : m_bValid(true)
 {
     sal_Int32 token = 0;
     while(token != -1)
     {
-        OUString sToken = sQuery.getToken(0, ':', token);
-        if (!sToken.isEmpty())
+        std::u16string_view sToken = o3tl::getToken(sQuery,0, ':', token);
+        if (!sToken.empty())
         {
             sal_Int32 nIdx{ 0 };
-            const OUString sKey{ sToken.getToken(0, '=', nIdx) };
-            const OUString sVal{ sToken.getToken(0, ':', nIdx) };
+            const OUString sKey{ o3tl::getToken(sToken, 0, '=', nIdx) };
+            const OUString sVal{ o3tl::getToken(sToken, 0, ':', nIdx) };
 
             if (sKey.isEmpty())
                 m_bValid = false;

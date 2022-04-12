@@ -27,6 +27,7 @@
 
 #include <font/FontSelectPattern.hxx>
 #include <font/PhysicalFontFace.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <string_view>
 
@@ -80,9 +81,9 @@ static int FamilyNameMatchValue(FontSelectPattern const& rFSP, std::u16string_vi
     return 0;
 }
 
-static int StyleNameMatchValue(FontMatchStatus const& rStatus, OUString const& rStyle)
+static int StyleNameMatchValue(FontMatchStatus const& rStatus, std::u16string_view rStyle)
 {
-    if (rStatus.mpTargetStyleName && rStyle.equalsIgnoreAsciiCase(*rStatus.mpTargetStyleName))
+    if (rStatus.mpTargetStyleName && o3tl::equalsIgnoreAsciiCase(rStyle, *rStatus.mpTargetStyleName))
         return 120000;
 
     return 0;

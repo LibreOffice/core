@@ -105,13 +105,13 @@ void SwAuthorityFieldType::RemoveField(const SwAuthEntry* pEntry)
     assert(false && "SwAuthorityFieldType::RemoveField: pEntry was not added previously");
 }
 
-SwAuthEntry* SwAuthorityFieldType::AddField(const OUString& rFieldContents)
+SwAuthEntry* SwAuthorityFieldType::AddField(std::u16string_view rFieldContents)
 {
     rtl::Reference<SwAuthEntry> pEntry(new SwAuthEntry);
     sal_Int32 nIdx{ 0 };
     for( sal_Int32 i = 0; i < AUTH_FIELD_END; ++i )
         pEntry->SetAuthorField( static_cast<ToxAuthorityField>(i),
-                        rFieldContents.getToken( 0, TOX_STYLE_DELIMITER, nIdx ));
+                        OUString(o3tl::getToken(rFieldContents, 0, TOX_STYLE_DELIMITER, nIdx )));
 
     for (const auto &rpTemp : m_DataArr)
     {
@@ -450,7 +450,7 @@ void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey  const
 }
 
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
-                                    const OUString& rFieldContents )
+                                    std::u16string_view rFieldContents )
     : SwField(pInitType)
     , m_nTempSequencePos( -1 )
     , m_nTempSequencePosRLHidden( -1 )

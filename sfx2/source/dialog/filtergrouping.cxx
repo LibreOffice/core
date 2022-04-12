@@ -894,7 +894,7 @@ namespace sfx2
     void appendFiltersForSave( TSortedFilterList& _rFilterMatcher,
                                const Reference< XFilterManager >& _rxFilterManager,
                                OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl,
-                               const OUString& _rFactory )
+                               std::u16string_view _rFactory )
     {
         DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForSave: invalid manager!" );
         if ( !_rxFilterManager.is() )

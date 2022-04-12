@@ -59,7 +59,7 @@ struct SwRangeDescriptor;
 class SwSelBoxes;
 namespace com::sun::star::table { class XCell; }
 
-bool FillRangeDescriptor( SwRangeDescriptor &rDesc, const OUString &rCellRangeName );
+bool FillRangeDescriptor( SwRangeDescriptor &rDesc, std::u16string_view rCellRangeName );
 
 class SwChartHelper
 {

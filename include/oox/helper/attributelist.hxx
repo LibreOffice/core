@@ -60,13 +60,13 @@ public:
     static OUString decodeXString( const OUString& rValue );
 
     /** Returns the 32-bit signed integer value from the passed string (decimal). */
-    static sal_Int32    decodeInteger( const OUString& rValue );
+    static sal_Int32    decodeInteger( std::u16string_view rValue );
 
     /** Returns the 32-bit unsigned integer value from the passed string (decimal). */
-    static sal_uInt32   decodeUnsigned( const OUString& rValue );
+    static sal_uInt32   decodeUnsigned( std::u16string_view rValue );
 
     /** Returns the 64-bit signed integer value from the passed string (decimal). */
-    static sal_Int64    decodeHyper( const OUString& rValue );
+    static sal_Int64    decodeHyper( std::u16string_view rValue );
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
     static sal_Int32    decodeIntegerHex( const OUString& rValue );

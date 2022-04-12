@@ -54,7 +54,7 @@ namespace writerfilter::dmapper::ConversionHelper{
     sal_Int16 ConvertNumberingType(const sal_Int32 nFmt, const sal_Int16 nDefault = css::style::NumberingType::ARABIC);
     sal_Int16 ConvertCustomNumberFormat(std::u16string_view rFormat);
 
-    css::util::DateTime ConvertDateStringToDateTime(const OUString& rDateTime);
+    css::util::DateTime ConvertDateStringToDateTime(std::u16string_view rDateTime);
 } // namespace writerfilter::dmapper::ConversionHelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -46,6 +46,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <sfx2/docfile.hxx>
 #include <sfx2/XmlIdRegistry.hxx>
@@ -241,14 +242,14 @@ getURI(uno::Reference< uno::XComponentContext > const & i_xContext)
 
 
 /** would storing the file to a XStorage succeed? */
-static bool isFileNameValid(const OUString & i_rFileName)
+static bool isFileNameValid(std::u16string_view i_rFileName)
 {
-    if (i_rFileName.isEmpty()) return false;
+    if (i_rFileName.empty()) return false;
     if (i_rFileName[0] == '/')        return false; // no absolute paths!
     sal_Int32 idx(0);
     do {
       const OUString segment(
-        i_rFileName.getToken(0, u'/', idx) );
+        o3tl::getToken(i_rFileName, 0, u'/', idx) );
       if (segment.isEmpty()      ||  // no empty segments
           segment == "."         ||  // no . segments
           segment == ".."        ||  // no .. segments

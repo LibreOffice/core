@@ -34,6 +34,7 @@
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 
 #include <unotools/pathoptions.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
@@ -262,16 +263,16 @@ OUString SvxPathSelectDialog::GetPath() const
     return sNewPath.makeStringAndClear();
 }
 
-void SvxMultiPathDialog::SetPath( const OUString& rPath )
+void SvxMultiPathDialog::SetPath( std::u16string_view rPath )
 {
-    if ( !rPath.isEmpty() )
+    if ( !rPath.empty() )
     {
         const sal_Unicode cDelim = SVT_SEARCHPATH_DELIMITER;
         int nCount = 0;
         sal_Int32 nIndex = 0;
         do
         {
-            const OUString sPath = rPath.getToken( 0, cDelim, nIndex );
+            const OUString sPath( o3tl::getToken(rPath, 0, cDelim, nIndex ) );
             OUString sSystemPath;
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;
@@ -292,14 +293,14 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
     SelectHdl_Impl(*m_xRadioLB);
 }
 
-void SvxPathSelectDialog::SetPath(const OUString& rPath)
+void SvxPathSelectDialog::SetPath(std::u16string_view rPath)
 {
-    if ( !rPath.isEmpty() )
+    if ( !rPath.empty() )
     {
         sal_Int32 nIndex = 0;
         do
         {
-            const OUString sPath = rPath.getToken( 0, SVT_SEARCHPATH_DELIMITER, nIndex );
+            const OUString sPath( o3tl::getToken(rPath, 0, SVT_SEARCHPATH_DELIMITER, nIndex ) );
             OUString sSystemPath;
             bool bIsSystemPath =
                 osl::FileBase::getSystemPathFromFileURL(sPath, sSystemPath) == osl::FileBase::E_None;

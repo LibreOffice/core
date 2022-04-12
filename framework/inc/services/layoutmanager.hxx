@@ -175,7 +175,7 @@ namespace framework
 
             //  query
 
-            css::uno::Reference< css::ui::XUIElement > implts_findElement( const OUString& aName );
+            css::uno::Reference< css::ui::XUIElement > implts_findElement( std::u16string_view aName );
 
             bool implts_readWindowStateData( const OUString& rName, UIElement& rElementData );
             void implts_writeWindowStateData( const OUString& rName, const UIElement& rElementData );

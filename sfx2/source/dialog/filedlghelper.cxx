@@ -2125,7 +2125,7 @@ void FileDialogHelper_Impl::saveConfig()
     }
 }
 
-OUString FileDialogHelper_Impl::getInitPath(const OUString& _rFallback,
+OUString FileDialogHelper_Impl::getInitPath(std::u16string_view _rFallback,
                                             const sal_Int32 _nFallbackToken)
 {
     OUString sPath;
@@ -2152,7 +2152,7 @@ OUString FileDialogHelper_Impl::getInitPath(const OUString& _rFallback,
     }
 
     if ( sPath.isEmpty() )
-        sPath = _rFallback.getToken( _nFallbackToken, ' ' );
+        sPath = o3tl::getToken(_rFallback, _nFallbackToken, ' ' );
 
     // check if the path points to a valid (accessible) directory
     bool bValid = false;

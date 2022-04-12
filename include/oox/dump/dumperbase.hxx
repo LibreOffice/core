@@ -320,26 +320,26 @@ public:
 
     static void         appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx );
 
-    static OUString getToken( const OUString& rData, sal_Int32& rnPos, sal_Unicode cSep = OOX_DUMP_LISTSEP );
+    static std::u16string_view getToken( std::u16string_view rData, sal_Int32& rnPos, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
     /** Encloses the passed string with the passed characters. Uses cOpen, if cClose is NUL. */
     static void         enclose( OUStringBuffer& rStr, sal_Unicode cOpen, sal_Unicode cClose = '\0' );
 
     // string conversion ------------------------------------------------------
 
-    static OUString trimSpaces( const OUString& rStr );
+    static std::u16string_view trimSpaces( std::u16string_view rStr );
     static OUString trimTrailingNul( const OUString& rStr );
 
     static OString convertToUtf8( std::u16string_view rStr );
     static DataType     convertToDataType( std::u16string_view rStr );
     static FormatType   convertToFormatType( std::u16string_view rStr );
 
-    static bool         convertFromDec( sal_Int64& ornData, const OUString& rData );
-    static bool         convertFromHex( sal_Int64& ornData, const OUString& rData );
+    static bool         convertFromDec( sal_Int64& ornData, std::u16string_view rData );
+    static bool         convertFromHex( sal_Int64& ornData, std::u16string_view rData );
 
-    static bool         convertStringToInt( sal_Int64& ornData, const OUString& rData );
-    static bool         convertStringToDouble( double& orfData, const OUString& rData );
-    static bool         convertStringToBool( const OUString& rData );
+    static bool         convertStringToInt( sal_Int64& ornData, std::u16string_view rData );
+    static bool         convertStringToDouble( double& orfData, std::u16string_view rData );
+    static bool         convertStringToBool( std::u16string_view rData );
 
     static OUStringPair convertStringToPair( const OUString& rString, sal_Unicode cSep = '=' );
 

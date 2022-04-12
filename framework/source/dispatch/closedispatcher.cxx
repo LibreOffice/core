@@ -40,6 +40,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <unotools/moduleoptions.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 
@@ -56,7 +57,7 @@ const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
 CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::uno::XComponentContext >& rxContext ,
                                  const css::uno::Reference< css::frame::XFrame >&          xFrame ,
-                                 const OUString&                                           sTarget)
+                                 std::u16string_view                                       sTarget)
     : m_xContext         (rxContext                                       )
     , m_aAsyncCallback(
         new vcl::EventPoster(LINK(this, CloseDispatcher, impl_asyncCallback)))
@@ -558,12 +559,12 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
 }
 
 css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
-                                                                                              const OUString&                           sTarget)
+                                                                                              std::u16string_view                           sTarget)
 {
-    if (sTarget.equalsIgnoreAsciiCase("_self"))
+    if (o3tl::equalsIgnoreAsciiCase(sTarget, u"_self"))
         return xFrame;
 
-    OSL_ENSURE(sTarget.isEmpty(), "CloseDispatch used for unexpected target. Magic things will happen now .-)");
+    OSL_ENSURE(sTarget.empty(), "CloseDispatch used for unexpected target. Magic things will happen now .-)");
 
     css::uno::Reference< css::frame::XFrame > xTarget = xFrame;
     while(true)

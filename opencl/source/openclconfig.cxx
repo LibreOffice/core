@@ -69,27 +69,27 @@ css::uno::Sequence<OUString> SetOfImplMatcherToStringSequence(const OpenCLConfig
     return result;
 }
 
-OUString getToken(const OUString& string, sal_Int32& index)
+OUString getToken(std::u16string_view string, sal_Int32& index)
 {
-    OUString token(string.getToken(0, '/', index));
+    std::u16string_view token(o3tl::getToken(string, 0, '/', index));
     OUStringBuffer result;
     sal_Int32 i(0);
-    sal_Int32 p;
-    while ((p = token.indexOf('%', i)) >= 0)
+    size_t p;
+    while ((p = token.find('%', i)) != std::u16string_view::npos)
     {
-        if (p > i)
-            result.append(token.subView(i, p - i));
-        if (p < token.getLength() - 2)
+        if (static_cast<sal_Int32>(p) > i)
+            result.append(token.substr(i, p - i));
+        if (p < token.size() - 2)
         {
-            result.append(sal_Unicode(o3tl::toInt32(token.subView(p+1, 2), 16)));
+            result.append(sal_Unicode(o3tl::toInt32(token.substr(p+1, 2), 16)));
             i = p + 3;
         }
         else
         {
-            i = token.getLength();
+            i = token.size();
         }
     }
-    result.append(token.subView(i));
+    result.append(token.substr(i));
 
     return result.makeStringAndClear();
 }

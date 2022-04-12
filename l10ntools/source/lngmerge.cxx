@@ -134,14 +134,14 @@ bool LngParser::isNextGroup(OString &sGroup_out, std::string_view sLine_in)
     return lcl_isNextGroup(sGroup_out, o3tl::trim(sLine_in));
 }
 
-void LngParser::ReadLine(const OString &rLine_in,
+void LngParser::ReadLine(std::string_view rLine_in,
         OStringHashMap &rText_inout)
 {
-    if (!rLine_in.match(" *") && !rLine_in.match("/*"))
+    if (!o3tl::starts_with(rLine_in, " *") && !o3tl::starts_with(rLine_in, "/*"))
     {
         OString sLang(o3tl::trim(o3tl::getToken(rLine_in, 0, '=')));
         if (!sLang.isEmpty()) {
-            OString sText(rLine_in.getToken(1, '"'));
+            OString sText(o3tl::getToken(rLine_in,1, '"'));
             rText_inout[sLang] = sText;
         }
     }
@@ -150,13 +150,13 @@ void LngParser::ReadLine(const OString &rLine_in,
 void LngParser::Merge(
     const OString &rPOFile,
     const OString &rDestinationFile,
-    const OString &rLanguage )
+    std::string_view rLanguage )
 {
     std::ofstream aDestination(
         rDestinationFile.getStr(), std::ios_base::out | std::ios_base::trunc);
 
     MergeDataFile aMergeDataFile( rPOFile, sSource, false, true );
-    if( rLanguage.equalsIgnoreAsciiCase("ALL") )
+    if( o3tl::equalsIgnoreAsciiCase(rLanguage, "ALL") )
         aLanguages = aMergeDataFile.GetLanguages();
 
     size_t nPos = 0;

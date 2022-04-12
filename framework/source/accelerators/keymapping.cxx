@@ -21,6 +21,7 @@
 
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
+#include <o3tl/string_view.hxx>
 
 namespace framework
 {
@@ -186,10 +187,10 @@ OUString KeyMapping::mapCodeToIdentifier(sal_uInt16 nCode)
     return OUString::number(nCode);
 }
 
-bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdentifier,
+bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(std::u16string_view sIdentifier,
                                                                 sal_uInt16&      rCode      )
 {
-    sal_Int32 nCode = sIdentifier.toInt32();
+    sal_Int32 nCode = o3tl::toInt32(sIdentifier);
     if (nCode > 0)
     {
         rCode = static_cast<sal_uInt16>(nCode);
@@ -199,7 +200,7 @@ bool KeyMapping::impl_st_interpretIdentifierAsPureKeyCode(const OUString& sIdent
     // 0 is normally an error of the called method toInt32() ...
     // But we must be aware, that the identifier is "0"!
     rCode = 0;
-    return sIdentifier == "0";
+    return sIdentifier == u"0";
 }
 
 } // namespace framework

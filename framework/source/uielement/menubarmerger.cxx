@@ -20,6 +20,7 @@
 #include <uielement/menubarmerger.hxx>
 #include <framework/addonsoptions.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace ::com::sun::star;
 
@@ -62,7 +63,7 @@ bool MenuBarMerger::IsCorrectContext(
 }
 
 void MenuBarMerger::RetrieveReferencePath(
-    const OUString& rReferencePathString,
+    std::u16string_view rReferencePathString,
     ::std::vector< OUString >& rReferencePath )
 {
     const char aDelimiter = '\\';
@@ -71,7 +72,7 @@ void MenuBarMerger::RetrieveReferencePath(
     sal_Int32 nIndex( 0 );
     do
     {
-        OUString aToken = rReferencePathString.getToken( 0, aDelimiter, nIndex );
+        OUString aToken( o3tl::getToken(rReferencePathString, 0, aDelimiter, nIndex ) );
         if ( !aToken.isEmpty() )
             rReferencePath.push_back( aToken );
     }
@@ -256,9 +257,9 @@ bool MenuBarMerger::ReplaceMenuItem(
 bool MenuBarMerger::RemoveMenuItems(
     Menu*                     pMenu,
     sal_uInt16                nPos,
-    const OUString&    rMergeCommandParameter )
+    std::u16string_view    rMergeCommandParameter )
 {
-    const sal_uInt16 nParam( sal_uInt16( rMergeCommandParameter.toInt32() ));
+    const sal_uInt16 nParam( sal_uInt16( o3tl::toInt32(rMergeCommandParameter) ));
     sal_uInt16       nCount = std::max( nParam, sal_uInt16(1) );
 
     sal_uInt16 i = 0;
@@ -276,7 +277,7 @@ bool MenuBarMerger::ProcessMergeOperation(
     sal_uInt16                nPos,
     sal_uInt16&               nItemId,
     std::u16string_view rMergeCommand,
-    const OUString&    rMergeCommandParameter,
+    std::u16string_view rMergeCommandParameter,
     const OUString&    rModuleIdentifier,
     const AddonMenuContainer& rAddonMenuItems )
 {

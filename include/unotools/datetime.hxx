@@ -49,7 +49,7 @@ namespace utl
 
     UNOTOOLS_DLLPUBLIC OUString toISO8601(const css::util::DateTime& _rDateTime);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseDateTime(const OUString &i_rIn, css::util::DateTime& o_rDateTime);
-    UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(const OUString &i_rIn, css::util::Date& o_rDate);
+    UNOTOOLS_DLLPUBLIC bool            ISO8601parseDate(std::u16string_view i_rIn, css::util::Date& o_rDate);
     UNOTOOLS_DLLPUBLIC bool            ISO8601parseTime(std::u16string_view i_rIn, css::util::Time& o_Time);
 
 }   // namespace utl

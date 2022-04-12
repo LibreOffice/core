@@ -63,6 +63,7 @@
 
 #include <rtl/ref.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 
@@ -482,7 +483,7 @@ void LayoutManager::implts_toggleFloatingUIElementsVisibility( bool bActive )
         pToolbarManager->setFloatingToolbarsVisibility( bActive );
 }
 
-uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( const OUString& aName )
+uno::Reference< ui::XUIElement > LayoutManager::implts_findElement( std::u16string_view aName )
 {
     OUString aElementType;
     OUString aElementName;
@@ -1880,7 +1881,7 @@ sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ )
 sal_Bool SAL_CALL LayoutManager::floatWindow( const OUString& aName )
 {
     bool bResult( false );
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager*             pToolbarManager = m_xToolbarManager.get();
@@ -1899,7 +1900,7 @@ sal_Bool SAL_CALL LayoutManager::floatWindow( const OUString& aName )
 sal_Bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
 {
     bool bResult( false );
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager*             pToolbarManager = m_xToolbarManager.get();
@@ -1918,7 +1919,7 @@ sal_Bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
 sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
 {
     bool bResult( false );
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager*             pToolbarManager = m_xToolbarManager.get();
@@ -1936,7 +1937,7 @@ sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
 
 void SAL_CALL LayoutManager::setElementSize( const OUString& aName, const awt::Size& aSize )
 {
-    if ( !getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( !o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
         return;
 
     SolarMutexClearableGuard aReadLock;
@@ -1953,7 +1954,7 @@ void SAL_CALL LayoutManager::setElementSize( const OUString& aName, const awt::S
 
 void SAL_CALL LayoutManager::setElementPos( const OUString& aName, const awt::Point& aPos )
 {
-    if ( !getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( !o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
         return;
 
     SolarMutexClearableGuard aReadLock;
@@ -1970,7 +1971,7 @@ void SAL_CALL LayoutManager::setElementPos( const OUString& aName, const awt::Po
 
 void SAL_CALL LayoutManager::setElementPosSize( const OUString& aName, const awt::Point& aPos, const awt::Size& aSize )
 {
-    if ( !getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( !o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
         return;
 
     SolarMutexClearableGuard aReadLock;
@@ -2061,7 +2062,7 @@ sal_Bool SAL_CALL LayoutManager::isElementVisible( const OUString& aName )
 
 sal_Bool SAL_CALL LayoutManager::isElementFloating( const OUString& aName )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
@@ -2076,7 +2077,7 @@ sal_Bool SAL_CALL LayoutManager::isElementFloating( const OUString& aName )
 
 sal_Bool SAL_CALL LayoutManager::isElementDocked( const OUString& aName )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
@@ -2091,7 +2092,7 @@ sal_Bool SAL_CALL LayoutManager::isElementDocked( const OUString& aName )
 
 sal_Bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
@@ -2106,7 +2107,7 @@ sal_Bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
 
 awt::Size SAL_CALL LayoutManager::getElementSize( const OUString& aName )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();
@@ -2121,7 +2122,7 @@ awt::Size SAL_CALL LayoutManager::getElementSize( const OUString& aName )
 
 awt::Point SAL_CALL LayoutManager::getElementPos( const OUString& aName )
 {
-    if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
+    if ( o3tl::equalsIgnoreAsciiCase(getElementTypeFromResourceURL( aName ), UIRESOURCETYPE_TOOLBAR ))
     {
         SolarMutexClearableGuard aReadLock;
         ToolbarLayoutManager* pToolbarManager = m_xToolbarManager.get();

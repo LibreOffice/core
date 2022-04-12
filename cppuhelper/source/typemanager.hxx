@@ -47,7 +47,7 @@ public:
     using TypeManager_Base::acquire;
     using TypeManager_Base::release;
 
-    void init(OUString const & rdbUris);
+    void init(std::u16string_view rdbUris);
 
     css::uno::Any find(OUString const & name);
 
