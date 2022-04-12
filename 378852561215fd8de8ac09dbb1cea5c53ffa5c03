@@ -16,6 +16,24 @@
       "message": "Fits nicely with how tooltips behave e.g. with Kate or Okular, but some tooltips get lost, e.g. the color names are no longer shown when hovering over colors in the \"Character Highlighting Color\" popup in Writer\u0027s formatting toolbar.",
       "revId": "378852561215fd8de8ac09dbb1cea5c53ffa5c03",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc802053_944d5574",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-12T10:36:46Z",
+      "side": 1,
+      "message": "I\u0027m not really eager to add more workarounds for our fake popup implementation, but here we go. This seem to work for X11 and Wayland.",
+      "parentUuid": "8e0e0c95_bb908b9a",
+      "revId": "378852561215fd8de8ac09dbb1cea5c53ffa5c03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
