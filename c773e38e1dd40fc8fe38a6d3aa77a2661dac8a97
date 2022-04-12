@@ -16,6 +16,40 @@
       "message": "This is the \"proof of concept\" patch.\n\n The DOC import is also handled in the next follow-up patch. The three other similar situations are dealt with separately in follow-up patches.Finally, the entire idea of writing out the field name as plain text instead of the field contents is handled at the end (after handling all the existing unit test examples that hit bWriteExpand).",
       "revId": "c773e38e1dd40fc8fe38a6d3aa77a2661dac8a97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be13a0b5_2d036622",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-12T09:46:36Z",
+      "side": 1,
+      "message": "Some idle wondering in the inline comment, but otherwise this looks good to me.",
+      "revId": "c773e38e1dd40fc8fe38a6d3aa77a2661dac8a97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be78219a_28e0ac81",
+        "filename": "sw/source/filter/ww8/ww8atr.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2940,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-12T09:46:36Z",
+      "side": 1,
+      "message": "Do we have UI to turn a fixed field into a non-fixed one? If I do insert -\u003e fields -\u003e first author, then trigger the edit fields dialog from the context menu, then I do get a \"fixed content\" checkbox on the UI, but it seems it\u0027s not available for author fields.\n\nI agree it\u0027s good to import these fields as fixed to match what Word does, but it would be nice to have UI to turn these fields into an updating one if a power user wants that.",
+      "revId": "c773e38e1dd40fc8fe38a6d3aa77a2661dac8a97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
