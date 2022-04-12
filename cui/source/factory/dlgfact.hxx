@@ -134,6 +134,19 @@ public:
     virtual bool StartExecuteAsync(AsyncContext& rCtx) override;
 };
 
+class CuiAbstractWidgetTestController_Impl : public VclAbstractDialog
+{
+    std::shared_ptr<weld::GenericDialogController> m_xDlg;
+
+public:
+    explicit CuiAbstractWidgetTestController_Impl(std::shared_ptr<weld::GenericDialogController> p)
+        : m_xDlg(std::move(p))
+    {
+    }
+    virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext& rCtx) override;
+};
+
 class CuiAbstractSingleTabController_Impl : public SfxAbstractDialog
 {
     std::unique_ptr<SfxSingleTabDialogController> m_xDlg;
@@ -952,6 +965,8 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
+
+    virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* pParent) override;
 

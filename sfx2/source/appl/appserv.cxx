@@ -670,6 +670,15 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             bDone = true;
             break;
         }
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_WIDGET_TEST_DIALOG:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateWidgetTestDialog(rReq.GetFrameWeld()));
+            pDlg->StartExecuteAsync(nullptr);
+            bDone = true;
+            break;
+        }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
