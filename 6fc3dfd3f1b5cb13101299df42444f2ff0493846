@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2179459_bf0697ae",
+        "filename": "configmgr/source/data.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-12T07:16:26Z",
+      "side": 1,
+      "message": "that is surely a job for clang-format, no?",
+      "parentUuid": "ecc702cb_38e4aaa2",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b050b287_04666644",
         "filename": "configmgr/source/data.cxx",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2022-04-11T16:13:51Z",
       "side": 1,
       "message": "I don\u0027t think such odd mixtures of a string_view on the one hand and sal_Int32 indexes that are supposed to point into it on the other hand are useful",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51c871eb_3460a3ed",
+        "filename": "configmgr/source/data.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-12T07:16:26Z",
+      "side": 1,
+      "message": "unfortunately, we have out parameters in getToken (i.e. the \"sal_Int32\u0026\"), which makes it hard to use size_t everywhere we convert to string_view",
+      "parentUuid": "b050b287_04666644",
       "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
