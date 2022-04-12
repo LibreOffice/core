@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4b895bf4_1d2e4ac0",
+        "filename": "configmgr/source/data.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-12T07:19:52Z",
+      "side": 1,
+      "message": "how is clang-format relevant here?",
+      "parentUuid": "c2179459_bf0697ae",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b050b287_04666644",
         "filename": "configmgr/source/data.cxx",
         "patchSetId": 2
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "unfortunately, we have out parameters in getToken (i.e. the \"sal_Int32\u0026\"), which makes it hard to use size_t everywhere we convert to string_view",
       "parentUuid": "b050b287_04666644",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "480647a8_05be5660",
+        "filename": "configmgr/source/data.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-12T07:19:52Z",
+      "side": 1,
+      "message": "that\u0027s why I tried to avoid such half-baked mass conversions, by excluding getLength from loplugin:stringviewparam",
+      "parentUuid": "51c871eb_3460a3ed",
       "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
