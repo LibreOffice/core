@@ -152,6 +152,15 @@ void CairoTextRender::DrawTextLayout(const GenericSalLayout& rLayout, const SalG
     if (nWidth == 0 || nHeight == 0)
         return;
 
+    if (nHeight > SAL_MAX_UINT16)
+    {
+        // as seen with freetype 2.11.0, so cairo surface status is "fail"
+        // ("error occurred in libfreetype") and no further operations are
+        // executed, so this error then leads to later leaks
+        SAL_WARN("vcl", "rendering text would fail with height: " << nHeight);
+        return;
+    }
+
     int nRatio = nWidth * 10 / nHeight;
     if (FreetypeFont::AlmostHorizontalDrainsRenderingPool(nRatio, rFSD))
         return;
