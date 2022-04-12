@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13694de6_a03142ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-12T13:37:37Z",
+      "side": 1,
+      "message": "Why? Doesn\u0027t having the required version mean inability to build?",
+      "revId": "2da30aa25d7832c0c9750322c28cec4f60f87747",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
