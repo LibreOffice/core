@@ -148,7 +148,7 @@ public:
  * the HDC changes (setHDC) or the SalGraphics is destructed. So think of the
  * HDC in terms of Rust's Borrowing semantics.
  */
-class WinSalGraphics : public SalGraphics
+class WinSalGraphics : public SalGraphicsAutoDelegateToImpl
 {
     friend class WinSalGraphicsImpl;
     friend class ScopedFont;
@@ -205,11 +205,6 @@ public:
     };
 
 public:
-
-    HWND gethWnd();
-
-
-public:
     explicit WinSalGraphics(WinSalGraphics::Type eType, bool bScreen, HWND hWnd,
                             SalGeometryProvider *pProvider);
     virtual ~WinSalGraphics() override;
@@ -220,62 +215,9 @@ public:
     bool isWindow() const;
     bool isScreen() const;
 
+    HWND gethWnd();
     void setHWND(HWND hWnd);
     void Flush();
-
-protected:
-    virtual bool        setClipRegion( const vcl::Region& ) override;
-    // draw --> LineColor and FillColor and RasterOp and ClipRegion
-    virtual void        drawPixel( tools::Long nX, tools::Long nY ) override;
-    virtual void        drawPixel( tools::Long nX, tools::Long nY, Color nColor ) override;
-    virtual void        drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 ) override;
-    virtual void        drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-    virtual void        drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry ) override;
-    virtual void        drawPolygon( sal_uInt32 nPoints, const Point* pPtAry ) override;
-    virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point** pPtAry ) override;
-    virtual bool        drawPolyPolygon(
-        const basegfx::B2DHomMatrix& rObjectToDevice,
-        const basegfx::B2DPolyPolygon&,
-        double fTransparency) override;
-    virtual bool        drawPolyLine(
-        const basegfx::B2DHomMatrix& rObjectToDevice,
-        const basegfx::B2DPolygon&,
-        double fTransparency,
-        double fLineWidth,
-        const std::vector< double >* pStroke, // MM01
-        basegfx::B2DLineJoin,
-        css::drawing::LineCap,
-        double fMiterMinimumAngle,
-        bool bPixelSnapHairline) override;
-    virtual bool        drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override;
-    virtual bool        drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry ) override;
-    virtual bool        drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const Point* const* pPtAry, const PolyFlags* const* pFlgAry ) override;
-    virtual bool        drawGradient( const tools::PolyPolygon&, const Gradient& ) override;
-    virtual bool        implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient) override;
-
-    // CopyArea --> No RasterOp, but ClipRegion
-    virtual void        copyArea( tools::Long nDestX, tools::Long nDestY, tools::Long nSrcX, tools::Long nSrcY, tools::Long nSrcWidth,
-                                  tools::Long nSrcHeight, bool bWindowInvalidate ) override;
-
-    // CopyBits and DrawBitmap --> RasterOp and ClipRegion
-    // CopyBits() --> pSrcGraphics == NULL, then CopyBits on same Graphics
-    virtual void        copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics ) override;
-    virtual void        drawBitmap( const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap ) override;
-    virtual void        drawBitmap( const SalTwoRect& rPosAry,
-                                    const SalBitmap& rSalBitmap,
-                                    const SalBitmap& rTransparentBitmap ) override;
-    virtual void        drawMask( const SalTwoRect& rPosAry,
-                                  const SalBitmap& rSalBitmap,
-                                  Color nMaskColor ) override;
-
-    virtual std::shared_ptr<SalBitmap> getBitmap( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight ) override;
-    virtual Color       getPixel( tools::Long nX, tools::Long nY ) override;
-
-    // invert --> ClipRegion (only Windows or VirDevs)
-    virtual void        invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags) override;
-    virtual void        invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nFlags ) override;
-
-    virtual bool        drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize ) override;
 
     // native widget rendering methods that require mirroring
 protected:
@@ -288,34 +230,8 @@ protected:
     virtual bool        getNativeControlRegion( ControlType nType, ControlPart nPart, const tools::Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const OUString& aCaption,
                                                 tools::Rectangle &rNativeBoundingRegion, tools::Rectangle &rNativeContentRegion ) override;
-
-public:
-    virtual bool        blendBitmap( const SalTwoRect&,
-                                     const SalBitmap& rBitmap ) override;
-
-    virtual bool        blendAlphaBitmap( const SalTwoRect&,
-                                          const SalBitmap& rSrcBitmap,
-                                          const SalBitmap& rMaskBitmap,
-                                          const SalBitmap& rAlphaBitmap ) override;
-
-    virtual bool        drawAlphaBitmap( const SalTwoRect&,
-                                         const SalBitmap& rSourceBitmap,
-                                         const SalBitmap& rAlphaBitmap ) override;
-    virtual bool       drawTransformedBitmap(
-                           const basegfx::B2DPoint& rNull,
-                           const basegfx::B2DPoint& rX,
-                           const basegfx::B2DPoint& rY,
-                           const SalBitmap& rSourceBitmap,
-                           const SalBitmap* pAlphaBitmap,
-                           double fAlpha) override;
-
-    virtual bool       hasFastDrawTransformedBitmap() const override;
-
-    virtual bool       drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt8 nTransparency ) override;
-
 private:
     // local helpers
-
     void DrawTextLayout(const GenericSalLayout&, HDC, bool bUseDWrite, bool bRenderingModeNatural);
 
 public:
@@ -323,29 +239,6 @@ public:
 
     // get device resolution
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-    // get the depth of the device
-    virtual sal_uInt16          GetBitCount() const override;
-    // get the width of the device
-    virtual tools::Long            GetGraphicsWidth() const override;
-
-    // set the clip region to empty
-    virtual void            ResetClipRegion() override;
-
-    // set the line color to transparent (= don't draw lines)
-    virtual void            SetLineColor() override;
-    // set the line color to a specific color
-    virtual void            SetLineColor( Color nColor ) override;
-    // set the fill color to transparent (= don't fill)
-    virtual void            SetFillColor() override;
-    // set the fill color to a specific color, shapes will be
-    // filled accordingly
-    virtual void            SetFillColor( Color nColor ) override;
-    // enable/disable XOR drawing
-    virtual void            SetXORMode( bool bSet, bool ) override;
-    // set line color for raster operations
-    virtual void            SetROPLineColor( SalROPColor nROPColor ) override;
-    // set fill color for raster operations
-    virtual void            SetROPFillColor( SalROPColor nROPColor ) override;
     // set the text color to a specific color
     virtual void            SetTextColor( Color nColor ) override;
     // set the font
@@ -398,12 +291,17 @@ public:
                             GetTextLayout(int nFallbackLevel) override;
     virtual void            DrawTextLayout( const GenericSalLayout& ) override;
 
-    virtual bool            supportsOperation( OutDevSupportType ) const override;
-
     virtual SystemGraphicsData GetGraphicsData() const override;
+
+    bool commonDrawEPS(tools::Long nX, tools::Long nY,
+                       tools::Long nWidth, tools::Long nHeight,
+                       void* pPtr, sal_uInt32 nSize);
 
     /// Update settings based on the platform values
     static void updateSettingsNative( AllSettings& rSettings );
+
+    /// convert incompatible SalBitmap instances
+    static void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap);
 };
 
 // Init/Deinit Graphics

@@ -434,4 +434,45 @@ void WinSkiaSalGraphicsImpl::ClearNativeControlCache()
     data->m_pSkiaControlsCache.reset();
 }
 
+void WinSkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
+{
+    if (dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
+    {
+        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
+        WinSalGraphics::convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
+        SkiaSalGraphicsImpl::drawBitmap(rPosAry, *pWinSalBitmap);
+    }
+    else
+    {
+        SkiaSalGraphicsImpl::drawBitmap(rPosAry, rSalBitmap);
+    }
+}
+
+void WinSkiaSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSSalBitmap,
+                                        const SalBitmap& rSTransparentBitmap)
+{
+    if (dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr)
+    {
+        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSSalBitmap);
+        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
+
+        std::unique_ptr<WinSalBitmap> pWinTransparentSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstTransparentBitmap = const_cast<SalBitmap&>(rSTransparentBitmap);
+        WinSalGraphics::convertToWinSalBitmap(rConstTransparentBitmap, *pWinTransparentSalBitmap);
+        SkiaSalGraphicsImpl::drawBitmap(rPosAry, *pWinSalBitmap, *pWinTransparentSalBitmap);
+    }
+    else
+    {
+        SkiaSalGraphicsImpl::drawBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap);
+    }
+}
+
+bool WinSkiaSalGraphicsImpl::drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth,
+                                     tools::Long nHeight, void* pPtr, sal_uInt32 nSize)
+{
+    return mWinParent.commonDrawEPS(nX, nY, nWidth, nHeight, pPtr, nSize);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

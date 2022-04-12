@@ -43,26 +43,6 @@
 #include <skia/salbmp.hxx>
 #endif
 
-
-bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
-{
-    return mpImpl->supportsOperation(eType);
-}
-
-void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
-{
-    mpImpl->copyBits( rPosAry, pSrcGraphics );
-}
-
-void WinSalGraphics::copyArea( tools::Long nDestX, tools::Long nDestY,
-                            tools::Long nSrcX, tools::Long nSrcY,
-                            tools::Long nSrcWidth, tools::Long nSrcHeight,
-                            bool bWindowInvalidate )
-{
-    mpImpl->copyArea( nDestX, nDestY, nSrcX, nSrcY,
-            nSrcWidth, nSrcHeight, bWindowInvalidate );
-}
-
 namespace
 {
 
@@ -103,7 +83,9 @@ public:
     }
 };
 
-void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
+}
+
+void WinSalGraphics::convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
 {
     BitmapPalette aBitmapPalette;
 #if HAVE_FEATURE_SKIA
@@ -128,11 +110,16 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     std::unique_ptr<ColorScanlineConverter> pConverter;
 
     if (RemoveScanline(pRead->mnFormat) == ScanlineFormat::N24BitTcRgb)
+    {
         pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N24BitTcRgb,
                                                     3, pRead->mnScanlineSize));
+    }
     else if (RemoveScanline(pRead->mnFormat) == ScanlineFormat::N32BitTcRgba)
+    {
         pConverter.reset(new ColorScanlineConverter(ScanlineFormat::N32BitTcRgba,
                                                     4, pRead->mnScanlineSize));
+    }
+
     if (pConverter)
     {
         for (tools::Long y = 0; y < pRead->mnHeight; y++)
@@ -154,87 +141,6 @@ void convertToWinSalBitmap(SalBitmap& rSalBitmap, WinSalBitmap& rWinSalBitmap)
     rWinSalBitmap.ReleaseBuffer(pWrite, BitmapAccessMode::Write);
 
     rSalBitmap.ReleaseBuffer(pRead, BitmapAccessMode::Read);
-}
-
-} // end anonymous namespace
-
-void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
-{
-    if (dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr
-#if HAVE_FEATURE_SKIA
-        && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
-#endif
-        )
-    {
-        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
-        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
-        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
-        mpImpl->drawBitmap(rPosAry, *pWinSalBitmap);
-    }
-    else
-    {
-        mpImpl->drawBitmap(rPosAry, rSalBitmap);
-    }
-}
-
-void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
-                              const SalBitmap& rSSalBitmap,
-                              const SalBitmap& rSTransparentBitmap )
-{
-    if (dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr
-#if HAVE_FEATURE_SKIA
-        && dynamic_cast<WinSkiaSalGraphicsImpl*>(mpImpl.get()) == nullptr
-#endif
-        )
-    {
-        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
-        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSSalBitmap);
-        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
-
-
-        std::unique_ptr<WinSalBitmap> pWinTransparentSalBitmap(new WinSalBitmap());
-        SalBitmap& rConstTransparentBitmap = const_cast<SalBitmap&>(rSTransparentBitmap);
-        convertToWinSalBitmap(rConstTransparentBitmap, *pWinTransparentSalBitmap);
-
-        mpImpl->drawBitmap(rPosAry, *pWinSalBitmap, *pWinTransparentSalBitmap);
-    }
-    else
-    {
-        mpImpl->drawBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap);
-    }
-}
-
-bool WinSalGraphics::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
-                                    tools::Long nHeight, sal_uInt8 nTransparency )
-{
-    return mpImpl->drawAlphaRect( nX, nY, nWidth, nHeight, nTransparency );
-}
-
-void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
-                            const SalBitmap& rSSalBitmap,
-                            Color nMaskColor )
-{
-    mpImpl->drawMask( rPosAry, rSSalBitmap, nMaskColor );
-}
-
-std::shared_ptr<SalBitmap> WinSalGraphics::getBitmap( tools::Long nX, tools::Long nY, tools::Long nDX, tools::Long nDY )
-{
-    return mpImpl->getBitmap( nX, nY, nDX, nDY );
-}
-
-Color WinSalGraphics::getPixel( tools::Long nX, tools::Long nY )
-{
-    return mpImpl->getPixel( nX, nY );
-}
-
-void WinSalGraphics::invert( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, SalInvert nFlags )
-{
-    mpImpl->invert( nX, nY, nWidth, nHeight, nFlags );
-}
-
-void WinSalGraphics::invert( sal_uInt32 nPoints, const Point* pPtAry, SalInvert nSalFlags )
-{
-    mpImpl->invert( nPoints, pPtAry, nSalFlags );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

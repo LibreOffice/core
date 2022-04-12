@@ -61,6 +61,19 @@ public:
 
     static void prepareSkia();
 
+    // draw method overrides for Win specifics
+    virtual bool drawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
+                         void* pPtr, sal_uInt32 nSize) override;
+
+    virtual void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap) override;
+
+    virtual void drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSSalBitmap,
+                            const SalBitmap& rSTransparentBitmap) override;
+
+private:
+    using SkiaSalGraphicsImpl::drawEPS;
+    using SkiaSalGraphicsImpl::drawBitmap;
+
 protected:
     virtual void createWindowSurfaceInternal(bool forceRaster = false) override;
     static sk_sp<SkTypeface> createDirectWriteTypeface(HDC hdc, HFONT hfont);

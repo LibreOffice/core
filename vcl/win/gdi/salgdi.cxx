@@ -755,127 +755,10 @@ void WinSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
         rDPIX = rDPIY = 600;
 }
 
-sal_uInt16 WinSalGraphics::GetBitCount() const
-{
-    return mpImpl->GetBitCount();
-}
-
-tools::Long WinSalGraphics::GetGraphicsWidth() const
-{
-    return mpImpl->GetGraphicsWidth();
-}
-
 void WinSalGraphics::Flush()
 {
     if(WinSalGraphicsImplBase* impl = dynamic_cast<WinSalGraphicsImplBase*>(GetImpl()))
         impl->Flush();
-}
-
-void WinSalGraphics::ResetClipRegion()
-{
-    mpImpl->ResetClipRegion();
-}
-
-bool WinSalGraphics::setClipRegion( const vcl::Region& i_rClip )
-{
-    return mpImpl->setClipRegion( i_rClip );
-}
-
-void WinSalGraphics::SetLineColor()
-{
-    mpImpl->SetLineColor();
-}
-
-void WinSalGraphics::SetLineColor( Color nColor )
-{
-    mpImpl->SetLineColor( nColor );
-}
-
-void WinSalGraphics::SetFillColor()
-{
-    mpImpl->SetFillColor();
-}
-
-void WinSalGraphics::SetFillColor( Color nColor )
-{
-    mpImpl->SetFillColor( nColor );
-}
-
-void WinSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
-{
-    mpImpl->SetXORMode( bSet, bInvertOnly );
-}
-
-void WinSalGraphics::SetROPLineColor( SalROPColor nROPColor )
-{
-    mpImpl->SetROPLineColor( nROPColor );
-}
-
-void WinSalGraphics::SetROPFillColor( SalROPColor nROPColor )
-{
-    mpImpl->SetROPFillColor( nROPColor );
-}
-
-void WinSalGraphics::drawPixel( tools::Long nX, tools::Long nY )
-{
-    mpImpl->drawPixel( nX, nY );
-}
-
-void WinSalGraphics::drawPixel( tools::Long nX, tools::Long nY, Color nColor )
-{
-    mpImpl->drawPixel( nX, nY, nColor );
-}
-
-void WinSalGraphics::drawLine( tools::Long nX1, tools::Long nY1, tools::Long nX2, tools::Long nY2 )
-{
-    mpImpl->drawLine( nX1, nY1, nX2, nY2 );
-}
-
-void WinSalGraphics::drawRect( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight )
-{
-    mpImpl->drawRect( nX, nY, nWidth, nHeight );
-}
-
-void WinSalGraphics::drawPolyLine( sal_uInt32 nPoints, const Point* pPtAry )
-{
-    mpImpl->drawPolyLine( nPoints, pPtAry );
-}
-
-void WinSalGraphics::drawPolygon( sal_uInt32 nPoints, const Point* pPtAry )
-{
-    mpImpl->drawPolygon( nPoints, pPtAry );
-}
-
-void WinSalGraphics::drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                   const Point** pPtAry )
-{
-    mpImpl->drawPolyPolygon( nPoly, pPoints, pPtAry );
-}
-
-bool WinSalGraphics::drawPolyLineBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
-{
-    return mpImpl->drawPolyLineBezier( nPoints, pPtAry, pFlgAry );
-}
-
-bool WinSalGraphics::drawPolygonBezier( sal_uInt32 nPoints, const Point* pPtAry, const PolyFlags* pFlgAry )
-{
-    return mpImpl->drawPolygonBezier( nPoints, pPtAry, pFlgAry );
-}
-
-bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints,
-                                             const Point* const* pPtAry, const PolyFlags* const* pFlgAry )
-{
-    return mpImpl->drawPolyPolygonBezier( nPoly, pPoints, pPtAry, pFlgAry );
-}
-
-bool WinSalGraphics::drawGradient(const tools::PolyPolygon& rPoly, const Gradient& rGradient)
-{
-    return mpImpl->drawGradient(rPoly, rGradient);
-}
-
-bool WinSalGraphics::implDrawGradient(basegfx::B2DPolyPolygon const & rPolyPolygon, SalGradient const & rGradient)
-{
-    return mpImpl->implDrawGradient(rPolyPolygon, rGradient);
 }
 
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE const * pDest, sal_uLong nComp, sal_uLong nSize )
@@ -959,7 +842,7 @@ static bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSize )
 
 #define POSTSCRIPT_BUFSIZE 0x4000           // MAXIMUM BUFSIZE EQ 0xFFFF
 
-bool WinSalGraphics::drawEPS( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize )
+bool WinSalGraphics::commonDrawEPS(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, void* pPtr, sal_uInt32 nSize)
 {
     bool bRetValue = false;
 

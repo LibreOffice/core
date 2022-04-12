@@ -252,9 +252,11 @@ void WinSalGraphicsImpl::freeResources()
 {
 }
 
-bool WinSalGraphicsImpl::drawEPS(tools::Long, tools::Long, tools::Long, tools::Long, void*, sal_uInt32)
+bool WinSalGraphicsImpl::drawEPS(tools::Long nX, tools::Long nY,
+                                 tools::Long nWidth, tools::Long nHeight,
+                                 void* pPtr, sal_uInt32 nSize)
 {
-    return false;
+    return mrParent.commonDrawEPS(nX, nY, nWidth, nHeight, pPtr, nSize);
 }
 
 void WinSalGraphicsImpl::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
@@ -635,7 +637,7 @@ void ImplDrawBitmap( HDC hDC, const SalTwoRect& rPosAry, const WinSalBitmap& rSa
 
 } // namespace
 
-void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
+void WinSalGraphicsImpl::internalDrawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
     bool bTryDirectPaint(!mrParent.isPrinter() && !mbXORMode);
 
@@ -664,7 +666,22 @@ void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& 
         mbXORMode ? SRCINVERT : SRCCOPY );
 }
 
-void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
+void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
+{
+    if (dynamic_cast<const WinSalBitmap*>(&rSalBitmap) == nullptr)
+    {
+        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSalBitmap);
+        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
+        internalDrawBitmap(rPosAry, *pWinSalBitmap);
+    }
+    else
+    {
+        internalDrawBitmap(rPosAry, rSalBitmap);
+    }
+}
+
+void WinSalGraphicsImpl::internalDrawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
                               const SalBitmap& rSTransparentBitmap )
 {
@@ -739,6 +756,27 @@ void WinSalGraphicsImpl::drawBitmap( const SalTwoRect& rPosAry,
     // copy to output DC
     BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC.get(), 0, 0, SRCCOPY );
 }
+
+void WinSalGraphicsImpl::drawBitmap(const SalTwoRect& rPosAry,
+                                    const SalBitmap& rSSalBitmap,
+                                    const SalBitmap& rSTransparentBitmap)
+{
+    if (dynamic_cast<const WinSalBitmap*>(&rSSalBitmap) == nullptr)
+    {
+        std::unique_ptr<WinSalBitmap> pWinSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstBitmap = const_cast<SalBitmap&>(rSSalBitmap);
+        convertToWinSalBitmap(rConstBitmap, *pWinSalBitmap);
+
+        std::unique_ptr<WinSalBitmap> pWinTransparentSalBitmap(new WinSalBitmap());
+        SalBitmap& rConstTransparentBitmap = const_cast<SalBitmap&>(rSTransparentBitmap);
+        convertToWinSalBitmap(rConstTransparentBitmap, *pWinTransparentSalBitmap);
+
+        internalDrawBitmap(rPosAry, *pWinSalBitmap, *pWinTransparentSalBitmap);
+    }
+    else
+    {
+        internalDrawBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap);
+    }
 
 bool WinSalGraphicsImpl::drawAlphaRect( tools::Long nX, tools::Long nY, tools::Long nWidth,
                                     tools::Long nHeight, sal_uInt8 nTransparency )
