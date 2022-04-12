@@ -2394,8 +2394,6 @@ ScHorizontalAttrIterator::ScHorizontalAttrIterator( ScDocument& rDocument, SCTAB
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     assert(rDoc.maTabs[nTab]);
 
-    nEndCol = rDoc.maTabs[nTab]->ClampToMaxNonDefPatternColumn(nEndCol);
-
     nRow = nStartRow;
     nCol = nStartCol;
     bRowEmpty = false;
@@ -2644,14 +2642,7 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument& rDocument, SCTAB nTable,
     nCol( nCol1 )
 {
     if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab] )
-    {
-        SCCOL attrColCount = rDoc.maTabs[nTab]->GetMaxNonDefPatternColumnsCount(nStartRow, nEndRow);
-        if( nCol < attrColCount )
-        {
-            nEndCol = std::min<SCCOL>(nEndCol,attrColCount - 1);
-            pColIter = rDoc.maTabs[nTab]->ColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
-        }
-    }
+        pColIter = rDoc.maTabs[nTab]->ColumnData(nCol).CreateAttrIterator( nStartRow, nEndRow );
 }
 
 ScDocAttrIterator::~ScDocAttrIterator()
@@ -2780,16 +2771,11 @@ ScAttrRectIterator::ScAttrRectIterator(ScDocument& rDocument, SCTAB nTable,
 {
     if ( ValidTab(nTab) && nTab < rDoc.GetTableCount() && rDoc.maTabs[nTab] )
     {
-        SCCOL attrColCount = rDoc.maTabs[nTab]->GetMaxNonDefPatternColumnsCount(nStartRow, nEndRow);
-        if( nCol1 < attrColCount )
-        {
-            nEndCol = std::min<SCCOL>(nEndCol,attrColCount - 1);
-            pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
-            while ( nIterEndCol < nEndCol &&
-                    rDoc.maTabs[nTab]->ColumnData(nIterEndCol).IsAllAttrEqual(
-                        rDoc.maTabs[nTab]->ColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
-                ++nIterEndCol;
-        }
+        pColIter = rDoc.maTabs[nTab]->ColumnData(nIterStartCol).CreateAttrIterator( nStartRow, nEndRow );
+        while ( nIterEndCol < nEndCol &&
+                rDoc.maTabs[nTab]->ColumnData(nIterEndCol).IsAllAttrEqual(
+                    rDoc.maTabs[nTab]->ColumnData(nIterEndCol+1), nStartRow, nEndRow ) )
+            ++nIterEndCol;
     }
 }
 
