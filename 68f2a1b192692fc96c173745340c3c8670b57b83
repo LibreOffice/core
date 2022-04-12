@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7498d78_96d6b3ba",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3562,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-04-12T17:46:29Z",
+      "side": 1,
+      "message": "Please split this line. From what I have been told, the recommend maximum line length is 100 characters.",
+      "range": {
+        "startLine": 3561,
+        "startChar": 0,
+        "endLine": 3562,
+        "endChar": 1
+      },
+      "revId": "68f2a1b192692fc96c173745340c3c8670b57b83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

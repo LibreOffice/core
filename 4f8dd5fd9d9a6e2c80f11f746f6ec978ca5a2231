@@ -115,6 +115,24 @@
       "parentUuid": "9fad24d1_45af6fea",
       "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d7b8102_3e9d1eb4",
+        "filename": "sw/source/uibase/utlui/content.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1779,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-04-12T17:46:29Z",
+      "side": 1,
+      "message": "I think a full make is required to pull in the changes made in Writer.xcs file and icon-themes links.txt files. My previous comment about icons was made because I didn\u0027t see any icons for the footnote and endnote content type items in the tree. They showed up when I did a full make. All seems to be working as expected.",
+      "parentUuid": "2d94f90d_b0240d85",
+      "revId": "4f8dd5fd9d9a6e2c80f11f746f6ec978ca5a2231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
