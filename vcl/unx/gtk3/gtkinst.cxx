@@ -5213,7 +5213,7 @@ public:
             char *id;
             if (g_menu_model_get_item_attribute(pMenuModel, i, "action", "s", &id))
             {
-                assert(OString(id).startsWith("menu."));
+                assert(o3tl::starts_with(id, "menu."));
 
                 sAction = OString(id + 5);
 
