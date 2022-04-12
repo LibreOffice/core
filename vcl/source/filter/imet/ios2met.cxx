@@ -2089,8 +2089,11 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             sal_uInt16 nLen=nOrderLen;
             (void) ReadCoord(bCoord32); // Width, unused
             auto nHeight = ReadCoord(bCoord32);
-            if (nHeight < 0)
+            if (nHeight < 0 || nHeight > SAL_MAX_INT16)
+            {
+                SAL_WARN("filter.os2met", "ignoring out of sane range font height: " << nHeight);
                 aAttr.nChrCellHeight = aDefAttr.nChrCellHeight;
+            }
             else
                 aAttr.nChrCellHeight = nHeight;
             if (bCoord32) nLen-=8; else nLen-=4;
