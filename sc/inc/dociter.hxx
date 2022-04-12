@@ -499,8 +499,6 @@ public:
     bool            GetNext( double& rValue, FormulaError& rErr );
 };
 
-//  returns all areas with non-default formatting (horizontal)
-
 class ScHorizontalAttrIterator
 {
 private:
@@ -518,11 +516,9 @@ private:
                               ppPatterns;
     SCCOL                   nCol;
     SCROW                   nRow;
-    bool                    bRowEmpty;
     SCROW                   nMinNextEnd;
 
     void InitForNextRow(bool bInitialization);
-    bool InitForNextAttr();
 
 public:
             ScHorizontalAttrIterator( ScDocument& rDocument, SCTAB nTable,
