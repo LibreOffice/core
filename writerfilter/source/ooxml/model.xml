@@ -17670,12 +17670,13 @@
     <resource name="CT_SimpleField" resource="Stream">
       <element name="fldData" tokenid="ooxml:CT_SimpleField_fldData"/>
       <attribute name="instr" tokenid="ooxml:CT_SimpleField_instr"/>
-      <attribute name="fldLock" tokenid="ooxml:CT_SimpleField_fldLock"/>
+      <attribute name="fldLock" tokenid="ooxml:CT_FldChar_fldLock"/>
       <attribute name="dirty" tokenid="ooxml:CT_SimpleField_dirty"/>
       <action name="start" action="fieldstart"/>
       <action name="start" action="startCharacterGroup"/>
       <action name="start" action="printproperty" sendtokenid="ooxml:CT_SimpleField_instr"/>
       <action name="start" action="endCharacterGroup"/>
+      <action name="start" action="fieldlock"/>
       <action name="start" action="fieldsep"/>
       <action name="end" action="fieldend"/>
     </resource>
