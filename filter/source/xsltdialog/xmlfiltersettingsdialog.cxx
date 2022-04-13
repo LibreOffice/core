@@ -1371,15 +1371,15 @@ bool copyStreams( const Reference< XInputStream >& xIS, const Reference< XOutput
     return false;
 }
 
-bool createDirectory( OUString const & rURL )
+bool createDirectory( std::u16string_view rURL )
 {
-    sal_Int32 nLastIndex = sizeof( "file:///" ) - 2;
-    while( nLastIndex != -1 )
+    size_t nLastIndex = sizeof( "file:///" ) - 2;
+    while( nLastIndex != std::u16string_view::npos )
     {
-        nLastIndex = rURL.indexOf( '/', nLastIndex + 1);
-        if( nLastIndex != -1 )
+        nLastIndex = rURL.find( '/', nLastIndex + 1);
+        if( nLastIndex != std::u16string_view::npos )
         {
-            OUString aDirURL( rURL.copy( 0, nLastIndex ) );
+            OUString aDirURL( rURL.substr( 0, nLastIndex ) );
             Directory aDir( aDirURL );
             Directory::RC rc = aDir.open();
             if( rc == Directory::E_NOENT )

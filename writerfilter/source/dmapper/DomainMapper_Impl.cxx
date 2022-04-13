@@ -4176,7 +4176,7 @@ static OUString lcl_ParseFormat( const OUString& rCommand )
     else
         command = rCommand;
 
-    return msfilter::util::findQuotedText(command, "\\@\"", '\"');
+    return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
@@ -6657,7 +6657,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                     // command looks like: " SEQ Table \* ARABIC "
                     OUString sCmd(pContext->GetCommand());
                     // find the sequence name, e.g. "SEQ"
-                    OUString sSeqName = msfilter::util::findQuotedText(sCmd, "SEQ ", '\\');
+                    OUString sSeqName( msfilter::util::findQuotedText(sCmd, "SEQ ", '\\') );
                     sSeqName = sSeqName.trim();
 
                     // create a sequence field master using the sequence name
