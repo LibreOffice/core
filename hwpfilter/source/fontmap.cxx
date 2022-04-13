@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cstddef>
 #include <stdio.h>
 #ifdef __sun
 #include <strings.h>
@@ -151,7 +152,7 @@ const char* const RepFontTab[] =
 
 int getRepFamilyName(const char* orig, char *buf, double &ratio)
 {
-    for( int i = 0 ; i < int(SAL_N_ELEMENTS(FontMapTab)); i++)
+    for( std::size_t i = 0 ; i < SAL_N_ELEMENTS(FontMapTab); i++)
     {
         if( !strcmp(orig, FontMapTab[i].familyname) ){
             ratio = FontMapTab[i].ratio;
