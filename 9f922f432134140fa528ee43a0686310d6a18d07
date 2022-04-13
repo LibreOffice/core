@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "54a7acec_6ac14211",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-13T06:24:55Z",
+      "side": 1,
+      "message": "Miklos: could you please check if this makes sense? I hope that the unit tests (that still pass) cover the required use case that you implemented back then, but could you please check just in case? Thank you!",
+      "revId": "9f922f432134140fa528ee43a0686310d6a18d07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
