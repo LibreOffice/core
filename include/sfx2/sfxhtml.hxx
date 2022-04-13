@@ -68,7 +68,7 @@ public:
     // <TD SDVAL="..." SDNUM="...">
     static double GetTableDataOptionsValNum( sal_uInt32& nNumForm,
             LanguageType& eNumLang, const OUString& aValStr,
-            const OUString& aNumStr, SvNumberFormatter& rFormatter );
+            std::u16string_view aNumStr, SvNumberFormatter& rFormatter );
 
 protected:
     // Start a file download. This is done asynchronously or synchronously.
