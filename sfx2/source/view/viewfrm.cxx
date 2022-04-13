@@ -437,7 +437,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             // etag tells that the cache representation (e.g. in LO) is different from the one on the server,
             // but tells nothing about the age
             // Details at this link: http://tools.ietf.org/html/rfc4918#section-15, section 15.7
-            bool bPhysObjIsYounger = ::utl::UCBContentHelper::IsYounger( aMedObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
+            bool const bPhysObjIsOlder = ::utl::UCBContentHelper::IsYounger(aMedObj.GetMainURL( INetURLObject::DecodeMechanism::NONE),
                                                                          aPhysObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) );
             bool bIsWebDAV = aMedObj.isAnyKnownWebDAVScheme();
 
@@ -446,14 +446,12 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
             if ( ( !bNeedsReload && ( ( aMedObj.GetProtocol() == INetProtocol::File &&
                                         ( aMedObj.getFSysPath( FSysStyle::Detect ) != aPhysObj.getFSysPath( FSysStyle::Detect )
                                           || bPasswordEntered ) &&
-                                        !bPhysObjIsYounger )
-                                      || ( bIsWebDAV && !bPhysObjIsYounger )
+                                        !bPhysObjIsOlder)
+                                      || (bIsWebDAV && !bPhysObjIsOlder)
                                       || ( pMed->IsRemote() && !bIsWebDAV ) ) )
                  || pVersionItem )
             // <- tdf#82744
             {
-                bNeedsReload = true;
-
                 bool bOK = false;
                 bool bRetryIgnoringLock = false;
                 bool bOpenTemplate = false;
