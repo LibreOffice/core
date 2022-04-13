@@ -47,7 +47,23 @@ information can be found in the [VCL](../vcl)
 documentation.
 
 ## How does it work?
-`emfio` module takes a byte array and turns it into a `drawinglayer` primitive container. The rendering is done via `drawinglayer` primitives. For more information, you should refer to [VCL](../vcl) documentation.
+`emfio` module takes a byte array and turns it into a `drawinglayer` primitive
+container. The rendering is done via `drawinglayer` primitives. For more
+information, you should refer to [VCL](../vcl) documentation.
+
+For debugging purposes, it is possible to dump the drawinglayer primitives as
+well as the metaactions as separate xml files. The drawinglayer xml dump can show
+possible problems with the rendering of the emf file.
+
+For example, in `emfio/qa/cppunit/emf/EmfImportTest.cxx`, one can write:
+
+    Primitive2DSequence aSequence = parseEmf(u"emfio/qa/cppunit/wmf/data/stockobject.emf");
+    drawinglayer::Primitive2dXmlDump dumper;
+    Primitive2DContainer aContainer(aSequence);
+    dumper.dump(aContainer, "/tmp/drawyinglayer.xml");
+
+Then, /tmp/drawyinglayer.xml will be the dump of the drawinglayer primitives.
+The top level tag will be <primitive2D>.
 
 ## Limitations
 Not all the WMF/EMF/EMF+ records are supported by this module. Unsupported
@@ -114,6 +130,8 @@ formats. Some of them are:
 modifies several binary formats from Microsoft including WMF/EMF/EMF+, and also
 other companies.
 * [EMF+ diagnostics reporting tool](https://github.com/chrissherlock/emfplus-decoder)
+* [limerest](https://gitlab.com/re-lab-project/limerest): A new gui tool based
+on OLEToy for working with verious binary formats
 
 ## Related Software
 * [libemf](http://libemf.sourceforge.net/)
