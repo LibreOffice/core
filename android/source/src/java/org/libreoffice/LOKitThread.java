@@ -214,15 +214,7 @@ class LOKitThread extends Thread {
         if (mTileProvider.isReady()) {
             LOKitShell.showProgressSpinner(mContext);
             updateZoomConstraints();
-            LOKitShell.getMainHandler().post(new Runnable() {
-                @Override
-                public void run() {
-                    // synchronize to avoid deletion while loading
-                    synchronized (LOKitThread.this) {
-                        refresh(true);
-                    }
-                }
-            });
+            refresh(true);
             LOKitShell.hideProgressSpinner(mContext);
         } else {
             closeDocument();
@@ -266,8 +258,7 @@ class LOKitThread extends Thread {
     /**
      * Close the currently loaded document.
      */
-    // needs to be synchronized to not destroy doc while it's loaded
-    private synchronized void closeDocument() {
+    private void closeDocument() {
         if (mTileProvider != null) {
             mTileProvider.close();
             mTileProvider = null;
