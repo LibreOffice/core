@@ -32,12 +32,12 @@
 
 namespace
 {
-    OString lcl_NormalizeFilename(const OString& rFilename)
+    OString lcl_NormalizeFilename(std::string_view rFilename)
     {
-        return rFilename.copy(
+        return OString(rFilename.substr(
             std::max(
-                rFilename.lastIndexOf( '\\' ),
-                rFilename.lastIndexOf( '/' ))+1);
+                rFilename.rfind( '\\' ),
+                rFilename.rfind( '/' ))+1));
     };
 
     bool lcl_ReadPoChecked(
@@ -111,7 +111,7 @@ OString MergeEntrys::GetQTZText(const ResData& rResData, std::string_view rOrigT
 
 
 MergeDataFile::MergeDataFile(
-    const OString &rFileName, const OString &rFile,
+    const OString &rFileName, std::string_view rFile,
     bool bCaseSensitive, bool bWithQtz )
 {
     auto const env = getenv("ENABLE_RELEASE_BUILD");
@@ -281,7 +281,7 @@ void MergeDataFile::InsertEntry(
     std::string_view rTYP, std::string_view rGID,
     std::string_view rLID, const OString &nLANG,
     const OString &rTEXT, const OString &rQHTEXT,
-    const OString &rTITLE, const OString &rInFilename,
+    const OString &rTITLE, std::string_view rInFilename,
     bool bFirstLang, bool bCaseSensitive )
 {
     MergeEntrys *pMergeEntrys = nullptr;
@@ -311,7 +311,7 @@ void MergeDataFile::InsertEntry(
     // insert the cur string
     if( nLANG =="qtz" )
     {
-        const OString sTemp = rInFilename + rGID + rLID + rTYP;
+        const OString sTemp = OString::Concat(rInFilename) + rGID + rLID + rTYP;
         pMergeEntrys->InsertEntry(
             nLANG,
             rTEXT.isEmpty()? rTEXT : PoEntry::genKeyId(sTemp + rTEXT) + GetDoubleBars() + rTEXT,
@@ -325,7 +325,7 @@ void MergeDataFile::InsertEntry(
 }
 
 OString MergeDataFile::CreateKey(std::string_view rTYP, std::string_view rGID,
-    std::string_view rLID, const OString& rFilename, bool bCaseSensitive)
+    std::string_view rLID, std::string_view rFilename, bool bCaseSensitive)
 {
     static const char sStroke[] = "-";
     OString sKey = OString::Concat(rTYP) + sStroke + rGID + sStroke + rLID + sStroke +
