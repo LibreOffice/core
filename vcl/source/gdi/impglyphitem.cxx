@@ -25,6 +25,7 @@
 #include <TextLayoutCache.hxx>
 #include <config_fuzzers.h>
 
+// These need being explicit because of SalLayoutGlyphsImpl being private in vcl.
 SalLayoutGlyphs::SalLayoutGlyphs() {}
 
 SalLayoutGlyphs::~SalLayoutGlyphs() {}
@@ -91,8 +92,6 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::clone() const { return new SalLayoutGl
 bool SalLayoutGlyphsImpl::IsValid() const
 {
     if (!m_rFontInstance.is())
-        return false;
-    if (empty())
         return false;
     return true;
 }
