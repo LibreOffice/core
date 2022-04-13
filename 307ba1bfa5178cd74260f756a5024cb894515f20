@@ -16,6 +16,24 @@
       "message": "I noticed you had created this patch on top of your commit \"Fix the error message for GNU Make version\". You should rather create your patches from fresh local branches.",
       "revId": "307ba1bfa5178cd74260f756a5024cb894515f20",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82cf7a88_c38e629e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-13T13:23:18Z",
+      "side": 1,
+      "message": "Thank you for your patience, I got it.",
+      "parentUuid": "f5d9b70d_578f2e46",
+      "revId": "307ba1bfa5178cd74260f756a5024cb894515f20",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
