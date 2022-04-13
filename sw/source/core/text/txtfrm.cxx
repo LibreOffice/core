@@ -1710,7 +1710,7 @@ void SwTextFrame::InvalidateRange_( const SwCharRange &aRange, const tools::Long
         // linelengths are being added, that's why it's negative
         // if chars have been added and positive, if chars have
         // deleted
-        pPara->GetDelta() += nD;
+        pPara->SetDelta(pPara->GetDelta() + nD);
         bInv = true;
     }
     SwCharRange &rReformat = pPara->GetReformat();
