@@ -61,21 +61,21 @@ IconThemeInfoTest::UpperCaseDisplayNameIsReturnedForNonDefaultId()
 void
 IconThemeInfoTest::ImagesZipIsNotValid()
 {
-    bool valid = vcl::IconThemeInfo::UrlCanBeParsed("file://images.zip");
+    bool valid = vcl::IconThemeInfo::UrlCanBeParsed(u"file://images.zip");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images.zip is not a valid theme name", false, valid);
 }
 
 void
 IconThemeInfoTest::ImagesColibreZipIsValid()
 {
-    bool valid = vcl::IconThemeInfo::UrlCanBeParsed("file://images_colibre.zip");
+    bool valid = vcl::IconThemeInfo::UrlCanBeParsed(u"file://images_colibre.zip");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("images_colibre.zip is a valid theme name", true, valid);
 }
 
 void
 IconThemeInfoTest::ThemeIdIsDetectedFromFileNameWithUnderscore()
 {
-    OUString sname = vcl::IconThemeInfo::FileNameToThemeId("images_colibre.zip");
+    OUString sname = vcl::IconThemeInfo::FileNameToThemeId(u"images_colibre.zip");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("'colibre' theme id is returned for 'images_colibre.zip'", OUString("colibre"), sname);
 }
 
@@ -84,7 +84,7 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined1()
 {
     bool thrown = false;
     try {
-        vcl::IconThemeInfo::FileNameToThemeId("images_colibre");
+        vcl::IconThemeInfo::FileNameToThemeId(u"images_colibre");
     }
     catch (std::runtime_error&) {
         thrown = true;
@@ -97,7 +97,7 @@ IconThemeInfoTest::ExceptionIsThrownWhenIdCannotBeDetermined2()
 {
     bool thrown = false;
     try {
-        vcl::IconThemeInfo::FileNameToThemeId("image_colibre.zip");
+        vcl::IconThemeInfo::FileNameToThemeId(u"image_colibre.zip");
     }
     catch (std::runtime_error&) {
         thrown = true;

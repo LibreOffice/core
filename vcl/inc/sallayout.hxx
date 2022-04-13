@@ -154,7 +154,7 @@ private:
 
     bool            HasVerticalAlternate(sal_UCS4 aChar, sal_UCS4 aNextChar);
 
-    void            ParseFeatures(const OUString& name);
+    void            ParseFeatures(std::u16string_view name);
 
     css::uno::Reference<css::i18n::XBreakIterator> mxBreak;
 
