@@ -5408,6 +5408,8 @@
           </desc>
         </info>
         <value>
+          <!-- tdf#148122 Celtic MD font appears wrong -->
+          <it>Celticmd,1571,-567,1571,-547,2126,559</it>
           <!-- DIN Light (ttf version) has odd metrics. The otf version works fine. -->
           <it>DIN Light,1509,-503,1509,-483,1997,483</it>
         </value>
