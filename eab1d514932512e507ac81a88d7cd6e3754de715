@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a119c607_57c36f99",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-04-13T06:31:26Z",
+      "side": 1,
+      "message": "Pointless to wait for Jenkins here, this affects iOS only and Jenkins isn\u0027t building for iOS.",
+      "revId": "eab1d514932512e507ac81a88d7cd6e3754de715",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
