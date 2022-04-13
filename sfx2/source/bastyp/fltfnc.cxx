@@ -652,23 +652,22 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Extension( const OU
 {
     if ( m_rImpl.pList )
     {
-        for (const std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
+        if (OUString sExt = ToUpper_Impl(rExt); !sExt.isEmpty())
         {
-            SfxFilterFlags nFlags = pFilter->GetFilterFlags();
-            if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) )
+            if (sExt[0] != '.')
+                sExt = "." + sExt;
+
+            for (const std::shared_ptr<const SfxFilter>& pFilter : *m_rImpl.pList)
             {
-                OUString sWildCard = ToUpper_Impl( pFilter->GetWildcard().getGlob() );
-                OUString sExt      = ToUpper_Impl( rExt );
+                SfxFilterFlags nFlags = pFilter->GetFilterFlags();
+                if ((nFlags & nMust) == nMust && !(nFlags & nDont))
+                {
+                    OUString sWildCard = ToUpper_Impl(pFilter->GetWildcard().getGlob());
 
-                if (sExt.isEmpty())
-                    continue;
-
-                if (sExt[0] != '.')
-                    sExt = "." + sExt;
-
-                WildCard aCheck(sWildCard, ';');
-                if (aCheck.Matches(sExt))
-                    return pFilter;
+                    WildCard aCheck(sWildCard, ';');
+                    if (aCheck.Matches(sExt))
+                        return pFilter;
+                }
             }
         }
 
