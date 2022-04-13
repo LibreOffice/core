@@ -62,6 +62,7 @@
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::beans::PropertyValue;
@@ -141,7 +142,7 @@ private:
                         ) const;
 
     static sal_uInt16   impl_findSlotParam(
-                            const OUString& i_rFactoryURL
+                            std::u16string_view i_rFactoryURL
                         );
 
     static SfxObjectShellRef   impl_findObjectShell(
@@ -444,20 +445,20 @@ bool SfxFrameLoader_Impl::impl_determineTemplateDocument( ::comphelper::NamedVal
 }
 
 
-sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( const OUString& i_rFactoryURL )
+sal_uInt16 SfxFrameLoader_Impl::impl_findSlotParam( std::u16string_view i_rFactoryURL )
 {
-    OUString sSlotParam;
-    const sal_Int32 nParamPos = i_rFactoryURL.indexOf( '?' );
-    if ( nParamPos >= 0 )
+    std::u16string_view sSlotParam;
+    const size_t nParamPos = i_rFactoryURL.find( '?' );
+    if ( nParamPos != std::u16string_view::npos )
     {
         // currently only the "slot" parameter is supported
-        const sal_Int32 nSlotPos = i_rFactoryURL.indexOf( "slot=", nParamPos );
-        if ( nSlotPos > 0 )
-            sSlotParam = i_rFactoryURL.copy( nSlotPos + 5 );
+        const size_t nSlotPos = i_rFactoryURL.find( u"slot=", nParamPos );
+        if ( nSlotPos > 0 && nSlotPos != std::u16string_view::npos )
+            sSlotParam = i_rFactoryURL.substr( nSlotPos + 5 );
     }
 
-    if ( !sSlotParam.isEmpty() )
-        return sal_uInt16( sSlotParam.toInt32() );
+    if ( !sSlotParam.empty() )
+        return sal_uInt16( o3tl::toInt32(sSlotParam) );
 
     return 0;
 }
