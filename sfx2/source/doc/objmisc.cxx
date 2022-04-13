@@ -106,6 +106,7 @@
 #include <sfx2/strings.hrc>
 #include <workwin.hxx>
 #include <sfx2/sfxdlg.hxx>
+#include <sfx2/sfxbasemodel.hxx>
 #include <appbaslib.hxx>
 #include <openflag.hxx>
 #include "objstor.hxx"
@@ -496,9 +497,16 @@ bool SfxObjectShell::SwitchToShared( bool bShared, bool bSave )
             {
                 // TODO/LATER: currently the application guards against the reentrance problem
                 SetModified(); // the modified flag has to be set to let the document be stored with the shared flag
-                const SfxPoolItem* pItem = pViewFrame->GetBindings().ExecuteSynchron( HasName() ? SID_SAVEDOC : SID_SAVEASDOC );
-                const SfxBoolItem* pResult = dynamic_cast<const SfxBoolItem*>( pItem  );
-                bResult = ( pResult && pResult->GetValue() );
+                try
+                {
+                    // Do *not* use dispatch mechanism in this place - we don't want others (extensions etc.) to intercept this.
+                    pImpl->pBaseModel->store();
+                    bResult = true;
+                }
+                catch (...)
+                {
+                    bResult = false;
+                }
             }
         }
 
