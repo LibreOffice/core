@@ -368,7 +368,10 @@ void DocxAttributeOutput::StartContentControl(const SwFormatContentControl& rFor
     m_pContentControl = rFormatContentControl.GetContentControl();
 }
 
-void DocxAttributeOutput::EndContentControl() { ++m_nCloseContentControl; }
+void DocxAttributeOutput::EndContentControl()
+{
+    ++m_nCloseContentControlInThisRun;
+}
 
 static void checkAndWriteFloatingTables(DocxAttributeOutput& rDocxAttributeOutput)
 {
@@ -1629,8 +1632,9 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         m_bEndCharSdt = false;
     }
 
-    for (; m_nCloseContentControl > 0; --m_nCloseContentControl)
+    for (; m_nCloseContentControlInPreviousRun > 0; --m_nCloseContentControlInPreviousRun)
     {
+        // Not the last run of this paragraph.
         m_pSerializer->endElementNS(XML_w, XML_sdtContent);
         m_pSerializer->endElementNS(XML_w, XML_sdt);
     }
@@ -1853,6 +1857,13 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     if ( !m_bWritingField )
     {
         m_pRedlineData = nullptr;
+    }
+
+    for (; m_nCloseContentControlInThisRun > 0; --m_nCloseContentControlInThisRun)
+    {
+        // Last run of this paragraph.
+        m_pSerializer->endElementNS(XML_w, XML_sdtContent);
+        m_pSerializer->endElementNS(XML_w, XML_sdt);
     }
 
     if ( m_closeHyperlinkInThisRun )
@@ -3266,6 +3277,10 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     if( m_closeHyperlinkInThisRun )
     {
         m_closeHyperlinkInPreviousRun = true;
+    }
+    if (m_nCloseContentControlInThisRun > 0)
+    {
+        ++m_nCloseContentControlInPreviousRun;
     }
     m_bRunTextIsOn = true;
     // one text can be split into more <w:t>blah</w:t>'s by line breaks etc.
