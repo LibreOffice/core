@@ -16,6 +16,23 @@
       "message": "Miklos: could you please check if this makes sense? I hope that the unit tests (that still pass) cover the required use case that you implemented back then, but could you please check just in case? Thank you!",
       "revId": "9f922f432134140fa528ee43a0686310d6a18d07",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b14059fd_bbad7ac6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-13T06:33:18Z",
+      "side": 1,
+      "message": "Looks OK. Is there an opportunity to have a testcase for this? E.g. some old weird compat flag was set for these 0-bytes Writer files in the past, but now that you load a sane template, this is no longer happening --  or something like this?",
+      "revId": "9f922f432134140fa528ee43a0686310d6a18d07",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
