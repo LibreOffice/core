@@ -1058,7 +1058,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     // If the current values have been calculated, show that they
     // are valid now
     pPara->GetReformat() = SwCharRange();
-    bool bDelta = pPara->GetDelta() != 0;
+    bool bDelta = pPara->HasDelta();
     pPara->SetDelta(0);
 
     if( rLine.IsStop() )
@@ -1325,7 +1325,7 @@ bool SwTextFrame::FormatLine( SwTextFormatter &rLine, const bool bPrev )
     if( nNewStart <= nEnd )
         return true;
 
-    return 0 != pPara->GetDelta();
+    return pPara->HasDelta();
 }
 
 void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,

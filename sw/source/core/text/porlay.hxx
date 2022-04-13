@@ -288,6 +288,7 @@ public:
     const SwCharRange& GetReformat() const { return m_aReformat; }
     void SetDelta(tools::Long nDelta) { m_nDelta = nDelta; }
     tools::Long GetDelta() const { return m_nDelta; }
+    bool HasDelta() const { return m_nDelta != 0; }
     SwScriptInfo& GetScriptInfo() { return m_aScriptInfo; }
     const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
 
