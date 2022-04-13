@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02c2303c_68548313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-13T06:37:40Z",
+      "side": 1,
+      "message": "Looks good, see inline comment for a nit.",
+      "revId": "1d4fa457a2c51e5b4ad4dc13bc17ca58c2496442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4da9661f_5835f779",
+        "filename": "emfio/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-13T06:37:40Z",
+      "side": 1,
+      "message": "Would it make sense to include such info in drawinglayer/README.md and only refer to it from this file? If each \u0026 every import filter explains how to inspect drawinglayer primitives, we\u0027ll have quite some duplication.",
+      "revId": "1d4fa457a2c51e5b4ad4dc13bc17ca58c2496442",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
