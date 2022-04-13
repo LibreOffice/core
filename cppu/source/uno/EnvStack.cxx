@@ -141,7 +141,7 @@ extern "C" void SAL_CALL uno_getCurrentEnvironment(uno_Environment ** ppEnv, rtl
     }
 }
 
-static OUString s_getPrefix(OUString const & str1, std::u16string_view str2)
+static OUString s_getPrefix(std::u16string_view str1, std::u16string_view str2)
 {
     sal_Int32 nIndex1 = 0;
     sal_Int32 nIndex2 = 0;
@@ -163,7 +163,7 @@ static OUString s_getPrefix(OUString const & str1, std::u16string_view str2)
     OUString result;
 
     if (sim)
-        result = str1.copy(0, sim - 1);
+        result = str1.substr(0, sim - 1);
 
     return result;
 }
