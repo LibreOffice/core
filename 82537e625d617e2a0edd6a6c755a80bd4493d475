@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdf7f6a4_22de9251",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-13T08:50:39Z",
+      "side": 1,
+      "message": "why failed? just fix the annotation\u0027s typo\n\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/112274/ : FAILURE\n\u003e \n\u003e the junit test JunitTest_toolkit_unoapi_1 failed ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/111711/ )\n\u003e \n\u003e Killed by the kill-wrapper, typically due to no stdout/-err activity during a specified timeout interval. ( https://ci.libreoffice.org/job/gerrit_linux_clang_dbgutil/111711/ )\n\n",
+      "revId": "82537e625d617e2a0edd6a6c755a80bd4493d475",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
