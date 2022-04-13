@@ -42,7 +42,7 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
 
 void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    OUString aExt = InputOutputHelper::getFileNameExtension( rStrmName );
+    OUString aExt( InputOutputHelper::getFileNameExtension( rStrmName ) );
     if( aExt.equalsIgnoreAsciiCase("pptx") ||
         aExt.equalsIgnoreAsciiCase("potx") )
     {
