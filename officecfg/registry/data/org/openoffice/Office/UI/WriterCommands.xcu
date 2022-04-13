@@ -1882,7 +1882,7 @@
       </node>
       <node oor:name=".uno:MoveUp" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Chapter Up</value>
+          <value xml:lang="en-US">Move Item Up</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1895,7 +1895,7 @@
       </node>
       <node oor:name=".uno:MoveDown" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Chapter Down</value>
+          <value xml:lang="en-US">Move Item Down</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1942,7 +1942,7 @@
       </node>
       <node oor:name=".uno:DecrementSubLevels" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Demote Outline Level With Subpoints</value>
+          <value xml:lang="en-US">Demote Outline Level with Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1955,7 +1955,7 @@
       </node>
       <node oor:name=".uno:IncrementSubLevels" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Promote Outline Level With Subpoints</value>
+          <value xml:lang="en-US">Promote Outline Level with Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1963,7 +1963,7 @@
       </node>
       <node oor:name=".uno:MoveUpSubItems" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Chapter Up with Subpoints</value>
+          <value xml:lang="en-US">Move Item Up with Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
@@ -1976,7 +1976,7 @@
       </node>
       <node oor:name=".uno:MoveDownSubItems" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Move Chapter Down with Subpoints</value>
+          <value xml:lang="en-US">Move Item Down with Subpoints</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>7</value>
