@@ -82,3 +82,20 @@ printing), etc.
     above)
 
 * Custom widgets (like the Header / Footer indicator button)
+
+## Dumping DrawingLayer Primitives as XML
+
+For debugging purposes, it is possible to dump the drawinglayer primitives as
+as an xml file. The drawinglayer xml dump can show possible problems with the
+rendering.
+
+For example, in `emfio/qa/cppunit/emf/EmfImportTest.cxx`, one can write:
+
+    Primitive2DSequence aSequence = parseEmf(u"emfio/qa/cppunit/wmf/data/stockobject.emf");
+    drawinglayer::Primitive2dXmlDump dumper;
+    Primitive2DContainer aContainer(aSequence);
+    dumper.dump(aContainer, "/tmp/drawyinglayer.xml");
+
+Then, after invoking `make CppunitTest_emfio_emf`, `/tmp/drawyinglayer.xml` will
+be the dump of the drawinglayer primitives used to draw the emf file in
+LibreOffice. The top level tag will be <primitive2D>.
