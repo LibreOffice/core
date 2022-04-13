@@ -33,6 +33,24 @@
       "message": "Your fix is wrong. Correct would be \"asynchronous\".",
       "revId": "82537e625d617e2a0edd6a6c755a80bd4493d475",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3275918b_c92526dc",
+        "filename": "avmedia/source/framework/soundhandler.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-13T11:14:30Z",
+      "side": 1,
+      "message": "Thank you for your correction. I have amended the patch.",
+      "parentUuid": "38632ccb_7fe5dad6",
+      "revId": "82537e625d617e2a0edd6a6c755a80bd4493d475",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
