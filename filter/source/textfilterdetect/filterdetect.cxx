@@ -20,8 +20,6 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <memory>
-#include <sfx2/fcontnr.hxx>
-#include <sfx2/docfilt.hxx>
 
 constexpr OUStringLiteral WRITER_TEXT_FILTER = u"Text";
 constexpr OUStringLiteral CALC_TEXT_FILTER = u"Text - txt - csv (StarCalc)";
@@ -129,45 +127,6 @@ bool IsHTMLStream( const uno::Reference<io::XInputStream>& xInStream )
     OString aToken = sHeader.copy( nStartOfTagIndex, i - nStartOfTagIndex );
     return GetHTMLToken( OStringToOUString( aToken.toAsciiLowerCase(), RTL_TEXTENCODING_ASCII_US ) ) != HtmlTokenId::NONE;
 }
-
-/**
- * Given an (empty) file URL in rMediaDesc and rExt, looks up the best filter type for it and
- * writes the type name to rType, the filter name to rMediaDesc.
- */
-bool HandleEmptyFileUrlByExtension(MediaDescriptor& rMediaDesc, const OUString& rExt,
-                                   OUString& rType, OUString& rService)
-{
-    OUString aURL = rMediaDesc.getUnpackedValueOrDefault(MediaDescriptor::PROP_URL, OUString());
-    if (!tools::isEmptyFileUrl(aURL))
-    {
-        return false;
-    }
-
-    if (rExt.isEmpty())
-    {
-        return false;
-    }
-
-    // Requiring the export+preferred flags helps to find the relevant filter, e.g. .doc -> WW8 (and
-    // not WW6 or Mac_Word).
-    SfxFilterFlags nMust
-        = SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT | SfxFilterFlags::PREFERED;
-    std::shared_ptr<const SfxFilter> pFilter(SfxFilterMatcher().GetFilter4Extension(rExt, nMust));
-    if (!pFilter)
-    {
-        // retry without PREFERRED so we can find at least something for 0-byte *.ods
-        nMust = SfxFilterFlags::IMPORT | SfxFilterFlags::EXPORT;
-        pFilter = SfxFilterMatcher().GetFilter4Extension(rExt, nMust);
-
-        if (!pFilter)
-            return false;
-    }
-
-    rMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= pFilter->GetFilterName();
-    rType = pFilter->GetTypeName();
-    rService = pFilter->GetServiceName();
-    return true;
-}
 }
 
 PlainTextFilterDetect::PlainTextFilterDetect() {}
@@ -226,15 +185,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         OUString aName = aParser.getName().toAsciiLowerCase();
 
         // Decide which filter to use based on the document service first,
-        // then on extension if that's not available. Make exception for 0-byte files
-        // whose extensions are handled by the same service as passed document service.
-        OUString aEmptyType, aEmptyService;
-        bool bEmpty = HandleEmptyFileUrlByExtension(aMediaDesc, aExt, aEmptyType, aEmptyService);
-        if (bEmpty && aDocService == aEmptyService)
-        {
-            aDocService.clear(); // don't fallback to text filter, use extension-based match
-            // TODO: maybe reset aExt when it's "xls"
-        }
+        // then on extension if that's not available.
 
         if (aDocService == CALC_DOCSERVICE)
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_TEXT_FILTER);
@@ -242,8 +193,6 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_TEXT_FILTER);
         else if (aExt == "csv" || aExt == "tsv" || aExt == "tab" || aExt == "xls" || aName.endsWith(".csv.gz"))
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(CALC_TEXT_FILTER);
-        else if (bEmpty)
-            aType = aEmptyType; // aMediaDesc is already updated in HandleEmptyFileUrlByExtension
         else
             aMediaDesc[MediaDescriptor::PROP_FILTERNAME] <<= OUString(WRITER_TEXT_FILTER);
     }
