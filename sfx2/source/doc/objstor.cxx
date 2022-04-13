@@ -429,7 +429,7 @@ bool SfxObjectShell::InitNew( const uno::Reference< embed::XStorage >& xStorage 
 
 bool SfxObjectShell::Load( SfxMedium& rMedium )
 {
-    return GeneralInit_Impl(rMedium.GetStorage(), !tools::isEmptyFileUrl(rMedium.GetName()));
+    return GeneralInit_Impl(rMedium.GetStorage(), true);
 }
 
 void SfxObjectShell::DoInitUnitTest()
@@ -662,9 +662,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                     bWarnMediaTypeFallback = false;
                 }
 
-                if (bWarnMediaTypeFallback
-                    || (!tools::isEmptyFileUrl(pMedium->GetName())
-                        && !xStorage->getElementNames().hasElements()))
+                if (bWarnMediaTypeFallback || !xStorage->getElementNames().hasElements())
                     SetError(ERRCODE_IO_BROKENPACKAGE);
             }
             catch( uno::Exception& )
@@ -2260,11 +2258,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
 
             // #i119492# During loading, some OLE objects like chart will be set
             // modified flag, so needs to reset the flag to false after loading
-            bool bRtn = true;
-            if (!tools::isEmptyFileUrl(rMedium.GetName()))
-            {
-                bRtn = xLoader->filter(aArgs);
-            }
+            bool bRtn = xLoader->filter(aArgs);
             const uno::Sequence < OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
             for ( const auto& rName : aNames )
             {
