@@ -479,6 +479,19 @@ sal_Int32 SwFieldDokPage::FillFormatLB(SwFieldTypesEnum nTypeId)
     {
         m_xFormatLB->select_id(OUString::number(GetCurField()->GetFormat() & ~AF_FIXED));
     }
+    else
+    {
+        // Select default selected value for "Insert" dialog
+        switch (nTypeId)
+        {
+            case SwFieldTypesEnum::PageNumber:
+            case SwFieldTypesEnum::DocumentStatistics:
+                m_xFormatLB->select_text(SwResId(FMT_NUM_PAGEDESC));
+                break;
+            default:
+                m_xFormatLB->select(0);
+        }
+    }
 
     FormatHdl(*m_xFormatLB);
 
