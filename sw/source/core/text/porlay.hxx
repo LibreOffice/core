@@ -286,8 +286,8 @@ public:
     const SwRepaint& GetRepaint() const { return m_aRepaint; }
     SwCharRange& GetReformat() { return m_aReformat; }
     const SwCharRange& GetReformat() const { return m_aReformat; }
-    tools::Long& GetDelta() { return m_nDelta; }
-    const tools::Long& GetDelta() const { return m_nDelta; }
+    void SetDelta(tools::Long nDelta) { m_nDelta = nDelta; }
+    tools::Long GetDelta() const { return m_nDelta; }
     SwScriptInfo& GetScriptInfo() { return m_aScriptInfo; }
     const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
 
