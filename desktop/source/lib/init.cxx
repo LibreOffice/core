@@ -4164,9 +4164,9 @@ static void lo_setOption(LibreOfficeKit* /*pThis*/, const char *pOption, const c
     else if (strcmp(pOption, "addfont") == 0)
     {
         OutputDevice *pDevice = Application::GetDefaultDevice();
-        OutputDevice::ImplClearAllFontData(true);
+        OutputDevice::ImplClearAllFontData(false);
         pDevice->AddTempDevFont(OUString::fromUtf8(OString(pValue)), "");
-        OutputDevice::ImplRefreshAllFontData(true);
+        OutputDevice::ImplRefreshAllFontData(false);
     }
 }
 
