@@ -1998,7 +1998,7 @@ static bool SvxUnoConvertResourceStringBuiltInFromApi(rtl::OUStringConstExpr con
         if( sStr == pSourceResIds[i].asView() )
         {
             OUString aReplace = SvxResId(pDestResIds[i]);
-            rString = rString.replaceAt( 0, OUString(pSourceResIds[i]).getLength(), aReplace );
+            rString = aReplace + rString.subView( pSourceResIds[i].asView().size() );
             return true;
         }
     }

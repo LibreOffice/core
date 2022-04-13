@@ -203,7 +203,7 @@ void SvxXMLTableImportContext::importColor( const uno::Reference< XFastAttribute
             case XML_ELEMENT(DRAW_OOO, XML_COLOR):
             {
                 sal_Int32 nColor(0);
-                ::sax::Converter::convertColor(nColor, aIter.toString());
+                ::sax::Converter::convertColor(nColor, aIter.toView());
                 rAny <<= nColor;
                 break;
             }
