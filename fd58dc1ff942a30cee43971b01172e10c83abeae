@@ -16,6 +16,24 @@
       "message": "Except if I missed something, it makes sense to me.",
       "revId": "fd58dc1ff942a30cee43971b01172e10c83abeae",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "741c7a26_fc6a0aea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-13T09:02:05Z",
+      "side": 1,
+      "message": "Hello, I rebased the patchset, does it need to be reviewed again?",
+      "parentUuid": "dd1c6563_52df7f10",
+      "revId": "fd58dc1ff942a30cee43971b01172e10c83abeae",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
