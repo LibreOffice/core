@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <sal/types.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
@@ -39,13 +43,13 @@ private:
 // cf. jurt/test/com/sun/star/lib/uno/protocols/urp/Cache_Test.java:
 void Test::testNothingLostFromLruList() {
     int a[8];
-    for (int i = 0; i != int(std::size(a)); ++i) {
-        for (int j = 0; j != i; ++j) {
+    for (std::size_t i = 0; i != std::size(a); ++i) {
+        for (std::size_t j = 0; j != i; ++j) {
             a[j] = 0;
         }
         for (;;) {
             binaryurp::Cache< int > c(4);
-            for (int k = 0; k != i; ++k) {
+            for (std::size_t k = 0; k != i; ++k) {
                 bool f;
                 c.add(a[k], &f);
             }
@@ -53,15 +57,15 @@ void Test::testNothingLostFromLruList() {
             CPPUNIT_ASSERT_EQUAL(
                 6,
                 c.add(-1, &f) + c.add(-2, &f) + c.add(-3, &f) + c.add(-4, &f));
-            int j = i - 1;
-            while (j >= 0 && a[j] == 3) {
+            std::size_t j = i;
+            while (j != 0 && a[j - 1] == 3) {
                 --j;
             }
-            if (j < 0) {
+            if (j == 0) {
                 break;
             }
-            ++a[j];
-            for (int k = j + 1; k != i; ++k) {
+            ++a[j - 1];
+            for (std::size_t k = j; k != i; ++k) {
                 a[k] = 0;
             }
         }
