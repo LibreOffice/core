@@ -3585,6 +3585,7 @@ void RtfAttributeOutput::FormatBox(const SvxBoxItem& rBox)
             m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "0"));
             return;
         }
+        m_aFlyProperties.push_back(std::make_pair<OString, OString>("fLine", "1"));
 
         const Color& rColor = pBorder->GetColor();
         // We in fact need RGB to BGR, but the transformation is symmetric.
