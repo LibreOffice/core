@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71317cae_3dddfc70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-13T11:43:15Z",
+      "side": 1,
+      "message": "The commit summary should not be only a bug reference.. in this case best join the two lines to\n\n  tdf#143148 use pragma once instead of include guards",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 42
+      },
+      "revId": "bf2cd91365e3efc9933dbca46dc0c86e3d347b41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1e9672c_69806258",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-13T11:43:15Z",
+      "side": 1,
+      "message": "I don\u0027t know how you created the commit (git add --all or some such?) but this certainly is not correct, changing permission bits of all executables, and also adding build.log is wrong.\nPlease fix and amend the commit to include only the files affected by the pragma #once changes.\n",
+      "revId": "bf2cd91365e3efc9933dbca46dc0c86e3d347b41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
