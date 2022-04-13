@@ -508,7 +508,7 @@ RTFDocumentImpl::getProperties(const RTFSprms& rAttributes, RTFSprms const& rSpr
     if (!m_aStates.empty())
         nStyle = m_aStates.top().getCurrentStyleIndex();
     auto it = m_pStyleTableEntries->find(nStyle);
-    if (it != m_pStyleTableEntries->end())
+    if (it != m_pStyleTableEntries->end() && nStyleType)
     {
         // cloneAndDeduplicate() wants to know about only a single "style", so
         // let's merge paragraph and character style properties here.
