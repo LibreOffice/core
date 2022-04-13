@@ -26,6 +26,7 @@
 
 #include <svx/svxids.hrc>
 #include <osl/diagnose.h>
+#include <sfx2/dialoghelper.hxx>
 #include <svx/chrtitem.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
@@ -557,6 +558,12 @@ void ScaleTabPage::SetNumFormat()
                 nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME, pFormat->GetLanguage() );
             else
                 nFmt = pNumFormatter->GetStandardFormat( SvNumFormatType::TIME );
+
+            // tdf#141625 give enough space to see full date+time
+            int nWidestTime(m_xFmtFldMin->get_pixel_size(getWidestDateTime(Application::GetSettings().GetLocaleDataWrapper(), true)).Width());
+            int nWidthChars = std::ceil(nWidestTime / m_xFmtFldMin->get_approximate_digit_width()) + 1;
+            m_xFmtFldMin->set_width_chars(nWidthChars);
+            m_xFmtFldMax->set_width_chars(nWidthChars);
         }
 
         if( m_nAxisType == chart2::AxisType::DATE && ( eType != SvNumFormatType::DATE && eType != SvNumFormatType::DATETIME) )
