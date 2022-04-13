@@ -15,6 +15,7 @@
 #include <com/sun/star/text/XDocumentIndex.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <o3tl/cppunittraitshelper.hxx>
 
@@ -247,6 +248,18 @@ DECLARE_RTFEXPORT_TEST(testBtlrCell, "btlr-cell.rtf")
 
     uno::Reference<beans::XPropertySet> xC1(xTable->getCellByName("C1"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(text::WritingMode2::TB_RL, getProperty<sal_Int16>(xC1, "WritingMode"));
+}
+
+DECLARE_RTFEXPORT_TEST(testTdf114303, "tdf114303.rtf")
+{
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::NONE,
+                         getProperty<sal_Int16>(getShape(1), "HoriOrient"));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 0
+    // - Actual  : 1
+    CPPUNIT_ASSERT_EQUAL(text::VertOrientation::NONE,
+                         getProperty<sal_Int16>(getShape(1), "VertOrient"));
 }
 
 DECLARE_RTFEXPORT_TEST(testTbrlFrame, "tbrl-frame.odt")
