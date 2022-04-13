@@ -49,6 +49,10 @@ documentation.
 ## How does it work?
 `emfio` module takes a byte array and turns it into a `drawinglayer` primitive container. The rendering is done via `drawinglayer` primitives. For more information, you should refer to [VCL](../vcl) documentation.
 
+The drawinglayer primitives created to draw the emf/wmf files can be dumped as
+xml for debugging purposes. For more information, please refer to the
+[drawyinglayer](../drawyinglayer) documentation.
+
 ## Limitations
 Not all the WMF/EMF/EMF+ records are supported by this module. Unsupported
 records are marked as "not implemented", and a warning message will printed
@@ -114,6 +118,8 @@ formats. Some of them are:
 modifies several binary formats from Microsoft including WMF/EMF/EMF+, and also
 other companies.
 * [EMF+ diagnostics reporting tool](https://github.com/chrissherlock/emfplus-decoder)
+* [limerest](https://gitlab.com/re-lab-project/limerest): A new gui tool based
+on OLEToy for working with verious binary formats
 
 ## Related Software
 * [libemf](http://libemf.sourceforge.net/)
