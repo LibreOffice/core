@@ -103,6 +103,40 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
     }
 }
 
+void DiagramLayout::secureDataFromXShapeToModelAfterDiagramImport()
+{
+    // maPresPointShapeMap types: < const svx::diagram::Point*, ShapePtr >
+    for (const auto& pEntry : maPresPointShapeMap)
+    {
+        if(nullptr != pEntry.first && pEntry.second)
+        {
+            const css::uno::Reference< css::drawing::XShape >& rXShape(pEntry.second->getXShape());
+
+            if(rXShape)
+            {
+                const_cast<svx::diagram::Point*>(pEntry.first)->securePropertiesFromXShape(rXShape);
+            }
+        }
+    }
+}
+
+void DiagramLayout::restoreDataFromModelToXShapeAfterDiagramReCreate()
+{
+    // maPresPointShapeMap types: < const svx::diagram::Point*, ShapePtr >
+    for (const auto& pEntry : maPresPointShapeMap)
+    {
+        if(nullptr != pEntry.first && pEntry.second)
+        {
+            const css::uno::Reference< css::drawing::XShape >& rXShape(pEntry.second->getXShape());
+
+            if(rXShape)
+            {
+                pEntry.first->restorePropertiesToXShape(rXShape);
+            }
+        }
+    }
+}
+
 void Diagram::addTo( const ShapePtr & pParentShape )
 {
     if (pParentShape->getSize().Width == 0 || pParentShape->getSize().Height == 0)
@@ -402,11 +436,6 @@ void loadDiagram( ShapePtr const & pShape,
             pShape->setFontRefColorForNodes(DiagramColor::getColorByIndex(aColor->second.maTextFillColors, -1));
         }
     }
-
-    // After Diagram import, parts of the Diagram ModelData is at the
-    // oox::drawingml::Shape. Since these objects are temporary helpers,
-    // secure that data at the Diagram ModelData by copying.
-    pData->secureDataFromShapeToModelAfterDiagramImport();
 
     // collect data, init maps
     // for Diagram import, do - for now - NOT clear all oox::drawingml::Shape
