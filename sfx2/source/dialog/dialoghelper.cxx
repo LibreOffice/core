@@ -32,17 +32,17 @@ Size getPreviewOptionsSize(const OutputDevice& rReference)
     return rReference.LogicToPixel(Size(70, 27), MapMode(MapUnit::MapAppFont));
 }
 
-OUString getWidestTime(const LocaleDataWrapper& rWrapper)
+OUString getWidestDateTime(const LocaleDataWrapper& rWrapper, bool bWithSec)
 {
     Date aDate(22, 12, 2000);
     tools::Time aTime(22, 59, 59);
     DateTime aDateTime(aDate, aTime);
-    return formatTime(aDateTime, rWrapper);
+    return formatDateTime(aDateTime, rWrapper, bWithSec);
 }
 
-OUString formatTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper)
+OUString formatDateTime(const DateTime& rDateTime, const LocaleDataWrapper& rWrapper, bool bWithSec)
 {
-    return rWrapper.getDate(rDateTime) + " " + rWrapper.getTime(rDateTime, false);
+    return rWrapper.getDate(rDateTime) + " " + rWrapper.getTime(rDateTime, bWithSec);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

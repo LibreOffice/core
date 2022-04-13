@@ -115,7 +115,7 @@ namespace
     void setColSizes(weld::TreeView& rVersionBox)
     {
         // recalculate the datetime column width
-        int nWidestTime(rVersionBox.get_pixel_size(getWidestTime(Application::GetSettings().GetLocaleDataWrapper())).Width());
+        int nWidestTime(rVersionBox.get_pixel_size(getWidestDateTime(Application::GetSettings().GetLocaleDataWrapper(), false)).Width());
         int nW1 = rVersionBox.get_pixel_size(rVersionBox.get_column_title(1)).Width();
 
         int nMax = std::max(nWidestTime, nW1) + 12; // max width + a little offset
@@ -217,7 +217,7 @@ void SfxVersionDialog::Init_Impl()
     for (size_t n = 0; n < m_pTable->size(); ++n)
     {
         SfxVersionInfo *pInfo = m_pTable->at( n );
-        OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
+        OUString aEntry = formatDateTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper(), false);
         m_xVersionBox->append(weld::toId(pInfo), aEntry);
         auto nLastRow = m_xVersionBox->n_children() - 1;
         m_xVersionBox->set_text(nLastRow, pInfo->aAuthor, 1);
@@ -394,7 +394,7 @@ SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl(weld::Window *pParent, SfxV
     OUString sAuthor = rInfo.aAuthor.isEmpty() ? SfxResId(STR_NO_NAME_SET) : rInfo.aAuthor;
 
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
-    m_xDateTimeText->set_label(m_xDateTimeText->get_label() + formatTime(rInfo.aCreationDate, rLocaleWrapper));
+    m_xDateTimeText->set_label(m_xDateTimeText->get_label() + formatDateTime(rInfo.aCreationDate, rLocaleWrapper, false));
     m_xSavedByText->set_label(m_xSavedByText->get_label() + sAuthor);
     m_xEdit->set_text(rInfo.aComment);
     m_xEdit->set_size_request(40 * m_xEdit->get_approximate_digit_width(),
@@ -459,7 +459,7 @@ void SfxCmisVersionsDialog::LoadVersions()
     for (size_t n = 0; n < m_pTable->size(); ++n)
     {
         SfxVersionInfo *pInfo = m_pTable->at( n );
-        OUString aEntry = formatTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper());
+        OUString aEntry = formatDateTime(pInfo->aCreationDate, Application::GetSettings().GetLocaleDataWrapper(), false);
         m_xVersionBox->append(weld::toId(pInfo), aEntry);
         auto nLastRow = m_xVersionBox->n_children() - 1;
         m_xVersionBox->set_text(nLastRow, pInfo->aAuthor, 1);
