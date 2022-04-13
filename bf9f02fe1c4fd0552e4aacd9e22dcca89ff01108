@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12ecb6fe_dc022b48",
+        "filename": "odk/examples/DevelopersGuide/FirstSteps/FirstUnoContact.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-13T06:54:17Z",
+      "side": 1,
+      "message": "...but now the above line is no longer true, and the example now does something completely different (just initialize a UNO in the current process, rather than also connect to a running soffice process)",
+      "revId": "bf9f02fe1c4fd0552e4aacd9e22dcca89ff01108",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
