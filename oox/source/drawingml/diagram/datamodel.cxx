@@ -68,15 +68,15 @@ void DiagramData::restoreDataFromModelToShapeAfterReCreation(const svx::diagram:
         pTextRun->getText() = rPoint.msTextBody->msText;
         aNewTextBody->addParagraph().addRun(pTextRun);
 
-        if(rPoint.msTextBody->maTextProps.hasElements())
+        if(!rPoint.msTextBody->maTextProps.empty())
         {
             oox::PropertyMap& rTargetMap(aNewTextBody->getTextProperties().maPropertyMap);
 
             for (auto const& prop : rPoint.msTextBody->maTextProps)
             {
-                sal_Int32 nPropId(oox::PropertyMap::getPropertyId(prop.Name));
+                const sal_Int32 nPropId(oox::PropertyMap::getPropertyId(prop.first));
                 if(nPropId > 0)
-                    rTargetMap.setAnyProperty(nPropId, prop.Value);
+                    rTargetMap.setAnyProperty(nPropId, prop.second);
             }
         }
     }
@@ -99,7 +99,12 @@ void DiagramData::secureDataFromShapeToModelAfterDiagramImport()
             {
                 point.msTextBody = std::make_shared<svx::diagram::TextBody>();
                 point.msTextBody->msText = pShapeCandidate->getTextBody()->toString();
-                point.msTextBody->maTextProps = pShapeCandidate->getTextBody()->getTextProperties().maPropertyMap.makePropertyValueSequence();
+
+                const uno::Sequence< beans::PropertyValue > aTextProps(
+                    pShapeCandidate->getTextBody()->getTextProperties().maPropertyMap.makePropertyValueSequence());
+
+                for (auto const& prop : aTextProps)
+                    point.msTextBody->maTextProps.push_back(std::pair(prop.Name, prop.Value));
             }
 
             // At this place a mechanism to find missing data should be added:
