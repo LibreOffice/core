@@ -1221,6 +1221,8 @@ auto CurlProcessor::ProcessRequest(
         }
     }
     bool isRetry(false);
+    int nAuthRequests(5);
+    int nAuthRequestsProxy(5);
 
     // libcurl does not have an authentication callback so handle auth
     // related status codes and requesting credentials via this loop
@@ -1363,8 +1365,17 @@ auto CurlProcessor::ProcessRequest(
                     case SC_UNAUTHORIZED:
                     case SC_PROXY_AUTHENTICATION_REQUIRED:
                     {
-                        if (pEnv && pEnv->m_xAuthListener)
+                        auto& rnAuthRequests(statusCode == SC_UNAUTHORIZED ? nAuthRequests
+                                                                           : nAuthRequestsProxy);
+
+                        if (rnAuthRequests == 0)
                         {
+                            SAL_INFO("ucb.ucp.webdav.curl",
+                                     "aborting authentication after 5 attempts");
+                        }
+                        else if (pEnv && pEnv->m_xAuthListener)
+                        {
+                            --rnAuthRequests;
                             ::std::optional<OUString> const oRealm(ExtractRealm(
                                 headers, statusCode == SC_UNAUTHORIZED ? "WWW-Authenticate"
                                                                        : "Proxy-Authenticate"));
