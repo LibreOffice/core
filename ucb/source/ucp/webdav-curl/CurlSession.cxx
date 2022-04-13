@@ -1374,7 +1374,6 @@ auto CurlProcessor::ProcessRequest(
                         }
                         else if (pEnv && pEnv->m_xAuthListener)
                         {
-                            ++rnAuthRequests;
                             ::std::optional<OUString> const oRealm(ExtractRealm(
                                 headers, statusCode == SC_UNAUTHORIZED ? "WWW-Authenticate"
                                                                        : "Proxy-Authenticate"));
@@ -1398,6 +1397,7 @@ auto CurlProcessor::ProcessRequest(
                             // will always force its use no matter how hopeless
                             bool const isSystemCredSupported((authAvail & authSystem) != 0
                                                              && rnAuthRequests == 0);
+                            ++rnAuthRequests;
 
                             // Ask user via XInteractionHandler.
                             // Warning: This likely runs an event loop which may
