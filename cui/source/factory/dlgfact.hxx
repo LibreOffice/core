@@ -109,6 +109,10 @@ DECL_ABSTDLG_CLASS_UNIQUE(CuiAbstractController, VclAbstractDialog, weld::Dialog
 DECL_ABSTDLG_CLASS_SHARED_ASYNC(CuiAbstractControllerAsync, VclAbstractDialog, weld::DialogController)
 };
 
+// CuiAbstractWidgetTestControllerAsync_Impl
+DECL_ABSTDLG_CLASS_SHARED_ASYNC(CuiAbstractWidgetTestControllerAsync, VclAbstractDialog, weld::GenericDialogController)
+};
+
 // CuiAbstractSingleTabController_Impl
 DECL_ABSTDLG_CLASS_UNIQUE(CuiAbstractSingleTabController, SfxAbstractDialog, SfxSingleTabDialogController)
     virtual const SfxItemSet*   GetOutputItemSet() const override;
@@ -604,6 +608,8 @@ public:
     virtual VclPtr<VclAbstractDialog> CreateAboutDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateTipOfTheDayDialog(weld::Window* pParent) override;
+
+    virtual VclPtr<VclAbstractDialog> CreateWidgetTestDialog(weld::Window* pParent) override;
 
     virtual VclPtr<VclAbstractDialog> CreateToolbarmodeDialog(weld::Window* pParent) override;
 

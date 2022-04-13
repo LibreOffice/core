@@ -228,6 +228,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/wordcompletionpage \
 	cui/uiconfig/ui/spinbox \
 	cui/uiconfig/ui/zoomdialog \
+	cui/uiconfig/ui/widgettestdialog \
 ))
 
 # vim: set noet sw=4 ts=4:

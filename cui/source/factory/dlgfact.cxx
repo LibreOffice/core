@@ -89,6 +89,7 @@
 #include <hyphen.hxx>
 #include <thesdlg.hxx>
 #include <tipofthedaydlg.hxx>
+#include <widgettestdlg.hxx>
 #include <toolbarmodedlg.hxx>
 #include <DiagramDialog.hxx>
 #include <fileextcheckdlg.hxx>
@@ -143,6 +144,7 @@ IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractControllerAsync,weld::DialogController)
 IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractTabController,SfxTabDialogController)
 IMPL_ABSTDLG_CLASS(CuiAbstractController)
 IMPL_ABSTDLG_CLASS(CuiAbstractSingleTabController)
+IMPL_ABSTDLG_CLASS_ASYNC(CuiAbstractWidgetTestControllerAsync,weld::GenericDialogController)
 
 short AbstractHyphenWordDialog_Impl::Execute()
 {
@@ -1516,6 +1518,13 @@ AbstractDialogFactory_Impl::CreateTipOfTheDayDialog(weld::Window* pParent)
     (void) pParent;
     return nullptr;
 #endif
+}
+
+VclPtr<VclAbstractDialog>
+AbstractDialogFactory_Impl::CreateWidgetTestDialog(weld::Window* pParent)
+{
+    return VclPtr<CuiAbstractWidgetTestControllerAsync_Impl>::Create(
+        std::make_shared<WidgetTestDialog>(pParent));
 }
 
 VclPtr<VclAbstractDialog>

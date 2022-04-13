@@ -638,6 +638,17 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 #endif
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        case SID_WIDGET_TEST_DIALOG:
+        {
+            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+            VclPtr<VclAbstractDialog> pDlg(pFact->CreateWidgetTestDialog(rReq.GetFrameWeld()));
+            pDlg->StartExecuteAsync([pDlg](sal_Int32 /*nResult*/){
+                pDlg->disposeOnce();
+            });
+            bDone = true;
+            break;
+        }
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
