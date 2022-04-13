@@ -138,7 +138,7 @@
         <property name="use_underline">True</property>
         <child internal-child="accessible">
           <object class="AtkObject" id="import-atkobject">
-            <property name="AtkObject::accessible-description" translatable="yes" context="autotext|extended_tip|import">Opens a dialog where you can select the MS 97/2000/XP Word document or template, containing the AutoText entries that you want to import.</property>
+            <property name="AtkObject::accessible-description" translatable="yes" context="autotext|extended_tip|import">Opens a dialog where you can select the 97/2000/XP Word document or template, containing the AutoText entries that you want to import.</property>
           </object>
         </child>
       </object>

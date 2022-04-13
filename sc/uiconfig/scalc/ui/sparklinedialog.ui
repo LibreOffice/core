@@ -20,7 +20,7 @@
   <object class="GtkDialog" id="SparklineDialog">
     <property name="can-focus">False</property>
     <property name="border-width">6</property>
-    <property name="title" translatable="yes" context="SparklineDialog">Sparkline Dialog</property>
+    <property name="title" translatable="yes" context="SparklineDialog">Sparkline</property>
     <property name="type-hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
@@ -371,7 +371,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="hexpand">False</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label-negative">Negative Points:</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-negative">Negative points:</property>
                         <property name="xalign">0</property>
                         <accessibility>
                           <relation type="label-for" target="check-negative"/>
@@ -387,7 +387,7 @@
                       <object class="GtkLabel" id="label-high">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label-high">High Points:</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-high">High points:</property>
                         <property name="xalign">0</property>
                         <accessibility>
                           <relation type="label-for" target="check-high"/>
@@ -480,7 +480,7 @@
                       <object class="GtkLabel" id="label-low">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label-low">Low Points:</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-low">Low points:</property>
                         <property name="xalign">0</property>
                         <accessibility>
                           <relation type="label-for" target="check-low"/>
@@ -534,7 +534,7 @@
                       <object class="GtkLabel" id="label-last">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label-last">Last Points:</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-last">Last points:</property>
                         <property name="xalign">0</property>
                         <accessibility>
                           <relation type="label-for" target="check-last"/>
@@ -550,7 +550,7 @@
                       <object class="GtkLabel" id="label-first">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label-first">First Points:</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-first">First points:</property>
                         <property name="xalign">0</property>
                         <accessibility>
                           <relation type="label-for" target="check-first"/>
@@ -719,7 +719,7 @@
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="check-display-x-axis">
-                        <property name="label" translatable="yes" context="SparklineDialog|check-display-x-axis">Display X Axis</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|check-display-x-axis">Display X axis</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -735,7 +735,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-display-hidden">
-                        <property name="label" translatable="yes" context="SparklineDialog|check-display-hidden">Display Hidden</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|check-display-hidden">Display hidden</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -751,7 +751,7 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="check-right-to-left">
-                        <property name="label" translatable="yes" context="SparklineDialog|check-right-to-left">Right To Left</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|check-right-to-left">Right-to-left</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">False</property>
@@ -879,7 +879,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="xpad">12</property>
-                            <property name="label" translatable="yes" context="SparklineDialog|label-series">Minimum Value:</property>
+                            <property name="label" translatable="yes" context="SparklineDialog|label-series">Minimum value:</property>
                             <property name="xalign">0</property>
                             <accessibility>
                               <relation type="label-for" target="combo-min-axis-type"/>
@@ -896,7 +896,7 @@
                             <property name="visible">True</property>
                             <property name="can-focus">False</property>
                             <property name="xpad">12</property>
-                            <property name="label" translatable="yes" context="SparklineDialog|label-series">Maximum Value:</property>
+                            <property name="label" translatable="yes" context="SparklineDialog|label-series">Maximum value:</property>
                             <property name="xalign">0</property>
                             <accessibility>
                               <relation type="label-for" target="combo-max-axis-type"/>
@@ -1005,7 +1005,7 @@
                       <object class="GtkLabel" id="label-line-width">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes" context="SparklineDialog|label-line-width">Line Width:</property>
+                        <property name="label" translatable="yes" context="SparklineDialog|label-line-width">Line width:</property>
                         <property name="xalign">0</property>
                         <accessibility>
                           <relation type="label-for" target="spin-line-width"/>
