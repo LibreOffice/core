@@ -1068,7 +1068,7 @@ public:
 
         This function should be used with care.  After you have called this
         function, you may use the returned pInternalData and pInternalCapacity
-        only as long as you make no other calls on this OUStringBuffer.
+        only as long as you make no other calls on this OStringBuffer.
 
         @param pInternalData
         This output parameter receives a pointer to the internal data
