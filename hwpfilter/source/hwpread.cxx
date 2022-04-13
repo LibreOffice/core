@@ -106,7 +106,7 @@ bool FieldCode::Read(HWPFile & hwpf)
 
     if( type[0] == 3 && type[1] == 2 ){ /* It must create a format as created date. */
           DateCode *pDate = new DateCode;
-          for (int i = 0 ; i < static_cast<int>(len3_); i++) {
+          for (uint i = 0 ; i < len3_; i++) {
                 if(str3[i] == 0 ) break;
                 if( i >= DATE_SIZE ) break;
                 pDate->format[i] = str3[i];
