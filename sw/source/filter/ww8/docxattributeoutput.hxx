@@ -911,7 +911,8 @@ private:
     o3tl::sorted_vector<const SwFrameFormat*> m_aFloatingTablesOfParagraph;
     sal_Int32 m_nTextFrameLevel;
 
-    sal_Int32 m_nCloseContentControl = 0;
+    sal_Int32 m_nCloseContentControlInThisRun = 0;
+    sal_Int32 m_nCloseContentControlInPreviousRun = 0;
 
     // close of hyperlink needed
     bool m_closeHyperlinkInThisRun;
