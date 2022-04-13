@@ -219,7 +219,7 @@ CommandLineEvent CheckWebQuery(/* in,out */ OUString& arg, CommandLineEvent curE
         if (!SkipNewline(pPos))
             return curEvt;
 
-        OStringBuffer aResult(static_cast<unsigned int>(nRead));
+        OStringBuffer aResult(nRead);
         do
         {
             const char* pPos1 = pPos;
