@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "603bdce6_a8756d71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-04-13T12:58:08Z",
+      "side": 1,
+      "message": "Looks great - can we have on co-22.05 too ? \u003d)",
+      "revId": "cef57d2bfa19d249e1c1721f32640f955a137955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
