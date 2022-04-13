@@ -39,7 +39,7 @@ public class FirstUnoContact {
         try {
             // get the remote office component context
             com.sun.star.uno.XComponentContext xContext =
-                com.sun.star.comp.helper.Bootstrap.bootstrap();
+                com.sun.star.comp.helper.Bootstrap.createInitialComponentContext( null );
 
             System.out.println("Connected to a running office ...");
 
