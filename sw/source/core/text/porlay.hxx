@@ -289,6 +289,7 @@ public:
     void SetDelta(tools::Long nDelta) { m_nDelta = nDelta; }
     tools::Long GetDelta() const { return m_nDelta; }
     bool HasDelta() const { return m_nDelta != 0; }
+    void ResetDelta() { m_nDelta = 0; }
     SwScriptInfo& GetScriptInfo() { return m_aScriptInfo; }
     const SwScriptInfo& GetScriptInfo() const { return m_aScriptInfo; }
 
@@ -337,7 +338,7 @@ inline void SwParaPortion::ResetPreps()
 
 inline void SwParaPortion::FormatReset()
 {
-    m_nDelta = 0;
+    ResetDelta();
     m_aReformat = SwCharRange(TextFrameIndex(0), TextFrameIndex(COMPLETE_STRING));
     // bFlys needs to be retained in SwTextFrame::Format_() so that empty
     // paragraphs that needed to avoid Frames with no flow, reformat

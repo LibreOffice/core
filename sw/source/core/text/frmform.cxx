@@ -214,7 +214,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
             if( pPara )
             {
                 pPara->GetReformat() = SwCharRange();
-                pPara->SetDelta(0);
+                pPara->ResetDelta();
             }
         }
 
@@ -312,7 +312,7 @@ bool SwTextFrame::CalcFollow(TextFrameIndex const nTextOfst)
             if( pPara )
             {
                 pPara->GetReformat() = SwCharRange();
-                pPara->SetDelta(0);
+                pPara->ResetDelta();
             }
         }
 
@@ -1059,7 +1059,7 @@ void SwTextFrame::FormatAdjust( SwTextFormatter &rLine,
     // are valid now
     pPara->GetReformat() = SwCharRange();
     bool bDelta = pPara->HasDelta();
-    pPara->SetDelta(0);
+    pPara->ResetDelta();
 
     if( rLine.IsStop() )
     {
@@ -2078,7 +2078,7 @@ bool SwTextFrame::FormatQuick( bool bForceQuickFormat )
 
     // Delete reformat
     pPara->GetReformat() = SwCharRange();
-    pPara->SetDelta(0);
+    pPara->ResetDelta();
 
     return true;
 }
