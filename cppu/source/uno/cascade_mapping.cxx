@@ -156,7 +156,7 @@ extern "C" { static void s_MediatorMapping_free(uno_Mapping * pMapping)
 }}
 
 
-static OUString getPrefix(OUString const & str1, std::u16string_view str2)
+static OUString getPrefix(std::u16string_view str1, std::u16string_view str2)
 {
     sal_Int32 nIndex1 = 0;
     sal_Int32 nIndex2 = 0;
@@ -178,7 +178,7 @@ static OUString getPrefix(OUString const & str1, std::u16string_view str2)
     OUString result;
 
     if (sim)
-        result = str1.copy(0, sim - 1);
+        result = str1.substr(0, sim - 1);
 
     return result;
 }
