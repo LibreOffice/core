@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c31c7b93_8e4263e5",
+        "filename": "cppuhelper/source/typemanager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 2156,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-13T16:38:05Z",
+      "side": 1,
+      "message": "I sometimes think we are in danger of going too far with the push to string_view in function interfaces.  For example, even if that can presumably not be the case here, in general s.copy(a,b) of an OUString s can be cheaper (when a\u003d0 \u0026\u0026 b\u003ds.getLength()) than OUString(v.substr(a,b)) of a std::u16string_view v.",
+      "revId": "a5343a89f898468178f04c241de0b2c2a314a1b5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
