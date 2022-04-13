@@ -33,6 +33,23 @@
       "message": "Working on a side-port to 22.05. I get a crash in the ForKit process, debugging...",
       "revId": "cef57d2bfa19d249e1c1721f32640f955a137955",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a090978_0e95f716",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-04-13T13:10:47Z",
+      "side": 1,
+      "message": "(And most likely the same crash would happen if run against core master, too. Haven\u0027t checked yet.)",
+      "revId": "cef57d2bfa19d249e1c1721f32640f955a137955",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
