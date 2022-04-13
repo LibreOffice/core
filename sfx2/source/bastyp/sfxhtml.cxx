@@ -314,10 +314,10 @@ const OUString& SfxHTMLParser::GetScriptTypeString(
 }
 
 double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
-        LanguageType& eNumLang, const OUString& aValStr, const OUString& aNumStr,
+        LanguageType& eNumLang, const OUString& aValStr, std::u16string_view aNumStr,
         SvNumberFormatter& rFormatter )
 {
-    LanguageType eParseLang(aNumStr.toInt32());
+    LanguageType eParseLang(o3tl::toInt32(aNumStr));
     sal_uInt32 nParseForm = rFormatter.GetFormatForLanguageIfBuiltIn( 0, eParseLang );
     double fVal;
     (void)rFormatter.IsNumberFormat(aValStr, nParseForm, fVal);
@@ -325,7 +325,7 @@ double SfxHTMLParser::GetTableDataOptionsValNum( sal_uInt32& nNumForm,
     {
         sal_Int32 nIdx {0};
         eNumLang = LanguageType(o3tl::toInt32(o3tl::getToken(aNumStr, 1, ';', nIdx )));
-        OUString aFormat( aNumStr.copy( nIdx ) );
+        OUString aFormat( aNumStr.substr( nIdx ) );
         sal_Int32 nCheckPos;
         SvNumFormatType nType;
         if ( eNumLang != LANGUAGE_SYSTEM )
