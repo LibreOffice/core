@@ -29,8 +29,8 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 
 namespace svx::diagram {
 
@@ -83,10 +83,20 @@ struct SVXCORE_DLLPUBLIC TextBody
     OUString msText;
 
     // attributes from TextBody::getTextProperties()
-    css::uno::Sequence< css::beans::PropertyValue > maTextProps;
+    std::vector< std::pair< OUString, css::uno::Any >> maTextProps;
 };
 
 typedef std::shared_ptr< TextBody > TextBodyPtr;
+
+/** Styles for a Point (FillStyle/LineStyle/...)
+ */
+struct SVXCORE_DLLPUBLIC PointStyle
+{
+    // attributes (LineStyle/FillStyle/...)
+    std::vector< std::pair< OUString, css::uno::Any >> maProperties;
+};
+
+typedef std::shared_ptr< PointStyle > PointStylePtr;
 
 /** A point
  */
@@ -95,6 +105,7 @@ struct SVXCORE_DLLPUBLIC Point
     Point();
 
     TextBodyPtr msTextBody;
+    PointStylePtr msPointStylePtr;
 
     OUString msCnxId;
     OUString msModelId;
@@ -136,6 +147,9 @@ struct SVXCORE_DLLPUBLIC Point
     bool          mbCustomVerticalFlip;
     bool          mbCustomText;
     bool          mbIsPlaceholder;
+
+    void securePropertiesFromXShape(const css::uno::Reference< css::drawing::XShape >& rXShape);
+    void restorePropertiesToXShape(const css::uno::Reference< css::drawing::XShape >& rXShape) const;
 };
 
 typedef std::vector< Point >        Points;

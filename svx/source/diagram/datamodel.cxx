@@ -23,6 +23,15 @@
 
 #include <svx/diagram/datamodel.hxx>
 #include <comphelper/xmltools.hxx>
+#include <com/sun/star/uno/Reference.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/text/XText.hpp>
+
+#include <editeng/unoprnms.hxx>
 #include <sal/log.hxx>
 
 namespace svx::diagram {
@@ -61,6 +70,163 @@ Point::Point()
 , mbCustomText(false)
 , mbIsPlaceholder(false)
 {
+}
+
+static void addProperty(const OUString& rName,
+    const css::uno::Reference< css::beans::XPropertySetInfo >& xInfo,
+    std::vector< std::pair< OUString, css::uno::Any >>& rTarget,
+    const css::uno::Reference< css::beans::XPropertySet >& xPropSet )
+{
+    if(xInfo->hasPropertyByName(rName))
+            rTarget.push_back(std::pair(OUString(rName), xPropSet->getPropertyValue(rName)));
+}
+
+void Point::securePropertiesFromXShape(const css::uno::Reference< css::drawing::XShape >& rXShape)
+{
+    if(!rXShape)
+        return;
+
+#ifdef DBG_UTIL
+    // to easier decide which additional properties may/should be preserved,
+    // create a full list of set properties to browse/decide (in debugger)
+    const css::uno::Reference< css::beans::XPropertyState > xAllPropStates(rXShape, css::uno::UNO_QUERY);
+    const css::uno::Reference< css::beans::XPropertySet > xAllPropSet( rXShape, css::uno::UNO_QUERY );
+    const css::uno::Sequence< css::beans::Property > allSequence(xAllPropSet->getPropertySetInfo()->getProperties());
+    std::vector< std::pair< OUString, css::uno::Any >> allSetProps;
+    for (auto& rProp : allSequence)
+    {
+        try
+        {
+            if (xAllPropStates->getPropertyState(rProp.Name) == css::beans::PropertyState::PropertyState_DIRECT_VALUE)
+            {
+                css::uno::Any aValue(xAllPropSet->getPropertyValue(rProp.Name));
+                if(aValue.hasValue())
+                    allSetProps.push_back(std::pair(rProp.Name, aValue));
+            }
+        }
+        catch (...)
+        {
+        }
+    }
+#endif
+
+    const css::uno::Reference< css::beans::XPropertySet > xPropSet( rXShape, css::uno::UNO_QUERY );
+    if(!xPropSet)
+        return;
+
+    const css::uno::Reference< css::lang::XServiceInfo > xServiceInfo( rXShape, css::uno::UNO_QUERY );
+    if(!xServiceInfo)
+        return;
+
+    const css::uno::Reference< css::beans::XPropertySetInfo > xInfo(xPropSet->getPropertySetInfo());
+    if (!xInfo.is())
+        return;
+
+    if(!msPointStylePtr)
+        msPointStylePtr = std::make_shared< svx::diagram::PointStyle >();
+
+    // shortcut to target
+    std::vector< std::pair< OUString, css::uno::Any >>& rTarget(msPointStylePtr->maProperties);
+
+    // Note: The Text may also be secured here, so it may also be possible to
+    // secure/store it at PointStyle instead of at TextBody, same maybe evaluated
+    // for the text attributes - where when securing here the attributes would be
+    // in our UNO API format already.
+    // if(xServiceInfo->supportsService("com.sun.star.drawing.Text"))
+    // {
+    //     css::uno::Reference< css::text::XText > xText(rXShape, css::uno::UNO_QUERY);
+    //     const OUString aText(xText->getString());
+    //
+    //     if(!aText.isEmpty())
+    //     {
+    //     }
+    // }
+
+    // Add all kinds of properties that are needed to re-create the XShape.
+    // For now this is a minimal example-selection, it will need to be extended
+    // over time for all kind of cases/properties
+
+    // text properties
+    if(xServiceInfo->supportsService("com.sun.star.drawing.TextProperties"))
+    {
+        addProperty(UNO_NAME_CHAR_COLOR, xInfo, rTarget, xPropSet);
+        addProperty(UNO_NAME_CHAR_HEIGHT, xInfo, rTarget, xPropSet);
+        addProperty(UNO_NAME_CHAR_SHADOWED, xInfo, rTarget, xPropSet);
+        addProperty(UNO_NAME_CHAR_WEIGHT, xInfo, rTarget, xPropSet);
+    }
+
+    // fill properties
+    if(xServiceInfo->supportsService("com.sun.star.drawing.FillProperties"))
+    {
+        css::drawing::FillStyle eFillStyle(css::drawing::FillStyle_NONE);
+        if (xInfo->hasPropertyByName(UNO_NAME_FILLSTYLE))
+            xPropSet->getPropertyValue(UNO_NAME_FILLSTYLE) >>= eFillStyle;
+
+        if(css::drawing::FillStyle_NONE != eFillStyle)
+        {
+            addProperty(UNO_NAME_FILLSTYLE, xInfo, rTarget, xPropSet);
+
+            switch(eFillStyle)
+            {
+                case css::drawing::FillStyle_SOLID:
+                {
+                    addProperty(UNO_NAME_FILLCOLOR, xInfo, rTarget, xPropSet);
+                    break;
+                }
+                default:
+                case css::drawing::FillStyle_NONE:
+                case css::drawing::FillStyle_GRADIENT:
+                case css::drawing::FillStyle_HATCH:
+                case css::drawing::FillStyle_BITMAP:
+                    break;
+            }
+        }
+    }
+
+    // line properties
+    if(xServiceInfo->supportsService("com.sun.star.drawing.LineProperties"))
+    {
+        css::drawing::LineStyle eLineStyle(css::drawing::LineStyle_NONE);
+        if (xInfo->hasPropertyByName(UNO_NAME_LINESTYLE))
+            xPropSet->getPropertyValue(UNO_NAME_LINESTYLE) >>= eLineStyle;
+
+        if(css::drawing::LineStyle_NONE != eLineStyle)
+        {
+            addProperty(UNO_NAME_LINESTYLE, xInfo, rTarget, xPropSet);
+            addProperty(UNO_NAME_LINECOLOR, xInfo, rTarget, xPropSet);
+            addProperty(UNO_NAME_LINEWIDTH, xInfo, rTarget, xPropSet);
+
+            switch(eLineStyle)
+            {
+                case css::drawing::LineStyle_SOLID:
+                    break;
+                default:
+                case css::drawing::LineStyle_NONE:
+                case css::drawing::LineStyle_DASH:
+                    break;
+            }
+        }
+    }
+}
+
+void Point::restorePropertiesToXShape(const css::uno::Reference< css::drawing::XShape >& rXShape) const
+{
+    if(!msPointStylePtr)
+        return;
+
+    if(!rXShape)
+        return;
+
+    css::uno::Reference<css::beans::XPropertySet> xPropSet(rXShape, css::uno::UNO_QUERY);
+    if(!xPropSet)
+        return;
+
+    std::vector< std::pair< OUString, css::uno::Any >>& rSource(msPointStylePtr->maProperties);
+
+    for (auto const& prop : rSource)
+    {
+        xPropSet->setPropertyValue(prop.first, prop.second);
+    }
 }
 
 DiagramData::DiagramData()
@@ -136,9 +302,6 @@ bool DiagramData::removeNode(const OUString& rNodeId)
                    maPoints.end());
 
     // TODO: fix source/dest order
-
-    buildDiagramDataModel(true);
-
     return true;
 }
 
@@ -253,8 +416,6 @@ OUString DiagramData::addNode(const OUString& rText)
     // adding at the end, so that references are not invalidated in between
     maPoints.push_back(aDataPoint);
     maPoints.push_back(aPresPoint);
-
-    buildDiagramDataModel(true);
 
     return sNewNodeId;
 }

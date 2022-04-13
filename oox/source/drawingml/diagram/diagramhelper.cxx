@@ -103,7 +103,9 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
 
     // set oox::Theme at Filter. All LineStyle/FillStyle/Colors/Attributes
     // will be taken from there
-    xFilter->setCurrentTheme(getOrCreateThemePtr(xFilter));
+    static bool bUseDiagramThemeData(false);
+    if(bUseDiagramThemeData)
+        xFilter->setCurrentTheme(getOrCreateThemePtr(xFilter));
 
     css::uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
     xFilter->setTargetDocument(aComponentModel);
@@ -126,11 +128,16 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
             pShapePtr->getFillProperties());
     }
 
-    // Re-apply remembered geometry
-    rTarget.TRSetBaseGeometry(aTransformation, aPolyPolygon);
-
     // sync FontHeights
     mpDiagramPtr->syncDiagramFontHeights();
+
+    // re-apply secured data from ModelData
+    static bool bUseDiagramModelData(true);
+    if(bUseDiagramModelData)
+        mpDiagramPtr->getLayout()->restoreDataFromModelToXShapeAfterDiagramReCreate();
+
+    // Re-apply remembered geometry
+    rTarget.TRSetBaseGeometry(aTransformation, aPolyPolygon);
 }
 
 OUString AdvancedDiagramHelper::getString() const
@@ -155,22 +162,42 @@ std::vector<std::pair<OUString, OUString>> AdvancedDiagramHelper::getChildren(co
 
 OUString AdvancedDiagramHelper::addNode(const OUString& rText)
 {
+    OUString aRetval;
+
     if(hasDiagramData())
     {
-        return mpDiagramPtr->getData()->addNode(rText);
+        aRetval = mpDiagramPtr->getData()->addNode(rText);
+
+        // reset temporary buffered ModelData association lists & rebuild them
+        // and the Diagram DataModel
+        mpDiagramPtr->getData()->buildDiagramDataModel(true);
+
+        // also reset temporary buffered layout data - that might
+        // still refer to changed oox::Shape data
+        mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
     }
 
-    return OUString();
+    return aRetval;
 }
 
 bool AdvancedDiagramHelper::removeNode(const OUString& rNodeId)
 {
+    bool bRetval(false);
+
     if(hasDiagramData())
     {
-        return mpDiagramPtr->getData()->removeNode(rNodeId);
+        bRetval = mpDiagramPtr->getData()->removeNode(rNodeId);
+
+        // reset temporary buffered ModelData association lists & rebuild them
+        // and the Diagram DataModel
+        mpDiagramPtr->getData()->buildDiagramDataModel(true);
+
+        // also reset temporary buffered layout data - that might
+        // still refer to changed oox::Shape data
+        mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
     }
 
-    return false;
+    return bRetval;
 }
 
 void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
@@ -181,6 +208,12 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
     }
 
     mpDiagramPtr->syncDiagramFontHeights();
+
+    // After Diagram import, parts of the Diagram ModelData is at the
+    // oox::drawingml::Shape. Since these objects are temporary helpers,
+    // secure that data at the Diagram ModelData by copying.
+    mpDiagramPtr->getData()->secureDataFromShapeToModelAfterDiagramImport();
+    mpDiagramPtr->getLayout()->secureDataFromXShapeToModelAfterDiagramImport();
 
     anchorToSdrObjGroup(rTarget);
 }
