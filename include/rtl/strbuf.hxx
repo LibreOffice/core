@@ -27,6 +27,7 @@
 
 #include <cassert>
 #include <cstring>
+#include <limits>
 
 #include "rtl/strbuf.h"
 #include "rtl/string.hxx"
@@ -35,6 +36,7 @@
 #ifdef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"
 #include "rtl/stringconcat.hxx"
 #include <string_view>
+#include <type_traits>
 #endif
 
 #ifdef RTL_STRING_UNITTEST
@@ -99,31 +101,29 @@ public:
 
         @param      length   the initial capacity.
      */
-    explicit OStringBuffer(int length)
+    explicit OStringBuffer(sal_Int32 length)
         : pData(NULL)
         , nCapacity( length )
     {
         rtl_string_new_WithLength( &pData, length );
     }
-#if __cplusplus >= 201103L
-    explicit OStringBuffer(unsigned int length)
-        : OStringBuffer(static_cast<int>(length))
+#if defined LIBO_INTERNAL_ONLY
+    template<typename T>
+    explicit OStringBuffer(T length, std::enable_if_t<std::is_integral_v<T>, int> = 0)
+        : OStringBuffer(static_cast<sal_Int32>(length))
     {
+        assert(
+            length >= 0
+            && static_cast<std::make_unsigned_t<T>>(length)
+                <= static_cast<std::make_unsigned_t<sal_Int32>>(
+                    std::numeric_limits<sal_Int32>::max()));
     }
-#if SAL_TYPES_SIZEOFLONG == 4
-    // additional overloads for sal_Int32 sal_uInt32
-    explicit OStringBuffer(long length)
-        : OStringBuffer(static_cast<int>(length))
-    {
-    }
-    explicit OStringBuffer(unsigned long length)
-        : OStringBuffer(static_cast<int>(length))
-    {
-    }
-#endif
-    // avoid obvious bugs
+    // avoid (obvious) bugs
+    explicit OStringBuffer(bool) = delete;
     explicit OStringBuffer(char) = delete;
-    explicit OStringBuffer(sal_Unicode) = delete;
+    explicit OStringBuffer(wchar_t) = delete;
+    explicit OStringBuffer(char16_t) = delete;
+    explicit OStringBuffer(char32_t) = delete;
 #endif
 
     /**
