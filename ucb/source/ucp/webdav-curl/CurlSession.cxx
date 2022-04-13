@@ -1223,6 +1223,8 @@ auto CurlProcessor::ProcessRequest(
         }
     }
     bool isRetry(false);
+    int nAuthRequests(0);
+    int nAuthRequestsProxy(0);
 
     // libcurl does not have an authentication callback so handle auth
     // related status codes and requesting credentials via this loop
@@ -1365,7 +1367,14 @@ auto CurlProcessor::ProcessRequest(
                     case SC_UNAUTHORIZED:
                     case SC_PROXY_AUTHENTICATION_REQUIRED:
                     {
-                        if (pEnv && pEnv->m_xAuthListener)
+                        auto& rnAuthRequests(statusCode == SC_UNAUTHORIZED ? nAuthRequests
+                                                                           : nAuthRequestsProxy);
+                        if (rnAuthRequests == 10)
+                        {
+                            SAL_INFO("ucb.ucp.webdav.curl", "aborting authentication after "
+                                                                << rnAuthRequests << " attempts");
+                        }
+                        else if (pEnv && pEnv->m_xAuthListener)
                         {
                             ::std::optional<OUString> const oRealm(ExtractRealm(
                                 headers, statusCode == SC_UNAUTHORIZED ? "WWW-Authenticate"
@@ -1383,7 +1392,14 @@ auto CurlProcessor::ProcessRequest(
                                                               &authAvail);
                             assert(rc == CURLE_OK);
                             (void)rc;
-                            bool const isSystemCredSupported((authAvail & authSystem) != 0);
+                            // only allow SystemCredentials once - the
+                            // PasswordContainer may have stored it in the
+                            // Config (TrySystemCredentialsFirst or
+                            // AuthenticateUsingSystemCredentials) and then it
+                            // will always force its use no matter how hopeless
+                            bool const isSystemCredSupported((authAvail & authSystem) != 0
+                                                             && rnAuthRequests == 0);
+                            ++rnAuthRequests;
 
                             // Ask user via XInteractionHandler.
                             // Warning: This likely runs an event loop which may
