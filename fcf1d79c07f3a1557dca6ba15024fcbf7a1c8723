@@ -34,6 +34,24 @@
       "parentUuid": "2876c6bb_6ea3be3e",
       "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6191bd34_7d96e0b0",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-14T07:57:34Z",
+      "side": 1,
+      "message": "I don\u0027t really care; I just wondered why a non-translatable string got changed in a \"Translatable string improvements\" commit.",
+      "parentUuid": "10de1c08_95cfce41",
+      "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
