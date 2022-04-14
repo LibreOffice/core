@@ -17,6 +17,11 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <string_view>
+
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include "ftransl.hxx"
@@ -418,9 +423,9 @@ void findStdFormatIdOrNativeFormatNameForFullMediaType(
     }
 }
 
-bool isTextPlainMediaType( const OUString& fullMediaType )
+bool isTextPlainMediaType( std::u16string_view fullMediaType )
 {
-    return fullMediaType.equalsIgnoreAsciiCase("text/plain");
+    return o3tl::equalsIgnoreAsciiCase(fullMediaType, u"text/plain");
 }
 
 DataFlavor mkDataFlv(const OUString& cnttype, const OUString& hpname, Type dtype)
