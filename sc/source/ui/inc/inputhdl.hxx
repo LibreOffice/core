@@ -130,6 +130,8 @@ private:
     static bool             bOptLoaded;
     ::std::set< sal_Unicode >    maFormulaChar;  //fdo 75264
 
+    bool                    m_bKeyInputLOK;
+
 private:
     void            UpdateActiveView();
     void            SyncViews( const EditView* pSourceView = nullptr );

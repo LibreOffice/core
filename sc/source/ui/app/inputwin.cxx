@@ -39,6 +39,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 #include <svl/stritem.hxx>
@@ -112,6 +113,14 @@ enum ScNameInputType
     SC_NAME_INPUT_BAD_SELECTION,
     SC_MANAGE_NAMES
 };
+
+void lcl_sendFormulabarUpdateLOK(const OUString& rText)
+{
+    std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
+    (*pData)["action_type"] = "setText";
+    (*pData)["text"] = rText;
+    jsdialog::SendAction("0formulabar", "sc_input_window", std::move(pData), true);
+}
 
 }
 
@@ -536,12 +545,12 @@ void ScInputWindow::SetPosString( const OUString& rStr )
         aWndPos->SetPos( rStr );
 }
 
-void ScInputWindow::SetTextString( const OUString& rString )
+void ScInputWindow::SetTextString( const OUString& rString, bool bKeyInput )
 {
     if (rString.getLength() <= 32767)
-        mxTextWindow->SetTextString(rString);
+        mxTextWindow->SetTextString(rString, bKeyInput);
     else
-        mxTextWindow->SetTextString(rString.copy(0, 32767));
+        mxTextWindow->SetTextString(rString.copy(0, 32767), bKeyInput);
 }
 
 void ScInputWindow::SetOkCancelMode()
@@ -896,9 +905,9 @@ const OUString& ScInputBarGroup::GetTextString() const
     return mxTextWndGroup->GetTextString();
 }
 
-void ScInputBarGroup::SetTextString( const OUString& rString )
+void ScInputBarGroup::SetTextString( const OUString& rString, bool bKeyInput )
 {
-    mxTextWndGroup->SetTextString(rString);
+    mxTextWndGroup->SetTextString(rString, bKeyInput);
 }
 
 void ScInputBarGroup::Resize()
@@ -1087,6 +1096,8 @@ ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh
     , mrParent(rParent)
 {
     mxScrollWin->connect_vadjustment_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
+    if (comphelper::LibreOfficeKit::isActive())
+        lcl_sendFormulabarUpdateLOK("");
 }
 
 Point ScTextWndGroup::GetCursorScreenPixelPos(bool bBelow)
@@ -1193,9 +1204,9 @@ void ScTextWndGroup::SetFormulaMode(bool bSet)
     mxTextWnd->SetFormulaMode(bSet);
 }
 
-void ScTextWndGroup::SetTextString(const OUString& rString)
+void ScTextWndGroup::SetTextString(const OUString& rString, bool bKeyInput)
 {
-    mxTextWnd->SetTextString(rString);
+    mxTextWnd->SetTextString(rString, bKeyInput);
 }
 
 void ScTextWndGroup::StartEditEngine()
@@ -1383,6 +1394,9 @@ void ScTextWnd::StartEditEngine()
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
+
+    if (comphelper::LibreOfficeKit::isActive())
+        lcl_sendFormulabarUpdateLOK("");
 }
 
 static void lcl_ExtendEditFontAttribs( SfxItemSet& rSet )
@@ -1666,6 +1680,22 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
         else if ( nCommand == CommandEventId::CursorPos )
         {
             //  don't call InputChanged for CommandEventId::CursorPos
+            if (comphelper::LibreOfficeKit::isActive())
+            {
+                if ( !(SC_MOD()->IsEditMode()) )
+                    StartEditEngine();
+
+                TextGrabFocus();
+
+                // LOK uses this to setup caret position because drawingarea is replaced
+                // with text input field, it sends logical position (start, end) not pixels
+                Point aSelectionStartEnd = rCEvt.GetMousePosPixel();
+                m_xEditView->SetSelection(ESelection(0, aSelectionStartEnd.X(),
+                                                    0, aSelectionStartEnd.Y()));
+                m_xEditView->ShowCursor();
+                SC_MOD()->InputSelection( m_xEditView.get() );
+
+            }
         }
         else if ( nCommand == CommandEventId::InputLanguageChange )
         {
@@ -1870,8 +1900,11 @@ static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString&
     return i;
 }
 
-void ScTextWnd::SetTextString( const OUString& rNewString )
+void ScTextWnd::SetTextString( const OUString& rNewString, bool bKeyInput )
 {
+    if (comphelper::LibreOfficeKit::isActive() && !bKeyInput)
+        lcl_sendFormulabarUpdateLOK(rNewString);
+
     // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
     // the initialisation scenario where a cell is first clicked on we end up with the text in the
     // inputbar window scrolled to the bottom if we do that here ( because the tableview and topview
