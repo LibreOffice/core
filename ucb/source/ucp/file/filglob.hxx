@@ -50,12 +50,12 @@ namespace fileaccess {
                                            std::u16string_view old_Name );
 
     // returns the last part of the given url as title
-    extern OUString getTitle( const OUString& aPath );
+    extern std::u16string_view getTitle( std::u16string_view aPath );
 
     // returns the url without last part as parentname
     // In case aFileName is root ( file:/// ) root is returned
 
-    extern OUString getParentName( const OUString& aFileName );
+    extern OUString getParentName( std::u16string_view aFileName );
 
     /**
      *  special copy:
