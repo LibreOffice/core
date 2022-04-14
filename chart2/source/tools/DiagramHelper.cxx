@@ -1061,7 +1061,7 @@ sal_Int32 DiagramHelper::getDateTimeInputNumberFormat( const Reference< util::XN
         // Obtain best matching date, time or datetime format.
         nRet = pNumFormatter->GuessDateTimeFormat( nType, fNumber, LANGUAGE_SYSTEM);
         // Obtain the corresponding edit format.
-        nRet = pNumFormatter->GetEditFormat( fNumber, nRet, nType, LANGUAGE_SYSTEM, nullptr);
+        nRet = pNumFormatter->GetEditFormat( fNumber, nRet, nType, nullptr);
     }
     return nRet;
 }

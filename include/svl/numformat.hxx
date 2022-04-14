@@ -306,9 +306,16 @@ public:
         should not be used otherwise. */
     sal_uInt32 GuessDateTimeFormat(SvNumFormatType& rType, double fNumber, LanguageType eLnge);
 
-    /** Return the corresponding edit format of a format. */
+    /** Return the corresponding edit format of a format.
+
+        nFIndex, eType and pFormat (if not nullptr) are assumed to match each
+        other / be of one format. The locale to use is obtained from pFormat,
+        if nullptr then LANGUAGE_SYSTEM is used. This can be overriden by
+        specifying eForLocale other than LANGUAGE_DONTKNOW.
+     */
     sal_uInt32 GetEditFormat(double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
-                             LanguageType eLnge, SvNumberformat const* pFormat);
+                             SvNumberformat const* pFormat,
+                             LanguageType eForLocale = LANGUAGE_DONTKNOW);
 
     /// Return the reference date
     const Date& GetNullDate() const;

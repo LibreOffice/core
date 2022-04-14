@@ -1594,10 +1594,14 @@ sal_uInt32 SvNumberFormatter::GuessDateTimeFormat( SvNumFormatType& rType, doubl
 }
 
 sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
-                                             SvNumFormatType eType, LanguageType eLang,
-                                             SvNumberformat const * pFormat )
+                                             SvNumFormatType eType,
+                                             SvNumberformat const * pFormat,
+                                             LanguageType eForLocale )
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
+    const LanguageType eLang = (pFormat ? pFormat->GetLanguage() : LANGUAGE_SYSTEM);
+    if (eForLocale == LANGUAGE_DONTKNOW)
+        eForLocale = eLang;
     sal_uInt32 nKey = nFIndex;
     switch ( eType )
     {
@@ -1615,16 +1619,16 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
                 // fdo#34977 preserve time when editing even if only date was
                 // displayed.
                 if (bIsoDate)
-                    nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang);
+                    nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eForLocale);
                 else
-                    nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+                    nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eForLocale );
             }
             else
             {
                 if (bIsoDate)
-                    nKey = GetFormatIndex( NF_DATE_ISO_YYYYMMDD, eLang);
+                    nKey = GetFormatIndex( NF_DATE_ISO_YYYYMMDD, eForLocale);
                 else
-                    nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eLang );
+                    nKey = GetFormatIndex( NF_DATE_SYS_DDMMYYYY, eForLocale );
             }
         }
         break;
@@ -1635,36 +1639,36 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
              * of a signed 16-bit. 32k hours are 3.7 years ... or
              * 1903-09-26 if date. */
             if (fabs( fNumber) * 24 < 0x7fff)
-                nKey = GetTimeFormat( fNumber, eLang, true);
+                nKey = GetTimeFormat( fNumber, eForLocale, true);
             // Preserve duration, use [HH]:MM:SS instead of time.
             else
-                nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+                nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eForLocale );
             // Assume that a large value is a datetime with only time
             // displayed.
         }
         else
-            nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
+            nKey = GetStandardFormat( fNumber, nFIndex, eType, eForLocale );
         break;
     case SvNumFormatType::DURATION :
-        nKey = GetTimeFormat( fNumber, eLang, true);
+        nKey = GetTimeFormat( fNumber, eForLocale, true);
         break;
     case SvNumFormatType::DATETIME :
         if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, eLang))
-            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, eLang );
+            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS, eForLocale );
         else if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, eLang))
-            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, eLang );
+            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDDTHHMMSS000, eForLocale );
         else if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS000, eLang))
-            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS000, eLang );
+            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS000, eForLocale );
         else if (nFIndex == GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang) || (pFormat && pFormat->IsIso8601( 0 )))
-            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eLang );
+            nKey = GetFormatIndex( NF_DATETIME_ISO_YYYYMMDD_HHMMSS, eForLocale );
         else
-            nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eLang );
+            nKey = GetFormatIndex( NF_DATETIME_SYS_DDMMYYYY_HHMMSS, eForLocale );
         break;
     case SvNumFormatType::NUMBER:
-        nKey = GetStandardFormat( eType, eLang );
+        nKey = GetStandardFormat( eType, eForLocale );
         break;
     default:
-        nKey = GetStandardFormat( fNumber, nFIndex, eType, eLang );
+        nKey = GetStandardFormat( fNumber, nFIndex, eType, eForLocale );
     }
     return nKey;
 }
@@ -1712,7 +1716,7 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         bPrecChanged = true;
     }
 
-    sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, eLang, pFormat);
+    sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, pFormat);
     // if bFiltering true keep the nRealKey format
     if ( nKey != nRealKey && !bFiltering )
     {
