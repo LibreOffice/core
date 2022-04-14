@@ -51,6 +51,7 @@
 #include <mediash.hxx>
 #include <pgbrksh.hxx>
 #include <scdll.hxx>
+#include <SparklineShell.hxx>
 
 #include <appoptio.hxx>
 #include <searchresults.hxx>
@@ -125,6 +126,7 @@ void ScDLL::Init()
     ScDrawTextObjectBar ::RegisterInterface(pMod);
     ScEditShell         ::RegisterInterface(pMod);
     ScPivotShell        ::RegisterInterface(pMod);
+    sc::SparklineShell  ::RegisterInterface(pMod);
     ScAuditingShell     ::RegisterInterface(pMod);
     ScFormatShell       ::RegisterInterface(pMod);
     ScCellShell         ::RegisterInterface(pMod);

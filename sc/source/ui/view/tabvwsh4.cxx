@@ -46,6 +46,7 @@
 #include <drformsh.hxx>
 #include <editsh.hxx>
 #include <pivotsh.hxx>
+#include <SparklineShell.hxx>
 #include <auditsh.hxx>
 #include <drtxtob.hxx>
 #include <inputhdl.hxx>
@@ -690,6 +691,25 @@ void ScTabViewShell::SetPivotShell( bool bActive )
         SetCurSubShell(OST_Cell);
 }
 
+void ScTabViewShell::SetSparklineShell(bool bActive)
+{
+    if (eCurOST != OST_Sparkline && eCurOST != OST_Cell)
+        return;
+
+    if (bActive)
+    {
+        bActiveDrawTextSh = bActiveDrawSh = false;
+        bActiveDrawFormSh=false;
+        bActiveGraphicSh=false;
+        bActiveMediaSh=false;
+        bActiveOleObjectSh=false;
+        bActiveChartSh=false;
+        SetCurSubShell(OST_Sparkline);
+    }
+    else
+        SetCurSubShell(OST_Cell);
+}
+
 void ScTabViewShell::SetAuditShell( bool bActive )
 {
     if ( bActive )
@@ -948,6 +968,20 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, bool bForce)
             bCellBrush = true;
         }
         break;
+        case OST_Sparkline:
+        {
+            AddSubShell(*pCellShell);
+            if(bPgBrk) AddSubShell(*pPageBreakShell);
+
+            if (!m_pSparklineShell)
+            {
+                m_pSparklineShell.reset(new sc::SparklineShell(this));
+                m_pSparklineShell->SetRepeatTarget(&aTarget);
+            }
+            AddSubShell(*m_pSparklineShell);
+            bCellBrush = true;
+        }
+        break;
         default:
         OSL_FAIL("wrong shell requested");
         break;
@@ -992,11 +1026,14 @@ SfxShell* ScTabViewShell::GetMySubShell() const
     SfxShell* pSub = const_cast<ScTabViewShell*>(this)->GetSubShell(nPos);
     while (pSub)
     {
-        if ( pSub == pDrawShell.get()  || pSub == pDrawTextShell.get() || pSub == pEditShell.get() ||
+        if  (pSub == pDrawShell.get()  || pSub == pDrawTextShell.get() || pSub == pEditShell.get() ||
              pSub == pPivotShell.get() || pSub == pAuditingShell.get() || pSub == pDrawFormShell.get() ||
              pSub == pCellShell.get()  || pSub == pOleObjectShell.get() || pSub == pChartShell.get() ||
-             pSub == pGraphicShell.get() || pSub == pMediaShell.get() || pSub == pPageBreakShell.get())
+             pSub == pGraphicShell.get() || pSub == pMediaShell.get() || pSub == pPageBreakShell.get() ||
+             pSub == m_pSparklineShell.get())
+        {
             return pSub;    // found
+        }
 
         pSub = const_cast<ScTabViewShell*>(this)->GetSubShell(++nPos);
     }
@@ -1812,6 +1849,7 @@ ScTabViewShell::~ScTabViewShell()
     pDrawTextShell.reset();
     pEditShell.reset();
     pPivotShell.reset();
+    m_pSparklineShell.reset();
     pAuditingShell.reset();
     pCurFrameLine.reset();
     mpFormEditData.reset();

@@ -184,6 +184,7 @@ void EnumContext::ProvideContextContainers()
     AddEntry("Text", Context::Text);
     AddEntry("TextObject", Context::TextObject);
     AddEntry("Trendline", Context::Trendline);
+    AddEntry("Sparkline", Context::Sparkline);
 
     // other general contexts
     AddEntry("any", Context::Any);
