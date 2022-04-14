@@ -9,6 +9,7 @@
 
 #include <sal/config.h>
 
+#include <array>
 #include <atomic>
 #include <initializer_list>
 
@@ -75,6 +76,8 @@ void f()
     h(w1.element);
     css::uno::Sequence<sal_Bool> s7(1);
     h(s7[0]);
+    std::array<sal_Bool, 1> s8;
+    s8[0] = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

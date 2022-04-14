@@ -30,6 +30,14 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
+#if defined LIBO_INTERNAL_ONLY
+#include <array>
+#include <cassert>
+#include <cstddef>
+#include <string_view>
+#include "config_global.h"
+#endif
+
 namespace rtl {
 
 /** A wrapper around the C functions from <rtl/uri.h>.
@@ -130,6 +138,39 @@ inline rtl::OUString Uri::convertRelToAbs(rtl::OUString const & rBaseUriRef,
         throw MalformedUriException(aException);
     return aResult;
 }
+
+#if defined LIBO_INTERNAL_ONLY
+
+constexpr std::size_t UriCharClassSize = 128;
+
+// Create a char class (for use with rtl_uriEncode and rtl::Uri::encode), represented as a
+// compile-time std::array, from an UTF-8 string literal.
+//
+// The given `unencoded` lists each ASCII character once that shall not be encoded.  (It uses an
+// UTF-8 string type to emphasize that its characters' values are always interpreted as ASCII
+// values.)
+#if HAVE_CPP_CONSTEVAL
+consteval
+#else
+constexpr
+#endif
+auto createUriCharClass(
+#if defined __cpp_lib_char8_t
+    std::u8string_view
+#else
+    std::string_view
+#endif
+        unencoded)
+{
+    std::array<sal_Bool, UriCharClassSize> a = {};
+    for (auto c: unencoded) {
+        assert(!a[c]); // would presumably indicate a typo in the `unencoded` argument
+        a[c] = true;
+    }
+    return a;
+}
+
+#endif
 
 }
 

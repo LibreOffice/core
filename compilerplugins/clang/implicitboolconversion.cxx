@@ -179,16 +179,23 @@ bool isBoolExpr(Expr const * expr) {
                 (void)op;
                 TemplateDecl const * d
                     = t->getTemplateName().getAsTemplateDecl();
-                if (d == nullptr
-                    || !loplugin::DeclCheck(d->getTemplatedDecl()).Class("Sequence")
-                        .Namespace("uno").Namespace("star").Namespace("sun").Namespace("com")
-                        .GlobalNamespace()
-                    || t->getNumArgs() != 1
-                    || t->getArg(0).getKind() != TemplateArgument::Type)
-                {
+                if (d == nullptr) {
                     break;
                 }
-                ty = t->getArg(0).getAsType();
+                auto const dc = loplugin::DeclCheck(d->getTemplatedDecl());
+                if (dc.ClassOrStruct("array").StdNamespace() && t->getNumArgs() >= 2
+                           && t->getArg(0).getKind() == TemplateArgument::Type)
+                {
+                    ty = t->getArg(0).getAsType();
+                } else if (dc.Class("Sequence").Namespace("uno").Namespace("star").Namespace("sun")
+                               .Namespace("com").GlobalNamespace()
+                           && t->getNumArgs() == 1
+                           && t->getArg(0).getKind() == TemplateArgument::Type)
+                {
+                    ty = t->getArg(0).getAsType();
+                } else {
+                    break;
+                }
             }
             stack.pop();
             if (stack.empty()) {

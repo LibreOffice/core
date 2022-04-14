@@ -132,23 +132,12 @@ static OUString ImplGetParameterString( const TransferableObjectDescriptor& rObj
     {
         // the display name might contain unacceptable characters, encode all of them
         // this seems to be the only parameter currently that might contain such characters
-        sal_Bool pToAccept[128];
-        for (sal_Bool & rb : pToAccept)
-            rb = false;
-
-        const char aQuotedParamChars[] =
-            "()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
-
-        for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
-        {
-            sal_Unicode nChar = aQuotedParamChars[nInd];
-            if ( nChar < 128 )
-                pToAccept[nChar] = true;
-        }
+        static constexpr auto pToAccept = rtl::createUriCharClass(
+            u8"()<>@,;:/[]?=!#$&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ");
 
         aParams += ";displayname=\""
             + rtl::Uri::encode(
-                rObjDesc.maDisplayName, pToAccept, rtl_UriEncodeIgnoreEscapes,
+                rObjDesc.maDisplayName, pToAccept.data(), rtl_UriEncodeIgnoreEscapes,
                 RTL_TEXTENCODING_UTF8)
             + "\"";
     }
