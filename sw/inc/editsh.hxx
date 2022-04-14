@@ -826,7 +826,7 @@ public:
 
     bool InsertURL( const SwFormatINetFormat& rFormat, const OUString& rStr,
                     bool bKeepSelection = false );
-    void GetINetAttrs( SwGetINetAttrs& rArr );
+    void GetINetAttrs(SwGetINetAttrs& rArr , bool bIncludeInToxContent = true);
 
     OUString GetDropText( const sal_Int32 nChars ) const;
     void   ReplaceDropText( const OUString &rStr, SwPaM* pPaM = nullptr );
