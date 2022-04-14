@@ -17,8 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
+#include <string_view>
+
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 
@@ -53,38 +59,38 @@ struct ProxyEntry
     OUString Port;
 };
 
-    ProxyEntry ReadProxyEntry(const OUString& aProxy, sal_Int32& i)
+    ProxyEntry ReadProxyEntry(std::u16string_view aProxy, std::size_t& i)
     {
         ProxyEntry aProxyEntry;
 
-        aProxyEntry.Server = aProxy.getToken( 0, COLON, i );
-        if ( i > -1 )
-            aProxyEntry.Port = aProxy.getToken( 0, COLON, i );
+        aProxyEntry.Server = o3tl::getToken( aProxy, COLON, i );
+        if ( i != std::u16string_view::npos )
+            aProxyEntry.Port = o3tl::getToken( aProxy, COLON, i );
 
         return aProxyEntry;
     }
 
-    ProxyEntry FindProxyEntry(const OUString& aProxyList, const OUString& aType)
+    ProxyEntry FindProxyEntry(std::u16string_view aProxyList, std::u16string_view aType)
     {
-        sal_Int32 nIndex = 0;
+        std::size_t nIndex = 0;
 
         do
         {
             // get the next token, e.g. ftp=server:port
-            OUString nextToken = aProxyList.getToken( 0, SPACE, nIndex );
+            std::u16string_view nextToken = o3tl::getToken( aProxyList, SPACE, nIndex );
 
             // split the next token again into the parts separated
             // through '=', e.g. ftp=server:port -> ftp and server:port
-            sal_Int32 i = 0;
-            if( nextToken.indexOf( EQUAL_SIGN ) > -1 )
+            std::size_t i = 0;
+            if( nextToken.find( EQUAL_SIGN ) != std::u16string_view::npos )
             {
-                if( aType.equals( nextToken.getToken( 0, EQUAL_SIGN, i ) ) )
+                if( aType == o3tl::getToken( nextToken, EQUAL_SIGN, i ) )
                     return ReadProxyEntry(nextToken, i);
             }
-            else if( aType.isEmpty())
+            else if( aType.empty())
                 return ReadProxyEntry(nextToken, i);
 
-        } while ( nIndex >= 0 );
+        } while ( nIndex != std::u16string_view::npos );
 
         return ProxyEntry();
     }
@@ -215,11 +221,11 @@ WinInetBackend::WinInetBackend()
                 // there is one and it has a port
 
 
-                ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, OUString());
-                ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, "http" );
-                ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, "https" );
+                ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, u"");
+                ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, u"http" );
+                ProxyEntry aHttpsProxy  = FindProxyEntry( aProxyList, u"https" );
 
-                ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, "ftp" );
+                ProxyEntry aFtpProxy  = FindProxyEntry( aProxyList, u"ftp" );
 
                 if( aTypeIndepProxy.Server.getLength() )
                 {
