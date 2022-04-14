@@ -413,12 +413,12 @@ char const IS_MISSING[] = "is missing";
 char const IS_INVALID[] = "is corrupt";
 char const PERIOD[] = ". ";
 
-static void addFileError(OUStringBuffer& _rBuf, OUString const& _aPath, AsciiString _sWhat)
+static void addFileError(OUStringBuffer& _rBuf, std::u16string_view _aPath, AsciiString _sWhat)
 {
-    OUString sSimpleFileName = _aPath.copy(1 +_aPath.lastIndexOf(cURLSeparator));
+    std::u16string_view sSimpleFileName = _aPath.substr(1 +_aPath.rfind(cURLSeparator));
 
     _rBuf.append("The configuration file");
-    _rBuf.append(" '" + sSimpleFileName + "' ");
+    _rBuf.append(OUString::Concat(" '") + sSimpleFileName + "' ");
     _rBuf.appendAscii(_sWhat).append(PERIOD);
 }
 
