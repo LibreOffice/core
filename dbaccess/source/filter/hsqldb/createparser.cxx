@@ -23,7 +23,6 @@
 #include "createparser.hxx"
 #include "utils.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
-#include <o3tl/string_view.hxx>
 
 using namespace ::comphelper;
 using namespace css::sdbc;
