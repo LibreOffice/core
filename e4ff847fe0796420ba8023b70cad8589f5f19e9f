@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ff500f5_2164d03a",
+        "filename": "include/o3tl/string_view.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-14T10:58:29Z",
+      "side": 1,
+      "message": "why char rather than char16_t?",
+      "range": {
+        "startLine": 67,
+        "startChar": 60,
+        "endLine": 67,
+        "endChar": 64
+      },
+      "revId": "e4ff847fe0796420ba8023b70cad8589f5f19e9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7422864_03938972",
+        "filename": "include/o3tl/string_view.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-14T10:58:29Z",
+      "side": 1,
+      "message": "do we really need the above two overloads; can\u0027t we call the template directly?",
+      "revId": "e4ff847fe0796420ba8023b70cad8589f5f19e9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
