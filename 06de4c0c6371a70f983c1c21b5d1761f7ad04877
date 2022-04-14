@@ -16,6 +16,23 @@
       "message": "This usually might work.\nHowever, there\u0027s a problem when the DMY order differs between the current locale and the format passed, because the number scanner does *not* do an entire match against the format passed (i.e. it\u0027s not an input mask but just a hint to resolve conflicts) but is configured to first try the detected numbers in the current locale\u0027s order and only if that fails try the format\u0027s order. That because usually the input is in the current locale and only the display differs (unless an existing value is edited).\n\nAn example where this fails is the current locale being en-GB with DMY order (D/M/Y formats) and the format\u0027s locale being en-US with MDY order (M/D/Y formats). The result is not as expected if the input can be interpreted as D/M/Y as well.\n\nThis could be circumvented by setting the scanner\u0027s priority to format first with SvNumberFormatter::SetEvalDateFormat(NF_EVALDATEFORMAT_FORMAT_INTL) (or even NF_EVALDATEFORMAT_FORMAT only) and after IsNumberFormat() reset to the value it had before, as obtained with SvNumberFormatter::GetEvalDateFormat().\n\nAnother solution could be to obtain the input string always in the current locale and not pass the applied format to the dialog, the edit format of the applied format would have to be obtained and from that the matching edit format of the current locale, which can get tricky though because we have no ready method for that. I could adjust the SvNumberFormatter::GetEditFormat() function for that (which currently at least since the last SvNumberformat* parameter was added isn\u0027t very clear in its usage anyway). But altogether this may be cleaner as using arbitrary locales\u0027 formats in the dialog isn\u0027t very user friendly. In fact this doesn\u0027t affect only date formats but any format.\n",
       "revId": "06de4c0c6371a70f983c1c21b5d1761f7ad04877",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcb0e46a_9028a6ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-14T23:53:13Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/133026 changed SvNumberFormatter::GetEditFormat() such that it can take another locale to obtain the edit format for, for example LANGUAGE_SYSTEM. With that you could change ScColumn::GetInputString() to obtain such edit format if a parameter was passed like bool bForceSystemLocale\u003dtrue, which can be defaulted to bForceSystemLocale\u003dfalse for ScDocument::GetInputString(), ScTable::GetInputString() and ScColumn::GetInputString() and called with true in ScCellShell::ExecuteEdit() in the FID_FILL_SERIES case.",
+      "revId": "06de4c0c6371a70f983c1c21b5d1761f7ad04877",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
