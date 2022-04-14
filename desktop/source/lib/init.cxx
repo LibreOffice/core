@@ -3158,7 +3158,15 @@ static void doc_iniUnoCommands ()
         OUString(".uno:RunMacro"),
         OUString(".uno:SpacePara1"),
         OUString(".uno:SpacePara15"),
-        OUString(".uno:SpacePara2")
+        OUString(".uno:SpacePara2"),
+        OUString(".uno:InsertSparkline"),
+        OUString(".uno:DeleteSparkline"),
+        OUString(".uno:DeleteSparklineGroup"),
+        OUString(".uno:EditSparklineGroup"),
+        OUString(".uno:EditSparkline"),
+        OUString(".uno:GroupSparklines"),
+        OUString(".uno:UngroupSparklines"),
+        OUString(".uno:FormatSparklineMenu"),
     };
 
     util::URL aCommandURL;
