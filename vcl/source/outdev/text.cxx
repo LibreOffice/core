@@ -51,6 +51,7 @@
 #include <textlineinfo.hxx>
 #include <impglyphitem.hxx>
 #include <optional>
+#include <TextLayoutCache.hxx>
 #include <font/PhysicalFontFace.hxx>
 
 #define TEXT_DRAW_ELLIPSIS  (DrawTextFlags::EndEllipsis | DrawTextFlags::PathEllipsis | DrawTextFlags::NewsEllipsis)
@@ -1459,7 +1460,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplLayout(const OUString& rOrigStr,
 std::shared_ptr<const vcl::text::TextLayoutCache> OutputDevice::CreateTextLayoutCache(
         OUString const& rString)
 {
-    return GenericSalLayout::CreateTextLayoutCache(rString);
+    return vcl::text::TextLayoutCache::Create(rString);
 }
 
 bool OutputDevice::GetTextIsRTL( const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen ) const

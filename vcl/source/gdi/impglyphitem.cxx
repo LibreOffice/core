@@ -256,7 +256,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
     if (layoutCache == nullptr)
     {
-        tmpLayoutCache = OutputDevice::CreateTextLayoutCache(text);
+        tmpLayoutCache = vcl::text::TextLayoutCache::Create(text);
         layoutCache = tmpLayoutCache.get();
     }
     std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
