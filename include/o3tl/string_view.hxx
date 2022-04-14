@@ -48,8 +48,9 @@ inline int compareToIgnoreAsciiCase(std::u16string_view s1, std::u16string_view 
     return rtl_ustr_compareIgnoreAsciiCase_WithLength(s1.data(), s1.size(), s2.data(), s2.size());
 };
 
-// Similar to OString::getToken, returning the first token of a std::string_view, starting at a
-// given position:
+// Similar to O[U]String::getToken, returning the first token of a std::[u16]string_view, starting
+// at a given position (and if needed, it can be extended to return the n'th token instead of just
+// the first, or support an initial position of npos):
 template <typename charT, typename traits = std::char_traits<charT>>
 inline std::basic_string_view<charT, traits> getToken(std::basic_string_view<charT, traits> sv,
                                                       charT delimiter, std::size_t& position)
