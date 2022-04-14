@@ -12,6 +12,7 @@
 #include <vcl/dllapi.h>
 #include <vcl/uitest/uiobject.hxx>
 #include <vcl/weld.hxx>
+#include <unordered_map>
 
 class LOKTrigger
 {
@@ -56,13 +57,36 @@ public:
     }
 
     static void trigger_closed(weld::Popover& rPopover) { rPopover.popdown(); }
+
+    static void trigger_key_press(weld::Widget& rWidget, const KeyEvent& rEvent)
+    {
+        rWidget.m_aKeyPressHdl.Call(rEvent);
+    }
+
+    static void trigger_key_release(weld::Widget& rWidget, const KeyEvent& rEvent)
+    {
+        rWidget.m_aKeyReleaseHdl.Call(rEvent);
+    }
+
+    static void command(weld::DrawingArea& rArea, const CommandEvent& rCmd)
+    {
+        rArea.m_aCommandHdl.Call(rCmd);
+    }
 };
 
 namespace jsdialog
 {
+// type used to store key-value pairs to put in the generated messages
+typedef std::unordered_map<std::string, OUString> ActionDataMap;
+
+/// execute action on a widget
 VCL_DLLPUBLIC bool ExecuteAction(const std::string& nWindowId, const OString& rWidget,
                                  StringMap& rData);
+/// send full update message to the client
 VCL_DLLPUBLIC void SendFullUpdate(const std::string& nWindowId, const OString& rWidget);
+/// send action message to the client
+VCL_DLLPUBLIC void SendAction(const std::string& nWindowId, const OString& rWidget,
+                              std::unique_ptr<ActionDataMap> pData);
 VCL_DLLPUBLIC StringMap jsonToStringMap(const char* pJSON);
 };
 

@@ -28,7 +28,6 @@
 #include <deque>
 #include <list>
 #include <mutex>
-#include <unordered_map>
 
 #define ACTION_TYPE "action_type"
 #define PARENT_ID "parent_id"
@@ -42,7 +41,6 @@ class SvTabListBox;
 class IconView;
 
 typedef std::map<OString, weld::Widget*> WidgetMap;
-typedef std::unordered_map<std::string, OUString> ActionDataMap;
 
 namespace jsdialog
 {
@@ -63,7 +61,7 @@ class JSDialogMessageInfo
 public:
     jsdialog::MessageType m_eType;
     VclPtr<vcl::Window> m_pWindow;
-    std::unique_ptr<ActionDataMap> m_pData;
+    std::unique_ptr<jsdialog::ActionDataMap> m_pData;
 
 private:
     void copy(const JSDialogMessageInfo& rInfo)
@@ -72,14 +70,15 @@ private:
         this->m_pWindow = rInfo.m_pWindow;
         if (rInfo.m_pData)
         {
-            std::unique_ptr<ActionDataMap> pData(new ActionDataMap(*rInfo.m_pData));
+            std::unique_ptr<jsdialog::ActionDataMap> pData(
+                new jsdialog::ActionDataMap(*rInfo.m_pData));
             this->m_pData = std::move(pData);
         }
     }
 
 public:
     JSDialogMessageInfo(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
-                        std::unique_ptr<ActionDataMap> pData)
+                        std::unique_ptr<jsdialog::ActionDataMap> pData)
         : m_eType(eType)
         , m_pWindow(pWindow)
         , m_pData(std::move(pData))
@@ -120,7 +119,7 @@ public:
     void clearQueue();
     void forceUpdate();
     void sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
-                     std::unique_ptr<ActionDataMap> pData = nullptr);
+                     std::unique_ptr<jsdialog::ActionDataMap> pData = nullptr);
 
 private:
     void send(tools::JsonWriter& aJsonWriter);
@@ -128,7 +127,8 @@ private:
     std::unique_ptr<tools::JsonWriter> generateWidgetUpdate(VclPtr<vcl::Window> pWindow) const;
     std::unique_ptr<tools::JsonWriter> generateCloseMessage() const;
     std::unique_ptr<tools::JsonWriter>
-    generateActionMessage(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData) const;
+    generateActionMessage(VclPtr<vcl::Window> pWindow,
+                          std::unique_ptr<jsdialog::ActionDataMap> pData) const;
     std::unique_ptr<tools::JsonWriter>
     generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId) const;
     std::unique_ptr<tools::JsonWriter> generateClosePopupMessage(OUString sWindowId) const;
@@ -158,7 +158,8 @@ public:
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
     void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
-    virtual void sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData);
+    virtual void sendAction(VclPtr<vcl::Window> pWindow,
+                            std::unique_ptr<jsdialog::ActionDataMap> pData);
     virtual void sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId);
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
     void flush() { mpIdleNotify->Invoke(); }
@@ -222,6 +223,9 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
                                                       const OString& rWidget, StringMap& rData);
     friend VCL_DLLPUBLIC void jsdialog::SendFullUpdate(const std::string& nWindowId,
                                                        const OString& rWidget);
+    friend VCL_DLLPUBLIC void jsdialog::SendAction(const std::string& nWindowId,
+                                                   const OString& rWidget,
+                                                   std::unique_ptr<jsdialog::ActionDataMap> pData);
 
     static std::map<std::string, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(const std::string& nWindowId);
@@ -318,7 +322,7 @@ public:
 
     virtual void sendFullUpdate(bool bForce = false) = 0;
 
-    virtual void sendAction(std::unique_ptr<ActionDataMap> pData) = 0;
+    virtual void sendAction(std::unique_ptr<jsdialog::ActionDataMap> pData) = 0;
 
     virtual void sendPopup(vcl::Window* pPopup, OUString sParentId, OUString sCloseId) = 0;
 
@@ -359,7 +363,8 @@ public:
         BaseInstanceClass::show();
         if (!bWasVisible)
         {
-            std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+            std::unique_ptr<jsdialog::ActionDataMap> pMap
+                = std::make_unique<jsdialog::ActionDataMap>();
             (*pMap)[ACTION_TYPE] = "show";
             sendAction(std::move(pMap));
         }
@@ -371,7 +376,8 @@ public:
         BaseInstanceClass::hide();
         if (bWasVisible)
         {
-            std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+            std::unique_ptr<jsdialog::ActionDataMap> pMap
+                = std::make_unique<jsdialog::ActionDataMap>();
             (*pMap)[ACTION_TYPE] = "hide";
             sendAction(std::move(pMap));
         }
@@ -425,7 +431,7 @@ public:
             m_pSender->sendFullUpdate(bForce);
     }
 
-    virtual void sendAction(std::unique_ptr<ActionDataMap> pData) override
+    virtual void sendAction(std::unique_ptr<jsdialog::ActionDataMap> pData) override
     {
         if (!m_bIsFreezed && m_pSender && pData)
             m_pSender->sendAction(BaseInstanceClass::m_xWidget, std::move(pData));
