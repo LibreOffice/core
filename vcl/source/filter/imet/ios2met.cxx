@@ -345,6 +345,7 @@ struct OSAttr
         , nArcR(0)
         , nArcS(0)
         , nChrAng(0)
+        , nChrCellHeight(0)
         , nChrSet(0)
         , eLinStyle(PEN_NULL)
         , nLinWidth(0)
