@@ -63,9 +63,12 @@ namespace slideshow::internal
             // perform will be called at least mnMinNumberOfTurns
             // times.
 
-            // fraction of time elapsed
+            // fraction of time elapsed (clamp to 1.0 for zero-length
+            // animations)
             const double nFractionElapsedTime(
-                nCurrElapsedTime / mnMinSimpleDuration );
+                mnMinSimpleDuration != 0.0 ?
+                nCurrElapsedTime / mnMinSimpleDuration :
+                1.0 );
 
             // fraction of minimum calls performed
             const double nFractionRequiredCalls(
@@ -115,7 +118,10 @@ namespace slideshow::internal
             // ===============================
 
             const double nCurrElapsedTime( maTimer.getElapsedTime() );
-            double nT( nCurrElapsedTime / mnMinSimpleDuration );
+            // clamp to 1.0 for zero animation duration
+            double nT( mnMinSimpleDuration != 0.0 ?
+                       nCurrElapsedTime / mnMinSimpleDuration :
+                       1.0 );
 
 
             // one of the stop criteria reached?
