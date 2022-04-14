@@ -634,10 +634,15 @@ void ScTabView::CursorPosChanged()
 
     //  Broadcast, so that other Views of the document also switch
 
-    ScDocument& rDoc = aViewData.GetDocument();
-    bool bDP = nullptr != rDoc.GetDPAtCursor(
-        aViewData.GetCurX(), aViewData.GetCurY(), aViewData.GetTabNo() );
-    aViewData.GetViewShell()->SetPivotShell(bDP);
+    ScDocument& rDocument = aViewData.GetDocument();
+    bool bDataPilot = rDocument.HasDataPilotAtPosition(aViewData.GetCurPos());
+    aViewData.GetViewShell()->SetPivotShell(bDataPilot);
+
+    if (!bDataPilot)
+    {
+        bool bSparkline = rDocument.HasSparkline(aViewData.GetCurPos());
+        aViewData.GetViewShell()->SetSparklineShell(bSparkline);
+    }
 
     //  UpdateInputHandler now in CellContentChanged
 

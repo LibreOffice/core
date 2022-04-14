@@ -60,6 +60,7 @@ class ScDPObject;
 class ScNavigatorSettings;
 class ScRangeName;
 class ScDrawTransferObj;
+namespace sc { class SparklineShell; }
 
 struct ScHeaderFieldData;
 
@@ -85,7 +86,8 @@ enum ObjectSelectionType
     OST_OleObject,
     OST_Chart,
     OST_Graphic,
-    OST_Media
+    OST_Media,
+    OST_Sparkline,
 };
 
 class ScFormEditData;
@@ -100,6 +102,7 @@ private:
     std::unique_ptr<ScDrawTextObjectBar> pDrawTextShell;
     std::unique_ptr<ScEditShell>         pEditShell;
     std::unique_ptr<ScPivotShell>        pPivotShell;
+    std::unique_ptr<sc::SparklineShell>  m_pSparklineShell;
     std::unique_ptr<ScAuditingShell>     pAuditingShell;
     std::unique_ptr<ScDrawFormShell>     pDrawFormShell;
     std::unique_ptr<ScCellShell>         pCellShell;
@@ -280,6 +283,7 @@ public:
     void            SetDrawTextShell( bool bActive );
 
     void            SetPivotShell( bool bActive );
+    void            SetSparklineShell(bool bActive);
     void            SetDialogDPObject( std::unique_ptr<ScDPObject> pObj );
     const ScDPObject* GetDialogDPObject() const { return pDialogDPObject.get(); }
 

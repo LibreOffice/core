@@ -39,5 +39,6 @@
 #define SCID_GRAPHIC_SHELL      (SFX_INTERFACE_SC_START+SfxInterfaceId(15))
 #define SCID_PAGEBREAK_SHELL    (SFX_INTERFACE_SC_START+SfxInterfaceId(16))
 #define SCID_MEDIA_SHELL        (SFX_INTERFACE_SC_START+SfxInterfaceId(17))
+#define SCID_SPARKLINE_SHELL    (SFX_INTERFACE_SC_START+SfxInterfaceId(18))
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

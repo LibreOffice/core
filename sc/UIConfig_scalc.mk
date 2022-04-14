@@ -37,6 +37,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/rowheader \
 	sc/uiconfig/scalc/popupmenu/row_operations \
 	sc/uiconfig/scalc/popupmenu/sheettab \
+	sc/uiconfig/scalc/popupmenu/sparkline \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/scalc,\

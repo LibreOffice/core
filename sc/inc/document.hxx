@@ -841,6 +841,14 @@ public:
     SC_DLLPUBLIC ScDPCollection*       GetDPCollection();
     SC_DLLPUBLIC const ScDPCollection* GetDPCollection() const;
     SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab) const;
+    SC_DLLPUBLIC ScDPObject*           GetDPAtCursor(ScAddress const& rAddress) const
+    {
+        return GetDPAtCursor(rAddress.Col(), rAddress.Row(), rAddress.Tab());
+    }
+    SC_DLLPUBLIC bool HasDataPilotAtPosition(ScAddress const& rAddress) const
+    {
+        return GetDPAtCursor(rAddress) != nullptr;
+    }
     ScDPObject*                        GetDPAtBlock( const ScRange& rBlock ) const;
 
     void                               StopTemporaryChartLock();
