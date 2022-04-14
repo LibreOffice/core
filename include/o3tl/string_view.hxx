@@ -74,7 +74,8 @@ inline std::string_view getToken(std::string_view sv, char delimiter, std::size_
 {
     return getToken<char>(sv, delimiter, position);
 }
-inline std::u16string_view getToken(std::u16string_view sv, char delimiter, std::size_t& position)
+inline std::u16string_view getToken(std::u16string_view sv, char16_t delimiter,
+                                    std::size_t& position)
 {
     return getToken<char16_t>(sv, delimiter, position);
 }
