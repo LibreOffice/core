@@ -16,6 +16,23 @@
       "message": "Thank you!",
       "revId": "68e2aceb0050e377c6297f05d4f873cf2eed8023",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d563333a_a9f0d1c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-04-14T12:37:54Z",
+      "side": 1,
+      "message": "thx - please also add the message to the custom collection of warning messages that are printed at the end of the run. Any messages by configure itself that are printed when they are happen are easy to overlook.\n\ni.e. use \n   add_warning \"the warning text for summary at end of configure\" \nin addition to the AC_MSG_WARN([the warning text printed when the check is done])",
+      "revId": "68e2aceb0050e377c6297f05d4f873cf2eed8023",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
