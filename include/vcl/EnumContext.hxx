@@ -96,6 +96,7 @@ public:
         Text,
         TextObject,
         Trendline,
+        Sparkline,
 
         // Default context of an application.  Do we need this?
         Default,

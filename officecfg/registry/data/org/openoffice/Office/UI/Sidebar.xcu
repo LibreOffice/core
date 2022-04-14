@@ -340,6 +340,7 @@
             Calc,             default,            visible                    ;
             Calc,             EditCell,           visible                    ;
             Calc,             Pivot,              visible                    ;
+            Calc,             Sparkline,          visible                    ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -375,6 +376,7 @@
             Calc,             DrawLine,           hidden                     ;
             Calc,             EditCell,           visible                    ;
             Calc,             Pivot,              visible,  .uno:CellTextDlg ;
+            Calc,             Sparkline,          visible                    ;
             DrawImpress,      Draw,               hidden                     ;
             DrawImpress,      DrawFontwork,       hidden                     ;
             DrawImpress,      DrawText,           visible                    ;
@@ -1179,6 +1181,7 @@
             Calc,  default,  visible ;
             Calc,  EditCell, visible ;
             Calc,  Pivot,    visible ;
+            Calc,  Sparkline, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -1212,6 +1215,7 @@
             Calc,  EditCell, visible ;
             Calc,  default,  visible ;
             Calc,  Pivot,    visible ;
+            Calc,  Sparkline, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
@@ -1245,6 +1249,7 @@
             Calc,  EditCell, visible ;
             Calc,  default,  visible ;
             Calc,  Pivot,    visible ;
+            Calc,  Sparkline, visible ;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
