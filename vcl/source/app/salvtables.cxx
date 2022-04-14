@@ -1439,7 +1439,7 @@ void resize_to_request(vcl::Window* pWindow)
 {
     if (SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(pWindow))
     {
-        pSysWin->setOptimalLayoutSize();
+        pSysWin->setOptimalLayoutSize(true);
         return;
     }
     if (DockingWindow* pDockWin = dynamic_cast<DockingWindow*>(pWindow))
@@ -1695,7 +1695,7 @@ void SalInstanceDialog::collapse(weld::Widget* pEdit, weld::Widget* pButton)
     m_xDialog->set_border_width(0);
     if (vcl::Window* pActionArea = m_xDialog->get_action_area())
         pActionArea->Hide();
-    m_xDialog->setOptimalLayoutSize();
+    m_xDialog->setOptimalLayoutSize(true);
     m_xRefEdit = pRefEdit;
 }
 
@@ -1713,7 +1713,7 @@ void SalInstanceDialog::undo_collapse()
     m_xDialog->set_border_width(m_nOldBorderWidth);
     if (vcl::Window* pActionArea = m_xDialog->get_action_area())
         pActionArea->Show();
-    m_xDialog->setOptimalLayoutSize();
+    m_xDialog->setOptimalLayoutSize(true);
 }
 
 void SalInstanceDialog::SetInstallLOKNotifierHdl(

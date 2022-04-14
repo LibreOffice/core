@@ -1070,7 +1070,7 @@ void SystemWindow::settingOptimalLayoutSize(Window* /*pBox*/)
 {
 }
 
-void SystemWindow::setOptimalLayoutSize()
+void SystemWindow::setOptimalLayoutSize(bool bAllowWindowShrink)
 {
     maLayoutIdle.Stop();
 
@@ -1088,9 +1088,7 @@ void SystemWindow::setOptimalLayoutSize()
 
     SetMinOutputSizePixel(aSize);
 
-    if (!mbInitialLayoutSizeCalculated)
-        mbInitialLayoutSizeCalculated = true;
-    else
+    if (!bAllowWindowShrink)
     {
         Size aCurrentSize = GetSizePixel();
         aSize.setWidth(std::max(aSize.Width(), aCurrentSize.Width()));
@@ -1110,7 +1108,8 @@ void SystemWindow::DoInitialLayout()
     {
         mbIsCalculatingInitialLayoutSize = true;
         setDeferredProperties();
-        setOptimalLayoutSize();
+        setOptimalLayoutSize(!mbInitialLayoutSizeCalculated);
+        mbInitialLayoutSizeCalculated = true;
         mbIsCalculatingInitialLayoutSize = false;
     }
 }
