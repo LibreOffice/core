@@ -276,29 +276,21 @@ void CGM::ImplDoClass4()
                 if ( mbFigure )
                     mpOutAct->CloseRegion();
 
-                sal_uInt16      nPoints = 0;
-                std::unique_ptr<Point[]> pPoints(new Point[ 0x4000 ]);
-
+                std::vector<Point> aPoints;
                 tools::PolyPolygon aPolyPolygon;
                 FloatPoint  aFloatPoint;
-                sal_uInt32      nEdgeFlag;
+
                 while ( mnParaSize < mnElementSize )
                 {
                     ImplGetPoint( aFloatPoint, true );
-                    nEdgeFlag = ImplGetUI16();
-                    pPoints[ nPoints++ ] = Point( static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y) );
+                    sal_uInt32 nEdgeFlag = ImplGetUI16();
+                    aPoints.push_back(Point(static_cast<tools::Long>(aFloatPoint.X), static_cast<tools::Long>(aFloatPoint.Y)));
                     if ( ( nEdgeFlag & 2 ) || ( mnParaSize == mnElementSize ) )
                     {
-                        tools::Polygon aPolygon( nPoints );
-                        for ( sal_uInt16 i = 0; i < nPoints; i++ )
-                        {
-                            aPolygon.SetPoint( pPoints[ i ], i );
-                        }
-                        aPolyPolygon.Insert( aPolygon );
-                        nPoints = 0;
+                        aPolyPolygon.Insert(tools::Polygon(aPoints.size(), aPoints.data()));
+                        aPoints.clear();
                     }
                 }
-                pPoints.reset();
                 mpOutAct->DrawPolyPolygon( aPolyPolygon );
             }
             break;
