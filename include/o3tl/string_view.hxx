@@ -74,6 +74,11 @@ inline std::basic_string_view<charT, traits> getToken(std::basic_string_view<cha
     }
     return t;
 }
+// The following two overloads prevent overload resolution mistakes that would occur with their
+// template counterpart, when sv is of a type that is implicitly convertible to basic_string_view
+// (like OString or OUString), in which case overload resolution would erroneously choose the
+// three-argument overloads (taking sv, nToken, cTok) from the second set of
+// o3tl::getToken overloads below:
 inline std::string_view getToken(std::string_view sv, char delimiter, std::size_t& position)
 {
     return getToken<char>(sv, delimiter, position);
@@ -133,6 +138,9 @@ inline std::basic_string_view<charT, traits> getToken(std::basic_string_view<cha
     rnIndex = -1;
     return std::basic_string_view<charT, traits>();
 }
+// The following two overloads prevent deduction failures that would occur with their template
+// counterpart, when sv is of a type that is implicitly convertible to basic_string_view (like
+// OString or OUString):
 inline std::string_view getToken(std::string_view sv, sal_Int32 nToken, char cTok,
                                  sal_Int32& rnIndex)
 {
