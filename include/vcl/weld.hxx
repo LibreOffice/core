@@ -320,6 +320,9 @@ public:
 
     virtual VclPtr<VirtualDevice> create_virtual_device() const = 0;
 
+    //do something transient to attract the attention of the user to the widget
+    virtual void call_attention_to() = 0;
+
     //make this widget look like a page in a notebook
     virtual void set_stack_background() = 0;
     //make this widget look like it has a highlighted background

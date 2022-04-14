@@ -295,22 +295,29 @@ IMPL_LINK(FindTextFieldControl, KeyInputHdl, const KeyEvent&, rKeyEvent, bool)
             }
         }
     }
-    // Select text in the search box when Ctrl-F pressed
-    else if ( bMod1 && nCode == KEY_F )
-        m_xWidget->select_entry_region(0, -1);
-
-    // Execute the search when Ctrl-G, F3 and Shift-RETURN pressed (in addition to ActivateHdl condition which handles bare RETURN)
-    else if ( (bMod1 && KEY_G == nCode) || (bShift && KEY_RETURN == nCode) || (KEY_F3 == nCode) )
-    {
-        ActivateFind(bShift);
-        bRet = true;
-    }
     else
     {
         auto awtKey = svt::AcceleratorExecute::st_VCLKey2AWTKey(rKeyEvent.GetKeyCode());
         const OUString aCommand(m_pAcc->findCommand(awtKey));
-        if (aCommand == ".uno:SearchDialog")
+
+        // Select text in the search box when Ctrl-F pressed
+        if ( bMod1 && nCode == KEY_F )
+            m_xWidget->select_entry_region(0, -1);
+        // Execute the search when Ctrl-G, F3 and Shift-RETURN pressed (in addition to ActivateHdl condition which handles bare RETURN)
+        else if ( (bMod1 && KEY_G == nCode) || (bShift && KEY_RETURN == nCode) || (KEY_F3 == nCode) )
+        {
+            ActivateFind(bShift);
+            bRet = true;
+        }
+        else if (aCommand == ".uno:SearchDialog")
             bRet = m_pAcc->execute(awtKey);
+
+        // find-shortcut called with focus already in find
+        if (aCommand == "vnd.sun.star.findbar:FocusToFindbar")
+        {
+            m_xWidget->call_attention_to();
+            bRet = true;
+        }
     }
 
     return bRet || ChildKeyInput(rKeyEvent);
