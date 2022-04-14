@@ -16,6 +16,24 @@
       "message": "Note: the .emf/emz/wmz files are just the TypeDetectionExample.wmf example that already exists, saved as other formats. I used libreoffices \"Export\" to convert to emf and gzip for emz/wmz",
       "revId": "233182b24fe8f161d0914964e41393ca74878599",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee33043c_594ae8a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-04-14T13:34:50Z",
+      "side": 1,
+      "message": "Did you try opening in any program that supports emz... so you know it\u0027s valid?",
+      "parentUuid": "14de61c2_b84487ce",
+      "revId": "233182b24fe8f161d0914964e41393ca74878599",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
