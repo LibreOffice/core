@@ -70,6 +70,24 @@
       "parentUuid": "6191bd34_7d96e0b0",
       "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "883fe4f2_7c0e5e18",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-14T09:40:57Z",
+      "side": 1,
+      "message": "Sorry that I didn\u0027t come across more clearly with my previous comment:  I\u0027m just fine with the current state of this Gerrit change.",
+      "parentUuid": "369f4f03_4a54f736",
+      "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
