@@ -88,7 +88,7 @@ void JSDialogNotifyIdle::send(tools::JsonWriter& aJsonWriter)
 
 namespace
 {
-OUString extractActionType(const ActionDataMap& rData)
+OUString extractActionType(const jsdialog::ActionDataMap& rData)
 {
     auto it = rData.find(ACTION_TYPE);
     if (it != rData.end())
@@ -98,7 +98,7 @@ OUString extractActionType(const ActionDataMap& rData)
 };
 
 void JSDialogNotifyIdle::sendMessage(jsdialog::MessageType eType, VclPtr<vcl::Window> pWindow,
-                                     std::unique_ptr<ActionDataMap> pData)
+                                     std::unique_ptr<jsdialog::ActionDataMap> pData)
 {
     std::scoped_lock aGuard(m_aQueueMutex);
 
@@ -172,7 +172,7 @@ std::unique_ptr<tools::JsonWriter> JSDialogNotifyIdle::generateCloseMessage() co
 
 std::unique_ptr<tools::JsonWriter>
 JSDialogNotifyIdle::generateActionMessage(VclPtr<vcl::Window> pWindow,
-                                          std::unique_ptr<ActionDataMap> pData) const
+                                          std::unique_ptr<jsdialog::ActionDataMap> pData) const
 {
     std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
 
@@ -270,6 +270,9 @@ void JSDialogNotifyIdle::Invoke()
     {
         jsdialog::MessageType eType = rMessage.m_eType;
 
+        if (m_sTypeOfJSON == "formulabar" && eType != jsdialog::MessageType::Action)
+            continue;
+
         switch (eType)
         {
             case jsdialog::MessageType::FullUpdate:
@@ -344,10 +347,14 @@ void JSDialogSender::sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce)
     mpIdleNotify->Start();
 }
 
-void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData)
+void JSDialogSender::sendAction(VclPtr<vcl::Window> pWindow,
+                                std::unique_ptr<jsdialog::ActionDataMap> pData, bool bForce)
 {
     if (!mpIdleNotify)
         return;
+
+    if (bForce)
+        mpIdleNotify->forceUpdate();
 
     mpIdleNotify->sendMessage(jsdialog::MessageType::Action, pWindow, std::move(pData));
     mpIdleNotify->Start();
@@ -358,7 +365,7 @@ void JSDialogSender::sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, 
     if (!mpIdleNotify)
         return;
 
-    std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
+    std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
     (*pData)[PARENT_ID] = sParentId;
     (*pData)[CLOSE_ID] = sCloseId;
     mpIdleNotify->sendMessage(jsdialog::MessageType::Popup, pWindow, std::move(pData));
@@ -370,7 +377,7 @@ void JSDialogSender::sendClosePopup(vcl::LOKWindowId nWindowId)
     if (!mpIdleNotify)
         return;
 
-    std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
+    std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
     (*pData)[WINDOW_ID] = OUString::number(nWindowId);
     mpIdleNotify->sendMessage(jsdialog::MessageType::PopupClose, nullptr, std::move(pData));
     flush();
@@ -610,7 +617,6 @@ JSInstanceBuilder::JSInstanceBuilder(vcl::Window* pParent, const OUString& rUIRo
     }
 
     initializeSender(GetNotifierWindow(), GetContentWindow(), GetTypeOfJSON());
-    sendFullUpdate();
 }
 
 std::unique_ptr<JSInstanceBuilder> JSInstanceBuilder::CreateDialogBuilder(weld::Widget* pParent,
@@ -1668,7 +1674,7 @@ void JSIconView::select(int pos)
 {
     SalInstanceIconView::select(pos);
 
-    std::unique_ptr<ActionDataMap> pMap = std::make_unique<ActionDataMap>();
+    std::unique_ptr<jsdialog::ActionDataMap> pMap = std::make_unique<jsdialog::ActionDataMap>();
     (*pMap)[ACTION_TYPE] = "select";
     (*pMap)["position"] = OUString::number(pos);
     sendAction(std::move(pMap));

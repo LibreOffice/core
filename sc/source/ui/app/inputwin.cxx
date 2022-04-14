@@ -1085,6 +1085,8 @@ ScTextWndGroup::ScTextWndGroup(ScInputBarGroup& rParent, ScTabViewShell* pViewSh
     , mrParent(rParent)
 {
     mxScrollWin->connect_vadjustment_changed(LINK(this, ScTextWndGroup, Impl_ScrollHdl));
+    if (comphelper::LibreOfficeKit::isActive())
+        ScInputHandler::LOKSendFormulabarUpdate(SfxViewShell::Current(), "", ESelection());
 }
 
 Point ScTextWndGroup::GetCursorScreenPixelPos(bool bBelow)
@@ -1704,6 +1706,26 @@ bool ScTextWnd::Command( const CommandEvent& rCEvt )
             SC_MOD()->InputChanged( m_xEditView.get() );
     }
 
+    if ( comphelper::LibreOfficeKit::isActive() && nCommand == CommandEventId::CursorPos )
+    {
+        // LOK uses this to setup caret position because drawingarea is replaced
+        // with text input field, it sends logical caret position (start, end) not pixels
+
+        StartEditEngine();
+        TextGrabFocus();
+
+        if (!m_xEditView)
+            return true;
+
+        Point aSelectionStartEnd = rCEvt.GetMousePosPixel();
+        m_xEditView->SetSelection(ESelection(0, aSelectionStartEnd.X(),
+                                                0, aSelectionStartEnd.Y()));
+
+        SC_MOD()->InputSelection( m_xEditView.get() );
+
+        bConsumed = true;
+    }
+
     bInputMode = false;
 
     return bConsumed;
@@ -1859,6 +1881,12 @@ static sal_Int32 findFirstNonMatchingChar(const OUString& rStr1, const OUString&
 
 void ScTextWnd::SetTextString( const OUString& rNewString )
 {
+    if (comphelper::LibreOfficeKit::isActive())
+    {
+        ESelection aSel = m_xEditView ? m_xEditView->GetSelection() : ESelection();
+        ScInputHandler::LOKSendFormulabarUpdate(SfxViewShell::Current(), rNewString, aSel);
+    }
+
     // Ideally it would be best to create on demand the EditEngine/EditView here, but... for
     // the initialisation scenario where a cell is first clicked on we end up with the text in the
     // inputbar window scrolled to the bottom if we do that here ( because the tableview and topview
