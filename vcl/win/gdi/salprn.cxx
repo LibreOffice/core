@@ -22,6 +22,7 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <vector>
 #include <string.h>
 
 #include <svsys.h>
@@ -224,31 +225,11 @@ OUString WinSalInstance::GetDefaultPrinter()
     GetDefaultPrinterW( nullptr, &nChars );
     if( nChars )
     {
-        LPWSTR  pStr = static_cast<LPWSTR>(std::malloc(nChars*sizeof(WCHAR)));
-        OUString aDefPrt;
-        if( GetDefaultPrinterW( pStr, &nChars ) )
-        {
-            aDefPrt = o3tl::toU(pStr);
-        }
-        std::free( pStr );
-        if( !aDefPrt.isEmpty() )
-            return aDefPrt;
+        std::vector<WCHAR> pStr(nChars);
+        if (GetDefaultPrinterW(pStr.data(), &nChars))
+            return OUString(o3tl::toU(pStr.data()));
     }
-
-    // get default printer from win.ini
-    wchar_t szBuffer[256];
-    GetProfileStringW( aImplWindows, aImplDevice, L"", szBuffer, SAL_N_ELEMENTS( szBuffer ) );
-    if ( szBuffer[0] )
-    {
-        // search for printer name
-        wchar_t* pBuf = szBuffer;
-        wchar_t* pTmp = pBuf;
-        while ( *pTmp && (*pTmp != ',') )
-            pTmp++;
-        return OUString( o3tl::toU(pBuf), static_cast<sal_Int32>(pTmp-pBuf) );
-    }
-    else
-        return OUString();
+    return OUString();
 }
 
 static DWORD ImplDeviceCaps( WinSalInfoPrinter const * pPrinter, WORD nCaps,
