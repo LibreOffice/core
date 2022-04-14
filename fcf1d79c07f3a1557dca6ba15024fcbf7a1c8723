@@ -52,6 +52,24 @@
       "parentUuid": "10de1c08_95cfce41",
       "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "369f4f03_4a54f736",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-04-14T09:16:36Z",
+      "side": 1,
+      "message": "I just followed precedent *shrugs*\n\nI can either clarify the commit message or even elaborate a bit in this file; just tell me what you’d prefer.",
+      "parentUuid": "6191bd34_7d96e0b0",
+      "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
