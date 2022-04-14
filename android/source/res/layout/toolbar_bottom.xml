@@ -13,7 +13,7 @@
     app:popupTheme="@style/LibreOfficeTheme.Toolbar"
     app:theme="@style/LibreOfficeTheme.Toolbar"
     tools:showIn="@layout/activity_main"
-    app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+    app:layout_behavior="@string/bottom_sheet_behavior"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp">
 

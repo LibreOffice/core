@@ -8,7 +8,7 @@
 package org.libreoffice;
 
 import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
