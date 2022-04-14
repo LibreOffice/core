@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0df6aacc_6c606fd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-04-14T09:12:40Z",
+      "side": 1,
+      "message": "A pity that devs have to chase widgets that look wrong one by one, just because some GTK designer drank the “all laptops have touchscreens” Kool-Aid. Somehow, Inkscape managed to bodge slim spin buttons into the toolkit, but GTK should get it together already...",
+      "revId": "bdb62144a9596257e601bc5a77cd8a4b82a574a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
