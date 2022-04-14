@@ -835,7 +835,8 @@ ScInputHandler::ScInputHandler()
         aScaleX( 1,1 ),
         aScaleY( 1,1 ),
         pRefViewSh( nullptr ),
-        pLastPattern( nullptr )
+        pLastPattern( nullptr ),
+        m_bKeyInputLOK( false )
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
     //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
@@ -2715,7 +2716,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         lcl_RemoveTabs(aText);
 
         if ( pInputWin )
-            pInputWin->SetTextString( aText );
+            pInputWin->SetTextString( aText, m_bKeyInputLOK );
 
         if (comphelper::LibreOfficeKit::isActive())
         {
@@ -3922,7 +3923,9 @@ bool ScInputHandler::KeyInput( const KeyEvent& rKEvt, bool bStartEdit /* = false
 
             // #i114511# don't count cursor keys as modification
             bool bSetModified = !bCursorKey;
+            m_bKeyInputLOK = true; // we need to avoid jsdialog updates on user input
             DataChanged(false, bSetModified); // also calls UpdateParenthesis()
+            m_bKeyInputLOK = false;
 
             // In the LOK case, we want to set the document modified state
             // right away at the start of the edit, so that the content is

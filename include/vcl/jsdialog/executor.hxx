@@ -56,6 +56,21 @@ public:
     }
 
     static void trigger_closed(weld::Popover& rPopover) { rPopover.popdown(); }
+
+    static void trigger_key_press(weld::Widget& rWidget, const KeyEvent& rEvent)
+    {
+        rWidget.m_aKeyPressHdl.Call(rEvent);
+    }
+
+    static void trigger_key_release(weld::Widget& rWidget, const KeyEvent& rEvent)
+    {
+        rWidget.m_aKeyReleaseHdl.Call(rEvent);
+    }
+
+    static void command(weld::DrawingArea& rArea, const CommandEvent& rCmd)
+    {
+        rArea.m_aCommandHdl.Call(rCmd);
+    }
 };
 
 namespace jsdialog
@@ -63,6 +78,8 @@ namespace jsdialog
 VCL_DLLPUBLIC bool ExecuteAction(const std::string& nWindowId, const OString& rWidget,
                                  StringMap& rData);
 VCL_DLLPUBLIC void SendFullUpdate(const std::string& nWindowId, const OString& rWidget);
+VCL_DLLPUBLIC void SendMessage(const std::string& nWindowId, const OString& rWidget,
+                               const OUString& rMessage);
 VCL_DLLPUBLIC StringMap jsonToStringMap(const char* pJSON);
 };
 

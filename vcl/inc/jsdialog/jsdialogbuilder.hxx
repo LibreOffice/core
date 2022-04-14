@@ -53,7 +53,8 @@ enum MessageType
     Close,
     Action,
     Popup,
-    PopupClose
+    PopupClose,
+    Message
 };
 }
 
@@ -132,6 +133,7 @@ private:
     std::unique_ptr<tools::JsonWriter>
     generatePopupMessage(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId) const;
     std::unique_ptr<tools::JsonWriter> generateClosePopupMessage(OUString sWindowId) const;
+    std::unique_ptr<tools::JsonWriter> generateMessage(std::unique_ptr<ActionDataMap> pData) const;
 };
 
 class JSDialogSender
@@ -158,6 +160,7 @@ public:
     virtual void sendFullUpdate(bool bForce = false);
     void sendClose();
     void sendUpdate(VclPtr<vcl::Window> pWindow, bool bForce = false);
+    virtual void sendMessage(const OUString& rMessage);
     virtual void sendAction(VclPtr<vcl::Window> pWindow, std::unique_ptr<ActionDataMap> pData);
     virtual void sendPopup(VclPtr<vcl::Window> pWindow, OUString sParentId, OUString sCloseId);
     virtual void sendClosePopup(vcl::LOKWindowId nWindowId);
@@ -222,6 +225,9 @@ class JSInstanceBuilder final : public SalInstanceBuilder, public JSDialogSender
                                                       const OString& rWidget, StringMap& rData);
     friend VCL_DLLPUBLIC void jsdialog::SendFullUpdate(const std::string& nWindowId,
                                                        const OString& rWidget);
+    friend VCL_DLLPUBLIC void jsdialog::SendMessage(const std::string& nWindowId,
+                                                    const OString& rWidget,
+                                                    const OUString& rMessage);
 
     static std::map<std::string, WidgetMap>& GetLOKWeldWidgetsMap();
     static void InsertWindowToMap(const std::string& nWindowId);
@@ -317,6 +323,8 @@ public:
     virtual void sendUpdate(bool bForce = false) = 0;
 
     virtual void sendFullUpdate(bool bForce = false) = 0;
+
+    virtual void sendMessage(const OUString& rMessage) = 0;
 
     virtual void sendAction(std::unique_ptr<ActionDataMap> pData) = 0;
 
@@ -423,6 +431,12 @@ public:
     {
         if ((!m_bIsFreezed || bForce) && m_pSender)
             m_pSender->sendFullUpdate(bForce);
+    }
+
+    virtual void sendMessage(const OUString& rMessage) override
+    {
+        if (!m_bIsFreezed && m_pSender)
+            m_pSender->sendMessage(rMessage);
     }
 
     virtual void sendAction(std::unique_ptr<ActionDataMap> pData) override

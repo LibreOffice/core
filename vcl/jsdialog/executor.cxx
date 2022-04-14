@@ -41,6 +41,13 @@ void SendFullUpdate(const std::string& nWindowId, const OString& rWidget)
         pJSWidget->sendFullUpdate();
 }
 
+void SendMessage(const std::string& nWindowId, const OString& rWidget, const OUString& rMessage)
+{
+    weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
+    if (auto pJSWidget = dynamic_cast<BaseJSWidget*>(pWidget))
+        pJSWidget->sendMessage(rMessage);
+}
+
 bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringMap& rData)
 {
     weld::Widget* pWidget = JSInstanceBuilder::FindWeldWidgetsMap(nWindowId, rWidget);
@@ -66,6 +73,9 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
 
     if (pWidget != nullptr)
     {
+        if (rWidget == "sc_input_window")
+            sControlType = "drawingarea";
+
         if (sControlType == "tabcontrol")
         {
             auto pNotebook = dynamic_cast<weld::Notebook*>(pWidget);
@@ -190,6 +200,40 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                         }
                     }
                     LOKTrigger::trigger_click(*pArea, Point(10, 10));
+                    return true;
+                }
+                else if (sAction == "keyup")
+                {
+                    LOKTrigger::trigger_key_press(
+                        *pArea,
+                        KeyEvent(rData["data"].toUInt32(), vcl::KeyCode(rData["data"].toUInt32())));
+                    LOKTrigger::trigger_key_release(
+                        *pArea,
+                        KeyEvent(rData["data"].toUInt32(), vcl::KeyCode(rData["data"].toUInt32())));
+                    return true;
+                }
+                else if (sAction == "select")
+                {
+                    // start;end
+                    int nSeparatorPos = rData["data"].indexOf(';');
+                    if (nSeparatorPos <= 0)
+                        return true;
+
+                    std::u16string_view aStartPos = rData["data"].subView(0, nSeparatorPos);
+                    std::u16string_view aEndPos = rData["data"].subView(nSeparatorPos + 1);
+
+                    if (aStartPos.empty() || aEndPos.empty())
+                        return true;
+
+                    int nStart = std::atoi(
+                        OUStringToOString(aStartPos.data(), RTL_TEXTENCODING_ASCII_US).getStr());
+                    int nEnd = std::atoi(
+                        OUStringToOString(aEndPos.data(), RTL_TEXTENCODING_ASCII_US).getStr());
+
+                    Point aPos(nStart, nEnd);
+                    CommandEvent aCEvt(aPos, CommandEventId::CursorPos);
+                    LOKTrigger::command(*pArea, aCEvt);
+
                     return true;
                 }
             }

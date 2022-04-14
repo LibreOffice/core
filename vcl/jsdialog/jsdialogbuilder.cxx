@@ -257,6 +257,28 @@ JSDialogNotifyIdle::generateClosePopupMessage(OUString sWindowId) const
     return aJsonWriter;
 }
 
+std::unique_ptr<tools::JsonWriter>
+JSDialogNotifyIdle::generateMessage(std::unique_ptr<ActionDataMap> pData) const
+{
+    std::unique_ptr<tools::JsonWriter> aJsonWriter(new tools::JsonWriter());
+
+    if (!m_aNotifierWindow)
+        return aJsonWriter;
+
+    aJsonWriter->put("jsontype", "formulabar");
+    aJsonWriter->put("action", "update");
+    aJsonWriter->put("id", m_aNotifierWindow->GetLOKWindowId());
+    {
+        auto aEntries = aJsonWriter->startNode("control");
+        aJsonWriter->put("id", "sc_input_window");
+        aJsonWriter->put("type", "edit");
+        aJsonWriter->put("raw_events", true);
+        aJsonWriter->put("text", (*pData)["message"]);
+    }
+
+    return aJsonWriter;
+}
+
 void JSDialogNotifyIdle::Invoke()
 {
     std::deque<JSDialogMessageInfo> aMessageQueue;
@@ -277,6 +299,8 @@ void JSDialogNotifyIdle::Invoke()
                 break;
 
             case jsdialog::MessageType::WidgetUpdate:
+                if (m_sTypeOfJSON == "formulabar")
+                    break;
                 send(*generateWidgetUpdate(rMessage.m_pWindow));
                 break;
 
@@ -295,6 +319,10 @@ void JSDialogNotifyIdle::Invoke()
 
             case jsdialog::MessageType::PopupClose:
                 send(*generateClosePopupMessage((*rMessage.m_pData)[WINDOW_ID]));
+                break;
+
+            case jsdialog::MessageType::Message:
+                send(*generateMessage(std::move(rMessage.m_pData)));
                 break;
         }
     }
@@ -319,6 +347,18 @@ void JSDialogSender::sendFullUpdate(bool bForce)
         mpIdleNotify->forceUpdate();
 
     mpIdleNotify->sendMessage(jsdialog::MessageType::FullUpdate, nullptr);
+    mpIdleNotify->Start();
+}
+
+void JSDialogSender::sendMessage(const OUString& rMessage)
+{
+    if (!mpIdleNotify)
+        return;
+
+    std::unique_ptr<ActionDataMap> pData = std::make_unique<ActionDataMap>();
+    (*pData)["message"] = rMessage;
+
+    mpIdleNotify->sendMessage(jsdialog::MessageType::Message, nullptr, std::move(pData));
     mpIdleNotify->Start();
 }
 
