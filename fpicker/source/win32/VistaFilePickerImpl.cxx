@@ -36,6 +36,7 @@
 #include <osl/file.hxx>
 #include <rtl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
+#include <o3tl/string_view.hxx>
 #include "WinImplHelper.hxx"
 
 #include <shlguid.h>
@@ -224,7 +225,7 @@ bailout:
 static OUString lcl_AdjustFilterName(const OUString& sName)
 {
     const sal_Int32 idx = sName.indexOf("(.");
-    return (idx > 0) ? sName.copy(0, idx).trim() : sName;
+    return (idx > 0) ? OUString(o3tl::trim(sName.subView(0, idx))) : sName;
 }
 
 // rvStrings holds the OUStrings, pointers to which data are stored in returned COMDLG_FILTERSPEC
