@@ -16,6 +16,24 @@
       "message": "This likely could be merged with both signed one, using something like\n\n  std::enable_if_t\u003cstd::is_signed_v\u003cT1\u003e \u003d\u003d std::is_signed_v\u003cT2\u003e, bool\u003e",
       "revId": "9a42c99d7b3e8a8429f14d7d851f3d186fa04594",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "051d3669_423e40af",
+        "filename": "cppu/source/uno/eq.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-14T10:41:45Z",
+      "side": 1,
+      "message": "`!std::is_unsigned_v\u003cT\u003e` doesn\u0027t imply `std::is_signed_v\u003cT\u003e`, but a condition like `std::is_arithmetic_v\u003cT1\u003e \u0026\u0026 std::is_arithmetic_v\u003cT2\u003e \u0026\u0026 std::is_signed_v\u003cT1\u003e \u003d\u003d std::is_signed_v\u003cT2\u003e` should work and still avoid accidental misuse of the function with inappropriate template arguments; question is whether that would be a net simplification overall :)",
+      "parentUuid": "bdc6dd9a_ad048cdb",
+      "revId": "9a42c99d7b3e8a8429f14d7d851f3d186fa04594",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
