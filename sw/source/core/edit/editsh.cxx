@@ -685,7 +685,7 @@ bool SwEditShell::InsertURL( const SwFormatINetFormat& rFormat, const OUString& 
     return true;
 }
 
-void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
+void SwEditShell::GetINetAttrs(SwGetINetAttrs& rArr, bool bIncludeInToxContent)
 {
     rArr.clear();
 
@@ -705,6 +705,18 @@ void SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                 && pFrame->MapModelToView(pTextNd, pFnd->GetStart())
                     != pFrame->MapModelToView(pTextNd, *pFnd->GetEnd()))
             {
+                // tdf#52113, tdf#148312 Don't include table of contents hyperlinks in the
+                // Navigator content tree Hyperlinks entries
+                if (!bIncludeInToxContent)
+                {
+                    if(const SwSectionNode* pSectNd = pTextNd->FindSectionNode())
+                    {
+                        SectionType eType = pSectNd->GetSection().GetType();
+                        if(SectionType::ToxContent == eType)
+                            continue;
+                    }
+                }
+
                 SwTextINetFormat& rAttr = *pFnd;
                 OUString sText( pTextNd->GetExpandText(GetLayout(),
                         rAttr.GetStart(), *rAttr.GetEnd() - rAttr.GetStart()) );

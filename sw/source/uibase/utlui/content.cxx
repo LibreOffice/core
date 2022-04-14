@@ -714,7 +714,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         case ContentTypeId::URLFIELD:
         {
             SwGetINetAttrs aArr;
-            m_pWrtShell->GetINetAttrs(aArr);
+            m_pWrtShell->GetINetAttrs(aArr, false);
 
             if (m_bAlphabeticSort)
             {
