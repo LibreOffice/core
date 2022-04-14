@@ -32,12 +32,16 @@
 module com {   module sun {   module star {   module document {
 
 
-/** makes it possible to import a document from a given URL
+/** Makes it possible to import a document from a given URL
     into this document.
  */
 published interface XDocumentInsertable: com::sun::star::uno::XInterface
 {
-    /** inserts the document that is specified by the URL.
+    /** Inserts the document that is specified by the URL.
+        The document will be inserted at the current cursor position.
+        
+        Make sure that you insert at a position which can be split
+        in two paragraphs (i.e. not inside of a field).
      */
     void insertDocumentFromURL( [in] string aURL,
              [in] sequence<com::sun::star::beans::PropertyValue> aOptions )
