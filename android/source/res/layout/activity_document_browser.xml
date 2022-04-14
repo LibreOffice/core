@@ -6,7 +6,7 @@
  License, v. 2.0. If a copy of the MPL was not distributed with this
  file, You can obtain one at http://mozilla.org/MPL/2.0/.
  -->
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,7 +14,7 @@
     android:orientation="vertical">
 
     <!-- The toolbar -->
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -30,10 +30,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 
-    <android.support.v4.widget.DrawerLayout
+    <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -47,7 +47,7 @@
         app:layout_constraintLeft_toLeftOf="parent">
 
         <!-- The content -->
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -99,7 +99,7 @@
                     android:textStyle="bold" />
 
                 <!--Recent files-->
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/list_recent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -108,13 +108,13 @@
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
 
         <!-- The navigation drawer -->
 
-    </android.support.v4.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/editFAB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -144,7 +144,7 @@
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:text="@string/new_textdocument" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/newWriterFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:text="@string/new_presentation" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/newImpressFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -208,7 +208,7 @@
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:text="@string/new_spreadsheet" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/newCalcFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -240,7 +240,7 @@
             android:layout_marginTop="@dimen/new_doc_fab_tweak_top"
             android:text="@string/new_drawing" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/newDrawFAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -254,4 +254,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
