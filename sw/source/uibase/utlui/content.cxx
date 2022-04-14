@@ -3257,7 +3257,11 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
                                               ContentTypeId nType, const void* ptr)
 {
     if (!ptr)
+    {
+        rContentTree.set_cursor(-1);
+        pThis->Select();
         return;
+    }
 
     // find content type entry
     std::unique_ptr<weld::TreeIter> xIter(rContentTree.make_iterator());
@@ -3273,7 +3277,11 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
     }
 
     if (!bFoundEntry)
+    {
+        rContentTree.set_cursor(-1);
+        pThis->Select();
         return;
+    }
 
     // assure content type entry is expanded
     rContentTree.expand_row(*xIter);
@@ -3332,6 +3340,10 @@ static void lcl_SelectByContentTypeAndAddress(SwContentTree* pThis, weld::TreeVi
             return;
         }
     }
+
+    rContentTree.set_cursor(-1);
+    pThis->Select();
+    return;
 }
 
 static void lcl_SelectByContentTypeAndName(SwContentTree* pThis, weld::TreeView& rContentTree,
