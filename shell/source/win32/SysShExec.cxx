@@ -19,6 +19,8 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
+#include <string_view>
 
 #include <osl/diagnose.h>
 #include <osl/process.h>
@@ -34,6 +36,7 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/runtimetooustring.hxx>
 #include <o3tl/safeCoInitUninit.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <prewin.h>
 #include <Shlobj.h>
@@ -166,12 +169,12 @@ CSysShExec::~CSysShExec()
 
 namespace
 {
-bool checkExtension(OUString const & extension, OUString const & denylist) {
-    assert(!extension.isEmpty());
-    for (sal_Int32 i = 0; i != -1;) {
-        OUString tok = denylist.getToken(0, ';', i);
-        tok.startsWith(".", &tok);
-        if (extension.equalsIgnoreAsciiCase(tok)) {
+bool checkExtension(std::u16string_view extension, std::u16string_view denylist) {
+    assert(!extension.empty());
+    for (std::size_t i = 0; i != std::u16string_view::npos;) {
+        std::u16string_view tok = o3tl::getToken(denylist, ';', i);
+        o3tl::starts_with(tok, u'.', &tok);
+        if (o3tl::equalsIgnoreAsciiCase(extension, tok)) {
             return false;
         }
     }
@@ -343,7 +346,7 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
                     if (!(checkExtension(ext, env)
                           && checkExtension(
                               ext,
-                              ".ADE;.ADP;.APK;.APPLICATION;.APPX;.APPXBUNDLE;.BAT;.CAB;.CHM;.CLASS;"
+                              u".ADE;.ADP;.APK;.APPLICATION;.APPX;.APPXBUNDLE;.BAT;.CAB;.CHM;.CLASS;"
                               ".CMD;.COM;.CPL;.DLL;.DMG;.EX;.EX_;.EXE;.GADGET;.HTA;.INF;.INS;.IPA;"
                               ".ISO;.ISP;.JAR;.JS;.JSE;.LIB;.LNK;.MDE;.MSC;.MSH;.MSH1;.MSH2;.MSHXML;"
                               ".MSH1XML;.MSH2XML;.MSI;.MSIX;.MSIXBUNDLE;.MSP;.MST;.NSH;.PIF;.PS1;"
