@@ -134,7 +134,7 @@ public class FileUtilities {
         Cursor cursor = null;
         try {
             String[] columns = {OpenableColumns.DISPLAY_NAME};
-            cursor = resolver.query(docUri, columns, null, null);
+            cursor = resolver.query(docUri, columns, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
                 displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
             }
