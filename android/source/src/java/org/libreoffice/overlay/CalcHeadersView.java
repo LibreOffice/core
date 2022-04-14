@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PointF;
 import android.graphics.RectF;
-import android.support.v4.view.GestureDetectorCompat;
+import androidx.core.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
