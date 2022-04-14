@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc9235c8_d306ec5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-04-14T11:14:14Z",
+      "side": 1,
+      "message": "patch is ok but is not needed so no need to introduce additional updates without any benefit from them...",
+      "revId": "e638d72e21939966c180f312e933d012a5795688",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
