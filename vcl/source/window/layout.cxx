@@ -1812,7 +1812,7 @@ IMPL_LINK( VclExpander, ClickHdl, CheckBox&, rBtn, void )
         queue_resize();
         Dialog* pResizeDialog = m_bResizeTopLevel ? GetParentDialog() : nullptr;
         if (pResizeDialog)
-            pResizeDialog->setOptimalLayoutSize();
+            pResizeDialog->setOptimalLayoutSize(true);
     }
     maExpandedHdl.Call(*this);
 }

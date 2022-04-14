@@ -159,7 +159,7 @@ public:
     virtual Size    GetOptimalSize() const override;
     virtual void    queue_resize(StateChangedType eReason = StateChangedType::Layout) override;
     bool            isLayoutEnabled() const;
-    void            setOptimalLayoutSize();
+    void            setOptimalLayoutSize(bool bAllowWindowShrink);
     bool            isCalculatingInitialLayoutSize() const { return mbIsCalculatingInitialLayoutSize; }
 
     void            SetIcon( sal_uInt16 nIcon );
