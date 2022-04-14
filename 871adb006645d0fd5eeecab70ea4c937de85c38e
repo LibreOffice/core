@@ -22,6 +22,30 @@
       },
       "revId": "871adb006645d0fd5eeecab70ea4c937de85c38e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fd44e57_3cb1633f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-14T11:42:23Z",
+      "side": 1,
+      "message": "Starting with \u003chttps://git.libreoffice.org/core/+/2bf56582475179faa9d71573532a0d416cb64bfc%5E%21\u003e \"add a more complete o3tl::getToken\" there are, confusingly, two (sets of) overloads of o3tl::getToken here, the first, original one based on std::size_t string lengths (and only to which this comment pertains), and a second one based on sal_Int32 string lengths.",
+      "parentUuid": "1d0cbd79_d56e346a",
+      "range": {
+        "startLine": 9,
+        "startChar": 18,
+        "endLine": 9,
+        "endChar": 27
+      },
+      "revId": "871adb006645d0fd5eeecab70ea4c937de85c38e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
