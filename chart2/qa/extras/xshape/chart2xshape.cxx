@@ -115,7 +115,7 @@ void Chart2XShapeTest::testPieChartLabels1()
         return;
 
     // inside placement for the best fit case
-    load(u"chart2/qa/extras/xshape/data/xlsx/", "tdf90839-1.xlsx");
+    load(u"chart2/qa/extras/xshape/data/xlsx/", u"tdf90839-1.xlsx");
     compareAgainstReference(u"tdf90839-1.xml");
 }
 
@@ -127,7 +127,7 @@ void Chart2XShapeTest::testPieChartLabels2()
         return;
 
     // text wrap: wrap all text labels except one
-    load(u"chart2/qa/extras/xshape/data/xlsx/", "tdf90839-2.xlsx");
+    load(u"chart2/qa/extras/xshape/data/xlsx/", u"tdf90839-2.xlsx");
     compareAgainstReference(u"tdf90839-2.xml");
 }
 
@@ -139,7 +139,7 @@ void Chart2XShapeTest::testPieChartLabels3()
         return;
 
     // text wrap: wrap no text label except one
-    load(u"chart2/qa/extras/xshape/data/xlsx/", "tdf90839-3.xlsx");
+    load(u"chart2/qa/extras/xshape/data/xlsx/", u"tdf90839-3.xlsx");
     compareAgainstReference(u"tdf90839-3.xml");
 }
 
@@ -151,7 +151,7 @@ void Chart2XShapeTest::testPieChartLabels4()
         return;
 
     // data value and percent value are centered horizontally
-    load(u"chart2/qa/extras/xshape/data/ods/", "tdf90839-4.ods");
+    load(u"chart2/qa/extras/xshape/data/ods/", u"tdf90839-4.ods");
     compareAgainstReference(u"tdf90839-4.xml");
 }
 
@@ -160,7 +160,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
     // This bug prevents that the trendline (regression curve) is drawn
     // if the first cell is empty. See tdf#76649 for details.
 
-    load(u"chart2/qa/extras/xshape/data/ods/", "tdf76649_TrendLineBug.ods");
+    load(u"chart2/qa/extras/xshape/data/ods/", u"tdf76649_TrendLineBug.ods");
 
     xmlDocUniquePtr pXmlDoc = getXShapeDumpXmlDoc();
 
@@ -171,7 +171,7 @@ void Chart2XShapeTest::testTdf76649TrendLineBug()
 
 void Chart2XShapeTest::testTdf88154LabelRotatedLayout()
 {
-    load(u"chart2/qa/extras/xshape/data/pptx/", "tdf88154_LabelRotatedLayout.pptx");
+    load(u"chart2/qa/extras/xshape/data/pptx/", u"tdf88154_LabelRotatedLayout.pptx");
     uno::Reference<chart::XChartDocument> xChartDoc = getChartDocFromDrawImpress(0, 5);
     uno::Reference<qa::XDumper> xDumper(xChartDoc, UNO_QUERY_THROW);
     OUString rDump = xDumper->dump();

@@ -166,9 +166,9 @@ public:
         );
 
     static bool isCID( std::u16string_view rName );
-    static OUString getDragMethodServiceName( const OUString& rClassifiedIdentifier );
-    static OUString getDragParameterString( const OUString& rCID );
-    static bool isDragableObject( const OUString& rClassifiedIdentifier );
+    static std::u16string_view getDragMethodServiceName( std::u16string_view rClassifiedIdentifier );
+    static std::u16string_view getDragParameterString( std::u16string_view rCID );
+    static bool isDragableObject( std::u16string_view rClassifiedIdentifier );
     bool isDragableObject() const;
     static bool isRotateableObject( std::u16string_view rClassifiedIdentifier );
     static bool isMultiClickObject( std::u16string_view rClassifiedIdentifier );
@@ -189,8 +189,8 @@ public:
     static OUString createDataCurveEquationCID( std::u16string_view rSeriesParticle, sal_Int32 nCurveIndex );
 
     SAL_DLLPRIVATE static OUString getObjectID( const OUString& rCID );
-    static OUString getParticleID( const OUString& rCID );
-    static OUString getFullParentParticle( const OUString& rCID );
+    static std::u16string_view getParticleID( std::u16string_view rCID );
+    static std::u16string_view getFullParentParticle( std::u16string_view rCID );
 
     //returns the series particle of a CID when the CID is a child of the series
     static OUString getSeriesParticleFromCID( const OUString& rCID );
@@ -228,7 +228,7 @@ public:
         , css::awt::Point& rMinimumPosition
         , css::awt::Point& rMaximumPosition );
 
-    static TitleHelper::eTitleType getTitleTypeForCID( const OUString& rCID );
+    static TitleHelper::eTitleType getTitleTypeForCID( std::u16string_view rCID );
 
     static OUString getMovedSeriesCID( const OUString& rObjectCID, bool bForward );
 
