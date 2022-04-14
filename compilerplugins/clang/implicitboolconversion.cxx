@@ -180,8 +180,9 @@ bool isBoolExpr(Expr const * expr) {
                 TemplateDecl const * d
                     = t->getTemplateName().getAsTemplateDecl();
                 if (d == nullptr
-                    || (d->getQualifiedNameAsString()
-                        != "com::sun::star::uno::Sequence")
+                    || !loplugin::DeclCheck(d->getTemplatedDecl()).Class("Sequence")
+                        .Namespace("uno").Namespace("star").Namespace("sun").Namespace("com")
+                        .GlobalNamespace()
                     || t->getNumArgs() != 1
                     || t->getArg(0).getKind() != TemplateArgument::Type)
                 {

@@ -12,6 +12,7 @@
 #include <atomic>
 #include <initializer_list>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include <sal/types.h>
 
 template <typename T> struct Sequence
@@ -34,6 +35,8 @@ template <typename T> struct Wrap2
 };
 
 bool g();
+
+void h(bool);
 
 void f()
 {
@@ -63,13 +66,15 @@ void f()
     Sequence<Sequence<int>> s4{ { false } };
     (void)s4;
     Wrap1<sal_Bool> w1{ false };
-    (void)w1;
     Sequence<Wrap1<sal_Bool>> s5{ { false } };
     (void)s5;
     Wrap2<sal_Bool> w2{ false };
     (void)w2;
     Sequence<Wrap2<sal_Bool>> s6{ { false } };
     (void)s6;
+    h(w1.element);
+    css::uno::Sequence<sal_Bool> s7(1);
+    h(s7[0]);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
