@@ -1553,17 +1553,17 @@ OUString SdGenericDrawPage::getBookmarkURL() const
     return aRet.makeStringAndClear();
 }
 
-void SdGenericDrawPage::setBookmarkURL( OUString const & rURL )
+void SdGenericDrawPage::setBookmarkURL( std::u16string_view rURL )
 {
     if( !SvxFmDrawPage::mpPage )
         return;
 
-    sal_Int32 nIndex = rURL.indexOf( '#' );
-    if( nIndex == -1 )
+    size_t nIndex = rURL.find( '#' );
+    if( nIndex == std::u16string_view::npos )
         return;
 
-    const OUString aFileName( rURL.copy( 0, nIndex ) );
-    const OUString aBookmarkName( SdDrawPage::getUiNameFromPageApiName( rURL.copy( nIndex+1 )  ) );
+    const OUString aFileName( rURL.substr( 0, nIndex ) );
+    const OUString aBookmarkName( SdDrawPage::getUiNameFromPageApiName( OUString(rURL.substr( nIndex+1 ))  ) );
 
     if( !aFileName.isEmpty() && !aBookmarkName.isEmpty() )
     {

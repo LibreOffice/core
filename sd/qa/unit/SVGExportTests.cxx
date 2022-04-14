@@ -46,13 +46,13 @@ bool isValidBitmapId(const OUString& sId)
     return std::regex_match(sId.toUtf8().getStr(), aRegEx);
 }
 
-BitmapChecksum getBitmapChecksumFromId(const OUString& sId)
+BitmapChecksum getBitmapChecksumFromId(std::u16string_view sId)
 {
-    sal_Int32 nStart = sId.indexOf("(") + 1;
-    sal_Int32 nCount = sId.indexOf(")") - nStart;
-    bool bIsValidRange = nStart > 0 && nCount > 0;
+    size_t nStart = sId.find(u"(") + 1;
+    size_t nCount = sId.find(u")") - nStart;
+    bool bIsValidRange = nStart > 0 && nStart != std::u16string_view::npos && nCount > 0;
     CPPUNIT_ASSERT(bIsValidRange);
-    OUString sChecksum = sId.copy( nStart, nCount );
+    OUString sChecksum( sId.substr( nStart, nCount ) );
     return sChecksum.toUInt64();
 }
 
