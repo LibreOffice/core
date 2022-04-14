@@ -24,6 +24,7 @@
 #include <drawingml/chart/axismodel.hxx>
 #include <drawingml/chart/seriesmodel.hxx>
 #include <drawingml/chart/typegroupmodel.hxx>
+#include <drawingml/chart/datatablemodel.hxx>
 
 namespace oox::drawingml::chart {
 
@@ -49,14 +50,6 @@ struct WallFloorModel
 
     explicit            WallFloorModel();
                         ~WallFloorModel();
-};
-
-struct DataTableModel
-{
-    bool                mbShowHBorder;      /// Show Horizontal Border
-    bool                mbShowVBorder;      /// Show Vertical Border
-    bool                mbShowOutline;      /// Show outline
-    explicit            DataTableModel();
 };
 
 struct PlotAreaModel

@@ -17,36 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawingml/chart/plotareamodel.hxx>
-#include <drawingml/fillproperties.hxx>
-#include <oox/token/tokens.hxx>
+#pragma once
 
-namespace oox::drawingml::chart {
-
-View3DModel::View3DModel(bool bMSO2007Doc) :
-    mnDepthPercent( 100 ),
-    mnPerspective( 30 ),
-    mbRightAngled( !bMSO2007Doc )
+namespace oox::drawingml::chart
 {
-}
-
-WallFloorModel::WallFloorModel()
+struct DataTableModel
 {
-}
+    bool mbShowHBorder : 1; /// Show Horizontal Border
+    bool mbShowVBorder : 1; /// Show Vertical Border
+    bool mbShowOutline : 1; /// Show outline
+    bool mbShowKeys : 1;
 
-WallFloorModel::~WallFloorModel()
-{
+    DataTableModel()
+        : mbShowHBorder(false)
+        , mbShowVBorder(false)
+        , mbShowOutline(false)
+        , mbShowKeys(false)
+    {
+    }
+};
 }
-
-PlotAreaModel::PlotAreaModel()
-{
-    mxShapeProp.create().getFillProperties().moFillType = XML_noFill;
-}
-
-PlotAreaModel::~PlotAreaModel()
-{
-}
-
-} // namespace oox::drawingml::chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

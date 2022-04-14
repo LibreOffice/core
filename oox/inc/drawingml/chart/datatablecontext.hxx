@@ -17,35 +17,25 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <drawingml/chart/plotareamodel.hxx>
-#include <drawingml/fillproperties.hxx>
-#include <oox/token/tokens.hxx>
+#pragma once
 
-namespace oox::drawingml::chart {
+#include <drawingml/chart/chartcontextbase.hxx>
 
-View3DModel::View3DModel(bool bMSO2007Doc) :
-    mnDepthPercent( 100 ),
-    mnPerspective( 30 ),
-    mbRightAngled( !bMSO2007Doc )
+namespace oox::drawingml::chart
 {
-}
+struct DataTableModel;
 
-WallFloorModel::WallFloorModel()
+/** Handler for a data table context (c:dTable element).
+ */
+class DataTableContext final : public ContextBase<DataTableModel>
 {
-}
+public:
+    explicit DataTableContext(::oox::core::ContextHandler2Helper& rParent, DataTableModel& rModel);
+    virtual ~DataTableContext() override;
 
-WallFloorModel::~WallFloorModel()
-{
-}
-
-PlotAreaModel::PlotAreaModel()
-{
-    mxShapeProp.create().getFillProperties().moFillType = XML_noFill;
-}
-
-PlotAreaModel::~PlotAreaModel()
-{
-}
+    virtual ::oox::core::ContextHandlerRef onCreateContext(sal_Int32 nElement,
+                                                           const AttributeList& rAttribs) override;
+};
 
 } // namespace oox::drawingml::chart
 
