@@ -827,6 +827,7 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
             {
                 Reference< XTableColumns > xCols( mxTable->getColumns() );
                 xCols->removeByIndex( aStart.mnCol, nRemovedColumns );
+                EditCell(aStart, nullptr, TblAction::NONE);
             }
             break;
         }
@@ -842,6 +843,7 @@ void SvxTableController::onDelete( sal_uInt16 nSId )
             {
                 Reference< XTableRows > xRows( mxTable->getRows() );
                 xRows->removeByIndex( aStart.mnRow, nRemovedRows );
+                EditCell(aStart, nullptr, TblAction::NONE);
             }
             break;
         }
