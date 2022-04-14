@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a44cb5b_adc9aa69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000674
+      },
+      "writtenOn": "2022-04-14T19:35:22Z",
+      "side": 1,
+      "message": "Build fails for me.This patch generates another problem for helpcontent2:\n\n[build XSL] CustomTarget/helpcontent2/help3xsl/fr/html.text\nwarning: failed to load external entity \"[...]/workdir/HelpTranslatePartTarget/fr/helpcontent2/source/text/swriter/00/00000004.xhp\"\nunable to parse [...]/workdir/HelpTranslatePartTarget/fr/helpcontent2/source/text/swriter/00/00000004.xhp\nxargs: printf : terminé par le signal 13\nmake[1]: *** [...]/helpcontent2/CustomTarget_html.mk:223 : [...]/workdir/CustomTarget/helpcontent2/help3xsl/fr/html.text] Erreur 6",
+      "revId": "e47997eb711401c71538191d39438239833d7b18",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
