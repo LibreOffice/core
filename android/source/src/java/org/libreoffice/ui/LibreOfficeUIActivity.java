@@ -258,9 +258,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     private void showSystemFilePickerAndOpenFile() {
         Intent intent = new Intent();
-        try {
+        if (Build.VERSION.SDK_INT >= 19) {
             intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
-        } catch (ActivityNotFoundException exception) {
+        }
+        else {
             // Intent.ACTION_OPEN_DOCUMENT added in API level 19, but minSdkVersion is currently 16
             intent.setAction(Intent.ACTION_GET_CONTENT);
         }
