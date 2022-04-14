@@ -173,8 +173,6 @@ static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source, sal_Int32
         const SalLayoutGlyphsImpl* sourceLevel = source.Impl(level);
         if (sourceLevel == nullptr)
             break;
-        if (level > 0) // TODO: Fallbacks do not work reliably.
-            return SalLayoutGlyphs();
         SalLayoutGlyphsImpl* cloned = sourceLevel->cloneCharRange(index, len);
         // If the glyphs range cannot be cloned, bail out.
         if (cloned == nullptr)
@@ -265,16 +263,26 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         text, nIndex, nLen, Point(0, 0), nLogicWidth, {}, glyphItemsOnlyLayout, layoutCache);
     if (layout)
     {
-        mCachedGlyphs.insert(std::make_pair(key, layout->GetGlyphs()));
-        assert(mCachedGlyphs.find(key) == mCachedGlyphs.begin()); // newly inserted item is first
-        return &mCachedGlyphs.begin()->second;
+        SalLayoutGlyphs glyphs = layout->GetGlyphs();
+        if (glyphs.IsValid())
+        {
+            // TODO: Fallbacks do not work reliably (fallback font not included in the key),
+            // so do not cache (but still return once, using the temporary without a key set).
+            if (glyphs.Impl(1) != nullptr)
+            {
+                mLastTemporaryGlyphs = std::move(glyphs);
+                mLastTemporaryKey.reset();
+                return &mLastTemporaryGlyphs;
+            }
+            mCachedGlyphs.insert(std::make_pair(key, layout->GetGlyphs()));
+            assert(mCachedGlyphs.find(key)
+                   == mCachedGlyphs.begin()); // newly inserted item is first
+            return &mCachedGlyphs.begin()->second;
+        }
     }
-    else
-    {
-        // Failure, cache it too as invalid glyphs.
-        mCachedGlyphs.insert(std::make_pair(key, SalLayoutGlyphs()));
-        return nullptr;
-    }
+    // Failure, cache it too as invalid glyphs.
+    mCachedGlyphs.insert(std::make_pair(key, SalLayoutGlyphs()));
+    return nullptr;
 }
 
 SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const OutputDevice>& d,
