@@ -2,9 +2,9 @@ package org.libreoffice;
 
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
