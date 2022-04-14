@@ -24,6 +24,7 @@
 #include <drawingml/chart/plotareamodel.hxx>
 #include <drawingml/chart/seriescontext.hxx>
 #include <drawingml/chart/typegroupcontext.hxx>
+#include <drawingml/chart/datatablecontext.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>
@@ -100,37 +101,6 @@ ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const A
                     return new PictureOptionsContext( *this, mrModel.mxPicOptions.create(bMSO2007Doc) );
                 case C_TOKEN( spPr ):
                     return new ShapePropertiesContext( *this, mrModel.mxShapeProp.create() );
-            }
-        break;
-    }
-    return nullptr;
-}
-
-DataTableContext::DataTableContext( ContextHandler2Helper& rParent, DataTableModel& rModel ) :
-    ContextBase< DataTableModel >( rParent, rModel )
-{
-}
-
-DataTableContext::~DataTableContext()
-{
-}
-
-ContextHandlerRef DataTableContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs)
-{
-    switch( getCurrentElement() )
-    {
-        case C_TOKEN( dTable ):
-            switch( nElement )
-            {
-                case C_TOKEN( showHorzBorder ):
-                        mrModel.mbShowHBorder = rAttribs.getBool( XML_val, false );
-                        break;
-                case C_TOKEN( showVertBorder ):
-                        mrModel.mbShowVBorder = rAttribs.getBool( XML_val, false );
-                        break;
-                case C_TOKEN( showOutline ):
-                        mrModel.mbShowOutline = rAttribs.getBool( XML_val, false );
-                        break;
             }
         break;
     }
