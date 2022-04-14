@@ -253,7 +253,7 @@ public:
     bool            IsSelected(sal_uInt16 nPage);
     bool            IsVisible(sal_uInt16 nPage);
 
-    void            GotoBookmark(const OUString& rBookmark);
+    void            GotoBookmark(std::u16string_view rBookmark);
     //Realize multi-selection of objects, If object is marked, the
     //corresponding entry is set true, else the corresponding entry is set
     //false.

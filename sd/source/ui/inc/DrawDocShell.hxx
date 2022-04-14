@@ -124,7 +124,7 @@ public:
     void                    Disconnect(sd::ViewShell const * pViewSh);
     void                    UpdateTablePointers();
 
-    void                    GotoBookmark(const OUString& rBookmark);
+    void                    GotoBookmark(std::u16string_view rBookmark);
 
     BitmapEx                GetPagePreviewBitmap(SdPage* pPage);
 
