@@ -660,6 +660,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/view/scextopt \
     sc/source/ui/view/select \
     sc/source/ui/view/selectionstate \
+    sc/source/ui/view/SparklineShell \
     sc/source/ui/view/spelldialog \
     sc/source/ui/view/spelleng \
     sc/source/ui/view/spellcheckcontext \
