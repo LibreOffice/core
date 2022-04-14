@@ -16,6 +16,24 @@
       "message": "this isn\u0027t translatable (it is by now mere source code documentation, and even gets stripped out of the resulting .xcd)",
       "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10de1c08_95cfce41",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-04-14T02:24:50Z",
+      "side": 1,
+      "message": "Ack, but shouldn’t it match the actual translatable string? To placate my OCD at least. :P",
+      "parentUuid": "2876c6bb_6ea3be3e",
+      "revId": "fcf1d79c07f3a1557dca6ba15024fcbf7a1c8723",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
