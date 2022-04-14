@@ -58,6 +58,7 @@ module StarCalc
     include "graphsh.sdi"
     include "pgbrksh.sdi"
     include "mediash.sdi"
+    include "SparklineShell.sdi"
 
 }
 
