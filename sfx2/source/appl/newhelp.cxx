@@ -475,6 +475,7 @@ IMPL_LINK_NOARG(IndexTabPage_Impl, EntryChangeHdl, weld::Entry&, void)
         case css::awt::Key::DELETE_TO_END_OF_LINE:
         case KEY_BACKSPACE:
         case KEY_DELETE:
+            aAutoCompleteIdle.Stop();
             break;
         default:
             aAutoCompleteIdle.Start();
