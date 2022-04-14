@@ -257,7 +257,10 @@ PoEntry::PoEntry(
         throw WRONGHELPTEXT;
 
     m_pGenPo.reset( new GenPoEntry() );
-    OString sReference(rSourceFile.substr(rSourceFile.rfind('/')+1));
+    size_t idx = rSourceFile.rfind('/');
+    if (idx == std::string_view::npos)
+        idx = 0;
+    OString sReference(rSourceFile.substr(idx+1));
     m_pGenPo->setReference(sReference);
 
     OString sMsgCtxt =

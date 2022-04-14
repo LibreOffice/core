@@ -34,10 +34,15 @@ namespace
 {
     OString lcl_NormalizeFilename(std::string_view rFilename)
     {
-        return OString(rFilename.substr(
-            std::max(
-                rFilename.rfind( '\\' ),
-                rFilename.rfind( '/' ))+1));
+        size_t idx1 = rFilename.rfind( '\\' );
+        size_t idx2 = rFilename.rfind( '/' );
+        if (idx1 == std::string_view::npos && idx2 == std::string_view::npos)
+            return OString(rFilename);
+        if (idx1 == std::string_view::npos)
+            idx1 = 0;
+        if (idx2 == std::string_view::npos)
+            idx2 = 0;
+        return OString(rFilename.substr(std::max(idx1, idx2)+1));
     };
 
     bool lcl_ReadPoChecked(
