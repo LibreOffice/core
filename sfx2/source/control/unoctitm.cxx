@@ -1104,6 +1104,14 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "IncrementIndent" ||
              aEvent.FeatureURL.Path == "DecrementIndent" ||
              aEvent.FeatureURL.Path == "EditHeaderAndFooter" ||
+             aEvent.FeatureURL.Path == "InsertSparkline" ||
+             aEvent.FeatureURL.Path == "DeleteSparkline" ||
+             aEvent.FeatureURL.Path == "DeleteSparklineGroup" ||
+             aEvent.FeatureURL.Path == "EditSparklineGroup" ||
+             aEvent.FeatureURL.Path == "EditSparkline" ||
+             aEvent.FeatureURL.Path == "GroupSparklines" ||
+             aEvent.FeatureURL.Path == "UngroupSparklines" ||
+             aEvent.FeatureURL.Path == "FormatSparklineMenu" ||
              aEvent.FeatureURL.Path == "NumberFormatDecDecimals" ||
              aEvent.FeatureURL.Path == "NumberFormatIncDecimals")
     {
