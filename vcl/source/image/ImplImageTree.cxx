@@ -56,7 +56,6 @@
 #include <vcl/pngwrite.hxx>
 #include <o3tl/string_view.hxx>
 #include <bitmap/BitmapLightenFilter.hxx>
-#include <o3tl/string_view.hxx>
 
 using namespace css;
 
