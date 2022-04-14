@@ -37,6 +37,8 @@
 #include <tools/json_writer.hxx>
 #include <docoptio.hxx>
 #include <test/lokcallback.hxx>
+#include <osl/file.hxx>
+#include <unotools/tempfile.hxx>
 
 #include <chrono>
 #include <cstddef>
@@ -122,6 +124,7 @@ public:
     void testTextSelectionBounds();
     void testSheetViewDataCrash();
     void testTextBoxInsert();
+    void testInvalidEntrySave();
 
     CPPUNIT_TEST_SUITE(ScTiledRenderingTest);
     CPPUNIT_TEST(testRowColumnHeaders);
@@ -177,13 +180,15 @@ public:
     CPPUNIT_TEST(testTextSelectionBounds);
     CPPUNIT_TEST(testSheetViewDataCrash);
     CPPUNIT_TEST(testTextBoxInsert);
+    CPPUNIT_TEST(testInvalidEntrySave);
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    ScModelObj* createDoc(const char* pName);
+    ScModelObj* createDoc(const char* pName, bool bMakeTempCopy = false);
     void setupLibreOfficeKitViewCallback(SfxViewShell* pViewShell);
     static void callback(int nType, const char* pPayload, void* pData);
     void callbackImpl(int nType, const char* pPayload);
+    void makeTempCopy(const OUString& rOrigURL);
 
     /// document size changed callback.
     osl::Condition m_aDocSizeCondition;
@@ -191,6 +196,7 @@ private:
 
     uno::Reference<lang::XComponent> mxComponent;
     TestLokCallbackWrapper m_callbackWrapper;
+    std::unique_ptr<utl::TempFile> mpTempFile;
 };
 
 ScTiledRenderingTest::ScTiledRenderingTest()
@@ -229,11 +235,29 @@ void ScTiledRenderingTest::tearDown()
     test::BootstrapFixture::tearDown();
 }
 
-ScModelObj* ScTiledRenderingTest::createDoc(const char* pName)
+void ScTiledRenderingTest::makeTempCopy(const OUString& rOrigURL)
+{
+    mpTempFile.reset(new utl::TempFile());
+    mpTempFile->EnableKillingFile();
+    auto const aError = osl::File::copy(rOrigURL, mpTempFile->GetURL());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        OUString("<" + rOrigURL + "> -> <" + mpTempFile->GetURL() + ">").toUtf8().getStr(),
+        osl::FileBase::E_None, aError);
+}
+
+ScModelObj* ScTiledRenderingTest::createDoc(const char* pName, bool bMakeTempCopy)
 {
     if (mxComponent.is())
         mxComponent->dispose();
-    mxComponent = loadFromDesktop(m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName), "com.sun.star.sheet.SpreadsheetDocument");
+
+    OUString aOriginalSrc = m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(pName);
+    if (bMakeTempCopy)
+        makeTempCopy(aOriginalSrc);
+
+    mxComponent = loadFromDesktop(
+        bMakeTempCopy ? mpTempFile->GetURL() : aOriginalSrc,
+        "com.sun.star.sheet.SpreadsheetDocument");
+
     ScModelObj* pModelObj = dynamic_cast<ScModelObj*>(mxComponent.get());
     CPPUNIT_ASSERT(pModelObj);
     pModelObj->initializeForTiledRendering(uno::Sequence<beans::PropertyValue>());
@@ -2643,18 +2667,25 @@ void ScTiledRenderingTest::testSortAscendingDescending()
     CPPUNIT_ASSERT_EQUAL(OString("rows"), aView.m_sInvalidateSheetGeometry);
 }
 
-void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView, ScModelObj* pModelObj)
+void lcl_typeCharsInCell(const std::string& aStr, SCCOL nCol, SCROW nRow, ScTabViewShell* pView,
+    ScModelObj* pModelObj, bool bInEdit = false, bool bCommit = true)
 {
-    pView->SetCursor(nCol, nRow);
+    if (!bInEdit)
+        pView->SetCursor(nCol, nRow);
+
     for (const char& cChar : aStr)
     {
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, cChar, 0);
         pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, cChar, 0);
         Scheduler::ProcessEventsToIdle();
     }
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
-    pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
-    Scheduler::ProcessEventsToIdle();
+
+    if (bCommit)
+    {
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, awt::Key::RETURN);
+        pModelObj->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, awt::Key::RETURN);
+        Scheduler::ProcessEventsToIdle();
+    }
 }
 
 void ScTiledRenderingTest::testAutoInputStringBlock()
@@ -2895,6 +2926,44 @@ void ScTiledRenderingTest::testTextBoxInsert()
     CPPUNIT_ASSERT(aView1.m_ShapeSelection != "EMPTY");
 
     Scheduler::ProcessEventsToIdle();
+}
+
+void ScTiledRenderingTest::testInvalidEntrySave()
+{
+    // Load a document
+    comphelper::LibreOfficeKit::setActive();
+
+    ScModelObj* pModelObj = createDoc("validity.xlsx", true /* bMakeTempCopy */);
+    const ScDocument* pDoc = pModelObj->GetDocument();
+    ViewCallback aView;
+    int nView = SfxLokHelper::getView();
+
+    SfxLokHelper::setView(nView);
+
+    ScDocShell* pDocSh = dynamic_cast< ScDocShell* >( pModelObj->GetEmbeddedObject() );
+    ScTabViewShell* pTabViewShell = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pTabViewShell);
+
+    // Type partial date "7/8" of "7/8/2013" that
+    // the validation cell at A8 can accept
+    lcl_typeCharsInCell("7/8", 0, 7, pTabViewShell, pModelObj,
+        false /* bInEdit */, false /* bCommit */); // Type "7/8" in A8
+
+    uno::Sequence<beans::PropertyValue> aArgs;
+    comphelper::dispatchCommand(".uno:Save", aArgs);
+    Scheduler::ProcessEventsToIdle();
+
+    CPPUNIT_ASSERT_MESSAGE("Should not be marked modified after save", !pDocSh->IsModified());
+
+    // Complete the date in A8 by appending "/2013" and commit.
+    lcl_typeCharsInCell("/2013", 0, 7, pTabViewShell, pModelObj,
+        true /* bInEdit */, true /* bCommit */);
+
+    // This would hang if the date entered "7/8/2013" is not acceptable.
+    Scheduler::ProcessEventsToIdle();
+
+    // Ensure that the correct date is recorded in the document.
+    CPPUNIT_ASSERT_EQUAL(double(41463), pDoc->GetValue(ScAddress(0, 7, 0)));
 }
 
 }

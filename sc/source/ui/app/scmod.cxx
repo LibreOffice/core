@@ -1356,13 +1356,13 @@ bool ScModule::InputKeyEvent( const KeyEvent& rKEvt, bool bStartEdit )
     return pHdl && pHdl->KeyInput( rKEvt, bStartEdit );
 }
 
-void ScModule::InputEnterHandler( ScEnterMode nBlockMode )
+void ScModule::InputEnterHandler( ScEnterMode nBlockMode, bool bBeforeSavingInLOK )
 {
     if ( !SfxGetpApp()->IsDowning() ) // Not when quitting the program
     {
         ScInputHandler* pHdl = GetInputHdl();
         if (pHdl)
-            pHdl->EnterHandler( nBlockMode );
+            pHdl->EnterHandler( nBlockMode, bBeforeSavingInLOK );
     }
 }
 

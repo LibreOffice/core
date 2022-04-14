@@ -198,7 +198,7 @@ public:
     void            MergeLanguageAttributes( ScEditEngineDefaulter& rDestEngine ) const;
 
     bool            KeyInput( const KeyEvent& rKEvt, bool bStartEdit );
-    void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL );
+    void            EnterHandler( ScEnterMode nBlockMode = ScEnterMode::NORMAL, bool bBeforeSavingInLOK = false );
     void            CancelHandler();
     void            SetReference( const ScRange& rRef, const ScDocument& rDoc );
     void            AddRefEntry();

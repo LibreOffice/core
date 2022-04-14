@@ -822,7 +822,7 @@ sal_uInt16 ScColumn::GetOptimalColWidth(
     {
         nWidth += 2;
         sal_uInt16 nTwips = static_cast<sal_uInt16>(
-            std::min(nWidth / nPPTX, double(std::numeric_limits<sal_uInt16>::max())));
+            std::min(nWidth / nPPTX, double(std::numeric_limits<sal_uInt16>::max() / 2)));
         return nTwips;
     }
     else
