@@ -167,10 +167,13 @@ public:
     virtual ~SalInstanceMenu() override;
 };
 
+class SalFlashAttention;
+
 class SalInstanceWidget : public virtual weld::Widget
 {
 protected:
     VclPtr<vcl::Window> m_xWidget;
+    std::unique_ptr<SalFlashAttention> m_xFlashAttention;
     SalInstanceBuilder* m_pBuilder;
 
 private:
@@ -366,6 +369,8 @@ public:
     virtual void connect_get_property_tree(const Link<tools::JsonWriter&, void>& rLink) override;
 
     virtual void get_property_tree(tools::JsonWriter& rJsonWriter) override;
+
+    virtual void call_attention_to() override;
 
     virtual void set_stack_background() override;
 
@@ -999,6 +1004,8 @@ public:
     virtual void set_mru_entries(const OUString& rEntries) override;
 
     virtual void HandleEventListener(VclWindowEvent& rEvent) override;
+
+    virtual void call_attention_to() override;
 
     virtual ~SalInstanceComboBoxWithEdit() override;
 };
