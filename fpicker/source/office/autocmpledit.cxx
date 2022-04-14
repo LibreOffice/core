@@ -7,21 +7,44 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <vcl/event.hxx>
 #include "autocmpledit.hxx"
 
 AutocompleteEdit::AutocompleteEdit(std::unique_ptr<weld::Entry> xEntry)
     : m_xEntry(std::move(xEntry))
     , m_aChangedIdle("fpicker::AutocompleteEdit m_aChangedIdle")
+    , m_nLastCharCode(0)
 {
     m_xEntry->connect_changed(LINK(this, AutocompleteEdit, ChangedHdl));
+    m_xEntry->connect_key_press(LINK(this, AutocompleteEdit, KeyInputHdl));
 
     m_aChangedIdle.SetInvokeHandler(LINK(this, AutocompleteEdit, TryAutoComplete));
+}
+
+IMPL_LINK(AutocompleteEdit, KeyInputHdl, const KeyEvent&, rKEvt, bool)
+{
+    m_nLastCharCode = rKEvt.GetKeyCode().GetCode();
+    return false;
 }
 
 IMPL_LINK_NOARG(AutocompleteEdit, ChangedHdl, weld::Entry&, void)
 {
     m_aChangeHdl.Call(*m_xEntry);
-    m_aChangedIdle.Start(); //launch this to happen on idle after cursor position will have been set
+
+    switch (m_nLastCharCode)
+    {
+        case css::awt::Key::DELETE_WORD_BACKWARD:
+        case css::awt::Key::DELETE_WORD_FORWARD:
+        case css::awt::Key::DELETE_TO_BEGIN_OF_LINE:
+        case css::awt::Key::DELETE_TO_END_OF_LINE:
+        case KEY_BACKSPACE:
+        case KEY_DELETE:
+            m_aChangedIdle.Stop();
+            break;
+        default:
+            m_aChangedIdle.Start(); //launch this to happen on idle after cursor position will have been set
+            break;
+    }
 }
 
 void AutocompleteEdit::AddEntry( const OUString& rEntry )

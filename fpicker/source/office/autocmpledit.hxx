@@ -22,7 +22,9 @@ private:
     std::vector<OUString> m_aMatching;
     Idle m_aChangedIdle;
     Link<weld::Entry&, void> m_aChangeHdl;
+    sal_uInt16 m_nLastCharCode;
 
+    DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
     DECL_LINK(ChangedHdl, weld::Entry&, void);
     DECL_LINK(TryAutoComplete, Timer*, void);
 
