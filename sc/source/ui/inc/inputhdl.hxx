@@ -298,6 +298,8 @@ public:
                                     tools::Long nTab, const Color& rColor );
 
     void            LOKPasteFunctionData(const OUString& rFunctionName);
+    static void     LOKSendFormulabarUpdate(const SfxViewShell* pActiveViewSh,
+                                            const OUString& rText, const ESelection& rSelection);
 };
 
 //  ScInputHdlState

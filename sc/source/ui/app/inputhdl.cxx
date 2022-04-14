@@ -50,6 +50,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/charclass.hxx>
 #include <vcl/help.hxx>
+#include <vcl/jsdialog/executor.hxx>
 #include <vcl/commandevent.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
@@ -1793,6 +1794,23 @@ void ScInputHandler::LOKPasteFunctionData(const OUString& rFunctionName)
     }
 }
 
+void ScInputHandler::LOKSendFormulabarUpdate(const SfxViewShell* pActiveViewSh,
+                                             const OUString& rText,
+                                             const ESelection& rSelection)
+{
+    OUString aSelection =
+        OUString::number(rSelection.nStartPos) + ";" + OUString::number(rSelection.nEndPos);
+
+    std::unique_ptr<jsdialog::ActionDataMap> pData = std::make_unique<jsdialog::ActionDataMap>();
+    (*pData)["action_type"] = "setText";
+    (*pData)["text"] = rText;
+    (*pData)["selection"] = aSelection;
+
+    sal_uInt64 nCurrentShellId = reinterpret_cast<sal_uInt64>(pActiveViewSh);
+    std::string sWindowId = std::to_string(nCurrentShellId) + "formulabar";
+    jsdialog::SendAction(sWindowId, "sc_input_window", std::move(pData));
+}
+
 // Calculate selection and display as tip help
 static OUString lcl_Calculate( const OUString& rFormula, ScDocument& rDoc, const ScAddress &rPos )
 {
@@ -2720,7 +2738,10 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if (comphelper::LibreOfficeKit::isActive())
         {
             if (pActiveViewSh)
+            {
+                // TODO: deprecated?
                 pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aText.toUtf8().getStr());
+            }
         }
     }
 
@@ -2733,6 +2754,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
     mpEditEngine->QuickFormatDoc();
 
     EditView* pActiveView = pTopView ? pTopView : pTableView;
+    ESelection aSel;
     if (pActiveView && pActiveViewSh)
     {
         ScViewData& rViewData = pActiveViewSh->GetViewData();
@@ -2741,7 +2763,7 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
         if (!bNeedGrow)
         {
             // Cursor before the end?
-            ESelection aSel = pActiveView->GetSelection();
+            aSel = pActiveView->GetSelection();
             aSel.Adjust();
             bNeedGrow = ( aSel.nEndPos != mpEditEngine->GetTextLen(aSel.nEndPara) );
         }
@@ -2755,6 +2777,13 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified )
             rViewData.EditGrowY();
             rViewData.EditGrowX();
         }
+    }
+
+    if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh && pInputWin)
+    {
+        ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh,
+                                                ScEditUtil::GetMultilineString(*mpEditEngine),
+                                                aSel);
     }
 
     UpdateFormulaMode();
@@ -4209,7 +4238,13 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
                         pInputWin->SetTextString(aString);
 
                     if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh)
+                    {
+                        EditView* pActiveView = pTopView ? pTopView : pTableView;
+                        ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
+                        ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh, aString, aSel);
+                        // TODO: deprecated?
                         pActiveViewSh->libreOfficeKitViewCallback(LOK_CALLBACK_CELL_FORMULA, aString.toUtf8().getStr());
+                    }
                 }
 
                 if ( pInputWin || comphelper::LibreOfficeKit::isActive())                        // Named range input
@@ -4365,6 +4400,13 @@ void ScInputHandler::InputSelection( const EditView* pView )
 
     // When the selection is changed manually, stop overwriting parentheses
     ResetAutoPar();
+
+    if (comphelper::LibreOfficeKit::isActive() && pActiveViewSh)
+    {
+        EditView* pActiveView = pTopView ? pTopView : pTableView;
+        ESelection aSel = pActiveView ? pActiveView->GetSelection() : ESelection();
+        ScInputHandler::LOKSendFormulabarUpdate(pActiveViewSh, GetEditString(), aSel);
+    }
 }
 
 void ScInputHandler::InputChanged( const EditView* pView, bool bFromNotify )

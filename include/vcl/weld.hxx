@@ -79,6 +79,8 @@ class DialogController;
 
 class VCL_DLLPUBLIC Widget
 {
+    friend class ::LOKTrigger;
+
 protected:
     Link<Widget&, void> m_aFocusInHdl;
     Link<Widget&, void> m_aFocusOutHdl;
