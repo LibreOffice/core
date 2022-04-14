@@ -2064,8 +2064,8 @@ bool ScColumn::ParseString(
                             bForceFormatDate = false;
                         else
                         {
-                            nIndex = aParam.mpNumFormatter->GetEditFormat( aCell.getValue(), nOldIndex, eNumFormatType,
-                                    pOldFormat->GetLanguage(), pOldFormat);
+                            nIndex = aParam.mpNumFormatter->GetEditFormat(
+                                    aCell.getValue(), nOldIndex, eNumFormatType, pOldFormat);
                             eEvalDateFormat = aParam.mpNumFormatter->GetEvalDateFormat();
                             aParam.mpNumFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL);
                         }
