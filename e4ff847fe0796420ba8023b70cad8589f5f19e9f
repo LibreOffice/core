@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "349f7655_a024c970",
+        "filename": "include/o3tl/string_view.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-14T11:20:12Z",
+      "side": 1,
+      "message": "good point, addressed here: https://gerrit.libreoffice.org/c/core/+/133011",
+      "parentUuid": "3ff500f5_2164d03a",
+      "range": {
+        "startLine": 67,
+        "startChar": 60,
+        "endLine": 67,
+        "endChar": 64
+      },
+      "revId": "e4ff847fe0796420ba8023b70cad8589f5f19e9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7422864_03938972",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-04-14T10:58:29Z",
       "side": 1,
       "message": "do we really need the above two overloads; can\u0027t we call the template directly?",
+      "revId": "e4ff847fe0796420ba8023b70cad8589f5f19e9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5751f985_634a6475",
+        "filename": "include/o3tl/string_view.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-14T11:20:12Z",
+      "side": 1,
+      "message": "apparently we do, removing them causes \u0027no matching function\u0027",
+      "parentUuid": "e7422864_03938972",
       "revId": "e4ff847fe0796420ba8023b70cad8589f5f19e9f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
