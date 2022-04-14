@@ -340,7 +340,7 @@ endif
 
 # lokclipboard.component
 ifneq ($(filter $(OS),ANDROID iOS MACOSX WNT),)
-$(if $(filter-out $(OS),IOS), \
+$(if $(filter-out $(OS),iOS), \
     $(eval $(call gb_Rdb_add_components,services,\
 		desktop/lokclipboard)))
 else
