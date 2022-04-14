@@ -2494,6 +2494,92 @@ void set_buildable_id(GtkBuildable* pWidget, const OString& rId)
 
 namespace {
 
+class FlashAttention
+{
+private:
+    GtkWidget* m_pWidget;
+    int m_nFlashCount;
+    gint m_nFlashTimeout;
+
+    static gboolean signalDraw(GtkWidget* pWidget, cairo_t* cr, gpointer self)
+    {
+        FlashAttention* pThis = static_cast<FlashAttention*>(self);
+        if (pThis->m_nFlashCount % 2 == 0)
+            return false;
+
+        GtkAllocation alloc {0, 0,
+                             gtk_widget_get_allocated_width(pWidget),
+                             gtk_widget_get_allocated_height(pWidget)};
+
+        Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+        cairo_set_source_rgba(cr, aColor.GetRed() / 255.0, aColor.GetGreen() / 255.0, aColor.GetBlue() / 255.0, 0.5);
+        cairo_rectangle(cr, alloc.x + 0.5, alloc.y + 0.5, alloc.width - 1, alloc.height - 1);
+        cairo_fill(cr);
+
+        return false;
+    }
+
+    static void signalUnmap(gpointer self)
+    {
+        FlashAttention* pThis = static_cast<FlashAttention*>(self);
+        pThis->ClearFlash();
+    }
+
+    void ClearFlash()
+    {
+        if (m_nFlashTimeout != 0)
+        {
+            g_source_remove(m_nFlashTimeout);
+            m_nFlashTimeout = 0;
+        }
+        if (m_pWidget)
+        {
+            gtk_widget_queue_draw(m_pWidget);
+            g_signal_handlers_disconnect_by_func(m_pWidget, reinterpret_cast<void*>(signalDraw), this);
+            g_signal_handlers_disconnect_by_func(m_pWidget, reinterpret_cast<void*>(signalUnmap), this);
+            m_pWidget = nullptr;
+        }
+    }
+
+    bool QueueFlash()
+    {
+        constexpr int FlashesWanted = 1;
+
+        gtk_widget_queue_draw(m_pWidget);
+        m_nFlashCount++;
+
+        if (m_nFlashCount == FlashesWanted * 2)
+        {
+            ClearFlash();
+            return false;
+        }
+
+        return true;
+    }
+
+    static gboolean FlashTimeout(FlashAttention* pThis)
+    {
+        return pThis->QueueFlash();
+    }
+
+public:
+    FlashAttention(GtkWidget* pWidget)
+        : m_pWidget(pWidget)
+        , m_nFlashCount(1)
+    {
+        g_signal_connect_after(m_pWidget, "draw", G_CALLBACK(signalDraw), this);
+        g_signal_connect_swapped(m_pWidget, "unmap", G_CALLBACK(signalUnmap), this);
+        gtk_widget_queue_draw(m_pWidget);
+
+        m_nFlashTimeout = g_timeout_add(250, reinterpret_cast<GSourceFunc>(FlashTimeout), this);
+    }
+
+    ~FlashAttention()
+    {
+        ClearFlash();
+    }
+};
+
 class GtkInstanceWidget : public virtual weld::Widget
 {
 protected:
@@ -2789,6 +2875,7 @@ private:
 #if !GTK_CHECK_VERSION(4, 0, 0)
     GdkDragAction m_eDragAction;
 #endif
+    std::unique_ptr<FlashAttention> m_xFlashAttention;
     gulong m_nFocusInSignalId;
     gulong m_nMnemonicActivateSignalId;
     gulong m_nFocusOutSignalId;
@@ -4151,6 +4238,11 @@ public:
     virtual void get_property_tree(tools::JsonWriter& /*rJsonWriter*/) override
     {
         //not implemented for the gtk variant
+    }
+
+    virtual void call_attention_to() override
+    {
+        m_xFlashAttention.reset(new FlashAttention(m_pWidget));
     }
 
     virtual void set_stack_background() override

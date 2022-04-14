@@ -559,6 +559,79 @@ VclPtr<VirtualDevice> SalInstanceWidget::create_virtual_device() const
                                          DeviceFormat::DEFAULT);
 }
 
+class SalFlashAttention
+{
+private:
+    VclPtr<vcl::Window> m_xWidget;
+    Timer m_aFlashTimer;
+    Color m_aOrigControlBackground;
+    Wallpaper m_aOrigBackground;
+    bool m_bOrigControlBackground;
+    int m_nFlashCount;
+
+    void SetFlash()
+    {
+        Color aColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
+        m_xWidget->SetControlBackground(aColor);
+    }
+
+    void ClearFlash()
+    {
+        if (m_bOrigControlBackground)
+            m_xWidget->SetControlBackground(m_aOrigControlBackground);
+        else
+            m_xWidget->SetControlBackground();
+    }
+
+    void Flash()
+    {
+        constexpr int FlashesWanted = 1;
+
+        if (m_nFlashCount % 2 == 0)
+            ClearFlash();
+        else
+            SetFlash();
+
+        if (m_nFlashCount == FlashesWanted * 2)
+            return;
+
+        ++m_nFlashCount;
+
+        m_aFlashTimer.Start();
+    }
+
+    DECL_LINK(FlashTimeout, Timer*, void);
+
+public:
+    SalFlashAttention(VclPtr<vcl::Window> xWidget)
+        : m_xWidget(xWidget)
+        , m_aFlashTimer("SalFlashAttention")
+        , m_bOrigControlBackground(false)
+        , m_nFlashCount(1)
+    {
+        m_aFlashTimer.SetTimeout(150);
+        m_aFlashTimer.SetInvokeHandler(LINK(this, SalFlashAttention, FlashTimeout));
+    }
+
+    void Start()
+    {
+        m_bOrigControlBackground = m_xWidget->IsControlBackground();
+        if (m_bOrigControlBackground)
+            m_aOrigControlBackground = m_xWidget->GetControlBackground();
+        m_aFlashTimer.Start();
+    }
+
+    ~SalFlashAttention() { ClearFlash(); }
+};
+
+IMPL_LINK_NOARG(SalFlashAttention, FlashTimeout, Timer*, void) { Flash(); }
+
+void SalInstanceWidget::call_attention_to()
+{
+    m_xFlashAttention.reset(new SalFlashAttention(m_xWidget));
+    m_xFlashAttention->Start();
+}
+
 css::uno::Reference<css::datatransfer::dnd::XDropTarget> SalInstanceWidget::get_drop_target()
 {
     return m_xWidget->GetDropTarget();
@@ -6355,6 +6428,14 @@ SalInstanceComboBoxWithEdit::SalInstanceComboBoxWithEdit(::ComboBox* pComboBox,
 }
 
 bool SalInstanceComboBoxWithEdit::has_entry() const { return true; }
+
+void SalInstanceComboBoxWithEdit::call_attention_to()
+{
+    Edit* pEdit = m_xComboBox->GetSubEdit();
+    assert(pEdit);
+    m_xFlashAttention.reset(new SalFlashAttention(pEdit));
+    m_xFlashAttention->Start();
+}
 
 bool SalInstanceComboBoxWithEdit::changed_by_direct_pick() const
 {
