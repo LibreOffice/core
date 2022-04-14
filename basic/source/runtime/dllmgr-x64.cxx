@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <cstddef>
 #include <map>
+#include <string_view>
 #include <vector>
 
 #include <basic/sbx.hxx>
@@ -483,7 +484,7 @@ struct ProcData {
 };
 
 ErrCode call(
-    OUString const & dll, ProcData const & proc, SbxArray * arguments,
+    std::u16string_view dll, ProcData const & proc, SbxArray * arguments,
     SbxVariable & result)
 {
     if (arguments && arguments->Count() > 20)
@@ -497,7 +498,7 @@ ErrCode call(
     // requires special handling in unmarshalString; other functions might
     // require similar treatment, too:
     bool special =
-        dll.equalsIgnoreAsciiCase("KERNEL32.DLL") &&
+        o3tl::equalsIgnoreAsciiCase(dll, u"KERNEL32.DLL") &&
         (proc.name == "GetLogicalDriveStringsA");
     for (sal_uInt32 i = 1; i < (arguments == nullptr ? 0 : arguments->Count()); ++i)
     {
