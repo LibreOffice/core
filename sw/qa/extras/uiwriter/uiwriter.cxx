@@ -9,6 +9,7 @@
 
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/document/XDocumentInsertable.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #include <swmodeltestbase.hxx>
@@ -260,6 +261,24 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testBookmarkCopy)
         OUString markText(SwPaM((*it)->GetMarkPos(), (*it)->GetOtherMarkPos()).GetText());
         CPPUNIT_ASSERT_EQUAL(OUString("bar"), markText);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testInsertFileInInputFieldException)
+{
+    createSwDoc();
+    uno::Reference<text::XTextDocument> const xTextDoc(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> const xBody(xTextDoc->getText());
+    uno::Reference<lang::XMultiServiceFactory> const xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextCursor> const xCursor(xBody->createTextCursor());
+    uno::Reference<document::XDocumentInsertable> const xInsertable(xCursor, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> const xContent(
+        xFactory->createInstance("com.sun.star.text.textfield.Input"), uno::UNO_QUERY);
+    xBody->insertTextContent(xCursor, xContent, false);
+    xCursor->goLeft(1, false);
+    // try to insert some random file
+    OUString const url(m_directories.getURLFromSrc(DATA_DIRECTORY) + "fdo75110.odt");
+    // inserting even asserts in debug builds - document model goes invalid with input field split across 2 nodes
+    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(url, {}), uno::RuntimeException);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf67238)
