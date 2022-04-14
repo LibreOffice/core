@@ -119,7 +119,7 @@ modifies several binary formats from Microsoft including WMF/EMF/EMF+, and also
 other companies.
 * [EMF+ diagnostics reporting tool](https://github.com/chrissherlock/emfplus-decoder)
 * [limerest](https://gitlab.com/re-lab-project/limerest): A new gui tool based
-on OLEToy for working with verious binary formats
+on OLEToy for working with various binary formats
 
 ## Related Software
 * [libemf](http://libemf.sourceforge.net/)
