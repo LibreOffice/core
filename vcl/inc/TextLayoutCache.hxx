@@ -49,6 +49,8 @@ class VCL_DLLPUBLIC TextLayoutCache
 public:
     std::vector<vcl::text::Run> runs;
     TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd);
+    // Creates a cached instance.
+    static std::shared_ptr<const vcl::text::TextLayoutCache> Create(OUString const&);
 };
 
 struct FirstCharsStringHash

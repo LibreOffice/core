@@ -17,8 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <scrptrun.h>
 #include <TextLayoutCache.hxx>
+
+#include <scrptrun.h>
+
+#include <o3tl/hash_combine.hxx>
+#include <o3tl/lru_map.hxx>
+#include <vcl/lazydelete.hxx>
 
 namespace vcl::text
 {
@@ -30,6 +35,24 @@ TextLayoutCache::TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd)
         runs.emplace_back(aScriptRun.getScriptStart(), aScriptRun.getScriptEnd(),
                           aScriptRun.getScriptCode());
     }
+}
+
+std::shared_ptr<const TextLayoutCache> TextLayoutCache::Create(OUString const& rString)
+{
+    typedef o3tl::lru_map<OUString, std::shared_ptr<const TextLayoutCache>, FirstCharsStringHash,
+                          FastStringCompareEqual>
+        Cache;
+    static vcl::DeleteOnDeinit<Cache> cache(1000);
+    if (Cache* map = cache.get())
+    {
+        auto it = map->find(rString);
+        if (it != map->end())
+            return it->second;
+        auto ret = std::make_shared<const TextLayoutCache>(rString.getStr(), rString.getLength());
+        map->insert({ rString, ret });
+        return ret;
+    }
+    return std::make_shared<const TextLayoutCache>(rString.getStr(), rString.getLength());
 }
 }
 
