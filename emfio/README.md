@@ -51,7 +51,7 @@ documentation.
 
 The drawinglayer primitives created to draw the emf/wmf files can be dumped as
 xml for debugging purposes. For more information, please refer to the
-[drawyinglayer](../drawyinglayer) documentation.
+[drawinglayer](../drawyinglayer) documentation.
 
 ## Limitations
 Not all the WMF/EMF/EMF+ records are supported by this module. Unsupported

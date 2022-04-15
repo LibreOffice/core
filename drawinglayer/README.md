@@ -86,7 +86,7 @@ printing), etc.
 ## Dumping DrawingLayer Primitives as XML
 
 For debugging purposes, it is possible to dump the drawinglayer primitives as
-as an xml file. The drawinglayer xml dump can show possible problems with the
+an xml file. The drawinglayer xml dump can show possible problems with the
 rendering.
 
 For example, in `emfio/qa/cppunit/emf/EmfImportTest.cxx`, one can write:
