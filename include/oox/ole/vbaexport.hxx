@@ -45,6 +45,7 @@ private:
         getLibraryContainer() const;
 
     OUString getProjectName() const;
+    rtl_TextEncoding getVBATextEncoding() const;
 
     css::uno::Reference<css::frame::XModel> mxModel;
 };
