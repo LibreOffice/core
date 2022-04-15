@@ -150,10 +150,10 @@ namespace svgio::svgreader
                 if(basegfx::fTools::more(fSnippetWidth, 0.0))
                 {
                     const OUString aText(getSource().getText());
-                    const OUString aTrimmedChars(o3tl::trim(aText.subView(nIndex, nLength)));
+                    const std::u16string_view aTrimmedChars(o3tl::trim(aText.subView(nIndex, nLength)));
                     const double fEndPos(mfPosition + fSnippetWidth);
 
-                    if(!aTrimmedChars.isEmpty() && (mfPosition < mfBasegfxPathLength || fEndPos > 0.0))
+                    if(!aTrimmedChars.empty() && (mfPosition < mfBasegfxPathLength || fEndPos > 0.0))
                     {
                         const double fHalfSnippetWidth(fSnippetWidth * 0.5);
 

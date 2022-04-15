@@ -48,6 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <algorithm>
 #include <map>
 
@@ -94,8 +95,8 @@ sal_Int32 lcl_getBuildIDFromGenerator( std::u16string_view rGenerator )
     size_t nBegin = rGenerator.find( sBuildCompare );
     if( nBegin != std::u16string_view::npos )
     {
-        OUString sBuildId( rGenerator.substr( nBegin + sBuildCompare.getLength() ) );
-        nBuildId = sBuildId.toInt32();
+        std::u16string_view sBuildId = rGenerator.substr( nBegin + sBuildCompare.getLength() );
+        nBuildId = o3tl::toInt32(sBuildId);
     }
     return nBuildId;
 }

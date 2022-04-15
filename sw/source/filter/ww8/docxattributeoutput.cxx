@@ -8507,7 +8507,7 @@ void DocxAttributeOutput::HiddenField(const SwField& rField)
         OUString aTrueFalse = rField.GetPar2();
         sal_Int32 nPos = aTrueFalse.indexOf('|');
         OUString aTrue;
-        OUString aFalse;
+        std::u16string_view aFalse;
         if (nPos == -1)
         {
             aTrue = aTrueFalse;

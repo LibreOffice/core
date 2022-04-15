@@ -719,7 +719,7 @@ Color AccessibleBase::getColor( eColorType eColType )
     if( eType == OBJECTTYPE_LEGEND_ENTRY )
     {
         // for colors get the data series/point properties
-        OUString aParentParticle( ObjectIdentifier::getFullParentParticle( aObjectCID ));
+        std::u16string_view aParentParticle( ObjectIdentifier::getFullParentParticle( aObjectCID ));
         aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticle( aParentParticle );
     }
 
