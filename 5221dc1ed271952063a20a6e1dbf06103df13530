@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa64b733_9af47aba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T12:08:43Z",
+      "side": 1,
+      "message": "Maybe you could provide me an example how to add such a property. I could not figure out it by myself 😞",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e1424c0_b7899dbc",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T12:08:43Z",
+      "side": 1,
+      "message": "Here I don\u0027t know how to set the text encoding to retrieve it later in vbaexport.",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
