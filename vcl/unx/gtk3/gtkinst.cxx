@@ -12586,30 +12586,42 @@ public:
 
 namespace
 {
-#if GTK_CHECK_VERSION(4, 0, 0)
     // CSS nodes: entry[.flat][.warning][.error]
     void set_widget_css_message_type(GtkWidget* pWidget, weld::EntryMessageType eType)
     {
+#if GTK_CHECK_VERSION(4, 0, 0)
+        gtk_widget_remove_css_class(pWidget, "error");
+        gtk_widget_remove_css_class(pWidget, "warning");
+#else
+        GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(pWidget);
+        gtk_style_context_remove_class(pWidgetContext, "error");
+        gtk_style_context_remove_class(pWidgetContext, "warning");
+#endif
+
         switch (eType)
         {
             case weld::EntryMessageType::Normal:
-                gtk_widget_remove_css_class(pWidget, "error");
-                gtk_widget_remove_css_class(pWidget, "warning");
                 break;
             case weld::EntryMessageType::Warning:
-                gtk_widget_remove_css_class(pWidget, "error");
+#if GTK_CHECK_VERSION(4, 0, 0)
                 gtk_widget_add_css_class(pWidget, "warning");
+#else
+                gtk_style_context_add_class(pWidgetContext, "warning");
+#endif
                 break;
             case weld::EntryMessageType::Error:
-                gtk_widget_remove_css_class(pWidget, "warning");
+#if GTK_CHECK_VERSION(4, 0, 0)
                 gtk_widget_add_css_class(pWidget, "error");
+#else
+                gtk_style_context_add_class(pWidgetContext, "error");
+#endif
                 break;
         }
     }
-#endif
 
     void set_entry_message_type(GtkEntry* pEntry, weld::EntryMessageType eType)
     {
+        set_widget_css_message_type(GTK_WIDGET(pEntry), eType);
         switch (eType)
         {
             case weld::EntryMessageType::Normal:
