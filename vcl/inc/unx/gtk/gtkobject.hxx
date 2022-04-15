@@ -82,6 +82,8 @@ class GtkSalObjectWidgetClip final : public GtkSalObjectBase
     tools::Rectangle m_aRect;
     tools::Rectangle m_aClipRect;
     GtkWidget* m_pScrolledWindow;
+    GtkWidget* m_pViewPort;
+    GtkCssProvider* m_pBgCssProvider;
 
     // signals
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -98,6 +100,11 @@ class GtkSalObjectWidgetClip final : public GtkSalObjectBase
 #endif
 
     void ApplyClipRegion();
+
+    void SetViewPortBackground();
+
+    DECL_LINK(SettingsChangedHdl, VclWindowEvent&, void);
+
 public:
     GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow);
     virtual ~GtkSalObjectWidgetClip() override;
