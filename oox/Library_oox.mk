@@ -101,6 +101,7 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/drawingml/chart/datasourceconverter \
     oox/source/drawingml/chart/datasourcemodel \
     oox/source/drawingml/chart/datatablecontext \
+    oox/source/drawingml/chart/datatableconverter \
     oox/source/drawingml/chart/modelbase \
     oox/source/drawingml/chart/objectformatter \
     oox/source/drawingml/chart/plotareacontext \

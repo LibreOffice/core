@@ -55,7 +55,7 @@ ContextHandlerRef DataTableContext::onCreateContext(sal_Int32 nElement,
                     mrModel.mbShowOutline = rAttribs.getBool(XML_val, false);
                     break;
                 case C_TOKEN(showKeys):
-                    //mrModel.mbShowKeys = rAttribs.getBool( XML_val, false );
+                    mrModel.mbShowKeys = rAttribs.getBool(XML_val, false);
                     break;
             }
             break;
