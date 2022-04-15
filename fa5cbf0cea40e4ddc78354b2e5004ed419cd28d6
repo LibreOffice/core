@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d20e941_10dc2c90",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T13:59:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4feb0014_3cb3b5c6",
+      "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c3be714_6582b1bc",
@@ -52,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1088d38e_28ccbd8f",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2873,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T13:59:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7c3be714_6582b1bc",
+      "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf383447_3bb98812",
@@ -65,6 +101,24 @@
       "writtenOn": "2022-04-15T13:48:17Z",
       "side": 1,
       "message": "And here, you implement setPropertyValue (accepting only one property, and throwing illegal argument on anything else) that would store the value in msTextEncoding or in m_eVBAEncoding; and getPropertyValue (also only accepting one property name) that would return the value - to be used in export.",
+      "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78a5c4de_230606c8",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2874,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T13:59:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "cf383447_3bb98812",
       "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
