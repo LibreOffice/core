@@ -136,6 +136,9 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
         {
             aDisplayName = OUStringChar(sal_Unicode(rtl::toAsciiUpperCase(firstLetter))) + aDisplayName.subView(1);
         }
+
+        // replacing underscores with spaces of multi words pack name.
+        aDisplayName = aDisplayName.replace('_', ' ');
     }
 
     if (bIsSvg && bIsDark)
