@@ -33,6 +33,24 @@
       "message": "Ofc unit test still missing.",
       "revId": "66f994a402c500551995f8eec5c391d6819b7776",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb4e18be_d3d426cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T08:49:41Z",
+      "side": 1,
+      "message": "\u003e Unfortunately, I cannot test the old/new file in MS since it always produces some gibberish.\n\nSorry, didn\u0027t get what you mean by that. Do you say that MS Office can\u0027t open such encoded VBA? Then it would be a showstopper, right?\n\nAFAIK, VBA UI doesn\u0027t allow you to use non-ASCII characters other than from current Windows codepage (which means, that at least the UI is using 8-bit codepage, not Unicode). How would VBA behave when reading the code, I don\u0027t know (I agree it would be best if it allowed UTF-8); but in case it fails, we could at least avoid hardcoding a single codepage, and try to re-use the codepage that was used when opening, or use LO locale for the codepage, or try to be smart and analyze the code itself (worst option - most error-prone without any predictability IMO).",
+      "parentUuid": "8696ba61_2849b9ec",
+      "revId": "66f994a402c500551995f8eec5c391d6819b7776",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
