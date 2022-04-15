@@ -12587,7 +12587,7 @@ public:
 namespace
 {
 #if GTK_CHECK_VERSION(4, 0, 0)
-    // speculative, "error" seems to be a thing but "warning" probably isn't
+    // CSS nodes: entry[.flat][.warning][.error]
     void set_widget_css_message_type(GtkWidget* pWidget, weld::EntryMessageType eType)
     {
         switch (eType)
