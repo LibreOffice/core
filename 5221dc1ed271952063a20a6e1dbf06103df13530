@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6ab6e002_2747c38d",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T12:32:25Z",
+      "side": 1,
+      "message": "Why do you need it as a member? It looks like it\u0027s still used in a single method. You need to pass the read value further to the libraries, but not keep in this class, or do I miss something?",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e1424c0_b7899dbc",
         "filename": "oox/source/ole/vbaproject.cxx",
         "patchSetId": 2
@@ -31,6 +48,24 @@
       "writtenOn": "2022-04-15T12:08:43Z",
       "side": 1,
       "message": "Here I don\u0027t know how to set the text encoding to retrieve it later in vbaexport.",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "652648c3_d5fc4399",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T12:32:25Z",
+      "side": 1,
+      "message": "The class that implements the XVBACompatibility interface (i.e., which you obtain here) is SfxLibraryContainer. It implements many other interfaces; you may want to add XPropertySet to the set of interfaces listed in SfxLibraryContainer_BASE, and implement its virtual methods in SfxLibraryContainer; the setPropertyValue should only accept one property name (e.g., \"VBAProjectCodePage\"), and set corresponding field in it; other methods may be simply stubs throwing \"NoSupportException\".\n\nDoes it make sense?",
+      "parentUuid": "1e1424c0_b7899dbc",
       "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
