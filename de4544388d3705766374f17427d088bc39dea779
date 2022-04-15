@@ -16,6 +16,295 @@
       "message": "Hi Mike! I tried to add the property set, but I have problems to create the getPropertySetInfo. The compiler tells me:\ncore/basic/source/uno/namecont.cxx(354): error C2512: \u0027comphelper::OPropertyContainer\u0027: no appropriate default constructor available\ncore\\include\\comphelper/propertycontainer.hxx(42): note: see declaration of \u0027comphelper::OPropertyContainer\u0027\ncore/basic/source/uno/namecont.cxx(373): error C2385: ambiguous access of \u0027rBHelper\u0027\ncore/basic/source/uno/namecont.cxx(373): note: could be the \u0027rBHelper\u0027 in base \u0027cppu::WeakComponentImplHelperBase\u0027\ncore/basic/source/uno/namecont.cxx(373): note: or could be the \u0027rBHelper\u0027 in base \u0027cppu::OPropertySetHelper\u0027\n\nand I don\u0027t know how to solve this issue 😞\n\nI could even create a local class like in https://opengrok.libreoffice.org/xref/core/xmloff/source/chart/ColorPropertySet.cxx?r\u003d14d61304#89, but Imho that is a little bit overkill. What do you think?\n",
       "revId": "de4544388d3705766374f17427d088bc39dea779",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45715c25_faa6eae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Oh! You started to do that the proper way - but please let\u0027s make it simple :-)",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f6a3e32_39cc0311",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58e3c4f8_9ebf281b",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13994c9c_39ce10b5",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 455,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75eefdcb_5adb6ab3",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 457,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab8d2f9e_64001818",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02a9e2e1_056077cb",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 460,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e30829f3_53094376",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2873,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Please throw NoSupportException.",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f8e81344_b323186f",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2880,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "... and return before you throw :-)",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4aedd0d_3ec4a6de",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2894,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Please throw NoSupportException [1]\n\n[1] https://opengrok.libreoffice.org/xref/core/udkapi/com/sun/star/lang/NoSupportException.idl?r\u003d3bf4af8d",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7496d8fc_9eab4d6d",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2900,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Please throw NoSupportException.",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faa4d1c1_2f7b70f5",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2906,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Please throw NoSupportException.",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e49e5265_ed1bd57c",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2912,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Please throw NoSupportException.",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8745300_6f1e72b8",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2916,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3fe63ffb_8ca7f976",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2922,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a291b02_8022b1b4",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2935,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1fb2c380_b5644178",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 2940,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T19:43:44Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
