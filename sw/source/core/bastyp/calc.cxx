@@ -88,6 +88,7 @@ const char sCalc_Average[] = "average";
 const char sCalc_Count[]=   "count";
 const char sCalc_Sign[] =   "sign";
 const char sCalc_Abs[]  =   "abs";
+const char sCalc_Int[]  =   "int";
 
 // ATTENTION: sorted list of all operators
 struct CalcOp
@@ -114,6 +115,7 @@ CalcOp const aOpTable[] = {
 /* EQ */      {{sCalc_Eq},         CALC_EQ},    // Equality
 /* G */       {{sCalc_G},          CALC_GRE},   // Greater than
 /* GEQ */     {{sCalc_Geq},        CALC_GEQ},   // Greater or equal
+/* INT */     {{sCalc_Int},        CALC_INT},   // Int (since LibreOffice 7.4)
 /* L */       {{sCalc_L},          CALC_LES},   // Less than
 /* LEQ */     {{sCalc_Leq},        CALC_LEQ},   // Less or equal
 /* MAX */     {{sCalc_Max},        CALC_MAX},   // Maximum value
@@ -1082,6 +1084,15 @@ SwSbxValue SwCalc::PrimFunc(bool &rChkPow)
             GetToken();
             double nVal = Prim().GetDouble();
             nErg.PutDouble( int(0 < nVal) - int(nVal < 0) );
+            return nErg;
+        }
+        case CALC_INT:
+        {
+            SAL_INFO("sw.calc", "int");
+            SwSbxValue nErg;
+            GetToken();
+            sal_Int32 nVal = static_cast<sal_Int32>( Prim().GetDouble() );
+            nErg.PutDouble( nVal );
             return nErg;
         }
         case CALC_NOT:
