@@ -105,6 +105,24 @@
       "parentUuid": "0a4c4a04_12b80557",
       "revId": "66f994a402c500551995f8eec5c391d6819b7776",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4932595e_6177d068",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T10:19:03Z",
+      "side": 1,
+      "message": "\u003e I can open the file from the bug report in MS, but it doesn\u0027t show any of the characters (just question marks). After the save using the utf8 charset, I can open the file in MS as before, but it shows different characters (ïðîáà).\n\nReading this again, I am confused.\nIf you see question marks from the original file, that would mean that MS Office *did* read encoding information (from *somewhere*), and it knew that the *true* characters in the code are *not* representable in the current codepage, hence question marks.\n\nThis is different compared to *my* test result *after* saving using changeset 2 - where I saw \"Ð¿Ñ€Ð¾Ð±Ð°\", which was definitely the written UTF-8 byte sequence that was read by Excel 2016 *without* any encoding information taken into account at all (so it used Win-1251 to interpret the byte sequence).\n\n(It is confusing that you write \"After the save using the utf8 charset, I can open the file in MS as before, but it shows different characters (ïðîáà)\" - which is not what I see after the saving; but maybe that also depends on Excel version, and/or on the changeset you used for testing?)\n\nWithout that (ïðîáà), my gut feeling is that there is some *other* source of encoding information, beyond PROJECTCODEPAGE record, which is used by Excel (VBA) when parsing the file, and which we likely do not define ... ?",
+      "parentUuid": "bcd78fb8_b8d70cdd",
+      "revId": "66f994a402c500551995f8eec5c391d6819b7776",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
