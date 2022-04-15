@@ -520,7 +520,7 @@ void ResourceManager::ReadContextList (
             continue;
         }
 
-        const OUString sInitialState(o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex)));
+        const std::u16string_view sInitialState(o3tl::trim(o3tl::getToken(sValue, 0, ',', nCharacterIndex)));
 
         // The fourth argument is optional.
         const OUString sMenuCommandOverride(
@@ -599,9 +599,9 @@ void ResourceManager::ReadContextList (
         // Setup the flag that controls whether a deck/pane is
         // initially visible/expanded.
         bool bIsInitiallyVisible;
-        if (sInitialState == "visible")
+        if (sInitialState == u"visible")
             bIsInitiallyVisible = true;
-        else if (sInitialState == "hidden")
+        else if (sInitialState == u"hidden")
             bIsInitiallyVisible = false;
         else
         {

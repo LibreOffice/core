@@ -1016,13 +1016,13 @@ OUString lcl_IncrementNumberInNamedRange(ScDBCollection::NamedDBs& namedDBs,
     sal_Int32 nOldNumber = 1;
     if (nLastIndex >= 0)
     {
-        OUString sLastPart(sOldName.subView(nLastIndex));
-        nOldNumber = sLastPart.toInt32();
+        std::u16string_view sLastPart(sOldName.subView(nLastIndex));
+        nOldNumber = o3tl::toInt32(sLastPart);
 
         // When no number found, add number at the end.
         // When there is a literal "0" at the end, keep the "lastIndex" from above
         // (OUString::toInt32() also returns 0 on failure)
-        if (nOldNumber == 0 && sLastPart != "0")
+        if (nOldNumber == 0 && sLastPart != u"0")
         {
             nOldNumber = 1;
             nLastIndex = sOldName.getLength();

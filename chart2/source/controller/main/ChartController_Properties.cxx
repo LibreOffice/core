@@ -678,7 +678,7 @@ OUString lcl_getFormatCIDforSelectedCID( const OUString& rSelectedCID )
     // some legend entries are handled as if they were data series
     if( eObjectType==OBJECTTYPE_LEGEND_ENTRY )
     {
-        OUString aParentParticle( ObjectIdentifier::getFullParentParticle( rSelectedCID ) );
+        std::u16string_view aParentParticle( ObjectIdentifier::getFullParentParticle( rSelectedCID ) );
         aFormatCID  = ObjectIdentifier::createClassifiedIdentifierForParticle( aParentParticle );
     }
 

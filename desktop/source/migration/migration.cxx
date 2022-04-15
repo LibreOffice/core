@@ -941,8 +941,8 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         OUString sParentNodeName = elem.m_sParentNodeName;
         sal_Int32 nIndex = 0;
         do {
-            OUString sToken( o3tl::trim(o3tl::getToken(sParentNodeName, 0, '|', nIndex)) );
-            if (sToken.isEmpty())
+            std::u16string_view sToken( o3tl::trim(o3tl::getToken(sParentNodeName, 0, '|', nIndex)) );
+            if (sToken.empty())
                 break;
 
             sal_Int32 nCount = xTemp->getCount();
