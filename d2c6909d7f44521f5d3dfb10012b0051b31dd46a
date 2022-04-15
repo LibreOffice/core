@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dae6895a_5f30f2af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-15T20:21:19Z",
+      "side": 1,
+      "message": "Hi László,\nIf you have a moment, could you please review this patch? this is similar to your patch e1aea22f3f4fbf0cc412a8867165a85a3c55f49c \"tdf#123354 DOCX import: fix ABS formula\"",
+      "revId": "d2c6909d7f44521f5d3dfb10012b0051b31dd46a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
