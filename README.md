@@ -18,8 +18,8 @@ A quick overview of the LibreOffice code structure.
 You can develop for LibreOffice in one of two ways, one
 recommended and one much less so. First the somewhat less recommended
 way: it is possible to use the SDK to develop an extension,
-for which you can read the API docs [here](https://api.libreoffice.org/)
-and [here](https://wiki.documentfoundation.org/Documentation/DevGuide).
+for which you can read the [API docs](https://api.libreoffice.org/)
+and [Developers Guide](https://wiki.documentfoundation.org/Documentation/DevGuide).
 This re-uses the (extremely generic) UNO APIs that are also used by
 macro scripting in StarBasic.
 
@@ -51,7 +51,7 @@ run and compile LibreOffice, also used by the TDF builds:
 * Emscripten / WASM:
     * Runtime: a browser with SharedMemory support (threads + atomics)
     * Build: Qt 5.15 with Qt supported Emscripten 1.39.8
-    * See README.wasm
+    * See [README.wasm](static/README.wasm.md)
 
 If you want to use Clang with the LibreOffice compiler plugins, the minimal
 version of Clang is 12.0.1. Since Xcode doesn't provide the compiler plugin
