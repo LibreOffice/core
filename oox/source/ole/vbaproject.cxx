@@ -412,6 +412,8 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             xVBACompat->setVBACompatibilityMode( true );
             xVBACompat->setProjectName( maPrjName );
 
+            uno::Reference<beans::XPropertySet> xProps(xVBACompat, uno::UNO_QUERY_THROW);
+            xProps->setPropertyValue("VBATextEncoding", uno::Any(eTextEnc));
         }
         catch(const Exception& )
         {
