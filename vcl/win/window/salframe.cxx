@@ -2695,6 +2695,10 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aMenuBarTextColor = ImplWinColorToSal( color );
         aMenuBarRolloverTextColor = ImplWinColorToSal( color );
         CloseThemeData(hTheme);
+
+        // tdf#148448 pick a warning color more likely to be readable as a
+        // background in a dark theme
+        aStyleSettings.SetWarningColor(Color(0xf5, 0x79, 0x00));
     }
     else
     {
