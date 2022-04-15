@@ -310,7 +310,7 @@ public:
 
         nFIndex, eType and pFormat (if not nullptr) are assumed to match each
         other / be of one format. The locale to use is obtained from pFormat,
-        if nullptr then LANGUAGE_SYSTEM is used. This can be overriden by
+        if nullptr then LANGUAGE_SYSTEM is used. This can be overridden by
         specifying eForLocale other than LANGUAGE_DONTKNOW.
      */
     sal_uInt32 GetEditFormat(double fNumber, sal_uInt32 nFIndex, SvNumFormatType eType,
