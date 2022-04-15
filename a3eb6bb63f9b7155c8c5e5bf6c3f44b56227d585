@@ -939,6 +939,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed62f669_793be5ec",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-15T16:33:47Z",
+      "side": 1,
+      "message": "I think the suggestion is to either not use an interface (and then expose OCommonEmbeddedObject to the places where you need to call the function), or add a c++-only interface somewhere in unotools or somesuch?\n\nNo strong opinion from my side though, it is not fully inconceivable that there\u0027s external use for this function...",
+      "parentUuid": "e8430387_cb2ce95f",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91037963_1daf45bb",
