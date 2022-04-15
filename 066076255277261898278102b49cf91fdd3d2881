@@ -34,6 +34,24 @@
       "parentUuid": "dcfe5916_e04f037e",
       "revId": "066076255277261898278102b49cf91fdd3d2881",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad7db730_03bee772",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-04-15T15:29:22Z",
+      "side": 0,
+      "message": "As far as I can tell MessageDialog doesn\u0027t support running asynchronously online with a custom .ui file. \nBut GenericDialogController does the same thing without creating extra files, so I\u0027ve implemented that instead.",
+      "parentUuid": "17cdf7b0_6c651df3",
+      "revId": "066076255277261898278102b49cf91fdd3d2881",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
