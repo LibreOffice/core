@@ -69,6 +69,24 @@
       "parentUuid": "eb4e18be_d3d426cf",
       "revId": "66f994a402c500551995f8eec5c391d6819b7776",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a4c4a04_12b80557",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T09:26:22Z",
+      "side": 1,
+      "message": "I see now, thanks. You would need to set your Windows to Russian in intl.cpl (\"Change system locale\") to be able to test this in MS Office ...\n\nOK, I have tested the patch locally. Unfortunately, it looks like MS just ignores the value of PROJECTCODEPAGE, and simply reads all 8-bit strings as if they were in current system codepage. That means that after saving using your patch, opened in MS Excel, the code has this in its Module1:\n\n  Sub Macro1()\n    ActiveSheet.Cells(1, 1).Value \u003d \"Ð¿Ñ€Ð¾Ð±Ð°\"\n  End Sub\n\nwhere the look of the garbage in quotes is UTF-8-read-as-Win125* codepage (whichever your current Windows codepage is). Of course, we read it correctly...\n\nSo no, it won\u0027t work this way, unless you find some trick to write it as correct Unicode (I see exportUTF16String method there - can we possibly use it everywhere, or does VBA format not allow using UTF-16 everywhere?)...",
+      "parentUuid": "5e7bc40f_dbcf1c9d",
+      "revId": "66f994a402c500551995f8eec5c391d6819b7776",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
