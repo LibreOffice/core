@@ -59,21 +59,6 @@ public:
                             ObjectType eObjType );
 };
 
-
-struct DataTableModel;
-
-class DataTableConverter final : public ConverterBase< DataTableModel >
-{
-public:
-    explicit            DataTableConverter( const ConverterRoot& rParent, DataTableModel& rModel );
-    virtual             ~DataTableConverter() override;
-
-    /** Converts the OOXML data table model to a chart2 diagram. */
-    void                convertFromModel(
-                            const css::uno::Reference< css::chart2::XDiagram >& rxDiagram);
-};
-
-
 struct PlotAreaModel;
 
 class PlotAreaConverter final : public ConverterBase< PlotAreaModel >
