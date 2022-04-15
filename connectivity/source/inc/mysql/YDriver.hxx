@@ -72,7 +72,7 @@ namespace connectivity
                 @return
                     The driver which was currently selected.
             */
-            css::uno::Reference< css::sdbc::XDriver > loadDriver( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info );
+            css::uno::Reference< css::sdbc::XDriver > loadDriver( std::u16string_view url, const css::uno::Sequence< css::beans::PropertyValue >& info );
 
         public:
             /** creates a new delegator for a mysql driver
