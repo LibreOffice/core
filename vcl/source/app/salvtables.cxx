@@ -3316,30 +3316,38 @@ void SalInstanceEntry::set_overwrite_mode(bool bOn) { m_xEntry->SetInsertMode(!b
 
 bool SalInstanceEntry::get_overwrite_mode() const { return !m_xEntry->IsInsertMode(); }
 
-void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
+namespace
+{
+void set_message_type(Edit* pEntry, weld::EntryMessageType eType)
 {
     switch (eType)
     {
         case weld::EntryMessageType::Normal:
-            m_xEntry->SetForceControlBackground(false);
-            m_xEntry->SetControlForeground();
-            m_xEntry->SetControlBackground();
+            pEntry->SetForceControlBackground(false);
+            pEntry->SetControlForeground();
+            pEntry->SetControlBackground();
             break;
         case weld::EntryMessageType::Warning:
             // tdf#114603: enable setting the background to a different color;
             // relevant for GTK; see also #i75179#
-            m_xEntry->SetForceControlBackground(true);
-            m_xEntry->SetControlForeground(COL_BLACK);
-            m_xEntry->SetControlBackground(COL_YELLOW);
+            pEntry->SetForceControlBackground(true);
+            pEntry->SetControlForeground(COL_BLACK);
+            pEntry->SetControlBackground(COL_YELLOW);
             break;
         case weld::EntryMessageType::Error:
             // tdf#114603: enable setting the background to a different color;
             // relevant for GTK; see also #i75179#
-            m_xEntry->SetForceControlBackground(true);
-            m_xEntry->SetControlForeground(COL_WHITE);
-            m_xEntry->SetControlBackground(0xff6563);
+            pEntry->SetForceControlBackground(true);
+            pEntry->SetControlForeground(COL_WHITE);
+            pEntry->SetControlBackground(0xff6563);
             break;
     }
+}
+}
+
+void SalInstanceEntry::set_message_type(weld::EntryMessageType eType)
+{
+    ::set_message_type(m_xEntry, eType);
 }
 
 void SalInstanceEntry::set_font(const vcl::Font& rFont)
@@ -6355,18 +6363,9 @@ bool SalInstanceComboBoxWithEdit::changed_by_direct_pick() const
 
 void SalInstanceComboBoxWithEdit::set_entry_message_type(weld::EntryMessageType eType)
 {
-    switch (eType)
-    {
-        case weld::EntryMessageType::Normal:
-            m_xComboBox->SetControlForeground();
-            break;
-        case weld::EntryMessageType::Warning:
-            m_xComboBox->SetControlForeground(COL_YELLOW);
-            break;
-        case weld::EntryMessageType::Error:
-            m_xComboBox->SetControlForeground(Color(0xf0, 0, 0));
-            break;
-    }
+    Edit* pEdit = m_xComboBox->GetSubEdit();
+    assert(pEdit);
+    ::set_message_type(pEdit, eType);
 }
 
 OUString SalInstanceComboBoxWithEdit::get_active_text() const { return m_xComboBox->GetText(); }
