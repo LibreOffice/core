@@ -89,9 +89,6 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::ui::dialogs;
 
-const wchar_t aImplWindows[] = L"windows";
-const wchar_t aImplDevice[]  = L"device";
-
 static DEVMODEW const * SAL_DEVMODE_W( const ImplJobSetup* pSetupData )
 {
     DEVMODEW const * pRet = nullptr;
