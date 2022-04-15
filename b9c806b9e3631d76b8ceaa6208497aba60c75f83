@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5cdade1_f48c4867",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000674
+      },
+      "writtenOn": "2022-04-15T12:11:29Z",
+      "side": 1,
+      "message": "Build successful for me (Ubuntu 20.04).",
+      "revId": "b9c806b9e3631d76b8ceaa6208497aba60c75f83",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
