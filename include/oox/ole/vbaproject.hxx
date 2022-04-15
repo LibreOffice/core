@@ -196,6 +196,7 @@ private:
     MacroAttacherVector maMacroAttachers;   ///< Objects that want to attach a VBA macro to an action.
     DummyModuleMap      maDummyModules;     ///< Additional empty modules created on import.
     OUString            maPrjName;          ///< Name of the VBA project.
+    rtl_TextEncoding    maTextEncoding;     ///< Text encoding of the VBA project.
     css::uno::Reference< css::container::XNameContainer >
                         mxOleOverridesSink;
     typedef RefMap< OUString, VbaModule > VbaModuleMap;

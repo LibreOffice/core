@@ -2867,6 +2867,12 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
     maVBAScriptListeners.notifyEach( &css::script::vba::XVBAScriptListener::notifyVBAScriptEvent, aEvent );
 }
 
+// Methods XPropertySet
+uno::Reference< beans::XPropertySetInfo > SAL_CALL SfxLibraryContainer::getPropertySetInfo()
+{
+    return m_xLibraryContainerProp->getPropertySetInfo();
+}
+
 // Methods XServiceInfo
 sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServiceName )
 {

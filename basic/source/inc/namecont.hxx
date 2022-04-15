@@ -52,6 +52,9 @@
 #include <comphelper/interfacecontainer3.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
 
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+
 class BasicManager;
 
 namespace basic
@@ -170,7 +173,7 @@ typedef ::cppu::WeakComponentImplHelper<
     css::container::XContainer,
     css::script::XLibraryQueryExecutable,
     css::script::vba::XVBACompatibility,
-    css::lang::XServiceInfo > SfxLibraryContainer_BASE;
+    css::beans::XPropertySet> SfxLibraryContainer_BASE;
 
 class SfxLibraryContainer
     : public ::cppu::BaseMutex
@@ -329,6 +332,8 @@ private:
                     const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );
     void implScanExtensions();
 
+    css::uno::Reference<css::beans::XPropertySet> m_xLibraryContainerProp;
+
 public:
     SfxLibraryContainer();
     virtual ~SfxLibraryContainer() override;
@@ -423,6 +428,25 @@ public:
     virtual void SAL_CALL removeVBAScriptListener(
         const css::uno::Reference< css::script::vba::XVBAScriptListener >& Listener ) override;
     virtual void SAL_CALL broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName ) override;
+
+    // css::beans::XPropertySet
+    virtual css::uno::Reference<css::beans::XPropertySetInfo>
+        SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue(const OUString& aPropertyName,
+                                           const css::uno::Any& aValue) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+    virtual void SAL_CALL addPropertyChangeListener(
+        const OUString& aPropertyName,
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& xListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(
+        const OUString& aPropertyName,
+        const css::uno::Reference<css::beans::XPropertyChangeListener>& aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(
+        const OUString& PropertyName,
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(
+        const OUString& PropertyName,
+        const css::uno::Reference<css::beans::XVetoableChangeListener>& aListener) override;
 };
 
 
