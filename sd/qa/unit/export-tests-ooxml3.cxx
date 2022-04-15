@@ -11,6 +11,7 @@
 #include "sdmodeltestbase.hxx"
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/outlobj.hxx>
@@ -34,6 +35,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -126,6 +128,8 @@ public:
     void testTdf147121();
     void testTdf140912_PicturePlaceholder();
     void testEnhancedPathViewBox();
+    void testTdf109169_OctagonBevel();
+    void testTdf109169_DiamondBevel();
 
     CPPUNIT_TEST_SUITE(SdOOXMLExportTest3);
 
@@ -202,6 +206,8 @@ public:
     CPPUNIT_TEST(testTdf147121);
     CPPUNIT_TEST(testTdf140912_PicturePlaceholder);
     CPPUNIT_TEST(testEnhancedPathViewBox);
+    CPPUNIT_TEST(testTdf109169_OctagonBevel);
+    CPPUNIT_TEST(testTdf109169_DiamondBevel);
     CPPUNIT_TEST_SUITE_END();
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathCtx) override
@@ -1910,6 +1916,46 @@ void SdOOXMLExportTest3::testEnhancedPathViewBox()
     // The shape has a Bézier curve which does not touch the right edge. Prior to the fix the curve
     // was stretched to touch the edge, resulting in 5098 curve width instead of 2045.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2045), aBoundRectangle.Width);
+}
+
+void SdOOXMLExportTest3::testTdf109169_OctagonBevel()
+{
+    // The document has a shape 'Octagon Bevel'. It consists of an octagon with 8 points and eight
+    // facets with 4 points each, total 8+8*4=40 points. Without the patch it was exported as
+    // rectangle and thus had 4 points.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf109169_Octagon.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    auto xPropSet(getShapeFromPage(0, 0, xDocShRef));
+    auto aGeomPropSeq = xPropSet->getPropertyValue("CustomShapeGeometry")
+                            .get<uno::Sequence<beans::PropertyValue>>();
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
+    auto aPathSeq((aCustomShapeGeometry["Path"]).get<uno::Sequence<beans::PropertyValue>>());
+    comphelper::SequenceAsHashMap aPath(aPathSeq);
+    auto aCoordinates(
+        (aPath["Coordinates"]).get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(40), aCoordinates.getLength());
+}
+
+void SdOOXMLExportTest3::testTdf109169_DiamondBevel()
+{
+    // The document has a shape 'Diamond Bevel'. It consists of a diamond with 4 points and four
+    // facets with 4 points each, total 4+4*4=20 points. Without the patch it was exported as
+    // rectangle and thus had 4 points.
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/odp/tdf109169_Diamond.odp"), ODP);
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    auto xPropSet(getShapeFromPage(0, 0, xDocShRef));
+    auto aGeomPropSeq = xPropSet->getPropertyValue("CustomShapeGeometry")
+                            .get<uno::Sequence<beans::PropertyValue>>();
+    comphelper::SequenceAsHashMap aCustomShapeGeometry(aGeomPropSeq);
+    auto aPathSeq((aCustomShapeGeometry["Path"]).get<uno::Sequence<beans::PropertyValue>>());
+    comphelper::SequenceAsHashMap aPath(aPathSeq);
+    auto aCoordinates(
+        (aPath["Coordinates"]).get<uno::Sequence<drawing::EnhancedCustomShapeParameterPair>>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20), aCoordinates.getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdOOXMLExportTest3);
