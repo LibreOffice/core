@@ -79,6 +79,7 @@ public:
     void testTdf55417();
     void testTdf129985();
     void testTdf73063();
+    void testTdf75263();
 
     xmlDocUniquePtr testTdf95640(std::u16string_view rFileName, sal_Int32 nSourceFormat,
                                  sal_Int32 nDestFormat);
@@ -203,6 +204,7 @@ public:
     CPPUNIT_TEST(testTdf55417);
     CPPUNIT_TEST(testTdf129985);
     CPPUNIT_TEST(testTdf73063);
+    CPPUNIT_TEST(testTdf75263);
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx);
     CPPUNIT_TEST(testTdf95640_ods_to_xlsx_with_standard_list);
     CPPUNIT_TEST(testTdf95640_xlsx_to_xlsx);
@@ -659,6 +661,20 @@ void ScExportTest2::testTdf73063()
 
     assertXPath(pDoc, "/x:styleSheet/x:numFmts/x:numFmt[2]", "formatCode",
                 "[$-1C1A]dddd\", \"d\". \"mmmm\\ yyyy;@");
+
+    xDocSh->DoClose();
+}
+
+void ScExportTest2::testTdf75263()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf75263.", FORMAT_XLSM);
+    ScDocument& rDoc = xDocSh->GetDocument();
+
+    // A1 contains formula with user-defined function, and the function is defined in VBA.
+    CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), rDoc.GetString(ScAddress(0, 0, 0)));
+  
+    xDocSh = saveAndReloadNoClose(*xDocSh, FORMAT_XLSM);
+    CPPUNIT_ASSERT(xDocSh.is());
 
     xDocSh->DoClose();
 }
