@@ -136,14 +136,14 @@ std::unique_ptr<filter_info_impl> TypeDetectionImporter::createFilterForNode( No
     pFilter->maType = getSubdata( 1, aComma, aData  );
     pFilter->maDocumentService = getSubdata( 2, aComma, aData );
 
-    OUString aFilterService( getSubdata( 3, aComma, aData ) );
+    std::u16string_view aFilterService( getSubdata( 3, aComma, aData ) );
     pFilter->maFlags = o3tl::toInt32(getSubdata( 4, aComma, aData ));
 
     // parse filter user data
     sal_Unicode aDelim(';');
-    OUString aFilterUserData( getSubdata( 5, aComma, aData ) );
+    std::u16string_view aFilterUserData( getSubdata( 5, aComma, aData ) );
 
-    OUString aAdapterService( getSubdata( 0, aDelim, aFilterUserData ) );
+    std::u16string_view aAdapterService( getSubdata( 0, aDelim, aFilterUserData ) );
     //Import/ExportService
     pFilter->mbNeedsXSLT2 = OUString(getSubdata( 1, aDelim, aFilterUserData )).toBoolean();
     pFilter->maImportService = getSubdata( 2, aDelim, aFilterUserData );
@@ -182,10 +182,10 @@ std::unique_ptr<filter_info_impl> TypeDetectionImporter::createFilterForNode( No
     if( pFilter->maFlags == 0 )
         bOk = false;
 
-    if( aFilterService != "com.sun.star.comp.Writer.XmlFilterAdaptor" )
+    if( aFilterService != u"com.sun.star.comp.Writer.XmlFilterAdaptor" )
         bOk = false;
 
-    if( aAdapterService != "com.sun.star.documentconversion.XSLTFilter" )
+    if( aAdapterService != u"com.sun.star.documentconversion.XSLTFilter" )
         bOk = false;
 
     if( pFilter->maExtension.isEmpty() )

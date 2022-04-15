@@ -2837,7 +2837,8 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
 
         // Check if watermark for pdf is passed by filteroptions...
         // It is not a real filter option so it must be filtered out.
-        OUString watermarkText, sFullSheetPreview;
+        OUString watermarkText;
+        std::u16string_view sFullSheetPreview;
         int aIndex = -1;
         if ((aIndex = aFilterOptions.indexOf(",Watermark=")) >= 0)
         {
@@ -2853,7 +2854,7 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
             aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex)) + aFilterOptions.subView(bIndex+16);
         }
 
-        bool bFullSheetPreview = sFullSheetPreview == "true";
+        bool bFullSheetPreview = sFullSheetPreview == u"true";
 
         // Select a pdf version if specified a valid one. If not specified then ignore.
         // If invalid then fail.
@@ -2861,19 +2862,18 @@ static int doc_saveAs(LibreOfficeKitDocument* pThis, const char* sUrl, const cha
         if ((aIndex = aFilterOptions.indexOf(",PDFVer=")) >= 0)
         {
             int bIndex = aFilterOptions.indexOf("PDFVEREND");
-            OUString sPdfVer;
-            sPdfVer = aFilterOptions.subView(aIndex+8, bIndex-(aIndex+8));
+            std::u16string_view sPdfVer = aFilterOptions.subView(aIndex+8, bIndex-(aIndex+8));
             aFilterOptions = OUString::Concat(aFilterOptions.subView(0, aIndex)) + aFilterOptions.subView(bIndex+9);
 
-            if (sPdfVer.equalsIgnoreAsciiCase("PDF/A-1b"))
+            if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF/A-1b"))
                 pdfVer = 1;
-            else if (sPdfVer.equalsIgnoreAsciiCase("PDF/A-2b"))
+            else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF/A-2b"))
                 pdfVer = 2;
-            else if (sPdfVer.equalsIgnoreAsciiCase("PDF/A-3b"))
+            else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF/A-3b"))
                 pdfVer = 3;
-            else if (sPdfVer.equalsIgnoreAsciiCase("PDF-1.5"))
+            else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF-1.5"))
                 pdfVer = 15;
-            else if (sPdfVer.equalsIgnoreAsciiCase("PDF-1.6"))
+            else if (o3tl::equalsIgnoreAsciiCase(sPdfVer, u"PDF-1.6"))
                 pdfVer = 16;
             else
             {

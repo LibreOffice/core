@@ -24,6 +24,7 @@
 #include <oox/dump/xlsbdumper.hxx>
 #include <oox/helper/zipstorage.hxx>
 #include <oox/ole/olestorage.hxx>
+#include <o3tl/string_view.hxx>
 
 #ifdef DBG_UTIL
 
@@ -42,41 +43,41 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
 
 void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
-    OUString aExt( InputOutputHelper::getFileNameExtension( rStrmName ) );
-    if( aExt.equalsIgnoreAsciiCase("pptx") ||
-        aExt.equalsIgnoreAsciiCase("potx") )
+    std::u16string_view aExt( InputOutputHelper::getFileNameExtension( rStrmName ) );
+    if( o3tl::equalsIgnoreAsciiCase(aExt, u"pptx") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"potx") )
     {
         Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
 #ifdef FIXME
     else if(
-        aExt.equalsIgnoreAsciiCase("xlsb") ||
-        aExt.equalsIgnoreAsciiCase("xlsm") ||
-        aExt.equalsIgnoreAsciiCase("xlsx") ||
-        aExt.equalsIgnoreAsciiCase("xltm") ||
-        aExt.equalsIgnoreAsciiCase("xltx") )
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xlsb") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xlsm") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xlsx") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xltm") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xltx") )
     {
         ::oox::dump::xlsb::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
     else if(
-        aExt.equalsIgnoreAsciiCase("xla") ||
-        aExt.equalsIgnoreAsciiCase("xlc") ||
-        aExt.equalsIgnoreAsciiCase("xlm") ||
-        aExt.equalsIgnoreAsciiCase("xls") ||
-        aExt.equalsIgnoreAsciiCase("xlt") ||
-        aExt.equalsIgnoreAsciiCase("xlw") )
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xla") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xlc") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xlm") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xls") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xlt") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xlw") )
     {
         ::oox::dump::biff::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
 #endif
     else if(
-        aExt.equalsIgnoreAsciiCase("xml") ||
-        aExt.equalsIgnoreAsciiCase("vml") ||
-        aExt.equalsIgnoreAsciiCase("rels") )
+        o3tl::equalsIgnoreAsciiCase(aExt, u"xml") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"vml") ||
+        o3tl::equalsIgnoreAsciiCase(aExt, u"rels") )
     {
         XmlStreamObject( *this, rxStrm, rSysFileName ).dump();
     }
-    else if( aExt.equalsIgnoreAsciiCase("bin") )
+    else if( o3tl::equalsIgnoreAsciiCase(aExt, u"bin") )
     {
         if( rStrgPath == "ppt" && rStrmName == "vbaProject.bin" )
         {

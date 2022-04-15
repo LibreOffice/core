@@ -577,8 +577,8 @@ void SwGrfNode::InsertLink( std::u16string_view rGrfName, const OUString& rFltNa
     {
         sal_Int32 nTmp = 0;
         const OUString sApp{ o3tl::getToken(rGrfName, 0, sfx2::cTokenSeparator, nTmp ) };
-        const OUString sTopic{ o3tl::getToken(rGrfName, 0, sfx2::cTokenSeparator, nTmp ) };
-        const OUString sItem{ rGrfName.substr( nTmp ) };
+        const std::u16string_view sTopic{ o3tl::getToken(rGrfName, 0, sfx2::cTokenSeparator, nTmp ) };
+        const std::u16string_view sItem{ rGrfName.substr( nTmp ) };
         rIDLA.GetLinkManager().InsertDDELink( mxLink.get(), sApp, sTopic, sItem );
     }
     else
