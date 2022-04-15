@@ -551,8 +551,6 @@ static bool lcl_IsOnDenylist(OUString const & rShapeType)
         u"flower",
         u"bracket-pair",
         u"brace-pair",
-        u"col-60da8460",
-        u"col-502ad400",
         u"quad-bevel",
         u"round-rectangular-callout",
         u"rectangular-callout",
@@ -605,7 +603,9 @@ static bool lcl_IsOnAllowlist(OUString const & rShapeType)
 {
     static const std::initializer_list<std::u16string_view> vAllowlist = {
         u"heart",
-        u"puzzle"
+        u"puzzle",
+        u"col-60da8460",
+        u"col-502ad400"
     };
 
     return std::find(vAllowlist.begin(), vAllowlist.end(), rShapeType) != vAllowlist.end();
