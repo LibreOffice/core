@@ -45,6 +45,7 @@ private:
         getLibraryContainer() const;
 
     OUString getProjectName() const;
+    rtl_TextEncoding getVBATextEncoding() const;
 
     css::uno::Reference<css::frame::XModel> mxModel;
 };
@@ -120,7 +121,8 @@ public:
     VBAEncryption(const sal_uInt8* pData,
                   const sal_uInt16 nLength,
                   SvStream& rEncryptedData,
-                  sal_uInt8 nProjKey);
+                  sal_uInt8 nProjKey,
+                  rtl_TextEncoding eTextEncoding);
 
     void write();
 
@@ -138,6 +140,7 @@ private:
 
     sal_uInt8 mnSeed; // the seed value
     sal_uInt8 mnVersionEnc; // the version encoding
+    rtl_TextEncoding meTextEncoding; // the VBA text encoding on export
 
     void writeSeed();
     void writeVersionEnc();
