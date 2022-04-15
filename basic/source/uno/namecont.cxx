@@ -2867,10 +2867,79 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
     maVBAScriptListeners.notifyEach( &css::script::vba::XVBAScriptListener::notifyVBAScriptEvent, aEvent );
 }
 
+// Methods XPropertySet
+css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SfxLibraryContainer::getPropertySetInfo()
+{
+    return createPropertySetInfo(getInfoHelper());
+}
+
+void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
+                                                    const uno::Any& aValue)
+{
+    if (aPropertyName == sVBATextEncodingPropName)
+        aValue >>= meVBATextEncoding;
+    throw UnknownPropertyException(aPropertyName, static_cast<uno::XWeak*>(this));
+}
+
+css::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
+{
+    if (aPropertyName == sVBATextEncodingPropName)
+        return uno::makeAny(meVBATextEncoding);
+    throw UnknownPropertyException(aPropertyName, static_cast<uno::XWeak*>(this));
+}
+
+void SAL_CALL SfxLibraryContainer::addPropertyChangeListener(
+    const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener>& /* xListener */)
+{
+    OSL_FAIL("Not supported.");
+}
+
+void SAL_CALL SfxLibraryContainer::removePropertyChangeListener(
+    const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener>& /* aListener */)
+{
+    OSL_FAIL("Not supported.");
+}
+
+void SAL_CALL SfxLibraryContainer::addVetoableChangeListener(
+    const OUString& /* PropertyName */, const Reference<XVetoableChangeListener>& /* aListener */)
+{
+    OSL_FAIL("Not supported.");
+}
+
+void SAL_CALL SfxLibraryContainer::removeVetoableChangeListener(
+    const OUString& /* PropertyName */, const Reference<XVetoableChangeListener>& /* aListener */)
+{
+    OSL_FAIL("Not supported.");
+}
+
+// OPropertySetHelper
+::cppu::IPropertyArrayHelper& SfxLibraryContainer::getInfoHelper()
+{
+    return *getArrayHelper();
+}
+
+// OPropertyArrayUsageHelper
+::cppu::IPropertyArrayHelper* SfxLibraryContainer::createArrayHelper() const
+{
+    Sequence<Property> aProperties;
+    describeProperties(aProperties);
+    return new ::cppu::OPropertyArrayHelper(aProperties);
+}
+
 // Methods XServiceInfo
 sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
+}
+
+void SAL_CALL SfxLibraryContainer::acquire() noexcept
+{
+    SfxLibraryContainer_BASE::acquire();
+}
+
+void SAL_CALL SfxLibraryContainer::release() noexcept
+{
+    SfxLibraryContainer_BASE::release();
 }
 
 // Implementation class SfxLibrary
