@@ -27,6 +27,7 @@
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkdata.hxx>
+#include <vcl/event.hxx>
 
 GtkSalObjectBase::GtkSalObjectBase(GtkSalFrame* pParent)
     : m_pSocket(nullptr)
@@ -296,6 +297,8 @@ void GtkSalObjectBase::SetForwardKey( bool bEnable )
 GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
     : GtkSalObjectBase(pParent)
     , m_pScrolledWindow(nullptr)
+    , m_pViewPort(nullptr)
+    , m_pBgCssProvider(nullptr)
 {
     if( !pParent )
         return;
@@ -318,31 +321,26 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
                    0, 0 );
 
     // deliberately without adjustments to avoid gtk's auto adjustment on changing focus
-    GtkWidget* pViewPort = gtk_viewport_new(nullptr, nullptr);
+    m_pViewPort = gtk_viewport_new(nullptr, nullptr);
 
     // force in a fake background of a suitable color
-    GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(pViewPort);
-    GtkCssProvider* pBgCssProvider = gtk_css_provider_new();
-    OUString sColor = Application::GetSettings().GetStyleSettings().GetDialogColor().AsRGBHexString();
-    OUString aBuffer = "* { background-color: #" + sColor + "; }";
-    OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
-    css_provider_load_from_data(pBgCssProvider, aResult.getStr(), aResult.getLength());
-    gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(pBgCssProvider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    SetViewPortBackground();
+
+    ImplGetDefaultWindow()->AddEventListener(LINK(this, GtkSalObjectWidgetClip, SettingsChangedHdl));
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), pViewPort);
+    gtk_container_add(GTK_CONTAINER(m_pScrolledWindow), m_pViewPort);
 #else
-    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(m_pScrolledWindow), pViewPort);
+    gtk_scrolled_window_set_child(GTK_SCROLLED_WINDOW(m_pScrolledWindow), m_pViewPort);
 #endif
-    gtk_widget_show(pViewPort);
+    gtk_widget_show(m_pViewPort);
 
     // our plug window
     m_pSocket = gtk_grid_new();
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    gtk_container_add(GTK_CONTAINER(pViewPort), m_pSocket);
+    gtk_container_add(GTK_CONTAINER(m_pViewPort), m_pSocket);
 #else
-    gtk_viewport_set_child(GTK_VIEWPORT(pViewPort), m_pSocket);
+    gtk_viewport_set_child(GTK_VIEWPORT(m_pViewPort), m_pSocket);
 #endif
     gtk_widget_show(m_pSocket);
 
@@ -353,8 +351,35 @@ GtkSalObjectWidgetClip::GtkSalObjectWidgetClip(GtkSalFrame* pParent, bool bShow)
     g_signal_connect( G_OBJECT(m_pSocket), "destroy", G_CALLBACK(signalDestroy), this );
 }
 
+// force in a fake background of a suitable color
+void GtkSalObjectWidgetClip::SetViewPortBackground()
+{
+    GtkStyleContext *pWidgetContext = gtk_widget_get_style_context(m_pViewPort);
+    if (m_pBgCssProvider)
+        gtk_style_context_remove_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider));
+    m_pBgCssProvider = gtk_css_provider_new();
+    OUString sColor = Application::GetSettings().GetStyleSettings().GetDialogColor().AsRGBHexString();
+    OUString aBuffer = "* { background-color: #" + sColor + "; }";
+    OString aResult = OUStringToOString(aBuffer, RTL_TEXTENCODING_UTF8);
+    css_provider_load_from_data(m_pBgCssProvider, aResult.getStr(), aResult.getLength());
+    gtk_style_context_add_provider(pWidgetContext, GTK_STYLE_PROVIDER(m_pBgCssProvider),
+                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+}
+
+IMPL_LINK(GtkSalObjectWidgetClip, SettingsChangedHdl, VclWindowEvent&, rEvent, void)
+{
+    if (rEvent.GetId() != VclEventId::WindowDataChanged)
+        return;
+
+    DataChangedEvent* pData = static_cast<DataChangedEvent*>(rEvent.GetData());
+    if (pData->GetType() == DataChangedEventType::SETTINGS)
+        SetViewPortBackground();
+}
+
 GtkSalObjectWidgetClip::~GtkSalObjectWidgetClip()
 {
+    ImplGetDefaultWindow()->RemoveEventListener(LINK(this, GtkSalObjectWidgetClip, SettingsChangedHdl));
+
     if( !m_pSocket )
         return;
 
