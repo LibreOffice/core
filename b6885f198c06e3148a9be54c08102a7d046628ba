@@ -41,6 +41,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2857e8cc_54270ea8",
+        "filename": "extras/source/templates/draw/bpmn/content.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 525,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-04-15T08:17:50Z",
+      "side": 1,
+      "message": "\u003e Think we can drop the 11pt for CTL/CJK but otherwise a p is missing here.\n\nremove all CTL/CJK font-size tags",
+      "parentUuid": "e0f582d7_24fee286",
+      "range": {
+        "startLine": 525,
+        "startChar": 72,
+        "endLine": 525,
+        "endChar": 75
+      },
+      "revId": "b6885f198c06e3148a9be54c08102a7d046628ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dfa4bbec_8ce4cc3b",
@@ -64,6 +88,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "43d59202_ed67d898",
+        "filename": "extras/source/templates/draw/bpmn/content.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 534,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-04-15T08:17:50Z",
+      "side": 1,
+      "message": "This font name is declared in font section. Slightly different from \"Liberation Sans\"",
+      "parentUuid": "dfa4bbec_8ce4cc3b",
+      "range": {
+        "startLine": 534,
+        "startChar": 61,
+        "endLine": 534,
+        "endChar": 62
+      },
+      "revId": "b6885f198c06e3148a9be54c08102a7d046628ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b5a44f29_401f8960",
@@ -77,6 +125,30 @@
       "writtenOn": "2022-04-07T08:52:43Z",
       "side": 1,
       "message": "Also German",
+      "range": {
+        "startLine": 24,
+        "startChar": 30,
+        "endLine": 24,
+        "endChar": 36
+      },
+      "revId": "b6885f198c06e3148a9be54c08102a7d046628ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1043b119_48c6d729",
+        "filename": "extras/source/templates/draw/bpmn/styles.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-04-15T08:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5a44f29_401f8960",
       "range": {
         "startLine": 24,
         "startChar": 30,
