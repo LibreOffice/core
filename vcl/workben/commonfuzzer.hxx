@@ -129,6 +129,8 @@ void CommonInitialize(int *argc, char ***argv)
     psp::PrintFontManager::get();
     //get the printer info
     Printer::GetPrinterQueues();
+    //Draw some text to fill CairoTextRender fontoptions cache
+    Application::GetDefaultDevice()->DrawText(Point(0, 0), "hello world");
 
     //https://github.com/google/oss-fuzz/issues/1449
     //https://github.com/google/oss-fuzz/issues/5441
