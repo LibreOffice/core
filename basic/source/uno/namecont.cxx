@@ -25,6 +25,7 @@
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/io/IOException.hpp>
+#include <com/sun/star/lang/NoSupportException.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/ucb/ContentCreationException.hpp>
@@ -2865,6 +2866,51 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
     Reference< XModel > xModel = mxOwnerDocument;  // weak-ref -> ref
     vba::VBAScriptEvent aEvent( Reference<XInterface>(xModel, UNO_QUERY), nIdentifier, rModuleName );
     maVBAScriptListeners.notifyEach( &css::script::vba::XVBAScriptListener::notifyVBAScriptEvent, aEvent );
+}
+
+// Methods XPropertySet
+css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL SfxLibraryContainer::getPropertySetInfo()
+{
+    return uno::Reference<beans::XPropertySetInfo>();
+}
+
+void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyName,
+                                                    const uno::Any& aValue)
+{
+    if (aPropertyName != sVBATextEncodingPropName)
+        throw UnknownPropertyException(aPropertyName, static_cast<uno::XWeak*>(this));
+    aValue >>= meVBATextEncoding;
+}
+
+css::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
+{
+    if (aPropertyName == sVBATextEncodingPropName)
+        return uno::makeAny(meVBATextEncoding);
+    throw UnknownPropertyException(aPropertyName, static_cast<uno::XWeak*>(this));
+}
+
+void SAL_CALL SfxLibraryContainer::addPropertyChangeListener(
+    const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener>& /* xListener */)
+{
+    throw NoSupportException();
+}
+
+void SAL_CALL SfxLibraryContainer::removePropertyChangeListener(
+    const OUString& /* aPropertyName */, const Reference<XPropertyChangeListener>& /* aListener */)
+{
+    throw NoSupportException();
+}
+
+void SAL_CALL SfxLibraryContainer::addVetoableChangeListener(
+    const OUString& /* PropertyName */, const Reference<XVetoableChangeListener>& /* aListener */)
+{
+    throw NoSupportException();
+}
+
+void SAL_CALL SfxLibraryContainer::removeVetoableChangeListener(
+    const OUString& /* PropertyName */, const Reference<XVetoableChangeListener>& /* aListener */)
+{
+    throw NoSupportException();
 }
 
 // Methods XServiceInfo
