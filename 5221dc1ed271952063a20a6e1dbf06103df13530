@@ -68,6 +68,24 @@
       "parentUuid": "1e1424c0_b7899dbc",
       "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa91bac5_090772da",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T13:33:52Z",
+      "side": 1,
+      "message": "Thx for the help. I hope I am on the right track. Should the setPropertyValue just accept the text encoding and nothing else, like, VbaTextEncoding?",
+      "parentUuid": "652648c3_d5fc4399",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
