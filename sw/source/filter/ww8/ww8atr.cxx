@@ -3300,8 +3300,8 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
         break;
     case SwFieldIds::Macro:
         {
-            const OUString sStr = " MACROBUTTON"
-                + pField->GetPar1().replaceFirst("StarOffice.Standard.Modul1.", " ")
+            const OUString sStr = " MACROBUTTON "
+                + pField->GetPar1().replaceFirst("StarOffice.Standard.Modul1.", "")
                 + " "
                 + lcl_GetExpandedField(*pField);
             GetExport().OutputField( pField, ww::eMACROBUTTON, sStr );

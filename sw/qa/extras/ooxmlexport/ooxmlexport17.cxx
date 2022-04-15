@@ -158,6 +158,18 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtContent", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
+{
+    loadAndSave("tdf148494.docx");
+
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected:  MACROBUTTON AllCaps Hello World
+    // - Actual  :  MACROBUTTONAllCaps Hello World
+    assertXPathContent(pXmlDoc, "/w:document/w:body/w:p/w:r[3]/w:instrText", " MACROBUTTON AllCaps Hello World ");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
