@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "067ec46b_37167a7e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-15T07:01:45Z",
+      "side": 1,
+      "message": "You should update the commit message so it has tdf#87605 at the start.\nYou should send a license statement https://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
+      "revId": "05dca31aba87887e369add22fbd070cf48e29c48",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
