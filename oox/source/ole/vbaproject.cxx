@@ -408,16 +408,19 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             document. */
         try
         {
-            Reference< XVBACompatibility > xVBACompat( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW );
+            Reference<XLibraryContainer> xLibraryContainer = getLibraryContainer(PROP_BasicLibraries);
+            uno::Reference<beans::XPropertySet> xProps(xLibraryContainer, uno::UNO_QUERY_THROW);
+            xProps->setPropertyValue("VBATextEncoding", uno::Any(eTextEnc));
+
+            Reference< XVBACompatibility > xVBACompat( xLibraryContainer, UNO_QUERY_THROW );
             xVBACompat->setVBACompatibilityMode( true );
             xVBACompat->setProjectName( maPrjName );
-
         }
-        catch(const Exception& )
+        catch(const Exception&)
         {
         }
     }
-    catch(const Exception& )
+    catch(const Exception&)
     {
     }
 }

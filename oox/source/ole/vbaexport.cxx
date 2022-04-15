@@ -31,15 +31,8 @@
 #include <sot/storage.hxx>
 
 #include <comphelper/xmltools.hxx>
-
-#define USE_UTF8_CODEPAGE 0
-#if USE_UTF8_CODEPAGE
-#define CODEPAGE_MS 65001
-#define CODEPAGE RTL_TEXTENCODING_UTF8
-#else
-#define CODEPAGE_MS 1252
-#define CODEPAGE RTL_TEXTENCODING_MS_1252
-#endif
+#include <rtl/tencinfo.h>
+#include <osl/thread.h>
 
 #define VBA_EXPORT_DEBUG 0
 #define VBA_USE_ORIGINAL_WM_STREAM 0
@@ -54,9 +47,9 @@
 
 namespace {
 
-void exportString(SvStream& rStrm, std::u16string_view rString)
+void exportString(SvStream& rStrm, std::u16string_view rString, const rtl_TextEncoding eTextencoding)
 {
-    OString aStringCorrectCodepage = OUStringToOString(rString, CODEPAGE);
+    OString aStringCorrectCodepage = OUStringToOString(rString, eTextencoding);
     rStrm.WriteOString(aStringCorrectCodepage);
 }
 
@@ -388,16 +381,16 @@ VBAEncryption::VBAEncryption(const sal_uInt8* pData, const sal_uInt16 length, Sv
     mnSeed = dis(gen);
 }
 
-void VBAEncryption::writeSeed()
+void VBAEncryption::writeSeed(const rtl_TextEncoding eTextencoding)
 {
-    exportString(mrEncryptedData, createHexStringFromDigit(mnSeed));
+    exportString(mrEncryptedData, createHexStringFromDigit(mnSeed), eTextencoding);
 }
 
-void VBAEncryption::writeVersionEnc()
+void VBAEncryption::writeVersionEnc(const rtl_TextEncoding eTextencoding)
 {
     static const sal_uInt8 mnVersion = 2; // the encrypted version
     mnVersionEnc = mnSeed ^ mnVersion;
-    exportString(mrEncryptedData, createHexStringFromDigit(mnVersionEnc));
+    exportString(mrEncryptedData, createHexStringFromDigit(mnVersionEnc), eTextencoding);
 }
 
 sal_uInt8 VBAEncryption::calculateProjKey(const OUString& rProjectKey)
@@ -414,37 +407,37 @@ sal_uInt8 VBAEncryption::calculateProjKey(const OUString& rProjectKey)
     return nProjKey;
 }
 
-void VBAEncryption::writeProjKeyEnc()
+void VBAEncryption::writeProjKeyEnc(const rtl_TextEncoding eTextencoding)
 {
     sal_uInt8 nProjKeyEnc = mnSeed ^ mnProjKey;
-    exportString(mrEncryptedData, createHexStringFromDigit(nProjKeyEnc));
+    exportString(mrEncryptedData, createHexStringFromDigit(nProjKeyEnc), eTextencoding);
     mnUnencryptedByte1 = mnProjKey;
     mnEncryptedByte1 = nProjKeyEnc; // ProjKeyEnc
     mnEncryptedByte2 = mnVersionEnc; // VersionEnc
 }
 
-void VBAEncryption::writeIgnoredEnc()
+void VBAEncryption::writeIgnoredEnc(const rtl_TextEncoding eTextencoding)
 {
     mnIgnoredLength = (mnSeed & 6) / 2;
     for(sal_Int32 i = 1; i <= mnIgnoredLength; ++i)
     {
         sal_uInt8 nTempValue = 0xBE; // Any value can be assigned here
         sal_uInt8 nByteEnc = nTempValue ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc));
+        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc), eTextencoding);
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = nTempValue;
     }
 }
 
-void VBAEncryption::writeDataLengthEnc()
+void VBAEncryption::writeDataLengthEnc(const rtl_TextEncoding eTextencoding)
 {
     sal_uInt16 temp = mnLength;
     for(sal_Int8 i = 0; i < 4; ++i)
     {
         sal_uInt8 nByte = temp & 0xFF;
         sal_uInt8 nByteEnc = nByte ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc));
+        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc), eTextencoding);
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = nByte;
@@ -452,26 +445,26 @@ void VBAEncryption::writeDataLengthEnc()
     }
 }
 
-void VBAEncryption::writeDataEnc()
+void VBAEncryption::writeDataEnc(const rtl_TextEncoding eTextencoding)
 {
     for(sal_Int16 i = 0; i < mnLength; i++)
     {
         sal_uInt8 nByteEnc = mpData[i] ^ (mnEncryptedByte2 + mnUnencryptedByte1);
-        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc));
+        exportString(mrEncryptedData, createHexStringFromDigit(nByteEnc), eTextencoding);
         mnEncryptedByte2 = mnEncryptedByte1;
         mnEncryptedByte1 = nByteEnc;
         mnUnencryptedByte1 = mpData[i];
     }
 }
 
-void VBAEncryption::write()
+void VBAEncryption::write(const rtl_TextEncoding eTextencoding)
 {
-    writeSeed();
-    writeVersionEnc();
-    writeProjKeyEnc();
-    writeIgnoredEnc();
-    writeDataLengthEnc();
-    writeDataEnc();
+    writeSeed(eTextencoding);
+    writeVersionEnc(eTextencoding);
+    writeProjKeyEnc(eTextencoding);
+    writeIgnoredEnc(eTextencoding);
+    writeDataLengthEnc(eTextencoding);
+    writeDataEnc(eTextencoding);
 }
 
 #endif
@@ -508,20 +501,20 @@ void writePROJECTLCIDINVOKE(SvStream& rStrm)
 }
 
 // section 2.3.4.2.1.4
-void writePROJECTCODEPAGE(SvStream& rStrm)
+void writePROJECTCODEPAGE(SvStream& rStrm, const rtl_TextEncoding eTextencoding)
 {
     rStrm.WriteUInt16(0x0003); // id
     rStrm.WriteUInt32(0x00000002); // size
-    rStrm.WriteUInt16(CODEPAGE_MS); // CodePage
+    rStrm.WriteUInt16(rtl_getWindowsCodePageFromTextEncoding(eTextencoding)); // CodePage
 }
 
 //section 2.3.4.2.1.5
-void writePROJECTNAME(SvStream& rStrm, const OUString& name)
+void writePROJECTNAME(SvStream& rStrm, const OUString& name, const rtl_TextEncoding eTextencoding)
 {
     rStrm.WriteUInt16(0x0004); // id
     sal_uInt32 sizeOfProjectName = name.getLength();
     rStrm.WriteUInt32(sizeOfProjectName); // sizeOfProjectName
-    exportString(rStrm, name); // ProjectName
+    exportString(rStrm, name, eTextencoding); // ProjectName
 }
 
 //section 2.3.4.2.1.6
@@ -577,13 +570,13 @@ void writePROJECTCONSTANTS(SvStream& rStrm)
 }
 
 // section 2.3.4.2.1
-void writePROJECTINFORMATION(SvStream& rStrm, const OUString& projectName)
+void writePROJECTINFORMATION(SvStream& rStrm, const OUString& projectName, const rtl_TextEncoding eTextencoding)
 {
     writePROJECTSYSKIND(rStrm);
     writePROJECTLCID(rStrm);
     writePROJECTLCIDINVOKE(rStrm);
-    writePROJECTCODEPAGE(rStrm);
-    writePROJECTNAME(rStrm, projectName);
+    writePROJECTCODEPAGE(rStrm, eTextencoding);
+    writePROJECTNAME(rStrm, projectName, eTextencoding);
     writePROJECTDOCSTRING(rStrm);
     writePROJECTHELPFILEPATH(rStrm);
     writePROJECTHELPCONTEXT(rStrm);
@@ -593,12 +586,12 @@ void writePROJECTINFORMATION(SvStream& rStrm, const OUString& projectName)
 }
 
 // section 2.3.4.2.2.2
-void writeREFERENCENAME(SvStream& rStrm, const OUString& name)
+void writeREFERENCENAME(SvStream& rStrm, const OUString& name, const rtl_TextEncoding eTextencoding)
 {
     rStrm.WriteUInt16(0x0016); // id
     sal_Int32 size = name.getLength();
     rStrm.WriteUInt32(size); // sizeOfName
-    exportString(rStrm, name); // name
+    exportString(rStrm, name, eTextencoding); // name
     rStrm.WriteUInt16(0x003E); // reserved
     sal_Int32 unicodesize = size * 2;
     rStrm.WriteUInt32(unicodesize); // sizeOfNameUnicode
@@ -606,31 +599,31 @@ void writeREFERENCENAME(SvStream& rStrm, const OUString& name)
 }
 
 // section 2.3.4.2.2.5
-void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString& libid)
+void writeREFERENCEREGISTERED(SvStream& rStrm, const OUString& libid, const rtl_TextEncoding eTextencoding)
 {
     rStrm.WriteUInt16(0x000D); // id
     sal_Int32 sizeOfLibid = libid.getLength();
     sal_Int32 size = sizeOfLibid + 10; // size of Libid, sizeOfLibid(4 bytes), reserved 1(4 bytes) and reserved 2(2 bytes)
     rStrm.WriteUInt32(size); // size
     rStrm.WriteUInt32(sizeOfLibid); // sizeOfLibid
-    exportString(rStrm, libid); // Libid
+    exportString(rStrm, libid, eTextencoding); // Libid
     rStrm.WriteUInt32(0x00000000); // reserved 1
     rStrm.WriteUInt16(0x0000); // reserved 2
 }
 
 // section 2.3.4.2.2.1
-void writeREFERENCE(SvStream& rStrm, const OUString& name, const OUString& libid)
+void writeREFERENCE(SvStream& rStrm, const OUString& name, const OUString& libid, const rtl_TextEncoding eTextencoding)
 {
-    writeREFERENCENAME(rStrm, name);
-    writeREFERENCEREGISTERED(rStrm, libid);
+    writeREFERENCENAME(rStrm, name, eTextencoding);
+    writeREFERENCEREGISTERED(rStrm, libid, eTextencoding);
 }
 
 // section 2.3.4.2.2
-void writePROJECTREFERENCES(SvStream& rStrm)
+void writePROJECTREFERENCES(SvStream& rStrm, const rtl_TextEncoding eTextencoding)
 {
     // TODO: find out where these references are coming from
-    writeREFERENCE(rStrm, "stdole", "*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation");
-    writeREFERENCE(rStrm, "Office", "*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library");
+    writeREFERENCE(rStrm, "stdole", "*\\G{00020430-0000-0000-C000-000000000046}#2.0#0#C:\\Windows\\SysWOW64\\stdole2.tlb#OLE Automation", eTextencoding);
+    writeREFERENCE(rStrm, "Office", "*\\G{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}#2.0#0#C:\\Program Files (x86)\\Common Files\\Microsoft Shared\\OFFICE14\\MSO.DLL#Microsoft Office 14.0 Object Library", eTextencoding);
 }
 
 // section 2.3.4.2.3.1
@@ -642,12 +635,12 @@ void writePROJECTCOOKIE(SvStream& rStrm)
 }
 
 // section 2.3.4.2.3.2.1
-void writeMODULENAME(SvStream& rStrm, const OUString& name)
+void writeMODULENAME(SvStream& rStrm, const OUString& name, const rtl_TextEncoding eTextencoding)
 {
     rStrm.WriteUInt16(0x0019); // id
     sal_Int32 n = name.getLength(); // sizeOfModuleName
     rStrm.WriteUInt32(n);
-    exportString(rStrm, name); // ModuleName
+    exportString(rStrm, name, eTextencoding); // ModuleName
 }
 
 // section 2.3.4.2.3.2.2
@@ -660,12 +653,12 @@ void writeMODULENAMEUNICODE(SvStream& rStrm, const OUString& name)
 }
 
 // section 2.3.4.2.3.2.3
-void writeMODULESTREAMNAME(SvStream& rStrm, const OUString& streamName)
+void writeMODULESTREAMNAME(SvStream& rStrm, const OUString& streamName, const rtl_TextEncoding eTextencoding)
 {
     rStrm.WriteUInt16(0x001A); // id
     sal_Int32 n = streamName.getLength(); // sizeOfStreamName
     rStrm.WriteUInt32(n);
-    exportString(rStrm, streamName); // StreamName
+    exportString(rStrm, streamName, eTextencoding); // StreamName
     rStrm.WriteUInt16(0x0032); // reserved
     rStrm.WriteUInt32(n * 2); // sizeOfStreamNameUnicode // TODO: better calculation for unicode string length
     exportUTF16String(rStrm, streamName); // StreamNameUnicode
@@ -715,11 +708,11 @@ void writeMODULETYPE(SvStream& rStrm, const sal_uInt16 type)
 }
 
 // section 2.3.4.2.3.2
-void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const sal_uInt16 type)
+void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const sal_uInt16 type, const rtl_TextEncoding eTextencoding)
 {
-    writeMODULENAME(rStrm, name);
+    writeMODULENAME(rStrm, name, eTextencoding);
     writeMODULENAMEUNICODE(rStrm, name);
-    writeMODULESTREAMNAME(rStrm, name);
+    writeMODULESTREAMNAME(rStrm, name, eTextencoding);
     writeMODULEDOCSTRING(rStrm);
     writeMODULEOFFSET(rStrm);
     writeMODULEHELPCONTEXT(rStrm);
@@ -730,7 +723,7 @@ void writePROJECTMODULE(SvStream& rStrm, const OUString& name, const sal_uInt16 
 }
 
 // section 2.3.4.2.3
-void writePROJECTMODULES(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibraryMap)
+void writePROJECTMODULES(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibraryMap, const rtl_TextEncoding eTextencoding)
 {
     const css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
@@ -748,18 +741,18 @@ void writePROJECTMODULES(SvStream& rStrm, const css::uno::Reference<css::contain
     {
         const OUString& rModuleName = aElementNames[rLibraryMap[i]];
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
-        writePROJECTMODULE(rStrm, rModuleName, aModuleInfo.ModuleType);
+        writePROJECTMODULE(rStrm, rModuleName, aModuleInfo.ModuleType, eTextencoding);
     }
 }
 
 // section 2.3.4.2
-void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibraryMap, const OUString& projectName)
+void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer, const std::vector<sal_Int32>& rLibraryMap, const OUString& projectName, const rtl_TextEncoding eTextencoding)
 {
     SvMemoryStream aDirStream(4096, 4096);
 
-    writePROJECTINFORMATION(aDirStream, projectName);
-    writePROJECTREFERENCES(aDirStream);
-    writePROJECTMODULES(aDirStream, xNameContainer, rLibraryMap);
+    writePROJECTINFORMATION(aDirStream, projectName, eTextencoding);
+    writePROJECTREFERENCES(aDirStream, eTextencoding);
+    writePROJECTMODULES(aDirStream, xNameContainer, rLibraryMap, eTextencoding);
     aDirStream.WriteUInt16(0x0010); // terminator
     aDirStream.WriteUInt32(0x00000000); // reserved
 
@@ -775,24 +768,24 @@ void exportDirStream(SvStream& rStrm, const css::uno::Reference<css::container::
 }
 
 // section 2.3.4.3 Module Stream
-void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName, css::script::ModuleInfo const & rInfo)
+void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUString& aElementName, css::script::ModuleInfo const & rInfo, const rtl_TextEncoding eTextencoding)
 {
     SvMemoryStream aModuleStream(4096, 4096);
 
-    exportString(aModuleStream, OUStringConcatenation("Attribute VB_Name = \"" + aElementName + "\"\r\n"));
+    exportString(aModuleStream, OUStringConcatenation("Attribute VB_Name = \"" + aElementName + "\"\r\n"), eTextencoding);
     if (rInfo.ModuleType == 4)
     {
         if (isWorkbook(rInfo.ModuleObject))
-            exportString(aModuleStream, u"Attribute VB_Base = \"0{00020819-0000-0000-C000-000000000046}\"\r\n");
+            exportString(aModuleStream, u"Attribute VB_Base = \"0{00020819-0000-0000-C000-000000000046}\"\r\n", eTextencoding);
         else
-            exportString(aModuleStream, u"Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n");
+            exportString(aModuleStream, u"Attribute VB_Base = \"0{00020820-0000-0000-C000-000000000046}\"\r\n", eTextencoding);
 
-        exportString(aModuleStream, u"Attribute VB_GlobalNameSpace = False\r\n");
-        exportString(aModuleStream, u"Attribute VB_Creatable = False\r\n");
-        exportString(aModuleStream, u"Attribute VB_PredeclaredId = True\r\n");
-        exportString(aModuleStream, u"Attribute VB_Exposed = True\r\n");
-        exportString(aModuleStream, u"Attribute VB_TemplateDerived = False\r\n");
-        exportString(aModuleStream, u"Attribute VB_Customizable = True\r\n");
+        exportString(aModuleStream, u"Attribute VB_GlobalNameSpace = False\r\n", eTextencoding);
+        exportString(aModuleStream, u"Attribute VB_Creatable = False\r\n", eTextencoding);
+        exportString(aModuleStream, u"Attribute VB_PredeclaredId = True\r\n", eTextencoding);
+        exportString(aModuleStream, u"Attribute VB_Exposed = True\r\n", eTextencoding);
+        exportString(aModuleStream, u"Attribute VB_TemplateDerived = False\r\n", eTextencoding);
+        exportString(aModuleStream, u"Attribute VB_Customizable = True\r\n", eTextencoding);
     }
     OUString aSourceCode = rSourceCode.replaceFirst("Option VBASupport 1\n", "");
     const sal_Int32 nPos = aSourceCode.indexOf("Rem Attribute VBA_ModuleType=");
@@ -800,7 +793,7 @@ void exportModuleStream(SvStream& rStrm, const OUString& rSourceCode, const OUSt
     if (nPos != -1 && nEndPos != -1)
         aSourceCode = aSourceCode.replaceAt(nPos, nEndPos - nPos+1, u"");
     aSourceCode = aSourceCode.replaceAll("\n", "\r\n");
-    exportString(aModuleStream, aSourceCode);
+    exportString(aModuleStream, aSourceCode, eTextencoding);
 
 #if VBA_EXPORT_DEBUG
     OUString aModuleFileName("/tmp/vba_" + aElementName + "_out.bin");
@@ -824,7 +817,7 @@ void exportVBAProjectStream(SvStream& rStrm)
 
 // section 2.3.1 PROJECT Stream
 void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::container::XNameContainer>& xNameContainer,
-        const OUString& projectName, const std::vector<sal_Int32>& rLibraryMap)
+        const OUString& projectName, const std::vector<sal_Int32>& rLibraryMap, const rtl_TextEncoding eTextencoding)
 {
     const css::uno::Sequence<OUString> aElementNames = xNameContainer->getElementNames();
     sal_Int32 n = aElementNames.getLength();
@@ -834,11 +827,11 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
     // section 2.3.1.1ProjectProperties
 
     // section 2.3.1.2 ProjectId
-    exportString(rStrm, u"ID=\"");
+    exportString(rStrm, u"ID=\"", eTextencoding);
     OUString aProjectID
         = OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8);
-    exportString(rStrm, aProjectID);
-    exportString(rStrm, u"\"\r\n");
+    exportString(rStrm, aProjectID, eTextencoding);
+    exportString(rStrm, u"\"\r\n", eTextencoding);
 
     // section 2.3.1.3 ProjectModule
     for (sal_Int32 i = 0; i < n; ++i)
@@ -847,94 +840,95 @@ void exportPROJECTStream(SvStream& rStrm, const css::uno::Reference<css::contain
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         if(aModuleInfo.ModuleType == 1)
         {
-            exportString(rStrm, OUStringConcatenation("Module=" + rModuleName + "\r\n"));
+            exportString(rStrm, OUStringConcatenation("Module=" + rModuleName + "\r\n"), eTextencoding);
         }
         else if(aModuleInfo.ModuleType == 4)
         {
-            exportString(rStrm, OUStringConcatenation("Document=" + rModuleName + "/&H00000000\r\n"));
+            exportString(rStrm, OUStringConcatenation("Document=" + rModuleName + "/&H00000000\r\n"), eTextencoding);
         }
     }
 
     // section 2.3.1.11 ProjectName
-    exportString(rStrm, OUStringConcatenation("Name=\"" + projectName + "\"\r\n"));
+    exportString(rStrm, OUStringConcatenation("Name=\"" + projectName + "\"\r\n"), eTextencoding);
 
     // section 2.3.1.12 ProjectHelpId
-    exportString(rStrm, u"HelpContextID=\"0\"\r\n");
+    exportString(rStrm, u"HelpContextID=\"0\"\r\n", eTextencoding);
 
     // section 2.3.1.14 ProjectVersionCompat32
-    exportString(rStrm, u"VersionCompatible32=\"393222000\"\r\n");
+    exportString(rStrm, u"VersionCompatible32=\"393222000\"\r\n", eTextencoding);
 
     // section 2.3.1.15 ProjectProtectionState
 #if VBA_ENCRYPTION
-    exportString(rStrm, u"CMG=\"");
+    exportString(rStrm, u"CMG=\"", eTextencoding);
     SvMemoryStream aProtectedStream(4096, 4096);
     aProtectedStream.WriteUInt32(0x00000000);
     const sal_uInt8* pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     sal_uInt8 nProjKey = VBAEncryption::calculateProjKey(aProjectID);
     VBAEncryption aProtectionState(pData, 4, rStrm, nProjKey);
-    aProtectionState.write();
-    exportString(rStrm, u"\"\r\n");
+    aProtectionState.write(eTextencoding);
+    exportString(rStrm, u"\"\r\n", eTextencoding);
 #else
-    exportString(rStrm, "CMG=\"BEBC9256EEAAA8AEA8AEA8AEA8AE\"\r\n");
+    exportString(rStrm, "CMG=\"BEBC9256EEAAA8AEA8AEA8AEA8AE\"\r\n", eTextencoding);
 #endif
 
     // section 2.3.1.16 ProjectPassword
 #if VBA_ENCRYPTION
-    exportString(rStrm, u"DPB=\"");
+    exportString(rStrm, u"DPB=\"", eTextencoding);
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0x00);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     VBAEncryption aProjectPassword(pData, 1, rStrm, nProjKey);
-    aProjectPassword.write();
-    exportString(rStrm, u"\"\r\n");
+    aProjectPassword.write(eTextencoding);
+    exportString(rStrm, u"\"\r\n", eTextencoding);
 #else
-    exportString(rStrm, "DPB=\"7C7E5014B0D3B1D3B1D3\"\r\n");
+    exportString(rStrm, "DPB=\"7C7E5014B0D3B1D3B1D3\"\r\n", eTextencoding);
 #endif
 
     // section 2.3.1.17 ProjectVisibilityState
 #if VBA_ENCRYPTION
-    exportString(rStrm, u"GC=\"");
+    exportString(rStrm, u"GC=\"", eTextencoding);
     aProtectedStream.Seek(0);
     aProtectedStream.WriteUInt8(0xFF);
     pData = static_cast<const sal_uInt8*>(aProtectedStream.GetData());
     VBAEncryption aVisibilityState(pData, 1, rStrm, nProjKey);
-    aVisibilityState.write();
-    exportString(rStrm, u"\"\r\n\r\n");
+    aVisibilityState.write(eTextencoding);
+    exportString(rStrm, u"\"\r\n\r\n", eTextencoding);
 #else
-    exportString(rStrm, "GC=\"3A3816DAD5DBD5DB2A\"\r\n\r\n");
+    exportString(rStrm, "GC=\"3A3816DAD5DBD5DB2A\"\r\n\r\n", eTextencoding);
 #endif
 
     // section 2.3.1.18 HostExtenders
-    exportString(rStrm, u"[Host Extender Info]\r\n"
-                        "&H00000001={3832D640-CF90-11CF-8E43-00A0C911005A};VBE;&H00000000\r\n\r\n"
-    );
+    exportString(rStrm,
+                 u"[Host Extender Info]\r\n"
+                 "&H00000001={3832D640-CF90-11CF-8E43-00A0C911005A};VBE;&H00000000\r\n\r\n",
+                 eTextencoding);
 
     // section 2.3.1.19 ProjectWorkspace
-    exportString(rStrm, u"[Workspace]\r\n");
+    exportString(rStrm, u"[Workspace]\r\n", eTextencoding);
     for (sal_Int32 i = 0; i < n; ++i)
     {
         const OUString& rModuleName = aElementNames[rLibraryMap[i]];
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         if(aModuleInfo.ModuleType == 1)
         {
-            exportString(rStrm,  OUStringConcatenation(rModuleName + "=25, 25, 1439, 639, \r\n"));
+            exportString(rStrm,  OUStringConcatenation(rModuleName + "=25, 25, 1439, 639, \r\n"), eTextencoding);
         }
         else
         {
-            exportString(rStrm, OUStringConcatenation(rModuleName + "=0, 0, 0, 0, C\r\n"));
+            exportString(rStrm, OUStringConcatenation(rModuleName + "=0, 0, 0, 0, C\r\n"), eTextencoding);
         }
     }
 }
 
 // section 2.3.3.1 NAMEMAP
 void writeNAMEMAP(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames,
-        const std::vector<sal_Int32>& rLibraryMap)
+        const std::vector<sal_Int32>& rLibraryMap, const rtl_TextEncoding eTextencoding)
 {
     int n = rElementNames.getLength();
     for(sal_Int32 i = 0; i < n; ++i)
     {
         const OUString& rModuleName = rElementNames[rLibraryMap[i]];
-        exportString(rStrm, rModuleName);
+        exportString(rStrm, rModuleName, eTextencoding);
         rStrm.WriteUInt8(0x00); // terminator
         exportUTF16String(rStrm, rModuleName);
         rStrm.WriteUInt16(0x0000); // terminator
@@ -943,9 +937,9 @@ void writeNAMEMAP(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementN
 
 // section 2.3.3 PROJECTwm Stream
 void exportPROJECTwmStream(SvStream& rStrm, const css::uno::Sequence<OUString>& rElementNames,
-        const std::vector<sal_Int32>& rLibraryMap)
+        const std::vector<sal_Int32>& rLibraryMap, const rtl_TextEncoding eTextencoding)
 {
-    writeNAMEMAP(rStrm, rElementNames, rLibraryMap);
+    writeNAMEMAP(rStrm, rElementNames, rLibraryMap, eTextencoding);
     rStrm.WriteUInt16(0x0000); // terminator
 }
 
@@ -1029,25 +1023,27 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
     tools::SvRef<SotStorageStream> pPROJECTStream = pRootStorage->OpenSotStream("PROJECT", StreamMode::READWRITE);
     tools::SvRef<SotStorageStream> pPROJECTwmStream = pRootStorage->OpenSotStream("PROJECTwm", StreamMode::READWRITE);
 
+    const rtl_TextEncoding eTextencoding = getVBATextEncoding();
+
 #if VBA_USE_ORIGINAL_WM_STREAM
     OUString aProjectwmPath = "/home/moggi/Documents/testfiles/vba/PROJECTwm";
     addFileStreamToSotStream(aProjectwmPath, *pPROJECTwmStream);
 #else
-    exportPROJECTwmStream(*pPROJECTwmStream, aElementNames, aLibraryMap);
+    exportPROJECTwmStream(*pPROJECTwmStream, aElementNames, aLibraryMap, eTextencoding);
 #endif
 
 #if VBA_USE_ORIGINAL_DIR_STREAM
     OUString aDirPath = "/home/moggi/Documents/testfiles/vba/VBA/dir";
     addFileStreamToSotStream(aDirPath, *pDirStream);
 #else
-    exportDirStream(*pDirStream, xNameContainer, aLibraryMap, getProjectName());
+    exportDirStream(*pDirStream, xNameContainer, aLibraryMap, getProjectName(), eTextencoding);
 #endif
 
 #if VBA_USE_ORIGINAL_PROJECT_STREAM
     OUString aProjectPath = "/home/moggi/Documents/testfiles/vba/PROJECT";
     addFileStreamToSotStream(aProjectPath, *pPROJECTStream);
 #else
-    exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName(), aLibraryMap);
+    exportPROJECTStream(*pPROJECTStream, xNameContainer, getProjectName(), aLibraryMap, eTextencoding);
 #endif
 
 #if VBA_USE_ORIGINAL_VBA_PROJECT
@@ -1090,7 +1086,7 @@ void VbaExport::exportVBA(SotStorage* pRootStorage)
         css::script::ModuleInfo aModuleInfo = xModuleInfo->getModuleInfo(rModuleName);
         OUString aSourceCode;
         aCode >>= aSourceCode;
-        exportModuleStream(*pModuleStream, aSourceCode, rModuleName, aModuleInfo);
+        exportModuleStream(*pModuleStream, aSourceCode, rModuleName, aModuleInfo, eTextencoding);
         pModuleStream->Commit();
     }
 
@@ -1151,6 +1147,22 @@ OUString VbaExport::getProjectName() const
         return xVbaCompatibility->getProjectName();
 
     return OUString();
+}
+
+rtl_TextEncoding VbaExport::getVBATextEncoding() const
+{
+    rtl_TextEncoding aTextEncoding = osl_getThreadTextEncoding();
+    css::uno::Reference<css::beans::XPropertySet> xProps(getLibraryContainer(), css::uno::UNO_QUERY);
+    if (xProps.is())
+        try
+        {
+            xProps->getPropertyValue("VBATextEncoding") >>= aTextEncoding;
+        }
+        catch (const css::uno::Exception& )
+        {
+        }
+
+    return aTextEncoding;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
