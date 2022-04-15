@@ -181,6 +181,7 @@ class SfxLibraryContainer
     sal_Int32 mnRunningVBAScripts;
     bool mbVBACompat;
     OUString msProjectName;
+    rtl_TextEncoding msTextEncoding;
 protected:
     css::uno::Reference< css::uno::XComponentContext >       mxContext;
     css::uno::Reference< css::ucb::XSimpleFileAccess3 >      mxSFI;
@@ -290,6 +291,10 @@ protected:
     // Interface to get the BasicManager (Hack for password implementation)
     BasicManager* getBasicManager();
     OUString createAppLibraryFolder( SfxLibrary* pLib, std::u16string_view aName );
+
+    // Text encoding extracted from the code page
+    rtl_TextEncoding getTextEncoding() const;
+    void setTextEncoding(const rtl_TextEncoding nTextEncoding);
 
     void init( const OUString& rInitialDocumentURL,
                const css::uno::Reference< css::embed::XStorage >& _rxInitialStorage );

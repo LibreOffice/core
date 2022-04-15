@@ -1338,6 +1338,16 @@ OUString SfxLibraryContainer::createAppLibraryFolder( SfxLibrary* pLib, std::u16
     return aLibDirPath;
 }
 
+rtl_TextEncoding SfxLibraryContainer::getTextEncoding() const
+{
+   return msTextEncoding;
+}
+
+void SfxLibraryContainer::setTextEncoding(const rtl_TextEncoding nTextEncoding)
+{
+    msTextEncoding = nTextEncoding;
+}
+
 // Storing
 void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                                             std::u16string_view aName,

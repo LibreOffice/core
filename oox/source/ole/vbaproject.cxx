@@ -139,7 +139,8 @@ VbaProject::VbaProject( const Reference< XComponentContext >& rxContext,
     VbaFilterConfig( rxContext, rConfigCompName ),
     mxContext( rxContext ),
     mxDocModel( rxDocModel ),
-    maPrjName( "Standard" )
+    maPrjName( "Standard" ),
+    maTextEncoding(RTL_TEXTENCODING_MS_1252)
 {
     OSL_ENSURE( mxContext.is(), "VbaProject::VbaProject - missing component context" );
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
@@ -282,7 +283,6 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
     prepareImport();
 
     // read all records of the directory
-    rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_MS_1252;
     sal_uInt16 nModuleCount = 0;
     bool bExecutable = isImportVbaExecutable();
 
@@ -302,12 +302,12 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
                 rtl_TextEncoding eNewTextEnc = rtl_getTextEncodingFromWindowsCodePage( aRecStrm.readuInt16() );
                 OSL_ENSURE( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW, "VbaProject::importVba - unknown text encoding" );
                 if( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW )
-                    eTextEnc = eNewTextEnc;
+                    maTextEncoding = eNewTextEnc;
             }
             break;
             case VBA_ID_PROJECTNAME:
             {
-                OUString aPrjName = aRecStrm.readCharArrayUC( nRecSize, eTextEnc );
+                OUString aPrjName = aRecStrm.readCharArrayUC( nRecSize, maTextEncoding );
                 OSL_ENSURE( !aPrjName.isEmpty(), "VbaProject::importVba - invalid project name" );
                 if( !aPrjName.isEmpty() )
                     maPrjName = aPrjName;
@@ -320,11 +320,11 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
             break;
             case VBA_ID_MODULENAME:
             {
-                OUString aName = aRecStrm.readCharArrayUC( nRecSize, eTextEnc );
+                OUString aName = aRecStrm.readCharArrayUC( nRecSize, maTextEncoding );
                 OSL_ENSURE( !aName.isEmpty(), "VbaProject::importVba - invalid module name" );
                 OSL_ENSURE( !maModules.has( aName ), "VbaProject::importVba - multiple modules with the same name" );
                 VbaModuleMap::mapped_type& rxModule = maModules[ aName ];
-                rxModule = std::make_shared<VbaModule>( mxContext, mxDocModel, aName, eTextEnc, bExecutable );
+                rxModule = std::make_shared<VbaModule>( mxContext, mxDocModel, aName, maTextEncoding, bExecutable );
                 // read all remaining records until the MODULEEND record
                 rxModule->importDirRecords( aDirStrm );
                 OSL_ENSURE( !maModulesByStrm.has( rxModule->getStreamName() ), "VbaProject::importVba - multiple modules with the same stream name" );
@@ -360,7 +360,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
     // do not exit if this stream does not exist, but proceed to load the modules below
     if( !aPrjStrm.isEof() )
     {
-        TextInputStream aPrjTextStrm( mxContext, aPrjStrm, eTextEnc );
+        TextInputStream aPrjTextStrm( mxContext, aPrjStrm, maTextEncoding );
         OUString aKey, aValue;
         bool bExitLoop = false;
         while( !bExitLoop && !aPrjTextStrm.isEof() )

@@ -31,15 +31,7 @@
 #include <sot/storage.hxx>
 
 #include <comphelper/xmltools.hxx>
-
-#define USE_UTF8_CODEPAGE 0
-#if USE_UTF8_CODEPAGE
-#define CODEPAGE_MS 65001
-#define CODEPAGE RTL_TEXTENCODING_UTF8
-#else
-#define CODEPAGE_MS 1252
-#define CODEPAGE RTL_TEXTENCODING_MS_1252
-#endif
+#include <rtl/tencinfo.h>
 
 #define VBA_EXPORT_DEBUG 0
 #define VBA_USE_ORIGINAL_WM_STREAM 0
@@ -56,7 +48,7 @@ namespace {
 
 void exportString(SvStream& rStrm, std::u16string_view rString)
 {
-    OString aStringCorrectCodepage = OUStringToOString(rString, CODEPAGE);
+    OString aStringCorrectCodepage = OUStringToOString(rString, RTL_TEXTENCODING_UTF8);
     rStrm.WriteOString(aStringCorrectCodepage);
 }
 
@@ -512,7 +504,7 @@ void writePROJECTCODEPAGE(SvStream& rStrm)
 {
     rStrm.WriteUInt16(0x0003); // id
     rStrm.WriteUInt32(0x00000002); // size
-    rStrm.WriteUInt16(CODEPAGE_MS); // CodePage
+    rStrm.WriteUInt16(rtl_getWindowsCodePageFromTextEncoding(RTL_TEXTENCODING_UTF8)); // CodePage
 }
 
 //section 2.3.4.2.1.5
