@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa183d26_5818dc41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T18:53:28Z",
+      "side": 1,
+      "message": "Hi Mike! I tried to add the property set, but I have problems to create the getPropertySetInfo. The compiler tells me:\ncore/basic/source/uno/namecont.cxx(354): error C2512: \u0027comphelper::OPropertyContainer\u0027: no appropriate default constructor available\ncore\\include\\comphelper/propertycontainer.hxx(42): note: see declaration of \u0027comphelper::OPropertyContainer\u0027\ncore/basic/source/uno/namecont.cxx(373): error C2385: ambiguous access of \u0027rBHelper\u0027\ncore/basic/source/uno/namecont.cxx(373): note: could be the \u0027rBHelper\u0027 in base \u0027cppu::WeakComponentImplHelperBase\u0027\ncore/basic/source/uno/namecont.cxx(373): note: or could be the \u0027rBHelper\u0027 in base \u0027cppu::OPropertySetHelper\u0027\n\nand I don\u0027t know how to solve this issue 😞\n\nI could even create a local class like in https://opengrok.libreoffice.org/xref/core/xmloff/source/chart/ColorPropertySet.cxx?r\u003d14d61304#89, but Imho that is a little bit overkill. What do you think?\n",
+      "revId": "de4544388d3705766374f17427d088bc39dea779",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
