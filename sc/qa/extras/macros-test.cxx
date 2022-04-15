@@ -61,6 +61,7 @@ public:
     void testTdf128218();
     void testTdf71271();
     void testTdf43003();
+    void testTdf75263();
     void testTdf133887();
     void testTdf133889();
     void testTdf144970();
@@ -95,6 +96,7 @@ public:
     CPPUNIT_TEST(testTdf128218);
     CPPUNIT_TEST(testTdf71271);
     CPPUNIT_TEST(testTdf43003);
+    CPPUNIT_TEST(testTdf75263);
     CPPUNIT_TEST(testTdf133887);
     CPPUNIT_TEST(testTdf133889);
     CPPUNIT_TEST(testTdf144970);
@@ -809,6 +811,44 @@ void ScMacrosTest::testTdf43003()
     rDoc.SetValue(ScAddress(0, 0, 0), 2);
     CPPUNIT_ASSERT_EQUAL(3.0, rDoc.GetValue(ScAddress(1, 0, 0)));
     CPPUNIT_ASSERT_EQUAL(4.0, rDoc.GetValue(ScAddress(2, 0, 0)));
+
+    css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
+    xCloseable->close(true);
+}
+
+
+void ScMacrosTest::testTdf75263()
+{
+    OUString aFileName;
+    createFileURL(u"tdf75263.xlsm", aFileName);
+    uno::Reference<lang::XComponent> xComponent = loadFromDesktop(aFileName, "com.sun.star.sheet.SpreadsheetDocument");
+
+    {
+        SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+        CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+        ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+        ScDocument& rDoc = pDocSh->GetDocument();
+        rDoc.CalcAll();
+
+        // A1 contains formula with user-defined function, and the function is defined in VBA.
+        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), rDoc.GetString(ScAddress(0, 0, 0)));
+    }
+
+    saveAndReload(xComponent, "Calc MS Excel 2007 VBA XML");
+    CPPUNIT_ASSERT(xComponent);
+
+    {
+        SfxObjectShell* pFoundShell = SfxObjectShell::GetShellFromComponent(xComponent);
+        CPPUNIT_ASSERT_MESSAGE("Failed to access document shell", pFoundShell);
+        ScDocShell* pDocSh = static_cast<ScDocShell*>(pFoundShell);
+        ScDocument& rDoc = pDocSh->GetDocument();
+        rDoc.CalcAll();
+
+        // Without the accompanying fix in place, this test would have failed with:
+        // - Expected: проба (sample)
+        // - Actual  : ?????
+        CPPUNIT_ASSERT_EQUAL(OUString(u"проба"), rDoc.GetString(ScAddress(0, 0, 0)));
+    }
 
     css::uno::Reference<css::util::XCloseable> xCloseable(xComponent, css::uno::UNO_QUERY_THROW);
     xCloseable->close(true);

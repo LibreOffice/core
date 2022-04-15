@@ -54,6 +54,8 @@
 #include <com/sun/star/sheet/XHeaderFooterContent.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
+#include <tokenstringcontext.hxx>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
