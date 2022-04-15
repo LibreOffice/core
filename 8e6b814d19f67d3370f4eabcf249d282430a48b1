@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "71a9e565_10cf128f",
+        "filename": "idlc/inc/astbasetype.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-15T07:06:48Z",
+      "side": 1,
+      "message": "Remove this extra blank line",
+      "revId": "8e6b814d19f67d3370f4eabcf249d282430a48b1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
