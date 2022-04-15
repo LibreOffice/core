@@ -18,8 +18,6 @@
 
 namespace {
 
-constexpr OUStringLiteral KARASA_JAGA_ID(u"karasa_jaga");
-constexpr OUStringLiteral KARASA_JAGA_DISPLAY_NAME(u"Karasa Jaga");
 constexpr OUStringLiteral HELPIMG_FAKE_THEME(u"helpimg");
 
 OUString
@@ -124,19 +122,15 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
     if (!bIsSvg && bIsDark)
         bIsSvg = aDisplayName.endsWith("_svg", &aDisplayName);
 
-    // special cases
-    if (aDisplayName.equalsIgnoreAsciiCase(KARASA_JAGA_ID)) {
-        aDisplayName = KARASA_JAGA_DISPLAY_NAME;
-    }
-    else
+    // make the first letter uppercase
+    sal_Unicode firstLetter = aDisplayName[0];
+    if (rtl::isAsciiLowerCase(firstLetter))
     {
-        // make the first letter uppercase
-        sal_Unicode firstLetter = aDisplayName[0];
-        if (rtl::isAsciiLowerCase(firstLetter))
-        {
-            aDisplayName = OUStringChar(sal_Unicode(rtl::toAsciiUpperCase(firstLetter))) + aDisplayName.subView(1);
-        }
+        aDisplayName = OUStringChar(sal_Unicode(rtl::toAsciiUpperCase(firstLetter))) + aDisplayName.subView(1);
     }
+
+    // replacing underscores with spaces of multi words pack name.
+    aDisplayName = aDisplayName.replace('_', ' ');
 
     if (bIsSvg && bIsDark)
         aDisplayName += " (SVG + dark)";
