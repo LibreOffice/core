@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "122b91a5_d0b0399e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000130
+      },
+      "writtenOn": "2022-04-15T10:47:27Z",
+      "side": 1,
+      "message": "Jenkins\u0027 Verfified got lost due to the commit message update.\nAlso verified that it works with\nii  libicu-dev:amd64 71.1-1       amd64        Development files for International Components for Unicode\nout of Debian experimental\n",
+      "revId": "ed05a3353844d6737341947bd57875c6c6d24ccb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
