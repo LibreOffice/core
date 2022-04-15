@@ -20,6 +20,57 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9fdf6ea6_096f74b4",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T13:48:17Z",
+      "side": 1,
+      "message": "Why do you remove XServiceInfo? Just add XPropertySet in addition to the XServiceInfo. Or is there some problem here?",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b650653_294397b7",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T13:48:17Z",
+      "side": 1,
+      "message": "The value is likely needed to store the encoding - why drop it?\n\nOr maybe it\u0027s even unrelated to the issue here; you might possibly need to add another value like m_eVBAEncoding.",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26aea102_ed9b51ef",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T13:48:17Z",
+      "side": 1,
+      "message": "These likely are used somewhere?",
+      "revId": "5221dc1ed271952063a20a6e1dbf06103df13530",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6ab6e002_2747c38d",
         "filename": "oox/source/ole/vbaproject.cxx",
         "patchSetId": 2

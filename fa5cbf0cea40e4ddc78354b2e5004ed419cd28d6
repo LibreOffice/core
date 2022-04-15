@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1d8716c_b94fab73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T13:48:17Z",
+      "side": 1,
+      "message": "Yes, you are on the right track! 👍🏻",
+      "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4feb0014_3cb3b5c6",
+        "filename": "basic/source/inc/namecont.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T13:48:17Z",
+      "side": 1,
+      "message": "I don\u0027t think it\u0027s needed here. You implement the interface in the methods yourself, not delegating to another object.",
+      "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c3be714_6582b1bc",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2873,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T13:48:17Z",
+      "side": 1,
+      "message": "Here I\u0027d just throw \"not supported\" exception: you are not required to implement them all.",
+      "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf383447_3bb98812",
+        "filename": "basic/source/uno/namecont.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 2874,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-15T13:48:17Z",
+      "side": 1,
+      "message": "And here, you implement setPropertyValue (accepting only one property, and throwing illegal argument on anything else) that would store the value in msTextEncoding or in m_eVBAEncoding; and getPropertyValue (also only accepting one property name) that would return the value - to be used in export.",
+      "revId": "fa5cbf0cea40e4ddc78354b2e5004ed419cd28d6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
