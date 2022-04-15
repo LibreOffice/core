@@ -10,6 +10,7 @@
 
 #include <vcl/font/FeatureParser.hxx>
 #include <vcl/font/Feature.hxx>
+#include <o3tl/string_view.hxx>
 
 namespace vcl::font
 {
@@ -30,18 +31,18 @@ FeatureParser::FeatureParser(std::u16string_view rFontName)
     if (nPrefixIdx == std::u16string_view::npos)
         return;
 
-    OUString sName(rFontName.substr(++nPrefixIdx));
+    std::u16string_view sName(rFontName.substr(++nPrefixIdx));
     sal_Int32 nIndex = 0;
     do
     {
-        OUString sToken = sName.getToken(0, vcl::font::FeatureSeparator, nIndex);
+        std::u16string_view sToken = o3tl::getToken(sName, 0, vcl::font::FeatureSeparator, nIndex);
 
         sal_Int32 nInnerIdx{ 0 };
-        OUString sID = sToken.getToken(0, '=', nInnerIdx);
+        std::u16string_view sID = o3tl::getToken(sToken, 0, '=', nInnerIdx);
 
-        if (sID == "lang")
+        if (sID == u"lang")
         {
-            m_sLanguage = sToken.getToken(0, '=', nInnerIdx);
+            m_sLanguage = o3tl::getToken(sToken, 0, '=', nInnerIdx);
         }
         else
         {

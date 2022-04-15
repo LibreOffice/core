@@ -46,7 +46,7 @@ DragMethod_PieSegment::DragMethod_PieSegment( DrawViewWrapper& rDrawViewWrapper
     , m_aDragDirection(1000.0,1000.0)
     , m_fDragRange( 1.0 )
 {
-    OUString aParameter( ObjectIdentifier::getDragParameterString( m_aObjectCID ) );
+    std::u16string_view aParameter( ObjectIdentifier::getDragParameterString( m_aObjectCID ) );
 
     sal_Int32 nOffsetPercent(0);
     awt::Point aMinimumPosition(0,0);

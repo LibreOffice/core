@@ -302,10 +302,10 @@ OUString ObjectIdentifier::createClassifiedIdentifierForObject(
     OUString aRet;
 
     enum ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
-    const OUString aObjectID;
+    const std::u16string_view aObjectID;
     OUString aParentParticle;
-    const OUString aDragMethodServiceName;
-    const OUString aDragParameterString;
+    const std::u16string_view aDragMethodServiceName;
+    const std::u16string_view aDragParameterString;
 
     try
     {
@@ -697,8 +697,8 @@ bool ObjectIdentifier::isDragableObject( std::u16string_view rClassifiedIdentifi
             bReturn = true;
             break;
         default:
-            OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( rClassifiedIdentifier ) );
-            bReturn = !aDragMethodServiceName.isEmpty();
+            std::u16string_view aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( rClassifiedIdentifier ) );
+            bReturn = !aDragMethodServiceName.empty();
             break;
     }
     return bReturn;
@@ -761,10 +761,10 @@ bool ObjectIdentifier::areSiblings( const OUString& rCID1, const OUString& rCID2
         bRet=false;
     else
     {
-        OUString aParent1( ObjectIdentifier::getFullParentParticle( rCID1 ) );
-        if( !aParent1.isEmpty() )
+        std::u16string_view aParent1( ObjectIdentifier::getFullParentParticle( rCID1 ) );
+        if( !aParent1.empty() )
         {
-            OUString aParent2( ObjectIdentifier::getFullParentParticle( rCID2 ) );
+            std::u16string_view aParent2( ObjectIdentifier::getFullParentParticle( rCID2 ) );
             bRet=aParent1 == aParent2;
         }
         //legend entries are special:

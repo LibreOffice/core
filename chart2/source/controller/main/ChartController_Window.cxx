@@ -711,7 +711,7 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         }
         else
         {
-            OUString aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) );
+            std::u16string_view aDragMethodServiceName( ObjectIdentifier::getDragMethodServiceName( m_aSelection.getSelectedCID() ) );
             if( aDragMethodServiceName == ObjectIdentifier::getPieSegmentDragMethodServiceName() )
                 pDragMethod = new DragMethod_PieSegment( *pDrawViewWrapper, m_aSelection.getSelectedCID(), getChartModel() );
         }
@@ -1420,7 +1420,7 @@ bool ChartController::execute_KeyInput( const KeyEvent& rKEvt )
                 nCode == KEY_DOWN )
             {
                 bDrag = true;
-                OUString aParameter( ObjectIdentifier::getDragParameterString( m_aSelection.getSelectedCID() ));
+                std::u16string_view aParameter( ObjectIdentifier::getDragParameterString( m_aSelection.getSelectedCID() ));
                 sal_Int32 nOffsetPercentDummy( 0 );
                 awt::Point aMinimumPosition( 0, 0 );
                 awt::Point aMaximumPosition( 0, 0 );

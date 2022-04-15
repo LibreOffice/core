@@ -975,7 +975,7 @@ void LocalizationMgr::resetResourceForDialog( const Reference< container::XNameC
         return;
 
     // Dialog as control
-    OUString aDummyName;
+    std::u16string_view aDummyName;
     Any aDialogCtrl;
     aDialogCtrl <<= xDialogModel;
     Reference< XStringResourceResolver > xDummyStringResolver;
@@ -1002,7 +1002,7 @@ void LocalizationMgr::setResourceIDsForDialog( const Reference< container::XName
         return;
 
     // Dialog as control
-    OUString aDummyName;
+    std::u16string_view aDummyName;
     Any aDialogCtrl;
     aDialogCtrl <<= xDialogModel;
     Reference< XStringResourceResolver > xDummyStringResolver;
@@ -1084,7 +1084,7 @@ void LocalizationMgr::copyResourceForDialog(
     if( !xDialogModel.is() || !xSourceStringResolver.is() || !xTargetStringResourceManager.is() )
         return;
 
-    OUString aDummyName;
+    std::u16string_view aDummyName;
     Any aDialogCtrl;
     aDialogCtrl <<= xDialogModel;
     implHandleControlResourceProperties
