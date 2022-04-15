@@ -51,6 +51,24 @@
       "parentUuid": "8696ba61_2849b9ec",
       "revId": "66f994a402c500551995f8eec5c391d6819b7776",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e7bc40f_dbcf1c9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-15T09:05:22Z",
+      "side": 1,
+      "message": "I mean that I can open the file from the bug report in MS, but it doesn\u0027t show any of the characters (just question marks). After the save using the utf8 charset, I can open the file in MS as before, but it shows different characters (ïðîáà).",
+      "parentUuid": "eb4e18be_d3d426cf",
+      "revId": "66f994a402c500551995f8eec5c391d6819b7776",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
