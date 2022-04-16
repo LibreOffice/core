@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03d3c9c6_df83211e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-16T14:28:36Z",
+      "side": 1,
+      "message": "I do not understand why could it be so; but please let\u0027s start from minimization of the change - please see inline.",
+      "revId": "32fe66c386b2fe50ec13c234656931f048228208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02c54a2f_b85b75af",
