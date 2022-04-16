@@ -35,8 +35,8 @@ class Test(UITestCase):
                     xFontTransparency.executeAction("UP", tuple())
 
             # Verify the result.
-            drawPage = component.getDrawPages().getByIndex(0)
-            shape = drawPage.getByIndex(0)
+            drawPage = component.getDrawPages()[0]
+            shape = drawPage[0]
 
             # Without the accompanying fix in place, this test would have failed with:
             # AssertionError: 100 != 5

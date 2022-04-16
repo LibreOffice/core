@@ -50,8 +50,8 @@ class tdf144940(UITestCase):
 
             with self.ui_test.load_file(systemPathToFileUrl(xFilePath)) as document:
 
-                xPageStyles = document.StyleFamilies.getByIndex(1)
-                xDefaultPageStyle = xPageStyles.getByIndex(0)
+                xPageStyles = document.StyleFamilies[1]
+                xDefaultPageStyle = xPageStyles[0]
 
                 # Without the fix in place, this test would have failed with
                 # AssertionError: False is not true
