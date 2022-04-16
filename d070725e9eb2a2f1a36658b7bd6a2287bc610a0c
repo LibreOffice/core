@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4aab4e28_6a128d76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-16T13:28:06Z",
+      "side": 1,
+      "message": "I\u0027d start simply with adding an argument to all such functions. That would match KISS principle :-)",
+      "parentUuid": "d081029e_e7cc35c6",
+      "revId": "d070725e9eb2a2f1a36658b7bd6a2287bc610a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50a89191_06c8307c",
         "filename": "oox/source/ole/vbaexport.cxx",
         "patchSetId": 7
