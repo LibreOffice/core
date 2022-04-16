@@ -4242,7 +4242,23 @@ public:
 
     virtual void call_attention_to() override
     {
-        m_xFlashAttention.reset(new FlashAttention(m_pWidget));
+#if !GTK_CHECK_VERSION(4, 0, 0)
+//        OString sFoo("* { transition: 300ms ease-in-out; border-color: yellow; }");
+//        OString sFoo("* { transition-property: color, background-color, border-color, background-image, padding, border-width; transition-duration: 1s; } * { padding: 12px 12px; color: #4870bc; }");
+//        OString sFoo("* { transition-property: color, background-color, border-color, background-image, padding, border-width; transition-duration: 1s; font: 20px Cantarell; } * { padding: 12px 48px; background-color: #4870bc; }");
+//        OString sFoo("* { color: rgba(255,255,255,0); transition: 500ms ease-in-out; }");
+//        OString sFoo("@keyframes wobble { 0% { padding: 1px; } 40% { padding: 5px; } 60% { padding: 15px; } 100% { padding: 1px; } } * { animation-name: wobble; animation-duration: 1s; animation-timing-function: linear; animation-iteration-count: infinite; }");
+        OString sFoo("@keyframes wobble { 0% { margin-left: 0px; margin-right: 0px } 50% { margin-left: 15px; margin-right: 15px} 100% { margin-left: 0px; margin-right: 0px } } * { animation-name: wobble; animation-duration: 1s; animation-timing-function: linear; animation-iteration-count: 2; }");
+
+        GtkCssProvider* m_pScrollBarCssProvider = gtk_css_provider_new();
+        css_provider_load_from_data(m_pScrollBarCssProvider, sFoo.getStr(), sFoo.getLength());
+        GtkStyleContext *pVertContext = gtk_widget_get_style_context(m_pWidget);
+        gtk_style_context_add_provider(pVertContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider),
+                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+//        gtk_style_context_remove_provider(pVertContext, GTK_STYLE_PROVIDER(m_pScrollBarCssProvider));
+
+        //m_xFlashAttention.reset(new FlashAttention(m_pWidget));
+#endif
     }
 
     virtual void set_stack_background() override
