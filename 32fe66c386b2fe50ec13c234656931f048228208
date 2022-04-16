@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02c54a2f_b85b75af",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-16T14:21:56Z",
+      "side": 1,
+      "message": "I don\u0027t know what it causes it, but many times during testing, this method fails calling BasicManager* pBasMgr \u003d getBasicManager();, and as a consequence the save process fails as well. However, if I debug it and wait for 1 or 2 seconds it works.",
+      "revId": "32fe66c386b2fe50ec13c234656931f048228208",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
