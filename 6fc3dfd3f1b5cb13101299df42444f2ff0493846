@@ -52,6 +52,24 @@
       "parentUuid": "9199498d_74ecdd75",
       "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4095752a_a29ab166",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-16T20:15:13Z",
+      "side": 0,
+      "message": "Hmm, putting breakpoints to the \u0027throw NoSupportException()\u0027 lines, I see that the one in getPropertySetInfo get triggered on loading the document. Maybe try to not throw there, but just return empty reference {} - so that calling code (Implementation::inspect in stoc/source/inspect/introspection.cxx) could gracefully handle that.",
+      "parentUuid": "339732f2_8298c229",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
