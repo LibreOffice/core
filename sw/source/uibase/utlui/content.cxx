@@ -1763,7 +1763,7 @@ IMPL_LINK(SwContentTree, CommandHdl, const CommandEvent&, rCEvt, bool)
         xPop->remove("sort");
 
     bool bSetSensitiveCollapseAllCategories = false;
-    if (!m_bIsRoot)
+    if (!m_bIsRoot && xEntry)
     {
         bool bEntry = m_xTreeView->get_iter_first(*xEntry);
         while (bEntry)
