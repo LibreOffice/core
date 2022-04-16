@@ -16,6 +16,24 @@
       "message": "You don\u0027t need XLibraryContainer to query for XPropertySet; please revert all changes here (including whitespace-only changes in catch clauses below), and simply add\n\n    uno::Reference\u003cbeans::XPropertySet\u003e xProps(xVBACompat, uno::UNO_QUERY_THROW);\n\nso that you query the XVBACompatibility obtained here. That would minimize the change.",
       "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9199498d_74ecdd75",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-16T14:45:18Z",
+      "side": 0,
+      "message": "No change 😕\nIt fails in ImplRepository::impl_createManagerForModel on _out_rpBasicManager-\u003eSetLibraryContainerInfo( aInfo );\n\nBut not reliable ...",
+      "parentUuid": "505e0b14_278b11f5",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
