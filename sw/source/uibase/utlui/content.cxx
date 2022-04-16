@@ -602,8 +602,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                         OUString sExpandField = pField->ExpandField(true, m_pWrtShell->GetLayout());
                         if (!sExpandField.isEmpty())
                             sExpandField = u" - " + sExpandField;
-                        OUString sText = pField->GetDescription() + u" - " + pField->GetFieldName()
-                                + sExpandField;
+                        OUString sText;
                         if (pField->GetTypeId() == SwFieldTypesEnum::DocumentStatistics)
                         {
                             OUString sSubType;
@@ -612,6 +611,22 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                             sText = pField->GetDescription() + u" - " + pField->GetFieldName()
                                     + sSubType + sExpandField;
                         }
+                        else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
+                        {
+                            OUString sFieldSubTypeOrName;
+                            auto nSubType = pField->GetSubType();
+                            if (nSubType == REF_FOOTNOTE)
+                                sFieldSubTypeOrName = SwResId(STR_FLDREF_FOOTNOTE);
+                            else if (nSubType == REF_ENDNOTE)
+                                sFieldSubTypeOrName = SwResId(STR_FLDREF_ENDNOTE);
+                            else
+                                sFieldSubTypeOrName = pField->GetFieldName();
+                            sText = pField->GetDescription() + u" - " + sFieldSubTypeOrName
+                                    + sExpandField;
+                        }
+                        else
+                            sText = pField->GetDescription() + u" - " + pField->GetFieldName()
+                                    + sExpandField;
                         auto pCnt(std::make_unique<SwTextFieldContent>(this, sText, pFormatField,
                             m_bAlphabeticSort ? 0 : pTextField->GetTextNode().GetIndex().get()));
                         if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
