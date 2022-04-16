@@ -35,6 +35,7 @@
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/app.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 using namespace com::sun::star;
@@ -701,11 +702,11 @@ bool ScFormatRangeStyles::AddStyleName(OUString const & rString, sal_Int32& rInd
     }
 }
 
-sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix, bool& bIsAutoStyle)
+sal_Int32 ScFormatRangeStyles::GetIndexOfStyleName(std::u16string_view rString, const OUString& rPrefix, bool& bIsAutoStyle)
 {
     sal_Int32 nPrefixLength(rPrefix.getLength());
-    OUString sTemp(rString.copy(nPrefixLength));
-    sal_Int32 nIndex(sTemp.toInt32());
+    std::u16string_view sTemp(rString.substr(nPrefixLength));
+    sal_Int32 nIndex(o3tl::toInt32(sTemp));
     if (nIndex > 0 && o3tl::make_unsigned(nIndex-1) < aAutoStyleNames.size() && aAutoStyleNames.at(nIndex - 1) == rString)
     {
         bIsAutoStyle = true;
@@ -913,11 +914,11 @@ sal_Int32 ScColumnRowStylesBase::AddStyleName(const OUString & rString)
     return aStyleNames.size() - 1;
 }
 
-sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const OUString& rString, const OUString& rPrefix)
+sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(std::u16string_view rString, const OUString& rPrefix)
 {
     sal_Int32 nPrefixLength(rPrefix.getLength());
-    OUString sTemp(rString.copy(nPrefixLength));
-    sal_Int32 nIndex(sTemp.toInt32());
+    std::u16string_view sTemp(rString.substr(nPrefixLength));
+    sal_Int32 nIndex(o3tl::toInt32(sTemp));
     if (nIndex > 0 && o3tl::make_unsigned(nIndex-1) < aStyleNames.size() && aStyleNames.at(nIndex - 1) == rString)
         return nIndex - 1;
     else
