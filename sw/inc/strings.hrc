@@ -416,6 +416,8 @@
 #define STR_HIDDEN_CHANGES_DETAIL2              NC_("STR_HIDDEN_CHANGES_DETAIL2", "Recording of changes is enabled.")
 #define STR_HIDDEN_CHANGES_DETAIL3              NC_("STR_HIDDEN_CHANGES_DETAIL3", "Document contains tracked changes.")
 #define STR_HEADER_FOOTER                       NC_("STR_HEADER_FOOTER", "Header/Footer")
+#define STR_FLDREF_FOOTNOTE                     NC_("STR_FLDREF_FOOTNOTE", "Footnote")
+#define STR_FLDREF_ENDNOTE                      NC_("STR_FLDREF_ENDNOTE", "Endnote")
 
 // Undo
 #define STR_CANT_UNDO                           NC_("STR_CANT_UNDO", "not possible")
