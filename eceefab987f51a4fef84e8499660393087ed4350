@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27704f76_9b42f1aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-16T18:44:13Z",
+      "side": 1,
+      "message": "Was it a mistake to choose libreoffice-7-3 instead of master for the branch?",
+      "revId": "eceefab987f51a4fef84e8499660393087ed4350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
