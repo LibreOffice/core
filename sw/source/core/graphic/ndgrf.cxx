@@ -49,6 +49,7 @@
 
 #include <rtl/ustring.hxx>
 #include <o3tl/deleter.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <retrieveinputstreamconsumer.hxx>
 #include <drawinglayer/processor2d/objectinfoextractor2d.hxx>
@@ -563,7 +564,7 @@ bool SwGrfNode::RestorePersistentData()
     return true;
 }
 
-void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
+void SwGrfNode::InsertLink( std::u16string_view rGrfName, const OUString& rFltName )
 {
     mxLink = new SwBaseLink( SfxLinkUpdateMode::ONCALL, SotClipboardFormatId::GDIMETAFILE, this );
 
@@ -575,9 +576,9 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
     if( rFltName == "DDE" )
     {
         sal_Int32 nTmp = 0;
-        const OUString sApp{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
-        const OUString sTopic{ rGrfName.getToken( 0, sfx2::cTokenSeparator, nTmp ) };
-        const OUString sItem{ rGrfName.copy( nTmp ) };
+        const OUString sApp{ o3tl::getToken(rGrfName, 0, sfx2::cTokenSeparator, nTmp ) };
+        const OUString sTopic{ o3tl::getToken(rGrfName, 0, sfx2::cTokenSeparator, nTmp ) };
+        const OUString sItem{ rGrfName.substr( nTmp ) };
         rIDLA.GetLinkManager().InsertDDELink( mxLink.get(), sApp, sTopic, sItem );
     }
     else
