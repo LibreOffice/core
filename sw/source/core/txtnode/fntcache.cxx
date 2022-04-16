@@ -1598,6 +1598,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                         nSpaceSum += nHalfSpace;
                 }
 
+                tools::Long nOldValue = aKernArray[i-1];
+
                 cChPrev = nCh;
                 aKernArray[i-1] += nKernSum + nSpaceSum;
                 // In word line mode and for Arabic, we disabled the half space trick. If a portion
@@ -1606,10 +1608,22 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // nSpaceAdd value again:
                 if ((bNoHalfSpace || m_pPrtFont->IsWordLineMode()) && i+1 == sal_Int32(nCnt) && nCh == CH_BLANK)
                     aKernArray[i-1] = aKernArray[i-1] - nSpaceAdd;
+
+                // Some glyph items use more than one sal_Unicode, eg. CJK ideograph extensions
+                // or unicode IVS. Don't assign space multiple times in case the orginal text array
+                // have the same values.
+                while(i < sal_Int32(nCnt) && aKernArray[i] == nOldValue)
+                {
+                    aKernArray[i] = aKernArray[i-1];
+                    ++i;
+                }
             }
 
             // the layout engine requires the total width of the output
-            aKernArray[sal_Int32(rInf.GetLen()) - 1] += nKernSum + nSpaceSum;
+            tools::Long nOldValue = aKernArray[sal_Int32(rInf.GetLen()) - 1];
+            for(sal_Int32 i = sal_Int32(rInf.GetLen()) - 1; i >= 0 && aKernArray[i] == nOldValue; --i)
+                aKernArray[i] += nKernSum + nSpaceSum;
+
 
             if( rInf.GetGreyWave() )
             {
@@ -1906,8 +1920,23 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     if (nLn)
     {
         aTextSize.setWidth(aKernArray[sal_Int32(nLn) - 1]);
+
+        // Note that we can't simply use sal_Int(nLn) - 1 as nSpaceCount
+        // because a glyph may be made up of more than one characters.
+        sal_Int32 nSpaceCount = 0;
+        tools::Long nOldValue = aKernArray[0];
+
+        for(sal_Int32 i = 1; i < sal_Int32(nLn); ++i)
+        {
+            if (nOldValue != aKernArray[i])
+            {
+                ++nSpaceCount;
+                nOldValue = aKernArray[i];
+            }
+        }
+
         if (rInf.GetKern())
-            aTextSize.AdjustWidth((sal_Int32(nLn) - 1) * rInf.GetKern());
+            aTextSize.AdjustWidth(nSpaceCount * rInf.GetKern());
     }
 
     OSL_ENSURE( !rInf.GetShell() ||
