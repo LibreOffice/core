@@ -219,7 +219,7 @@ class SwCalc
     SwSbxValue  StdFunc(pfCalc pFnc, bool bChkTrig);
 
     static OUString  GetColumnName( const OUString& rName );
-    OUString  GetDBName( const OUString& rName );
+    OUString  GetDBName( std::u16string_view rName );
 
     SwCalc( const SwCalc& ) = delete;
     SwCalc& operator=( const SwCalc& ) = delete;

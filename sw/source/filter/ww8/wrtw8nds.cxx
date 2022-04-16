@@ -1200,30 +1200,30 @@ bool WW8AttributeOutput::EndURL(bool const)
     return true;
 }
 
-OUString BookmarkToWord(const OUString &rBookmark, bool* pIsMove, bool* pIsFrom)
+OUString BookmarkToWord(std::u16string_view rBookmark, bool* pIsMove, bool* pIsFrom)
 {
     sal_Int32 nTrim = 0; // position to remove "__RefMoveRange" from bookmark names
     if ( pIsMove )
     {
         static constexpr OUStringLiteral MoveFrom_Bookmark_NamePrefix = u"__RefMoveFrom__";
         static constexpr OUStringLiteral MoveTo_Bookmark_NamePrefix = u"__RefMoveTo__";
-        if ( rBookmark.startsWith(MoveFrom_Bookmark_NamePrefix) )
+        if ( o3tl::starts_with(rBookmark, MoveFrom_Bookmark_NamePrefix) )
         {
             *pIsMove = true;
             *pIsFrom = true;
             nTrim = MoveFrom_Bookmark_NamePrefix.getLength();
         }
-        else if ( rBookmark.startsWith(MoveTo_Bookmark_NamePrefix) )
+        else if ( o3tl::starts_with(rBookmark, MoveTo_Bookmark_NamePrefix) )
         {
             *pIsMove = true;
             *pIsFrom = false;
             nTrim = MoveTo_Bookmark_NamePrefix.getLength();
         }
     }
-    OUString sRet(INetURLObject::encode(
-        rBookmark.copy(nTrim).replace(' ', '_'), // Spaces are prohibited in bookmark name
+    OUString sRet = INetURLObject::encode(
+        OUString(rBookmark.substr(nTrim)).replace(' ', '_'), // Spaces are prohibited in bookmark name
         INetURLObject::PART_REL_SEGMENT_EXTRA,
-        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US));
+        INetURLObject::EncodeMechanism::All, RTL_TEXTENCODING_ASCII_US);
     // Unicode letters are allowed
     sRet = INetURLObject::decode(sRet, INetURLObject::DecodeMechanism::Unambiguous, RTL_TEXTENCODING_UTF8);
     return TruncateBookmark(sRet);

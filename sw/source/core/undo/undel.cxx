@@ -659,7 +659,7 @@ static bool lcl_IsSpecialCharacter(sal_Unicode nChar)
     return false;
 }
 
-static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_Int32 nEnd, bool bQuoted)
+static OUString lcl_DenotedPortion(std::u16string_view rStr, sal_Int32 nStart, sal_Int32 nEnd, bool bQuoted)
 {
     OUString aResult;
 
@@ -704,11 +704,11 @@ static OUString lcl_DenotedPortion(const OUString& rStr, sal_Int32 nStart, sal_I
         else if (bQuoted)
         {
             aResult = SwResId(STR_START_QUOTE) +
-                rStr.subView(nStart, nCount) +
+                rStr.substr(nStart, nCount) +
                 SwResId(STR_END_QUOTE);
         }
         else
-            aResult = rStr.copy(nStart, nCount);
+            aResult = rStr.substr(nStart, nCount);
     }
 
     return aResult;

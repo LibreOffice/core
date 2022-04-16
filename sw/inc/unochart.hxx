@@ -137,9 +137,9 @@ class SwChartDataProvider final :
     css::uno::Reference< css::chart2::data::XDataSource > Impl_createDataSource( const css::uno::Sequence< css::beans::PropertyValue >& aArguments, bool bTestOnly = false );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::chart2::data::XDataSequence > Impl_createDataSequenceByRangeRepresentation( const OUString& aRangeRepresentation, bool bTestOnly = false );
+    css::uno::Reference< css::chart2::data::XDataSequence > Impl_createDataSequenceByRangeRepresentation( std::u16string_view aRangeRepresentation, bool bTestOnly = false );
 
-    static OUString GetBrokenCellRangeForExport( const OUString &rCellRangeRepresentation );
+    static OUString GetBrokenCellRangeForExport( std::u16string_view rCellRangeRepresentation );
 
 public:
     SwChartDataProvider( const SwDoc& rDoc );
