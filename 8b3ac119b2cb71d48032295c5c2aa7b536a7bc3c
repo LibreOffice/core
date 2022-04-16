@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7007bcf_83bfa30e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-04-16T20:35:57Z",
+      "side": 1,
+      "message": "Ready if needed. It does what has been asked but there is ongoing discussion on weather this is better than the current footnotes and endnotes handling. Thanks Dhiraj!",
+      "revId": "8b3ac119b2cb71d48032295c5c2aa7b536a7bc3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
