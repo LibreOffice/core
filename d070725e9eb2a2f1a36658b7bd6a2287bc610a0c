@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d081029e_e7cc35c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-16T12:50:07Z",
+      "side": 1,
+      "message": "Is it worth to create a base class, i.e., VBAExportBase, which holds the encoding and the export function, or should I just pass the encoding to every single function which needs it?",
+      "parentUuid": "ab112c40_86e54fcb",
+      "revId": "d070725e9eb2a2f1a36658b7bd6a2287bc610a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "50a89191_06c8307c",
         "filename": "oox/source/ole/vbaexport.cxx",
         "patchSetId": 7
@@ -66,6 +84,24 @@
       "writtenOn": "2022-04-16T07:31:17Z",
       "side": 1,
       "message": "I suggest to default to current LO locale, instead of the hardcoded value. In the end, one could possibly export a new library to a MS format, so there could be no prior encoding available - and in that case, it\u0027s most probable that non-ASCII strings use the characters representable in the current locale (similar to how MS defaults to system codepage).",
+      "revId": "d070725e9eb2a2f1a36658b7bd6a2287bc610a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "320bf37a_6260e547",
+        "filename": "oox/source/ole/vbaexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1150,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-16T12:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "50a89191_06c8307c",
       "revId": "d070725e9eb2a2f1a36658b7bd6a2287bc610a0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -83,6 +119,24 @@
       "writtenOn": "2022-04-16T07:31:17Z",
       "side": 1,
       "message": "in theory, if we had several implementations of the container, we could need to enclose this into try block",
+      "revId": "d070725e9eb2a2f1a36658b7bd6a2287bc610a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aade6982_504456fc",
+        "filename": "oox/source/ole/vbaexport.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1153,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-16T12:50:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1db29a75_8d3d0a08",
       "revId": "d070725e9eb2a2f1a36658b7bd6a2287bc610a0c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
