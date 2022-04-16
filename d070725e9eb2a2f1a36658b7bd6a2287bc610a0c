@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5512ef8_e1c52ba0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-16T00:26:12Z",
+      "side": 1,
+      "message": "I hope the property set now works. In the vbaexport, what is the best way pass the correct encoding to local functions in the namespace?",
+      "revId": "d070725e9eb2a2f1a36658b7bd6a2287bc610a0c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
