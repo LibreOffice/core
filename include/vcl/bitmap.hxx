@@ -110,8 +110,10 @@ public:
     explicit                Bitmap( std::shared_ptr<SalBitmap> const & xSalBitmap );
     virtual                 ~Bitmap();
 
-    Bitmap&                 operator=( const Bitmap& rBitmap );
+    Bitmap&                 operator=( const Bitmap& rBitmap ) const;
     Bitmap&                 operator=( Bitmap&& rBitmap ) noexcept;
+    Bitmap&                 operator=( const Bitmap& rBitmap );
+
     bool                    operator==( const Bitmap& rBitmap ) const;
     bool                    operator!=( const Bitmap& rBitmap ) const { return !operator==(rBitmap); }
 

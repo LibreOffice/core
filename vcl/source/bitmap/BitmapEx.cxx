@@ -105,23 +105,22 @@ BitmapEx::BitmapEx( const Bitmap& rBmp ) :
 
 BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         maBitmap         ( rBmp ),
-        maMask           ( rMask ),
-        maBitmapSize     ( maBitmap.GetSizePixel() ),
-        meTransparent    ( rMask.IsEmpty() ? TransparentType::NONE : TransparentType::Bitmap ),
-        mbAlpha          ( false )
+        maBitmapSize     ( maBitmap.GetSizePixel() )
+        //meTransparent    ( rMask.IsEmpty() ? TransparentType::NONE : TransparentType::Bitmap ),
+        //mbAlpha          ( false )
 {
     // Ensure a mask is exactly one bit deep,
     // alternatively also allow 8bpp masks.
-    if (!maMask.IsEmpty() && maMask.getPixelFormat() != vcl::PixelFormat::N1_BPP
-                && !(maMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && maMask.HasGreyPalette8Bit()))
+    if (!rMask.IsEmpty() && rMask.getPixelFormat() != vcl::PixelFormat::N1_BPP
+                && !(rMask.getPixelFormat() == vcl::PixelFormat::N8_BPP && rMask.HasGreyPalette8Bit()))
     {
         SAL_WARN( "vcl", "BitmapEx: forced mask to monochrome");
-        BitmapEx aMaskEx(maMask);
+        BitmapEx aMaskEx(rMask);
         BitmapFilter::Filter(aMaskEx, BitmapMonochromeFilter(255));
-        maMask = aMaskEx.GetBitmap();
+        rMask = aMaskEx.GetBitmap();
     }
 
-    if (!maBitmap.IsEmpty() && !maMask.IsEmpty() && maBitmap.GetSizePixel() != maMask.GetSizePixel())
+    if (!maBitmap.IsEmpty() && !rMask.IsEmpty() && maBitmap.GetSizePixel() != rMask.GetSizePixel())
     {
         OSL_ENSURE(false, "Mask size differs from Bitmap size, corrected Mask (!)");
         maAlphaMask.Scale(maBitmap.GetSizePixel(), BmpScaleFlag::Fast);
@@ -153,6 +152,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Color& rTransparentColor ) :
 
 
 BitmapEx& BitmapEx::operator=( const BitmapEx& ) = default;
+
 
 bool BitmapEx::operator==( const BitmapEx& rBitmapEx ) const
 {
