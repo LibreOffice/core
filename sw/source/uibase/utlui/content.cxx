@@ -301,6 +301,25 @@ sal_Int32 getYPos(const SwNodeIndex& rNodeIndex)
     }
     return sal_Int32(nIndex);
 }
+// Gets the content node used to sort content members in Navigator's content types having a
+// specific start position
+SwContentNode* getContentNode(const SwNode& rNode)
+{
+    if (rNode.GetNodes().GetEndOfExtras().GetIndex() >= rNode.GetIndex())
+    {
+        // Not a node of BodyText
+        // Are we in a fly?
+        if (const auto pFlyFormat = rNode.GetFlyFormat())
+        {
+            // Get node index of anchor
+            if (auto pSwPosition = pFlyFormat->GetAnchor().GetContentAnchor())
+            {
+                return getContentNode(pSwPosition->nNode.GetNode());
+            }
+        }
+    }
+    return const_cast<SwContentNode*>(rNode.GetContentNode());
+}
 } // end of anonymous namespace
 
 SwContentType::SwContentType(SwWrtShell* pShell, ContentTypeId nType, sal_uInt8 nLevel) :
@@ -575,6 +594,7 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
         break;
         case ContentTypeId::TEXTFIELD:
         {
+            std::vector<SwTextField*> aArr;
             const SwFieldTypes& rFieldTypes =
                     *m_pWrtShell->GetDoc()->getIDocumentFieldsAccess().GetFieldTypes();
             const size_t nSize = rFieldTypes.size();
@@ -585,55 +605,68 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                     continue;
                 std::vector<SwFormatField*> vFields;
                 pFieldType->GatherFields(vFields);
-                std::vector<OUString> aSubTypesList;
-                if (pFieldType->Which() == SwFieldIds::DocStat && !vFields.empty())
-                {
-                    SwFieldMgr(m_pWrtShell).GetSubTypes(SwFieldTypesEnum::DocumentStatistics,
-                                                        aSubTypesList);
-                }
                 for (SwFormatField* pFormatField: vFields)
                 {
                     if (SwTextField* pTextField = pFormatField->GetTextField())
                     {
-                        const SwField* pField = pFormatField->GetField();
                         // fields in header footer don't behave well, skip them
                         if (m_pWrtShell->GetDoc()->IsInHeaderFooter(pTextField->GetTextNode()))
                             continue;
-                        OUString sExpandField = pField->ExpandField(true, m_pWrtShell->GetLayout());
-                        if (!sExpandField.isEmpty())
-                            sExpandField = u" - " + sExpandField;
-                        OUString sText;
-                        if (pField->GetTypeId() == SwFieldTypesEnum::DocumentStatistics)
-                        {
-                            OUString sSubType;
-                            if (pField->GetSubType() < aSubTypesList.size())
-                                sSubType = u" - " + aSubTypesList[pField->GetSubType()];
-                            sText = pField->GetDescription() + u" - " + pField->GetFieldName()
-                                    + sSubType + sExpandField;
-                        }
-                        else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
-                        {
-                            OUString sFieldSubTypeOrName;
-                            auto nSubType = pField->GetSubType();
-                            if (nSubType == REF_FOOTNOTE)
-                                sFieldSubTypeOrName = SwResId(STR_FLDREF_FOOTNOTE);
-                            else if (nSubType == REF_ENDNOTE)
-                                sFieldSubTypeOrName = SwResId(STR_FLDREF_ENDNOTE);
-                            else
-                                sFieldSubTypeOrName = pField->GetFieldName();
-                            sText = pField->GetDescription() + u" - " + sFieldSubTypeOrName
-                                    + sExpandField;
-                        }
-                        else
-                            sText = pField->GetDescription() + u" - " + pField->GetFieldName()
-                                    + sExpandField;
-                        auto pCnt(std::make_unique<SwTextFieldContent>(this, sText, pFormatField,
-                            m_bAlphabeticSort ? 0 : pTextField->GetTextNode().GetIndex().get()));
-                        if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
-                            pCnt->SetInvisible();
-                        m_pMember->insert(std::move(pCnt));
+                        aArr.emplace_back(pTextField);
                     }
                 }
+            }
+            if (!m_bAlphabeticSort)
+            {
+                // use stable sort array to list fields in document order
+                std::stable_sort(aArr.begin(), aArr.end(),
+                                 [](const SwTextField* a, const SwTextField* b){
+                    SwPosition aSwPos(*getContentNode(a->GetTextNode()), a->GetStart());
+                    SwPosition bSwPos(*getContentNode(b->GetTextNode()), b->GetStart());
+                    return aSwPos < bSwPos;});
+            }
+            std::vector<OUString> aDocumentStatisticsSubTypesList;
+            tools::Long nYPos = 0;
+            for (SwTextField* pTextField : aArr)
+            {
+                const SwField* pField = pTextField->GetFormatField().GetField();
+                OUString sExpandField = pField->ExpandField(true, m_pWrtShell->GetLayout());
+                if (!sExpandField.isEmpty())
+                    sExpandField = u" - " + sExpandField;
+                OUString sText;
+                if (pField->GetTypeId() == SwFieldTypesEnum::DocumentStatistics)
+                {
+                    if (aDocumentStatisticsSubTypesList.empty())
+                        SwFieldMgr(m_pWrtShell).GetSubTypes(SwFieldTypesEnum::DocumentStatistics,
+                                                            aDocumentStatisticsSubTypesList);
+                    OUString sSubType;
+                    if (pField->GetSubType() < aDocumentStatisticsSubTypesList.size())
+                        sSubType = u" - " + aDocumentStatisticsSubTypesList[pField->GetSubType()];
+                    sText = pField->GetDescription() + u" - " + pField->GetFieldName() + sSubType +
+                            sExpandField;
+                }
+                else if (pField->GetTypeId() == SwFieldTypesEnum::GetRef)
+                {
+                    OUString sFieldSubTypeOrName;
+                    auto nSubType = pField->GetSubType();
+                    if (nSubType == REF_FOOTNOTE)
+                        sFieldSubTypeOrName = SwResId(STR_FLDREF_FOOTNOTE);
+                    else if (nSubType == REF_ENDNOTE)
+                        sFieldSubTypeOrName = SwResId(STR_FLDREF_ENDNOTE);
+                    else
+                        sFieldSubTypeOrName = pField->GetFieldName();
+                    sText = pField->GetDescription() + u" - " + sFieldSubTypeOrName
+                            + sExpandField;
+                }
+                else
+                    sText = pField->GetDescription() + u" - " + pField->GetFieldName()
+                            + sExpandField;
+                auto pCnt(std::make_unique<SwTextFieldContent>(this, sText,
+                                                               &pTextField->GetFormatField(),
+                                                               m_bAlphabeticSort ? 0 : nYPos++));
+                if (!pTextField->GetTextNode().getLayoutFrame(m_pWrtShell->GetLayout()))
+                    pCnt->SetInvisible();
+                m_pMember->insert(std::move(pCnt));
             }
         }
         break;
