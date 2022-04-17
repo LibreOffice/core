@@ -16,6 +16,24 @@
       "message": "Cool. I had noticed this sorting issue for fields, but decided to wait and see...\n...look forward to seeing this patch.",
       "revId": "39d732657faa218c83e031c2c2c588d44284fe96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff66422e_56b6c2ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-04-17T20:57:49Z",
+      "side": 1,
+      "message": "Hey Seth, Thanks for the comment!\n\nPatchset 2 corrects order placement of fields in headers/footers and frames. Previous to this patchset these are always placed first in the list. (This is due to doc model nodes structure header/footer and frames nodes being placed in a special section before the regular doc nodes section.) Hyperlinks in frames, headers/footers currently display this first in members list behavior. The getContentNode function, used in the fields stable sort, can be used to correct this behavior in the hyperlinks list after the patch is merged.",
+      "parentUuid": "3c859015_ccab5322",
+      "revId": "39d732657faa218c83e031c2c2c588d44284fe96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
