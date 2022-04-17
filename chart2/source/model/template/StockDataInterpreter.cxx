@@ -20,8 +20,6 @@
 #include "StockDataInterpreter.hxx"
 #include "StockChartTypeTemplate.hxx"
 #include <DataSeries.hxx>
-#include <LabeledDataSequence.hxx>
-#include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;

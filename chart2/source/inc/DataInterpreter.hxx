@@ -18,12 +18,11 @@
  */
 #pragma once
 
+#include "DataSeries.hxx"
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include "charttoolsdllapi.hxx"
 #include <rtl/ref.hxx>
 #include <vector>
 

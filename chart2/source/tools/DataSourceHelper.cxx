@@ -31,8 +31,6 @@
 #include <LabeledDataSequence.hxx>
 #include <unonames.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 

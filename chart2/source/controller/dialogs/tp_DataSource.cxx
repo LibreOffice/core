@@ -33,13 +33,9 @@
 #include "DialogModel.hxx"
 #include <o3tl/safeint.hxx>
 #include <TabPageNotifiable.hxx>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/chart2/data/XDataSink.hpp>
 
 #include <tools/diagnose_ex.h>
 

@@ -20,10 +20,10 @@
 
 #include "StackMode.hxx"
 #include "charttoolsdllapi.hxx"
+#include "ChartTypeTemplate.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <rtl/ref.hxx>
 
-#include <utility>
 #include <vector>
 
 namespace chart { class ChartModel; }

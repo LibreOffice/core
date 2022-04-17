@@ -18,14 +18,7 @@
  */
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>

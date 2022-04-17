@@ -20,7 +20,6 @@
 
 #include <com/sun/star/uno/Reference.h>
 #include <rtl/ustring.hxx>
-#include <rtl/ref.hxx>
 #include "charttoolsdllapi.hxx"
 
 namespace com::sun::star::beans { class XPropertySet; }

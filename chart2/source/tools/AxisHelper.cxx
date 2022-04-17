@@ -25,7 +25,6 @@
 #include <Axis.hxx>
 #include <AxisIndexDefines.hxx>
 #include <DataSource.hxx>
-#include <LabeledDataSequence.hxx>
 #include <LinePropertiesHelper.hxx>
 #include <servicenames_coosystems.hxx>
 #include <DataSeries.hxx>
@@ -43,10 +42,6 @@
 
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
 
 #include <sal/log.hxx>
 

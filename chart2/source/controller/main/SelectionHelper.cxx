@@ -24,7 +24,6 @@
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/obj3d.hxx>
