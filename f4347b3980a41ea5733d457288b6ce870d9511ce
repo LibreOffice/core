@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cfafa59_bfdbccbc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-17T05:52:44Z",
+      "side": 1,
+      "message": "This would be another solution than we have for \"Karasa Jaga\". My take: either the one or the other so please remove the KJ renaming lines too.",
+      "revId": "f4347b3980a41ea5733d457288b6ce870d9511ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
