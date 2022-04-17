@@ -39,7 +39,6 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>

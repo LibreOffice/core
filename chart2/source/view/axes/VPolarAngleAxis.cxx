@@ -26,7 +26,6 @@
 #include <NumberFormatterWrapper.hxx>
 #include <PolarLabelPositionHelper.hxx>
 #include <PlottingPositionHelper.hxx>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <tools/color.hxx>
 
 #include <memory>

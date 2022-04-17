@@ -24,11 +24,9 @@
 #include <UserDefinedProperties.hxx>
 #include "DataPoint.hxx"
 #include <DataSeriesHelper.hxx>
-#include <LabeledDataSequence.hxx>
 #include <CloneHelper.hxx>
 #include <RegressionCurveModel.hxx>
 #include <ModifyListenerHelper.hxx>
-#include <EventListenerHelper.hxx>
 #include <com/sun/star/container/NoSuchElementException.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <cppuhelper/supportsservice.hxx>

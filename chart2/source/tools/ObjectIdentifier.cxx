@@ -36,19 +36,13 @@
 #include <DataSeries.hxx>
 #include <RegressionCurveModel.hxx>
 
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 #include <o3tl/string_view.hxx>
-#include <comphelper/string.hxx>
 
 namespace com::sun::star::drawing { class XShape; }
 

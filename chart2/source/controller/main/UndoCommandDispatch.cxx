@@ -20,10 +20,8 @@
 #include "UndoCommandDispatch.hxx"
 #include <ChartModel.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/document/UndoFailedException.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 
 #include <vcl/svapp.hxx>
 #include <tools/diagnose_ex.h>

@@ -57,11 +57,7 @@
 
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/data/XPivotTableDataProvider.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 
 #include <com/sun/star/awt/PopupMenuDirection.hpp>
 #include <com/sun/star/frame/DispatchHelper.hpp>
@@ -69,14 +65,11 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/qa/XDumper.hpp>
 
 #include <comphelper/lok.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
-
-#include <toolkit/awt/vclxmenu.hxx>
 
 #include <sfx2/viewsh.hxx>
 #include <svx/ActionDescriptionProvider.hxx>

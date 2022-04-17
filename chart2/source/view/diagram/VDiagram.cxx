@@ -34,7 +34,6 @@
 #include <svx/scene3d.hxx>
 #include <svx/e3dsceneupdater.hxx>
 #include <tools/diagnose_ex.h>
-#include <com/sun/star/chart2/XDiagram.hpp>
 
 namespace chart
 {

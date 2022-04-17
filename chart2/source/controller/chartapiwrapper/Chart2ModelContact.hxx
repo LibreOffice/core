@@ -18,7 +18,6 @@
  */
 #pragma once
 
-#include <cppuhelper/weakref.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>

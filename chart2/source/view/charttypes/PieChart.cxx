@@ -28,13 +28,9 @@
 #include <ChartType.hxx>
 
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>
 
-#include <com/sun/star/container/XChild.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>

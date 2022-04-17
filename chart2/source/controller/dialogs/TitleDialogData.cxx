@@ -19,8 +19,6 @@
 
 #include <sal/config.h>
 
-#include <com/sun/star/frame/XModel.hpp>
-
 #include <TitleDialogData.hxx>
 #include <TitleHelper.hxx>
 #include <ChartModelHelper.hxx>

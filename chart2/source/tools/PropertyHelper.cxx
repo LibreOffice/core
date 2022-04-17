@@ -21,7 +21,6 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/sequence.hxx>
-#include <comphelper/string.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include <o3tl/string_view.hxx>

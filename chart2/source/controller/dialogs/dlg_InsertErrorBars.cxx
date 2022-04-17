@@ -31,7 +31,6 @@
 #include <ObjectNameProvider.hxx>
 #include <DataSeries.hxx>
 
-#include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/servicehelper.hxx>
 
 using ::com::sun::star::uno::Reference;
