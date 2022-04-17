@@ -361,6 +361,8 @@ void SlidePersist::createConnectorShapeConnection()
             {
                 OUString aDestShapeId = aConnectorShapeProperties[j].maDestShapeId;
                 const auto& pShape = maShapeMap.find(aDestShapeId);
+                if (pShape == maShapeMap.end())
+                    continue;
                 uno::Reference<drawing::XShape> xShape(pShape->second->getXShape(), uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xSet(xShape, uno::UNO_QUERY);
                 if (xShape.is())
