@@ -16,6 +16,40 @@
       "message": "Will deliever an automated test in the next days.",
       "revId": "61570f569528535883dc269636c6ad460c6a8411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "827f277a_1bf71ae5",
+        "filename": "include/oox/ole/vbaexport.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-17T15:56:40Z",
+      "side": 1,
+      "message": "This class could have a member for the encoding (set in ctor), this way avoiding the need to pass the encoding explicitly. Of course, the free functions in unnamed namespace would still need it.",
+      "revId": "61570f569528535883dc269636c6ad460c6a8411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92146a65_4e642629",
+        "filename": "include/oox/ole/vbaexport.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-17T15:56:40Z",
+      "side": 1,
+      "message": "The \u0027const\u0027 at the by-value arguments in function *declaration* does not make difference, and actually is just a noise.\n\nNote how you can skip the \u0027const\u0027 at declaration, and at the same time use \u0027const\u0027 at the definition, where that \u0027const\u0027 is actually useful - it avoids changing the variable by mistake:\n\n  void foo(int i); // No const here at declaration!\n  ...\n  ...\n  void foo(const int i) // Definition of the *same* function declared above!\n  {\n    cout \u003c\u003c i;\n    i +\u003d 2; // error!\n  }",
+      "revId": "61570f569528535883dc269636c6ad460c6a8411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
