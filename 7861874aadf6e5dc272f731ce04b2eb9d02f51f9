@@ -16,6 +16,23 @@
       "message": "You could send a license statement now https://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
       "revId": "7861874aadf6e5dc272f731ce04b2eb9d02f51f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f3219314_9f4d8791",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-17T14:56:28Z",
+      "side": 1,
+      "message": "License statement: https://lists.freedesktop.org/archives/libreoffice/2022-April/088759.html",
+      "revId": "7861874aadf6e5dc272f731ce04b2eb9d02f51f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
