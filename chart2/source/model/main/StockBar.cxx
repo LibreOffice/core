@@ -24,7 +24,6 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 

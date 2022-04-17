@@ -18,7 +18,6 @@
  */
 
 #include "ColumnLineDataInterpreter.hxx"
-#include <LabeledDataSequence.hxx>
 #include <DataSeries.hxx>
 #include <osl/diagnose.h>
 

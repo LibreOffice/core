@@ -49,7 +49,6 @@
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <memory>
 
 using namespace com::sun::star;

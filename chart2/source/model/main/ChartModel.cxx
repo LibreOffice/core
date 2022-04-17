@@ -47,7 +47,6 @@
 #include <svl/numformat.hxx>
 #include <svl/numuno.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/embed/EmbedMapUnits.hpp>
 #include <com/sun/star/embed/Aspects.hpp>

@@ -27,7 +27,6 @@
 #include <chartview/DrawModelWrapper.hxx>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/frame/CommandGroup.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
 
 #include <vcl/svapp.hxx>
 #include <editeng/formatbreakitem.hxx>

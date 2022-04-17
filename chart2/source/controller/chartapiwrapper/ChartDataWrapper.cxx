@@ -25,7 +25,6 @@
 #include <ControllerLockGuard.hxx>
 #include "Chart2ModelContact.hxx"
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 
 #include <float.h>

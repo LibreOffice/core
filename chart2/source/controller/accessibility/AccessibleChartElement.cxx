@@ -26,7 +26,6 @@
 
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

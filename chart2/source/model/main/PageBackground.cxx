@@ -26,7 +26,6 @@
 
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>

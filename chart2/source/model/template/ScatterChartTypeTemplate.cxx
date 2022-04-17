@@ -23,7 +23,6 @@
 #include <ChartType.hxx>
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
-#include <servicenames_charttypes.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <PropertyHelper.hxx>
@@ -32,11 +31,9 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/SymbolStyle.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/diagnose_ex.h>
 
 #include <algorithm>

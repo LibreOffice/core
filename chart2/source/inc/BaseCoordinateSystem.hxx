@@ -27,7 +27,6 @@
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include "ModifyListenerHelper.hxx"
-#include "charttoolsdllapi.hxx"
 
 #include <vector>
 

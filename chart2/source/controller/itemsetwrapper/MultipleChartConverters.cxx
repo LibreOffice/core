@@ -33,10 +33,7 @@
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/chart2/XAxis.hpp>
 
 using namespace ::com::sun::star;

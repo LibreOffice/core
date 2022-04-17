@@ -21,7 +21,6 @@
 #include "Chart2ModelContact.hxx"
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <com/sun/star/chart2/XDiagram.hpp>
 
 #include <FillProperties.hxx>
 #include <LinePropertiesHelper.hxx>

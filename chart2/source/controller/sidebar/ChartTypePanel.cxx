@@ -31,10 +31,6 @@
 #include <Diagram.hxx>
 #include <unonames.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-
 #include <svtools/valueset.hxx>
 #include <tools/diagnose_ex.h>
 
