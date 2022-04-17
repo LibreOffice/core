@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c859015_ccab5322",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-17T16:15:30Z",
+      "side": 1,
+      "message": "Cool. I had noticed this sorting issue for fields, but decided to wait and see...\n...look forward to seeing this patch.",
+      "revId": "39d732657faa218c83e031c2c2c588d44284fe96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
