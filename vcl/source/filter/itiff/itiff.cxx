@@ -912,8 +912,8 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                     if ( nPlanes < 3 )
                     {
                         nRed = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
-                        nGreen = GetBits( getMapData(1), ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
-                        nBlue = GetBits( getMapData(2), ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
                     }
                     else
                     {
