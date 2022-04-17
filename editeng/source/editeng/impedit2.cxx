@@ -4001,16 +4001,17 @@ sal_Int32 ImpEditEngine::GetChar(
                         tools::Long nDiffRight = nTmpPosMax - nXInPortion;
                         OSL_ENSURE( nDiffLeft >= 0, "DiffLeft negative" );
                         OSL_ENSURE( nDiffRight >= 0, "DiffRight negative" );
-                        nOffset = ( bSmart && ( nDiffRight < nDiffLeft ) ) ? x+1 : x;
-                        // I18N: If there are character position with the length of 0,
-                        // they belong to the same character, we can not use this position as an index.
-                        // Skip all 0-positions, cheaper than using XBreakIterator:
-                        if ( nOffset < nMax )
+
+                        if (bSmart && nDiffRight < nDiffLeft)
                         {
-                            const tools::Long nX = pLine->GetCharPosArray()[nOffset];
-                            while ( ( (nOffset+1) < nMax ) && ( pLine->GetCharPosArray()[nOffset+1] == nX ) )
-                                nOffset++;
+                            // I18N: If there are character position with the length of 0,
+                            // they belong to the same character, we can not use this position as an index.
+                            // Skip all 0-positions, cheaper than using XBreakIterator:
+                            tools::Long nX = pLine->GetCharPosArray()[nTmpCurIndex + x];
+                            while(x < nMax && pLine->GetCharPosArray()[nTmpCurIndex + x] == nX)
+                                ++x;
                         }
+                        nOffset = x;
                         break;
                     }
                 }
