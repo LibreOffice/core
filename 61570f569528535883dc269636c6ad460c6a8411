@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c003a04_4a2358c2",
+        "filename": "include/oox/ole/vbaexport.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-17T16:23:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "827f277a_1bf71ae5",
+      "revId": "61570f569528535883dc269636c6ad460c6a8411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92146a65_4e642629",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-04-17T15:56:40Z",
       "side": 1,
       "message": "The \u0027const\u0027 at the by-value arguments in function *declaration* does not make difference, and actually is just a noise.\n\nNote how you can skip the \u0027const\u0027 at declaration, and at the same time use \u0027const\u0027 at the definition, where that \u0027const\u0027 is actually useful - it avoids changing the variable by mistake:\n\n  void foo(int i); // No const here at declaration!\n  ...\n  ...\n  void foo(const int i) // Definition of the *same* function declared above!\n  {\n    cout \u003c\u003c i;\n    i +\u003d 2; // error!\n  }",
+      "revId": "61570f569528535883dc269636c6ad460c6a8411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25d4ebe5_2319a9e2",
+        "filename": "include/oox/ole/vbaexport.hxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-17T16:23:07Z",
+      "side": 1,
+      "message": "Thx for the input!",
+      "parentUuid": "92146a65_4e642629",
       "revId": "61570f569528535883dc269636c6ad460c6a8411",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
