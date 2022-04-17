@@ -56,9 +56,6 @@
 #include <ReferenceSizeProvider.hxx>
 #include <RegressionCurveHelper.hxx>
 #include <RegressionCurveModel.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <o3tl/string_view.hxx>

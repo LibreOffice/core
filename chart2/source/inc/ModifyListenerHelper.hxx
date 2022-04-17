@@ -26,7 +26,6 @@
 
 #include <mutex>
 #include <algorithm>
-#include <utility>
 
 namespace chart
 {

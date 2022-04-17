@@ -25,7 +25,6 @@
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#include <com/sun/star/container/XChild.hpp>
 
 #include <sot/formats.hxx>
 #include <vector>

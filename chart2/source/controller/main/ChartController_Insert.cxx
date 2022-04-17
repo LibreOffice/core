@@ -27,8 +27,6 @@
 #include <dlg_InsertTitle.hxx>
 #include <dlg_ObjectProperties.hxx>
 
-#include <ChartModel.hxx>
-#include <ChartModelHelper.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <TitleHelper.hxx>
@@ -57,9 +55,6 @@
 #include <RegressionCurveModel.hxx>
 
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 

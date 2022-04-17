@@ -38,12 +38,8 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/data/XDataSink.hpp>
-#include <comphelper/sequence.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <rtl/ustring.hxx>

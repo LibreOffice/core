@@ -27,7 +27,6 @@
 #include <strings.hrc>
 
 #include <vcl/svapp.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 using namespace ::com::sun::star;
 

@@ -26,7 +26,6 @@
 #include <ModifyListenerHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <tools/diagnose_ex.h>
 
 namespace com::sun::star::uno { class XComponentContext; }
 

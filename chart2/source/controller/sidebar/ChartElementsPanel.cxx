@@ -19,8 +19,6 @@
 
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 #include <vcl/svapp.hxx>
 

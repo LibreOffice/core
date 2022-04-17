@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <ChartModel.hxx>
 #include <ObjectIdentifier.hxx>
 #include <map>
 #include <vector>

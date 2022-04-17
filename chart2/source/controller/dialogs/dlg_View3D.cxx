@@ -26,9 +26,7 @@
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 namespace chart
 {

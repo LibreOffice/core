@@ -24,7 +24,6 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <tools/diagnose_ex.h>
 
 #include <vector>
 #include <algorithm>

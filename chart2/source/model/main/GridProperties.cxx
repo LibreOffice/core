@@ -25,7 +25,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
 
 namespace com::sun::star::beans { class XPropertySetInfo; }
 namespace com::sun::star::uno { class XComponentContext; }

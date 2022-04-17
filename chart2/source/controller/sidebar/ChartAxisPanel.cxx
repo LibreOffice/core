@@ -17,11 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart2/AxisOrientation.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 
 #include <vcl/svapp.hxx>
 #include <sal/log.hxx>

@@ -40,7 +40,6 @@
 #include <vcl/image.hxx>
 #include <vcl/settings.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/diagnose_ex.h>
 
 namespace chart

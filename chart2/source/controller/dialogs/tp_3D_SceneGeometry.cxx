@@ -25,8 +25,6 @@
 #include <ChartTypeHelper.hxx>
 #include <ThreeDHelper.hxx>
 #include <ControllerLockGuard.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <tools/diagnose_ex.h>
 #include <tools/helpers.hxx>

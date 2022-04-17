@@ -29,7 +29,6 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <comphelper/servicehelper.hxx>
 

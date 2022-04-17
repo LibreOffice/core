@@ -18,6 +18,9 @@
  */
 #pragma once
 
+#include <DataSeries.hxx>
+#include <ChartType.hxx>
+
 #include <vcl/wizardmachine.hxx>
 
 #include <RangeSelectionListener.hxx>

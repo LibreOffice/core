@@ -32,7 +32,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 
 #include <comphelper/property.hxx>

@@ -37,7 +37,6 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/unohelp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
@@ -45,7 +44,6 @@
 #include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/accessiblestatesethelper.hxx>
-#include <ChartModel.hxx>
 
 #include <algorithm>
 #include <iterator>

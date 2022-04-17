@@ -23,7 +23,6 @@
 
 #include <comphelper/sequenceashashmap.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <algorithm>
 

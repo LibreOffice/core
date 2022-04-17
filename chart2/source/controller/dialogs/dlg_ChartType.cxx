@@ -19,7 +19,6 @@
 
 #include <dlg_ChartType.hxx>
 #include "tp_ChartType.hxx"
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <ChartModel.hxx>
 
 namespace chart

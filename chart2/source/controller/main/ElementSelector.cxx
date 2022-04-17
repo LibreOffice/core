@@ -33,10 +33,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 namespace chart { class ExplicitValueProvider; }
 
 namespace chart

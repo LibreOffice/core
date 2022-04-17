@@ -64,8 +64,6 @@
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/MovingAverageType.hpp>
 #include <com/sun/star/chart2/XDataPointCustomLabelField.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <tools/color.hxx>
@@ -75,7 +73,6 @@
 #include <basegfx/vector/b2dvector.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 
 #include <unotools/localedatawrapper.hxx>
 #include <comphelper/sequence.hxx>

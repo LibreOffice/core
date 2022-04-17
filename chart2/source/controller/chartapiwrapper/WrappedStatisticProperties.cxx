@@ -32,7 +32,6 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/ChartErrorIndicatorType.hpp>
 #include <com/sun/star/chart/ChartRegressionCurveType.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <utility>

@@ -16,7 +16,6 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 
-#include <o3tl/string_view.hxx>
 #include <editeng/unoprnms.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>

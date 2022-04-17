@@ -20,7 +20,6 @@
 #include <DataSource.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/sequence.hxx>
-#include <LabeledDataSequence.hxx>
 
 namespace com::sun::star::uno { class XComponentContext; }
 

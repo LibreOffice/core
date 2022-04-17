@@ -24,7 +24,6 @@
 #include <ChartType.hxx>
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>
-#include <servicenames_charttypes.hxx>
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <Axis.hxx>
@@ -33,12 +32,7 @@
 #include <PropertyHelper.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 #include <tools/diagnose_ex.h>
 

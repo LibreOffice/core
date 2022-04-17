@@ -9,7 +9,8 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.hxx>
+#include <ChartModel.hxx>
+
 #include <svx/Palette.hxx>
 #include <rtl/ref.hxx>
 

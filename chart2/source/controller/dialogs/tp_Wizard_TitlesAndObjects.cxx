@@ -25,8 +25,6 @@
 #include <Diagram.hxx>
 #include <AxisHelper.hxx>
 #include <ControllerLockGuard.hxx>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 namespace chart
 {

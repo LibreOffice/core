@@ -24,7 +24,6 @@
 #include <unonames.hxx>
 #include <Diagram.hxx>
 #include <BaseCoordinateSystem.hxx>
-#include <LabeledDataSequence.hxx>
 #include <Axis.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -38,9 +37,6 @@
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
 
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>

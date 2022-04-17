@@ -18,9 +18,6 @@
  */
 
 #include <ModifyListenerHelper.hxx>
-#include <WeakListenerAdapter.hxx>
-
-#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 

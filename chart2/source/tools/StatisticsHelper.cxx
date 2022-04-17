@@ -21,7 +21,6 @@
 #include <DataSeriesHelper.hxx>
 #include <ErrorBar.hxx>
 #include <unonames.hxx>
-#include <LabeledDataSequence.hxx>
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>

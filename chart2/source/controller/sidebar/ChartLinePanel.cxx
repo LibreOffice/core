@@ -22,7 +22,6 @@
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/view/XSelectionSupplier.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 
 #include <comphelper/lok.hxx>

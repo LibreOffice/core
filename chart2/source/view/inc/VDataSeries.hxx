@@ -21,7 +21,6 @@
 #include "PropertyMapper.hxx"
 
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>

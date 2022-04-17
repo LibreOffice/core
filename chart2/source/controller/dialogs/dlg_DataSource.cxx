@@ -18,11 +18,9 @@
  */
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <dlg_DataSource.hxx>
 #include <ChartTypeTemplateProvider.hxx>
-#include <ChartTypeManager.hxx>
 #include <ChartTypeTemplate.hxx>
 #include <Diagram.hxx>
 #include <DiagramHelper.hxx>

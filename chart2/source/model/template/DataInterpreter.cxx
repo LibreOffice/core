@@ -20,16 +20,12 @@
 #include <DataInterpreter.hxx>
 #include <DataSeries.hxx>
 #include <DataSource.hxx>
-#include <DataSourceHelper.hxx>
 #include <DataSeriesHelper.hxx>
 #include <CommonConverters.hxx>
-#include <LabeledDataSequence.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <vector>
 #include <algorithm>
 
 using namespace ::com::sun::star;

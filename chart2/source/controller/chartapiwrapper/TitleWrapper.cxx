@@ -26,7 +26,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XTitle.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <CharacterProperties.hxx>
 #include <LinePropertiesHelper.hxx>

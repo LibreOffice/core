@@ -27,7 +27,6 @@
 #include <strings.hrc>
 #include <ResId.hxx>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <tools/diagnose_ex.h>
 
 using namespace ::com::sun::star;
 

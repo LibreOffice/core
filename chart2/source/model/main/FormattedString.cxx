@@ -23,7 +23,6 @@
 #include <PropertyHelper.hxx>
 #include <ModifyListenerHelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <tools/diagnose_ex.h>
 
 namespace com::sun::star::uno { class XComponentContext; }
 

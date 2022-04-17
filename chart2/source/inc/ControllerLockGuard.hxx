@@ -19,7 +19,6 @@
 #pragma once
 
 #include "charttoolsdllapi.hxx"
-#include <com/sun/star/uno/Reference.h>
 #include <rtl/ref.hxx>
 
 namespace chart

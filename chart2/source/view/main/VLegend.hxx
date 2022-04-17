@@ -18,6 +18,8 @@
  */
 #pragma once
 
+#include <Legend.hxx>
+
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include <svx/unoshape.hxx>

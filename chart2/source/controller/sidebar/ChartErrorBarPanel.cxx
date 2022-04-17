@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "ChartErrorBarPanel.hxx"

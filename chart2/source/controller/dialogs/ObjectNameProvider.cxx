@@ -34,7 +34,6 @@
 #include <DataSeries.hxx>
 #include <DataSeriesHelper.hxx>
 #include <TitleHelper.hxx>
-#include <LabeledDataSequence.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <CommonConverters.hxx>
 #include <NumberFormatterWrapper.hxx>
@@ -49,8 +48,6 @@
 
 #include <com/sun/star/chart2/XTitle.hpp>
 #include <com/sun/star/chart2/MovingAverageType.hpp>
-#include <com/sun/star/chart2/XDataSeries.hpp>
-#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <tools/diagnose_ex.h>
 #include <o3tl/string_view.hxx>
 

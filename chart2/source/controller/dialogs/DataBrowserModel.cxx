@@ -29,24 +29,18 @@
 #include <ControllerLockGuard.hxx>
 #include <StatisticsHelper.hxx>
 #include <ChartTypeHelper.hxx>
-#include <ChartTypeTemplate.hxx>
 #include <chartview/ExplicitValueProvider.hxx>
 #include <ExplicitCategoriesProvider.hxx>
 #include <BaseCoordinateSystem.hxx>
-#include <LabeledDataSequence.hxx>
 #include <ChartModel.hxx>
 #include <unonames.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
 #include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>

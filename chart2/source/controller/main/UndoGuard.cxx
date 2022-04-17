@@ -23,7 +23,6 @@
 #include <ChartModel.hxx>
 
 #include <com/sun/star/document/XUndoManager.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 
 #include <tools/diagnose_ex.h>
 

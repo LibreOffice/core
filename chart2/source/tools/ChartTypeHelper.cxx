@@ -28,7 +28,6 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <tools/diagnose_ex.h>
 

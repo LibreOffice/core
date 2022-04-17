@@ -24,7 +24,6 @@
 #include <ObjectIdentifier.hxx>
 
 #include <svx/ActionDescriptionProvider.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 #include <vcl/ptrstyle.hxx>
 
 namespace chart

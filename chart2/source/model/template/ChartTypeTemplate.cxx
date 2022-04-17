@@ -32,19 +32,13 @@
 #include <AxisIndexDefines.hxx>
 #include <BaseCoordinateSystem.hxx>
 #include <unonames.hxx>
-#include <LabeledDataSequence.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XColorScheme.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
-#include <comphelper/sequence.hxx>
 
 #include <algorithm>
 

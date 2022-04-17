@@ -22,7 +22,6 @@
 #include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <cppuhelper/implbase.hxx>
-#include <rtl/ref.hxx>
 #include <vector>
 #include "charttoolsdllapi.hxx"
 

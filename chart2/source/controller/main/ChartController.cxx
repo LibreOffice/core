@@ -58,18 +58,12 @@
 #include <BaseCoordinateSystem.hxx>
 
 #include <com/sun/star/awt/XWindowPeer.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/frame/XController2.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/frame/LayoutManagerEvents.hpp>
 #include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
-#include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/ui/XSidebar.hpp>
-#include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XDataProviderAccess.hpp>
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 

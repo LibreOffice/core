@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/uno/Reference.h>
 #include <vcl/timer.hxx>
 #include <rtl/ref.hxx>
 
