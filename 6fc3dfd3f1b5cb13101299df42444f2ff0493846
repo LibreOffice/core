@@ -70,6 +70,24 @@
       "parentUuid": "339732f2_8298c229",
       "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4761a658_76fa4163",
+        "filename": "oox/source/ole/vbaproject.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-17T15:24:12Z",
+      "side": 0,
+      "message": "This did the trick. Thank you!",
+      "parentUuid": "4095752a_a29ab166",
+      "revId": "6fc3dfd3f1b5cb13101299df42444f2ff0493846",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
