@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f66772b0_8715b94b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-17T18:11:33Z",
+      "side": 1,
+      "message": "I noticed that\n\"else if ( nPhotometricInterpretation \u003d\u003d 2 \u0026\u0026 nSamplesPerPixel \u003e\u003d 3 )\" became\nidentical with the next block\n\"else if ( nPhotometricInterpretation \u003d\u003d 5 \u0026\u0026 nSamplesPerPixel \u003d\u003d 3 )\"\n(except the end but it\u0027s only the form, result is identical)\n",
+      "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
