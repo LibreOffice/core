@@ -238,11 +238,13 @@ static void CalculateHorizontalScalingFactor(
 
         if (fScalingFactor < 1.0)
         {
-            // if we have a ridiculously large font (flagged with the SAL_WARN
-            // above) that will require scaling down to a very small value then
+            // if we have a very large font that will require scaling down to a very small value then
             // skip directly to a small font size
-            if (nFontSize > SAL_MAX_INT16 && fScalingFactor * nFontSize < 1.0)
+            if (nFontSize > 128 && fScalingFactor * nFontSize < 1.0)
+            {
                 nFontSize = 16;
+                SAL_WARN("svx", "CalculateHorizontalScalingFactor skipping direct to: " << nFontSize << " from " << rFontHeight.GetHeight());
+            }
             nFontSize--;
             aFont.SetFontHeight( nFontSize );
             pVirDev->SetFont( aFont );
