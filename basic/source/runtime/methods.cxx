@@ -3337,8 +3337,7 @@ void SbRtl_Format(StarBASIC *, SbxArray & rPar, bool)
     }
 }
 
-// https://msdn.microsoft.com/en-us/vba/language-reference-vba/articles/formatnumber-function
-void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
+static void lcl_FormatNumberPercent(SbxArray& rPar, bool isPercent)
 {
     const sal_uInt32 nArgCount = rPar.Count();
     if (nArgCount < 2 || nArgCount > 6)
@@ -3421,6 +3420,8 @@ void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
     }
 
     double fVal = rPar.Get(1)->GetDouble();
+    if (isPercent)
+        fVal *= 100;
     const bool bNegative = fVal < 0;
     if (bNegative)
         fVal = fabs(fVal); // Always work with non-negatives, to easily handle leading zero
@@ -3462,6 +3463,20 @@ void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
     }
 
     rPar.Get(0)->PutString(aResult);
+    if (isPercent)
+        aResult += "%";
+}
+
+// https://docs.microsoft.com/en-us/office/vba/Language/Reference/User-Interface-Help/formatnumber-function
+void SbRtl_FormatNumber(StarBASIC*, SbxArray& rPar, bool)
+{
+    return lcl_FormatNumberPercent(rPar, false);
+}
+
+// https://docs.microsoft.com/en-us/office/vba/Language/Reference/User-Interface-Help/formatpercent-function
+void SbRtl_FormatPercent(StarBASIC*, SbxArray& rPar, bool)
+{
+    return lcl_FormatNumberPercent(rPar, true);
 }
 
 namespace {
