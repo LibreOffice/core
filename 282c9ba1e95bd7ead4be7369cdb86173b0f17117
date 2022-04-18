@@ -16,6 +16,23 @@
       "message": "I noticed that\n\"else if ( nPhotometricInterpretation \u003d\u003d 2 \u0026\u0026 nSamplesPerPixel \u003e\u003d 3 )\" became\nidentical with the next block\n\"else if ( nPhotometricInterpretation \u003d\u003d 5 \u0026\u0026 nSamplesPerPixel \u003d\u003d 3 )\"\n(except the end but it\u0027s only the form, result is identical)\n",
       "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b337621_c2e78916",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-18T07:56:17Z",
+      "side": 1,
+      "message": "Has been this way since initial import (commit 0d14f932b02c43dd83fa3dfbe25d92755a4d7e26) - and I suppose that your change makes perfect sense (using *both* different arrays *and* different offsets into them looks odd); wrt identical code - well, just merge them in a follow-up with an explanation.\n\nBut maybe quikee has a better idea?",
+      "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
