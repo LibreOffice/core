@@ -139,6 +139,24 @@
       "parentUuid": "49001f9d_202fa253",
       "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eacf9ae_384ba313",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-18T14:50:14Z",
+      "side": 1,
+      "message": "Recently Lubos had added support for WebP using libwebp: https://gerrit.libreoffice.org/c/core/+/128920\n\nI suppose this may be used as a reference for this task.",
+      "parentUuid": "986e632a_e42dd03e",
+      "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
