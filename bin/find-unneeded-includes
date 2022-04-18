@@ -31,7 +31,7 @@ import argparse
 import pathlib
 
 
-def ignoreRemoval(include, toAdd, absFileName, moduleRules):
+def ignoreRemoval(include, toAdd, absFileName, moduleRules, noexclude):
     # global rules
 
     # Avoid replacing .hpp with .hdl in the com::sun::star and  ooo::vba namespaces.
@@ -139,9 +139,9 @@ def ignoreRemoval(include, toAdd, absFileName, moduleRules):
         if include.endswith(".hpp"):
             return True
 
-    # yaml rules
+    # yaml rules, except when --noexclude is given
 
-    if "excludelist" in moduleRules.keys():
+    if "excludelist" in moduleRules.keys() and not noexclude:
         excludelistRules = moduleRules["excludelist"]
         if fileName in excludelistRules.keys():
             if include in excludelistRules[fileName]:
@@ -155,7 +155,7 @@ def unwrapInclude(include):
     return include[1:-1]
 
 
-def processIWYUOutput(iwyuOutput, moduleRules, fileName):
+def processIWYUOutput(iwyuOutput, moduleRules, fileName, noexclude):
     inAdd = False
     toAdd = []
     inRemove = False
@@ -208,7 +208,7 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName):
                 # avoid the later.
                 include = unwrapInclude(match.group(1))
                 lineno = match.group(2)
-                if not ignoreRemoval(include, toAdd, currentFileName, moduleRules):
+                if not ignoreRemoval(include, toAdd, currentFileName, moduleRules, noexclude):
                     toRemove.append("%s:%s: %s" % (currentFileName, lineno, include))
 
     for remove in sorted(toRemove):
@@ -216,13 +216,13 @@ def processIWYUOutput(iwyuOutput, moduleRules, fileName):
     return len(toRemove)
 
 
-def run_tool(task_queue, failed_files, dontstop):
+def run_tool(task_queue, failed_files, dontstop, noexclude):
     while True:
         invocation, moduleRules = task_queue.get()
         if not len(failed_files):
             print("[IWYU] " + invocation.split(' ')[-1])
             p = subprocess.Popen(invocation, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1])
+            retcode = processIWYUOutput(p.communicate()[0].decode('utf-8').splitlines(), moduleRules, invocation.split(' ')[-1], noexclude)
             if retcode == -1:
                 print("ERROR: A file is probably not self contained, check this commands output:\n" + invocation)
             elif retcode > 0:
@@ -245,7 +245,7 @@ def isInUnoIncludeFile(path):
             or path.startswith("include/uno/")
 
 
-def tidy(compileCommands, paths, dontstop):
+def tidy(compileCommands, paths, dontstop, noexclude):
     return_code = 0
 
     try:
@@ -253,7 +253,7 @@ def tidy(compileCommands, paths, dontstop):
         task_queue = queue.Queue(max_task)
         failed_files = []
         for _ in range(max_task):
-            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop))
+            t = threading.Thread(target=run_tool, args=(task_queue, failed_files, dontstop, noexclude))
             t.daemon = True
             t.start()
 
@@ -315,6 +315,8 @@ def main(argv):
                     help='Recursively search a directory for source files to check')
     parser.add_argument('--headers', action='store_true',
                     help='Check header files. If omitted, check source files. Use with --recursive.')
+    parser.add_argument('--noexclude', action='store_true',
+                    help='Ignore excludelist. Useful to check wheher its exclusions are still all valid.')
 
     args = parser.parse_args()
 
@@ -356,7 +358,7 @@ def main(argv):
             if not file.exists():
                 print("WARNING: File listed in " + rulePath + " no longer exists: " + pathname)
 
-    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"])
+    tidy(compileCommands, paths=list_of_files, dontstop=vars(args)["continue"], noexclude=args.noexclude)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
