@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6ea401f_7b0f9f89",
+        "filename": "vcl/source/filter/itiff/itiff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-18T10:42:52Z",
+      "side": 0,
+      "message": "Oh - wait: in the first block, nRed - nMinMax is used as red value; here, 255 - (nRed - nMinMax).",
+      "revId": "49ee1c889665c3539fa9a1c99a865a42fc08ee97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
