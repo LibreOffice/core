@@ -34,6 +34,24 @@
       "parentUuid": "3c859015_ccab5322",
       "revId": "39d732657faa218c83e031c2c2c588d44284fe96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd5ee434_8dabc431",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-18T21:52:17Z",
+      "side": 1,
+      "message": "This also sounds good (because my templates use fields for dates, pages, etc.) and Navigator has not always been so elegant in that connection.\n\nAnd one small comment about \"sorting\" -- \n\nI mention it in case it is relevant for you -- otherwise please ignore -- because I may have misunderstood the commit message.  \n\nIf I insert Statistics fields, with number formatting, then they appear alphabetically in Navigator, independently of their order in the document (i.e.):\nStatistics - Characters - 23\nStatistics - Pages - 1\nStatistics - Words - 3\n\nBut if those fields were formatted with \"A B C\", then they also appear in Navigator according to document order.",
+      "parentUuid": "ff66422e_56b6c2ae",
+      "revId": "39d732657faa218c83e031c2c2c588d44284fe96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
