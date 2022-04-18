@@ -704,7 +704,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
                 OUString sFind("%" + OUString::number(i + 1) + "%");
                 sal_Int32 nPositionToken = sLevelFormat.indexOf(sFind);
                 sal_Int32 nPositionNextToken = sLevelFormat.indexOf('%', nPositionToken + sFind.getLength());
-                if (nPositionToken > 0 && nPositionNextToken >= nPositionToken)
+                if (nPositionToken >= 0 && nPositionNextToken >= nPositionToken)
                 {
                     sLevelFormat = sLevelFormat.replaceAt(nPositionToken, nPositionNextToken - nPositionToken, u"");
                 }
