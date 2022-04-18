@@ -16,6 +16,24 @@
       "message": "FYI, you\u0027ll need to update LLVM/Clang in case you run Clang 15 tunk",
       "revId": "4d987ed8f4d6dca16738172f205170ac783da13e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c49bca_20845770",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-18T06:40:06Z",
+      "side": 1,
+      "message": "\u003e FYI, you\u0027ll need to update LLVM/Clang in case you run Clang 15 tunk\n\n...but in which case watch out for \u003chttps://gcc.gnu.org/bugzilla/show_bug.cgi?id\u003d105291\u003e \"include/c++/12.0.1/debug/safe_unordered_container.h:71:28: error: captured variable \u0027__local_end\u0027 cannot appear here\"",
+      "parentUuid": "a29c1f61_420c80ce",
+      "revId": "4d987ed8f4d6dca16738172f205170ac783da13e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
