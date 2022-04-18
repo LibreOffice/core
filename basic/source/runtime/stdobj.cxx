@@ -401,6 +401,13 @@ constexpr Method aMethods[] = {
     arg(u"useParensForNegativeNumbers", SbxINTEGER, OPT_), // vbTriState
     arg(u"groupDigits",                 SbxINTEGER, OPT_), // vbTriState
 
+{ u"FormatPercent",                  SbxSTRING,   5 | FUNCTION_ | COMPATONLY_, SbRtl_FormatPercent  },
+    arg(u"expression",                  SbxDOUBLE),
+    arg(u"numDigitsAfterDecimal",       SbxINTEGER, OPT_),
+    arg(u"includeLeadingDigit",         SbxINTEGER, OPT_), // vbTriState
+    arg(u"useParensForNegativeNumbers", SbxINTEGER, OPT_), // vbTriState
+    arg(u"groupDigits",                 SbxINTEGER, OPT_), // vbTriState
+
 { u"Frac",                          SbxDOUBLE,   1 | FUNCTION_,        SbRtl_Frac                 },
     arg(u"number", SbxDOUBLE),
 
