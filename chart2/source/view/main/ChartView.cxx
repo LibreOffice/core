@@ -1795,10 +1795,9 @@ std::shared_ptr< DrawModelWrapper > ChartView::getDrawModelWrapper()
 
 namespace
 {
-sal_Int32 lcl_getDiagramTitleSpace()
-{
-    return 200; //=0,2 cm spacing
-}
+
+constexpr sal_Int32 constDiagramTitleSpace = 200; //=0,2 cm spacing
+
 bool lcl_getPropertySwapXAndYAxis( const rtl::Reference< Diagram >& xDiagram )
 {
     bool bSwapXAndY = false;
@@ -1821,7 +1820,7 @@ bool lcl_getPropertySwapXAndYAxis( const rtl::Reference< Diagram >& xDiagram )
     return bSwapXAndY;
 }
 
-}
+} // end anonymous namespace
 
 sal_Int32 ExplicitValueProvider::getExplicitNumberFormatKeyForAxis(
                   const Reference< chart2::XAxis >& xAxis
@@ -1899,28 +1898,28 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
                 OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Height, &rModel ) );
                 nTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nTitleSpaceHeight )
-                    nTitleSpaceHeight+=lcl_getDiagramTitleSpace();
+                    nTitleSpaceHeight += constDiagramTitleSpace;
             }
             if( xTitle_Width.is() )
             {
                 OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xTitle_Width, &rModel ) );
                 nTitleSpaceWidth = pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if(nTitleSpaceWidth)
-                    nTitleSpaceWidth+=lcl_getDiagramTitleSpace();
+                    nTitleSpaceWidth += constDiagramTitleSpace;
             }
             if( xSecondTitle_Height.is() )
             {
                 OUString aCID_X( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Height, &rModel ) );
                 nSecondTitleSpaceHeight = pExplicitValueProvider->getRectangleOfObject( aCID_X, true ).Height;
                 if( nSecondTitleSpaceHeight )
-                    nSecondTitleSpaceHeight+=lcl_getDiagramTitleSpace();
+                    nSecondTitleSpaceHeight += constDiagramTitleSpace;
             }
             if( xSecondTitle_Width.is() )
             {
                 OUString aCID_Y( ObjectIdentifier::createClassifiedIdentifierForObject( xSecondTitle_Width, &rModel ) );
                 nSecondTitleSpaceWidth += pExplicitValueProvider->getRectangleOfObject( aCID_Y, true ).Width;
                 if( nSecondTitleSpaceWidth )
-                    nSecondTitleSpaceWidth+=lcl_getDiagramTitleSpace();
+                    nSecondTitleSpaceWidth += constDiagramTitleSpace;
             }
             if( bSubtract )
             {
@@ -1942,12 +1941,10 @@ awt::Rectangle ExplicitValueProvider::AddSubtractAxisTitleSizes(
     return aRet;
 }
 
-namespace {
-
-double lcl_getPageLayoutDistancePercentage()
+namespace
 {
-    return 0.02;
-}
+
+constexpr double constPageLayoutDistancePercentage = 0.02;
 
 bool getAvailablePosAndSizeForDiagram(
     CreateShapeParam2D& rParam, const awt::Size & rPageSize, const uno::Reference< beans::XPropertySet >& xProp)
@@ -1955,8 +1952,8 @@ bool getAvailablePosAndSizeForDiagram(
     rParam.mbUseFixedInnerSize = false;
 
     //@todo: we need a size dependent on the axis labels
-    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
-    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
+    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height * constPageLayoutDistancePercentage);
+    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width * constPageLayoutDistancePercentage);
     rParam.maRemainingSpace.X += nXDistance;
     rParam.maRemainingSpace.Width -= 2*nXDistance;
     rParam.maRemainingSpace.Y += nYDistance;
@@ -2019,8 +2016,8 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
 
     awt::Point aNewPosition(0,0);
     awt::Size aTitleSize = pVTitle->getFinalSize();
-    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
-    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
+    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height * constPageLayoutDistancePercentage);
+    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width * constPageLayoutDistancePercentage);
     switch( eAlignment )
     {
     case ALIGN_TOP:
@@ -2074,7 +2071,7 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     std::shared_ptr<VTitle> apVTitle;
 
     // #i109336# Improve auto positioning in chart
-    double fPercentage = lcl_getPageLayoutDistancePercentage();
+    double fPercentage = constPageLayoutDistancePercentage;
     sal_Int32 nXDistance = static_cast< sal_Int32 >( rPageSize.Width * fPercentage );
     sal_Int32 nYDistance = static_cast< sal_Int32 >( rPageSize.Height * fPercentage );
     if ( eType == TitleHelper::MAIN_TITLE )
