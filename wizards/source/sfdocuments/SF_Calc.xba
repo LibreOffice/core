@@ -1287,6 +1287,204 @@ CatchDuplicate:
 End Function    &apos;   SFDocuments.SF_Calc.CreateChart
 
 REM -----------------------------------------------------------------------------
+Public Function CreatePivotTable(Optional ByVal PivotTableName As Variant _
+									, Optional ByVal SourceRange As Variant _
+									, Optional ByVal TargetCell As Variant _
+									, Optional ByRef DataFields As Variant _
+									, Optional ByRef RowFields As Variant _
+									, Optional ByRef ColumnFields As Variant _
+									, Optional ByVal FilterButton As Variant _
+									, Optional ByVal RowTotals As Variant _
+									, Optional ByVal ColumnTotals As Variant _
+							) As String
+&apos;&apos;&apos; Create a new pivot table with the properties defined by the arguments.
+&apos;&apos;&apos;	If a pivot table with the same name exists already in the targeted sheet, it will be erased without warning.
+&apos;&apos;&apos;	Args:
+&apos;&apos;&apos;		PivotTableName: The user-defined name of the new pivottable
+&apos;&apos;&apos;		SourceRange: The range as a string containing the raw data.
+&apos;&apos;&apos;			The first row of the range is presumed to contain the field names of the new pivot table
+&apos;&apos;&apos;		TargetCell: the top left cell or the range as a string where to locate the pivot table.
+&apos;&apos;&apos;			Only the top left cell of the range will be considered.
+&apos;&apos;&apos;		DataFields: A single string or an array of field name + function to apply, formatted like:
+&apos;&apos;&apos;				Array(&quot;FieldName[;Function]&quot;, ...)
+&apos;&apos;&apos;			The allowed functions are: Sum, Count, Average, Max, Min, Product, CountNums, StDev, StDevP, Var, VarP and Median.
+&apos;&apos;&apos;			The default function is: When the values are all numerical, Sum is used, otherwise Count
+&apos;&apos;&apos;		RowFields: A single string or an array of the field names heading the pivot table rows
+&apos;&apos;&apos;		ColumnFields: A single string or an array of the field names heading the pivot table columns
+&apos;&apos;&apos;		FilterButton: When True (default), display a &quot;Filter&quot; button above the pivot table
+&apos;&apos;&apos;		RowTotals: When True (default), display a separate column for row totals
+&apos;&apos;&apos;		ColumnTotals: When True (default), display a separate row for column totals
+&apos;&apos;&apos;	Returns:
+&apos;&apos;&apos;		Return the range where the new pivot table is deployed.
+&apos;&apos;&apos;	Examples:
+&apos;&apos;&apos;		Dim vData As Variant, oDoc As Object, sTable As String, sPivot As String
+&apos;&apos;&apos;		vData = Array(Array(&quot;Item&quot;, &quot;State&quot;, &quot;Team&quot;, &quot;2002&quot;, &quot;2003&quot;, &quot;2004&quot;), _
+&apos;&apos;&apos;				Array(&quot;Books&quot;, &quot;Michigan&quot;, &quot;Jean&quot;, 14788, 30222, 23490), _
+&apos;&apos;&apos;				Array(&quot;Candy&quot;, &quot;Michigan&quot;, &quot;Jean&quot;, 26388, 15641, 32849), _
+&apos;&apos;&apos;				Array(&quot;Pens&quot;, &quot;Michigan&quot;, &quot;Jean&quot;, 16569, 32675, 25396), _
+&apos;&apos;&apos;				Array(&quot;Books&quot;, &quot;Michigan&quot;, &quot;Volker&quot;, 21961, 21242, 29009), _
+&apos;&apos;&apos;				Array(&quot;Candy&quot;, &quot;Michigan&quot;, &quot;Volker&quot;, 26142, 22407, 32841))
+&apos;&apos;&apos;		Set oDoc = ui.CreateDocument(&quot;Calc&quot;)
+&apos;&apos;&apos;		sTable = oDoc.SetArray(&quot;A1&quot;, vData)
+&apos;&apos;&apos;		sPivot = oDoc.CreatePivotTable(&quot;PT1&quot;, sTable, &quot;H1&quot;, Array(&quot;2002&quot;, &quot;2003;count&quot;, &quot;2004;average&quot;), &quot;Item&quot;, Array(&quot;State&quot;, &quot;Team&quot;), False)
+
+Dim sPivotTable As String				&apos;	Return value
+Dim vData As Variant					&apos;	Alias of DataFields
+Dim vRows As Variant					&apos;	Alias of RowFields
+Dim vColumns As Variant					&apos;	Alias of ColumnFields
+Dim oSourceAddress As Object			&apos;	Source as an _Address
+Dim oTargetAddress As Object			&apos;	Target as an _Address
+Dim vHeaders As Variant					&apos;	Array of header fields in the source range
+Dim oPivotTables As Object				&apos;	com.sun.star.sheet.XDataPilotTables
+Dim oDescriptor As Object				&apos;	com.sun.star.sheet.DataPilotDescriptor
+Dim oFields As Object					&apos;	ScDataPilotFieldsObj - Collection of fields
+Dim oField As Object					&apos;	ScDataPilotFieldsObj - A single field
+Dim sField As String					&apos;	A single field name
+Dim sData As String						&apos;	A single data field name + function
+Dim vDataField As Variant				&apos;	A single vData element, split on semicolon
+Dim sFunction As String					&apos;	Function to apply on a data field (string)
+Dim iFunction As Integer				&apos;	Equivalent of sFunction as com.sun.star.sheet.GeneralFunction2 constant
+Dim oOutputRange As Object				&apos;	com.sun.star.table.CellRangeAddress
+Dim i As Integer
+
+Const cstThisSub = &quot;SFDocuments.Calc.CreatePivotTable&quot;
+Const cstSubArgs = &quot;PivotTableName, SourceRange, TargetCell, DataFields, [RowFields], [ColumnFields]&quot; _
+					&amp; &quot;, [FilterButton=True], [RowTotals=True], [ColumnTotals=True]&quot;
+
+	If ScriptForge.SF_Utils._ErrorHandling() Then On Local Error GoTo Catch
+	sPivotTable = &quot;&quot;
+
+Check:
+	If IsMissing(RowFields) Or IsEmpty(RowFields) Then RowFields = Array()
+	If IsMissing(ColumnFields) Or IsEmpty(ColumnFields) Then ColumnFields = Array()
+	If IsMissing(FilterButton) Or IsEmpty(FilterButton) Then FilterButton = True
+	If IsMissing(RowTotals) Or IsEmpty(RowTotals) Then RowTotals = True
+	If IsMissing(ColumnTotals) Or IsEmpty(ColumnTotals) Then ColumnTotals = True
+	If ScriptForge.SF_Utils._EnterFunction(cstThisSub, cstSubArgs) Then
+		If Not _IsStillAlive(True) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(PivotTableName, &quot;PivotTableName&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(SourceRange, &quot;SourceRange&quot;, V_STRING) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(TargetCell, &quot;TargetCell&quot;, V_STRING) Then GoTo Finally
+		If IsArray(DataFields) Then
+			If Not ScriptForge.SF_Utils._ValidateArray(DataFields, &quot;DataFields&quot;, 1, V_STRING, True) Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(DataFields, &quot;DataFields&quot;, V_STRING) Then GoTo Finally
+		End If
+		If IsArray(RowFields) Then
+			If Not ScriptForge.SF_Utils._ValidateArray(RowFields, &quot;RowFields&quot;, 1, V_STRING, True) Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(RowFields, &quot;RowFields&quot;, V_STRING) Then GoTo Finally
+		End If
+		If IsArray(ColumnFields) Then
+			If Not ScriptForge.SF_Utils._ValidateArray(ColumnFields, &quot;ColumnFields&quot;, 1, V_STRING, True) Then GoTo Finally
+		Else
+			If Not ScriptForge.SF_Utils._Validate(ColumnFields, &quot;ColumnFields&quot;, V_STRING) Then GoTo Finally
+		End If
+		If Not ScriptForge.SF_Utils._Validate(FilterButton, &quot;FilterButton&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(RowTotals, &quot;RowTotals&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+		If Not ScriptForge.SF_Utils._Validate(ColumnTotals, &quot;ColumnTotals&quot;, ScriptForge.V_BOOLEAN) Then GoTo Finally
+	End If
+	&apos;	Next statements must be outside previous If-block to force their execution even in case of internal call
+	If IsArray(DataFields) Then vData = DataFields Else vData = Array(DataFields)
+	If IsArray(RowFields) Then vRows = RowFields Else vRows = Array(RowFields)
+	If IsArray(ColumnFields) Then vColumns = ColumnFields Else vColumns = Array(ColumnFields)
+
+Try:
+
+	Set oSourceAddress = _ParseAddress(SourceRange)
+	vHeaders = GetValue(Offset(SourceRange, 0, 0, 1))		&apos;	Content of the first row of the source
+	Set oTargetAddress = _Offset(TargetCell, 0, 0, 1, 1)	&apos;	Retain the top left cell only
+	Set oPivotTables = oTargetAddress.XSpreadsheet.getDataPilotTables()
+
+	&apos;	Initialize new pivot table
+	Set oDescriptor = oPivotTables.createDataPilotDescriptor()
+	oDescriptor.setSourceRange(oSourceAddress.XCellRange.RangeAddress)
+	Set oFields = oDescriptor.getDataPilotFields()
+
+	&apos;	Set row fields
+	For i = 0 To UBound(vRows)
+		sField = vRows(i)
+		If Len(sField) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(sField, &quot;RowFields&quot;, V_STRING, vHeaders) Then GoTo Finally
+			Set oField = oFields.getByName(sField)
+			oField.Orientation = com.sun.star.sheet.DataPilotFieldOrientation.ROW
+		End If
+	Next i
+
+	&apos;	Set column fields
+	For i = 0 To UBound(vColumns)
+		sField = vColumns(i)
+		If Len(sField) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(sField, &quot;ColumnFields&quot;, V_STRING, vHeaders) Then GoTo Finally
+			Set oField = oFields.getByName(sField)
+			oField.Orientation = com.sun.star.sheet.DataPilotFieldOrientation.COLUMN
+		End If
+	Next i
+
+	&apos;	Set data fields
+	For i = 0 To UBound(vData)
+		sData = vData(i)
+		&apos;	Minimal parsing
+		If Right(sData, 1) = &quot;;&quot; Then sData = Left(sData, Len(sData) - 1)
+		vDataField = Split(sData, &quot;;&quot;)
+		sField = vDataField(0)
+		If UBound(vDataField) &gt; 0 Then sFunction = vDataField(1) Else sFunction = &quot;&quot;
+		&apos;	Define field properties
+		If Len(sField) &gt; 0 Then
+			If Not ScriptForge.SF_Utils._Validate(sField, &quot;DataFields&quot;, V_STRING, vHeaders) Then GoTo Finally
+			Set oField = oFields.getByName(sField)
+			oField.Orientation = com.sun.star.sheet.DataPilotFieldOrientation.DATA
+			&apos;	Associate the correct function
+			With com.sun.star.sheet.GeneralFunction2
+				Select Case UCase(sFunction)
+					Case &quot;&quot;			:	iFunction = .AUTO
+					Case &quot;SUM&quot;		:	iFunction = .SUM
+					Case &quot;COUNT&quot;	:	iFunction = .COUNT
+					Case &quot;AVERAGE&quot;	:	iFunction = .AVERAGE
+					Case &quot;MAX&quot;		:	iFunction = .MAX
+					Case &quot;MIN&quot;		:	iFunction = .MIN
+					Case &quot;PRODUCT&quot;	:	iFunction = .PRODUCT
+					Case &quot;COUNTNUMS&quot;:	iFunction = .COUNTNUMS
+					Case &quot;STDEV&quot;	:	iFunction = .STDEV
+					Case &quot;STDEVP&quot;	:	iFunction = .STDEVP
+					Case &quot;VAR&quot;		:	iFunction = .VAR
+					Case &quot;VARP&quot;		:	iFunction = .VARP
+					Case &quot;MEDIAN&quot;	:	iFunction = .MEDIAN
+					Case Else
+						If Not ScriptForge.SF_Utils._Validate(sFunction, &quot;DataFields/Function&quot;, V_STRING _
+								, Array(&quot;Sum&quot;, &quot;Count&quot;, &quot;Average&quot;, &quot;Max&quot;, &quot;Min&quot;, &quot;Product&quot;, &quot;CountNums&quot; _
+										, &quot;StDev&quot;, &quot;StDevP&quot;, &quot;Var&quot;, &quot;VarP&quot;, &quot;Median&quot;) _
+								) Then GoTo Finally
+				End Select
+			End With
+			oField.Function2 = iFunction
+		End If
+	Next i
+
+	&apos;	Remove any pivot table with same name
+	If oPivotTables.hasByName(PivotTableName) Then oPivotTables.removeByName(PivotTableName)
+
+	&apos;	Finalize the new pivot table
+	oDescriptor.ShowFilterButton = FilterButton
+	oDescriptor.RowGrand = RowTotals
+	oDescriptor.ColumnGrand = ColumnTotals
+	oPivotTables.insertNewByName(PivotTableName, oTargetAddress.XCellRange.getCellByPosition(0, 0).CellAddress, oDescriptor)
+
+	&apos;	Determine the range of the new pivot table
+	Set oOutputRange = oPivotTables.getByName(PivotTableName).OutputRange
+	With oOutputRange
+		sPivotTable = _Component.getSheets().getCellRangeByPosition(.StartColumn, .StartRow, .EndColumn, .EndRow, .Sheet).AbsoluteName
+	End With
+
+Finally:
+	CreatePivotTable = sPivotTable
+	ScriptForge.SF_Utils._ExitFunction(cstThisSub)
+	Exit Function
+Catch:
+	GoTo Finally
+End Function    &apos;   SFDocuments.SF_Calc.CreatePivotTable
+
+REM -----------------------------------------------------------------------------
 Public Function DAvg(Optional ByVal Range As Variant) As Double
 &apos;&apos;&apos;	Get the average of the numeric values stored in the given range
 &apos;&apos;&apos;	Args:
