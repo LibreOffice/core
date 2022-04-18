@@ -1137,7 +1137,7 @@ tools::Rectangle ImpEditView::GetEditCursor() const
     if (nPara == EE_PARA_NOT_FOUND) // #i94322
         return tools::Rectangle();
 
-    const ParaPortion& rParaPortion = pEditEngine->GetParaPortions()[nPara];
+    const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
 
     GetCursorFlags nShowCursorFlags = nExtraCursorFlags | GetCursorFlags::TextOnly;
 
@@ -1150,7 +1150,7 @@ tools::Rectangle ImpEditView::GetEditCursor() const
         nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
     }
 
-    return ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, &rParaPortion);
+    return ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, pParaPortion);
 }
 
 void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
@@ -1184,7 +1184,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
     if (nPara == EE_PARA_NOT_FOUND) // #i94322
         return;
 
-    const ParaPortion& rParaPortion = pEditEngine->GetParaPortions()[nPara];
+    const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
 
     GetCursorFlags nShowCursorFlags = nExtraCursorFlags | GetCursorFlags::TextOnly;
 
@@ -1197,7 +1197,7 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         nShowCursorFlags |= GetCursorFlags::PreferPortionStart;
     }
 
-    tools::Rectangle aEditCursor = ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, &rParaPortion);
+    tools::Rectangle aEditCursor = ImplGetEditCursor(aPaM, nShowCursorFlags, nTextPortionStart, pParaPortion);
 
     if ( bGotoCursor  ) // && (!pEditEngine->pImpEditEngine->GetStatus().AutoPageSize() ) )
     {
@@ -1439,8 +1439,8 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
         CursorDirection nCursorDir = CursorDirection::NONE;
         if ( IsInsertMode() && !aEditSelection.HasRange() && ( pEditEngine->pImpEditEngine->HasDifferentRTLLevels( aPaM.GetNode() ) ) )
         {
-            sal_uInt16 nTextPortion = rParaPortion.GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, bool(nShowCursorFlags & GetCursorFlags::PreferPortionStart) );
-            const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[nTextPortion];
+            sal_uInt16 nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTextPortionStart, bool(nShowCursorFlags & GetCursorFlags::PreferPortionStart) );
+            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nTextPortion];
             if (rTextPortion.IsRightToLeft())
                 nCursorDir = CursorDirection::RTL;
             else
@@ -1871,8 +1871,8 @@ bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
         sal_Int32 nPara = pEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
         tools::Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
         tools::Long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
-        const ParaPortion& rParaPortion = pEditEngine->GetParaPortions()[nPara];
-        nY += rParaPortion.GetFirstLineOffset();
+        const ParaPortion* pParaPortion = pEditEngine->GetParaPortions()[nPara];
+        nY += pParaPortion->GetFirstLineOffset();
         if ( ( aDocPos.Y() > ( nY + aBulletArea.Top() ) ) &&
              ( aDocPos.Y() < ( nY + aBulletArea.Bottom() ) ) &&
              ( aDocPos.X() > ( aBulletArea.Left() ) ) &&
