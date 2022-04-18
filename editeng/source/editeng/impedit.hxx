@@ -761,8 +761,8 @@ private:
 
     void                CheckIdleFormatter();
 
-    inline const ParaPortion& FindParaPortion( const ContentNode* pNode ) const;
-    inline ParaPortion& FindParaPortion( ContentNode const * pNode );
+    inline const ParaPortion* FindParaPortion( const ContentNode* pNode ) const;
+    inline ParaPortion* FindParaPortion( ContentNode const * pNode );
 
     css::uno::Reference< css::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
@@ -1261,14 +1261,14 @@ inline SfxUndoManager* ImpEditEngine::SetUndoManager(SfxUndoManager* pNew)
     return pRetval;
 }
 
-inline const ParaPortion& ImpEditEngine::FindParaPortion( const ContentNode* pNode ) const
+inline const ParaPortion* ImpEditEngine::FindParaPortion( const ContentNode* pNode ) const
 {
     sal_Int32 nPos = aEditDoc.GetPos( pNode );
     DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
     return GetParaPortions()[ nPos ];
 }
 
-inline ParaPortion& ImpEditEngine::FindParaPortion( ContentNode const * pNode )
+inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode const * pNode )
 {
     sal_Int32 nPos = aEditDoc.GetPos( pNode );
     DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
