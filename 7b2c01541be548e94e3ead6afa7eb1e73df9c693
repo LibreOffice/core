@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb3111a3_d10f6e1b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-18T20:45:15Z",
+      "side": 1,
+      "message": "Hi Mike! This could be a test routine, but I am not able to create such a document in excel. Even after the change of my entire OS and Excel\u0027s language it messes up the contents in the first cell. It shows me ïðîáà. Do you have another idea how to test this?",
+      "revId": "7b2c01541be548e94e3ead6afa7eb1e73df9c693",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
