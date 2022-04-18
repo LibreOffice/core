@@ -121,6 +121,24 @@
       "parentUuid": "3bf084f5_5d6f4848",
       "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "986e632a_e42dd03e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-18T14:23:11Z",
+      "side": 1,
+      "message": "I don\u0027t know at all. I don\u0027t even know if we can split the work into 2 parts (import and export) and do only one to begin with this task.\nI just think it would be a pity to have something experimental during years because not finished, plenty of bugs, whatever or to be stuck in the middle of a bridge if we got rid of the current implementation or also having both implementations to maintain.",
+      "parentUuid": "49001f9d_202fa253",
+      "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
