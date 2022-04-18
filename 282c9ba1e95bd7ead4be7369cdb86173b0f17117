@@ -103,6 +103,24 @@
       "parentUuid": "8c0cae4c_b37d337c",
       "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49001f9d_202fa253",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-18T13:12:32Z",
+      "side": 1,
+      "message": "Hi Tomaž, Mike, Julien,\nDo you think this could fit into a GSOC idea ?",
+      "parentUuid": "3bf084f5_5d6f4848",
+      "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
