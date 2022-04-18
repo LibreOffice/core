@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ddc928c_31c4bb5a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-18T12:12:35Z",
+      "side": 1,
+      "message": "Looks good - thanks!",
+      "revId": "302cd2582b62fa930ab1858a0bd97e49db4bfc77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cf4cdcc_1a0d5fd8",
+        "filename": "vcl/source/filter/itiff/itiff.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 927,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-18T12:12:35Z",
+      "side": 1,
+      "message": "May I ask you to reorder the two SetPixel calls - so that \u003d\u003d 2 cose goes first, and \u003d\u003d 5 second? Not a big deal, but follows the older code more closely. No problem if you merge it as is, anyway.",
+      "revId": "302cd2582b62fa930ab1858a0bd97e49db4bfc77",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
