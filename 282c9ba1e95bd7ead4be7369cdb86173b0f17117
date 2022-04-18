@@ -50,6 +50,23 @@
       "message": "Out of the scope of the commit but considering the complexity of tiff in general, just wonder if it wouldn\u0027t be better to use a lib like http://www.libtiff.org/.",
       "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d3982b0_70c293df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-18T09:50:08Z",
+      "side": 1,
+      "message": "It seems it can help tdf#36300 too.",
+      "revId": "282c9ba1e95bd7ead4be7369cdb86173b0f17117",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
