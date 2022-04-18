@@ -24,6 +24,7 @@
 
 #include <svl/lstner.hxx>
 #include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>

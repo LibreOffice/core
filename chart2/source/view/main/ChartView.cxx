@@ -76,7 +76,6 @@
 
 #include <time.h>
 
-#include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
