@@ -2114,6 +2114,12 @@ class SFDocuments:
         def CreateChart(self, chartname, sheetname, range, columnheader = False, rowheader = False):
             return self.ExecMethod(self.vbMethod, 'CreateChart', chartname, sheetname, range, columnheader, rowheader)
 
+        def CreatePivotTable(self, pivottablename, sourcerange, targetcell, datafields = ScriptForge.cstSymEmpty,
+                             rowfields = ScriptForge.cstSymEmpty, columnfields = ScriptForge.cstSymEmpty,
+                             filterbutton = True, rowtotals = True, columntotals = True):
+            return self.ExecMethod(self.vbMethod, 'CreatePivotTable', pivottablename, sourcerange, targetcell,
+                                   datafields, rowfields, columnfields, filterbutton, rowtotals, columntotals)
+
         def DAvg(self, range):
             return self.ExecMethod(self.vbMethod, 'DAvg', range)
 
