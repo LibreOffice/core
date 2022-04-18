@@ -1613,7 +1613,7 @@ libo_FUZZ_ARG_ENABLE(split-debug,
 libo_FUZZ_ARG_ENABLE(gdb-index,
     AS_HELP_STRING([--disable-gdb-index],
         [Disables creating debug information in the gdb index format, which makes gdb start faster.
-         The feature requires the gold or lld linker.]))
+         The feature requires a linker that supports the --gdb-index option.]))
 
 libo_FUZZ_ARG_ENABLE(sal-log,
     AS_HELP_STRING([--enable-sal-log],
@@ -4597,7 +4597,7 @@ fi
 AC_SUBST(ENABLE_DEBUG)
 
 dnl ===================================================================
-dnl Select the linker to use (gold/lld/ld.bfd).
+dnl Select the linker to use (gold/lld/ld.bfd/mold).
 dnl This is done only after compiler checks (need to know if Clang is
 dnl used, for different defaults) and after checking if a debug build
 dnl is wanted (non-debug builds get the default linker if not explicitly
@@ -4662,17 +4662,23 @@ if test "$enable_ld" != "no"; then
             check_use_ld lld
             if test $? -ne 0; then
                 check_use_ld gold
+                if test $? -ne 0; then
+                    check_use_ld mold
+                fi
             fi
         else
-            # For gcc first try gold, new versions also support lld.
+            # For gcc first try gold, new versions also support lld/mold.
             check_use_ld gold
             if test $? -ne 0; then
                 check_use_ld lld
+                if test $? -ne 0; then
+                    check_use_ld mold
+                fi
             fi
         fi
         ld_output=$(echo 'int main() { return 0; }' | $CC -Wl,-v -x c -o conftest.out - $CFLAGS $LDFLAGS 2>/dev/null)
         rm conftest.out
-        ld_used=$(echo "$ld_output" | grep -E '(^GNU gold|^GNU ld|^LLD)')
+        ld_used=$(echo "$ld_output" | grep -E '(^GNU gold|^GNU ld|^LLD|^mold)')
         if test -z "$ld_used"; then
             ld_used="unknown"
         fi
@@ -4680,8 +4686,8 @@ if test "$enable_ld" != "no"; then
         AC_MSG_RESULT([$ld_used])
         if test -n "$ENABLE_DEBUG$ENABLE_DBGUTIL"; then
             if echo "$ld_used" | grep -q "^GNU ld"; then
-                AC_MSG_WARN([The default GNU linker is slow, consider using the LLD or the GNU gold linker.])
-                add_warning "The default GNU linker is slow, consider using the LLD or the GNU gold linker."
+                AC_MSG_WARN([The default GNU linker is slow, consider using LLD, mold or the GNU gold linker.])
+                add_warning "The default GNU linker is slow, consider using LLD, mold or the GNU gold linker."
             fi
         fi
     else
