@@ -545,20 +545,21 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             rOutput.WriteChar( ' ' ); // Separator
 
         ItemList aAttribItems;
-        ParaPortion& rParaPortion = FindParaPortion( pNode );
+        ParaPortion* pParaPortion = FindParaPortion( pNode );
+        DBG_ASSERT( pParaPortion, "Portion not found: WriteRTF" );
 
         sal_Int32 nIndex = 0;
         sal_Int32 nStartPos = 0;
         sal_Int32 nEndPos = pNode->Len();
         sal_Int32 nStartPortion = 0;
-        sal_Int32 nEndPortion = rParaPortion.GetTextPortions().Count() - 1;
+        sal_Int32 nEndPortion = pParaPortion->GetTextPortions().Count() - 1;
         bool bFinishPortion = false;
         sal_Int32 nPortionStart;
 
         if ( nNode == nStartNode )
         {
             nStartPos = aSel.Min().GetIndex();
-            nStartPortion = rParaPortion.GetTextPortions().FindPortion( nStartPos, nPortionStart );
+            nStartPortion = pParaPortion->GetTextPortions().FindPortion( nStartPos, nPortionStart );
             if ( nStartPos != 0 )
             {
                 aAttribItems.Clear();
@@ -576,14 +577,14 @@ ErrCode ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         if ( nNode == nEndNode ) // can also be == nStart!
         {
             nEndPos = aSel.Max().GetIndex();
-            nEndPortion = rParaPortion.GetTextPortions().FindPortion( nEndPos, nPortionStart );
+            nEndPortion = pParaPortion->GetTextPortions().FindPortion( nEndPos, nPortionStart );
         }
 
         const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature(nIndex);
         // start at 0, so the index is right ...
         for ( sal_Int32 n = 0; n <= nEndPortion; n++ )
         {
-            const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[n];
+            const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
             if ( n < nStartPortion )
             {
                 nIndex = nIndex + rTextPortion.GetLen();
@@ -1013,8 +1014,8 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
 
         if ( bOnlyFullParagraphs )
         {
-            const ParaPortion& rParaPortion = GetParaPortions()[nNode];
-            nTextPortions += rParaPortion.GetTextPortions().Count();
+            const ParaPortion* pParaPortion = GetParaPortions()[nNode];
+            nTextPortions += pParaPortion->GetTextPortions().Count();
         }
 
         sal_Int32 nStartPos = 0;
@@ -1090,39 +1091,39 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
         pTxtObj->SetPortionInfo(std::unique_ptr<XParaPortionList>(pXList));
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
-            const ParaPortion& rParaPortion = GetParaPortions()[nNode];
+            const ParaPortion* pParaPortion = GetParaPortions()[nNode];
             XParaPortion* pX = new XParaPortion;
             pXList->push_back(pX);
 
-            pX->nHeight = rParaPortion.GetHeight();
-            pX->nFirstLineOffset = rParaPortion.GetFirstLineOffset();
+            pX->nHeight = pParaPortion->GetHeight();
+            pX->nFirstLineOffset = pParaPortion->GetFirstLineOffset();
 
             // The TextPortions
-            sal_uInt16 nCount = rParaPortion.GetTextPortions().Count();
+            sal_uInt16 nCount = pParaPortion->GetTextPortions().Count();
             sal_uInt16 n;
             for ( n = 0; n < nCount; n++ )
             {
-                const TextPortion& rTextPortion = rParaPortion.GetTextPortions()[n];
+                const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[n];
                 TextPortion* pNew = new TextPortion( rTextPortion );
                 pX->aTextPortions.Append(pNew);
             }
 
             // The lines
-            nCount = rParaPortion.GetLines().Count();
+            nCount = pParaPortion->GetLines().Count();
             for ( n = 0; n < nCount; n++ )
             {
-                const EditLine& rLine = rParaPortion.GetLines()[n];
+                const EditLine& rLine = pParaPortion->GetLines()[n];
                 EditLine* pNew = rLine.Clone();
                 pX->aLines.Append(pNew);
             }
 #ifdef DBG_UTIL
             sal_uInt16 nTest;
             int nTPLen = 0, nTxtLen = 0;
-            for ( nTest = rParaPortion.GetTextPortions().Count(); nTest; )
-                nTPLen += rParaPortion.GetTextPortions()[--nTest].GetLen();
-            for ( nTest = rParaPortion.GetLines().Count(); nTest; )
-                nTxtLen += rParaPortion.GetLines()[--nTest].GetLen();
-            DBG_ASSERT( ( nTPLen == rParaPortion.GetNode()->Len() ) && ( nTxtLen == rParaPortion.GetNode()->Len() ), "CreateBinTextObject: ParaPortion not completely formatted!" );
+            for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
+                nTPLen += pParaPortion->GetTextPortions()[--nTest].GetLen();
+            for ( nTest = pParaPortion->GetLines().Count(); nTest; )
+                nTxtLen += pParaPortion->GetLines()[--nTest].GetLen();
+            DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "CreateBinTextObject: ParaPortion not completely formatted!" );
 #endif
         }
     }
@@ -1205,8 +1206,9 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
 
         aPaM = ImpFastInsertText( aPaM, pC->GetText() );
 
-        ParaPortion& rPortion = FindParaPortion( aPaM.GetNode() );
-        rPortion.MarkInvalid( nStartPos, pC->GetText().getLength() );
+        ParaPortion* pPortion = FindParaPortion( aPaM.GetNode() );
+        DBG_ASSERT( pPortion, "Blind Portion in FastInsertText" );
+        pPortion->MarkInvalid( nStartPos, pC->GetText().getLength() );
 
         // Character attributes ...
         bool bAllreadyHasAttribs = aPaM.GetNode()->GetCharAttribs().Count() != 0;
@@ -1254,7 +1256,7 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
                 UpdateFields();
 
             // Otherwise, quick format => no attributes!
-            rPortion.MarkSelectionInvalid( nStartPos );
+            pPortion->MarkSelectionInvalid( nStartPos );
         }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
@@ -1284,40 +1286,41 @@ EditSelection ImpEditEngine::InsertTextObject( const EditTextObject& rTextObject
             if ( bNewContent && bUsePortionInfo )
             {
                 const XParaPortion& rXP = (*pPortionInfo)[n];
-                ParaPortion& rParaPortion = GetParaPortions()[ nPara ];
-                rParaPortion.nHeight = rXP.nHeight;
-                rParaPortion.nFirstLineOffset = rXP.nFirstLineOffset;
-                rParaPortion.bForceRepaint = true;
-                rParaPortion.SetValid();   // Do not format
+                ParaPortion* pParaPortion = GetParaPortions()[ nPara ];
+                DBG_ASSERT( pParaPortion, "InsertBinTextObject: ParaPortion?" );
+                pParaPortion->nHeight = rXP.nHeight;
+                pParaPortion->nFirstLineOffset = rXP.nFirstLineOffset;
+                pParaPortion->bForceRepaint = true;
+                pParaPortion->SetValid();   // Do not format
 
                 // The Text Portions
-                rParaPortion.GetTextPortions().Reset();
+                pParaPortion->GetTextPortions().Reset();
                 sal_uInt16 nCount = rXP.aTextPortions.Count();
                 for ( sal_uInt16 _n = 0; _n < nCount; _n++ )
                 {
                     const TextPortion& rTextPortion = rXP.aTextPortions[_n];
                     TextPortion* pNew = new TextPortion( rTextPortion );
-                    rParaPortion.GetTextPortions().Append(pNew);
+                    pParaPortion->GetTextPortions().Append(pNew);
                 }
 
                 // The lines
-                rParaPortion.GetLines().Reset();
+                pParaPortion->GetLines().Reset();
                 nCount = rXP.aLines.Count();
                 for ( sal_uInt16 m = 0; m < nCount; m++ )
                 {
                     const EditLine& rLine = rXP.aLines[m];
                     EditLine* pNew = rLine.Clone();
                     pNew->SetInvalid(); // Paint again!
-                    rParaPortion.GetLines().Append(pNew);
+                    pParaPortion->GetLines().Append(pNew);
                 }
 #ifdef DBG_UTIL
                 sal_uInt16 nTest;
                 int nTPLen = 0, nTxtLen = 0;
-                for ( nTest = rParaPortion.GetTextPortions().Count(); nTest; )
-                    nTPLen += rParaPortion.GetTextPortions()[--nTest].GetLen();
-                for ( nTest = rParaPortion.GetLines().Count(); nTest; )
-                    nTxtLen += rParaPortion.GetLines()[--nTest].GetLen();
-                DBG_ASSERT( ( nTPLen == rParaPortion.GetNode()->Len() ) && ( nTxtLen == rParaPortion.GetNode()->Len() ), "InsertTextObject: ParaPortion not completely formatted!" );
+                for ( nTest = pParaPortion->GetTextPortions().Count(); nTest; )
+                    nTPLen += pParaPortion->GetTextPortions()[--nTest].GetLen();
+                for ( nTest = pParaPortion->GetLines().Count(); nTest; )
+                    nTxtLen += pParaPortion->GetLines()[--nTest].GetLen();
+                DBG_ASSERT( ( nTPLen == pParaPortion->GetNode()->Len() ) && ( nTxtLen == pParaPortion->GetNode()->Len() ), "InsertTextObject: ParaPortion not completely formatted!" );
 #endif
             }
         }
@@ -2936,8 +2939,8 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                     aNewSel.Max().SetIndex( aNewSel.Max().GetIndex() + nDiffs );
 
                 sal_Int32 nSelNode = aEditDoc.GetPos( rData.aSelection.Min().GetNode() );
-                ParaPortion& rParaPortion = GetParaPortions()[nSelNode];
-                rParaPortion.MarkSelectionInvalid( rData.nStart );
+                ParaPortion* pParaPortion = GetParaPortions()[nSelNode];
+                pParaPortion->MarkSelectionInvalid( rData.nStart );
             }
         }
     }
