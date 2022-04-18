@@ -1145,7 +1145,7 @@ bool getAvailablePosAndSizeForDiagram(
     return true;
 }
 
-enum TitleAlignment { ALIGN_LEFT, ALIGN_TOP, ALIGN_RIGHT, ALIGN_BOTTOM, ALIGN_Z };
+enum class TitleAlignment { ALIGN_LEFT, ALIGN_TOP, ALIGN_RIGHT, ALIGN_BOTTOM, ALIGN_Z };
 
 void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
                                , awt::Rectangle const & rDiagramPlusAxesRect, const awt::Size & rPageSize )
@@ -1157,30 +1157,28 @@ void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
     awt::Size aTitleSize = pVTitle->getFinalSize();
     sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height * constPageLayoutDistancePercentage);
     sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width * constPageLayoutDistancePercentage);
-    switch( eAlignment )
+    switch (eAlignment)
     {
-    case ALIGN_TOP:
+    case TitleAlignment::ALIGN_TOP:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width/2
                                     , rDiagramPlusAxesRect.Y - aTitleSize.Height/2  - nYDistance );
         break;
-    case ALIGN_BOTTOM:
+    case TitleAlignment::ALIGN_BOTTOM:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width/2
                                     , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height + aTitleSize.Height/2  + nYDistance );
         break;
-    case ALIGN_LEFT:
+    case TitleAlignment::ALIGN_LEFT:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X - aTitleSize.Width/2 - nXDistance
                                     , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height/2 );
         break;
-    case ALIGN_RIGHT:
+    case TitleAlignment::ALIGN_RIGHT:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width + aTitleSize.Width/2 + nXDistance
                                     , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height/2 );
         break;
-    case ALIGN_Z:
+    case TitleAlignment::ALIGN_Z:
         aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width + aTitleSize.Width/2 + nXDistance
                                     , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height - aTitleSize.Height/2 );
        break;
-    default:
-        break;
     }
 
     sal_Int32 nMaxY = rPageSize.Height - aTitleSize.Height/2;
@@ -1281,23 +1279,23 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     {
         switch( eAlignment )
         {
-        case ALIGN_TOP:
+        case TitleAlignment::ALIGN_TOP:
             aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
                                      , rRemainingSpace.Y + aTitleSize.Height/2 + nYDistance );
             break;
-        case ALIGN_BOTTOM:
+        case TitleAlignment::ALIGN_BOTTOM:
             aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
                                      , rRemainingSpace.Y + rRemainingSpace.Height - aTitleSize.Height/2 - nYDistance );
             break;
-        case ALIGN_LEFT:
+        case TitleAlignment::ALIGN_LEFT:
             aNewPosition = awt::Point( rRemainingSpace.X + aTitleSize.Width/2 + nXDistance
                                      , rRemainingSpace.Y + rRemainingSpace.Height/2 );
             break;
-        case ALIGN_RIGHT:
+        case TitleAlignment::ALIGN_RIGHT:
             aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width - aTitleSize.Width/2 - nXDistance
                                      , rRemainingSpace.Y + rRemainingSpace.Height/2 );
             break;
-        default:
+        case TitleAlignment::ALIGN_Z:
             break;
 
         }
@@ -1307,25 +1305,25 @@ std::shared_ptr<VTitle> lcl_createTitle( TitleHelper::eTitleType eType
     //remaining space
     switch( eAlignment )
     {
-        case ALIGN_TOP:
+        case TitleAlignment::ALIGN_TOP:
             // Push the remaining space down from top.
             rRemainingSpace.Y += ( aTitleSize.Height + nYDistance );
             rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
             break;
-        case ALIGN_BOTTOM:
+        case TitleAlignment::ALIGN_BOTTOM:
             // Push the remaining space up from bottom.
             rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
             break;
-        case ALIGN_LEFT:
+        case TitleAlignment::ALIGN_LEFT:
             // Push the remaining space to the right from left edge.
             rRemainingSpace.X += ( aTitleSize.Width + nXDistance );
             rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
             break;
-        case ALIGN_RIGHT:
+        case TitleAlignment::ALIGN_RIGHT:
             // Push the remaining space to the left from right edge.
             rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
             break;
-        default:
+        case TitleAlignment::ALIGN_Z:
             break;
     }
 
@@ -2041,13 +2039,13 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
 
     lcl_createTitle(
         TitleHelper::MAIN_TITLE, mxRootShape, mrChartModel,
-        aParam.maRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy);
+        aParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_TOP, bAutoPositionDummy);
     if (!bHasRelativeSize && (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0))
         return;
 
     lcl_createTitle(
         TitleHelper::SUB_TITLE, mxRootShape, mrChartModel,
-        aParam.maRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy );
+        aParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_TOP, bAutoPositionDummy );
     if (!bHasRelativeSize && (aParam.maRemainingSpace.Width <= 0 || aParam.maRemainingSpace.Height <= 0))
         return;
 
@@ -2098,15 +2096,15 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
         //correct axis title position
         awt::Rectangle aDiagramPlusAxesRect( aUsedOuterRect );
         if (aParam.mbAutoPosTitleX)
-            changePositionOfAxisTitle(aParam.mpVTitleX.get(), ALIGN_BOTTOM, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleX.get(), TitleAlignment::ALIGN_BOTTOM, aDiagramPlusAxesRect, rPageSize);
         if (aParam.mbAutoPosTitleY)
-            changePositionOfAxisTitle(aParam.mpVTitleY.get(), ALIGN_LEFT, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleY.get(), TitleAlignment::ALIGN_LEFT, aDiagramPlusAxesRect, rPageSize);
         if (aParam.mbAutoPosTitleZ)
-            changePositionOfAxisTitle(aParam.mpVTitleZ.get(), ALIGN_Z, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleZ.get(), TitleAlignment::ALIGN_Z, aDiagramPlusAxesRect, rPageSize);
         if (aParam.mbAutoPosSecondTitleX)
-            changePositionOfAxisTitle(aParam.mpVTitleSecondX.get(), bIsVertical? ALIGN_RIGHT : ALIGN_TOP, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleSecondX.get(), bIsVertical? TitleAlignment::ALIGN_RIGHT : TitleAlignment::ALIGN_TOP, aDiagramPlusAxesRect, rPageSize);
         if (aParam.mbAutoPosSecondTitleY)
-            changePositionOfAxisTitle(aParam.mpVTitleSecondY.get(), bIsVertical? ALIGN_TOP : ALIGN_RIGHT, aDiagramPlusAxesRect, rPageSize);
+            changePositionOfAxisTitle(aParam.mpVTitleSecondY.get(), bIsVertical? TitleAlignment::ALIGN_TOP : TitleAlignment::ALIGN_RIGHT, aDiagramPlusAxesRect, rPageSize);
     }
 
     //cleanup: remove all empty group shapes to avoid grey border lines:
@@ -2151,19 +2149,19 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 0 ) )
         rParam.mpVTitleX = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_X_AXIS_POSITION, mxRootShape, mrChartModel
-                , rParam.maRemainingSpace, rPageSize, ALIGN_BOTTOM, rParam.mbAutoPosTitleX );
+                , rParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_BOTTOM, rParam.mbAutoPosTitleX );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 1 ) )
         rParam.mpVTitleY = lcl_createTitle( TitleHelper::TITLE_AT_STANDARD_Y_AXIS_POSITION, mxRootShape, mrChartModel
-                , rParam.maRemainingSpace, rPageSize, ALIGN_LEFT, rParam.mbAutoPosTitleY );
+                , rParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_LEFT, rParam.mbAutoPosTitleY );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingMainAxis( xChartType, nDimension, 2 ) )
         rParam.mpVTitleZ = lcl_createTitle( TitleHelper::Z_AXIS_TITLE, mxRootShape, mrChartModel
-                , rParam.maRemainingSpace, rPageSize, ALIGN_RIGHT, rParam.mbAutoPosTitleZ );
+                , rParam.maRemainingSpace, rPageSize, TitleAlignment::ALIGN_RIGHT, rParam.mbAutoPosTitleZ );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
@@ -2172,13 +2170,13 @@ bool ChartView::createAxisTitleShapes2D( CreateShapeParam2D& rParam, const css::
 
     if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
         rParam.mpVTitleSecondX = lcl_createTitle( TitleHelper::SECONDARY_X_AXIS_TITLE, mxRootShape, mrChartModel
-                , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_RIGHT : ALIGN_TOP, rParam.mbAutoPosSecondTitleX );
+                , rParam.maRemainingSpace, rPageSize, bIsVertical? TitleAlignment::ALIGN_RIGHT : TitleAlignment::ALIGN_TOP, rParam.mbAutoPosSecondTitleX );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
     if( ChartTypeHelper::isSupportingSecondaryAxis( xChartType, nDimension ) )
         rParam.mpVTitleSecondY = lcl_createTitle( TitleHelper::SECONDARY_Y_AXIS_TITLE, mxRootShape, mrChartModel
-                , rParam.maRemainingSpace, rPageSize, bIsVertical? ALIGN_TOP : ALIGN_RIGHT, rParam.mbAutoPosSecondTitleY );
+                , rParam.maRemainingSpace, rPageSize, bIsVertical? TitleAlignment::ALIGN_TOP : TitleAlignment::ALIGN_RIGHT, rParam.mbAutoPosSecondTitleY );
     if (!bHasRelativeSize && (rParam.maRemainingSpace.Width <= 0 || rParam.maRemainingSpace.Height <= 0))
         return false;
 
