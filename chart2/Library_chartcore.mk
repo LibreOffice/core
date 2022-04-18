@@ -225,7 +225,6 @@ $(eval $(call gb_Library_add_exception_objects,chartcore,\
     chart2/source/tools/StatisticsHelper \
     chart2/source/tools/ThreeDHelper \
     chart2/source/tools/TitleHelper \
-    chart2/source/tools/TrueGuard \
     chart2/source/tools/UncachedDataSequence \
     chart2/source/tools/UserDefinedProperties \
     chart2/source/tools/WeakListenerAdapter \

@@ -23,7 +23,6 @@
 #include <PropertyMapper.hxx>
 #include <NumberFormatterWrapper.hxx>
 #include <LabelPositionHelper.hxx>
-#include <TrueGuard.hxx>
 #include <BaseGFXHelper.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
@@ -36,6 +35,8 @@
 #include <tools/color.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/unoshtxt.hxx>
+
+#include <comphelper/scopeguard.hxx>
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -1720,7 +1721,8 @@ void VCartesianAxis::createLabels()
 
 void VCartesianAxis::createMaximumLabels()
 {
-    TrueGuard aRecordMaximumTextSize(m_bRecordMaximumTextSize);
+    m_bRecordMaximumTextSize = true;
+    const comphelper::ScopeGuard aGuard([this]() { m_bRecordMaximumTextSize = false; });
 
     if( !prepareShapeCreation() )
         return;
