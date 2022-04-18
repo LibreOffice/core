@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76eebf1b_286a597d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-18T10:06:36Z",
+      "side": 1,
+      "message": "Since it seems also to help for tdf#36300, thought it might be worth it to cherry-pick it for 7.3 branch.\n(I don\u0027t think it\u0027s useful for 7.2 branch since it\u0027s almost EOL)",
+      "revId": "86a6619e94ebb1e4e84cde6ca1590e9a4b3e7c7c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
