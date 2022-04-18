@@ -166,23 +166,18 @@ private:
 
     void fireModifyEvent();
 
-     css::uno::Reference< css::uno::XComponentContext >                m_xContext;
-
+    css::uno::Reference<css::uno::XComponentContext> m_xContext;
     tCoordinateSystemContainerType m_aCoordSystems;
 
-    rtl::Reference< Wall >  m_xWall;
+    rtl::Reference<Wall> m_xWall;
+    rtl::Reference<Wall> m_xFloor;
 
-    rtl::Reference< Wall >  m_xFloor;
+    css::uno::Reference<css::chart2::XTitle> m_xTitle;
 
-    css::uno::Reference< css::chart2::XTitle >
-                        m_xTitle;
-
-    rtl::Reference< ::chart::Legend > m_xLegend;
-
-    css::uno::Reference< css::chart2::XColorScheme >
-                        m_xColorScheme;
-
+    rtl::Reference<::chart::Legend> m_xLegend;
+    css::uno::Reference<css::chart2::XColorScheme> m_xColorScheme;
     rtl::Reference<ModifyEventForwarder> m_xModifyEventForwarder;
+
 };
 
 } //  namespace chart
