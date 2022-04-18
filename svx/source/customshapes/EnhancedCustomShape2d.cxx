@@ -777,8 +777,19 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
         case mso_sptSmileyFace :                nColorData = 0x20e00000; break;
         case mso_sptNil :
         {
-            if( sShapeType.getLength() > 4 &&
-                sShapeType.match( "col-" ))
+            // Because calculation method has changed in #i102797 original color encoding for
+            // Octagon Bevel and Diamond Bevel can no longer be used. We keep the color coding
+            // only for self-created shapes, as authors may have already considered the change.
+            // We use ColorData compatible to OOXML.
+            if (sShapeType == "col-60da8460") // Octagon Bevel
+            {
+                nColorData = 0x60ecc240;
+            }
+            else if (sShapeType == "col-502ad400") // Diamond Bevel
+            {
+                nColorData = 0x502ce400;
+            }
+            else if (sShapeType.getLength() > 4 && sShapeType.match( "col-" ))
             {
                 nColorData = sShapeType.copy( 4 ).toUInt32( 16 );
             }
@@ -2755,6 +2766,9 @@ void EnhancedCustomShape2d::AdaptObjColor(
         return;
 
     const drawing::FillStyle eFillStyle = rObj.GetMergedItem(XATTR_FILLSTYLE).GetValue();
+    if (eFillStyle == drawing::FillStyle_NONE)
+        return;
+
     switch( eFillStyle )
     {
         default:
