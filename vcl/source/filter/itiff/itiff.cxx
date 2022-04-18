@@ -902,7 +902,10 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                 }
             }
         }
-        else if ( nPhotometricInterpretation == 2 && nSamplesPerPixel >= 3 )
+        else if (
+               ( nPhotometricInterpretation == 2 && nSamplesPerPixel >= 3 ) ||
+               ( nPhotometricInterpretation == 5 && nSamplesPerPixel == 3 )
+        )
         {
             if ( nMaxSampleValue > nMinSampleValue )
             {
@@ -921,33 +924,10 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         nGreen = GetBits( getMapData(1), nx * nBitsPerSample, nBitsPerSample );
                         nBlue = GetBits( getMapData(2), nx * nBitsPerSample, nBitsPerSample );
                     }
-                    SetPixel(nY, nx, Color(static_cast<sal_uInt8>(nRed - nMinMax), static_cast<sal_uInt8>(nGreen - nMinMax), static_cast<sal_uInt8>(nBlue - nMinMax)));
-                }
-            }
-        }
-        else if ( nPhotometricInterpretation == 5 && nSamplesPerPixel == 3 )
-        {
-            if ( nMaxSampleValue > nMinSampleValue )
-            {
-                sal_uInt32 nMinMax =  nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
-                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
-                {
-                    if ( nPlanes < 3 )
-                    {
-                        nRed = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
-                        nGreen = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
-                        nBlue = GetBits( getMapData(0), ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
-                    }
+                    if (nPhotometricInterpretation == 2)
+                        SetPixel(nY, nx, Color(static_cast<sal_uInt8>(nRed - nMinMax), static_cast<sal_uInt8>(nGreen - nMinMax), static_cast<sal_uInt8>(nBlue - nMinMax)));
                     else
-                    {
-                        nRed = GetBits( getMapData(0), nx * nBitsPerSample, nBitsPerSample );
-                        nGreen = GetBits( getMapData(1), nx * nBitsPerSample, nBitsPerSample );
-                        nBlue = GetBits( getMapData(2), nx * nBitsPerSample, nBitsPerSample );
-                    }
-                    nRed = 255 - static_cast<sal_uInt8>( nRed - nMinMax );
-                    nGreen = 255 - static_cast<sal_uInt8>( nGreen - nMinMax );
-                    nBlue = 255 - static_cast<sal_uInt8>( nBlue - nMinMax );
-                    SetPixel(nY, nx, Color(static_cast<sal_uInt8>(nRed), static_cast<sal_uInt8>(nGreen), static_cast<sal_uInt8>(nBlue)));
+                        SetPixel(nY, nx, Color(255 - static_cast<sal_uInt8>(nRed - nMinMax), 255 - static_cast<sal_uInt8>(nGreen - nMinMax), 255 - static_cast<sal_uInt8>(nBlue - nMinMax)));
                 }
             }
         }
