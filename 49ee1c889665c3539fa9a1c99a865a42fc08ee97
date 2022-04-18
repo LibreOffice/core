@@ -16,6 +16,24 @@
       "message": "Oh - wait: in the first block, nRed - nMinMax is used as red value; here, 255 - (nRed - nMinMax).",
       "revId": "49ee1c889665c3539fa9a1c99a865a42fc08ee97",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eaa5f97_b7c1d0c7",
+        "filename": "vcl/source/filter/itiff/itiff.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-18T11:38:45Z",
+      "side": 0,
+      "message": "Oups, indeed! (and of course idem for the 2 other colos) I had overlooked this.\nI\u0027ve uploaded a new version dealing with the slight difference.",
+      "parentUuid": "b6ea401f_7b0f9f89",
+      "revId": "49ee1c889665c3539fa9a1c99a865a42fc08ee97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
