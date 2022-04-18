@@ -16,6 +16,24 @@
       "message": "I would not expect test substrates to change here, perhaps a stray modification?",
       "revId": "75893fb99173f615d9fa40b50dfba147d22967b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa15fbfb_bc8d7734",
+        "filename": "sc/qa/extras/testdocuments/vba.xls",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003573
+      },
+      "writtenOn": "2022-04-18T17:34:43Z",
+      "side": 0,
+      "message": "Sorry didn\u0027t see it in the diff!",
+      "parentUuid": "cfd4bcb5_2fc73de6",
+      "revId": "75893fb99173f615d9fa40b50dfba147d22967b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
