@@ -2755,6 +2755,9 @@ void EnhancedCustomShape2d::AdaptObjColor(
         return;
 
     const drawing::FillStyle eFillStyle = rObj.GetMergedItem(XATTR_FILLSTYLE).GetValue();
+    if (eFillStyle == drawing::FillStyle_NONE)
+        return;
+
     switch( eFillStyle )
     {
         default:

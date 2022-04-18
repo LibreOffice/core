@@ -1263,6 +1263,48 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
         }
     }
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
+{
+    // The document contains a shape "Octagon Bevel". It should use five shadings, becoming
+    // darker from left-top to bottom-right. The test examines actual color, not the geometry.
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf148501_OctagonBevel.odp";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+
+    // Generate bitmap from shape
+    uno::Reference<drawing::XShape> xShape = getShape(0);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "image/png", aTempFile.GetURL());
+
+    // Read bitmap and test color
+    // expected in order top-left, top, top-right, right, bottom-right:
+    // RGB(193|214|236), RGB(165|195|226), RGB(80|111|146), RGB(46|64|83), RGB(23|32|41)
+    // Without applied patch the colors were:
+    // RGB(193|214,236), RGB(193|214,236), RGB(80|111|145), RGB(23|32|41), RGB(193|214|236)
+    // So we test segments top, right and bottom-right.
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    Bitmap::ScopedReadAccess pRead(aBMP);
+    Size aSize = aBMP.GetSizePixel();
+
+    // GetColor(Y,X). The chosen threshold for the ColorDistance can be adapted if necessary.
+    Color aActualColor = pRead->GetColor(aSize.Height() * 0.17, aSize.Width() * 0.5); // top
+    Color aExpectedColor(165, 195, 226);
+    sal_uInt16 nColorDistance = aExpectedColor.GetColorError(aActualColor);
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+    aActualColor = pRead->GetColor(aSize.Height() * 0.5, aSize.Width() * 0.83); // right
+    aExpectedColor = Color(46, 64, 83);
+    nColorDistance = aExpectedColor.GetColorError(aActualColor);
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+    aActualColor = pRead->GetColor(aSize.Height() * 0.75, aSize.Width() * 0.75); // bottom-right
+    aExpectedColor = Color(23, 32, 41);
+    nColorDistance = aExpectedColor.GetColorError(aActualColor);
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
