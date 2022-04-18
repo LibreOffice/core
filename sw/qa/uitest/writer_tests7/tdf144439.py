@@ -71,8 +71,7 @@ class tdf144439(UITestCase):
             Paragraphs = document.Text.createEnumeration()
             Para1 = Paragraphs.nextElement()
             self.assertEqual(Para1.String, "Outline2")
-            # Well, this looks strange, but we asked to show 1 & 2 levels and 1st is without numbering
-            self.assertEqual(Para1.getPropertyValue("ListLabelString"), ".1")
+            self.assertEqual(Para1.getPropertyValue("ListLabelString"), "1")
 
             with self.ui_test.execute_dialog_through_command(".uno:ChapterNumberingDialog") as xDialog:
                 # Select level "1"
