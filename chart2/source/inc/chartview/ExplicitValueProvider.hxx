@@ -18,15 +18,12 @@
  */
 #pragma once
 
-#include <com/sun/star/awt/Rectangle.hpp>
 #include <chartview/chartviewdllapi.hxx>
 #include <rtl/ref.hxx>
+#include <rtl/ustring.hxx>
 
 #include <memory>
 
-namespace chart { class ChartModel; }
-namespace chart { struct ExplicitIncrementData; }
-namespace chart { struct ExplicitScaleData; }
 namespace com::sun::star::beans { class XPropertySet; }
 namespace com::sun::star::chart2 { class XAxis; }
 namespace com::sun::star::chart2 { class XChartDocument; }
@@ -38,12 +35,17 @@ namespace com::sun::star::uno { class XInterface; }
 namespace com::sun::star::uno { template <typename > class Reference; }
 namespace com::sun::star::uno { template <typename > class Sequence; }
 namespace com::sun::star::util { class XNumberFormatsSupplier; }
+namespace com::sun::star::awt { struct Rectangle; }
 class SvxShape;
 
 namespace chart
 {
+
 class BaseCoordinateSystem;
 class DrawModelWrapper;
+class ChartModel;
+struct ExplicitIncrementData;
+struct ExplicitScaleData;
 
 class OOO_DLLPUBLIC_CHARTVIEW ExplicitValueProvider
 {
@@ -91,7 +93,7 @@ public:
             , const css::uno::Reference< css::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
 protected:
-    ~ExplicitValueProvider() {}
+    ~ExplicitValueProvider() = default;
 };
 
 } //namespace chart
