@@ -24,6 +24,7 @@
 #include <svl/intitem.hxx>
 #include <svx/EnhancedCustomShape2d.hxx>
 #include <svx/extrusionbar.hxx>
+#include <svx/graphichelper.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdview.hxx>
@@ -1155,6 +1156,47 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf136176)
                                          basegfx::B2DPoint(fX[i], fY[i]));
         }
     }
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
+{
+    // The document contains a shape "Octagon Bevel". It should use shadings 40%, 20%, -20%, -40%
+    // from left-top to bottom-right. The test examines actual color, not the geometry.
+    // Load document
+    OUString aURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf148501_OctagonBevel.odp";
+    mxComponent = loadFromDesktop(aURL, "com.sun.star.presentation.PresentationDocument");
+
+    // Generate bitmap from shape
+    uno::Reference<drawing::XShape> xShape = getShape(0);
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    GraphicHelper::SaveShapeAsGraphicToPath(mxComponent, xShape, "image/png", aTempFile.GetURL());
+
+    // Read bitmap and test color
+    // expected in order top-left, top, top-right, right, bottom-right:
+    // RGB(165|195|266), RGB(139|176|217), RGB(91|127|166), RGB(68|95|124), RGB(68|95|124)
+    // Without applied patch the colors were:
+    // RGB(193|214,236), RGB(193|214,236), RGB(80|111|145), RGB(23|32|41), RGB(193|214|236)
+    // So we test segments top, right and bottom-right.
+    SvFileStream aFileStream(aTempFile.GetURL(), StreamMode::READ);
+    vcl::PngImageReader aPNGReader(aFileStream);
+    BitmapEx aBMPEx = aPNGReader.read();
+    Bitmap aBMP = aBMPEx.GetBitmap();
+    Bitmap::ScopedReadAccess pRead(aBMP);
+    Size aSize = aBMP.GetSizePixel();
+
+    // GetColor(Y,X). The chosen threshold for the ColorDistance can be adapted if necessary.
+    Color aActualColor = pRead->GetColor(aSize.Height() * 0.17, aSize.Width() * 0.5); // top
+    Color aExpectedColor(139, 176, 217);
+    sal_uInt16 nColorDistance = aExpectedColor.GetColorError(aActualColor);
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+    aActualColor = pRead->GetColor(aSize.Height() * 0.5, aSize.Width() * 0.83); // right
+    aExpectedColor = Color(68, 95, 124); // same for right and bottom-right
+    nColorDistance = aExpectedColor.GetColorError(aActualColor);
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+    aActualColor = pRead->GetColor(aSize.Height() * 0.75, aSize.Width() * 0.75); // bottom-right
+    nColorDistance = aExpectedColor.GetColorError(aActualColor);
+    CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
 }
 }
 
