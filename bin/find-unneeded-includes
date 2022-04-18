@@ -346,6 +346,13 @@ def main(argv):
 
     # quickly sanity check whether files with exceptions in yaml still exists
     # only check for the module of the very first filename passed
+
+    # Verify there are files selected for checking, with --recursive it
+    # may happen that there are in fact no C/C++ files in a module directory
+    if not list_of_files:
+        print("No files found to check!")
+        sys.exit(-2)
+
     moduleName = sorted(list_of_files)[0].split("/")[0]
     rulePath = os.path.join(moduleName, "IwyuFilter_" + moduleName + ".yaml")
     moduleRules = {}
