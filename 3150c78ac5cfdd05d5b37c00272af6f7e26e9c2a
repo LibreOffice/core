@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48bb1299_f77c74df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-18T17:38:58Z",
+      "side": 1,
+      "message": "I didn\u0027t put QA tests but basic/qa/vba_tests/formatnumber.vb could be an example to follow.\nNow the pb is I\u0027m not sure what the result should be in different cases.",
+      "revId": "3150c78ac5cfdd05d5b37c00272af6f7e26e9c2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
