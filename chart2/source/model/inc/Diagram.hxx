@@ -151,30 +151,20 @@ private:
 
     void fireModifyEvent();
 
-     css::uno::Reference< css::uno::XComponentContext >                m_xContext;
+     css::uno::Reference<css::uno::XComponentContext> m_xContext;
 
     typedef
-        std::vector< css::uno::Reference< css::chart2::XCoordinateSystem > >
+        std::vector<css::uno::Reference<css::chart2::XCoordinateSystem>>
         tCoordinateSystemContainerType;
 
     tCoordinateSystemContainerType m_aCoordSystems;
 
-    css::uno::Reference< css::beans::XPropertySet >
-                        m_xWall;
-
-    css::uno::Reference< css::beans::XPropertySet >
-                        m_xFloor;
-
-    css::uno::Reference< css::chart2::XTitle >
-                        m_xTitle;
-
-    css::uno::Reference< css::chart2::XLegend >
-                        m_xLegend;
-
-    css::uno::Reference< css::chart2::XColorScheme >
-                        m_xColorScheme;
-
-    css::uno::Reference< css::util::XModifyListener > m_xModifyEventForwarder;
+    css::uno::Reference<css::beans::XPropertySet> m_xWall;
+    css::uno::Reference<css::beans::XPropertySet> m_xFloor;
+    css::uno::Reference<css::chart2::XTitle> m_xTitle;
+    css::uno::Reference<css::chart2::XLegend> m_xLegend;
+    css::uno::Reference<css::chart2::XColorScheme> m_xColorScheme;
+    css::uno::Reference<css::util::XModifyListener> m_xModifyEventForwarder;
 };
 
 } //  namespace chart
