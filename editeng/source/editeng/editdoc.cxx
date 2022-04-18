@@ -369,6 +369,7 @@ TextPortionList::TextPortionList()
 
 TextPortionList::~TextPortionList()
 {
+    Reset();
 }
 
 void TextPortionList::Reset()
@@ -684,65 +685,52 @@ ParaPortionList::~ParaPortionList()
 
 sal_Int32 ParaPortionList::GetPos(const ParaPortion* p) const
 {
-    sal_Int32 nArrayLen = maPortions.size();
+    return FastGetPos(maPortions, p, nLastCache);
+}
 
-    // Through certain filter code-paths we do a lot of appends, which in
-    // turn call GetPos - creating some N^2 nightmares. If we have a
-    // non-trivially large list, do a few checks from the end first.
-    if (nLastCache > 16 && nArrayLen > 16)
+ParaPortion* ParaPortionList::operator [](sal_Int32 nPos)
+{
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
+}
+
+const ParaPortion* ParaPortionList::operator [](sal_Int32 nPos) const
+{
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
+}
+
+std::unique_ptr<ParaPortion> ParaPortionList::Release(sal_Int32 nPos)
+{
+    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) <= nPos)
     {
-        sal_Int32 nEnd;
-        if (nLastCache > nArrayLen - 2)
-            nEnd = nArrayLen;
-        else
-            nEnd = nLastCache + 2;
-
-        for (sal_Int32 nIdx = nLastCache - 2; nIdx < nEnd; ++nIdx)
-        {
-            if (&maPortions.at(nIdx) == p)
-            {
-                nLastCache = nIdx;
-                return nIdx;
-            }
-        }
+        SAL_WARN( "editeng", "ParaPortionList::Release - out of bounds pos " << nPos);
+        return nullptr;
     }
-    // The world's lamest linear search from svarray...
-    for (sal_Int32 nIdx = 0; nIdx < nArrayLen; ++nIdx)
-        if (&maPortions.at(nIdx) == p)
-        {
-            nLastCache = nIdx;
-            return nLastCache;
-        }
-
-    // XXX "not found" condition for sal_Int32 indexes
-    return EE_PARA_NOT_FOUND;
+    std::unique_ptr<ParaPortion> p = std::move(maPortions[nPos]);
+    maPortions.erase(maPortions.begin()+nPos);
+    return p;
 }
 
-ParaPortion& ParaPortionList::operator [](sal_Int32 nPos)
+void ParaPortionList::Remove(sal_Int32 nPos)
 {
-    return maPortions[nPos];
+    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) <= nPos)
+    {
+        SAL_WARN( "editeng", "ParaPortionList::Remove - out of bounds pos " << nPos);
+        return;
+    }
+    maPortions.erase(maPortions.begin()+nPos);
 }
 
-const ParaPortion& ParaPortionList::operator [](sal_Int32 nPos) const
+void ParaPortionList::Insert(sal_Int32 nPos, std::unique_ptr<ParaPortion> p)
 {
-    return maPortions[nPos];
-}
-
-ParaPortion ParaPortionList::Remove(sal_Int32 nPos)
-{
-    auto it = maPortions.begin()+nPos;
-    ParaPortion val = std::move(*it);
-    maPortions.erase(it);
-    return val;
-}
-
-ParaPortion& ParaPortionList::Insert(sal_Int32 nPos, ParaPortion&& p)
-{
+    if (nPos < 0 || static_cast<sal_Int32>(maPortions.size()) < nPos)
+    {
+        SAL_WARN( "editeng", "ParaPortionList::Insert - out of bounds pos " << nPos);
+        return;
+    }
     maPortions.insert(maPortions.begin()+nPos, std::move(p));
-    return maPortions[nPos];
 }
 
-void ParaPortionList::Append(ParaPortion&& p)
+void ParaPortionList::Append(std::unique_ptr<ParaPortion> p)
 {
     maPortions.push_back(std::move(p));
 }
@@ -768,9 +756,10 @@ tools::Long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
     tools::Long nHeight = 0;
     for (const auto & rPortion : maPortions)
     {
-        if ( pPPortion == &rPortion )
+        const ParaPortion* pTmpPortion = rPortion.get();
+        if ( pTmpPortion == pPPortion )
             return nHeight;
-        nHeight += rPortion.GetHeight();
+        nHeight += pTmpPortion->GetHeight();
     }
     OSL_FAIL( "GetYOffset: Portion not found" );
     return nHeight;
@@ -781,7 +770,7 @@ sal_Int32 ParaPortionList::FindParagraph(tools::Long nYOffset) const
     tools::Long nY = 0;
     for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
-        nY += maPortions[i].GetHeight(); // should also be correct even in bVisible!
+        nY += maPortions[i]->GetHeight(); // should also be correct even in bVisible!
         if ( nY > nYOffset )
             return i <= SAL_MAX_INT32 ? static_cast<sal_Int32>(i) : SAL_MAX_INT32;
     }
@@ -790,12 +779,12 @@ sal_Int32 ParaPortionList::FindParagraph(tools::Long nYOffset) const
 
 const ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos) const
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? &maPortions[nPos] : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
 }
 
 ParaPortion* ParaPortionList::SafeGetObject(sal_Int32 nPos)
 {
-    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? &maPortions[nPos] : nullptr;
+    return 0 <= nPos && nPos < static_cast<sal_Int32>(maPortions.size()) ? maPortions[nPos].get() : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
@@ -939,6 +928,26 @@ EditLine::EditLine() :
 {
 }
 
+EditLine::EditLine( const EditLine& r ) :
+    nTxtWidth(0),
+    nStartPosX(0),
+    nStart(r.nStart),
+    nEnd(r.nEnd),
+    nStartPortion(r.nStartPortion),
+    nEndPortion(r.nEndPortion),
+    nHeight(0),
+    nTxtHeight(0),
+    nMaxAscent(0),
+    bHangingPunctuation(r.bHangingPunctuation),
+    bInvalid(true)
+{
+}
+
+EditLine::~EditLine()
+{
+}
+
+
 EditLine* EditLine::Clone() const
 {
     EditLine* pL = new EditLine;
@@ -971,6 +980,15 @@ bool operator == ( const EditLine& r1,  const EditLine& r2  )
         return false;
 
     return true;
+}
+
+EditLine& EditLine::operator = ( const EditLine& r )
+{
+    nEnd = r.nEnd;
+    nStart = r.nStart;
+    nEndPortion = r.nEndPortion;
+    nStartPortion = r.nStartPortion;
+    return *this;
 }
 
 
