@@ -16,6 +16,24 @@
       "message": "Was it a mistake to choose libreoffice-7-3 instead of master for the branch?",
       "revId": "eceefab987f51a4fef84e8499660393087ed4350",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7095643f_44ff59f7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-18T17:11:25Z",
+      "side": 1,
+      "message": "\u003e Was it a mistake to choose libreoffice-7-3 instead of master for the branch?\n\nStill waiting for a response.",
+      "parentUuid": "27704f76_9b42f1aa",
+      "revId": "eceefab987f51a4fef84e8499660393087ed4350",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
