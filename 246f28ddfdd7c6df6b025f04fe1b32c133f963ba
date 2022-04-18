@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d05fb5e_c638835e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-18T11:04:49Z",
+      "side": 1,
+      "message": "Considering there is still one last minor release, i think it\u0027s worth it to backport it to 7.2",
+      "revId": "246f28ddfdd7c6df6b025f04fe1b32c133f963ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
