@@ -16,6 +16,23 @@
       "message": "Considering there is still one last minor release, i think it\u0027s worth it to backport it to 7.2",
       "revId": "246f28ddfdd7c6df6b025f04fe1b32c133f963ba",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86a421a6_0c7e6db6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-18T11:32:24Z",
+      "side": 1,
+      "message": "No pb of course! I just didn\u0027t want to generate extra work (I mean in addition with 7.3 branch) for a non-crashing bug.",
+      "revId": "246f28ddfdd7c6df6b025f04fe1b32c133f963ba",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
