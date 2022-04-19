@@ -51,6 +51,7 @@ void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
     rDPIX = rDPIY = 96;
 }
 
+
 #if ENABLE_CAIRO_CANVAS
 bool SvpSalGraphics::SupportsCairo() const
 {
