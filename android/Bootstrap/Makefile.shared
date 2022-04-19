@@ -23,7 +23,8 @@ OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
 #
 
 local.properties: $(BUILDDIR)/config_host.mk
-	echo sdk.dir=$(ANDROID_SDK_HOME) >local.properties
+	echo ndk.dir=$(ANDROID_NDK_DIR) >local.properties
+	echo sdk.dir=$(ANDROID_SDK_HOME) >>local.properties
 
 #
 # Build / link the single .so for this app
@@ -71,7 +72,7 @@ $(SODEST)/nss-libraries :
 	mkdir -p $(SODEST)
 	$(foreach lib,$(NSSLIBS),$(STRIP) -o $(SODEST)/lib$(lib).so $(INSTDIR)/$(LIBO_LIB_FOLDER)/lib$(lib).so;)
 
-$(SODEST)/libc++_shared.so : $(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_APP_ABI)/libc++_shared.so
+$(SODEST)/libc++_shared.so : $(ANDROID_NDK_DIR)/sources/cxx-stl/llvm-libc++/libs/$(ANDROID_APP_ABI)/libc++_shared.so
 	mkdir -p $(SODEST)
 	cp $< $@
 

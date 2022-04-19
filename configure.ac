@@ -650,22 +650,22 @@ AC_ARG_WITH(android-api-level,
         [Specify the API level when building for Android. Defaults to 16 for ARM and x86 and to 21 for ARM64 and x86-64]),
 ,)
 
-ANDROID_NDK_HOME=
+ANDROID_NDK_DIR=
 if test -z "$with_android_ndk" -a -e "$SRC_ROOT/external/android-ndk" -a "$build" != "$host"; then
     with_android_ndk="$SRC_ROOT/external/android-ndk"
 fi
 if test -n "$with_android_ndk"; then
-    eval ANDROID_NDK_HOME=$with_android_ndk
+    eval ANDROID_NDK_DIR=$with_android_ndk
 
     # Set up a lot of pre-canned defaults
 
-    if test ! -f $ANDROID_NDK_HOME/RELEASE.TXT; then
-        if test ! -f $ANDROID_NDK_HOME/source.properties; then
-            AC_MSG_ERROR([Unrecognized Android NDK. Missing RELEASE.TXT or source.properties file in $ANDROID_NDK_HOME.])
+    if test ! -f $ANDROID_NDK_DIR/RELEASE.TXT; then
+        if test ! -f $ANDROID_NDK_DIR/source.properties; then
+            AC_MSG_ERROR([Unrecognized Android NDK. Missing RELEASE.TXT or source.properties file in $ANDROID_NDK_DIR.])
         fi
-        ANDROID_NDK_VERSION=`sed -n -e 's/Pkg.Revision = //p' $ANDROID_NDK_HOME/source.properties`
+        ANDROID_NDK_VERSION=`sed -n -e 's/Pkg.Revision = //p' $ANDROID_NDK_DIR/source.properties`
     else
-        ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_HOME/RELEASE.TXT`
+        ANDROID_NDK_VERSION=`cut -f1 -d' ' <$ANDROID_NDK_DIR/RELEASE.TXT`
     fi
     if test -z "$ANDROID_NDK_VERSION";  then
         AC_MSG_ERROR([Failed to determine Android NDK version. Please check your installation.])
@@ -751,10 +751,10 @@ if test -n "$with_android_ndk"; then
         # ndk would also support windows and windows-x86_64
         ;;
     esac
-    android_TOOLCHAIN=$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/$android_HOST_TAG
+    android_TOOLCHAIN=$ANDROID_NDK_DIR/toolchains/llvm/prebuilt/$android_HOST_TAG
     ANDROID_COMPILER_BIN=$android_TOOLCHAIN/bin
     dnl TODO: NSS build uses it...
-    ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_NDK_HOME/toolchains/$android_platform_prefix-$ANDROID_GCC_TOOLCHAIN_VERSION/prebuilt/$android_HOST_TAG
+    ANDROID_BINUTILS_PREBUILT_ROOT=$ANDROID_NDK_DIR/toolchains/$android_platform_prefix-$ANDROID_GCC_TOOLCHAIN_VERSION/prebuilt/$android_HOST_TAG
     AC_SUBST(ANDROID_BINUTILS_PREBUILT_ROOT)
 
     test -z "$AR" && AR=$ANDROID_COMPILER_BIN/$android_gnu_prefix-ar
@@ -782,7 +782,7 @@ if test -n "$with_android_ndk"; then
         CXX_BASE="clang++"
     fi
 fi
-AC_SUBST(ANDROID_NDK_HOME)
+AC_SUBST(ANDROID_NDK_DIR)
 AC_SUBST(ANDROID_APP_ABI)
 AC_SUBST(ANDROID_GCC_TOOLCHAIN_VERSION)
 
@@ -807,7 +807,7 @@ AC_ARG_ENABLE([android-lok],
          actually the Online-based, non-modified LOK.])
 )
 ENABLE_ANDROID_LOK=
-if test -n "$ANDROID_NDK_HOME" ; then
+if test -n "$ANDROID_NDK_DIR" ; then
     if test "$enable_android_lok" = yes; then
         ENABLE_ANDROID_LOK=TRUE
         AC_DEFINE(HAVE_FEATURE_ANDROID_LOK)
@@ -1234,7 +1234,7 @@ if test "$_os" = "Android" ; then
     # Verify that the NDK and SDK options are proper
     if test -z "$with_android_ndk"; then
         AC_MSG_ERROR([the --with-android-ndk option is mandatory, unless it is available at external/android-ndk/.])
-    elif test ! -f "$ANDROID_NDK_HOME/meta/abis.json"; then
+    elif test ! -f "$ANDROID_NDK_DIR/meta/abis.json"; then
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
     fi
 
