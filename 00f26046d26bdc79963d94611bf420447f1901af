@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3db254cb_48d51c2c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-04-19T09:07:28Z",
+      "side": 1,
+      "message": "Not sure what Jenkins is doing, but anyway, as this is an iOS-only change, and the Jenkins build for iOS seems to have passed, let\u0027s cut some corners, right?",
+      "revId": "00f26046d26bdc79963d94611bf420447f1901af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
