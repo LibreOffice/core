@@ -1106,6 +1106,7 @@ void ExtensionBox_Impl::checkEntries()
                         m_bHasActive = false;
                     }
                     m_vRemovedEntries.push_back(*iIndex);
+                    (*iIndex)->m_xPackage->removeEventListener(m_xRemoveListener);
                     iIndex = m_vEntries.erase(iIndex);
                 }
             }
