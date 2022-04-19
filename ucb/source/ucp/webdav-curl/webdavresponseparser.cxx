@@ -22,11 +22,13 @@
 #include "DAVProperties.hxx"
 #include "UCBDeadPropertyValue.hxx"
 
-#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/xml/sax/Parser.hpp>
 #include <com/sun/star/xml/sax/InputSource.hpp>
-#include <comphelper/processfactory.hxx>
+#include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/ucb/LockEntry.hpp>
 #include <com/sun/star/ucb/LockScope.hpp>
 #include <com/sun/star/ucb/LockType.hpp>
@@ -76,6 +78,7 @@ namespace
     {
         WebDAVName_unknown = 0,
         WebDAVName_activelock,
+        WebDAVName_lockdiscovery,
         WebDAVName_multistatus,
         WebDAVName_response,
         WebDAVName_href,
@@ -115,6 +118,7 @@ namespace
         if(aWebDAVNameMapperList.empty())
         {
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("activelock"), WebDAVName_activelock));
+            aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("lockdiscovery"), WebDAVName_lockdiscovery));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("multistatus"), WebDAVName_multistatus));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("response"), WebDAVName_response));
             aWebDAVNameMapperList.insert(WebDAVNameValueType(OUString("href"), WebDAVName_href));
@@ -750,6 +754,20 @@ namespace
                                 maLock.Type = maLockType;
                                 maLock.Scope = maLockScope;
                                 maResult_Lock.push_back(maLock);
+                                break;
+                            }
+                            case WebDAVName_lockdiscovery:
+                            {
+                                // lockdiscovery may be requested via PROPFIND,
+                                // in addition to LOCK! so return it 2 ways
+                                if (isCollectingProperties())
+                                {
+                                    http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
+
+                                    aDAVPropertyValue.Name = "DAV:lockdiscovery";
+                                    aDAVPropertyValue.Value <<= ::comphelper::containerToSequence(maResult_Lock);
+                                    maPropStatProperties.push_back(aDAVPropertyValue);
+                                }
                                 break;
                             }
                             case WebDAVName_propstat:
