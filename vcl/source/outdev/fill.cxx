@@ -73,6 +73,37 @@ void OutputDevice::SetFillColor( const Color& rColor )
         mpAlphaVDev->SetFillColor( COL_BLACK );
 }
 
+void OutputDevice::SetFillMode()
+{
+    if (mpMetaFile)
+    {
+        mpMetaFile->AddAction(new MetaFillModeAction(meFillMode, true));
+    }
+
+    if (mbFillMode)
+    {
+        mbInitFillMode = true;
+        mbFillMode = false;
+        meFillMode = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+    }
+
+}
+
+void OutputDevice::SetFillMode(const PolyFillMode& rMode)
+{
+    if (mpMetaFile)
+    {
+        mpMetaFile->AddAction(new MetaFillModeAction(rMode, true));
+    }
+
+    if (mbFillMode)
+    {
+        mbInitFillMode = true;
+        mbFillMode = false;
+        meFillMode = rMode;
+    }
+}
+
 void OutputDevice::InitFillColor()
 {
     DBG_TESTSOLARMUTEX();
@@ -94,6 +125,20 @@ void OutputDevice::InitFillColor()
     }
 
     mbInitFillColor = false;
+}
+
+void OutputDevice::InitFillMode()
+{
+    if (mbFillMode)
+    {
+        mpGraphics->SetFillRule(meFillMode);
+    }
+    else
+    {
+        mpGraphics->SetFillRule();
+    }
+
+    mbInitFillMode = false;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
