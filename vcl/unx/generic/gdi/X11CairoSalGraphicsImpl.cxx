@@ -29,6 +29,7 @@ X11CairoSalGraphicsImpl::X11CairoSalGraphicsImpl(X11SalGraphics& rParent, X11Com
     , mrX11Common(rX11Common)
     , mnPenColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
+    , meFillMode(EVEN_ODD_RULE_ALTERNATE)
 {
 }
 
@@ -117,7 +118,10 @@ bool X11CairoSalGraphicsImpl::drawPolyPolygon(const basegfx::B2DHomMatrix& rObje
         {
             cairo_set_source_rgba(cr, mnFillColor.GetRed() / 255.0, mnFillColor.GetGreen() / 255.0,
                                   mnFillColor.GetBlue() / 255.0, 1.0 - fTransparency);
-            cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+            if (meFillRule == PolyFillMode::NON_ZERO_RULE_WINDING)
+                cairo_set_fill_rule(cr, CAIRO_FILL_RULE_WINDING);
+            else
+                cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
             cairo_fill_preserve(cr);
         }
 
