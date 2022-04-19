@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <cairo.h>
 #include <sal/config.h>
 #include <sal/log.hxx>
 
@@ -128,9 +129,16 @@ namespace cairocanvas
                 ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                     rClip ));
 
-            doPolyPolygonImplementation( aClipPoly, Clip, pCairo.get(),
-                                         nullptr, SurfaceProviderRef(mpSpriteCanvas),
-                                         rClip->getFillRule() );
+
+            _cairo_fill_rule eCairoFillRule;
+            if (rClip->getFillRule() == ::css::rendering::FillRule::FillRule_NON_ZERO)
+                eCairoFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_WINDING;
+            else
+                eCairoFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_EVEN_ODD;
+
+            doPolyPolygonImplementation(aClipPoly, Clip, pCairo.get(),
+                                        nullptr, SurfaceProviderRef(mpSpriteCanvas),
+                                        eCairoFillRule);
         }
 
         SAL_INFO( "canvas.cairo","aSize " << aSize.getX() << " x " << aSize.getY() << " position: " << fX << "," << fY );
