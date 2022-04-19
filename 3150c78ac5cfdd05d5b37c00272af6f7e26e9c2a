@@ -16,6 +16,24 @@
       "message": "I didn\u0027t put QA tests but basic/qa/vba_tests/formatnumber.vb could be an example to follow.\nNow the pb is I\u0027m not sure what the result should be in different cases.",
       "revId": "3150c78ac5cfdd05d5b37c00272af6f7e26e9c2a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7df350d0_c98f905f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-19T16:55:30Z",
+      "side": 1,
+      "message": "I am not sure, either. It is likely locale-dependent function, as all of these functions. I have Russian locale set in my Windows, so can only provide you with the values that are likely not correct for en-US (used for the unit tests).\n\nAnyway, if you provide a ready macro to run and get some values, I\u0027m ready to run it locally and send you the output back :-)",
+      "parentUuid": "48bb1299_f77c74df",
+      "revId": "3150c78ac5cfdd05d5b37c00272af6f7e26e9c2a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
