@@ -198,6 +198,7 @@ using namespace desktop;
 using namespace utl;
 
 static LibLibreOffice_Impl *gImpl = nullptr;
+static bool lok_preinit_2_called = false;
 static std::weak_ptr< LibreOfficeKitClass > gOfficeClass;
 static std::weak_ptr< LibreOfficeKitDocumentClass > gDocumentClass;
 
@@ -6537,8 +6538,11 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
     if (pThis == nullptr)
     {
         eStage = PRE_INIT;
-        SAL_INFO("lok", "Create libreoffice object");
-        gImpl = new LibLibreOffice_Impl();
+        if (lok_preinit_2_called)
+        {
+            SAL_INFO("lok", "Create libreoffice object");
+            gImpl = new LibLibreOffice_Impl();
+        }
     }
     else if (bPreInited)
         eStage = SECOND_INIT;
@@ -6828,9 +6832,15 @@ LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user
 {
     static bool alreadyCalled = false;
 
-    if (!alreadyCalled)
+    if ((!lok_preinit_2_called && !gImpl) || (lok_preinit_2_called && !alreadyCalled))
     {
         alreadyCalled = true;
+
+        if (!lok_preinit_2_called)
+        {
+            SAL_INFO("lok", "Create libreoffice object");
+            gImpl = new LibLibreOffice_Impl();
+        }
 
         if (!lo_initialize(gImpl, install_path, user_profile_url))
         {
@@ -6855,6 +6865,7 @@ int lok_preinit(const char* install_path, const char* user_profile_url)
 SAL_JNI_EXPORT
 int lok_preinit_2(const char* install_path, const char* user_profile_url, LibLibreOffice_Impl** kit)
 {
+    lok_preinit_2_called = true;
     int result = lo_initialize(nullptr, install_path, user_profile_url);
     if (kit != nullptr)
         *kit = gImpl;
