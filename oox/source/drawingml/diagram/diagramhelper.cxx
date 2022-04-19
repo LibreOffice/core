@@ -103,8 +103,7 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
 
     // set oox::Theme at Filter. All LineStyle/FillStyle/Colors/Attributes
     // will be taken from there
-    static bool bUseDiagramThemeData(false);
-    if(bUseDiagramThemeData)
+    if(UseDiagramThemeData())
         xFilter->setCurrentTheme(getOrCreateThemePtr(xFilter));
 
     css::uno::Reference< css::lang::XComponent > aComponentModel( rUnoModel, uno::UNO_QUERY );
@@ -132,9 +131,8 @@ void AdvancedDiagramHelper::reLayout(SdrObjGroup& rTarget)
     mpDiagramPtr->syncDiagramFontHeights();
 
     // re-apply secured data from ModelData
-    static bool bUseDiagramModelData(true);
-    if(bUseDiagramModelData)
-        mpDiagramPtr->getLayout()->restoreDataFromModelToXShapeAfterDiagramReCreate();
+    if(UseDiagramModelData())
+        mpDiagramPtr->getData()->restoreDataFromShapeToModelAfterDiagramImport(*pShapePtr);
 
     // Re-apply remembered geometry
     rTarget.TRSetBaseGeometry(aTransformation, aPolyPolygon);
@@ -200,7 +198,7 @@ bool AdvancedDiagramHelper::removeNode(const OUString& rNodeId)
     return bRetval;
 }
 
-void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
+void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape)
 {
     if(!mpDiagramPtr)
     {
@@ -212,8 +210,7 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
     // After Diagram import, parts of the Diagram ModelData is at the
     // oox::drawingml::Shape. Since these objects are temporary helpers,
     // secure that data at the Diagram ModelData by copying.
-    mpDiagramPtr->getData()->secureDataFromShapeToModelAfterDiagramImport();
-    mpDiagramPtr->getLayout()->secureDataFromXShapeToModelAfterDiagramImport();
+    mpDiagramPtr->getData()->secureDataFromShapeToModelAfterDiagramImport(rRootShape);
 
     anchorToSdrObjGroup(rTarget);
 }
@@ -221,11 +218,9 @@ void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget)
 std::shared_ptr< ::oox::drawingml::Theme > AdvancedDiagramHelper::getOrCreateThemePtr(
     rtl::Reference< oox::shape::ShapeFilterBase >& rxFilter) const
 {
-    static bool bForceThemePtrReceation(false);
-
     // (Re-)Use already existing Theme if existing/imported if possible.
     // If not, re-import Theme if data is available and thus possible
-    if(hasDiagramData() && (bForceThemePtrReceation || !mpThemePtr))
+    if(hasDiagramData() && (ForceThemePtrReceation() || !mpThemePtr))
     {
         // get the originally imported dom::XDocument
         const uno::Reference< css::xml::dom::XDocument >& xThemeDocument(mpDiagramPtr->getData()->getThemeDocument());

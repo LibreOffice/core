@@ -73,7 +73,7 @@ public:
     virtual OUString addNode(const OUString& rText) override;
     virtual bool removeNode(const OUString& rNodeId) override;
 
-    void doAnchor(SdrObjGroup& rTarget);
+    void doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape);
     std::shared_ptr< ::oox::drawingml::Theme > getOrCreateThemePtr(
         rtl::Reference< oox::shape::ShapeFilterBase>& rxFilter ) const;
 };
