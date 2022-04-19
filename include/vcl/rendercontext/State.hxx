@@ -28,6 +28,7 @@
 #include <vcl/rendercontext/RasterOp.hxx>
 #include <vcl/font.hxx>
 #include <vcl/mapmod.hxx>
+#include <vcl/metaact.hxx>
 #include <vcl/region.hxx>
 
 #include <memory>
@@ -53,6 +54,7 @@ enum class PushFlags
     TEXTLAYOUTMODE = 0x0800,
     TEXTLANGUAGE = 0x1000,
     OVERLINECOLOR = 0x2000,
+    FILLMODE = 0x4000,
     ALL = 0xFFFF
 };
 }
@@ -104,6 +106,7 @@ struct State
     std::optional<Point> mpRefPoint;
     std::optional<Color> mpLineColor;
     std::optional<Color> mpFillColor;
+    std::optional<PolyFillMode> mpFillMode;
     std::optional<Color> mpTextColor;
     std::optional<Color> mpTextFillColor;
     std::optional<Color> mpTextLineColor;
