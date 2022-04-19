@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd142e05_5fb0a97f",
+        "filename": "basic/source/runtime/methods.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 3423,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-19T16:59:16Z",
+      "side": 1,
+      "message": "FTR: this is blocked here, I can only read https://docs.microsoft.com/en-us/office/vba/Language/Reference/User-Interface-Help/formatnumber-function and https://docs.microsoft.com/en-us/office/vba/Language/Reference/User-Interface-Help/formatpercent-function",
+      "range": {
+        "startLine": 3423,
+        "startChar": 3,
+        "endLine": 3423,
+        "endChar": 93
+      },
+      "revId": "907bbc8214020c8b6f47edd2214a5d4aff55dd0f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
