@@ -607,7 +607,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 {
                     if (RET_OK == nResult)
                     {
-                        const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem<SfxDocumentInfoItem>(xDlg->GetOutputItemSet(), SID_DOCINFO, false);
+                        const SfxDocumentInfoItem* pDocInfoItem = SfxItemSet::GetItem(xDlg->GetOutputItemSet(), SID_DOCINFO, false);
                         if ( pDocInfoItem )
                         {
                             // user has done some changes to DocumentInfo
