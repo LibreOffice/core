@@ -789,15 +789,15 @@ AC_SUBST(ANDROID_GCC_TOOLCHAIN_VERSION)
 dnl ===================================================================
 dnl --with-android-sdk
 dnl ===================================================================
-ANDROID_SDK_HOME=
+ANDROID_SDK_DIR=
 if test -z "$with_android_sdk" -a -e "$SRC_ROOT/external/android-sdk-linux" -a "$build" != "$host"; then
     with_android_sdk="$SRC_ROOT/external/android-sdk-linux"
 fi
 if test -n "$with_android_sdk"; then
-    eval ANDROID_SDK_HOME=$with_android_sdk
-    PATH="$ANDROID_SDK_HOME/platform-tools:$ANDROID_SDK_HOME/tools:$PATH"
+    eval ANDROID_SDK_DIR=$with_android_sdk
+    PATH="$ANDROID_SDK_DIR/platform-tools:$ANDROID_SDK_DIR/tools:$PATH"
 fi
-AC_SUBST(ANDROID_SDK_HOME)
+AC_SUBST(ANDROID_SDK_DIR)
 
 AC_ARG_ENABLE([android-lok],
     AS_HELP_STRING([--enable-android-lok],
@@ -1238,19 +1238,19 @@ if test "$_os" = "Android" ; then
         AC_MSG_ERROR([the --with-android-ndk option does not point to an Android NDK])
     fi
 
-    if test -z "$ANDROID_SDK_HOME"; then
+    if test -z "$ANDROID_SDK_DIR"; then
         AC_MSG_ERROR([the --with-android-sdk option is mandatory, unless it is available at external/android-sdk-linux/.])
-    elif test ! -d "$ANDROID_SDK_HOME/platforms"; then
+    elif test ! -d "$ANDROID_SDK_DIR/platforms"; then
         AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
     fi
 
     BUILD_TOOLS_VERSION=`$SED -n -e 's/.*buildToolsVersion "\(.*\)"/\1/p' $SRC_ROOT/android/source/build.gradle`
-    if test ! -d "$ANDROID_SDK_HOME/build-tools/$BUILD_TOOLS_VERSION"; then
+    if test ! -d "$ANDROID_SDK_DIR/build-tools/$BUILD_TOOLS_VERSION"; then
         AC_MSG_WARN([android build-tools $BUILD_TOOLS_VERSION not found - install with
-                         $ANDROID_SDK_HOME/tools/android update sdk -u --all --filter build-tools-$BUILD_TOOLS_VERSION
+                         $ANDROID_SDK_DIR/tools/android update sdk -u --all --filter build-tools-$BUILD_TOOLS_VERSION
                     or adjust change $SRC_ROOT/android/source/build.gradle accordingly])
         add_warning "android build-tools $BUILD_TOOLS_VERSION not found - install with"
-        add_warning "    $ANDROID_SDK_HOME/tools/android update sdk -u --all --filter build-tools-$BUILD_TOOLS_VERSION"
+        add_warning "    $ANDROID_SDK_DIR/tools/android update sdk -u --all --filter build-tools-$BUILD_TOOLS_VERSION"
         add_warning "or adjust $SRC_ROOT/android/source/build.gradle accordingly"
     fi
 fi
