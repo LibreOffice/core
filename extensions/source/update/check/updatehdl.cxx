@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <cstddef>
 
 #include "updatehdl.hxx"
 #include <helpids.h>
@@ -240,13 +243,13 @@ void UpdateHandler::setErrorMessage( const OUString& rErrorMsg )
 }
 
 
-void UpdateHandler::setDownloadFile( const OUString& rFilePath )
+void UpdateHandler::setDownloadFile( std::u16string_view rFilePath )
 {
-    sal_Int32 nLast = rFilePath.lastIndexOf( '/' );
-    if ( nLast != -1 )
+    std::size_t nLast = rFilePath.rfind( '/' );
+    if ( nLast != std::u16string_view::npos )
     {
-        msDownloadFile = rFilePath.copy( nLast+1 );
-        const OUString aDownloadURL = rFilePath.copy( 0, nLast );
+        msDownloadFile = rFilePath.substr( nLast+1 );
+        const OUString aDownloadURL(rFilePath.substr( 0, nLast ));
         osl::FileBase::getSystemPathFromFileURL( aDownloadURL, msDownloadPath );
     }
 }

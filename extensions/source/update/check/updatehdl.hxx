@@ -166,7 +166,7 @@ public:
     void                    setProgress( sal_Int32 nPercent );
     void                    setNextVersion( const OUString &rNextVersion ) { msNextVersion = rNextVersion; }
     void                    setDownloadPath( const OUString &rPath ) { msDownloadPath = rPath; }
-    void                    setDownloadFile( const OUString &rPath );
+    void                    setDownloadFile( std::u16string_view rPath );
     void                    setErrorMessage( const OUString &rErrorMsg );
     void                    setDescription( const OUString &rDescription ){ msDescriptionMsg = rDescription; }
 
