@@ -52,6 +52,24 @@
       "parentUuid": "ff66422e_56b6c2ae",
       "revId": "39d732657faa218c83e031c2c2c588d44284fe96",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2131d8e0_be4ebf77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001615
+      },
+      "writtenOn": "2022-04-19T01:38:07Z",
+      "side": 1,
+      "message": "Prepatch, Statistics fields in the same paragraph are ordered alphabetically by their full description seen in the Navigator. Statistics - Characters - 23, Statistics - Pages - 1, Statistics - Words - 3 fields all in the same paragraph will always be ordered alphabetically no matter their order of appearance in the paragraph. If each field is in different paragraphs the order will be the appearance in the document from start to end. With the patch installed they will always be ordered in document appearance unless order alphabetically is checked for the Fields category.",
+      "parentUuid": "cd5ee434_8dabc431",
+      "revId": "39d732657faa218c83e031c2c2c588d44284fe96",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
