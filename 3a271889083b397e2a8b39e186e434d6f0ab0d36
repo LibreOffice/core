@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dfec760_84acdee3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 15
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-04-19T05:09:24Z",
+      "side": 1,
+      "message": "looks good :) added last nitpick:",
+      "revId": "3a271889083b397e2a8b39e186e434d6f0ab0d36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e3519ea_835c1c9f",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-04-19T05:09:24Z",
+      "side": 1,
+      "message": "can be MessageDialogController ?\n\nas I see: \"class VCL_DLLPUBLIC MessageDialogController : public DialogController\"\nMessageDialogController inherits from DialogController - so it should work the same way.",
+      "revId": "3a271889083b397e2a8b39e186e434d6f0ab0d36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
