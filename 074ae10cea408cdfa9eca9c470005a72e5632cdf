@@ -16,6 +16,23 @@
       "message": "This should be what you mean? It might not work in localized excel, but it must work in LO after your fix :-)",
       "revId": "074ae10cea408cdfa9eca9c470005a72e5632cdf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ba6817d_6872657d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-19T07:47:58Z",
+      "side": 1,
+      "message": "Thank you very much!",
+      "revId": "074ae10cea408cdfa9eca9c470005a72e5632cdf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
