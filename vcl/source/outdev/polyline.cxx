@@ -210,6 +210,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitLineColor();
         SetFillColor(aOldLineColor);
         InitFillColor();
+        InitFillMode();
 
         // draw using a loop; else the topology will paint a PolyPolygon
         for(auto const& rPolygon : aAreaPolyPolygon)
@@ -222,6 +223,8 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         InitLineColor();
         SetFillColor(aOldFillColor);
         InitFillColor();
+        InitFillMode();
+
 
         // when AA it is necessary to also paint the filled polygon's outline
         // to avoid optical gaps
