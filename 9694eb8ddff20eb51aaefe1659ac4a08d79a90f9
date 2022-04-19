@@ -16,6 +16,29 @@
       "message": "Hi Miklos, please look, whether the way to fix the wrong rendering of our preset shapes \"Octagon Bevel\" and \"Diamond Bevel\" is OK for you. The chosen ColorData would allow a 1:1 conversion to OOXML when it comes to export. The actual export to OOXML is not here but will be a separate patch.",
       "revId": "9694eb8ddff20eb51aaefe1659ac4a08d79a90f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df0e144c_a5d4e56c",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-19T16:01:12Z",
+      "side": 1,
+      "message": "Sorry to bother you -- was just curious -- but noticed this \"space\", which I think you do not want to include.",
+      "range": {
+        "startLine": 792,
+        "startChar": 20,
+        "endLine": 792,
+        "endChar": 21
+      },
+      "revId": "9694eb8ddff20eb51aaefe1659ac4a08d79a90f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
