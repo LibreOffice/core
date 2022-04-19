@@ -42,17 +42,10 @@ class QtWidget : public QWidget
     int m_nDeltaX;
     int m_nDeltaY;
 
-    enum class ButtonKeyState
-    {
-        Pressed,
-        Released
-    };
-
     static void commitText(QtFrame&, const QString& aText);
     static void deleteReplacementText(QtFrame& rFrame, int nReplacementStart,
                                       int nReplacementLength);
-    static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*, const ButtonKeyState);
-    static void handleMouseButtonEvent(const QtFrame&, const QMouseEvent*, const ButtonKeyState);
+    static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*);
     static void handleMouseEnterLeaveEvents(const QtFrame&, QEvent*);
     static void fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
                                           const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
@@ -101,23 +94,12 @@ public:
     // key events might be propagated further down => call base on false
     static inline bool handleKeyReleaseEvent(QtFrame&, const QWidget&, QKeyEvent*);
     // mouse events are always accepted
-    static inline void handleMousePressEvent(const QtFrame&, const QMouseEvent*);
-    static inline void handleMouseReleaseEvent(const QtFrame&, const QMouseEvent*);
+    static void handleMouseButtonEvent(const QtFrame&, const QMouseEvent*);
 };
 
 bool QtWidget::handleKeyReleaseEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
 {
-    return handleKeyEvent(rFrame, rWidget, pEvent, ButtonKeyState::Released);
-}
-
-void QtWidget::handleMousePressEvent(const QtFrame& rFrame, const QMouseEvent* pEvent)
-{
-    handleMouseButtonEvent(rFrame, pEvent, ButtonKeyState::Pressed);
-}
-
-void QtWidget::handleMouseReleaseEvent(const QtFrame& rFrame, const QMouseEvent* pEvent)
-{
-    handleMouseButtonEvent(rFrame, pEvent, ButtonKeyState::Released);
+    return handleKeyEvent(rFrame, rWidget, pEvent);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

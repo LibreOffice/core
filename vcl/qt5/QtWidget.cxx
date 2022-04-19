@@ -153,8 +153,7 @@ void QtWidget::fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEven
 #define FILL_SAME(rFrame, nWidth)                                                                  \
     fillSalAbstractMouseEvent(rFrame, pEvent, pEvent->pos(), pEvent->buttons(), nWidth, aEvent)
 
-void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* pEvent,
-                                      const ButtonKeyState eState)
+void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* pEvent)
 {
     SalMouseEvent aEvent;
     FILL_SAME(rFrame, rFrame.GetQWidget()->width());
@@ -175,7 +174,7 @@ void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* 
     }
 
     SalEvent nEventType;
-    if (eState == ButtonKeyState::Pressed)
+    if (pEvent->type() == QEvent::MouseButtonPress)
         nEventType = SalEvent::MouseButtonDown;
     else
         nEventType = SalEvent::MouseButtonUp;
@@ -184,13 +183,13 @@ void QtWidget::handleMouseButtonEvent(const QtFrame& rFrame, const QMouseEvent* 
 
 void QtWidget::mousePressEvent(QMouseEvent* pEvent)
 {
-    handleMousePressEvent(m_rFrame, pEvent);
+    handleMouseButtonEvent(m_rFrame, pEvent);
     if (m_rFrame.isPopup()
         && !geometry().translated(geometry().topLeft() * -1).contains(pEvent->pos()))
         closePopup();
 }
 
-void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseReleaseEvent(m_rFrame, pEvent); }
+void QtWidget::mouseReleaseEvent(QMouseEvent* pEvent) { handleMouseButtonEvent(m_rFrame, pEvent); }
 
 void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
 {
@@ -514,11 +513,12 @@ void QtWidget::deleteReplacementText(QtFrame& rFrame, int nReplacementStart, int
     rFrame.CallCallback(SalEvent::DeleteSurroundingTextRequest, &aEvt);
 }
 
-bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent,
-                              const ButtonKeyState eState)
+bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent* pEvent)
 {
+    const bool bIsKeyPressed
+        = pEvent->type() == QEvent::KeyPress || pEvent->type() == QEvent::ShortcutOverride;
     sal_uInt16 nCode = GetKeyCode(pEvent->key(), pEvent->modifiers());
-    if (eState == ButtonKeyState::Pressed && nCode == 0 && pEvent->text().length() > 1
+    if (bIsKeyPressed && nCode == 0 && pEvent->text().length() > 1
         && rWidget.testAttribute(Qt::WA_InputMethodEnabled))
     {
         commitText(rFrame, pEvent->text());
@@ -530,7 +530,7 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
     {
         sal_uInt16 nModCode = GetKeyModCode(pEvent->modifiers());
         SalKeyModEvent aModEvt;
-        aModEvt.mbDown = eState == ButtonKeyState::Pressed;
+        aModEvt.mbDown = bIsKeyPressed;
         aModEvt.mnModKeyCode = ModKeyFlags::NONE;
 
 #if CHECK_ANY_QT_USING_X11
@@ -582,7 +582,7 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
                     break;
             }
 
-            if (eState == ButtonKeyState::Released)
+            if (!bIsKeyPressed)
             {
                 // sending the old mnModKeyCode mask on release is needed to
                 // implement the writing direction switch with Ctrl + L/R-Shift
@@ -618,7 +618,7 @@ bool QtWidget::handleKeyEvent(QtFrame& rFrame, const QWidget& rWidget, QKeyEvent
     QGuiApplication::inputMethod()->update(Qt::ImCursorRectangle);
 
     bool bStopProcessingKey;
-    if (eState == ButtonKeyState::Pressed)
+    if (bIsKeyPressed)
         bStopProcessingKey = rFrame.CallCallback(SalEvent::KeyInput, &aEvent);
     else
         bStopProcessingKey = rFrame.CallCallback(SalEvent::KeyUp, &aEvent);
@@ -650,8 +650,7 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
         // and if it's handled - disable the shortcut, it should have been activated.
         // Don't process keyPressEvent generated after disabling shortcut since it was handled here.
         // If event is not handled, don't accept it and let Qt activate related shortcut.
-        if (handleKeyEvent(rFrame, rWidget, static_cast<QKeyEvent*>(pEvent),
-                           ButtonKeyState::Pressed))
+        if (handleKeyEvent(rFrame, rWidget, static_cast<QKeyEvent*>(pEvent)))
             return true;
     }
     else if (pEvent->type() == QEvent::ToolTip)
