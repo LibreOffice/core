@@ -596,7 +596,8 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 }
             }
 
-            rReq.AppendItem( SfxBoolItem( SID_FORCERELOAD, bNeedsReload) );
+            rReq.AppendItem( SfxBoolItem(SID_FORCERELOAD,
+                    rReq.GetSlot() == SID_EDITDOC || bNeedsReload) );
             rReq.AppendItem( SfxBoolItem( SID_SILENT, true ));
 
             [[fallthrough]]; //TODO ???
