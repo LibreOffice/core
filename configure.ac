@@ -11143,10 +11143,32 @@ else
     if test "$with_system_zxing" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_ZXING=TRUE
+        ZXING_CFLAGS=
         AC_LANG_PUSH([C++])
-        AC_CHECK_HEADER(ZXing/MultiFormatWriter.h, [],
-            [AC_MSG_ERROR(zxing headers not found.)], [#include <stdexcept>])
-        ZXING_CFLAGS=-I/usr/include/ZXing
+        save_CXXFLAGS=$CXXFLAGS
+        save_IFS=$IFS
+        IFS=$P_SEP
+        for i in $CPLUS_INCLUDE_PATH /usr/include; do
+            dnl Reset IFS as soon as possible, to avoid unexpected side effects (and the
+            dnl "/usr/include" fallback makes sure we get here at least once; resetting rather than
+            dnl unsetting follows the advice at <http://git.savannah.gnu.org/gitweb/?p=autoconf.git;
+            dnl a=commit;h=e51c9919f2cf70185b7916ac040bc0bbfd0f743b> "Add recommendation on (not)
+            dnl unsetting IFS."):
+            IFS=$save_IFS
+            dnl TODO: GCC and Clang treat empty paths in CPLUS_INCLUDE_PATH like ".", but we simply
+            dnl ignore them here:
+            if test -z "$i"; then
+                continue
+            fi
+            dnl TODO: White space in $i would cause problems:
+            CXXFLAGS="$save_CXXFLAGS -I$i/ZXing"
+            AC_CHECK_HEADER(MultiFormatWriter.h, [ZXING_CFLAGS=-I$i/ZXing; break],
+                [unset ac_cv_header_MultiFormatWriter_h], [#include <stdexcept>])
+        done
+        CXXFLAGS=$save_CXXFLAGS
+        if test -z "$ZXING_CFLAGS"; then
+            AC_MSG_ERROR(zxing headers not found.)
+        fi
         AC_CHECK_LIB([ZXing], [main], [ZXING_LIBS=-lZXing],
             [ AC_CHECK_LIB([ZXingCore], [main], [ZXING_LIBS=-lZXingCore],
             [ AC_MSG_ERROR(zxing C++ library not found.) ])], [])
