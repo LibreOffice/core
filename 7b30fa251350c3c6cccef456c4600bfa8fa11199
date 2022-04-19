@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "970e53c8_e76599b0",
+        "filename": "sw/source/core/unocore/unocrsrhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-19T08:57:35Z",
+      "side": 1,
+      "message": "Would InvalidStateException be more accurate here?\nFrom the docs: \"is thrown when an object\u0027s state does not allow to call requested functionality.\"\nhttps://api.libreoffice.org/docs/idl/ref/exceptioncom_1_1sun_1_1star_1_1util_1_1InvalidStateException.html",
+      "range": {
+        "startLine": 1035,
+        "startChar": 23,
+        "endLine": 1035,
+        "endChar": 39
+      },
+      "revId": "7b30fa251350c3c6cccef456c4600bfa8fa11199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
