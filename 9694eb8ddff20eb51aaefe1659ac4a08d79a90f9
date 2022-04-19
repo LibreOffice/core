@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ee1c7ff_1b19d950",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-04-19T14:40:36Z",
+      "side": 1,
+      "message": "Hi Miklos, please look, whether the way to fix the wrong rendering of our preset shapes \"Octagon Bevel\" and \"Diamond Bevel\" is OK for you. The chosen ColorData would allow a 1:1 conversion to OOXML when it comes to export. The actual export to OOXML is not here but will be a separate patch.",
+      "revId": "9694eb8ddff20eb51aaefe1659ac4a08d79a90f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
