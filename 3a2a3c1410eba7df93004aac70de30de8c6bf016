@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43334f79_cc5acd67",
+        "filename": "vcl/qt5/QtWidget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-19T10:17:52Z",
+      "side": 1,
+      "message": "uh, does it have to be formatted so unreadable? where does the condition end and the then-statement begin?",
+      "revId": "3a2a3c1410eba7df93004aac70de30de8c6bf016",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
