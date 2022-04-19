@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e257954c_60734b1c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-19T06:12:52Z",
+      "side": 1,
+      "message": "The old way, as a work-around you could switch to a date/time format in order to turn off the fixed field status and then switch back (or turn it on as well for that matter, which still works).",
+      "revId": "73ab9413b225b6ae536df2f43ece603e483fe4b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
