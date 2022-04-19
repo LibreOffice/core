@@ -23,6 +23,7 @@ $(eval $(call gb_Library_use_libraries,ucpdav1,\
 	cppuhelper \
 	sal \
 	salhelper \
+	svl \
 	ucbhelper \
 	tl \
 ))

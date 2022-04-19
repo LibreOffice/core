@@ -28,6 +28,7 @@
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <svl/lockfilecommon.hxx>
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
@@ -3235,8 +3236,7 @@ void Content::lock(
         }
 
         uno::Any aOwnerAny;
-        aOwnerAny
-            <<= OUString("LibreOffice - http://www.libreoffice.org/");
+        aOwnerAny <<= OUString("LibreOffice - " + ::svt::LockFileCommon::GetOOOUserName());
 
         ucb::Lock aLock(
             ucb::LockScope_EXCLUSIVE,
