@@ -28,7 +28,6 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 
@@ -73,9 +72,7 @@ typedef std::vector< Connection > Connections;
 /** Text and properties for a point
  * For proof of concept to make TextData available in svx level this
  * is in a first run pretty simple, but may need to be extended accordingly
- * up to similar data as in oox::drawingml::TextBody. Pls have a look at
- * secureDataFromShapeToModelAfterDiagramImport() resp.
- * restoreDataFromModelToShapeAfterReCreation() on it's usage/purpose
+ * up to similar data as in oox::drawingml::TextBody.
  */
 struct SVXCORE_DLLPUBLIC TextBody
 {
@@ -104,7 +101,13 @@ struct SVXCORE_DLLPUBLIC Point
 {
     Point();
 
+    // The minimal text data from the imported Diagram
+    // in source format
     TextBodyPtr msTextBody;
+
+    // The property sequence of pairs<OUString, css::uno::Any>,
+    // interpreted & assigned by the ::addShape(s) creators in the
+    // import filter that created a XShape associated/based on this entry
     PointStylePtr msPointStylePtr;
 
     OUString msCnxId;
@@ -147,9 +150,6 @@ struct SVXCORE_DLLPUBLIC Point
     bool          mbCustomVerticalFlip;
     bool          mbCustomText;
     bool          mbIsPlaceholder;
-
-    void securePropertiesFromXShape(const css::uno::Reference< css::drawing::XShape >& rXShape);
-    void restorePropertiesToXShape(const css::uno::Reference< css::drawing::XShape >& rXShape) const;
 };
 
 typedef std::vector< Point >        Points;
@@ -183,6 +183,10 @@ public:
     // creates temporary processing data from model data
     virtual void buildDiagramDataModel(bool bClearOoxShapes);
 
+    // dump to readable format
+    virtual void dump() const = 0;
+
+    // read accesses
     Connections& getConnections() { return maConnections; }
     Points& getPoints() { return maPoints; }
     StringMap& getPresOfNameMap() { return maPresOfNameMap; }
@@ -190,18 +194,21 @@ public:
     PointsNameMap& getPointsPresNameMap() { return maPointsPresNameMap; }
     ::std::vector<OUString>& getExtDrawings() { return maExtDrawings; }
     const Point* getRootPoint() const;
-
-    virtual void dump() const = 0;
-
     OUString getString() const;
     std::vector<std::pair<OUString, OUString>> getChildren(const OUString& rParentId) const;
-    OUString addNode(const OUString& rText);
-    bool removeNode(const OUString& rNodeId);
 
     const css::uno::Reference< css::xml::dom::XDocument >& getThemeDocument() const { return mxThemeDocument; }
     void setThemeDocument( const css::uno::Reference< css::xml::dom::XDocument >& xRef ) { mxThemeDocument = xRef; }
 
+    const OUString& getBackgroundShapeModelID() const { return msBackgroundShapeModelID; }
+    void setBackgroundShapeModelID( const OUString& rModelID ) { msBackgroundShapeModelID = rModelID; }
+
+    // model modifiers
+    OUString addNode(const OUString& rText);
+    bool removeNode(const OUString& rNodeId);
+
 protected:
+    // helpers
     void getChildrenString(OUStringBuffer& rBuf, const Point* pPoint, sal_Int32 nLevel) const;
     void addConnection(TypeConstant nType, const OUString& sSourceId, const OUString& sDestId);
 
@@ -211,22 +218,31 @@ protected:
     // The model definition, the parts available in svx.
     // See evtl. parts in oox::drawingml::DiagramData that may need t obe accessed
     // - logic connections/associations
+    Connections maConnections;
+
     // - data point entries
+    Points maPoints;
+
+    // - style for the BackgroundShape (if used)
+    //   this is the property sequence of pairs<OUString, css::uno::Any>,
+    //   as interpreted & assigned by the ::addShape(s) creators in the
+    //   import filter
+    PointStylePtr maBackgroundShapeStyle;
+
     // - Theme definition as css::xml::dom::XDocument
     //    Note: I decided to use dom::XDocument which is already in use, instead of a
     //          temp file what is also possible (implemented that for POC) but would
     //          need to be created in PresentationFragmentHandler::importSlide. If
     //          this needs to be written to a File, please refer to
     //          fileDocxExport::WriteTheme(), look for "OOXTheme"
-    Connections maConnections;
-    Points maPoints;
     css::uno::Reference< css::xml::dom::XDocument > mxThemeDocument;
 
-    // temporary processing data, deleted when using build()
+    // temporary processing data, partially deleted when using build()
     PointNameMap      maPointNameMap;
     PointsNameMap     maPointsPresNameMap;
     ConnectionNameMap maConnectionNameMap;
     StringMap         maPresOfNameMap;
+    OUString          msBackgroundShapeModelID;
 };
 
 typedef std::shared_ptr< DiagramData > DiagramDataPtr;

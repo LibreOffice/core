@@ -35,6 +35,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpage.hxx>
 #include <oox/ppt/pptimport.hxx>
+#include <comphelper/xmltools.hxx>
 
 #include "diagramlayoutatoms.hxx"
 #include "layoutatomvisitors.hxx"
@@ -103,39 +104,6 @@ static void removeUnneededGroupShapes(const ShapePtr& pShape)
     }
 }
 
-void DiagramLayout::secureDataFromXShapeToModelAfterDiagramImport()
-{
-    // maPresPointShapeMap types: < const svx::diagram::Point*, ShapePtr >
-    for (const auto& pEntry : maPresPointShapeMap)
-    {
-        if(nullptr != pEntry.first && pEntry.second)
-        {
-            const css::uno::Reference< css::drawing::XShape >& rXShape(pEntry.second->getXShape());
-
-            if(rXShape)
-            {
-                const_cast<svx::diagram::Point*>(pEntry.first)->securePropertiesFromXShape(rXShape);
-            }
-        }
-    }
-}
-
-void DiagramLayout::restoreDataFromModelToXShapeAfterDiagramReCreate()
-{
-    // maPresPointShapeMap types: < const svx::diagram::Point*, ShapePtr >
-    for (const auto& pEntry : maPresPointShapeMap)
-    {
-        if(nullptr != pEntry.first && pEntry.second)
-        {
-            const css::uno::Reference< css::drawing::XShape >& rXShape(pEntry.second->getXShape());
-
-            if(rXShape)
-            {
-                pEntry.first->restorePropertiesToXShape(rXShape);
-            }
-        }
-    }
-}
 
 void Diagram::addTo( const ShapePtr & pParentShape )
 {
@@ -165,8 +133,13 @@ void Diagram::addTo( const ShapePtr & pParentShape )
     pBackground->setSubType(XML_rect);
     pBackground->getCustomShapeProperties()->setShapePresetType(XML_rect);
     pBackground->setSize(pParentShape->getSize());
-    pBackground->getFillProperties() = *mpData->getBackgroundFillProperties();
+    pBackground->getFillProperties() = *mpData->getBackgroundShapeFillProperties();
     pBackground->setLocked(true);
+
+    // create and set ModelID for BackgroundShape to allow later association
+    getData()->setBackgroundShapeModelID(OStringToOUString(comphelper::xml::generateGUIDString(), RTL_TEXTENCODING_UTF8));
+    pBackground->setDiagramDataModelID(getData()->getBackgroundShapeModelID());
+
     auto& aChildren = pParentShape->getChildren();
     aChildren.insert(aChildren.begin(), pBackground);
 }

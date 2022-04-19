@@ -118,6 +118,9 @@ public:
     OUString&                  getServiceName(){ return msServiceName; }
     void                            setServiceName( const char* pServiceName );
 
+    const OUString& getDiagramDataModelID() const { return msDiagramDataModelID; }
+    void setDiagramDataModelID( const OUString& rDiagramDataModelID ) { msDiagramDataModelID = rDiagramDataModelID; }
+
     PropertyMap&                    getShapeProperties(){ return maShapeProperties; }
 
     LineProperties&          getLineProperties() { return *mpLinePropertiesPtr; }
@@ -408,6 +411,9 @@ private:
     // temporary space for DiagramHelper in preparation for collecting data
     // Note: I tried to use a unique_ptr here, but existing constructor func does not allow that
     IDiagramHelper* mpDiagramHelper;
+
+    // association-ID to identify the Diagram ModelData
+    OUString msDiagramDataModelID;
 };
 
 }
