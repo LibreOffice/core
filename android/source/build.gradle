@@ -33,10 +33,6 @@ dependencies {
 
 android {
     compileSdkVersion 31
-    compileOptions {
-        // silence some java-language features hints
-        sourceCompatibility 6
-    }
     // uses non-conventional source layout, so need to reconfigure accordingly
     // ToDo move to conventional layout, so stuff can be stripped down.
     sourceSets {
