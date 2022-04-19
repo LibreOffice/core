@@ -16,6 +16,24 @@
       "message": "We even have \u003ccomphelper/flagguard.hxx\u003e based on the scopeguard, exactly for this purpose :-)",
       "revId": "216493f32236f0086f4c5b527deb18b020b0ed1c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7988ae94_63f84cb5",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-04-19T05:56:11Z",
+      "side": 1,
+      "message": "oh... and even a ValueRestorationGuard. Didn\u0027t know about those.",
+      "parentUuid": "f7e20817_7d8c4340",
+      "revId": "216493f32236f0086f4c5b527deb18b020b0ed1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
