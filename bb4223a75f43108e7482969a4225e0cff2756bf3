@@ -16,6 +16,24 @@
       "message": "Unfortunately, this test never fails. Even if I set the encoding in vbaexport to RTL_TEXTENCODING_ASCII_US or I just saveAndReload. If I do a rDoc.CalcAll(), I get the error - Expected: проба - Actual  : #NAME?.\n\nIt seems vbaexport is never called in saveAndReload.",
       "revId": "bb4223a75f43108e7482969a4225e0cff2756bf3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fac0a6ba_c290ab71",
+        "filename": "sc/qa/unit/subsequent_export_test2.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-19T11:15:33Z",
+      "side": 1,
+      "message": "Actual  : #NAME? is OK. It is because I used a Cyrillic function name. It would break as well. But wait, let me add another function, and use two cells (A1 and A2), so that we can see both normal name with wrong text, and wrong function name.",
+      "parentUuid": "097cb558_cb8afb15",
+      "revId": "bb4223a75f43108e7482969a4225e0cff2756bf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
