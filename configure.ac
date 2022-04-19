@@ -11153,10 +11153,30 @@ else
     if test "$with_system_zxing" = "yes"; then
         AC_MSG_RESULT([external])
         SYSTEM_ZXING=TRUE
+        my_CXXFLAGS=
+        my_INCLUDES=
+        for i in $CXXFLAGS; do
+            case "$i" in
+            -I*)
+                my_INCLUDES="$my_INCLUDES $i"
+                ;;
+            *)
+                my_CXXFLAGS="$my_CXXFLAGS $i"
+                ;;
+            esac
+        done
+        ZXING_CFLAGS=
         AC_LANG_PUSH([C++])
-        AC_CHECK_HEADER(ZXing/MultiFormatWriter.h, [],
-            [AC_MSG_ERROR(zxing headers not found.)], [#include <stdexcept>])
-        ZXING_CFLAGS=-I/usr/include/ZXing
+        save_CXXFLAGS=$CXXFLAGS
+        for i in $my_INCLUDES -I/usr/include; do
+            CXXFLAGS="$my_CXXFLAGS $i/ZXing"
+            AC_CHECK_HEADER(MultiFormatWriter.h, [ZXING_CFLAGS=$i/ZXing; break],
+                [unset ac_cv_header_MultiFormatWriter_h], [#include <stdexcept>])
+        done
+        CXXFLAGS=$save_CXXFLAGS
+        if test -z "$ZXING_CFLAGS"; then
+            AC_MSG_ERROR(zxing headers not found.)
+        fi
         AC_CHECK_LIB([ZXing], [main], [ZXING_LIBS=-lZXing],
             [ AC_CHECK_LIB([ZXingCore], [main], [ZXING_LIBS=-lZXingCore],
             [ AC_MSG_ERROR(zxing C++ library not found.) ])], [])
