@@ -136,9 +136,10 @@ bool ViewObjectContactPrimitiveHit(
         {
             // get primitive sequence
             sdr::contact::DisplayInfo aDisplayInfo;
-            const drawinglayer::primitive2d::Primitive2DContainer& rSequence(rVOC.getPrimitive2DSequence(aDisplayInfo));
+            // have to make a copy of this container here, because it might be changed underneath us
+            const drawinglayer::primitive2d::Primitive2DContainer aSequence(rVOC.getPrimitive2DSequence(aDisplayInfo));
 
-            if(!rSequence.empty())
+            if(!aSequence.empty())
             {
                 // create a HitTest processor
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D = rVOC.GetObjectContact().getViewInformation2D();
@@ -152,7 +153,7 @@ bool ViewObjectContactPrimitiveHit(
                 aHitTestProcessor2D.collectHitStack(true);
 
                 // feed it with the primitives
-                aHitTestProcessor2D.process(rSequence);
+                aHitTestProcessor2D.process(aSequence);
 
                 // deliver result
                 if (aHitTestProcessor2D.getHit())
