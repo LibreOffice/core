@@ -35,6 +35,7 @@
 #include <sallayout.hxx>
 #include "svpcairotextrender.hxx"
 #include <impfontmetricdata.hxx>
+#include <vcl/metaact.hxx>
 
 #include <headless/SvpGraphicsBackend.hxx>
 #include <headless/CairoCommon.hxx>
@@ -68,7 +69,6 @@ public:
     std::unique_ptr<SvpGraphicsBackend> const& getSvpBackend() { return m_pBackend; }
 
     virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
-
     virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;
     virtual void            GetFontMetric( ImplFontMetricDataRef&, int nFallbackLevel ) override;

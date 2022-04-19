@@ -1124,6 +1124,11 @@ namespace svgio::svgreader
                 if(bClipPathIsNonzero || bFillRuleIsNonzero)
                 {
                     if(getFill() || getSvgGradientNodeFill() || getSvgPatternNodeFill()) {
+
+                        // FIXME: By introducing appropriate fill rule, this should be changed
+                        //       createNonzeroConform() is no longer needed, this should be
+                        //       done by setting the appropriate FillRule
+
                         // nonzero is wanted, solve geometrically (see description on basegfx)
                         // basegfx::utils::createNonzeroConform() is expensive for huge paths
                         // and is only needed if path will be filled later on
