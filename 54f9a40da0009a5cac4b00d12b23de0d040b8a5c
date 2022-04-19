@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cf0a3fb_045676f1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-19T11:56:13Z",
+      "side": 1,
+      "message": "Or maybe even that is wrong. Using Cyrillic function names would create wrong syntax, and it won\u0027t even compile. I can\u0027t even succeed with *different modules* - so it looks like I need to make it simple, and have a single latin-name function with Cyrillic output.\n\nWill upload shortly. Sorry for the inconvenience.",
+      "revId": "54f9a40da0009a5cac4b00d12b23de0d040b8a5c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
