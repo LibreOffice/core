@@ -2286,6 +2286,8 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     // read from the configuration
     OUString aPersona( officecfg::Office::Common::Misc::Persona::get() );
     OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get() );
+    if (aPersona == "no")
+        return;
 
     // have the settings changed? marks if header /footer prepared before
     //should maybe extended to a flag that marks if header /footer /both are loaded
