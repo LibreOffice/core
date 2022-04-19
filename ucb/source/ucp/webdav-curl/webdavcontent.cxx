@@ -22,12 +22,14 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <rtl/uri.hxx>
 #include <sal/log.hxx>
+#include <officecfg/Office/Common.hxx>
 #include <officecfg/Inet.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
+#include <svl/lockfilecommon.hxx>
 
 #include <com/sun/star/beans/IllegalTypeException.hpp>
 #include <com/sun/star/beans/NotRemoveableException.hpp>
@@ -3235,8 +3237,10 @@ void Content::lock(
         }
 
         uno::Any aOwnerAny;
-        aOwnerAny
-            <<= OUString("LibreOffice - http://www.libreoffice.org/");
+        OUString const user(officecfg::Office::Common::Save::Document::UseUserData::get()
+                ? " - " + ::svt::LockFileCommon::GetOOOUserName()
+                : OUString());
+        aOwnerAny <<= OUString("LibreOffice" + user);
 
         ucb::Lock aLock(
             ucb::LockScope_EXCLUSIVE,
