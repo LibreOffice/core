@@ -51,6 +51,7 @@ class QtWidget : public QWidget
     static void commitText(QtFrame&, const QString& aText);
     static bool handleKeyEvent(QtFrame&, const QWidget&, QKeyEvent*, const ButtonKeyState);
     static void handleMouseButtonEvent(const QtFrame&, const QMouseEvent*, const ButtonKeyState);
+    static void handleMouseEnterLeaveEvents(const QtFrame&, QEvent*);
     static void fillSalAbstractMouseEvent(const QtFrame& rFrame, const QInputEvent* pQEvent,
                                           const QPoint& rPos, Qt::MouseButtons eButtons, int nWidth,
                                           SalAbstractMouseEvent& aSalEvent);
@@ -75,6 +76,12 @@ class QtWidget : public QWidget
     virtual void wheelEvent(QWheelEvent*) override;
     virtual void closeEvent(QCloseEvent*) override;
     virtual void changeEvent(QEvent*) override;
+    virtual void leaveEvent(QEvent*) override;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    virtual void enterEvent(QEnterEvent*) override;
+#else
+    virtual void enterEvent(QEvent*) override;
+#endif
 
     void inputMethodEvent(QInputMethodEvent*) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery) const override;
