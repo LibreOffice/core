@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0124432d_4fc4d145",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-19T15:12:23Z",
+      "side": 1,
+      "message": "Note that to qualify for GSoC you also need to solve at least one difficultyInteresting easy hack. The application evaluation deadline is 12 May, so it would be best to get it done soon.",
+      "revId": "b158a99dacdd1343fa2d827fc9f671183652f3aa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
