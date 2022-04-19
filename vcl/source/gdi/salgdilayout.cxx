@@ -32,6 +32,7 @@
 #include <FileDefinitionWidgetDraw.hxx>
 #include <rtl/math.hxx>
 #include <comphelper/lok.hxx>
+#include <toolbarvalue.hxx>
 
 // The only common SalFrame method
 
