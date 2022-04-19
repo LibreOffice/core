@@ -33,6 +33,24 @@
       "message": "can be MessageDialogController ?\n\nas I see: \"class VCL_DLLPUBLIC MessageDialogController : public DialogController\"\nMessageDialogController inherits from DialogController - so it should work the same way.",
       "revId": "3a271889083b397e2a8b39e186e434d6f0ab0d36",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc272773_6cbac3e7",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 15
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-04-19T18:23:43Z",
+      "side": 1,
+      "message": "Sure MessageDialogController uses weld_message_dialog whereas GenericDialogController using weld_dialog in their ctors.\n\nThe change to vcl/jsdialog/jsdialogbuilder.cxx is related to this.",
+      "parentUuid": "6e3519ea_835c1c9f",
+      "revId": "3a271889083b397e2a8b39e186e434d6f0ab0d36",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

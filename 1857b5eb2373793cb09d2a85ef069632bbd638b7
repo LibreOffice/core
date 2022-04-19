@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aeaf38a_07d53b77",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-04-19T18:23:43Z",
+      "side": 1,
+      "message": "Changed GenericDialogController to MessageDialogController.\nFixed bug related to changing DialogController and another unrelated bug.",
+      "revId": "1857b5eb2373793cb09d2a85ef069632bbd638b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "769d11b8_47cd44b2",
+        "filename": "cui/source/tabpages/tpcolor.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 317,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-04-19T18:23:43Z",
+      "side": 1,
+      "message": "Multiple name dialogs open caused issues when disposing the parent widget",
+      "revId": "1857b5eb2373793cb09d2a85ef069632bbd638b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bff2cfe_06c3defc",
+        "filename": "vcl/jsdialog/jsdialogbuilder.cxx",
+        "patchSetId": 16
+      },
+      "lineNbr": 832,
+      "author": {
+        "id": 1003543
+      },
+      "writtenOn": "2022-04-19T18:23:43Z",
+      "side": 1,
+      "message": "weld_message_dialog did not notify the online client of the change preventing the JsMessageDialog from rendering.",
+      "revId": "1857b5eb2373793cb09d2a85ef069632bbd638b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
