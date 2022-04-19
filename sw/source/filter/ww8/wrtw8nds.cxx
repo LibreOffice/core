@@ -2772,6 +2772,8 @@ void MSWordExportBase::OutputTextNode( SwTextNode& rNode )
                 if (FLY_PROCESSED == nStateOfFlyFrame || FLY_NONE == nStateOfFlyFrame)
                 {
                     AttrOutput().EndRun(&rNode, nCurrentPos, /*bLastRun=*/false);
+                    if (!aSavedSnippet.isEmpty())
+                        bStartedPostponedRunProperties = false;
 
                     AttrOutput().StartRun( pRedlineData, nCurrentPos, bSingleEmptyRun );
                     AttrOutput().SetAnchorIsLinkedToNode( false );
