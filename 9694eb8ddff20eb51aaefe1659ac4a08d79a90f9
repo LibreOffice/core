@@ -39,6 +39,30 @@
       },
       "revId": "9694eb8ddff20eb51aaefe1659ac4a08d79a90f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e198b00c_bf255dd4",
+        "filename": "svx/source/customshapes/EnhancedCustomShape2d.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 792,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-04-19T19:48:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "df0e144c_a5d4e56c",
+      "range": {
+        "startLine": 792,
+        "startChar": 20,
+        "endLine": 792,
+        "endChar": 21
+      },
+      "revId": "9694eb8ddff20eb51aaefe1659ac4a08d79a90f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
