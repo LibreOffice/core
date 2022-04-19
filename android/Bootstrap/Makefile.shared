@@ -24,7 +24,7 @@ OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
 
 local.properties: $(BUILDDIR)/config_host.mk
 	echo ndk.dir=$(ANDROID_NDK_DIR) >local.properties
-	echo sdk.dir=$(ANDROID_SDK_HOME) >>local.properties
+	echo sdk.dir=$(ANDROID_SDK_DIR) >>local.properties
 
 #
 # Build / link the single .so for this app
@@ -84,7 +84,7 @@ link-so: $(SODEST)/liblo-native-code.so $(SODEST)/nss-libraries $(SODEST)/libc++
 # can't "stop" a device anyway.)
 
 stop-start-cycle:
-	$(ANDROID_SDK_HOME)/platform-tools/adb shell stop && $(ANDROID_SDK_HOME)/platform-tools/adb shell start && sleep 10
+	$(ANDROID_SDK_DIR)/platform-tools/adb shell stop && $(ANDROID_SDK_DIR)/platform-tools/adb shell start && sleep 10
 
 # build-host specific stuff (build paths and the like) to keep build.gradle static
 liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
