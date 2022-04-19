@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "097cb558_cb8afb15",
+        "filename": "sc/qa/unit/subsequent_export_test2.cxx",
+        "patchSetId": 17
+      },
+      "lineNbr": 668,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-19T10:26:55Z",
+      "side": 1,
+      "message": "Unfortunately, this test never fails. Even if I set the encoding in vbaexport to RTL_TEXTENCODING_ASCII_US or I just saveAndReload. If I do a rDoc.CalcAll(), I get the error - Expected: проба - Actual  : #NAME?.\n\nIt seems vbaexport is never called in saveAndReload.",
+      "revId": "bb4223a75f43108e7482969a4225e0cff2756bf3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
