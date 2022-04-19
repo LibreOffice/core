@@ -19,6 +19,6 @@
 
 #pragma once
 
-#define FIXED_SIZE_FOR_3D_CHART_VOLUME 10000.0
+constexpr double FIXED_SIZE_FOR_3D_CHART_VOLUME = 10000.0;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
