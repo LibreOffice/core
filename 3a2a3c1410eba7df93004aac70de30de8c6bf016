@@ -16,6 +16,24 @@
       "message": "uh, does it have to be formatted so unreadable? where does the condition end and the then-statement begin?",
       "revId": "3a2a3c1410eba7df93004aac70de30de8c6bf016",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07eb5dc0_ff7e7132",
+        "filename": "vcl/qt5/QtWidget.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 600,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-19T10:23:17Z",
+      "side": 1,
+      "message": "\u003e uh, does it have to be formatted so unreadable?\n\nYes (kind of). That\u0027s from clang-format…",
+      "parentUuid": "43334f79_cc5acd67",
+      "revId": "3a2a3c1410eba7df93004aac70de30de8c6bf016",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
