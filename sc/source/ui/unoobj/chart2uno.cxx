@@ -1403,7 +1403,11 @@ ScChart2DataProvider::createDataSource(
     if ( ! m_pDocument )
         throw uno::RuntimeException();
 
-    uno::Reference< chart2::data::XDataSource> xResult;
+    // This is expensive to compute and we get called more than once, so cache
+    if (maCreateDataSourceArguments == aArguments)
+        return mxCreatedDataSource;
+    maCreateDataSourceArguments = aArguments;
+
     bool bLabel = true;
     bool bCategories = false;
     bool bOrientCol = true;
@@ -1490,7 +1494,7 @@ ScChart2DataProvider::createDataSource(
     const Chart2PositionMap* pChartMap = aChPositioner.getPositionMap();
     if (!pChartMap)
         // No chart position map instance.  Bail out.
-        return xResult;
+        return mxCreatedDataSource;
 
     rtl::Reference<ScChart2DataSource> pDS;
     ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > aSeqs;
@@ -1568,8 +1572,8 @@ ScChart2DataProvider::createDataSource(
         }
     }
 
-    xResult.set( pDS );
-    return xResult;
+    mxCreatedDataSource.set(pDS);
+    return mxCreatedDataSource;
 }
 
 namespace
@@ -1761,6 +1765,10 @@ std::pair<OUString, OUString> constructKey(const uno::Reference< chart2::data::X
 uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArguments(
     const uno::Reference< chart2::data::XDataSource >& xDataSource )
 {
+    // Cache these because this is expensive to compute and we get called more than once
+    if (xDataSource == mxCachedDataSource)
+        return maCachedArguments;
+
     ::std::vector< beans::PropertyValue > aResult;
     bool bRowSourceDetected = false;
     bool bFirstCellAsLabel = false;
@@ -2026,7 +2034,10 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         }
     }
 
-    return comphelper::containerToSequence( aResult );
+    mxCachedDataSource = xDataSource;
+    maCachedArguments = comphelper::containerToSequence( aResult );
+
+    return maCachedArguments;
 }
 
 sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& aRangeRepresentation )
