@@ -183,6 +183,10 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
     // Fill properties have to be changed as sometimes only the presentation node contains the blip
     // fill, unshare those.
     mpShape->cloneFillProperties();
+
+    // add/set ModelID from currrent node to allow later association
+    if (mpCurrentNode)
+        mpShape->setDiagramDataModelID(mpCurrentNode->msModelId);
 }
 
 void ShapeLayoutingVisitor::visit(ConstraintAtom& rAtom)

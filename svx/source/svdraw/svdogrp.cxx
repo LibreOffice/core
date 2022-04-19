@@ -34,7 +34,13 @@
 #include <libxml/xmlwriter.h>
 #include <vcl/canvastools.hxx>
 
-IDiagramHelper::IDiagramHelper() {}
+IDiagramHelper::IDiagramHelper()
+: mbUseDiagramThemeData(false)
+, mbUseDiagramModelData(true)
+, mbForceThemePtrReceation(false)
+{
+}
+
 IDiagramHelper::~IDiagramHelper() {}
 
 void IDiagramHelper::anchorToSdrObjGroup(SdrObjGroup& rTarget)

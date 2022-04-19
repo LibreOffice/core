@@ -193,6 +193,7 @@ Shape::Shape( const ShapePtr& pSourceShape )
 , mfAspectRatio(pSourceShape->mfAspectRatio)
 , mbUseBgFill(pSourceShape->mbUseBgFill)
 , mpDiagramHelper( nullptr )
+, msDiagramDataModelID(pSourceShape->msDiagramDataModelID)
 {}
 
 Shape::~Shape()
@@ -225,7 +226,7 @@ void Shape::propagateDiagramHelper()
 
         if(pAnchorObj)
         {
-            static_cast<AdvancedDiagramHelper*>(mpDiagramHelper)->doAnchor(*pAnchorObj);
+            static_cast<AdvancedDiagramHelper*>(mpDiagramHelper)->doAnchor(*pAnchorObj, *this);
             mpDiagramHelper = nullptr;
         }
     }

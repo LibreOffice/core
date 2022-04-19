@@ -79,10 +79,6 @@ public:
     PresPointShapeMap & getPresPointShapeMap()
         { return maPresPointShapeMap; }
 
-    // get/set data between Diagram DataModel and oox::drawingml::Shape
-    void secureDataFromXShapeToModelAfterDiagramImport();
-    void restoreDataFromModelToXShapeAfterDiagramReCreate();
-
 private:
     Diagram& mrDgm;
     OUString msDefStyle;
