@@ -489,6 +489,7 @@ bool Printer::AcquireGraphics() const
 
     mbInitLineColor     = true;
     mbInitFillColor     = true;
+    mbInitFillMode      = true;
     mbInitFont          = true;
     mbInitTextColor     = true;
     mbInitClipRegion    = true;

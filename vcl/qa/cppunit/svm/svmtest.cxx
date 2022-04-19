@@ -151,6 +151,9 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkFillColor(const GDIMetaFile& rMetaFile);
     void testFillColor();
 
+    void checkFillRule(const GDIMetaFile& rMetaFile);
+    void testFillRule();
+
     void checkTextColor(const GDIMetaFile& rMetaFile);
     void testTextColor();
 
@@ -238,6 +241,7 @@ public:
     CPPUNIT_TEST(testMoveClipRegion);
     CPPUNIT_TEST(testLineColor);
     CPPUNIT_TEST(testFillColor);
+    CPPUNIT_TEST(testFillRule);
     CPPUNIT_TEST(testTextColor);
     CPPUNIT_TEST(testTextFillColor);
     CPPUNIT_TEST(testTextLineColor);
@@ -1739,6 +1743,30 @@ void SvmTest::testFillColor()
     checkFillColor(writeAndReadStream(aGDIMetaFile));
     checkFillColor(readFile(u"fillcolor.svm"));
 }
+
+void SvmTest::checkFillRule(const GDIMetaFile& rMetaFile)
+{
+    xmlDocUniquePtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/push/fillmode[1]", {
+        {"fillmode", "alternate"},
+    });
+}
+
+void SvmTest::testFillRule()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev, aGDIMetaFile);
+
+    pVirtualDev->Push();
+    pVirtualDev->SetFillMode(PolyFillMode::NON_ZERO_RULE_WINDING);
+    pVirtualDev->Pop();
+
+    checkFillRule(writeAndReadStream(aGDIMetaFile));
+    checkFillRule(readFile(u"fillcolor.svm"));
+}
+
 
 void SvmTest::checkTextColor(const GDIMetaFile& rMetaFile)
 {

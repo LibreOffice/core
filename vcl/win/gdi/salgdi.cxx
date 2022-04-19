@@ -801,6 +801,16 @@ void WinSalGraphics::SetFillColor( Color nColor )
     mpImpl->SetFillColor( nColor );
 }
 
+void WinSalGraphics::SetFillRule()
+{
+    mpImpl->SetFillRule();
+}
+
+void WinSalGraphics::SetFillRule( PolyFillMode eFillRule )
+{
+    mpImpl->SetFillRule( eFillRule );
+}
+
 void WinSalGraphics::SetXORMode( bool bSet, bool bInvertOnly )
 {
     mpImpl->SetXORMode( bSet, bInvertOnly );

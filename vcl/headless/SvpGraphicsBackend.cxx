@@ -62,6 +62,19 @@ void SvpGraphicsBackend::SetFillColor() { m_rCairoCommon.m_aFillColor = SALCOLOR
 
 void SvpGraphicsBackend::SetFillColor(Color nColor) { m_rCairoCommon.m_aFillColor = nColor; }
 
+void SvpGraphicsBackend::SetFillRule()
+{
+    m_rCairoCommon.m_eFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_EVEN_ODD;
+}
+
+void SvpGraphicsBackend::SetFillRule(PolyFillMode eFillRule)
+{
+    if (eFillRule == PolyFillMode::NON_ZERO_RULE_WINDING)
+        m_rCairoCommon.m_eFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_WINDING;
+    else
+        m_rCairoCommon.m_eFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_EVEN_ODD;
+}
+
 void SvpGraphicsBackend::SetXORMode(bool bSet, bool /*bInvertOnly*/)
 {
     m_rCairoCommon.m_ePaintMode = bSet ? PaintMode::Xor : PaintMode::Over;

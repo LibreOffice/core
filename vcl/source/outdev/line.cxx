@@ -326,6 +326,7 @@ void OutputDevice::drawLine( basegfx::B2DPolyPolygon aLinePolyPolygon, const Lin
         InitLineColor();
         SetFillColor( aOldLineColor );
         InitFillColor();
+        InitFillMode();
 
         bool bDone(false);
 

@@ -34,6 +34,8 @@ OUString collectPushFlags(vcl::PushFlags nFlags)
         aStrings.emplace_back("PushLineColor");
     if (nFlags & vcl::PushFlags::FILLCOLOR)
         aStrings.emplace_back("PushFillColor");
+    if (nFlags & vcl::PushFlags::FILLMODE)
+        aStrings.emplace_back("PushFillMode");
     if (nFlags & vcl::PushFlags::FONT)
         aStrings.emplace_back("PushFont");
     if (nFlags & vcl::PushFlags::TEXTCOLOR)
@@ -308,6 +310,7 @@ OString convertLineStyleToString(const MetaActionType nActionType)
         case MetaActionType::MOVECLIPREGION:        return "moveclipregion";
         case MetaActionType::LINECOLOR:             return "linecolor";
         case MetaActionType::FILLCOLOR:             return "fillcolor";
+        case MetaActionType::FILLMODE:              return "fillmode";
         case MetaActionType::TEXTCOLOR:             return "textcolor";
         case MetaActionType::TEXTFILLCOLOR:         return "textfillcolor";
         case MetaActionType::TEXTLINECOLOR:         return "textlinecolor";
@@ -1182,6 +1185,16 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 rWriter.startElement(sCurrentElementTag);
 
                 rWriter.attribute("color", convertColorToString(pMetaFillColorAction->GetColor()));
+                rWriter.endElement();
+            }
+            break;
+
+            case MetaActionType::FILLMODE:
+            {
+                MetaFillModeAction* pMetaFillAction = static_cast<MetaFillModeAction*>(pAction);
+                rWriter.startElement(sCurrentElementTag);
+                rWriter.attribute("fillmode", pMetaFillAction->GetFillMode() == PolyFillMode::EVEN_ODD_RULE_ALTERNATE
+                                ? "alternate" : "winding");
                 rWriter.endElement();
             }
             break;

@@ -108,8 +108,10 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbTextRenderModeForResolutionIndependentLayout = false;
     mbLineColor                     = true;
     mbFillColor                     = true;
+    mbFillMode                      = true;
     mbInitLineColor                 = true;
     mbInitFillColor                 = true;
+    mbInitFillMode                  = true;
     mbInitFont                      = true;
     mbInitTextColor                 = true;
     mbInitClipRegion                = true;

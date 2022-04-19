@@ -635,6 +635,18 @@ void SkiaSalGraphicsImpl::SetFillColor(Color nColor)
     mFillColor = nColor;
 }
 
+void SkiaSalGraphicsImpl::SetFillRule()
+{
+    checkPendingDrawing();
+    meFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+}
+
+void SkiaSalGraphicsImpl::SetFillRule(PolyFillMode eFillRule)
+{
+    checkPendingDrawing();
+    meFillRule = eFillRule;
+}
+
 void SkiaSalGraphicsImpl::SetXORMode(bool set, bool invert)
 {
     XorMode newMode = set ? (invert ? XorMode::Invert : XorMode::Xor) : XorMode::None;

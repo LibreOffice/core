@@ -38,6 +38,7 @@ QtGraphicsBackend::QtGraphicsBackend(QtFrame* pFrame, QImage* pQImage)
     , m_pQImage(pQImage)
     , m_aLineColor(0x00, 0x00, 0x00)
     , m_aFillColor(0xFF, 0xFF, 0XFF)
+    , m_eFillRule(PolyFillMode::EVEN_ODD_RULE_ALTERNATE)
     , m_eCompositionMode(QPainter::CompositionMode_SourceOver)
 {
     ResetClipRegion();
@@ -133,6 +134,9 @@ bool QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
         if (!m_aClipPath.isEmpty())
         {
             QPainterPath aPath;
+            aPath.setFillRule(m_eFillRule == PolyFillMode::EVEN_ODD_RULE_ALTERNATE
+                                  ? Qt::OddEvenFill
+                                  : Qt::WindingFill);
             m_aClipPath.swap(aPath);
         }
     }
@@ -147,12 +151,17 @@ bool QtGraphicsBackend::setClipRegion(const vcl::Region& rRegion)
         if (!m_aClipPath.isEmpty())
         {
             QPainterPath aPath;
+            aPath.setFillRule(m_eFillRule == PolyFillMode::EVEN_ODD_RULE_ALTERNATE
+                                  ? Qt::OddEvenFill
+                                  : Qt::WindingFill);
             m_aClipPath.swap(aPath);
         }
     }
     else
     {
         QPainterPath aPath;
+        aPath.setFillRule(Qt::WindingFill);
+
         const basegfx::B2DPolyPolygon aPolyClip(rRegion.GetAsB2DPolyPolygon());
         AddPolyPolygonToPath(aPath, aPolyClip, !getAntiAlias(), false);
         m_aClipPath.swap(aPath);
@@ -174,6 +183,8 @@ void QtGraphicsBackend::ResetClipRegion()
     if (!m_aClipPath.isEmpty())
     {
         QPainterPath aPath;
+        aPath.setFillRule(Qt::WindingFill);
+
         m_aClipPath.swap(aPath);
     }
 }
@@ -273,6 +284,8 @@ void QtGraphicsBackend::drawPolyPolygon(sal_uInt32 nPolyCount, const sal_uInt32*
         return;
 
     QPainterPath aPath;
+    aPath.setFillRule(Qt::WindingFill);
+
     for (sal_uInt32 nPoly = 0; nPoly < nPolyCount; nPoly++)
     {
         const sal_uInt32 nPoints = pPoints[nPoly];
@@ -307,6 +320,7 @@ bool QtGraphicsBackend::drawPolyPolygon(const basegfx::B2DHomMatrix& rObjectToDe
     aPolyPolygon.transform(rObjectToDevice);
 
     QPainterPath aPath;
+    aPath.setFillRule(Qt::WindingFill);
     // ignore empty polygons
     if (!AddPolyPolygonToPath(aPath, aPolyPolygon, !getAntiAlias(), m_aLineColor != SALCOLOR_NONE))
         return true;
@@ -391,6 +405,7 @@ bool QtGraphicsBackend::drawPolyLine(const basegfx::B2DHomMatrix& rObjectToDevic
 
     // setup poly-polygon path
     QPainterPath aPath;
+    aPath.setFillRule(Qt::WindingFill);
 
     // MM01 todo - I assume that this is OKAY to be done in one run for Qt,
     // but this NEEDS to be checked/verified
@@ -677,6 +692,10 @@ void QtGraphicsBackend::SetLineColor(Color nColor) { m_aLineColor = nColor; }
 void QtGraphicsBackend::SetFillColor() { m_aFillColor = SALCOLOR_NONE; }
 
 void QtGraphicsBackend::SetFillColor(Color nColor) { m_aFillColor = nColor; }
+
+void QtGraphicsBackend::SetFillRule() { m_eFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE; }
+
+void QtGraphicsBackend::SetFillRule(PolyFillMode eFillRule) { m_eFillRule = eFillRule; }
 
 void QtGraphicsBackend::SetXORMode(bool bSet, bool)
 {

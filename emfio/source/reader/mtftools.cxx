@@ -26,7 +26,6 @@
 #include <vcl/metric.hxx>
 #include <vcl/graphictools.hxx>
 #include <vcl/BitmapTools.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/canvastools.hxx>
 #include <vcl/svapp.hxx>
 #include <tools/stream.hxx>
@@ -865,6 +864,11 @@ namespace emfio
         mbClockWiseArcDirection = bClockWise;
     }
 
+    void MtfTools::setPolyFillMode( PolyFillMode nMode )
+    {
+        mePolyFillMode = nMode;
+    }
+
     void MtfTools::SetBkMode( BackgroundMode nMode )
     {
         mnBkMode = nMode;
@@ -1066,6 +1070,8 @@ namespace emfio
         maBkColor(COL_WHITE),
         mnLatestTextLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
         mnTextLayoutMode(vcl::text::ComplexTextLayoutFlags::Default),
+        meLatestPolyFillMode(PolyFillMode::EVEN_ODD_RULE_ALTERNATE), // The default Fill Mode for LibreOffice is EvenOdd
+        mePolyFillMode(PolyFillMode::NON_ZERO_RULE_WINDING), // The default Fill Mode for EMF/WMF is NonZeroWinding
         mnLatestBkMode(BackgroundMode::NONE),
         mnBkMode(BackgroundMode::OPAQUE),
         meLatestRasterOp(RasterOp::Invert),
@@ -1190,8 +1196,19 @@ namespace emfio
         }
     }
 
+    void MtfTools::UpdateFillMode()
+    {
+        if ( meLatestPolyFillMode != mePolyFillMode )
+        {
+            meLatestPolyFillMode = mePolyFillMode;
+            mpGDIMetaFile->AddAction( new MetaFillModeAction(mePolyFillMode, true) );
+        }
+    }
+
+
     void MtfTools::UpdateFillStyle()
     {
+        UpdateFillMode();
         if ( !mbFillStyleSelected )     // SJ: #i57205# taking care of bkcolor if no brush is selected
             maFillStyle = WinMtfFillStyle( maBkColor, mnBkMode == BackgroundMode::Transparent );
         if (!( maLatestFillStyle == maFillStyle ) )
@@ -1531,7 +1548,9 @@ namespace emfio
                         SvtGraphicFill aFill( tools::PolyPolygon( rPolygon ),
                                               Color(),
                                               0.0,
-                                              SvtGraphicFill::fillNonZero,
+                                              (meLatestPolyFillMode == PolyFillMode::EVEN_ODD_RULE_ALTERNATE)
+                                                  ? SvtGraphicFill::fillNonZero
+                                                  : SvtGraphicFill::fillEvenOdd,
                                               SvtGraphicFill::fillTexture,
                                               SvtGraphicFill::Transform(),
                                               true,
@@ -1593,6 +1612,7 @@ namespace emfio
 
     void MtfTools::DrawPolyLine( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
+        // Disabling this method leads to removal of lines, but circles remain
         UpdateClipRegion();
 
         sal_uInt16 nPoints = rPolygon.GetSize();
@@ -1606,7 +1626,9 @@ namespace emfio
             maActPos = rPolygon[ rPolygon.GetSize() - 1 ];
         }
         if ( bRecordPath )
+        {
             maPathObj.AddPolyLine( rPolygon );
+        }
         else
         {
             UpdateLineStyle();
@@ -1616,6 +1638,7 @@ namespace emfio
 
     void MtfTools::DrawPolyBezier( tools::Polygon rPolygon, bool bTo, bool bRecordPath )
     {
+        // Disabling this method removes drawing the circles for handwriting
         sal_uInt16 nPoints = rPolygon.GetSize();
         if ( ( nPoints < 4 ) || ( ( ( nPoints - 4 ) % 3 ) != 0 ) )
             return;
@@ -2379,6 +2402,7 @@ namespace emfio
         pSave->eMapMode = meMapMode;
         pSave->eGfxMode = meGfxMode;
         pSave->nBkMode = mnBkMode;
+        pSave->nPolyFillMode = mePolyFillMode;
         pSave->aBkColor = maBkColor;
         pSave->bClockWiseArcDirection = mbClockWiseArcDirection;
         pSave->bFillStyleSelected = mbFillStyleSelected;
@@ -2441,6 +2465,7 @@ namespace emfio
         mnBkMode = pSave->nBkMode;
         meGfxMode = pSave->eGfxMode;
         meMapMode = pSave->eMapMode;
+        mePolyFillMode = pSave->nPolyFillMode;
         maBkColor = pSave->aBkColor;
         mbClockWiseArcDirection = pSave->bClockWiseArcDirection;
         mbFillStyleSelected = pSave->bFillStyleSelected;
