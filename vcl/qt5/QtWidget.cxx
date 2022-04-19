@@ -207,6 +207,34 @@ void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
     pEvent->accept();
 }
 
+void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEvent)
+{
+    const qreal fRatio = rFrame.devicePixelRatioF();
+    const QWidget* pWidget = rFrame.GetQWidget();
+    const Point aPos = toPoint(pWidget->mapFromGlobal(QCursor::pos()) * fRatio);
+
+    SalMouseEvent aEvent;
+    aEvent.mnX
+        = QGuiApplication::isLeftToRight() ? aPos.X() : round(pWidget->width() * fRatio) - aPos.X();
+    aEvent.mnY = aPos.Y();
+    aEvent.mnTime = 0;
+    aEvent.mnButton = 0;
+    aEvent.mnCode = GetKeyModCode(QGuiApplication::keyboardModifiers())
+                    | GetMouseModCode(QGuiApplication::mouseButtons());
+
+    SalEvent nEventType;
+    if (pQEvent->type() == QEvent::Enter)
+        nEventType = SalEvent::MouseMove;
+    else
+        nEventType = SalEvent::MouseLeave;
+    rFrame.CallCallback(nEventType, &aEvent);
+    pQEvent->accept();
+}
+
+void QtWidget::leaveEvent(QEvent* pEvent) { handleMouseEnterLeaveEvents(m_rFrame, pEvent); }
+
+void QtWidget::enterEvent(QEvent* pEvent) { handleMouseEnterLeaveEvents(m_rFrame, pEvent); }
+
 void QtWidget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
