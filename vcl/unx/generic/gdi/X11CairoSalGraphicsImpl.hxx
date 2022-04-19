@@ -36,6 +36,7 @@ private:
     vcl::Region maClipRegion;
     Color mnPenColor;
     Color mnFillColor;
+    _cairo_fill_rule meFillRule;
 
     using X11SalGraphicsImpl::drawPolyPolygon;
     using X11SalGraphicsImpl::drawPolyLine;
@@ -77,6 +78,21 @@ public:
     {
         mnFillColor = nColor;
         X11SalGraphicsImpl::SetFillColor(nColor);
+    }
+
+    void SetFillRule() override
+    {
+        meFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_EVEN_ODD;
+        X11SalGraphicsImpl::SetFillRule();
+    }
+
+    void SetFillRule(PolyFillMode eFillRule) override
+    {
+        if (eFillRule == PolyFillMode::NON_ZERO_RULE_WINDING)
+            meFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_WINDING;
+        else
+            meFillRule = _cairo_fill_rule::CAIRO_FILL_RULE_EVEN_ODD;
+        X11SalGraphicsImpl::SetFillRule(eFillRule);
     }
 
     void clipRegion(cairo_t* cr) { CairoCommon::clipRegion(cr, maClipRegion); }

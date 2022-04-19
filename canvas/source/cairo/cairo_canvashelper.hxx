@@ -27,6 +27,7 @@
 #include <vcl/vclptr.hxx>
 #include <vcl/virdev.hxx>
 
+#include <cairo.h>
 #include <vcl/cairo.hxx>
 #include "cairo_surfaceprovider.hxx"
 
@@ -265,7 +266,7 @@ namespace cairocanvas
                                       cairo_t* pCairo,
                                       const css::uno::Sequence< css::rendering::Texture >* pTextures,
                                       const SurfaceProviderRef& pDevice,
-                                      css::rendering::FillRule eFillrule );
+                                      const _cairo_fill_rule eFillRule);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
