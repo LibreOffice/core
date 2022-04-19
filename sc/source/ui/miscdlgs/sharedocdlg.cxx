@@ -39,7 +39,7 @@ using namespace ::com::sun::star;
 
 IMPL_LINK(ScShareDocumentDlg, SizeAllocated, const Size&, rSize, void)
 {
-    OUString sWidestAccessString = getWidestTime(ScGlobal::getLocaleData());
+    OUString sWidestAccessString = getWidestDateTime(ScGlobal::getLocaleData(), false);
     const int nAccessWidth = m_xLbUsers->get_pixel_size(sWidestAccessString).Width() * 2;
     std::vector<int> aWidths
     {
@@ -151,7 +151,7 @@ void ScShareDocumentDlg::UpdateView()
                         tools::Time aTime( nHours, nMinutes );
                         DateTime aDateTime( aDate, aTime );
 
-                        OUString aString = formatTime(aDateTime, ScGlobal::getLocaleData());
+                        OUString aString = formatDateTime(aDateTime, ScGlobal::getLocaleData(), false);
 
                         m_xLbUsers->append_text(aUser);
                         m_xLbUsers->set_text(m_xLbUsers->n_children() - 1, aString, 1);
@@ -201,7 +201,7 @@ void ScShareDocumentDlg::UpdateView()
         util::DateTime uDT(xDocProps->getModificationDate());
         DateTime aDateTime(uDT);
 
-        OUString aString = formatTime(aDateTime, ScGlobal::getLocaleData()) + " " +
+        OUString aString = formatDateTime(aDateTime, ScGlobal::getLocaleData(), false) + " " +
             ScGlobal::getLocaleData().getTime( aDateTime, false );
 
         m_xLbUsers->append_text(aUser);
