@@ -22,6 +22,30 @@
       },
       "revId": "7b30fa251350c3c6cccef456c4600bfa8fa11199",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f19cdcc_59fc1fd2",
+        "filename": "sw/source/core/unocore/unocrsrhelper.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1035,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-19T09:11:50Z",
+      "side": 1,
+      "message": "oh, i wasn\u0027t aware that this exception exists; unfortunately it does not derive from RuntimeException and XDocumentInsertable does not allow it.\n\nsberg says about IllegalArgumentException:\n\n\u003csberg\u003e mst___, I think convention is to start counting at 0 the parameters of the UNOIDL interface method (i.e., without e.g. an implicit C++ this argument)\n\n... so not an option either.",
+      "parentUuid": "970e53c8_e76599b0",
+      "range": {
+        "startLine": 1035,
+        "startChar": 23,
+        "endLine": 1035,
+        "endChar": 39
+      },
+      "revId": "7b30fa251350c3c6cccef456c4600bfa8fa11199",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
