@@ -110,6 +110,7 @@ OutputDevice::OutputDevice(OutDevType eOutDevType) :
     mbFillColor                     = true;
     mbInitLineColor                 = true;
     mbInitFillColor                 = true;
+    mbInitFillMode                  = true;
     mbInitFont                      = true;
     mbInitTextColor                 = true;
     mbInitClipRegion                = true;

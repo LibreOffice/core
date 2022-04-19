@@ -403,7 +403,7 @@ cairo_t* CairoCommon::getCairoContext(bool bXorModeAllowed, bool bAntiAlias) con
     else
         cr = cairo_create(m_pSurface);
     cairo_set_line_width(cr, 1);
-    cairo_set_fill_rule(cr, CAIRO_FILL_RULE_EVEN_ODD);
+    cairo_set_fill_rule(cr, m_eFillRule);
     cairo_set_antialias(cr, bAntiAlias ? CAIRO_ANTIALIAS_DEFAULT : CAIRO_ANTIALIAS_NONE);
     cairo_set_operator(cr, CAIRO_OPERATOR_OVER);
 

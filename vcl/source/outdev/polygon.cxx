@@ -62,6 +62,9 @@ void OutputDevice::DrawPolyPolygon( const tools::PolyPolygon& rPolyPoly )
     if ( mbInitFillColor )
         InitFillColor();
 
+    if ( mbInitFillMode )
+        InitFillMode();
+
     // use b2dpolygon drawing if possible
     if(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
        RasterOp::OverPaint == GetRasterOp() &&
@@ -182,6 +185,9 @@ void OutputDevice::DrawPolygon( const tools::Polygon& rPoly )
     if ( mbInitFillColor )
         InitFillColor();
 
+    if ( mbInitFillMode )
+        InitFillMode();
+
     // use b2dpolygon drawing if possible
     if(mpGraphics->supportsOperation(OutDevSupportType::B2DDraw) &&
        RasterOp::OverPaint == GetRasterOp() &&
@@ -290,6 +296,9 @@ void OutputDevice::ImplDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyP
 
     if( mbInitFillColor )
         InitFillColor();
+
+    if ( mbInitFillMode )
+        InitFillMode();
 
     bool bSuccess(false);
 
