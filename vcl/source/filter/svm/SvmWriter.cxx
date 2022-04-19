@@ -30,6 +30,12 @@ SvmWriter::SvmWriter(SvStream& rIStm)
 {
 }
 
+void SvmWriter::WriteFill(PolyFillMode mePolyFillMode)
+{
+    //TODO: make sure that writes appropriately
+    mrStream.WriteUInt32(static_cast<sal_uInt32>(mePolyFillMode));
+}
+
 void SvmWriter::WriteColor(::Color aColor)
 {
     mrStream.WriteUInt32(static_cast<sal_uInt32>(aColor));
@@ -673,6 +679,13 @@ void SvmWriter::MetaActionHandler(MetaAction* pAction, ImplMetaWriteData* pData)
         }
         break;
 
+        case MetaActionType::FILLMODE:
+        {
+            auto* pMetaAction = static_cast<MetaFillModeAction*>(pAction);
+            FillModeHandler(pMetaAction);
+        }
+        break;
+
         case MetaActionType::FILLCOLOR:
         {
             auto* pMetaAction = static_cast<MetaFillColorAction*>(pAction);
@@ -1247,6 +1260,14 @@ void SvmWriter::LineColorHandler(const MetaLineColorAction* pAction)
     mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
     VersionCompatWrite aCompat(mrStream, 1);
     WriteColor(pAction->GetColor());
+    mrStream.WriteBool(pAction->IsSetting());
+}
+
+void SvmWriter::FillModeHandler(const MetaFillModeAction* pAction)
+{
+    mrStream.WriteUInt16(static_cast<sal_uInt16>(pAction->GetType()));
+    VersionCompatWrite aCompat(mrStream, 1);
+    WriteFill(pAction->GetFillMode());
     mrStream.WriteBool(pAction->IsSetting());
 }
 
