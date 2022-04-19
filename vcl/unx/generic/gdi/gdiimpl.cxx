@@ -1070,6 +1070,16 @@ void X11SalGraphicsImpl::SetFillColor( Color nColor )
     mbBrushGC       = false;
 }
 
+void X11SalGraphicsImpl::SetFillRule()
+{
+    meFillRule = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+}
+
+void X11SalGraphicsImpl::SetFillRule( PolyFillMode eFillRule )
+{
+    meFillRule = eFillRule;
+}
+
 void X11SalGraphicsImpl::SetROPLineColor( SalROPColor nROPColor )
 {
     switch( nROPColor )
@@ -1383,6 +1393,7 @@ bool X11SalGraphicsImpl::drawEPS( tools::Long,tools::Long,tools::Long,tools::Lon
     return false;
 }
 
+// INFO: This is the main draw method for drawing the handwriting
 // draw a poly-polygon
 bool X11SalGraphicsImpl::drawPolyPolygon(
     const basegfx::B2DHomMatrix& rObjectToDevice,

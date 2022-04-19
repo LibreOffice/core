@@ -29,6 +29,7 @@ class VCL_DLLPUBLIC SvmWriter
 private:
     SvStream& mrStream;
 
+    void WriteFill(PolyFillMode mePolyFillMode);
     void WriteColor(::Color aColor);
 
 public:
@@ -73,6 +74,7 @@ public:
     void ISectRegionClipRegionHandler(const MetaISectRegionClipRegionAction* pAction);
     void MoveClipRegionHandler(const MetaMoveClipRegionAction* pAction);
     void LineColorHandler(const MetaLineColorAction* pAction);
+    void FillModeHandler(const MetaFillModeAction* pAction);
     void FillColorHandler(const MetaFillColorAction* pAction);
     void TextColorHandler(const MetaTextColorAction* pAction);
     void TextFillColorHandler(const MetaTextFillColorAction* pAction);

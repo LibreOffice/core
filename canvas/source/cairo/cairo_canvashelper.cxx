@@ -666,7 +666,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                                       cairo_t* pCairo,
                                       const uno::Sequence< rendering::Texture >* pTextures,
                                       const SurfaceProviderRef& pDevice,
-                                      rendering::FillRule eFillrule )
+                                      PolyFillMode eFillrule )
     {
         if( pTextures )
             ENSURE_ARG_OR_THROW( pTextures->hasElements(),
@@ -681,7 +681,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
         cairo_set_matrix( pCairo, &aIdentityMatrix );
 
         cairo_set_fill_rule( pCairo,
-                             eFillrule == rendering::FillRule_EVEN_ODD ?
+                             eFillrule == PolyFillMode::EVEN_ODD_RULE_ALTERNATE?
                              CAIRO_FILL_RULE_EVEN_ODD : CAIRO_FILL_RULE_WINDING );
 
         for( sal_uInt32 nPolygonIndex = 0; nPolygonIndex < aPolyPolygon.count(); nPolygonIndex++ )
@@ -818,6 +818,12 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
 
         cairo_t* pCairo = mpCairo.get();
 
+        PolyFillMode eFillMode;
+        if(xPolyPolygon->getFillRule() == ::css::rendering::FillRule::FillRule_NON_ZERO)
+            eFillMode = PolyFillMode::NON_ZERO_RULE_WINDING;
+        else
+            eFillMode = PolyFillMode::EVEN_ODD_RULE_ALTERNATE;
+
         if(bNoLineJoin && aOperation == Stroke)
         {
             // emulate rendering::PathJoinType::NONE by painting single edges
@@ -844,7 +850,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
                                                      aOperation,
                                                      pCairo, pTextures,
                                                      mpSurfaceProvider,
-                                                     xPolyPolygon->getFillRule() );
+                                                     eFillMode );
 
                         // prepare next step
                         aEdge.setB2DPoint(0, aEdge.getB2DPoint(1));
@@ -857,7 +863,7 @@ constexpr OUStringLiteral PARAMETRICPOLYPOLYGON_IMPLEMENTATION_NAME = u"Canvas::
             doPolyPolygonImplementation( rPolyPoly, aOperation,
                                          pCairo, pTextures,
                                          mpSurfaceProvider,
-                                         xPolyPolygon->getFillRule() );
+                                         eFillMode );
         }
     }
 
