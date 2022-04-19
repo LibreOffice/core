@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7e20817_7d8c4340",
+        "filename": "chart2/source/view/axes/VCartesianAxis.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1725,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-19T04:26:46Z",
+      "side": 1,
+      "message": "We even have \u003ccomphelper/flagguard.hxx\u003e based on the scopeguard, exactly for this purpose :-)",
+      "revId": "216493f32236f0086f4c5b527deb18b020b0ed1c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
