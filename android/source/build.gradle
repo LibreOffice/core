@@ -32,7 +32,7 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 31
     compileOptions {
         // silence some java-language features hints
         sourceCompatibility 6
@@ -53,7 +53,7 @@ android {
     }
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 31
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
