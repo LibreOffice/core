@@ -9,6 +9,7 @@
 
 #include <swmodeltestbase.hxx>
 
+#include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -268,6 +269,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138739, "tdf138739.docx")
     uno::Reference<beans::XPropertySet> xParaProps(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font type name does not match!", OUString("Comic Sans MS"),
                                  xParaProps->getPropertyValue("CharFontName").get<OUString>());
+
+    // tdf#148565: text at anchor point should be bold, Comic Sanc MS font
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(getParagraph(5), 3), "CharWeight"));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf123390, "tdf123390.fodt")
