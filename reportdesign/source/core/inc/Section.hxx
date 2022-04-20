@@ -221,7 +221,7 @@ namespace reportdesign
 
         // css::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
+        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
         void notifyElementAdded(const css::uno::Reference< css::drawing::XShape >& xShape);
         void notifyElementRemoved(const css::uno::Reference< css::drawing::XShape >& xShape);

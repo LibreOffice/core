@@ -47,7 +47,7 @@ namespace dbaui
         virtual void SAL_CALL release(  ) noexcept override;
 
         // XUnoTunnel
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
+        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
 
         static OJoinExchangeData    GetSourceDescription(const css::uno::Reference< css::datatransfer::XTransferable >& _rxObject);

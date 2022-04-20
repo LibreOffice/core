@@ -63,7 +63,7 @@ namespace comphelper
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& _rIdentifier ) override;
 
     public:
-        COMPHELPER_DLLPRIVATE static css::uno::Sequence<sal_Int8> getUnoTunnelId();
+        COMPHELPER_DLLPRIVATE static const css::uno::Sequence<sal_Int8> & getUnoTunnelId();
     };
 
 } // namespace comphelper

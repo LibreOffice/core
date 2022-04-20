@@ -1380,7 +1380,7 @@ void OResultSet::OpenImpl()
     m_nFilePos  = 0;
 }
 
-Sequence< sal_Int8 > OResultSet::getUnoTunnelId()
+const Sequence< sal_Int8 > & OResultSet::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

@@ -189,7 +189,7 @@ public:
     /// Get the page number of the multi-page source this Graphic is rendered from.
     sal_Int32 getPageNumber() const;
 
-    static css::uno::Sequence<sal_Int8> getUnoTunnelId();
+    static const css::uno::Sequence<sal_Int8> & getUnoTunnelId();
 };
 
 namespace std {

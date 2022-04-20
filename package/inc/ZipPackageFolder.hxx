@@ -91,7 +91,7 @@ public:
 
     ZipContentInfo& doGetByName( const OUString& aName );
 
-    static css::uno::Sequence < sal_Int8 > getUnoTunnelId();
+    static const css::uno::Sequence < sal_Int8 > & getUnoTunnelId();
 
     void setPackageFormat_Impl( sal_Int32 nFormat ) { m_nFormat = nFormat; }
     void setRemoveOnInsertMode_Impl( bool bRemove ) { mbAllowRemoveOnInsert = bRemove; }

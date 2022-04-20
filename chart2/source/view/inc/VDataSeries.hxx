@@ -117,7 +117,7 @@ public:
 
     css::uno::Reference<css::beans::XPropertySet> getPropertiesOfPoint( sal_Int32 index ) const;
 
-    css::uno::Reference<css::beans::XPropertySet> getPropertiesOfSeries() const;
+    const css::uno::Reference<css::beans::XPropertySet> & getPropertiesOfSeries() const;
 
     css::chart2::Symbol* getSymbolProperties( sal_Int32 index ) const;
 

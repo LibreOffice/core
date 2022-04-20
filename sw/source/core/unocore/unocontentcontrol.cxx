@@ -208,7 +208,7 @@ void SwXContentControl::Impl::Notify(const SfxHint& rHint)
     m_EventListeners.disposeAndClear(aGuard, aEvent);
 }
 
-uno::Reference<text::XText> SwXContentControl::GetParentText() const
+const uno::Reference<text::XText>& SwXContentControl::GetParentText() const
 {
     return m_pImpl->m_xParentText;
 }

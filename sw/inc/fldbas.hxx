@@ -391,7 +391,7 @@ public:
     /// Is this field clickable?
     bool IsClickable() const;
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
-    OUString GetTitle() const { return m_aTitle; }
+    const OUString & GetTitle() const { return m_aTitle; }
     void SetTitle(const OUString& rTitle) { m_aTitle = rTitle; }
 };
 

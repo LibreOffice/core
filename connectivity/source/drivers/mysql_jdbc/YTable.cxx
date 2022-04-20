@@ -116,7 +116,7 @@ sdbcx::OCollection* OMySQLTable::createIndexes(const ::std::vector<OUString>& _r
     return new OIndexesHelper(this, m_aMutex, _rNames);
 }
 
-Sequence<sal_Int8> OMySQLTable::getUnoTunnelId()
+const Sequence<sal_Int8>& OMySQLTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

@@ -315,7 +315,7 @@ sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
                                         comphelper::FallbackToGetSomethingOf<OTable_Base>{});
 }
 
-Sequence< sal_Int8 > ODBTable::getUnoTunnelId()
+const Sequence< sal_Int8 > & ODBTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit s_Id;
     return s_Id.getSeq();

@@ -100,7 +100,7 @@ OString ConvertToSVGFormat(const ZXing::BitMatrix& bitmatrix)
     return sb.toString();
 }
 
-std::string GetBarCodeType(const int& type)
+std::string GetBarCodeType(int type)
 {
     switch (type)
     {

@@ -104,7 +104,7 @@ css::uno::Sequence< OUString > SAL_CALL OContentHelper::getSupportedServiceNames
 }
 
 
-css::uno::Sequence<sal_Int8> OContentHelper::getUnoTunnelId()
+const css::uno::Sequence<sal_Int8> & OContentHelper::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit aId;
     return aId.getSeq();

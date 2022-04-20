@@ -137,7 +137,7 @@ public:
     void setZipEntryOnLoading( const ZipEntry &rInEntry);
     void successfullyWritten( ZipEntry const *pEntry );
 
-    static css::uno::Sequence < sal_Int8 > getUnoTunnelId();
+    static const css::uno::Sequence < sal_Int8 > & getUnoTunnelId();
 
     // XActiveDataSink
     virtual void SAL_CALL setInputStream( const css::uno::Reference< css::io::XInputStream >& aStream ) override;

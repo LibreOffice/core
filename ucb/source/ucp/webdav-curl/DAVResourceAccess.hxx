@@ -73,7 +73,7 @@ public:
 
     const OUString & getURL() const { return m_aURL; }
 
-    rtl::Reference< DAVSessionFactory > getSessionFactory() const
+    const rtl::Reference< DAVSessionFactory > & getSessionFactory() const
     { return m_xSessionFactory; }
 
     // DAV methods

@@ -34,7 +34,7 @@ public:
     GraphicSizeViolation(sal_Int32 nDPI, const SwGrfNode* pGraphicNode);
     bool check();
 
-    OUString getGraphicName();
+    const OUString& getGraphicName();
 
     bool isDPITooLow() { return m_nDPIX < m_nLowDPILimit || m_nDPIY < m_nLowDPILimit; }
 

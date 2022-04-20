@@ -188,7 +188,7 @@ namespace reportdesign
 
     public:
         //TTTT Needed? Or same as above?
-        static css::uno::Sequence< sal_Int8 > getUnoTunnelId();
+        static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId();
         static std::shared_ptr<rptui::OReportModel> getSdrModel(const css::uno::Reference< css::report::XReportDefinition >& _xReportDefinition);
 
     private:

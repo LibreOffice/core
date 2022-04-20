@@ -1959,7 +1959,7 @@ uno::Sequence< sal_Int8 > SAL_CALL OReportDefinition::getImplementationId(  )
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Sequence< sal_Int8 > OReportDefinition::getUnoTunnelId()
+const uno::Sequence< sal_Int8 > & OReportDefinition::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

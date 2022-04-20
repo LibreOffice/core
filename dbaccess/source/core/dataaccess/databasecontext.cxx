@@ -712,7 +712,7 @@ sal_Int64 SAL_CALL ODatabaseContext::getSomething( const Sequence< sal_Int8 >& r
     return comphelper::getSomethingImpl(rId, this);
 }
 
-Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelId()
+const Sequence< sal_Int8 > & ODatabaseContext::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

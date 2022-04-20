@@ -477,7 +477,7 @@ sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& 
     return nRet;
 }
 
-Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelId()
+const Sequence< sal_Int8 > & ODBTableDecorator::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

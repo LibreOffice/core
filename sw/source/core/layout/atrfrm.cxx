@@ -3195,7 +3195,7 @@ void SwFlyFrameFormat::SetObjTooltip(const OUString& rTooltip)
     msTooltip = rTooltip;
 }
 
-OUString SwFlyFrameFormat::GetObjTooltip() const
+const OUString & SwFlyFrameFormat::GetObjTooltip() const
 {
     return msTooltip;
 }

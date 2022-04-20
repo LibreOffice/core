@@ -549,7 +549,7 @@ OUString SAL_CALL OTableHelper::getName()
     return sComposedName;
 }
 
-OUString OTableHelper::getTableName()
+const OUString & OTableHelper::getTableName()
 {
     return m_Name;
 }

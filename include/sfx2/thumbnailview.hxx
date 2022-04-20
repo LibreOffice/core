@@ -254,7 +254,7 @@ protected:
 
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
 
-    css::uno::Reference<css::accessibility::XAccessible> getAccessible() const;
+    const css::uno::Reference<css::accessibility::XAccessible> & getAccessible() const;
 
 protected:
 

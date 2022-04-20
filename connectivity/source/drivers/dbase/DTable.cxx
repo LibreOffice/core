@@ -765,7 +765,7 @@ Any SAL_CALL ODbaseTable::queryInterface( const Type & rType )
 }
 
 
-Sequence< sal_Int8 > ODbaseTable::getUnoTunnelId()
+const Sequence< sal_Int8 > & ODbaseTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

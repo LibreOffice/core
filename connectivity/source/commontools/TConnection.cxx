@@ -59,7 +59,7 @@ sal_Int64 SAL_CALL OMetaConnection::getSomething( const css::uno::Sequence< sal_
     return comphelper::getSomethingImpl(rId, this);
 }
 
-Sequence< sal_Int8 > OMetaConnection::getUnoTunnelId()
+const Sequence< sal_Int8 > & OMetaConnection::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

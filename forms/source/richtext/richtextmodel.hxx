@@ -126,7 +126,7 @@ namespace frm
 
         // XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
-        static css::uno::Sequence<sal_Int8> getUnoTunnelId();
+        static const css::uno::Sequence<sal_Int8> & getUnoTunnelId();
 
         // XModifyBroadcaster
         virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;

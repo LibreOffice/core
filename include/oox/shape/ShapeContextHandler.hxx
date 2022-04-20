@@ -97,7 +97,7 @@ public:
     void setPosition(const css::awt::Point& rPosition);
 
     const bool& getFullWPGSupport() { return m_bFullWPGSUpport; }
-    void setFullWPGSupport(const bool& rbUse) { m_bFullWPGSUpport = rbUse; }
+    void setFullWPGSupport(bool bUse) { m_bFullWPGSUpport = bUse; }
 
     bool isWordProcessingGroupShape() const { return mxWpgContext ? true : false; }
 

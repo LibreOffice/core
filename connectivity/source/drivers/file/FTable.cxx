@@ -118,7 +118,7 @@ void SAL_CALL OFileTable::disposing()
     FileClose();
 }
 
-Sequence< sal_Int8 > OFileTable::getUnoTunnelId()
+const Sequence< sal_Int8 > & OFileTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit s_Id;
     return s_Id.getSeq();

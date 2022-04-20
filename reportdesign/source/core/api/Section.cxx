@@ -570,7 +570,7 @@ sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId )
     return (m_xDrawPage_Tunnel.is()) ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
 }
 
-uno::Sequence< sal_Int8 > OSection::getUnoTunnelId()
+const uno::Sequence< sal_Int8 > & OSection::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

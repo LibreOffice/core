@@ -319,7 +319,7 @@ public:
     void applyFieldContent( const OUString& rNewFieldContent );
 
     bool isFormField() const;
-    css::uno::Sequence<css::beans::PropertyValue> getGrabBagParams() const { return maGrabBag; }
+    const css::uno::Sequence<css::beans::PropertyValue> & getGrabBagParams() const { return maGrabBag; }
 
     virtual OUString        GetFieldName() const override;
 
