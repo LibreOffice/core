@@ -1610,7 +1610,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     aKernArray[i-1] = aKernArray[i-1] - nSpaceAdd;
 
                 // Some glyph items use more than one sal_Unicode, eg. CJK ideograph extensions
-                // or unicode IVS. Don't assign space multiple times in case the orginal text array
+                // or unicode IVS. Don't assign space multiple times in case the original text array
                 // have the same values.
                 while(i < sal_Int32(nCnt) && aKernArray[i] == nOldValue)
                 {
