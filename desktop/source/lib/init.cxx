@@ -3639,9 +3639,12 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                 {
                     if (pViewShell->getPart() == nPart)
                     {
-                        nViewId = pViewShell->GetViewShellId().get();
-                        doc_setView(pThis, nViewId);
-                        break;
+                        if (!pViewShell->GetDrawView()->GetTextEditOutliner())
+                        {
+                            nViewId = pViewShell->GetViewShellId().get();
+                            doc_setView(pThis, nViewId);
+                            break;
+                        }
                     }
                     pViewShell = SfxViewShell::GetNext(*pViewShell);
                 }
