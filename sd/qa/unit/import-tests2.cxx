@@ -116,6 +116,7 @@ public:
     void testAoo124143();
     void testTdf103567();
     void testTdf103792();
+    void testTdf148685();
     void testTdf103876();
     void testTdf79007();
     void testTdf118776();
@@ -184,6 +185,7 @@ public:
     CPPUNIT_TEST(testAoo124143);
     CPPUNIT_TEST(testTdf103567);
     CPPUNIT_TEST(testTdf103792);
+    CPPUNIT_TEST(testTdf148685);
     CPPUNIT_TEST(testTdf103876);
     CPPUNIT_TEST(testTdf79007);
     CPPUNIT_TEST(testTdf118776);
@@ -472,6 +474,47 @@ void SdImportTest2::testTdf103792()
 
     const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
     CPPUNIT_ASSERT_EQUAL(OUString("Click to add Title"), aEdit.GetText(0));
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf148685()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf148685.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0, xDocShRef));
+
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    CPPUNIT_ASSERT_EQUAL(OUString("TEXT "), xRun->getString());
+
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nCharUnderlineColor;
+    xPropSet->getPropertyValue("CharUnderlineColor") >>= nCharUnderlineColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0xA1467E), nCharUnderlineColor);
+
+    xRun.set(getRunFromParagraph(1, xParagraph));
+
+    CPPUNIT_ASSERT_EQUAL(OUString("TE"), xRun->getString());
+
+    xPropSet.set(xRun, uno::UNO_QUERY_THROW);
+
+    xPropSet->getPropertyValue("CharUnderlineColor") >>= nCharUnderlineColor;
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: Color: R:255 G:255 B:255 A:255
+    // - Actual  : Color: R:161 G:70 B:126 A:0
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nCharUnderlineColor);
+
+    xRun.set(getRunFromParagraph(2, xParagraph));
+    CPPUNIT_ASSERT_EQUAL(OUString("XT"), xRun->getString());
+
+    xPropSet.set(xRun, uno::UNO_QUERY_THROW);
+
+    xPropSet->getPropertyValue("CharUnderlineColor") >>= nCharUnderlineColor;
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nCharUnderlineColor);
 
     xDocShRef->DoClose();
 }
