@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61dbe6c6_787cbb43",
+        "filename": "compilerplugins/clang/stringviewvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-20T06:46:19Z",
+      "side": 1,
+      "message": "* \"various\" -\u003e \"variables\"?\n* double space",
+      "revId": "ab699bfdb3375f7142a50cc35322e2924c9e5945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4637d06d_fe4aa4f8",
+        "filename": "compilerplugins/clang/stringviewvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-20T06:46:19Z",
+      "side": 1,
+      "message": "and still, this plugin is enabled by default, and the warning message doesn\u0027t mention that blindly following its request can lead to disaster?",
+      "range": {
+        "startLine": 22,
+        "startChar": 3,
+        "endLine": 22,
+        "endChar": 36
+      },
+      "revId": "ab699bfdb3375f7142a50cc35322e2924c9e5945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "85bad3b9_f5302201",
+        "filename": "compilerplugins/clang/stringviewvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-20T06:46:19Z",
+      "side": 1,
+      "message": "what\u0027s the rationale here?",
+      "range": {
+        "startLine": 369,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 9
+      },
+      "revId": "ab699bfdb3375f7142a50cc35322e2924c9e5945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
