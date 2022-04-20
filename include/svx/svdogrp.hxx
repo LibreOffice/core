@@ -38,7 +38,7 @@ private:
     // of Diagram visualization (if needed/triggered).
     // The style attributes per shape e.g. can be re-stored frm either an
     // existing Theme, or the preserved key/value list of properties per XShape.
-    // With the current default settings the re-ceation uses the preserved
+    // With the current default settings the re-creation uses the preserved
     // key/value pairs, but re-creation from Theme may also be desirable. It
     // is also good to preserve both data packages at initial import to allow
     // alternatively one of these two methods for re-construction
