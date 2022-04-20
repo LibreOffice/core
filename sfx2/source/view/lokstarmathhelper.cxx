@@ -131,7 +131,9 @@ tools::Rectangle LokStarMathHelper::GetBoundingBox()
                 {
                     // In all cases, the following code fragment
                     // returns the bounding box in twips.
-                    const MapMode& aMapMode = pWindow->GetMapMode();
+                    // Note: the correct mapmode (representing document zoom) is provided by
+                    // GraphicWindow, not WidgetWindow
+                    const MapMode& aMapMode = GetGraphicWindow()->GetMapMode();
                     const auto & [ m, d ]
                         = o3tl::getConversionMulDiv(o3tl::Length::px, o3tl::Length::twip);
                     const Fraction& scaleX = aMapMode.GetScaleX();
