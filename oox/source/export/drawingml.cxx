@@ -4104,6 +4104,7 @@ bool DrawingML::WriteCustomGeometry(
     sal_Int32 nPairIndex = 0; // index over "Coordinates"
     sal_Int32 nPathSizeIndex = 0; // index over "SubViewSize"
     sal_Int32 nSubpathStartIndex(0); // index over "Segments"
+    sal_Int32 nSubPathIndex(0); // serial number of current subpath
     do
     {
         bool bOK(true); // catch faulty paths were commands do not correspond to points
@@ -4126,6 +4127,19 @@ bool DrawingML::WriteCustomGeometry(
         else if (HasCommandInSubPath(LIGHTENLESS, nSubpathStartIndex, nNextNcommandIndex - 1,
                                      aSegments))
             sFill = "lightenLess";
+        else
+        {
+            // shading info might be in object type, e.g. "Octagon Bevel".
+            sal_Int32 nLuminanceChange(aCustomShape2d.GetLuminanceChange(nSubPathIndex));
+            if (nLuminanceChange <= -40)
+                sFill = "darken";
+            else if (nLuminanceChange <= -10)
+                sFill = "darkenLess";
+            else if (nLuminanceChange >= 40)
+                sFill = "lighten";
+            else if (nLuminanceChange >= 10)
+                sFill = "lightenLess";
+        }
         // NOSTROKE
         std::optional<OString> sStroke;
         if (HasCommandInSubPath(NOSTROKE, nSubpathStartIndex, nNextNcommandIndex - 1, aSegments))
@@ -4170,6 +4184,7 @@ bool DrawingML::WriteCustomGeometry(
         // step forward to next subpath
         nSubpathStartIndex = nNextNcommandIndex + 1;
         nPathSizeIndex++;
+        nSubPathIndex++;
     } while (nSubpathStartIndex < aSegments.getLength());
 
     mpFS->endElementNS(XML_a, XML_pathLst);
