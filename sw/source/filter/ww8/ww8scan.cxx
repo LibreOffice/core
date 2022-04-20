@@ -874,50 +874,50 @@ static sal_Int32 Get_Long( sal_uInt8 *& p )
 
 WW8SprmIter::WW8SprmIter(const sal_uInt8* pSprms_, sal_Int32 nLen_,
     const wwSprmParser &rParser)
-    :  mrSprmParser(rParser), pSprms( pSprms_), nRemLen( nLen_)
+    :  mrSprmParser(rParser), m_pSprms( pSprms_), m_nRemLen( nLen_)
 {
     UpdateMyMembers();
 }
 
 void WW8SprmIter::SetSprms(const sal_uInt8* pSprms_, sal_Int32 nLen_)
 {
-    pSprms = pSprms_;
-    nRemLen = nLen_;
+    m_pSprms = pSprms_;
+    m_nRemLen = nLen_;
     UpdateMyMembers();
 }
 
 void WW8SprmIter::advance()
 {
-    if (nRemLen > 0 )
+    if (m_nRemLen > 0 )
     {
-        sal_uInt16 nSize = nCurrentSize;
-        if (nSize > nRemLen)
-            nSize = nRemLen;
-        pSprms += nSize;
-        nRemLen -= nSize;
+        sal_uInt16 nSize = m_nCurrentSize;
+        if (nSize > m_nRemLen)
+            nSize = m_nRemLen;
+        m_pSprms += nSize;
+        m_nRemLen -= nSize;
         UpdateMyMembers();
     }
 }
 
 void WW8SprmIter::UpdateMyMembers()
 {
-    bool bValid = (pSprms && nRemLen >= mrSprmParser.MinSprmLen());
+    bool bValid = (m_pSprms && m_nRemLen >= mrSprmParser.MinSprmLen());
 
     if (bValid)
     {
-        nCurrentId = mrSprmParser.GetSprmId(pSprms);
-        nCurrentSize = mrSprmParser.GetSprmSize(nCurrentId, pSprms, nRemLen);
-        pCurrentParams = pSprms + mrSprmParser.DistanceToData(nCurrentId);
-        bValid = nCurrentSize <= nRemLen;
+        m_nCurrentId = mrSprmParser.GetSprmId(m_pSprms);
+        m_nCurrentSize = mrSprmParser.GetSprmSize(m_nCurrentId, m_pSprms, m_nRemLen);
+        m_pCurrentParams = m_pSprms + mrSprmParser.DistanceToData(m_nCurrentId);
+        bValid = m_nCurrentSize <= m_nRemLen;
         SAL_WARN_IF(!bValid, "sw.ww8", "sprm longer than remaining bytes, doc or parser is wrong");
     }
 
     if (!bValid)
     {
-        nCurrentId = 0;
-        pCurrentParams = nullptr;
-        nCurrentSize = 0;
-        nRemLen = 0;
+        m_nCurrentId = 0;
+        m_pCurrentParams = nullptr;
+        m_nCurrentSize = 0;
+        m_nRemLen = 0;
     }
 }
 
@@ -952,8 +952,8 @@ SprmResult WW8SprmIter::FindSprm(sal_uInt16 nId, bool bFindFirst, const sal_uInt
 // All methods relating to iterators are therefore dummies.
 WW8PLCFx_PCDAttrs::WW8PLCFx_PCDAttrs(const WW8Fib& rFib,
     WW8PLCFx_PCD* pPLCFx_PCD, const WW8ScannerBase* pBase)
-    : WW8PLCFx(rFib, true), pPcdI(pPLCFx_PCD->GetPLCFIter()),
-    pPcd(pPLCFx_PCD), mrGrpprls(pBase->m_aPieceGrpprls)
+    : WW8PLCFx(rFib, true), m_pPcdI(pPLCFx_PCD->GetPLCFIter()),
+    m_pPcd(pPLCFx_PCD), mrGrpprls(pBase->m_aPieceGrpprls)
 {
 }
 
@@ -977,7 +977,7 @@ void WW8PLCFx_PCDAttrs::advance()
 
 WW8_CP WW8PLCFx_PCDAttrs::Where()
 {
-    return pPcd ? pPcd->Where() : WW8_CP_MAX;
+    return m_pPcd ? m_pPcd->Where() : WW8_CP_MAX;
 }
 
 void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
@@ -985,7 +985,7 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
     void* pData;
 
     p->bRealLineEnd = false;
-    if ( !pPcdI || !pPcdI->Get(p->nStartPos, p->nEndPos, pData) )
+    if ( !m_pPcdI || !m_pPcdI->Get(p->nStartPos, p->nEndPos, pData) )
     {
         // PLCF fully processed
         p->nStartPos = p->nEndPos = WW8_CP_MAX;
@@ -1023,12 +1023,12 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
 
         if (IsSevenMinus(GetFIBVersion()))
         {
-            aShortSprm[0] = static_cast<sal_uInt8>( ( nPrm & 0xfe) >> 1 );
-            aShortSprm[1] = static_cast<sal_uInt8>(   nPrm         >> 8 );
+            m_aShortSprm[0] = static_cast<sal_uInt8>( ( nPrm & 0xfe) >> 1 );
+            m_aShortSprm[1] = static_cast<sal_uInt8>(   nPrm         >> 8 );
             p->nSprmsLen = nPrm ? 2 : 0;        // length
 
             // store Position of internal mini storage in Data Pointer
-            p->pMemPos = aShortSprm;
+            p->pMemPos = m_aShortSprm;
         }
         else
         {
@@ -1120,15 +1120,15 @@ void WW8PLCFx_PCDAttrs::GetSprms(WW8PLCFxDesc* p)
                 if( nSprmId )
                 {
                     // move Sprm Id and Sprm Param to internal mini storage:
-                    aShortSprm[0] = static_cast<sal_uInt8>( nSprmId & 0x00ff)       ;
-                    aShortSprm[1] = static_cast<sal_uInt8>( ( nSprmId & 0xff00) >> 8 );
-                    aShortSprm[2] = static_cast<sal_uInt8>( nPrm >> 8 );
+                    m_aShortSprm[0] = static_cast<sal_uInt8>( nSprmId & 0x00ff)       ;
+                    m_aShortSprm[1] = static_cast<sal_uInt8>( ( nSprmId & 0xff00) >> 8 );
+                    m_aShortSprm[2] = static_cast<sal_uInt8>( nPrm >> 8 );
 
                     // store Sprm Length in member:
                     p->nSprmsLen = nPrm ? 3 : 0;
 
                     // store Position of internal mini storage in Data Pointer
-                    p->pMemPos = aShortSprm;
+                    p->pMemPos = m_aShortSprm;
                 }
             }
         }
@@ -3710,13 +3710,13 @@ void WW8PLCFx_Cp_FKP::advance()
 WW8PLCFx_SEPX::WW8PLCFx_SEPX(SvStream* pSt, SvStream* pTableSt,
     const WW8Fib& rFib, WW8_CP nStartCp)
     : WW8PLCFx(rFib, true), maSprmParser(rFib),
-    pStrm(pSt), nArrMax(256), nSprmSiz(0)
+    m_pStrm(pSt), m_nArrMax(256), m_nSprmSiz(0)
 {
     if (rFib.m_lcbPlcfsed)
-        pPLCF.reset( new WW8PLCF(*pTableSt, rFib.m_fcPlcfsed, rFib.m_lcbPlcfsed,
+        m_pPLCF.reset( new WW8PLCF(*pTableSt, rFib.m_fcPlcfsed, rFib.m_lcbPlcfsed,
                                  GetFIBVersion() <= ww::eWW2 ? 6 : 12, nStartCp) );
 
-    pSprms.reset( new sal_uInt8[nArrMax] );     // maximum length
+    m_pSprms.reset( new sal_uInt8[m_nArrMax] );     // maximum length
 }
 
 WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
@@ -3725,32 +3725,32 @@ WW8PLCFx_SEPX::~WW8PLCFx_SEPX()
 
 sal_uInt32 WW8PLCFx_SEPX::GetIdx() const
 {
-    return pPLCF ? pPLCF->GetIdx() : 0;
+    return m_pPLCF ? m_pPLCF->GetIdx() : 0;
 }
 
 void WW8PLCFx_SEPX::SetIdx(sal_uInt32 nIdx)
 {
-    if( pPLCF ) pPLCF->SetIdx( nIdx );
+    if( m_pPLCF ) m_pPLCF->SetIdx( nIdx );
 }
 
 bool WW8PLCFx_SEPX::SeekPos(WW8_CP nCpPos)
 {
-    return pPLCF && pPLCF->SeekPos( nCpPos );
+    return m_pPLCF && m_pPLCF->SeekPos( nCpPos );
 }
 
 WW8_CP WW8PLCFx_SEPX::Where()
 {
-    return pPLCF ? pPLCF->Where() : 0;
+    return m_pPLCF ? m_pPLCF->Where() : 0;
 }
 
 void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
 {
-    if( !pPLCF ) return;
+    if( !m_pPLCF ) return;
 
     void* pData;
 
     p->bRealLineEnd = false;
-    if (!pPLCF->Get( p->nStartPos, p->nEndPos, pData ))
+    if (!m_pPLCF->Get( p->nStartPos, p->nEndPos, pData ))
     {
         p->nStartPos = p->nEndPos = WW8_CP_MAX;       // PLCF completely processed
         p->pMemPos = nullptr;
@@ -3759,7 +3759,7 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
     else
     {
         sal_uInt32 nPo =  SVBT32ToUInt32( static_cast<sal_uInt8*>(pData)+2 );
-        if (nPo == 0xFFFFFFFF || !checkSeek(*pStrm, nPo))
+        if (nPo == 0xFFFFFFFF || !checkSeek(*m_pStrm, nPo))
         {
             p->nStartPos = p->nEndPos = WW8_CP_MAX;   // Sepx empty
             p->pMemPos = nullptr;
@@ -3771,47 +3771,47 @@ void WW8PLCFx_SEPX::GetSprms(WW8PLCFxDesc* p)
             if (GetFIBVersion() <= ww::eWW2)    // eWW6 ?, docs say yes, but...
             {
                 sal_uInt8 nSiz(0);
-                pStrm->ReadUChar( nSiz );
-                nSprmSiz = nSiz;
+                m_pStrm->ReadUChar( nSiz );
+                m_nSprmSiz = nSiz;
             }
             else
             {
-                pStrm->ReadUInt16( nSprmSiz );
+                m_pStrm->ReadUInt16( m_nSprmSiz );
             }
 
-            std::size_t nRemaining = pStrm->remainingSize();
-            if (nSprmSiz > nRemaining)
-                nSprmSiz = nRemaining;
+            std::size_t nRemaining = m_pStrm->remainingSize();
+            if (m_nSprmSiz > nRemaining)
+                m_nSprmSiz = nRemaining;
 
-            if( nSprmSiz > nArrMax )
+            if( m_nSprmSiz > m_nArrMax )
             {               // does not fit
-                nArrMax = nSprmSiz;                 // Get more memory
-                pSprms.reset( new sal_uInt8[nArrMax] );
+                m_nArrMax = m_nSprmSiz;                 // Get more memory
+                m_pSprms.reset( new sal_uInt8[m_nArrMax] );
             }
-            nSprmSiz = pStrm->ReadBytes(pSprms.get(), nSprmSiz); // read Sprms
+            m_nSprmSiz = m_pStrm->ReadBytes(m_pSprms.get(), m_nSprmSiz); // read Sprms
 
-            p->nSprmsLen = nSprmSiz;
-            p->pMemPos = pSprms.get();                    // return Position
+            p->nSprmsLen = m_nSprmSiz;
+            p->pMemPos = m_pSprms.get();                    // return Position
         }
     }
 }
 
 void WW8PLCFx_SEPX::advance()
 {
-    if (pPLCF)
-        pPLCF->advance();
+    if (m_pPLCF)
+        m_pPLCF->advance();
 }
 
 SprmResult WW8PLCFx_SEPX::HasSprm(sal_uInt16 nId) const
 {
-    return HasSprm(nId, pSprms.get(), nSprmSiz);
+    return HasSprm(nId, m_pSprms.get(), m_nSprmSiz);
 }
 
 SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOtherSprms,
     tools::Long nOtherSprmSiz ) const
 {
     SprmResult aRet;
-    if (pPLCF)
+    if (m_pPLCF)
     {
         WW8SprmIter aIter(pOtherSprms, nOtherSprmSiz, maSprmParser);
         aRet = aIter.FindSprm(nId, /*bFindFirst=*/true);
@@ -3822,18 +3822,18 @@ SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, const sal_uInt8*  pOtherSprms
 bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,sal_uInt16 nId4,
     SprmResult& r1, SprmResult& r2, SprmResult& r3, SprmResult& r4) const
 {
-    if( !pPLCF )
+    if( !m_pPLCF )
         return false;
 
     bool bFound = false;
 
-    sal_uInt8* pSp = pSprms.get();
+    sal_uInt8* pSp = m_pSprms.get();
     size_t i = 0;
-    while (i + maSprmParser.MinSprmLen() <= nSprmSiz)
+    while (i + maSprmParser.MinSprmLen() <= m_nSprmSiz)
     {
         // Sprm found?
         const sal_uInt16 nCurrentId = maSprmParser.GetSprmId(pSp);
-        sal_Int32 nRemLen = nSprmSiz - i;
+        sal_Int32 nRemLen = m_nSprmSiz - i;
         const sal_Int32 x = maSprmParser.GetSprmSize(nCurrentId, pSp, nRemLen);
         bool bValid = x <= nRemLen;
         if (!bValid)
@@ -3875,9 +3875,9 @@ bool WW8PLCFx_SEPX::Find4Sprms(sal_uInt16 nId1,sal_uInt16 nId2,sal_uInt16 nId3,s
 SprmResult WW8PLCFx_SEPX::HasSprm( sal_uInt16 nId, sal_uInt8 n2nd ) const
 {
     SprmResult aRet;
-    if (pPLCF)
+    if (m_pPLCF)
     {
-        WW8SprmIter aIter(pSprms.get(), nSprmSiz, maSprmParser);
+        WW8SprmIter aIter(m_pSprms.get(), m_nSprmSiz, maSprmParser);
         aRet = aIter.FindSprm(nId, /*bFindFirst=*/true, &n2nd);
     }
     return aRet;
@@ -3890,43 +3890,43 @@ WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, const WW8Fib& rFib,
 {
     if( nLenRef && nLenText )
     {
-        pRef.reset(new WW8PLCF(*pSt, nFcRef, nLenRef, nStruct, nStartCp));
-        pText.reset(new WW8PLCF(*pSt, nFcText, nLenText, 0, nStartCp));
+        m_pRef.reset(new WW8PLCF(*pSt, nFcRef, nLenRef, nStruct, nStartCp));
+        m_pText.reset(new WW8PLCF(*pSt, nFcText, nLenText, 0, nStartCp));
     }
 }
 
 WW8PLCFx_SubDoc::~WW8PLCFx_SubDoc()
 {
-    pRef.reset();
-    pText.reset();
+    m_pRef.reset();
+    m_pText.reset();
 }
 
 sal_uInt32 WW8PLCFx_SubDoc::GetIdx() const
 {
     // Probably pText ... no need for it
-    if( pRef )
-        return ( pRef->GetIdx() << 16 | pText->GetIdx() );
+    if( m_pRef )
+        return ( m_pRef->GetIdx() << 16 | m_pText->GetIdx() );
     return 0;
 }
 
 void WW8PLCFx_SubDoc::SetIdx(sal_uInt32 nIdx)
 {
-    if( pRef )
+    if( m_pRef )
     {
-        pRef->SetIdx( nIdx >> 16 );
+        m_pRef->SetIdx( nIdx >> 16 );
         // Probably pText ... no need for it
-        pText->SetIdx( nIdx & 0xFFFF );
+        m_pText->SetIdx( nIdx & 0xFFFF );
     }
 }
 
 bool WW8PLCFx_SubDoc::SeekPos( WW8_CP nCpPos )
 {
-    return pRef && pRef->SeekPos( nCpPos );
+    return m_pRef && m_pRef->SeekPos( nCpPos );
 }
 
 WW8_CP WW8PLCFx_SubDoc::Where()
 {
-    return pRef ? pRef->Where() : WW8_CP_MAX;
+    return m_pRef ? m_pRef->Where() : WW8_CP_MAX;
 }
 
 void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
@@ -3936,14 +3936,14 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
     p->nSprmsLen = 0;
     p->bRealLineEnd = false;
 
-    if (!pRef)
+    if (!m_pRef)
         return;
 
-    sal_uInt32 nNr = pRef->GetIdx();
+    sal_uInt32 nNr = m_pRef->GetIdx();
 
     void *pData;
     WW8_CP nFoo;
-    if (!pRef->Get(p->nStartPos, nFoo, pData))
+    if (!m_pRef->Get(p->nStartPos, nFoo, pData))
     {
         p->nEndPos = p->nStartPos = WW8_CP_MAX;
         return;
@@ -3956,12 +3956,12 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
         return;
     }
 
-    if (!pText)
+    if (!m_pText)
         return;
 
-    pText->SetIdx(nNr);
+    m_pText->SetIdx(nNr);
 
-    if (!pText->Get(p->nCp2OrIdx, p->nSprmsLen, pData))
+    if (!m_pText->Get(p->nCp2OrIdx, p->nSprmsLen, pData))
     {
         p->nEndPos = p->nStartPos = WW8_CP_MAX;
         p->nSprmsLen = 0;
@@ -3981,10 +3981,10 @@ void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
 
 void WW8PLCFx_SubDoc::advance()
 {
-    if (pRef && pText)
+    if (m_pRef && m_pText)
     {
-        pRef->advance();
-        pText->advance();
+        m_pRef->advance();
+        m_pText->advance();
     }
 }
 
