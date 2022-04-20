@@ -507,30 +507,18 @@ oslFileError FileHandle_Impl::writeFileAt(
             m_bufptr = -1;
             m_buflen = 0;
 
-            if (nBytesToWrite >= m_bufsiz)
-            {
-                // buffer too small, write through to file
-                sal_uInt64 uDone = 0;
-                result = writeAt(nOffset, &(buffer[*pBytesWritten]), nBytesToWrite, &uDone);
-                if (result != osl_File_E_None)
-                    return result;
-
-                if (uDone != nBytesToWrite)
-                    return osl_File_E_IO;
-
-                *pBytesWritten += uDone;
-
-                return osl_File_E_None;
-            }
-
-            // update buffer (pointer)
+            // write through to file
             sal_uInt64 uDone = 0;
-            result = readAt(bufptr, m_buffer, m_bufsiz, &uDone);
+            result = writeAt(nOffset, &(buffer[*pBytesWritten]), nBytesToWrite, &uDone);
             if (result != osl_File_E_None)
                 return result;
 
-            m_bufptr = bufptr;
-            m_buflen = uDone;
+            if (uDone != nBytesToWrite)
+                return osl_File_E_IO;
+
+            *pBytesWritten += uDone;
+
+            return osl_File_E_None;
         }
 
         size_t const bytes = std::min(m_bufsiz - bufpos, nBytesToWrite);
