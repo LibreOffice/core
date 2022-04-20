@@ -93,8 +93,7 @@ void OConnection::construct(std::u16string_view url,const Sequence< PropertyValu
     nLen = url.find(':',nLen == std::u16string_view::npos ? 0 : nLen+1);
     std::u16string_view aDSN(url.substr(nLen == std::u16string_view::npos ? 0 : nLen+1));
     OUString aUID,aPWD;
-    if ( o3tl::starts_with(aDSN, u"access:") )
-        aDSN.remove_prefix(7);
+    o3tl::starts_with(aDSN, u"access:", &aDSN);
 
     sal_Int32 nTimeout = 20;
     const PropertyValue *pIter  = info.getConstArray();
