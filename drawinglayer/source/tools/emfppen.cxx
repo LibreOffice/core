@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -179,27 +178,31 @@ namespace emfplushelper
     {
         switch (nEmfStroke)
         {
-            case EmfPlusLineCapTypeSquare: return rendering::PathCapType::SQUARE;
-            case EmfPlusLineCapTypeRound:  return rendering::PathCapType::ROUND;
+            case EmfPlusLineCapTypeSquare:
+                return rendering::PathCapType::SQUARE;
+            // we have no mapping for EmfPlusLineCapTypeTriangle,
+            // but it is similar to Round
+            case EmfPlusLineCapTypeTriangle: // fall-through
+            case EmfPlusLineCapTypeRound:
+                return rendering::PathCapType::ROUND;
         }
 
-        // we have no mapping for EmfPlusLineCapTypeTriangle = 0x00000003,
-        // so return BUTT always
         return rendering::PathCapType::BUTT;
     }
 
-    sal_Int8 EMFPPen::lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin)
+    basegfx::B2DLineJoin EMFPPen::GetLineJoinType() const
     {
-        switch (nEmfLineJoin)
+        switch (lineJoin)
         {
-            case EmfPlusLineJoinTypeMiter:        // fall-through
-            case EmfPlusLineJoinTypeMiterClipped: return rendering::PathJoinType::MITER;
-            case EmfPlusLineJoinTypeBevel:        return rendering::PathJoinType::BEVEL;
-            case EmfPlusLineJoinTypeRound:        return rendering::PathJoinType::ROUND;
+            case EmfPlusLineJoinTypeMiter: // fall-through
+            case EmfPlusLineJoinTypeMiterClipped:
+                return basegfx::B2DLineJoin::Miter;
+            case EmfPlusLineJoinTypeBevel:
+                return basegfx::B2DLineJoin::Bevel;
+            case EmfPlusLineJoinTypeRound:
+                return basegfx::B2DLineJoin::Round;
         }
-
-        assert(false); // Line Join type isn't in specification.
-        return 0;
+        return basegfx::B2DLineJoin::Round;
     }
 
     void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)

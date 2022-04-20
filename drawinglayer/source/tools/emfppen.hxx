@@ -26,6 +26,7 @@ namespace emfplushelper
 {
     const sal_uInt32 EmfPlusLineCapTypeSquare = 0x00000001;
     const sal_uInt32 EmfPlusLineCapTypeRound = 0x00000002;
+    const sal_uInt32 EmfPlusLineCapTypeTriangle = 0x00000003;
 
     const sal_uInt32 EmfPlusLineJoinTypeMiter = 0x00000000;
     const sal_uInt32 EmfPlusLineJoinTypeBevel = 0x00000001;
@@ -122,7 +123,7 @@ namespace emfplushelper
         void Read(SvStream& s, EmfPlusHelperData const & rR);
 
         static sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke);
-        static sal_Int8 lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin);
+        basegfx::B2DLineJoin GetLineJoinType() const;
     };
 }
 
