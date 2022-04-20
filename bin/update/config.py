@@ -1,6 +1,6 @@
-
 import configparser
 import os
+
 
 class Config(object):
 
@@ -11,6 +11,7 @@ class Config(object):
         self.base_url = None
         self.upload_url = None
         self.server_url = None
+
 
 def parse_config(config_file):
     config = configparser.ConfigParser()
