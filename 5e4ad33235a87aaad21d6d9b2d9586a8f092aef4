@@ -34,6 +34,24 @@
       "parentUuid": "f4710461_ed55d30f",
       "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c412e55d_d92cddee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-20T15:57:55Z",
+      "side": 1,
+      "message": "Saving memory for a 32bit LO which OOMs, because the Java in-process VM takes too much memory to run all extensions.",
+      "parentUuid": "602ea79d_cad10d0e",
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
