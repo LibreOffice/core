@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40417819_7b4f8e3a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003551
+      },
+      "writtenOn": "2022-04-20T15:19:27Z",
+      "side": 1,
+      "message": "Hi. \n\nI\u0027ve uploaded a new patch set, in which most of the changes suggested by Heiko have been implemented. I\u0027ve revamped the design of the dialog, and taken care of the spacing of the elements too. I\u0027ve tested the dialog in kf5/gen as well. \n\nThere is one small problem though: the icon does not show up in kf5/gen, and I\u0027m not sure how to fix that. Some help here will be great (this seems to be an easily fixable thing, but I don\u0027t know how LO handles it\u0027s icons). \n\nThanks.",
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
