@@ -74,6 +74,7 @@ public:
     void testTdf103792();
     void testTdf103876();
     void testTdf79007();
+    void testTdf119649();
     void testTdf118776();
     void testTdf129686();
     void testTdf104015();
@@ -143,6 +144,7 @@ public:
     CPPUNIT_TEST(testTdf103792);
     CPPUNIT_TEST(testTdf103876);
     CPPUNIT_TEST(testTdf79007);
+    CPPUNIT_TEST(testTdf119649);
     CPPUNIT_TEST(testTdf118776);
     CPPUNIT_TEST(testTdf129686);
     CPPUNIT_TEST(testTdf104015);
@@ -507,6 +509,47 @@ void SdImportTest2::testTdf79007()
     sal_Int16 nLuminance3;
     xShape3->getPropertyValue("AdjustLuminance") >>= nLuminance3;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(0), nLuminance3);
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTest2::testTdf119649()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"/sd/qa/unit/data/pptx/tdf119649.pptx"), PPTX);
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0, xDocShRef));
+
+    // Get first paragraph of the text
+    uno::Reference<text::XTextRange> const xParagraph(getParagraphFromShape(0, xShape));
+
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    CPPUNIT_ASSERT_EQUAL(OUString("default_color("), xRun->getString());
+
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nCharColor;
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nCharColor);
+
+    xRun.set(getRunFromParagraph(1, xParagraph));
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: colored_text
+    // - Actual  : colored_text)
+    CPPUNIT_ASSERT_EQUAL(OUString("colored_text"), xRun->getString());
+
+    xPropSet.set(xRun, uno::UNO_QUERY_THROW);
+
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0xCE181E), nCharColor);
+
+    xRun.set(getRunFromParagraph(2, xParagraph));
+    CPPUNIT_ASSERT_EQUAL(OUString(")"), xRun->getString());
+
+    xPropSet.set(xRun, uno::UNO_QUERY_THROW);
+
+    xPropSet->getPropertyValue("CharColor") >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nCharColor);
 
     xDocShRef->DoClose();
 }
