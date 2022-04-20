@@ -1842,6 +1842,23 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf109077)
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148594)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf148594.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nFirstLineWidth
+        = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout[1]", "width").toInt32();
+
+    sal_Int32 nSecondLineWidth
+        = getXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout[1]", "width").toInt32();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1400
+    // - Actual  : 1800
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1400), nSecondLineWidth - nFirstLineWidth);
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
 {
     // Set the system locale to German, the document will be English.
