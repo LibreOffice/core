@@ -210,7 +210,7 @@ namespace connectivity::firebird
             DECLARE_SERVICE_INFO();
             // XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething(const css::uno::Sequence<sal_Int8>& rId) override;
-            static css::uno::Sequence<sal_Int8> getUnoTunnelId();
+            static const css::uno::Sequence<sal_Int8> & getUnoTunnelId();
             // XConnection
             virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
             virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;

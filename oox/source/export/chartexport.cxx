@@ -503,7 +503,7 @@ bool DataLabelsRange::hasLabel(sal_Int32 nIndex) const
     return maLabels.find(nIndex) != maLabels.end();
 }
 
-OUString DataLabelsRange::getRange() const
+const OUString & DataLabelsRange::getRange() const
 {
     return maRange;
 }

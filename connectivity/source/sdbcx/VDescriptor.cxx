@@ -91,7 +91,7 @@ namespace connectivity::sdbcx
         }
 
 
-        Sequence< sal_Int8 > ODescriptor::getUnoTunnelId()
+        const Sequence< sal_Int8 > & ODescriptor::getUnoTunnelId()
         {
             static const comphelper::UnoIdInit implId;
             return implId.getSeq();

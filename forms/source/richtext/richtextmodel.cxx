@@ -559,7 +559,7 @@ namespace frm
     }
 
 
-    Sequence<sal_Int8> ORichTextModel::getUnoTunnelId()
+    const Sequence<sal_Int8> & ORichTextModel::getUnoTunnelId()
     {
         static const comphelper::UnoIdInit aId;
         return aId.getSeq();

@@ -1601,7 +1601,7 @@ SdrMeasureTextHPosItem* SdrMeasureTextHPosItem::Clone(SfxItemPool* /*pPool*/) co
 
 sal_uInt16 SdrMeasureTextHPosItem::GetValueCount() const { return 4; }
 
-OUString SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
+const OUString & SdrMeasureTextHPosItem::GetValueTextByPos(sal_uInt16 nPos)
 {
     static std::array<OUString, 4> aMeasureTextHPosItem
     {

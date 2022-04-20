@@ -405,7 +405,7 @@ sal_Int64 SAL_CALL OConnection::getSomething( const Sequence< sal_Int8 >& rId )
     return comphelper::getSomethingImpl(rId, this);
 }
 
-Sequence< sal_Int8 > OConnection::getUnoTunnelId()
+const Sequence< sal_Int8 > & OConnection::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

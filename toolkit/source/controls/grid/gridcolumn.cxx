@@ -282,7 +282,7 @@ namespace toolkit
     }
 
 
-    Sequence< sal_Int8 > GridColumn::getUnoTunnelId() noexcept
+    const Sequence< sal_Int8 > & GridColumn::getUnoTunnelId() noexcept
     {
         static const comphelper::UnoIdInit aId;
         return aId.getSeq();

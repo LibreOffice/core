@@ -425,7 +425,7 @@ sal_Int64 SAL_CALL ORowSet::getSomething( const Sequence< sal_Int8 >& rId )
     return comphelper::getSomethingImpl(rId, this);
 }
 
-Sequence< sal_Int8 > ORowSet::getUnoTunnelId()
+const Sequence< sal_Int8 > & ORowSet::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit s_Id;
     return s_Id.getSeq();
@@ -2903,7 +2903,7 @@ void ORowSetClone::close()
     return *::comphelper::OPropertyArrayUsageHelper<ORowSetClone>::getArrayHelper();
 }
 
-Sequence< sal_Int8 > ORowSetClone::getUnoTunnelId()
+const Sequence< sal_Int8 > & ORowSetClone::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

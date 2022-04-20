@@ -440,7 +440,7 @@ void EmbeddedObjectRef::SetIsProtectedHdl(const Link<LinkParamNone*, bool>& rPro
     mpImpl->m_aIsProtectedHdl = rProtectedHdl;
 }
 
-Link<LinkParamNone*, bool> EmbeddedObjectRef::GetIsProtectedHdl() const
+const Link<LinkParamNone*, bool> & EmbeddedObjectRef::GetIsProtectedHdl() const
 {
     return mpImpl->m_aIsProtectedHdl;
 }

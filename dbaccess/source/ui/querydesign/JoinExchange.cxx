@@ -61,7 +61,7 @@ namespace dbaui
         return aReturn;
     }
 
-    Sequence< sal_Int8 > OJoinExchObj::getUnoTunnelId()
+    const Sequence< sal_Int8 > & OJoinExchObj::getUnoTunnelId()
     {
         static const comphelper::UnoIdInit implId;
         return implId.getSeq();

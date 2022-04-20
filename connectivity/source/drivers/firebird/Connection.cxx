@@ -383,7 +383,7 @@ sal_Int64 SAL_CALL Connection::getSomething(const css::uno::Sequence<sal_Int8>& 
 }
 
 // static
-css::uno::Sequence<sal_Int8> Connection::getUnoTunnelId()
+const css::uno::Sequence<sal_Int8> & Connection::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

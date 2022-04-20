@@ -94,7 +94,7 @@ namespace
         sal_Int32    getIndexInParent() const                    { return m_nIndexInParent; }
         void         setIndexInParent( sal_Int32 _nNewIndex )    { m_nIndexInParent = _nNewIndex; }
 
-        static Sequence< sal_Int8 > getUnoTunnelId();
+        static const Sequence< sal_Int8 > & getUnoTunnelId();
 
     public:
         OToolBoxWindowItem(sal_Int32 _nIndexInParent,
@@ -132,7 +132,7 @@ namespace
         return new OToolBoxWindowItemContext( m_nIndexInParent, getComponentContext(), _rxInnerContext, this, getParent() );
     }
 
-    Sequence< sal_Int8 > OToolBoxWindowItem::getUnoTunnelId()
+    const Sequence< sal_Int8 > & OToolBoxWindowItem::getUnoTunnelId()
     {
         static const comphelper::UnoIdInit implId;
         return implId.getSeq();

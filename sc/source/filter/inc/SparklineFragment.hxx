@@ -44,7 +44,7 @@ public:
     {
     }
 
-    std::shared_ptr<sc::SparklineGroup> getSparklineGroup() { return m_pSparklineGroup; }
+    const std::shared_ptr<sc::SparklineGroup>& getSparklineGroup() { return m_pSparklineGroup; }
 
     std::vector<Sparkline>& getSparklines() { return m_aSparklines; }
 };

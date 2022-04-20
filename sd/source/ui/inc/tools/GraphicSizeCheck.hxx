@@ -36,7 +36,7 @@ public:
     GraphicSizeViolation(sal_Int32 nDPI, SdrGrafObj* pGraphicObject);
     bool check();
 
-    OUString getGraphicName();
+    const OUString& getGraphicName();
 
     SdrGrafObj* getObject() const { return m_pGraphicObject; }
 

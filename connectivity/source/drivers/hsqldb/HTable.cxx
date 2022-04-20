@@ -115,7 +115,7 @@ sdbcx::OCollection* OHSQLTable::createIndexes(const ::std::vector< OUString>& _r
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }
 
-Sequence< sal_Int8 > OHSQLTable::getUnoTunnelId()
+const Sequence< sal_Int8 > & OHSQLTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

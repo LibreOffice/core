@@ -61,7 +61,7 @@ public:
     const OUString& GetTemplateName() const { return m_aTemplate; }
     sal_uInt16 GetKind() const { return nKind; }
     const ::std::optional<sal_uInt16>& GetPageNumber() const { return oPgNum; }
-    std::optional<SwLineBreakClear> GetClear() const { return m_eClear; }
+    const std::optional<SwLineBreakClear>& GetClear() const { return m_eClear; }
 };
 
 #endif

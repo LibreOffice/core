@@ -143,7 +143,7 @@ void ZipPackageFolder::setChildStreamsTypeByExtension( const beans::StringPair& 
     }
 }
 
-css::uno::Sequence < sal_Int8 > ZipPackageFolder::getUnoTunnelId()
+const css::uno::Sequence < sal_Int8 > & ZipPackageFolder::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit lcl_CachedImplId;
     return lcl_CachedImplId.getSeq();

@@ -256,7 +256,7 @@ Reference< chart2::XAxis > SAL_CALL BaseCoordinateSystem::getAxisByDimension(
     return m_aAllAxis[ nDimensionIndex ][nAxisIndex];
 }
 
-rtl::Reference< Axis > BaseCoordinateSystem::getAxisByDimension2(
+const rtl::Reference< Axis > & BaseCoordinateSystem::getAxisByDimension2(
             sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const
 {
     if( nDimensionIndex < 0 || nDimensionIndex >= m_nDimensionCount )

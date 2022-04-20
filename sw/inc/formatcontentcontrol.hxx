@@ -91,7 +91,7 @@ public:
 
     void NotifyChangeTextNode(SwTextNode* pTextNode);
 
-    css::uno::WeakReference<css::text::XTextContent> GetXContentControl() const
+    const css::uno::WeakReference<css::text::XTextContent>& GetXContentControl() const
     {
         return m_wXContentControl;
     }

@@ -608,7 +608,7 @@ void SAL_CALL OCalcTable::disposing()
 
 }
 
-Sequence< sal_Int8 > OCalcTable::getUnoTunnelId()
+const Sequence< sal_Int8 > & OCalcTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

@@ -71,7 +71,7 @@ using namespace cppu;
 #define THROW_WHERE ""
 #endif
 
-css::uno::Sequence < sal_Int8 > ZipPackageStream::getUnoTunnelId()
+const css::uno::Sequence < sal_Int8 > & ZipPackageStream::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit lcl_CachedImplId;
     return lcl_CachedImplId.getSeq();

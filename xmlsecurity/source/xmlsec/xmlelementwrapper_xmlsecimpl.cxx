@@ -33,7 +33,7 @@ XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNod
 }
 
 /* XUnoTunnel */
-uno::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelId()
+const uno::Sequence< sal_Int8 > & XMLElementWrapper_XmlSecImpl::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

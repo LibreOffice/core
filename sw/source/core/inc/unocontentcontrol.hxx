@@ -81,7 +81,7 @@ public:
 
     /// Initializes params with position of the attribute content (without CH_TXTATR).
     bool SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart, sal_Int32& rEnd) const;
-    css::uno::Reference<css::text::XText> GetParentText() const;
+    const css::uno::Reference<css::text::XText>& GetParentText() const;
 
     bool CheckForOwnMemberContentControl(const SwPaM& rPam, const bool bAbsorb);
 

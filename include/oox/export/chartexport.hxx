@@ -112,7 +112,7 @@ public:
     /// Indicates whether the container has a label with index specified by nIndex.
     bool hasLabel(sal_Int32 nIndex) const;
     /// Returns the address of the cell[range] from which label contents are sourced.
-    OUString getRange() const;
+    const OUString & getRange() const;
 
     /// Sets the address of the cell[range] from which label contents are sourced.
     void setRange(const OUString& rRange);

@@ -210,7 +210,7 @@ void SAL_CALL OWriterTable::disposing()
     m_pWriterConnection = nullptr;
 }
 
-uno::Sequence<sal_Int8> OWriterTable::getUnoTunnelId()
+const uno::Sequence<sal_Int8>& OWriterTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

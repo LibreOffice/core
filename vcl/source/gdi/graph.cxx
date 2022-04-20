@@ -556,7 +556,7 @@ OString Graphic::getUniqueID() const
     return aUniqueString;
 }
 
-css::uno::Sequence<sal_Int8> Graphic::getUnoTunnelId() {
+const css::uno::Sequence<sal_Int8> & Graphic::getUnoTunnelId() {
     static const comphelper::UnoIdInit gId;
     return gId.getSeq();
 }

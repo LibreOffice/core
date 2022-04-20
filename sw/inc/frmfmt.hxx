@@ -223,7 +223,7 @@ public:
     OUString GetObjTitle() const;
     void SetObjTitle( const OUString& rTitle, bool bBroadcast = false );
 
-    OUString GetObjTooltip() const;
+    const OUString & GetObjTooltip() const;
     void SetObjTooltip(const OUString& rTooltip);
 
     OUString GetObjDescription() const;

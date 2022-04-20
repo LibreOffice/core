@@ -910,7 +910,7 @@ uno::Reference< beans::XPropertySet > VDataSeries::getPropertiesOfPoint( sal_Int
     return getPropertiesOfSeries();
 }
 
-uno::Reference<beans::XPropertySet> VDataSeries::getPropertiesOfSeries() const
+const uno::Reference<beans::XPropertySet> & VDataSeries::getPropertiesOfSeries() const
 {
     return m_xDataSeriesProps;
 }

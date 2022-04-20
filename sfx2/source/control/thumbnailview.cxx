@@ -328,7 +328,7 @@ css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::CreateAcce
     return mxAccessible;
 }
 
-css::uno::Reference< css::accessibility::XAccessible > ThumbnailView::getAccessible() const
+const css::uno::Reference< css::accessibility::XAccessible > & ThumbnailView::getAccessible() const
 {
     return mxAccessible;
 }

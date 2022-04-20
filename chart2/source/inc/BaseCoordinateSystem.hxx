@@ -98,7 +98,7 @@ public:
         const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     void setAxisByDimension( sal_Int32 nDimension, const rtl::Reference< ::chart::Axis >& xAxis, sal_Int32 nIndex );
-    rtl::Reference< ::chart::Axis > getAxisByDimension2(sal_Int32 nDimension, sal_Int32 nIndex ) const;
+    const rtl::Reference< ::chart::Axis > & getAxisByDimension2(sal_Int32 nDimension, sal_Int32 nIndex ) const;
 
     void setChartTypes( const std::vector< rtl::Reference< ::chart::ChartType > >& aChartTypes );
     const std::vector< rtl::Reference<::chart::ChartType > > & getChartTypes2() const { return m_aChartTypes; }

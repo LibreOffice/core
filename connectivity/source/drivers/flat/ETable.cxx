@@ -549,7 +549,7 @@ Any SAL_CALL OFlatTable::queryInterface( const Type & rType )
 }
 
 
-Sequence< sal_Int8 > OFlatTable::getUnoTunnelId()
+const Sequence< sal_Int8 > & OFlatTable::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit implId;
     return implId.getSeq();

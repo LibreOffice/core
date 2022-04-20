@@ -62,7 +62,7 @@ public:
 
     Color const& GetSelectEntryColor() const { return m_aSelectedColor.m_aColor; }
     NamedColor GetSelectedEntry() const { return m_aSelectedColor.ToNamedColor(); }
-    svx::NamedThemedColor GetSelectedEntryThemedColor() const { return m_aSelectedColor; }
+    const svx::NamedThemedColor& GetSelectedEntryThemedColor() const { return m_aSelectedColor; }
 
     void SelectEntry(const NamedColor& rColor);
     void SelectEntry(const Color& rColor);

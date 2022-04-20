@@ -111,7 +111,7 @@ bool GraphicSizeViolation::check()
     return isDPITooLow() || isDPITooHigh();
 }
 
-OUString GraphicSizeViolation::getGraphicName() { return m_pGraphicObject->GetName(); }
+const OUString& GraphicSizeViolation::getGraphicName() { return m_pGraphicObject->GetName(); }
 
 namespace
 {
