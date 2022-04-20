@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e25f7d4a_7700ade9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 20
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-20T09:04:53Z",
+      "side": 1,
+      "message": "Hi Mike! Thank you for the file. You may have an idea why it fails solely on the mac build?",
+      "revId": "adf0845e5d688105f3ed38cc2becbfd939dc770e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
