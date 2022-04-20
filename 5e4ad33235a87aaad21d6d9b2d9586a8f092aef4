@@ -16,6 +16,24 @@
       "message": "@sberg: this works as expected, but the implementation feels fishy (not because of mis-using Reg::MaybeRegistered; that can be easily fixed). See the comment. Any better idea where to place this functionality?\n\nAnd I placed the config item into ExtensionManager::ExtensionSecurity as RunAlwaysOutOfProcess, which is definitely some easy bike-shedding item... ",
       "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "602ea79d_cad10d0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-20T15:46:39Z",
+      "side": 1,
+      "message": "first of all: what\u0027s the motivation for this change? the commit message should tell",
+      "parentUuid": "f4710461_ed55d30f",
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
