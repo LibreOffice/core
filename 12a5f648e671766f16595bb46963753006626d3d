@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c99ac05_4b29bf98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-20T10:47:35Z",
+      "side": 1,
+      "message": "This is where my patch set starts falling into the weeds. Things start to look \"different from MS\". The biggest issue is what happens when NO formatString is provided - allowing the application to make the decision. Well, making that decision in a similar way to MS is defeating me (in the following patch).\nOnce this part is figured out, then the remaining two patches can fairly easily move forward.",
+      "revId": "12a5f648e671766f16595bb46963753006626d3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
