@@ -1471,7 +1471,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > XMLTextFrameContext::c
                     {
                         if( aIter.getToken() == XML_ELEMENT(DRAW, XML_MIME_TYPE) )
                         {
-                            if( aIter.toString() == "application/vnd.sun.star.media" )
+                            if( aIter.toView() == "application/vnd.sun.star.media" )
                                 bMedia = true;
 
                             // leave this loop

@@ -87,7 +87,7 @@ void XMLHatchStyleImport::importXML(
                 break;
             case XML_ELEMENT(DRAW, XML_COLOR):
             case XML_ELEMENT(DRAW_OOO, XML_COLOR):
-                ::sax::Converter::convertColor(aHatch.Color, aIter.toString());
+                ::sax::Converter::convertColor(aHatch.Color, aIter.toView());
                 break;
             case XML_ELEMENT(DRAW, XML_DISTANCE):
             case XML_ELEMENT(DRAW_OOO, XML_DISTANCE):

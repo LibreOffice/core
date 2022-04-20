@@ -440,7 +440,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_ELEMENT(OFFICE, XML_TIME_VALUE):
             {
                 double fTmp;
-                if (::sax::Converter::convertDuration(fTmp, aIter.toString()))
+                if (::sax::Converter::convertDuration(fTmp, aIter.toView()))
                 {
                     m_fValue = fTmp;
                     m_bHasValue = true;
@@ -451,7 +451,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             {
                 double fTmp;
                 if (GetImport().GetMM100UnitConverter().convertDateTime(fTmp,
-                                                                      aIter.toString()))
+                                                                      aIter.toView()))
                 {
                     m_fValue = fTmp;
                     m_bHasValue = true;
@@ -461,7 +461,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_ELEMENT(OFFICE, XML_BOOLEAN_VALUE):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
                     m_fValue = (bTmp ? 1.0 : 0.0);
                     m_bHasValue = true;
@@ -472,7 +472,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
         case XML_ELEMENT(TABLE, XML_PROTECTED):
             {
                 bool bTmp(false);
-                if (::sax::Converter::convertBool(bTmp, aIter.toString()))
+                if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 {
                     m_bProtect = bTmp;
                 }
@@ -486,7 +486,7 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
             break;
         case XML_ELEMENT(OFFICE, XML_VALUE_TYPE):
             {
-                if ("string" == aIter.toString())
+                if ("string" == aIter.toView())
                 {
                     m_bValueTypeIsString = true;
                 }

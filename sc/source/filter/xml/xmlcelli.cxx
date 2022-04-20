@@ -213,7 +213,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 {
                     if (!it.isEmpty() && rXMLImport.SetNullDateOnUnitConverter())
                     {
-                        rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, it.toString());
+                        rXMLImport.GetMM100UnitConverter().convertDateTime(fValue, it.toView());
                         bIsEmpty = false;
                     }
                 }
@@ -222,7 +222,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                 {
                     if (!it.isEmpty())
                     {
-                        ::sax::Converter::convertDuration(fValue, it.toString());
+                        ::sax::Converter::convertDuration(fValue, it.toView());
                         bIsEmpty = false;
                     }
                 }

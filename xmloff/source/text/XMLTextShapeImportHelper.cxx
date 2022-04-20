@@ -109,7 +109,7 @@ void XMLTextShapeImportHelper::addShape(
             break;
         case XML_ELEMENT(SVG, XML_Y):
         case XML_ELEMENT(SVG_COMPAT, XML_Y):
-            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, aIter.toString() );
+            rImport.GetMM100UnitConverter().convertMeasureToCore( nY, aIter.toView() );
             break;
         }
     }

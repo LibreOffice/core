@@ -1211,7 +1211,7 @@ void SchXMLStatisticsObjectContext::startFastElement (sal_Int32 /*Element*/,
                 sAutoStyleName = aIter.toString();
                 break;
             case XML_ELEMENT(CHART, XML_DIMENSION):
-                bYError = aIter.toString() == "y";
+                bYError = aIter.toView() == "y";
                 break;
             case XML_ELEMENT(CHART, XML_ERROR_UPPER_RANGE):
                 aPosRange = aIter.toString();

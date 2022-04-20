@@ -73,7 +73,7 @@ ScXMLCalculationSettingsContext::ScXMLCalculationSettingsContext( ScXMLImport& r
             break;
         case XML_ELEMENT( TABLE, XML_NULL_YEAR ):
             sal_Int32 nTemp;
-            ::sax::Converter::convertNumber( nTemp, aIter.toString() );
+            ::sax::Converter::convertNumber( nTemp, aIter.toView() );
             nYear2000 = static_cast<sal_uInt16>(nTemp);
             break;
         case XML_ELEMENT( TABLE, XML_USE_REGULAR_EXPRESSIONS ):
@@ -150,7 +150,7 @@ ScXMLNullDateContext::ScXMLNullDateContext( ScXMLImport& rImport,
     if (aIter != rAttrList->end())
     {
         util::DateTime aDateTime;
-        ::sax::Converter::parseDateTime(aDateTime, aIter.toString());
+        ::sax::Converter::parseDateTime(aDateTime, aIter.toView());
         util::Date aDate;
         aDate.Day = aDateTime.Day;
         aDate.Month = aDateTime.Month;

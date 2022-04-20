@@ -63,7 +63,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
             case XML_ELEMENT( TABLE, XML_LAST_COLUMN_SPANNED ):
             {
                 sal_Int32 nValue;
-                if (::sax::Converter::convertNumber( nValue, aIter.toString(), 1 ))
+                if (::sax::Converter::convertNumber( nValue, aIter.toView(), 1 ))
                     pCellRangeSource->nColumns = nValue;
                 else
                     pCellRangeSource->nColumns = 1;
@@ -72,7 +72,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
             case XML_ELEMENT( TABLE, XML_LAST_ROW_SPANNED ):
             {
                 sal_Int32 nValue;
-                if (::sax::Converter::convertNumber( nValue, aIter.toString(), 1 ))
+                if (::sax::Converter::convertNumber( nValue, aIter.toView(), 1 ))
                     pCellRangeSource->nRows = nValue;
                 else
                     pCellRangeSource->nRows = 1;
@@ -81,7 +81,7 @@ ScXMLCellRangeSourceContext::ScXMLCellRangeSourceContext(
             case XML_ELEMENT( TABLE, XML_REFRESH_DELAY ):
             {
                 double fTime;
-                if (::sax::Converter::convertDuration( fTime, aIter.toString() ))
+                if (::sax::Converter::convertDuration( fTime, aIter.toView() ))
                     pCellRangeSource->nRefresh = std::max( static_cast<sal_Int32>(fTime * 86400.0), sal_Int32(0) );
             }
             break;

@@ -44,7 +44,7 @@ SchXMLCalculationSettingsContext::SchXMLCalculationSettingsContext( SvXMLImport&
         if ( aIter.getToken() == XML_ELEMENT(TABLE, XML_DATE_VALUE) )
         {
             util::DateTime aNullDate;
-            ::sax::Converter::parseDateTime(aNullDate, aIter.toString());
+            ::sax::Converter::parseDateTime(aNullDate, aIter.toView());
             m_aNullDate <<= aNullDate;
         }
         else
