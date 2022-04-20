@@ -3794,7 +3794,7 @@ SfxVoidItem LoadStyles SID_TEMPLATE_LOAD
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Format;
+    GroupId = SfxGroupId::Template;
 ]
 
 SfxBoolItem Marks FN_VIEW_MARKS
