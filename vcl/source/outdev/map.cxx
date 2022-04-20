@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/unit_conversion.hxx>
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
 #include <vcl/cursor.hxx>
@@ -241,66 +242,49 @@ void OutputDevice::ImplInvalidateViewTransform()
     }
 }
 
-static tools::Long ImplLogicToPixel(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
-                                    tools::Long nMapDenom)
+// Use sal_Int64 to convert implicitly when calling
+
+static tools::Long ImplLogicToPixel(tools::Long n, sal_Int64 nDPI, sal_Int64 nMapNum,
+                                    sal_Int64 nMapDenom)
 {
     assert(nDPI > 0);
     assert(nMapDenom != 0);
-    if constexpr (sizeof(tools::Long) >= 8)
+    assert(nMapNum >= 0);
+    if (nMapNum == 0)
+        return 0;
+    if (nMapDenom < 0)
     {
-        assert(nMapNum >= 0);
-        //detect overflows
-        assert(nMapNum == 0
-               || std::abs(n) < std::numeric_limits<tools::Long>::max() / nMapNum / nDPI);
+        nMapDenom = -nMapDenom;
+        n = -n;
     }
-    sal_Int64 n64 = n;
-    n64 *= nMapNum;
-    n64 *= nDPI;
-    if (nMapDenom == 1)
-        n = static_cast<tools::Long>(n64);
-    else
-    {
-        n64 = 2 * n64 / nMapDenom;
-        if (n64 < 0)
-            --n64;
-        else
-            ++n64;
-        n = static_cast<tools::Long>(n64 / 2);
-    }
-    return n;
+    return o3tl::convertSaturate(n, nDPI * nMapNum, nMapDenom);
 }
 
-static double ImplLogicToPixel(double n, tools::Long nDPI, tools::Long nMapNum,
-                                         tools::Long nMapDenom)
+static double ImplLogicToPixel(double n, sal_Int64 nDPI, sal_Int64 nMapNum, sal_Int64 nMapDenom)
 {
     assert(nDPI > 0);
     assert(nMapDenom != 0);
     return n * nMapNum * nDPI / nMapDenom;
 }
 
-static tools::Long ImplPixelToLogic(tools::Long n, tools::Long nDPI, tools::Long nMapNum,
-                                    tools::Long nMapDenom)
+static tools::Long ImplPixelToLogic(tools::Long n, sal_Int64 nDPI, sal_Int64 nMapNum,
+                                    sal_Int64 nMapDenom)
 {
     assert(nDPI > 0);
+    assert(nMapDenom != 0);
     if (nMapNum == 0)
         return 0;
-    sal_Int64 nDenom = nDPI;
-    nDenom *= nMapNum;
-
-    sal_Int64 n64 = n;
-    n64 *= nMapDenom;
-    if (nDenom == 1)
-        n = static_cast<tools::Long>(n64);
-    else
+    if (nMapNum < 0)
     {
-        n64 = 2 * n64 / nDenom;
-        if (n64 < 0)
-            --n64;
-        else
-            ++n64;
-        n = static_cast<tools::Long>(n64 / 2);
+        nMapNum = -nMapNum;
+        n = -n;
     }
-    return n;
+    if (nMapDenom < 0)
+    {
+        nMapDenom = -nMapDenom;
+        n = -n;
+    }
+    return o3tl::convertSaturate(n, nMapDenom, nDPI * nMapNum);
 }
 
 tools::Long OutputDevice::ImplLogicXToDevicePixel( tools::Long nX ) const
