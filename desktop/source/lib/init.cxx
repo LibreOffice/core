@@ -3461,6 +3461,7 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
         int nOrigPart = 0;
         const bool isText = (doc_getDocumentType(pThis) == LOK_DOCTYPE_TEXT);
         int nViewId = nOrigViewId;
+        int nLastNonEditorView = nViewId;
         if (!isText)
         {
             // Check if just switching to another view is enough, that has
@@ -3470,14 +3471,28 @@ static void doc_paintPartTile(LibreOfficeKitDocument* pThis,
                 SfxViewShell* pViewShell = SfxViewShell::GetFirst();
                 while (pViewShell)
                 {
-                    if (pViewShell->getPart() == nPart)
+                    bool bIsInEdit = pViewShell->GetDrawView() &&
+                        pViewShell->GetDrawView()->GetTextEditOutliner();
+                    if (!bIsInEdit)
+                        nLastNonEditorView = pViewShell->GetViewShellId().get();
+
+                    if (pViewShell->getPart() == nPart && !bIsInEdit)
                     {
                         nViewId = static_cast<sal_Int32>(pViewShell->GetViewShellId());
+                        nLastNonEditorView = nViewId;
                         doc_setView(pThis, nViewId);
                         break;
                     }
                     pViewShell = SfxViewShell::GetNext(*pViewShell);
                 }
+            }
+
+            // if not found view with correct part - at least avoid rendering active textbox
+            SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
+            if (pCurrentViewShell && pCurrentViewShell->GetDrawView() &&
+                pCurrentViewShell->GetDrawView()->GetTextEditOutliner())
+            {
+                doc_setView(pThis, nLastNonEditorView);
             }
 
             nOrigPart = doc_getPart(pThis);
