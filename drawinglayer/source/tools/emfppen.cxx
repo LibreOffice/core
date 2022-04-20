@@ -18,7 +18,6 @@
  */
 
 #include <com/sun/star/rendering/PathCapType.hpp>
-#include <com/sun/star/rendering/PathJoinType.hpp>
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -179,27 +178,70 @@ namespace emfplushelper
     {
         switch (nEmfStroke)
         {
-            case EmfPlusLineCapTypeSquare: return rendering::PathCapType::SQUARE;
-            case EmfPlusLineCapTypeRound:  return rendering::PathCapType::ROUND;
+            case EmfPlusLineCapTypeSquare:
+                return rendering::PathCapType::SQUARE;
+            // we have no mapping for EmfPlusLineCapTypeTriangle,
+            // but it is similar to Round
+            case EmfPlusLineCapTypeTriangle: // fall-through
+            case EmfPlusLineCapTypeRound:
+                return rendering::PathCapType::ROUND;
         }
 
-        // we have no mapping for EmfPlusLineCapTypeTriangle = 0x00000003,
-        // so return BUTT always
         return rendering::PathCapType::BUTT;
     }
 
-    sal_Int8 EMFPPen::lcl_convertLineJoinType(sal_uInt32 nEmfLineJoin)
+    basegfx::B2DLineJoin EMFPPen::GetLineJoinType() const
     {
-        switch (nEmfLineJoin)
+        if (penDataFlags & EmfPlusPenDataJoin) // additional line join information
         {
-            case EmfPlusLineJoinTypeMiter:        // fall-through
-            case EmfPlusLineJoinTypeMiterClipped: return rendering::PathJoinType::MITER;
-            case EmfPlusLineJoinTypeBevel:        return rendering::PathJoinType::BEVEL;
-            case EmfPlusLineJoinTypeRound:        return rendering::PathJoinType::ROUND;
+            switch (lineJoin)
+            {
+                case EmfPlusLineJoinTypeMiter: // fall-through
+                case EmfPlusLineJoinTypeMiterClipped:
+                    return basegfx::B2DLineJoin::Miter;
+                case EmfPlusLineJoinTypeBevel:
+                    return basegfx::B2DLineJoin::Bevel;
+                case EmfPlusLineJoinTypeRound:
+                    return basegfx::B2DLineJoin::Round;
+            }
         }
+        // If nothing set, then miter applied with no limit
+        return basegfx::B2DLineJoin::Miter;
+    }
 
-        assert(false); // Line Join type isn't in specification.
-        return 0;
+    drawinglayer::attribute::StrokeAttribute
+    EMFPPen::GetStrokeAttribute(const double aTransformation) const
+    {
+        if (penDataFlags & EmfPlusPenDataLineStyle // pen has a predefined line style
+            && dashStyle != EmfPlusLineStyleCustom)
+        {
+            const double pw = aTransformation * penWidth;
+            switch (dashStyle)
+            {
+                case EmfPlusLineStyleDash:
+                    return drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw });
+                case EmfPlusLineStyleDot:
+                    return drawinglayer::attribute::StrokeAttribute({ pw, pw });
+                case EmfPlusLineStyleDashDot:
+                    return drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw, pw, pw });
+                case EmfPlusLineStyleDashDotDot:
+                    return drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw, pw, pw, pw, pw });
+            }
+        }
+        else if (penDataFlags & EmfPlusPenDataDashedLine) // pen has a custom dash line
+        {
+            const double pw = aTransformation * penWidth;
+            // StrokeAttribute needs a double vector while the pen provides a float vector
+            std::vector<double> aPattern(dashPattern.size());
+            for (size_t i = 0; i < aPattern.size(); i++)
+            {
+                // convert from float to double and multiply with the adjusted pen width
+                aPattern[i] = pw * dashPattern[i];
+            }
+            return drawinglayer::attribute::StrokeAttribute(std::move(aPattern));
+        }
+        //  EmfPlusLineStyleSolid: - do nothing special, use default stroke attribute
+        return drawinglayer::attribute::StrokeAttribute();
     }
 
     void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)
@@ -249,7 +291,7 @@ namespace emfplushelper
         if (penDataFlags & PenDataJoin)
         {
             s.ReadInt32(lineJoin);
-            SAL_WARN("drawinglayer.emf", "EMF+\t\tTODO PenDataJoin: " << LineJoinTypeToString(lineJoin) << " (0x" << std::hex << lineJoin << ")");
+            SAL_WARN("drawinglayer.emf", "EMF+\t\t LineJoin: " << LineJoinTypeToString(lineJoin) << " (0x" << std::hex << lineJoin << ")");
         }
         else
         {
