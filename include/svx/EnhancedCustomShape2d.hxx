@@ -127,7 +127,6 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
         Degree100               nRotateAngle;
 
         SAL_DLLPRIVATE bool     SetAdjustValueAsDouble( const double& rValue, const sal_Int32 nIndex );
-        SAL_DLLPRIVATE sal_Int32 GetLuminanceChange( sal_uInt32 nIndex ) const;
         SAL_DLLPRIVATE Color    GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const;
         SAL_DLLPRIVATE void AdaptObjColor(
             SdrPathObj& rObj,
@@ -183,6 +182,7 @@ class SVXCORE_DLLPUBLIC EnhancedCustomShape2d final : public SfxItemSet
             }
         };
 
+        sal_Int32 GetLuminanceChange( sal_uInt32 nIndex ) const;
         SAL_DLLPRIVATE bool     IsFlipVert() const { return bFlipV; };
         SAL_DLLPRIVATE bool     IsFlipHorz() const { return bFlipH; };
         SAL_DLLPRIVATE Degree100 GetRotateAngle() const { return nRotateAngle; };
