@@ -8,6 +8,7 @@ from config import parse_config
 
 from tools import replace_variables_in_string
 
+
 def update_all_url_entries(data, **kwargs):
     data['complete']['url'] = replace_variables_in_string(data['complete']['url'], **kwargs)
 
@@ -25,6 +26,7 @@ def update_all_url_entries(data, **kwargs):
             for lang, lang_file in partial['languages'].items():
                 lang_file['url'] = replace_variables_in_string(lang_file['url'], **kwargs)
 
+
 def main(argv):
     if len(argv) < 7:
         print("Usage: create_build_config.py $PRODUCTNAME $VERSION $BUILDID $PLATFORM $TARGETDIR $UPDATE_CONFIG")
@@ -32,11 +34,11 @@ def main(argv):
 
     config = parse_config(argv[6])
 
-    data = { 'productName' : argv[1],
-            'version' : argv[2],
-            'buildNumber' : argv[3],
-            'updateChannel' : config.channel,
-            'platform' : argv[4]
+    data = {'productName': argv[1],
+            'version': argv[2],
+            'buildNumber': argv[3],
+            'updateChannel': config.channel,
+            'platform': argv[4]
             }
 
     extra_data_files = ['complete_info.json', 'partial_update_info.json']
@@ -55,6 +57,7 @@ def main(argv):
 
     with open(os.path.join(argv[5], "build_config.json"), "w") as f:
         json.dump(data, f, indent=4)
+
 
 if __name__ == "__main__":
     main(sys.argv)
