@@ -114,35 +114,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116640)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xSections->getCount());
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108524)
-{
-    createSwDoc(DATA_DIRECTORY, "tdf108524.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // In total we expect two cells containing a section.
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
-
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
-    // This was 0, section wasn't split, instead it was only on the first page
-    // and it was cut off.
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesInSectionInTable)
-{
-    // This is similar to testTdf108524(), but the page boundary now is not in
-    // the middle of a multi-line paragraph: the section only contains oneliner
-    // paragraphs instead.
-    createSwDoc(DATA_DIRECTORY, "lines-in-section-in-table.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // In total we expect two cells containing a section.
-    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
-
-    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
-    // This was 0, section wasn't split, instead it was only on the first page
-    // and it was cut off.
-    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
 {
 #if HAVE_MORE_FONTS
@@ -178,49 +149,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testLinesMoveBackwardsInSectionInTable)
 #endif
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTableInSection)
-{
-#if HAVE_MORE_FONTS
-    // The document has a section, containing a table that spans over 2 pages.
-    createSwDoc(DATA_DIRECTORY, "table-in-sect.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // In total we expect 4 cells.
-    assertXPath(pXmlDoc, "/root/page/body/section/tab/row/cell", 4);
-
-    // Assert that on both pages the section contains 2 cells.
-    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell", 2);
-    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell", 2);
-#endif
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTableInNestedSection)
-{
-#if HAVE_MORE_FONTS
-    // The document has a nested section, containing a table that spans over 2 pages.
-    // This crashed the layout.
-    createSwDoc(DATA_DIRECTORY, "rhbz739252-3.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // Make sure the table is inside a section and spans over 2 pages.
-    assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
-    assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
-#endif
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112741)
-{
-#if HAVE_MORE_FONTS
-    createSwDoc(DATA_DIRECTORY, "tdf112741.fodt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // This was 5 pages.
-    assertXPath(pXmlDoc, "//page", 4);
-    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell/section", 1);
-    assertXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row/cell/section", 1);
-    // This failed, 3rd page contained no sections.
-    assertXPath(pXmlDoc, "//page[3]/body/tab/row/cell/tab/row/cell/section", 1);
-    assertXPath(pXmlDoc, "//page[4]/body/tab/row/cell/tab/row/cell/section", 1);
-#endif
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112860)
 {
 #if HAVE_MORE_FONTS
@@ -228,23 +156,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112860)
     // in the footer.
     // This crashed the layout.
     createSwDoc(DATA_DIRECTORY, "tdf112860.fodt");
-#endif
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113287)
-{
-#if HAVE_MORE_FONTS
-    createSwDoc(DATA_DIRECTORY, "tdf113287.fodt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//page", 2);
-    sal_uInt32 nCellTop
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/infos/bounds", "top").toUInt32();
-    sal_uInt32 nSectionTop
-        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/section/infos/bounds", "top")
-              .toUInt32();
-    // Make sure section frame is inside the cell frame.
-    // Expected greater than 4593, was only 3714.
-    CPPUNIT_ASSERT_GREATER(nCellTop, nSectionTop);
 #endif
 }
 
@@ -347,29 +258,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable)
     // page boundary.
     // This crashed the layout later in SwFrame::IsFootnoteAllowed().
     createSwDoc(DATA_DIRECTORY, "tdf112109.fodt");
-#endif
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable2)
-{
-#if HAVE_MORE_FONTS
-    createSwDoc(DATA_DIRECTORY, "split-section-in-nested-table.fodt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    sal_uInt32 nSection1
-        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
-    sal_uInt32 nSection1Follow
-        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "follow")
-              .toUInt32();
-    // This failed, the section wasn't split inside a nested table.
-    sal_uInt32 nSection2
-        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
-    sal_uInt32 nSection2Precede
-        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "precede")
-              .toUInt32();
-
-    // Make sure that the first's follow and the second's precede is correct.
-    CPPUNIT_ASSERT_EQUAL(nSection2, nSection1Follow);
-    CPPUNIT_ASSERT_EQUAL(nSection1, nSection2Precede);
 #endif
 }
 
@@ -591,19 +479,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf99689TableOfTables)
     CPPUNIT_ASSERT(pNext->HasHints());
     nAttrType = lcl_getAttributeIDFromHints(pNext->GetSwpHints());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(RES_CHRATR_ESCAPEMENT), nAttrType);
-}
-
-// tdf#112448: Fix: take correct line height
-//
-// When line metrics is not calculated we need to call CalcRealHeight()
-// before usage of the Height() and GetRealHeight().
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf112448)
-{
-    createSwDoc(DATA_DIRECTORY, "tdf112448.odt");
-
-    // check actual number of line breaks in the paragraph
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "/root/page/body/txt/LineBreak", 2);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf113790)

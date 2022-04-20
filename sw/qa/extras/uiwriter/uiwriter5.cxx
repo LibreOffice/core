@@ -2654,13 +2654,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf109266)
     CPPUNIT_ASSERT_EQUAL(OUString("lOREM IPSUM..."), pTextNode->GetRedlineText());
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf129655)
-{
-    createSwDoc(DATA_DIRECTORY, "tdf129655-vtextbox.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    assertXPath(pXmlDoc, "//anchored/fly/txt[@WritingMode='Vertical']", 1);
-}
-
 static uno::Reference<text::XTextRange> getAssociatedTextRange(uno::Any object)
 {
     // possible cases:

@@ -1333,19 +1333,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf68183)
     CPPUNIT_ASSERT_EQUAL(true, pTextNode->GetSwAttrSet().HasItem(RES_PARATR_RSID));
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testCp1000115)
-{
-    createSwDoc(DATA_DIRECTORY, "cp1000115.fodt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
-    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
-    // This was 1: the long paragraph in the B1 cell did flow over to the
-    // second page, so there was only one paragraph in the second cell of the
-    // second page.
-    CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
-    xmlXPathFreeObject(pXmlObj);
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
 {
     //This is a crash test
@@ -1371,16 +1358,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf63214)
     pWrtShell->SplitNode();
     rUndoManager.Undo();
     rUndoManager.Redo();
-}
-
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf90003)
-{
-    createSwDoc(DATA_DIRECTORY, "tdf90003.odt");
-    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    CPPUNIT_ASSERT(pXmlDoc);
-    // This was 1: an unexpected fly portion was created, resulting in too
-    // large x position for the empty paragraph marker.
-    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Fly']", 0);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf51741)

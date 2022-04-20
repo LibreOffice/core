@@ -19,6 +19,7 @@
 #include <editeng/unolingu.hxx>
 #include <o3tl/string_view.hxx>
 
+#include <config_fonts.h>
 #include <unotxdoc.hxx>
 #include <rootfrm.hxx>
 #include <wrtsh.hxx>
@@ -1889,6 +1890,366 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
     // We expect, that the field value is not changed. Otherwise there is a problem:
     assertXPath(pXmlDoc, "/root/page/body/txt/Special[@nType='PortionType::Field']", "rText",
                 "1,234.56");
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testCp1000115)
+{
+    createSwDoc(DATA_DIRECTORY, "cp1000115.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "/root/page[2]/body/tab/row/cell[2]/txt");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    // This was 1: the long paragraph in the B1 cell did flow over to the
+    // second page, so there was only one paragraph in the second cell of the
+    // second page.
+    CPPUNIT_ASSERT_EQUAL(2, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf90003)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf90003.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    CPPUNIT_ASSERT(pXmlDoc);
+    // This was 1: an unexpected fly portion was created, resulting in too
+    // large x position for the empty paragraph marker.
+    assertXPath(pXmlDoc, "//Special[@nType='PortionType::Fly']", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf88453)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf88453.odt");
+    calcLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 0: the table does not fit the first page, but it wasn't split
+    // to continue on the second page.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf98987)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf98987.docx");
+    calcLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/SdrObject", "name",
+                "Rectangle 1");
+    sal_Int32 nRectangle1
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[2]/bounds", "top")
+              .toInt32();
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject", "name",
+                "Rectangle 2");
+    sal_Int32 nRectangle2
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top")
+              .toInt32();
+    CPPUNIT_ASSERT_GREATER(nRectangle1, nRectangle2);
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/SdrObject", "name",
+                "Rectangle 3");
+    sal_Int32 nRectangle3
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[3]/bounds", "top")
+              .toInt32();
+    // This failed: the 3rd rectangle had a smaller "top" value than the 2nd one, it even overlapped with the 1st one.
+    CPPUNIT_ASSERT_GREATER(nRectangle2, nRectangle3);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf99004)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf99004.docx");
+    calcLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nTextbox1Top
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "top").toInt32();
+    sal_Int32 nTextBox1Height
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/fly/infos/bounds", "height").toInt32();
+    sal_Int32 nTextBox1Bottom = nTextbox1Top + nTextBox1Height;
+
+    assertXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/SdrObject", "name",
+                "Rectangle 2");
+    sal_Int32 nRectangle2Top
+        = getXPath(pXmlDoc, "/root/page/body/txt/anchored/SwAnchoredDrawObject[1]/bounds", "top")
+              .toInt32();
+    // This was 3291 and 2531, should be now around 2472 and 2531, i.e. the two rectangles should not overlap anymore.
+    CPPUNIT_ASSERT(nTextBox1Bottom < nRectangle2Top);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf104440)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf104440.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    xmlXPathObjectPtr pXmlObj = getXPathNode(pXmlDoc, "//page[2]/body/txt/anchored");
+    xmlNodeSetPtr pXmlNodes = pXmlObj->nodesetval;
+    // This was 0: both Text Frames in the document were anchored to a
+    // paragraph on page 1, while we expect that the second Text Frame is
+    // anchored to a paragraph on page 2.
+    CPPUNIT_ASSERT_EQUAL(1, xmlXPathNodeSetGetLength(pXmlNodes));
+    xmlXPathFreeObject(pXmlObj);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf104425)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf104425.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // The document contains one top-level 1-cell table with minimum row height set to 70 cm,
+    // and the cell contents does not exceed the minimum row height.
+    // It should span over 3 pages.
+    assertXPath(pXmlDoc, "//page", 3);
+    sal_Int32 nHeight1
+        = getXPath(pXmlDoc, "//page[1]/body/tab/row/infos/bounds", "height").toInt32();
+    sal_Int32 nHeight2
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/infos/bounds", "height").toInt32();
+    sal_Int32 nHeight3
+        = getXPath(pXmlDoc, "//page[3]/body/tab/row/infos/bounds", "height").toInt32();
+    double fSumHeight_mm = o3tl::convert<double>(nHeight1 + nHeight2 + nHeight3, o3tl::Length::twip,
+                                                 o3tl::Length::mm);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(700.0, fSumHeight_mm, 0.05);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf35021_tabOverMarginDemo)
+{
+#if HAVE_MORE_FONTS
+    createSwDoc(DATA_DIRECTORY, "tdf35021_tabOverMarginDemo.doc");
+    calcLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Tabs should go past the margin @ ~3381
+    sal_Int32 nMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
+    // left tab was 3381 because it got its own full line
+    sal_Int32 nWidth
+        = getXPath(pXmlDoc, "//SwFixPortion[@type='PortionType::TabLeft']", "width").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~4479", nMargin < nWidth);
+    // center tab was 842
+    nWidth = getXPath(pXmlDoc, "//SwFixPortion[@type='PortionType::TabCenter']", "width").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Center Tab width is ~3521", nMargin < nWidth);
+    // right tab was probably the same as center tab.
+    nWidth = getXPath(pXmlDoc, "//SwFixPortion[@type='PortionType::TabRight']", "width").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Right Tab width is ~2907", sal_Int32(2500) < nWidth);
+    // decimal tab was 266
+    nWidth
+        = getXPath(pXmlDoc, "//SwFixPortion[@type='PortionType::TabDecimal']", "width").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106701_tabOverMarginAutotab)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf106701_tabOverMarginAutotab.doc");
+    calcLayout();
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // The right margin is ~3378
+    sal_Int32 nRightMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
+    // Automatic tabstops should never be affected by tabOverMargin compatibility
+    // The 1st line's width previously was ~9506
+    sal_Int32 nWidth = getXPath(pXmlDoc, "//LineBreak[1]", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("1st line's width is less than the right margin", nWidth < nRightMargin);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf104492)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf104492.docx");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // The document should split table over 3 pages.
+    assertXPath(pXmlDoc, "//page", 3);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf107025)
+{
+    // Tdf107025 - characters advance with wrong distance, so that
+    // they are cluttered because of negative value or
+    // break into multiple lines because of overflow.
+    // The test document uses DFKAI-SB shipped with Windows.
+    createSwDoc(DATA_DIRECTORY, "tdf107025.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Verify the number of characters in each line.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         getXPath(pXmlDoc, "(//SwLinePortion)[1]", "length").toInt32());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9),
+                         getXPath(pXmlDoc, "(//SwLinePortion)[2]", "length").toInt32());
+
+    // Do the subsequent test only if the first line can be displayed,
+    // in case that the required font does not exist.
+    sal_Int32 nWidth1 = getXPath(pXmlDoc, "(//SwLinePortion)[1]", "width").toInt32();
+    if (!nWidth1)
+        return;
+
+    CPPUNIT_ASSERT(!parseDump("(//SwLinePortion)[2]", "width").isEmpty());
+    // Width of the second line is expected to be 9 times of the first.
+    sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nWidth2 / nWidth1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf107362)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf107362.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nHeight
+        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nHeight").toInt32();
+    sal_Int32 nWidth1
+        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[1]", "nWidth").toInt32();
+    sal_Int32 nWidth2
+        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::Text'])[2]", "nWidth").toInt32();
+    sal_Int32 nLineWidth = getXPath(pXmlDoc, "//LineBreak", "nWidth").toInt32();
+    sal_Int32 nKernWidth = nLineWidth - nWidth1 - nWidth2;
+    // Test only if fonts are available
+    if (nWidth1 > 500 && nWidth2 > 200)
+    {
+        // Kern width should be smaller than 1/3 of the CJK font height.
+        CPPUNIT_ASSERT(nKernWidth * 3 < nHeight);
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf106736)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf106736-grid.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_Int32 nWidth
+        = getXPath(pXmlDoc, "(//Text[@nType='PortionType::TabLeft'])[1]", "nWidth").toInt32();
+    // In tdf106736, width of tab overflow so that it got
+    // width value around 9200, expected value is around 103
+    CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~103", nWidth < 150);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf114306)
+{
+    createSwDoc(DATA_DIRECTORY, "fdo114306.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    // There are 2 long paragraphs in cell A1.
+    // A part of paragraph 2 should flow over to the second page but
+    // *not* the whole paragraph. There should be 2 paragraphs on
+    // page 1 and 1 paragraph on page 2.
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab[1]/row[1]/cell[1]/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab[1]/row[1]/cell[1]/txt", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf129655)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf129655-vtextbox.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//anchored/fly/txt[@WritingMode='Vertical']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf108524)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf108524.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // In total we expect two cells containing a section.
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
+    // This was 0, section wasn't split, instead it was only on the first page
+    // and it was cut off.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testLinesInSectionInTable)
+{
+    // This is similar to testTdf108524(), but the page boundary now is not in
+    // the middle of a multi-line paragraph: the section only contains oneliner
+    // paragraphs instead.
+    createSwDoc(DATA_DIRECTORY, "lines-in-section-in-table.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // In total we expect two cells containing a section.
+    assertXPath(pXmlDoc, "/root/page/body/tab/row/cell/section", 2);
+
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/section", 1);
+    // This was 0, section wasn't split, instead it was only on the first page
+    // and it was cut off.
+    assertXPath(pXmlDoc, "/root/page[2]/body/tab/row/cell/section", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableInSection)
+{
+#if HAVE_MORE_FONTS
+    // The document has a section, containing a table that spans over 2 pages.
+    createSwDoc(DATA_DIRECTORY, "table-in-sect.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // In total we expect 4 cells.
+    assertXPath(pXmlDoc, "/root/page/body/section/tab/row/cell", 4);
+
+    // Assert that on both pages the section contains 2 cells.
+    assertXPath(pXmlDoc, "/root/page[1]/body/section/tab/row/cell", 2);
+    assertXPath(pXmlDoc, "/root/page[2]/body/section/tab/row/cell", 2);
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTableInNestedSection)
+{
+#if HAVE_MORE_FONTS
+    // The document has a nested section, containing a table that spans over 2 pages.
+    // This crashed the layout.
+    createSwDoc(DATA_DIRECTORY, "rhbz739252-3.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Make sure the table is inside a section and spans over 2 pages.
+    assertXPath(pXmlDoc, "//page[1]//section/tab", 1);
+    assertXPath(pXmlDoc, "//page[2]//section/tab", 1);
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf112741)
+{
+#if HAVE_MORE_FONTS
+    createSwDoc(DATA_DIRECTORY, "tdf112741.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // This was 5 pages.
+    assertXPath(pXmlDoc, "//page", 4);
+    assertXPath(pXmlDoc, "//page[1]/body/tab/row/cell/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "//page[2]/body/tab/row/cell/tab/row/cell/section", 1);
+    // This failed, 3rd page contained no sections.
+    assertXPath(pXmlDoc, "//page[3]/body/tab/row/cell/tab/row/cell/section", 1);
+    assertXPath(pXmlDoc, "//page[4]/body/tab/row/cell/tab/row/cell/section", 1);
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf113287)
+{
+#if HAVE_MORE_FONTS
+    createSwDoc(DATA_DIRECTORY, "tdf113287.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "//page", 2);
+    sal_uInt32 nCellTop
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/infos/bounds", "top").toUInt32();
+    sal_uInt32 nSectionTop
+        = getXPath(pXmlDoc, "//page[2]/body/tab/row/cell[1]/section/infos/bounds", "top")
+              .toUInt32();
+    // Make sure section frame is inside the cell frame.
+    // Expected greater than 4593, was only 3714.
+    CPPUNIT_ASSERT_GREATER(nCellTop, nSectionTop);
+#endif
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testSectionInTableInTable2)
+{
+#if HAVE_MORE_FONTS
+    createSwDoc(DATA_DIRECTORY, "split-section-in-nested-table.fodt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    sal_uInt32 nSection1
+        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
+    sal_uInt32 nSection1Follow
+        = getXPath(pXmlDoc, "//page[1]//body/tab/row/cell/tab/row/cell/section", "follow")
+              .toUInt32();
+    // This failed, the section wasn't split inside a nested table.
+    sal_uInt32 nSection2
+        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "id").toUInt32();
+    sal_uInt32 nSection2Precede
+        = getXPath(pXmlDoc, "//page[2]//body/tab/row/cell/tab/row/cell/section", "precede")
+              .toUInt32();
+
+    // Make sure that the first's follow and the second's precede is correct.
+    CPPUNIT_ASSERT_EQUAL(nSection2, nSection1Follow);
+    CPPUNIT_ASSERT_EQUAL(nSection1, nSection2Precede);
+#endif
+}
+
+// tdf#112448: Fix: take correct line height
+//
+// When line metrics is not calculated we need to call CalcRealHeight()
+// before usage of the Height() and GetRealHeight().
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf112448)
+{
+    createSwDoc(DATA_DIRECTORY, "tdf112448.odt");
+
+    // check actual number of line breaks in the paragraph
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page/body/txt/LineBreak", 2);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
