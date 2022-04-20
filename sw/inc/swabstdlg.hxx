@@ -323,6 +323,11 @@ public:
     virtual std::shared_ptr<SfxDialogController> GetController() = 0;
 };
 
+/**
+ * Interface for e.g. the insert -> bookmark -> rename dialog. It's implemented by
+ * AbstractSwRenameXNamedDlg_Impl, but SwInsertBookmarkDlg only knows about this interface and the
+ * SwAbstractDialogFactory::CreateSwRenameXNamedDlg() factory.
+ */
 class AbstractSwRenameXNamedDlg : public VclAbstractDialog
 {
 protected:
