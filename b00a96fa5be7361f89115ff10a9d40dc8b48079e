@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "99a69cab_30e064fe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-20T09:59:31Z",
+      "side": 1,
+      "message": "Cloph commented in the chat:\ndon\u0027t like the duplication here, a common list that\u0027s reused would be nicer. It is just the existing german - anything with ß - so \"grep -v ß\" or a common list that\u0027s expanded instead would be nicer.",
+      "revId": "b00a96fa5be7361f89115ff10a9d40dc8b48079e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
