@@ -100,6 +100,7 @@ public:
                         SwPrintData const*const pPrintData = nullptr ) const override;
     const SwFrame *Lower() const { return m_pLower; }
           SwFrame *Lower()       { return m_pLower; }
+    bool ContainsDeleteForbiddenLayFrame() const;
     const SwContentFrame *ContainsContent() const;
     inline SwContentFrame *ContainsContent();
     const SwCellFrame *FirstCell() const;
