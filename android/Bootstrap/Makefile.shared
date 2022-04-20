@@ -23,8 +23,7 @@ OBJLOCAL=$(BUILDDIR)/android/obj/local/$(ANDROID_APP_ABI)
 #
 
 local.properties: $(BUILDDIR)/config_host.mk
-	echo ndk.dir=$(ANDROID_NDK_DIR) >local.properties
-	echo sdk.dir=$(ANDROID_SDK_DIR) >>local.properties
+	echo sdk.dir=$(ANDROID_SDK_DIR) >local.properties
 
 #
 # Build / link the single .so for this app
@@ -105,6 +104,9 @@ liboSettings.gradle: $(BUILDDIR)/config_build.mk $(BUILDDIR)/config_host.mk
 		&& echo "    liboVersionMajor    = '$(LIBO_VERSION_MAJOR)'" \
 		&& echo "    liboVersionMinor    = '$(LIBO_VERSION_MINOR)'" \
 		&& echo "    liboGitFullCommit   = '$(shell cd $(SRCDIR) && git log -1 --format=%H)'" \
+		&& echo "}" \
+		&& echo "android {" \
+		&& echo "    ndkPath '$(ANDROID_NDK_DIR)'" \
 		&& echo "}" \
 		&& echo "android.defaultConfig {" \
 		&& echo "    applicationId '$(ANDROID_PACKAGE_NAME)'" \
