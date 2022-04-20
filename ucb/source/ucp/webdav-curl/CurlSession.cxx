@@ -620,9 +620,10 @@ CurlSession::CurlSession(uno::Reference<uno::XComponentContext> const& xContext,
     // en.wikipedia.org:80 forces back 403 "Scripts should use an informative
     // User-Agent string with contact information, or they may be IP-blocked
     // without notice" otherwise:
-    OString const useragent(OString::Concat("LibreOffice " LIBO_VERSION_DOTTED " curl/")
-                            + ::std::string_view(pVersion->version, strlen(pVersion->version)) + " "
-                            + pVersion->ssl_version);
+    OString const useragent(
+        OString::Concat("LibreOffice " LIBO_VERSION_DOTTED " denylistedbackend/")
+        + ::std::string_view(pVersion->version, strlen(pVersion->version)) + " "
+        + pVersion->ssl_version);
     // looks like an explicit "User-Agent" header in CURLOPT_HTTPHEADER
     // will override CURLOPT_USERAGENT, see Curl_http_useragent(), so no need
     // to check anything here
