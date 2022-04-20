@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 // buildhost settings - paths and the like
 apply from: 'liboSettings.gradle'
 
-project.ext.set("archivesBaseName", "LibreOfficeViewer")
 allprojects {
     repositories {
         jcenter()
