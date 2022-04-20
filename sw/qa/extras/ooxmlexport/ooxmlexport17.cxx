@@ -233,8 +233,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148361, "tdf148361.docx")
     uno::Reference<text::XTextField> xTextField1(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("itadmin"), xTextField1->getPresentation(false));
 
-    uno::Reference<text::XTextField> xTextField2(xFields->nextElement(), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(OUString("[Type text]"), xTextField2->getPresentation(false));
+    OUString aActual = getParagraph(2)->getString();
+    // This was "itadmin".
+    CPPUNIT_ASSERT_EQUAL(OUString("[Type text]"), aActual);
 }
 
 DECLARE_OOXMLEXPORT_TEST(testTdf142407, "tdf142407.docx")

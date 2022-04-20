@@ -42,6 +42,7 @@ enum class SdtControlType
     datePicker,
     dropDown,
     plainText,
+    richText,
     unsupported, // Sdt block is defined, but we still do not support such type of field
     unknown
 };
@@ -92,6 +93,9 @@ class SdtHelper final : public virtual SvRefBase
     /// Check if m_xPropertiesXMLs is initialized and loaded (need extra flag to distinguish
     /// empty sequence from not yet initialized)
     bool m_bPropertiesXMLsLoaded;
+
+    /// Current contents are placeholder text.
+    bool m_bShowingPlcHdr = false;
 
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(css::awt::Size aSize,
@@ -155,6 +159,9 @@ public:
     bool isInteropGrabBagEmpty() const;
     bool containedInInteropGrabBag(const OUString& rValueName);
     sal_Int32 getInteropGrabBagSize() const;
+
+    void SetShowingPlcHdr();
+    bool GetShowingPlcHdr() const;
 };
 
 } // namespace writerfilter::dmapper

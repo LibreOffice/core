@@ -3281,6 +3281,7 @@ void DocxAttributeOutput::RunText( const OUString& rText, rtl_TextEncoding /*eCh
     if (m_nCloseContentControlInThisRun > 0)
     {
         ++m_nCloseContentControlInPreviousRun;
+        --m_nCloseContentControlInThisRun;
     }
     m_bRunTextIsOn = true;
     // one text can be split into more <w:t>blah</w:t>'s by line breaks etc.

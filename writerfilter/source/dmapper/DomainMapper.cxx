@@ -1074,14 +1074,33 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtContent:
+        case NS_ooxml::LN_CT_SdtRun_sdtContent:
             if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::unknown)
             {
                 // Still not determined content type? and it is even not unsupported? Then it is plain text field
                 m_pImpl->m_pSdtHelper->setControlType(SdtControlType::plainText);
+                if (nName == NS_ooxml::LN_CT_SdtRun_sdtContent)
+                {
+                    m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
+                    m_pImpl->PushSdt();
+                }
             }
             m_pImpl->SetSdt(true);
         break;
         case NS_ooxml::LN_CT_SdtBlock_sdtEndContent:
+        case NS_ooxml::LN_CT_SdtRun_sdtEndContent:
+            if (nName == NS_ooxml::LN_CT_SdtRun_sdtEndContent)
+            {
+                switch (m_pImpl->m_pSdtHelper->getControlType())
+                {
+                    case SdtControlType::richText:
+                        m_pImpl->PopSdt();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             m_pImpl->SetSdt(false);
 
             // It's not possible to insert the relevant property to the character context here:
@@ -2723,6 +2742,11 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
             pProperties->resolve(*this);
         m_pImpl->m_pSdtHelper->appendToInteropGrabBag(getInteropGrabBag());
         m_pImpl->disableInteropGrabBag();
+    }
+    break;
+    case NS_ooxml::LN_CT_SdtPr_showingPlcHdr:
+    {
+        m_pImpl->m_pSdtHelper->SetShowingPlcHdr();
     }
     break;
     case NS_ooxml::LN_CT_SdtPr_dataBinding:
