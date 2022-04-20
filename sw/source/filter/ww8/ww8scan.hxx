@@ -264,12 +264,12 @@ class WW8SprmIter
 private:
     const wwSprmParser &mrSprmParser;
     // these members will be updated
-    const sal_uInt8* pSprms; // remaining part of the SPRMs ( == start of current SPRM)
-    const sal_uInt8* pCurrentParams; // start of current SPRM's parameters
-    sal_uInt16 nCurrentId;
-    sal_Int32 nCurrentSize;
+    const sal_uInt8* m_pSprms; // remaining part of the SPRMs ( == start of current SPRM)
+    const sal_uInt8* m_pCurrentParams; // start of current SPRM's parameters
+    sal_uInt16 m_nCurrentId;
+    sal_Int32 m_nCurrentSize;
 
-    sal_Int32 nRemLen;   // length of remaining SPRMs (including current SPRM)
+    sal_Int32 m_nRemLen;   // length of remaining SPRMs (including current SPRM)
 
     void UpdateMyMembers();
 
@@ -280,10 +280,10 @@ public:
     SprmResult FindSprm(sal_uInt16 nId, bool bFindFirst, const sal_uInt8* pNextByteMatch = nullptr);
     void  advance();
     const sal_uInt8* GetSprms() const
-        { return ( pSprms && (0 < nRemLen) ) ? pSprms : nullptr; }
-    const sal_uInt8* GetCurrentParams() const { return pCurrentParams; }
-    sal_uInt16 GetCurrentId() const { return nCurrentId; }
-    sal_Int32 GetRemLen() const { return nRemLen; }
+        { return ( m_pSprms && (0 < m_nRemLen) ) ? m_pSprms : nullptr; }
+    const sal_uInt8* GetCurrentParams() const { return m_pCurrentParams; }
+    sal_uInt16 GetCurrentId() const { return m_nCurrentId; }
+    sal_Int32 GetRemLen() const { return m_nRemLen; }
 
 private:
     WW8SprmIter(const WW8SprmIter&) = delete;
@@ -434,10 +434,10 @@ public:
 class WW8PLCFx_PCDAttrs : public WW8PLCFx
 {
 private:
-    WW8PLCFpcd_Iter* pPcdI;
-    WW8PLCFx_PCD* pPcd;
+    WW8PLCFpcd_Iter* m_pPcdI;
+    WW8PLCFx_PCD* m_pPcd;
     std::vector<std::unique_ptr<sal_uInt8[]>> const & mrGrpprls; // attribute of Piece-table
-    SVBT32 aShortSprm;          // mini storage: can contain ONE sprm with
+    SVBT32 m_aShortSprm;          // mini storage: can contain ONE sprm with
                                 // 1 byte param
 
     WW8PLCFx_PCDAttrs(const WW8PLCFx_PCDAttrs&) = delete;
@@ -453,7 +453,7 @@ public:
     virtual void GetSprms( WW8PLCFxDesc* p ) override;
     virtual void advance() override;
 
-    WW8PLCFpcd_Iter* GetIter() const { return pPcdI; }
+    WW8PLCFpcd_Iter* GetIter() const { return m_pPcdI; }
 };
 
 class WW8PLCFx_PCD : public WW8PLCFx            // iterator for Piece table
@@ -664,11 +664,11 @@ class WW8PLCFx_SEPX : public WW8PLCFx
 {
 private:
     wwSprmParser maSprmParser;
-    SvStream* pStrm;
-    std::unique_ptr<WW8PLCF> pPLCF;
-    std::unique_ptr<sal_uInt8[]> pSprms;
-    sal_uInt16 nArrMax;
-    sal_uInt16 nSprmSiz;
+    SvStream* m_pStrm;
+    std::unique_ptr<WW8PLCF> m_pPLCF;
+    std::unique_ptr<sal_uInt8[]> m_pSprms;
+    sal_uInt16 m_nArrMax;
+    sal_uInt16 m_nSprmSiz;
 
     WW8PLCFx_SEPX(const WW8PLCFx_SEPX&) = delete;
     WW8PLCFx_SEPX& operator=(const WW8PLCFx_SEPX&) = delete;
@@ -695,8 +695,8 @@ public:
 class WW8PLCFx_SubDoc : public WW8PLCFx
 {
 private:
-    std::unique_ptr<WW8PLCF> pRef;
-    std::unique_ptr<WW8PLCF> pText;
+    std::unique_ptr<WW8PLCF> m_pRef;
+    std::unique_ptr<WW8PLCF> m_pText;
 
     WW8PLCFx_SubDoc(const WW8PLCFx_SubDoc&) = delete;
     WW8PLCFx_SubDoc& operator=(const WW8PLCFx_SubDoc&) = delete;
@@ -713,12 +713,12 @@ public:
     // returns reference descriptors
     const void* GetData() const
     {
-        return pRef ? pRef->GetData( pRef->GetIdx() ) : nullptr;
+        return m_pRef ? m_pRef->GetData( m_pRef->GetIdx() ) : nullptr;
     }
 
     virtual void GetSprms(WW8PLCFxDesc* p) override;
     virtual void advance() override;
-    tools::Long Count() const { return pRef ? pRef->GetIMax() : 0; }
+    tools::Long Count() const { return m_pRef ? m_pRef->GetIMax() : 0; }
 };
 
 /// Iterator for fields
