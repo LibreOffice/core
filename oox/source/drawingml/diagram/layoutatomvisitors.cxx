@@ -184,7 +184,7 @@ void ShapeTemplateVisitor::visit(ShapeAtom& rAtom)
     // fill, unshare those.
     mpShape->cloneFillProperties();
 
-    // add/set ModelID from currrent node to allow later association
+    // add/set ModelID from current node to allow later association
     if (mpCurrentNode)
         mpShape->setDiagramDataModelID(mpCurrentNode->msModelId);
 }
