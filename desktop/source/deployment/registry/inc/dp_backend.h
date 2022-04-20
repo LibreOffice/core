@@ -83,6 +83,7 @@ protected:
         ::rtl::Reference< ::dp_misc::AbortChannel > const & abortChannel,
         css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
         = 0;
+    virtual bool canRunOOP_() const { return false; }
 
     virtual ~Package() override;
     Package( ::rtl::Reference<PackageRegistryBackend> const & myBackend,
