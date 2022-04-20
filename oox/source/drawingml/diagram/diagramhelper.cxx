@@ -220,7 +220,7 @@ std::shared_ptr< ::oox::drawingml::Theme > AdvancedDiagramHelper::getOrCreateThe
 {
     // (Re-)Use already existing Theme if existing/imported if possible.
     // If not, re-import Theme if data is available and thus possible
-    if(hasDiagramData() && (ForceThemePtrReceation() || !mpThemePtr))
+    if(hasDiagramData() && (ForceThemePtrRecreation() || !mpThemePtr))
     {
         // get the originally imported dom::XDocument
         const uno::Reference< css::xml::dom::XDocument >& xThemeDocument(mpDiagramPtr->getData()->getThemeDocument());
