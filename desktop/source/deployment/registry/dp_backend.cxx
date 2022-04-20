@@ -620,6 +620,8 @@ void Package::processPackage_impl(
                       (option.Value.IsAmbiguous ||
                        (doRegisterPackage ? !option.Value.Value
                                         : option.Value.Value)));
+            if (!action && doRegisterPackage && canRunOOP_())
+                action = true;
             if (action) {
 
                 OUString displayName = isRemoved() ? getName() : getDisplayName();

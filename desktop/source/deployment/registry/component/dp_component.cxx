@@ -56,6 +56,8 @@
 #include <vector>
 #include "dp_compbackenddb.hxx"
 
+#include <officecfg/Office/ExtensionManager.hxx>
+
 using namespace ::dp_misc;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -135,6 +137,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
+        virtual bool canRunOOP_() const override { return true; }
 
         Reference<registry::XSimpleRegistry> getRDB() const;
 
@@ -163,6 +166,8 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             bool startup,
             ::rtl::Reference<AbortChannel> const & abortChannel,
             Reference<XCommandEnvironment> const & xCmdEnv ) override;
+        virtual bool canRunOOP_() const override { return true; }
+
     public:
         ComponentsPackageImpl(
             ::rtl::Reference<PackageRegistryBackend> const & myBackend,
@@ -1313,7 +1318,12 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
                 }
             }
             if (pos >= 0)
-                m_registered = Reg::Registered;
+            {
+                if (!officecfg::Office::ExtensionManager::ExtensionSecurity::RunAlwaysOutOfProcess::get())
+                    m_registered = Reg::Registered;
+                else
+                    m_registered = Reg::MaybeRegistered;
+            }
             else if (bAmbiguousComponentName)
                 m_registered = Reg::MaybeRegistered;
         }
@@ -1353,7 +1363,8 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     if (doRegisterPackage) {
         ComponentBackendDb::Data data;
         css::uno::Reference< css::uno::XComponentContext > context;
-        if (startup) {
+
+        if (startup && !officecfg::Office::ExtensionManager::ExtensionSecurity::RunAlwaysOutOfProcess::get()) {
             context = that->getComponentContext();
         } else {
             context.set(that->getObject(url), css::uno::UNO_QUERY);
