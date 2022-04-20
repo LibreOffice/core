@@ -1025,6 +1025,8 @@ bool IsPageFrameEmpty(SwPageFrame const& rPage)
          rPage.FindFootnoteCont() ||
          (nullptr != (pBody = rPage.FindBodyCont()) &&
             ( pBody->ContainsContent() ||
+              // check for section frames that are being formatted on the stack
+              rPage.ContainsDeleteForbiddenLayFrame() ||
                 // #i47580#
                 // Do not delete page if there's an empty tabframe
                 // left. I think it might be correct to use ContainsAny()
