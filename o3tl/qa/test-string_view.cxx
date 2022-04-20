@@ -603,7 +603,9 @@ private:
     void testGetToken()
     {
         {
-            OUString suTokenStr;
+            // Explicit initialization of suTokenStr to avoid an unhelpful loplugin:stringviewvar;
+            // it is the o3tl::getToken overload taking OUString that we want to test here:
+            OUString suTokenStr("");
             sal_Int32 nIndex = 0;
             do
             {
