@@ -709,7 +709,7 @@ Reference< chart2::data::XDataSource > SAL_CALL InternalDataProvider::createData
     {
         //return split complex categories if we have any:
         std::vector< Reference< chart2::data::XLabeledDataSequence > > aComplexCategories;
-        vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
+        const vector< vector< uno::Any > > & aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         if( bUseColumns==m_bDataInColumns )
         {
             sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
@@ -907,7 +907,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     else if( aRange.match( lcl_aCategoriesLevelRangeNamePrefix ) )
     {
         sal_Int32 nLevel = o3tl::toInt32(aRange.subView( strlen(lcl_aCategoriesLevelRangeNamePrefix) ));
-        vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
+        const vector< vector< uno::Any > > & aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         if( nLevel < lcl_getInnerLevelCount( aCategories ) )
         {
             aResult.realloc( aCategories.size() );
@@ -917,7 +917,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     }
     else if( aRange == lcl_aCategoriesRangeName )
     {
-        vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
+        const vector< vector< uno::Any > > & aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
         sal_Int32 nLevelCount = lcl_getInnerLevelCount( aCategories );
         if( nLevelCount == 1 )
         {
@@ -1379,7 +1379,7 @@ uno::Sequence< OUString > SplitCategoriesProvider_ForComplexDescriptions::getStr
 // ____ XDateCategories ____
 Sequence< double > SAL_CALL InternalDataProvider::getDateCategories()
 {
-    vector< vector< uno::Any > > aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
+    const vector< vector< uno::Any > > & aCategories( m_bDataInColumns ? m_aInternalData.getComplexRowLabels() : m_aInternalData.getComplexColumnLabels());
     sal_Int32 nCount = aCategories.size();
     Sequence< double > aDoubles( nCount );
     auto aDoublesRange = asNonConstRange(aDoubles);
@@ -1478,14 +1478,14 @@ void SAL_CALL InternalDataProvider::setColumnDescriptions( const Sequence< OUStr
 
 Sequence< OUString > SAL_CALL InternalDataProvider::getRowDescriptions()
 {
-    vector< vector< uno::Any > > aComplexLabels( m_aInternalData.getComplexRowLabels() );
+    const vector< vector< uno::Any > > & aComplexLabels( m_aInternalData.getComplexRowLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
     return ExplicitCategoriesProvider::getExplicitSimpleCategories( aProvider );
 }
 
 Sequence< OUString > SAL_CALL InternalDataProvider::getColumnDescriptions()
 {
-    vector< vector< uno::Any > > aComplexLabels( m_aInternalData.getComplexColumnLabels() );
+    const vector< vector< uno::Any > > & aComplexLabels( m_aInternalData.getComplexColumnLabels() );
     SplitCategoriesProvider_ForComplexDescriptions aProvider( aComplexLabels );
     return ExplicitCategoriesProvider::getExplicitSimpleCategories( aProvider );
 }
