@@ -804,9 +804,25 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
             }
 
             // use stable sort array to list hyperlinks in document order
+            const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
+            bool bHasEntryInFly = false;
             std::vector<SwGetINetAttr*> aStableSortINetAttrsArray;
+
             for (SwGetINetAttr& r : aArr)
+            {
                 aStableSortINetAttrsArray.emplace_back(&r);
+                if (!bHasEntryInFly)
+                {
+                    if (nEndOfExtrasIndex >= r.rINetAttr.GetTextNode().GetIndex())
+                    {
+                        // Not a node of BodyText
+                        // Are we in a fly?
+                        if (r.rINetAttr.GetTextNode().GetFlyFormat())
+                            bHasEntryInFly = true;
+                    }
+                }
+            }
+
             std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
                              [](const SwGetINetAttr* a, const SwGetINetAttr* b){
                 SwPosition aSwPos(const_cast<SwTextNode&>(a->rINetAttr.GetTextNode()),
@@ -814,6 +830,30 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
                 SwPosition bSwPos(const_cast<SwTextNode&>(b->rINetAttr.GetTextNode()),
                                   b->rINetAttr.GetStart());
                 return aSwPos < bSwPos;});
+
+            // When there are hyperlinks in text frames do an additional sort using the text frame
+            // anchor position to place entries in the order of document layout appearance.
+            if (bHasEntryInFly)
+            {
+                std::stable_sort(aStableSortINetAttrsArray.begin(), aStableSortINetAttrsArray.end(),
+                                 [nEndOfExtrasIndex](const SwGetINetAttr* a, const SwGetINetAttr* b){
+                    const SwTextNode& aTextNode = a->rINetAttr.GetTextNode();
+                    const SwTextNode& bTextNode = b->rINetAttr.GetTextNode();
+                    SwPosition aPos(const_cast<SwTextNode&>(aTextNode), a->rINetAttr.GetStart());
+                    SwPosition bPos(const_cast<SwTextNode&>(bTextNode), b->rINetAttr.GetStart());
+                    // use anchor position for entries that are located in flys
+                    if (nEndOfExtrasIndex >= aTextNode.GetIndex())
+                    {
+                        if (auto pFlyFormat = aTextNode.GetFlyFormat())
+                            aPos = *pFlyFormat->GetAnchor().GetContentAnchor();
+                    }
+                    if (nEndOfExtrasIndex >= bTextNode.GetIndex())
+                    {
+                        if (auto pFlyFormat = bTextNode.GetFlyFormat())
+                            bPos = *pFlyFormat->GetAnchor().GetContentAnchor();
+                    }
+                    return aPos < bPos;});
+            }
 
             SwGetINetAttrs::size_type n = 0;
             for (auto p : aStableSortINetAttrsArray)
