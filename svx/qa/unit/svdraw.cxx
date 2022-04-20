@@ -338,7 +338,8 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObject)
 
     assertXPathContent(pXmlDoc, aBasePath + "/polygon", "49.5,99 0,99 0,0 99,0 99,99");
 
-    assertXPath(pXmlDoc, aBasePath + "/stroke", "fulldotdashlen", "0");
+    // If solid line, then there is no line stroke information
+    assertXPath(pXmlDoc, aBasePath + "/stroke", 0);
 
     pPage->RemoveObject(0);
 
