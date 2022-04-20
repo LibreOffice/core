@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "521e0c81_3dacc0cf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-20T08:11:19Z",
+      "side": 1,
+      "message": "Something strange there. The graphic objects on that page are not that far away. A debugging is needed, when and why the coordinate becomes that large.",
+      "revId": "471712d83a81593e079c511e30b11310bde04f3e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
