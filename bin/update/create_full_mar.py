@@ -12,6 +12,7 @@ from path import UpdaterPath, convert_to_unix, convert_to_native
 
 current_dir_path = os.path.dirname(os.path.realpath(convert_to_unix(__file__)))
 
+
 def main():
     if len(sys.argv) < 5:
         print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $FILENAMEPREFIX $UPDATE_CONFIG")
@@ -45,10 +46,11 @@ def main():
 
     sign_mar_file(target_dir, config, mar_file, filename_prefix)
 
-    file_info = { 'complete' : get_file_info(mar_file, config.base_url) }
+    file_info = {'complete': get_file_info(mar_file, config.base_url)}
 
     with open(os.path.join(target_dir, 'complete_info.json'), "w") as complete_info_file:
-        json.dump(file_info, complete_info_file, indent = 4)
+        json.dump(file_info, complete_info_file, indent=4)
+
 
 if __name__ == '__main__':
     main()
