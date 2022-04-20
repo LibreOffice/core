@@ -16,6 +16,24 @@
       "message": "Hi, Do you know why the static error:\n\ndrawinglayer/source/tools/emfppen.cxx:222:28: error: redundant functional cast from \u0027drawinglayer::attribute::StrokeAttribute\u0027 to \u0027drawinglayer::attribute::StrokeAttribute\u0027 [loplugin:redundantfcast]\n                    return drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw });\n\nis appearing?\nI would like to run StrokeAttribute constructor.",
       "revId": "3f72861107b1af6f8f6c47a92b8db77941fe20f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c04bf81_13c4231a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-20T17:50:07Z",
+      "side": 1,
+      "message": "that looks odd indeed; I\u0027ll take a look later",
+      "parentUuid": "603a7d21_718da652",
+      "revId": "3f72861107b1af6f8f6c47a92b8db77941fe20f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
