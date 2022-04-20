@@ -161,6 +161,27 @@ const SwFrame *SwLayoutFrame::ContainsAny( const bool _bInvestigateFootnoteForSe
     return nullptr;
 }
 
+bool SwLayoutFrame::ContainsDeleteForbiddenLayFrame() const
+{
+    if (IsDeleteForbidden())
+    {
+        return true;
+    }
+    for (SwFrame const* pFrame = Lower(); pFrame; pFrame = pFrame->GetNext())
+    {
+        if (!pFrame->IsLayoutFrame())
+        {
+            continue;
+        }
+        SwLayoutFrame const*const pLay(static_cast<SwLayoutFrame const*>(pFrame));
+        if (pLay->ContainsDeleteForbiddenLayFrame())
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 const SwFrame* SwFrame::GetLower() const
 {
     return IsLayoutFrame() ? static_cast<const SwLayoutFrame*>(this)->Lower() : nullptr;
