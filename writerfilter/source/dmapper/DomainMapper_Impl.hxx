@@ -625,6 +625,7 @@ private:
 
     css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
     css::uno::Reference<css::text::XTextRange> m_xSdtEntryStart;
+    std::stack<BookmarkInsertPosition> m_xSdtStarts;
 
     std::queue< css::uno::Reference< css::text::XTextFrame > > m_xPendingTextBoxFrames;
 
@@ -725,6 +726,8 @@ public:
 
     /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
+    void PushSdt();
+    void PopSdt();
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
     bool GetParaChanged() const { return m_bParaChanged;}

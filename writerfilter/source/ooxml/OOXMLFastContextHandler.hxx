@@ -139,6 +139,8 @@ public:
     virtual void popBiDiEmbedLevel();
     void startSdt();
     void endSdt();
+    void startSdtRun();
+    void endSdtRun();
 
     void startField();
     void fieldSeparator();
