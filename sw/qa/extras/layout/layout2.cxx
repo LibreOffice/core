@@ -15,6 +15,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <config_fonts.h>
 #include <unotools/syslocaleoptions.hxx>
 #include <editeng/unolingu.hxx>
 #include <o3tl/string_view.hxx>
@@ -1867,6 +1868,25 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf109077)
     // This was 281: the top of the shape and its textbox should match, though
     // tolerate differences <= 1px (about 15 twips).
     CPPUNIT_ASSERT_LESS(static_cast<sal_Int32>(15), nTextBoxTop - nShapeTop);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf148594)
+{
+#if HAVE_MORE_FONTS
+    createSwDoc(DATA_DIRECTORY, "tdf148594.odt");
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+
+    sal_Int32 nFirstLineWidth
+        = getXPath(pXmlDoc, "//body/txt[1]/SwParaPortion/SwLineLayout[1]", "width").toInt32();
+
+    sal_Int32 nSecondLineWidth
+        = getXPath(pXmlDoc, "//body/txt[2]/SwParaPortion/SwLineLayout[1]", "width").toInt32();
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1400
+    // - Actual  : 1800
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1400), nSecondLineWidth - nFirstLineWidth);
+#endif
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
