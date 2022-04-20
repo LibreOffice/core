@@ -56,7 +56,7 @@ private:
 
     // If true and mxThemeDocument exists it will be re-imported to
     // a newly created oox::drawingml::Theme object
-    bool mbForceThemePtrReceation; // false
+    bool mbForceThemePtrRecreation; // false
 
 protected:
     void anchorToSdrObjGroup(SdrObjGroup& rTarget);
