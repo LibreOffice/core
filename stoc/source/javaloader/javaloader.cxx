@@ -57,6 +57,19 @@
 #include <jvmaccess/unovirtualmachine.hxx>
 #include <jvmaccess/virtualmachine.hxx>
 
+#include <comphelper/sequence.hxx>
+//#include <officecfg/Office/ExtensionManager.hxx>
+#include <com/sun/star/bridge/UnoUrlResolver.hpp>
+#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/XLocalizable.hpp>
+//#include <com/sun/star/configuration/ReadOnlyAccess.hpp>
+//#include <com/sun/star/configuration/theDefaultProvider.hpp>
+#include <com/sun/star/util/theMacroExpander.hpp>
+#include <osl/security.hxx>
+#include <osl/thread.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <rtl/random.h>
+
 namespace com::sun::star::registry { class XRegistryKey; }
 
 using namespace css::java;
@@ -72,6 +85,159 @@ namespace stoc_javaloader {
 
 namespace {
 
+OUString generateRandomPipeId()
+{
+    // compute some good pipe id:
+    static rtlRandomPool s_hPool = rtl_random_createPool();
+    if (s_hPool == nullptr)
+        throw RuntimeException( "cannot create random pool!?", nullptr );
+    sal_uInt8 bytes[ 32 ];
+    if (rtl_random_getBytes(
+            s_hPool, bytes, SAL_N_ELEMENTS(bytes) ) != rtl_Random_E_None) {
+        throw RuntimeException( "random pool error!?", nullptr );
+    }
+    OUStringBuffer buf;
+    for (unsigned char byte : bytes) {
+        buf.append( static_cast<sal_Int32>(byte), 0x10 );
+    }
+    return buf.makeStringAndClear();
+}
+
+/** return a vector of bootstrap variables which have been provided
+    as command arguments.
+*/
+std::vector<OUString> getCmdBootstrapVariables()
+{
+    std::vector<OUString> ret;
+    sal_uInt32 count = osl_getCommandArgCount();
+    for (sal_uInt32 i = 0; i < count; i++)
+    {
+        OUString arg;
+        osl_getCommandArg(i, &arg.pData);
+        if (arg.startsWith("-env:"))
+            ret.push_back(arg);
+    }
+    return ret;
+}
+
+oslProcess raiseProcess(
+    OUString const & appURL, Sequence<OUString> const & args )
+{
+    ::osl::Security sec;
+    oslProcess hProcess = nullptr;
+    oslProcessError rc = osl_executeProcess(
+        appURL.pData,
+        reinterpret_cast<rtl_uString **>(
+            const_cast<OUString *>(args.getConstArray()) ),
+        args.getLength(),
+        osl_Process_DETACHED,
+        sec.getHandle(),
+        nullptr, // => current working dir
+        nullptr, 0, // => no env vars
+        &hProcess );
+
+    switch (rc) {
+    case osl_Process_E_None:
+        break;
+    case osl_Process_E_NotFound:
+        throw RuntimeException( "image not found!", nullptr );
+    case osl_Process_E_TimedOut:
+        throw RuntimeException( "timeout occurred!", nullptr );
+    case osl_Process_E_NoPermission:
+        throw RuntimeException( "permission denied!", nullptr );
+    case osl_Process_E_Unknown:
+        throw RuntimeException( "unknown error!", nullptr );
+    case osl_Process_E_InvalidError:
+    default:
+        throw RuntimeException( "unmapped error!", nullptr );
+    }
+
+    return hProcess;
+}
+
+Reference<XComponentContext> raise_uno_process(
+    Reference<XComponentContext> const & xContext/*,
+    ::rtl::Reference<AbortChannel> const & abortChannel*/ )
+{
+    OSL_ASSERT( xContext.is() );
+
+    OUString const url(css::util::theMacroExpander::get(xContext)->expandMacros("$URE_BIN_DIR/uno"));
+
+    const OUString connectStr = "uno:pipe,name=" + generateRandomPipeId() + ";urp;uno.ComponentContext";
+
+    // raise core UNO process to register/run a component,
+    // javavm service uses unorc next to executable to retrieve deployed
+    // jar typelibs
+
+    std::vector<OUString> args{
+#if OSL_DEBUG_LEVEL == 0
+        "--quiet",
+#endif
+        "--singleaccept",
+        "-u",
+        connectStr,
+        // don't inherit from unorc:
+        "-env:INIFILENAME=" };
+
+    //now add the bootstrap variables which were supplied on the command line
+    std::vector<OUString> bootvars = getCmdBootstrapVariables();
+    args.insert(args.end(), bootvars.begin(), bootvars.end());
+
+    oslProcess hProcess;
+    try {
+        hProcess = raiseProcess(
+            url, comphelper::containerToSequence(args) );
+    }
+    catch (...) {
+        OUStringBuffer sMsg = "error starting process: " + url;
+        for (const auto& arg : args)
+        {
+            sMsg.append(" " + arg);
+        }
+        throw css::uno::RuntimeException(sMsg.makeStringAndClear());
+    }
+    try {
+        /*
+        return Reference<XComponentContext>(
+            resolveUnoURL( connectStr, xContext, abortChannel.get() ),
+            UNO_QUERY_THROW );
+            */
+        Reference<css::bridge::XUnoUrlResolver> const xUnoUrlResolver(
+            css::bridge::UnoUrlResolver::create(xContext) );
+
+        for (int i = 0; i <= 40; ++i) // 20 seconds
+        {
+#if 0
+            if (abortChannel != nullptr && abortChannel->isAborted()) {
+                throw ucb::CommandAbortedException( "abort!" );
+            }
+#endif
+            try {
+                return Reference<XComponentContext>(
+                            xUnoUrlResolver->resolve(connectStr),
+                        UNO_QUERY_THROW );
+            }
+            catch (const css::connection::NoConnectException &) {
+                if (i < 40)
+                {
+                    ::osl::Thread::wait( std::chrono::milliseconds(500) );
+                }
+                else throw;
+            }
+        }
+        return nullptr; // warning C4715
+    }
+    catch (...) {
+        // try to terminate process:
+        if ( osl_terminateProcess( hProcess ) != osl_Process_E_None )
+        {
+            OSL_ASSERT( false );
+        }
+        throw;
+    }
+}
+
+
 class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServiceInfo>
 {
     css::uno::Reference<XComponentContext> m_xComponentContext;
@@ -85,7 +251,7 @@ class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServic
         If the Java implementation of the loader could not be obtained, for reasons other
         then that java was not configured the RuntimeException is thrown.
      */
-    const css::uno::Reference<XImplementationLoader> & getJavaLoader();
+    const css::uno::Reference<XImplementationLoader> & getJavaLoader(OUString &);
 
 
 public:
@@ -109,13 +275,44 @@ public:
 
 }
 
-const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader()
+const css::uno::Reference<XImplementationLoader> & JavaComponentLoader::getJavaLoader(OUString & rRemoteArg)
 {
     static Mutex ourMutex;
     MutexGuard aGuard(ourMutex);
 
     if (m_javaLoader.is())
         return m_javaLoader;
+
+    // check if the JVM should be instantiated out-of-process
+    if (rRemoteArg.isEmpty()) {
+        css::uno::Reference<css::container::XHierarchicalNameAccess> const xConf(
+            m_xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+                "com.sun.star.configuration.ReadOnlyAccess",
+                { Any(OUString("en-US")) }, // locale isn't relevant here
+                m_xComponentContext),
+            css::uno::UNO_QUERY_THROW);
+
+        // configmgr is not part of URE, so may not exist!
+        if (xConf.is()) {
+            css::uno::Any const value(xConf->getByHierarchicalName(
+                "org.openoffice.Office.ExtensionManager/ExtensionSecurity/RunAlwaysOutOfProcess"));
+            bool b;
+            if ((value >>= b) && b) {
+                // todo how to dispose this at shutdown
+                css::uno::Reference<css::uno::XComponentContext> const xContext(
+                    raise_uno_process(m_xComponentContext));
+                // create JVM service in remote uno.bin process
+                css::uno::Reference<css::loader::XImplementationLoader> const xLoader(
+                    xContext->getServiceManager()->createInstanceWithContext(
+                        "com.sun.star.loader.Java2", xContext),
+                    css::uno::UNO_QUERY_THROW);
+                assert(xLoader.is());
+                m_javaLoader = xLoader;
+                rRemoteArg = "remote";
+                return m_javaLoader;
+            }
+        }
+    }
 
     uno_Environment * pJava_environment = nullptr;
     uno_Environment * pUno_environment = nullptr;
@@ -304,27 +501,29 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
     const css::uno::Reference<XRegistryKey> & xKey, const OUString & blabla,
     const OUString & rLibName)
 {
-    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
+    OUString remoteArg(blabla);
+    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
     if (!loader.is())
         throw CannotRegisterImplementationException("Could not create Java implementation loader");
-    return loader->writeRegistryInfo(xKey, blabla, rLibName);
+    return loader->writeRegistryInfo(xKey, remoteArg, rLibName);
 }
 
 css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
     const OUString & rImplName, const OUString & blabla, const OUString & rLibName,
     const css::uno::Reference<XRegistryKey> & xKey)
 {
+    OUString remoteArg(blabla);
     if (rImplName.isEmpty() && blabla.isEmpty() && rLibName.isEmpty())
     {
         // preload JVM was requested
-        (void)getJavaLoader();
+        (void)getJavaLoader(remoteArg);
         return css::uno::Reference<XInterface>();
     }
 
-    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
+    const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader(remoteArg);
     if (!loader.is())
         throw CannotActivateFactoryException("Could not create Java implementation loader");
-    return loader->activate(rImplName, blabla, rLibName, xKey);
+    return loader->activate(rImplName, remoteArg, rLibName, xKey);
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
