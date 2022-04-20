@@ -9,6 +9,7 @@
 import sys
 from config import parse_config
 
+
 def main():
     if len(sys.argv) < 2:
         sys.exit(1)
@@ -16,6 +17,7 @@ def main():
     update_config = sys.argv[1]
     config = parse_config(update_config)
     print(config.channel)
+
 
 if __name__ == "__main__":
     main()
