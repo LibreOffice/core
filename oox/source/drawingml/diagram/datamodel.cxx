@@ -377,7 +377,7 @@ void DiagramData::restoreStyleDataFromShapeToModel(::oox::drawingml::Shape& rSha
     if(nullptr == pSource)
         return;
 
-    // get target  ProperySet of new XShape
+    // get target PropertySet of new XShape
     css::uno::Reference<css::beans::XPropertySet> xPropSet(rXShape, css::uno::UNO_QUERY);
     if(!xPropSet)
         return;
