@@ -13,19 +13,23 @@ from signing import sign_mar_file
 
 current_dir_path = os.path.dirname(os.path.realpath(__file__))
 
+
 def make_complete_mar_name(target_dir, filename_prefix, language):
     filename = filename_prefix + "_" + language + "_complete_langpack.mar"
     return os.path.join(target_dir, filename)
 
+
 def create_lang_infos(mar_file_name, language, url):
-    data = {'lang' : language,
-            'complete' : get_file_info(mar_file_name, url)
+    data = {'lang': language,
+            'complete': get_file_info(mar_file_name, url)
             }
     return data
 
+
 def main():
     if len(sys.argv) < 5:
-        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $UPDATE_CONFIG")
+        print(
+            "Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $TARGETDIR $TEMPDIR $FILENAMEPREFIX $UPDATE_CONFIG")
         sys.exit(1)
 
     update_config = sys.argv[4]
@@ -60,7 +64,8 @@ def main():
         lang_infos.append(create_lang_infos(mar_file_name, language, config.base_url))
 
     with open(os.path.join(target_dir, "complete_lang_info.json"), "w") as language_info_file:
-        json.dump({'languages' : lang_infos}, language_info_file, indent=4)
+        json.dump({'languages': lang_infos}, language_info_file, indent=4)
+
 
 if __name__ == '__main__':
     main()
