@@ -37,7 +37,7 @@
 IDiagramHelper::IDiagramHelper()
 : mbUseDiagramThemeData(false)
 , mbUseDiagramModelData(true)
-, mbForceThemePtrReceation(false)
+, mbForceThemePtrRecreation(false)
 {
 }
 
