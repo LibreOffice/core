@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f1e0ba_b59ca455",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-20T16:19:30Z",
+      "side": 1,
+      "message": "I made a \u0027clean\u0027 test file xlookup.fods and removed some comment lines in interpr1.cxx that were not going to be code. Finally I added a TODO for myself as an idea to make wildcards possibly work with numeric search values.",
+      "revId": "88bea24e0e382c3c7f2304d3beabba520f5ca624",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
