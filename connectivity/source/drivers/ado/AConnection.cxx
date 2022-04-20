@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <cstddef>
 #include <string_view>
 
 #include <ado/AConnection.hxx>
@@ -34,6 +35,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/servicehelper.hxx>
 #include <connectivity/dbexception.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/file.hxx>
 #include <systools/win32/oleauto.hxx>
 #include <strings.hrc>
@@ -81,17 +83,18 @@ OConnection::~OConnection()
 {
 }
 
-void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
+void OConnection::construct(std::u16string_view url,const Sequence< PropertyValue >& info)
 {
     osl_atomic_increment( &m_refCount );
 
     setConnectionInfo(info);
 
-    sal_Int32 nLen = url.indexOf(':');
-    nLen = url.indexOf(':',nLen+1);
-    OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
-    if ( aDSN.startsWith("access:") )
-        aDSN = aDSN.copy(7);
+    std::size_t nLen = url.find(':');
+    nLen = url.find(':',nLen == std::u16string_view::npos ? 0 : nLen+1);
+    std::u16string_view aDSN(url.substr(nLen == std::u16string_view::npos ? 0 : nLen+1));
+    OUString aUID,aPWD;
+    if ( o3tl::starts_with(aDSN, u"access:") )
+        aDSN.remove_prefix(7);
 
     sal_Int32 nTimeout = 20;
     const PropertyValue *pIter  = info.getConstArray();
