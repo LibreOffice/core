@@ -18315,8 +18315,9 @@
       <element name="sdtPr" tokenid="ooxml:CT_SdtRun_sdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtRun_sdtEndPr"/>
       <element name="sdtContent" tokenid="ooxml:CT_SdtRun_sdtContent"/>
-      <action name="start" action="startSdt"/>
-      <action name="end" action="endSdt"/>
+      <element name="sdtEndContent" tokenid="ooxml:CT_SdtRun_sdtEndContent"/>
+      <action name="start" action="startSdtRun"/>
+      <action name="end" action="endSdtRun"/>
     </resource>
     <resource name="CT_SdtCell" resource="Stream">
       <element name="sdtPr" tokenid="ooxml:CT_SdtCell_sdtPr"/>

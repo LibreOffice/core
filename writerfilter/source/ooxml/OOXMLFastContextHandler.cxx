@@ -468,6 +468,22 @@ void OOXMLFastContextHandler::endSdt()
     mpStream->props(pProps.get());
 }
 
+void OOXMLFastContextHandler::startSdtRun()
+{
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+    pProps->add(NS_ooxml::LN_CT_SdtRun_sdtContent, pVal, OOXMLProperty::ATTRIBUTE);
+    mpStream->props(pProps.get());
+}
+
+void OOXMLFastContextHandler::endSdtRun()
+{
+    OOXMLPropertySet::Pointer_t pProps(new OOXMLPropertySet);
+    OOXMLValue::Pointer_t pVal = OOXMLIntegerValue::Create(1);
+    pProps->add(NS_ooxml::LN_CT_SdtRun_sdtEndContent, pVal, OOXMLProperty::ATTRIBUTE);
+    mpStream->props(pProps.get());
+}
+
 void OOXMLFastContextHandler::startSectionGroup()
 {
     if (isForwardEvents())

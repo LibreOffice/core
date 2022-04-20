@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_dmapper, \
     writerfilter/qa/cppunittests/dmapper/GraphicImport \
     writerfilter/qa/cppunittests/dmapper/TextEffectsHandler \
     writerfilter/qa/cppunittests/dmapper/PropertyMap \
+    writerfilter/qa/cppunittests/dmapper/SdtHelper \
 ))
 
 $(eval $(call gb_CppunitTest_use_libraries,writerfilter_dmapper, \

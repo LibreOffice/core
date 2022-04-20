@@ -829,6 +829,60 @@ void DomainMapper_Impl::SetSdt(bool bSdt)
     }
 }
 
+void DomainMapper_Impl::PushSdt()
+{
+    if (m_aTextAppendStack.empty())
+    {
+        return;
+    }
+
+    uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
+    uno::Reference<text::XTextCursor> xCursor
+        = xTextAppend->getText()->createTextCursorByRange(xTextAppend->getEnd());
+    // Offset so the cursor is not adjusted as we import the SDT's content.
+    bool bStart = !xCursor->goLeft(1, /*bExpand=*/false);
+    m_xSdtStarts.push({bStart, OUString(), xCursor->getStart()});
+}
+
+void DomainMapper_Impl::PopSdt()
+{
+    if (m_xSdtStarts.empty())
+    {
+        return;
+    }
+
+    BookmarkInsertPosition aPosition = m_xSdtStarts.top();
+    m_xSdtStarts.pop();
+    uno::Reference<text::XTextRange> xStart = aPosition.m_xTextRange;
+    uno::Reference<text::XTextRange> xEnd = GetTopTextAppend()->getEnd();
+    uno::Reference<text::XText> xText = xEnd->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursorByRange(xStart);
+    if (!xCursor)
+    {
+        SAL_WARN("writerfilter.dmapper", "DomainMapper_Impl::PopSdt: no start position");
+        return;
+    }
+
+    if (aPosition.m_bIsStartOfText)
+    {
+        xCursor->gotoStart(/*bExpand=*/false);
+    }
+    else
+    {
+        // Undo the goLeft() in DomainMapper_Impl::PushSdt();
+        xCursor->goRight(1, /*bExpand=*/false);
+    }
+    xCursor->gotoRange(xEnd, /*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        m_xTextFactory->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    if (m_pSdtHelper->GetShowingPlcHdr())
+    {
+        xContentControlProps->setPropertyValue("ShowingPlaceHolder",
+                                               uno::makeAny(m_pSdtHelper->GetShowingPlcHdr()));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+}
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {

@@ -421,6 +421,10 @@ bool SdtHelper::containedInInteropGrabBag(const OUString& rValueName)
         [&rValueName](const beans::PropertyValue& i) { return i.Name == rValueName; });
 }
 
+void SdtHelper::SetShowingPlcHdr() { m_bShowingPlcHdr = true; }
+
+bool SdtHelper::GetShowingPlcHdr() const { return m_bShowingPlcHdr; }
+
 void SdtHelper::clear()
 {
     m_aDropDownItems.clear();
@@ -429,6 +433,7 @@ void SdtHelper::clear()
     m_sDataBindingXPath.clear();
     m_sDataBindingStoreItemID.clear();
     m_aGrabBag.clear();
+    m_bShowingPlcHdr = false;
 }
 
 } // namespace writerfilter::dmapper
