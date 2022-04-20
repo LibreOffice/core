@@ -13,6 +13,7 @@
 #include <tools/stream.hxx>
 #include <tools/XmlWriter.hxx>
 
+#include <math.h>
 #include <memory>
 #include <sal/log.hxx>
 
@@ -130,6 +131,24 @@ void writePolyPolygon(::tools::XmlWriter& rWriter, const basegfx::B2DPolyPolygon
     }
 
     rWriter.endElement();
+}
+
+void writeStrokeAttribute(::tools::XmlWriter& rWriter,
+                          const drawinglayer::attribute::StrokeAttribute& rStrokeAttribute)
+{
+    if (!rStrokeAttribute.getDotDashArray().empty())
+    {
+        rWriter.startElement("stroke");
+
+        OUString sDotDash;
+        for (double fDotDash : rStrokeAttribute.getDotDashArray())
+        {
+            sDotDash += OUString::number(round(100.0 * fDotDash)) + " ";
+        }
+        rWriter.attribute("dotDashArray", sDotDash);
+        rWriter.attribute("fullDotDashLength", rStrokeAttribute.getFullDotDashLen());
+        rWriter.endElement();
+    }
 }
 
 void writeLineAttribute(::tools::XmlWriter& rWriter,
@@ -718,14 +737,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.endElement();
 
                 writeLineAttribute(rWriter, rPolygonStrokePrimitive2D.getLineAttribute());
-
-                rWriter.startElement("stroke");
-                const drawinglayer::attribute::StrokeAttribute& aStrokeAttribute
-                    = rPolygonStrokePrimitive2D.getStrokeAttribute();
-                rWriter.attribute("fulldotdashlen", aStrokeAttribute.getFullDotDashLen());
-                //rWriter.attribute("dotdasharray", aStrokeAttribute.getDotDashArray());
-                rWriter.endElement();
-
+                writeStrokeAttribute(rWriter, rPolygonStrokePrimitive2D.getStrokeAttribute());
                 rWriter.endElement();
             }
             break;
@@ -736,9 +748,7 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.startElement("polypolygonstroke");
 
                 writeLineAttribute(rWriter, rPolyPolygonStrokePrimitive2D.getLineAttribute());
-
-                //getStrokeAttribute()
-
+                writeStrokeAttribute(rWriter, rPolyPolygonStrokePrimitive2D.getStrokeAttribute());
                 writePolyPolygon(rWriter, rPolyPolygonStrokePrimitive2D.getB2DPolyPolygon());
 
                 rWriter.endElement();

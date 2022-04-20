@@ -43,15 +43,6 @@ namespace emfplushelper
     {
     }
 
-    void EMFPCustomLineCap::SetAttributes(rendering::StrokeAttributes& aAttributes)
-    {
-        aAttributes.StartCapType = EMFPPen::lcl_convertStrokeCap(strokeStartCap);
-        aAttributes.EndCapType = EMFPPen::lcl_convertStrokeCap(strokeEndCap);
-        aAttributes.JoinType = EMFPPen::lcl_convertLineJoinType(strokeJoin);
-
-        aAttributes.MiterLimit = miterLimit;
-    }
-
     void EMFPCustomLineCap::ReadPath(SvStream& s, EmfPlusHelperData const & rR, bool bFill)
     {
         sal_Int32 pathLength;
