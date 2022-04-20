@@ -400,7 +400,8 @@ private:
     std::set<DeclRefExpr const*> currentGoodUses_;
 };
 
-static loplugin::Plugin::Registration<StringViewVar> reg("stringviewvar");
+static loplugin::Plugin::Registration<StringViewVar> reg("stringviewvar",
+                                                         false); // might generate false+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
