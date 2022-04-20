@@ -22,6 +22,7 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <map>
+#include <string_view>
 #include <connectivity/CommonTools.hxx>
 #include <OTypeInfo.hxx>
 #include <TConnection.hxx>
@@ -71,7 +72,7 @@ namespace connectivity::ado
             OConnection(ODriver*        _pDriver);
             //  OConnection(const SQLHANDLE _pConnectionHandle);
             ~OConnection() override;
-            void construct(const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
+            void construct(std::u16string_view url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 
             //XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
