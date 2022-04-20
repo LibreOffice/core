@@ -25,6 +25,8 @@
 #include <o3tl/char16_t2wchar_t.hxx>
 
 #ifdef _WIN32
+#include <cstddef>
+#include <string_view>
 #if !defined WIN32_LEAN_AND_MEAN
 # define WIN32_LEAN_AND_MEAN
 #endif
@@ -45,13 +47,13 @@ void PrivateProfileStringListener::Initialize( const OUString& rFileName, const 
     maKey = rKey;
 }
 #ifdef _WIN32
-static void lcl_getRegKeyInfo( const OString& sKeyInfo, HKEY& hBaseKey, OString& sSubKey )
+static void lcl_getRegKeyInfo( std::string_view sKeyInfo, HKEY& hBaseKey, OString& sSubKey )
 {
-    sal_Int32 nBaseKeyIndex = sKeyInfo.indexOf('\\');
-    if( nBaseKeyIndex > 0 )
+    std::size_t nBaseKeyIndex = sKeyInfo.find('\\');
+    if( nBaseKeyIndex != std::string_view::npos )
     {
-        OString sBaseKey = sKeyInfo.copy( 0, nBaseKeyIndex );
-        sSubKey = sKeyInfo.copy( nBaseKeyIndex + 1 );
+        std::string_view sBaseKey = sKeyInfo.substr( 0, nBaseKeyIndex );
+        sSubKey = OString(sKeyInfo.substr( nBaseKeyIndex + 1 ));
         if( sBaseKey == "HKEY_CURRENT_USER" )
         {
             hBaseKey = HKEY_CURRENT_USER;
