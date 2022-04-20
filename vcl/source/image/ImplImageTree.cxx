@@ -74,9 +74,14 @@ sal_Int32 ImageRequestParameters::scalePercentage()
 {
     sal_Int32 aScalePercentage = 100;
     if (!(meFlags & ImageLoadFlags::IgnoreScalingFactor))
-        aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
-    else if (mnScalePercentage > 0)
-        aScalePercentage = mnScalePercentage;
+    {
+	if (mnScalePercentage <= 0)
+            SAL_WARN("vcl", "icon requested without percentage!");
+        if (mnScalePercentage > 0)
+            aScalePercentage = mnScalePercentage;
+	else
+            aScalePercentage = Application::GetDefaultDevice()->GetDPIScalePercentage();
+    }
     return aScalePercentage;
 }
 

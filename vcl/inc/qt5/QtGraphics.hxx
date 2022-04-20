@@ -29,8 +29,6 @@
 #include <QtGui/QPainterPath>
 #include <QtGui/QRegion>
 
-#include "QtGraphicsBase.hxx"
-
 namespace vcl::font
 {
 class PhysicalFontCollection;
@@ -42,7 +40,7 @@ class QtFontFace;
 class QtFrame;
 class QtPainter;
 
-class QtGraphicsBackend final : public SalGraphicsImpl, public QtGraphicsBase
+class QtGraphicsBackend final : public SalGraphicsImpl
 {
     friend class QtPainter;
 
@@ -164,7 +162,7 @@ private:
     void drawScaledImage(const SalTwoRect& rPosAry, const QImage& rImage);
 };
 
-class QtGraphics final : public SalGraphicsAutoDelegateToImpl, public QtGraphicsBase
+class QtGraphics final : public SalGraphicsAutoDelegateToImpl
 {
     friend class QtBitmap;
 
@@ -218,7 +216,7 @@ public:
 
     // GDI
 
-    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     // Text rendering + font support
 

@@ -38,17 +38,32 @@ SvpSalGraphics::~SvpSalGraphics()
     ReleaseFonts();
 }
 
-void SvpSalGraphics::setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize)
+void SvpSalGraphics::setSurface(cairo_surface_t* pSurface)
 {
     m_aCairoCommon.m_pSurface = pSurface;
-    m_aCairoCommon.m_aFrameSize = rSize;
-    dl_cairo_surface_get_device_scale(pSurface, &m_aCairoCommon.m_fScale, nullptr);
     GetImpl()->ResetClipRegion();
 }
 
-void SvpSalGraphics::GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY )
+sal_Int32 SvpSalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    rDPIX = rDPIY = 96;
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return cairo_image_surface_get_width(m_aCairoCommon.m_pSurface);
+        case vcl::SGPmetric::Height: return cairo_image_surface_get_height(m_aCairoCommon.m_pSurface);
+        case vcl::SGPmetric::DPIX:
+        case vcl::SGPmetric::DPIY:
+            return 96 * GetDPIScaleFactor();
+        case vcl::SGPmetric::ScalePercentage:
+        {
+            double fScale;
+            dl_cairo_surface_get_device_scale(m_aCairoCommon.m_pSurface, &fScale, nullptr);
+            return round(fScale * 100);
+        }
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return 32;
+        default:
+            return -1;
+    }
 }
 
 #if ENABLE_CAIRO_CANVAS

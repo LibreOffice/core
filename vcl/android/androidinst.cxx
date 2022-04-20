@@ -143,12 +143,12 @@ public:
     }
 };
 
-SalFrame *AndroidSalInstance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
+SalFrame *AndroidSalInstance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle, vcl::Window& rWin )
 {
     return new AndroidSalFrame( this, NULL, nStyle );
 }
 
-SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
+SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& )
 {
     return new AndroidSalFrame( this, pParent, nStyle );
 }

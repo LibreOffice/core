@@ -198,16 +198,16 @@ OUString X11SalInstance::GetConnectionIdentifier()
     return pDisplay ? OUString::createFromAscii(pDisplay) : OUString();
 }
 
-SalFrame *X11SalInstance::CreateFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle )
+SalFrame *X11SalInstance::CreateFrame(SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle, vcl::Window& rWin)
 {
-    SalFrame *pFrame = new X11SalFrame( pParent, nSalFrameStyle );
+    SalFrame *pFrame = new X11SalFrame(pParent, nSalFrameStyle, nullptr, rWin);
 
     return pFrame;
 }
 
-SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, SalFrameStyleFlags nStyle )
+SalFrame* X11SalInstance::CreateChildFrame( SystemParentData* pParentData, SalFrameStyleFlags nStyle, vcl::Window& rWin)
 {
-    SalFrame* pFrame = new X11SalFrame( nullptr, nStyle, pParentData );
+    SalFrame* pFrame = new X11SalFrame(nullptr, nStyle, pParentData, rWin);
 
     return pFrame;
 }

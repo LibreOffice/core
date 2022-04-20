@@ -26,11 +26,16 @@
 
 QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame)
     : m_pFrame(pFrame)
+    , m_nScalePercentage(-1)
 {
     if (!QtData::noNativeControls())
         m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
+    SAL_DEBUG(__func__ << " " << m_pFrame);
+#if 1
     if (m_pFrame)
-        setDevicePixelRatioF(m_pFrame->devicePixelRatioF());
+	SAL_DEBUG(__func__ << " " << m_pFrame->devicePixelRatioF());
+//        setDevicePixelRatioF(m_pFrame->devicePixelRatioF());
+#endif
 }
 
 QtSvpGraphics::~QtSvpGraphics() {}
@@ -93,29 +98,17 @@ void QtSvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     getSvpBackend()->drawBitmapBuffer(aTR, &aBuffer, CAIRO_OPERATOR_OVER);
 }
 
-void QtSvpGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
+sal_Int32 QtSvpGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    QImage* pImage = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get())->getImage();
+    if (!pImage)
     {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
-        return;
+	if (eMetric == vcl::SGPmetric::ScalePercentage && m_nScalePercentage > 0)
+            return m_nScalePercentage;
+        return SvpSalGraphics::GetSgpMetric(eMetric);
     }
-
-    if (!m_pFrame)
-        return;
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QScreen* pScreen = m_pFrame->GetQWidget()->screen();
-#else
-    if (!m_pFrame->GetQWidget()->window()->windowHandle())
-        return;
-
-    QScreen* pScreen = m_pFrame->GetQWidget()->window()->windowHandle()->screen();
-#endif
-    rDPIX = pScreen->logicalDotsPerInchX() * pScreen->devicePixelRatio() + 0.5;
-    rDPIY = pScreen->logicalDotsPerInchY() * pScreen->devicePixelRatio() + 0.5;
+    else
+        return GetSgpMetricFromQImage(eMetric, *pImage);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

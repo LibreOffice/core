@@ -44,20 +44,20 @@ public:
     explicit X11SalInstance(std::unique_ptr<SalYieldMutex> pMutex);
     virtual ~X11SalInstance() override;
 
-    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin ) override;
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& ) override;
     virtual void                DestroyFrame( SalFrame* pFrame ) override;
 
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
     virtual void                DestroyObject( SalObject* pObject ) override;
 
     /// Gtk vclplug needs to pass GtkSalGraphics to X11SalVirtualDevice, so create it, and pass as pNewGraphics.
-    static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, tools::Long &nDX, tools::Long &nDY,
+    static std::unique_ptr<SalVirtualDevice> CreateX11VirtualDevice(const SalGraphics& rGraphics, sal_Int32 &nDX, sal_Int32 &nDY,
             DeviceFormat eFormat, const SystemGraphicsData* pData, std::unique_ptr<X11SalGraphics> pNewGraphics);
 
     virtual std::unique_ptr<SalVirtualDevice>
                                 CreateVirtualDevice( SalGraphics& rGraphics,
-                                                     tools::Long &nDX, tools::Long &nDY,
+                                                     sal_Int32 &nDX, sal_Int32 &nDY,
                                                      DeviceFormat eFormat, const SystemGraphicsData *pData = nullptr ) override;
     virtual void                PostPrintersChanged() override;
     virtual std::unique_ptr<GenPspGraphics> CreatePrintGraphics() override;

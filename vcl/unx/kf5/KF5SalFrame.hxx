@@ -29,7 +29,7 @@ class QWidget;
 class KF5SalFrame : public QtFrame
 {
 public:
-    KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo);
+    KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin, bool bUseCairo);
 
     virtual void UpdateSettings(AllSettings& rSettings) override;
 };

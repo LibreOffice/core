@@ -43,8 +43,8 @@
 
 #include <optional>
 
-KF5SalFrame::KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nState, bool bUseCairo)
-    : QtFrame(pParent, nState, bUseCairo)
+KF5SalFrame::KF5SalFrame(KF5SalFrame* pParent, SalFrameStyleFlags nState, vcl::Window& rWin, bool bUseCairo)
+    : QtFrame(pParent, nState, rWin, bUseCairo)
 {
 }
 

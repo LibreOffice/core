@@ -100,8 +100,9 @@ sal_Int32 screenNumber(const QScreen* pScreen)
 }
 }
 
-QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
-    : m_pTopLevel(nullptr)
+QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin, bool bUseCairo)
+    : SalFrame(rWin)
+    , m_pTopLevel(nullptr)
     , m_bUseCairo(bUseCairo)
     , m_bNullRegion(true)
     , m_bGraphicsInUse(false)
@@ -197,7 +198,31 @@ QtFrame::QtFrame(QtFrame* pParent, SalFrameStyleFlags nStyle, bool bUseCairo)
     fixICCCMwindowGroup();
 }
 
-void QtFrame::screenChanged(QScreen*) { m_pQWidget->fakeResize(); }
+void QtFrame::screenChanged(QScreen* pScreen)
+{
+    SAL_DEBUG(__func__ << " " << m_pQWidget->size() << " " << pScreen->devicePixelRatio() << " "
+                       << GetWidth() << " " << GetHeight());
+
+    maGeometry.nDisplayScreenNumber = screenNumber(pScreen);
+#if 1
+    if (m_pSvpGraphics)
+    {
+//        m_pSvpGraphics->setDevicePixelRatioF(devicePixelRatioF());
+        m_pSvpGraphics->ReleaseFonts();
+    }
+    if (m_pQtGraphics)
+    {
+//        m_pQtGraphics->setDevicePixelRatioF(devicePixelRatioF());
+        m_pQtGraphics->ReleaseFonts();
+    }
+#endif
+    m_pQWidget->fakeResize();
+    CallCallback(SalEvent::SettingsChanged, nullptr);
+#if 0
+    SalPaintEvent aPaintEvt(0, 0, GetWidth(), GetHeight(), true);
+    CallCallback(SalEvent::Paint, &aPaintEvt);
+#endif
+}
 
 void QtFrame::FillSystemEnvData(SystemEnvData& rData, sal_IntPtr pWindow, QWidget* pWidget)
 {
@@ -303,6 +328,8 @@ SalGraphics* QtFrame::AcquireGraphics()
     if (m_bGraphicsInUse)
         return nullptr;
 
+    SAL_DEBUG(__func__ << " " << this);
+
     m_bGraphicsInUse = true;
 
     if (m_bUseCairo)
@@ -313,8 +340,7 @@ SalGraphics* QtFrame::AcquireGraphics()
             m_pSvpGraphics.reset(new QtSvpGraphics(this));
             m_pSurface.reset(
                 cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
-            m_pSvpGraphics->setSurface(m_pSurface.get(),
-                                       basegfx::B2IVector(aSize.width(), aSize.height()));
+            m_pSvpGraphics->setSurface(m_pSurface.get());
             cairo_surface_set_user_data(m_pSurface.get(), QtSvpGraphics::getDamageKey(),
                                         &m_aDamageHandler, nullptr);
         }
@@ -624,8 +650,10 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
     asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
 }
 
-void QtFrame::GetClientSize(tools::Long& rWidth, tools::Long& rHeight)
+void QtFrame::GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight)
 {
+    SAL_DEBUG(__func__ << " " << m_pQWidget->width() << " " << m_pQWidget->height() << " "
+                       << devicePixelRatioF());
     rWidth = round(m_pQWidget->width() * devicePixelRatioF());
     rHeight = round(m_pQWidget->height() * devicePixelRatioF());
 }
@@ -1507,6 +1535,35 @@ void QtFrame::handleDragLeave()
     aEvent.Source = static_cast<css::datatransfer::dnd::XDropTarget*>(m_pDropTarget);
     m_pDropTarget->fire_dragExit(aEvent);
     m_bInDrag = false;
+}
+
+void QtFrame::GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        rDPIX = rDPIY = sForceDPI.toInt32();
+        return;
+    }
+
+    QScreen* pScreen = screen();
+    if (!pScreen)
+        return;
+
+    rDPIX = pScreen->logicalDotsPerInchX() * pScreen->devicePixelRatio() + 0.5;
+    rDPIY = pScreen->logicalDotsPerInchY() * pScreen->devicePixelRatio() + 0.5;
+}
+
+sal_Int32 QtFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return asChild()->width() * GetDPIScaleFactor();
+        case vcl::SGPmetric::Height: return asChild()->height() * GetDPIScaleFactor();
+        default:
+            return GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

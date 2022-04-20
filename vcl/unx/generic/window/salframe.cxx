@@ -41,6 +41,7 @@
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
 #include <unx/salframe.h>
+#include <unx/salunx.h>
 #include <unx/wmadaptor.hxx>
 #include <unx/salbmp.h>
 #include <unx/i18n_ic.hxx>
@@ -790,7 +791,8 @@ void X11SalFrame::Init( SalFrameStyleFlags nSalFrameStyle, SalX11Screen nXScreen
 }
 
 X11SalFrame::X11SalFrame( SalFrame *pParent, SalFrameStyleFlags nSalFrameStyle,
-                          SystemParentData const * pSystemParent ) :
+                          SystemParentData const * pSystemParent, vcl::Window& rWin)
+    : SalFrame(rWin),
     m_nXScreen( 0 ),
     maAlwaysOnTopRaiseTimer( "vcl::X11SalFrame maAlwaysOnTopRaiseTimer" )
 {
@@ -1152,6 +1154,8 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
         || ( !bVisible && !bMapped_ ) )
         return;
 
+    SAL_DEBUG(__func__ << " " << bVisible);
+
     // HACK: this is a workaround for (at least) kwin
     // even though transient frames should be kept above their parent
     // this does not necessarily hold true for DOCK type windows
@@ -1407,7 +1411,52 @@ void X11SalFrame::GetWorkArea( tools::Rectangle& rWorkArea )
     rWorkArea = pDisplay_->getWMAdaptor()->getWorkArea( 0 );
 }
 
-void X11SalFrame::GetClientSize( tools::Long &rWidth, tools::Long &rHeight )
+void X11SalFrame::GetDPI(sal_Int32 &rDPIX, sal_Int32 &rDPIY)
+{
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        rDPIX = rDPIY = sForceDPI.toInt32();
+        return;
+    }
+
+    const SalDisplay *pDisplay = GetDisplay();
+    if (!pDisplay)
+    {
+        SAL_WARN( "vcl", "Null display");
+        rDPIX = rDPIY = 96;
+        return;
+    }
+
+    Pair dpi = pDisplay->GetResolution();
+    rDPIX = dpi.A();
+    rDPIY = dpi.B();
+
+    if ( rDPIY > 200 )
+    {
+        rDPIX = Divide( rDPIX * 200, rDPIY );
+        rDPIY = 200;
+    }
+
+    // #i12705# equalize x- and y-resolution if they are close enough
+    if( rDPIX == rDPIY )
+        return;
+
+    // different x- and y- resolutions are usually artifacts of
+    // a wrongly calculated screen size.
+#ifdef DEBUG
+    SAL_INFO("vcl.gdi", "Forcing Resolution from "
+        << std::hex << rDPIX
+        << std::dec << rDPIX
+        << " to "
+        << std::hex << rDPIY
+        << std::dec << rDPIY);
+#endif
+    rDPIX = rDPIY; // y-resolution is more trustworthy
+}
+
+void X11SalFrame::GetClientSize(sal_Int32 &rWidth, sal_Int32 &rHeight)
 {
     if( ! bViewable_  )
     {
@@ -3697,7 +3746,7 @@ bool X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
          */
         maGeometry.nX       = xp + nLeft;
         maGeometry.nY       = yp + nTop;
-        bResized = w != maGeometry.nWidth || h != maGeometry.nHeight;
+        bResized = w != o3tl::make_unsigned(maGeometry.nWidth) || h != o3tl::make_unsigned(maGeometry.nHeight);
         maGeometry.nWidth   = w;
         maGeometry.nHeight = h;
     }
@@ -4087,6 +4136,56 @@ void X11SalFrame::EndSetClipRegion()
                               m_vClipRectangles.size(),
                               op, ordering );
 
+}
+
+sal_Int32 X11SalFrame::GetDPI() const
+{
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        return sForceDPI.toInt32();
+    }
+
+    const SalDisplay *pDisplay = GetDisplay();
+    if (!pDisplay)
+    {
+        SAL_WARN( "vcl", "Null display");
+        return 96;
+    }
+
+    Pair dpi = pDisplay->GetResolution();
+    sal_Int32 rDPIX = dpi.A();
+    sal_Int32 rDPIY = dpi.B();
+
+    if (rDPIY > 200)
+    {
+        rDPIX = Divide(rDPIX * 200, rDPIY);
+        rDPIY = 200;
+    }
+
+    // different x- and y- resolutions are usually artifacts of
+    // a wrongly calculated screen size.
+#ifdef DEBUG
+    SAL_INFO("vcl.gdi", "Forcing Resolution from "
+        << std::hex << rDPIX
+        << std::dec << rDPIX
+        << " to "
+        << std::hex << rDPIY
+        << std::dec << rDPIY);
+#endif
+    return rDPIY; // y-resolution is more trustworthy
+}
+
+sal_Int32 X11SalFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    switch (eMetric) {
+    case vcl::SGPmetric::DPIX:
+    case vcl::SGPmetric::DPIY:
+        return GetDPI();
+    default:
+        return SalFrame::GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

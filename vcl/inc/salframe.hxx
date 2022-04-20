@@ -113,7 +113,7 @@ struct ImplSVEvent;
 /// A SalFrame is a system window (e.g. an X11 window).
 class VCL_PLUGIN_PUBLIC SalFrame
     : public vcl::DeletionNotifier
-    , public SalGeometryProvider
+    , public vcl::SalGeometryProvider
 {
 private:
     // the VCL window corresponding to this frame
@@ -123,15 +123,13 @@ private:
 protected:
     mutable std::unique_ptr<weld::Window> m_xFrameWeld;
 public:
-                            SalFrame();
+                            SalFrame(vcl::Window&);
     virtual                 ~SalFrame() override;
 
     SalFrameGeometry        maGeometry = {}; ///< absolute, unmirrored values
 
-    // SalGeometryProvider
-    virtual tools::Long GetWidth() const override { return maGeometry.nWidth; }
-    virtual tools::Long GetHeight() const override { return maGeometry.nHeight; }
-    virtual bool IsOffScreen() const override { return false; }
+    void SetGeometrySize(sal_Int32, sal_Int32);
+    void SetGeometrySize(const Size& rSize) { SetGeometrySize(rSize.getWidth(), rSize.getHeight()); }
 
     // SalGraphics or NULL, but two Graphics for all SalFrames
     // must be returned
@@ -159,7 +157,8 @@ public:
     virtual void            SetMinClientSize( tools::Long nWidth, tools::Long nHeight ) = 0;
     virtual void            SetMaxClientSize( tools::Long nWidth, tools::Long nHeight ) = 0;
     virtual void            SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags ) = 0;
-    virtual void            GetClientSize( tools::Long& rWidth, tools::Long& rHeight ) = 0;
+    virtual void GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY) = 0;
+    virtual void GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight) = 0;
     virtual void            GetWorkArea( tools::Rectangle& rRect ) = 0;
     virtual SalFrame*       GetParent() const = 0;
     // Note: x will be mirrored at parent if UI mirroring is active
@@ -293,7 +292,7 @@ public:
 
     // Callbacks (independent part in vcl/source/window/winproc.cxx)
     // for default message handling return 0
-    void                    SetCallback( vcl::Window* pWindow, SALFRAMEPROC pProc );
+    void                    SetCallback(SALFRAMEPROC pProc );
 
     // returns the instance set
     vcl::Window*            GetWindow() const { return m_pWindow; }

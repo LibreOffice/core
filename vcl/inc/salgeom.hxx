@@ -17,19 +17,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_VCL_INC_SALGEOM_HXX
-#define INCLUDED_VCL_INC_SALGEOM_HXX
+#pragma once
 
 #include <iostream>
 
 #include <vcl/dllapi.h>
+#include <tools/gen.hxx>
 #include <tools/long.hxx>
 
-struct SalFrameGeometry {
+struct SalFrameGeometry
+{
     // screen position of upper left corner of drawable area in pixel
-    tools::Long                nX, nY;
+    sal_Int32 nX, nY;
     // dimensions of the drawable area in pixel
-    tools::ULong        nWidth, nHeight;
+    sal_Int32 nWidth, nHeight;
     // thickness of the decoration in pixel
     tools::ULong        nLeftDecoration,
                         nTopDecoration,
@@ -48,26 +49,18 @@ struct SalFrameGeometry {
         nBottomDecoration( 0 ),
         nDisplayScreenNumber( 0 )
     {}
+
+    Size GetSize() const { return Size(nWidth, nHeight); }
+    Point GetPos() const { return Point(nX, nY); }
 };
 
 inline std::ostream &operator <<(std::ostream& s, const SalFrameGeometry& rGeom)
 {
+    s << rGeom.nDisplayScreenNumber << " ";
     s << rGeom.nWidth << "x" << rGeom.nHeight << "@(" << rGeom.nX << "," << rGeom.nY << "):{"
       << rGeom.nLeftDecoration << "," << rGeom.nTopDecoration << "," << rGeom.nRightDecoration << "," << rGeom.nBottomDecoration << "}";
 
     return s;
 }
-
-/// Interface used to share logic on sizing between
-/// SalVirtualDevices and SalFrames
-class VCL_PLUGIN_PUBLIC SalGeometryProvider {
-public:
-    virtual ~SalGeometryProvider() {}
-    virtual tools::Long GetWidth() const = 0;
-    virtual tools::Long GetHeight() const = 0;
-    virtual bool IsOffScreen() const = 0;
-};
-
-#endif // INCLUDED_VCL_INC_SALGEOM_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

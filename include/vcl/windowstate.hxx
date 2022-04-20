@@ -30,8 +30,8 @@ private:
     WindowStateMask mnValidMask;
     int mnX;
     int mnY;
-    unsigned int mnWidth;
-    unsigned int mnHeight;
+    sal_Int32 mnWidth;
+    sal_Int32 mnHeight;
     int mnMaximizedX;
     int mnMaximizedY;
     unsigned int mnMaximizedWidth;
@@ -60,10 +60,10 @@ public:
     int GetX() const { return mnX; }
     void SetY(int nY) { mnY = nY; }
     int GetY() const { return mnY; }
-    void SetWidth(unsigned int nWidth) { mnWidth = nWidth; }
-    unsigned int GetWidth() const { return mnWidth; }
-    void SetHeight(unsigned int nHeight) { mnHeight = nHeight; }
-    unsigned int GetHeight() const { return mnHeight; }
+    void SetWidth(sal_Int32 nWidth) { mnWidth = nWidth; }
+    sal_Int32 GetWidth() const { return mnWidth; }
+    void SetHeight(sal_Int32 nHeight) { mnHeight = nHeight; }
+    sal_Int32 GetHeight() const { return mnHeight; }
     void SetState(WindowStateState nState) { mnState = nState; }
     WindowStateState GetState() const { return mnState; }
     void SetMaximizedX(int nRX) { mnMaximizedX = nRX; }

@@ -30,6 +30,7 @@
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
+#include <vcl/GeometryProvider.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
@@ -150,6 +151,8 @@ sal_uInt16 GetKeyModCode(Qt::KeyboardModifiers eKeyModifiers);
 sal_uInt16 GetMouseModCode(Qt::MouseButtons eButtons);
 
 QImage toQImage(const Image& rImage);
+
+sal_Int32 GetSgpMetricFromQImage(vcl::SGPmetric eMetric, QImage& rImage);
 
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,

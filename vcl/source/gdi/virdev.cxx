@@ -123,7 +123,7 @@ void VirtualDevice::ReleaseGraphics( bool bRelease )
 }
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
-                                    tools::Long nDX, tools::Long nDY, const SystemGraphicsData *pData )
+                                    sal_Int32 nDX, sal_Int32 nDY, const SystemGraphicsData *pData )
 {
     SAL_INFO( "vcl.virdev", "ImplInitVirDev(" << nDX << "," << nDY << ")" );
 
@@ -165,8 +165,8 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     }
 
     mnBitCount = pOutDev->GetBitCount();
-    mnOutWidth      = nDX;
-    mnOutHeight     = nDY;
+    m_nWidth = nDX;
+    m_nHeight = nDY;
 
     mbScreenComp    = pOutDev->IsScreenComp();
 
@@ -269,7 +269,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     }
 
     bool bRet;
-    tools::Long nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
+    sal_Int32 nNewWidth = rNewSize.Width(), nNewHeight = rNewSize.Height();
 
     if ( nNewWidth < 1 )
         nNewWidth = 1;
@@ -286,8 +286,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
 
         if ( bRet )
         {
-            mnOutWidth  = rNewSize.Width();
-            mnOutHeight = rNewSize.Height();
+            m_nWidth  = rNewSize.Width();
+            m_nHeight = rNewSize.Height();
             Erase();
         }
     }
@@ -310,12 +310,12 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
             {
                 tools::Long nWidth;
                 tools::Long nHeight;
-                if ( mnOutWidth < nNewWidth )
-                    nWidth = mnOutWidth;
+                if ( m_nWidth < nNewWidth )
+                    nWidth = m_nWidth;
                 else
                     nWidth = nNewWidth;
-                if ( mnOutHeight < nNewHeight )
-                    nHeight = mnOutHeight;
+                if ( m_nHeight < nNewHeight )
+                    nHeight = m_nHeight;
                 else
                     nHeight = nNewHeight;
                 SalTwoRect aPosAry(0, 0, nWidth, nHeight, 0, 0, nWidth, nHeight);
@@ -323,8 +323,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
                 pNewVirDev->ReleaseGraphics( pGraphics );
                 ReleaseGraphics();
                 mpVirDev = std::move(pNewVirDev);
-                mnOutWidth  = rNewSize.Width();
-                mnOutHeight = rNewSize.Height();
+                m_nWidth  = rNewSize.Width();
+                m_nHeight = rNewSize.Height();
                 bRet = true;
             }
             else
@@ -490,11 +490,6 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
 
     // prepare to use new font lists
     mxFontCache = std::make_shared<ImplFontCache>();
-}
-
-sal_uInt16 VirtualDevice::GetBitCount() const
-{
-    return mnBitCount;
 }
 
 bool VirtualDevice::UsePolyPolygonForComplexGradient()

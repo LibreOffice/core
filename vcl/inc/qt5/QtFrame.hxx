@@ -129,7 +129,6 @@ class VCLPLUG_QT_PUBLIC QtFrame : public QObject, public SalFrame
 
     bool isWindow() const;
     QWindow* windowHandle() const;
-    QScreen* screen() const;
     bool isMinimized() const;
     bool isMaximized() const;
     void SetWindowStateImpl(Qt::WindowStates eState);
@@ -141,16 +140,19 @@ private Q_SLOTS:
     void screenChanged(QScreen*);
 
 public:
-    QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, bool bUseCairo);
+    QtFrame(QtFrame* pParent, SalFrameStyleFlags nSalFrameStyle, vcl::Window&, bool bUseCairo);
     virtual ~QtFrame() override;
 
     QWidget* GetQWidget() const { return m_pQWidget; }
     QtMainWindow* GetTopLevelWindow() const { return m_pTopLevel; }
     QWidget* asChild() const;
     qreal devicePixelRatioF() const;
+    QScreen* screen() const;
 
     void Damage(sal_Int32 nExtentsX, sal_Int32 nExtentsY, sal_Int32 nExtentsWidth,
                 sal_Int32 nExtentsHeight) const;
+
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     virtual SalGraphics* AcquireGraphics() override;
     virtual void ReleaseGraphics(SalGraphics* pGraphics) override;
@@ -177,7 +179,8 @@ public:
     virtual void SetMaxClientSize(tools::Long nWidth, tools::Long nHeight) override;
     virtual void SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                             sal_uInt16 nFlags) override;
-    virtual void GetClientSize(tools::Long& rWidth, tools::Long& rHeight) override;
+    virtual void GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
+    virtual void GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight) override;
     virtual void GetWorkArea(tools::Rectangle& rRect) override;
     virtual SalFrame* GetParent() const override;
     virtual void SetModal(bool bModal) override;

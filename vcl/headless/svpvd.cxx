@@ -48,7 +48,7 @@ SvpSalVirtualDevice::~SvpSalVirtualDevice()
 
 SvpSalGraphics* SvpSalVirtualDevice::AddGraphics(SvpSalGraphics* pGraphics)
 {
-    pGraphics->setSurface(m_pSurface, m_aFrameSize);
+    pGraphics->setSurface(m_pSurface);
     m_aGraphics.push_back(pGraphics);
     return pGraphics;
 }
@@ -64,28 +64,44 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-bool SvpSalVirtualDevice::SetSize( tools::Long nNewDX, tools::Long nNewDY )
+void SvpSalVirtualDevice::SetScalePercentage(sal_Int32 nScale)
 {
-    return SetSizeUsingBuffer(nNewDX, nNewDY, nullptr);
+    CreateSurface(0, 0, nullptr, nScale);
 }
 
-void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, sal_uInt8 *const pBuffer)
+void SvpSalVirtualDevice::CreateSurface(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8 *const pBuffer, sal_Int32 nScalePercentage)
 {
-    if (m_pSurface)
+    double fXScale, fYScale;
+    if (nScalePercentage > 0)
+        fXScale = fYScale = nScalePercentage / 100.0;
+    else
+        fXScale = fYScale = GetDPIScaleFactor();
+
+    if (nNewDX <= 0 || nNewDY <= 0)
     {
-        cairo_surface_destroy(m_pSurface);
+        if (nScalePercentage > 0 && m_pSurface)
+        {
+            dl_cairo_surface_set_device_scale(m_pSurface, fXScale, fYScale);
+            return;
+        }
+
+        if (pBuffer && !m_pSurface)
+        {
+            SAL_WARN("vcl", "Trying to set buffer without sizes or surface!");
+            return;
+        }
+
+        if (m_pSurface)
+        {
+            nNewDX = cairo_image_surface_get_width(m_pSurface);
+            nNewDY = cairo_image_surface_get_height(m_pSurface);
+        }
+        else
+            nNewDX = nNewDY = 1;
     }
 
-    double fXScale, fYScale;
-    if (comphelper::LibreOfficeKit::isActive())
-    {
-        // Force scaling of the painting
-        fXScale = fYScale = comphelper::LibreOfficeKit::getDPIScale();
-    }
-    else
-    {
-        dl_cairo_surface_get_device_scale(m_pRefSurface, &fXScale, &fYScale);
-    }
+    if (m_pSurface)
+        cairo_surface_destroy(m_pSurface);
 
     if (pBuffer)
     {
@@ -117,39 +133,49 @@ void SvpSalVirtualDevice::CreateSurface(tools::Long nNewDX, tools::Long nNewDY, 
     SAL_WARN_IF(cairo_surface_status(m_pSurface) != CAIRO_STATUS_SUCCESS, "vcl", "surface of size " << nNewDX << " by " << nNewDY << " creation failed with status of: " << cairo_status_to_string(cairo_surface_status(m_pSurface)));
 }
 
-bool SvpSalVirtualDevice::SetSizeUsingBuffer( tools::Long nNewDX, tools::Long nNewDY,
-        sal_uInt8 *const pBuffer)
+bool SvpSalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8 *const pBuffer, sal_Int32 nScale)
 {
-    if (nNewDX == 0)
-        nNewDX = 1;
-    if (nNewDY == 0)
-        nNewDY = 1;
-
-    if (!m_pSurface || m_aFrameSize.getX() != nNewDX ||
-                       m_aFrameSize.getY() != nNewDY)
+    FixSetSizeParams(nNewDX, nNewDY, nScale);
+    if (!m_pSurface || cairo_image_surface_get_width(m_pSurface) != nNewDX ||
+                       cairo_image_surface_get_height(m_pSurface) != nNewDY)
     {
-        m_aFrameSize = basegfx::B2IVector(nNewDX, nNewDY);
-
         if (m_bOwnsSurface)
-            CreateSurface(nNewDX, nNewDY, pBuffer);
+            CreateSurface(nNewDX, nNewDY, pBuffer, nScale);
 
         assert(m_pSurface);
 
         // update device in existing graphics
         for (auto const& graphic : m_aGraphics)
-            graphic->setSurface(m_pSurface, m_aFrameSize);
+            graphic->setSurface(m_pSurface);
     }
     return true;
 }
 
-tools::Long SvpSalVirtualDevice::GetWidth() const
+sal_Int32 SvpSalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    return m_pSurface ? m_aFrameSize.getX() : 0;
-}
-
-tools::Long SvpSalVirtualDevice::GetHeight() const
-{
-    return m_pSurface ? m_aFrameSize.getY() : 0;
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return m_pSurface ? cairo_image_surface_get_width(m_pSurface) : 1;
+        case vcl::SGPmetric::Height: return m_pSurface ? cairo_image_surface_get_height(m_pSurface) : 1;
+        case vcl::SGPmetric::DPIX:
+        case vcl::SGPmetric::DPIY:
+            return 96 * GetSgpMetric(vcl::SGPmetric::ScalePercentage);
+        case vcl::SGPmetric::ScalePercentage:
+        {
+            double fXScale, fYScale;
+            if (m_pSurface)
+                dl_cairo_surface_get_device_scale(m_pSurface, &fXScale, &fYScale);
+            else if (comphelper::LibreOfficeKit::isActive())
+                fXScale = comphelper::LibreOfficeKit::getDPIScale();
+            else
+                fXScale = 1.0;
+            return round(fXScale * 100);
+        }
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return 32;
+        default:
+            return -1;
+    }
 }
 
 #endif

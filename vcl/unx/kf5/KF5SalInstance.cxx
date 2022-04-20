@@ -40,21 +40,21 @@ KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCa
     pSVData->maAppData.mxToolkitName = constructToolkitID(u"kf5");
 }
 
-SalFrame* KF5SalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
+SalFrame* KF5SalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle, vcl::Window& rWin)
 {
     SalFrame* pRet(nullptr);
-    RunInMainThread([&, this]() { pRet = new KF5SalFrame(nullptr, nStyle, useCairo()); });
+    RunInMainThread([&, this]() { pRet = new KF5SalFrame(nullptr, nStyle, rWin, useCairo()); });
     assert(pRet);
     return pRet;
 }
 
-SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
+SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin)
 {
     assert(!pParent || dynamic_cast<KF5SalFrame*>(pParent));
 
     SalFrame* pRet(nullptr);
     RunInMainThread([&, this]() {
-        pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nStyle, useCairo());
+        pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nStyle, rWin, useCairo());
     });
     assert(pRet);
     return pRet;

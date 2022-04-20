@@ -42,8 +42,10 @@ QtGraphics::QtGraphics( QtFrame *pFrame, QImage *pQImage )
         if (!QtData::noNativeControls())
             m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
     }
+#if 0
     if (m_pFrame)
-        setDevicePixelRatioF(m_pFrame->devicePixelRatioF());
+        setScale(m_pFrame->devicePixelRatioF());
+#endif
 }
 
 QtGraphics::~QtGraphics() { ReleaseFonts(); }
@@ -101,6 +103,17 @@ void QtGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
     QtPainter aPainter(*m_pBackend);
     aPainter.drawImage(QPoint(rDamagedRegion.Left(), rDamagedRegion.Top()), blit);
     aPainter.update(toQRect(rDamagedRegion));
+}
+
+sal_Int32 QtGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    QImage* pImage = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get())->getImage();
+    assert(pImage || m_pFrame);
+    if (pImage)
+        return GetSgpMetricFromQImage(eMetric, *pImage);
+    if (m_pFrame)
+        return m_pFrame->GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

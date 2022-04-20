@@ -254,8 +254,8 @@ public:
     void    EnsureInit();
     virtual void AfterAppInit() override;
 
-    virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*           CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& ) override;
+    virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin ) override;
     virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
     virtual SalSystem*          CreateSalSystem() override;
     virtual SalInfoPrinter*     CreateInfoPrinter(SalPrinterQueueInfo* pPrinterQueueInfo, ImplJobSetup* pJobSetup) override;
@@ -266,7 +266,7 @@ public:
     virtual void                AddToRecentDocumentList(const OUString& rFileUrl, const OUString& rMimeType, const OUString& rDocumentService) override;
     virtual std::unique_ptr<SalVirtualDevice>
                                 CreateVirtualDevice( SalGraphics&,
-                                                     tools::Long &nDX, tools::Long &nDY,
+                                                     sal_Int32 &nDX, sal_Int32 &nDY,
                                                      DeviceFormat eFormat,
                                                      const SystemGraphicsData* = nullptr ) override;
     virtual std::shared_ptr<SalBitmap> CreateSalBitmap() override;

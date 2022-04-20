@@ -51,7 +51,8 @@ sal_uInt16 SvpGraphicsBackend::GetBitCount() const
 
 tools::Long SvpGraphicsBackend::GetGraphicsWidth() const
 {
-    return m_rCairoCommon.m_pSurface ? m_rCairoCommon.m_aFrameSize.getX() : 0;
+    assert(m_rCairoCommon.m_pSurface);
+    return cairo_image_surface_get_width(m_rCairoCommon.m_pSurface);
 }
 
 void SvpGraphicsBackend::SetLineColor() { m_rCairoCommon.m_aLineColor = SALCOLOR_NONE; }

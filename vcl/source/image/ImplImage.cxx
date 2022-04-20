@@ -20,6 +20,7 @@
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/bitmapex.hxx>
+#include <vcl/outdev.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/BitmapFilter.hxx>
 #include <vcl/ImageTree.hxx>
@@ -30,7 +31,7 @@
 
 ImplImage::ImplImage(const BitmapEx &rBitmapEx)
     : maBitmapChecksum(0)
-    , maSizePixel(rBitmapEx.GetSizePixel())
+    , m_nScalePercentage(100)
     , maBitmapEx(rBitmapEx)
 {
 }
@@ -38,25 +39,22 @@ ImplImage::ImplImage(const BitmapEx &rBitmapEx)
 ImplImage::ImplImage(const OUString &aStockName)
     : maBitmapChecksum(0)
     , maStockName(aStockName)
+    , m_nScalePercentage(100)
 {
 }
 
-bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
+bool ImplImage::loadStockAtScale(BitmapEx* pBitmapEx) const
 {
+    assert(pBitmapEx);
     BitmapEx aBitmapEx;
-
     ImageLoadFlags eScalingFlags = ImageLoadFlags::NONE;
-    sal_Int32 nScalePercentage = -1;
 
     if (comphelper::LibreOfficeKit::isActive()) // scale at the surface
-    {
-        nScalePercentage = fScale * 100.0;
         eScalingFlags = ImageLoadFlags::IgnoreScalingFactor;
-    }
 
     OUString aIconTheme = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
     if (!ImageTree::get().loadImage(maStockName, aIconTheme, aBitmapEx, true,
-                                    nScalePercentage, eScalingFlags))
+                                    m_nScalePercentage, eScalingFlags))
     {
         /* If the uno command has parameters, passed in from a toolbar,
          * recover from failure by removing the parameters from the file name
@@ -68,48 +66,57 @@ bool ImplImage::loadStockAtScale(double fScale, BitmapEx &rBitmapEx)
 
             OUString aFileName = maStockName.replaceAt(nStart, nEnd - nStart, u"");
             if (!ImageTree::get().loadImage(aFileName, aIconTheme, aBitmapEx, true,
-                                            nScalePercentage, eScalingFlags))
+                                            m_nScalePercentage, eScalingFlags))
             {
                 SAL_WARN("vcl", "Failed to load scaled image from " << maStockName <<
-                         " and " << aFileName << " at " << fScale);
+                         " and " << aFileName << " at " << m_nScalePercentage << "%");
                 return false;
             }
         }
         else
         {
             SAL_WARN("vcl", "Failed to load scaled image from " << maStockName <<
-                     " at " << fScale);
+                     " at " << m_nScalePercentage << "%");
             return false;
         }
     }
-    rBitmapEx = aBitmapEx;
+    (*pBitmapEx) = aBitmapEx;
     return true;
 }
 
-Size ImplImage::getSizePixel()
+sal_Int32 ImplImage::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    Size aRet;
-    if (!isSizeEmpty())
-        aRet = maSizePixel;
-    else if (isStock())
+    if (isStock() && maBitmapEx.IsEmpty())
     {
-        if (loadStockAtScale(1.0, maBitmapEx))
+        if (loadStockAtScale(const_cast<BitmapEx*>(&maBitmapEx)))
         {
             assert(maDisabledBitmapEx.IsEmpty());
             assert(maBitmapChecksum == 0);
-            maSizePixel = maBitmapEx.GetSizePixel();
-            aRet = maSizePixel;
         }
         else
             SAL_WARN("vcl", "Failed to load stock icon " << maStockName);
     }
-    return aRet;
+
+    using namespace vcl;
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width: return maBitmapEx.GetSizePixel().getWidth();
+        case vcl::SGPmetric::Height: return maBitmapEx.GetSizePixel().getHeight();
+        case vcl::SGPmetric::DPIX:
+        case vcl::SGPmetric::DPIY:
+            return round(96 * m_nScalePercentage / 100.0);
+        case vcl::SGPmetric::ScalePercentage: return m_nScalePercentage;
+        case vcl::SGPmetric::OffScreen: return true;
+        case vcl::SGPmetric::BitCount: return static_cast<sal_Int32>(maBitmapEx.getPixelFormat());
+        default:
+            return -1;
+    }
 }
 
 /// non-HiDPI compatibility method.
 BitmapEx const & ImplImage::getBitmapEx(bool bDisabled)
 {
-    getSizePixel(); // force load, and at unity scale.
+    GetSgpMetric(vcl::SGPmetric::Width); // force load, and at unity scale.
     if (bDisabled)
     {
         // Changed since we last generated this.
@@ -132,23 +139,19 @@ bool ImplImage::isEqual(const ImplImage &ref) const
     if (isStock() != ref.isStock())
         return false;
     if (isStock())
-        return maStockName == ref.maStockName;
+        return maStockName == ref.maStockName && m_nScalePercentage == ref.m_nScalePercentage;
     else
         return maBitmapEx == ref.maBitmapEx;
 }
 
-BitmapEx const & ImplImage::getBitmapExForHiDPI(bool bDisabled)
+void ImplImage::setScalePercentage(sal_Int32 nScale)
 {
-    if (isStock())
-    {   // check we have the right bitmap cached.
-        // FIXME: DPI scaling should be tied to the outdev really ...
-        double fScale = comphelper::LibreOfficeKit::getDPIScale();
-        Size aTarget(maSizePixel.Width()*fScale,
-                     maSizePixel.Height()*fScale);
-        if (maBitmapEx.GetSizePixel() != aTarget)
-            loadStockAtScale(fScale, maBitmapEx);
-    }
-    return getBitmapEx(bDisabled);
+    assert(nScale > 0);
+    if (m_nScalePercentage == nScale || !isStock())
+	return;
+    SAL_WARN_IF(!maBitmapEx.IsEmpty(), "vcl", "image scale changed after loading(" << m_nScalePercentage << "% >> " << nScale << "%); invalidaing image!");
+    m_nScalePercentage = nScale;
+    maBitmapEx.SetEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -9,21 +9,10 @@
 
 #pragma once
 
-#include <QtWidgets/QApplication>
+#include <vcl/GenometryProvider.hxx>
 
-class QtGraphicsBase
-{
-    qreal m_fDPR;
+class QImage;
 
-public:
-    QtGraphicsBase()
-        : m_fDPR(qApp ? qApp->devicePixelRatio() : 1.0)
-    {
-    }
-
-    void setDevicePixelRatioF(qreal fDPR) { m_fDPR = fDPR; }
-
-    qreal devicePixelRatioF() const { return m_fDPR; }
-};
+static sal_Int32 GetSgpMetric(QImage &rImage, vcl::SGPmetric eMetric) const;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

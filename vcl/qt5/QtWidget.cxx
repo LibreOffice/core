@@ -39,6 +39,7 @@
 #include <QtGui/QPaintEvent>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QShowEvent>
+#include <QtGui/QScreen>
 #include <QtGui/QTextCharFormat>
 #include <QtGui/QWheelEvent>
 #include <QtWidgets/QMainWindow>
@@ -104,7 +105,7 @@ void QtWidget::resizeEvent(QResizeEvent* pEvent)
                 = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, nWidth, nHeight);
             cairo_surface_set_user_data(pSurface, SvpSalGraphics::getDamageKey(),
                                         &m_rFrame.m_aDamageHandler, nullptr);
-            m_rFrame.m_pSvpGraphics->setSurface(pSurface, basegfx::B2IVector(nWidth, nHeight));
+            m_rFrame.m_pSvpGraphics->setSurface(pSurface);
             UniqueCairoSurface old_surface(m_rFrame.m_pSurface.release());
             m_rFrame.m_pSurface.reset(pSurface);
 
@@ -201,6 +202,7 @@ void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
     SalMouseEvent aEvent;
     FILL_SAME(m_rFrame, width());
 
+    SAL_DEBUG(this << " " << __func__ << " " << Point(aEvent.mnX, aEvent.mnY));
     aEvent.mnButton = 0;
 
     m_rFrame.CallCallback(SalEvent::MouseMove, &aEvent);
@@ -221,6 +223,9 @@ void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEven
     aEvent.mnButton = 0;
     aEvent.mnCode = GetKeyModCode(QGuiApplication::keyboardModifiers())
                     | GetMouseModCode(QGuiApplication::mouseButtons());
+
+    SAL_DEBUG(pWidget << " " << __func__ << " " << Point(aEvent.mnX, aEvent.mnY) << " "
+                      << QGuiApplication::isLeftToRight());
 
     SalEvent nEventType;
     if (pQEvent->type() == QEvent::Enter)

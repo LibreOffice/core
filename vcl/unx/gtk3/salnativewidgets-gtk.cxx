@@ -3026,28 +3026,36 @@ GtkSalGraphics::GtkSalGraphics( GtkSalFrame *pFrame, GtkWidget *pWindow )
 #endif
 }
 
-void GtkSalGraphics::GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY)
+sal_Int32 GtkSalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    switch (eMetric)
     {
-        OString sForceDPI(pForceDpi);
-        rDPIX = rDPIY = sForceDPI.toInt32();
-        return;
-    }
+    case vcl::SGPmetric::DPIX:
+    case vcl::SGPmetric::DPIY:
+    {
+        char* pForceDpi;
+        if ((pForceDpi = getenv("SAL_FORCEDPI")))
+        {
+            OString sForceDPI(pForceDpi);
+            return sForceDPI.toInt32();
+        }
 
 #if !GTK_CHECK_VERSION(4, 0, 0)
-    GdkScreen* pScreen = gtk_widget_get_screen(mpWindow);
-    double fResolution = -1.0;
-    g_object_get(pScreen, "resolution", &fResolution, nullptr);
+        GdkScreen* pScreen = gtk_widget_get_screen(mpWindow);
+        double fResolution = -1.0;
+        g_object_get(pScreen, "resolution", &fResolution, nullptr);
 
-    if (fResolution > 0.0)
-        rDPIX = rDPIY = sal_Int32(fResolution);
-    else
-        rDPIX = rDPIY = 96;
+        if (fResolution > 0.0)
+            return sal_Int32(fResolution);
+        else
+            return 96;
 #else
-    rDPIX = rDPIY = 96;
+        return 96;
 #endif
+    }
+    default:
+        return SvpSalGraphics::GetSgpMetric(eMetric);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

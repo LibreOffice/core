@@ -126,8 +126,7 @@ public:
 
     void WidgetQueueDraw() const;
 
-    virtual void GetResolution(sal_Int32& rDPIX, sal_Int32& rDPIY) override;
-
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
     virtual OUString getRenderBackendName() const override { return "gtk3svp"; }
 
     GtkStyleContext* createStyleContext(GtkControlPart ePart);

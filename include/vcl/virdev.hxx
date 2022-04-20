@@ -48,14 +48,13 @@ private:
     std::unique_ptr<SalVirtualDevice> mpVirDev;
     VclPtr<VirtualDevice>  mpPrev;
     VclPtr<VirtualDevice>  mpNext;
-    sal_uInt16          mnBitCount;
     bool                mbScreenComp;
     const DeviceFormat  meFormat;
     const DeviceFormat  meAlphaFormat;
     RefDevMode          meRefDevMode;
     bool                mbForceZeroExtleadBug;
 
-    SAL_DLLPRIVATE void ImplInitVirDev( const OutputDevice* pOutDev, tools::Long nDX, tools::Long nDY, const SystemGraphicsData *pData = nullptr );
+    SAL_DLLPRIVATE void ImplInitVirDev(const OutputDevice* pOutDev, sal_Int32 nDX, sal_Int32 nDY, const SystemGraphicsData *pData = nullptr );
     SAL_DLLPRIVATE bool InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
                                                      sal_uInt8* pBuffer );
     SAL_DLLPRIVATE bool ImplSetOutputSizePixel( const Size& rNewSize, bool bErase,
@@ -167,8 +166,6 @@ public:
     void                Compat_ZeroExtleadBug(); // enable workaround for #i60495#
 
     void                SetReferenceDevice( sal_Int32 i_nDPIX, sal_Int32 i_nDPIY );
-
-    virtual sal_uInt16  GetBitCount() const override;
 
     bool IsVirtual() const override;
 

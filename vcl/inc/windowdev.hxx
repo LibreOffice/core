@@ -23,7 +23,7 @@
 
 namespace vcl
 {
-class WindowOutputDevice final : public ::OutputDevice
+class WindowOutputDevice : public ::OutputDevice
 {
 public:
     WindowOutputDevice(vcl::Window& rOwnerWindow);

@@ -86,7 +86,7 @@ OUString Image::GetStock() const
 Size Image::GetSizePixel() const
 {
     if (mpImplData)
-        return mpImplData->getSizePixel();
+        return mpImplData->GetSizePixel();
     else
         return Size();
 }
@@ -118,9 +118,11 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
     if (!mpImplData || (!pOutDev->IsDeviceOutputNecessary() && pOutDev->GetConnectMetaFile() == nullptr))
         return;
 
-    Size aOutSize = pSize ? *pSize : pOutDev->PixelToLogic(mpImplData->getSizePixel());
+    Size aOutSize = pSize ? *pSize : pOutDev->PixelToLogic(mpImplData->GetSizePixel());
 
-    BitmapEx aRenderBmp = mpImplData->getBitmapExForHiDPI(bool(nStyle & DrawImageFlags::Disable));
+    mpImplData->setScalePercentage(pOutDev->GetDPIScalePercentage());
+//    SAL_DEBUG(__func__ << " " << pOutDev->GetDPIScalePercentage());
+    BitmapEx aRenderBmp = mpImplData->getBitmapEx(bool(nStyle & DrawImageFlags::Disable));
 
     if (!(nStyle & DrawImageFlags::Disable) &&
         (nStyle & (DrawImageFlags::ColorTransform | DrawImageFlags::Highlight |

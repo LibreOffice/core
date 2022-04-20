@@ -23,7 +23,7 @@
 #include <vcl/dllapi.h>
 
 #include <salgdiimpl.hxx>
-#include <salgeom.hxx>
+#include <vcl/GeometryProvider.hxx>
 
 #include <skia/utils.hxx>
 
@@ -37,7 +37,7 @@ class SkiaSalBitmap;
 class VCL_DLLPUBLIC SkiaSalGraphicsImpl : public SalGraphicsImpl
 {
 public:
-    SkiaSalGraphicsImpl(SalGraphics& pParent, SalGeometryProvider* pProvider);
+    SkiaSalGraphicsImpl(SalGraphics& pParent, vcl::SalGeometryProvider* pProvider);
     virtual ~SkiaSalGraphicsImpl() override;
 
     virtual void Init() override;
@@ -242,7 +242,7 @@ protected:
                               tools::Long nHeight, double nTransparency, bool blockAA = false);
     void privateCopyBits(const SalTwoRect& rPosAry, SkiaSalGraphicsImpl* src);
 
-    void setProvider(SalGeometryProvider* provider) { mProvider = provider; }
+    void setProvider(vcl::SalGeometryProvider* provider) { mProvider = provider; }
 
     bool isOffscreen() const;
     bool isGPU() const { return mIsGPU; }
@@ -341,7 +341,7 @@ protected:
 
     SalGraphics& mParent;
     /// Pointer to the SalFrame or SalVirtualDevice
-    SalGeometryProvider* mProvider;
+    vcl::SalGeometryProvider* mProvider;
     // The Skia surface that is target of all the rendering.
     sk_sp<SkSurface> mSurface;
     // Note that mSurface may be a proxy surface and not the one from the window context.

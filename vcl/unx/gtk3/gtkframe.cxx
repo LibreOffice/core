@@ -467,8 +467,9 @@ bool GtkSalFrame::doKeyCallback( guint state,
     return bStopProcessingKey;
 }
 
-GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
-    : m_nXScreen( getDisplay()->GetDefaultXScreen() )
+GtkSalFrame::GtkSalFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin)
+    : SalFrame(rWin)
+    , m_nXScreen(getDisplay()->GetDefaultXScreen())
     , m_pHeaderBar(nullptr)
     , m_bGraphics(false)
     , m_nSetFocusSignalId(0)
@@ -482,8 +483,9 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
     Init( pParent, nStyle );
 }
 
-GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
-    : m_nXScreen( getDisplay()->GetDefaultXScreen() )
+GtkSalFrame::GtkSalFrame(SystemParentData* pSysData, vcl::Window& rWin)
+    : SalFrame(rWin)
+    , m_nXScreen(getDisplay()->GetDefaultXScreen())
     , m_pHeaderBar(nullptr)
     , m_bGraphics(false)
     , m_nSetFocusSignalId(0)
@@ -1466,7 +1468,7 @@ SalGraphics* GtkSalFrame::AcquireGraphics()
             AllocateFrame();
             TriggerPaintEvent();
         }
-        m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
+        m_pGraphics->setSurface(m_pSurface);
     }
     m_bGraphics = true;
     return m_pGraphics.get();
@@ -1760,9 +1762,9 @@ void GtkSalFrame::SetMinClientSize( tools::Long nWidth, tools::Long nHeight )
 
 void GtkSalFrame::AllocateFrame()
 {
-    basegfx::B2IVector aFrameSize( maGeometry.nWidth, maGeometry.nHeight );
-    if (m_pSurface && m_aFrameSize.getX() == aFrameSize.getX() &&
-                      m_aFrameSize.getY() == aFrameSize.getY() )
+    basegfx::B2IVector aFrameSize(GetWidth(), GetHeight());
+    if (m_pSurface && cairo_image_surface_get_width(m_pSurface) == aFrameSize.getX() &&
+                      cairo_image_surface_get_height(m_pSurface) == aFrameSize.getY())
         return;
 
     if( aFrameSize.getX() == 0 )
@@ -1777,13 +1779,12 @@ void GtkSalFrame::AllocateFrame()
                                                 CAIRO_CONTENT_COLOR_ALPHA,
                                                 aFrameSize.getX(),
                                                 aFrameSize.getY());
-    m_aFrameSize = aFrameSize;
 
     cairo_surface_set_user_data(m_pSurface, SvpSalGraphics::getDamageKey(), &m_aDamageHandler, nullptr);
     SAL_INFO("vcl.gtk3", "allocated Frame size of " << maGeometry.nWidth << " x " << maGeometry.nHeight);
 
     if (m_pGraphics)
-        m_pGraphics->setSurface(m_pSurface, m_aFrameSize);
+        m_pGraphics->setSurface(m_pSurface);
 }
 
 void GtkSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight, sal_uInt16 nFlags )
@@ -1845,12 +1846,36 @@ void GtkSalFrame::SetPosSize( tools::Long nX, tools::Long nY, tools::Long nWidth
     m_bDefaultPos = false;
 }
 
-void GtkSalFrame::GetClientSize( tools::Long& rWidth, tools::Long& rHeight )
+void GtkSalFrame::GetDPI(sal_Int32& rDPIX, sal_Int32& rDPIY)
+{
+    char* pForceDpi;
+    if ((pForceDpi = getenv("SAL_FORCEDPI")))
+    {
+        OString sForceDPI(pForceDpi);
+        rDPIX = rDPIY = sForceDPI.toInt32();
+        return;
+    }
+
+#if !GTK_CHECK_VERSION(4, 0, 0)
+    GdkScreen* pScreen = gtk_widget_get_screen(m_pWindow);
+    double fResolution = -1.0;
+    g_object_get(pScreen, "resolution", &fResolution, nullptr);
+
+    if (fResolution > 0.0)
+        rDPIX = rDPIY = sal_Int32(fResolution);
+    else
+        rDPIX = rDPIY = 96;
+#else
+    rDPIX = rDPIY = 96;
+#endif
+}
+
+void GtkSalFrame::GetClientSize(sal_Int32& rWidth, sal_Int32& rHeight)
 {
     if( m_pWindow && !(m_nState & GDK_TOPLEVEL_STATE_MINIMIZED) )
     {
-        rWidth = maGeometry.nWidth;
-        rHeight = maGeometry.nHeight;
+        rWidth = GetWidth();
+        rHeight = GetHeight();
     }
     else
         rWidth = rHeight = 0;
@@ -6012,6 +6037,11 @@ GdkEvent* GtkSalFrame::makeFakeKeyPress(GtkWidget* pWidget)
     (void)pWidget;
     return nullptr;
 #endif
+}
+
+sal_Int32 GtkSalFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    return GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

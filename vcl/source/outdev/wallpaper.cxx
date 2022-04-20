@@ -103,7 +103,7 @@ void OutputDevice::Erase()
         RasterOp eRasterOp = GetRasterOp();
         if ( eRasterOp != RasterOp::OverPaint )
             SetRasterOp( RasterOp::OverPaint );
-        DrawWallpaper( 0, 0, mnOutWidth, mnOutHeight, maBackground );
+        DrawWallpaper(0, 0, m_nWidth, m_nHeight, maBackground);
         if ( eRasterOp != RasterOp::OverPaint )
             SetRasterOp( eRasterOp );
     }

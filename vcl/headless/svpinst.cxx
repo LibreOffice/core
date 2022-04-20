@@ -216,14 +216,14 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
     return bRet;
 }
 
-SalFrame* SvpSalInstance::CreateChildFrame( SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle )
+SalFrame* SvpSalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle, vcl::Window& rWin)
 {
-    return new SvpSalFrame( this, nullptr, nStyle );
+    return new SvpSalFrame(this, nullptr, nStyle, rWin);
 }
 
-SalFrame* SvpSalInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
+SalFrame* SvpSalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin)
 {
-    return new SvpSalFrame( this, pParent, nStyle );
+    return new SvpSalFrame(this, pParent, nStyle, rWin);
 }
 
 void SvpSalInstance::DestroyFrame( SalFrame* pFrame )
@@ -244,7 +244,7 @@ void SvpSalInstance::DestroyObject( SalObject* pObject )
 #ifndef IOS
 
 std::unique_ptr<SalVirtualDevice> SvpSalInstance::CreateVirtualDevice(SalGraphics& rGraphics,
-                                                       tools::Long &nDX, tools::Long &nDY,
+                                                       sal_Int32 &nDX, sal_Int32 &nDY,
                                                        DeviceFormat /*eFormat*/,
                                                        const SystemGraphicsData* pGd)
 {

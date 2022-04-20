@@ -431,8 +431,8 @@ void CairoCommon::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
     basegfx::B2IRange aIntExtents(basegfx::unotools::b2ISurroundingRangeFromB2DRange(rExtents));
     sal_Int32 nExtentsLeft(aIntExtents.getMinX()), nExtentsTop(aIntExtents.getMinY());
     sal_Int32 nExtentsRight(aIntExtents.getMaxX()), nExtentsBottom(aIntExtents.getMaxY());
-    sal_Int32 nWidth = m_aFrameSize.getX();
-    sal_Int32 nHeight = m_aFrameSize.getY();
+    sal_Int32 nWidth = cairo_image_surface_get_width(m_pSurface);
+    sal_Int32 nHeight = cairo_image_surface_get_height(m_pSurface);
     nExtentsLeft = std::max<sal_Int32>(nExtentsLeft, 0);
     nExtentsTop = std::max<sal_Int32>(nExtentsTop, 0);
     nExtentsRight = std::min<sal_Int32>(nExtentsRight, nWidth);
@@ -467,11 +467,13 @@ void CairoCommon::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
         cairo_format_t nFormat = cairo_image_surface_get_format(target_surface);
         assert(nFormat == CAIRO_FORMAT_ARGB32
                && "need to implement CAIRO_FORMAT_A1 after all here");
-        sal_Int32 nStride = cairo_format_stride_for_width(nFormat, nWidth * m_fScale);
-        sal_Int32 nUnscaledExtentsLeft = nExtentsLeft * m_fScale;
-        sal_Int32 nUnscaledExtentsRight = nExtentsRight * m_fScale;
-        sal_Int32 nUnscaledExtentsTop = nExtentsTop * m_fScale;
-        sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * m_fScale;
+        double fScale = 1.0;
+        dl_cairo_surface_get_device_scale(m_pSurface, &fScale, nullptr);
+        sal_Int32 nStride = cairo_format_stride_for_width(nFormat, nWidth * fScale);
+        sal_Int32 nUnscaledExtentsLeft = nExtentsLeft * fScale;
+        sal_Int32 nUnscaledExtentsRight = nExtentsRight * fScale;
+        sal_Int32 nUnscaledExtentsTop = nExtentsTop * fScale;
+        sal_Int32 nUnscaledExtentsBottom = nExtentsBottom * fScale;
 
         // Handle headless size forced to (1,1) by SvpSalFrame::GetSurfaceFrameSize().
         int target_surface_width = cairo_image_surface_get_width(target_surface);
@@ -557,15 +559,19 @@ void CairoCommon::releaseCairoContext(cairo_t* cr, bool bXorModeAllowed,
 
 cairo_t* CairoCommon::createTmpCompatibleCairoContext() const
 {
+    double fScale = 1.0;
+    dl_cairo_surface_get_device_scale(m_pSurface, &fScale, nullptr);
+    sal_Int32 nWidth = cairo_image_surface_get_width(m_pSurface);
+    sal_Int32 nHeight = cairo_image_surface_get_height(m_pSurface);
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 12, 0)
     cairo_surface_t* target = cairo_surface_create_similar_image(
         m_pSurface,
 #else
     cairo_surface_t* target = cairo_image_surface_create(
 #endif
-        CAIRO_FORMAT_ARGB32, m_aFrameSize.getX() * m_fScale, m_aFrameSize.getY() * m_fScale);
+        CAIRO_FORMAT_ARGB32, nWidth * fScale, nHeight * fScale);
 
-    dl_cairo_surface_set_device_scale(target, m_fScale, m_fScale);
+    dl_cairo_surface_set_device_scale(target, fScale, fScale);
 
     return cairo_create(target);
 }
@@ -920,10 +926,12 @@ void CairoCommon::copyBitsCairo(const SalTwoRect& rTR, cairo_surface_t* pSourceS
     if (pSourceSurface == getSurface())
     {
         //self copy is a problem, so dup source in that case
+        double fScale = 1.0;
+        dl_cairo_surface_get_device_scale(m_pSurface, &fScale, nullptr);
         pCopy
             = cairo_surface_create_similar(pSourceSurface, cairo_surface_get_content(getSurface()),
-                                           aTR.mnSrcWidth * m_fScale, aTR.mnSrcHeight * m_fScale);
-        dl_cairo_surface_set_device_scale(pCopy, m_fScale, m_fScale);
+                                           aTR.mnSrcWidth * fScale, aTR.mnSrcHeight * fScale);
+        dl_cairo_surface_set_device_scale(pCopy, fScale, fScale);
         cairo_t* cr = cairo_create(pCopy);
         cairo_set_source_surface(cr, pSourceSurface, -aTR.mnSrcX, -aTR.mnSrcY);
         cairo_rectangle(cr, 0, 0, aTR.mnSrcWidth, aTR.mnSrcHeight);
@@ -1014,12 +1022,14 @@ void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, boo
 
         if (nFlags & SalInvert::N50)
         {
+            double fScale = 1.0;
+            dl_cairo_surface_get_device_scale(m_pSurface, &fScale, nullptr);
             cairo_pattern_t* pattern = create_stipple();
             cairo_surface_t* surface = cairo_surface_create_similar(
-                m_pSurface, cairo_surface_get_content(m_pSurface), extents.getWidth() * m_fScale,
-                extents.getHeight() * m_fScale);
+                m_pSurface, cairo_surface_get_content(m_pSurface), extents.getWidth() * fScale,
+                extents.getHeight() * fScale);
 
-            dl_cairo_surface_set_device_scale(surface, m_fScale, m_fScale);
+            dl_cairo_surface_set_device_scale(surface, fScale, fScale);
             cairo_t* stipple_cr = cairo_create(surface);
             cairo_set_source_rgb(stipple_cr, 1.0, 1.0, 1.0);
             cairo_mask(stipple_cr, pattern);

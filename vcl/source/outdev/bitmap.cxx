@@ -190,7 +190,7 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
     {
         assert(mpGraphics);
 
-        if ( nWidth > 0 && nHeight  > 0 && nX <= (mnOutWidth + mnOutOffX) && nY <= (mnOutHeight + mnOutOffY))
+        if ( nWidth > 0 && nHeight  > 0 && nX <= (m_nWidth + mnOutOffX) && nY <= (m_nHeight + mnOutOffY))
         {
             tools::Rectangle   aRect( Point( nX, nY ), Size( nWidth, nHeight ) );
             bool        bClipped = false;
@@ -212,16 +212,16 @@ Bitmap OutputDevice::GetBitmap( const Point& rSrcPt, const Size& rSize ) const
             }
 
             // Width outside of draw area?
-            if ( (nWidth + nX) > (mnOutWidth + mnOutOffX) )
+            if ( (nWidth + nX) > (m_nWidth + mnOutOffX) )
             {
-                nWidth  = mnOutOffX + mnOutWidth - nX;
+                nWidth  = mnOutOffX + m_nWidth - nX;
                 bClipped = true;
             }
 
             // Height outside of draw area?
-            if ( (nHeight + nY) > (mnOutHeight + mnOutOffY) )
+            if ( (nHeight + nY) > (m_nHeight + mnOutOffY) )
             {
-                nHeight = mnOutOffY + mnOutHeight - nY;
+                nHeight = mnOutOffY + m_nHeight - nY;
                 bClipped = true;
             }
 

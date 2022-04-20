@@ -43,8 +43,8 @@ public:
     WinSalInstance();
     virtual ~WinSalInstance() override;
 
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle ) override;
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin ) override;
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& ) override;
     virtual void            DestroyFrame( SalFrame* pFrame ) override;
     virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow ) override;
     virtual void            DestroyObject( SalObject* pObject ) override;

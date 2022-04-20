@@ -355,6 +355,8 @@ IMPL_LINK(FontNameBox, SettingsChangedHdl, VclSimpleEvent&, rEvent, void)
     DataChangedEvent* pData = static_cast<DataChangedEvent*>(static_cast<VclWindowEvent&>(rEvent).GetData());
     if (pData->GetType() == DataChangedEventType::SETTINGS)
     {
+        for (auto &rDev : gFontPreviewVirDevs)
+            rDev.disposeAndClear();
         gFontPreviewVirDevs.clear();
         gRenderedFontNames.clear();
         calcCustomItemSize(*m_xComboBox);

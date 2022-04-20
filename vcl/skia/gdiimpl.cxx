@@ -257,7 +257,7 @@ public:
     }
 };
 
-SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, SalGeometryProvider* pProvider)
+SkiaSalGraphicsImpl::SkiaSalGraphicsImpl(SalGraphics& rParent, vcl::SalGeometryProvider* pProvider)
     : mParent(rParent)
     , mProvider(pProvider)
     , mIsGPU(false)

@@ -261,16 +261,16 @@ GtkInstance::~GtkInstance()
     ResetLastSeenCairoFontOptions(nullptr);
 }
 
-SalFrame* GtkInstance::CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
+SalFrame* GtkInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window& rWin)
 {
     EnsureInit();
-    return new GtkSalFrame( pParent, nStyle );
+    return new GtkSalFrame(pParent, nStyle, rWin);
 }
 
-SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, SalFrameStyleFlags )
+SalFrame* GtkInstance::CreateChildFrame(SystemParentData* pParentData, SalFrameStyleFlags, vcl::Window& rWin)
 {
     EnsureInit();
-    return new GtkSalFrame( pParentData );
+    return new GtkSalFrame(pParentData, rWin);
 }
 
 SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, bool bShow )
@@ -373,7 +373,7 @@ void GtkYieldMutex::ThreadsLeave()
 }
 
 std::unique_ptr<SalVirtualDevice> GtkInstance::CreateVirtualDevice( SalGraphics &rG,
-                                                    tools::Long &nDX, tools::Long &nDY,
+                                                    sal_Int32 &nDX, sal_Int32 &nDY,
                                                     DeviceFormat /*eFormat*/,
                                                     const SystemGraphicsData* pGd )
 {

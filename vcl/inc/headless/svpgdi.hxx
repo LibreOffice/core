@@ -47,7 +47,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
     CairoCommon m_aCairoCommon;
 
 public:
-    void setSurface(cairo_surface_t* pSurface, const basegfx::B2IVector& rSize);
+    void setSurface(cairo_surface_t* pSurface);
     cairo_surface_t* getSurface() const { return m_aCairoCommon.m_pSurface; }
     static cairo_user_data_key_t* getDamageKey()
     {
@@ -67,7 +67,7 @@ public:
     virtual SalGraphicsImpl* GetImpl() const override { return m_pBackend.get(); }
     std::unique_ptr<SvpGraphicsBackend> const& getSvpBackend() { return m_pBackend; }
 
-    virtual void            GetResolution( sal_Int32& rDPIX, sal_Int32& rDPIY ) override;
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     virtual void            SetTextColor( Color nColor ) override;
     virtual void            SetFont(LogicalFontInstance*, int nFallbackLevel) override;

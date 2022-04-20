@@ -77,14 +77,16 @@ GenPspGraphics::~GenPspGraphics()
     ReleaseFonts();
 }
 
-void GenPspGraphics::GetResolution( sal_Int32 &rDPIX, sal_Int32 &rDPIY )
+sal_Int32 GenPspGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    if (m_pJobData != nullptr)
+    assert(m_pJobData);
+    switch (eMetric)
     {
-        int x = m_pJobData->m_aContext.getRenderResolution();
-
-        rDPIX = x;
-        rDPIY = x;
+        case vcl::SGPmetric::DPIX: return m_pJobData->m_aContext.getRenderResolution();
+        case vcl::SGPmetric::DPIY: return m_pJobData->m_aContext.getRenderResolution();
+        case vcl::SGPmetric::OffScreen: return true;
+        default:
+            return -1;
     }
 }
 

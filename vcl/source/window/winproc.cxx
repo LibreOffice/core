@@ -1854,7 +1854,7 @@ static void KillOwnPopups( vcl::Window const * pWindow )
     }
 }
 
-void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight )
+void ImplHandleResize(vcl::Window* pWindow, sal_Int32 nNewWidth, sal_Int32 nNewHeight)
 {
     const bool bChanged = (nNewWidth != pWindow->GetOutputSizePixel().Width()) || (nNewHeight != pWindow->GetOutDev()->GetOutputHeightPixel());
     if (bChanged && pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE))
@@ -1871,8 +1871,8 @@ void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long 
     {
         if (bChanged)
         {
-            pWindow->GetOutDev()->mnOutWidth  = nNewWidth;
-            pWindow->GetOutDev()->mnOutHeight = nNewHeight;
+            pWindow->GetOutDev()->m_nWidth  = nNewWidth;
+            pWindow->GetOutDev()->m_nHeight = nNewHeight;
             pWindow->ImplGetWindowImpl()->mbWaitSystemResize = false;
             if ( pWindow->IsReallyVisible() )
                 pWindow->ImplSetClipFlag();
@@ -2739,8 +2739,7 @@ bool ImplWindowFrameProc( vcl::Window* _pWindow, SalEvent nEvent, const void* pE
 
         case SalEvent::Resize:
             {
-            tools::Long nNewWidth;
-            tools::Long nNewHeight;
+            sal_Int32 nNewWidth, nNewHeight;
             pWindow->ImplGetWindowImpl()->mpFrame->GetClientSize( nNewWidth, nNewHeight );
             ImplHandleResize( pWindow, nNewWidth, nNewHeight );
             }

@@ -88,6 +88,7 @@ enum class SalEvent {
     LongPress,
     ExternalGesture,
     Gesture,
+    ScaleChanged,
 };
 
 struct SalAbstractMouseEvent
