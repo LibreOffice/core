@@ -896,8 +896,7 @@ OUString SAL_CALL ODatabaseMetaData::getSearchStringEscape(  )
 
 OUString SAL_CALL ODatabaseMetaData::getStringFunctions(  )
 {
-    OUString aValue;
-    return aValue.copy(0,aValue.lastIndexOf(','));
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  )
@@ -907,8 +906,7 @@ OUString SAL_CALL ODatabaseMetaData::getTimeDateFunctions(  )
 
 OUString SAL_CALL ODatabaseMetaData::getSystemFunctions(  )
 {
-    OUString aValue;
-    return aValue.copy(0,aValue.lastIndexOf(','));
+    return OUString();
 }
 
 OUString SAL_CALL ODatabaseMetaData::getNumericFunctions(  )
