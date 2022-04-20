@@ -6,17 +6,19 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import requests, sys
-import platform, configparser
+import configparser
+import platform
 
-def detect_platform():
-    return platform.system()
+import sys
+import requests
+
 
 def main():
     if len(sys.argv) < 4:
         print(sys.argv)
         print("Invalid number of parameters")
-        print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\" [--system]")
+        print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\" [--system | --platform {"
+              "Windows|Linux}]")
         sys.exit(1)
 
     base_url = "https://crashreport.libreoffice.org/"
@@ -29,25 +31,30 @@ def main():
     user = config["CrashReport"]["User"]
     password = config["CrashReport"]["Password"]
 
-    platform = detect_platform()
     files = {'symbols': open(sys.argv[1], 'rb')}
-    data = {'version': sys.argv[3], 'platform': platform}
+    data = {'version': sys.argv[3]}
 
     if len(sys.argv) > 4 and sys.argv[4] == "--system":
         data['system'] = True
+    elif len(sys.argv) > 4 and sys.argv[4] == "--system":
+        if len(sys.argv) > 5:
+            data['platform'] = sys.argv[5]
+        else:
+            data['platform'] = platform.system()
 
     session = requests.session()
     session.get(login_url)
     csrftoken = session.cookies['csrftoken']
 
-    login_data = { 'username': user,'password': password,
-            'csrfmiddlewaretoken': csrftoken }
-    headers = { "Referer": base_url }
-    r1 = session.post(login_url, headers=headers, data=login_data)
+    login_data = {'username': user, 'password': password,
+                  'csrfmiddlewaretoken': csrftoken}
+    headers = {"Referer": base_url}
+    session.post(login_url, headers=headers, data=login_data)
 
     data['csrfmiddlewaretoken'] = csrftoken
 
-    r = session.post(upload_url, headers=headers, files=files, data=data)
+    session.post(upload_url, headers=headers, files=files, data=data)
+
 
 if __name__ == "__main__":
     main()
