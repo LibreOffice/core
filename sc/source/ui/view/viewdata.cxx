@@ -1866,8 +1866,8 @@ void ScViewData::EditGrowX()
     vcl::Window* pWin = pCurView->GetWindow();
 
     // Get the left- and right-most column positions.
-    SCCOL nLeft = GetPosX(eHWhich);
-    SCCOL nRight = nLeft + VisibleCellsX(eHWhich);
+    SCCOL nLeft = bLOKActive ? nEditStartCol : GetPosX(eHWhich);
+    SCCOL nRight = bLOKActive ? nEditEndCol : nLeft + VisibleCellsX(eHWhich);
 
     Size        aSize = pEngine->GetPaperSize();
     Size aSizePTwips;
