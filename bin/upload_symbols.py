@@ -6,48 +6,50 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
-import requests, sys
-import platform, configparser
+import configparser
+import platform
+import argparse
+import requests
 
-def detect_platform():
-    return platform.system()
 
 def main():
-    if len(sys.argv) < 4:
-        print(sys.argv)
-        print("Invalid number of parameters")
-        print("Usage: upload-symbols.py symbols.zip config.ini \"long explanation\" [--system]")
-        sys.exit(1)
+    parser = argparse.ArgumentParser()
+    parser.add_argument('symbols_dir')
+    parser.add_argument('config_dir')
+    parser.add_argument('version')
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--system', action='store_true')
+    group.add_argument('--platform', choices=('Windows', 'Linux'))
+    args = parser.parse_args()
 
     base_url = "https://crashreport.libreoffice.org/"
     upload_url = base_url + "upload/"
     login_url = base_url + "accounts/login/"
 
     config = configparser.ConfigParser()
-    config.read(sys.argv[2])
+    config.read(args.config_dir)
 
     user = config["CrashReport"]["User"]
     password = config["CrashReport"]["Password"]
 
-    platform = detect_platform()
-    files = {'symbols': open(sys.argv[1], 'rb')}
-    data = {'version': sys.argv[3], 'platform': platform}
-
-    if len(sys.argv) > 4 and sys.argv[4] == "--system":
-        data['system'] = True
+    files = {'symbols': open(args.symbol_dir, 'rb')}
+    data = {'version': args.version,
+            'system': args.system,
+            'platform': platform.system() if args.platform is None else args.platform}
 
     session = requests.session()
     session.get(login_url)
     csrftoken = session.cookies['csrftoken']
 
-    login_data = { 'username': user,'password': password,
-            'csrfmiddlewaretoken': csrftoken }
-    headers = { "Referer": base_url }
-    r1 = session.post(login_url, headers=headers, data=login_data)
+    login_data = {'username': user, 'password': password,
+                  'csrfmiddlewaretoken': csrftoken}
+    headers = {"Referer": base_url}
+    session.post(login_url, headers=headers, data=login_data)
 
     data['csrfmiddlewaretoken'] = csrftoken
 
-    r = session.post(upload_url, headers=headers, files=files, data=data)
+    session.post(upload_url, headers=headers, files=files, data=data)
+
 
 if __name__ == "__main__":
     main()
