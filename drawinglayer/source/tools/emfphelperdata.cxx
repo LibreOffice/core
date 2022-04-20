@@ -523,13 +523,6 @@ namespace emfplushelper
         if (!(pen && polygon.count()))
             return;
 
-        // we need a line join attribute
-        basegfx::B2DLineJoin lineJoin = basegfx::B2DLineJoin::Round;
-        if (pen->penDataFlags & EmfPlusPenDataJoin) // additional line join information
-        {
-            lineJoin = static_cast<basegfx::B2DLineJoin>(EMFPPen::lcl_convertLineJoinType(pen->lineJoin));
-        }
-
         // we need a line cap attribute
         css::drawing::LineCap lineCap = css::drawing::LineCap_BUTT;
         if (pen->penDataFlags & EmfPlusPenDataStartCap) // additional line cap information
@@ -541,46 +534,54 @@ namespace emfplushelper
         const double transformedPenWidth = maMapTransform.get(0, 0) * pen->penWidth;
         drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
                                                              transformedPenWidth,
-                                                             lineJoin,
-                                                             lineCap);
+                                                             pen->GetLineJoinType(),
+                                                             lineCap,
+                                                             basegfx::deg2rad(15.0));
 
         drawinglayer::attribute::StrokeAttribute aStrokeAttribute;
-        if (pen->penDataFlags & EmfPlusPenDataLineStyle && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
+        if (pen->penDataFlags & EmfPlusPenDataLineStyle
+            && pen->dashStyle != EmfPlusLineStyleCustom) // pen has a predefined line style
         {
-            // short writing
             const double pw = maMapTransform.get(1, 1) * pen->penWidth;
-            // taken from the old cppcanvas implementation and multiplied with pen width
-            const std::vector<double> dash = { 3*pw, 3*pw };
-            const std::vector<double> dot = { pw, 3*pw };
-            const std::vector<double> dashdot = { 3*pw, 3*pw, pw, 3*pw };
-            const std::vector<double> dashdotdot = { 3*pw, 3*pw, pw, 3*pw, pw, 3*pw };
-
             switch (pen->dashStyle)
             {
                 case EmfPlusLineStyleSolid: // do nothing special, use default stroke attribute
                     break;
                 case EmfPlusLineStyleDash:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dash));
+                {
+                    std::vector<double> dash = { 3 * pw, pw };
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::move(dash));
                     break;
+                }
                 case EmfPlusLineStyleDot:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dot));
+                {
+                    std::vector<double> dot = { pw, pw };
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::move(dot));
                     break;
+                }
                 case EmfPlusLineStyleDashDot:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dashdot));
+                {
+                    std::vector<double> dashdot = { 3 * pw, pw, pw, pw };
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::move(dashdot));
                     break;
+                }
                 case EmfPlusLineStyleDashDotDot:
-                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::vector(dashdotdot));
+                {
+                    std::vector<double> dashdotdot = { 3 * pw, pw, pw, pw, pw, pw };
+                    aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::move(dashdotdot));
                     break;
+                }
             }
         }
         else if (pen->penDataFlags & EmfPlusPenDataDashedLine) // pen has a custom dash line
         {
+            const double pw = maMapTransform.get(1, 1) * pen->penWidth;
             // StrokeAttribute needs a double vector while the pen provides a float vector
             std::vector<double> aPattern(pen->dashPattern.size());
-            for (size_t i=0; i<aPattern.size(); i++)
+            for (size_t i = 0; i < aPattern.size(); i++)
             {
                 // convert from float to double and multiply with the adjusted pen width
-                aPattern[i] = maMapTransform.get(1, 1) * pen->penWidth * pen->dashPattern[i];
+                aPattern[i] = pw * pen->dashPattern[i];
             }
             aStrokeAttribute = drawinglayer::attribute::StrokeAttribute(std::move(aPattern));
         }
