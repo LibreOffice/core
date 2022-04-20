@@ -76,7 +76,7 @@ namespace drawinglayer::primitive2d
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(getTail()),
-                        getTransform()));
+                        {}));
             }
             else
             {
@@ -89,11 +89,9 @@ namespace drawinglayer::primitive2d
                         getSdrLFSTAttribute().getLine(),
                         attribute::SdrLineStartEndAttribute()));
 
-                aTransformed = getTail();
-                aTransformed.transform(getTransform());
                 aRetval.push_back(
                     createPolygonLinePrimitive(
-                        aTransformed,
+                        getTail(),
                         getSdrLFSTAttribute().getLine(),
                         getSdrLFSTAttribute().getLineStartEnd()));
             }
@@ -132,13 +130,6 @@ namespace drawinglayer::primitive2d
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY)
         {
-            // transform maTail to unit polygon
-            if(getTail().count())
-            {
-                basegfx::B2DHomMatrix aInverse(getTransform());
-                aInverse.invert();
-                maTail.transform(aInverse);
-            }
         }
 
         bool SdrCaptionPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
