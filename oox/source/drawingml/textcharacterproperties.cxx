@@ -195,13 +195,30 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap.setProperty( PROP_CharPostureAsian, eSlant);
     rPropMap.setProperty( PROP_CharPostureComplex, eSlant);
 
-    bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
-    if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
+    if( moUnderline.has() )
     {
         rPropMap.setProperty( PROP_CharUnderlineHasColor, true);
-        rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getColor( rFilter.getGraphicHelper() ));
+
+        if( maUnderlineColor.isUsed() )
+        {
+            bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
+            if( !bUnderlineFillFollowText )
+                rPropMap.setProperty( PROP_CharUnderlineColor, maUnderlineColor.getColor( rFilter.getGraphicHelper() ));
+
+            // TODO If bUnderlineFillFollowText uFillTx (CT_TextUnderlineFillFollowText) is set, fill color of the underline should be the same color as the text
+        }
+        else
+        {
+            // Use fill color unless it's COL_AUTO, then default to COL_BLACK
+            Color aColor = maFillProperties.getBestSolidColor();
+            if ( aColor.getColor(rFilter.getGraphicHelper()) != COL_AUTO )
+                rPropMap.setProperty( PROP_CharUnderlineColor, aColor.getColor( rFilter.getGraphicHelper() ));
+            else
+                rPropMap.setProperty( PROP_CharUnderlineColor, COL_BLACK );
+        }
     }
-    // TODO If bUnderlineFillFollowText uFillTx (CT_TextUnderlineFillFollowText) is set, fill color of the underline should be the same color as the text
+    else
+        rPropMap.setProperty( PROP_CharUnderlineHasColor, false);
 
     if (maHighlightColor.isUsed() && maHighlightColor.getTransparency() != 100)
         rPropMap.setProperty( PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));

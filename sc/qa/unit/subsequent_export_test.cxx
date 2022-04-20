@@ -4112,14 +4112,26 @@ void ScExportTest::testTextUnderlineColorXLSX()
     // Make sure the underline type is drawn with heavy line
     assertXPath(pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr",
                 "u", "heavy");
-    // tdf#104219 Make sure that uFill is not existing and uFillTx is set.
-    // It mean that color is automatic, should be the same color as the text.
-    assertXPath(
-        pDoc, "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill", 0);
+    // tdf#104219
+    // - Expected: 000000
+    // - Actual  : ffffff
     assertXPath(pDoc,
-                "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFillTx",
-                1);
+                "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[1]/a:rPr/a:uFill/"
+                "a:solidFill/a:srgbClr",
+                "val", "000000");
 
+    assertXPath(pDoc,
+                "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[2]/a:rPr/a:uFill/"
+                "a:solidFill/a:srgbClr",
+                "val", "ff0000");
+
+    // tdf#148685
+    // - Expected: 604a7b
+    // - Actual  : ff0000
+    assertXPath(pDoc,
+                "/xdr:wsDr/xdr:twoCellAnchor[2]/xdr:sp[1]/xdr:txBody/a:p[1]/a:r[3]/a:rPr/a:uFill/"
+                "a:solidFill/a:srgbClr",
+                "val", "604a7b");
     xDocSh->DoClose();
 }
 

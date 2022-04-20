@@ -2325,17 +2325,10 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             || GetProperty(rXPropSet, "CharUnderlineColor")))
     {
         ::Color color(ColorTransparency, *o3tl::doAccess<sal_uInt32>(mAny));
-        // if color is automatic, then we shouldn't write information about color but to take color from character
-        if( color != COL_AUTO )
-        {
-            mpFS->startElementNS(XML_a, XML_uFill);
-            WriteSolidFill( color );
-            mpFS->endElementNS( XML_a, XML_uFill );
-        }
-        else
-        {
-            mpFS->singleElementNS(XML_a, XML_uFillTx);
-        }
+
+        mpFS->startElementNS(XML_a, XML_uFill);
+        WriteSolidFill( color );
+        mpFS->endElementNS( XML_a, XML_uFill );
     }
 
     if (GetProperty(rXPropSet, "CharFontName"))
