@@ -4,6 +4,7 @@ import sys
 import os
 import subprocess
 import json
+import argparse
 
 from tools import uncompress_file_to_dir, get_file_info, make_complete_mar_name
 from config import parse_config
@@ -12,15 +13,19 @@ from path import UpdaterPath, convert_to_unix, convert_to_native
 
 current_dir_path = os.path.dirname(os.path.realpath(convert_to_unix(__file__)))
 
-def main():
-    if len(sys.argv) < 5:
-        print("Usage: create_full_mar_for_languages.py $PRODUCTNAME $WORKDIR $FILENAMEPREFIX $UPDATE_CONFIG")
-        sys.exit(1)
 
-    update_config = sys.argv[4]
-    filename_prefix = sys.argv[3]
-    workdir = sys.argv[2]
-    product_name = sys.argv[1]
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('product_name')
+    parser.add_argument('workdir')
+    parser.add_argument('filename_prefix')
+    parser.add_argument('update_config')
+    args = parser.parse_args()
+
+    update_config = args.update_config
+    filename_prefix = args.filename_prefix
+    workdir = args.workdir
+    product_name = args.update_config
 
     if len(update_config) == 0:
         print("missing update config")
@@ -45,10 +50,11 @@ def main():
 
     sign_mar_file(target_dir, config, mar_file, filename_prefix)
 
-    file_info = { 'complete' : get_file_info(mar_file, config.base_url) }
+    file_info = {'complete': get_file_info(mar_file, config.base_url)}
 
     with open(os.path.join(target_dir, 'complete_info.json'), "w") as complete_info_file:
-        json.dump(file_info, complete_info_file, indent = 4)
+        json.dump(file_info, complete_info_file, indent=4)
+
 
 if __name__ == '__main__':
     main()
