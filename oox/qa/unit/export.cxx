@@ -611,6 +611,27 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf100391TextAreaRect)
     // The test reflects the state of Apr 2022. It needs to be adapted when export of handles and
     // guides is implemented.
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf109169_OctagonBevel)
+{
+    // The odp file contains an "Octagon Bevel" shape. Such has shading not in commands H,I,J,K
+    // but shading is generated in ctor of EnhancedCustomShape2d from the Type value.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf109169_OctagonBevel.odt";
+
+    // Export to docx had not written a:fill or a:stroke attributes at all.
+    loadAndSave(aURL, "Office Open XML Text");
+
+    // Verify the markup:
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "word/document.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // File should have six subpaths, one with stroke and five with fill
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[1]", "stroke", "0");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[2]", "fill", "darkenLess");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[3]", "fill", "darken");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "fill", "darken");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[5]", "fill", "lightenLess");
+    assertXPath(pXmlDoc, "//a:pathLst/a:path[6]", "fill", "lighten");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
