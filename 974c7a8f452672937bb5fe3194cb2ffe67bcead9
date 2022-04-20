@@ -16,6 +16,23 @@
       "message": "Yes when I had touched that line I should have removed it.",
       "revId": "974c7a8f452672937bb5fe3194cb2ffe67bcead9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48838e10_f48ce912",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-20T09:05:13Z",
+      "side": 1,
+      "message": "Looks OK to me, thanks.",
+      "revId": "974c7a8f452672937bb5fe3194cb2ffe67bcead9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
