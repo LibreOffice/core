@@ -424,7 +424,7 @@ SvXMLNumFmtPropContext::SvXMLNumFmtPropContext( SvXMLImport& rImport,
         {
             case XML_ELEMENT(FO, XML_COLOR):
             case XML_ELEMENT(FO_COMPAT, XML_COLOR):
-                bColSet = ::sax::Converter::convertColor( m_nColor, aIter.toString() );
+                bColSet = ::sax::Converter::convertColor( m_nColor, aIter.toView() );
                 break;
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", aIter);

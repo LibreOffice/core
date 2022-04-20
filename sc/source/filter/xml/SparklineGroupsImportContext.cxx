@@ -32,29 +32,29 @@ SparklineGroupsImportContext::SparklineGroupsImportContext(ScXMLImport& rImport)
 
 namespace
 {
-sc::SparklineType parseSparklineType(std::u16string_view aString)
+sc::SparklineType parseSparklineType(std::string_view aString)
 {
-    if (aString == u"column")
+    if (aString == "column")
         return sc::SparklineType::Column;
-    else if (aString == u"stacked")
+    else if (aString == "stacked")
         return sc::SparklineType::Stacked;
     return sc::SparklineType::Line;
 }
 
-sc::DisplayEmptyCellsAs parseDisplayEmptyCellsAs(std::u16string_view aString)
+sc::DisplayEmptyCellsAs parseDisplayEmptyCellsAs(std::string_view aString)
 {
-    if (aString == u"span")
+    if (aString == "span")
         return sc::DisplayEmptyCellsAs::Span;
-    else if (aString == u"gap")
+    else if (aString == "gap")
         return sc::DisplayEmptyCellsAs::Gap;
     return sc::DisplayEmptyCellsAs::Zero;
 }
 
-sc::AxisType parseAxisType(std::u16string_view aString)
+sc::AxisType parseAxisType(std::string_view aString)
 {
-    if (aString == u"group")
+    if (aString == "group")
         return sc::AxisType::Group;
-    else if (aString == u"custom")
+    else if (aString == "custom")
         return sc::AxisType::Custom;
     return sc::AxisType::Individual;
 }
@@ -70,8 +70,7 @@ void SparklineGroupsImportContext::fillSparklineGroupID(
         {
             case XML_ELEMENT(CALC_EXT, XML_ID):
             {
-                OString aString = OUStringToOString(rIter.toString(), RTL_TEXTENCODING_ASCII_US);
-                tools::Guid aGuid(aString);
+                tools::Guid aGuid(rIter.toView());
                 m_pCurrentSparklineGroup->setID(aGuid);
                 break;
             }
@@ -90,7 +89,7 @@ void SparklineGroupsImportContext::fillSparklineGroupAttributes(
         {
             case XML_ELEMENT(CALC_EXT, XML_TYPE):
             {
-                rAttributes.setType(parseSparklineType(rIter.toString()));
+                rAttributes.setType(parseSparklineType(rIter.toView()));
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_LINE_WIDTH):
@@ -111,7 +110,7 @@ void SparklineGroupsImportContext::fillSparklineGroupAttributes(
             }
             case XML_ELEMENT(CALC_EXT, XML_DISPLAY_EMPTY_CELLS_AS):
             {
-                auto eDisplayEmptyCellsAs = parseDisplayEmptyCellsAs(rIter.toString());
+                auto eDisplayEmptyCellsAs = parseDisplayEmptyCellsAs(rIter.toView());
                 rAttributes.setDisplayEmptyCellsAs(eDisplayEmptyCellsAs);
                 break;
             }
@@ -157,12 +156,12 @@ void SparklineGroupsImportContext::fillSparklineGroupAttributes(
             }
             case XML_ELEMENT(CALC_EXT, XML_MIN_AXIS_TYPE):
             {
-                rAttributes.setMinAxisType(parseAxisType(rIter.toString()));
+                rAttributes.setMinAxisType(parseAxisType(rIter.toView()));
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_MAX_AXIS_TYPE):
             {
-                rAttributes.setMaxAxisType(parseAxisType(rIter.toString()));
+                rAttributes.setMaxAxisType(parseAxisType(rIter.toView()));
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_RIGHT_TO_LEFT):
@@ -183,56 +182,56 @@ void SparklineGroupsImportContext::fillSparklineGroupAttributes(
             case XML_ELEMENT(CALC_EXT, XML_COLOR_SERIES):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorSeries(aColor);
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_NEGATIVE):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorNegative(aColor);
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_AXIS):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorAxis(aColor);
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_MARKERS):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorMarkers(aColor);
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_FIRST):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorFirst(aColor);
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_LAST):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorLast(aColor);
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_HIGH):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorHigh(aColor);
                 break;
             }
             case XML_ELEMENT(CALC_EXT, XML_COLOR_LOW):
             {
                 Color aColor;
-                sax::Converter::convertColor(aColor, rIter.toString());
+                sax::Converter::convertColor(aColor, rIter.toView());
                 rAttributes.setColorLow(aColor);
                 break;
             }

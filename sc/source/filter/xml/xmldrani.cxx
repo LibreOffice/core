@@ -167,7 +167,7 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                 case XML_ELEMENT( TABLE, XML_REFRESH_DELAY ):
                 {
                     double fTime;
-                    if (::sax::Converter::convertDuration( fTime, aIter.toString() ))
+                    if (::sax::Converter::convertDuration( fTime, aIter.toView() ))
                         nRefresh = std::max( static_cast<sal_Int32>(fTime * 86400.0), sal_Int32(0) );
                 }
                 break;

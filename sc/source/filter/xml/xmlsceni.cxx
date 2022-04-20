@@ -56,7 +56,7 @@ ScXMLTableScenarioContext::ScXMLTableScenarioContext(
             bDisplayBorder = IsXMLToken(aIter, XML_TRUE);
             break;
         case XML_ELEMENT( TABLE, XML_BORDER_COLOR ):
-            ::sax::Converter::convertColor(aBorderColor, aIter.toString());
+            ::sax::Converter::convertColor(aBorderColor, aIter.toView());
             break;
         case XML_ELEMENT( TABLE, XML_COPY_BACK ):
             bCopyBack = IsXMLToken(aIter, XML_TRUE);

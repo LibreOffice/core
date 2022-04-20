@@ -100,10 +100,10 @@ void XMLGradientStyleImport::importXML(
             aGradient.YOffset = static_cast< sal_Int16 >( nTmpValue );
             break;
         case XML_ELEMENT(DRAW, XML_START_COLOR):
-            ::sax::Converter::convertColor(aGradient.StartColor, aIter.toString());
+            ::sax::Converter::convertColor(aGradient.StartColor, aIter.toView());
             break;
         case XML_ELEMENT(DRAW, XML_END_COLOR):
-            ::sax::Converter::convertColor(aGradient.EndColor, aIter.toString());
+            ::sax::Converter::convertColor(aGradient.EndColor, aIter.toView());
             break;
         case XML_ELEMENT(DRAW, XML_START_INTENSITY):
             ::sax::Converter::convertPercent( nTmpValue, aIter.toView() );

@@ -222,6 +222,10 @@ public:
     static bool convertDuration(css::util::Duration& rDuration,
                         std::u16string_view rString);
 
+    /** convert XMLSchema-2 "duration" string to util::Duration */
+    static bool convertDuration(css::util::Duration& rDuration,
+                        std::string_view rString);
+
     /** convert util::Date to XMLSchema-2 "date" string */
     static void convertDate( OUStringBuffer& rBuffer,
                     const css::util::Date& rDate,

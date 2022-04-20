@@ -115,8 +115,8 @@ public:
     Any convertTarget( const OUString& rValue );
     static Any convertPath( const OUString& rValue );
     Any convertTiming( const OUString& rValue );
-    static Sequence< double > convertKeyTimes( std::u16string_view rValue );
-    static Sequence< TimeFilterPair > convertTimeFilter( std::u16string_view rValue );
+    static Sequence< double > convertKeyTimes( std::string_view rValue );
+    static Sequence< TimeFilterPair > convertTimeFilter( std::string_view rValue );
 };
 
 AnimationsImportHelperImpl::AnimationsImportHelperImpl( SvXMLImport& rImport )
@@ -378,7 +378,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
     return aAny;
 }
 
-Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( std::u16string_view rValue )
+Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( std::string_view rValue )
 {
     const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
 
@@ -394,7 +394,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( std::u16string_v
     return aKeyTimes;
 }
 
-Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( std::u16string_view rValue )
+Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( std::string_view rValue )
 {
     const sal_Int32 nElements { comphelper::string::getTokenCount(rValue, ';') };
 
@@ -405,14 +405,14 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( std::u
         TimeFilterPair* pValues = aTimeFilter.getArray();
         for (sal_Int32 nIndex = 0; nIndex >= 0; )
         {
-            const std::u16string_view aToken( o3tl::getToken(rValue, 0, ';', nIndex ) );
+            const std::string_view aToken( o3tl::getToken(rValue, 0, ';', nIndex ) );
 
             size_t nPos = aToken.find( ',' );
-            if( nPos != std::u16string_view::npos )
+            if( nPos != std::string_view::npos )
             {
-                pValues->Time = rtl_math_uStringToDouble(
+                pValues->Time = rtl_math_stringToDouble(
                     aToken.data(), aToken.data() + nPos, '.', 0, nullptr, nullptr);
-                pValues->Progress = rtl_math_uStringToDouble(
+                pValues->Progress = rtl_math_stringToDouble(
                     aToken.data() + nPos + 1, aToken.data() + aToken.size(), '.', 0,
                     nullptr, nullptr);
             }
@@ -842,7 +842,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_SO52, XML_KEYTIMES):
             {
                 if( xAnimate.is() )
-                    xAnimate->setKeyTimes( AnimationsImportHelperImpl::convertKeyTimes( aIter.toString() ) );
+                    xAnimate->setKeyTimes( AnimationsImportHelperImpl::convertKeyTimes( aIter.toView() ) );
             }
             break;
 
@@ -908,7 +908,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_SO52, XML_KEYSPLINES):
             {
                 if( xAnimate.is() )
-                    xAnimate->setTimeFilter( AnimationsImportHelperImpl::convertTimeFilter( aIter.toString() ) );
+                    xAnimate->setTimeFilter( AnimationsImportHelperImpl::convertTimeFilter( aIter.toView() ) );
             }
             break;
 

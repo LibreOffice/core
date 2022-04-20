@@ -94,7 +94,7 @@ SdXMLShowsContext::SdXMLShowsContext( SdXMLImport& rImport, const Reference< XFa
             case XML_ELEMENT(PRESENTATION, XML_PAUSE):
             {
                 Duration aDuration;
-                if (!::sax::Converter::convertDuration(aDuration, aIter.toString()))
+                if (!::sax::Converter::convertDuration(aDuration, aIter.toView()))
                     continue;
 
                 const sal_Int32 nMS = (aDuration.Hours * 60 +

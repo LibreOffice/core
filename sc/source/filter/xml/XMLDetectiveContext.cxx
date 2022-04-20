@@ -167,7 +167,7 @@ ScXMLDetectiveOperationContext::ScXMLDetectiveOperationContext(
                 case XML_ELEMENT( TABLE, XML_INDEX ):
                 {
                     sal_Int32 nValue;
-                    if (::sax::Converter::convertNumber( nValue, aIter.toString(), 0 ))
+                    if (::sax::Converter::convertNumber( nValue, aIter.toView(), 0 ))
                         aDetectiveOp.nIndex = nValue;
                 }
                 break;

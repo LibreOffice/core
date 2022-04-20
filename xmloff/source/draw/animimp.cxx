@@ -455,7 +455,7 @@ XMLAnimationsEffectContext::XMLAnimationsEffectContext( SvXMLImport& rImport,
                 maShapeId = aIter.toString();
                 break;
             case XML_ELEMENT(DRAW, XML_COLOR):
-                ::sax::Converter::convertColor(maDimColor, aIter.toString());
+                ::sax::Converter::convertColor(maDimColor, aIter.toView());
                 break;
 
             case XML_ELEMENT(PRESENTATION, XML_EFFECT):

@@ -1383,7 +1383,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                         bAutoStart = true;
                     else
                     {
-                        GetScImport().GetMM100UnitConverter().convertDateTime(fStart, aIter.toString());
+                        GetScImport().GetMM100UnitConverter().convertDateTime(fStart, aIter.toView());
                         bAutoStart = false;
                     }
                 }
@@ -1395,7 +1395,7 @@ ScXMLDataPilotGroupsContext::ScXMLDataPilotGroupsContext( ScXMLImport& rImport,
                         bAutoEnd = true;
                     else
                     {
-                        GetScImport().GetMM100UnitConverter().convertDateTime(fEnd, aIter.toString());
+                        GetScImport().GetMM100UnitConverter().convertDateTime(fEnd, aIter.toView());
                         bAutoEnd = false;
                     }
                 }

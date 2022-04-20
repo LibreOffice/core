@@ -441,14 +441,14 @@ static void GetPosition3D( std::vector< css::beans::PropertyValue >& rDest,     
 }
 
 static void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest,                 // e.g. draw:glue-point-leaving-directions
-                        std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                        std::string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< double > vDirection;
     sal_Int32 nIndex = 0;
     do
     {
         double fAttrDouble;
-        std::u16string_view aToken( o3tl::getToken(rValue, 0, ',', nIndex ) );
+        std::string_view aToken( o3tl::getToken(rValue, 0, ',', nIndex ) );
         if (!::sax::Converter::convertDouble( fAttrDouble, aToken ))
             break;
         else
@@ -466,14 +466,14 @@ static void GetDoubleSequence( std::vector< css::beans::PropertyValue >& rDest, 
 }
 
 static void GetSizeSequence( std::vector< css::beans::PropertyValue >& rDest,
-                      std::u16string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
+                      std::string_view rValue, const EnhancedCustomShapeTokenEnum eDestProp )
 {
     std::vector< sal_Int32 > vNum;
     sal_Int32 nIndex = 0;
     do
     {
         sal_Int32 n;
-        std::u16string_view aToken( o3tl::getToken(rValue, 0, ' ', nIndex ) );
+        std::string_view aToken( o3tl::getToken(rValue, 0, ' ', nIndex ) );
         if (!::sax::Converter::convertNumber( n, aToken ))
             break;
         else
@@ -892,7 +892,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
             }
             break;
             case EAS_sub_view_size:
-                GetSizeSequence( maPath, aIter.toString(), EAS_SubViewSize );
+                GetSizeSequence( maPath, aIter.toView(), EAS_SubViewSize );
             break;
             case EAS_text_rotate_angle :
                 GetDouble( mrCustomShapeGeometry, aIter.toView(), EAS_TextRotateAngle );
@@ -1093,7 +1093,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
                 GetEnum( maPath, aIter.toView(), EAS_GluePointType, *aXML_GluePointEnumMap );
             break;
             case EAS_glue_point_leaving_directions :
-                GetDoubleSequence( maPath, aIter.toString(), EAS_GluePointLeavingDirections );
+                GetDoubleSequence( maPath, aIter.toView(), EAS_GluePointLeavingDirections );
             break;
             case EAS_text_path :
                 GetBool( maTextPath, aIter.toView(), EAS_TextPath );

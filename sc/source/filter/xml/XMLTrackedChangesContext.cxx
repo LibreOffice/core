@@ -776,12 +776,12 @@ ScXMLChangeCellContext::ScXMLChangeCellContext( ScXMLImport& rImport,
             case XML_ELEMENT( OFFICE, XML_DATE_VALUE ):
                 bEmpty = false;
                 if (GetScImport().GetMM100UnitConverter().setNullDate(GetScImport().GetModel()))
-                    GetScImport().GetMM100UnitConverter().convertDateTime(rDateTimeValue, aIter.toString());
+                    GetScImport().GetMM100UnitConverter().convertDateTime(rDateTimeValue, aIter.toView());
                 fValue = rDateTimeValue;
                 break;
             case XML_ELEMENT( OFFICE, XML_TIME_VALUE ):
                 bEmpty = false;
-                ::sax::Converter::convertDuration(rDateTimeValue, aIter.toString());
+                ::sax::Converter::convertDuration(rDateTimeValue, aIter.toView());
                 fValue = rDateTimeValue;
             }
         }

@@ -53,13 +53,13 @@ SdXML3DLightContext::SdXML3DLightContext(
         {
             case XML_ELEMENT(DR3D, XML_DIFFUSE_COLOR):
             {
-                ::sax::Converter::convertColor(maDiffuseColor, aIter.toString());
+                ::sax::Converter::convertColor(maDiffuseColor, aIter.toView());
                 break;
             }
             case XML_ELEMENT(DR3D, XML_DIRECTION):
             {
                 ::basegfx::B3DVector aVal;
-                SvXMLUnitConverter::convertB3DVector(aVal, aIter.toString());
+                SvXMLUnitConverter::convertB3DVector(aVal, aIter.toView());
                 if (!std::isnan(aVal.getX()) && !std::isnan(aVal.getY()) && !std::isnan(aVal.getZ()))
                 {
                     maDirection = aVal;

@@ -274,12 +274,12 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
             case XML_ELEMENT(SVG, XML_X):
             case XML_ELEMENT(SVG_COMPAT, XML_X):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aGluePoint.Position.X, aIter.toString());
+                        aGluePoint.Position.X, aIter.toView());
                 break;
             case XML_ELEMENT(SVG, XML_Y):
             case XML_ELEMENT(SVG_COMPAT, XML_Y):
                 GetImport().GetMM100UnitConverter().convertMeasureToCore(
-                        aGluePoint.Position.Y, aIter.toString());
+                        aGluePoint.Position.Y, aIter.toView());
                 break;
             case XML_ELEMENT(DRAW, XML_ID):
                 nId = aIter.toInt32();
@@ -2884,7 +2884,7 @@ void SdXMLPluginShapeContext::startFastElement (sal_Int32 /*nElement*/,
     {
         if( aIter.getToken() == XML_ELEMENT(DRAW, XML_MIME_TYPE) )
         {
-            if( aIter.toString() == "application/vnd.sun.star.media" )
+            if( aIter.toView() == "application/vnd.sun.star.media" )
                 mbMedia = true;
             // leave this loop
             break;
