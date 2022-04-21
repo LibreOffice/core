@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9150e0c5_0f3c804c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-21T12:28:46Z",
+      "side": 1,
+      "message": "Hi Mert!\nCould you please take a look at this? This touches some bits that you introduced in https://gerrit.libreoffice.org/c/core/+/93747 - could you please check that this doesn\u0027t break whatever your change was fixing? Thank you!",
+      "revId": "a137774ddcd44a0e00bc7d5fcf2e1c1d4f7e3059",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
