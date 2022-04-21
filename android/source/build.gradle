@@ -4,14 +4,14 @@ apply from: 'liboSettings.gradle'
 
 allprojects {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
 }
 //build-time dependencies - android plugin for gradle
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         google()
     }
     dependencies {
