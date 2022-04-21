@@ -34,6 +34,92 @@
       "parentUuid": "40417819_7b4f8e3a",
       "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90a02447_2e62b74a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T07:35:48Z",
+      "side": 1,
+      "message": "Looks pretty nice, hope you like it too. Some comments inline.",
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69680948_2a74d433",
+        "filename": "vcl/uiconfig/ui/openlockedquerybox.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T07:35:48Z",
+      "side": 1,
+      "message": "My guess is that this stock symbol is just not defined on other flavors than gtk3. With a different symbol (and not stretching) the image shows up with kf5 too. \n\nI would not assign a stock image at all but ask the designers to create something else (and larger). And load the image at the OpenLockedQueryBox() ctor.",
+      "range": {
+        "startLine": 77,
+        "startChar": 43,
+        "endLine": 77,
+        "endChar": 64
+      },
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42bc280f_245b81d2",
+        "filename": "vcl/uiconfig/ui/openlockedquerybox.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T07:35:48Z",
+      "side": 1,
+      "message": "Superfluous space here",
+      "range": {
+        "startLine": 138,
+        "startChar": 144,
+        "endLine": 138,
+        "endChar": 146
+      },
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e2ac78e_ca61dd88",
+        "filename": "vcl/uiconfig/ui/openlockedquerybox.ui",
+        "patchSetId": 3
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T07:35:48Z",
+      "side": 1,
+      "message": "The button box is not a good choice within the layout. The Notify checkbox should be a bit closer to the Open button to indicate its relation and the second text \"You can open a copy...\" is not aligned with the Open Copy button.\n\nBetter use a GtkGrid for the content. And maybe a GtkBox for the button/checkbox item. If you don\u0027t want to fiddle around with the layout I\u0027m happy to help.",
+      "range": {
+        "startLine": 170,
+        "startChar": 41,
+        "endLine": 170,
+        "endChar": 53
+      },
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
