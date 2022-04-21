@@ -1887,7 +1887,7 @@ void ScTable::FillAutoSimple(
             {
                 if (bVertical)      // rInner&:=nRow, rOuter&:=nCol
                 {
-                    aSrcCell = aCol[rCol].GetCellValue(nSource);
+                    aSrcCell = GetCellValue(rCol, nSource);
                     if (nISrcStart == nISrcEnd && aSrcCell.meType == CELLTYPE_FORMULA)
                     {
                         FillFormulaVertical(*aSrcCell.mpFormula, rInner, rCol, nIStart, nIEnd, pProgress, rProgress);
@@ -1901,7 +1901,7 @@ void ScTable::FillAutoSimple(
                 }
                 else                // rInner&:=nCol, rOuter&:=nRow
                 {
-                    aSrcCell = aCol[nSource].GetCellValue(rRow);
+                    aSrcCell = GetCellValue(nSource, rRow);
                     const SvNumFormatType nFormatType = rDocument.GetFormatTable()->GetType(
                                 aCol[nSource].GetNumberFormat( rDocument.GetNonThreadedContext(), rRow));
                     bBooleanCell = (nFormatType == SvNumFormatType::LOGICAL);
@@ -2226,9 +2226,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         // it is still a good upper estimation.
         ScCellValue aSrcCell;
         if (bVertical)
-            aSrcCell = aCol[static_cast<SCCOL>(nOStart)].GetCellValue(static_cast<SCROW>(nISource));
+            aSrcCell = GetCellValue(static_cast<SCCOL>(nOStart), static_cast<SCROW>(nISource));
         else
-            aSrcCell = aCol[static_cast<SCCOL>(nISource)].GetCellValue(static_cast<SCROW>(nOStart));
+            aSrcCell = GetCellValue(static_cast<SCCOL>(nISource), static_cast<SCROW>(nOStart));
         // Same logic as for the actual series.
         if (!aSrcCell.isEmpty() && (aSrcCell.meType == CELLTYPE_VALUE || aSrcCell.meType == CELLTYPE_FORMULA))
         {
@@ -2281,7 +2281,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
         CreateColumnIfNotExists(nCol);
 
         // Source cell value. We need to clone the value since it may be inserted repeatedly.
-        ScCellValue aSrcCell = aCol[nCol].GetCellValue(static_cast<SCROW>(nRow));
+        ScCellValue aSrcCell = GetCellValue(nCol, static_cast<SCROW>(nRow));
 
         // Maybe another source cell need to be searched, if the fill is going through merged cells,
         // where overlapped parts does not contain any information, so they can be skipped.
@@ -2306,9 +2306,9 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
 
             //Set the real source cell
             if (bVertical)
-                aSrcCell = aCol[nOStart].GetCellValue(static_cast<SCROW>(nFirstValueIdx));
+                aSrcCell = GetCellValue(nOStart, static_cast<SCROW>(nFirstValueIdx));
             else
-                aSrcCell = aCol[nFirstValueIdx].GetCellValue(static_cast<SCROW>(nOStart));
+                aSrcCell = GetCellValue(nFirstValueIdx, static_cast<SCROW>(nOStart));
         }
 
         const ScPatternAttr* pSrcPattern = aCol[nCol].GetPattern(static_cast<SCROW>(nRow));
