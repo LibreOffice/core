@@ -3032,6 +3032,23 @@ SfxVoidItem InsertLinebreak FN_INSERT_LINEBREAK
     GroupId = SfxGroupId::Insert;
 ]
 
+SfxVoidItem InsertContentControl FN_INSERT_CONTENT_CONTROL
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Insert;
+]
+
 SfxVoidItem InsertMultiIndex FN_INSERT_MULTI_TOX
 ()
 [

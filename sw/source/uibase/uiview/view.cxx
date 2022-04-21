@@ -594,7 +594,7 @@ void SwView::CheckReadonlyState()
             SID_CHARMAP,                SID_EMOJI_CONTROL,          FN_INSERT_SOFT_HYPHEN,
             FN_INSERT_HARDHYPHEN,       FN_INSERT_HARD_SPACE,       FN_INSERT_NNBSP,
             FN_INSERT_BREAK,            FN_INSERT_LINEBREAK,        FN_INSERT_COLUMN_BREAK,
-            FN_INSERT_BREAK_DLG,
+            FN_INSERT_BREAK_DLG,        FN_INSERT_CONTENT_CONTROL,
             FN_DELETE_SENT,             FN_DELETE_BACK_SENT,        FN_DELETE_WORD,
             FN_DELETE_BACK_WORD,        FN_DELETE_LINE,             FN_DELETE_BACK_LINE,
             FN_DELETE_PARA,             FN_DELETE_BACK_PARA,        FN_DELETE_WHOLE_LINE,

@@ -210,6 +210,7 @@
 
 #define FN_INSERT_LINEBREAK     (FN_INSERT + 18)    /* Newline */
 #define FN_INSERT_FIELD_DATA_ONLY (FN_INSERT + 19)  /* Field dialog for mail merge*/
+#define FN_INSERT_CONTENT_CONTROL (FN_INSERT + 20)  /* Content control */
 #define FN_INSERT_OBJECT_DLG    (FN_INSERT + 22)    /* Object */
 #define FN_INSERT_PAGEBREAK     (FN_INSERT + 23)    /* Page break*/
 #define FN_POSTIT               (FN_INSERT + 29)    /* Insert/edit PostIt */
