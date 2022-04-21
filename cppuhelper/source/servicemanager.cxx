@@ -1325,8 +1325,8 @@ void cppuhelper::ServiceManager::removeEventListenerFromComponent(
 
 void cppuhelper::ServiceManager::init(std::u16string_view rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        OUString uri(o3tl::getToken(rdbUris, 0, ' ', i));
-        if (uri.isEmpty()) {
+        std::u16string_view uri(o3tl::getToken(rdbUris, 0, ' ', i));
+        if (uri.empty()) {
             continue;
         }
         bool optional;
@@ -1335,27 +1335,27 @@ void cppuhelper::ServiceManager::init(std::u16string_view rdbUris) {
         if (directory) {
             readRdbDirectory(uri, optional);
         } else {
-            readRdbFile(uri, optional);
+            readRdbFile(OUString(uri), optional);
         }
     }
 }
 
 void cppuhelper::ServiceManager::readRdbDirectory(
-    OUString const & uri, bool optional)
+    std::u16string_view uri, bool optional)
 {
-    osl::Directory dir(uri);
+    osl::Directory dir = OUString(uri);
     switch (dir.open()) {
     case osl::FileBase::E_None:
         break;
     case osl::FileBase::E_NOENT:
         if (optional) {
-            SAL_INFO("cppuhelper", "Ignored optional " << uri);
+            SAL_INFO("cppuhelper", "Ignored optional " << OUString(uri));
             return;
         }
         [[fallthrough]];
     default:
         throw css::uno::DeploymentException(
-            "Cannot open directory " + uri,
+            OUString::Concat("Cannot open directory ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     for (;;) {

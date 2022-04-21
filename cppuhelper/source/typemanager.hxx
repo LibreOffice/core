@@ -90,9 +90,9 @@ private:
         css::uno::Sequence< css::uno::TypeClass > const & types,
         css::reflection::TypeDescriptionSearchDepth depth) override;
 
-    void readRdbDirectory(OUString const & uri, bool optional);
+    void readRdbDirectory(std::u16string_view uri, bool optional);
 
-    void readRdbFile(OUString const & uri, bool optional);
+    void readRdbFile(std::u16string_view uri, bool optional);
 
     css::uno::Any getSequenceType(OUString const & name);
 
@@ -108,12 +108,12 @@ private:
 
     static css::uno::Any getEnumMember(
         rtl::Reference< unoidl::EnumTypeEntity > const & entity,
-        OUString const & member);
+        std::u16string_view member);
 
     static css::uno::Any getConstant(
-        OUString const & constantGroupName,
+        std::u16string_view constantGroupName,
         rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
-        OUString const & member);
+        std::u16string_view member);
 
     rtl::Reference< unoidl::Entity > findEntity(OUString const & name);
 

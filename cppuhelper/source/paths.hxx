@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <rtl/ustring.hxx>
+#include <string_view>
 
 namespace osl
 {
@@ -33,7 +34,7 @@ OUString getUnoIniUri();
 
 bool nextDirectoryItem(osl::Directory& directory, OUString* url);
 
-void decodeRdbUri(OUString* uri, bool* optional, bool* directory);
+void decodeRdbUri(std::u16string_view* uri, bool* optional, bool* directory);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
