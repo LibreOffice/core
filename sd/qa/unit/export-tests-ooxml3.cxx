@@ -21,6 +21,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/svdoole2.hxx>
 
+#include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -91,6 +92,7 @@ public:
     void testTdf128213();
     void testTdf129372();
     void testShapeGlowEffect();
+    void testUnderline();
     void testTdf119087();
     void testTdf131554();
     void testTdf132282();
@@ -170,6 +172,7 @@ public:
     CPPUNIT_TEST(testTdf128213);
     CPPUNIT_TEST(testTdf129372);
     CPPUNIT_TEST(testShapeGlowEffect);
+    CPPUNIT_TEST(testUnderline);
     CPPUNIT_TEST(testTdf119087);
     CPPUNIT_TEST(testTdf131554);
     CPPUNIT_TEST(testTdf132282);
@@ -1569,6 +1572,46 @@ void SdOOXMLExportTest3::testShapeGlowEffect()
     sal_Int16 nTransparency;
     xShape->getPropertyValue("GlowEffectTransparency") >>= nTransparency;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(60), nTransparency);
+}
+
+void SdOOXMLExportTest3::testUnderline()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/underline.fodp"), FODP);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
+    uno::Reference<text::XTextRange> xParagraph(getParagraphFromShape(0, xShape));
+    uno::Reference<text::XTextRange> xRun(getRunFromParagraph(0, xParagraph));
+    uno::Reference<beans::XPropertySet> xPropSet(xRun, uno::UNO_QUERY_THROW);
+
+    Color nColor;
+    xPropSet->getPropertyValue("CharColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
+
+    xPropSet->getPropertyValue("CharUnderlineColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nColor);
+
+    sal_Int16 nUnderline;
+    xPropSet->getPropertyValue("CharUnderline") >>= nUnderline;
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::DOUBLE, nUnderline);
+
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
+
+    xShape.set(getShapeFromPage(0, 0, xDocShRef));
+    xParagraph.set(getParagraphFromShape(0, xShape));
+    xRun.set(getRunFromParagraph(0, xParagraph));
+    xPropSet.set(xRun, uno::UNO_QUERY_THROW);
+
+    xPropSet->getPropertyValue("CharColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, nColor);
+
+    xPropSet->getPropertyValue("CharUnderlineColor") >>= nColor;
+    CPPUNIT_ASSERT_EQUAL(COL_AUTO, nColor);
+
+    xPropSet->getPropertyValue("CharUnderline") >>= nUnderline;
+    CPPUNIT_ASSERT_EQUAL(awt::FontUnderline::DOUBLE, nUnderline);
+
+    xDocShRef->DoClose();
 }
 
 void SdOOXMLExportTest3::testTdf119087()
