@@ -172,7 +172,7 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
 {
     int res = 0;
 
-    OUString nextPurpose;
+    std::u16string_view nextPurpose;
 
     OUString currPurpose;
     if (pCurrEnv)
@@ -186,7 +186,7 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
     if (currPurpose.getLength() > intermPurpose.getLength())
     {
         sal_Int32 idx = currPurpose.lastIndexOf(':');
-        nextPurpose = currPurpose.copy(0, idx);
+        nextPurpose = currPurpose.subView(0, idx);
 
         res = -1;
     }
@@ -197,14 +197,14 @@ static int s_getNextEnv(uno_Environment ** ppEnv, uno_Environment * pCurrEnv, un
             nextPurpose = targetPurpose;
 
         else
-            nextPurpose = targetPurpose.copy(0, idx);
+            nextPurpose = targetPurpose.subView(0, idx);
 
         res = 1;
     }
 
-    if (!nextPurpose.isEmpty())
+    if (!nextPurpose.empty())
     {
-        OUString next_envDcp = UNO_LB_UNO + nextPurpose;
+        OUString next_envDcp = OUString::Concat(UNO_LB_UNO) + nextPurpose;
         uno_getEnvironment(ppEnv, next_envDcp.pData, nullptr);
     }
     else
