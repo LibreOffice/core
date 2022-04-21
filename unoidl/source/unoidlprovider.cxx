@@ -27,6 +27,7 @@
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <unoidl/unoidl.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "unoidlprovider.hxx"
 
@@ -203,18 +204,18 @@ bool isIdentifier(std::u16string_view type, bool scoped) {
 }
 
 void checkTypeName(
-    rtl::Reference< MappedFile > const & file, OUString const & type)
+    rtl::Reference< MappedFile > const & file, std::u16string_view type)
 {
-    OUString nucl(type);
+    std::u16string_view nucl(type);
     bool args = false;
-    while (nucl.startsWith("[]", &nucl)) {}
-    sal_Int32 i = nucl.indexOf('<');
-    if (i != -1) {
-        OUString tmpl(nucl.copy(0, i));
+    while (o3tl::starts_with(nucl, u"[]", &nucl)) {}
+    size_t i = nucl.find('<');
+    if (i != std::u16string_view::npos) {
+        std::u16string_view tmpl(nucl.substr(0, i));
         do {
             ++i; // skip '<' or ','
-            sal_Int32 j = i;
-            for (sal_Int32 level = 0; j != nucl.getLength(); ++j) {
+            size_t j = i;
+            for (size_t level = 0; j != nucl.size(); ++j) {
                 sal_Unicode c = nucl[j];
                 if (c == ',') {
                     if (level == 0) {
@@ -229,20 +230,20 @@ void checkTypeName(
                     --level;
                 }
             }
-            if (j != nucl.getLength()) {
-                checkTypeName(file, nucl.copy(i, j - i));
+            if (j != nucl.size()) {
+                checkTypeName(file, nucl.substr(i, j - i));
                 args = true;
             }
             i = j;
-        } while (i != nucl.getLength() && nucl[i] != '>');
-        if (i != nucl.getLength() - 1 || nucl[i] != '>' || !args) {
-            tmpl.clear(); // bad input
+        } while (i != nucl.size() && nucl[i] != '>');
+        if (i != nucl.size() - 1 || nucl[i] != '>' || !args) {
+            tmpl = {}; // bad input
         }
         nucl = tmpl;
     }
     if (isSimpleType(nucl) ? args : !isIdentifier(nucl, true)) {
         throw FileFormatException(
-            file->uri, "UNOIDL format: bad type \"" + type + "\"");
+            file->uri, OUString::Concat("UNOIDL format: bad type \"") + type + "\"");
     }
 }
 
@@ -507,7 +508,7 @@ Compare compare(
 
 sal_uInt32 findInMap(
     rtl::Reference< MappedFile > const & file, MapEntry const * mapBegin,
-    sal_uInt32 mapSize, OUString const & name, sal_Int32 nameOffset,
+    sal_uInt32 mapSize, std::u16string_view name, sal_Int32 nameOffset,
     sal_Int32 nameLength)
 {
     if (mapSize == 0) {
@@ -1348,21 +1349,21 @@ rtl::Reference< MapCursor > UnoidlProvider::createRootCursor() const {
         rtl::Reference<UnoidlModuleEntity>(), map_);
 }
 
-rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
+rtl::Reference< Entity > UnoidlProvider::findEntity(std::u16string_view name) const
 {
     NestedMap map(map_);
     bool cgroup = false;
     for (sal_Int32 i = 0;;) {
-        sal_Int32 j = name.indexOf('.', i);
-        if (j == -1) {
-            j = name.getLength();
+        size_t j = name.find('.', i);
+        if (j == std::u16string_view::npos) {
+            j = name.size();
         }
         sal_Int32 off = findInMap(
             file_, map.map.begin, map.map.size, name, i, j - i);
         if (off == 0) {
             return rtl::Reference< Entity >();
         }
-        if (j == name.getLength()) {
+        if (j == name.size()) {
             return cgroup
                 ? rtl::Reference< Entity >()
                 : readEntity(file_, off, std::set(map.trace));
