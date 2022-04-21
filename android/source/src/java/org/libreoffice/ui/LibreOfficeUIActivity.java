@@ -10,7 +10,6 @@
 package org.libreoffice.ui;
 
 import android.Manifest;
-import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -267,7 +266,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         }
 
         intent.setType("*/*");
-        intent.putExtra(Intent.EXTRA_MIME_TYPES, SUPPORTED_MIME_TYPES);;
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, SUPPORTED_MIME_TYPES);
 
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_CODE_OPEN_FILECHOOSER);
