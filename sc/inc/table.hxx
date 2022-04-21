@@ -123,7 +123,7 @@ class ScColumnsRange final
  public:
     class Iterator final
     {
-        std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>>::const_iterator maColIter;
+        SCCOL mCol;
     public:
         typedef std::bidirectional_iterator_tag iterator_category;
         typedef SCCOL value_type;
@@ -131,17 +131,18 @@ class ScColumnsRange final
         typedef const SCCOL* pointer;
         typedef SCCOL reference;
 
-        explicit Iterator(const std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>>::const_iterator& colIter) : maColIter(colIter) {}
+        explicit Iterator(SCCOL nCol) : mCol(nCol) {}
 
-        Iterator& operator++() { ++maColIter; return *this;}
-        Iterator& operator--() { --maColIter; return *this;}
+        Iterator& operator++() { ++mCol; return *this;}
+        Iterator& operator--() { --mCol; return *this;}
 
-        bool operator==(const Iterator & rOther) const {return maColIter == rOther.maColIter;}
+        // Comparing iterators from different containers is undefined, so comparing mCol is enough.
+        bool operator==(const Iterator & rOther) const {return mCol == rOther.mCol;}
         bool operator!=(const Iterator & rOther) const {return !(*this == rOther);}
-        SCCOL operator*() const {return (*maColIter)->GetCol();}
+        SCCOL operator*() const {return mCol;}
     };
 
-    ScColumnsRange(const Iterator & rBegin, const Iterator & rEnd) : maBegin(rBegin), maEnd(rEnd) {}
+    ScColumnsRange(SCCOL nBegin, SCCOL nEnd) : maBegin(nBegin), maEnd(nEnd) {}
     const Iterator & begin() { return maBegin; }
     const Iterator & end() { return maEnd; }
     std::reverse_iterator<Iterator> rbegin() { return std::reverse_iterator<Iterator>(maEnd); }
@@ -1114,6 +1115,8 @@ public:
     */
     static void UpdateSearchItemAddressForReplace( const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow );
 
+    ScColumnsRange GetWritableColumnsRange(SCCOL begin, SCCOL end);
+    ScColumnsRange GetAllocatedColumnsRange(SCCOL begin, SCCOL end) const;
     ScColumnsRange GetColumnsRange(SCCOL begin, SCCOL end) const;
     SCCOL ClampToAllocatedColumns(SCCOL nCol) const { return std::min(nCol, static_cast<SCCOL>(aCol.size() - 1)); }
     SCCOL GetAllocatedColumnsCount() const { return aCol.size(); }

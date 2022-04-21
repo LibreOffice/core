@@ -4627,7 +4627,7 @@ sal_Int32 SAL_CALL ScAnnotationsObj::getCount()
     if (pDocShell)
     {
         const ScDocument& rDoc = pDocShell->GetDocument();
-        for (SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, rDoc.MaxCol()))
+        for (SCCOL nCol : rDoc.GetAllocatedColumnsRange(nTab, 0, rDoc.MaxCol()))
             nCount += rDoc.GetNoteCount(nTab, nCol);
     }
     return nCount;
