@@ -84,26 +84,26 @@ OUString getArgumentUri(sal_uInt32 argument) {
     return abs;
 }
 
-OUString decomposeType(
-    OUString const & type, std::size_t * rank,
+std::u16string_view decomposeType(
+    std::u16string_view type, std::size_t * rank,
     std::vector<OUString> * typeArguments, bool * entity)
 {
     assert(rank != nullptr);
     assert(typeArguments != nullptr);
     assert(entity != nullptr);
-    OUString nucl(type);
+    std::u16string_view nucl(type);
     *rank = 0;
     typeArguments->clear();
-    while (nucl.startsWith("[]", &nucl)) {
+    while (o3tl::starts_with(nucl, u"[]", &nucl)) {
         ++*rank;
     }
-    sal_Int32 i = nucl.indexOf('<');
-    if (i != -1) {
-        OUString tmpl(nucl.copy(0, i));
+    size_t i = nucl.find('<');
+    if (i != std::u16string_view::npos) {
+        std::u16string_view tmpl(nucl.substr(0, i));
         do {
             ++i; // skip '<' or ','
-            sal_Int32 j = i;
-            for (sal_Int32 level = 0; j != nucl.getLength(); ++j) {
+            size_t j = i;
+            for (sal_Int32 level = 0; j != nucl.size(); ++j) {
                 sal_Unicode c = nucl[j];
                 if (c == ',') {
                     if (level == 0) {
@@ -118,22 +118,22 @@ OUString decomposeType(
                     --level;
                 }
             }
-            if (j != nucl.getLength()) {
-                typeArguments->push_back(nucl.copy(i, j - i));
+            if (j != nucl.size()) {
+                typeArguments->push_back(OUString(nucl.substr(i, j - i)));
             }
             i = j;
-        } while (i != nucl.getLength() && nucl[i] != '>');
-        assert(i == nucl.getLength() - 1 && nucl[i] == '>');
+        } while (i != nucl.size() && nucl[i] != '>');
+        assert(i == nucl.size() - 1 && nucl[i] == '>');
         assert(!typeArguments->empty());
         nucl = tmpl;
     }
-    assert(!nucl.isEmpty());
-    *entity = nucl != "void" && nucl != "boolean" && nucl != "byte"
-        && nucl != "short" && nucl != "unsigned short" && nucl != "long"
-        && nucl != "unsigned long" && nucl != "hyper"
-        && nucl != "unsigned hyper" && nucl != "float" && nucl != "double"
-        && nucl != "char" && nucl != "string" && nucl != "type"
-        && nucl != "any";
+    assert(!nucl.empty());
+    *entity = nucl != u"void" && nucl != u"boolean" && nucl != u"byte"
+        && nucl != u"short" && nucl != u"unsigned short" && nucl != u"long"
+        && nucl != u"unsigned long" && nucl != u"hyper"
+        && nucl != u"unsigned hyper" && nucl != u"float" && nucl != u"double"
+        && nucl != u"char" && nucl != u"string" && nucl != u"type"
+        && nucl != u"any";
     assert(*entity || typeArguments->empty());
     return nucl;
 }
@@ -204,7 +204,7 @@ void insertEntityDependencies(
 void insertTypeDependency(
     rtl::Reference<unoidl::Manager> const & manager,
     std::map<OUString, Entity>::iterator const & iterator,
-    OUString const & type)
+    std::u16string_view type)
 {
     std::size_t rank;
     std::vector<OUString> args;
@@ -520,7 +520,7 @@ void writeAnnotationsPublished(
     writePublished(entity);
 }
 
-void writeType(OUString const & type) {
+void writeType(std::u16string_view type) {
     std::size_t rank;
     std::vector<OUString> args;
     bool entity;

@@ -400,7 +400,7 @@ Found findEntity(
                                  + t));
                             return FOUND_ERROR;
                         }
-                        OUString tmpl(typeNucleus.copy(0, i));
+                        std::u16string_view tmpl(typeNucleus.subView(0, i));
                         do {
                             ++i; // skip '<' or ','
                             sal_Int32 j = i;
@@ -3509,7 +3509,7 @@ primaryExpr:
               YYERROR;
           }
           if (ent != nullptr) {
-              OUString id(name.copy(i + 1));
+              std::u16string_view id(name.subView(i + 1));
               // No need to check for enum members here, as they cannot be
               // referenced in expressions by qualified name (TODO: is that true?):
               if (ent->entity.is()) {
