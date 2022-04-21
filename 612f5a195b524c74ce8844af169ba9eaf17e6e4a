@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e224ad7f_0b7b9106",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-21T08:38:15Z",
+      "side": 1,
+      "message": "I\u0027d say it\u0027s a new feature (introduction of a new compatibility function into the language), so it\u0027s INO not suited for 7-3?",
+      "revId": "612f5a195b524c74ce8844af169ba9eaf17e6e4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
