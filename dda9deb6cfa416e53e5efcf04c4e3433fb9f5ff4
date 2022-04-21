@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7560f458_9e7387dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T09:26:41Z",
+      "side": 1,
+      "message": "I like the change, makes the code much cleaner. But the name is now \"Karasa jaga\" since only the very first character is converted. We can solve this in a follow-up patch if you don\u0027t find a simple solution.",
+      "revId": "dda9deb6cfa416e53e5efcf04c4e3433fb9f5ff4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
