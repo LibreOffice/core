@@ -1525,6 +1525,9 @@ public:
     void                        ExtendPrintArea( OutputDevice* pDev, SCTAB nTab,
                                                  SCCOL nStartCol, SCROW nStartRow,
                                                  SCCOL& rEndCol, SCROW nEndRow ) const;
+    SC_DLLPUBLIC bool           IsEmptyBlock(SCCOL nStartCol, SCROW nStartRow,
+                                             SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const;
+    // I think this returns the number of empty cells starting from the given direction.
     SC_DLLPUBLIC SCSIZE         GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                                                       SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
                                                       ScDirection eDir );
@@ -2600,6 +2603,12 @@ public:
     void                finalizeOutlineImport();
     bool                TableExists( SCTAB nTab ) const;
 
+    // Returns the given column range, first allocating all the columns if necessary.
+    SC_DLLPUBLIC ScColumnsRange GetWritableColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd);
+    // Returns a column range, clamped to the allocated columns.
+    SC_DLLPUBLIC ScColumnsRange GetAllocatedColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
+    // Returns the given range, without any adjustments. One of the variants above may return
+    // a smaller range (better performance) if the use case is known.
     SC_DLLPUBLIC ScColumnsRange GetColumnsRange(SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const;
 
     bool IsInDocShellRecalc() const   { return mbDocShellRecalc; }

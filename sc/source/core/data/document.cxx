@@ -2541,15 +2541,27 @@ const ScTable* ScDocument::FetchTable( SCTAB nTab ) const
     return maTabs[nTab].get();
 }
 
-ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const
+ScColumnsRange ScDocument::GetWritableColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd)
 {
     if (!TableExists(nTab))
     {
-        std::vector<std::unique_ptr<ScColumn, o3tl::default_delete<ScColumn>>> aEmptyVector;
-        return ScColumnsRange(ScColumnsRange::Iterator(aEmptyVector.begin()),
-                              ScColumnsRange::Iterator(aEmptyVector.end()));
+        SAL_WARN("sc",  "GetWritableColumnsRange() called for non-existent table");
+        return ScColumnsRange(-1, -1);
     }
+    return maTabs[nTab]->GetWritableColumnsRange(nColBegin, nColEnd);
+}
 
+ScColumnsRange ScDocument::GetAllocatedColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const
+{
+    if (!TableExists(nTab))
+        return ScColumnsRange(-1, -1);
+    return maTabs[nTab]->GetAllocatedColumnsRange(nColBegin, nColEnd);
+}
+
+ScColumnsRange ScDocument::GetColumnsRange( SCTAB nTab, SCCOL nColBegin, SCCOL nColEnd) const
+{
+    if (!TableExists(nTab))
+        return ScColumnsRange(-1, -1);
     return maTabs[nTab]->GetColumnsRange(nColBegin, nColEnd);
 }
 
@@ -6121,6 +6133,13 @@ ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
     return mxPoolHelper->GetStylePool();
 }
 
+bool ScDocument::IsEmptyBlock(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->IsEmptyBlock(nStartCol, nStartRow, nEndCol, nEndRow);
+    return true;
+}
+
 SCSIZE ScDocument::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, ScDirection eDir )
 {
@@ -6860,7 +6879,7 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 {
     for (size_t nTab = 0; nTab < maTabs.size(); ++nTab)
     {
-        for (SCCOL nCol : GetColumnsRange(nTab, 0, MaxCol()))
+        for (SCCOL nCol : GetAllocatedColumnsRange(nTab, 0, MaxCol()))
         {
             size_t nColNoteCount = GetNoteCount(nTab, nCol);
             if (!nColNoteCount)
@@ -6887,7 +6906,7 @@ ScAddress ScDocument::GetNotePosition( size_t nIndex ) const
 
 ScAddress ScDocument::GetNotePosition( size_t nIndex, SCTAB nTab ) const
 {
-    for (SCCOL nCol : GetColumnsRange(nTab, 0, MaxCol()))
+    for (SCCOL nCol : GetAllocatedColumnsRange(nTab, 0, MaxCol()))
     {
         size_t nColNoteCount = GetNoteCount(nTab, nCol);
         if (!nColNoteCount)

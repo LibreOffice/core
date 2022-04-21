@@ -318,7 +318,7 @@ ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
 {
     if (!rDocument.IsInDtorClear())
     {
-        for (SCCOL nCol = 0; nCol < (aCol.size() - 1); ++nCol)
+        for (SCCOL nCol = 0; nCol < aCol.size(); ++nCol)
         {
             aCol[nCol].FreeNotes();
         }
@@ -1175,6 +1175,15 @@ SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, ScDataA
     return nNewLastRow;
 }
 
+bool ScTable::IsEmptyBlock( SCCOL nStartCol, SCROW nStartRow,
+                            SCCOL nEndCol, SCROW nEndRow ) const
+{
+    for( SCCOL col : GetAllocatedColumnsRange( nStartCol, nEndCol ))
+        if( !aCol[col].IsEmptyBlock( nStartRow, nEndRow ))
+            return false;
+    return true;
+}
+
 SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const
 {
@@ -1234,11 +1243,10 @@ bool ScTable::IsEmptyLine( SCROW nRow, SCCOL nStartCol, SCCOL nEndCol ) const
 
     nEndCol   = std::min<SCCOL>( nEndCol,   aCol.size()-1 );
 
-    bool bFound = false;
-    for (SCCOL i=nStartCol; i<=nEndCol && !bFound; i++)
+    for (SCCOL i=nStartCol; i<=nEndCol; i++)
         if (aCol[i].HasDataAt(nRow))
-            bFound = true;
-    return !bFound;
+            return false;
+    return true;
 }
 
 void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const
@@ -2670,31 +2678,34 @@ const ScConditionalFormatList* ScTable::GetCondFormList() const
     return mpCondFormatList.get();
 }
 
-ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
+ScColumnsRange ScTable::GetWritableColumnsRange(SCCOL nColBegin, SCCOL nColEnd)
 {
-    ScColContainer::ScColumnVector::const_iterator beginIter;
-    ScColContainer::ScColumnVector::const_iterator endIter;
-
     // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
     if (nColEnd < nColBegin)
-    {
-        beginIter = aCol.end();
-        endIter = aCol.end();
-    }
-    else if (nColBegin >= aCol.size())
-    {
-        beginIter = aCol.end();
-        endIter = aCol.end();
-    }
-    else
-    {
-        // clamp end of range to available columns
-        if (nColEnd >= aCol.size())
-            nColEnd = aCol.size() - 1;
-        beginIter = aCol.begin() + nColBegin;
-        endIter = aCol.begin() + nColEnd + 1;
-    }
-    return ScColumnsRange(ScColumnsRange::Iterator(beginIter), ScColumnsRange::Iterator(endIter));
+        return ScColumnsRange(-1, -1);
+    assert( nColEnd >= 0 && nColEnd <= GetDoc().MaxCol());
+    CreateColumnIfNotExists(nColEnd);
+    return GetColumnsRange(nColBegin, nColEnd);
+}
+
+ScColumnsRange ScTable::GetAllocatedColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
+{
+    if (nColBegin >= aCol.size())
+        return ScColumnsRange(-1, -1);
+    // clamp end of range to available columns
+    if (nColEnd >= aCol.size())
+        nColEnd = aCol.size() - 1;
+    return GetColumnsRange(nColBegin, nColEnd);
+}
+
+ScColumnsRange ScTable::GetColumnsRange(SCCOL nColBegin, SCCOL nColEnd) const
+{
+    // because the range is inclusive, some code will pass nColEnd<nColBegin to indicate an empty range
+    if (nColEnd < nColBegin)
+        return ScColumnsRange(-1, -1);
+    assert( nColBegin >= 0 && nColBegin <= GetDoc().MaxCol());
+    assert( nColEnd >= 0 && nColEnd <= GetDoc().MaxCol());
+    return ScColumnsRange(nColBegin, nColEnd + 1); // change inclusive end to past-end
 }
 
 // out-of-line the cold part of the CreateColumnIfNotExists function

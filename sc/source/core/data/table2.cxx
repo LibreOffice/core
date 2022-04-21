@@ -260,7 +260,7 @@ bool ScTable::TestInsertCol( SCROW nStartRow, SCROW nEndRow, SCSIZE nSize ) cons
         && ! pOutlineTable->TestInsertCol(nSize) )
             return false;
 
-    auto range = GetColumnsRange( rDocument.MaxCol() - static_cast<SCCOL>(nSize) + 1, rDocument.MaxCol() );
+    auto range = GetAllocatedColumnsRange( rDocument.MaxCol() - static_cast<SCCOL>(nSize) + 1, rDocument.MaxCol() );
     for (auto it = range.rbegin(); it != range.rend(); ++it )
         if (! aCol[*it].TestInsertCol(nStartRow, nEndRow))
             return false;
