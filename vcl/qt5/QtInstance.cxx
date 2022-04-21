@@ -223,6 +223,7 @@ QtInstance::QtInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo)
     , m_pQApplication(std::move(pQApp))
     , m_aUpdateStyleTimer("vcl::qt5 m_aUpdateStyleTimer")
     , m_bUpdateFonts(false)
+    , m_pActivePopup(nullptr)
 {
     ImplSVData* pSVData = ImplGetSVData();
     const OUString sToolkit = "qt" + OUString::number(QT_VERSION_MAJOR);
@@ -720,6 +721,12 @@ std::unique_ptr<QApplication> QtInstance::CreateQApplication(int& nArgc, char** 
 
     QApplication::setQuitOnLastWindowClosed(false);
     return pQApp;
+}
+
+void QtInstance::setActivePopup(QtFrame* pFrame)
+{
+    assert(!pFrame || pFrame->isPopup());
+    m_pActivePopup = pFrame;
 }
 
 extern "C" {
