@@ -102,6 +102,7 @@ class NativeLibLoader {
             System.loadLibrary("smime3");
             System.loadLibrary("ssl3");
 
+            System.loadLibrary("c++_shared");
             System.loadLibrary("lo-native-code");
             done = true;
         }
