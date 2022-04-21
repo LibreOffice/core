@@ -243,12 +243,12 @@ JNI_compound_type_info::JNI_compound_type_info(
         OUString::unacquired( &td->aBase.pTypeName );
 
     // Erase type arguments of instantiated polymorphic struct types:
-    OUString nucleus;
+    std::u16string_view nucleus;
     sal_Int32 i = uno_name.indexOf( '<' );
     if ( i < 0 ) {
         nucleus = uno_name;
     } else {
-        nucleus = uno_name.copy( 0, i );
+        nucleus = uno_name.subView( 0, i );
     }
     JLocalAutoRef jo_class(
         jni,
