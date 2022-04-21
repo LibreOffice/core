@@ -2327,11 +2327,13 @@ void XMLShapeExport::ImpExportPolygonShape(
     {
         // get PolygonBezier
         uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
-        const basegfx::B2DPolyPolygon aPolyPolygon(
-            basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*o3tl::doAccess<drawing::PolyPolygonBezierCoords>(aAny)));
-
-        if(aPolyPolygon.count())
+        auto pSourcePolyPolygon = o3tl::tryAccess<drawing::PolyPolygonBezierCoords>(aAny);
+        if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
         {
+            const basegfx::B2DPolyPolygon aPolyPolygon(
+                basegfx::utils::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
+                    *pSourcePolyPolygon));
+
             // complex polygon shape, write as svg:d
             const OUString aPolygonString(
                 basegfx::utils::exportToSvgD(
