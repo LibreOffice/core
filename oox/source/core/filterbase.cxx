@@ -324,14 +324,14 @@ StorageRef const & FilterBase::getStorage() const
     return mxImpl->mxStorage;
 }
 
-Reference< XInputStream > FilterBase::openInputStream( const OUString& rStreamName ) const
+Reference< XInputStream > FilterBase::openInputStream( std::u16string_view rStreamName ) const
 {
     if (!mxImpl->mxStorage)
         throw RuntimeException();
     return mxImpl->mxStorage->openInputStream( rStreamName );
 }
 
-Reference< XOutputStream > FilterBase::openOutputStream( const OUString& rStreamName ) const
+Reference< XOutputStream > FilterBase::openOutputStream( std::u16string_view rStreamName ) const
 {
     return mxImpl->mxStorage->openOutputStream( rStreamName );
 }
@@ -379,10 +379,10 @@ VbaProject& FilterBase::getVbaProject() const
     return *mxImpl->mxVbaProject;
 }
 
-bool FilterBase::importBinaryData( StreamDataSequence & orDataSeq, const OUString& rStreamName )
+bool FilterBase::importBinaryData( StreamDataSequence & orDataSeq, std::u16string_view rStreamName )
 {
-    OSL_ENSURE( !rStreamName.isEmpty(), "FilterBase::importBinaryData - empty stream name" );
-    if( rStreamName.isEmpty() )
+    OSL_ENSURE( !rStreamName.empty(), "FilterBase::importBinaryData - empty stream name" );
+    if( rStreamName.empty() )
         return false;
 
     // try to open the stream (this may fail - do not assert)

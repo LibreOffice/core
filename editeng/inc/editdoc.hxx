@@ -291,8 +291,8 @@ public:
     void Append(std::u16string_view rStr);
     void Erase(sal_Int32 nPos);
     void Erase(sal_Int32 nPos, sal_Int32 nCount);
-    OUString Copy(sal_Int32 nPos) const;
-    OUString Copy(sal_Int32 nPos, sal_Int32 nCount) const;
+    std::u16string_view Copy(sal_Int32 nPos) const;
+    std::u16string_view Copy(sal_Int32 nPos, sal_Int32 nCount) const;
     sal_Unicode GetChar(sal_Int32 nPos) const;
 };
 

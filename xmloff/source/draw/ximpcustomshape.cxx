@@ -383,7 +383,7 @@ static bool GetNextParameter( css::drawing::EnhancedCustomShapeParameter& rParam
                 bValid = false;
             if ( bValid )
             {
-                OUString aNumber( rParaString.copy( nStartIndex, nIndex - nStartIndex ) );
+                std::u16string_view aNumber( rParaString.subView( nStartIndex, nIndex - nStartIndex ) );
                 if ( bE || bDot )
                 {
                     double fAttrDouble;

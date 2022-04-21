@@ -56,11 +56,11 @@ static OUString getEnumCommand( std::u16string_view rCommand )
 {
     INetURLObject aURL( rCommand );
 
-    OUString   aEnumCommand;
+    std::u16string_view   aEnumCommand;
     OUString   aURLPath = aURL.GetURLPath();
     sal_Int32  nIndex   = aURLPath.indexOf( '.' );
     if (( nIndex > 0 ) && ( nIndex < aURLPath.getLength() ))
-        aEnumCommand = aURLPath.copy( nIndex+1 );
+        aEnumCommand = aURLPath.subView( nIndex+1 );
 
     return aEnumCommand;
 }

@@ -31,6 +31,7 @@
 #include <svl/inettype.hxx>
 #include <unotools/pathoptions.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/string_view.hxx>
 
 #if HAVE_FEATURE_XMLHELP
 #include <helpcompiler/compilehelp.hxx>
@@ -448,7 +449,7 @@ void BackendImpl::implProcessHelp(
 
                             // Copy to package (later: move?)
                             OUString aDestPath = aDestBasePath;
-                            OUString aPureFolderName = aSubFolderURL.copy( nLenLangFolderURL );
+                            std::u16string_view aPureFolderName = aSubFolderURL.subView( nLenLangFolderURL );
                             aDestPath += aPureFolderName;
                             xSFA->copy( aSubFolderURL, aDestPath );
                         }
@@ -580,8 +581,8 @@ void BackendImpl::implCollectXhpFiles( const OUString& aDir,
             sal_Int32 nLastDot = aURL.lastIndexOf( '.' );
             if( nLastDot != -1 )
             {
-                OUString aExt = aURL.copy( nLastDot + 1 );
-                if( aExt.equalsIgnoreAsciiCase( "xhp" ) )
+                std::u16string_view aExt = aURL.subView( nLastDot + 1 );
+                if( o3tl::equalsIgnoreAsciiCase( aExt, u"xhp" ) )
                     o_rXhpFileVector.push_back( aURL );
             }
         }

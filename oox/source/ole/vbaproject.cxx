@@ -262,7 +262,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
 void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
 {
-    StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
+    StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( u"VBA", false );
     OSL_ENSURE( xVbaStrg, "VbaProject::readVbaModules - cannot open 'VBA' substorage" );
     if( !xVbaStrg )
         return;
@@ -271,7 +271,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
         project such as the text encoding used throughout several streams, and
         a list of all code modules.
      */
-    BinaryXInputStream aInStrm( xVbaStrg->openInputStream( "dir" ), true );
+    BinaryXInputStream aInStrm( xVbaStrg->openInputStream( u"dir" ), true );
     // VbaInputStream implements decompression
     VbaInputStream aDirStrm( aInStrm );
     OSL_ENSURE( !aDirStrm.isEof(), "VbaProject::importVba - cannot open 'dir' stream" );
@@ -355,7 +355,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
         -   The line 'BaseClass=<modulename>' declares a code module attached
             to a user form with the same name.
      */
-    BinaryXInputStream aPrjStrm( rVbaPrjStrg.openInputStream( "PROJECT" ), true );
+    BinaryXInputStream aPrjStrm( rVbaPrjStrg.openInputStream( u"PROJECT" ), true );
     OSL_ENSURE( !aPrjStrm.isEof(), "VbaProject::importVba - cannot open 'PROJECT' stream" );
     // do not exit if this stream does not exist, but proceed to load the modules below
     if( !aPrjStrm.isEof() )
@@ -426,7 +426,7 @@ void VbaProject::readVbaModules( StorageBase& rVbaPrjStrg )
 
 void VbaProject::importModulesAndForms( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper )
 {
-    StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( "VBA", false );
+    StorageRef xVbaStrg = rVbaPrjStrg.openSubStorage( u"VBA", false );
     OSL_ENSURE( xVbaStrg, "VbaProject::importModulesAndForms - cannot open 'VBA' substorage" );
     if( !xVbaStrg )
         return;

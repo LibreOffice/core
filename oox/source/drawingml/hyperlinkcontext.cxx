@@ -91,8 +91,8 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
                 static const OUStringLiteral sJump( u"jump=" );
                 if ( aPPAct.match( sJump, nIndex + 1 ) )
                 {
-                    OUString aDestination( aPPAct.copy( nIndex + 1 + sJump.getLength() ) );
-                    sURL += "#action?jump=" + aDestination;
+                    std::u16string_view aDestination( aPPAct.subView( nIndex + 1 + sJump.getLength() ) );
+                    sURL += OUString::Concat("#action?jump=") + aDestination;
                 }
             }
             else if ( aPPAction.match( "hlinksldjump" ) )

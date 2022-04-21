@@ -154,8 +154,8 @@ void GalApp::Init()
             if( fileName.lastIndexOf( '\\' ) > lastSlash )
                 lastSlash = fileName.lastIndexOf( '\\' );
 #endif
-            OUString baseBinDir = fileName.copy( 0, lastSlash );
-            OUString installPrefix = baseBinDir + "/../..";
+            std::u16string_view baseBinDir = fileName.subView( 0, lastSlash );
+            OUString installPrefix = OUString::Concat(baseBinDir) + "/../..";
 
             OUString envVar( "OOO_INSTALL_PREFIX");
             osl_setEnvironment(envVar.pData, installPrefix.pData);

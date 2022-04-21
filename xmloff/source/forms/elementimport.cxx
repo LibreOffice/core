@@ -49,6 +49,7 @@
 #include <comphelper/extract.hxx>
 #include <comphelper/types.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 
@@ -2002,8 +2003,6 @@ namespace xmloff
 
             sal_Int32 nElementStart = 0;
             sal_Int32 nNextSep = 0;
-            sal_Int32 nElementLength;
-            OUString sElement;
             do
             {
                 // extract the current element
@@ -2011,15 +2010,15 @@ namespace xmloff
                     _rValue, nElementStart);
                 if (-1 == nNextSep)
                     nNextSep = nLength;
-                sElement = _rValue.copy(nElementStart, nNextSep - nElementStart);
+                std::u16string_view sElement = _rValue.subView(nElementStart, nNextSep - nElementStart);
 
-                nElementLength = sElement.getLength();
+                size_t nElementLength = sElement.size();
                 // when writing the sequence, we quoted the single elements with " characters
-                OSL_ENSURE( sElement.startsWith("\"") && sElement.endsWith("\""),
+                OSL_ENSURE( o3tl::starts_with(sElement, u"\"") && o3tl::ends_with(sElement, u"\""),
                         "OFormImport::implTranslateStringListProperty: invalid quoted element name.");
-                sElement = sElement.copy(1, nElementLength - 2);
+                sElement = sElement.substr(1, nElementLength - 2);
 
-                aElements.push_back(sElement);
+                aElements.push_back(OUString(sElement));
 
                 // switch to the next element
                 nElementStart = 1 + nNextSep;

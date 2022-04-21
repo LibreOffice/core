@@ -513,12 +513,12 @@ OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno
 OUString ManifestImport::ConvertNameWithNamespace( const OUString& aName, const StringHashMap& aNamespaces )
 {
     OUString aNsAlias;
-    OUString aPureName = aName;
+    std::u16string_view aPureName = aName;
 
     sal_Int32 nInd = aName.indexOf( ':' );
     if ( nInd != -1 && nInd < aName.getLength() ) {
         aNsAlias = aName.copy( 0, nInd );
-        aPureName = aName.copy( nInd + 1 );
+        aPureName = aName.subView( nInd + 1 );
     }
 
     OUString aResult;

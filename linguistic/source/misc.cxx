@@ -521,7 +521,6 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             //! should at least work with the German words
             //! B-"u-c-k-er and Sc-hif-fah-rt
 
-            OUString aLeft, aRight;
             sal_Int16 nPos = GetOrigWordPos( rOrigWord, nChgPos );
 
             // get words like Sc-hif-fah-rt to work correct
@@ -529,12 +528,12 @@ uno::Reference< XHyphenatedWord > RebuildHyphensAndControlChars(
             if (nChgPos > nHyphenationPos)
                 --nPos;
 
-            aLeft = rOrigWord.copy( 0, nPos );
-            aRight = rOrigWord.copy( nPos ); // FIXME: changes at the right side
+            std::u16string_view aLeft = rOrigWord.subView( 0, nPos );
+            std::u16string_view aRight = rOrigWord.subView( nPos ); // FIXME: changes at the right side
 
             aOrigHyphenatedWord =  aLeft + aRplc + aRight;
 
-            nOrigHyphenPos      = sal::static_int_cast< sal_Int16 >(aLeft.getLength() +
+            nOrigHyphenPos      = sal::static_int_cast< sal_Int16 >(aLeft.size() +
                                   rxHyphWord->getHyphenPos() - nChgPos);
             nOrigHyphenationPos = GetOrigWordPos( rOrigWord, nHyphenationPos );
         }

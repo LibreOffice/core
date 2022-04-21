@@ -85,7 +85,7 @@ class XMLVersionContext final : public SvXMLImportContext
 {
 private:
     static bool         ParseISODateTimeString(
-                                const OUString& rString,
+                                std::u16string_view rString,
                                 css::util::DateTime& rDateTime );
 
 public:

@@ -119,9 +119,9 @@ namespace ucb::ucp::ext
         }
         else
         {
-            const OUString sRelativeURL( sURL.copy( ContentProvider::getRootURL().getLength() ) );
-            const sal_Int32 nSepPos = sRelativeURL.indexOf( '/' );
-            if ( ( nSepPos == -1 ) || ( nSepPos == sRelativeURL.getLength() - 1 ) )
+            const std::u16string_view sRelativeURL( sURL.subView( ContentProvider::getRootURL().getLength() ) );
+            const size_t nSepPos = sRelativeURL.find( '/' );
+            if ( ( nSepPos == std::u16string_view::npos ) || ( nSepPos == sRelativeURL.size() - 1 ) )
             {
                 m_eExtContentType = E_EXTENSION_ROOT;
             }

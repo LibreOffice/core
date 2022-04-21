@@ -1304,10 +1304,10 @@ BackendImpl::ComponentPackageImpl::isRegistered_(
                     {
                         //try to match only the file name
                         OUString thisUrl(getURL());
-                        OUString thisFileName(thisUrl.copy(thisUrl.lastIndexOf('/')));
+                        std::u16string_view thisFileName(thisUrl.subView(thisUrl.lastIndexOf('/')));
 
-                        OUString locationFileName(location.copy(location.lastIndexOf('/')));
-                        if (locationFileName.equalsIgnoreAsciiCase(thisFileName))
+                        std::u16string_view locationFileName(location.subView(location.lastIndexOf('/')));
+                        if (o3tl::equalsIgnoreAsciiCase(locationFileName, thisFileName))
                             bAmbiguousComponentName = true;
                     }
                 }

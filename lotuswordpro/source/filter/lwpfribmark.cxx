@@ -373,8 +373,8 @@ void LwpFribField::RegisterTimeField(const LwpFieldMark* pFieldMark)
         if (index < 0)
             return;
 
-        OUString tag = sFormula.copy(0, index);
-        if (tag == "Now()" || tag == "CreateDate" || tag == "EditDate")
+        std::u16string_view tag = sFormula.subView(0, index);
+        if (tag == u"Now()" || tag == u"CreateDate" || tag == u"EditDate")
             RegisterDateTimeStyle(sFormula.copy(index + 1));
     }
 }

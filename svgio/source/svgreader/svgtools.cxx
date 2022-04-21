@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 #include <tools/color.hxx>
 #include <rtl/math.hxx>
+#include <o3tl/string_view.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svgtoken.hxx>
@@ -1323,20 +1324,20 @@ namespace svgio::svgreader
                         if(rMimeType.startsWith("image"))
                         {
                             // image data
-                            OUString aData(rCandidate.copy(nPos));
-                            static const char aStrBase64[] = "base64";
+                            std::u16string_view aData(rCandidate.subView(nPos));
+                            static constexpr std::u16string_view aStrBase64 = u"base64";
 
-                            if(aData.startsWith(aStrBase64))
+                            if(o3tl::starts_with(aData, aStrBase64))
                             {
                                 // base64 encoded
-                                nPos = strlen(aStrBase64);
-                                nLen = aData.getLength();
+                                nPos = aStrBase64.size();
+                                nLen = aData.size();
 
                                 skip_char(aData, ' ', ',', nPos, nLen);
 
                                 if(nPos < nLen)
                                 {
-                                    rData = aData.copy(nPos);
+                                    rData = aData.substr(nPos);
                                 }
                             }
                         }

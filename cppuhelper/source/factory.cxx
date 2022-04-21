@@ -701,7 +701,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
 Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
 {
     OUString aActivatorUrl;
-    OUString aActivatorName;
+    std::u16string_view aActivatorName;
     OUString aLocation;
 
     Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
@@ -744,9 +744,9 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     }
 
     Reference< XInterface > xFactory;
-    if( !aActivatorName.isEmpty() )
+    if( !aActivatorName.empty() )
     {
-        Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
+        Reference<XInterface > x = xSMgr->createInstance( OUString(aActivatorName) );
         Reference<XImplementationLoader > xLoader( x, UNO_QUERY );
         if (xLoader.is())
         {

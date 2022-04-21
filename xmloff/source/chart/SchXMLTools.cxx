@@ -295,30 +295,30 @@ XMLTokenEnum getTokenByChartType(
         // if postfix matches and leaves a non-empty type
         if( nTypeLength > 0 && rChartTypeService.match( aPostfix, nSkip + nTypeLength ))
         {
-            OUString aServiceName( rChartTypeService.copy( nSkip, nTypeLength ));
+            std::u16string_view aServiceName( rChartTypeService.subView( nSkip, nTypeLength ));
 
-            if ( aServiceName == "Line" )
+            if ( aServiceName == u"Line" )
                 eResult = XML_LINE;
-            else if ( aServiceName == "Area" )
+            else if ( aServiceName == u"Area" )
                 eResult = XML_AREA;
-            else if( aServiceName == "Bar" ||
-                     (!bUseOldNames && aServiceName == "Column"))
+            else if( aServiceName == u"Bar" ||
+                     (!bUseOldNames && aServiceName == u"Column"))
                 eResult = XML_BAR;
-            else if ( aServiceName == "Pie" )
+            else if ( aServiceName == u"Pie" )
                 eResult = XML_CIRCLE;
-            else if ( aServiceName == "Donut" )
+            else if ( aServiceName == u"Donut" )
                 eResult = XML_RING;
-            else if( (bUseOldNames && aServiceName == "XY") ||
-                     (!bUseOldNames && aServiceName == "Scatter"))
+            else if( (bUseOldNames && aServiceName == u"XY") ||
+                     (!bUseOldNames && aServiceName == u"Scatter"))
                 eResult = XML_SCATTER;
-            else if ( aServiceName == "Bubble" )
+            else if ( aServiceName == u"Bubble" )
                 eResult = XML_BUBBLE;
-            else if ( aServiceName == "Net" )
+            else if ( aServiceName == u"Net" )
                 eResult = XML_RADAR;
-            else if ( aServiceName == "FilledNet" )
+            else if ( aServiceName == u"FilledNet" )
                 eResult = XML_FILLED_RADAR;
-            else if( (bUseOldNames && aServiceName == "Stock") ||
-                     (!bUseOldNames && aServiceName == "CandleStick"))
+            else if( (bUseOldNames && aServiceName == u"Stock") ||
+                     (!bUseOldNames && aServiceName == u"CandleStick"))
                 eResult = XML_STOCK;
         }
     }

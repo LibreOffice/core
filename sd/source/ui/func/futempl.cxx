@@ -46,6 +46,7 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflftrit.hxx>
 #include <svx/xflhtit.hxx>
+#include <o3tl/string_view.hxx>
 #include <app.hrc>
 #include <stlsheet.hxx>
 #include <sdpage.hxx>
@@ -336,8 +337,8 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     {
                         OUString aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
                         // determine number, mind the blank between name and number
-                        OUString aNumStr(aName.copy(aOutlineStr.getLength() + 1));
-                        sal_uInt16 nLevel = static_cast<sal_uInt16>(aNumStr.toInt32());
+                        std::u16string_view aNumStr(aName.subView(aOutlineStr.getLength() + 1));
+                        sal_uInt16 nLevel = static_cast<sal_uInt16>(o3tl::toInt32(aNumStr));
                         switch (nLevel)
                         {
                             case 1: ePO = PresentationObjects::Outline_1; break;

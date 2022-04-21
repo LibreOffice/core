@@ -146,11 +146,11 @@ public:
     OleFormCtrlExportHelper( const css::uno::Reference< css::uno::XComponentContext >& rxCtx, const css::uno::Reference< css::frame::XModel >& xDocModel, const css::uno::Reference< css::awt::XControlModel >& xModel );
     ~OleFormCtrlExportHelper();
 
-    OUString getGUID() const
+    std::u16string_view getGUID() const
     {
-        OUString sResult;
+        std::u16string_view sResult;
         if ( maGUID.getLength() > 2 )
-            sResult = maGUID.copy(1, maGUID.getLength() - 2 );
+            sResult = maGUID.subView(1, maGUID.getLength() - 2 );
         return sResult;
     }
     const OUString& getFullName() const { return maFullName; }

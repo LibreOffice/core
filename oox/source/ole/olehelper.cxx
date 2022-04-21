@@ -525,7 +525,7 @@ bool MSConvertOCXControls::WriteOCXExcelKludgeStream( const css::uno::Reference<
         return false;
     rName = exportHelper.getTypeName();
     SvGlobalName aName;
-    OUString sId = exportHelper.getGUID();
+    OUString sId( exportHelper.getGUID() );
     aName.MakeId(sId);
     BinaryXOutputStream aOut( xOutStrm, false );
     OleHelper::exportGuid( aOut, aName );
@@ -544,7 +544,7 @@ bool MSConvertOCXControls::WriteOCXStream( const Reference< XModel >& rxModel, t
     if ( !exportHelper.isValid() )
         return false;
 
-    OUString sId = exportHelper.getGUID();
+    OUString sId( exportHelper.getGUID() );
     aName.MakeId(sId);
 
     OUString sFullName = exportHelper.getFullName();

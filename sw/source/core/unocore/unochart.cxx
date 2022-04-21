@@ -1984,16 +1984,16 @@ uno::Sequence< OUString > SAL_CALL SwChartDataSequence::generateLabel(
                         if (pBuf < pEnd && ('0' <= *pBuf && *pBuf <= '9'))
                         {
                             OUString aRplc;
-                            OUString aNew;
+                            std::u16string_view aNew;
                             if (bUseCol)
                             {
                                 aRplc = "%COLUMNLETTER";
-                                aNew = aCellName.copy(0, pBuf - aCellName.getStr());
+                                aNew = aCellName.subView(0, pBuf - aCellName.getStr());
                             }
                             else
                             {
                                 aRplc = "%ROWNUMBER";
-                                aNew = OUString(pBuf, (aCellName.getStr() + nLen) - pBuf);
+                                aNew = std::u16string_view(pBuf, (aCellName.getStr() + nLen) - pBuf);
                             }
                             aText = aText.replaceFirst( aRplc, aNew );
                         }

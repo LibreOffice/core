@@ -60,7 +60,7 @@ void HexColorControl::SetColor(Color nColor)
 {
     OUStringBuffer aBuffer;
     sax::Converter::convertColor(aBuffer, nColor);
-    OUString sColor = aBuffer.makeStringAndClear().copy(1);
+    OUString sColor(aBuffer.subView(1));
     if (sColor == m_xEntry->get_text())
         return;
     int nStartPos, nEndPos;

@@ -31,6 +31,7 @@
 #include <vcl/graph.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace css;
 using namespace com::sun::star::uno;
@@ -383,14 +384,14 @@ void SAL_CALL RecentFilesMenuController::dispatch(
         return;
 
     sal_Int32 nAddArgs = aURL.Complete.indexOf( '&', nEntryPos );
-    OUString aEntryArg;
+    std::u16string_view aEntryArg;
 
     if ( nAddArgs < 0 )
-        aEntryArg = aURL.Complete.copy( nEntryPos );
+        aEntryArg = aURL.Complete.subView( nEntryPos );
     else
-        aEntryArg = aURL.Complete.copy( nEntryPos, nAddArgs-nEntryPos );
+        aEntryArg = aURL.Complete.subView( nEntryPos, nAddArgs-nEntryPos );
 
-    sal_Int32 nEntry = aEntryArg.toInt32();
+    sal_Int32 nEntry = o3tl::toInt32(aEntryArg);
     executeEntry( nEntry );
 }
 
