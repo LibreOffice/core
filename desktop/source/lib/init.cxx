@@ -875,10 +875,10 @@ void setupSidebar(std::u16string_view sidebarDeckId = u"")
 
         OUString currentDeckId = pDockingWin->GetSidebarController()->GetCurrentDeckId();
 
-        // check if it is the chart deck id, if it is, don't switch to default deck
+        // check if it is the property deck id, if it is, don't switch to default deck
         bool switchToDefault = true;
 
-        if (currentDeckId == "ChartDeck")
+        if (currentDeckId == "PropertyDeck")
             switchToDefault = false;
 
         if (!sidebarDeckId.empty())
