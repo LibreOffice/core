@@ -93,6 +93,30 @@
       },
       "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "501f45e8_440976ff",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-21T13:56:28Z",
+      "side": 1,
+      "message": "Nope. I\u0027m testing it with a Calc Python extension. This should generally work with any extension. In fact I had speculated, if actually running a 32bit URE + uno exec + 64bit LO would be generally a better solution for the memory problems, but that would be a much larger patch to implement (I\u0027m just imagining the gbuild stuff to build and ship a 2nd URE with 32/64 bit x86 builds + additional packaging changes). AFAIK LO extensions have an arch identifier in the XML description, so having something like a subdirectory for per-arch URE\u0027s and select them and run any matching extension OOP should generally work.",
+      "parentUuid": "ea9114ee_793bf7d5",
+      "range": {
+        "startLine": 68,
+        "startChar": 22,
+        "endLine": 68,
+        "endChar": 43
+      },
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
