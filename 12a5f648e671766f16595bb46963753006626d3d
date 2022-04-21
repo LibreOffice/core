@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "593ee114_4af987b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-21T06:53:16Z",
+      "side": 1,
+      "message": "Yes - still true. You will notice that I changed the unit test to expect only PRINTDATE and no longer to expect the additional \\* MERGEFORMAT.\n\nProbably not an issue, because we lose this on EVERY field that we handle. So I only note it here. The only option would be grabbag it if we thought it was important. (It is a default setting for Word.) It has to do with char-runs.  If you replace the field contents, you magically just apply the char-runs at the same positions to the new text. LO of course doesn\u0027t do that.",
+      "parentUuid": "ac0ec56a_f419d17e",
+      "revId": "12a5f648e671766f16595bb46963753006626d3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1c99ac05_4b29bf98",
