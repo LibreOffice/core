@@ -33,6 +33,24 @@
       "message": "Yes new small feature but does it break something in 7.3 ?",
       "revId": "612f5a195b524c74ce8844af169ba9eaf17e6e4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51b3f501_28ac557f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-21T08:48:34Z",
+      "side": 1,
+      "message": "It\u0027s more my personal preference - to not introduce any new into released branches, having clear \"only bugfix minor releases\" rule, and not having those \"available since X.Y.3\" in release notes ... but you see, I don\u0027t set any \"-1\" - so of course, up to you :-)",
+      "parentUuid": "bf46a797_d9231b0f",
+      "revId": "612f5a195b524c74ce8844af169ba9eaf17e6e4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
