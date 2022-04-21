@@ -675,7 +675,7 @@ public:
     virtual rtl::Reference< MapCursor > createRootCursor() const = 0;
 
     // throws FileFormatException:
-    virtual rtl::Reference< Entity > findEntity(std::u16string_view name)
+    virtual rtl::Reference< Entity > findEntity(OUString const & name)
         const = 0;
 
 protected:
@@ -689,10 +689,10 @@ public:
     Manager() {}
 
     // throws FileFormatException, NoSuchFileException:
-    rtl::Reference< Provider > addProvider(std::u16string_view uri);
+    rtl::Reference< Provider > addProvider(OUString const & uri);
 
     // throws FileFormatException:
-    rtl::Reference< Entity > findEntity(std::u16string_view name) const;
+    rtl::Reference< Entity > findEntity(OUString const & name) const;
 
     // throws FileFormatException:
     rtl::Reference< MapCursor > createCursor(OUString const & name) const;
@@ -701,7 +701,7 @@ private:
     virtual SAL_DLLPRIVATE ~Manager() noexcept override;
 
     SAL_DLLPRIVATE rtl::Reference< Provider > loadProvider(
-        std::u16string_view uri);
+        OUString const & uri);
 
     mutable osl::Mutex mutex_;
     std::vector< rtl::Reference< Provider > > providers_;

@@ -164,7 +164,7 @@ ServiceBasedSingletonEntity::~ServiceBasedSingletonEntity() noexcept {}
 
 Provider::~Provider() noexcept {}
 
-rtl::Reference< Provider > Manager::addProvider(std::u16string_view uri) {
+rtl::Reference< Provider > Manager::addProvider(OUString const & uri) {
     rtl::Reference< Provider > p(loadProvider(uri));
     assert(p.is());
     {
@@ -174,7 +174,7 @@ rtl::Reference< Provider > Manager::addProvider(std::u16string_view uri) {
     return p;
 }
 
-rtl::Reference< Entity > Manager::findEntity(std::u16string_view name) const {
+rtl::Reference< Entity > Manager::findEntity(OUString const & name) const {
     //TODO: caching? (here or in cppuhelper::TypeManager?)
     osl::MutexGuard g(mutex_);
     for (auto & i: providers_) {
@@ -194,8 +194,7 @@ rtl::Reference< MapCursor > Manager::createCursor(OUString const & name)
 
 Manager::~Manager() noexcept {}
 
-rtl::Reference< Provider > Manager::loadProvider(std::u16string_view _uri) {
-    OUString uri(_uri);
+rtl::Reference< Provider > Manager::loadProvider(OUString const & uri) {
     osl::DirectoryItem item;
     if (osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None) {
         osl::FileStatus status(osl_FileStatus_Mask_Type);

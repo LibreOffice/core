@@ -231,10 +231,9 @@ rtl::Reference<MapCursor> SourceTreeProvider::createRootCursor() const {
     return new Cursor(manager_, uri_);
 }
 
-rtl::Reference<Entity> SourceTreeProvider::findEntity(std::u16string_view _name)
+rtl::Reference<Entity> SourceTreeProvider::findEntity(OUString const & name)
     const
 {
-    OUString name(_name);
     std::map< OUString, rtl::Reference<Entity> >::iterator ci(
         cache_.find(name));
     if (ci != cache_.end()) {
