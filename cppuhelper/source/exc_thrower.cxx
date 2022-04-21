@@ -168,7 +168,7 @@ ExceptionThrower::ExceptionThrower()
     uno_Interface::pDispatcher = ExceptionThrower_dispatch;
 }
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID)) || defined(EMSCRIPTEN)
+#if defined(IOS) || defined(ANDROID) || defined(EMSCRIPTEN)
 #define RETHROW_FAKE_EXCEPTIONS 1
 #else
 #define RETHROW_FAKE_EXCEPTIONS 0
@@ -256,9 +256,7 @@ void SAL_CALL throwException( Any const & exc )
 Any SAL_CALL getCaughtException()
 {
     // why does this differ from RETHROW_FAKE_EXCEPTIONS?
-#if (defined(__aarch64__) && defined(ANDROID)) || defined(EMSCRIPTEN)
-    // FIXME This stuff works on 32bit ARM, let's use the shortcut only for
-    // the 64bit ARM.
+#if defined(ANDROID) || defined(EMSCRIPTEN)
     return Any();
 #else
     Mapping cpp2uno(Environment::getCurrent(), Environment(UNO_LB_UNO));
