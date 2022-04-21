@@ -54,6 +54,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42c6b89d_486988ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T19:11:11Z",
+      "side": 1,
+      "message": "Addressed other comments in https://gerrit.libreoffice.org/c/core/+/133302",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb416ca8_8b6dfc28",
@@ -67,6 +84,24 @@
       "writtenOn": "2022-04-21T13:39:55Z",
       "side": 1,
       "message": "any reason this was moved out of the conditional expression below?  (if it had been left inside the expression, we\u0027d avoid creating an OUString if ucr_.isValid() is false)",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "875d6e4d_ceafa726",
+        "filename": "unoidl/source/legacyprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T19:11:11Z",
+      "side": 1,
+      "message": "reverted to using OUString here",
+      "parentUuid": "fb416ca8_8b6dfc28",
       "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -94,6 +129,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "717ea131_01c06904",
+        "filename": "unoidl/source/unoidl-read.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T19:11:11Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "2b065ff5_c15ce54e",
+      "range": {
+        "startLine": 106,
+        "startChar": 17,
+        "endLine": 106,
+        "endChar": 26
+      },
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e2dedb4f_13d1002d",
@@ -107,6 +166,24 @@
       "writtenOn": "2022-04-21T13:39:55Z",
       "side": 1,
       "message": "why change the signature of this function in the first place, then?",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5b17b4a_5435519a",
+        "filename": "unoidl/source/unoidl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T19:11:11Z",
+      "side": 1,
+      "message": "Because the call chain wanted to pass down string_view. Reverted this to OUString.",
+      "parentUuid": "e2dedb4f_13d1002d",
       "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -128,6 +205,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cc47227_d04b0084",
+        "filename": "unoidl/source/unoidlprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T19:11:11Z",
+      "side": 1,
+      "message": "done.",
+      "parentUuid": "1b303983_ca92bb21",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80c70e4d_32d915a7",
@@ -145,6 +240,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2356dc42_a3f2f239",
+        "filename": "unoidl/source/unoidlprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T19:11:11Z",
+      "side": 1,
+      "message": "reverted to using OUString here, since the call site is using OUString",
+      "parentUuid": "80c70e4d_32d915a7",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9b8d7e19_b3cf3b99",
@@ -158,6 +271,30 @@
       "writtenOn": "2022-04-21T13:39:55Z",
       "side": 1,
       "message": "this apparently needs to be std::size_t now, too?",
+      "range": {
+        "startLine": 1356,
+        "startChar": 9,
+        "endLine": 1356,
+        "endChar": 18
+      },
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5ad30fa_09f8e916",
+        "filename": "unoidl/source/unoidlprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T19:11:11Z",
+      "side": 1,
+      "message": "reverted findEntity to use OUString",
+      "parentUuid": "9b8d7e19_b3cf3b99",
       "range": {
         "startLine": 1356,
         "startChar": 9,
