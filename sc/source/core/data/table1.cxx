@@ -1234,11 +1234,10 @@ bool ScTable::IsEmptyLine( SCROW nRow, SCCOL nStartCol, SCCOL nEndCol ) const
 
     nEndCol   = std::min<SCCOL>( nEndCol,   aCol.size()-1 );
 
-    bool bFound = false;
-    for (SCCOL i=nStartCol; i<=nEndCol && !bFound; i++)
+    for (SCCOL i=nStartCol; i<=nEndCol; i++)
         if (aCol[i].HasDataAt(nRow))
-            bFound = true;
-    return !bFound;
+            return false;
+    return true;
 }
 
 void ScTable::LimitChartArea( SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const
