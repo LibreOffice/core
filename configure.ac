@@ -1243,16 +1243,6 @@ if test "$_os" = "Android" ; then
     elif test ! -d "$ANDROID_SDK_DIR/platforms"; then
         AC_MSG_ERROR([the --with-android-sdk option does not point to an Android SDK])
     fi
-
-    BUILD_TOOLS_VERSION=`$SED -n -e 's/.*buildToolsVersion "\(.*\)"/\1/p' $SRC_ROOT/android/source/build.gradle`
-    if test ! -d "$ANDROID_SDK_DIR/build-tools/$BUILD_TOOLS_VERSION"; then
-        AC_MSG_WARN([android build-tools $BUILD_TOOLS_VERSION not found - install with
-                         $ANDROID_SDK_DIR/tools/android update sdk -u --all --filter build-tools-$BUILD_TOOLS_VERSION
-                    or adjust change $SRC_ROOT/android/source/build.gradle accordingly])
-        add_warning "android build-tools $BUILD_TOOLS_VERSION not found - install with"
-        add_warning "    $ANDROID_SDK_DIR/tools/android update sdk -u --all --filter build-tools-$BUILD_TOOLS_VERSION"
-        add_warning "or adjust $SRC_ROOT/android/source/build.gradle accordingly"
-    fi
 fi
 
 if test "$_os" = "AIX"; then
