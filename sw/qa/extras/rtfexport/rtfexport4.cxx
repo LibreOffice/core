@@ -646,6 +646,25 @@ DECLARE_RTFEXPORT_TEST(testTdf139948, "tdf139948.rtf")
         sal_uInt32(0), getProperty<table::BorderLine2>(getParagraph(5), "BottomBorder").LineWidth);
 }
 
+DECLARE_RTFEXPORT_TEST(testTdf148515, "tdf148515.rtf")
+{
+    uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
+
+    uno::Reference<text::XTextRange> xCell1(xTable->getCellByName("A1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("XXXXXX"), xCell1->getString());
+    CPPUNIT_ASSERT_EQUAL(
+        5.0f,
+        getProperty<float>(getRun(getParagraphOfText(1, xCell1->getText()), 1), "CharHeight"));
+
+    uno::Reference<text::XTextRange> xCell2(xTable->getCellByName("B1"), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(""), xCell2->getString());
+    CPPUNIT_ASSERT_EQUAL(
+        5.0f,
+        getProperty<float>(getRun(getParagraphOfText(1, xCell2->getText()), 1), "CharHeight"));
+
+    CPPUNIT_ASSERT_EQUAL(10.f, getProperty<float>(getRun(getParagraph(2), 1), "CharHeight"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
