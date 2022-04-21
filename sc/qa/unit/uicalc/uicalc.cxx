@@ -2261,6 +2261,17 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf118207)
     pMod->SetInputOptions(aInputOption);
 }
 
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf148669)
+{
+    // Without the fix in place, this test would have failed with an assert
+    ScModelObj* pModelObj = createDoc("tdf148669.xlsx");
+
+    ScDocument* pDoc = pModelObj->GetDocument();
+    CPPUNIT_ASSERT(pDoc);
+
+    CPPUNIT_ASSERT_MESSAGE("There should be a note", pDoc->HasNote(ScAddress(701, 0, 0)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124778)
 {
     mxComponent = loadFromDesktop("private:factory/scalc");
