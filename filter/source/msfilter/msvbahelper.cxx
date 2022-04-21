@@ -56,14 +56,14 @@ OUString makeMacroURL( std::u16string_view sMacroName )
     return sUrlPart0 + sMacroName + sUrlPart1;
 }
 
-OUString extractMacroName( const OUString& rMacroUrl )
+std::u16string_view extractMacroName( const OUString& rMacroUrl )
 {
     if( rMacroUrl.startsWith( sUrlPart0 ) && rMacroUrl.endsWith( sUrlPart1 ) )
     {
-        return rMacroUrl.copy( sUrlPart0.getLength(),
+        return rMacroUrl.subView( sUrlPart0.getLength(),
             rMacroUrl.getLength() - sUrlPart0.getLength() - sUrlPart1.getLength() );
     }
-    return OUString();
+    return std::u16string_view();
 }
 
 static std::u16string_view trimMacroName( std::u16string_view rMacroName )

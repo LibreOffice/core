@@ -52,9 +52,9 @@ class UCB(object):
         self.executeCommand(self.getContent(filename),"delete", True)
 
     def copy(self, sourceDir, targetDir):
-        self.copy1(sourceDir,targetDir, None)
+        self.copy(sourceDir,targetDir, None)
 
-    def copy1(self, sourceDir, targetDir, verifier):
+    def copy(self, sourceDir, targetDir, verifier):
         files = self.listFiles(sourceDir, verifier)
         for i in range(len(files)):
           self.copy2(sourceDir, files[i], targetDir, "")

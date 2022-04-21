@@ -136,7 +136,8 @@ tools::Rectangle ImplCalcActionBounds(const MetaAction& rAct, const OutputDevice
         case MetaActionType::TEXTARRAY:
         {
             const MetaTextArrayAction& rTextAct = static_cast<const MetaTextArrayAction&>(rAct);
-            const OUString aString(rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()));
+            const OUString aString(
+                rTextAct.GetText().copy(rTextAct.GetIndex(), rTextAct.GetLen()));
 
             if (!aString.isEmpty())
             {

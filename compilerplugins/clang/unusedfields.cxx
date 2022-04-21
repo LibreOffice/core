@@ -434,7 +434,7 @@ bool UnusedFields::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructor
 
 bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
 {
-    auto copy1 = insideMoveOrCopyOrCloneDeclParent;
+    auto copy = insideMoveOrCopyOrCloneDeclParent;
     auto copy2 = insideFunctionDecl;
     if (!ignoreLocation(cxxMethodDecl->getBeginLoc()) && cxxMethodDecl->isThisDeclarationADefinition())
     {
@@ -453,14 +453,14 @@ bool UnusedFields::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
     }
     insideFunctionDecl = cxxMethodDecl;
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
-    insideMoveOrCopyOrCloneDeclParent = copy1;
+    insideMoveOrCopyOrCloneDeclParent = copy;
     insideFunctionDecl = copy2;
     return ret;
 }
 
 bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
 {
-    auto copy1 = insideStreamOutputOperator;
+    auto copy = insideStreamOutputOperator;
     auto copy2 = insideFunctionDecl;
     auto copy3 = insideMoveOrCopyOrCloneDeclParent;
     if (functionDecl->getLocation().isValid() && !ignoreLocation(functionDecl->getBeginLoc()) && functionDecl->isThisDeclarationADefinition())
@@ -482,7 +482,7 @@ bool UnusedFields::TraverseFunctionDecl(FunctionDecl* functionDecl)
     }
     insideFunctionDecl = functionDecl;
     bool ret = RecursiveASTVisitor::TraverseFunctionDecl(functionDecl);
-    insideStreamOutputOperator = copy1;
+    insideStreamOutputOperator = copy;
     insideFunctionDecl = copy2;
     insideMoveOrCopyOrCloneDeclParent = copy3;
     return ret;

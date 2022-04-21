@@ -60,6 +60,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <vcl/help.hxx>
+#include <o3tl/string_view.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
@@ -793,17 +794,17 @@ void EditorWindow::HandleProcedureCompletion()
             if( aCurrPortions.size() >= 3 )
             {//at least 3 tokens: (sub|function) whitespace identifier...
                 HighlightPortion& r = aCurrPortions.front();
-                OUString sStr = aCurrLine.copy(r.nBegin, r.nEnd - r.nBegin);
+                std::u16string_view sStr = aCurrLine.subView(r.nBegin, r.nEnd - r.nBegin);
 
                 if( r.tokenType == TokenType::Keywords )
                 {
-                    if( sStr.equalsIgnoreAsciiCase("sub") || sStr.equalsIgnoreAsciiCase("function") )
+                    if( o3tl::equalsIgnoreAsciiCase(sStr, u"sub") || o3tl::equalsIgnoreAsciiCase(sStr, u"function") )
                     {
                         pEditView->InsertText( sText );//append to the end
                         GetEditView()->SetSelection(aSel);
                         break;
                     }
-                    if( sStr.equalsIgnoreAsciiCase("end") )
+                    if( o3tl::equalsIgnoreAsciiCase(sStr, u"end") )
                         break;
                 }
             }
@@ -824,10 +825,10 @@ bool EditorWindow::GetProcedureName(OUString const & rLine, OUString& rProcType,
 
     for (auto const& portion : aPortions)
     {
-        OUString sTokStr = rLine.copy(portion.nBegin, portion.nEnd - portion.nBegin);
+        std::u16string_view sTokStr = rLine.subView(portion.nBegin, portion.nEnd - portion.nBegin);
 
-        if( portion.tokenType == TokenType::Keywords && ( sTokStr.equalsIgnoreAsciiCase("sub")
-            || sTokStr.equalsIgnoreAsciiCase("function")) )
+        if( portion.tokenType == TokenType::Keywords && ( o3tl::equalsIgnoreAsciiCase(sTokStr, u"sub")
+            || o3tl::equalsIgnoreAsciiCase(sTokStr, u"function")) )
         {
             rProcType = sTokStr;
             bFoundType = true;

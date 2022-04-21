@@ -375,7 +375,7 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
     try
     {
         oox::ole::OleStorage root( mxCtx, rxIn, false );
-        oox::StorageRef vbaStg = root.openSubStorage( "Macros" , false );
+        oox::StorageRef vbaStg = root.openSubStorage( u"Macros" , false );
         if ( vbaStg )
         {
             oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), u"Writer" );

@@ -473,7 +473,7 @@ bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, cons
 
         if( (nOpen != -1) && (nClose > nOpen) )
         {
-            const OUString aTmp( rStrImpValue.copy( nOpen+1, nClose - nOpen-1) );
+            const std::u16string_view aTmp( rStrImpValue.subView( nOpen+1, nClose - nOpen-1) );
 
             sal_Int32 nIndex = 0;
 

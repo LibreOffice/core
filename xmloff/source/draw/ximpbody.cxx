@@ -190,7 +190,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             if( nIndex != -1 )
             {
                 OUString aFileName( sHREF.copy( 0, nIndex ) );
-                OUString aBookmarkName( sHREF.copy( nIndex+1 ) );
+                std::u16string_view aBookmarkName( sHREF.subView( nIndex+1 ) );
 
                 sHREF = GetImport().GetAbsoluteReference( aFileName ) + "#"
                     + aBookmarkName;

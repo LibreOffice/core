@@ -237,11 +237,11 @@ namespace pcr
 
                 sal_Int32 nPrefixLen = aScriptEvent.ScriptCode.indexOf( ':' );
                 OSL_ENSURE( nPrefixLen > 0, "lcl_getAssignedScriptEvent: illegal location!" );
-                OUString sLocation = aScriptEvent.ScriptCode.copy( 0, nPrefixLen );
-                OUString sMacroPath = aScriptEvent.ScriptCode.copy( nPrefixLen + 1 );
+                std::u16string_view sLocation = aScriptEvent.ScriptCode.subView( 0, nPrefixLen );
+                std::u16string_view sMacroPath = aScriptEvent.ScriptCode.subView( nPrefixLen + 1 );
 
                 aScriptEvent.ScriptCode =
-                    "vnd.sun.star.script:" +
+                    OUString::Concat("vnd.sun.star.script:") +
                     sMacroPath +
                     "?language=Basic&location=" +
                     sLocation;

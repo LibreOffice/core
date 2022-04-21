@@ -622,7 +622,7 @@ void SvxNumberFormat::SetListFormat(std::optional<OUString> oSet)
     }
 }
 
-OUString SvxNumberFormat::GetListFormat(bool bIncludePrefixSuffix /*= true*/) const
+std::u16string_view SvxNumberFormat::GetListFormat(bool bIncludePrefixSuffix /*= true*/) const
 {
     assert(sListFormat.has_value());
 
@@ -630,7 +630,7 @@ OUString SvxNumberFormat::GetListFormat(bool bIncludePrefixSuffix /*= true*/) co
         return *sListFormat;
 
     // Strip prefix & suffix from string
-    return sListFormat->copy(sPrefix.getLength(), sListFormat->getLength() - sPrefix.getLength() - sSuffix.getLength());
+    return sListFormat->subView(sPrefix.getLength(), sListFormat->getLength() - sPrefix.getLength() - sSuffix.getLength());
 }
 
 OUString SvxNumberFormat::GetCharFormatName()const

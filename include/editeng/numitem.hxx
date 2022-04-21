@@ -175,7 +175,7 @@ public:
     void            SetListFormat(const OUString& rPrefix, const OUString& rSuffix, int nLevel);
     void            SetListFormat(std::optional<OUString> oSet = std::nullopt);
     bool            HasListFormat() const { return sListFormat.has_value(); }
-    OUString        GetListFormat(bool bIncludePrefixSuffix = true) const;
+    std::u16string_view GetListFormat(bool bIncludePrefixSuffix = true) const;
 
     void                    SetCharFormatName(const OUString& rSet){ sCharStyleName = rSet; }
     virtual OUString        GetCharFormatName()const;

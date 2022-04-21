@@ -2389,9 +2389,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             else
             {
                 sal_Int32 nIndex = sURL.indexOf('=');
-                OUString aDestination(sURL.copy(nIndex + 1));
+                std::u16string_view aDestination(sURL.subView(nIndex + 1));
                 mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
-                                      "ppaction://hlinkshowjump?jump=" + aDestination);
+                                      OUString::Concat("ppaction://hlinkshowjump?jump=") + aDestination);
             }
         }
     }
@@ -4624,7 +4624,7 @@ sal_Unicode DrawingML::SubstituteBullet( sal_Unicode cBulletId, css::awt::FontDe
 }
 
 sax_fastparser::FSHelperPtr DrawingML::CreateOutputStream (
-    const OUString& sFullStream,
+    std::u16string_view sFullStream,
     std::u16string_view sRelativeStream,
     const Reference< XOutputStream >& xParentRelation,
     const char* sContentType,
@@ -5662,7 +5662,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // write data file
     serializer.set(dataDom, uno::UNO_QUERY);
     uno::Reference<io::XOutputStream> xDataOutputStream = mpFB->openFragmentStream(
-        sDir + "/" + dataFileName,
+        rtl::OUStringConcatenation(sDir + "/" + dataFileName),
         "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml");
     writer->setOutputStream(xDataOutputStream);
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
@@ -5674,7 +5674,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // write layout file
     serializer.set(layoutDom, uno::UNO_QUERY);
     writer->setOutputStream(mpFB->openFragmentStream(
-        sDir + "/" + layoutFileName,
+        rtl::OUStringConcatenation(sDir + "/" + layoutFileName),
         "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml"));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
@@ -5682,7 +5682,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // write style file
     serializer.set(styleDom, uno::UNO_QUERY);
     writer->setOutputStream(mpFB->openFragmentStream(
-        sDir + "/" + styleFileName,
+        rtl::OUStringConcatenation(sDir + "/" + styleFileName),
         "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml"));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
@@ -5690,7 +5690,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
     // write color file
     serializer.set(colorDom, uno::UNO_QUERY);
     writer->setOutputStream(mpFB->openFragmentStream(
-        sDir + "/" + colorFileName,
+        rtl::OUStringConcatenation(sDir + "/" + colorFileName),
         "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml"));
     serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence<beans::StringPair>());
@@ -5701,7 +5701,7 @@ void DrawingML::WriteDiagram(const css::uno::Reference<css::drawing::XShape>& rX
 
     serializer.set(drawingDom, uno::UNO_QUERY);
     uno::Reference<io::XOutputStream> xDrawingOutputStream = mpFB->openFragmentStream(
-        sDir + "/" + drawingFileName, "application/vnd.ms-office.drawingml.diagramDrawing+xml");
+        rtl::OUStringConcatenation(sDir + "/" + drawingFileName), "application/vnd.ms-office.drawingml.diagramDrawing+xml");
     writer->setOutputStream(xDrawingOutputStream);
     serializer->serialize(
         uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
@@ -5759,7 +5759,7 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
 
         OUString sDir = OUString::createFromAscii(GetComponentDir());
         uno::Reference<io::XOutputStream> xBinOutStream
-            = mpFB->openFragmentStream(sDir + "/" + sFragment, sContentType);
+            = mpFB->openFragmentStream(rtl::OUStringConcatenation(sDir + "/" + sFragment), sContentType);
 
         try
         {

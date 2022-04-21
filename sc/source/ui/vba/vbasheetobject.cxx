@@ -330,7 +330,7 @@ OUString SAL_CALL ScVbaControlObjectBase::getOnAction()
                     && (rEvent.ScriptType == "Script");
             });
         if (pEvent != aEvents.end())
-            return extractMacroName( pEvent->ScriptCode );
+            return OUString(extractMacroName( pEvent->ScriptCode ));
     }
     return OUString();
 }

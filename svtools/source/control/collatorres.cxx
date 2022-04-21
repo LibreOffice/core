@@ -41,7 +41,7 @@ CollatorResource::CollatorResource()
 const OUString& CollatorResource::GetTranslation(const OUString& r_Algorithm)
 {
     sal_Int32 nIndex = r_Algorithm.indexOf('.');
-    OUString aLocaleFreeAlgorithm;
+    std::u16string_view aLocaleFreeAlgorithm;
 
     if (nIndex == -1)
     {
@@ -50,7 +50,7 @@ const OUString& CollatorResource::GetTranslation(const OUString& r_Algorithm)
     else
     {
         nIndex += 1;
-        aLocaleFreeAlgorithm = r_Algorithm.copy(nIndex);
+        aLocaleFreeAlgorithm = r_Algorithm.subView(nIndex);
     }
 
     for (size_t i = 0; i < m_aData.size(); ++i)

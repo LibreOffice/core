@@ -241,7 +241,7 @@ bool ConstVars::TraverseCXXConstructorDecl(CXXConstructorDecl* cxxConstructorDec
 
 bool ConstVars::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
 {
-    auto copy1 = insideMoveOrCopyDeclParent;
+    auto copy = insideMoveOrCopyDeclParent;
     auto copy2 = insideFunctionDecl;
     if (!ignoreLocation(cxxMethodDecl) && cxxMethodDecl->isThisDeclarationADefinition())
     {
@@ -250,7 +250,7 @@ bool ConstVars::TraverseCXXMethodDecl(CXXMethodDecl* cxxMethodDecl)
     }
     insideFunctionDecl = cxxMethodDecl;
     bool ret = RecursiveASTVisitor::TraverseCXXMethodDecl(cxxMethodDecl);
-    insideMoveOrCopyDeclParent = copy1;
+    insideMoveOrCopyDeclParent = copy;
     insideFunctionDecl = copy2;
     return ret;
 }

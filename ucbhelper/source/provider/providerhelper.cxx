@@ -263,7 +263,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
         if ( aKeys.hasElements() )
         {
             OUString aOldKeyWithSlash = rOldKey;
-            OUString aOldKeyWithoutSlash;
+            std::u16string_view aOldKeyWithoutSlash;
             if ( !aOldKeyWithSlash.endsWith("/") )
             {
                 aOldKeyWithSlash += "/";
@@ -271,7 +271,7 @@ bool ContentProviderImplHelper::renameAdditionalPropertySet(
             }
             else if ( !rOldKey.isEmpty() )
                 aOldKeyWithoutSlash
-                    = rOldKey.copy( 0, rOldKey.getLength() - 1 );
+                    = rOldKey.subView( 0, rOldKey.getLength() - 1 );
 
             for ( const OUString& rKey : aKeys )
             {
@@ -336,14 +336,14 @@ bool ContentProviderImplHelper::copyAdditionalPropertySet(
         if ( aKeys.hasElements() )
         {
             OUString aSrcKeyWithSlash = rSourceKey;
-            OUString aSrcKeyWithoutSlash;
+            std::u16string_view aSrcKeyWithoutSlash;
             if ( !aSrcKeyWithSlash.endsWith("/") )
             {
                 aSrcKeyWithSlash += "/";
                 aSrcKeyWithoutSlash = rSourceKey;
             }
             else if ( !rSourceKey.isEmpty() )
-                aSrcKeyWithoutSlash = rSourceKey.copy(
+                aSrcKeyWithoutSlash = rSourceKey.subView(
                     0, rSourceKey.getLength() - 1 );
 
             for ( const OUString& rKey : aKeys )
@@ -456,7 +456,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
         if ( aKeys.hasElements() )
         {
             OUString aKeyWithSlash = rKey;
-            OUString aKeyWithoutSlash;
+            std::u16string_view aKeyWithoutSlash;
             if ( !aKeyWithSlash.endsWith("/") )
             {
                 aKeyWithSlash += "/";
@@ -464,7 +464,7 @@ bool ContentProviderImplHelper::removeAdditionalPropertySet(
             }
             else if ( !rKey.isEmpty() )
                 aKeyWithoutSlash
-                    = rKey.copy( 0, rKey.getLength() - 1 );
+                    = rKey.subView( 0, rKey.getLength() - 1 );
 
             for ( const OUString& rCurrKey : aKeys )
             {

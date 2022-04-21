@@ -406,13 +406,13 @@ CreateStream(uno::Reference<embed::XStorage> const& xStorage,
 
     if (xStorage->hasByName(filename))
     {
-        OUString basename;
-        OUString suffix;
+        std::u16string_view basename;
+        std::u16string_view suffix;
         sal_Int32 const nIndex(rFilename.lastIndexOf('.'));
         if (0 < nIndex)
         {
-            basename = rFilename.copy(0, nIndex);
-            suffix = rFilename.copy(nIndex);
+            basename = rFilename.subView(0, nIndex);
+            suffix = rFilename.subView(nIndex);
         }
         sal_Int32 count(0); // sigh... try to generate non-existent name
         do

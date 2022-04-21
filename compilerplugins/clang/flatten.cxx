@@ -124,60 +124,60 @@ bool Flatten::TraverseCompoundStmt(CompoundStmt * compoundStmt)
 
 bool Flatten::TraverseFunctionDecl(FunctionDecl * fd)
 {
-    auto copy1 = functionDeclBody;
+    auto copy = functionDeclBody;
     auto copy2 = fd;
     functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
     functionDecl = fd;
     bool rv = RecursiveASTVisitor<Flatten>::TraverseFunctionDecl(fd);
-    functionDeclBody = copy1;
+    functionDeclBody = copy;
     functionDecl = copy2;
     return rv;
 }
 
 bool Flatten::TraverseCXXMethodDecl(CXXMethodDecl * fd)
 {
-    auto copy1 = functionDeclBody;
+    auto copy = functionDeclBody;
     auto copy2 = fd;
     functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
     functionDecl = fd;
     bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXMethodDecl(fd);
-    functionDeclBody = copy1;
+    functionDeclBody = copy;
     functionDecl = copy2;
     return rv;
 }
 
 bool Flatten::TraverseCXXConstructorDecl(CXXConstructorDecl * fd)
 {
-    auto copy1 = functionDeclBody;
+    auto copy = functionDeclBody;
     auto copy2 = fd;
     functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
     functionDecl = fd;
     bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXConstructorDecl(fd);
-    functionDeclBody = copy1;
+    functionDeclBody = copy;
     functionDecl = copy2;
     return rv;
 }
 
 bool Flatten::TraverseCXXConversionDecl(CXXConversionDecl * fd)
 {
-    auto copy1 = functionDeclBody;
+    auto copy = functionDeclBody;
     auto copy2 = fd;
     functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
     functionDecl = fd;
     bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXConversionDecl(fd);
-    functionDeclBody = copy1;
+    functionDeclBody = copy;
     functionDecl = copy2;
     return rv;
 }
 
 bool Flatten::TraverseCXXDestructorDecl(CXXDestructorDecl * fd)
 {
-    auto copy1 = functionDeclBody;
+    auto copy = functionDeclBody;
     auto copy2 = fd;
     functionDeclBody = dyn_cast_or_null<CompoundStmt>(fd->getBody());
     functionDecl = fd;
     bool rv = RecursiveASTVisitor<Flatten>::TraverseCXXDestructorDecl(fd);
-    functionDeclBody = copy1;
+    functionDeclBody = copy;
     functionDecl = copy2;
     return rv;
 }

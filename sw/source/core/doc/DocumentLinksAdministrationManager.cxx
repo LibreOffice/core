@@ -461,12 +461,12 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
     {
         bool bContinue = false;
         OUString sName( sItem.copy( 0, nPos ) );
-        OUString sCmp( sItem.copy( nPos + 1 ));
+        std::u16string_view sCmp( sItem.subView( nPos + 1 ));
         sItem = rCC.lowercase( sItem );
 
         FindItem aPara( sName );
 
-        if( sCmp == "table" )
+        if( sCmp == u"table" )
         {
             sName = rCC.lowercase( sName );
             for( const SwFrameFormat* pFormat : *m_rDoc.GetTableFrameFormats() )
@@ -481,7 +481,7 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
                 return true;
             }
         }
-        else if( sCmp == "frame" )
+        else if( sCmp == u"frame" )
         {
             const SwFlyFrameFormat* pFlyFormat = m_rDoc.FindFlyByName( sName );
             if( pFlyFormat )
@@ -498,12 +498,12 @@ bool DocumentLinksAdministrationManager::SelectServerObj( std::u16string_view rS
                 }
             }
         }
-        else if( sCmp == "region" )
+        else if( sCmp == u"region" )
         {
             sItem = sName;              // Is being dealt with further down!
             bContinue = true;
         }
-        else if( sCmp == "outline" )
+        else if( sCmp == u"outline" )
         {
             SwPosition aPos( SwNodeIndex( m_rDoc.GetNodes() ));
             if (m_rDoc.GotoOutline(aPos, sName, nullptr))

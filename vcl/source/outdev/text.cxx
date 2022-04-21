@@ -2141,7 +2141,7 @@ OUString OutputDevice::ImplGetEllipsisString( const OutputDevice& rTargetDevice,
 
                             if ( nFirstContent < nLastContent )
                             {
-                                OUString aTempLastStr = aStr.copy( nLastContent );
+                                std::u16string_view aTempLastStr = aStr.subView( nLastContent );
                                 aTempStr = aFirstStr + aTempLastStr;
 
                                 if ( _rLayout.GetTextWidth( aTempStr, 0, aTempStr.getLength() ) > nMaxWidth )

@@ -880,13 +880,13 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
             bool bSuccess = true;
             if( xParentPackageBundle.is() )
             {
-                OUString aIdentifierInPath;
+                std::u16string_view aIdentifierInPath;
                 sal_Int32 nFindSlash = path.indexOf( '/' );
                 if( nFindSlash != -1 )
-                    aIdentifierInPath = path.copy( 0, nFindSlash );
+                    aIdentifierInPath = path.subView( 0, nFindSlash );
 
                 beans::Optional<OUString> aIdentifierOptional = xParentPackageBundle->getIdentifier();
-                if( !aIdentifierInPath.isEmpty() && aIdentifierOptional.IsPresent )
+                if( !aIdentifierInPath.empty() && aIdentifierOptional.IsPresent )
                 {
                     OUString aUnencodedIdentifier = aIdentifierOptional.Value;
                     OUString aIdentifier = rtl::Uri::encode( aUnencodedIdentifier,

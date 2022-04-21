@@ -170,8 +170,8 @@ bool DAVProperties::isUCBSpecialProperty(const OUString& rFullName, OUString& rP
     if ( nEnd == -1 )
         return false;
 
-    OUString sPropName = rFullName.copy( nStart, nEnd - nStart );
-    if ( !sPropName.getLength() )
+    std::u16string_view sPropName = rFullName.subView( nStart, nEnd - nStart );
+    if ( sPropName.empty() )
         return false;
 
     // TODO skip whitespaces?
@@ -183,8 +183,8 @@ bool DAVProperties::isUCBSpecialProperty(const OUString& rFullName, OUString& rP
     if ( nEnd != nLen - RTL_CONSTASCII_LENGTH( "\">" ) )
         return false;
 
-    OUString sNamesp = rFullName.copy( nStart, nEnd - nStart );
-    if ( !( nLen = sNamesp.getLength() ) )
+    std::u16string_view sNamesp = rFullName.subView( nStart, nEnd - nStart );
+    if ( !( nLen = sNamesp.size() ) )
         return false;
 
     OUStringBuffer aBuff( sNamesp );

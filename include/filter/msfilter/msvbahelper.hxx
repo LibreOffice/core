@@ -56,7 +56,7 @@ struct MSFILTER_DLLPUBLIC MacroResolvedInfo
 };
 
 MSFILTER_DLLPUBLIC OUString makeMacroURL( std::u16string_view sMacroName );
-MSFILTER_DLLPUBLIC OUString extractMacroName( const OUString& rMacroUrl );
+MSFILTER_DLLPUBLIC std::u16string_view extractMacroName( const OUString& rMacroUrl );
 MSFILTER_DLLPUBLIC OUString getDefaultProjectName( SfxObjectShell const * pShell );
 MSFILTER_DLLPUBLIC OUString resolveVBAMacro( SfxObjectShell const * pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName );
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& rMacroName, bool bSearchGlobalTemplates = false );

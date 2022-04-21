@@ -1325,7 +1325,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetPropertiesForNumFormat
     //listformat
     if (rFormat.HasListFormat())
     {
-        aPropertyValues.push_back(comphelper::makePropertyValue("ListFormat", rFormat.GetListFormat()));
+        aPropertyValues.push_back(comphelper::makePropertyValue("ListFormat", OUString(rFormat.GetListFormat())));
     }
 
     //char style name

@@ -171,14 +171,14 @@ static Reference< XInterface > loadComponent(
 
     Reference< XImplementationLoader > xLoader;
 
-    OUString aExt( rLocation.copy( nDot +1 ) );
+    std::u16string_view aExt( rLocation.subView( nDot +1 ) );
 
-    if (aExt == "dll" || aExt == "exe" || aExt == "dylib" || aExt == "so")
+    if (aExt == u"dll" || aExt == u"exe" || aExt == u"dylib" || aExt == u"so")
     {
         createInstance(
             xLoader, xContext, "com.sun.star.loader.SharedLibrary" );
     }
-    else if (aExt == "jar" || aExt == "class")
+    else if (aExt == u"jar" || aExt == u"class")
     {
         createInstance(
             xLoader, xContext, "com.sun.star.loader.Java" );

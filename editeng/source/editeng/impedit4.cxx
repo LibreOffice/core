@@ -1036,7 +1036,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
         }
 
         // The Text...
-        pC->SetText(pNode->Copy(nStartPos, nEndPos-nStartPos));
+        pC->SetText(OUString(pNode->Copy(nStartPos, nEndPos-nStartPos)));
         auto& rCAttriblist = pC->GetCharAttribs();
 
         // and the Attribute...
@@ -2928,7 +2928,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
                 const bool bSingleNode = aSel.Min().GetNode()== aSel.Max().GetNode();
                 const bool bHasAttribs = aSel.Min().GetNode()->GetCharAttribs().HasAttrib( aSel.Min().GetIndex(), aSel.Max().GetIndex() );
                 if (bSingleNode && !bHasAttribs)
-                    pUndo->SetText( aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() ) );
+                    pUndo->SetText( OUString(aSel.Min().GetNode()->Copy( aSel.Min().GetIndex(), aSel.Max().GetIndex()-aSel.Min().GetIndex() )) );
                 else
                     pUndo->SetText( CreateTextObject( aSel, nullptr ) );
             }

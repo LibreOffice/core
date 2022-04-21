@@ -94,7 +94,7 @@ public:
             True = create missing sub storages (for export filters). Must be
             false for storages based on input streams.
      */
-    StorageRef          openSubStorage( const OUString& rStorageName, bool bCreateMissing );
+    StorageRef          openSubStorage( std::u16string_view rStorageName, bool bCreateMissing );
 
     /** Opens and returns the specified input stream from the storage.
 
@@ -105,7 +105,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     css::uno::Reference< css::io::XInputStream >
-                        openInputStream( const OUString& rStreamName );
+                        openInputStream( std::u16string_view rStreamName );
 
     /** Opens and returns the specified output stream from the storage.
 
@@ -116,7 +116,7 @@ public:
             can be accessed by passing an empty string as stream name.
      */
     css::uno::Reference< css::io::XOutputStream >
-                        openOutputStream( const OUString& rStreamName );
+                        openOutputStream( std::u16string_view rStreamName );
 
     /** Copies the specified element from this storage to the passed
          destination storage.
@@ -127,7 +127,7 @@ public:
             case, the element will be copied to the same substorage in the
             destination storage.
      */
-    void                copyToStorage( StorageBase& rDestStrg, const OUString& rElementName );
+    void                copyToStorage( StorageBase& rDestStrg, std::u16string_view rElementName );
 
     /** Copies all streams of this storage and of all substorages to the passed
         destination. */

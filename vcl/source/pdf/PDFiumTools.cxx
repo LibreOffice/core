@@ -17,45 +17,45 @@ OUString convertPdfDateToISO8601(OUString const& rInput)
     if (rInput.getLength() < 6)
         return {};
 
-    OUString prefix = rInput.copy(0, 2);
-    if (prefix != "D:")
+    std::u16string_view prefix = rInput.subView(0, 2);
+    if (prefix != u"D:")
         return {};
 
-    OUString sYear = rInput.copy(2, 4);
+    std::u16string_view sYear = rInput.subView(2, 4);
 
-    OUString sMonth("01");
+    std::u16string_view sMonth(u"01");
     if (rInput.getLength() >= 8)
-        sMonth = rInput.copy(6, 2);
+        sMonth = rInput.subView(6, 2);
 
-    OUString sDay("01");
+    std::u16string_view sDay(u"01");
     if (rInput.getLength() >= 10)
-        sDay = rInput.copy(8, 2);
+        sDay = rInput.subView(8, 2);
 
-    OUString sHours("00");
+    std::u16string_view sHours(u"00");
     if (rInput.getLength() >= 12)
-        sHours = rInput.copy(10, 2);
+        sHours = rInput.subView(10, 2);
 
-    OUString sMinutes("00");
+    std::u16string_view sMinutes(u"00");
     if (rInput.getLength() >= 14)
-        sMinutes = rInput.copy(12, 2);
+        sMinutes = rInput.subView(12, 2);
 
-    OUString sSeconds("00");
+    std::u16string_view sSeconds(u"00");
     if (rInput.getLength() >= 16)
-        sSeconds = rInput.copy(14, 2);
+        sSeconds = rInput.subView(14, 2);
 
     OUString sTimeZoneMark("Z");
     if (rInput.getLength() >= 17)
-        sTimeZoneMark = rInput.copy(16, 1);
+        sTimeZoneMark = rInput.subView(16, 1);
 
-    OUString sTimeZoneHours("00");
-    OUString sTimeZoneMinutes("00");
+    std::u16string_view sTimeZoneHours(u"00");
+    std::u16string_view sTimeZoneMinutes(u"00");
     if ((sTimeZoneMark == "+" || sTimeZoneMark == "-") && rInput.getLength() >= 22)
     {
-        OUString sTimeZoneSeparator = rInput.copy(19, 1);
-        if (sTimeZoneSeparator == "'")
+        std::u16string_view sTimeZoneSeparator = rInput.subView(19, 1);
+        if (sTimeZoneSeparator == u"'")
         {
-            sTimeZoneHours = rInput.copy(17, 2);
-            sTimeZoneMinutes = rInput.copy(20, 2);
+            sTimeZoneHours = rInput.subView(17, 2);
+            sTimeZoneMinutes = rInput.subView(20, 2);
         }
     }
 
@@ -65,8 +65,8 @@ OUString convertPdfDateToISO8601(OUString const& rInput)
     else if (sTimeZoneMark == "Z")
         sTimeZoneString = sTimeZoneMark;
 
-    return sYear + "-" + sMonth + "-" + sDay + "T" + sHours + ":" + sMinutes + ":" + sSeconds
-           + sTimeZoneString;
+    return OUString::Concat(sYear) + "-" + sMonth + "-" + sDay + "T" + sHours + ":" + sMinutes + ":"
+           + sSeconds + sTimeZoneString;
 }
 } // end vcl::pdf
 
