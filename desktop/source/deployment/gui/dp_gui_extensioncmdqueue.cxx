@@ -1059,7 +1059,8 @@ ExtensionCmdQueue::ExtensionCmdQueue( DialogHelper * pDialogHelper,
 }
 
 ExtensionCmdQueue::~ExtensionCmdQueue() {
-    stop();
+    m_thread->stop();
+    m_thread->join();
 }
 
 void ExtensionCmdQueue::addExtension( const OUString & extensionURL,
@@ -1093,11 +1094,6 @@ void ExtensionCmdQueue::acceptLicense( const uno::Reference< deployment::XPackag
 void ExtensionCmdQueue::syncRepositories( const uno::Reference< uno::XComponentContext > &xContext )
 {
     dp_misc::syncRepositories( false, new ProgressCmdEnv( xContext, nullptr, "Extension Manager" ) );
-}
-
-void ExtensionCmdQueue::stop()
-{
-    m_thread->stop();
 }
 
 bool ExtensionCmdQueue::isBusy()

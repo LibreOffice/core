@@ -75,11 +75,6 @@ public:
     void checkForUpdates( std::vector< css::uno::Reference< css::deployment::XPackage > > && vList );
     void acceptLicense( const css::uno::Reference< css::deployment::XPackage > &rPackage );
     static void syncRepositories( const css::uno::Reference< css::uno::XComponentContext > & xContext );
-    /**
-       This call does not block. It signals the internal thread
-       that it should install the remaining extensions and then terminate.
-    */
-    void stop();
 
     bool isBusy();
 private:
