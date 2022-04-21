@@ -1175,6 +1175,15 @@ SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow, ScDataA
     return nNewLastRow;
 }
 
+bool ScTable::IsEmptyBlock( SCCOL nStartCol, SCROW nStartRow,
+                            SCCOL nEndCol, SCROW nEndRow ) const
+{
+    for( SCCOL col : GetAllocatedColumnsRange( nStartCol, nEndCol ))
+        if( !aCol[col].IsEmptyBlock( nStartRow, nEndRow ))
+            return false;
+    return true;
+}
+
 SCSIZE ScTable::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const
 {
