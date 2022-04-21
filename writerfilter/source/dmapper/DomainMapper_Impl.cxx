@@ -4230,18 +4230,17 @@ style::NumberingType::
 static OUString lcl_ParseFormat( const OUString& rCommand )
 {
     //  The command looks like: " DATE \@"dd MMMM yyyy" or "09/02/2014"
-    //  Remove whitespace permitted by standard between \@ and "
     OUString command;
     sal_Int32 delimPos = rCommand.indexOf("\\@");
     if (delimPos != -1)
     {
+        // Remove whitespace permitted by standard between \@ and "
         sal_Int32 wsChars = rCommand.indexOf('\"') - delimPos - 2;
         command = rCommand.replaceAt(delimPos+2, wsChars, u"");
+        return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
     }
-    else
-        command = rCommand;
 
-    return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
+    return OUString();
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
