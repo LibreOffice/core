@@ -78,6 +78,15 @@ void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const
     }
 
     Color aColor = rColorSet.getColor(nFillColorTheme);
+    sal_Int32 nFillColorLumMod{};
+    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_LUM_MOD) >>= nFillColorLumMod;
+    sal_Int32 nFillColorLumOff{};
+    xShape->getPropertyValue(UNO_NAME_FILLCOLOR_LUM_OFF) >>= nFillColorLumOff;
+    if (nFillColorLumMod != 10000 || nFillColorLumOff != 0)
+    {
+        aColor.ApplyLumModOff(nFillColorLumMod, nFillColorLumOff);
+    }
+
     xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(aColor)));
 }
 

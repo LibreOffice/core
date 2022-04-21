@@ -98,6 +98,13 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     xShape4->getPropertyValue("FillColorTheme") >>= nColorTheme;
     // 4 means accent1, this was -1 without the PPTX import bit in place.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nColorTheme);
+    uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
+    // Blue, lighter.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeFillColor(xShape5));
+    // Set theme index to accent 1 & effects till PPTX import is missing.
+    xShape5->setPropertyValue("FillColorTheme", uno::makeAny(static_cast<sal_Int16>(4)));
+    xShape5->setPropertyValue("FillColorLumMod", uno::makeAny(static_cast<sal_Int16>(4000)));
+    xShape5->setPropertyValue("FillColorLumOff", uno::makeAny(static_cast<sal_Int16>(6000)));
 
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
@@ -126,6 +133,12 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     // - Expected: 9486886 (#90c226, green)
     // - Actual  : 4485828 (#4472c4, blue)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x90c226), GetShapeFillColor(xShape4));
+    // Green, lighter:
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 14020002 (#d5eda2, light green)
+    // - Actual  : 9486886 (#90c226, green)
+    // i.e. the "light" effect on green was not applied.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xd5eda2), GetShapeFillColor(xShape5));
 }
 }
 
