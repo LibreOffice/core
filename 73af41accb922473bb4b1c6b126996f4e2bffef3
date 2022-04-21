@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4fd6787_8d136acd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-21T03:43:22Z",
+      "side": 1,
+      "message": "I\u0027d suggest to squash a backport of pending https://gerrit.libreoffice.org/c/core/+/133235 (\"qt6: Fix build (QtWidget::enterEvent)\") into this.",
+      "revId": "73af41accb922473bb4b1c6b126996f4e2bffef3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
