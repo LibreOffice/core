@@ -318,19 +318,18 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_about: {
-                AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
-                aboutDialogFragment.show(getSupportFragmentManager(), "AboutDialogFragment");
-            }
-                return true;
-            case R.id.action_settings:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_about) {
+            AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+            aboutDialogFragment.show(getSupportFragmentManager(), "AboutDialogFragment");
+            return true;
         }
+        if (itemId == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     public void readPreferences(){
@@ -441,35 +440,28 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
-            case R.id.editFAB:
-                // Intent.ACTION_CREATE_DOCUMENT, used in 'createNewFileDialog' requires SDK version 19
-                if (Build.VERSION.SDK_INT < 19) {
-                    Toast.makeText(this,
-                        getString(R.string.creating_new_files_not_supported), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (isFabMenuOpen) {
-                    collapseFabMenu();
-                } else {
-                    expandFabMenu();
-                }
-                break;
-            case R.id.open_file_view:
-                showSystemFilePickerAndOpenFile();
-                break;
-            case R.id.newWriterFAB:
-                loadNewDocument(DocumentType.WRITER);
-                break;
-            case R.id.newImpressFAB:
-                loadNewDocument(DocumentType.IMPRESS);
-                break;
-            case R.id.newCalcFAB:
-                loadNewDocument(DocumentType.CALC);
-                break;
-            case R.id.newDrawFAB:
-                loadNewDocument(DocumentType.DRAW);
-                break;
+        if (id == R.id.editFAB) {
+            // Intent.ACTION_CREATE_DOCUMENT, used in 'createNewFileDialog' requires SDK version 19
+            if (Build.VERSION.SDK_INT < 19) {
+                Toast.makeText(this,
+                    getString(R.string.creating_new_files_not_supported), Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (isFabMenuOpen) {
+                collapseFabMenu();
+            } else {
+                expandFabMenu();
+            }
+        } else if (id == R.id.open_file_view) {
+            showSystemFilePickerAndOpenFile();
+        } else if (id == R.id.newWriterFAB) {
+            loadNewDocument(DocumentType.WRITER);
+        } else if (id == R.id.newImpressFAB) {
+            loadNewDocument(DocumentType.IMPRESS);
+        } else if (id == R.id.newCalcFAB) {
+            loadNewDocument(DocumentType.CALC);
+        } else if (id == R.id.newDrawFAB) {
+            loadNewDocument(DocumentType.DRAW);
         }
     }
 }
