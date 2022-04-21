@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bc1570d_c708a673",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:39:55Z",
+      "side": 1,
+      "message": "do you have any measurements of the benefit of avoiding OUString.copy creating a new OUString when passing string_view into unoidl::Provider::findEntity now, vs. the cost of creating new OUString in some of the findEntity implementations?",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb416ca8_8b6dfc28",
+        "filename": "unoidl/source/legacyprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 819,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:39:55Z",
+      "side": 1,
+      "message": "any reason this was moved out of the conditional expression below?  (if it had been left inside the expression, we\u0027d avoid creating an OUString if ucr_.isValid() is false)",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b065ff5_c15ce54e",
+        "filename": "unoidl/source/unoidl-read.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:39:55Z",
+      "side": 1,
+      "message": "this should apparently be std::size_t now, too",
+      "range": {
+        "startLine": 106,
+        "startChar": 17,
+        "endLine": 106,
+        "endChar": 26
+      },
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e2dedb4f_13d1002d",
+        "filename": "unoidl/source/unoidl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:39:55Z",
+      "side": 1,
+      "message": "why change the signature of this function in the first place, then?",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b303983_ca92bb21",
+        "filename": "unoidl/source/unoidlprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:39:55Z",
+      "side": 1,
+      "message": "it would have been nice if this include block would have been kept ordered lexicographically",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80c70e4d_32d915a7",
+        "filename": "unoidl/source/unoidlprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:39:55Z",
+      "side": 1,
+      "message": "nameOffset and nameLength, pointing into a std::u16string_view now, should apparently be of type std::size_t now",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b8d7e19_b3cf3b99",
+        "filename": "unoidl/source/unoidlprovider.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1356,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:39:55Z",
+      "side": 1,
+      "message": "this apparently needs to be std::size_t now, too?",
+      "range": {
+        "startLine": 1356,
+        "startChar": 9,
+        "endLine": 1356,
+        "endChar": 18
+      },
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
