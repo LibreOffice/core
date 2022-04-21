@@ -175,7 +175,6 @@ public:
 
     void testImportCrashes();
     void testTdf129681();
-    void testTdf111974XLSM();
     void testEscapedUnicodeXLSX();
     void testTdf144758_DBDataDefaultOrientation();
 
@@ -273,7 +272,6 @@ public:
 
     CPPUNIT_TEST(testImportCrashes);
     CPPUNIT_TEST(testTdf129681);
-    CPPUNIT_TEST(testTdf111974XLSM);
     CPPUNIT_TEST(testEscapedUnicodeXLSX);
     CPPUNIT_TEST(testTdf144758_DBDataDefaultOrientation);
 
@@ -2975,6 +2973,7 @@ void ScFiltersTest::testImportCrashes() {
     testImportCrash(u"tdf136551.", FORMAT_ODS);
     testImportCrash(u"tdf90391.", FORMAT_ODS);
     testImportCrash(u"tdf121887.", FORMAT_XLSX); // 'Maximum number of rows per sheet' warning
+    testImportCrash(u"tdf111974.", FORMAT_XLSM);
 }
 
 void ScFiltersTest::testTdf129681()
@@ -3003,8 +3002,6 @@ void ScFiltersTest::testTdf129681()
 
     xDocSh->DoClose();
 }
-
-void ScFiltersTest::testTdf111974XLSM() { testImportCrash(u"tdf111974.", FORMAT_XLSM); }
 
 void ScFiltersTest::testEscapedUnicodeXLSX()
 {
