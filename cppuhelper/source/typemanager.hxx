@@ -115,7 +115,7 @@ private:
         rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
         OUString const & member);
 
-    rtl::Reference< unoidl::Entity > findEntity(std::u16string_view name);
+    rtl::Reference< unoidl::Entity > findEntity(OUString const & name);
 
     rtl::Reference< unoidl::Manager > manager_;
 };

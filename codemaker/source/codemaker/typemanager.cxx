@@ -33,15 +33,15 @@ TypeManager::TypeManager(): manager_(new unoidl::Manager) {}
 
 TypeManager::~TypeManager() {}
 
-void TypeManager::loadProvider(std::u16string_view uri, bool primary) {
+void TypeManager::loadProvider(OUString const & uri, bool primary) {
     rtl::Reference< unoidl::Provider > prov(manager_->addProvider(uri));
     if (primary) {
         primaryProviders_.push_back(prov);
     }
 }
 
-bool TypeManager::foundAtPrimaryProvider(std::u16string_view name) const {
-    if (name.empty()) {
+bool TypeManager::foundAtPrimaryProvider(OUString const & name) const {
+    if (name.isEmpty()) {
         return !primaryProviders_.empty();
     }
     for (const rtl::Reference< unoidl::Provider >& xProvider : primaryProviders_)
@@ -51,7 +51,7 @@ bool TypeManager::foundAtPrimaryProvider(std::u16string_view name) const {
         }
     }
     if (!manager_->findEntity(name).is()) {
-        throw CannotDumpException(OUString::Concat("Unknown entity '") + name + "'");
+        throw CannotDumpException("Unknown entity '" + name + "'");
     }
     return false;
 }

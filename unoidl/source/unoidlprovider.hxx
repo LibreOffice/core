@@ -41,7 +41,7 @@ public:
     virtual rtl::Reference< MapCursor > createRootCursor() const override;
 
     // throws FileFormatException:
-    virtual rtl::Reference< Entity > findEntity(std::u16string_view name)
+    virtual rtl::Reference< Entity > findEntity(OUString const & name)
         const override;
 
 private:
