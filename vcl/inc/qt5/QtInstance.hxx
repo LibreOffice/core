@@ -35,6 +35,7 @@
 
 #include "QtFilePicker.hxx"
 
+class QtFrame;
 class QtTimer;
 
 class QApplication;
@@ -66,6 +67,8 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
 
     Timer m_aUpdateStyleTimer;
     bool m_bUpdateFonts;
+
+    QtFrame* m_pActivePopup;
 
     DECL_DLLPRIVATE_LINK(updateStyleHdl, Timer*, void);
     void AfterAppInit() override;
@@ -177,6 +180,9 @@ public:
 
     bool DoExecute(int& nExitCode) override;
     void DoQuit() override;
+
+    QtFrame* activePopup() const { return m_pActivePopup; }
+    void setActivePopup(QtFrame*);
 };
 
 inline QtInstance* GetQtInstance() { return static_cast<QtInstance*>(GetSalInstance()); }

@@ -316,7 +316,15 @@ void QtWidget::showEvent(QShowEvent*)
     // sequence from QtFrame::SetModal, if the frame was already set visible,
     // resulting in a hidden / unmapped window
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height());
+    if (m_rFrame.isPopup())
+        GetQtInstance()->setActivePopup(&m_rFrame);
     m_rFrame.CallCallback(SalEvent::Paint, &aPaintEvt);
+}
+
+void QtWidget::hideEvent(QHideEvent*)
+{
+    if (m_rFrame.isPopup() && GetQtInstance()->activePopup() == &m_rFrame)
+        GetQtInstance()->setActivePopup(nullptr);
 }
 
 void QtWidget::closeEvent(QCloseEvent* /*pEvent*/)
@@ -627,11 +635,10 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
     }
     else if (pEvent->type() == QEvent::ToolTip)
     {
-        // Qt's POV on focus is wrong for our fake popup windows, so check LO's state.
+        // Qt's POV on the active popup is wrong due to our fake popup, so check LO's state.
         // Otherwise Qt will continue handling ToolTip events from the "parent" window.
-        const vcl::Window* pFocusWin = Application::GetFocusWindow();
-        if (!rFrame.m_aTooltipText.isEmpty() && pFocusWin
-            && pFocusWin->GetFrameWindow() == rFrame.GetWindow())
+        const QtFrame* pPopupFrame = GetQtInstance()->activePopup();
+        if (!rFrame.m_aTooltipText.isEmpty() && (!pPopupFrame || pPopupFrame == &rFrame))
             QToolTip::showText(QCursor::pos(), toQString(rFrame.m_aTooltipText), &rWidget,
                                rFrame.m_aTooltipArea);
         else
