@@ -457,14 +457,14 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
     return rNameStr;
 }
 
-OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
+std::u16string_view GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
 {
     // check for valid start index
     sal_Int32 nStringLen = rTokenStr.getLength();
     if( rIndex >= nStringLen )
     {
         rIndex = -1;
-        return OUString();
+        return {};
     }
 
     // find the next token delimiter and return the token substring
@@ -498,7 +498,7 @@ OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
         }
     }
 
-    return rTokenStr.copy( nTokenStart, nTokenLen );
+    return rTokenStr.subView( nTokenStart, nTokenLen );
 }
 
 static bool ImplIsFontToken( const OUString& rName, std::u16string_view rToken )

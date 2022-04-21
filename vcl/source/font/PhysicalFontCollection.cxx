@@ -344,8 +344,8 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByTokenNames(OUString 
     // use normalized font name tokens to find the font
     for( sal_Int32 nTokenPos = 0; nTokenPos != -1; )
     {
-        OUString aFamilyName = GetNextFontToken( rTokenStr, nTokenPos );
-        if( aFamilyName.isEmpty() )
+        std::u16string_view aFamilyName = GetNextFontToken( rTokenStr, nTokenPos );
+        if( aFamilyName.empty() )
             continue;
 
         pFoundData = FindFontFamily( aFamilyName );

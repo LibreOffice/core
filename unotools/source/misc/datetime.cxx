@@ -303,25 +303,25 @@ OUString toISO8601(const css::util::DateTime& rDateTime)
 }
 
 /** convert ISO8601 DateTime String to util::DateTime */
-bool ISO8601parseDateTime(const OUString &rString, css::util::DateTime& rDateTime)
+bool ISO8601parseDateTime(std::u16string_view rString, css::util::DateTime& rDateTime)
 {
     bool bSuccess = true;
 
-    OUString aDateStr, aTimeStr;
+    std::u16string_view aDateStr, aTimeStr;
     css::util::Date aDate;
     css::util::Time aTime;
-    sal_Int32 nPos = rString.indexOf( 'T' );
-    if ( nPos >= 0 )
+    size_t nPos = rString.find( 'T' );
+    if ( nPos != std::u16string_view::npos )
     {
-        aDateStr = rString.copy( 0, nPos );
-        aTimeStr = rString.copy( nPos + 1 );
+        aDateStr = rString.substr( 0, nPos );
+        aTimeStr = rString.substr( nPos + 1 );
     }
     else
         aDateStr = rString;         // no separator: only date part
 
     bSuccess = ISO8601parseDate(aDateStr, aDate);
 
-    if ( bSuccess && !aTimeStr.isEmpty() )           // time is optional
+    if ( bSuccess && !aTimeStr.empty() )           // time is optional
     {
         bSuccess = ISO8601parseTime(aTimeStr, aTime);
     }
