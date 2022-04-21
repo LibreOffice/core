@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9454c9f_50386c7c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-21T10:24:59Z",
+      "side": 1,
+      "message": "hmm i guess it should be okay, unless the box only has 4GB RAM, but then you\u0027ll run into trouble with 4 compilers already...",
+      "revId": "60723440b89d959aa4aa32a7a68ec1576c3a9f74",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
