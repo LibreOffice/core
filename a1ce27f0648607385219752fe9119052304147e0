@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f48f91d8_250ffdc7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-21T09:47:02Z",
+      "side": 1,
+      "message": "I\u0027m almost at the point of reverting the fix for tdf#148115...",
+      "revId": "a1ce27f0648607385219752fe9119052304147e0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
