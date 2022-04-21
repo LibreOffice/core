@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "221255eb_073ba96b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-21T14:11:31Z",
+      "side": 1,
+      "message": "\u003e Also it has the advantage, that a JVM crash would not crash LO.\n\nThis is just the JVM of extensions; you still need the in-process JVM for Base etc.",
+      "parentUuid": "b02a706d_0bd9faf7",
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea9114ee_793bf7d5",
         "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
         "patchSetId": 1
