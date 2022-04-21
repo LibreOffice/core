@@ -46,9 +46,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/TypeClass.hpp>
 #include <o3tl/any.hxx>
-#include <osl/conditn.hxx>
 #include <osl/diagnose.h>
-#include <osl/mutex.hxx>
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
@@ -73,8 +71,10 @@
 #include <dp_identifier.hxx>
 #include <dp_version.hxx>
 
+#include <condition_variable>
 #include <queue>
 #include <memory>
+#include <mutex>
 
 #ifdef _WIN32
 #include <o3tl/safeCoInitUninit.hxx>
@@ -248,8 +248,8 @@ private:
     const OUString   m_sRemovingPackages;
     const OUString   m_sDefaultCmd;
     const OUString   m_sAcceptLicense;
-    osl::Condition   m_wakeup;
-    osl::Mutex       m_mutex;
+    std::condition_variable m_wakeup;
+    std::mutex       m_mutex;
     Input            m_eInput;
     bool             m_bStopped;
     bool             m_bWorking;
@@ -655,16 +655,16 @@ void ExtensionCmdQueue::Thread::checkForUpdates(
 //Stopping this thread will not abort the installation of extensions.
 void ExtensionCmdQueue::Thread::stop()
 {
-    osl::MutexGuard aGuard( m_mutex );
+    std::scoped_lock aGuard( m_mutex );
     m_bStopped = true;
     m_eInput = STOP;
-    m_wakeup.set();
+    m_wakeup.notify_all();
 }
 
 
 bool ExtensionCmdQueue::Thread::isBusy()
 {
-    osl::MutexGuard aGuard( m_mutex );
+    std::scoped_lock aGuard( m_mutex );
     return m_bWorking;
 }
 
@@ -682,17 +682,13 @@ void ExtensionCmdQueue::Thread::execute()
 #endif
     for (;;)
     {
-        if ( m_wakeup.wait() != osl::Condition::result_ok )
-        {
-            dp_misc::TRACE( "dp_gui::ExtensionCmdQueue::Thread::run: ignored "
-                       "osl::Condition::wait failure\n" );
-        }
-        m_wakeup.reset();
-
         int nSize;
         Input eInput;
         {
-            osl::MutexGuard aGuard( m_mutex );
+            std::unique_lock aGuard( m_mutex );
+            while (m_eInput == NONE) {
+                m_wakeup.wait(aGuard);
+            }
             eInput = m_eInput;
             m_eInput = NONE;
             nSize = m_queue.size();
@@ -702,13 +698,11 @@ void ExtensionCmdQueue::Thread::execute()
         if ( eInput == STOP )
             break;
 
-        // If this thread has been woken up by anything else except start, stop
-        // then input is NONE and we wait again.
         // We only install the extension which are currently in the queue.
         // The progressbar will be set to show the progress of the current number
         // of extensions. If we allowed to add extensions now then the progressbar may
         // have reached the end while we still install newly added extensions.
-        if ( ( eInput == NONE ) || ( nSize == 0 ) )
+        if ( nSize == 0 )
             continue;
 
         ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, m_pDialogHelper, m_sDefaultCmd ) );
@@ -721,7 +715,7 @@ void ExtensionCmdQueue::Thread::execute()
         while ( --nSize >= 0 )
         {
             {
-                osl::MutexGuard aGuard( m_mutex );
+                std::scoped_lock aGuard( m_mutex );
                 m_bWorking = true;
             }
 
@@ -729,7 +723,7 @@ void ExtensionCmdQueue::Thread::execute()
             {
                 TExtensionCmd pEntry;
                 {
-                    ::osl::MutexGuard queueGuard( m_mutex );
+                    std::scoped_lock queueGuard( m_mutex );
                     pEntry = m_queue.front();
                     m_queue.pop();
                 }
@@ -767,7 +761,7 @@ void ExtensionCmdQueue::Thread::execute()
                 //Then we cancel the installation of all extensions and remove them from
                 //the queue.
                 {
-                    ::osl::MutexGuard queueGuard2(m_mutex);
+                    std::scoped_lock queueGuard2(m_mutex);
                     while ( --nSize >= 0 )
                         m_queue.pop();
                 }
@@ -814,14 +808,14 @@ void ExtensionCmdQueue::Thread::execute()
                 //Continue with installation of the remaining extensions
             }
             {
-                osl::MutexGuard aGuard( m_mutex );
+                std::scoped_lock aGuard( m_mutex );
                 m_bWorking = false;
             }
         }
 
         {
             // when leaving the while loop with break, we should set working to false, too
-            osl::MutexGuard aGuard( m_mutex );
+            std::scoped_lock aGuard( m_mutex );
             m_bWorking = false;
         }
 
@@ -1044,7 +1038,7 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
 
 void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
 {
-    ::osl::MutexGuard aGuard( m_mutex );
+    std::scoped_lock aGuard( m_mutex );
 
     // If someone called stop then we do not process the command -> game over!
     if ( m_bStopped )
@@ -1052,7 +1046,7 @@ void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
 
     m_queue.push( rExtCmd );
     m_eInput = START;
-    m_wakeup.set();
+    m_wakeup.notify_all();
 }
 
 
