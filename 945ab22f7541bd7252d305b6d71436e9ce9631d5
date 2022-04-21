@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b4ac06_49c3add3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-04-21T07:15:40Z",
+      "side": 1,
+      "message": "Thanks.\n\nWhile testing, I ran into tdf#148699, which is not related to this change, however.",
+      "revId": "945ab22f7541bd7252d305b6d71436e9ce9631d5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
