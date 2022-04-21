@@ -887,6 +887,27 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testMixedFormFieldInsertion)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pMarkAccess->getAllMarksCount());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147723)
+{
+    SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "tdf147723.docx");
+
+    IDocumentMarkAccess& rIDMA(*pDoc->getIDocumentMarkAccess());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getAllMarksCount());
+
+    dispatchCommand(mxComponent, ".uno:SelectAll", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+
+    // Without the fix in place, this test would have crashed here
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getAllMarksCount());
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(6), rIDMA.getAllMarksCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getAllMarksCount());
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rIDMA.getAllMarksCount());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf147006)
 {
     SwDoc* const pDoc = createSwDoc(DATA_DIRECTORY, "tdf147006.rtf");
