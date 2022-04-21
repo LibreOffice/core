@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ec76cea_3ea7a520",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4468,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-21T17:50:24Z",
+      "side": 1,
+      "message": "Stephan: I\u0027m getting a clang loplugin error about \"use subView instead of copy\", but then the .trim() on a string_view produces a compile error. Obviously I could re-wrap this in an OUString, but are you interested in tweaking the loplugin to handle situations that expect an OUString result?\n\nrCommand looks like \"  PRINTSAVE \\* MERGEFORMAT\" and I only want the first keyword.",
+      "range": {
+        "startLine": 4468,
+        "startChar": 59,
+        "endLine": 4468,
+        "endChar": 88
+      },
+      "revId": "6ea250f2541781f1f81387968b4c49b9570cceea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
