@@ -22,6 +22,30 @@
       },
       "revId": "6ea250f2541781f1f81387968b4c49b9570cceea",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d48e5d8b_936c3fde",
+        "filename": "writerfilter/source/dmapper/DomainMapper_Impl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 4468,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T18:37:47Z",
+      "side": 1,
+      "message": "there\u0027s o3tl::trim for that now in o3tl/string_view.hxx\n\nNoel improved loplugin:stringview and loplugin:stringviewparam recently; some of their suggestions are probably a bit terse now for the casual user and might need improving?",
+      "parentUuid": "7ec76cea_3ea7a520",
+      "range": {
+        "startLine": 4468,
+        "startChar": 59,
+        "endLine": 4468,
+        "endChar": 88
+      },
+      "revId": "6ea250f2541781f1f81387968b4c49b9570cceea",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
