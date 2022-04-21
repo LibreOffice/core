@@ -709,6 +709,8 @@
       <menu:menuseparator/>
       <menu:menuitem menu:id=".uno:OpenReadOnly"/>
       <menu:menuitem menu:id=".uno:AutoControlFocus"/>
+      <menu:menuseparator/>
+      <menu:menuitem menu:id=".uno:InsertContentControl"/>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">

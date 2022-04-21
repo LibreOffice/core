@@ -111,6 +111,7 @@
 #include <UndoInsert.hxx>
 #include <UndoCore.hxx>
 #include <formatlinebreak.hxx>
+#include <formatcontentcontrol.hxx>
 
 using namespace sw::mark;
 using namespace com::sun::star;
@@ -1004,6 +1005,31 @@ void SwWrtShell::InsertColumnBreak()
     SetAttrItem(SvxFormatBreakItem(SvxBreak::ColumnBefore, RES_BREAK));
 
     EndUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
+}
+
+void SwWrtShell::InsertContentControl()
+{
+    if (!lcl_IsAllowed(this))
+    {
+        return;
+    }
+
+    ResetCursorStack();
+    if (!CanInsert())
+    {
+        return;
+    }
+
+    auto pContentControl = std::make_shared<SwContentControl>(nullptr);
+    pContentControl->SetShowingPlaceHolder(true);
+    if (!HasSelection())
+    {
+        OUString aPlaceholder = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER);
+        Insert(aPlaceholder);
+        Left(CRSR_SKIP_CHARS, /*bSelect=*/true, aPlaceholder.getLength(), /*bBasicCall=*/false);
+    }
+    SwFormatContentControl aContentControl(pContentControl, RES_TXTATR_CONTENTCONTROL);
+    SetAttrItem(aContentControl);
 }
 
 // Insert footnote

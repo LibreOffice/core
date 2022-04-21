@@ -1420,6 +1420,7 @@
 #define STR_AUTOMARK_NO                         NC_("createautomarkdialog|no", "No")
 
 #define STR_WRAP_PANEL_CUSTOM_STR               NC_("sidebarwrap|customlabel", "Custom")
+#define STR_CONTENT_CONTROL_PLACEHOLDER         NC_("STR_CONTENT_CONTROL_PLACEHOLDER", "Click here to enter text")
 
 #endif
 
