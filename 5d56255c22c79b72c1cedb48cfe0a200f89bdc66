@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aca04d49_0ee3f259",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-21T06:18:06Z",
+      "side": 1,
+      "message": "Interesting. So I thought we could simply do\n```\n#if QT_VERSION \u003c QT_VERSION_CHECK(6, 0, 0)\n#define QEnterEvent QEvent\n#endif\n\n    virtual void enterEvent(QEnterEvent*) override;\n```\nBut then found QEnterEvent does exist in Qt5 too (\"This class was introduced in Qt 5.0.\"). Even \"better\":\n\ntests/manual/widgetgrab/main.cpp has:\n```\ncase QEvent::Enter:\n#if QT_VERSION \u003e\u003d 0x050000\n            const QEnterEvent *ee \u003d static_cast\u003cQEnterEvent *\u003e(e);\n            debug.nospace()  \u003c\u003c \u0027#\u0027 \u003c\u003c m_enterLeaveEventCount++ \u003c\u003c \" Enter for \" \u003c\u003c o-\u003eobjectName()\n                             \u003c\u003c \" at \" \u003c\u003c ee-\u003elocalPos() \u003c\u003c \" global: \" \u003c\u003c ee-\u003eglobalPos();\n#else\n            debug.nospace()  \u003c\u003c \u0027#\u0027 \u003c\u003c m_enterLeaveEventCount++ \u003c\u003c \" Enter for \" \u003c\u003c o-\u003eobjectName();\n#endif\n```\n\nAs this uses a static_cast, all my manual QCursor::pos() mapping could have been avoided. Seems this is just some API error...",
+      "revId": "5d56255c22c79b72c1cedb48cfe0a200f89bdc66",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
