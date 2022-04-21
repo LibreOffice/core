@@ -859,7 +859,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
     sal_uInt32  nRed, nGreen, nBlue, ns, nVal;
     sal_uInt8   nByteVal;
 
-    if ( nDstBitsPerPixel == 24 )
+    if ( nDstBitsPerPixel == 24 || (nDstBitsPerPixel == 8 && nPhotometricInterpretation <= 1 && nSamplesPerPixel == 1) )
     {
         if ( nBitsPerSample == 8 && nSamplesPerPixel >= 3 &&
              nPlanes == 1 && nPhotometricInterpretation == 2 )
@@ -904,7 +904,8 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         }
         else if (
                ( nPhotometricInterpretation == 2 && nSamplesPerPixel >= 3 ) ||
-               ( nPhotometricInterpretation == 5 && nSamplesPerPixel == 3 )
+               ( nPhotometricInterpretation == 5 && nSamplesPerPixel == 3 ) ||
+               ( nPhotometricInterpretation <= 1 && nSamplesPerPixel == 1 )
         )
         {
             if ( nMaxSampleValue > nMinSampleValue )
@@ -924,7 +925,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
                         nGreen = GetBits( getMapData(1), nx * nBitsPerSample, nBitsPerSample );
                         nBlue = GetBits( getMapData(2), nx * nBitsPerSample, nBitsPerSample );
                     }
-                    if (nPhotometricInterpretation == 2)
+                    if (nPhotometricInterpretation == 1 || nPhotometricInterpretation == 2)
                         SetPixel(nY, nx, Color(static_cast<sal_uInt8>(nRed - nMinMax), static_cast<sal_uInt8>(nGreen - nMinMax), static_cast<sal_uInt8>(nBlue - nMinMax)));
                     else
                         SetPixel(nY, nx, Color(255 - static_cast<sal_uInt8>(nRed - nMinMax), 255 - static_cast<sal_uInt8>(nGreen - nMinMax), 255 - static_cast<sal_uInt8>(nBlue - nMinMax)));
