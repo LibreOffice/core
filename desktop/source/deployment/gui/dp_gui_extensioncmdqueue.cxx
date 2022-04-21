@@ -699,6 +699,9 @@ void ExtensionCmdQueue::Thread::execute()
             m_bWorking = false;
         }
 
+        if ( eInput == STOP )
+            break;
+
         // If this thread has been woken up by anything else except start, stop
         // then input is NONE and we wait again.
         // We only install the extension which are currently in the queue.
@@ -707,8 +710,6 @@ void ExtensionCmdQueue::Thread::execute()
         // have reached the end while we still install newly added extensions.
         if ( ( eInput == NONE ) || ( nSize == 0 ) )
             continue;
-        if ( eInput == STOP )
-            break;
 
         ::rtl::Reference< ProgressCmdEnv > currentCmdEnv( new ProgressCmdEnv( m_xContext, m_pDialogHelper, m_sDefaultCmd ) );
 
