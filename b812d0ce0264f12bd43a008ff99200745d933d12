@@ -36,6 +36,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b03b2e4_a8f6295b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T08:09:46Z",
+      "side": 1,
+      "message": "Alt+P and Shift+Alt+P work but Alt+C not unless I remove these uno:UnicodeNotationToggle lines. Although my locale is EN_US, and Alt+X does toggle the unicode. \n\nJustin/Samuel/Miklos made the changes for bug 73691 (with a lot roundabouts to make the actual Alt+X work across OS and locales). The request was not unanimously accepted and I strongly believe that precious shortcuts must not be used for such a nerd feature. My take: revert and use it for P/Pg/C-Style.\n",
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b66a3fe9_9644ca2c",
