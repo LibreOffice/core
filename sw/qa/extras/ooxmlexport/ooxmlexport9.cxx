@@ -45,15 +45,6 @@ class Test : public SwModelTestBase
 {
 public:
     Test() : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text") {}
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 class DocmTest : public SwModelTestBase
@@ -483,8 +474,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104420, "tdf104420_lostParagraph.docx")
     CPPUNIT_ASSERT_EQUAL( 2, getPages() );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf41542_borderlessPadding, "tdf41542_borderlessPadding.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf41542_borderlessPadding)
 {
+    loadAndReload("tdf41542_borderlessPadding.odt");
     // the page style's borderless padding should force this to 3 pages, not 1
     CPPUNIT_ASSERT_EQUAL( 3, getPages() );
 }
@@ -497,7 +489,7 @@ DECLARE_OOXMLEXPORT_TEST(tdf105490_negativeMargins, "tdf105490_negativeMargins.d
 }
 #endif
 
-DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth,"tdf97648_relativeWidth.docx")
+DECLARE_OOXMLEXPORT_TEST(testTdf97648_relativeWidth, "tdf97648_relativeWidth.docx")
 {
     CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(7616), getShape(1)->getSize().Width, 10);
     CPPUNIT_ASSERT_DOUBLES_EQUAL( sal_Int32(8001), getShape(2)->getSize().Width, 10);
@@ -536,8 +528,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf46940_dontEquallyDistributeColumns, "tdf46940_do
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xTextSections->getByIndex(3), "DontBalanceTextColumns"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf98700_keepWithNext, "tdf98700_keepWithNext.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf98700_keepWithNext)
 {
+    loadAndReload("tdf98700_keepWithNext.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Heading style keeps with next", true, getProperty<bool>(getParagraph(1), "ParaKeepTogether"));
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Default style doesn't keep with next", false, getProperty<bool>(getParagraph(2), "ParaKeepTogether"));
@@ -956,8 +949,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf82173_endnoteStyle, "tdf82173_endnoteStyle.docx"
     CPPUNIT_ASSERT_EQUAL( Color(0xFF00FF), getProperty<Color>(xPageStyle, "CharColor"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf55427_footnote2endnote, "tdf55427_footnote2endnote.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf55427_footnote2endnote)
 {
+    loadAndReload("tdf55427_footnote2endnote.odt");
     CPPUNIT_ASSERT_EQUAL(4, getPages());
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("ParagraphStyles")->getByName("Footnote"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote style is rose color", Color(0xFF007F), getProperty<Color>(xPageStyle, "CharColor"));
@@ -1158,8 +1152,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107889, "tdf107889.docx")
 }
 #endif
 
-DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107837)
 {
+    loadAndReload("tdf107837.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTextSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
@@ -1167,16 +1162,18 @@ DECLARE_OOXMLEXPORT_TEST(testTdf107837, "tdf107837.odt")
     CPPUNIT_ASSERT_EQUAL(false, getProperty<bool>(xTextSections->getByIndex(0), "DontBalanceTextColumns"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf107684, "tdf107684.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107684)
 {
+    loadAndReload("tdf107684.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     if (xmlDocUniquePtr pXmlDoc = parseExport("word/styles.xml"))
         // This was 1, <w:outlineLvl> was duplicated for Heading1.
         assertXPath(pXmlDoc, "//w:style[@w:styleId='Heading1']/w:pPr/w:outlineLvl", 1);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf107618, "tdf107618.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf107618)
 {
+    loadAndReload("tdf107618.doc");
     // This was false, header was lost on export.
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(xPageStyle, "HeaderIsOn"));
@@ -1218,8 +1215,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf105095, "tdf105095.docx")
     CPPUNIT_ASSERT_EQUAL( OUString("\tfootnote"), xTextRange->getString() );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf106062_nonHangingFootnote, "tdf106062_nonHangingFootnote.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf106062_nonHangingFootnote)
 {
+    loadAndReload("tdf106062_nonHangingFootnote.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes = xFootnotesSupplier->getFootnotes();
@@ -1285,8 +1283,9 @@ DECLARE_OOXMLEXPORT_TEST( testActiveXCheckbox, "activex_checkbox.docx" )
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,getProperty<text::TextContentAnchorType>(xPropertySet2,"AnchorType"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testActiveXControlAlign, "activex_control_align.odt")
+CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAlign)
 {
+    loadAndReload("activex_control_align.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // First check box aligned as a floating object
@@ -1389,8 +1388,9 @@ DECLARE_OOXMLEXPORT_TEST(testWatermark, "watermark-shapetype.docx")
     CPPUNIT_ASSERT_EQUAL(xPropertySet1->getPropertyValue("TextAutoGrowHeight"), xPropertySet2->getPropertyValue("TextAutoGrowHeight"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testActiveXControlAtRunEnd, "activex_control_at_run_end.odt")
+CPPUNIT_TEST_FIXTURE(Test, testActiveXControlAtRunEnd)
 {
+    loadAndReload("activex_control_at_run_end.odt");
     CPPUNIT_ASSERT_EQUAL(2, getShapes());
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Two issues were here:
