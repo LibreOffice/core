@@ -68,6 +68,24 @@
       "message": "\u003e The biggest issue is what happens when NO formatString is provided\n\nIf 80% of the cases provide a format string, then what about doing this only in case there is a format string? And leave the no-format-string case unchanged. That would provide benefit to most users while not breaking the edge case. Would that work?",
       "revId": "12a5f648e671766f16595bb46963753006626d3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc6f79aa_ac1cbea0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-21T07:11:46Z",
+      "side": 1,
+      "message": "\u003e If 80% of the cases provide a format string, then what about doing this only in case there is a format string?\nCan\u0027t do (easily). It is all or nothing.  As soon as you put it in aFieldConversionMap, it follows a different code path. It would require duplicating the \"else\" clause. The complication doesn\u0027t seem worth the effort.",
+      "parentUuid": "6510c546_f6de7888",
+      "revId": "12a5f648e671766f16595bb46963753006626d3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
