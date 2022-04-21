@@ -94,6 +94,7 @@ void VBATest::testMiscVBAFunctions()
         "hex.vb",
         "hour.vb",
         "formatnumber.vb",
+        "formatpercent.vb",
         "iif.vb",
         "instr.vb",
         "instrrev.vb",
