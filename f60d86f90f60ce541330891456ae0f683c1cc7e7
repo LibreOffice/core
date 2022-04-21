@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "649b6170_be3d0631",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-21T11:07:45Z",
+      "side": 1,
+      "message": "tdf#115863 displays correctly now but in addition to deal with specific tdf#74331, I had to revert the reversed part min-is-black/min-is-white.\nBut now, grid tdf#74331 is incorrect in addition to the tests I made with small 2 px images, what a mess...",
+      "revId": "f60d86f90f60ce541330891456ae0f683c1cc7e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
