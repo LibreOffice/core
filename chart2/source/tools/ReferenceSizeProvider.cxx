@@ -26,7 +26,6 @@
 #include <Diagram.hxx>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
-#include <com/sun/star/chart2/XTitle.hpp>
 #include <tools/diagnose_ex.h>
 
 #include <vector>

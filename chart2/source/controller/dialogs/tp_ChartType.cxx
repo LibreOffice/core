@@ -28,7 +28,6 @@
 #include <DiagramHelper.hxx>
 #include <Diagram.hxx>
 #include <unonames.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <svtools/valueset.hxx>
 

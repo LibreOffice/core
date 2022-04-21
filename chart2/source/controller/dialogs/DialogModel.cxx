@@ -36,9 +36,7 @@
 #include <BaseCoordinateSystem.hxx>
 #include <LabeledDataSequence.hxx>
 
-#include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <tools/diagnose_ex.h>
 

@@ -43,7 +43,6 @@
 #include <svl/numformat.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 
 #include <algorithm>

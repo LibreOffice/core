@@ -18,7 +18,6 @@
  */
 
 #include <ChartController.hxx>
-#include <ChartWindow.hxx>
 #include <chartview/DrawModelWrapper.hxx>
 #include <chartview/ChartSfxItemIds.hxx>
 #include <ObjectIdentifier.hxx>

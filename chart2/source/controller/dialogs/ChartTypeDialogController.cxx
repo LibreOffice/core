@@ -34,7 +34,6 @@
 #include <ChartModel.hxx>
 
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 
 #include <svtools/valueset.hxx>
 #include <vcl/image.hxx>

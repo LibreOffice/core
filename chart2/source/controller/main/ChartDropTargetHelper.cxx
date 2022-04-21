@@ -23,7 +23,6 @@
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
 
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 
 #include <sot/formats.hxx>

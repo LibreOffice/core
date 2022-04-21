@@ -62,7 +62,6 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <tools/diagnose_ex.h>
 
-#include <vector>
 #include <algorithm>
 #include <map>
 

@@ -19,7 +19,6 @@
 
 #include <ChartController.hxx>
 
-#include <ChartWindow.hxx>
 #include <DrawViewWrapper.hxx>
 #include <PositionAndSizeHelper.hxx>
 #include <ChartModel.hxx>

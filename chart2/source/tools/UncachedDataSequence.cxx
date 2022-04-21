@@ -26,7 +26,6 @@
 #include <algorithm>
 #include <strings.hrc>
 #include <ResId.hxx>
-#include <com/sun/star/chart2/XInternalDataProvider.hpp>
 
 using namespace ::com::sun::star;
 
