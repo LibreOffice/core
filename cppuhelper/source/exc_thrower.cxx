@@ -168,7 +168,7 @@ ExceptionThrower::ExceptionThrower()
     uno_Interface::pDispatcher = ExceptionThrower_dispatch;
 }
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID)) || defined(EMSCRIPTEN)
+#if defined(IOS) || defined(ANDROID) || defined(EMSCRIPTEN)
 #define RETHROW_FAKE_EXCEPTIONS 1
 #else
 #define RETHROW_FAKE_EXCEPTIONS 0
