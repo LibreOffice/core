@@ -19,24 +19,24 @@ namespace comphelper
 {
 typedef std::shared_ptr<osl::File> FileSharedPtr;
 
-OUString DirectoryHelper::splitAtLastToken(const OUString& rSrc, sal_Unicode aToken,
-                                           OUString& rRight)
+std::u16string_view DirectoryHelper::splitAtLastToken(std::u16string_view rSrc, sal_Unicode aToken,
+                                                      OUString& rRight)
 {
-    const sal_Int32 nIndex(rSrc.lastIndexOf(aToken));
-    OUString aRetval;
+    const size_t nIndex(rSrc.rfind(aToken));
+    std::u16string_view aRetval;
 
-    if (-1 == nIndex)
+    if (std::u16string_view::npos == nIndex)
     {
         aRetval = rSrc;
         rRight.clear();
     }
     else if (nIndex > 0)
     {
-        aRetval = rSrc.copy(0, nIndex);
+        aRetval = rSrc.substr(0, nIndex);
 
-        if (rSrc.getLength() > nIndex + 1)
+        if (rSrc.size() > nIndex + 1)
         {
-            rRight = rSrc.copy(nIndex + 1);
+            rRight = rSrc.substr(nIndex + 1);
         }
     }
 

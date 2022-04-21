@@ -21,7 +21,8 @@ namespace comphelper
 class COMPHELPER_DLLPUBLIC DirectoryHelper
 {
 public:
-    static OUString splitAtLastToken(const OUString& rSrc, sal_Unicode aToken, OUString& rRight);
+    static std::u16string_view splitAtLastToken(std::u16string_view rSrc, sal_Unicode aToken,
+                                                OUString& rRight);
     static bool fileExists(const OUString& rBaseURL);
     static bool dirExists(const OUString& rDirURL);
 
