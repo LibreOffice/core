@@ -200,9 +200,16 @@ ifeq (,$(DISABLE_DYNLOADING))
 # libraries takes enormous amounts of RAM.	To prevent annoying OOM situations
 # etc., try to prevent linking these in parallel by adding artificial build
 # order dependencies here.
+# Do this only if a linker is not explicitly set, as this should only apply
+# to the BFD linker and any decently modern linker presumably performs better.
+ifeq (,$(USE_LD))
 define repositorymodule_serialize1
 $(call gb_Library_get_linktarget_target,$(1)) :| $(foreach lib,$(2),$(call gb_Library_get_target,$(lib)))
 endef
+else
+define repositorymodule_serialize1
+endef
+endif
 
 define repositorymodule_serialize
 $(if $(filter-out 0 1,$(words $(1))),\
