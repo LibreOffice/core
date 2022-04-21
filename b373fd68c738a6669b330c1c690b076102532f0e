@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d70779b0_74aeebb3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-21T07:51:30Z",
+      "side": 1,
+      "message": "Armin: I didn\u0027t find a location where mbForceThemePtrRecreation is set to true, is it planned in a next patch or could this var be removed? ",
+      "revId": "b373fd68c738a6669b330c1c690b076102532f0e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
