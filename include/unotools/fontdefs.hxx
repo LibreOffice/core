@@ -84,7 +84,7 @@ enum class DefaultFontType
     CTL_DISPLAY         = 4004,
 };
 
-UNOTOOLS_DLLPUBLIC OUString GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
+UNOTOOLS_DLLPUBLIC std::u16string_view GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
 UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( std::u16string_view rName );
 
 /** Strip any "script font suffix" from the font name

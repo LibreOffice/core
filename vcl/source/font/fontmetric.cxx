@@ -137,7 +137,7 @@ ImplFontMetricData::ImplFontMetricData( const vcl::font::FontSelectPattern& rFon
 {
     // initialize the used font name
     sal_Int32 nTokenPos = 0;
-    SetFamilyName( GetNextFontToken( rFontSelData.GetFamilyName(), nTokenPos ) );
+    SetFamilyName( OUString(GetNextFontToken( rFontSelData.GetFamilyName(), nTokenPos )) );
     SetStyleName( rFontSelData.GetStyleName() );
 }
 
