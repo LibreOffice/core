@@ -86,6 +86,30 @@
       },
       "revId": "ab699bfdb3375f7142a50cc35322e2924c9e5945",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce84bfa1_3fa35141",
+        "filename": "compilerplugins/clang/stringviewvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T13:57:19Z",
+      "side": 1,
+      "message": "you mean loplugin:stringviewparam? for which the rationale is given at \u003chttps://git.libreoffice.org/core/+/dec14c4a074b4e4b156b932155e73647d6ebd519%5E%21\u003e \"Avoid --disable-assert-always-abort loplugin:stringviewparam false positives\" (and whether or not that applies here, too)\n\n(and you probably should have mentioned somewhere that the new plugin is mostly a copy of an existing one)",
+      "parentUuid": "a04a181c_6b806ae7",
+      "range": {
+        "startLine": 369,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 9
+      },
+      "revId": "ab699bfdb3375f7142a50cc35322e2924c9e5945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
