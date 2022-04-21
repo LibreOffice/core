@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88cfb2e7_7a7f10ec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-21T18:30:36Z",
+      "side": 1,
+      "message": "Hi Mike. Sry for the noise. I tried different approaches now. If I don\u0027t reload the document, I get a build error on the mac. If I reload the function entirely, I get a no name error. Could this depend on the upper/lowercase of the function?\n\nHappens also without the patch in place.",
+      "revId": "51f52afdcda33f8df41462542dd861ec3d1e569f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ad1cce8_dccbd0c6",
+        "filename": "sc/qa/unit/subsequent_export_test2.cxx",
+        "patchSetId": 29
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-21T18:30:36Z",
+      "side": 1,
+      "message": "Here the CalcAll works as expected the formula name is upper case.",
+      "revId": "51f52afdcda33f8df41462542dd861ec3d1e569f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4d19892_b6e068c1",
+        "filename": "sc/qa/unit/subsequent_export_test2.cxx",
+        "patchSetId": 29
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-21T18:30:36Z",
+      "side": 1,
+      "message": "And here the function will be in lower case.",
+      "revId": "51f52afdcda33f8df41462542dd861ec3d1e569f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
