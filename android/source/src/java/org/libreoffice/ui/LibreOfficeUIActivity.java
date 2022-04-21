@@ -197,9 +197,9 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
         SharedPreferences prefs = getSharedPreferences(EXPLORER_PREFS_KEY, MODE_PRIVATE);
         String recentPref = prefs.getString(RECENT_DOCUMENTS_KEY, "");
-        List<String> recentFileStrings = Arrays.asList(recentPref.split(RECENT_DOCUMENTS_DELIMITER));
+        String[] recentFileStrings = recentPref.split(RECENT_DOCUMENTS_DELIMITER);
 
-        final List<RecentFile> recentFiles = new ArrayList();
+        final List<RecentFile> recentFiles = new ArrayList<>();
         for (String recentFileString : recentFileStrings) {
             Uri uri = Uri.parse(recentFileString);
             String filename = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), uri);
@@ -364,7 +364,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
         getContentResolver().takePersistableUriPermission(fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
         String newRecent = fileUri.toString();
-        List<String> recentsList = new ArrayList(Arrays.asList(prefs.getString(RECENT_DOCUMENTS_KEY, "").split(RECENT_DOCUMENTS_DELIMITER)));
+        List<String> recentsList = new ArrayList<>(Arrays.asList(prefs.getString(RECENT_DOCUMENTS_KEY, "").split(RECENT_DOCUMENTS_DELIMITER)));
 
         // remove string if present, so that it doesn't appear multiple times
         recentsList.remove(newRecent);
@@ -393,7 +393,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
             //Remove all shortcuts, and apply new ones.
             shortcutManager.removeAllDynamicShortcuts();
 
-            ArrayList<ShortcutInfo> shortcuts = new ArrayList<ShortcutInfo>();
+            ArrayList<ShortcutInfo> shortcuts = new ArrayList<>();
             for (String recentDoc : recentsList) {
                 Uri docUri = Uri.parse(recentDoc);
                 String filename = FileUtilities.retrieveDisplayNameForDocumentUri(getContentResolver(), docUri);
