@@ -859,7 +859,7 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
     sal_uInt32  nRed, nGreen, nBlue, ns, nVal;
     sal_uInt8   nByteVal;
 
-    if ( nDstBitsPerPixel == 24 )
+    if ( nDstBitsPerPixel == 24 || (nDstBitsPerPixel == 8 && nPhotometricInterpretation <= 1 && nSamplesPerPixel == 1) )
     {
         if ( nBitsPerSample == 8 && nSamplesPerPixel >= 3 &&
              nPlanes == 1 && nPhotometricInterpretation == 2 )
@@ -904,7 +904,8 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
         }
         else if (
                ( nPhotometricInterpretation == 2 && nSamplesPerPixel >= 3 ) ||
-               ( nPhotometricInterpretation == 5 && nSamplesPerPixel == 3 )
+               ( nPhotometricInterpretation == 5 && nSamplesPerPixel == 3 ) ||
+               ( nPhotometricInterpretation <= 1 && nSamplesPerPixel == 1 )
         )
         {
             if ( nMaxSampleValue > nMinSampleValue )
