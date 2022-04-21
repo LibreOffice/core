@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8380cdd0_14e5a998",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T07:52:05Z",
+      "side": 1,
+      "message": "Cannot confirm the crash on kf5. But the idea to not cycle cases on white-spaces is reasonable (and works, of course).\n\nHowever, if nothing is selected the border detection algorithm kicks in and something weird happens. My test case is A.....B (dots are spaces). With A.|...|.B (pipe indicate start/end of selection) nothing happens (some feedback would be nice though). But A..|...B changes to A.....b and any subsequent shift+F3 applied to this A..|...b have no effect. This is a bit surprising since |A.....B| literally cycles.\n\nNot a big deal, feel free to ignore as unrelated.",
+      "revId": "442bb845769fafd7e10051732d73d021318f2118",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
