@@ -52,6 +52,24 @@
       "parentUuid": "602ea79d_cad10d0e",
       "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b02a706d_0bd9faf7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-21T13:27:07Z",
+      "side": 1,
+      "message": "Also it has the advantage, that a JVM crash would not crash LO.",
+      "parentUuid": "c412e55d_d92cddee",
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
