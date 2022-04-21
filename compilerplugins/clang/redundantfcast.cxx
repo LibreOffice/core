@@ -335,7 +335,7 @@ public:
         // tdf#145203: FIREBIRD cannot create a table
         if (fn == SRCDIR "/connectivity/source/drivers/firebird/DatabaseMetaData.cxx")
             return false;
-        // false positive during using contructor drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw })
+        // false positive during using constructor drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw })
         if (fn == SRCDIR "/drawinglayer/source/tools/emfppen.cxx")
             return false;
         return true;
