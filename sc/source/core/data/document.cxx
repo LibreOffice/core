@@ -6142,6 +6142,13 @@ ScStyleSheetPool* ScDocument::GetStyleSheetPool() const
     return mxPoolHelper->GetStylePool();
 }
 
+bool ScDocument::IsEmptyBlock(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const
+{
+    if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
+        return maTabs[nTab]->IsEmptyBlock(nStartCol, nStartRow, nEndCol, nEndRow);
+    return true;
+}
+
 SCSIZE ScDocument::GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                             SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab, ScDirection eDir )
 {
