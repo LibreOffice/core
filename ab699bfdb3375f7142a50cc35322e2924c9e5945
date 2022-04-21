@@ -62,6 +62,30 @@
       },
       "revId": "ab699bfdb3375f7142a50cc35322e2924c9e5945",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04a181c_6b806ae7",
+        "filename": "compilerplugins/clang/stringviewvar.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T13:45:32Z",
+      "side": 1,
+      "message": "I don\u0027t know - I copied this plugin from your stringview plugin, and it came along for the ride",
+      "parentUuid": "85bad3b9_f5302201",
+      "range": {
+        "startLine": 369,
+        "startChar": 8,
+        "endLine": 372,
+        "endChar": 9
+      },
+      "revId": "ab699bfdb3375f7142a50cc35322e2924c9e5945",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
