@@ -16,6 +16,7 @@
 #include <string_view>
 #include <vector>
 
+#include <o3tl/string_view.hxx>
 #include <osl/endian.h>
 #include <osl/file.h>
 #include <rtl/character.hxx>
@@ -27,7 +28,6 @@
 #include <sal/types.h>
 #include <salhelper/simplereferenceobject.hxx>
 #include <unoidl/unoidl.hxx>
-#include <o3tl/string_view.hxx>
 
 #include "unoidlprovider.hxx"
 
@@ -508,7 +508,7 @@ Compare compare(
 
 sal_uInt32 findInMap(
     rtl::Reference< MappedFile > const & file, MapEntry const * mapBegin,
-    sal_uInt32 mapSize, std::u16string_view name, sal_Int32 nameOffset,
+    sal_uInt32 mapSize, OUString const & name, sal_Int32 nameOffset,
     sal_Int32 nameLength)
 {
     if (mapSize == 0) {
@@ -1349,21 +1349,21 @@ rtl::Reference< MapCursor > UnoidlProvider::createRootCursor() const {
         rtl::Reference<UnoidlModuleEntity>(), map_);
 }
 
-rtl::Reference< Entity > UnoidlProvider::findEntity(std::u16string_view name) const
+rtl::Reference< Entity > UnoidlProvider::findEntity(OUString const & name) const
 {
     NestedMap map(map_);
     bool cgroup = false;
     for (sal_Int32 i = 0;;) {
-        size_t j = name.find('.', i);
-        if (j == std::u16string_view::npos) {
-            j = name.size();
+        sal_Int32 j = name.indexOf('.', i);
+        if (j == -1) {
+            j = name.getLength();
         }
         sal_Int32 off = findInMap(
             file_, map.map.begin, map.map.size, name, i, j - i);
         if (off == 0) {
             return rtl::Reference< Entity >();
         }
-        if (j == name.size()) {
+        if (j == name.getLength()) {
             return cgroup
                 ? rtl::Reference< Entity >()
                 : readEntity(file_, off, std::set(map.trace));

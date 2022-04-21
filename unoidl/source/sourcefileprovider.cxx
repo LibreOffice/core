@@ -15,7 +15,6 @@
 
 #include "sourcefileprovider.hxx"
 #include "sourceprovider-scanner.hxx"
-#include <o3tl/string_view.hxx>
 
 namespace unoidl::detail {
 
@@ -106,12 +105,12 @@ rtl::Reference<MapCursor> SourceFileProvider::createRootCursor() const {
     return new Cursor(rootMap_);
 }
 
-rtl::Reference<Entity> SourceFileProvider::findEntity(std::u16string_view name)
+rtl::Reference<Entity> SourceFileProvider::findEntity(OUString const & name)
     const
 {
     std::map< OUString, rtl::Reference<Entity> > const * map = &rootMap_;
     for (sal_Int32 i = 0;;) {
-        OUString id(o3tl::getToken(name, 0, '.', i));
+        OUString id(name.getToken(0, '.', i));
         std::map< OUString, rtl::Reference<Entity> >::const_iterator j(
             map->find(id));
         if (j == map->end()) {

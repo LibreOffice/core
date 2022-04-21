@@ -103,7 +103,7 @@ std::u16string_view decomposeType(
         do {
             ++i; // skip '<' or ','
             size_t j = i;
-            for (sal_Int32 level = 0; j != nucl.size(); ++j) {
+            for (size_t level = 0; j != nucl.size(); ++j) {
                 sal_Unicode c = nucl[j];
                 if (c == ',') {
                     if (level == 0) {

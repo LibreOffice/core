@@ -43,9 +43,9 @@ class TypeManager final : public salhelper::SimpleReferenceObject {
 public:
     TypeManager();
 
-    void loadProvider(std::u16string_view uri, bool primary);
+    void loadProvider(OUString const & uri, bool primary);
 
-    bool foundAtPrimaryProvider(std::u16string_view name) const;
+    bool foundAtPrimaryProvider(OUString const & name) const;
 
     codemaker::UnoType::Sort getSort(
         OUString const & name, rtl::Reference< unoidl::Entity > * entity = nullptr,

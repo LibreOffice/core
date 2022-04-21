@@ -394,7 +394,7 @@ void mapEntities(
                     std::map< OUString, Item >::iterator k(map2->find(id));
                     if (k == map2->end()) {
                         rtl::Reference< unoidl::Entity > ent2(
-                            manager->findEntity(t.subView(0, j - 1)));
+                            manager->findEntity(t.copy(0, j - 1)));
                         assert(ent2.is());
                         k = map2->insert(std::make_pair(id, Item(ent2))).first;
                     }
