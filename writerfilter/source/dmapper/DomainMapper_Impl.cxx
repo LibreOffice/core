@@ -4230,18 +4230,17 @@ style::NumberingType::
 static OUString lcl_ParseFormat( const OUString& rCommand )
 {
     //  The command looks like: " DATE \@"dd MMMM yyyy" or "09/02/2014"
-    //  Remove whitespace permitted by standard between \@ and "
     OUString command;
     sal_Int32 delimPos = rCommand.indexOf("\\@");
     if (delimPos != -1)
     {
+        // Remove whitespace permitted by standard between \@ and "
         sal_Int32 wsChars = rCommand.indexOf('\"') - delimPos - 2;
         command = rCommand.replaceAt(delimPos+2, wsChars, u"");
+        return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
     }
-    else
-        command = rCommand;
 
-    return OUString(msfilter::util::findQuotedText(command, "\\@\"", '\"'));
+    return OUString();
 }
 /*-------------------------------------------------------------------------
 extract a parameter (with or without quotes) between the command and the following backslash
@@ -4480,9 +4479,9 @@ void DomainMapper_Impl::SetNumberFormat( const OUString& rCommand,
                 if (nPos == -1)
                     sFormatString = sFormatString.replaceFirst("YY", "YYYY");
                 if (aCurrentLocale == aUSLocale)
-                    sFormatString += " H:mm:ss AM/PM";
+                    sFormatString += " h:mm:ss AM/PM";
                 else
-                    sFormatString += " HH:mm:ss AM/PM";
+                    sFormatString += " hh:mm:ss AM/PM";
             }
             catch(const uno::Exception&)
             {
