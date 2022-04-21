@@ -456,10 +456,10 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     for( const auto& rObj : aList )
         detach( nIndex, rObj.xTarget );
 
-    OUString aLstType = ListenerType;
-    sal_Int32 nLastDot = aLstType.lastIndexOf('.');
-    if (nLastDot != -1)
-        aLstType = aLstType.copy(nLastDot+1);
+    std::u16string_view aLstType = ListenerType;
+    size_t nLastDot = aLstType.rfind('.');
+    if (nLastDot != std::u16string_view::npos)
+        aLstType = aLstType.substr(nLastDot+1);
 
     auto aEvtIt = std::find_if(aIt->aEventList.begin(), aIt->aEventList.end(),
         [&aLstType, &EventMethod, &ToRemoveListenerParam](const ScriptEventDescriptor& rEvent) {
