@@ -77,7 +77,11 @@ class QtWidget : public QWidget
     virtual void closeEvent(QCloseEvent*) override;
     virtual void changeEvent(QEvent*) override;
     virtual void leaveEvent(QEvent*) override;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    virtual void enterEvent(QEnterEvent*) override;
+#else
     virtual void enterEvent(QEvent*) override;
+#endif
 
     void inputMethodEvent(QInputMethodEvent*) override;
     QVariant inputMethodQuery(Qt::InputMethodQuery) const override;

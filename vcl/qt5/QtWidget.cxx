@@ -233,7 +233,14 @@ void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEven
 
 void QtWidget::leaveEvent(QEvent* pEvent) { handleMouseEnterLeaveEvents(m_rFrame, pEvent); }
 
-void QtWidget::enterEvent(QEvent* pEvent) { handleMouseEnterLeaveEvents(m_rFrame, pEvent); }
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+void QtWidget::enterEvent(QEnterEvent* pEvent)
+#else
+void QtWidget::enterEvent(QEvent* pEvent)
+#endif
+{
+    handleMouseEnterLeaveEvents(m_rFrame, pEvent);
+}
 
 void QtWidget::wheelEvent(QWheelEvent* pEvent)
 {
