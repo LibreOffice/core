@@ -159,7 +159,7 @@ void RTFSprms::eraseLast(Id nKeyword)
 
 static RTFValue::Pointer_t getDefaultSPRM(Id const id, Id nStyleType)
 {
-    if (!nStyleType || nStyleType == NS_ooxml::LN_Value_ST_StyleType_character)
+    if (nStyleType == NS_ooxml::LN_Value_ST_StyleType_character)
     {
         switch (id)
         {
