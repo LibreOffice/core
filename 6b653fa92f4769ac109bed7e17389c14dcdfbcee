@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7ebf3e1_061aa4f7",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-21T07:03:46Z",
+      "side": 1,
+      "message": "I tested the modified version with pylint and it whines \u0027standard import \"import sys\" should be placed before \"import requests\" (wrong-import-order)\u0027",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
