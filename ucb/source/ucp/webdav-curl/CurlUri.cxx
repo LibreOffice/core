@@ -187,7 +187,7 @@ OUString CurlUri::GetPathBaseName() const
     }
     if (nPos == -1)
     {
-        return "/";
+        return u"/";
     }
     return m_Path.copy(nPos + 1, m_Path.getLength() - nPos - 1 - nTrail);
 }
@@ -246,7 +246,7 @@ CurlUri CurlUri::CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) 
     CURLUcode uc;
     if (indexFragment != -1)
     {
-        OUString const fragment(rRelativeRef.copy(indexFragment + 1));
+        std::u16string_view const fragment(rRelativeRef.subView(indexFragment + 1));
         indexEnd = indexFragment;
         OString const utf8Fragment(OUStringToOString(fragment, RTL_TEXTENCODING_UTF8));
         uc = curl_url_set(pUrl.get(), CURLUPART_FRAGMENT, utf8Fragment.getStr(), 0);
@@ -262,7 +262,8 @@ CurlUri CurlUri::CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) 
     }
     if (indexQuery != -1 && (indexFragment == -1 || indexQuery < indexFragment))
     {
-        OUString const query(rRelativeRef.copy(indexQuery + 1, indexEnd - indexQuery - 1));
+        std::u16string_view const query(
+            rRelativeRef.subView(indexQuery + 1, indexEnd - indexQuery - 1));
         indexEnd = indexQuery;
         OString const utf8Query(OUStringToOString(query, RTL_TEXTENCODING_UTF8));
         uc = curl_url_set(pUrl.get(), CURLUPART_QUERY, utf8Query.getStr(), 0);
@@ -276,7 +277,7 @@ CurlUri CurlUri::CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) 
         SAL_WARN("ucb.ucp.webdav.curl", "curl_url_set failed: " << uc);
         throw DAVException(DAVException::DAV_INVALID_ARG);
     }
-    OUString const path(rRelativeRef.copy(0, indexEnd));
+    std::u16string_view const path(rRelativeRef.subView(0, indexEnd));
     OString const utf8Path(OUStringToOString(path, RTL_TEXTENCODING_UTF8));
     uc = curl_url_set(pUrl.get(), CURLUPART_PATH, utf8Path.getStr(), 0);
     if (uc != CURLUE_OK)

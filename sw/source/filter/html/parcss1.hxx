@@ -225,7 +225,7 @@ protected:
      *
      * @param rIn the style element as string
      */
-    void ParseStyleSheet( const OUString& rIn );
+    void ParseStyleSheet( std::u16string_view rIn );
 
     /** parse the content of a HTML style option
      *

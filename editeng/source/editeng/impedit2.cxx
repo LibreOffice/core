@@ -345,7 +345,7 @@ bool ImpEditEngine::Command( const CommandEvent& rCEvt, EditView* pView )
         pView->DeleteSelected();
         mpIMEInfos.reset();
         EditPaM aPaM = pView->GetImpEditView()->GetEditSelection().Max();
-        OUString aOldTextAfterStartPos = aPaM.GetNode()->Copy( aPaM.GetIndex() );
+        OUString aOldTextAfterStartPos( aPaM.GetNode()->Copy( aPaM.GetIndex() ) );
         sal_Int32 nMax = aOldTextAfterStartPos.indexOf( CH_FEATURE );
         if ( nMax != -1 )  // don't overwrite features!
             aOldTextAfterStartPos = aOldTextAfterStartPos.copy( 0, nMax );

@@ -212,7 +212,7 @@ namespace editeng
 
         /** get the string currently considered to be replaced or ignored
         */
-        OUString GetCurrentUnit() const;
+        std::u16string_view GetCurrentUnit() const;
 
         /** read options from configuration, update suggestion list and dialog content
         */
@@ -507,7 +507,7 @@ namespace editeng
         return false;
     }
 
-    OUString HangulHanjaConversion_Impl::GetCurrentUnit() const
+    std::u16string_view HangulHanjaConversion_Impl::GetCurrentUnit() const
     {
         DBG_ASSERT( m_nCurrentStartIndex < m_sCurrentPortion.getLength(),
             "HangulHanjaConversion_Impl::GetCurrentUnit: invalid index into current portion!" );
@@ -516,8 +516,7 @@ namespace editeng
         DBG_ASSERT( m_nCurrentStartIndex <= m_nCurrentEndIndex,
             "HangulHanjaConversion_Impl::GetCurrentUnit: invalid interval!" );
 
-        OUString sCurrentUnit = m_sCurrentPortion.copy( m_nCurrentStartIndex, m_nCurrentEndIndex - m_nCurrentStartIndex );
-        return sCurrentUnit;
+        return m_sCurrentPortion.subView( m_nCurrentStartIndex, m_nCurrentEndIndex - m_nCurrentStartIndex );
     }
 
     bool HangulHanjaConversion_Impl::ContinueConversion( bool _bRepeatCurrentUnit )
@@ -721,7 +720,7 @@ namespace editeng
         sal_Int32 nEndIndex = m_nCurrentEndIndex - m_nReplacementBaseIndex;
 
         //remind this decision
-        m_aRecentlyUsedList[ GetCurrentUnit() ] = _rChangeInto;
+        m_aRecentlyUsedList[ OUString(GetCurrentUnit()) ] = _rChangeInto;
 
         LanguageType *pNewUnitLang = nullptr;
         LanguageType  nNewUnitLang = LANGUAGE_NONE;

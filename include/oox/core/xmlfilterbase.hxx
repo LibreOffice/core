@@ -134,7 +134,7 @@ public:
         @return a non-empty reference to the XDocument, if the
         fragment could be imported.
      */
-    css::uno::Reference< css::xml::dom::XDocument> importFragment( const OUString& rFragmentPath );
+    css::uno::Reference< css::xml::dom::XDocument> importFragment( std::u16string_view rFragmentPath );
 
     /** Imports a fragment from an xml::dom::XDocument using the
         passed fragment handler
@@ -202,7 +202,7 @@ public:
      */
     css::uno::Reference< css::io::XOutputStream >
                         openFragmentStream(
-                            const OUString& rStreamName,
+                            std::u16string_view rStreamName,
                             const OUString& rMediaType );
 
     /** Opens specified output stream from the base storage with specified
@@ -222,7 +222,7 @@ public:
      */
     ::sax_fastparser::FSHelperPtr
                         openFragmentStreamWithSerializer(
-                            const OUString& rStreamName,
+                            std::u16string_view rStreamName,
                             const OUString& rMediaType );
 
     /** Returns new unique ID for exported document.

@@ -284,50 +284,50 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 OUString createDesiredName(
     const OUString & rSourceURL, const OUString & rNewTitle )
 {
-    OUString aName( rNewTitle );
-    if ( aName.isEmpty() )
+    if (rNewTitle.isEmpty())
+        return rNewTitle;
+
+    std::u16string_view aName( rNewTitle );
+    // calculate name using source URL
+
+    // @@@ It's not guaranteed that slashes contained in the URL are
+    // actually path separators. This depends on the fact whether the
+    // URL is hierarchical. Only then the slashes are path separators.
+    // Therefore this algorithm is not guaranteed to work! But, ATM
+    // I don't know a better solution. It would have been better to
+    // have a member for the clashing name in
+    // UnsupportedNameClashException...
+
+    sal_Int32 nLastSlash = rSourceURL.lastIndexOf( '/' );
+    bool bTrailingSlash = false;
+    if ( nLastSlash == rSourceURL.getLength() - 1 )
     {
-        // calculate name using source URL
-
-        // @@@ It's not guaranteed that slashes contained in the URL are
-        // actually path separators. This depends on the fact whether the
-        // URL is hierarchical. Only then the slashes are path separators.
-        // Therefore this algorithm is not guaranteed to work! But, ATM
-        // I don't know a better solution. It would have been better to
-        // have a member for the clashing name in
-        // UnsupportedNameClashException...
-
-        sal_Int32 nLastSlash = rSourceURL.lastIndexOf( '/' );
-        bool bTrailingSlash = false;
-        if ( nLastSlash == rSourceURL.getLength() - 1 )
-        {
-            nLastSlash = rSourceURL.lastIndexOf( '/', nLastSlash );
-            bTrailingSlash = true;
-        }
-
-        if ( nLastSlash != -1 )
-        {
-            if ( bTrailingSlash )
-                aName = rSourceURL.copy(
-                            nLastSlash + 1,
-                            rSourceURL.getLength() - nLastSlash - 2 );
-            else
-                aName = rSourceURL.copy( nLastSlash + 1 );
-        }
-        else
-        {
-            aName = rSourceURL;
-        }
-
-        // query, fragment present?
-        sal_Int32  nPos = aName.indexOf( '?' );
-        if ( nPos == -1 )
-          nPos = aName.indexOf( '#' );
-
-        if ( nPos != -1 )
-          aName = aName.copy( 0, nPos );
+        nLastSlash = rSourceURL.lastIndexOf( '/', nLastSlash );
+        bTrailingSlash = true;
     }
-    return aName;
+
+    if ( nLastSlash != -1 )
+    {
+        if ( bTrailingSlash )
+            aName = rSourceURL.subView(
+                        nLastSlash + 1,
+                        rSourceURL.getLength() - nLastSlash - 2 );
+        else
+            aName = rSourceURL.subView( nLastSlash + 1 );
+    }
+    else
+    {
+        aName = rSourceURL;
+    }
+
+    // query, fragment present?
+    size_t nPos = aName.find( '?' );
+    if ( nPos == std::u16string_view::npos )
+      nPos = aName.find( '#' );
+
+    if ( nPos != std::u16string_view::npos )
+      aName = aName.substr( 0, nPos );
+    return OUString(aName);
 }
 
 OUString createDesiredName(

@@ -62,7 +62,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
-    OUString aDSN(url.copy(nLen+1));
+    std::u16string_view aDSN(url.subView(nLen+1));
 
     m_aFileName = aDSN;
     INetURLObject aURL;

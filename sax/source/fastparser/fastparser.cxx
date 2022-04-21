@@ -37,6 +37,7 @@
 #include <sal/log.hxx>
 #include <salhelper/thread.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <queue>
 #include <memory>
@@ -1651,9 +1652,9 @@ static bool NormalizeOasisURN( OUString& rName )
 
     // :urn:oasis:names:tc:[^:]:xmlns.*
     nPos = nTCIdEnd + 1;
-    OUString sTmp( rName.copy( nPos ) );
+    std::u16string_view sTmp( rName.subView( nPos ) );
     const OUString& rXMLNS = XML_XMLNS;
-    if( !sTmp.startsWith( rXMLNS ) )
+    if( !o3tl::starts_with(sTmp, rXMLNS ) )
         return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns:.*

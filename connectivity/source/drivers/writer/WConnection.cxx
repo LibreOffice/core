@@ -55,7 +55,7 @@ void OWriterConnection::construct(const OUString& rURL,
 
     sal_Int32 nLen = rURL.indexOf(':');
     nLen = rURL.indexOf(':', nLen + 1);
-    OUString aDSN(rURL.copy(nLen + 1));
+    std::u16string_view aDSN(rURL.subView(nLen + 1));
 
     m_aFileName = aDSN;
     INetURLObject aURL;

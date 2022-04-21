@@ -242,7 +242,7 @@ private:
         const Reference<XAllListener>& xAllListener,
         const Any& aObject,
         const Any& aHelper,
-        const OUString& aListenerType,
+        std::u16string_view aListenerType,
         const OUString& aAddListenerParam );
 
     Sequence< Reference<XEventListener> > attachListeners(
@@ -558,22 +558,22 @@ Reference<XEventListener> EventAttacherImpl::attachListenerForTarget(
     const Reference<XAllListener>& xAllListener,
     const Any& aObject,
     const Any& aHelper,
-    const OUString& aListenerType,
+    std::u16string_view aListenerType,
     const OUString& aAddListenerParam)
 {
     Reference< XEventListener > xRet;
 
     // Construct the name of the addListener-Method.
-    sal_Int32 nIndex = aListenerType.lastIndexOf('.');
+    size_t nIndex = aListenerType.rfind('.');
     // set index to the interface name without package name
-    if( nIndex == -1 )
+    if( nIndex == std::u16string_view::npos )
         // not found
         nIndex = 0;
     else
         nIndex++;
 
-    OUString aListenerName = (!aListenerType.isEmpty() && aListenerType[nIndex] == 'X') ? aListenerType.copy(nIndex+1) : aListenerType;
-    OUString aAddListenerName = "add" + aListenerName;
+    std::u16string_view aListenerName = (!aListenerType.empty() && aListenerType[nIndex] == 'X') ? aListenerType.substr(nIndex+1) : aListenerType;
+    OUString aAddListenerName = OUString::Concat("add") + aListenerName;
 
     // Send Methods to the correct addListener-Method
     const Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
@@ -749,18 +749,18 @@ void EventAttacherImpl::removeListener
 
     // Create name of the removeListener-Method
     OUString aRemoveListenerName;
-    OUString aListenerName( ListenerType );
-    sal_Int32 nIndex = aListenerName.lastIndexOf( '.' );
+    std::u16string_view aListenerName( ListenerType );
+    size_t nIndex = aListenerName.rfind( '.' );
     // set index to the interface name without package name
-    if( nIndex == -1 )
+    if( nIndex == std::u16string_view::npos )
         // not found
         nIndex = 0;
     else
         nIndex++;
     if( aListenerName[nIndex] == 'X' )
         // erase X from the interface name
-        aListenerName = aListenerName.copy( nIndex +1 );
-    aRemoveListenerName = "remove" + aListenerName;
+        aListenerName = aListenerName.substr( nIndex +1 );
+    aRemoveListenerName = OUString::Concat("remove") + aListenerName;
 
     // Search methods for the correct removeListener method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );

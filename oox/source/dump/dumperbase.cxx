@@ -1794,7 +1794,7 @@ void StorageObjectBase::implDump()
     bool bIsRoot = mxStrg->isRootStorage();
     Reference< XInputStream > xBaseStrm;
     if( !bIsStrg )
-        xBaseStrm = mxStrg->openInputStream( OUString() );
+        xBaseStrm = mxStrg->openInputStream( u"" );
 
     OUString aSysOutPath = maSysPath;
     if( bIsRoot ) try

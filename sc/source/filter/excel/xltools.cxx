@@ -26,6 +26,7 @@
 #include <sal/macros.h>
 #include <sal/log.hxx>
 #include <tools/solar.h>
+#include <o3tl/string_view.hxx>
 #include <unotools/fontdefs.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <xestream.hxx>
@@ -629,8 +630,8 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
     {
         if( (nStyleId == EXC_STYLE_ROWLEVEL) || (nStyleId == EXC_STYLE_COLLEVEL) )
         {
-            OUString aLevel = rStyleName.copy(nNextChar);
-            sal_Int32 nLevel = aLevel.toInt32();
+            std::u16string_view aLevel = rStyleName.subView(nNextChar);
+            sal_Int32 nLevel = o3tl::toInt32(aLevel);
             if (std::u16string_view(OUString::number(nLevel)) == aLevel
                 && nLevel > 0 && nLevel <= EXC_STYLE_LEVELCOUNT)
             {

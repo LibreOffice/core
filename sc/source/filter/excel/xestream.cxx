@@ -1092,7 +1092,7 @@ bool XclExpXmlStream::exportDocument()
             css::uno::Reference<css::io::XInputStream> xVBAStream(
                     new utl::OInputStreamWrapper(aVbaStream));
             css::uno::Reference<css::io::XOutputStream> xVBAOutput =
-                openFragmentStream("xl/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+                openFragmentStream(u"xl/vbaProject.bin", "application/vnd.ms-office.vbaProject");
             comphelper::OStorageHelper::CopyInputToOutput(xVBAStream, xVBAOutput);
 
             addRelation(GetCurrentStream()->getOutputStream(), oox::getRelationship(Relationship::VBAPROJECT), u"vbaProject.bin");

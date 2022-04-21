@@ -43,6 +43,7 @@
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <o3tl/string_view.hxx>
 
 // Our starmath tools
 #include <cfgitem.hxx>
@@ -840,8 +841,8 @@ SmLengthValue SmMLImportContext::handleLengthAttribute(const OUString& aAttribut
     }
 
     // Get value
-    OUString aValue = aAttribute.copy(0, nUnitPos);
-    double nValue = aValue.toDouble();
+    std::u16string_view aValue = aAttribute.subView(0, nUnitPos);
+    double nValue = o3tl::toDouble(aValue);
     if (nValue == 0)
     {
         nUnit = SmLengthUnit::MlM;

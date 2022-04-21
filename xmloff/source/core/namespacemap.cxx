@@ -27,6 +27,7 @@
 #include <xmloff/namespacemap.hxx>
 
 #include <xmloff/xmlnamespace.hxx>
+#include <o3tl/string_view.hxx>
 
 
 using namespace ::xmloff::token;
@@ -517,9 +518,9 @@ bool SvXMLNamespaceMap::NormalizeOasisURN( OUString& rName )
 
     // :urn:oasis:names:tc:[^:]:xmlns.*
     nPos = nTCIdEnd + 1;
-    OUString sTmp( rName.copy( nPos ) );
+    std::u16string_view sTmp( rName.subView( nPos ) );
     const OUString& rXMLNS = GetXMLToken( XML_XMLNS );
-    if( !sTmp.startsWith( rXMLNS ) )
+    if( !o3tl::starts_with(sTmp, rXMLNS ) )
         return false;
 
     // :urn:oasis:names:tc:[^:]:xmlns:.*
