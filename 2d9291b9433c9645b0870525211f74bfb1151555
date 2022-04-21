@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3bde4c5f_96b454ee",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-21T16:01:10Z",
+      "side": 1,
+      "message": "\u003e Since we can sometimes avoid creating an OUString at all, vs. creating an OUString like the prior code did, the cost will definitely not be worse, and might be considerably better.\n\nMany of the calls to findEntity still pass an OUString (which gets cheaply converted to a std::u16string_view now).  And some of the findEntity implementations then reconstruct an OUString from the passed argument.  Which was not necessary when findEntity took a `OUString const \u0026` argument, but has become an expensive operation now.  That\u0027s the cost I\u0027m concerned about.",
+      "parentUuid": "2f8fe486_985ab3cc",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fb416ca8_8b6dfc28",
         "filename": "unoidl/source/legacyprovider.cxx",
         "patchSetId": 2
