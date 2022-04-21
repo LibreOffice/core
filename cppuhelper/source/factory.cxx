@@ -29,6 +29,7 @@
 #include <rtl/unload.h>
 
 #include <cppuhelper/propshlp.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -700,7 +701,7 @@ Reference< XInterface > ORegistryFactoryHelper::createInstanceWithArgumentsAndCo
 Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
 {
     OUString aActivatorUrl;
-    OUString aActivatorName;
+    std::u16string_view aActivatorName;
     OUString aLocation;
 
     Reference<XRegistryKey > xActivatorKey = xImplementationKey->openKey(
@@ -709,7 +710,7 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
     {
         aActivatorUrl = xActivatorKey->getAsciiValue();
 
-        aActivatorName = aActivatorUrl.getToken(0, ':');
+        aActivatorName = o3tl::getToken(aActivatorUrl, 0, ':');
 
         Reference<XRegistryKey > xLocationKey = xImplementationKey->openKey(
             "/UNO/LOCATION" );
@@ -732,20 +733,20 @@ Reference< XInterface > ORegistryFactoryHelper::createModuleFactory()
             sal_Int32 nPos = aLocation.indexOf("://");
             if( nPos != -1 )
             {
-                aActivatorName = aLocation.copy( 0, nPos );
-                if( aActivatorName == "java" )
-                    aActivatorName = "com.sun.star.loader.Java";
-                else if( aActivatorName == "module" )
-                    aActivatorName = "com.sun.star.loader.SharedLibrary";
+                aActivatorName = aLocation.subView( 0, nPos );
+                if( aActivatorName == u"java" )
+                    aActivatorName = u"com.sun.star.loader.Java";
+                else if( aActivatorName == u"module" )
+                    aActivatorName = u"com.sun.star.loader.SharedLibrary";
                 aLocation = aLocation.copy( nPos + 3 );
             }
         }
     }
 
     Reference< XInterface > xFactory;
-    if( !aActivatorName.isEmpty() )
+    if( !aActivatorName.empty() )
     {
-        Reference<XInterface > x = xSMgr->createInstance( aActivatorName );
+        Reference<XInterface > x = xSMgr->createInstance( OUString(aActivatorName) );
         Reference<XImplementationLoader > xLoader( x, UNO_QUERY );
         if (xLoader.is())
         {

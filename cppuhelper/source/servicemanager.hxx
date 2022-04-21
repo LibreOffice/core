@@ -315,7 +315,7 @@ private:
     void removeEventListenerFromComponent(
         css::uno::Reference< css::lang::XComponent > const & component);
 
-    void readRdbDirectory(OUString const & uri, bool optional);
+    void readRdbDirectory(std::u16string_view uri, bool optional);
 
     void readRdbFile(OUString const & uri, bool optional);
 

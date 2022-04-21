@@ -1873,19 +1873,19 @@ css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
     }
     i = name.lastIndexOf('.');
     if (i != -1) {
-        OUString parent(name.copy(0, i));
+        std::u16string_view parent(name.subView(0, i));
         ent = findEntity(parent);
         if (ent.is()) {
             switch (ent->getSort()) {
             case unoidl::Entity::SORT_ENUM_TYPE:
                 return getEnumMember(
                     static_cast< unoidl::EnumTypeEntity * >(ent.get()),
-                    name.copy(i + 1));
+                    name.subView(i + 1));
             case unoidl::Entity::SORT_CONSTANT_GROUP:
                 return getConstant(
                     parent,
                     static_cast< unoidl::ConstantGroupEntity * >(ent.get()),
-                    name.copy(i + 1));
+                    name.subView(i + 1));
             default:
                 break;
             }
@@ -2026,8 +2026,8 @@ cppuhelper::TypeManager::createTypeDescriptionEnumeration(
 
 void cppuhelper::TypeManager::init(std::u16string_view rdbUris) {
     for (sal_Int32 i = 0; i != -1;) {
-        OUString uri(o3tl::getToken(rdbUris, 0, ' ', i));
-        if (uri.isEmpty()) {
+        std::u16string_view uri(o3tl::getToken(rdbUris, 0, ' ', i));
+        if (uri.empty()) {
             continue;
         }
         bool optional;
@@ -2042,21 +2042,21 @@ void cppuhelper::TypeManager::init(std::u16string_view rdbUris) {
 }
 
 void cppuhelper::TypeManager::readRdbDirectory(
-    OUString const & uri, bool optional)
+    std::u16string_view uri, bool optional)
 {
-    osl::Directory dir(uri);
+    osl::Directory dir = OUString(uri);
     switch (dir.open()) {
     case osl::FileBase::E_None:
         break;
     case osl::FileBase::E_NOENT:
         if (optional) {
-            SAL_INFO("cppuhelper", "Ignored optional " << uri);
+            SAL_INFO("cppuhelper", "Ignored optional " << OUString(uri));
             return;
         }
         [[fallthrough]];
     default:
         throw css::uno::DeploymentException(
-            "Cannot open directory " + uri,
+            OUString::Concat("Cannot open directory ") + uri,
             static_cast< cppu::OWeakObject * >(this));
     }
     for (;;) {
@@ -2069,17 +2069,17 @@ void cppuhelper::TypeManager::readRdbDirectory(
 }
 
 void cppuhelper::TypeManager::readRdbFile(
-    OUString const & uri, bool optional)
+    std::u16string_view uri, bool optional)
 {
     try {
         manager_->addProvider(uri);
     } catch (unoidl::NoSuchFileException &) {
         if (!optional) {
             throw css::uno::DeploymentException(
-                uri + ": no such file",
+                OUString::Concat(uri) + ": no such file",
                 static_cast< cppu::OWeakObject * >(this));
         }
-        SAL_INFO("cppuhelper", "Ignored optional " << uri);
+        SAL_INFO("cppuhelper", "Ignored optional " << OUString(uri));
     } catch (unoidl::FileFormatException & e) {
             throw css::uno::DeploymentException(
                 ("unoidl::FileFormatException for <" + e.getUri() + ">: "
@@ -2265,7 +2265,7 @@ css::uno::Any cppuhelper::TypeManager::getNamed(
 
 css::uno::Any cppuhelper::TypeManager::getEnumMember(
     rtl::Reference< unoidl::EnumTypeEntity > const & entity,
-    OUString const & member)
+    std::u16string_view member)
 {
     auto i = std::find_if(entity->getMembers().begin(), entity->getMembers().end(),
         [&member](const unoidl::EnumTypeEntity::Member& rMember) { return rMember.name == member; });
@@ -2275,16 +2275,16 @@ css::uno::Any cppuhelper::TypeManager::getEnumMember(
 }
 
 css::uno::Any cppuhelper::TypeManager::getConstant(
-    OUString const & constantGroupName,
+    std::u16string_view constantGroupName,
     rtl::Reference< unoidl::ConstantGroupEntity > const & entity,
-    OUString const & member)
+    std::u16string_view member)
 {
     auto i = std::find_if(entity->getMembers().begin(), entity->getMembers().end(),
         [&member](const unoidl::ConstantGroupEntity::Member& rMember) { return rMember.name == member; });
     if (i != entity->getMembers().end())
         return css::uno::makeAny<
             css::uno::Reference< css::reflection::XTypeDescription > >(
-                new ConstantDescription(constantGroupName, *i));
+                new ConstantDescription(OUString(constantGroupName), *i));
     return css::uno::Any();
 }
 

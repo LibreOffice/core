@@ -28,6 +28,7 @@
 #include <osl/module.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <o3tl/string_view.hxx>
 
 #include "paths.hxx"
 
@@ -108,18 +109,18 @@ bool cppu::nextDirectoryItem(osl::Directory & directory, OUString * url) {
     }
 }
 
-void cppu::decodeRdbUri(OUString * uri, bool * optional, bool * directory)
+void cppu::decodeRdbUri(std::u16string_view * uri, bool * optional, bool * directory)
 {
     assert(uri != nullptr && optional != nullptr && directory != nullptr);
-    if(!(uri->isEmpty()))
+    if(!(uri->empty()))
     {
         *optional = (*uri)[0] == '?';
         if (*optional) {
-            *uri = uri->copy(1);
+            *uri = uri->substr(1);
         }
-        *directory = uri->startsWith("<") && uri->endsWith(">*");
+        *directory = o3tl::starts_with(*uri, u"<") && o3tl::ends_with(*uri, u">*");
         if (*directory) {
-            *uri = uri->copy(1, uri->getLength() - 3);
+            *uri = uri->substr(1, uri->size() - 3);
         }
     }
     else
