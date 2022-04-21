@@ -89,9 +89,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
             SCCOL nCol2 = aR.aEnd.Col();
             SCROW nRow2 = aR.aEnd.Row();
             // All cells empty under object?
-            bool bInCell = (pDoc->GetEmptyLinesInBlock(
-                nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
-                == static_cast< SCSIZE >( nRow2 - nRow1 ));    // rows-1 !
+            bool bInCell = pDoc->IsEmptyBlock( nCol1, nRow1, nCol2, nRow2, nTab );
             if ( bInCell )
             {   // Spacing in spanning cell
                 tools::Rectangle aCellRect = pDoc->GetMMRect(

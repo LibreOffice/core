@@ -618,6 +618,7 @@ public:
     SCROW       GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow,
                                 ScDataAreaExtras* pDataAreaExtras = nullptr ) const;
 
+    bool        IsEmptyBlock(SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow) const;
     SCSIZE      GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow, ScDirection eDir ) const;
 
