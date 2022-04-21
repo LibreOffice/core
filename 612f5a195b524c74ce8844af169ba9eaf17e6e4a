@@ -51,6 +51,23 @@
       "parentUuid": "bf46a797_d9231b0f",
       "revId": "612f5a195b524c74ce8844af169ba9eaf17e6e4a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9746ac48_b3777b3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-21T08:49:23Z",
+      "side": 1,
+      "message": "Ok no strong opinion here, let\u0027s abandon this one then.",
+      "revId": "612f5a195b524c74ce8844af169ba9eaf17e6e4a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
