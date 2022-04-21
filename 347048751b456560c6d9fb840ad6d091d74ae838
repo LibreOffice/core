@@ -53,6 +53,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa0a0669_95ab0273",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-21T08:47:32Z",
+      "side": 1,
+      "message": "Forgot to mention the a11y warnings. Labels without buddy relation are suspicious and need special treatment. See https://wiki.documentfoundation.org/Development/Accessibility",
+      "revId": "347048751b456560c6d9fb840ad6d091d74ae838",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69680948_2a74d433",
