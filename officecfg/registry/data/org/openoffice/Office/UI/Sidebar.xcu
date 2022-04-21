@@ -114,7 +114,9 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            any, any, visible ;
+            Calc,           any, visible;
+            DrawImpress,    any, visible;
+            WriterVariants, any, visible;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
@@ -194,7 +196,9 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            any, any, visible ;
+            Calc,           any, visible;
+            DrawImpress,    any, visible;
+            WriterVariants, any, visible;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
@@ -214,7 +218,9 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            any, any, visible ;
+            Calc,           any, visible;
+            DrawImpress,    any, visible;
+            WriterVariants, any, visible;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
@@ -289,26 +295,6 @@
         </prop>
         <prop oor:name="IsExperimental" oor:type="xs:boolean">
           <value>true</value>
-        </prop>
-      </node>
-
-      <node oor:name="ChartDeck" oor:op="replace">
-        <prop oor:name="Title" oor:type="xs:string">
-          <value xml:lang="en-US">Properties</value>
-        </prop>
-        <prop oor:name="Id" oor:type="xs:string">
-          <value>ChartDeck</value>
-        </prop>
-        <prop oor:name="IconURL" oor:type="xs:string">
-          <value>private:graphicrepository/sfx2/res/symphony/sidebar-property-large.png</value>
-        </prop>
-        <prop oor:name="ContextList">
-          <value oor:separator=";">
-            Chart, any, visible ;
-          </value>
-        </prop>
-        <prop oor:name="OrderIndex" oor:type="xs:int">
-          <value>10</value>
         </prop>
       </node>
 
@@ -1649,7 +1635,7 @@
           <value>ChartElementsPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
+          <value>PropertyDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
@@ -1675,7 +1661,7 @@
           <value>ChartSeriesPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
+          <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
           <value>.uno:ChartProperties</value>
@@ -1704,7 +1690,7 @@
           <value>ChartErrorBarPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
+          <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
           <value>.uno:ChartProperties</value>
@@ -1733,7 +1719,7 @@
           <value>ChartAxisPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
+          <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
           <value>.uno:ChartProperties</value>
@@ -1762,7 +1748,7 @@
           <value>ChartAreaPanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
+          <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
           <value>.uno:ChartProperties</value>
@@ -1792,7 +1778,7 @@
           <value>ChartLinePanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
+          <value>PropertyDeck</value>
         </prop>
         <prop oor:name="DefaultMenuCommand">
           <value>.uno:ChartProperties</value>
@@ -1858,7 +1844,7 @@
           <value>ChartTypePanel</value>
         </prop>
         <prop oor:name="DeckId" oor:type="xs:string">
-          <value>ChartDeck</value>
+          <value>PropertyDeck</value>
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
