@@ -218,6 +218,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         rReq.Done();
         break;
 
+    case FN_INSERT_CONTENT_CONTROL:
+        rSh.InsertContentControl();
+        rReq.Done();
+        break;
+
     case FN_INSERT_COLUMN_BREAK:
         rSh.InsertColumnBreak();
         rReq.Done();

@@ -90,6 +90,22 @@ CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
     sal_Int32 nEnd = pWrtShell->GetCursor()->End()->nContent.GetIndex();
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), nEnd);
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testInsertContentControl)
+{
+    // Given an empty document:
+    SwDoc* pDoc = createSwDoc();
+
+    // When inserting a content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->InsertContentControl();
+
+    // Then make sure that the matching text attribute is added to the document model:
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    // Without the accompanying fix in place, this test would have failed, nothing happened on
+    // InsertContentControl().
+    CPPUNIT_ASSERT(pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL));
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
