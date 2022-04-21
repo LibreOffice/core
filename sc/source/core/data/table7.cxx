@@ -321,7 +321,7 @@ void ScTable::EndListeningIntersectedGroups(
     if (nCol2 < nCol1 || !IsColValid(nCol1) || !ValidCol(nCol2))
         return;
 
-    for (SCCOL nCol : GetColumnsRange(nCol1, nCol2))
+    for (SCCOL nCol : GetAllocatedColumnsRange(nCol1, nCol2))
         aCol[nCol].EndListeningIntersectedGroups(rCxt, nRow1, nRow2, pGroupPos);
 }
 

@@ -664,7 +664,7 @@ void DifAttrCache::SetNumFormat( const ScDocument* pDoc, const SCCOL nCol, const
 
 void DifAttrCache::Apply( ScDocument& rDoc, SCTAB nTab )
 {
-    for( SCCOL nCol : rDoc.GetColumnsRange(nTab, 0, rDoc.MaxCol()) )
+    for( SCCOL nCol : rDoc.GetWritableColumnsRange(nTab, 0, rDoc.MaxCol()) )
     {
         if( maColMap.count(nCol) )
             maColMap[ nCol ]->Apply( rDoc, nCol, nTab );

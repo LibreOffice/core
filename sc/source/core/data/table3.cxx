@@ -1926,12 +1926,12 @@ public:
         SCCOL nStartCol = mrParam.nCol1;
         SCCOL nEndCol = mrParam.nCol2;
 
-        for (SCCOL nCol : mrTab.GetColumnsRange(0, nStartCol - 1))
+        for (SCCOL nCol : mrTab.GetAllocatedColumnsRange(0, nStartCol - 1))
         {
             if (mrTab.HasData(nCol, nRow))
                 return true;
         }
-        for (SCCOL nCol : mrTab.GetColumnsRange(nEndCol + 1, mrTab.GetDoc().MaxCol()))
+        for (SCCOL nCol : mrTab.GetAllocatedColumnsRange(nEndCol + 1, mrTab.GetDoc().MaxCol()))
         {
             if (mrTab.HasData(nCol, nRow))
                 return true;
