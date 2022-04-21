@@ -22,7 +22,6 @@
 #include <RangeSelectionHelper.hxx>
 #include <helpids.h>
 #include <chartview/ChartSfxItemIds.hxx>
-#include <com/sun/star/chart2/XChartDocument.hpp>
 #include <vcl/weld.hxx>
 #include <ChartModel.hxx>
 

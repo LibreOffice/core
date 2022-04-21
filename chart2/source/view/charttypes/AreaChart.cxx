@@ -40,7 +40,6 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 

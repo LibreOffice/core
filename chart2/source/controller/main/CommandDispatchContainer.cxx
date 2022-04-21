@@ -26,7 +26,6 @@
 #include <ChartModel.hxx>
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
-#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <rtl/ref.hxx>
 
