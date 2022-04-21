@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8fe486_985ab3cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-21T13:56:33Z",
+      "side": 1,
+      "message": "No.\n\nSince we can sometimes avoid creating an OUString at all, vs. creating an OUString like the prior code did, the cost will definitely not be worse, and might be considerably better.\n\nAn std::u16string_view is essentially free, since it is just a pointer and length, and the associated data is already (probably) in L1 cache.\n\nCreating an OUString requires malloc, which requires taking a lock, which is surprisingly expensive - malloc is almost always near the top of the list of hot functions in any performance profile.",
+      "parentUuid": "0bc1570d_c708a673",
+      "revId": "2d9291b9433c9645b0870525211f74bfb1151555",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb416ca8_8b6dfc28",
