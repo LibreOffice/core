@@ -318,7 +318,7 @@ ScTable::~ScTable() COVERITY_NOEXCEPT_FALSE
 {
     if (!rDocument.IsInDtorClear())
     {
-        for (SCCOL nCol = 0; nCol < (aCol.size() - 1); ++nCol)
+        for (SCCOL nCol = 0; nCol < aCol.size(); ++nCol)
         {
             aCol[nCol].FreeNotes();
         }
