@@ -742,14 +742,14 @@ void OTableEditorCtrl::CopyRows()
 OUString OTableEditorCtrl::GenerateName( const OUString& rName )
 {
     // Create a base name for appending numbers to
-    OUString aBaseName;
+    std::u16string_view aBaseName;
     Reference<XConnection> xCon = GetView()->getController().getConnection();
     Reference< XDatabaseMetaData> xMetaData = xCon.is() ? xCon->getMetaData() : Reference< XDatabaseMetaData>();
 
     sal_Int32 nMaxTextLen(xMetaData.is() ? xMetaData->getMaxColumnNameLength() : 0);
 
     if( (rName.getLength()+2) >nMaxTextLen )
-        aBaseName = rName.copy( 0, nMaxTextLen-2 );
+        aBaseName = rName.subView( 0, nMaxTextLen-2 );
     else
         aBaseName = rName;
 

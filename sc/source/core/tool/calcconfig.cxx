@@ -15,6 +15,7 @@
 #include <rtl/ustring.hxx>
 #include <sal/log.hxx>
 #include <unotools/configmgr.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <calcconfig.hxx>
 
@@ -216,17 +217,17 @@ ScCalcConfig::OpCodeSet ScStringToOpCodeSet(std::u16string_view rOpCodes)
     {
         if (semicolon > fromIndex)
         {
-            OUString element(s.copy(fromIndex, semicolon - fromIndex));
-            sal_Int32 n = element.toInt32();
-            if (n > 0 || (n == 0 && element == "0"))
+            std::u16string_view element(s.subView(fromIndex, semicolon - fromIndex));
+            sal_Int32 n = o3tl::toInt32(element);
+            if (n > 0 || (n == 0 && element == u"0"))
                 result->insert(static_cast<OpCode>(n));
             else
             {
-                auto opcode(rHashMap.find(element));
+                auto opcode(rHashMap.find(OUString(element)));
                 if (opcode != rHashMap.end())
                     result->insert(opcode->second);
                 else
-                    SAL_WARN("sc.opencl", "Unrecognized OpCode " << element << " in OpCode set string");
+                    SAL_WARN("sc.opencl", "Unrecognized OpCode " << OUString(element) << " in OpCode set string");
             }
         }
         fromIndex = semicolon+1;

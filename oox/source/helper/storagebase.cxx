@@ -33,22 +33,22 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, const OUString& _aFullName )
+void lclSplitFirstElement( OUString& orElement, OUString& orRemainder, std::u16string_view _aFullName )
 {
-    OUString aFullName = _aFullName;
-    sal_Int32  nSlashPos = aFullName.indexOf( '/' );
+    std::u16string_view aFullName = _aFullName;
+    size_t nSlashPos = aFullName.find( '/' );
 
     // strip leading slashes
     while( nSlashPos == 0 )
     {
-        aFullName = aFullName.copy(1);
-        nSlashPos = aFullName.indexOf( '/' );
+        aFullName = aFullName.substr(1);
+        nSlashPos = aFullName.find( '/' );
     }
 
-    if( (0 <= nSlashPos) && (nSlashPos < aFullName.getLength()) )
+    if( (0 <= nSlashPos) && (nSlashPos < aFullName.size()) )
     {
-        orElement = aFullName.copy( 0, nSlashPos );
-        orRemainder = aFullName.copy( nSlashPos + 1 );
+        orElement = aFullName.substr( 0, nSlashPos );
+        orRemainder = aFullName.substr( nSlashPos + 1 );
     }
     else
     {
@@ -116,7 +116,7 @@ void StorageBase::getElementNames( ::std::vector< OUString >& orElementNames ) c
     implGetElementNames( orElementNames );
 }
 
-StorageRef StorageBase::openSubStorage( const OUString& rStorageName, bool bCreateMissing )
+StorageRef StorageBase::openSubStorage( std::u16string_view rStorageName, bool bCreateMissing )
 {
     StorageRef xSubStorage;
     OSL_ENSURE( !bCreateMissing || !mbReadOnly, "StorageBase::openSubStorage - cannot create substorage in read-only mode" );
@@ -132,7 +132,7 @@ StorageRef StorageBase::openSubStorage( const OUString& rStorageName, bool bCrea
     return xSubStorage;
 }
 
-Reference< XInputStream > StorageBase::openInputStream( const OUString& rStreamName )
+Reference< XInputStream > StorageBase::openInputStream( std::u16string_view rStreamName )
 {
     Reference< XInputStream > xInStream;
     OUString aElement, aRemainder;
@@ -157,7 +157,7 @@ Reference< XInputStream > StorageBase::openInputStream( const OUString& rStreamN
     return xInStream;
 }
 
-Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStreamName )
+Reference< XOutputStream > StorageBase::openOutputStream( std::u16string_view rStreamName )
 {
     Reference< XOutputStream > xOutStream;
     OSL_ENSURE( !mbReadOnly, "StorageBase::openOutputStream - cannot create output stream in read-only mode" );
@@ -186,11 +186,11 @@ Reference< XOutputStream > StorageBase::openOutputStream( const OUString& rStrea
     return xOutStream;
 }
 
-void StorageBase::copyToStorage( StorageBase& rDestStrg, const OUString& rElementName )
+void StorageBase::copyToStorage( StorageBase& rDestStrg, std::u16string_view rElementName )
 {
     OSL_ENSURE( rDestStrg.isStorage() && !rDestStrg.isReadOnly(), "StorageBase::copyToStorage - invalid destination" );
-    OSL_ENSURE( !rElementName.isEmpty(), "StorageBase::copyToStorage - invalid element name" );
-    if( !rDestStrg.isStorage() || rDestStrg.isReadOnly() || rElementName.isEmpty() )
+    OSL_ENSURE( !rElementName.empty(), "StorageBase::copyToStorage - invalid element name" );
+    if( !rDestStrg.isStorage() || rDestStrg.isReadOnly() || rElementName.empty() )
         return;
 
     StorageRef xSubStrg = openSubStorage( rElementName, false );

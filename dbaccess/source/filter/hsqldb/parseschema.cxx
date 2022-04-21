@@ -60,9 +60,14 @@ public:
     {
         assert(isIndexStatement());
 
-        OUString sIndexPart = m_sql.copy(m_sql.indexOf("INDEX") + 5);
-        sal_Int32 nQuotePos = sIndexPart.indexOf("'") + 1;
-        OUString sIndexNums = sIndexPart.copy(nQuotePos, sIndexPart.lastIndexOf("'") - nQuotePos);
+        std::u16string_view sIndexPart = m_sql.subView(m_sql.indexOf("INDEX") + 5);
+        size_t nQuotePos = sIndexPart.find('\'');
+        if (nQuotePos == std::u16string_view::npos)
+            nQuotePos = 0;
+        else
+            ++nQuotePos;
+        std::u16string_view sIndexNums
+            = sIndexPart.substr(nQuotePos, sIndexPart.rfind('\'') - nQuotePos);
 
         std::vector<OUString> sIndexes = string::split(sIndexNums, u' ');
         IndexVector indexes;

@@ -586,10 +586,10 @@ namespace frm
         }
 
         // is it a UNO slot?
-        OUString sUnoProtocolPrefix( ".uno:" );
+        static constexpr std::u16string_view sUnoProtocolPrefix( u".uno:" );
         if ( _rURL.Complete.startsWith( sUnoProtocolPrefix ) )
         {
-            OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.getLength() );
+            OUString sUnoSlotName = _rURL.Complete.copy( sUnoProtocolPrefix.size() );
             SfxSlotId nSlotId = lcl_getSlotFromUnoName( SfxSlotPool::GetSlotPool(), sUnoSlotName );
             if ( nSlotId > 0 )
             {

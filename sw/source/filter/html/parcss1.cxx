@@ -1118,32 +1118,32 @@ CSS1Parser::~CSS1Parser()
 {
 }
 
-void CSS1Parser::ParseStyleSheet( const OUString& rIn )
+void CSS1Parser::ParseStyleSheet( std::u16string_view rIn )
 {
-    OUString aTmp( rIn );
+    std::u16string_view aTmp( rIn );
 
     sal_Unicode c;
-    while( !aTmp.isEmpty() &&
+    while( !aTmp.empty() &&
            ( ' '==(c=aTmp[0]) || '\t'==c || '\r'==c || '\n'==c ) )
-        aTmp = aTmp.copy( 1 );
+        aTmp = aTmp.substr( 1 );
 
-    while( !aTmp.isEmpty() && ( ' '==(c=aTmp[aTmp.getLength()-1])
+    while( !aTmp.empty() && ( ' '==(c=aTmp[aTmp.size()-1])
            || '\t'==c || '\r'==c || '\n'==c ) )
-        aTmp = aTmp.copy( 0, aTmp.getLength()-1 );
+        aTmp = aTmp.substr( 0, aTmp.size()-1 );
 
     // remove SGML comments
-    if( aTmp.getLength() >= 4 &&
-        aTmp.startsWith( "<!--" ) )
-        aTmp = aTmp.copy( 4 );
+    if( aTmp.size() >= 4 &&
+        o3tl::starts_with(aTmp, u"<!--" ) )
+        aTmp = aTmp.substr( 4 );
 
-    if( aTmp.getLength() >=3 &&
-        aTmp.endsWith("-->") )
-        aTmp = aTmp.copy( 0, aTmp.getLength() - 3 );
+    if( aTmp.size() >=3 &&
+        o3tl::ends_with(aTmp, u"-->") )
+        aTmp = aTmp.substr( 0, aTmp.size() - 3 );
 
-    if( aTmp.isEmpty() )
+    if( aTmp.empty() )
         return;
 
-    InitRead( aTmp );
+    InitRead( OUString(aTmp) );
 
     ParseStyleSheet();
 }

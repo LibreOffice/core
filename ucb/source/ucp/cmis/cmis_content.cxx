@@ -46,6 +46,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <config_oauth2.h>
 #include <o3tl/runtimetooustring.hxx>
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/long.hxx>
@@ -696,16 +697,16 @@ namespace cmis
                     // Nothing worked... get it from the path
                     if ( sTitle.isEmpty( ) )
                     {
-                        OUString sPath = m_sObjectPath;
+                        std::u16string_view sPath = m_sObjectPath;
 
                         // Get rid of the trailing slash problem
-                        if ( sPath.endsWith("/") )
-                            sPath = sPath.copy( 0, sPath.getLength() - 1 );
+                        if ( o3tl::ends_with(sPath, u"/") )
+                            sPath = sPath.substr( 0, sPath.size() - 1 );
 
                         // Get the last segment
-                        sal_Int32 nPos = sPath.lastIndexOf( '/' );
-                        if ( nPos >= 0 )
-                            sTitle = sPath.copy( nPos + 1 );
+                        size_t nPos = sPath.rfind( '/' );
+                        if ( nPos != std::u16string_view::npos )
+                            sTitle = sPath.substr( nPos + 1 );
                     }
 
                     if ( !sTitle.isEmpty( ) )

@@ -676,7 +676,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
         // If numbering is disabled for this level we should emit just prefix/suffix
         // Remove everything between first %1% and last %n% (including markers)
-        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings);
+        OUString sLevelFormat( rMyNFormat.GetListFormat(bInclStrings) );
         sal_Int32 nFirstPosition = sLevelFormat.indexOf("%");
         sal_Int32 nLastPosition = sLevelFormat.lastIndexOf("%");
         if (nFirstPosition >= 0 && nLastPosition >= nFirstPosition)
@@ -688,7 +688,7 @@ OUString SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVecto
 
     if (rMyNFormat.HasListFormat())
     {
-        OUString sLevelFormat = rMyNFormat.GetListFormat(bInclStrings);
+        OUString sLevelFormat( rMyNFormat.GetListFormat(bInclStrings) );
 
         // In this case we are ignoring GetIncludeUpperLevels: we put all
         // level numbers requested by level format

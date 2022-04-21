@@ -2038,7 +2038,7 @@ template<typename T > static void lcl_Format( T& r, SCTAB nTab, SCROW nRow, SCCO
                     {
                         lcl_string_append(r.append("'["), aDocName);
                         r.append("]");
-                        lcl_string_append(r, aTabName.copy(1));
+                        lcl_string_append(r, aTabName.subView(1));
                     }
                     else
                     {

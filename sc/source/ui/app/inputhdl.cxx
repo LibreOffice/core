@@ -1415,15 +1415,15 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
             sal_uInt32 nCurIndex = std::distance(aPos, miAutoPosFormula);
             const sal_uInt32 nSize = pFormulaData->size();
 
-            OUString aFuncNameStr;
             OUString aDescFuncNameStr;
             OStringBuffer aPayload;
             aPayload.append("[ ");
             for (const OUString& rFunc : rFuncStrVec)
             {
+                std::u16string_view aFuncNameStr;
                 if ( rFunc[rFunc.getLength()-1] == cParenthesesReplacement )
                 {
-                    aFuncNameStr = rFunc.copy(0, rFunc.getLength()-1);
+                    aFuncNameStr = rFunc.subView(0, rFunc.getLength()-1);
                 }
                 else
                 {
@@ -1431,7 +1431,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
                 }
 
                 FormulaHelper aHelper(ScGlobal::GetStarCalcFunctionMgr());
-                aDescFuncNameStr = aFuncNameStr + "()";
+                aDescFuncNameStr = OUString::Concat(aFuncNameStr) + "()";
                 sal_Int32 nNextFStart = 0;
                 const IFunctionDescription* ppFDesc;
                 ::std::vector< OUString > aArgs;
@@ -1468,7 +1468,6 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     }
 
     OUStringBuffer aTipStr;
-    OUString aFuncNameStr;
     OUString aDescFuncNameStr;
     ::std::vector<OUString>::const_iterator itStr = rFuncStrVec.begin();
     sal_Int32 nMaxFindNumber = 3;
@@ -1476,9 +1475,10 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
     for ( ; itStr != rFuncStrVec.end(); ++itStr )
     {
         const OUString& rFunc = *itStr;
+        std::u16string_view aFuncNameStr;
         if ( rFunc[rFunc.getLength()-1] == cParenthesesReplacement )
         {
-            aFuncNameStr = rFunc.copy(0, rFunc.getLength()-1);
+            aFuncNameStr = rFunc.subView(0, rFunc.getLength()-1);
         }
         else
         {
@@ -1487,7 +1487,7 @@ void ScInputHandler::ShowFuncList( const ::std::vector< OUString > & rFuncStrVec
         if ( itStr == rFuncStrVec.begin() )
         {
             aTipStr = "[";
-            aDescFuncNameStr = aFuncNameStr + "()";
+            aDescFuncNameStr = OUString::Concat(aFuncNameStr) + "()";
         }
         else
         {

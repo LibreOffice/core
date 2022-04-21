@@ -58,6 +58,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 #include <mutex>
 #include <string_view>
@@ -243,11 +244,11 @@ sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
-        OUString    aTmpStr     = aResourceURL.copy( RESOURCEURL_PREFIX_SIZE );
-        sal_Int32   nIndex      = aTmpStr.indexOf( '/' );
-        if (( nIndex > 0 ) &&  ( aTmpStr.getLength() > nIndex ))
+        std::u16string_view aTmpStr = aResourceURL.subView( RESOURCEURL_PREFIX_SIZE );
+        size_t nIndex = aTmpStr.find( '/' );
+        if (( nIndex > 0 ) &&  ( aTmpStr.size() > nIndex ))
         {
-            OUString aTypeStr( aTmpStr.copy( 0, nIndex ));
+            std::u16string_view aTypeStr( aTmpStr.substr( 0, nIndex ));
             for ( int i = 0; i < ui::UIElementType::COUNT; i++ )
             {
                 if ( aTypeStr == UIELEMENTTYPENAMES[i] )
@@ -259,17 +260,17 @@ sal_Int16 RetrieveTypeFromResourceURL( const OUString& aResourceURL )
     return ui::UIElementType::UNKNOWN;
 }
 
-OUString RetrieveNameFromResourceURL( const OUString& aResourceURL )
+std::u16string_view RetrieveNameFromResourceURL( const OUString& aResourceURL )
 {
     if (( aResourceURL.startsWith( RESOURCEURL_PREFIX ) ) &&
         ( aResourceURL.getLength() > RESOURCEURL_PREFIX_SIZE ))
     {
         sal_Int32 nIndex = aResourceURL.lastIndexOf( '/' );
         if (( nIndex > 0 ) && (( nIndex+1 ) < aResourceURL.getLength()))
-            return aResourceURL.copy( nIndex+1 );
+            return aResourceURL.subView( nIndex+1 );
     }
 
-    return OUString();
+    return std::u16string_view();
 }
 
 void ModuleUIConfigurationManager::impl_fillSequenceWithElementTypeInfo( UIElementInfoHashMap& aUIElementInfoCollection, sal_Int16 nElementType )
@@ -375,11 +376,11 @@ void ModuleUIConfigurationManager::impl_preloadUIElementTypeList( Layer eLayer, 
         sal_Int32 nIndex = rElementName.lastIndexOf( '.' );
         if (( nIndex > 0 ) && ( nIndex < rElementName.getLength() ))
         {
-            OUString aExtension( rElementName.copy( nIndex+1 ));
-            OUString aUIElementName( rElementName.copy( 0, nIndex ));
+            std::u16string_view aExtension( rElementName.subView( nIndex+1 ));
+            std::u16string_view aUIElementName( rElementName.subView( 0, nIndex ));
 
-            if (!aUIElementName.isEmpty() &&
-                ( aExtension.equalsIgnoreAsciiCase("xml")))
+            if (!aUIElementName.empty() &&
+                ( o3tl::equalsIgnoreAsciiCase(aExtension, u"xml")))
             {
                 aUIElementData.aResourceURL = aResURLPrefix + aUIElementName;
                 aUIElementData.aName        = rElementName;

@@ -1738,14 +1738,14 @@ void ContentNode::Erase(sal_Int32 nPos, sal_Int32 nCount)
     maString = maString.replaceAt(nPos, nCount, u"");
 }
 
-OUString ContentNode::Copy(sal_Int32 nPos) const
+std::u16string_view ContentNode::Copy(sal_Int32 nPos) const
 {
-    return maString.copy(nPos);
+    return maString.subView(nPos);
 }
 
-OUString ContentNode::Copy(sal_Int32 nPos, sal_Int32 nCount) const
+std::u16string_view ContentNode::Copy(sal_Int32 nPos, sal_Int32 nCount) const
 {
-    return maString.copy(nPos, nCount);
+    return maString.subView(nPos, nCount);
 }
 
 sal_Unicode ContentNode::GetChar(sal_Int32 nPos) const
@@ -2268,7 +2268,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, bool bKeepEndingAttribs )
     assert(aPaM.GetNode());
     ContentNode* pCurNode = aPaM.GetNode();
     sal_Int32 nPos = GetPos( pCurNode );
-    OUString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
+    OUString aStr( aPaM.GetNode()->Copy( aPaM.GetIndex() ) );
     aPaM.GetNode()->Erase( aPaM.GetIndex() );
 
     // the paragraph attributes...

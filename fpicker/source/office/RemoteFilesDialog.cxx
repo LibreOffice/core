@@ -1075,15 +1075,15 @@ void RemoteFilesDialog::UpdateControls( const OUString& rURL )
     for(const auto & rFolder : rFolders)
     {
         //WebDAV folders path ends in '/', so strip it
-        OUString aFolderName = rFolder.maURL;
-        if( rFolder.mbIsFolder && ( ( aFolderName.lastIndexOf( '/' ) + 1 ) == aFolderName.getLength() ) )
-            aFolderName = aFolderName.copy( 0, aFolderName.getLength() - 1 );
+        std::u16string_view aFolderName = rFolder.maURL;
+        if( rFolder.mbIsFolder && ( ( aFolderName.rfind( '/' ) + 1 ) == aFolderName.size() ) )
+            aFolderName = aFolderName.substr( 0, aFolderName.size() - 1 );
 
-        int nTitleStart = aFolderName.lastIndexOf( '/' );
-        if( nTitleStart != -1 )
+        size_t nTitleStart = aFolderName.rfind( '/' );
+        if( nTitleStart != std::u16string_view::npos )
         {
             OUString sTitle( INetURLObject::decode(
-                                aFolderName.subView( nTitleStart + 1 ),
+                                aFolderName.substr( nTitleStart + 1 ),
                                 INetURLObject::DecodeMechanism::WithCharset ) );
 
             if( rFolder.mbIsFolder )

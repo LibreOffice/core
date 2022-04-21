@@ -127,9 +127,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     {
         sal_Int32 nLen = url.indexOf(':');
         nLen = url.indexOf(':',nLen+1);
-        OUString aDSN(url.copy(nLen+1));
+        std::u16string_view aDSN(url.subView(nLen+1));
 
-        OUString aFileName = aDSN;
+        OUString aFileName( aDSN );
         INetURLObject aURL;
         aURL.SetSmartProtocol(INetProtocol::File);
         if (!utl::ConfigManager::IsFuzzing())

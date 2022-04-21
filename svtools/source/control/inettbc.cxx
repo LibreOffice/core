@@ -687,7 +687,7 @@ bool SvtURLBox_Impl::TildeParsing(
         {
             // covers "~username" and "~username/..." cases
             sal_Int32 nNameEnd = aText.indexOf( '/' );
-            OUString aUserName = aText.copy( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
+            std::u16string_view aUserName = aText.subView( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
 
             struct passwd* pPasswd = nullptr;
 #ifdef __sun

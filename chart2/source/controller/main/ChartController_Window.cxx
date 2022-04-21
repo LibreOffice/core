@@ -85,6 +85,7 @@
 #include <svtools/acceleratorexecute.hxx>
 #include <tools/diagnose_ex.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <boost/property_tree/json_parser.hpp>
 #include <sfx2/dispatch.hxx>
@@ -2086,8 +2087,8 @@ void ChartController::sendPopupRequest(OUString const & rCID, tools::Rectangle a
     sal_Int32 nStartPos = rCID.lastIndexOf('.');
     nStartPos++;
     sal_Int32 nEndPos = rCID.getLength();
-    OUString sDimensionIndex = rCID.copy(nStartPos, nEndPos - nStartPos);
-    sal_Int32 nDimensionIndex = sDimensionIndex.toInt32();
+    std::u16string_view sDimensionIndex = rCID.subView(nStartPos, nEndPos - nStartPos);
+    sal_Int32 nDimensionIndex = o3tl::toInt32(sDimensionIndex);
 
     awt::Rectangle xRectangle {
         sal_Int32(aRectangle.Left()),

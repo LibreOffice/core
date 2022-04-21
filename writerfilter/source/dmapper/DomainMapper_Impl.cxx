@@ -5467,13 +5467,14 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
     if (nEnd <= nIndex)
         return;
 
-    OUString sRubyParts = rCommand.copy(nIndex+1,nEnd-nIndex-1);
-    nIndex = 0;
-    OUString sPart1 = sRubyParts.getToken(0, ',', nIndex);
-    OUString sPart2 = sRubyParts.getToken(0, ',', nIndex);
-    if ((nIndex = sPart1.indexOf('(')) != -1 && (nEnd = sPart1.lastIndexOf(')'))!=-1  && nEnd > nIndex)
+    std::u16string_view sRubyParts = rCommand.subView(nIndex+1,nEnd-nIndex-1);
+    size_t nIndex2 = 0;
+    size_t nEnd2 = 0;
+    std::u16string_view sPart1 = o3tl::getToken(sRubyParts, 0, ',', nIndex);
+    std::u16string_view sPart2 = o3tl::getToken(sRubyParts, 0, ',', nIndex);
+    if ((nIndex2 = sPart1.find('(')) != std::u16string_view::npos && (nEnd2 = sPart1.rfind(')')) != std::u16string_view::npos  && nEnd2 > nIndex2)
     {
-        aInfo.sRubyText = sPart1.copy(nIndex+1,nEnd-nIndex-1);
+        aInfo.sRubyText = sPart1.substr(nIndex2+1,nEnd2-nIndex2-1);
     }
 
     PropertyMapPtr pRubyContext(new PropertyMap());
@@ -5497,7 +5498,7 @@ void  DomainMapper_Impl::handleRubyEQField( const FieldContextPtr& pContext)
     if ( aInfo.nRubyAlign == NS_ooxml::LN_Value_ST_RubyAlign_rightVertical )
         pCharContext->Insert(PROP_RUBY_POSITION, uno::makeAny(css::text::RubyPosition::INTER_CHARACTER));
     pCharContext->Insert(PROP_RUBY_STYLE, uno::makeAny(aInfo.sRubyStyle));
-    appendTextPortion(sPart2, pCharContext);
+    appendTextPortion(OUString(sPart2), pCharContext);
 
 }
 

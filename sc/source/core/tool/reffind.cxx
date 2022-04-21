@@ -291,7 +291,7 @@ void ScRefFinder::ToggleRel( sal_Int32 nStartPos, sal_Int32 nEndPos )
                 if (nSep >= 0)
                 {
                     OUString aRef = aExpr.copy(nSep+1);
-                    OUString aExtDocNameTabName = aExpr.copy(0, nSep+1);
+                    std::u16string_view aExtDocNameTabName = aExpr.subView(0, nSep+1);
                     nResult = aAddr.Parse(aRef, mrDoc, aDetails);
                     aAddr.SetTab(0); // force to first tab to avoid error on checking
                     nFlags = lcl_NextFlags( nResult );

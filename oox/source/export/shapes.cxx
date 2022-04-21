@@ -2270,7 +2270,7 @@ ShapeExport& ShapeExport::WriteOLE2Shape( const Reference< XShape >& xShape )
     OUString sFileName = "embeddings/oleObject" + OUString::number(++m_nEmbeddedObjects) + "." + sSuffix;
     uno::Reference<io::XOutputStream> const xOutStream(
         mpFB->openFragmentStream(
-            OUString::createFromAscii(GetComponentDir()) + "/" + sFileName,
+            rtl::OUStringConcatenation(OUString::createFromAscii(GetComponentDir()) + "/" + sFileName),
             sMediaType));
     assert(xOutStream.is()); // no reason why that could fail
 
