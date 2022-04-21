@@ -23,7 +23,6 @@
 
 #include "WrappedAxisAndGridExistenceProperties.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <Axis.hxx>
 #include <AxisHelper.hxx>
 #include <WrappedProperty.hxx>

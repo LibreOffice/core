@@ -20,7 +20,6 @@
 #include <PositionAndSizeHelper.hxx>
 #include <ControllerLockGuard.hxx>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
-#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include <tools/gen.hxx>

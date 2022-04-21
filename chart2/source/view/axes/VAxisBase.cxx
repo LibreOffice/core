@@ -22,9 +22,7 @@
 #include <ExplicitCategoriesProvider.hxx>
 #include "Tickmarks.hxx"
 #include <Axis.hxx>
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
-#include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 
 #include <osl/diagnose.h>

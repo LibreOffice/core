@@ -23,7 +23,6 @@
 #include <servicenames.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/frame/XModel.hpp>
 
 namespace com::sun::star::awt { class XWindow; }
 

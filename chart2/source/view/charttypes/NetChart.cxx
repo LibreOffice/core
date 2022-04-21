@@ -35,7 +35,6 @@
 
 #include <osl/diagnose.h>
 
-#include <com/sun/star/drawing/XShapes.hpp>
 #include <officecfg/Office/Compatibility.hxx>
 
 #include <limits>

@@ -26,7 +26,6 @@
 #include <ChartModelHelper.hxx>
 #include <ChartModel.hxx>
 #include <Diagram.hxx>
-#include <com/sun/star/chart2/XDiagram.hpp>
 
 namespace chart
 {

@@ -19,7 +19,6 @@
 
 #include "Splines.hxx"
 #include <osl/diagnose.h>
-#include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 
 #include <vector>

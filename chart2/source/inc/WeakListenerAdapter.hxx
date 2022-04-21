@@ -19,7 +19,6 @@
 #pragma once
 
 #include <com/sun/star/lang/XEventListener.hpp>
-#include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/view/XSelectionChangeListener.hpp>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase.hxx>

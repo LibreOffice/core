@@ -15,7 +15,6 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <CommonConverters.hxx>
 #include <editeng/unoprnms.hxx>
