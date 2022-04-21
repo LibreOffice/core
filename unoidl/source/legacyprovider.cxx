@@ -813,10 +813,9 @@ rtl::Reference< MapCursor > LegacyProvider::createRootCursor() const {
     return new Cursor(&manager_, ucr_, ucr_);
 }
 
-rtl::Reference< Entity > LegacyProvider::findEntity(std::u16string_view name)
+rtl::Reference< Entity > LegacyProvider::findEntity(OUString const & s)
     const
 {
-    OUString s(name);
     return ucr_.isValid()
         ? readEntity(&manager_, ucr_, ucr_, s.replace('.', '/'), true)
         : rtl::Reference< Entity >();

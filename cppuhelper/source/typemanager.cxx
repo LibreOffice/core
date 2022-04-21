@@ -2102,7 +2102,7 @@ css::uno::Any cppuhelper::TypeManager::getInstantiatedStruct(
     OUString const & name, sal_Int32 separator)
 {
     assert(name.indexOf('<') == separator && separator != -1);
-    rtl::Reference< unoidl::Entity > ent(findEntity(name.subView(0, separator)));
+    rtl::Reference< unoidl::Entity > ent(findEntity(name.copy(0, separator)));
     if (!ent.is()
         || (ent->getSort()
             != unoidl::Entity::SORT_POLYMORPHIC_STRUCT_TYPE_TEMPLATE))
@@ -2289,7 +2289,7 @@ css::uno::Any cppuhelper::TypeManager::getConstant(
 }
 
 rtl::Reference< unoidl::Entity > cppuhelper::TypeManager::findEntity(
-    std::u16string_view name)
+    OUString const & name)
 {
     try {
         return manager_->findEntity(name);
