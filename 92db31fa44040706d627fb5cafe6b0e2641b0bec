@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cd3e6c7_6a7693d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000062
+      },
+      "writtenOn": "2022-04-21T19:20:52Z",
+      "side": 1,
+      "message": "After five iterations, with no changes to the code, it passes CI. Nice.",
+      "revId": "92db31fa44040706d627fb5cafe6b0e2641b0bec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
