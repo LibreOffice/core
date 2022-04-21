@@ -105,6 +105,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "330a7f76_32168d85",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-21T10:36:33Z",
+      "side": 1,
+      "message": "A question of clarification: as noted in a comment on the source code, I believe that the shortcuts depend on the language of the UI. (that was implied partly by Miklos\u0027s comment).\n\nI am not able to test this patch, but I attempted a similar experiment with LO.  Choose German UI.\nAdd Zeichen... to Alt+Z (for LibreOffice). Now Alt+Z will open the Character dialog, but if I change the UI to English or French, then Alt+Z is not configured.  \n\nIn other words, it seems, at least empirically, that LO will save different accelerators according to which language is used for the UI.  And I get the impression that \u003cvalue xml:lang\u003dde\"\u003e can be used in the .xcu file to specify which UI languages get which accelerators. If these speculations are valid, then maybe it is possible to \"workaround\" (not only the German case, but a few others -- if you look in the .xcu file).  Well -- that is what I suggested in the comment.\n\n(ftr -- I am neutral about the general issue of what to assign to what keys -- I just responded to the request in the ticket.)",
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b66a3fe9_9644ca2c",
