@@ -35,6 +35,7 @@
 
 #include "QtFilePicker.hxx"
 
+class QtFrame;
 class QtTimer;
 
 class QApplication;
@@ -66,6 +67,8 @@ class VCLPLUG_QT_PUBLIC QtInstance : public QObject,
 
     Timer m_aUpdateStyleTimer;
     bool m_bUpdateFonts;
+
+    QtFrame* m_pActivePopup;
 
     DECL_DLLPRIVATE_LINK(updateStyleHdl, Timer*, void);
     void AfterAppInit() override;
@@ -172,6 +175,9 @@ public:
     void UpdateStyle(bool bFontsChanged);
 
     void* CreateGStreamerSink(const SystemChildWindow*) override;
+
+    QtFrame* activePopup() const { return m_pActivePopup; }
+    void setActivePopup(QtFrame*);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
