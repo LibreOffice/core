@@ -33,6 +33,23 @@
       "message": "Btw. you could send a license statement https://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
       "revId": "87ebaef1907e103538051bc6256f35d12342e97f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dccec909_8b1fa7df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-22T11:04:21Z",
+      "side": 1,
+      "message": "Please create a unit test. You might try to create a document, add a link to a dummy file in the same location; then save, move the saved document to a temporary position, open there and check that the link points to the new location.",
+      "revId": "87ebaef1907e103538051bc6256f35d12342e97f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
