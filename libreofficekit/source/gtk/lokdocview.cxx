@@ -124,6 +124,8 @@ struct LOKDocViewPrivateImpl
     guint32 m_nKeyModifier;
     /// Rectangles of the current text selection.
     std::vector<GdkRectangle> m_aTextSelectionRectangles;
+    /// Rectangles of the current content control.
+    std::vector<GdkRectangle> m_aContentControlRectangles;
     /// Rectangles of view selections. The current view can only see
     /// them, can't modify them. Key is the view id.
     std::map<int, ViewRectangles> m_aTextViewSelectionRectangles;
@@ -281,6 +283,7 @@ enum
     ADDRESS_CHANGED,
     FORMULA_CHANGED,
     TEXT_SELECTION,
+    CONTENT_CONTROL,
     PASSWORD_REQUIRED,
     COMMENT,
     RULER,
@@ -1394,6 +1397,27 @@ callback (gpointer pData)
         break;
     }
 
+    case LOK_CALLBACK_CONTENT_CONTROL:
+    {
+        std::stringstream aStream(pCallback->m_aPayload);
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        auto aAction = aTree.get<std::string>("action");
+        if (aAction == "show")
+        {
+            auto aRectangles = aTree.get<std::string>("rectangles");
+            priv->m_aContentControlRectangles = payloadToRectangles(pDocView, aRectangles.c_str());
+        }
+        else if (aAction == "hide")
+        {
+            priv->m_aContentControlRectangles.clear();
+        }
+        bool bIsTextSelected = !priv->m_aContentControlRectangles.empty();
+        g_signal_emit(pDocView, doc_view_signals[CONTENT_CONTROL], 0, bIsTextSelected);
+        gtk_widget_queue_draw(GTK_WIDGET(pDocView));
+    }
+    break;
+
     case LOK_CALLBACK_STATUS_INDICATOR_START:
     case LOK_CALLBACK_STATUS_INDICATOR_SET_VALUE:
     case LOK_CALLBACK_STATUS_INDICATOR_FINISH:
@@ -1808,6 +1832,21 @@ renderOverlay(LOKDocView* pDocView, cairo_t* pCairo)
             }
             renderHandle(pDocView, pCairo, priv->m_aTextSelectionEnd, priv->m_pHandleEnd, priv->m_aHandleEndRect);
             g_free (handleEndPath);
+        }
+    }
+
+    if (!priv->m_aContentControlRectangles.empty())
+    {
+        for (const GdkRectangle& rRectangle : priv->m_aContentControlRectangles)
+        {
+            // Black with 75% transparency.
+            cairo_set_source_rgba(pCairo, (double(0x7f))/255, (double(0x7f))/255, (double(0x7f))/255, 0.25);
+            cairo_rectangle(pCairo,
+                            twipToPixel(rRectangle.x, priv->m_fZoom),
+                            twipToPixel(rRectangle.y, priv->m_fZoom),
+                            twipToPixel(rRectangle.width, priv->m_fZoom),
+                            twipToPixel(rRectangle.height, priv->m_fZoom));
+            cairo_fill(pCairo);
         }
     }
 
@@ -3285,6 +3324,21 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_BOOLEAN);
 
     /**
+     * LOKDocView::content-control:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @bIsTextSelected: whether current content control is non-null
+     */
+    doc_view_signals[CONTENT_CONTROL] =
+        g_signal_new("content-control",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_VOID__BOOLEAN,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_BOOLEAN);
+
+    /**
      * LOKDocView::password-required:
      * @pDocView: the #LOKDocView on which the signal is emitted
      * @pUrl: URL of the document for which password is required
@@ -3728,6 +3782,7 @@ lok_doc_view_reset_view(LOKDocView* pDocView)
     priv->m_nLastButtonPressTime = 0;
     priv->m_nLastButtonReleaseTime = 0;
     priv->m_aTextSelectionRectangles.clear();
+    priv->m_aContentControlRectangles.clear();
 
     memset(&priv->m_aTextSelectionStart, 0, sizeof(priv->m_aTextSelectionStart));
     memset(&priv->m_aTextSelectionEnd, 0, sizeof(priv->m_aTextSelectionEnd));

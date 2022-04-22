@@ -795,6 +795,22 @@ typedef enum
      * Rectangle format is the same as LOK_CALLBACK_INVALIDATE_TILES.
      */
     LOK_CALLBACK_SC_FOLLOW_JUMP = 54,
+
+    /**
+     * Sends all information for displaying metadata for a text based content control.
+     *
+     * The payload example:
+     * {
+     *      "action": "show",
+     *      "rectangles": "1418, 1694, 720, 551; 10291, 1418, 1099, 275"
+     * }
+     *
+     * or
+     * {
+     *      "action": "hide"
+     * }
+     */
+    LOK_CALLBACK_CONTENT_CONTROL = 55,
 }
 LibreOfficeKitCallbackType;
 
@@ -933,6 +949,8 @@ static inline const char* lokCallbackTypeToString(int nType)
         return "LOK_COMMAND_BLOCKED";
     case LOK_CALLBACK_SC_FOLLOW_JUMP:
         return "LOK_CALLBACK_SC_FOLLOW_JUMP";
+    case LOK_CALLBACK_CONTENT_CONTROL:
+        return "LOK_CALLBACK_CONTENT_CONTROL";
     }
 
     assert(!"Unknown LibreOfficeKitCallbackType type.");

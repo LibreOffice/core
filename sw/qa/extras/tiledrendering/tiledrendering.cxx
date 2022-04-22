@@ -167,6 +167,7 @@ public:
     void testCondCollCopy();
     void testMoveShapeHandle();
     void testRedlinePortions();
+    void testContentControl();
 
     CPPUNIT_TEST_SUITE(SwTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -254,6 +255,7 @@ public:
     CPPUNIT_TEST(testCondCollCopy);
     CPPUNIT_TEST(testMoveShapeHandle);
     CPPUNIT_TEST(testRedlinePortions);
+    CPPUNIT_TEST(testContentControl);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -279,6 +281,7 @@ private:
     OString m_sHyperlinkText;
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;
+    OString m_aContentControl;
     OString m_ShapeSelection;
     TestLokCallbackWrapper m_callbackWrapper;
 };
@@ -446,6 +449,11 @@ void SwTiledRenderingTest::callbackImpl(int nType, const char* pPayload)
         case LOK_CALLBACK_FORM_FIELD_BUTTON:
             {
                 m_aFormFieldButton = OString(pPayload);
+            }
+            break;
+        case LOK_CALLBACK_CONTENT_CONTROL:
+            {
+                m_aContentControl = OString(pPayload);
             }
             break;
         case LOK_CALLBACK_GRAPHIC_SELECTION:
@@ -3598,6 +3606,42 @@ void SwTiledRenderingTest::testRedlinePortions()
     // i.e. the portion list was outdated, even " after" was marked as deleted.
     assertXPath(pXmlDoc, "//Text[3]", "Portion", "bar");
     assertXPath(pXmlDoc, "//Text[4]", "Portion", " after");
+}
+
+void SwTiledRenderingTest::testContentControl()
+{
+    // Given a document with a content control:
+    SwXTextDocument* pXTextDocument = createDoc("content-control.odt");
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    m_aContentControl.clear();
+
+    // When entering that content control (chars 2-7 are the content control):
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/5, /*bBasicCall=*/false);
+
+    // Then make sure that the callback is emitted:
+    // Without the accompanying fix in place, this test would have failed, no callback was emitted.
+    CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
+    {
+        std::stringstream aStream(m_aContentControl.getStr());
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT_EQUAL(OString("show"), sAction);
+        OString sRectangles = aTree.get_child("rectangles").get_value<std::string>().c_str();
+        CPPUNIT_ASSERT(!sRectangles.isEmpty());
+    }
+
+    // And when leaving that content control:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+
+    // Then make sure that the callback is emitted again:
+    std::stringstream aStream(m_aContentControl.getStr());
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    OString sAction = aTree.get_child("action").get_value<std::string>().c_str();
+    CPPUNIT_ASSERT_EQUAL(OString("hide"), sAction);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwTiledRenderingTest);
