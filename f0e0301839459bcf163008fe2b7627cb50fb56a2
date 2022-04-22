@@ -54,6 +54,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e5967cdb_86809216",
+        "filename": "sfx2/source/appl/sfxpicklist.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-22T07:12:44Z",
+      "side": 1,
+      "message": "Plus, this is not at all limited to OOXML - so the impact will be rather significant if this is a mistake.",
+      "parentUuid": "cade37fa_51b8435f",
+      "revId": "f0e0301839459bcf163008fe2b7627cb50fb56a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55e9ff74_45e7519d",
         "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
         "patchSetId": 12
