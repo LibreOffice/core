@@ -29,6 +29,7 @@
 #include "emfpstringformat.hxx"
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <wmfemfhelper.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
@@ -519,6 +520,92 @@ namespace emfplushelper
         }
     }
 
+    const drawinglayer::attribute::LineStartEndAttribute
+    EmfPlusHelperData::CreateLineEnd(const sal_Int32 aCap, const float aPenWidth) const
+    {
+        const double pw = maMapTransform.get(1, 1) * aPenWidth;
+        if (aCap == LineCapTypeSquare)
+        {
+            basegfx::B2DPolygon aCapPolygon(
+                { Map(-1.0, -1.0), Map(1.0, -1.0), Map(1.0, 1.0), Map(-1.0, 1.0) });
+            aCapPolygon.setClosed(true);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                pw, basegfx::B2DPolyPolygon(aCapPolygon), true);
+        }
+/*
+        else if (aCap == LineCapTypeRound)
+        {
+            basegfx::B2DPolyPolygon aCapPolyPolygon = basegfx::B2DPolyPolygon(::basegfx::utils::createPolygonFromEllipseSegment(
+                ::basegfx::B2DPoint(0.0, 0.0), 1.0, 1.0, M_PI, 2.0 * M_PI));
+            basegfx::B2DPolygon aCapPolygon(
+                { Map(-1.0, 0.0), Map(1.0, 0.0), Map(1.0, 1.0), Map(-1.0, 1.0) });
+            aCapPolygon.setClosed(true);
+            //aCapPolyPolygon.append(aCapPolygon);
+            aCapPolyPolygon.transform(maMapTransform);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                pw, aCapPolyPolygon, true);
+        }
+
+        else if (aCap == LineCapTypeRound)
+        {
+            basegfx::B2DPolyPolygon aCapPolyPolygon = basegfx::B2DPolyPolygon(::basegfx::utils::createPolygonFromEllipseSegment(
+                ::basegfx::B2DPoint(0.0, 0.0), 1.0, 1.0, M_PI, 2.0 * M_PI));
+            aCapPolyPolygon.transform(maMapTransform);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                pw, aCapPolyPolygon, true);
+        }
+*/
+        else if (aCap == LineCapTypeRound)
+        {
+            basegfx::B2DPolygon aCapPolygon = ::basegfx::utils::createPolygonFromEllipseSegment(
+                ::basegfx::B2DPoint(0.0, 0.0), 1.0, 1.0, M_PI, 2.0 * M_PI);
+            aCapPolygon.transform(maMapTransform);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                pw, basegfx::B2DPolyPolygon(aCapPolygon), true);
+        }
+        else if (aCap == LineCapTypeTriangle)
+        {
+            basegfx::B2DPolygon aCapPolygon(
+                { Map(-1.0, 1.0), Map(1.0, 1.0), Map(1.0, 0.0), Map(0.0, -1.0), Map(-1.0, 0.0) });
+            aCapPolygon.setClosed(true);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                pw, basegfx::B2DPolyPolygon(aCapPolygon), true);
+        }
+        else if (aCap == LineCapTypeSquareAnchor)
+        {
+            basegfx::B2DPolygon aCapPolygon(
+                { Map(-1.0, -1.0), Map(1.0, -1.0), Map(1.0, 1.0), Map(-1.0, 1.0) });
+            aCapPolygon.setClosed(true);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                1.5 * pw, basegfx::B2DPolyPolygon(aCapPolygon), true);
+        }
+        else if (aCap == LineCapTypeRoundAnchor)
+        {
+            basegfx::B2DPolygon aCapPolygon
+                = ::basegfx::utils::createPolygonFromEllipse(::basegfx::B2DPoint(0.0, 0.0), 1.0, 1.0);
+            aCapPolygon.transform(maMapTransform);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                2.0 * pw, basegfx::B2DPolyPolygon(aCapPolygon), true);
+        }
+        else if (aCap == LineCapTypeDiamondAnchor)
+        {
+            basegfx::B2DPolygon aCapPolygon({ Map(0.0, -1.0), Map(1.0, 0.0), Map(0.5, 0.5),
+                                              Map(0.5, 1.0), Map(-0.5, 1.0), Map(-0.5, 0.5),
+                                              Map(-1.0, 0.0) });
+            aCapPolygon.setClosed(true);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                2.0 * pw, basegfx::B2DPolyPolygon(aCapPolygon), true);
+        }
+        else if (aCap == LineCapTypeArrowAnchor)
+        {
+            basegfx::B2DPolygon aCapPolygon({ Map(0.0, -1.0), Map(1.0, 1.0), Map(-1.0, 1.0) });
+            aCapPolygon.setClosed(true);
+            return drawinglayer::attribute::LineStartEndAttribute(
+                2.0 * pw, basegfx::B2DPolyPolygon(aCapPolygon), true);
+        }
+        return drawinglayer::attribute::LineStartEndAttribute(pw, basegfx::B2DPolyPolygon(), false);
+    }
+
     void EmfPlusHelperData::EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex)
     {
         const EMFPPen* pen = dynamic_cast<EMFPPen*>(maEMFPObjects[penIndex & 0xff].get());
@@ -527,40 +614,69 @@ namespace emfplushelper
         if (!(pen && polygon.count()))
             return;
 
-        // we need a line cap attribute
-        css::drawing::LineCap lineCap = css::drawing::LineCap_BUTT;
-        if (pen->penDataFlags & EmfPlusPenDataStartCap) // additional line cap information
-        {
-            lineCap = static_cast<css::drawing::LineCap>(EMFPPen::lcl_convertStrokeCap(pen->startCap));
-            SAL_WARN_IF(pen->startCap != pen->endCap, "drawinglayer.emf", "emf+ pen uses different start and end cap");
-        }
-
         const double transformedPenWidth = mdExtractedYScale * pen->penWidth;
         drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
                                                              transformedPenWidth,
                                                              pen->GetLineJoinType(),
-                                                             lineCap,
+                                                             css::drawing::LineCap_BUTT,
                                                              basegfx::deg2rad(15.0)); // TODO Add MiterLimit support
-        if (!pen->GetColor().IsTransparent())
-        {
-            mrTargetHolders.Current().append(
-                new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                    polygon,
-                    lineAttribute,
-                    pen->GetStrokeAttribute(mdExtractedXScale)));
-        }
-        else
-        {
-            const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
-                        new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
-                            polygon,
-                            lineAttribute,
-                            pen->GetStrokeAttribute(mdExtractedXScale)));
 
-            mrTargetHolders.Current().append(
-                        new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
-                            drawinglayer::primitive2d::Primitive2DContainer { aPrimitive },
-                            (255 - pen->GetColor().GetAlpha()) / 255.0));
+        drawinglayer::attribute::LineStartEndAttribute aStart;
+        if (pen->penDataFlags & EmfPlusPenDataStartCap)
+            aStart = EmfPlusHelperData::CreateLineEnd(pen->startCap, pen->penWidth);
+
+        drawinglayer::attribute::LineStartEndAttribute aEnd;
+        if (pen->penDataFlags & EmfPlusPenDataEndCap)
+            aEnd = EmfPlusHelperData::CreateLineEnd(pen->endCap, pen->penWidth);
+
+        for (sal_uInt32 i = 0; i < polygon.count(); i++)
+        {
+
+            /*
+
+            if(!rPolygon.isClosed() && !rStroke.isDefault())
+            {
+                attribute::LineStartEndAttribute aStart(rStroke.getStartWidth(), rStroke.getStartPolyPolygon(), rStroke.isStartCentered());
+                attribute::LineStartEndAttribute aEnd(rStroke.getEndWidth(), rStroke.getEndPolyPolygon(), rStroke.isEndCentered());
+
+                // create data
+                pNewLinePrimitive = new PolygonStrokeArrowPrimitive2D(rPolygon, aLineAttribute, aStrokeAttribute, aStart, aEnd);
+            }
+            else
+            {
+                // create data
+                pNewLinePrimitive = new PolygonStrokePrimitive2D(rPolygon, aLineAttribute, aStrokeAttribute);
+            }
+
+            if(0.0 != rLine.getTransparence())
+            {
+                // create simpleTransparencePrimitive, add created fill primitive
+                Primitive2DContainer aContent { pNewLinePrimitive };
+                return Primitive2DReference(new UnifiedTransparencePrimitive2D(std::move(aContent), rLine.getTransparence()));
+            }
+            else
+            {
+                // add to decomposition
+                return pNewLinePrimitive;
+            }
+            */
+            if (!pen->GetColor().IsTransparent())
+            {
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::PolygonStrokeArrowPrimitive2D(
+                        polygon.getB2DPolygon(i), lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
+            }
+            else
+            {
+                const drawinglayer::primitive2d::Primitive2DReference aPrimitive(
+                    new drawinglayer::primitive2d::PolygonStrokeArrowPrimitive2D(
+                        polygon.getB2DPolygon(i), lineAttribute, pen->GetStrokeAttribute(mdExtractedXScale), aStart, aEnd));
+
+                mrTargetHolders.Current().append(
+                    new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
+                        drawinglayer::primitive2d::Primitive2DContainer{ aPrimitive },
+                        (255 - pen->GetColor().GetAlpha()) / 255.0));
+            }
         }
 
         if ((pen->penDataFlags & EmfPlusPenDataCustomStartCap) && (pen->customStartCap->polygon.begin()->count() > 1))
@@ -604,7 +720,7 @@ namespace emfplushelper
                             new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                                 startCapPolygon,
                                 lineAttribute,
-                                pen->GetStrokeAttribute(maMapTransform.get(1, 1))));
+                                pen->GetStrokeAttribute(mdExtractedXScale)));
             }
         }
 
