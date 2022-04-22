@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac8452c2_138e62a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-22T06:36:17Z",
+      "side": 1,
+      "message": "Looks good to me in general, Word indeed generates strings like \"2022-04-22T06:33:00Z\", and we now match that after this change.",
+      "revId": "f0e0301839459bcf163008fe2b7627cb50fb56a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
