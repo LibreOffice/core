@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ab6e100_8e4b28cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-22T12:26:48Z",
+      "side": 1,
+      "message": "Thank you for your quick feedback!\nI understand. I tried to revert locally 9820f11ad2b1ef32e5527eec519b0a7c766e2602 then I saw Noel\u0027s patch waiting for review https://gerrit.libreoffice.org/c/core/+/133322. So let\u0027s wait a bit.",
+      "parentUuid": "144d36a4_4ff259eb",
+      "revId": "25ada1e520b50247aa27fdbb6f1ab35e678c7ef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57a52bef_5d27c30a",
