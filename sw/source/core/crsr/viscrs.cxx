@@ -57,6 +57,7 @@
 #include <SwGrammarMarkUp.hxx>
 #include <docsh.hxx>
 #include <svtools/optionsdrawinglayer.hxx>
+#include <tools/json_writer.hxx>
 #include <cellfrm.hxx>
 #include <wrtsh.hxx>
 #include <textcontentcontrol.hxx>
@@ -634,6 +635,7 @@ void SwSelPaintRects::HighlightInputField()
 void SwSelPaintRects::HighlightContentControl()
 {
     std::vector<basegfx::B2DRange> aContentControlRanges;
+    std::vector<OString> aLOKRectangles;
 
     if (m_bShowContentControlOverlay)
     {
@@ -668,12 +670,25 @@ void SwSelPaintRects::HighlightContentControl()
 
                 aContentControlRanges.emplace_back(aRect.Left(), aRect.Top(), aRect.Right() + 1,
                                                    aRect.Bottom() + 1);
+                if (comphelper::LibreOfficeKit::isActive())
+                {
+                    aLOKRectangles.push_back(aRect.toString());
+                }
             }
         }
     }
 
     if (!aContentControlRanges.empty())
     {
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            OString aPayload = comphelper::string::join("; ", aLOKRectangles);
+            tools::JsonWriter aJson;
+            aJson.put("action", "show");
+            aJson.put("rectangles", aPayload);
+            std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
+            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson.get());
+        }
         if (m_pContentControlOverlay)
         {
             m_pContentControlOverlay->setRanges(std::move(aContentControlRanges));
@@ -699,6 +714,13 @@ void SwSelPaintRects::HighlightContentControl()
     }
     else
     {
+        if (comphelper::LibreOfficeKit::isActive() && m_pContentControlOverlay)
+        {
+            tools::JsonWriter aJson;
+            aJson.put("action", "hide");
+            std::unique_ptr<char, o3tl::free_delete> pJson(aJson.extractData());
+            GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson.get());
+        }
         m_pContentControlOverlay.reset();
     }
 }
