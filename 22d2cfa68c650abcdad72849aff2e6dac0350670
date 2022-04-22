@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fe09c4c_909d07c4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-04-22T08:36:22Z",
+      "side": 1,
+      "message": "i think without commit 2177f48b16b8cd68c0ef4ec817ca391f28324418 on the branch this is pointless and likely breaks the build for --with-webdav\u003dneon",
+      "revId": "22d2cfa68c650abcdad72849aff2e6dac0350670",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
