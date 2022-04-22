@@ -900,6 +900,11 @@ void CheckResetRedlineMergeFlag(SwTextNode & rNode, Recreate const eRecreateMerg
             {
                 assert(pFrame->GetMergedPara()->listener.IsListeningTo(&rNode));
                 assert(rNode.GetIndex() <= pFrame->GetMergedPara()->pLastNode->GetIndex());
+                // tdf#135978 Join: recreate fly frames anchored to subsequent nodes
+                if (eRecreateMerged == sw::Recreate::ThisNode)
+                {
+                    AddRemoveFlysAnchoredToFrameStartingAtNode(*pFrame, rNode, nullptr);
+                }
             }
             eMode = sw::FrameMode::New; // Existing is not idempotent!
         }
