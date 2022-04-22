@@ -107,13 +107,15 @@
                  none
 
           2  Context name
-              Know context names are 3DObject, Annotation, Auditing, Axis, Cell, Chart, Draw, DrawPage, DrawText,
-              EditCell, ErrorBar, Form, Frame, Graphic, HandoutPage, MasterPage, Media, Multiobj, OLE, OutlineText,
-              Pivot, Series, SlidesorterPage, Table, Text, TextObject, Trendline, Sparkline
-              default
+              Know context names are 3DObject, Annotation, Auditing, Axis, Cell, Chart, ChartElements, Draw,
+              DrawFontwork, DrawLine, DrawPage, DrawText, EditCell, ErrorBar, Form, Frame, Graphic, Grid,
+              HandoutPage, MasterPage, Media, MultiObject, NotesPage, OLE, OutlineText, Pivot, Printpreview,
+              Series, SlidesorterPage, Table, Text, TextObject, Trendline, Sparkline
 
              Special values:
                  any
+                 default
+                 empty
 
           3  Panel state.  One of
              visible  Panel is initially visible and expanded
