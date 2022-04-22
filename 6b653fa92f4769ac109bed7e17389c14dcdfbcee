@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b15dd4ba_f68a74bc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-22T10:35:23Z",
+      "side": 1,
+      "message": "While you amend the commit, change the commit message to:\n\nbin/upload_symbols.py: make pythonic",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7ebf3e1_061aa4f7",
