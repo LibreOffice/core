@@ -15,6 +15,15 @@ $(eval $(call gb_ExternalProject_register_targets,openldap,\
 	build \
 ))
 
+openldap_CFLAGS =
+ifeq ($(OS),LINUX) # i.e., assuming glibc
+# glibc needs at least _XOPEN_SOURCE=500 to declare pthread_getconcurrency and
+# pthread_setconcurrency in <pthread.h> (and once that is defined, it also needs either
+# _DEFUALT_SOURCE (glibc >= 2.19) or the deprecated _BSD_SOURCE (glibc <= 2.18) to be defined
+# explicitly, so that e.g. u_char is declared in <sys/types.h>):
+openldap_CFLAGS = -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_BSD_SOURCE
+endif
+
 openldap_LDFLAGS =
 ifeq ($(SYSTEM_NSS),)
 openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib \
@@ -41,10 +50,10 @@ $(call gb_ExternalProject_get_state_target,openldap,build) :
 				ac_cv_func_memcmp_working=yes \
 			) \
 			$(if $(SYSTEM_NSS), \
-				CPPFLAGS="$(CPPFLAGS) $(NSS_CFLAGS)" CFLAGS="$(CFLAGS) $(NSS_CFLAGS)" LDFLAGS="$(LDFLAGS) $(NSS_LIBS)" \
+				CPPFLAGS="$(CPPFLAGS) $(openldap_CFLAGS) $(NSS_CFLAGS)" CFLAGS="$(CFLAGS) $(NSS_CFLAGS)" LDFLAGS="$(LDFLAGS) $(NSS_LIBS)" \
 				, \
 				CPPFLAGS="$(CPPFLAGS) -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
-				CFLAGS="$(CFLAGS) -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
+				CFLAGS="$(CFLAGS) $(openldap_CFLAGS) -I$(call gb_UnpackedTarball_get_dir,nss)/dist/public/nss -I$(call gb_UnpackedTarball_get_dir,nss)/dist/out/include" \
 			) \
 			$(if $(openldap_LDFLAGS),LDFLAGS="$(LDFLAGS) $(openldap_LDFLAGS)") \
 		&& MAKEFLAGS= && $(MAKE) \
