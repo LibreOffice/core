@@ -46,6 +46,30 @@
       },
       "revId": "960f5270f8f1afa3ac02c6bc8dc92a8b3ed21d6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74a42b96_fed5bf7b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002306
+      },
+      "writtenOn": "2022-04-22T19:55:54Z",
+      "side": 1,
+      "message": "Found a better place to fix the issue, which I missed the first time locking into this. There is already a resume method which is getting called, but this method is missing the End mode handling.\n\nI would abandoned this one in favor of: https://gerrit.libreoffice.org/c/core/+/133337",
+      "parentUuid": "7c8eba7e_cd322517",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 57
+      },
+      "revId": "960f5270f8f1afa3ac02c6bc8dc92a8b3ed21d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
