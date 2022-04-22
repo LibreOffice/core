@@ -33,6 +33,23 @@
       "message": "I tested the modified version with pylint and it whines \u0027standard import \"import sys\" should be placed before \"import requests\" (wrong-import-order)\u0027",
       "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38b35554_1a4a3a91",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-04-22T10:48:07Z",
+      "side": 1,
+      "message": "This is btw. not how the script is used in practice, usually the symbols are not uploaded from the machine they are generated on, so making this a parameter instead and possibly fallback to the system it runs on would be preferred if the script is touched..",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
