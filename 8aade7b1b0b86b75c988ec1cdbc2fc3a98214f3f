@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c3d27b_f6b5af15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-22T15:53:16Z",
+      "side": 1,
+      "message": "looks like I\u0027ll be the first person to use o3tl::trim()",
+      "revId": "8aade7b1b0b86b75c988ec1cdbc2fc3a98214f3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
