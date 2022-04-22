@@ -22,6 +22,30 @@
       },
       "revId": "960f5270f8f1afa3ac02c6bc8dc92a8b3ed21d6e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c8eba7e_cd322517",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002306
+      },
+      "writtenOn": "2022-04-22T18:54:27Z",
+      "side": 1,
+      "message": "Hi Mike,\n\nI have updated the description and explained more what the patch will do. As this fix is a saved guard and a \"good quality\" fix is probably at another point in code, because most of the time the mode is switched at another point, I could do a bit more research whether I can find a better place to fix the issue.",
+      "parentUuid": "1faf7d34_3583e625",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 57
+      },
+      "revId": "960f5270f8f1afa3ac02c6bc8dc92a8b3ed21d6e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
