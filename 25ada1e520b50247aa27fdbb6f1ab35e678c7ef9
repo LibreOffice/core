@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57a52bef_5d27c30a",
+        "filename": "cppuhelper/source/factory.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-22T12:01:37Z",
+      "side": 1,
+      "message": "Change for change\u0027s sake?  As aActivatorName is always turned into an OUString here (unless it is empty, but which is also cheap to construct for OUString), why have it as a std::u16string_view?",
+      "revId": "25ada1e520b50247aa27fdbb6f1ab35e678c7ef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
