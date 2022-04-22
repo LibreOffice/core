@@ -89,9 +89,12 @@ bool TextBody::isEmpty() const
 OUString TextBody::toString() const
 {
     if (!isEmpty())
-        return maParagraphs.front()->getRuns().front()->getText();
-    else
-        return OUString();
+    {
+        TextRunVector& runs = maParagraphs.front()->getRuns();
+        if(!runs.empty())
+            return runs.front()->getText();
+    }
+    return OUString();
 }
 
 bool TextBody::hasVisualRunProperties() const
