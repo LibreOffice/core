@@ -261,6 +261,30 @@
       },
       "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "093bce21_ddab07e9",
+        "filename": "officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
+        "patchSetId": 3
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-22T16:52:30Z",
+      "side": 1,
+      "message": "Many thanks for testing and insight Jason.  \n\nFrom googling -- it seems a potential explanation for your and Heiko\u0027s experience is that there are \"layers\" -- which you have removed manually. \n\nhttps://wiki.openoffice.org/wiki/OOR-document-format#Layering_and_Merging  \n\nPerhaps that document contains the knowledge needed to do this properly (but it starts to exceed my capacity now).\n\nI also enjoyed (from 2009): https://wiki.openoffice.org/wiki/User:Rvojta/Multiplatform_shortcuts  (though I am uncertain if the limitations discussed there are still valid).  \n\nSolving this issue with Alt+C may also be relevant to solving tdf#119425\n\nBut -- now I am in over my current knowledge -- so I am reluctant to propose a definite next step.  But one possibility is to make this patch for only PS and Page Style, which seems \"safe\" or \"reliable\" for now, and addresses 2 out 3 for the ticket. And then I am not able to test MacOS, but a second patch (by someone else) could be made in relation to Alt+C alone  (which would be easier to revert if needed).",
+      "parentUuid": "f4fb6449_db3e221d",
+      "range": {
+        "startLine": 280,
+        "startChar": 0,
+        "endLine": 280,
+        "endChar": 57
+      },
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
