@@ -83,6 +83,7 @@ public:
         Grid,
         HandoutPage,
         MasterPage,
+        Math,
         Media,
         MultiObject,
         NotesPage,
