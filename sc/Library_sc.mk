@@ -179,6 +179,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/data/poolhelp \
     sc/source/core/data/postit \
     sc/source/core/data/queryevaluator \
+    sc/source/core/data/queryiter \
     sc/source/core/data/refupdatecontext \
     sc/source/core/data/rowheightcontext \
     sc/source/core/data/segmenttree \
