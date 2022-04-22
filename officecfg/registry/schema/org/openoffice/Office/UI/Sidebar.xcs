@@ -87,6 +87,7 @@
                  com.sun.star.presentation.PresentationDocument
                  com.sun.star.drawing.DrawingDocument
                  com.sun.star.chart2.ChartDocument
+                 com.sun.star.formula.FormulaProperties
 
              Recognized shortcuts:
                  Writer
@@ -94,6 +95,7 @@
                  Impress
                  Draw
                  Chart
+                 Math
 
              Shortcuts for multiple applications:
                  DrawImpress
@@ -109,7 +111,7 @@
           2  Context name
               Know context names are 3DObject, Annotation, Auditing, Axis, Cell, Chart, ChartElements, Draw,
               DrawFontwork, DrawLine, DrawPage, DrawText, EditCell, ErrorBar, Form, Frame, Graphic, Grid,
-              HandoutPage, MasterPage, Media, MultiObject, NotesPage, OLE, OutlineText, Pivot, Printpreview,
+              HandoutPage, MasterPage, Math, Media, MultiObject, NotesPage, OLE, OutlineText, Pivot, Printpreview,
               Series, SlidesorterPage, Table, Text, TextObject, Trendline, Sparkline
 
              Special values:

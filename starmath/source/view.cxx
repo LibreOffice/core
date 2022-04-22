@@ -42,6 +42,8 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/request.hxx>
+#include <sfx2/sfxbasecontroller.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 #include <sfx2/viewfac.hxx>
 #include <svl/eitem.hxx>
 #include <svl/itemset.hxx>
@@ -50,6 +52,7 @@
 #include <vcl/transfer.hxx>
 #include <svtools/colorcfg.hxx>
 #include <svl/whiter.hxx>
+#include <svx/sidebar/SelectionChangeHandler.hxx>
 #include <svx/zoomslideritem.hxx>
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
@@ -1079,6 +1082,8 @@ void SmViewShell::InitInterface_Impl()
     GetStaticInterface()->RegisterChildWindow(SmCmdBoxWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SmElementsDockingWindowWrapper::GetChildWindowId());
     GetStaticInterface()->RegisterChildWindow(SfxInfoBarContainerChild::GetChildWindowId());
+
+    GetStaticInterface()->RegisterChildWindow(::sfx2::sidebar::SidebarChildWindow::GetChildWindowId());
 }
 
 SFX_IMPL_NAMED_VIEWFACTORY(SmViewShell, "Default")
@@ -2089,6 +2094,36 @@ void SmViewShell::GetState(SfxItemSet &rSet)
     }
 }
 
+namespace
+{
+class SmController : public SfxBaseController
+{
+public:
+    SmController(SfxViewShell& rViewShell)
+        : SfxBaseController(&rViewShell)
+        , mpSelectionChangeHandler(new svx::sidebar::SelectionChangeHandler(
+              GetContextName, this, vcl::EnumContext::Context::Math))
+    {
+        mpSelectionChangeHandler->Connect();
+        rViewShell.SetContextName(GetContextName());
+    }
+    ~SmController() { mpSelectionChangeHandler->Disconnect(); }
+
+    // css::frame::XController
+    void SAL_CALL attachFrame(const css::uno::Reference<css::frame::XFrame>& xFrame) override
+    {
+        SfxBaseController::attachFrame(xFrame);
+
+        mpSelectionChangeHandler->selectionChanged({}); // Installs the correct context
+    }
+
+private:
+    static OUString GetContextName() { return "Math"; } // Static constant for now
+
+    rtl::Reference<svx::sidebar::SelectionChangeHandler> mpSelectionChangeHandler;
+};
+}
+
 SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     : SfxViewShell(pFrame_, SfxViewShellFlags::HAS_PRINTOPTIONS)
     , mxGraphicWindow(VclPtr<SmGraphicWindow>::Create(*this))
@@ -2100,6 +2135,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame_, SfxViewShell *)
     SetWindow(mxGraphicWindow.get());
     SfxShell::SetName("SmView");
     SfxShell::SetUndoManager( &GetDoc()->GetEditEngine().GetUndoManager() );
+    SetController(new SmController(*this));
 }
 
 SmViewShell::~SmViewShell()
