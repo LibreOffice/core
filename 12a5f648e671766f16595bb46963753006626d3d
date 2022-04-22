@@ -86,6 +86,24 @@
       "parentUuid": "6510c546_f6de7888",
       "revId": "12a5f648e671766f16595bb46963753006626d3d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd1aa3ba_f18c408d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-22T04:13:30Z",
+      "side": 1,
+      "message": "\u003e making that decision in a similar way to MS is defeating me\n\nI finally found the right set of UNO commands to handle that. Now it looks pretty much identical to the DOC import. So, with the caveat of throwing out MERGEFORMAT and the minor time differences (which I am not intending to attempt to address since IMHO they are irrelevant), I think the series is ready to continue if you agree with that assessment.\n\nP.S. One other time difference is that LO treats H: differently from Word. Word treats it as 24hr time - even when couple with AM/PM. And the magical process of locale-transformation forces a capital H with nowhere to insert logic to handle using a small h: instead.\n\nP.P.S. The followup is still WIP waiting for Noel to have a chance to respond, but it now passes Jenkins testing and so is ready to be turned into a review.",
+      "parentUuid": "1c99ac05_4b29bf98",
+      "revId": "12a5f648e671766f16595bb46963753006626d3d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
