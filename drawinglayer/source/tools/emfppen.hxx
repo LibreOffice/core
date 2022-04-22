@@ -112,9 +112,9 @@ namespace emfplushelper
         std::vector<float> dashPattern;
         sal_Int32 alignment;
         std::vector<float> compoundArray;
-        sal_Int32 customStartCapLen;
+        sal_uInt32 customStartCapLen;
         std::unique_ptr<EMFPCustomLineCap> customStartCap;
-        sal_Int32 customEndCapLen;
+        sal_uInt32 customEndCapLen;
         std::unique_ptr<EMFPCustomLineCap> customEndCap;
 
         EMFPPen();
