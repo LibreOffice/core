@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ab47e96_04f75da0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-04-22T11:13:33Z",
+      "side": 1,
+      "message": "Looks good. Thanks Szymon!",
+      "revId": "b30549f3ba5435fc3e49f04df43819067faaaf00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "689c9d55_f91e292c",
+        "filename": "sfx2/source/notebookbar/SfxNotebookBar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-04-22T11:13:33Z",
+      "side": 1,
+      "message": "Could be const. Same for aPath.",
+      "revId": "b30549f3ba5435fc3e49f04df43819067faaaf00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
