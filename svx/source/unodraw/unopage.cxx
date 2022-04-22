@@ -41,6 +41,7 @@
 #include <svx/svdundo.hxx>
 #include <svx/unopage.hxx>
 #include "shapeimpl.hxx"
+#include <svx/unodraw/SvxTableShape.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/unoprov.hxx>
