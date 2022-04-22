@@ -33,6 +33,24 @@
       "message": "Could be const. Same for aPath.",
       "revId": "b30549f3ba5435fc3e49f04df43819067faaaf00",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "599d6a8c_74d05ade",
+        "filename": "sfx2/source/notebookbar/SfxNotebookBar.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-04-22T12:50:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "689c9d55_f91e292c",
+      "revId": "b30549f3ba5435fc3e49f04df43819067faaaf00",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
