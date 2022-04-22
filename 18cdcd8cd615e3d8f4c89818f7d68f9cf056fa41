@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4da13e94_4b85b563",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-04-22T16:15:55Z",
+      "side": 1,
+      "message": "A follow-up build has +1 from Jenkins, adding here too.\n",
+      "revId": "18cdcd8cd615e3d8f4c89818f7d68f9cf056fa41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
