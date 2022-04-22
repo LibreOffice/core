@@ -689,6 +689,57 @@ void SwUiWriterTest::testTdf67238()
     CPPUNIT_ASSERT(!((rTable.GetTableBox("C3"))->GetFrameFormat()->GetProtect()).IsContentProtected());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)
+{
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("foobar");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("bazquux");
+
+    CPPUNIT_ASSERT(pWrtShell->IsEndOfDoc());
+
+    SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+    anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+    SfxItemSet flySet(pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>);
+    flySet.Put(anchor);
+    SwFlyFrameFormat const* pFly = dynamic_cast<SwFlyFrameFormat const*>(
+            pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true));
+    CPPUNIT_ASSERT(pFly != nullptr);
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+    // move cursor back to body
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+
+    // hide and enable
+    dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT(
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // now split
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SplitNode();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+
+    // the problem was that undo removed the fly frame from the layout
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+}
+
 void SwUiWriterTest::testFdo75110()
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "fdo75110.odt");
