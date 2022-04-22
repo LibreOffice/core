@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "93b5142e_928c338d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-22T11:22:48Z",
+      "side": 1,
+      "message": "Please drop the \"atan2 handles condition for all 4 quadrants\" comments: they are simply justification of this change, and aren\u0027t needed further.",
+      "revId": "3de7404472e01bf3cc6566b4d49129d06b4aad91",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "542a056d_0b1f5a82",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 822,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-22T11:22:48Z",
+      "side": 0,
+      "message": "This previous condition checks Y, not X in atan(Y/X) - so is this change correct? What the comment above points to, which commit added it - maybe that could help?",
+      "revId": "41cbbb6ecb9d5bbca79d6537228dbabd8c896e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42a833a6_48f0ddb7",
+        "filename": "chart2/source/tools/ThreeDHelper.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 871,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-22T11:22:48Z",
+      "side": 0,
+      "message": "This only checks f22. Strange - is it (-1.0*f23/cos(R)) that substitutes the Y in atan(Y/X) here? And shouldn\u0027t the fix consider *that*?",
+      "revId": "41cbbb6ecb9d5bbca79d6537228dbabd8c896e84",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
