@@ -16,6 +16,23 @@
       "message": "looks like I\u0027ll be the first person to use o3tl::trim()",
       "revId": "8aade7b1b0b86b75c988ec1cdbc2fc3a98214f3f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4399c9cb_88d9c3ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-22T19:09:32Z",
+      "side": 1,
+      "message": "Jenkins approved the follow-up patches - this is a common false positive.",
+      "revId": "8aade7b1b0b86b75c988ec1cdbc2fc3a98214f3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
