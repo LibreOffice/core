@@ -55,6 +55,7 @@
 #include <fmtfsize.hxx>
 #include <swmodule.hxx>
 #include <wrtsh.hxx>
+#include <rootfrm.hxx>
 #include <wview.hxx>
 #include <frmatr.hxx>
 #include <uitool.hxx>
@@ -441,6 +442,43 @@ static void lcl_TabGetMaxLineWidth(const SvxBorderLine* pBorderLine, SvxBorderLi
 
     rBorderLine.SetBorderLineStyle(pBorderLine->GetBorderLineStyle());
     rBorderLine.SetColor(pBorderLine->GetColor());
+}
+
+static bool lcl_BoxesInDeletedRows(SwWrtShell &rSh, const SwSelBoxes& rBoxes)
+{
+    // cursor and selection are there only in deleted rows in Show Changes mode
+    if ( rSh.GetLayout()->IsHideRedlines() )
+        return false;
+
+    // not selected or all selected rows are deleted
+    bool bRet = true;
+    SwRedlineTable::size_type nRedlinePos = 0;
+    if ( rBoxes.empty() )
+        bRet = rSh.GetCursor()->GetNode().GetTableBox()->GetUpper()->IsDeleted(nRedlinePos);
+    else
+    {
+        tools::Long nBoxes = rBoxes.size();
+        SwTableLine* pPrevLine = nullptr;
+        for ( tools::Long i = 0; i < nBoxes; i++ )
+        {
+            SwTableLine* pLine = rBoxes[i]->GetUpper();
+            if ( pLine != pPrevLine )
+                bRet &= pLine->IsDeleted(nRedlinePos);
+            pPrevLine = pLine;
+        }
+    }
+
+    return bRet;
+}
+
+static bool lcl_CursorInDeletedTable(SwWrtShell &rSh)
+{
+    // cursor and selection are there only in deleted table in Show Changes mode
+    if ( rSh.GetLayout()->IsHideRedlines() )
+        return false;
+
+    SwTableNode* pTableNd = rSh.GetCursor()->GetPoint()->nNode.GetNode().FindTableNode();
+    return pTableNd && pTableNd->GetTable().IsDeleted();
 }
 
 void SwTableShell::Execute(SfxRequest &rReq)
@@ -1380,7 +1418,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 {
                     SwSelBoxes aBoxes;
                     ::GetTableSel( rSh, aBoxes, SwTableSearchType::Row );
-                    if( ::HasProtectedCells( aBoxes ))
+                    if( ::HasProtectedCells( aBoxes ) || lcl_BoxesInDeletedRows( rSh, aBoxes ) )
                         rSet.DisableItem( nSlot );
                 }
                 break;
@@ -1388,9 +1426,13 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 {
                     SwSelBoxes aBoxes;
                     ::GetTableSel( rSh, aBoxes, SwTableSearchType::Col );
-                    if( ::HasProtectedCells( aBoxes ))
+                    if( ::HasProtectedCells( aBoxes ) || lcl_CursorInDeletedTable( rSh ) )
                         rSet.DisableItem( nSlot );
                 }
+                break;
+            case FN_TABLE_DELETE_TABLE:
+                if( lcl_CursorInDeletedTable( rSh ) )
+                    rSet.DisableItem( nSlot );
                 break;
 
             case FN_TABLE_UNSET_READ_ONLY_CELLS:
