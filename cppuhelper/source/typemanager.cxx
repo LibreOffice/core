@@ -1873,7 +1873,7 @@ css::uno::Any cppuhelper::TypeManager::find(OUString const & name) {
     }
     i = name.lastIndexOf('.');
     if (i != -1) {
-        std::u16string_view parent(name.subView(0, i));
+        OUString parent(name.copy(0, i));
         ent = findEntity(parent);
         if (ent.is()) {
             switch (ent->getSort()) {
@@ -2072,7 +2072,7 @@ void cppuhelper::TypeManager::readRdbFile(
     std::u16string_view uri, bool optional)
 {
     try {
-        manager_->addProvider(uri);
+        manager_->addProvider(OUString(uri));
     } catch (unoidl::NoSuchFileException &) {
         if (!optional) {
             throw css::uno::DeploymentException(
