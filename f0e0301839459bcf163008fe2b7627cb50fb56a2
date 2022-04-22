@@ -33,6 +33,40 @@
       "message": "Hrm, ask Mike points out, forgot to notice that the output is the system time, so the test won\u0027t pass against a fixed string.\n\nThe code change looks OK to me, but you should probably test a case where we take the timestamp from the input document, not \"now\".",
       "revId": "f0e0301839459bcf163008fe2b7627cb50fb56a2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cade37fa_51b8435f",
+        "filename": "sfx2/source/appl/sfxpicklist.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-22T07:08:03Z",
+      "side": 1,
+      "message": "This changes the DateTime itself, but it doesn\u0027t make the css::util::DateTime created in the next line to be timezoned, so this doesn\u0027t fix the issue.",
+      "revId": "f0e0301839459bcf163008fe2b7627cb50fb56a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55e9ff74_45e7519d",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport14.cxx",
+        "patchSetId": 12
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-22T07:08:03Z",
+      "side": 1,
+      "message": "This test must not compare the date of dynamically generated document to some fixed string. Instead, it must:\n1. Store the time when the test started;\n2. When it reads the created string, convert it to css::util::DateTime structure;\n3. Check that the structure is timezoned;\n4. Check that its value is between the time when the check is done, and the time stored at step #1.\n\nAlso another unit test is needed, that would open and save a OOXML document, without the conversion, and we need to check that the creation time string is still timezoned and doesn\u0027t change.",
+      "revId": "f0e0301839459bcf163008fe2b7627cb50fb56a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
