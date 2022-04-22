@@ -34,6 +34,24 @@
       "parentUuid": "4f903a78_7d464ef9",
       "revId": "203ae78e73695ea4ef23a94cab06012acca17f63",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aff02465_e517e131",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-22T18:44:06Z",
+      "side": 1,
+      "message": "\u003e Where should the \u0027since version X.Y\u0027 info be added? to sw/source/core/bastyp/calc.cxx ?\n\nSorry, I just thought of the LibreOffice help. It\u0027s better than nothing to avoid of resulting not back-compatible .odt documents.\n\nThe next step would be to create a new namespace for the extended LibreOffice formulas.",
+      "parentUuid": "e8da931e_82c1e5ac",
+      "revId": "203ae78e73695ea4ef23a94cab06012acca17f63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
