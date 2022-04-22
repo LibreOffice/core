@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92e99e4a_c4de1128",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-22T12:46:26Z",
+      "side": 1,
+      "message": "Just for historic amusement.. the original German comment said \"Ende und Aus\", which roughly translates to finished and off.",
+      "revId": "2b0579fbcc064dbcaf9217feead7ef23ec7a5222",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
