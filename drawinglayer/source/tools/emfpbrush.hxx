@@ -104,13 +104,13 @@ namespace emfplushelper
         ::Color secondColor; // first color is stored in solidColor;
         basegfx::B2DHomMatrix brush_transformation;
         bool hasTransformation;
-        sal_Int32 blendPoints;
+        sal_uInt32 blendPoints;
         std::unique_ptr<float[]> blendPositions;
         float* blendFactors;
-        sal_Int32 colorblendPoints;
+        sal_uInt32 colorblendPoints;
         std::unique_ptr<float[]> colorblendPositions;
         std::unique_ptr<::Color[]> colorblendColors;
-        sal_Int32 surroundColorsNumber;
+        sal_uInt32 surroundColorsNumber;
         std::unique_ptr<::Color[]> surroundColors;
         std::unique_ptr<EMFPPath> path;
         EmfPlusHatchStyle hatchStyle;
