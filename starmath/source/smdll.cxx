@@ -25,6 +25,7 @@
 #include <svx/zoomsliderctrl.hxx>
 #include <sfx2/docfac.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/sidebar/SidebarChildWindow.hxx>
 
 #include <smdll.hxx>
 #include <smmod.hxx>
@@ -68,6 +69,8 @@ namespace
         SvxZoomSliderControl::RegisterControl(SID_ATTR_ZOOMSLIDER, pModule);
         SvxModifyControl::RegisterControl(SID_TEXTSTATUS, pModule);
         XmlSecStatusBarControl::RegisterControl(SID_SIGNATURE, pModule);
+
+        sfx2::sidebar::SidebarChildWindow::RegisterChildWindow(false, pModule);
 
         SmCmdBoxWrapper::RegisterChildWindow(true);
         SmElementsDockingWindowWrapper::RegisterChildWindow(true);
