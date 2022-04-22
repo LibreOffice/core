@@ -208,6 +208,41 @@ void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
     pEvent->accept();
 }
 
+void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEvent)
+{
+    const qreal fRatio = rFrame.devicePixelRatioF();
+    const QWidget* pWidget = rFrame.GetQWidget();
+    const Point aPos = toPoint(pWidget->mapFromGlobal(QCursor::pos()) * fRatio);
+
+    SalMouseEvent aEvent;
+    aEvent.mnX
+        = QGuiApplication::isLeftToRight() ? aPos.X() : round(pWidget->width() * fRatio) - aPos.X();
+    aEvent.mnY = aPos.Y();
+    aEvent.mnTime = 0;
+    aEvent.mnButton = 0;
+    aEvent.mnCode = GetKeyModCode(QGuiApplication::keyboardModifiers())
+                    | GetMouseModCode(QGuiApplication::mouseButtons());
+
+    SalEvent nEventType;
+    if (pQEvent->type() == QEvent::Enter)
+        nEventType = SalEvent::MouseMove;
+    else
+        nEventType = SalEvent::MouseLeave;
+    rFrame.CallCallback(nEventType, &aEvent);
+    pQEvent->accept();
+}
+
+void QtWidget::leaveEvent(QEvent* pEvent) { handleMouseEnterLeaveEvents(m_rFrame, pEvent); }
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+void QtWidget::enterEvent(QEnterEvent* pEvent)
+#else
+void QtWidget::enterEvent(QEvent* pEvent)
+#endif
+{
+    handleMouseEnterLeaveEvents(m_rFrame, pEvent);
+}
+
 void QtWidget::wheelEvent(QWheelEvent* pEvent)
 {
     SalWheelMouseEvent aEvent;
@@ -282,7 +317,19 @@ void QtWidget::showEvent(QShowEvent*)
     // sequence from QtFrame::SetModal, if the frame was already set visible,
     // resulting in a hidden / unmapped window
     SalPaintEvent aPaintEvt(0, 0, aSize.width(), aSize.height());
+    if (m_rFrame.isPopup())
+    {
+        auto* pQtInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+        pQtInst->setActivePopup(&m_rFrame);
+    }
     m_rFrame.CallCallback(SalEvent::Paint, &aPaintEvt);
+}
+
+void QtWidget::hideEvent(QHideEvent*)
+{
+    auto* pQtInst(static_cast<QtInstance*>(GetSalData()->m_pInstance));
+    if (m_rFrame.isPopup() && pQtInst->activePopup() == &m_rFrame)
+        pQtInst->setActivePopup(nullptr);
 }
 
 void QtWidget::closeEvent(QCloseEvent* /*pEvent*/)
@@ -592,11 +639,11 @@ bool QtWidget::handleEvent(QtFrame& rFrame, QWidget& rWidget, QEvent* pEvent)
     }
     else if (pEvent->type() == QEvent::ToolTip)
     {
-        // Qt's POV on focus is wrong for our fake popup windows, so check LO's state.
+        // Qt's POV on the active popup is wrong due to our fake popup, so check LO's state.
         // Otherwise Qt will continue handling ToolTip events from the "parent" window.
-        const vcl::Window* pFocusWin = Application::GetFocusWindow();
-        if (!rFrame.m_aTooltipText.isEmpty() && pFocusWin
-            && pFocusWin->GetFrameWindow() == rFrame.GetWindow())
+        const QtFrame* pPopupFrame
+            = static_cast<QtInstance*>(GetSalData()->m_pInstance)->activePopup();
+        if (!rFrame.m_aTooltipText.isEmpty() && (!pPopupFrame || pPopupFrame == &rFrame))
             QToolTip::showText(QCursor::pos(), toQString(rFrame.m_aTooltipText), &rWidget,
                                rFrame.m_aTooltipArea);
         else

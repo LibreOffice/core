@@ -687,8 +687,9 @@ namespace sw::mark
                 // no special array for these
                 break;
         }
-        if (eType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
-            || eType == IDocumentMarkAccess::MarkType::DATE_FIELDMARK)
+        if (eMode == InsertMode::New
+            && (eType == IDocumentMarkAccess::MarkType::TEXT_FIELDMARK
+                || eType == IDocumentMarkAccess::MarkType::DATE_FIELDMARK))
         {
             // due to SwInsText notifications everything is visible now - tell
             // layout to hide as appropriate
