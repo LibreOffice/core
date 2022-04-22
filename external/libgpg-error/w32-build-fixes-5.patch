@@ -43,12 +43,13 @@
 
 --- src/logging.c	2020-06-05 18:58:59.254413200 +0200
 +++ src/logging.c~	2019-12-12 15:23:37.000000000 +0100
-@@ -44,7 +44,11 @@
+@@ -44,7 +44,12 @@
  # include <netinet/in.h>
  # include <arpa/inet.h>
  #endif /*!HAVE_W32_SYSTEM*/
 +#ifdef _WIN32
 +# include <io.h>
++# include <process.h>
 +#else
 +# include <unistd.h>
 +#endif
