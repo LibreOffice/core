@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e30611_a0255ba8",
+        "filename": "unoidl/source/legacyprovider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 816,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-22T07:23:41Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "25043078_174f09c8",
+      "range": {
+        "startLine": 816,
+        "startChar": 69,
+        "endLine": 816,
+        "endChar": 70
+      },
+      "revId": "aba76963f1153c9b036806f5bd124777a7a6a2df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b680b0c8_ff241607",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-04-21T19:48:31Z",
       "side": 1,
       "message": "this can be removed again",
+      "revId": "aba76963f1153c9b036806f5bd124777a7a6a2df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ecc5145_d7e144b6",
+        "filename": "unoidl/source/sourcefileprovider.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-22T07:23:41Z",
+      "side": 1,
+      "message": "done",
+      "parentUuid": "b680b0c8_ff241607",
       "revId": "aba76963f1153c9b036806f5bd124777a7a6a2df",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
