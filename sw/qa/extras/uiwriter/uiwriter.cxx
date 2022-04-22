@@ -590,7 +590,7 @@ public:
     CPPUNIT_TEST(testTdf59666);
     CPPUNIT_TEST_SUITE_END();
 
-private:
+protected:
     SwDoc* createDoc(const char* pName = nullptr);
     std::unique_ptr<SwTextBlocks> readDOCXAutotext(const OUString& sFileName, bool bEmpty = false);
 };
@@ -4145,6 +4145,57 @@ static void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xCompone
     CPPUNIT_ASSERT(xDispatchHelper.is());
 
     xDispatchHelper->executeDispatch(xFrame, rCommand, OUString(), 0, rPropertyValues);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf135978)
+{
+    SwDoc* pDoc = createDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    pWrtShell->Insert("foobar");
+    pWrtShell->SplitNode();
+    pWrtShell->Insert("bazquux");
+
+    CPPUNIT_ASSERT(pWrtShell->IsEndOfDoc());
+
+    SwFormatAnchor anchor(RndStdIds::FLY_AT_CHAR);
+    anchor.SetAnchor(pWrtShell->GetCursor()->GetPoint());
+    SfxItemSet flySet(pDoc->GetAttrPool(), svl::Items<RES_ANCHOR, RES_ANCHOR>{});
+    flySet.Put(anchor);
+    SwFlyFrameFormat const* pFly = dynamic_cast<SwFlyFrameFormat const*>(
+            pWrtShell->NewFlyFrame(flySet, /*bAnchValid=*/true));
+    CPPUNIT_ASSERT(pFly != nullptr);
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+    // move cursor back to body
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+
+    // hide and enable
+    lcl_dispatchCommand(mxComponent, ".uno:ShowTrackedChanges", {});
+    lcl_dispatchCommand(mxComponent, ".uno:TrackChanges", {});
+
+    CPPUNIT_ASSERT(pDoc->getIDocumentRedlineAccess().IsRedlineOn());
+    CPPUNIT_ASSERT(
+        IDocumentRedlineAccess::IsShowChanges(pDoc->getIDocumentRedlineAccess().GetRedlineFlags()));
+    CPPUNIT_ASSERT(pWrtShell->GetLayout()->IsHideRedlines());
+
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 4, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtShell->Delete();
+
+    // now split
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->SplitNode();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+
+    // the problem was that undo removed the fly frame from the layout
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+
+    pWrtShell->Redo();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
+
+    pWrtShell->Undo();
+    CPPUNIT_ASSERT(pFly->GetFrame() != nullptr);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTdf139843)
