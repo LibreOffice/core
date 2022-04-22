@@ -84,23 +84,6 @@ public:
     virtual void Create( SdrObject* pNewOpj, SvxDrawPage* pNewPage ) override;
 };
 
-
-class SvxTableShape : public SvxShape
-{
-protected:
-    // override these for special property handling in subcasses. Return true if property is handled
-    virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue ) override;
-    virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue ) override;
-
-    virtual void lock() override;
-    virtual void unlock() override;
-
-public:
-
-    explicit SvxTableShape(SdrObject* pObj);
-    virtual ~SvxTableShape() noexcept override;
-};
-
 SvxUnoPropertyMapProvider& getSvxMapProvider();
 
 #endif
