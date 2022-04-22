@@ -2176,6 +2176,97 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148345)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141391)
+{
+    // table insertion in the first paragraph of the cell
+    // overwrites the row content, instead of inserting a nested table
+
+    // load a 2-row table
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf116789.fodt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // select the table, and copy it into at paragraph start of cell "A2"
+
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    // remove the selection and positionate the cursor at beginning of A2
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // 3-row, overwriting cells of the second row and inserting a new row
+    // with the 2-row clipboard table content
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 3);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/Text", "Portion", "hello");
+
+    // Undo
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // 2 rows again, no copied text content
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/Text", 0);
+
+    // insert the 2-row table into the second paragraph of cell "A2" as a nested table
+    // For this it's enough to positionate the text cursor not in the first paragraph
+
+    // insert some text and an empty paragraph
+    pWrtShell->Insert("Some text...");
+    pWrtShell->SplitNode();
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/Text", "Portion",
+                "Some text...");
+    // the empty paragraph in A2
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[2]/Text", 0);
+
+    // insert the table, as a nested one in cell "A2"
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/tab", 1);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/tab/row", 2);
+
+    // Undo
+
+    dispatchCommand(mxComponent, ".uno:Undo", {});
+    Scheduler::ProcessEventsToIdle();
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // 2 rows again, no copied text content
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 2);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt[1]/Text", "Portion",
+                "Some text...");
+
+    // copy the 2-row table into the fist paragraph of cell "A2",
+    // but not at paragraph start (changed behaviour)
+
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Insert("and some text again in the first paragraph to be sure...");
+    dispatchCommand(mxComponent, ".uno:Paste", {});
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+
+    // 3-row, overwriting cells of the second row and inserting a new row
+    // with the 2-row clipboard table content
+
+    // This was 2 (nested table)
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 3);
+    // This was "Some text..." with a nested table
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/Text", "Portion", "hello");
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 {
     createSwDoc();
