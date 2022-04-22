@@ -966,11 +966,15 @@ bool SwFEShell::Paste(SwDoc& rClpDoc, bool bNestedTable)
             if (pSrcNd && nullptr != pDestNd &&
                 // not a forced nested table insertion
                 !bNestedTable &&
-                // are we at the beginning of the cell? (if not, we will insert a nested table)
-                // first paragraph of the cell?
-                rPaM.GetNode().GetIndex() == rPaM.GetNode().FindTableBoxStartNode()->GetIndex()+1 &&
-                // beginning of the paragraph?
-                !rPaM.GetPoint()->nContent.GetIndex())
+                // Heuristics to allow copying table rows or nesting tables without
+                // using Edit -> Paste Special -> Paste as Nested Table:
+                // Using table cursor, or if the text selection starts in the
+                // first paragraph, or if there is no selection and the text cursor
+                // is there in the first paragraph, overwrite content of the cell(s)
+                // (else insert a nested table later, i.e. if nothing selected and
+                // the cursor is not in the first paragraph, or the selected text
+                // doesn't contain the first paragraph of the cell)
+                rPaM.GetNode().GetIndex() == rPaM.GetNode().FindTableBoxStartNode()->GetIndex() + 1)
             {
                 SwPosition aDestPos( *rPaM.GetPoint() );
 
