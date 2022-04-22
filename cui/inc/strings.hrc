@@ -319,7 +319,7 @@
 #define RID_CUISTR_ADD                              NC_("RID_SVXSTR_ADD", "Add")
 #define RID_CUISTR_DESC_COLOR                       NC_("RID_SVXSTR_DESC_COLOR", "Please enter a name for the new color:")
 #define RID_CUISTR_TABLE                            NC_("RID_SVXSTR_TABLE", "Table")
-#define RID_CUISTR_DESC_LINEEND                     NC_("RID_SVXSTR_DESC_LINEEND", "Please enter a name for the new arrowhead:")
+#define RID_CUISTR_DESC_LINEEND                     NC_("RID_SVXSTR_DESC_LINEEND", "Please enter a name for the new arrow style:")
 #define RID_CUISTR_CHARNAME_NOSTYLE                 NC_("RID_SVXSTR_CHARNAME_NOSTYLE", "No %1")
 #define RID_CUISTR_CHARNAME_FAMILY                  NC_("RID_SVXSTR_CHARNAME_FAMILY", "Family:")
 #define RID_CUISTR_CHARNAME_FONT                    NC_("RID_SVXSTR_CHARNAME_FONT", "Font:")
