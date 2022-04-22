@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bdcd643_16f3857e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-04-22T06:39:49Z",
+      "side": 1,
+      "message": "The effect of this one is in:\nhttps://gerrit.libreoffice.org/c/core/+/133309/1",
+      "revId": "5ba453c465aaf92fba739e4cd49c714d8b17e231",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
