@@ -139,6 +139,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5976c704_ed791fd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-22T07:09:13Z",
+      "side": 1,
+      "message": "English is \"every language\".  Any exceptions are handled on an individual basis to override the English default.",
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b66a3fe9_9644ca2c",
