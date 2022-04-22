@@ -16,6 +16,23 @@
       "message": "Adding Mike who provided code pointers",
       "revId": "87ebaef1907e103538051bc6256f35d12342e97f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c7e2369_4bb9008d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-22T10:39:10Z",
+      "side": 1,
+      "message": "Btw. you could send a license statement https://wiki.documentfoundation.org/Development/GetInvolved#License_statement",
+      "revId": "87ebaef1907e103538051bc6256f35d12342e97f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
