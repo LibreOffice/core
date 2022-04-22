@@ -557,6 +557,8 @@ void ResourceManager::ReadContextList (
                 aApplications.push_back(vcl::EnumContext::Application::Impress);
             else if (sApplicationName == "Chart")
                 aApplications.push_back(vcl::EnumContext::Application::Chart);
+            else if (sApplicationName == "Math")
+                aApplications.push_back(vcl::EnumContext::Application::Formula);
             else if (sApplicationName == "DrawImpress")
             {
                 // A special case among the special names:  it is
