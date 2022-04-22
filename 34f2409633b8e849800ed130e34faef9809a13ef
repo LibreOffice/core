@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1feeab3b_0a48439a",
+        "filename": "drawinglayer/source/tools/emfpbrush.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001501
+      },
+      "writtenOn": "2022-04-22T18:34:35Z",
+      "side": 1,
+      "message": "Could you possibly add enum with these flags instead of comments?",
+      "revId": "34f2409633b8e849800ed130e34faef9809a13ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
