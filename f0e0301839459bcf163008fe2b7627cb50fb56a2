@@ -35,6 +35,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f819192c_46a25a9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003180
+      },
+      "writtenOn": "2022-04-22T23:44:22Z",
+      "side": 1,
+      "message": "Done a quick test, it seems that ODF is also affected by this issue (we also write local time but not UTC time to ODF metadata).",
+      "revId": "f0e0301839459bcf163008fe2b7627cb50fb56a2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cade37fa_51b8435f",
