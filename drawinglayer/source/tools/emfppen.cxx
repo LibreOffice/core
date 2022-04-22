@@ -98,7 +98,6 @@ namespace emfplushelper
     void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
         sal_uInt32 graphicsVersion, penType;
-        int i;
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
         SAL_INFO("drawinglayer", "EMF+\tpen");
         SAL_INFO("drawinglayer", "EMF+\t graphics version: 0x" << std::hex << graphicsVersion << " type (must be set to zero): " << penType <<
@@ -192,19 +191,14 @@ namespace emfplushelper
         if (penDataFlags & PenDataDashedLine)
         {
             dashStyle = EmfPlusLineStyleCustom;
-            sal_Int32 dashPatternLen;
+            sal_uInt32 dashPatternLen;
 
-            s.ReadInt32(dashPatternLen);
+            s.ReadUInt32(dashPatternLen);
             SAL_INFO("drawinglayer", "EMF+\t\tdashPatternLen: " << dashPatternLen);
-
-            if (dashPatternLen<0 || sal_uInt32(dashPatternLen)>SAL_MAX_INT32 / sizeof(float))
-            {
-                dashPatternLen = SAL_MAX_INT32 / sizeof(float);
-            }
 
             dashPattern.resize( dashPatternLen );
 
-            for (i = 0; i < dashPatternLen; i++)
+            for (sal_uInt32 i = 0; i < dashPatternLen; i++)
             {
                 s.ReadFloat(dashPattern[i]);
                 SAL_INFO("drawinglayer", "EMF+\t\t\tdashPattern[" << i << "]: " << dashPattern[i]);
@@ -223,17 +217,12 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataCompoundLine)
         {
-            sal_Int32 compoundArrayLen;
-            s.ReadInt32(compoundArrayLen);
-
-            if (compoundArrayLen<0 || sal_uInt32(compoundArrayLen)>SAL_MAX_INT32 / sizeof(float))
-            {
-                compoundArrayLen = SAL_MAX_INT32 / sizeof(float);
-            }
+            sal_uInt32 compoundArrayLen;
+            s.ReadUInt32(compoundArrayLen);
 
             compoundArray.resize(compoundArrayLen);
 
-            for (i = 0; i < compoundArrayLen; i++)
+            for (sal_uInt32 i = 0; i < compoundArrayLen; i++)
             {
                 s.ReadFloat(compoundArray[i]);
             }
@@ -242,7 +231,7 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataCustomStartCap)
         {
-            s.ReadInt32(customStartCapLen);
+            s.ReadUInt32(customStartCapLen);
             SAL_INFO("drawinglayer", "EMF+\t\tcustomStartCapLen: " << customStartCapLen);
             sal_uInt64 const pos = s.Tell();
 
@@ -259,7 +248,7 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataCustomEndCap)
         {
-            s.ReadInt32(customEndCapLen);
+            s.ReadUInt32(customEndCapLen);
             SAL_INFO("drawinglayer", "EMF+\t\tcustomEndCapLen: " << customEndCapLen);
             sal_uInt64 const pos = s.Tell();
 
