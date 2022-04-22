@@ -8001,6 +8001,7 @@ sc/inc/printopt.hxx
 sc/inc/prnsave.hxx
 sc/inc/progress.hxx
 sc/inc/queryentry.hxx
+sc/inc/queryiter.hxx
 sc/inc/queryparam.hxx
 sc/inc/rangelst.hxx
 sc/inc/rangenam.hxx
@@ -8190,6 +8191,7 @@ sc/source/core/data/patattr.cxx
 sc/source/core/data/pivot2.cxx
 sc/source/core/data/poolhelp.cxx
 sc/source/core/data/postit.cxx
+sc/source/core/data/queryiter.cxx
 sc/source/core/data/refupdatecontext.cxx
 sc/source/core/data/rowheightcontext.cxx
 sc/source/core/data/segmenttree.cxx
