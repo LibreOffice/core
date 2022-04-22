@@ -143,7 +143,7 @@ void writeStrokeAttribute(::tools::XmlWriter& rWriter,
         OUString sDotDash;
         for (double fDotDash : rStrokeAttribute.getDotDashArray())
         {
-            sDotDash += OUString::number(round(100.0 * fDotDash)) + " ";
+            sDotDash += OUString::number(lround(fDotDash)) + " ";
         }
         rWriter.attribute("dotDashArray", sDotDash);
         rWriter.attribute("fullDotDashLength", rStrokeAttribute.getFullDotDashLen());

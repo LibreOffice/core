@@ -210,6 +210,11 @@ namespace emfplushelper
         GraphicStateMap             mGSStack;
         GraphicStateMap             mGSContainerStack;
 
+        /* Performance optimizators */
+        /* Extracted Scale values from Transformation Matrix */
+        double mdExtractedXScale;
+        double mdExtractedYScale;
+
         /// data holders
         wmfemfhelper::TargetHolders&    mrTargetHolders;
         wmfemfhelper::PropertyHolders&  mrPropertyHolders;
