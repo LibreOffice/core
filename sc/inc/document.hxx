@@ -1534,6 +1534,7 @@ public:
                                                  SCCOL& rEndCol, SCROW nEndRow ) const;
     SC_DLLPUBLIC bool           IsEmptyBlock(SCCOL nStartCol, SCROW nStartRow,
                                              SCCOL nEndCol, SCROW nEndRow, SCTAB nTab) const;
+    // I think this returns the number of empty cells starting from the given direction.
     SC_DLLPUBLIC SCSIZE         GetEmptyLinesInBlock( SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab,
                                                       SCCOL nEndCol, SCROW nEndRow, SCTAB nEndTab,
                                                       ScDirection eDir );

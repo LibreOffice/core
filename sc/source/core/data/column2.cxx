@@ -1329,13 +1329,13 @@ bool ScColumn::IsNotesEmptyBlock(SCROW nStartRow, SCROW nEndRow) const
 
 SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirection eDir ) const
 {
-    // Given a range of rows, find a top or bottom empty segment.  Skip the start row.
+    // Given a range of rows, find a top or bottom empty segment.
     switch (eDir)
     {
         case DIR_TOP:
         {
             // Determine the length of empty head segment.
-            size_t nLength = nEndRow - nStartRow;
+            size_t nLength = nEndRow - nStartRow + 1;
             std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nStartRow);
             sc::CellStoreType::const_iterator it = aPos.first;
             if (it->type != sc::element_type_empty)
@@ -1350,7 +1350,7 @@ SCSIZE ScColumn::GetEmptyLinesInBlock( SCROW nStartRow, SCROW nEndRow, ScDirecti
         case DIR_BOTTOM:
         {
             // Determine the length of empty tail segment.
-            size_t nLength = nEndRow - nStartRow;
+            size_t nLength = nEndRow - nStartRow + 1;
             std::pair<sc::CellStoreType::const_iterator,size_t> aPos = maCells.position(nEndRow);
             sc::CellStoreType::const_iterator it = aPos.first;
             if (it->type != sc::element_type_empty)
