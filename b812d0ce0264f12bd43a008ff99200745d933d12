@@ -122,6 +122,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2ff3bfb_4a9ce41a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-22T06:55:46Z",
+      "side": 1,
+      "message": "@Heiko. Are you expecting that these shortcuts would be available to/for all languages? Or only English?  Iiuc the replies from Miklos and Justin, the patch will apply only for the English language interface, but not anywhere else. \n\nDoes \u003cvalue xml:lang\u003d\"de\"\u003e in  Accelerator.xcu  get invoked according to lang of interface? Or locale?  (I have assumed it refers to the lang of interface). \n\nIs there any place to read documentation about interaction between \"lang\" (of UI) and \"locale\"? (my attempts to find something relevant failed).\n\n",
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b66a3fe9_9644ca2c",
