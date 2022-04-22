@@ -181,7 +181,7 @@ bool ScValueIterator::GetThis(double& rValue, FormulaError& rErr)
                     if (mnTab > maEndPos.Tab())
                     {
                         rErr = FormulaError::NONE;
-                        return false; // Over and out
+                        return false;
                     }
                 }
                 pCol = &(mrDoc.maTabs[mnTab])->aCol[mnCol];
@@ -937,7 +937,7 @@ bool ScCellIterator::getCurrent()
                     if (maCurPos.Tab() > maEndPos.Tab())
                     {
                         maCurCell.clear();
-                        return false; // Over and out
+                        return false;
                     }
                 }
                 pCol = getColumn();
@@ -1142,7 +1142,7 @@ bool ScQueryCellIterator::GetThis()
             {
                 ++nCol;
                 if (nCol > maParam.nCol2 || nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
-                    return false; // Over and out
+                    return false;
                 if ( bAdvanceQuery )
                 {
                     AdvanceQueryParamEntryField();
@@ -1529,7 +1529,7 @@ int ScCountIfCellIterator::GetCount()
             {
                 ++nCol;
                 if (nCol > maParam.nCol2 || nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
-                    return count; // Over and out
+                    return count;
                 AdvanceQueryParamEntryField();
                 pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
             }
