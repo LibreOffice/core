@@ -905,7 +905,7 @@ drawinglayer::primitive2d::Primitive2DContainer SdrDragMethod::AddConnectorOverl
 
                         if(!aLine.isDefault())
                         {
-                            const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd(
+                            const drawinglayer::attribute::SdrLineStartEndAttribute aLineStartEnd( //tworzenie nowej linii
                                 drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(
                                     rItemSet,
                                     aLine.getWidth()));
