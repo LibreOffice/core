@@ -546,7 +546,7 @@
 #define RID_SVXSTR_INVISIBLE                                NC_("RID_SVXSTR_INVISIBLE", "None")
 #define RID_SVXSTR_COLOR                                    NC_("RID_SVXSTR_COLOR", "Color")
 #define RID_SVXSTR_HATCH                                    NC_("RID_SVXSTR_HATCH", "Hatching")
-#define RID_SVXSTR_LINEEND                                  NC_("RID_SVXSTR_LINEEND", "Arrowheads")
+#define RID_SVXSTR_LINEEND                                  NC_("RID_SVXSTR_LINEEND", "Arrow Styles")
 #define RID_SVXSTR_ARROW                                    NC_("RID_SVXSTR_ARROW", "Arrow")
 #define RID_SVXSTR_SQUARE                                   NC_("RID_SVXSTR_SQUARE", "Square")
 #define RID_SVXSTR_CIRCLE                                   NC_("RID_SVXSTR_CIRCLE", "Circle")
