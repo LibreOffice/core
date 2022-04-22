@@ -133,4 +133,10 @@ namespace o3tl{
     template<> struct typed_flags<sc::MatrixEdge> : o3tl::is_typed_flags<sc::MatrixEdge, 63> {};
 }
 
+enum class ScQueryCellIteratorType
+{
+  Generic,
+  CountIf
+};
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

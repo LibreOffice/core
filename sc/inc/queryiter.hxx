@@ -23,9 +23,24 @@
 #include "global.hxx"
 #include "scdllapi.h"
 #include "queryparam.hxx"
+#include "types.hxx"
 
-class ScQueryCellIterator           // walk through all non-empty cells in an area
+// Query-related iterators. There is one template class ScQueryCellIteratorBase
+// that implements most of the shared functionality, specific parts are done
+// by specializing the templates and then subclassing as the actual class to use.
+
+// Specific data should be in ScQueryCellIteratorSpecific (otherwise adding data
+// members here would mean specializing the entire ScQueryCellIteratorBase).
+template< ScQueryCellIteratorType iteratorType >
+class ScQueryCellIteratorSpecific
 {
+};
+
+// Shared code for query-based iterators.
+template< ScQueryCellIteratorType iteratorType >
+class ScQueryCellIteratorBase : public ScQueryCellIteratorSpecific< iteratorType >
+{
+protected:
     enum StopOnMismatchBits
     {
         nStopOnMismatchDisabled = 0x00,
@@ -60,28 +75,20 @@ class ScQueryCellIterator           // walk through all non-empty cells in an ar
     void InitPos();
     void IncPos();
     void IncBlock();
-    bool GetThis();
 
-                    /* Only works if no regular expression is involved, only
-                       searches for rows in one column, and only the first
-                       query entry is considered with simple conditions
-                       SC_LESS_EQUAL (sorted ascending) or SC_GREATER_EQUAL
-                       (sorted descending). Check these things before
-                       invocation! Delivers a starting point, continue with
-                       GetThis() and GetNext() afterwards. Introduced for
-                       FindEqualOrSortedLastInRange()
-                     */
-    bool BinarySearch();
+    // The actual query function. It will call HandleItemFound() for any matching type
+    // and return if HandleItemFound() returns true.
+    void PerformQuery();
+    bool HandleItemFound(); // not implemented, needs specialization
 
-public:
-                    ScQueryCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
-                                        const ScQueryParam& aParam, bool bMod);
-                                        // when !bMod, the QueryParam has to be filled
-                                        // (bIsString)
-    bool GetFirst();
-    bool GetNext();
     SCCOL           GetCol() const { return nCol; }
     SCROW           GetRow() const { return nRow; }
+
+public:
+                    ScQueryCellIteratorBase(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+                                            const ScQueryParam& aParam, bool bMod);
+                                        // when !bMod, the QueryParam has to be filled
+                                        // (bIsString)
 
                     // increments all Entry.nField, if column
                     // changes, for ScInterpreter ScHLookup()
@@ -120,6 +127,37 @@ public:
                         }
     bool            IsEqualConditionFulfilled() const
                         { return nTestEqualCondition == nTestEqualConditionFulfilled; }
+};
+
+template<>
+class ScQueryCellIteratorSpecific< ScQueryCellIteratorType::Generic >
+{
+protected:
+    bool getThisResult;
+};
+
+// The generic query iterator, used e.g. by VLOOKUP.
+class ScQueryCellIterator : public ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >
+{
+                    /* Only works if no regular expression is involved, only
+                       searches for rows in one column, and only the first
+                       query entry is considered with simple conditions
+                       SC_LESS_EQUAL (sorted ascending) or SC_GREATER_EQUAL
+                       (sorted descending). Check these things before
+                       invocation! Delivers a starting point, continue with
+                       GetThis() and GetNext() afterwards. Introduced for
+                       FindEqualOrSortedLastInRange()
+                     */
+    bool BinarySearch();
+
+    bool GetThis();
+
+public:
+    using ScQueryCellIteratorBase::ScQueryCellIteratorBase;
+    bool GetFirst();
+    bool GetNext();
+    using ScQueryCellIteratorBase::GetCol;
+    using ScQueryCellIteratorBase::GetRow;
 
                     /** In a range assumed to be sorted find either the last of
                         a sequence of equal entries or the last being less than
@@ -142,29 +180,20 @@ public:
     bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW& nFoundRow );
 };
 
-// Used by ScInterpreter::ScCountIf.
-// Walk through all non-empty cells in an area.
-class ScCountIfCellIterator
+
+template<>
+class ScQueryCellIteratorSpecific< ScQueryCellIteratorType::CountIf >
 {
-    typedef sc::CellStoreType::const_position_type PositionType;
-    PositionType    maCurPos;
-    ScQueryParam    maParam;
-    ScDocument&     rDoc;
-    const ScInterpreterContext& mrContext;
-    SCTAB           nTab;
-    SCCOL           nCol;
-    SCROW           nRow;
+protected:
+    sal_uInt64 countIfCount;
+};
 
-    /** Initialize position for new column. */
-    void            InitPos();
-    void            IncPos();
-    void            IncBlock();
-    void            AdvanceQueryParamEntryField();
-
+// Used by ScInterpreter::ScCountIf.
+class ScCountIfCellIterator : public ScQueryCellIteratorBase< ScQueryCellIteratorType::CountIf >
+{
 public:
-                    ScCountIfCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
-                                        const ScQueryParam& aParam);
-    int             GetCount();
+    using ScQueryCellIteratorBase::ScQueryCellIteratorBase;
+    sal_uInt64 GetCount();
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
