@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67c22806_1361af88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-22T14:16:39Z",
+      "side": 1,
+      "message": "I\u0027m in favour of backporting it. Some users might benefit from having it available earlier. In the particular case, the pros outweight the cons, IMHO",
+      "revId": "a256e103c3b7b9a01bddaa2f8d149ab945cf7826",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
