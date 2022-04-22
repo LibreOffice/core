@@ -18,6 +18,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f32392_8fe7996b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 29
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-22T19:01:09Z",
+      "side": 1,
+      "message": "So the saveAndReload does not export the vba project. This flag prevents it: https://opengrok.libreoffice.org/xref/core/oox/source/core/filterbase.cxx?r\u003d2d2dc141#158\n\nIs there a possibility to set the this flag somehow in the document shell? I could not figure it out by myself. Thank you for your help.",
+      "revId": "51f52afdcda33f8df41462542dd861ec3d1e569f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ad1cce8_dccbd0c6",
@@ -35,6 +52,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4be420b_a16e3d4f",
+        "filename": "sc/qa/unit/subsequent_export_test2.cxx",
+        "patchSetId": 29
+      },
+      "lineNbr": 676,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-22T19:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ad1cce8_dccbd0c6",
+      "revId": "51f52afdcda33f8df41462542dd861ec3d1e569f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4d19892_b6e068c1",
@@ -48,6 +83,24 @@
       "writtenOn": "2022-04-21T18:30:36Z",
       "side": 1,
       "message": "And here the function will be in lower case.",
+      "revId": "51f52afdcda33f8df41462542dd861ec3d1e569f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6f9fdff_5792f0a0",
+        "filename": "sc/qa/unit/subsequent_export_test2.cxx",
+        "patchSetId": 29
+      },
+      "lineNbr": 696,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-22T19:01:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4d19892_b6e068c1",
       "revId": "51f52afdcda33f8df41462542dd861ec3d1e569f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
