@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49ee3fdf_2370ed69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-22T16:02:33Z",
+      "side": 1,
+      "message": "Sorry, but you made a mistake. You were supposed to amend your patch, not submit a new one. https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version\n\nNow you can use this new patch for something else.",
+      "revId": "c994784ba6a5240c12a164bff7f842ee75254fbf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
