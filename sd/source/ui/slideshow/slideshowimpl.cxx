@@ -1383,7 +1383,7 @@ void SAL_CALL SlideshowImpl::resume()
 
     if( mbIsPaused ) try
     {
-        if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK )
+        if( mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_BLANK || mpShowWindow->GetShowWindowMode() == SHOWWINDOWMODE_END )
         {
             mpShowWindow->RestartShow();
         }

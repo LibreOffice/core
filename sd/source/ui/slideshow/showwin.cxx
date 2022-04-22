@@ -432,7 +432,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
         {
             AddWindowToPaintView();
 
-            if( SHOWWINDOWMODE_BLANK == eOldShowWindowMode )
+            if( SHOWWINDOWMODE_BLANK == eOldShowWindowMode || SHOWWINDOWMODE_END == eOldShowWindowMode )
             {
                 xSlideShow->pause(false);
                 Invalidate();
