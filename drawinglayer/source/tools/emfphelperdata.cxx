@@ -796,7 +796,7 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer.emf", "EMF+\t\tUse blend");
 
                     // store the blendpoints in the vector
-                    for (int i = 0; i < brush->blendPoints; i++)
+                    for (sal_uInt32 i = 0; i < brush->blendPoints; i++)
                     {
                         double aBlendPoint;
                         basegfx::BColor aColor;
@@ -821,7 +821,7 @@ namespace emfplushelper
                     SAL_INFO("drawinglayer.emf", "EMF+\t\tUse color blend");
 
                     // store the colorBlends in the vector
-                    for (int i = 0; i < brush->colorblendPoints; i++)
+                    for (sal_uInt32 i = 0; i < brush->colorblendPoints; i++)
                     {
                         double aBlendPoint;
                         basegfx::BColor aColor;
