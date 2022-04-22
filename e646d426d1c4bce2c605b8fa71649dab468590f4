@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "7e9ef392_2828d6e0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-22T09:37:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e26461bc_31c07987",
+      "revId": "e646d426d1c4bce2c605b8fa71649dab468590f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "ac506cf2_89d4d1a5",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -48,6 +66,30 @@
       "writtenOn": "2021-12-13T14:41:17Z",
       "side": 1,
       "message": "if (!pScMod-\u003eIsFormulaMode())\n    pScMod-\u003eInputEnterHandler();\n\nThis seems to work for \"commit change before creating sheet\", but that is just discovered by copy/paste of random bits of code that I don\u0027t understand. Highly likely not the right thing to do.",
+      "range": {
+        "startLine": 238,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 33
+      },
+      "revId": "e646d426d1c4bce2c605b8fa71649dab468590f4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3753665f_7fb9b619",
+        "filename": "sc/source/ui/view/tabcont.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-22T09:37:05Z",
+      "side": 1,
+      "message": "Yes, this looks like the perfect suggestion. InputEnterHandle does a sanity check, and then does a GetInputHdl() and if pHdl, the EnterHandler() similar to my other patches a couple months ago.",
+      "parentUuid": "4c949098_844fe39a",
       "range": {
         "startLine": 238,
         "startChar": 4,
