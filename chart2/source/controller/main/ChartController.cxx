@@ -366,6 +366,17 @@ void SAL_CALL ChartController::attachFrame(
     if( impl_isDisposedOrSuspended() ) //@todo? allow attaching the frame while suspended?
         return; //behave passive if already disposed or suspended
 
+    if(m_xFrame.is()) //what happens, if we do have a Frame already??
+    {
+        //@todo? throw exception?
+        OSL_FAIL( "there is already a frame attached to the controller" );
+        return;
+    }
+
+    //--attach frame
+    m_xFrame = xFrame; //the frameloader is responsible to call xFrame->setComponent
+
+    // Only notify after setting the frame, otherwise notification will fail
     mpSelectionChangeHandler->Connect();
 
     uno::Reference<ui::XSidebar> xSidebar = getSidebarFromModel(getChartModel());
@@ -378,16 +389,6 @@ void SAL_CALL ChartController::attachFrame(
         css::lang::EventObject aEvent;
         mpSelectionChangeHandler->selectionChanged(aEvent);
     }
-
-    if(m_xFrame.is()) //what happens, if we do have a Frame already??
-    {
-        //@todo? throw exception?
-        OSL_FAIL( "there is already a frame attached to the controller" );
-        return;
-    }
-
-    //--attach frame
-    m_xFrame = xFrame; //the frameloader is responsible to call xFrame->setComponent
 
     //add as disposelistener to the frame (due to persistent reference) ??...:
 
