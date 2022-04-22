@@ -389,13 +389,13 @@ void Test::TestDrawLine()
 
     // check correct import of the DrawLine: color and width of the line
     assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "color", "#000000");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "width", "33");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "width", "23");
 }
 
 void Test::TestDrawLineWithDash()
 {
-    // EMF+ with records: DrawLine
-    // The lines with different dash styles
+    // EMF+ with records: DrawLine, ScaleWorldTransform, RotateWorldTransform
+    // Test lines with different dash styles and different World Rotation
     Primitive2DSequence aSequence
         = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusDrawLineWithDash.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
@@ -405,23 +405,31 @@ void Test::TestDrawLineWithDash()
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawLine: color and width of the line
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 10);
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "color", "#000000");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "width", "132");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/stroke", 0);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke", 12);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/stroke", 0);
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "width", "132");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/stroke", "dotDashArray",
-                "13225 13225 ");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/stroke", "dotDashArray",
-                "39674 13225 ");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[4]/stroke", "dotDashArray",
-                "39674 13225 13225 13225 ");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[5]/stroke", "dotDashArray",
-                "39674 13225 13225 13225 13225 13225 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[2]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[2]/stroke", "dotDashArray",
+                "185 185 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/stroke", "dotDashArray",
+                "556 185 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[4]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[4]/stroke", "dotDashArray",
+                "556 185 185 185 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/stroke", "dotDashArray",
+                "556 185 185 185 185 185 ");
     //TODO polypolygonstroke[6-9]/stroke add support for PenDataDashedLineOffset
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[10]/stroke", "dotDashArray",
-                "66124 26450 198372 52899 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[10]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[10]/stroke", "dotDashArray",
+                "1851 741 5554 1481 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[11]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[11]/stroke", "dotDashArray",
+                "1851 741 5554 1481 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[12]/line", "width", "370");
 }
 
 void Test::TestLinearGradient()
