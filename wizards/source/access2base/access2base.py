@@ -43,7 +43,7 @@ from platform import system as _opsys
 import datetime, os, sys, traceback
 
 _LIBRARY = ''               # Should be 'Access2Base' or 'Access2BaseDev'
-_VERSION = '7.1'            # Actual version number
+_VERSION = '7.4'            # Actual version number
 _WRAPPERMODULE = 'Python'   # Module name in the Access2Base library containing Python interfaces
 
 # CallByName types
@@ -443,7 +443,8 @@ class acConstants(object, metaclass = _Singleton):
     vbCr = chr(13)
     vbLf = chr(10)
 
-    def _NewLine():
+    @classmethod
+    def _NewLine(cls):
         if _opsys == 'Windows': return chr(13) + chr(10)
         return chr(10)
 
@@ -608,7 +609,7 @@ class _A2B(object, metaclass = _Singleton):
         Script = cls.xScript(script, module)
         try:
             Returned = Script.invoke((args), (), ())[0]
-        except:
+        except Exception:
             raise TypeError("Access2Base error: method '" + script + "' in Basic module '" + module + "' call error. Check its arguments.")
         else:
             if Returned == None:
@@ -643,7 +644,7 @@ class _A2B(object, metaclass = _Singleton):
                 args = (action,) + (basic,) + (script,) + args
             try:
                 Returned = Script.invoke((args), (), ())
-            except:
+            except Exception:
                 raise TypeError("Access2Base error: method '" + script + "' call error. Check its arguments.")
 
         if isinstance(Returned[0], tuple):
