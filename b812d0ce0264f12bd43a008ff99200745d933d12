@@ -156,6 +156,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8693fc05_b8642bf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-22T07:37:00Z",
+      "side": 1,
+      "message": "#1: Our shortcut implementation is very much unexpected in itself. It hard-codes keys but overwrites per language and allows customization but only for English keyboards. But the actual question is: Who needs to toggle the unicode?\n\n#2: In my test run with UI\u003den_US (both KDE and LibreOffice) but locale\u003dde_DE nothing happened on pressing the shortcut alt+C. Alt+X toggled the unicode, alt+P evoked the PS dialog.\n\n#3: No idea. Had a similar discussion with Eike about locale vs. ui setting somewhere on BZ.",
+      "parentUuid": "e2ff3bfb_4a9ce41a",
+      "revId": "b812d0ce0264f12bd43a008ff99200745d933d12",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b66a3fe9_9644ca2c",
