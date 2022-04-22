@@ -5547,7 +5547,7 @@ void DomainMapper_Impl::handleAutoNum
 }
 
 void DomainMapper_Impl::handleAuthor
-    (std::u16string_view rFirstParam,
+    (std::u16string_view,
      uno::Reference< beans::XPropertySet > const& xFieldProperties,
      FieldId  eFieldId )
 {
@@ -5555,7 +5555,9 @@ void DomainMapper_Impl::handleAuthor
         xFieldProperties->setPropertyValue
             ( getPropertyName(PROP_FULL_NAME), uno::makeAny( true ));
 
-    if (!rFirstParam.empty() || eFieldId == FIELD_AUTHOR)
+    // Always set as FIXED b/c MS Word only updates these fields via user intervention (F9)
+    // AUTHOR of course never changes and USERNAME is easily mis-used as an original author field.
+    // Additionally, this was forced as fixed if any special case-formatting was provided.
     {
         xFieldProperties->setPropertyValue(
                 getPropertyName( PROP_IS_FIXED ),
