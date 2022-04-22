@@ -75,16 +75,17 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 
 } // namespace
 
-ScQueryCellIterator::ScQueryCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
-             const ScQueryParam& rParam, bool bMod ) :
-    maParam(rParam),
-    rDoc( rDocument ),
-    mrContext( rContext ),
-    nTab( nTable),
-    nStopOnMismatch( nStopOnMismatchDisabled ),
-    nTestEqualCondition( nTestEqualConditionDisabled ),
-    bAdvanceQuery( false ),
-    bIgnoreMismatchOnLeadingStrings( false )
+template< ScQueryCellIteratorType iteratorType >
+ScQueryCellIteratorBase< iteratorType >::ScQueryCellIteratorBase(ScDocument& rDocument,
+    const ScInterpreterContext& rContext, SCTAB nTable, const ScQueryParam& rParam, bool bMod )
+    : maParam(rParam)
+    , rDoc( rDocument )
+    , mrContext( rContext )
+    , nTab( nTable)
+    , nStopOnMismatch( nStopOnMismatchDisabled )
+    , nTestEqualCondition( nTestEqualConditionDisabled )
+    , bAdvanceQuery( false )
+    , bIgnoreMismatchOnLeadingStrings( false )
 {
     nCol = maParam.nCol1;
     nRow = maParam.nRow1;
@@ -104,7 +105,8 @@ ScQueryCellIterator::ScQueryCellIterator(ScDocument& rDocument, const ScInterpre
     }
 }
 
-void ScQueryCellIterator::InitPos()
+template< ScQueryCellIteratorType iteratorType >
+void ScQueryCellIteratorBase< iteratorType >::InitPos()
 {
     nRow = maParam.nRow1;
     if (maParam.bHasHeader && maParam.bByRow)
@@ -113,7 +115,8 @@ void ScQueryCellIterator::InitPos()
     maCurPos = rCol.maCells.position(nRow);
 }
 
-void ScQueryCellIterator::IncPos()
+template< ScQueryCellIteratorType iteratorType >
+void ScQueryCellIteratorBase< iteratorType >::IncPos()
 {
     if (maCurPos.second + 1 < maCurPos.first->size)
     {
@@ -126,7 +129,8 @@ void ScQueryCellIterator::IncPos()
         IncBlock();
 }
 
-void ScQueryCellIterator::IncBlock()
+template< ScQueryCellIteratorType iteratorType >
+void ScQueryCellIteratorBase< iteratorType >::IncBlock()
 {
     ++maCurPos.first;
     maCurPos.second = 0;
@@ -134,12 +138,14 @@ void ScQueryCellIterator::IncBlock()
     nRow = maCurPos.first->position;
 }
 
-bool ScQueryCellIterator::GetThis()
+template< ScQueryCellIteratorType iteratorType >
+void ScQueryCellIteratorBase< iteratorType >::PerformQuery()
 {
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     const ScQueryEntry& rEntry = maParam.GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
+    const bool bSingleQueryItem = rEntry.GetQueryItems().size() == 1;
     SCCOLROW nFirstQueryField = rEntry.nField;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings &&
         rItem.meType != ScQueryEntry::ByString;
@@ -150,6 +156,19 @@ bool ScQueryCellIterator::GetThis()
     bool bTestEqualCondition = false;
     ScQueryEvaluator queryEvaluator(rDoc, *rDoc.maTabs[nTab], maParam, &mrContext,
         (nTestEqualCondition ? &bTestEqualCondition : nullptr));
+    if( iteratorType == ScQueryCellIteratorType::CountIf )
+    {
+        // These are not used for COUNTIF, so should not be set, make the compiler
+        // explicitly aware of it so that the relevant parts are optimized away.
+        assert( !bAllStringIgnore );
+        assert( !bIgnoreMismatchOnLeadingStrings );
+        assert( nStopOnMismatch == nStopOnMismatchDisabled );
+        assert( nTestEqualCondition == nTestEqualConditionDisabled );
+        bAllStringIgnore = false;
+        bIgnoreMismatchOnLeadingStrings = false;
+        nStopOnMismatch = nStopOnMismatchDisabled;
+        nTestEqualCondition = nTestEqualConditionDisabled;
+    }
 
     ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
     while (true)
@@ -167,7 +186,7 @@ bool ScQueryCellIterator::GetThis()
             {
                 ++nCol;
                 if (nCol > maParam.nCol2 || nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
-                    return false;
+                    return;
                 if ( bAdvanceQuery )
                 {
                     AdvanceQueryParamEntryField();
@@ -186,7 +205,7 @@ bool ScQueryCellIterator::GetThis()
 
         if (maCurPos.first->type == sc::element_type_empty)
         {
-            if (rItem.mbMatchEmpty && rEntry.GetQueryItems().size() == 1)
+            if (rItem.mbMatchEmpty && bSingleQueryItem)
             {
                 // This shortcut, instead of determining if any SC_OR query
                 // exists or this query is SC_AND'ed (which wouldn't make
@@ -197,7 +216,10 @@ bool ScQueryCellIterator::GetThis()
                 // XXX this would have to be reworked if other filters used it
                 // in different manners and evaluation would have to be done in
                 // ValidQuery().
-                return true;
+                if(this->HandleItemFound())
+                    return;
+                IncPos();
+                continue;
             }
             else
             {
@@ -217,7 +239,12 @@ bool ScQueryCellIterator::GetThis()
             {
                 if ( nTestEqualCondition && bTestEqualCondition )
                     nTestEqualCondition |= nTestEqualConditionMatched;
-                return !aCell.isEmpty(); // Found it!
+                if ( aCell.isEmpty())
+                    return;
+                if( this->HandleItemFound())
+                    return;
+                IncPos();
+                continue;
             }
             else if ( nStopOnMismatch )
             {
@@ -228,7 +255,7 @@ bool ScQueryCellIterator::GetThis()
                 {
                     nTestEqualCondition |= nTestEqualConditionMatched;
                     nStopOnMismatch |= nStopOnMismatchOccurred;
-                    return false;
+                    return;
                 }
                 bool bStop;
                 if (bFirstStringIgnore)
@@ -246,7 +273,7 @@ bool ScQueryCellIterator::GetThis()
                 if (bStop)
                 {
                     nStopOnMismatch |= nStopOnMismatchOccurred;
-                    return false;
+                    return;
                 }
             }
             else
@@ -256,25 +283,8 @@ bool ScQueryCellIterator::GetThis()
     }
 }
 
-bool ScQueryCellIterator::GetFirst()
-{
-    assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
-    nCol = maParam.nCol1;
-    InitPos();
-    return GetThis();
-}
-
-bool ScQueryCellIterator::GetNext()
-{
-    IncPos();
-    if ( nStopOnMismatch )
-        nStopOnMismatch = nStopOnMismatchEnabled;
-    if ( nTestEqualCondition )
-        nTestEqualCondition = nTestEqualConditionEnabled;
-    return GetThis();
-}
-
-void ScQueryCellIterator::AdvanceQueryParamEntryField()
+template< ScQueryCellIteratorType iteratorType >
+void ScQueryCellIteratorBase< iteratorType >::AdvanceQueryParamEntryField()
 {
     SCSIZE nEntries = maParam.GetEntryCount();
     for ( SCSIZE j = 0; j < nEntries; j++  )
@@ -481,147 +491,6 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         }
     }
     return (nFoundCol <= rDoc.MaxCol()) && (nFoundRow <= rDoc.MaxRow());
-}
-
-ScCountIfCellIterator::ScCountIfCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
-             const ScQueryParam& rParam ) :
-    maParam(rParam),
-    rDoc( rDocument ),
-    mrContext( rContext ),
-    nTab( nTable)
-{
-    maParam.nCol1 = rDoc.maTabs[nTable]->ClampToAllocatedColumns(maParam.nCol1);
-    maParam.nCol2 = rDoc.maTabs[nTable]->ClampToAllocatedColumns(maParam.nCol2);
-    nCol = maParam.nCol1;
-    nRow = maParam.nRow1;
-}
-
-void ScCountIfCellIterator::InitPos()
-{
-    nRow = maParam.nRow1;
-    if (maParam.bHasHeader && maParam.bByRow)
-        ++nRow;
-    ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
-    maCurPos = pCol->maCells.position(nRow);
-}
-
-void ScCountIfCellIterator::IncPos()
-{
-    if (maCurPos.second + 1 < maCurPos.first->size)
-    {
-        // Move within the same block.
-        ++maCurPos.second;
-        ++nRow;
-    }
-    else
-        // Move to the next block.
-        IncBlock();
-}
-
-void ScCountIfCellIterator::IncBlock()
-{
-    ++maCurPos.first;
-    maCurPos.second = 0;
-
-    nRow = maCurPos.first->position;
-}
-
-int ScCountIfCellIterator::GetCount()
-{
-    assert(nTab < rDoc.GetTableCount() && "try to access index out of bounds, FIX IT");
-    nCol = maParam.nCol1;
-    InitPos();
-
-    const ScQueryEntry& rEntry = maParam.GetEntry(0);
-    const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-    const bool bSingleQueryItem = rEntry.GetQueryItems().size() == 1;
-    int count = 0;
-    ScQueryEvaluator queryEvaluator(rDoc, *rDoc.maTabs[nTab], maParam, &mrContext);
-
-    ScColumn* pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
-    while (true)
-    {
-        bool bNextColumn = maCurPos.first == pCol->maCells.end();
-        if (!bNextColumn)
-        {
-            if (nRow > maParam.nRow2)
-                bNextColumn = true;
-        }
-
-        if (bNextColumn)
-        {
-            do
-            {
-                ++nCol;
-                if (nCol > maParam.nCol2 || nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
-                    return count;
-                AdvanceQueryParamEntryField();
-                pCol = &(rDoc.maTabs[nTab])->aCol[nCol];
-            }
-            while (!rItem.mbMatchEmpty && pCol->IsEmptyData());
-
-            InitPos();
-        }
-
-        if (maCurPos.first->type == sc::element_type_empty)
-        {
-            if (rItem.mbMatchEmpty && bSingleQueryItem)
-            {
-                // This shortcut, instead of determining if any SC_OR query
-                // exists or this query is SC_AND'ed (which wouldn't make
-                // sense, but..) and evaluating them in ValidQuery(), is
-                // possible only because the interpreter is the only caller
-                // that sets mbMatchEmpty and there is only one item in those
-                // cases.
-                // XXX this would have to be reworked if other filters used it
-                // in different manners and evaluation would have to be done in
-                // ValidQuery().
-                count++;
-                IncPos();
-                continue;
-            }
-            else
-            {
-                IncBlock();
-                continue;
-            }
-        }
-
-        ScRefCellValue aCell = sc::toRefCell(maCurPos.first, maCurPos.second);
-
-        if ( queryEvaluator.ValidQuery( nRow,
-                (nCol == static_cast<SCCOL>(rEntry.nField) ? &aCell : nullptr)))
-        {
-            if (aCell.isEmpty())
-                return count;
-            count++;
-            IncPos();
-            continue;
-        }
-        else
-            IncPos();
-    }
-    return count;
-}
-
-void ScCountIfCellIterator::AdvanceQueryParamEntryField()
-{
-    SCSIZE nEntries = maParam.GetEntryCount();
-    for ( SCSIZE j = 0; j < nEntries; j++  )
-    {
-        ScQueryEntry& rEntry = maParam.GetEntry( j );
-        if ( rEntry.bDoQuery )
-        {
-            if ( rEntry.nField < rDoc.MaxCol() )
-                rEntry.nField++;
-            else
-            {
-                OSL_FAIL( "AdvanceQueryParamEntryField: ++rEntry.nField > MAXCOL" );
-            }
-        }
-        else
-            break;  // for
-    }
 }
 
 namespace {
@@ -1090,5 +959,59 @@ bool ScQueryCellIterator::BinarySearch()
         return false;
     }
 }
+
+
+template<>
+bool ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >::HandleItemFound()
+{
+    getThisResult = true;
+    return true; // Return from PerformQuery().
+}
+
+bool ScQueryCellIterator::GetThis()
+{
+    getThisResult = false;
+    PerformQuery();
+    return getThisResult;
+}
+
+bool ScQueryCellIterator::GetFirst()
+{
+    assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
+    nCol = maParam.nCol1;
+    InitPos();
+    return GetThis();
+}
+
+bool ScQueryCellIterator::GetNext()
+{
+    IncPos();
+    if ( nStopOnMismatch )
+        nStopOnMismatch = nStopOnMismatchEnabled;
+    if ( nTestEqualCondition )
+        nTestEqualCondition = nTestEqualConditionEnabled;
+    return GetThis();
+}
+
+
+template<>
+bool ScQueryCellIteratorBase< ScQueryCellIteratorType::CountIf >::HandleItemFound()
+{
+    ++countIfCount;
+    return false; // Continue searching.
+}
+
+sal_uInt64 ScCountIfCellIterator::GetCount()
+{
+    assert(nTab < rDoc.GetTableCount() && "try to access index out of bounds, FIX IT");
+    nCol = maParam.nCol1;
+    InitPos();
+    countIfCount = 0;
+    PerformQuery();
+    return countIfCount;
+}
+
+template class ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >;
+template class ScQueryCellIteratorBase< ScQueryCellIteratorType::CountIf >;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
