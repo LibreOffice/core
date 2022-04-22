@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f903a78_7d464ef9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-22T12:44:37Z",
+      "side": 1,
+      "message": "@Xisco: very nice fix!\n\nIt\u0027s a good idea to add INT to the help content, too, fixing the following bugs, too:\n\n– There is no information about the portability of the functions. It would be very useful to add some \"since version 7.1\" and since version 7.4. [By the way, Mike Kaganski mentioned that the formula identifier ooow: is not correct in the OpenDocument export using our extensions, so it needs some fixes there, too.];\n\n– Related to the bug of the help conversion tool, the final help text is incomplete for cell range examples, e.g. for SUM, PRODUCT etc.\n\nInstead of:\n\"Example: SUM \u003cA2:C2\u003e displays the sum of the values in cells A2 to C2\"\n\nthe text is messed up this way:\n\n\"Example: SUM displays the sum of the values in cells A2 to C2\"\n\n(at least on the web: https://help.libreoffice.org/7.4/en-US/text/swriter/02/14020000.html?DbPAR\u003dWRITER#bm_id3149687).\n\nCould you ask Olivier to do these, or if it\u0027s better for you, I will ask our new QA to do that?\n",
+      "revId": "203ae78e73695ea4ef23a94cab06012acca17f63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
