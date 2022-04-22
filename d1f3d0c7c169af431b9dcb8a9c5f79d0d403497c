@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80675f35_0cdf82c8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-22T10:16:01Z",
+      "side": 1,
+      "message": "Why did you delete the two files? By accident I guess?",
+      "revId": "d1f3d0c7c169af431b9dcb8a9c5f79d0d403497c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
