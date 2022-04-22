@@ -5786,7 +5786,7 @@ void ScInterpreter::ScCountIf()
             }
             else
             {
-                ScCountIfCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam);
+                ScCountIfCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                 fCount += aCellIter.GetCount();
             }
         }
