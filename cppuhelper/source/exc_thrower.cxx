@@ -168,9 +168,15 @@ ExceptionThrower::ExceptionThrower()
     uno_Interface::pDispatcher = ExceptionThrower_dispatch;
 }
 
+#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID)) || defined(EMSCRIPTEN)
+#define RETHROW_FAKE_EXCEPTIONS 1
+#else
+#define RETHROW_FAKE_EXCEPTIONS 0
+#endif
+
 class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThrower> {};
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#if RETHROW_FAKE_EXCEPTIONS
 // In the native iOS / Android app, where we don't have any Java, Python,
 // BASIC, or other scripting, the only thing that would use the C++/UNO bridge
 // functionality that invokes codeSnippet() was cppu::throwException().
@@ -208,7 +214,7 @@ void lo_mobile_throwException(css::uno::Any const& aException)
 
     assert(false);
 }
-#endif // defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#endif // RETHROW_FAKE_EXCEPTIONS
 
 } // anonymous namespace
 
@@ -226,7 +232,7 @@ void SAL_CALL throwException( Any const & exc )
             "(must be derived from com::sun::star::uno::Exception)!" );
     }
 
-#if defined(IOS) || (defined(__aarch64__) && defined(ANDROID))
+#if RETHROW_FAKE_EXCEPTIONS
     lo_mobile_throwException(exc);
 #else
     Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
@@ -243,13 +249,14 @@ void SAL_CALL throwException( Any const & exc )
         ExceptionThrower::getCppuType() );
     OSL_ASSERT( xThrower.is() );
     xThrower->throwException( exc );
-#endif
+#endif // !RETHROW_FAKE_EXCEPTIONS
 }
 
 
 Any SAL_CALL getCaughtException()
 {
-#if defined(__aarch64__) && defined(ANDROID)
+    // why does this differ from RETHROW_FAKE_EXCEPTIONS?
+#if (defined(__aarch64__) && defined(ANDROID)) || defined(EMSCRIPTEN)
     // FIXME This stuff works on 32bit ARM, let's use the shortcut only for
     // the 64bit ARM.
     return Any();
