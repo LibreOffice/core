@@ -442,6 +442,10 @@ namespace emfplushelper
         maMapTransform *= basegfx::utils::createScaleTranslateB2DHomMatrix(100.0 * mnMmX / mnPixX, 100.0 * mnMmY / mnPixY,
                                                                            double(-mnFrameLeft), double(-mnFrameTop));
         maMapTransform *= maBaseTransform;
+
+        // Used only for performance optimization, to do not calculate it every line draw
+        mdExtractedXScale = std::hypot(maMapTransform.a(), maMapTransform.b());
+        mdExtractedYScale = std::hypot(maMapTransform.c(), maMapTransform.d());
     }
 
     ::basegfx::B2DPoint EmfPlusHelperData::Map(double ix, double iy) const
@@ -531,7 +535,7 @@ namespace emfplushelper
             SAL_WARN_IF(pen->startCap != pen->endCap, "drawinglayer.emf", "emf+ pen uses different start and end cap");
         }
 
-        const double transformedPenWidth = maMapTransform.get(0, 0) * pen->penWidth;
+        const double transformedPenWidth = mdExtractedYScale * pen->penWidth;
         drawinglayer::attribute::LineAttribute lineAttribute(pen->GetColor().getBColor(),
                                                              transformedPenWidth,
                                                              pen->GetLineJoinType(),
@@ -543,7 +547,7 @@ namespace emfplushelper
                 new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                     polygon,
                     lineAttribute,
-                    pen->GetStrokeAttribute(maMapTransform.get(1, 1))));
+                    pen->GetStrokeAttribute(mdExtractedXScale)));
         }
         else
         {
@@ -551,7 +555,7 @@ namespace emfplushelper
                         new drawinglayer::primitive2d::PolyPolygonStrokePrimitive2D(
                             polygon,
                             lineAttribute,
-                            pen->GetStrokeAttribute(maMapTransform.get(1, 1))));
+                            pen->GetStrokeAttribute(mdExtractedXScale)));
 
             mrTargetHolders.Current().append(
                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
