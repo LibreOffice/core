@@ -64,6 +64,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcb0c14b_abd1579e",
+        "filename": "unoidl/source/sourcefileprovider.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-22T06:27:50Z",
+      "side": 1,
+      "message": "ignore me here, it had already been like this since \u003chttps://git.libreoffice.org/core/+/49fbda99b4e563be54ee7c85560a5929f0627654%5E%21\u003e \"tdf#123936 Formatting files in module unoidl with clang-format\"",
+      "parentUuid": "8791bca9_28d870ee",
+      "range": {
+        "startLine": 31,
+        "startChar": 55,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "aba76963f1153c9b036806f5bd124777a7a6a2df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0dc6f7e1_52c36af8",
@@ -77,6 +101,30 @@
       "writtenOn": "2022-04-21T19:48:31Z",
       "side": 1,
       "message": "nitpicky me would prefer if this was reverted back to the original state, with a space between const and \u0026",
+      "range": {
+        "startLine": 31,
+        "startChar": 55,
+        "endLine": 31,
+        "endChar": 61
+      },
+      "revId": "aba76963f1153c9b036806f5bd124777a7a6a2df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f131c1c7_8f18776c",
+        "filename": "unoidl/source/sourcetreeprovider.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-22T06:27:50Z",
+      "side": 1,
+      "message": "ignore me here, it had already been like this since \u003chttps://git.libreoffice.org/core/+/49fbda99b4e563be54ee7c85560a5929f0627654%5E%21\u003e \"tdf#123936 Formatting files in module unoidl with clang-format\"",
+      "parentUuid": "0dc6f7e1_52c36af8",
       "range": {
         "startLine": 31,
         "startChar": 55,
