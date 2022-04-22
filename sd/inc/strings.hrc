@@ -64,7 +64,7 @@
 #define STR_AUTOLAYOUT_NOTES                            NC_("STR_AUTOLAYOUT_NOTES", "Notes")
 #define STR_TRANSFORM                                   NC_("STR_TRANSFORM", "Transform")
 #define STR_LINEEND                                     NC_("STR_LINEEND", "Line Ends")
-#define STR_DESC_LINEEND                                NC_("STR_DESC_LINEEND", "Please enter a name for the new arrowhead:")
+#define STR_DESC_LINEEND                                NC_("STR_DESC_LINEEND", "Please enter a name for the new arrow style:")
 #define STR_WARN_NAME_DUPLICATE                         NC_("STR_WARN_NAME_DUPLICATE", "The name chosen already exists. \nPlease enter another name.")
 #define STR_UNDO_ANIMATION                              NC_("STR_UNDO_ANIMATION", "Animation parameters")
 #define STR_UNDO_COPYOBJECTS                            NC_("STR_UNDO_COPYOBJECTS", "Duplicate")
