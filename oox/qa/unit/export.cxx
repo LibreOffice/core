@@ -529,6 +529,26 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978_subpath)
     assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "w", "80");
     assertXPath(pXmlDoc, "//a:pathLst/a:path[4]", "h", "80");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
+{
+    // The odp file contains shapes whose path starts with command A, W, T or L. That is a faulty
+    // path. LO is tolerant and renders it so that is makes a moveTo to the start point of the arc or
+    // the end of the line respectively. Export to OOXML does the same now and writes a moveTo
+    // instead of the normally used lnTo. If a lnTo is written, MS Office shows nothing of the shape.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "FaultyPathStart.odp";
+
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Verify the markup:
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // First child of a:path should be a moveTo in all four shapes.
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
+    assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
