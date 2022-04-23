@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d835c4d_77e1cc5f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-04-23T10:46:13Z",
+      "side": 1,
+      "message": "I worry that we’re overloading the term “style” (that’s why I filed tdf#145517 after all). I’d rather use the term “arrowhead” in more places in the UI.",
+      "revId": "36842317c782009390600429dd4e83a414c6febb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
