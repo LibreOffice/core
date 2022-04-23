@@ -16,6 +16,24 @@
       "message": "I worry that we’re overloading the term “style” (that’s why I filed tdf#145517 after all). I’d rather use the term “arrowhead” in more places in the UI.",
       "revId": "bf1c42adf31b810d2cf8fdd05438f6a1a361bde7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19da2a2e_3c3383fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-23T11:08:02Z",
+      "side": 1,
+      "message": "Actually I think arrow style / arrowhead is used only in connection with the Line dialog (on the Arrow style tab and Line tab) -- i.e.  highly limited.\n\nMeanwhile -- none of these tickets are confirmed yet -- I just made the patches in anticipation -- so still time to discuss in BZ.",
+      "parentUuid": "0a541854_2236347c",
+      "revId": "bf1c42adf31b810d2cf8fdd05438f6a1a361bde7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
