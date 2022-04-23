@@ -16,6 +16,23 @@
       "message": "- windows fails due to CI error\n- cypress is not ready (expects canvas, to disable: https://github.com/CollaboraOnline/online/pull/4611)",
       "revId": "c7979307420819a0823b545cb40f2a62d1d7aecf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36f6c7df_64b8fce2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2022-04-23T06:29:13Z",
+      "side": 1,
+      "message": "cypress passes locally, this has to be merged together with online",
+      "revId": "c7979307420819a0823b545cb40f2a62d1d7aecf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
