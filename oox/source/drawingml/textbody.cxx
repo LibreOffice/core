@@ -77,21 +77,24 @@ bool TextBody::isEmpty() const
     if ( maParagraphs.size() > 1 )
         return false;
 
-    const TextRunVector aRuns = maParagraphs[0]->getRuns();
-    if ( aRuns.empty() )
+    const TextRunVector& rRuns = maParagraphs[0]->getRuns();
+    if ( rRuns.empty() )
         return true;
-    if ( aRuns.size() > 1 )
+    if ( rRuns.size() > 1 )
         return false;
 
-    return aRuns[0]->getText().isEmpty();
+    return rRuns[0]->getText().isEmpty();
 }
 
 OUString TextBody::toString() const
 {
     if (!isEmpty())
-        return maParagraphs.front()->getRuns().front()->getText();
-    else
-        return OUString();
+    {
+        const TextRunVector& rRuns = maParagraphs.front()->getRuns();
+        if(!rRuns.empty())
+            return rRuns.front()->getText();
+    }
+    return OUString();
 }
 
 bool TextBody::hasVisualRunProperties() const
