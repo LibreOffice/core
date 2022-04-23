@@ -29,6 +29,7 @@
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/colorbox.hxx>
+#include <svx/dlgutil.hxx>
 #include <svx/strarray.hxx>
 #include <svx/gallery.hxx>
 #include <editeng/brushitem.hxx>
@@ -2488,6 +2489,13 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(weld::Container* pPage, weld::Dialo
     , m_xPreviewWIN(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWIN))
 {
     SetExchangeSupport();
+
+    // set metric
+    FieldUnit eFUnit = GetModuleFieldUnit(rSet);
+
+    SetFieldUnit( *m_xDistBorderMF, eFUnit );
+    SetFieldUnit( *m_xIndentMF, eFUnit );
+    SetFieldUnit( *m_xDistNumMF, eFUnit );
 
     m_xAlignedAtMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
     m_xListtabMF->set_range(0, SAL_MAX_INT32, FieldUnit::NONE);
