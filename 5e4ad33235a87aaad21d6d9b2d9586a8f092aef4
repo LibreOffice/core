@@ -110,6 +110,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f1088905_e086ea2a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-23T10:19:21Z",
+      "side": 1,
+      "message": "\u003e and is \"JVM crash\" even a common thing to begin with?\n\nThis would be just some potential side effect. The existing problem is OOM for 32bit due to high extension memory usage.",
+      "parentUuid": "5b79fac1_64f40a5b",
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea9114ee_793bf7d5",
         "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
         "patchSetId": 1
