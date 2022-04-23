@@ -102,7 +102,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_modifiedField, "tdf148380_modifiedField.d
 
 DECLARE_OOXMLEXPORT_TEST(testTdf132475_printField, "tdf132475_printField.docx")
 {
-    // The last printed date field: formatted two diferent ways
+    // The last printed date field: formatted two different ways
     getParagraph(2, "Thursday, March 17, 2022");
     getParagraph(3, "17-Mar-22");
     // Time zone affects the displayed time in MS Word. LO shows GMT time. Word only updated by F9
