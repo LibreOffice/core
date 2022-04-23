@@ -3997,10 +3997,21 @@ bool DrawingML::WriteCustomGeometrySegment(
         {
             if (rnPairIndex >= rPairs.getLength())
                 return false;
-
-            mpFS->startElementNS(XML_a, XML_lnTo);
-            WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
-            mpFS->endElementNS(XML_a, XML_lnTo);
+            // LINETO without valid current point is a faulty path. LO is tolerant and makes a
+            // moveTo instead. Do the same on export. MS OFFICE requires a current point for lnTo,
+            // otherwise it shows nothing of the shape.
+            if (rbCurrentValid)
+            {
+                mpFS->startElementNS(XML_a, XML_lnTo);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+                mpFS->endElementNS(XML_a, XML_lnTo);
+            }
+            else
+            {
+                mpFS->startElementNS(XML_a, XML_moveTo);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+                mpFS->endElementNS(XML_a, XML_moveTo);
+            }
             rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, false, false);
             rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex].Second, false, false);
             rbCurrentValid = true;
@@ -4063,7 +4074,8 @@ bool DrawingML::WriteCustomGeometrySegment(
             getEllipsePointFromViewAngle(fSx, fSy, fWR, fHR, fCx, fCy, fStartAngle);
 
             // write markup for going to start point
-            if (eCommand == ANGLEELLIPSETO)
+            // lnTo requires a valid current point
+            if (eCommand == ANGLEELLIPSETO && rbCurrentValid)
             {
                 mpFS->startElementNS(XML_a, XML_lnTo);
                 mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fSx)),
@@ -4126,7 +4138,8 @@ bool DrawingML::WriteCustomGeometrySegment(
             getEllipsePointAndAngleFromRayPoint(fStartAngle, fPx, fPy, fWR, fHR, fCx, fCy, fX3,
                                                 fY3);
             // markup for going to start point
-            if (eCommand == ARCTO || eCommand == CLOCKWISEARCTO)
+            // lnTo requires a valid current point.
+            if ((eCommand == ARCTO || eCommand == CLOCKWISEARCTO) && rbCurrentValid)
             {
                 mpFS->startElementNS(XML_a, XML_lnTo);
                 mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fPx)),
