@@ -660,6 +660,8 @@ void OutputDevice::ImplDrawStrikeoutChar( tools::Long nBaseX, tools::Long nBaseY
     int nStrikeStrLen = (nWidth+(nStrikeoutWidth-1)) / nStrikeoutWidth;
     if( nStrikeStrLen > nMaxStrikeStrLen )
         nStrikeStrLen = nMaxStrikeStrLen;
+    else if (nStrikeStrLen < 0)
+        nStrikeStrLen = 0;
 
     // build the strikeout string
     for( int i = nTestStrLen; i < nStrikeStrLen; ++i)
