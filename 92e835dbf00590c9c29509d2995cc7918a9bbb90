@@ -124,6 +124,24 @@
       "parentUuid": "80523253_227d6194",
       "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58dc7692_774376bd",
+        "filename": "hwpfilter/source/hwpreader.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 3959,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-24T08:11:10Z",
+      "side": 0,
+      "message": "I don\u0027t see enough value in the current form, so I think it would be better to abandon this change, and find other places of code which are better suited to change atan-\u003eatan2.",
+      "parentUuid": "7bbbd8de_4159c258",
+      "revId": "92e835dbf00590c9c29509d2995cc7918a9bbb90",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
