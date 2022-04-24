@@ -316,7 +316,7 @@ def main(argv):
     parser.add_argument('--headers', action='store_true',
                     help='Check header files. If omitted, check source files. Use with --recursive.')
     parser.add_argument('--noexclude', action='store_true',
-                    help='Ignore excludelist. Useful to check wheher its exclusions are still all valid.')
+                    help='Ignore excludelist. Useful to check whether its exclusions are still all valid.')
 
     args = parser.parse_args()
 
