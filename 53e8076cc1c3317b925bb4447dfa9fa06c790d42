@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3305c1e9_871e40cb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-04-24T08:18:29Z",
+      "side": 1,
+      "message": "If no objection, I will push this commit next week",
+      "revId": "53e8076cc1c3317b925bb4447dfa9fa06c790d42",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
