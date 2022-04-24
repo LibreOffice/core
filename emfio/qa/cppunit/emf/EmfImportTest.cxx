@@ -51,6 +51,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestDrawStringTransparent();
     void TestDrawStringWithBrush();
     void TestDrawLine();
+    void TestDrawLineWithCaps();
     void TestDrawLineWithDash();
     void TestLinearGradient();
     void TestTextMapMode();
@@ -98,6 +99,7 @@ public:
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawStringWithBrush);
     CPPUNIT_TEST(TestDrawLine);
+    CPPUNIT_TEST(TestDrawLineWithCaps);
     CPPUNIT_TEST(TestDrawLineWithDash);
     CPPUNIT_TEST(TestLinearGradient);
     CPPUNIT_TEST(TestTextMapMode);
@@ -155,6 +157,7 @@ Primitive2DSequence Test::parseEmf(std::u16string_view aSource)
 
     SvFileStream aFileStream(aUrl, StreamMode::READ);
     std::size_t nSize = aFileStream.remainingSize();
+    CPPUNIT_ASSERT_MESSAGE("Unable to open file", nSize);
     std::unique_ptr<sal_Int8[]> pBuffer(new sal_Int8[nSize + 1]);
     aFileStream.ReadBytes(pBuffer.get(), nSize);
     pBuffer[nSize] = 0;
@@ -379,30 +382,91 @@ void Test::TestDrawLine()
 {
     // EMF+ with records: DrawLine
     // The line is colored and has a specified width, therefore a polypolygonstroke primitive is the optimal choice
-    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestDrawLine.emf");
+    Primitive2DSequence aSequence = parseEmf(u"emfio/qa/cppunit/emf/data/TestDrawLine.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawLine: color and width of the line
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "color", "#000000");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "width", "23");
+    assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence", "transparence", "14");
+    assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
+                "color", "#c01002");
+    assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
+                "width", "115");
+    assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/line",
+                "linecap", "BUTT");
+    assertXPath(pDocument, aXPathPrefix + "mask/unifiedtransparence/polypolygonstroke/polypolygon",
+                "path", "m55.5192348773662 403.573503917507 874.352660545936-345.821325648415");
+}
+
+void Test::TestDrawLineWithCaps()
+{
+    // EMF+ with records: DrawLine
+    // Test lines with different caps styles and arrows
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusDrawLineWithCaps.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 3);
+
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/line", "width", "211");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/stroke", 0);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/linestartattribute/polypolygon",
+                "path", "m0-1 1 2h-2z");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[1]/lineendattribute", 0);
+
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/line", "width", "211");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/stroke", 0);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/linestartattribute/polypolygon",
+                "path", "m0-1 1 2h-2z");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[2]/lineendattribute", 0);
+
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/line", "width", "423");
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/stroke", 0);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/linestartattribute", 0);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow[3]/lineendattribute/polypolygon",
+                "path", "m-1-1h2v2h-2z");
+
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence", 3);
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]", "transparence", "39");
+    assertXPath(pDocument,
+                aXPathPrefix
+                    + "unifiedtransparence[1]/polygonstrokearrow/linestartattribute/polypolygon",
+                "path",
+                "m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
+                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z");
+    assertXPath(pDocument,
+                aXPathPrefix
+                    + "unifiedtransparence[1]/polygonstrokearrow/lineendattribute/polypolygon",
+                "path", "m-1 1h2v-1l-1-1-1 1z");
+    assertXPath(pDocument,
+                aXPathPrefix + "unifiedtransparence[2]/polygonstrokearrow/linestartattribute", 0);
+    assertXPath(pDocument,
+                aXPathPrefix
+                    + "unifiedtransparence[2]/polygonstrokearrow/lineendattribute/polypolygon",
+                "path", "m-1-1h2v2h-2z");
+    assertXPath(pDocument,
+                aXPathPrefix
+                    + "unifiedtransparence[3]/polygonstrokearrow/lineendattribute/polypolygon",
+                "path", "m0-1 1 1-0.5 0.5v0.5h-1v-0.5l-0.5-0.5z");
 }
 
 void Test::TestDrawLineWithDash()
 {
     // EMF+ with records: DrawLine, ScaleWorldTransform, RotateWorldTransform
-    // Test lines with different dash styles and different World Rotation
+    // Test lines with different dash styles, different line arrows and different World Rotation
     Primitive2DSequence aSequence
-        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusDrawLineWithDash.emf");
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusDrawLineWithDash.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawLine: color and width of the line
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke", 12);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke", 10);
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "color", "#000000");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "width", "185");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/stroke", 0);
@@ -419,14 +483,30 @@ void Test::TestDrawLineWithDash()
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/line", "width", "370");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/stroke", "dotDashArray",
                 "556 185 185 185 185 185 ");
+
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow", 2);
     //TODO polypolygonstroke[6-9]/stroke add support for PenDataDashedLineOffset
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[10]/line", "width", "370");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[10]/stroke", "dotDashArray",
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[1]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[1]/stroke", "dotDashArray",
                 "1851 741 5554 1481 ");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[11]/line", "width", "370");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[11]/stroke", "dotDashArray",
-                "1851 741 5554 1481 ");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[12]/line", "width", "370");
+    // Arrows on both ends
+    assertXPath(pDocument,
+                aXPathPrefix + "mask/polygonstrokearrow[1]/linestartattribute/polypolygon", "path",
+                "m0-1 1 2h-2z");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[1]/lineendattribute/polypolygon",
+                "path", "m0-1 1 2h-2z");
+
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[2]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[2]/stroke", "dotDashArray",
+                "1852 741 5555 1481 ");
+    assertXPath(pDocument,
+                aXPathPrefix + "mask/polygonstrokearrow[2]/linestartattribute/polypolygon", "path",
+                "m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
+                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow[2]/lineendattribute/polypolygon",
+                "path",
+                "m-1 1h2v-1l-0.0764-0.3827-0.2165-0.3244-0.3244-0.2165-0.3827-0.0764-0.3827 "
+                "0.0764-0.3244 0.2165-0.2165 0.3244-0.0764 0.3827z");
 }
 
 void Test::TestLinearGradient()
@@ -878,7 +958,7 @@ void Test::TestPolylinetoCloseStroke()
 void Test::TestEmfPlusGetDC()
 {
     // tdf#147818 EMF+ records: GetDC, DrawPath, FillRects
-    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusGetDC.emf");
+    Primitive2DSequence aSequence = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusGetDC.emf");
     CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
     drawinglayer::Primitive2dXmlDump dumper;
     xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
@@ -910,7 +990,8 @@ void Test::TestEmfPlusGetDC()
                 "m19428.4895833333 6632.22222222222h317.34375v-2398.88888888889h-317.34375z");
     assertXPath(pDocument, aXPathPrefix + "polypolygoncolor[6]", "color", "#fcf2e3");
 
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 15);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 4);
+    assertXPath(pDocument, aXPathPrefix + "polygonstrokearrow", 13);
 }
 
 void Test::TestEmfPlusSave()
@@ -932,9 +1013,10 @@ void Test::TestEmfPlusSave()
                 "m10853.4145539602 7321.41354709201h41952690v29630720h-41952690z");
     assertXPath(pDocument, aXPathPrefix + "mask/polypolygoncolor", "color", "#00ffad");
 
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke/line", "color", "#000000");
-    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke/polypolygon", "path",
-                "m10853.4145539602 7321.41354709201v-2413.87029012044h1979.24116969109");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/line", "color", "#000000");
+    assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstrokearrow/polygon",
+                       "10853.4145539602,7321.41354709201 10853.4145539602,4907.54325697157 "
+                       "12832.6557236512,4907.54325697157");
 }
 
 void Test::TestExtTextOutOpaqueAndClipTransform()
