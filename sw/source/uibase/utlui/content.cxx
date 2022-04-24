@@ -440,23 +440,57 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
     {
         case ContentTypeId::OUTLINE   :
         {
-            const size_t nOutlineCount =
-                m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+            const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
+            bool bHasEntryInFly = false;
+            std::vector<SwNode*> aArr;
 
+            // place pointers to outline nodes in array for sorting and determine if there is an
+            // outline node in a fly frame
+            for (SwNode* p : m_pWrtShell->GetNodes().GetOutLineNds())
+            {
+                aArr.emplace_back(p);
+                if (!bHasEntryInFly && nEndOfExtrasIndex >= p->GetIndex() && p->GetFlyFormat())
+                    bHasEntryInFly = true;
+            }
+
+            // When there are outline nodes in fly frames do a sort using the fly frame anchor
+            // position to place those node entries in order of document layout appearance.
+            if (bHasEntryInFly)
+            {
+                std::stable_sort(aArr.begin(), aArr.end(),
+                                 [nEndOfExtrasIndex](const SwNode* a, const SwNode* b){
+                    SwPosition aPos(*a);
+                    SwPosition bPos(*b);
+                    // use anchor position for entries that are located in flys
+                    if (nEndOfExtrasIndex >= a->GetIndex())
+                    {
+                        if (auto pFlyFormat = a->GetFlyFormat())
+                            aPos = *pFlyFormat->GetAnchor().GetContentAnchor();
+                    }
+                    if (nEndOfExtrasIndex >= b->GetIndex())
+                    {
+                        if (auto pFlyFormat = b->GetFlyFormat())
+                            bPos = *pFlyFormat->GetAnchor().GetContentAnchor();
+                    }
+                    return aPos < bPos;});
+            }
+
+            const size_t nOutlineCount = aArr.size();
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                const sal_uInt8 nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
-                if (nLevel >= m_nOutlineLevel || !m_pWrtShell->getIDocumentOutlineNodesAccess()->
-                        isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
+                SwTextNode* pNode = aArr[i]->GetTextNode();
+                const sal_uInt8 nLevel = pNode->GetAttrOutlineLevel() - 1;
+                if (nLevel >= m_nOutlineLevel || !pNode->getLayoutFrame(m_pWrtShell->GetLayout()))
                     continue;
-                tools::Long nYPos = m_bAlphabeticSort ? 0 : getYPos(
-                            *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
+                auto const it = m_pWrtShell->GetNodes().GetOutLineNds().find(pNode);
+                auto nIndex = it - m_pWrtShell->GetNodes().GetOutLineNds().begin();
                 OUString aEntry(comphelper::string::stripStart(
-                                    m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
-                                        i, m_pWrtShell->GetLayout(), true, false, false), ' '));
+                                m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
+                                nIndex, m_pWrtShell->GetLayout(), true, false, false), ' '));
                 aEntry = SwNavigationPI::CleanEntry(aEntry);
-                auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
-                                                        m_pWrtShell->IsOutlineMovable( i ), nYPos));
+                auto pCnt(make_unique<SwOutlineContent>(this, aEntry, nIndex, nLevel,
+                                                        m_pWrtShell->IsOutlineMovable(nIndex),
+                                                        m_bAlphabeticSort ? 0 : i));
                 m_pMember->insert(std::move(pCnt));
             }
 
