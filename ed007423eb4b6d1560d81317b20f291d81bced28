@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "255fe0e4_38bbda30",
+        "filename": "include/filter/msfilter/dffrecordheader.hxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-24T09:22:40Z",
+      "side": 0,
+      "message": "You should also change sal_uLong -\u003e sal_uInt64 for GetRecEndFilePos(). Please also look at all the invocations of this function.\nMake sure that you look at all invokations of GetRecBegFilePos() and GetRecEndFilePos(). For example, you have not changed filter/source/msfilter/svdfppt.cxx:1510.",
+      "revId": "ed007423eb4b6d1560d81317b20f291d81bced28",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
