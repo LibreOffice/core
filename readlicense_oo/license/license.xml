@@ -2274,13 +2274,6 @@
     <hr />
     <h1><a id="a__Extensions" name="a__Extensions">Extensions</a></h1>
     <p>Only third party extensions are listed here whose source code is not in the LibreOffice tree.</p>
-    <div class="CT2N">
-        <h2>Convert Text to Number</h2>
-        <p>The following software may be included in this product: Convert Text to Number. Use of any of this software is
-        governed by the terms of the license below:</p>
-        <p>Copyright (C) 2008/2009 - Cor Nouws</p>
-        <p><a href="#a__LGPL_version_3">Jump to LGPL Version 3</a></p>
-    </div>
     <div class="LANGUAGETOOL">
         <h2>LanguageTool Grammar Checker</h2>
         <p>The following software may be included in this product: LanguageTool Grammar Checker. Use of any of this
