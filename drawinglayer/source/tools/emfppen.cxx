@@ -173,23 +173,6 @@ namespace emfplushelper
         return "";
     }
 
-    /// Convert stroke caps between EMF+ and rendering API
-    sal_Int8 EMFPPen::lcl_convertStrokeCap(sal_uInt32 nEmfStroke)
-    {
-        switch (nEmfStroke)
-        {
-            case EmfPlusLineCapTypeSquare:
-                return rendering::PathCapType::SQUARE;
-            // we have no mapping for EmfPlusLineCapTypeTriangle,
-            // but it is similar to Round
-            case EmfPlusLineCapTypeTriangle: // fall-through
-            case EmfPlusLineCapTypeRound:
-                return rendering::PathCapType::ROUND;
-        }
-
-        return rendering::PathCapType::BUTT;
-    }
-
     basegfx::B2DLineJoin EMFPPen::GetLineJoinType() const
     {
         if (penDataFlags & EmfPlusPenDataJoin) // additional line join information
