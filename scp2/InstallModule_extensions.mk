@@ -10,7 +10,6 @@
 $(eval $(call gb_InstallModule_InstallModule,scp2/extensions))
 
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/extensions,extensions_bsh))
-$(eval $(call gb_InstallModule_use_auto_install_libs,scp2/extensions,extensions_ct2n))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/extensions,extensions_rhino))
 $(eval $(call gb_InstallModule_use_auto_install_libs,scp2/extensions,extensions_numbertext))
 
