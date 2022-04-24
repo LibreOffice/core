@@ -1,4 +1,0 @@
-From [https://extensions.libreoffice.org/en/extensions/show/ct2n-convert-text-to-number-and-dates].
-
-ConvertTextToNumber replaces numbers and dates, formatted
- as text, with real numbers.
