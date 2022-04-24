@@ -51,7 +51,6 @@ $(eval $(call gb_Module_add_moduledirs,external,\
 	$(call gb_Helper_optional,ICU,icu) \
 	$(call gb_Helper_optional,JFREEREPORT,jfreereport) \
 	$(call gb_Helper_optional,LIBJPEG_TURBO,libjpeg-turbo) \
-	$(call gb_Helper_optional,LANGUAGETOOL,languagetool) \
 	$(call gb_Helper_optional,LCMS2,lcms2) \
 	$(call gb_Helper_optional,LIBASSUAN,libassuan) \
 	$(call gb_Helper_optional,LIBATOMIC_OPS,libatomic_ops) \

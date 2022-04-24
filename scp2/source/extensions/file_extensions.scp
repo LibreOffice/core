@@ -48,19 +48,6 @@ End
 
 #endif
 
-/* ** LanguageTool ** */
-
-#ifdef WITH_EXTENSION_LANGUAGETOOL
-
-File gid_File_Oxt_LanguageTool
-    TXT_FILE_BODY;
-    Styles = (PACKED, FILELIST);
-    Dir = FILELIST_DIR;
-    Name = "LanguageTool.filelist";
-End
-
-#endif
-
 /* ** Script provider for BeanShell ** */
 
 #if defined ENABLE_JAVA && !defined WITHOUT_SCRIPTING_BEANSHELL
