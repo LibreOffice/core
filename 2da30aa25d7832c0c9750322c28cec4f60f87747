@@ -36,6 +36,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5224f1c_9455d695",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-24T11:18:39Z",
+      "side": 1,
+      "message": "I\u0027ve removed the mentioned part, and used the term \"recommended version\" for 16.10 in the variable names.",
+      "parentUuid": "32dcfdd1_f9539f3a",
+      "revId": "2da30aa25d7832c0c9750322c28cec4f60f87747",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d5cc902_bfd25f3a",
