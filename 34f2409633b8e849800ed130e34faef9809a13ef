@@ -16,6 +16,24 @@
       "message": "Could you possibly add enum with these flags instead of comments?",
       "revId": "34f2409633b8e849800ed130e34faef9809a13ef",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f0962c5_4c768d7c",
+        "filename": "drawinglayer/source/tools/emfpbrush.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-04-24T11:00:59Z",
+      "side": 1,
+      "message": "Nice idea. I will do that in separate Pull Request, to not mix refactorong with bug fix. Thanks",
+      "parentUuid": "1feeab3b_0a48439a",
+      "revId": "34f2409633b8e849800ed130e34faef9809a13ef",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
