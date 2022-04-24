@@ -123,7 +123,6 @@ namespace emfplushelper
 
         void Read(SvStream& s, EmfPlusHelperData const & rR);
 
-        static sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke);
         drawinglayer::attribute::StrokeAttribute GetStrokeAttribute(const double aTransformation) const;
         basegfx::B2DLineJoin GetLineJoinType() const;
     };

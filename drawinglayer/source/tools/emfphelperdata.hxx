@@ -21,6 +21,7 @@
 
 #include <wmfemfhelper.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <drawinglayer/attribute/linestartendattribute.hxx>
 #include <tools/stream.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <map>
@@ -231,6 +232,9 @@ namespace emfplushelper
         // stack actions
         void GraphicStatePush(GraphicStateMap& map, sal_Int32 index);
         void GraphicStatePop(GraphicStateMap& map, sal_Int32 index);
+
+        const drawinglayer::attribute::LineStartEndAttribute CreateLineEnd(const sal_Int32 aCap,
+                                                                           const float aPenWidth) const;
 
         // primitive creators
         void EMFPPlusDrawPolygon(const ::basegfx::B2DPolyPolygon& polygon, sal_uInt32 penIndex);

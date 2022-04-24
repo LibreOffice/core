@@ -216,7 +216,7 @@ basegfx::B2DRange getTextAnchorRange(const attribute::SdrTextAttribute& rText,
             }
         }
 
-        Primitive2DReference createPolygonLinePrimitive(
+        Primitive2DReference createPolygonLinePrimitive( // to mozna uzyc do tworzenia linii
             const basegfx::B2DPolygon& rPolygon,
             const attribute::SdrLineAttribute& rLine,
             const attribute::SdrLineStartEndAttribute& rStroke)

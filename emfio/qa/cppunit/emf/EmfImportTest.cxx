@@ -51,6 +51,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestDrawStringTransparent();
     void TestDrawStringWithBrush();
     void TestDrawLine();
+    void TestDrawLineWithCaps();
     void TestDrawLineWithDash();
     void TestLinearGradient();
     void TestTextMapMode();
@@ -97,6 +98,7 @@ public:
     CPPUNIT_TEST(TestDrawStringTransparent);
     CPPUNIT_TEST(TestDrawStringWithBrush);
     CPPUNIT_TEST(TestDrawLine);
+    CPPUNIT_TEST(TestDrawLineWithCaps);
     CPPUNIT_TEST(TestDrawLineWithDash);
     CPPUNIT_TEST(TestLinearGradient);
     CPPUNIT_TEST(TestTextMapMode);
@@ -384,8 +386,52 @@ void Test::TestDrawLine()
     CPPUNIT_ASSERT(pDocument);
 
     // check correct import of the DrawLine: color and width of the line
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "color", "#000000");
-    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke/line", "width", "23");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/line", "width", "115");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/line", "linecap", "BUTT");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/linestartattribute", "width", "115");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/linestartattribute", "centered", "1");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/lineendattribute", "width", "115");
+    assertXPath(pDocument, aXPathPrefix + "mask/polygonstrokearrow/lineendattribute", "centered", "1");
+}
+
+void Test::TestDrawLineWithCaps()
+{
+    // EMF+ with records: DrawLine
+    // Test lines with different caps styles and arrows
+    Primitive2DSequence aSequence
+        = parseEmf(u"/emfio/qa/cppunit/emf/data/TestEmfPlusDrawLineWithCaps.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    // check correct import of the DrawLine: color and width of the line
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke", 12);
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "color", "#000000");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[1]/stroke", 0);
+
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[2]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[2]/stroke", "dotDashArray",
+                "185 185 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[3]/stroke", "dotDashArray",
+                "556 185 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[4]/line", "width", "185");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[4]/stroke", "dotDashArray",
+                "556 185 185 185 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[5]/stroke", "dotDashArray",
+                "556 185 185 185 185 185 ");
+    //TODO polypolygonstroke[6-9]/stroke add support for PenDataDashedLineOffset
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[10]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[10]/stroke", "dotDashArray",
+                "1851 741 5554 1481 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[11]/line", "width", "370");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[11]/stroke", "dotDashArray",
+                "1851 741 5554 1481 ");
+    assertXPath(pDocument, aXPathPrefix + "mask/polypolygonstroke[12]/line", "width", "370");
 }
 
 void Test::TestDrawLineWithDash()

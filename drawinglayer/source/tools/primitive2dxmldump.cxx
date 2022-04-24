@@ -23,6 +23,7 @@
 #include <drawinglayer/primitive2d/Tools.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokeArrowPrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonStrokePrimitive2D.hxx>
 #include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
@@ -722,6 +723,35 @@ void Primitive2dXmlDump::decomposeAndWrite(
                 rWriter.endElement();
             }
             break;
+
+            case PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D:
+            {
+                const PolygonStrokeArrowPrimitive2D& rPolygonStrokeArrowPrimitive2D
+                    = dynamic_cast<const PolygonStrokeArrowPrimitive2D&>(*pBasePrimitive);
+                rWriter.startElement("polygonstrokearrow");
+
+                rWriter.startElement("polygon");
+                rWriter.content(
+                    basegfx::utils::exportToSvgPoints(rPolygonStrokeArrowPrimitive2D.getB2DPolygon()));
+                rWriter.endElement();
+                rWriter.startElement("linestartattribute");
+                rWriter.attribute("width", rPolygonStrokeArrowPrimitive2D.getStart().getWidth());
+                rWriter.attribute("centered", rPolygonStrokeArrowPrimitive2D.getEnd().isCentered());
+                writePolyPolygon(rWriter, rPolygonStrokeArrowPrimitive2D.getStart().getB2DPolyPolygon());
+                rWriter.endElement();
+
+                rWriter.startElement("lineendattribute");
+                rWriter.attribute("width", rPolygonStrokeArrowPrimitive2D.getEnd().getWidth());
+                rWriter.attribute("centered", rPolygonStrokeArrowPrimitive2D.getEnd().isCentered());
+                writePolyPolygon(rWriter, rPolygonStrokeArrowPrimitive2D.getEnd().getB2DPolyPolygon());
+                rWriter.endElement();
+
+                writeLineAttribute(rWriter, rPolygonStrokeArrowPrimitive2D.getLineAttribute());
+                writeStrokeAttribute(rWriter, rPolygonStrokeArrowPrimitive2D.getStrokeAttribute());
+                rWriter.endElement();
+            }
+            break;
+
             case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
             {
                 const PolygonStrokePrimitive2D& rPolygonStrokePrimitive2D
