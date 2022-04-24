@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b31acc_81469938",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-04-24T13:00:54Z",
+      "side": 1,
+      "message": "\"Margin\" should be \"Entire frame\".\n\n\"left frame border\" and \"right frame border\" is the area of frame line plus padding as set in dialog page \"Border\". (Here term \"border\" has the same problem as discussed for a page.) In content it would be \"Frame region bevor frame text area\" and \"frame region after frame text area\". \"left\" of \"Right frame border\" sets the object direct after the frame text area.\nSo changing \"Margin\" and \"Entire frame\" to \"Frame border\" would be very confusing together with \"left frame border\" and \"right frame border\" and confusing in regard to the term \"border\". ",
+      "revId": "3ee20b28acdf58c93094005821b161573f8d6e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
