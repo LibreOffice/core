@@ -183,7 +183,7 @@ namespace
 
 // Content, contains names and reference at the content type.
 
-SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, tools::Long nYPos) :
+SwContent::SwContent(const SwContentType* pCnt, const OUString& rName, double nYPos) :
     SwTypeNumber(CTYPE_CNT),
     m_pParent(pCnt),
     m_sContentName(rName),
@@ -440,23 +440,30 @@ void SwContentType::FillMemberList(bool* pbContentChanged)
     {
         case ContentTypeId::OUTLINE   :
         {
-            const size_t nOutlineCount =
-                m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNodesCount();
+            const SwNodeOffset nEndOfExtrasIndex = m_pWrtShell->GetNodes().GetEndOfExtras().GetIndex();
+            // provide for up to 99999 outline nodes in frames to be sorted in document layout order
+            double nOutlinesInFramesIndexAdjustment = 0.00001;
+            const SwOutlineNodes& rOutlineNodes(m_pWrtShell->GetNodes().GetOutLineNds());
+            const size_t nOutlineCount = rOutlineNodes.size();
 
             for (size_t i = 0; i < nOutlineCount; ++i)
             {
-                const sal_uInt8 nLevel = m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineLevel(i);
-                if (nLevel >= m_nOutlineLevel || !m_pWrtShell->getIDocumentOutlineNodesAccess()->
-                        isOutlineInLayout(i, *m_pWrtShell->GetLayout()))
+                SwTextNode* pNode = rOutlineNodes[i]->GetTextNode();
+                const sal_uInt8 nLevel = pNode->GetAttrOutlineLevel() - 1;
+                if (nLevel >= m_nOutlineLevel || !pNode->getLayoutFrame(m_pWrtShell->GetLayout()))
                     continue;
-                tools::Long nYPos = m_bAlphabeticSort ? 0 : getYPos(
-                            *m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineNode(i));
+                double nYPos = m_bAlphabeticSort ? 0 : static_cast<double>(getYPos(*pNode));
+                if (nEndOfExtrasIndex >= pNode->GetIndex() && pNode->GetFlyFormat())
+                {
+                    nYPos += nOutlinesInFramesIndexAdjustment;
+                    nOutlinesInFramesIndexAdjustment += 0.00001;
+                }
                 OUString aEntry(comphelper::string::stripStart(
-                                    m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
-                                        i, m_pWrtShell->GetLayout(), true, false, false), ' '));
+                                m_pWrtShell->getIDocumentOutlineNodesAccess()->getOutlineText(
+                                i, m_pWrtShell->GetLayout(), true, false, false), ' '));
                 aEntry = SwNavigationPI::CleanEntry(aEntry);
                 auto pCnt(make_unique<SwOutlineContent>(this, aEntry, i, nLevel,
-                                                        m_pWrtShell->IsOutlineMovable( i ), nYPos));
+                                                        m_pWrtShell->IsOutlineMovable(i), nYPos));
                 m_pMember->insert(std::move(pCnt));
             }
 
