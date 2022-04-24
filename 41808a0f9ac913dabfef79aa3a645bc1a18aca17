@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cd81824_d3fcc6fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-24T08:05:42Z",
+      "side": 1,
+      "message": "About the code, I can\u0027t tell because I don\u0027t know understand the \"run\" notion but I confirm it builds and the file can open with the patch.\n",
+      "revId": "41808a0f9ac913dabfef79aa3a645bc1a18aca17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
