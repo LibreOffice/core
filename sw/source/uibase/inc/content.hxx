@@ -46,7 +46,7 @@ class SwOutlineContent final : public SwContent
                             SwOutlineNodes::size_type nArrPos,
                             sal_uInt8 nLevel,
                             bool bMove,
-                            tools::Long nYPos) :
+                            float nYPos) :
             SwContent(pCnt, rName, nYPos),
             m_nOutlinePos(nArrPos), m_nOutlineLevel(nLevel), m_bIsMoveable(bMove) {}
 
