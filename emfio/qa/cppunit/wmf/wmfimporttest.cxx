@@ -403,11 +403,6 @@ void WmfTest::testStockObject()
     CPPUNIT_ASSERT(pDoc);
 
     //   Without the fix in place, this test would have failed with
-    // - Expected: 42
-    // - Actual  : 37
-    assertXPathChildren(pDoc, "/metafile/push[2]", 42);
-
-    //   Without the fix in place, this test would have failed with
     // - Expected: 1
     // - Actual  : 0
     // - In <>, XPath '/metafile/push[2]/fillcolor[2]' number of nodes is incorrect
