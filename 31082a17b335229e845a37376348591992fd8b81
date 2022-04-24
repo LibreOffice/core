@@ -16,6 +16,23 @@
       "message": "Let\u0027s put back Verified+1 since I just modified the comment.\n\nArmin/Mike: any thoughts here?\n(Regina didn\u0027t reproduce the bug)",
       "revId": "31082a17b335229e845a37376348591992fd8b81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba666f98_4e5e204d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-04-24T06:49:53Z",
+      "side": 1,
+      "message": "Tested the patch locally, added my new example file and screenshots to the bug.\nNow the file save is successful, but upon reload the freeform line is not read correctly.\nThis also happens in older versions back to 6.0.7 so not a new regression.",
+      "revId": "31082a17b335229e845a37376348591992fd8b81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
