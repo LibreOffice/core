@@ -148,7 +148,6 @@ $(WORKDIR)/download: $(BUILDDIR)/config_$(gb_Side).mk $(SRCDIR)/download.lst $(S
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_LIBXML_TARBALL) \
 		$(call fetch_Optional,JFREEREPORT,JFREEREPORT_SAC_TARBALL) \
 		$(call fetch_Optional,LIBJPEG_TURBO,LIBJPEG_TURBO_TARBALL) \
-		$(call fetch_Optional,LANGUAGETOOL,LANGUAGETOOL_TARBALL) \
 		$(call fetch_Optional,LCMS2,LCMS2_TARBALL) \
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
 		$(call fetch_Optional,LIBASSUAN,LIBASSUAN_TARBALL) \
