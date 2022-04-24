@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c758ab8a_76291016",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-24T08:00:01Z",
+      "side": 1,
+      "message": "No idea at all but I suppose Tor or Stephan may have some idea since it concerns macOS.",
+      "revId": "88fd564d0240f26239a1cf3c1a889a9d8a90d728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
