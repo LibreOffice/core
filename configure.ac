@@ -4272,6 +4272,7 @@ if test "$_os" = "WINNT"; then
         AC_MSG_ERROR([Visual C++ not found after all, huh])
     fi
 
+    # ERROR if VS version < 16.5
     AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2019 version 16.5])
     AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
         // See <https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros> for mapping
@@ -4280,6 +4281,21 @@ if test "$_os" = "WINNT"; then
         #error
         #endif
     ]])],[AC_MSG_RESULT([yes])],[AC_MSG_ERROR([no])])
+
+    # WARN if VS version < 16.10
+    AC_MSG_CHECKING([$CC_BASE is at least Visual Studio 2019 version 16.10])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+        #if _MSC_VER < 1929
+        #error
+        #endif
+    ]])],[vs2019_recommended_version=yes],[vs2019_recommended_version=no])
+
+    if test $vs2019_recommended_version = yes; then
+        AC_MSG_RESULT([yes])
+    else
+        AC_MSG_WARN([no])
+        add_warning "You should have at least Visual Studio 2019 version 16.10 to avoid build problems. Otherwise, you may face problems with the build of some modules including dragonbox."
+    fi
 
     # Check for 64-bit (cross-)compiler to use to build the 64-bit
     # version of the Explorer extension (and maybe other small
