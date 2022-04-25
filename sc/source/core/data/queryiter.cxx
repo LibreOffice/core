@@ -287,195 +287,6 @@ void ScQueryCellIteratorBase< iteratorType >::AdvanceQueryParamEntryField()
     }
 }
 
-bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
-        SCROW& nFoundRow )
-{
-    // Set and automatically reset mpParam->mbRangeLookup when returning. We
-    // could use comphelper::FlagRestorationGuard, but really, that one is
-    // overengineered for this simple purpose here.
-    struct BoolResetter
-    {
-        bool& mr;
-        bool  mb;
-        BoolResetter( bool& r, bool b ) : mr(r), mb(r) { r = b; }
-        ~BoolResetter() { mr = mb; }
-    } aRangeLookupResetter( maParam.mbRangeLookup, true);
-
-    nFoundCol = rDoc.MaxCol()+1;
-    nFoundRow = rDoc.MaxRow()+1;
-    SetStopOnMismatch( true ); // assume sorted keys
-    SetTestEqualCondition( true );
-    bIgnoreMismatchOnLeadingStrings = true;
-    bool bLiteral = maParam.eSearchType == utl::SearchParam::SearchType::Normal &&
-        maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
-    bool bBinary = maParam.bByRow &&
-        (bLiteral || maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue) &&
-        (maParam.GetEntry(0).eOp == SC_LESS_EQUAL || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
-    bool bFound = false;
-    if (bBinary)
-    {
-        if (BinarySearch())
-        {
-            // BinarySearch() already positions correctly and only needs real
-            // query comparisons afterwards, skip the verification check below.
-            maParam.mbRangeLookup = false;
-            bFound = GetThis();
-        }
-    }
-    else
-    {
-        bFound = GetFirst();
-    }
-    if (bFound)
-    {
-        // First equal entry or last smaller than (greater than) entry.
-        PositionType aPosSave;
-        bool bNext = false;
-        do
-        {
-            nFoundCol = GetCol();
-            nFoundRow = GetRow();
-            aPosSave = maCurPos;
-            if (IsEqualConditionFulfilled())
-                break;
-            bNext = GetNext();
-        }
-        while (bNext);
-
-        // There may be no pNext but equal condition fulfilled if regular
-        // expressions are involved. Keep the found entry and proceed.
-        if (!bNext && !IsEqualConditionFulfilled())
-        {
-            // Step back to last in range and adjust position markers for
-            // GetNumberFormat() or similar.
-            SCCOL nColDiff = nCol - nFoundCol;
-            nCol = nFoundCol;
-            nRow = nFoundRow;
-            maCurPos = aPosSave;
-            if (maParam.mbRangeLookup)
-            {
-                // Verify that the found entry does not only fulfill the range
-                // lookup but also the real query, i.e. not numeric was found
-                // if query is ByString and vice versa.
-                maParam.mbRangeLookup = false;
-                // Step back the last field advance if GetNext() did one.
-                if (bAdvanceQuery && nColDiff)
-                {
-                    SCSIZE nEntries = maParam.GetEntryCount();
-                    for (SCSIZE j=0; j < nEntries; ++j)
-                    {
-                        ScQueryEntry& rEntry = maParam.GetEntry( j );
-                        if (rEntry.bDoQuery)
-                        {
-                            if (rEntry.nField - nColDiff >= 0)
-                                rEntry.nField -= nColDiff;
-                            else
-                            {
-                                assert(!"FindEqualOrSortedLastInRange: rEntry.nField -= nColDiff < 0");
-                            }
-                        }
-                        else
-                            break;  // for
-                    }
-                }
-                // Check it.
-                if (!GetThis())
-                {
-                    nFoundCol = rDoc.MaxCol()+1;
-                    nFoundRow = rDoc.MaxRow()+1;
-                }
-            }
-        }
-    }
-    if ( IsEqualConditionFulfilled() )
-    {
-        // Position on last equal entry.
-        SCSIZE nEntries = maParam.GetEntryCount();
-        for ( SCSIZE j = 0; j < nEntries; j++  )
-        {
-            ScQueryEntry& rEntry = maParam.GetEntry( j );
-            if ( rEntry.bDoQuery )
-            {
-                switch ( rEntry.eOp )
-                {
-                    case SC_LESS_EQUAL :
-                    case SC_GREATER_EQUAL :
-                        rEntry.eOp = SC_EQUAL;
-                    break;
-                    default:
-                    {
-                        // added to avoid warnings
-                    }
-                }
-            }
-            else
-                break;  // for
-        }
-        PositionType aPosSave;
-        bIgnoreMismatchOnLeadingStrings = false;
-        SetTestEqualCondition( false );
-        do
-        {
-            nFoundCol = GetCol();
-            nFoundRow = GetRow();
-            aPosSave = maCurPos;
-        } while (GetNext());
-
-        // Step back conditions are the same as above
-        nCol = nFoundCol;
-        nRow = nFoundRow;
-        maCurPos = aPosSave;
-        return true;
-    }
-    if ( (maParam.eSearchType != utl::SearchParam::SearchType::Normal) &&
-            StoppedOnMismatch() )
-    {
-        // Assume found entry to be the last value less than respectively
-        // greater than the query. But keep on searching for an equal match.
-        SCSIZE nEntries = maParam.GetEntryCount();
-        for ( SCSIZE j = 0; j < nEntries; j++  )
-        {
-            ScQueryEntry& rEntry = maParam.GetEntry( j );
-            if ( rEntry.bDoQuery )
-            {
-                switch ( rEntry.eOp )
-                {
-                    case SC_LESS_EQUAL :
-                    case SC_GREATER_EQUAL :
-                        rEntry.eOp = SC_EQUAL;
-                    break;
-                    default:
-                    {
-                        // added to avoid warnings
-                    }
-                }
-            }
-            else
-                break;  // for
-        }
-        SetStopOnMismatch( false );
-        SetTestEqualCondition( false );
-        if (GetNext())
-        {
-            // Last of a consecutive area, avoid searching the entire parameter
-            // range as it is a real performance bottleneck in case of regular
-            // expressions.
-            PositionType aPosSave;
-            do
-            {
-                nFoundCol = GetCol();
-                nFoundRow = GetRow();
-                aPosSave = maCurPos;
-                SetStopOnMismatch( true );
-            } while (GetNext());
-            nCol = nFoundCol;
-            nRow = nFoundRow;
-            maCurPos = aPosSave;
-        }
-    }
-    return (nFoundCol <= rDoc.MaxCol()) && (nFoundRow <= rDoc.MaxRow());
-}
-
 namespace {
 
 template<typename Iter>
@@ -691,7 +502,8 @@ public:
 
 }
 
-bool ScQueryCellIterator::BinarySearch()
+template< ScQueryCellIteratorType iteratorType >
+bool ScQueryCellIteratorBase< iteratorType >::BinarySearch()
 {
     // TODO: This will be extremely slow with mdds::multi_type_vector.
 
@@ -959,6 +771,195 @@ bool ScQueryCellIterator::BinarySearch()
     }
 }
 
+
+bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
+        SCROW& nFoundRow )
+{
+    // Set and automatically reset mpParam->mbRangeLookup when returning. We
+    // could use comphelper::FlagRestorationGuard, but really, that one is
+    // overengineered for this simple purpose here.
+    struct BoolResetter
+    {
+        bool& mr;
+        bool  mb;
+        BoolResetter( bool& r, bool b ) : mr(r), mb(r) { r = b; }
+        ~BoolResetter() { mr = mb; }
+    } aRangeLookupResetter( maParam.mbRangeLookup, true);
+
+    nFoundCol = rDoc.MaxCol()+1;
+    nFoundRow = rDoc.MaxRow()+1;
+    SetStopOnMismatch( true ); // assume sorted keys
+    SetTestEqualCondition( true );
+    bIgnoreMismatchOnLeadingStrings = true;
+    bool bLiteral = maParam.eSearchType == utl::SearchParam::SearchType::Normal &&
+        maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString;
+    bool bBinary = maParam.bByRow &&
+        (bLiteral || maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue) &&
+        (maParam.GetEntry(0).eOp == SC_LESS_EQUAL || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
+    bool bFound = false;
+    if (bBinary)
+    {
+        if (BinarySearch())
+        {
+            // BinarySearch() already positions correctly and only needs real
+            // query comparisons afterwards, skip the verification check below.
+            maParam.mbRangeLookup = false;
+            bFound = GetThis();
+        }
+    }
+    else
+    {
+        bFound = GetFirst();
+    }
+    if (bFound)
+    {
+        // First equal entry or last smaller than (greater than) entry.
+        PositionType aPosSave;
+        bool bNext = false;
+        do
+        {
+            nFoundCol = GetCol();
+            nFoundRow = GetRow();
+            aPosSave = maCurPos;
+            if (IsEqualConditionFulfilled())
+                break;
+            bNext = GetNext();
+        }
+        while (bNext);
+
+        // There may be no pNext but equal condition fulfilled if regular
+        // expressions are involved. Keep the found entry and proceed.
+        if (!bNext && !IsEqualConditionFulfilled())
+        {
+            // Step back to last in range and adjust position markers for
+            // GetNumberFormat() or similar.
+            SCCOL nColDiff = nCol - nFoundCol;
+            nCol = nFoundCol;
+            nRow = nFoundRow;
+            maCurPos = aPosSave;
+            if (maParam.mbRangeLookup)
+            {
+                // Verify that the found entry does not only fulfill the range
+                // lookup but also the real query, i.e. not numeric was found
+                // if query is ByString and vice versa.
+                maParam.mbRangeLookup = false;
+                // Step back the last field advance if GetNext() did one.
+                if (bAdvanceQuery && nColDiff)
+                {
+                    SCSIZE nEntries = maParam.GetEntryCount();
+                    for (SCSIZE j=0; j < nEntries; ++j)
+                    {
+                        ScQueryEntry& rEntry = maParam.GetEntry( j );
+                        if (rEntry.bDoQuery)
+                        {
+                            if (rEntry.nField - nColDiff >= 0)
+                                rEntry.nField -= nColDiff;
+                            else
+                            {
+                                assert(!"FindEqualOrSortedLastInRange: rEntry.nField -= nColDiff < 0");
+                            }
+                        }
+                        else
+                            break;  // for
+                    }
+                }
+                // Check it.
+                if (!GetThis())
+                {
+                    nFoundCol = rDoc.MaxCol()+1;
+                    nFoundRow = rDoc.MaxRow()+1;
+                }
+            }
+        }
+    }
+    if ( IsEqualConditionFulfilled() )
+    {
+        // Position on last equal entry.
+        SCSIZE nEntries = maParam.GetEntryCount();
+        for ( SCSIZE j = 0; j < nEntries; j++  )
+        {
+            ScQueryEntry& rEntry = maParam.GetEntry( j );
+            if ( rEntry.bDoQuery )
+            {
+                switch ( rEntry.eOp )
+                {
+                    case SC_LESS_EQUAL :
+                    case SC_GREATER_EQUAL :
+                        rEntry.eOp = SC_EQUAL;
+                    break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
+                }
+            }
+            else
+                break;  // for
+        }
+        PositionType aPosSave;
+        bIgnoreMismatchOnLeadingStrings = false;
+        SetTestEqualCondition( false );
+        do
+        {
+            nFoundCol = GetCol();
+            nFoundRow = GetRow();
+            aPosSave = maCurPos;
+        } while (GetNext());
+
+        // Step back conditions are the same as above
+        nCol = nFoundCol;
+        nRow = nFoundRow;
+        maCurPos = aPosSave;
+        return true;
+    }
+    if ( (maParam.eSearchType != utl::SearchParam::SearchType::Normal) &&
+            StoppedOnMismatch() )
+    {
+        // Assume found entry to be the last value less than respectively
+        // greater than the query. But keep on searching for an equal match.
+        SCSIZE nEntries = maParam.GetEntryCount();
+        for ( SCSIZE j = 0; j < nEntries; j++  )
+        {
+            ScQueryEntry& rEntry = maParam.GetEntry( j );
+            if ( rEntry.bDoQuery )
+            {
+                switch ( rEntry.eOp )
+                {
+                    case SC_LESS_EQUAL :
+                    case SC_GREATER_EQUAL :
+                        rEntry.eOp = SC_EQUAL;
+                    break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
+                }
+            }
+            else
+                break;  // for
+        }
+        SetStopOnMismatch( false );
+        SetTestEqualCondition( false );
+        if (GetNext())
+        {
+            // Last of a consecutive area, avoid searching the entire parameter
+            // range as it is a real performance bottleneck in case of regular
+            // expressions.
+            PositionType aPosSave;
+            do
+            {
+                nFoundCol = GetCol();
+                nFoundRow = GetRow();
+                aPosSave = maCurPos;
+                SetStopOnMismatch( true );
+            } while (GetNext());
+            nCol = nFoundCol;
+            nRow = nFoundRow;
+            maCurPos = aPosSave;
+        }
+    }
+    return (nFoundCol <= rDoc.MaxCol()) && (nFoundRow <= rDoc.MaxRow());
+}
 
 template<>
 bool ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >::HandleItemFound()
