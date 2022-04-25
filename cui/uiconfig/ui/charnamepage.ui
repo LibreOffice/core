@@ -1108,6 +1108,14 @@
       </object>
     </child>
   </object>
+  <object class="GtkSizeGroup" id="sizegroup1">
+    <property name="ignore-hidden">True</property>
+    <widgets>
+      <widget name="weststyleft-cjk"/>
+      <widget name="eaststyleft"/>
+      <widget name="ctlstyleft"/>
+    </widgets>
+  </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <property name="ignore-hidden">True</property>
     <widgets>
@@ -1116,13 +1124,20 @@
       <widget name="ctlfontnameft"/>
     </widgets>
   </object>
-  <object class="GtkSizeGroup" id="sizegroup1">
-    <property name="ignore-hidden">True</property>
-  </object>
   <object class="GtkSizeGroup" id="sizegroup3">
     <property name="ignore-hidden">True</property>
+    <widgets>
+      <widget name="westsizeft-cjk"/>
+      <widget name="eastsizeft"/>
+      <widget name="ctlsizeft"/>
+    </widgets>
   </object>
   <object class="GtkSizeGroup" id="sizegroup4">
     <property name="ignore-hidden">True</property>
+    <widgets>
+      <widget name="westlangft-cjk"/>
+      <widget name="eastlangft"/>
+      <widget name="ctllangft"/>
+    </widgets>
   </object>
 </interface>
