@@ -80,7 +80,7 @@ ZipPackageHelper::ZipPackageHelper(
     mxHNameAccess->getByHierarchicalName( "/" ) >>= mxRootFolder;
 }
 
-static OUString encodeZipUri( const OUString& rURI )
+static OUString encodeZipUri( std::u16string_view rURI )
 {
     return Uri::encode( rURI, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
@@ -91,9 +91,9 @@ Reference< XInterface >& ZipPackageHelper::getRootFolder()
 }
 
 Reference< XInterface > ZipPackageHelper::addFolder( Reference< XInterface > const & xRootFolder,
-                                                     const OUString& rName )
+                                                     std::u16string_view rName )
 {
-    if ( rName == ".." || rName == "." )
+    if ( rName == u".." || rName == u"." )
         throw lang::IllegalArgumentException();
 
     Reference< XInterface > xFolder( mxFactory->createInstanceWithArguments({ Any(true) } ));

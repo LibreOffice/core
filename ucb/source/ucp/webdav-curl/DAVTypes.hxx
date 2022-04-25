@@ -164,11 +164,11 @@ namespace http_dav_ucp
         explicit DAVOptionsCache();
         ~DAVOptionsCache();
 
-        bool getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions );
-        void removeDAVOptions( const OUString & rURL );
+        bool getDAVOptions( std::u16string_view rURL, DAVOptions & rDAVOptions );
+        void removeDAVOptions( std::u16string_view rURL );
         void addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 nLifeTime );
 
-        void setHeadAllowed( const OUString & rURL, bool HeadAllowed = true );
+        void setHeadAllowed( std::u16string_view rURL, bool HeadAllowed = true );
 
     private:
 

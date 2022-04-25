@@ -109,7 +109,7 @@ inline UnoUrlDescriptor::Impl::Impl(OUString const & rDescriptor)
             {
                 if (!m_aParameters.emplace(
                             aKey,
-                            rtl::Uri::decode(rDescriptor.copy(nStart,
+                            rtl::Uri::decode(rDescriptor.subView(nStart,
                                                               i - nStart),
                                              rtl_UriDecodeWithCharset,
                                              RTL_TEXTENCODING_UTF8)).second)

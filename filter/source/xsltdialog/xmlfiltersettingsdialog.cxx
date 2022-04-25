@@ -1305,7 +1305,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     };
 }
 
-OUString string_encode( const OUString & rText )
+OUString string_encode( std::u16string_view rText )
 {
     static sal_Bool const uricNoSlash[] = {
         false, false, false, false, false, false, false, false,
@@ -1329,7 +1329,7 @@ OUString string_encode( const OUString & rText )
     return Uri::encode( rText, uricNoSlash, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
 
-OUString string_decode( const OUString & rText )
+OUString string_decode( std::u16string_view rText )
 {
     return Uri::decode( rText, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 }

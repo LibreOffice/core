@@ -112,7 +112,7 @@ bool create_folder(
     if (! create_folder(
             &parentContent, url.copy( 0, slash ), xCmdEnv, throw_exc ))
         return false;
-    const Any title( ::rtl::Uri::decode( url.copy( slash + 1 ),
+    const Any title( ::rtl::Uri::decode( url.subView( slash + 1 ),
                                          rtl_UriDecodeWithCharset,
                                          RTL_TEXTENCODING_UTF8 ) );
     const Sequence<ContentInfo> infos(

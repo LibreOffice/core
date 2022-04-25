@@ -264,7 +264,7 @@ namespace ucb::ucp::ext
         {
             const OUString& rId( m_aResults[ i_nIndex ].sId );
             const OUString sRootURL( ContentProvider::getRootURL() );
-            OUString sTitle = Content::decodeIdentifier( rId.copy( sRootURL.getLength() ) );
+            OUString sTitle = Content::decodeIdentifier( rId.subView( sRootURL.getLength() ) );
             if ( sTitle.endsWith("/") )
                 sTitle = sTitle.copy( 0, sTitle.getLength() - 1 );
             xRow = Content::getArtificialNodePropertyValues( m_xContext, getResultSet()->getProperties(), sTitle );

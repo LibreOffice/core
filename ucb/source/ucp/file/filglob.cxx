@@ -561,7 +561,7 @@ namespace fileaccess {
             prop.Handle = -1;
             OUString aClashingName(
                 rtl::Uri::decode(
-                    OUString(getTitle(aUncPath)),
+                    getTitle(aUncPath),
                     rtl_UriDecodeWithCharset,
                     RTL_TEXTENCODING_UTF8));
             prop.Value <<= aClashingName;

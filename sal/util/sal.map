@@ -761,6 +761,13 @@ PRIVATE_1.8 { # LibreOffice 7.3
         rtl_uString_newReplaceStrAtUtf16L;
 } PRIVATE_1.7;
 
+PRIVATE_1.8 { # LibreOffice 7.5
+    global:
+        rtl_uriConvertRelToAbs2;
+        rtl_uriEncode2;
+        rtl_uriDecode2;
+} PRIVATE_1.8;
+
 PRIVATE_textenc.1 { # LibreOffice 3.6
     global:
         _ZN3sal6detail7textenc20convertCharToUnicode*;

@@ -279,7 +279,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
         }
     } else if constexpr (std::is_same_v<T, rtl::OUString>) {
         *path = rtl::Uri::decode(
-            url.copy(i), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+            url.subView(i), rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
     } else {
         static_assert(std::is_same_v<T, rtl::OString> || std::is_same_v<T, rtl::OUString>);
     }
@@ -315,7 +315,7 @@ template<typename T> oslFileError getSystemPathFromFileUrl(
                 home += "/";
             try
             {
-                home = rtl::Uri::convertRelToAbs(home, url.copy(i));
+                home = rtl::Uri::convertRelToAbs(home, url.subView(i));
             }
             catch (rtl::MalformedUriException & e)
             {

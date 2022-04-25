@@ -1982,14 +1982,14 @@ SfxFilterFlags FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequ
 }
 
 
-void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
+void FilterCache::impl_interpretDataVal4Type(std::u16string_view sValue,
                                                    sal_Int32        nProp ,
                                                    CacheItem&       rItem )
 {
     switch(nProp)
     {
         // Preferred
-        case 0:     rItem[PROPNAME_PREFERRED] <<= (sValue.toInt32() == 1);
+        case 0:     rItem[PROPNAME_PREFERRED] <<= (o3tl::toInt32(sValue) == 1);
                     break;
         // MediaType
         case 1:     rItem[PROPNAME_MEDIATYPE] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
@@ -2007,7 +2007,7 @@ void FilterCache::impl_interpretDataVal4Type(const OUString& sValue,
 }
 
 
-void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
+void FilterCache::impl_interpretDataVal4Filter(std::u16string_view sValue,
                                                      sal_Int32        nProp ,
                                                      CacheItem&       rItem )
 {
@@ -2015,7 +2015,7 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
     {
         // Order
         case 0:     {
-                        sal_Int32 nOrder = sValue.toInt32();
+                        sal_Int32 nOrder = o3tl::toInt32(sValue);
                         if (nOrder > 0)
                         {
                             SAL_WARN( "filter.config", "FilterCache::impl_interpretDataVal4Filter()\nCan not move Order value from filter to type on demand!");
@@ -2032,13 +2032,13 @@ void FilterCache::impl_interpretDataVal4Filter(const OUString& sValue,
         case 3:     rItem[PROPNAME_FILTERSERVICE] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
                     break;
         // Flags
-        case 4:     rItem[PROPNAME_FLAGS] <<= sValue.toInt32();
+        case 4:     rItem[PROPNAME_FLAGS] <<= o3tl::toInt32(sValue);
                     break;
         // UserData
         case 5:     rItem[PROPNAME_USERDATA] <<= comphelper::containerToSequence(impl_tokenizeString(sValue, ';'));
                     break;
         // FileFormatVersion
-        case 6:     rItem[PROPNAME_FILEFORMATVERSION] <<= sValue.toInt32();
+        case 6:     rItem[PROPNAME_FILEFORMATVERSION] <<= o3tl::toInt32(sValue);
                     break;
         // TemplateName
         case 7:     rItem[PROPNAME_TEMPLATENAME] <<= ::rtl::Uri::decode(sValue, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);

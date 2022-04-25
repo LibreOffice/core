@@ -55,7 +55,7 @@ public:
 
     virtual void validate() override;
 
-    OUString assembleChildURL( const OUString& aName );
+    OUString assembleChildURL( std::u16string_view aName );
 
 private:
     struct ResultListEntry

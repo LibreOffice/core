@@ -99,7 +99,7 @@ uno::Reference < io::XInputStream > UriBindingHelper::OpenInputStream( const uno
     else
     {
         const OUString aStoreName = ::rtl::Uri::decode(
-            aURI.copy( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
+            aURI.subView( 0, nSepPos ), rtl_UriDecodeStrict, rtl_UriCharClassRelSegment);
         if (aStoreName.isEmpty() && !aURI.isEmpty())
             throw uno::Exception("Could not decode URI for stream element.", nullptr);
 

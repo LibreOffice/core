@@ -879,13 +879,13 @@ class FilterCache : public cppu::BaseMutex
 
 
         /** TODO */
-        static void impl_interpretDataVal4Type(const OUString& sValue,
+        static void impl_interpretDataVal4Type(std::u16string_view sValue,
                                               sal_Int32        nProp ,
                                               CacheItem&       rItem );
 
 
         /** TODO */
-        static void impl_interpretDataVal4Filter(const OUString& sValue,
+        static void impl_interpretDataVal4Filter(std::u16string_view sValue,
                                                 sal_Int32        nProp ,
                                                 CacheItem&       rItem );
 
