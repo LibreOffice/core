@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d97f3d6f_f13290f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-04-25T07:47:21Z",
+      "side": 1,
+      "message": "Hi Cor\n\nI see this extension is not actively developed, nor is it included in TDF builds.\nWhat do you think about removing it?",
+      "revId": "419be2a0f8b0cf4817fff007579724729efbb33f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
