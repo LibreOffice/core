@@ -505,6 +505,14 @@ public:
 template< ScQueryCellIteratorType iteratorType >
 bool ScQueryCellIteratorBase< iteratorType >::BinarySearch()
 {
+    assert(maParam.GetEntry(0).bDoQuery && !maParam.GetEntry(1).bDoQuery
+        && maParam.GetEntry(0).GetQueryItems().size() == 1 );
+    assert(maParam.eSearchType == utl::SearchParam::SearchType::Normal);
+    assert(maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
+        || maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue);
+    assert(maParam.bByRow);
+    assert(maParam.GetEntry(0).eOp == SC_LESS_EQUAL || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
+
     // TODO: This will be extremely slow with mdds::multi_type_vector.
 
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");

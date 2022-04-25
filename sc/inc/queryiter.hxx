@@ -87,9 +87,9 @@ protected:
 
     /* Only works if no regular expression is involved, only searches for rows in one column,
        and only the first query entry is considered with simple conditions SC_LESS_EQUAL
-       (sorted ascending) or SC_GREATER_EQUAL (sorted descending). Check these things before
-       invocation! Delivers a starting point, continue with e.g. GetThis() and GetNext()
-       afterwards. Introduced for FindEqualOrSortedLastInRange(). */
+       (sorted ascending) or SC_GREATER_EQUAL (sorted descending). Delivers a starting point,
+       continue with e.g. GetThis() and GetNext() afterwards. Introduced
+       for FindEqualOrSortedLastInRange(). */
     bool BinarySearch();
 
 public:
