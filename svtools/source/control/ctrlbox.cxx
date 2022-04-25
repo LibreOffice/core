@@ -844,9 +844,10 @@ FontStyleBox::FontStyleBox(std::unique_ptr<weld::ComboBox> p)
 
 void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
 {
-    m_xComboBox->freeze();
     OUString aOldText = m_xComboBox->get_active_text();
     int nPos = m_xComboBox->get_active();
+
+    m_xComboBox->freeze();
     m_xComboBox->clear();
 
     // does a font with this name already exist?
@@ -949,19 +950,6 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
             if ( bNormal || bItalic || bBold )
                 m_xComboBox->append_text(pList->GetBoldItalicStr());
         }
-        if (!aOldText.isEmpty())
-        {
-            int nFound = m_xComboBox->find_text(aOldText);
-            if (nFound != -1)
-                m_xComboBox->set_active(nFound);
-            else
-            {
-                if (nPos >= m_xComboBox->get_count())
-                    m_xComboBox->set_active(0);
-                else
-                    m_xComboBox->set_active(nPos);
-            }
-        }
     }
     else
     {
@@ -970,7 +958,16 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
         m_xComboBox->append_text(pList->GetItalicStr());
         m_xComboBox->append_text(pList->GetBoldStr());
         m_xComboBox->append_text(pList->GetBoldItalicStr());
-        if (!aOldText.isEmpty())
+    }
+
+    m_xComboBox->thaw();
+
+    if (!aOldText.isEmpty())
+    {
+        int nFound = m_xComboBox->find_text(aOldText);
+        if (nFound != -1)
+            m_xComboBox->set_active(nFound);
+        else
         {
             if (nPos >= m_xComboBox->get_count())
                 m_xComboBox->set_active(0);
@@ -978,7 +975,6 @@ void FontStyleBox::Fill( std::u16string_view rName, const FontList* pList )
                 m_xComboBox->set_active(nPos);
         }
     }
-    m_xComboBox->thaw();
 }
 
 FontSizeBox::FontSizeBox(std::unique_ptr<weld::ComboBox> p)
