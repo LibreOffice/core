@@ -1323,9 +1323,8 @@ class _Form(_BasicObject):
 
 
 class _Module(_BasicObject):
-    classProperties = dict(CountOfDeclarationLines = False, CountOfLines = False
-                        , ProcStartLine = False, Type = False
-                        )
+    classProperties = dict(CountOfDeclarationLines = False, CountOfLines = False, Type = False)
+
     def __init__(self, reference = -1, objtype = None, name = ''):
         super().__init__(reference, objtype, name)
         self.localProperties = ('startline', 'startcolumn', 'endline', 'endcolumn', 'prockind')
