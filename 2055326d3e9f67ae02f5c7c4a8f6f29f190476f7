@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c4d793f_492219ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-25T12:05:21Z",
+      "side": 1,
+      "message": "Hi Bartosz,\nI think this TODO can go after my fix. I\u0027m adding you as reviewer because you added it in https://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d8129ad7b22dceeb2fef13741aa509c2229cf03de",
+      "revId": "2055326d3e9f67ae02f5c7c4a8f6f29f190476f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
