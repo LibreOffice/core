@@ -793,9 +793,9 @@ const SfxPoolItem& MSWordExportBase::GetItem(sal_uInt16 nWhich) const
 }
 
 WW8_WrPlc1::WW8_WrPlc1( sal_uInt16 nStructSz )
-    : pData( new sal_uInt8[ 16 * nStructSz ] ),
-      nDataLen(16 * nStructSz),
-      nStructSiz( nStructSz )
+    : m_pData( new sal_uInt8[ 16 * nStructSz ] ),
+      m_nDataLen(16 * nStructSz),
+      m_nStructSiz( nStructSz )
 {
 }
 
@@ -805,43 +805,43 @@ WW8_WrPlc1::~WW8_WrPlc1()
 
 WW8_CP WW8_WrPlc1::Prev() const
 {
-    bool b = !aPos.empty();
+    bool b = !m_aPos.empty();
     OSL_ENSURE(b,"Prev called on empty list");
-    return b ? aPos.back() : 0;
+    return b ? m_aPos.back() : 0;
 }
 
 void WW8_WrPlc1::Append( WW8_CP nCp, const void* pNewData )
 {
-    sal_uLong nInsPos = aPos.size() * nStructSiz;
-    aPos.push_back( nCp );
-    if( nDataLen < nInsPos + nStructSiz )
+    sal_uLong nInsPos = m_aPos.size() * m_nStructSiz;
+    m_aPos.push_back( nCp );
+    if( m_nDataLen < nInsPos + m_nStructSiz )
     {
-        sal_uInt8* pNew = new sal_uInt8[ 2 * nDataLen ];
-        memcpy( pNew, pData.get(), nDataLen );
-        pData.reset(pNew);
-        nDataLen *= 2;
+        sal_uInt8* pNew = new sal_uInt8[ 2 * m_nDataLen ];
+        memcpy( pNew, m_pData.get(), m_nDataLen );
+        m_pData.reset(pNew);
+        m_nDataLen *= 2;
     }
-    memcpy( pData.get() + nInsPos, pNewData, nStructSiz );
+    memcpy( m_pData.get() + nInsPos, pNewData, m_nStructSiz );
 }
 
 void WW8_WrPlc1::Finish( sal_uLong nLastCp, sal_uLong nSttCp )
 {
-    if( !aPos.empty() )
+    if( !m_aPos.empty() )
     {
-        aPos.push_back( nLastCp );
+        m_aPos.push_back( nLastCp );
         if( nSttCp )
-            for(WW8_CP & rCp : aPos)
+            for(WW8_CP & rCp : m_aPos)
                 rCp -= nSttCp;
     }
 }
 
 void WW8_WrPlc1::Write( SvStream& rStrm )
 {
-    decltype(aPos)::size_type i;
-    for( i = 0; i < aPos.size(); ++i )
-        SwWW8Writer::WriteLong( rStrm, aPos[i] );
+    decltype(m_aPos)::size_type i;
+    for( i = 0; i < m_aPos.size(); ++i )
+        SwWW8Writer::WriteLong( rStrm, m_aPos[i] );
     if( i )
-        rStrm.WriteBytes(pData.get(), (i-1) * nStructSiz);
+        rStrm.WriteBytes(m_pData.get(), (i-1) * m_nStructSiz);
 }
 
 // Class WW8_WrPlcField for fields
@@ -853,7 +853,7 @@ void WW8_WrPlcField::Write( WW8Export& rWrt )
 
     WW8_FC *pfc;
     sal_Int32 *plc;
-    switch (nTextTyp)
+    switch (m_nTextTyp)
     {
         case TXT_MAINTEXT:
             pfc = &rWrt.m_pFib->m_fcPlcffldMom;
@@ -1328,9 +1328,9 @@ WW8_FC WW8_WrFkp::GetEndFc() const
 
 // Method for managing the piece table
 WW8_WrPct::WW8_WrPct(WW8_FC nfcMin)
-    : nOldFc(nfcMin)
+    : m_nOldFc(nfcMin)
 {
-    AppendPc(nOldFc);
+    AppendPc(m_nOldFc);
 }
 
 WW8_WrPct::~WW8_WrPct()
@@ -1340,14 +1340,14 @@ WW8_WrPct::~WW8_WrPct()
 // Fill the piece and create a new one
 void WW8_WrPct::AppendPc(WW8_FC nStartFc)
 {
-    WW8_CP nStartCp = nStartFc - nOldFc;    // subtract the beginning of the text
+    WW8_CP nStartCp = nStartFc - m_nOldFc;    // subtract the beginning of the text
     if ( !nStartCp && !m_Pcts.empty())
     {
         OSL_ENSURE(1 == m_Pcts.size(), "empty Piece!");
         m_Pcts.pop_back();
     }
 
-    nOldFc = nStartFc;                      // remember StartFc as old
+    m_nOldFc = nStartFc;                      // remember StartFc as old
 
     nStartCp >>= 1;     // for Unicode: number of characters / 2
 
@@ -1375,7 +1375,7 @@ void WW8_WrPct::WritePc( WW8Export& rWrt )
     }
 
     // calculate the last Pos
-    sal_uLong nStartCp = rWrt.m_pFib->m_fcMac - nOldFc;
+    sal_uLong nStartCp = rWrt.m_pFib->m_fcMac - m_nOldFc;
     nStartCp >>= 1;             // For Unicode: number of characters / 2
     nStartCp += m_Pcts.back()->GetStartCp();
     SwWW8Writer::WriteLong( *rWrt.m_pTableStrm, nStartCp );
@@ -1407,10 +1407,10 @@ void WW8_WrPct::SetParaBreak()
 
 WW8_CP WW8_WrPct::Fc2Cp( sal_uLong nFc ) const
 {
-    OSL_ENSURE( nFc >= o3tl::make_unsigned(nOldFc), "FilePos lies in front of last piece" );
+    OSL_ENSURE( nFc >= o3tl::make_unsigned(m_nOldFc), "FilePos lies in front of last piece" );
     OSL_ENSURE( ! m_Pcts.empty(), "Fc2Cp no piece available" );
 
-    nFc -= nOldFc;
+    nFc -= m_nOldFc;
     nFc /= 2; // Unicode
     return nFc + m_Pcts.back()->GetStartCp();
 }
@@ -3974,7 +3974,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT sal_uInt32 GetSaveWarningOfMSVBAStorage_ww8(  Sf
 bool WW8_WrPlcFootnoteEdn::WriteText( WW8Export& rWrt )
 {
     bool bRet = false;
-    if (TXT_FTN == nTyp)
+    if (TXT_FTN == m_nTyp)
     {
         bRet = WriteGenericText( rWrt, TXT_FTN, rWrt.m_pFib->m_ccpFootnote );
         rWrt.m_pFieldFootnote->Finish( rWrt.Fc2Cp( rWrt.Strm().Tell() ),
@@ -3992,7 +3992,7 @@ bool WW8_WrPlcFootnoteEdn::WriteText( WW8Export& rWrt )
 
 void WW8_WrPlcFootnoteEdn::WritePlc( WW8Export& rWrt ) const
 {
-    if( TXT_FTN == nTyp )
+    if( TXT_FTN == m_nTyp )
     {
         WriteGenericPlc( rWrt, TXT_FTN, rWrt.m_pFib->m_fcPlcffndText,
             rWrt.m_pFib->m_lcbPlcffndText, rWrt.m_pFib->m_fcPlcffndRef,

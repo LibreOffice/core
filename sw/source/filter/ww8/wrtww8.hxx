@@ -282,7 +282,7 @@ public:
 class WW8_WrPct
 {
     std::vector<std::unique_ptr<WW8_WrPc>> m_Pcts;
-    WW8_FC nOldFc;
+    WW8_FC m_nOldFc;
 public:
     explicit WW8_WrPct(WW8_FC nStartFc);
     ~WW8_WrPct();
@@ -1239,12 +1239,12 @@ protected:
 class WW8_WrPlcFootnoteEdn : public WW8_WrPlcSubDoc
 {
 private:
-    sal_uInt8 nTyp;
+    sal_uInt8 m_nTyp;
 
     WW8_WrPlcFootnoteEdn(const WW8_WrPlcFootnoteEdn&) = delete;
     WW8_WrPlcFootnoteEdn& operator=(WW8_WrPlcFootnoteEdn const &) = delete;
 public:
-    explicit WW8_WrPlcFootnoteEdn( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
+    explicit WW8_WrPlcFootnoteEdn( sal_uInt8 nTTyp ) : m_nTyp( nTTyp ) {}
 
     bool WriteText( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
@@ -1336,15 +1336,15 @@ public:
 class WW8_WrPlc1
 {
 private:
-    std::vector<WW8_CP> aPos;
-    std::unique_ptr<sal_uInt8[]> pData;                // content ( structures )
-    sal_uLong nDataLen;
-    sal_uInt16 nStructSiz;
+    std::vector<WW8_CP> m_aPos;
+    std::unique_ptr<sal_uInt8[]> m_pData;                // content ( structures )
+    sal_uLong m_nDataLen;
+    sal_uInt16 m_nStructSiz;
 
     WW8_WrPlc1(const WW8_WrPlc1&) = delete;
     WW8_WrPlc1& operator=(const WW8_WrPlc1&) = delete;
 protected:
-    sal_uInt16 Count() const { return aPos.size(); }
+    sal_uInt16 Count() const { return m_aPos.size(); }
     void Write( SvStream& rStrm );
     WW8_CP Prev() const;
 public:
@@ -1358,18 +1358,18 @@ public:
 class WW8_WrPlcField : public WW8_WrPlc1
 {
 private:
-    sal_uInt8 nTextTyp;
-    sal_uInt16 nResults;
+    sal_uInt8 m_nTextTyp;
+    sal_uInt16 m_nResults;
 
     WW8_WrPlcField(const WW8_WrPlcField&) = delete;
     WW8_WrPlcField& operator=(const WW8_WrPlcField&) = delete;
 public:
     WW8_WrPlcField( sal_uInt16 nStructSz, sal_uInt8 nTTyp )
-        : WW8_WrPlc1( nStructSz ), nTextTyp( nTTyp ), nResults(0)
+        : WW8_WrPlc1( nStructSz ), m_nTextTyp( nTTyp ), m_nResults(0)
     {}
     void Write( WW8Export& rWrt );
-    void ResultAdded() { ++nResults; }
-    sal_uInt16 ResultCount() const { return nResults; }
+    void ResultAdded() { ++m_nResults; }
+    sal_uInt16 ResultCount() const { return m_nResults; }
 };
 
 class WW8_WrMagicTable : public WW8_WrPlc1
