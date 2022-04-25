@@ -27,6 +27,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <list>
+#include <string_view>
 #include <vector>
 
 #include <premac.h>
@@ -82,7 +83,7 @@ public:
     //XFilterManager delegates
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void appendFilter( const OUString& aTitle, const OUString& aFilter );
+    void appendFilter( const OUString& aTitle, std::u16string_view aFilter );
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
