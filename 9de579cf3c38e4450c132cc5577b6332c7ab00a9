@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f880c122_d272d48b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-04-25T07:42:20Z",
+      "side": 1,
+      "message": "Hi Andreas,\nI added you as reviewer because you proposed your name in bug report.\nThanks you.",
+      "revId": "9de579cf3c38e4450c132cc5577b6332c7ab00a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
