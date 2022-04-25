@@ -143,7 +143,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'HideEula=1' \
 		&& echo 'Logo=1' \
 		&& echo 'NativeProgress=false' \
-		&& echo 'ProgressBarColor=80,73,153' \
+		&& echo 'ProgressBarColor=92,41,131' \
 		&& echo 'ProgressFrameColor=255,255,255' \
 		&& echo 'ProgressPosition=268,106' \
 		&& echo 'ProgressSize=212,4' \
