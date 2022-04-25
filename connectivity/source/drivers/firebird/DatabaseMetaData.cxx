@@ -1026,6 +1026,7 @@ uno::Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo()
         tmp.push_back(aRow);
         return tmp;
     }();
+    // [-loplugin:redundantfcast] false positive:
     pResultSet->setRows(ODatabaseMetaDataResultSet::ORows(aResults));
     return pResultSet;
 }
