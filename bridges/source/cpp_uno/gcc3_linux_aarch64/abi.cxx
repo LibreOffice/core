@@ -29,6 +29,7 @@
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/uno/genfunc.h>
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
@@ -99,7 +100,7 @@ std::type_info * Rtti::getRtti(typelib_TypeDescription const & type) {
         for (sal_Int32 j = 0; j != -1;) {
             OString t(
                 OUStringToOString(
-                    unoName.getToken(0, '.', j), RTL_TEXTENCODING_ASCII_US));
+                    o3tl::getToken(unoName, 0, '.', j), RTL_TEXTENCODING_ASCII_US));
             b.append(t.getLength());
             b.append(t);
         }
