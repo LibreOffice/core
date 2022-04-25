@@ -63,4 +63,8 @@
         constructor="com_sun_star_comp_Math_MathTypeFilter_get_implementation">
     <service name="com.sun.star.document.ImportFilter"/>
   </implementation>
+  <implementation name="org.libreoffice.comp.Math.sidebar.SmPanelFactory"
+        constructor="org_libreoffice_comp_Math_sidebar_SmPanelFactory">
+    <service name="com.sun.star.ui.UIElementFactory"/>
+  </implementation>
 </component>
