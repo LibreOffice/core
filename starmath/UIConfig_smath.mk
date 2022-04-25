@@ -39,6 +39,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/smath,\
 	starmath/uiconfig/smath/ui/mathwindow \
 	starmath/uiconfig/smath/ui/printeroptions \
 	starmath/uiconfig/smath/ui/savedefaultsdialog \
+	starmath/uiconfig/smath/ui/sidebarelements_math \
 	starmath/uiconfig/smath/ui/smathsettings \
 	starmath/uiconfig/smath/ui/spacingdialog \
 	starmath/uiconfig/smath/ui/symdefinedialog \
