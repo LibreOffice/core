@@ -65,5 +65,22 @@ class moveCopySheet(UITestCase):
             self.assertEqual(document.Sheets[1].Name, "Sheet1")
             self.assertEqual(document.Sheets[2].Name, "moveName")
 
+    #tdf#139464 Set OK button label to selected action: Move or Copy
+    def test_copy_move_sheet_ok_btn(self):
+        with self.ui_test.create_doc_in_start_center("calc") as document:
+            with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                xOkButton = xDialog.getChild("ok")
+                xCopyButton = xDialog.getChild("copy")
+                self.assertEqual(get_state_as_dict(xCopyButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+            with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                xOkButton = xDialog.getChild("ok")
+                xCopyButton = xDialog.getChild("copy")
+                xMoveButton = xDialog.getChild("move")
+                self.assertEqual(get_state_as_dict(xMoveButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+                xCopyButton.executeAction("CLICK", tuple())
+                self.assertEqual(get_state_as_dict(xCopyButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+                xMoveButton.executeAction("CLICK", tuple())
+                self.assertEqual(get_state_as_dict(xMoveButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:
