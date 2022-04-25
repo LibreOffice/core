@@ -36,6 +36,7 @@ class SdOOXMLExportTest3 : public SdModelTestBaseXML
 public:
     void testTdf129430();
     void testTdf114848();
+    void testTdf147586();
     void testTdf68759();
     void testTdf127901();
     void testTdf48735();
@@ -118,6 +119,7 @@ public:
 
     CPPUNIT_TEST(testTdf129430);
     CPPUNIT_TEST(testTdf114848);
+    CPPUNIT_TEST(testTdf147586);
     CPPUNIT_TEST(testTdf68759);
     CPPUNIT_TEST(testTdf127901);
     CPPUNIT_TEST(testTdf48735);
@@ -229,6 +231,26 @@ void SdOOXMLExportTest3::testTdf114848()
     xmlDocUniquePtr pXmlDocTheme2 = parseExport(tempFile, "ppt/theme/theme2.xml");
     assertXPath(pXmlDocTheme2, "/a:theme/a:themeElements/a:clrScheme/a:dk2/a:srgbClr", "val",
                 "1f497d");
+}
+
+void SdOOXMLExportTest3::testTdf147586()
+{
+    ::sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf147586.pptx"), PPTX);
+    utl::TempFile tempFile;
+    xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
+    xDocShRef->DoClose();
+
+    xmlDocUniquePtr pXmlDocContent = parseExport(tempFile, "ppt/slides/slide1.xml");
+    // Without the fix in place, this test would have failed with
+    // - Expected: 227fc7
+    // - Actual  : 4f4f4f
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[1]/a:pPr/a:buClr/a:srgbClr", "val",
+                "227fc7");
+    assertXPath(pXmlDocContent,
+                "/p:sld/p:cSld/p:spTree/p:sp[1]/p:txBody/a:p[2]/a:pPr/a:buClr/a:srgbClr", "val",
+                "227fc7");
 }
 
 void SdOOXMLExportTest3::testTdf68759()
