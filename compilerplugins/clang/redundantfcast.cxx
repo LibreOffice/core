@@ -56,9 +56,15 @@ public:
             return true;
         }
         if (m_Seen.insert(cxxFunctionalCastExpr->getExprLoc()).second)
+        {
+            if (suppressWarningAt(cxxFunctionalCastExpr->getBeginLoc()))
+            {
+                return true;
+            }
             report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
                    cxxFunctionalCastExpr->getExprLoc())
                 << t2 << t1 << cxxFunctionalCastExpr->getSourceRange();
+        }
         return true;
     }
 
@@ -310,33 +316,21 @@ public:
             return true;
 
         if (m_Seen.insert(expr->getExprLoc()).second)
+        {
+            if (suppressWarningAt(expr->getBeginLoc()))
+            {
+                return true;
+            }
             report(DiagnosticsEngine::Warning, "redundant functional cast from %0 to %1",
                    expr->getExprLoc())
                 << t2 << t1 << expr->getSourceRange();
+        }
         return true;
     }
 
     bool preRun() override
     {
         if (!compiler.getLangOpts().CPlusPlus)
-            return false;
-        std::string fn = handler.getMainFileName().str();
-        loplugin::normalizeDotDotInFilePath(fn);
-        // necessary on some other platforms
-        if (fn == SRCDIR "/sal/osl/unx/socket.cxx")
-            return false;
-        // compile-time check of constant
-        if (fn == SRCDIR "/bridges/source/jni_uno/jni_bridge.cxx")
-            return false;
-        // TODO constructing a temporary to pass to a && param
-        if (fn == SRCDIR "/sc/source/ui/view/viewfunc.cxx"
-            || fn == SRCDIR "/sc/source/core/data/table2.cxx")
-            return false;
-        // tdf#145203: FIREBIRD cannot create a table
-        if (fn == SRCDIR "/connectivity/source/drivers/firebird/DatabaseMetaData.cxx")
-            return false;
-        // false positive during using constructor drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw })
-        if (fn == SRCDIR "/drawinglayer/source/tools/emfppen.cxx")
             return false;
         return true;
     }

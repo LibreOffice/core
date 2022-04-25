@@ -65,6 +65,10 @@ public:
     enum { isSharedPlugin = false };
 protected:
     DiagnosticBuilder report( DiagnosticsEngine::Level level, StringRef message, SourceLocation loc = SourceLocation()) const;
+    // Look at the line containing location and the previous line for any comments that overlap
+    // either of those two lines and that contain "[-loplugin:<name>]" (with the name of this
+    // plugin), indicating that warnings from this plugin should be suppressed here:
+    bool suppressWarningAt(SourceLocation location) const;
     bool ignoreLocation( SourceLocation loc ) const
     { return handler.ignoreLocation(loc); }
     bool ignoreLocation( const Decl* decl ) const;
