@@ -174,7 +174,7 @@ class XFillGradientItem;
 
 // Writer IDs
 
-#define FN_EDIT                 (SID_SW_START +  100)
+#define FN_EDIT                 (SID_SW_START +  100) // 20100
 #define FN_NUM_BULLET_OFF       (FN_EDIT + 37)  // numbering off
 #define FN_NUM_BULLET_ON        (FN_EDIT + 38)  // numbering with bullets on
 #define FN_NUM_NUMBERING_ON     (FN_EDIT + 44)  // numbering on
@@ -182,7 +182,7 @@ class XFillGradientItem;
 #define FN_NUM_NUM_RULE_INDEX   (FN_EDIT + 121)
 #define FN_OUTLINE_RULE_INDEX   (FN_EDIT + 122)
 
-#define FN_INSERT               (SID_SW_START +  300)
+#define FN_INSERT               (SID_SW_START +  300) // 20300
 #define FN_DELETE_BOOKMARK      (FN_INSERT + 1)
 #define FN_INSERT_BREAK         (FN_INSERT + 3)
 #define FN_INSERT_SOFT_HYPHEN   (FN_INSERT + 43)    /* optional hyphen */
@@ -191,12 +191,12 @@ class XFillGradientItem;
 #define FN_INSERT_HARDHYPHEN    (FN_INSERT + 85)    /* hyphen without break*/
 
 //!! be aware to not overwrite something that is used in sw/inc/cmdid.h already !!
-#define FN_FORMAT               (SID_SW_START +  400)
+#define FN_FORMAT               (SID_SW_START +  400) // 20400
 #define FN_FORMAT_RESET         (FN_FORMAT + 69)
 
-#define FN_EXTRA                (SID_SW_START +  600)
+#define FN_EXTRA                (SID_SW_START +  600) // 20600
 
-#define FN_SELECTION            (SID_SW_START +  900)
+#define FN_SELECTION            (SID_SW_START +  900) // 20900
 #define FN_END_OF_DOCUMENT      (FN_SELECTION +  8)
 #define FN_START_DOC_DIRECT     (FN_SELECTION + 78)
 #define FN_END_DOC_DIRECT       (FN_SELECTION + 79)
