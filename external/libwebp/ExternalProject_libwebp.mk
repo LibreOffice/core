@@ -46,7 +46,7 @@ $(call gb_ExternalProject_get_state_target,libwebp,build) :
 			--disable-gif \
 			--disable-wic \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
-			CFLAGS="$(gb_CFLAGS) $(call gb_ExternalProject_get_build_flags,libwebp)" \
+			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libwebp)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
