@@ -42,6 +42,7 @@ namespace {
     constexpr OUStringLiteral s_sTitle = u"Title";
     constexpr OUStringLiteral s_sPassword = u"Password";
     constexpr OUStringLiteral s_sThumbnail = u"Thumbnail";
+    constexpr OUStringLiteral s_sReadOnly = u"ReadOnly";
 }
 
 static uno::Reference<container::XNameAccess> GetConfig();
@@ -123,6 +124,7 @@ std::vector< HistoryItem > GetList( EHistoryType eHistory )
                 xSet->getPropertyValue(s_sTitle) >>= aItem.sTitle;
                 xSet->getPropertyValue(s_sPassword) >>= aItem.sPassword;
                 xSet->getPropertyValue(s_sThumbnail) >>= aItem.sThumbnail;
+                xSet->getPropertyValue(s_sReadOnly) >>= aItem.isReadOnly;
                 aRet.push_back(aItem);
             }
             catch(const uno::Exception&)
@@ -147,7 +149,8 @@ std::vector< HistoryItem > GetList( EHistoryType eHistory )
 
 void AppendItem(EHistoryType eHistory,
         const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-        const std::optional<OUString>& sThumbnail)
+        const std::optional<OUString>& sThumbnail,
+        ::std::optional<bool> const oIsReadOnly)
 {
     try
     {
@@ -171,11 +174,15 @@ void AppendItem(EHistoryType eHistory,
         if (xItemList->hasByName(sURL))
         {
             uno::Reference<beans::XPropertySet>       xSet;
+            xItemList->getByName(sURL) >>= xSet;
             if (sThumbnail)
             {
                 // update the thumbnail
-                xItemList->getByName(sURL) >>= xSet;
                 xSet->setPropertyValue(s_sThumbnail, uno::makeAny(*sThumbnail));
+            }
+            if (oIsReadOnly)
+            {
+                xSet->setPropertyValue(s_sReadOnly, uno::makeAny(*oIsReadOnly));
             }
 
             for (sal_Int32 i=0; i<nLength; ++i)
@@ -265,6 +272,10 @@ void AppendItem(EHistoryType eHistory,
             xSet->setPropertyValue(s_sTitle, uno::makeAny(sTitle));
             xSet->setPropertyValue(s_sPassword, uno::makeAny(OUString()));
             xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail.value_or(OUString())));
+            if (oIsReadOnly)
+            {
+                xSet->setPropertyValue(s_sReadOnly, uno::makeAny(*oIsReadOnly));
+            }
 
             ::comphelper::ConfigurationHelper::flush(xCfg);
         }

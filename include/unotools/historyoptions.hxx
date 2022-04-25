@@ -58,6 +58,7 @@ namespace SvtHistoryOptions
         OUString sTitle;
         OUString sPassword;
         OUString sThumbnail;
+        bool isReadOnly = false;
     };
     UNOTOOLS_DLLPUBLIC std::vector< HistoryItem > GetList(EHistoryType eHistory);
 
@@ -72,7 +73,7 @@ namespace SvtHistoryOptions
     */
     UNOTOOLS_DLLPUBLIC void AppendItem(EHistoryType eHistory,
             const OUString& sURL, const OUString& sFilter, const OUString& sTitle,
-            const std::optional<OUString>& sThumbnail);
+            const std::optional<OUString>& sThumbnail, std::optional<bool> oIsReadOnly);
 
     /** Delete item from the specified list.
     */

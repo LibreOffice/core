@@ -92,7 +92,7 @@ private:
     void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu > const & rPopupMenu );
     void executeEntry( sal_Int32 nIndex );
 
-    std::vector< OUString >   m_aRecentFilesItems;
+    std::vector<std::pair<OUString, bool>>   m_aRecentFilesItems;
     bool                      m_bDisabled : 1;
     bool                      m_bShowToolbarEntries;
 };
@@ -157,7 +157,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         for ( int i = 0; i < nPickListMenuItems; i++ )
         {
             const SvtHistoryOptions::HistoryItem& rPickListEntry = aHistoryList[i];
-            m_aRecentFilesItems.push_back( rPickListEntry.sURL );
+            m_aRecentFilesItems.emplace_back(rPickListEntry.sURL, rPickListEntry.isReadOnly);
         }
     }
 
@@ -191,7 +191,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 
             // Abbreviate URL
             OUString   aMenuTitle;
-            INetURLObject   aURL( m_aRecentFilesItems[i] );
+            INetURLObject const aURL(m_aRecentFilesItems[i].first);
             OUString aTipHelpText( aURL.getFSysPath( FSysStyle::Detect ) );
 
             if ( aURL.GetProtocol() == INetProtocol::File )
@@ -263,13 +263,15 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     Sequence< PropertyValue > aArgsList{
         comphelper::makePropertyValue("Referer", OUString( "private:user" )),
 
+        comphelper::makePropertyValue("ReadOnly", m_aRecentFilesItems[nIndex].second),
+
         // documents in the picklist will never be opened as templates
         comphelper::makePropertyValue("AsTemplate", false),
 
         // Type detection needs to know which app we are opening it from.
         comphelper::makePropertyValue("DocumentService", m_aModuleName)
     };
-    dispatchCommand( m_aRecentFilesItems[ nIndex ], aArgsList, "_default" );
+    dispatchCommand(m_aRecentFilesItems[nIndex].first, aArgsList, "_default");
 }
 
 // XEventListener

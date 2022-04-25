@@ -123,13 +123,15 @@ void SfxPickListImpl::AddDocumentToPickList( const SfxObjectShell* pDocSh )
             }
         }
     }
+    ::std::optional<bool> const oIsReadOnly(pDocSh->IsReadOnly());
 
     // add to svtool history options
     SvtHistoryOptions::AppendItem( EHistoryType::PickList,
             aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
             aFilter,
             aTitle,
-            aThumbnail);
+            aThumbnail,
+            oIsReadOnly);
 
     if ( aURL.GetProtocol() == INetProtocol::File )
         Application::AddToRecentDocumentList( aURL.GetURLNoPass( INetURLObject::DecodeMechanism::NONE ),
