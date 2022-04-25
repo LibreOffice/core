@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c78f273f_ce98d24c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-25T17:33:05Z",
+      "side": 1,
+      "message": "Select Case statement got removed accidently",
+      "revId": "1e7e7fe66f58eaf0b5838ea9acb3f67873e1e81f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
