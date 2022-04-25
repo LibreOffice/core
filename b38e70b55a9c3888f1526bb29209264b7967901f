@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a270860_7cca5928",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-25T14:16:26Z",
+      "side": 1,
+      "message": "that probably is the right thing to do I\u0027d guess FWIW",
+      "revId": "b38e70b55a9c3888f1526bb29209264b7967901f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
