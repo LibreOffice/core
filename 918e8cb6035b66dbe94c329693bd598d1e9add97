@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72c855b0_8d8f96f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-25T13:38:35Z",
+      "side": 1,
+      "message": "Is it intentional that the original change is authored by Regina, but you\u0027re marked as the author of this change?",
+      "revId": "918e8cb6035b66dbe94c329693bd598d1e9add97",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
