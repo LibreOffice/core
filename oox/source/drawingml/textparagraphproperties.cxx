@@ -57,7 +57,8 @@ using ::com::sun::star::awt::FontDescriptor;
 namespace oox::drawingml {
 
 BulletList::BulletList( )
-: maBulletColorPtr( std::make_shared<Color>() )
+: maBulletColorPtr( std::make_shared<Color>() ),
+  mbBulletColorFollowText ( false )
 {
 }
 
