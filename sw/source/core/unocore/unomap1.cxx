@@ -1027,6 +1027,10 @@ const SfxItemPropertyMapEntry* SwUnoPropertyMapProvider::GetContentControlProper
     static SfxItemPropertyMapEntry const aContentControlMap_Impl[] =
     {
         { u"" UNO_NAME_SHOWING_PLACE_HOLDER, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_CHECKBOX, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_CHECKED, 0, cppu::UnoType<bool>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_CHECKED_STATE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
+        { u"" UNO_NAME_UNCHECKED_STATE, 0, cppu::UnoType<OUString>::get(), PROPERTY_NONE, 0 },
         { u"", 0, css::uno::Type(), 0, 0 }
     };
 

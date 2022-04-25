@@ -79,6 +79,18 @@ class SwContentControl : public sw::BroadcastingModify
     /// Current content is placeholder text.
     bool m_bShowingPlaceHolder = false;
 
+    /// Display the content control as a checkbox.
+    bool m_bCheckbox = false;
+
+    /// If m_bCheckbox is true, is the checkbox checked?
+    bool m_bChecked = false;
+
+    /// If m_bCheckbox is true, the value of a checked checkbox.
+    OUString m_aCheckedState;
+
+    /// If m_bCheckbox is true, the value of an unchecked checkbox.
+    OUString m_aUncheckedState;
+
 public:
     SwTextContentControl* GetTextAttr() const;
 
@@ -112,6 +124,22 @@ public:
     }
 
     bool GetShowingPlaceHolder() const { return m_bShowingPlaceHolder; }
+
+    void SetCheckbox(bool bCheckbox) { m_bCheckbox = bCheckbox; }
+
+    bool GetCheckbox() const { return m_bCheckbox; }
+
+    void SetChecked(bool bChecked) { m_bChecked = bChecked; }
+
+    bool GetChecked() const { return m_bChecked; }
+
+    void SetCheckedState(const OUString& rCheckedState) { m_aCheckedState = rCheckedState; }
+
+    OUString GetCheckedState() const { return m_aCheckedState; }
+
+    void SetUncheckedState(const OUString& rUncheckedState) { m_aUncheckedState = rUncheckedState; }
+
+    OUString GetUncheckedState() const { return m_aUncheckedState; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
