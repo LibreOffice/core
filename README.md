@@ -1,3 +1,17 @@
+# Branch info
+
+This basically tries to fix tdf#141578. So every frame gets some scaling factor.
+Same for all the stuff buffering some output. The main functionality is extending
+SalGeometryProvider and then inheriting it from various classes.
+
+Problems:
+  * Refresh layout when moving a window to a screen with different scaling
+  * In theory, the SalEvent::Resize is sufficient, but an extra SalEvent::ScaleChanged should be better
+  * VirtualDevices are independent. These need to be created with a reference window
+  * A lot of code uses "Application::GetDefaultDevice()"
+  * The font preview can just cache a single scale size.
+
+
 # LibreOffice
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/211/badge.svg)](https://scan.coverity.com/projects/211) [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/307/badge)](https://bestpractices.coreinfrastructure.org/projects/307) [![Translation status](https://weblate.documentfoundation.org/widgets/libo_ui-master/-/svg-badge.svg)](https://weblate.documentfoundation.org/engage/libo_ui-master/?utm_source=widget)
 
