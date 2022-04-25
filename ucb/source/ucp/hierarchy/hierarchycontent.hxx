@@ -151,7 +151,7 @@ private:
     bool isFolder() const { return ( m_eKind > LINK ); }
 
     css::uno::Reference< css::ucb::XContentIdentifier >
-    makeNewIdentifier( const OUString& rTitle );
+    makeNewIdentifier( std::u16string_view rTitle );
 
     typedef rtl::Reference< HierarchyContent > HierarchyContentRef;
     typedef std::vector< HierarchyContentRef > HierarchyContentRefVector;

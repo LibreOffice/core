@@ -310,7 +310,7 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
                 {
                     aURL += aHRef.subView( nPos+1, nPos2 - (nPos+1) )
                         + OUStringChar(sfx2::cTokenSeparator)
-                        + rtl::Uri::decode( aHRef.copy( nPos2+1 ),
+                        + rtl::Uri::decode( aHRef.subView( nPos2+1 ),
                                               rtl_UriDecodeWithCharset,
                                               RTL_TEXTENCODING_ISO_8859_1 );
                 }

@@ -342,7 +342,7 @@ INetURLObject CmisDetailsContainer::getUrl( )
     if ( !sBindingUrl.isEmpty( ) && !bSkip )
     {
         OUString sEncodedBinding = rtl::Uri::encode(
-                sBindingUrl + "#" + m_sRepoId,
+                rtl::OUStringConcatenation(sBindingUrl + "#" + m_sRepoId),
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );

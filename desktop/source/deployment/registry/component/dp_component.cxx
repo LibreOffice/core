@@ -82,7 +82,7 @@ std::vector<OUString> getCmdBootstrapVariables()
 }
 
 bool jarManifestHeaderPresent(
-    OUString const & url, OUString const & name,
+    std::u16string_view url, OUString const & name,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
     OUString buf = "vnd.sun.star.zip://"

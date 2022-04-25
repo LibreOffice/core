@@ -287,13 +287,13 @@ CurlUri CurlUri::CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) 
     return CurlUri(*pUrl.release());
 }
 
-OUString EncodeSegment(OUString const& rSegment)
+OUString EncodeSegment(std::u16string_view rSegment)
 {
     return rtl::Uri::encode(rSegment, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
                             RTL_TEXTENCODING_UTF8);
 }
 
-OUString DecodeURI(OUString const& rURI)
+OUString DecodeURI(std::u16string_view rURI)
 {
     return rtl::Uri::decode(rURI, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
 }

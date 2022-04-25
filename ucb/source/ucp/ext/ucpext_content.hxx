@@ -69,9 +69,9 @@ namespace ucb::ucp::ext
             );
 
         static OUString
-            encodeIdentifier( const OUString& i_rIdentifier );
+            encodeIdentifier( std::u16string_view i_rIdentifier );
         static OUString
-            decodeIdentifier( const OUString& i_rIdentifier );
+            decodeIdentifier( std::u16string_view i_rIdentifier );
 
         virtual OUString getParentURL() override;
 

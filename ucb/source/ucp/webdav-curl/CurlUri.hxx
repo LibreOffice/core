@@ -85,8 +85,8 @@ public:
     CurlUri CloneWithRelativeRefPathAbsolute(OUString const& rRelativeRef) const;
 };
 
-OUString EncodeSegment(OUString const& rSegment);
-OUString DecodeURI(OUString const& rURI);
+OUString EncodeSegment(std::u16string_view rSegment);
+OUString DecodeURI(std::u16string_view rURI);
 OUString ConnectionEndPointString(std::u16string_view rHost, sal_uInt16 nPort);
 
 } // namespace http_dav_ucp

@@ -399,6 +399,73 @@ void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
     }
 }
 
+void parseUriRef(sal_Unicode const * pUriRef, sal_Int32 nUriRefLength, Components * pComponents)
+{
+    // This algorithm is liberal and accepts various forms of illegal input.
+
+    sal_Unicode const * pBegin = pUriRef;
+    sal_Unicode const * pEnd = pBegin + nUriRefLength;
+    sal_Unicode const * pPos = pBegin;
+
+    if (pPos != pEnd && rtl::isAsciiAlpha(*pPos))
+    {
+        for (sal_Unicode const * p = pPos + 1; p != pEnd; ++p)
+        {
+            if (*p == ':')
+            {
+                pComponents->aScheme.pBegin = pBegin;
+                pComponents->aScheme.pEnd = ++p;
+                pPos = p;
+                break;
+            }
+
+            if (!rtl::isAsciiAlphanumeric(*p) && *p != '+' && *p != '-'
+                     && *p != '.')
+            {
+                break;
+            }
+        }
+    }
+
+    if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
+    {
+        pComponents->aAuthority.pBegin = pPos;
+        pPos += 2;
+        while (pPos != pEnd && *pPos != '/' && *pPos != '?' && *pPos != '#')
+        {
+            ++pPos;
+        }
+
+        pComponents->aAuthority.pEnd = pPos;
+    }
+
+    pComponents->aPath.pBegin = pPos;
+    while (pPos != pEnd && *pPos != '?' && * pPos != '#')
+    {
+        ++pPos;
+    }
+
+    pComponents->aPath.pEnd = pPos;
+
+    if (pPos != pEnd && *pPos == '?')
+    {
+        pComponents->aQuery.pBegin = pPos++;
+        while (pPos != pEnd && * pPos != '#')
+        {
+            ++pPos;
+        }
+
+        pComponents->aQuery.pEnd = pPos;
+    }
+
+    if (pPos != pEnd)
+    {
+        assert(*pPos == '#');
+        pComponents->aFragment.pBegin = pPos;
+        pComponents->aFragment.pEnd = pEnd;
+    }
+}
+
 void appendPath(
     OUStringBuffer & buffer, sal_Int32 bufferStart, bool precedingSlash,
     sal_Unicode const * pathBegin, sal_Unicode const * pathEnd)
@@ -500,10 +567,18 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                             rtl_TextEncoding eCharset, rtl_uString ** pResult)
     SAL_THROW_EXTERN_C()
 {
+    rtl_uriEncode_WithLength(pText->buffer, pText->length, pCharClass, eMechanism, eCharset, pResult);
+}
+
+void SAL_CALL rtl_uriEncode_WithLength(const sal_Unicode * pText, sal_Int32 nTextLength, sal_Bool const * pCharClass,
+                            rtl_UriEncodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset, rtl_uString ** pResult)
+    SAL_THROW_EXTERN_C()
+{
     assert(!pCharClass[0x25]); // make sure the percent sign is encoded...
 
-    sal_Unicode const * p = pText->buffer;
-    sal_Unicode const * pEnd = p + pText->length;
+    sal_Unicode const * p = pText;
+    sal_Unicode const * pEnd = pText + nTextLength;
     sal_Int32 nCapacity = 256;
     rtl_uString_new_WithLength(pResult, nCapacity);
 
@@ -616,6 +691,62 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
     }
 }
 
+void SAL_CALL rtl_uriDecode_WithLength(const sal_Unicode* pText, sal_Int32 nTextLength,
+                            rtl_UriDecodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset, rtl_uString ** pResult)
+    SAL_THROW_EXTERN_C()
+{
+    switch (eMechanism)
+    {
+    case rtl_UriDecodeNone:
+        rtl_uString_newFromStr_WithLength(pResult, pText, nTextLength);
+        break;
+
+    case rtl_UriDecodeToIuri:
+        eCharset = RTL_TEXTENCODING_UTF8;
+        [[fallthrough]];
+    default: // rtl_UriDecodeWithCharset, rtl_UriDecodeStrict
+        {
+            sal_Unicode const * p = pText;
+            sal_Unicode const * pEnd = p + nTextLength;
+            sal_Int32 nCapacity = nTextLength;
+            rtl_uString_new_WithLength(pResult, nCapacity);
+
+            while (p < pEnd)
+            {
+                rtl::uri::detail::EscapeType eType;
+                sal_uInt32 nUtf32 = rtl::uri::detail::readUcs4(&p, pEnd, true, eCharset, &eType);
+                switch (eType)
+                {
+                case rtl::uri::detail::EscapeChar:
+                    if (nUtf32 <= 0x7F && eMechanism == rtl_UriDecodeToIuri)
+                    {
+                        writeEscapeOctet(pResult, &nCapacity, nUtf32);
+                        break;
+                    }
+                    [[fallthrough]];
+
+                case rtl::uri::detail::EscapeNo:
+                    writeUcs4(pResult, &nCapacity, nUtf32);
+                    break;
+
+                case rtl::uri::detail::EscapeOctet:
+                    if (eMechanism == rtl_UriDecodeStrict)
+                    {
+                        rtl_uString_new(pResult);
+                        return;
+                    }
+                    writeEscapeOctet(pResult, &nCapacity, nUtf32);
+                    break;
+                }
+            }
+
+            *pResult = rtl_uStringBuffer_makeStringAndClear( pResult, &nCapacity );
+        }
+        break;
+    }
+}
+
 sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
                                          rtl_uString * pRelUriRef,
                                          rtl_uString ** pResult,
@@ -659,6 +790,146 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
                 pException,
                 (OUString(
                     "<" + OUString::unacquired(&pBaseUriRef)
+                    + "> does not start with a scheme component")
+                 .pData));
+            return false;
+        }
+
+        aBuffer.append(aBaseComponents.aScheme.pBegin,
+                       aBaseComponents.aScheme.getLength());
+        if (aRelComponents.aAuthority.isPresent())
+        {
+            aBuffer.append(aRelComponents.aAuthority.pBegin,
+                           aRelComponents.aAuthority.getLength());
+            appendPath(
+                aBuffer, aBuffer.getLength(), false,
+                aRelComponents.aPath.pBegin, aRelComponents.aPath.pEnd);
+
+            if (aRelComponents.aQuery.isPresent())
+            {
+                aBuffer.append(aRelComponents.aQuery.pBegin,
+                               aRelComponents.aQuery.getLength());
+            }
+        }
+        else
+        {
+            if (aBaseComponents.aAuthority.isPresent())
+            {
+                aBuffer.append(aBaseComponents.aAuthority.pBegin,
+                               aBaseComponents.aAuthority.getLength());
+            }
+
+            if (aRelComponents.aPath.pBegin == aRelComponents.aPath.pEnd)
+            {
+                aBuffer.append(aBaseComponents.aPath.pBegin,
+                               aBaseComponents.aPath.getLength());
+                if (aRelComponents.aQuery.isPresent())
+                {
+                    aBuffer.append(aRelComponents.aQuery.pBegin,
+                                   aRelComponents.aQuery.getLength());
+                }
+                else if (aBaseComponents.aQuery.isPresent())
+                {
+                    aBuffer.append(aBaseComponents.aQuery.pBegin,
+                                   aBaseComponents.aQuery.getLength());
+                }
+            }
+            else
+            {
+                if (*aRelComponents.aPath.pBegin == '/')
+                {
+                    appendPath(
+                        aBuffer, aBuffer.getLength(), false,
+                        aRelComponents.aPath.pBegin, aRelComponents.aPath.pEnd);
+                }
+                else if (aBaseComponents.aAuthority.isPresent()
+                         && aBaseComponents.aPath.pBegin
+                            == aBaseComponents.aPath.pEnd)
+                {
+                    appendPath(
+                        aBuffer, aBuffer.getLength(), true,
+                        aRelComponents.aPath.pBegin, aRelComponents.aPath.pEnd);
+                }
+                else
+                {
+                    sal_Int32 n = aBuffer.getLength();
+                    sal_Int32 i = rtl_ustr_lastIndexOfChar_WithLength(
+                        aBaseComponents.aPath.pBegin,
+                        aBaseComponents.aPath.getLength(), '/');
+
+                    if (i >= 0)
+                    {
+                        appendPath(
+                            aBuffer, n, false, aBaseComponents.aPath.pBegin,
+                            aBaseComponents.aPath.pBegin + i);
+                    }
+
+                    appendPath(
+                        aBuffer, n, i >= 0, aRelComponents.aPath.pBegin,
+                        aRelComponents.aPath.pEnd);
+                }
+
+                if (aRelComponents.aQuery.isPresent())
+                {
+                    aBuffer.append(aRelComponents.aQuery.pBegin,
+                                   aRelComponents.aQuery.getLength());
+                }
+            }
+        }
+    }
+    if (aRelComponents.aFragment.isPresent())
+    {
+        aBuffer.append(aRelComponents.aFragment.pBegin,
+                       aRelComponents.aFragment.getLength());
+    }
+
+    rtl_uString_assign(pResult, aBuffer.makeStringAndClear().pData);
+    return true;
+}
+
+sal_Bool SAL_CALL rtl_uriConvertRelToAbs_WithLength(const sal_Unicode * pBaseUriRef, sal_Int32 nBaseUriRefLength,
+                                         const sal_Unicode * pRelUriRef, sal_Int32 nRelUriRefLength,
+                                         rtl_uString ** pResult,
+                                         rtl_uString ** pException)
+    SAL_THROW_EXTERN_C()
+{
+    // Use the strict parser algorithm from RFC 3986, section 5.2, to turn the
+    // relative URI into an absolute one:
+    Components aRelComponents;
+    parseUriRef(pRelUriRef, nRelUriRefLength, &aRelComponents);
+    OUStringBuffer aBuffer(256);
+
+    if (aRelComponents.aScheme.isPresent())
+    {
+        aBuffer.append(aRelComponents.aScheme.pBegin,
+                       aRelComponents.aScheme.getLength());
+
+        if (aRelComponents.aAuthority.isPresent())
+        {
+            aBuffer.append(aRelComponents.aAuthority.pBegin,
+                           aRelComponents.aAuthority.getLength());
+        }
+
+        appendPath(
+            aBuffer, aBuffer.getLength(), false, aRelComponents.aPath.pBegin,
+            aRelComponents.aPath.pEnd);
+
+        if (aRelComponents.aQuery.isPresent())
+        {
+            aBuffer.append(aRelComponents.aQuery.pBegin,
+                           aRelComponents.aQuery.getLength());
+        }
+    }
+    else
+    {
+        Components aBaseComponents;
+        parseUriRef(pBaseUriRef, nBaseUriRefLength, &aBaseComponents);
+        if (!aBaseComponents.aScheme.isPresent())
+        {
+            rtl_uString_assign(
+                pException,
+                (OUString(
+                    OUString::Concat("<") + std::u16string_view(pBaseUriRef, nBaseUriRefLength)
                     + "> does not start with a scheme component")
                  .pData));
             return false;
