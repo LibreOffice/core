@@ -273,6 +273,15 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriEncode(
                             rtl_TextEncoding eCharset,
                             rtl_uString ** pResult)
     SAL_THROW_EXTERN_C();
+#if defined LIBO_INTERNAL_ONLY
+SAL_DLLPUBLIC void SAL_CALL rtl_uriEncode_WithLength(
+                            const sal_Unicode * pText, sal_Int32 nTextLength,
+                            sal_Bool const * pCharClass,
+                            rtl_UriEncodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset,
+                            rtl_uString ** pResult)
+    SAL_THROW_EXTERN_C();
+#endif
 
 /** Decode (a part of) a URI.
 
@@ -310,6 +319,14 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode(
                             rtl_TextEncoding eCharset,
                             rtl_uString ** pResult)
     SAL_THROW_EXTERN_C();
+#if defined LIBO_INTERNAL_ONLY
+SAL_DLLPUBLIC void SAL_CALL rtl_uriDecode_WithLength(
+                            const sal_Unicode * pText, sal_Int32 nTextLength,
+                            rtl_UriDecodeMechanism eMechanism,
+                            rtl_TextEncoding eCharset,
+                            rtl_uString ** pResult)
+    SAL_THROW_EXTERN_C();
+#endif
 
 /** Convert a relative URI reference into an absolute URI.
 
@@ -347,6 +364,14 @@ SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_uriConvertRelToAbs(
                                          rtl_uString ** pResult,
                                          rtl_uString ** pException)
     SAL_THROW_EXTERN_C();
+#if defined LIBO_INTERNAL_ONLY
+SAL_DLLPUBLIC sal_Bool SAL_CALL rtl_uriConvertRelToAbs_WithLength(
+                                         const sal_Unicode * pBaseUriRef, sal_Int32 nBaseUriRefLength,
+                                         const sal_Unicode * pRelUriRef, sal_Int32 nRelUriRefLength,
+                                         rtl_uString ** pResult,
+                                         rtl_uString ** pException)
+    SAL_THROW_EXTERN_C();
+#endif
 
 #if defined __cplusplus
 }

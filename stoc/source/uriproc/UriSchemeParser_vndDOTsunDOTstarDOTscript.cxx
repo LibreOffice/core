@@ -128,7 +128,7 @@ OUString parsePart(
     return buf.makeStringAndClear();
 }
 
-OUString encodeNameOrParamFragment(OUString const & fragment) {
+OUString encodeNameOrParamFragment(std::u16string_view fragment) {
     static sal_Bool const nameOrParamFragment[] = {
         false, false, false, false, false, false, false, false,
         false, false, false, false, false, false, false, false,

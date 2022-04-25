@@ -1485,7 +1485,7 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
         {
             try {
                 xDocProps->setAutoloadURL(
-                    rtl::Uri::convertRelToAbs(pDoc->GetMedium()->GetName(), aURL.copy( 4 )) );
+                    rtl::Uri::convertRelToAbs(pDoc->GetMedium()->GetName(), aURL.subView( 4 )) );
             } catch (rtl::MalformedUriException &) {
                 TOOLS_WARN_EXCEPTION("sfx", "");
             }

@@ -409,7 +409,7 @@ namespace cmis
             // Return the repository root as child
             OUString sUrl;
             OUString sEncodedBinding = rtl::Uri::encode(
-                    m_aURL.getBindingUrl( ) + "#" + m_sRepositoryId,
+                    rtl::OUStringConcatenation(m_aURL.getBindingUrl( ) + "#" + m_sRepositoryId),
                     rtl_UriCharClassRelSegment,
                     rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_UTF8 );

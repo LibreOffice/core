@@ -102,7 +102,7 @@ namespace ftp {
         OUString parent(bool internal = false) const;
 
         /** sets the unencoded title */
-        void child(const OUString& title);
+        void child(std::u16string_view title);
 
         /** returns the unencoded title */
         OUString child() const;

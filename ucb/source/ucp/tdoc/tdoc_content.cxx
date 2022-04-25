@@ -687,7 +687,7 @@ OUString Content::getParentURL()
 
 
 uno::Reference< ucb::XContentIdentifier >
-Content::makeNewIdentifier( const OUString& rTitle )
+Content::makeNewIdentifier( std::u16string_view rTitle )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 

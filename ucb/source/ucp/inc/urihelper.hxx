@@ -22,11 +22,12 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/uri.hxx>
+#include <o3tl/string_view.hxx>
 
 
 namespace ucb_impl::urihelper {
 
-    inline OUString encodeSegment( const OUString & rSegment )
+    inline OUString encodeSegment( std::u16string_view rSegment )
     {
         return rtl::Uri::encode( rSegment,
                                  rtl_UriCharClassPchar,
@@ -34,7 +35,7 @@ namespace ucb_impl::urihelper {
                                  RTL_TEXTENCODING_UTF8 );
     }
 
-    inline OUString decodeSegment( const OUString& rSegment )
+    inline OUString decodeSegment( std::u16string_view rSegment )
     {
         return rtl::Uri::decode( rSegment,
                                  rtl_UriDecodeWithCharset,
@@ -84,7 +85,7 @@ namespace ucb_impl::urihelper {
         do
         {
             aResult.append(
-                rtl::Uri::encode( aURI.getToken( 0, '/', nIndex ),
+                rtl::Uri::encode( o3tl::getToken(aURI, 0, '/', nIndex ),
                                   rtl_UriCharClassPchar,
                                   rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 ) );

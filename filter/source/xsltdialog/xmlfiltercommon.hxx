@@ -26,8 +26,8 @@
 #include <vector>
 
 
-extern OUString string_encode( const OUString & rText );
-extern OUString string_decode( const OUString & rText );
+extern OUString string_encode( std::u16string_view rText );
+extern OUString string_decode( std::u16string_view rText );
 
 bool copyStreams( const css::uno::Reference< css::io::XInputStream >& xIS, const css::uno::Reference< css::io::XOutputStream >& xOS );
 bool createDirectory( std::u16string_view rURL );

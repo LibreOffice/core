@@ -38,7 +38,7 @@ private:
     SAL_DLLPRIVATE virtual void SearchKeyword( const OUString& rKeyWord ) override;
     SAL_DLLPRIVATE virtual bool Start(const OUString& rURL, weld::Widget* pWidget = nullptr) override;
     SAL_DLLPRIVATE static OUString GetHelpModuleName_Impl(std::u16string_view rHelpId);
-    SAL_DLLPRIVATE static OUString CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName );
+    SAL_DLLPRIVATE static OUString CreateHelpURL_Impl( std::u16string_view aCommandURL, const OUString& rModuleName );
 
     SAL_DLLPRIVATE static bool Start_Impl( const OUString& rURL, const vcl::Window* pWindow );
     SAL_DLLPRIVATE virtual bool Start( const OUString& rURL, const vcl::Window* pWindow ) override;
@@ -50,7 +50,7 @@ public:
     virtual OUString        GetHelpText(const OUString&, const vcl::Window* pWindow) override;
     virtual OUString        GetHelpText(const OUString&, const weld::Widget* pWindow) override;
 
-    static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
+    static OUString         CreateHelpURL( std::u16string_view aCommandURL, const OUString& rModuleName );
     static OUString         GetDefaultHelpModule();
     static OUString         GetCurrentModuleIdentifier();
     // Check for built-in help
