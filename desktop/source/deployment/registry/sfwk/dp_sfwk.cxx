@@ -151,7 +151,7 @@ BackendImpl::PackageImpl::PackageImpl(
         segmStart = 0;
     // name and display name default the same:
     m_displayName = ::rtl::Uri::decode(
-        url.copy( segmStart, segmEnd - segmStart ),
+        url.subView( segmStart, segmEnd - segmStart ),
         rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     m_name = m_displayName;
 

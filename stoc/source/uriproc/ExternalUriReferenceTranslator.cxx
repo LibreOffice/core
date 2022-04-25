@@ -111,7 +111,7 @@ OUString Translator::translateToInternal(
             OUString seg(
                 rtl::Uri::encode(
                     rtl::Uri::decode(
-                        externalUriReference.copy(i, j - i),
+                        externalUriReference.subView(i, j - i),
                         rtl_UriDecodeStrict, encoding),
                     rtl_UriCharClassPchar, rtl_UriEncodeStrict,
                     RTL_TEXTENCODING_UTF8));
@@ -156,7 +156,7 @@ OUString Translator::translateToExternal(
             OUString seg(
                 rtl::Uri::encode(
                     rtl::Uri::decode(
-                        internalUriReference.copy(i, j - i),
+                        internalUriReference.subView(i, j - i),
                         rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8),
                     rtl_UriCharClassPchar, rtl_UriEncodeStrictKeepEscapes,
                     encoding));

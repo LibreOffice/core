@@ -97,7 +97,7 @@ private:
             }
             auto seg(
                 rtl::Uri::decode(
-                    path.copy(i, j - i), rtl_UriDecodeStrict,
+                    path.subView(i, j - i), rtl_UriDecodeStrict,
                     RTL_TEXTENCODING_UTF8));
             if (seg.isEmpty()) {
                 throw css::ucb::IllegalIdentifierException(url);

@@ -43,10 +43,10 @@ namespace com::sun::star::uri { class XUriReference; }
 
 namespace {
 
-bool parseSchemeSpecificPart(OUString const & part) {
+bool parseSchemeSpecificPart(std::u16string_view part) {
     // Liberally accepts both an empty opaque_part and an opaque_part that
     // starts with a non-escaped "/":
-    return part.isEmpty()
+    return part.empty()
         || (!::rtl::Uri::decode(part, ::rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8).isEmpty());
 }
 

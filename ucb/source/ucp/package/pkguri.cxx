@@ -168,7 +168,7 @@ void PackageUri::init() const
             sal_Int32 nLastSlash = m_aPackage.lastIndexOf( '/' );
             if ( nLastSlash != -1 )
                 m_aName = ::ucb_impl::urihelper::decodeSegment(
-                    m_aPackage.copy( nLastSlash + 1 ) );
+                    m_aPackage.subView( nLastSlash + 1 ) );
             else
                 m_aName
                     = ::ucb_impl::urihelper::decodeSegment( m_aPackage );
@@ -216,7 +216,7 @@ void PackageUri::init() const
             {
                 m_aParentUri = aPureUri.copy( 0, nLastSlash );
                 m_aName = ::ucb_impl::urihelper::decodeSegment(
-                    aPureUri.copy( nLastSlash + 1 ) );
+                    aPureUri.subView( nLastSlash + 1 ) );
             }
         }
 

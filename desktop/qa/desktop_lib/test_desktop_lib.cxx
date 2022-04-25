@@ -2307,7 +2307,7 @@ void DesktopLOKTest::testGetFontSubset()
 {
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     OUString aFontName = rtl::Uri::encode(
-        OUString("Liberation Sans"),
+        std::u16string_view(u"Liberation Sans"),
         rtl_UriCharClassRelSegment,
         rtl_UriEncodeKeepEscapes,
         RTL_TEXTENCODING_UTF8

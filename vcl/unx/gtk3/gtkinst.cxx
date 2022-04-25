@@ -299,7 +299,7 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     {
         //Non-utf8 locales are a bad idea if trying to work with non-ascii filenames
         //Decode %XX components
-        OUString sDecodedUri = rtl::Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
+        OUString sDecodedUri = rtl::Uri::decode(rFileUrl.subView(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
         //Convert back to system locale encoding
         OString sSystemUrl = OUStringToOString(sDecodedUri, aSystemEnc);
         //Encode to an escaped ASCII-encoded URI

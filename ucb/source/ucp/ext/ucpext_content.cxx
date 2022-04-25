@@ -267,14 +267,14 @@ namespace ucb::ucp::ext
     }
 
 
-    OUString Content::encodeIdentifier( const OUString& i_rIdentifier )
+    OUString Content::encodeIdentifier( std::u16string_view i_rIdentifier )
     {
         return ::rtl::Uri::encode( i_rIdentifier, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
             RTL_TEXTENCODING_UTF8 );
     }
 
 
-    OUString Content::decodeIdentifier( const OUString& i_rIdentifier )
+    OUString Content::decodeIdentifier( std::u16string_view i_rIdentifier )
     {
         return ::rtl::Uri::decode( i_rIdentifier, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
     }
