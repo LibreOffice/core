@@ -19,16 +19,48 @@ module com { module sun { module star { module system { module windows {
 
 /** Specifies an interface for adding custom jump lists to the task bar (Windows only)
 
+    To add a new jump list, call
+    1. XJumpList::beginList
+    2. XJumpList::appendCategory / XJumpList::addTasks / XJumpList::showRecentFiles / XJumpListshowFrequentFiles
+    3. XJumpList::commitList
+
+    Use XJumpList::abortList to cancel a current list building session.
+    Use XJumpList::getRemovedItems to see which items were removed by the user.
+
     @since LibreOffice 7.4
 */
 interface XJumpList: com::sun::star::uno::XInterface
 {
-    /** Add (or update) a jump list category.
+    /**
+       Start a new jump list.
 
-        Note that it is only possible to have one jump list category per `application`.
+       @param application
+        Used to map the jump list to the correct application. Use one of the following values:
+        <ul>
+            <li>Writer</li>
+            <li>Calc</li>
+            <li>Impress</li>
+            <li>Draw</li>
+            <li>Math</li>
+            <li>Base</li>
+            <li>Startcenter</li>
+        </ul>
 
-        When there is already a jump list for the given `application`,
-        that jump list will be cleared, and the new `category` and `jumpListItems` will be added.
+        "Startcenter" will map to the generic "LibreOffice" icon.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        When `application` is invalid
+
+        @throws com::sun::star::util::InvalidStateException
+        When there is already an open list.
+     */
+    void beginList([in] string application)
+        raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::util::InvalidStateException );
+
+    /** Add a jump list category.
+
+        Users can pin or remove items added via this method.
+        Use XJumpList::getRemovedItems to see which items were removed by the user.
 
         @param category
         Specifies the category name. It will appear as the title of the custom jump list.
@@ -44,34 +76,72 @@ interface XJumpList: com::sun::star::uno::XInterface
         If you try to add items which the user removed before,
         they will be silently ignored and not added to the list.
 
-        @param application
-        Used to map the jump list to the correct application. Use one of the following values:
-        <ul>
-            <li>Writer</li>
-            <li>Calc</li>
-            <li>Impress</li>
-            <li>Draw</li>
-            <li>Math</li>
-            <li>Base</li>
-            <li>Startcenter</li>
-        </ul>
-
-        "Startcenter" will map to the generic "LibreOffice" icon.
-
         @throws com::sun::star::lang::IllegalArgumentException
         When one of the following applies:
         <ul>
             <li>`category` is empty</li>
             <li>`jumpListItems` is empty or contains only items which were removed by the user</li>
-            <li>`application` is invalid</li>
         </ul>
+
+        @throws com::sun::star::util::InvalidStateException
+        When there is no open list.
     */
     void appendCategory( [in] string category,
-                         [in] sequence<com::sun::star::system::windows::JumpListItem> jumpListItems,
-                         [in] string application )
-        raises( ::com::sun::star::lang::IllegalArgumentException );
+                         [in] sequence<com::sun::star::system::windows::JumpListItem> jumpListItems )
+        raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::util::InvalidStateException );
 
-    /** Delete a jump list category
+    /** Add items to the "Tasks" category. This category is system-defined and the category title cannot be changed.
+        Also the user cannot remove or pin items from this category (as he can with items added via XJumpList::appendCategory ).
+
+        @param jumpListItems
+        Specifies a list of com::sun::star::system::JumpListItem.
+        Must contain at least one item.
+        These will be added as entries below the "Tasks" system category.
+
+        @throws com::sun::star::lang::IllegalArgumentException
+        When `jumpListItems` is empty
+
+        @throws com::sun::star::util::InvalidStateException
+        When there is no open list.
+    */
+    void addTasks([in] sequence<com::sun::star::system::windows::JumpListItem> jumpListItems)
+        raises( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::util::InvalidStateException );
+
+    /** Display the recently used files (populated by LibreOffice)
+
+        @throws com::sun::star::util::InvalidStateException
+        When there is no open list.
+     */
+    void showRecentFiles([in] boolean show)
+        raises (::com::sun::star::util::InvalidStateException);
+
+    /** Display the frequently used files (populated by LibreOffice)
+
+        @throws com::sun::star::util::InvalidStateException
+        When there is no open list.
+     */
+    void showFrequentFiles()
+        raises (::com::sun::star::util::InvalidStateException);
+
+    /**
+        Commits the list.
+
+        @throws com::sun::star::util::InvalidStateException
+        When there is no open list.
+     */
+    void commitList()
+        raises( ::com::sun::star::util::InvalidStateException );
+
+    /**
+        Aborts a list building session started with beginList.
+
+        @throws com::sun::star::util::InvalidStateException
+        When there is no open list.
+     */
+    void abortList()
+        raises( ::com::sun::star::util::InvalidStateException );
+
+    /** Deletes the Jump List for a certain application
 
         @param application
         Used to map the jump list to the correct application. Use one of the following values:
@@ -90,7 +160,7 @@ interface XJumpList: com::sun::star::uno::XInterface
         @throws com::sun::star::lang::IllegalArgumentException
         When `application` is invalid
     */
-    void deleteCategory( [in] string application )
+    void deleteList( [in] string application )
         raises( ::com::sun::star::lang::IllegalArgumentException );
 
     /** Returns items that were removed from the jump list by the user.

@@ -30,6 +30,7 @@
 #include <com/sun/star/system/windows/JumpListItem.hpp>
 #include <com/sun/star/system/windows/XJumpList.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/InvalidStateException.hpp>
 
 #include <prewin.h>
 #include <Shlobj.h>
@@ -43,6 +44,7 @@ using namespace css;
 using namespace css::uno;
 using namespace css::lang;
 using namespace css::system::windows;
+using namespace css::util;
 using namespace osl;
 using namespace sal::systools;
 
@@ -51,15 +53,23 @@ namespace
 class JumpListImpl : public BaseMutex, public WeakComponentImplHelper<XJumpList, XServiceInfo>
 {
     Reference<XComponentContext> m_xContext;
+    COMReference<ICustomDestinationList> m_aDestinationList;
+    COMReference<IObjectArray> m_aRemoved;
+    bool m_isListOpen;
 
 public:
     explicit JumpListImpl(const Reference<XComponentContext>& xContext);
 
     // XJumpList
+    virtual void SAL_CALL beginList(const OUString& sApplication) override;
     virtual void SAL_CALL appendCategory(const OUString& sCategory,
-                                         const Sequence<JumpListItem>& aJumpListItems,
-                                         const OUString& sApplication) override;
-    virtual void SAL_CALL deleteCategory(const OUString& sApplication) override;
+                                         const Sequence<JumpListItem>& aJumpListItems) override;
+    virtual void SAL_CALL addTasks(const Sequence<JumpListItem>& aJumpListItems) override;
+    virtual void SAL_CALL showRecentFiles(sal_Bool bShow) override;
+    virtual void SAL_CALL showFrequentFiles(sal_Bool bShow) override;
+    virtual void SAL_CALL commitList() override;
+    virtual void SAL_CALL abortList() override;
+    virtual void SAL_CALL deleteList(const OUString& sApplication) override;
     virtual Sequence<JumpListItem> SAL_CALL getRemovedItems(const OUString& sApplication) override;
 
     // XServiceInfo
@@ -71,6 +81,8 @@ public:
 JumpListImpl::JumpListImpl(const Reference<XComponentContext>& xContext)
     : WeakComponentImplHelper(m_aMutex)
     , m_xContext(xContext)
+    , m_aDestinationList(CLSID_DestinationList, nullptr, CLSCTX_INPROC_SERVER)
+    , m_isListOpen(false)
 {
 }
 
@@ -105,15 +117,11 @@ bool lcl_isItemInArray(COMReference<IShellLinkW> pShellLinkItem,
 }
 }
 
-void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
-                                           const Sequence<JumpListItem>& aJumpListItems,
-                                           const OUString& sApplication)
+void SAL_CALL JumpListImpl::beginList(const OUString& sApplication)
 {
-    if (sCategory.isEmpty())
-    {
-        throw IllegalArgumentException("Parameter 'category' must not be empty",
-                                       static_cast<OWeakObject*>(this), 1);
-    }
+    if (m_isListOpen)
+        throw InvalidStateException("There is already a list open. Close it with 'commitList'");
+
     if (sApplication != "Writer" && sApplication != "Calc" && sApplication != "Impress"
         && sApplication != "Draw" && sApplication != "Math" && sApplication != "Base"
         && sApplication != "Startcenter")
@@ -127,16 +135,34 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
 
     try
     {
-        COMReference<ICustomDestinationList> aDestinationList(CLSID_DestinationList, nullptr,
-                                                              CLSCTX_INPROC_SERVER);
-
-        aDestinationList->SetAppID(o3tl::toW(sApplicationID.getStr()));
+        m_aDestinationList->SetAppID(o3tl::toW(sApplicationID.getStr()));
 
         UINT min_slots;
-        COMReference<IObjectArray> removed;
-        ThrowIfFailed(aDestinationList->BeginList(&min_slots, IID_PPV_ARGS(&removed)),
-                      "BeginList failed");
 
+        ThrowIfFailed(m_aDestinationList->BeginList(&min_slots, IID_PPV_ARGS(&m_aRemoved)),
+                      "BeginList failed");
+        m_isListOpen = true;
+    }
+    catch (const ComError& e)
+    {
+        SAL_WARN("shell.jumplist", e.what());
+    }
+}
+
+void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
+                                           const Sequence<JumpListItem>& aJumpListItems)
+{
+    if (!m_isListOpen)
+        throw InvalidStateException("No list open. Open it with 'beginList'");
+
+    if (sCategory.isEmpty())
+    {
+        throw IllegalArgumentException("Parameter 'category' must not be empty",
+                                       static_cast<OWeakObject*>(this), 1);
+    }
+
+    try
+    {
         OUString sofficeURL;
         OUString sofficePath;
         oslProcessError err = osl_getExecutableFile(&sofficeURL.pData);
@@ -191,7 +217,7 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                               OStringConcatenation("Setting icon path '" + item.iconPath.toUtf8()
                                                    + "' failed."));
 
-                if (lcl_isItemInArray(pShellLinkItem, removed))
+                if (lcl_isItemInArray(pShellLinkItem, m_aRemoved))
                 {
                     SAL_INFO("shell.jumplist", "Ignoring item '"
                                                    << item.name
@@ -219,10 +245,9 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                 static_cast<OWeakObject*>(this), 1);
         }
 
-        ThrowIfFailed(aDestinationList->AppendCategory(o3tl::toW(sCategory.getStr()), pObjectArray),
-                      "AppendCategory failed.");
-
-        ThrowIfFailed(aDestinationList->CommitList(), "CommitList failed.");
+        ThrowIfFailed(
+            m_aDestinationList->AppendCategory(o3tl::toW(sCategory.getStr()), pObjectArray),
+            "AppendCategory failed.");
     }
     catch (const ComError& e)
     {
@@ -230,8 +255,163 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
     }
 }
 
-void SAL_CALL JumpListImpl::deleteCategory(const OUString& sApplication)
+void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItems)
 {
+    if (!m_isListOpen)
+        throw InvalidStateException("No list open. Open it with 'beginList'");
+
+    try
+    {
+        OUString sofficeURL;
+        OUString sofficePath;
+        oslProcessError err = osl_getExecutableFile(&sofficeURL.pData);
+        FileBase::getSystemPathFromFileURL(sofficeURL, sofficePath);
+        if (err != osl_Process_E_None)
+        {
+            SAL_WARN("shell.jumplist", "osl_getExecutableFile failed");
+            return;
+        }
+        // We need to run soffice.exe, not soffice.bin
+        sofficePath = sofficePath.replaceFirst("soffice.bin", "soffice.exe");
+
+        COMReference<IObjectCollection> aCollection(CLSID_EnumerableObjectCollection, nullptr,
+                                                    CLSCTX_INPROC_SERVER);
+
+        for (auto const& item : aJumpListItems)
+        {
+            if (item.name.isEmpty())
+                continue;
+            try
+            {
+                COMReference<IShellLinkW> pShellLinkItem(CLSID_ShellLink, nullptr,
+                                                         CLSCTX_INPROC_SERVER);
+
+                {
+                    COMReference<IPropertyStore> pps(pShellLinkItem, COM_QUERY_THROW);
+
+                    PROPVARIANT propvar;
+                    ThrowIfFailed(
+                        InitPropVariantFromString(o3tl::toW(item.name.getStr()), &propvar),
+                        "InitPropVariantFromString failed.");
+
+                    ThrowIfFailed(pps->SetValue(PKEY_Title, propvar), "SetValue failed.");
+
+                    ThrowIfFailed(pps->Commit(), "Commit failed.");
+
+                    PropVariantClear(&propvar);
+                }
+                ThrowIfFailed(pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
+                              OStringConcatenation("Setting description '"
+                                                   + item.description.toUtf8() + "' failed."));
+
+                ThrowIfFailed(
+                    pShellLinkItem->SetPath(o3tl::toW(sofficePath.getStr())),
+                    OStringConcatenation("Setting path '" + sofficePath.toUtf8() + "' failed."));
+
+                ThrowIfFailed(pShellLinkItem->SetArguments(o3tl::toW(item.arguments.getStr())),
+                              OStringConcatenation("Setting arguments '" + item.arguments.toUtf8()
+                                                   + "' failed."));
+
+                ThrowIfFailed(pShellLinkItem->SetIconLocation(o3tl::toW(item.iconPath.getStr()), 0),
+                              OStringConcatenation("Setting icon path '" + item.iconPath.toUtf8()
+                                                   + "' failed."));
+
+                aCollection->AddObject(pShellLinkItem);
+            }
+            catch (const ComError& e)
+            {
+                SAL_WARN("shell.jumplist", e.what());
+                continue;
+            }
+        }
+
+        COMReference<IObjectArray> pObjectArray(aCollection, COM_QUERY_THROW);
+        UINT nItems;
+        ThrowIfFailed(pObjectArray->GetCount(&nItems), "GetCount failed.");
+        if (nItems == 0)
+        {
+            throw IllegalArgumentException("No valid items given. `jumpListItems` is empty.",
+                                           static_cast<OWeakObject*>(this), 1);
+        }
+
+        ThrowIfFailed(m_aDestinationList->AddUserTasks(pObjectArray), "AddUserTasks failed.");
+    }
+    catch (const ComError& e)
+    {
+        SAL_WARN("shell.jumplist", e.what());
+    }
+}
+
+void SAL_CALL JumpListImpl::showRecentFiles(sal_Bool /*bShow*/)
+{
+    if (!m_isListOpen)
+        throw InvalidStateException("No list open. Open it with 'beginList'");
+
+    try
+    {
+        ThrowIfFailed(m_aDestinationList->AppendKnownCategory(KDC_RECENT),
+                      "AppendKnownCategory(KDC_RECENT) failed.");
+    }
+    catch (const ComError& e)
+    {
+        SAL_WARN("shell.jumplist", e.what());
+    }
+}
+
+void SAL_CALL JumpListImpl::showFrequentFiles(sal_Bool /*bShow*/)
+{
+    if (!m_isListOpen)
+        throw InvalidStateException("No list open. Open it with 'beginList'");
+
+    try
+    {
+        ThrowIfFailed(m_aDestinationList->AppendKnownCategory(KDC_FREQUENT),
+                      "AppendKnownCategory(KDC_FREQUENT) failed.");
+    }
+    catch (const ComError& e)
+    {
+        SAL_WARN("shell.jumplist", e.what());
+    }
+}
+
+void SAL_CALL JumpListImpl::commitList()
+{
+    if (!m_isListOpen)
+        throw InvalidStateException("No list open. Open it with 'beginList'");
+
+    try
+    {
+        ThrowIfFailed(m_aDestinationList->CommitList(), "CommitList failed.");
+        m_isListOpen = false;
+    }
+    catch (const ComError& e)
+    {
+        SAL_WARN("shell.jumplist", e.what());
+    }
+}
+
+void SAL_CALL JumpListImpl::abortList()
+{
+    if (!m_isListOpen)
+        throw InvalidStateException("No list open.");
+
+    try
+    {
+        ThrowIfFailed(m_aDestinationList->AbortList(), "AbortList failed.");
+        m_isListOpen = false;
+    }
+    catch (const ComError& e)
+    {
+        SAL_WARN("shell.jumplist", e.what());
+    }
+}
+
+void SAL_CALL JumpListImpl::deleteList(const OUString& sApplication)
+{
+    if (m_isListOpen)
+        throw InvalidStateException("You are in a list building session. Close it with "
+                                    "'commitList', or abort with 'abortList'");
+
     if (sApplication != "Writer" && sApplication != "Calc" && sApplication != "Impress"
         && sApplication != "Draw" && sApplication != "Math" && sApplication != "Base"
         && sApplication != "Startcenter")
