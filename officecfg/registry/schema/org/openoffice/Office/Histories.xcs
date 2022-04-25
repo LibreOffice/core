@@ -38,6 +38,7 @@
       </prop>
       <prop oor:name="Password" oor:type="xs:string">
         <info>
+          <deprecated>Not used anymore</deprecated>
           <desc>Contains an encoded password used to open the document.</desc>
         </info>
       </prop>
