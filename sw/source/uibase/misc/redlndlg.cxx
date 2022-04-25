@@ -167,8 +167,10 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(const std::shared_ptr<weld::Window>& rPar
     //tdf#89227 default to disabled, and only enable if possible to accept/reject
     m_pTPView->EnableAccept(false);
     m_pTPView->EnableReject(false);
+    m_pTPView->EnableClearFormat(false);
     m_pTPView->EnableAcceptAll(false);
     m_pTPView->EnableRejectAll(false);
+    m_pTPView->EnableClearFormatAll(false);
 
     m_xTabPagesCTRL->GetFilterPage()->SetReadyHdl(LINK(this, SwRedlineAcceptDlg, FilterChangedHdl));
 
@@ -358,8 +360,10 @@ void SwRedlineAcceptDlg::Activate()
     {
         m_pTPView->EnableAccept(false);
         m_pTPView->EnableReject(false);
+        m_pTPView->EnableClearFormat(false);
         m_pTPView->EnableAcceptAll(false);
         m_pTPView->EnableRejectAll(false);
+        m_pTPView->EnableClearFormatAll(false);
         return; // had the focus previously
     }
 
@@ -1178,6 +1182,7 @@ IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl, Timer *, void)
     m_pTPView->EnableAccept( bEnable && bSel /*&& !bReadonlySel*/ );
     m_pTPView->EnableReject( bEnable && bSel /*&& !bReadonlySel*/ );
     m_pTPView->EnableClearFormat( bEnable && bSel && !bIsNotFormated /*&& !bReadonlySel*/ );
+    m_pTPView->EnableAcceptAll( bEnable );
     m_pTPView->EnableRejectAll( bEnable );
     m_pTPView->EnableClearFormatAll( bEnable && m_bOnlyFormatedRedlines );
 }
