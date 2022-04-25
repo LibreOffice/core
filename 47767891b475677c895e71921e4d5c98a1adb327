@@ -16,6 +16,24 @@
       "message": "needs adapting to macOS",
       "revId": "47767891b475677c895e71921e4d5c98a1adb327",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e9f5d35_e9947c9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-25T11:41:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1184a1c4_a391e112",
+      "revId": "47767891b475677c895e71921e4d5c98a1adb327",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
