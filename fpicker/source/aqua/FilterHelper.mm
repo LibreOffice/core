@@ -21,6 +21,9 @@
 #include <sal/log.hxx>
 
 #include <algorithm>
+#include <cstddef>
+#include <string_view>
+#include <o3tl/string_view.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 
@@ -31,12 +34,12 @@
 
 namespace {
 
-void fillSuffixList(OUStringList& aSuffixList, const OUString& suffixString) {
-    sal_Int32 nIndex = 0;
+void fillSuffixList(OUStringList& aSuffixList, std::u16string_view suffixString) {
+    std::size_t nIndex = 0;
     do {
-        OUString aToken = suffixString.getToken( 0, ';', nIndex );
-        aSuffixList.push_back(aToken.copy(1));
-    } while ( nIndex >= 0 );
+        std::u16string_view aToken = o3tl::getToken( suffixString, u';', nIndex );
+        aSuffixList.push_back(OUString(aToken.substr(1)));
+    } while ( nIndex != std::u16string_view::npos );
 }
 
 }
@@ -70,24 +73,22 @@ sal_Int32 FilterEntry::getSubFilters( UnoFilterList& _rSubFilterList )
 
 #pragma mark statics
 static bool
-isFilterString( const OUString& rFilterString, const char *pMatch )
+isFilterString( std::u16string_view rFilterString, std::u16string_view pMatch )
 {
-    sal_Int32 nIndex = 0;
-    OUString aToken;
+    std::size_t nIndex = 0;
+    std::u16string_view aToken;
     bool bIsFilter = true;
-
-    OUString aMatch(OUString::createFromAscii(pMatch));
 
     do
     {
-        aToken = rFilterString.getToken( 0, ';', nIndex );
-        if( !aToken.match( aMatch ) )
+        aToken = o3tl::getToken( rFilterString, u';', nIndex );
+        if( !o3tl::starts_with( aToken, pMatch ) )
         {
             bIsFilter = false;
             break;
         }
     }
-    while( nIndex >= 0 );
+    while( nIndex != std::u16string_view::npos );
 
     return bIsFilter;
 }
@@ -109,11 +110,11 @@ shrinkFilterName( const OUString& aFilterName, bool bAllowNoStar = false )
             sal_Int32 nBracketLen = nBracketEnd - i;
             if( nBracketEnd <= 0 )
                 continue;
-            if( isFilterString( aFilterName.copy( i + 1, nBracketLen - 1 ), "*." ) )
+            if( isFilterString( aFilterName.subView( i + 1, nBracketLen - 1 ), u"*." ) )
                 aRealName = aRealName.replaceAt( i, nBracketLen + 1, u"" );
             else if (bAllowNoStar)
             {
-                if( isFilterString( aFilterName.copy( i + 1, nBracketLen - 1 ), ".") )
+                if( isFilterString( aFilterName.subView( i + 1, nBracketLen - 1 ), u".") )
                     aRealName = aRealName.replaceAt( i, nBracketLen + 1, u"" );
             }
         }
@@ -259,7 +260,7 @@ void FilterHelper::SetFilters()
     }
 }
 
-void FilterHelper::appendFilter(const OUString& aTitle, const OUString& aFilterString)
+void FilterHelper::appendFilter(const OUString& aTitle, std::u16string_view aFilterString)
 {
     SolarMutexGuard aGuard;
 
