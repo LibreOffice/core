@@ -37,7 +37,7 @@ SfxBoolItem AcceptTrackedChanges FN_REDLINE_ACCEPT
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,

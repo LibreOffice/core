@@ -1498,7 +1498,7 @@
           <value>true</value>
         </prop>
         <prop oor:name="ShowForReadOnlyDocument" oor:type="xs:boolean">
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="Id" oor:type="xs:string">
           <value>SwManageChangesPanel</value>
