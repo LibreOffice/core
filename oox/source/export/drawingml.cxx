@@ -3951,352 +3951,9 @@ bool DrawingML::WriteCustomGeometry(
             }
             for (sal_Int32 k = 0; k < rSegment.Count && bOK; ++k)
             {
-                switch (rSegment.Command)
-                {
-                    case MOVETO:
-                    {
-                        if (nPairIndex >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            mpFS->startElementNS(XML_a, XML_moveTo);
-                            WriteCustomGeometryPoint(aPairs[nPairIndex], aCustomShape2d);
-                            mpFS->endElementNS(XML_a, XML_moveTo);
-                            aCustomShape2d.GetParameter(fCurrentX, aPairs[nPairIndex].First, false,
-                                                        false);
-                            aCustomShape2d.GetParameter(fCurrentY, aPairs[nPairIndex].Second, false,
-                                                        false);
-                            bCurrentValid = true;
-                            nPairIndex++;
-                        }
-                        break;
-                    }
-                    case LINETO:
-                    {
-                        if (nPairIndex >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            mpFS->startElementNS(XML_a, XML_lnTo);
-                            WriteCustomGeometryPoint(aPairs[nPairIndex], aCustomShape2d);
-                            mpFS->endElementNS(XML_a, XML_lnTo);
-                            aCustomShape2d.GetParameter(fCurrentX, aPairs[nPairIndex].First, false,
-                                                        false);
-                            aCustomShape2d.GetParameter(fCurrentY, aPairs[nPairIndex].Second, false,
-                                                        false);
-                            bCurrentValid = true;
-                            nPairIndex++;
-                        }
-                        break;
-                    }
-                    case CURVETO:
-                    {
-                        if (nPairIndex + 2 >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            mpFS->startElementNS(XML_a, XML_cubicBezTo);
-                            for (sal_uInt8 l = 0; l <= 2; ++l)
-                            {
-                                WriteCustomGeometryPoint(aPairs[nPairIndex + l], aCustomShape2d);
-                            }
-                            mpFS->endElementNS(XML_a, XML_cubicBezTo);
-                            aCustomShape2d.GetParameter(fCurrentX, aPairs[nPairIndex + 2].First,
-                                                        false, false);
-                            aCustomShape2d.GetParameter(fCurrentY, aPairs[nPairIndex + 2].Second,
-                                                        false, false);
-                            bCurrentValid = true;
-                            nPairIndex += 3;
-                        }
-                        break;
-                    }
-                    case ANGLEELLIPSETO:
-                    case ANGLEELLIPSE:
-                    {
-                        if (nPairIndex + 2 >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            // Read parameters
-                            double fCx = 0.0;
-                            aCustomShape2d.GetParameter(fCx, aPairs[nPairIndex].First, false,
-                                                        false);
-                            double fCy = 0.0;
-                            aCustomShape2d.GetParameter(fCy, aPairs[nPairIndex].Second, false,
-                                                        false);
-                            double fWR = 0.0;
-                            aCustomShape2d.GetParameter(fWR, aPairs[nPairIndex + 1].First, false,
-                                                        false);
-                            double fHR = 0.0;
-                            aCustomShape2d.GetParameter(fHR, aPairs[nPairIndex + 1].Second, false,
-                                                        false);
-                            double fStartAngle = 0.0;
-                            aCustomShape2d.GetParameter(fStartAngle, aPairs[nPairIndex + 2].First,
-                                                        false, false);
-                            double fEndAngle = 0.0;
-                            aCustomShape2d.GetParameter(fEndAngle, aPairs[nPairIndex + 2].Second,
-                                                        false, false);
-
-                            // Prepare start and swing angle
-                            sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
-                            sal_Int32 nSwingAng = 0;
-                            if (basegfx::fTools::equalZero(fStartAngle)
-                                && basegfx::fTools::equalZero(fEndAngle - 360.0))
-                                nSwingAng = 360 * 60000; // special case full circle
-                            else
-                            {
-                                nSwingAng = std::lround((fEndAngle - fStartAngle) * 60000);
-                                if (nSwingAng < 0)
-                                    nSwingAng += 360 * 60000;
-                            }
-
-                            // calculate start point on ellipse
-                            double fSx = 0.0;
-                            double fSy = 0.0;
-                            getEllipsePointFromViewAngle(fSx, fSy, fWR, fHR, fCx, fCy, fStartAngle);
-
-                            // write markup for going to start point
-                            if (rSegment.Command == ANGLEELLIPSETO)
-                            {
-                                mpFS->startElementNS(XML_a, XML_lnTo);
-                                mpFS->singleElementNS(XML_a, XML_pt, XML_x,
-                                                      OString::number(std::lround(fSx)), XML_y,
-                                                      OString::number(std::lround(fSy)));
-                                mpFS->endElementNS(XML_a, XML_lnTo);
-                            }
-                            else
-                            {
-                                mpFS->startElementNS(XML_a, XML_moveTo);
-                                mpFS->singleElementNS(XML_a, XML_pt, XML_x,
-                                                      OString::number(std::lround(fSx)), XML_y,
-                                                      OString::number(std::lround(fSy)));
-                                mpFS->endElementNS(XML_a, XML_moveTo);
-                            }
-                            // write markup for arcTo
-                            if (!basegfx::fTools::equalZero(fWR)
-                                && !basegfx::fTools::equalZero(fHR))
-                                mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR,
-                                                    OString::number(std::lround(fWR)), XML_hR,
-                                                    OString::number(std::lround(fHR)), XML_stAng,
-                                                    OString::number(nStartAng), XML_swAng,
-                                                    OString::number(nSwingAng));
-
-                            getEllipsePointFromViewAngle(fCurrentX, fCurrentY, fWR, fHR, fCx, fCy,
-                                                         fEndAngle);
-                            bCurrentValid = true;
-                            nPairIndex += 3;
-                        }
-                        break;
-                    }
-                    case ARCTO:
-                    case ARC:
-                    case CLOCKWISEARCTO:
-                    case CLOCKWISEARC:
-                    {
-                        if (nPairIndex + 3 >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            // read parameters
-                            double fX1 = 0.0;
-                            aCustomShape2d.GetParameter(fX1, aPairs[nPairIndex].First, false,
-                                                        false);
-                            double fY1 = 0.0;
-                            aCustomShape2d.GetParameter(fY1, aPairs[nPairIndex].Second, false,
-                                                        false);
-                            double fX2 = 0.0;
-                            aCustomShape2d.GetParameter(fX2, aPairs[nPairIndex + 1].First, false,
-                                                        false);
-                            double fY2 = 0.0;
-                            aCustomShape2d.GetParameter(fY2, aPairs[nPairIndex + 1].Second, false,
-                                                        false);
-                            double fX3 = 0.0;
-                            aCustomShape2d.GetParameter(fX3, aPairs[nPairIndex + 2].First, false,
-                                                        false);
-                            double fY3 = 0.0;
-                            aCustomShape2d.GetParameter(fY3, aPairs[nPairIndex + 2].Second, false,
-                                                        false);
-                            double fX4 = 0.0;
-                            aCustomShape2d.GetParameter(fX4, aPairs[nPairIndex + 3].First, false,
-                                                        false);
-                            double fY4 = 0.0;
-                            aCustomShape2d.GetParameter(fY4, aPairs[nPairIndex + 3].Second, false,
-                                                        false);
-                            // calculate ellipse parameter
-                            const double fWR = (fX2 - fX1) / 2.0;
-                            const double fHR = (fY2 - fY1) / 2.0;
-                            const double fCx = (fX1 + fX2) / 2.0;
-                            const double fCy = (fY1 + fY2) / 2.0;
-                            // calculate start angle
-                            double fStartAngle = 0.0;
-                            double fPx = 0.0;
-                            double fPy = 0.0;
-                            getEllipsePointAndAngleFromRayPoint(fStartAngle, fPx, fPy, fWR, fHR,
-                                                                fCx, fCy, fX3, fY3);
-                            // markup for going to start point
-                            if (rSegment.Command == ARCTO || rSegment.Command == CLOCKWISEARCTO)
-                            {
-                                mpFS->startElementNS(XML_a, XML_lnTo);
-                                mpFS->singleElementNS(XML_a, XML_pt, XML_x,
-                                                      OString::number(std::lround(fPx)), XML_y,
-                                                      OString::number(std::lround(fPy)));
-                                mpFS->endElementNS(XML_a, XML_lnTo);
-                            }
-                            else
-                            {
-                                mpFS->startElementNS(XML_a, XML_moveTo);
-                                mpFS->singleElementNS(XML_a, XML_pt, XML_x,
-                                                      OString::number(std::lround(fPx)), XML_y,
-                                                      OString::number(std::lround(fPy)));
-                                mpFS->endElementNS(XML_a, XML_moveTo);
-                            }
-                            // calculate swing angle
-                            double fEndAngle = 0.0;
-                            getEllipsePointAndAngleFromRayPoint(fEndAngle, fPx, fPy, fWR, fHR, fCx,
-                                                                fCy, fX4, fY4);
-                            double fSwingAngle(fEndAngle - fStartAngle);
-                            const bool bIsClockwise(rSegment.Command == CLOCKWISEARCTO
-                                                    || rSegment.Command == CLOCKWISEARC);
-                            if (bIsClockwise && fSwingAngle < 0)
-                                fSwingAngle += 360.0;
-                            else if (!bIsClockwise && fSwingAngle > 0)
-                                fSwingAngle -= 360.0;
-                            // markup for arcTo
-                            // ToDo: write markup for case zero width or height of ellipse
-                            const sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
-                            const sal_Int32 nSwingAng(std::lround(fSwingAngle * 60000));
-                            mpFS->singleElement(
-                                FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)),
-                                XML_hR, OString::number(std::lround(fHR)), XML_stAng,
-                                OString::number(nStartAng), XML_swAng, OString::number(nSwingAng));
-                            fCurrentX = fPx;
-                            fCurrentY = fPy;
-                            bCurrentValid = true;
-                            nPairIndex += 4;
-                        }
-                        break;
-                    }
-                    case ELLIPTICALQUADRANTX:
-                    case ELLIPTICALQUADRANTY:
-                    {
-                        if (nPairIndex >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            // read parameters
-                            double fX = 0.0;
-                            aCustomShape2d.GetParameter(fX, aPairs[nPairIndex].First, false, false);
-                            double fY = 0.0;
-                            aCustomShape2d.GetParameter(fY, aPairs[nPairIndex].Second, false,
-                                                        false);
-
-                            // Prepare parameters for arcTo
-                            if (bCurrentValid)
-                            {
-                                double fWR = std::abs(fCurrentX - fX);
-                                double fHR = std::abs(fCurrentY - fY);
-                                double fStartAngle(0.0);
-                                double fSwingAngle(0.0);
-                                // The starting direction of the arc toggles beween X and Y
-                                if ((rSegment.Command == ELLIPTICALQUADRANTX && !(k % 2))
-                                    || (rSegment.Command == ELLIPTICALQUADRANTY && (k % 2)))
-                                {
-                                    // arc starts horizontal
-                                    fStartAngle = fY < fCurrentY ? 90.0 : 270.0;
-                                    const bool bClockwise = (fX < fCurrentX && fY < fCurrentY)
-                                                            || (fX > fCurrentX && fY > fCurrentY);
-                                    fSwingAngle = bClockwise ? 90.0 : -90.0;
-                                }
-                                else
-                                {
-                                    // arc starts vertical
-                                    fStartAngle = fX < fCurrentX ? 0.0 : 180.0;
-                                    const bool bClockwise = (fX < fCurrentX && fY > fCurrentY)
-                                                            || (fX > fCurrentX && fY < fCurrentY);
-                                    fSwingAngle = bClockwise ? 90.0 : -90.0;
-                                }
-                                sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
-                                sal_Int32 nSwingAng(std::lround(fSwingAngle * 60000));
-                                mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR,
-                                                    OString::number(std::lround(fWR)), XML_hR,
-                                                    OString::number(std::lround(fHR)), XML_stAng,
-                                                    OString::number(nStartAng), XML_swAng,
-                                                    OString::number(nSwingAng));
-                            }
-                            else
-                            {
-                                // faulty path, but we continue with the target point
-                                mpFS->startElementNS(XML_a, XML_moveTo);
-                                WriteCustomGeometryPoint(aPairs[nPairIndex], aCustomShape2d);
-                                mpFS->endElementNS(XML_a, XML_moveTo);
-                            }
-                            fCurrentX = fX;
-                            fCurrentY = fY;
-                            bCurrentValid = true;
-                            nPairIndex++;
-                        }
-                        break;
-                    }
-                    case QUADRATICCURVETO:
-                    {
-                        if (nPairIndex + 1 >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            mpFS->startElementNS(XML_a, XML_quadBezTo);
-                            for( sal_uInt8 l = 0; l < 2; ++l )
-                            {
-                                WriteCustomGeometryPoint(aPairs[nPairIndex + l], aCustomShape2d);
-                            }
-                            mpFS->endElementNS( XML_a, XML_quadBezTo );
-                            aCustomShape2d.GetParameter(fCurrentX, aPairs[nPairIndex + 1].First, false,
-                                                        false);
-                            aCustomShape2d.GetParameter(fCurrentY, aPairs[nPairIndex + 1].Second, false,
-                                                        false);
-                            bCurrentValid = true;
-                            nPairIndex += 2;
-                        }
-                        break;
-                    }
-                    case ARCANGLETO:
-                    {
-                        if (nPairIndex + 1 >= aPairs.getLength())
-                            bOK = false;
-                        else
-                        {
-                            double fWR = 0.0;
-                            aCustomShape2d.GetParameter(fWR, aPairs[nPairIndex].First, false, false);
-                            double fHR = 0.0;
-                            aCustomShape2d.GetParameter(fHR, aPairs[nPairIndex].Second, false, false);
-                            double fStartAngle = 0.0;
-                            aCustomShape2d.GetParameter(fStartAngle, aPairs[nPairIndex + 1].First,
-                                                        false, false);
-                            sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
-                            double fSwingAng = 0.0;
-                            aCustomShape2d.GetParameter(fSwingAng, aPairs[nPairIndex + 1].Second,
-                                                        false, false);
-                            sal_Int32 nSwingAng(std::lround(fSwingAng * 60000));
-                            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(fWR),
-                                                XML_hR, OString::number(fHR), XML_stAng,
-                                                OString::number(nStartAng), XML_swAng,
-                                                OString::number(nSwingAng));
-                            double fPx = 0.0;
-                            double fPy = 0.0;
-                            getEllipsePointFromViewAngle(fPx, fPy, fWR, fHR, 0.0, 0.0, fStartAngle);
-                            double fCx = fCurrentX - fPx;
-                            double fCy = fCurrentY - fPy;
-                            getEllipsePointFromViewAngle(fCurrentX, fCurrentY, fWR, fHR, fCx, fCy,
-                                                         fStartAngle + fSwingAng);
-                            bCurrentValid = true;
-                            nPairIndex += 2;
-                        }
-                        break;
-                    }
-                    default:
-                        // do nothing
-                        break;
-                }
-            } // end loop for commands which are repeated
+                bOK = WriteCustomGeometrySegment(rSegment.Command, k, aPairs, nPairIndex, fCurrentX,
+                                                 fCurrentY, bCurrentValid, aCustomShape2d);
+            }
         } // end loop over all commands of subpath
         // finish this subpath in any case
         mpFS->endElementNS(XML_a, XML_path);
@@ -4312,6 +3969,307 @@ bool DrawingML::WriteCustomGeometry(
     mpFS->endElementNS(XML_a, XML_pathLst);
     mpFS->endElementNS(XML_a, XML_custGeom);
     return true; // We have written custGeom even if path is poorly structured.
+}
+
+bool DrawingML::WriteCustomGeometrySegment(
+    const sal_Int16 eCommand, const sal_Int32 nCount,
+    const uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
+    sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
+    const EnhancedCustomShape2d& rCustomShape2d)
+{
+    switch (eCommand)
+    {
+        case MOVETO:
+        {
+            if (rnPairIndex >= rPairs.getLength())
+                return false;
+
+            mpFS->startElementNS(XML_a, XML_moveTo);
+            WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+            mpFS->endElementNS(XML_a, XML_moveTo);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, false, false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex].Second, false, false);
+            rbCurrentValid = true;
+            rnPairIndex++;
+            break;
+        }
+        case LINETO:
+        {
+            if (rnPairIndex >= rPairs.getLength())
+                return false;
+
+            mpFS->startElementNS(XML_a, XML_lnTo);
+            WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+            mpFS->endElementNS(XML_a, XML_lnTo);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, false, false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex].Second, false, false);
+            rbCurrentValid = true;
+            rnPairIndex++;
+            break;
+        }
+        case CURVETO:
+        {
+            if (rnPairIndex + 2 >= rPairs.getLength())
+                return false;
+
+            mpFS->startElementNS(XML_a, XML_cubicBezTo);
+            for (sal_uInt8 i = 0; i <= 2; ++i)
+            {
+                WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d);
+            }
+            mpFS->endElementNS(XML_a, XML_cubicBezTo);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 2].First, false, false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex + 2].Second, false, false);
+            rbCurrentValid = true;
+            rnPairIndex += 3;
+            break;
+        }
+        case ANGLEELLIPSETO:
+        case ANGLEELLIPSE:
+        {
+            if (rnPairIndex + 2 >= rPairs.getLength())
+                return false;
+
+            // Read parameters
+            double fCx = 0.0;
+            rCustomShape2d.GetParameter(fCx, rPairs[rnPairIndex].First, false, false);
+            double fCy = 0.0;
+            rCustomShape2d.GetParameter(fCy, rPairs[rnPairIndex].Second, false, false);
+            double fWR = 0.0;
+            rCustomShape2d.GetParameter(fWR, rPairs[rnPairIndex + 1].First, false, false);
+            double fHR = 0.0;
+            rCustomShape2d.GetParameter(fHR, rPairs[rnPairIndex + 1].Second, false, false);
+            double fStartAngle = 0.0;
+            rCustomShape2d.GetParameter(fStartAngle, rPairs[rnPairIndex + 2].First, false, false);
+            double fEndAngle = 0.0;
+            rCustomShape2d.GetParameter(fEndAngle, rPairs[rnPairIndex + 2].Second, false, false);
+
+            // Prepare start and swing angle
+            sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
+            sal_Int32 nSwingAng = 0;
+            if (basegfx::fTools::equalZero(fStartAngle)
+                && basegfx::fTools::equalZero(fEndAngle - 360.0))
+                nSwingAng = 360 * 60000; // special case full circle
+            else
+            {
+                nSwingAng = std::lround((fEndAngle - fStartAngle) * 60000);
+                if (nSwingAng < 0)
+                    nSwingAng += 360 * 60000;
+            }
+
+            // calculate start point on ellipse
+            double fSx = 0.0;
+            double fSy = 0.0;
+            getEllipsePointFromViewAngle(fSx, fSy, fWR, fHR, fCx, fCy, fStartAngle);
+
+            // write markup for going to start point
+            if (eCommand == ANGLEELLIPSETO)
+            {
+                mpFS->startElementNS(XML_a, XML_lnTo);
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fSx)),
+                                      XML_y, OString::number(std::lround(fSy)));
+                mpFS->endElementNS(XML_a, XML_lnTo);
+            }
+            else
+            {
+                mpFS->startElementNS(XML_a, XML_moveTo);
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fSx)),
+                                      XML_y, OString::number(std::lround(fSy)));
+                mpFS->endElementNS(XML_a, XML_moveTo);
+            }
+            // write markup for arcTo
+            if (!basegfx::fTools::equalZero(fWR) && !basegfx::fTools::equalZero(fHR))
+                mpFS->singleElement(
+                    FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)), XML_hR,
+                    OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
+                    XML_swAng, OString::number(nSwingAng));
+
+            getEllipsePointFromViewAngle(rfCurrentX, rfCurrentY, fWR, fHR, fCx, fCy, fEndAngle);
+            rbCurrentValid = true;
+            rnPairIndex += 3;
+            break;
+        }
+        case ARCTO:
+        case ARC:
+        case CLOCKWISEARCTO:
+        case CLOCKWISEARC:
+        {
+            if (rnPairIndex + 3 >= rPairs.getLength())
+                return false;
+
+            // read parameters
+            double fX1 = 0.0;
+            rCustomShape2d.GetParameter(fX1, rPairs[rnPairIndex].First, false, false);
+            double fY1 = 0.0;
+            rCustomShape2d.GetParameter(fY1, rPairs[rnPairIndex].Second, false, false);
+            double fX2 = 0.0;
+            rCustomShape2d.GetParameter(fX2, rPairs[rnPairIndex + 1].First, false, false);
+            double fY2 = 0.0;
+            rCustomShape2d.GetParameter(fY2, rPairs[rnPairIndex + 1].Second, false, false);
+            double fX3 = 0.0;
+            rCustomShape2d.GetParameter(fX3, rPairs[rnPairIndex + 2].First, false, false);
+            double fY3 = 0.0;
+            rCustomShape2d.GetParameter(fY3, rPairs[rnPairIndex + 2].Second, false, false);
+            double fX4 = 0.0;
+            rCustomShape2d.GetParameter(fX4, rPairs[rnPairIndex + 3].First, false, false);
+            double fY4 = 0.0;
+            rCustomShape2d.GetParameter(fY4, rPairs[rnPairIndex + 3].Second, false, false);
+            // calculate ellipse parameter
+            const double fWR = (fX2 - fX1) / 2.0;
+            const double fHR = (fY2 - fY1) / 2.0;
+            const double fCx = (fX1 + fX2) / 2.0;
+            const double fCy = (fY1 + fY2) / 2.0;
+            // calculate start angle
+            double fStartAngle = 0.0;
+            double fPx = 0.0;
+            double fPy = 0.0;
+            getEllipsePointAndAngleFromRayPoint(fStartAngle, fPx, fPy, fWR, fHR, fCx, fCy, fX3,
+                                                fY3);
+            // markup for going to start point
+            if (eCommand == ARCTO || eCommand == CLOCKWISEARCTO)
+            {
+                mpFS->startElementNS(XML_a, XML_lnTo);
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fPx)),
+                                      XML_y, OString::number(std::lround(fPy)));
+                mpFS->endElementNS(XML_a, XML_lnTo);
+            }
+            else
+            {
+                mpFS->startElementNS(XML_a, XML_moveTo);
+                mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(std::lround(fPx)),
+                                      XML_y, OString::number(std::lround(fPy)));
+                mpFS->endElementNS(XML_a, XML_moveTo);
+            }
+            // calculate swing angle
+            double fEndAngle = 0.0;
+            getEllipsePointAndAngleFromRayPoint(fEndAngle, fPx, fPy, fWR, fHR, fCx, fCy, fX4, fY4);
+            double fSwingAngle(fEndAngle - fStartAngle);
+            const bool bIsClockwise(eCommand == CLOCKWISEARCTO || eCommand == CLOCKWISEARC);
+            if (bIsClockwise && fSwingAngle < 0)
+                fSwingAngle += 360.0;
+            else if (!bIsClockwise && fSwingAngle > 0)
+                fSwingAngle -= 360.0;
+            // markup for arcTo
+            // ToDo: write markup for case zero width or height of ellipse
+            const sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
+            const sal_Int32 nSwingAng(std::lround(fSwingAngle * 60000));
+            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)),
+                                XML_hR, OString::number(std::lround(fHR)), XML_stAng,
+                                OString::number(nStartAng), XML_swAng, OString::number(nSwingAng));
+            rfCurrentX = fPx;
+            rfCurrentY = fPy;
+            rbCurrentValid = true;
+            rnPairIndex += 4;
+            break;
+        }
+        case ELLIPTICALQUADRANTX:
+        case ELLIPTICALQUADRANTY:
+        {
+            if (rnPairIndex >= rPairs.getLength())
+                return false;
+
+            // read parameters
+            double fX = 0.0;
+            rCustomShape2d.GetParameter(fX, rPairs[rnPairIndex].First, false, false);
+            double fY = 0.0;
+            rCustomShape2d.GetParameter(fY, rPairs[rnPairIndex].Second, false, false);
+
+            // Prepare parameters for arcTo
+            if (rbCurrentValid)
+            {
+                double fWR = std::abs(rfCurrentX - fX);
+                double fHR = std::abs(rfCurrentY - fY);
+                double fStartAngle(0.0);
+                double fSwingAngle(0.0);
+                // The starting direction of the arc toggles between X and Y
+                if ((eCommand == ELLIPTICALQUADRANTX && !(nCount % 2))
+                    || (eCommand == ELLIPTICALQUADRANTY && (nCount % 2)))
+                {
+                    // arc starts horizontal
+                    fStartAngle = fY < rfCurrentY ? 90.0 : 270.0;
+                    const bool bClockwise = (fX < rfCurrentX && fY < rfCurrentY)
+                                            || (fX > rfCurrentX && fY > rfCurrentY);
+                    fSwingAngle = bClockwise ? 90.0 : -90.0;
+                }
+                else
+                {
+                    // arc starts vertical
+                    fStartAngle = fX < rfCurrentX ? 0.0 : 180.0;
+                    const bool bClockwise = (fX < rfCurrentX && fY > rfCurrentY)
+                                            || (fX > rfCurrentX && fY < rfCurrentY);
+                    fSwingAngle = bClockwise ? 90.0 : -90.0;
+                }
+                sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
+                sal_Int32 nSwingAng(std::lround(fSwingAngle * 60000));
+                mpFS->singleElement(
+                    FSNS(XML_a, XML_arcTo), XML_wR, OString::number(std::lround(fWR)), XML_hR,
+                    OString::number(std::lround(fHR)), XML_stAng, OString::number(nStartAng),
+                    XML_swAng, OString::number(nSwingAng));
+            }
+            else
+            {
+                // faulty path, but we continue with the target point
+                mpFS->startElementNS(XML_a, XML_moveTo);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+                mpFS->endElementNS(XML_a, XML_moveTo);
+            }
+            rfCurrentX = fX;
+            rfCurrentY = fY;
+            rbCurrentValid = true;
+            rnPairIndex++;
+            break;
+        }
+        case QUADRATICCURVETO:
+        {
+            if (rnPairIndex + 1 >= rPairs.getLength())
+                return false;
+
+            mpFS->startElementNS(XML_a, XML_quadBezTo);
+            for (sal_uInt8 i = 0; i < 2; ++i)
+            {
+                WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d);
+            }
+            mpFS->endElementNS(XML_a, XML_quadBezTo);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 1].First, false, false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex + 1].Second, false, false);
+            rbCurrentValid = true;
+            rnPairIndex += 2;
+            break;
+        }
+        case ARCANGLETO:
+        {
+            if (rnPairIndex + 1 >= rPairs.getLength())
+                return false;
+
+            double fWR = 0.0;
+            rCustomShape2d.GetParameter(fWR, rPairs[rnPairIndex].First, false, false);
+            double fHR = 0.0;
+            rCustomShape2d.GetParameter(fHR, rPairs[rnPairIndex].Second, false, false);
+            double fStartAngle = 0.0;
+            rCustomShape2d.GetParameter(fStartAngle, rPairs[rnPairIndex + 1].First, false, false);
+            sal_Int32 nStartAng(std::lround(fStartAngle * 60000));
+            double fSwingAng = 0.0;
+            rCustomShape2d.GetParameter(fSwingAng, rPairs[rnPairIndex + 1].Second, false, false);
+            sal_Int32 nSwingAng(std::lround(fSwingAng * 60000));
+            mpFS->singleElement(FSNS(XML_a, XML_arcTo), XML_wR, OString::number(fWR), XML_hR,
+                                OString::number(fHR), XML_stAng, OString::number(nStartAng),
+                                XML_swAng, OString::number(nSwingAng));
+            double fPx = 0.0;
+            double fPy = 0.0;
+            getEllipsePointFromViewAngle(fPx, fPy, fWR, fHR, 0.0, 0.0, fStartAngle);
+            double fCx = rfCurrentX - fPx;
+            double fCy = rfCurrentY - fPy;
+            getEllipsePointFromViewAngle(rfCurrentX, rfCurrentY, fWR, fHR, fCx, fCy,
+                                         fStartAngle + fSwingAng);
+            rbCurrentValid = true;
+            rnPairIndex += 2;
+            break;
+        }
+        default:
+            // do nothing
+            break;
+    }
+    return true;
 }
 
 void DrawingML::WriteCustomGeometryPoint(
