@@ -69,6 +69,23 @@
       "parentUuid": "bfc9582f_7ce720a1",
       "revId": "2055326d3e9f67ae02f5c7c4a8f6f29f190476f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f46b2bc_f5ce8e58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-25T14:23:23Z",
+      "side": 1,
+      "message": "OTOH, could you please make sure your build contains 1c924efe1f80207a5e104d755615b1eb9a91d418",
+      "revId": "2055326d3e9f67ae02f5c7c4a8f6f29f190476f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
