@@ -339,6 +339,7 @@ OUString ImplImageTree::fallbackStyle(std::u16string_view rsStyle)
 bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, BitmapEx & rBitmap, bool localized,
                               const ImageLoadFlags eFlags, sal_Int32 nScalePercentage)
 {
+//    assert(nScalePercentage != 100 && eFlags != ImageLoadFlags::IgnoreScalingFactor);
     OUString aCurrentStyle(rStyle);
     while (!aCurrentStyle.isEmpty())
     {

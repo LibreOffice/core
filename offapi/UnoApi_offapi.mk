@@ -4064,6 +4064,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui,\
 	XUIConfigurationListener \
 	XUIConfigurationManager \
 	XUIConfigurationManager2 \
+	XUIConfigurationManager3 \
 	XUIConfigurationManagerSupplier \
 	XUIConfigurationPersistence \
 	XUIConfigurationStorage \

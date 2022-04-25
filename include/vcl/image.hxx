@@ -46,6 +46,7 @@ public:
     explicit Image(OUString const & rPNGFileUrl);
     explicit Image(StockImage, OUString const & rPNGFilePath);
 
+    void setScalePercentage(sal_Int32);
     Size GetSizePixel() const;
     BitmapEx GetBitmapEx() const;
 

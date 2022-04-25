@@ -915,27 +915,6 @@ void WindowOutputDevice::ReleaseGraphics( bool bRelease )
     mpNextGraphics  = nullptr;
 }
 
-static sal_Int32 CountDPIScaleFactor(sal_Int32 nDPI)
-{
-#ifndef MACOSX
-    // Setting of HiDPI is unfortunately all only a heuristic; and to add
-    // insult to an injury, the system is constantly lying to us about
-    // the DPI and whatnot
-    // eg. fdo#77059 - set the value from which we do consider the
-    // screen HiDPI to greater than 168
-    if (nDPI > 216)      // 96 * 2   + 96 / 4
-        return 250;
-    else if (nDPI > 168) // 96 * 2   - 96 / 4
-        return 200;
-    else if (nDPI > 120) // 96 * 1.5 - 96 / 4
-        return 150;
-#else
-    (void)nDPI;
-#endif
-
-    return 100;
-}
-
 void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* pSystemParentData )
 {
     SAL_WARN_IF( !mpWindowImpl->mbFrame && !pParent && GetType() != WindowType::FIXEDIMAGE, "vcl.window",
@@ -1088,16 +1067,18 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     {
         if ( pParent )
         {
-            GetOutDev()->mnDPIX = pParent->mpWindowImpl->mpFrame->GetDPIX();
-            GetOutDev()->mnDPIY = pParent->mpWindowImpl->mpFrame->GetDPIY();
+            sal_Int32 nDPIX, nDPIY;
+            pParent->mpWindowImpl->mpFrame->GetDPI(nDPIX, nDPIY);
+            GetOutDev()->SetDPI(nDPIX, nDPIY);
         }
         else
         {
             OutputDevice *pOutDev = GetOutDev();
             if ( pOutDev->AcquireGraphics() )
             {
-                GetOutDev()->mnDPIX = mpWindowImpl->mpFrame->GetDPIX();
-                GetOutDev()->mnDPIY = mpWindowImpl->mpFrame->GetDPIY();
+                sal_Int32 nDPIX, nDPIY;
+                mpWindowImpl->mpFrame->GetDPI(nDPIX, nDPIY);
+                GetOutDev()->SetDPI(nDPIX, nDPIY);
             }
         }
 
@@ -1146,11 +1127,9 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
     }
 
     // setup the scale factor for HiDPI displays
-#if 0
-    mpWindowImpl->mxOutDev->mnDPIScalePercentage = CountDPIScaleFactor(GetOutDev()->mnDPIY);
-    GetOutDev()->mnDPIX = mnDPIX;
-    mpWindowImpl->mxOutDev->mnDPIY = GetOutDev()->mnDPIY;
-#endif
+    sal_Int32 nDPIX, nDPIY;
+    mpWindowImpl->mpFrame->GetDPI(nDPIX, nDPIY);
+    GetOutDev()->SetDPI(nDPIX, nDPIY);
 
     if (!utl::ConfigManager::IsFuzzing())
     {
@@ -1351,16 +1330,17 @@ void Window::ImplInitResolutionSettings()
     if (mpWindowImpl->mbFrame)
     {
         // setup the scale factor for HiDPI displays
-        GetOutDev()->mnDPIScalePercentage = CountDPIScaleFactor(GetOutDev()->mnDPIY);
+        sal_Int32 nDPIX, nDPIY;
+        mpWindowImpl->mpFrame->GetDPI(nDPIX, nDPIY);
+        GetOutDev()->SetDPI(nDPIX, nDPIY);
+        SAL_DEBUG(__func__ << " " << GetOutDev()->mnDPIScalePercentage);
         const StyleSettings& rStyleSettings = GetOutDev()->mxSettings->GetStyleSettings();
         SetPointFont(*GetOutDev(), rStyleSettings.GetAppFont());
     }
     else if ( mpWindowImpl->mpParent )
     {
         OutputDevice *pParentOutDev = mpWindowImpl->mpParent->GetOutDev();
-        GetOutDev()->mnDPIX = pParentOutDev->mnDPIX;
-        GetOutDev()->mnDPIY = pParentOutDev->mnDPIY;
-        GetOutDev()->mnDPIScalePercentage = pParentOutDev->mnDPIScalePercentage;
+        GetOutDev()->SetDPI(pParentOutDev->mnDPIX, pParentOutDev->mnDPIY);
     }
 
     // update the recalculated values for logical units
@@ -2777,7 +2757,7 @@ void Window::setPosSizePixel( tools::Long nX, tools::Long nY,
         // Adjust resize with the hack of different client size and frame geometries to fix
         // native menu bars. Eventually this should be replaced by proper mnTopBorder usage.
         sal_Int32 nNewWidth, nNewHeight;
-	pWindow->mpWindowImpl->mpFrame->GetClientSize(nNewWidth, nNewHeight);
+        pWindow->mpWindowImpl->mpFrame->GetClientSize(nNewWidth, nNewHeight);
 
         // Resize should be called directly. If we haven't
         // set the correct size, we get a second resize from

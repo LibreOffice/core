@@ -380,8 +380,14 @@ protected:
     ///@{
 
 public:
-    SAL_DLLPRIVATE void         SetDPIX( sal_Int32 nDPIX ) { mnDPIX = nDPIX; }
-    SAL_DLLPRIVATE void         SetDPIY( sal_Int32 nDPIY ) { mnDPIY = nDPIY; }
+    SAL_DLLPRIVATE void SetDPIX(sal_Int32 nDPIX);
+    SAL_DLLPRIVATE void SetDPIY(sal_Int32 nDPIY);
+
+    /** Sets the DPI values
+     *
+     * Use <= 0 to keep the old value
+     */
+    SAL_DLLPRIVATE void SetDPI(sal_Int32 nDPIX, sal_Int32 nDPIY);
 
     OutDevType                  GetOutDevType() const { return meOutDevType; }
     virtual bool IsVirtual() const;

@@ -142,6 +142,8 @@ void Button::SetModeImage( const Image& rImage )
 
 Image const & Button::GetModeImage( ) const
 {
+    if (!!(mpButtonData->maImage))
+        mpButtonData->maImage.setScalePercentage(GetOutDev()->GetDPIScalePercentage());
     return mpButtonData->maImage;
 }
 

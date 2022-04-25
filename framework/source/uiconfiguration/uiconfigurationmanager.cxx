@@ -40,7 +40,7 @@
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/DocumentAcceleratorConfiguration.hpp>
 #include <com/sun/star/ui/XAcceleratorConfiguration.hpp>
-#include <com/sun/star/ui/XUIConfigurationManager2.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager3.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -71,7 +71,7 @@ namespace {
 
 class UIConfigurationManager :   public ::cppu::WeakImplHelper<
                                         css::lang::XServiceInfo  ,
-                                        css::ui::XUIConfigurationManager2 >
+                                        css::ui::XUIConfigurationManager3 >
 {
 public:
     virtual OUString SAL_CALL getImplementationName() override
@@ -123,6 +123,9 @@ public:
     // XUIConfigurationStorage
     virtual void SAL_CALL setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
     virtual sal_Bool SAL_CALL hasStorage() override;
+
+    // XUIConfigurationManager3
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getScaledImageManager(::sal_Int16 nScalePercentage) override;
 
 private:
     // private data types
@@ -193,7 +196,7 @@ private:
     std::mutex                                                m_mutex;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>               m_aEventListeners;
     comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener>       m_aConfigListeners;
-    rtl::Reference< ImageManager >                            m_xImageManager;
+    std::unordered_map<sal_Int16, rtl::Reference<ImageManager>> m_xImageManagers;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xAccConfig;
 };
 
@@ -698,16 +701,17 @@ void SAL_CALL UIConfigurationManager::dispose()
 
     {
         SolarMutexGuard g;
-        try
-        {
-            if ( m_xImageManager.is() )
-                m_xImageManager->dispose();
-        }
-        catch ( const Exception& )
-        {
-        }
+        for (auto xImageManager : m_xImageManagers)
+            try
+            {
+                if (xImageManager.second.is())
+                     xImageManager.second->dispose();
+            }
+            catch (const Exception&)
+            {
+            }
 
-        m_xImageManager.clear();
+        m_xImageManagers.clear();
         m_aUIElements.clear();
         m_xDocConfigStorage.clear();
         m_bModified = false;
@@ -1115,14 +1119,18 @@ void SAL_CALL UIConfigurationManager::insertSettings( const OUString& NewResourc
     }
 }
 
-Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
+Reference< XInterface > SAL_CALL UIConfigurationManager::getScaledImageManager(sal_Int16 nScaleFactor)
 {
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !m_xImageManager.is() )
+    rtl::Reference<ImageManager> xImageManager;
+
+    auto const & aManagerIter = m_xImageManagers.find(nScaleFactor);
+    if (aManagerIter == m_xImageManagers.end())
     {
-        m_xImageManager = new ImageManager( m_xContext, /*bForModule*/false );
+        xImageManager = new ImageManager(m_xContext, /*bForModule*/ false);
+        m_xImageManagers[nScaleFactor] = xImageManager;
 
         Sequence<Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
@@ -1130,10 +1138,17 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getImageManager()
             {"ModuleIdentifier", Any(OUString())},
         }));
 
-        m_xImageManager->initialize( aPropSeq );
+        xImageManager->initialize( aPropSeq );
     }
+    else
+        xImageManager = aManagerIter->second;
 
-    return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xImageManager.get()), UNO_QUERY );
+    return Reference<XInterface>(static_cast<cppu::OWeakObject*>(xImageManager.get()), UNO_QUERY);
+}
+
+Reference<XInterface> SAL_CALL UIConfigurationManager::getImageManager()
+{
+    return getScaledImageManager(100);
 }
 
 Reference< XAcceleratorConfiguration > SAL_CALL UIConfigurationManager::getShortCutManager()
@@ -1187,8 +1202,9 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     if ( m_xAccConfig.is() )
         m_xAccConfig->setStorage( m_xDocConfigStorage );
 
-    if ( m_xImageManager )
-        m_xImageManager->setStorage( m_xDocConfigStorage );
+    auto const & aManagerIter = m_xImageManagers.find(100);
+    if (aManagerIter != m_xImageManagers.end())
+        aManagerIter->second->setStorage(m_xDocConfigStorage);
 
     if ( m_xDocConfigStorage.is() )
     {

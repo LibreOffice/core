@@ -76,6 +76,12 @@ void Image::ImplInit(const BitmapEx& rBitmapEx)
         mpImplData = std::make_shared<ImplImage>(rBitmapEx);
 }
 
+void Image::setScalePercentage(sal_Int32 nScale)
+{
+    if (mpImplData)
+	mpImplData->setScalePercentage(nScale);
+}
+
 OUString Image::GetStock() const
 {
     if (mpImplData)

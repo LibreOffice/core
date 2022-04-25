@@ -1479,6 +1479,7 @@ bool ToolBox::ImplCalcItem()
                         // we're drawing images only
                         if ( bImage || !bText )
                         {
+			    item.maImage.setScalePercentage(GetOutDev()->GetDPIScalePercentage());
                             item.maItemSize = item.maImage.GetSizePixel();
                         }
                         else
@@ -1499,6 +1500,7 @@ bool ToolBox::ImplCalcItem()
                         }
                         else
                         {
+			    item.maImage.setScalePercentage(GetOutDev()->GetDPIScalePercentage());
                             item.maItemSize = item.maImage.GetSizePixel();
                         }
                     }

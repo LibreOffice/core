@@ -818,4 +818,32 @@ void OutputDevice::ImplDisposeCanvas()
     }
 }
 
+sal_Int32 lcl_updateScalePercentage(sal_Int32 nDPIX, sal_Int32 nDPIY)
+{
+     return round((nDPIX + nDPIY) * 100 / (96 * 2));
+}
+
+void OutputDevice::SetDPIX(sal_Int32 nDPIX)
+{
+    assert(nDPIX >= 0);
+    mnDPIX = nDPIX;
+    mnDPIScalePercentage = lcl_updateScalePercentage(mnDPIX, mnDPIY);
+}
+
+void OutputDevice::SetDPIY(sal_Int32 nDPIY)
+{
+    assert(nDPIY >= 0);
+    mnDPIY = nDPIY;
+    mnDPIScalePercentage = lcl_updateScalePercentage(mnDPIX, mnDPIY);
+}
+
+void OutputDevice::SetDPI(sal_Int32 nDPIX, sal_Int32 nDPIY)
+{
+    if (nDPIX > 0)
+        mnDPIX = nDPIX;
+    if (nDPIY > 0)
+        mnDPIY = nDPIY;
+    mnDPIScalePercentage = lcl_updateScalePercentage(mnDPIX, mnDPIY);
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

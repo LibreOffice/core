@@ -143,6 +143,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
 
     ImplSVData* pSVData = ImplGetSVData();
 
+    assert(pOutDev);
     if ( !pOutDev )
         pOutDev = ImplGetDefaultWindow()->GetOutDev();
     if( !pOutDev )

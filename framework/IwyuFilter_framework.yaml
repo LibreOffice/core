@@ -41,6 +41,8 @@ excludelist:
     framework/source/fwe/helper/configimporter.cxx:
     # Actually used
     - com/sun/star/ui/XUIConfigurationManager2.hpp
+    # Actually used
+    - com/sun/star/ui/XUIConfigurationManager3.hpp
     framework/source/fwe/helper/undomanagerhelper.cxx:
     # Actually used
     - com/sun/star/document/XUndoManager.hpp
