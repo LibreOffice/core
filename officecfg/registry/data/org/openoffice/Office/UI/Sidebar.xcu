@@ -117,6 +117,7 @@
             Calc,           any, visible;
             DrawImpress,    any, visible;
             WriterVariants, any, visible;
+            Math,           any, visible;
           </value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
@@ -725,11 +726,42 @@
         </prop>
         <prop oor:name="ContextList">
           <value oor:separator=";">
-            any, any, visible ;
+            Calc,           any, visible;
+            DrawImpress,    any, visible;
+            WriterVariants, any, visible;
           </value>
         </prop>
         <prop oor:name="ImplementationURL" oor:type="xs:string">
           <value>private:resource/toolpanel/SvxPanelFactory/GalleryPanel</value>
+        </prop>
+        <prop oor:name="OrderIndex" oor:type="xs:int">
+          <value>100</value>
+        </prop>
+        <prop oor:name="WantsAWT" oor:type="xs:boolean">
+          <value>false</value>
+        </prop>
+      </node>
+
+      <node oor:name="GalleryMathPanel" oor:op="replace">
+        <prop oor:name="Title" oor:type="xs:string">
+          <value xml:lang="en-US">Gallery</value>
+        </prop>
+        <prop oor:name="TitleBarIsOptional" oor:type="xs:boolean">
+          <value>true</value>
+        </prop>
+        <prop oor:name="Id" oor:type="xs:string">
+          <value>GalleryMathPanel</value>
+        </prop>
+        <prop oor:name="DeckId" oor:type="xs:string">
+          <value>GalleryDeck</value>
+        </prop>
+        <prop oor:name="ContextList">
+          <value oor:separator=";">
+            Math, any, visible;
+          </value>
+        </prop>
+        <prop oor:name="ImplementationURL" oor:type="xs:string">
+          <value>private:resource/toolpanel/SmPanelFactory/GalleryMathPanel</value>
         </prop>
         <prop oor:name="OrderIndex" oor:type="xs:int">
           <value>100</value>
