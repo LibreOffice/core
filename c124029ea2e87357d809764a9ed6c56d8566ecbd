@@ -34,6 +34,24 @@
       "parentUuid": "53b5f7dc_2f8cecc5",
       "revId": "c124029ea2e87357d809764a9ed6c56d8566ecbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7affe898_9bf6e333",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-25T16:22:24Z",
+      "side": 1,
+      "message": "\u003e \u003e without a clear indication that this is a real performance benefit\n\u003e \n\nFrom my perspective, I am simply picking up essentially free performance.\n\n\u003e What is the guiding principle which existing URE C++ interfaces to augment with string_view overloads where applicable? \n\nI am extending those where I can see several call-sites that are using OUString::copy() i.e. they can benefit from rather using subView().\nThis is the only remaining API extension I am planning (so far, but highly likely to be the last one).\n\n\u003e i.e., with all three of the newly added functions, there is a real chance that invocations of them would pass back one of their argument strings unchanged via \n\nGood point. In which case I should leave the existing functions and methods exposed so that call-sites which are __not__ using subView() will use that. Call sites which do need subView can not be any worse off.",
+      "parentUuid": "dd76e242_65ef0528",
+      "revId": "c124029ea2e87357d809764a9ed6c56d8566ecbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
