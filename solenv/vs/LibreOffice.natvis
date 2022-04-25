@@ -410,6 +410,22 @@
       <Item Name='Type'>maType</Item>
     </Expand>
   </Type>
+  <Type Name='writerfilter::rtftok::RTFSprms'>
+    <DisplayString>{{Params: {m_pSprms.pObj->size()}}}</DisplayString>
+    <Expand>
+      <ArrayItems>
+        <Size>m_pSprms.pObj->size()</Size>
+        <ValuePointer>m_pSprms.pObj->_Mypair._Myval2._Myfirst</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name='tools::SvRef&lt;*&gt;'>
+    <DisplayString Condition="pObj!=nullptr">{*pObj}</DisplayString>
+    <DisplayString Condition="pObj==nullptr">nullptr</DisplayString>
+    <Expand>
+      <ExpandedItem Condition="pObj!=nullptr">*pObj</ExpandedItem>
+    </Expand>
+  </Type>
   <Type Name='SwFrame'>
     <DisplayString IncludeView='min'>{mnFrameType,en} of {mpUpper->mnFrameType,en} {(void*)mpUpper}</DisplayString>
     <DisplayString Condition='!mpUpper'>{{{mnFrameType,en}}}</DisplayString>
