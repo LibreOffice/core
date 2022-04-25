@@ -22,6 +22,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 
+#include <unotools/configmgr.hxx>
 #include <vcl/filter/SvmReader.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <vcl/dibtools.hxx>
@@ -705,7 +706,21 @@ rtl::Reference<MetaAction> SvmReader::TextArrayHandler(const ImplMetaReadData* p
     }
 
     if (!aArray.empty())
+    {
+        static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+        if (bFuzzing)
+        {
+            for (size_t i = 0, nLen = aArray.size(); i < nLen; ++i)
+            {
+                if (aArray[i] < -4096 || aArray[i] > 4096)
+                {
+                    SAL_WARN("vcl.gdi", "suspicious dx of: " << aArray[i]);
+                    aArray[i] = 0;
+                }
+            }
+        }
         pAction->SetDXArray(std::move(aArray));
+    }
     return pAction;
 }
 
