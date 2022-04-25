@@ -436,6 +436,7 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     , m_xProgressText(m_xBuilder->weld_label("progressft"))
     , m_xProgressBar(m_xBuilder->weld_progress_bar("progressbar"))
     , m_xCancelBtn(m_xBuilder->weld_button("cancel"))
+    , m_xSearchEntry(m_xBuilder->weld_entry("search"))
 {
     m_xExtensionBox->InitFromDialog(this);
 
@@ -452,6 +453,8 @@ ExtMgrDialog::ExtMgrDialog(weld::Window *pParent, TheExtensionManager *pManager)
     m_xBundledCbx->connect_toggled( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
     m_xSharedCbx->connect_toggled( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
     m_xUserCbx->connect_toggled( LINK( this, ExtMgrDialog, HandleExtTypeCbx ) );
+
+    m_xSearchEntry->connect_changed( LINK( this, ExtMgrDialog, HandleSearch ) );
 
     m_xBundledCbx->set_active(true);
     m_xSharedCbx->set_active(true);
@@ -497,6 +500,18 @@ void ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
     const SolarMutexGuard aGuard;
     m_xUpdateBtn->set_sensitive(true);
 
+    bool bSearchMatch = m_xSearchEntry->get_text().isEmpty();
+    if (!m_xSearchEntry->get_text().isEmpty()
+        && xPackage->getDisplayName().toAsciiLowerCase().indexOf(
+               m_xSearchEntry->get_text().toAsciiLowerCase())
+               >= 0)
+    {
+        bSearchMatch = true;
+    }
+
+    if (!bSearchMatch)
+        return;
+
     if (m_xBundledCbx->get_active() && (xPackage->getRepositoryName() == BUNDLED_PACKAGE_MANAGER) )
     {
         m_xExtensionBox->addEntry( xPackage, bLicenseMissing );
@@ -509,6 +524,14 @@ void ExtMgrDialog::addPackageToList( const uno::Reference< deployment::XPackage 
     {
         m_xExtensionBox->addEntry( xPackage, bLicenseMissing );
     }
+}
+
+void ExtMgrDialog::updateList()
+{
+    // re-creates the list of packages with addEntry selecting the packages
+    prepareChecking();
+    m_pManager->createPackageList();
+    checkEntries();
 }
 
 void ExtMgrDialog::prepareChecking()
@@ -903,10 +926,12 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleEnableBtn, weld::Button&, void)
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleExtTypeCbx, weld::Toggleable&, void)
 {
-    // re-creates the list of packages with addEntry selecting the packages
-    prepareChecking();
-    m_pManager->createPackageList();
-    checkEntries();
+    updateList();
+}
+
+IMPL_LINK_NOARG(ExtMgrDialog, HandleSearch, weld::Entry&, void)
+{
+    updateList();
 }
 
 IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, weld::Button&, void)
