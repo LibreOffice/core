@@ -16,6 +16,46 @@
       "message": "If no objection, I will push this commit next week",
       "revId": "2509e83428436a2759f423a1c38c5d69c7c7895b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68b997c8_7bcaeaa0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-25T06:12:10Z",
+      "side": 1,
+      "message": "Hard to review but lgtm",
+      "revId": "2509e83428436a2759f423a1c38c5d69c7c7895b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80d303be_1bbeb17e",
+        "filename": "extras/source/templates/offimisc/Businesscard-with-logo/meta.xml",
+        "patchSetId": 6
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-25T06:12:10Z",
+      "side": 1,
+      "message": "Could be removed too I guess",
+      "range": {
+        "startLine": 9,
+        "startChar": 5,
+        "endLine": 9,
+        "endChar": 18
+      },
+      "revId": "2509e83428436a2759f423a1c38c5d69c7c7895b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
