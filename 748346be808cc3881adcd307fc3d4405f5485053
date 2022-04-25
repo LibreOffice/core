@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d269b49b_1d1e7cb7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-04-25T12:51:32Z",
+      "side": 1,
+      "message": "Some numbers for memory allocations count for some random RTF documents i\u0027ve played with recently. Only RtfFilter::filter() and internals are taken into account.\n\n                                           before      after\n_merge_result.315_chnaged.rtf           2 731 949    997 126\noriginal rtf.rtf                        1 957 815    738 673\n",
+      "revId": "748346be808cc3881adcd307fc3d4405f5485053",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
