@@ -963,6 +963,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "83e67c95_d2f64753",
+        "filename": "offapi/com/sun/star/embed/XEmbeddedUpdate.idl",
+        "patchSetId": 18
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-04-25T06:31:24Z",
+      "side": 1,
+      "message": "Hi Thorsten, when you look in Patchset 24, i have update the docu. \nThat was my first way to expose OCommonEmbeddedObject to the places where you need to call the function, but i was told this was the clean solution with idl?!\nThe other problem the OCommonEmbeddedObject class is local",
+      "parentUuid": "ed62f669_793be5ec",
+      "range": {
+        "startLine": 15,
+        "startChar": 8,
+        "endLine": 15,
+        "endChar": 58
+      },
+      "revId": "a3eb6bb63f9b7155c8c5e5bf6c3f44b56227d585",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91037963_1daf45bb",
