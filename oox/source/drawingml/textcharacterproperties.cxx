@@ -207,8 +207,6 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap.setProperty( PROP_CharUnderlineColor, sal_Int32(-1));
     }
 
-    // TODO If bUnderlineFillFollowText uFillTx (CT_TextUnderlineFillFollowText) is set, fill color of the underline should be the same color as the text
-
     if (maHighlightColor.isUsed() && maHighlightColor.getTransparency() != 100)
         rPropMap.setProperty( PROP_CharBackColor, maHighlightColor.getColor( rFilter.getGraphicHelper() ));
     else
