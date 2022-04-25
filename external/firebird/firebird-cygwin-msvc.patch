@@ -29,10 +29,10 @@
 
 --- configure	2016-07-07 15:57:04.538983200 +0200
 +++ configure	2016-07-13 11:31:18.132820200 +0200
-@@ -21473,13 +21473,12 @@
- else
+@@ -21490,13 +21490,12 @@
    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
+ #include <stdlib.h>
 -#include <semaphore.h>
  main () {
    struct s {
