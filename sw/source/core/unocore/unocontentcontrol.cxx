@@ -156,6 +156,10 @@ public:
     rtl::Reference<SwXContentControlText> m_xText;
     SwContentControl* m_pContentControl;
     bool m_bShowingPlaceHolder;
+    bool m_bCheckbox;
+    bool m_bChecked;
+    OUString m_aCheckedState;
+    OUString m_aUncheckedState;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          const uno::Reference<text::XText>& xParentText,
@@ -167,6 +171,8 @@ public:
         , m_xText(new SwXContentControlText(rDoc, rThis))
         , m_pContentControl(pContentControl)
         , m_bShowingPlaceHolder(false)
+        , m_bCheckbox(false)
+        , m_bChecked(false)
     {
         if (m_pContentControl)
         {
@@ -506,6 +512,10 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     auto pContentControl = std::make_shared<SwContentControl>(nullptr);
 
     pContentControl->SetShowingPlaceHolder(m_pImpl->m_bShowingPlaceHolder);
+    pContentControl->SetCheckbox(m_pImpl->m_bCheckbox);
+    pContentControl->SetChecked(m_pImpl->m_bChecked);
+    pContentControl->SetCheckedState(m_pImpl->m_aCheckedState);
+    pContentControl->SetUncheckedState(m_pImpl->m_aUncheckedState);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -672,6 +682,66 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_CHECKBOX)
+    {
+        bool bValue;
+        if (rValue >>= bValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_bCheckbox = bValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetCheckbox(bValue);
+            }
+        }
+    }
+    else if (rPropertyName == UNO_NAME_CHECKED)
+    {
+        bool bValue;
+        if (rValue >>= bValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_bChecked = bValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetChecked(bValue);
+            }
+        }
+    }
+    else if (rPropertyName == UNO_NAME_CHECKED_STATE)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aCheckedState = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetCheckedState(aValue);
+            }
+        }
+    }
+    else if (rPropertyName == UNO_NAME_UNCHECKED_STATE)
+    {
+        OUString aValue;
+        if (rValue >>= aValue)
+        {
+            if (m_pImpl->m_bIsDescriptor)
+            {
+                m_pImpl->m_aUncheckedState = aValue;
+            }
+            else
+            {
+                m_pImpl->m_pContentControl->SetUncheckedState(aValue);
+            }
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -692,6 +762,50 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         else
         {
             aRet <<= m_pImpl->m_pContentControl->GetShowingPlaceHolder();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_CHECKBOX)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_bCheckbox;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetCheckbox();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_CHECKED)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_bChecked;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetChecked();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_CHECKED_STATE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aCheckedState;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetCheckedState();
+        }
+    }
+    else if (rPropertyName == UNO_NAME_UNCHECKED_STATE)
+    {
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aRet <<= m_pImpl->m_aUncheckedState;
+        }
+        else
+        {
+            aRet <<= m_pImpl->m_pContentControl->GetUncheckedState();
         }
     }
     else
