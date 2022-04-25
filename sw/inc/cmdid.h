@@ -33,7 +33,7 @@ class SwUINumRuleItem;
 
 #define FN_FILE                 SID_SW_START
 //#define FN_EDIT                 (SID_SW_START +  100) defined in svxids.hrc
-#define FN_VIEW                 (SID_SW_START +  200)
+#define FN_VIEW                 (SID_SW_START +  200) // 20200
 //#define FN_INSERT               (SID_SW_START +  300) defined in svxids.hrc
 //#define FN_FORMAT               (SID_SW_START +  400) defined in svxids.hrc
 //#define FN_EXTRA                (SID_SW_START +  600) defined in svxids.hrc
