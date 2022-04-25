@@ -86,6 +86,24 @@
       "message": "OTOH, could you please make sure your build contains 1c924efe1f80207a5e104d755615b1eb9a91d418",
       "revId": "2055326d3e9f67ae02f5c7c4a8f6f29f190476f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad6db307_0f938954",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-04-25T17:32:48Z",
+      "side": 1,
+      "message": "I have build without your changes.\nAfter using latest build, underscore is working perfectly fine.\n\nThank you Xisco, and I am sorry for confusion",
+      "parentUuid": "75a2454d_70f0913a",
+      "revId": "2055326d3e9f67ae02f5c7c4a8f6f29f190476f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
