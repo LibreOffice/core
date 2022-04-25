@@ -957,6 +957,10 @@ cairo_pattern_t* create_stipple()
 }
 } // end anonymous ns
 
+#if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
+#define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
+#endif
+
 void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias)
 {
     cairo_t* cr = getCairoContext(false, bAntiAlias);
