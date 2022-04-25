@@ -21,6 +21,7 @@
 #include <sal/log.hxx>
 
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/print.hxx>
 #include <vcl/image.hxx>
@@ -330,7 +331,7 @@ static OUString filterAccelerator( OUString const & rText )
 {
     OUStringBuffer aBuf( rText.getLength() );
     for( sal_Int32 nIndex = 0; nIndex != -1; )
-        aBuf.append( rText.getToken( 0, '~', nIndex ) );
+        aBuf.append( o3tl::getToken( rText, 0, '~', nIndex ) );
     return aBuf.makeStringAndClear();
 }
 
