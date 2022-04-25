@@ -3425,10 +3425,10 @@
       </node>
       <node oor:name=".uno:DefaultCharStyle" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Default ~Character</value>
+          <value xml:lang="en-US">No ~Character Style</value>
         </prop>
         <prop oor:name="TooltipLabel" oor:type="xs:string">
-          <value xml:lang="en-US">Default Character Style</value>
+          <value xml:lang="en-US">Remove applied character style</value>
         </prop>
         <prop oor:name="TargetURL" oor:type="xs:string">
           <value>.uno:StyleApply?Style:string=Standard&amp;FamilyName:string=CharacterStyles</value>
