@@ -29,6 +29,7 @@
 #include <tools/stream.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <unotools/configmgr.hxx>
 
 #include "fontmap.hxx"
 #include "formula.h"
@@ -40,6 +41,7 @@
 #include <sal/types.h>
 #include <rtl/character.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <sal/log.hxx>
 
 // xmloff/xmlkyd.hxx
 constexpr OUStringLiteral sXML_CDATA = u"CDATA";
@@ -954,6 +956,12 @@ void HwpReader::makeMasterStyles()
 
     PageSetting *pPrevSet = nullptr;
     PageSetting *pPage = nullptr;
+
+    if (nMax > SAL_MAX_UINT16 && utl::ConfigManager::IsFuzzing())
+    {
+        SAL_WARN("filter.hwp", "too many pages: " << nMax << " clip to " << SAL_MAX_UINT16);
+        nMax = SAL_MAX_UINT16;
+    }
 
     for( i = 1; i <= nMax ; i++ )
     {
