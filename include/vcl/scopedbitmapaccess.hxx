@@ -61,7 +61,7 @@ public:
     {
     }
 
-    ScopedBitmapAccess( ) :
+    SAL_WARN_UNUSED_CONSTRUCTOR ScopedBitmapAccess( ) :
         mpAccess( nullptr ),
         mpBitmap( nullptr )
     {

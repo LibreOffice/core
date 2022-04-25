@@ -26,6 +26,7 @@
 #include "osl/pipe.h"
 #include "osl/security.hxx"
 #include "rtl/ustring.hxx"
+#include "sal/types.h"
 
 namespace osl
 {
@@ -42,7 +43,7 @@ public:
     /** Does not create a pipe. Use assignment operator to
         make this a usable pipe.
     */
-    inline Pipe();
+    SAL_WARN_UNUSED_CONSTRUCTOR inline Pipe();
 
     /** Creates an insecure pipe that is accessible for all users.
         @param strName
@@ -153,7 +154,7 @@ public:
         e.g. by using the operator=(oslPipe), before you can use the stream-
         functionality of the object.
     */
-    inline StreamPipe();
+    SAL_WARN_UNUSED_CONSTRUCTOR inline StreamPipe();
 
     /** Creates pipe as wrapper around the underlying oslPipe.
 

@@ -21,6 +21,7 @@
 
 #include <sal/config.h>
 #include <cassert>
+#include <sal/types.h>
 #include <tools/toolsdllapi.h>
 #include <utility>
 
@@ -33,7 +34,7 @@ namespace tools {
 /** T must be a class that extends SvRefBase */
 template<typename T> class SAL_DLLPUBLIC_RTTI SvRef final {
 public:
-    SvRef(): pObj(nullptr) {}
+    SAL_WARN_UNUSED_CONSTRUCTOR SvRef(): pObj(nullptr) {}
 
     SvRef(SvRef&& rObj) noexcept
     {

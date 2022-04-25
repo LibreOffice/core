@@ -587,6 +587,19 @@ template< typename T1, typename T2 > inline T1 static_int_cast(T2 n) {
 #define SAL_WARN_UNUSED
 #endif
 
+/** Annotate constructors where a compiler should warn if an instance is unused.
+
+    For classes that cannot use SAL_WARN_UNUSED because only instances created via certain
+    constructors should be warned about (e.g., the default constructor of a smart pointer class).
+
+    @since LibreOffice 7.4
+*/
+#if defined LIBO_INTERNAL_ONLY && (defined __clang__ && __clang_major__ >= 14 && 1/*TODO*/)
+#define SAL_WARN_UNUSED_CONSTRUCTOR __attribute__((warn_unused))
+#else
+#define SAL_WARN_UNUSED_CONSTRUCTOR
+#endif
+
 /// @cond INTERNAL
 
 #if defined __GNUC__ || defined __clang__

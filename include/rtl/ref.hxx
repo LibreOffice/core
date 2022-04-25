@@ -52,7 +52,7 @@ class Reference
 public:
     /** Constructor...
      */
-    Reference()
+    SAL_WARN_UNUSED_CONSTRUCTOR Reference()
         : m_pBody (NULL)
     {}
 

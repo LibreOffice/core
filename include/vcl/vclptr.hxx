@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <rtl/ref.hxx>
+#include <sal/types.h>
 
 #include <utility>
 #include <type_traits>
@@ -66,7 +67,7 @@ class VclPtr
 public:
     /** Constructor...
      */
-    VclPtr()
+    SAL_WARN_UNUSED_CONSTRUCTOR VclPtr()
         : m_rInnerRef()
     {}
 
@@ -293,7 +294,7 @@ class ScopedVclPtr : public VclPtr<reference_type>
 public:
     /** Constructor...
      */
-    ScopedVclPtr()
+    SAL_WARN_UNUSED_CONSTRUCTOR ScopedVclPtr()
         : VclPtr<reference_type>()
     {}
 

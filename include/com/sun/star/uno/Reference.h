@@ -33,6 +33,7 @@
 #endif
 
 #include "rtl/alloc.h"
+#include "sal/types.h"
 
 namespace com
 {
@@ -251,7 +252,7 @@ public:
 
     /** Default Constructor: Sets null reference.
     */
-    inline Reference();
+    inline SAL_WARN_UNUSED_CONSTRUCTOR Reference();
 
     /** Copy constructor: Copies interface reference.
 

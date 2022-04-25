@@ -31,6 +31,7 @@
 #include <cstddef>
 
 #include "sal/log.hxx"
+#include "sal/types.h"
 #include "osl/time.h"
 #include "rtl/ustring.hxx"
 
@@ -330,7 +331,7 @@ public:
     /** Constructor.
     */
 
-    VolumeDevice() : _aHandle( NULL )
+    SAL_WARN_UNUSED_CONSTRUCTOR VolumeDevice() : _aHandle( NULL )
     {
     }
 
@@ -1438,7 +1439,7 @@ public:
     /** Constructor.
     */
 
-    DirectoryItem(): _pData( NULL )
+    SAL_WARN_UNUSED_CONSTRUCTOR DirectoryItem(): _pData( NULL )
     {
     }
 
