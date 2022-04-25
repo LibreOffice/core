@@ -51,6 +51,24 @@
       "message": "The document with the uFillTx usage, \nhttps://docs.microsoft.com/en-us/openspecs/office_standards/ms-oe376/b4427782-f26e-48bf-9826-7eecefa8170f\n\nwhich prooves that uFillTx is not implemented is here:\nhttps://bugs.documentfoundation.org/attachment.cgi?id\u003d133563\n\nIn second \"Text Box\" (yellow color), the dashed line (under \"Box\" string) should be the same as text. And it has red colour (should be grey).\n\nHere is the code from XLSX file:\n\n\n                    \u003ca:r\u003e\n                        \u003ca:rPr lang\u003d\"en-IN\" sz\u003d\"2800\" b\u003d\"1\" u\u003d\"dashLongHeavy\" baseline\u003d\"0\"\u003e\n                            \u003ca:solidFill\u003e\n                                \u003ca:schemeClr val\u003d\"accent4\"\u003e\n                                    \u003ca:lumMod val\u003d\"75000\"/\u003e\n                                \u003c/a:schemeClr\u003e\n                            \u003c/a:solidFill\u003e\n                            \u003ca:uFillTx/\u003e\n                        \u003c/a:rPr\u003e\n                        \u003ca:t\u003eBox\u003c/a:t\u003e\n                    \u003c/a:r\u003e\n\nSo I would strongly advice to implement that feature, or at least leave the comment.\n\nDo you think setup a call, where I could describe that would be useful?",
       "revId": "2055326d3e9f67ae02f5c7c4a8f6f29f190476f7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75a2454d_70f0913a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-25T14:22:20Z",
+      "side": 1,
+      "message": "Hi Bartosz,\nThanks for your comment.\nIn https://bugs.documentfoundation.org/attachment.cgi?id\u003d133563, The underline of \u0027Box\u0027 is the same as the text after 1c924efe1f80207a5e104d755615b1eb9a91d418, Before this patch, it\u0027s red. Could you please explain what is missing ?",
+      "parentUuid": "bfc9582f_7ce720a1",
+      "revId": "2055326d3e9f67ae02f5c7c4a8f6f29f190476f7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
