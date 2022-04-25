@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "748404fa_2c924b04",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-04-25T16:46:55Z",
+      "side": 1,
+      "message": "I was confusing with the many comments, sorry.\n\nAs stated in https://bugs.documentfoundation.org/show_bug.cgi?id\u003d145240#c13 the patched version now generates an invalid ODF. Not a complete failure, but still...\n\nThat does not appear in any version correctly, but that is to be expected, and not a regression.\n\nI\u0027d not backport this patch to a stable version.",
+      "revId": "fd4410aa5fd079e4277297f1fb70ad8c728e7a17",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
