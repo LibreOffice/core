@@ -85,6 +85,13 @@ protected:
     SCCOL           GetCol() const { return nCol; }
     SCROW           GetRow() const { return nRow; }
 
+    /* Only works if no regular expression is involved, only searches for rows in one column,
+       and only the first query entry is considered with simple conditions SC_LESS_EQUAL
+       (sorted ascending) or SC_GREATER_EQUAL (sorted descending). Check these things before
+       invocation! Delivers a starting point, continue with e.g. GetThis() and GetNext()
+       afterwards. Introduced for FindEqualOrSortedLastInRange(). */
+    bool BinarySearch();
+
 public:
                     ScQueryCellIteratorBase(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
                                             const ScQueryParam& aParam, bool bMod);
@@ -140,17 +147,6 @@ protected:
 // The generic query iterator, used e.g. by VLOOKUP.
 class ScQueryCellIterator : public ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >
 {
-                    /* Only works if no regular expression is involved, only
-                       searches for rows in one column, and only the first
-                       query entry is considered with simple conditions
-                       SC_LESS_EQUAL (sorted ascending) or SC_GREATER_EQUAL
-                       (sorted descending). Check these things before
-                       invocation! Delivers a starting point, continue with
-                       GetThis() and GetNext() afterwards. Introduced for
-                       FindEqualOrSortedLastInRange()
-                     */
-    bool BinarySearch();
-
     bool GetThis();
 
 public:
