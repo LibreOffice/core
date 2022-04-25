@@ -63,7 +63,7 @@ public:
     RecentDocsView(std::unique_ptr<weld::ScrolledWindow> xWindow, std::unique_ptr<weld::Menu> xMenu);
     virtual ~RecentDocsView() override;
 
-    void insertItem(const OUString &rURL, const OUString &rTitle, const OUString& rThumbnail, sal_uInt16 nId);
+    void insertItem(const OUString &rURL, const OUString &rTitle, const OUString& rThumbnail, bool isReadOnly, sal_uInt16 nId);
 
     static bool typeMatchesExtension(ApplicationType type, std::u16string_view rExt);
 

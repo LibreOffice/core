@@ -21,7 +21,7 @@ class RecentDocsViewItem final : public ThumbnailViewItem
 {
 public:
     RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
-        const OUString &rTitle, std::u16string_view sThumbnailBase64, sal_uInt16 nId, tools::Long nThumbnailSize);
+        const OUString &rTitle, std::u16string_view sThumbnailBase64, sal_uInt16 nId, tools::Long nThumbnailSize, bool isReadOnly);
 
     /** Updates own highlight status based on the aPoint position.
 
@@ -49,6 +49,8 @@ private:
     tools::Rectangle getRemoveIconArea() const;
 
     OUString maURL;
+
+    bool m_isReadOnly = false;
 
     OUString m_sHelpText;
 

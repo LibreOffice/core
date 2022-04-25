@@ -121,10 +121,13 @@ BitmapEx getModuleOverlay(const OUString& rURL)
 };
 
 RecentDocsViewItem::RecentDocsViewItem(sfx2::RecentDocsView &rView, const OUString &rURL,
-    const OUString &rTitle, std::u16string_view sThumbnailBase64, sal_uInt16 nId, tools::Long nThumbnailSize)
+    const OUString &rTitle, std::u16string_view const sThumbnailBase64,
+        sal_uInt16 const nId, tools::Long const nThumbnailSize,
+        bool const isReadOnly)
     : ThumbnailViewItem(rView, nId),
       mrParentView(rView),
       maURL(rURL),
+      m_isReadOnly(isReadOnly),
       m_bRemoveIconHighlighted(false),
       m_aRemoveRecentBitmap(BMP_RECENTDOC_REMOVE),
       m_aRemoveRecentBitmapHighlighted(BMP_RECENTDOC_REMOVE_HIGHLIGHTED)
@@ -317,6 +320,7 @@ void RecentDocsViewItem::OpenDocument()
     xTrans->parseStrict(aTargetURL);
 
     aArgsList = { comphelper::makePropertyValue("Referer", OUString("private:user")),
+                  comphelper::makePropertyValue("ReadOnly", m_isReadOnly),
                   // documents will never be opened as templates
                   comphelper::makePropertyValue("AsTemplate", false) };
 

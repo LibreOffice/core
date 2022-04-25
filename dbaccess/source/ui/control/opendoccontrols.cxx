@@ -145,7 +145,7 @@ namespace dbaui
                 OUString sTitle = rHistoryItem.sTitle;
                 OUString sPassword = rHistoryItem.sPassword;
 
-                //  If the entry is an impress file then insert it into the
+                //  If the entry is a Base file then insert it into the
                 //  history list and the list box.
                 Sequence< PropertyValue > aProps;
                 xFilterFactory->getByName( sFilter ) >>= aProps;

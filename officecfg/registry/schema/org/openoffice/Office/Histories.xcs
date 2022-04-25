@@ -47,6 +47,11 @@
           <desc>Contains a base64 encoded thumbnail of the document.</desc>
         </info>
       </prop>
+      <prop oor:name="ReadOnly" oor:type="xs:boolean">
+        <info>
+          <desc>Stores whether the document was opened editable or read-only.</desc>
+        </info>
+      </prop>
     </group>
     <group oor:name="HistoryOrder">
       <info>
