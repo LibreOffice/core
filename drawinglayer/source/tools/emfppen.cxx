@@ -219,12 +219,16 @@ namespace emfplushelper
             switch (dashStyle)
             {
                 case EmfPlusLineStyleDash:
+                    // [-loplugin:redundantfcast] false positive:
                     return drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw });
                 case EmfPlusLineStyleDot:
+                    // [-loplugin:redundantfcast] false positive:
                     return drawinglayer::attribute::StrokeAttribute({ pw, pw });
                 case EmfPlusLineStyleDashDot:
+                    // [-loplugin:redundantfcast] false positive:
                     return drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw, pw, pw });
                 case EmfPlusLineStyleDashDotDot:
+                    // [-loplugin:redundantfcast] false positive:
                     return drawinglayer::attribute::StrokeAttribute({ 3 * pw, pw, pw, pw, pw, pw });
             }
         }
