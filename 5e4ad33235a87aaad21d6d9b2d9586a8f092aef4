@@ -195,6 +195,30 @@
       },
       "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea98b9d_d30d611a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000562
+      },
+      "writtenOn": "2022-04-25T10:29:35Z",
+      "side": 1,
+      "message": "\u003e If running a 64-bit core process is an option, then why the 32-bit process is needed for Java and Python extensions, which IIUC should be platform-independent? I might misunderstand things, but I thought that platform dependence might only be relevant for native code (e.g. C++-based extensions)?\n\nThere are multiple problems: one is the OOM with some Java extension. A 2nd is a closed-source, 32bit native Windows component with no 64bit variant (AFAIK from Nuance to use their speak recognition with LO, but I don\u0027t know the whole setup).",
+      "parentUuid": "d5f067c0_a51856ce",
+      "range": {
+        "startLine": 68,
+        "startChar": 22,
+        "endLine": 68,
+        "endChar": 43
+      },
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
