@@ -74,6 +74,7 @@ void ScMoveTableDlg::SetForceCopyTable()
     m_xBtnCopy->set_active(true);
     m_xBtnMove->set_sensitive(false);
     m_xBtnCopy->set_sensitive(false);
+    SetOkBtnLabel();
 }
 
 void ScMoveTableDlg::EnableRenameTable(bool bFlag)
@@ -185,6 +186,7 @@ void ScMoveTableDlg::Init()
     m_xBtnOk->connect_clicked(LINK(this, ScMoveTableDlg, OkHdl));
     m_xLbDoc->connect_changed(LINK(this, ScMoveTableDlg, SelHdl));
     m_xBtnCopy->connect_toggled(LINK(this, ScMoveTableDlg, CheckBtnHdl));
+    m_xBtnMove->connect_toggled(LINK(this, ScMoveTableDlg, CheckBtnHdl));
     m_xEdTabName->connect_changed(LINK(this, ScMoveTableDlg, CheckNameHdl));
     m_xBtnMove->set_active(true);
     m_xBtnCopy->set_active(false);
@@ -197,6 +199,7 @@ void ScMoveTableDlg::Init()
         m_xFtDoc->hide();
         m_xLbDoc->hide();
     }
+    SetOkBtnLabel();
 }
 
 void ScMoveTableDlg::InitDocListBox()
@@ -236,12 +239,20 @@ void ScMoveTableDlg::InitDocListBox()
     m_xLbDoc->set_active(nSelPos);
 }
 
+void ScMoveTableDlg::SetOkBtnLabel()
+{
+    // tdf#139464 Write "Copy" or "Move" on OK button
+    m_xBtnOk->set_label( m_xBtnCopy->get_active() ?
+            m_xBtnCopy->get_label() : m_xBtnMove->get_label() );
+}
+
 // Handler:
 
 IMPL_LINK(ScMoveTableDlg, CheckBtnHdl, weld::Toggleable&, rBtn, void)
 {
     if (&rBtn == m_xBtnCopy.get())
         ResetRenameInput();
+    SetOkBtnLabel();
 }
 
 IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl, weld::Button&, void)
