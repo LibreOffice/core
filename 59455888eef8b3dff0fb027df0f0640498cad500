@@ -16,6 +16,23 @@
       "message": "Hi Laurent, thank you for the patch! I will check it and report back. You may add a unit test in order to verify the fix. Thank you!",
       "revId": "59455888eef8b3dff0fb027df0f0640498cad500",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dcbafa4_118c5772",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-25T19:45:46Z",
+      "side": 1,
+      "message": "The change looks fine! If you add an uitest I will submit it. If you need any help to create one, don\u0027t bother to ask!",
+      "revId": "59455888eef8b3dff0fb027df0f0640498cad500",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
