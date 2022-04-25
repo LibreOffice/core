@@ -18,6 +18,11 @@ class moveCopySheet(UITestCase):
             gridwin = xCalcDoc.getChild("grid_window")
             #default - 1 sheet; select the sheet (is selected), dialog move/copy sheet
             with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                #tdf#139464 Set OK button label to selected action: Move or Copy
+                xOkButton = xDialog.getChild("ok")
+                xCopyButton = xDialog.getChild("copy")
+                self.assertEqual(get_state_as_dict(xCopyButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+
                 #new name = newName
                 newName = xDialog.getChild("newName")
                 newName.executeAction("TYPE", mkPropertyValues({"KEYCODE":"CTRL+A"}))
@@ -27,6 +32,16 @@ class moveCopySheet(UITestCase):
             self.assertEqual(document.Sheets.getCount(), 2)
             # dialog move/copy sheet ; Move is selected; select -move to end position - ; New Name = moveName
             with self.ui_test.execute_dialog_through_command(".uno:Move") as xDialog:
+                #tdf#139464 Set OK button label to selected action: Move or Copy
+                xOkButton = xDialog.getChild("ok")
+                xCopyButton = xDialog.getChild("copy")
+                xMoveButton = xDialog.getChild("move")
+                self.assertEqual(get_state_as_dict(xMoveButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+                xCopyButton.executeAction("CLICK", tuple())
+                self.assertEqual(get_state_as_dict(xCopyButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+                xMoveButton.executeAction("CLICK", tuple())
+                self.assertEqual(get_state_as_dict(xMoveButton)['Text'], get_state_as_dict(xOkButton)['Text'])
+
                 insertBefore = xDialog.getChild("insertBefore")
 
                 xTreeEntry = insertBefore.getChild('2')
