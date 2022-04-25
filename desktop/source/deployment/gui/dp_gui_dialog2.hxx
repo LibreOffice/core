@@ -122,6 +122,7 @@ class ExtMgrDialog : public weld::GenericDialogController
     std::unique_ptr<weld::Label> m_xProgressText;
     std::unique_ptr<weld::ProgressBar> m_xProgressBar;
     std::unique_ptr<weld::Button> m_xCancelBtn;
+    std::unique_ptr<weld::Entry> m_xSearchEntry;
 
     bool removeExtensionWarn(std::u16string_view rExtensionTitle);
 
@@ -133,6 +134,7 @@ class ExtMgrDialog : public weld::GenericDialogController
     DECL_LINK( HandleCancelBtn, weld::Button&, void );
     DECL_LINK( HandleCloseBtn, weld::Button&, void );
     DECL_LINK( HandleExtTypeCbx, weld::Toggleable&, void );
+    DECL_LINK( HandleSearch, weld::Entry&, void );
     DECL_LINK( TimeOutHdl, Timer *, void );
     DECL_LINK( startProgress, void *, void );
 
@@ -160,6 +162,7 @@ public:
 
     TheExtensionManager*    getExtensionManager() const { return m_pManager; }
 
+    virtual void    updateList();
     virtual void    prepareChecking() override;
     virtual void    checkEntries() override;
 
