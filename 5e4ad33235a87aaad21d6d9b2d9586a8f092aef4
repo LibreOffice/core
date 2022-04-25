@@ -171,6 +171,30 @@
       },
       "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5f067c0_a51856ce",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-25T10:14:53Z",
+      "side": 1,
+      "message": "If running a 64-bit core process is an option, then why the 32-bit process is needed for Java and Python extensions, which IIUC should be platform-independent? I might misunderstand things, but I thought that platform dependence might only be relevant for native code (e.g. C++-based extensions)?",
+      "parentUuid": "501f45e8_440976ff",
+      "range": {
+        "startLine": 68,
+        "startChar": 22,
+        "endLine": 68,
+        "endChar": 43
+      },
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
