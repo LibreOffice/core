@@ -33,6 +33,23 @@
       "message": "Tested the patch locally, added my new example file and screenshots to the bug.\nNow the file save is successful, but upon reload the freeform line is not read correctly.\nThis also happens in older versions back to 6.0.7 so not a new regression.",
       "revId": "31082a17b335229e845a37376348591992fd8b81",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b04d098_090e132a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-25T16:30:21Z",
+      "side": 1,
+      "message": "Thank you Gabor for the feedback, let\u0027s give it a try then since the pb you encountered already existed. As usual, at worst it can be reverted.",
+      "revId": "31082a17b335229e845a37376348591992fd8b81",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
