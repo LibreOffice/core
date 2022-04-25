@@ -112,9 +112,10 @@ public:
 
     void RunInMainThread(std::function<void()> func);
 
-    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, vcl::Window&) override;
-    virtual SalFrame* CreateChildFrame(SystemParentData* pParent,
-                                       SalFrameStyleFlags nStyle, vcl::Window&) override;
+    virtual SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle,
+                                  vcl::Window&) override;
+    virtual SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle,
+                                       vcl::Window&) override;
     virtual void DestroyFrame(SalFrame* pFrame) override;
 
     virtual SalObject* CreateObject(SalFrame* pParent, SystemWindowData* pWindowData,

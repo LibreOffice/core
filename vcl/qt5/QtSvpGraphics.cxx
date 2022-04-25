@@ -30,8 +30,8 @@ QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame)
 {
     if (!QtData::noNativeControls())
         m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
-    SAL_DEBUG(__func__ << " " << m_pFrame);
-#if 1
+//    SAL_DEBUG(__func__ << " " << m_pFrame);
+#if 0
     if (m_pFrame)
 	SAL_DEBUG(__func__ << " " << m_pFrame->devicePixelRatioF());
 //        setDevicePixelRatioF(m_pFrame->devicePixelRatioF());

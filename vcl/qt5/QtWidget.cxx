@@ -202,7 +202,6 @@ void QtWidget::mouseMoveEvent(QMouseEvent* pEvent)
     SalMouseEvent aEvent;
     FILL_SAME(m_rFrame, width());
 
-    SAL_DEBUG(this << " " << __func__ << " " << Point(aEvent.mnX, aEvent.mnY));
     aEvent.mnButton = 0;
 
     m_rFrame.CallCallback(SalEvent::MouseMove, &aEvent);
@@ -223,9 +222,6 @@ void QtWidget::handleMouseEnterLeaveEvents(const QtFrame& rFrame, QEvent* pQEven
     aEvent.mnButton = 0;
     aEvent.mnCode = GetKeyModCode(QGuiApplication::keyboardModifiers())
                     | GetMouseModCode(QGuiApplication::mouseButtons());
-
-    SAL_DEBUG(pWidget << " " << __func__ << " " << Point(aEvent.mnX, aEvent.mnY) << " "
-                      << QGuiApplication::isLeftToRight());
 
     SalEvent nEventType;
     if (pQEvent->type() == QEvent::Enter)

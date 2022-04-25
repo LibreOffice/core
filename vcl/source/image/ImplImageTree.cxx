@@ -75,8 +75,10 @@ sal_Int32 ImageRequestParameters::scalePercentage()
     sal_Int32 aScalePercentage = 100;
     if (!(meFlags & ImageLoadFlags::IgnoreScalingFactor))
     {
+#if 0
 	if (mnScalePercentage <= 0)
             SAL_WARN("vcl", "icon requested without percentage!");
+#endif
         if (mnScalePercentage > 0)
             aScalePercentage = mnScalePercentage;
 	else

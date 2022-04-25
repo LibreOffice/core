@@ -297,7 +297,8 @@ void QtInstance::localeChanged()
 
 void QtInstance::deleteObjectLater(QObject* pObject) { pObject->deleteLater(); }
 
-SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle, vcl::Window& rWin)
+SalFrame* QtInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle,
+                                       vcl::Window& rWin)
 {
     SalFrame* pRet(nullptr);
     RunInMainThread([&, this]() { pRet = new QtFrame(nullptr, nStyle, rWin, useCairo()); });
@@ -310,8 +311,9 @@ SalFrame* QtInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle, 
     assert(!pParent || dynamic_cast<QtFrame*>(pParent));
 
     SalFrame* pRet(nullptr);
-    RunInMainThread(
-        [&, this]() { pRet = new QtFrame(static_cast<QtFrame*>(pParent), nStyle, rWin, useCairo()); });
+    RunInMainThread([&, this]() {
+        pRet = new QtFrame(static_cast<QtFrame*>(pParent), nStyle, rWin, useCairo());
+    });
     assert(pRet);
     return pRet;
 }
@@ -344,9 +346,10 @@ void QtInstance::DestroyObject(SalObject* pObject)
     }
 }
 
-std::unique_ptr<SalVirtualDevice>
-QtInstance::CreateVirtualDevice(SalGraphics& rGraphics, sal_Int32& nDX, sal_Int32& nDY,
-                                DeviceFormat /*eFormat*/, const SystemGraphicsData* pGd)
+std::unique_ptr<SalVirtualDevice> QtInstance::CreateVirtualDevice(SalGraphics& rGraphics,
+                                                                  sal_Int32& nDX, sal_Int32& nDY,
+                                                                  DeviceFormat /*eFormat*/,
+                                                                  const SystemGraphicsData* pGd)
 {
     if (m_bUseCairo)
     {
@@ -362,7 +365,8 @@ QtInstance::CreateVirtualDevice(SalGraphics& rGraphics, sal_Int32& nDX, sal_Int3
     }
     else
     {
-        std::unique_ptr<SalVirtualDevice> pVD(new QtVirtualDevice(nDX, nDY, rGraphics.GetDPIScalePercentage()));
+        std::unique_ptr<SalVirtualDevice> pVD(
+            new QtVirtualDevice(nDX, nDY, rGraphics.GetDPIScalePercentage()));
         return pVD;
     }
 }
