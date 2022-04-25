@@ -33,6 +33,23 @@
       "message": "Jenkins approved the follow-up patches - this is a common false positive.",
       "revId": "8aade7b1b0b86b75c988ec1cdbc2fc3a98214f3f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0719e107_2be4a7b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-25T13:35:47Z",
+      "side": 1,
+      "message": "This looks reasonable to me, let\u0027s just have a proper jenkins verify.",
+      "revId": "8aade7b1b0b86b75c988ec1cdbc2fc3a98214f3f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
