@@ -16,6 +16,24 @@
       "message": "The idea of extending sal.map with a somewhat random-looking set of overloads (poorly named, even :), without a clear indication that this is a real performance benefit, gives me collywobbles.\n\nI think I\u0027d like a bigger picture perspective here.  What is the guiding principle which existing URE C++ interfaces to augment with string_view overloads where applicable?  What is the end goal, duplicating all applicable functions?",
       "revId": "c124029ea2e87357d809764a9ed6c56d8566ecbd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd76e242_65ef0528",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-25T15:37:06Z",
+      "side": 1,
+      "message": "\u003e without a clear indication that this is a real performance benefit\n\ni.e., with all three of the newly added functions, there is a real chance that invocations of them would pass back one of their argument strings unchanged via rtl_uString**pResult, which is cheap if the argument string is itself a rtl_uString*, but is expensive if it is a sal_Unicode*/length pair",
+      "parentUuid": "53b5f7dc_2f8cecc5",
+      "revId": "c124029ea2e87357d809764a9ed6c56d8566ecbd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
