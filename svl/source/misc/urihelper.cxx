@@ -535,7 +535,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
             if (rtl::isAsciiAlpha(c))
             {
                 sal_Int32 i = nPos;
-                INetProtocol eScheme = INetURLObject::CompareProtocolScheme(rText.copy(i, rEnd - i));
+                INetProtocol eScheme = INetURLObject::CompareProtocolScheme(rText.subView(i, rEnd - i));
                 if (eScheme == INetProtocol::File) // 2nd
                 {
                     while (rText[i++] != ':') ;
