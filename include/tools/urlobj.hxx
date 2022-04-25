@@ -406,8 +406,7 @@ public:
      */
     static const OUString & GetSchemeName(INetProtocol eTheScheme);
 
-    static INetProtocol CompareProtocolScheme(OUString const &
-                                                  rTheAbsURIRef);
+    static INetProtocol CompareProtocolScheme(std::u16string_view aTheAbsURIRef);
 
     // User Info:
 

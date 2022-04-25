@@ -3963,11 +3963,10 @@ const OUString & INetURLObject::GetSchemeName(INetProtocol eTheScheme)
 }
 
 // static
-INetProtocol INetURLObject::CompareProtocolScheme(OUString const &
-                                                      rTheAbsURIRef)
+INetProtocol INetURLObject::CompareProtocolScheme(std::u16string_view aTheAbsURIRef)
 {
-    sal_Unicode const * p = rTheAbsURIRef.getStr();
-    PrefixInfo const * pPrefix = getPrefix(p, p + rTheAbsURIRef.getLength());
+    sal_Unicode const * p = aTheAbsURIRef.data();
+    PrefixInfo const * pPrefix = getPrefix(p, p + aTheAbsURIRef.size());
     return pPrefix ? pPrefix->m_eScheme : INetProtocol::NotValid;
 }
 

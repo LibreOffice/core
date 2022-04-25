@@ -75,7 +75,7 @@ static bool lcl_isExternalRefCache(const OUString& rName, OUString& rUrl, OUStri
 
     // #i114504# Other schemes besides "file:" are also allowed.
     // CompareProtocolScheme is quick, only looks at the start of the string.
-    INetProtocol eProt = INetURLObject::CompareProtocolScheme( rName.copy(1) );
+    INetProtocol eProt = INetURLObject::CompareProtocolScheme( rName.subView(1) );
     if ( eProt == INetProtocol::NotValid )
         return false;
 

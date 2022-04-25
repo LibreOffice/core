@@ -687,7 +687,7 @@ bool SvxAutoCorrect::FnAddNonBrkSpace(
             sal_Int32 nProtocolLen = nEndPos - nSttWdPos + 1;
             if (nIndex + nProtocolLen <= rTxt.getLength())
             {
-                if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INetProtocol::NotValid)
+                if (INetURLObject::CompareProtocolScheme(rTxt.subView(nIndex, nProtocolLen)) != INetProtocol::NotValid)
                     return false;
             }
 
@@ -895,7 +895,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     sal_Int32 nProtocolLen = pDelim - pWordStt + 1;
     if (nIndex + nProtocolLen <= rTxt.getLength())
     {
-        if (INetURLObject::CompareProtocolScheme(rTxt.copy(nIndex, nProtocolLen)) != INetProtocol::NotValid)
+        if (INetURLObject::CompareProtocolScheme(rTxt.subView(nIndex, nProtocolLen)) != INetProtocol::NotValid)
             return; // already ok
     }
 
