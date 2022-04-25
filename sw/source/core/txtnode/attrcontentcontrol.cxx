@@ -212,6 +212,14 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
     (void)xmlTextWriterWriteFormatAttribute(
         pWriter, BAD_CAST("showing-place-holder"), "%s",
         BAD_CAST(OString::boolean(m_bShowingPlaceHolder).getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("checkbox"), "%s",
+                                            BAD_CAST(OString::boolean(m_bCheckbox).getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("checked"), "%s",
+                                            BAD_CAST(OString::boolean(m_bChecked).getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("checked-state"), "%s",
+                                            BAD_CAST(m_aCheckedState.toUtf8().getStr()));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("unchecked-state"), "%s",
+                                            BAD_CAST(m_aUncheckedState.toUtf8().getStr()));
     (void)xmlTextWriterEndElement(pWriter);
 }
 

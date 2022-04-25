@@ -871,6 +871,10 @@
 #define UNO_NAME_LINEBREAK "LineBreak"
 #define UNO_NAME_CONTENT_CONTROL "ContentControl"
 #define UNO_NAME_SHOWING_PLACE_HOLDER "ShowingPlaceHolder"
+#define UNO_NAME_CHECKBOX "Checkbox"
+#define UNO_NAME_CHECKED "Checked"
+#define UNO_NAME_CHECKED_STATE "CheckedState"
+#define UNO_NAME_UNCHECKED_STATE "UncheckedState"
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
