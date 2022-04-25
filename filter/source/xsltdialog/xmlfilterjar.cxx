@@ -74,15 +74,15 @@ XMLFilterJarHelper::XMLFilterJarHelper( const Reference< XComponentContext >& rx
     sTemplatePath = aOptions.SubstituteVariable( sTemplatePath );
 }
 
-static OUString encodeZipUri( const OUString& rURI )
+static OUString encodeZipUri( std::u16string_view rURI )
 {
     return Uri::encode( rURI, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
 
 /// @throws Exception
-static Reference< XInterface > addFolder( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, const OUString& rName )
+static Reference< XInterface > addFolder( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, std::u16string_view rName )
 {
-    if ( rName == ".." || rName == "." )
+    if ( rName == u".." || rName == u"." )
         throw lang::IllegalArgumentException();
 
     Sequence< Any > aArgs{ Any(true) };
@@ -102,7 +102,7 @@ static Reference< XInterface > addFolder( Reference< XInterface > const & xRootF
 }
 
 /// @throws Exception
-static void addFile_( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, Reference< XInputStream > const & xInput, const OUString& aName )
+static void addFile_( Reference< XInterface > const & xRootFolder, Reference< XSingleServiceFactory > const & xFactory, Reference< XInputStream > const & xInput, std::u16string_view aName )
 {
     Reference< XActiveDataSink > xSink( xFactory->createInstance(), UNO_QUERY );
     Reference< XUnoTunnel > xTunnel( xSink, UNO_QUERY );
@@ -205,7 +205,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const std::ve
             }
 
             Reference< XInputStream > XIS(  new utl::OSeekableInputStreamWrapper( new SvFileStream(aTempFileURL, StreamMode::READ ), true ) );
-            addFile_( xRootFolder, xFactory,  XIS, "TypeDetection.xcu" );
+            addFile_( xRootFolder, xFactory,  XIS, u"TypeDetection.xcu" );
 
             Reference< XChangesBatch > xBatch( xIfc, UNO_QUERY );
             if( xBatch.is() )
@@ -306,7 +306,7 @@ bool XMLFilterJarHelper::copyFile( const Reference< XHierarchicalNameAccess >& x
 
     try
     {
-        OUString szPackagePath( encodeZipUri( rURL.copy( sVndSunStarPackage.getLength() ) ) );
+        OUString szPackagePath( encodeZipUri( rURL.subView( sVndSunStarPackage.getLength() ) ) );
 
         if ( ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, u".." )
           || ::comphelper::OStorageHelper::PathHasSegment( szPackagePath, u"." ) )

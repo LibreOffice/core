@@ -1559,7 +1559,7 @@ void SAL_CALL ZipPackage::commitChanges()
                     aInfo.NameClash = NameClash::OVERWRITE;
                     aInfo.MoveData = false;
                     aInfo.SourceURL = sTempURL;
-                    aInfo.NewTitle = rtl::Uri::decode ( m_aURL.copy ( 1 + m_aURL.lastIndexOf ( u'/' ) ),
+                    aInfo.NewTitle = rtl::Uri::decode ( m_aURL.subView ( 1 + m_aURL.lastIndexOf ( u'/' ) ),
                                                         rtl_UriDecodeWithCharset,
                                                         RTL_TEXTENCODING_UTF8 );
                     // if the file is still not corrupted, it can become after the next step

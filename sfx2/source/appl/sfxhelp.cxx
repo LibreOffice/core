@@ -321,12 +321,12 @@ namespace {
 class SfxHelp_Impl
 {
 public:
-    static OUString GetHelpText( const OUString& aCommandURL, const OUString& rModule );
+    static OUString GetHelpText( std::u16string_view aCommandURL, const OUString& rModule );
 };
 
 }
 
-OUString SfxHelp_Impl::GetHelpText( const OUString& aCommandURL, const OUString& rModule )
+OUString SfxHelp_Impl::GetHelpText( std::u16string_view aCommandURL, const OUString& rModule )
 {
     // create help url
     OUStringBuffer aHelpURL( SfxHelp::CreateHelpURL( aCommandURL, rModule ) );
@@ -493,7 +493,7 @@ OUString SfxHelp::GetHelpModuleName_Impl(std::u16string_view rHelpID)
     return aFactoryShortName;
 }
 
-OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUString& rModuleName )
+OUString SfxHelp::CreateHelpURL_Impl( std::u16string_view aCommandURL, const OUString& rModuleName )
 {
     // build up the help URL
     OUStringBuffer aHelpURL("vnd.sun.star.help://");
@@ -506,7 +506,7 @@ OUString SfxHelp::CreateHelpURL_Impl( const OUString& aCommandURL, const OUStrin
 
     aHelpURL.append(aModuleName);
 
-    if ( aCommandURL.isEmpty() )
+    if ( aCommandURL.empty() )
         aHelpURL.append("/start");
     else
     {
@@ -1095,7 +1095,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow)
                         if (!pParent)
                         {
                             // create help url of start page ( helpid == 0 -> start page)
-                            aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
+                            aHelpURL = CreateHelpURL( u"", aHelpModuleName );
                         }
                     }
                 }
@@ -1269,7 +1269,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
                 if (bUseFinalFallback)
                 {
                     // create help url of start page ( helpid == 0 -> start page)
-                    aHelpURL = CreateHelpURL( OUString(), aHelpModuleName );
+                    aHelpURL = CreateHelpURL( u"", aHelpModuleName );
                 }
             }
             break;
@@ -1366,7 +1366,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, weld::Widget* pWidget, const OUSt
     return true;
 }
 
-OUString SfxHelp::CreateHelpURL(const OUString& aCommandURL, const OUString& rModuleName)
+OUString SfxHelp::CreateHelpURL(std::u16string_view aCommandURL, const OUString& rModuleName)
 {
     SfxHelp* pHelp = static_cast< SfxHelp* >(Application::GetHelp());
     return pHelp ? SfxHelp::CreateHelpURL_Impl( aCommandURL, rModuleName ) : OUString();

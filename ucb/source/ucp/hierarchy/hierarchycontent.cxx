@@ -692,7 +692,7 @@ bool HierarchyContent::isReadOnly()
 
 
 uno::Reference< ucb::XContentIdentifier >
-HierarchyContent::makeNewIdentifier( const OUString& rTitle )
+HierarchyContent::makeNewIdentifier( std::u16string_view rTitle )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 

@@ -43,7 +43,7 @@ public:
 
     /// @throws css::uno::Exception
     css::uno::Reference< css::uno::XInterface > addFolder( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
-                                                           const OUString& rName );
+                                                           std::u16string_view rName );
 
     void addFolderWithContent( css::uno::Reference< css::uno::XInterface > const & xRootFolder,
                                const OUString& rDirURL );

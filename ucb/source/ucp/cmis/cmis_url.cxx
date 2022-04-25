@@ -65,7 +65,7 @@ namespace cmis
                                    rtl::Uri::encode( m_sUser, rtl_UriCharClassUserinfo,
                                                      rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8) );
         OUString sEncodedBinding = rtl::Uri::encode(
-                m_sBindingUrl + "#" + m_sRepositoryId,
+                rtl::OUStringConcatenation(m_sBindingUrl + "#" + m_sRepositoryId),
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
