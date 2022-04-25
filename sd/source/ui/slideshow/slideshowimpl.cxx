@@ -1347,6 +1347,8 @@ IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl, void*, void)
 {
     mnEndShowEvent = nullptr;
 
+    stopSound();
+
     if( mxPresentation.is() )
         mxPresentation->end();
 }
