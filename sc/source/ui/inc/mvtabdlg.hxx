@@ -37,6 +37,7 @@ public:
     void    GetTabNameString( OUString& rString ) const;
     void    SetForceCopyTable       ();
     void    EnableRenameTable       (bool bFlag);
+    void    SetOkBtnLabel           ();
 
 private:
     void ResetRenameInput();
