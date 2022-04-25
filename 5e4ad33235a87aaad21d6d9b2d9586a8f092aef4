@@ -163,6 +163,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26ee7d64_2b31dbbf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-25T14:58:33Z",
+      "side": 1,
+      "message": "I\u0027ve seen it a few times in the last years, both on my machine and in customer environments.",
+      "parentUuid": "f7f00d35_b9b8109e",
+      "revId": "5e4ad33235a87aaad21d6d9b2d9586a8f092aef4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ea9114ee_793bf7d5",
         "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
         "patchSetId": 1
