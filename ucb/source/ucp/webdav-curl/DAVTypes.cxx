@@ -102,7 +102,7 @@ DAVOptionsCache::~DAVOptionsCache()
 {
 }
 
-bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOptions )
+bool DAVOptionsCache::getDAVOptions( std::u16string_view rURL, DAVOptions & rDAVOptions )
 {
     std::unique_lock aGuard( m_aMutex );
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
@@ -130,7 +130,7 @@ bool DAVOptionsCache::getDAVOptions( const OUString & rURL, DAVOptions & rDAVOpt
     }
 }
 
-void DAVOptionsCache::removeDAVOptions( const OUString & rURL )
+void DAVOptionsCache::removeDAVOptions( std::u16string_view rURL )
 {
     std::unique_lock aGuard( m_aMutex );
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );
@@ -173,7 +173,7 @@ void DAVOptionsCache::addDAVOptions( DAVOptions & rDAVOptions, const sal_uInt32 
     m_aTheCache[ aEncodedUrl ] = rDAVOptions;
 }
 
-void DAVOptionsCache::setHeadAllowed( const OUString & rURL, const bool HeadAllowed )
+void DAVOptionsCache::setHeadAllowed( std::u16string_view rURL, const bool HeadAllowed )
 {
     std::unique_lock aGuard( m_aMutex );
     OUString aEncodedUrl( ucb_impl::urihelper::encodeURI( DecodeURI(rURL) ) );

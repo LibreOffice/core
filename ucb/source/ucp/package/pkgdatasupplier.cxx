@@ -375,7 +375,7 @@ void DataSupplier::validate()
 }
 
 
-OUString DataSupplier::assembleChildURL( const OUString& aName )
+OUString DataSupplier::assembleChildURL( std::u16string_view aName )
 {
     OUString aURL;
     OUString aContURL

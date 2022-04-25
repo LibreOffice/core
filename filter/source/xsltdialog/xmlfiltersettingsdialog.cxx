@@ -1305,7 +1305,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
     };
 }
 
-OUString string_encode( const OUString & rText )
+OUString string_encode( std::u16string_view rText )
 {
     static constexpr auto uricNoSlash = rtl::createUriCharClass(
         u8"!$&'()*+-.0123456789:=?@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~");
@@ -1315,7 +1315,7 @@ OUString string_encode( const OUString & rText )
         Uri::encode( rText, uricNoSlash.data(), rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
 
-OUString string_decode( const OUString & rText )
+OUString string_decode( std::u16string_view rText )
 {
     return Uri::decode( rText, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 }

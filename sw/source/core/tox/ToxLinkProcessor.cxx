@@ -44,7 +44,7 @@ void ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url, boo
         // arbitrary strings that need to be encoded
         assert(url[0] == '#'); // all links are internal
         uri = "#"
-              + rtl::Uri::encode(url.copy(1), rtl_UriCharClassUricNoSlash,
+              + rtl::Uri::encode(url.subView(1), rtl_UriCharClassUricNoSlash,
                                  rtl_UriEncodeIgnoreEscapes, RTL_TEXTENCODING_UTF8);
     }
     else

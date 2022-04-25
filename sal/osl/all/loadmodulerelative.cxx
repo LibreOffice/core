@@ -44,10 +44,13 @@ oslModule SAL_CALL osl_loadModuleRelative(
         return nullptr;
     }
     OUString abs;
-    try {
-        abs = rtl::Uri::convertRelToAbs(base, relativePath);
-    } catch (const rtl::MalformedUriException & e) {
-        SAL_INFO("sal.osl", "rtl::MalformedUriException <" << e.getMessage() << ">");
+    OUString aException;
+    if (!rtl_uriConvertRelToAbs(
+            base.pData,
+            relativePath, &abs.pData,
+            &aException.pData))
+    {
+        SAL_INFO("sal.osl", "rtl::MalformedUriException <" << aException << ">");
         return nullptr;
     }
     return osl_loadModule(abs.pData, mode);

@@ -128,7 +128,7 @@ OUString parsePart(
     return buf.makeStringAndClear();
 }
 
-OUString encodeNameOrParamFragment(OUString const & fragment) {
+OUString encodeNameOrParamFragment(std::u16string_view fragment) {
     static constexpr auto nameOrParamFragment = rtl::createUriCharClass(
         u8"!$'()*+,-.0123456789:;@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]_abcdefghijklmnopqrstuvwxyz~");
     return rtl::Uri::encode(

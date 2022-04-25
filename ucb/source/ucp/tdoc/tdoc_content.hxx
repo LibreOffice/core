@@ -131,7 +131,7 @@ private:
     bool copyData( const Uri & rSourceUri, const OUString & rNewName );
 
     css::uno::Reference< css::ucb::XContentIdentifier >
-    makeNewIdentifier( const OUString& rTitle );
+    makeNewIdentifier( std::u16string_view rTitle );
 
     typedef rtl::Reference< Content > ContentRef;
     typedef std::vector< ContentRef > ContentRefList;

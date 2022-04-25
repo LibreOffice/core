@@ -44,13 +44,13 @@ using namespace com::sun::star::uno;
 
 namespace {
 
-OUString encodePathSegment(OUString const & decoded) {
+OUString encodePathSegment(std::u16string_view decoded) {
     return rtl::Uri::encode(
         decoded, rtl_UriCharClassPchar, rtl_UriEncodeIgnoreEscapes,
         RTL_TEXTENCODING_UTF8);
 }
 
-OUString decodePathSegment(OUString const & encoded) {
+OUString decodePathSegment(std::u16string_view encoded) {
     return rtl::Uri::decode(
         encoded, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
 }
@@ -338,7 +338,7 @@ OUString FTPURL::parent(bool internal) const
 }
 
 
-void FTPURL::child(const OUString& title)
+void FTPURL::child(std::u16string_view title)
 {
     m_aPathSegmentVec.push_back(encodePathSegment(title));
 }

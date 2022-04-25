@@ -48,6 +48,12 @@ public:
     /** A wrapper around rtl_uriEncode() from <rtl/uri.h> (see there), using
         an array of 128 booleans as char class.
      */
+#if defined LIBO_INTERNAL_ONLY
+    static inline rtl::OUString encode(std::u16string_view aText,
+                                       sal_Bool const * pCharClass,
+                                       rtl_UriEncodeMechanism eMechanism,
+                                       rtl_TextEncoding eCharset);
+#endif
     static inline rtl::OUString encode(rtl::OUString const & rText,
                                        sal_Bool const * pCharClass,
                                        rtl_UriEncodeMechanism eMechanism,
@@ -56,6 +62,12 @@ public:
     /** A wrapper around rtl_uriEncode() from <rtl/uri.h> (see there), using
         a predefined rtl_UriCharClass enumeration member.
      */
+#if defined LIBO_INTERNAL_ONLY
+    static inline rtl::OUString encode(std::u16string_view aText,
+                                       rtl_UriCharClass eCharClass,
+                                       rtl_UriEncodeMechanism eMechanism,
+                                       rtl_TextEncoding eCharset);
+#endif
     static inline rtl::OUString encode(rtl::OUString const & rText,
                                        rtl_UriCharClass eCharClass,
                                        rtl_UriEncodeMechanism eMechanism,
@@ -63,6 +75,11 @@ public:
 
     /** A wrapper around rtl_uriDecode() from <rtl/uri.h> (see there).
      */
+#if defined LIBO_INTERNAL_ONLY
+    static inline rtl::OUString decode(std::u16string_view aText,
+                                       rtl_UriDecodeMechanism eMechanism,
+                                       rtl_TextEncoding eCharset);
+#endif
     static inline rtl::OUString decode(rtl::OUString const & rText,
                                        rtl_UriDecodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset);
@@ -73,6 +90,10 @@ public:
         Thrown in case rtl_uriConvertRelToAbs() signals an exception due to a
         malformed base URI.
      */
+#if defined LIBO_INTERNAL_ONLY
+    static inline rtl::OUString convertRelToAbs(
+        std::u16string_view aBaseUriRef, std::u16string_view aRelUriRef);
+#endif
     static inline rtl::OUString convertRelToAbs(
         rtl::OUString const & rBaseUriRef, rtl::OUString const & rRelUriRef);
 
@@ -85,6 +106,22 @@ private:
 
     void operator =(Uri) SAL_DELETED_FUNCTION;
 };
+
+#if defined LIBO_INTERNAL_ONLY
+inline rtl::OUString Uri::encode(std::u16string_view aText,
+                                 sal_Bool const * pCharClass,
+                                 rtl_UriEncodeMechanism eMechanism,
+                                 rtl_TextEncoding eCharset)
+{
+    rtl::OUString aResult;
+    rtl_uriEncode_WithLength(aText.data(), aText.size(),
+                  pCharClass,
+                  eMechanism,
+                  eCharset,
+                  &aResult.pData);
+    return aResult;
+}
+#endif
 
 inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  sal_Bool const * pCharClass,
@@ -100,6 +137,22 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
     return aResult;
 }
 
+#if defined LIBO_INTERNAL_ONLY
+inline rtl::OUString Uri::encode(std::u16string_view aText,
+                                 rtl_UriCharClass eCharClass,
+                                 rtl_UriEncodeMechanism eMechanism,
+                                 rtl_TextEncoding eCharset)
+{
+    rtl::OUString aResult;
+    rtl_uriEncode_WithLength(aText.data(), aText.size(),
+                  rtl_getUriCharClass(eCharClass),
+                  eMechanism,
+                  eCharset,
+                  &aResult.pData);
+    return aResult;
+}
+#endif
+
 inline rtl::OUString Uri::encode(rtl::OUString const & rText,
                                  rtl_UriCharClass eCharClass,
                                  rtl_UriEncodeMechanism eMechanism,
@@ -114,6 +167,20 @@ inline rtl::OUString Uri::encode(rtl::OUString const & rText,
     return aResult;
 }
 
+#if defined LIBO_INTERNAL_ONLY
+inline rtl::OUString Uri::decode(std::u16string_view aText,
+                                 rtl_UriDecodeMechanism eMechanism,
+                                 rtl_TextEncoding eCharset)
+{
+    rtl::OUString aResult;
+    rtl_uriDecode_WithLength(aText.data(), aText.size(),
+                  eMechanism,
+                  eCharset,
+                  &aResult.pData);
+    return aResult;
+}
+#endif
+
 inline rtl::OUString Uri::decode(rtl::OUString const & rText,
                                  rtl_UriDecodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset)
@@ -125,6 +192,21 @@ inline rtl::OUString Uri::decode(rtl::OUString const & rText,
                   &aResult.pData);
     return aResult;
 }
+
+#if defined LIBO_INTERNAL_ONLY
+inline rtl::OUString Uri::convertRelToAbs(std::u16string_view aBaseUriRef,
+                                          std::u16string_view aRelUriRef)
+{
+    rtl::OUString aResult;
+    rtl::OUString aException;
+    if (!rtl_uriConvertRelToAbs_WithLength(
+            aBaseUriRef.data(), aBaseUriRef.size(),
+            aRelUriRef.data(), aRelUriRef.size(), &aResult.pData,
+            &aException.pData))
+        throw MalformedUriException(aException);
+    return aResult;
+}
+#endif
 
 inline rtl::OUString Uri::convertRelToAbs(rtl::OUString const & rBaseUriRef,
                                           rtl::OUString const & rRelUriRef)

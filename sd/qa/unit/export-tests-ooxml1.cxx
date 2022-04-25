@@ -1626,7 +1626,7 @@ void SdOOXMLExportTest1::testNarrationMimeType()
     OUString aImagePath = "/rels:Relationships/rels:Relationship[@Id='" + aImageId + "']";
     // Something like ../media/image2.png.
     OUString aImageStreamName = getXPath(pRelsDoc, aImagePath.toUtf8(), "Target");
-    OUString aImageAbsName = rtl::Uri::convertRelToAbs("file:///ppt/slides/", aImageStreamName);
+    OUString aImageAbsName = rtl::Uri::convertRelToAbs(u"file:///ppt/slides/", aImageStreamName);
     // Something like ppt/media/image2.png.
     OUString aImageRelName;
     CPPUNIT_ASSERT(aImageAbsName.startsWith("file:///", &aImageRelName));
