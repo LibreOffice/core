@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9359465_4c8ba94d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-25T06:33:48Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/133332/1 is a follow-up change and that passed CI.",
+      "revId": "6ce1426321b98d3c8a489262835ab5a06b065b61",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
