@@ -181,6 +181,7 @@ OLE1Reader::OLE1Reader(SvStream& rStream)
 }
 }
 
+/// Covers sw/source/filter/html/wrthtml.cxx and related fixes.
 class HtmlExportTest : public SwModelTestBase, public HtmlTestTools
 {
 private:
