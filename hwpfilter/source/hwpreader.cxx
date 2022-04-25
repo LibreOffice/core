@@ -880,7 +880,7 @@ void HwpReader::makeMasterStyles()
 
     int i;
     int nMax = hwpfile.getMaxSettedPage();
-    std::deque<PageSetting> aSet(nMax + 1);
+    std::vector<PageSetting> aSet(nMax + 1);
 
     for( i = 0 ; i < hwpfile.getPageNumberCount() ; i++ )
     {
