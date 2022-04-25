@@ -201,6 +201,11 @@ protected:
     void WriteSoftEdgeEffect(const css::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
                                   const EnhancedCustomShape2d& rCustomShape2d);
+    bool WriteCustomGeometrySegment(
+        const sal_Int16 eCommand, const sal_Int32 nCount,
+        const css::uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
+        sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
+        const EnhancedCustomShape2d& rCustomShape2d);
 
 public:
     DrawingML( ::sax_fastparser::FSHelperPtr pFS, ::oox::core::XmlFilterBase* pFB, DocumentType eDocumentType = DOCUMENT_PPTX, DMLTextExport* pTextExport = nullptr )
