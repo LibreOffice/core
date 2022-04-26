@@ -365,54 +365,60 @@ void ScInputWindow::Select()
     }
     else if (curItemId == SID_INPUT_EQUAL)
     {
+        StartFormula();
+    }
+}
+
+void ScInputWindow::StartFormula()
+{
+    ScModule* pScMod = SC_MOD();
+    mxTextWindow->StartEditEngine();
+    if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
+    {
         mxTextWindow->StartEditEngine();
-        if ( pScMod->IsEditMode() ) // Isn't if e.g. protected
+
+        sal_Int32 nStartPos = 1;
+        sal_Int32 nEndPos = 1;
+
+        ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
+        if ( pViewSh )
         {
-            mxTextWindow->StartEditEngine();
+            const OUString& rString = mxTextWindow->GetTextString();
+            const sal_Int32 nLen = rString.getLength();
 
-            sal_Int32 nStartPos = 1;
-            sal_Int32 nEndPos = 1;
-
-            ScTabViewShell* pViewSh = dynamic_cast<ScTabViewShell*>( SfxViewShell::Current()  );
-            if ( pViewSh )
+            ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
+            CellType eCellType = rDoc.GetCellType( pViewSh->GetViewData().GetCurPos() );
+            switch ( eCellType )
             {
-                const OUString& rString = mxTextWindow->GetTextString();
-                const sal_Int32 nLen = rString.getLength();
-
-                ScDocument& rDoc = pViewSh->GetViewData().GetDocument();
-                CellType eCellType = rDoc.GetCellType( pViewSh->GetViewData().GetCurPos() );
-                switch ( eCellType )
+                case CELLTYPE_VALUE:
                 {
-                    case CELLTYPE_VALUE:
-                    {
-                        nEndPos = nLen + 1;
-                        mxTextWindow->SetTextString("=" +  rString);
-                        break;
-                    }
-                    case CELLTYPE_STRING:
-                    case CELLTYPE_EDIT:
-                        nStartPos = 0;
-                        nEndPos = nLen;
-                        break;
-                    case CELLTYPE_FORMULA:
-                        nEndPos = nLen;
-                        break;
-                    default:
-                        mxTextWindow->SetTextString("=");
-                        break;
+                    nEndPos = nLen + 1;
+                    mxTextWindow->SetTextString("=" +  rString);
+                    break;
                 }
+                case CELLTYPE_STRING:
+                case CELLTYPE_EDIT:
+                    nStartPos = 0;
+                    nEndPos = nLen;
+                    break;
+                case CELLTYPE_FORMULA:
+                    nEndPos = nLen;
+                    break;
+                default:
+                    mxTextWindow->SetTextString("=");
+                    break;
             }
+        }
 
-            EditView* pView = mxTextWindow->GetEditView();
-            if (pView)
-            {
-                if (comphelper::LibreOfficeKit::isActive())
-                    TextGrabFocus();
-                pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
-                pScMod->InputChanged(pView);
-                SetOkCancelMode();
-                pView->SetEditEngineUpdateLayout(true);
-            }
+        EditView* pView = mxTextWindow->GetEditView();
+        if (pView)
+        {
+            if (comphelper::LibreOfficeKit::isActive())
+                TextGrabFocus();
+            pView->SetSelection( ESelection(0, nStartPos, 0, nEndPos) );
+            pScMod->InputChanged(pView);
+            SetOkCancelMode();
+            pView->SetEditEngineUpdateLayout(true);
         }
     }
 }
@@ -991,6 +997,7 @@ IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
 {
     ToolBoxItemId nCurID = GetCurItemId();
     EndSelection();
+
     if (nCurID == SID_INPUT_SUM)
     {
         tools::Rectangle aRect(GetItemRect(SID_INPUT_SUM));

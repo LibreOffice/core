@@ -48,6 +48,8 @@
 #include <columnspanset.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <inputhdl.hxx>
+#include <inputwin.hxx>
 
 #include <memory>
 
@@ -1029,6 +1031,21 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     // TODO/LATER: when is this code executed?
                     pTabViewShell->Escape();
                 }
+            }
+            break;
+
+        case SID_ACCEPT_FORMULA:
+            {
+                if (GetViewData().HasEditView(GetViewData().GetActivePart()))
+                    pScMod->InputEnterHandler();
+            }
+            break;
+
+        case SID_START_FORMULA:
+            {
+                ScInputHandler* pInputHandler = pScMod->GetInputHdl();
+                if (pInputHandler && pInputHandler->GetInputWindow())
+                    pInputHandler->GetInputWindow()->StartFormula();
             }
             break;
 

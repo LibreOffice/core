@@ -2824,9 +2824,24 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_AUTO_SUM:
             {
+                const SfxItemSet *pArgs = rReq.GetArgs();
+                const OUString sFunction = pArgs ?
+                    static_cast<const SfxStringItem&>( pArgs->Get( SID_AUTO_SUM ) ).GetValue()
+                    : "";
+
+                OpCode eFunction = ocSum;
+                if (sFunction == "average")
+                    eFunction = ocAverage;
+                else if (sFunction == "count")
+                    eFunction = ocCount;
+                else if (sFunction == "min")
+                    eFunction = ocMin;
+                if (sFunction == "max")
+                    eFunction = ocMax;
+
                 bool bSubTotal = false;
                 bool bRangeFinder = false;
-                const OUString aFormula = pTabViewShell->DoAutoSum( bRangeFinder, bSubTotal , ocSum );
+                const OUString aFormula = pTabViewShell->DoAutoSum( bRangeFinder, bSubTotal , eFunction );
                 if ( !aFormula.isEmpty() )
                 {
                     const sal_Int32 nPar = aFormula.indexOf( '(' );

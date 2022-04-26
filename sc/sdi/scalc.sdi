@@ -483,6 +483,42 @@ SfxVoidItem Cancel SID_CANCEL
     GroupId = SfxGroupId::Edit;
 ]
 
+SfxVoidItem AcceptFormula SID_ACCEPT_FORMULA
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
+SfxVoidItem StartFormula SID_START_FORMULA
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = SfxGroupId::Edit;
+]
+
 
 SfxVoidItem ChangeChartData SID_CHART_SOURCE
 (SfxStringItem Name SID_CHART_NAME,SfxStringItem Range SID_CHART_SOURCE,SfxBoolItem ColHeaders FN_PARAM_1,SfxBoolItem RowHeaders FN_PARAM_2)
@@ -6550,6 +6586,7 @@ SfxUInt16Item NumberFormatType SID_NUMBER_TYPE_FORMAT
 
 
 SfxVoidItem AutoSum SID_AUTO_SUM
+(SfxStringItem Function SID_AUTO_SUM)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

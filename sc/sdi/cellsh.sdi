@@ -209,6 +209,8 @@ interface CellSelection
     FID_INSERT_NAME                     [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     FID_USE_NAME                        [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_CANCEL                          [ ExecMethod = Execute; ]
+    SID_ACCEPT_FORMULA                  [ ExecMethod = Execute; ]
+    SID_START_FORMULA                   [ ExecMethod = Execute; ]
     SID_TOGGLE_REL                      [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_POPUP_CONDFRMT                  []
     SID_COLUMN_OPERATIONS               [ ExecMethod = ExecuteEdit; StateMethod = GetBlockState; ]
