@@ -52,6 +52,24 @@
       "parentUuid": "e417a834_2497533f",
       "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd5f3b3_072e67a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-26T10:39:06Z",
+      "side": 1,
+      "message": "It implies that you run a macros from the start center. And I doubt this is an average use case. So removing all (and customizing it locally) makes more sense to me.",
+      "parentUuid": "386e7712_83835b4c",
+      "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
