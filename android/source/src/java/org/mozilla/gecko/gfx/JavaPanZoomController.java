@@ -143,10 +143,6 @@ class JavaPanZoomController
 
     /** This function MUST be called on the UI thread */
     public boolean onMotionEvent(MotionEvent event) {
-        if (Build.VERSION.SDK_INT <= 11) {
-            return false;
-        }
-
         switch (event.getSource() & InputDevice.SOURCE_CLASS_MASK) {
         case InputDevice.SOURCE_CLASS_POINTER:
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
