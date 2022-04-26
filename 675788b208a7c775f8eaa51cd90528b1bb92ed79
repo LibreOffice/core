@@ -16,6 +16,24 @@
       "message": "This is worthy of a mention on the release notes.",
       "revId": "675788b208a7c775f8eaa51cd90528b1bb92ed79",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1ee33d9_16639c70",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-26T11:06:37Z",
+      "side": 1,
+      "message": "https://wiki.documentfoundation.org/ReleaseNotes/7.4#Jump_Lists",
+      "parentUuid": "2b7793aa_9b6a918a",
+      "revId": "675788b208a7c775f8eaa51cd90528b1bb92ed79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
