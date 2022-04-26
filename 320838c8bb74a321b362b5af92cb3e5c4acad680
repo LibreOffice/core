@@ -16,6 +16,24 @@
       "message": "MacroRecorder, MacroSignature and OpenXMLFilterSettings are disabled in the Start center?\n\nShould I add them anyway, to be uniform?\nOr remove them here?",
       "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e417a834_2497533f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-26T10:13:20Z",
+      "side": 1,
+      "message": "Why would you want to run a macro from the start center? And the patch adds the recording feature. Would rather remove everything (those who need may customize it).",
+      "parentUuid": "018abd6e_ea4f0190",
+      "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
