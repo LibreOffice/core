@@ -113,6 +113,8 @@ public:
     const Link<LinkParamNone*, bool> & GetIsProtectedHdl() const;
 
     bool IsChart() const;
+    bool IsCalc() const;
+    bool IsMath() const;
 
     OUString GetChartType();
 

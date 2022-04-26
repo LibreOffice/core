@@ -651,21 +651,6 @@ public:
     }
 };
 
-// Predicate determining whether the given OLE is an internal math
-// object
-static bool ImplIsMathObj( const uno::Reference < embed::XEmbeddedObject >& rObjRef )
-{
-    if ( !rObjRef.is() )
-        return false;
-
-    SvGlobalName aClassName( rObjRef->getClassID() );
-    return aClassName == SvGlobalName(SO3_SM_CLASSID_30) ||
-        aClassName == SvGlobalName(SO3_SM_CLASSID_40) ||
-        aClassName == SvGlobalName(SO3_SM_CLASSID_50) ||
-        aClassName == SvGlobalName(SO3_SM_CLASSID_60) ||
-        aClassName == SvGlobalName(SO3_SM_CLASSID);
-}
-
 // BaseProperties section
 
 std::unique_ptr<sdr::properties::BaseProperties> SdrOle2Obj::CreateObjectSpecificProperties()
@@ -766,7 +751,7 @@ SdrOle2Obj::SdrOle2Obj(
         SetResizeProtect(true);
 
     // For math objects, set closed state to transparent
-    SetClosedObj(!ImplIsMathObj( mpImpl->mxObjRef.GetObject() ));
+    SetClosedObj(!IsMath());
 
     Init();
 }
@@ -1320,7 +1305,7 @@ void SdrOle2Obj::SetObjRef( const css::uno::Reference < css::embed::XEmbeddedObj
             SetResizeProtect(true);
 
         // For math objects, set closed state to transparent
-        SetClosedObj(!ImplIsMathObj( rNewObjRef ));
+        SetClosedObj(!IsMath());
 
         Connect();
     }
@@ -1749,7 +1734,7 @@ void SdrOle2Obj::GetObjRef_Impl()
             }
 
             // For math objects, set closed state to transparent
-            SetClosedObj(!ImplIsMathObj( mpImpl->mxObjRef.GetObject() ));
+            SetClosedObj(!IsMath());
         }
 
         if ( mpImpl->mxObjRef.is() )
@@ -1833,17 +1818,12 @@ void SdrOle2Obj::SetGraphicToObj( const uno::Reference< io::XInputStream >& xGrS
 
 bool SdrOle2Obj::IsCalc() const
 {
-    if ( !mpImpl->mxObjRef.is() )
-        return false;
+    return mpImpl->mxObjRef.IsCalc();
+}
 
-    SvGlobalName aObjClsId( mpImpl->mxObjRef->getClassID() );
-    return SvGlobalName(SO3_SC_CLASSID_30) == aObjClsId
-        || SvGlobalName(SO3_SC_CLASSID_40) == aObjClsId
-        || SvGlobalName(SO3_SC_CLASSID_50) == aObjClsId
-        || SvGlobalName(SO3_SC_CLASSID_60) == aObjClsId
-        || SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_60) == aObjClsId
-        || SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_8) == aObjClsId
-        || SvGlobalName(SO3_SC_CLASSID) == aObjClsId;
+bool SdrOle2Obj::IsMath() const
+{
+    return mpImpl->mxObjRef.IsMath();
 }
 
 uno::Reference< frame::XModel > SdrOle2Obj::GetParentXModel() const
