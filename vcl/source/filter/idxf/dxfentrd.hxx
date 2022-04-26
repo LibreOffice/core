@@ -416,7 +416,6 @@ public:
     std::vector<std::unique_ptr<DXFEdgeType>> aEdges;
 
     DXFBoundaryPathData();
-    ~DXFBoundaryPathData();
 
     bool EvaluateGroup( DXFGroupReader & rDGR );
 };

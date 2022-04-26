@@ -565,10 +565,6 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
 {
 }
 
-DXFBoundaryPathData::~DXFBoundaryPathData()
-{
-}
-
 bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
 {
     bool bExecutingGroupCode = true;
