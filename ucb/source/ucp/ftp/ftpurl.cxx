@@ -30,6 +30,7 @@
 #include <com/sun/star/ucb/OpenMode.hpp>
 #include <string.h>
 #include <rtl/uri.hxx>
+#include <o3tl/safeint.hxx>
 
 #include "ftpurl.hxx"
 #include "ftpcontentprovider.hxx"
@@ -458,8 +459,8 @@ std::vector<FTPDirentry> FTPURL::list(
     OUString viewurl(ident(true,false));
 
     while(true) {
-        while(p2-fwd < int(len) && *p2 != '\n') ++p2;
-        if(p2-fwd == int(len)) break;
+        while(o3tl::make_unsigned(p2-fwd) < len && *p2 != '\n') ++p2;
+        if(o3tl::make_unsigned(p2-fwd) == len) break;
 
         *p2 = 0;
         switch(osKind) {
