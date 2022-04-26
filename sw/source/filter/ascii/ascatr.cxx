@@ -250,7 +250,7 @@ static Writer& OutASC_SwTextNode( Writer& rWrt, SwContentNode& rNode )
     if( bLastNd )
         nEnd = rWrt.m_pCurrentPam->GetMark()->nContent.GetIndex();
 
-    bool bIsOneParagraph = rWrt.m_pOrigPam->Start()->nNode == rWrt.m_pOrigPam->End()->nNode;
+    bool bIsOneParagraph = rWrt.m_pOrigPam->Start()->nNode == rWrt.m_pOrigPam->End()->nNode && !getenv("SW_ASCII_COPY_NUMBERING");
 
     SwASC_AttrIter aAttrIter( static_cast<SwASCWriter&>(rWrt), rNd, nStrPos );
     SwASC_RedlineIter redlineIter(static_cast<SwASCWriter&>(rWrt), rNd);
