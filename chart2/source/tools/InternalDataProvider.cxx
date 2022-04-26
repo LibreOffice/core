@@ -887,7 +887,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
 
     if( aRange.match( lcl_aLabelRangePrefix ) )
     {
-        auto nIndex = aRange.copy( strlen(lcl_aLabelRangePrefix)).toUInt32();
+        auto nIndex = o3tl::toUInt32(aRange.subView( strlen(lcl_aLabelRangePrefix)));
         vector< uno::Any > aComplexLabel = m_bDataInColumns
             ? m_aInternalData.getComplexColumnLabel( nIndex )
             : m_aInternalData.getComplexRowLabel( nIndex );
@@ -896,7 +896,7 @@ Sequence< uno::Any > SAL_CALL InternalDataProvider::getDataByRangeRepresentation
     }
     else if( aRange.match( lcl_aCategoriesPointRangeNamePrefix ) )
     {
-        auto nPointIndex = aRange.copy( strlen(lcl_aCategoriesPointRangeNamePrefix) ).toUInt32();
+        auto nPointIndex = o3tl::toUInt32(aRange.subView( strlen(lcl_aCategoriesPointRangeNamePrefix) ));
         vector< uno::Any > aComplexCategory = m_bDataInColumns
             ? m_aInternalData.getComplexRowLabel( nPointIndex )
             : m_aInternalData.getComplexColumnLabel( nPointIndex );

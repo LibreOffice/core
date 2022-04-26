@@ -3471,7 +3471,7 @@ bool DocxAttributeOutput::StartURL( const OUString& rUrl, const OUString& rTarge
                     // Extract <seqname>, the field instruction text has the name quoted.
                     OUString aSequenceName = sMark.copy(0, nPos);
                     // Extract <index>.
-                    sal_uInt32 nIndex = sMark.copy(nPos + 1, sMark.getLength() - nPos - sizeof("|sequence")).toUInt32();
+                    sal_uInt32 nIndex = o3tl::toUInt32(sMark.subView(nPos + 1, sMark.getLength() - nPos - sizeof("|sequence")));
                     std::map<OUString, std::vector<OString> >::iterator it = m_aSeqBookmarksNames.find(aSequenceName);
                     if (it != m_aSeqBookmarksNames.end())
                     {

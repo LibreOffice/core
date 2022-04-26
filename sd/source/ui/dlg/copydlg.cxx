@@ -169,8 +169,8 @@ void CopyDlg::Reset()
         m_xMtrFldAngle->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
         m_xMtrFldWidth->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
         m_xMtrFldHeight->set_value(o3tl::toInt64(o3tl::getToken(aStr, 0, TOKEN, nIdx)), FieldUnit::NONE);
-        m_xLbStartColor->SelectEntry( Color( ColorTransparency, aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
-        m_xLbEndColor->SelectEntry( Color( ColorTransparency, aStr.getToken(0, TOKEN, nIdx).toUInt32() ) );
+        m_xLbStartColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
+        m_xLbEndColor->SelectEntry( Color( ColorTransparency, o3tl::toUInt32(o3tl::getToken(aStr, 0, TOKEN, nIdx)) ) );
     }
 
 }

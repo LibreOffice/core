@@ -112,7 +112,7 @@ private:
     static void Execute( const CommandInfo &rCmdInfo,
                   const css::uno::Sequence< css::beans::PropertyValue > &rArguments );
 
-    void MenuSelectHdl(const OString& rIdent);
+    void MenuSelectHdl(std::string_view rIdent);
     void BackgroundMenuSelectHdl(sal_uInt16 nId);
 public:
     GalleryThemePopup(weld::Widget* pParent,
@@ -286,12 +286,12 @@ void GalleryThemePopup::ExecutePopup(weld::Widget* pParent, const ::Point &rPos)
     MenuSelectHdl(mxPopupMenu->popup_at_rect(pParent, tools::Rectangle(rPos, Size(1,1))));
 }
 
-void GalleryThemePopup::MenuSelectHdl(const OString& rIdent)
+void GalleryThemePopup::MenuSelectHdl(std::string_view rIdent)
 {
-    if (rIdent.isEmpty())
+    if (rIdent.empty())
         return;
 
-    sal_uInt16 nSubMenuId = rIdent.toUInt32();
+    sal_uInt16 nSubMenuId = o3tl::toUInt32(rIdent);
     if (nSubMenuId)
     {
         BackgroundMenuSelectHdl(nSubMenuId-1);

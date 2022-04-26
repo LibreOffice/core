@@ -18,6 +18,7 @@
 
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/character.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/string.hxx>
@@ -114,7 +115,7 @@ sal_uInt32 PDFDocument::GetNextSignature()
         if (!rValue.startsWith(aPrefix))
             continue;
 
-        nRet = std::max(nRet, rValue.copy(aPrefix.getLength()).toUInt32());
+        nRet = std::max(nRet, o3tl::toUInt32(rValue.subView(aPrefix.getLength())));
     }
 
     return nRet + 1;

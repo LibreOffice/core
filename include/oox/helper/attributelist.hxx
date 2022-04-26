@@ -69,7 +69,7 @@ public:
     static sal_Int64    decodeHyper( std::u16string_view rValue );
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
-    static sal_Int32    decodeIntegerHex( const OUString& rValue );
+    static sal_Int32    decodeIntegerHex( std::u16string_view rValue );
 };
 
 

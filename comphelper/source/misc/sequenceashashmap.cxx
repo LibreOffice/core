@@ -80,7 +80,7 @@ uno::Any jsonToUnoAny(const boost::property_tree::ptree& aTree)
             else if (aTypeClass == uno::TypeClass_SHORT)
                 aAny <<= static_cast<sal_Int16>(o3tl::toInt32(rValue));
             else if (aTypeClass == uno::TypeClass_UNSIGNED_SHORT)
-                aAny <<= static_cast<sal_uInt16>(OString(rValue.c_str()).toUInt32());
+                aAny <<= static_cast<sal_uInt16>(o3tl::toUInt32(rValue));
             else if (aTypeClass == uno::TypeClass_LONG)
                 aAny <<= o3tl::toInt32(rValue);
             else if (aTypeClass == uno::TypeClass_UNSIGNED_LONG)
@@ -331,7 +331,7 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         else if (rType == "short")
             aValue.Value <<= sal_Int16(o3tl::toInt32(rValue));
         else if (rType == "unsigned short")
-            aValue.Value <<= sal_uInt16(OString(rValue.c_str()).toUInt32());
+            aValue.Value <<= sal_uInt16(o3tl::toUInt32(rValue));
         else if (rType == "int64")
             aValue.Value <<= o3tl::toInt64(rValue);
         else if (rType == "int32")
@@ -341,9 +341,9 @@ std::vector<css::beans::PropertyValue> JsonToPropertyValues(const OString& rJson
         else if (rType == "uint64")
             aValue.Value <<= OString(rValue.c_str()).toUInt64();
         else if (rType == "uint32")
-            aValue.Value <<= OString(rValue.c_str()).toUInt32();
+            aValue.Value <<= o3tl::toUInt32(rValue);
         else if (rType == "uint16")
-            aValue.Value <<= sal_uInt16(OString(rValue.c_str()).toUInt32());
+            aValue.Value <<= sal_uInt16(o3tl::toUInt32(rValue));
         else if (rType == "[]byte")
         {
             aNodeValue = rPair.second.get_child("value", aNodeNull);

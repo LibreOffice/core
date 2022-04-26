@@ -791,7 +791,7 @@ EnhancedCustomShape2d::EnhancedCustomShape2d(SdrObjCustomShape& rSdrObjCustomSha
             }
             else if (sShapeType.getLength() > 4 && sShapeType.match( "col-" ))
             {
-                nColorData = sShapeType.copy( 4 ).toUInt32( 16 );
+                nColorData = o3tl::toUInt32(sShapeType.subView( 4 ), 16);
             }
         }
         break;

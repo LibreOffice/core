@@ -45,6 +45,7 @@
 #include <oox/vml/vmlshape.hxx>
 #include <oox/vml/vmlshapecontainer.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <formulaparser.hxx>
 #include <stylesbuffer.hxx>
 #include <themebuffer.hxx>
@@ -703,14 +704,14 @@ sal_uInt32 VmlDrawing::convertControlTextColor( const OUString& rTextColor ) con
     {
         // RGB colors in the format '#RRGGBB'
         if( rTextColor.getLength() == 7 )
-            return OleHelper::encodeOleColor( rTextColor.copy( 1 ).toUInt32( 16 ) );
+            return OleHelper::encodeOleColor( o3tl::toUInt32(rTextColor.subView( 1 ), 16) );
 
         // RGB colors in the format '#RGB'
         if( rTextColor.getLength() == 4 )
         {
-            sal_Int32 nR = rTextColor.copy( 1, 1 ).toUInt32( 16 ) * 0x11;
-            sal_Int32 nG = rTextColor.copy( 2, 1 ).toUInt32( 16 ) * 0x11;
-            sal_Int32 nB = rTextColor.copy( 3, 1 ).toUInt32( 16 ) * 0x11;
+            sal_Int32 nR = o3tl::toUInt32(rTextColor.subView( 1, 1 ), 16) * 0x11;
+            sal_Int32 nG = o3tl::toUInt32(rTextColor.subView( 2, 1 ), 16) * 0x11;
+            sal_Int32 nB = o3tl::toUInt32(rTextColor.subView( 3, 1 ), 16) * 0x11;
             return OleHelper::encodeOleColor( (nR << 16) | (nG << 8) | nB );
         }
 

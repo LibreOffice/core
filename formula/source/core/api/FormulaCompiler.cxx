@@ -23,6 +23,7 @@
 #include <formula/errorcodes.hxx>
 #include <formula/token.hxx>
 #include <formula/tokenarray.hxx>
+#include <o3tl/string_view.hxx>
 #include <core_resource.hxx>
 #include <core_resource.hrc>
 
@@ -1234,7 +1235,7 @@ FormulaError FormulaCompiler::GetErrorConstant( const OUString& rName ) const
         // digits.
         if (rName.startsWithIgnoreAsciiCase("#ERR") && rName.getLength() <= 10 && rName[rName.getLength()-1] == '!')
         {
-            sal_uInt32 nErr = rName.copy( 4, rName.getLength() - 5).toUInt32();
+            sal_uInt32 nErr = o3tl::toUInt32(rName.subView( 4, rName.getLength() - 5));
             if (0 < nErr && nErr <= SAL_MAX_UINT16 && isPublishedFormulaError(static_cast<FormulaError>(nErr)))
                 nError = static_cast<FormulaError>(nErr);
         }
