@@ -16,6 +16,24 @@
       "message": "I\u0027m never sure what the right annotation syntax is, and always fail to find authoritative documentation.",
       "revId": "e6ef3d299c79ddbcf5b57e6d18c61d6bc9393e14",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88ba0b13_88b27dfe",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-26T08:38:23Z",
+      "side": 1,
+      "message": "that should do it",
+      "parentUuid": "3ee4b33f_ad6d664e",
+      "revId": "e6ef3d299c79ddbcf5b57e6d18c61d6bc9393e14",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
