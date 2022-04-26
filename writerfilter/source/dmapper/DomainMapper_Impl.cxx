@@ -6802,7 +6802,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_SYMBOL:
                 {
                     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
-                    OUString sSymbol( sal_Unicode( sFirstParam.startsWithIgnoreAsciiCase("0x") ?  sFirstParam.copy(2).toUInt32(16) : sFirstParam.toUInt32() ) );
+                    OUString sSymbol( sal_Unicode( sFirstParam.startsWithIgnoreAsciiCase("0x") ?  o3tl::toUInt32(sFirstParam.subView(2),16) : sFirstParam.toUInt32() ) );
                     OUString sFont;
                     bool bHasFont = lcl_FindInCommand( pContext->GetCommand(), 'f', sFont);
                     if ( bHasFont )

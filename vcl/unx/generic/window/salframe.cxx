@@ -52,6 +52,7 @@
 
 #include <sal/macros.h>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/uno/Exception.hpp>
 
 #include <svdata.hxx>
@@ -2916,8 +2917,8 @@ bool X11SalFrame::endUnicodeSequence()
     if( rSeq.getLength() > 1 && rSeq.getLength() < 6 )
     {
         // cut the "u"
-        OUString aNumbers( rSeq.copy( 1 ) );
-        sal_uInt32 nValue = aNumbers.toUInt32( 16 );
+        std::u16string_view aNumbers( rSeq.subView( 1 ) );
+        sal_uInt32 nValue = o3tl::toUInt32(aNumbers, 16);
         if( nValue >= 32 )
         {
             ExtTextInputAttr nTextAttr = ExtTextInputAttr::Underline;

@@ -59,6 +59,7 @@
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 
@@ -890,8 +891,8 @@ sal_uInt32 AnimationExporter::GetPresetID( const OUString& rPreset, sal_uInt32 n
         sal_Int32 nLast = rPreset.lastIndexOf( '_' );
         if ( ( nLast != -1 ) && ( ( nLast + 1 ) < rPreset.getLength() ) )
         {
-            OUString aNumber( rPreset.copy( nLast + 1 ) );
-            nPresetId = aNumber.toUInt32();
+            std::u16string_view aNumber( rPreset.subView( nLast + 1 ) );
+            nPresetId = o3tl::toUInt32(aNumber);
             bPresetId = true;
         }
     }

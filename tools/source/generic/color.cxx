@@ -27,6 +27,7 @@
 #include <tools/color.hxx>
 #include <tools/helpers.hxx>
 #include <tools/long.hxx>
+#include <o3tl/string_view.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
 void Color::IncreaseLuminance(sal_uInt8 cLumInc)
@@ -165,7 +166,7 @@ Color Color::STRtoRGB(const OUString& colorname)
 
     switch(colorname.getLength()){
         case 7:
-            col.mValue = colorname.copy(1,6).toUInt32(16);
+            col.mValue = o3tl::toUInt32(colorname.subView(1,6), 16);
             break;
         case 6:
             col.mValue = colorname.toUInt32(16);

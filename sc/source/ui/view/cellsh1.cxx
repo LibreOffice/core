@@ -94,6 +94,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/bootstrap.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <memory>
 
@@ -149,7 +150,7 @@ OUString FlagsToString( InsertDeleteFlags nFlags,
     return aFlagsStr;
 }
 
-void SetTabNoAndCursor( const ScViewData& rViewData, const OUString& rCellId )
+void SetTabNoAndCursor( const ScViewData& rViewData, std::u16string_view rCellId )
 {
     ScTabViewShell* pTabViewShell = rViewData.GetViewShell();
     assert(pTabViewShell);
@@ -157,7 +158,7 @@ void SetTabNoAndCursor( const ScViewData& rViewData, const OUString& rCellId )
     std::vector<sc::NoteEntry> aNotes;
     rDoc.GetAllNoteEntries(aNotes);
 
-    sal_uInt32 nId = rCellId.toUInt32();
+    sal_uInt32 nId = o3tl::toUInt32(rCellId);
     auto lComp = [nId](const sc::NoteEntry& rNote) { return rNote.mpNote->GetId() == nId; };
 
     const auto& aFoundNoteIt = std::find_if(aNotes.begin(), aNotes.end(), lComp);

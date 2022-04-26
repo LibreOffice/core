@@ -18,6 +18,7 @@
 #include <comphelper/lok.hxx>
 #include <i18nutil/unicode.hxx>
 #include <jsdialog/enabled.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
@@ -3387,7 +3388,7 @@ namespace
             return vcl::KeyCode(KEY_MULTIPLY, bShift, bMod1, bMod2, bMod3);
         else if (rKey.first.getLength() > 1 && rKey.first[0] == 'F')
         {
-            sal_uInt32 nIndex = rKey.first.copy(1).toUInt32();
+            sal_uInt32 nIndex = o3tl::toUInt32(rKey.first.subView(1));
             assert(nIndex >= 1 && nIndex <= 26);
             return vcl::KeyCode(KEY_F1 + nIndex - 1, bShift, bMod1, bMod2, bMod3);
         }
