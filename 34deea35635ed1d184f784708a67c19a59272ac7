@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eb42a7c6_b88ff642",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-26T15:45:04Z",
+      "side": 1,
+      "message": "@Tünde: many thanks for the detailed commit description and for the fix!",
+      "revId": "34deea35635ed1d184f784708a67c19a59272ac7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
