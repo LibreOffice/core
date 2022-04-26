@@ -67,15 +67,6 @@ public:
     }
 
 protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
-
-protected:
     /// Copy&paste helper.
     bool paste(std::u16string_view rFilename, const uno::Reference<text::XTextRange>& xTextRange)
     {
@@ -283,7 +274,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo70457, "fdo70457.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4500), getProperty<sal_Int32>(getShape(1), "RotateAngle"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testLOCrash,"file_crash.docx")
+DECLARE_OOXMLEXPORT_TEST(testLOCrash, "file_crash.docx")
 {
     //The problem was libreoffice crash while opening the file.
     getParagraph(1,"Contents");
@@ -564,7 +555,7 @@ DECLARE_OOXMLEXPORT_TEST(testLargeTwips, "large-twips.docx" )
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twips.docx" )
+DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twips.docx")
 {
     // Slightly related to cp#1000043, the twips value was negative, which wrapped around somewhere,
     // while MSO seems to ignore that as well.
@@ -572,7 +563,7 @@ DECLARE_OOXMLEXPORT_TEST(testNegativeCellMarginTwips, "negative-cell-margin-twip
     CPPUNIT_ASSERT( width.toInt32() > 0 );
 }
 
-DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx" )
+DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx")
 {
     // The cells in the last (4th) column were merged properly and so the result didn't have the same height.
     // (Since w:gridBefore is worked around by faking another cell in the row, so column count is thus 5
@@ -587,7 +578,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38414, "fdo38414.docx" )
     CPPUNIT_ASSERT_EQUAL( height3, height4 );
 }
 
-DECLARE_OOXMLEXPORT_TEST(test_extra_image, "test_extra_image.docx" )
+DECLARE_OOXMLEXPORT_TEST(test_extra_image, "test_extra_image.docx")
 {
     // fdo#74652 Check there is no shape added to the doc during import
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
@@ -787,8 +778,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo80555, "fdo80555.docx")
     CPPUNIT_ASSERT_EQUAL(sal_Int32(247), xShape->getPosition().Y);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf104418, "tdf104418.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf104418)
 {
+    loadAndReload("tdf104418.odt");
     // Problem was that <w:hideMark> cell property was ignored.
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables( ), uno::UNO_QUERY);
@@ -880,8 +872,9 @@ DECLARE_OOXMLEXPORT_TEST(testFdo85542, "fdo85542.docx")
     CPPUNIT_ASSERT_EQUAL(OUString("AB"), xNeighborhoodCursor->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf65955)
 {
+    loadAndReload("tdf65955.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
@@ -899,8 +892,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf65955, "tdf65955.odt")
     CPPUNIT_ASSERT_EQUAL(OUString("r"), xRange2->getString());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf65955_2, "tdf65955_2.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf65955_2)
 {
+    loadAndReload("tdf65955_2.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
@@ -1220,8 +1214,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf99140, "tdf99140.docx")
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::LEFT_AND_WIDTH, getProperty<sal_Int16>(xTableProperties, "HoriOrient"));
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTableMarginAdjustment, "table.fodt")
+CPPUNIT_TEST_FIXTURE(Test, testTableMarginAdjustment)
 {
+    loadAndReload("table.fodt");
     // Writer, (new) Word: margin 0 means table border starts at 0
     // (old) Word: margin 0 means paragraph in table starts at 0
 
@@ -1301,8 +1296,9 @@ DECLARE_OOXMLEXPORT_TEST( testTableCellMargin, "table-cell-margin.docx" )
     }
 }
 
-DECLARE_OOXMLEXPORT_TEST(TestPuzzleExport, "TestPuzzleExport.odt")
+CPPUNIT_TEST_FIXTURE(Test, TestPuzzleExport)
 {
+    loadAndReload("TestPuzzleExport.odt");
     // See tdf#148342 for details
     // Get the doc
     uno::Reference< text::XTextDocument > xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
@@ -1332,7 +1328,7 @@ DECLARE_OOXMLEXPORT_TEST(TestPuzzleExport, "TestPuzzleExport.odt")
 }
 
 // tdf#106742 for DOCX with compatibility level <= 14 (MS Word up to and incl. ver.2010), we should use cell margins when calculating table left border position
-DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx" )
+DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx")
 {
     sal_Int32 const aXCoordsFromOffice[] = { 2500, -1000, 0, 0 };
 
