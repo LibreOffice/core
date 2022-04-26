@@ -16,6 +16,24 @@
       "message": "Hi Xisco, may I have your opinion about this change? Personally, I would not create a follow-up but just put it into the patch. \n\nThank you for the patch Laurent! I would just insert it into an existing file: https://opengrok.libreoffice.org/xref/core/sc/qa/uitest/calc_tests6/moveCopySheet.py?r\u003d8b71bc7e",
       "revId": "5f7293cc6a69161f0fb5a33597edd372b586d7fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f94362e_036654ba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-26T07:58:53Z",
+      "side": 1,
+      "message": "Yes, better to have them together. On the other hand, I think the test can go in sc/qa/uitest/calc_tests6/moveCopySheet.py, so no need to create a new make file",
+      "parentUuid": "500bf1eb_43b7bb5f",
+      "revId": "5f7293cc6a69161f0fb5a33597edd372b586d7fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
