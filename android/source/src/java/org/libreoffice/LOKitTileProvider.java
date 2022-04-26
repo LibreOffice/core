@@ -120,25 +120,9 @@ class LOKitTileProvider implements TileProvider {
     private void postLoad() {
         mDocument.setMessageCallback(mMessageCallback);
 
-        int parts = mDocument.getParts();
-        Log.i(LOGTAG, "Document parts: " + parts);
-        mContext.getDocumentPartView().clear();
-
+        resetParts();
         // Writer documents always have one part, so hide the navigation drawer.
-        if (mDocument.getDocumentType() != Document.DOCTYPE_TEXT) {
-            for (int i = 0; i < parts; i++) {
-                String partName = mDocument.getPartName(i);
-                if (partName.isEmpty()) {
-                    partName = getGenericPartName(i);
-                }
-                Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
-
-                mDocument.setPart(i);
-                resetDocumentSize();
-                final DocumentPartView partView = new DocumentPartView(i, partName);
-                mContext.getDocumentPartView().add(partView);
-            }
-        } else {
+        if (mDocument.getDocumentType() == Document.DOCTYPE_TEXT) {
             mContext.disableNavigationDrawer();
             mContext.getToolbarController().hideItem(R.id.action_parts);
         }
