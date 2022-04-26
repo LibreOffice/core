@@ -645,7 +645,7 @@ DXFHatchEntity::DXFHatchEntity() :
     nCurrentBoundaryPathIndex( -1 ),
     nFlags( 0 ),
     nAssociativityFlag( 0 ),
-    nBoundaryPathCount( 0 ),
+    nMaxBoundaryPathCount( 0 ),
     nHatchStyle( 0 ),
     nHatchPatternType( 0 ),
     fHatchPatternAngle( 0.0 ),
@@ -669,12 +669,12 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 91 :
         {
             bIsInBoundaryPathContext = true;
-            nBoundaryPathCount = rDGR.GetI();
+            nMaxBoundaryPathCount = rDGR.GetI();
             // limit alloc to max reasonable size based on remaining data in stream
-            if (nBoundaryPathCount > 0 && o3tl::make_unsigned(nBoundaryPathCount) <= rDGR.remainingSize())
-                aBoundaryPathData.resize(nBoundaryPathCount);
+            if (nMaxBoundaryPathCount > 0 && o3tl::make_unsigned(nMaxBoundaryPathCount) > rDGR.remainingSize())
+                aBoundaryPathData.reserve(nMaxBoundaryPathCount);
             else
-                nBoundaryPathCount = 0;
+                nMaxBoundaryPathCount = 0;
         }
         break;
         case 75 :
@@ -699,9 +699,11 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
             bool bExecutingGroupCode = false;
             if ( bIsInBoundaryPathContext )
             {
-                if ( ( nCurrentBoundaryPathIndex >= 0 ) &&
-                    ( nCurrentBoundaryPathIndex < nBoundaryPathCount ) )
-                    bExecutingGroupCode = aBoundaryPathData[ nCurrentBoundaryPathIndex ].EvaluateGroup( rDGR );
+                if (nCurrentBoundaryPathIndex >= 0 && nCurrentBoundaryPathIndex < nMaxBoundaryPathCount)
+                {
+                    aBoundaryPathData.resize(nCurrentBoundaryPathIndex + 1);
+                    bExecutingGroupCode = aBoundaryPathData.back().EvaluateGroup(rDGR);
+                }
             }
             if ( !bExecutingGroupCode )
                 DXFBasicEntity::EvaluateGroup(rDGR);
