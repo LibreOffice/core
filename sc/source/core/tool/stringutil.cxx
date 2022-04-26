@@ -191,9 +191,8 @@ bool ScStringUtil::parseSimpleNumber(
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;
-    OUString aString( aBuf.makeStringAndClear());
-    rVal = ::rtl::math::stringToDouble( aString, dsep, gsep, &eStatus, &nParseEnd);
-    if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aString.getLength())
+    rVal = ::rtl::math::stringToDouble( aBuf, dsep, gsep, &eStatus, &nParseEnd);
+    if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aBuf.getLength())
         // Not a valid number or not entire string consumed.
         return false;
 
@@ -337,9 +336,8 @@ bool ScStringUtil::parseSimpleNumber(
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
     sal_Int32 nParseEnd = 0;
-    OString aString( aBuf.makeStringAndClear());
-    rVal = ::rtl::math::stringToDouble( aString, dsep, gsep, &eStatus, &nParseEnd);
-    if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aString.getLength())
+    rVal = ::rtl::math::stringToDouble( aBuf, dsep, gsep, &eStatus, &nParseEnd);
+    if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aBuf.getLength())
         // Not a valid number or not entire string consumed.
         return false;
 

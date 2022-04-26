@@ -110,7 +110,7 @@ namespace basegfx::internal
             if(sNumberString.getLength())
             {
                 rtl_math_ConversionStatus eStatus;
-                o_fRetval = ::rtl::math::stringToDouble( sNumberString.makeStringAndClear(),
+                o_fRetval = ::rtl::math::stringToDouble( sNumberString,
                                                             '.',
                                                             ',',
                                                             &eStatus );

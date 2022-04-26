@@ -252,7 +252,7 @@ public:
         rtl::math::stringToDouble() does. The caller is responsible for proper
         error checking and end comparison.
 
-        @param  rString
+        @param  aString
                 The string to parse as floating point number.
         @param  bUseGroupSep
                 Whether group separator is used/accepted during parsing.
@@ -264,7 +264,7 @@ public:
                 rtl::math::stringToDouble().
         @return The floating point number as parsed.
      */
-    double              stringToDouble( const OUString& rString, bool bUseGroupSep,
+    double              stringToDouble( std::u16string_view aString, bool bUseGroupSep,
                                         rtl_math_ConversionStatus* pStatus, sal_Int32* pParseEnd ) const;
 
     /** A wrapper around rtl_math_uStringToDouble() using the locale dependent

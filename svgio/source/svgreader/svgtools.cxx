@@ -273,7 +273,7 @@ namespace svgio::svgreader
                     rtl_math_ConversionStatus eStatus;
 
                     fNum = rtl::math::stringToDouble(
-                        aNum.makeStringAndClear(), '.', ',',
+                        aNum, '.', ',',
                         &eStatus);
 
                     return eStatus == rtl_math_ConversionStatus_Ok;

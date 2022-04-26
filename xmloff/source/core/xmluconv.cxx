@@ -539,7 +539,7 @@ bool SvXMLTokenEnumerator::getNextToken( std::u16string_view& rToken )
     return true;
 }
 
-static bool lcl_getPositions(std::u16string_view _sValue, OUString& _rContentX, OUString& _rContentY, OUString& _rContentZ)
+static bool lcl_getPositions(std::u16string_view _sValue, std::u16string_view& _rContentX, std::u16string_view& _rContentY, std::u16string_view& _rContentZ)
 {
     if(_sValue.empty() || _sValue[0] != '(')
         return false;
@@ -570,7 +570,7 @@ static bool lcl_getPositions(std::u16string_view _sValue, OUString& _rContentX, 
     return true;
 }
 
-static bool lcl_getPositions(std::string_view _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
+static bool lcl_getPositions(std::string_view _sValue, std::u16string_view& _rContentX, std::u16string_view& _rContentY, std::u16string_view& _rContentZ)
 {
     if(_sValue.empty() || _sValue[0] != '(')
         return false;
@@ -605,7 +605,7 @@ static bool lcl_getPositions(std::string_view _sValue,OUString& _rContentX,OUStr
 /** convert string to ::basegfx::B3DVector */
 bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, std::u16string_view rValue )
 {
-    OUString aContentX,aContentY,aContentZ;
+    std::u16string_view aContentX,aContentY,aContentZ;
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
         return false;
 
@@ -633,7 +633,7 @@ bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, std::u
 /** convert string to ::basegfx::B3DVector */
 bool SvXMLUnitConverter::convertB3DVector( ::basegfx::B3DVector& rVector, std::string_view rValue )
 {
-    OUString aContentX,aContentY,aContentZ;
+    std::u16string_view aContentX,aContentY,aContentZ;
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
         return false;
 
@@ -674,7 +674,7 @@ void SvXMLUnitConverter::convertB3DVector( OUStringBuffer &rBuffer, const ::base
 bool SvXMLUnitConverter::convertPosition3D( drawing::Position3D& rPosition,
     std::string_view rValue ) const
 {
-    OUString aContentX,aContentY,aContentZ;
+    std::u16string_view aContentX,aContentY,aContentZ;
     if ( !lcl_getPositions(rValue,aContentX,aContentY,aContentZ) )
         return false;
 

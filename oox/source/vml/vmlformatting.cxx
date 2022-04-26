@@ -65,11 +65,11 @@ using ::com::sun::star::drawing::PolygonFlags_CONTROL;
 
 namespace {
 
-bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, const OUString& rValue )
+bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, std::u16string_view aValue )
 {
     // extract the double value and find start position of unit characters
     rtl_math_ConversionStatus eConvStatus = rtl_math_ConversionStatus_Ok;
-    orfValue = ::rtl::math::stringToDouble( rValue, '.', '\0', &eConvStatus, &ornEndPos );
+    orfValue = ::rtl::math::stringToDouble( aValue, '.', '\0', &eConvStatus, &ornEndPos );
     return eConvStatus == rtl_math_ConversionStatus_Ok;
 }
 

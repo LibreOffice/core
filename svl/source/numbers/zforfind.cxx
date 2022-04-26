@@ -4057,7 +4057,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 }
                 sResString.append(sStrArray[nNums[nNumericsCnt-1]]);
                 rtl_math_ConversionStatus eStatus;
-                fOutNumber = ::rtl::math::stringToDouble( sResString.makeStringAndClear(), '.', ',', &eStatus );
+                fOutNumber = ::rtl::math::stringToDouble( sResString, '.', ',', &eStatus );
                 if ( eStatus == rtl_math_ConversionStatus_OutOfRange )
                 {
                     F_Type = SvNumFormatType::TEXT;         // overflow/underflow -> Text

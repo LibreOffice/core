@@ -101,7 +101,7 @@ SwSortElement::~SwSortElement()
 {
 }
 
-double SwSortElement::StrToDouble( const OUString& rStr )
+double SwSortElement::StrToDouble( std::u16string_view rStr )
 {
     if( !pLclData )
         pLclData = new LocaleDataWrapper( LanguageTag( *pLocale ));

@@ -172,11 +172,10 @@ ErrCode ImpScan( const OUString& rWSrc, double& nVal, SbxDataType& rType,
         if( decsep > 1 || exp > 1 )
             bRes = false;
 
-        OUString aBufStr( aBuf.makeStringAndClear());
         rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
         sal_Int32 nParseEnd = 0;
-        nVal = rtl::math::stringToDouble( aBufStr, cIntntlDecSep, cIntntlGrpSep, &eStatus, &nParseEnd );
-        if( eStatus != rtl_math_ConversionStatus_Ok || nParseEnd != aBufStr.getLength() )
+        nVal = rtl::math::stringToDouble( aBuf, cIntntlDecSep, cIntntlGrpSep, &eStatus, &nParseEnd );
+        if( eStatus != rtl_math_ConversionStatus_Ok || nParseEnd != aBuf.getLength() )
             bRes = false;
 
         if( !decsep && !exp )
