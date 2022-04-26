@@ -16,6 +16,23 @@
       "message": "@Tünde: many thanks for the detailed commit description and for the fix!",
       "revId": "34deea35635ed1d184f784708a67c19a59272ac7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c417ef4d_91ccbf88",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-26T16:07:36Z",
+      "side": 1,
+      "message": "@Tünde: also many thanks for the sc and sc unit tests!",
+      "revId": "34deea35635ed1d184f784708a67c19a59272ac7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
