@@ -301,6 +301,7 @@ public:
     void            SetSumAssignMode();
     void            EnableButtons( bool bEnable );
 
+    void            StartFormula();
     void            SetFormulaMode( bool bSet );
 
     bool            IsInputActive();
