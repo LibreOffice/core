@@ -5815,16 +5815,39 @@ void GtkSalFrame::startDrag(const css::datatransfer::dnd::DragGestureEvent& rEve
     aFakeEvent.type = GDK_BUTTON_PRESS;
     aFakeEvent.button.window = widget_get_surface(getMouseEventWidget());
     aFakeEvent.button.time = GDK_CURRENT_TIME;
-    GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
-    aFakeEvent.button.device = gdk_device_manager_get_client_pointer(pDeviceManager);
 
-    GdkDragContext *pDrag = gtk_drag_begin_with_coordinates(getMouseEventWidget(),
-                                                            pTargetList,
-                                                            sourceActions,
-                                                            nDragButton,
-                                                            &aFakeEvent,
-                                                            rEvent.DragOriginX,
-                                                            rEvent.DragOriginY);
+    aFakeEvent.button.device = gtk_get_current_event_device();
+    // if no current event to determine device, or (tdf#140272) the device will be unsuitable then find an
+    // appropiate device to use.
+    if (!aFakeEvent.button.device || !gdk_device_get_window_at_position(aFakeEvent.button.device, nullptr, nullptr))
+    {
+        GdkDeviceManager* pDeviceManager = gdk_display_get_device_manager(getGdkDisplay());
+        GList* pDevices = gdk_device_manager_list_devices(pDeviceManager, GDK_DEVICE_TYPE_MASTER);
+        for (GList* pEntry = pDevices; pEntry; pEntry = pEntry->next)
+        {
+            GdkDevice* pDevice = static_cast<GdkDevice*>(pEntry->data);
+            if (gdk_device_get_source(pDevice) == GDK_SOURCE_KEYBOARD)
+                continue;
+            if (gdk_device_get_window_at_position(pDevice, nullptr, nullptr))
+            {
+                aFakeEvent.button.device = pDevice;
+                break;
+            }
+        }
+        g_list_free(pDevices);
+    }
+
+    GdkDragContext *pDrag;
+    if (!aFakeEvent.button.device || !gdk_device_get_window_at_position(aFakeEvent.button.device, nullptr, nullptr))
+        pDrag = nullptr;
+    else
+        pDrag = gtk_drag_begin_with_coordinates(getMouseEventWidget(),
+                                                pTargetList,
+                                                sourceActions,
+                                                nDragButton,
+                                                &aFakeEvent,
+                                                rEvent.DragOriginX,
+                                                rEvent.DragOriginY);
 
     gtk_target_list_unref(pTargetList);
 
