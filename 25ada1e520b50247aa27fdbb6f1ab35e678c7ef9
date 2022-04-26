@@ -69,6 +69,24 @@
       "message": "Change for change\u0027s sake?  As aActivatorName is always turned into an OUString here (unless it is empty, but which is also cheap to construct for OUString), why have it as a std::u16string_view?",
       "revId": "25ada1e520b50247aa27fdbb6f1ab35e678c7ef9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b728d6bc_670ce5f5",
+        "filename": "cppuhelper/source/factory.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 749,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-04-26T08:59:11Z",
+      "side": 1,
+      "message": "reverted in https://gerrit.libreoffice.org/c/core/+/133430",
+      "parentUuid": "57a52bef_5d27c30a",
+      "revId": "25ada1e520b50247aa27fdbb6f1ab35e678c7ef9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
