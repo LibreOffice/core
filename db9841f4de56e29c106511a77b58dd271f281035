@@ -22,6 +22,30 @@
       },
       "revId": "db9841f4de56e29c106511a77b58dd271f281035",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d29c170d_45852221",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 17673,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-26T13:54:47Z",
+      "side": 0,
+      "message": "This looks ugly. The source of this \u003cattribute\u003e element is the wml.xsd from the OOXML spec:\n\n  \u003cxsd:complexType name\u003d\"CT_SimpleField\"\u003e\n    \u003cxsd:sequence\u003e\n      \u003cxsd:group ref\u003d\"EG_PContent\" minOccurs\u003d\"0\" maxOccurs\u003d\"unbounded\"/\u003e\n    \u003c/xsd:sequence\u003e\n    \u003cxsd:attribute name\u003d\"instr\" type\u003d\"s:ST_String\" use\u003d\"required\"/\u003e\n    \u003cxsd:attribute name\u003d\"fldLock\" type\u003d\"s:ST_OnOff\"/\u003e\n    \u003cxsd:attribute name\u003d\"dirty\" type\u003d\"s:ST_OnOff\"/\u003e\n  \u003c/xsd:complexType\u003e\n\nIf you could find a way to keep the model.xml continue to match the spec and rather adapt the dmapper, that would be great. Thanks.",
+      "parentUuid": "0a60a045_74e0be55",
+      "range": {
+        "startLine": 17673,
+        "startChar": 41,
+        "endLine": 17673,
+        "endChar": 69
+      },
+      "revId": "db9841f4de56e29c106511a77b58dd271f281035",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
