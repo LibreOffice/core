@@ -1,0 +1,226 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce168045_4fcba172",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "While that may eliminate some code overhead, it also eliminates the advantages of ScQueryCellIterator (horizontal) or LookupQueryWithCache() (vertical) with lcl_LookupQuery() that again uses ScQueryCellIterator that already do everything that is needed, in the cases of identical behaviour (exact match or sorted range lookup). Also, converting a cell range to matrix takes additional processing time and memory.\n\nProbably similar to ScInterpreter::ScMatch() that also determines the offset of a search, and then use that offset for further processing. Maybe the arguments obtaining and match code of ScMatch() could be factored out to be used by both, ScMatch and ScXLookup(), after ScXLookup() has evaluated the additional parameters. Just an idea. Also the search modes are identical except having different argument numbers and XLOOKUP() has the additional \"-1 - Perform a reverse search starting at the last item.\"",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "07907523_17dcf815",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "Wildcards and regular expressions are not implemented on matrix searches yet. See also ScInterpreter::CalculateLookup() line 7313 (of the modified sc/source/core/tool/interpr1.cxx file) the comment\n\n  //TODO: enable regex on matrix strings.\n\nThat (specifically if the code of ScMatch() was used) should be implemented in lcl_CompareMatrix2Query().",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4f520b1_939ede05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "If a function can handle non-scalar arguments it needs to be added to ScParameterClassification::pRawData[] in sc/source/core/tool/parclass.cxx see for example the entry for ocVLookup; ocXLookup probably needs ReferenceOrForceArray also for its return parameter (3rd). The enum values are explained in include/formula/paramclass.hxx",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8ded538_c513a365",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "That is the normal behaviour for functions returning an array/matrix. The initial result range is determined automatically. To force to one cell preselect only one cell, e.g. press Shift+Right followed by Shift+Left, or Ctrl+Click the current cell, before entering the formula.",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24b06a33_9bb7db91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "Do you mean Example 5 of https://support.microsoft.com/en-us/office/xlookup-function-b7fd680e-6d10-43e6-84f9-88eae8bf5929 ? I don\u0027t see an ad-hoc reason why such nested use should not work if the inner XLOOKUP() returns the proper column vector of C6:C17 (because \"Qtr1\" is found in C5 of $C5:$G5), then looking up \"Gross Profit\" in $B6:$B17 would yield the 3rd row (B8) and the 3rd value of the column vector should be returned (which is the value of C8).\n\nThe example talking of \"first looks for Gross Profit in column B, then looks for Qtr1 in the top row of the table (range C5:F5)\" may be misleading, reading the formula expression from left to right, but actually the inner XLOOKUP() is executed first looking for \"Qtr1\" in $C5:$G5 (also not in C5:F5).",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cc1c9b6_14d50c95",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "Sorry it took so long until I got back to this..\nPlease see my comments inline.",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "918533d8_c37d31c7",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7567,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "Nitpick: the e... prefix is used with enum variables, the enums themselves are defined like class names, so MatchMode.",
+      "range": {
+        "startLine": 7567,
+        "startChar": 9,
+        "endLine": 7567,
+        "endChar": 19
+      },
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "541c712e_baf36128",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7568,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "This then would be\n\n  MatchMode eMatchMode",
+      "range": {
+        "startLine": 7568,
+        "startChar": 4,
+        "endLine": 7568,
+        "endChar": 24
+      },
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4d4f6a0_5f07d87f",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7573,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "Instead of C-style cast use\n\n  static_cast\u003cMatchMode\u003e(k)",
+      "range": {
+        "startLine": 7573,
+        "startChar": 24,
+        "endLine": 7573,
+        "endChar": 37
+      },
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28caab53_fe89f194",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7585,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "The \"not found\" return value is not necessarily a string. It can be anything. Use a formula::FormulaConstTokenRef to remember it, like\n\n  formula::FormulaConstTokenRef xNotFound;\n  if (nParamCount \u003e\u003d 4)\n      xNotFound \u003d PopToken();\n\nThat then later can be pushed as result with\n\n  if (xNotFound)\n      PushTokenRef(xNotFound);\n  else\n      PushNA();",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddb4efd6_3eba1796",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7715,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "Note that in wildcard mode forcing a string search if the lookup-value is numeric does not make sense. IMHO. Don\u0027t know what Excel does there.",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf2748b2_cea70625",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7732,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-26T19:35:55Z",
+      "side": 1,
+      "message": "Obtaining the CollatorWrapper can be pulled out of the loop and be done only once before.",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
