@@ -1787,9 +1787,9 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount(const uno::Any& aSelection,
     return (nSelectCount > 0) ? nSelectCount : 1;
 }
 
-static sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, const OUString& rPagesStr, sal_Int32 nTotalPages )
+static sal_Int32 lcl_GetRendererNum( sal_Int32 nSelRenderer, std::u16string_view rPagesStr, sal_Int32 nTotalPages )
 {
-    if ( rPagesStr.isEmpty() )
+    if ( rPagesStr.empty() )
         return nSelRenderer;
 
     StringRangeEnumerator aRangeEnum( rPagesStr, 0, nTotalPages-1 );

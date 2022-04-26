@@ -475,20 +475,25 @@ BigInt::BigInt( const BigInt& rBigInt )
         nVal = rBigInt.nVal;
 }
 
-BigInt::BigInt( const OUString& rString )
+BigInt::BigInt( std::u16string_view rString )
     : nLen(0)
 {
     bIsNeg = false;
     nVal   = 0;
 
     bool bNeg = false;
-    const sal_Unicode* p = rString.getStr();
+    auto p = rString.begin();
+    auto pEnd = rString.end();
+    if (p == pEnd)
+        return;
     if ( *p == '-' )
     {
         bNeg = true;
         p++;
     }
-    while( *p >= '0' && *p <= '9' )
+    if (p == pEnd)
+        return;
+    while( p != pEnd && *p >= '0' && *p <= '9' )
     {
         *this *= 10;
         *this += *p - '0';

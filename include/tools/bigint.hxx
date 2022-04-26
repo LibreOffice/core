@@ -76,7 +76,7 @@ public:
     BigInt( sal_uInt32 nVal );
     BigInt( sal_Int64 nVal );
     BigInt( const BigInt& rBigInt );
-    BigInt( const OUString& rString );
+    BigInt( std::u16string_view rString );
 
     operator        sal_Int16() const;
     operator        sal_uInt16() const;
