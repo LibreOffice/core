@@ -33,6 +33,24 @@
       "message": "I never used that IDE integration myself, but the change looks reasonable.\n\nAlso, I assume that we have a license statement for you on file at \u003chttps://wiki.documentfoundation.org/index.php?title\u003dDevelopment/Developers\u0026oldid\u003d496141\u003e \"added Enhua Xu\", even if that is for a different email address (\u003cenhua_2008@163.com\u003e there vs. \u003cxuenhua2008@sina.com\u003e here).\n\nIn any case, thanks for the patch!",
       "revId": "88fd564d0240f26239a1cf3c1a889a9d8a90d728",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67eef913_36b38df4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-26T09:48:43Z",
+      "side": 1,
+      "message": "I have resent the license statement via xuenhua2008@sina.com, thank you.",
+      "parentUuid": "c5833aa9_7e93cd99",
+      "revId": "88fd564d0240f26239a1cf3c1a889a9d8a90d728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
