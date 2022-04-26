@@ -22,6 +22,7 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/drawing/CircleKind.hpp>
 #include <com/sun/star/lang/NoSupportException.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <vcl/svapp.hxx>
 #include <svl/itemprop.hxx>
 #include <o3tl/any.hxx>
@@ -2504,6 +2505,20 @@ bool SvxShape::setPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
         break;
     }
 
+    case SDRATTR_TEXTDIRECTION:
+    {
+        if (auto pTextObj = dynamic_cast<SdrTextObj*>(GetSdrObject()))
+        {
+            css::text::WritingMode nMode;
+            if (rValue >>= nMode)
+            {
+                pTextObj->SetTextWritingMode(nMode);
+                return true;
+            }
+        }
+        break;
+    }
+
     default:
     {
         return false;
@@ -2929,6 +2944,15 @@ bool SvxShape::getPropertyValueImpl( const OUString&, const SfxItemPropertyMapEn
     case OWN_ATTR_HYPERLINK:
     {
         rValue <<= GetSdrObject()->getHyperlink();
+        break;
+    }
+
+    case SDRATTR_TEXTDIRECTION:
+    {
+        if (auto pTextObj = dynamic_cast<const SdrTextObj*>(GetSdrObject()))
+        {
+            rValue <<= pTextObj->GetTextWritingMode();
+        }
         break;
     }
 
@@ -3906,39 +3930,11 @@ void SAL_CALL SvxShapeText::setString( const OUString& aString )
 // override these for special property handling in subcasses. Return true if property is handled
 bool SvxShapeText::setPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, const css::uno::Any& rValue )
 {
-    // HACK-fix #99090#
-    // since SdrTextObj::SetVerticalWriting exchanges
-    // SDRATTR_TEXT_AUTOGROWWIDTH and SDRATTR_TEXT_AUTOGROWHEIGHT,
-    // we have to set the textdirection here
-
-    if( pProperty->nWID == SDRATTR_TEXTDIRECTION )
-    {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetSdrObject() );
-        if( pTextObj )
-        {
-            css::text::WritingMode eMode;
-            if( rValue >>= eMode )
-            {
-                pTextObj->SetVerticalWriting( eMode == css::text::WritingMode_TB_RL );
-            }
-        }
-        return true;
-    }
     return SvxShape::setPropertyValueImpl( rName, pProperty, rValue );
 }
 
 bool SvxShapeText::getPropertyValueImpl( const OUString& rName, const SfxItemPropertyMapEntry* pProperty, css::uno::Any& rValue )
 {
-    if( pProperty->nWID == SDRATTR_TEXTDIRECTION )
-    {
-        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetSdrObject() );
-        if( pTextObj && pTextObj->IsVerticalWriting() )
-            rValue <<= css::text::WritingMode_TB_RL;
-        else
-            rValue <<= css::text::WritingMode_LR_TB;
-        return true;
-    }
-
     return SvxShape::getPropertyValueImpl( rName, pProperty, rValue );
 }
 

@@ -85,6 +85,8 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel)
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
     mbInDownScale = false;
+
+    mnWritingMode = css::text::WritingMode_LR_TB;
 }
 
 SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
@@ -105,6 +107,8 @@ SdrTextObj::SdrTextObj(SdrModel& rSdrModel, SdrTextObj const & rSource)
     mbTextFrame = rSource.mbTextFrame;
     maTextSize = rSource.maTextSize;
     mbTextSizeDirty = rSource.mbTextSizeDirty;
+
+    mnWritingMode = rSource.mnWritingMode;
 
     // Not all of the necessary parameters were copied yet.
     mbNoShear = rSource.mbNoShear;
@@ -157,6 +161,8 @@ SdrTextObj::SdrTextObj(
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
+
+    mnWritingMode = css::text::WritingMode_LR_TB;
 }
 
 SdrTextObj::SdrTextObj(
@@ -178,6 +184,8 @@ SdrTextObj::SdrTextObj(
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
+
+    mnWritingMode = css::text::WritingMode_LR_TB;
 }
 
 SdrTextObj::SdrTextObj(
@@ -202,6 +210,8 @@ SdrTextObj::SdrTextObj(
 
     // #i25616#
     mbSupportTextIndentingOnLineWidthChange = true;
+
+    mnWritingMode = css::text::WritingMode_LR_TB;
 }
 
 SdrTextObj::~SdrTextObj()
@@ -1559,6 +1569,49 @@ bool SdrTextObj::IsTopToBottom() const
         return pOutlinerParaObject->IsTopToBottom();
 
     return false;
+}
+
+const css::text::WritingMode& SdrTextObj::GetTextWritingMode() const
+{
+    return mnWritingMode;
+}
+
+void SdrTextObj::SetTextWritingMode(const css::text::WritingMode& rNew)
+{
+    mnWritingMode = rNew;
+
+    //SetVerticalWriting(rNew == css::text::WritingMode_TB_LR || rNew == css::text::WritingMode_TB_RL
+    //                   || rNew == css::text::WritingMode_BT_LR
+    //                   || rNew == css::text::WritingMode_BT_RL);
+
+
+
+    if (rNew == css::text::WritingMode_TB_LR || rNew == css::text::WritingMode_TB_RL)
+    {
+        if (mpEditingOutliner)
+            mpEditingOutliner->SetRotation(TextRotation::TOPTOBOTTOM);
+
+        if (OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject())
+            pOutlinerParaObject->SetRotation(TextRotation::TOPTOBOTTOM);
+    }
+
+    if (rNew == css::text::WritingMode_BT_LR || rNew == css::text::WritingMode_BT_RL)
+    {
+        if (mpEditingOutliner)
+            mpEditingOutliner->SetRotation(TextRotation::BOTTOMTOTOP);
+
+        if (OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject())
+            pOutlinerParaObject->SetRotation(TextRotation::BOTTOMTOTOP);
+    }
+
+    if (rNew == css::text::WritingMode_LR_TB || rNew == css::text::WritingMode_LR_TB)
+    {
+        if (mpEditingOutliner)
+            mpEditingOutliner->SetRotation(TextRotation::NONE);
+
+        if (OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject())
+            pOutlinerParaObject->SetRotation(TextRotation::NONE);
+    }
 }
 
 // transformation interface for StarOfficeAPI. This implements support for

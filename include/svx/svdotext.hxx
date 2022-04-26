@@ -34,6 +34,7 @@
 #include <vector>
 
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 
 //   forward declarations
 
@@ -241,6 +242,9 @@ protected:
     SdrOutliner& ImpGetDrawOutliner() const;
 
 private:
+
+    css::text::WritingMode mnWritingMode;
+
     // #101029#: Extracted from ImpGetDrawOutliner()
     SVX_DLLPRIVATE void ImpInitDrawOutliner( SdrOutliner& rOutl ) const;
     // #101029#: Extracted from Paint()
@@ -538,6 +542,9 @@ public:
     virtual bool IsVerticalWriting() const;
     virtual void SetVerticalWriting(bool bVertical);
     bool IsTopToBottom() const;
+
+    const css::text::WritingMode& GetTextWritingMode() const;
+    void SetTextWritingMode(const css::text::WritingMode& rNew);
 
     /** called from the SdrObjEditView during text edit when the status of the edit outliner changes */
     virtual void onEditOutlinerStatusEvent( EditStatus* pEditStatus );

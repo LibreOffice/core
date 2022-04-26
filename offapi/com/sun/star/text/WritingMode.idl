@@ -53,7 +53,34 @@ published enum WritingMode
         <p>
         Typically, this writing mode is used in Chinese and Japanese text.
      */
-    TB_RL
+    TB_RL,
+
+    /** text within a line is written top-to-bottom. Lines and blocks are
+        placed left-to-right.
+        <p>
+        Since LibreOffice 7.4
+     */
+    TB_LR,
+
+     /** text within a line is written bottom-to-top. Lines and blocks are
+        placed right-to-left.
+        <p>
+        Since LibreOffice 7.4
+     */
+    BT_RL,
+
+     /** text within a line is written bottom-to-top. Lines and blocks are
+        placed left-to-right.
+        <p>
+        Since LibreOffice 7.4
+     */
+    BT_LR,
+
+     /** text is written top-to-bottom stacked. The are no lines.
+        <p>
+        Since LibreOffice 7.4
+     */
+    STACKED
 
 };
 
