@@ -27,6 +27,9 @@
 
 #include <porlay.hxx>
 #include <pormulti.hxx>
+#include <sortedobjs.hxx>
+#include <anchoredobject.hxx>
+#include <fmtcntnt.hxx>
 
 constexpr OUStringLiteral DATA_DIRECTORY = u"/sw/qa/core/text/data/";
 
@@ -230,6 +233,49 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testEmptyNumberingPageSplit)
     };
     // Without the accompanying fix in place, this never finished.
     dispatchCommand(mxComponent, ".uno:InsertGraphic", aArgs);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
+{
+    // Given a document with an as-char image:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xTextGraphic(
+        xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
+    // Only set the anchor type, the actual bitmap content is not interesting.
+    xTextGraphic->setPropertyValue("AnchorType",
+                                   uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBodyText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());
+    uno::Reference<text::XTextContent> xTextContent(xTextGraphic, uno::UNO_QUERY);
+    xBodyText->insertTextContent(xCursor, xTextContent, false);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwRootFrame* pRootFrame = pWrtShell->GetLayout();
+    SwFrame* pPageFrame = pRootFrame->GetLower();
+    SwFrame* pBodyFrame = pPageFrame->GetLower();
+    SwFrame* pTextFrame = pBodyFrame->GetLower();
+    const SwSortedObjs& rSortedObjs = *pTextFrame->GetDrawObjs();
+    const SwAnchoredObject* pAnchoredObject = rSortedObjs[0];
+    // The content points to the start node, the next node is the graphic node.
+    SwNodeIndex aGraphicNode = *pAnchoredObject->GetFrameFormat().GetContent().GetContentIdx();
+    ++aGraphicNode;
+    tools::Rectangle aFlyFrame = pAnchoredObject->GetDrawObj()->GetLastBoundRect();
+    Point aDocPos = aFlyFrame.Center();
+
+    // When translating the view point to the model position:
+    pWrtShell->SttCursorMove();
+    pWrtShell->CallSetCursor(&aDocPos, /*bOnlyText=*/false);
+    pWrtShell->EndCursorMove();
+
+    // Then make sure that we find the graphic node, and not its anchor:
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(/*bBlock=*/false);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: SwNodeIndex (node 6)
+    // - Actual  : SwNodeIndex (node 12)
+    // i.e. the cursor position was the text node hosting the as-char image, not the graphic node of
+    // the image.
+    CPPUNIT_ASSERT_EQUAL(aGraphicNode, pShellCursor->GetMark()->nNode);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
