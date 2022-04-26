@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e495065d_585312e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-26T15:10:05Z",
+      "side": 1,
+      "message": "Miklos: could you please sanity-check the code - it is rather convoluted way to get EmbeddedObjectRef :-)\nThanks!",
+      "revId": "e88177cff479880319928fc6dae2aecc5268f027",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
