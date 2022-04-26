@@ -114,8 +114,8 @@ private:
     std::unique_ptr<weld::Toolbar> mxAlignTbx2;
     std::unique_ptr<ToolbarUnoDispatcher> mxAlignDispatch2;
 
-    //edit charts button for online's mobile view
-    std::unique_ptr<weld::Button> mxBtnEditChart;
+    //edit objects button for online's mobile view
+    std::unique_ptr<weld::Button> mxBtnEditOLEObject;
 
     // Internal variables
     basegfx::B2DRange                       maRect;
@@ -161,7 +161,7 @@ private:
     DECL_LINK( ChangeHeightHdl, weld::MetricSpinButton&, void );
     DECL_LINK( ClickAutoHdl, weld::Toggleable&, void );
     DECL_LINK( RotationHdl, svx::DialControl&, void );
-    DECL_STATIC_LINK( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void );
+    DECL_STATIC_LINK( PosSizePropertyPanel, ClickObjectEditHdl, weld::Button&, void );
 
     void Initialize();
     void executeSize();
