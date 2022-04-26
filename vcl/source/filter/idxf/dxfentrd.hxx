@@ -439,7 +439,7 @@ class DXFHatchEntity : public DXFBasicEntity
         double      fPixelSize;                     // 47
         sal_Int32   nNumberOfSeedPoints;            // 98
 
-        std::unique_ptr<DXFBoundaryPathData[]> pBoundaryPathData;
+        std::vector<DXFBoundaryPathData> aBoundaryPathData;
 
         DXFHatchEntity();
 
