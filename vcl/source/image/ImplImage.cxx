@@ -39,7 +39,7 @@ ImplImage::ImplImage(const BitmapEx &rBitmapEx)
 ImplImage::ImplImage(const OUString &aStockName)
     : maBitmapChecksum(0)
     , maStockName(aStockName)
-    , m_nScalePercentage(100)
+    , m_nScalePercentage(-1)
 {
 }
 
@@ -86,6 +86,19 @@ bool ImplImage::loadStockAtScale(BitmapEx* pBitmapEx) const
 
 sal_Int32 ImplImage::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
+    using namespace vcl;
+
+    switch (eMetric)
+    {
+        case SGPmetric::DPIX:
+        case vcl::SGPmetric::DPIY:
+            return round(96 * m_nScalePercentage / 100.0);
+        case SGPmetric::ScalePercentage: return m_nScalePercentage;
+        case SGPmetric::OffScreen: return true;
+        default:
+            break;
+    }
+
     if (isStock() && maBitmapEx.IsEmpty())
     {
         if (loadStockAtScale(const_cast<BitmapEx*>(&maBitmapEx)))
@@ -97,17 +110,11 @@ sal_Int32 ImplImage::GetSgpMetric(vcl::SGPmetric eMetric) const
             SAL_WARN("vcl", "Failed to load stock icon " << maStockName);
     }
 
-    using namespace vcl;
     switch (eMetric)
     {
-        case vcl::SGPmetric::Width: return maBitmapEx.GetSizePixel().getWidth();
-        case vcl::SGPmetric::Height: return maBitmapEx.GetSizePixel().getHeight();
-        case vcl::SGPmetric::DPIX:
-        case vcl::SGPmetric::DPIY:
-            return round(96 * m_nScalePercentage / 100.0);
-        case vcl::SGPmetric::ScalePercentage: return m_nScalePercentage;
-        case vcl::SGPmetric::OffScreen: return true;
-        case vcl::SGPmetric::BitCount: return static_cast<sal_Int32>(maBitmapEx.getPixelFormat());
+        case SGPmetric::Width: return maBitmapEx.GetSizePixel().getWidth();
+        case SGPmetric::Height: return maBitmapEx.GetSizePixel().getHeight();
+        case SGPmetric::BitCount: return static_cast<sal_Int32>(maBitmapEx.getPixelFormat());
         default:
             return -1;
     }
@@ -147,11 +154,12 @@ bool ImplImage::isEqual(const ImplImage &ref) const
 void ImplImage::setScalePercentage(sal_Int32 nScale)
 {
     assert(nScale > 0);
-    if (m_nScalePercentage == nScale || !isStock())
+    if (m_nScalePercentage == nScale)
 	return;
     SAL_WARN_IF(!maBitmapEx.IsEmpty(), "vcl", "image scale changed after loading(" << m_nScalePercentage << "% >> " << nScale << "%); invalidaing image!");
+    if (m_nScalePercentage > 0 && isStock())
+        maBitmapEx.SetEmpty();
     m_nScalePercentage = nScale;
-    maBitmapEx.SetEmpty();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

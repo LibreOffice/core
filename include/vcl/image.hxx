@@ -47,6 +47,7 @@ public:
     explicit Image(StockImage, OUString const & rPNGFilePath);
 
     void setScalePercentage(sal_Int32);
+    sal_Int32 scalePercentage() const;
     Size GetSizePixel() const;
     BitmapEx GetBitmapEx() const;
 
@@ -60,6 +61,7 @@ public:
         return !(Image::operator==(rImage));
     }
 
+    bool isStock() const;
     OUString GetStock() const;
 
     void Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize = nullptr);

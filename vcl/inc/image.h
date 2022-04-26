@@ -41,10 +41,7 @@ public:
     ImplImage(const BitmapEx& rBitmapEx);
     ImplImage(const OUString &aStockName);
 
-    bool isStock() const
-    {
-        return maStockName.getLength() > 0;
-    }
+    bool isStock() const { return !maStockName.isEmpty(); }
 
     const OUString & getStock() const
     {

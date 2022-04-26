@@ -62,12 +62,18 @@ OUString lclConvertToCanonicalName(const OUString& rFileName)
 
 } // end anonymous namespace
 
-CommandImageResolver::CommandImageResolver()
+CommandImageResolver::CommandImageResolver(sal_Int32 nScalePercentage)
+    : m_nScalePercentage(nScalePercentage)
 {
 }
 
 CommandImageResolver::~CommandImageResolver()
 {
+}
+
+void CommandImageResolver::setScalePercentage(sal_Int32 nScale)
+{
+    m_nScalePercentage = nScale;
 }
 
 void CommandImageResolver::registerCommands(const Sequence<OUString>& aCommandSequence)
@@ -130,7 +136,7 @@ ImageList* CommandImageResolver::getImageList(ImageType nImageType)
     if (!m_pImageList[nImageType])
     {
         OUString sIconPath = OUString::createFromAscii(ImageType_Prefixes[nImageType]);
-        m_pImageList[nImageType].reset( new ImageList(m_aImageNameVector, sIconPath) );
+        m_pImageList[nImageType].reset(new ImageList(m_aImageNameVector, sIconPath, m_nScalePercentage));
     }
 
     return m_pImageList[nImageType].get();
@@ -144,7 +150,10 @@ Image CommandImageResolver::getImageFromCommandURL(ImageType nImageType, const O
         ImageList* pImageList = getImageList(nImageType);
         return pImageList->GetImage(pIterator->second);
     }
-    return Image();
+
+    Image aImage;
+    aImage.setScalePercentage(m_nScalePercentage);
+    return aImage;
 }
 
 } // end namespace vcl

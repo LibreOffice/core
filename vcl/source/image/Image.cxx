@@ -82,11 +82,23 @@ void Image::setScalePercentage(sal_Int32 nScale)
 	mpImplData->setScalePercentage(nScale);
 }
 
+sal_Int32 Image::scalePercentage() const
+{
+    if (mpImplData)
+        mpImplData->GetDPIScalePercentage();
+    return -1;
+}
+
 OUString Image::GetStock() const
 {
     if (mpImplData)
         return mpImplData->getStock();
     return OUString();
+}
+
+bool Image::isStock() const
+{
+    return mpImplData ? mpImplData->isStock() : false;
 }
 
 Size Image::GetSizePixel() const

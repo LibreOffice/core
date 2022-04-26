@@ -241,6 +241,7 @@ class ToolBarManager final : public ToolbarManager_Base
         OUString                                                     m_sIconTheme;
 
         rtl::Reference< ToolBarManager >                             m_aOverflowManager;
+        sal_Int32 m_nScalePercentage;
 };
 
 }

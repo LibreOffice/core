@@ -33,12 +33,16 @@ private:
 
     o3tl::enumarray<ImageType, std::unique_ptr<ImageList>> m_pImageList;
     OUString m_sIconTheme;
+    sal_Int32 m_nScalePercentage;
 
     ImageList* getImageList(ImageType nImageType);
 
 public:
-    CommandImageResolver();
+    CommandImageResolver(sal_Int32 nScalePercentage);
     ~CommandImageResolver();
+
+    sal_Int32 scalePercentage() const { return m_nScalePercentage; }
+    void setScalePercentage(sal_Int32 nScale);
 
     void registerCommands(const css::uno::Sequence<OUString>& aCommandSequence);
     Image getImageFromCommandURL(ImageType nImageType, const OUString& rCommandURL);

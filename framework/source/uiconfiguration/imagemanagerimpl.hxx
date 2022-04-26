@@ -44,7 +44,8 @@ namespace framework
     class CmdImageList
     {
         public:
-            CmdImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier);
+            CmdImageList(const css::uno::Reference< css::uno::XComponentContext >& rxContext, 
+                         const OUString& aModuleIdentifier, sal_Int32 nScalePercentage = 100);
             virtual ~CmdImageList();
 
             virtual Image getImageFromCommandURL(vcl::ImageType nImageType, const OUString& rCommandURL);
@@ -77,8 +78,9 @@ namespace framework
     {
         public:
             ImageManagerImpl(const css::uno::Reference< css::uno::XComponentContext >& rxContext
-                ,::cppu::OWeakObject *pOwner
-                ,bool _bUseGlobal);
+                , ::cppu::OWeakObject *pOwner
+                , bool bUseGlobal
+		, sal_Int32 nScalePercentage = 100);
             ~ImageManagerImpl();
 
             void dispose();
@@ -176,12 +178,13 @@ namespace framework
             comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener>       m_aConfigListeners;
             o3tl::enumarray<vcl::ImageType,std::unique_ptr<ImageList>>                      m_pUserImageList;
             o3tl::enumarray<vcl::ImageType,bool>                                            m_bUserImageListModified;
-            bool                                                                            m_bUseGlobal;
+        const bool m_bUseGlobal;
             bool                                                                            m_bReadOnly;
             bool                                                                            m_bInitialized;
             bool                                                                            m_bModified;
             bool                                                                            m_bDisposed;
-   };
+        sal_Int32 m_nScalePercentage;
+    };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

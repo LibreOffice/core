@@ -20,15 +20,20 @@
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/keycod.hxx>
 #include <vcl/mnemonic.hxx>
+#include <vcl/toolkit/unowrap.hxx>
+#include <vcl/window.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/servicehelper.hxx>
 #include <cppuhelper/weakref.hxx>
 
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
 #include <com/sun/star/frame/theUICommandDescription.hpp>
 #include <com/sun/star/ui/GlobalAcceleratorConfiguration.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager3.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
@@ -337,6 +342,14 @@ OUString GetRealCommandForCommand(const css::uno::Sequence<css::beans::PropertyV
     return GetCommandProperty("TargetURL", rProperties);
 }
 
+OutputDevice* lcl_getVclWindowFromFrame(const Reference<frame::XFrame>& rxFrame)
+{
+    const Reference<css::awt::XWindow> xFrameWindow(rxFrame->getContainerWindow(), UNO_SET_THROW);
+    auto pWrapper = UnoWrapperBase::GetUnoWrapper();
+    VclPtr<vcl::Window> pWindow = pWrapper->GetWindow(xFrameWindow);
+    return pWindow ? pWindow->GetOutDev() : nullptr;
+}
+
 Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName,
                                                    const Reference<frame::XFrame>& rxFrame,
                                                    vcl::ImageType eImageType)
@@ -351,14 +364,24 @@ Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName
     else if (eImageType == vcl::ImageType::Size32)
         nImageType |= ui::ImageType::SIZE_32;
 
+    OutputDevice* pOutDev = nullptr;
     try
     {
         Reference<frame::XController> xController(rxFrame->getController(), UNO_SET_THROW);
         Reference<ui::XUIConfigurationManagerSupplier> xSupplier(xController->getModel(), UNO_QUERY);
         if (xSupplier.is())
         {
-            Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager());
-            Reference<ui::XImageManager> xDocImgMgr(xDocUICfgMgr->getImageManager(), UNO_QUERY);
+            Reference<ui::XUIConfigurationManager> xDocUICfgMgr(xSupplier->getUIConfigurationManager(), UNO_SET_THROW);
+            pOutDev = lcl_getVclWindowFromFrame(rxFrame);
+            Reference<ui::XImageManager> xDocImgMgr;
+            if (pOutDev)
+            {
+                const sal_Int32 nScalePercentage = pOutDev->GetDPIScalePercentage();
+                Reference<ui::XUIConfigurationManager3> xDocUICfgMgr3(xDocUICfgMgr, UNO_QUERY_THROW);
+                xDocImgMgr.set(xDocUICfgMgr3->getScaledImageManager(nScalePercentage), UNO_QUERY);
+            }
+            else
+                xDocImgMgr.set(xDocUICfgMgr->getImageManager(), UNO_QUERY);
 
             Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
             Sequence<OUString> aImageCmdSeq { rsCommandName };
@@ -377,12 +400,20 @@ Reference<graphic::XGraphic> GetXGraphicForCommand(const OUString& rsCommandName
         Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(GetModuleConfigurationSupplier());
         Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier(rxFrame)));
 
-        Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
-        Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), UNO_QUERY);
+        Reference<ui::XImageManager> xModuleImageManager;
+        if (!pOutDev)
+            pOutDev = lcl_getVclWindowFromFrame(rxFrame);
+        if (pOutDev)
+        {
+            const sal_Int32 nScalePercentage = pOutDev->GetDPIScalePercentage();
+            Reference<ui::XModuleUIConfigurationManager3> xUICfgMgr3(xUICfgMgr, UNO_QUERY_THROW);
+            xModuleImageManager.set(xUICfgMgr3->getScaledImageManager(nScalePercentage), UNO_QUERY);
+        }
+        else
+            xModuleImageManager.set(xUICfgMgr->getImageManager(), UNO_QUERY);
 
         Sequence<OUString> aImageCmdSeq { rsCommandName };
-
-        aGraphicSeq = xModuleImageManager->getImages(nImageType, aImageCmdSeq);
+        Sequence< Reference<graphic::XGraphic> > aGraphicSeq(xModuleImageManager->getImages(nImageType, aImageCmdSeq));
 
         Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
 

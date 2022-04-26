@@ -210,6 +210,8 @@ interface XImageManager
             com::sun::star::embed::XTransactedObject
             property which makes it possible to commit a root storage.
             </li>
+            <li><b>ScalePercentage</b> specifies the optional scaling.
+            </li>
         </ul>
     */
     interface ::com::sun::star::lang::XInitialization;

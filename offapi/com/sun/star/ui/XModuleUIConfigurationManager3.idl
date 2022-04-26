@@ -7,10 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#ifndef __com_sun_star_ui_XUIConfigurationManager3_idl__
-#define __com_sun_star_ui_XUIConfigurationManager3_idl__
+#ifndef __com_sun_star_ui_XModuleUIConfigurationManager3_idl__
+#define __com_sun_star_ui_XModuleUIConfigurationManager3_idl__
 
-#include <com/sun/star/ui/XUIConfigurationManager2.idl>
+#include <com/sun/star/ui/XModuleUIConfigurationManager2.idl>
 
 module com { module sun { module star { module ui {
 
@@ -18,7 +18,7 @@ module com { module sun { module star { module ui {
     @since LibreOffice 7.4
 */
 
-interface XUIConfigurationManager3 : ::com::sun::star::ui::XUIConfigurationManager2
+interface XModuleUIConfigurationManager3 : ::com::sun::star::ui::XModuleUIConfigurationManager2
 {
     /** retrieves the image manager from the user interface configuration
         manager with a particular scaled percentage.

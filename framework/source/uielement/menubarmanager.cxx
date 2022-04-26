@@ -37,6 +37,7 @@
 #include <com/sun/star/ui/ItemType.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/ui/ItemStyle.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -48,6 +49,7 @@
 #include <uno/current_context.hxx>
 #include <unotools/cmdoptions.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/menu.hxx>
@@ -58,6 +60,7 @@
 #include <svtools/miscopt.hxx>
 #include <uielement/menubarmerger.hxx>
 #include <tools/urlobj.hxx>
+#include <vcl/window.hxx>
 
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -94,6 +97,7 @@ MenuBarManager::MenuBarManager(
     , m_xURLTransformer(_xURLTransformer)
     , m_sIconTheme( SvtMiscOptions().GetIconTheme() )
     , m_aAsyncSettingsTimer( "framework::MenuBarManager::Deactivate m_aAsyncSettingsTimer" )
+    , m_nScalePercentage(100)
 {
     m_xPopupMenuControllerFactory = frame::thePopupMenuControllerFactory::get(m_xContext);
     FillMenuManager( pMenu, rFrame, rDispatchProvider, rModuleIdentifier, bDelete );
@@ -907,6 +911,10 @@ void MenuBarManager::FillMenuManager( Menu* pMenu, const Reference< XFrame >& rF
     m_pVCLMenu          = pMenu;
     m_xDispatchProvider = rDispatchProvider;
 
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(rFrame->getComponentWindow());
+    m_nScalePercentage = pWindow->GetOutDev()->GetDPIScalePercentage();
+    SAL_DEBUG(__func__ << " " << m_nScalePercentage);
+
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
     m_bRetrieveImages   = false;
@@ -1221,7 +1229,11 @@ void MenuBarManager::RetrieveImageManagers()
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
             theModuleUIConfigurationManagerSupplier::get( m_xContext );
         Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
-        m_xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
+	Reference<XModuleUIConfigurationManager3> xUICfgMgr3(xUICfgMgr, UNO_QUERY);
+	if (xUICfgMgr3.is())
+            m_xModuleImageManager.set(xUICfgMgr3->getScaledImageManager(m_nScalePercentage), UNO_QUERY);
+	else
+            m_xModuleImageManager.set(xUICfgMgr->getImageManager(), UNO_QUERY);
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
     }
 }
@@ -1556,9 +1568,11 @@ void MenuBarManager::FillMenuImages(Reference< XFrame > const & _xFrame, Menu* _
             {
                 OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
                 Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aMenuItemCommand, _xFrame);
+		SAL_DEBUG(__func__ << " " << !!aImage << " " << aImage.scalePercentage());
                 if ( !aImage )
                     aImage = Image(aAddonOptions.GetImageFromURL(aMenuItemCommand, false));
 
+		SAL_DEBUG(__func__ << " " << aImage.scalePercentage());
                 _pMenu->SetItemImage( nId, aImage );
             }
             else

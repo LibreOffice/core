@@ -19,7 +19,7 @@
 #ifndef __com_sun_star_ui_UIConfigurationManager_idl__
 #define __com_sun_star_ui_UIConfigurationManager_idl__
 
-#include <com/sun/star/ui/XUIConfigurationManager2.idl>
+#include <com/sun/star/ui/XUIConfigurationManager3.idl>
 
 module com { module sun { module star { module ui {
 
@@ -29,7 +29,7 @@ module com { module sun { module star { module ui {
     @since OOo 2.0
 */
 
-service UIConfigurationManager : XUIConfigurationManager2;
+service UIConfigurationManager : XUIConfigurationManager3;
 
 
 }; }; }; };

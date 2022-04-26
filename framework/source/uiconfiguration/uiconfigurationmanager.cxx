@@ -1202,9 +1202,9 @@ void SAL_CALL UIConfigurationManager::setStorage( const Reference< XStorage >& S
     if ( m_xAccConfig.is() )
         m_xAccConfig->setStorage( m_xDocConfigStorage );
 
-    auto const & aManagerIter = m_xImageManagers.find(100);
-    if (aManagerIter != m_xImageManagers.end())
-        aManagerIter->second->setStorage(m_xDocConfigStorage);
+    for (auto& xImageManager : m_xImageManagers)
+        if (xImageManager.second.is())
+            xImageManager.second->setStorage(m_xDocConfigStorage);
 
     if ( m_xDocConfigStorage.is() )
     {

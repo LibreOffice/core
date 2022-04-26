@@ -4050,8 +4050,10 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/ui,\
 	XDecks \
 	XDockingAreaAcceptor \
 	XImageManager \
+	XImageManager2 \
 	XModuleUIConfigurationManager \
 	XModuleUIConfigurationManager2 \
+	XModuleUIConfigurationManager3 \
 	XModuleUIConfigurationManagerSupplier \
 	XPanel \
 	XPanels \

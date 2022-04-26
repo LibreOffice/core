@@ -30,7 +30,7 @@
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/ui/ConfigurationEvent.hpp>
 #include <com/sun/star/ui/ModuleAcceleratorConfiguration.hpp>
-#include <com/sun/star/ui/XModuleUIConfigurationManager2.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalAccessException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
@@ -81,7 +81,7 @@ namespace {
 class ModuleUIConfigurationManager : public cppu::WeakImplHelper<
                                        css::lang::XServiceInfo,
                                        css::lang::XComponent,
-                                       css::ui::XModuleUIConfigurationManager2 >
+                                       css::ui::XModuleUIConfigurationManager3 >
 {
 public:
     ModuleUIConfigurationManager(
@@ -135,6 +135,9 @@ public:
     virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
     virtual sal_Bool SAL_CALL isModified() override;
     virtual sal_Bool SAL_CALL isReadOnly() override;
+
+    // XUIConfigurationManager3
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getScaledImageManager(::sal_Int16 nScalePercentage) override;
 
 private:
     // private data types
@@ -216,7 +219,7 @@ private:
     std::mutex                                                m_mutex;
     comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aEventListeners;
     comphelper::OInterfaceContainerHelper4<css::ui::XUIConfigurationListener> m_aConfigListeners;
-    rtl::Reference< ImageManager >                            m_xModuleImageManager;
+    std::unordered_map<sal_Int16, rtl::Reference<ImageManager>> m_xModuleImageManagers;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > m_xModuleAcceleratorManager;
 };
 
@@ -907,10 +910,7 @@ void SAL_CALL ModuleUIConfigurationManager::dispose()
         m_aConfigListeners.disposeAndClear( aGuard, aEvent );
     }
 
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    SolarMutexClearableGuard aGuard;
-    Reference< XComponent > xModuleImageManager( m_xModuleImageManager );
-    m_xModuleImageManager.clear();
+    SolarMutexGuard aGuard;
     m_xModuleAcceleratorManager.clear();
     m_aUIElements[LAYER_USERDEFINED].clear();
     m_aUIElements[LAYER_DEFAULT].clear();
@@ -919,17 +919,18 @@ void SAL_CALL ModuleUIConfigurationManager::dispose()
     m_xUserRootCommit.clear();
     m_bModified = false;
     m_bDisposed = true;
-    aGuard.clear();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    try
-    {
-        if ( xModuleImageManager.is() )
-            xModuleImageManager->dispose();
-    }
-    catch ( const Exception& )
-    {
-    }
+    for (auto xImageManager : m_xModuleImageManagers)
+        try
+        {
+            if (xImageManager.second.is())
+                 xImageManager.second->dispose();
+        }
+        catch (const Exception&)
+        {
+        }
+
+    m_xModuleImageManagers.clear();
 }
 
 void SAL_CALL ModuleUIConfigurationManager::addEventListener( const Reference< XEventListener >& xListener )
@@ -1397,27 +1398,40 @@ void SAL_CALL ModuleUIConfigurationManager::insertSettings( const OUString& NewR
     }
 }
 
-Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
+Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getScaledImageManager(sal_Int16 nScaleFactor)
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
         throw DisposedException();
 
-    if ( !m_xModuleImageManager.is() )
+    rtl::Reference<ImageManager> xImageManager;
+
+    auto const & aManagerIter = m_xModuleImageManagers.find(nScaleFactor);
+    if (aManagerIter == m_xModuleImageManagers.end())
     {
-        m_xModuleImageManager = new ImageManager( m_xContext, /*bForModule*/true );
+        xImageManager = new ImageManager(m_xContext, /*bForModule*/ true);
+	m_xModuleImageManagers[nScaleFactor] = xImageManager;
+	SAL_DEBUG(__func__ << " " << nScaleFactor);
 
         uno::Sequence<uno::Any> aPropSeq(comphelper::InitAnyPropertySequence(
         {
             {"UserConfigStorage", uno::Any(m_xUserConfigStorage)},
             {"ModuleIdentifier", uno::Any(m_aModuleIdentifier)},
             {"UserRootCommit", uno::Any(m_xUserRootCommit)},
+	    {"ScalePercentage", uno::Any(nScaleFactor)}
         }));
-        m_xModuleImageManager->initialize( aPropSeq );
+        xImageManager->initialize(aPropSeq);
     }
+    else
+        xImageManager = aManagerIter->second;
 
-    return Reference< XInterface >( static_cast<cppu::OWeakObject*>(m_xModuleImageManager.get()), UNO_QUERY );
+    return Reference< XInterface >( static_cast<cppu::OWeakObject*>(xImageManager.get()), UNO_QUERY );
+}
+
+Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
+{
+    return getScaledImageManager(100);
 }
 
 Reference< ui::XAcceleratorConfiguration > SAL_CALL ModuleUIConfigurationManager::getShortCutManager()

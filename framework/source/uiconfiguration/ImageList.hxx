@@ -40,7 +40,7 @@ class ImageList
 public:
                     explicit ImageList();
                     ImageList( const std::vector<OUString>& rNameVector,
-                               const OUString& rPrefix);
+                               const OUString& rPrefix, sal_Int32 nScale);
 
     void            InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                    const std::vector< OUString > &rNameVector );
@@ -62,11 +62,14 @@ public:
     const OUString & GetImageName( sal_uInt16 nPos ) const;
     void            GetImageNames( ::std::vector< OUString >& rNames ) const;
 
+    sal_Int32 scalePercentage() const { return m_nScalePercentage; }
+
 private:
 
     std::vector< std::unique_ptr<ImageAryData> >   maImages;
     std::unordered_map< OUString, ImageAryData * > maNameHash;
     OUString               maPrefix;
+    const sal_Int32 m_nScalePercentage;
 
     sal_uInt16  ImplGetImageId( const OUString& rImageName ) const;
     void ImplAddImage( std::u16string_view aPrefix, const OUString &aName, sal_uInt16 nId, const Image &aImage );

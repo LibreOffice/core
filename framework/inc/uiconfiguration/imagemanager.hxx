@@ -22,7 +22,7 @@
 #include <memory>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/ui/XImageManager.hpp>
+#include <com/sun/star/ui/XImageManager2.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
@@ -32,10 +32,10 @@
 namespace framework
 {
     class ImageManagerImpl;
-    class ImageManager final : public ::cppu::WeakImplHelper< css::ui::XImageManager, css::lang::XServiceInfo>
+    class ImageManager final : public ::cppu::WeakImplHelper< css::ui::XImageManager2, css::lang::XServiceInfo>
     {
         public:
-            ImageManager( const css::uno::Reference< css::uno::XComponentContext >& rxContext, bool bForModule );
+            ImageManager(const css::uno::Reference<css::uno::XComponentContext>& rxContext, bool bForModule, sal_Int32 nScale = 100);
             virtual ~ImageManager() override;
 
             virtual OUString SAL_CALL getImplementationName() override
@@ -81,6 +81,9 @@ namespace framework
             virtual void SAL_CALL storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) override;
             virtual sal_Bool SAL_CALL isModified() override;
             virtual sal_Bool SAL_CALL isReadOnly() override;
+
+            // XImageManager2
+            virtual sal_Int32 SAL_CALL scalePercentage() override;
 
             // Non-UNO methods
             /// @throws css::uno::RuntimeException

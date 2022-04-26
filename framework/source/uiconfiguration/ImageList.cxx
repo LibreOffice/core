@@ -23,12 +23,15 @@
 #include "ImageList.hxx"
 
 ImageList::ImageList()
+    : m_nScalePercentage(100)
 {
 }
 
 ImageList::ImageList(const std::vector< OUString >& rNameVector,
-                     const OUString& rPrefix)
+                     const OUString& rPrefix, sal_Int32 nScale)
+    : m_nScalePercentage(nScale)
 {
+    assert(nScale > 0);
     SAL_INFO( "vcl", "vcl: ImageList::ImageList(const vector< OUString >& ..." );
 
     maImages.reserve( rNameVector.size() );
@@ -103,6 +106,7 @@ void ImageList::AddImage( const OUString& rImageName, const Image& rImage )
 
 void ImageList::ReplaceImage( const OUString& rImageName, const Image& rImage )
 {
+    assert(rImage.scalePercentage() == m_nScalePercentage);
     const sal_uInt16 nId = ImplGetImageId( rImageName );
 
     if( nId )

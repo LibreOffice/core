@@ -186,6 +186,7 @@ class MenuBarManager final :
         css::uno::Reference< css::container::XIndexAccess >          m_xDeferredItemContainer;
         OUString                                                     m_sIconTheme;
         Timer                                                        m_aAsyncSettingsTimer;
+        sal_Int32 m_nScalePercentage;
 };
 
 } // namespace

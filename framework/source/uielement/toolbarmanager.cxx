@@ -49,6 +49,7 @@
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XModuleUIConfigurationManager3.hpp>
 #include <com/sun/star/ui/ImageType.hpp>
 #include <com/sun/star/ui/UIElementType.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -579,6 +580,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xContext( rxContext ),
     m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+    , m_nScalePercentage(100)
 {
     Init();
 }
@@ -600,6 +602,7 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_xContext( rxContext ),
     m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
+    , m_nScalePercentage(100)
 {
     Init();
 }
@@ -607,6 +610,10 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
 void ToolBarManager::Init()
 {
     OSL_ASSERT( m_xContext.is() );
+
+    vcl::Window* pWindow = VCLUnoHelper::GetWindow(m_xFrame->getComponentWindow());
+    m_nScalePercentage = pWindow->GetOutDev()->GetDPIScalePercentage();
+    SAL_DEBUG(__func__ << " " << m_nScalePercentage);
 
     m_pImpl->Init();
 
@@ -1339,7 +1346,11 @@ void ToolBarManager::InitImageManager()
         Reference< XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier =
             theModuleUIConfigurationManagerSupplier::get( m_xContext );
         Reference< XUIConfigurationManager > xUICfgMgr = xModuleCfgMgrSupplier->getUIConfigurationManager( m_aModuleIdentifier );
-        m_xModuleImageManager.set( xUICfgMgr->getImageManager(), UNO_QUERY );
+        Reference<XModuleUIConfigurationManager3> xUICfgMgr3(xUICfgMgr, UNO_QUERY);
+        if (xUICfgMgr3.is())
+             m_xModuleImageManager.set(xUICfgMgr3->getScaledImageManager(m_nScalePercentage), UNO_QUERY);
+        else
+             m_xModuleImageManager.set(xUICfgMgr->getImageManager(), UNO_QUERY);
         m_xModuleImageManager->addConfigurationListener( Reference< XUIConfigurationListener >(this) );
     }
 }

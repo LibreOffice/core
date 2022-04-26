@@ -38,8 +38,8 @@ using namespace ::com::sun::star::beans;
 namespace framework
 {
 
-ImageManager::ImageManager( const uno::Reference< uno::XComponentContext >& rxContext, bool bForModule ) :
-    m_pImpl( new ImageManagerImpl(rxContext, this, bForModule) )
+ImageManager::ImageManager(const uno::Reference< uno::XComponentContext>& rxContext, bool bForModule, sal_Int32 nScale)
+    : m_pImpl(new ImageManagerImpl(rxContext, this, bForModule, nScale))
 {
 }
 
@@ -158,6 +158,11 @@ sal_Bool SAL_CALL ImageManager::isModified()
 sal_Bool SAL_CALL ImageManager::isReadOnly()
 {
     return m_pImpl->isReadOnly();
+}
+
+sal_Int32 SAL_CALL ImageManager::scalePercentage()
+{
+    return m_pImpl->m_nScalePercentage;
 }
 
 } // namespace framework

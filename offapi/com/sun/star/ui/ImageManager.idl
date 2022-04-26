@@ -19,7 +19,7 @@
 #ifndef __com_sun_star_ui_ImageManager_idl__
 #define __com_sun_star_ui_ImageManager_idl__
 
-#include <com/sun/star/ui/XImageManager.idl>
+#include <com/sun/star/ui/XImageManager2.idl>
 
 module com {  module sun {  module star {  module ui {
 
@@ -28,7 +28,7 @@ module com {  module sun {  module star {  module ui {
 
     @since LibreOffice 4.1
 */
-service ImageManager : XImageManager;
+service ImageManager : XImageManager2;
 
 }; }; }; }; // com.sun.star.ui
 

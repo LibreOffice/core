@@ -100,8 +100,9 @@ static GlobalImageList* getGlobalImageList( const uno::Reference< uno::XComponen
     return pGlobalImageList;
 }
 
-CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier ) :
+CmdImageList::CmdImageList( const uno::Reference< uno::XComponentContext >& rxContext, const OUString& aModuleIdentifier, sal_Int32 nScale) :
     m_bInitialized(false),
+    m_aResolver(nScale),
     m_aModuleIdentifier( aModuleIdentifier ),
     m_xContext( rxContext )
 {
@@ -473,15 +474,17 @@ CmdImageList* ImageManagerImpl::implts_getDefaultImageList()
     return m_pDefaultImageList.get();
 }
 
-ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,::cppu::OWeakObject* pOwner,bool _bUseGlobal ) :
-    m_xContext( rxContext )
+ImageManagerImpl::ImageManagerImpl( const uno::Reference< uno::XComponentContext >& rxContext,
+        ::cppu::OWeakObject* pOwner, bool bUseGlobal, sal_Int32 nScale)
+    : m_xContext(rxContext)
     , m_pOwner(pOwner)
     , m_aResourceString( "private:resource/images/moduleimages" )
-    , m_bUseGlobal(_bUseGlobal)
+    , m_bUseGlobal(bUseGlobal)
     , m_bReadOnly( true )
     , m_bInitialized( false )
     , m_bModified( false )
     , m_bDisposed( false )
+    , m_nScalePercentage(nScale)
 {
     for ( vcl::ImageType n : o3tl::enumrange<vcl::ImageType>() )
     {
@@ -571,8 +574,12 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
             {
                 aPropValue.Value >>= m_xUserRootCommit;
             }
+	    else if (aPropValue.Name == "ScalePercentage")
+                aPropValue.Value >>= m_nScalePercentage;
         }
     }
+
+    SAL_DEBUG(__func__ << " " << m_nScalePercentage);
 
     if ( m_xUserConfigStorage.is() )
     {
@@ -588,6 +595,7 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
     implts_initialize();
 
     m_bInitialized = true;
+    SAL_DEBUG(__func__ << " " << m_nScalePercentage);
 }
 
 // XImageManagerImpl
@@ -734,6 +742,8 @@ Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
                 aImage = rGlobalImageList->getImageFromCommandURL( nIndex, rURL );
         }
 
+        aImage.setScalePercentage(m_nScalePercentage);
+        SAL_DEBUG(__func__ << " " << m_nScalePercentage << " " << aImage.scalePercentage());
         aGraphSeqRange[n++] = GetXGraphic(aImage);
     }
 
