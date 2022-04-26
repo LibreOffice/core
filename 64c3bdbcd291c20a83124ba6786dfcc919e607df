@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d61254aa_cb1b4a38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-04-26T10:33:23Z",
+      "side": 1,
+      "message": "thx for the first steps re making the platform be set when the command is run.\n\nIf you\u0027re unsure where to fit that in: The --system switch would never be used in conjunction with a possible --platform switch, so it would be fine to check for either --system or --platform in the additional arguments after the version i.e. check sys.argv[4]  for --system or --platform\n\nOr otherwise put: not necessary to allow the switch at any position/no need for complicated argument parsing. Using it as follows would be fine:\n\n→ upload-symbols.py symbols.zip config.ini version [--system | --platform {Windows|Linux}]\n  ",
+      "revId": "64c3bdbcd291c20a83124ba6786dfcc919e607df",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
