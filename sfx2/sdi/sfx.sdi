@@ -1007,7 +1007,7 @@ SfxVoidItem DesignerDialog SID_STYLE_DESIGNER
     AccelConfig = TRUE,
     MenuConfig = TRUE,
     ToolBoxConfig = TRUE,
-    GroupId = SfxGroupId::Format;
+    GroupId = SfxGroupId::View;
 ]
 
 SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
