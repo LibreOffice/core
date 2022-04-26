@@ -573,15 +573,14 @@ void DXF2GDIMetaFile::DrawLWPolyLineEntity(const DXFLWPolyLineEntity & rE, const
 
 void DXF2GDIMetaFile::DrawHatchEntity(const DXFHatchEntity & rE, const DXFTransform & rTransform )
 {
-    if ( !rE.nBoundaryPathCount )
+    if (rE.aBoundaryPathData.empty())
         return;
 
     SetAreaAttribute( rE );
     tools::PolyPolygon aPolyPoly;
-    for (sal_Int32 j = 0; j < rE.nBoundaryPathCount; ++j)
+    for (const DXFBoundaryPathData& rPathData : rE.aBoundaryPathData)
     {
         std::vector< Point > aPtAry;
-        const DXFBoundaryPathData& rPathData = rE.aBoundaryPathData[j];
         if ( rPathData.bIsPolyLine )
         {
             for (const auto& a : rPathData.aP)
