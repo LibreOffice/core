@@ -46,8 +46,6 @@
 // xmloff/xmlkyd.hxx
 constexpr OUStringLiteral sXML_CDATA = u"CDATA";
 
-static char buf[1024];
-
 namespace
 {
 double WTI(double x) { return x / 1800.; } // unit => inch
@@ -77,6 +75,7 @@ struct HwpReaderPrivate
     ShowPageNum *pPn;
     hchar *pField;
     int nPnPos;
+    char buf[1024];
 };
 
 HwpReader::HwpReader() : mxList(new AttributeListImpl), d(new HwpReaderPrivate)
@@ -314,10 +313,10 @@ void HwpReader::makeMeta()
         else {
             minute = 0;
         }
-        sprintf(buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
+        sprintf(d->buf,"%d-%02d-%02dT%02d:%02d:00",year,month,day,hour,minute);
 
         startEl("meta:creation-date");
-        chars( OUString::createFromAscii(buf));
+        chars( OUString::createFromAscii(d->buf));
         endEl("meta:creation-date");
     }
 
@@ -1274,12 +1273,12 @@ void HwpReader::parseCharShape(CharShape const * cshape)
     ::std::string const tmp = hstr2ksstr(kstr2hstr(
         reinterpret_cast<unsigned char const *>(hwpfont.GetFontName(0, cshape->font[0]))).c_str());
     double fRatio = 1.0;
-    int size = getRepFamilyName(tmp.c_str(), buf, fRatio);
+    int size = getRepFamilyName(tmp.c_str(), d->buf, fRatio);
 
     mxList->addAttribute("fo:font-family", sXML_CDATA,
-        OUString(buf, size, RTL_TEXTENCODING_EUC_KR));
+        OUString(d->buf, size, RTL_TEXTENCODING_EUC_KR));
     mxList->addAttribute("style:font-family-asian", sXML_CDATA,
-        OUString(buf, size, RTL_TEXTENCODING_EUC_KR));
+        OUString(d->buf, size, RTL_TEXTENCODING_EUC_KR));
 
     mxList->addAttribute("style:text-scale", sXML_CDATA,
         OUString::number(static_cast<int>(cshape->ratio[0] * fRatio)) + "%");
@@ -1814,8 +1813,8 @@ void HwpReader::makeTableStyle(Table *tbl)
 // column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
-        sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii( buf ));
+        sprintf(d->buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
+        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii(d->buf));
         mxList->addAttribute("style:family", sXML_CDATA,"table-column");
         startEl("style:style");
         mxList->clear();
@@ -1830,8 +1829,8 @@ void HwpReader::makeTableStyle(Table *tbl)
 // row
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
-        sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
-        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii( buf ));
+        sprintf(d->buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
+        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii(d->buf));
         mxList->addAttribute("style:family", sXML_CDATA,"table-row");
         startEl("style:style");
         mxList->clear();
@@ -1846,8 +1845,8 @@ void HwpReader::makeTableStyle(Table *tbl)
 // cell
     for (auto const& tcell : tbl->cells)
     {
-        sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii( buf ));
+        sprintf(d->buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
+        mxList->addAttribute("style:name", sXML_CDATA, OUString::createFromAscii(d->buf));
         mxList->addAttribute("style:family", sXML_CDATA,"table-cell");
         startEl("style:style");
         mxList->clear();
@@ -3376,8 +3375,8 @@ void HwpReader::makeTable(TxtBox * hbox)
 // column
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
-        sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
-        mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii( buf ));
+        sprintf(d->buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
+        mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii(d->buf));
         startEl("table:table-column");
         mxList->clear();
         endEl("table:table-column");
@@ -3395,15 +3394,15 @@ void HwpReader::makeTable(TxtBox * hbox)
                 k = j;
             }
 // row
-            sprintf(buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
-            mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii( buf ));
+            sprintf(d->buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
+            mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii(d->buf));
             startEl("table:table-row");
             mxList->clear();
             j = tcell->nRowIndex;
         }
 
-        sprintf(buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
-        mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii( buf ));
+        sprintf(d->buf,"Table%d.%c%d",hbox->style.boxnum, 'A'+ tcell->nColumnIndex, tcell->nRowIndex +1);
+        mxList->addAttribute("table:style-name", sXML_CDATA, OUString::createFromAscii(d->buf));
         if( tcell->nColumnSpan > 1 )
             mxList->addAttribute("table:number-columns-spanned", sXML_CDATA, OUString::number(tcell->nColumnSpan));
         if( tcell->nRowSpan > 1 )
@@ -3783,8 +3782,8 @@ void HwpReader::makePicture(Picture * hbox)
 
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
-                sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
-                mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(reinterpret_cast<uchar *>(buf)).c_str()));
+                sprintf(d->buf, "file:///%s", hbox->picinfo.picun.path );
+                mxList->addAttribute("xlink:href", sXML_CDATA, hstr2OUString(kstr2hstr(reinterpret_cast<uchar *>(d->buf)).c_str()));
 #else
                 mxList->addAttribute("xlink:href", sXML_CDATA,
                     hstr2OUString(kstr2hstr(reinterpret_cast<uchar const *>(urltounix(hbox->picinfo.picun.path).c_str())).c_str()));
@@ -4215,8 +4214,8 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                         OUString::number (WTMM( drawobj->extent.w )) + "mm");
                     mxList->addAttribute("svg:height", sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
-                    sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w) , WTSM(drawobj->extent.h) );
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, OUString::createFromAscii(buf) );
+                    sprintf(d->buf, "0 0 %d %d", WTSM(drawobj->extent.w) , WTSM(drawobj->extent.h) );
+                    mxList->addAttribute("svg:viewBox", sXML_CDATA, OUString::createFromAscii(d->buf));
 
                     OUStringBuffer oustr;
 
@@ -4262,24 +4261,24 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                                   NaturalSpline(n, tarr.get(), yarr.get(), yb, carr, darr);
                               }
 
-                              sprintf(buf, "M%d %dC%d %d", WTSM(xarr[0]), WTSM(yarr[0]),
+                              sprintf(d->buf, "M%d %dC%d %d", WTSM(xarr[0]), WTSM(yarr[0]),
                                       WTSM(xarr[0] + xb[0]/3), WTSM(yarr[0] + yb[0]/3) );
-                              oustr.appendAscii(buf);
+                              oustr.appendAscii(d->buf);
 
                               for( i = 1 ; i < n  ; i++ ){
                                   if( i == n -1 ){
-                                      sprintf(buf, " %d %d %d %dz",
+                                      sprintf(d->buf, " %d %d %d %dz",
                                               WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
                                               WTSM(xarr[i]), WTSM(yarr[i]) );
                                   }
                                   else{
-                                      sprintf(buf, " %d %d %d %d %d %d",
+                                      sprintf(d->buf, " %d %d %d %d %d %d",
                                               WTSM(xarr[i] - xb[i]/3), WTSM(yarr[i] - yb[i]/3),
                                               WTSM(xarr[i]), WTSM(yarr[i]),
                                               WTSM(xarr[i] + xb[i]/3), WTSM(yarr[i] + yb[i]/3) );
                                   }
 
-                                  oustr.appendAscii(buf);
+                                  oustr.appendAscii(d->buf);
                               }
                     }
 
@@ -4315,22 +4314,22 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, const Picture* hbox)
                     mxList->addAttribute("svg:height", sXML_CDATA,
                         OUString::number (WTMM( drawobj->extent.h )) + "mm");
 
-                    sprintf(buf, "0 0 %d %d", WTSM(drawobj->extent.w), WTSM(drawobj->extent.h));
-                    mxList->addAttribute("svg:viewBox", sXML_CDATA, OUString::createFromAscii(buf) );
+                    sprintf(d->buf, "0 0 %d %d", WTSM(drawobj->extent.w), WTSM(drawobj->extent.h));
+                    mxList->addAttribute("svg:viewBox", sXML_CDATA, OUString::createFromAscii(d->buf));
 
                     OUStringBuffer oustr;
 
                     if (drawobj->u.freeform.npt > 0)
                     {
-                        sprintf(buf, "%d,%d", WTSM(drawobj->u.freeform.pt[0].x), WTSM(drawobj->u.freeform.pt[0].y));
-                        oustr.appendAscii(buf);
+                        sprintf(d->buf, "%d,%d", WTSM(drawobj->u.freeform.pt[0].x), WTSM(drawobj->u.freeform.pt[0].y));
+                        oustr.appendAscii(d->buf);
                         int i;
                         for (i = 1; i < drawobj->u.freeform.npt  ; i++)
                         {
-                            sprintf(buf, " %d,%d",
+                            sprintf(d->buf, " %d,%d",
                                 WTSM(drawobj->u.freeform.pt[i].x),
                                 WTSM(drawobj->u.freeform.pt[i].y));
-                            oustr.appendAscii(buf);
+                            oustr.appendAscii(d->buf);
                         }
                         if( drawobj->u.freeform.pt[0].x == drawobj->u.freeform.pt[i-1].x &&
                             drawobj->u.freeform.pt[0].y == drawobj->u.freeform.pt[i-1].y )
