@@ -159,7 +159,7 @@ ViewObjectContact::ViewObjectContact(ObjectContact& rObjectContact, ViewContact&
 ViewObjectContact::~ViewObjectContact()
 {
     // invalidate in view
-    if(!maObjectRange.isEmpty())
+    if(!getObjectRange().isEmpty())
     {
         GetObjectContact().InvalidatePartOfView(maObjectRange);
     }
@@ -217,7 +217,7 @@ void ViewObjectContact::ActionChanged()
     // force ObjectRange
     getObjectRange();
 
-    if(!maObjectRange.isEmpty())
+    if(!getObjectRange().isEmpty())
     {
         // invalidate current valid range
         GetObjectContact().InvalidatePartOfView(maObjectRange);
@@ -244,7 +244,7 @@ void ViewObjectContact::triggerLazyInvalidate()
     // force ObjectRange
     getObjectRange();
 
-    if(!maObjectRange.isEmpty())
+    if(!getObjectRange().isEmpty())
     {
         // invalidate current valid range
         GetObjectContact().InvalidatePartOfView(maObjectRange);
