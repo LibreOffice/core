@@ -160,6 +160,7 @@ public:
 
     bool IsChart() const;
     bool IsCalc() const;
+    bool IsMath() const;
 
     bool UpdateLinkURL_Impl();
     void BreakFileLink_Impl();

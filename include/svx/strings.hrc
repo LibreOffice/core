@@ -1830,6 +1830,14 @@
 #define STR_WARNING_GRAPHIC_PIXEL_COUNT_LOW   NC_("STR_WARNING_GRAPHIC_PIXEL_COUNT_LOW", "Image '%NAME%' has too few pixels for the current size (%DPIX% x %DPIY% DPI)")
 #define STR_WARNING_GRAPHIC_PIXEL_COUNT_HIGH  NC_("STR_WARNING_GRAPHIC_PIXEL_COUNT_HIGH", "Image '%NAME%' has too many pixels for the current size (%DPIX% x %DPIY% DPI)")
 
+// These are used in svx/source/sidebar/possize/PosSizePropertyPanel.cxx
+
+// "Edit Object", or "Edit Chart", or "Edit Formula", etc.
+#define STR_btnEditObject_TEXT         NC_("STR_btnEditObject_TEXT", "Edit %OBJ")
+#define STR_btnEditObject_CASE_DEFAULT NC_("STR_btnEditObject_CASE_DEFAULT", "Object")
+#define STR_btnEditObject_CASE_CHART   NC_("STR_btnEditObject_CASE_CHART", "Chart")
+#define STR_btnEditObject_CASE_MATH    NC_("STR_btnEditObject_CASE_MATH", "Formula")
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

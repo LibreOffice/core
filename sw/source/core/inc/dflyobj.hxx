@@ -139,6 +139,8 @@ public:
     virtual bool HasLimitedRotation() const override;
 
     virtual bool IsTextBox() const override;
+
+    virtual svt::EmbeddedObjectRef getEmbeddedObjectRef() const override;
 };
 
 #endif
