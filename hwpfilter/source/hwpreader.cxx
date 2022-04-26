@@ -71,7 +71,6 @@
     rendEl("text:span"); \
     tstart = false
 
-static hchar *field = nullptr;
 static char buf[1024];
 
 namespace
@@ -97,12 +96,13 @@ struct HwpReaderPrivate
         bInHeader = false;
         nPnPos = 0;
         pPn = nullptr;
-
+        pField = nullptr;
     }
     bool bFirstPara;
     bool bInBody;
     bool bInHeader;
     ShowPageNum *pPn;
+    hchar *pField;
     int nPnPos;
 };
 
@@ -2961,7 +2961,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 firstspace = 1;
                 if( hbox->type[0] == 4 && hbox->type[1] == 0 )
                 {
-                     field = hbox->str3.get();
+                     d->pField = hbox->str3.get();
                 }
                 else{
                      makeFieldCode(str, hbox);
@@ -2974,7 +2974,7 @@ void HwpReader::make_text_p3(HWPPara * para,bool bParaStart)
                 if( hbox->type[0] == 4 && hbox->type[1] == 0 )
                 {
                      makeFieldCode(str, hbox);
-                     field = nullptr;
+                     d->pField = nullptr;
                 }
                 infield = false;
                 str.clear();
@@ -3142,8 +3142,8 @@ void HwpReader::makeFieldCode(hchar_string const & rStr, FieldCode const *hbox)
     if( hbox->type[0] == 4 && hbox->type[1] == 0 )
     {
         padd("text:placeholder-type", sXML_CDATA, "text");
-        if( field )
-              padd("text:description", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(field)));
+        if (d->pField)
+            padd("text:description", sXML_CDATA, fromHcharStringToOUString(hstr2ucsstr(d->pField)));
         rstartEl( "text:placeholder", mxList.get());
         mxList->clear();
         rchars( fromHcharStringToOUString(rStr) );
