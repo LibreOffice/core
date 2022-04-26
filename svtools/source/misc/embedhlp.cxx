@@ -918,6 +918,34 @@ bool EmbeddedObjectRef::IsChart() const
     return EmbeddedObjectRef::IsChart(mpImpl->mxObj);
 }
 
+bool EmbeddedObjectRef::IsCalc() const
+{
+    if (!mpImpl->mxObj)
+        return false;
+
+    const SvGlobalName aObjClsId(mpImpl->mxObj->getClassID());
+    return aObjClsId == SvGlobalName(SO3_SC_CLASSID_30)
+           || aObjClsId == SvGlobalName(SO3_SC_CLASSID_40)
+           || aObjClsId == SvGlobalName(SO3_SC_CLASSID_50)
+           || aObjClsId == SvGlobalName(SO3_SC_CLASSID_60)
+           || aObjClsId == SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_60)
+           || aObjClsId == SvGlobalName(SO3_SC_OLE_EMBED_CLASSID_8)
+           || aObjClsId == SvGlobalName(SO3_SC_CLASSID);
+}
+
+bool EmbeddedObjectRef::IsMath() const
+{
+    if (!mpImpl->mxObj)
+        return false;
+
+    const SvGlobalName aObjClsId(mpImpl->mxObj->getClassID());
+    return aObjClsId == SvGlobalName(SO3_SM_CLASSID_30)
+           || aObjClsId == SvGlobalName(SO3_SM_CLASSID_40)
+           || aObjClsId == SvGlobalName(SO3_SM_CLASSID_50)
+           || aObjClsId == SvGlobalName(SO3_SM_CLASSID_60)
+           || aObjClsId == SvGlobalName(SO3_SM_CLASSID);
+}
+
 // MT: Only used for getting accessible attributes, which are not localized
 OUString EmbeddedObjectRef::GetChartType()
 {

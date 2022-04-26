@@ -32,6 +32,7 @@
 #include <vcl/ptrstyle.hxx>
 
 #include <fmtclds.hxx>
+#include <fmtcntnt.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
 #include <fmturl.hxx>
@@ -52,6 +53,7 @@
 #include <textboxhelper.hxx>
 #include <wrtsh.hxx>
 #include <ndgrf.hxx>
+#include <ndole.hxx>
 #include <frmmgr.hxx>
 
 #include <svx/sdr/properties/defaultproperties.hxx>
@@ -1290,6 +1292,32 @@ SdrObject* SwVirtFlyDrawObj::CheckMacroHit( const SdrObjMacroHitRec& rRec ) cons
 bool SwVirtFlyDrawObj::IsTextBox() const
 {
     return SwTextBoxHelper::isTextBox(GetFormat(), RES_FLYFRMFMT, this);
+}
+
+svt::EmbeddedObjectRef SwVirtFlyDrawObj::getEmbeddedObjectRef() const
+{
+    if (auto p = GetFormat())
+    {
+        if (auto pContent = p->GetItemIfSet(RES_CNTNT))
+        {
+            if (auto pNodeIndex = pContent->GetContentIdx())
+            {
+                auto aNodeIndex = *pNodeIndex;
+                if (aNodeIndex.GetNode().IsStartNode())
+                {
+                    ++aNodeIndex;
+                    if (aNodeIndex.GetNode().IsOLENode())
+                    {
+                        if (SwOLENode* pOleNode = dynamic_cast<SwOLENode*>(&aNodeIndex.GetNode()))
+                        {
+                            return pOleNode->GetOLEObj().GetObject();
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return SdrVirtObj::getEmbeddedObjectRef();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
