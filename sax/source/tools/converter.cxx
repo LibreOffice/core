@@ -687,6 +687,22 @@ bool Converter::convertDouble(double& rValue,
 }
 
 /** convert string to double number (using ::rtl::math) */
+bool Converter::convertDouble(double& rValue,
+    std::string_view rString, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
+{
+    if (!convertDouble(rValue, rString))
+        return false;
+
+    OStringBuffer sUnit;
+    // fdo#48969: switch source and target because factor is used to divide!
+    double const fFactor =
+        GetConversionFactor(sUnit, nTargetUnit, nSourceUnit);
+    if(fFactor != 1.0 && fFactor != 0.0)
+        rValue /= fFactor;
+    return true;
+}
+
+/** convert string to double number (using ::rtl::math) */
 bool Converter::convertDouble(double& rValue, std::u16string_view rString)
 {
     rtl_math_ConversionStatus eStatus;
@@ -2275,6 +2291,25 @@ double Converter::GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUn
 
         if (const auto sUnit = Measure2UnitString(nTargetUnit); sUnit.size() > 0)
             rUnit.appendAscii(sUnit.data(), sUnit.size());
+    }
+
+    return fRetval;
+}
+
+double Converter::GetConversionFactor(OStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit)
+{
+    double fRetval(1.0);
+    rUnit.setLength(0);
+
+
+    if(nSourceUnit != nTargetUnit)
+    {
+        const o3tl::Length eFrom = Measure2O3tlUnit(nSourceUnit);
+        const o3tl::Length eTo = Measure2O3tlUnit(nTargetUnit);
+        fRetval = o3tl::convert(1.0, eFrom, eTo);
+
+        if (const auto sUnit = Measure2UnitString(nTargetUnit); sUnit.size() > 0)
+            rUnit.append(sUnit.data(), sUnit.size());
     }
 
     return fRetval;

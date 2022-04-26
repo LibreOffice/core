@@ -1413,22 +1413,13 @@ OUString LocaleDataWrapper::getCurr( sal_Int64 nNumber, sal_uInt16 nDecimals,
 
 // --- number parsing -------------------------------------------------
 
-double LocaleDataWrapper::stringToDouble( const OUString& rString, bool bUseGroupSep,
+double LocaleDataWrapper::stringToDouble( std::u16string_view aString, bool bUseGroupSep,
         rtl_math_ConversionStatus* pStatus, sal_Int32* pParseEnd ) const
 {
-    const sal_Unicode cGroupSep = (bUseGroupSep ? aLocaleDataItem.thousandSeparator[0] : 0);
-    rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
-    sal_Int32 nParseEnd = 0;
-    double fValue = rtl::math::stringToDouble( rString, aLocaleDataItem.decimalSeparator[0], cGroupSep, &eStatus, &nParseEnd);
-    bool bTryAlt = (nParseEnd < rString.getLength() && !aLocaleDataItem.decimalSeparatorAlternative.isEmpty() &&
-            rString[nParseEnd] == aLocaleDataItem.decimalSeparatorAlternative.toChar());
-    // Try re-parsing with alternative if that was the reason to stop.
-    if (bTryAlt)
-        fValue = rtl::math::stringToDouble( rString, aLocaleDataItem.decimalSeparatorAlternative.toChar(), cGroupSep, &eStatus, &nParseEnd);
-    if (pStatus)
-        *pStatus = eStatus;
+    const sal_Unicode* pParseEndChar;
+    double fValue = stringToDouble(aString.data(), aString.data() + aString.size(), bUseGroupSep, pStatus, &pParseEndChar);
     if (pParseEnd)
-        *pParseEnd = nParseEnd;
+        *pParseEnd = pParseEndChar - aString.data();
     return fValue;
 }
 

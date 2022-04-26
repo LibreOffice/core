@@ -91,7 +91,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToString
  */
 struct OOO_DLLPUBLIC_CHARTTOOLS OUStringToDouble
 {
-    double operator() ( const OUString & rStr )
+    double operator() ( std::u16string_view rStr )
     {
         rtl_math_ConversionStatus eConversionStatus;
         double fResult = ::rtl::math::stringToDouble( rStr, '.', ',', & eConversionStatus );

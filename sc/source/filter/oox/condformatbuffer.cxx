@@ -26,6 +26,7 @@
 #include <com/sun/star/sheet/ConditionOperator2.hpp>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 #include <svl/sharedstringpool.hxx>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
@@ -101,12 +102,12 @@ const sal_uInt16 BIFF12_CFRULE_ABOVEAVERAGE         = 0x0004;
 const sal_uInt16 BIFF12_CFRULE_BOTTOM               = 0x0008;
 const sal_uInt16 BIFF12_CFRULE_PERCENT              = 0x0010;
 
-bool isValue(const OUString& rStr, double& rVal)
+bool isValue(std::u16string_view rStr, double& rVal)
 {
     sal_Int32 nEnd = -1;
-    rVal = rtl::math::stringToDouble(rStr.trim(), '.', ',', nullptr, &nEnd);
+    rVal = rtl::math::stringToDouble(o3tl::trim(rStr), '.', ',', nullptr, &nEnd);
 
-    return nEnd >= rStr.getLength();
+    return nEnd >= static_cast<sal_Int32>(rStr.size());
 }
 
 void SetCfvoData( ColorScaleRuleModelEntry* pEntry, const AttributeList& rAttribs )

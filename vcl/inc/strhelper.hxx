@@ -44,12 +44,12 @@ namespace psp
 
 
     // parses the first double in the string; decimal is '.' only
-    inline double StringToDouble( const OUString& rStr )
+    inline double StringToDouble( std::u16string_view rStr )
     {
         return rtl::math::stringToDouble(rStr, u'.', u'\0');
     }
 
-    inline double StringToDouble(const OString& rStr)
+    inline double StringToDouble(std::string_view rStr)
     {
         return rtl::math::stringToDouble(rStr, '.', static_cast<char>(0));
     }
