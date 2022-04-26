@@ -21,6 +21,8 @@
 #define INCLUDED_SW_SOURCE_UIBASE_INC_DRWBASSH_HXX
 
 #include "basesh.hxx"
+#include <svx/svxdlg.hxx>
+#include <svx/svdobj.hxx>
 
 class SwView;
 class SfxItemSet;
@@ -31,7 +33,8 @@ struct SvxSwFrameValidation;
 class SwDrawBaseShell: public SwBaseShell
 {
     DECL_LINK( CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&, bool );
-    DECL_LINK(ValidatePosition, SvxSwFrameValidation&, void );
+    DECL_LINK( NameDialogOkHdl_Impl, AbstractSvxObjectNameDialog&, void );
+    DECL_LINK( ValidatePosition, SvxSwFrameValidation&, void );
 public:
                 SwDrawBaseShell(SwView &rShell);
     virtual     ~SwDrawBaseShell() override;
@@ -42,6 +45,10 @@ private:
     /// SfxInterface initializer.
     static void InitInterface_Impl();
 
+    VclPtr<AbstractSvxObjectNameDialog> m_xNameDialog;
+    VclPtr<AbstractSvxObjectTitleDescDialog> m_xDescriptionDialog;
+
+    SdrObject m_xSelectedObject;
 public:
     void        Execute(SfxRequest const &);
     void        GetState(SfxItemSet &);

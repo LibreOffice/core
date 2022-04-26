@@ -54,6 +54,7 @@
 #include <IDocumentDrawModelAccess.hxx>
 #include <fmtfollowtextflow.hxx>
 #include <textboxhelper.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 
@@ -551,17 +552,24 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
 
+                m_xSelectedObject = pSelected;
+
+
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectNameDialog> pDlg(pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
+                m_xNameDialog = VclPtr<AbstractSvxObjectNameDialog>(
+                    pFact->CreateSvxObjectNameDialog(GetView().GetFrameWeld(), aName));
 
-                pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
-
-                if(RET_OK == pDlg->Execute())
-                {
-                    pDlg->GetName(aName);
-                    pSelected->SetName(aName);
-                    pSh->SetModified();
-                }
+                m_xNameDialog->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
+                m_xNameDialog->SetOkHdl(LINK(this, SwDrawBaseShell, NameDialogOkHdl_Impl));
+                m_xNameDialog->StartExecuteAsync([this] (sal_Int32){
+                    m_xNameDialog.disposeAndClear();
+                });
+                // if(RET_OK == pDlg->Execute())
+                // {
+                //     pDlg->GetName(aName);
+                //     pSelected->SetName(aName);
+                //     pSh->SetModified();
+                // }
             }
 
             break;
@@ -580,19 +588,32 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                 OUString aDescription(pSelected->GetDescription());
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ScopedVclPtr<AbstractSvxObjectTitleDescDialog> pDlg(pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(),
-                            aTitle, aDescription));
+                m_xDescriptionDialog = VclPtr<AbstractSvxObjectTitleDescDialog>(
+                    pFact->CreateSvxObjectTitleDescDialog(GetView().GetFrameWeld(), aTitle, aDescription));
 
-                if(RET_OK == pDlg->Execute())
-                {
-                    pDlg->GetTitle(aTitle);
-                    pDlg->GetDescription(aDescription);
+                m_xDescriptionDialog->StartExecuteAsync([&] (sal_Int32 retValue){
+                    if (retValue == RET_OK)
+                    {
+                        m_xDescriptionDialog->GetTitle(aTitle);
+                        m_xDescriptionDialog->GetDescription(aDescription);
 
-                    pSelected->SetTitle(aTitle);
-                    pSelected->SetDescription(aDescription);
+                        pSelected->SetTitle(aTitle);
+                        pSelected->SetDescription(aDescription);
 
-                    pSh->SetModified();
-                }
+                        pSh->SetModified();
+                    }
+                });
+
+                // if(RET_OK == pDlg->Execute())
+                // {
+                //     pDlg->GetTitle(aTitle);
+                //     pDlg->GetDescription(aDescription);
+
+                //     pSelected->SetTitle(aTitle);
+                //     pSelected->SetDescription(aDescription);
+
+                //     pSh->SetModified();
+                // }
             }
 
             break;
@@ -644,6 +665,20 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxObjectNameDialog&
         }
     }
     return bRet;
+}
+
+IMPL_LINK( SwDrawBaseShell, NameDialogOkHdl_Impl, AbstractSvxObjectNameDialog&, rNameDialog, void )
+{
+    OUString aName;
+    SwWrtShell *rSh = &GetShell();
+    //SdrObject* rSelected = rSh->GetDrawView()->GetMarkedObjectByIndex(0);
+    OSL_ENSURE(m_xSelectedObject, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
+    // will this break if you select diffrent object with dialog open?
+    rNameDialog.GetName(aName);
+    m_xSelectedObject->SetName(aName);
+    rSh->SetModified();
+
+    rNameDialog.Response(RET_CLOSE);
 }
 
 void SwDrawBaseShell::GetState(SfxItemSet& rSet)
