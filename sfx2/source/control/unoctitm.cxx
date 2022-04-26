@@ -1220,7 +1220,9 @@ static void InterceptLOKStateChangeEvent(sal_uInt16 nSID, SfxViewFrame* pViewFra
              aEvent.FeatureURL.Path == "DecrementIndent" ||
              aEvent.FeatureURL.Path == "EditHeaderAndFooter" ||
              aEvent.FeatureURL.Path == "NumberFormatDecDecimals" ||
-             aEvent.FeatureURL.Path == "NumberFormatIncDecimals")
+             aEvent.FeatureURL.Path == "NumberFormatIncDecimals" ||
+             aEvent.FeatureURL.Path == "NameGroup" ||
+             aEvent.FeatureURL.Path == "ObjectTitleDescription")
     {
         aBuffer.append(aEvent.IsEnabled ? std::u16string_view(u"enabled") : std::u16string_view(u"disabled"));
     }

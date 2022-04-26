@@ -61,7 +61,8 @@ bool isBuilderEnabled(const OUString& rUIFile, bool bMobile)
         || rUIFile == "svx/ui/accessibilitycheckdialog.ui"
         || rUIFile == "svx/ui/accessibilitycheckentry.ui"
         || rUIFile == "cui/ui/namedialog.ui"
-        || rUIFile == "cui/ui/queryduplicatedialog.ui")
+        || rUIFile == "cui/ui/queryduplicatedialog.ui"
+        || rUIFile == "cui/ui/objectnamedialog.ui")
     {
         return true;
     }

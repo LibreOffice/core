@@ -467,29 +467,35 @@ class SvxObjectTitleDescDialog;
 class AbstractSvxObjectNameDialog_Impl : public AbstractSvxObjectNameDialog
 {
 public:
-    explicit AbstractSvxObjectNameDialog_Impl(std::unique_ptr<SvxObjectNameDialog> p)
+    explicit AbstractSvxObjectNameDialog_Impl(std::shared_ptr<SvxObjectNameDialog> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void GetName(OUString& rName) override ;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) override;
+    virtual void SetOkHdl(const Link<AbstractSvxObjectNameDialog&,void>& rLink) override;
+    virtual void Response(int response) override;
 
 private:
-    std::unique_ptr<SvxObjectNameDialog> m_xDlg;
+    std::shared_ptr<SvxObjectNameDialog> m_xDlg;
     Link<AbstractSvxObjectNameDialog&,bool> aCheckNameHdl;
+    Link<AbstractSvxObjectNameDialog&,void> aOkHdl;
     DECL_LINK(CheckNameHdl, SvxObjectNameDialog&, bool);
+    DECL_LINK(OkHdl, SvxObjectNameDialog&, void);
 };
 
 class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDialog
 {
-    std::unique_ptr<SvxObjectTitleDescDialog> m_xDlg;
+    std::shared_ptr<SvxObjectTitleDescDialog> m_xDlg;
 public:
-    explicit AbstractSvxObjectTitleDescDialog_Impl(std::unique_ptr<SvxObjectTitleDescDialog> p)
+    explicit AbstractSvxObjectTitleDescDialog_Impl(std::shared_ptr<SvxObjectTitleDescDialog> p)
         : m_xDlg(std::move(p))
     {
     }
     virtual short Execute() override;
+    virtual bool StartExecuteAsync(AsyncContext &rCtx) override;
     virtual void GetTitle(OUString& rName) override;
     virtual void GetDescription(OUString& rName) override;
 };

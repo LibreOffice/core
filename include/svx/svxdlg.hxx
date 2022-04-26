@@ -181,6 +181,8 @@ protected:
 public:
     virtual void GetName(OUString& rName) = 0;
     virtual void SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink) = 0;
+    virtual void SetOkHdl(const Link<AbstractSvxObjectNameDialog&,void>& rLink) = 0;
+    virtual void Response(int response) = 0;
 };
 
 class AbstractSvxObjectTitleDescDialog :public VclAbstractDialog

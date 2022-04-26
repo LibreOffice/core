@@ -91,6 +91,7 @@
 #include <toolbarmodedlg.hxx>
 #include <DiagramDialog.hxx>
 #include <TextColumnsPage.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -237,9 +238,24 @@ short AbstractSvxObjectNameDialog_Impl::Execute()
     return m_xDlg->run();
 }
 
+bool AbstractSvxObjectNameDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
+}
+
+void AbstractSvxObjectNameDialog_Impl::Response(int response)
+{
+    m_xDlg->response(response);
+}
+
 short AbstractSvxObjectTitleDescDialog_Impl::Execute()
 {
     return m_xDlg->run();
+}
+
+bool AbstractSvxObjectTitleDescDialog_Impl::StartExecuteAsync(AsyncContext &rCtx)
+{
+    return SfxDialogController::runAsync(m_xDlg, rCtx.maEndDialogFn);
 }
 
 short AbstractSvxMultiPathDialog_Impl::Execute()
@@ -809,7 +825,10 @@ IMPL_LINK_NOARG(AbstractSvxNameDialog_Impl, CheckNameTooltipHdl, SvxNameDialog&,
 
 void AbstractSvxObjectNameDialog_Impl::GetName(OUString& rName)
 {
-    rName = m_xDlg->GetName();
+    // crashes when we don't have tempName.
+    // Something to do with OUString::operator=(rtl::OUString&&), ustring.hxx:522
+    OUString tempName = m_xDlg->GetName();
+    rName = tempName;
 }
 
 void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObjectNameDialog&,bool>& rLink)
@@ -829,6 +848,20 @@ void AbstractSvxObjectNameDialog_Impl::SetCheckNameHdl(const Link<AbstractSvxObj
 IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, CheckNameHdl, SvxObjectNameDialog&, bool)
 {
     return aCheckNameHdl.Call(*this);
+}
+
+void AbstractSvxObjectNameDialog_Impl::SetOkHdl(const Link<AbstractSvxObjectNameDialog&, void>& rLink)
+{
+    aOkHdl = rLink;
+    if( rLink.IsSet() )
+        m_xDlg->SetOkHdl( LINK(this, AbstractSvxObjectNameDialog_Impl, OkHdl) );
+    else
+        m_xDlg->SetOkHdl( Link<SvxObjectNameDialog&, void>() );
+}
+
+IMPL_LINK_NOARG(AbstractSvxObjectNameDialog_Impl, OkHdl, SvxObjectNameDialog&, void)
+{
+    aOkHdl.Call(*this);
 }
 
 void AbstractSvxObjectTitleDescDialog_Impl::GetTitle(OUString& rTitle)
@@ -1287,7 +1320,7 @@ VclPtr<AbstractSvxNameDialog> AbstractDialogFactory_Impl::CreateSvxNameDialog(we
 
 VclPtr<AbstractSvxObjectNameDialog> AbstractDialogFactory_Impl::CreateSvxObjectNameDialog(weld::Window* pParent, const OUString& rName)
 {
-    return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(std::make_unique<SvxObjectNameDialog>(pParent, rName));
+    return VclPtr<AbstractSvxObjectNameDialog_Impl>::Create(std::make_shared<SvxObjectNameDialog>(pParent, rName));
 }
 
 VclPtr<AbstractSvxObjectTitleDescDialog> AbstractDialogFactory_Impl::CreateSvxObjectTitleDescDialog(weld::Window* pParent, const OUString& rTitle, const OUString& rDescription)

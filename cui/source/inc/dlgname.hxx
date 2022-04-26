@@ -89,10 +89,12 @@ private:
     // buttons
     std::unique_ptr<weld::Button> m_xBtnOK;
 
-    // callback link for name uniqueness
+    // callback links
     Link<SvxObjectNameDialog&, bool> aCheckNameHdl;
+    Link<SvxObjectNameDialog&, void> aOkHdl;
 
     DECL_LINK(ModifyHdl, weld::Entry&, void);
+    DECL_LINK(OkHdl, weld::Button&, void);
 
 public:
     // constructor
@@ -101,8 +103,13 @@ public:
     // data access
     OUString GetName() const { return m_xEdtName->get_text(); }
 
-    // set handler
+    // set handlers
     void SetCheckNameHdl(const Link<SvxObjectNameDialog&, bool>& rLink) { aCheckNameHdl = rLink; }
+
+    void SetOkHdl(const Link<SvxObjectNameDialog&, void>& rLink)
+    {
+        aOkHdl = rLink;
+    }
 };
 
 /** #i68101#
