@@ -21,6 +21,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <rtl/ref.hxx>
@@ -44,11 +45,11 @@ namespace configmgr {
 namespace {
 
 bool decode(
-    std::u16string_view encoded, sal_Int32 begin, sal_Int32 end,
+    std::u16string_view encoded, std::size_t begin, std::size_t end,
     OUString * decoded)
 {
     assert(
-        begin >= 0 && begin <= end && end <= static_cast<sal_Int32>(encoded.size()) &&
+        begin <= end && end <= encoded.size() &&
         decoded != nullptr);
     OUStringBuffer buf(end - begin);
     while (begin != end) {
