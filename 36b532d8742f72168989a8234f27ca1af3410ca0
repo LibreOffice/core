@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20deeb0f_d32b154c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-26T13:46:24Z",
+      "side": 1,
+      "message": "Previously (before this series of patches), these two fields were not handled well.\nSAVEDATE was previously just written out as plain text. That is what we will continue to do if this is an unchangeable/locked field.\nPRINTDATE was previously saved as a generic field for round-tripping. Now that it is a proper field, if it is locked we need to just write it out as plain text or else we will lose the locked effect.\n\nSo if we don\u0027t do this, we will be causing a regression in the unlikely case of locking.",
+      "revId": "36b532d8742f72168989a8234f27ca1af3410ca0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

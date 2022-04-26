@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a60a045_74e0be55",
+        "filename": "writerfilter/source/ooxml/model.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 17673,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2022-04-26T13:46:24Z",
+      "side": 0,
+      "message": "Alternatively, I could have duplicated the ~8 lines of code in the factory file and kept them separate, but I didn\u0027t see any reason to do that - other than to keep this model.xml code more consistent.",
+      "range": {
+        "startLine": 17673,
+        "startChar": 41,
+        "endLine": 17673,
+        "endChar": 69
+      },
+      "revId": "db9841f4de56e29c106511a77b58dd271f281035",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
