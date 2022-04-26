@@ -106,7 +106,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf148380_printField, "tdf148380_printField.docx")
     auto xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     uno::Reference<text::XTextField> xField(xFields->nextElement(), uno::UNO_QUERY);
-    // unspecified SAVEDATE gets default GB formatting because stylele.xml has w:lang w:val="en-GB"
+    // unspecified SAVEDATE gets default GB formatting because style.xml has w:lang w:val="en-GB"
     CPPUNIT_ASSERT_EQUAL(OUString("08/04/2022 07:10:00 AM"), xField->getPresentation(false));
     CPPUNIT_ASSERT_EQUAL(OUString("DocInformation:Modified"), xField->getPresentation(true));
     xField.set(xFields->nextElement(), uno::UNO_QUERY);
