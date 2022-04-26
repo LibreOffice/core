@@ -34,6 +34,23 @@
       "parentUuid": "500bf1eb_43b7bb5f",
       "revId": "5f7293cc6a69161f0fb5a33597edd372b586d7fd",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d458e50f_4fe98a57",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-26T08:01:53Z",
+      "side": 1,
+      "message": "@xisco thank you for your opinion! @Laurent so just move the test to your existing patch with git commit --amend and move the test to sc/qa/uitest/calc_tests6/moveCopySheet.py and we are fine. Good work!",
+      "revId": "5f7293cc6a69161f0fb5a33597edd372b586d7fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
