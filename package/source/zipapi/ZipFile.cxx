@@ -35,6 +35,7 @@
 #include <comphelper/processfactory.hxx>
 #include <rtl/digest.h>
 #include <sal/log.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 
 #include <algorithm>
@@ -618,7 +619,7 @@ public:
     // XSeekable
     virtual void SAL_CALL seek( sal_Int64 location ) override
     {
-        if ( location > sal_Int64(maBytes.size()) || location < 0 )
+        if ( location < 0 || o3tl::make_unsigned(location) > maBytes.size() )
             throw IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
         mnPos = location;
     }

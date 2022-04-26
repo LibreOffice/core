@@ -34,6 +34,7 @@
 
 #include <osl/diagnose.h>
 #include <ucbhelper/propertyvalueset.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 using namespace com::sun::star::beans;
@@ -161,7 +162,7 @@ T PropertyValueSet::getValue(PropsSet nTypeName, sal_Int32 columnIndex)
 
     m_bWasNull = true;
 
-    if ( ( columnIndex < 1 ) || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
+    if ( ( columnIndex < 1 ) || ( o3tl::make_unsigned(columnIndex) > m_pValues->size() ) )
     {
         OSL_FAIL( "PropertyValueSet - index out of range!" );
         return aValue;
@@ -356,7 +357,7 @@ Any SAL_CALL PropertyValueSet::getObject(
     m_bWasNull = true;
 
     if ( ( columnIndex < 1 )
-         || ( columnIndex > sal_Int32( m_pValues->size() ) ) )
+         || ( o3tl::make_unsigned(columnIndex) > m_pValues->size() ) )
     {
         OSL_FAIL( "PropertyValueSet - index out of range!" );
     }

@@ -21,6 +21,7 @@
 
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/accessiblekeybindinghelper.hxx>
+#include <o3tl/safeint.hxx>
 
 
 namespace comphelper
@@ -83,7 +84,7 @@ namespace comphelper
     {
         std::scoped_lock aGuard( m_aMutex );
 
-        if ( nIndex < 0 || nIndex >= static_cast<sal_Int32>(m_aKeyBindings.size()) )
+        if ( nIndex < 0 || o3tl::make_unsigned(nIndex) >= m_aKeyBindings.size() )
             throw IndexOutOfBoundsException();
 
         return m_aKeyBindings[nIndex];

@@ -21,6 +21,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/multicontainer2.hxx>
 
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
@@ -103,7 +104,7 @@ void OInterfaceIteratorHelper2::remove()
     if( bIsList )
     {
         OSL_ASSERT( nRemain >= 0 &&
-                    nRemain < static_cast<sal_Int32>(aData.pAsVector->size()) );
+                    o3tl::make_unsigned(nRemain) < aData.pAsVector->size() );
         rCont.removeInterface(  (*aData.pAsVector)[nRemain] );
     }
     else

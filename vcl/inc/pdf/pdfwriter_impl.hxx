@@ -1071,7 +1071,7 @@ public:
     Size getCurPageSize() const
     {
         Size aSize;
-        if( m_nCurrentPage >= 0 && m_nCurrentPage < static_cast<sal_Int32>(m_aPages.size()) )
+        if( m_nCurrentPage >= 0 && o3tl::make_unsigned(m_nCurrentPage) < m_aPages.size() )
             aSize = Size( m_aPages[ m_nCurrentPage ].m_nPageWidth, m_aPages[ m_nCurrentPage ].m_nPageHeight );
         return aSize;
     }

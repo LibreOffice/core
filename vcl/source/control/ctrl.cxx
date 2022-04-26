@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/event.hxx>
 #include <vcl/ctrl.hxx>
@@ -103,7 +104,7 @@ ControlLayoutData::ControlLayoutData() : m_pParent( nullptr )
 
 tools::Rectangle ControlLayoutData::GetCharacterBounds( tools::Long nIndex ) const
 {
-    return (nIndex >= 0 && nIndex < static_cast<tools::Long>(m_aUnicodeBoundRects.size())) ? m_aUnicodeBoundRects[ nIndex ] : tools::Rectangle();
+    return (nIndex >= 0 && o3tl::make_unsigned(nIndex) < m_aUnicodeBoundRects.size()) ? m_aUnicodeBoundRects[ nIndex ] : tools::Rectangle();
 }
 
 tools::Rectangle Control::GetCharacterBounds( tools::Long nIndex ) const

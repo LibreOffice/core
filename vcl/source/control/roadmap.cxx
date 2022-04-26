@@ -19,6 +19,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <o3tl/safeint.hxx>
 #include <vcl/event.hxx>
 #include <vcl/toolkit/roadmap.hxx>
 #include <vcl/settings.hxx>
@@ -452,7 +453,7 @@ const RoadmapItem* ORoadmap::GetByID(ItemId _nID) const
 RoadmapItem* ORoadmap::GetByIndex(ItemIndex _nItemIndex)
 {
     const HL_Vector& rItems = m_pImpl->getHyperLabels();
-    if ( ( _nItemIndex > -1 ) && ( _nItemIndex < static_cast<ItemIndex>(rItems.size()) ) )
+    if ( ( _nItemIndex > -1 ) && ( o3tl::make_unsigned(_nItemIndex) < rItems.size() ) )
     {
         return rItems.at( _nItemIndex );
     }
