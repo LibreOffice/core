@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_text, \
     cppuhelper \
     sal \
     sfx \
+    svl \
     sw \
     test \
     unotest \
