@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09d29cae_b138c9b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-26T15:41:18Z",
+      "side": 1,
+      "message": "Can\u0027t we replace in sw/qa/extras/layout/data/LIBREOFFICE-UXTSOREL.rtf the uses of fonts like Palatino Linotype that are not covered by the build environment?  The exact choices of font substitution used when running `CppunitTest_sw_layoutwriter CPPUNIT_TEST_NAME\u003dtestUXTSOREL::TestBody` apparently make at least a timing difference, or maybe even cause execution to diverge.  Witness:\n\n1  \u003chttps://gerrit.libreoffice.org/c/core/+/130493/4..5/sw/qa/extras/layout/layout.cxx#2482\u003e \"FIXME: apparently infinite loop on Mac\" here.  (And which we might then be able to undo again?)\n\n2  The mail thread starting at \u003chttps://lists.freedesktop.org/archives/libreoffice/2022-April/088768.html\u003e \"Frequent recent killing of runaway CppunitTest_sw_layoutwriter on Jenkins (was: ESC meeting minutes: 2022-04-14)\" documenting how this test causes killed builds.\n\n3  My own timing tests of an --enable-dbgutil ASan+UBSan build on F36 and looking at SAL_LOG\u003d+INFO.vcl.fonts to see \"vcl/unx/generic/fontmanager/fontconfig.cxx:1164: PrintFontManager::Substitute: replacing missing font: \u0027Palatino Linotype\u0027 with\":\n3.1  With julietaula-montserrat-fonts-1:7.222-2.fc36.noarch installed (as already happened to be the case on my machine), `time make CppunitTest_sw_layoutwriter CPPUNIT_TEST_NAME\u003dtestUXTSOREL::TestBody` is ca. 1 min wall clock, and the substitute is \u0027Montserrat\u0027.\n3.2  Without that font package installed, `time make CppunitTest_sw_layoutwriter CPPUNIT_TEST_NAME\u003dtestUXTSOREL::TestBody` is ca. 10 min wall clock, andthe substitute is \u0027Linux Libertine G\u0027.",
+      "revId": "10d46c0498b89350645cf45e744a528d3d8f1ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
