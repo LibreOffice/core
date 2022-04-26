@@ -27,6 +27,7 @@
 
 #include <sax/saxdllapi.h>
 
+#include <rtl/strbuf.hxx>
 #include <sal/types.h>
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/util/MeasureUnit.hpp>
@@ -184,6 +185,13 @@ public:
                                 sal_Int16 nSourceUnit,
                                 sal_Int16 nTargetUnit );
 
+    /** convert string to double number (using ::rtl::math) and DO convert from
+        source unit to target unit. */
+    static bool convertDouble(  double& rValue,
+                                std::string_view rString,
+                                sal_Int16 nSourceUnit,
+                                sal_Int16 nTargetUnit );
+
     /** convert string to double number (using ::rtl::math) without unit conversion */
     static bool convertDouble(double& rValue, std::u16string_view rString);
 
@@ -281,6 +289,7 @@ public:
                                    sal_Int32 nPos );
 
     static double GetConversionFactor(OUStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
+    static double GetConversionFactor(OStringBuffer& rUnit, sal_Int16 nSourceUnit, sal_Int16 nTargetUnit);
     static sal_Int16 GetUnitFromString(std::u16string_view rString, sal_Int16 nDefaultUnit);
     static sal_Int16 GetUnitFromString(std::string_view rString, sal_Int16 nDefaultUnit);
 

@@ -1727,7 +1727,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
     }
     else if( aParam.startsWith( "playFrom" ) )
     {
-        const OUString aMediaTime( aParam.copy( 9, aParam.getLength() - 10 ) );
+        const std::u16string_view aMediaTime( aParam.subView( 9, aParam.getLength() - 10 ) );
         rtl_math_ConversionStatus eStatus;
         double fMediaTime = ::rtl::math::stringToDouble( aMediaTime, u'.', u',', &eStatus );
         if( eStatus == rtl_math_ConversionStatus_Ok )
