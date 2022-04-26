@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b7793aa_9b6a918a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-04-26T10:00:46Z",
+      "side": 1,
+      "message": "This is worthy of a mention on the release notes.",
+      "revId": "675788b208a7c775f8eaa51cd90528b1bb92ed79",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
