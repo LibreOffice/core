@@ -143,12 +143,9 @@ class JavaPanZoomController
 
     /** This function MUST be called on the UI thread */
     public boolean onMotionEvent(MotionEvent event) {
-        switch (event.getSource() & InputDevice.SOURCE_CLASS_MASK) {
-        case InputDevice.SOURCE_CLASS_POINTER:
-            switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_SCROLL: return handlePointerScroll(event);
-            }
-            break;
+        if ((event.getSource() & InputDevice.SOURCE_CLASS_MASK) == InputDevice.SOURCE_CLASS_POINTER
+                && (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_SCROLL) {
+            return handlePointerScroll(event);
         }
         return false;
     }
