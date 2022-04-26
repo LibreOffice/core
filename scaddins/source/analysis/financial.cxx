@@ -584,16 +584,16 @@ double SAL_CALL AnalysisAddIn::getXnpv(
     aValList.Append( rValues );
     aDateList.Append( rDates );
 
-    sal_Int32           nNum = aValList.Count();
+    sal_uInt32          nNum = aValList.Count();
 
-    if( nNum != sal_Int32( aDateList.Count() ) || nNum < 2 )
+    if( nNum != aDateList.Count() || nNum < 2 )
         throw css::lang::IllegalArgumentException();
 
     double              fRet = 0.0;
     double              fNull = aDateList.Get( 0 );
     fRate++;
 
-    for( sal_Int32 i = 0 ; i < nNum ; i++ )
+    for( sal_uInt32 i = 0 ; i < nNum ; i++ )
         fRet += aValList.Get( i ) / ( pow( fRate, ( aDateList.Get( i ) - fNull ) / 365.0 ) );
 
     RETURN_FINITE( fRet );
