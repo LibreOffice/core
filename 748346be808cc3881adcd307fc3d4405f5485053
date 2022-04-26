@@ -16,6 +16,24 @@
       "message": "Some numbers for memory allocations count for some random RTF documents i\u0027ve played with recently. Only RtfFilter::filter() and internals are taken into account.\n\n                                           before      after\n_merge_result.315_chnaged.rtf           2 731 949    997 126\noriginal rtf.rtf                        1 957 815    738 673\n",
       "revId": "748346be808cc3881adcd307fc3d4405f5485053",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0a7c527_3a4c1982",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-26T06:34:34Z",
+      "side": 1,
+      "message": "Thanks, makes sense now.",
+      "parentUuid": "d269b49b_1d1e7cb7",
+      "revId": "748346be808cc3881adcd307fc3d4405f5485053",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
