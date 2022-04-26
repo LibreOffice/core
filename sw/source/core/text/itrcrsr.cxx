@@ -1766,8 +1766,10 @@ TextFrameIndex SwTextCursor::GetModelPositionForViewPoint( SwPosition *pPos, con
                 //              (BugId: 9692 + Change in feshview)
                 SwFlyInContentFrame *pTmp = pFlyPor->GetFlyFrame();
                 SwFrame* pLower = pTmp->GetLower();
+                // Allow non-text-frames to get SwGrfNode for as-char anchored images into pPos
+                // instead of the closest SwTextNode, to be consistent with at-char behavior.
                 bool bChgNodeInner = pLower
-                    && (pLower->IsTextFrame() || pLower->IsLayoutFrame());
+                    && (pLower->IsTextFrame() || pLower->IsLayoutFrame() || pLower->IsNoTextFrame());
                 Point aTmpPoint( rPoint );
 
                 if ( m_pFrame->IsRightToLeft() )
