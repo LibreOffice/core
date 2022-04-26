@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0fe8298_af6e8e43",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000059
+      },
+      "writtenOn": "2022-04-26T10:06:16Z",
+      "side": 1,
+      "message": "Approved. There is no point in a toolbar that is never seen.",
+      "revId": "1a75baef431fa093475f1f520d48316ba786b7c9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
