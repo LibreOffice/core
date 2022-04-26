@@ -652,6 +652,119 @@ CPPUNIT_TEST_FIXTURE(Test, testFaultyPathCommandsAWT)
     assertXPath(pXmlDoc, "//p:spTree/p:sp[3]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
     assertXPath(pXmlDoc, "//p:spTree/p:sp[4]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo");
 }
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf148781StretchXY)
+{
+    // The document has a custom shapes of type "non-primitive" to trigger the custGeom export.
+    // They use formulas with 'right' and 'bottom'.
+    // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered. The
+    // line at right and bottom edge were positioned inside as if the shape had a square size.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf148781_StretchXY.odp";
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Verify the markup.
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // x-position of last segment should be same as path width. It was 21600 without fix.
+    sal_Int32 nWidth
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
+              .toInt32();
+    sal_Int32 nPosX
+        = getXPathContent(
+              pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@x")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nWidth, nPosX);
+
+    // y-position of last segment should be same as path height. It was 21600 without fix.
+    sal_Int32 nHeight
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
+              .toInt32();
+    sal_Int32 nPosY
+        = getXPathContent(
+              pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:moveTo[4]/a:pt/@y")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHeight, nPosY);
+
+    // The test reflects the state of Apr 2022. It needs to be adapted when export of handles and
+    // guides is implemented.
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf148781StretchCommandQ)
+{
+    // The document has a custom shapes of type "non-primitive" to trigger the custGeom export.
+    // They use formulas with 'right' and 'bottom'.
+    // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
+    // That results in wrong arcs on the right or bottom side of the shape.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf148781_StretchCommandQ.odp";
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Verify the markup.
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // x-position of second quadBezTo control should be same as path width. It was 21600 without fix.
+    sal_Int32 nWidth
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
+              .toInt32();
+    sal_Int32 nPosX
+        = getXPathContent(
+              pXmlDoc,
+              "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[2]/a:pt/@x")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nWidth, nPosX);
+
+    // y-position of third quadBezTo control should be same as path height. It was 21600 without fix.
+    sal_Int32 nHeight
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
+              .toInt32();
+    sal_Int32 nPosY
+        = getXPathContent(
+              pXmlDoc,
+              "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:quadBezTo[3]/a:pt/@y")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHeight, nPosY);
+
+    // The test reflects the state of Apr 2022. It needs to be adapted when export of handles and
+    // guides is implemented.
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf148781StretchCommandVW)
+{
+    // The document has a custom shapes of type "non-primitive" to trigger the custGeom export.
+    // It should not need adaption when export of handles and guides is implemented because it
+    // has only fixed values in the path.
+    // When saving to PPTX the attributes stretchpoint-x and stretchpoint-y were not considered.
+    // That results in circles instead of ellipses.
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf148781_StretchCommandVW.odp";
+    loadAndSave(aURL, "Impress Office Open XML");
+
+    // Verify the markup.
+    std::unique_ptr<SvStream> pStream = parseExportStream(getTempFile(), "ppt/slides/slide1.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+
+    // wR of first ArcTo in first shape should be same as path width/2. It was 10800 without fix.
+    sal_Int32 nHalfWidth
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/@w")
+              .toInt32()
+          / 2;
+    sal_Int32 nWR
+        = getXPathContent(pXmlDoc,
+                          "//p:spTree/p:sp[1]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@wR")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchX", nHalfWidth, nWR);
+
+    // hR of first ArcTo in second shape should be same as path height /2. It was 10800 without fix.
+    sal_Int32 nHalfHeight
+        = getXPathContent(pXmlDoc, "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/@h")
+              .toInt32()
+          / 2;
+    sal_Int32 nHR
+        = getXPathContent(pXmlDoc,
+                          "//p:spTree/p:sp[2]/p:spPr/a:custGeom/a:pathLst/a:path/a:arcTo[1]/@hR")
+              .toInt32();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("StretchY", nHalfHeight, nHR);
+}
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
