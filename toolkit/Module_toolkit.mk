@@ -27,6 +27,7 @@ $(eval $(call gb_Module_add_targets,toolkit,\
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_check_targets,toolkit,\
     CppunitTest_toolkit \
+    CppunitTest_toolkit_a11y \
 ))
 endif
 
