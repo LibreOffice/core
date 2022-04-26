@@ -152,13 +152,13 @@ static void TransformInput( SvNumberFormatter const * pFormatter, OUString& rStr
  * Only simple unsigned floating point values without any error detection,
  * decimal separator has to be '.'
  */
-double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFraction )
+double ImpSvNumberInputScan::StringToDouble( std::u16string_view aStr, bool bForceFraction )
 {
     std::unique_ptr<char[]> bufInHeap;
     constexpr int bufOnStackSize = 256;
     char bufOnStack[bufOnStackSize];
     char* buf = bufOnStack;
-    const sal_Int32 bufsize = rStr.getLength() + (bForceFraction ? 2 : 1);
+    const sal_Int32 bufsize = aStr.size() + (bForceFraction ? 2 : 1);
     if (bufsize > bufOnStackSize)
     {
         bufInHeap = std::make_unique<char[]>(bufsize);
@@ -167,9 +167,9 @@ double ImpSvNumberInputScan::StringToDouble( const OUString& rStr, bool bForceFr
     char* p = buf;
     if (bForceFraction)
         *p++ = '.';
-    for (sal_Int32 nPos = 0; nPos < rStr.getLength(); ++nPos)
+    for (size_t nPos = 0; nPos < aStr.size(); ++nPos)
     {
-        sal_Unicode c = rStr[nPos];
+        sal_Unicode c = aStr[nPos];
         if (c == '.' || (c >= '0' && c <= '9'))
             *p++ = static_cast<char>(c);
         else
@@ -4046,7 +4046,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
 
             if (eScannedType != SvNumFormatType::SCIENTIFIC)
             {
-                fOutNumber = StringToDouble(sResString.makeStringAndClear());
+                fOutNumber = StringToDouble(sResString);
             }
             else
             {                                           // append exponent
@@ -4106,7 +4106,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                 {
                     sResString = sStrArray[nNums[0]];
                     sResString.append(sStrArray[nNums[1]]); // integer part
-                    fOutNumber = StringToDouble(sResString.makeStringAndClear());
+                    fOutNumber = StringToDouble(sResString);
                 }
                 else
                 {
@@ -4133,7 +4133,7 @@ bool ImpSvNumberInputScan::IsNumberFormat( const OUString& rString,         // s
                         sResString.append(sStrArray[nNums[k]]);
                     }
                 }
-                fOutNumber = StringToDouble(sResString.makeStringAndClear());
+                fOutNumber = StringToDouble(sResString);
 
                 if (k == nNumericsCnt-2)
                 {
