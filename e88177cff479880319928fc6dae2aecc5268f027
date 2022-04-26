@@ -51,6 +51,24 @@
       "message": "You could use GetOLENode() here, which does the type check + static cast for you.",
       "revId": "e88177cff479880319928fc6dae2aecc5268f027",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9423933_4db44a1e",
+        "filename": "sw/source/core/draw/dflyobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-26T18:04:54Z",
+      "side": 1,
+      "message": "Thank you!",
+      "parentUuid": "c269f8cb_29e81ef3",
+      "revId": "e88177cff479880319928fc6dae2aecc5268f027",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
