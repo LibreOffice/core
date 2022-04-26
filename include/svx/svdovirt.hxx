@@ -22,6 +22,8 @@
 #include <svx/svdobj.hxx>
 #include <svx/svxdllapi.h>
 
+#include <svtools/embedhlp.hxx>
+
 /**
  * FIXME: The virtual object is not yet fully implemented and tested.
  * At the moment we only use it in a derived class in Writer.
@@ -62,6 +64,8 @@ public:
     virtual SdrInventor GetObjInventor() const override;
     virtual SdrObjKind GetObjIdentifier() const override;
     virtual SdrObjList* GetSubList() const override;
+
+    virtual svt::EmbeddedObjectRef getEmbeddedObjectRef() const { return {}; }
 
     virtual const tools::Rectangle& GetCurrentBoundRect() const override;
     virtual const tools::Rectangle& GetLastBoundRect() const override;

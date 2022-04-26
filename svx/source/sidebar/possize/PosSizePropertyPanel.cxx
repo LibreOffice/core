@@ -23,6 +23,7 @@
 
 #include "PosSizePropertyPanel.hxx"
 #include <sal/log.hxx>
+#include <svx/strings.hrc>
 #include <svx/svxids.hrc>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -35,6 +36,8 @@
 #include <svx/dialmgr.hxx>
 #include <svx/rectenum.hxx>
 #include <svx/sdangitm.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdovirt.hxx>
 #include <unotools/viewoptions.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/canvastools.hxx>
@@ -85,7 +88,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxAlignDispatch(new ToolbarUnoDispatcher(*mxAlignTbx, *m_xBuilder, rxFrame)),
     mxAlignTbx2(m_xBuilder->weld_toolbar("aligntoolbar2")),
     mxAlignDispatch2(new ToolbarUnoDispatcher(*mxAlignTbx2, *m_xBuilder, rxFrame)),
-    mxBtnEditChart(m_xBuilder->weld_button("btnEditChart")),
+    mxBtnEditOLEObject(m_xBuilder->weld_button("btnEditObject")),
     mpView(nullptr),
     mlOldWidth(1),
     mlOldHeight(1),
@@ -157,7 +160,7 @@ PosSizePropertyPanel::~PosSizePropertyPanel()
     mxArrangeDispatch2.reset();
     mxArrangeTbx.reset();
     mxArrangeTbx2.reset();
-    mxBtnEditChart.reset();
+    mxBtnEditOLEObject.reset();
 
     maTransfPosXControl.dispose();
     maTransfPosYControl.dispose();
@@ -198,6 +201,37 @@ namespace
 
         return false;
     }
+
+    OUString GetOLEName(const SdrView* pSdrView)
+    {
+        if (pSdrView && pSdrView->GetMarkedObjectCount() == 1)
+        {
+            std::optional<svt::EmbeddedObjectRef> oRef;
+            const SdrObject* pObj = pSdrView->GetMarkedObjectByIndex(0);
+            const SdrObjKind eKind = pObj->GetObjIdentifier();
+            if (eKind == SdrObjKind::OLE2)
+            {
+                if (const SdrOle2Obj* pSdrOleObj = dynamic_cast<const SdrOle2Obj*>(pObj))
+                    oRef.emplace(pSdrOleObj->getEmbeddedObjectRef());
+            }
+            else if (eKind == SdrObjKind::SwFlyDrawObjIdentifier)
+            {
+                if (const SdrVirtObj* pSdrVirtObj = dynamic_cast<const SdrVirtObj*>(pObj))
+                    oRef.emplace(pSdrVirtObj->getEmbeddedObjectRef());
+            }
+
+            if (oRef)
+            {
+                if (oRef->IsChart())
+                    return SvxResId(STR_btnEditObject_CASE_CHART);
+
+                if (oRef->IsMath())
+                    return SvxResId(STR_btnEditObject_CASE_MATH);
+            }
+        }
+
+        return SvxResId(STR_btnEditObject_CASE_DEFAULT);
+    }
 } // end of anonymous namespace
 
 
@@ -226,7 +260,7 @@ void PosSizePropertyPanel::Initialize()
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     mxCtrlDial->Init(aSize);
 
-    mxBtnEditChart->connect_clicked( LINK( this, PosSizePropertyPanel, ClickChartEditHdl ) );
+    mxBtnEditOLEObject->connect_clicked( LINK( this, PosSizePropertyPanel, ClickObjectEditHdl ) );
 
     SfxViewShell* pCurSh = SfxViewShell::Current();
     if ( pCurSh )
@@ -273,7 +307,7 @@ void PosSizePropertyPanel::HandleContextChange(
     bool bShowPosition = false;
     bool bShowAngle = false;
     bool bShowFlip = false;
-    bool bShowEditChart = false;
+    bool bShowEditObject = false;
     bool bShowArrangeTbx2 = false;
 
     switch (maContext.GetCombinedContext_DI())
@@ -302,13 +336,13 @@ void PosSizePropertyPanel::HandleContextChange(
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::OLE):
-            bShowEditChart = true;
+            bShowEditObject = true;
             break;
 
         case CombinedEnumContext(Application::Calc, Context::OLE):
         case CombinedEnumContext(Application::DrawImpress, Context::OLE):
             bShowPosition = true;
-            bShowEditChart = true;
+            bShowEditObject = true;
             break;
 
         case CombinedEnumContext(Application::Calc, Context::Chart):
@@ -338,8 +372,8 @@ void PosSizePropertyPanel::HandleContextChange(
     mxFtFlip->set_visible(bShowFlip);
     mxFlipTbx->set_visible(bShowFlip);
 
-    // Edit Chart
-    mxBtnEditChart->set_visible(bShowEditChart);
+    // Edit Object
+    mxBtnEditOLEObject->set_visible(bShowEditObject);
 
     // Arrange tool bar 2
     mxArrangeTbx2->set_visible(bShowArrangeTbx2);
@@ -452,7 +486,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
             SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
 }
 
-IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void )
+IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickObjectEditHdl, weld::Button&, void )
 {
     SfxViewShell* pCurSh = SfxViewShell::Current();
     if ( pCurSh)
@@ -769,6 +803,12 @@ void PosSizePropertyPanel::NotifyItemUpdate(
     if ( aUserItem >>= aTemp )
         sUserData = aTemp;
     mxCbxScale->set_active(static_cast<bool>(sUserData.toInt32()));
+
+    if (mxBtnEditOLEObject->get_visible())
+    {
+        mxBtnEditOLEObject->set_label(
+            SvxResId(STR_btnEditObject_TEXT).replaceFirst(u"%OBJ", GetOLEName(mpView)));
+    }
 }
 
 void PosSizePropertyPanel::GetControlState(const sal_uInt16 nSID, boost::property_tree::ptree& rState)
