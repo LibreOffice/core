@@ -122,7 +122,7 @@ bool SwGlossaries::FindGroupName(OUString& rGroup)
     for(size_t i = 0; i < nCount; ++i)
     {
         const OUString sTemp( GetGroupName( i ));
-        sal_uInt16 nPath = sTemp.getToken(1, GLOS_DELIM).toUInt32();
+        sal_uInt16 nPath = o3tl::toUInt32(o3tl::getToken(sTemp, 1, GLOS_DELIM));
 
         if (!SWUnoHelper::UCB_IsCaseSensitiveFileName( m_PathArr[nPath] )
              && rSCmp.isEqual( rGroup, sTemp.getToken( 0, GLOS_DELIM) ) )

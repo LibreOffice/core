@@ -543,7 +543,7 @@ void SfxRedactionHelper::fillSearchOptions(i18nutil::SearchOptions2& rSearchOpt,
     rSearchOpt.Locale = GetAppLanguageTag().getLocale();
     if (rTarget.sType == RedactionTargetType::REDACTION_TARGET_PREDEFINED)
     {
-        auto nPredefIndex = rTarget.sContent.getToken(0, ';').toUInt32();
+        auto nPredefIndex = o3tl::toUInt32(o3tl::getToken(rTarget.sContent, 0, ';'));
         rSearchOpt.searchString = m_aPredefinedTargets[nPredefIndex];
     }
     else

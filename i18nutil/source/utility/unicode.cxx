@@ -26,6 +26,7 @@
 #include <unicode/numfmt.h>
 #include "unicode_data.h"
 #include <rtl/character.hxx>
+#include <o3tl/string_view.hxx>
 #include <memory>
 
 // Workaround for glibc braindamage:
@@ -1019,7 +1020,7 @@ OUString ToggleUnicodeCodepoint::StringToReplace()
         sIn = maInput.toString();
     while( nUPlus != -1 )
     {
-        nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
+        nUnicode = o3tl::toUInt32(sIn.subView(0, nUPlus), 16);
         //prevent creating control characters or invalid Unicode values
         if( !rtl::isUnicodeCodePoint(nUnicode) || nUnicode < 0x20  )
             maInput = sIn.subView(nUPlus);
@@ -1062,7 +1063,7 @@ OUString ToggleUnicodeCodepoint::ReplacementString()
         }
         while( nUPlus > 0 )
         {
-            nUnicode = sIn.copy(0, nUPlus).toUInt32(16);
+            nUnicode = o3tl::toUInt32(sIn.subView(0, nUPlus), 16);
             output.appendUtf32( nUnicode );
 
             sIn = sIn.copy(nUPlus+2);

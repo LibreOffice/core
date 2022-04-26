@@ -119,7 +119,7 @@ sal_Int32 lclConvertCrop(const OUString& rCrop, sal_uInt32 nSize)
     if (rCrop.endsWith("f"))
     {
         // Numeric value is specified in 1/65536-ths.
-        sal_uInt32 nCrop = rCrop.copy(0, rCrop.getLength() - 1).toUInt32();
+        sal_uInt32 nCrop = o3tl::toUInt32(rCrop.subView(0, rCrop.getLength() - 1));
         return (nCrop * nSize) / 65536;
     }
 

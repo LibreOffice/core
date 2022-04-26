@@ -8,6 +8,7 @@
  */
 
 #include <comphelper/random.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/string.hxx>
 #include <sal/log.hxx>
 #include <vcl/keycodes.hxx>
@@ -260,7 +261,7 @@ DebugEventInjector *DebugEventInjector::getCreate()
     const char *pEvents = getenv("VCL_EVENT_INJECTION");
     if (!pEvents)
         return nullptr;
-    nEvents = OString( pEvents ).toUInt32();
+    nEvents = o3tl::toUInt32( pEvents );
     if (nEvents > 0)
         return new DebugEventInjector( nEvents );
     else
