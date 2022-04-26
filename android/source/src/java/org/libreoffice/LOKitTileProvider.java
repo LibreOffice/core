@@ -176,9 +176,9 @@ class LOKitTileProvider implements TileProvider {
     }
 
     public void resetParts(){
-        int parts = mDocument.getParts();
         mContext.getDocumentPartView().clear();
         if (mDocument.getDocumentType() != Document.DOCTYPE_TEXT) {
+            int parts = mDocument.getParts();
             for (int i = 0; i < parts; i++) {
                 String partName = mDocument.getPartName(i);
 
@@ -192,7 +192,9 @@ class LOKitTileProvider implements TileProvider {
                 mContext.getDocumentPartView().add(partView);
             }
         }
-    } public void renamePart(String partName) {
+    }
+
+    public void renamePart(String partName) {
         try{
             for(int i=0; i<mDocument.getParts(); i++){
                 if(mContext.getDocumentPartView().get(i).partName.equals(partName)){
