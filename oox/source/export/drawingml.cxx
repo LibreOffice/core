@@ -3824,10 +3824,11 @@ void getEllipsePointFromViewAngle(double& rfSx, double& rfSy, const double fWR, 
 }
 
 sal_Int32 GetCustomGeometryPointValue(const css::drawing::EnhancedCustomShapeParameter& rParam,
-                                      const EnhancedCustomShape2d& rCustomShape2d)
+                                      const EnhancedCustomShape2d& rCustomShape2d,
+                                      const bool bReplaceGeoWidth, const bool bReplaceGeoHeight)
 {
     double fValue = 0.0;
-    rCustomShape2d.GetParameter(fValue, rParam, false, false);
+    rCustomShape2d.GetParameter(fValue, rParam, bReplaceGeoWidth, bReplaceGeoHeight);
     sal_Int32 nValue(std::lround(fValue));
 
     return nValue;
@@ -3848,7 +3849,7 @@ struct Guide
 };
 
 void prepareTextArea(const EnhancedCustomShape2d& rEnhancedCustomShape2d,
-                    std::vector<Guide>& rGuideList, TextAreaRect& rTextAreaRect)
+                     std::vector<Guide>& rGuideList, TextAreaRect& rTextAreaRect)
 {
     tools::Rectangle aTextAreaLO(rEnhancedCustomShape2d.GetTextRect());
     tools::Rectangle aLogicRectLO(rEnhancedCustomShape2d.GetLogicRect());
@@ -3947,6 +3948,8 @@ bool DrawingML::WriteCustomGeometry(
     uno::Sequence<drawing::EnhancedCustomShapeParameterPair> aPairs;
     uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
     uno::Sequence<awt::Size> aPathSize;
+    bool bReplaceGeoWidth = false;
+    bool bReplaceGeoHeight = false;
     for (const beans::PropertyValue& rPathProp : std::as_const(aPathProp))
     {
         if (rPathProp.Name == "Coordinates")
@@ -3955,6 +3958,10 @@ bool DrawingML::WriteCustomGeometry(
             rPathProp.Value >>= aSegments;
         else if (rPathProp.Name == "SubViewSize")
             rPathProp.Value >>= aPathSize;
+        else if (rPathProp.Name == "StretchX")
+            bReplaceGeoWidth = true;
+        else if (rPathProp.Name == "StretchY")
+            bReplaceGeoHeight = true;
     }
 
     if ( !aPairs.hasElements() )
@@ -3997,7 +4004,7 @@ bool DrawingML::WriteCustomGeometry(
     else
     {
         mpFS->startElementNS(XML_a, XML_gdLst);
-        for (auto const& elem: aGuideList)
+        for (auto const& elem : aGuideList)
         {
             mpFS->singleElementNS(XML_a, XML_gd, XML_name, elem.sName, XML_fmla, elem.sFormula);
         }
@@ -4057,8 +4064,10 @@ bool DrawingML::WriteCustomGeometry(
 
             for (const auto& rPair : std::as_const(aPairs))
             {
-                sal_Int32 nX = GetCustomGeometryPointValue(rPair.First, aCustomShape2d);
-                sal_Int32 nY = GetCustomGeometryPointValue(rPair.Second, aCustomShape2d);
+                sal_Int32 nX = GetCustomGeometryPointValue(rPair.First, aCustomShape2d,
+                                                           bReplaceGeoWidth, false);
+                sal_Int32 nY = GetCustomGeometryPointValue(rPair.Second, aCustomShape2d, false,
+                                                           bReplaceGeoHeight);
                 if (nX < nXMin)
                     nXMin = nX;
                 if (nY < nYMin)
@@ -4147,7 +4156,8 @@ bool DrawingML::WriteCustomGeometry(
             for (sal_Int32 k = 0; k < rSegment.Count && bOK; ++k)
             {
                 bOK = WriteCustomGeometrySegment(rSegment.Command, k, aPairs, nPairIndex, fCurrentX,
-                                                 fCurrentY, bCurrentValid, aCustomShape2d);
+                                                 fCurrentY, bCurrentValid, aCustomShape2d,
+                                                 bReplaceGeoWidth, bReplaceGeoHeight);
             }
         } // end loop over all commands of subpath
         // finish this subpath in any case
@@ -4171,7 +4181,8 @@ bool DrawingML::WriteCustomGeometrySegment(
     const sal_Int16 eCommand, const sal_Int32 nCount,
     const uno::Sequence<css::drawing::EnhancedCustomShapeParameterPair>& rPairs,
     sal_Int32& rnPairIndex, double& rfCurrentX, double& rfCurrentY, bool& rbCurrentValid,
-    const EnhancedCustomShape2d& rCustomShape2d)
+    const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
+    const bool bReplaceGeoHeight)
 {
     switch (eCommand)
     {
@@ -4181,10 +4192,13 @@ bool DrawingML::WriteCustomGeometrySegment(
                 return false;
 
             mpFS->startElementNS(XML_a, XML_moveTo);
-            WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+            WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
+                                     bReplaceGeoHeight);
             mpFS->endElementNS(XML_a, XML_moveTo);
-            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, false, false);
-            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex].Second, false, false);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, bReplaceGeoWidth,
+                                        false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex].Second, false,
+                                        bReplaceGeoHeight);
             rbCurrentValid = true;
             rnPairIndex++;
             break;
@@ -4199,17 +4213,21 @@ bool DrawingML::WriteCustomGeometrySegment(
             if (rbCurrentValid)
             {
                 mpFS->startElementNS(XML_a, XML_lnTo);
-                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
+                                         bReplaceGeoHeight);
                 mpFS->endElementNS(XML_a, XML_lnTo);
             }
             else
             {
                 mpFS->startElementNS(XML_a, XML_moveTo);
-                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
+                                         bReplaceGeoHeight);
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
-            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, false, false);
-            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex].Second, false, false);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex].First, bReplaceGeoWidth,
+                                        false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex].Second, false,
+                                        bReplaceGeoHeight);
             rbCurrentValid = true;
             rnPairIndex++;
             break;
@@ -4222,11 +4240,14 @@ bool DrawingML::WriteCustomGeometrySegment(
             mpFS->startElementNS(XML_a, XML_cubicBezTo);
             for (sal_uInt8 i = 0; i <= 2; ++i)
             {
-                WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d, bReplaceGeoWidth,
+                                         bReplaceGeoHeight);
             }
             mpFS->endElementNS(XML_a, XML_cubicBezTo);
-            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 2].First, false, false);
-            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex + 2].Second, false, false);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 2].First, bReplaceGeoWidth,
+                                        false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex + 2].Second, false,
+                                        bReplaceGeoHeight);
             rbCurrentValid = true;
             rnPairIndex += 3;
             break;
@@ -4239,9 +4260,9 @@ bool DrawingML::WriteCustomGeometrySegment(
 
             // Read parameters
             double fCx = 0.0;
-            rCustomShape2d.GetParameter(fCx, rPairs[rnPairIndex].First, false, false);
+            rCustomShape2d.GetParameter(fCx, rPairs[rnPairIndex].First, bReplaceGeoWidth, false);
             double fCy = 0.0;
-            rCustomShape2d.GetParameter(fCy, rPairs[rnPairIndex].Second, false, false);
+            rCustomShape2d.GetParameter(fCy, rPairs[rnPairIndex].Second, false, bReplaceGeoHeight);
             double fWR = 0.0;
             rCustomShape2d.GetParameter(fWR, rPairs[rnPairIndex + 1].First, false, false);
             double fHR = 0.0;
@@ -4307,21 +4328,27 @@ bool DrawingML::WriteCustomGeometrySegment(
 
             // read parameters
             double fX1 = 0.0;
-            rCustomShape2d.GetParameter(fX1, rPairs[rnPairIndex].First, false, false);
+            rCustomShape2d.GetParameter(fX1, rPairs[rnPairIndex].First, bReplaceGeoWidth, false);
             double fY1 = 0.0;
-            rCustomShape2d.GetParameter(fY1, rPairs[rnPairIndex].Second, false, false);
+            rCustomShape2d.GetParameter(fY1, rPairs[rnPairIndex].Second, false, bReplaceGeoHeight);
             double fX2 = 0.0;
-            rCustomShape2d.GetParameter(fX2, rPairs[rnPairIndex + 1].First, false, false);
+            rCustomShape2d.GetParameter(fX2, rPairs[rnPairIndex + 1].First, bReplaceGeoWidth,
+                                        false);
             double fY2 = 0.0;
-            rCustomShape2d.GetParameter(fY2, rPairs[rnPairIndex + 1].Second, false, false);
+            rCustomShape2d.GetParameter(fY2, rPairs[rnPairIndex + 1].Second, false,
+                                        bReplaceGeoHeight);
             double fX3 = 0.0;
-            rCustomShape2d.GetParameter(fX3, rPairs[rnPairIndex + 2].First, false, false);
+            rCustomShape2d.GetParameter(fX3, rPairs[rnPairIndex + 2].First, bReplaceGeoWidth,
+                                        false);
             double fY3 = 0.0;
-            rCustomShape2d.GetParameter(fY3, rPairs[rnPairIndex + 2].Second, false, false);
+            rCustomShape2d.GetParameter(fY3, rPairs[rnPairIndex + 2].Second, false,
+                                        bReplaceGeoHeight);
             double fX4 = 0.0;
-            rCustomShape2d.GetParameter(fX4, rPairs[rnPairIndex + 3].First, false, false);
+            rCustomShape2d.GetParameter(fX4, rPairs[rnPairIndex + 3].First, bReplaceGeoWidth,
+                                        false);
             double fY4 = 0.0;
-            rCustomShape2d.GetParameter(fY4, rPairs[rnPairIndex + 3].Second, false, false);
+            rCustomShape2d.GetParameter(fY4, rPairs[rnPairIndex + 3].Second, false,
+                                        bReplaceGeoHeight);
             // calculate ellipse parameter
             const double fWR = (fX2 - fX1) / 2.0;
             const double fHR = (fY2 - fY1) / 2.0;
@@ -4379,9 +4406,9 @@ bool DrawingML::WriteCustomGeometrySegment(
 
             // read parameters
             double fX = 0.0;
-            rCustomShape2d.GetParameter(fX, rPairs[rnPairIndex].First, false, false);
+            rCustomShape2d.GetParameter(fX, rPairs[rnPairIndex].First, bReplaceGeoWidth, false);
             double fY = 0.0;
-            rCustomShape2d.GetParameter(fY, rPairs[rnPairIndex].Second, false, false);
+            rCustomShape2d.GetParameter(fY, rPairs[rnPairIndex].Second, false, bReplaceGeoHeight);
 
             // Prepare parameters for arcTo
             if (rbCurrentValid)
@@ -4419,7 +4446,8 @@ bool DrawingML::WriteCustomGeometrySegment(
             {
                 // faulty path, but we continue with the target point
                 mpFS->startElementNS(XML_a, XML_moveTo);
-                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex], rCustomShape2d, bReplaceGeoWidth,
+                                         bReplaceGeoHeight);
                 mpFS->endElementNS(XML_a, XML_moveTo);
             }
             rfCurrentX = fX;
@@ -4436,11 +4464,14 @@ bool DrawingML::WriteCustomGeometrySegment(
             mpFS->startElementNS(XML_a, XML_quadBezTo);
             for (sal_uInt8 i = 0; i < 2; ++i)
             {
-                WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d);
+                WriteCustomGeometryPoint(rPairs[rnPairIndex + i], rCustomShape2d, bReplaceGeoWidth,
+                                         bReplaceGeoHeight);
             }
             mpFS->endElementNS(XML_a, XML_quadBezTo);
-            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 1].First, false, false);
-            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex + 1].Second, false, false);
+            rCustomShape2d.GetParameter(rfCurrentX, rPairs[rnPairIndex + 1].First, bReplaceGeoWidth,
+                                        false);
+            rCustomShape2d.GetParameter(rfCurrentY, rPairs[rnPairIndex + 1].Second, false,
+                                        bReplaceGeoHeight);
             rbCurrentValid = true;
             rnPairIndex += 2;
             break;
@@ -4483,10 +4514,13 @@ bool DrawingML::WriteCustomGeometrySegment(
 
 void DrawingML::WriteCustomGeometryPoint(
     const drawing::EnhancedCustomShapeParameterPair& rParamPair,
-    const EnhancedCustomShape2d& rCustomShape2d)
+    const EnhancedCustomShape2d& rCustomShape2d, const bool bReplaceGeoWidth,
+    const bool bReplaceGeoHeight)
 {
-    sal_Int32 nX = GetCustomGeometryPointValue(rParamPair.First, rCustomShape2d);
-    sal_Int32 nY = GetCustomGeometryPointValue(rParamPair.Second, rCustomShape2d);
+    sal_Int32 nX
+        = GetCustomGeometryPointValue(rParamPair.First, rCustomShape2d, bReplaceGeoWidth, false);
+    sal_Int32 nY
+        = GetCustomGeometryPointValue(rParamPair.Second, rCustomShape2d, false, bReplaceGeoHeight);
 
     mpFS->singleElementNS(XML_a, XML_pt, XML_x, OString::number(nX), XML_y, OString::number(nY));
 }
