@@ -16,6 +16,23 @@
       "message": "The suggested changes are done.",
       "revId": "ca772047520ed3612cd3409652471cfa3b7f3763",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddee3d54_e7b7601f",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-26T18:07:52Z",
+      "side": 1,
+      "message": "\"Visual Studio 2022 is also supported\" is not related to \"current minimal ... compiler version\". Please drop it - this is not a wiki.",
+      "revId": "ca772047520ed3612cd3409652471cfa3b7f3763",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
