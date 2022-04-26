@@ -468,7 +468,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
 
 // StringRangeEnumerator
 
-StringRangeEnumerator::StringRangeEnumerator( const OUString& i_rInput,
+StringRangeEnumerator::StringRangeEnumerator( std::u16string_view i_rInput,
                                               sal_Int32 i_nMinNumber,
                                               sal_Int32 i_nMaxNumber,
                                               sal_Int32 i_nLogicalOffset
@@ -566,18 +566,19 @@ void StringRangeEnumerator::insertJoinedRanges(
     }
 }
 
-bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
+bool StringRangeEnumerator::setRange( std::u16string_view aNewRange )
 {
     mnCount = 0;
     maSequence.clear();
 
-    const sal_Unicode* pInput = i_rNewRange.getStr();
+    auto pInput = aNewRange.begin();
+    auto pInputEnd = aNewRange.end();
     OUStringBuffer aNumberBuf( 16 );
     std::vector< sal_Int32 > aNumbers;
     bool bSequence = false;
-    while( *pInput )
+    while( pInput != pInputEnd )
     {
-        while( *pInput >= '0' && *pInput <= '9' )
+        while( pInput != pInputEnd && *pInput >= '0' && *pInput <= '9' )
             aNumberBuf.append( *pInput++ );
         if( !aNumberBuf.isEmpty() )
         {
@@ -585,7 +586,8 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
             aNumbers.push_back( nNumber );
             bSequence = false;
         }
-
+        if (pInput == pInputEnd)
+            break;
         if( *pInput == '-' )
         {
             bSequence = true;
@@ -607,11 +609,10 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange )
             aNumbers.clear();
             bSequence = false;
         }
-        else if( *pInput && *pInput != ' ' )
+        else if( *pInput != ' ' )
             return false; // parse error
 
-        if( *pInput )
-            pInput++;
+        pInput++;
     }
     // insert last entries
     if( bSequence && !aNumbers.empty() )
@@ -710,7 +711,7 @@ StringRangeEnumerator::Iterator StringRangeEnumerator::end( const o3tl::sorted_v
     return StringRangeEnumerator::Iterator( this, i_pPossibleValues, -1, -1 );
 }
 
-bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
+bool StringRangeEnumerator::getRangesFromString( std::u16string_view i_rPageRange,
                                                  std::vector< sal_Int32 >& o_rPageVector,
                                                  sal_Int32 i_nMinNumber,
                                                  sal_Int32 i_nMaxNumber,
