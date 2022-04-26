@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SOT_SOURCE_SDSTOR_STGCACHE_HXX
 #define INCLUDED_SOT_SOURCE_SDSTOR_STGCACHE_HXX
 
+#include <o3tl/safeint.hxx>
 #include <osl/endian.h>
 #include <rtl/ref.hxx>
 #include <tools/stream.hxx>
@@ -115,7 +116,7 @@ public:
 
 inline sal_Int32 StgCache::GetFromPage ( const rtl::Reference< StgPage >& rPage, short nOff )
 {
-    if( ( nOff >= static_cast<short>( rPage->GetSize() / sizeof( sal_Int32 ) ) ) || nOff < 0 )
+    if( nOff < 0 || ( o3tl::make_unsigned(nOff) >= rPage->GetSize() / sizeof( sal_Int32 ) ) )
         return -1;
     sal_Int32 n = static_cast<sal_Int32*>(rPage->GetData())[ nOff ];
 #ifdef OSL_BIGENDIAN

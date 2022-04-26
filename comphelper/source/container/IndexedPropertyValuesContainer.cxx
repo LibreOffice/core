@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <vector>
 
@@ -89,7 +90,7 @@ void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, c
 
 void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
 {
-    if ((nIndex >= sal_Int32(maProperties.size())) || (nIndex < 0))
+    if ((nIndex < 0) || (o3tl::make_unsigned(nIndex) >= maProperties.size()))
         throw lang::IndexOutOfBoundsException();
 
     maProperties.erase(maProperties.begin() + nIndex);

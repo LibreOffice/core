@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
@@ -1756,7 +1757,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
         {
             pList->set_active( static_cast< sal_uInt16 >(nVal) );
         }
-        else if( nVal >= 0 && nVal < sal_Int32(rWindows.size() ) )
+        else if( nVal >= 0 && o3tl::make_unsigned(nVal) < rWindows.size() )
         {
             weld::RadioButton* pBtn = dynamic_cast<weld::RadioButton*>(rWindows[nVal]);
             SAL_WARN_IF( !pBtn, "vcl", "unexpected control for property" );

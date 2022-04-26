@@ -27,6 +27,7 @@
 #include <com/sun/star/rendering/XBezierPolyPolygon2D.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/basegfxdllapi.h>
+#include <o3tl/safeint.hxx>
 
 namespace basegfx::unotools
 {
@@ -73,7 +74,7 @@ namespace basegfx::unotools
         /// Check whether index is a valid polygon index
         void checkIndex( sal_Int32 nIndex ) const // throw (css::lang::IndexOutOfBoundsException);
         {
-            if( nIndex < 0 || nIndex >= static_cast<sal_Int32>(maPolyPoly.count()) )
+            if( nIndex < 0 || o3tl::make_unsigned(nIndex) >= maPolyPoly.count() )
                 throw css::lang::IndexOutOfBoundsException();
         }
 

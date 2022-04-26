@@ -27,6 +27,7 @@
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #include <com/sun/star/i18n/KNumberFormatType.hpp>
@@ -376,7 +377,7 @@ const OUString& LocaleDataWrapper::getOneLocaleItem( sal_Int16 nItem ) const
 
 const OUString& LocaleDataWrapper::getOneReservedWord( sal_Int16 nWord ) const
 {
-    if ( nWord < 0 || nWord >= static_cast<sal_Int16>(aReservedWords.size()) )
+    if ( nWord < 0 || o3tl::make_unsigned(nWord) >= aReservedWords.size() )
     {
         SAL_WARN( "unotools.i18n", "getOneReservedWord: bounds" );
         static const OUString EMPTY;

@@ -229,7 +229,7 @@ namespace basegfx::unotools
 
         const B2DPolygon& rPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
 
-        if( nPointIndex < 0 || nPointIndex >= static_cast<sal_Int32>(rPoly.count()) )
+        if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= rPoly.count() )
             throw lang::IndexOutOfBoundsException();
 
         return unotools::point2DFromB2DPoint( rPoly.getB2DPoint( nPointIndex ) );
@@ -246,7 +246,7 @@ namespace basegfx::unotools
 
         B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
 
-        if( nPointIndex < 0 || nPointIndex >= static_cast<sal_Int32>(aPoly.count()) )
+        if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= aPoly.count() )
             throw lang::IndexOutOfBoundsException();
 
         aPoly.setB2DPoint( nPointIndex,
@@ -297,7 +297,7 @@ namespace basegfx::unotools
         const B2DPolygon& rPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
         const sal_uInt32  nPointCount(rPoly.count());
 
-        if( nPointIndex < 0 || nPointIndex >= static_cast<sal_Int32>(nPointCount) )
+        if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= nPointCount )
             throw lang::IndexOutOfBoundsException();
 
         const B2DPoint& rPt( rPoly.getB2DPoint( nPointIndex ) );
@@ -323,7 +323,7 @@ namespace basegfx::unotools
         B2DPolygon aPoly( maPolyPoly.getB2DPolygon( nPolygonIndex ) );
         const sal_uInt32 nPointCount(aPoly.count());
 
-        if( nPointIndex < 0 || nPointIndex >= static_cast<sal_Int32>(nPointCount) )
+        if( nPointIndex < 0 || o3tl::make_unsigned(nPointIndex) >= nPointCount )
             throw lang::IndexOutOfBoundsException();
 
         aPoly.setB2DPoint( nPointIndex,
