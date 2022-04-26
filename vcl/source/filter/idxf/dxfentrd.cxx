@@ -672,7 +672,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
             nBoundaryPathCount = rDGR.GetI();
             // limit alloc to max reasonable size based on remaining data in stream
             if (nBoundaryPathCount > 0 && o3tl::make_unsigned(nBoundaryPathCount) <= rDGR.remainingSize())
-                pBoundaryPathData.reset( new DXFBoundaryPathData[ nBoundaryPathCount ] );
+                aBoundaryPathData.resize(nBoundaryPathCount);
             else
                 nBoundaryPathCount = 0;
         }
@@ -701,7 +701,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
             {
                 if ( ( nCurrentBoundaryPathIndex >= 0 ) &&
                     ( nCurrentBoundaryPathIndex < nBoundaryPathCount ) )
-                    bExecutingGroupCode = pBoundaryPathData[ nCurrentBoundaryPathIndex ].EvaluateGroup( rDGR );
+                    bExecutingGroupCode = aBoundaryPathData[ nCurrentBoundaryPathIndex ].EvaluateGroup( rDGR );
             }
             if ( !bExecutingGroupCode )
                 DXFBasicEntity::EvaluateGroup(rDGR);
