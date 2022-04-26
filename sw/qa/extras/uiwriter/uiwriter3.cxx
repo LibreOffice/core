@@ -2626,6 +2626,119 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf141391)
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[2]/cell[1]/txt/Text", "Portion", "hello");
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
+{
+    // test Paste as Rows Above with centered table alignment
+
+    // load a 2-row table
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf116789.fodt");
+    CPPUNIT_ASSERT(pDoc);
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT(pWrtShell);
+
+    // select and copy the table, and Paste As Rows Above
+
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    // remove the selection and positionate the cursor at beginning of A2
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:PasteRowsBefore", {});
+    Scheduler::ProcessEventsToIdle();
+
+    xmlDocUniquePtr pXmlDoc = parseLayoutDump();
+    // Paste as Rows Above results 4-row table with default table aligment
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 4);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/Text", "Portion", "hello");
+
+    // set table alignment to center, select and copy the table again
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
+
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    // Default table alignment
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::FULL,
+                         getProperty<sal_Int16>(xTextTable, "HoriOrient"));
+
+    //CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xTextTable, "TableTemplateName"));
+    uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
+
+    xTableProps->setPropertyValue("HoriOrient", uno::makeAny(text::HoriOrientation::CENTER));
+
+    CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER,
+                         getProperty<sal_Int16>(xTextTable, "HoriOrient"));
+
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    // remove the selection and positionate the cursor at beginning of A2
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:PasteRowsBefore", {});
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // This was 5 (inserting only a single row for the 4-row clipboard content, and
+    // overwriting 3 existing rows)
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 8);
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[5]/cell[1]/txt/Text", "Portion", "hello");
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[7]/cell[1]/txt/Text", "Portion", "hello");
+
+    // tdf#64902 add a test case for nested tables
+
+    // insert a nested table, and copy as paste as rows above the whole table with it
+    dispatchCommand(mxComponent, ".uno:PasteNestedTable", {});
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    // remove the selection and positionate the cursor at beginning of A2
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // skip 7 table rows plus 4 rows of the nested table
+    for (int i = 0; i < 7 + 4; ++i)
+        pWrtShell->Up(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:PasteRowsBefore", {});
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // rows of the nested table doesn't effect row number of the main table
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 16);
+    // there are two nested tables after the paste
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/tab", 2);
+
+    // tdf#64902 add a test case for repeated table headings
+
+    xTableProps->setPropertyValue("RepeatHeadline", uno::makeAny(true));
+    CPPUNIT_ASSERT(getProperty<bool>(xTextTable, "RepeatHeadline"));
+
+    xTableProps->setPropertyValue("HeaderRowCount", uno::makeAny(sal_Int32(3)));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(xTextTable, "HeaderRowCount"));
+
+    dispatchCommand(mxComponent, ".uno:SelectTable", {});
+    dispatchCommand(mxComponent, ".uno:Copy", {});
+    // remove the selection and positionate the cursor at beginning of A2
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    // skip 15 table rows plus 4 * 2 rows of the nested tables
+    for (int i = 0; i < 15 + 4 * 2; ++i)
+        pWrtShell->Up(/*bSelect=*/false);
+    dispatchCommand(mxComponent, ".uno:PasteRowsBefore", {});
+    Scheduler::ProcessEventsToIdle();
+
+    discardDumpedLayout();
+    pXmlDoc = parseLayoutDump();
+    // repeating table header (and its thead/tbody indentation) doesn't effect row number
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 32);
+    // there are two nested tables after the paste
+    assertXPath(pXmlDoc, "/root/page[1]/body/tab/row/cell/tab", 4);
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
 {
     createSwDoc();
