@@ -130,8 +130,6 @@ class LOKitTileProvider implements TileProvider {
                 String partName = mDocument.getPartName(i);
                 if (partName.isEmpty()) {
                     partName = getGenericPartName(i);
-                }else if (partName.startsWith("Slide") || partName.startsWith("Sheet") || partName.startsWith("Part")) {
-                    partName = getGenericPartName(i);
                 }
                 Log.i(LOGTAG, "Document part " + i + " name:'" + partName + "'");
 
