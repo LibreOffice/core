@@ -25,6 +25,7 @@
 #include <unotools/fontdefs.hxx>
 #include <sal/macros.h>
 
+#include <cstddef>
 #include <map>
 #include <vector>
 
@@ -1355,7 +1356,7 @@ const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName,
     if( aMapName == "starsymbol"
      || aMapName == "opensymbol" )
     {
-        for( int i = 0; i < int(SAL_N_ELEMENTS(aStarSymbolRecodeTable)); ++i)
+        for( std::size_t i = 0; i < SAL_N_ELEMENTS(aStarSymbolRecodeTable); ++i)
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
@@ -1370,7 +1371,7 @@ const ConvertChar* ConvertChar::GetRecodeData( std::u16string_view rOrgFontName,
     //adobe-symbol to unicode conversion in rtl instead
     else if( aMapName == "applesymbol" )
     {
-        for( int i = 0; i < int(SAL_N_ELEMENTS(aAppleSymbolRecodeTable)); ++i)
+        for( std::size_t i = 0; i < SAL_N_ELEMENTS(aAppleSymbolRecodeTable); ++i)
         {
             const RecodeTable& r = aAppleSymbolRecodeTable[i];
             if( aOrgName.equalsAscii( r.pOrgName ) )
@@ -1399,8 +1400,8 @@ FontToSubsFontConverter CreateFontToSubsFontConverter( std::u16string_view rOrgN
 
     if ( nFlags == FontToSubsFontFlags::IMPORT )
     {
-        const int nEntries = 2; // only StarMath+StarBats
-        for( int i = 0; i < nEntries; ++i )
+        const std::size_t nEntries = 2; // only StarMath+StarBats
+        for( std::size_t i = 0; i < nEntries; ++i )
         {
             const RecodeTable& r = aStarSymbolRecodeTable[i];
             if( aName.equalsAscii( r.pOrgName ) )
