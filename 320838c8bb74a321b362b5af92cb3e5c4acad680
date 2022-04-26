@@ -34,6 +34,24 @@
       "parentUuid": "018abd6e_ea4f0190",
       "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "386e7712_83835b4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-26T10:20:44Z",
+      "side": 1,
+      "message": "Macros are not bound to documents.\nI was missing the \"Edit macros\" entry which opens the Basic IDE directly. In the other apps it\u0027s there.",
+      "parentUuid": "e417a834_2497533f",
+      "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
