@@ -1114,6 +1114,16 @@ ATTR_SETEMPHASIS:
                             }
                             break;
 
+                        // We expect these to be preceeded by a RTF_HYPHEN and
+                        // so normally are handled by the RTF_HYPHEN case, but
+                        // if they appear 'bare' in a document then safely skip
+                        // them here
+                        case RTF_HYPHLEAD:
+                        case RTF_HYPHTRAIL:
+                        case RTF_HYPHMAX:
+                            SkipGroup();
+                            break;
+
                         case RTF_SHADOW:
                             {
                                 bool bSkip = true;
