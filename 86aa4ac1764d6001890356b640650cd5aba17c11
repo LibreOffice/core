@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae0f0285_05e44f10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-26T17:50:09Z",
+      "side": 1,
+      "message": "Thank you for the adaption. Personally, I would not mix these two tests up. Just create an additional method inside the class.",
+      "revId": "86aa4ac1764d6001890356b640650cd5aba17c11",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
