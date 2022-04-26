@@ -424,6 +424,22 @@ inline sal_Int32 toInt32(std::string_view str, sal_Int16 radix = 10)
     return n;
 }
 
+// Like OString::toUInt32, but for std::string_view:
+inline sal_uInt32 toUInt32(std::u16string_view str, sal_Int16 radix = 10)
+{
+    sal_Int64 n = rtl_ustr_toInt64_WithLength(str.data(), radix, str.size());
+    if (n < 0 || n > SAL_MAX_UINT32)
+        n = 0;
+    return n;
+}
+inline sal_uInt32 toUInt32(std::string_view str, sal_Int16 radix = 10)
+{
+    sal_Int64 n = rtl_str_toInt64_WithLength(str.data(), radix, str.size());
+    if (n < 0 || n > SAL_MAX_UINT32)
+        n = 0;
+    return n;
+}
+
 // Like OString::toInt64, but for std::string_view:
 inline sal_Int64 toInt64(std::u16string_view str, sal_Int16 radix = 10)
 {

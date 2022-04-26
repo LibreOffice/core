@@ -26,6 +26,7 @@
 #include <com/sun/star/xml/input/XRoot.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ref.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <vector>
 
@@ -36,7 +37,7 @@ inline sal_Int32 toInt32( OUString const & rStr )
     sal_Int32 nVal;
     if (rStr.getLength() > 2 && rStr[ 0 ] == '0' && rStr[ 1 ] == 'x')
     {
-        nVal = rStr.copy( 2 ).toUInt32( 16 );
+        nVal = o3tl::toUInt32(rStr.subView( 2 ),  16);
     }
     else
     {

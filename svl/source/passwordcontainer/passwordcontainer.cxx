@@ -29,6 +29,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/task/InteractionHandler.hpp>
 #include <com/sun/star/task/MasterPasswordRequest.hpp>
@@ -425,7 +426,7 @@ std::vector< OUString > PasswordContainer::DecodePasswords( std::u16string_view 
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = static_cast<char>(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
+                code[ ind ] = static_cast<char>(o3tl::toUInt32(aMasterPasswd.subView( ind*2, 2 ), 16));
 
             unsigned char iv[RTL_DIGEST_LENGTH_MD5] = {0};
             if (!aIV.empty())
@@ -487,7 +488,7 @@ OUString PasswordContainer::EncodePasswords(const std::vector< OUString >& lines
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = static_cast<char>(aMasterPasswd.copy( ind*2, 2 ).toUInt32(16));
+                code[ ind ] = static_cast<char>(o3tl::toUInt32(aMasterPasswd.subView( ind*2, 2 ), 16));
 
             unsigned char iv[RTL_DIGEST_LENGTH_MD5] = {0};
             if (!aIV.empty())

@@ -376,10 +376,10 @@ bool StringView::VisitCXXMemberCallExpr(CXXMemberCallExpr const* expr)
         || tc.Class("OString").Namespace("rtl").GlobalNamespace())
     {
         auto const dc = loplugin::DeclCheck(expr->getMethodDecl());
-        if (dc.Function("toInt32") || dc.Function("toInt64") || dc.Function("toDouble")
-            || dc.Function("equalsIgnoreAsciiCase") || dc.Function("compareToIgnoreAsciiCase")
-            || dc.Function("trim") || dc.Function("startsWith") || dc.Function("endsWith")
-            || dc.Function("match"))
+        if (dc.Function("toInt32") || dc.Function("toUInt32") || dc.Function("toInt64")
+            || dc.Function("toDouble") || dc.Function("equalsIgnoreAsciiCase")
+            || dc.Function("compareToIgnoreAsciiCase") || dc.Function("trim")
+            || dc.Function("startsWith") || dc.Function("endsWith") || dc.Function("match"))
         {
             handleSubExprThatCouldBeView(expr->getImplicitObjectArgument());
         }
