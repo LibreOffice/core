@@ -1454,6 +1454,18 @@ void SwTransferable::SelectPasteFormat(TransferableDataHelper& rData, sal_uInt8&
     nFormat = SotClipboardFormatId::EMBED_SOURCE;
 }
 
+// get HTML indentation level by counting tabulator characters before the index
+// (also index value -1 returns with 0)
+static sal_Int32 lcl_getLevel(OUString& sText, sal_Int32 nIdx)
+{
+    sal_Int32 nRet = 0;
+    while ( nIdx-- > 0 && sText[nIdx] == '\t' )
+    {
+        nRet++;
+    }
+    return nRet;
+}
+
 bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndStdIds nAnchorType, bool bIgnoreComments, PasteTableType ePasteTable)
 {
     SwPasteContext aPasteContext(rSh);
@@ -1568,16 +1580,22 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
         bool bRowMode = rSh.GetTableInsertMode() == SwTable::SEARCH_ROW || ePasteTable == PasteTableType::PASTE_ROW;
         if( rData.GetString( SotClipboardFormatId::HTML, aExpand ) && (nIdx = aExpand.indexOf("<table")) > -1 )
         {
-            // table rows with span use also tbody
-            bool bShifted = aExpand.indexOf("<tbody>") > -1;
+            // calculate table row/column count by analysing indentation of the HTML table extract
+
+            // calculate indentation level of <table>, which is the base of the next calculations
+            // (tdf#148791 table alignment can enlarge it using first level <center>, <div> or <dl>)
+            sal_Int32 nTableLevel = lcl_getLevel(aExpand, nIdx);
+            // table rows repeated heading use extra indentation, too:
+            // <thead> is always used here, and the first table with <thead> is not nested,
+            // if its indentation level is greater only by 1, than intentation level of the table
+            bool bShifted = lcl_getLevel(aExpand, aExpand.indexOf("<thead")) == nTableLevel + 1;
             // calculate count of selected rows or columns
             sal_Int32 nSelectedRowsOrCols = 0;
             const OUString sSearchRowOrCol = bRowMode ? OUString("</tr>") : OUString("<col ");
             while((nIdx = aExpand.indexOf(sSearchRowOrCol, nIdx)) > -1)
             {
                 // skip rows/columns of nested tables, based on HTML indentation
-                if ( nIdx > 3 && (aExpand[nIdx-1] != '\t' || aExpand[nIdx-2] != '\t' ||
-                    ( bShifted && aExpand[nIdx-3] != '\t') ) &&
+                if ( lcl_getLevel(aExpand, nIdx) == nTableLevel + (bShifted ? 2 : 1) &&
                     // skip also strange hidden empty rows <tr></tr>
                     !aExpand.match("<tr></tr>", nIdx - 4) )
                 {
