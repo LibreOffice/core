@@ -692,6 +692,7 @@ void ExtensionCmdQueue::Thread::execute()
             eInput = m_eInput;
             m_eInput = NONE;
             nSize = m_queue.size();
+            // coverity[missing_lock: FALSE] - maybe due to (by-design) unique_lock vs. scoped_lock?
             m_bWorking = false;
         }
 
