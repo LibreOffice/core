@@ -301,6 +301,7 @@ public:
     void            SetSumAssignMode();
     void            EnableButtons( bool bEnable );
 
+    void            StartFormula();
     void            SetFormulaMode( bool bSet );
 
     bool            IsInputActive();
@@ -334,6 +335,7 @@ public:
     void MenuHdl(std::string_view command);
     DECL_LINK( DropdownClickHdl, ToolBox*, void );
 
+    void            OpenAutoSumMenu();
     void            AutoSum( bool& bRangeFinder, bool& bSubTotal, OpCode eCode );
 
 private:
