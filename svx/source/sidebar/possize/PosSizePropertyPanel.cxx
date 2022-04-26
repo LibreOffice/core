@@ -85,7 +85,7 @@ PosSizePropertyPanel::PosSizePropertyPanel(
     mxAlignDispatch(new ToolbarUnoDispatcher(*mxAlignTbx, *m_xBuilder, rxFrame)),
     mxAlignTbx2(m_xBuilder->weld_toolbar("aligntoolbar2")),
     mxAlignDispatch2(new ToolbarUnoDispatcher(*mxAlignTbx2, *m_xBuilder, rxFrame)),
-    mxBtnEditChart(m_xBuilder->weld_button("btnEditChart")),
+    mxBtnEditOLEObject(m_xBuilder->weld_button("btnEditObject")),
     mpView(nullptr),
     mlOldWidth(1),
     mlOldHeight(1),
@@ -157,7 +157,7 @@ PosSizePropertyPanel::~PosSizePropertyPanel()
     mxArrangeDispatch2.reset();
     mxArrangeTbx.reset();
     mxArrangeTbx2.reset();
-    mxBtnEditChart.reset();
+    mxBtnEditOLEObject.reset();
 
     maTransfPosXControl.dispose();
     maTransfPosYControl.dispose();
@@ -226,7 +226,7 @@ void PosSizePropertyPanel::Initialize()
     pDrawingArea->set_size_request(aSize.Width(), aSize.Height());
     mxCtrlDial->Init(aSize);
 
-    mxBtnEditChart->connect_clicked( LINK( this, PosSizePropertyPanel, ClickChartEditHdl ) );
+    mxBtnEditOLEObject->connect_clicked( LINK( this, PosSizePropertyPanel, ClickObjectEditHdl ) );
 
     SfxViewShell* pCurSh = SfxViewShell::Current();
     if ( pCurSh )
@@ -273,7 +273,7 @@ void PosSizePropertyPanel::HandleContextChange(
     bool bShowPosition = false;
     bool bShowAngle = false;
     bool bShowFlip = false;
-    bool bShowEditChart = false;
+    bool bShowEditObject = false;
     bool bShowArrangeTbx2 = false;
 
     switch (maContext.GetCombinedContext_DI())
@@ -302,13 +302,13 @@ void PosSizePropertyPanel::HandleContextChange(
             break;
 
         case CombinedEnumContext(Application::WriterVariants, Context::OLE):
-            bShowEditChart = true;
+            bShowEditObject = true;
             break;
 
         case CombinedEnumContext(Application::Calc, Context::OLE):
         case CombinedEnumContext(Application::DrawImpress, Context::OLE):
             bShowPosition = true;
-            bShowEditChart = true;
+            bShowEditObject = true;
             break;
 
         case CombinedEnumContext(Application::Calc, Context::Chart):
@@ -338,8 +338,8 @@ void PosSizePropertyPanel::HandleContextChange(
     mxFtFlip->set_visible(bShowFlip);
     mxFlipTbx->set_visible(bShowFlip);
 
-    // Edit Chart
-    mxBtnEditChart->set_visible(bShowEditChart);
+    // Edit Object
+    mxBtnEditOLEObject->set_visible(bShowEditObject);
 
     // Arrange tool bar 2
     mxArrangeTbx2->set_visible(bShowArrangeTbx2);
@@ -452,7 +452,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )
             SfxCallMode::RECORD, { &aAngleItem, &aRotXItem, &aRotYItem });
 }
 
-IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickChartEditHdl, weld::Button&, void )
+IMPL_STATIC_LINK_NOARG( PosSizePropertyPanel, ClickObjectEditHdl, weld::Button&, void )
 {
     SfxViewShell* pCurSh = SfxViewShell::Current();
     if ( pCurSh)
