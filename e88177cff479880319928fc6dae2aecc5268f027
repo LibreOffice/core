@@ -16,6 +16,41 @@
       "message": "Miklos: could you please sanity-check the code - it is rather convoluted way to get EmbeddedObjectRef :-)\nThanks!",
       "revId": "e88177cff479880319928fc6dae2aecc5268f027",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b628a184_686cf4ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-26T15:18:03Z",
+      "side": 1,
+      "message": "Looks correct to me, you just reinvented GetFooNode() -- perhaps that\u0027s worth fixing?",
+      "parentUuid": "e495065d_585312e9",
+      "revId": "e88177cff479880319928fc6dae2aecc5268f027",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c269f8cb_29e81ef3",
+        "filename": "sw/source/core/draw/dflyobj.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1311,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-26T15:18:03Z",
+      "side": 1,
+      "message": "You could use GetOLENode() here, which does the type check + static cast for you.",
+      "revId": "e88177cff479880319928fc6dae2aecc5268f027",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
