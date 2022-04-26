@@ -91,6 +91,44 @@ CPPUNIT_TEST_FIXTURE(Test, testGotoContentControl)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(5), nEnd);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
+{
+    // Given a document with a checkbox (checked) content control:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, OUString(u"☒"), /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Checkbox", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("Checked", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("CheckedState", uno::makeAny(OUString(u"☒")));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::makeAny(OUString(u"☐")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When clicking on that content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    pWrtShell->GotoContentControl(rFormatContentControl);
+
+    // Then make sure that the checkbox is no longer checked:
+    // Without the accompanying fix in place, this test would have failed:
+    // - Expected: ☐
+    // - Actual  : ☒
+    // i.e. the text node's text was CH_TXTATR_BREAKWORD + "Ballot Box with X", not just
+    // CH_TXTATR_BREAKWORD + "Ballot Box".
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\x0001☐"), pTextNode->GetText());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testInsertContentControl)
 {
     // Given an empty document:

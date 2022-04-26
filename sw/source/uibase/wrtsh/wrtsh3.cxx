@@ -33,6 +33,10 @@
 #include <view.hxx>
 #include <IMark.hxx>
 #include <doc.hxx>
+#include <formatcontentcontrol.hxx>
+#include <IDocumentUndoRedo.hxx>
+#include <SwRewriter.hxx>
+#include <strings.hrc>
 
 using namespace ::com::sun::star;
 
@@ -88,6 +92,40 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
     (this->*m_fnKillSel)(nullptr, false);
 
     bool bRet = SwCursorShell::GotoFormatContentControl(rContentControl);
+
+    auto pContentControl = const_cast<SwContentControl*>(rContentControl.GetContentControl());
+    if (bRet && pContentControl && pContentControl->GetCheckbox())
+    {
+        // Checkbox: GotoFormatContentControl() selected the old state.
+        LockView(/*bViewLocked=*/true);
+        OUString aOldState;
+        OUString aNewState;
+        if (pContentControl->GetChecked())
+        {
+            aOldState = pContentControl->GetCheckedState();
+            aNewState = pContentControl->GetUncheckedState();
+        }
+        else
+        {
+            aOldState = pContentControl->GetUncheckedState();
+            aNewState = pContentControl->GetCheckedState();
+        }
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, aOldState);
+        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
+        aRewriter.AddRule(UndoArg3, aNewState);
+        GetIDocumentUndoRedo().StartUndo(SwUndoId::REPLACE, &aRewriter);
+
+        // Toggle the state.
+        DelLeft();
+        pContentControl->SetChecked(!pContentControl->GetChecked());
+        Insert(aNewState);
+
+        GetIDocumentUndoRedo().EndUndo(SwUndoId::REPLACE, &aRewriter);
+        LockView(/*bViewLocked=*/false);
+        ShowCursor();
+    }
+
     if (bRet && IsSelFrameMode())
     {
         UnSelectFrame();
