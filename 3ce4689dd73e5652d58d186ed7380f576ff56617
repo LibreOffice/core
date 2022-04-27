@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5d301c6_85cedbb6",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-27T17:05:09Z",
+      "side": 0,
+      "message": "I don\u0027t understand why this line was changed.",
+      "range": {
+        "startLine": 376,
+        "startChar": 87,
+        "endLine": 376,
+        "endChar": 94
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d65ad511_f23d1151",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-27T17:05:09Z",
+      "side": 0,
+      "message": "And this.",
+      "range": {
+        "startLine": 378,
+        "startChar": 88,
+        "endLine": 378,
+        "endChar": 95
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac58d260_584168ec",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-27T17:05:09Z",
+      "side": 0,
+      "message": "And this.",
+      "range": {
+        "startLine": 380,
+        "startChar": 88,
+        "endLine": 380,
+        "endChar": 95
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

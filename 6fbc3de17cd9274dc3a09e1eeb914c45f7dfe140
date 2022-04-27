@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d145540d_22d54d2b",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-27T17:05:09Z",
+      "side": 1,
+      "message": "I only wrote about this thing in the bug.",
+      "range": {
+        "startLine": 379,
+        "startChar": 111,
+        "endLine": 379,
+        "endChar": 114
+      },
+      "revId": "6fbc3de17cd9274dc3a09e1eeb914c45f7dfe140",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
