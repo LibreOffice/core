@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e551ac1b_e70d1bf1",
+        "filename": "codemaker/source/codemaker/unotype.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-27T15:37:17Z",
+      "side": 1,
+      "message": "Another case of a non-sink OString parameter that was likely returned as-is for many invocations of this function, which now got pessimized?",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 25
+      },
+      "revId": "9463550eabd0455c374c1369bc72388108baccad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
