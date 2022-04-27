@@ -375,6 +375,7 @@ endef
 
 define gb_CppunitTest_use_more_fonts
 ifneq ($(filter MORE_FONTS,$(BUILD_TYPE)),)
+export SAL_ABORT_ON_NON_APPLICATION_FONT_USE=1
 $(call gb_CppunitTest_get_target,$(1)) : \
     $(foreach font,$(gb_Package_MODULE_ooo_fonts),$(call gb_Package_get_target,$(font)))
 endif
