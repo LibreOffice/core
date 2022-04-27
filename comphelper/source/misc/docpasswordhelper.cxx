@@ -376,15 +376,15 @@ OUString DocPasswordHelper::GetOoxHashAsBase64(
 }
 
 
-/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
+/*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( std::u16string_view aPassword, const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
-    if ( !aPassword.isEmpty() && aDocId.getLength() == 16 )
+    if ( !aPassword.empty() && aDocId.getLength() == 16 )
     {
         sal_uInt16 pPassData[16] = {};
 
-        sal_Int32 nPassLen = std::min< sal_Int32 >( aPassword.getLength(), 15 );
-        memcpy( pPassData, aPassword.getStr(), nPassLen * sizeof(pPassData[0]) );
+        sal_Int32 nPassLen = std::min< sal_Int32 >( aPassword.size(), 15 );
+        memcpy( pPassData, aPassword.data(), nPassLen * sizeof(pPassData[0]) );
 
         aResultKey = GenerateStd97Key( pPassData, aDocId );
     }

@@ -331,7 +331,7 @@ public:
       */
 
     static css::uno::Sequence< sal_Int8 > GenerateStd97Key(
-                const OUString& aPassword,
+                std::u16string_view aPassword,
                 const css::uno::Sequence< sal_Int8 >& aDocId );
 
 
