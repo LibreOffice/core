@@ -21,6 +21,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 #include <utility>
 #include <vector>
@@ -48,7 +49,7 @@ namespace comphelper::xmlsec
         The second string is for the details view at the bottom. It shows the attribute/value
         pairs on different lines. All escape characters ('"') are removed.
     */
-    std::pair< OUString, OUString> GetDNForCertDetailsView( const OUString & rRawString)
+    std::pair< OUString, OUString> GetDNForCertDetailsView( std::u16string_view rRawString)
     {
         std::vector< std::pair< OUString, OUString > > vecAttrValueOfDN = parseDN(rRawString);
         OUStringBuffer s1, s2;
@@ -72,18 +73,18 @@ namespace comphelper::xmlsec
     they are escaped with a double quote. This function removes the escape characters.
 */
 #ifdef _WIN32
-std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString)
+std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawString)
 {
         std::vector< std::pair<OUString, OUString> > retVal;
         bool bInEscape = false;
         bool bInValue = false;
         bool bInType = true;
         sal_Int32 nTypeNameStart = 0;
-        OUString sType;
+        std::u16string_view sType;
         OUStringBuffer sbufValue;
-        sal_Int32 length = rRawString.getLength();
+        size_t length = rRawString.size();
 
-        for (sal_Int32 i = 0; i < length; i++)
+        for (size_t i = 0; i < length; i++)
         {
             sal_Unicode c = rRawString[i];
 
@@ -91,8 +92,8 @@ std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString
             {
                 if (! bInValue)
                 {
-                    sType = rRawString.copy(nTypeNameStart, i - nTypeNameStart);
-                    sType = sType.trim();
+                    sType = rRawString.substr(nTypeNameStart, i - nTypeNameStart);
+                    sType = o3tl::trim(sType);
                     bInType = false;
                 }
                 else
@@ -128,9 +129,9 @@ std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString
                 //then we have reached the end of the value
                 if (!bInValue)
                 {
-                    OSL_ASSERT(!sType.isEmpty());
-                    retVal.push_back(std::make_pair(sType, sbufValue.makeStringAndClear()));
-                    sType.clear();
+                    OSL_ASSERT(!sType.empty());
+                    retVal.push_back(std::make_pair(OUString(sType), sbufValue.makeStringAndClear()));
+                    sType = {};
                     //The next char is the start of the new type
                     nTypeNameStart = i + 1;
                     bInType = true;
@@ -151,13 +152,13 @@ std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString
         }
         if (sbufValue.getLength())
         {
-            OSL_ASSERT(!sType.isEmpty());
-            retVal.push_back(std::make_pair(sType, sbufValue.makeStringAndClear()));
+            OSL_ASSERT(!sType.empty());
+            retVal.push_back(std::make_pair(OUString(sType), sbufValue.makeStringAndClear()));
         }
         return retVal;
     }
 #else
-std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString)
+std::vector< std::pair< OUString, OUString> > parseDN(std::u16string_view rRawString)
     {
         std::vector< std::pair<OUString, OUString> > retVal;
         //bInEscape == true means that the preceding character is an escape character
@@ -165,11 +166,11 @@ std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString
         bool bInValue = false;
         bool bInType = true;
         sal_Int32 nTypeNameStart = 0;
-        OUString sType;
+        std::u16string_view sType;
         OUStringBuffer sbufValue;
-        sal_Int32 length = rRawString.getLength();
+        size_t length = rRawString.size();
 
-        for (sal_Int32 i = 0; i < length; i++)
+        for (size_t i = 0; i < length; i++)
         {
             sal_Unicode c = rRawString[i];
 
@@ -177,8 +178,8 @@ std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString
             {
                 if (! bInValue)
                 {
-                    sType = rRawString.copy(nTypeNameStart, i - nTypeNameStart);
-                    sType = sType.trim();
+                    sType = rRawString.substr(nTypeNameStart, i - nTypeNameStart);
+                    sType = o3tl::trim(sType);
                     bInType = false;
                 }
                 else
@@ -223,9 +224,9 @@ std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString
                 //then we have reached the end of the value
                 if (!bInValue)
                 {
-                    OSL_ASSERT(!sType.isEmpty());
+                    OSL_ASSERT(!sType.empty());
                     retVal.emplace_back(sType, sbufValue.makeStringAndClear());
-                    sType.clear();
+                    sType = {};
                     //The next char is the start of the new type
                     nTypeNameStart = i + 1;
                     bInType = true;
@@ -249,7 +250,7 @@ std::vector< std::pair< OUString, OUString> > parseDN(const OUString& rRawString
         }
         if (!sbufValue.isEmpty())
         {
-            OSL_ASSERT(!sType.isEmpty());
+            OSL_ASSERT(!sType.empty());
             retVal.emplace_back(sType, sbufValue.makeStringAndClear());
         }
         return retVal;

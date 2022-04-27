@@ -31,9 +31,10 @@ namespace comphelper::xmlsec
 {
 COMPHELPER_DLLPUBLIC OUString GetCertificateKind(const css::security::CertificateKind& rKind);
 
-COMPHELPER_DLLPUBLIC std::vector<std::pair<OUString, OUString>> parseDN(const OUString& rRawString);
+COMPHELPER_DLLPUBLIC std::vector<std::pair<OUString, OUString>>
+parseDN(std::u16string_view rRawString);
 COMPHELPER_DLLPUBLIC std::pair<OUString, OUString>
-GetDNForCertDetailsView(const OUString& rRawString);
+GetDNForCertDetailsView(std::u16string_view rRawString);
 COMPHELPER_DLLPUBLIC OUString GetContentPart(const OUString& _rRawString,
                                              const css::security::CertificateKind& rKind);
 
