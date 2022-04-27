@@ -1580,7 +1580,7 @@ bool SwTransferable::Paste(SwWrtShell& rSh, TransferableDataHelper& rData, RndSt
             sal_Int32 nTableLevel = lcl_getLevel(aExpand, nIdx);
             // table rows repeated heading use extra indentation, too:
             // <thead> is always used here, and the first table with <thead> is not nested,
-            // if its indentation level is greater only by 1, than intentation level of the table
+            // if its indentation level is greater only by 1, than indentation level of the table
             bool bShifted = lcl_getLevel(aExpand, aExpand.indexOf("<thead")) == nTableLevel + 1;
             // calculate count of selected rows or columns
             sal_Int32 nSelectedRowsOrCols = 0;

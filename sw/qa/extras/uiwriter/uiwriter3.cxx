@@ -2647,7 +2647,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
     Scheduler::ProcessEventsToIdle();
 
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
-    // Paste as Rows Above results 4-row table with default table aligment
+    // Paste as Rows Above results 4-row table with default table alignment
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row", 4);
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[1]/cell[1]/txt/Text", "Portion", "hello");
     assertXPath(pXmlDoc, "/root/page[1]/body/tab/row[3]/cell[1]/txt/Text", "Portion", "hello");
