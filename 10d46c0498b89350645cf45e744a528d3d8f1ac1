@@ -34,6 +34,23 @@
       "parentUuid": "09d29cae_b138c9b2",
       "revId": "10d46c0498b89350645cf45e744a528d3d8f1ac1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20e31897_baa1acf3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-27T08:59:56Z",
+      "side": 1,
+      "message": "What is the value of having this test?  Michael claimed offline that executing it with \u003chttps://git.libreoffice.org/core/+/3f569ffc9238e6bf2915e78bf21c844ca5f1270d%5E!/\u003e \"sw: really prevent footnote frame against delete while it\u0027s moved\" (and its follow-up \u003chttps://git.libreoffice.org/core/+/f51ec0c0c860d751ac4255470796ffba4a5fafd3%5E!/\u003e \"sw: oops forgot to remove this comment\") locally reverted should lead to a crash.  But at least on my recent master Linux ASan+UBSan build, doing that local revert and executing `make CppunitTest_sw_layoutwriter CPPUNIT_TEST_NAME\u003dtestUXTSOREL::TestBody` still succeeds.",
+      "revId": "10d46c0498b89350645cf45e744a528d3d8f1ac1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
