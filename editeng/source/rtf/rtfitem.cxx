@@ -1114,7 +1114,7 @@ ATTR_SETEMPHASIS:
                             }
                             break;
 
-                        // We expect these to be preceeded by a RTF_HYPHEN and
+                        // We expect these to be preceded by a RTF_HYPHEN and
                         // so normally are handled by the RTF_HYPHEN case, but
                         // if they appear 'bare' in a document then safely skip
                         // them here
