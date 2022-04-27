@@ -177,6 +177,8 @@ void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int
 
     lang::Locale aLocale(rArgs.maLanguageTag.getLocale());
 
+    SAL_DEBUG("SETNEED:" << static_cast<int>(rArgs.mrStr[nCharPos]));
+
     //if position nCharPos is missing in the font, grab the entire grapheme and
     //mark all glyphs as missing so the whole thing is rendered with the same
     //font
