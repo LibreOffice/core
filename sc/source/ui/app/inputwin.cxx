@@ -677,6 +677,11 @@ void ScInputWindow::EnableButtons( bool bEnable )
 //  Invalidate();
 }
 
+void ScInputWindow::NumLinesChanged()
+{
+    mxTextWindow->NumLinesChanged();
+}
+
 void ScInputWindow::StateChanged( StateChangedType nType )
 {
     ToolBox::StateChanged( nType );
@@ -908,6 +913,7 @@ void ScInputBarGroup::Resize()
 {
     mxTextWndGroup->SetScrollPolicy();
     InterimItemWindow::Resize();
+    TriggerToolboxLayout();
 }
 
 void ScInputBarGroup::StopEditEngine(bool bAll)
@@ -1034,16 +1040,25 @@ IMPL_LINK_NOARG(ScInputWindow, DropdownClickHdl, ToolBox *, void)
 IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl, weld::Button&, void)
 {
     if (mxTextWndGroup->GetNumLines() > 1)
-    {
         mxTextWndGroup->SetNumLines(1);
-        mxButtonUp->hide();
-        mxButtonDown->show();
+    else
+        mxTextWndGroup->SetNumLines(mxTextWndGroup->GetLastNumExpandedLines());
+
+    NumLinesChanged();
+}
+
+void ScInputBarGroup::NumLinesChanged()
+{
+    if (mxTextWndGroup->GetNumLines() > 1)
+    {
+        mxButtonDown->hide();
+        mxButtonUp->show();
+        mxTextWndGroup->SetLastNumExpandedLines(mxTextWndGroup->GetNumLines());
     }
     else
     {
-        mxTextWndGroup->SetNumLines(mxTextWndGroup->GetLastNumExpandedLines());
-        mxButtonDown->hide();
-        mxButtonUp->show();
+        mxButtonUp->hide();
+        mxButtonDown->show();
     }
     TriggerToolboxLayout();
 
@@ -1163,6 +1178,11 @@ const OutputDevice& ScTextWndGroup::GetEditViewDevice() const
 tools::Long ScTextWndGroup::GetLastNumExpandedLines() const
 {
     return mxTextWnd->GetLastNumExpandedLines();
+}
+
+void ScTextWndGroup::SetLastNumExpandedLines(tools::Long nLastExpandedLines)
+{
+    mxTextWnd->SetLastNumExpandedLines(nLastExpandedLines);
 }
 
 tools::Long ScTextWndGroup::GetNumLines() const
@@ -1301,9 +1321,17 @@ int ScTextWnd::GetPixelHeightForLines(tools::Long nLines)
     return rDevice.LogicToPixel(Size(0, nLines * rDevice.GetTextHeight())).Height() + 1;
 }
 
+tools::Long ScTextWnd::GetNumLines() const
+{
+    ScViewData& rViewData = mpViewShell->GetViewData();
+    return rViewData.GetFormulaBarLines();
+}
+
 void ScTextWnd::SetNumLines(tools::Long nLines)
 {
-    mnLines = nLines;
+    ScViewData& rViewData = mpViewShell->GetViewData();
+    rViewData.SetFormulaBarLines(nLines);
+
     if ( nLines > 1 )
     {
         mnLastExpandedLines = nLines;
@@ -1567,7 +1595,6 @@ ScTextWnd::ScTextWnd(ScTextWndGroup& rParent, ScTabViewShell* pViewSh) :
         bInputMode   (false),
         mpViewShell(pViewSh),
         mrGroupBar(rParent),
-        mnLines(1),
         mnLastExpandedLines(INPUTWIN_MULTILINES),
         mbInvalidate(false)
 {
@@ -1931,7 +1958,7 @@ void ScTextWnd::SetTextString( const OUString& rNewString )
         // Find position of the change, only paint the rest
         if (!m_xEditEngine)
         {
-            bool bPaintAll = mnLines > 1 || bIsRTL;
+            bool bPaintAll = GetNumLines() > 1 || bIsRTL;
             if (!bPaintAll)
             {
                 //  test if CTL script type is involved

@@ -53,6 +53,8 @@
 #include <miscuno.hxx>
 #include <unonames.hxx>
 #include <inputopt.hxx>
+#include <inputhdl.hxx>
+#include <inputwin.hxx>
 #include <viewutil.hxx>
 #include <markdata.hxx>
 #include <ViewSettingsSequenceDefines.hxx>
@@ -814,6 +816,7 @@ ScViewData::ScViewData(ScDocument* pDoc, ScDocShell* pDocSh, ScTabViewShell* pVi
         bSelCtrlMouseClick( false ),
         bMoveArea ( false ),
         bGrowing (false),
+        nFormulaBarLines(1),
         m_nLOKPageUpDownOffset( 0 )
 {
     assert(bool(pDoc) != bool(pDocSh)); // either one or the other, not both
@@ -3764,6 +3767,8 @@ void ScViewData::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>& rSe
     pSettings[SC_OUTLSYMB].Value <<= maOptions.GetOption(VOPT_OUTLINER);
     pSettings[SC_VALUE_HIGHLIGHTING].Name = SC_UNO_VALUEHIGH;
     pSettings[SC_VALUE_HIGHLIGHTING].Value <<= maOptions.GetOption(VOPT_SYNTAX);
+    pSettings[SC_FORMULA_BAR_HEIGHT_VALUE].Name = SC_FORMULABARHEIGHT;
+    pSettings[SC_FORMULA_BAR_HEIGHT_VALUE].Value <<= GetFormulaBarLines();;
 
     const ScGridOptions& aGridOpt = maOptions.GetGridOptions();
     pSettings[SC_SNAPTORASTER].Name = SC_UNO_SNAPTORASTER;
@@ -3791,6 +3796,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
 
     sal_Int32 nTemp32(0);
     sal_Int16 nTemp16(0);
+    sal_Int16 nFormulaBarLineCount(0);
     bool bPageMode(false);
 
     EnsureTabDataSize(GetDocument().GetTableCount());
@@ -3866,6 +3872,21 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             {
                 Fraction aZoom(nTemp32, 100);
                 aDefPageZoomX = aDefPageZoomY = aZoom;
+            }
+        }
+        else if (sName == SC_FORMULABARHEIGHT)
+        {
+            if (rSetting.Value >>= nFormulaBarLineCount)
+            {
+                SetFormulaBarLines(nFormulaBarLineCount);
+                // Notify formula bar about changed lines
+                ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+                if (pInputHdl)
+                {
+                    ScInputWindow* pInputWin = pInputHdl->GetInputWindow();
+                    if (pInputWin)
+                        pInputWin->NumLinesChanged();
+                }
             }
         }
         else if (sName == SC_SHOWPAGEBREAKPREVIEW)
