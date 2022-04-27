@@ -16,6 +16,23 @@
       "message": "Some more notes:\n- Needs to be added to pie chart UI\n- Needs to be disabled for area chart, since there are no data points shown on such charts (neither is it visible in Excel)\n- Only visible with Experimental features enabled, since it has the formerly mentioned bugs too",
       "revId": "81c7fa8b58c91062b3d8c73314d713b97f040c4f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c8a75c_a96de6c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-27T10:08:23Z",
+      "side": 1,
+      "message": "Patch works as advertised - what is still missing:\n* Chart is not updated after modifying the checkbox\n* Property is not stored in ODF\n\nDo we want this incomplete feature in?",
+      "revId": "81c7fa8b58c91062b3d8c73314d713b97f040c4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
