@@ -253,16 +253,7 @@ DECLARE_OOXMLEXPORT_TEST(testFdo38244, "fdo38244.docx")
     xParaEnumAccess = getProperty< uno::Reference<container::XEnumerationAccess> >(xPropertySet, "TextRange");
     xParaEnum = xParaEnumAccess->createEnumeration();
     xParaEnum->nextElement();
-    bool bCaught = false;
-    try
-    {
-        xParaEnum->nextElement();
-    }
-    catch (container::NoSuchElementException&)
-    {
-        bCaught = true;
-    }
-    CPPUNIT_ASSERT_EQUAL(true, bCaught);
+    CPPUNIT_ASSERT(!xParaEnum->hasMoreElements());
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testCommentsNested)

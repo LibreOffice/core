@@ -440,16 +440,7 @@ DECLARE_RTFEXPORT_TEST(testTdf107413, "tdf107413.rtf")
 DECLARE_RTFEXPORT_TEST(testCp1000016, "hello.rtf")
 {
     // The single-line document had a second fake empty para on Windows.
-    bool bFound = true;
-    try
-    {
-        getParagraph(2);
-    }
-    catch (const container::NoSuchElementException&)
-    {
-        bFound = false;
-    }
-    CPPUNIT_ASSERT_EQUAL(false, bFound);
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo65090, "fdo65090.rtf")
