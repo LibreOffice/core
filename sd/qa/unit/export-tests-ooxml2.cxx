@@ -1832,16 +1832,10 @@ void SdOOXMLExportTest2::testTdf53970()
         CPPUNIT_ASSERT(xShape.is());
         OUString sVideoURL;
 
-        // Without fix in place, the media shape was imported as an image after export.
-        try
-        {
-            CPPUNIT_ASSERT_MESSAGE("MediaURL property is not set",
-                                   xShape->getPropertyValue("MediaURL") >>= sVideoURL);
-        }
-        catch (const beans::UnknownPropertyException&)
-        {
-            CPPUNIT_FAIL("Error: MediaURL is unknown property");
-        }
+        // Without fix in place, the media shape was imported as an image after export
+        // and this test would have failed with exception of type com.sun.star.beans.UnknownPropertyException
+        CPPUNIT_ASSERT_MESSAGE("MediaURL property is not set",
+                               xShape->getPropertyValue("MediaURL") >>= sVideoURL);
         CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
 
         xDocShRef->DoClose();
