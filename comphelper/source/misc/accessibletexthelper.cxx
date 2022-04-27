@@ -265,16 +265,16 @@ namespace comphelper
     }
 
 
-    OUString OCommonAccessibleText::implGetTextRange( const OUString& rText, sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+    OUString OCommonAccessibleText::implGetTextRange( std::u16string_view rText, sal_Int32 nStartIndex, sal_Int32 nEndIndex )
     {
 
-        if ( !implIsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
+        if ( !implIsValidRange( nStartIndex, nEndIndex, rText.size() ) )
             throw IndexOutOfBoundsException();
 
         sal_Int32 nMinIndex = std::min( nStartIndex, nEndIndex );
         sal_Int32 nMaxIndex = std::max( nStartIndex, nEndIndex );
 
-        return rText.copy( nMinIndex, nMaxIndex - nMinIndex );
+        return OUString(rText.substr( nMinIndex, nMaxIndex - nMinIndex ));
     }
 
     TextSegment OCommonAccessibleText::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
@@ -634,13 +634,13 @@ namespace comphelper
 
 
     bool OCommonAccessibleText::implInitTextChangedEvent(
-        const OUString& rOldString,
-        const OUString& rNewString,
+        std::u16string_view rOldString,
+        std::u16string_view rNewString,
         css::uno::Any& rDeleted,
         css::uno::Any& rInserted) // throw()
     {
-        sal_uInt32 nLenOld = rOldString.getLength();
-        sal_uInt32 nLenNew = rNewString.getLength();
+        size_t nLenOld = rOldString.size();
+        size_t nLenNew = rNewString.size();
 
         // equal
         if ((0 == nLenOld) && (0 == nLenNew))
@@ -659,7 +659,7 @@ namespace comphelper
         {
             aInsertedText.SegmentStart = 0;
             aInsertedText.SegmentEnd = nLenNew;
-            aInsertedText.SegmentText = rNewString.copy( aInsertedText.SegmentStart, aInsertedText.SegmentEnd - aInsertedText.SegmentStart );
+            aInsertedText.SegmentText = rNewString.substr( aInsertedText.SegmentStart, aInsertedText.SegmentEnd - aInsertedText.SegmentStart );
 
             rInserted <<= aInsertedText;
             return true;
@@ -670,16 +670,16 @@ namespace comphelper
         {
             aDeletedText.SegmentStart = 0;
             aDeletedText.SegmentEnd = nLenOld;
-            aDeletedText.SegmentText = rOldString.copy( aDeletedText.SegmentStart, aDeletedText.SegmentEnd - aDeletedText.SegmentStart );
+            aDeletedText.SegmentText = rOldString.substr( aDeletedText.SegmentStart, aDeletedText.SegmentEnd - aDeletedText.SegmentStart );
 
             rDeleted <<= aDeletedText;
             return true;
         }
 
-        const sal_Unicode* pFirstDiffOld = rOldString.getStr();
-        const sal_Unicode* pLastDiffOld  = rOldString.getStr() + nLenOld;
-        const sal_Unicode* pFirstDiffNew = rNewString.getStr();
-        const sal_Unicode* pLastDiffNew  = rNewString.getStr() + nLenNew;
+        auto pFirstDiffOld = rOldString.begin();
+        auto pLastDiffOld  = rOldString.end();
+        auto pFirstDiffNew = rNewString.begin();
+        auto pLastDiffNew  = rNewString.end();
 
         // find first difference
         while ((*pFirstDiffOld == *pFirstDiffNew) &&
@@ -691,7 +691,7 @@ namespace comphelper
         }
 
         // equality test
-        if ((0 == *pFirstDiffOld) && (0 == *pFirstDiffNew))
+        if (pFirstDiffOld == pLastDiffOld && pFirstDiffNew == pLastDiffNew)
             return false;
 
         // find last difference
@@ -705,18 +705,18 @@ namespace comphelper
 
         if (pFirstDiffOld < pLastDiffOld)
         {
-            aDeletedText.SegmentStart = pFirstDiffOld - rOldString.getStr();
-            aDeletedText.SegmentEnd = pLastDiffOld  - rOldString.getStr();
-            aDeletedText.SegmentText = rOldString.copy( aDeletedText.SegmentStart, aDeletedText.SegmentEnd - aDeletedText.SegmentStart );
+            aDeletedText.SegmentStart = pFirstDiffOld - rOldString.begin();
+            aDeletedText.SegmentEnd = pLastDiffOld  - rOldString.begin();
+            aDeletedText.SegmentText = rOldString.substr( aDeletedText.SegmentStart, aDeletedText.SegmentEnd - aDeletedText.SegmentStart );
 
             rDeleted <<= aDeletedText;
         }
 
         if (pFirstDiffNew < pLastDiffNew)
         {
-            aInsertedText.SegmentStart = pFirstDiffNew - rNewString.getStr();
-            aInsertedText.SegmentEnd = pLastDiffNew  - rNewString.getStr();
-            aInsertedText.SegmentText = rNewString.copy( aInsertedText.SegmentStart, aInsertedText.SegmentEnd - aInsertedText.SegmentStart );
+            aInsertedText.SegmentStart = pFirstDiffNew - rNewString.begin();
+            aInsertedText.SegmentEnd = pLastDiffNew  - rNewString.begin();
+            aInsertedText.SegmentText = rNewString.substr( aInsertedText.SegmentStart, aInsertedText.SegmentEnd - aInsertedText.SegmentStart );
 
             rInserted <<= aInsertedText;
         }
