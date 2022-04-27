@@ -22,6 +22,7 @@
 #include <tools/gen.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
+#include <o3tl/hash_combine.hxx>
 
 #include <vcl/font.hxx>
 #include <vcl/svapp.hxx>
@@ -330,6 +331,16 @@ bool Font::operator==( const vcl::Font& rFont ) const
 bool Font::EqualIgnoreColor( const vcl::Font& rFont ) const
 {
     return mpImplFont->EqualIgnoreColor( *rFont.mpImplFont );
+}
+
+size_t Font::GetHashValue() const
+{
+    return mpImplFont->GetHashValue();
+}
+
+size_t Font::GetHashValueIgnoreColor() const
+{
+    return mpImplFont->GetHashValueIgnoreColor();
 }
 
 void Font::Merge( const vcl::Font& rFont )
@@ -1013,6 +1024,49 @@ bool ImplFont::EqualIgnoreColor( const ImplFont& rOther ) const
         return false;
 
     return true;
+}
+
+size_t ImplFont::GetHashValue() const
+{
+    size_t hash = GetHashValueIgnoreColor();
+    o3tl::hash_combine( hash, static_cast<sal_uInt32>( maColor ));
+    o3tl::hash_combine( hash, static_cast<sal_uInt32>( maFillColor ));
+    return hash;
+}
+
+size_t ImplFont::GetHashValueIgnoreColor() const
+{
+    size_t hash = 0;
+
+    o3tl::hash_combine( hash, meWeight );
+    o3tl::hash_combine( hash, meItalic );
+    o3tl::hash_combine( hash, meFamily );
+    o3tl::hash_combine( hash, mePitch );
+
+    o3tl::hash_combine( hash, meCharSet );
+    o3tl::hash_combine( hash, maLanguageTag.getLanguageType( false ).get());
+    o3tl::hash_combine( hash, maCJKLanguageTag.getLanguageType( false ).get());
+    o3tl::hash_combine( hash, meAlign );
+
+    o3tl::hash_combine( hash, maAverageFontSize.GetHashValue());
+    o3tl::hash_combine( hash, mnOrientation.get());
+    o3tl::hash_combine( hash, mbVertical );
+
+    o3tl::hash_combine( hash, maFamilyName );
+    o3tl::hash_combine( hash, maStyleName );
+
+    o3tl::hash_combine( hash, meUnderline );
+    o3tl::hash_combine( hash, meOverline );
+    o3tl::hash_combine( hash, meStrikeout );
+    o3tl::hash_combine( hash, meRelief );
+    o3tl::hash_combine( hash, meEmphasisMark );
+    o3tl::hash_combine( hash, mbWordLine );
+    o3tl::hash_combine( hash, mbOutline );
+    o3tl::hash_combine( hash, mbShadow );
+    o3tl::hash_combine( hash, meKerning );
+    o3tl::hash_combine( hash, mbTransparent );
+
+    return hash;
 }
 
 void ImplFont::AskConfig()
