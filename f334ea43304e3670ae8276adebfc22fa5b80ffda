@@ -52,6 +52,23 @@
       "parentUuid": "cf5fc6e3_db988cea",
       "revId": "f334ea43304e3670ae8276adebfc22fa5b80ffda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c884a6ee_df0731e9",
+        "filename": "svx/source/sidebar/possize/PosSizePropertyPanel.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-27T08:06:37Z",
+      "side": 1,
+      "message": "So calling this from PosSizePropertyPanel::NotifyItemUpdate breaks ScJumboSheetsTest::testTdf134553 - which I don\u0027t understand, why the object gets identified as chart after copy and paste without the calls, but not with ...\n\nFor now, let me restore the simple rename to a neutral button name. It could be done properly in a follow-up.",
+      "revId": "f334ea43304e3670ae8276adebfc22fa5b80ffda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
