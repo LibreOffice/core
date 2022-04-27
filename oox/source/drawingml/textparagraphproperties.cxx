@@ -59,7 +59,9 @@ namespace oox::drawingml {
 
 BulletList::BulletList( )
 : maBulletColorPtr( std::make_shared<Color>() ),
-  mbBulletColorFollowText ( false )
+  mbBulletColorFollowText ( false ),
+  mbBulletFontFollowText ( false ),
+  mbBulletSizeFollowText ( false )
 {
 }
 
@@ -266,6 +268,8 @@ void BulletList::apply( const BulletList& rSource )
         mbBulletColorFollowText = rSource.mbBulletColorFollowText;
     if ( rSource.mbBulletFontFollowText.hasValue() )
         mbBulletFontFollowText = rSource.mbBulletFontFollowText;
+    if ( rSource.mbBulletSizeFollowText.hasValue() )
+        mbBulletSizeFollowText = rSource.mbBulletSizeFollowText;
     maBulletFont.assignIfUsed( rSource.maBulletFont );
     if ( rSource.msBulletChar.hasValue() )
         msBulletChar = rSource.msBulletChar;
@@ -308,7 +312,9 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     float nBulletFontWeight = css::awt::FontWeight::NORMAL;
     bool bSymbolFont = false;
     if( pFilterBase) {
-        if (maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) )
+        bool bFollowTextFont = false;
+        mbBulletFontFollowText >>= bFollowTextFont;
+        if (!bFollowTextFont && maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) )
         {
             FontDescriptor aFontDesc;
             sal_Int16 nFontSize = 0;
@@ -357,7 +363,9 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
         if (xBitmap.is())
             rPropMap.setProperty(PROP_GraphicBitmap, xBitmap);
     }
-    if( mnSize.hasValue() )
+    bool bFollowTextSize = false;
+    mbBulletSizeFollowText >>= bFollowTextSize;
+    if( !bFollowTextSize && mnSize.hasValue() )
         rPropMap.setAnyProperty( PROP_BulletRelSize, mnSize);
     if ( maStyleName.hasValue() )
         rPropMap.setAnyProperty( PROP_CharStyleName, maStyleName);

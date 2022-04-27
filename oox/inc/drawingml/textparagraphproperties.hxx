@@ -58,6 +58,7 @@ public:
     std::shared_ptr< ::oox::drawingml::Color > maBulletColorPtr;
     css::uno::Any               mbBulletColorFollowText;
     css::uno::Any               mbBulletFontFollowText;
+    css::uno::Any               mbBulletSizeFollowText;
     ::oox::drawingml::TextFont  maBulletFont;
     css::uno::Any               msBulletChar;
     css::uno::Any               mnStartAt;

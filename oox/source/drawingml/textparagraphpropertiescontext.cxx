@@ -213,7 +213,7 @@ ContextHandlerRef TextParagraphPropertiesContext::onCreateContext( sal_Int32 aEl
             return new ColorContext( *this, *mrBulletList.maBulletColorPtr );
         // EG_TextBulletSize
         case A_TOKEN( buSzTx ):         // CT_TextBulletSizeFollowText
-            mrBulletList.setBulletSize(100);
+            mrBulletList.mbBulletSizeFollowText <<= true;
             break;
         case A_TOKEN( buSzPct ):        // CT_TextBulletSizePercent
             mrBulletList.setBulletSize( std::lround( GetPercent( rAttribs.getString( XML_val ).get() ) / 1000.f ) );
