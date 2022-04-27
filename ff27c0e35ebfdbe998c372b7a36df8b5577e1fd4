@@ -16,6 +16,24 @@
       "message": "* But Bitstream Vera Sans is not covered by gb_CppunitTest_use_more_fonts, either, so e.g. \u003chttps://ci.libreoffice.org/job/lo_ubsan/\u003e builds will now substitute DejaVu Sans for it (and which leads to a massively faster execution of CppunitTest_sw_layoutwriter CPPUNIT_TEST_NAME\u003dtestUXTSOREL::TestBody than when it substituted DejaVu Serif for Palatino Linotype; tried that out in tb76-maggie\u0027s ~tdf/lode/jenkins/workspace/lo_ubsan environment with SAL_LOG\u003d+INFO.vcl.fonts to see the vcl/unx/generic/fontmanager/fontconfig.cxx:1164 substitution SAL_INFO).\n\n* Does the updated LIBREOFFICE-UXTSOREL.rtf still test what the original version was meant to test?  (Whatever that would be, see my comment at \u003chttps://gerrit.libreoffice.org/c/core/+/130493/7#message-ecf32e8674c0cc5dc10a94fab49e260fb7ecc81a\u003e \"add a layout test to exercise UXTSOREL\".)",
       "revId": "ff27c0e35ebfdbe998c372b7a36df8b5577e1fd4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75923c2f_9d67e0fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-27T15:33:35Z",
+      "side": 1,
+      "message": "- well we can jump straight to putting \"DejaVu Sans\" in there instead of \"Bitstream Vera Sans\" then. I had a strong memory that Bitstream Vera Sans was one of our bundled ones but that\u0027s clearly bogus.\n- hard to tell if another change has causes the crash be avoided or if the testcase isn\u0027t exercising the right thing anymore, would really have to revert back to the state at the original commit and check with the final document. I\u0027ll give that a go in a while.",
+      "parentUuid": "d00836fb_3e661711",
+      "revId": "ff27c0e35ebfdbe998c372b7a36df8b5577e1fd4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
