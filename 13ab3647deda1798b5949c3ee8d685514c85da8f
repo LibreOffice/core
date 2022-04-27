@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6790e27d_4c3c6f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-27T17:19:47Z",
+      "side": 1,
+      "message": "Is FormulaBarLines the right term? Or rather InputBarLines? Or something else?",
+      "revId": "13ab3647deda1798b5949c3ee8d685514c85da8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
