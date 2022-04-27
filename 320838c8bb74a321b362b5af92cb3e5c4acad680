@@ -70,6 +70,24 @@
       "parentUuid": "386e7712_83835b4c",
       "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "906f7130_7901e31e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-27T09:52:45Z",
+      "side": 1,
+      "message": "Ok, I will just fix the bug (inconsistency).\nIf you want to remove that part (Macro submenu) completely from the start center, please discuss in design meeting, or file a bug.\n\nPersonally I see no reason to remove the macro submenu from start center. It\u0027s useful to some, and doesn\u0027t hurt (there\u0027s very few menu entries in start center).",
+      "parentUuid": "7bd5f3b3_072e67a0",
+      "revId": "320838c8bb74a321b362b5af92cb3e5c4acad680",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
