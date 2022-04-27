@@ -279,8 +279,8 @@ class SyntaxHighlighter::Tokenizer
     bool testCharFlags(sal_Unicode c, CharFlags nTestFlags) const;
 
     // Get new token, EmptyString == nothing more over there
-    bool getNextToken(const sal_Unicode*& pos, /*out*/TokenType& reType,
-        /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos) const;
+    bool getNextToken(std::u16string_view::const_iterator& pos, std::u16string_view::const_iterator end, /*out*/TokenType& reType,
+        /*out*/std::u16string_view::const_iterator& rpStartPos, /*out*/std::u16string_view::const_iterator& rpEndPos) const;
 
     const char** ppListKeyWords;
     sal_uInt16 nKeyWordCount;
@@ -290,7 +290,7 @@ public:
 
     explicit Tokenizer( HighlighterLanguage aLang );
 
-    void getHighlightPortions(const OUString& rLine,
+    void getHighlightPortions(std::u16string_view rLine,
                                /*out*/std::vector<HighlightPortion>& portions) const;
     void setKeyWords( const char** ppKeyWords, sal_uInt16 nCount );
 };
@@ -317,24 +317,25 @@ void SyntaxHighlighter::Tokenizer::setKeyWords( const char** ppKeyWords, sal_uIn
     nKeyWordCount = nCount;
 }
 
-bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/TokenType& reType,
-    /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos) const
+bool SyntaxHighlighter::Tokenizer::getNextToken(std::u16string_view::const_iterator& pos, std::u16string_view::const_iterator end,
+    /*out*/TokenType& reType,
+    /*out*/std::u16string_view::const_iterator& rpStartPos, /*out*/std::u16string_view::const_iterator& rpEndPos) const
 {
     reType = TokenType::Unknown;
 
     rpStartPos = pos;
 
-    sal_Unicode c = *pos;
-    if( c == 0 )
+    if( pos == end )
         return false;
 
+    sal_Unicode c = *pos;
     ++pos;
 
     //*** Go through all possibilities ***
     // Space?
     if ( testCharFlags( c, CharFlags::Space ) )
     {
-        while( testCharFlags( *pos, CharFlags::Space ) )
+        while( pos != end && testCharFlags( *pos, CharFlags::Space ) )
             ++pos;
 
         reType = TokenType::Whitespace;
@@ -346,6 +347,8 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         bool bIdentifierChar;
         do
         {
+            if (pos == end)
+                break;
             // Fetch next character
             c = *pos;
             bIdentifierChar = testCharFlags( c, CharFlags::InIdentifier );
@@ -385,10 +388,14 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                     if( aByteStr == "rem" )
                     {
                         // Remove all characters until end of line or EOF
-                        sal_Unicode cPeek = *pos;
-                        while( cPeek != 0 && !testCharFlags( cPeek, CharFlags::EOL ) )
+                        for (;;)
                         {
-                            cPeek = *++pos;
+                            if (pos == end)
+                                break;
+                            sal_Unicode cPeek = *pos;
+                            if ( testCharFlags( cPeek, CharFlags::EOL ) )
+                                break;
+                            ++pos;
                         }
 
                         reType = TokenType::Comment;
@@ -411,6 +418,8 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
                 do
                 {
                     // Get next character
+                    if (pos == end)
+                        break;
                     c = *pos;
                     bIdentifierChar = isAlpha(c);
                     if( bIdentifierChar )
@@ -422,14 +431,12 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         }
         else if ((c=='-') && (aLanguage == HighlighterLanguage::SQL))
         {
-            sal_Unicode cPeekNext = *pos;
-            if (cPeekNext=='-')
+            if (pos != end && *pos=='-')
             {
                 // Remove all characters until end of line or EOF
-                while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
+                while( pos != end && !testCharFlags( *pos, CharFlags::EOL ) )
                 {
                     ++pos;
-                    cPeekNext = *pos;
                 }
                 reType = TokenType::Comment;
             }
@@ -438,14 +445,12 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         }
         else if ((c=='/') && (aLanguage == HighlighterLanguage::SQL))
         {
-            sal_Unicode cPeekNext = *pos;
-            if (cPeekNext=='/')
+            if (pos != end && *pos=='/')
             {
                 // Remove all characters until end of line or EOF
-                while( cPeekNext != 0 && !testCharFlags( cPeekNext, CharFlags::EOL ) )
+                while( pos != end && !testCharFlags( *pos, CharFlags::EOL ) )
                 {
                     ++pos;
-                    cPeekNext = *pos;
                 }
                 reType = TokenType::Comment;
             }
@@ -459,8 +464,10 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             {
                 // Skip all characters until end of input or end of line:
                 for (;;) {
+                    if (pos == end)
+                        break;
                     c = *pos;
-                    if (c == 0 || testCharFlags(c, CharFlags::EOL)) {
+                    if (testCharFlags(c, CharFlags::EOL)) {
                         break;
                     }
                     ++pos;
@@ -497,25 +504,25 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
         if( c == '&' )
         {
             // Octal?
-            if( *pos == 'o' || *pos == 'O' )
+            if( pos != end && (*pos == 'o' || *pos == 'O' ))
             {
                 // remove o
                 ++pos;
                 nRadix = 8;     // Octal base
 
                 // Read all numbers
-                while( testCharFlags( *pos, CharFlags::InOctNumber ) )
+                while( pos != end && testCharFlags( *pos, CharFlags::InOctNumber ) )
                     ++pos;
             }
             // Hexadecimal?
-            else if( *pos == 'h' || *pos == 'H' )
+            else if( pos != end && (*pos == 'h' || *pos == 'H' ))
             {
                 // remove x
                 ++pos;
                 nRadix = 16;     // Hexadecimal base
 
                 // Read all numbers
-                while( testCharFlags( *pos, CharFlags::InHexNumber ) )
+                while( pos != end && testCharFlags( *pos, CharFlags::InHexNumber ) )
                     ++pos;
             }
             else
@@ -531,9 +538,9 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             bool bAfterExpChar = false;
 
             // Read all numbers
-            while( testCharFlags( *pos, CharFlags::InNumber ) ||
+            while( pos != end && (testCharFlags( *pos, CharFlags::InNumber ) ||
                     (bAfterExpChar && *pos == '+' ) ||
-                    (bAfterExpChar && *pos == '-' ) )
+                    (bAfterExpChar && *pos == '-' ) ))
                     // After exponent +/- are OK, too
             {
                 c = *pos++;
@@ -551,10 +558,10 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
             cEndString = ']';
 
         // Read all characters
-        while( *pos != cEndString )
+        while( pos == end || *pos != cEndString )
         {
             // Detect EOF before reading next char, so we do not lose EOF
-            if( *pos == 0 )
+            if( pos == end )
             {
                 // ERROR: unterminated string literal
                 reType = TokenType::Error;
@@ -583,9 +590,12 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(const sal_Unicode*& pos, /*out*/
     else if( testCharFlags( c, CharFlags::EOL ) )
     {
         // If another EOL character comes, read it
-        sal_Unicode cNext = *pos;
-        if( cNext != c && testCharFlags( cNext, CharFlags::EOL ) )
-            ++pos;
+        if (pos != end)
+        {
+            sal_Unicode cNext = *pos;
+            if( cNext != c && testCharFlags( cNext, CharFlags::EOL ) )
+                ++pos;
+        }
 
         reType = TokenType::EOL;
     }
@@ -676,11 +686,11 @@ SyntaxHighlighter::Tokenizer::Tokenizer( HighlighterLanguage aLang ): aLanguage(
     nKeyWordCount = 0;
 }
 
-void SyntaxHighlighter::Tokenizer::getHighlightPortions(const OUString& rLine,
+void SyntaxHighlighter::Tokenizer::getHighlightPortions(std::u16string_view rLine,
                                                  /*out*/std::vector<HighlightPortion>& portions) const
 {
     // Set the position to the beginning of the source string
-    const sal_Unicode* pos = rLine.getStr();
+    auto pos = rLine.begin();
 
     // Variables for the out parameter
     TokenType eType;
@@ -688,10 +698,10 @@ void SyntaxHighlighter::Tokenizer::getHighlightPortions(const OUString& rLine,
     const sal_Unicode* pEndPos;
 
     // Loop over all the tokens
-    while( getNextToken( pos, eType, pStartPos, pEndPos ) )
+    while( getNextToken( pos, rLine.end(), eType, pStartPos, pEndPos ) )
     {
         portions.emplace_back(
-                pStartPos - rLine.getStr(), pEndPos - rLine.getStr(), eType);
+                pStartPos - rLine.begin(), pEndPos - rLine.begin(), eType);
     }
 }
 
@@ -716,7 +726,7 @@ SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
 
 SyntaxHighlighter::~SyntaxHighlighter() {}
 
-void SyntaxHighlighter::getHighlightPortions(const OUString& rLine,
+void SyntaxHighlighter::getHighlightPortions(std::u16string_view rLine,
                                               /*out*/std::vector<HighlightPortion>& portions) const
 {
     m_tokenizer->getHighlightPortions( rLine, portions );
