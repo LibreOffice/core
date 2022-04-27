@@ -95,15 +95,33 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
 {
     std::unique_ptr<SalLayoutGlyphsImpl> copy(new SalLayoutGlyphsImpl(*GetFont()));
     copy->SetFlags(GetFlags());
+    if (empty())
+        return copy.release();
     copy->reserve(std::min<size_t>(size(), length));
-    // Skip glyphs that are in the string before the given index (glyphs are sorted by charPos()).
-    const_iterator pos = std::partition_point(
-        begin(), end(), [index](const GlyphItem& it) { return it.charPos() < index; });
+    sal_Int32 beginPos = index;
+    sal_Int32 endPos = index + length;
+    const_iterator pos;
+    bool rtl = front().IsRTLGlyph();
+    if (rtl)
+    {
+        // Glyphs are in reverse order for RTL.
+        beginPos = index + length - 1;
+        endPos = index - 1;
+        // Skip glyphs that are in the string after the given index, i.e. are before the glyphs
+        // we want.
+        pos = std::partition_point(
+            begin(), end(), [beginPos](const GlyphItem& it) { return it.charPos() > beginPos; });
+    }
+    else
+    {
+        // Skip glyphs that are in the string before the given index (glyphs are sorted by charPos()).
+        pos = std::partition_point(
+            begin(), end(), [beginPos](const GlyphItem& it) { return it.charPos() < beginPos; });
+    }
     if (pos == end())
         return nullptr;
     // Require a start at the exact position given, otherwise bail out.
-    // TODO: This bails out also for RTL text.
-    if (pos->charPos() != index)
+    if (pos->charPos() != beginPos)
         return nullptr;
     // Don't create a subset if it's not safe to break at the beginning or end of the sequence
     // (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
@@ -113,9 +131,9 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     // that's how it's computed in GenericSalLayout::LayoutText().
     DevicePoint zeroPoint = pos->linearPos() - DevicePoint(pos->xOffset(), pos->yOffset());
     // Add and adjust all glyphs until the given length.
-    while (pos != end() && pos->charPos() < index + length)
+    while (pos != end() && (rtl ? pos->charPos() > endPos : pos->charPos() < endPos))
     {
-        if (pos->IsRTLGlyph())
+        if (pos->IsRTLGlyph() != rtl)
             return nullptr; // Don't mix RTL and non-RTL runs.
         copy->push_back(*pos);
         copy->back().setLinearPos(copy->back().linearPos() - zeroPoint);
@@ -123,7 +141,7 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     }
     if (pos != end())
     {
-        if (pos->charPos() != index + length)
+        if (pos->charPos() != endPos)
             return nullptr;
         if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
             return nullptr;
