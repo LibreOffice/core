@@ -21,17 +21,18 @@
 #include <astscope.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/diagnose.h>
+#include <o3tl/string_view.hxx>
 
 constexpr OStringLiteral sGlobal("::");
 
-static OString convertName(const OString& name)
+static OString convertName(std::string_view name)
 {
-    OStringBuffer nameBuffer(name.getLength()+1);
+    OStringBuffer nameBuffer(name.size()+1);
     sal_Int32 nIndex = 0;
     do
     {
-        OString token( name.getToken( 0, ':', nIndex ) );
-        if( !token.isEmpty() )
+        std::string_view token( o3tl::getToken(name, 0, ':', nIndex ) );
+        if( !token.empty() )
         {
             nameBuffer.append('/');
             nameBuffer.append( token );
