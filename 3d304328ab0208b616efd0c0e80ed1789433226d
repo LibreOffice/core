@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f63526fa_d90cf2e3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-27T14:43:51Z",
+      "side": 1,
+      "message": "@Attila: very nice fix! Many thanks for the clean-up! Now the manual testing works perfectly.",
+      "revId": "3d304328ab0208b616efd0c0e80ed1789433226d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
