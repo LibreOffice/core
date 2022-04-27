@@ -3900,6 +3900,38 @@ void XMLTextParagraphExport::ExportContentControl(
             GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_SHOWING_PLACE_HOLDER,
                                      aBuffer.makeStringAndClear());
         }
+
+        bool bCheckbox = false;
+        xPropertySet->getPropertyValue("Checkbox") >>= bCheckbox;
+        if (bCheckbox)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bCheckbox);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CHECKBOX, aBuffer.makeStringAndClear());
+        }
+
+        bool bChecked = false;
+        xPropertySet->getPropertyValue("Checked") >>= bChecked;
+        if (bChecked)
+        {
+            OUStringBuffer aBuffer;
+            sax::Converter::convertBool(aBuffer, bChecked);
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CHECKED, aBuffer.makeStringAndClear());
+        }
+
+        OUString aCheckedState;
+        xPropertySet->getPropertyValue("CheckedState") >>= aCheckedState;
+        if (!aCheckedState.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_CHECKED_STATE, aCheckedState);
+        }
+
+        OUString aUncheckedState;
+        xPropertySet->getPropertyValue("UncheckedState") >>= aUncheckedState;
+        if (!aUncheckedState.isEmpty())
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_UNCHECKED_STATE, aUncheckedState);
+        }
     }
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,

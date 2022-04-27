@@ -453,6 +453,90 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlImport)
     CPPUNIT_ASSERT_EQUAL(OUString("test"), xContent->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
+{
+    // Given a document with a checkbox content control around a text portion:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, OUString(u"☐"), /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Checkbox", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("Checked", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("CheckedState", uno::makeAny(OUString(u"☒")));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::makeAny(OUString(u"☐")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to ODT:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::makeAny(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    validate(aTempFile.GetFileName(), test::ODF);
+
+    // Then make sure the expected markup is used:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    assertXPath(pXmlDoc, "//loext:content-control", "checkbox", "true");
+    assertXPath(pXmlDoc, "//loext:content-control", "checked", "true");
+    assertXPath(pXmlDoc, "//loext:content-control", "checked-state", u"☒");
+    assertXPath(pXmlDoc, "//loext:content-control", "unchecked-state", u"☐");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlImport)
+{
+    // Given an ODF document with a checkbox content control:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-checkbox.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the content control is not lost on import:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    bool bCheckbox{};
+    xContentControlProps->getPropertyValue("Checkbox") >>= bCheckbox;
+    // Without the accompanying fix in place, this failed, as the checkbox-related attributes were
+    // ignored on import.
+    CPPUNIT_ASSERT(bCheckbox);
+    bool bChecked{};
+    xContentControlProps->getPropertyValue("Checked") >>= bChecked;
+    CPPUNIT_ASSERT(bChecked);
+    OUString aCheckedState;
+    xContentControlProps->getPropertyValue("CheckedState") >>= aCheckedState;
+    CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), aCheckedState);
+    OUString aUncheckedState;
+    xContentControlProps->getPropertyValue("UncheckedState") >>= aUncheckedState;
+    CPPUNIT_ASSERT_EQUAL(OUString(u"☐"), aUncheckedState);
+    uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xContentControlRange->getText();
+    uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), xContent->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
