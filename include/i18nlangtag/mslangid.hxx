@@ -120,7 +120,7 @@ public:
     // TODO: refactor to LanguageTag, used only in
     // i18npool/source/isolang/inunx.cxx to convert Unix locale string
 
-    static LanguageType convertUnxByteStringToLanguage( const OString& rString );
+    static LanguageType convertUnxByteStringToLanguage( std::string_view rString );
 
 
     static LanguageType resolveSystemLanguageByScriptType( LanguageType nLang, sal_Int16 nType );
@@ -245,7 +245,7 @@ public:
                 const css::lang::Locale & rLocale );
 
         friend LanguageType MsLangId::convertUnxByteStringToLanguage(
-                const OString& rString );
+                std::string_view rString );
 
 
         /** Convert a Locale to a LanguageType with handling of an empty
