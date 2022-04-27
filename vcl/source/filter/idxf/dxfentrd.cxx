@@ -671,7 +671,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
             bIsInBoundaryPathContext = true;
             nMaxBoundaryPathCount = rDGR.GetI();
             // limit alloc to max reasonable size based on remaining data in stream
-            if (nMaxBoundaryPathCount > 0 && o3tl::make_unsigned(nMaxBoundaryPathCount) > rDGR.remainingSize())
+            if (nMaxBoundaryPathCount > 0 && o3tl::make_unsigned(nMaxBoundaryPathCount) <= rDGR.remainingSize())
                 aBoundaryPathData.reserve(nMaxBoundaryPathCount);
             else
                 nMaxBoundaryPathCount = 0;
