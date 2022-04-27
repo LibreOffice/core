@@ -22,8 +22,6 @@
 #include <sal/config.h>
 
 #include <sfx2/bindings.hxx>
-#include <sfx2/sidebar/IContextChangeReceiver.hxx>
-#include <sfx2/sidebar/SidebarModelUpdate.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <vcl/customweld.hxx>
 #include <vcl/EnumContext.hxx>
