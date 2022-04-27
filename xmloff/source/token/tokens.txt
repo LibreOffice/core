@@ -3216,4 +3216,6 @@ symmetric
 linked-style-name
 content-control
 showing-place-holder
+checked-state
+unchecked-state
 TOKEN_END_DUMMY

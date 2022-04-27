@@ -35,6 +35,11 @@ class XMLContentControlContext : public SvXMLImportContext
 
     bool m_bShowingPlaceHolder = false;
 
+    bool m_bCheckbox = false;
+    bool m_bChecked = false;
+    OUString m_aCheckedState;
+    OUString m_aUncheckedState;
+
 public:
     XMLContentControlContext(SvXMLImport& rImport, sal_Int32 nElement, XMLHints_Impl& rHints,
                              bool& rIgnoreLeadingSpace);

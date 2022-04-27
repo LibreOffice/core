@@ -2772,6 +2772,28 @@ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.
         <rng:ref name="boolean"/>
         </rng:attribute>
       </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:checkbox">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <!-- default value: false -->
+        <rng:attribute name="loext:checked">
+        <rng:ref name="boolean"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:checked-state">
+        <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
+      <rng:optional>
+        <rng:attribute name="loext:unchecked-state">
+        <rng:ref name="string"/>
+        </rng:attribute>
+      </rng:optional>
       <rng:zeroOrMore>
         <rng:ref name="paragraph-content-or-hyperlink"/>
       </rng:zeroOrMore>
