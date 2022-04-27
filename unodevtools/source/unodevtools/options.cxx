@@ -18,6 +18,7 @@
  */
 
 #include <codemaker/global.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/process.h>
@@ -28,18 +29,18 @@ namespace unodevtools {
 
 
 bool readOption( OUString * pValue, const char * pOpt,
-                     sal_uInt32 * pnIndex, const OUString & aArg)
+                     sal_uInt32 * pnIndex, std::u16string_view aArg)
 {
     static const OUStringLiteral dash = u"-";
-    if(aArg.indexOf(dash) != 0)
+    if(aArg.find(dash) != 0)
         return false;
 
     OUString aOpt = OUString::createFromAscii( pOpt );
 
-    if (aArg.getLength() < aOpt.getLength())
+    if (aArg.size() < o3tl::make_unsigned(aOpt.getLength()))
         return false;
 
-    if (aOpt.equalsIgnoreAsciiCase( aArg.subView(1) )) {
+    if (aOpt.equalsIgnoreAsciiCase( aArg.substr(1) )) {
         // take next argument
         ++(*pnIndex);
 
@@ -53,8 +54,8 @@ bool readOption( OUString * pValue, const char * pOpt,
         SAL_INFO("unodevtools", "identified option -" << pOpt << " = " << *pValue);
         ++(*pnIndex);
         return true;
-    } else if (aArg.indexOf(aOpt) == 1) {
-        *pValue = aArg.copy(1 + aOpt.getLength());
+    } else if (aArg.find(aOpt) == 1) {
+        *pValue = aArg.substr(1 + aOpt.getLength());
         SAL_INFO("unodevtools", "identified option -" << pOpt << " = " << *pValue);
         ++(*pnIndex);
 

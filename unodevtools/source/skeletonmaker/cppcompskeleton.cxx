@@ -34,7 +34,7 @@ namespace skeletonmaker::cpp {
 
 static void generateIncludes(std::ostream & o,
          const std::set< OUString >& interfaces,
-         const OUString & propertyhelper, const bool serviceobject,
+         std::u16string_view propertyhelper, const bool serviceobject,
          const bool supportxcomponent)
 {
     o << "#include \"sal/config.h\"\n";
@@ -51,8 +51,8 @@ static void generateIncludes(std::ostream & o,
         o << "#include \"cppuhelper/implbase" << interfaces.size() << ".hxx\"\n";
     }
 
-    if (propertyhelper.getLength() > 1) {
-        if (propertyhelper == "_")
+    if (propertyhelper.size() > 1) {
+        if (propertyhelper == u"_")
             o << "#include \"cppuhelper/rpopshlp.hxx\"\n";
         else
             o << "#include \"cppuhelper/propertysetmixin.hxx\"\n";
