@@ -73,7 +73,7 @@ public:
     SyntaxHighlighter(HighlighterLanguage language);
     ~SyntaxHighlighter();
 
-    void getHighlightPortions( const OUString& rLine,
+    void getHighlightPortions( std::u16string_view rLine,
                                std::vector<HighlightPortion>& pPortions ) const;
 
     HighlighterLanguage GetLanguage() const;

@@ -528,9 +528,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreateGpgPackageEncryptionDat
 #endif
 }
 
-bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
+bool OStorageHelper::IsValidZipEntryFileName( std::u16string_view aName, bool bSlashAllowed )
 {
-    return IsValidZipEntryFileName( aName.getStr(), aName.getLength(), bSlashAllowed );
+    return IsValidZipEntryFileName( aName.data(), aName.size(), bSlashAllowed );
 }
 
 
