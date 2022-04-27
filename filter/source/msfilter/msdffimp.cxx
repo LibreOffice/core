@@ -171,6 +171,18 @@ static sal_uInt32 nMSOleObjCntr = 0;
 constexpr OUStringLiteral MSO_OLE_Obj = u"MSO_OLE_Obj";
 
 namespace {
+/* Office File Formats - 2.2.23  */
+enum class OfficeArtBlipRecInstance : sal_uInt32
+{
+    EMF = 0x3D4, // defined in section 2.2.24.
+    WMF = 0x216, // defined in section 2.2.25.
+    PICT = 0x542, // as defined in section 2.2.26.
+    JPEG_RGB = 0x46A, // defined in section 2.2.27.
+    JPEG_CMYK = 0x6E2, // defined in section 2.2.27.
+    PNG = 0x6E0, // defined in section 2.2.28.
+    DIB = 0x7A8, // defined in section 2.2.29.
+    TIFF = 0x6E4 // defined in section 2.2.30.
+};
 
 struct SvxMSDffBLIPInfo
 {
@@ -6479,40 +6491,42 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
         bool        bMtfBLIP = false;
         bool        bZCodecCompression = false;
         // now position it exactly at the beginning of the embedded graphic
-        sal_uLong nSkip = ( nInst & 0x0001 ) ? 32 : 16;
-
-        switch( nInst & 0xFFFE )
+        sal_uLong nSkip = (nInst & 0x0001) ? 32 : 16;
+        const OfficeArtBlipRecInstance aRecInstanse = OfficeArtBlipRecInstance(nInst & 0xFFFE);
+        switch (aRecInstanse)
         {
-            case 0x216 :            // Metafile header then compressed WMF
-            case 0x3D4 :            // Metafile header then compressed EMF
-            case 0x542 :            // Metafile hd. then compressed PICT
+            case OfficeArtBlipRecInstance::EMF:
+            case OfficeArtBlipRecInstance::WMF:
+            case OfficeArtBlipRecInstance::PICT:
             {
-                rBLIPStream.SeekRel( nSkip + 20 );
+                rBLIPStream.SeekRel(nSkip + 20);
 
-                // read in size of metafile in EMUS
+                // read in size of metafile in English Metric Units (EMUs)
                 sal_Int32 width(0), height(0);
-                rBLIPStream.ReadInt32( width ).ReadInt32( height );
-                aMtfSize100.setWidth( width );
-                aMtfSize100.setHeight( height );
+                rBLIPStream.ReadInt32(width).ReadInt32(height);
+                aMtfSize100.setWidth(width);
+                aMtfSize100.setHeight(height);
 
+                // 1 EMU = 1/360,000 of a centimeter
                 // scale to 1/100mm
-                aMtfSize100.setWidth( aMtfSize100.Width() / 360 );
-                aMtfSize100.setHeight( aMtfSize100.Height() / 360 );
+                aMtfSize100.setWidth(aMtfSize100.Width() / 360);
+                aMtfSize100.setHeight(aMtfSize100.Height() / 360);
 
-                if ( pVisArea )     // seem that we currently are skipping the visarea position
-                    *pVisArea = tools::Rectangle( Point(), aMtfSize100 );
+                if (pVisArea) // seem that we currently are skipping the visarea position
+                    *pVisArea = tools::Rectangle(Point(), aMtfSize100);
 
                 // skip rest of header
                 nSkip = 6;
                 bMtfBLIP = bZCodecCompression = true;
             }
             break;
-            case 0x46A :            // One byte tag then JPEG (= JFIF) data
-            case 0x6E0 :            // One byte tag then PNG data
-            case 0x6E2 :            // One byte tag then JPEG in CMYK color space
-            case 0x7A8 :
-                nSkip += 1;         // One byte tag then DIB data
-            break;
+            case OfficeArtBlipRecInstance::JPEG_RGB:
+            case OfficeArtBlipRecInstance::JPEG_CMYK:
+            case OfficeArtBlipRecInstance::PNG:
+            case OfficeArtBlipRecInstance::DIB:
+            case OfficeArtBlipRecInstance::TIFF:
+                nSkip += 1; // Skip one byte tag
+                break;
         }
         rBLIPStream.SeekRel( nSkip );
 
@@ -6535,17 +6549,33 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
         // extract graphics from ole storage into "dbggfxNNN.*"
         static sal_Int32 nGrfCount;
 
-        OUString aFileName = "dbggfx" + OUString::number( nGrfCount++ );
-        switch( nInst &~ 1 )
+        OUString aFileName = "dbggfx" + OUString::number(nGrfCount++);
+        switch (aRecInstanse)
         {
-            case 0x216 : aFileName += ".wmf"; break;
-            case 0x3d4 : aFileName += ".emf"; break;
-            case 0x542 : aFileName += ".pct"; break;
-            case 0x46a : aFileName += ".jpg"; break;
-            case 0x6e0 : aFileName += ".png"; break;
-            case 0x6e2 : aFileName += ".jpg"; break;
-            case 0x7a8 : aFileName += ".bmp"; break;
+            case OfficeArtBlipRecInstance::WMF:
+                aFileName += ".wmf";
+                break;
+            case OfficeArtBlipRecInstance::EMF:
+                aFileName += ".emf";
+                break;
+            case OfficeArtBlipRecInstance::PICT:
+                aFileName += ".pct";
+                break;
+            case OfficeArtBlipRecInstance::JPEG_RGB:
+            case OfficeArtBlipRecInstance::JPEG_CMYK:
+                aFileName += ".jpg";
+                break;
+            case OfficeArtBlipRecInstance::PNG:
+                aFileName += ".png";
+                break;
+            case OfficeArtBlipRecInstance::DIB:
+                aFileName += ".bmp";
+                break;
+            case OfficeArtBlipRecInstance::TIFF:
+                aFileName += ".tif";
+                break;
         }
+
 
         OUString aURLStr;
         if( osl::FileBase::getFileURLFromSystemPath( Application::GetAppFileName(), aURLStr ) == osl::FileBase::E_None )
@@ -6583,8 +6613,7 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             }
         }
 #endif
-
-        if( ( nInst & 0xFFFE ) == 0x7A8 )
+        if (aRecInstanse == OfficeArtBlipRecInstance::DIB)
         {   // getting the DIBs immediately
             Bitmap aNew;
             if( ReadDIB(aNew, *pGrStream, false) )
@@ -6622,7 +6651,8 @@ bool SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, tool
             //
             // For pict graphics we will furthermore scale the metafile, because font scaling leads to error if the
             // dxarray is empty (this has been solved in wmf/emf but not for pict)
-            if( bMtfBLIP && ( ERRCODE_NONE == nRes ) && ( rData.GetType() == GraphicType::GdiMetafile ) && ( ( nInst & 0xFFFE ) == 0x542 ) )
+            if (bMtfBLIP && (ERRCODE_NONE == nRes) && (rData.GetType() == GraphicType::GdiMetafile)
+                && (aRecInstanse == OfficeArtBlipRecInstance::PICT))
             {
                 if ( ( aMtfSize100.Width() >= 1000 ) && ( aMtfSize100.Height() >= 1000 ) )
                 {   // #75956#, scaling does not work properly, if the graphic is less than 1cm
