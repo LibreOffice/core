@@ -134,7 +134,8 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
 #ifdef DBG_UTIL
 bool SalLayoutGlyphsImpl::isEqual(const SalLayoutGlyphsImpl* other) const
 {
-    if (GetFont()->mxFontMetric != other->GetFont()->mxFontMetric)
+    if (!GetFont()->mxFontMetric->CompareDeviceIndependentFontAttributes(
+            *other->GetFont()->mxFontMetric))
         return false;
     if (GetFlags() != other->GetFlags())
         return false;
