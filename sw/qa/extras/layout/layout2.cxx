@@ -302,6 +302,27 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
     assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']", 0);
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInFootnote)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf85610.fodt");
+    SwDocShell* pShell = pDoc->GetDocShell();
+
+    // Dump the rendering of the first page as an XML file.
+    std::shared_ptr<GDIMetaFile> xMetaFile = pShell->GetPreviewMetaFile();
+    MetafileXmlDump dumper;
+
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // number of footnote 1 (deleted footnote)
+    // This was #000000 (black)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[22]", "color", "#c69200");
+
+    // number of footnote 2 (inserted footnote)
+    // This was #000000 (black)
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[29]", "color", "#c69200");
+}
+
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineMoving)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf42748.fodt");

@@ -823,7 +823,15 @@ void MetafileXmlDump::writeXml(const GDIMetaFile& rMetaFile, tools::XmlWriter& r
                 }
 
                 rWriter.startElement("text");
-                rWriter.content(pMetaTextArrayAction->GetText());
+
+                const OUString& rStr = pMetaTextArrayAction->GetText();
+                // fix bad XML dump by removing forbidden 0x01
+                // FIXME: expand footnote anchor point 0x01 instead of this
+                if ( rStr.indexOf(0x01) > -1 )
+                    rWriter.content(rStr.replaceAll("\001", ""));
+                else
+                    rWriter.content(rStr);
+
                 rWriter.endElement();
 
                 rWriter.endElement();
