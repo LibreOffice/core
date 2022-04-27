@@ -40,6 +40,7 @@
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <comphelper/string.hxx>
+#include <o3tl/string_view.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/progress.hxx>
@@ -811,7 +812,7 @@ void EditorWindow::HandleProcedureCompletion()
     }
 }
 
-bool EditorWindow::GetProcedureName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const
+bool EditorWindow::GetProcedureName(std::u16string_view rLine, OUString& rProcType, OUString& rProcName) const
 {
     std::vector<HighlightPortion> aPortions;
     aHighlighter.getHighlightPortions(rLine, aPortions);
@@ -824,10 +825,10 @@ bool EditorWindow::GetProcedureName(OUString const & rLine, OUString& rProcType,
 
     for (auto const& portion : aPortions)
     {
-        OUString sTokStr = rLine.copy(portion.nBegin, portion.nEnd - portion.nBegin);
+        std::u16string_view sTokStr = rLine.substr(portion.nBegin, portion.nEnd - portion.nBegin);
 
-        if( portion.tokenType == TokenType::Keywords && ( sTokStr.equalsIgnoreAsciiCase("sub")
-            || sTokStr.equalsIgnoreAsciiCase("function")) )
+        if( portion.tokenType == TokenType::Keywords && ( o3tl::equalsIgnoreAsciiCase(sTokStr, u"sub")
+            || o3tl::equalsIgnoreAsciiCase(sTokStr, u"function")) )
         {
             rProcType = sTokStr;
             bFoundType = true;
