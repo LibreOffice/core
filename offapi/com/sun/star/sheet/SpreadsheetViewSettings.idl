@@ -152,6 +152,12 @@ published service SpreadsheetViewSettings
         com::sun::star::view::DocumentZoomType::BY_VALUE.
     */
     [property] short ZoomValue;
+
+    /** Number of lines shown in the Formula bar (default is 1)
+
+        @since LibreOffice 7.4
+    */
+    [optional, property] short FormulaBarLines;
 };
 
 

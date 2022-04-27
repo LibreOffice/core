@@ -104,9 +104,10 @@ public:
     int GetPixelHeightForLines(tools::Long nLines);
     int GetEditEngTxtHeight() const;
 
-    virtual tools::Long GetNumLines() const override { return mnLines; }
+    virtual tools::Long GetNumLines() const override;
     void SetNumLines(tools::Long nLines);
     tools::Long GetLastNumExpandedLines() const { return mnLastExpandedLines; }
+    void SetLastNumExpandedLines(tools::Long nLastExpandedLines) { mnLastExpandedLines = nLastExpandedLines; }
 
     void DoScroll();
 
@@ -153,7 +154,6 @@ private:
 
     ScTabViewShell* mpViewShell;
     ScTextWndGroup& mrGroupBar;
-    tools::Long mnLines;
     tools::Long mnLastExpandedLines;
     bool mbInvalidate;
 };
@@ -209,6 +209,7 @@ public:
     const OutputDevice&     GetEditViewDevice() const;
     Point                   GetCursorScreenPixelPos(bool bBelowLine);
     tools::Long             GetLastNumExpandedLines() const;
+    void SetLastNumExpandedLines(tools::Long nLastExpandedLines);
     virtual tools::Long     GetNumLines() const override;
     int                     GetPixelHeightForLines(tools::Long nLines);
     weld::ScrolledWindow&   GetScrollWin();
@@ -259,6 +260,7 @@ public:
     bool                    IsInputActive() override;
     void                    IncrementVerticalSize();
     void                    DecrementVerticalSize();
+    void                    NumLinesChanged();
     virtual tools::Long            GetNumLines() const override { return mxTextWndGroup->GetNumLines(); }
     tools::Long                    GetVertOffset() const { return  mnVertOffset; }
 
@@ -303,6 +305,8 @@ public:
     void            SetOkCancelMode();
     void            SetSumAssignMode();
     void            EnableButtons( bool bEnable );
+    /// Update Input bar after the number of lines was changed externally
+    void            NumLinesChanged();
 
     void            SetFormulaMode( bool bSet );
 

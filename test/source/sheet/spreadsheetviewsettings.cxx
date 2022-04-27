@@ -235,6 +235,16 @@ void SpreadsheetViewSettings::testSpreadsheetViewSettingsProperties()
     xSpreadsheetViewSettings->setPropertyValue(propName, aNewValue);
     CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aZoomValue);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue ZoomValue", sal_Int16(1), aZoomValue);
+
+    propName = "FormulaBarLines";
+    sal_Int16 aFormulaBarLines;
+    CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aFormulaBarLines);
+
+    aNewValue <<= sal_Int16(15);
+    xSpreadsheetViewSettings->setPropertyValue(propName, aNewValue);
+    CPPUNIT_ASSERT(xSpreadsheetViewSettings->getPropertyValue(propName) >>= aFormulaBarLines);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unable to set PropertyValue FormulaBarLines", sal_Int16(15),
+                                 aFormulaBarLines);
 }
 }
 
