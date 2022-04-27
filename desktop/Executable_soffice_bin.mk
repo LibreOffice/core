@@ -45,6 +45,14 @@ $(eval $(call gb_Executable_add_ldflags,soffice_bin,\
 
 endif
 
+ifeq (TRUE,$(EMSCRIPTEN))
+
+$(eval $(call gb_Executable_add_ldflags,soffice_bin,\
+    -sEXPORTED_FUNCTIONS=_main,_libreofficekit_hook,_libreofficekit_hook_2,_lok_preinit,_lok_preinit_2 \
+))
+
+endif
+
 endif
 
 ifeq ($(OS),EMSCRIPTEN)

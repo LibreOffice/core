@@ -24,6 +24,9 @@ gb_EMSCRIPTEN_LDFLAGS := $(gb_EMSCRIPTEN_CPPFLAGS)
 # Initial memory size and worker thread pool
 gb_EMSCRIPTEN_LDFLAGS += -s TOTAL_MEMORY=1GB -s PTHREAD_POOL_SIZE=4
 
+# add a few critical functions to export
+gb_EMSCRIPTEN_LDFLAGS += -sEXPORTED_RUNTIME_METHODS=ccall,cwrap
+
 # To keep the link time (and memory) down, prevent all rewriting options from wasm-emscripten-finalize
 # See emscripten.py, finalize_wasm, modify_wasm = True
 # So we need WASM_BIGINT=1 and ASSERTIONS=1 (2 implies STACK_OVERFLOW_CHECK)
