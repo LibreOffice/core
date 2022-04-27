@@ -1210,6 +1210,7 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     while (rLayoutArgs.GetNextPos( &nCharPos, &bRTL))
     {
         assert(rLayoutArgs.mrStr[nCharPos] != '\0');
+        SAL_DEBUG("GLYPHFALLBACL:" << (int)rLayoutArgs.mrStr[nCharPos]);
         aMissingCodeBuf.append(rLayoutArgs.mrStr[nCharPos]);
     }
     rLayoutArgs.ResetPos();
@@ -1231,7 +1232,12 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
             pFallbackFont = mxFontCache->GetGlyphFallbackFont( mxFontCollection.get(),
                 aFontSelData, mpFontInstance.get(), nFallbackLevel, aMissingCodes );
         if( !pFallbackFont )
+        {
+            SAL_DEBUG("NOFALLBACK");
+            for(sal_Int32 i = 0; i < aMissingCodes.getLength(); ++i)
+                SAL_DEBUG("N2:" << (int)aMissingCodes[i]);
             break;
+        }
 
         if( nFallbackLevel < MAX_FALLBACK-1)
         {
