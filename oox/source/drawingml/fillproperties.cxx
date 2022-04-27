@@ -397,6 +397,12 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 {
                     rPropMap.setProperty(PROP_FillColorTheme, nPhClrTheme);
                 }
+                else
+                {
+                    rPropMap.setProperty(PROP_FillColorTheme, maFillColor.getSchemeColorIndex());
+                    rPropMap.setProperty(PROP_FillColorLumMod, maFillColor.getLumMod());
+                    rPropMap.setProperty(PROP_FillColorLumOff, maFillColor.getLumOff());
+                }
 
                 eFillStyle = FillStyle_SOLID;
             }
