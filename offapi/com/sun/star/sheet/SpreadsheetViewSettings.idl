@@ -152,6 +152,13 @@ published service SpreadsheetViewSettings
         com::sun::star::view::DocumentZoomType::BY_VALUE.
     */
     [property] short ZoomValue;
+
+    /** Number of lines shown in the Formula bar
+        Default is 1, maximum value is 25.
+
+        @since LibreOffice 7.4
+    */
+    [optional, property] short FormulaBarHeight;
 };
 
 
