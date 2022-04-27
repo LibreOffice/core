@@ -34,6 +34,24 @@
       "parentUuid": "33d61632_9c6949e8",
       "revId": "f334ea43304e3670ae8276adebfc22fa5b80ffda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "356c810d_872ff8ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-27T06:42:59Z",
+      "side": 1,
+      "message": "Thanks!\n\nFun thing is - the IsChart specifically is unchanged (I touched IsMath/IsCalc) ... but anyway, it indeed looks related. I might just overlook something obvious - debugging.",
+      "parentUuid": "cf5fc6e3_db988cea",
+      "revId": "f334ea43304e3670ae8276adebfc22fa5b80ffda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
