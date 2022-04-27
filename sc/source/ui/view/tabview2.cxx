@@ -739,8 +739,16 @@ void ScTabView::SkipCursorHorizontal(SCCOL& rCurX, SCROW& rCurY, SCCOL nOldX, SC
 
     bool bSkipCell = false;
     bool bHFlip = false;
-    // search also the first unallocated column (all unallocated columns share a set of attrs)
-    SCCOL nMaxCol = std::min<SCCOL>( rDoc.GetAllocatedColumnsCount(nTab) + 1, rDoc.MaxCol());
+    // If a number of last columns are hidden, search up to and including the first of them,
+    // because after it nothing changes.
+    SCCOL nMaxCol;
+    if(rDoc.ColHidden(rDoc.MaxCol(), nTab, &nMaxCol))
+        ++nMaxCol;
+    else
+        nMaxCol = rDoc.MaxCol();
+    // Search also at least up to and including the first unallocated column (all unallocated columns
+    // share a set of attrs).
+    nMaxCol = std::max( nMaxCol, std::min<SCCOL>( rDoc.GetAllocatedColumnsCount(nTab) + 1, rDoc.MaxCol()));
     do
     {
         bSkipCell = rDoc.ColHidden(rCurX, nTab) || rDoc.IsHorOverlapped(rCurX, rCurY, nTab);
