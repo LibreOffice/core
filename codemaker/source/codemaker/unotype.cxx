@@ -26,25 +26,25 @@
 
 
 OString codemaker::UnoType::decompose(
-    OString const & type, sal_Int32 * rank,
+    std::string_view type, sal_Int32 * rank,
     std::vector< OString > * arguments)
 {
-    sal_Int32 len = type.getLength();
-    sal_Int32 i = 0;
+    size_t len = type.size();
+    size_t i = 0;
     while (len - i > 1 && type[i + 1] == ']') {
         i += 2;
     }
     if (rank != nullptr) {
         *rank = i / 2;
     }
-    sal_Int32 j = arguments == nullptr ? -1 : type.indexOf('<', i);
-    if (j < 0) {
-        return type.copy(i);
+    size_t j = arguments == nullptr ? std::string_view::npos : type.find('<', i);
+    if (j == std::string_view::npos) {
+        return OString(type.substr(i));
     }
-    sal_Int32 k = j;
+    size_t k = j;
     do {
         ++k; // skip '<' or ','
-        sal_Int32 l = k;
+        size_t l = k;
         for (sal_Int32 level = 0; l != len; ++l) {
             char c = type[l];
             if (c == ',') {
@@ -60,11 +60,11 @@ OString codemaker::UnoType::decompose(
                 --level;
             }
         }
-        arguments->push_back(type.copy(k, l - k));
+        arguments->push_back(OString(type.substr(k, l - k)));
         k = l;
     } while (k != len && type[k] != '>');
     OSL_ASSERT(k == len - 1 && type[k] == '>');
-    return type.copy(i, j - i);
+    return OString(type.substr(i, j - i));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@ Includes::Includes(
 Includes::~Includes()
 {}
 
-void Includes::add(OString const & entityName) {
+void Includes::add(std::string_view entityName) {
     sal_Int32 k;
     std::vector< OString > args;
     OUString n(b2u(codemaker::UnoType::decompose(entityName, &k, &args)));
