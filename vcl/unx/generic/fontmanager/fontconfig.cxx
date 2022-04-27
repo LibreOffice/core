@@ -1185,7 +1185,7 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
             // ImplFontMetricData::ImplInitTextLineSize
             return;
         }
-        SAL_WARN("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
+        SAL_DEBUG("PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
                               "' try: " << rPattern.maSearchName << " instead");
         std::abort();
     }
