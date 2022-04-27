@@ -58,6 +58,32 @@ void XMLContentControlContext::startFastElement(
                 }
                 break;
             }
+            case XML_ELEMENT(LO_EXT, XML_CHECKBOX):
+            {
+                if (sax::Converter::convertBool(bTmp, rIter.toView()))
+                {
+                    m_bCheckbox = bTmp;
+                }
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_CHECKED):
+            {
+                if (sax::Converter::convertBool(bTmp, rIter.toView()))
+                {
+                    m_bChecked = bTmp;
+                }
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_CHECKED_STATE):
+            {
+                m_aCheckedState = rIter.toString();
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_UNCHECKED_STATE):
+            {
+                m_aUncheckedState = rIter.toString();
+                break;
+            }
             default:
                 XMLOFF_WARN_UNKNOWN("xmloff", rIter);
         }
@@ -98,6 +124,23 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     if (m_bShowingPlaceHolder)
     {
         xPropertySet->setPropertyValue("ShowingPlaceHolder", uno::makeAny(m_bShowingPlaceHolder));
+    }
+
+    if (m_bCheckbox)
+    {
+        xPropertySet->setPropertyValue("Checkbox", uno::makeAny(m_bCheckbox));
+    }
+    if (m_bChecked)
+    {
+        xPropertySet->setPropertyValue("Checked", uno::makeAny(m_bChecked));
+    }
+    if (!m_aCheckedState.isEmpty())
+    {
+        xPropertySet->setPropertyValue("CheckedState", uno::makeAny(m_aCheckedState));
+    }
+    if (!m_aUncheckedState.isEmpty())
+    {
+        xPropertySet->setPropertyValue("UncheckedState", uno::makeAny(m_aUncheckedState));
     }
 }
 
