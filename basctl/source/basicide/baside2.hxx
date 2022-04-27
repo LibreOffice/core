@@ -153,7 +153,7 @@ public:
     void            ChangeFontColor( Color aColor );
     void            UpdateSyntaxHighlighting ();
 
-    bool            GetProcedureName(OUString const & rLine, OUString& rProcType, OUString& rProcName) const;
+    bool            GetProcedureName(std::u16string_view rLine, OUString& rProcType, OUString& rProcName) const;
 
     FactoryFunction GetUITestFactory() const override;
 };
