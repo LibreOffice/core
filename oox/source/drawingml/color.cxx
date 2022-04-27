@@ -496,7 +496,7 @@ sal_Int16 Color::getTintOrShade()
     return 0;
 }
 
-sal_Int16 Color::getLumMod()
+sal_Int16 Color::getLumMod() const
 {
     for (const auto& rTransform : maTransforms)
     {
@@ -512,7 +512,7 @@ sal_Int16 Color::getLumMod()
     return 10000;
 }
 
-sal_Int16 Color::getLumOff()
+sal_Int16 Color::getLumOff() const
 {
     for (const auto& rTransform : maTransforms)
     {

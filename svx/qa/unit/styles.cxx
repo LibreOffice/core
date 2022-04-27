@@ -94,17 +94,26 @@ CPPUNIT_TEST_FIXTURE(Test, testThemeChange)
     // Blue.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0x4472c4), GetShapeFillColor(xShape4));
     // The theme index of this filled shape is set by the PPTX import:
-    sal_Int32 nColorTheme = -1;
+    sal_Int16 nColorTheme = -1;
     xShape4->getPropertyValue("FillColorTheme") >>= nColorTheme;
     // 4 means accent1, this was -1 without the PPTX import bit in place.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(4), nColorTheme);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nColorTheme);
     uno::Reference<beans::XPropertySet> xShape5(xDrawPageShapes->getByIndex(5), uno::UNO_QUERY);
     // Blue, lighter.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0xb4c7e7), GetShapeFillColor(xShape5));
-    // Set theme index to accent 1 & effects till PPTX import is missing.
-    xShape5->setPropertyValue("FillColorTheme", uno::makeAny(static_cast<sal_Int16>(4)));
-    xShape5->setPropertyValue("FillColorLumMod", uno::makeAny(static_cast<sal_Int16>(4000)));
-    xShape5->setPropertyValue("FillColorLumOff", uno::makeAny(static_cast<sal_Int16>(6000)));
+    // The theme index, and effects (lum mod, lum off) are set by the PPTX import:
+    nColorTheme = -1;
+    xShape5->getPropertyValue("FillColorTheme") >>= nColorTheme;
+    // 4 means accent1, this was -1 without the PPTX import bit in place.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nColorTheme);
+    sal_Int16 nColorLumMod = 10000;
+    xShape5->getPropertyValue("FillColorLumMod") >>= nColorLumMod;
+    // This was 10000 without the PPTX import bit in place.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4000), nColorLumMod);
+    sal_Int16 nColorLumOff = 0;
+    xShape5->getPropertyValue("FillColorLumOff") >>= nColorLumOff;
+    // This was 0 without the PPTX import bit in place.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(6000), nColorLumOff);
 
     // When changing the master slide of slide 1 to use the theme of the second master slide:
     uno::Reference<drawing::XMasterPageTarget> xDrawPage2(
