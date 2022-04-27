@@ -25,16 +25,18 @@ class Tdf82616(UITestCase):
 
             xImpressDoc = self.xUITest.getTopFocusWindow()
 
-            self.assertEqual(1400, document.DrawPages[0].getByIndex(0).Position.X)
-            self.assertEqual(628, document.DrawPages[0].getByIndex(0).Position.Y)
-            self.assertEqual(1400, document.DrawPages[0].getByIndex(1).Position.X)
-            self.assertEqual(3685, document.DrawPages[0].getByIndex(1).Position.Y)
-
             self.assertIsNone(document.CurrentSelection)
 
             xEditWin = xImpressDoc.getChild("impress_win")
             xEditWin.executeAction("SELECT", mkPropertyValues({"OBJECT":"Unnamed Drawinglayer object 1"}))
             self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
+
+            with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
+                self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                self.assertEqual('1.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                self.assertEqual('3.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
             xEditWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "PosSizePropertyPanel"}))
 
@@ -49,10 +51,12 @@ class Tdf82616(UITestCase):
             xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
             xDrawinglayerObject.executeAction("MOVE", mkPropertyValues({"X": "-5000", "Y":"-10000"}))
 
-            self.assertEqual(1400, document.DrawPages[0].getByIndex(0).Position.X)
-            self.assertEqual(628, document.DrawPages[0].getByIndex(0).Position.Y)
-            self.assertEqual(-3600, document.DrawPages[0].getByIndex(1).Position.X)
-            self.assertEqual(-6315, document.DrawPages[0].getByIndex(1).Position.Y)
+            with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
+                self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                self.assertEqual('-3.6', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                self.assertEqual('-6.32', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
             # Without the fix in place, this test would have failed with
             # AssertionError: '-3.6' != '0'
