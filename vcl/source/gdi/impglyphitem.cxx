@@ -164,8 +164,9 @@ SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
     return cache.get();
 }
 
-static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source, sal_Int32 index,
-                                        sal_Int32 len)
+static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source,
+                                        const OutputDevice* outputDevice, const OUString& text,
+                                        sal_Int32 index, sal_Int32 len)
 {
     SalLayoutGlyphs ret;
     for (int level = 0;; ++level)
@@ -177,6 +178,11 @@ static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source, sal_Int32
         // If the glyphs range cannot be cloned, bail out.
         if (cloned == nullptr)
             return SalLayoutGlyphs();
+        // If the entire string is mixed LTR/RTL but the subset is only LTR,
+        // then make sure the flags match that, otherwise checkGlyphsEqual()
+        // would assert on flags being different.
+        cloned->SetFlags(cloned->GetFlags()
+                         | outputDevice->GetBiDiLayoutFlags(text, index, index + len));
         ret.AppendImpl(cloned);
     }
     return ret;
@@ -236,7 +242,8 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         GlyphsCache::const_iterator itWhole = mCachedGlyphs.find(keyWhole);
         if (itWhole != mCachedGlyphs.end() && itWhole->second.IsValid())
         {
-            mLastTemporaryGlyphs = makeGlyphsSubset(itWhole->second, nIndex, nLen);
+            mLastTemporaryGlyphs
+                = makeGlyphsSubset(itWhole->second, outputDevice, text, nIndex, nLen);
             if (mLastTemporaryGlyphs.IsValid())
             {
                 mLastTemporaryKey = std::move(key);
