@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac1f6316_1419c60e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-27T19:18:44Z",
+      "side": 1,
+      "message": "The last piece to adjust is when calling SetPixel:\nnPhotometricInterpretation \u003d 1 corresponds to the same case as nPhotometricInterpretation \u003d 2\nsince RGB black is 0, nPhotometricInterpretation \u003d 1 is minisblack so here too black is 0\n\nI thought first MakePalCol was the only method to take into account for minisblack/miniswhite that\u0027s why I was stuck with reversed grey tones in the tif from tdf#74331.",
+      "revId": "1c77fbff27082b4b79079399369b3d9b780ea8a6",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
