@@ -16,6 +16,24 @@
       "message": "Is FormulaBarLines the right term? Or rather InputBarLines? Or something else?",
       "revId": "13ab3647deda1798b5949c3ee8d685514c85da8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "592c5626_cec3b9de",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-04-27T18:03:10Z",
+      "side": 1,
+      "message": "I think \"formula bar\" is fine.  Personally I may have labeled it as \"formula bar height\" then the height can be expressed in terms of the number of lines.  But \"formula bar lines\" may be ok.  Just my opinion.",
+      "parentUuid": "6790e27d_4c3c6f69",
+      "revId": "13ab3647deda1798b5949c3ee8d685514c85da8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
