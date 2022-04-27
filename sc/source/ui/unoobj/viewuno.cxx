@@ -65,6 +65,8 @@
 #include <markdata.hxx>
 #include <scextopt.hxx>
 #include <preview.hxx>
+#include <inputhdl.hxx>
+#include <inputwin.hxx>
 #include <svx/sdrhittesthelper.hxx>
 #include <formatsh.hxx>
 #include <sfx2/app.hxx>
@@ -107,6 +109,7 @@ static const SfxItemPropertyMapEntry* lcl_GetViewOptPropertyMap()
         { SC_UNO_ZOOMTYPE,     0,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         { SC_UNO_ZOOMVALUE,    0,  cppu::UnoType<sal_Int16>::get(),    0, 0},
         { SC_UNO_VISAREASCREEN,0,  cppu::UnoType<awt::Rectangle>::get(), 0, 0},
+        { SC_UNO_FORMULABARLINES,0,cppu::UnoType<sal_Int16>::get(),    0, 0},
         { u"", 0, css::uno::Type(), 0, 0 }
     };
     return aViewOptPropertyMap_Impl;
@@ -1793,6 +1796,21 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         if ( aValue >>= nIntVal )
             SetZoom(nIntVal);
     }
+    else if ( aPropertyName == SC_UNO_FORMULABARLINES )
+    {
+        sal_Int16 nIntVal = 0;
+        if ( aValue >>= nIntVal )
+            rViewData.SetFormulaBarLines(nIntVal);
+
+        // Notify formula bar about changed lines
+        ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
+        if (pInputHdl)
+        {
+            ScInputWindow* pInputWin = pInputHdl->GetInputWindow();
+            if (pInputWin)
+                pInputWin->NumLinesChanged();
+        }
+    }
 
     //  Options are set on the view and document (for new views),
     //  so that they remain during saving.
@@ -1832,7 +1850,8 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
     ScTabViewShell* pViewSh = GetViewShell();
     if (pViewSh)
     {
-        const ScViewOptions& rOpt = pViewSh->GetViewData().GetOptions();
+        ScViewData& rViewData = pViewSh->GetViewData();
+        const ScViewOptions& rOpt = rViewData.GetOptions();
 
         if ( aPropertyName == SC_UNO_COLROWHDR || aPropertyName == OLD_UNO_COLROWHDR )
             aRet <<= rOpt.GetOption( VOPT_HEADER );
@@ -1860,9 +1879,9 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const OUString& aPropertyName 
         else if ( aPropertyName == SC_UNO_VISAREA ) aRet <<= GetVisArea();
         else if ( aPropertyName == SC_UNO_ZOOMTYPE ) aRet <<= GetZoomType();
         else if ( aPropertyName == SC_UNO_ZOOMVALUE ) aRet <<= GetZoom();
+        else if ( aPropertyName == SC_UNO_FORMULABARLINES ) rViewData.GetFormulaBarLines();
         else if ( aPropertyName == SC_UNO_VISAREASCREEN )
         {
-            ScViewData& rViewData = pViewSh->GetViewData();
             vcl::Window* pActiveWin = rViewData.GetActiveWin();
             if ( pActiveWin )
             {

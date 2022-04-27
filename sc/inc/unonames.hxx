@@ -576,6 +576,7 @@ inline constexpr OUStringLiteral SC_SERVICENAME_CHART_PIVOTTABLE_DATAPROVIDER = 
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
 #define SC_UNO_FILTERED_RANGE_SELECTION       "FilteredRangeSelection"
 #define SC_UNO_VISAREASCREEN        "VisibleAreaOnScreen"
+#define SC_UNO_FORMULABARLINES      "FormularBarLines"
 #define SC_UNO_IMAGE_PREFERRED_DPI  "ImagePreferredDPI"
 
 /*Stampit enable/disable print cancel */
