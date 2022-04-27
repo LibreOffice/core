@@ -329,6 +329,7 @@ private:
     bool                bMoveArea:1;
 
     bool                bGrowing;
+    sal_Int16           nFormulaBarLines;           // Visible lines in the formula bar
 
     tools::Long                m_nLOKPageUpDownOffset;
     tools::Rectangle    maLOKVisibleArea;///< The visible area in the LibreOfficeKit client.
@@ -466,6 +467,9 @@ public:
 
     double          GetPPTX() const { return nPPTX; }
     double          GetPPTY() const { return nPPTY; }
+
+    void            SetFormulaBarLines(sal_Int16 nLines) { nFormulaBarLines = nLines; }
+    sal_Int16       GetFormulaBarLines() const { return nFormulaBarLines; };
 
     ScMarkType      GetSimpleArea( SCCOL& rStartCol, SCROW& rStartRow, SCTAB& rStartTab,
                                     SCCOL& rEndCol, SCROW& rEndRow, SCTAB& rEndTab ) const;
