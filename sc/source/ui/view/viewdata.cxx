@@ -3335,8 +3335,8 @@ void ScViewData::ReadUserData(std::u16string_view rData)
     // SetPagebreakMode must always be called due to CalcPPT / RecalcPixPos()
 
     // sheet may have become invalid (for instance last version):
-    sal_Int64 nNewTab = o3tl::toInt64(o3tl::getToken(rData, 0, ';', nMainIdx));
-    if (nNewTab >= 0 && mrDoc.HasTable(nNewTab))
+    SCTAB nNewTab = static_cast<SCTAB>(o3tl::toUInt32(o3tl::getToken(rData, 0, ';', nMainIdx)));
+    if (mrDoc.HasTable(nNewTab))
         SetTabNo(nNewTab);
 
     // if available, get tab bar width:
