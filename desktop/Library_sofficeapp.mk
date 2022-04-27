@@ -137,18 +137,11 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 		desktop/source/lib/lokandroid) \
 ))
 else
-ifeq ($(USING_X11),TRUE)
+ifneq ($(filter TRUE,$(USING_X11) $(DISABLE_GUI))($filter EMSCRIPTEN,$(OS)),)
 $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/init \
 	desktop/source/lib/lokinteractionhandler \
 	desktop/source/lib/lokclipboard \
-))
-endif
-ifeq ($(DISABLE_GUI),TRUE)
-$(eval $(call gb_Library_add_exception_objects,sofficeapp,\
-    desktop/source/lib/init \
-    desktop/source/lib/lokinteractionhandler \
-    desktop/source/lib/lokclipboard \
 ))
 endif
 endif
