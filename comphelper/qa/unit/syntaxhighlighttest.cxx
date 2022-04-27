@@ -38,7 +38,7 @@ public:
 
 void SyntaxHighlightTest::testBasicString() {
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions("\"foo\"", ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(u"\"foo\"", ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -48,7 +48,7 @@ void SyntaxHighlightTest::testBasicString() {
 
 void SyntaxHighlightTest::testBasicComment() {
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions("' foo", ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(u"' foo", ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -58,7 +58,7 @@ void SyntaxHighlightTest::testBasicComment() {
 
 void SyntaxHighlightTest::testBasicCommentNewline() {
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions("' foo\n", ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(u"' foo\n", ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -71,7 +71,7 @@ void SyntaxHighlightTest::testBasicCommentNewline() {
 
 void SyntaxHighlightTest::testBasicEmptyComment() {
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions("'", ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(u"'", ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(1), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
@@ -81,7 +81,7 @@ void SyntaxHighlightTest::testBasicEmptyComment() {
 
 void SyntaxHighlightTest::testBasicEmptyCommentNewline() {
     std::vector<HighlightPortion> ps;
-    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions("'\n", ps);
+    SyntaxHighlighter(HighlighterLanguage::Basic).getHighlightPortions(u"'\n", ps);
     CPPUNIT_ASSERT_EQUAL(
         static_cast<std::vector<HighlightPortion>::size_type>(2), ps.size());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ps[0].nBegin);
