@@ -1160,15 +1160,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo49893_3)
 {
     load(mpTestDocumentPath, "fdo49893-3.rtf");
     // No artifacts (black lines in left top corner) as shape #3 are expected
-    try
-    {
-        getShape(3);
-        CPPUNIT_FAIL("exception expected: no shape #3 in document");
-    }
-    catch (lang::IndexOutOfBoundsException const&)
-    {
-        /* expected */
-    }
+    CPPUNIT_ASSERT_EQUAL(2, getShapes());
 
     // Correct wrapping for shape
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGH,

@@ -451,18 +451,10 @@ DECLARE_RTFEXPORT_TEST(testFdo46966, "fdo46966.rtf")
 DECLARE_RTFEXPORT_TEST(testFdo76633, "fdo76633.rtf")
 {
     // check that there is only a graphic object, not an additional rectangle
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     uno::Reference<lang::XServiceInfo> xShape(getShape(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xShape.is());
     CPPUNIT_ASSERT(xShape->supportsService("com.sun.star.text.TextGraphicObject"));
-    try
-    {
-        getShape(2);
-        CPPUNIT_FAIL("exception expected");
-    }
-    catch (lang::IndexOutOfBoundsException const&)
-    {
-        /* expected */
-    }
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo48033, "fdo48033.rtf")
