@@ -45,6 +45,7 @@
 #include <unicode/uscript.h>
 #include <officecfg/Office/Common.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
+#include <config_fonts.h>
 
 using namespace psp;
 
@@ -305,7 +306,12 @@ FcFontSet* FontCfgWrapper::getFontSet()
     if( !m_pFontSet )
     {
         m_pFontSet = FcFontSetCreate();
-        addFontSet( FcSetSystem );
+        bool bRestrictFontSetToApplicationFonts = false;
+#if HAVE_MORE_FONTS
+        bRestrictFontSetToApplicationFonts = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+#endif
+        if (!bRestrictFontSetToApplicationFonts)
+            addFontSet( FcSetSystem );
         addFontSet( FcSetApplication );
 
         std::stable_sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
@@ -1162,6 +1168,14 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     SAL_INFO("vcl.fonts", "PrintFontManager::Substitute: replacing missing font: '"
                               << rPattern.maTargetName << "' with '" << rPattern.maSearchName
                               << "'");
+
+    static bool bAbortOnFontSubstitute = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+    if (bAbortOnFontSubstitute && rPattern.maTargetName != rPattern.maSearchName)
+    {
+        SAL_WARN("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
+                              " try: " << rPattern.maSearchName << " instead");
+        std::abort();
+    }
 }
 
 FontConfigFontOptions::~FontConfigFontOptions()
