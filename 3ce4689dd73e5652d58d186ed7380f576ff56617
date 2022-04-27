@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9c01edeb_231bba96",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-27T22:43:55Z",
+      "side": 0,
+      "message": "Sorry.  There was no further response to comment 3... and my \"Hound of the Baskerville\" detector is not so finely tuned...so I responded to the request in comment 3, as I understood it.\n\nHow to clean up the spilt milk? Revert this patch and start over?  Make a new patch on top of this one?  In either case -- it seems necessary to first bring up the issue in BZ given that others have commented.",
+      "parentUuid": "4ca92842_a67a7cfe",
+      "range": {
+        "startLine": 376,
+        "startChar": 87,
+        "endLine": 376,
+        "endChar": 94
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d65ad511_f23d1151",
         "filename": "sw/inc/strings.hrc",
         "patchSetId": 6
