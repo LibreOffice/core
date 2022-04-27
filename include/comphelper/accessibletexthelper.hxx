@@ -55,7 +55,7 @@ namespace comphelper
         static bool                      implIsValidIndex( sal_Int32 nIndex, sal_Int32 nLength );
         static bool                      implIsValidRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex, sal_Int32 nLength );
         static sal_Unicode               implGetCharacter( std::u16string_view rText, sal_Int32 nIndex );
-        static OUString                  implGetTextRange( const OUString& rText, sal_Int32 nStartIndex, sal_Int32 nEndIndex );
+        static OUString                  implGetTextRange( std::u16string_view rText, sal_Int32 nStartIndex, sal_Int32 nEndIndex );
         virtual OUString                 implGetText() = 0;
         virtual css::lang::Locale        implGetLocale() = 0;
         virtual void                     implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex ) = 0;
@@ -101,8 +101,8 @@ namespace comphelper
                  css::accessibility::TextSegment
         */
         static bool implInitTextChangedEvent(
-            const OUString& rOldString,
-            const OUString& rNewString,
+            std::u16string_view rOldString,
+            std::u16string_view rNewString,
             /*out*/ css::uno::Any& rDeleted,
             /*out*/ css::uno::Any& rInserted); // throw()
     };
