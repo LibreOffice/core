@@ -32,6 +32,7 @@
 #include <vcl/weldutils.hxx>
 
 #include "SmElementsPanel.hxx"
+#include "SmPropertiesPanel.hxx"
 
 namespace
 {
@@ -85,7 +86,11 @@ css::uno::Reference<css::ui::XUIElement> SAL_CALL SmPanelFactory::createUIElemen
 
         std::unique_ptr<PanelLayout> pPanel;
         css::ui::LayoutSize aLayoutSize{ -1, -1, -1 };
-        if (ResourceURL.endsWith("/MathElementsPanel"))
+        if (ResourceURL.endsWith("/MathPropertiesPanel"))
+        {
+            pPanel = sm::sidebar::SmPropertiesPanel::Create(*pParent);
+        }
+        else if (ResourceURL.endsWith("/MathElementsPanel"))
         {
             pPanel = sm::sidebar::SmElementsPanel::Create(*pParent, *pBindings);
             aLayoutSize = { 300, -1, -1 };

@@ -69,6 +69,7 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
         starmath/source/ElementsDockingWindow \
         starmath/source/SmElementsPanel \
         starmath/source/SmPanelFactory \
+        starmath/source/SmPropertiesPanel \
         starmath/source/accessibility \
         starmath/source/action \
         starmath/source/caret \
