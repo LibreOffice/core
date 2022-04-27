@@ -500,6 +500,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext& rContext, bool
             mxScroll->hadjustment_set_upper(nTotalControlWidth);
             mxScroll->hadjustment_set_page_size(nControlWidth);
             mxScroll->hadjustment_set_page_increment(nControlWidth);
+            mxScroll->hadjustment_set_step_increment(boxX);
             mxScroll->set_hpolicy(VclPolicyType::ALWAYS);
         }
         else
@@ -516,6 +517,7 @@ void SmElementsControl::LayoutOrPaintContents(vcl::RenderContext& rContext, bool
             mxScroll->vadjustment_set_upper(nTotalControlHeight);
             mxScroll->vadjustment_set_page_size(nControlHeight);
             mxScroll->vadjustment_set_page_increment(nControlHeight);
+            mxScroll->vadjustment_set_step_increment(boxY);
             mxScroll->set_vpolicy(VclPolicyType::ALWAYS);
         }
         else
