@@ -1078,6 +1078,10 @@ public:
                                               const SalLayoutGlyphs* pGlyphs = nullptr) const;
     static std::shared_ptr<const vcl::text::TextLayoutCache> CreateTextLayoutCache(OUString const&);
 
+    SAL_DLLPRIVATE SalLayoutFlags GetBiDiLayoutFlags( const OUString& rStr,
+                                                      const sal_Int32 nMinIndex,
+                                                      const sal_Int32 nEndIndex ) const;
+
 protected:
     SAL_DLLPRIVATE void         ImplInitTextLineSize();
     SAL_DLLPRIVATE void         ImplInitAboveTextLineSize();
