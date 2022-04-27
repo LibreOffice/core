@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4ca92842_a67a7cfe",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-27T17:57:18Z",
+      "side": 0,
+      "message": "OMG - I haven\u0027t reacted soon enough 😞 That\u0027s just wrong.\nThe Heading was used *correctly* here - a paragraph with an outline level set to non-TextBody. This paragraph is *not* a chapter - the chapter is *all the paragraphs* from one level 1 heading up to the next one.",
+      "parentUuid": "b4fdf81f_4f8f3357",
+      "range": {
+        "startLine": 376,
+        "startChar": 87,
+        "endLine": 376,
+        "endChar": 94
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d65ad511_f23d1151",
         "filename": "sw/inc/strings.hrc",
         "patchSetId": 6
