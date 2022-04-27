@@ -405,15 +405,20 @@ bool nsscrypto_initialize(css::uno::Reference<css::uno::XComponentContext> const
             }
             return false;
         }
-        // Initialize and set empty password if needed
-        PK11SlotInfo* pSlot = PK11_GetInternalKeySlot();
-        if (pSlot)
-        {
-            if (PK11_NeedUserInit(pSlot))
-                PK11_InitPin(pSlot, nullptr, nullptr);
-            PK11_FreeSlot(pSlot);
-        }
     }
+
+    // Initialize and set empty password if needed
+    // note: it's possible that the first NSS_InitReadWrite() succeeds by
+    // creating a new DB; in this case it may also be necessary to call
+    // PK11_InitPin()
+    PK11SlotInfo* pSlot = PK11_GetInternalKeySlot();
+    if (pSlot)
+    {
+        if (PK11_NeedUserInit(pSlot))
+            PK11_InitPin(pSlot, nullptr, nullptr);
+        PK11_FreeSlot(pSlot);
+    }
+
     out_nss_init = true;
 
 #ifdef XMLSEC_CRYPTO_NSS
