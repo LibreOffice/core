@@ -754,26 +754,23 @@ CPPUNIT_TEST_FIXTURE(Test, testTextInput)
 DECLARE_OOXMLEXPORT_TEST(testTdf123460, "tdf123460.docx")
 {
     // check paragraph mark deletion at terminating moveFrom
-    CPPUNIT_ASSERT_EQUAL(true,getParagraph( 2 )->getString().startsWith("Nunc"));
-    CPPUNIT_ASSERT_EQUAL( OUString( "" ), getRun( getParagraph( 2 ), 1 )->getString());
-    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 2), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(getRun(getParagraph(2), 2), "RedlineType"));
-    CPPUNIT_ASSERT_EQUAL(true, getRun( getParagraph( 2 ), 3 )->getString().endsWith("tellus."));
-    CPPUNIT_ASSERT(hasProperty(getRun(getParagraph(2), 4), "Bookmark"));
+    CPPUNIT_ASSERT(getParagraph( 2 )->getString().startsWith("Nunc"));
+    uno::Reference<container::XEnumerationAccess> xRunEnumAccess(getParagraph( 2 ), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRunEnum = xRunEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL( OUString( "" ), xRun->getString());
+    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(hasProperty(xRun, "RedlineType"));
+    CPPUNIT_ASSERT_EQUAL(OUString("Delete"),getProperty<OUString>(xRun, "RedlineType"));
+    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xRun->getString().endsWith("tellus."));
+    xRun.set(xRunEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(hasProperty(xRun, "Bookmark"));
     // deleted paragraph mark at the end of the second paragraph
     if (mbExported)
     {
         // there is no run after the MoveBookmark
-        bool bCaught = false;
-        try
-        {
-            getRun( getParagraph( 2 ), 5 );
-        }
-        catch (container::NoSuchElementException&)
-        {
-            bCaught = true;
-        }
-        CPPUNIT_ASSERT_EQUAL(true, bCaught);
+        CPPUNIT_ASSERT(!xRunEnum->hasMoreElements());
     }
 }
 

@@ -643,15 +643,12 @@ static void lcl_CheckShape(
 CPPUNIT_TEST_FIXTURE(Test, testFdo68839)
 {
     load(mpTestDocumentPath, "fdo68839.odt");
+    CPPUNIT_ASSERT_EQUAL(4, getShapes());
     // check names
     lcl_CheckShape(getShape(1), "FrameXXX");
     lcl_CheckShape(getShape(2), "ObjectXXX");
     lcl_CheckShape(getShape(3), "FrameY");
     lcl_CheckShape(getShape(4), "graphicsXXX");
-    try {
-        uno::Reference<drawing::XShape> xShape = getShape(5);
-        CPPUNIT_FAIL("IndexOutOfBoundsException expected");
-    } catch (lang::IndexOutOfBoundsException const&) { }
     // check prev/next chain
     uno::Reference<beans::XPropertySet> xFrame1(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame2(getShape(3), uno::UNO_QUERY);
@@ -668,12 +665,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo68839)
 CPPUNIT_TEST_FIXTURE(Test, testFdo82165)
 {
     load(mpTestDocumentPath, "fdo82165.odt");
+    CPPUNIT_ASSERT_EQUAL(1, getShapes());
     // there was a duplicate shape in the left header
     lcl_CheckShape(getShape(1), "Picture 9");
-    try {
-        uno::Reference<drawing::XShape> xShape = getShape(2);
-        CPPUNIT_FAIL("IndexOutOfBoundsException expected");
-    } catch (lang::IndexOutOfBoundsException const&) { }
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf89802)
