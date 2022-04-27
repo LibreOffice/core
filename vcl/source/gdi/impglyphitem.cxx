@@ -301,6 +301,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     const SalLayoutFlags glyphItemsOnlyLayout
         = SalLayoutFlags::GlyphItemsOnly | SalLayoutFlags::BiDiStrong;
 #endif
+    bool resetLastPrefixKey = true;
     if (nIndex != 0 || nLen != text.getLength())
     {
         // The glyphs functions are often called first for an entire string
@@ -311,8 +312,34 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             return &mLastTemporaryGlyphs;
         const CachedGlyphsKey keyWhole(outputDevice, text, 0, text.getLength(), nLogicWidth);
         GlyphsCache::const_iterator itWhole = mCachedGlyphs.find(keyWhole);
+        if (itWhole == mCachedGlyphs.end())
+        {
+            // This function may often be called repeatedly for segments of the same string,
+            // in which case it is more efficient to cache glyphs for the entire string
+            // and then return subsets of them. So if the first call is for a prefix of the string,
+            // remember that, and if the next call follows the previous part of the string,
+            // cache the entire string.
+            if (nIndex == 0)
+            {
+                mLastPrefixKey = key;
+                resetLastPrefixKey = false;
+            }
+            else if (mLastPrefixKey.has_value() && mLastPrefixKey->len == nIndex
+                     && mLastPrefixKey
+                            == CachedGlyphsKey(outputDevice, text, mLastPrefixKey->index,
+                                               mLastPrefixKey->len, nLogicWidth))
+            {
+                assert(mLastPrefixKey->index == 0);
+                std::unique_ptr<SalLayout> layout
+                    = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
+                                               glyphItemsOnlyLayout, layoutCache);
+                GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), nLogicWidth, layoutCache);
+                itWhole = mCachedGlyphs.find(keyWhole);
+            }
+        }
         if (itWhole != mCachedGlyphs.end() && itWhole->second.IsValid())
         {
+            mLastPrefixKey.reset();
             mLastTemporaryGlyphs
                 = makeGlyphsSubset(itWhole->second, outputDevice, text, nIndex, nLen);
             if (mLastTemporaryGlyphs.IsValid())
@@ -337,6 +364,9 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             }
         }
     }
+    if (resetLastPrefixKey)
+        mLastPrefixKey.reset();
+
     std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
     if (layoutCache == nullptr)
     {
