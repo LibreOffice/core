@@ -775,7 +775,7 @@ void SvxTextEditSourceImpl::UpdateData()
             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
             if( pTextObj )
             {
-                if( (mpOutliner->GetParagraphCount() != 1 && mpOutliner->GetParagraphCount() != 2)
+                if( mpOutliner->GetParagraphCount() != 1
                     || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
                 {
                     pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
