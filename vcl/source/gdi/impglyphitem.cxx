@@ -290,6 +290,19 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             return &mLastTemporaryGlyphs;
         const CachedGlyphsKey keyWhole(outputDevice, text, 0, text.getLength(), nLogicWidth);
         GlyphsCache::const_iterator itWhole = mCachedGlyphs.find(keyWhole);
+        if (itWhole == mCachedGlyphs.end() && nIndex == 0)
+        {
+            // If this is called for a starting segment of the string, there's a good chance
+            // the next call will want a following segment and repeatedly so until the end
+            // of the string. So lay out the entire text and cache it, to make it possible
+            // to return subsets of it for all the repeated calls.
+            // This is a waste if in fact there will be no calls for the remaining part
+            // of the text, but hopefully that's not a problem in practice. If it turns out
+            // to be, then either this heuristic needs to be improved, or callers should
+            // call this function once for the entire text to prime the cache explicitly.
+            GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), nLogicWidth, layoutCache);
+            itWhole = mCachedGlyphs.find(keyWhole);
+        }
         if (itWhole != mCachedGlyphs.end() && itWhole->second.IsValid())
         {
             mLastTemporaryGlyphs
