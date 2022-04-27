@@ -113,7 +113,13 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     // that's how it's computed in GenericSalLayout::LayoutText().
     DevicePoint zeroPoint = pos->linearPos() - DevicePoint(pos->xOffset(), pos->yOffset());
     // Add and adjust all glyphs until the given length.
-    while (pos != end() && pos->charPos() < index + length)
+    // The check is written as 'charPos + charCount <= index + length' rather than
+    // 'charPos < index + length' to make sure we include complete glyphs. If a glyph is composed
+    // from several characters, we should not cut in the middle of those characters, so this
+    // checks the glyph is entirely in the given character range. If it is not, this will end
+    // the loop and the later 'pos->charPos() != endPos' check will fail and bail out.
+    // CppunitTest_sw_layoutwriter's testCombiningCharacterCursorPosition would fail without this.
+    while (pos != end() && pos->charPos() + pos->charCount() <= index + length))
     {
         if (pos->IsRTLGlyph())
             return nullptr; // Don't mix RTL and non-RTL runs.
