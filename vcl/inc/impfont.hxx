@@ -94,6 +94,9 @@ public:
     bool                operator==( const ImplFont& ) const;
     bool                EqualIgnoreColor( const ImplFont& ) const;
 
+    size_t              GetHashValue() const;
+    size_t              GetHashValueIgnoreColor() const;
+
 private:
     friend class vcl::Font;
     friend SvStream&    ReadImplFont( SvStream& rIStm, ImplFont&, tools::Long& );

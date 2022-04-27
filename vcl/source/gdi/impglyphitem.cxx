@@ -310,9 +310,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     o3tl::hash_combine(hashValue, logicWidth);
 
     o3tl::hash_combine(hashValue, outputDevice.get());
-    SvMemoryStream stream;
-    WriteFont(stream, font);
-    o3tl::hash_combine(hashValue, static_cast<const char*>(stream.GetData()), stream.GetSize());
+    o3tl::hash_combine(hashValue, font.GetHashValueIgnoreColor());
     o3tl::hash_combine(hashValue, mapMode.GetHashValue());
     o3tl::hash_combine(hashValue, rtl);
     o3tl::hash_combine(hashValue, layoutMode);
