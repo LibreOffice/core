@@ -16,6 +16,24 @@
       "message": "\u003e Build queued https://ci.libreoffice.org/job/gerrit_master/113162/\n\nThe problem with the failing test looks related, although I don\u0027t see yet how",
       "revId": "f334ea43304e3670ae8276adebfc22fa5b80ffda",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf5fc6e3_db988cea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-27T06:24:37Z",
+      "side": 1,
+      "message": "Hm, ScJumboSheetsTest::testTdf134553() fails, which uses getSingleChartObject(), which uses IsChart(), and IsChart() / IsCalc() also shows up in this change, perhaps you broke something along the way?\n\nWhy pOleObj is nullptr in that function is something you could investigate.",
+      "parentUuid": "33d61632_9c6949e8",
+      "revId": "f334ea43304e3670ae8276adebfc22fa5b80ffda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
