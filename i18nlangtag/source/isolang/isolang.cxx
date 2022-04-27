@@ -1455,34 +1455,34 @@ IsoLangGLIBCModifiersEntry const aImplIsoLangGLIBCModifiersEntries[] =
 
 // static
 LanguageType MsLangId::convertUnxByteStringToLanguage(
-        const OString& rString )
+        std::string_view rString )
 {
     OString  aLang;
     OString  aCountry;
     OString  aAtString;
 
-    sal_Int32  nLangSepPos    = rString.indexOf( '_' );
-    sal_Int32  nCountrySepPos = rString.indexOf( '.' );
-    sal_Int32  nAtPos         = rString.indexOf( '@' );
+    size_t  nLangSepPos    = rString.find( '_' );
+    size_t  nCountrySepPos = rString.find( '.' );
+    size_t  nAtPos         = rString.find( '@' );
 
-    if (nCountrySepPos < 0)
+    if (nCountrySepPos == std::string_view::npos)
         nCountrySepPos = nAtPos;
-    if (nCountrySepPos < 0)
-        nCountrySepPos = rString.getLength();
+    if (nCountrySepPos == std::string_view::npos)
+        nCountrySepPos = rString.size();
 
-    if (nAtPos >= 0)
-        aAtString = rString.copy( nAtPos+1 );
+    if (nAtPos != std::string_view::npos)
+        aAtString = OString(rString.substr( nAtPos+1 ));
 
-    if (((nLangSepPos >= 0) && (nLangSepPos > nCountrySepPos)) || (nLangSepPos < 0))
+    if (((nLangSepPos != std::string_view::npos) && (nLangSepPos > nCountrySepPos)) || (nLangSepPos == std::string_view::npos))
     {
         // eg. "el.sun_eu_greek", "tchinese", "es.ISO8859-15"
-        aLang    = rString.copy( 0, nCountrySepPos );
+        aLang    = OString(rString.substr( 0, nCountrySepPos ));
     }
-    else if ( nLangSepPos >= 0 )
+    else if ( nLangSepPos != std::string_view::npos )
     {
         // well formed iso names like "en_US.UTF-8", "sh_BA.ISO8859-2@bosnia"
-        aLang    = rString.copy( 0, nLangSepPos );
-        aCountry = rString.copy( nLangSepPos+1, nCountrySepPos - nLangSepPos - 1);
+        aLang    = OString(rString.substr( 0, nLangSepPos ));
+        aCountry = OString(rString.substr( nLangSepPos+1, nCountrySepPos - nLangSepPos - 1));
     }
 
     //  if there is a glibc modifier, first look for exact match in modifier table
