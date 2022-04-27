@@ -45,6 +45,7 @@
 #include <unicode/uscript.h>
 #include <officecfg/Office/Common.hxx>
 #include <org/freedesktop/PackageKit/SyncDbusSessionHelper.hpp>
+#include <config_fonts.h>
 
 using namespace psp;
 
@@ -305,7 +306,12 @@ FcFontSet* FontCfgWrapper::getFontSet()
     if( !m_pFontSet )
     {
         m_pFontSet = FcFontSetCreate();
-        addFontSet( FcSetSystem );
+        bool bRestrictFontSetToApplicationFonts = false;
+#if HAVE_MORE_FONTS
+        bRestrictFontSetToApplicationFonts = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+#endif
+        if (!bRestrictFontSetToApplicationFonts)
+            addFontSet( FcSetSystem );
         addFontSet( FcSetApplication );
 
         std::stable_sort(m_pFontSet->fonts,m_pFontSet->fonts+m_pFontSet->nfont,SortFont());
@@ -608,7 +614,7 @@ void PrintFontManager::countFontconfigFonts()
             if( eFileRes != FcResultMatch || eFamilyRes != FcResultMatch || eScalableRes != FcResultMatch )
                 continue;
 
-            SAL_INFO(
+            SAL_WARN(
                 "vcl.fonts.detail",
                 "found font \"" << family << "\" in file " << file << ", weight = "
                 << (eWeightRes == FcResultMatch ? weight : -1) << ", slant = "
@@ -989,10 +995,13 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     LanguageTag aLangTag(rPattern.meLanguage);
     OString aLangAttrib = mapToFontConfigLangTag(aLangTag);
 
+    bool bMissingJustBullet = false;
+
     // Add required Unicode characters, if any
     if ( !rMissingCodes.isEmpty() )
     {
         FcCharSet *codePoints = FcCharSetCreate();
+        bMissingJustBullet = rMissingCodes.getLength() == 1 && rMissingCodes[0] == 0xb7;
         for( sal_Int32 nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
         {
             // also handle unicode surrogates
@@ -1162,6 +1171,24 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     SAL_INFO("vcl.fonts", "PrintFontManager::Substitute: replacing missing font: '"
                               << rPattern.maTargetName << "' with '" << rPattern.maSearchName
                               << "'");
+
+    static bool bAbortOnFontSubstitute = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
+    if (bAbortOnFontSubstitute && rPattern.maTargetName != rPattern.maSearchName)
+    {
+        SAL_INFO("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
+                              "' try: " << rPattern.maSearchName << " instead");
+        if (bMissingJustBullet)
+        {
+            assert(rPattern.maTargetName == "Amiri Quran" || rPattern.maTargetName == "David CLM" ||
+                   rPattern.maTargetName == "EmojiOne Color" || rPattern.maTargetName == "Frank Ruehl CLM" ||
+                   rPattern.maTargetName == "KacstBook" || rPattern.maTargetName == "KacstOffice");
+            // These fonts exist in "more_fonts", but have no U+00B7 MIDDLE DOT
+            // so will always glyph fallback on measuring mnBulletOffset in
+            // ImplFontMetricData::ImplInitTextLineSize
+            return;
+        }
+        std::abort();
+    }
 }
 
 FontConfigFontOptions::~FontConfigFontOptions()
