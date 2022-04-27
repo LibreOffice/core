@@ -50,6 +50,7 @@
 #define SC_RASTERSUBX                       21
 #define SC_RASTERSUBY                       22
 #define SC_RASTERSYNC                       23
+#define SC_FORMULA_BAR_LINES                24
 
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence
@@ -70,6 +71,7 @@
 #define SC_TABLE_ZOOM_TYPE                  11
 #define SC_TABLE_ZOOM_VALUE                 12
 #define SC_TABLE_PAGE_VIEW_ZOOM_VALUE       13
+#define SC_FORMULA_BAR_LINES_VALUE          14
 #define SC_TABLE_SHOWGRID                   15
 
 inline constexpr OUStringLiteral SC_CURSORPOSITIONX = u"CursorPositionX";
@@ -95,6 +97,7 @@ inline constexpr OUStringLiteral SC_ZOOMTYPE = u"ZoomType";
 inline constexpr OUStringLiteral SC_ZOOMVALUE = u"ZoomValue";
 inline constexpr OUStringLiteral SC_PAGEVIEWZOOMVALUE = u"PageViewZoomValue";
 inline constexpr OUStringLiteral SC_SHOWPAGEBREAKPREVIEW = u"ShowPageBreakPreview";
+inline constexpr OUStringLiteral SC_FORMULABARLINES = u"FormulaBarLines";
 inline constexpr OUStringLiteral SC_VIEWID = u"ViewId";
 #define SC_VIEW                             "view"
 
