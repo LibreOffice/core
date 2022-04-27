@@ -309,6 +309,21 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             return &mLastTemporaryGlyphs;
         const CachedGlyphsKey keyWhole(outputDevice, text, 0, text.getLength(), nLogicWidth);
         GlyphsCache::const_iterator itWhole = mCachedGlyphs.find(keyWhole);
+        if (itWhole == mCachedGlyphs.end() && nIndex == 0)
+        {
+            // If this is called for a starting segment of the string, there's a good chance
+            // the next call will want a following segment and repeatedly so until the end
+            // of the string. So lay out the entire text and cache it, to make it possible
+            // to return subsets of it for all the repeated calls.
+            // This is a waste if in fact there will be no calls for the remaining part
+            // of the text, but hopefully that's not a problem in practice. If it turns out
+            // to be, then either this heuristic needs to be improved, or callers should
+            // call this function once for the entire text to prime the cache explicitly.
+            SAL_DEBUG("PREWHOLE");
+            GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), nLogicWidth, layoutCache);
+            SAL_DEBUG("POSTWHOLE");
+            itWhole = mCachedGlyphs.find(keyWhole);
+        }
         if (itWhole != mCachedGlyphs.end() && itWhole->second.IsValid())
         {
             mLastTemporaryGlyphs
@@ -323,11 +338,17 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
                     tmpLayoutCache = vcl::text::TextLayoutCache::Create(text);
                     layoutCache = tmpLayoutCache.get();
                 }
+                SAL_DEBUG("FIRST:" << nIndex << ":" << nLen << ":" << text);
+                std::unique_ptr<SalLayout> layoutf
+                    = outputDevice->ImplLayout(text, 0, text.getLength(), Point(0, 0), nLogicWidth,
+                                               {}, glyphItemsOnlyLayout, layoutCache);
                 // Check if the subset result really matches what we would get normally,
                 // to make sure corner cases are handled well (see SalLayoutGlyphsImpl::cloneCharRange()).
+                SAL_DEBUG("SECOND");
                 std::unique_ptr<SalLayout> layout
                     = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
                                                glyphItemsOnlyLayout, layoutCache);
+                SAL_DEBUG("DONE");
                 assert(layout);
                 checkGlyphsEqual(mLastTemporaryGlyphs, layout->GetGlyphs());
 #endif
@@ -341,6 +362,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         tmpLayoutCache = vcl::text::TextLayoutCache::Create(text);
         layoutCache = tmpLayoutCache.get();
     }
+    SAL_DEBUG("LAY:" << nIndex << ":" << nLen << ":" << text);
     std::unique_ptr<SalLayout> layout = outputDevice->ImplLayout(
         text, nIndex, nLen, Point(0, 0), nLogicWidth, {}, glyphItemsOnlyLayout, layoutCache);
     if (layout)
