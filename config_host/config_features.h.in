@@ -77,19 +77,6 @@
 #define HAVE_FEATURE_READONLY_INSTALLSET 0
 
 /*
- * Whether to use validation on files.
- */
-#define HAVE_EXPORT_VALIDATION 0
-
-/*
- * Whether to use export validation of binary formats (doc, xls, ppt)
- *
- * Requires installed Microsoft Office Binary File Format Validator
- * https://www.microsoft.com/en-us/download/details.aspx?id=26794
- */
-#define HAVE_BFFVALIDATOR 0
-
-/*
  * Whether we support breakpad as crash reporting lib.
  */
 #define HAVE_FEATURE_BREAKPAD 0
