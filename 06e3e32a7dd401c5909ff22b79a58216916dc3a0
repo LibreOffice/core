@@ -16,6 +16,24 @@
       "message": "It is touching the code from bug report:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d141049\n\nI though that you could be interesting",
       "revId": "06e3e32a7dd401c5909ff22b79a58216916dc3a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a47f73b6_79535c3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-04-28T07:00:56Z",
+      "side": 1,
+      "message": "It is nice to see that you are adding support for new formats!\nThe last status for the above bug report was that I understood that the code that read the graphics file was not fully compliant with the specification.\nDoes this patch affect the status of the above bug?",
+      "parentUuid": "12a5c18f_d31fd45f",
+      "revId": "06e3e32a7dd401c5909ff22b79a58216916dc3a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
