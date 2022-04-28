@@ -1208,7 +1208,10 @@ std::unique_ptr<SalLayout> OutputDevice::ImplGlyphFallbackLayout( std::unique_pt
     bool bRTL = false;
     OUStringBuffer aMissingCodeBuf(512);
     while (rLayoutArgs.GetNextPos( &nCharPos, &bRTL))
+    {
+        assert(rLayoutArgs.mrStr[nCharPos] != '\0');
         aMissingCodeBuf.append(rLayoutArgs.mrStr[nCharPos]);
+    }
     rLayoutArgs.ResetPos();
     OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 

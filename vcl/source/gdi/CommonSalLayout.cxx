@@ -165,6 +165,11 @@ void GenericSalLayout::SetNeedFallback(vcl::text::ImplLayoutArgs& rArgs, sal_Int
     if (nCharPos < 0 || mbFuzzing)
         return;
 
+    // Do not try to find fallback for null character, as that is pointless and it would break
+    // searching for it (the broken ofz34898-1.doc document triggers this).
+    if (rArgs.mrStr[nCharPos] == '\0')
+        return;
+
     using namespace ::com::sun::star;
 
     if (!mxBreak.is())
