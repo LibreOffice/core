@@ -345,9 +345,8 @@ void SdImportTestSmartArt::testTdf148665()
                                                  uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xShapeGroup->getCount());
 
-    // FIXME: tdf#148818: Text should be 'Fufufu'
     uno::Reference<text::XText> xText0(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
-    CPPUNIT_ASSERT_EQUAL(OUString(""), xText0->getString());
+    CPPUNIT_ASSERT_EQUAL(OUString("\nFufufu"), xText0->getString());
     uno::Reference<text::XText> xText1(xShapeGroup->getByIndex(2), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("Susu"), xText1->getString());
     uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
