@@ -364,6 +364,9 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     , layoutMode(outputDevice->GetLayoutMode())
     , digitLanguage(outputDevice->GetDigitLanguage())
 {
+    const LogicalFontInstance* fi = outputDevice->GetFontInstance();
+    fi->GetScale(&fontScaleX, &fontScaleY);
+
     hashValue = 0;
     o3tl::hash_combine(hashValue, vcl::text::FirstCharsStringHash()(text));
     o3tl::hash_combine(hashValue, index);
@@ -371,7 +374,13 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     o3tl::hash_combine(hashValue, logicWidth);
 
     o3tl::hash_combine(hashValue, outputDevice.get());
+    // Need to use IgnoreColor, because sometimes the color changes, but it's irrelevant
+    // for text layout (and also obsolete in vcl::Font).
     o3tl::hash_combine(hashValue, font.GetHashValueIgnoreColor());
+    // For some reason font scale may differ even if vcl::Font is the same,
+    // so explicitly check it too.
+    o3tl::hash_combine(hashValue, fontScaleX);
+    o3tl::hash_combine(hashValue, fontScaleY);
     o3tl::hash_combine(hashValue, mapMode.GetHashValue());
     o3tl::hash_combine(hashValue, rtl);
     o3tl::hash_combine(hashValue, layoutMode);
@@ -383,10 +392,8 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
     return hashValue == other.hashValue && index == other.index && len == other.len
            && logicWidth == other.logicWidth && outputDevice == other.outputDevice
            && mapMode == other.mapMode && rtl == other.rtl && layoutMode == other.layoutMode
-           && digitLanguage == other.digitLanguage
-           // Need to use EqualIgnoreColor, because sometimes the color changes, but it's irrelevant
-           // for text layout (and also obsolete in vcl::Font).
-           && font.EqualIgnoreColor(other.font)
+           && digitLanguage == other.digitLanguage && fontScaleX == other.fontScaleX
+           && fontScaleY == other.fontScaleY && font.EqualIgnoreColor(other.font)
            && vcl::text::FastStringCompareEqual()(text, other.text);
     // Slower things last in the comparison.
 }

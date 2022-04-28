@@ -71,6 +71,8 @@ private:
         tools::Long logicWidth;
         VclPtr<const OutputDevice> outputDevice;
         vcl::Font font;
+        double fontScaleX;
+        double fontScaleY;
         MapMode mapMode;
         bool rtl;
         vcl::text::ComplexTextLayoutFlags layoutMode;
