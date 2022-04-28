@@ -1384,7 +1384,7 @@ public:
     // Query if URL was visited.
     // Query via Doc, if only a Bookmark has been given.
     // In this case the document name has to be set in front.
-    bool IsVisitedURL( const OUString& rURL );
+    bool IsVisitedURL( std::u16string_view rURL );
 
     // Save current values for automatic registration of exceptions in Autocorrection.
     void SetAutoCorrExceptWord( std::unique_ptr<SwAutoCorrExceptWord> pNew );

@@ -42,7 +42,7 @@ public:
     MasterPageDescriptor (
         MasterPageContainer::Origin eOrigin,
         const sal_Int32 nTemplateIndex,
-        const OUString& rURL,
+        std::u16string_view rURL,
         const OUString& rPageName,
         const OUString& rStyleName,
         const bool bIsPrecious,

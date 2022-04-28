@@ -74,7 +74,7 @@ public:
             return false;
     }
 
-    bool QueryUrl (const OUString &rUrl) const;
+    bool QueryUrl (std::u16string_view rUrl) const;
 
     /** PutUrl.
     */

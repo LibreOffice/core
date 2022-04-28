@@ -351,7 +351,7 @@ XPropertyListRef XPropertyList::CreatePropertyList( XPropertyListType aType,
 
 XPropertyListRef
 XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
-                                          const OUString & rURLStr )
+                                          std::u16string_view rURLStr )
 {
     INetURLObject aURL( rURLStr );
     INetURLObject aPathURL( aURL );

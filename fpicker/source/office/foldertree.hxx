@@ -41,7 +41,7 @@ public:
     void InsertRootEntry(const OUString& rId, const OUString& rRootLabel);
     void FillTreeEntry(const weld::TreeIter& rEntry);
     void FillTreeEntry(const OUString & rUrl, const ::std::vector< std::pair< OUString, OUString > >& rFolders);
-    void SetTreePath(OUString const & sUrl);
+    void SetTreePath(std::u16string_view sUrl);
     void SetDenyList(const css::uno::Sequence< OUString >& rDenyList);
 };
 

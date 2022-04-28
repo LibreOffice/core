@@ -62,7 +62,7 @@ public:
     void CopyContentToStorage_Impl(ucbhelper::Content& rContent,
                                    const css::uno::Reference<css::embed::XStorage>& xDest);
 
-    static bool MakeFolderNoUI( const OUString& rFolder );
+    static bool MakeFolderNoUI( std::u16string_view rFolder );
 
     //  XInterface
 

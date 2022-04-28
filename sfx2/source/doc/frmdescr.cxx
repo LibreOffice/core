@@ -42,7 +42,7 @@ SfxItemSet* SfxFrameDescriptor::GetArgs()
     return m_pArgs.get();
 }
 
-void SfxFrameDescriptor::SetURL( const OUString& rURL )
+void SfxFrameDescriptor::SetURL( std::u16string_view rURL )
 {
     aURL = INetURLObject(rURL);
     SetActualURL();

@@ -235,7 +235,7 @@ namespace {
         m_bInitialized = true;
     }
 
-    OString lcl_getHelpId( const OUString& _rHelpURL )
+    OString lcl_getHelpId( std::u16string_view _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INetProtocol::Hid )

@@ -421,7 +421,7 @@ BasicLibInfo* BasicLibInfo::Create( SotStorageStream& rSStream )
     return pInfo;
 }
 
-BasicManager::BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib, OUString const * pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
+BasicManager::BasicManager( SotStorage& rStorage, std::u16string_view rBaseURL, StarBASIC* pParentFromStdLib, OUString const * pLibPath, bool bDocMgr ) : mbDocMgr( bDocMgr )
 {
     if( pLibPath )
     {
@@ -630,7 +630,7 @@ void BasicManager::ImpCreateStdLib( StarBASIC* pParentFromStdLib )
     pStdLib->SetFlag( SbxFlagBits::DontStore | SbxFlagBits::ExtSearch );
 }
 
-void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL )
+void BasicManager::LoadBasicManager( SotStorage& rStorage, std::u16string_view rBaseURL )
 {
     tools::SvRef<SotStorageStream> xManagerStream = rStorage.OpenSotStream( szManagerStream, eStreamReadMode );
 
@@ -648,7 +648,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
 
     OUString aRealStorageName = maStorageName;  // for relative paths, can be modified through BaseURL
 
-    if ( !rBaseURL.isEmpty() )
+    if ( !rBaseURL.empty() )
     {
         INetURLObject aObj( rBaseURL );
         if ( aObj.GetProtocol() == INetProtocol::File )
