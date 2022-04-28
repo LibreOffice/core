@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e0e5503_60f63c5b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-28T10:49:12Z",
+      "side": 1,
+      "message": "If it\u0027s possible to review this one for 7.3, the goal is to facilitate the cherry-pick of the fix of tdf#74331 by avoiding the merge conflict.",
+      "revId": "150c59efd4ca2d9341a39b31699d3cccaca99b1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
