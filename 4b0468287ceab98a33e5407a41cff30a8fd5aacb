@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9bfb1a0_9be1d1dc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-28T19:43:16Z",
+      "side": 1,
+      "message": "Thank you Xisco for the cherry-pick of the other patch on 7.3 and for this cherry-pick.",
+      "revId": "4b0468287ceab98a33e5407a41cff30a8fd5aacb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
