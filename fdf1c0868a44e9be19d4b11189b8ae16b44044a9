@@ -16,6 +16,23 @@
       "message": "preparing VBA equivalent unit test …",
       "revId": "fdf1c0868a44e9be19d4b11189b8ae16b44044a9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e76516ae_a218cfad",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-28T10:35:42Z",
+      "side": 1,
+      "message": "Please do not assert on specific error codes. You keep making the error numbers set in stone. They are not part of published API; they are not guaranteed to be unchanged. Please stop creating impression that they provide such guarantees.",
+      "revId": "fdf1c0868a44e9be19d4b11189b8ae16b44044a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
