@@ -146,6 +146,42 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtContent", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
+{
+    // Given a document with a checkbox content control around a text portion:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, OUString(u"☐"), /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    xContentControlProps->setPropertyValue("Checkbox", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("Checked", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("CheckedState", uno::makeAny(OUString(u"☒")));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::makeAny(OUString(u"☐")));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure the expected markup is used:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//w:sdt/w:sdtPr/w14:checkbox/w14:checked' number of nodes is incorrect
+    // i.e. <w14:checkbox> and its child elements were lost.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checked", "val", "1");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checkedState", "val", "2612");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:uncheckedState", "val", "2610");
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf137466, "tdf137466.docx")
 {
     xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
