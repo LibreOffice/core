@@ -100,9 +100,9 @@ public: // TODO: make data members private
     bool GetGlyphBoundRect(sal_GlyphId, tools::Rectangle&, bool) const;
     virtual bool GetGlyphOutline(sal_GlyphId, basegfx::B2DPolyPolygon&, bool) const = 0;
 
-    int GetKashidaWidth();
+    int GetKashidaWidth() const;
 
-    void GetScale(double* nXScale, double* nYScale);
+    void GetScale(double* nXScale, double* nYScale) const;
     static inline void DecodeOpenTypeTag(const uint32_t nTableTag, char* pTagName);
 
 protected:

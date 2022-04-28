@@ -63,9 +63,9 @@ hb_font_t* LogicalFontInstance::InitHbFont(hb_face_t* pHbFace)
     return pHbFont;
 }
 
-int LogicalFontInstance::GetKashidaWidth()
+int LogicalFontInstance::GetKashidaWidth() const
 {
-    hb_font_t* pHbFont = GetHbFont();
+    hb_font_t* pHbFont = const_cast<LogicalFontInstance*>(this)->GetHbFont();
     hb_position_t nWidth = 0;
     hb_codepoint_t nIndex = 0;
 
@@ -79,9 +79,9 @@ int LogicalFontInstance::GetKashidaWidth()
     return nWidth;
 }
 
-void LogicalFontInstance::GetScale(double* nXScale, double* nYScale)
+void LogicalFontInstance::GetScale(double* nXScale, double* nYScale) const
 {
-    hb_face_t* pHbFace = hb_font_get_face(GetHbFont());
+    hb_face_t* pHbFace = hb_font_get_face(const_cast<LogicalFontInstance*>(this)->GetHbFont());
     unsigned int nUPEM = hb_face_get_upem(pHbFace);
 
     double nHeight(m_aFontSelData.mnHeight);
