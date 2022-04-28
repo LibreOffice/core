@@ -180,7 +180,7 @@ public:
         parameters will be modified.
      */
     static sal_Unicode const * scanContentType(
-        OUString const & rStr,
+        std::u16string_view rStr,
         OUString * pType = nullptr, OUString * pSubType = nullptr,
         INetContentTypeParameterList * pParameters = nullptr);
 
