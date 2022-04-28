@@ -1199,7 +1199,8 @@ const SvxMSDffVertPair mso_sptCurvedRightVert[] =
 };
 const sal_uInt16 mso_sptCurvedRightSegm[] =
 {
-    0xa408,
+    0xa404,
+    0xa304,
     0x0003,
     0xa508,
     0x6000,
@@ -1309,7 +1310,8 @@ const SvxMSDffVertPair mso_sptCurvedDownVert[] =
 };
 const sal_uInt16 mso_sptCurvedDownSegm[] =
 {
-    0xa608,
+    0xa604,
+    0xa504,
     0x0003,
     0xa308,
     0x6000,
@@ -1364,7 +1366,8 @@ const SvxMSDffVertPair mso_sptCurvedUpVert[] =
 };
 const sal_uInt16 mso_sptCurvedUpSegm[] =
 {
-   0xa408,
+   0xa404,
+   0xa304,
    0x0003,
    0xa508,
    0x6000,
@@ -1470,7 +1473,8 @@ const SvxMSDffVertPair mso_sptCurvedLeftVert[] =
 };
 const sal_uInt16 mso_sptCurvedLeftSegm[] =
 {
-   0xa608,
+   0xa604,
+   0xa504,
    0x0003,
    0xa308,
    0x6000,
