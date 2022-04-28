@@ -147,6 +147,11 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     {
         if (pos->IsRTLGlyph() != rtl)
             return nullptr; // Don't mix RTL and non-RTL runs.
+        // HACK: When running CppunitTest_sw_uiwriter3's testTdf104649 on Mac there's glyph
+        // with id 1232 that has 0 charCount, 0 origWidth and inconsistent xOffset (sometimes 0,
+        // but sometimes not). Possibly font or Harfbuzz bug? It's extremely rare, so simply bail out.
+        if (pos->charCount() == 0 && pos->origWidth() == 0)
+            return nullptr;
         copy->push_back(*pos);
         copy->back().setLinearPos(copy->back().linearPos() - zeroPoint);
         ++pos;
