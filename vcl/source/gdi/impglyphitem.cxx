@@ -192,18 +192,25 @@ static SalLayoutGlyphs makeGlyphsSubset(const SalLayoutGlyphs& source,
                          | outputDevice->GetBiDiLayoutFlags(text, index, index + len));
         // SalLayoutFlags::KashidaJustification is set only if any glyph
         // in the range has GlyphItemFlags::ALLOW_KASHIDA (otherwise unset it).
-        bool hasKashida = false;
-        for (const GlyphItem& item : *cloned)
+        if (cloned->GetFlags() & SalLayoutFlags::KashidaJustification)
         {
-            if (item.AllowKashida())
+            bool hasKashida = false;
+            for (const GlyphItem& item : *cloned)
             {
-                assert(cloned->GetFlags() & SalLayoutFlags::KashidaJustification);
-                hasKashida = true;
-                break;
+                if (item.AllowKashida())
+                {
+                    hasKashida = true;
+                    break;
+                }
             }
+            if (!hasKashida)
+                cloned->SetFlags(cloned->GetFlags() & ~SalLayoutFlags::KashidaJustification);
         }
-        if (!hasKashida)
-            cloned->SetFlags(cloned->GetFlags() & ~SalLayoutFlags::KashidaJustification);
+#ifdef DBG_UTIL
+        else
+            for (const GlyphItem& item : *cloned)
+                assert(!item.AllowKashida());
+#endif
         ret.AppendImpl(cloned);
     }
     return ret;
