@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b6761db_f08c967b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-04-28T09:47:34Z",
+      "side": 1,
+      "message": "@Attila: very nice fix and quite useful for the users of the handy poor man\u0027s solutions! I\u0027ve added more details, because this was really an important fix for the document interoperability (e.g. first page of the documents were broken before).",
+      "revId": "032dcdeaab7e9953fa9e166c73139cd174d9b849",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
