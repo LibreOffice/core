@@ -216,7 +216,7 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
                 nLast = aRowSel.GetMarkEnd( nBeg, false );
         }
 
-        if ( nBeg != mrSheetLimits.GetMaxRowCount() && nLast >= nEndRow )
+        if ( nBeg != mrSheetLimits.GetMaxRowCount() && nLast >= nEndRow && nBeg <= nEndRow )
             MarkAllCols( nBeg, nEndRow );
         else
         {
@@ -227,7 +227,7 @@ void ScMultiSel::SetMarkArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, S
                 if ( nBeg != mrSheetLimits.GetMaxRowCount() )
                     nLast = aRowSel.GetMarkEnd( nBeg, false );
             }
-            if ( nBeg != mrSheetLimits.GetMaxRowCount() && nLast >= nEndRow )
+            if ( nBeg != mrSheetLimits.GetMaxRowCount() && nLast >= nEndRow && nBeg <= nEndRow )
                 MarkAllCols( nBeg, nEndRow );
         }
 
