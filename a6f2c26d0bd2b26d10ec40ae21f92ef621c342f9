@@ -33,6 +33,41 @@
       "message": "Hi Miklos, Regina,\nI Believe mbBulletColorFollowText, mbBulletFontFollowText and mbBulletSizeFollowText should behave the same way, however I couldn\u0027t find any document where this patch makes a difference and Jenkins passes, thus is a kind of a blind fix\nAny comment on this ?\nThanks in advance",
       "revId": "a6f2c26d0bd2b26d10ec40ae21f92ef621c342f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1aaff78_08146f3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-28T07:57:27Z",
+      "side": 1,
+      "message": "Possib",
+      "revId": "a6f2c26d0bd2b26d10ec40ae21f92ef621c342f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c01e094_355db3c9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-28T07:57:27Z",
+      "side": 1,
+      "message": "\u003e I Believe mbBulletColorFollowText, mbBulletFontFollowText and mbBulletSizeFollowText should behave the same way\n\nPossibly. FWIW Writer has something similar in its core at SwTextNode::IsIgnoredCharFormatForNumbering(), where it takes all char format for bullets, expect a few cases. So handling font color/size/name the same way would be consistent with that.",
+      "parentUuid": "989788eb_35cba818",
+      "revId": "a6f2c26d0bd2b26d10ec40ae21f92ef621c342f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
