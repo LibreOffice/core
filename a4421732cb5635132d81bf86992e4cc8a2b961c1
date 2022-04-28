@@ -16,6 +16,23 @@
       "message": "One more +1 needed",
       "revId": "a4421732cb5635132d81bf86992e4cc8a2b961c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8bde716_75fa922d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-28T06:51:42Z",
+      "side": 1,
+      "message": "Will this be built by Jenkins?",
+      "revId": "a4421732cb5635132d81bf86992e4cc8a2b961c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
