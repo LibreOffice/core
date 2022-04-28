@@ -59,7 +59,7 @@ public:
                       { return !(*this == rObj); }
 
     void          MakeFromMemory( void const * pData );
-    bool          MakeId( const OUString & rId );
+    bool          MakeId( std::u16string_view rId );
     OUString      GetHexName() const;
 
     const SvGUID& GetCLSID() const { return m_aData; }
