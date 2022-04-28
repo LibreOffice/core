@@ -79,17 +79,6 @@ export GMAKE_OPTIONS?=-r$(if $(verbose),,s)$(value $(MAKEFLAGS))
 
 PARALLELISM_OPTION := $(if $(filter-out 0,$(PARALLELISM)),-j $(PARALLELISM),)
 
-IWYU_OPTION := $(if $(IWYU_PATH),-k CC=$(IWYU_PATH) CXX=$(IWYU_PATH),)
-
-# don't want to have a dependency to iwyudummy.generate because it's
-# useful to manually edit the generated StaticLibrary_iwyudummy.mk
-iwyudummy: bootstrap fetch
-	$(if $(wildcard $(BUILDDIR)/iwyudummy),,$(error first call "make iwyudummy.generate"))
-	cd $(BUILDDIR)/iwyudummy && $(MAKE) $(IWYU_OPTION) $(GMAKE_OPTIONS)
-
-iwyudummy.generate:
-	$(SRCDIR)/bin/gen-iwyu-dummy-lib
-
 #
 # Partial Build
 #
@@ -98,7 +87,7 @@ define gb_Top_GbuildModuleRules
 .PHONY: $(1).allbuild $(1).buildall $(1).allcheck $(1).checkall
 
 $(1): bootstrap fetch
-	cd $(SRCDIR)/$(2) && $$(MAKE) $(IWYU_OPTION) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
+	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS)
 
 $(1).build $(1).check $(foreach target,$(gb_Top_MODULE_CHECK_TARGETS),$(1).$(target)): bootstrap fetch
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
@@ -107,10 +96,10 @@ $(1).clean $(1).showdeliverables:
 	cd $(SRCDIR)/$(2) && $$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) $$(patsubst $(1).%,%,$$@)
 
 $(1).allbuild $(1).buildall: bootstrap fetch
-	$$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
+	$$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1)
 
 $(1).allcheck $(1).checkall: bootstrap fetch
-	$$(MAKE) $(PARALLELISM_OPTION) $(IWYU_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
+	$$(MAKE) $(PARALLELISM_OPTION) $(GMAKE_OPTIONS) -f $(SRCDIR)/Makefile.gbuild $(WORKDIR)/Module/$(1) $(WORKDIR)/Module/check/$(1) $(WORKDIR)/Module/slowcheck/$(1)
 
 $(1).all:
 	@echo "'make $(1).all' was renamed to 'make $(1).allcheck' (or use 'make $(1).allbuild' to build without unit tests)"
