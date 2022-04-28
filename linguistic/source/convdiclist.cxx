@@ -53,7 +53,7 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
-static OUString GetConvDicMainURL( std::u16string_view rDicName, const OUString &rDirectoryURL )
+static OUString GetConvDicMainURL( std::u16string_view rDicName, std::u16string_view rDirectoryURL )
 {
     // build URL to use for new (persistent) dictionaries
 

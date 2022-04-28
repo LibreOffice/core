@@ -742,7 +742,7 @@ public:
     PreDoSaveAs_Impl(const OUString& rFileName, const OUString& rFiltName,
                      SfxItemSet const& rItemSet,
                      const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
-    SAL_DLLPRIVATE bool APISaveAs_Impl(const OUString& aFileName, SfxItemSet& rItemSet,
+    SAL_DLLPRIVATE bool APISaveAs_Impl(std::u16string_view aFileName, SfxItemSet& rItemSet,
                                        const css::uno::Sequence<css::beans::PropertyValue>& rArgs);
     SAL_DLLPRIVATE bool
     CommonSaveAs_Impl(const INetURLObject& aURL, const OUString& aFilterName, SfxItemSet& rItemSet,

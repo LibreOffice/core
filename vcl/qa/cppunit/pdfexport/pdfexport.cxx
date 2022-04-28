@@ -1747,7 +1747,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf121615)
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     sal_uInt16 format;
-    ErrCode bResult = rFilter.ImportGraphic(aGraphic, OUString("import"), rObjectStream,
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"import", rObjectStream,
                                             GRFILTER_FORMAT_DONTKNOW, &format);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 
@@ -1795,7 +1795,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf141171)
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     sal_uInt16 format;
-    ErrCode bResult = rFilter.ImportGraphic(aGraphic, OUString("import"), rObjectStream,
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"import", rObjectStream,
                                             GRFILTER_FORMAT_DONTKNOW, &format);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 
@@ -1852,7 +1852,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf129085)
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     Graphic aGraphic;
     sal_uInt16 format;
-    ErrCode bResult = rFilter.ImportGraphic(aGraphic, OUString("import"), rObjectStream,
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"import", rObjectStream,
                                             GRFILTER_FORMAT_DONTKNOW, &format);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
 

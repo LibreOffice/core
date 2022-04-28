@@ -51,7 +51,7 @@ namespace dlgprov
 
 
     css::uno::Reference< css::container::XNameContainer > lcl_createControlModel(const css::uno::Reference< css::uno::XComponentContext >& i_xContext);
-    css::uno::Reference< css::resource::XStringResourceManager > lcl_getStringResourceManager(const css::uno::Reference< css::uno::XComponentContext >& i_xContext,const OUString& i_sURL);
+    css::uno::Reference< css::resource::XStringResourceManager > lcl_getStringResourceManager(const css::uno::Reference< css::uno::XComponentContext >& i_xContext, std::u16string_view i_sURL);
     /// @throws css::uno::Exception
     css::uno::Reference< css::container::XNameContainer > lcl_createDialogModel(
                 const css::uno::Reference< css::uno::XComponentContext >& i_xContext,

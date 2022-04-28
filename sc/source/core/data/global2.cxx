@@ -297,7 +297,7 @@ OUString ScGlobal::GetAbsDocName( const OUString& rFileName,
             aObj.setFinalSlash();       // it IS a path
         }
         else
-            aObj.SetSmartURL("file:///tmp/document");
+            aObj.SetSmartURL(u"file:///tmp/document");
         bool bWasAbs = true;
         aAbsName = aObj.smartRel2Abs( rFileName, bWasAbs ).GetMainURL(INetURLObject::DecodeMechanism::NONE);
         //  returned string must be encoded because it's used directly to create SfxMedium

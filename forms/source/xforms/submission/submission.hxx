@@ -114,7 +114,7 @@ public:
         UNKNOWN_ERROR
     };
 
-    CSubmission(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
+    CSubmission(std::u16string_view aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
         : m_aURLObj(aURL)
         , m_aFragment(aFragment)
         , m_xContext(::comphelper::getProcessComponentContext())

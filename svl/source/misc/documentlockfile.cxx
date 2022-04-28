@@ -163,7 +163,7 @@ void GenDocumentLockFile::RemoveFileDirectly()
 }
 
 
-DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
+DocumentLockFile::DocumentLockFile( std::u16string_view aOrigURL )
     : GenDocumentLockFile(GenerateOwnLockFileURL(aOrigURL, u".~lock."))
 {
 }

@@ -140,7 +140,7 @@ class FWK_DLLPUBLIC TitleHelper final : private ::cppu::BaseMutex
 
         void impl_setSubTitle (const css::uno::Reference< css::frame::XTitle >& xSubTitle);
 
-        OUString impl_convertURL2Title(const OUString& sURL);
+        OUString impl_convertURL2Title(std::u16string_view sURL);
 
 
     // member

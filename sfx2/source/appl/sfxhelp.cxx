@@ -285,7 +285,7 @@ void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
     rURL.append(utl::ConfigManager::getProductVersion());
 }
 
-static bool GetHelpAnchor_Impl( const OUString& _rURL, OUString& _rAnchor )
+static bool GetHelpAnchor_Impl( std::u16string_view _rURL, OUString& _rAnchor )
 {
     bool bRet = false;
 

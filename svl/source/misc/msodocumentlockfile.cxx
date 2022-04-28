@@ -42,7 +42,7 @@ bool isPowerPointFormat(std::u16string_view sExt)
 }
 
 // Need to generate different lock file name for MSO.
-OUString GenerateMSOLockFileURL(const OUString& aOrigURL)
+OUString GenerateMSOLockFileURL(std::u16string_view aOrigURL)
 {
     INetURLObject aURL = LockFileCommon::ResolveLinks(INetURLObject(aOrigURL));
 
@@ -64,7 +64,7 @@ OUString GenerateMSOLockFileURL(const OUString& aOrigURL)
 }
 
 // static
-MSODocumentLockFile::AppType MSODocumentLockFile::getAppType(const OUString& sOrigURL)
+MSODocumentLockFile::AppType MSODocumentLockFile::getAppType(std::u16string_view sOrigURL)
 {
     AppType eResult = AppType::PowerPoint;
     INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(sOrigURL));
@@ -77,7 +77,7 @@ MSODocumentLockFile::AppType MSODocumentLockFile::getAppType(const OUString& sOr
     return eResult;
 }
 
-MSODocumentLockFile::MSODocumentLockFile(const OUString& aOrigURL)
+MSODocumentLockFile::MSODocumentLockFile(std::u16string_view aOrigURL)
     : GenDocumentLockFile(GenerateMSOLockFileURL(aOrigURL))
     , m_eAppType(getAppType(aOrigURL))
 {
@@ -260,7 +260,7 @@ void MSODocumentLockFile::RemoveFile()
     RemoveFileDirectly();
 }
 
-bool MSODocumentLockFile::IsMSOSupportedFileFormat(const OUString& aURL)
+bool MSODocumentLockFile::IsMSOSupportedFileFormat(std::u16string_view aURL)
 {
     INetURLObject aDocURL = LockFileCommon::ResolveLinks(INetURLObject(aURL));
     const OUString sExt = aDocURL.GetFileExtension();

@@ -682,7 +682,7 @@ void DialogWindow::SaveDialog()
 
         if( bResource )
         {
-            INetURLObject aURLObj("");
+            INetURLObject aURLObj(u"");
             aURLObj.removeExtension();
             OUString aDialogName( aURLObj.getName() );
             aURLObj.removeSegment();

@@ -43,7 +43,7 @@ namespace o3tl
 }
 
 // load language strings from resource
-SVXCORE_DLLPUBLIC OUString    GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg );
+SVXCORE_DLLPUBLIC OUString    GetDicInfoStr( std::u16string_view rName, const LanguageType nLang, bool bNeg );
 
 class SVXCORE_DLLPUBLIC SvxLanguageBox
 {

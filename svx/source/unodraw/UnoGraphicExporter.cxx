@@ -1068,7 +1068,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
                 // SvOutputStream, or adapt the graphic filter to not seek anymore.
                 SvMemoryStream aStream( 1024, 1024 );
 
-                nStatus = rFilter.ExportGraphic( aGraphic,"", aStream, nFilter, &aSettings.maFilterData );
+                nStatus = rFilter.ExportGraphic( aGraphic, u"", aStream, nFilter, &aSettings.maFilterData );
 
                 // copy temp stream to XOutputStream
                 SvOutputStream aOutputStream( aSettings.mxOutputStream );

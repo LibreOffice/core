@@ -147,7 +147,7 @@ private:
     */
     void declareAuthDepPath( const OUString& _sURL, PathId _nPathId, const vcl::RoadmapWizardTypes::WizardPath& _rPaths);
 
-    void RegisterDataSourceByLocation(const OUString& sPath);
+    void RegisterDataSourceByLocation(std::u16string_view sPath);
     bool SaveDatabaseDocument();
     void activateDatabasePath();
     OUString createUniqueFileName(const INetURLObject& rURL);

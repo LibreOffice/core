@@ -23,7 +23,7 @@ namespace cmis
             OUString m_sPass;
 
         public:
-            explicit URL( OUString const & urlStr );
+            explicit URL( std::u16string_view urlStr );
 
             const OUString& getObjectPath() const { return m_sPath; }
             const OUString& getObjectId() const { return m_sId; }
