@@ -33,6 +33,8 @@
 #if USE_CRYPTO_NSS
 // NSS headers for PDF signing
 #include <cert.h>
+#include <keyhi.h>
+#include <pk11pub.h>
 #include <hasht.h>
 #include <secerr.h>
 #include <sechash.h>
@@ -634,7 +636,30 @@ NSSCMSMessage *CreateCMSMessage(const PRTime* time,
         return nullptr;
     }
 
-    *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA256);
+    // workaround: with legacy "dbm:", NSS can't find the private key - try out
+    // if it works, and fallback if it doesn't.
+    if (SECKEYPrivateKey * pPrivateKey = PK11_FindKeyByAnyCert(cert, nullptr))
+    {
+        SECKEY_DestroyPrivateKey(pPrivateKey);
+        *cms_signer = NSS_CMSSignerInfo_Create(result, cert, SEC_OID_SHA256);
+    }
+    else
+    {
+        pPrivateKey = PK11_FindKeyByDERCert(cert->slot, cert, nullptr);
+        SECKEYPublicKey *const pPublicKey = CERT_ExtractPublicKey(cert);
+        if (pPublicKey && pPrivateKey)
+        {
+            *cms_signer = NSS_CMSSignerInfo_CreateWithSubjKeyID(result, &cert->subjectKeyID, pPublicKey, pPrivateKey, SEC_OID_SHA256);
+            SECKEY_DestroyPrivateKey(pPrivateKey);
+            SECKEY_DestroyPublicKey(pPublicKey);
+            if (*cms_signer)
+            {
+                // this is required in NSS_CMSSignerInfo_IncludeCerts()
+                // (and NSS_CMSSignerInfo_GetSigningCertificate() doesn't work)
+                (**cms_signer).cert = CERT_DupCertificate(cert);
+            }
+        }
+    }
     if (!*cms_signer)
     {
         SAL_WARN("svl.crypto", "NSS_CMSSignerInfo_Create failed");
