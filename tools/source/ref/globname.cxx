@@ -96,10 +96,10 @@ void SvGlobalName::MakeFromMemory( void const * pData )
     memcpy( &m_aData, pData, sizeof( m_aData ) );
 }
 
-bool SvGlobalName::MakeId( const OUString & rIdStr )
+bool SvGlobalName::MakeId( std::u16string_view rIdStr )
 {
-    const sal_Unicode *pStr = rIdStr.getStr();
-    if( rIdStr.getLength() != 36
+    const sal_Unicode *pStr = rIdStr.data();
+    if( rIdStr.size() != 36
       || '-' != pStr[ 8 ]  || '-' != pStr[ 13 ]
       || '-' != pStr[ 18 ] || '-' != pStr[ 23 ] )
         return false;

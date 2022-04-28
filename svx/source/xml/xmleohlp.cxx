@@ -438,7 +438,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
 
         SvGlobalName aClassId, *pClassId = nullptr;
         sal_Int32 nPos = aObjectStorageName.lastIndexOf( '!' );
-        if( -1 != nPos && aClassId.MakeId( aObjectStorageName.copy( nPos+1 ) ) )
+        if( -1 != nPos && aClassId.MakeId( aObjectStorageName.subView( nPos+1 ) ) )
         {
             aObjectStorageName = aObjectStorageName.copy( 0, nPos );
             pClassId = &aClassId;
