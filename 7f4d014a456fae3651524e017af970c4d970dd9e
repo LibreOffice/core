@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2c57356_da42b3ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-04-28T18:48:05Z",
+      "side": 1,
+      "message": "Heiko, I created a new .ui file but I can\u0027t write the C++ code. Could you please help me here?",
+      "revId": "7f4d014a456fae3651524e017af970c4d970dd9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
