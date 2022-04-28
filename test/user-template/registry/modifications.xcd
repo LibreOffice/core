@@ -16,6 +16,12 @@
     </prop>
    </node>
    <node oor:name="en">
+    <prop oor:name="CJK_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CTL_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
     <prop oor:name="CTL_TEXT" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
