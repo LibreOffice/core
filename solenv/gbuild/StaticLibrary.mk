@@ -50,18 +50,6 @@ $(call gb_Helper_make_userfriendly_targets,$(1),StaticLibrary)
 
 endef
 
-# this is a crude hack to "build" header files with include-what-you-use
-define gb_StaticLibrary__add_iwyu_header
-$(call gb_StaticLibrary_get_linktarget_target,$(1)) : $(call gb_GenCxxObject_get_target,$(basename $(2)))
-$(call gb_GenCxxObject_get_target,$(basename $(2))) : $(SRCDIR)/$(2)
-$(call gb_GenCxxObject_get_target,$(basename $(2))) : WARNINGS_NOT_ERRORS := $(true)
-$(call gb_GenCxxObject_get_target,$(basename $(2))) : GEN_CXX_SOURCE := $(SRCDIR)/$(2)
-
-endef
-define gb_StaticLibrary__add_iwyu_headers
-$(foreach file,$(2),$(call gb_StaticLibrary__add_iwyu_header,$(1),$(file)))
-endef
-
 # forward the call to the gb_LinkTarget implementation
 # (note: because the function name is in $(1), the other args are shifted by 1)
 define gb_StaticLibrary__forward_to_Linktarget
