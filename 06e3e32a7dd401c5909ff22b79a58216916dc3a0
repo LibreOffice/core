@@ -34,6 +34,24 @@
       "parentUuid": "12a5c18f_d31fd45f",
       "revId": "06e3e32a7dd401c5909ff22b79a58216916dc3a0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "831d5b30_a9615210",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-04-28T07:52:01Z",
+      "side": 1,
+      "message": "This patch does not affect status of this bug.\n\nCould you please add information what is not compliant with the specification?\n\nI checked the headers and OfficeArtBlip from:\nhttps://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-odraw/2c09e2c4-0513-419f-b5f9-4feb0a71ef32\nhttps://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-odraw/ffdcc2b8-98fd-46b2-921e-6bb6693d05e5\nand it seems that it is correctly read.\n\nThe only complain which I have is that we are skipping \"rcBounds\" from OfficeArtMetafileHeader:\nhttps://docs.microsoft.com/en-us/openspecs/office_file_formats/ms-odraw/ffdcc2b8-98fd-46b2-921e-6bb6693d05e5\nwhich could be useful for visible area:\n\n     if (pVisArea) // seem that we currently are skipping the visarea position           \n         *pVisArea \u003d tools::Rectangle(Point(), aMtfSize100);\n\nBut I need to investigate if it is a really a case.",
+      "parentUuid": "a47f73b6_79535c3c",
+      "revId": "06e3e32a7dd401c5909ff22b79a58216916dc3a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
