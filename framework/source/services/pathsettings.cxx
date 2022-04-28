@@ -395,7 +395,7 @@ private:
     const PathSettings::PathInfo* impl_getPathAccessConst(sal_Int32 nHandle) const;
 
     /** it checks, if the given path value seems to be a valid URL or system path. */
-    bool impl_isValidPath(const OUString& sPath) const;
+    bool impl_isValidPath(std::u16string_view sPath) const;
     bool impl_isValidPath(const std::vector<OUString>& lPath) const;
 
     void impl_storePath(const PathSettings::PathInfo& aPath);
@@ -1228,7 +1228,7 @@ bool PathSettings::impl_isValidPath(const std::vector<OUString>& lPath) const
     return true;
 }
 
-bool PathSettings::impl_isValidPath(const OUString& sPath) const
+bool PathSettings::impl_isValidPath(std::u16string_view sPath) const
 {
     // allow empty path to reset a path.
 // idea by LLA to support empty paths

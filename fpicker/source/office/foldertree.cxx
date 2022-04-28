@@ -126,7 +126,7 @@ void FolderTree::FillTreeEntry( const OUString & rUrl, const ::std::vector< std:
     m_xTreeView->expand_row(*xParent);
 }
 
-void FolderTree::SetTreePath( OUString const & sUrl )
+void FolderTree::SetTreePath( std::u16string_view sUrl )
 {
     INetURLObject aUrl( sUrl );
     aUrl.setFinalSlash();

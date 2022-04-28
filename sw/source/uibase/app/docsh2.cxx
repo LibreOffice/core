@@ -1686,13 +1686,13 @@ SfxInPlaceClient* SwDocShell::GetIPClient( const ::svt::EmbeddedObjectRef& xObjR
 
 int SwFindDocShell( SfxObjectShellRef& xDocSh,
                     SfxObjectShellLock& xLockRef,
-                    const OUString& rFileName,
+                    std::u16string_view rFileName,
                     const OUString& rPasswd,
                     const OUString& rFilter,
                     sal_Int16 nVersion,
                     SwDocShell* pDestSh )
 {
-    if ( rFileName.isEmpty() )
+    if ( rFileName.empty() )
         return 0;
 
     // 1. Does the file already exist in the list of all Documents?

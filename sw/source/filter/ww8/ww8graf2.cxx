@@ -232,7 +232,7 @@ static void WW8PicShadowToReal(  WW8_PIC_SHADOW const *  pPicS,  WW8_PIC*  pPic 
 
 bool SwWW8ImplReader::GetPictGrafFromStream(Graphic& rGraphic, SvStream& rSrc)
 {
-    return ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(rGraphic, OUString(), rSrc);
+    return ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(rGraphic, u"", rSrc);
 }
 
 bool SwWW8ImplReader::ReadGrafFile(OUString& rFileName, std::unique_ptr<Graphic>& rpGraphic,

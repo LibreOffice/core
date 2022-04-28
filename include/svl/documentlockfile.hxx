@@ -56,7 +56,7 @@ class SVL_DLLPUBLIC DocumentLockFile final : public GenDocumentLockFile
     virtual void WriteEntryToStream( const LockFileEntry& aEntry, const css::uno::Reference< css::io::XOutputStream >& xStream ) override;
 
 public:
-    DocumentLockFile( const OUString& aOrigURL );
+    DocumentLockFile( std::u16string_view aOrigURL );
     virtual ~DocumentLockFile() override;
 
     virtual LockFileEntry GetLockData() override;

@@ -253,7 +253,7 @@ namespace
     }
 #endif
 
-    OUString lcl_ensureFinalSlash( const OUString& _rDir )
+    OUString lcl_ensureFinalSlash( std::u16string_view _rDir )
     {
         INetURLObject aWorkPathObj( _rDir, INetProtocol::File );
         aWorkPathObj.setFinalSlash();
@@ -1270,7 +1270,7 @@ bool implIsInvalid( const OUString & rURL )
 }
 
 
-OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, const OUString& _rFallback )
+OUString SvtFileDialog::implGetInitialURL( const OUString& _rPath, std::u16string_view _rFallback )
 {
     // a URL parser for the fallback
     INetURLObject aURLParser;

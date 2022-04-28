@@ -1312,7 +1312,7 @@ bool ScHTMLExport::WriteFieldText( const EditTextObject* pData )
 }
 
 void ScHTMLExport::CopyLocalFileToINet( OUString& rFileNm,
-        const OUString& rTargetNm )
+        std::u16string_view rTargetNm )
 {
     INetURLObject aFileUrl, aTargetUrl;
     aFileUrl.SetSmartURL( rFileNm );

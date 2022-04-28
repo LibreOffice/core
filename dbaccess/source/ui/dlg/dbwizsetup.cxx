@@ -755,7 +755,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         m_pImpl->saveChanges(*m_pOutSet);
     }
 
-    void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(const OUString& _sPath)
+    void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(std::u16string_view _sPath)
     {
         Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
         Reference< XDatabaseContext > xDatabaseContext( DatabaseContext::create(getORB()) );

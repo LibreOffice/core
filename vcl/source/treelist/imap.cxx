@@ -107,7 +107,7 @@ void IMapObject::Read( SvStream& rIStm )
     aTarget = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
 
     // make URL absolute
-    aURL = URIHelper::SmartRel2Abs( INetURLObject(""), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::Unambiguous );
+    aURL = URIHelper::SmartRel2Abs( INetURLObject(u""), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::EncodeMechanism::WasEncoded, INetURLObject::DecodeMechanism::Unambiguous );
     IMapCompat aCompat( rIStm, StreamMode::READ );
 
     ReadIMapObject( rIStm );

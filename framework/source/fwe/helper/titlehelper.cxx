@@ -656,7 +656,7 @@ void TitleHelper::impl_setSubTitle (const css::uno::Reference< css::frame::XTitl
         xNewBroadcaster->addTitleChangeListener (xThis);
 }
 
-OUString TitleHelper::impl_convertURL2Title(const OUString& sURL)
+OUString TitleHelper::impl_convertURL2Title(std::u16string_view sURL)
 {
     INetURLObject   aURL (sURL);
     OUString sTitle;

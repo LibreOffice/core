@@ -573,7 +573,7 @@ namespace legacy
 
                 // TODO/MBA: how can we get a BaseURL here?!
                 OSL_FAIL("No BaseURL!");
-                OUString aAbs = INetURLObject::GetAbsURL( "", aRel );
+                OUString aAbs = INetURLObject::GetAbsURL( u"", aRel );
                 DBG_ASSERT( !aAbs.isEmpty(), "Invalid URL!" );
                 rItem.SetGraphicLink(aAbs);
             }
@@ -616,7 +616,7 @@ namespace legacy
             {
                 OSL_FAIL("No BaseURL!");
                 // TODO/MBA: how to get a BaseURL?!
-                OUString aRel = INetURLObject::GetRelURL( "", rItem.GetGraphicLink() );
+                OUString aRel = INetURLObject::GetRelURL( u"", rItem.GetGraphicLink() );
                 // UNICODE: rStrm << aRel;
                 rStrm.WriteUniOrByteString(aRel, rStrm.GetStreamCharSet());
             }

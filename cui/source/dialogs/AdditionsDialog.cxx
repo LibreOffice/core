@@ -229,7 +229,7 @@ bool getPreviewFile(const AdditionInfo& aAdditionInfo, OUString& sPreviewFile)
     return true;
 }
 
-void LoadImage(const OUString& rPreviewFile, std::shared_ptr<AdditionsItem> pCurrentItem)
+void LoadImage(std::u16string_view rPreviewFile, std::shared_ptr<AdditionsItem> pCurrentItem)
 {
     const sal_Int8 Margin = 6;
 

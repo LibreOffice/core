@@ -27,6 +27,7 @@
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <o3tl/string_view.hxx>
 #include <svtools/ehdl.hxx>
 #include <svtools/sfxecode.hxx>
 #include <unotools/pathoptions.hxx>
@@ -284,7 +285,7 @@ namespace basic
 
         // The first dir in the path as destination:
         OUString aFileName( aAppBasic.getName() );
-        aAppBasic = INetURLObject( aAppBasicDir.getToken(1, ';') );
+        aAppBasic = INetURLObject( o3tl::getToken(aAppBasicDir, 1, ';') );
         DBG_ASSERT(aAppBasic.GetProtocol() != INetProtocol::NotValid,
             OString("Invalid URL: \"" +
                     OUStringToOString(aAppBasicDir, osl_getThreadTextEncoding()) +
@@ -430,7 +431,7 @@ namespace basic
 
             // Storage and BaseURL are only needed by binary documents!
             tools::SvRef<SotStorage> xDummyStor = new SotStorage( OUString() );
-            _out_rpBasicManager.reset(new BasicManager( *xDummyStor, OUString() /* TODO/LATER: xStorage */,
+            _out_rpBasicManager.reset(new BasicManager( *xDummyStor, u"" /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
                                                                 &aAppBasicDir, true ));
             if ( !_out_rpBasicManager->GetErrors().empty() )

@@ -129,7 +129,7 @@ namespace avmedia
         ///                 checkbox and store its state in *o_pbLink
         static bool         executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink);
         static void         executeFormatErrorBox(weld::Window* pParent);
-        static bool         isMediaURL(const OUString& rURL, const OUString& rReferer, bool bDeep = false,
+        static bool         isMediaURL(std::u16string_view rURL, const OUString& rReferer, bool bDeep = false,
                                        rtl::Reference<PlayerListener> xPreferredPixelSizeListener = nullptr);
 
         static css::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );

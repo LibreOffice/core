@@ -216,7 +216,7 @@ namespace svgio::svgreader
 
                     if(ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(
                         aGraphic,
-                        OUString(),
+                        u"",
                         aStream))
                     {
                         extractFromGraphic(aGraphic, aNewTarget, aViewBox, aBitmapEx);

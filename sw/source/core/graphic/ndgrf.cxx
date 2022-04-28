@@ -98,7 +98,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
  * @note Does not read/open the image itself!
  */
 SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
-                      const OUString& rGrfName,
+                      std::u16string_view rGrfName,
                       const OUString& rFltName,
                       SwGrfFormatColl *pGrfColl,
                       SwAttrSet const * pAutoAttr ) :

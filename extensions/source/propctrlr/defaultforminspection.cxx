@@ -145,7 +145,7 @@ namespace pcr
         {
             pReturn->ProgrammaticName = OUString::createFromAscii( aCategories[i].programmaticName );
             pReturn->UIName = PcrRes( aCategories[i].uiNameResId );
-            pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId );
+            pReturn->HelpURL = HelpIdUrl::getHelpURL( aCategories[i].helpId.asView() );
         }
 
         return aReturn;

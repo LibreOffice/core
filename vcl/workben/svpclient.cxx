@@ -267,7 +267,7 @@ IMPL_LINK_NOARG( MyWin, SelectHdl, ListBox&, void)
 
     Graphic aGraphicResult;
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-    rFilter.ImportGraphic( aGraphicResult, OUString("import"), aStream );
+    rFilter.ImportGraphic( aGraphicResult, u"import", aStream );
 
     BitmapEx aBitmap = aGraphicResult.GetBitmapEx();
 

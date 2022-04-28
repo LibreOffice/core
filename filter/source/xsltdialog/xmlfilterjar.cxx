@@ -299,7 +299,7 @@ bool XMLFilterJarHelper::copyFiles( const Reference< XHierarchicalNameAccess >& 
     return bOk;
 }
 
-bool XMLFilterJarHelper::copyFile( const Reference< XHierarchicalNameAccess >& xIfc, OUString& rURL, const OUString& rTargetURL )
+bool XMLFilterJarHelper::copyFile( const Reference< XHierarchicalNameAccess >& xIfc, OUString& rURL, std::u16string_view rTargetURL )
 {
     if( !rURL.matchIgnoreAsciiCase( sVndSunStarPackage ) )
         return true;

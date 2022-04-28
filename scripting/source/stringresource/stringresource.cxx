@@ -934,7 +934,7 @@ void StringResourcePersistenceImpl::storeToURL( const OUString& URL,
 
 void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 (
-    const OUString& Location,
+    std::u16string_view Location,
     const OUString& aNameBase,
     const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
 )
@@ -957,7 +957,7 @@ void StringResourcePersistenceImpl::implKillRemovedLocaleFiles
 
 void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 (
-    const OUString& Location,
+    std::u16string_view Location,
     const OUString& aNameBase,
     const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
 )
@@ -976,7 +976,7 @@ void StringResourcePersistenceImpl::implKillChangedDefaultFiles
 
 void StringResourcePersistenceImpl::implStoreAtLocation
 (
-    const OUString& Location,
+    std::u16string_view Location,
     const OUString& aNameBase,
     const OUString& aComment,
     const Reference< ucb::XSimpleFileAccess3 >& xFileAccess,
@@ -1615,7 +1615,7 @@ OUString StringResourcePersistenceImpl::implGetFileNameForLocaleItem
 
 OUString StringResourcePersistenceImpl::implGetPathForLocaleItem
     ( LocaleItem const * pLocaleItem, const OUString& aNameBase,
-      const OUString& aLocation, bool bDefaultFile )
+      std::u16string_view aLocation, bool bDefaultFile )
 {
     OUString aFileName = implGetFileNameForLocaleItem( pLocaleItem, aNameBase );
     INetURLObject aInetObj( aLocation );

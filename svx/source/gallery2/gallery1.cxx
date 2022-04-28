@@ -225,7 +225,7 @@ public:
 };
 
 
-Gallery::Gallery( const OUString& rMultiPath )
+Gallery::Gallery( std::u16string_view rMultiPath )
 :       bMultiPath          ( false )
 {
     ImplLoad( rMultiPath );
@@ -245,11 +245,11 @@ Gallery* Gallery::GetGalleryInstance()
     return s_pGallery;
 }
 
-void Gallery::ImplLoad( const OUString& rMultiPath )
+void Gallery::ImplLoad( std::u16string_view rMultiPath )
 {
     bool bIsReadOnlyDir {false};
 
-    bMultiPath = !rMultiPath.isEmpty();
+    bMultiPath = !rMultiPath.empty();
 
     INetURLObject aCurURL(SvtPathOptions().GetConfigPath());
     ImplLoadSubDirs( aCurURL, bIsReadOnlyDir );
@@ -263,7 +263,7 @@ void Gallery::ImplLoad( const OUString& rMultiPath )
         sal_Int32 nIdx {0};
         do
         {
-            aCurURL = INetURLObject(rMultiPath.getToken(0, ';', nIdx));
+            aCurURL = INetURLObject(o3tl::getToken(rMultiPath, 0, ';', nIdx));
             if (bIsRelURL)
             {
                 aRelURL = aCurURL;

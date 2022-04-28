@@ -124,7 +124,7 @@ private:
     void            ImpCreateStdLib( StarBASIC* pParentFromStdLib );
     void            ImpMgrNotLoaded(  const OUString& rStorageName  );
     BasicLibInfo*   CreateLibInfo();
-    void            LoadBasicManager( SotStorage& rStorage, const OUString& rBaseURL );
+    void            LoadBasicManager( SotStorage& rStorage, std::u16string_view rBaseURL );
     void            LoadOldBasicManager( SotStorage& rStorage );
     bool            ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) const;
     static bool     ImplEncryptStream( SvStream& rStream );
@@ -132,7 +132,7 @@ private:
     static void     CheckModules( StarBASIC* pBasic, bool bReference );
 
 public:
-                    BasicManager( SotStorage& rStorage, const OUString& rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString const * pLibPath = nullptr, bool bDocMgr = false );
+                    BasicManager( SotStorage& rStorage, std::u16string_view rBaseURL, StarBASIC* pParentFromStdLib = nullptr, OUString const * pLibPath = nullptr, bool bDocMgr = false );
                     BasicManager( StarBASIC* pStdLib, OUString const * pLibPath = nullptr, bool bDocMgr = false );
 
     virtual ~BasicManager() override;
