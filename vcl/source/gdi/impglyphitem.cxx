@@ -123,6 +123,10 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     // Require a start at the exact position given, otherwise bail out.
     if (pos->charPos() != beginPos)
         return nullptr;
+    // For RTL make sure we're not cutting in the middle of a multi-character glyph
+    // (for non-RTL charPos is always the start of a multi-character glyph).
+    if (rtl && pos->charPos() + pos->charCount() > beginPos + 1)
+        return nullptr;
     // Don't create a subset if it's not safe to break at the beginning or end of the sequence
     // (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
     if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
@@ -149,7 +153,7 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     }
     if (pos != end())
     {
-        // Fail if the next character is at the expected past-end position. For RTL check
+        // Fail if the next character is not at the expected past-end position. For RTL check
         // that we're not cutting in the middle of a multi-character glyph.
         if (rtl ? pos->charPos() + pos->charCount() != endPos + 1 : pos->charPos() != endPos)
             return nullptr;
