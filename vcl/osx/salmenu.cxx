@@ -594,7 +594,8 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     /* #i90015# until there is a correct solution
        strip out any appended (.*) in menubar entries
     */
-    if( mbMenuBar )
+    // Delete mnemonics for CJK translations along with '(' and ')', not just only for mbMenuBar.
+    if(i_rText.indexOf("~")>0)
     {
         sal_Int32 nPos = aText.lastIndexOf( '(' );
         if( nPos != -1 )
