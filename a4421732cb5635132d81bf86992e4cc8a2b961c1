@@ -33,6 +33,24 @@
       "message": "Will this be built by Jenkins?",
       "revId": "a4421732cb5635132d81bf86992e4cc8a2b961c1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2376bc3e_7b4511d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-28T07:03:35Z",
+      "side": 1,
+      "message": "minor releases are not built by Jenkins",
+      "parentUuid": "b8bde716_75fa922d",
+      "revId": "a4421732cb5635132d81bf86992e4cc8a2b961c1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
