@@ -7,7 +7,37 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
 -->
-<oor:data xmlns:oor="http://openoffice.org/2001/registry">
+<oor:data xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:oor="http://openoffice.org/2001/registry">
+ <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="VCL" oor:package="org.openoffice">
+  <node oor:name="DefaultFonts">
+   <node oor:name="ar">
+    <prop oor:name="CTL_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+   <node oor:name="en">
+    <prop oor:name="CTL_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+   <node oor:name="hi">
+    <prop oor:name="CTL_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CTL_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+   <node oor:name="zh-cn">
+    <prop oor:name="CJK_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
+  </node>
+ </oor:component-data>
  <oor:component-data oor:name="Common" oor:package="org.openoffice.Office">
   <node oor:name="Misc">
     <prop oor:name="UseDocumentSystemFileLocking">
