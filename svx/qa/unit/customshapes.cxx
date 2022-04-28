@@ -38,6 +38,8 @@
 #include <cppunit/TestAssert.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegment.hpp>
+#include <com/sun/star/drawing/EnhancedCustomShapeSegmentCommand.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -1213,6 +1215,77 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148501_OctagonBevel)
     aActualColor = pRead->GetColor(aSize.Height() * 0.75, aSize.Width() * 0.75); // bottom-right
     nColorDistance = aExpectedColor.GetColorError(aActualColor);
     CPPUNIT_ASSERT_LESS(sal_uInt16(6), nColorDistance);
+}
+
+bool lcl_getShapeSegments(uno::Sequence<drawing::EnhancedCustomShapeSegment>& rSegments,
+                          const uno::Reference<drawing::XShape>& xShape)
+{
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY_THROW);
+    uno::Any anotherAny = xShapeProps->getPropertyValue("CustomShapeGeometry");
+    uno::Sequence<beans::PropertyValue> aCustomShapeGeometry;
+    if (!(anotherAny >>= aCustomShapeGeometry))
+        return false;
+    uno::Sequence<beans::PropertyValue> aPathProps;
+    for (beans::PropertyValue const& rProp : std::as_const(aCustomShapeGeometry))
+    {
+        if (rProp.Name == "Path")
+        {
+            rProp.Value >>= aPathProps;
+            break;
+        }
+    }
+
+    for (beans::PropertyValue const& rProp : std::as_const(aPathProps))
+    {
+        if (rProp.Name == "Segments")
+        {
+            rProp.Value >>= rSegments;
+            break;
+        }
+    }
+    if (rSegments.getLength() > 2)
+        return true;
+    else
+        return false;
+}
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148714_CurvedArrows)
+{
+    // Error was, that the line between 1. and 2. arc was missing.
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf148714_CurvedArrows.ppt";
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.presentation.PresentationDocument");
+
+    for (sal_Int32 nShapeIndex = 0; nShapeIndex < 4; nShapeIndex++)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(nShapeIndex));
+        uno::Sequence<drawing::EnhancedCustomShapeSegment> aSegments;
+        CPPUNIT_ASSERT(lcl_getShapeSegments(aSegments, xShape));
+
+        if (nShapeIndex == 0 || nShapeIndex == 3)
+        {
+            // curvedDownArrow or curvedLeftArrow. Segments should start with VW. Without fix it was
+            // V with count 2, which means VV.
+            CPPUNIT_ASSERT_EQUAL(
+                sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC),
+                aSegments[0].Command);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aSegments[0].Count);
+            CPPUNIT_ASSERT_EQUAL(
+                sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO),
+                aSegments[1].Command);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aSegments[1].Count);
+        }
+        else
+        {
+            // curvedUpArrow or curvedRightArrow. Segments should start with BA. Without fix is was
+            // B with count 2, which means BB.
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::ARC),
+                                 aSegments[0].Command);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aSegments[0].Count);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(drawing::EnhancedCustomShapeSegmentCommand::ARCTO),
+                                 aSegments[1].Command);
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(1), aSegments[1].Count);
+        }
+    }
 }
 }
 
