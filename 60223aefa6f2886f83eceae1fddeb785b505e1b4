@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55301085_affcbb8f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-04-28T13:51:23Z",
+      "side": 1,
+      "message": "Sorry, my bad. The correct bug number should be 148837, so please revise to tdf#148837 instead...",
+      "revId": "60223aefa6f2886f83eceae1fddeb785b505e1b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
