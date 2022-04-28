@@ -16,6 +16,24 @@
       "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/113274/ : FAILURE\n\u003e \n\u003e seems like the buildslave lost the connection ( https://ci.libreoffice.org/job/gerrit_windows/125501/ )\n\n",
       "revId": "806ffe09d44c9e8a78dd72adbcf10a02fe9a9deb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7929d6ea_498564e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-04-28T13:17:36Z",
+      "side": 1,
+      "message": "You may rebase to current master after you have updated the commit message, so that the build server will re-run.",
+      "parentUuid": "8e8af6bc_49e5fb21",
+      "revId": "806ffe09d44c9e8a78dd72adbcf10a02fe9a9deb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
