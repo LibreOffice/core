@@ -41,6 +41,7 @@
 #include <quartz/utils.h>
 #include <strings.hrc>
 #include <window.h>
+#include <vcl/mnemonic.hxx>
 
 namespace {
 
@@ -588,22 +589,8 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
 
     AquaSalMenuItem *pAquaSalMenuItem = static_cast<AquaSalMenuItem *>(i_pSalMenuItem);
 
-    // Delete mnemonics
-    OUString aText = i_rText.replaceAll("~", "");
-
-    /* #i90015# until there is a correct solution
-       strip out any appended (.*) in menubar entries
-    */
-    if( mbMenuBar )
-    {
-        sal_Int32 nPos = aText.lastIndexOf( '(' );
-        if( nPos != -1 )
-        {
-            sal_Int32 nPos2 = aText.indexOf( ')' );
-            if( nPos2 != -1 )
-                aText = aText.replaceAt( nPos, nPos2-nPos+1, u"" );
-        }
-    }
+    // Delete all mnemonics of mbMenuBar and CJK-style mnemonic
+    OUString aText = MnemonicGenerator::EraseAllMnemonicChars(i_rText);
 
     if (aText.endsWith("...", &aText))
         aText += u"\u2026";
