@@ -35,6 +35,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac08ed3f_02264046",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-28T10:16:42Z",
+      "side": 1,
+      "message": "Arguments are required in case of different error case as illustrated by extra comments.\nThis .bas file will be reused to build a similar test unit for VBA Choose() function.",
+      "parentUuid": "e12b8a86_c1be086c",
+      "revId": "1e7e7fe66f58eaf0b5838ea9acb3f67873e1e81f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "645c07fb_a836ecee",
@@ -48,6 +66,24 @@
       "writtenOn": "2022-04-28T07:35:38Z",
       "side": 1,
       "message": "Please restore empty line in the end of the file.",
+      "revId": "1e7e7fe66f58eaf0b5838ea9acb3f67873e1e81f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a2146c3_552f4405",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-28T10:16:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "645c07fb_a836ecee",
       "revId": "1e7e7fe66f58eaf0b5838ea9acb3f67873e1e81f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

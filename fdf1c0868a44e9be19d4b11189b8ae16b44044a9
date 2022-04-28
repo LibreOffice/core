@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "913f1a50_ad8bb2f8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002002
+      },
+      "writtenOn": "2022-04-28T10:16:42Z",
+      "side": 1,
+      "message": "preparing VBA equivalent unit test …",
+      "revId": "fdf1c0868a44e9be19d4b11189b8ae16b44044a9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
