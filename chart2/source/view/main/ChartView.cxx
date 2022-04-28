@@ -525,19 +525,18 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     //create VAxis, so they can give necessary information for automatic scaling
     uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
             mrChartModel.getNumberFormatsSupplier());
-    size_t nC = 0;
-    for( nC=0; nC < rVCooSysList.size(); nC++)
+
+    for (auto& rpVCooSys : rVCooSysList)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC].get();
-        if(nDimensionCount==3)
+        if (nDimensionCount == 3)
         {
             CuboidPlanePosition eLeftWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardLeftWall( xDiagram ) );
             CuboidPlanePosition eBackWallPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBackWall( xDiagram ) );
             CuboidPlanePosition eBottomPos( ThreeDHelper::getAutomaticCuboidPlanePositionForStandardBottom( xDiagram ) );
-            pVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
+            rpVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
 
-        pVCooSys->createVAxisList(&mrChartModel, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize);
+        rpVCooSys->createVAxisList(&mrChartModel, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize);
     }
 
     // - prepare list of all axis and how they are used
@@ -574,15 +573,14 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     // - create axis and grids for all coordinate systems
 
     //init all coordinate systems
-    for( nC=0; nC < rVCooSysList.size(); nC++)
+    for (auto& rpVCooSys : rVCooSysList)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC].get();
-        pVCooSys->initPlottingTargets(xSeriesTargetInFrontOfAxis,xTextTargetShapes,xSeriesTargetBehindAxis);
+        rpVCooSys->initPlottingTargets(xSeriesTargetInFrontOfAxis, xTextTargetShapes, xSeriesTargetBehindAxis);
 
-        pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
+        rpVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
             createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
 
-        pVCooSys->initVAxisInList();
+        rpVCooSys->initVAxisInList();
     }
 
     //calculate resulting size respecting axis label layout and fontscaling
@@ -645,15 +643,13 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     }
 
     //create axes and grids for the final size
-    for( nC=0; nC < rVCooSysList.size(); nC++)
+    for (auto& rpVCooSys : rVCooSysList)
     {
-        VCoordinateSystem* pVCooSys = rVCooSysList[nC].get();
-
-        pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
+        rpVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
             createTransformationSceneToScreen( aVDiagram.getCurrentRectangle() ) ));
 
-        pVCooSys->createAxesShapes();
-        pVCooSys->createGridShapes();
+        rpVCooSys->createAxesShapes();
+        rpVCooSys->createGridShapes();
     }
 
     // - create data series for all charttypes
@@ -712,11 +708,10 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         ShapeFactory::removeSubShapes( xTextTargetShapes );
 
         //set new transformation
-        for( nC=0; nC < rVCooSysList.size(); nC++)
+        for (auto& rpVCooSys : rVCooSysList)
         {
-            VCoordinateSystem* pVCooSys = rVCooSysList[nC].get();
-            pVCooSys->setTransformationSceneToScreen( B3DHomMatrixToHomogenMatrix(
-                createTransformationSceneToScreen( aNewInnerRect ) ));
+            auto aMatrix = createTransformationSceneToScreen(aNewInnerRect);
+            rpVCooSys->setTransformationSceneToScreen(B3DHomMatrixToHomogenMatrix(aMatrix));
         }
 
         // - create data series for all charttypes
