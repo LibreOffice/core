@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2a5ac43f_a60cddf5",
+        "filename": "xmlsecurity/source/xmlsec/nss/x509certificate_nssimpl.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2022-04-28T16:20:21Z",
+      "side": 0,
+      "message": "That one was actually needed, see https://gerrit.libreoffice.org/c/core/+/133571",
+      "revId": "db345bee733fee8c7157c246979bed2c65799507",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
