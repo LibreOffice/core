@@ -98,6 +98,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "60105e51_e5ce7aa9",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-28T06:07:22Z",
+      "side": 0,
+      "message": "\u003e How to clean up the spilt milk? Revert this patch and start over?  Make a new patch on top of this one?\n\nCreate a patch that reverts only wrong parts; name that patch \"Partial revert of commit XXXXXX...\".\n\n\u003e In either case -- it seems necessary to first bring up the issue in BZ\n\nWill do now. Thanks!",
+      "parentUuid": "9c01edeb_231bba96",
+      "range": {
+        "startLine": 376,
+        "startChar": 87,
+        "endLine": 376,
+        "endChar": 94
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d65ad511_f23d1151",
         "filename": "sw/inc/strings.hrc",
         "patchSetId": 6
