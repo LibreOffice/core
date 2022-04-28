@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "886eefde_96ce2971",
+        "filename": "filter/source/msfilter/msdffimp.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 6510,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-28T19:38:50Z",
+      "side": 1,
+      "message": "Please note that we have o3tl::convert, that can convert to/from EMUs with proper rounding, without magic constants.",
+      "revId": "8c9e6d3a99df641f9c395c65f7b48225b8775baa",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
