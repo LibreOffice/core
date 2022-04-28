@@ -165,6 +165,16 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
         if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
             return nullptr;
     }
+    // HACK: If mode is se to be RTL, but the last glyph is a non-RTL space,
+    // then making a subset would give a different result than the actual layout,
+    // because the weak BiDi mode code in ImplLayoutArgs ctor would interpret
+    // the string subset ending with space as the space being RTL, but it would
+    // treat it as non-RTL for the whole string if there would be more non-RTL
+    // characters after the space. So bail out.
+    if (GetFlags() & SalLayoutFlags::BiDiRtl && !rtl && !copy->empty() && copy->back().IsSpacing())
+    {
+        return nullptr;
+    }
     return copy.release();
 }
 
