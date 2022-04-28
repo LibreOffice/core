@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4acd2e4a_980da27d",
+        "filename": "sc/source/ui/unoobj/viewuno.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 1802,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-28T21:34:10Z",
+      "side": 1,
+      "message": "Setting the value via API, shouldn\u0027t it be sanitized further? i.e. max some sensible value? In the UI dragging formula bar height is limited to the height of grid leaving one row of cells visible, but such is probably not available in this context.",
+      "revId": "dbabbdaa70353ad3dcb88f93fb3dd9170cb31b9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d92ca43_f2736802",
+        "filename": "sc/source/ui/view/viewdata.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 3880,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-04-28T21:34:10Z",
+      "side": 1,
+      "message": "Similar, and more important, as the value can be set by arbitrary document settings read, it should be sanitized to min 1 and max some sensible value.",
+      "revId": "dbabbdaa70353ad3dcb88f93fb3dd9170cb31b9b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
