@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a5c18f_d31fd45f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-04-28T06:51:38Z",
+      "side": 1,
+      "message": "It is touching the code from bug report:\nhttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d141049\n\nI though that you could be interesting",
+      "revId": "06e3e32a7dd401c5909ff22b79a58216916dc3a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
