@@ -547,7 +547,7 @@ bool SwBookmarkPortion::DoPaint(SwTextPaintInfo const& rInf,
     Size size(rTmpFont.GetSize(rTmpFont.GetActual()));
     // use also the external leading (line gap) of the portion, but don't use
     // 100% of it because i can't figure out how to baseline align that
-    auto const nFactor = (Height() * 95) / size.Height();
+    auto const nFactor = size.Height() > 0 ? (Height() * 95) / size.Height() : Height();
     rTmpFont.SetProportion(nFactor);
     rTmpFont.SetWeight(WEIGHT_THIN, rTmpFont.GetActual());
     rTmpFont.SetColor(NON_PRINTING_CHARACTER_COLOR);
