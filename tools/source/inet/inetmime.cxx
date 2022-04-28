@@ -1003,11 +1003,11 @@ bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
 
 // static
 sal_Unicode const * INetMIME::scanContentType(
-    OUString const & rStr, OUString * pType,
+    std::u16string_view rStr, OUString * pType,
     OUString * pSubType, INetContentTypeParameterList * pParameters)
 {
-    sal_Unicode const * pBegin = rStr.getStr();
-    sal_Unicode const * pEnd = pBegin + rStr.getLength();
+    sal_Unicode const * pBegin = rStr.data();
+    sal_Unicode const * pEnd = pBegin + rStr.size();
     sal_Unicode const * p = skipLinearWhiteSpaceComment(pBegin, pEnd);
     sal_Unicode const * pTypeBegin = p;
     while (p != pEnd && isTokenChar(*p))

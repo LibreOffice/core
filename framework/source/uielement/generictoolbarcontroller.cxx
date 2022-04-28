@@ -44,7 +44,7 @@ using namespace ::com::sun::star::frame::status;
 namespace framework
 {
 
-static bool isEnumCommand( const OUString& rCommand )
+static bool isEnumCommand( std::u16string_view rCommand )
 {
     INetURLObject aURL( rCommand );
 
@@ -52,7 +52,7 @@ static bool isEnumCommand( const OUString& rCommand )
            ( aURL.GetURLPath().indexOf( '.' ) != -1);
 }
 
-static OUString getEnumCommand( const OUString& rCommand )
+static OUString getEnumCommand( std::u16string_view rCommand )
 {
     INetURLObject aURL( rCommand );
 
@@ -74,7 +74,7 @@ static OUString getMasterCommand( const OUString& rCommand )
         sal_Int32 nIndex = aURL.GetURLPath().indexOf( '.' );
         if ( nIndex )
         {
-            aURL.SetURLPath( aURL.GetURLPath().copy( 0, nIndex ) );
+            aURL.SetURLPath( aURL.GetURLPath().subView( 0, nIndex ) );
             aMasterCommand = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }
     }

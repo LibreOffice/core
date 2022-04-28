@@ -391,7 +391,7 @@ public:
       * rgb
       * If fails returns Color().
       */
-    static Color STRtoRGB(const OUString& colorname);
+    static Color STRtoRGB(std::u16string_view colorname);
 
     /** Color space conversion tools
       * @param nHue

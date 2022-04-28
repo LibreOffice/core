@@ -212,7 +212,7 @@ protected:
     void implScanLocaleNames( const css::uno::Sequence< OUString >& aContentSeq );
     static OUString implGetFileNameForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase );
     static OUString implGetPathForLocaleItem( LocaleItem const * pLocaleItem, const OUString& aNameBase,
-        const OUString& aLocation, bool bDefaultFile=false );
+        std::u16string_view aLocation, bool bDefaultFile=false );
 
     bool implReadPropertiesFile( LocaleItem* pLocaleItem,
         const css::uno::Reference< css::io::XInputStream >& xInput );
@@ -238,7 +238,7 @@ protected:
     /// @throws css::uno::RuntimeException
     void implKillRemovedLocaleFiles
     (
-        const OUString& Location,
+        std::u16string_view Location,
         const OUString& aNameBase,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
     );
@@ -247,7 +247,7 @@ protected:
     /// @throws css::uno::RuntimeException
     void implKillChangedDefaultFiles
     (
-        const OUString& Location,
+        std::u16string_view Location,
         const OUString& aNameBase,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess
     );
@@ -256,7 +256,7 @@ protected:
     /// @throws css::uno::RuntimeException
     void implStoreAtLocation
     (
-        const OUString& Location,
+        std::u16string_view Location,
         const OUString& aNameBase,
         const OUString& aComment,
         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& xFileAccess,

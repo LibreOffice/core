@@ -3208,7 +3208,7 @@ const GraphicObject* SvxBrushItem::GetGraphicObject(OUString const & referer) co
                 std::unique_ptr<SvMemoryStream> const xMemStream(aGraphicURL.getData());
                 if (xMemStream)
                 {
-                    if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, "", *xMemStream))
+                    if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, u"", *xMemStream))
                     {
                         bGraphicLoaded = true;
 

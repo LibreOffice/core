@@ -304,7 +304,7 @@ void SvxHyperlinkDocTp::SetMarkStr ( const OUString& aStrMark )
 |* retrieve kind of pathstr
 |*
 |************************************************************************/
-SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( const OUString& rStrPath )
+SvxHyperlinkDocTp::EPathType SvxHyperlinkDocTp::GetPathType ( std::u16string_view rStrPath )
 {
     INetURLObject aURL( rStrPath, INetProtocol::File );
 

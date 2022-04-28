@@ -309,14 +309,14 @@ void INetURLHistory::NormalizeUrl_Impl (INetURLObject &rUrl)
             if (!rUrl.HasPort())
                 rUrl.SetPort (INETHIST_DEF_HTTP_PORT);
             if (!rUrl.HasURLPath())
-                rUrl.SetURLPath("/");
+                rUrl.SetURLPath(u"/");
             break;
 
         case INetProtocol::Https:
             if (!rUrl.HasPort())
                 rUrl.SetPort (INETHIST_DEF_HTTPS_PORT);
             if (!rUrl.HasURLPath())
-                rUrl.SetURLPath("/");
+                rUrl.SetURLPath(u"/");
             break;
 
         default:
@@ -346,7 +346,7 @@ void INetURLHistory::PutUrl_Impl (const INetURLObject &rUrl)
     }
 }
 
-bool INetURLHistory::QueryUrl(const OUString &rUrl) const
+bool INetURLHistory::QueryUrl(std::u16string_view rUrl) const
 {
     INetProtocol eProto = INetURLObject::CompareProtocolScheme (rUrl);
     if (!QueryProtocol (eProto))

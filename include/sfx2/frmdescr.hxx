@@ -65,7 +65,7 @@ public:
     SfxItemSet*             GetArgs();
     const INetURLObject&    GetURL() const
                             { return aURL; }
-    void                    SetURL( const OUString& rURL );
+    void                    SetURL( std::u16string_view rURL );
     void                    SetActualURL();
 
                             // FrameName

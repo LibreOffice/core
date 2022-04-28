@@ -42,7 +42,7 @@ static sal_uInt64 getFileSize(const OUString& rURL);
 static sal_uInt32 getFileModifyTime(const OUString& rURL);
 static OUString getDisplayFileSize(const OUString& rURL);
 static OUString getDisplayFileModifyTime(const OUString& rURL);
-static OUString getApplication(const OUString& rURL);
+static OUString getApplication(std::u16string_view rURL);
 
 ListView::ListView(std::unique_ptr<weld::TreeView> xTreeView)
     : mxTreeView(std::move(xTreeView))
@@ -416,7 +416,7 @@ static sal_uInt64 getFileSize(const OUString& rURL)
     return nSize;
 }
 
-static OUString getApplication(const OUString& rURL)
+static OUString getApplication(std::u16string_view rURL)
 {
     INetURLObject aUrl(rURL);
     OUString aExt = aUrl.getExtension();

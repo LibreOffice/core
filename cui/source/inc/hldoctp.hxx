@@ -49,7 +49,7 @@ private:
     DECL_LINK( TimeoutHdl_Impl, Timer *, void ); ///< Handler for timer -timeout
 
     enum class EPathType { Invalid, ExistsFile };
-    static EPathType GetPathType ( const OUString& rStrPath );
+    static EPathType GetPathType ( std::u16string_view rStrPath );
 
     void FillDlgFields(const OUString& rStrURL) override;
     void GetCurentItemData ( OUString& rStrURL, OUString& aStrName,

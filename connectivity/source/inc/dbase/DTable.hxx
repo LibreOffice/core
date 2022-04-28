@@ -182,7 +182,7 @@ namespace connectivity::dbase
             virtual void dropColumn(sal_Int32 _nPos) override;
 
             static OUString   getEntry(file::OConnection const * _pConnection, std::u16string_view _sURL );
-            static bool     Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, sdbcx::OCollection* _pIndexes );
+            static bool     Drop_Static(std::u16string_view _sUrl, bool _bHasMemoFields, sdbcx::OCollection* _pIndexes );
 
             virtual void refreshHeader() override;
 

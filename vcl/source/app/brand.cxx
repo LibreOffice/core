@@ -34,7 +34,7 @@
 #include <vcl/svapp.hxx>
 
 namespace {
-    bool loadPng( const OUString & rPath, BitmapEx &rBitmap)
+    bool loadPng( std::u16string_view rPath, BitmapEx &rBitmap)
     {
         INetURLObject aObj( rPath );
         SvFileStream aStrm( aObj.PathToFileName(), StreamMode::STD_READ );
@@ -48,7 +48,7 @@ namespace {
     }
     bool tryLoadPng( std::u16string_view rBaseDir, std::u16string_view rName, BitmapEx& rBitmap )
     {
-        return loadPng( OUString::Concat(rBaseDir) + "/" LIBO_ETC_FOLDER + rName, rBitmap);
+        return loadPng( rtl::OUStringConcatenation(OUString::Concat(rBaseDir) + "/" LIBO_ETC_FOLDER + rName), rBitmap);
     }
 }
 

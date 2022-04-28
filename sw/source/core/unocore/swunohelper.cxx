@@ -75,7 +75,7 @@ bool UCB_DeleteFile( const OUString& rURL )
     return bRemoved;
 }
 
-bool UCB_MoveFile( const OUString& rURL, const OUString& rNewURL )
+bool UCB_MoveFile( const OUString& rURL, std::u16string_view rNewURL )
 {
     bool bCopyCompleted = true;
     try
@@ -104,7 +104,7 @@ bool UCB_MoveFile( const OUString& rURL, const OUString& rNewURL )
     return bCopyCompleted;
 }
 
-bool UCB_IsCaseSensitiveFileName( const OUString& rURL )
+bool UCB_IsCaseSensitiveFileName( std::u16string_view rURL )
 {
     bool bCaseSensitive;
     try

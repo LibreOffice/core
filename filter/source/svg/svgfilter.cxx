@@ -231,7 +231,7 @@ bool SVGFilter::filterImpressOrDraw( const Sequence< PropertyValue >& rDescripto
             GraphicFilter aGraphicFilter;
             Graphic aGraphic;
             const ErrCode nGraphicFilterErrorCode(
-                aGraphicFilter.ImportGraphic(aGraphic, OUString(), *aStream));
+                aGraphicFilter.ImportGraphic(aGraphic, u"", *aStream));
 
             if(ERRCODE_NONE != nGraphicFilterErrorCode)
             {

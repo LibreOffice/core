@@ -2854,7 +2854,7 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
         xStorable->storeAsURL(sTmpName, aSequence);
 }
 
-OUString SwDBManager::LoadAndRegisterDataSource(const OUString &rURI, const OUString *pDestDir)
+OUString SwDBManager::LoadAndRegisterDataSource(std::u16string_view rURI, const OUString *pDestDir)
 {
     return LoadAndRegisterDataSource_Impl( DBConnURIType::UNKNOWN, nullptr, INetURLObject(rURI), pDestDir, nullptr );
 }

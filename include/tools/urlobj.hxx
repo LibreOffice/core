@@ -287,22 +287,22 @@ public:
     // Strict Parsing:
 
     inline explicit INetURLObject(
-        OUString const & rTheAbsURIRef,
+        std::u16string_view rTheAbsURIRef,
         EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
         rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
-    inline bool SetURL(OUString const & rTheAbsURIRef,
+    inline bool SetURL(std::u16string_view rTheAbsURIRef,
                        EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                        rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     bool ConcatData(INetProtocol eTheScheme, std::u16string_view rTheUser,
                     std::u16string_view rThePassword,
                     std::u16string_view rTheHost, sal_uInt32 nThePort,
-                    OUString const & rThePath);
+                    std::u16string_view rThePath);
 
     // Smart Parsing:
 
-    inline INetURLObject(OUString const & rTheAbsURIRef,
+    inline INetURLObject(std::u16string_view rTheAbsURIRef,
                          INetProtocol eTheSmartScheme,
                          EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                          rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
@@ -312,7 +312,7 @@ public:
     { m_eSmartScheme = eTheSmartScheme; }
 
     inline bool
-    SetSmartURL(OUString const & rTheAbsURIRef,
+    SetSmartURL(std::u16string_view rTheAbsURIRef,
                 EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                 rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8,
                 FSysStyle eStyle = FSysStyle::Detect);
@@ -341,14 +341,14 @@ public:
         is returned.
      */
     static OUString
-    GetAbsURL(OUString const & rTheBaseURIRef,
+    GetAbsURL(std::u16string_view rTheBaseURIRef,
               OUString const & rTheRelURIRef,
               EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
               DecodeMechanism eDecodeMechanism = DecodeMechanism::ToIUri,
               rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8);
 
     static inline OUString
-    GetRelURL(OUString const & rTheBaseURIRef,
+    GetRelURL(std::u16string_view rTheBaseURIRef,
               OUString const & rTheAbsURIRef,
               EncodeMechanism eEncodeMechanism = EncodeMechanism::WasEncoded,
               DecodeMechanism eDecodeMechanism = DecodeMechanism::ToIUri,
@@ -458,7 +458,7 @@ public:
                                     = RTL_TEXTENCODING_UTF8) const
     { return decode(m_aPath, eMechanism, eCharset); }
 
-    bool SetURLPath(OUString const & rThePath,
+    bool SetURLPath(std::u16string_view rThePath,
                            EncodeMechanism eMechanism = EncodeMechanism::WasEncoded,
                            rtl_TextEncoding eCharset = RTL_TEXTENCODING_UTF8)
     { return setPath(rThePath, eMechanism, eCharset); }
@@ -971,7 +971,7 @@ private:
     TOOLS_DLLPRIVATE void setInvalid();
 
     bool setAbsURIRef(
-        OUString const & rTheAbsURIRef,
+        std::u16string_view rTheAbsURIRef,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset, bool bSmart,
         FSysStyle eStyle);
 
@@ -1058,7 +1058,7 @@ private:
         OUStringBuffer &rSynPath);
 
     bool setPath(
-        OUString const & rThePath,
+        std::u16string_view rThePath,
         EncodeMechanism eMechanism, rtl_TextEncoding eCharset);
 
     // Hierarchical Path:
@@ -1140,16 +1140,16 @@ inline OUString INetURLObject::decode(SubString const & rSubString,
                OUString();
 }
 
-inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
+inline INetURLObject::INetURLObject(std::u16string_view rTheAbsURIRef,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset):
-    m_aAbsURIRef(rTheAbsURIRef.getLength() * 2), m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
+    m_aAbsURIRef(rTheAbsURIRef.size() * 2), m_eScheme(INetProtocol::NotValid), m_eSmartScheme(INetProtocol::Http)
 {
     setAbsURIRef(rTheAbsURIRef, eMechanism, eCharset, false,
                  FSysStyle(0));
 }
 
-inline bool INetURLObject::SetURL(OUString const & rTheAbsURIRef,
+inline bool INetURLObject::SetURL(std::u16string_view rTheAbsURIRef,
                                   EncodeMechanism eMechanism,
                                   rtl_TextEncoding eCharset)
 {
@@ -1157,7 +1157,7 @@ inline bool INetURLObject::SetURL(OUString const & rTheAbsURIRef,
                         FSysStyle(0));
 }
 
-inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
+inline INetURLObject::INetURLObject(std::u16string_view rTheAbsURIRef,
                                     INetProtocol eTheSmartScheme,
                                     EncodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset,
@@ -1167,7 +1167,7 @@ inline INetURLObject::INetURLObject(OUString const & rTheAbsURIRef,
     setAbsURIRef(rTheAbsURIRef, eMechanism, eCharset, true, eStyle);
 }
 
-inline bool INetURLObject::SetSmartURL(OUString const & rTheAbsURIRef,
+inline bool INetURLObject::SetSmartURL(std::u16string_view rTheAbsURIRef,
                                        EncodeMechanism eMechanism,
                                        rtl_TextEncoding eCharset,
                                        FSysStyle eStyle)
@@ -1208,7 +1208,7 @@ inline bool INetURLObject::GetNewAbsURL(OUString const & rTheRelURIRef,
 }
 
 // static
-inline OUString INetURLObject::GetRelURL(OUString const & rTheBaseURIRef,
+inline OUString INetURLObject::GetRelURL(std::u16string_view rTheBaseURIRef,
                                           OUString const & rTheAbsURIRef,
                                           EncodeMechanism eEncodeMechanism,
                                           DecodeMechanism eDecodeMechanism,

@@ -38,7 +38,7 @@ namespace emfplushelper
             {
                 // non native formats
                 GraphicFilter filter;
-                filter.ImportGraphic(graphic, OUString(), s);
+                filter.ImportGraphic(graphic, u"", s);
                 SAL_INFO("drawinglayer.emf", "EMF+\tbitmap width: " << graphic.GetSizePixel().Width() << " height: " << graphic.GetSizePixel().Height());
             }
         }
@@ -58,7 +58,7 @@ namespace emfplushelper
             GraphicFilter filter;
             // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
             SvMemoryStream mfStream(const_cast<char *>(static_cast<char const *>(s.GetData()) + s.Tell()), dataSize, StreamMode::READ);
-            filter.ImportGraphic(graphic, OUString(), mfStream);
+            filter.ImportGraphic(graphic, u"", mfStream);
 
             // debug code - write the stream to debug file /tmp/emf-stream.emf
 #if OSL_DEBUG_LEVEL > 1

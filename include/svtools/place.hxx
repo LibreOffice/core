@@ -21,13 +21,13 @@ private:
 
 public:
 
-    Place( const OUString& sName, const OUString& sUrl, bool bEditable = false ) :
+    Place( const OUString& sName, std::u16string_view sUrl, bool bEditable = false ) :
         msName( sName ),
         maUrl( sUrl ),
         mbEditable( bEditable ) {};
 
     void SetName(const OUString& aName ) { msName = aName; }
-    void SetUrl(const  OUString& aUrl ) { maUrl.SetURL( aUrl ); }
+    void SetUrl(std::u16string_view aUrl ) { maUrl.SetURL( aUrl ); }
 
     OUString& GetName( ) { return msName; }
     OUString GetUrl( ) const { return maUrl.GetMainURL( INetURLObject::DecodeMechanism::NONE ); }

@@ -92,7 +92,7 @@ public:
                                             const OUString& rFileURL,
                                             const OUString& rFontName ) override;
     static bool             AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pFontCollection,
-                                                  const OUString& rFileURL,
+                                                  std::u16string_view rFileURL,
                                                   const OUString& rFontName);
 
     virtual bool            CreateFontSubset( const OUString& rToFile,

@@ -268,7 +268,7 @@ public:
     void                SetXChgData( ExchangeData* pData );
     const ExchangeData* GetXChgData() const { return pData; }
 
-    void                StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult );
+    void                StartSearchFiles( std::u16string_view _rFolderURL, short _nDlgResult );
 
     static std::unique_ptr<SfxTabPage>  Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* rSet);
 };
