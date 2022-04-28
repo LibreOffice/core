@@ -302,6 +302,12 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             {
                 mLastTemporaryKey = std::move(key);
 #ifdef DBG_UTIL
+                std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
+                if (layoutCache == nullptr)
+                {
+                    tmpLayoutCache = vcl::text::TextLayoutCache::Create(text);
+                    layoutCache = tmpLayoutCache.get();
+                }
                 // Check if the subset result really matches what we would get normally,
                 // to make sure corner cases are handled well (see SalLayoutGlyphsImpl::cloneCharRange()).
                 std::unique_ptr<SalLayout> layout
