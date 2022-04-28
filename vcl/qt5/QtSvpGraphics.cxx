@@ -24,18 +24,14 @@
 #include <QtGui/QWindow>
 #include <QtWidgets/QWidget>
 
-QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame)
+QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame, sal_Int32 nScale)
     : m_pFrame(pFrame)
-    , m_nScalePercentage(-1)
+    , m_nScalePercentage(pFrame ? pFrame->GetDPIScalePercentage() : nScale)
 {
+    assert(m_nScalePercentage > 0);
+    SAL_DEBUG(__func__ << " " << pFrame << " " << m_nScalePercentage);
     if (!QtData::noNativeControls())
-        m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
-//    SAL_DEBUG(__func__ << " " << m_pFrame);
-#if 0
-    if (m_pFrame)
-	SAL_DEBUG(__func__ << " " << m_pFrame->devicePixelRatioF());
-//        setDevicePixelRatioF(m_pFrame->devicePixelRatioF());
-#endif
+         m_pWidgetDraw.reset(new QtGraphics_Controls(*this, m_nScalePercentage));
 }
 
 QtSvpGraphics::~QtSvpGraphics() {}
@@ -47,6 +43,19 @@ void QtSvpGraphics::updateQWidget() const
     QWidget* pQWidget = m_pFrame->GetQWidget();
     if (pQWidget)
         pQWidget->update(pQWidget->rect());
+}
+
+void QtSvpGraphics::setSurface(cairo_surface_t* pSurface)
+{
+    SvpSalGraphics::setSurface(pSurface);
+    if (m_pWidgetDraw && pSurface)
+    {
+	sal_Int32 nScale = CairoCommon::GetSgpMetricFromSurface(vcl::SGPmetric::ScalePercentage, *pSurface);
+	SAL_DEBUG(static_cast<sal_IntPtr*>(cairo_surface_get_user_data(pSurface, CairoCommon::getScalingKey())));
+        SAL_DEBUG(__func__ << " " << GetDPIScalePercentage() << " " << nScale);
+	auto *pWidgetDraw = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get());
+        pWidgetDraw->getImage()->setDevicePixelRatio(GetDPIScalePercentage());
+    }
 }
 
 #if ENABLE_CAIRO_CANVAS
@@ -100,15 +109,19 @@ void QtSvpGraphics::handleDamage(const tools::Rectangle& rDamagedRegion)
 
 sal_Int32 QtSvpGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    QImage* pImage = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get())->getImage();
-    if (!pImage)
-    {
-	if (eMetric == vcl::SGPmetric::ScalePercentage && m_nScalePercentage > 0)
-            return m_nScalePercentage;
-        return SvpSalGraphics::GetSgpMetric(eMetric);
-    }
+    if (eMetric == vcl::SGPmetric::ScalePercentage)
+        return m_nScalePercentage;
     else
-        return GetSgpMetricFromQImage(eMetric, *pImage);
+    {
+        if (m_pWidgetDraw)
+	{
+            QImage* pImage = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get())->getImage();
+	    assert(pImage);
+            return GetSgpMetricFromQImage(eMetric, *pImage);
+	}
+	else
+            return SvpSalGraphics::GetSgpMetric(eMetric);
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -472,7 +472,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         else
             n = 1; // printer or other display
     }
-    else if( pSrcGraphics->bVirDev_ )
+    else if (pSrcGraphics->m_pVDev)
     {
         n = 1; // window or compatible virtual device
     }
@@ -488,7 +488,7 @@ void X11SalGraphicsImpl::copyBits( const SalTwoRect& rPosAry,
         // obscured areas beneath overlapping windows), src and dest
         // are the same window.
         const bool bNeedGraphicsExposures( pSrcGraphics == &mrParent &&
-                                           !mrParent.bVirDev_ &&
+                                           !mrParent.m_pVDev &&
                                            pSrcGraphics->bWindow_ );
 
         GC pCopyGC = GetCopyGC();
@@ -1857,7 +1857,7 @@ bool X11SalGraphicsImpl::drawPolyLine(
 
 Color X11SalGraphicsImpl::getPixel( tools::Long nX, tools::Long nY )
 {
-    if( mrParent.bWindow_ && !mrParent.bVirDev_ )
+    if (mrParent.bWindow_ && !mrParent.m_pVDev)
     {
         XWindowAttributes aAttrib;
 
@@ -1905,7 +1905,7 @@ std::shared_ptr<SalBitmap> X11SalGraphicsImpl::getBitmap( tools::Long nX, tools:
         nDY = -nDY;
     }
 
-    if( mrParent.bWindow_ && !mrParent.bVirDev_ )
+    if (mrParent.bWindow_ && !mrParent.m_pVDev)
     {
         XWindowAttributes aAttrib;
 

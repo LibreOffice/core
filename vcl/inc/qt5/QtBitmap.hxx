@@ -44,8 +44,7 @@ public:
     virtual bool Create(const css::uno::Reference<css::rendering::XBitmapCanvas>& rBitmapCanvas,
                         Size& rSize, bool bMask = false) override;
     virtual void Destroy() final override;
-    virtual Size GetSize() const override;
-    virtual sal_uInt16 GetBitCount() const override;
+    sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     virtual BitmapBuffer* AcquireBuffer(BitmapAccessMode nMode) override;
     virtual void ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode) override;

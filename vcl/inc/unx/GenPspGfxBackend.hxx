@@ -22,6 +22,9 @@ class GenPspGfxBackend final : public SalGraphicsImpl
 private:
     psp::PrinterGfx* m_pPrinterGfx;
 
+    sal_uInt16 GetBitCount() const;
+    tools::Long GetGraphicsWidth() const;
+
 public:
     GenPspGfxBackend(psp::PrinterGfx* pPrinterGfx);
     ~GenPspGfxBackend() override;
@@ -32,10 +35,6 @@ public:
 
     bool setClipRegion(vcl::Region const& rRegion) override;
     void ResetClipRegion() override;
-
-    sal_uInt16 GetBitCount() const override;
-
-    tools::Long GetGraphicsWidth() const override;
 
     void SetLineColor() override;
     void SetLineColor(Color nColor) override;

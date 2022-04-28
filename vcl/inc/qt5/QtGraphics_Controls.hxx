@@ -40,7 +40,7 @@ class QtGraphics_Controls final : public vcl::WidgetDrawInterface
     SalGraphics const& m_rGraphics;
 
 public:
-    QtGraphics_Controls(const SalGraphics& rGraphics);
+    QtGraphics_Controls(const SalGraphics& rGraphics, sal_Int32 nScale);
 
     QImage* getImage() { return m_image.get(); }
 

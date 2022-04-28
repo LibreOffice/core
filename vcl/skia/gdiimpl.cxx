@@ -606,10 +606,6 @@ void SkiaSalGraphicsImpl::ResetClipRegion()
 
 const vcl::Region& SkiaSalGraphicsImpl::getClipRegion() const { return mClipRegion; }
 
-sal_uInt16 SkiaSalGraphicsImpl::GetBitCount() const { return 32; }
-
-tools::Long SkiaSalGraphicsImpl::GetGraphicsWidth() const { return GetWidth(); }
-
 void SkiaSalGraphicsImpl::SetLineColor()
 {
     checkPendingDrawing();

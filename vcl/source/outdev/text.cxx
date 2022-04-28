@@ -307,7 +307,7 @@ void OutputDevice::ImplDrawTextDirect( SalLayout& rSalLayout,
     auto nOldX = rSalLayout.DrawBase().getX();
     if( HasMirroredGraphics() )
     {
-        tools::Long w = IsVirtual() ? m_nWidth : mpGraphics->GetGraphicsWidth();
+        tools::Long w = IsVirtual() ? m_nWidth : mpGraphics->GetWidth();
         auto x = rSalLayout.DrawBase().getX();
         rSalLayout.DrawBase().setX( w - 1 - x );
         if( !IsRTLEnabled() )

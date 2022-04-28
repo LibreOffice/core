@@ -110,9 +110,6 @@ public:
 
     // public SalGraphics methods, the interface to the independent vcl part
 
-    // get the width of the device
-    virtual tools::Long                GetGraphicsWidth() const = 0;
-
     // set the clip region to empty
     virtual void                ResetClipRegion() = 0;
 
@@ -696,11 +693,6 @@ void SalGraphics::handleDamage(const tools::Rectangle&) {}
 class VCL_DLLPUBLIC SalGraphicsAutoDelegateToImpl : public SalGraphics
 {
 public:
-    tools::Long GetGraphicsWidth() const override
-    {
-        return GetImpl()->GetGraphicsWidth();
-    }
-
     void ResetClipRegion() override
     {
         GetImpl()->ResetClipRegion();

@@ -125,15 +125,15 @@ sal_Int32 GetSgpMetricFromQImage(vcl::SGPmetric eMetric, QImage &rImage)
     {
         case vcl::SGPmetric::Width: return rImage.width();
         case vcl::SGPmetric::Height: return rImage.height();
-        case vcl::SGPmetric::ScalePercentage: return round(100 * rImage.devicePixelRatioF());
+        case vcl::SGPmetric::ScalePercentage: return round(100 * rImage.devicePixelRatio());
         case vcl::SGPmetric::OffScreen: return true;
         case vcl::SGPmetric::BitCount: return getFormatBits(rImage.format());
         case vcl::SGPmetric::DPIX:
         case vcl::SGPmetric::DPIY:
-	    return round(96 * rImage.devicePixelRatioF());
-        default:
-            return -1;
+            return round(96 * rImage.devicePixelRatioF());
     }
+
+    return -1;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

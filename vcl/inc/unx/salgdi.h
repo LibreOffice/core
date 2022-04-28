@@ -189,8 +189,7 @@ private:
     Region                          mpClipRegion;
     Pixmap                          hBrush_;        // Dither
 
-    bool                            bWindow_ : 1;       // is Window
-    bool                            bVirDev_ : 1;       // is VirDev
+    bool                            bWindow_ : 1;       // is Window or compatible virtual device
 
     std::unique_ptr<SalGraphicsImpl> mxImpl;
     std::unique_ptr<TextRenderImpl> mxTextRenderImpl;

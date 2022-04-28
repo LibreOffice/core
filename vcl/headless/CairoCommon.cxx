@@ -392,6 +392,12 @@ cairo_user_data_key_t* CairoCommon::getDamageKey()
     return &aDamageKey;
 }
 
+cairo_user_data_key_t* CairoCommon::getScalingKey()
+{
+    static cairo_user_data_key_t aScalingKey;
+    return &aScalingKey;
+}
+
 cairo_t* CairoCommon::getCairoContext(bool bXorModeAllowed, bool bAntiAlias) const
 {
     cairo_t* cr;
@@ -1101,6 +1107,41 @@ cairo_surface_t* CairoCommon::createCairoSurface(const BitmapBuffer* pBuffer)
         return nullptr;
     }
     return target;
+}
+
+sal_Int32 CairoCommon::GetSgpMetricFromSurface(vcl::SGPmetric eMetric, cairo_surface_t& rSurface)
+{
+    switch (eMetric)
+    {
+        case vcl::SGPmetric::Width:
+            return cairo_image_surface_get_width(&rSurface);
+        case vcl::SGPmetric::Height:
+            return cairo_image_surface_get_height(&rSurface);
+        case vcl::SGPmetric::DPIX:
+        case vcl::SGPmetric::DPIY:
+            return 96 * GetSgpMetricFromSurface(vcl::SGPmetric::ScalePercentage, rSurface);
+        case vcl::SGPmetric::ScalePercentage:
+        {
+            double fXScale;
+            dl_cairo_surface_get_device_scale(&rSurface, &fXScale, nullptr);
+            return round(fXScale * 100);
+        }
+        case vcl::SGPmetric::OffScreen:
+            return true;
+        case vcl::SGPmetric::BitCount:
+            if (cairo_surface_get_content(&rSurface) != CAIRO_CONTENT_COLOR_ALPHA)
+                return 1;
+            return 32;
+    }
+    return -1;
+}
+
+sal_Int32 CairoCommon::GetSgpMetric(vcl::SGPmetric eMetric) const
+{
+    assert(m_pSurface);
+    if (!m_pSurface)
+        return -1;
+    return CairoCommon::GetSgpMetricFromSurface(eMetric, *m_pSurface);
 }
 
 std::unique_ptr<BitmapBuffer> FastConvert24BitRgbTo32BitCairo(const BitmapBuffer* pSrc)

@@ -340,7 +340,7 @@ bool ImplImageTree::loadImage(OUString const & rName, OUString const & rStyle, B
                               const ImageLoadFlags eFlags, sal_Int32 nScalePercentage)
 {
     // debug assert to catch non-scaled images
-    assert(nScalePercentage != 100 && eFlags != ImageLoadFlags::IgnoreScalingFactor);
+//    assert(nScalePercentage != 100 && eFlags != ImageLoadFlags::IgnoreScalingFactor);
     OUString aCurrentStyle(rStyle);
     while (!aCurrentStyle.isEmpty())
     {

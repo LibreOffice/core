@@ -26,6 +26,7 @@
 #include <vcl/BitmapAccessMode.hxx>
 #include <vcl/BitmapBuffer.hxx>
 #include <vcl/bitmap/BitmapTypes.hxx>
+#include <vcl/GeometryProvider.hxx>
 #include <com/sun/star/rendering/XBitmapCanvas.hpp>
 
 struct BitmapBuffer;
@@ -41,7 +42,7 @@ extern const sal_uLong nVCLBLut[ 6 ];
 extern const sal_uLong nVCLDitherLut[ 256 ];
 extern const sal_uLong nVCLLut[ 256 ];
 
-class VCL_PLUGIN_PUBLIC SalBitmap
+class VCL_PLUGIN_PUBLIC SalBitmap : public vcl::SalGeometryProvider
 {
 public:
 
@@ -65,8 +66,6 @@ public:
                                     Size& rSize,
                                     bool bMask = false ) = 0;
     virtual void            Destroy() = 0;
-    virtual Size            GetSize() const = 0;
-    virtual sal_uInt16      GetBitCount() const = 0;
 
     virtual BitmapBuffer*   AcquireBuffer( BitmapAccessMode nMode ) = 0;
     virtual void            ReleaseBuffer( BitmapBuffer* pBuffer, BitmapAccessMode nMode ) = 0;

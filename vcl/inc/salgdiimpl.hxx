@@ -82,10 +82,6 @@ public:
 
     virtual bool setClipRegion( const vcl::Region& ) = 0;
 
-    virtual sal_uInt16 GetBitCount() const = 0;
-
-    virtual tools::Long GetGraphicsWidth() const = 0;
-
     virtual void ResetClipRegion() = 0;
 
     virtual void SetLineColor() = 0;

@@ -47,7 +47,7 @@ class VCL_DLLPUBLIC SvpSalGraphics : public SalGraphicsAutoDelegateToImpl
     CairoCommon m_aCairoCommon;
 
 public:
-    void setSurface(cairo_surface_t* pSurface);
+    virtual void setSurface(cairo_surface_t* pSurface);
     cairo_surface_t* getSurface() const { return m_aCairoCommon.m_pSurface; }
     static cairo_user_data_key_t* getDamageKey()
     {

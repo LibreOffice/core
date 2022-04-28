@@ -40,12 +40,11 @@ QtGraphics::QtGraphics( QtFrame *pFrame, QImage *pQImage )
     if (!initWidgetDrawBackends(false))
     {
         if (!QtData::noNativeControls())
-            m_pWidgetDraw.reset(new QtGraphics_Controls(*this));
+	{
+            sal_Int32 nScalePercentage = pFrame ? pFrame->GetDPIScalePercentage() : round(pQImage->devicePixelRatio() * 100);
+            m_pWidgetDraw.reset(new QtGraphics_Controls(*this, nScalePercentage));
+	}
     }
-#if 0
-    if (m_pFrame)
-        setScale(m_pFrame->devicePixelRatioF());
-#endif
 }
 
 QtGraphics::~QtGraphics() { ReleaseFonts(); }

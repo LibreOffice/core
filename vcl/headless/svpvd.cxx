@@ -153,29 +153,15 @@ bool SvpSalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY,
 
 sal_Int32 SvpSalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    switch (eMetric)
+    assert(m_pSurface);
+    if (!m_pSurface)
     {
-        case vcl::SGPmetric::Width: return m_pSurface ? cairo_image_surface_get_width(m_pSurface) : 1;
-        case vcl::SGPmetric::Height: return m_pSurface ? cairo_image_surface_get_height(m_pSurface) : 1;
-        case vcl::SGPmetric::DPIX:
-        case vcl::SGPmetric::DPIY:
-            return 96 * GetSgpMetric(vcl::SGPmetric::ScalePercentage);
-        case vcl::SGPmetric::ScalePercentage:
-        {
-            double fXScale, fYScale;
-            if (m_pSurface)
-                dl_cairo_surface_get_device_scale(m_pSurface, &fXScale, &fYScale);
-            else if (comphelper::LibreOfficeKit::isActive())
-                fXScale = comphelper::LibreOfficeKit::getDPIScale();
-            else
-                fXScale = 1.0;
-            return round(fXScale * 100);
-        }
-        case vcl::SGPmetric::OffScreen: return true;
-        case vcl::SGPmetric::BitCount: return 32;
-        default:
-            return -1;
+        if (vcl::SGPmetric::ScalePercentage == eMetric && comphelper::LibreOfficeKit::isActive())
+            return round(comphelper::LibreOfficeKit::getDPIScale() * 100);
+        return -1;
     }
+
+    return CairoCommon::GetSgpMetricFromSurface(eMetric, *m_pSurface);
 }
 
 #endif

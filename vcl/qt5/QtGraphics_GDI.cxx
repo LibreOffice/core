@@ -701,10 +701,6 @@ bool QtGraphicsBackend::drawAlphaRect(tools::Long nX, tools::Long nY, tools::Lon
     return true;
 }
 
-sal_uInt16 QtGraphicsBackend::GetBitCount() const { return getFormatBits(m_pQImage->format()); }
-
-tools::Long QtGraphicsBackend::GetGraphicsWidth() const { return m_pQImage->width(); }
-
 void QtGraphicsBackend::SetLineColor() { m_aLineColor = SALCOLOR_NONE; }
 
 void QtGraphicsBackend::SetLineColor(Color nColor) { m_aLineColor = nColor; }

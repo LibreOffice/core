@@ -42,6 +42,8 @@ public:
     {
         return Size(GetSgpMetric(SGPmetric::Width), GetSgpMetric(SGPmetric::Height));
     }
+    // alias for SalBitmap
+    Size GetSize() const { return GetSizePixel(); }
 
     virtual sal_Int32 GetSgpMetric(SGPmetric eMetric) const = 0;
 };

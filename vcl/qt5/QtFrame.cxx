@@ -204,7 +204,7 @@ void QtFrame::screenChanged(QScreen* pScreen)
                        << GetWidth() << " " << GetHeight());
 
     maGeometry.nDisplayScreenNumber = screenNumber(pScreen);
-#if 1
+#if 0
     if (m_pSvpGraphics)
     {
 //        m_pSvpGraphics->setDevicePixelRatioF(devicePixelRatioF());
@@ -217,7 +217,7 @@ void QtFrame::screenChanged(QScreen* pScreen)
     }
 #endif
     m_pQWidget->fakeResize();
-    CallCallback(SalEvent::SettingsChanged, nullptr);
+//    CallCallback(SalEvent::SettingsChanged, nullptr);
 #if 0
     SalPaintEvent aPaintEvt(0, 0, GetWidth(), GetHeight(), true);
     CallCallback(SalEvent::Paint, &aPaintEvt);
@@ -341,8 +341,10 @@ SalGraphics* QtFrame::AcquireGraphics()
             m_pSurface.reset(
                 cairo_image_surface_create(CAIRO_FORMAT_ARGB32, aSize.width(), aSize.height()));
             m_pSvpGraphics->setSurface(m_pSurface.get());
-            cairo_surface_set_user_data(m_pSurface.get(), QtSvpGraphics::getDamageKey(),
+            cairo_surface_set_user_data(m_pSurface.get(), CairoCommon::getDamageKey(),
                                         &m_aDamageHandler, nullptr);
+	    cairo_surface_set_user_data(m_pSurface.get(), CairoCommon::getScalingKey(),
+			                (void*) (sal_IntPtr) round(devicePixelRatioF() * 100), nullptr);
         }
         return m_pSvpGraphics.get();
     }

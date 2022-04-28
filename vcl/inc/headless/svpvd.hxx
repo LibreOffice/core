@@ -41,6 +41,7 @@ class VCL_DLLPUBLIC SvpSalVirtualDevice : public SalVirtualDevice
 
 protected:
     SvpSalGraphics* AddGraphics(SvpSalGraphics* aGraphics);
+    cairo_surface_t* refSurface() const { return m_pRefSurface; }
 
 public:
     SvpSalVirtualDevice(cairo_surface_t* pRefSurface, cairo_surface_t* pPreExistingTarget);

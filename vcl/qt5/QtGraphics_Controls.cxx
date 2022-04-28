@@ -74,9 +74,11 @@ static void lcl_ApplyBackgroundColorToStyleOption(QStyleOption& rOption,
     }
 }
 
-QtGraphics_Controls::QtGraphics_Controls(const SalGraphics& rGraphics)
-    : m_rGraphics(rGraphics)
+QtGraphics_Controls::QtGraphics_Controls(const SalGraphics& rGraphics, sal_Int32 nScale)
+    : m_image(new QImage())
+    , m_rGraphics(rGraphics)
 {
+    m_image->setDevicePixelRatio(nScale / 100.0);
 }
 
 bool QtGraphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
@@ -264,11 +266,12 @@ bool QtGraphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     QRect widgetRect = toQRect(rControlRegion);
 
     //if no image, or resized, make a new image
-    if (!m_image || m_image->size() != widgetRect.size())
+    if (m_image->size() != widgetRect.size())
     {
+	qreal fScaleRatio = m_image->devicePixelRatio();
         m_image.reset(new QImage(widgetRect.width(), widgetRect.height(),
                                  QImage::Format_ARGB32_Premultiplied));
-        m_image->setDevicePixelRatio(m_rGraphics.GetDPIScaleFactor());
+        m_image->setDevicePixelRatio(fScaleRatio);
     }
 
     // Default image color - just once

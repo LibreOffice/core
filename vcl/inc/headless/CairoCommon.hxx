@@ -25,6 +25,7 @@
 #include <cairo.h>
 
 #include <vcl/dllapi.h>
+#include <vcl/GeometryProvider.hxx>
 #include <vcl/region.hxx>
 #include <vcl/salgtype.hxx>
 #include <vcl/BitmapBuffer.hxx>
@@ -144,7 +145,7 @@ struct VCL_DLLPUBLIC DamageHandler
     damageHandler damaged;
 };
 
-struct VCL_DLLPUBLIC CairoCommon
+struct VCL_DLLPUBLIC CairoCommon : public vcl::SalGeometryProvider
 {
     cairo_surface_t* m_pSurface;
     vcl::Region m_aClipRegion;
@@ -161,6 +162,7 @@ struct VCL_DLLPUBLIC CairoCommon
     }
 
     static cairo_user_data_key_t* getDamageKey();
+    static cairo_user_data_key_t* getScalingKey();
 
     cairo_surface_t* getSurface() const { return m_pSurface; }
 
@@ -196,6 +198,9 @@ struct VCL_DLLPUBLIC CairoCommon
     void invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias);
 
     static cairo_surface_t* createCairoSurface(const BitmapBuffer* pBuffer);
+
+    static sal_Int32 GetSgpMetricFromSurface(vcl::SGPmetric eMetric, cairo_surface_t& rSurface);
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 };
 
 class SurfaceHelper

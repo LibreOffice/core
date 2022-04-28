@@ -1154,8 +1154,6 @@ void X11SalFrame::Show( bool bVisible, bool bNoActivate )
         || ( !bVisible && !bMapped_ ) )
         return;
 
-    SAL_DEBUG(__func__ << " " << bVisible);
-
     // HACK: this is a workaround for (at least) kwin
     // even though transient frames should be kept above their parent
     // this does not necessarily hold true for DOCK type windows

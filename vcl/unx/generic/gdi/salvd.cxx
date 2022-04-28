@@ -62,6 +62,8 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
     int nVisualDepth = pDisplay->GetColormap( m_nXScreen ).GetVisual().GetDepth();
     int nDeviceDepth = pDevice->GetDepth();
 
+    SAL_DEBUG(__func__ << " " << nVisualDepth << " " << nDeviceDepth);
+
     if( pColormap )
     {
         maX11Common.m_pColormap = pColormap;
@@ -78,9 +80,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
 
     m_pVDev      = pDevice;
     m_pFrame     = nullptr;
-
     bWindow_     = pDisplay->IsDisplay();
-    bVirDev_     = true;
 
     SetDrawable(pDevice->GetDrawable(), pPreExistingTarget, m_nXScreen);
     mxImpl->Init();
@@ -99,6 +99,8 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, sal_Int32
     sal_uInt16 nBitCount = rGraphics.GetBitCount();
     pDisplay_               = vcl_sal::getSalDisplay(GetGenericUnixSalData());
     nDepth_                 = nBitCount;
+
+    SAL_DEBUG(__func__ << " 1 " << nDepth_ << " " << GetDepth());
 
     if( pData && pData->hDrawable != None )
     {
@@ -157,6 +159,8 @@ X11SalVirtualDevice::X11SalVirtualDevice(const SalGraphics& rGraphics, sal_Int32
     cairo_surface_t* pPreExistingTarget = pData ? static_cast<cairo_surface_t*>(pData->pSurface) : nullptr;
 
     pGraphics_->Init( this, pPreExistingTarget, pColormap, bDeleteColormap );
+
+    SAL_DEBUG(__func__ << " 2 " << nBitCount << " " << pGraphics_->GetBitCount());
 }
 
 X11SalVirtualDevice::~X11SalVirtualDevice()

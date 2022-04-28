@@ -49,13 +49,6 @@ public:
     const vcl::Region& getClipRegion() const;
     virtual bool setClipRegion(const vcl::Region&) override;
 
-    //
-    // get the depth of the device
-    virtual sal_uInt16 GetBitCount() const override;
-
-    // get the width of the device
-    virtual tools::Long GetGraphicsWidth() const override;
-
     // set the clip region to empty
     virtual void ResetClipRegion() override;
 

@@ -32,10 +32,13 @@ class VCLPLUG_QT_PUBLIC QtSvpGraphics final : public SvpSalGraphics
     void handleDamage(const tools::Rectangle&) override;
 
 public:
-    QtSvpGraphics(QtFrame* pFrame);
+    QtSvpGraphics(QtFrame *rFrame, sal_Int32 nScale = -1);
     ~QtSvpGraphics() override;
 
+    void setSurface(cairo_surface_t* pSurface) override;
+
     void updateQWidget() const;
+    QtFrame* frame() const { return m_pFrame; }
 
 #if ENABLE_CAIRO_CANVAS
     bool SupportsCairo() const override;

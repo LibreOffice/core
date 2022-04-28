@@ -44,6 +44,7 @@
 #include <unx/salunx.h>
 #include <unx/saldisp.hxx>
 #include <unx/salgdi.h>
+#include <unx/x11/xrender_peer.hxx>
 #include <unx/x11/xlimits.hxx>
 
 #include <salframe.hxx>
@@ -60,7 +61,6 @@
 #if ENABLE_CAIRO_CANVAS
 #include "X11CairoSalGraphicsImpl.hxx"
 #endif
-
 
 // X11Common
 
@@ -108,8 +108,7 @@ X11SalGraphics::X11SalGraphics():
     m_aXRenderPicture(0),
     mpClipRegion(nullptr),
     hBrush_(None),
-    bWindow_(false),
-    bVirDev_(false)
+    bWindow_(false)
 {
 #if HAVE_FEATURE_SKIA
     if (SkiaHelper::isVCLSkiaEnabled())
@@ -205,7 +204,6 @@ void X11SalGraphics::Init( SalFrame *pFrame, Drawable aTarget,
     m_pVDev     = nullptr;
 
     bWindow_    = true;
-    bVirDev_    = false;
 
     SetDrawable(aTarget, nullptr, nXScreen);
     mxImpl->Init();
@@ -319,7 +317,9 @@ bool X11SalGraphics::GetDitherPixmap( Color nColor )
 
 sal_Int32 X11SalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    if (bVirDev_)
+    assert(m_pVDev || m_pFrame);
+    SAL_DEBUG(__func__ << " " << m_pVDev << " " << m_pFrame << " " << bWindow_);
+    if (m_pVDev)
        return m_pVDev->GetSgpMetric(eMetric);
     else
         return m_pFrame->GetSgpMetric(eMetric);
@@ -441,5 +441,65 @@ void X11SalGraphics::releaseCairoContext(cairo_t* cr)
 {
    X11Common::releaseCairoContext(cr);
 }
+
+extern "C"
+{
+    static Bool GraphicsExposePredicate( Display*, XEvent* pEvent, const XPointer pFrameWindow )
+    {
+        Bool bRet = False;
+        if( (pEvent->type == GraphicsExpose || pEvent->type == NoExpose) &&
+            pEvent->xnoexpose.drawable == reinterpret_cast<Drawable>(pFrameWindow) )
+        {
+            bRet = True;
+        }
+        return bRet;
+    }
+}
+
+void X11SalGraphics::YieldGraphicsExpose()
+{
+    // get frame if necessary
+    SalFrame* pFrame    = m_pFrame;
+    Display* pDisplay   = GetXDisplay();
+    ::Window aWindow = GetDrawable();
+    if( ! pFrame )
+    {
+        for (auto pSalFrame : vcl_sal::getSalDisplay(GetGenericUnixSalData())->getFrames() )
+        {
+            const SystemEnvData* pEnvData = pSalFrame->GetSystemData();
+            if( Drawable(pEnvData->GetWindowHandle(pSalFrame)) == aWindow )
+            {
+                pFrame = pSalFrame;
+                break;
+            }
+        }
+        if( ! pFrame )
+            return;
+    }
+
+    XEvent aEvent;
+    while( XCheckTypedWindowEvent( pDisplay, aWindow, Expose, &aEvent ) )
+    {
+        SalPaintEvent aPEvt( aEvent.xexpose.x, aEvent.xexpose.y, aEvent.xexpose.width+1, aEvent.xexpose.height+1 );
+        pFrame->CallCallback( SalEvent::Paint, &aPEvt );
+    }
+
+    do
+    {
+        if( ! GetDisplay()->XIfEventWithTimeout( &aEvent, reinterpret_cast<XPointer>(aWindow), GraphicsExposePredicate ) )
+            // this should not happen at all; still sometimes it happens
+            break;
+
+        if( aEvent.type == NoExpose )
+            break;
+
+        if( pFrame )
+        {
+            SalPaintEvent aPEvt( aEvent.xgraphicsexpose.x, aEvent.xgraphicsexpose.y, aEvent.xgraphicsexpose.width+1, aEvent.xgraphicsexpose.height+1 );
+            pFrame->CallCallback( SalEvent::Paint, &aPEvt );
+        }
+    } while( aEvent.xgraphicsexpose.count != 0 );
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -31,6 +31,7 @@
 #include <QtMenu.hxx>
 #include <QtObject.hxx>
 #include <QtOpenGLContext.hxx>
+#include "QtSvpGraphics.hxx"
 #include "QtSvpVirtualDevice.hxx"
 #include <QtSystem.hxx>
 #include <QtTimer.hxx>
@@ -353,13 +354,13 @@ std::unique_ptr<SalVirtualDevice> QtInstance::CreateVirtualDevice(SalGraphics& r
 {
     if (m_bUseCairo)
     {
-        SvpSalGraphics* pSvpSalGraphics = dynamic_cast<QtSvpGraphics*>(&rGraphics);
-        assert(pSvpSalGraphics);
+        QtSvpGraphics* pQtSvpGraphics = dynamic_cast<QtSvpGraphics*>(&rGraphics);
+        assert(pQtSvpGraphics);
         // tdf#127529 see SvpSalInstance::CreateVirtualDevice for the rare case of a non-null pPreExistingTarget
         cairo_surface_t* pPreExistingTarget
             = pGd ? static_cast<cairo_surface_t*>(pGd->pSurface) : nullptr;
         std::unique_ptr<SalVirtualDevice> pVD(
-            new QtSvpVirtualDevice(pSvpSalGraphics->getSurface(), pPreExistingTarget));
+            new QtSvpVirtualDevice(*pQtSvpGraphics, pPreExistingTarget));
         pVD->SetSize(nDX, nDY);
         return pVD;
     }

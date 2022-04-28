@@ -47,8 +47,7 @@ public:
 
     virtual void Destroy() final override;
 
-    virtual Size GetSize() const override;
-    virtual sal_uInt16 GetBitCount() const override;
+    virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
 
     virtual BitmapBuffer* AcquireBuffer(BitmapAccessMode nMode) override;
     virtual void ReleaseBuffer(BitmapBuffer* pBuffer, BitmapAccessMode nMode) override;
