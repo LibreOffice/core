@@ -47,7 +47,6 @@ public:
 
     // SalGeometryProvider
     virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
-    virtual void SetScalePercentage(sal_Int32) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

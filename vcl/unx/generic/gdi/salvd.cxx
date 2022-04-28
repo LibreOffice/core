@@ -78,6 +78,7 @@ void X11SalGraphics::Init( X11SalVirtualDevice *pDevice, cairo_surface_t* pPreEx
         maX11Common.m_pColormap = m_pDeleteColormap.get();
     }
 
+    assert(pDevice);
     m_pVDev      = pDevice;
     m_pFrame     = nullptr;
     bWindow_     = pDisplay->IsDisplay();
@@ -233,14 +234,8 @@ sal_Int32 X11SalVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
         case vcl::SGPmetric::ScalePercentage: return 100;
         case vcl::SGPmetric::OffScreen: return true;
         case vcl::SGPmetric::BitCount: return nDepth_;
-        default:
-            return -1;
     }
+    return -1;
 }
-
-void X11SalVirtualDevice::SetScalePercentage(sal_Int32)
-{
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

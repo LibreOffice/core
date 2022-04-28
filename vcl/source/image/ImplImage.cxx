@@ -156,7 +156,7 @@ void ImplImage::setScalePercentage(sal_Int32 nScale)
     assert(nScale > 0);
     if (m_nScalePercentage == nScale)
 	return;
-    SAL_WARN_IF(!maBitmapEx.IsEmpty(), "vcl", "image scale changed after loading(" << m_nScalePercentage << "% >> " << nScale << "%); invalidaing image!");
+    SAL_WARN_IF(!maBitmapEx.IsEmpty() && m_nScalePercentage > 0, "vcl", "image scale changed after loading(" << m_nScalePercentage << "% >> " << nScale << "%); invalidaing image!");
     if (m_nScalePercentage > 0 && isStock())
         maBitmapEx.SetEmpty();
     m_nScalePercentage = nScale;

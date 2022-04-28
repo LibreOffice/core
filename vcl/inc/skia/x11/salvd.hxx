@@ -38,8 +38,6 @@ public:
 
     // Set new size, without saving the old contents
     virtual bool SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8*, sal_Int32 = 100) override;
-
-    virtual void SetScalePercentage(sal_Int32) override;
 };
 
 #endif // INCLUDED_VCL_INC_SKIA_X11_SALVD_H

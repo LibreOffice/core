@@ -1074,11 +1074,11 @@ void Window::ImplInit( vcl::Window* pParent, WinBits nStyle, SystemParentData* p
         else
         {
             OutputDevice *pOutDev = GetOutDev();
-            if ( pOutDev->AcquireGraphics() )
+            if (pOutDev)
             {
                 sal_Int32 nDPIX, nDPIY;
                 mpWindowImpl->mpFrame->GetDPI(nDPIX, nDPIY);
-                GetOutDev()->SetDPI(nDPIX, nDPIY);
+                pOutDev->SetDPI(nDPIX, nDPIY);
             }
         }
 

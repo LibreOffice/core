@@ -29,9 +29,9 @@ QtSvpGraphics::QtSvpGraphics(QtFrame* pFrame, sal_Int32 nScale)
     , m_nScalePercentage(pFrame ? pFrame->GetDPIScalePercentage() : nScale)
 {
     assert(m_nScalePercentage > 0);
-    SAL_DEBUG(__func__ << " " << pFrame << " " << m_nScalePercentage);
+    SAL_DEBUG(__func__ << " " << pFrame << " " << nScale << " " << m_nScalePercentage);
     if (!QtData::noNativeControls())
-         m_pWidgetDraw.reset(new QtGraphics_Controls(*this, m_nScalePercentage));
+        m_pWidgetDraw.reset(new QtGraphics_Controls(*this, m_nScalePercentage));
 }
 
 QtSvpGraphics::~QtSvpGraphics() {}
@@ -48,14 +48,19 @@ void QtSvpGraphics::updateQWidget() const
 void QtSvpGraphics::setSurface(cairo_surface_t* pSurface)
 {
     SvpSalGraphics::setSurface(pSurface);
+#if 0
     if (m_pWidgetDraw && pSurface)
     {
-	sal_Int32 nScale = CairoCommon::GetSgpMetricFromSurface(vcl::SGPmetric::ScalePercentage, *pSurface);
-	SAL_DEBUG(static_cast<sal_IntPtr*>(cairo_surface_get_user_data(pSurface, CairoCommon::getScalingKey())));
-        SAL_DEBUG(__func__ << " " << GetDPIScalePercentage() << " " << nScale);
-	auto *pWidgetDraw = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get());
-        pWidgetDraw->getImage()->setDevicePixelRatio(GetDPIScalePercentage());
+        sal_Int32 nScale
+            = CairoCommon::GetSgpMetricFromSurface(vcl::SGPmetric::ScalePercentage, *pSurface);
+        SAL_DEBUG(__func__ << " 1 " << GetDPIScalePercentage() << " " << nScale);
+        SAL_DEBUG(__func__ << " 2 "
+                           << static_cast<sal_IntPtr*>(cairo_surface_get_user_data(
+                                  pSurface, CairoCommon::getScalingKey())));
+        auto* pWidgetDraw = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get());
+        pWidgetDraw->getImage()->setDevicePixelRatio(GetDPIScaleFactor());
     }
+#endif
 }
 
 #if ENABLE_CAIRO_CANVAS
@@ -114,12 +119,12 @@ sal_Int32 QtSvpGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
     else
     {
         if (m_pWidgetDraw)
-	{
+        {
             QImage* pImage = static_cast<QtGraphics_Controls*>(m_pWidgetDraw.get())->getImage();
-	    assert(pImage);
+            assert(pImage);
             return GetSgpMetricFromQImage(eMetric, *pImage);
-	}
-	else
+        }
+        else
             return SvpSalGraphics::GetSgpMetric(eMetric);
     }
 }

@@ -70,7 +70,6 @@ public:
     virtual bool SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8*, sal_Int32) override;
 
     virtual sal_Int32 GetSgpMetric(vcl::SGPmetric eMetric) const override;
-    virtual void SetScalePercentage(sal_Int32) override;
 };
 
 #endif // INCLUDED_VCL_INC_UNX_SALVD_H

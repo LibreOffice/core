@@ -74,11 +74,11 @@ static void lcl_ApplyBackgroundColorToStyleOption(QStyleOption& rOption,
     }
 }
 
-QtGraphics_Controls::QtGraphics_Controls(const SalGraphics& rGraphics, sal_Int32 nScale)
-    : m_image(new QImage())
-    , m_rGraphics(rGraphics)
+QtGraphics_Controls::QtGraphics_Controls(const SalGraphics& rGraphics, sal_Int32 nScalePercentage)
+    : m_rGraphics(rGraphics)
+    , m_fDevicePixelRatio(nScalePercentage / 100.0f)
 {
-    m_image->setDevicePixelRatio(nScale / 100.0);
+    // can't call setDevicePixelRatio on an empty QImage...
 }
 
 bool QtGraphics_Controls::isNativeControlSupported(ControlType type, ControlPart part)
@@ -266,12 +266,12 @@ bool QtGraphics_Controls::drawNativeControl(ControlType type, ControlPart part,
     QRect widgetRect = toQRect(rControlRegion);
 
     //if no image, or resized, make a new image
-    if (m_image->size() != widgetRect.size())
+    if (!m_image || m_image->size() != widgetRect.size())
     {
-	qreal fScaleRatio = m_image->devicePixelRatio();
+//	qreal fScaleRatio = m_image->devicePixelRatio();
         m_image.reset(new QImage(widgetRect.width(), widgetRect.height(),
                                  QImage::Format_ARGB32_Premultiplied));
-        m_image->setDevicePixelRatio(fScaleRatio);
+        m_image->setDevicePixelRatio(m_fDevicePixelRatio);
     }
 
     // Default image color - just once

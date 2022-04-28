@@ -95,19 +95,13 @@ private:
         const basegfx::triangulator::B2DTriangleVector& rTriangles,
         double fTransparency);
 
-    tools::Long GetGraphicsHeight() const;
-
     void drawMaskedBitmap( const SalTwoRect& rPosAry,
                                               const SalBitmap& rSalBitmap,
                                               const SalBitmap& rTransparentBitmap );
 
     void internalDrawPolyLine( sal_uInt32 nPoints, const Point* pPtAry, bool bClose );
 
-    sal_uInt16 GetBitCount() const;
-    tools::Long GetGraphicsWidth() const;
-
 public:
-
     explicit X11SalGraphicsImpl(X11SalGraphics& rParent);
 
     virtual void freeResources() override;

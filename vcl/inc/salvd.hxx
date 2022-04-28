@@ -44,8 +44,6 @@ public:
 
     // Set new size using a buffer at the given address
     virtual bool SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8*, sal_Int32 nScale = 100) = 0;
-
-    virtual void SetScalePercentage(sal_Int32 nScale) = 0;
 };
 
 void SalVirtualDevice::FixSetSizeParams(sal_Int32& nDX, sal_Int32& nDY, sal_Int32& nScale)

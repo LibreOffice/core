@@ -48,7 +48,6 @@ void QtVirtualDevice::ReleaseGraphics(SalGraphics* pGraphics)
 bool QtVirtualDevice::SetSizeUsingBuffer(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8* pBuffer, sal_Int32 nScale)
 {
     FixSetSizeParams(nNewDX, nNewDY, nScale);
-    SAL_DEBUG(__func__ << " " << nScale);
     if (!pBuffer && m_pImage && m_pImage->width() == nNewDX && m_pImage->height() == nNewDY && nScale == GetDPIScalePercentage())
         return true;
 
@@ -77,13 +76,6 @@ sal_Int32 QtVirtualDevice::GetSgpMetric(vcl::SGPmetric eMetric) const
     if (!m_pImage)
         return -1;
     return ::GetSgpMetricFromQImage(eMetric, *m_pImage);
-}
-
-void QtVirtualDevice::SetScalePercentage(sal_Int32 nScale)
-{
-    if (!m_pImage)
-        SetSizeUsingBuffer(1, 1, nullptr);
-    m_pImage->setDevicePixelRatio(nScale / 100.0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

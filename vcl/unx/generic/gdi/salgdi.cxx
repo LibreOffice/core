@@ -318,7 +318,9 @@ bool X11SalGraphics::GetDitherPixmap( Color nColor )
 sal_Int32 X11SalGraphics::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
     assert(m_pVDev || m_pFrame);
-    SAL_DEBUG(__func__ << " " << m_pVDev << " " << m_pFrame << " " << bWindow_);
+    if (m_pFrame && eMetric == vcl::SGPmetric::BitCount)
+        return GetVisual().GetDepth();
+
     if (m_pVDev)
        return m_pVDev->GetSgpMetric(eMetric);
     else

@@ -10,16 +10,18 @@
 #include <QtSvpVirtualDevice.hxx>
 #include <QtSvpGraphics.hxx>
 
-QtSvpVirtualDevice::QtSvpVirtualDevice(QtSvpGraphics& rRefGraphics, cairo_surface_t* pPreExistingTarget)
+QtSvpVirtualDevice::QtSvpVirtualDevice(QtSvpGraphics& rRefGraphics,
+                                       cairo_surface_t* pPreExistingTarget)
     : SvpSalVirtualDevice(rRefGraphics.getSurface(), pPreExistingTarget)
-    , m_rRefGraphics(rRefGraphics)
+    , m_nScalePercentage(rRefGraphics.GetDPIScalePercentage())
 {
-    SAL_DEBUG(__func__ << " " << m_rRefGraphics.frame() << m_rRefGraphics.GetDPIScalePercentage());
+    // can't store rRefGraphics, as it's released
+    SAL_DEBUG(__func__ << " " << rRefGraphics.frame() << " " << m_nScalePercentage);
 }
 
 SalGraphics* QtSvpVirtualDevice::AcquireGraphics()
 {
-    return AddGraphics(new QtSvpGraphics(m_rRefGraphics.frame(), m_rRefGraphics.GetDPIScalePercentage())); 
+    return AddGraphics(new QtSvpGraphics(nullptr, m_nScalePercentage));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -93,8 +93,4 @@ bool X11SkiaSalVirtualDevice::SetSizeUsingBuffer(sal_Int32 nDX, sal_Int32 nDY, s
     return true;
 }
 
-void X11SkiaSalVirtualDevice::SetScalePercentage(sal_Int32)
-{
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

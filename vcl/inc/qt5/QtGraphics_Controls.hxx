@@ -38,9 +38,10 @@ class QtGraphics_Controls final : public vcl::WidgetDrawInterface
     std::unique_ptr<QImage> m_image;
     QRect m_lastPopupRect;
     SalGraphics const& m_rGraphics;
+    qreal m_fDevicePixelRatio;
 
 public:
-    QtGraphics_Controls(const SalGraphics& rGraphics, sal_Int32 nScale);
+    QtGraphics_Controls(const SalGraphics& rGraphics, sal_Int32 nScalePercentage);
 
     QImage* getImage() { return m_image.get(); }
 

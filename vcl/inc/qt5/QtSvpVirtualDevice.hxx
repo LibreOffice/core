@@ -15,7 +15,7 @@ class QtSvpGraphics;
 
 class VCL_DLLPUBLIC QtSvpVirtualDevice final : public SvpSalVirtualDevice
 {
-    QtSvpGraphics& m_rRefGraphics;
+    sal_Int32 m_nScalePercentage;
 
 public:
     QtSvpVirtualDevice(QtSvpGraphics& rGraphics, cairo_surface_t* pPreExistingTarget);

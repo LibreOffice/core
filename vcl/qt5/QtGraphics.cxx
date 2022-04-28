@@ -40,10 +40,12 @@ QtGraphics::QtGraphics( QtFrame *pFrame, QImage *pQImage )
     if (!initWidgetDrawBackends(false))
     {
         if (!QtData::noNativeControls())
-	{
-            sal_Int32 nScalePercentage = pFrame ? pFrame->GetDPIScalePercentage() : round(pQImage->devicePixelRatio() * 100);
-            m_pWidgetDraw.reset(new QtGraphics_Controls(*this, nScalePercentage));
-	}
+        {
+            sal_Int32 nScale = m_pFrame ? pFrame->GetDPIScalePercentage()
+                                        : round(pQImage->devicePixelRatio() * 100);
+            SAL_DEBUG(__func__ << " " << m_pFrame << " " << nScale);
+            m_pWidgetDraw.reset(new QtGraphics_Controls(*this, nScale));
+        }
     }
 }
 

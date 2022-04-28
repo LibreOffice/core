@@ -64,11 +64,6 @@ void SvpSalVirtualDevice::ReleaseGraphics( SalGraphics* pGraphics )
     delete pGraphics;
 }
 
-void SvpSalVirtualDevice::SetScalePercentage(sal_Int32 nScale)
-{
-    CreateSurface(0, 0, nullptr, nScale);
-}
-
 void SvpSalVirtualDevice::CreateSurface(sal_Int32 nNewDX, sal_Int32 nNewDY, sal_uInt8 *const pBuffer, sal_Int32 nScalePercentage)
 {
     double fXScale, fYScale;

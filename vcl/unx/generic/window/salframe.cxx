@@ -4133,57 +4133,12 @@ void X11SalFrame::EndSetClipRegion()
                               m_vClipRectangles.data(),
                               m_vClipRectangles.size(),
                               op, ordering );
-
-}
-
-sal_Int32 X11SalFrame::GetDPI() const
-{
-    char* pForceDpi;
-    if ((pForceDpi = getenv("SAL_FORCEDPI")))
-    {
-        OString sForceDPI(pForceDpi);
-        return sForceDPI.toInt32();
-    }
-
-    const SalDisplay *pDisplay = GetDisplay();
-    if (!pDisplay)
-    {
-        SAL_WARN( "vcl", "Null display");
-        return 96;
-    }
-
-    Pair dpi = pDisplay->GetResolution();
-    sal_Int32 rDPIX = dpi.A();
-    sal_Int32 rDPIY = dpi.B();
-
-    if (rDPIY > 200)
-    {
-        rDPIX = Divide(rDPIX * 200, rDPIY);
-        rDPIY = 200;
-    }
-
-    // different x- and y- resolutions are usually artifacts of
-    // a wrongly calculated screen size.
-#ifdef DEBUG
-    SAL_INFO("vcl.gdi", "Forcing Resolution from "
-        << std::hex << rDPIX
-        << std::dec << rDPIX
-        << " to "
-        << std::hex << rDPIY
-        << std::dec << rDPIY);
-#endif
-    return rDPIY; // y-resolution is more trustworthy
 }
 
 sal_Int32 X11SalFrame::GetSgpMetric(vcl::SGPmetric eMetric) const
 {
-    switch (eMetric) {
-    case vcl::SGPmetric::DPIX:
-    case vcl::SGPmetric::DPIY:
-        return GetDPI();
-    default:
-        return SalFrame::GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
-    }
+    assert(eMetric != vcl::SGPmetric::BitCount);
+    return SalFrame::GetWindow()->GetOutDev()->GetSgpMetric(eMetric);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

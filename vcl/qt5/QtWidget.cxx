@@ -69,6 +69,7 @@ void QtWidget::paintEvent(QPaintEvent* pEvent)
     if (!m_rFrame.m_bNullRegion)
         p.setClipRegion(m_rFrame.m_aRegion);
 
+    const qreal fRatio = m_rFrame.devicePixelRatioF();
     QImage aImage;
     if (m_rFrame.m_bUseCairo)
     {
@@ -78,12 +79,15 @@ void QtWidget::paintEvent(QPaintEvent* pEvent)
         aImage = QImage(cairo_image_surface_get_data(pSurface),
                         cairo_image_surface_get_width(pSurface),
                         cairo_image_surface_get_height(pSurface), Qt_DefaultFormat32);
+        aImage.setDevicePixelRatio(fRatio);
     }
     else
+    {
+	SAL_DEBUG(__func__ << " " << round(m_rFrame.m_pQImage->devicePixelRatio() * 100) << " " << m_rFrame.GetDPIScalePercentage());
+	assert(round(m_rFrame.m_pQImage->devicePixelRatio() * 100) == m_rFrame.GetDPIScalePercentage());
         aImage = *m_rFrame.m_pQImage;
+    }
 
-    const qreal fRatio = m_rFrame.devicePixelRatioF();
-    aImage.setDevicePixelRatio(fRatio);
     QRectF source(pEvent->rect().topLeft() * fRatio, pEvent->rect().size() * fRatio);
     p.drawImage(pEvent->rect(), aImage, source);
 }

@@ -54,7 +54,6 @@ public:
     virtual bool        SetSizeUsingBuffer( sal_Int32 nNewDX, sal_Int32 nNewDY,
                                             sal_uInt8 * pBuffer, sal_Int32 nScale = 100
                                           ) override;
-    virtual void SetScalePercentage(sal_Int32) override;
 
     cairo_surface_t* GetSurface() const { return m_pSurface; }
 
