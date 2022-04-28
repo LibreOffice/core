@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 namespace svt {
 
 
-ShareControlFile::ShareControlFile( const OUString& aOrigURL )
+ShareControlFile::ShareControlFile( std::u16string_view aOrigURL )
     : LockFileCommon(GenerateOwnLockFileURL(aOrigURL, u".~sharing."))
 {
     if ( !m_xStream.is() && !GetURL().isEmpty() )

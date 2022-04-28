@@ -620,7 +620,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     m_xCbxPreview->set_sensitive(false);
 }
 
-void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult )
+void TPGalleryThemeProperties::StartSearchFiles( std::u16string_view _rFolderURL, short _nDlgResult )
 {
     if ( RET_OK == _nDlgResult )
     {

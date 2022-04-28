@@ -50,7 +50,7 @@ protected:
     ::osl::Mutex m_aMutex;
 
     /// This method generates the URL of the lock file based on the document URL and the specified prefix.
-    static OUString GenerateOwnLockFileURL(const OUString& aOrigURL, std::u16string_view aPrefix);
+    static OUString GenerateOwnLockFileURL(std::u16string_view aOrigURL, std::u16string_view aPrefix);
 
 public:
     LockFileCommon(const OUString& aLockFileURL);

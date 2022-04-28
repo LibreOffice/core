@@ -146,7 +146,7 @@ class ScHTMLExport : public ScExportBase
     bool WriteFieldText( const EditTextObject* pData );
 
     // copy a local file to internet if needed
-    void CopyLocalFileToINet( OUString& rFileNm, const OUString& rTargetNm );
+    void CopyLocalFileToINet( OUString& rFileNm, std::u16string_view rTargetNm );
 
     void PrepareGraphics( ScDrawLayer*, SCTAB nTab,
                           SCCOL nStartCol, SCROW nStartRow,

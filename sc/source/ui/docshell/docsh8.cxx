@@ -102,7 +102,7 @@ constexpr OUStringLiteral SC_DBPROP_CHARSET = u"CharSet";
 
 namespace
 {
-    ErrCode lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr, uno::Reference<sdbc::XConnection>& _rConnection, OUString& _rTabName, const OUString& rFullFileName, rtl_TextEncoding eCharSet)
+    ErrCode lcl_getDBaseConnection(uno::Reference<sdbc::XDriverManager2>& _rDrvMgr, uno::Reference<sdbc::XConnection>& _rConnection, OUString& _rTabName, std::u16string_view rFullFileName, rtl_TextEncoding eCharSet)
     {
         INetURLObject aURL;
         aURL.SetSmartProtocol( INetProtocol::File );

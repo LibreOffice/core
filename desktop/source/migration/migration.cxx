@@ -429,7 +429,7 @@ OUString MigrationImpl::preXDGConfigDir(const OUString& rConfigDir)
 
 void MigrationImpl::setInstallInfoIfExist(
     install_info& aInfo,
-    const OUString& rConfigDir,
+    std::u16string_view rConfigDir,
     const OUString& rVersion)
 {
     OUString url(INetURLObject(rConfigDir).GetMainURL(INetURLObject::DecodeMechanism::NONE));
@@ -470,11 +470,11 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
              ( aInfo.userdata.isEmpty() ||
                aProfileName.equalsIgnoreAsciiCase(
                    utl::ConfigManager::getProductName() ) ) ) {
-            setInstallInfoIfExist(aInfo, aTopConfigDir + aProfileName, aVersion);
+            setInstallInfoIfExist(aInfo, OUStringConcatenation(aTopConfigDir + aProfileName), aVersion);
 #if defined UNX && ! defined MACOSX
             //try preXDG path if the new one does not exist
             if ( aInfo.userdata.isEmpty())
-                setInstallInfoIfExist(aInfo, aPreXDGTopConfigDir + aProfileName, aVersion);
+                setInstallInfoIfExist(aInfo, OUStringConcatenation(aPreXDGTopConfigDir + aProfileName), aVersion);
 #endif
         }
     }

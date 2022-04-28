@@ -108,7 +108,7 @@ class ShutdownIcon : public ShutdownIconServiceBase
         /// @throws css::uno::Exception
         void init();
 
-        static OUString GetUrlDescription( const OUString& aUrl );
+        static OUString GetUrlDescription( std::u16string_view aUrl );
 
         void SetVeto( bool bVeto )  { m_bVeto = bVeto;}
 

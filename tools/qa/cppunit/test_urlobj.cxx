@@ -48,7 +48,7 @@ namespace tools_urlobj
         // this is only demonstration code
         void urlobjTest_001(  )
         {
-            INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
+            INetURLObject aUrl( u"file://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT_EQUAL(INetProtocol::File, aUrl.GetProtocol());
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
@@ -62,7 +62,7 @@ namespace tools_urlobj
 
         void urlobjTest_004(  )
         {
-            INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
+            INetURLObject aUrl( u"smb://10.10.1.1/sampledir/sample.file" );
             CPPUNIT_ASSERT_EQUAL( INetProtocol::Smb, aUrl.GetProtocol(  ) );
             CPPUNIT_ASSERT_EQUAL(OUString("10.10.1.1"),
                                  aUrl.GetHost(INetURLObject::DecodeMechanism::NONE));
@@ -77,7 +77,7 @@ namespace tools_urlobj
         {
             // Test with a username part
             {
-                INetURLObject aUrl( OUString( "vnd.libreoffice.cmis://username@http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) );
+                INetURLObject aUrl( u"vnd.libreoffice.cmis://username@http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" );
                 CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
                         OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DecodeMechanism::WithCharset ) ) );
                 CPPUNIT_ASSERT_EQUAL( std::string( "username" ), OUSTR_TO_STDSTR( aUrl.GetUser( ) ) );
@@ -88,8 +88,8 @@ namespace tools_urlobj
 
             // Test without a username part
             {
-                INetURLObject aUrl( OUString(
-                                "vnd.libreoffice.cmis://http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) );
+                INetURLObject aUrl(
+                                u"vnd.libreoffice.cmis://http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" );
                 CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
                         OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DecodeMechanism::WithCharset ) ) );
                 CPPUNIT_ASSERT( !aUrl.HasUserData() );
@@ -101,18 +101,18 @@ namespace tools_urlobj
 
         void urlobjTest_emptyPath() {
             {
-                INetURLObject url(OUString("http://example.com"));
+                INetURLObject url(u"http://example.com");
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Http, url.GetProtocol());
                 CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
                 CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
             }
             {
                 // This is an invalid http URL per RFC 2616:
-                INetURLObject url(OUString("http://example.com?query"));
+                INetURLObject url(u"http://example.com?query");
                 CPPUNIT_ASSERT(url.HasError());
             }
             {
-                INetURLObject url(OUString("http://example.com#fragment"));
+                INetURLObject url(u"http://example.com#fragment");
                 CPPUNIT_ASSERT_EQUAL(INetProtocol::Http, url.GetProtocol());
                 CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
                 CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
@@ -125,19 +125,19 @@ namespace tools_urlobj
             std::unique_ptr<SvMemoryStream> strm;
             unsigned char const * buf;
 
-            url = INetURLObject("data:");
+            url = INetURLObject(u"data:");
             //TODO: CPPUNIT_ASSERT(url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(!strm);
 
-            url = INetURLObject("data:,");
+            url = INetURLObject(u"data:,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
-            url = INetURLObject("data:,,%C3%A4%90");
+            url = INetURLObject(u"data:,,%C3%A4%90");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != nullptr);
@@ -149,26 +149,26 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(0x90, int(buf[3]));
             strm.reset();
 
-            url = INetURLObject("data:base64,");
+            url = INetURLObject(u"data:base64,");
             //TODO: CPPUNIT_ASSERT(url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(!strm);
 
-            url = INetURLObject("data:;base64,");
+            url = INetURLObject(u"data:;base64,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
-            url = INetURLObject("data:;bAsE64,");
+            url = INetURLObject(u"data:;bAsE64,");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != nullptr);
             CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), strm->GetSize());
             strm.reset();
 
-            url = INetURLObject("data:;base64,YWJjCg==");
+            url = INetURLObject(u"data:;base64,YWJjCg==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != nullptr);
@@ -180,17 +180,17 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(0x0A, int(buf[3]));
             strm.reset();
 
-            url = INetURLObject("data:;base64,YWJjCg=");
+            url = INetURLObject(u"data:;base64,YWJjCg=");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(!strm);
 
-            url = INetURLObject("data:;base64,YWJ$Cg==");
+            url = INetURLObject(u"data:;base64,YWJ$Cg==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(!strm);
 
-            url = INetURLObject("data:text/plain;param=%22;base64,%22,YQ==");
+            url = INetURLObject(u"data:text/plain;param=%22;base64,%22,YQ==");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(strm != nullptr);
@@ -202,7 +202,7 @@ namespace tools_urlobj
             CPPUNIT_ASSERT_EQUAL(0x3D, int(buf[3]));
             strm.reset();
 
-            url = INetURLObject("http://example.com");
+            url = INetURLObject(u"http://example.com");
             CPPUNIT_ASSERT(!url.HasError());
             strm = url.getData();
             CPPUNIT_ASSERT(!strm);
@@ -212,62 +212,62 @@ namespace tools_urlobj
             CPPUNIT_ASSERT(INetURLObject().isSchemeEqualTo(INetProtocol::NotValid));
             CPPUNIT_ASSERT(!INetURLObject().isSchemeEqualTo(u""));
             CPPUNIT_ASSERT(
-                INetURLObject("http://example.org").isSchemeEqualTo(
+                INetURLObject(u"http://example.org").isSchemeEqualTo(
                     INetProtocol::Http));
             CPPUNIT_ASSERT(
-                !INetURLObject("http://example.org").isSchemeEqualTo(
+                !INetURLObject(u"http://example.org").isSchemeEqualTo(
                     INetProtocol::Https));
             CPPUNIT_ASSERT(
-                INetURLObject("http://example.org").isSchemeEqualTo(u"Http"));
+                INetURLObject(u"http://example.org").isSchemeEqualTo(u"Http"));
             CPPUNIT_ASSERT(
-                !INetURLObject("http://example.org").isSchemeEqualTo(u"dav"));
+                !INetURLObject(u"http://example.org").isSchemeEqualTo(u"dav"));
             CPPUNIT_ASSERT(
-                INetURLObject("dav://example.org").isSchemeEqualTo(u"dav"));
+                INetURLObject(u"dav://example.org").isSchemeEqualTo(u"dav"));
         }
 
         void urlobjTest_isAnyKnownWebDAVScheme() {
             CPPUNIT_ASSERT(
-                INetURLObject("http://example.org").isAnyKnownWebDAVScheme());
+                INetURLObject(u"http://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                INetURLObject("https://example.org").isAnyKnownWebDAVScheme());
+                INetURLObject(u"https://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                INetURLObject("vnd.sun.star.webdav://example.org").isAnyKnownWebDAVScheme());
+                INetURLObject(u"vnd.sun.star.webdav://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                INetURLObject("vnd.sun.star.webdavs://example.org").isAnyKnownWebDAVScheme());
+                INetURLObject(u"vnd.sun.star.webdavs://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                !INetURLObject("ftp://example.org").isAnyKnownWebDAVScheme());
+                !INetURLObject(u"ftp://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                !INetURLObject("file://example.org").isAnyKnownWebDAVScheme());
+                !INetURLObject(u"file://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                !INetURLObject("dav://example.org").isAnyKnownWebDAVScheme());
+                !INetURLObject(u"dav://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                !INetURLObject("davs://example.org").isAnyKnownWebDAVScheme());
+                !INetURLObject(u"davs://example.org").isAnyKnownWebDAVScheme());
             CPPUNIT_ASSERT(
-                !INetURLObject("vnd.sun.star.pkg://example.org").isAnyKnownWebDAVScheme());
+                !INetURLObject(u"vnd.sun.star.pkg://example.org").isAnyKnownWebDAVScheme());
         }
 
         void testSetName() {
             {
-                INetURLObject obj("file:///");
+                INetURLObject obj(u"file:///");
                 bool ok = obj.setName(u"foo");
                 CPPUNIT_ASSERT(!ok);
             }
             {
-                INetURLObject obj("file:///foo");
+                INetURLObject obj(u"file:///foo");
                 bool ok = obj.setName(u"bar");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
                     OUString("file:///bar"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
-                INetURLObject obj("file:///foo/");
+                INetURLObject obj(u"file:///foo/");
                 bool ok = obj.setName(u"bar");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
                     OUString("file:///bar/"), obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
-                INetURLObject obj("file:///foo/bar");
+                INetURLObject obj(u"file:///foo/bar");
                 bool ok = obj.setName(u"baz");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
@@ -275,7 +275,7 @@ namespace tools_urlobj
                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
             }
             {
-                INetURLObject obj("file:///foo/bar/");
+                INetURLObject obj(u"file:///foo/bar/");
                 bool ok = obj.setName(u"baz");
                 CPPUNIT_ASSERT(ok);
                 CPPUNIT_ASSERT_EQUAL(
@@ -285,7 +285,7 @@ namespace tools_urlobj
         }
 
         void testSetExtension() {
-            INetURLObject obj("file:///foo/bar.baz/");
+            INetURLObject obj(u"file:///foo/bar.baz/");
             bool ok = obj.setExtension(
                 u"other", INetURLObject::LAST_SEGMENT, false);
             CPPUNIT_ASSERT(ok);
@@ -295,7 +295,7 @@ namespace tools_urlobj
         }
 
         void testChangeScheme() {
-            INetURLObject obj("unknown://example.com/foo/bar");
+            INetURLObject obj(u"unknown://example.com/foo/bar");
             CPPUNIT_ASSERT(!obj.HasError());
             obj.changeScheme(INetProtocol::Http);
             CPPUNIT_ASSERT_EQUAL(
@@ -312,7 +312,7 @@ namespace tools_urlobj
         }
 
         void testTd146382() {
-            INetURLObject obj("file://share.allotropia.de@SSL/DavWWWRoot/remote.php");
+            INetURLObject obj(u"file://share.allotropia.de@SSL/DavWWWRoot/remote.php");
             CPPUNIT_ASSERT(!obj.HasError());
             CPPUNIT_ASSERT_EQUAL(
                 OUString("file://share.allotropia.de@SSL/DavWWWRoot/remote.php"),
@@ -323,7 +323,7 @@ namespace tools_urlobj
         {
             {
                 // host:port must not be misinterpreted as scheme:path
-                INetURLObject obj("example.com:8080/foo", INetProtocol::Http);
+                INetURLObject obj(u"example.com:8080/foo", INetProtocol::Http);
                 CPPUNIT_ASSERT(!obj.HasError());
                 CPPUNIT_ASSERT_EQUAL(OUString("http://example.com:8080/foo"),
                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
@@ -334,7 +334,7 @@ namespace tools_urlobj
             }
             {
                 // port may only contain decimal digits, so this must be treated as unknown scheme
-                INetURLObject obj("example.com:80a0/foo", INetProtocol::Http);
+                INetURLObject obj(u"example.com:80a0/foo", INetProtocol::Http);
                 CPPUNIT_ASSERT(!obj.HasError());
                 CPPUNIT_ASSERT_EQUAL(OUString("example.com:80a0/foo"),
                     obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));

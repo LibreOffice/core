@@ -388,7 +388,7 @@ bool utl::UCBContentHelper::EqualURLs(
 bool utl::UCBContentHelper::ensureFolder(
     const css::uno::Reference< css::uno::XComponentContext >& xCtx,
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
-    const OUString& rFolder, ucbhelper::Content & result) noexcept
+    std::u16string_view rFolder, ucbhelper::Content & result) noexcept
 {
     try
     {

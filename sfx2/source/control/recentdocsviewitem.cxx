@@ -73,7 +73,7 @@ bool IsDocEncrypted(const OUString& rURL)
 }
 
 using Ext2IconMap = std::map<sfx2::ApplicationType, OUString>;
-BitmapEx Url2Icon(const OUString& rURL, const Ext2IconMap& rExtToIcon, const OUString& sDefault)
+BitmapEx Url2Icon(std::u16string_view rURL, const Ext2IconMap& rExtToIcon, const OUString& sDefault)
 {
     auto it = std::find_if(rExtToIcon.begin(), rExtToIcon.end(),
                            [aExt = INetURLObject(rURL).getExtension()](const auto& r)
@@ -106,7 +106,7 @@ BitmapEx getDefaultThumbnail(const OUString& rURL)
     return Url2Icon(rURL, rWhichMap, SFX_FILE_THUMBNAIL_DEFAULT);
 }
 
-BitmapEx getModuleOverlay(const OUString& rURL)
+BitmapEx getModuleOverlay(std::u16string_view rURL)
 {
     static const Ext2IconMap OverlayBitmapForExtension
         = { { sfx2::ApplicationType::TYPE_WRITER, SFX_FILE_OVERLAY_TEXT },

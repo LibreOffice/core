@@ -100,7 +100,7 @@ namespace dbaccess
         ::utl::OConfigurationNode
                 impl_checkValidName_throw_must_not_exist(const OUString& _rName);
 
-        void    impl_checkValidLocation_throw( const OUString& _rLocation );
+        void    impl_checkValidLocation_throw( std::u16string_view _rLocation );
 
         /** retrieves the configuration node whose "Name" sub node has the given value
 
@@ -221,9 +221,9 @@ namespace dbaccess
         return impl_getNodeForName_throw_must_not_exist(_rName);
     }
 
-    void DatabaseRegistrations::impl_checkValidLocation_throw( const OUString& _rLocation )
+    void DatabaseRegistrations::impl_checkValidLocation_throw( std::u16string_view _rLocation )
     {
-        if ( _rLocation.isEmpty() )
+        if ( _rLocation.empty() )
             throw IllegalArgumentException( OUString(), *this, 2 );
 
         INetURLObject aURL( _rLocation );

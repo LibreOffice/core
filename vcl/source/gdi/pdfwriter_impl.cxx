@@ -5057,7 +5057,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
             // directly with a reader (provided the reader has the feature) we
             // need to set the name of the destination the same way it will be encoded
             // in an Internet link
-            INetURLObject aLocalURL( "http://ahost.ax" ); //dummy location, won't be used
+            INetURLObject aLocalURL( u"http://ahost.ax" ); //dummy location, won't be used
             aLocalURL.SetMark( rDest.m_aDestName );
 
             const OUString aName   = aLocalURL.GetMark( INetURLObject::DecodeMechanism::NONE ); //same coding as

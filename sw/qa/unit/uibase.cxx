@@ -31,7 +31,7 @@ public:
 
 void Test::testTdf98168()
 {
-    INetURLObject aURL("file:///tmp/test.xlsx");
+    INetURLObject aURL(u"file:///tmp/test.xlsx");
     // This was sw::DBConnURIType::UNKNOWN, xlsx was not recognized.
     CPPUNIT_ASSERT_EQUAL(sw::DBConnURIType::CALC, sw::GetDBunoType(aURL));
 }

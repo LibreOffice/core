@@ -74,7 +74,7 @@ namespace dbaui
         sal_Int32   checkPathExistence(const OUString& _rURL);
 
         IS_PATH_EXIST   pathExists(const OUString& _rURL, bool bIsFile) const;
-        bool        createDirectoryDeep(const OUString& _rPathNormalized);
+        bool        createDirectoryDeep(std::u16string_view _rPathNormalized);
         bool        commitURL();
 
         /** opens the FileOpen dialog and asks for a FileName

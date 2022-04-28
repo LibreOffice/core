@@ -1109,7 +1109,8 @@ void BookmarksTabPage_Impl::DoAction(std::string_view rAction)
             {
                 OUString sURL = m_xBookmarksBox->get_id(nPos);
                 m_xBookmarksBox->remove(nPos);
-                m_xBookmarksBox->append(sURL, aDlg.GetTitle(), SvFileInformationManager::GetImageId(INetURLObject(IMAGE_URL+INetURLObject(sURL).GetHost())));
+                m_xBookmarksBox->append(sURL, aDlg.GetTitle(),
+                    SvFileInformationManager::GetImageId(INetURLObject(rtl::OUStringConcatenation(IMAGE_URL+INetURLObject(sURL).GetHost()))));
                 m_xBookmarksBox->select(m_xBookmarksBox->n_children() - 1);
             }
         }
@@ -2364,7 +2365,7 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl&, rListener, void )
 }
 
 
-void SfxHelpWindow_Impl::openDone(const OUString& sURL    ,
+void SfxHelpWindow_Impl::openDone(std::u16string_view sURL    ,
                                         bool         bSuccess)
 {
     INetURLObject aObj( sURL );
@@ -2526,7 +2527,7 @@ void SfxHelpWindow_Impl::SetFactory( const OUString& rFactory )
     xIndexWin->SetFactory( rFactory, true );
 }
 
-void SfxHelpWindow_Impl::SetHelpURL( const OUString& rURL )
+void SfxHelpWindow_Impl::SetHelpURL( std::u16string_view rURL )
 {
     INetURLObject aObj( rURL );
     if ( aObj.GetProtocol() == INetProtocol::VndSunStarHelp )

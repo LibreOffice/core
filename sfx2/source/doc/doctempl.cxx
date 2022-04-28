@@ -708,7 +708,7 @@ bool SfxDocumentTemplates::CopyTo
 (
     sal_uInt16          nRegion,    //  Region of the template to be exported
     sal_uInt16          nIdx,       //  Index of the template to be exported
-    const OUString&     rName       /*  File name under which the template is to
+    std::u16string_view rName       /*  File name under which the template is to
                                     be created */
 )   const
 
@@ -1143,7 +1143,7 @@ bool SfxDocumentTemplates::GetFull
 
 bool SfxDocumentTemplates::GetLogicNames
 (
-    const OUString &rPath,            // Full Path to the template
+    std::u16string_view rPath,        // Full Path to the template
     OUString &rRegion,                // Out: Region name
     OUString &rName                   // Out: Template name
 ) const

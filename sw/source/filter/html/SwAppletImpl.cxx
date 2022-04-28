@@ -115,7 +115,7 @@ SwApplet_Impl::SwApplet_Impl( SfxItemPool& rPool ) :
 
 void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
                                   bool bMayScript, const OUString& rCodeBase,
-                                  const OUString& rDocumentBaseURL )
+                                  std::u16string_view rDocumentBaseURL )
 {
     comphelper::EmbeddedObjectContainer aCnt;
     OUString aName;
@@ -142,7 +142,7 @@ void SwApplet_Impl::CreateApplet( const OUString& rCode, const OUString& rName,
     }
 }
 #if HAVE_FEATURE_JAVA
-bool SwApplet_Impl::CreateApplet( const OUString& rBaseURL )
+bool SwApplet_Impl::CreateApplet( std::u16string_view rBaseURL )
 {
     OUString aCode, aName, aCodeBase;
     bool bMayScript = false;

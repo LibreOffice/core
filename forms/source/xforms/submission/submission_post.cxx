@@ -36,7 +36,7 @@ using namespace osl;
 using namespace ucbhelper;
 
 
-CSubmissionPost::CSubmissionPost(const OUString& aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
+CSubmissionPost::CSubmissionPost(std::u16string_view aURL, const css::uno::Reference< css::xml::dom::XDocumentFragment >& aFragment)
     : CSubmission(aURL, aFragment)
 {
 }

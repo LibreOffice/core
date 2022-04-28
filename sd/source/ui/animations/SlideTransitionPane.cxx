@@ -275,7 +275,7 @@ private:
 
 // returns -1 if no object was found
 bool lcl_findSoundInList( const ::std::vector< OUString > & rSoundList,
-                          const OUString & rFileName,
+                          std::u16string_view rFileName,
                           ::std::vector< OUString >::size_type & rOutPosition )
 {
     INetURLObject aURL(rFileName);
@@ -315,7 +315,7 @@ struct lcl_AppendSoundToListBox
         : mrListBox( rListBox )
     {}
 
-    void operator() ( const OUString & rString ) const
+    void operator() ( std::u16string_view rString ) const
     {
         INetURLObject aURL( rString );
         mrListBox.append_text( aURL.GetBase() );

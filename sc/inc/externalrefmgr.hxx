@@ -432,7 +432,7 @@ public:
         OUString maFilterName;
         OUString maFilterOptions;
 
-        void maybeCreateRealFileName(const OUString& rOwnDocName);
+        void maybeCreateRealFileName(std::u16string_view rOwnDocName);
     };
 
 public:

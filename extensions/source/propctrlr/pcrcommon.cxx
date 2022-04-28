@@ -34,7 +34,7 @@ namespace pcr
     //= HelpIdUrl
 
 
-    OString HelpIdUrl::getHelpId( const OUString& _rHelpURL )
+    OString HelpIdUrl::getHelpId( std::u16string_view _rHelpURL )
     {
         INetURLObject aHID( _rHelpURL );
         if ( aHID.GetProtocol() == INetProtocol::Hid )
@@ -44,7 +44,7 @@ namespace pcr
     }
 
 
-    OUString HelpIdUrl::getHelpURL( const OUString & sHelpId )
+    OUString HelpIdUrl::getHelpURL( std::u16string_view sHelpId )
     {
         OUStringBuffer aBuffer;
         INetURLObject aHID( sHelpId );

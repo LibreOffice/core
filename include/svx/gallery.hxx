@@ -109,8 +109,8 @@ public:
                                 // FillObjTitleList is filling the rList with the title for each gallery object
     static bool                 FillObjListTitle( const sal_uInt32 nThemeId, std::vector< OUString >& rList );
 
-    static bool                 InsertURL( std::u16string_view rThemeName, const OUString& rURL );
-    static bool                 InsertURL( sal_uInt32 nThemeId, const OUString& rURL );
+    static bool                 InsertURL( std::u16string_view rThemeName, std::u16string_view rURL );
+    static bool                 InsertURL( sal_uInt32 nThemeId, std::u16string_view rURL );
 
     static bool                 GetGraphicObj( std::u16string_view rThemeName, sal_uInt32 nPos,
                                                Graphic* pGraphic );

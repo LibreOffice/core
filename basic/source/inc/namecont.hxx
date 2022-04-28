@@ -224,7 +224,7 @@ protected:
     void implStoreLibrary( SfxLibrary* pLib,
                             std::u16string_view rName,
                             const css::uno::Reference< css::embed::XStorage >& rStorage,
-                            const OUString& rTargetURL,
+                            std::u16string_view rTargetURL,
                             const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI,
                             const css::uno::Reference< css::task::XInteractionHandler >& rHandler );
 
@@ -234,7 +234,7 @@ protected:
     // New variant for library export
     void implStoreLibraryIndexFile( SfxLibrary* pLib, const ::xmlscript::LibDescriptor& rLib,
                                     const css::uno::Reference< css::embed::XStorage >& xStorage,
-                                    const OUString& aTargetURL,
+                                    std::u16string_view aTargetURL,
                                     const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI );
 
     bool implLoadLibraryIndexFile( SfxLibrary* pLib,

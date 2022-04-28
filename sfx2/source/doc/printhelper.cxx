@@ -507,7 +507,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
            the thread, if finishing of the job was detected outside this thread.
            But it must be called without using a corresponding thread for the given parameter!
          */
-        static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, const OUString& sTargetURL )
+        static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, std::u16string_view sTargetURL )
         {
             // move the file
             try
