@@ -2717,7 +2717,8 @@ SwNodeOffset SwTableBox::IsValidNumTextNd( bool bCheckAttr ) const
                                     continue;
                                 }
                             }
-                            else if( RES_TXTATR_ANNOTATION == pAttr->Which() )
+                            else if( RES_TXTATR_ANNOTATION == pAttr->Which() ||
+                                     RES_TXTATR_FTN == pAttr->Which() )
                             {
                                 continue;
                             }
