@@ -34,6 +34,24 @@
       "parentUuid": "6790e27d_4c3c6f69",
       "revId": "13ab3647deda1798b5949c3ee8d685514c85da8f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd828321_98f5c254",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-04-28T15:06:08Z",
+      "side": 1,
+      "message": "Thanks, I agree, height is better in this case, with \"lines\" being the unit.\nI changed the property accordingly.",
+      "parentUuid": "592c5626_cec3b9de",
+      "revId": "13ab3647deda1798b5949c3ee8d685514c85da8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
