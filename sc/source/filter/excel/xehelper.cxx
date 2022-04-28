@@ -968,7 +968,7 @@ OUString lclEncodeDosUrl(
 
 } // namespace
 
-OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, const OUString& rAbsUrl, const OUString* pTableName )
+OUString XclExpUrlHelper::EncodeUrl( const XclExpRoot& rRoot, std::u16string_view rAbsUrl, const OUString* pTableName )
 {
     OUString aDosUrl = INetURLObject(rAbsUrl).getFSysPath(FSysStyle::Dos);
     OUString aDosBase = INetURLObject(rRoot.GetBasePath()).getFSysPath(FSysStyle::Dos);

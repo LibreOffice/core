@@ -474,7 +474,7 @@ void ExportDialog::GetGraphicStream()
                 {
                     mpTempStream->SetResizeOffset(1024);
                     mpTempStream->SetStreamSize(1024);
-                    rFilter.ExportGraphic( aGraphic, "", *mpTempStream, nFilter, &aNewFilterData );
+                    rFilter.ExportGraphic( aGraphic, u"", *mpTempStream, nFilter, &aNewFilterData );
                 }
             }
             else

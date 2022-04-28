@@ -230,7 +230,7 @@ private:
     virtual void                enableControl( sal_Int16 _nControlId, bool _bEnable ) override;
     virtual OUString            getCurFilter( ) const override;
 
-    OUString                    implGetInitialURL( const OUString& _rPath, const OUString& _rFallback );
+    OUString                    implGetInitialURL( const OUString& _rPath, std::u16string_view _rFallback );
 
     /// executes a certain FileView action asynchronously
     void                        executeAsync(

@@ -75,6 +75,7 @@
 #include <unotools/ucbhelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <ucbhelper/content.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <sfx2/sfxresid.hxx>
 #include <sfxurlrelocator.hxx>
@@ -212,24 +213,24 @@ class SfxDocTplService_Impl
                                               bool  bFsysFolder,
                                               Content   &rNewFolder );
 
-    static bool             CreateNewUniqueFolderWithPrefix( const OUString& aPath,
+    static bool             CreateNewUniqueFolderWithPrefix( std::u16string_view aPath,
                                                                 const OUString& aPrefix,
                                                                 OUString& aNewFolderName,
                                                                 OUString& aNewFolderURL,
                                                                 Content& aNewFolder );
-    static OUString         CreateNewUniqueFileWithPrefix( const OUString& aPath,
+    static OUString         CreateNewUniqueFileWithPrefix( std::u16string_view aPath,
                                                                 const OUString& aPrefix,
                                                                 const OUString& aExt );
 
-    std::vector< beans::StringPair > ReadUINamesForTemplateDir_Impl( const OUString& aUserPath );
-    bool                    UpdateUINamesForTemplateDir_Impl( const OUString& aUserPath,
+    std::vector< beans::StringPair > ReadUINamesForTemplateDir_Impl( std::u16string_view aUserPath );
+    bool                    UpdateUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                   const OUString& aGroupName,
                                                                   const OUString& aNewFolderName );
-    bool                    ReplaceUINamesForTemplateDir_Impl( const OUString& aUserPath,
+    bool                    ReplaceUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                   const OUString& aFsysGroupName,
                                                                   std::u16string_view aOldGroupName,
                                                                   const OUString& aNewGroupName );
-    void                    RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
+    void                    RemoveUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                   std::u16string_view aGroupName );
     bool                    WriteUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                 const std::vector< beans::StringPair >& aUINames );
@@ -551,7 +552,7 @@ void SfxDocTplService_Impl::getDirList()
     for (auto& rTemplateDir : asNonConstRange(maTemplateDirs))
     {
         aURL.SetSmartProtocol( INetProtocol::File );
-        aURL.SetURL( aDirs.getToken( 0, C_DELIM, nIdx ) );
+        aURL.SetURL( o3tl::getToken(aDirs, 0, C_DELIM, nIdx ) );
         rTemplateDir = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
 
         if ( xExpander.is() )
@@ -773,7 +774,7 @@ bool SfxDocTplService_Impl::createFolder( const OUString& rNewFolderURL,
 }
 
 
-bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPath,
+bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( std::u16string_view aPath,
                                                                 const OUString& aPrefix,
                                                                 OUString& aNewFolderName,
                                                                 OUString& aNewFolderURL,
@@ -826,7 +827,7 @@ bool SfxDocTplService_Impl::CreateNewUniqueFolderWithPrefix( const OUString& aPa
 }
 
 
-OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( const OUString& aPath,
+OUString SfxDocTplService_Impl::CreateNewUniqueFileWithPrefix( std::u16string_view aPath,
                                                                         const OUString& aPrefix,
                                                                         const OUString& aExt )
 {
@@ -1166,7 +1167,7 @@ void SfxDocTplService_Impl::doUpdate()
 }
 
 
-std::vector< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDir_Impl( const OUString& aUserPath )
+std::vector< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDir_Impl( std::u16string_view aUserPath )
 {
     INetURLObject aLocObj( aUserPath );
     aLocObj.insertName( u"groupuinames.xml", false,
@@ -1192,7 +1193,7 @@ std::vector< beans::StringPair > SfxDocTplService_Impl::ReadUINamesForTemplateDi
 }
 
 
-bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( const OUString& aUserPath,
+bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                   const OUString& aGroupName,
                                                                   const OUString& aNewFolderName )
 {
@@ -1212,7 +1213,7 @@ bool SfxDocTplService_Impl::UpdateUINamesForTemplateDir_Impl( const OUString& aU
 }
 
 
-bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& aUserPath,
+bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                   const OUString& aDefaultFsysGroupName,
                                                                   std::u16string_view aOldGroupName,
                                                                   const OUString& aNewGroupName )
@@ -1238,7 +1239,7 @@ bool SfxDocTplService_Impl::ReplaceUINamesForTemplateDir_Impl( const OUString& a
 }
 
 
-void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( const OUString& aUserPath,
+void SfxDocTplService_Impl::RemoveUINamesForTemplateDir_Impl( std::u16string_view aUserPath,
                                                                   std::u16string_view aGroupName )
 {
     std::vector< beans::StringPair > aUINames = ReadUINamesForTemplateDir_Impl( aUserPath );

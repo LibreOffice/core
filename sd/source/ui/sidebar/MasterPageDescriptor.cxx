@@ -34,7 +34,7 @@ namespace sd::sidebar {
 MasterPageDescriptor::MasterPageDescriptor (
     MasterPageContainer::Origin eOrigin,
     const sal_Int32 nTemplateIndex,
-    const OUString& rsURL,
+    std::u16string_view rsURL,
     const OUString& rsPageName,
     const OUString& rsStyleName,
     const bool bIsPrecious,

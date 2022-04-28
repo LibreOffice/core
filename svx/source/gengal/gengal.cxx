@@ -55,7 +55,7 @@ protected:
 
 }
 
-static void createTheme( const OUString& aThemeName, const OUString& aGalleryURL,
+static void createTheme( const OUString& aThemeName, std::u16string_view aGalleryURL,
                          const OUString& aDestDir, std::vector<INetURLObject> &rFiles,
                          bool bRelativeURLs )
 {
@@ -135,7 +135,7 @@ static int PrintHelp()
     return EXIT_SUCCESS;
 }
 
-static INetURLObject Smartify( const OUString &rPath )
+static INetURLObject Smartify( std::u16string_view rPath )
 {
     INetURLObject aURL;
     aURL.SetSmartURL( rPath );

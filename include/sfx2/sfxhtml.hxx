@@ -57,11 +57,11 @@ public:
     static bool ParseMapOptions(ImageMap* pImageMap, const HTMLOptions& rOptions);
     bool ParseMapOptions(ImageMap * pImageMap)
     { return ParseMapOptions(pImageMap, GetOptions()); }
-    static bool ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
+    static bool ParseAreaOptions(ImageMap * pImageMap, std::u16string_view rBaseURL,
                                  const HTMLOptions& rOptions,
                                  SvMacroItemId nEventMouseOver,
                                  SvMacroItemId nEventMouseOut );
-    inline bool ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
+    inline bool ParseAreaOptions(ImageMap * pImageMap, std::u16string_view rBaseURL,
                                  SvMacroItemId nEventMouseOver,
                                  SvMacroItemId nEventMouseOut);
 
@@ -99,7 +99,7 @@ protected:
     const OUString& GetScriptTypeString( SvKeyValueIterator* ) const;
 };
 
-inline bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
+inline bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, std::u16string_view rBaseURL,
                                             SvMacroItemId nEventMouseOver,
                                             SvMacroItemId nEventMouseOut)
 {

@@ -103,12 +103,12 @@ bool GraphicNativeTransform::rotateGeneric(Degree10 aRotation, std::u16string_vi
 
     BitmapEx aBitmap = mrGraphic.GetBitmapEx();
     aBitmap.Rotate(aRotation, COL_BLACK);
-    rFilter.ExportGraphic(aBitmap, "none", aStream, nFilterFormat, &aFilterData);
+    rFilter.ExportGraphic(aBitmap, u"none", aStream, nFilterFormat, &aFilterData);
 
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     Graphic aGraphic;
-    rFilter.ImportGraphic(aGraphic, "import", aStream);
+    rFilter.ImportGraphic(aGraphic, u"import", aStream);
 
     mrGraphic = aGraphic;
     return true;
@@ -156,7 +156,7 @@ void GraphicNativeTransform::rotateJPEG(Degree10 aRotation)
 
         Graphic aGraphic;
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.ImportGraphic(aGraphic, "import", aTargetStream);
+        rFilter.ImportGraphic(aGraphic, u"import", aTargetStream);
         mrGraphic = aGraphic;
     }
 }

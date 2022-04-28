@@ -124,7 +124,7 @@ protected:
                               const weld::TreeIter* pParent,
                               bool bChildrenOnDemand,
                               std::unique_ptr< SFEntry > && aUserData,
-                              const OUString& factoryURL, bool bSelect);
+                              std::u16string_view factoryURL, bool bSelect);
     void        insertEntry(OUString const & rText, OUString const & rBitmap,
                               const weld::TreeIter* pParent,
                               bool bChildrenOnDemand,

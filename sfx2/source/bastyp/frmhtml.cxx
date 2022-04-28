@@ -38,7 +38,7 @@ HTMLOptionEnum<ScrollingMode> const aScrollingTable[] =
 namespace SfxFrameHTMLParser
 {
 void ParseFrameOptions(
-    SfxFrameDescriptor *pFrame, const HTMLOptions& rOptions, const OUString& rBaseURL )
+    SfxFrameDescriptor *pFrame, const HTMLOptions& rOptions, std::u16string_view rBaseURL )
 {
     // Get and set the options
     Size aMargin( pFrame->GetMargin() );

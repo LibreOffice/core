@@ -188,7 +188,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
 }
 
 
-bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
+bool SfxContentHelper::IsHelpErrorDocument( std::u16string_view rURL )
 {
     bool bRet = false;
     try
@@ -209,7 +209,7 @@ bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
 }
 
 
-sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
+sal_Int64 SfxContentHelper::GetSize( std::u16string_view rContent )
 {
     sal_Int64 nSize = 0;
     INetURLObject aObj( rContent );

@@ -295,7 +295,7 @@ public:
     ErrCode             ExportGraphic( const Graphic& rGraphic, const INetURLObject& rPath,
                                        sal_uInt16 nFormat,
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
-    ErrCode             ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
+    ErrCode             ExportGraphic( const Graphic& rGraphic, std::u16string_view rPath,
                                        SvStream& rOStm, sal_uInt16 nFormat,
                                        const css::uno::Sequence< css::beans::PropertyValue >* pFilterData = nullptr );
 
@@ -307,11 +307,11 @@ public:
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE );
 
-    ErrCode             CanImportGraphic( const OUString& rPath, SvStream& rStream,
+    ErrCode             CanImportGraphic( std::u16string_view rPath, SvStream& rStream,
                                       sal_uInt16 nFormat,
                                       sal_uInt16 * pDeterminedFormat);
 
-    ErrCode             ImportGraphic( Graphic& rGraphic, const OUString& rPath,
+    ErrCode             ImportGraphic( Graphic& rGraphic, std::u16string_view rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW,
                                    sal_uInt16 * pDeterminedFormat = nullptr, GraphicFilterImportFlags nImportFlags = GraphicFilterImportFlags::NONE,
@@ -328,7 +328,7 @@ public:
     */
     void MakeGraphicsAvailableThreaded(std::vector< Graphic* >& rGraphics);
 
-    ErrCode             ImportGraphic( Graphic& rGraphic, const OUString& rPath,
+    ErrCode             ImportGraphic( Graphic& rGraphic, std::u16string_view rPath,
                                    SvStream& rStream,
                                    sal_uInt16 nFormat,
                                    sal_uInt16 * pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
@@ -387,7 +387,7 @@ private:
 
     void            ImplInit();
     ErrCode         ImplSetError( ErrCode nError, const SvStream* pStm = nullptr );
-    ErrCode         ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat );
+    ErrCode         ImpTestOrFindFormat( std::u16string_view rPath, SvStream& rStream, sal_uInt16& rFormat );
 
                     DECL_DLLPRIVATE_LINK( FilterCallback, ConvertData&, bool );
 

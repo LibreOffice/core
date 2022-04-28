@@ -58,7 +58,7 @@ class SW_DLLPUBLIC SwGrfNode final: public SwNoTextNode
                SwAttrSet const * pAutoAttr );
     ///< Ctor for reading (SW/G) without graphics.
     SwGrfNode( const SwNodeIndex& rWhere,
-               const OUString& rGrfName, const OUString& rFltName,
+               std::u16string_view rGrfName, const OUString& rFltName,
                SwGrfFormatColl* pGrfColl,
                SwAttrSet const * pAutoAttr );
     SwGrfNode( const SwNodeIndex& rWhere,

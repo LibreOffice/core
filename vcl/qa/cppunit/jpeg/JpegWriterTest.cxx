@@ -60,7 +60,7 @@ BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 exportFormatJPG = rFilter.GetExportFormatNumberForShortName(JPG_SHORTNAME);
     Graphic aExportGraphic(bitmap);
-    ErrCode bResult = rFilter.ExportGraphic(aExportGraphic, "memory", aStream, exportFormatJPG);
+    ErrCode bResult = rFilter.ExportGraphic(aExportGraphic, u"memory", aStream, exportFormatJPG);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     //Detect the magic bytes - we need to be sure the file is actually a JPEG
     aStream.Seek(0);
@@ -71,7 +71,7 @@ BitmapEx JpegWriterTest::roundtripJPG(const BitmapEx& bitmap)
     aStream.Seek(0);
     Graphic aImportGraphic;
     sal_uInt16 importFormatJPG = rFilter.GetImportFormatNumberForShortName(JPG_SHORTNAME);
-    bResult = rFilter.ImportGraphic(aImportGraphic, "memory", aStream, importFormatJPG);
+    bResult = rFilter.ImportGraphic(aImportGraphic, u"memory", aStream, importFormatJPG);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     return aImportGraphic.GetBitmapEx();
 }

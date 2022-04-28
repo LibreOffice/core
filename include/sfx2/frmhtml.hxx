@@ -30,7 +30,7 @@ class SfxFrameDescriptor;
 namespace SfxFrameHTMLParser
 {
 // These methods can also be used by other parsers.
-SFX2_DLLPUBLIC void ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions&, const OUString&);
+SFX2_DLLPUBLIC void ParseFrameOptions(SfxFrameDescriptor*, const HTMLOptions&, std::u16string_view);
 };
 
 #endif

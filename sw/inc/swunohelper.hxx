@@ -40,10 +40,10 @@ sal_Int32 GetEnumAsInt32( const css::uno::Any& rVal );
 SW_DLLPUBLIC bool UCB_DeleteFile( const OUString& rURL );
 
     // move the file to a new location
-bool UCB_MoveFile( const OUString& rURL, const OUString& rNewURL );
+bool UCB_MoveFile( const OUString& rURL, std::u16string_view rNewURL );
 
     // is the URL on the current system case sensitive?
-SW_DLLPUBLIC bool UCB_IsCaseSensitiveFileName( const OUString& rURL );
+SW_DLLPUBLIC bool UCB_IsCaseSensitiveFileName( std::u16string_view rURL );
 
     // is the URL readonly?
 SW_DLLPUBLIC bool UCB_IsReadOnlyFileName( const OUString& rURL );

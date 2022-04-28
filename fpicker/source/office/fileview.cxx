@@ -287,7 +287,7 @@ public:
     void                    Clear();
 
     FileViewResult          GetFolderContent_Impl(
-        const OUString& rFolder,
+        std::u16string_view rFolder,
         const FileViewAsyncAction* pAsyncDescriptor,
         const css::uno::Sequence< OUString >& rDenyList );
 
@@ -1172,7 +1172,7 @@ void SvtFileView_Impl::Clear()
 }
 
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
-    const OUString& rFolder,
+    std::u16string_view rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
     const css::uno::Sequence< OUString >& rDenyList )
 {

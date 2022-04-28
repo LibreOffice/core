@@ -1570,7 +1570,7 @@ BitmapEx AddonsOptions_Impl::ReadImageFromURL(const OUString& aImageURL)
         Graphic aGraphic;
 
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-        rGF.ImportGraphic( aGraphic, OUString(), *pStream );
+        rGF.ImportGraphic( aGraphic, u"", *pStream );
 
         BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 

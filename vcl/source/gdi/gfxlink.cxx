@@ -141,7 +141,7 @@ bool GfxLink::LoadNative( Graphic& rGraphic ) const
             {
                 GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
                 sal_uInt16 nFormat = rFilter.GetImportFormatNumberForShortName(aShortName);
-                ErrCode nResult = rFilter.ImportGraphic(rGraphic, OUString(), aMemoryStream, nFormat);
+                ErrCode nResult = rFilter.ImportGraphic(rGraphic, u"", aMemoryStream, nFormat);
                 if (nResult == ERRCODE_NONE)
                     bRet = true;
             }

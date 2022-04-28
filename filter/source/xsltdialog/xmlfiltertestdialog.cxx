@@ -199,7 +199,7 @@ void XMLFilterTestDialog::test( const filter_info_impl& rFilterInfo )
     m_xDialog->run();
 }
 
-static OUString getFileNameFromURL( OUString const & rURL )
+static OUString getFileNameFromURL( std::u16string_view rURL )
 {
     INetURLObject aURL( rURL );
     OUString aName( aURL.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset) );

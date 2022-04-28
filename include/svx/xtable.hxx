@@ -215,7 +215,7 @@ public:
                                                const OUString& rReferer);
     // as above but initializes name as expected
     static XPropertyListRef CreatePropertyListFromURL(XPropertyListType t,
-                                                       const OUString & rUrl);
+                                                       std::u16string_view rUrl);
 
     // helper accessors
     static inline XDashListRef AsDashList(

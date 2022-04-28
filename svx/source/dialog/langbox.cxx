@@ -44,7 +44,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
-OUString GetDicInfoStr( const OUString& rName, const LanguageType nLang, bool bNeg )
+OUString GetDicInfoStr( std::u16string_view rName, const LanguageType nLang, bool bNeg )
 {
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INetProtocol::File );

@@ -501,7 +501,7 @@ IMAGE_SETEVENT:
 
             if (!sGrfNm.isEmpty())
             {
-                if (ERRCODE_NONE == rFilter.ImportGraphic(aGraphic, "", *pStream))
+                if (ERRCODE_NONE == rFilter.ImportGraphic(aGraphic, u"", *pStream))
                     sGrfNm.clear();
             }
         }

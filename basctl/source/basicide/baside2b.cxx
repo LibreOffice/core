@@ -65,6 +65,7 @@
 #include <vector>
 #include <com/sun/star/reflection/theCoreReflection.hpp>
 #include <unotools/charclass.hxx>
+#include <o3tl/string_view.hxx>
 #include "textwindowpeer.hxx"
 #include "uiobject.hxx"
 

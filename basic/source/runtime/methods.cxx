@@ -2582,7 +2582,7 @@ static bool implCheckWildcard(std::u16string_view rName, SbiRTLData const& rRTLD
 }
 
 
-static bool isRootDir( const OUString& aDirURLStr )
+static bool isRootDir( std::u16string_view aDirURLStr )
 {
     INetURLObject aDirURLObj( aDirURLStr );
     bool bRoot = false;

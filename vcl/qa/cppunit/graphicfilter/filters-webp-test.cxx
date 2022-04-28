@@ -111,11 +111,11 @@ void WebpFilterTest::testRoundtrip(bool lossy)
         comphelper::makePropertyValue("Lossless", !lossy),
         comphelper::makePropertyValue("Quality", sal_Int32(100))
     };
-    rFilter.ExportGraphic(Graphic(aBitmapEx), "none", aStream, nFilterFormat, &aFilterData);
+    rFilter.ExportGraphic(Graphic(aBitmapEx), u"none", aStream, nFilterFormat, &aFilterData);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     Graphic aGraphic;
-    ErrCode bResult = rFilter.ImportGraphic(aGraphic, "none", aStream);
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"none", aStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeWebp, aGraphic.GetGfxLink().GetType());
     BitmapEx aResultBitmap = aGraphic.GetBitmapEx();
@@ -172,7 +172,7 @@ void WebpFilterTest::testRead(bool lossy, bool alpha)
     SvFileStream aFileStream(file, StreamMode::READ);
     Graphic aGraphic;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-    ErrCode bResult = rFilter.ImportGraphic(aGraphic, "none", aFileStream);
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"none", aFileStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeWebp, aGraphic.GetGfxLink().GetType());
     BitmapEx aResultBitmap = aGraphic.GetBitmapEx();

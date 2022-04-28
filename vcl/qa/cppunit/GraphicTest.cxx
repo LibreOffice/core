@@ -161,7 +161,7 @@ void createBitmapAndExportForType(SvStream& rStream, std::u16string_view sType, 
     uno::Sequence<beans::PropertyValue> aFilterData;
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rGraphicFilter.GetExportFormatNumberForShortName(sType);
-    rGraphicFilter.ExportGraphic(aBitmapEx, "none", rStream, nFilterFormat, &aFilterData);
+    rGraphicFilter.ExportGraphic(aBitmapEx, u"none", rStream, nFilterFormat, &aFilterData);
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 }
@@ -250,9 +250,8 @@ Graphic loadGraphic(std::u16string_view const& rFilename)
     GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
 
     Graphic aGraphic;
-    CPPUNIT_ASSERT_EQUAL(
-        ERRCODE_NONE,
-        rGraphicFilter.ImportGraphic(aGraphic, OUString(), aFileStream, GRFILTER_FORMAT_DONTKNOW));
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, rGraphicFilter.ImportGraphic(aGraphic, u"", aFileStream,
+                                                                    GRFILTER_FORMAT_DONTKNOW));
     return aGraphic;
 }
 
@@ -336,7 +335,7 @@ void GraphicTest::testUnloadedGraphicWmf()
     Graphic aGraphic(aBitmapEx);
     aGraphic.SetPrefSize(Size(99, 99));
     aGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
-    rGraphicFilter.ExportGraphic(aGraphic, "none", aStream, nFilterFormat);
+    rGraphicFilter.ExportGraphic(aGraphic, u"none", aStream, nFilterFormat);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     // Now lazy-load this WMF data, with a custom preferred size of 42x42.
@@ -404,7 +403,7 @@ void GraphicTest::testWMFRoundtrip()
     aTempFile.EnableKillingFile();
     sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
     SvStream& rOutStream = *aTempFile.GetStream(StreamMode::READWRITE);
-    rGraphicFilter.ExportGraphic(aGraphic, OUString(), rOutStream, nFormat);
+    rGraphicFilter.ExportGraphic(aGraphic, u"", rOutStream, nFormat);
 
     // Check if we preserved the WMF data perfectly.
     sal_uInt64 nActualSize = rOutStream.TellEnd();
@@ -470,7 +469,7 @@ void GraphicTest::testWMFWithEmfPlusRoundtrip()
         else
         {
             sal_uInt16 nFormat = rGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
-            rGraphicFilter.ExportGraphic(aGraphic, OUString(), rOutStream, nFormat);
+            rGraphicFilter.ExportGraphic(aGraphic, u"", rOutStream, nFormat);
         }
         CPPUNIT_ASSERT_EQUAL(nExpectedSize, rOutStream.TellEnd());
 
@@ -502,14 +501,14 @@ void GraphicTest::testEmfToWmfConversion()
     // This similar to an application/x-openoffice-wmf mime type in manifest.xml in the ODF case.
     sal_uInt16 nFormat = aGraphicFilter.GetImportFormatNumberForShortName(u"WMF");
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
-                         aGraphicFilter.ImportGraphic(aGraphic, OUString(), aStream, nFormat));
+                         aGraphicFilter.ImportGraphic(aGraphic, u"", aStream, nFormat));
     CPPUNIT_ASSERT_EQUAL(VectorGraphicDataType::Wmf, aGraphic.getVectorGraphicData()->getType());
 
     // Save as WMF.
     sal_uInt16 nFilterType = aGraphicFilter.GetExportFormatNumberForShortName(u"WMF");
     SvMemoryStream aGraphicStream;
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aGraphicFilter.ExportGraphic(aGraphic, OUString(),
-                                                                    aGraphicStream, nFilterType));
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                         aGraphicFilter.ExportGraphic(aGraphic, u"", aGraphicStream, nFilterType));
     aGraphicStream.Seek(0);
     vcl::GraphicFormatDetector aDetector(aGraphicStream, OUString());
     CPPUNIT_ASSERT(aDetector.detect());
@@ -524,8 +523,8 @@ void GraphicTest::testEmfToWmfConversion()
     // Import the WMF result and check for traces of EMF+ in it.
     Graphic aWmfGraphic;
     aGraphicStream.Seek(0);
-    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, aGraphicFilter.ImportGraphic(aWmfGraphic, OUString(),
-                                                                    aGraphicStream, nFormat));
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE,
+                         aGraphicFilter.ImportGraphic(aWmfGraphic, u"", aGraphicStream, nFormat));
     int nCommentCount = 0;
     for (size_t i = 0; i < aWmfGraphic.GetGDIMetaFile().GetActionSize(); ++i)
     {
