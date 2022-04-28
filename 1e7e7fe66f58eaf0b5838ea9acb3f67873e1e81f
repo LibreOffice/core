@@ -16,6 +16,40 @@
       "message": "Select Case statement got removed accidently",
       "revId": "1e7e7fe66f58eaf0b5838ea9acb3f67873e1e81f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e12b8a86_c1be086c",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 9
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-28T07:35:38Z",
+      "side": 1,
+      "message": "Why do you need to pass the \"curErrNo\" argument (actually, both arguments), if it\u0027s a constant? This just complicates the understanding of the test.\n\nI\u0027d make the two tests (TestErrRaise and verify_Choose) independent, and call them one after the other from doUnitTest.",
+      "revId": "1e7e7fe66f58eaf0b5838ea9acb3f67873e1e81f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "645c07fb_a836ecee",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 9
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-28T07:35:38Z",
+      "side": 1,
+      "message": "Please restore empty line in the end of the file.",
+      "revId": "1e7e7fe66f58eaf0b5838ea9acb3f67873e1e81f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4af06731_fbcd732b",
+        "filename": "basic/qa/basic_coverage/test_choose_method.bas",
+        "patchSetId": 9
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-28T07:35:38Z",
+      "side": 0,
+      "message": "Please restore this empty line. For one, this removal is not needed for the functionality change; and for another, it separated license header from the code.",
+      "revId": "3bf4925903cadb011bedaabb3cf18fde65bcf61a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
