@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e04d411_36cd5186",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-28T09:04:12Z",
+      "side": 1,
+      "message": "Hi Hossein,\nPlease adapt SdImportTestSmartArt::testTdf148665 before pushing this patch",
+      "revId": "5e06e665c62ab9c1899c778d957a014ceb09d8f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
