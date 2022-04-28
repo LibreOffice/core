@@ -16,6 +16,23 @@
       "message": "Hi Miklos, Regina,\nI Believe mbBulletColorFollowText, mbBulletFontFollowText and mbBulletSizeFollowText should behave the same way, however I couldn\u0027t find any document where this patch makes a difference and Jenkins passes, thus is a kind of a blind fix\nAny comment on this ?\nThanks in advance",
       "revId": "a6f2c26d0bd2b26d10ec40ae21f92ef621c342f9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "989788eb_35cba818",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-04-28T07:21:23Z",
+      "side": 1,
+      "message": "Hi Miklos, Regina,\nI Believe mbBulletColorFollowText, mbBulletFontFollowText and mbBulletSizeFollowText should behave the same way, however I couldn\u0027t find any document where this patch makes a difference and Jenkins passes, thus is a kind of a blind fix\nAny comment on this ?\nThanks in advance",
+      "revId": "a6f2c26d0bd2b26d10ec40ae21f92ef621c342f9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
