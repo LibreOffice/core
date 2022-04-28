@@ -520,7 +520,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
     basegfx::B2IRectangle aAvailableOuterRect = BaseGFXHelper::makeRectangle(rParam.maRemainingSpace);
 
     const std::vector< std::unique_ptr<VCoordinateSystem> >& rVCooSysList( rParam.mpSeriesPlotterContainer->getCooSysList() );
-    SeriesPlottersType& rSeriesPlotterList = rParam.mpSeriesPlotterContainer->getSeriesPlotterList();
+    auto& rSeriesPlotterList = rParam.mpSeriesPlotterContainer->getSeriesPlotterList();
 
     //create VAxis, so they can give necessary information for automatic scaling
     uno::Reference<util::XNumberFormatsSupplier> const xNumberFormatsSupplier(
@@ -1897,7 +1897,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     aParam.mpSeriesPlotterContainer->initializeCooSysAndSeriesPlotter( mrChartModel );
     if(maTimeBased.bTimeBased && maTimeBased.nFrame != 0)
     {
-        SeriesPlottersType& rSeriesPlotter = aParam.mpSeriesPlotterContainer->getSeriesPlotterList();
+        auto& rSeriesPlotter = aParam.mpSeriesPlotterContainer->getSeriesPlotterList();
         size_t n = rSeriesPlotter.size();
         for(size_t i = 0; i < n; ++i)
         {
@@ -1957,7 +1957,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     if(maTimeBased.bTimeBased && maTimeBased.nFrame % 60 == 0)
     {
         // create copy of the data for next frame
-        SeriesPlottersType& rSeriesPlotter = aParam.mpSeriesPlotterContainer->getSeriesPlotterList();
+        auto& rSeriesPlotter = aParam.mpSeriesPlotterContainer->getSeriesPlotterList();
         size_t n = rSeriesPlotter.size();
         maTimeBased.m_aDataSeriesList.clear();
         maTimeBased.m_aDataSeriesList.resize(n);

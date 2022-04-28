@@ -24,8 +24,6 @@
 
 namespace chart
 {
-typedef std::vector<std::unique_ptr<VSeriesPlotter>> SeriesPlottersType;
-
 /** This class is a container of `SeriesPlotter` objects (such as `PieChart`
  *  instances). It is used for initializing coordinate systems, axes and scales
  *  of all series plotters which belongs to the container.
@@ -108,7 +106,10 @@ public:
     void setNumberFormatsFromAxes();
     css::drawing::Direction3D getPreferredAspectRatio();
 
-    SeriesPlottersType& getSeriesPlotterList() { return m_aSeriesPlotterList; }
+    std::vector<std::unique_ptr<VSeriesPlotter>>& getSeriesPlotterList()
+    {
+        return m_aSeriesPlotterList;
+    }
     std::vector<std::unique_ptr<VCoordinateSystem>>& getCooSysList() { return m_rVCooSysList; }
     std::vector<LegendEntryProvider*> getLegendEntryProviderList();
 
@@ -130,7 +131,7 @@ public:
 private:
     /** A vector of series plotters.
      */
-    SeriesPlottersType m_aSeriesPlotterList;
+    std::vector<std::unique_ptr<VSeriesPlotter>> m_aSeriesPlotterList;
 
     /** A vector of coordinate systems.
      */
