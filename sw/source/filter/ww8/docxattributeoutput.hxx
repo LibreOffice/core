@@ -772,7 +772,8 @@ private:
     void WriteSdtPlainText(const OUString& sValue, const uno::Sequence<beans::PropertyValue>& aGrabBagSdt);
     void WriteSdtDropDownStart(std::u16string_view rName, OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
     void WriteSdtDropDownEnd(OUString const& rSelected, uno::Sequence<OUString> const& rListItems);
-    void WriteSdtEnd();
+    void WriteContentControlStart();
+    void WriteContentControlEnd();
 
     void StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun = false );
     void DoWriteCmd( const OUString& rCmd );
