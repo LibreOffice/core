@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2580ab5_4d2f8393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-04-28T13:13:10Z",
+      "side": 1,
+      "message": "I reported the bug you mentioned to bug 102700. So, you may change the commit message to something like the following, to allow better trace the problem:\n-----\ntdf#102700: fix cell range negative selection\n \nIn Calc when you select all and then do negative selection, there has a bug. The reason is in ScMultiSel::SetMarkArea that case will make nBeg larger than nEndRow and in MarkAllCols start will be larger than end.\nSo I added a condition in the if cause to make sure that nBeg is not larger than nEndRow.\n------\n",
+      "revId": "daea1accbbb035697bd8a7dddf3b8d8d36bd1f1e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
