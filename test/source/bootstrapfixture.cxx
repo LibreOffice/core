@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <config_features.h>
+#include <config_validation.h>
 
 #include <test/bootstrapfixture.hxx>
 #include <vcl/errinf.hxx>
