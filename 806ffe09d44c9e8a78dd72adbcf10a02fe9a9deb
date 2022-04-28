@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e8af6bc_49e5fb21",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003579
+      },
+      "writtenOn": "2022-04-28T10:08:20Z",
+      "side": 1,
+      "message": "\u003e Patch Set 1: Verified-1\n\u003e \n\u003e Build Failed \n\u003e \n\u003e https://ci.libreoffice.org/job/gerrit_master/113274/ : FAILURE\n\u003e \n\u003e seems like the buildslave lost the connection ( https://ci.libreoffice.org/job/gerrit_windows/125501/ )\n\n",
+      "revId": "806ffe09d44c9e8a78dd72adbcf10a02fe9a9deb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
