@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7d7a26e5_ab30ecf1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "I will try to use cell range (and the advantages you mention) and code from ScMatch() to produce a (local) function that both ScMatch and ScXLookup will use and keep processing of cell ranges apart from processing of matrixes. That will reduce the length of single functions too.",
+      "parentUuid": "ce168045_4fcba172",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "07907523_17dcf815",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -31,6 +49,24 @@
       "writtenOn": "2022-04-26T19:35:55Z",
       "side": 1,
       "message": "Wildcards and regular expressions are not implemented on matrix searches yet. See also ScInterpreter::CalculateLookup() line 7313 (of the modified sc/source/core/tool/interpr1.cxx file) the comment\n\n  //TODO: enable regex on matrix strings.\n\nThat (specifically if the code of ScMatch() was used) should be implemented in lcl_CompareMatrix2Query().",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d683015_8ced2d58",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "OK. Implementing of regex/wildcard expressions may be doable for me, but as a follow up of XLOOKUP.",
+      "parentUuid": "07907523_17dcf815",
       "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cc489323_42cc93d1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "Thank you, I will start digging in that code and try to use it for XLOOKUP.",
+      "parentUuid": "a4f520b1_939ede05",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e8ded538_c513a365",
         "filename": "/COMMIT_MSG",
         "patchSetId": 6
@@ -65,6 +119,24 @@
       "writtenOn": "2022-04-26T19:35:55Z",
       "side": 1,
       "message": "That is the normal behaviour for functions returning an array/matrix. The initial result range is determined automatically. To force to one cell preselect only one cell, e.g. press Shift+Right followed by Shift+Left, or Ctrl+Click the current cell, before entering the formula.",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d733bd8_c5735aa7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "OK. I will use these key combinations to make XLOOKUP and the test document work the way I it should work.",
+      "parentUuid": "e8ded538_c513a365",
       "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
@@ -86,6 +158,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "f76acc98_4929a605",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "If it should work I will have a look again / debug the sample and try to get it working properly.",
+      "parentUuid": "24b06a33_9bb7db91",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "4cc1c9b6_14d50c95",
@@ -103,6 +193,23 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7bc9b90_b1ca4bec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "I have no problem with you taking long to reply. It was well worth waiting for.\nAnd now it will take \u0027long\u0027 before I expect to upload a revised patch...",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "918533d8_c37d31c7",
@@ -116,6 +223,30 @@
       "writtenOn": "2022-04-26T19:35:55Z",
       "side": 1,
       "message": "Nitpick: the e... prefix is used with enum variables, the enums themselves are defined like class names, so MatchMode.",
+      "range": {
+        "startLine": 7567,
+        "startChar": 9,
+        "endLine": 7567,
+        "endChar": 19
+      },
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fca55b58_72d66eee",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7567,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "No nitpick, useful comment. I will change it.",
+      "parentUuid": "918533d8_c37d31c7",
       "range": {
         "startLine": 7567,
         "startChar": 9,
@@ -151,6 +282,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9a3772b1_831538b2",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7568,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "I will change it.",
+      "parentUuid": "541c712e_baf36128",
+      "range": {
+        "startLine": 7568,
+        "startChar": 4,
+        "endLine": 7568,
+        "endChar": 24
+      },
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e4d4f6a0_5f07d87f",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 6
@@ -162,6 +317,30 @@
       "writtenOn": "2022-04-26T19:35:55Z",
       "side": 1,
       "message": "Instead of C-style cast use\n\n  static_cast\u003cMatchMode\u003e(k)",
+      "range": {
+        "startLine": 7573,
+        "startChar": 24,
+        "endLine": 7573,
+        "endChar": 37
+      },
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc1f94f_66e05f0c",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7573,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "Oh dear, my age shows: I\u0027m a C guy* and C++ only came later ;-)\n(only excuse is that I still use C for processing lots of data in console applications)\n* Actually, I started with ALGOL 66, which is even older than C and now fully obsolete.\n\nI will change the cast style.",
+      "parentUuid": "e4d4f6a0_5f07d87f",
       "range": {
         "startLine": 7573,
         "startChar": 24,
@@ -191,6 +370,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a7ee1b5_b16c427e",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7585,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "That I certainly overlooked. It\u0027s (in my case a consequense of having to use the help text and samples from Microsoft as specification for the function.)\n\nI will fix this and add extra unit tests.",
+      "parentUuid": "28caab53_fe89f194",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ddb4efd6_3eba1796",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 6
@@ -208,6 +405,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ad3ec449_f301a264",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7715,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "The few tests I did showed that Excel couldn\u0027t cope with wildcards and numeric lookup-values. I will recheck and use Excel as guideline.",
+      "parentUuid": "ddb4efd6_3eba1796",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf2748b2_cea70625",
         "filename": "sc/source/core/tool/interpr1.cxx",
         "patchSetId": 6
@@ -219,6 +434,24 @@
       "writtenOn": "2022-04-26T19:35:55Z",
       "side": 1,
       "message": "Obtaining the CollatorWrapper can be pulled out of the loop and be done only once before.",
+      "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "982d89c8_6114e519",
+        "filename": "sc/source/core/tool/interpr1.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 7732,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "I will do that (if this part of the code remains).",
+      "parentUuid": "cf2748b2_cea70625",
       "revId": "d51b4fc5fdf3ba075865fc04cf22a6759cdb4745",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }

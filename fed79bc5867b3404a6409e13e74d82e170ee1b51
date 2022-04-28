@@ -70,6 +70,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1b482b4_d05d143c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "520b10e5_27a0fe4b",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4856f1eb_7f909c6a",
@@ -152,6 +170,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d69bf958_20d49bd8",
+        "filename": "sc/qa/unit/data/functions/spreadsheet/fods/xlookup.fods",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48736421_9daa571d",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ff764a0_eeeec8a0",
@@ -183,6 +219,24 @@
       "side": 1,
       "message": "I missed that comment. One of my problems has now been solved, with \u0027only\u0027 wildcards and matrix problems remaining.",
       "parentUuid": "2ff764a0_eeeec8a0",
+      "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9600bd0_88414ef0",
+        "filename": "sc/source/core/data/funcdesc.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1000057
+      },
+      "writtenOn": "2022-04-28T14:33:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "244acd59_8741b13c",
       "revId": "fed79bc5867b3404a6409e13e74d82e170ee1b51",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
