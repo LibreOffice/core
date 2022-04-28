@@ -1175,7 +1175,7 @@ static void doc_postWindowGestureEvent(LibreOfficeKitDocument* pThis,
                                       int nX,
                                       int nY,
                                       int nOffset);
-static void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
+void doc_postUnoCommand(LibreOfficeKitDocument* pThis,
                                const char* pCommand,
                                const char* pArguments,
                                bool bNotifyWhenFinished);
@@ -5046,7 +5046,7 @@ void LibLibreOffice_Impl::dumpState(rtl::OStringBuffer &rState)
     vcl::lok::dumpState(rState);
 }
 
-static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
+void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)
 {
     comphelper::ProfileZone aZone("doc_postUnoCommand");
 
@@ -8071,9 +8071,19 @@ LibreOfficeKit *libreofficekit_hook_2(const char* install_path, const char* user
 }
 
 SAL_JNI_EXPORT
-LibreOfficeKit *libreofficekit_hook(const char* install_path)
+LibreOfficeKitDocument *libreofficekit_hook(const char*)
 {
-    return libreofficekit_hook_2(install_path, nullptr);
+    if (!gImpl)
+    {
+        gImpl = new LibLibreOffice_Impl();
+        xContext.set( ::comphelper::getProcessComponentContext(), uno::UNO_SET_THROW );    
+    }
+
+    uno::Reference<frame::XDesktop> xDesktop = frame::Desktop::create(xContext);
+    uno::Reference<lang::XComponent> xComponent = xDesktop->getCurrentComponent();
+    LibLODocument_Impl* pDocument = new LibLODocument_Impl(xComponent, 0);
+    
+    return pDocument;
 }
 
 SAL_JNI_EXPORT
