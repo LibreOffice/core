@@ -239,7 +239,7 @@ bool GenPspGraphics::AddTempDevFont( vcl::font::PhysicalFontCollection*, const O
 }
 
 bool GenPspGraphics::AddTempDevFontHelper( vcl::font::PhysicalFontCollection* pFontCollection,
-                                           const OUString& rFileURL,
+                                           std::u16string_view rFileURL,
                                            const OUString& rFontName)
 {
     // inform PSP font manager

@@ -232,7 +232,7 @@ void ShutdownIcon::FromTemplate()
         xDisp->dispatch( aTargetURL, aArgs );
 }
 
-OUString ShutdownIcon::GetUrlDescription( const OUString& aUrl )
+OUString ShutdownIcon::GetUrlDescription( std::u16string_view aUrl )
 {
     ::SolarMutexGuard aGuard;
 

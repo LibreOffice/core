@@ -361,7 +361,7 @@ OUString ImageMap::ImpReadCERNURL( const char** ppStr )
     aStr = comphelper::string::strip(aStr, ' ');
     aStr = comphelper::string::strip(aStr, '\t');
 
-    return INetURLObject::GetAbsURL( "", aStr );
+    return INetURLObject::GetAbsURL( u"", aStr );
 }
 
 void ImageMap::ImpReadNCSA( SvStream& rIStm )
@@ -445,7 +445,7 @@ OUString ImageMap::ImpReadNCSAURL( const char** ppStr )
         }
     }
 
-    return INetURLObject::GetAbsURL( "", aStr.makeStringAndClear() );
+    return INetURLObject::GetAbsURL( u"", aStr.makeStringAndClear() );
 }
 
 Point ImageMap::ImpReadNCSACoords( const char** ppStr )

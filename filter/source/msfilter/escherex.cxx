@@ -4199,7 +4199,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                     SvMemoryStream  aGIFStream;
                     const char* const pString = "MSOFFICE9.0";
                     aGIFStream.WriteBytes(pString, strlen(pString));
-                    nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aGIFStream,
+                    nErrCode = rFilter.ExportGraphic( aGraphic, u"", aGIFStream,
                         rFilter.GetExportFormatNumberForShortName( u"GIF" ) );
                     SAL_WARN_IF(
                         nErrCode != ERRCODE_NONE, "filter.ms",
@@ -4218,7 +4218,7 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, GraphicObjec
                         aFilterProp.Name = "AdditionalChunks";
                         aFilterProp.Value <<= aAdditionalChunkSequence;
                         uno::Sequence<beans::PropertyValue> aFilterData{ aFilterProp };
-                        nErrCode = rFilter.ExportGraphic( aGraphic, OUString(), aStream,
+                        nErrCode = rFilter.ExportGraphic( aGraphic, u"", aStream,
                                                           rFilter.GetExportFormatNumberForShortName( u"PNG" ), &aFilterData );
                     }
                 }

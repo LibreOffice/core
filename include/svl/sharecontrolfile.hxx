@@ -52,7 +52,7 @@ class SVL_DLLPUBLIC ShareControlFile final : public LockFileCommon
 public:
 
     // The constructor will throw exception in case the stream can not be opened
-    ShareControlFile( const OUString& aOrigURL );
+    ShareControlFile( std::u16string_view aOrigURL );
     virtual ~ShareControlFile() override;
 
     std::vector< LockFileEntry > GetUsersData();

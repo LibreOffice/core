@@ -83,7 +83,7 @@ FSStorage::~FSStorage()
     {}
 }
 
-bool FSStorage::MakeFolderNoUI( const OUString& rFolder )
+bool FSStorage::MakeFolderNoUI( std::u16string_view rFolder )
 {
     INetURLObject aURL( rFolder );
     OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DecodeMechanism::WithCharset );

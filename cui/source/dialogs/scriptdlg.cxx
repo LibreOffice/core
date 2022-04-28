@@ -298,9 +298,9 @@ void SvxScriptOrgDialog::RequestSubEntries(const weld::TreeIter& rRootEntry, Ref
 
 void SvxScriptOrgDialog::insertEntry(const OUString& rText, const OUString& rBitmap,
     const weld::TreeIter* pParent, bool bChildrenOnDemand, std::unique_ptr<SFEntry> && aUserData,
-    const OUString& factoryURL, bool bSelect)
+    std::u16string_view factoryURL, bool bSelect)
 {
-    if (rBitmap == RID_CUIBMP_DOC && !factoryURL.isEmpty())
+    if (rBitmap == RID_CUIBMP_DOC && !factoryURL.empty())
     {
         OUString aImage = SvFileInformationManager::GetFileImageId(INetURLObject(factoryURL));
         insertEntry(rText, aImage, pParent, bChildrenOnDemand, std::move(aUserData), bSelect);

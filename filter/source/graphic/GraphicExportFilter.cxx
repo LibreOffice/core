@@ -163,7 +163,7 @@ bool GraphicExportFilter::filterRenderDocument() const
     SvMemoryStream aMemStream;
     const GraphicConversionParameters aParameters(aTargetSizePixel, true, true);
 
-    const ErrCode nResult = rFilter.ExportGraphic( aGraphic.GetBitmapEx(aParameters), OUString(), aMemStream,
+    const ErrCode nResult = rFilter.ExportGraphic( aGraphic.GetBitmapEx(aParameters), u"", aMemStream,
             nFilterFormat, &maFilterDataSequence );
 
     if ( nResult == ERRCODE_NONE )

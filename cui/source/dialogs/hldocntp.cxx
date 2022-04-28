@@ -66,7 +66,7 @@ struct DocumentTypeData
 
 }
 
-bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const
+bool SvxHyperlinkNewDocTp::ImplGetURLObject( const OUString& rPath, std::u16string_view rBase, INetURLObject& aURLObject ) const
 {
     bool bIsValidURL = !rPath.isEmpty();
     if ( bIsValidURL )

@@ -55,7 +55,7 @@ public:
     bool operator () (const ThumbnailViewItem *pItem);
 
     static bool isFilteredExtension(FILTER_APPLICATION filter, std::u16string_view rExt);
-    bool isValid (const OUString& rPath) const;
+    bool isValid (std::u16string_view rPath) const;
 
 private:
 
@@ -114,7 +114,7 @@ public:
 
     bool copyFrom(TemplateContainerItem *pItem, const OUString &rPath);
 
-    bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, const OUString &rName);
+    bool exportTo (const sal_uInt16 nItemId, const sal_uInt16 nRegionItemId, std::u16string_view rName);
 
     virtual bool renameItem(ThumbnailViewItem* pItem, const OUString& sNewTitle) override;
 
@@ -152,7 +152,7 @@ public:
 
     static BitmapEx scaleImg (const BitmapEx &rImg, tools::Long width, tools::Long height);
 
-    static BitmapEx getDefaultThumbnail( const OUString& rPath );
+    static BitmapEx getDefaultThumbnail( std::u16string_view rPath );
 
     static BitmapEx fetchThumbnail (const OUString &msURL, tools::Long width, tools::Long height);
 

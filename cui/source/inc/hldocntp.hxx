@@ -34,7 +34,7 @@ private:
     std::unique_ptr<weld::Button> m_xBtCreate;
     std::unique_ptr<weld::TreeView> m_xLbDocTypes;
 
-    bool                ImplGetURLObject( const OUString& rPath, const OUString& rBase, INetURLObject& aURLObject ) const;
+    bool                ImplGetURLObject( const OUString& rPath, std::u16string_view rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();
 
     DECL_LINK (ClickNewHdl_Impl, weld::Button&, void );

@@ -719,14 +719,14 @@ OUString parseScheme(
 
 }
 
-bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
+bool INetURLObject::setAbsURIRef(std::u16string_view rTheAbsURIRef,
                                  EncodeMechanism eMechanism,
                                  rtl_TextEncoding eCharset,
                                  bool bSmart,
                                  FSysStyle eStyle)
 {
-    sal_Unicode const * pPos = rTheAbsURIRef.getStr();
-    sal_Unicode const * pEnd = pPos + rTheAbsURIRef.getLength();
+    sal_Unicode const * pPos = rTheAbsURIRef.data();
+    sal_Unicode const * pEnd = pPos + rTheAbsURIRef.size();
 
     setInvalid();
 
@@ -3200,13 +3200,13 @@ failed:
     return false;
 }
 
-bool INetURLObject::setPath(OUString const & rThePath,
+bool INetURLObject::setPath(std::u16string_view rThePath,
                             EncodeMechanism eMechanism,
                             rtl_TextEncoding eCharset)
 {
     OUStringBuffer aSynPath(256);
-    sal_Unicode const * p = rThePath.getStr();
-    sal_Unicode const * pEnd = p + rThePath.getLength();
+    sal_Unicode const * p = rThePath.data();
+    sal_Unicode const * pEnd = p + rThePath.size();
     if (!parsePath(m_eScheme, &p, pEnd, eMechanism, eCharset, false,
                    '/', 0x80000000, 0x80000000, 0x80000000, aSynPath)
         || p != pEnd)
@@ -3773,7 +3773,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
                                std::u16string_view rThePassword,
                                std::u16string_view rTheHost,
                                sal_uInt32 nThePort,
-                               OUString const & rThePath)
+                               std::u16string_view rThePath)
 {
     setInvalid();
     m_eScheme = eTheScheme;
@@ -3885,8 +3885,8 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
         }
     }
     OUStringBuffer aSynPath(256);
-    sal_Unicode const * p = rThePath.getStr();
-    sal_Unicode const * pEnd = p + rThePath.getLength();
+    sal_Unicode const * p = rThePath.data();
+    sal_Unicode const * pEnd = p + rThePath.size();
     if (!parsePath(m_eScheme, &p, pEnd, EncodeMechanism::WasEncoded, RTL_TEXTENCODING_UTF8, false, '/',
                    0x80000000, 0x80000000, 0x80000000, aSynPath)
         || p != pEnd)
@@ -3900,7 +3900,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
 }
 
 // static
-OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
+OUString INetURLObject::GetAbsURL(std::u16string_view rTheBaseURIRef,
                                        OUString const & rTheRelURIRef,
                                        EncodeMechanism eEncodeMechanism,
                                        DecodeMechanism eDecodeMechanism,
@@ -4102,9 +4102,9 @@ bool INetURLObject::setName(std::u16string_view rTheName, EncodeMechanism eMecha
         ++p;
 
     return setPath(
-        std::u16string_view(pPathBegin, pSegBegin - pPathBegin)
+        rtl::OUStringConcatenation(std::u16string_view(pPathBegin, pSegBegin - pPathBegin)
             + encodeText(rTheName, PART_PCHAR, eMechanism, eCharset, true)
-            + std::u16string_view(p, pPathEnd - p),
+            + std::u16string_view(p, pPathEnd - p)),
         EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
@@ -4179,9 +4179,9 @@ bool INetURLObject::setBase(std::u16string_view rTheBase, sal_Int32 nIndex,
         pExtension = p;
 
     return setPath(
-        std::u16string_view(pPathBegin, pSegBegin - pPathBegin)
+        rtl::OUStringConcatenation(std::u16string_view(pPathBegin, pSegBegin - pPathBegin)
             + encodeText(rTheBase, PART_PCHAR, eMechanism, eCharset, true)
-            + std::u16string_view(pExtension, pPathEnd - pExtension),
+            + std::u16string_view(pExtension, pPathEnd - pExtension)),
         EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }
@@ -4239,9 +4239,9 @@ bool INetURLObject::setExtension(std::u16string_view rTheExtension,
         pExtension = p;
 
     return setPath(
-        OUString::Concat(std::u16string_view(pPathBegin, pExtension - pPathBegin)) + "."
+        rtl::OUStringConcatenation(OUString::Concat(std::u16string_view(pPathBegin, pExtension - pPathBegin)) + "."
             + encodeText(rTheExtension, PART_PCHAR, EncodeMechanism::WasEncoded, eCharset, true)
-            + std::u16string_view(p, pPathEnd - p),
+            + std::u16string_view(p, pPathEnd - p)),
         EncodeMechanism::NotCanonical,
         RTL_TEXTENCODING_UTF8);
 }

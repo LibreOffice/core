@@ -193,11 +193,11 @@ void TiffFilterTest::testRoundtrip()
     SvMemoryStream aStream;
     GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName(u"tif");
-    rFilter.ExportGraphic(Graphic(BitmapEx(aBitmap)), "none", aStream, nFilterFormat);
+    rFilter.ExportGraphic(Graphic(BitmapEx(aBitmap)), u"none", aStream, nFilterFormat);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 
     Graphic aGraphic;
-    ErrCode bResult = rFilter.ImportGraphic(aGraphic, "none", aStream);
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, u"none", aStream);
     CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
     CPPUNIT_ASSERT_EQUAL(GfxLinkType::NativeTif, aGraphic.GetGfxLink().GetType());
     Bitmap aResultBitmap = aGraphic.GetBitmapEx().GetBitmap();

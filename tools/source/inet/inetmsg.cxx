@@ -22,6 +22,8 @@
 #include <tools/inetmsg.hxx>
 #include <comphelper/string.hxx>
 #include <rtl/character.hxx>
+#include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <map>
 
@@ -52,32 +54,32 @@ static const char *months[12] =
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 };
 
-static sal_uInt16 ParseNumber(const OString& rStr, sal_Int32& nIndex)
+static sal_uInt16 ParseNumber(std::string_view rStr, size_t& nIndex)
 {
-    sal_Int32 n = nIndex;
-    while ((n < rStr.getLength())
+    size_t n = nIndex;
+    while ((n < rStr.size())
            && rtl::isAsciiDigit(static_cast<unsigned char>(rStr[n])))
         n++;
 
-    OString aNum(rStr.copy(nIndex, (n - nIndex)));
+    std::string_view aNum(rStr.substr(nIndex, (n - nIndex)));
     nIndex = n;
 
-    return static_cast<sal_uInt16>(aNum.toInt32());
+    return static_cast<sal_uInt16>(o3tl::toInt32(aNum));
 }
 
-static sal_uInt16 ParseMonth(const OString& rStr, sal_Int32& nIndex)
+static sal_uInt16 ParseMonth(std::string_view rStr, size_t& nIndex)
 {
-    sal_Int32 n = nIndex;
-    while ((n < rStr.getLength())
+    size_t n = nIndex;
+    while ((n < rStr.size())
            && rtl::isAsciiAlpha(static_cast<unsigned char>(rStr[n])))
         n++;
 
-    OString aMonth(rStr.copy(nIndex, 3));
+    std::string_view aMonth(rStr.substr(nIndex, 3));
     nIndex = n;
 
     sal_uInt16 i;
     for (i = 0; i < 12; i++)
-        if (aMonth.equalsIgnoreAsciiCase(months[i])) break;
+        if (o3tl::equalsIgnoreAsciiCase(aMonth, months[i])) break;
     return (i + 1);
 }
 
@@ -92,20 +94,20 @@ bool INetMIMEMessage::ParseDateField (
     if (aDateField.indexOf(':') != -1)
     {
         // Some DateTime format.
-        sal_Int32 nIndex = 0;
+        size_t nIndex = 0;
 
         // Skip over <Wkd> or <Weekday>, leading and trailing space.
-        while ((nIndex < aDateField.getLength()) &&
+        while ((nIndex < o3tl::make_unsigned(aDateField.getLength())) &&
                (aDateField[nIndex] == ' '))
             nIndex++;
 
         while (
-            (nIndex < aDateField.getLength()) &&
+            (nIndex < o3tl::make_unsigned(aDateField.getLength())) &&
             (rtl::isAsciiAlpha (static_cast<unsigned char>(aDateField[nIndex])) ||
              (aDateField[nIndex] == ',')     ))
             nIndex++;
 
-        while ((nIndex < aDateField.getLength()) &&
+        while ((nIndex < o3tl::make_unsigned(aDateField.getLength())) &&
                (aDateField[nIndex] == ' '))
             nIndex++;
 
@@ -143,7 +145,7 @@ bool INetMIMEMessage::ParseDateField (
             rDateTime.SetSec    (ParseNumber (aDateField, nIndex)); nIndex++;
             rDateTime.SetNanoSec (0);
 
-            const char cPossiblePlusMinus = nIndex < aDateField.getLength() ? aDateField[nIndex] : 0;
+            const char cPossiblePlusMinus = nIndex < o3tl::make_unsigned(aDateField.getLength()) ? aDateField[nIndex] : 0;
             if (cPossiblePlusMinus == '+' || cPossiblePlusMinus == '-')
             {
                 // Offset from GMT: "(+|-)HHMM".

@@ -553,7 +553,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     if (nUriEnd != nPrefixEnd
                         && isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
-                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
+                        INetURLObject aUri(rText.subView(nPos, nUriEnd - nPos),
                                            INetProtocol::File, eMechanism, eCharset,
                                            FSysStyle::Detect);
                         if (!aUri.HasError())
@@ -584,7 +584,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                         && (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
                             || rText[nUriEnd] == '\\'))
                     {
-                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
+                        INetURLObject aUri(rText.subView(nPos, nUriEnd - nPos),
                                            INetProtocol::Http, eMechanism,
                                            eCharset);
                         if (!aUri.HasError())
@@ -633,7 +633,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
                         || rText[nUriEnd] == '\\')
                     {
-                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
+                        INetURLObject aUri(rText.subView(nPos, nUriEnd - nPos),
                                            INetProtocol::Http, eMechanism,
                                            eCharset);
                         if (!aUri.HasError())
@@ -657,7 +657,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                            && checkWChar(rCharClass, rText, &i, &nUriEnd)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
-                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
+                        INetURLObject aUri(rText.subView(nPos, nUriEnd - nPos),
                                            INetProtocol::File,
                                            INetURLObject::EncodeMechanism::All,
                                            RTL_TEXTENCODING_UTF8,
@@ -686,7 +686,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                                          nullptr, true)) ;
                     if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
                     {
-                        INetURLObject aUri(rText.copy(nPos, nUriEnd - nPos),
+                        INetURLObject aUri(rText.subView(nPos, nUriEnd - nPos),
                                            INetProtocol::File,
                                            INetURLObject::EncodeMechanism::All,
                                            RTL_TEXTENCODING_UTF8,
@@ -723,7 +723,7 @@ OUString URIHelper::FindFirstURLInText(OUString const & rText,
                         if (nLabels >= 1
                             && isBoundary1(rCharClass, rText, i, rEnd))
                         {
-                            INetURLObject aUri(rText.copy(nPos, i - nPos),
+                            INetURLObject aUri(rText.subView(nPos, i - nPos),
                                                INetProtocol::Mailto,
                                                INetURLObject::EncodeMechanism::All);
                             if (!aUri.HasError())
