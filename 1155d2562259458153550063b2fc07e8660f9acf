@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9ff3d2f_026d412c",
+        "filename": "sc/qa/uitest/calc_tests6/moveCopySheet.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-28T07:43:26Z",
+      "side": 1,
+      "message": "Normally, we have something like def test_tdf97340_autofilter(self): (https://opengrok.libreoffice.org/xref/core/sc/qa/uitest/autofilter2/tdf97340.py?r\u003d8b71bc7e#16) and we should follow this policy here as well.\n\nSry for the nitpick. I think after this change we can submit it.",
+      "revId": "1155d2562259458153550063b2fc07e8660f9acf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
