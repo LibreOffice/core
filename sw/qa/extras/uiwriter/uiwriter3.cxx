@@ -3490,9 +3490,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf39828)
 {
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39828.fodt");
-    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-
-    pWrtShell->GotoNextTOXBase();
 
     // show changes
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowDelete
@@ -3519,6 +3516,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf39828)
     uno::Reference<text::XTextRange> xCellA4(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
     // This was 28 (bad sum: 2 + A1 + A3, where A1 was 12 and A3 was 14)
     CPPUNIT_ASSERT_EQUAL(OUString("8"), xCellA4->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf146573)
+{
+    SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf39828.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+
+    // remove redlines, add a footnote, and change the value
+    // of the cell with the footnote
+    dispatchCommand(mxComponent, ".uno:AcceptAllTrackedChanges", {});
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->Right(CRSR_SKIP_CELLS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    dispatchCommand(mxComponent, ".uno:InsertFootnote", {});
+    dispatchCommand(mxComponent, ".uno:PageUp", {}); // leave footnote
+    pWrtShell->Left(CRSR_SKIP_CELLS, /*bSelect=*/false, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Left(CRSR_SKIP_CELLS, /*bSelect=*/true, /*nCount=*/1, /*bBasicCall=*/false);
+    pWrtShell->Insert("100");
+
+    // trigger recalculation by leaving the cell
+    pWrtShell->Down(/*bSelect=*/false, /*nCount=*/1);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(),
+                                                         uno::UNO_QUERY);
+    uno::Reference<text::XTextTable> xTextTable(xIndexAccess->getByIndex(0), uno::UNO_QUERY);
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4), xTextTable->getRows()->getCount());
+
+    uno::Reference<text::XTextRange> xCellA1(xTextTable->getCellByName("A1"), uno::UNO_QUERY);
+    // value "100" and footnote index "1"
+    CPPUNIT_ASSERT_EQUAL(OUString("1001"), xCellA1->getString());
+    uno::Reference<text::XTextRange> xCellA3(xTextTable->getCellByName("A3"), uno::UNO_QUERY);
+    // This was 4 (missing recalculation)
+    CPPUNIT_ASSERT_EQUAL(OUString("102"), xCellA3->getString());
+    uno::Reference<text::XTextRange> xCellA4(xTextTable->getCellByName("A4"), uno::UNO_QUERY);
+    // This was 8 (missing recalculation)
+    CPPUNIT_ASSERT_EQUAL(OUString("204"), xCellA4->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
