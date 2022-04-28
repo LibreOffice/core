@@ -319,6 +319,13 @@ SECKEYPrivateKey* X509Certificate_NssImpl::getPrivateKey()
         SECKEYPrivateKey* pPrivateKey = PK11_FindPrivateKeyFromCert(m_pCert->slot, m_pCert, nullptr);
         if (pPrivateKey)
             return pPrivateKey;
+        pPrivateKey = PK11_FindKeyByDERCert(m_pCert->slot, m_pCert, nullptr);
+        if (pPrivateKey)
+        {
+            SAL_INFO("xmlsecurity.xmlsec", "fallback from PK11_FindPrivateKeyFromCert to PK11_FindKeyByDERCert needed");
+            return pPrivateKey;
+        }
+        SAL_WARN("xmlsecurity.xmlsec", "X509Certificate_NssImpl::getPrivateKey() cannot find private key");
     }
     return nullptr;
 }
