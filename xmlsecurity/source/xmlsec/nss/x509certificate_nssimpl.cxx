@@ -22,6 +22,7 @@
 
 #include <cert.h>
 #include <pk11pub.h>
+#include <hasht.h>
 
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
