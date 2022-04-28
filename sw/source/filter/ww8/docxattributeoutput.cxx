@@ -1635,8 +1635,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for (; m_nCloseContentControlInPreviousRun > 0; --m_nCloseContentControlInPreviousRun)
     {
         // Not the last run of this paragraph.
-        m_pSerializer->endElementNS(XML_w, XML_sdtContent);
-        m_pSerializer->endElementNS(XML_w, XML_sdt);
+        WriteContentControlEnd();
     }
 
     if ( m_closeHyperlinkInPreviousRun )
@@ -1736,18 +1735,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
         m_nHyperLinkCount++;
     }
 
-    if (m_pContentControl)
-    {
-        m_pSerializer->startElementNS(XML_w, XML_sdt);
-        m_pSerializer->startElementNS(XML_w, XML_sdtPr);
-        if (m_pContentControl->GetShowingPlaceHolder())
-        {
-            m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
-        }
-        m_pSerializer->endElementNS(XML_w, XML_sdtPr);
-        m_pSerializer->startElementNS(XML_w, XML_sdtContent);
-        m_pContentControl = nullptr;
-    }
+    WriteContentControlStart();
 
     // if there is some redlining in the document, output it
     StartRedline( m_pRedlineData );
@@ -1862,8 +1850,7 @@ void DocxAttributeOutput::EndRun(const SwTextNode* pNode, sal_Int32 nPos, bool /
     for (; m_nCloseContentControlInThisRun > 0; --m_nCloseContentControlInThisRun)
     {
         // Last run of this paragraph.
-        m_pSerializer->endElementNS(XML_w, XML_sdtContent);
-        m_pSerializer->endElementNS(XML_w, XML_sdt);
+        WriteContentControlEnd();
     }
 
     if ( m_closeHyperlinkInThisRun )
@@ -2342,7 +2329,46 @@ void DocxAttributeOutput::WriteSdtPlainText(const OUString & sValue, const uno::
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
 }
 
-void DocxAttributeOutput::WriteSdtEnd()
+void DocxAttributeOutput::WriteContentControlStart()
+{
+    if (!m_pContentControl)
+    {
+        return;
+    }
+
+    m_pSerializer->startElementNS(XML_w, XML_sdt);
+    m_pSerializer->startElementNS(XML_w, XML_sdtPr);
+    if (m_pContentControl->GetShowingPlaceHolder())
+    {
+        m_pSerializer->singleElementNS(XML_w, XML_showingPlcHdr);
+    }
+
+    if (m_pContentControl->GetCheckbox())
+    {
+        m_pSerializer->startElementNS(XML_w14, XML_checkbox);
+        m_pSerializer->singleElementNS(XML_w14, XML_checked, FSNS(XML_w14, XML_val),
+                                       OString::number(int(m_pContentControl->GetChecked())));
+        OUString aCheckedState = m_pContentControl->GetCheckedState();
+        if (!aCheckedState.isEmpty())
+        {
+            m_pSerializer->singleElementNS(XML_w14, XML_checkedState, FSNS(XML_w14, XML_val),
+                                           OString::number(aCheckedState[0], /*radix=*/16));
+        }
+        OUString aUncheckedState = m_pContentControl->GetUncheckedState();
+        if (!aUncheckedState.isEmpty())
+        {
+            m_pSerializer->singleElementNS(XML_w14, XML_uncheckedState, FSNS(XML_w14, XML_val),
+                                           OString::number(aUncheckedState[0], /*radix=*/16));
+        }
+        m_pSerializer->endElementNS(XML_w14, XML_checkbox);
+    }
+
+    m_pSerializer->endElementNS(XML_w, XML_sdtPr);
+    m_pSerializer->startElementNS(XML_w, XML_sdtContent);
+    m_pContentControl = nullptr;
+}
+
+void DocxAttributeOutput::WriteContentControlEnd()
 {
     m_pSerializer->endElementNS(XML_w, XML_sdtContent);
     m_pSerializer->endElementNS(XML_w, XML_sdt);
@@ -2403,7 +2429,7 @@ void DocxAttributeOutput::WriteSdtDropDownEnd(OUString const& rSelected,
         m_pSerializer->endElementNS(XML_w, XML_r);
     }
 
-    WriteSdtEnd();
+    WriteContentControlEnd();
 }
 
 void DocxAttributeOutput::StartField_Impl( const SwTextNode* pNode, sal_Int32 nPos, FieldInfos const & rInfos, bool bWriteRun )
@@ -2702,7 +2728,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
 {
     if (rInfos.eType == ww::eFORMDATE)
     {
-        WriteSdtEnd();
+        WriteContentControlEnd();
         return;
     }
     else if (rInfos.eType == ww::eFORMDROPDOWN && rInfos.pField)
@@ -2718,7 +2744,7 @@ void DocxAttributeOutput::EndField_Impl( const SwTextNode* pNode, sal_Int32 nPos
         SwInputField const& rField(*static_cast<SwInputField const*>(rInfos.pField.get()));
         if (rField.getGrabBagParams().hasElements())
         {
-            WriteSdtEnd();
+            WriteContentControlEnd();
             return;
         }
     }
