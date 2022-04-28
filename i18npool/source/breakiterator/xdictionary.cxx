@@ -63,64 +63,6 @@ sal_Unicode* getDataArea_zh();
 xdictionary::xdictionary(const char *lang) :
     japaneseWordBreak( false )
 {
-
-#ifdef DICT_JA_ZH_IN_DATAFILE
-
-    if( strcmp( lang, "ja" ) == 0 || strcmp( lang, "zh" ) == 0 )
-    {
-        OUString sUrl( "$BRAND_BASE_DIR/" LIBO_SHARE_FOLDER "/dict_" );
-        rtl::Bootstrap::expandMacros(sUrl);
-
-        if( strcmp( lang, "ja" ) == 0 )
-            sUrl += "ja.data";
-        else if( strcmp( lang, "zh" ) == 0 )
-            sUrl += "zh.data";
-
-        oslFileHandle aFileHandle;
-        sal_uInt64 nFileSize;
-        char *pMapping;
-        if( osl_openFile( sUrl.pData, &aFileHandle, osl_File_OpenFlag_Read ) == osl_File_E_None &&
-            osl_getFileSize( aFileHandle, &nFileSize) == osl_File_E_None &&
-            osl_mapFile( aFileHandle, (void **) &pMapping, nFileSize, 0, osl_File_MapFlag_RandomAccess ) == osl_File_E_None )
-        {
-            // We have the offsets to the parts of the file at its end, see gendict.cxx
-            sal_Int64 *pEOF = (sal_Int64*)(pMapping + nFileSize);
-
-            data.existMark = (sal_uInt8*) (pMapping + pEOF[-1]);
-            data.index2 = (sal_Int32*) (pMapping + pEOF[-2]);
-            data.index1 = (sal_Int16*) (pMapping + pEOF[-3]);
-            data.lenArray = (sal_Int32*) (pMapping + pEOF[-4]);
-            data.dataArea = (sal_Unicode*) (pMapping + pEOF[-5]);
-        }
-    }
-
-#elif !defined DISABLE_DYNLOADING
-
-    initDictionaryData( lang );
-
-#else
-
-    if( strcmp( lang, "ja" ) == 0 ) {
-        data.existMark = getExistMark_ja();
-        data.index1 = getIndex1_ja();
-        data.index2 = getIndex2_ja();
-        data.lenArray = getLenArray_ja();
-        data.dataArea = getDataArea_ja();
-    }
-    else if( strcmp( lang, "zh" ) == 0 ) {
-        data.existMark = getExistMark_zh();
-        data.index1 = getIndex1_zh();
-        data.index2 = getIndex2_zh();
-        data.lenArray = getLenArray_zh();
-        data.dataArea = getDataArea_zh();
-    }
-
-#endif
-
-    for (WordBreakCache & i : cache)
-        i.size = 0;
-
-    japaneseWordBreak = false;
 }
 
 xdictionary::~xdictionary()
