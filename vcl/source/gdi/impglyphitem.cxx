@@ -357,7 +357,7 @@ SalLayoutGlyphsCache::CachedGlyphsKey::CachedGlyphsKey(const VclPtr<const Output
     , font(outputDevice->GetFont())
     // TODO It would be possible to get a better hit ratio if mapMode wasn't part of the key
     // and results that differ only in mapmode would have coordinates adjusted based on that.
-    // That would occassionally lead to rounding errors (at least differences that would
+    // That would occasionally lead to rounding errors (at least differences that would
     // make checkGlyphsEqual() fail).
     , mapMode(outputDevice->GetMapMode())
     , rtl(outputDevice->IsRTLEnabled())
