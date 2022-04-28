@@ -590,7 +590,7 @@ Reference< XController2 > SfxFrameLoader_Impl::impl_createDocumentView( const Re
     return xController;
 }
 
-std::shared_ptr<const SfxFilter> getEmptyURLFilter(const OUString& sURL)
+std::shared_ptr<const SfxFilter> getEmptyURLFilter(std::u16string_view sURL)
 {
     INetURLObject aParser(sURL);
     const OUString aExt = aParser.getExtension(INetURLObject::LAST_SEGMENT, true,

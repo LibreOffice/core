@@ -99,7 +99,7 @@ bool SfxHTMLParser::ParseMapOptions(
     return !aName.isEmpty();
 }
 
-bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBaseURL,
+bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, std::u16string_view rBaseURL,
                                      const HTMLOptions& rOptions,
                                      SvMacroItemId nEventMouseOver,
                                      SvMacroItemId nEventMouseOut )

@@ -1005,7 +1005,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 namespace
 {
 
-OUString tryMSOwnerFiles(const OUString& sDocURL)
+OUString tryMSOwnerFiles(std::u16string_view sDocURL)
 {
     svt::MSODocumentLockFile aMSOLockFile(sDocURL);
     LockFileEntry aData;
@@ -1026,7 +1026,7 @@ OUString tryMSOwnerFiles(const OUString& sDocURL)
     return sUserData;
 }
 
-OUString tryForeignLockfiles(const OUString& sDocURL)
+OUString tryForeignLockfiles(std::u16string_view sDocURL)
 {
     OUString sUserData = tryMSOwnerFiles(sDocURL);
     // here we can test for empty result, and add other known applications' lockfile testing
@@ -4264,14 +4264,14 @@ bool SfxMedium::IsOpen() const
     return pImpl->m_pInStream || pImpl->m_pOutStream || pImpl->xStorage.is();
 }
 
-OUString SfxMedium::CreateTempCopyWithExt( const OUString& aURL )
+OUString SfxMedium::CreateTempCopyWithExt( std::u16string_view aURL )
 {
     OUString aResult;
 
-    if ( !aURL.isEmpty() )
+    if ( !aURL.empty() )
     {
-        sal_Int32 nPrefixLen = aURL.lastIndexOf( '.' );
-        OUString aExt = ( nPrefixLen == -1 ) ? OUString() :  aURL.copy( nPrefixLen );
+        size_t nPrefixLen = aURL.rfind( '.' );
+        OUString aExt = ( nPrefixLen == std::u16string_view::npos ) ? OUString() : OUString(aURL.substr( nPrefixLen ));
 
         OUString aNewTempFileURL = ::utl::TempFile( u"", true, &aExt ).GetURL();
         if ( !aNewTempFileURL.isEmpty() )

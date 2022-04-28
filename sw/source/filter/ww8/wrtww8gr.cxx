@@ -170,12 +170,12 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet, tools::SvRef<SotStora
                 {
                     Graphic aGr1;
                     GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
-                    if( rGF.ImportGraphic( aGr1, OUString(), *pGraphicStream ) == ERRCODE_NONE )
+                    if( rGF.ImportGraphic( aGr1, u"", *pGraphicStream ) == ERRCODE_NONE )
                     {
                         Graphic aGr2;
                         pGraphicStream =
                                 ::utl::UcbStreamHelper::CreateStream( aCnt.GetGraphicStream( pRet->GetObjRef() ) );
-                        if( pGraphicStream && rGF.ImportGraphic( aGr2, OUString(), *pGraphicStream ) == ERRCODE_NONE )
+                        if( pGraphicStream && rGF.ImportGraphic( aGr2, u"", *pGraphicStream ) == ERRCODE_NONE )
                         {
                             if ( aGr1 == aGr2 )
                                 bGraphicNeeded = false;

@@ -70,7 +70,7 @@ void LockFileCommon::SetURL(const OUString& aURL)
 
 
 OUString LockFileCommon::GenerateOwnLockFileURL(
-    const OUString& aOrigURL, std::u16string_view aPrefix)
+    std::u16string_view aOrigURL, std::u16string_view aPrefix)
 {
     INetURLObject aURL = ResolveLinks(INetURLObject(aOrigURL));
     aURL.setName(OUStringConcatenation(aPrefix + aURL.GetLastName() + "%23" /*'#'*/));

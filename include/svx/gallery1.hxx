@@ -102,7 +102,7 @@ private:
     INetURLObject               aUserURL;
     bool                        bMultiPath;
 
-    SAL_DLLPRIVATE void         ImplLoad( const OUString& rMultiPath );
+    SAL_DLLPRIVATE void         ImplLoad( std::u16string_view rMultiPath );
     SAL_DLLPRIVATE void         ImplLoadSubDirs( const INetURLObject& rBaseURL, bool& rbIsReadOnly );
 
     GalleryThemeEntry*          ImplGetThemeEntry( std::u16string_view rThemeName );
@@ -115,7 +115,7 @@ private:
 
 public:
                                 // only for gengal utility!
-                                Gallery( const OUString& rMultiPath );
+                                Gallery( std::u16string_view rMultiPath );
                                 virtual ~Gallery() override;
 
     static Gallery*             GetGalleryInstance();

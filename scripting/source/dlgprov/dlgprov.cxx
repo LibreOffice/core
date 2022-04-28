@@ -63,7 +63,7 @@ using namespace ::sf_misc;
 namespace dlgprov
 {
 
-    Reference< resource::XStringResourceManager > lcl_getStringResourceManager(const Reference< XComponentContext >& i_xContext,const OUString& i_sURL)
+    Reference< resource::XStringResourceManager > lcl_getStringResourceManager(const Reference< XComponentContext >& i_xContext, std::u16string_view i_sURL)
     {
         INetURLObject aInetObj( i_sURL );
         OUString aDlgName = aInetObj.GetBase();

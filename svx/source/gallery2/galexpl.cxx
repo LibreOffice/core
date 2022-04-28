@@ -107,7 +107,7 @@ bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vector< 
     return !rList.empty();
 }
 
-bool GalleryExplorer::InsertURL( std::u16string_view rThemeName, const OUString& rURL )
+bool GalleryExplorer::InsertURL( std::u16string_view rThemeName, std::u16string_view rURL )
 {
     Gallery*    pGal = ::Gallery::GetGalleryInstance();
     bool        bRet = false;
@@ -129,7 +129,7 @@ bool GalleryExplorer::InsertURL( std::u16string_view rThemeName, const OUString&
     return bRet;
 }
 
-bool GalleryExplorer::InsertURL( sal_uInt32 nThemeId, const OUString& rURL )
+bool GalleryExplorer::InsertURL( sal_uInt32 nThemeId, std::u16string_view rURL )
 {
     Gallery* pGal = ::Gallery::GetGalleryInstance();
     return pGal && InsertURL( pGal->GetThemeName( nThemeId ), rURL );

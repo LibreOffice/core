@@ -133,7 +133,7 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
         else
         {
             GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-            bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(rMimeType)) == ERRCODE_NONE);
+            bRet = (rFilter.ExportGraphic(aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType(rMimeType)) == ERRCODE_NONE);
         }
     }
     else
@@ -148,7 +148,7 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
             else if (aFormat.isEmpty())
                 aFormat = "image/png";
 
-            bRet = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
+            bRet = (rFilter.ExportGraphic(aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
         }
         else if (rMimeType.isEmpty() && aGraphic.GetType() == GraphicType::GdiMetafile)
         {
@@ -161,7 +161,7 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
         else if (!rMimeType.isEmpty())
         {
             GraphicFilter & rFilter = GraphicFilter::GetGraphicFilter();
-            bRet = ( rFilter.ExportGraphic( aGraphic, "", *pStream, rFilter.GetExportFormatNumberForMediaType( rMimeType ) ) == ERRCODE_NONE );
+            bRet = ( rFilter.ExportGraphic( aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType( rMimeType ) ) == ERRCODE_NONE );
         }
     }
 
@@ -297,7 +297,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
         mpOStm->Seek( 0 );
         sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
         sal_uInt16 nDeterminedFormat = GRFILTER_FORMAT_DONTKNOW;
-        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", *mpOStm ,nFormat,&nDeterminedFormat);
+        GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, u"", *mpOStm ,nFormat,&nDeterminedFormat);
 
         if (nDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
@@ -337,7 +337,7 @@ Graphic SvXMLGraphicOutputStream::GetGraphic()
                         if (nStreamLen_ > 0)
                         {
                             aDest.Seek(0);
-                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, "", aDest ,nFormat,&nDeterminedFormat );
+                            GraphicFilter::GetGraphicFilter().ImportGraphic( aGraphic, u"", aDest ,nFormat,&nDeterminedFormat );
                         }
                     }
                 }
@@ -506,7 +506,7 @@ Graphic SvXMLGraphicHelper::ImplReadGraphic( const OUString& rPictureStorageName
         if (!aGraphic.IsNone())
             aReturnGraphic = aGraphic;
         else
-            rGraphicFilter.ImportGraphic(aReturnGraphic, "", *pStream);
+            rGraphicFilter.ImportGraphic(aReturnGraphic, u"", *pStream);
     }
 
     return aReturnGraphic;
@@ -798,7 +798,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(css::uno::Reference<css::graphic::X
                     }
                     rOutSavedMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aFormat.toUtf8());
 
-                    bSuccess = (rFilter.ExportGraphic(aGraphic, "", *pStream, rFilter.GetExportFormatNumberForShortName(aFormat)) == ERRCODE_NONE);
+                    bSuccess = (rFilter.ExportGraphic(aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForShortName(aFormat)) == ERRCODE_NONE);
                 }
                 else if (aGraphic.GetType() == GraphicType::GdiMetafile)
                 {

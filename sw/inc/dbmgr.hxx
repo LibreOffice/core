@@ -412,7 +412,7 @@ public:
      Convenience function, which calls GetDBunoURI and has just one mandatory parameter.
      In case of success it returns the registered name, otherwise an empty string.
      */
-    static OUString            LoadAndRegisterDataSource(const OUString& rURI, const OUString *pDestDir);
+    static OUString            LoadAndRegisterDataSource(std::u16string_view rURI, const OUString *pDestDir);
 
     /// Load the embedded data source of the document and also register it.
     void LoadAndRegisterEmbeddedDataSource(const SwDBData& rData, const SwDocShell& rDocShell);

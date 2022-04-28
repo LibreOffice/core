@@ -33,7 +33,7 @@ HTMLOptionEnum<HTMLScriptLanguage> const aScriptLangOptEnums[] =
     { nullptr,                                 HTMLScriptLanguage(0) }
 };
 
-void HTMLParser::ParseScriptOptions( OUString& rLangString, const OUString& rBaseURL,
+void HTMLParser::ParseScriptOptions( OUString& rLangString, std::u16string_view rBaseURL,
                                      HTMLScriptLanguage& rLang,
                                      OUString& rSrc,
                                      OUString& rLibrary,

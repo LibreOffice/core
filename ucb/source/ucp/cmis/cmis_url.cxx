@@ -16,7 +16,7 @@
 
 namespace cmis
 {
-    URL::URL( OUString const & urlStr )
+    URL::URL( std::u16string_view urlStr )
     {
         INetURLObject aUrl( urlStr );
 

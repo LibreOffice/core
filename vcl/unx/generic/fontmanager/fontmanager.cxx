@@ -150,7 +150,7 @@ int PrintFontManager::getDirectoryAtom( const OString& rDirectory )
     return nAtom;
 }
 
-std::vector<fontID> PrintFontManager::addFontFile( const OUString& rFileUrl )
+std::vector<fontID> PrintFontManager::addFontFile( std::u16string_view rFileUrl )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     INetURLObject aPath( rFileUrl );

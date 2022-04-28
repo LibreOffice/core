@@ -1970,7 +1970,7 @@ OUString ImplSdPPTImport::ReadSound(sal_uInt32 nSoundRef) const
                                 aGalleryDir = SvtPathOptions().GetGalleryPath();
                             // Use last token delimited by ';'. copy(lastIndexOf+1) works whether
                             // string is empty or not and whether ';' is there or not.
-                            INetURLObject aGalleryUserSound( aGalleryDir.copy(aGalleryDir.lastIndexOf(';')+1) );
+                            INetURLObject aGalleryUserSound( aGalleryDir.subView(aGalleryDir.lastIndexOf(';')+1) );
 
                             aGalleryUserSound.Append( aRetval );
                             const auto nRemainingSize = rStCtrl.remainingSize();

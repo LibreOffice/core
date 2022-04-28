@@ -29,7 +29,7 @@ private:
         Excel,
         PowerPoint
     };
-    static AppType getAppType(const OUString& sOrigURL);
+    static AppType getAppType(std::u16string_view sOrigURL);
     AppType m_eAppType;
 
     virtual void
@@ -39,14 +39,14 @@ private:
     virtual css::uno::Reference<css::io::XInputStream> OpenStream() override;
 
 public:
-    MSODocumentLockFile(const OUString& aOrigURL);
+    MSODocumentLockFile(std::u16string_view aOrigURL);
     virtual ~MSODocumentLockFile() override;
 
     virtual LockFileEntry GetLockData() override;
 
     virtual void RemoveFile() override;
 
-    static bool IsMSOSupportedFileFormat(const OUString& aURL);
+    static bool IsMSOSupportedFileFormat(std::u16string_view aURL);
 };
 }
 

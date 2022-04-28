@@ -2679,7 +2679,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
         return false;
     }
 
-    if ( aURL != INetURLObject( OUString( "private:stream"  ) ) )
+    if ( aURL != INetURLObject( u"private:stream" ) )
     {
         // Is there already a Document with this name?
         SfxObjectShell* pDoc = nullptr;
@@ -2731,7 +2731,7 @@ bool SfxObjectShell::CommonSaveAs_Impl(const INetURLObject& aURL, const OUString
 
     bool bWasReadonly = IsReadOnly();
 
-    if ( aURL == aActName && aURL != INetURLObject( OUString("private:stream") )
+    if ( aURL == aActName && aURL != INetURLObject( u"private:stream" )
         && IsReadOnly() )
     {
         SetError(ERRCODE_SFX_DOCUMENTREADONLY);

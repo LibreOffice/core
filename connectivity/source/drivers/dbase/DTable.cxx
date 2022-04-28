@@ -1418,7 +1418,7 @@ bool ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     return true;
 }
 
-bool ODbaseTable::Drop_Static(const OUString& _sUrl, bool _bHasMemoFields, OCollection* _pIndexes )
+bool ODbaseTable::Drop_Static(std::u16string_view _sUrl, bool _bHasMemoFields, OCollection* _pIndexes )
 {
     INetURLObject aURL;
     aURL.SetURL(_sUrl);

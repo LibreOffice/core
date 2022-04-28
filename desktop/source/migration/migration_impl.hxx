@@ -159,7 +159,7 @@ private:
 #if defined UNX && ! defined MACOSX
     static OUString preXDGConfigDir(const OUString& rConfigDir);
 #endif
-    static void   setInstallInfoIfExist(install_info& aInfo,  const OUString& rConfigDir, const OUString& rVersion);
+    static void   setInstallInfoIfExist(install_info& aInfo, std::u16string_view rConfigDir, const OUString& rVersion);
     static install_info  findInstallation(const strings_v& rVersions);
     strings_vr    compileFileList();
 

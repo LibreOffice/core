@@ -468,7 +468,7 @@ public:
                         getTextFrame() const { return pTextWin->getFrame(); }
 
     void                SetFactory( const OUString& rFactory );
-    void                SetHelpURL( const OUString& rURL );
+    void                SetHelpURL( std::u16string_view rURL );
     void                DoAction(std::string_view rAction);
     void                CloseWindow();
 
@@ -480,7 +480,7 @@ public:
     bool                HasHistoryPredecessor() const;      // forward to interceptor
     bool                HasHistorySuccessor() const;        // forward to interceptor
 
-    void                openDone(const OUString& sURL    ,
+    void                openDone(std::u16string_view sURL    ,
                                        bool         bSuccess);
 
     static OUString     buildHelpURL(std::u16string_view sFactory        ,

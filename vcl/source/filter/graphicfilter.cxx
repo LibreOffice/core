@@ -157,7 +157,7 @@ sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, sal_uLo
     return nullptr;
 }
 
-static OUString ImpGetExtension( const OUString &rPath )
+static OUString ImpGetExtension( std::u16string_view rPath )
 {
     OUString        aExt;
     INetURLObject   aURL( rPath );
@@ -202,7 +202,7 @@ bool isPCT(SvStream& rStream, sal_uLong nStreamPos, sal_uLong nStreamLen)
     return false;
 }
 
-ErrCode GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& rStream, sal_uInt16& rFormat )
+ErrCode GraphicFilter::ImpTestOrFindFormat( std::u16string_view rPath, SvStream& rStream, sal_uInt16& rFormat )
 {
     // determine or check the filter/format by reading into it
     if( rFormat == GRFILTER_FORMAT_DONTKNOW )
@@ -215,7 +215,7 @@ ErrCode GraphicFilter::ImpTestOrFindFormat( const OUString& rPath, SvStream& rSt
                 return ERRCODE_NONE;
         }
         // determine filter by file extension
-        if( !rPath.isEmpty() )
+        if( !rPath.empty() )
         {
             OUString aExt( ImpGetExtension( rPath ) );
             rFormat = pConfig->GetImportFormatNumberForExtension( aExt );
@@ -506,7 +506,7 @@ ErrCode GraphicFilter::CanImportGraphic( const INetURLObject& rPath,
     return nRetValue;
 }
 
-ErrCode GraphicFilter::CanImportGraphic( const OUString& rMainUrl, SvStream& rIStream,
+ErrCode GraphicFilter::CanImportGraphic( std::u16string_view rMainUrl, SvStream& rIStream,
                                         sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat )
 {
     sal_uInt64 nStreamPos = rIStream.Tell();
@@ -538,7 +538,7 @@ ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rP
 
 ErrCode GraphicFilter::ImportGraphic(
     Graphic& rGraphic,
-    const OUString& rPath,
+    std::u16string_view rPath,
     SvStream& rIStream,
     sal_uInt16 nFormat,
     sal_uInt16* pDeterminedFormat,
@@ -638,7 +638,7 @@ void GraphicFilter::ImportGraphics(std::vector< std::shared_ptr<Graphic> >& rGra
             ResetLastError();
             rContext.m_nStreamBegin = rContext.m_pStream->Tell();
             sal_uInt16 nFormat = GRFILTER_FORMAT_DONTKNOW;
-            rContext.m_nStatus = ImpTestOrFindFormat(OUString(), *rContext.m_pStream, nFormat);
+            rContext.m_nStatus = ImpTestOrFindFormat(u"", *rContext.m_pStream, nFormat);
             rContext.m_pStream->Seek(rContext.m_nStreamBegin);
 
             // Import the graphic.
@@ -797,7 +797,7 @@ Graphic GraphicFilter::ImportUnloadedGraphic(SvStream& rIStream, sal_uInt64 size
 
     rIStream.Seek(nStreamBegin);
 
-    ErrCode nStatus = ImpTestOrFindFormat("", rIStream, nFormat);
+    ErrCode nStatus = ImpTestOrFindFormat(u"", rIStream, nFormat);
 
     rIStream.Seek(nStreamBegin);
     sal_uInt32 nStreamLength(rIStream.remainingSize());
@@ -1345,7 +1345,7 @@ ErrCode GraphicFilter::readWEBP(SvStream & rStream, Graphic & rGraphic, GfxLinkT
         return ERRCODE_GRFILTER_FILTERERROR;
 }
 
-ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, const OUString& rPath, SvStream& rIStream,
+ErrCode GraphicFilter::ImportGraphic( Graphic& rGraphic, std::u16string_view rPath, SvStream& rIStream,
                                      sal_uInt16 nFormat, sal_uInt16* pDeterminedFormat, GraphicFilterImportFlags nImportFlags,
                                      const css::uno::Sequence< css::beans::PropertyValue >* /*pFilterData*/,
                                      WmfExternal const *pExtHeader )
@@ -1567,7 +1567,7 @@ ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const INetURLObje
     return nRetValue;
 }
 
-ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, const OUString& rPath,
+ErrCode GraphicFilter::ExportGraphic( const Graphic& rGraphic, std::u16string_view rPath,
     SvStream& rOStm, sal_uInt16 nFormat, const css::uno::Sequence< css::beans::PropertyValue >* pFilterData )
 {
     SAL_INFO( "vcl.filter", "GraphicFilter::ExportGraphic() (thb)" );
@@ -1943,7 +1943,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
     {
         // Import
         nFormat = GetImportFormatNumberForShortName( aShortName );
-        bRet = ImportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat ) == ERRCODE_NONE;
+        bRet = ImportGraphic( rData.maGraphic, u"", rData.mrStm, nFormat ) == ERRCODE_NONE;
     }
     else if( !aShortName.isEmpty() )
     {
@@ -1959,7 +1959,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData&, rData, bool )
         }
 #endif
         nFormat = GetExportFormatNumberForShortName( aShortName );
-        bRet = ExportGraphic( rData.maGraphic, OUString(), rData.mrStm, nFormat, &aFilterData ) == ERRCODE_NONE;
+        bRet = ExportGraphic( rData.maGraphic, u"", rData.mrStm, nFormat, &aFilterData ) == ERRCODE_NONE;
     }
 
     return bRet;
@@ -2040,7 +2040,7 @@ ErrCode GraphicFilter::compressAsPNG(const Graphic& rGraphic, SvStream& rOutputS
         "Compression", sal_uInt32(9)) };
 
     sal_uInt16 nFilterFormat = GetExportFormatNumberForShortName(u"PNG");
-    return ExportGraphic(rGraphic, OUString(), rOutputStream, nFilterFormat, &aFilterData);
+    return ExportGraphic(rGraphic, u"", rOutputStream, nFilterFormat, &aFilterData);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

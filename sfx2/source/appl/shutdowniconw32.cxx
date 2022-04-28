@@ -181,7 +181,7 @@ static HMENU createSystrayMenu( )
             continue;
 
         addMenuItem( hMenu, nMenuItemID, nMenuIconID,
-            ShutdownIcon::GetUrlDescription( sURL ), pos, true, "" );
+            ShutdownIcon::GetUrlDescription( sURL.asView() ), pos, true, "" );
     }
 
 

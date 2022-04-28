@@ -2717,7 +2717,7 @@ void ScExternalRefManager::addFilesToLinkManager()
         maybeLinkExternalFile( nFileId, true);
 }
 
-void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const OUString& rOwnDocName)
+void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(std::u16string_view rOwnDocName)
 {
     if (maRelativeName.isEmpty())
         // No relative path given.  Nothing to do.

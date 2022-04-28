@@ -570,7 +570,7 @@ namespace dbaui
         commitURL();
     }
 
-    bool OConnectionHelper::createDirectoryDeep(const OUString& _rPathURL)
+    bool OConnectionHelper::createDirectoryDeep(std::u16string_view _rPathURL)
     {
         // get a URL object analyzing the URL for us ...
         INetURLObject aParser;

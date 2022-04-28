@@ -271,7 +271,7 @@ void CompressGraphicsDialog::Compress(SvStream& aStream)
     OUString aGraphicFormatName = m_xLosslessRB->get_active() ? OUString( "png" ) : OUString( "jpg" );
 
     sal_uInt16 nFilterFormat = rFilter.GetExportFormatNumberForShortName( aGraphicFormatName );
-    rFilter.ExportGraphic( aScaledGraphic, "none", aStream, nFilterFormat, &aFilterData );
+    rFilter.ExportGraphic( aScaledGraphic, u"none", aStream, nFilterFormat, &aFilterData );
 }
 
 IMPL_LINK_NOARG( CompressGraphicsDialog, OkayClickHdl, weld::Button&, void )
@@ -417,7 +417,7 @@ Graphic CompressGraphicsDialog::GetCompressedGraphic()
         aMemStream.Seek( STREAM_SEEK_TO_BEGIN );
         Graphic aResultGraphic;
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
-        rFilter.ImportGraphic( aResultGraphic, OUString("import"), aMemStream );
+        rFilter.ImportGraphic( aResultGraphic, u"import", aMemStream );
 
         return aResultGraphic;
     }
