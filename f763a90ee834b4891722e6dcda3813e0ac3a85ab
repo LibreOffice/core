@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "816d6603_e26ba266",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-29T06:52:35Z",
+      "side": 1,
+      "message": "That call to toAsciiUpperCase got introduced with \u003chttps://git.libreoffice.org/core/+/5488ff0be8ec4625822428781298ffb76ea84041%5E!/\u003e \"mnemonics in words with Eszett misplaced\", together with another call to toAsciiUpperCase in MnemonicGenerator::CreateMnemonic in the same source file, which looks equally wrong?",
+      "revId": "f763a90ee834b4891722e6dcda3813e0ac3a85ab",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
