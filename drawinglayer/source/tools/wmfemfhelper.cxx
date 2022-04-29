@@ -1529,7 +1529,7 @@ namespace wmfemfhelper
                     if(rPropertyHolders.Current().getLineColorActive())
                     {
                         basegfx::B2DPolygon aLinePolygon;
-                        LineInfo aLineInfo;
+                        LineInfo aLineInfo = static_cast<const MetaLineAction*>(pAction)->GetLineInfo();
 
                         while(MetaActionType::LINE == pAction->GetType() && nAction < nCount)
                         {
@@ -1563,14 +1563,14 @@ namespace wmfemfhelper
                                 aLinePolygon.append(aEnd);
                             }
 
-                            nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
+                            nAction++;
+                            if (nAction < nCount)
+                                pAction = rMetaFile.GetAction(nAction);
                         }
 
                         nAction--;
-
-                        if(aLinePolygon.count())
+                        if (aLinePolygon.count())
                         {
-                            aLineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE); // It were lines; force to NONE
                             createLinePrimitive(aLinePolygon, aLineInfo, rTargetHolders.Current(), rPropertyHolders.Current());
                         }
                     }
