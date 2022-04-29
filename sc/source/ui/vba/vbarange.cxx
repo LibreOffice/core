@@ -781,13 +781,13 @@ namespace {
 class CellValueGetter : public ValueGetter
 {
 protected:
+    RangeValueType meValueType;
     uno::Any maValue;
 public:
-    CellValueGetter() {}
+    CellValueGetter(RangeValueType eValueType) { meValueType = eValueType; }
     virtual void visitNode( sal_Int32 x, sal_Int32 y, const uno::Reference< table::XCell >& xCell ) override;
     virtual void processValue( const uno::Any& aValue ) override;
     const uno::Any& getValue() const override { return maValue; }
-
 };
 
 }
@@ -800,10 +800,10 @@ CellValueGetter::processValue(  const uno::Any& aValue )
 void CellValueGetter::visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell )
 {
     uno::Any aValue;
-    table::CellContentType eType = xCell->getType();
-    if( eType == table::CellContentType_VALUE || eType == table::CellContentType_FORMULA )
+    table::CellContentType eCellContentType = xCell->getType();
+    if( eCellContentType == table::CellContentType_VALUE || eCellContentType == table::CellContentType_FORMULA )
     {
-        if ( eType == table::CellContentType_FORMULA )
+        if ( eCellContentType == table::CellContentType_FORMULA )
         {
 
             OUString sFormula = xCell->getFormula();
@@ -834,13 +834,13 @@ void CellValueGetter::visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Re
             NumFormatHelper cellFormat( xRange );
             if ( cellFormat.isBooleanType() )
                 aValue <<= ( xCell->getValue() != 0.0 );
-            else if ( cellFormat.isDateType() )
+            else if ( cellFormat.isDateType() && meValueType == RangeValueType::value)
                 aValue <<= bridge::oleautomation::Date( xCell->getValue() );
             else
                 aValue <<= xCell->getValue();
         }
     }
-    if( eType == table::CellContentType_TEXT )
+    if( eCellContentType == table::CellContentType_TEXT )
     {
         uno::Reference< text::XTextRange > xTextRange(xCell, ::uno::UNO_QUERY_THROW);
         aValue <<= xTextRange->getString();
@@ -908,7 +908,8 @@ private:
     ScDocument& m_rDoc;
     formula::FormulaGrammar::Grammar m_eGrammar;
 public:
-    CellFormulaValueGetter(ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ) :  m_rDoc( rDoc ), m_eGrammar( eGram ) {}
+    CellFormulaValueGetter(ScDocument& rDoc, formula::FormulaGrammar::Grammar eGram ) :
+         CellValueGetter( RangeValueType::value ), m_rDoc( rDoc ), m_eGrammar( eGram ) {}
     virtual void visitNode( sal_Int32 /*x*/, sal_Int32 /*y*/, const uno::Reference< table::XCell >& xCell ) override
     {
         uno::Any aValue;
@@ -1524,8 +1525,7 @@ ScVbaRange::getValue( ValueGetter& valueGetter)
     return uno::Any( script::ArrayWrapper( false, arrayGetter.getValue() ) );
 }
 
-uno::Any SAL_CALL
-ScVbaRange::getValue()
+css::uno::Any ScVbaRange::DoGetValue( RangeValueType eValueType )
 {
     // #TODO code within the test below "if ( m_Areas... " can be removed
     // Test is performed only because m_xRange is NOT set to be
@@ -1537,10 +1537,22 @@ ScVbaRange::getValue()
         return xRange->getValue();
     }
 
-    CellValueGetter valueGetter;
+    CellValueGetter valueGetter( eValueType );
     return getValue( valueGetter );
-
 }
+
+uno::Any SAL_CALL
+ScVbaRange::getValue()
+{
+    return DoGetValue( RangeValueType::value );
+}
+
+uno::Any SAL_CALL
+ScVbaRange::getValue2()
+{
+    return DoGetValue( RangeValueType::value2 );
+}
+
 
 void
 ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
@@ -1593,6 +1605,13 @@ ScVbaRange::setValue( const uno::Any  &aValue )
     CellValueSetter valueSetter( aValue );
     setValue( aValue, valueSetter );
 }
+
+void SAL_CALL
+ScVbaRange::setValue2( const uno::Any  &aValue )
+{
+    return setValue( aValue );
+}
+
 
 void SAL_CALL
 ScVbaRange::Clear()
