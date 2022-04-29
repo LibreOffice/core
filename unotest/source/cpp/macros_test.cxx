@@ -131,7 +131,8 @@ void MacrosTest::setUpNssGpg(const test::Directories& rDirectories, const OUStri
     osl_setEnvironment(caVar.pData, aTargetPath.pData);
 #else
     OUString mozCertVar("MOZILLA_CERTIFICATE_FOLDER");
-    osl_setEnvironment(mozCertVar.pData, aTargetPath.pData);
+    // explicit prefix with "sql:" needed for CentOS7 system NSS 3.67
+    osl_setEnvironment(mozCertVar.pData, OUString("sql:" + aTargetPath).pData);
 #endif
     OUString gpgHomeVar("GNUPGHOME");
     osl_setEnvironment(gpgHomeVar.pData, aTargetPath.pData);
