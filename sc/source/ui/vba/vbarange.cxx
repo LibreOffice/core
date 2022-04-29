@@ -1535,6 +1535,14 @@ ScVbaRange::getValue()
 
 }
 
+uno::Any SAL_CALL
+ScVbaRange::getValue2()
+{
+    // #TODO special case currency and date
+    return getValue();
+}
+
+
 void
 ScVbaRange::setValue( const uno::Any& aValue, ValueSetter& valueSetter )
 {
@@ -1586,6 +1594,15 @@ ScVbaRange::setValue( const uno::Any  &aValue )
     CellValueSetter valueSetter( aValue );
     setValue( aValue, valueSetter );
 }
+
+void SAL_CALL
+ScVbaRange::setValue2( const uno::Any  &aValue )
+{
+    // If this is a multiple selection apply setValue over all areas
+    // TODO special case currency and date
+    return setValue( aValue );
+}
+
 
 void SAL_CALL
 ScVbaRange::Clear()
