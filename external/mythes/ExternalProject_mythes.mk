@@ -21,6 +21,7 @@ $(call gb_ExternalProject_get_state_target,mythes,build):
 	$(call gb_Trace_StartRange,mythes,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
 		CXXFLAGS=" $(CXXFLAGS) $(call gb_ExternalProject_get_build_flags,mythes)" \
+		LDFLAGS="$(call gb_ExternalProject_get_link_flags,mythes)" \
 		LIBS="$(gb_STDLIBS) $(LIBS)" $(gb_RUN_CONFIGURE) ./configure --disable-shared --with-pic \
 		$(gb_CONFIGURE_PLATFORMS) \
 		$(if $(CROSS_COMPILING),gio_can_sniff=no) \

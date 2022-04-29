@@ -40,7 +40,7 @@ $(call gb_ExternalProject_get_state_target,libxml2,build):
 			$(if $(debug),--with-run-debug) \
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(filter MACOSX,$(OS)),--prefix=/@.__________________________________________________URELIB) \
-			LDFLAGS="$(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
+			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libxml2) $(if $(SYSBASE),-L$(SYSBASE)/usr/lib)" \
 			CFLAGS="$(CFLAGS) \
 				$(if $(SYSBASE),-I$(SYSBASE)/usr/include) \
 				$(call gb_ExternalProject_get_build_flags,libxml2)" \
