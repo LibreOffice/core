@@ -723,7 +723,7 @@ IMPL_LINK( SwView, ScrollHdl, ScrollBar *, p, void )
                     {
                         sPageStr += "  - ";
                         sal_Int32 nChunkLen = std::min<sal_Int32>(aCnt.sStr.getLength(), 80);
-                        OUString sChunk = aCnt.sStr.copy(0, nChunkLen);
+                        std::u16string_view sChunk = aCnt.sStr.subView(0, nChunkLen);
                         sPageStr = sChunk + sPageStr;
                         sPageStr = sPageStr.replace('\t', ' ');
                         sPageStr = sPageStr.replace(0x0a, ' ');

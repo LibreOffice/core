@@ -53,6 +53,7 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <svx/UnoNamespaceMap.hxx>
 #include <svx/svdlayer.hxx>
@@ -954,76 +955,76 @@ css::uno::Reference<css::uno::XInterface> SdXImpressDocument::create(
 
     if( aServiceSpecifier.startsWith( "com.sun.star.presentation.") )
     {
-        const OUString aType( aServiceSpecifier.copy(26) );
+        const std::u16string_view aType( aServiceSpecifier.subView(26) );
         rtl::Reference<SvxShape> pShape;
 
         SdrObjKind nType = SdrObjKind::Text;
         // create a shape wrapper
-        if( aType.startsWith( "TitleTextShape" ) )
+        if( o3tl::starts_with(aType, u"TitleTextShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "OutlinerShape" ) )
+        else if( o3tl::starts_with(aType, u"OutlinerShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "SubtitleShape" ) )
+        else if( o3tl::starts_with(aType, u"SubtitleShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "GraphicObjectShape" ) )
+        else if( o3tl::starts_with(aType, u"GraphicObjectShape" ) )
         {
             nType = SdrObjKind::Graphic;
         }
-        else if( aType.startsWith( "PageShape" ) )
+        else if( o3tl::starts_with(aType, u"PageShape" ) )
         {
             nType = SdrObjKind::Page;
         }
-        else if( aType.startsWith( "OLE2Shape" ) )
+        else if( o3tl::starts_with(aType, u"OLE2Shape" ) )
         {
             nType = SdrObjKind::OLE2;
         }
-        else if( aType.startsWith( "ChartShape" ) )
+        else if( o3tl::starts_with(aType, u"ChartShape" ) )
         {
             nType = SdrObjKind::OLE2;
         }
-        else if( aType.startsWith( "CalcShape" ) )
+        else if( o3tl::starts_with(aType, u"CalcShape" ) )
         {
             nType = SdrObjKind::OLE2;
         }
-        else if( aType.startsWith( "TableShape" ) )
+        else if( o3tl::starts_with(aType, u"TableShape" ) )
         {
             nType = SdrObjKind::Table;
         }
-        else if( aType.startsWith( "OrgChartShape" ) )
+        else if( o3tl::starts_with(aType, u"OrgChartShape" ) )
         {
             nType = SdrObjKind::OLE2;
         }
-        else if( aType.startsWith( "NotesShape" ) )
+        else if( o3tl::starts_with(aType, u"NotesShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "HandoutShape" ) )
+        else if( o3tl::starts_with(aType, u"HandoutShape" ) )
         {
             nType = SdrObjKind::Page;
         }
-        else if( aType.startsWith( "FooterShape" ) )
+        else if( o3tl::starts_with(aType, u"FooterShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "HeaderShape" ) )
+        else if( o3tl::starts_with(aType, u"HeaderShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "SlideNumberShape" ) )
+        else if( o3tl::starts_with(aType, u"SlideNumberShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "DateTimeShape" ) )
+        else if( o3tl::starts_with(aType, u"DateTimeShape" ) )
         {
             nType = SdrObjKind::Text;
         }
-        else if( aType.startsWith( "MediaShape" ) )
+        else if( o3tl::starts_with(aType, u"MediaShape" ) )
         {
             nType = SdrObjKind::Media;
         }

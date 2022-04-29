@@ -713,9 +713,9 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::ONE_SINGLE_CHAR )
         {
-            OUString aName( m_sCommand.copy( nRealStt,
+            std::u16string_view aName( m_sCommand.subView( nRealStt,
                               aRes.EndPos - nRealStt ));
-            if( 1 == aName.getLength() )
+            if( 1 == aName.size() )
             {
                 bSetError = false;
                 sal_Unicode ch = aName[0];
@@ -819,9 +819,9 @@ SwCalcOper SwCalc::GetToken()
         }
         else if( aRes.TokenType & KParseType::BOOLEAN )
         {
-            OUString aName( m_sCommand.copy( nRealStt,
+            std::u16string_view aName( m_sCommand.subView( nRealStt,
                                          aRes.EndPos - nRealStt ));
-            if( !aName.isEmpty() )
+            if( !aName.empty() )
             {
                 sal_Unicode ch = aName[0];
 
@@ -833,9 +833,9 @@ SwCalcOper SwCalc::GetToken()
                     SwCalcOper eTmp2 = ('<' == ch) ? CALC_LEQ : CALC_GEQ;
                     m_eCurrOper = ('<' == ch) ? CALC_LES : CALC_GRE;
 
-                    if( 2 == aName.getLength() && '=' == aName[1] )
+                    if( 2 == aName.size() && '=' == aName[1] )
                         m_eCurrOper = eTmp2;
-                    else if( 1 != aName.getLength() )
+                    else if( 1 != aName.size() )
                         bSetError = true;
                 }
             }

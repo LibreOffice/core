@@ -1911,7 +1911,7 @@ void SbRtl_CDateFromIso(StarBASIC *, SbxArray & rPar, bool)
                 break;
 
             bool bUseTwoDigitYear = false;
-            OUString aYearStr, aMonthStr, aDayStr;
+            std::u16string_view aYearStr, aMonthStr, aDayStr;
             if (nLen == 6 || nLen == 8 || nLen == 9)
             {
                 // ((Y)YY)YYMMDD
@@ -1921,9 +1921,9 @@ void SbRtl_CDateFromIso(StarBASIC *, SbxArray & rPar, bool)
                 const sal_Int32 nMonthPos = (nLen == 8 ? 4 : (nLen == 6 ? 2 : 5));
                 if (nMonthPos == 2)
                     bUseTwoDigitYear = true;
-                aYearStr  = aStr.copy( 0, nMonthPos );
-                aMonthStr = aStr.copy( nMonthPos, 2 );
-                aDayStr   = aStr.copy( nMonthPos + 2, 2 );
+                aYearStr  = aStr.subView( 0, nMonthPos );
+                aMonthStr = aStr.subView( nMonthPos, 2 );
+                aDayStr   = aStr.subView( nMonthPos + 2, 2 );
             }
             else
             {
@@ -1934,9 +1934,9 @@ void SbRtl_CDateFromIso(StarBASIC *, SbxArray & rPar, bool)
                 if (aStr.indexOf('-', nMonthSep + 1) != nMonthSep + 3)
                     break;
 
-                aYearStr  = aStr.copy( 0, nMonthSep );
-                aMonthStr = aStr.copy( nMonthSep + 1, 2 );
-                aDayStr   = aStr.copy( nMonthSep + 4, 2 );
+                aYearStr  = aStr.subView( 0, nMonthSep );
+                aMonthStr = aStr.subView( nMonthSep + 1, 2 );
+                aDayStr   = aStr.subView( nMonthSep + 4, 2 );
                 if (    !comphelper::string::isdigitAsciiString(aYearStr) ||
                         !comphelper::string::isdigitAsciiString(aMonthStr) ||
                         !comphelper::string::isdigitAsciiString(aDayStr))
@@ -1944,8 +1944,8 @@ void SbRtl_CDateFromIso(StarBASIC *, SbxArray & rPar, bool)
             }
 
             double dDate;
-            if (!implDateSerial( static_cast<sal_Int16>(nSign * aYearStr.toInt32()),
-                        static_cast<sal_Int16>(aMonthStr.toInt32()), static_cast<sal_Int16>(aDayStr.toInt32()),
+            if (!implDateSerial( static_cast<sal_Int16>(nSign * o3tl::toInt32(aYearStr)),
+                        static_cast<sal_Int16>(o3tl::toInt32(aMonthStr)), static_cast<sal_Int16>(o3tl::toInt32(aDayStr)),
                         bUseTwoDigitYear, SbDateCorrection::None, dDate ))
                 break;
 

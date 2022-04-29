@@ -402,7 +402,7 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         sal_Int32 nPos = aStyleName.indexOf(aOutlineStr);
         if (nPos >= 0)
         {
-            OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
+            std::u16string_view aNumStr(aStyleName.subView(aOutlineStr.getLength()));
             aInternalName = STR_LAYOUT_OUTLINE + aNumStr;
         }
     }
@@ -464,7 +464,7 @@ SdStyleSheet* SdStyleSheet::GetPseudoStyleSheet() const
         sal_Int32 nPos = aStyleName.indexOf(aOutlineStr);
         if (nPos != -1)
         {
-            OUString aNumStr(aStyleName.copy(aOutlineStr.getLength()));
+            std::u16string_view aNumStr(aStyleName.subView(aOutlineStr.getLength()));
             aStyleName = SdResId(STR_PSEUDOSHEET_OUTLINE) + aNumStr;
         }
     }

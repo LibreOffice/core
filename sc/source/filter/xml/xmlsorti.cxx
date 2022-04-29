@@ -173,12 +173,12 @@ void ScXMLSortContext::AddSortField(std::u16string_view sFieldNumber, const OUSt
         aSortField.SortAscending = false;
     if (sDataType.getLength() > 8)
     {
-        OUString sTemp = sDataType.copy(0, 8);
-        if (sTemp == "UserList")
+        std::u16string_view sTemp = sDataType.subView(0, 8);
+        if (sTemp == u"UserList")
         {
             bEnabledUserList = true;
-            sTemp = sDataType.copy(8);
-            nUserListIndex = static_cast<sal_Int16>(sTemp.toInt32());
+            sTemp = sDataType.subView(8);
+            nUserListIndex = static_cast<sal_Int16>(o3tl::toInt32(sTemp));
         }
         else
         {

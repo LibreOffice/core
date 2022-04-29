@@ -17946,7 +17946,7 @@ public:
         if (nCursorIndex != -1)
         {
             OString sUTF = OUStringToOString(sSurroundingText, RTL_TEXTENCODING_UTF8);
-            OUString sCursorText(sSurroundingText.copy(0, nCursorIndex));
+            std::u16string_view sCursorText(sSurroundingText.subView(0, nCursorIndex));
             gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
                 OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
         }

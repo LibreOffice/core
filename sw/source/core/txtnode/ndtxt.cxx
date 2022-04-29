@@ -3708,9 +3708,9 @@ void SwTextNode::ReplaceText( const SwIndex& rStart, const sal_Int32 nDelLen,
         m_Text = m_Text.replaceAt(rStart.GetIndex(), nLen - 1, u"");
         Update( rStart, nLen - 1, true );
 
-        OUString aTmpText( sInserted.copy(1) );
+        std::u16string_view aTmpText( sInserted.subView(1) );
         m_Text = m_Text.replaceAt(rStart.GetIndex(), 0, aTmpText);
-        Update( rStart, aTmpText.getLength() );
+        Update( rStart, aTmpText.size() );
     }
     else
     {

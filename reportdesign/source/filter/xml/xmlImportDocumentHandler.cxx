@@ -247,14 +247,14 @@ void SAL_CALL ImportDocumentHandler::startElement(const OUString & _sName, const
         const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
         for(sal_Int16 i = 0; i < nLength; ++i)
         {
-            OUString sLocalName;
+            std::u16string_view sLocalName;
             const OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_Int32 nColonPos = sAttrName.indexOf( ':' );
             if( -1 == nColonPos )
                 sLocalName = sAttrName;
             else
-                sLocalName = sAttrName.copy( nColonPos + 1 );
-            if ( sLocalName == "data-source-has-labels" )
+                sLocalName = sAttrName.subView( nColonPos + 1 );
+            if ( sLocalName == u"data-source-has-labels" )
             {
                 const OUString sValue = _xAttrList->getValueByIndex( i );
                 bHasCategories = sValue == "both";

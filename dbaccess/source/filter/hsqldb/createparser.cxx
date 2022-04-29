@@ -251,9 +251,9 @@ void CreateStmtParser::parseColumnPart(std::u16string_view sColumnPart)
         // search next space to get the whole type name
         // eg: INTEGER, VARCHAR(10), DECIMAL(6,3)
         auto nNextSpace = sFromTypeName.indexOf(" ");
-        OUString sFullTypeName;
+        std::u16string_view sFullTypeName;
         if (nNextSpace > 0)
-            sFullTypeName = sFromTypeName.copy(0, nNextSpace);
+            sFullTypeName = sFromTypeName.subView(0, nNextSpace);
         // perhaps column type corresponds to the last info here
         else
             sFullTypeName = sFromTypeName;
@@ -266,7 +266,8 @@ void CreateStmtParser::parseColumnPart(std::u16string_view sColumnPart)
         if (isPrimaryKey)
             m_PrimaryKeys.push_back(rColumnName);
 
-        const OUString sColumnWithoutName = sColumn.copy(sColumn.indexOf(typeParts.typeName));
+        const std::u16string_view sColumnWithoutName
+            = sColumn.subView(sColumn.indexOf(typeParts.typeName));
 
         ColumnDefinition aColDef(rColumnName, lcl_getDataTypeFromHsql(typeParts.typeName),
                                  std::move(typeParts.params), isPrimaryKey,

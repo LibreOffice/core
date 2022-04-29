@@ -488,15 +488,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             sal_Int32 nCharIndex = 0; // Character index
             do
             {
-                OUString aToken = rProperty.second.getToken(0, ';', nCharIndex);
+                std::u16string_view aToken = o3tl::getToken(rProperty.second, 0, ';', nCharIndex);
                 if (!nSize)
-                    nSize = aToken.toInt32();
+                    nSize = o3tl::toInt32(aToken);
                 else if (!nCount)
-                    nCount = aToken.toInt32();
-                else if (aToken.getLength())
+                    nCount = o3tl::toInt32(aToken);
+                else if (!aToken.empty())
                 {
                     // The coordinates are in an (x,y) form.
-                    aToken = aToken.copy(1, aToken.getLength() - 2);
+                    aToken = aToken.substr(1, aToken.size() - 2);
                     sal_Int32 nI = 0;
                     sal_Int32 nX = o3tl::toInt32(o3tl::getToken(aToken, 0, ',', nI));
                     sal_Int32 nY
@@ -835,15 +835,15 @@ void RTFSdrImport::resolve(RTFShape& rShape, bool bClose, ShapeOrPict const shap
             sal_Int32 nCharIndex = 0; // Character index
             do
             {
-                OUString aToken = rProperty.second.getToken(0, ';', nCharIndex);
+                std::u16string_view aToken = o3tl::getToken(rProperty.second, 0, ';', nCharIndex);
                 if (!nSize)
-                    nSize = aToken.toInt32();
+                    nSize = o3tl::toInt32(aToken);
                 else if (!nCount)
-                    nCount = aToken.toInt32();
-                else if (aToken.getLength())
+                    nCount = o3tl::toInt32(aToken);
+                else if (!aToken.empty())
                 {
                     // The coordinates are in an (x,y) form.
-                    aToken = aToken.copy(1, aToken.getLength() - 2);
+                    aToken = aToken.substr(1, aToken.size() - 2);
                     sal_Int32 nI = 0;
                     sal_Int32 nX = o3tl::toInt32(o3tl::getToken(aToken, 0, ',', nI));
                     sal_Int32 nY

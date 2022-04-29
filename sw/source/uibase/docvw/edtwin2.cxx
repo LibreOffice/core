@@ -179,15 +179,15 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 sal_Int32 nFound = sText.indexOf(cMarkSeparator);
                 if( nFound != -1 && (++nFound) < sText.getLength() )
                 {
-                    OUString sSuffix( sText.copy(nFound) );
-                    if( sSuffix == "table" ||
-                        sSuffix == "frame" ||
-                        sSuffix == "region" ||
-                        sSuffix == "outline" ||
-                        sSuffix == "text" ||
-                        sSuffix == "graphic" ||
-                        sSuffix == "ole" ||
-                        sSuffix == "drawingobject" )
+                    std::u16string_view sSuffix( sText.subView(nFound) );
+                    if( sSuffix == u"table" ||
+                        sSuffix == u"frame" ||
+                        sSuffix == u"region" ||
+                        sSuffix == u"outline" ||
+                        sSuffix == u"text" ||
+                        sSuffix == u"graphic" ||
+                        sSuffix == u"ole" ||
+                        sSuffix == u"drawingobject" )
                         sText = sText.copy( 0, nFound - 1);
                 }
                 // #i104300#

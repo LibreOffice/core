@@ -83,7 +83,7 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
         nPos = aName.indexOf(aOutlineStr);
         if (nPos != -1)
         {
-            OUString aNumStr(aName.copy(aOutlineStr.getLength()));
+            std::u16string_view aNumStr(aName.subView(aOutlineStr.getLength()));
             aName = STR_LAYOUT_OUTLINE + aNumStr;
         }
     }

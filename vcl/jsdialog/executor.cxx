@@ -92,7 +92,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     int separatorPos = rData["data"].indexOf(';');
                     if (separatorPos > 0)
                     {
-                        OUString entryPos = rData["data"].copy(0, separatorPos);
+                        std::u16string_view entryPos = rData["data"].subView(0, separatorPos);
                         OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
                         int pos = std::atoi(posString.getStr());
                         pCombobox->set_active(pos);

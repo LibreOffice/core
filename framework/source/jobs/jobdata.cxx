@@ -460,7 +460,7 @@ bool JobData::hasCorrectContext(const OUString& rModuleIdent) const
         sal_Int32 nIndex = m_sContext.indexOf( rModuleIdent );
         if ( nIndex >= 0 && ( nIndex+nModuleIdLen <= nContextLen ))
         {
-            OUString sContextModule = m_sContext.copy( nIndex, nModuleIdLen );
+            std::u16string_view sContextModule = m_sContext.subView( nIndex, nModuleIdLen );
             return sContextModule == rModuleIdent;
         }
     }
