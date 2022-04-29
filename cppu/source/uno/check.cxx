@@ -69,8 +69,11 @@ struct D
 };
 struct E
 {
+    // [-loplugin:fakebool] false positive:
     sal_Bool a;
+    // [-loplugin:fakebool] false positive:
     sal_Bool b;
+    // [-loplugin:fakebool] false positive:
     sal_Bool c;
     sal_Int16 d;
     sal_Int32 e;
@@ -142,8 +145,10 @@ enum Enum
 #   pragma pack(pop)
 #endif
 
+// [-loplugin:fakebool] false positive:
 static_assert( static_cast<sal_Bool>(true) == sal_True,
                "must be binary compatible" );
+// [-loplugin:fakebool] false positive:
 static_assert( static_cast<sal_Bool>(false) == sal_False,
                "must be binary compatible" );
 #if SAL_TYPES_ALIGNMENT8 == 2
