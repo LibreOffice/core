@@ -1175,8 +1175,6 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
     static bool bAbortOnFontSubstitute = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
     if (bAbortOnFontSubstitute && rPattern.maTargetName != rPattern.maSearchName)
     {
-        SAL_INFO("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
-                              "' try: " << rPattern.maSearchName << " instead");
         if (bMissingJustBullet)
         {
             assert(rPattern.maTargetName == "Amiri Quran" || rPattern.maTargetName == "David CLM" ||
@@ -1187,6 +1185,8 @@ void PrintFontManager::Substitute(vcl::font::FontSelectPattern &rPattern, OUStri
             // ImplFontMetricData::ImplInitTextLineSize
             return;
         }
+        SAL_WARN("vcl.fonts", "PrintFontManager::Substitute: missing font: '" << rPattern.maTargetName <<
+                              "' try: " << rPattern.maSearchName << " instead");
         std::abort();
     }
 }
