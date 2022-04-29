@@ -429,27 +429,27 @@ bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
         return false;
     }
 
-    OUString tag = sFormula.copy(0,index);
-    if (tag == "Now()")
+    std::u16string_view tag = sFormula.subView(0,index);
+    if (tag == u"Now()")
     {
         type = DATETIME_NOW;
         formula = sFormula.copy(index+1);
         return true;
     }
-    else if (tag == "CreateDate")
+    else if (tag == u"CreateDate")
     {
         type = DATETIME_CREATE;
         formula = sFormula.copy(index+1);
         return true;
     }
-    else if (tag == "EditDate")
+    else if (tag == u"EditDate")
     {
         type = DATETIME_LASTEDIT;
         formula = sFormula.copy(index+1);
         return true;
     }
-    else if (tag == "YesterdaysDate" || tag == "TomorrowsDate"
-            || tag == "TodaysDate")
+    else if (tag == u"YesterdaysDate" || tag == u"TomorrowsDate"
+            || tag == u"TodaysDate")
     {
         type = DATETIME_SKIP;
         return true;
@@ -476,14 +476,14 @@ bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
             return false;
     }
 
-    OUString tag = sFormula.copy(0,index);
-    if (tag == "PageRef")
+    std::u16string_view tag = sFormula.subView(0,index);
+    if (tag == u"PageRef")
     {
         sMarkName = sFormula.copy(index+1);
         nType = CROSSREF_PAGE;
         return true;
     }
-    else if (tag == "ParaRef")
+    else if (tag == u"ParaRef")
     {
         sMarkName = sFormula.copy(index+1);
         nType = CROSSREF_PARANUMBER;

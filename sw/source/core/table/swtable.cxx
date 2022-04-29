@@ -1266,11 +1266,11 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 }
 
 // return the pointer of the box specified.
-static bool lcl_IsValidRowName( const OUString& rStr )
+static bool lcl_IsValidRowName( std::u16string_view rStr )
 {
     bool bIsValid = true;
-    sal_Int32 nLen = rStr.getLength();
-    for( sal_Int32 i = 0;  i < nLen && bIsValid; ++i )
+    size_t nLen = rStr.size();
+    for( size_t i = 0;  i < nLen && bIsValid; ++i )
     {
         const sal_Unicode cChar = rStr[i];
         if (cChar < '0' || cChar > '9')
@@ -1328,10 +1328,10 @@ sal_uInt16 SwTable::GetBoxNum( OUString& rStr, bool bFirstPart,
         else
         {
             nRet = 0;
-            const OUString aText( rStr.copy( 0, nPos ) );
+            const std::u16string_view aText( rStr.subView( 0, nPos ) );
             if ( !bPerformValidCheck || lcl_IsValidRowName( aText ) )
             {
-                nRet = o3tl::narrowing<sal_uInt16>(aText.toInt32());
+                nRet = o3tl::narrowing<sal_uInt16>(o3tl::toInt32(aText));
             }
             rStr = rStr.copy( nPos+1 );
         }

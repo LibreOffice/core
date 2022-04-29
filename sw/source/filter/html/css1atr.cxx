@@ -1224,16 +1224,16 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
     if( SwHTMLWriter::HasScriptDependentItems( rItemSet, bHasClass ) )
     {
         bScriptDependent = true;
-        OUString aSelector( rSelector );
+        std::u16string_view aSelector( rSelector );
 
-        OUString aPseudo;
+        std::u16string_view aPseudo;
         if( bCheckForPseudo )
         {
-            sal_Int32 nPos = aSelector.lastIndexOf( ':' );
-            if( nPos >= 0 )
+            size_t nPos = aSelector.rfind( ':' );
+            if( nPos != std::u16string_view::npos )
             {
-                aPseudo = aSelector.copy( nPos );
-                aSelector =aSelector.copy( 0, nPos );
+                aPseudo = aSelector.substr( nPos );
+                aSelector =aSelector.substr( 0, nPos );
             }
         }
 
@@ -1257,21 +1257,21 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
                 aScriptItemSet( *rItemSet.GetPool() );
             aScriptItemSet.Put( rItemSet );
 
-            OUString aNewSelector = aSelector + ".western" + aPseudo;
+            OUString aNewSelector = OUString::Concat(aSelector) + ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, false );
             }
 
-            aNewSelector = aSelector + ".cjk" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + ".cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, false );
             }
 
-            aNewSelector = aSelector + ".ctl" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + ".ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
@@ -1283,21 +1283,21 @@ static bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const OUString& rSelector,
             // If there are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
-            OUString aNewSelector = aSelector + "-western" + aPseudo;
+            OUString aNewSelector = OUString::Concat(aSelector) + "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
             }
 
-            aNewSelector = aSelector + "-cjk" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + "-cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
                 rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, false );
             }
 
-            aNewSelector = aSelector + "-ctl" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + "-ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
                                      &aNewSelector );
@@ -1329,14 +1329,14 @@ static void OutCSS1DropCapRule(
     if( (bHasScriptDependencies && bHasClass) ||
          (pDCCharFormat && SwHTMLWriter::HasScriptDependentItems( pDCCharFormat->GetAttrSet(), false ) ) )
     {
-        OUString aSelector( rSelector );
+        std::u16string_view aSelector( rSelector );
 
-        OUString aPseudo;
-        sal_Int32 nPos = aSelector.lastIndexOf( ':' );
-        if( nPos >= 0 )
+        std::u16string_view aPseudo;
+        size_t nPos = aSelector.rfind( ':' );
+        if( nPos != std::u16string_view::npos )
         {
-            aPseudo = aSelector.copy( nPos );
-            aSelector = aSelector.copy( 0, nPos );
+            aPseudo = aSelector.substr( nPos );
+            aSelector = aSelector.substr( 0, nPos );
         }
 
         if( !bHasClass )
@@ -1358,21 +1358,21 @@ static void OutCSS1DropCapRule(
             if( pDCCharFormat )
                 aScriptItemSet.Set( pDCCharFormat->GetAttrSet() );
 
-            OUString aNewSelector = aSelector + ".western" + aPseudo;
+            OUString aNewSelector = OUString::Concat(aSelector) + ".western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
-            aNewSelector = aSelector + ".cjk" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + ".cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
             }
 
-            aNewSelector = aSelector + ".ctl" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + ".ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
@@ -1384,21 +1384,21 @@ static void OutCSS1DropCapRule(
             // If there are script dependencies and we are derived from a tag,
             // when we have to export a style dependent class for all
             // scripts
-            OUString aNewSelector = aSelector + "-western" + aPseudo;
+            OUString aNewSelector = OUString::Concat(aSelector) + "-western" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop );
             }
 
-            aNewSelector = aSelector + "-cjk" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + "-cjk" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
                 OutCSS1_SwFormatDropAttrs(  rHTMLWrt, rDrop );
             }
 
-            aNewSelector = aSelector + "-ctl" + aPseudo;
+            aNewSelector = OUString::Concat(aSelector) + "-ctl" + aPseudo;
             {
                 SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
                                      &aNewSelector );
