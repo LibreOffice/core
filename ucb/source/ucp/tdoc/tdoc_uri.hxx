@@ -99,7 +99,7 @@ inline bool Uri::isDocument() const
 {
     init();
     return ( ( !m_aDocId.isEmpty() ) /* not root */
-             && ( m_aPath.copy( m_aDocId.getLength() + 1 ).getLength() < 2 ) );
+             && ( m_aPath.subView( m_aDocId.getLength() + 1 ).size() < 2 ) );
 }
 
 } // namespace tdoc_ucp

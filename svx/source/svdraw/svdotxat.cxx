@@ -19,6 +19,7 @@
 
 #include <comphelper/string.hxx>
 #include <o3tl/sorted_vector.hxx>
+#include <o3tl/string_view.hxx>
 #include <svl/style.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdmodel.hxx>
@@ -445,9 +446,9 @@ void SdrTextObj::AppendFamilyToStyleName(OUString& styleName, SfxStyleFamily fam
 
 SfxStyleFamily SdrTextObj::ReadFamilyFromStyleName(const OUString& styleName)
 {
-    OUString familyString = styleName.copy(styleName.getLength() - PADDING_LENGTH_FOR_STYLE_FAMILY);
-    familyString = comphelper::string::stripEnd(familyString, PADDING_CHARACTER_FOR_STYLE_FAMILY);
-    sal_uInt16 nFam = static_cast<sal_uInt16>(familyString.toInt32());
+    std::u16string_view familyString1 = styleName.subView(styleName.getLength() - PADDING_LENGTH_FOR_STYLE_FAMILY);
+    OUString familyString2 = comphelper::string::stripEnd(familyString1, PADDING_CHARACTER_FOR_STYLE_FAMILY);
+    sal_uInt16 nFam = static_cast<sal_uInt16>(o3tl::toInt32(familyString2));
     assert(nFam != 0);
     return static_cast<SfxStyleFamily>(nFam);
 }

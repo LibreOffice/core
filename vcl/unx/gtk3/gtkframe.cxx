@@ -5609,7 +5609,7 @@ gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pCon
     pThis->m_pFrame->CallCallback(SalEvent::SurroundingTextRequest, &aEvt);
 
     OString sUTF = OUStringToOString(aEvt.maText, RTL_TEXTENCODING_UTF8);
-    OUString sCursorText(aEvt.maText.copy(0, aEvt.mnStart));
+    std::u16string_view sCursorText(aEvt.maText.subView(0, aEvt.mnStart));
     gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
         OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
     return true;

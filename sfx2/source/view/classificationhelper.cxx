@@ -385,10 +385,10 @@ void SfxClassificationHelper::Impl::parsePolicy()
     OUString aExtension(".xml");
     if (aPath.endsWith(aExtension) && m_bUseLocalized)
     {
-        OUString aBase = aPath.copy(0, aPath.getLength() - aExtension.getLength());
+        std::u16string_view aBase = aPath.subView(0, aPath.getLength() - aExtension.getLength());
         const LanguageTag& rLanguageTag = Application::GetSettings().GetLanguageTag();
         // Expected format is "<original path>_xx-XX.xml".
-        OUString aLocalized = aBase + "_" + rLanguageTag.getBcp47() + aExtension;
+        OUString aLocalized = OUString::Concat(aBase) + "_" + rLanguageTag.getBcp47() + aExtension;
         if (FStatHelper::IsDocument(aLocalized))
             aPath = aLocalized;
     }

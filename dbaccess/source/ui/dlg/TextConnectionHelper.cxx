@@ -357,7 +357,7 @@ namespace dbaui
         int nPos(rBox.find_text(rBox.get_active_text()));
 
         if (nPos == -1)
-            return rBox.get_active_text().copy(0);
+            return rBox.get_active_text();
 
         if ( m_xTextSeparator.get() != &rBox || nPos != (rBox.get_count()-1) )
             return OUString(

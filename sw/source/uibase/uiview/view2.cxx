@@ -2180,7 +2180,7 @@ auto PrepareJumpToTOXMark(SwDoc const& rDoc, OUString const& rName)
         return std::optional<std::pair<SwTOXMark, sal_Int32>>();
     }
     sal_uInt16 const indexType(rName[second + 1]);
-    OUString const indexName(rName.copy(second + 2));
+    std::u16string_view const indexName(rName.subView(second + 2));
     SwTOXType const* pType(nullptr);
     switch (indexType)
     {

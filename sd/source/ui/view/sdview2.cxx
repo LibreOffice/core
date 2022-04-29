@@ -731,7 +731,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                                 sal_Int32 nIndex = aBookmark.indexOf( '#' );
                                 if( nIndex != -1 )
                                 {
-                                    const OUString aDocName( aBookmark.copy( 0, nIndex ) );
+                                    const std::u16string_view aDocName( aBookmark.subView( 0, nIndex ) );
 
                                     if (mpDocSh->GetMedium()->GetName() == aDocName || aDocName == mpDocSh->GetName())
                                     {
