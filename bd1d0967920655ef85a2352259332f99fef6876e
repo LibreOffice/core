@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b09ec921_3f696b10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-29T17:07:24Z",
+      "side": 1,
+      "message": "Ok then. Thank you for the revert and the alternative fix!\nIt\u0027s a pity no Jenkins machine detected it whereas at least one of the machine regularly fails for reason unrelated to the patch.",
+      "revId": "bd1d0967920655ef85a2352259332f99fef6876e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "539dd630_223f69f0",
         "filename": "vcl/source/filter/itiff/itiff.cxx",
         "patchSetId": 4
