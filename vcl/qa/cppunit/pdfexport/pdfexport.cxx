@@ -2955,22 +2955,22 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf145873)
     int nPageObjectCount = pPdfPage->getObjectCount();
 
     // tdf#145873: Without the fix #1 in place, this test would have failed with
-    // - Expected: 318
+    // - Expected: 66
     // - Actual  : 3
-    CPPUNIT_ASSERT_EQUAL(318, nPageObjectCount);
+    CPPUNIT_ASSERT_EQUAL(66, nPageObjectCount);
 
     auto pObject = pPdfPage->getObject(4);
     CPPUNIT_ASSERT_MESSAGE("no object", pObject != nullptr);
 
     // tdf#145873: Without the fix #2 in place, this test would have failed with
-    // - Expected: 3.23
+    // - Expected: 13.23
     // - Actual  : 3.57...
     // - Delta   : 0.1
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.23, pObject->getBounds().getWidth(), 0.1);
-    // - Expected: 3.49
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.23, pObject->getBounds().getWidth(), 0.1);
+    // - Expected: 13.49
     // - Actual  : 3.74...
     // - Delta   : 0.1
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(3.49, pObject->getBounds().getHeight(), 0.1);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(13.49, pObject->getBounds().getHeight(), 0.1);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageHyperlink)
