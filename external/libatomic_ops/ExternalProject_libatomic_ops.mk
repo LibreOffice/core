@@ -18,7 +18,12 @@ $(eval $(call gb_ExternalProject_register_targets,libatomic_ops,\
 $(call gb_ExternalProject_get_state_target,libatomic_ops,build) :
 	$(call gb_Trace_StartRange,libatomic_ops,EXTERNAL)
 	$(call gb_ExternalProject_run,build,\
-		$(if $(filter TRUE,$(DISABLE_DYNLOADING)),CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(call gb_ExternalProject_get_build_flags,libatomic_ops)" CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(call gb_ExternalProject_get_build_flags,libatomic_ops)") \
+		$(if $(filter TRUE, \
+			$(DISABLE_DYNLOADING)) \
+			, \
+			CFLAGS="$(CFLAGS) $(gb_VISIBILITY_FLAGS) $(call gb_ExternalProject_get_build_flags,libatomic_ops)" \
+			CXXFLAGS="$(CXXFLAGS) $(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX) $(call gb_ExternalProject_get_build_flags,libatomic_ops)" \
+			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libatomic_ops)") \
 		$(gb_RUN_CONFIGURE) ./configure \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
