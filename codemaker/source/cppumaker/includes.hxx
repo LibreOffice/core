@@ -38,7 +38,7 @@ public:
 
     ~Includes();
 
-    void add(std::string_view entityName);
+    void add(OString const & entityName);
     void addCassert() { m_includeCassert = true; }
     void addAny() { m_includeAny = true; }
     void addReference() { m_includeReference = true; }
