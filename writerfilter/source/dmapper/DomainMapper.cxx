@@ -1083,6 +1083,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 {
                     m_pImpl->m_pSdtHelper->setControlType(SdtControlType::richText);
                     m_pImpl->PushSdt();
+                    break;
                 }
             }
             m_pImpl->SetSdt(true);
@@ -1094,6 +1095,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 switch (m_pImpl->m_pSdtHelper->getControlType())
                 {
                     case SdtControlType::richText:
+                    case SdtControlType::checkBox:
                         m_pImpl->PopSdt();
                         break;
                     default:
@@ -2771,6 +2773,20 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     case NS_ooxml::LN_CT_SdtPlaceholder_docPart:
     case NS_ooxml::LN_CT_SdtPr_color:
     {
+        if (!m_pImpl->GetSdtStarts().empty())
+        {
+            if (nSprmId == NS_ooxml::LN_CT_SdtPr_checkbox)
+            {
+                m_pImpl->m_pSdtHelper->setControlType(SdtControlType::checkBox);
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if (pProperties)
+                {
+                    pProperties->resolve(*this);
+                }
+                break;
+            }
+        }
+
         // this is an unsupported SDT property, create a grab bag for it
         OUString sName;
         switch (nSprmId)
@@ -2819,13 +2835,42 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
     }
     break;
     case NS_ooxml::LN_CT_SdtCheckbox_checked:
-        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_checked", sStringValue);
+        if (!m_pImpl->GetSdtStarts().empty())
+        {
+            // nIntValue is not just 0 or 1, because we're in the w14 namespace's ST_OnOff.
+            if (nIntValue == NS_ooxml::LN_ST_OnOff_true || nIntValue == NS_ooxml::LN_ST_OnOff_1)
+            {
+                m_pImpl->m_pSdtHelper->SetChecked();
+            }
+        }
+        else
+        {
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_checked",
+                                   TextEffectsHandler::getOnOffString(nIntValue));
+        }
         break;
     case NS_ooxml::LN_CT_SdtCheckbox_checkedState:
-        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_checkedState", sStringValue);
+        if (!m_pImpl->GetSdtStarts().empty())
+        {
+            m_pImpl->m_pSdtHelper->SetCheckedState(OUString(sal_Unicode(sStringValue.toInt32(16))));
+        }
+        else
+        {
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_checkedState",
+                                   sStringValue);
+        }
         break;
     case NS_ooxml::LN_CT_SdtCheckbox_uncheckedState:
-        m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtCheckbox_uncheckedState", sStringValue);
+        if (!m_pImpl->GetSdtStarts().empty())
+        {
+            m_pImpl->m_pSdtHelper->SetUncheckedState(
+                OUString(sal_Unicode(sStringValue.toInt32(16))));
+        }
+        else
+        {
+            m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag,
+                                   "ooxml:CT_SdtCheckbox_uncheckedState", sStringValue);
+        }
         break;
     case NS_ooxml::LN_CT_SdtDocPart_docPartGallery:
         m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDocPart_docPartGallery", sStringValue);
@@ -2930,6 +2975,12 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 {
                     rContext->Insert(PROP_CHAR_TRANSPARENCE, uno::makeAny(nTransparency));
                 }
+            }
+            else if (nSprmId == NS_ooxml::LN_cntxtAlts_cntxtAlts)
+            {
+                pTextEffectsHandlerPtr->lcl_sprm(rSprm);
+                beans::PropertyValue aGrabBag = pTextEffectsHandlerPtr->getInteropGrabBag();
+                rContext->Insert(*aPropertyId, uno::makeAny(aGrabBag), true, CHAR_GRAB_BAG);
             }
         }
     }

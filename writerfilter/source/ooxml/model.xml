@@ -4886,7 +4886,7 @@
       </define>
       <define name="CT_SdtCheckbox">
         <element name="checked">
-          <ref name="CT_String"/>
+          <ref name="CT_OnOff"/>
         </element>
         <element name="checkedState">
           <ref name="CT_String"/>
@@ -5260,8 +5260,9 @@
       <attribute name="id" tokenid="ooxml:CT_StyleSet_id"/>
       <attribute name="val" tokenid="ooxml:CT_StyleSet_val"/>
     </resource>
-    <resource name="CT_OnOff" resource="Properties">
-      <attribute name="val" tokenid="ooxml:CT_OnOff_val"/>
+    <resource name="CT_OnOff" resource="Value">
+      <attribute name="val" tokenid="ooxml:CT_OnOff_val" action="setValue"/>
+      <action name="start" action="setDefaultBooleanValue"/>
     </resource>
 
     <!-- Main element content -->
