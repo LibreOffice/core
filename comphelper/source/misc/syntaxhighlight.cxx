@@ -487,7 +487,7 @@ bool SyntaxHighlighter::Tokenizer::getNextToken(std::u16string_view::const_itera
     }
 
     // Object separator? Must be handled before Number
-    else if( c == '.' && ( *pos < '0' || *pos > '9' ) )
+    else if( c == '.' && ( pos == end || *pos < '0' || *pos > '9' ) )
     {
         reType = TokenType::Operator;
     }
