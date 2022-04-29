@@ -30,7 +30,7 @@ namespace com::sun::star::i18n { class XCharacterClassification; }
 // Latin 0-9
 #define MNEMONIC_RANGE_1_START      0x30
 #define MNEMONIC_RANGE_1_END        0x39
-// Latin A-Z
+// Latin a-z
 #define MNEMONIC_RANGE_2_START      0x61
 #define MNEMONIC_RANGE_2_END        0x7A
 // Cyrillic
