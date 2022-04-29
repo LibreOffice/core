@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4534fcc_71def049",
+        "filename": "sw/qa/extras/layout/layout2.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-04-29T11:45:19Z",
+      "side": 1,
+      "message": "Ah, nice to see you started to use the newer markup here. See feeed3e762cf077fbd9cf48f82e949365108ccc1 for more info, hopefully the new markup can be used in all new tests. If that new way would not allow you to test something, let me know. :-)",
+      "revId": "41b012767feb8552b60a68c7be18d80c403304bf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
