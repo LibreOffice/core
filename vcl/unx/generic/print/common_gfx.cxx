@@ -31,6 +31,7 @@
 #include <tools/color.hxx>
 #include <tools/poly.hxx>
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 
 using namespace psp ;
 
@@ -1071,7 +1072,7 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
             {
                 if( aLine.matchIgnoreAsciiCase( "%%BoundingBox:" ) )
                 {
-                    aLine = WhitespaceToSpace( aLine.getToken(1, ':') );
+                    aLine = WhitespaceToSpace( o3tl::getToken(aLine, 1, ':') );
                     if( !aLine.isEmpty() && aLine.indexOf( "atend" ) == -1 )
                     {
                         fLeft   = StringToDouble( GetCommandLineToken( 0, aLine ) );
@@ -1081,7 +1082,7 @@ PrinterGfx::DrawEPS( const tools::Rectangle& rBoundingBox, void* pPtr, sal_uInt3
                     }
                 }
                 else if( aLine.matchIgnoreAsciiCase( "%%Title:" ) )
-                    aDocTitle = WhitespaceToSpace( aLine.copy( 8 ) );
+                    aDocTitle = WhitespaceToSpace( aLine.subView( 8 ) );
                 else if( aLine.matchIgnoreAsciiCase( "%%EndComments" ) )
                     bEndComments = true;
             }
