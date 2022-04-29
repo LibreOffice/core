@@ -74,6 +74,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestRestoreDCWMF();
     void TestRoundrectWMF();
     void TestStretchDIBWMF();
+    void TestMoveToLineToWMF();
     void TestPolylinetoCloseStroke();
     void TestPolyLineWidth();
 
@@ -120,6 +121,7 @@ public:
     CPPUNIT_TEST(TestRestoreDCWMF);
     CPPUNIT_TEST(TestRoundrectWMF);
     CPPUNIT_TEST(TestStretchDIBWMF);
+    CPPUNIT_TEST(TestMoveToLineToWMF);
     CPPUNIT_TEST(TestPolylinetoCloseStroke);
     CPPUNIT_TEST(TestPolyLineWidth);
     CPPUNIT_TEST(TestRestoreDC);
@@ -1204,6 +1206,23 @@ void Test::TestStretchDIBWMF()
                 "000000,00001c,000038,000055,000071,00008d,0000aa,0000c6,0000e2,0000ff");
     assertXPath(pDocument, aXPathPrefix + "/mask/bitmap/data[5]", "row",
                 "720000,721c1c,723838,725555,727171,72728d,55728d,39728d,1d728d,00728d");
+}
+
+void Test::TestMoveToLineToWMF()
+{
+    // tdf#89331 WMF records: MOTETO, LINETO, CREATEPENINDIRECT.
+    Primitive2DSequence aSequence = parseEmf(u"/emfio/qa/cppunit/wmf/data/TestLineTo.wmf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPathContent(pDocument, aXPathPrefix + "polygonstroke/polygon",
+                       "5856,3586 7167,621 8625,3586");
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "color", "#800000");
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "width", "310");
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "linejoin", "Bevel");
+    assertXPath(pDocument, aXPathPrefix + "polygonstroke/line", "linecap", "ROUND");
 }
 
 void Test::TestPolyLineWidth()
