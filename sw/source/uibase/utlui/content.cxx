@@ -18,6 +18,7 @@
  */
 
 #include <comphelper/string.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <svl/urlbmk.hxx>
 #include <osl/thread.h>
 #include <sal/log.hxx>
@@ -43,6 +44,7 @@
 #include <docsh.hxx>
 #include <drawdoc.hxx>
 #include <content.hxx>
+#include <frmatr.hxx>
 #include <frmfmt.hxx>
 #include <fldbas.hxx>
 #include <IMark.hxx>
@@ -2965,6 +2967,16 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
         m_eState = State::ACTIVE;
         bClear = true;
     }
+
+    // tdf#148432 in LTR UI override the navigator treeview direction based on
+    // the first page directionality
+    if (m_pActiveShell && !AllSettings::GetLayoutRTL())
+    {
+        const SwPageDesc& rDesc = m_pActiveShell->GetPageDesc(0);
+        const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrameDir();
+        m_xTreeView->set_direction(rFrameDir.GetValue() == SvxFrameDirection::Horizontal_RL_TB);
+    }
+
     // Only if it is the active view, the array will be deleted and
     // the screen filled new.
     if (State::ACTIVE == m_eState && bClear)
