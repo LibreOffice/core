@@ -22,7 +22,6 @@
 
 #include <sal/types.h>
 
-#include <string_view>
 #include <vector>
 
 namespace rtl { class OString; }
@@ -79,7 +78,7 @@ namespace codemaker::UnoType {
        @return the base part of the given type
      */
     rtl::OString decompose(
-        std::string_view type, sal_Int32 * rank = nullptr,
+        rtl::OString const & type, sal_Int32 * rank = nullptr,
         std::vector< rtl::OString > * arguments = nullptr);
 
 }
