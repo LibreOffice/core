@@ -25,6 +25,7 @@ $(call gb_ExternalProject_get_state_target,hyphen,build):
 			$(gb_CONFIGURE_PLATFORMS) \
 			$(if $(CROSS_COMPILING),gio_can_sniff=no) \
 			CFLAGS=" $(CFLAGS) $(call gb_ExternalProject_get_build_flags,libgpg-error)" \
+			LDFLAGS="$(call gb_ExternalProject_get_link_flags,hyphen)" \
 		&& $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,hyphen,EXTERNAL)

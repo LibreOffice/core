@@ -48,6 +48,7 @@ $(call gb_ExternalProject_get_state_target,libwebp,build) :
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CFLAGS="$(CFLAGS) $(call gb_ExternalProject_get_build_flags,libwebp)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
+			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libwebp)" \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
 	)
