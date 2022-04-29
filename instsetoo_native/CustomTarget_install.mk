@@ -76,25 +76,18 @@ instsetoo_native_msitemplates :=
 endif
 
 define instsetoo_native_install_command
-$(call instsetoo_native_msitemplates,$(1))
+ifneq ($(filter parallel,$(GNUPARALLEL)),)
+$(call gb_Helper_print_on_error, \
+cd $(dir $@) && \
+$(GNUPARALLEL) -j $(PARALLELISM) $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) -- $(1) \
+,$@.log)
+else
 $(call gb_Helper_print_on_error, \
 cd $(dir $@) \
-$(foreach pkgformat,$(5),\
-&& $(if $(filter-out archive,$(pkgformat)),ENABLE_STRIP=1) $(PERL) -w $< \
-	-f $(BUILDDIR)/instsetoo_native/util/openoffice.lst \
-	-l $(subst $(WHITESPACE),$(COMMA),$(strip $(2))) \
-	-p $(PRODUCTNAME_WITHOUT_SPACES)$(3) \
-	-u $(instsetoo_OUT) \
-	-packer $(COMPRESSIONTOOL) \
-	-buildid $(if $(filter deb0 rpm0,$(pkgformat)$(LIBO_VERSION_PATCH)),1,$(LIBO_VERSION_PATCH)) \
-	$(if $(filter WNT,$(OS)), \
-		-msitemplate $(dir $@)msi_templates \
-		-msilanguage $(dir $@)win_ulffiles \
-	) \
-	$(4) \
-	-format $(pkgformat) \
-	$(if $(verbose),-verbose,-quiet) \
+$(foreach curpkg,$(1),\
+&& $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) $(curpkg) \
 ),$@.log)
+endif
 endef
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
@@ -102,13 +95,13 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	rm -rf $(instsetoo_OUT)
 ifeq (TRUE,$(LIBO_TEST_INSTALL))
-	$(call instsetoo_native_install_command,openoffice,en-US,,,archive)
+	$(call instsetoo_native_install_command, "openoffice,en-US,,,archive,nostrip")
 	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)/archive/install/en-US/LibreOffice*_archive.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive
 ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
-	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,archive)
+	$(call instsetoo_native_install_command, "sdkoo,en-US,_SDK,,archive,nostrip")
 	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
 	mv $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK/sdk \
         $(TESTINSTALLDIR)/
@@ -116,18 +109,17 @@ ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
 	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk
 endif
 else # LIBO_TEST_INSTALL
-	$(call instsetoo_native_install_command,openoffice,$(if $(filter WNT,$(OS)),$(instsetoo_native_WITH_LANG),en-US),,,$(PKGFORMAT))
-ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
-	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,$(PKGFORMAT))
-endif
-ifeq (HELP,$(filter HELP,$(BUILD_TYPE))$(filter MACOSX,$(OS)))
-	$(foreach lang,$(gb_HELP_LANGS),\
-		$(call instsetoo_native_install_command,ooohelppack,$(lang),,-helppack,$(PKGFORMAT)))
-endif
-ifneq (WNT,$(OS))
-	$(foreach lang,$(instsetoo_native_WITH_LANG),\
-		$(call instsetoo_native_install_command,ooolangpack,$(lang),,-languagepack,$(PKGFORMAT)))
-endif
+	$(call instsetoo_native_install_command, \
+		$(foreach pkgformat,$(PKGFORMAT),\
+			"openoffice,en-US,,,$(pkgformat),$(if $(filter-out archive,$(pkgformat)),strip,nostrip)" \
+			$(if $(filter ODK,$(BUILD_TYPE)), \
+				"sdkoo,en-US$(COMMA)_SDK$(COMMA)$(COMMA)$(pkgformat)$(COMMA)nostrip") \
+			$(if $(filter HELP,$(BUILD_TYPE))$(filter MACOSX,$(OS)), \
+				$(foreach lang,$(gb_HELP_LANGS), \
+					"ooohelppack,$(lang),,-helppack,$(pkgformat),nostrip" )) \
+			$(if $(filter-out WNT,$(OS)), $(foreach lang,$(gb_HELP_LANGS), \
+				$(foreach lang,$(instsetoo_native_WITH_LANG), \
+					"ooolangpack,$(lang),,-languagepack,$(pkgformat),nostrip" ) ))))
 endif # LIBO_TEST_INSTALL
 	touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
