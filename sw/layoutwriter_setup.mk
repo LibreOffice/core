@@ -82,7 +82,7 @@ $(eval $(call gb_CppunitTest_use_uiconfigs,sw_layoutwriter$(1), \
 $(call gb_CppunitTest_get_target,sw_layoutwriter$(1)): \
     $(call gb_Library_get_target,textconv_dict)
 
-# reset the LD_LIBRARY_PATH for spawned GPG processes
+# assert if font/glyph fallback occurs
 $(call gb_CppunitTest_get_target,sw_layoutwriter$(1)): \
     EXTRA_ENV_VARS := \
         SAL_ABORT_ON_NON_APPLICATION_FONT_USE=1
