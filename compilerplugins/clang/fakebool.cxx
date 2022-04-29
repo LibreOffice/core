@@ -213,16 +213,12 @@ public:
 
     bool VisitValueDecl(ValueDecl const * decl);
 
-    bool TraverseStaticAssertDecl(StaticAssertDecl * decl);
-
     bool TraverseLinkageSpecDecl(LinkageSpecDecl * decl);
 
 private:
     bool isFromCIncludeFile(SourceLocation spellingLocation) const;
 
     bool isSharedCAndCppCode(SourceLocation location) const;
-
-    bool isInSpecialMainFile(SourceLocation spellingLocation) const;
 
     bool rewrite(SourceLocation location, FakeBoolKind kind);
 
@@ -270,7 +266,7 @@ void FakeBool::run() {
                     }
                 }
             }
-            if (!rewrite(loc, fbk)) {
+            if (!(suppressWarningAt(loc) || rewrite(loc, fbk))) {
                 report(
                     DiagnosticsEngine::Warning,
                     "VarDecl, use \"bool\" instead of %0", loc)
@@ -312,7 +308,7 @@ void FakeBool::run() {
                     }
                 }
             }
-            if (!rewrite(loc, fbk)) {
+            if (!(suppressWarningAt(loc) || rewrite(loc, fbk))) {
                 report(
                     DiagnosticsEngine::Warning,
                     "FieldDecl, use \"bool\" instead of %0", loc)
@@ -561,6 +557,9 @@ bool FakeBool::VisitCStyleCastExpr(CStyleCastExpr * expr) {
                         // arguments to CPPUNIT_ASSERT_EQUAL:
                         return true;
                     }
+                    if (suppressWarningAt(callLoc)) {
+                        return true;
+                    }
                     bool b = k == FBK_sal_Bool && name == "sal_True";
                     if (rewriter != nullptr) {
                         auto callSpellLoc = compiler.getSourceManager()
@@ -603,14 +602,10 @@ bool FakeBool::VisitCXXStaticCastExpr(CXXStaticCastExpr * expr) {
     if (ignoreLocation(expr)) {
         return true;
     }
-    auto const k = isFakeBool(expr->getType());
-    if (k == FBK_No) {
+    if (isFakeBool(expr->getType()) == FBK_No) {
         return true;
     }
-    if (k == FBK_sal_Bool
-        && isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(expr->getBeginLoc())))
-    {
+    if (suppressWarningAt(expr->getBeginLoc())) {
         return true;
     }
     report(
@@ -777,14 +772,7 @@ bool FakeBool::VisitVarDecl(VarDecl const * decl) {
     if (k == FBK_No) {
         return true;
     }
-    auto const loc = decl->getBeginLoc();
-    if (k == FBK_sal_Bool
-        && isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(loc)))
-    {
-        return true;
-    }
-    auto l = loc;
+    auto l = decl->getBeginLoc();
     while (compiler.getSourceManager().isMacroArgExpansion(l)) {
         l = compiler.getSourceManager().getImmediateMacroCallerLoc(l);
     }
@@ -813,12 +801,6 @@ bool FakeBool::VisitFieldDecl(FieldDecl const * decl) {
         return true;
     }
     if (!handler.isAllRelevantCodeDefined(decl)) {
-        return true;
-    }
-    if (k == FBK_sal_Bool
-        && isInSpecialMainFile(
-            compiler.getSourceManager().getSpellingLoc(decl->getBeginLoc())))
-    {
         return true;
     }
     TagDecl const * td = dyn_cast<TagDecl>(decl->getDeclContext());
@@ -877,19 +859,6 @@ bool FakeBool::VisitValueDecl(ValueDecl const * decl) {
     return true;
 }
 
-bool FakeBool::TraverseStaticAssertDecl(StaticAssertDecl * decl) {
-    // Ignore special code like
-    //
-    //   static_cast<sal_Bool>(true) == sal_True
-    //
-    // inside static_assert in cppu/source/uno/check.cxx:
-    return
-        loplugin::isSamePathname(
-            getFilenameOfLocation(decl->getLocation()),
-            SRCDIR "/cppu/source/uno/check.cxx")
-        || RecursiveASTVisitor::TraverseStaticAssertDecl(decl);
-}
-
 bool FakeBool::TraverseLinkageSpecDecl(LinkageSpecDecl * decl) {
     assert(externCContexts_ != std::numeric_limits<unsigned int>::max()); //TODO
     ++externCContexts_;
@@ -915,16 +884,6 @@ bool FakeBool::isSharedCAndCppCode(SourceLocation location) const {
         isFromCIncludeFile(compiler.getSourceManager().getSpellingLoc(location))
         && (externCContexts_ != 0
             || compiler.getSourceManager().isMacroBodyExpansion(location));
-}
-
-bool FakeBool::isInSpecialMainFile(SourceLocation spellingLocation) const {
-    if (!compiler.getSourceManager().isInMainFile(spellingLocation)) {
-        return false;
-    }
-    auto f = getFilenameOfLocation(spellingLocation);
-    return loplugin::isSamePathname(f, SRCDIR "/cppu/qa/test_any.cxx")
-        || loplugin::isSamePathname(f, SRCDIR "/cppu/source/uno/check.cxx");
-        // TODO: the offset checks
 }
 
 bool FakeBool::rewrite(SourceLocation location, FakeBoolKind kind) {

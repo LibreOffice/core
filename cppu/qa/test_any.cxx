@@ -228,6 +228,7 @@ void Test::testVoid() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -336,6 +337,7 @@ void Test::testBoolean() {
         CPPUNIT_ASSERT_MESSAGE("bool", !b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", (a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !b);
@@ -446,6 +448,7 @@ void Test::testByte() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -556,6 +559,7 @@ void Test::testShort() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -668,6 +672,7 @@ void Test::testUnsignedShort() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -778,6 +783,7 @@ void Test::testLong() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -888,6 +894,7 @@ void Test::testUnsignedLong() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -998,6 +1005,7 @@ void Test::testHyper() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1108,6 +1116,7 @@ void Test::testUnsignedHyper() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1218,6 +1227,7 @@ void Test::testFloat() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1328,6 +1338,7 @@ void Test::testDouble() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1439,6 +1450,7 @@ void Test::testChar() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1549,6 +1561,7 @@ void Test::testString() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1659,6 +1672,7 @@ void Test::testType() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1770,6 +1784,7 @@ void Test::testSequence() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -1899,6 +1914,7 @@ void Test::testEnum() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -2014,6 +2030,7 @@ void Test::testStruct() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -2155,6 +2172,7 @@ void Test::testException() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -2290,6 +2308,7 @@ void Test::testInterface() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
@@ -2421,6 +2440,7 @@ void Test::testNull() {
         CPPUNIT_ASSERT_MESSAGE("bool", b);
     }
     {
+        // [-loplugin:fakebool] false positive:
         sal_Bool b = true;
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", !(a >>= b));
         CPPUNIT_ASSERT_MESSAGE("sal_Bool", b);
