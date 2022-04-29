@@ -48,15 +48,18 @@ public:
     std::optional<double> m_aManualMax;
     std::optional<double> m_aManualMin;
 
+    static constexpr ::Color COL_STANDARD_RED = 0xff0000;
+    static constexpr ::Color COL_STANDARD_BLUE = 0x2a6099;
+
     Implementation()
-        : m_aColorSeries(COL_BLUE)
-        , m_aColorNegative(COL_RED)
-        , m_aColorAxis(COL_RED)
-        , m_aColorMarkers(COL_RED)
-        , m_aColorFirst(COL_RED)
-        , m_aColorLast(COL_RED)
-        , m_aColorHigh(COL_RED)
-        , m_aColorLow(COL_RED)
+        : m_aColorSeries(COL_STANDARD_BLUE)
+        , m_aColorNegative(COL_STANDARD_RED)
+        , m_aColorAxis(COL_STANDARD_RED)
+        , m_aColorMarkers(COL_STANDARD_RED)
+        , m_aColorFirst(COL_STANDARD_RED)
+        , m_aColorLast(COL_STANDARD_RED)
+        , m_aColorHigh(COL_STANDARD_RED)
+        , m_aColorLow(COL_STANDARD_RED)
         , m_eMinAxisType(AxisType::Individual)
         , m_eMaxAxisType(AxisType::Individual)
         , m_fLineWeight(0.75)
