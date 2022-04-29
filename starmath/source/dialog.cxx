@@ -1821,7 +1821,7 @@ bool SmSymDefineDialog::SelectSymbolSet(weld::ComboBox& rComboBox,
     assert((&rComboBox == m_xOldSymbolSets.get() || &rComboBox == m_xSymbolSets.get()) && "Sm : wrong ComboBox");
 
     // trim SymbolName (no leading and trailing blanks)
-    OUString aNormName = comphelper::string::strip(rSymbolSetName, ' ');
+    OUString aNormName( comphelper::string::strip(rSymbolSetName, ' ') );
     // and remove possible deviations within the input
     rComboBox.set_entry_text(aNormName);
 

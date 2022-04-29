@@ -986,7 +986,7 @@ void SmCursor::InsertSpecial(std::u16string_view _aString)
     BeginEdit();
     Delete();
 
-    OUString aString = comphelper::string::strip(_aString, ' ');
+    OUString aString( comphelper::string::strip(_aString, ' ') );
 
     //Create instance of special node
     SmToken token;

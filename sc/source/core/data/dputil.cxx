@@ -65,7 +65,7 @@ bool ScDPUtil::isDuplicateDimension(std::u16string_view rName)
 
 OUString ScDPUtil::getSourceDimensionName(std::u16string_view rName)
 {
-    return comphelper::string::stripEnd(rName, '*');
+    return OUString(comphelper::string::stripEnd(rName, '*'));
 }
 
 sal_uInt8 ScDPUtil::getDuplicateIndex(const OUString& rName)

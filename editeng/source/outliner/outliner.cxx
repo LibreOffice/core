@@ -47,6 +47,7 @@
 #include <libxml/xmlwriter.h>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <memory>
@@ -523,8 +524,8 @@ bool Outliner::ImpConvertEdtToOut( sal_Int32 nPara )
         }
 
         sal_Int32 nPos = nHeadingNumberStart ? nHeadingNumberStart : nNumberingNumberStart;
-        OUString aLevel = comphelper::string::stripStart(aName.subView(nPos), ' ');
-        nTabs = aLevel.toInt32();
+        std::u16string_view aLevel = comphelper::string::stripStart(aName.subView(nPos), ' ');
+        nTabs = o3tl::toInt32(aLevel);
         if( nTabs )
             nTabs--; // Level 0 = "heading 1"
         bConverted = true;

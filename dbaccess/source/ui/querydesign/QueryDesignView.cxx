@@ -2172,7 +2172,7 @@ namespace
                         if ( SQL_ISRULE(pColumnRef,general_set_fct) )
                         {
                             aInfo->SetFunctionType(nFunctionType|FKT_AGGREGATE);
-                            aInfo->SetFunction(comphelper::string::stripEnd(o3tl::getToken(aColumns,0,'('), ' '));
+                            aInfo->SetFunction(OUString(comphelper::string::stripEnd(o3tl::getToken(aColumns,0,'('), ' ')));
                         }
                         else
                             aInfo->SetFunctionType(nFunctionType|FKT_OTHER);
