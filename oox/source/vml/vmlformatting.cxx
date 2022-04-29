@@ -166,14 +166,14 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
         return 0;
 
     // process trailing unit, convert to EMU
-    OUString aUnit;
+    std::u16string_view aUnit;
     if( (0 < nEndPos) && (nEndPos < rValue.getLength()) )
-        aUnit = rValue.copy( nEndPos );
+        aUnit = rValue.subView( nEndPos );
     else if( bDefaultAsPixel )
-        aUnit = "px";
+        aUnit = u"px";
     // else default is EMU
 
-    if( aUnit.getLength() == 2 )
+    if( aUnit.size() == 2 )
     {
         sal_Unicode cChar1 = aUnit[ 0 ];
         sal_Unicode cChar2 = aUnit[ 1 ];
@@ -192,11 +192,11 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
                                            : rGraphicHelper.convertScreenPixelYToHmm(fValue),
                                    o3tl::Length::mm100, o3tl::Length::emu);
     }
-    else if( (aUnit.getLength() == 1) && (aUnit[ 0 ] == '%') )
+    else if( (aUnit.size() == 1) && (aUnit[ 0 ] == '%') )
     {
         fValue *= nRefValue / 100.0;
     }
-    else if( bDefaultAsPixel || !aUnit.isEmpty() )   // default as EMU and no unit -> do nothing
+    else if( bDefaultAsPixel || !aUnit.empty() )   // default as EMU and no unit -> do nothing
     {
         OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - unknown measure unit" );
         fValue = nRefValue;
