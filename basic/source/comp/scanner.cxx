@@ -27,6 +27,7 @@
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 #include <rtl/character.hxx>
+#include <o3tl/string_view.hxx>
 
 SbiScanner::SbiScanner(const OUString& rBuf, StarBASIC* p)
     : aBuf(rBuf)
@@ -160,8 +161,8 @@ void SbiScanner::scanGoto()
 
     if(n + 1 < aLine.getLength())
     {
-        OUString aTemp = aLine.copy(n, 2);
-        if(aTemp.equalsIgnoreAsciiCase("to"))
+        std::u16string_view aTemp = aLine.subView(n, 2);
+        if(o3tl::equalsIgnoreAsciiCase(aTemp, u"to"))
         {
             aSym = "goto";
             nLineIdx += n + 2 - nCol;

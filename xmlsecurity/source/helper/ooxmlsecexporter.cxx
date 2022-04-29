@@ -330,8 +330,8 @@ void OOXMLSecExporter::Impl::writePackageObjectSignatureProperties()
         sal_Int32 nCommaPos = m_aSignatureTimeValue.indexOf(',');
         if (nCommaPos != -1)
         {
-            m_aSignatureTimeValue = m_aSignatureTimeValue.copy(0, nCommaPos);
-            m_aSignatureTimeValue += "Z";
+            m_aSignatureTimeValue
+                = OUString::Concat(m_aSignatureTimeValue.subView(0, nCommaPos)) + "Z";
         }
     }
     m_xDocumentHandler->characters(m_aSignatureTimeValue);

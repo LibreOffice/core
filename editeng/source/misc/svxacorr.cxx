@@ -519,7 +519,7 @@ bool SvxAutoCorrect::FnChgOrdinalNumber(
             const uno::Sequence< OUString > aSuffixes = xOrdSuffix->getOrdinalSuffix(nNum, rCC.getLanguageTag().getLocale());
             for (OUString const & sSuffix : aSuffixes)
             {
-                OUString sEnd = rTxt.copy(nNumEnd + 1, nEndPos - nNumEnd - 1);
+                std::u16string_view sEnd = rTxt.subView(nNumEnd + 1, nEndPos - nNumEnd - 1);
 
                 if (sSuffix == sEnd)
                 {
@@ -2971,7 +2971,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             if (bWasWordDelim) rStt++;
             OUString left_pattern = rTxt.copy(rStt, nEndPos - rStt - rChk.getLength() + left_wildcard);
             // avoid double spaces before simple "word" replacement
-            left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().copy(1) : pFnd->GetLong();
+            left_pattern += (left_pattern.getLength() == 0 && pFnd->GetLong()[0] == 0x20) ? pFnd->GetLong().subView(1) : pFnd->GetLong();
             if( const SvxAutocorrWord* pNew = Insert( SvxAutocorrWord(rTxt.copy(rStt, nEndPos - rStt), left_pattern) ) )
                 return pNew;
         }
@@ -3018,7 +3018,7 @@ const SvxAutocorrWord* SvxAutocorrWordList::WordMatches(const SvxAutocorrWord *p
             if ( !left_wildcard )
             {
                 sal_Int32 siz = nEndPos - nFndPos - sTmp.getLength();
-                aLong = pFnd->GetLong() + (siz > 0 ? rTxt.copy(nFndPos + sTmp.getLength(), siz) : "");
+                aLong = pFnd->GetLong() + (siz > 0 ? rTxt.subView(nFndPos + sTmp.getLength(), siz) : u"");
             } else {
                 OUStringBuffer buf;
                 do {

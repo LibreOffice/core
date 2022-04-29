@@ -88,6 +88,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <svx/colorwindow.hxx>
+#include <o3tl/string_view.hxx>
 #include <editeng/editids.hrc>
 
 #include <reffld.hxx>
@@ -3512,11 +3513,10 @@ sal_Int32 SwAccessibleParagraph::GetRealHeadingLevel()
         sal_Int32 length = sValue.getLength();
         if (length == 9 || length == 10)
         {
-            OUString headStr = sValue.copy(0, 7);
-            if (headStr == "Heading")
+            if (sValue.startsWith("Heading"))
             {
-                OUString intStr = sValue.copy(8);
-                sal_Int32 headingLevel = intStr.toInt32();
+                std::u16string_view intStr = sValue.subView(8);
+                sal_Int32 headingLevel = o3tl::toInt32(intStr);
                 return headingLevel;
             }
         }

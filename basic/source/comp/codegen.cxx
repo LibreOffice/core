@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/string_view.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 
 // nInc is the increment size of the buffers
@@ -200,24 +201,24 @@ void SbiCodeGen::Save()
             if( nIfaceCount )
             {
                 int nPropPrefixFound = aProcName.indexOf("Property ");
-                OUString aPureProcName = aProcName;
-                OUString aPropPrefix;
+                std::u16string_view aPureProcName = aProcName;
+                std::u16string_view aPropPrefix;
                 if( nPropPrefixFound == 0 )
                 {
-                    aPropPrefix = aProcName.copy( 0, 13 );      // 13 == Len( "Property ?et " )
-                    aPureProcName = aProcName.copy( 13 );
+                    aPropPrefix = aProcName.subView( 0, 13 );      // 13 == Len( "Property ?et " )
+                    aPureProcName = aProcName.subView( 13 );
                 }
                 for( int i = 0 ; i < nIfaceCount ; i++ )
                 {
                     const OUString& rIfaceName = pParser->aIfaceVector[i];
-                    int nFound = aPureProcName.indexOf( rIfaceName );
-                    if( nFound == 0 && aPureProcName[rIfaceName.getLength()] == '_' )
+                    bool bFound = o3tl::starts_with(aPureProcName, rIfaceName );
+                    if( bFound && aPureProcName[rIfaceName.getLength()] == '_' )
                     {
                         if( nPropPrefixFound == 0 )
                         {
                             aIfaceProcName.append(aPropPrefix);
                         }
-                        aIfaceProcName.append(aPureProcName.subView(rIfaceName.getLength() + 1) );
+                        aIfaceProcName.append(aPureProcName.substr(rIfaceName.getLength() + 1) );
                         aIfaceName = rIfaceName;
                         nPassCount = 2;
                         break;

@@ -115,14 +115,14 @@ OUString SvxChartColorTable::getDefaultName( size_t _nIndex )
 {
     OUString aName;
 
-    OUString sDefaultNamePrefix;
-    OUString sDefaultNamePostfix;
+    std::u16string_view sDefaultNamePrefix;
+    std::u16string_view sDefaultNamePostfix;
     OUString aResName( CuiResId( RID_CUISTR_DIAGRAM_ROW ) );
     sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
     if( nPos != -1 )
     {
-        sDefaultNamePrefix = aResName.copy( 0, nPos );
-        sDefaultNamePostfix = aResName.copy( nPos + sizeof( "$(ROW)" ) - 1 );
+        sDefaultNamePrefix = aResName.subView( 0, nPos );
+        sDefaultNamePostfix = aResName.subView( nPos + sizeof( "$(ROW)" ) - 1 );
     }
     else
     {
@@ -203,13 +203,14 @@ bool SvxChartOptions::RetrieveOptions()
 
     // create strings for entry names
     OUString aResName( CuiResId( RID_CUISTR_DIAGRAM_ROW ) );
-    OUString aPrefix, aPostfix, aName;
+    std::u16string_view aPrefix, aPostfix;
+    OUString aName;
     sal_Int32 nPos = aResName.indexOf( "$(ROW)" );
     if( nPos != -1 )
     {
-        aPrefix = aResName.copy( 0, nPos );
+        aPrefix = aResName.subView( 0, nPos );
         sal_Int32 idx = nPos + sizeof( "$(ROW)" ) - 1;
-        aPostfix = aResName.copy( idx );
+        aPostfix = aResName.subView( idx );
     }
     else
         aPrefix = aResName;

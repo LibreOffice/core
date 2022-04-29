@@ -74,6 +74,7 @@
 #include <vcl/dibtools.hxx>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
+#include <o3tl/string_view.hxx>
 
 using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
@@ -2172,16 +2173,15 @@ OUString getUiNameFromPageApiNameImpl( const OUString& rApiName )
     const OUString aDefPageName( sEmptyPageName );
     if( rApiName.startsWith( aDefPageName ) )
     {
-        OUString aNumber( rApiName.copy( aDefPageName.getLength() ) );
+        std::u16string_view aNumber( rApiName.subView( aDefPageName.getLength() ) );
 
         // create the page number
-        sal_Int32 nPageNumber = aNumber.toInt32();
+        sal_Int32 nPageNumber = o3tl::toInt32(aNumber);
 
         // check if there are non number characters in the number part
-        const sal_Int32 nChars = aNumber.getLength();
-        const sal_Unicode* pString = aNumber.getStr();
-        sal_Int32 nChar;
-        for( nChar = 0; nChar < nChars; nChar++, pString++ )
+        const size_t nChars = aNumber.size();
+        const sal_Unicode* pString = aNumber.data();
+        for( size_t nChar = 0; nChar < nChars; nChar++, pString++ )
         {
             if((*pString < '0') || (*pString > '9'))
             {

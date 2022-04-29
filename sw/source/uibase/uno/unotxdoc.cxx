@@ -4007,7 +4007,7 @@ Any SwXLinkNameAccessWrapper::getByName(const OUString& rName)
     OUString sSuffix(m_sLinkSuffix);
     if(sParam.getLength() > sSuffix.getLength() )
     {
-        OUString sCmp = sParam.copy(sParam.getLength() - sSuffix.getLength(),
+        std::u16string_view sCmp = sParam.subView(sParam.getLength() - sSuffix.getLength(),
                                                     sSuffix.getLength());
         if(sCmp == sSuffix)
         {
@@ -4128,7 +4128,7 @@ sal_Bool SwXLinkNameAccessWrapper::hasByName(const OUString& rName)
     OUString sParam(rName);
     if(sParam.getLength() > m_sLinkSuffix.getLength() )
     {
-        OUString sCmp = sParam.copy(sParam.getLength() - m_sLinkSuffix.getLength(),
+        std::u16string_view sCmp = sParam.subView(sParam.getLength() - m_sLinkSuffix.getLength(),
                                                     m_sLinkSuffix.getLength());
         if(sCmp == m_sLinkSuffix)
         {
@@ -4205,29 +4205,28 @@ void SwXLinkNameAccessWrapper::setPropertyValue(
     throw UnknownPropertyException(rPropName);
 }
 
-static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
+static Any lcl_GetDisplayBitmap(std::u16string_view sLinkSuffix)
 {
     Any aRet;
-    OUString sLinkSuffix = _sLinkSuffix;
-    if(!sLinkSuffix.isEmpty())
-        sLinkSuffix = sLinkSuffix.copy(1);
+    if(!sLinkSuffix.empty())
+        sLinkSuffix = sLinkSuffix.substr(1);
     OUString sImgId;
 
-    if(sLinkSuffix == "outline")
+    if(sLinkSuffix == u"outline")
         sImgId = RID_BMP_NAVI_OUTLINE;
-    else if(sLinkSuffix == "table")
+    else if(sLinkSuffix == u"table")
         sImgId = RID_BMP_NAVI_TABLE;
-    else if(sLinkSuffix == "frame")
+    else if(sLinkSuffix == u"frame")
         sImgId = RID_BMP_NAVI_FRAME;
-    else if(sLinkSuffix == "graphic")
+    else if(sLinkSuffix == u"graphic")
         sImgId = RID_BMP_NAVI_GRAPHIC;
-    else if(sLinkSuffix == "ole")
+    else if(sLinkSuffix == u"ole")
         sImgId = RID_BMP_NAVI_OLE;
-    else if(sLinkSuffix.isEmpty())
+    else if(sLinkSuffix.empty())
         sImgId = RID_BMP_NAVI_BOOKMARK;
-    else if(sLinkSuffix == "region")
+    else if(sLinkSuffix == u"region")
         sImgId = RID_BMP_NAVI_REGION;
-    else if(sLinkSuffix == "drawingobject")
+    else if(sLinkSuffix == u"drawingobject")
         sImgId = RID_BMP_NAVI_DRAWOBJECT;
 
     if (!sImgId.isEmpty())

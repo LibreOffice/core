@@ -1665,14 +1665,14 @@ static bool SvxUnoConvertResourceStringToApi(const TranslateId* pSourceResIds, c
         }
     }
 
-    const OUString aShortString( rString.copy( 0, nLength ) );
+    const std::u16string_view aShortString( rString.subView( 0, nLength ) );
 
     for (int i = 0; i < nCount; ++i)
     {
         const OUString & aCompare = SvxResId(pSourceResIds[i]);
         if( aShortString == aCompare )
         {
-            rString = rString.replaceAt( 0, aShortString.getLength(), OUString(pDestResIds[i]) );
+            rString = rString.replaceAt( 0, aShortString.size(), OUString(pDestResIds[i]) );
             return true;
         }
         else if( rString == aCompare )
@@ -1711,14 +1711,14 @@ static bool SvxUnoConvertResourceStringFromApi(const rtl::OUStringConstExpr* pSo
         }
     }
 
-    const OUString aShortString( rString.copy( 0, nLength ) );
+    const std::u16string_view aShortString( rString.subView( 0, nLength ) );
 
     for (int i = 0; i < nCount; ++i)
     {
         auto pCompare = pSourceResIds[i];
-        if( aShortString == pCompare )
+        if( aShortString == pCompare.asView() )
         {
-            rString = rString.replaceAt( 0, aShortString.getLength(), SvxResId(pDestResIds[i]) );
+            rString = rString.replaceAt( 0, aShortString.size(), SvxResId(pDestResIds[i]) );
             return true;
         }
         else if( rString == pCompare )

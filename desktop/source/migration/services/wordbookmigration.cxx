@@ -138,7 +138,7 @@ static bool IsUserWordbook( const OUString& rFile )
             {
                 if (IsUserWordbook(elem) )
                 {
-                    OUString sSourceLocalName = elem.copy( m_sSourceDir.getLength() );
+                    std::u16string_view sSourceLocalName = elem.subView( m_sSourceDir.getLength() );
                     OUString sTargetName = sTargetDir + sSourceLocalName;
                     INetURLObject aURL( sTargetName );
                     aURL.removeSegment();
