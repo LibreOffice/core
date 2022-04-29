@@ -306,7 +306,7 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
 {
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (!loader.is())
-        throw CannotRegisterImplementationException("Could not create Java implementation loader");
+        throw CannotRegisterImplementationException("Java Runtime Environment (JRE) must be installed in your system and enabled in Tools  ▸ Options  ▸ Advanced");
     return loader->writeRegistryInfo(xKey, blabla, rLibName);
 }
 
@@ -323,7 +323,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
 
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (!loader.is())
-        throw CannotActivateFactoryException("Could not create Java implementation loader");
+        throw CannotActivateFactoryException("Java Runtime Environment (JRE) must be installed in your system and enabled in Tools  ▸ Options  ▸ Advanced");
     return loader->activate(rImplName, blabla, rLibName, xKey);
 }
 
