@@ -1599,8 +1599,26 @@ void SwTextFrame::Format_( SwTextFormatter &rLine, SwTextFormatInfo &rInf,
         // If we're finished formatting the text and we still
         // have other line objects left, these are superfluous
         // now because the text has gotten shorter.
+        bool bTruncLines = false;
         if( rLine.GetStart() + rLine.GetLength() >= nStrLen &&
             rLine.GetCurr()->GetNext() )
+        {
+            bTruncLines = true;
+        }
+        else if (GetMergedPara() && rLine.GetCurr()->GetNext())
+        {
+            // We can also have superfluous lines with redlining in case the current line is shorter
+            // than the text length, but the total length of lines is still more than expected.
+            // Truncate in this case as well.
+            TextFrameIndex nLen(0);
+            for (const SwLineLayout* pLine = pPara; pLine; pLine = pLine->GetNext())
+            {
+                nLen += pLine->GetLen();
+            }
+            bTruncLines = nLen > nStrLen;
+        }
+
+        if (bTruncLines)
         {
             rLine.TruncLines();
             rLine.SetTruncLines( true );
