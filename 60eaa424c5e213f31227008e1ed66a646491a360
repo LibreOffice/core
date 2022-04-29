@@ -52,6 +52,23 @@
       "parentUuid": "50103262_9740c0a6",
       "revId": "60eaa424c5e213f31227008e1ed66a646491a360",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9433b84_2e8b45f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-29T07:52:56Z",
+      "side": 1,
+      "message": "@Lubos: could this one be the reason that \"LINK : warning LNK4098: defaultlib \u0027LIBCMT\u0027 conflicts with use of other libs; use /NODEFAULTLIB:library\" has started to appear on Windows builds - maybe libwebp has non-debug static crt referenced unconditionally somehow? (This is just a guess, and it may have nothing to do with this change; sorry for the noise. You are the expert in the build/link process, so you could see the real problem cause anyway :))\n\nMaybe this warning is harmless - I don\u0027t know what linker will do in that case; yet, it feels uncomfortable that debug and non-debug libraries are *attempted* to be linked at the same time (wrt memory corruption if that actually would link).",
+      "revId": "60eaa424c5e213f31227008e1ed66a646491a360",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
