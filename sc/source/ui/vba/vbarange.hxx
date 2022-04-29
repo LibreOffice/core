@@ -95,6 +95,7 @@ class ScVbaRange : public ScVbaRange_BASE
 
     /// @throws css::uno::RuntimeException
     css::uno::Any getValue( ValueGetter& rValueGetter );
+    css::uno::Any SAL_CALL DoGetValue( bool );
     /// @throws css::uno::RuntimeException
     void setValue( const css::uno::Any& aValue, ValueSetter& setter );
 
@@ -171,7 +172,9 @@ public:
 
     // Attributes
     virtual css::uno::Any SAL_CALL getValue() override;
+    virtual css::uno::Any SAL_CALL getValue2() override;
     virtual void   SAL_CALL setValue( const css::uno::Any& aValue ) override;
+    virtual void   SAL_CALL setValue2( const css::uno::Any& aValue2 ) override;
     virtual css::uno::Any SAL_CALL getFormula() override;
     virtual void   SAL_CALL setFormula( const css::uno::Any& rFormula ) override;
     virtual css::uno::Any SAL_CALL getFormulaArray() override;
