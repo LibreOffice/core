@@ -378,7 +378,7 @@ void PDFWriter::SetLinkPropertyID( sal_Int32 nLinkId, sal_Int32 nPropertyId )
     xImplementation->setLinkPropertyId( nLinkId, nPropertyId );
 }
 
-sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID )
+sal_Int32 PDFWriter::CreateOutlineItem( sal_Int32 nParent, std::u16string_view rText, sal_Int32 nDestID )
 {
     return xImplementation->createOutlineItem( nParent, rText, nDestID );
 }

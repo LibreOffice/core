@@ -111,7 +111,7 @@ public:
     bool        StartJob (const OUString& rFileName,
                               int nMode,
                               const OUString& rJobName,
-                              const OUString& rAppName,
+                              std::u16string_view rAppName,
                               const JobData& rSetupData,
                               PrinterGfx* pGraphics,
                               bool bIsQuickJob

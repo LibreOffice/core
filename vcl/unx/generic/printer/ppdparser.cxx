@@ -1244,7 +1244,7 @@ void PPDParser::parse( ::std::vector< OString >& rLines )
             {
                 aKey = aKey.copy(0, nPos);
                 OUString aOption(OStringToOUString(
-                    WhitespaceToSpace(aLine.copy(nPos+9)),
+                    WhitespaceToSpace(aLine.subView(nPos+9)),
                     RTL_TEXTENCODING_MS_1252));
                 keyit = m_aKeys.find( aKey );
                 if( keyit != m_aKeys.end() )

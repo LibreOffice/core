@@ -1240,9 +1240,9 @@ public:
     void setScreenStream(sal_Int32 nScreenId, const OUString& rURL);
 
     // outline
-    sal_Int32 createOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID );
+    sal_Int32 createOutlineItem( sal_Int32 nParent, std::u16string_view rText, sal_Int32 nDestID );
     void      setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent );
-    void      setOutlineItemText( sal_Int32 nItem, const OUString& rText );
+    void      setOutlineItemText( sal_Int32 nItem, std::u16string_view rText );
     void      setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID );
 
     // notes

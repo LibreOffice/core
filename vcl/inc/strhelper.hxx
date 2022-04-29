@@ -35,8 +35,8 @@ namespace psp
     int GetCommandLineTokenCount(const OUString&);
     // returns number of tokens (zero if empty or whitespace only)
 
-    OUString WhitespaceToSpace( const OUString&, bool bProtect = true );
-    OString WhitespaceToSpace(const OString&);
+    OUString WhitespaceToSpace( std::u16string_view, bool bProtect = true );
+    OString WhitespaceToSpace(std::string_view);
     // returns a string with multiple adjacent occurrences of whitespace
     // converted to a single space. if bProtect is sal_True (nonzero), then
     // doublequote, singlequote and singleleftquote protect their respective

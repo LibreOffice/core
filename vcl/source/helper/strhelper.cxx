@@ -251,27 +251,28 @@ int GetCommandLineTokenCount(const OUString& rLine)
     return nTokenCount;
 }
 
-OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
+OUString WhitespaceToSpace( std::u16string_view rLine, bool bProtect )
 {
-    sal_Int32 nLen = rLine.getLength();
+    size_t nLen = rLine.size();
     if( ! nLen )
         return OUString();
 
     sal_Unicode *pBuffer = static_cast<sal_Unicode*>(alloca( sizeof(sal_Unicode)*(nLen + 1) ));
-    const sal_Unicode *pRun = rLine.getStr();
+    const sal_Unicode *pRun = rLine.data();
+    const sal_Unicode * const pEnd = rLine.data() + rLine.size();
     sal_Unicode *pLeap = pBuffer;
 
-    while( *pRun )
+    while( pRun != pEnd )
     {
-        if( *pRun && isSpace( *pRun ) )
+        if( pRun != pEnd && isSpace( *pRun ) )
         {
             *pLeap = ' ';
             pLeap++;
             pRun++;
         }
-        while( *pRun && isSpace( *pRun ) )
+        while( pRun != pEnd && isSpace( *pRun ) )
             pRun++;
-        while( *pRun && ! isSpace( *pRun ) )
+        while( pRun != pEnd && ! isSpace( *pRun ) )
         {
             if( *pRun == '\\' )
             {
@@ -279,7 +280,7 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
                 pRun++;
                 *pLeap = *pRun;
                 pLeap++;
-                if( *pRun )
+                if( pRun != pEnd )
                     pRun++;
             }
             else if( bProtect && *pRun == '`' )
@@ -310,27 +311,28 @@ OUString WhitespaceToSpace( const OUString& rLine, bool bProtect )
     return OUString(*pBuffer == ' ' ? pBuffer+1 : pBuffer);
 }
 
-OString WhitespaceToSpace(const OString& rLine)
+OString WhitespaceToSpace(std::string_view rLine)
 {
-    sal_Int32 nLen = rLine.getLength();
+    size_t nLen = rLine.size();
     if (!nLen)
-        return rLine;
+        return OString();
 
     char *pBuffer = static_cast<char*>(alloca( nLen + 1 ));
-    const char *pRun = rLine.getStr();
+    const char *pRun = rLine.data();
+    const char * const pEnd = rLine.data() + rLine.size();
     char *pLeap = pBuffer;
 
-    while( *pRun )
+    while( pRun != pEnd )
     {
-        if( *pRun && isSpace( *pRun ) )
+        if( pRun != pEnd && isSpace( *pRun ) )
         {
             *pLeap = ' ';
             pLeap++;
             pRun++;
         }
-        while( *pRun && isSpace( *pRun ) )
+        while( pRun != pEnd && isSpace( *pRun ) )
             pRun++;
-        while( *pRun && ! isSpace( *pRun ) )
+        while( pRun != pEnd && ! isSpace( *pRun ) )
         {
             if( *pRun == '\\' )
             {
@@ -338,7 +340,7 @@ OString WhitespaceToSpace(const OString& rLine)
                 pRun++;
                 *pLeap = *pRun;
                 pLeap++;
-                if( *pRun )
+                if( pRun != pEnd )
                     pRun++;
             }
             else if( *pRun == '`' )

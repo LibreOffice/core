@@ -277,7 +277,7 @@ PrinterJob::StartJob (
                       const OUString& rFileName,
                       int nMode,
                       const OUString& rJobName,
-                      const OUString& rAppName,
+                      std::u16string_view rAppName,
                       const JobData& rSetupData,
                       PrinterGfx* pGraphics,
                       bool bIsQuickJob
@@ -340,7 +340,7 @@ PrinterJob::StartJob (
     OUString aTitle( aFilterWS );
     if( ! isAscii( aTitle ) )
     {
-        aTitle = WhitespaceToSpace( rFileName.copy(rFileName.lastIndexOf('/')+1), false );
+        aTitle = WhitespaceToSpace( rFileName.subView(rFileName.lastIndexOf('/')+1), false );
         if( ! isAscii( aTitle ) )
             aTitle.clear();
     }
