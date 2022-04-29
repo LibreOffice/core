@@ -693,7 +693,7 @@ OUString NativeNumberSupplierService::getNativeNumberString(const OUString& aNum
             {
                 case CAPITALIZE:
                     return xCharClass->toTitle(aStr, 0, 1, aLocale) +
-                        (aStr.getLength() > 1 ? aStr.copy(1) : OUString());
+                        (aStr.getLength() > 1 ? aStr.subView(1) : u"");
                 case UPPER:
                     return xCharClass->toUpper(aStr, 0, aStr.getLength(), aLocale);
                 case LOWER:

@@ -839,9 +839,9 @@ std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules()
                     aModuleInfo.sModuleShortName = sModuleShortName;
                     sal_Int32 nIndex = sToolbarName.lastIndexOf('.');
                     if (nIndex > 0) {
-                        OUString sExtension(sToolbarName.copy(nIndex));
+                        std::u16string_view sExtension(sToolbarName.subView(nIndex));
                         OUString sToolbarResourceName(sToolbarName.copy(0, nIndex));
-                        if (!sToolbarResourceName.isEmpty() && sExtension == ".xml")
+                        if (!sToolbarResourceName.isEmpty() && sExtension == u".xml")
                             aModuleInfo.m_vToolbars.push_back(sToolbarResourceName);
                     }
                 }

@@ -1275,7 +1275,7 @@ void JavaVirtualMachine::setINetSettingsInVM(bool set_reset)
                 for( auto& prop : Props)
                 {
                     sal_Int32 index= prop.indexOf( '=');
-                    OUString propName= prop.copy( 0, index);
+                    std::u16string_view propName= prop.subView( 0, index);
                     OUString propValue= prop.copy( index + 1);
 
                     if( propName == sFtpProxyHost)
