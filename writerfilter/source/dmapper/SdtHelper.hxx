@@ -43,6 +43,7 @@ enum class SdtControlType
     dropDown,
     plainText,
     richText,
+    checkBox,
     unsupported, // Sdt block is defined, but we still do not support such type of field
     unknown
 };
@@ -97,6 +98,15 @@ class SdtHelper final : public virtual SvRefBase
     /// Current contents are placeholder text.
     bool m_bShowingPlcHdr = false;
 
+    /// If this is a checkbox, is the checkbox checked?
+    bool m_bChecked = false;
+
+    /// If this is a checkbox, the value of a checked checkbox.
+    OUString m_aCheckedState;
+
+    /// If this is a checkbox, the value of an unchecked checkbox.
+    OUString m_aUncheckedState;
+
     /// Create and append the drawing::XControlShape, containing the various models.
     void createControlShape(css::awt::Size aSize,
                             css::uno::Reference<css::awt::XControlModel> const& xControlModel,
@@ -105,9 +115,6 @@ class SdtHelper final : public virtual SvRefBase
     std::optional<OUString> getValueFromDataBinding();
 
     void loadPropertiesXMLs();
-
-    /// Clear all collected attributes for further reuse
-    void clear();
 
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
@@ -162,6 +169,16 @@ public:
 
     void SetShowingPlcHdr();
     bool GetShowingPlcHdr() const;
+
+    void SetChecked();
+    bool GetChecked() const;
+    void SetCheckedState(const OUString& rCheckedState);
+    OUString GetCheckedState() const;
+    void SetUncheckedState(const OUString& rUncheckedState);
+    OUString GetUncheckedState() const;
+
+    /// Clear all collected attributes for further reuse
+    void clear();
 };
 
 } // namespace writerfilter::dmapper

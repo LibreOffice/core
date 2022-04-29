@@ -66,6 +66,7 @@ OUString lclGetNameForElementId(sal_uInt32 aId)
         aIdMap[NS_ooxml::LN_CT_Props3D_extrusionClr]            = "extrusionClr";
         aIdMap[NS_ooxml::LN_CT_Props3D_contourClr]              = "contourClr";
         aIdMap[NS_ooxml::LN_CT_StylisticSets_styleSet]          = "styleSet";
+        aIdMap[NS_ooxml::LN_cntxtAlts_cntxtAlts]                = "cntxtAlts";
     }
     return aIdMap[aId];
 }
