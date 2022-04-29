@@ -7572,7 +7572,7 @@ void DocxAttributeOutput::EmbedFontStyle( std::u16string_view name, int tag, Fon
         if( file.open( osl_File_OpenFlag_Read ) != osl::File::E_None )
             return;
         uno::Reference< css::io::XOutputStream > xOutStream = m_rExport.GetFilter().openFragmentStream(
-            "word/fonts/font" + OUString::number(m_nextFontId) + ".odttf",
+            OUStringConcatenation("word/fonts/font" + OUString::number(m_nextFontId) + ".odttf"),
             "application/vnd.openxmlformats-officedocument.obfuscatedFont" );
         // Not much point in trying hard with the obfuscation key, whoever reads the spec can read the font anyway,
         // so just alter the first and last part of the key.

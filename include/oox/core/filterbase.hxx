@@ -154,7 +154,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     css::uno::Reference< css::io::XInputStream >
-                        openInputStream( const OUString& rStreamName ) const;
+                        openInputStream( std::u16string_view rStreamName ) const;
 
     /** Opens and returns the specified output stream from the base storage.
 
@@ -165,7 +165,7 @@ public:
             accessed by passing an empty string as stream name.
      */
     css::uno::Reference< css::io::XOutputStream >
-                        openOutputStream( const OUString& rStreamName ) const;
+                        openOutputStream( std::u16string_view rStreamName ) const;
 
     /** Commits changes to base storage (and substorages) */
     void                commitStorage() const;
@@ -190,7 +190,7 @@ public:
 
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
-    bool                importBinaryData( StreamDataSequence & orDataSeq, const OUString& rStreamName );
+    bool                importBinaryData( StreamDataSequence & orDataSeq, std::u16string_view rStreamName );
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 

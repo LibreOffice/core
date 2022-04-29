@@ -462,7 +462,7 @@ bool PowerPointExport::exportDocument()
         }
     }
 
-    mPresentationFS = openFragmentStreamWithSerializer("ppt/presentation.xml", aMediaType);
+    mPresentationFS = openFragmentStreamWithSerializer(u"ppt/presentation.xml", aMediaType);
 
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::THEME),
@@ -1067,7 +1067,7 @@ void PowerPointExport::WriteAuthors()
     if (maAuthors.empty())
         return;
 
-    FSHelperPtr pFS = openFragmentStreamWithSerializer("ppt/commentAuthors.xml",
+    FSHelperPtr pFS = openFragmentStreamWithSerializer(u"ppt/commentAuthors.xml",
                       "application/vnd.openxmlformats-officedocument.presentationml.commentAuthors+xml");
     addRelation(mPresentationFS->getOutputStream(),
                 oox::getRelationship(Relationship::COMMENTAUTHORS),
@@ -1120,7 +1120,7 @@ void PowerPointExport::WritePresentationProps()
     OUString sCustomShow = xPresentationProps->getPropertyValue("CustomShow").get<OUString>();
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(
-        "ppt/presProps.xml",
+        u"ppt/presProps.xml",
         "application/vnd.openxmlformats-officedocument.presentationml.presProps+xml");
 
     addRelation(mPresentationFS->getOutputStream(),
@@ -1190,7 +1190,7 @@ bool PowerPointExport::WriteComments(sal_uInt32 nPageNum)
         if (xAnnotationEnumeration->hasMoreElements())
         {
             FSHelperPtr pFS = openFragmentStreamWithSerializer(
-                              "ppt/comments/comment" + OUString::number(nPageNum + 1) + ".xml",
+                              OUStringConcatenation("ppt/comments/comment" + OUString::number(nPageNum + 1) + ".xml"),
                               "application/vnd.openxmlformats-officedocument.presentationml.comments+xml");
 
             pFS->startElementNS(XML_p, XML_cmLst,
@@ -1255,7 +1255,7 @@ void PowerPointExport::WriteVBA()
     if (!xMacrosStream.is())
         return;
 
-    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream("ppt/vbaProject.bin", "application/vnd.ms-office.vbaProject");
+    uno::Reference<io::XOutputStream> xOutputStream = openFragmentStream(u"ppt/vbaProject.bin", "application/vnd.ms-office.vbaProject");
     comphelper::OStorageHelper::CopyInputToOutput(xMacrosStream, xOutputStream);
 
     // Write the relationship.
@@ -1355,7 +1355,7 @@ void PowerPointExport::ImplWriteSlide(sal_uInt32 nPageNum, sal_uInt32 nMasterNum
         mPresentationFS->endElementNS(XML_p, XML_sldIdLst);
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(
-                        "ppt/slides/slide" + OUString::number(nPageNum + 1) + ".xml",
+                        OUStringConcatenation("ppt/slides/slide" + OUString::number(nPageNum + 1) + ".xml"),
                         "application/vnd.openxmlformats-officedocument.presentationml.slide+xml");
 
     if (mpSlidesFSArray.size() < mnPages)
@@ -1422,9 +1422,9 @@ void PowerPointExport::ImplWriteNotes(sal_uInt32 nPageNum)
     SAL_INFO("sd.eppt", "write Notes " << nPageNum << "\n----------------");
 
     FSHelperPtr pFS = openFragmentStreamWithSerializer(
-                        "ppt/notesSlides/notesSlide" +
-                        OUString::number(nPageNum + 1) +
-                        ".xml",
+                        OUStringConcatenation("ppt/notesSlides/notesSlide" +
+                            OUString::number(nPageNum + 1) +
+                            ".xml"),
                         "application/vnd.openxmlformats-officedocument.presentationml.notesSlide+xml");
 
     pFS->startElementNS(XML_p, XML_notes, PNMSS);
@@ -1488,8 +1488,8 @@ void PowerPointExport::ImplWriteSlideMaster(sal_uInt32 nPageNum, Reference< XPro
         mPresentationFS->endElementNS(XML_p, XML_sldMasterIdLst);
 
     FSHelperPtr pFS =
-        openFragmentStreamWithSerializer("ppt/slideMasters/slideMaster" +
-                                          OUString::number(nPageNum + 1) + ".xml",
+        openFragmentStreamWithSerializer(OUStringConcatenation("ppt/slideMasters/slideMaster" +
+                                            OUString::number(nPageNum + 1) + ".xml"),
                                          "application/vnd.openxmlformats-officedocument.presentationml.slideMaster+xml");
 
     SdrPage* pMasterPage = SdPage::getImplementation(mXDrawPage);
@@ -1595,8 +1595,8 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
         return;
 
     FSHelperPtr pFS
-        = openFragmentStreamWithSerializer("ppt/slideLayouts/slideLayout" +
-                                            OUString::number(mnLayoutFileIdMax) + ".xml",
+        = openFragmentStreamWithSerializer(OUStringConcatenation("ppt/slideLayouts/slideLayout" +
+                                                OUString::number(mnLayoutFileIdMax) + ".xml"),
                                            "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml");
 
     // add implicit relation of slide layout to slide master
@@ -2333,7 +2333,7 @@ void PowerPointExport::WriteNotesMaster()
     mPresentationFS->endElementNS(XML_p, XML_notesMasterIdLst);
 
     FSHelperPtr pFS =
-        openFragmentStreamWithSerializer("ppt/notesMasters/notesMaster1.xml",
+        openFragmentStreamWithSerializer(u"ppt/notesMasters/notesMaster1.xml",
                                          "application/vnd.openxmlformats-officedocument.presentationml.notesMaster+xml");
     // write theme per master
     WriteTheme(mnMasterPages, nullptr);

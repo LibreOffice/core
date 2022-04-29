@@ -425,13 +425,13 @@ bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHan
     return false;
 }
 
-Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPath )
+Reference<XDocument> XmlFilterBase::importFragment( std::u16string_view aFragmentPath )
 {
     Reference<XDocument> xRet;
 
     // path to fragment stream valid?
-    OSL_ENSURE( !aFragmentPath.isEmpty(), "XmlFilterBase::importFragment - empty fragment path" );
-    if( aFragmentPath.isEmpty() )
+    OSL_ENSURE( !aFragmentPath.empty(), "XmlFilterBase::importFragment - empty fragment path" );
+    if( aFragmentPath.empty() )
         return xRet;
 
     // try to open the fragment stream (this may fail - do not assert)
@@ -440,7 +440,7 @@ Reference<XDocument> XmlFilterBase::importFragment( const OUString& aFragmentPat
         return xRet;
 
     // binary streams (fragment extension is '.bin') currently not supported
-    if (aFragmentPath.endsWith(gaBinSuffix))
+    if (o3tl::ends_with(aFragmentPath, gaBinSuffix))
         return xRet;
 
     // try to import XML stream
@@ -493,7 +493,7 @@ RelationsRef XmlFilterBase::importRelations( const OUString& rFragmentPath )
     return rxRelations;
 }
 
-Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rStreamName, const OUString& rMediaType )
+Reference< XOutputStream > XmlFilterBase::openFragmentStream( std::u16string_view rStreamName, const OUString& rMediaType )
 {
     Reference< XOutputStream > xOutputStream = openOutputStream( rStreamName );
     PropertySet aPropSet( xOutputStream );
@@ -501,7 +501,7 @@ Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rS
     return xOutputStream;
 }
 
-FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
+FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( std::u16string_view rStreamName, const OUString& rMediaType )
 {
     const bool bWriteHeader = rMediaType.indexOf( "vml" ) < 0 || rMediaType.indexOf( "+xml" ) >= 0;
     return std::make_shared<FastSerializerHelper>( openFragmentStream( rStreamName, rMediaType ), bWriteHeader );
@@ -638,7 +638,7 @@ writeCoreProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties 
 
     rSelf.addRelation( sValue, u"docProps/core.xml" );
     FSHelperPtr pCoreProps = rSelf.openFragmentStreamWithSerializer(
-            "docProps/core.xml",
+            u"docProps/core.xml",
             "application/vnd.openxmlformats-package.core-properties+xml" );
     pCoreProps->startElementNS( XML_cp, XML_coreProperties,
         FSNS(XML_xmlns, XML_cp),       rSelf.getNamespaceURL(OOX_NS(packageMetaCorePr)),
@@ -712,7 +712,7 @@ writeAppProperties( XmlFilterBase& rSelf, const Reference< XDocumentProperties >
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
             u"docProps/app.xml" );
     FSHelperPtr pAppProps = rSelf.openFragmentStreamWithSerializer(
-            "docProps/app.xml",
+            u"docProps/app.xml",
             "application/vnd.openxmlformats-officedocument.extended-properties+xml" );
     pAppProps->startElement( XML_Properties,
             XML_xmlns,               rSelf.getNamespaceURL(OOX_NS(officeExtPr)),
@@ -852,7 +852,7 @@ writeCustomProperties( XmlFilterBase& rSelf, const Reference< XDocumentPropertie
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
             u"docProps/custom.xml" );
     FSHelperPtr pAppProps = rSelf.openFragmentStreamWithSerializer(
-            "docProps/custom.xml",
+            u"docProps/custom.xml",
             "application/vnd.openxmlformats-officedocument.custom-properties+xml" );
     pAppProps->startElement( XML_Properties,
             XML_xmlns,               rSelf.getNamespaceURL(OOX_NS(officeCustomPr)),
@@ -1103,8 +1103,8 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
     // In some cases it's stored in the workbook relationships, which is unexpected. So we discover them directly.
     for (int i = 1; ; ++i)
     {
-        Reference<XDocument> xCustDoc = importFragment("customXml/item" + OUString::number(i) + ".xml");
-        Reference<XDocument> xCustDocProps = importFragment("customXml/itemProps" + OUString::number(i) + ".xml");
+        Reference<XDocument> xCustDoc = importFragment(rtl::OUStringConcatenation("customXml/item" + OUString::number(i) + ".xml"));
+        Reference<XDocument> xCustDocProps = importFragment(rtl::OUStringConcatenation("customXml/itemProps" + OUString::number(i) + ".xml"));
         if (xCustDoc && xCustDocProps)
         {
             aCustomXmlDomList.emplace_back(xCustDoc);
@@ -1120,7 +1120,7 @@ void XmlFilterBase::importCustomFragments(css::uno::Reference<css::embed::XStora
 
     // Save the [Content_Types].xml after parsing.
     uno::Sequence<uno::Sequence<beans::StringPair>> aContentTypeInfo;
-    uno::Reference<io::XInputStream> xInputStream = openInputStream("[Content_Types].xml");
+    uno::Reference<io::XInputStream> xInputStream = openInputStream(u"[Content_Types].xml");
     if (xInputStream.is())
         aContentTypeInfo = comphelper::OFOPXMLHelper::ReadContentTypeSequence(xInputStream, getComponentContext());
 
@@ -1198,7 +1198,7 @@ void XmlFilterBase::exportCustomFragments()
         {
             uno::Reference<xml::sax::XSAXSerializable> serializer(customXmlDomProps, uno::UNO_QUERY);
             uno::Reference<xml::sax::XWriter> writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
-            writer->setOutputStream(openFragmentStream("customXml/itemProps"+OUString::number(j+1)+".xml",
+            writer->setOutputStream(openFragmentStream(rtl::OUStringConcatenation("customXml/itemProps"+OUString::number(j+1)+".xml"),
                                     "application/vnd.openxmlformats-officedocument.customXmlProperties+xml"));
             serializer->serialize(uno::Reference<xml::sax::XDocumentHandler>(writer, uno::UNO_QUERY_THROW),
                                   uno::Sequence<beans::StringPair>());

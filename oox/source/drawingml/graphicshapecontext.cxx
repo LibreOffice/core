@@ -49,9 +49,9 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::oox::core;
 
 static uno::Reference<io::XInputStream>
-lcl_GetMediaStream(const OUString& rStream, const oox::core::XmlFilterBase& rFilter)
+lcl_GetMediaStream(std::u16string_view rStream, const oox::core::XmlFilterBase& rFilter)
 {
-    if (rStream.isEmpty())
+    if (rStream.empty())
         return nullptr;
 
     Reference< XInputStream > xInStrm( rFilter.openInputStream(rStream), UNO_SET_THROW );

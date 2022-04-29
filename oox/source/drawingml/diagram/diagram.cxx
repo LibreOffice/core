@@ -221,7 +221,7 @@ void Diagram::syncDiagramFontHeights()
 
 static uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
-    const OUString& rFragmentPath )
+    std::u16string_view rFragmentPath )
 {
     // load diagramming fragments into DOM representation, that later
     // gets serialized back to SAX events and parsed
