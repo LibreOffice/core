@@ -114,7 +114,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler >
             if( aIter.first == XML_ELEMENT(XLINK, XML_HREF) &&
                 SvxXMLTableImportContextEnum::Bitmap == meContext )
             {
-                OString rValue = aIter.second;
+                OString& rValue = aIter.second;
                 if( !rValue.isEmpty() && '#' == rValue[0] )
                     rValue = rValue.copy( 1 );
             }
