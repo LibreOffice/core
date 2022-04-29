@@ -24,10 +24,6 @@
 
 ifneq ($(filter gbuildtojson,$(MAKECMDGOALS)),)
 
-ifeq ($(MAKE_VERSION),3.81)
-$(error make version 3.81 not supported for gbuildtojson; install newer make via LODE)
-endif
-
 # possibly recurse to ensure gbuildtojson was build before running the modded make
 gb_GbuildToJson_prep := $(shell $(MAKE) -f $(SRCDIR)/solenv/Makefile Executable_gbuildtojson)
 gb_FULLDEPS:=
