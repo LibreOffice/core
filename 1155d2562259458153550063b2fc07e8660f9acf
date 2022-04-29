@@ -16,6 +16,24 @@
       "message": "Normally, we have something like def test_tdf97340_autofilter(self): (https://opengrok.libreoffice.org/xref/core/sc/qa/uitest/autofilter2/tdf97340.py?r\u003d8b71bc7e#16) and we should follow this policy here as well.\n\nSry for the nitpick. I think after this change we can submit it.",
       "revId": "1155d2562259458153550063b2fc07e8660f9acf",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5598b24_d92d1eb3",
+        "filename": "sc/qa/uitest/calc_tests6/moveCopySheet.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-04-29T17:03:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9ff3d2f_026d412c",
+      "revId": "1155d2562259458153550063b2fc07e8660f9acf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
