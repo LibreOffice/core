@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e46d74e0_052a3f0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000871
+      },
+      "writtenOn": "2022-04-29T11:32:41Z",
+      "side": 1,
+      "message": "Thanks Henry. Looks good, but best to have a unit-test that verifies that loading a template with a regular document extension produces this property with true as expected.",
+      "revId": "c306e440e1047dd943f7aae76dc8618b27b3fe1a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
