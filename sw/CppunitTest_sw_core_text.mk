@@ -21,9 +21,11 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_core_text, \
     comphelper \
     cppu \
     cppuhelper \
+    editeng \
     sal \
     sfx \
     sw \
+    svl \
     test \
     unotest \
     utl \
