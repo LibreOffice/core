@@ -30,47 +30,43 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     , mbDialogLostFocus(false)
     , mxButtonOk(m_xBuilder->weld_button("ok"))
     , mxButtonCancel(m_xBuilder->weld_button("cancel"))
-    , mxFrameData(m_xBuilder->weld_frame("frame-data"))
-    , mxInputRangeLabel(m_xBuilder->weld_label("cell-range-label"))
-    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("cell-range-edit")))
-    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("cell-range-button")))
-    , mxOutputRangeLabel(m_xBuilder->weld_label("output-range-label"))
-    , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("output-range-edit")))
-    , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("output-range-button")))
-    , mxColorSeries(new ColorListBox(m_xBuilder->weld_menu_button("color-button-series"),
+    , mxFrameData(m_xBuilder->weld_frame("frmData"))
+    , mxInputRangeLabel(m_xBuilder->weld_label("lbInputRange"))
+    , mxInputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("edInputRange")))
+    , mxInputRangeButton(new formula::RefButton(m_xBuilder->weld_button("btnInputRange")))
+    , mxOutputRangeLabel(m_xBuilder->weld_label("lbOutputRange"))
+    , mxOutputRangeEdit(new formula::RefEdit(m_xBuilder->weld_entry("edOutputRange")))
+    , mxOutputRangeButton(new formula::RefButton(m_xBuilder->weld_button("btnOutputRange")))
+    , mxColorSeries(new ColorListBox(m_xBuilder->weld_menu_button("colSeries"),
                                      [pWindow] { return pWindow; }))
-    , mxColorNegative(new ColorListBox(m_xBuilder->weld_menu_button("color-button-negative"),
+    , mxColorNegative(new ColorListBox(m_xBuilder->weld_menu_button("colNegative"),
                                        [pWindow] { return pWindow; }))
-    , mxColorMarker(new ColorListBox(m_xBuilder->weld_menu_button("color-button-marker"),
+    , mxColorMarker(new ColorListBox(m_xBuilder->weld_menu_button("colMarker"),
                                      [pWindow] { return pWindow; }))
-    , mxColorHigh(new ColorListBox(m_xBuilder->weld_menu_button("color-button-high"),
-                                   [pWindow] { return pWindow; }))
-    , mxColorLow(new ColorListBox(m_xBuilder->weld_menu_button("color-button-low"),
-                                  [pWindow] { return pWindow; }))
-    , mxColorFirst(new ColorListBox(m_xBuilder->weld_menu_button("color-button-first"),
-                                    [pWindow] { return pWindow; }))
-    , mxColorLast(new ColorListBox(m_xBuilder->weld_menu_button("color-button-last"),
-                                   [pWindow] { return pWindow; }))
-    , mxCheckButtonNegative(m_xBuilder->weld_check_button("check-negative"))
-    , mxCheckButtonMarker(m_xBuilder->weld_check_button("check-marker"))
-    , mxCheckButtonHigh(m_xBuilder->weld_check_button("check-high"))
-    , mxCheckButtonLow(m_xBuilder->weld_check_button("check-low"))
-    , mxCheckButtonFirst(m_xBuilder->weld_check_button("check-first"))
-    , mxCheckButtonLast(m_xBuilder->weld_check_button("check-last"))
-    , mxSpinLineWidth(m_xBuilder->weld_spin_button("spin-line-width"))
-    , mxRadioLine(m_xBuilder->weld_radio_button("line-radiobutton"))
-    , mxRadioColumn(m_xBuilder->weld_radio_button("column-radiobutton"))
-    , mxRadioStacked(m_xBuilder->weld_radio_button("stacked-radiobutton"))
-    , mxCheckDisplayXAxis(m_xBuilder->weld_check_button("check-display-x-axis"))
-    , mxCheckDisplayHidden(m_xBuilder->weld_check_button("check-display-hidden"))
-    , mxCheckRightToLeft(m_xBuilder->weld_check_button("check-right-to-left"))
-    , mxRadioDisplayEmptyGap(m_xBuilder->weld_radio_button("display-empty-radiobutton-gap"))
-    , mxRadioDisplayEmptyZero(m_xBuilder->weld_radio_button("display-empty-radiobutton-zero"))
-    , mxRadioDisplayEmptySpan(m_xBuilder->weld_radio_button("display-empty-radiobutton-span"))
-    , mxComboMinAxisType(m_xBuilder->weld_combo_box("combo-min-axis-type"))
-    , mxComboMaxAxisType(m_xBuilder->weld_combo_box("combo-max-axis-type"))
-    , mxSpinCustomMin(m_xBuilder->weld_formatted_spin_button("spin-custom-min"))
-    , mxSpinCustomMax(m_xBuilder->weld_formatted_spin_button("spin-custom-max"))
+    , mxColorHigh(
+          new ColorListBox(m_xBuilder->weld_menu_button("colHigh"), [pWindow] { return pWindow; }))
+    , mxColorLow(
+          new ColorListBox(m_xBuilder->weld_menu_button("colLow"), [pWindow] { return pWindow; }))
+    , mxColorFirst(
+          new ColorListBox(m_xBuilder->weld_menu_button("colFirst"), [pWindow] { return pWindow; }))
+    , mxColorLast(
+          new ColorListBox(m_xBuilder->weld_menu_button("colLast"), [pWindow] { return pWindow; }))
+    , mxCheckButtonNegative(m_xBuilder->weld_check_button("cbNegative"))
+    , mxCheckButtonMarker(m_xBuilder->weld_check_button("cbMarker"))
+    , mxCheckButtonHigh(m_xBuilder->weld_check_button("cbHigh"))
+    , mxCheckButtonLow(m_xBuilder->weld_check_button("cbLow"))
+    , mxCheckButtonFirst(m_xBuilder->weld_check_button("cbFirst"))
+    , mxCheckButtonLast(m_xBuilder->weld_check_button("cbLast"))
+    , mxSpinLineWidth(m_xBuilder->weld_spin_button("seLineWidth"))
+    , mxType(m_xBuilder->weld_combo_box("cbType"))
+    , mxCheckDisplayXAxis(m_xBuilder->weld_check_button("cbDisplayXAxis"))
+    , mxCheckDisplayHidden(m_xBuilder->weld_check_button("cbHidden"))
+    , mxCheckRightToLeft(m_xBuilder->weld_check_button("cbRTL"))
+    , mxDisplayEmptyGap(m_xBuilder->weld_combo_box("cbEmptyCells"))
+    , mxComboMinAxisType(m_xBuilder->weld_combo_box("cbMinAxisType"))
+    , mxComboMaxAxisType(m_xBuilder->weld_combo_box("cbMaxAxisType"))
+    , mxSpinCustomMin(m_xBuilder->weld_formatted_spin_button("seMinAxis"))
+    , mxSpinCustomMax(m_xBuilder->weld_formatted_spin_button("seMaxAxis"))
     , mbEditMode(false)
 {
     mxInputRangeEdit->SetReferences(this, mxInputRangeLabel.get());
@@ -101,14 +97,8 @@ SparklineDialog::SparklineDialog(SfxBindings* pBindings, SfxChildWindow* pChildW
     mxInputRangeEdit->SetModifyHdl(aModifyLink);
     mxOutputRangeEdit->SetModifyHdl(aModifyLink);
 
-    Link<weld::Toggleable&, void> aRadioButtonLink
-        = LINK(this, SparklineDialog, SelectSparklineType);
-    mxRadioLine->connect_toggled(aRadioButtonLink);
-    mxRadioColumn->connect_toggled(aRadioButtonLink);
-    mxRadioStacked->connect_toggled(aRadioButtonLink);
-    mxRadioDisplayEmptyGap->connect_toggled(aRadioButtonLink);
-    mxRadioDisplayEmptyZero->connect_toggled(aRadioButtonLink);
-    mxRadioDisplayEmptySpan->connect_toggled(aRadioButtonLink);
+    mxType->connect_changed(LINK(this, SparklineDialog, SelectSparklineType));
+    mxDisplayEmptyGap->connect_changed(LINK(this, SparklineDialog, SelectSparklineType));
 
     Link<weld::Toggleable&, void> aLink = LINK(this, SparklineDialog, ToggleHandler);
     mxCheckButtonNegative->connect_toggled(aLink);
@@ -179,26 +169,26 @@ void SparklineDialog::setupValues()
     switch (maAttributes.getType())
     {
         case sc::SparklineType::Line:
-            mxRadioLine->set_active(true);
+            mxType->set_active(0);
             break;
         case sc::SparklineType::Column:
-            mxRadioColumn->set_active(true);
+            mxType->set_active(1);
             break;
         case sc::SparklineType::Stacked:
-            mxRadioStacked->set_active(true);
+            mxType->set_active(2);
             break;
     }
 
     switch (maAttributes.getDisplayEmptyCellsAs())
     {
         case sc::DisplayEmptyCellsAs::Gap:
-            mxRadioDisplayEmptyGap->set_active(true);
+            mxDisplayEmptyGap->set_active(0);
             break;
         case sc::DisplayEmptyCellsAs::Zero:
-            mxRadioDisplayEmptyZero->set_active(true);
+            mxDisplayEmptyGap->set_active(1);
             break;
         case sc::DisplayEmptyCellsAs::Span:
-            mxRadioDisplayEmptySpan->set_active(true);
+            mxDisplayEmptyGap->set_active(2);
             break;
     }
 
@@ -419,21 +409,32 @@ IMPL_LINK(SparklineDialog, ToggleHandler, weld::Toggleable&, rToggle, void)
         maAttributes.setRightToLeft(mxCheckRightToLeft->get_active());
 }
 
-IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::Toggleable&, void)
+IMPL_LINK_NOARG(SparklineDialog, SelectSparklineType, weld::ComboBox&, void)
 {
-    if (mxRadioLine->get_active())
-        maAttributes.setType(sc::SparklineType::Line);
-    else if (mxRadioColumn->get_active())
-        maAttributes.setType(sc::SparklineType::Column);
-    else if (mxRadioStacked->get_active())
-        maAttributes.setType(sc::SparklineType::Stacked);
-
-    if (mxRadioDisplayEmptyGap->get_active())
-        maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Gap);
-    else if (mxRadioDisplayEmptyZero->get_active())
-        maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Zero);
-    else if (mxRadioDisplayEmptySpan->get_active())
-        maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Span);
+    switch (mxType->get_active())
+    {
+        case 0:
+            maAttributes.setType(sc::SparklineType::Line);
+            break;
+        case 1:
+            maAttributes.setType(sc::SparklineType::Column);
+            break;
+        case 2:
+            maAttributes.setType(sc::SparklineType::Stacked);
+            break;
+    }
+    switch (mxDisplayEmptyGap->get_active())
+    {
+        case 1:
+            maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Gap);
+            break;
+        case 2:
+            maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Zero);
+            break;
+        case 3:
+            maAttributes.setDisplayEmptyCellsAs(sc::DisplayEmptyCellsAs::Span);
+            break;
+    }
 }
 
 IMPL_LINK_NOARG(SparklineDialog, SpinLineWidthChanged, weld::SpinButton&, void)
