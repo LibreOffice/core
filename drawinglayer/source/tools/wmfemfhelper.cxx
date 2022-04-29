@@ -1548,7 +1548,7 @@ namespace wmfemfhelper
                                 }
                                 else
                                 {
-                                    aLineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE); // It were lines; force to NONE
+                                    aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
                                     createLinePrimitive(aLinePolygon, aLineInfo, rTargetHolders.Current(), rPropertyHolders.Current());
                                     aLinePolygon.clear();
                                     aLineInfo = pA->GetLineInfo();
@@ -1563,14 +1563,16 @@ namespace wmfemfhelper
                                 aLinePolygon.append(aEnd);
                             }
 
-                            nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
+                            nAction++;
+                            if (nAction < nCount)
+                                pAction = rMetaFile.GetAction(nAction);
                         }
 
                         nAction--;
 
-                        if(aLinePolygon.count())
+                        if (aLinePolygon.count())
                         {
-                            aLineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE); // It were lines; force to NONE
+                            aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
                             createLinePrimitive(aLinePolygon, aLineInfo, rTargetHolders.Current(), rPropertyHolders.Current());
                         }
                     }

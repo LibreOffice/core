@@ -402,6 +402,80 @@ namespace emfio
     const sal_uInt32 EMR_COMMENT_MULTIFORMATS = 0x40000004;
     const sal_uInt32 EMR_COMMENT_WINDOWS_METAFILE = 0x80000001;
 
+    void EmfReader::CreateLineInfoForPen(const sal_uInt32 nStyle, const sal_Int32 nPenWidth,
+                                         LineInfo& aLineInfo)
+    {
+        // According to documentation: nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
+        // tdf#140271 Based on observed behaviour the line width is not constant with PS_COSMETIC
+
+        // Width 0 means default width for LineInfo (HairLine) with 1 pixel wide
+        aLineInfo.SetWidth(nPenWidth);
+        switch (nStyle & PS_STYLE_MASK)
+        {
+            case PS_DASHDOTDOT:
+                aLineInfo.SetStyle(LineStyle::Dash);
+                aLineInfo.SetDashCount(1);
+                aLineInfo.SetDotCount(2);
+                break;
+            case PS_DASHDOT:
+                aLineInfo.SetStyle(LineStyle::Dash);
+                aLineInfo.SetDashCount(1);
+                aLineInfo.SetDotCount(1);
+                break;
+            case PS_DOT:
+                aLineInfo.SetStyle(LineStyle::Dash);
+                aLineInfo.SetDashCount(0);
+                aLineInfo.SetDotCount(1);
+                break;
+            case PS_DASH:
+                aLineInfo.SetStyle(LineStyle::Dash);
+                aLineInfo.SetDashCount(1);
+                aLineInfo.SetDotCount(0);
+                break;
+            case PS_NULL:
+                aLineInfo.SetStyle(LineStyle::NONE);
+                break;
+            case PS_INSIDEFRAME:
+            case PS_SOLID:
+            default:
+                aLineInfo.SetStyle(LineStyle::Solid);
+        }
+        switch (nStyle & PS_ENDCAP_STYLE_MASK)
+        {
+            case PS_ENDCAP_ROUND:
+                if (nPenWidth)
+                {
+                    aLineInfo.SetLineCap(css::drawing::LineCap_ROUND);
+                    break;
+                }
+                [[fallthrough]];
+            case PS_ENDCAP_SQUARE:
+                if (nPenWidth)
+                {
+                    aLineInfo.SetLineCap(css::drawing::LineCap_SQUARE);
+                    break;
+                }
+                [[fallthrough]];
+            case PS_ENDCAP_FLAT:
+            default:
+                aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+        }
+        switch (nStyle & PS_JOIN_STYLE_MASK)
+        {
+            case PS_JOIN_ROUND:
+                aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Round);
+                break;
+            case PS_JOIN_BEVEL:
+                aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
+                break;
+            // Undocumented but based on experiments with MS Paint and MS Word,
+            // the default Join Style is PS_JOIN_MITER
+            case PS_JOIN_MITER:
+            default:
+                aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Miter);
+        }
+    }
+
     void EmfReader::ReadGDIComment(sal_uInt32 nCommentId)
     {
         sal_uInt32 nPublicCommentIdentifier(0);
@@ -1144,186 +1218,46 @@ namespace emfio
                     }
                     break;
 
-                    case EMR_CREATEPEN :
+                    case EMR_CREATEPEN:
                     {
-                        mpInputStream->ReadUInt32( nIndex );
-                        if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                        mpInputStream->ReadUInt32(nIndex);
+                        if ((nIndex & ENHMETA_STOCK_OBJECT) == 0)
                         {
-                            LineInfo    aLineInfo;
                             sal_uInt32 nStyle(0);
                             sal_Int32 nPenWidth(0), nIgnored;
-
-                            mpInputStream->ReadUInt32( nStyle ).ReadInt32( nPenWidth ).ReadInt32( nIgnored );
-
-                            SAL_INFO("emfio", "\t\tIndex: " << nIndex << " Style: 0x" << std::hex << nStyle << std::dec << " PenWidth: " << nPenWidth);
-                            // According to documentation: nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
-                            // tdf#140271 Based on observed behaviour the line width is not constant with PS_COSMETIC
-
-                            // Width 0 means default width for LineInfo (HairLine) with 1 pixel wide
-                            aLineInfo.SetWidth( nPenWidth );
-
-                            bool bTransparent = false;
-                            switch( nStyle & PS_STYLE_MASK )
-                            {
-                                case PS_DASHDOTDOT :
-                                    aLineInfo.SetStyle( LineStyle::Dash );
-                                    aLineInfo.SetDashCount( 1 );
-                                    aLineInfo.SetDotCount( 2 );
-                                break;
-                                case PS_DASHDOT :
-                                    aLineInfo.SetStyle( LineStyle::Dash );
-                                    aLineInfo.SetDashCount( 1 );
-                                    aLineInfo.SetDotCount( 1 );
-                                break;
-                                case PS_DOT :
-                                    aLineInfo.SetStyle( LineStyle::Dash );
-                                    aLineInfo.SetDashCount( 0 );
-                                    aLineInfo.SetDotCount( 1 );
-                                break;
-                                case PS_DASH :
-                                    aLineInfo.SetStyle( LineStyle::Dash );
-                                    aLineInfo.SetDashCount( 1 );
-                                    aLineInfo.SetDotCount( 0 );
-                                break;
-                                case PS_NULL :
-                                    bTransparent = true;
-                                    aLineInfo.SetStyle( LineStyle::NONE );
-                                break;
-                                case PS_INSIDEFRAME :
-                                case PS_SOLID :
-                                default :
-                                    aLineInfo.SetStyle( LineStyle::Solid );
-                            }
-                            switch( nStyle & PS_ENDCAP_STYLE_MASK )
-                            {
-                                case PS_ENDCAP_ROUND :
-                                    if ( nPenWidth )
-                                    {
-                                        aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
-                                        break;
-                                    }
-                                    [[fallthrough]];
-                                case PS_ENDCAP_SQUARE :
-                                    if ( nPenWidth )
-                                    {
-                                        aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
-                                        break;
-                                    }
-                                    [[fallthrough]];
-                                case PS_ENDCAP_FLAT :
-                                default :
-                                    aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
-                            }
-                            switch( nStyle & PS_JOIN_STYLE_MASK )
-                            {
-                                case PS_JOIN_ROUND :
-                                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Round );
-                                break;
-                                case PS_JOIN_MITER :
-                                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Miter );
-                                break;
-                                case PS_JOIN_BEVEL :
-                                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Bevel );
-                                break;
-                                default :
-                                    aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
-                            }
-                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
+                            mpInputStream->ReadUInt32(nStyle).ReadInt32(nPenWidth).ReadInt32(nIgnored);
+                            SAL_INFO("emfio", "\t\tIndex: " << nIndex << " Style: 0x" << std::hex
+                                                            << nStyle << std::dec
+                                                            << " PenWidth: " << nPenWidth);
+                            LineInfo aLineInfo;
+                            CreateLineInfoForPen(nStyle, nPenWidth, aLineInfo);
+                            CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(ReadColor(), aLineInfo));
                         }
                     }
                     break;
 
-                    case EMR_EXTCREATEPEN :
+                    case EMR_EXTCREATEPEN:
                     {
-                        mpInputStream->ReadUInt32( nIndex );
-                        if ( ( nIndex & ENHMETA_STOCK_OBJECT ) == 0 )
+                        mpInputStream->ReadUInt32(nIndex);
+                        if ((nIndex & ENHMETA_STOCK_OBJECT) == 0)
                         {
-                            sal_uInt32  offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
-                            sal_Int32   elpHatch;
-                            mpInputStream->ReadUInt32( offBmi ).ReadUInt32( cbBmi ).ReadUInt32( offBits ).ReadUInt32( cbBits ). ReadUInt32( nStyle ).ReadUInt32( nWidth ).ReadUInt32( nBrushStyle );
+                            sal_uInt32 offBmi, cbBmi, offBits, cbBits, nStyle, nWidth, nBrushStyle, elpNumEntries;
+                            sal_Int32 elpHatch;
+                            mpInputStream->ReadUInt32(offBmi).ReadUInt32(cbBmi).ReadUInt32(offBits).ReadUInt32(cbBits);
+                            mpInputStream->ReadUInt32(nStyle).ReadUInt32(nWidth).ReadUInt32(nBrushStyle);
 
                             SAL_INFO("emfio", "\t\tStyle: 0x" << std::hex << nStyle << std::dec);
                             SAL_INFO("emfio", "\t\tWidth: " << nWidth);
                             Color aColorRef = ReadColor();
-                            mpInputStream->ReadInt32( elpHatch ).ReadUInt32( elpNumEntries );
+                            mpInputStream->ReadInt32(elpHatch).ReadUInt32(elpNumEntries);
 
                             if (!mpInputStream->good())
                                 bStatus = false;
                             else
                             {
-                                LineInfo    aLineInfo;
-                                if ( nWidth )
-                                    aLineInfo.SetWidth( nWidth );
-
-                                bool bTransparent = false;
-
-                                switch( nStyle & PS_STYLE_MASK )
-                                {
-                                    case PS_DASHDOTDOT :
-                                        aLineInfo.SetStyle( LineStyle::Dash );
-                                        aLineInfo.SetDashCount( 1 );
-                                        aLineInfo.SetDotCount( 2 );
-                                    break;
-                                    case PS_DASHDOT :
-                                        aLineInfo.SetStyle( LineStyle::Dash );
-                                        aLineInfo.SetDashCount( 1 );
-                                        aLineInfo.SetDotCount( 1 );
-                                    break;
-                                    case PS_DOT :
-                                        aLineInfo.SetStyle( LineStyle::Dash );
-                                        aLineInfo.SetDashCount( 0 );
-                                        aLineInfo.SetDotCount( 1 );
-                                    break;
-                                    case PS_DASH :
-                                        aLineInfo.SetStyle( LineStyle::Dash );
-                                        aLineInfo.SetDashCount( 1 );
-                                        aLineInfo.SetDotCount( 0 );
-                                    break;
-                                    case PS_NULL :
-                                        bTransparent = true;
-                                        aLineInfo.SetStyle( LineStyle::NONE );
-                                    break;
-
-                                    case PS_INSIDEFRAME :
-                                    case PS_SOLID :
-                                    default :
-                                        aLineInfo.SetStyle( LineStyle::Solid );
-                                }
-                                switch( nStyle & PS_ENDCAP_STYLE_MASK )
-                                {
-                                    case PS_ENDCAP_ROUND :
-                                        if ( aLineInfo.GetWidth() )
-                                        {
-                                            aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
-                                            break;
-                                        }
-                                        [[fallthrough]];
-                                    case PS_ENDCAP_SQUARE :
-                                        if ( aLineInfo.GetWidth() )
-                                        {
-                                            aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
-                                            break;
-                                        }
-                                        [[fallthrough]];
-                                    case PS_ENDCAP_FLAT :
-                                    default :
-                                        aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
-                                }
-                                switch( nStyle & PS_JOIN_STYLE_MASK )
-                                {
-                                    case PS_JOIN_ROUND :
-                                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Round );
-                                    break;
-                                    case PS_JOIN_MITER :
-                                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Miter );
-                                    break;
-                                    case PS_JOIN_BEVEL :
-                                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Bevel );
-                                    break;
-                                    default :
-                                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
-                                }
-                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>( aColorRef, aLineInfo, bTransparent ));
+                                LineInfo aLineInfo;
+                                CreateLineInfoForPen(nStyle, nWidth, aLineInfo);
+                                CreateObjectIndexed(nIndex, std::make_unique<WinMtfLineStyle>(aColorRef, aLineInfo));
                             }
                         }
                     }
