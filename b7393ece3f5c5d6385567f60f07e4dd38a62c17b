@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a226071f_28fd42f5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-29T10:08:38Z",
+      "side": 1,
+      "message": "I understand that ▸ has given OUString indigestion.  \n\nNow what?  \n - Go back to \"\u003e\" or \"-\" ?\n - Modify OUString ?\n - use situation as an opportunity to move this string to an .hrc file (to address translation issue)?",
+      "revId": "b7393ece3f5c5d6385567f60f07e4dd38a62c17b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5af1d00_e8e1604a",
         "filename": "stoc/source/javaloader/javaloader.cxx",
         "patchSetId": 2
