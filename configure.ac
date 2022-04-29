@@ -2939,6 +2939,10 @@ if test -z "$COMPRESSIONTOOL"; then
 fi
 AC_SUBST(COMPRESSIONTOOL)
 
+# use GNU parallel for packaging, if available
+AC_PATH_PROG(GNUPARALLEL, parallel)
+AC_SUBST(GNUPARALLEL)
+
 AC_MSG_CHECKING([for GNU or BSD tar])
 for a in $GNUTAR gtar gnutar tar bsdtar /usr/sfw/bin/gtar; do
     $a --version 2> /dev/null | egrep "GNU|bsdtar"  2>&1 > /dev/null
