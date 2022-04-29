@@ -63,7 +63,7 @@ public class FileUtilities {
         mExtnMap.put(".vsdx", DRAWING);
         mExtnMap.put(".pub", DRAWING);
         mExtnMap.put(".ppt",  IMPRESS);
-        // mExtnMap.put(".pps",  IMPRESS);
+        mExtnMap.put(".pps",  IMPRESS);
         mExtnMap.put(".xls",  CALC);
 
         // MS templates
