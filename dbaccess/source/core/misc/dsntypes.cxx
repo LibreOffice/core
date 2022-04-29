@@ -84,7 +84,7 @@ OUString ODsnTypeCollection::cutPrefix(std::u16string_view _sURL) const
     OUString sOldPattern;
 
     // on Windows or with gen rendering, the urls may begin with an ~
-    const OUString& sCleanURL = comphelper::string::stripStart(_sURL, '~');
+    std::u16string_view sCleanURL = comphelper::string::stripStart(_sURL, '~');
 
     for (auto const& dsnPrefix : m_aDsnPrefixes)
     {
@@ -95,8 +95,8 @@ OUString ODsnTypeCollection::cutPrefix(std::u16string_view _sURL) const
             //   foo*
             // that is, the very concept of "prefix" applies.
             OUString prefix(comphelper::string::stripEnd(dsnPrefix, '*'));
-            OSL_ENSURE(prefix.getLength() <= sCleanURL.getLength(), "How can A match B when A shorter than B?");
-            sRet = sCleanURL.copy(prefix.getLength());
+            OSL_ENSURE(o3tl::make_unsigned(prefix.getLength()) <= sCleanURL.size(), "How can A match B when A shorter than B?");
+            sRet = sCleanURL.substr(prefix.getLength());
             sOldPattern = dsnPrefix;
         }
     }

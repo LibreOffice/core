@@ -99,8 +99,8 @@ static bool getTag(std::string_view rLine, std::string_view rTagName,
     if (nPos == std::string_view::npos)
         return false;
 
-    rTagValue = comphelper::string::strip(rLine.substr(nPos + rTagName.size()),
-        ' ');
+    rTagValue = OString(comphelper::string::strip(rLine.substr(nPos + rTagName.size()),
+        ' '));
     return true;
 }
 
