@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "61c592d7_21e3ade4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-29T18:00:45Z",
+      "side": 1,
+      "message": "I confirm it builds (after having reverted locally my wrong patch) + tif from tdf#74331 still opens ok.",
+      "revId": "89fff666dd8de67d660df77676741f6b42b18f8f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
