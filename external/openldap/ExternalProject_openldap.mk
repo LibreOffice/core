@@ -24,7 +24,7 @@ ifeq ($(OS),LINUX) # i.e., assuming glibc
 openldap_CFLAGS = -D_XOPEN_SOURCE=500 -D_DEFAULT_SOURCE -D_BSD_SOURCE
 endif
 
-openldap_LDFLAGS =
+openldap_LDFLAGS = $(call gb_ExternalProject_get_link_flags,openldap)
 ifeq ($(SYSTEM_NSS),)
 openldap_LDFLAGS += -L$(call gb_UnpackedTarball_get_dir,nss)/dist/out/lib \
     $(if $(filter AIX,$(OS)),-Wl$(COMMA)-brtl)

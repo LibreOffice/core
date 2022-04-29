@@ -62,6 +62,7 @@ $(call gb_ExternalProject_get_state_target,firebird,build):
 			$(if $(ENABLE_DEBUG),$(if $(filter MSC,$(COM)),-Od -Z7)) \
 		" \
 		&& export LDFLAGS=" \
+			$(call gb_ExternalProject_get_link_flags,firebird) \
 			$(if $(SYSTEM_LIBATOMIC_OPS),$(LIBATOMIC_OPS_LIBS), \
 				-L$(call gb_UnpackedTarball_get_dir,libatomic_ops)/src \
 			) \

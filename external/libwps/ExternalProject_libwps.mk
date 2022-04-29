@@ -23,18 +23,10 @@ libwps_CPPFLAGS+=$(gb_COMPILERDEFS_STDLIB_DEBUG)
 
 libwps_CXXFLAGS=$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libwps)
 
-libwps_LDFLAGS=
+libwps_LDFLAGS=$(call gb_ExternalProject_get_link_flags,libwps)
 ifeq ($(OS),LINUX)
 ifeq ($(SYSTEM_REVENGE),)
 libwps_LDFLAGS+=-Wl,-z,origin -Wl,-rpath,\$$$$ORIGIN
-endif
-endif
-
-ifeq ($(ENABLE_GDB_INDEX),TRUE)
-libwps_LDFLAGS+=-Wl,--gdb-index
-libwps_CXXFLAGS+=-ggnu-pubnames
-ifneq ($(USE_LD),)
-libwps_LDFLAGS += $(USE_LD)
 endif
 endif
 

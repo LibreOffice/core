@@ -33,6 +33,7 @@ $(call gb_ExternalProject_get_state_target,libnumbertext,build):
 			CXXFLAGS="$(libnumbertext_CXXFLAGS) \
 				$(call gb_ExternalProject_get_build_flags,libnumbertext) \
 				$(gb_VISIBILITY_FLAGS) $(gb_VISIBILITY_FLAGS_CXX)" \
+			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libnumbertext)" \
 		&& cd src && $(MAKE) \
 	)
 	$(call gb_Trace_EndRange,libnumbertext,EXTERNAL)

@@ -38,6 +38,7 @@ $(call gb_ExternalProject_get_state_target,libabw,build) :
 			$(if $(gb_FULLDEPS),,--disable-dependency-tracking) \
 			CXXFLAGS="$(gb_CXXFLAGS) $(call gb_ExternalProject_get_build_flags,libabw)" \
 			CPPFLAGS="$(CPPFLAGS) $(BOOST_CPPFLAGS)" \
+			LDFLAGS="$(call gb_ExternalProject_get_link_flags,libabw)" \
 			$(gb_CONFIGURE_PLATFORMS) \
 		&& $(MAKE) \
 	)

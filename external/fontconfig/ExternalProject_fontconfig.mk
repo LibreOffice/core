@@ -26,6 +26,7 @@ $(call gb_ExternalProject_get_state_target,fontconfig,build) :
 			$(gb_VISIBILITY_FLAGS) \
 			$(if $(filter EMSCRIPTEN,$(OS)),-pthread)" \
 			$(if $(filter ANDROID,$(OS)),LIBS="-lm") \
+		LDFLAGS="$(call gb_ExternalProject_get_link_flags,fontconfig)" \
 		$(gb_RUN_CONFIGURE) ./configure \
 			--disable-shared \
 			--disable-silent-rules \
