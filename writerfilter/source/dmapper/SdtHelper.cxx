@@ -423,6 +423,21 @@ void SdtHelper::SetShowingPlcHdr() { m_bShowingPlcHdr = true; }
 
 bool SdtHelper::GetShowingPlcHdr() const { return m_bShowingPlcHdr; }
 
+void SdtHelper::SetChecked() { m_bChecked = true; }
+
+bool SdtHelper::GetChecked() const { return m_bChecked; }
+
+void SdtHelper::SetCheckedState(const OUString& rCheckedState) { m_aCheckedState = rCheckedState; }
+
+OUString SdtHelper::GetCheckedState() const { return m_aCheckedState; }
+
+void SdtHelper::SetUncheckedState(const OUString& rUncheckedState)
+{
+    m_aUncheckedState = rUncheckedState;
+}
+
+OUString SdtHelper::GetUncheckedState() const { return m_aUncheckedState; }
+
 void SdtHelper::clear()
 {
     m_aDropDownItems.clear();
@@ -432,6 +447,9 @@ void SdtHelper::clear()
     m_sDataBindingStoreItemID.clear();
     m_aGrabBag.clear();
     m_bShowingPlcHdr = false;
+    m_bChecked = false;
+    m_aCheckedState.clear();
+    m_aUncheckedState.clear();
 }
 
 } // namespace writerfilter::dmapper

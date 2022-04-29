@@ -725,8 +725,12 @@ public:
 
     /// Setter method for m_bSdt.
     void SetSdt(bool bSdt);
+
     void PushSdt();
     void PopSdt();
+    /// Gives access to the currently open run/inline SDTs.
+    const std::stack<BookmarkInsertPosition>& GetSdtStarts() const;
+
     /// Getter method for m_bSdt.
     bool GetSdt() const { return m_bSdt;}
     bool GetParaChanged() const { return m_bParaChanged;}

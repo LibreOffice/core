@@ -849,6 +849,11 @@ void DomainMapper_Impl::PushSdt()
     m_xSdtStarts.push({bStart, OUString(), xCursor->getStart()});
 }
 
+const std::stack<BookmarkInsertPosition>& DomainMapper_Impl::GetSdtStarts() const
+{
+    return m_xSdtStarts;
+}
+
 void DomainMapper_Impl::PopSdt()
 {
     if (m_xSdtStarts.empty())
@@ -886,7 +891,23 @@ void DomainMapper_Impl::PopSdt()
         xContentControlProps->setPropertyValue("ShowingPlaceHolder",
                                                uno::makeAny(m_pSdtHelper->GetShowingPlcHdr()));
     }
+
+    if (m_pSdtHelper->getControlType() == SdtControlType::checkBox)
+    {
+        xContentControlProps->setPropertyValue("Checkbox", uno::makeAny(true));
+
+        xContentControlProps->setPropertyValue("Checked", uno::makeAny(m_pSdtHelper->GetChecked()));
+
+        xContentControlProps->setPropertyValue("CheckedState",
+                                               uno::makeAny(m_pSdtHelper->GetCheckedState()));
+
+        xContentControlProps->setPropertyValue("UncheckedState",
+                                               uno::makeAny(m_pSdtHelper->GetUncheckedState()));
+    }
+
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    m_pSdtHelper->clear();
 }
 
 void    DomainMapper_Impl::PushProperties(ContextType eId)
