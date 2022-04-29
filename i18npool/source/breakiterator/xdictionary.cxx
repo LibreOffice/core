@@ -62,6 +62,11 @@ sal_Unicode* getDataArea_zh();
 
 xdictionary::xdictionary(const char *lang) :
     japaneseWordBreak( false )
+#ifdef DICT_JA_ZH_IN_DATAFILE
+    , m_aFileHandle(nullptr),
+    m_nFileSize(-1),
+    m_pMapping(nullptr)
+#endif
 {
 
 #ifdef DICT_JA_ZH_IN_DATAFILE
@@ -76,21 +81,18 @@ xdictionary::xdictionary(const char *lang) :
         else if( strcmp( lang, "zh" ) == 0 )
             sUrl += "zh.data";
 
-        oslFileHandle aFileHandle;
-        sal_uInt64 nFileSize;
-        char *pMapping;
-        if( osl_openFile( sUrl.pData, &aFileHandle, osl_File_OpenFlag_Read ) == osl_File_E_None &&
-            osl_getFileSize( aFileHandle, &nFileSize) == osl_File_E_None &&
-            osl_mapFile( aFileHandle, (void **) &pMapping, nFileSize, 0, osl_File_MapFlag_RandomAccess ) == osl_File_E_None )
+        if( osl_openFile( sUrl.pData, &m_aFileHandle, osl_File_OpenFlag_Read ) == osl_File_E_None &&
+            osl_getFileSize( m_aFileHandle, &m_nFileSize) == osl_File_E_None &&
+            osl_mapFile( m_aFileHandle, (void **) &m_pMapping, m_nFileSize, 0, osl_File_MapFlag_RandomAccess ) == osl_File_E_None )
         {
             // We have the offsets to the parts of the file at its end, see gendict.cxx
-            sal_Int64 *pEOF = (sal_Int64*)(pMapping + nFileSize);
+            sal_Int64 *pEOF = (sal_Int64*)(m_pMapping + m_nFileSize);
 
-            data.existMark = (sal_uInt8*) (pMapping + pEOF[-1]);
-            data.index2 = (sal_Int32*) (pMapping + pEOF[-2]);
-            data.index1 = (sal_Int16*) (pMapping + pEOF[-3]);
-            data.lenArray = (sal_Int32*) (pMapping + pEOF[-4]);
-            data.dataArea = (sal_Unicode*) (pMapping + pEOF[-5]);
+            data.existMark = (sal_uInt8*) (m_pMapping + pEOF[-1]);
+            data.index2 = (sal_Int32*) (m_pMapping + pEOF[-2]);
+            data.index1 = (sal_Int16*) (m_pMapping + pEOF[-3]);
+            data.lenArray = (sal_Int32*) (m_pMapping + pEOF[-4]);
+            data.dataArea = (sal_Unicode*) (m_pMapping + pEOF[-5]);
         }
     }
 
@@ -131,6 +133,14 @@ xdictionary::~xdictionary()
             delete [] i.wordboundary;
         }
     }
+#ifdef DICT_JA_ZH_IN_DATAFILE
+    if (m_aFileHandle) {
+        if (m_pMapping) {
+            osl_unmapMappedFile(m_aFileHandle, m_pMapping, m_nFileSize);
+        }
+        osl_closeFile(m_aFileHandle);
+    }
+#endif
 }
 
 namespace {
