@@ -74,7 +74,7 @@ public class FileUtilities {
         // OOXML
         mExtnMap.put(".docx", DOC);
         mExtnMap.put(".pptx", IMPRESS);
-        // mExtnMap.put(".ppsx", IMPRESS);
+        mExtnMap.put(".ppsx", IMPRESS);
         mExtnMap.put(".xlsx", CALC);
 
         // OOXML templates

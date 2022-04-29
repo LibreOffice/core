@@ -70,7 +70,7 @@
                 <!-- OOXML -->
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.presentation" />
-                <!-- Currently crashes. <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.slideshow"/> -->
+                <data android:mimeType="application/vnd.openxmlformats-officedocument.presentationml.slideshow" />
                 <data android:mimeType="application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
 
                 <!-- OOXML templates -->
