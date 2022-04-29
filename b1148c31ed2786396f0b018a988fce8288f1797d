@@ -16,6 +16,24 @@
       "message": "I see it\u0027s reversed, but if it will be re-implemented, this should be\n\n    else if( c \u003d\u003d \u0027.\u0027 \u0026\u0026 ( pos \u003d\u003d end || *pos \u003c \u00270\u0027 || *pos \u003e \u00279\u0027 ) )",
       "revId": "b1148c31ed2786396f0b018a988fce8288f1797d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a88873c_9c02bea2",
+        "filename": "comphelper/source/misc/syntaxhighlight.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-29T11:27:30Z",
+      "side": 1,
+      "message": "Oh it\u0027s nor reverted (confused with another change) - sorry; I\u0027ll send a fix.",
+      "parentUuid": "c8f235b8_d77d8e3f",
+      "revId": "b1148c31ed2786396f0b018a988fce8288f1797d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
