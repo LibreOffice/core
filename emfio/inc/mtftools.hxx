@@ -204,8 +204,6 @@ namespace emfio
     enum PenStyle : sal_uInt32
     {
         PS_COSMETIC          = 0x00000000,
-        PS_ENDCAP_ROUND      = 0x00000000,
-        PS_JOIN_ROUND        = 0x00000000,
         PS_SOLID             = 0x00000000,
         PS_DASH              = 0x00000001,
         PS_DOT               = 0x00000002,
@@ -216,12 +214,17 @@ namespace emfio
         PS_USERSTYLE         = 0x00000007,
         PS_ALTERNATE         = 0x00000008,
         PS_STYLE_MASK        = 0x0000000F,
+
+        PS_ENDCAP_ROUND      = 0x00000000,
         PS_ENDCAP_SQUARE     = 0x00000100,
         PS_ENDCAP_FLAT       = 0x00000200,
         PS_ENDCAP_STYLE_MASK = 0x00000F00,
+
+        PS_JOIN_ROUND        = 0x00000000,
         PS_JOIN_BEVEL        = 0x00001000,
         PS_JOIN_MITER        = 0x00002000,
         PS_JOIN_STYLE_MASK   = 0x0000F000,
+
         PS_GEOMETRIC         = 0x00010000
     };
 
@@ -461,11 +464,75 @@ namespace emfio
             , bTransparent(bTrans)
         {}
 
-        WinMtfLineStyle(const Color& rColor, const LineInfo& rStyle, bool bTrans)
+        WinMtfLineStyle(const Color& rColor, const sal_uInt32 nStyle, const sal_Int32 nPenWidth)
             : aLineColor(rColor)
-            , aLineInfo(rStyle)
-            , bTransparent(bTrans)
-        {}
+        {
+            // According to documentation: nStyle = PS_COSMETIC = 0x0 - line with a width of one logical unit and a style that is a solid color
+            // tdf#140271 Based on observed behaviour the line width is not constant with PS_COSMETIC
+
+            // Width 0 means default width for LineInfo (HairLine) with 1 pixel wide
+            aLineInfo.SetWidth(nPenWidth);
+            switch (nStyle & PS_STYLE_MASK)
+            {
+                case PS_DASHDOTDOT:
+                    aLineInfo.SetStyle(LineStyle::Dash);
+                    aLineInfo.SetDashCount(1);
+                    aLineInfo.SetDotCount(2);
+                    break;
+                case PS_DASHDOT:
+                    aLineInfo.SetStyle(LineStyle::Dash);
+                    aLineInfo.SetDashCount(1);
+                    aLineInfo.SetDotCount(1);
+                    break;
+                case PS_DOT:
+                    aLineInfo.SetStyle(LineStyle::Dash);
+                    aLineInfo.SetDashCount(0);
+                    aLineInfo.SetDotCount(1);
+                    break;
+                case PS_DASH:
+                    aLineInfo.SetStyle(LineStyle::Dash);
+                    aLineInfo.SetDashCount(1);
+                    aLineInfo.SetDotCount(0);
+                    break;
+                case PS_NULL:
+                    aLineInfo.SetStyle(LineStyle::NONE);
+                    break;
+                case PS_INSIDEFRAME: // TODO Implement PS_INSIDEFRAME
+                case PS_SOLID:
+                default:
+                    aLineInfo.SetStyle(LineStyle::Solid);
+            }
+            if (nPenWidth)
+                switch (nStyle & PS_ENDCAP_STYLE_MASK)
+                {
+                    case PS_ENDCAP_ROUND:
+                        aLineInfo.SetLineCap(css::drawing::LineCap_ROUND);
+                        break;
+                    case PS_ENDCAP_SQUARE:
+                        aLineInfo.SetLineCap(css::drawing::LineCap_SQUARE);
+                        break;
+                    case PS_ENDCAP_FLAT:
+                    default:
+                        aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+                }
+            else
+                aLineInfo.SetLineCap(css::drawing::LineCap_BUTT);
+            switch (nStyle & PS_JOIN_STYLE_MASK)
+            {
+                case PS_JOIN_ROUND:
+                    aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Round);
+                    break;
+                case PS_JOIN_BEVEL:
+                    aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Bevel);
+                    break;
+                // Undocumented but based on experiments with MS Paint and MS Word,
+                // the default Join Style is PS_JOIN_MITER
+                case PS_JOIN_MITER:
+                default:
+                    aLineInfo.SetLineJoin(basegfx::B2DLineJoin::Miter);
+            }
+            bTransparent = aLineInfo.GetStyle() == LineStyle::NONE;
+        }
 
         bool operator==(const WinMtfLineStyle& rStyle) const
         {

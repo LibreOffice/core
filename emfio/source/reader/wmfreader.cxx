@@ -1025,70 +1025,7 @@ namespace emfio
                 mpInputStream->ReadUInt16(nStyle);
                 mpInputStream->ReadUInt16(nWidth);
                 mpInputStream->ReadUInt16(nHeight);
-
-                if (nWidth > 0)
-                    aLineInfo.SetWidth(nWidth);
-
-                bool bTransparent = false;
-
-                switch( nStyle & 0xFF )
-                {
-                    case PS_DASHDOTDOT :
-                        aLineInfo.SetStyle( LineStyle::Dash );
-                        aLineInfo.SetDashCount( 1 );
-                        aLineInfo.SetDotCount( 2 );
-                    break;
-                    case PS_DASHDOT :
-                        aLineInfo.SetStyle( LineStyle::Dash );
-                        aLineInfo.SetDashCount( 1 );
-                        aLineInfo.SetDotCount( 1 );
-                    break;
-                    case PS_DOT :
-                        aLineInfo.SetStyle( LineStyle::Dash );
-                        aLineInfo.SetDashCount( 0 );
-                        aLineInfo.SetDotCount( 1 );
-                    break;
-                    case PS_DASH :
-                        aLineInfo.SetStyle( LineStyle::Dash );
-                        aLineInfo.SetDashCount( 1 );
-                        aLineInfo.SetDotCount( 0 );
-                    break;
-                    case PS_NULL :
-                        bTransparent = true;
-                        aLineInfo.SetStyle( LineStyle::NONE );
-                    break;
-                    default :
-                    case PS_INSIDEFRAME :
-                    case PS_SOLID :
-                        aLineInfo.SetStyle( LineStyle::Solid );
-                }
-                switch( nStyle & 0xF00 )
-                {
-                    case PS_ENDCAP_ROUND :
-                        aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
-                    break;
-                    case PS_ENDCAP_SQUARE :
-                        aLineInfo.SetLineCap( css::drawing::LineCap_SQUARE );
-                    break;
-                    case PS_ENDCAP_FLAT :
-                    default :
-                        aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
-                }
-                switch( nStyle & 0xF000 )
-                {
-                    case PS_JOIN_ROUND :
-                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Round );
-                    break;
-                    case PS_JOIN_MITER :
-                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Miter );
-                    break;
-                    case PS_JOIN_BEVEL :
-                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Bevel );
-                    break;
-                    default :
-                        aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
-                }
-                CreateObject(std::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
+                CreateObject(std::make_unique<WinMtfLineStyle>(ReadColor(), nStyle, nWidth));
             }
             break;
 
