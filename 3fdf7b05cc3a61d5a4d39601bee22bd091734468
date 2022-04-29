@@ -34,6 +34,24 @@
       "parentUuid": "e1fc8c7c_c890db2a",
       "revId": "3fdf7b05cc3a61d5a4d39601bee22bd091734468",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73c905de_d343c51a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-04-29T14:19:16Z",
+      "side": 1,
+      "message": "Indeed; I had misread the relation chain and assumed that this change was based on the merged, failing \u003chttps://gerrit.libreoffice.org/c/core/+/133251\u003e \"tdf#74331: 16bit \u0027min-is-black\u0027 tiff not loaded correctly\".",
+      "parentUuid": "bcd6516f_d38cd47d",
+      "revId": "3fdf7b05cc3a61d5a4d39601bee22bd091734468",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
