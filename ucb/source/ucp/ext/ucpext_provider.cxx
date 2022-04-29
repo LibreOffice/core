@@ -80,11 +80,11 @@ namespace ucb::ucp::ext
 
     namespace
     {
-        void lcl_ensureAndTransfer( OUString& io_rIdentifierFragment, OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
+        void lcl_ensureAndTransfer( std::u16string_view& io_rIdentifierFragment, OUStringBuffer& o_rNormalization, const sal_Unicode i_nLeadingChar )
         {
-            if ( ( io_rIdentifierFragment.isEmpty() ) || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
+            if ( ( io_rIdentifierFragment.empty() ) || ( io_rIdentifierFragment[0] != i_nLeadingChar ) )
                 throw IllegalIdentifierException();
-            io_rIdentifierFragment = io_rIdentifierFragment.copy( 1 );
+            io_rIdentifierFragment = io_rIdentifierFragment.substr( 1 );
             o_rNormalization.append( i_nLeadingChar );
         }
     }
@@ -105,14 +105,14 @@ namespace ucb::ucp::ext
         aComposer.append( sIdentifier.copy( 0, sScheme.getLength() ).toAsciiLowerCase() );
 
         // one : is required after the scheme
-        OUString sRemaining( sIdentifier.copy( sScheme.getLength() ) );
+        std::u16string_view sRemaining( sIdentifier.subView( sScheme.getLength() ) );
         lcl_ensureAndTransfer( sRemaining, aComposer, ':' );
 
         // and at least one /
         lcl_ensureAndTransfer( sRemaining, aComposer, '/' );
 
         // the normalized form requires one additional /, but we also accept identifiers which don't have it
-        if ( sRemaining.isEmpty() )
+        if ( sRemaining.empty() )
         {
             // the root content is a special case, it requires /
             aComposer.append( "//" );
@@ -128,7 +128,7 @@ namespace ucb::ucp::ext
             {
                 lcl_ensureAndTransfer( sRemaining, aComposer, '/' );
                 // by now, we moved "vnd.sun.star.extension://" from the URL to aComposer
-                if ( sRemaining.isEmpty() )
+                if ( sRemaining.empty() )
                 {
                     // again, it's the root content, but one / is missing
                     aComposer.append( '/' );

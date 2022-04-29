@@ -1054,7 +1054,7 @@ bool OSelectionBrowseBox::SaveModified()
                     sal_Int32 nPos = rComboBox.get_active();
                     // these functions are only available in CORE
                     OUString sFunctionName        = rComboBox.get_text(nPos);
-                    OUString sGroupFunctionName   = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
+                    std::u16string_view sGroupFunctionName = m_aFunctionStrings.subView(m_aFunctionStrings.lastIndexOf(';')+1);
                     bool bGroupBy = false;
                     if ( sGroupFunctionName == sFunctionName ) // check if the function name is GROUP
                     {
@@ -2282,16 +2282,16 @@ void OSelectionBrowseBox::SetCellContents(sal_Int32 nRow, sal_uInt16 nColId, con
             break;
         case BROW_FUNCTION_ROW:
         {
-            OUString sGroupFunctionName = m_aFunctionStrings.copy(m_aFunctionStrings.lastIndexOf(';')+1);
+            std::u16string_view sGroupFunctionName = m_aFunctionStrings.subView(m_aFunctionStrings.lastIndexOf(';')+1);
             pEntry->SetFunction(strNewText);
             // first reset this two member
             sal_Int32 nFunctionType = pEntry->GetFunctionType();
             nFunctionType &= ~FKT_AGGREGATE;
             pEntry->SetFunctionType(nFunctionType);
-            if ( pEntry->IsGroupBy() && !sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
+            if ( pEntry->IsGroupBy() && !o3tl::equalsIgnoreAsciiCase(sGroupFunctionName, strNewText) )
                 pEntry->SetGroupBy(false);
 
-            if ( sGroupFunctionName.equalsIgnoreAsciiCase(strNewText) )
+            if ( o3tl::equalsIgnoreAsciiCase(sGroupFunctionName, strNewText) )
                 pEntry->SetGroupBy(true);
             else if ( !strNewText.isEmpty() )
             {

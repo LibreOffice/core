@@ -108,7 +108,7 @@ namespace migration
             TStringVectorPtr aFileList = getFiles( m_sSourceDir );
             for (auto const& elem : *aFileList)
             {
-                OUString sLocalName = elem.copy( m_sSourceDir.getLength() );
+                std::u16string_view sLocalName = elem.subView( m_sSourceDir.getLength() );
                 OUString sTargetName = sTargetDir + sLocalName;
                 INetURLObject aURL( sTargetName );
                 aURL.removeSegment();

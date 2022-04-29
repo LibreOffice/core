@@ -1971,8 +1971,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
                         {
                             // TODO: handle all alternative hyphenations (see hyphen-1.2.8/tests/unicode.*)
                             OUString aAlt( xHyphWord->getHyphenatedWord() );
-                            OUString aAltLeft(aAlt.copy(0, _nWordLen));
-                            OUString aAltRight(aAlt.copy(_nWordLen));
+                            std::u16string_view aAltLeft(aAlt.subView(0, _nWordLen));
+                            std::u16string_view aAltRight(aAlt.subView(_nWordLen));
                             bAltFullLeft = aWord.startsWith(aAltLeft);
                             bAltFullRight = aWord.endsWith(aAltRight);
                             nAltDelChar = aWord.getLength() - aAlt.getLength() + static_cast<int>(!bAltFullLeft) + static_cast<int>(!bAltFullRight);

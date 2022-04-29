@@ -58,6 +58,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/random.h>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sal/log.hxx>
 #include <com/sun/star/io/XAsyncOutputMonitor.hpp>
@@ -602,24 +603,24 @@ void SAL_CALL ZipPackage::initialize( const uno::Sequence< Any >& aArguments )
                 if ( nParam >= 0 )
                 {
                     m_aURL = aParamUrl.copy( 0, nParam );
-                    OUString aParam = aParamUrl.copy( nParam + 1 );
+                    std::u16string_view aParam = aParamUrl.subView( nParam + 1 );
 
                     sal_Int32 nIndex = 0;
                     do
                     {
-                        OUString aCommand = aParam.getToken( 0, '&', nIndex );
-                        if ( aCommand == "repairpackage" )
+                        std::u16string_view aCommand = o3tl::getToken(aParam, 0, '&', nIndex );
+                        if ( aCommand == u"repairpackage" )
                         {
                             m_bForceRecovery = true;
                             break;
                         }
-                        else if ( aCommand == "purezip" )
+                        else if ( aCommand == u"purezip" )
                         {
                             m_nFormat = embed::StorageFormats::ZIP;
                             m_xRootFolder->setPackageFormat_Impl( m_nFormat );
                             break;
                         }
-                        else if ( aCommand == "ofopxml" )
+                        else if ( aCommand == u"ofopxml" )
                         {
                             m_nFormat = embed::StorageFormats::OFOPXML;
                             m_xRootFolder->setPackageFormat_Impl( m_nFormat );
