@@ -1019,8 +1019,11 @@ bool WW8AttributeOutput::AnalyzeURL( const OUString& rUrl, const OUString& rTarg
     if ( !sURL.isEmpty() )
         sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
 
-    if ( bBookMarkOnly )
-        sURL = FieldString( ww::eHYPERLINK );
+    if (bBookMarkOnly)
+    {
+        sURL = FieldString(ww::eHYPERLINK);
+        *pMark = BookmarkToWord(*pMark);
+    }
     else
         sURL = FieldString( ww::eHYPERLINK ) + "\"" + sURL + "\"";
 

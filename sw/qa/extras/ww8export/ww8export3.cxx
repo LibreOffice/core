@@ -1082,6 +1082,23 @@ CPPUNIT_TEST_FIXTURE(Test, testClearingBreak)
     verify();
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf142840, "tdf142840.odt")
+{
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+
+    uno::Reference<text::XBookmarksSupplier> xBookmarksSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xBookmarksByIdx(xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xBookmarksByName = xBookmarksSupplier->getBookmarks();
+
+    // Ensure space are replaced by underscore in bookmark name (it was working before, but ensure this)
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xBookmarksByIdx->getCount());
+    CPPUNIT_ASSERT(xBookmarksByName->hasByName("Chapter_1"));
+    CPPUNIT_ASSERT(!xBookmarksByName->hasByName("Chapter 1"));
+
+    // And hyperlink is referring bookmark with underscore also (this was broken)
+    CPPUNIT_ASSERT_EQUAL(OUString("#Chapter_1"), getProperty<OUString>(getRun(getParagraph(1), 1), "HyperLinkURL"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
