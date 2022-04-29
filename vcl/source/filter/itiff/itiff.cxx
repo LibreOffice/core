@@ -978,156 +978,169 @@ bool TIFFReader::ConvertScanline(sal_Int32 nY)
     {
         if ( nMaxSampleValue > nMinSampleValue )
         {
-            sal_uInt32 nMinMax = ( ( 1 << nDstBitsPerPixel ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
             sal_uInt8* pt = getMapData(0);
             sal_uInt8* ptend = pt + nBytesPerRow;
-            sal_uInt8 nShift;
 
-            switch ( nDstBitsPerPixel )
+            if (nBitsPerSample > 8)
             {
-                case 8 :
+                sal_uInt32 nMinMax = nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
+                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                 {
-                    if (pt + nImageWidth > ptend)
-                        return false;
+                    nVal = GetBits(pt, nx * nSamplesPerPixel * nBitsPerSample, nBitsPerSample);
+                    SetPixel(nY, nx, static_cast<sal_uInt8>(nVal - nMinMax));
+                }
+            }
+            else
+            {
+                sal_uInt32 nMinMax = ( ( 1 << nDstBitsPerPixel ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
+                sal_uInt8 nShift;
 
-                    if ( bByteSwap )
+                switch ( nDstBitsPerPixel )
+                {
+                    case 8 :
                     {
-                        if ( nPredictor == 2 )
+                        if (pt + nImageWidth > ptend)
+                            return false;
+
+                        if ( bByteSwap )
                         {
-                            sal_uInt8 nLast = 0;
-                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
+                            if ( nPredictor == 2 )
                             {
-                                nLast += nx == 0 ? BYTESWAP( *pt++ ) : *pt++;
-                                SetPixel(nY, nx, nLast);
+                                sal_uInt8 nLast = 0;
+                                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
+                                {
+                                    nLast += nx == 0 ? BYTESWAP( *pt++ ) : *pt++;
+                                    SetPixel(nY, nx, nLast);
+                                }
+                            }
+                            else
+                            {
+                                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
+                                {
+                                    sal_uInt8 nLast = *pt++;
+                                    SetPixel(nY, nx, static_cast<sal_uInt8>( (BYTESWAP(static_cast<sal_uInt32>(nLast)) - nMinSampleValue) * nMinMax ));
+                                }
                             }
                         }
                         else
                         {
-                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
+                            if ( nPredictor == 2 )
                             {
-                                sal_uInt8 nLast = *pt++;
-                                SetPixel(nY, nx, static_cast<sal_uInt8>( (BYTESWAP(static_cast<sal_uInt32>(nLast)) - nMinSampleValue) * nMinMax ));
+                                sal_uInt8 nLast = 0;
+                                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
+                                {
+                                    nLast += *pt++;
+                                    SetPixel(nY, nx, nLast);
+                                }
+                            }
+                            else
+                            {
+                                for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
+                                {
+                                    SetPixel(nY, nx, static_cast<sal_uInt8>( (static_cast<sal_uInt32>(*pt++) - nMinSampleValue) * nMinMax ));
+                                }
                             }
                         }
                     }
-                    else
+                    break;
+
+                    case 7 :
+                    case 6 :
+                    case 5 :
+                    case 4 :
+                    case 3 :
+                    case 2 :
                     {
-                        if ( nPredictor == 2 )
+                        for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
                         {
-                            sal_uInt8 nLast = 0;
-                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
-                            {
-                                nLast += *pt++;
-                                SetPixel(nY, nx, nLast);
-                            }
-                        }
-                        else
-                        {
-                            for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
-                            {
-                                SetPixel(nY, nx, static_cast<sal_uInt8>( (static_cast<sal_uInt32>(*pt++) - nMinSampleValue) * nMinMax ));
-                            }
+                            nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
+                            SetPixel(nY, nx, static_cast<sal_uInt8>(nVal));
                         }
                     }
-                }
-                break;
+                    break;
 
-                case 7 :
-                case 6 :
-                case 5 :
-                case 4 :
-                case 3 :
-                case 2 :
-                {
-                    for (sal_Int32 nx = 0; nx < nImageWidth; ++nx)
+                    case 1 :
                     {
-                        nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
-                        SetPixel(nY, nx, static_cast<sal_uInt8>(nVal));
-                    }
-                }
-                break;
+                        sal_uInt32 nByteCount = nImageWidth >> 3;
 
-                case 1 :
-                {
-                    sal_uInt32 nByteCount = nImageWidth >> 3;
+                        sal_uInt32 nBytesNeeded = nByteCount;
+                        if (nImageWidth & 7)
+                            ++nBytesNeeded;
+                        if (pt + nBytesNeeded > ptend)
+                            return false;
 
-                    sal_uInt32 nBytesNeeded = nByteCount;
-                    if (nImageWidth & 7)
-                        ++nBytesNeeded;
-                    if (pt + nBytesNeeded > ptend)
-                        return false;
-
-                    if ( bByteSwap )
-                    {
-                        sal_Int32 nx = 0;
-                        while (nByteCount--)
+                        if ( bByteSwap )
                         {
-                            nByteVal = *pt++;
-                            SetPixel(nY, nx++, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, nx++, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, nx++, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, nx++, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, nx++, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, nx++, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, nx++, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, nx++, nByteVal);
-                        }
-                        if ( nImageWidth & 7 )
-                        {
-                            nByteVal = *pt++;
-                            while ( nx < nImageWidth )
+                            sal_Int32 nx = 0;
+                            while (nByteCount--)
                             {
+                                nByteVal = *pt++;
                                 SetPixel(nY, nx++, nByteVal & 1);
                                 nByteVal >>= 1;
+                                SetPixel(nY, nx++, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, nx++, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, nx++, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, nx++, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, nx++, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, nx++, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, nx++, nByteVal);
                             }
-                        }
-                    }
-                    else
-                    {
-                        sal_Int32 nx = 7;
-                        while (nByteCount--)
-                        {
-                            nByteVal = *pt++;
-                            SetPixel(nY, nx, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, --nx, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, --nx, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, --nx, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, --nx, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, --nx, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, --nx, nByteVal & 1);
-                            nByteVal >>= 1;
-                            SetPixel(nY, --nx, nByteVal);
-                            nx += 15;
-                        }
-                        if ( nImageWidth & 7 )
-                        {
-                            nx -= 7;
-                            nByteVal = *pt++;
-                            nShift = 7;
-                            while ( nx < nImageWidth )
+                            if ( nImageWidth & 7 )
                             {
-                                SetPixel(nY, nx++, ( nByteVal >> nShift ) & 1);
+                                nByteVal = *pt++;
+                                while ( nx < nImageWidth )
+                                {
+                                    SetPixel(nY, nx++, nByteVal & 1);
+                                    nByteVal >>= 1;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            sal_Int32 nx = 7;
+                            while (nByteCount--)
+                            {
+                                nByteVal = *pt++;
+                                SetPixel(nY, nx, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, --nx, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, --nx, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, --nx, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, --nx, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, --nx, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, --nx, nByteVal & 1);
+                                nByteVal >>= 1;
+                                SetPixel(nY, --nx, nByteVal);
+                                nx += 15;
+                            }
+                            if ( nImageWidth & 7 )
+                            {
+                                nx -= 7;
+                                nByteVal = *pt++;
+                                nShift = 7;
+                                while ( nx < nImageWidth )
+                                {
+                                    SetPixel(nY, nx++, ( nByteVal >> nShift ) & 1);
+                                }
                             }
                         }
                     }
-                }
-                break;
+                    break;
 
-                default :
-                    return false;
+                    default :
+                        return false;
+                }
             }
         }
     }

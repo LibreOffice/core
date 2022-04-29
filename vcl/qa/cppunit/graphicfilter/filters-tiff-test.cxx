@@ -45,6 +45,7 @@ public:
     void testTdf126460();
     void testTdf115863();
     void testTdf138818();
+    void testTdf74331();
     void testRoundtrip();
     void testRGB8bits();
     void testRGB16bits();
@@ -54,6 +55,7 @@ public:
     CPPUNIT_TEST(testTdf126460);
     CPPUNIT_TEST(testTdf115863);
     CPPUNIT_TEST(testTdf138818);
+    CPPUNIT_TEST(testTdf74331);
     CPPUNIT_TEST(testRoundtrip);
     CPPUNIT_TEST(testRGB8bits);
     CPPUNIT_TEST(testRGB16bits);
@@ -126,6 +128,55 @@ void TiffFilterTest::testTdf138818()
     // - Expected: 46428
     // - Actual  : 45951
     CPPUNIT_ASSERT_EQUAL(sal_uInt32(46428), aGraphic.GetGfxLink().GetDataSize());
+}
+
+void TiffFilterTest::testTdf74331()
+{
+    OUString aURL = getUrl() + "tdf74331.tif";
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    Graphic aGraphic;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    Bitmap aBitmap = aGraphic.GetBitmapEx().GetBitmap();
+    Size aSize = aBitmap.GetSizePixel();
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aSize.Width());
+    CPPUNIT_ASSERT_EQUAL(tools::Long(200), aSize.Height());
+
+    Bitmap::ScopedReadAccess pReadAccess(aBitmap);
+
+    // Check the image contains different kinds of grays
+    int nGrayCount = 0;
+    int nGray3Count = 0;
+    int nGray7Count = 0;
+    int nLightGrayCount = 0;
+
+    for (tools::Long nX = 1; nX < aSize.Width() - 1; ++nX)
+    {
+        for (tools::Long nY = 1; nY < aSize.Height() - 1; ++nY)
+        {
+            const Color aColor = pReadAccess->GetColor(nY, nX);
+            if (aColor == COL_GRAY)
+                ++nGrayCount;
+            else if (aColor == COL_GRAY3)
+                ++nGray3Count;
+            else if (aColor == COL_GRAY7)
+                ++nGray7Count;
+            else if (aColor == COL_LIGHTGRAY)
+                ++nLightGrayCount;
+        }
+    }
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 313
+    // - Actual  : 0
+    CPPUNIT_ASSERT_EQUAL(313, nGrayCount);
+    CPPUNIT_ASSERT_EQUAL(71, nGray3Count);
+    CPPUNIT_ASSERT_EQUAL(227, nGray7Count);
+    CPPUNIT_ASSERT_EQUAL(165, nLightGrayCount);
 }
 
 void TiffFilterTest::testRoundtrip()
