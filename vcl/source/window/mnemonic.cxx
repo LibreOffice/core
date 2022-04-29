@@ -322,7 +322,7 @@ OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
             // check for CJK-style mnemonic
             if( i > 0 && (i+2) < nLen )
             {
-                sal_Unicode c = sal_Unicode(rtl::toAsciiUpperCase(aStr[i+1]));
+                sal_Unicode c = sal_Unicode(rtl::toAsciiLowerCase(aStr[i+1]));
                 if( aStr[ i-1 ] == '(' &&
                     aStr[ i+2 ] == ')' &&
                     c >= MNEMONIC_RANGE_2_START && c <= MNEMONIC_RANGE_2_END )
