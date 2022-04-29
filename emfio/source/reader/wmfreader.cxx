@@ -1029,8 +1029,6 @@ namespace emfio
                 if (nWidth > 0)
                     aLineInfo.SetWidth(nWidth);
 
-                bool bTransparent = false;
-
                 switch( nStyle & 0xFF )
                 {
                     case PS_DASHDOTDOT :
@@ -1054,7 +1052,6 @@ namespace emfio
                         aLineInfo.SetDotCount( 0 );
                     break;
                     case PS_NULL :
-                        bTransparent = true;
                         aLineInfo.SetStyle( LineStyle::NONE );
                     break;
                     default :
@@ -1088,7 +1085,7 @@ namespace emfio
                     default :
                         aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                 }
-                CreateObject(std::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
+                CreateObject(std::make_unique<WinMtfLineStyle>(ReadColor(), aLineInfo));
             }
             break;
 

@@ -60,6 +60,8 @@ namespace emfio
 
         tools::Rectangle ReadRectangle();
         void ReadEMFPlusComment(sal_uInt32 length, bool& bHaveDC);
+        void CreateLineInfoForPen(const sal_uInt32 nStyle, const sal_Int32 nPenWidth,
+                                  LineInfo& aLineInfo)
     };
 }
 
