@@ -9844,7 +9844,7 @@ void PDFWriterImpl::setLinkPropertyId( sal_Int32 nLinkId, sal_Int32 nPropertyId 
     m_aLinkPropertyMap[ nPropertyId ] = nLinkId;
 }
 
-sal_Int32 PDFWriterImpl::createOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID )
+sal_Int32 PDFWriterImpl::createOutlineItem( sal_Int32 nParent, std::u16string_view rText, sal_Int32 nDestID )
 {
     // create new item
     sal_Int32 nNewItem = m_aOutline.size();
@@ -9871,7 +9871,7 @@ void PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent 
     m_aOutline[ nNewParent ].m_aChildren.push_back( nItem );
 }
 
-void PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, const OUString& rText )
+void PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, std::u16string_view rText )
 {
     if( nItem < 1 || nItem >= static_cast<sal_Int32>(m_aOutline.size()) )
         return;

@@ -999,7 +999,7 @@ The following structure describes the permissions used in PDF security
         @returns
         the outline item id of the new item
     */
-    sal_Int32 CreateOutlineItem( sal_Int32 nParent, const OUString& rText, sal_Int32 nDestID );
+    sal_Int32 CreateOutlineItem( sal_Int32 nParent, std::u16string_view rText, sal_Int32 nDestID );
 
     /** Create a new note on a page
 
