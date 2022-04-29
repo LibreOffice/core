@@ -61,17 +61,13 @@ private:
     std::unique_ptr<weld::CheckButton> mxCheckButtonLast;
 
     std::unique_ptr<weld::SpinButton> mxSpinLineWidth;
-    std::unique_ptr<weld::RadioButton> mxRadioLine;
-    std::unique_ptr<weld::RadioButton> mxRadioColumn;
-    std::unique_ptr<weld::RadioButton> mxRadioStacked;
+    std::unique_ptr<weld::ComboBox> mxType;
 
     std::unique_ptr<weld::CheckButton> mxCheckDisplayXAxis;
     std::unique_ptr<weld::CheckButton> mxCheckDisplayHidden;
     std::unique_ptr<weld::CheckButton> mxCheckRightToLeft;
 
-    std::unique_ptr<weld::RadioButton> mxRadioDisplayEmptyGap;
-    std::unique_ptr<weld::RadioButton> mxRadioDisplayEmptyZero;
-    std::unique_ptr<weld::RadioButton> mxRadioDisplayEmptySpan;
+    std::unique_ptr<weld::ComboBox> mxDisplayEmptyGap;
 
     std::unique_ptr<weld::ComboBox> mxComboMinAxisType;
     std::unique_ptr<weld::ComboBox> mxComboMaxAxisType;
@@ -86,7 +82,7 @@ private:
     DECL_LINK(LoseButtonFocusHandler, formula::RefButton&, void);
     DECL_LINK(RefInputModifyHandler, formula::RefEdit&, void);
     DECL_LINK(ToggleHandler, weld::Toggleable&, void);
-    DECL_LINK(SelectSparklineType, weld::Toggleable&, void);
+    DECL_LINK(SelectSparklineType, weld::ComboBox&, void);
     DECL_LINK(ComboValueChanged, weld::ComboBox&, void);
     DECL_LINK(SpinLineWidthChanged, weld::SpinButton&, void);
     DECL_LINK(SpinCustomChanged, weld::FormattedSpinButton&, void);
