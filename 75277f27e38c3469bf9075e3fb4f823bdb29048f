@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "457d9f63_d571dd50",
+        "filename": "test/user-template/registry/modifications.xcd",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-04-29T08:00:41Z",
+      "side": 1,
+      "message": "Nitpicking: for some reason, the indentation is inconsistent in the edit :-)",
+      "revId": "75277f27e38c3469bf9075e3fb4f823bdb29048f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
