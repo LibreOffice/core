@@ -882,7 +882,7 @@ namespace
 {
     OUString stripTrailingDots(std::u16string_view rStr)
     {
-        return comphelper::string::stripEnd(rStr, '.');
+        return OUString(comphelper::string::stripEnd(rStr, '.'));
     }
 }
 

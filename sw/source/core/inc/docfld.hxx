@@ -134,7 +134,7 @@ struct SwCalcFieldType final : public SwHash
 };
 
 // search for the string that was saved under rName in the hash table
-OUString LookString( SwHashTable<HashStr> const & rTable, std::u16string_view rName );
+OUString LookString( SwHashTable<HashStr> const & rTable, const OUString& rName );
 
 const int GETFLD_ALL        = 3;        // combine flags via OR
 const int GETFLD_CALC       = 1;
