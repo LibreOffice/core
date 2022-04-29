@@ -71,9 +71,6 @@ TEMPLATE_DIR=$(dir $@)msi_templates \
 && for I in $(SRCDIR)/instsetoo_native/inc_$(1)/windows/msi_templates/*.* ; do $(GREP) -v '^#' "$$I" > $${TEMPLATE_DIR}/`basename $$I` || true ; done \
 && $(GNUCOPY) $(SRCDIR)/instsetoo_native/inc_common/windows/msi_templates/Binary/*.* $${TEMPLATE_DIR}/Binary
 endef
-else
-instsetoo_native_msitemplates :=
-endif
 
 define instsetoo_native_install_command
 $(call instsetoo_native_msitemplates,$(1))
@@ -96,39 +93,28 @@ $(foreach pkgformat,$(5),\
 	$(if $(verbose),-verbose,-quiet) \
 ),$@.log)
 endef
+else
+define instsetoo_native_install_command
+$(call gb_Helper_print_on_error, \
+cd $(dir $@) && \
+parallel -j $(PARALLELISM) $(SRCDIR)/solenv/bin/call_installer.sh $(if $(verbose),-verbose,-quiet) -- $(1) \
+,$@.log)
+endef
+endif
 
 $(call gb_CustomTarget_get_workdir,instsetoo_native/install)/install.phony:
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),PRL,2)
 	$(call gb_Trace_StartRange,$(subst $(WORKDIR)/,,$@),PRL)
 	rm -rf $(instsetoo_OUT)
-ifeq (TRUE,$(LIBO_TEST_INSTALL))
-	$(call instsetoo_native_install_command,openoffice,en-US,,,archive)
-	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)/archive/install/en-US/LibreOffice*_archive.zip
-	mv $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*/* $(TESTINSTALLDIR)/
-	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive/LibreOffice*
-	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive
-ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
-	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,archive)
-	unzip -q -d $(TESTINSTALLDIR) $(instsetoo_OUT)/$(PRODUCTNAME_WITHOUT_SPACES)_SDK/archive/install/en-US/LibreOffice*_archive_sdk.zip
-	mv $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK/sdk \
-        $(TESTINSTALLDIR)/
-	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk/LibreOffice*_SDK
-	rmdir $(TESTINSTALLDIR)/LibreOffice*_archive_sdk
-endif
-else # LIBO_TEST_INSTALL
-	$(call instsetoo_native_install_command,openoffice,$(if $(filter WNT,$(OS)),$(instsetoo_native_WITH_LANG),en-US),,,$(PKGFORMAT))
-ifeq (ODK,$(filter ODK,$(BUILD_TYPE)))
-	$(call instsetoo_native_install_command,sdkoo,en-US,_SDK,,$(PKGFORMAT))
-endif
-ifeq (HELP,$(filter HELP,$(BUILD_TYPE))$(filter MACOSX,$(OS)))
-	$(foreach lang,$(gb_HELP_LANGS),\
-		$(call instsetoo_native_install_command,ooohelppack,$(lang),,-helppack,$(PKGFORMAT)))
-endif
-ifneq (WNT,$(OS))
-	$(foreach lang,$(instsetoo_native_WITH_LANG),\
-		$(call instsetoo_native_install_command,ooolangpack,$(lang),,-languagepack,$(PKGFORMAT)))
-endif
-endif # LIBO_TEST_INSTALL
+	$(call instsetoo_native_install_command, \
+		$(foreach pkgformat,$(PKGFORMAT),\
+			"en-US,,,$(pkgformat)" \
+			$(if $(filter ODK,$(BUILD_TYPE)), \
+				"en-US$(COMMA)_SDK$(COMMA)$(COMMA)$(pkgformat)") \
+			$(if $(filter HELP,$(BUILD_TYPE)), $(foreach lang,$(gb_HELP_LANGS),\
+				"$(lang),,-helppack,$(pkgformat)" )) \
+			$(foreach lang,$(instsetoo_native_WITH_LANG),\
+				"$(lang),,-languagepack,$(pkgformat)" ) ))
 	touch $@
 	$(call gb_Trace_EndRange,$(subst $(WORKDIR)/,,$@),PRL)
 
