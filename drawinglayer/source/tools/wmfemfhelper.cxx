@@ -1563,16 +1563,14 @@ namespace wmfemfhelper
                                 aLinePolygon.append(aEnd);
                             }
 
-                            nAction++; if(nAction < nCount) pAction = rMetaFile.GetAction(nAction);
+                            nAction++;
+                            if (nAction < nCount)
+                                pAction = rMetaFile.GetAction(nAction);
                         }
 
                         nAction--;
-
-                        if(aLinePolygon.count())
-                        {
-                            aLineInfo.SetLineJoin(basegfx::B2DLineJoin::NONE); // It were lines; force to NONE
+                        if (aLinePolygon.count())
                             createLinePrimitive(aLinePolygon, aLineInfo, rTargetHolders.Current(), rPropertyHolders.Current());
-                        }
                     }
 
                     break;
