@@ -783,7 +783,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
         sBuffer.append(sValue);
         if(sValue.indexOf('.') != -1) // there is a dot
         {
-            for(sal_Int32 i=sValue.copy(sValue.indexOf('.')+1).getLength(); i<scale;i++)
+            for(sal_Int32 i=sValue.subView(sValue.indexOf('.')+1).size(); i<scale;i++)
             {
                 sBuffer.append('0');
             }

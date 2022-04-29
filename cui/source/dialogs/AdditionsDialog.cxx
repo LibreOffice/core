@@ -635,8 +635,8 @@ AdditionsItem::AdditionsItem(weld::Widget* pParent, AdditionsDialog* pParentDial
 
     if (additionInfo.sName.getLength() > maxExtensionNameLength)
     {
-        OUString sShortName = additionInfo.sName.copy(0, maxExtensionNameLength - 3);
-        sExtensionName = sShortName + "...";
+        std::u16string_view sShortName = additionInfo.sName.subView(0, maxExtensionNameLength - 3);
+        sExtensionName = OUString::Concat(sShortName) + "...";
     }
     else
     {

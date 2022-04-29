@@ -646,10 +646,10 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData() const
     else if (sURLPath.matchIgnoreAsciiCase(";base64,", nCharactersSkipped))
     {
         nCharactersSkipped += strlen(";base64,");
-        OUString sBase64Data = sURLPath.copy( nCharactersSkipped );
+        std::u16string_view sBase64Data = sURLPath.subView( nCharactersSkipped );
         css::uno::Sequence< sal_Int8 > aDecodedData;
         if (comphelper::Base64::decodeSomeChars(aDecodedData, sBase64Data)
-            == sBase64Data.getLength())
+            == static_cast<sal_Int32>(sBase64Data.size()))
         {
             return memoryStream(
                 aDecodedData.getArray(), aDecodedData.getLength());

@@ -431,9 +431,9 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
 
         if (nSepPos != -1)
         {
-            OUString aSheetName(aTextMark.copy(0, nSepPos));
+            std::u16string_view aSheetName(aTextMark.subView(0, nSepPos));
 
-            if (aSheetName.indexOf(' ') != -1 && aSheetName[0] != '\'')
+            if (aSheetName.find(' ') != std::u16string_view::npos && aSheetName[0] != '\'')
             {
                 aTextMark = "'" + aTextMark.replaceAt(nSepPos, 0, u"'");
             }

@@ -1278,8 +1278,8 @@ void SAL_CALL SdUnoEventsAccess::replaceByName( const OUString& aName, const uno
                         sal_Int32 nPos = aStrBookmark.lastIndexOf( '#' );
                         if( nPos >= 0 )
                         {
-                            OUString aURL( aStrBookmark.copy( 0, nPos+1 ) );
-                            aURL += getUiNameFromPageApiNameImpl( aStrBookmark.copy( nPos+1 ) );
+                            OUString aURL = aStrBookmark.subView( 0, nPos+1 )
+                                    + getUiNameFromPageApiNameImpl( aStrBookmark.copy( nPos+1 ) );
                             aStrBookmark = aURL;
                         }
                     }
@@ -1531,8 +1531,8 @@ uno::Any SAL_CALL SdUnoEventsAccess::getByName( const OUString& aName )
                 sal_Int32 nPos = aString.lastIndexOf( '#' );
                 if( nPos >= 0 )
                 {
-                    OUString aURL( aString.copy( 0, nPos+1 ) );
-                    aURL += getPageApiNameFromUiName( aString.copy( nPos+1 ) );
+                    OUString aURL = aString.subView( 0, nPos+1 ) +
+                        getPageApiNameFromUiName( aString.copy( nPos+1 ) );
                     aString = aURL;
                 }
                 pProperties->Name = gaStrBookmark;
