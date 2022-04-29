@@ -19,6 +19,7 @@
 
 #include <rtl/process.h>
 #include <sal/log.hxx>
+#include "strings.hrc"
 
 #include <uno/environment.h>
 #include <uno/lbnames.h>
@@ -306,7 +307,7 @@ sal_Bool SAL_CALL JavaComponentLoader::writeRegistryInfo(
 {
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (!loader.is())
-        throw CannotRegisterImplementationException("Could not create Java implementation loader");
+        throw CannotRegisterImplementationException(STR_JRE_ERROR);
     return loader->writeRegistryInfo(xKey, blabla, rLibName);
 }
 
@@ -323,7 +324,7 @@ css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader::activate(
 
     const css::uno::Reference<XImplementationLoader> & loader = getJavaLoader();
     if (!loader.is())
-        throw CannotActivateFactoryException("Could not create Java implementation loader");
+        throw CannotActivateFactoryException(STR_JRE_ERROR);
     return loader->activate(rImplName, blabla, rLibName, xKey);
 }
 
