@@ -54,6 +54,17 @@
      <value>DejaVu Sans</value>
     </prop>
    </node>
+   <node oor:name="zh-tw">
+    <prop oor:name="CJK_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_TEXT" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+   </node>
   </node>
  </oor:component-data>
  <oor:component-data oor:name="Common" oor:package="org.openoffice.Office">
