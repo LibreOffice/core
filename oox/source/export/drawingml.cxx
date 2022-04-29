@@ -2389,9 +2389,9 @@ void DrawingML::WriteRunProperties( const Reference< XPropertySet >& rRun, bool 
             else
             {
                 sal_Int32 nIndex = sURL.indexOf('=');
-                OUString aDestination(sURL.copy(nIndex + 1));
+                std::u16string_view aDestination(sURL.subView(nIndex + 1));
                 mpFS->singleElementNS(XML_a, XML_hlinkClick, FSNS(XML_r, XML_id), "", XML_action,
-                                      "ppaction://hlinkshowjump?jump=" + aDestination);
+                                      OUString::Concat("ppaction://hlinkshowjump?jump=") + aDestination);
             }
         }
     }

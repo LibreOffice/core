@@ -199,13 +199,13 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg )
                         int nSpaceIndex = aCodeLine.indexOf(' ');
                         OUString sProc = aCodeLine.copy( nSpaceIndex + 1, index - nSpaceIndex - 1);
                         // for Excel short cut key seems limited to cntrl+'a-z, A-Z'
-                        OUString sKey = aCodeLine.copy( aCodeLine.lastIndexOf("= ") + 3, 1 );
+                        std::u16string_view sKey = aCodeLine.subView( aCodeLine.lastIndexOf("= ") + 3, 1 );
                         // only alpha key valid for key shortcut, however the api will accept other keys
                         if ( rtl::isAsciiAlpha( sKey[ 0 ] ) )
                         {
                             // cntrl modifier is explicit ( but could be cntrl+shift ), parseKeyEvent
                             // will handle and uppercase letter appropriately
-                            OUString sApiKey = "^" + sKey;
+                            OUString sApiKey = OUString::Concat("^") + sKey;
                             maKeyBindings.push_back({sApiKey, sProc});
                         }
                     }
