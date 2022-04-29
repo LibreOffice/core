@@ -883,12 +883,12 @@ void SwTOXAuthority::FillText(SwTextNode& rNd, const SwIndex& rInsPos, sal_uInt1
         // Convert URL to a relative one if requested.
         SwDoc* pDoc = static_cast<SwAuthorityFieldType*>(m_rField.GetField()->GetTyp())->GetDoc();
         SwDocShell* pDocShell = pDoc->GetDocShell();
-        OUString aBaseURL = pDocShell->getDocumentBaseURL();
-        OUString aBaseURIScheme;
+        const OUString aBaseURL = pDocShell->getDocumentBaseURL();
+        std::u16string_view aBaseURIScheme;
         sal_Int32 nSep = aBaseURL.indexOf(':');
         if (nSep != -1)
         {
-            aBaseURIScheme = aBaseURL.copy(0, nSep);
+            aBaseURIScheme = aBaseURL.subView(0, nSep);
         }
 
         uno::Reference<uri::XUriReferenceFactory> xUriReferenceFactory

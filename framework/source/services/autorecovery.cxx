@@ -74,6 +74,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <o3tl/string_view.hxx>
 #include <unotools/mediadescriptor.hxx>
 #include <comphelper/multiinterfacecontainer3.hxx>
 #include <comphelper/namedvaluecollection.hxx>
@@ -1837,8 +1838,8 @@ void AutoRecovery::implts_readConfig()
 
         if (pItems[i].startsWith(sRECOVERY_ITEM_BASE_IDENTIFIER))
         {
-            OUString sID = pItems[i].copy(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
-            aInfo.ID = sID.toInt32();
+            std::u16string_view sID = pItems[i].subView(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
+            aInfo.ID = o3tl::toInt32(sID);
             /* SAFE */ {
             osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
             if (aInfo.ID > m_nIdPool)

@@ -380,9 +380,9 @@ bool URLParameter::scheme()
     if( m_aExpr.startsWith("vnd.sun.star.help:///") )
     {
         sal_Int32 nLen = m_aExpr.getLength();
-        OUString aLastStr =
-            m_aExpr.copy(sal::static_int_cast<sal_uInt32>(nLen) - 6);
-        if( aLastStr == "DbPAR=" )
+        std::u16string_view aLastStr =
+            m_aExpr.subView(sal::static_int_cast<sal_uInt32>(nLen) - 6);
+        if( aLastStr == u"DbPAR=" )
         {
             m_aExpr = OUString::Concat(m_aExpr.subView( 0, 20 )) +
                 "shared" +

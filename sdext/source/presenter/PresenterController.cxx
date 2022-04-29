@@ -372,7 +372,7 @@ void PresenterController::UpdatePaneTitles()
                 // Get the placeholder
                 ++nStartIndex;
                 const sal_Int32 nEndIndex (sTemplate.indexOf('%', nStartIndex+1));
-                const OUString sPlaceholder (sTemplate.copy(nStartIndex, nEndIndex-nStartIndex));
+                const std::u16string_view sPlaceholder (sTemplate.subView(nStartIndex, nEndIndex-nStartIndex));
                 nIndex = nEndIndex+1;
 
                 // Replace the placeholder with its current value.
