@@ -1693,7 +1693,7 @@ void SdXMLExport::ExportContent_()
                         if( nIndex != -1 )
                         {
                             OUString aFileName( aBookmarkURL.copy( 0, nIndex ) );
-                            OUString aBookmarkName( aBookmarkURL.copy( nIndex+1 ) );
+                            std::u16string_view aBookmarkName( aBookmarkURL.subView( nIndex+1 ) );
 
                             aBookmarkURL = GetRelativeReference( aFileName ) + "#" + aBookmarkName;
                         }

@@ -202,17 +202,17 @@ XMLVersionContext::~XMLVersionContext()
 {}
 
 bool XMLVersionContext::ParseISODateTimeString(
-                                const OUString& rString,
+                                std::u16string_view rString,
                                 util::DateTime& rDateTime )
 {
     bool bSuccess = true;
 
-    OUString aDateStr, aTimeStr;
-    sal_Int32 nPos = rString.indexOf( 'T' );
-    if ( nPos >= 0 )
+    std::u16string_view aDateStr, aTimeStr;
+    size_t nPos = rString.find( 'T' );
+    if ( nPos != std::u16string_view::npos )
     {
-        aDateStr = rString.copy( 0, nPos );
-        aTimeStr = rString.copy( nPos + 1 );
+        aDateStr = rString.substr( 0, nPos );
+        aTimeStr = rString.substr( nPos + 1 );
     }
     else
         aDateStr = rString;         // no separator: only date part
@@ -224,15 +224,15 @@ bool XMLVersionContext::ParseISODateTimeString(
     sal_Int32 nMin   = 0;
     sal_Int32 nSec   = 0;
 
-    const sal_Unicode* pStr = aDateStr.getStr();
+    auto pStr = aDateStr.begin();
     sal_Int32 nDateTokens = 1;
-    while ( *pStr )
+    while ( pStr != aDateStr.end() )
     {
         if ( *pStr == '-' )
             nDateTokens++;
         pStr++;
     }
-    if ( nDateTokens > 3 || aDateStr.isEmpty() )
+    if ( nDateTokens > 3 || aDateStr.empty() )
         bSuccess = false;
     else
     {
@@ -254,11 +254,11 @@ bool XMLVersionContext::ParseISODateTimeString(
         }
     }
 
-    if ( bSuccess && !aTimeStr.isEmpty() )         // time is optional
+    if ( bSuccess && !aTimeStr.empty() )         // time is optional
     {
-        pStr = aTimeStr.getStr();
+        pStr = aTimeStr.begin();
         sal_Int32 nTimeTokens = 1;
-        while ( *pStr )
+        while ( pStr != aTimeStr.end() )
         {
             if ( *pStr == ':' )
                 nTimeTokens++;
