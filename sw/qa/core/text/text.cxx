@@ -12,6 +12,9 @@
 #include <vcl/gdimtf.hxx>
 
 #include <wrtsh.hxx>
+#include <fmtfsize.hxx>
+#include <IDocumentRedlineAccess.hxx>
+#include <rootfrm.hxx>
 
 static char const DATA_DIRECTORY[] = "/sw/qa/core/text/data/";
 
@@ -76,6 +79,50 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
     xmlDocPtr pXmlDoc = dumpAndParse(dumper, *xMetaFile);
     CPPUNIT_ASSERT(pXmlDoc);
     assertXPath(pXmlDoc, "//floattransparent");
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testRedlineDelete)
+{
+    // Given a document with A4 paper size, some text, redlining on, but hidden:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pTextDoc);
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwDocShell* pDocShell = pDoc->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    {
+        // Set page size to A4.
+        size_t nCurIdx = pWrtShell->GetCurPageDesc();
+        SwPageDesc aPageDesc(pWrtShell->GetPageDesc(nCurIdx));
+        SwFrameFormat& rMaster = aPageDesc.GetMaster();
+        SwFormatFrameSize aSize(ATT_FIX_SIZE);
+        aSize.SetSize(Size(11906, 16838));
+        rMaster.SetFormatAttr(aSize);
+        pWrtShell->ChgPageDesc(nCurIdx, aPageDesc);
+    }
+    OUString aBefore("aaaaaaaaa aaaaaaaaaa aa aa aa ");
+    OUString aDelete("delete eeeeeeeeeee ee eeeeeeeeeee ee eeeeee");
+    pWrtShell->Insert(aBefore + " " + aDelete
+                      + " zz zzz zzzzzzzzz zzz zzzz zzzz zzzzzzzzz zzzzzz zzz zzzzzzzzzzz zzz");
+    // Enable redlining.
+    pDocShell->SetChangeRecording(/*bActivate=*/true);
+    // Hide redlining.
+    pWrtShell->StartAllAction();
+    pWrtShell->GetLayout()->SetHideRedlines(true);
+    pWrtShell->EndAllAction();
+
+    // When deleting content in the middle of the paragraph:
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/false, /*nCount=*/aBefore.getLength(),
+                     /*bBasicCall=*/false);
+    pWrtShell->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, /*nCount=*/aDelete.getLength(),
+                     /*bBasicCall=*/false);
+    // Without the accompanying fix in place, this test would have crashed:
+    pWrtShell->Delete();
+
+    // Then make sure that the redline is created:
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1),
+                         pDoc->getIDocumentRedlineAccess().GetRedlineTable().size());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
