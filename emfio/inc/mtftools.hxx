@@ -461,10 +461,10 @@ namespace emfio
             , bTransparent(bTrans)
         {}
 
-        WinMtfLineStyle(const Color& rColor, const LineInfo& rStyle, bool bTrans)
+        WinMtfLineStyle(const Color& rColor, const LineInfo& rStyle)
             : aLineColor(rColor)
             , aLineInfo(rStyle)
-            , bTransparent(bTrans)
+            , bTransparent(rStyle.GetStyle() == LineStyle::NONE)
         {}
 
         bool operator==(const WinMtfLineStyle& rStyle) const

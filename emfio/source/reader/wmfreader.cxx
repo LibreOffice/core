@@ -1029,9 +1029,7 @@ namespace emfio
                 if (nWidth > 0)
                     aLineInfo.SetWidth(nWidth);
 
-                bool bTransparent = false;
-
-                switch( nStyle & 0xFF )
+                switch (nStyle & PS_STYLE_MASK)
                 {
                     case PS_DASHDOTDOT :
                         aLineInfo.SetStyle( LineStyle::Dash );
@@ -1054,7 +1052,6 @@ namespace emfio
                         aLineInfo.SetDotCount( 0 );
                     break;
                     case PS_NULL :
-                        bTransparent = true;
                         aLineInfo.SetStyle( LineStyle::NONE );
                     break;
                     default :
@@ -1062,7 +1059,7 @@ namespace emfio
                     case PS_SOLID :
                         aLineInfo.SetStyle( LineStyle::Solid );
                 }
-                switch( nStyle & 0xF00 )
+                switch (nStyle & PS_ENDCAP_STYLE_MASK)
                 {
                     case PS_ENDCAP_ROUND :
                         aLineInfo.SetLineCap( css::drawing::LineCap_ROUND );
@@ -1074,7 +1071,7 @@ namespace emfio
                     default :
                         aLineInfo.SetLineCap( css::drawing::LineCap_BUTT );
                 }
-                switch( nStyle & 0xF000 )
+                switch (nStyle & PS_JOIN_STYLE_MASK)
                 {
                     case PS_JOIN_ROUND :
                         aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::Round );
@@ -1088,7 +1085,7 @@ namespace emfio
                     default :
                         aLineInfo.SetLineJoin ( basegfx::B2DLineJoin::NONE );
                 }
-                CreateObject(std::make_unique<WinMtfLineStyle>( ReadColor(), aLineInfo, bTransparent ));
+                CreateObject(std::make_unique<WinMtfLineStyle>(ReadColor(), aLineInfo));
             }
             break;
 
