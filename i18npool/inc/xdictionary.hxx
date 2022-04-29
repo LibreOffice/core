@@ -18,6 +18,7 @@
  */
 #pragma once
 
+#include <osl/file.h>
 #include <sal/types.h>
 
 #include <com/sun/star/i18n/Boundary.hpp>
@@ -63,6 +64,11 @@ private:
 
     css::i18n::Boundary boundary;
     bool japaneseWordBreak;
+#ifdef DICT_JA_ZH_IN_DATAFILE
+    oslFileHandle m_aFileHandle;
+    sal_uInt64 m_nFileSize;
+    char* m_pMapping;
+#endif
 
 public:
     xdictionary(const char *lang);
