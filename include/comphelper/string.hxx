@@ -69,7 +69,9 @@ inline OUStringBuffer& remove(OUStringBuffer &rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC OString stripStart(std::string_view rIn,
+COMPHELPER_DLLPUBLIC OString stripStart(const OString& rIn,
+    char c);
+COMPHELPER_DLLPUBLIC std::string_view stripStart(std::string_view rIn,
     char c);
 
 /** Strips occurrences of a character from the start of the source string
@@ -79,7 +81,9 @@ COMPHELPER_DLLPUBLIC OString stripStart(std::string_view rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC OUString stripStart(std::u16string_view rIn,
+COMPHELPER_DLLPUBLIC OUString stripStart(const OUString& rIn,
+    sal_Unicode c);
+COMPHELPER_DLLPUBLIC std::u16string_view stripStart(std::u16string_view rIn,
     sal_Unicode c);
 
 /** Strips occurrences of a character from the end of the source string
@@ -89,7 +93,9 @@ COMPHELPER_DLLPUBLIC OUString stripStart(std::u16string_view rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC OString stripEnd(std::string_view rIn,
+COMPHELPER_DLLPUBLIC OString stripEnd(const OString& rIn,
+    char c);
+COMPHELPER_DLLPUBLIC std::string_view stripEnd(std::string_view rIn,
     char c);
 
 /** Strips occurrences of a character from the end of the source string
@@ -99,7 +105,9 @@ COMPHELPER_DLLPUBLIC OString stripEnd(std::string_view rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC OUString stripEnd(std::u16string_view rIn,
+COMPHELPER_DLLPUBLIC OUString stripEnd(const OUString& rIn,
+    sal_Unicode c);
+COMPHELPER_DLLPUBLIC std::u16string_view stripEnd(std::u16string_view rIn,
     sal_Unicode c);
 
 /** Strips occurrences of a character from the start and end of the source string
@@ -109,7 +117,9 @@ COMPHELPER_DLLPUBLIC OUString stripEnd(std::u16string_view rIn,
 
     @return         The resulting OString
  */
-COMPHELPER_DLLPUBLIC OString strip(std::string_view rIn,
+COMPHELPER_DLLPUBLIC OString strip(const OString& rIn,
+    char c);
+COMPHELPER_DLLPUBLIC std::string_view strip(std::string_view rIn,
     char c);
 
 /** Strips occurrences of a character from the start and end of the source string
@@ -119,7 +129,9 @@ COMPHELPER_DLLPUBLIC OString strip(std::string_view rIn,
 
     @return         The resulting OUString
  */
-COMPHELPER_DLLPUBLIC OUString strip(std::u16string_view rIn,
+COMPHELPER_DLLPUBLIC OUString strip(const OUString& rIn,
+    sal_Unicode c);
+COMPHELPER_DLLPUBLIC std::u16string_view strip(std::u16string_view rIn,
     sal_Unicode c);
 
 /** Returns number of tokens in an OUString

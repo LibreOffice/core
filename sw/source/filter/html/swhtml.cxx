@@ -2058,7 +2058,7 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
                 ' ' == aToken[ aToken.getLength()-3 ] )
             {
                 std::u16string_view aComment( aToken.subView( 3, aToken.getLength()-5 ) );
-                InsertComment(comphelper::string::strip(aComment, ' '));
+                InsertComment(OUString(comphelper::string::strip(aComment, ' ')));
             }
             else
             {

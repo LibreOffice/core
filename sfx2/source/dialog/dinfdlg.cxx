@@ -157,8 +157,8 @@ OUString ConvertDateTime_Impl( std::u16string_view rName,
      OUString aStr = rWrapper.getDate( aD )
                    + aDelim
                    + rWrapper.getTime( aT );
-     OUString aAuthor = comphelper::string::stripStart(rName, ' ');
-     if (!aAuthor.isEmpty())
+     std::u16string_view aAuthor = comphelper::string::stripStart(rName, ' ');
+     if (!aAuthor.empty())
      {
         aStr += aDelim + aAuthor;
      }

@@ -243,7 +243,7 @@ void ImageMap::ImpReadCERN( SvStream& rIStm )
 
 void ImageMap::ImpReadCERNLine( std::string_view rLine  )
 {
-    OString aStr = comphelper::string::stripStart(rLine, ' ');
+    OString aStr( comphelper::string::stripStart(rLine, ' ') );
     aStr = comphelper::string::stripStart(aStr, '\t');
     aStr = aStr.replaceAll(";", "");
     aStr = aStr.toAsciiLowerCase();
@@ -376,7 +376,7 @@ void ImageMap::ImpReadNCSA( SvStream& rIStm )
 
 void ImageMap::ImpReadNCSALine( std::string_view rLine )
 {
-    OString aStr = comphelper::string::stripStart(rLine, ' ');
+    OString aStr( comphelper::string::stripStart(rLine, ' ') );
     aStr = comphelper::string::stripStart(aStr, '\t');
     aStr = aStr.replaceAll(";", "");
     aStr = aStr.toAsciiLowerCase();
