@@ -11,10 +11,10 @@
  <oor:component-data xmlns:install="http://openoffice.org/2004/installation" oor:name="VCL" oor:package="org.openoffice">
   <node oor:name="DefaultFonts">
    <node oor:name="ar">
-   <prop oor:name="CTL_HEADING" oor:type="xs:string">
+    <prop oor:name="CTL_HEADING" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
-   <prop oor:name="CTL_TEXT" oor:type="xs:string">
+    <prop oor:name="CTL_TEXT" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
    </node>
@@ -36,12 +36,18 @@
     <prop oor:name="CTL_HEADING" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
+    <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
     <prop oor:name="CTL_TEXT" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
    </node>
    <node oor:name="zh-cn">
     <prop oor:name="CJK_HEADING" oor:type="xs:string">
+     <value>DejaVu Sans</value>
+    </prop>
+    <prop oor:name="CJK_SPREADSHEET" oor:type="xs:string">
      <value>DejaVu Sans</value>
     </prop>
     <prop oor:name="CJK_TEXT" oor:type="xs:string">
