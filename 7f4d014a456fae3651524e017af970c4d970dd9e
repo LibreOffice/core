@@ -16,6 +16,23 @@
       "message": "Heiko, I created a new .ui file but I can\u0027t write the C++ code. Could you please help me here?",
       "revId": "7f4d014a456fae3651524e017af970c4d970dd9e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "053bcbc3_787e1e59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-04-29T12:22:46Z",
+      "side": 1,
+      "message": "Suggest to abandon in favor of https://gerrit.libreoffice.org/c/core/+/133636 / Ifda426b5fa9596c2b23c335165785c0cb341433f",
+      "revId": "7f4d014a456fae3651524e017af970c4d970dd9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
