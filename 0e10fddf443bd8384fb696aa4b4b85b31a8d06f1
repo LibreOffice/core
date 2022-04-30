@@ -16,6 +16,23 @@
       "message": "No idea if that is applicable here (the message mentions Times, not TNR), but I think I mention this: I see a value in keeping testing layout for well-known substitutions with metrically compatible fonts. Imo that is a valid testcase 😁",
       "revId": "0e10fddf443bd8384fb696aa4b4b85b31a8d06f1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c5a4740_3c9ec1e5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-30T09:52:45Z",
+      "side": 1,
+      "message": "yeah \"Times New Roman\" is fine and doesn\u0027t trigger the assert. \"Times\" is more ambiguous and does.",
+      "revId": "0e10fddf443bd8384fb696aa4b4b85b31a8d06f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
