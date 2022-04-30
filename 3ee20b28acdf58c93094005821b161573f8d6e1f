@@ -34,6 +34,24 @@
       "parentUuid": "46b31acc_81469938",
       "revId": "3ee20b28acdf58c93094005821b161573f8d6e1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba6b58e2_9579bffc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-30T08:04:20Z",
+      "side": 1,
+      "message": "Hi Regina -- now \"Left frame border\" and \"Right frame border\" are changed to \"Left (Right) of frame text area\" -- which removes your concern about confusion with \"Frame border\"  -- so would like to consider the question again about using \"Frame border\" here instead of \"Entire Frame\".   Reasons are given in  tdf#148519 comment 1.  Not a big deal.  But would like to move forward. Thanks.",
+      "parentUuid": "6c58f25e_6c605790",
+      "revId": "3ee20b28acdf58c93094005821b161573f8d6e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
