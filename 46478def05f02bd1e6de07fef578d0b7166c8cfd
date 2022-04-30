@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e005819a_40b14b7d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-04-30T10:52:21Z",
+      "side": 1,
+      "message": "Why Jenkins hasn\u0027t been triggered following the rebase?",
+      "revId": "46478def05f02bd1e6de07fef578d0b7166c8cfd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
