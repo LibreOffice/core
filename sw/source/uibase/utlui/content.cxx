@@ -2976,7 +2976,7 @@ void SwContentTree::SetActiveShell(SwWrtShell* pSh)
     }
 
     // tdf#148432 in LTR UI override the navigator treeview direction based on
-    // the first page directionality
+    // the first page direction
     if (m_pActiveShell && !AllSettings::GetLayoutRTL())
     {
         const SwPageDesc& rDesc = m_pActiveShell->GetPageDesc(0);
