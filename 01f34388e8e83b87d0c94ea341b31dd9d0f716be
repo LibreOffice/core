@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7d209a3_39fbeb31",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-30T21:25:21Z",
+      "side": 1,
+      "message": "Setting Verified to +1 because after the patch was verified, I updated the commit message, but did not change the patch, which reflects what was agreed upon in tdf#148519",
+      "revId": "01f34388e8e83b87d0c94ea341b31dd9d0f716be",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

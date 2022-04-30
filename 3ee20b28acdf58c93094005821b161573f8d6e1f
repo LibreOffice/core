@@ -70,6 +70,24 @@
       "parentUuid": "ba6b58e2_9579bffc",
       "revId": "3ee20b28acdf58c93094005821b161573f8d6e1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb8eef2a_dd8a00a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-04-30T21:25:21Z",
+      "side": 1,
+      "message": "Thanks for clarification. My \"frame border\" proposal arose from my misinterpretation of the \"frame\" diagram. \"Entire frame\" is fine with me. This is what is used in the Image positioning dialog.",
+      "parentUuid": "728830c7_ecf483eb",
+      "revId": "3ee20b28acdf58c93094005821b161573f8d6e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
