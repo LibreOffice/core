@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9898627_2174bb38",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2022-04-30T13:35:15Z",
+      "side": 1,
+      "message": "I propose to duplicate option instead of moving it.\nIt still need some improvement as checkbox \"sticks\" at the top. I could not find how to add some space",
+      "revId": "7b293278dc7842e565828c52009f9f85edab7c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
