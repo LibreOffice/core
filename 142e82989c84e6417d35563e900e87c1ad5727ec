@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "281f10b6_9de0dc81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-30T18:37:47Z",
+      "side": 1,
+      "message": "Looks good to me. There seems to be an outage of our ci today so the submissions are not getting built, I expect that will get fixed in a while and when it does get build and passes ci we can push",
+      "revId": "142e82989c84e6417d35563e900e87c1ad5727ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
