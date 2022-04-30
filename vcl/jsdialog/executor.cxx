@@ -170,14 +170,14 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     if (separatorPos > 0)
                     {
                         // x;y
-                        std::string_view clickPosX = OUStringToOString(
+                        OString clickPosX = OUStringToOString(
                             rData["data"].subView(0, separatorPos), RTL_TEXTENCODING_ASCII_US);
-                        std::string_view clickPosY = OUStringToOString(
+                        OString clickPosY = OUStringToOString(
                             rData["data"].subView(separatorPos + 1), RTL_TEXTENCODING_ASCII_US);
-                        if (!clickPosX.empty() && !clickPosY.empty())
+                        if (!clickPosX.isEmpty() && !clickPosY.isEmpty())
                         {
-                            double posX = std::atof(clickPosX.data());
-                            double posY = std::atof(clickPosY.data());
+                            double posX = std::atof(clickPosX.getStr());
+                            double posY = std::atof(clickPosY.getStr());
                             OutputDevice& rRefDevice = pArea->get_ref_device();
                             // We send OutPutSize for the drawing area bitmap
                             // get_size_request is not necessarily updated

@@ -93,6 +93,7 @@ $(eval $(call gb_CompilerTest_add_exception_objects,compilerplugins_clang, \
     compilerplugins/clang/test/stringloop \
     compilerplugins/clang/test/stringstatic \
     compilerplugins/clang/test/stringview \
+    compilerplugins/clang/test/stringviewdangle \
     compilerplugins/clang/test/stringviewparam \
     compilerplugins/clang/test/stringviewvar \
     compilerplugins/clang/test/trivialconstructor \
