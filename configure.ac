@@ -7371,6 +7371,7 @@ dnl ===================================================================
 
 AC_MSG_CHECKING([what the C++ library is])
 HAVE_LIBSTDCPP=
+HAVE_LIBCPP=
 AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <utility>
@@ -7391,6 +7392,7 @@ foo bar
     [CPP_LIBRARY=LIBCPP
      cpp_library_name="LLVM libc++"
      AC_DEFINE([HAVE_LIBCXX])
+     HAVE_LIBCPP=TRUE
     ],
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <utility>
@@ -7405,6 +7407,7 @@ foo bar
 AC_MSG_RESULT([$cpp_library_name])
 AC_LANG_POP([C++])
 AC_SUBST([HAVE_LIBSTDCPP])
+AC_SUBST([HAVE_LIBCPP])
 
 dnl ===================================================================
 dnl Check for gperf
