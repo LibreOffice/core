@@ -1,37 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
+<!-- Generated with glade 3.22.2 -->
 <interface domain="sc">
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkScrolledWindow" id="SortCriteriaPage">
+  <object class="GtkBox" id="SortCriteriaPage">
     <property name="visible">True</property>
-    <property name="can-focus">True</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
-    <property name="hscrollbar-policy">never</property>
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">12</property>
     <child>
-      <object class="GtkViewport" id="viewport2">
+      <object class="GtkCheckButton" id="header">
+        <property name="label" translatable="yes" context="sortcriteriapage|header">Range contains...</property>
         <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
-        <child>
-          <object class="GtkBox" id="SortKeyWindow">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <placeholder/>
-            </child>
+        <property name="can_focus">True</property>
+        <property name="receives_default">False</property>
+        <property name="use_underline">True</property>
+        <property name="draw_indicator">True</property>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="header-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="sortcriteriapage|extended_tip|SortCrieriaPage">Omits the first row or the first column in the selection from the sort.</property>
           </object>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
     </child>
-    <child internal-child="accessible">
-      <object class="AtkObject" id="SortCriteriaPage-atkobject">
-        <property name="AtkObject::accessible-description" translatable="yes" context="sortcriteriapage|extended_tip|SortCriteriaPage">Specify the sorting options for the selected range.</property>
+    <child>
+      <object class="GtkScrolledWindow" id="scrollWindow">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="hexpand">True</property>
+        <property name="vexpand">True</property>
+        <property name="hscrollbar_policy">never</property>
+        <child>
+          <object class="GtkViewport" id="viewport2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <child>
+              <object class="GtkBox" id="SortKeyWindow">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="hexpand">True</property>
+                <property name="vexpand">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child internal-child="accessible">
+          <object class="AtkObject" id="scrollWindow-atkobject">
+            <property name="AtkObject::accessible-description" translatable="yes" context="sortcriteriapage|extended_tip|SortCrieriaPage">Specify the sorting options for the selected range.</property>
+          </object>
+        </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
     </child>
   </object>
 </interface>

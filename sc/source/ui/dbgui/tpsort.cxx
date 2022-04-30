@@ -76,6 +76,8 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
+        aStrRowLabel    ( ScResId(SCSTR_ROW_LABEL) ),
+        aStrColLabel    ( ScResId(SCSTR_COL_LABEL) ),
 
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         pViewData       ( nullptr ),
@@ -86,7 +88,8 @@ ScTabPageSortFields::ScTabPageSortFields(weld::Container* pPage, weld::DialogCon
         bHasHeader      ( false ),
         bSortByRows     ( false )
 
-    , m_xScrolledWindow(m_xBuilder->weld_scrolled_window("SortCriteriaPage"))
+    , m_xBtnHeader      ( m_xBuilder->weld_check_button("header") )
+    , m_xScrolledWindow ( m_xBuilder->weld_scrolled_window("scrollWindow") )
     , m_xBox(m_xBuilder->weld_container("SortKeyWindow"))
     , m_aSortWin(m_xBox.get())
 {
@@ -124,6 +127,8 @@ void ScTabPageSortFields::Init()
         AddSortKey(i+1);
         m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->connect_changed(LINK(this, ScTabPageSortFields, SelectHdl));
     }
+    m_xBtnHeader->connect_toggled( LINK( this, ScTabPageSortFields, SortHeaderHdl ) );
+    m_xBtnHeader->set_label( aStrColLabel );
 }
 
 std::unique_ptr<SfxTabPage> ScTabPageSortFields::Create(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet* pArgSet)
@@ -210,6 +215,9 @@ void ScTabPageSortFields::Reset( const SfxItemSet* /* rArgSet */ )
     // Make sure that there is always a last undefined sort key
     if (m_aSortWin.m_aSortKeyItems[nSortKeyCount - 1]->m_xLbSort->get_active() > 0)
         SetLastSortKey( nSortKeyCount );
+
+    m_xBtnHeader->set_active( bHasHeader );
+    m_xBtnHeader->set_label ( bSortByRows ? aStrColLabel : aStrRowLabel );
 }
 
 bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
@@ -267,6 +275,7 @@ bool ScTabPageSortFields::FillItemSet( SfxItemSet* rArgSet )
         for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
             aNewSortData.maKeyState[i].bDoSort = false;
     }
+    aNewSortData.bHasHeader = m_xBtnHeader->get_active();
 
     rArgSet->Put( ScSortItem( SCITEM_SORTDATA, nullptr, &aNewSortData ) );
 
@@ -284,21 +293,12 @@ void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 
     if ( bHasHeader == pDlg->GetHeaders() && bSortByRows == pDlg->GetByRows() )
         return;
-
-    std::vector<sal_uInt16> nCurSel;
-    for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-        nCurSel.push_back( m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->get_active() );
-
-    bHasHeader  = pDlg->GetHeaders();
-    bSortByRows = pDlg->GetByRows();
-    FillFieldLists(0);
-
-    for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
-        m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->set_active(nCurSel[i]);
+    FillFieldLabels( pDlg );
 }
 
 DeactivateRC ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
+    bHasHeader = m_xBtnHeader->get_active();
     if (ScSortDlg* pDlg = static_cast<ScSortDlg*>(GetDialogController()))
     {
         if ( bHasHeader != pDlg->GetHeaders() )
@@ -312,6 +312,25 @@ DeactivateRC ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
         FillItemSet( pSetP );
 
     return DeactivateRC::LeavePage;
+}
+
+void ScTabPageSortFields::FillFieldLabels( ScSortDlg* pDlg )
+{
+    std::vector<sal_uInt16> nCurSel;
+    for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
+        nCurSel.push_back( m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->get_active() );
+
+    bHasHeader  = pDlg ? pDlg->GetHeaders() : m_xBtnHeader->get_active();
+    if ( pDlg )
+    {
+        m_xBtnHeader->set_active( bHasHeader );
+        bSortByRows = pDlg->GetByRows();
+        m_xBtnHeader->set_label( bSortByRows ? aStrColLabel : aStrRowLabel );
+    }
+    FillFieldLists(0);
+
+    for ( sal_uInt16 i=0; i<nSortKeyCount; i++ )
+        m_aSortWin.m_aSortKeyItems[i]->m_xLbSort->set_active(nCurSel[i]);
 }
 
 void ScTabPageSortFields::FillFieldLists( sal_uInt16 nStartField )
@@ -466,6 +485,11 @@ IMPL_LINK( ScTabPageSortFields, SelectHdl, weld::ComboBox&, rLb, void )
 IMPL_LINK_NOARG(ScTabPageSortFields, ScrollToEndHdl, Timer*, void)
 {
     m_xScrolledWindow->vadjustment_set_value(m_xScrolledWindow->vadjustment_get_upper());
+}
+
+IMPL_LINK_NOARG(ScTabPageSortFields, SortHeaderHdl, weld::Toggleable&, void)
+{
+    FillFieldLabels();
 }
 
 void ScTabPageSortFields::AddSortKey( sal_uInt16 nItem )

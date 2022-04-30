@@ -61,6 +61,8 @@ private:
     OUString            aStrUndefined;
     OUString            aStrColumn;
     OUString            aStrRow;
+    OUString            aStrRowLabel;
+    OUString            aStrColLabel;
 
     TypedWhichId<ScSortItem> nWhichSort;
     ScViewData*         pViewData;
@@ -72,6 +74,7 @@ private:
     bool                bHasHeader;
     bool                bSortByRows;
 
+    std::unique_ptr<weld::CheckButton> m_xBtnHeader;
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::unique_ptr<weld::Container> m_xBox;
     ScSortKeyWindow m_aSortWin;
@@ -81,11 +84,13 @@ private:
 private:
     void    Init            ();
     void    FillFieldLists  ( sal_uInt16 nStartField );
+    void    FillFieldLabels ( ScSortDlg* pDlg = nullptr );
     sal_uInt16  GetFieldSelPos  ( SCCOLROW nField );
     void    SetLastSortKey( sal_uInt16 nItem );
 
     // Handler ------------------------
     DECL_LINK(SelectHdl, weld::ComboBox&, void);
+    DECL_LINK( SortHeaderHdl, weld::Toggleable&, void );
     DECL_LINK(ScrollToEndHdl, Timer*, void);
 };
 
