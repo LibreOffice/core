@@ -52,6 +52,24 @@
       "parentUuid": "6c58f25e_6c605790",
       "revId": "3ee20b28acdf58c93094005821b161573f8d6e1f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "728830c7_ecf483eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-04-30T11:37:12Z",
+      "side": 1,
+      "message": "I think it should be \"Entire Frame\", see my comment in tdf#148519.",
+      "parentUuid": "ba6b58e2_9579bffc",
+      "revId": "3ee20b28acdf58c93094005821b161573f8d6e1f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
