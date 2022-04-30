@@ -7371,6 +7371,7 @@ dnl ===================================================================
 
 AC_MSG_CHECKING([what the C++ library is])
 HAVE_LIBSTDCPP=
+HAVE_LIBCPP=
 AC_LANG_PUSH([C++])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <utility>
@@ -7391,6 +7392,7 @@ foo bar
     [CPP_LIBRARY=LIBCPP
      cpp_library_name="LLVM libc++"
      AC_DEFINE([HAVE_LIBCXX])
+     HAVE_LIBCPP=TRUE
     ],
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 #include <utility>
@@ -7405,6 +7407,27 @@ foo bar
 AC_MSG_RESULT([$cpp_library_name])
 AC_LANG_POP([C++])
 AC_SUBST([HAVE_LIBSTDCPP])
+AC_SUBST([HAVE_LIBCPP])
+
+HAVE_LIBCPP_DEBUG=
+if test -n "$HAVE_LIBCPP" -a -n "$ENABLE_DBGUTIL"; then
+    # libc++ supports debug mode only if built for it, Mac libc++ isn't,
+    # and there would be undefined references to debug functions
+    AC_MSG_CHECKING([if libc++ is built with debug mode])
+    AC_LANG_PUSH([C++])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+#define _LIBCPP_DEBUG 1
+#include <vector>
+int foo(const std::vector<int>& v) { return *v.begin(); }
+]])],
+    [AC_MSG_RESULT(yes)
+     HAVE_LIBCPP_DEBUG=1
+    ],
+    [AC_MSG_RESULT(no)]
+    )
+    AC_LANG_POP([C++])
+fi
+AC_SUBST([HAVE_LIBCPP_DEBUG])
 
 dnl ===================================================================
 dnl Check for gperf

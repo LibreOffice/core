@@ -47,6 +47,10 @@ gb_CFLAGS := \
 ifneq ($(HAVE_LIBSTDCPP),)
 gb_CXX_LINKFLAGS := -pthread
 endif
+# libc++ needs it too
+ifneq ($(HAVE_LIBCPP),)
+gb_CXX_LINKFLAGS := -pthread
+endif
 
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
