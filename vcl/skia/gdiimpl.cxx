@@ -301,7 +301,7 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
     createWindowSurfaceInternal(forceRaster);
     if (!mSurface)
     {
-        switch (renderMethodToUse())
+        switch (forceRaster ? RenderRaster : renderMethodToUse())
         {
             case RenderVulkan:
                 SAL_WARN("vcl.skia",
