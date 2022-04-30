@@ -33,6 +33,24 @@
       "message": "Should this instead just use (the recently fixed) MnemonicGenerator::EraseAllMnemonicChars ? Would that then mean there is no need to have the following block at all?",
       "revId": "7722324e21321d3b6544ed3fdb468d3b3f2a8c43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "159aa46f_1ac219aa",
+        "filename": "vcl/osx/salmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-30T16:14:06Z",
+      "side": 1,
+      "message": "Right, I have modified as your advise, and delete the block which no need anymore.",
+      "parentUuid": "e27bdfa8_7ce87930",
+      "revId": "7722324e21321d3b6544ed3fdb468d3b3f2a8c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
