@@ -16,6 +16,24 @@
       "message": "Sorry, my bad. The correct bug number should be 148837, so please revise to tdf#148837 instead...",
       "revId": "60223aefa6f2886f83eceae1fddeb785b505e1b4",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0925e5dd_efecb535",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000750
+      },
+      "writtenOn": "2022-04-30T16:04:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55301085_affcbb8f",
+      "revId": "60223aefa6f2886f83eceae1fddeb785b505e1b4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
