@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40387090_a1cdf9fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000198
+      },
+      "writtenOn": "2022-04-30T08:17:50Z",
+      "side": 1,
+      "message": "Thanks for reviewing my very first patch.\nLouis",
+      "revId": "f6be78f6b173bf4534601b75428fd3c5ae97ff41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
