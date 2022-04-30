@@ -96,7 +96,7 @@ TextEngine::TextEngine()
 
     ImpInitDoc();
 
-    vcl::Font aFont;
+    vcl::Font aFont(mpRefDev->GetFont().GetFamilyName(), Size(0, 0));
     aFont.SetTransparent( false );
     Color aFillColor( aFont.GetFillColor() );
     aFillColor.SetAlpha( 255 );
