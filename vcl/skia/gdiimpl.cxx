@@ -301,6 +301,8 @@ void SkiaSalGraphicsImpl::createWindowSurface(bool forceRaster)
     createWindowSurfaceInternal(forceRaster);
     if (!mSurface)
     {
+        if (forceRaster)
+            abort();
         switch (renderMethodToUse())
         {
             case RenderVulkan:
