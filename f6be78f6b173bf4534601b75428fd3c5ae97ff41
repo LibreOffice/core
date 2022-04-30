@@ -16,6 +16,23 @@
       "message": "Thanks for reviewing my very first patch.\nLouis",
       "revId": "f6be78f6b173bf4534601b75428fd3c5ae97ff41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a15d8745_35bb162b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-04-30T09:24:39Z",
+      "side": 1,
+      "message": "Thanks for the patch. A cosmetic nitpick: you should format your lines so they match the maximum length limits, 72 chars for subject and 80 chars for others. https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_patches_for_review\n\nFor updating, follow the amending procedure: https://wiki.documentfoundation.org/Development/gerrit/SubmitPatch#Submitting_a_new_version",
+      "revId": "f6be78f6b173bf4534601b75428fd3c5ae97ff41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
