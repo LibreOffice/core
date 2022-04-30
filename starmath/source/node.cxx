@@ -782,6 +782,12 @@ void SmRootNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
     nHeight += rFormat.GetDistance(DIS_ROOT)
                * GetFont().GetFontSize().Height() / 100;
 
+    if (nHeight < 0)
+    {
+        SAL_WARN("starmath", "negative height");
+        nHeight = 0;
+    }
+
     // font specialist advised to change the width first
     pRootSym->AdaptToY(rDev, nHeight);
     pRootSym->AdaptToX(rDev, pBody->GetItalicWidth());
