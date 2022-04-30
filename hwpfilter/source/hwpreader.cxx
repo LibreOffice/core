@@ -2608,7 +2608,6 @@ void HwpReader::makeChars(hchar_string & rStr)
 void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
 {
     hchar_string str;
-    int n;
     int res;
     hchar dest[3];
     unsigned char firstspace = 0;
@@ -2637,16 +2636,21 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
     startEl("text:span");
     mxList->clear();
 
-    for (n = 0; n < para->nch && para->hhstr[n]->hh;
-        n += para->hhstr[n]->WSize())
+    int n = 0;
+    while (n < para->nch)
     {
-        if (para->hhstr[n]->hh == CH_SPACE && !firstspace)
+        const auto& box = para->hhstr[n];
+
+        if (!box->hh)
+            break;
+
+        if (box->hh == CH_SPACE && !firstspace)
         {
             makeChars(str);
             startEl("text:s");
             endEl("text:s");
         }
-        else if (para->hhstr[n]->hh == CH_END_PARA)
+        else if (box->hh == CH_END_PARA)
         {
             makeChars(str);
             endEl("text:span");
@@ -2655,16 +2659,17 @@ void HwpReader::make_text_p0(HWPPara * para, bool bParaStart)
         }
         else
         {
-            if (para->hhstr[n]->hh == CH_SPACE)
+            if (box->hh == CH_SPACE)
                 firstspace = 0;
             else
                 firstspace = 1;
-            res = hcharconv(para->hhstr[n]->hh, dest, UNICODE);
+            res = hcharconv(box->hh, dest, UNICODE);
             for( int j = 0 ; j < res; j++ )
             {
                 str.push_back(dest[j]);
             }
         }
+        n += box->WSize();
     }
 }
 
