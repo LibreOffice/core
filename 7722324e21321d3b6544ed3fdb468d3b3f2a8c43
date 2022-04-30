@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1886fc4_1caeaa6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-30T15:04:29Z",
+      "side": 1,
+      "message": "should ",
+      "revId": "7722324e21321d3b6544ed3fdb468d3b3f2a8c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27bdfa8_7ce87930",
+        "filename": "vcl/osx/salmenu.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000135
+      },
+      "writtenOn": "2022-04-30T15:04:29Z",
+      "side": 1,
+      "message": "Should this instead just use (the recently fixed) MnemonicGenerator::EraseAllMnemonicChars ? Would that then mean there is no need to have the following block at all?",
+      "revId": "7722324e21321d3b6544ed3fdb468d3b3f2a8c43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
