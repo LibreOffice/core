@@ -242,11 +242,11 @@ static void CalculateHorizontalScalingFactor(
             // skip directly to a small font size
             if (nFontSize > 128)
             {
-                int nEstimatedFinalFontSize = std::ceil(nFontSize * fScalingFactor);
-                int nFontThth = nFontSize / 1000;
-                if (nEstimatedFinalFontSize < nFontThth)
+                double nEstimatedFinalFontSize = nFontSize * fScalingFactor;
+                double nOnePercentFontSize = nFontSize / 100.0;
+                if (nEstimatedFinalFontSize < nOnePercentFontSize)
                 {
-                    nFontSize = std::max(16, nFontThth);
+                    nFontSize = std::max<int>(16, std::ceil(5 * nEstimatedFinalFontSize));
                     SAL_WARN("svx", "CalculateHorizontalScalingFactor skipping direct to: " << nFontSize << " from " << rFontHeight.GetHeight());
                 }
             }
