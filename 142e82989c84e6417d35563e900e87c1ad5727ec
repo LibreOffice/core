@@ -34,6 +34,24 @@
       "parentUuid": "281f10b6_9de0dc81",
       "revId": "142e82989c84e6417d35563e900e87c1ad5727ec",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84079f4f_2cca8819",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003569
+      },
+      "writtenOn": "2022-04-30T23:09:39Z",
+      "side": 1,
+      "message": "Sorry, the bug’s link is https://bugs.documentfoundation.org/show_bug.cgi?id\u003d148470 \nThe link in the previous reply is the attachment address and “)” are recognized as part of link.",
+      "parentUuid": "d913585d_4791b1e1",
+      "revId": "142e82989c84e6417d35563e900e87c1ad5727ec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
