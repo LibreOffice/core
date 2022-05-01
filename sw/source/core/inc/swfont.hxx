@@ -72,6 +72,7 @@ class SwSubFont final : public SvxFont
     bool IsSymbol( SwViewShell const *pSh );
     sal_uInt16 GetAscent( SwViewShell const *pSh, const OutputDevice& rOut );
     sal_uInt16 GetHeight( SwViewShell const *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetHangingBaseline( SwViewShell const *pSh, const OutputDevice& rOut );
     Size GetTextSize_( SwDrawTextInfo& rInf );
     Size GetCapitalSize( SwDrawTextInfo& rInf );
     void DrawText_( SwDrawTextInfo &rInf, const bool bGrey );
@@ -327,6 +328,9 @@ public:
         { return m_aSub[m_nActual].GetAscent( pSh, rOut ); }
     sal_uInt16 GetHeight( SwViewShell const *pSh, const OutputDevice& rOut )
         { return m_aSub[m_nActual].GetHeight( pSh, rOut ); }
+
+    sal_uInt16 GetHangingBaseline( SwViewShell const *pSh, const OutputDevice& rOut )
+        { return m_nActual == SwFontScript::CTL ? m_aSub[m_nActual].GetHangingBaseline( pSh, rOut ) : 0; }
 
     void Invalidate()
         { m_bFontChg = m_bOrgChg = true; }

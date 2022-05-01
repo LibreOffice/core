@@ -965,6 +965,12 @@ sal_uInt16 SwSubFont::GetHeight( SwViewShell const *pSh, const OutputDevice& rOu
     return nHeight; // + nLeading;
 }
 
+sal_uInt16 SwSubFont::GetHangingBaseline( SwViewShell const *pSh, const OutputDevice& rOut )
+{
+    SwFntAccess aFntAccess( m_nFontCacheId, m_nFontIndex, this, pSh );
+    return aFntAccess.Get()->GetFontHangingBaseline( pSh, rOut );
+}
+
 Size SwSubFont::GetTextSize_( SwDrawTextInfo& rInf )
 {
     // Robust: the font is supposed to be set already, but better safe than
