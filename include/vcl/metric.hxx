@@ -47,6 +47,7 @@ public:
     tools::Long                GetLineHeight() const                       { return mnLineHeight; } // TODO this is ascent + descnt
     tools::Long                GetSlant() const                            { return mnSlant; }
     tools::Long                GetBulletOffset() const                     { return mnBulletOffset; }
+    tools::Long                GetHangingBaseline() const                  { return mnHangingBaseline; }
 
     void                SetAscent( tools::Long nAscent )                   { mnAscent = nAscent; }
     void                SetDescent( tools::Long nDescent )                 { mnDescent = nDescent; }
@@ -55,6 +56,7 @@ public:
     void                SetLineHeight( tools::Long nHeight )               { mnLineHeight = nHeight; } // TODO this is ascent + descent
     void                SetSlant( tools::Long nSlant )                     { mnSlant = nSlant; }
     void                SetBulletOffset( tools::Long nOffset )             { mnBulletOffset = nOffset; }
+    void                SetHangingBaseline( tools::Long nBaseline )        { mnHangingBaseline = nBaseline; }
 
     bool                IsFullstopCentered() const                  { return mbFullstopCentered; }
 
@@ -74,6 +76,7 @@ private:
     tools::Long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
     tools::Long                mnSlant;                       // Slant
     tools::Long                mnBulletOffset;                // Offset for non-printing character
+    tools::Long                mnHangingBaseline;             // Offset from Romn baseline to hanigng baseline.
 
     bool                mbFullstopCentered;
 };

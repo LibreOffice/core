@@ -34,6 +34,7 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 #include <comphelper/sequence.hxx>
+#include <hb-ot.h>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -48,6 +49,7 @@ FontMetric::FontMetric()
     mnLineHeight( 0 ),
     mnSlant( 0 ),
     mnBulletOffset( 0 ),
+    mnHangingBaseline( 0 ),
     mbFullstopCentered( false )
 {}
 
@@ -406,6 +408,25 @@ void ImplFontMetricData::ImplCalcLineSpacing(LogicalFontInstance *pFontInstance)
              << ", descender: "     << rInfo.descender
              << ", linegap: "       << rInfo.linegap
              );
+}
+
+void ImplFontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
+{
+    hb_font_t* pHbFont = pFontInstance->GetHbFont();
+    hb_face_t* pHbFace = hb_font_get_face(pHbFont);
+    double nUPEM = hb_face_get_upem(pHbFace);
+    double fScale = mnHeight / nUPEM;
+    hb_position_t nBaseline = 0;
+
+    if (hb_ot_layout_get_baseline(pHbFont,
+             HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+                                HB_DIRECTION_INVALID,
+                                HB_SCRIPT_UNKNOWN,
+                                HB_TAG_NONE,
+                                &nBaseline))
+    {
+        mnHangingBaseline = nBaseline * fScale;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
