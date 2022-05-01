@@ -1604,6 +1604,15 @@
           </info>
           <value>20000000</value>
         </prop>
+        <prop oor:name="TextRunsCacheSize" oor:type="xs:long" oor:nillable="false">
+          <info>
+            <desc>Specifies the maximum cache size in bytes for all text run data used
+            when laying out text. Larger size may improve text drawing performance
+            in large documents.</desc>
+            <label>Text Runs Cache Size</label>
+          </info>
+          <value>100000</value>
+        </prop>
       </group>
     </group>
     <group oor:name="Path">

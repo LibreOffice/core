@@ -24,6 +24,7 @@
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/lru_map.hxx>
 #include <vcl/lazydelete.hxx>
+#include <officecfg/Office/Common.hxx>
 
 namespace vcl::text
 {
@@ -37,12 +38,24 @@ TextLayoutCache::TextLayoutCache(sal_Unicode const* pStr, sal_Int32 const nEnd)
     }
 }
 
+namespace
+{
+struct TextLayoutCacheCost
+{
+    size_t operator()(const std::shared_ptr<const TextLayoutCache>& item) const
+    {
+        return item->runs.size() * sizeof(item->runs.front());
+    }
+};
+} // namespace
+
 std::shared_ptr<const TextLayoutCache> TextLayoutCache::Create(OUString const& rString)
 {
     typedef o3tl::lru_map<OUString, std::shared_ptr<const TextLayoutCache>, FirstCharsStringHash,
-                          FastStringCompareEqual>
+                          FastStringCompareEqual, TextLayoutCacheCost>
         Cache;
-    static vcl::DeleteOnDeinit<Cache> cache(1000);
+    static vcl::DeleteOnDeinit<Cache> cache(
+        officecfg::Office::Common::Cache::Font::TextRunsCacheSize::get());
     if (Cache* map = cache.get())
     {
         auto it = map->find(rString);
