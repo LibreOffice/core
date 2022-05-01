@@ -40,7 +40,7 @@ class SdXMLNumberFormatImportContext final : public SvXMLNumFormatContext
 
     bool compareStyle( const SdXMLFixedDataStyle* pStyle, sal_Int16& nIndex ) const;
 
-    void add( std::u16string_view rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText );
+    void add( std::u16string_view rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, std::u16string_view rText );
 
 public:
 

@@ -58,7 +58,7 @@ namespace oox::ppt {
         bool mbDirection; // true: default geometric direction
 
         static const transition* getList();
-        static const transition* find( const OUString& rName );
+        static const transition* find( std::u16string_view rName );
     };
 
     struct OOX_DLLPUBLIC convert_subtype

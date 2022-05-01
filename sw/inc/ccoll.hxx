@@ -34,7 +34,7 @@ struct CommandStruct
     sal_uLong nSubCond;
 };
 
-sal_Int16       GetCommandContextIndex( const OUString &rContextName );
+sal_Int16 GetCommandContextIndex( std::u16string_view rContextName );
 OUString   GetCommandContextByIndex( sal_Int16 nIndex );
 
 class SW_DLLPUBLIC SwCondCollItem final : public SfxPoolItem

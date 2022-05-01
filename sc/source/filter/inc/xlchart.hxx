@@ -1253,7 +1253,7 @@ public:
     /** Returns the first fitting chart type info for an Excel chart type record identifier. */
     const XclChTypeInfo& GetTypeInfoFromRecId( sal_uInt16 nRecId ) const;
     /** Returns the first fitting chart type info for the passed service name. */
-    const XclChTypeInfo& GetTypeInfoFromService( const OUString& rServiceName ) const;
+    const XclChTypeInfo& GetTypeInfoFromService( std::u16string_view rServiceName ) const;
 
 private:
     typedef ::std::map< XclChTypeId, const XclChTypeInfo* > XclChTypeInfoMap;

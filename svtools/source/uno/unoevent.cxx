@@ -21,6 +21,7 @@
 
 #include <comphelper/propertyvalue.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <sfx2/event.hxx>
 #include <svtools/unoevent.hxx>
@@ -284,12 +285,12 @@ Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames()
     return { sAPI_ServiceName };
 }
 
-SvMacroItemId SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
+SvMacroItemId SvBaseEventDescriptor::mapNameToEventID(std::u16string_view rName) const
 {
     // iterate over known event names
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
     {
-        if( rName.equalsAscii(mpSupportedMacroItems[i].mpEventName))
+        if( o3tl::equalsAscii(rName, mpSupportedMacroItems[i].mpEventName))
         {
             return mpSupportedMacroItems[i].mnEvent;
         }
@@ -299,7 +300,7 @@ SvMacroItemId SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) con
     return SvMacroItemId::NONE;
 }
 
-SvMacroItemId SvBaseEventDescriptor::getMacroID(const OUString& rName) const
+SvMacroItemId SvBaseEventDescriptor::getMacroID(std::u16string_view rName) const
 {
     return mapNameToEventID(rName);
 }

@@ -32,6 +32,7 @@
 #include <svl/sharedstringpool.hxx>
 #include <sal/log.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <rtl/character.hxx>
 #include <unotools/charclass.hxx>
@@ -3061,13 +3062,13 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
     return bFound;
 }
 
-bool ScCompiler::ParseOpCode2( const OUString& rName )
+bool ScCompiler::ParseOpCode2( std::u16string_view rName )
 {
     bool bFound = false;
     sal_uInt16 i;
 
     for( i = ocInternalBegin; i <= ocInternalEnd && !bFound; i++ )
-        bFound = rName.equalsAscii( pInternal[ i-ocInternalBegin ] );
+        bFound = o3tl::equalsAscii( rName, pInternal[ i-ocInternalBegin ] );
 
     if (bFound)
     {

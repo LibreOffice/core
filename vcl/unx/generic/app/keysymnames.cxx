@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/string_view.hxx>
 #include <unx/saldisp.hxx>
 #include <X11/keysym.h>
 #include <sal/macros.h>
@@ -478,11 +479,11 @@ namespace vcl_sal {
     };
 
     // translate keycodes, used within the displayed menu shortcuts
-    OUString getKeysymReplacementName( const OUString& pLang, KeySym nSymbol )
+    OUString getKeysymReplacementName( std::u16string_view pLang, KeySym nSymbol )
     {
         for(const auto & rKeyboard : aKeyboards)
         {
-            if( pLang.equalsAscii( rKeyboard.pLangName ) )
+            if( o3tl::equalsAscii( pLang, rKeyboard.pLangName ) )
             {
                 const struct KeysymNameReplacement* pRepl = rKeyboard.pReplacements;
                 for( int m = rKeyboard.nReplacements ; m ; )
