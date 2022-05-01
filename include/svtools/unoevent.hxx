@@ -136,10 +136,10 @@ protected:
         const SvMacroItemId nEvent ) = 0;
 
     /// convert an API event name to the event ID as used by SvxMacroItem
-    SvMacroItemId mapNameToEventID(const OUString& rName) const;
+    SvMacroItemId mapNameToEventID(std::u16string_view rName) const;
 
     /// get the event ID for the name; return 0 if not supported
-    SvMacroItemId getMacroID(const OUString& rName) const;
+    SvMacroItemId getMacroID(std::u16string_view rName) const;
 };
 
 

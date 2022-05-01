@@ -53,10 +53,10 @@ class SmLocalizedSymbolData
 public:
     SmLocalizedSymbolData() = delete;
 
-    static OUString GetUiSymbolName( const OUString &rExportName );
+    static OUString GetUiSymbolName( std::u16string_view rExportName );
     static OUString GetExportSymbolName( std::u16string_view rUiName );
 
-    static OUString GetUiSymbolSetName( const OUString &rExportName );
+    static OUString GetUiSymbolSetName( std::u16string_view rExportName );
     static OUString GetExportSymbolSetName( std::u16string_view rUiName );
 };
 

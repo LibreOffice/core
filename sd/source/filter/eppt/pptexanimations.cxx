@@ -138,7 +138,7 @@ static void ImplTranslateAttribute( OUString& rString, const TranslateMode eTran
     }
 }
 
-sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, const OUString& rPresetSubType )
+sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetClass, const sal_uInt32 nPresetId, std::u16string_view rPresetSubType )
 {
     sal_uInt32  nPresetSubType = 0;
     bool    bTranslated = false;
@@ -151,12 +151,12 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
             {
                 case 5 :
                 {
-                    if ( rPresetSubType == "downward" )
+                    if ( rPresetSubType == u"downward" )
                     {
                         nPresetSubType = 5;
                         bTranslated = true;
                     }
-                    else if ( rPresetSubType == "across" )
+                    else if ( rPresetSubType == u"across" )
                     {
                         nPresetSubType = 10;
                         bTranslated = true;
@@ -165,7 +165,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                 break;
                 case 17 :
                 {
-                    if ( rPresetSubType == "across" )
+                    if ( rPresetSubType == u"across" )
                     {
                         nPresetSubType = 10;
                         bTranslated = true;
@@ -174,22 +174,22 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
                 break;
                 case 18 :
                 {
-                    if ( rPresetSubType == "right-to-top" )
+                    if ( rPresetSubType == u"right-to-top" )
                     {
                         nPresetSubType = 3;
                         bTranslated = true;
                     }
-                    else if ( rPresetSubType == "right-to-bottom" )
+                    else if ( rPresetSubType == u"right-to-bottom" )
                     {
                         nPresetSubType = 6;
                         bTranslated = true;
                     }
-                    else if ( rPresetSubType == "left-to-top" )
+                    else if ( rPresetSubType == u"left-to-top" )
                     {
                         nPresetSubType = 9;
                         bTranslated = true;
                     }
-                    else if ( rPresetSubType == "left-to-bottom" )
+                    else if ( rPresetSubType == u"left-to-bottom" )
                     {
                         nPresetSubType = 12;
                         bTranslated = true;
@@ -203,7 +203,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
             const oox::ppt::convert_subtype* p = oox::ppt::convert_subtype::getList();
             while( p->mpStrSubType )
             {
-                if ( rPresetSubType.equalsAscii( p->mpStrSubType ) )
+                if ( o3tl::equalsAscii( rPresetSubType, p->mpStrSubType ) )
                 {
                     nPresetSubType = p->mnID;
                     bTranslated = true;
@@ -214,7 +214,7 @@ sal_uInt32 AnimationExporter::TranslatePresetSubType( const sal_uInt32 nPresetCl
         }
     }
     if ( !bTranslated )
-        nPresetSubType = rPresetSubType.toUInt32();
+        nPresetSubType = o3tl::toUInt32(rPresetSubType);
     return nPresetSubType;
 }
 

@@ -52,7 +52,7 @@ namespace oox::ppt {
 
     }
 
-    SlideTransition::SlideTransition(const OUString & sFilterName)
+    SlideTransition::SlideTransition(std::u16string_view sFilterName)
         : mnTransitionType( 0 )
         , mnTransitionSubType( 0 )
         , mbTransitionDirectionNormal( true )

@@ -21,6 +21,7 @@
 
 #include <string_view>
 
+#include <o3tl/string_view.hxx>
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>
 #include "optsave.hxx"
@@ -324,7 +325,7 @@ bool SvxSaveTabPage::FillItemSet( SfxItemSet* rSet )
     return bModified;
 }
 
-static bool isODFFormat( const OUString& sFilter )
+static bool isODFFormat( std::u16string_view sFilter )
 {
     static const char* aODFFormats[] =
     {
@@ -348,7 +349,7 @@ static bool isODFFormat( const OUString& sFilter )
     int i = 0;
     while ( aODFFormats[i] != nullptr )
     {
-        if ( sFilter.equalsAscii( aODFFormats[i++] ) )
+        if ( o3tl::equalsAscii( sFilter, aODFFormats[i++] ) )
         {
             bRet = true;
             break;

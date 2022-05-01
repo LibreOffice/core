@@ -24,6 +24,7 @@
 #include <sfx2/objsh.hxx>
 #include <unotools/charclass.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
@@ -294,7 +295,7 @@ void ScUnoAddInCollection::Initialize()
     bInitialized = true;        // with or without functions
 }
 
-static sal_uInt16 lcl_GetCategory( const OUString& rName )
+static sal_uInt16 lcl_GetCategory( std::u16string_view rName )
 {
     static const char* aFuncNames[SC_FUNCGROUP_COUNT] =
     {
@@ -313,7 +314,7 @@ static sal_uInt16 lcl_GetCategory( const OUString& rName )
         "Add-In"            // ID_FUNCTION_GRP_ADDINS
     };
     for (sal_uInt16 i=0; i<SC_FUNCGROUP_COUNT; i++)
-        if ( rName.equalsAscii( aFuncNames[i] ) )
+        if ( o3tl::equalsAscii( rName, aFuncNames[i] ) )
             return i+1;                             // IDs start at 1
 
     return ID_FUNCTION_GRP_ADDINS;  // if not found, use Add-In group

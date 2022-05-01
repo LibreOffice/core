@@ -21,6 +21,7 @@
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequence.hxx>
@@ -123,12 +124,12 @@ namespace dbaccess
         m_pData->rParent.release();
     }
 
-    bool DocumentEvents::needsSynchronousNotification( const OUString& _rEventName )
+    bool DocumentEvents::needsSynchronousNotification( std::u16string_view _rEventName )
     {
         const DocumentEventData* pEventData = lcl_getDocumentEventData();
         while ( pEventData->pAsciiEventName )
         {
-            if ( _rEventName.equalsAscii( pEventData->pAsciiEventName ) )
+            if ( o3tl::equalsAscii( _rEventName, pEventData->pAsciiEventName ) )
                 return pEventData->bNeedsSyncNotify;
             ++pEventData;
         }

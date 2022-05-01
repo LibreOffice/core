@@ -37,6 +37,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <o3tl/string_view.hxx>
 #include <sal/macros.h>
 #include <sal/mathconf.h>
 #include <svl/itemset.hxx>
@@ -528,10 +529,10 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromRecId( sal_uInt16 nRe
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
-const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUString& rServiceName ) const
+const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( std::u16string_view rServiceName ) const
 {
     for(auto const &rIt : spTypeInfos)
-        if( rServiceName.equalsAscii( rIt.mpcServiceName ) )
+        if( o3tl::equalsAscii( rServiceName, rIt.mpcServiceName ) )
             return rIt;
     OSL_FAIL( "XclChTypeInfoProvider::GetTypeInfoFromService - unknown service name" );
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
