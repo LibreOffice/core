@@ -214,6 +214,7 @@ FontMetric OutputDevice::GetFontMetric() const
     aMetric.SetExternalLeading( ImplDevicePixelToLogicHeight( GetFontExtLeading() ) );
     aMetric.SetLineHeight( ImplDevicePixelToLogicHeight( xFontMetric->GetAscent() + xFontMetric->GetDescent() + mnEmphasisAscent + mnEmphasisDescent ) );
     aMetric.SetSlant( ImplDevicePixelToLogicHeight( xFontMetric->GetSlant() ) );
+    aMetric.SetHangingBaseline( ImplDevicePixelToLogicHeight( xFontMetric->GetHangingBaseline() ) );
 
     // get miscellaneous data
     aMetric.SetQuality( xFontMetric->GetQuality() );
