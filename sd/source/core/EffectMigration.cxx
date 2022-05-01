@@ -25,6 +25,7 @@
 #include <com/sun/star/animations/AnimationFill.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
+#include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
 #include <svx/unoshape.hxx>
 #include <svx/svdotext.hxx>
@@ -751,16 +752,16 @@ AnimationEffect EffectMigration::GetTextAnimationEffect( SvxShape* pShape )
     return eEffect;
 }
 
-bool EffectMigration::ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, AnimationEffect& rEffect )
+bool EffectMigration::ConvertPreset( std::u16string_view rPresetId, const OUString* pPresetSubType, AnimationEffect& rEffect )
 {
     rEffect = AnimationEffect_NONE;
-    if( !rPresetId.isEmpty() )
+    if( !rPresetId.empty() )
     {
         // first try a match for preset id and subtype
         deprecated_AnimationEffect_conversion_table_entry const * p = deprecated_AnimationEffect_conversion_table;
         while( p->mpPresetId )
         {
-            if( rPresetId.equalsAscii( p->mpPresetId ) &&
+            if( o3tl::equalsAscii( rPresetId, p->mpPresetId ) &&
                 (( p->mpPresetSubType == nullptr ) ||
                  ( pPresetSubType == nullptr) ||
                  ( pPresetSubType->equalsAscii( p->mpPresetSubType )) ) )

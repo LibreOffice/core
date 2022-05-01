@@ -32,6 +32,7 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <svx/xtable.hxx>
@@ -289,10 +290,10 @@ struct {
     { "BitmapTableURL", XPropertyListType::Bitmap }
 };
 
-static XPropertyListType getTypeOfName( const OUString &aName )
+static XPropertyListType getTypeOfName( std::u16string_view aName )
 {
     for(const auto & rURLPropertyName : aURLPropertyNames) {
-        if( aName.equalsAscii( rURLPropertyName.pName ) )
+        if( o3tl::equalsAscii( aName, rURLPropertyName.pName ) )
             return rURLPropertyName.t;
     }
     return XPropertyListType::Unknown;

@@ -27,6 +27,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 
 #include <algorithm>
@@ -203,11 +204,11 @@ TransliterationImpl::loadModule( TransliterationModules modType, const Locale& r
         // additional transliterations from TransliterationModulesExtra (we cannot extend TransliterationModules)
         if (bool(modType & TransliterationModules(TransliterationModulesExtra::IGNORE_DIACRITICS_CTL)))
         {
-            if (loadModuleByName("ignoreDiacritics_CTL", bodyCascade[numCascade], rLocale))
+            if (loadModuleByName(u"ignoreDiacritics_CTL", bodyCascade[numCascade], rLocale))
                 numCascade++;
         }
         if (bool(modType & TransliterationModules(TransliterationModulesExtra::IGNORE_KASHIDA_CTL)))
-            if (loadModuleByName("ignoreKashida_CTL", bodyCascade[numCascade], rLocale))
+            if (loadModuleByName(u"ignoreKashida_CTL", bodyCascade[numCascade], rLocale))
                 numCascade++;
 
     } else if (bool(modType & TransliterationModules_NON_IGNORE_MASK)) {
@@ -600,17 +601,17 @@ void TransliterationImpl::loadBody( OUString const &implName, Reference<XExtende
 }
 
 bool
-TransliterationImpl::loadModuleByName( const OUString& implName,
+TransliterationImpl::loadModuleByName( std::u16string_view implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale)
 {
-    OUString cname = TRLT_IMPLNAME_PREFIX + implName;
+    OUString cname = OUString::Concat(TRLT_IMPLNAME_PREFIX) + implName;
     loadBody(cname, body);
     if (body.is()) {
         body->loadModule(TransliterationModules(0), rLocale); // toUpper/toLoad need rLocale
 
         // if the module is ignore case/kana/width, load caseignore for equals/compareString mothed
         for (sal_Int16 i = 0; i < 3; i++) {
-            if (implName.equalsAscii(TMlist[i].implName)) {
+            if (o3tl::equalsAscii(implName, TMlist[i].implName)) {
                 if (i == 0) // current module is caseignore
                     body->loadModule(TMlist[0].tm, rLocale); // caseignore need to setup module name
                 if (! caseignore.is()) {

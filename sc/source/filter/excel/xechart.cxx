@@ -315,7 +315,7 @@ const XclChTypeInfo& XclExpChRoot::GetChartTypeInfo( XclChTypeId eType ) const
     return mxChData->mxTypeInfoProv->GetTypeInfo( eType );
 }
 
-const XclChTypeInfo& XclExpChRoot::GetChartTypeInfo( const OUString& rServiceName ) const
+const XclChTypeInfo& XclExpChRoot::GetChartTypeInfo( std::u16string_view rServiceName ) const
 {
     return mxChData->mxTypeInfoProv->GetTypeInfoFromService( rServiceName );
 }

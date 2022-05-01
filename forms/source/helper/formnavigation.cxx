@@ -427,12 +427,12 @@ namespace frm
     }
 
 
-    sal_Int16 OFormNavigationMapper::getFeatureId( const OUString& _rCompleteURL )
+    sal_Int16 OFormNavigationMapper::getFeatureId( std::u16string_view _rCompleteURL )
     {
         const FeatureURL* pFeatures = lcl_getFeatureTable();
         while ( pFeatures->pAsciiURL )
         {
-            if ( _rCompleteURL.equalsAscii( pFeatures->pAsciiURL ) )
+            if ( o3tl::equalsAscii( _rCompleteURL, pFeatures->pAsciiURL ) )
                 return pFeatures->nFormFeature;
             ++pFeatures;
         }

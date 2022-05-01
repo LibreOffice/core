@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <comphelper/propertyvalue.hxx>
+#include <o3tl/string_view.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/idle.hxx>
 #include <svl/intitem.hxx>
@@ -161,7 +162,7 @@ struct CommandToRID
 
 }
 
-static OUString ImplGetRID( const OUString& aCommand )
+static OUString ImplGetRID( std::u16string_view aCommand )
 {
     static constexpr OUStringLiteral EMPTY = u"";
     static const CommandToRID aImplCommandToResMap[] =
@@ -181,7 +182,7 @@ static OUString ImplGetRID( const OUString& aCommand )
     sal_Int32 i( 0 );
     while ( aImplCommandToResMap[ i ].pCommand )
     {
-        if ( aCommand.equalsAscii( aImplCommandToResMap[ i ].pCommand ))
+        if ( o3tl::equalsAscii( aCommand, aImplCommandToResMap[ i ].pCommand ))
         {
             sRID = aImplCommandToResMap[i].sResId;
             break;

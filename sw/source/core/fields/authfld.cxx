@@ -720,10 +720,10 @@ bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
     return false;
 }
 
-static sal_Int32 lcl_Find(const OUString& rFieldName)
+static sal_Int32 lcl_Find(std::u16string_view rFieldName)
 {
     for(sal_Int32 i = 0; i < AUTH_FIELD_END; ++i)
-        if(rFieldName.equalsAscii(aFieldNames[i]))
+        if(o3tl::equalsAscii(rFieldName, aFieldNames[i]))
             return i;
     return -1;
 }

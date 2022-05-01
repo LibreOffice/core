@@ -59,12 +59,12 @@ const char * const aCommandContext[COND_COMMAND_COUNT] =
     "NumberingLevel10"
 };
 
-sal_Int16 GetCommandContextIndex( const OUString &rContextName )
+sal_Int16 GetCommandContextIndex( std::u16string_view rContextName )
 {
     sal_Int16 nRes = -1;
     for (sal_Int16 i = 0;  nRes == -1 && i < COND_COMMAND_COUNT;  ++i)
     {
-        if (rContextName.equalsAscii( aCommandContext[i] ))
+        if (o3tl::equalsAscii( rContextName, aCommandContext[i] ))
             nRes = i;
     }
     return nRes;

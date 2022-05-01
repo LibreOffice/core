@@ -41,7 +41,7 @@ public:
     static css::presentation::AnimationSpeed ConvertDuration( double fDuration );
     static double ConvertAnimationSpeed( css::presentation::AnimationSpeed eSpeed );
 
-    static bool ConvertPreset( const OUString& rPresetId, const OUString* pPresetSubType, css::presentation::AnimationEffect& rEffect );
+    static bool ConvertPreset( std::u16string_view rPresetId, const OUString* pPresetSubType, css::presentation::AnimationEffect& rEffect );
     static bool ConvertAnimationEffect( const css::presentation::AnimationEffect& rEffect, OUString& rPresetId, OUString& rPresetSubType );
 
     static void SetFadeEffect( SdPage* pPage, css::presentation::FadeEffect eNewEffect);
