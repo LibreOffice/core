@@ -107,6 +107,7 @@ void CoreTextStyle::GetFontMetric( ImplFontMetricDataRef const & rxFontMetric )
     CTFontRef aCTFontRef = static_cast<CTFontRef>(CFDictionaryGetValue( mpStyleDict, kCTFontAttributeName ));
 
     rxFontMetric->ImplCalcLineSpacing(this);
+    rxFontMetric->ImplInitBaselines(this);
 
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
