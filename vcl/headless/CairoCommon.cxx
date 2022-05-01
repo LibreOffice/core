@@ -966,6 +966,7 @@ bool bDisableDifference(nullptr != pDisableDifference);
 
 #if defined CAIRO_VERSION && CAIRO_VERSION < CAIRO_VERSION_ENCODE(1, 10, 0)
 #define CAIRO_OPERATOR_DIFFERENCE (static_cast<cairo_operator_t>(23))
+#define CAIRO_OPERATOR_EXCLUSION (static_cast<cairo_operator_t>(24))
 #endif
 
 void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, bool bAntiAlias)
@@ -980,13 +981,13 @@ void CairoCommon::invert(const basegfx::B2DPolygon& rPoly, SalInvert nFlags, boo
 
     cairo_set_source_rgb(cr, 1.0, 1.0, 1.0);
 
-    if (cairo_version() >= CAIRO_VERSION_ENCODE(1, 10, 0) && !bDisableDifference)
+    if (bDisableDifference)
     {
-        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
+        cairo_set_operator(cr, CAIRO_OPERATOR_EXCLUSION);
     }
     else
     {
-        SAL_WARN("vcl.gdi", "SvpSalGraphics::invert, archaic cairo");
+        cairo_set_operator(cr, CAIRO_OPERATOR_DIFFERENCE);
     }
 
     if (nFlags & SalInvert::TrackFrame)
