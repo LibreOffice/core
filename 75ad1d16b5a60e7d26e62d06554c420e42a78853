@@ -16,6 +16,24 @@
       "message": "this clamping looks wrong for the custom case?",
       "revId": "75ad1d16b5a60e7d26e62d06554c420e42a78853",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb97b608_59e9cbd4",
+        "filename": "include/o3tl/lru_map.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-05-01T20:14:41Z",
+      "side": 1,
+      "message": "Yes, thanks. But I think not specifying maximum size does not make sense for custom sizes. In fact, now that I think of it, I think it doesn\u0027t make sense at all. What would be the point of a lru_map that does not actually do cleanup of old items?",
+      "parentUuid": "9da9811a_6a56c06d",
+      "revId": "75ad1d16b5a60e7d26e62d06554c420e42a78853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
