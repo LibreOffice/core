@@ -17,6 +17,7 @@
 
 #include <document.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <svl/style.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/frame.hxx>
@@ -605,11 +606,11 @@ const struct
     { COLORSCALE_FORMULA,    "formula" },
 };
 
-ScColorScaleEntryType getTypeForId(const OUString& sId)
+ScColorScaleEntryType getTypeForId(std::u16string_view sId)
 {
     for (auto& r : TypeIdMap)
     {
-        if (sId.equalsAscii(r.sId))
+        if (o3tl::equalsAscii(sId, r.sId))
             return r.eType;
     }
     assert(false); // The id is not in TypeIdMap - something not in sync?

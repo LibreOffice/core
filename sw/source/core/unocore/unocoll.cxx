@@ -502,11 +502,11 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 
 }
 
-SwServiceType  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
+SwServiceType  SwXServiceProvider::GetProviderType(std::u16string_view rServiceName)
 {
     for(const ProvNamesId_Type & i : aProvNamesId)
     {
-        if (rServiceName.equalsAscii(i.pName))
+        if (o3tl::equalsAscii(rServiceName, i.pName))
             return i.nType;
     }
     return SwServiceType::Invalid;

@@ -24,6 +24,7 @@
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmltoken.hxx>
 
+#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 
 #include "sdxmlexp_impl.hxx"
@@ -600,7 +601,7 @@ SdXMLNumberFormatImportContext::~SdXMLNumberFormatImportContext()
 {
 }
 
-void SdXMLNumberFormatImportContext::add( std::u16string_view rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, OUString const & rText )
+void SdXMLNumberFormatImportContext::add( std::u16string_view rNumberStyle, bool bLong, bool bTextual, bool bDecimal02, std::u16string_view rText )
 {
     if (mnIndex == 16)
         return;
@@ -612,8 +613,8 @@ void SdXMLNumberFormatImportContext::add( std::u16string_view rNumberStyle, bool
             (pStyleMember->mbLong == bLong) &&
             (pStyleMember->mbTextual == bTextual) &&
             (pStyleMember->mbDecimal02 == bDecimal02) &&
-            ( ( (pStyleMember->mpText == nullptr) && (rText.isEmpty()) ) ||
-              ( pStyleMember->mpText && (rText.equalsAscii( pStyleMember->mpText ) ) ) ) )
+            ( ( (pStyleMember->mpText == nullptr) && (rText.empty()) ) ||
+              ( pStyleMember->mpText && (o3tl::equalsAscii( rText, pStyleMember->mpText ) ) ) ) )
         {
             mnElements[mnIndex++] = static_cast<DataStyleNumber>(nIndex + 1);
             return;

@@ -343,11 +343,11 @@ void CharacterProperties::AddDefaultsToMap(
 
     SvtLinguConfig aLinguConfig;
     lang::Locale aDefaultLocale;
-    aLinguConfig.GetProperty("DefaultLocale") >>= aDefaultLocale;
+    aLinguConfig.GetProperty(u"DefaultLocale") >>= aDefaultLocale;
     lang::Locale aDefaultLocale_CJK;
-    aLinguConfig.GetProperty("DefaultLocale_CJK") >>= aDefaultLocale_CJK;
+    aLinguConfig.GetProperty(u"DefaultLocale_CJK") >>= aDefaultLocale_CJK;
     lang::Locale aDefaultLocale_CTL;
-    aLinguConfig.GetProperty("DefaultLocale_CTL") >>= aDefaultLocale_CTL;
+    aLinguConfig.GetProperty(u"DefaultLocale_CTL") >>= aDefaultLocale_CTL;
 
     using namespace ::com::sun::star::i18n::ScriptType;
     LanguageType nLang;

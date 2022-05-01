@@ -97,7 +97,7 @@ public:
     /** Returns chart type info for a unique chart type identifier. */
     const XclChTypeInfo& GetChartTypeInfo( XclChTypeId eType ) const;
     /** Returns the first fitting chart type info for the passed service name. */
-    const XclChTypeInfo& GetChartTypeInfo( const OUString& rServiceName ) const;
+    const XclChTypeInfo& GetChartTypeInfo( std::u16string_view rServiceName ) const;
 
     /** Returns an info struct about auto formatting for the passed object type. */
     const XclChFormatInfo& GetFormatInfo( XclChObjectType eObjType ) const;
