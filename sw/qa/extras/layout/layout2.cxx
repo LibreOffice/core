@@ -1917,6 +1917,18 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
                 "1,234.56");
 }
 
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf58604)
+{
+#ifdef _WIN32
+    // Allow linebreak character follows hanging punctuation immediately instead of
+    // breaking at the start of the next line.
+    createSwDoc(DATA_DIRECTORY, "tdf58604.odt");
+    CPPUNIT_ASSERT_EQUAL(
+        OUString("PortionType::Break"),
+        parseDump("(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType"));
+#endif
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

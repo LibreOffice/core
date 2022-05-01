@@ -1928,18 +1928,6 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107976)
     CPPUNIT_ASSERT(!pTransferable2->GetShell());
 }
 
-CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf58604)
-{
-#ifdef _WIN32
-    // Allow linebreak character follows hanging punctuation immediately instead of
-    // breaking at the start of the next line.
-    createSwDoc(DATA_DIRECTORY, "tdf58604.odt");
-    CPPUNIT_ASSERT_EQUAL(
-        OUString("PortionType::Break"),
-        parseDump("(/root/page/body/txt/LineBreak[1]/preceding::Text)[last()]", "nType"));
-#endif
-}
-
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf112025)
 {
     mergeDocs("fdo112025.odt", "fdo112025-insert.docx");
