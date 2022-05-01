@@ -24,6 +24,7 @@
 #include <tools/stream.hxx>
 #include <TextLayoutCache.hxx>
 #include <config_fuzzers.h>
+#include <officecfg/Office/Common.hxx>
 
 // These need being explicit because of SalLayoutGlyphsImpl being private in vcl.
 SalLayoutGlyphs::SalLayoutGlyphs() {}
@@ -208,7 +209,8 @@ bool SalLayoutGlyphsImpl::IsValid() const
 
 SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
 {
-    static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(1000);
+    static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(
+        officecfg::Office::Common::Cache::Font::GlyphsCacheSize::get());
     return cache.get();
 }
 
@@ -417,6 +419,21 @@ inline bool SalLayoutGlyphsCache::CachedGlyphsKey::operator==(const CachedGlyphs
            && font.EqualIgnoreColor(other.font)
            && vcl::text::FastStringCompareEqual()(text, other.text);
     // Slower things last in the comparison.
+}
+
+size_t SalLayoutGlyphsCache::GlyphsCost::operator()(const SalLayoutGlyphs& glyphs) const
+{
+    size_t cost = 0;
+    for (int level = 0;; ++level)
+    {
+        const SalLayoutGlyphsImpl* impl = glyphs.Impl(level);
+        if (impl == nullptr)
+            break;
+        // Count size in bytes, both the SalLayoutGlyphsImpl instance and contained GlyphItem's.
+        cost += sizeof(*impl);
+        cost += impl->size() * sizeof(impl->front());
+    }
+    return cost;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
