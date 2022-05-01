@@ -58,6 +58,7 @@ public:
     tools::Long            GetExternalLeading() const                                      { return mnExtLeading; }
     int             GetSlant() const                                                { return mnSlant; }
     tools::Long            GetMinKashida() const                                           { return mnMinKashida; }
+    tools::Long            GetHangingBaseline() const                                      { return mnHangingBaseline; }
 
     void            SetSlant(int nSlant)                                            { mnSlant=nSlant; }
     void            SetMinKashida( tools::Long nMinKashida )                               { mnMinKashida=nMinKashida; }
@@ -99,6 +100,7 @@ public:
     void            ImplInitAboveTextLineSize();
     void            ImplInitFlags( const OutputDevice* pDev );
     void            ImplCalcLineSpacing(LogicalFontInstance *pFontInstance);
+    void            ImplInitBaselines(LogicalFontInstance *pFontInstance);
 
 private:
     bool            ShouldUseWinMetrics(const vcl::TTGlobalFontInfo& rInfo) const;
@@ -115,6 +117,7 @@ private:
     tools::Long            mnExtLeading;               // External Leading
     int             mnSlant;                    // Slant (Italic/Oblique)
     tools::Long            mnMinKashida;               // Minimal width of kashida (Arabic)
+    tools::Long            mnHangingBaseline;          // Offset of haning baseline to Romn baseline
 
     // font attributes queried from the font instance
     bool            mbFullstopCentered;

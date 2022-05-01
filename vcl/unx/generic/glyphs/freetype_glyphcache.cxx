@@ -542,6 +542,7 @@ void FreetypeFont::GetFontMetric(ImplFontMetricDataRef const & rxTo) const
     FT_Activate_Size( maSizeFT );
 
     rxTo->ImplCalcLineSpacing(&mrFontInstance);
+    rxTo->ImplInitBaselines(&mrFontInstance);
 
     rxTo->SetSlant( 0 );
     rxTo->SetWidth( mnWidth );

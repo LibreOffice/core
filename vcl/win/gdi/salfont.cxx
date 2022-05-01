@@ -946,6 +946,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricDataRef& rxFontMetric, int nFa
 
     rxFontMetric->SetMinKashida(pFontInstance->GetKashidaWidth());
     rxFontMetric->ImplCalcLineSpacing(pFontInstance.get());
+    rxFontMetric->ImplInitBaselines(pFontInstance.get());
 
     // get the font metric
     OUTLINETEXTMETRICW aOutlineMetric;
