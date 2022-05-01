@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9da9811a_6a56c06d",
+        "filename": "include/o3tl/lru_map.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-01T19:04:13Z",
+      "side": 1,
+      "message": "this clamping looks wrong for the custom case?",
+      "revId": "75ad1d16b5a60e7d26e62d06554c420e42a78853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
