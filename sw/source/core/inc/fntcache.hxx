@@ -74,6 +74,8 @@ class SwFntObj final : public SwCacheObj
     sal_uInt16 m_nScrHeight;
     sal_uInt16 m_nPrtHeight;
     sal_uInt16 m_nPropWidth;
+    sal_uInt16 m_nScrHangingBaseline;
+    sal_uInt16 m_nPrtHangingBaseline;
     sal_uInt16 m_nZoom;
     bool m_bSymbol : 1;
     bool m_bPaintBlank : 1;
@@ -97,6 +99,7 @@ public:
     sal_uInt16 GetFontAscent( const SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetFontHeight( const SwViewShell *pSh, const OutputDevice& rOut );
     sal_uInt16 GetFontLeading( const SwViewShell *pSh, const OutputDevice& rOut );
+    sal_uInt16 GetFontHangingBaseline( const SwViewShell *pSh, const OutputDevice& rOut );
 
     void GuessLeading( const SwViewShell& rSh, const FontMetric& rMet );
 
