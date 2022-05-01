@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "48c73fba_b2aeebaa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-01T09:28:29Z",
+      "side": 1,
+      "message": "This is not a typo; the word exists. I’d maybe add a possessive ’s before it, but that’s it.",
+      "revId": "e92796c49cf37b1c5ff21554dd6ad75f2781fe03",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
