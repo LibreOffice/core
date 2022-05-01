@@ -1920,7 +1920,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testUserFieldTypeLanguage)
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124261)
 {
-#if !defined(_WIN32)
     // Make sure that pressing a key in a btlr cell frame causes an immediate, correct repaint.
     SwDoc* pDoc = createSwDoc(DATA_DIRECTORY, "tdf124261.docx");
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -1949,7 +1948,6 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf124261)
     SwTextFrame* pTextFrame = static_cast<SwTextFrame*>(pFrame);
     SwRect aRect = pTextFrame->GetPaintSwRect();
     CPPUNIT_ASSERT_EQUAL(pTextFrame->getFrameArea().Top(), aRect.Top());
-#endif
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
