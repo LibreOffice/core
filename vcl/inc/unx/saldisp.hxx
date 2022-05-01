@@ -412,7 +412,7 @@ public:
 namespace vcl_sal {
     // get foreign key names
     OUString getKeysymReplacementName(
-        const OUString& pLang,
+        std::u16string_view pLang,
         KeySym nSymbol );
 
     inline SalDisplay *getSalDisplay(GenericUnixSalData const * data)

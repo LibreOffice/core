@@ -20,6 +20,7 @@
 #include <utility>
 
 #include <cppu/unotype.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <osl/diagnose.hxx>
 #include <osl/thread.hxx>
@@ -1197,7 +1198,7 @@ SAL_DLLPUBLIC_EXPORT void * component_getFactory(
 {
     void * pRet = nullptr;
 
-    if (pServiceManager && OUString(IMPLNAME).equalsAscii(pImplName))
+    if (pServiceManager && o3tl::equalsAscii(IMPLNAME, pImplName))
     {
         Reference< XSingleServiceFactory > xFactory( createSingleFactory(
             static_cast< XMultiServiceFactory * >( pServiceManager ),

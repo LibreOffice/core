@@ -54,7 +54,7 @@ namespace svxform
                             );
 
         static  DocumentType getDocumentTypeForModuleIdentifier(
-                                const OUString& _rModuleIdentifier
+                                std::u16string_view _rModuleIdentifier
                             );
 
         static  OUString getModuleIdentifierForDocumentType(

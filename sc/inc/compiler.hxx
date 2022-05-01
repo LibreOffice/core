@@ -349,7 +349,7 @@ private:
 
     bool ParseValue( const OUString& );
     bool ParseOpCode( const OUString&, bool bInArray );
-    bool ParseOpCode2( const OUString& );
+    bool ParseOpCode2( std::u16string_view );
     bool ParseString();
     bool ParseReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );
     bool ParseSingleReference( const OUString& rSymbol, const OUString* pErrRef = nullptr );

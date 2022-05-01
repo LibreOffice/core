@@ -91,7 +91,7 @@ private:
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
     /// @throws css::uno::RuntimeException
-    bool loadModuleByName( const OUString& implName,
+    bool loadModuleByName( std::u16string_view implName,
         css::uno::Reference<css::i18n::XExtendedTransliteration> & body, const css::lang::Locale& rLocale);
 
     void clear();

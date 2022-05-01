@@ -2621,7 +2621,7 @@ std::unique_ptr<SmSpecialNode> SmParser5::DoSpecial()
     {
         if (IsImportSymbolNames())
         {
-            aNewName = SmLocalizedSymbolData::GetUiSymbolName(rName.copy(1));
+            aNewName = SmLocalizedSymbolData::GetUiSymbolName(rName.subView(1));
             bReplace = true;
         }
         else if (IsExportSymbolNames())
