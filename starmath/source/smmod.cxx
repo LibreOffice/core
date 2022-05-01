@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 
+#include <o3tl/string_view.hxx>
 #include <sfx2/objface.hxx>
 #include <svl/whiter.hxx>
 #include <sfx2/viewsh.hxx>
@@ -43,13 +44,13 @@ OUString SmResId(TranslateId aId)
     return Translate::get(aId, SM_MOD()->GetResLocale());
 }
 
-OUString SmLocalizedSymbolData::GetUiSymbolName( const OUString &rExportName )
+OUString SmLocalizedSymbolData::GetUiSymbolName( std::u16string_view rExportName )
 {
     OUString aRes;
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOL_NAMES); ++i)
     {
-        if (rExportName.equalsAscii(RID_UI_SYMBOL_NAMES[i].mpId))
+        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOL_NAMES[i].mpId))
         {
             aRes = SmResId(RID_UI_SYMBOL_NAMES[i]);
             break;
@@ -76,13 +77,13 @@ OUString SmLocalizedSymbolData::GetExportSymbolName( std::u16string_view rUiName
     return aRes;
 }
 
-OUString SmLocalizedSymbolData::GetUiSymbolSetName( const OUString &rExportName )
+OUString SmLocalizedSymbolData::GetUiSymbolSetName( std::u16string_view rExportName )
 {
     OUString aRes;
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(RID_UI_SYMBOLSET_NAMES); ++i)
     {
-        if (rExportName.equalsAscii(RID_UI_SYMBOLSET_NAMES[i].mpId))
+        if (o3tl::equalsAscii(rExportName, RID_UI_SYMBOLSET_NAMES[i].mpId))
         {
             aRes = SmResId(RID_UI_SYMBOLSET_NAMES[i]);
             break;

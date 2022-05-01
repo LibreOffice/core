@@ -22,6 +22,7 @@
 #include "formstrings.hxx"
 #include <comphelper/extract.hxx>
 #include <comphelper/property.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 
@@ -53,12 +54,12 @@ namespace pcr
             nullptr
         };
 
-        sal_Int32 lcl_getNavigationURLIndex( const OUString& _rNavURL )
+        sal_Int32 lcl_getNavigationURLIndex( std::u16string_view _rNavURL )
         {
             const char** pLookup = pNavigationURLs;
             while ( *pLookup )
             {
-                if ( _rNavURL.equalsAscii( *pLookup ) )
+                if ( o3tl::equalsAscii( _rNavURL, *pLookup ) )
                     return pLookup - pNavigationURLs;
                 ++pLookup;
             }

@@ -33,6 +33,7 @@
 #include <txtftn.hxx>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <svtools/unoimap.hxx>
 #include <svtools/unoevent.hxx>
 #include <svx/SvxXTextColumns.hxx>
@@ -502,11 +503,11 @@ uno::Sequence<OUString>     SwXServiceProvider::GetAllServiceNames()
 
 }
 
-SwServiceType  SwXServiceProvider::GetProviderType(const OUString& rServiceName)
+SwServiceType  SwXServiceProvider::GetProviderType(std::u16string_view rServiceName)
 {
     for(const ProvNamesId_Type & i : aProvNamesId)
     {
-        if (rServiceName.equalsAscii(i.pName))
+        if (o3tl::equalsAscii(rServiceName, i.pName))
             return i.nType;
     }
     return SwServiceType::Invalid;

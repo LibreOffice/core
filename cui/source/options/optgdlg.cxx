@@ -1365,7 +1365,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             Any aValue;
             Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
-            pLangConfig->aLinguConfig.SetProperty( "DefaultLocale", aValue );
+            pLangConfig->aLinguConfig.SetProperty( u"DefaultLocale", aValue );
             if (xLinguProp.is())
                 xLinguProp->setDefaultLocale( aLocale );
         }
@@ -1384,7 +1384,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             Any aValue;
             Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
-            pLangConfig->aLinguConfig.SetProperty( "DefaultLocale_CJK", aValue );
+            pLangConfig->aLinguConfig.SetProperty( u"DefaultLocale_CJK", aValue );
             if (xLinguProp.is())
                 xLinguProp->setDefaultLocale_CJK( aLocale );
         }
@@ -1403,7 +1403,7 @@ bool OfaLanguagesTabPage::FillItemSet( SfxItemSet* rSet )
             Any aValue;
             Locale aLocale = LanguageTag::convertToLocale( eSelectLang, false);
             aValue <<= aLocale;
-            pLangConfig->aLinguConfig.SetProperty( "DefaultLocale_CTL", aValue );
+            pLangConfig->aLinguConfig.SetProperty( u"DefaultLocale_CTL", aValue );
             if (xLinguProp.is())
                 xLinguProp->setDefaultLocale_CTL( aLocale );
         }
@@ -1530,18 +1530,18 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     Any aCTLLang;
     try
     {
-        aWestLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale");
+        aWestLang = pLangConfig->aLinguConfig.GetProperty(u"DefaultLocale");
         Locale aLocale;
         aWestLang >>= aLocale;
 
         eCurLang = LanguageTag::convertToLanguageType( aLocale, false);
 
-        aCJKLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CJK");
+        aCJKLang = pLangConfig->aLinguConfig.GetProperty(u"DefaultLocale_CJK");
         aLocale = Locale();
         aCJKLang >>= aLocale;
         eCurLangCJK = LanguageTag::convertToLanguageType( aLocale, false);
 
-        aCTLLang = pLangConfig->aLinguConfig.GetProperty("DefaultLocale_CTL");
+        aCTLLang = pLangConfig->aLinguConfig.GetProperty(u"DefaultLocale_CTL");
         aLocale = Locale();
         aCTLLang >>= aLocale;
         eCurLangCTL = LanguageTag::convertToLanguageType( aLocale, false);
@@ -1596,7 +1596,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet* rSet )
     m_xIgnoreLanguageChangeCB->save_state();
     m_xCurrentDocCB->save_state();
 
-    bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale" );
+    bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( u"DefaultLocale" );
     m_xWesternLanguageFT->set_sensitive( bEnable );
     m_xWesternLanguageLB->set_sensitive( bEnable );
 
@@ -1616,7 +1616,7 @@ IMPL_LINK(OfaLanguagesTabPage, SupportHdl, weld::Toggleable&, rBox, void)
     bool bCheck = rBox.get_active();
     if ( m_xAsianSupportCB.get() == &rBox )
     {
-        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CJK");
+        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly(u"DefaultLocale_CJK");
         bCheck = ( bCheck && !bReadonly );
         m_xAsianLanguageLB->set_sensitive( bCheck );
         if (rBox.get_sensitive())
@@ -1624,7 +1624,7 @@ IMPL_LINK(OfaLanguagesTabPage, SupportHdl, weld::Toggleable&, rBox, void)
     }
     else if ( m_xCTLSupportCB.get() == &rBox )
     {
-        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly("DefaultLocale_CTL");
+        bool bReadonly = pLangConfig->aLinguConfig.IsReadOnly(u"DefaultLocale_CTL");
         bCheck = ( bCheck && !bReadonly  );
         m_xComplexLanguageLB->set_sensitive( bCheck );
         if (rBox.get_sensitive())
