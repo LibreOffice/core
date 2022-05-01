@@ -203,7 +203,7 @@ namespace frm
                 the id of the feature URL, or -1 if the URl is not known
                 (which is a valid usage)
         */
-        static sal_Int16 getFeatureId( const OUString& _rCompleteURL );
+        static sal_Int16 getFeatureId( std::u16string_view _rCompleteURL );
 
     private:
         OFormNavigationMapper( const OFormNavigationMapper& ) = delete;

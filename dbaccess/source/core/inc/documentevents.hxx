@@ -48,7 +48,7 @@ namespace dbaccess
         DocumentEvents(const DocumentEvents&) = delete;
         const DocumentEvents& operator=(const DocumentEvents&) = delete;
 
-        static bool needsSynchronousNotification( const OUString& _rEventName );
+        static bool needsSynchronousNotification( std::u16string_view _rEventName );
 
         // XInterface
         virtual void SAL_CALL acquire() noexcept override;

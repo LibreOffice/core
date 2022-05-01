@@ -34,6 +34,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <o3tl/string_view.hxx>
 #include <svtools/htmltokn.h>
 #include <svtools/htmlkywd.hxx>
 #include <fmtpdsc.hxx>
@@ -1659,7 +1660,7 @@ void SwHTMLParser::NewStyle()
     }
 
     m_bIgnoreRawData = sType.getLength() &&
-                     !sType.getToken(0,';').equalsAscii(sCSS_mimetype);
+                     !o3tl::equalsAscii(o3tl::getToken(sType, 0,';'), sCSS_mimetype);
 }
 
 void SwHTMLParser::EndStyle()
@@ -1745,7 +1746,7 @@ void SwHTMLParser::InsertLink()
 
         if( !sHRef.isEmpty() && sRel.equalsIgnoreAsciiCase( "STYLESHEET" ) &&
             ( sType.isEmpty() ||
-              sType.getToken(0,';').equalsAscii(sCSS_mimetype) ) )
+              o3tl::equalsAscii(o3tl::getToken(sType, 0,';'), sCSS_mimetype) ) )
         {
             if( GetMedium() )
             {
