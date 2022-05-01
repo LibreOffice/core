@@ -341,6 +341,8 @@ void SwTextFormatter::InsertPortion( SwTextFormatInfo &rInf,
             m_pCurr->Height( pPor->Height(), pPor->IsTextPortion() );
         if( m_pCurr->GetAscent() < pPor->GetAscent() )
             m_pCurr->SetAscent( pPor->GetAscent() );
+        if( m_pCurr->GetHangingBaseline() < pPor->GetHangingBaseline() )
+            m_pCurr->SetHangingBaseline( pPor->GetHangingBaseline() );
 
         if (GetTextFrame()->GetDoc().getIDocumentSettingAccess().get(DocumentSettingId::MS_WORD_COMP_MIN_LINE_HEIGHT_BY_FLY))
         {
@@ -831,6 +833,7 @@ void SwTextFormatter::CalcAscent( SwTextFormatInfo &rInf, SwLinePortion *pPor )
         if( bChg || bFirstPor || !pPor->GetAscent()
             || !rInf.GetLast()->InTextGrp() )
         {
+            pPor->SetHangingBaseline( rInf.GetHangingBaseline() );
             pPor->SetAscent( rInf.GetAscent()  );
             pPor->Height( rInf.GetTextHeight() );
             bCalc = true;
