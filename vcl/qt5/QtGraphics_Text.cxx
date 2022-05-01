@@ -63,6 +63,7 @@ void QtGraphics::GetFontMetric(ImplFontMetricDataRef& rFMD, int nFallbackLevel)
     QtFontFace::fillAttributesFromQFont(*m_pTextStyle[nFallbackLevel], *rFMD);
 
     rFMD->ImplCalcLineSpacing(m_pTextStyle[nFallbackLevel].get());
+    rFMD->ImplInitBaselines(m_pTextStyle[nFallbackLevel].get());
 
     rFMD->SetSlant(0);
     rFMD->SetWidth(aRawFont.averageCharWidth());
