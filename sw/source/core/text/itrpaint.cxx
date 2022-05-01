@@ -243,7 +243,7 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     SwTextGridItem const*const pGrid(GetGridItem(GetTextFrame()->FindPageFrame()));
     const bool bAdjustBaseLine =
         GetLineInfo().HasSpecialAlign( GetTextFrame()->IsVertical() ) ||
-        ( nullptr != pGrid );
+        ( nullptr != pGrid ) || m_pCurr->GetHangingBaseline();
     const SwTwips nLineBaseLine = GetInfo().GetPos().Y() + nTmpAscent;
     if ( ! bAdjustBaseLine )
         GetInfo().Y( nLineBaseLine );

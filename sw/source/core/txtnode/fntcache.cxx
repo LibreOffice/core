@@ -290,6 +290,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
             const_cast<OutputDevice&>(rRefDev).SetFont( *m_pPrtFont );
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             m_nPrtAscent = o3tl::narrowing<sal_uInt16>(aOutMet.GetAscent());
+            m_nPrtHangingBaseline = o3tl::narrowing<sal_uInt16>(aOutMet.GetHangingBaseline());
             const_cast<OutputDevice&>(rRefDev).SetFont( aOldFnt );
         }
 
@@ -397,6 +398,21 @@ sal_uInt16 SwFntObj::GetFontLeading( const SwViewShell *pSh, const OutputDevice&
     return nRet;
 }
 
+sal_uInt16 SwFntObj::GetFontHangingBaseline( const SwViewShell* pSh, const OutputDevice& rOut )
+{
+    sal_uInt16 nRet = 0;
+    const OutputDevice& rRefDev = pSh ? pSh->GetRefDev() : rOut;
+
+    GetFontAscent(pSh, rOut);
+
+    if ( pSh && lcl_IsFontAdjustNecessary( rOut, rRefDev ) )
+        nRet = m_nScrHangingBaseline;
+    else
+        nRet = m_nPrtHangingBaseline;
+
+    return nRet;
+}
+
 //  pOut is the output device, not the reference device
 void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
 {
@@ -465,6 +481,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
     }
 
     m_nScrAscent = o3tl::narrowing<sal_uInt16>(pOut->GetFontMetric().GetAscent());
+    m_nScrHangingBaseline =  o3tl::narrowing<sal_uInt16>(pOut->GetFontMetric().GetHangingBaseline());
     if ( USHRT_MAX == m_nScrHeight )
         m_nScrHeight = o3tl::narrowing<sal_uInt16>(pOut->GetTextHeight());
 

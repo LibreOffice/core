@@ -267,6 +267,7 @@ public:
                             vcl::text::TextLayoutCache const*) const;
 
     sal_uInt16 GetAscent() const;
+    sal_uInt16 GetHangingBaseline() const;
 
     TextFrameIndex GetIdx() const { return m_nIdx; }
     void SetIdx(const TextFrameIndex nNew) { m_nIdx = nNew; }
@@ -713,6 +714,12 @@ inline sal_uInt16 SwTextSizeInfo::GetTextHeight() const
 {
     assert(GetOut());
     return const_cast<SwFont*>(GetFont())->GetHeight( m_pVsh, *GetOut() );
+}
+
+inline sal_uInt16 SwTextSizeInfo::GetHangingBaseline() const
+{
+    assert(GetOut());
+    return const_cast<SwFont*>(GetFont())->GetHangingBaseline( m_pVsh, *GetOut() );
 }
 
 inline SwPosSize SwTextSizeInfo::GetTextSize( const OUString &rText ) const

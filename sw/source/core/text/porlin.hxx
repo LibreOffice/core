@@ -56,6 +56,7 @@ protected:
     // Count of chars and spaces on the line
     TextFrameIndex mnLineLength;
     SwTwips mnAscent;      // Maximum ascender
+    SwTwips mnHangingBaseline;
 
     SwLinePortion();
 private:
@@ -82,6 +83,8 @@ public:
     SwTwips PrtWidth() const { return Width(); }
     void AddPrtWidth( const SwTwips nNew ) { Width( Width() + nNew ); }
     void SubPrtWidth( const SwTwips nNew ) { Width( Width() - nNew ); }
+    SwTwips GetHangingBaseline() const { return mnHangingBaseline; }
+    void SetHangingBaseline( const SwTwips nNewBaseline ) { mnHangingBaseline = nNewBaseline; }
 
     // Insert methods
     virtual SwLinePortion *Insert( SwLinePortion *pPortion );
@@ -184,6 +187,7 @@ inline SwLinePortion &SwLinePortion::operator=(const SwLinePortion &rPortion)
     *static_cast<SwPosSize*>(this) = rPortion;
     mnLineLength = rPortion.mnLineLength;
     mnAscent = rPortion.mnAscent;
+    mnHangingBaseline = rPortion.mnHangingBaseline;
     mnWhichPor = rPortion.mnWhichPor;
     m_bJoinBorderWithPrev = rPortion.m_bJoinBorderWithPrev;
     m_bJoinBorderWithNext = rPortion.m_bJoinBorderWithNext;
@@ -195,6 +199,7 @@ inline SwLinePortion::SwLinePortion(const SwLinePortion &rPortion) :
     mpNextPortion( nullptr ),
     mnLineLength( rPortion.mnLineLength ),
     mnAscent( rPortion.mnAscent ),
+    mnHangingBaseline( rPortion.mnHangingBaseline ),
     mnWhichPor( rPortion.mnWhichPor ),
     m_bJoinBorderWithPrev( rPortion.m_bJoinBorderWithPrev ),
     m_bJoinBorderWithNext( rPortion.m_bJoinBorderWithNext )

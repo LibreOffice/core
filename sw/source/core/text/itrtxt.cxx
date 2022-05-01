@@ -289,7 +289,14 @@ SwTwips SwTextCursor::AdjustBaseLine( const SwLineLayout& rLine,
                 [[fallthrough]];
             case SvxParaVertAlignItem::Align::Baseline :
                 // base line
-                nOfst = nOfst + rLine.GetAscent();
+                if (pPor && pPor->GetHangingBaseline())
+                {
+                    nOfst += rLine.GetAscent()          // Romn baseline of the line.
+                        - rLine.GetHangingBaseline()    // Hanging baseline of the line.
+                        + pPor->GetHangingBaseline();   // Romn baseline of the portion.
+                }
+                else
+                    nOfst = nOfst + rLine.GetAscent();
                 break;
         }
     }
