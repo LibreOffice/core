@@ -91,6 +91,7 @@
 #include <osl/file.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/lok.hxx>
+#include <i18nlangtag/languagetag.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -102,6 +103,7 @@
 #include <sfx2/docfac.hxx>
 #include <appopen.hxx>
 #include <objshimp.hxx>
+#include <sfx2/lokhelper.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/dispatch.hxx>
@@ -3190,6 +3192,37 @@ bool SfxObjectShell::SaveAsOwnFormat( SfxMedium& rMedium )
             pImpl->aBasicManager.storeLibrariesToStorage( xStorage );
         }
 #endif
+
+        if (comphelper::LibreOfficeKit::isActive())
+        {
+            // Because XMLTextFieldExport::ExportFieldDeclarations (called from SwXMLExport)
+            // calls SwXTextFieldMasters::getByName, which in turn maps property names by
+            // calling SwStyleNameMapper::GetTextUINameArray, which uses
+            // SvtSysLocale().GetUILanguageTag() to do the mapping, saving indirectly depends
+            // on the UI language. This is an unfortunate depenency. Here we use the loader's language.
+            const LanguageTag viewLanguage = comphelper::LibreOfficeKit::getLanguageTag();
+            const LanguageTag loadLanguage = SfxLokHelper::getLoadLanguage();
+
+            // Use the default language for saving and restore later if necessary.
+            bool restoreLanguage = false;
+            if (viewLanguage != loadLanguage)
+            {
+                restoreLanguage = true;
+                comphelper::LibreOfficeKit::setLanguageTag(loadLanguage);
+            }
+
+            // Restore the view's original language automatically and as necessary.
+            const ::comphelper::ScopeGuard aGuard(
+                [&viewLanguage, restoreLanguage]()
+                {
+                    if (restoreLanguage
+                        && viewLanguage != comphelper::LibreOfficeKit::getLanguageTag())
+                        comphelper::LibreOfficeKit::setLanguageTag(viewLanguage);
+                });
+
+            return SaveAs(rMedium);
+        }
+
         return SaveAs( rMedium );
     }
     else return false;
