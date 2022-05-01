@@ -86,6 +86,8 @@ public:
     explicit inline Any(rtl::OUStringConcat<T1, T2> && value);
     template<typename T1, typename T2>
     explicit Any(rtl::OUStringConcat<T1, T2> const &) = delete;
+    template<typename T> explicit inline Any(rtl::OUStringNumber<T> && value);
+    template<typename T> explicit Any(rtl::OUStringNumber<T> const &) = delete;
 #endif
 
     /** Copy constructor: Sets value of the given any.
