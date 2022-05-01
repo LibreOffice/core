@@ -16,6 +16,23 @@
       "message": "Lol, cherry-picked a minute later.",
       "revId": "17cc9a0ef928e25aa44b84590f1bde6411046fa1",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9293bbaf_ba07b475",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-01T08:03:36Z",
+      "side": 1,
+      "message": "Merging because it improves the situation, although it doesn’t fully fix it. Perfect is the enemy of good, as they say.",
+      "revId": "17cc9a0ef928e25aa44b84590f1bde6411046fa1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
