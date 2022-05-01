@@ -85,7 +85,13 @@ private:
     {
         size_t operator()(const CachedGlyphsKey& key) const { return key.hashValue; }
     };
-    typedef o3tl::lru_map<CachedGlyphsKey, SalLayoutGlyphs, CachedGlyphsHash> GlyphsCache;
+    struct GlyphsCost
+    {
+        size_t operator()(const SalLayoutGlyphs&) const;
+    };
+    typedef o3tl::lru_map<CachedGlyphsKey, SalLayoutGlyphs, CachedGlyphsHash,
+                          std::equal_to<CachedGlyphsKey>, GlyphsCost>
+        GlyphsCache;
     GlyphsCache mCachedGlyphs;
     // Last temporary glyphs returned (pointer is returned, so the object needs to be kept somewhere).
     std::optional<CachedGlyphsKey> mLastTemporaryKey;

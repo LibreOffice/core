@@ -1591,6 +1591,20 @@
           <value>64000000</value>
         </prop>
       </group>
+      <group oor:name="Font">
+        <info>
+          <desc>Specifies the cache related options for fonts.</desc>
+        </info>
+        <prop oor:name="GlyphsCacheSize" oor:type="xs:long" oor:nillable="false">
+          <info>
+            <desc>Specifies the maximum cache size in bytes for all glyphs used
+            when laying out text. Larger size may improve text drawing performance
+            in large documents.</desc>
+            <label>Glyphs Cache Size</label>
+          </info>
+          <value>20000000</value>
+        </prop>
+      </group>
     </group>
     <group oor:name="Path">
       <!-- UIHints: Tools - Options - General - Paths -->
