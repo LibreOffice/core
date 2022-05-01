@@ -164,12 +164,12 @@ namespace svxform
     }
 
 
-    DocumentType DocumentClassification::getDocumentTypeForModuleIdentifier( const OUString& _rModuleIdentifier )
+    DocumentType DocumentClassification::getDocumentTypeForModuleIdentifier( std::u16string_view _rModuleIdentifier )
     {
         const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
         while ( pModuleInfo->pAsciiModuleOrServiceName )
         {
-            if ( _rModuleIdentifier.equalsAscii( pModuleInfo->pAsciiModuleOrServiceName ) )
+            if ( o3tl::equalsAscii(_rModuleIdentifier, pModuleInfo->pAsciiModuleOrServiceName ) )
                 return pModuleInfo->eType;
             ++pModuleInfo;
         }

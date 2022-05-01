@@ -28,6 +28,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
+#include <o3tl/string_view.hxx>
 #include <tools/wldcrd.hxx>
 #include <sal/log.hxx>
 #include <framework/interaction.hxx>
@@ -125,7 +126,7 @@ namespace {
  * In each category, rank them from strictly-structured to
  * loosely-structured.
  */
-int getFlatTypeRank(const OUString& rType)
+int getFlatTypeRank(std::u16string_view rType)
 {
     // List formats from more complex to less complex.
     // TODO: Add more.
@@ -287,7 +288,7 @@ int getFlatTypeRank(const OUString& rType)
 
     for (size_t i = 0; i < n; ++i)
     {
-        if (rType.equalsAscii(ranks[i]))
+        if (o3tl::equalsAscii(rType, ranks[i]))
             return n - i - 1;
     }
 

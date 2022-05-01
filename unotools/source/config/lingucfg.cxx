@@ -37,6 +37,7 @@
 #include <sal/macros.h>
 #include <comphelper/getexpandeduri.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "itemholder1.hxx"
 
@@ -149,7 +150,7 @@ class SvtLinguConfigItem : public utl::ConfigItem
 {
     SvtLinguOptions     aOpt;
 
-    static bool GetHdlByName( sal_Int32 &rnHdl, const OUString &rPropertyName, bool bFullPropName = false );
+    static bool GetHdlByName( sal_Int32 &rnHdl, std::u16string_view rPropertyName, bool bFullPropName = false );
     static uno::Sequence< OUString > GetPropertyNames();
     void                LoadOptions( const uno::Sequence< OUString > &rProperyNames );
     bool                SaveOptions( const uno::Sequence< OUString > &rProperyNames );
@@ -173,18 +174,18 @@ public:
     //using utl::ConfigItem::GetReadOnlyStates;
 
     css::uno::Any
-            GetProperty( const OUString &rPropertyName ) const;
+            GetProperty( std::u16string_view rPropertyName ) const;
     css::uno::Any
             GetProperty( sal_Int32 nPropertyHandle ) const;
 
-    bool    SetProperty( const OUString &rPropertyName,
+    bool    SetProperty( std::u16string_view rPropertyName,
                          const css::uno::Any &rValue );
     bool    SetProperty( sal_Int32 nPropertyHandle,
                          const css::uno::Any &rValue );
 
     const SvtLinguOptions& GetOptions() const;
 
-    bool    IsReadOnly( const OUString &rPropertyName ) const;
+    bool    IsReadOnly( std::u16string_view rPropertyName ) const;
     bool    IsReadOnly( sal_Int32 nPropertyHandle ) const;
 };
 
@@ -286,7 +287,7 @@ uno::Sequence< OUString > SvtLinguConfigItem::GetPropertyNames()
 
 bool SvtLinguConfigItem::GetHdlByName(
     sal_Int32 &rnHdl,
-    const OUString &rPropertyName,
+    std::u16string_view rPropertyName,
     bool bFullPropName )
 {
     NamesToHdl const *pEntry = &aNamesToHdl[0];
@@ -295,7 +296,7 @@ bool SvtLinguConfigItem::GetHdlByName(
     {
         while (pEntry && pEntry->pFullPropName != nullptr)
         {
-            if (rPropertyName.equalsAscii( pEntry->pFullPropName ))
+            if (o3tl::equalsAscii(rPropertyName, pEntry->pFullPropName ))
             {
                 rnHdl = pEntry->nHdl;
                 break;
@@ -319,7 +320,7 @@ bool SvtLinguConfigItem::GetHdlByName(
     }
 }
 
-uno::Any SvtLinguConfigItem::GetProperty( const OUString &rPropertyName ) const
+uno::Any SvtLinguConfigItem::GetProperty( std::u16string_view rPropertyName ) const
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
@@ -409,7 +410,7 @@ uno::Any SvtLinguConfigItem::GetProperty( sal_Int32 nPropertyHandle ) const
     return aRes;
 }
 
-bool SvtLinguConfigItem::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
+bool SvtLinguConfigItem::SetProperty( std::u16string_view rPropertyName, const uno::Any &rValue )
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
@@ -746,7 +747,7 @@ bool SvtLinguConfigItem::SaveOptions( const uno::Sequence< OUString > &rProperyN
     return bRet;
 }
 
-bool SvtLinguConfigItem::IsReadOnly( const OUString &rPropertyName ) const
+bool SvtLinguConfigItem::IsReadOnly( std::u16string_view rPropertyName ) const
 {
     osl::MutexGuard aGuard(theSvtLinguConfigItemMutex());
 
@@ -856,7 +857,7 @@ bool SvtLinguConfig::ReplaceSetProperties(
     return GetConfigItem().ReplaceSetProperties( rNode, rValues );
 }
 
-uno::Any SvtLinguConfig::GetProperty( const OUString &rPropertyName ) const
+uno::Any SvtLinguConfig::GetProperty( std::u16string_view rPropertyName ) const
 {
     return GetConfigItem().GetProperty( rPropertyName );
 }
@@ -866,7 +867,7 @@ uno::Any SvtLinguConfig::GetProperty( sal_Int32 nPropertyHandle ) const
     return GetConfigItem().GetProperty( nPropertyHandle );
 }
 
-bool SvtLinguConfig::SetProperty( const OUString &rPropertyName, const uno::Any &rValue )
+bool SvtLinguConfig::SetProperty( std::u16string_view rPropertyName, const uno::Any &rValue )
 {
     return GetConfigItem().SetProperty( rPropertyName, rValue );
 }
@@ -881,7 +882,7 @@ void SvtLinguConfig::GetOptions( SvtLinguOptions &rOptions ) const
     rOptions = GetConfigItem().GetOptions();
 }
 
-bool SvtLinguConfig::IsReadOnly( const OUString &rPropertyName ) const
+bool SvtLinguConfig::IsReadOnly( std::u16string_view rPropertyName ) const
 {
     return GetConfigItem().IsReadOnly( rPropertyName );
 }

@@ -38,6 +38,7 @@
 #include <oox/ppt/slidetransition.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
+#include <o3tl/string_view.hxx>
 
 #include "animvariantcontext.hxx"
 #include "commonbehaviorcontext.hxx"
@@ -59,13 +60,13 @@ using ::com::sun::star::beans::NamedValue;
 
 namespace {
 
-    oox::ppt::AnimationAttributeEnum getAttributeEnumByAPIName(const OUString &rAPIName)
+    oox::ppt::AnimationAttributeEnum getAttributeEnumByAPIName(std::u16string_view rAPIName)
     {
         oox::ppt::AnimationAttributeEnum eResult = oox::ppt::AnimationAttributeEnum::UNKNOWN;
         const oox::ppt::ImplAttributeNameConversion *attrConv = oox::ppt::getAttributeConversionList();
         while(attrConv->mpAPIName != nullptr)
         {
-            if(rAPIName.equalsAscii(attrConv->mpAPIName))
+            if(o3tl::equalsAscii(rAPIName, attrConv->mpAPIName))
             {
                 eResult = attrConv->meAttribute;
                 break;
@@ -82,7 +83,7 @@ namespace {
         aAny >>= aNameList;
 
         // only get first token.
-        return oox::ppt::convertAnimationValue(getAttributeEnumByAPIName(aNameList.getToken(0, ';')), rAny);
+        return oox::ppt::convertAnimationValue(getAttributeEnumByAPIName(o3tl::getToken(aNameList, 0, ';')), rAny);
     }
 
     css::uno::Any convertPointPercent(const css::awt::Point& rPoint)

@@ -38,7 +38,7 @@ namespace oox::ppt {
     {
     public:
         SlideTransition();
-        explicit SlideTransition(const OUString & );
+        explicit SlideTransition(std::u16string_view );
 
         void setSlideProperties( PropertyMap& props );
         void setTransitionFilterProperties( const css::uno::Reference< css::animations::XTransitionFilter > & xFilter );

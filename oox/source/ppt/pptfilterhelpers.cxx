@@ -127,13 +127,13 @@ namespace oox::ppt {
         return aList;
     }
 
-    const transition* transition::find( const OUString& rName )
+    const transition* transition::find( std::u16string_view rName )
     {
         const transition* p = transition::getList();
 
         while( p->mpName )
         {
-            if( rName.equalsAscii( p->mpName ) )
+            if( o3tl::equalsAscii( rName, p->mpName ) )
                 return p;
 
             p++;
