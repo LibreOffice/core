@@ -29,6 +29,7 @@ public:
     void testRemoveIf();
     void testNoAutoCleanup();
     void testChangeMaxSize();
+    void testCustomItemSize();
 
     CPPUNIT_TEST_SUITE(lru_map_test);
     CPPUNIT_TEST(testBaseUsage);
@@ -39,6 +40,7 @@ public:
     CPPUNIT_TEST(testRemoveIf);
     CPPUNIT_TEST(testNoAutoCleanup);
     CPPUNIT_TEST(testChangeMaxSize);
+    CPPUNIT_TEST(testCustomItemSize);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -321,6 +323,34 @@ void lru_map_test::testChangeMaxSize()
     CPPUNIT_ASSERT_EQUAL(size_t(3), lru.size());
     lru.setMaxSize(1);
     CPPUNIT_ASSERT_EQUAL(size_t(1), lru.size());
+}
+
+void lru_map_test::testCustomItemSize()
+{
+    struct cost_is_value
+    {
+        size_t operator()(int i) { return i; };
+    };
+    o3tl::lru_map<int, int, std::hash<int>, std::equal_to<int>, cost_is_value> lru(5);
+    lru.insert({ 1, 1 });
+    lru.insert({ 2, 2 });
+    // Adding this one will remove the first one, since then the total
+    // cost would be 6, more than the maximum 5.
+    lru.insert({ 3, 3 });
+    CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(5), lru.total_size());
+    // Drop the last item.
+    lru.remove_if([](std::pair<int, int> i) { return i.first == 3; });
+    CPPUNIT_ASSERT_EQUAL(size_t(1), lru.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(2), lru.total_size());
+    // This should drop everything except for keeping this one (an exception that
+    // keeps the last item inserted regardless of limit).
+    lru.insert({ 4, 4 });
+    CPPUNIT_ASSERT_EQUAL(size_t(1), lru.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(4), lru.total_size());
+    lru.clear();
+    CPPUNIT_ASSERT_EQUAL(size_t(0), lru.size());
+    CPPUNIT_ASSERT_EQUAL(size_t(0), lru.total_size());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(lru_map_test);

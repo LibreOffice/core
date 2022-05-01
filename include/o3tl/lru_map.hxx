@@ -16,9 +16,31 @@
 #include <list>
 #include <unordered_map>
 #include <cstddef>
+#include <type_traits>
 
 namespace o3tl
 {
+namespace detail
+{
+// Helper base class to keep total cost for lru_map with custom item size.
+// Custom size is specified by the ValueSize functor, the default of each
+// item counting as 1 is specified using the void type.
+template <class ValueSize> class lru_map_base
+{
+public:
+    // Returns total of ValueSize for all items.
+    size_t total_size() const { return mCurrentSize; }
+
+protected:
+    size_t mCurrentSize = 0; // sum of ValueSize for all items
+};
+
+// By default cost of each item is 1, so it doesn't need to be tracked.
+template <> class lru_map_base<void>
+{
+};
+} // namespace
+
 /** LRU map
  *
  * Similar to unordered_map (it actually uses it) with additionally functionality
@@ -31,10 +53,17 @@ namespace o3tl
  * The implementation is as simple as possible but it still uses O(1) complexity
  * for most of the operations with a combination unordered map and linked list.
  *
+ * It is optionally possible to specify a function for ValueSize template
+ * argument (that can be called as 'size_t func(Value)') that will return
+ * a size (cost) for an item istead of the default size of 1 for each item.
+ * The size of an item must not change for an item (if needed, re-insert
+ * the item). A newly inserted item is guaranteed to be in the container,
+ * even if its size exceeds the maximum size.
+ *
  **/
 template <typename Key, typename Value, class KeyHash = std::hash<Key>,
-          class KeyEqual = std::equal_to<Key>>
-class lru_map final
+          class KeyEqual = std::equal_to<Key>, class ValueSize = void>
+class lru_map final : public detail::lru_map_base<ValueSize>
 {
 public:
     typedef typename std::pair<Key, Value> key_value_pair_t;
@@ -52,14 +81,84 @@ private:
     map_t mLruMap;
     size_t mMaxSize;
 
-    void checkLRU()
+    void addSize(const Value& value)
     {
-        if (mLruMap.size() > mMaxSize)
+        // by default total size is equal to number of items
+        if constexpr (!std::is_void_v<ValueSize>)
+            this->mCurrentSize += ValueSize()(value);
+    }
+
+    void removeSize(const Value& value)
+    {
+        // by default total size is equal to number of items
+        if constexpr (!std::is_void_v<ValueSize>)
         {
-            // remove from map
-            mLruMap.erase(mLruList.back().first);
-            // remove from list
-            mLruList.pop_back();
+            size_t itemSize = ValueSize()(value);
+            assert(itemSize <= this->mCurrentSize);
+            this->mCurrentSize -= itemSize;
+        }
+    }
+
+    void removeOldestItem()
+    {
+        removeSize(mLruList.back().second);
+        // remove from map
+        mLruMap.erase(mLruList.back().first);
+        // remove from list
+        mLruList.pop_back();
+    }
+
+    void checkLRUItemInsert()
+    {
+        if constexpr (std::is_void_v<ValueSize>)
+        { // One added, so it's enough to remove one, if needed.
+            if (mLruMap.size() > mMaxSize)
+                removeOldestItem();
+        }
+        else
+        {
+            // This must leave at least one item (it's called from insert).
+            while (this->mCurrentSize > mMaxSize && mLruList.size() > 1)
+                removeOldestItem();
+        }
+    }
+
+    void checkLRUItemUpdate()
+    {
+        // Item update does not change total size by default.
+        if constexpr (!std::is_void_v<ValueSize>)
+        {
+            // This must leave at least one item (it's called from insert).
+            while (this->mCurrentSize > mMaxSize && mLruList.size() > 1)
+                removeOldestItem();
+        }
+    }
+
+    void checkLRUMaxSize()
+    {
+        if constexpr (std::is_void_v<ValueSize>)
+        {
+            while (mLruMap.size() > mMaxSize)
+                removeOldestItem();
+        }
+        else
+        {
+            while (this->mCurrentSize > mMaxSize)
+                removeOldestItem();
+        }
+    }
+
+    void clearSize()
+    {
+        if constexpr (!std::is_void_v<ValueSize>)
+        {
+#ifdef DBG_UTIL
+            for (const key_value_pair_t& item : mLruList)
+                removeSize(item.second);
+            assert(this->mCurrentSize == 0);
+#else
+            this->mCurrentSize = 0;
+#endif
         }
     }
 
@@ -74,6 +173,7 @@ public:
     }
     ~lru_map()
     {
+        clearSize();
         // Some code .e.g. SalBitmap likes to remove itself from a cache during it's destructor, which means we
         // get calls into lru_map while we are in destruction, so use the swap-and-clear idiom to avoid those problems.
         mLruMap.clear();
@@ -83,8 +183,7 @@ public:
     void setMaxSize(size_t nMaxSize)
     {
         mMaxSize = nMaxSize ? nMaxSize : std::min(mLruMap.max_size(), mLruList.max_size());
-        while (mLruMap.size() > mMaxSize)
-            checkLRU();
+        checkLRUMaxSize();
     }
 
     void insert(key_value_pair_t& rPair)
@@ -93,19 +192,24 @@ public:
 
         if (i == mLruMap.end()) // doesn't exist -> add to queue and map
         {
+            addSize(rPair.second);
             // add to front of the list
             mLruList.push_front(rPair);
             // add the list position (iterator) to the map
             auto it = mLruList.begin();
             mLruMap[it->first] = it;
-            checkLRU();
+            checkLRUItemInsert();
         }
         else // already exists -> replace value
         {
+            // update total cost
+            removeSize(i->second->second);
+            addSize(rPair.second);
             // replace value
             i->second->second = rPair.second;
             // bring to front of the lru list
             mLruList.splice(mLruList.begin(), mLruList, i->second);
+            checkLRUItemUpdate();
         }
     }
 
@@ -115,19 +219,23 @@ public:
 
         if (i == mLruMap.end()) // doesn't exist -> add to list and map
         {
+            addSize(rPair.second);
             // add to front of the list
             mLruList.push_front(std::move(rPair));
             // add the list position (iterator) to the map
             auto it = mLruList.begin();
             mLruMap[it->first] = it;
-            checkLRU();
+            checkLRUItemInsert();
         }
         else // already exists -> replace value
         {
+            removeSize(i->second->second);
+            addSize(rPair.second);
             // replace value
             i->second->second = std::move(rPair.second);
             // push to back of the lru list
             mLruList.splice(mLruList.begin(), mLruList, i->second);
+            checkLRUItemUpdate();
         }
     }
 
@@ -155,6 +263,7 @@ public:
         {
             if (pred(*it))
             {
+                removeSize(it->second);
                 mLruMap.erase(it->first);
                 it = decltype(it){ mLruList.erase(std::next(it).base()) };
             }
@@ -173,8 +282,11 @@ public:
         return mLruMap.size();
     }
 
+    // size_t total_size() const; - only if custom ValueSize
+
     void clear()
     {
+        clearSize();
         mLruMap.clear();
         mLruList.clear();
     }
