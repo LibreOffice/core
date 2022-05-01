@@ -72,6 +72,10 @@ public:
     static void setViewLanguage(int nId, const OUString& rBcp47LanguageTag);
     /// Set the default language for views.
     static void setDefaultLanguage(const OUString& rBcp47LanguageTag);
+    /// Get the language used by the loading view (used for all save operations).
+    static const LanguageTag & getLoadLanguage();
+    /// Set the language used by the loading view (used for all save operations).
+    static void setLoadLanguage(const OUString& rBcp47LanguageTag);
     /// Set the locale for the given view.
     static void setViewLocale(int nId, const OUString& rBcp47LanguageTag);
     /// Get the device form factor that should be used for a new view.

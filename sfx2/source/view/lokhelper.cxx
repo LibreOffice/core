@@ -69,6 +69,7 @@ int DisableCallbacks::m_nDisabled = 0;
 namespace
 {
 LanguageTag g_defaultLanguageTag("en-US", true);
+LanguageTag g_loadLanguageTag("en-US", true); //< The language used to load.
 LOKDeviceFormFactor g_deviceFormFactor = LOKDeviceFormFactor::UNKNOWN;
 }
 
@@ -273,6 +274,13 @@ LanguageTag SfxLokHelper::getDefaultLanguage()
 void SfxLokHelper::setDefaultLanguage(const OUString& rBcp47LanguageTag)
 {
     g_defaultLanguageTag = LanguageTag(rBcp47LanguageTag, true);
+}
+
+const LanguageTag& SfxLokHelper::getLoadLanguage() { return g_loadLanguageTag; }
+
+void SfxLokHelper::setLoadLanguage(const OUString& rBcp47LanguageTag)
+{
+    g_loadLanguageTag = LanguageTag(rBcp47LanguageTag, true);
 }
 
 void SfxLokHelper::setViewLanguage(int nId, const OUString& rBcp47LanguageTag)
