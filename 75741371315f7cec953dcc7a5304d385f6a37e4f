@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a0833d3_73cb12c4",
+        "filename": "sc/uiconfig/scalc/ui/sparklinedialog.ui",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-01T08:01:10Z",
+      "side": 1,
+      "message": "There is no point in having a dialog call itself a “dialog”.",
+      "revId": "75741371315f7cec953dcc7a5304d385f6a37e4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
