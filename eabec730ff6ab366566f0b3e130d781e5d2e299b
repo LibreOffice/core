@@ -16,6 +16,23 @@
       "message": "online.git unit-render-shape failed, resume.",
       "revId": "eabec730ff6ab366566f0b3e130d781e5d2e299b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d0b65ba_9d943946",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-02T06:31:44Z",
+      "side": 1,
+      "message": "online.git unit-copy-paste failed, will try a rebase.",
+      "revId": "eabec730ff6ab366566f0b3e130d781e5d2e299b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
