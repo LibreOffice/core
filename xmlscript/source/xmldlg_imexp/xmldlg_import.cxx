@@ -130,7 +130,7 @@ void StyleElement::importTextColorStyle(
     {
         if ((_hasValue & 0x2) != 0)
         {
-            xProps->setPropertyValue("TextColor", makeAny( _textColor ) );
+            xProps->setPropertyValue("TextColor", Any( _textColor ) );
         }
         return;
     }
@@ -139,7 +139,7 @@ void StyleElement::importTextColorStyle(
     if (getLongAttr( &_textColor, "text-color", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x2;
-        xProps->setPropertyValue( "TextColor", makeAny( _textColor ) );
+        xProps->setPropertyValue( "TextColor", Any( _textColor ) );
         return;
     }
 }
@@ -151,7 +151,7 @@ void StyleElement::importTextLineColorStyle(
     {
         if ((_hasValue & 0x20) != 0)
         {
-            xProps->setPropertyValue( "TextLineColor", makeAny( _textLineColor ) );
+            xProps->setPropertyValue( "TextLineColor", Any( _textLineColor ) );
         }
         return;
     }
@@ -160,7 +160,7 @@ void StyleElement::importTextLineColorStyle(
     if (getLongAttr( &_textLineColor, "textline-color", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x20;
-        xProps->setPropertyValue( "TextLineColor", makeAny( _textLineColor ) );
+        xProps->setPropertyValue( "TextLineColor", Any( _textLineColor ) );
     }
 }
 
@@ -171,7 +171,7 @@ void StyleElement::importFillColorStyle(
     {
         if ((_hasValue & 0x10) != 0)
         {
-            xProps->setPropertyValue( "FillColor", makeAny( _fillColor ) );
+            xProps->setPropertyValue( "FillColor", Any( _fillColor ) );
         }
         return;
     }
@@ -180,7 +180,7 @@ void StyleElement::importFillColorStyle(
     if (getLongAttr( &_fillColor, "fill-color", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x10;
-        xProps->setPropertyValue( "FillColor", makeAny( _fillColor ) );
+        xProps->setPropertyValue( "FillColor", Any( _fillColor ) );
     }
 }
 
@@ -191,7 +191,7 @@ void StyleElement::importBackgroundColorStyle(
     {
         if ((_hasValue & 0x1) != 0)
         {
-            xProps->setPropertyValue( "BackgroundColor", makeAny( _backgroundColor ) );
+            xProps->setPropertyValue( "BackgroundColor", Any( _backgroundColor ) );
         }
         return;
     }
@@ -200,7 +200,7 @@ void StyleElement::importBackgroundColorStyle(
     if (getLongAttr( &_backgroundColor, "background-color", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x1;
-        xProps->setPropertyValue( "BackgroundColor", makeAny( _backgroundColor ) );
+        xProps->setPropertyValue( "BackgroundColor", Any( _backgroundColor ) );
     }
 }
 
@@ -211,9 +211,9 @@ void StyleElement::importBorderStyle(
     {
         if ((_hasValue & 0x4) != 0)
         {
-            xProps->setPropertyValue( "Border", makeAny( _border == BORDER_SIMPLE_COLOR ? BORDER_SIMPLE : _border ) );
+            xProps->setPropertyValue( "Border", Any( _border == BORDER_SIMPLE_COLOR ? BORDER_SIMPLE : _border ) );
             if (_border == BORDER_SIMPLE_COLOR)
-                xProps->setPropertyValue( "BorderColor", makeAny(_borderColor) );
+                xProps->setPropertyValue( "BorderColor", Any(_borderColor) );
         }
         return;
     }
@@ -245,7 +245,7 @@ void StyleElement::importVisualEffectStyle(
     {
         if ((_hasValue & 0x40) != 0)
         {
-            xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
+            xProps->setPropertyValue( "VisualEffect", Any(_visualEffect) );
         }
         return;
     }
@@ -271,15 +271,15 @@ void StyleElement::importVisualEffectStyle(
         OSL_ASSERT( false );
 
     _hasValue |= 0x40;
-    xProps->setPropertyValue( "VisualEffect", makeAny(_visualEffect) );
+    xProps->setPropertyValue( "VisualEffect", Any(_visualEffect) );
 }
 
 void StyleElement::setFontProperties(
     Reference< beans::XPropertySet > const & xProps ) const
 {
-    xProps->setPropertyValue("FontDescriptor", makeAny( _descr ) );
-    xProps->setPropertyValue("FontEmphasisMark", makeAny( _fontEmphasisMark ) );
-    xProps->setPropertyValue("FontRelief", makeAny( _fontRelief ) );
+    xProps->setPropertyValue("FontDescriptor", Any( _descr ) );
+    xProps->setPropertyValue("FontEmphasisMark", Any( _fontEmphasisMark ) );
+    xProps->setPropertyValue("FontRelief", Any( _fontRelief ) );
 }
 
 void StyleElement::importFontStyle(
@@ -674,7 +674,7 @@ bool ImportContext::importStringProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( aValue ) );
+        _xControlModel->setPropertyValue( rPropName, Any( aValue ) );
         return true;
     }
     return false;
@@ -689,7 +689,7 @@ bool ImportContext::importDoubleProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( aValue.toDouble() ) );
+        _xControlModel->setPropertyValue( rPropName, Any( aValue.toDouble() ) );
         return true;
     }
     return false;
@@ -703,7 +703,7 @@ bool ImportContext::importBooleanProperty(
     if (getBoolAttr(
             &bBool, rAttrName, xAttributes, _pImport->XMLNS_DIALOGS_UID ))
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( bBool ) );
+        _xControlModel->setPropertyValue( rPropName, Any( bBool ) );
         return true;
     }
     return false;
@@ -718,7 +718,7 @@ bool ImportContext::importLongProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) ) );
+        _xControlModel->setPropertyValue( rPropName, Any( toInt32( aValue ) ) );
         return true;
     }
     return false;
@@ -734,7 +734,7 @@ bool ImportContext::importLongProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) + nOffset ) );
+        _xControlModel->setPropertyValue( rPropName, Any( toInt32( aValue ) + nOffset ) );
         return true;
     }
     return false;
@@ -749,7 +749,7 @@ bool ImportContext::importHexLongProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( toInt32( aValue ) ) );
+        _xControlModel->setPropertyValue( rPropName, Any( toInt32( aValue ) ) );
         return true;
     }
     return false;
@@ -764,7 +764,7 @@ bool ImportContext::importShortProperty(
             _pImport->XMLNS_DIALOGS_UID, rAttrName ) );
     if (!aValue.isEmpty())
     {
-        _xControlModel->setPropertyValue( rPropName, makeAny( static_cast<sal_Int16>(toInt32( aValue )) ) );
+        _xControlModel->setPropertyValue( rPropName, Any( static_cast<sal_Int16>(toInt32( aValue )) ) );
         return true;
     }
     return false;
@@ -801,7 +801,7 @@ bool ImportContext::importAlignProperty(
             throw xml::sax::SAXException("invalid align value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nAlign ) );
         return true;
     }
     return false;
@@ -835,7 +835,7 @@ bool ImportContext::importVerticalAlignProperty(
             throw xml::sax::SAXException( "invalid vertical align value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( eAlign ) );
+        _xControlModel->setPropertyValue( rPropName, Any( eAlign ) );
         return true;
     }
     return false;
@@ -876,7 +876,7 @@ bool ImportContext::importGraphicOrImageProperty(
             Reference<beans::XPropertySet> xProps = getControlModel();
             if (xProps.is())
             {
-                xProps->setPropertyValue("Graphic", makeAny(xGraphic));
+                xProps->setPropertyValue("Graphic", Any(xGraphic));
                 return true;
             }
         }
@@ -887,7 +887,7 @@ bool ImportContext::importGraphicOrImageProperty(
             Reference<beans::XPropertySet> xProps = getControlModel();
             if (xProps.is())
             {
-                xProps->setPropertyValue("ImageURL", makeAny(sURL));
+                xProps->setPropertyValue("ImageURL", Any(sURL));
                 return true;
             }
         }
@@ -917,7 +917,7 @@ bool ImportContext::importDataAwareProperty(
             if ( xBindable.is() && xConvertor.is() )
             {
                 table::CellAddress aAddress;
-                xConvertor->setPropertyValue( "PersistentRepresentation" , uno::makeAny( sLinkedCell ) );
+                xConvertor->setPropertyValue( "PersistentRepresentation" , uno::Any( sLinkedCell ) );
                 xConvertor->getPropertyValue( "Address" ) >>= aAddress;
                 beans::NamedValue aArg1;
                 aArg1.Name = "BoundCell";
@@ -936,7 +936,7 @@ bool ImportContext::importDataAwareProperty(
             if ( xListEntrySink.is() && xConvertor.is() )
             {
                 table::CellRangeAddress aAddress;
-                xConvertor->setPropertyValue( "PersistentRepresentation" , uno::makeAny( sCellRange ) );
+                xConvertor->setPropertyValue( "PersistentRepresentation" , uno::Any( sCellRange ) );
                 xConvertor->getPropertyValue( "Address" ) >>= aAddress;
                 beans::NamedValue aArg1;
                 aArg1.Name = "CellRange";
@@ -982,7 +982,7 @@ bool ImportContext::importImageAlignProperty(
             throw xml::sax::SAXException( "invalid image align value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nAlign ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nAlign ) );
         return true;
     }
     return false;
@@ -1055,7 +1055,7 @@ bool ImportContext::importImagePositionProperty(
             throw xml::sax::SAXException( "invalid image position value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nPosition ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nPosition ) );
         return true;
     }
     return false;
@@ -1092,7 +1092,7 @@ bool ImportContext::importButtonTypeProperty(
             throw xml::sax::SAXException( "invalid button-type value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( static_cast<sal_Int16>(nButtonType) ) );
+        _xControlModel->setPropertyValue( rPropName, Any( static_cast<sal_Int16>(nButtonType) ) );
         return true;
     }
     return false;
@@ -1161,7 +1161,7 @@ bool ImportContext::importDateFormatProperty(
             throw xml::sax::SAXException( "invalid date-format value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nFormat ) );
         return true;
     }
     return false;
@@ -1178,7 +1178,7 @@ bool ImportContext::importTimeProperty(
     {
         ::tools::Time aTTime(toInt32( aValue ) * ::tools::Time::nanoPerCenti);
         util::Time aUTime(aTTime.GetUNOTime());
-        _xControlModel->setPropertyValue( rPropName, makeAny( aUTime ) );
+        _xControlModel->setPropertyValue( rPropName, Any( aUTime ) );
         return true;
     }
     return false;
@@ -1195,7 +1195,7 @@ bool ImportContext::importDateProperty(
     {
         ::Date aTDate(toInt32( aValue ));
         util::Date aUDate(aTDate.GetUNODate());
-        _xControlModel->setPropertyValue( rPropName, makeAny( aUDate ) );
+        _xControlModel->setPropertyValue( rPropName, Any( aUDate ) );
         return true;
     }
     return false;
@@ -1240,7 +1240,7 @@ bool ImportContext::importTimeFormatProperty(
             throw xml::sax::SAXException( "invalid time-format value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nFormat ) );
         return true;
     }
     return false;
@@ -1269,7 +1269,7 @@ bool ImportContext::importOrientationProperty(
             throw xml::sax::SAXException( "invalid orientation value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nOrient ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nOrient ) );
         return true;
     }
     return false;
@@ -1302,7 +1302,7 @@ bool ImportContext::importLineEndFormatProperty(
             throw xml::sax::SAXException( "invalid line end format value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nFormat ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nFormat ) );
         return true;
     }
     return false;
@@ -1340,7 +1340,7 @@ bool ImportContext::importSelectionTypeProperty(
             throw xml::sax::SAXException( "invalid selection type value!", Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( eSelectionType ) );
+        _xControlModel->setPropertyValue( rPropName, Any( eSelectionType ) );
         return true;
     }
     return false;
@@ -1375,7 +1375,7 @@ bool ImportContext::importImageScaleModeProperty(
                 Reference< XInterface >(), Any() );
         }
 
-        _xControlModel->setPropertyValue( rPropName, makeAny( nImageScaleMode ) );
+        _xControlModel->setPropertyValue( rPropName, Any( nImageScaleMode ) );
         return true;
     }
     return false;
@@ -1532,7 +1532,7 @@ void ImportContext::importEvents(
             getStringAttr( &descr.AddListenerParam, "param", xAttributes, _pImport->XMLNS_DIALOGS_UID );
         }
 
-        xEvents->insertByName( descr.ListenerType + "::" + descr.EventMethod, makeAny( descr ) );
+        xEvents->insertByName( descr.ListenerType + "::" + descr.EventMethod, Any( descr ) );
     }
 }
 void ImportContext::importScollableSettings(
@@ -1563,14 +1563,14 @@ void ImportContext::importDefaults(
     Reference< xml::input::XAttributes > const & xAttributes,
     bool supportPrintable )
 {
-    _xControlModel->setPropertyValue( "Name", makeAny( _aId ) );
+    _xControlModel->setPropertyValue( "Name", Any( _aId ) );
 
     importShortProperty( "TabIndex", "tab-index", xAttributes );
 
     sal_Bool bDisable = false;
     if (getBoolAttr( &bDisable,"disabled", xAttributes, _pImport->XMLNS_DIALOGS_UID ) && bDisable)
     {
-        _xControlModel->setPropertyValue( "Enabled", makeAny( false ) );
+        _xControlModel->setPropertyValue( "Enabled", Any( false ) );
     }
 
     sal_Bool bVisible = true;
@@ -1578,7 +1578,7 @@ void ImportContext::importDefaults(
     {
         try
         {
-                _xControlModel->setPropertyValue( "EnableVisible", makeAny( false ) );
+                _xControlModel->setPropertyValue( "EnableVisible", Any( false ) );
         }
         catch( Exception& )
         {
@@ -1604,7 +1604,7 @@ void ImportContext::importDefaults(
     {
         nLong = 0;
     }
-    _xControlModel->setPropertyValue( "Step", makeAny( nLong ) );
+    _xControlModel->setPropertyValue( "Step", Any( nLong ) );
 
     importStringProperty("Tag", "tag", xAttributes );
     importStringProperty( "HelpText", "help-text", xAttributes );

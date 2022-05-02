@@ -86,7 +86,7 @@ void Frame::endElement()
     ctx.importDefaults( 0, 0, _xAttributes ); // inherited from BulletinBoardElement
     if (!_label.isEmpty())
     {
-        xControlModel->setPropertyValue( "Label" , makeAny( _label ) );
+        xControlModel->setPropertyValue( "Label" , Any( _label ) );
     }
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -468,7 +468,7 @@ void FormattedFieldElement::endElement()
     ctx.importShortProperty( "MaxTextLen", "maxlength", _xAttributes );
     ctx.importBooleanProperty( "Spin",  "spin", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
-        ctx.getControlModel()->setPropertyValue( "Repeat" , makeAny(true) );
+        ctx.getControlModel()->setPropertyValue( "Repeat" , Any(true) );
 
     OUString sDefault(_xAttributes->getValueByUidName(m_pImport->XMLNS_DIALOGS_UID, "value-default") );
     if (!sDefault.isEmpty())
@@ -476,16 +476,16 @@ void FormattedFieldElement::endElement()
         double d = sDefault.toDouble();
         if (d != 0.0 || sDefault == "0" || sDefault == "0.0" )
         {
-            ctx.getControlModel()->setPropertyValue( "EffectiveDefault", makeAny( d ) );
+            ctx.getControlModel()->setPropertyValue( "EffectiveDefault", Any( d ) );
         }
         else // treat as string
         {
-            ctx.getControlModel()->setPropertyValue( "EffectiveDefault", makeAny( sDefault ) );
+            ctx.getControlModel()->setPropertyValue( "EffectiveDefault", Any( sDefault ) );
         }
     }
 
     // format spec
-    ctx.getControlModel()->setPropertyValue("FormatsSupplier", makeAny( m_pImport->getNumberFormatsSupplier() ) );
+    ctx.getControlModel()->setPropertyValue("FormatsSupplier", Any( m_pImport->getNumberFormatsSupplier() ) );
 
     OUString sFormat( _xAttributes->getValueByUidName(m_pImport->XMLNS_DIALOGS_UID, "format-code" ) );
     if (!sFormat.isEmpty())
@@ -530,7 +530,7 @@ void FormattedFieldElement::endElement()
             {
                 nKey = xFormats->addNew( sFormat, locale );
             }
-            ctx.getControlModel()->setPropertyValue("FormatKey", makeAny( nKey ) );
+            ctx.getControlModel()->setPropertyValue("FormatKey", Any( nKey ) );
         }
         catch (const util::MalformedNumberFormatException & exc)
         {
@@ -593,7 +593,7 @@ void TimeFieldElement::endElement()
     ctx.importTimeProperty( "TimeMax", "value-max", _xAttributes );
     ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
-        ctx.getControlModel()->setPropertyValue("Repeat", makeAny(true) );
+        ctx.getControlModel()->setPropertyValue("Repeat", Any(true) );
     ctx.importStringProperty( "Text", "text" , _xAttributes );
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format" , _xAttributes );
 
@@ -650,7 +650,7 @@ void NumericFieldElement::endElement()
     ctx.importDoubleProperty( "ValueStep", "value-step", _xAttributes );
     ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat",  _xAttributes ))
-        ctx.getControlModel()->setPropertyValue("Repeat", makeAny(true) );
+        ctx.getControlModel()->setPropertyValue("Repeat", Any(true) );
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
@@ -702,7 +702,7 @@ void DateFieldElement::endElement()
     ctx.importDateProperty( "DateMax", "value-max", _xAttributes );
     ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
-        ctx.getControlModel()->setPropertyValue( "Repeat", makeAny(true) );
+        ctx.getControlModel()->setPropertyValue( "Repeat", Any(true) );
     ctx.importBooleanProperty( "Dropdown", "dropdown", _xAttributes );
     ctx.importStringProperty( "Text", "text", _xAttributes );
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
@@ -758,7 +758,7 @@ void CurrencyFieldElement::endElement()
     ctx.importDoubleProperty( "ValueStep", "value-step", _xAttributes );
     ctx.importBooleanProperty( "Spin", "spin", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
-        ctx.getControlModel()->setPropertyValue( "Repeat", makeAny(true) );
+        ctx.getControlModel()->setPropertyValue( "Repeat", Any(true) );
     ctx.importBooleanProperty( "PrependCurrencySymbol", "prepend-symbol", _xAttributes );
     ctx.importBooleanProperty( "EnforceFormat", "enforce-format", _xAttributes );
     ctx.importEvents( _events );
@@ -1041,7 +1041,7 @@ void TextFieldElement::endElement()
         {
             nChar = static_cast<sal_Int16>(aValue[ 0 ]);
         }
-        xControlModel->setPropertyValue( "EchoChar", makeAny( nChar ) );
+        xControlModel->setPropertyValue( "EchoChar", Any( nChar ) );
     }
 
     ctx.importEvents( _events );
@@ -1108,7 +1108,7 @@ void TitledBoxElement::endElement()
 
         if (!_label.isEmpty())
         {
-            xControlModel->setPropertyValue( "Label", makeAny( _label ) );
+            xControlModel->setPropertyValue( "Label", Any( _label ) );
         }
 
         ctx.importEvents( _events );
@@ -1154,7 +1154,7 @@ void TitledBoxElement::endElement()
         {
             nVal = 1;
         }
-        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
+        xControlModel->setPropertyValue( "State", Any( nVal ) );
         ctx.importDataAwareProperty( "linked-cell" , xAttributes );
         ::std::vector< Reference< xml::input::XElement > > & radioEvents =
             static_cast< RadioElement * >( xRadio.get() )->getEvents();
@@ -1244,7 +1244,7 @@ void RadioGroupElement::endElement()
         {
             nVal = 1;
         }
-        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
+        xControlModel->setPropertyValue( "State", Any( nVal ) );
 
         ctx.importDataAwareProperty( "linked-cell", xAttributes );
 
@@ -1369,9 +1369,9 @@ void MenuListElement::endElement()
     {
         MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
         if ( !bHasSrcRange )
-            xControlModel->setPropertyValue( "StringItemList", makeAny( p->getItemValues() ) );
+            xControlModel->setPropertyValue( "StringItemList", Any( p->getItemValues() ) );
         if ( !bHasLinkedCell )
-            xControlModel->setPropertyValue( "SelectedItems", makeAny( p->getSelectedItems() ) );
+            xControlModel->setPropertyValue( "SelectedItems", Any( p->getSelectedItems() ) );
 
     }
     ctx.importEvents( _events );
@@ -1438,7 +1438,7 @@ void ComboBoxElement::endElement()
     if (_popup.is() && !bHasSrcRange )
     {
         MenuPopupElement * p = static_cast< MenuPopupElement * >( _popup.get() );
-        xControlModel->setPropertyValue( "StringItemList", makeAny( p->getItemValues() ) );
+        xControlModel->setPropertyValue( "StringItemList", Any( p->getItemValues() ) );
     }
 
     ctx.importEvents( _events );
@@ -1491,19 +1491,19 @@ void CheckBoxElement::endElement()
     sal_Bool bTriState = false;
     if (getBoolAttr( &bTriState, "tristate", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
-        xControlModel->setPropertyValue( "TriState", makeAny( bTriState ) );
+        xControlModel->setPropertyValue( "TriState", Any( bTriState ) );
     }
     sal_Bool bChecked = false;
     if (getBoolAttr( &bChecked, "checked", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ))
     {
         // has "checked" attribute
         sal_Int16 nVal = (bChecked ? 1 : 0);
-        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
+        xControlModel->setPropertyValue( "State", Any( nVal ) );
     }
     else
     {
         sal_Int16 nVal = (bTriState ? 2 : 0); // if tristate set, but checked omitted => don't know!
-        xControlModel->setPropertyValue( "State", makeAny( nVal ) );
+        xControlModel->setPropertyValue( "State", Any( nVal ) );
     }
 
     ctx.importEvents( _events );
@@ -1554,17 +1554,17 @@ void ButtonElement::endElement()
     ctx.importImagePositionProperty( "ImagePosition", "image-position", _xAttributes );
     ctx.importImageAlignProperty( "ImageAlign", "image-align", _xAttributes );
     if (ctx.importLongProperty( "RepeatDelay", "repeat", _xAttributes ))
-        ctx.getControlModel()->setPropertyValue( "Repeat", makeAny(true) );
+        ctx.getControlModel()->setPropertyValue( "Repeat", Any(true) );
     sal_Int32 toggled = 0;
     if (getLongAttr( &toggled, "toggled", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ) && toggled == 1)
-        ctx.getControlModel()->setPropertyValue( "Toggle" , makeAny(true));
+        ctx.getControlModel()->setPropertyValue( "Toggle" , Any(true));
     ctx.importBooleanProperty( "FocusOnClick", "grab-focus", _xAttributes );
     ctx.importBooleanProperty( "MultiLine", "multiline", _xAttributes );
     // State
     sal_Bool bChecked = false;
     if (getBoolAttr( &bChecked, "checked", _xAttributes, m_pImport->XMLNS_DIALOGS_UID ) && bChecked)
     {
-        ctx.getControlModel()->setPropertyValue( "State" , makeAny( sal_Int16(1) ) );
+        ctx.getControlModel()->setPropertyValue( "State" , Any( sal_Int16(1) ) );
     }
 
     ctx.importEvents( _events );
