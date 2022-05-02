@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbaf8cc9_d8af5b6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-05-02T17:35:05Z",
+      "side": 1,
+      "message": "Hi Xisco! I could not find how to add a new translatable string to libreoffice. Here I would add two tooltips for the [+] and the [-] button. May you know an example or any documentation? Thank you very much!",
+      "revId": "665bb2f7f609a7bde31121efecf38738540f3839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
