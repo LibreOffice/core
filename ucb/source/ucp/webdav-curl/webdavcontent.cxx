@@ -2254,7 +2254,9 @@ uno::Any Content::open(
                     DAVOptions aDAVOptions;
                     getResourceOptions( xEnv, aDAVOptions, xResAccess );
 
-                    if ( aDAVOptions.getHttpResponseStatusCode() != SC_NONE )
+                    if (aDAVOptions.getHttpResponseStatusCode() != SC_NONE
+                        // tdf#148426 fall back to GET in case of 500
+                        && aDAVOptions.getHttpResponseStatusCode() != SC_INTERNAL_SERVER_ERROR)
                     {
                         // throws exception as if there was a server error, a DAV exception
                         throw DAVException( DAVException::DAV_HTTP_ERROR,
