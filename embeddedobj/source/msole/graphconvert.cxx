@@ -54,7 +54,7 @@ bool ConvertBufferToFormat( void* pBuf,
         SvMemoryStream aMemoryStream(pBuf, nBufSize, StreamMode::READ);
         GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
         sal_uInt16 nRetFormat = 0;
-        if (rFilter.CanImportGraphic(OUString(), aMemoryStream, GRFILTER_FORMAT_DONTKNOW, &nRetFormat) == ERRCODE_NONE &&
+        if (rFilter.CanImportGraphic(u"", aMemoryStream, GRFILTER_FORMAT_DONTKNOW, &nRetFormat) == ERRCODE_NONE &&
                 rFilter.GetImportFormatMediaType(nRetFormat) == aMimeType)
         {
             aResult <<= uno::Sequence< sal_Int8 >( static_cast< const sal_Int8* >( aMemoryStream.GetData() ), aMemoryStream.TellEnd() );
