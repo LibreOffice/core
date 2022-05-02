@@ -959,11 +959,11 @@ sal_uLong SwWW8Writer::FillUntil( SvStream& rStrm, sal_uLong nEndPos )
 }
 
 WW8_WrPlcPn::WW8_WrPlcPn(WW8Export& rWr, ePLCFT ePl, WW8_FC nStartFc)
-    : rWrt(rWr)
-    , nFkpStartPage(0)
-    , ePlc(ePl)
+    : m_rWrt(rWr)
+    , m_nFkpStartPage(0)
+    , m_ePlc(ePl)
 {
-    m_Fkps.push_back(std::make_unique<WW8_WrFkp>(ePlc, nStartFc));
+    m_Fkps.push_back(std::make_unique<WW8_WrFkp>(m_ePlc, nStartFc));
 }
 
 WW8_WrPlcPn::~WW8_WrPlcPn()
@@ -983,16 +983,16 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
     // big sprm? build the sprmPHugePapx
     sal_uInt8* pNewSprms = const_cast<sal_uInt8*>(pSprms);
     sal_uInt8 aHugePapx[ 8 ];
-    if (PAP == ePlc && 488 <= nVarLen)
+    if (PAP == m_ePlc && 488 <= nVarLen)
     {
         sal_uInt8* p = aHugePapx;
         *p++ = *pSprms++;           // set style Id
         *p++ = *pSprms++;
         nVarLen -= 2;
 
-        sal_uInt64 nDataPos = rWrt.m_pDataStrm->Tell();
-        SwWW8Writer::WriteShort( *rWrt.m_pDataStrm, nVarLen );
-        rWrt.m_pDataStrm->WriteBytes(pSprms, nVarLen);
+        sal_uInt64 nDataPos = m_rWrt.m_pDataStrm->Tell();
+        SwWW8Writer::WriteShort( *m_rWrt.m_pDataStrm, nVarLen );
+        m_rWrt.m_pDataStrm->WriteBytes(pSprms, nVarLen);
 
         Set_UInt16( p, 0x6646 );    // set SprmCode
         Set_UInt32( p, nDataPos );  // set startpos (FC) in the datastream
@@ -1015,7 +1015,7 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
     if( !bOk )
     {
         pF->Combine();
-        pF = new WW8_WrFkp(ePlc, pF->GetEndFc()); // Start new Fkp == end of old Fkp
+        pF = new WW8_WrFkp(m_ePlc, pF->GetEndFc()); // Start new Fkp == end of old Fkp
 
         m_Fkps.push_back(std::unique_ptr<WW8_WrFkp>(pF));
         if( !pF->Append( nEndFc, nVarLen, pNewSprms ) )
@@ -1029,54 +1029,54 @@ void WW8_WrPlcPn::AppendFkpEntry(WW8_FC nEndFc,short nVarLen,const sal_uInt8* pS
 
 void WW8_WrPlcPn::WriteFkps()
 {
-    nFkpStartPage = o3tl::narrowing<sal_uInt16>( SwWW8Writer::FillUntil( rWrt.Strm() ) >> 9 );
+    m_nFkpStartPage = o3tl::narrowing<sal_uInt16>( SwWW8Writer::FillUntil( m_rWrt.Strm() ) >> 9 );
 
     for(const std::unique_ptr<WW8_WrFkp> & rp : m_Fkps)
     {
-        rp->Write( rWrt.Strm(), *rWrt.m_pGrf );
+        rp->Write( m_rWrt.Strm(), *m_rWrt.m_pGrf );
     }
 
-    if( CHP == ePlc )
+    if( CHP == m_ePlc )
     {
-        rWrt.m_pFib->m_pnChpFirst = nFkpStartPage;
-        rWrt.m_pFib->m_cpnBteChp = m_Fkps.size();
+        m_rWrt.m_pFib->m_pnChpFirst = m_nFkpStartPage;
+        m_rWrt.m_pFib->m_cpnBteChp = m_Fkps.size();
     }
     else
     {
-        rWrt.m_pFib->m_pnPapFirst = nFkpStartPage;
-        rWrt.m_pFib->m_cpnBtePap = m_Fkps.size();
+        m_rWrt.m_pFib->m_pnPapFirst = m_nFkpStartPage;
+        m_rWrt.m_pFib->m_cpnBtePap = m_Fkps.size();
     }
 }
 
 void WW8_WrPlcPn::WritePlc()
 {
-    sal_uInt64 nFcStart = rWrt.m_pTableStrm->Tell();
+    sal_uInt64 nFcStart = m_rWrt.m_pTableStrm->Tell();
     decltype(m_Fkps)::size_type i;
 
     for (i = 0; i < m_Fkps.size(); ++i)
     {
-        SwWW8Writer::WriteLong( *rWrt.m_pTableStrm,
+        SwWW8Writer::WriteLong( *m_rWrt.m_pTableStrm,
                                 m_Fkps[ i ]->GetStartFc() );
     }
 
-    SwWW8Writer::WriteLong( *rWrt.m_pTableStrm,
+    SwWW8Writer::WriteLong( *m_rWrt.m_pTableStrm,
                                 m_Fkps[ i - 1 ]->GetEndFc() );
 
     // for every FKP output the page
     for (i = 0; i < m_Fkps.size(); ++i)
     {
-        SwWW8Writer::WriteLong( *rWrt.m_pTableStrm, i + nFkpStartPage );
+        SwWW8Writer::WriteLong( *m_rWrt.m_pTableStrm, i + m_nFkpStartPage );
     }
 
-    if( CHP == ePlc )
+    if( CHP == m_ePlc )
     {
-        rWrt.m_pFib->m_fcPlcfbteChpx = nFcStart;
-        rWrt.m_pFib->m_lcbPlcfbteChpx = rWrt.m_pTableStrm->Tell() - nFcStart;
+        m_rWrt.m_pFib->m_fcPlcfbteChpx = nFcStart;
+        m_rWrt.m_pFib->m_lcbPlcfbteChpx = m_rWrt.m_pTableStrm->Tell() - nFcStart;
     }
     else
     {
-        rWrt.m_pFib->m_fcPlcfbtePapx = nFcStart;
-        rWrt.m_pFib->m_lcbPlcfbtePapx = rWrt.m_pTableStrm->Tell() - nFcStart;
+        m_rWrt.m_pFib->m_fcPlcfbtePapx = nFcStart;
+        m_rWrt.m_pFib->m_lcbPlcfbtePapx = m_rWrt.m_pTableStrm->Tell() - nFcStart;
     }
 }
 
@@ -4024,15 +4024,15 @@ void WW8_WrPlcAnnotations::WritePlc( WW8Export& rWrt ) const
 
 void WW8_WrPlcTextBoxes::WritePlc( WW8Export& rWrt ) const
 {
-    if( TXT_TXTBOX == nTyp )
+    if( TXT_TXTBOX == m_nTyp )
     {
-        WriteGenericPlc( rWrt, nTyp, rWrt.m_pFib->m_fcPlcftxbxBkd,
+        WriteGenericPlc( rWrt, m_nTyp, rWrt.m_pFib->m_fcPlcftxbxBkd,
             rWrt.m_pFib->m_lcbPlcftxbxBkd, rWrt.m_pFib->m_fcPlcftxbxText,
             rWrt.m_pFib->m_lcbPlcftxbxText );
     }
     else
     {
-        WriteGenericPlc( rWrt, nTyp, rWrt.m_pFib->m_fcPlcfHdrtxbxBkd,
+        WriteGenericPlc( rWrt, m_nTyp, rWrt.m_pFib->m_fcPlcfHdrtxbxBkd,
             rWrt.m_pFib->m_lcbPlcfHdrtxbxBkd, rWrt.m_pFib->m_fcPlcfHdrtxbxText,
             rWrt.m_pFib->m_lcbPlcfHdrtxbxText );
     }
