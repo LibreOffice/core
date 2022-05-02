@@ -6107,6 +6107,7 @@ AC_SUBST(THES_SYSTEM_DIR)
 dnl ===================================================================
 dnl Precompiled headers.
 ENABLE_PCH=""
+enable_pch=full
 AC_MSG_CHECKING([whether to enable pch feature])
 if test -z "$enable_pch"; then
     if test "$_os" = "WINNT"; then
