@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71cf0e3e_6c15ca8a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-05-02T08:43:09Z",
+      "side": 1,
+      "message": "Looks fine to me - thanks Ash ! \u003d)",
+      "revId": "d97241115a10f08747b14a6fb25d569d2b15950c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
