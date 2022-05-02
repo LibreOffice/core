@@ -59,7 +59,7 @@ ScVbaPictureFormat::setBrightness( double _brightness )
     checkParameterRangeInDouble( _brightness, 0.0, 1.0 );
     double fLuminance = _brightness * 200 - 100;
     sal_Int16 nLuminance = static_cast< sal_Int16 >( fLuminance );
-    m_xPropertySet->setPropertyValue( "AdjustLuminance" , uno::makeAny( nLuminance ) );
+    m_xPropertySet->setPropertyValue( "AdjustLuminance" , uno::Any( nLuminance ) );
 }
 
 double SAL_CALL
@@ -78,7 +78,7 @@ ScVbaPictureFormat::setContrast( double _contrast )
     checkParameterRangeInDouble( _contrast, 0.0, 1.0 );
     double fContrast = _contrast * 200 - 100;
     sal_Int16 nContrast = static_cast< sal_Int16 >( fContrast );
-    m_xPropertySet->setPropertyValue( "AdjustContrast" , uno::makeAny( nContrast ) );
+    m_xPropertySet->setPropertyValue( "AdjustContrast" , uno::Any( nContrast ) );
 }
 
 

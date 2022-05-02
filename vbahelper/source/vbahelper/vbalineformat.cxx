@@ -118,7 +118,7 @@ void SAL_CALL
 ScVbaLineFormat::setBeginArrowheadStyle( sal_Int32 _beginarrowheadstyle )
 {
     OUString sArrayName = convertArrowheadStyleToLineStartEndName( _beginarrowheadstyle );
-    m_xPropertySet->setPropertyValue( "LineStartName" , uno::makeAny( sArrayName ) );
+    m_xPropertySet->setPropertyValue( "LineStartName" , uno::Any( sArrayName ) );
 }
 
 sal_Int32 SAL_CALL
@@ -216,7 +216,7 @@ ScVbaLineFormat::setWeight( double _weight )
     aMillimeter.setInPoints( _weight );
 
     sal_Int32 nLineWidth = static_cast<sal_Int32>( aMillimeter.getInHundredthsOfOneMillimeter() );
-    m_xPropertySet->setPropertyValue( "LineWidth" , uno::makeAny( nLineWidth ) );
+    m_xPropertySet->setPropertyValue( "LineWidth" , uno::Any( nLineWidth ) );
     setDashStyle( m_nLineDashStyle );
 }
 
@@ -240,7 +240,7 @@ ScVbaLineFormat::setVisible( sal_Bool _visible )
     if( !_visible )
     {
         aLineStyle = drawing::LineStyle_NONE;
-        m_xPropertySet->setPropertyValue( "LineStyle" , uno::makeAny( aLineStyle ) );
+        m_xPropertySet->setPropertyValue( "LineStyle" , uno::Any( aLineStyle ) );
     }
     else
     {
@@ -264,7 +264,7 @@ void SAL_CALL
 ScVbaLineFormat::setTransparency( double _transparency )
 {
     sal_Int16 nTransparency = static_cast<sal_Int16>( _transparency * 100 );
-    m_xPropertySet->setPropertyValue( "LineTransparence" , uno::makeAny( nTransparency ) );
+    m_xPropertySet->setPropertyValue( "LineTransparence" , uno::Any( nTransparency ) );
 }
 
 sal_Int16 SAL_CALL
@@ -343,11 +343,11 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle )
     m_nLineDashStyle = _dashstyle;
     if( _dashstyle == office::MsoLineDashStyle::msoLineSolid )
     {
-        m_xPropertySet->setPropertyValue( "LineStyle" , uno::makeAny( drawing::LineStyle_SOLID  ));
+        m_xPropertySet->setPropertyValue( "LineStyle" , uno::Any( drawing::LineStyle_SOLID  ));
     }
     else
     {
-        m_xPropertySet->setPropertyValue( "LineStyle" , uno::makeAny( drawing::LineStyle_DASH ) );
+        m_xPropertySet->setPropertyValue( "LineStyle" , uno::Any( drawing::LineStyle_DASH ) );
         drawing::LineDash  aLineDash;
         Millimeter aMillimeter( m_nLineWeight );
         sal_Int32 nPixel = static_cast< sal_Int32 >( aMillimeter.getInHundredthsOfOneMillimeter() );
@@ -405,7 +405,7 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle )
         default:
             throw uno::RuntimeException( "this MsoLineDashStyle is not supported." );
         }
-        m_xPropertySet->setPropertyValue( "LineDash" , uno::makeAny( aLineDash ) );
+        m_xPropertySet->setPropertyValue( "LineDash" , uno::Any( aLineDash ) );
     }
 }
 

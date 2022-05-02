@@ -77,7 +77,7 @@ VbaFontBase::getSuperscript()
     // not supported in form controls
     if( !mbFormControl )
        mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
-    return uno::makeAny( nValue == SUPERSCRIPT );
+    return uno::Any( nValue == SUPERSCRIPT );
 }
 
 void SAL_CALL
@@ -110,7 +110,7 @@ VbaFontBase::getSubscript()
     // not supported in form controls
     if( !mbFormControl )
        mxFont->getPropertyValue( "CharEscapement" ) >>= nValue;
-    return uno::makeAny( nValue == SUBSCRIPT );
+    return uno::Any( nValue == SUBSCRIPT );
 }
 
 void SAL_CALL
@@ -166,7 +166,7 @@ VbaFontBase::getColorIndex()
             break;
         }
     }
-    return uno::makeAny( nIndex );
+    return uno::Any( nIndex );
 }
 
 void SAL_CALL
@@ -186,7 +186,7 @@ VbaFontBase::getBold()
 {
     double fValue = 0.0;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharWeight", "FontWeight" ) ) >>= fValue;
-    return uno::makeAny( fValue == awt::FontWeight::BOLD );
+    return uno::Any( fValue == awt::FontWeight::BOLD );
 }
 
 void SAL_CALL
@@ -237,7 +237,7 @@ VbaFontBase::getItalic()
 {
     awt::FontSlant aFS;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharPosture", "FontSlant" ) ) >>= aFS;
-    return uno::makeAny( aFS == awt::FontSlant_ITALIC );
+    return uno::Any( aFS == awt::FontSlant_ITALIC );
 }
 
 void  SAL_CALL

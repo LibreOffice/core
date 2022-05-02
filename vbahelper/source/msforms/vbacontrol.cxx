@@ -305,7 +305,7 @@ ScVbaControl::getControlSource()
             uno::Reference< beans::XPropertySet > xProps( xBindable->getValueBinding(), uno::UNO_QUERY_THROW );
             table::CellAddress aAddress;
             xProps->getPropertyValue( "BoundCell" ) >>= aAddress;
-            xConvertor->setPropertyValue( "Address" , uno::makeAny( aAddress ) );
+            xConvertor->setPropertyValue( "Address" , uno::Any( aAddress ) );
             xConvertor->getPropertyValue( "XLA1Representation" ) >>= sControlSource;
         }
         catch(const uno::Exception&)
@@ -369,7 +369,7 @@ ScVbaControl::getRowSource()
             uno::Reference< beans::XPropertySet > xProps( xListSink->getListEntrySource(), uno::UNO_QUERY_THROW );
             table::CellRangeAddress aAddress;
             xProps->getPropertyValue( "CellRange" ) >>= aAddress;
-            xConvertor->setPropertyValue( "Address" , uno::makeAny( aAddress ) );
+            xConvertor->setPropertyValue( "Address" , uno::Any( aAddress ) );
             xConvertor->getPropertyValue( "XLA1Representation" ) >>= sRowSource;
         }
         catch(const uno::Exception&)
@@ -397,7 +397,7 @@ ScVbaControl::getName()
 void SAL_CALL
 ScVbaControl::setName( const OUString& _name )
 {
-    m_xProps->setPropertyValue( "Name" , uno::makeAny( _name ) );
+    m_xProps->setPropertyValue( "Name" , uno::Any( _name ) );
     }
 
 OUString SAL_CALL
@@ -411,7 +411,7 @@ ScVbaControl::getControlTipText()
 void SAL_CALL
 ScVbaControl::setControlTipText( const OUString& rsToolTip )
 {
-    m_xProps->setPropertyValue( "HelpText" , uno::makeAny( rsToolTip ) );
+    m_xProps->setPropertyValue( "HelpText" , uno::Any( rsToolTip ) );
 }
 
 OUString SAL_CALL ScVbaControl::getTag()
@@ -509,7 +509,7 @@ void SAL_CALL ScVbaControl::fireEvent( const script::ScriptEvent& rEvt )
     uno::Reference< script::XScriptListener > xScriptListener( xServiceManager->createInstanceWithContext( "ooo.vba.EventListener" , mxContext ), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xProps( xScriptListener, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue( "Model" , uno::makeAny( m_xModel ) );
+    xProps->setPropertyValue( "Model" , uno::Any( m_xModel ) );
 
     // handling for sheet control
     uno::Reference< msforms::XControl > xThisControl( this );
@@ -715,7 +715,7 @@ void ScVbaControl::setBackColor( sal_Int32 nBackColor )
     {
         nBackColor = nSysCols[ col & 0x0FF];
     }
-    m_xProps->setPropertyValue( "BackgroundColor" , uno::makeAny( XLRGBToOORGB( nBackColor ) ) );
+    m_xProps->setPropertyValue( "BackgroundColor" , uno::Any( XLRGBToOORGB( nBackColor ) ) );
 }
 
 bool ScVbaControl::getAutoSize() const
@@ -746,7 +746,7 @@ bool ScVbaControl::getLocked()
 
 void ScVbaControl::setLocked( bool bLocked )
 {
-    m_xProps->setPropertyValue( "ReadOnly" , uno::makeAny( bLocked ) );
+    m_xProps->setPropertyValue( "ReadOnly" , uno::Any( bLocked ) );
 }
 
 namespace {

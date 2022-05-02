@@ -280,7 +280,7 @@ ScVbaShape::setLeft( double _left )
     catch( uno::Exception& )
     {
         sal_Int32 nLeft = Millimeter::getInHundredthsOfOneMillimeter( _left );
-        m_xPropertySet->setPropertyValue( "HoriOrientPosition" , uno::makeAny( nLeft ) );
+        m_xPropertySet->setPropertyValue( "HoriOrientPosition" , uno::Any( nLeft ) );
     }
 }
 
@@ -311,7 +311,7 @@ ScVbaShape::setTop( double _top )
     catch( uno::Exception& )
     {
         sal_Int32 nTop = Millimeter::getInHundredthsOfOneMillimeter( _top );
-        m_xPropertySet->setPropertyValue( "VertOrientPosition" , uno::makeAny( nTop ) );
+        m_xPropertySet->setPropertyValue( "VertOrientPosition" , uno::Any( nTop ) );
     }
 }
 
@@ -359,7 +359,7 @@ void SAL_CALL
 ScVbaShape::setRotation( double _rotation )
 {
     sal_Int32 nRotation = static_cast < sal_Int32 > ( _rotation * 100 );
-    m_xPropertySet->setPropertyValue( "RotateAngle" , uno::makeAny( nRotation ) );
+    m_xPropertySet->setPropertyValue( "RotateAngle" , uno::Any( nRotation ) );
 }
 
 uno::Reference< msforms::XLineFormat > SAL_CALL
@@ -390,10 +390,10 @@ ScVbaShape::TextFrame()
     {
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         uno::Reference< uno::XInterface > xTextFrame = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "ooo.vba.excel.TextFrame" , { uno::Any(getParent()), uno::Any(m_xShape) }, xContext );
-        return uno::makeAny( xTextFrame );
+        return uno::Any( xTextFrame );
     }
 
-    return uno::makeAny( uno::Reference< msforms::XTextFrame >( new VbaTextFrame( this, mxContext, m_xShape ) ) );
+    return uno::Any( uno::Reference< msforms::XTextFrame >( new VbaTextFrame( this, mxContext, m_xShape ) ) );
 }
 
 void SAL_CALL
@@ -412,20 +412,20 @@ ScVbaShape::ZOrder( sal_Int32 ZOrderCmd )
     switch( ZOrderCmd )
     {
     case office::MsoZOrderCmd::msoBringToFront:
-        m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( SAL_MAX_INT32 ) );
+        m_xPropertySet->setPropertyValue( "ZOrder" , uno::Any( SAL_MAX_INT32 ) );
         break;
     case office::MsoZOrderCmd::msoSendToBack:
-        m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( sal_Int32(0) ) );
+        m_xPropertySet->setPropertyValue( "ZOrder" , uno::Any( sal_Int32(0) ) );
         break;
     case office::MsoZOrderCmd::msoBringForward:
         nOrderPosition += 1;
-        m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( nOrderPosition ) );
+        m_xPropertySet->setPropertyValue( "ZOrder" , uno::Any( nOrderPosition ) );
         break;
     case office::MsoZOrderCmd::msoSendBackward:
         if( nOrderPosition > 0 )
         {
             nOrderPosition -= 1;
-            m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( nOrderPosition ) );
+            m_xPropertySet->setPropertyValue( "ZOrder" , uno::Any( nOrderPosition ) );
         }
         break;
     // below two commands use with Writer for text and image object.
@@ -523,7 +523,7 @@ void SAL_CALL
 ScVbaShape::Select( const uno::Any& /*Replace*/ )
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( m_xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    xSelectSupp->select( uno::makeAny( m_xShape ) );
+    xSelectSupp->select( uno::Any( m_xShape ) );
 }
 
 // This method should not be part of Shape, what we really need to do is...
@@ -545,7 +545,7 @@ ScVbaShape::ShapeRange( const uno::Any& index )
     uno::Reference< msforms::XShapeRange > xShapeRange( new ScVbaShapeRange( mxParent, mxContext, xIndexAccess,  uno::Reference< drawing::XDrawPage >( xChild->getParent(), uno::UNO_QUERY_THROW ), m_xModel ) );
     if ( index.hasValue() )
         return xShapeRange->Item( index, uno::Any() );
-    return uno::makeAny( xShapeRange );
+    return uno::Any( xShapeRange );
 }
 
 sal_Bool SAL_CALL
@@ -642,7 +642,7 @@ ScVbaShape::setRelativeHorizontalPosition(::sal_Int32 _relativehorizontalpositio
             DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT);
         }
     }
-    m_xPropertySet->setPropertyValue( "HoriOrientRelation" , uno::makeAny( nType ) );
+    m_xPropertySet->setPropertyValue( "HoriOrientRelation" , uno::Any( nType ) );
 }
 
 sal_Int32 SAL_CALL
@@ -713,7 +713,7 @@ ScVbaShape::setRelativeVerticalPosition(::sal_Int32 _relativeverticalposition)
             DebugHelper::runtimeexception(ERRCODE_BASIC_BAD_ARGUMENT);
         }
     }
-    m_xPropertySet->setPropertyValue( "VertOrientRelation" , uno::makeAny( nType ) );
+    m_xPropertySet->setPropertyValue( "VertOrientRelation" , uno::Any( nType ) );
 }
 
 uno::Any SAL_CALL
@@ -724,7 +724,7 @@ ScVbaShape::WrapFormat()
     {
         uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
         uno::Reference< uno::XInterface > xWrapFormat = xContext->getServiceManager()->createInstanceWithArgumentsAndContext( "ooo.vba.word.WrapFormat" ,{ uno::Any(getParent()), uno::Any(m_xShape) }, xContext );
-        return uno::makeAny( xWrapFormat );
+        return uno::Any( xWrapFormat );
     }
     throw uno::RuntimeException( "Not implemented" );
 }

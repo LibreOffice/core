@@ -61,7 +61,7 @@ public:
             // Strange, shouldn't the Enumeration support match/share the
             // iteration code? ( e.g. ScVbaCommandBars::Item(...) )
             // and we at least should return here ( something ) it seems
-            return uno::makeAny( xCommandBar );
+            return uno::Any( xCommandBar );
         }
         else
             return nextElement();
