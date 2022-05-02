@@ -199,7 +199,7 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
     }
 
     // draw icon
-    if (nIconItem != nItemCount && nIconItem < nItemCount)
+    if (nIconItem < nItemCount)
     {
         SvLBoxItem* pItem = &rEntry.GetItem(nIconItem);
         auto nItemWidth = pItem->GetWidth(this, pViewDataEntry, nIconItem);
