@@ -69,13 +69,13 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     css::uno::Sequence<css::uno::Any> args
     {
-        makeAny(OUString::number(nSecurityId)),
-        makeAny(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),
-        makeAny(OUString::number(nIdOfSignatureElementCollector)),
+        Any(OUString::number(nSecurityId)),
+        Any(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),
+        Any(OUString::number(nIdOfSignatureElementCollector)),
 
         //for nss, the internal module is used for signing, which needs to be improved later
-        makeAny(m_xSecurityContext->getSecurityEnvironment()),
-        makeAny(m_xXMLSignature)
+        Any(m_xSecurityContext->getSecurityEnvironment()),
+        Any(m_xXMLSignature)
     };
     xSignatureCreator->initialize(args);
 

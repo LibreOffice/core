@@ -75,11 +75,11 @@ css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener > XSecCon
 
     css::uno::Sequence<css::uno::Any> args
     {
-        makeAny(OUString::number(nSecurityId)),
-        makeAny(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),
-        makeAny(OUString::number(nIdOfSignatureElementCollector)),
-        makeAny(m_xSecurityContext),
-        makeAny(m_xXMLSignature)
+        Any(OUString::number(nSecurityId)),
+        Any(uno::Reference<xml::crypto::sax::XSecuritySAXEventKeeper>(m_xSAXEventKeeper)),
+        Any(OUString::number(nIdOfSignatureElementCollector)),
+        Any(m_xSecurityContext),
+        Any(m_xXMLSignature)
     };
     xInitialization->initialize(args);
 
