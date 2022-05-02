@@ -710,7 +710,12 @@
       <menu:menuitem menu:id=".uno:OpenReadOnly"/>
       <menu:menuitem menu:id=".uno:AutoControlFocus"/>
       <menu:menuseparator/>
-      <menu:menuitem menu:id=".uno:InsertContentControl"/>
+      <menu:menu menu:id=".uno:ContentControlsMenu">
+        <menu:menupopup>
+          <menu:menuitem menu:id=".uno:InsertContentControl"/>
+          <menu:menuitem menu:id=".uno:InsertCheckboxContentControl"/>
+        </menu:menupopup>
+      </menu:menu>
     </menu:menupopup>
   </menu:menu>
   <menu:menu menu:id=".uno:ToolsMenu">
