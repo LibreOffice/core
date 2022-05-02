@@ -577,8 +577,9 @@ static void GetEnhancedRectangleSequence( std::vector< css::beans::PropertyValue
     }
 }
 
-static void GetEnhancedPath( std::vector< css::beans::PropertyValue >& rDest,                   // e.g. draw:enhanced-path
-                        const OUString& rValue )
+static void
+GetEnhancedPath(std::vector<css::beans::PropertyValue>& rDest, // e.g. draw:enhanced-path
+                const OUString& rValue, std::u16string_view rType)
 {
     std::vector< css::drawing::EnhancedCustomShapeParameterPair >    vCoordinates;
     std::vector< css::drawing::EnhancedCustomShapeSegment >      vSegments;
@@ -820,6 +821,22 @@ static void GetEnhancedPath( std::vector< css::beans::PropertyValue >& rDest,   
         }
     }
 
+    // Corrections for wrong paths in curvedArrow shapes written by older LO versions
+    if (!vSegments.empty()
+        && (rType == u"mso-spt102" || rType == u"mso-spt103" || rType == u"mso-spt104"
+            || rType == u"mso-spt105")
+        && vSegments[0].Count == 2)
+    {
+        vSegments[0].Count = 1;
+        css::drawing::EnhancedCustomShapeSegment aSegment;
+        aSegment.Count = 1;
+        aSegment.Command
+            = vSegments[0].Command == css::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARC
+                  ? css::drawing::EnhancedCustomShapeSegmentCommand::CLOCKWISEARCTO
+                  : css::drawing::EnhancedCustomShapeSegmentCommand::ARCTO;
+        vSegments.insert(vSegments.begin() + 1, aSegment);
+    }
+
     // adding the Coordinates property
     beans::PropertyValue aProp;
     aProp.Name = EASGet( EAS_Coordinates );
@@ -868,12 +885,17 @@ void XMLEnhancedCustomShapeContext::startFastElement(
 {
     sal_Int32               nAttrNumber;
     std::optional<std::string_view> oSpecularityValue; // for postpone extrusion-specularity
+    std::optional<OUString> oPathValue; // for postpone GetEnhancedPath;
+    OUString sType("non-primitive"); // default in ODF
     for( auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList) )
     {
         switch( EASGet( aIter.getToken() ) )
         {
             case EAS_type :
-                GetString( mrCustomShapeGeometry, aIter.toString(), EAS_Type );
+            {
+                sType = aIter.toString();
+                GetString( mrCustomShapeGeometry, sType, EAS_Type );
+            }
             break;
             case EAS_mirror_horizontal :
                 GetBool( mrCustomShapeGeometry, aIter.toView(), EAS_MirroredX );
@@ -1054,7 +1076,7 @@ void XMLEnhancedCustomShapeContext::startFastElement(
                 GetBool( maExtrusion, aIter.toView(), EAS_Color );
             break;
             case EAS_enhanced_path :
-                GetEnhancedPath( maPath, aIter.toString() );
+                oPathValue = aIter.toString();
             break;
             case EAS_path_stretchpoint_x :
             {
@@ -1133,6 +1155,8 @@ void XMLEnhancedCustomShapeContext::startFastElement(
     }
     if (oSpecularityValue)
         GetDoublePercentage( maExtrusion, *oSpecularityValue, EAS_Specularity );
+    if (oPathValue)
+        GetEnhancedPath(maPath, *oPathValue, sType);
 }
 
 static void SdXMLCustomShapePropertyMerge( std::vector< css::beans::PropertyValue >& rPropVec,
