@@ -32,6 +32,12 @@ class SwTextContentControl;
 class SwTextNode;
 class SwXContentControl;
 
+enum class SwContentControlType
+{
+    RICH_TEXT,
+    CHECKBOX,
+};
+
 /// SfxPoolItem subclass that wraps an SwContentControl.
 class SAL_DLLPUBLIC_RTTI SwFormatContentControl final : public SfxPoolItem
 {

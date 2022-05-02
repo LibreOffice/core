@@ -1012,7 +1012,7 @@ void SwWrtShell::InsertColumnBreak()
     EndUndo(SwUndoId::UI_INSERT_COLUMN_BREAK);
 }
 
-void SwWrtShell::InsertContentControl()
+void SwWrtShell::InsertContentControl(SwContentControlType eType)
 {
     if (!lcl_IsAllowed(this))
     {
@@ -1026,13 +1026,32 @@ void SwWrtShell::InsertContentControl()
     }
 
     auto pContentControl = std::make_shared<SwContentControl>(nullptr);
-    pContentControl->SetShowingPlaceHolder(true);
-    if (!HasSelection())
+    OUString aPlaceholder;
+    switch (eType)
     {
-        OUString aPlaceholder = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER);
-        Insert(aPlaceholder);
-        Left(CRSR_SKIP_CHARS, /*bSelect=*/true, aPlaceholder.getLength(), /*bBasicCall=*/false);
+        case SwContentControlType::RICH_TEXT:
+        {
+            pContentControl->SetShowingPlaceHolder(true);
+            if (!HasSelection())
+            {
+                aPlaceholder = SwResId(STR_CONTENT_CONTROL_PLACEHOLDER);
+            }
+            break;
+        }
+        case SwContentControlType::CHECKBOX:
+        {
+            pContentControl->SetCheckbox(true);
+            // Ballot Box with X
+            pContentControl->SetCheckedState(u"\u2612");
+            // Ballot Box
+            pContentControl->SetUncheckedState(OUString(u"\u2610"));
+            aPlaceholder = u"\u2610";
+            break;
+        }
     }
+    Insert(aPlaceholder);
+    Left(CRSR_SKIP_CHARS, /*bSelect=*/true, aPlaceholder.getLength(),
+            /*bBasicCall=*/false);
     SwFormatContentControl aContentControl(pContentControl, RES_TXTATR_CONTENTCONTROL);
     SetAttrItem(aContentControl);
 }

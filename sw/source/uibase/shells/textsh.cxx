@@ -91,6 +91,7 @@ using namespace ::com::sun::star;
 #include <com/sun/star/ui/dialogs/DialogClosedEvent.hpp>
 #include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
 #include <IDocumentUndoRedo.hxx>
+#include <formatcontentcontrol.hxx>
 
 SFX_IMPL_INTERFACE(SwTextShell, SwBaseShell)
 
@@ -219,7 +220,12 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         break;
 
     case FN_INSERT_CONTENT_CONTROL:
-        rSh.InsertContentControl();
+        rSh.InsertContentControl(SwContentControlType::RICH_TEXT);
+        rReq.Done();
+        break;
+
+    case FN_INSERT_CHECKBOX_CONTENT_CONTROL:
+        rSh.InsertContentControl(SwContentControlType::CHECKBOX);
         rReq.Done();
         break;
 
