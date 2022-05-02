@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce44dcb9_a5e73d12",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-02T16:52:31Z",
+      "side": 1,
+      "message": "Just a typo in a comment, let\u0027s push this one.",
+      "revId": "072dc6593e43691c1db2ddf5147b074ea8b88b60",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
