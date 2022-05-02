@@ -32,6 +32,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
+#include <o3tl/string_view.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
@@ -1265,12 +1266,12 @@ Sequence< Reference<deployment::XPackage> > BackendImpl::PackageImpl::getBundle(
     return *pBundle;
 }
 
-bool isBundle_( OUString const & mediaType )
+bool isBundle_( std::u16string_view mediaType )
 {
     // xxx todo: additional parsing?
-    return !mediaType.isEmpty() &&
-        (mediaType.matchIgnoreAsciiCase( "application/vnd.sun.star.package-bundle") ||
-         mediaType.matchIgnoreAsciiCase( "application/vnd.sun.star.legacy-package-bundle"));
+    return !mediaType.empty() &&
+        (o3tl::matchIgnoreAsciiCase( mediaType, u"application/vnd.sun.star.package-bundle") ||
+         o3tl::matchIgnoreAsciiCase( mediaType, u"application/vnd.sun.star.legacy-package-bundle"));
 }
 
 

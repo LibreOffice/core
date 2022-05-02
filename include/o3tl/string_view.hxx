@@ -54,6 +54,15 @@ inline int compareToIgnoreAsciiCase(std::u16string_view s1, std::u16string_view 
     return rtl_ustr_compareIgnoreAsciiCase_WithLength(s1.data(), s1.size(), s2.data(), s2.size());
 };
 
+// Like OUString::matchIgnoreAsciiCase, but for two std::u16string_view:
+inline bool matchIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2,
+                                 sal_Int32 fromIndex = 0)
+{
+    return rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength(
+               s1.data() + fromIndex, s1.size() - fromIndex, s2.data(), s2.size(), s2.size())
+           == 0;
+}
+
 // Similar to O[U]String::getToken, returning the first token of a std::[u16]string_view starting
 // at a given position.
 //

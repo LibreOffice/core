@@ -296,13 +296,13 @@ bool lcl_IsNotAM(OUString const & rFmt, sal_Int32 nPos)
             )
         );
 }
-bool IsPreviousAM(OUString const& rParams, sal_Int32 nPos)
+bool IsPreviousAM(std::u16string_view rParams, sal_Int32 nPos)
 {
-    return nPos >= 2 && rParams.matchIgnoreAsciiCase("am", nPos - 2);
+    return nPos >= 2 && o3tl::matchIgnoreAsciiCase(rParams, u"am", nPos - 2);
 }
-bool IsNextPM(OUString const& rParams, sal_Int32 nPos)
+bool IsNextPM(std::u16string_view rParams, sal_Int32 nPos)
 {
-    return nPos + 2 < rParams.getLength() && rParams.matchIgnoreAsciiCase("pm", nPos + 1);
+    return o3tl::make_unsigned(nPos + 2) < rParams.size() && o3tl::matchIgnoreAsciiCase(rParams, u"pm", nPos + 1);
 }
 }
 
