@@ -92,7 +92,7 @@ static uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
         case NS_ooxml::LN_Value_ST_Shd_pct95: aRet = "pct95"; break;
         case NS_ooxml::LN_Value_ST_Shd_nil: aRet = "nil"; break;
     }
-    return uno::makeAny(aRet);
+    return uno::Any(aRet);
 }
 
 void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
@@ -107,7 +107,7 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
-            createGrabBag("fill", uno::makeAny(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
+            createGrabBag("fill", uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0xffffff; //fill color auto means white
             else
@@ -117,29 +117,29 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
             m_bFillSpecified = true;
         break;
         case NS_ooxml::LN_CT_Shd_color:
-            createGrabBag("color", uno::makeAny(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
+            createGrabBag("color", uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nIntValue))));
             if( nIntValue == sal_Int32(COL_AUTO) )
                 nIntValue = 0; //shading color auto means black
             //color of the shading
             m_nColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_themeFill:
-            createGrabBag("themeFill", uno::makeAny(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+            createGrabBag("themeFill", uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillShade:
-            createGrabBag("themeFillShade", uno::makeAny(OUString::number(nIntValue, 16)));
+            createGrabBag("themeFillShade", uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeFillTint:
-            createGrabBag("themeFillTint", uno::makeAny(OUString::number(nIntValue, 16)));
+            createGrabBag("themeFillTint", uno::Any(OUString::number(nIntValue, 16)));
             break;
         case NS_ooxml::LN_CT_Shd_themeColor:
-            createGrabBag("themeColor", uno::makeAny(TDefTableHandler::getThemeColorTypeString(nIntValue)));
+            createGrabBag("themeColor", uno::Any(TDefTableHandler::getThemeColorTypeString(nIntValue)));
         break;
         case NS_ooxml::LN_CT_Shd_themeShade:
-            createGrabBag("themeShade", uno::makeAny(OUString::number(nIntValue, 16)));
+            createGrabBag("themeShade", uno::Any(OUString::number(nIntValue, 16)));
         break;
         case NS_ooxml::LN_CT_Shd_themeTint:
-            createGrabBag("themeTint", uno::makeAny(OUString::number(nIntValue, 16)));
+            createGrabBag("themeTint", uno::Any(OUString::number(nIntValue, 16)));
             break;
         default:
             OSL_FAIL( "unknown attribute");
@@ -270,23 +270,23 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         }
 
         // Write the shading pattern property
-        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( nShadingPattern ));
+        pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::Any( nShadingPattern ));
     }
 
     if (m_OutputFormat == Paragraph && m_nShadingPattern != NS_ooxml::LN_Value_ST_Shd_nil)
     {
         if (nWW8BrushStyle || !m_bAutoFillColor)
-            pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_SOLID));
+            pPropertyMap->Insert(PROP_FILL_STYLE, uno::Any(drawing::FillStyle_SOLID));
         else if (m_bFillSpecified) // m_bAutoFillColor == true
-            pPropertyMap->Insert(PROP_FILL_STYLE, uno::makeAny(drawing::FillStyle_NONE));
+            pPropertyMap->Insert(PROP_FILL_STYLE, uno::Any(drawing::FillStyle_NONE));
 
-        pPropertyMap->Insert(PROP_FILL_COLOR, uno::makeAny(nApplyColor));
+        pPropertyMap->Insert(PROP_FILL_COLOR, uno::Any(nApplyColor));
     }
     else if ( nWW8BrushStyle || !m_bAutoFillColor || m_bFillSpecified )
         pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
-                            : PROP_CHAR_BACK_COLOR, uno::makeAny( nApplyColor ));
+                            : PROP_CHAR_BACK_COLOR, uno::Any( nApplyColor ));
 
-    createGrabBag("originalColor", uno::makeAny(msfilter::util::ConvertColorOU(Color(ColorTransparency, nApplyColor))));
+    createGrabBag("originalColor", uno::Any(msfilter::util::ConvertColorOU(Color(ColorTransparency, nApplyColor))));
 
     return pPropertyMap;
 }

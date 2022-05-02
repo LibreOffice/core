@@ -529,10 +529,10 @@ void TableManager::endRow()
                     aBorderLine.InnerLineWidth = 0;
                     aBorderLine.OuterLineWidth = 0;
                     TablePropertyMapPtr pCellProperties(new TablePropertyMap);
-                    pCellProperties->Insert(PROP_TOP_BORDER, css::uno::makeAny(aBorderLine));
-                    pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::makeAny(aBorderLine));
-                    pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::makeAny(aBorderLine));
-                    pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::makeAny(aBorderLine));
+                    pCellProperties->Insert(PROP_TOP_BORDER, css::uno::Any(aBorderLine));
+                    pCellProperties->Insert(PROP_LEFT_BORDER, css::uno::Any(aBorderLine));
+                    pCellProperties->Insert(PROP_BOTTOM_BORDER, css::uno::Any(aBorderLine));
+                    pCellProperties->Insert(PROP_RIGHT_BORDER, css::uno::Any(aBorderLine));
                     pTableData->getCurrentRow()->addCell(xRowStart, pCellProperties,
                                                          /*bAddBefore=*/true);
                 }

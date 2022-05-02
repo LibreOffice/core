@@ -998,7 +998,7 @@ void RTFDocumentImpl::resolvePict(bool const bInline, uno::Reference<drawing::XS
 
         // Replacement graphic is inline by default, see oox::vml::SimpleShape::implConvertAndInsert().
         xPropertySet->setPropertyValue("AnchorType",
-                                       uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+                                       uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
         auto pShapeValue = new RTFValue(xShape);
         m_aObjectAttributes.set(NS_ooxml::LN_shape, pShapeValue);
@@ -2680,8 +2680,7 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 break; // not for nested group
             OUString aName = rState.getDestination() == Destination::OPERATOR ? OUString("Operator")
                                                                               : OUString("Company");
-            uno::Any aValue
-                = uno::makeAny(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
+            uno::Any aValue(m_aStates.top().getCurrentDestinationText()->makeStringAndClear());
             if (m_xDocumentProperties.is())
             {
                 uno::Reference<beans::XPropertyContainer> xUserDefinedProperties
@@ -2839,15 +2838,15 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
                 bool bTextFrame = xServiceInfo->supportsService("com.sun.star.text.TextFrame");
 
                 // The default is certainly not inline, but then what Word supports is just at-character.
-                xPropertySet->setPropertyValue(
-                    "AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                xPropertySet->setPropertyValue("AnchorType",
+                                               uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
                 if (bTextFrame)
                 {
                     xPropertySet->setPropertyValue("HoriOrientPosition",
-                                                   uno::makeAny(rDrawing.getLeft()));
+                                                   uno::Any(rDrawing.getLeft()));
                     xPropertySet->setPropertyValue("VertOrientPosition",
-                                                   uno::makeAny(rDrawing.getTop()));
+                                                   uno::Any(rDrawing.getTop()));
                 }
                 else
                 {
@@ -2857,22 +2856,21 @@ RTFError RTFDocumentImpl::beforePopState(RTFParserState& rState)
 
                 if (rDrawing.getHasLineColor())
                 {
-                    uno::Any aLineColor = uno::makeAny(sal_uInt32((rDrawing.getLineColorR() << 16)
-                                                                  + (rDrawing.getLineColorG() << 8)
-                                                                  + rDrawing.getLineColorB()));
+                    uno::Any aLineColor(sal_uInt32((rDrawing.getLineColorR() << 16)
+                                                   + (rDrawing.getLineColorG() << 8)
+                                                   + rDrawing.getLineColorB()));
                     uno::Any aLineWidth;
                     RTFSdrImport::resolveLineColorAndWidth(bTextFrame, xPropertySet, aLineColor,
                                                            aLineWidth);
                 }
                 if (rDrawing.getHasFillColor())
                     xPropertySet->setPropertyValue(
-                        "FillColor", uno::makeAny(sal_uInt32((rDrawing.getFillColorR() << 16)
-                                                             + (rDrawing.getFillColorG() << 8)
-                                                             + rDrawing.getFillColorB())));
+                        "FillColor", uno::Any(sal_uInt32((rDrawing.getFillColorR() << 16)
+                                                         + (rDrawing.getFillColorG() << 8)
+                                                         + rDrawing.getFillColorB())));
                 else if (!bTextFrame)
                     // If there is no fill, the Word default is 100% transparency.
-                    xPropertySet->setPropertyValue("FillTransparence",
-                                                   uno::makeAny(sal_Int32(100)));
+                    xPropertySet->setPropertyValue("FillTransparence", uno::Any(sal_Int32(100)));
 
                 RTFSdrImport::resolveFLine(xPropertySet, rDrawing.getFLine());
 

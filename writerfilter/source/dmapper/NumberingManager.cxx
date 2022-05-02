@@ -54,7 +54,7 @@ namespace writerfilter::dmapper {
 template <typename T>
 static beans::PropertyValue lcl_makePropVal(PropertyIds nNameID, T const & aValue)
 {
-    return {getPropertyName(nNameID), 0, uno::makeAny(aValue), beans::PropertyState_DIRECT_VALUE};
+    return {getPropertyName(nNameID), 0, uno::Any(aValue), beans::PropertyState_DIRECT_VALUE};
 }
 
 static sal_Int32 lcl_findProperty( const uno::Sequence< beans::PropertyValue >& aProps, std::u16string_view sName )
@@ -255,11 +255,11 @@ uno::Sequence<beans::PropertyValue> ListLevel::GetLevelProperties(bool bDefaults
             aNumberingProperties.emplace_back( getPropertyName(aProp->first), 0, aProp->second, beans::PropertyState_DIRECT_VALUE );
         else if (rReadId == PROP_FIRST_LINE_INDENT && bDefaults)
             // Writer default is -360 twips, Word default seems to be 0.
-            aNumberingProperties.emplace_back("FirstLineIndent", 0, uno::makeAny(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
+            aNumberingProperties.emplace_back("FirstLineIndent", 0, uno::Any(static_cast<sal_Int32>(0)), beans::PropertyState_DIRECT_VALUE);
         else if (rReadId == PROP_INDENT_AT && bDefaults)
             // Writer default is 720 twips, Word default seems to be 0.
             aNumberingProperties.emplace_back("IndentAt", 0,
-                                              uno::makeAny(static_cast<sal_Int32>(0)),
+                                              uno::Any(static_cast<sal_Int32>(0)),
                                               beans::PropertyState_DIRECT_VALUE);
     }
 
@@ -537,7 +537,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
         if (GetId() == nOutline)
             m_StyleName = "Outline"; //SwNumRule.GetOutlineRuleName()
         else
-            xStyles->insertByName(GetStyleName(GetId(), xStyles), makeAny(xStyle));
+            xStyles->insertByName(GetStyleName(GetId(), xStyles), css::uno::Any(xStyle));
 
         uno::Any oStyle = xStyles->getByName(GetStyleName());
         xStyle.set( oStyle, uno::UNO_QUERY_THROW );
@@ -593,7 +593,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
             aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_POSITION_AND_SPACE_MODE), sal_Int16(text::PositionAndSpaceMode::LABEL_ALIGNMENT)));
 
             // Replace the numbering rules for the level
-            m_xNumRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
+            m_xNumRules->replaceByIndex(nLevel, uno::Any(comphelper::containerToSequence(aLvlProps)));
 
             // Handle the outline level here
             if (GetId() == nOutline && pAbsLevel && pAbsLevel->GetParaStyle())
@@ -607,7 +607,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 pParaStyle->bAssignedAsChapterNumbering = true;
                 aLvlProps.push_back(comphelper::makePropertyValue(getPropertyName(PROP_HEADING_STYLE_NAME), pParaStyle->sConvertedStyleName));
 
-                xOutlineRules->replaceByIndex(nLevel, uno::makeAny(comphelper::containerToSequence(aLvlProps)));
+                xOutlineRules->replaceByIndex(nLevel, uno::Any(comphelper::containerToSequence(aLvlProps)));
             }
 
             nLevel++;
@@ -615,7 +615,7 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
 
         // Create the numbering style for these rules
         OUString sNumRulesName = getPropertyName( PROP_NUMBERING_RULES );
-        xStyle->setPropertyValue( sNumRulesName, uno::makeAny( m_xNumRules ) );
+        xStyle->setPropertyValue( sNumRulesName, uno::Any( m_xNumRules ) );
     }
     catch( const lang::IllegalArgumentException& )
     {
@@ -751,17 +751,17 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
         case NS_ooxml::LN_CT_Ind_left:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_INDENT_AT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                    PROP_INDENT_AT, uno::Any( ConversionHelper::convertTwipToMM100( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_FIRST_LINE_INDENT, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                    PROP_FIRST_LINE_INDENT, uno::Any( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Ind_firstLine:
             if ( pCurrentLvl )
                 pCurrentLvl->Insert(
-                    PROP_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
+                    PROP_FIRST_LINE_INDENT, uno::Any( ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Lvl_tplc: //template code - unsupported
         case NS_ooxml::LN_CT_Lvl_tentative: //marks level as unused in the document - unsupported
@@ -1016,7 +1016,7 @@ void ListsManager::lcl_sprm( Sprm& rSprm )
                 if (ListLevel::Pointer pLevel = m_pCurrentDefinition->GetCurrentLevel())
                 {
                     pLevel->Insert(
-                        PROP_ADJUST, uno::makeAny( nValue ) );
+                        PROP_ADJUST, uno::Any( nValue ) );
                 }
             }
         }

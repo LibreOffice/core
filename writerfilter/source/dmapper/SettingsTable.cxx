@@ -542,25 +542,25 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     uno::Reference<lang::XMultiServiceFactory> xTextFactory(xDoc, uno::UNO_QUERY_THROW);
     uno::Reference<beans::XPropertySet> xDocumentSettings(xTextFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW);
 
-    xDocumentSettings->setPropertyValue("TableRowKeep", uno::makeAny(true));
+    xDocumentSettings->setPropertyValue("TableRowKeep", uno::Any(true));
 
     if (GetWordCompatibilityMode() <= 14)
     {
-        xDocumentSettings->setPropertyValue("MsWordCompMinLineHeightByFly", uno::makeAny(true));
-        xDocumentSettings->setPropertyValue("TabOverMargin", uno::makeAny(true));
+        xDocumentSettings->setPropertyValue("MsWordCompMinLineHeightByFly", uno::Any(true));
+        xDocumentSettings->setPropertyValue("TabOverMargin", uno::Any(true));
     }
 
     // Show changes value
     if (xDocProps.is())
     {
         bool bHideChanges = !m_pImpl->m_bShowInsDelChanges || !m_pImpl->m_bShowMarkupChanges;
-        xDocProps->setPropertyValue("ShowChanges", uno::makeAny( !bHideChanges || m_pImpl->m_bShowFormattingChanges ) );
+        xDocProps->setPropertyValue("ShowChanges", uno::Any( !bHideChanges || m_pImpl->m_bShowFormattingChanges ) );
     }
 
     // Record changes value
     if (xDocProps.is())
     {
-        xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
+        xDocProps->setPropertyValue("RecordChanges", uno::Any( m_pImpl->m_bRecordChanges ) );
         // Password protected Record changes
         if (m_pImpl->m_bRecordChanges && m_pImpl->m_pDocumentProtection->getRedlineProtection()
             && m_pImpl->m_pDocumentProtection->getEnforcement())
@@ -568,7 +568,7 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
             // use dummy protection key to forbid disabling of Record changes without a notice
             // (extending the recent GrabBag support)    TODO support password verification...
             css::uno::Sequence<sal_Int8> aDummyKey { 1 };
-            xDocProps->setPropertyValue("RedlineProtectionKey", uno::makeAny( aDummyKey ));
+            xDocProps->setPropertyValue("RedlineProtectionKey", uno::Any( aDummyKey ));
         }
     }
 
@@ -588,17 +588,17 @@ void SettingsTable::ApplyProperties(uno::Reference<text::XTextDocument> const& x
     if (m_pImpl->m_bAutoHyphenation && lcl_isDefault(xPropertyState, "ParaIsHyphenation"))
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("ParaIsHyphenation", uno::makeAny(true));
+        xPropertySet->setPropertyValue("ParaIsHyphenation", uno::Any(true));
     }
     if (m_pImpl->m_bNoHyphenateCaps)
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("ParaHyphenationNoCaps", uno::makeAny(true));
+        xPropertySet->setPropertyValue("ParaHyphenationNoCaps", uno::Any(true));
     }
     if (m_pImpl->m_bWidowControl && lcl_isDefault(xPropertyState, "ParaWidows") && lcl_isDefault(xPropertyState, "ParaOrphans"))
     {
         uno::Reference<beans::XPropertySet> xPropertySet(xDefault, uno::UNO_QUERY);
-        uno::Any aAny = uno::makeAny(static_cast<sal_Int8>(2));
+        uno::Any aAny(static_cast<sal_Int8>(2));
         xPropertySet->setPropertyValue("ParaWidows", aAny);
         xPropertySet->setPropertyValue("ParaOrphans", aAny);
     }

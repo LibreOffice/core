@@ -66,7 +66,7 @@ bool DomainMapperTableManager::attribute(Id nName, Value const & rValue)
     case NS_ooxml::LN_CT_TblLook_val:
     {
         TablePropertyMapPtr pPropMap(new TablePropertyMap());
-        pPropMap->Insert(PROP_TBL_LOOK, uno::makeAny<sal_Int32>(rValue.getInt()));
+        pPropMap->Insert(PROP_TBL_LOOK, uno::Any(sal_Int32(rValue.getInt())));
         insertTableProps(pPropMap);
         m_aTableLook["val"] <<= static_cast<sal_Int32>(rValue.getInt());
     }
@@ -99,7 +99,7 @@ bool DomainMapperTableManager::attribute(Id nName, Value const & rValue)
 void DomainMapperTableManager::finishTableLook()
 {
     TablePropertyMapPtr pPropMap(new TablePropertyMap());
-    pPropMap->Insert(META_PROP_TABLE_LOOK, uno::makeAny(m_aTableLook.getAsConstPropertyValueList()));
+    pPropMap->Insert(META_PROP_TABLE_LOOK, uno::Any(m_aTableLook.getAsConstPropertyValueList()));
     m_aTableLook.clear();
     insertTableProps(pPropMap);
 }
@@ -211,12 +211,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     if ( m_nHeaderRepeat == HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND )
                     {
                         m_nHeaderRepeat = -1;
-                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(0)));
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::Any(sal_Int32(0)));
                     }
                     else
                     {
                         ++m_nHeaderRepeat;
-                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( m_nHeaderRepeat ));
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::Any( m_nHeaderRepeat ));
                     }
                     insertTableProps(pPropMap);
                 }
@@ -226,7 +226,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     {
                         // explicit tblHeader=0 in the first row must overwrite table style
                         TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(0)));
+                        pPropMap->Insert( PROP_HEADER_ROW_COUNT, uno::Any(sal_Int32(0)));
                         insertTableProps(pPropMap);
                     }
                     m_nHeaderRepeat = -1;
@@ -235,14 +235,14 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 {
                     // Store the info that this is a header, we'll need that when we apply table styles.
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                    pPropMap->Insert( PROP_TBL_HEADER, uno::makeAny(nIntValue));
+                    pPropMap->Insert( PROP_TBL_HEADER, uno::Any(nIntValue));
                     insertRowProps(pPropMap);
                 }
             break;
             case NS_ooxml::LN_CT_TblPrBase_tblStyle: //table style name
             {
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, uno::makeAny( pValue->getString() ));
+                pPropMap->Insert( META_PROP_TABLE_STYLE_NAME, uno::Any( pValue->getString() ));
                 insertTableProps(pPropMap);
             }
             break;
@@ -258,7 +258,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             {
                 // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
                 TablePropertyMapPtr pMergeProps( new TablePropertyMap );
-                pMergeProps->Insert( PROP_VERTICAL_MERGE, uno::makeAny( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart ) );
+                pMergeProps->Insert( PROP_VERTICAL_MERGE, uno::Any( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart ) );
                 cellProps( pMergeProps);
             }
             break;
@@ -266,7 +266,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             {
                 // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
                 TablePropertyMapPtr pMergeProps(new TablePropertyMap());
-                pMergeProps->Insert(PROP_HORIZONTAL_MERGE, uno::makeAny( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart ));
+                pMergeProps->Insert(PROP_HORIZONTAL_MERGE, uno::Any( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart ));
                 cellProps(pMergeProps);
             }
             break;
@@ -289,17 +289,17 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     case NS_ooxml::LN_Value_ST_TextDirection_tbRl:
                     // Binary filter takes BiDirection into account ( but I have no idea about that here )
                     // or even what it is. But... here's where to handle it if it becomes an issue
-                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::TB_RL ));
+                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::Any( text::WritingMode2::TB_RL ));
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
                     case NS_ooxml::LN_Value_ST_TextDirection_btLr:
-                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::BT_LR ));
+                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::Any( text::WritingMode2::BT_LR ));
                         break;
                     case NS_ooxml::LN_Value_ST_TextDirection_lrTbV:
-                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::LR_TB ));
+                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::Any( text::WritingMode2::LR_TB ));
                         break;
                     case NS_ooxml::LN_Value_ST_TextDirection_tbRlV:
-                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::TB_RL ));
+                        pPropMap->Insert( PROP_FRM_DIRECTION, uno::Any( text::WritingMode2::TB_RL ));
                         break;
                     case NS_ooxml::LN_Value_ST_TextDirection_lrTb:
                     case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
@@ -370,7 +370,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             case NS_ooxml::LN_CT_TblPrBase_bidiVisual:
             {
                 TablePropertyMapPtr pPropMap(new TablePropertyMap());
-                pPropMap->Insert(PROP_WRITING_MODE, uno::makeAny(sal_Int16(nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB)));
+                pPropMap->Insert(PROP_WRITING_MODE, uno::Any(sal_Int16(nIntValue ? text::WritingMode2::RL_TB : text::WritingMode2::LR_TB)));
                 insertTableProps(pPropMap);
                 break;
             }
@@ -730,7 +730,7 @@ void DomainMapperTableManager::endOfRowAction()
             }
         }
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
-        pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::makeAny( aSeparators ) );
+        pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::Any( aSeparators ) );
 
 #ifdef DBG_UTIL
         TagLogger::getInstance().startElement("rowProperties");
@@ -747,7 +747,7 @@ void DomainMapperTableManager::endOfRowAction()
                         ? oox::XML_tableRowDelete
                         : oox::XML_tableRowInsert );
             uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
-            pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
+            pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::Any( aTableRedlineProperties ));
         }
 
         insertRowProps(pPropMap);
@@ -820,7 +820,7 @@ void DomainMapperTableManager::endOfRowAction()
         }
 
         TablePropertyMapPtr pPropMap( new TablePropertyMap );
-        pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::makeAny( aSeparators ) );
+        pPropMap->Insert( PROP_TABLE_COLUMN_SEPARATORS, uno::Any( aSeparators ) );
 #ifdef DBG_UTIL
         TagLogger::getInstance().startElement("rowProperties");
         pPropMap->dumpXml();

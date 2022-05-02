@@ -46,7 +46,7 @@ bool RtfTest::load(const OUString&, const OUString& rURL, const OUString&, SfxFi
                    SotClipboardFormatId, unsigned int)
 {
     uno::Sequence<beans::PropertyValue> aDescriptor = { beans::PropertyValue(
-        "URL", sal_Int32(0), uno::makeAny(rURL), beans::PropertyState_DIRECT_VALUE) };
+        "URL", sal_Int32(0), uno::Any(rURL), beans::PropertyState_DIRECT_VALUE) };
     try
     {
         return m_xFilter->filter(aDescriptor);

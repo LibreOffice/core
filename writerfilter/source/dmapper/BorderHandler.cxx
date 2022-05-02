@@ -168,7 +168,7 @@ PropertyMapPtr  BorderHandler::getProperties()
         for( auto nProp: o3tl::enumrange<BorderPosition>())
         {
             if ( m_aFilledLines[nProp] ) {
-                pPropertyMap->Insert( aPropNames[nProp], uno::makeAny( m_aBorderLines[nProp] ) );
+                pPropertyMap->Insert( aPropNames[nProp], uno::Any( m_aBorderLines[nProp] ) );
             }
         }
     }

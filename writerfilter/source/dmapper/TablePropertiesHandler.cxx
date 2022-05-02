@@ -80,8 +80,8 @@ namespace writerfilter::dmapper {
                     pProperties->resolve(*pMeasureHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
 
-                    pPropMap->Insert( PROP_SIZE_TYPE, uno::makeAny( pMeasureHandler->GetRowHeightSizeType() ), false);
-                    pPropMap->Insert( PROP_HEIGHT, uno::makeAny(pMeasureHandler->getMeasureValue() ));
+                    pPropMap->Insert( PROP_SIZE_TYPE, uno::Any( pMeasureHandler->GetRowHeightSizeType() ), false);
+                    pPropMap->Insert( PROP_HEIGHT, uno::Any(pMeasureHandler->getMeasureValue() ));
 
                     insertRowProps(pPropMap);
                 }
@@ -110,7 +110,7 @@ namespace writerfilter::dmapper {
                     // Add the 'track changes' properties to the 'table row' via UNO.
                     // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
                     uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
-                    pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
+                    pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::Any( aTableRedlineProperties ));
                     insertRowProps(pPropMap);
                 }
             }
@@ -141,7 +141,7 @@ namespace writerfilter::dmapper {
                     // Add the 'track changes' properties to the 'table row' via UNO.
                     // This way - in the SW core - when it receives this - it will create a new 'Table Redline' object for that row
                     uno::Sequence<beans::PropertyValue> aTableRedlineProperties = pTrackChangesHandler->getRedlineProperties();
-                    pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::makeAny( aTableRedlineProperties ));
+                    pPropMap->Insert( PROP_TABLE_REDLINE_PARAMS , uno::Any( aTableRedlineProperties ));
                     cellProps(pPropMap);
                 }
             }
@@ -150,7 +150,7 @@ namespace writerfilter::dmapper {
             {
                 //row can't break across pages if nIntValue == 1
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
-                pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny( nIntValue != 1 ) );
+                pPropMap->Insert( PROP_IS_SPLIT_ALLOWED, uno::Any( nIntValue != 1 ) );
                 insertRowProps(pPropMap);
             }
             break;
@@ -164,7 +164,7 @@ namespace writerfilter::dmapper {
                     default:;
                 }
                 TablePropertyMapPtr pCellPropMap( new TablePropertyMap() );
-                pCellPropMap->Insert( PROP_VERT_ORIENT, uno::makeAny( nVertOrient ) );
+                pCellPropMap->Insert( PROP_VERT_ORIENT, uno::Any( nVertOrient ) );
                 //todo: in ooxml import the value of m_ncell is wrong
                 cellProps( pCellPropMap );
                 if (m_pCurrentInteropGrabBag)
@@ -265,13 +265,13 @@ namespace writerfilter::dmapper {
                             m_pCurrentInteropGrabBag->push_back(pCellMarginHandler->getInteropGrabBag());
                         TablePropertyMapPtr pCellProperties(new TablePropertyMap);
                         if (pCellMarginHandler->m_bTopMarginValid)
-                            pCellProperties->Insert(PROP_TOP_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nTopMargin));
+                            pCellProperties->Insert(PROP_TOP_BORDER_DISTANCE, uno::Any(pCellMarginHandler->m_nTopMargin));
                         if (pCellMarginHandler->m_bLeftMarginValid)
-                            pCellProperties->Insert(PROP_LEFT_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nLeftMargin));
+                            pCellProperties->Insert(PROP_LEFT_BORDER_DISTANCE, uno::Any(pCellMarginHandler->m_nLeftMargin));
                         if (pCellMarginHandler->m_bBottomMarginValid)
-                            pCellProperties->Insert(PROP_BOTTOM_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nBottomMargin));
+                            pCellProperties->Insert(PROP_BOTTOM_BORDER_DISTANCE, uno::Any(pCellMarginHandler->m_nBottomMargin));
                         if (pCellMarginHandler->m_bRightMarginValid)
-                            pCellProperties->Insert(PROP_RIGHT_BORDER_DISTANCE, uno::makeAny(pCellMarginHandler->m_nRightMargin));
+                            pCellProperties->Insert(PROP_RIGHT_BORDER_DISTANCE, uno::Any(pCellMarginHandler->m_nRightMargin));
                         cellProps(pCellProperties);
                     }
                 }
@@ -358,7 +358,7 @@ namespace writerfilter::dmapper {
             if (nIntValue)
             {
                 TablePropertyMapPtr pPropMap(new TablePropertyMap());
-                pPropMap->Insert(PROP_CELL_HIDE_MARK, uno::makeAny(nIntValue));
+                pPropMap->Insert(PROP_CELL_HIDE_MARK, uno::Any(nIntValue));
                 cellProps(pPropMap);
             }
             break;
