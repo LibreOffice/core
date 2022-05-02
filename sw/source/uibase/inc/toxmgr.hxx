@@ -223,6 +223,10 @@ public:
     std::optional<OUString> const & GetPhoneticReadingOfSecKey() const { return maPhoneticReadingOfSecKey; }
 };
 
+/**
+ * Built on top of SwWrtShell, provides functionality to insert, update or perform other actions on
+ * various ToX types (table of contents, indexes and so on).
+ */
 class SW_DLLPUBLIC SwTOXMgr
 {
     SwWrtShell*         m_pSh;
