@@ -64,7 +64,6 @@ $(eval $(call gb_Library_use_externals,vclplug_kf5,\
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_kf5,\
     vcl/unx/kf5/KF5FilePicker \
-    vcl/unx/kf5/KF5SalFrame \
     vcl/unx/kf5/KF5SalInstance \
 ))
 
