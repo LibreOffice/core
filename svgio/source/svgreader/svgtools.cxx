@@ -402,7 +402,7 @@ namespace svgio::svgreader
             return false;
         }
 
-        bool readAngle(const OUString& rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen)
+        bool readAngle(std::u16string_view rCandidate, sal_Int32& nPos, double& fAngle, const sal_Int32 nLen)
         {
             if(readNumber(rCandidate, nPos, fAngle, nLen))
             {
@@ -418,18 +418,18 @@ namespace svgio::svgreader
                 if(nPos < nLen)
                 {
                     const sal_Unicode aChar(rCandidate[nPos]);
-                    static const char aStrGrad[] = "grad";
-                    static const char aStrRad[] = "rad";
+                    static constexpr std::u16string_view aStrGrad = u"grad";
+                    static constexpr std::u16string_view aStrRad = u"rad";
 
                     switch(aChar)
                     {
                         case u'g' :
                         case u'G' :
                         {
-                            if(rCandidate.matchIgnoreAsciiCase(aStrGrad, nPos))
+                            if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrGrad, nPos))
                             {
                                 // angle in grad
-                                nPos += strlen(aStrGrad);
+                                nPos += aStrGrad.size();
                                 aType = DegreeType::grad;
                             }
                             break;
@@ -437,10 +437,10 @@ namespace svgio::svgreader
                         case u'r' :
                         case u'R' :
                         {
-                            if(rCandidate.matchIgnoreAsciiCase(aStrRad, nPos))
+                            if(o3tl::matchIgnoreAsciiCase(rCandidate, aStrRad, nPos))
                             {
                                 // angle in radians
-                                nPos += strlen(aStrRad);
+                                nPos += aStrRad.size();
                                 aType = DegreeType::rad;
                             }
                             break;

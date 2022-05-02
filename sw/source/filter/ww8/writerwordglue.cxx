@@ -25,6 +25,7 @@
 
 #include <algorithm>
 
+#include <o3tl/string_view.hxx>
 #include <rtl/tencinfo.h>
 #include <sal/log.hxx>
 #include <svl/numformat.hxx>
@@ -1036,18 +1037,18 @@ namespace sw
             return nKey;
         }
 
-        bool IsPreviousAM(OUString const & rParams, sal_Int32 nPos)
+        bool IsPreviousAM(std::u16string_view rParams, sal_Int32 nPos)
         {
-            return nPos>=2 && rParams.matchIgnoreAsciiCase("am", nPos-2);
+            return nPos>=2 && o3tl::matchIgnoreAsciiCase(rParams, u"am", nPos-2);
         }
-        bool IsNextPM(OUString const & rParams, sal_Int32 nPos)
+        bool IsNextPM(std::u16string_view rParams, sal_Int32 nPos)
         {
-            return nPos+2<rParams.getLength() && rParams.matchIgnoreAsciiCase("pm", nPos+1);
+            return o3tl::make_unsigned(nPos+2)<rParams.size() && o3tl::matchIgnoreAsciiCase(rParams, u"pm", nPos+1);
         }
-        bool IsNotAM(OUString const & rParams, sal_Int32 nPos)
+        bool IsNotAM(std::u16string_view rParams, sal_Int32 nPos)
         {
             ++nPos;
-            return nPos>=rParams.getLength() || (rParams[nPos]!='M' && rParams[nPos]!='m');
+            return o3tl::make_unsigned(nPos)>=rParams.size() || (rParams[nPos]!='M' && rParams[nPos]!='m');
         }
 
         void SwapQuotesInField(OUString &rFormat)

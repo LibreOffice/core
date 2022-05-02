@@ -84,15 +84,15 @@ namespace sw
         sal_uLong MSDateTimeFormatToSwFormat(OUString& rParams, SvNumberFormatter *pFormatter, LanguageType &rLang, bool bHijri, LanguageType nDocLang);
 
         /*Used to identify if the previous token is AM time field*/
-        bool IsPreviousAM(OUString const & rParams, sal_Int32 nPos);
+        bool IsPreviousAM(std::u16string_view rParams, sal_Int32 nPos);
 
         /*Used to identify if the next token is PM time field*/
-        bool IsNextPM(OUString const & rParams, sal_Int32 nPos);
+        bool IsNextPM(std::u16string_view rParams, sal_Int32 nPos);
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 
         */
-        bool IsNotAM(OUString const & rParams, sal_Int32 nPos);
+        bool IsNotAM(std::u16string_view rParams, sal_Int32 nPos);
 
         /** Another function used by MSDateTimeFormatToSwFormat
 

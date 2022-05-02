@@ -63,11 +63,11 @@ namespace
 
 struct Bootstrap_Impl;
 
-char const VND_SUN_STAR_PATHNAME[] = "vnd.sun.star.pathname:";
+constexpr std::u16string_view VND_SUN_STAR_PATHNAME = u"vnd.sun.star.pathname:";
 
-bool isPathnameUrl(OUString const & url)
+bool isPathnameUrl(std::u16string_view url)
 {
-    return url.matchIgnoreAsciiCase(VND_SUN_STAR_PATHNAME);
+    return o3tl::matchIgnoreAsciiCase(url, VND_SUN_STAR_PATHNAME);
 }
 
 bool resolvePathnameUrl(OUString * url)
@@ -75,7 +75,7 @@ bool resolvePathnameUrl(OUString * url)
     OSL_ASSERT(url);
     if (!isPathnameUrl(*url) ||
         (osl::FileBase::getFileURLFromSystemPath(
-            url->copy(RTL_CONSTASCII_LENGTH(VND_SUN_STAR_PATHNAME)), *url) ==
+            url->copy(VND_SUN_STAR_PATHNAME.size()), *url) ==
          osl::FileBase::E_None))
     {
         return true;
