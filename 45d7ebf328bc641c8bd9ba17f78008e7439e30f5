@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39e2ac34_3b0efe91",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-02T20:19:54Z",
+      "side": 1,
+      "message": "Appears to be broken ever since \u003chttps://git.libreoffice.org/core/+/095ffaf5efef5e8fdc4d7dfa8cd90fff7b768661%5E!\u003e \"add O(U)String::startsWith() to complement endsWith()\", and \u003chttps://git.libreoffice.org/core/+/fe0ed1e8bbc0cf8d0957474dcbd42b7153adb09b%5E!\u003e \"valgrind: rtl_ustr_asciil_reverseEquals_WithLength is a death trap\" fixed startsWith but missed startsWithIgnoreAsciiCase.",
+      "revId": "45d7ebf328bc641c8bd9ba17f78008e7439e30f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
