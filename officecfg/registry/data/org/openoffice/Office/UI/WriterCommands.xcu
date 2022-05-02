@@ -614,9 +614,22 @@
           <value>1</value>
         </prop>
       </node>
+      <node oor:name=".uno:ContentControlsMenu" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Content Controls</value>
+        </prop>
+      </node>
       <node oor:name=".uno:InsertContentControl" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Insert Rich Text Content Control</value>
+        </prop>
+        <prop oor:name="Properties" oor:type="xs:int">
+          <value>1</value>
+        </prop>
+      </node>
+      <node oor:name=".uno:InsertCheckboxContentControl" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">Insert Check Box Content Control</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
