@@ -180,6 +180,10 @@ public:
 
             if (m_Seen.insert(arg->getExprLoc()).second)
             {
+                if (suppressWarningAt(arg->getBeginLoc()))
+                {
+                    continue;
+                }
                 report(DiagnosticsEngine::Warning,
                        "redundant functional cast from %0 to %1 in construct expression",
                        arg->getExprLoc())

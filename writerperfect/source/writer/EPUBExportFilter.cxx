@@ -111,9 +111,9 @@ sal_Bool EPUBExportFilter::filter(const uno::Sequence<beans::PropertyValue>& rDe
             { OUString(), 0, uno::Type(), 0, 0 } };
     uno::Reference<beans::XPropertySet> xInfoSet(
         comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aInfoMap)));
-    xInfoSet->setPropertyValue("BaseURI", uno::makeAny(aSourceURL));
+    xInfoSet->setPropertyValue("BaseURI", uno::Any(aSourceURL));
 
-    xInitialization->initialize({ uno::makeAny(xExportHandler), uno::makeAny(xInfoSet) });
+    xInitialization->initialize({ uno::Any(xExportHandler), uno::Any(xInfoSet) });
     uno::Reference<document::XExporter> xExporter(xInitialization, uno::UNO_QUERY);
     xExporter->setSourceDocument(mxSourceDocument);
     uno::Reference<document::XFilter> xFilter(xInitialization, uno::UNO_QUERY);
