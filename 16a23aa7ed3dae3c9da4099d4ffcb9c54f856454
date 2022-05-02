@@ -16,6 +16,69 @@
       "message": "Nice fix, gave it a bit of testing. \nThis changes the PPTX export of the example file from https://bugs.documentfoundation.org/show_bug.cgi?id\u003d80236 in PP to be correct.\n\nA related issue is https://bugs.documentfoundation.org/show_bug.cgi?id\u003d66228 - here the connector type in Impress is \"Line Connector\" which is still not saved to PPTX correctly.\nChanging it in Impress to Standard connector however keeps its shape and saves to PPTX too, so maybe its export could be easily fixed now.\n\nAnother issue is https://bugs.documentfoundation.org/show_bug.cgi?id\u003d50434 - the connectors in docx now get some extra 90/270 degrees rotation after this change.",
       "revId": "16a23aa7ed3dae3c9da4099d4ffcb9c54f856454",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa0f64f2_02d84679",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-02T15:23:47Z",
+      "side": 1,
+      "message": "@Tibor: very nice and useful fix! I suggest only a minor clean-up.\n\nWe can check the problem reported by Gábor later.\n\n@Gábor: many thanks for your review!",
+      "revId": "16a23aa7ed3dae3c9da4099d4ffcb9c54f856454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aec03648_bb548708",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-02T15:23:47Z",
+      "side": 1,
+      "message": "/ 2 is correct for negative numbers, too (awt.Point can be negative, see Point.idl), not only more clear and same or similarly fast, than \u003e\u003e\n\nMore information: https://stackoverflow.com/a/10681871",
+      "range": {
+        "startLine": 1706,
+        "startChar": 58,
+        "endLine": 1706,
+        "endChar": 63
+      },
+      "revId": "16a23aa7ed3dae3c9da4099d4ffcb9c54f856454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d30e069_39171a28",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-02T15:23:47Z",
+      "side": 1,
+      "message": "same as above",
+      "range": {
+        "startLine": 1707,
+        "startChar": 59,
+        "endLine": 1707,
+        "endChar": 63
+      },
+      "revId": "16a23aa7ed3dae3c9da4099d4ffcb9c54f856454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
