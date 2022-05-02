@@ -1892,7 +1892,7 @@ COM_DECLSPEC_NOTHROW STDMETHODIMP CMAccessible::get_groupPosition(long __RPC_FAR
             Reference< XAccessibleGroupPosition > xGroupPosition( pRContext, UNO_QUERY );
             if ( xGroupPosition.is() )
             {
-                Sequence< sal_Int32 > rSeq = xGroupPosition->getGroupPosition( makeAny( pRContext ) );
+                Sequence< sal_Int32 > rSeq = xGroupPosition->getGroupPosition( Any( pRContext ) );
                 if (rSeq.getLength() >= 3)
                 {
                     *groupLevel = rSeq[0];
