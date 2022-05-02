@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(VclFilterIpdfTest, testPDFAddVisibleSignatureLastPage)
     // Select it and assign a certificate.
     uno::Reference<view::XSelectionSupplier> xSelectionSupplier(pBaseModel->getCurrentController(),
                                                                 uno::UNO_QUERY);
-    xSelectionSupplier->select(uno::makeAny(xShape));
+    xSelectionSupplier->select(uno::Any(xShape));
     auto xCert = GetValidCertificate(
         getSecurityContext()->getSecurityEnvironment()->getPersonalCertificates());
     if (!xCert)

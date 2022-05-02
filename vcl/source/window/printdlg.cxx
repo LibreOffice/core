@@ -1816,13 +1816,13 @@ IMPL_LINK(PrintDialog, ToggleHdl, weld::Toggleable&, rButton, void)
     else if (&rButton == mxSingleJobsBox.get())
     {
         maPController->setValue( "SinglePrintJobs",
-                                 makeAny( isSingleJobs() ) );
+                                 Any( isSingleJobs() ) );
         checkControlDependencies();
     }
     else if( &rButton == mxCollateBox.get() )
     {
         maPController->setValue( "Collate",
-                                 makeAny( isCollate() ) );
+                                 Any( isCollate() ) );
         checkControlDependencies();
     }
     else if( &rButton == mxReverseOrderBox.get() )
@@ -1830,7 +1830,7 @@ IMPL_LINK(PrintDialog, ToggleHdl, weld::Toggleable&, rButton, void)
         bool bChecked = mxReverseOrderBox->get_active();
         maPController->setReversePrint( bChecked );
         maPController->setValue( "PrintReverse",
-                                 makeAny( bChecked ) );
+                                 Any( bChecked ) );
         maUpdatePreviewIdle.Start();
     }
     else if (&rButton == mxBrochureBtn.get())
@@ -2051,9 +2051,9 @@ IMPL_LINK( PrintDialog, SpinModifyHdl, weld::SpinButton&, rEdit, void )
     else if( &rEdit == mxCopyCountField.get() )
     {
         maPController->setValue( "CopyCount",
-                               makeAny( sal_Int32(mxCopyCountField->get_value()) ) );
+                               Any( sal_Int32(mxCopyCountField->get_value()) ) );
         maPController->setValue( "Collate",
-                               makeAny( isCollate() ) );
+                               Any( isCollate() ) );
     }
 }
 

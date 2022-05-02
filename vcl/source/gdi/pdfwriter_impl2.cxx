@@ -1063,7 +1063,7 @@ public:
     // XMaterialHolder
     virtual uno::Any SAL_CALL getMaterial() override
     {
-        return uno::makeAny( sal_Int64(maID) );
+        return uno::Any( sal_Int64(maID) );
     }
 
     static EncHashTransporter* getEncHashTransporter( const uno::Reference< beans::XMaterialHolder >& );
