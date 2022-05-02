@@ -82,59 +82,45 @@ tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, tools::Long nEnt
 void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long nY,
                           vcl::RenderContext& rRenderContext)
 {
-    tools::Rectangle aRect; // multi purpose
+    const int nSpacing = 5; // 5 pixels from top, from bottom, between icon and label
 
     pImpl->UpdateContextBmpWidthMax(&rEntry);
 
     short nTempEntryHeight = GetEntryHeight();
     short nTempEntryWidth = GetEntryWidth();
 
-    Point aEntryPos;
+    Point aEntryPos(nX, nY);
 
-    Color aBackupTextColor(rRenderContext.GetTextColor());
-    vcl::Font aBackupFont(rRenderContext.GetFont());
-    Color aBackupColor = rRenderContext.GetFillColor();
+    const Color aBackupTextColor(rRenderContext.GetTextColor());
+    const vcl::Font aBackupFont(rRenderContext.GetFont());
+    const Color aBackupColor = rRenderContext.GetFillColor();
 
-    bool bCurFontIsSel = false;
-    const WinBits nWindowStyle = GetStyle();
-    const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) != 0 && !HasFocus();
     const StyleSettings& rSettings = rRenderContext.GetSettings().GetStyleSettings();
 
-    vcl::Font aHighlightFont(rRenderContext.GetFont());
-    const Color aHighlightTextColor(rSettings.GetHighlightTextColor());
-    aHighlightFont.SetColor(aHighlightTextColor);
-
-    Size aOutputSize = GetOutputSizePixel();
+    const Size aOutputSize = GetOutputSizePixel();
     if (aOutputSize.getHeight() < nTempEntryHeight)
         nTempEntryHeight = aOutputSize.getHeight();
 
-    Size aRectSize(nTempEntryWidth, nTempEntryHeight);
+    const SvViewDataEntry* pViewDataEntry = GetViewDataEntry(&rEntry);
 
-    SvViewDataEntry* pViewDataEntry = GetViewDataEntry(&rEntry);
-
-    sal_uInt16 nItemCount = rEntry.ItemCount();
-    sal_uInt16 nCurItem = 0;
-    sal_uInt16 nIconItem = nItemCount;
-
-    while (nCurItem < nItemCount)
+    bool bCurFontIsSel = false;
+    if (pViewDataEntry->IsHighlighted())
     {
-        SvLBoxItem* pItem = nCurItem < nItemCount ? &rEntry.GetItem(nCurItem) : nullptr;
-        SvLBoxItemType nItemType = pItem->GetType();
+        vcl::Font aHighlightFont(rRenderContext.GetFont());
+        const Color aHighlightTextColor(rSettings.GetHighlightTextColor());
+        aHighlightFont.SetColor(aHighlightTextColor);
 
-        if (nItemType == SvLBoxItemType::ContextBmp)
-        {
-            nIconItem = nCurItem;
-            nCurItem++;
-            continue;
-        }
+        // set font color to highlight
+        rRenderContext.SetTextColor(aHighlightTextColor);
+        rRenderContext.SetFont(aHighlightFont);
+        bCurFontIsSel = true;
+    }
 
-        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nCurItem);
-
-        aEntryPos.setX(nX);
-        aEntryPos.setY(nY);
-
+    bool bFillColorSet = false;
+    // draw background
+    if (!(nTreeFlags & SvTreeFlags::USESEL))
+    {
         // set background pattern/color
-
         Wallpaper aWallpaper = rRenderContext.GetBackground();
 
         if (pViewDataEntry->IsHighlighted())
@@ -142,80 +128,87 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
             Color aNewWallColor = rSettings.GetHighlightColor();
             // if the face color is bright then the deactivate color is also bright
             // -> so you can't see any deactivate selection
+            const WinBits nWindowStyle = GetStyle();
+            const bool bHideSelection = (nWindowStyle & WB_HIDESELECTION) != 0 && !HasFocus();
             if (bHideSelection && !rSettings.GetFaceColor().IsBright()
                 && aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright())
             {
                 aNewWallColor = rSettings.GetDeactiveColor();
             }
-            // set font color to highlight
-            if (!bCurFontIsSel)
-            {
-                rRenderContext.SetTextColor(aHighlightTextColor);
-                rRenderContext.SetFont(aHighlightFont);
-                bCurFontIsSel = true;
-            }
             aWallpaper.SetColor(aNewWallColor);
         }
         else // no selection
         {
-            if (bCurFontIsSel)
-            {
-                bCurFontIsSel = false;
-                rRenderContext.SetTextColor(aBackupTextColor);
-                rRenderContext.SetFont(aBackupFont);
-            }
-            else
-            {
-                aWallpaper.SetColor(rEntry.GetBackColor());
-            }
+            aWallpaper.SetColor(rEntry.GetBackColor());
         }
 
-        // draw background
-        if (!(nTreeFlags & SvTreeFlags::USESEL))
+        Color aBackgroundColor = aWallpaper.GetColor();
+        if (aBackgroundColor != COL_TRANSPARENT)
         {
-            aRect.SetPos(aEntryPos);
-            aRect.SetSize(aRectSize);
-
-            Color aBackgroundColor = aWallpaper.GetColor();
-            if (aBackgroundColor != COL_TRANSPARENT)
-            {
-                rRenderContext.SetFillColor(aBackgroundColor);
-                // this case may occur for smaller horizontal resizes
-                if (aRect.Left() < aRect.Right())
-                    rRenderContext.DrawRect(aRect);
-            }
+            rRenderContext.SetFillColor(aBackgroundColor);
+            bFillColorSet = true;
+            // this case may occur for smaller horizontal resizes
+            if (nTempEntryWidth > 1)
+                rRenderContext.DrawRect({ aEntryPos, Size(nTempEntryWidth, nTempEntryHeight) });
         }
-
-        // center vertically
-        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2);
-
-        aEntryPos.AdjustY(15);
-
-        pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
-
-        rRenderContext.SetFillColor(aBackupColor);
-
-        nCurItem++;
     }
 
-    // draw icon
-    if (nIconItem != nItemCount && nIconItem < nItemCount)
+    const size_t nItemCount = rEntry.ItemCount();
+    size_t nIconItem = nItemCount;
+
+    int nLabelHeight = 0;
+    std::vector<size_t> aTextItems;
+
+    for (size_t nCurItem = 0; nCurItem < nItemCount; ++nCurItem)
     {
-        SvLBoxItem* pItem = &rEntry.GetItem(nIconItem);
-        auto nItemWidth = pItem->GetWidth(this, pViewDataEntry, nIconItem);
+        SvLBoxItem& rItem = rEntry.GetItem(nCurItem);
+        SvLBoxItemType nItemType = rItem.GetType();
+
+        if (nItemType == SvLBoxItemType::ContextBmp)
+        {
+            nIconItem = nCurItem;
+            continue;
+        }
+
+        aTextItems.push_back(nCurItem);
+        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nCurItem);
+        nLabelHeight += nItemHeight;
+    }
+
+    int nLabelYPos = nY + nTempEntryHeight - nLabelHeight - nSpacing; // padding from bottom
+    for (auto nCurItem : aTextItems)
+    {
+        aEntryPos.setY(nLabelYPos);
+
+        auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nCurItem);
+        nLabelYPos += nItemHeight;
+
+        rEntry.GetItem(nCurItem).Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
+    }
+
+    if (bFillColorSet)
+        rRenderContext.SetFillColor(aBackupColor);
+
+    // draw icon
+    if (nIconItem < nItemCount)
+    {
+        SvLBoxItem& rItem = rEntry.GetItem(nIconItem);
+        auto nItemWidth = rItem.GetWidth(this, pViewDataEntry, nIconItem);
         auto nItemHeight = SvLBoxItem::GetHeight(pViewDataEntry, nIconItem);
 
-        aEntryPos.setX(nX);
         aEntryPos.setY(nY);
 
         // center horizontally
         aEntryPos.AdjustX((nTempEntryWidth - nItemWidth) / 2);
         // center vertically
-        aEntryPos.AdjustY((nTempEntryHeight - nItemHeight) / 2);
+        int nImageAreaHeight = nTempEntryHeight - nSpacing * 2; // spacings from top, from bottom
+        if (nLabelHeight > 0)
+        {
+            nImageAreaHeight -= nLabelHeight + nSpacing; // spacing between icon and label
+        }
+        aEntryPos.AdjustY((nImageAreaHeight - nItemHeight) / 2 + nSpacing);
 
-        aEntryPos.AdjustY(-10);
-
-        pItem->Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
+        rItem.Paint(aEntryPos, *this, rRenderContext, pViewDataEntry, rEntry);
     }
 
     if (bCurFontIsSel)
