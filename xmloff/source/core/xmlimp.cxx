@@ -630,7 +630,7 @@ void SAL_CALL SvXMLImport::endDocument()
                     mxImportInfo->setPropertyValue(sProgressCurrent, uno::Any(nProgressCurrent));
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                    mxImportInfo->setPropertyValue(sRepeat, css::uno::makeAny(mpProgressBarHelper->GetRepeat()));
+                    mxImportInfo->setPropertyValue(sRepeat, css::uno::Any(mpProgressBarHelper->GetRepeat()));
                 // pProgressBarHelper is deleted in dtor
             }
             OUString sNumberStyles(XML_NUMBERSTYLES);
@@ -698,7 +698,7 @@ std::optional<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
             {
                 throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
                         uno::Reference< uno::XInterface >(),
-                        uno::makeAny(
+                        uno::Any(
                             packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
             }
         }
@@ -770,7 +770,7 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
             {
                 throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
                         uno::Reference< uno::XInterface >(),
-                        uno::makeAny(
+                        uno::Any(
                             packages::zip::ZipIOException("Inconsistent ODF versions in content.xml and manifest.xml!" ) ) );
             }
         }
@@ -1049,7 +1049,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
-    xInit->initialize( { makeAny(OUString("IgnoreMissingNSDecl")) });
+    xInit->initialize( { Any(OUString("IgnoreMissingNSDecl")) });
 }
 
 // XServiceInfo
@@ -1669,7 +1669,7 @@ bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                         bResult = aODFVersion == aStorVersion;
                     else
                         xStorProps->setPropertyValue( "Version",
-                                                      uno::makeAny( aODFVersion ) );
+                                                      uno::Any( aODFVersion ) );
 
                     if ( bResult )
                     {

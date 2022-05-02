@@ -46,7 +46,6 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Exception;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using namespace com::sun::star;
 using com::sun::star::util::Duration;
 using com::sun::star::xml::sax::XFastAttributeList;
@@ -104,21 +103,21 @@ typedef Any (*convert_t)( const OUString& );
 
 static Any xforms_string( const OUString& rValue )
 {
-    return makeAny( rValue );
+    return Any( rValue );
 }
 
 static Any xforms_int32( const OUString& rValue )
 {
     sal_Int32 nValue;
     bool bSuccess = ::sax::Converter::convertNumber( nValue, rValue );
-    return bSuccess ? makeAny( nValue ) : Any();
+    return bSuccess ? Any( nValue ) : Any();
 }
 
 static Any xforms_int16( const OUString& rValue )
 {
     sal_Int32 nValue;
     bool bSuccess = ::sax::Converter::convertNumber( nValue, rValue );
-    return bSuccess ? makeAny( static_cast<sal_Int16>( nValue ) ) : Any();
+    return bSuccess ? Any( static_cast<sal_Int16>( nValue ) ) : Any();
 }
 
 static Any xforms_whitespace( const OUString& rValue )
@@ -137,7 +136,7 @@ static Any xforms_double( const OUString& rValue )
 {
     double fValue;
     bool bSuccess = ::sax::Converter::convertDouble( fValue, rValue );
-    return bSuccess ? makeAny( fValue ) : Any();
+    return bSuccess ? Any( fValue ) : Any();
 }
 
 static Any xforms_date( const OUString& rValue )
@@ -165,7 +164,7 @@ static Any xforms_dateTime( const OUString& rValue )
 {
     util::DateTime aDateTime;
     bool const bSuccess = ::sax::Converter::parseDateTime(aDateTime, rValue);
-    return bSuccess ? makeAny( aDateTime ) : Any();
+    return bSuccess ? Any( aDateTime ) : Any();
 }
 
 static Any xforms_time( const OUString& rValue )

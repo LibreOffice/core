@@ -115,7 +115,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testFontSorting)
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
 

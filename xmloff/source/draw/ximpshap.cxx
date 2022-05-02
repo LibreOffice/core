@@ -308,7 +308,7 @@ void SdXMLShapeContext::addGluePoint( const uno::Reference< xml::sax::XFastAttri
     {
         try
         {
-            sal_Int32 nInternalId = mxGluePoints->insert( uno::makeAny( aGluePoint ) );
+            sal_Int32 nInternalId = mxGluePoints->insert( uno::Any( aGluePoint ) );
             GetImport().GetShapeImport()->addGluePointMapping( mxShape, nId, nInternalId );
         }
         catch(const uno::Exception&)
@@ -449,9 +449,9 @@ void SdXMLShapeContext::AddShape(uno::Reference< drawing::XShape >& xShape)
             uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
             uno::Reference<beans::XPropertySetInfo> xPropertySetInfo = xPropertySet->getPropertySetInfo();
             if (mnRelWidth && xPropertySetInfo->hasPropertyByName("RelativeWidth"))
-                xPropertySet->setPropertyValue("RelativeWidth", uno::makeAny(mnRelWidth));
+                xPropertySet->setPropertyValue("RelativeWidth", uno::Any(mnRelWidth));
             if (mnRelHeight && xPropertySetInfo->hasPropertyByName("RelativeHeight"))
-                xPropertySet->setPropertyValue("RelativeHeight", uno::makeAny(mnRelHeight));
+                xPropertySet->setPropertyValue("RelativeHeight", uno::Any(mnRelHeight));
         }
 
         if( !maShapeId.isEmpty() )
@@ -707,7 +707,7 @@ void SdXMLShapeContext::SetStyle( bool bSupportsStyle /* = true */)
             uno::Reference<beans::XPropertySetInfo> xPropertySetInfo
                 = xPropSet->getPropertySetInfo();
             if (xPropertySetInfo->hasPropertyByName("TextBox"))
-                xPropSet->setPropertyValue("TextBox", uno::makeAny(mbTextBox));
+                xPropSet->setPropertyValue("TextBox", uno::Any(mbTextBox));
 
             // if this is an auto style, set its properties
             if(bAutoStyle && pDocStyle)
@@ -780,7 +780,7 @@ void SdXMLShapeContext::SetThumbnail()
             // it at the api
 
             uno::Reference<graphic::XGraphic> xGraphic = GetImport().loadGraphicByURL(maThumbnailURL);
-            xPropSet->setPropertyValue("ThumbnailGraphic", uno::makeAny(xGraphic));
+            xPropSet->setPropertyValue("ThumbnailGraphic", uno::Any(xGraphic));
         }
     }
     catch(const uno::Exception&)
@@ -965,7 +965,7 @@ void SdXMLRectShapeContext::startFastElement (sal_Int32 nElement,
         {
             try
             {
-                xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
+                xPropSet->setPropertyValue("CornerRadius", uno::Any( mnRadius ) );
             }
             catch(const uno::Exception&)
             {
@@ -1629,7 +1629,7 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
         {
             try
             {
-                xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
+                xPropSet->setPropertyValue("CornerRadius", uno::Any( mnRadius ) );
             }
             catch(const uno::Exception&)
             {
@@ -1646,7 +1646,7 @@ void SdXMLTextBoxShapeContext::startFastElement (sal_Int32 nElement,
             try
             {
                 xPropSet->setPropertyValue("TextChainNextName",
-                                           uno::makeAny( maChainNextName ) );
+                                           uno::Any( maChainNextName ) );
             }
             catch(const uno::Exception&)
             {
@@ -2190,7 +2190,7 @@ void SdXMLPageShapeContext::startFastElement (sal_Int32 nElement,
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
         static const OUStringLiteral aPageNumberStr(u"PageNumber");
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
-            xPropSet->setPropertyValue(aPageNumberStr, uno::makeAny( mnPageNumber ));
+            xPropSet->setPropertyValue(aPageNumberStr, uno::Any( mnPageNumber ));
     }
 
     SdXMLShapeContext::startFastElement(nElement, xAttrList);
@@ -2238,16 +2238,16 @@ void SdXMLCaptionShapeContext::startFastElement (sal_Int32 nElement,
         aAny >>= bIsAutoGrowWidth;
 
         if ( bIsAutoGrowWidth )
-            xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( false ) );
+            xProps->setPropertyValue("TextAutoGrowWidth", uno::Any( false ) );
     }
 
     // set pos, size, shear and rotate
     SetTransformation();
     if( xProps.is() )
-        xProps->setPropertyValue("CaptionPoint", uno::makeAny( maCaptionPoint ) );
+        xProps->setPropertyValue("CaptionPoint", uno::Any( maCaptionPoint ) );
 
     if ( bIsAutoGrowWidth )
-        xProps->setPropertyValue("TextAutoGrowWidth", uno::makeAny( true ) );
+        xProps->setPropertyValue("TextAutoGrowWidth", uno::Any( true ) );
 
     if(mnRadius)
     {
@@ -2256,7 +2256,7 @@ void SdXMLCaptionShapeContext::startFastElement (sal_Int32 nElement,
         {
             try
             {
-                xPropSet->setPropertyValue("CornerRadius", uno::makeAny( mnRadius ) );
+                xPropSet->setPropertyValue("CornerRadius", uno::Any( mnRadius ) );
             }
             catch(const uno::Exception&)
             {
@@ -2350,7 +2350,7 @@ void SdXMLGraphicObjectShapeContext::startFastElement (sal_Int32 nElement,
 
         uno::Reference< beans::XPropertySetInfo > xPropsInfo( xPropset->getPropertySetInfo() );
         if( xPropsInfo.is() && xPropsInfo->hasPropertyByName("IsEmptyPresentationObject"))
-            xPropset->setPropertyValue("IsEmptyPresentationObject", css::uno::makeAny( mbIsPlaceholder ) );
+            xPropset->setPropertyValue("IsEmptyPresentationObject", css::uno::Any( mbIsPlaceholder ) );
 
         if( !mbIsPlaceholder )
         {
@@ -2359,7 +2359,7 @@ void SdXMLGraphicObjectShapeContext::startFastElement (sal_Int32 nElement,
                 uno::Reference<graphic::XGraphic> xGraphic = GetImport().loadGraphicByURL(maURL);
                 if (xGraphic.is())
                 {
-                    xPropset->setPropertyValue("Graphic", uno::makeAny(xGraphic));
+                    xPropset->setPropertyValue("Graphic", uno::Any(xGraphic));
                 }
             }
         }
@@ -2395,7 +2395,7 @@ void SdXMLGraphicObjectShapeContext::endFastElement(sal_Int32 nElement)
             uno::Reference<beans::XPropertySet> xProperties(mxShape, uno::UNO_QUERY);
             if (xProperties.is())
             {
-                xProperties->setPropertyValue("Graphic", uno::makeAny(xGraphic));
+                xProperties->setPropertyValue("Graphic", uno::Any(xGraphic));
             }
         }
     }
@@ -2626,13 +2626,13 @@ void SdXMLObjectShapeContext::startFastElement (sal_Int32 /*nElement*/,
                     aPersistName = aPersistName.copy( sURL.getLength() );
 
                 xProps->setPropertyValue("PersistName",
-                                          uno::makeAny( aPersistName ) );
+                                          uno::Any( aPersistName ) );
             }
             else
             {
                 // this is OOo link object
                 xProps->setPropertyValue("LinkURL",
-                                          uno::makeAny( aPersistName ) );
+                                          uno::Any( aPersistName ) );
             }
         }
     }
@@ -2660,8 +2660,8 @@ void SdXMLObjectShapeContext::endFastElement(sal_Int32 nElement)
 
         if( xProps.is() )
         {
-            xProps->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
-            xProps->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
+            xProps->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
+            xProps->setPropertyValue("LineStyle", uno::Any(drawing::LineStyle_NONE));
         }
     }
 
@@ -2674,7 +2674,7 @@ void SdXMLObjectShapeContext::endFastElement(sal_Int32 nElement)
 
         uno::Reference< beans::XPropertySet > xProps(mxShape, uno::UNO_QUERY);
         if( xProps.is() )
-            xProps->setPropertyValue("PersistName", uno::makeAny( aPersistName ) );
+            xProps->setPropertyValue("PersistName", uno::Any( aPersistName ) );
     }
 
     SdXMLShapeContext::endFastElement(nElement);
@@ -2718,7 +2718,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLObjectShapeContex
             uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
             if( xPropSet.is() )
             {
-                xPropSet->setPropertyValue("CLSID", uno::makeAny( maCLSID ) );
+                xPropSet->setPropertyValue("CLSID", uno::Any( maCLSID ) );
 
                 uno::Reference< lang::XComponent > xComp;
                 xPropSet->getPropertyValue("Model") >>= xComp;
@@ -3009,9 +3009,9 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
         else
         {
             // in case we have a media object
-            xProps->setPropertyValue( "MediaURL", uno::makeAny(maHref));
+            xProps->setPropertyValue( "MediaURL", uno::Any(maHref));
 
-            xProps->setPropertyValue("MediaMimeType", uno::makeAny(maMimeType) );
+            xProps->setPropertyValue("MediaMimeType", uno::Any(maMimeType) );
 
             for( const auto& rParam : std::as_const(maParams) )
             {
@@ -3022,21 +3022,21 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
                     OUString aValueStr;
                     rParam.Value >>= aValueStr;
                     xProps->setPropertyValue("Loop",
-                        uno::makeAny( aValueStr == "true" ) );
+                        uno::Any( aValueStr == "true" ) );
                 }
                 else if( rName == "Mute" )
                 {
                     OUString aValueStr;
                     rParam.Value >>= aValueStr;
                     xProps->setPropertyValue("Mute",
-                        uno::makeAny( aValueStr == "true" ) );
+                        uno::Any( aValueStr == "true" ) );
                 }
                 else if( rName == "VolumeDB" )
                 {
                     OUString aValueStr;
                     rParam.Value >>= aValueStr;
                     xProps->setPropertyValue("VolumeDB",
-                                                uno::makeAny( static_cast< sal_Int16 >( aValueStr.toInt32() ) ) );
+                                                uno::Any( static_cast< sal_Int16 >( aValueStr.toInt32() ) ) );
                 }
                 else if( rName == "Zoom" )
                 {
@@ -3064,7 +3064,7 @@ void SdXMLPluginShapeContext::endFastElement(sal_Int32 nElement)
                     else
                         eZoomLevel = media::ZoomLevel_NOT_AVAILABLE;
 
-                    xProps->setPropertyValue("Zoom", uno::makeAny( eZoomLevel ) );
+                    xProps->setPropertyValue("Zoom", uno::Any( eZoomLevel ) );
                 }
             }
         }

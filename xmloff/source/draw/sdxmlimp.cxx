@@ -510,7 +510,7 @@ void SdXMLImport::SetViewSettings(const css::uno::Sequence<css::beans::PropertyV
 
     try
     {
-        xPropSet->setPropertyValue("VisibleArea", uno::makeAny( aVisArea )  );
+        xPropSet->setPropertyValue("VisibleArea", uno::Any( aVisArea )  );
     }
     catch(const css::uno::Exception&)
     {
@@ -656,7 +656,7 @@ void SdXMLImport::NotifyContainsEmbeddedFont()
     {
         uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
         if( xProps.is() )
-            xProps->setPropertyValue("EmbedFonts", uno::makeAny( true ) );
+            xProps->setPropertyValue("EmbedFonts", uno::Any( true ) );
     }
 }
 

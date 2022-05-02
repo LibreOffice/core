@@ -980,7 +980,7 @@ void SvxXMLListStyleContext::CreateAndInsertLate( bool bOverwrite )
         }
 
         if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
-            xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );
+            xPropSet->setPropertyValue( "Hidden", uno::Any( IsHidden( ) ) );
 
         if( rName != GetName() )
             GetImport().AddStyleDisplayName( XmlStyleFamily::TEXT_LIST,

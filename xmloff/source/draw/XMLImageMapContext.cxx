@@ -536,7 +536,7 @@ void XMLImageMapContext::endFastElement(sal_Int32 )
     Reference < XPropertySetInfo > xInfo =
         xPropertySet->getPropertySetInfo();
     if( xInfo.is() && xInfo->hasPropertyByName( gsImageMap ) )
-        xPropertySet->setPropertyValue(gsImageMap, uno::makeAny( xImageMap ) );
+        xPropertySet->setPropertyValue(gsImageMap, uno::Any( xImageMap ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -130,7 +130,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     {
         // OOo 1.x only supported "true" so that is the more appropriate
         // default for OOoXML format documents.
-        xDefaults->setPropertyValue("IsFollowingTextFlow", uno::makeAny(true));
+        xDefaults->setPropertyValue("IsFollowingTextFlow", uno::Any(true));
     }
 
     // NOTE: the only reason why it's legal to check "==" (not "<") against
@@ -160,7 +160,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         {
             Color const nStroke(
                     bIsAOO4 ? Color(128, 128, 128) : COL_BLACK);
-            xDefaults->setPropertyValue("LineColor", makeAny(nStroke));
+            xDefaults->setPropertyValue("LineColor", Any(nStroke));
         }
         Color const nFillColor( bIsAOO4
             ? Color(0xCF, 0xE7, 0xF5) : Color(153, 204, 255));
@@ -169,7 +169,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
         if (std::none_of(GetProperties().begin(), GetProperties().end(),
                          XMLPropertyByIndex(nFillIndex)))
         {
-            xDefaults->setPropertyValue("FillColor", makeAny(nFillColor));
+            xDefaults->setPropertyValue("FillColor", Any(nFillColor));
         }
         if (xInfo->hasPropertyByName("FillColor2"))
         {
@@ -178,7 +178,7 @@ void XMLGraphicsDefaultStyle::SetDefaults()
             if (std::none_of(GetProperties().begin(), GetProperties().end(),
                              XMLPropertyByIndex(nFill2Index)))
             {
-                xDefaults->setPropertyValue("FillColor2", makeAny(sal_Int32(nFillColor)));
+                xDefaults->setPropertyValue("FillColor2", Any(sal_Int32(nFillColor)));
             }
         }
     }

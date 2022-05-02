@@ -196,7 +196,7 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
                     + aBookmarkName;
             }
 
-            xProps->setPropertyValue("BookmarkURL", uno::makeAny( sHREF ) );
+            xProps->setPropertyValue("BookmarkURL", uno::Any( sHREF ) );
         }
     }
 

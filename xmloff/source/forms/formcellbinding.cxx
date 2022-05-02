@@ -113,7 +113,7 @@ bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescr
     Any aAddress;
     return doConvertAddressRepresentations(
                 PROPERTY_FILE_REPRESENTATION,
-                makeAny( _rAddressDescription ),
+                Any( _rAddressDescription ),
                 PROPERTY_ADDRESS,
                 aAddress,
                 false
@@ -127,7 +127,7 @@ bool FormCellBindingHelper::convertStringAddress( const OUString& _rAddressDescr
     Any aAddress;
     return doConvertAddressRepresentations(
                 PROPERTY_FILE_REPRESENTATION,
-                makeAny( _rAddressDescription ),
+                Any( _rAddressDescription ),
                 PROPERTY_ADDRESS,
                 aAddress,
                 true
@@ -150,7 +150,7 @@ Reference< XValueBinding > FormCellBindingHelper::createCellBindingFromStringAdd
     xBinding.set(createDocumentDependentInstance(
         _bUseIntegerBinding ? OUString(SERVICE_LISTINDEXCELLBINDING) : OUString(SERVICE_CELLVALUEBINDING),
         PROPERTY_BOUND_CELL,
-        makeAny( aAddress )
+        Any( aAddress )
     ), css::uno::UNO_QUERY);
 
     return xBinding;
@@ -168,7 +168,7 @@ Reference< XListEntrySource > FormCellBindingHelper::createCellListSourceFromStr
     xSource.set(createDocumentDependentInstance(
         SERVICE_CELLRANGELISTSOURCE,
         PROPERTY_LIST_CELL_RANGE,
-        makeAny( aRangeAddress )
+        Any( aRangeAddress )
     ), css::uno::UNO_QUERY);
 
     return xSource;
@@ -189,7 +189,7 @@ OUString FormCellBindingHelper::getStringAddressFromCellBinding( const Reference
             xBindingProps->getPropertyValue( PROPERTY_BOUND_CELL ) >>= aAddress;
 
             Any aStringAddress;
-            doConvertAddressRepresentations( PROPERTY_ADDRESS, makeAny( aAddress ),
+            doConvertAddressRepresentations( PROPERTY_ADDRESS, Any( aAddress ),
                 PROPERTY_FILE_REPRESENTATION, aStringAddress, false );
 
             aStringAddress >>= sAddress;
@@ -218,7 +218,7 @@ OUString FormCellBindingHelper::getStringAddressFromCellListSource( const Refere
             xSourceProps->getPropertyValue( PROPERTY_LIST_CELL_RANGE ) >>= aRangeAddress;
 
             Any aStringAddress;
-            doConvertAddressRepresentations( PROPERTY_ADDRESS, makeAny( aRangeAddress ),
+            doConvertAddressRepresentations( PROPERTY_ADDRESS, Any( aRangeAddress ),
                 PROPERTY_FILE_REPRESENTATION, aStringAddress, true );
             aStringAddress >>= sAddress;
         }

@@ -279,7 +279,7 @@ void exportXFormsBinding( SvXMLExport& rExport,
             // if we don't have a name yet, generate one on the fly
             sal_Int64 nId = reinterpret_cast<sal_uInt64>( xBinding.get() );
             sName = "bind_" + OUString::number( nId , 16 );
-            xBinding->setPropertyValue( "BindingID", makeAny(sName));
+            xBinding->setPropertyValue( "BindingID", Any(sName));
         }
     }
 
@@ -785,7 +785,7 @@ void getXFormsSettings( const Reference< XNameAccess >& _rXForms, Sequence< Prop
             Sequence<PropertyValue> aModelSettings{ comphelper::makePropertyValue(
                 sExternalData, xModelProps->getPropertyValue(sExternalData)) };
 
-            xModelSettings->insertByName( modelName, makeAny( aModelSettings ) );
+            xModelSettings->insertByName( modelName, Any( aModelSettings ) );
         }
 
         if ( xModelSettings->hasElements() )

@@ -326,7 +326,7 @@ void XMLSettingsExportHelper::exportSymbolDescriptors(
         pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Name       = sCharacter;
         pSymbol[XML_SYMBOL_DESCRIPTOR_CHARACTER].Value  <<= pDescriptor->nCharacter;
 
-        xBox->insertByIndex(nIndex, uno::makeAny( aSequence ));
+        xBox->insertByIndex(nIndex, uno::Any( aSequence ));
     }
 
     exportIndexAccess( xBox, rName );
@@ -453,7 +453,7 @@ void XMLSettingsExportHelper::exportForbiddenCharacters(
             pForChar[XML_FORBIDDEN_CHARACTER_BEGIN_LINE].Value <<= aChars.beginLine;
             pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Name    = sEndLine;
             pForChar[XML_FORBIDDEN_CHARACTER_END_LINE].Value <<= aChars.endLine;
-            xBox->insertByIndex(nPos++, uno::makeAny( aSequence ));
+            xBox->insertByIndex(nPos++, uno::Any( aSequence ));
         }
     }
 

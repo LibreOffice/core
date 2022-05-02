@@ -153,7 +153,7 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testThemeExport)
     uno::Sequence<util::Color> aColorScheme
         = { 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8, 0x9, 0xa, 0xb };
     aMap["ColorScheme"] <<= aColorScheme;
-    uno::Any aTheme = uno::makeAny(aMap.getAsConstPropertyValueList());
+    uno::Any aTheme(aMap.getAsConstPropertyValueList());
     xMasterPage->setPropertyValue("Theme", aTheme);
 
     // Export to ODP:

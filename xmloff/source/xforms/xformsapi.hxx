@@ -54,7 +54,7 @@ inline void xforms_setValue(
     const OUString& rName,
     const T& aValue )
 {
-    xforms_setValueAny( xPropSet, rName, css::uno::makeAny( aValue ) );
+    xforms_setValueAny( xPropSet, rName, css::uno::Any( aValue ) );
 }
 template<>
 inline void xforms_setValue(

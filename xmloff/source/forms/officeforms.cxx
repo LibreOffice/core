@@ -83,7 +83,7 @@ namespace xmloff
         // set the property
         if (_rxPropInfo->hasPropertyByName(_rPropName))
         {
-            _rxProps->setPropertyValue(_rPropName, makeAny(bValue));
+            _rxProps->setPropertyValue(_rPropName, Any(bValue));
         }
     }
 

@@ -636,7 +636,7 @@ void setXMLRangePropertyAtDataSequence(
         Reference< beans::XPropertySet > xProp( xDataSequence, uno::UNO_QUERY_THROW );
         Reference< beans::XPropertySetInfo > xInfo( xProp->getPropertySetInfo());
         if( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ))
-            xProp->setPropertyValue( aXMLRangePropName, uno::makeAny( rXMLRange ));
+            xProp->setPropertyValue( aXMLRangePropName, uno::Any( rXMLRange ));
     }
     catch( const uno::Exception & )
     {
