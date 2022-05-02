@@ -22,6 +22,7 @@
 #include <sal/types.h>
 #include <sal/log.hxx>
 #include <comphelper/processfactory.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/debug.hxx>
 #include <tools/helpers.hxx>
 
@@ -1420,7 +1421,7 @@ const PaperInfo& Printer::GetPaperInfo( int nPaper ) const
         return ImplGetEmptyPaper();
     if( ! mpInfoPrinter->m_bPapersInit )
         mpInfoPrinter->InitPaperFormats( &maJobSetup.ImplGetConstData() );
-    if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || nPaper >= int(mpInfoPrinter->m_aPaperFormats.size()) )
+    if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || o3tl::make_unsigned(nPaper) >= mpInfoPrinter->m_aPaperFormats.size() )
         return ImplGetEmptyPaper();
     return mpInfoPrinter->m_aPaperFormats[nPaper];
 }
