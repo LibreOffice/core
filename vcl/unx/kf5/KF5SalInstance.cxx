@@ -28,7 +28,6 @@
 #include <QtData.hxx>
 
 #include "KF5FilePicker.hxx"
-#include "KF5SalFrame.hxx"
 #include "KF5SalInstance.hxx"
 
 using namespace com::sun::star;
@@ -38,26 +37,6 @@ KF5SalInstance::KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCa
 {
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->maAppData.mxToolkitName = constructToolkitID(u"kf5");
-}
-
-SalFrame* KF5SalInstance::CreateChildFrame(SystemParentData* /*pParent*/, SalFrameStyleFlags nStyle)
-{
-    SalFrame* pRet(nullptr);
-    RunInMainThread([&, this]() { pRet = new KF5SalFrame(nullptr, nStyle, useCairo()); });
-    assert(pRet);
-    return pRet;
-}
-
-SalFrame* KF5SalInstance::CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle)
-{
-    assert(!pParent || dynamic_cast<KF5SalFrame*>(pParent));
-
-    SalFrame* pRet(nullptr);
-    RunInMainThread([&, this]() {
-        pRet = new KF5SalFrame(static_cast<KF5SalFrame*>(pParent), nStyle, useCairo());
-    });
-    assert(pRet);
-    return pRet;
 }
 
 bool KF5SalInstance::hasNativeFileSelection() const
