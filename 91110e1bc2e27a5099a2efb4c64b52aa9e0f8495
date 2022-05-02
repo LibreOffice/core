@@ -16,6 +16,24 @@
       "message": "As the comment below says, that should not really happen, but if it does then this makes sense I guess.\n",
       "revId": "91110e1bc2e27a5099a2efb4c64b52aa9e0f8495",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9da3881b_62d80304",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000026
+      },
+      "writtenOn": "2022-05-02T19:05:45Z",
+      "side": 1,
+      "message": "I will try to understand in wich case it can\u0027t create raster context, but at least this patch avoid the recursive call and will produce better crash reports.\n\nPs : it\u0027s not on my machine, juste saw the crash report and made this change, so it could be a challenge for me to understand the issue !",
+      "parentUuid": "6a139dac_e6bae2c2",
+      "revId": "91110e1bc2e27a5099a2efb4c64b52aa9e0f8495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
