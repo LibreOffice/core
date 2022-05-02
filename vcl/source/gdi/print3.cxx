@@ -22,6 +22,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
@@ -949,7 +950,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         {
             sal_Int32 nBin = -1;
             rProp.Value >>= nBin;
-            if( nBin >= 0 && nBin < static_cast<sal_Int32>(mxPrinter->GetPaperBinCount()) )
+            if( nBin >= 0 && o3tl::make_unsigned(nBin) < mxPrinter->GetPaperBinCount() )
                 nPaperBin = nBin;
         }
     }

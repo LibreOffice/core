@@ -43,6 +43,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/safeint.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <osl/file.hxx>
 #include <osl/thread.h>
@@ -398,8 +399,8 @@ void PDFWriterImpl::createWidgetFieldName( sal_Int32 i_nWidgetIndex, const PDFWr
         std::unordered_map< OString, sal_Int32 >::const_iterator it = m_aFieldNameMap.find( aDomain );
         if( it != m_aFieldNameMap.end() )
         {
-            OSL_ENSURE( it->second >= 0 && it->second < sal_Int32( m_aWidgets.size() ), "invalid field index" );
-            if( it->second >= 0 && it->second < sal_Int32(m_aWidgets.size()) )
+            OSL_ENSURE( it->second >= 0 && o3tl::make_unsigned(it->second) < m_aWidgets.size(), "invalid field index" );
+            if( it->second >= 0 && o3tl::make_unsigned(it->second) < m_aWidgets.size() )
             {
                 m_aWidgets[i_nWidgetIndex].m_nParent = m_aWidgets[it->second].m_nObject;
                 m_aWidgets[it->second].m_aKids.push_back( m_aWidgets[i_nWidgetIndex].m_nObject);
@@ -1910,7 +1911,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
                 m_aLinkPropertyMap.find( nLink );
             if( link_it != m_aLinkPropertyMap.end() )
                 nLink = link_it->second;
-            if( nLink >= 0 && nLink < static_cast<sal_Int32>(m_aLinks.size()) )
+            if( nLink >= 0 && o3tl::make_unsigned(nLink) < m_aLinks.size() )
             {
                 // update struct parent of link
                 OString aStructParentEntry =
@@ -2032,7 +2033,7 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
 
     for (auto const& child : rEle.m_aChildren)
     {
-        if( child > 0 && child < sal_Int32(m_aStructure.size()) )
+        if( child > 0 && o3tl::make_unsigned(child) < m_aStructure.size() )
         {
             PDFStructureElement& rChild = m_aStructure[ child ];
             if( rChild.m_eType != PDFWriter::NonStructElement )
@@ -3048,7 +3049,7 @@ sal_Int32 PDFWriterImpl::emitOutline()
             appendUnicodeTextStringEncrypt( rItem.m_aTitle, rItem.m_nObject, aLine );
             aLine.append( "\n" );
             // Dest is not required
-            if( rItem.m_nDestID >= 0 && rItem.m_nDestID < static_cast<sal_Int32>(m_aDests.size()) )
+            if( rItem.m_nDestID >= 0 && o3tl::make_unsigned(rItem.m_nDestID) < m_aDests.size() )
             {
                 aLine.append( "/Dest" );
                 appendDest( rItem.m_nDestID, aLine );
@@ -3081,7 +3082,7 @@ sal_Int32 PDFWriterImpl::emitOutline()
 
 bool PDFWriterImpl::appendDest( sal_Int32 nDestID, OStringBuffer& rBuffer )
 {
-    if( nDestID < 0 || nDestID >= static_cast<sal_Int32>(m_aDests.size()) )
+    if( nDestID < 0 || o3tl::make_unsigned(nDestID) >= m_aDests.size() )
     {
         SAL_INFO("vcl.pdfwriter", "ERROR: invalid dest " << static_cast<int>(nDestID) << " requested");
         return false;
@@ -4232,14 +4233,15 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                         for( size_t i = 0; i < rWidget.m_aSelectedEntries.size(); i++ )
                         {
                             sal_Int32 nEntry = rWidget.m_aSelectedEntries[i];
-                            if( nEntry >= 0 && nEntry < sal_Int32(rWidget.m_aListEntries.size()) )
+                            if( nEntry >= 0
+                                && o3tl::make_unsigned(nEntry) < rWidget.m_aListEntries.size() )
                                 appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ nEntry ], rWidget.m_nObject, aValue );
                         }
                         aValue.append( "]" );
                     }
                     else if( !rWidget.m_aSelectedEntries.empty() &&
                              rWidget.m_aSelectedEntries[0] >= 0 &&
-                             rWidget.m_aSelectedEntries[0] < sal_Int32(rWidget.m_aListEntries.size()) )
+                             o3tl::make_unsigned(rWidget.m_aSelectedEntries[0]) < rWidget.m_aListEntries.size() )
                     {
                         appendUnicodeTextStringEncrypt( rWidget.m_aListEntries[ rWidget.m_aSelectedEntries[0] ], rWidget.m_nObject, aValue );
                     }
@@ -4646,7 +4648,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( "/PageMode/FullScreen\n" ); //document is opened full screen
 
     OStringBuffer aInitPageRef;
-    if( m_aContext.InitialPage >= 0 && m_aContext.InitialPage < static_cast<sal_Int32>(m_aPages.size()) )
+    if( m_aContext.InitialPage >= 0 && o3tl::make_unsigned(m_aContext.InitialPage) < m_aPages.size() )
     {
         aInitPageRef.append( m_aPages[m_aContext.InitialPage].m_nPageObject );
         aInitPageRef.append( " 0 R" );
@@ -9678,7 +9680,7 @@ void PDFWriterImpl::createNote( const tools::Rectangle& rRect, const PDFNote& rN
     if (nPageNr < 0)
         nPageNr = m_nCurrentPage;
 
-    if (nPageNr < 0 || nPageNr >= sal_Int32(m_aPages.size()))
+    if (nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size())
         return;
 
     m_aNotes.emplace_back();
@@ -9701,7 +9703,7 @@ sal_Int32 PDFWriterImpl::createLink( const tools::Rectangle& rRect, sal_Int32 nP
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
+    if( nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size() )
         return -1;
 
     sal_Int32 nRet = m_aLinks.size();
@@ -9724,7 +9726,7 @@ sal_Int32 PDFWriterImpl::createScreen(const tools::Rectangle& rRect, sal_Int32 n
     if (nPageNr < 0)
         nPageNr = m_nCurrentPage;
 
-    if (nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()))
+    if (nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size())
         return -1;
 
     sal_Int32 nRet = m_aScreens.size();
@@ -9747,7 +9749,7 @@ sal_Int32 PDFWriterImpl::createNamedDest( const OUString& sDestName, const tools
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
+    if( nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size() )
         return -1;
 
     sal_Int32 nRet = m_aNamedDests.size();
@@ -9768,7 +9770,7 @@ sal_Int32 PDFWriterImpl::createDest( const tools::Rectangle& rRect, sal_Int32 nP
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
+    if( nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size() )
         return -1;
 
     sal_Int32 nRet = m_aDests.size();
@@ -9791,9 +9793,9 @@ sal_Int32 PDFWriterImpl::registerDestReference( sal_Int32 nDestId, const tools::
 
 void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 {
-    if( nLinkId < 0 || nLinkId >= static_cast<sal_Int32>(m_aLinks.size()) )
+    if( nLinkId < 0 || o3tl::make_unsigned(nLinkId) >= m_aLinks.size() )
         return;
-    if( nDestId < 0 || nDestId >= static_cast<sal_Int32>(m_aDests.size()) )
+    if( nDestId < 0 || o3tl::make_unsigned(nDestId) >= m_aDests.size() )
         return;
 
     m_aLinks[ nLinkId ].m_nDest = nDestId;
@@ -9801,7 +9803,7 @@ void PDFWriterImpl::setLinkDest( sal_Int32 nLinkId, sal_Int32 nDestId )
 
 void PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 {
-    if( nLinkId < 0 || nLinkId >= static_cast<sal_Int32>(m_aLinks.size()) )
+    if( nLinkId < 0 || o3tl::make_unsigned(nLinkId) >= m_aLinks.size() )
         return;
 
     m_aLinks[ nLinkId ].m_nDest = -1;
@@ -9824,7 +9826,7 @@ void PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
 
 void PDFWriterImpl::setScreenURL(sal_Int32 nScreenId, const OUString& rURL)
 {
-    if (nScreenId < 0 || nScreenId >= static_cast<sal_Int32>(m_aScreens.size()))
+    if (nScreenId < 0 || o3tl::make_unsigned(nScreenId) >= m_aScreens.size())
         return;
 
     m_aScreens[nScreenId].m_aURL = rURL;
@@ -9832,7 +9834,7 @@ void PDFWriterImpl::setScreenURL(sal_Int32 nScreenId, const OUString& rURL)
 
 void PDFWriterImpl::setScreenStream(sal_Int32 nScreenId, const OUString& rURL)
 {
-    if (nScreenId < 0 || nScreenId >= static_cast<sal_Int32>(m_aScreens.size()))
+    if (nScreenId < 0 || o3tl::make_unsigned(nScreenId) >= m_aScreens.size())
         return;
 
     m_aScreens[nScreenId].m_aTempFileURL = rURL;
@@ -9860,10 +9862,10 @@ sal_Int32 PDFWriterImpl::createOutlineItem( sal_Int32 nParent, std::u16string_vi
 
 void PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent )
 {
-    if( nItem < 1 || nItem >= static_cast<sal_Int32>(m_aOutline.size()) )
+    if( nItem < 1 || o3tl::make_unsigned(nItem) >= m_aOutline.size() )
         return;
 
-    if( nNewParent < 0 || nNewParent >= static_cast<sal_Int32>(m_aOutline.size()) || nNewParent == nItem )
+    if( nNewParent < 0 || o3tl::make_unsigned(nNewParent) >= m_aOutline.size() || nNewParent == nItem )
     {
         nNewParent = 0;
     }
@@ -9873,7 +9875,7 @@ void PDFWriterImpl::setOutlineItemParent( sal_Int32 nItem, sal_Int32 nNewParent 
 
 void PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, std::u16string_view rText )
 {
-    if( nItem < 1 || nItem >= static_cast<sal_Int32>(m_aOutline.size()) )
+    if( nItem < 1 || o3tl::make_unsigned(nItem) >= m_aOutline.size() )
         return;
 
     m_aOutline[ nItem ].m_aTitle = psp::WhitespaceToSpace( rText );
@@ -9881,9 +9883,9 @@ void PDFWriterImpl::setOutlineItemText( sal_Int32 nItem, std::u16string_view rTe
 
 void PDFWriterImpl::setOutlineItemDest( sal_Int32 nItem, sal_Int32 nDestID )
 {
-    if( nItem < 1 || nItem >= static_cast<sal_Int32>(m_aOutline.size()) ) // item does not exist
+    if( nItem < 1 || o3tl::make_unsigned(nItem) >= m_aOutline.size() ) // item does not exist
         return;
-    if( nDestID < 0 || nDestID >= static_cast<sal_Int32>(m_aDests.size()) ) // dest does not exist
+    if( nDestID < 0 || o3tl::make_unsigned(nDestID) >= m_aDests.size() ) // dest does not exist
         return;
     m_aOutline[nItem].m_nDestID = nDestID;
 }
@@ -10010,7 +10012,7 @@ bool PDFWriterImpl::checkEmitStructure()
     {
         bEmit = true;
         sal_Int32 nEle = m_nCurrentStructElement;
-        while( nEle > 0 && nEle < sal_Int32(m_aStructure.size()) )
+        while( nEle > 0 && o3tl::make_unsigned(nEle) < m_aStructure.size() )
         {
             if( m_aStructure[ nEle ].m_eType == PDFWriter::NonStructElement )
             {
@@ -10165,7 +10167,7 @@ void PDFWriterImpl::addInternalStructureContainer( PDFStructureElement& rEle )
 
     for (auto const& child : rEle.m_aChildren)
     {
-        if( child > 0 && child < sal_Int32(m_aStructure.size()) )
+        if( child > 0 && o3tl::make_unsigned(child) < m_aStructure.size() )
         {
             PDFStructureElement& rChild = m_aStructure[ child ];
             if( rChild.m_eType != PDFWriter::NonStructElement )
@@ -10249,7 +10251,7 @@ bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
 {
     bool bSuccess = false;
 
-    if( m_aContext.Tagged && nEle >= 0 && nEle < sal_Int32(m_aStructure.size()) )
+    if( m_aContext.Tagged && nEle >= 0 && o3tl::make_unsigned(nEle) < m_aStructure.size() )
     {
         // end eventual previous marked content sequence
         endStructureElementMCSeq();
@@ -10607,7 +10609,7 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
 void PDFWriterImpl::setStructureBoundingBox( const tools::Rectangle& rRect )
 {
     sal_Int32 nPageNr = m_nCurrentPage;
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) || !m_aContext.Tagged )
+    if( nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size() || !m_aContext.Tagged )
         return;
 
     if( !(m_nCurrentStructElement > 0 && m_bEmitStructure) )
@@ -10646,7 +10648,7 @@ void PDFWriterImpl::setPageTransition( PDFWriter::PageTransition eType, sal_uInt
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
+    if( nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size() )
         return;
 
     m_aPages[ nPageNr ].m_eTransition   = eType;
@@ -10750,7 +10752,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
     if( nPageNr < 0 )
         nPageNr = m_nCurrentPage;
 
-    if( nPageNr < 0 || nPageNr >= static_cast<sal_Int32>(m_aPages.size()) )
+    if( nPageNr < 0 || o3tl::make_unsigned(nPageNr) >= m_aPages.size() )
         return -1;
 
     bool sigHidden(true);
@@ -10817,7 +10819,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
         rNewWidget.m_eType          = PDFWriter::CheckBox;
         rNewWidget.m_nRadioGroup    = rBtn.RadioGroup;
 
-        SAL_WARN_IF( nRadioGroupWidget < 0 || nRadioGroupWidget >= static_cast<sal_Int32>(m_aWidgets.size()), "vcl.pdfwriter", "no radio group parent" );
+        SAL_WARN_IF( nRadioGroupWidget < 0 || o3tl::make_unsigned(nRadioGroupWidget) >= m_aWidgets.size(), "vcl.pdfwriter", "no radio group parent" );
 
         PDFWidget& rRadioButton = m_aWidgets[nRadioGroupWidget];
         rRadioButton.m_aKids.push_back( rNewWidget.m_nObject );
