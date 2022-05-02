@@ -167,7 +167,7 @@ private:
             virtual css::uno::Any SAL_CALL nextElement(  ) override
             {
                 if ( hasMoreElements() )
-                    return css::uno::makeAny( *mIt++ );
+                    return css::uno::Any( *mIt++ );
                 throw css::container::NoSuchElementException();
             }
     };
@@ -184,7 +184,7 @@ public:
     {
         if ( !hasByName(aName) )
             throw css::container::NoSuchElementException();
-        return css::uno::makeAny( *cachePos );
+        return css::uno::Any( *cachePos );
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -220,7 +220,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
 
-        return css::uno::makeAny( mXNamedVec[ Index ] );
+        return css::uno::Any( mXNamedVec[ Index ] );
 
     }
     // XEnumerationAccess

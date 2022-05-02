@@ -72,7 +72,7 @@ void SAL_CALL
 ScVbaCommandBar::setName( const OUString& _name )
 {
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
-    xPropertySet->setPropertyValue( "UIName" , uno::makeAny( _name ) );
+    xPropertySet->setPropertyValue( "UIName" , uno::Any( _name ) );
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
@@ -154,7 +154,7 @@ ScVbaCommandBar::Controls( const uno::Any& aIndex )
     {
         return xCommandBarControls->Item( aIndex, uno::Any() );
     }
-    return uno::makeAny( xCommandBarControls );
+    return uno::Any( xCommandBarControls );
 }
 
 sal_Int32 SAL_CALL
@@ -170,7 +170,7 @@ uno::Any SAL_CALL
 ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ )
 {
     // alwayse fail to find control
-    return uno::makeAny( uno::Reference< XCommandBarControl > () );
+    return uno::Any( uno::Reference< XCommandBarControl > () );
 }
 
 OUString

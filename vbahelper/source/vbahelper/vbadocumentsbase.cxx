@@ -89,7 +89,7 @@ public:
         {
             throw container::NoSuchElementException();
         }
-        return makeAny( *(m_it++) );
+        return css::uno::Any( *(m_it++) );
     }
 };
 
@@ -150,7 +150,7 @@ public:
         if ( Index < 0
             || o3tl::make_unsigned(Index) >= m_documents.size() )
             throw lang::IndexOutOfBoundsException();
-        return makeAny( m_documents[ Index ] ); // returns xspreadsheetdoc
+        return css::uno::Any( m_documents[ Index ] ); // returns xspreadsheetdoc
     }
 
     //XElementAccess
@@ -170,7 +170,7 @@ public:
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
             throw container::NoSuchElementException();
-        return makeAny( m_documents[ it->second ] );
+        return css::uno::Any( m_documents[ it->second ] );
 
     }
 
@@ -256,7 +256,7 @@ uno::Any VbaDocumentsBase::createDocument()
     // #163808# lock document controllers and container window if specified by application
     lclSetupComponent( xComponent, bScreenUpdating, bInteractive );
 
-    return uno::makeAny( xComponent );
+    return uno::Any( xComponent );
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
@@ -313,7 +313,7 @@ uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::A
     // #163808# lock document controllers and container window if specified by application
     lclSetupComponent( xComponent, bScreenUpdating, bInteractive );
 
-    return uno::makeAny( xComponent );
+    return uno::Any( xComponent );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -49,7 +49,7 @@ OUString SAL_CALL ScVbaFrame::getCaption()
 
 void SAL_CALL ScVbaFrame::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
 }
 
 sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect()

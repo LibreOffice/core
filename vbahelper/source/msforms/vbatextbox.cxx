@@ -35,7 +35,7 @@ ScVbaTextBox::ScVbaTextBox( const uno::Reference< ov::XHelperInterface >& xParen
 uno::Any SAL_CALL
 ScVbaTextBox::getValue()
 {
-    return uno::makeAny( getText() );
+    return uno::Any( getText() );
 }
 
 void SAL_CALL
@@ -66,7 +66,7 @@ ScVbaTextBox::setText( const OUString& _text )
         xTextRange->setString( _text );
     }
     else
-        m_xProps->setPropertyValue( "Text" , uno::makeAny( _text ) );
+        m_xProps->setPropertyValue( "Text" , uno::Any( _text ) );
     if ( oldText != _text )
         fireChangeEvent();
 }

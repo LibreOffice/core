@@ -40,7 +40,7 @@ VbaButton::getCaption()
 void SAL_CALL
 VbaButton::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
 }
 
 sal_Bool SAL_CALL VbaButton::getAutoSize()

@@ -39,7 +39,7 @@ public:
     {
         if ( Index < 0 || Index > mnPages )
             throw lang::IndexOutOfBoundsException();
-        return uno::makeAny( uno::Reference< uno::XInterface >() );
+        return uno::Any( uno::Reference< uno::XInterface >() );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType() override
@@ -82,7 +82,7 @@ ScVbaMultiPage::setValue( const sal_Int32 _value )
     // Openoffice 1 based tab index
     sal_Int32 nVal = _value + 1;
     sal_Int32 nOldVal = getValue();
-    m_xProps->setPropertyValue( SVALUE, uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( SVALUE, uno::Any( nVal ) );
     if ( nVal != nOldVal )
         fireChangeEvent();
 }
@@ -100,7 +100,7 @@ ScVbaMultiPage::Pages( const uno::Any& index )
     uno::Reference< container::XNameContainer > xContainer( m_xProps, uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xColl( new ScVbaPages( this, mxContext, new PagesImpl( xContainer->getElementNames().getLength() ) ) );
     if ( !index.hasValue() )
-        return uno::makeAny( xColl );
+        return uno::Any( xColl );
     return xColl->Item( index, uno::Any() );
 }
 

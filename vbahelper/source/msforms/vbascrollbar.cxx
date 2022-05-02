@@ -51,7 +51,7 @@ ScVbaScrollBar::getMax()
 void SAL_CALL
 ScVbaScrollBar::setMax( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( "ScrollValueMax", uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "ScrollValueMax", uno::Any( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -65,13 +65,13 @@ ScVbaScrollBar::getMin()
 void SAL_CALL
 ScVbaScrollBar::setMin( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( "ScrollValueMin", uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "ScrollValueMin", uno::Any( nVal ) );
 }
 
 void SAL_CALL
 ScVbaScrollBar::setLargeChange( ::sal_Int32 _largechange )
 {
-    m_xProps->setPropertyValue( "BlockIncrement", uno::makeAny( _largechange ) );
+    m_xProps->setPropertyValue( "BlockIncrement", uno::Any( _largechange ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -93,7 +93,7 @@ ScVbaScrollBar::getSmallChange()
 void SAL_CALL
 ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange )
 {
-    m_xProps->setPropertyValue( "LineIncrement", uno::makeAny( _smallchange ) );
+    m_xProps->setPropertyValue( "LineIncrement", uno::Any( _smallchange ) );
 }
 
 OUString

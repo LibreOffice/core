@@ -76,7 +76,7 @@ ScVbaComboBox::setListIndex( const uno::Any& _value )
     if( ( nIndex >= 0 ) && ( sItems.getLength() > nIndex ) )
     {
         OUString sText = sItems[ nIndex ];
-        m_xProps->setPropertyValue( "Text", uno::makeAny( sText ) );
+        m_xProps->setPropertyValue( "Text", uno::Any( sText ) );
 
         // fire the _Change event
         if( nOldIndex != nIndex )
@@ -100,12 +100,12 @@ ScVbaComboBox::getListIndex()
             if (index != -1)
             {
                 SAL_INFO("vbahelper", "getListIndex returning " << index );
-                return uno::makeAny( index );
+                return uno::Any( index );
             }
         }
     }
     SAL_INFO("vbahelper", "getListIndex returning -1" );
-    return uno::makeAny( sal_Int32( -1 ) );
+    return uno::Any( sal_Int32( -1 ) );
 }
 
 // Value, [write]e.g. setValue sets the value in the drop down, and if the value is one
@@ -142,7 +142,7 @@ ScVbaComboBox::getText()
 void SAL_CALL
 ScVbaComboBox::setText( const OUString& _text )
 {
-    setValue( uno::makeAny( _text ) ); // seems the same
+    setValue( uno::Any( _text ) ); // seems the same
 }
 
 // Methods
