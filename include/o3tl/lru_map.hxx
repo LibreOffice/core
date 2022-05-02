@@ -166,10 +166,10 @@ public:
     typedef list_iterator_t iterator;
     typedef list_const_iterator_t const_iterator;
 
-    // a size of 0 effectively disables the LRU cleanup code
     lru_map(size_t nMaxSize)
-        : mMaxSize(nMaxSize ? nMaxSize : std::min(mLruMap.max_size(), mLruList.max_size()))
+        : mMaxSize(nMaxSize)
     {
+        assert(mMaxSize > 0);
     }
     ~lru_map()
     {
@@ -182,7 +182,8 @@ public:
 
     void setMaxSize(size_t nMaxSize)
     {
-        mMaxSize = nMaxSize ? nMaxSize : std::min(mLruMap.max_size(), mLruList.max_size());
+        mMaxSize = nMaxSize;
+        assert(mMaxSize > 0);
         checkLRUMaxSize();
     }
 

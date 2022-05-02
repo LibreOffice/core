@@ -88,7 +88,7 @@ bool ImplFontCache::IFSD_Equal::operator()(const vcl::font::FontSelectPattern& r
 
 ImplFontCache::ImplFontCache()
     : mpLastHitCacheEntry( nullptr )
-    , maFontInstanceList(0)
+    , maFontInstanceList(std::numeric_limits<size_t>::max()) // "unlimited", i.e. no cleanup
     // The cache limit is set by the rough number of characters needed to read your average Asian newspaper.
     , m_aBoundRectCache(3000)
 {}
