@@ -27,7 +27,6 @@ public:
     void testLruRemoval();
     void testCustomHash();
     void testRemoveIf();
-    void testNoAutoCleanup();
     void testChangeMaxSize();
     void testCustomItemSize();
 
@@ -38,7 +37,6 @@ public:
     CPPUNIT_TEST(testLruRemoval);
     CPPUNIT_TEST(testCustomHash);
     CPPUNIT_TEST(testRemoveIf);
-    CPPUNIT_TEST(testNoAutoCleanup);
     CPPUNIT_TEST(testChangeMaxSize);
     CPPUNIT_TEST(testCustomItemSize);
     CPPUNIT_TEST_SUITE_END();
@@ -293,24 +291,6 @@ void lru_map_test::testRemoveIf()
     // remove the only item
     lru.remove_if([](IntMapPair const& rPair) { return (rPair.first == 7); });
     CPPUNIT_ASSERT_EQUAL(size_t(0), lru.size());
-}
-
-void lru_map_test::testNoAutoCleanup()
-{
-    o3tl::lru_map<int, int> lru(0);
-    CPPUNIT_ASSERT_EQUAL(size_t(0), lru.size());
-    lru.insert({ 0, 0 });
-    lru.insert({ 1, 1 });
-    CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
-    lru.insert({ 0, 0 });
-    CPPUNIT_ASSERT_EQUAL(size_t(2), lru.size());
-
-    int i = 0;
-    for (auto& rPair : lru)
-    {
-        CPPUNIT_ASSERT_EQUAL(i, rPair.first);
-        ++i;
-    }
 }
 
 void lru_map_test::testChangeMaxSize()
