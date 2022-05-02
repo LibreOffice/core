@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc44012b_ad8bc534",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-02T11:23:04Z",
+      "side": 1,
+      "message": "(Just for the record:  Adding\n\n  OString::operator std::string_view() \u0026\u0026 \u003d delete;\n\netc. instead of the new loplugin:stringviewdangle would cause the common case to fail where an O[U]String rvalue is passed into a string_view function parameter.  Those could be dressed up with o3tl::temporary, but that would arguably be more clutter than it\u0027d be worth.)",
+      "revId": "40077fe30919494f0ecd04c4620cac2334d3d382",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
