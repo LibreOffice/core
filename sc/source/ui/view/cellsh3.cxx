@@ -47,7 +47,6 @@
 #include <columnspanset.hxx>
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
-#include <inputhdl.hxx>
 #include <inputwin.hxx>
 
 #include <memory>
