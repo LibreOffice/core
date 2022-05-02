@@ -114,7 +114,7 @@ void OLEHandler::lcl_attribute(Id rName, Value & rVal)
                     try
                     {
                         uno::Reference<beans::XPropertySet> xShapeProps(m_xShape, uno::UNO_QUERY);
-                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(false));
+                        xShapeProps->setPropertyValue("Opaque", uno::Any(false));
                     }
                     catch( const uno::Exception& )
                     {
@@ -176,12 +176,12 @@ void OLEHandler::lcl_sprm(Sprm & rSprm)
 
                     xShapeProps->setPropertyValue(
                         getPropertyName( PROP_SURROUND ),
-                        uno::makeAny( static_cast<sal_Int32>(m_nWrapMode) ) );
+                        uno::Any( static_cast<sal_Int32>(m_nWrapMode) ) );
 
                     // Through shapes in the header or footer(that spill into the body) should be in the background.
                     // It is just assumed that all shapes will spill into the body.
                     if( m_rDomainMapper.IsInHeaderFooter() )
-                        xShapeProps->setPropertyValue("Opaque", uno::makeAny(m_nWrapMode != text::WrapTextMode_THROUGH));
+                        xShapeProps->setPropertyValue("Opaque", uno::Any(m_nWrapMode != text::WrapTextMode_THROUGH));
                 }
                 catch( const uno::Exception& )
                 {

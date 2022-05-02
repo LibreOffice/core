@@ -1765,7 +1765,7 @@ void OOXMLFastContextHandlerShape::sendShape( Token_t Element )
     if (mnTableDepth > 0 && xShapePropSet.is() && mbIsVMLfound) //if we had a table
     {
         xShapePropSet->setPropertyValue(dmapper::getPropertyName(dmapper::PROP_FOLLOW_TEXT_FLOW),
-                                        uno::makeAny(mbAllowInCell));
+                                        uno::Any(mbAllowInCell));
     }
     // Notify the dmapper that the shape is ready to use
     if ( !bIsPicture )

@@ -232,9 +232,9 @@ void SdtHelper::createDropDownControl()
 
         // set properties
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("SelectedItem", uno::makeAny(aDefaultText));
-        xPropertySet->setPropertyValue(
-            "Items", uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
+        xPropertySet->setPropertyValue("SelectedItem", uno::Any(aDefaultText));
+        xPropertySet->setPropertyValue("Items",
+                                       uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
         m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
@@ -250,10 +250,10 @@ void SdtHelper::createDropDownControl()
 
         // set properties
         uno::Reference<beans::XPropertySet> xPropertySet(xControlModel, uno::UNO_QUERY);
-        xPropertySet->setPropertyValue("DefaultText", uno::makeAny(aDefaultText));
-        xPropertySet->setPropertyValue("Dropdown", uno::makeAny(true));
-        xPropertySet->setPropertyValue(
-            "StringItemList", uno::makeAny(comphelper::containerToSequence(m_aDropDownItems)));
+        xPropertySet->setPropertyValue("DefaultText", uno::Any(aDefaultText));
+        xPropertySet->setPropertyValue("Dropdown", uno::Any(true));
+        xPropertySet->setPropertyValue("StringItemList",
+                                       uno::Any(comphelper::containerToSequence(m_aDropDownItems)));
 
         // add it into document
         createControlShape(
@@ -283,14 +283,14 @@ void SdtHelper::createPlainTextControl()
     if (oData.has_value())
         aDefaultText = *oData;
 
-    xPropertySet->setPropertyValue("Content", uno::makeAny(aDefaultText));
+    xPropertySet->setPropertyValue("Content", uno::Any(aDefaultText));
 
     // add it into document
     m_rDM_Impl.appendTextContent(xControlModel, uno::Sequence<beans::PropertyValue>());
 
     // Store all unused sdt parameters from grabbag
     xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
-                                   uno::makeAny(getInteropGrabBagAndClear()));
+                                   uno::Any(getInteropGrabBagAndClear()));
 
     // clean up
     clear();
@@ -344,9 +344,9 @@ void SdtHelper::createDateContentControl()
 
         // Replace quotation mark used for marking static strings in date format
         sDateFormat = sDateFormat.replaceAll("'", "\"");
-        xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::makeAny(sDateFormat));
+        xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT, uno::Any(sDateFormat));
         xNameCont->insertByName(ODF_FORMDATE_DATEFORMAT_LANGUAGE,
-                                uno::makeAny(m_sLocale.makeStringAndClear()));
+                                uno::Any(m_sLocale.makeStringAndClear()));
     }
     OUString sFullDate = m_sDate.makeStringAndClear();
 
@@ -359,7 +359,7 @@ void SdtHelper::createDateContentControl()
         sal_Int32 nTimeSep = sFullDate.indexOf("T");
         if (nTimeSep != -1)
             sFullDate = sFullDate.copy(0, nTimeSep);
-        xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::makeAny(sFullDate));
+        xNameCont->insertByName(ODF_FORMDATE_CURRENTDATE, uno::Any(sFullDate));
     }
 
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(m_rDM_Impl.GetTextDocument(),
@@ -370,7 +370,7 @@ void SdtHelper::createDateContentControl()
 
     // Store all unused sdt parameters from grabbag
     xNameCont->insertByName(UNO_NAME_MISC_OBJ_INTEROPGRABBAG,
-                            uno::makeAny(getInteropGrabBagAndClear()));
+                            uno::Any(getInteropGrabBagAndClear()));
 
     clear();
 }
@@ -386,10 +386,10 @@ void SdtHelper::createControlShape(awt::Size aSize,
     xControlShape->setControl(xControlModel);
 
     uno::Reference<beans::XPropertySet> xPropertySet(xControlShape, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::CENTER));
+    xPropertySet->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::CENTER));
 
     if (rGrabBag.hasElements())
-        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::makeAny(rGrabBag));
+        xPropertySet->setPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG, uno::Any(rGrabBag));
 
     uno::Reference<text::XTextContent> xTextContent(xControlShape, uno::UNO_QUERY);
     m_rDM_Impl.appendTextContent(xTextContent, uno::Sequence<beans::PropertyValue>());

@@ -101,13 +101,13 @@ sal_Bool RtfFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescripto
     if (m_xDstDoc.is()) // not in cppunittest?
     {
         xDocProps.set(m_xDstDoc, uno::UNO_QUERY);
-        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(true));
+        xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(true));
     }
     comphelper::ScopeGuard g([xDocProps] {
         if (xDocProps.is()) // not in cppunittest?
         {
             // note: pStream.clear calls RemoveLastParagraph()
-            xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::makeAny(false));
+            xDocProps->setPropertyValue("UndocumentedWriterfilterHack", uno::Any(false));
         }
     });
 

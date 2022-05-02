@@ -163,7 +163,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
             break;
         case NS_ooxml::LN_CT_TrPrBase_tblHeader:
         {
-            m_pProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny(sal_Int32(1)));
+            m_pProperties->Insert( PROP_HEADER_ROW_COUNT, uno::Any(sal_Int32(1)));
             beans::PropertyValue aValue;
             aValue.Name = "tblHeader";
             aValue.Value <<= true;
@@ -180,7 +180,7 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                 pProperties->resolve(*pMeasureHandler);
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
                 pPropMap->setValue( TablePropertyMap::LEFT_MARGIN, pMeasureHandler->getMeasureValue() );
-                m_pProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny(pMeasureHandler->getMeasureValue()) );
+                m_pProperties->Insert( PROP_LEFT_MARGIN, uno::Any(pMeasureHandler->getMeasureValue()) );
             }
         }
             break;
@@ -195,13 +195,13 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
                 m_aInteropGrabBag.push_back(pCellMarginHandler->getInteropGrabBag());
 
                 if( pCellMarginHandler->m_bTopMarginValid )
-                    m_pProperties->Insert( META_PROP_CELL_MAR_TOP, uno::makeAny(pCellMarginHandler->m_nTopMargin) );
+                    m_pProperties->Insert( META_PROP_CELL_MAR_TOP, uno::Any(pCellMarginHandler->m_nTopMargin) );
                 if( pCellMarginHandler->m_bBottomMarginValid )
-                    m_pProperties->Insert( META_PROP_CELL_MAR_BOTTOM, uno::makeAny(pCellMarginHandler->m_nBottomMargin) );
+                    m_pProperties->Insert( META_PROP_CELL_MAR_BOTTOM, uno::Any(pCellMarginHandler->m_nBottomMargin) );
                 if( pCellMarginHandler->m_bLeftMarginValid )
-                    m_pProperties->Insert( META_PROP_CELL_MAR_LEFT, uno::makeAny(pCellMarginHandler->m_nLeftMargin) );
+                    m_pProperties->Insert( META_PROP_CELL_MAR_LEFT, uno::Any(pCellMarginHandler->m_nLeftMargin) );
                 if( pCellMarginHandler->m_bRightMarginValid )
-                    m_pProperties->Insert( META_PROP_CELL_MAR_RIGHT, uno::makeAny(pCellMarginHandler->m_nRightMargin) );
+                    m_pProperties->Insert( META_PROP_CELL_MAR_RIGHT, uno::Any(pCellMarginHandler->m_nRightMargin) );
             }
         }
         break;

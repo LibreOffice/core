@@ -267,7 +267,7 @@ bool lcl_extractTableBorderProperty(const PropertyMapPtr& pTableProperties, cons
     {
         OSL_VERIFY(aTblBorder->second >>= rLine);
 
-        rInfo.pTableBorders->Insert( nId, uno::makeAny( rLine ) );
+        rInfo.pTableBorders->Insert( nId, uno::Any( rLine ) );
         rInfo.pTableDefaults->Erase( nId );
 
         return true;
@@ -446,7 +446,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                     // apply tblHeader setting of the table style
                     PropertyMapPtr pHeaderStyleProps = pTableStyle->GetProperties(CNF_FIRST_ROW);
                     if ( pHeaderStyleProps->getProperty(PROP_HEADER_ROW_COUNT) )
-                        m_aTableProperties->Insert(PROP_HEADER_ROW_COUNT, uno::makeAny( sal_Int32(1)), false);
+                        m_aTableProperties->Insert(PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(1)), false);
                 }
             }
         }
@@ -504,7 +504,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         if (!aGrabBag.empty())
         {
-            m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::makeAny( aGrabBag.getAsConstPropertyValueList() ) );
+            m_aTableProperties->Insert( PROP_TABLE_INTEROP_GRAB_BAG, uno::Any( aGrabBag.getAsConstPropertyValueList() ) );
         }
 
         m_aTableProperties->getValue( TablePropertyMap::GAP_HALF, nGapHalf );
@@ -537,14 +537,14 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         aDistances.LeftDistance = static_cast<sal_Int16>( rInfo.nLeftBorderDistance );
         aDistances.RightDistance = static_cast<sal_Int16>( rInfo.nRightBorderDistance );
 
-        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::makeAny( aDistances ) );
+        m_aTableProperties->Insert( PROP_TABLE_BORDER_DISTANCES, uno::Any( aDistances ) );
 
         if (!rFrameProperties.empty())
             lcl_DecrementHoriOrientPosition(rFrameProperties, rInfo.nLeftBorderDistance);
 
         // Set table above/bottom spacing to 0.
-        m_aTableProperties->Insert( PROP_TOP_MARGIN, uno::makeAny( sal_Int32( 0 ) ) );
-        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, uno::makeAny( sal_Int32( 0 ) ) );
+        m_aTableProperties->Insert( PROP_TOP_MARGIN, uno::Any( sal_Int32( 0 ) ) );
+        m_aTableProperties->Insert( PROP_BOTTOM_MARGIN, uno::Any( sal_Int32( 0 ) ) );
 
         //table border settings
         table::TableBorder aTableBorder;
@@ -585,7 +585,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         aTableBorder.Distance = 0;
         aTableBorder.IsDistanceValid = false;
 
-        m_aTableProperties->Insert( PROP_TABLE_BORDER, uno::makeAny( aTableBorder ) );
+        m_aTableProperties->Insert( PROP_TABLE_BORDER, uno::Any( aTableBorder ) );
 
 #ifdef DBG_UTIL
         lcl_debug_TableBorder(aTableBorder);
@@ -624,7 +624,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if (((nMode < 0) || (0 < nMode && nMode <= 14)) && rInfo.nNestLevel == 1)
         {
             const sal_Int32 nAdjustedMargin = nLeftMargin - nGapHalf - rInfo.nLeftBorderDistance;
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nAdjustedMargin ) );
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );
         }
         else
         {
@@ -634,7 +634,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
             if ( rInfo.nNestLevel > 1 && nLeftMargin < 0 )
                 nLeftMargin = 0;
             const sal_Int32 nAdjustedMargin = nLeftMargin - nGapHalf + (aLeftBorder.LineWidth / 2);
-            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::makeAny( nAdjustedMargin ) );
+            m_aTableProperties->Insert( PROP_LEFT_MARGIN, uno::Any( nAdjustedMargin ) );
         }
 
         sal_Int32 nTableWidth = 0;
@@ -644,7 +644,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         if( nTableWidthType == text::SizeType::FIX )
         {
             if( nTableWidth > 0 )
-                m_aTableProperties->Insert( PROP_WIDTH, uno::makeAny( nTableWidth ));
+                m_aTableProperties->Insert( PROP_WIDTH, uno::Any( nTableWidth ));
             else
             {
                 // tdf#109524: If there is no width for the table, make it simply 100% by default.
@@ -655,17 +655,17 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         }
         if (nTableWidthType != text::SizeType::FIX)
         {
-            m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, uno::makeAny( sal_Int16( nTableWidth ) ) );
-            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, uno::makeAny( true ) );
+            m_aTableProperties->Insert( PROP_RELATIVE_WIDTH, uno::Any( sal_Int16( nTableWidth ) ) );
+            m_aTableProperties->Insert( PROP_IS_WIDTH_RELATIVE, uno::Any( true ) );
         }
 
         sal_Int32 nHoriOrient = text::HoriOrientation::LEFT_AND_WIDTH;
         // Fetch Horizontal Orientation in rFrameProperties if not set in m_aTableProperties
         if ( !m_aTableProperties->getValue( TablePropertyMap::HORI_ORIENT, nHoriOrient ) )
             lcl_extractHoriOrient( rFrameProperties, nHoriOrient );
-        m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::makeAny( sal_Int16(nHoriOrient) ) );
+        m_aTableProperties->Insert( PROP_HORI_ORIENT, uno::Any( sal_Int16(nHoriOrient) ) );
         //fill default value - if not available
-        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::makeAny( sal_Int32(0)), false);
+        m_aTableProperties->Insert( PROP_HEADER_ROW_COUNT, uno::Any( sal_Int32(0)), false);
 
         // if table is only a single row, and row is set as don't split, set the same value for the whole table.
         if( m_aRowProperties.size() == 1 && m_aRowProperties[0] )
@@ -676,7 +676,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 bool bRowCanSplit = true;
                 oSplitAllowed->second >>= bRowCanSplit;
                 if( !bRowCanSplit )
-                    m_aTableProperties->Insert( PROP_SPLIT, uno::makeAny(bRowCanSplit) );
+                    m_aTableProperties->Insert( PROP_SPLIT, uno::Any(bRowCanSplit) );
             }
         }
 
@@ -936,13 +936,13 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
                 //now set the default left+right border distance TODO: there's an sprm containing the default distance!
                 aCellIterator->get()->Insert( PROP_LEFT_BORDER_DISTANCE,
-                                                 uno::makeAny(rInfo.nLeftBorderDistance ), false);
+                                                 uno::Any(rInfo.nLeftBorderDistance ), false);
                 aCellIterator->get()->Insert( PROP_RIGHT_BORDER_DISTANCE,
-                                                 uno::makeAny(rInfo.nRightBorderDistance ), false);
+                                                 uno::Any(rInfo.nRightBorderDistance ), false);
                 aCellIterator->get()->Insert( PROP_TOP_BORDER_DISTANCE,
-                                                 uno::makeAny(rInfo.nTopBorderDistance ), false);
+                                                 uno::Any(rInfo.nTopBorderDistance ), false);
                 aCellIterator->get()->Insert( PROP_BOTTOM_BORDER_DISTANCE,
-                                                 uno::makeAny(rInfo.nBottomBorderDistance ), false);
+                                                 uno::Any(rInfo.nBottomBorderDistance ), false);
 
                 // Horizontal merge is not a UNO property, extract that info here to rMerges, and then remove it from the map.
                 const std::optional<PropertyMap::Property> aHorizontalMergeVal = (*aCellIterator)->getProperty(PROP_HORIZONTAL_MERGE);
@@ -1057,7 +1057,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
         if (rRow)
         {
             //set default to 'break across pages"
-            rRow->Insert( PROP_IS_SPLIT_ALLOWED, uno::makeAny(true ), false );
+            rRow->Insert( PROP_IS_SPLIT_ALLOWED, uno::Any(true ), false );
             // tblHeader is only our property, remove before the property map hits UNO
             rRow->Erase(PROP_TBL_HEADER);
 
@@ -1065,7 +1065,7 @@ css::uno::Sequence<css::beans::PropertyValues> DomainMapperTableHandler::endTabl
             {
                 // We have CellHideMark on all cells, and also all cells are empty:
                 // Force the row height to be exactly as specified, and not just as the minimum suggestion.
-                rRow->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+                rRow->Insert(PROP_SIZE_TYPE, uno::Any(text::SizeType::FIX));
             }
 
             aRowPropertiesRange[nRow] = rRow->GetPropertyValues();
@@ -1128,7 +1128,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                     auto pFillStyleProp = std::find_if(rCellProperties.begin(), rCellProperties.end(),
                         [](const beans::PropertyValue& rProp) { return rProp.Name == "FillStyle"; });
                     if ( pFillStyleProp != rCellProperties.end() &&
-                         pFillStyleProp->Value == uno::makeAny(drawing::FillStyle_SOLID) )
+                         pFillStyleProp->Value == uno::Any(drawing::FillStyle_SOLID) )
                     {
                         sPropertyName = "ParaBackColor";
                     }
@@ -1183,7 +1183,7 @@ void DomainMapperTableHandler::ApplyParagraphPropertiesFromTableStyle(TableParag
                         {
                             // we need this for complete import of table-style based paragraph background color
                             rParaProp.m_rPropertySet->setPropertyValue( "FillColor",  pCellProp->Value );
-                            rParaProp.m_rPropertySet->setPropertyValue( "FillStyle",  uno::makeAny(drawing::FillStyle_SOLID) );
+                            rParaProp.m_rPropertySet->setPropertyValue( "FillStyle",  uno::Any(drawing::FillStyle_SOLID) );
                         }
                     }
                     else
@@ -1324,21 +1324,21 @@ static void lcl_convertFormulaRanges(const uno::Reference<text::XTextTable> & xT
                             {
                                 uno::Reference<text::XTextRange> xRun(xRunEnum->nextElement(), uno::UNO_QUERY);
                                 uno::Reference< beans::XPropertySet > xRunProperties( xRun, uno::UNO_QUERY_THROW );
-                                if ( xRunProperties->getPropertyValue("TextPortionType") == uno::makeAny(OUString("TextField")) )
+                                if ( xRunProperties->getPropertyValue("TextPortionType") == uno::Any(OUString("TextField")) )
                                 {
                                     uno::Reference<text::XTextField> const xField(xRunProperties->getPropertyValue("TextField").get<uno::Reference<text::XTextField>>());
                                     uno::Reference< beans::XPropertySet > xFieldProperties( xField, uno::UNO_QUERY_THROW );
                                     // cell can contain multiple text fields, but only one is handled now (~formula cell)
                                     if ( rProp.Value != xFieldProperties->getPropertyValue("Content") )
                                         continue;
-                                    xFieldProperties->setPropertyValue("Content", uno::makeAny(sFormula));
+                                    xFieldProperties->setPropertyValue("Content", uno::Any(sFormula));
                                     // update grab bag
                                     auto aGrabBag = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aCellGrabBag);
                                     beans::PropertyValue aValue;
                                     aValue.Name = "CellFormulaConverted";
                                     aValue.Value <<= sFormula;
                                     aGrabBag.push_back(aValue);
-                                    xCellProperties->setPropertyValue("CellInteropGrabBag", uno::makeAny(comphelper::containerToSequence(aGrabBag)));
+                                    xCellProperties->setPropertyValue("CellInteropGrabBag", uno::Any(comphelper::containerToSequence(aGrabBag)));
                                 }
                             }
                         }
@@ -1514,7 +1514,7 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                                 {
                                     if (aBorderValues[i].LineStyle != table::BorderLineStyle::NONE)
                                         xFirstCell->setPropertyValue(
-                                            OUString(aBorderNames[i]), uno::makeAny(aBorderValues[i]));
+                                            OUString(aBorderNames[i]), uno::Any(aBorderValues[i]));
                                 }
                             }
                         }
@@ -1559,11 +1559,11 @@ void DomainMapperTableHandler::endTable(unsigned int nestedTableLevel, bool bTab
                 aFrameProperties.push_back(aValue);
 
                 // Applying the relative width to the frame, needs to have the table width to be 100% of the frame width
-                xTableProperties->setPropertyValue("RelativeWidth", uno::makeAny(sal_Int16(100)));
+                xTableProperties->setPropertyValue("RelativeWidth", uno::Any(sal_Int16(100)));
             }
 
             // A non-zero left margin would move the table out of the frame, move the frame itself instead.
-            xTableProperties->setPropertyValue("LeftMargin", uno::makeAny(sal_Int32(0)));
+            xTableProperties->setPropertyValue("LeftMargin", uno::Any(sal_Int32(0)));
 
             if (nestedTableLevel >= 2)
             {
