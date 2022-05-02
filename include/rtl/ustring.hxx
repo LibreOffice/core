@@ -1526,7 +1526,9 @@ public:
         assert(
             libreoffice_internal::ConstCharArrayDetector<T>::isValid(literal));
         bool b
-            = (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+            = (libreoffice_internal::ConstCharArrayDetector<T>::length
+               <= sal_uInt32(pData->length))
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
                    pData->buffer,
                    libreoffice_internal::ConstCharArrayDetector<T>::length,
                    libreoffice_internal::ConstCharArrayDetector<T>::toPointer(
