@@ -1119,7 +1119,7 @@ void OutputDevice::GetCaretPositions( const OUString& rStr, long* pCaretXArray,
     for( i = 0; i < 2 * nLen; ++i )
         if( pCaretXArray[ i ] >= 0 )
             break;
-    long nXPos = pCaretXArray[ i ];
+    long nXPos = (i < 2 * nLen) ? pCaretXArray[i] : -1;
     for( i = 0; i < 2 * nLen; ++i )
     {
         if( pCaretXArray[ i ] >= 0 )
