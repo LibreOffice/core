@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e224512e_85570893",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-02T20:44:33Z",
+      "side": 1,
+      "message": "I looked at seeing how to make this string translatable -- but could not find anything obvious to imitate -- so I am unable to go further without assistance.",
+      "parentUuid": "c07887ec_5aa6d458",
+      "revId": "b7393ece3f5c5d6385567f60f07e4dd38a62c17b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5af1d00_e8e1604a",
         "filename": "stoc/source/javaloader/javaloader.cxx",
         "patchSetId": 2
