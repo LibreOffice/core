@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d470de5b_82cc615d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-05-02T08:49:50Z",
+      "side": 1,
+      "message": "Nice fix, gave it a bit of testing. \nThis changes the PPTX export of the example file from https://bugs.documentfoundation.org/show_bug.cgi?id\u003d80236 in PP to be correct.\n\nA related issue is https://bugs.documentfoundation.org/show_bug.cgi?id\u003d66228 - here the connector type in Impress is \"Line Connector\" which is still not saved to PPTX correctly.\nChanging it in Impress to Standard connector however keeps its shape and saves to PPTX too, so maybe its export could be easily fixed now.\n\nAnother issue is https://bugs.documentfoundation.org/show_bug.cgi?id\u003d50434 - the connectors in docx now get some extra 90/270 degrees rotation after this change.",
+      "revId": "16a23aa7ed3dae3c9da4099d4ffcb9c54f856454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
