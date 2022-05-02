@@ -486,13 +486,13 @@ public:
         try
         {
             _pImport->_xDialogModel->insertByName(
-                _aId, css::uno::makeAny(
+                _aId, css::uno::Any(
                     css::uno::Reference<css::awt::XControlModel>::query(
                         _xControlModel ) ) );
         }
         catch(const css::container::ElementExistException &e)
         {
-            throw css::lang::WrappedTargetRuntimeException("", e.Context, makeAny(e));
+            throw css::lang::WrappedTargetRuntimeException("", e.Context, css::uno::Any(e));
         }
     }
 };
