@@ -110,7 +110,7 @@ ScVbaUserForm::getCaption()
 void
 ScVbaUserForm::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Title", uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Title", uno::Any( _caption ) );
 }
 
 sal_Bool SAL_CALL
@@ -278,7 +278,7 @@ ScVbaUserForm::Controls( const uno::Any& index )
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() ) );
     if ( index.hasValue() )
         return xControls->Item( index, uno::Any() );
-    return uno::makeAny( xControls );
+    return uno::Any( xControls );
 }
 
 sal_Bool SAL_CALL

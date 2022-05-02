@@ -40,7 +40,7 @@ ScVbaRadioButton::getCaption()
 void SAL_CALL
 ScVbaRadioButton::setCaption( const OUString& _caption )
 {
-    m_xProps->setPropertyValue( "Label", uno::makeAny( _caption ) );
+    m_xProps->setPropertyValue( "Label", uno::Any( _caption ) );
 }
 
 uno::Any SAL_CALL
@@ -53,7 +53,7 @@ ScVbaRadioButton::getValue()
 //    return uno::makeAny( nValue );
 // I must be missing something MSO says value should be -1 if selected, 0 if not
 // selected
-    return uno::makeAny( nValue == -1 );
+    return uno::Any( nValue == -1 );
 
 }
 
@@ -74,7 +74,7 @@ ScVbaRadioButton::setValue( const uno::Any& _value )
 
     if( nValue == -1)
         nValue = 1;
-    m_xProps->setPropertyValue( "State", uno::makeAny( nValue ) );
+    m_xProps->setPropertyValue( "State", uno::Any( nValue ) );
     if ( nValue != nOldValue )
     {
         fireChangeEvent();

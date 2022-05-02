@@ -129,7 +129,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         std::copy(sVec.begin(), sVec.end(), std::next(sList.getArray(), nIndex));
     }
 
-    m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
+    m_xProps->setPropertyValue( "StringItemList", uno::Any( sList ) );
 }
 
 void
@@ -155,7 +155,7 @@ ListControlHelper::removeItem( const uno::Any& index )
         comphelper::removeElementAt(sList, nIndex);
     }
 
-    m_xProps->setPropertyValue( "StringItemList", uno::makeAny( sList ) );
+    m_xProps->setPropertyValue( "StringItemList", uno::Any( sList ) );
 }
 
 void
@@ -163,7 +163,7 @@ ListControlHelper::Clear(  )
 {
     // urk, setValue doesn't seem to work !!
     //setValue( uno::makeAny( sal_Int16() ) );
-    m_xProps->setPropertyValue( "StringItemList", uno::makeAny( uno::Sequence< OUString >() ) );
+    m_xProps->setPropertyValue( "StringItemList", uno::Any( uno::Sequence< OUString >() ) );
 }
 
 void
@@ -184,7 +184,7 @@ ListControlHelper::getListCount()
 uno::Any
 ListControlHelper::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
 {
-    return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( new ListPropListener( m_xProps, pvargIndex, pvarColumn ) ) ) );
+    return uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( new ListPropListener( m_xProps, pvargIndex, pvarColumn ) ) ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

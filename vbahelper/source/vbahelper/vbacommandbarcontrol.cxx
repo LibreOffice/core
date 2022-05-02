@@ -32,7 +32,7 @@ ScVbaCommandBarControl::ScVbaCommandBarControl( const css::uno::Reference< ov::X
 void ScVbaCommandBarControl::ApplyChange()
 {
     uno::Reference< container::XIndexContainer > xIndexContainer( m_xCurrentSettings, uno::UNO_QUERY_THROW );
-    xIndexContainer->replaceByIndex( m_nPosition, uno::makeAny( m_aPropertyValues ) );
+    xIndexContainer->replaceByIndex( m_nPosition, uno::Any( m_aPropertyValues ) );
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 }
 
@@ -49,7 +49,7 @@ void SAL_CALL
 ScVbaCommandBarControl::setCaption( const OUString& _caption )
 {
     OUString sCaption = _caption.replace('&','~');
-    setPropertyValue( m_aPropertyValues, "Label" , uno::makeAny( sCaption ) );
+    setPropertyValue( m_aPropertyValues, "Label" , uno::Any( sCaption ) );
     ApplyChange();
 }
 
@@ -71,7 +71,7 @@ ScVbaCommandBarControl::setOnAction( const OUString& _onaction )
     {
         OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
         SAL_INFO("vbahelper", "ScVbaCommandBarControl::setOnAction: " << aCommandURL);
-        setPropertyValue( m_aPropertyValues, "CommandURL" , uno::makeAny( aCommandURL ) );
+        setPropertyValue( m_aPropertyValues, "CommandURL" , uno::Any( aCommandURL ) );
         ApplyChange();
     }
 }
@@ -91,7 +91,7 @@ ScVbaCommandBarControl::setVisible( sal_Bool _visible )
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE );
     if( aValue.hasValue() )
     {
-        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE , uno::makeAny( _visible ) );
+        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ISVISIBLE , uno::Any( _visible ) );
         ApplyChange();
     }
 }
@@ -120,7 +120,7 @@ ScVbaCommandBarControl::setEnabled( sal_Bool _enabled )
     uno::Any aValue = getPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED );
     if( aValue.hasValue() )
     {
-        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED , uno::makeAny( _enabled ) );
+        setPropertyValue( m_aPropertyValues, ITEM_DESCRIPTOR_ENABLED , uno::Any( _enabled ) );
         ApplyChange();
     }
     else
@@ -173,7 +173,7 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex )
     {
         return xCommandBarControls->Item( aIndex, uno::Any() );
     }
-    return uno::makeAny( xCommandBarControls );
+    return uno::Any( xCommandBarControls );
 }
 
 OUString

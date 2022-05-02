@@ -54,7 +54,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     {
         ::cppu::ContextEntry_Init( gsApplication, uno::Any() ),
         ::cppu::ContextEntry_Init( sDocCtxName, uno::Any() ),
-        ::cppu::ContextEntry_Init( "/singletons/com.sun.star.lang.theServiceManager" , uno::makeAny( aSrvMgr ) )
+        ::cppu::ContextEntry_Init( "/singletons/com.sun.star.lang.theServiceManager" , uno::Any( aSrvMgr ) )
     };
     // don't pass a delegate, this seems to introduce yet another cyclic dependency ( and
     // some strange behavior
@@ -68,7 +68,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const OUString& sDocCt
     {
         uno::Reference< beans::XPropertySet >(
             aSrvMgr, uno::UNO_QUERY_THROW )->
-            setPropertyValue( "DefaultContext", uno::makeAny( mxContext ) );
+            setPropertyValue( "DefaultContext", uno::Any( mxContext ) );
     }
     catch ( uno::RuntimeException & )
     {

@@ -46,7 +46,7 @@ public:
         if( !hasMoreElements() )
             throw container::NoSuchElementException();
 
-        return m_pCommandBarControls->createCollectionObject( uno::makeAny( m_nCurrentPosition++ ) );
+        return m_pCommandBarControls->createCollectionObject( uno::Any( m_nCurrentPosition++ ) );
     }
 };
 
@@ -127,7 +127,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     else
         pNewCommandBarControl = new ScVbaCommandBarButton( this, mxContext, m_xIndexAccess, pCBarHelper, m_xBarSettings, m_sResourceUrl, nPosition );
 
-    return uno::makeAny( uno::Reference< XCommandBarControl > ( pNewCommandBarControl ) );
+    return uno::Any( uno::Reference< XCommandBarControl > ( pNewCommandBarControl ) );
 }
 
 // Methods
@@ -151,7 +151,7 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
         throw uno::RuntimeException();
     }
 
-    return createCollectionObject( uno::makeAny( nPosition ) );
+    return createCollectionObject( uno::Any( nPosition ) );
 }
 
 uno::Reference< XCommandBarControl > SAL_CALL
@@ -205,7 +205,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
 
 
     uno::Reference< container::XIndexContainer > xIndexContainer( m_xIndexAccess, uno::UNO_QUERY_THROW );
-    xIndexContainer->insertByIndex( nPosition, uno::makeAny( aProps ) );
+    xIndexContainer->insertByIndex( nPosition, uno::Any( aProps ) );
 
     pCBarHelper->ApplyTempChange( m_sResourceUrl, m_xBarSettings );
 

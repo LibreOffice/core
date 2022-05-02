@@ -127,7 +127,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl, Timer *, void)
     // must be the last call in the method since it deletes the timer
     try
     {
-        m_xBase->OnTime( uno::makeAny( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::makeAny( m_aTimerInfo.second.second ), uno::makeAny( false ) );
+        m_xBase->OnTime( uno::Any( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::Any( m_aTimerInfo.second.second ), uno::Any( false ) );
     } catch( uno::Exception& )
     {}
 }
@@ -320,7 +320,7 @@ VbaApplicationBase::CommandBars( const uno::Any& aIndex )
     uno::Reference< XCommandBars > xCommandBars( new ScVbaCommandBars( this, mxContext, uno::Reference< container::XIndexAccess >(), getCurrentDocument() ) );
     if( aIndex.hasValue() )
         return xCommandBars->Item( aIndex, uno::Any() );
-    return uno::makeAny( xCommandBars );
+    return uno::Any( xCommandBars );
 }
 
 OUString SAL_CALL

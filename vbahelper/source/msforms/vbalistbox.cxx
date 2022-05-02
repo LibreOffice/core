@@ -39,7 +39,7 @@ ScVbaListBox::setListIndex( const uno::Any& _value )
     sal_Int32 nIndex = 0;
     _value >>= nIndex;
     uno::Reference< XPropValue > xPropVal( Selected( nIndex ), uno::UNO_QUERY_THROW );
-    xPropVal->setValue( uno::makeAny( true ) );
+    xPropVal->setValue( uno::Any( true ) );
 }
 
 uno::Any SAL_CALL
@@ -84,7 +84,7 @@ ScVbaListBox::setValue( const uno::Any& _value )
     uno::Sequence< sal_Int16 > nSelectedIndices { nValue };
     uno::Sequence< sal_Int16 > nOldSelectedIndices;
     m_xProps->getPropertyValue( "SelectedItems" ) >>= nOldSelectedIndices;
-    m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nSelectedIndices ) );
+    m_xProps->setPropertyValue( "SelectedItems", uno::Any( nSelectedIndices ) );
     if ( nSelectedIndices != nOldSelectedIndices )
         fireClickEvent();
 }
@@ -100,7 +100,7 @@ ScVbaListBox::getText()
 void SAL_CALL
 ScVbaListBox::setText( const OUString& _text )
 {
-    setValue( uno::makeAny( _text ) ); // seems the same
+    setValue( uno::Any( _text ) ); // seems the same
 }
 
 sal_Int32 SAL_CALL
@@ -129,7 +129,7 @@ ScVbaListBox::setMultiSelect( sal_Int32 _multiselect )
             throw lang::IllegalArgumentException();
             break;
     }
-    m_xProps->setPropertyValue( "MultiSelection" , uno::makeAny( bBoolVal ) );
+    m_xProps->setPropertyValue( "MultiSelection" , uno::Any( bBoolVal ) );
 }
 
 
@@ -145,7 +145,7 @@ ScVbaListBox::Selected( sal_Int32 index )
     if( nIndex < 0 || nIndex >= nLength )
         throw uno::RuntimeException( "Error Number." );
     m_nIndex = nIndex;
-    return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
+    return uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
 
 // Methods
@@ -195,7 +195,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
                 nList.realloc( nLength - 1 );
                 //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
                 fireClickEvent();
-                m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
+                m_xProps->setPropertyValue( "SelectedItems", uno::Any( nList ) );
             }
             return;
         }
@@ -214,7 +214,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
     }
     //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
     fireClickEvent();
-    m_xProps->setPropertyValue( "SelectedItems", uno::makeAny( nList ) );
+    m_xProps->setPropertyValue( "SelectedItems", uno::Any( nList ) );
 }
 
 // this is called when something like the following vba code is used
@@ -229,7 +229,7 @@ ScVbaListBox::getValueEvent()
     sal_Int32 nIndex = m_nIndex;
     bool bRet = std::find(std::cbegin(nList), std::cend(nList), nIndex) != std::cend(nList);
 
-    return uno::makeAny( bRet );
+    return uno::Any( bRet );
 }
 
 void SAL_CALL

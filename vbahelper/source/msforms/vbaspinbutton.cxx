@@ -51,7 +51,7 @@ ScVbaSpinButton::getMax()
 void SAL_CALL
 ScVbaSpinButton::setMax( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( "SpinValueMax", uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "SpinValueMax", uno::Any( nVal ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -65,7 +65,7 @@ ScVbaSpinButton::getMin()
 void SAL_CALL
 ScVbaSpinButton::setMin( sal_Int32 nVal )
 {
-    m_xProps->setPropertyValue( "SpinValueMin", uno::makeAny( nVal ) );
+    m_xProps->setPropertyValue( "SpinValueMin", uno::Any( nVal ) );
 }
 
 OUString

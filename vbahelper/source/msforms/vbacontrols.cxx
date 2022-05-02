@@ -137,7 +137,7 @@ public:
     {
         if ( Index < 0 || Index >= static_cast< sal_Int32 >( mControls.size() ) )
             throw lang::IndexOutOfBoundsException();
-        return uno::makeAny( mControls[ Index ] );
+        return uno::Any( mControls[ Index ] );
     }
 };
 
@@ -183,7 +183,7 @@ public:
             uno::Reference< msforms::XControl > xVBAControl;
             if ( xControl.is() && m_xDlg.is() )
                 xVBAControl = ScVbaControlFactory::createUserformControl( m_xContext, xControl, m_xDlg, m_xModel, mfOffsetX, mfOffsetY );
-            return uno::makeAny( xVBAControl );
+            return uno::Any( xVBAControl );
         }
         throw container::NoSuchElementException();
     }
@@ -374,7 +374,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
                 xModelProps->setPropertyValue( "FontStrikeout" , uno::Any( awt::FontStrikeout::NONE ) );
             }
 
-            xDialogContainer->insertByName( aNewName, uno::makeAny( xNewModel ) );
+            xDialogContainer->insertByName( aNewName, uno::Any( xNewModel ) );
             uno::Reference< awt::XControlContainer > xControlContainer( mxDialog, uno::UNO_QUERY_THROW );
             xNewControl = xControlContainer->getControl( aNewName );
 

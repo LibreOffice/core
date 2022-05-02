@@ -111,7 +111,7 @@ getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext )
 const uno::Any&
 aNULL()
 {
-    static  uno::Any aNULLL = uno::makeAny( uno::Reference< uno::XInterface >() );
+    static  uno::Any aNULLL{ uno::Reference< uno::XInterface >() };
     return aNULLL;
 }
 
@@ -323,7 +323,7 @@ OORGBToXLRGB( const uno::Any& aCol )
     sal_Int32 nCol(0);
     aCol >>= nCol;
     nCol = OORGBToXLRGB( nCol );
-    return uno::makeAny( nCol );
+    return uno::Any( nCol );
 }
 uno::Any
 XLRGBToOORGB(  const uno::Any& aCol )
@@ -331,7 +331,7 @@ XLRGBToOORGB(  const uno::Any& aCol )
     sal_Int32 nCol(0);
     aCol >>= nCol;
     nCol = XLRGBToOORGB( nCol );
-    return uno::makeAny( nCol );
+    return uno::Any( nCol );
 }
 
 void PrintOutHelper( SfxViewShell const * pViewShell, const uno::Any& From, const uno::Any& To, const uno::Any& Copies, const uno::Any& Preview, const uno::Any& /*ActivePrinter*/, const uno::Any& /*PrintToFile*/, const uno::Any& Collate, const uno::Any& PrToFileName, bool bUseSelection  )

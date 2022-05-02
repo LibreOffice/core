@@ -36,8 +36,8 @@ VbaTextFrame::setAsMSObehavior()
     //set property TextWordWrap default as False.
     // TextFitToSize control the text content. It seems we should set the default as False.
     // com.sun.star.drawing.TextFitToSizeType.NONE
-    m_xPropertySet->setPropertyValue( "TextWordWrap", uno::makeAny( false ) );
-    m_xPropertySet->setPropertyValue( "TextFitToSize", uno::makeAny( drawing::TextFitToSizeType_NONE ) );
+    m_xPropertySet->setPropertyValue( "TextWordWrap", uno::Any( false ) );
+    m_xPropertySet->setPropertyValue( "TextFitToSize", uno::Any( drawing::TextFitToSizeType_NONE ) );
 }
 
 sal_Int32 VbaTextFrame::getMargin( const OUString& sMarginType )
@@ -51,7 +51,7 @@ sal_Int32 VbaTextFrame::getMargin( const OUString& sMarginType )
 void VbaTextFrame::setMargin( const OUString& sMarginType, float fMargin )
 {
     sal_Int32 nMargin = Millimeter::getInHundredthsOfOneMillimeter( fMargin );
-    m_xPropertySet->setPropertyValue( sMarginType, uno::makeAny( nMargin ) );
+    m_xPropertySet->setPropertyValue( sMarginType, uno::Any( nMargin ) );
 }
 
 // Attributes
@@ -71,7 +71,7 @@ void SAL_CALL
 VbaTextFrame::setAutoSize( sal_Bool _autosize )
 {
     setAsMSObehavior();
-    m_xPropertySet->setPropertyValue( "TextAutoGrowHeight", uno::makeAny( _autosize ) );
+    m_xPropertySet->setPropertyValue( "TextAutoGrowHeight", uno::Any( _autosize ) );
 }
 
 float SAL_CALL
