@@ -34,6 +34,24 @@
       "parentUuid": "9da9811a_6a56c06d",
       "revId": "75ad1d16b5a60e7d26e62d06554c420e42a78853",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfa90f54_3bf33911",
+        "filename": "include/o3tl/lru_map.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 185,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-05-02T08:58:18Z",
+      "side": 1,
+      "message": "Ok, this actually comes from 16a338e173083954a9932a3a4005f172309c784e. I\u0027ve reworked that in https://gerrit.libreoffice.org/c/core/+/133690 .",
+      "parentUuid": "eb97b608_59e9cbd4",
+      "revId": "75ad1d16b5a60e7d26e62d06554c420e42a78853",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
