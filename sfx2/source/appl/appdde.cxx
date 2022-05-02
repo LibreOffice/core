@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <string_view>
+
 #include <config_features.h>
 #include <rtl/character.hxx>
 #include <rtl/malformeduriexception.hxx>
@@ -78,7 +80,7 @@ public:
     virtual bool SysTopicExecute( const OUString* pStr );
 };
 
-    bool lcl_IsDocument( const OUString& rContent )
+    bool lcl_IsDocument( std::u16string_view rContent )
     {
         using namespace com::sun::star;
 
