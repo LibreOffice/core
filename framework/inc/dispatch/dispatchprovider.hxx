@@ -74,6 +74,8 @@ class DispatchProvider final : public ::cppu::WeakImplHelper< css::frame::XDispa
         css::uno::WeakReference< css::frame::XFrame > m_xFrame;
         /// cache of some other dispatch provider which are registered inside configuration to handle special URL protocols
         HandlerCache m_aProtocolHandlerCache;
+        std::unordered_map<OUString, css::uno::Reference<css::frame::XDispatchProvider>>
+            m_aProtocolHandlers;
 
     /* interface */
     public:
