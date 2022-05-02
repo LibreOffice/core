@@ -82,8 +82,6 @@ tools::Rectangle IconView::GetFocusRect(const SvTreeListEntry*, tools::Long nEnt
 void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long nY,
                           vcl::RenderContext& rRenderContext)
 {
-    tools::Rectangle aRect; // multi purpose
-
     pImpl->UpdateContextBmpWidthMax(&rEntry);
 
     short nTempEntryHeight = GetEntryHeight();
@@ -173,16 +171,13 @@ void IconView::PaintEntry(SvTreeListEntry& rEntry, tools::Long nX, tools::Long n
         // draw background
         if (!(nTreeFlags & SvTreeFlags::USESEL))
         {
-            aRect.SetPos(aEntryPos);
-            aRect.SetSize(aRectSize);
-
             Color aBackgroundColor = aWallpaper.GetColor();
             if (aBackgroundColor != COL_TRANSPARENT)
             {
                 rRenderContext.SetFillColor(aBackgroundColor);
                 // this case may occur for smaller horizontal resizes
-                if (aRect.Left() < aRect.Right())
-                    rRenderContext.DrawRect(aRect);
+                if (aRectSize.Width() > 1)
+                    rRenderContext.DrawRect(tools::Rectangle(aEntryPos, aRectSize));
             }
         }
 
