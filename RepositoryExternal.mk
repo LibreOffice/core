@@ -2638,7 +2638,7 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 ifeq ($(OS),WNT)
 $(call gb_LinkTarget_add_libs,$(1),\
-	$(call gb_UnpackedTarball_get_dir,libwebp)/output/lib/libwebp$(gb_StaticLibrary_PLAINEXT) \
+	$(call gb_UnpackedTarball_get_dir,libwebp)/output/lib/libwebp$(if $(MSVC_USE_DEBUG_RUNTIME),_debug)$(gb_StaticLibrary_PLAINEXT) \
 )
 else
 $(call gb_LinkTarget_add_libs,$(1),\
