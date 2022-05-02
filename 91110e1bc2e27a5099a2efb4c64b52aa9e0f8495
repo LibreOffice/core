@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a139dac_e6bae2c2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-05-02T09:18:15Z",
+      "side": 1,
+      "message": "As the comment below says, that should not really happen, but if it does then this makes sense I guess.\n",
+      "revId": "91110e1bc2e27a5099a2efb4c64b52aa9e0f8495",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
