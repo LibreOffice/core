@@ -1051,7 +1051,7 @@ WW8_WrPlcSepx::WW8_WrPlcSepx( MSWordExportBase& rExport )
 {
     // to be in sync with the AppendSection() call in the MSWordSections
     // constructor
-    aCps.push_back( 0 );
+    m_aCps.push_back( 0 );
 }
 
 MSWordSections::~MSWordSections()
@@ -1124,7 +1124,7 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwPageDesc* pPd,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aCps.push_back( nStartCp );
+    m_aCps.push_back( nStartCp );
     AppendSection( pPd, pSectionFormat, nLnNumRestartNo );
 }
 
@@ -1147,7 +1147,7 @@ void WW8_WrPlcSepx::AppendSep( WW8_CP nStartCp, const SwFormatPageDesc& rPD,
     if (HeaderFooterWritten()) {
         return; // #i117955# prevent new sections in endnotes
     }
-    aCps.push_back( nStartCp );
+    m_aCps.push_back( nStartCp );
     AppendSection( rPD, rNd, pSectionFormat, nLnNumRestartNo );
 }
 
@@ -1161,33 +1161,33 @@ void WW8_WrPlcSepx::WriteFootnoteEndText( WW8Export& rWrt, sal_uLong nCpStt )
     sal_uInt8 nEmptyStt = 0;
     if( nInfoFlags )
     {
-        pTextPos->Append( nCpStt );  // empty footnote separator
+        m_pTextPos->Append( nCpStt );  // empty footnote separator
 
         if( 0x02 & nInfoFlags )         // Footnote continuation separator
         {
-            pTextPos->Append( nCpStt );
+            m_pTextPos->Append( nCpStt );
             rWrt.WriteStringAsPara( rInfo.m_aErgoSum );
             rWrt.WriteStringAsPara( OUString() );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
         else
-            pTextPos->Append( nCpStt );
+            m_pTextPos->Append( nCpStt );
 
         if( 0x04 & nInfoFlags )         // Footnote continuation notice
         {
-            pTextPos->Append( nCpStt );
+            m_pTextPos->Append( nCpStt );
             rWrt.WriteStringAsPara( rInfo.m_aQuoVadis );
             rWrt.WriteStringAsPara( OUString() );
             nCpStt = rWrt.Fc2Cp( rWrt.Strm().Tell() );
         }
         else
-            pTextPos->Append( nCpStt );
+            m_pTextPos->Append( nCpStt );
 
         nEmptyStt = 3;
     }
 
     while( 6 > nEmptyStt++ )
-        pTextPos->Append( nCpStt );
+        m_pTextPos->Append( nCpStt );
 
     // set the flags at the Dop right away
     WW8Dop& rDop = *rWrt.m_pDop;
@@ -1232,14 +1232,14 @@ void WW8_WrPlcSepx::OutHeaderFooter( WW8Export& rWrt, bool bHeader,
 {
     if ( nFlag & nHFFlags )
     {
-        pTextPos->Append( rCpPos );
+        m_pTextPos->Append( rCpPos );
         rWrt.WriteHeaderFooterText( rFormat, bHeader);
         rWrt.WriteStringAsPara( OUString() ); // CR to the end ( otherwise WW complains )
         rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     }
     else
     {
-        pTextPos->Append( rCpPos );
+        m_pTextPos->Append( rCpPos );
         if ((bHeader? rWrt.m_bHasHdr : rWrt.m_bHasFtr) && nBreakCode!=0)
         {
             rWrt.WriteStringAsPara( OUString() ); // Empty paragraph for empty header/footer
@@ -1972,8 +1972,8 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
 {
     sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
 
-    OSL_ENSURE( !pTextPos, "who set the pointer?" );
-    pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
+    OSL_ENSURE( !m_pTextPos, "who set the pointer?" );
+    m_pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
 
     WriteFootnoteEndText( rWrt, nCpStart );
     CheckForFacinPg( rWrt );
@@ -1995,16 +1995,16 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     }
     rWrt.SetHdFtIndex( nOldIndex ); //0
 
-    if ( pTextPos->Count() )
+    if ( m_pTextPos->Count() )
     {
         // HdFt available?
         sal_uLong nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-        pTextPos->Append( nCpEnd );  // End of last Header/Footer for PlcfHdd
+        m_pTextPos->Append( nCpEnd );  // End of last Header/Footer for PlcfHdd
 
         if ( nCpEnd > nCpStart )
         {
             ++nCpEnd;
-            pTextPos->Append( nCpEnd + 1 );  // End of last Header/Footer for PlcfHdd
+            m_pTextPos->Append( nCpEnd + 1 );  // End of last Header/Footer for PlcfHdd
 
             rWrt.WriteStringAsPara( OUString() ); // CR to the end ( otherwise WW complains )
         }
@@ -2013,7 +2013,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     }
     else
     {
-        pTextPos.reset();
+        m_pTextPos.reset();
     }
 
     return rWrt.m_pFib->m_ccpHdr != 0;
@@ -2039,12 +2039,12 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 {
     OSL_ENSURE(m_SectionAttributes.size() == static_cast<size_t>(m_aSects.size())
         , "WritePlcSed(): arrays out of sync!");
-    OSL_ENSURE( aCps.size() == m_aSects.size() + 1, "WrPlcSepx: DeSync" );
+    OSL_ENSURE( m_aCps.size() == m_aSects.size() + 1, "WrPlcSepx: DeSync" );
     sal_uInt64 nFcStart = rWrt.m_pTableStrm->Tell();
 
     for( decltype(m_aSects)::size_type i = 0; i <= m_aSects.size(); i++ )
     {
-        sal_uInt32 nP = aCps[i];
+        sal_uInt32 nP = m_aCps[i];
         rWrt.m_pTableStrm->WriteUInt32(nP);
     }
 
@@ -2063,10 +2063,10 @@ void WW8_WrPlcSepx::WritePlcSed( WW8Export& rWrt ) const
 void WW8_WrPlcSepx::WritePlcHdd( WW8Export& rWrt ) const
 {
     // Don't write out the PlcfHdd if ccpHdd is 0: it's a validation failure case.
-    if( rWrt.m_pFib->m_ccpHdr != 0 && pTextPos && pTextPos->Count() )
+    if( rWrt.m_pFib->m_ccpHdr != 0 && m_pTextPos && m_pTextPos->Count() )
     {
         rWrt.m_pFib->m_fcPlcfhdd = rWrt.m_pTableStrm->Tell();
-        pTextPos->Write( *rWrt.m_pTableStrm );             // Plc0
+        m_pTextPos->Write( *rWrt.m_pTableStrm );             // Plc0
         rWrt.m_pFib->m_lcbPlcfhdd = rWrt.m_pTableStrm->Tell() -
                                 rWrt.m_pFib->m_fcPlcfhdd;
     }
@@ -2133,8 +2133,8 @@ WW8_WrPlcSubDoc::~WW8_WrPlcSubDoc()
 
 void WW8_WrPlcFootnoteEdn::Append( WW8_CP nCp, const SwFormatFootnote& rFootnote )
 {
-    aCps.push_back( nCp );
-    aContent.push_back( &rFootnote );
+    m_aCps.push_back( nCp );
+    m_aContent.push_back( &rFootnote );
 }
 
 WW8_Annotation::WW8_Annotation(const SwPostItField* pPostIt, WW8_CP nRangeStart, WW8_CP nRangeEnd)
@@ -2180,7 +2180,7 @@ void WW8_WrPlcAnnotations::AddRangeStartPosition(const OUString& rName, WW8_CP n
 
 void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
 {
-    aCps.push_back( nCp );
+    m_aCps.push_back( nCp );
     WW8_Annotation* p;
     if( m_aRangeStartPositions.find(pPostIt->GetName()) != m_aRangeStartPositions.end() )
     {
@@ -2193,15 +2193,15 @@ void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwPostItField *pPostIt )
     {
         p = new WW8_Annotation(pPostIt, nCp, nCp);
     }
-    aContent.push_back( p );
+    m_aContent.push_back( p );
 }
 
 void WW8_WrPlcAnnotations::Append( WW8_CP nCp, const SwRedlineData *pRedline )
 {
     maProcessedRedlines.insert(pRedline);
-    aCps.push_back( nCp );
+    m_aCps.push_back( nCp );
     WW8_Annotation* p = new WW8_Annotation(pRedline);
-    aContent.push_back( p );
+    m_aContent.push_back( p );
 }
 
 bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
@@ -2211,19 +2211,19 @@ bool WW8_WrPlcAnnotations::IsNewRedlineComment( const SwRedlineData *pRedline )
 
 WW8_WrPlcAnnotations::~WW8_WrPlcAnnotations()
 {
-    for(const void * p : aContent)
+    for(const void * p : m_aContent)
         delete static_cast<WW8_Annotation const *>(p);
 }
 
 bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
     WW8_CP& rCount )
 {
-    sal_uInt16 nLen = aContent.size();
+    sal_uInt16 nLen = m_aContent.size();
     if ( !nLen )
         return false;
 
     sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-    pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
+    m_pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
     sal_uInt16 i;
 
     switch ( nTTyp )
@@ -2232,10 +2232,10 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
             for ( i = 0; i < nLen; i++ )
             {
                 // beginning for PlcfAtnText
-                pTextPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
+                m_pTextPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
 
                 rWrt.WritePostItBegin();
-                const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
+                const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(m_aContent[i]);
                 if (rAtn.mpRichText)
                     rWrt.WriteOutliner(*rAtn.mpRichText, nTTyp);
                 else
@@ -2252,13 +2252,13 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
             {
                 // textbox content
                 WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-                aCps.insert( aCps.begin()+i, nCP );
-                pTextPos->Append( nCP );
+                m_aCps.insert( m_aCps.begin()+i, nCP );
+                m_pTextPos->Append( nCP );
 
-                if( aContent[ i ] != nullptr )
+                if( m_aContent[ i ] != nullptr )
                 {
                     // is it a writer or sdr - textbox?
-                    const SdrObject& rObj = *static_cast<SdrObject const *>(aContent[ i ]);
+                    const SdrObject& rObj = *static_cast<SdrObject const *>(m_aContent[ i ]);
                     if (rObj.GetObjInventor() == SdrInventor::FmForm)
                     {
                         sal_uInt8 nOldTyp = rWrt.m_nTextTyp;
@@ -2304,9 +2304,9 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
                         }
                     }
                 }
-                else if (i < aSpareFormats.size() && aSpareFormats[i])
+                else if (i < m_aSpareFormats.size() && m_aSpareFormats[i])
                 {
-                    const SwFrameFormat& rFormat = *aSpareFormats[i];
+                    const SwFrameFormat& rFormat = *m_aSpareFormats[i];
                     const SwNodeIndex* pNdIdx = rFormat.GetContent().GetContentIdx();
                     rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
                                pNdIdx->GetNode().EndOfSectionIndex(), nTTyp );
@@ -2322,10 +2322,10 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
             for ( i = 0; i < nLen; i++ )
             {
                 // beginning for PlcfFootnoteText/PlcfEdnText
-                pTextPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
+                m_pTextPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
 
                 // Note content
-                const SwFormatFootnote* pFootnote = static_cast<SwFormatFootnote const *>(aContent[ i ]);
+                const SwFormatFootnote* pFootnote = static_cast<SwFormatFootnote const *>(m_aContent[ i ]);
                 rWrt.WriteFootnoteBegin( *pFootnote );
                 const SwNodeIndex* pIdx = pFootnote->GetTextFootnote()->GetStartNode();
                 OSL_ENSURE( pIdx, "Where is the start node of Foot-/Endnote?" );
@@ -2339,12 +2339,12 @@ bool WW8_WrPlcSubDoc::WriteGenericText( WW8Export& rWrt, sal_uInt8 nTTyp,
             OSL_ENSURE( false, "What kind of SubDocType is that?" );
     }
 
-    pTextPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
+    m_pTextPos->Append( rWrt.Fc2Cp( rWrt.Strm().Tell() ));
     // CR to the end ( otherwise WW complains )
     rWrt.WriteStringAsPara( OUString() );
 
     WW8_CP nCpEnd = rWrt.Fc2Cp( rWrt.Strm().Tell() );
-    pTextPos->Append( nCpEnd );
+    m_pTextPos->Append( nCpEnd );
     rCount = nCpEnd - nCpStart;
 
     return ( rCount != 0 );
@@ -2365,11 +2365,11 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
 {
 
     sal_uInt64 nFcStart = rWrt.m_pTableStrm->Tell();
-    sal_uInt16 nLen = aCps.size();
+    sal_uInt16 nLen = m_aCps.size();
     if ( !nLen )
         return;
 
-    OSL_ENSURE( aCps.size() + 2 == pTextPos->Count(), "WritePlc: DeSync" );
+    OSL_ENSURE( m_aCps.size() + 2 == m_pTextPos->Count(), "WritePlc: DeSync" );
 
     std::vector<std::pair<OUString,OUString> > aStrArr;
     WW8Fib& rFib = *rWrt.m_pFib;              // n+1-th CP-Pos according to the manual
@@ -2388,7 +2388,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 int nIdx = 0;
                 for ( sal_uInt16 i = 0; i < nLen; ++i )
                 {
-                    const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
+                    const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(m_aContent[i]);
                     aStrArr.emplace_back(rAtn.msOwner,rAtn.m_sInitials);
                     // record start and end positions for ranges
                     if (rAtn.HasRange())
@@ -2484,7 +2484,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 // Write the extended >= Word XP ATRD records
                 for( sal_uInt16 i = 0; i < nLen; ++i )
                 {
-                    const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
+                    const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(m_aContent[i]);
 
                     sal_uInt32 nDTTM = sw::ms::DateTime2DTTM(rAtn.maDateTime);
 
@@ -2505,7 +2505,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
         case TXT_TXTBOX:
         case TXT_HFTXTBOX:
             {
-                pTextPos->Write( *rWrt.m_pTableStrm );
+                m_pTextPos->Write( *rWrt.m_pTableStrm );
                 const std::vector<sal_uInt32>* pShapeIds = GetShapeIdArr();
                 OSL_ENSURE( pShapeIds, "Where are the ShapeIds?" );
 
@@ -2513,7 +2513,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                 {
                     // write textbox story - FTXBXS
                     // is it a writer or sdr - textbox?
-                    const SdrObject* pObj = static_cast<SdrObject const *>(aContent[ i ]);
+                    const SdrObject* pObj = static_cast<SdrObject const *>(m_aContent[ i ]);
                     sal_Int32 nCnt = 1;
                     if (dynamic_cast< const SdrTextObj *>( pObj ))
                     {
@@ -2531,9 +2531,9 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
                     }
                     if( nullptr == pObj )
                     {
-                        if (i < aSpareFormats.size() && aSpareFormats[i])
+                        if (i < m_aSpareFormats.size() && m_aSpareFormats[i])
                         {
-                            const SwFrameFormat& rFormat = *aSpareFormats[i];
+                            const SwFrameFormat& rFormat = *m_aSpareFormats[i];
 
                             const SwFormatChain* pChn = &rFormat.GetChain();
                             while( pChn->GetNext() )
@@ -2569,7 +2569,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     {
         // write CP Positions
         for ( sal_uInt16 i = 0; i < nLen; i++ )
-            SwWW8Writer::WriteLong( *rWrt.m_pTableStrm, aCps[ i ] );
+            SwWW8Writer::WriteLong( *rWrt.m_pTableStrm, m_aCps[ i ] );
 
         // n+1-th CP-Pos according to the manual
         SwWW8Writer::WriteLong( *rWrt.m_pTableStrm,
@@ -2581,7 +2581,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
             sal_uInt16 nlTag = 0;
             for ( sal_uInt16 i = 0; i < nLen; ++i )
             {
-                const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(aContent[i]);
+                const WW8_Annotation& rAtn = *static_cast<const WW8_Annotation*>(m_aContent[i]);
 
                 //aStrArr is sorted
                 auto aIter = std::lower_bound(aStrArr.begin(),
@@ -2630,7 +2630,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
             sal_uInt16 nNo = 0;
             for ( sal_uInt16 i = 0; i < nLen; ++i )             // write Flags
             {
-                const SwFormatFootnote* pFootnote = static_cast<SwFormatFootnote const *>(aContent[ i ]);
+                const SwFormatFootnote* pFootnote = static_cast<SwFormatFootnote const *>(m_aContent[ i ]);
                 SwWW8Writer::WriteShort( *rWrt.m_pTableStrm,
                         !pFootnote->GetNumStr().isEmpty() ? 0 : ++nNo );
             }
@@ -2640,7 +2640,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, sal_uInt8 nTTyp,
     nFcStart = rWrt.m_pTableStrm->Tell();
     rRefCount = nFcStart - rRefStart;
 
-    pTextPos->Write( *rWrt.m_pTableStrm );
+    m_pTextPos->Write( *rWrt.m_pTableStrm );
 
     switch ( nTTyp )
     {

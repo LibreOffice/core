@@ -241,11 +241,11 @@ public:
 
 class WW8_WrPlcSepx : public MSWordSections
 {
-    std::vector<WW8_CP> aCps;
+    std::vector<WW8_CP> m_aCps;
     std::vector< std::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
     // hack to prevent adding sections in endnotes
     bool m_bHeaderFooterWritten;
-    std::unique_ptr<WW8_WrPlc0> pTextPos;        // Position of the headers/footers
+    std::unique_ptr<WW8_WrPlc0> m_pTextPos;        // Position of the headers/footers
 
     WW8_WrPlcSepx( const WW8_WrPlcSepx& ) = delete;
     WW8_WrPlcSepx& operator=( const WW8_WrPlcSepx& ) = delete;
@@ -264,7 +264,7 @@ public:
                     const SwNode& rNd,
                     const SwSectionFormat* pSectionFormat,
                     sal_uLong nLnNumRestartNo );
-    void Finish( WW8_CP nEndCp ) { aCps.push_back( nEndCp ); }
+    void Finish( WW8_CP nEndCp ) { m_aCps.push_back( nEndCp ); }
 
     bool WriteKFText( WW8Export& rWrt );
     void WriteSepx( SvStream& rStrm ) const;
@@ -1220,10 +1220,10 @@ private:
     WW8_WrPlcSubDoc(const WW8_WrPlcSubDoc&) = delete;
     WW8_WrPlcSubDoc& operator=(const WW8_WrPlcSubDoc&) = delete;
 protected:
-    std::vector<WW8_CP> aCps;
-    std::vector<const void*> aContent;                // PTRARR of SwFormatFootnote/PostIts/..
-    std::vector<const SwFrameFormat*> aSpareFormats;  // a backup for aContent: if there's no SdrObject, stores the fmt directly here
-    std::unique_ptr<WW8_WrPlc0> pTextPos;             // positions of the individual texts
+    std::vector<WW8_CP> m_aCps;
+    std::vector<const void*> m_aContent;                // PTRARR of SwFormatFootnote/PostIts/..
+    std::vector<const SwFrameFormat*> m_aSpareFormats;  // a backup for aContent: if there's no SdrObject, stores the fmt directly here
+    std::unique_ptr<WW8_WrPlc0> m_pTextPos;             // positions of the individual texts
 
     WW8_WrPlcSubDoc();
     virtual ~WW8_WrPlcSubDoc();
@@ -1290,36 +1290,36 @@ public:
 class WW8_WrPlcTextBoxes : public WW8_WrPlcSubDoc // double Plc for Textboxes
 {                        // Frame/DrawTextboxes!
 private:
-    sal_uInt8 nTyp;
-    std::vector<sal_uInt32> aShapeIds;        // VARARR of ShapeIds for the SwFrameFormats
+    sal_uInt8 m_nTyp;
+    std::vector<sal_uInt32> m_aShapeIds;        // VARARR of ShapeIds for the SwFrameFormats
     virtual const std::vector<sal_uInt32>* GetShapeIdArr() const override;
 
     WW8_WrPlcTextBoxes(const WW8_WrPlcTextBoxes&) = delete;
     WW8_WrPlcTextBoxes& operator=(WW8_WrPlcTextBoxes const &) = delete;
 public:
-    explicit WW8_WrPlcTextBoxes( sal_uInt8 nTTyp ) : nTyp( nTTyp ) {}
+    explicit WW8_WrPlcTextBoxes( sal_uInt8 nTTyp ) : m_nTyp( nTTyp ) {}
 
     bool WriteText( WW8Export& rWrt );
     void WritePlc( WW8Export& rWrt ) const;
     void Append( const SdrObject& rObj, sal_uInt32 nShapeId );
     void Append( const SwFrameFormat* pFormat, sal_uInt32 nShapeId );
-    sal_uInt16 Count() const { return aContent.size(); }
+    sal_uInt16 Count() const { return m_aContent.size(); }
     sal_uInt16 GetPos( const void* p ) const
     {
         std::vector<const void*>::const_iterator it
-            = std::find( aContent.begin(), aContent.end(), p );
-        return it == aContent.end() ? USHRT_MAX : it - aContent.begin();
+            = std::find( m_aContent.begin(), m_aContent.end(), p );
+        return it == m_aContent.end() ? USHRT_MAX : it - m_aContent.begin();
     }
 };
 
 class WW8_WrPlcPn                   // Plc for Page Numbers
 {
 private:
-    WW8Export& rWrt;
+    WW8Export& m_rWrt;
     // Plc for Chpx and Papx ( incl PN-Plc )
     std::vector<std::unique_ptr<WW8_WrFkp>> m_Fkps;
-    sal_uInt16 nFkpStartPage;
-    ePLCFT ePlc;
+    sal_uInt16 m_nFkpStartPage;
+    ePLCFT m_ePlc;
 
     WW8_WrPlcPn(const WW8_WrPlcPn&) = delete;
     WW8_WrPlcPn& operator=(const WW8_WrPlcPn&) = delete;

@@ -904,15 +904,15 @@ void DrawObj::SetShapeDetails(sal_uInt32 nId, sal_Int32 nThick)
 bool WW8_WrPlcTextBoxes::WriteText( WW8Export& rWrt )
 {
     rWrt.m_bInWriteEscher = true;
-    WW8_CP& rccp=TXT_TXTBOX == nTyp ? rWrt.m_pFib->m_ccpTxbx : rWrt.m_pFib->m_ccpHdrTxbx;
+    WW8_CP& rccp=TXT_TXTBOX == m_nTyp ? rWrt.m_pFib->m_ccpTxbx : rWrt.m_pFib->m_ccpHdrTxbx;
 
-    bool bRet = WriteGenericText( rWrt, nTyp, rccp );
+    bool bRet = WriteGenericText( rWrt, m_nTyp, rccp );
 
     WW8_CP nCP = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     WW8Fib& rFib = *rWrt.m_pFib;
     WW8_CP nMyOffset = rFib.m_ccpText + rFib.m_ccpFootnote + rFib.m_ccpHdr + rFib.m_ccpAtn
                             + rFib.m_ccpEdn;
-    if( TXT_TXTBOX == nTyp )
+    if( TXT_TXTBOX == m_nTyp )
         rWrt.m_pFieldTextBxs->Finish( nCP, nMyOffset );
     else
         rWrt.m_pFieldHFTextBxs->Finish( nCP, nMyOffset + rFib.m_ccpTxbx );
@@ -922,23 +922,23 @@ bool WW8_WrPlcTextBoxes::WriteText( WW8Export& rWrt )
 
 void WW8_WrPlcTextBoxes::Append( const SdrObject& rObj, sal_uInt32 nShapeId )
 {
-    aContent.push_back( &rObj );
-    aShapeIds.push_back( nShapeId );
+    m_aContent.push_back( &rObj );
+    m_aShapeIds.push_back( nShapeId );
     //save NULL, if we have an actual SdrObject
-    aSpareFormats.push_back(nullptr);
+    m_aSpareFormats.push_back(nullptr);
 }
 
 void WW8_WrPlcTextBoxes::Append( const SwFrameFormat* pFormat, sal_uInt32 nShapeId )
 {
     //no sdr object, we insert a NULL in the aContent and save the real fmt in aSpareFormats.
-    aContent.push_back( nullptr );
-    aShapeIds.push_back( nShapeId );
-    aSpareFormats.push_back(pFormat);
+    m_aContent.push_back( nullptr );
+    m_aShapeIds.push_back( nShapeId );
+    m_aSpareFormats.push_back(pFormat);
 }
 
 const std::vector<sal_uInt32>* WW8_WrPlcTextBoxes::GetShapeIdArr() const
 {
-    return &aShapeIds;
+    return &m_aShapeIds;
 }
 
 sal_uInt32 WW8Export::GetSdrOrdNum( const SwFrameFormat& rFormat ) const
