@@ -60,6 +60,7 @@ private:
 
     DECL_LINK( Selection, weld::TreeView&, void );
     DECL_LINK( DoubleClick, weld::TreeView&, bool );
+    DECL_LINK(QueryTooltipHdl, const weld::TreeIter&, OUString);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
