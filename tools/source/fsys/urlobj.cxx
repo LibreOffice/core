@@ -649,7 +649,7 @@ std::unique_ptr<SvMemoryStream> INetURLObject::getData() const
         std::u16string_view sBase64Data = sURLPath.subView( nCharactersSkipped );
         css::uno::Sequence< sal_Int8 > aDecodedData;
         if (comphelper::Base64::decodeSomeChars(aDecodedData, sBase64Data)
-            == static_cast<sal_Int32>(sBase64Data.size()))
+            == sBase64Data.size())
         {
             return memoryStream(
                 aDecodedData.getArray(), aDecodedData.getLength());

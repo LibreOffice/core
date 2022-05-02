@@ -20,6 +20,10 @@
 #ifndef INCLUDED_COMPHELPER_BASE64_HXX
 #define INCLUDED_COMPHELPER_BASE64_HXX
 
+#include <sal/config.h>
+
+#include <cstddef>
+
 #include <comphelper/comphelperdllapi.h>
 
 #include <sal/types.h>
@@ -48,8 +52,8 @@ public:
     // must be used!
     static void decode(css::uno::Sequence<sal_Int8>& aPass, std::u16string_view sBuffer);
 
-    static sal_Int32 decodeSomeChars(css::uno::Sequence<sal_Int8>& aPass,
-                                     std::u16string_view sBuffer);
+    static std::size_t decodeSomeChars(css::uno::Sequence<sal_Int8>& aPass,
+                                       std::u16string_view sBuffer);
 };
 }
 
