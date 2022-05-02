@@ -28,6 +28,7 @@
 #include <mutex>
 #include <set>
 #include <string.h>
+#include <string_view>
 #include <svsys.h>
 #include <vector>
 
@@ -1090,7 +1091,7 @@ void ImplReleaseTempFonts(SalData& rSalData, bool bAll)
     }
 }
 
-static OUString lcl_GetFontFamilyName(const OUString& rFontFileURL)
+static OUString lcl_GetFontFamilyName(std::u16string_view rFontFileURL)
 {
     // Create temporary file name
     OUString aTempFileURL;
