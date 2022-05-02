@@ -1513,7 +1513,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf113143)
         // want to test.
         { "ReduceImageResolution", uno::Any(false) },
         // Set a custom PDF version.
-        { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(16)) },
+        { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(16)) },
     }));
     aMediaDescriptor["FilterData"] <<= aFilterData;
     saveAsPDF(u"tdf113143.odp");
@@ -2113,7 +2113,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageResourceInlineXObjectRef)
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
     OUString aURL
         = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-resource-inline-xobject-ref.pdf";
-    xGraphicObject->setPropertyValue("GraphicURL", uno::makeAny(aURL));
+    xGraphicObject->setPropertyValue("GraphicURL", uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
     uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
@@ -2191,7 +2191,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testVersion15)
     // Save as PDF.
     uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence(
-        { { "SelectPdfVersion", uno::makeAny(static_cast<sal_Int32>(15)) } }));
+        { { "SelectPdfVersion", uno::Any(static_cast<sal_Int32>(15)) } }));
     aMediaDescriptor["FilterName"] <<= OUString("writer_pdf_Export");
     aMediaDescriptor["FilterData"] <<= aFilterData;
     xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
@@ -2847,7 +2847,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testPdfImageRotate180)
     uno::Reference<beans::XPropertySet> xGraphicObject(
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
     OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf-image-rotate-180.pdf";
-    xGraphicObject->setPropertyValue("GraphicURL", uno::makeAny(aURL));
+    xGraphicObject->setPropertyValue("GraphicURL", uno::Any(aURL));
     uno::Reference<drawing::XShape> xShape(xGraphicObject, uno::UNO_QUERY);
     xShape->setSize(awt::Size(1000, 1000));
     uno::Reference<text::XTextContent> xTextContent(xGraphicObject, uno::UNO_QUERY);
@@ -3099,8 +3099,8 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
     {
         // Test the filename rewriting
         uno::Sequence<beans::PropertyValue> aFilterData(comphelper::InitPropertySequence({
-            { "ExportLinksRelativeFsys", uno::makeAny(URIs[i].relativeFsys) },
-            { "ConvertOOoTargetToPDFTarget", uno::makeAny(true) },
+            { "ExportLinksRelativeFsys", uno::Any(URIs[i].relativeFsys) },
+            { "ConvertOOoTargetToPDFTarget", uno::Any(true) },
         }));
         aMediaDescriptor["FilterData"] <<= aFilterData;
 
@@ -3108,7 +3108,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testURIs)
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
         uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-        xCursorProps->setPropertyValue("HyperLinkURL", uno::makeAny(URIs[i].in));
+        xCursorProps->setPropertyValue("HyperLinkURL", uno::Any(URIs[i].in));
 
         // Save as PDF.
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);

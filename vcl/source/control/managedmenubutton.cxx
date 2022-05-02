@@ -72,9 +72,9 @@ void ManagedMenuButton::Activate()
     {}
 
     css::uno::Sequence<css::uno::Any> aArgs {
-        css::uno::makeAny(comphelper::makePropertyValue("ModuleIdentifier", aModuleName)),
-        css::uno::makeAny(comphelper::makePropertyValue("Frame", css::uno::makeAny(xFrame))),
-        css::uno::makeAny(comphelper::makePropertyValue("InToolbar", css::uno::makeAny(true)))
+        css::uno::Any(comphelper::makePropertyValue("ModuleIdentifier", aModuleName)),
+        css::uno::Any(comphelper::makePropertyValue("Frame", css::uno::Any(xFrame))),
+        css::uno::Any(comphelper::makePropertyValue("InToolbar", css::uno::Any(true)))
     };
 
     const OUString aCommand(GetCommand());

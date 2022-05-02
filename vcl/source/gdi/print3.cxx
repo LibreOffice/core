@@ -349,7 +349,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
             xBox->run();
         }
         xController->setValue( "IsDirect",
-                               css::uno::makeAny( false ) );
+                               css::uno::Any( false ) );
     }
 
     // setup printer
@@ -425,7 +425,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                             aBuf.append( "-" );
                             aBuf.append( nPages );
                         }
-                        xController->setValue("PageRange", css::uno::makeAny(aBuf.makeStringAndClear()));
+                        xController->setValue("PageRange", css::uno::Any(aBuf.makeStringAndClear()));
                     }
                 }
             }
@@ -525,7 +525,7 @@ bool Printer::PreparePrintJob(std::shared_ptr<PrinterController> xController,
                     return false;
                 }
                 xController->setValue( "LocalFileName",
-                                       css::uno::makeAny( aFile ) );
+                                       css::uno::Any( aFile ) );
             }
             else if (aDlg.isSingleJobs())
             {
@@ -828,7 +828,7 @@ void PrinterController::setPrinter( const VclPtr<Printer>& i_rPrinter )
 
     mpImplData->mxPrinter = i_rPrinter;
     setValue( "Name",
-              css::uno::makeAny( i_rPrinter->GetName() ) );
+              css::uno::Any( i_rPrinter->GetName() ) );
     mpImplData->mnDefaultPaperBin = mpImplData->mxPrinter->GetPaperBin();
     mpImplData->mxPrinter->Push();
     mpImplData->mxPrinter->SetMapMode(MapMode(MapUnit::Map100thMM));
@@ -1700,12 +1700,12 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
                {
                    if( it->second.mnDependsOnEntry != -1 )
                    {
-                       setValue( aDependency, css::uno::makeAny( sal_Int32( it->second.mnDependsOnEntry ) ) );
+                       setValue( aDependency, css::uno::Any( sal_Int32( it->second.mnDependsOnEntry ) ) );
                    }
                }
                else if( pVal->Value >>= bDepVal )
                {
-                   setValue( aDependency, css::uno::makeAny( it->second.mnDependsOnEntry != 0 ) );
+                   setValue( aDependency, css::uno::Any( it->second.mnDependsOnEntry != 0 ) );
                }
                else
                {
@@ -1984,7 +1984,7 @@ css::uno::Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OU
 
     SAL_WARN_IF( nUsed != nElements, "vcl.gdi", "nUsed != nElements, probable heap corruption" );
 
-    return css::uno::makeAny( aCtrl );
+    return css::uno::Any( aCtrl );
 }
 
 css::uno::Any PrinterOptionsHelper::setGroupControlOpt(const OUString& i_rID,

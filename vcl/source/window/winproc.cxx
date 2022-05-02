@@ -515,7 +515,7 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
                                 if( xDragSource.is() )
                                 {
                                     static_cast < DNDListenerContainer * > ( xDragGestureRecognizer.get() )->fireDragGestureEvent( 0,
-                                        relLoc.X(), relLoc.Y(), xDragSource, css::uno::makeAny( aMouseEvent ) );
+                                        relLoc.X(), relLoc.Y(), xDragSource, css::uno::Any( aMouseEvent ) );
                                 }
                             }
                         }
@@ -953,7 +953,7 @@ bool ImplLOKHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, MouseNotifyEven
                                         aWinPos.X(),
                                         aWinPos.Y(),
                                         xDragSource,
-                                        css::uno::makeAny(aEvent));
+                                        css::uno::Any(aEvent));
                             }
                         }
                     }

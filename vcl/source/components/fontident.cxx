@@ -145,7 +145,7 @@ Any SAL_CALL FontIdentificator::getMaterial()
         aFD.Slant = css::awt::FontSlant_DONTKNOW;
         break;
     }
-    return makeAny( aFD );
+    return Any( aFD );
 }
 
 // XServiceInfo

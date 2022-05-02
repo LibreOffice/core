@@ -257,7 +257,7 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
              m_bUnicodeRegistered )
         {
              OUString aUnicodeText = synthesizeUnicodeText( );
-             Any aAny = makeAny( aUnicodeText );
+             Any aAny( aUnicodeText );
              return aAny;
         }
         // #i124085# CF_DIBV5 should not be possible, but keep for reading from the

@@ -291,7 +291,7 @@ css::uno::Any OutputDevice::GetSystemGfxDataAny() const
     css::uno::Sequence< sal_Int8 > aSeq( reinterpret_cast<sal_Int8 const *>(&aSysData),
                                                       aSysData.nSize );
 
-    return css::uno::makeAny(aSeq);
+    return css::uno::Any(aSeq);
 }
 
 void OutputDevice::SetRefPoint()
