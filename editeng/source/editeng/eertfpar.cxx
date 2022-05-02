@@ -31,6 +31,7 @@
 
 #include <svtools/rtftoken.h>
 #include <svtools/htmltokn.h>
+#include <unotools/configmgr.hxx>
 
 using namespace com::sun::star;
 
@@ -336,7 +337,13 @@ void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
         {
             nEsc *= 10; //HalfPoints => Twips was embezzled in RTFITEM.CXX!
             SvxFont aFont;
-            mpEditEngine->SeekCursor(aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont);
+            if (utl::ConfigManager::IsFuzzing())
+            {
+                // ofz#24932 detecting RTL vs LTR is slow
+                aFont = aStartPaM.GetNode()->GetCharAttribs().GetDefFont();
+            }
+            else
+                mpEditEngine->SeekCursor(aStartPaM.GetNode(), aStartPaM.GetIndex()+1, aFont);
             nEscFontHeight = aFont.GetFontSize().Height();
         }
         if (nEscFontHeight)
