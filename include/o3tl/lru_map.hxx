@@ -55,7 +55,7 @@ template <> class lru_map_base<void>
  *
  * It is optionally possible to specify a function for ValueSize template
  * argument (that can be called as 'size_t func(Value)') that will return
- * a size (cost) for an item istead of the default size of 1 for each item.
+ * a size (cost) for an item instead of the default size of 1 for each item.
  * The size of an item must not change for an item (if needed, re-insert
  * the item). A newly inserted item is guaranteed to be in the container,
  * even if its size exceeds the maximum size.
