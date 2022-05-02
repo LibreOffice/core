@@ -22,6 +22,7 @@
 
 #include <QtData.hxx>
 #include <QtDragAndDrop.hxx>
+#include <QtFontFace.hxx>
 #include <QtGraphics.hxx>
 #include <QtInstance.hxx>
 #include <QtMainWindow.hxx>
@@ -65,6 +66,8 @@
 
 #include <cairo.h>
 #include <headless/svpgdi.hxx>
+
+#include <unx/fontmanager.hxx>
 
 #if CHECK_QT5_USING_X11 && QT5_HAVE_XCB_ICCCM
 static bool g_bNeedsWmHintsWindowGroup = true;
@@ -1056,12 +1059,51 @@ static Color toColor(const QColor& rColor)
     return Color(rColor.red(), rColor.green(), rColor.blue());
 }
 
+static bool toVclFont(const QFont& rQFont, const css::lang::Locale& rLocale, vcl::Font& rVclFont)
+{
+    psp::FastPrintFontInfo aInfo;
+    QFontInfo qFontInfo(rQFont);
+
+    OUString sFamilyName = toOUString(rQFont.family());
+    aInfo.m_aFamilyName = sFamilyName;
+    aInfo.m_eItalic = QtFontFace::toFontItalic(qFontInfo.style());
+    aInfo.m_eWeight = QtFontFace::toFontWeight(qFontInfo.weight());
+    aInfo.m_eWidth = QtFontFace::toFontWidth(rQFont.stretch());
+
+    psp::PrintFontManager::get().matchFont(aInfo, rLocale);
+    SAL_INFO("vcl.qt", "font match result for '"
+                           << sFamilyName << "': "
+                           << (aInfo.m_nID != 0 ? OUString::Concat("'") + aInfo.m_aFamilyName + "'"
+                                                : OUString("failed")));
+
+    if (aInfo.m_nID == 0)
+        return false;
+
+    int nPointHeight = qFontInfo.pointSize();
+    if (nPointHeight <= 0)
+        nPointHeight = rQFont.pointSize();
+
+    vcl::Font aFont(aInfo.m_aFamilyName, Size(0, nPointHeight));
+    if (aInfo.m_eWeight != WEIGHT_DONTKNOW)
+        aFont.SetWeight(aInfo.m_eWeight);
+    if (aInfo.m_eWidth != WIDTH_DONTKNOW)
+        aFont.SetWidthType(aInfo.m_eWidth);
+    if (aInfo.m_eItalic != ITALIC_DONTKNOW)
+        aFont.SetItalic(aInfo.m_eItalic);
+    if (aInfo.m_ePitch != PITCH_DONTKNOW)
+        aFont.SetPitch(aInfo.m_ePitch);
+
+    rVclFont = aFont;
+    return true;
+}
+
 void QtFrame::UpdateSettings(AllSettings& rSettings)
 {
     if (QtData::noNativeControls())
         return;
 
     StyleSettings style(rSettings.GetStyleSettings());
+    const css::lang::Locale aLocale = rSettings.GetUILanguageTag().getLocale();
 
     // General settings
     QPalette pal = QApplication::palette();
@@ -1146,9 +1188,6 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     style.SetHelpTextColor(
         toColor(QToolTip::palette().color(QPalette::Active, QPalette::ToolTipText)));
 
-    const int flash_time = QApplication::cursorFlashTime();
-    style.SetCursorBlinkTime(flash_time != 0 ? flash_time / 2 : STYLE_CURSOR_NOBLINKTIME);
-
     // Menu
     std::unique_ptr<QMenuBar> pMenuBar = std::make_unique<QMenuBar>();
     QPalette qMenuCG = pMenuBar->palette();
@@ -1184,6 +1223,24 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     }
     style.SetMenuBarHighlightTextColor(style.GetMenuHighlightTextColor());
 
+    // Default fonts
+    vcl::Font aFont;
+    if (toVclFont(QApplication::font(), aLocale, aFont))
+    {
+        style.BatchSetFonts(aFont, aFont);
+        aFont.SetWeight(WEIGHT_BOLD);
+        style.SetTitleFont(aFont);
+        style.SetFloatTitleFont(aFont);
+    }
+
+    // Tooltip font
+    if (toVclFont(QToolTip::font(), aLocale, aFont))
+        style.SetHelpFont(aFont);
+
+    // Menu bar font
+    if (toVclFont(pMenuBar->font(), aLocale, aFont))
+        style.SetMenuFont(aFont);
+
     // Icon theme
     style.SetPreferredIconTheme(toOUString(QIcon::themeName()));
 
@@ -1194,6 +1251,10 @@ void QtFrame::UpdateSettings(AllSettings& rSettings)
     // These colors are used for the ruler text and marks
     style.SetShadowColor(toColor(pal.color(QPalette::Disabled, QPalette::WindowText)));
     style.SetDarkShadowColor(toColor(pal.color(QPalette::Inactive, QPalette::WindowText)));
+
+    // Cursor blink interval
+    int nFlashTime = QApplication::cursorFlashTime();
+    style.SetCursorBlinkTime(nFlashTime != 0 ? nFlashTime / 2 : STYLE_CURSOR_NOBLINKTIME);
 
     rSettings.SetStyleSettings(style);
 }

@@ -28,9 +28,6 @@ class KF5SalInstance final : public QtInstance
     createPicker(css::uno::Reference<css::uno::XComponentContext> const& context,
                  QFileDialog::FileMode) override;
 
-    SalFrame* CreateFrame(SalFrame* pParent, SalFrameStyleFlags nStyle) override;
-    SalFrame* CreateChildFrame(SystemParentData* pParent, SalFrameStyleFlags nStyle) override;
-
 public:
     explicit KF5SalInstance(std::unique_ptr<QApplication>& pQApp, bool bUseCairo);
 };
