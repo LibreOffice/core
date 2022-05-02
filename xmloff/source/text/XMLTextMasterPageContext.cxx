@@ -294,7 +294,7 @@ void XMLTextMasterPageContext::Finish( bool bOverwrite )
 
     if ( xPropSetInfo->hasPropertyByName( "Hidden" ) )
     {
-        xPropSet->setPropertyValue( "Hidden", uno::makeAny( IsHidden( ) ) );
+        xPropSet->setPropertyValue( "Hidden", uno::Any( IsHidden( ) ) );
     }
 }
 

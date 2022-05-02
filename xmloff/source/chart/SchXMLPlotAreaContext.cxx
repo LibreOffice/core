@@ -323,7 +323,7 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
                                 OUString aPropName( "StartingAngle" );
                                 uno::Any aAStartingAngle( SchXMLTools::getPropertyFromContext( aPropName, pPropStyleContext, pStylesCtxt ) );
                                 if( !aAStartingAngle.hasValue() )
-                                    xProp->setPropertyValue( aPropName, uno::makeAny(sal_Int32(0)) ) ;
+                                    xProp->setPropertyValue( aPropName, uno::Any(sal_Int32(0)) ) ;
                             }
                         }
                     }
@@ -396,7 +396,7 @@ void SchXMLPlotAreaContext::startFastElement (sal_Int32 /*nElement*/,
         // data yet.
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
         if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
-            xProp->setPropertyValue("DataRowSource", uno::makeAny(mrDataRowSource) );
+            xProp->setPropertyValue("DataRowSource", uno::Any(mrDataRowSource) );
     }
 }
 
@@ -538,7 +538,7 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
             try
             {
                 xDiaProp->setPropertyValue("NumberOfLines",
-                                            uno::makeAny( mnNumOfLinesProp ));
+                                            uno::Any( mnNumOfLinesProp ));
             }
             catch( const uno::Exception & )
             {
@@ -553,7 +553,7 @@ void SchXMLPlotAreaContext::endFastElement(sal_Int32 )
             try
             {
                 xDiaProp->setPropertyValue("Volume",
-                                            uno::makeAny( true ));
+                                            uno::Any( true ));
             }
             catch( const uno::Exception & )
             {
@@ -763,7 +763,7 @@ void SchXMLDataPointContext::startFastElement (sal_Int32 /*Element*/,
                         deletedLegendEntries.push_back(deletedLegendEntry);
                     }
                     deletedLegendEntries.push_back(mDataPoint.m_nPointIndex);
-                    xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::makeAny(comphelper::containerToSequence(deletedLegendEntries)));
+                    xSeriesProp->setPropertyValue("DeletedLegendEntries", uno::Any(comphelper::containerToSequence(deletedLegendEntries)));
                 }
                 break;
             }
@@ -1026,7 +1026,7 @@ static void lcl_setErrorBarSequence ( const uno::Reference< chart2::XChartDocume
 
     Reference< beans::XPropertySet > xSeqProp( xNewSequence, uno::UNO_QUERY );
 
-    xSeqProp->setPropertyValue("Role", uno::makeAny( aRole ));
+    xSeqProp->setPropertyValue("Role", uno::Any( aRole ));
 
     Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
 
@@ -1241,12 +1241,12 @@ void SchXMLStatisticsObjectContext::startFastElement (sal_Int32 /*Element*/,
                 uno::Reference< beans::XPropertySet > xBarProp( xFact->createInstance("com.sun.star.chart2.ErrorBar" ),
                                                                 uno::UNO_QUERY );
 
-                xBarProp->setPropertyValue("ErrorBarStyle",uno::makeAny(css::chart::ErrorBarStyle::NONE));
-                xBarProp->setPropertyValue("PositiveError",uno::makeAny(0.0));
-                xBarProp->setPropertyValue("NegativeError",uno::makeAny(0.0));
-                xBarProp->setPropertyValue("Weight",uno::makeAny(1.0));
-                xBarProp->setPropertyValue("ShowPositiveError",uno::makeAny(true));
-                xBarProp->setPropertyValue("ShowNegativeError",uno::makeAny(true));
+                xBarProp->setPropertyValue("ErrorBarStyle",uno::Any(css::chart::ErrorBarStyle::NONE));
+                xBarProp->setPropertyValue("PositiveError",uno::Any(0.0));
+                xBarProp->setPropertyValue("NegativeError",uno::Any(0.0));
+                xBarProp->setPropertyValue("Weight",uno::Any(1.0));
+                xBarProp->setPropertyValue("ShowPositiveError",uno::Any(true));
+                xBarProp->setPropertyValue("ShowNegativeError",uno::Any(true));
 
                 // first import defaults from parent style
                 SetErrorBarStyleProperties( maSeriesStyleName, xBarProp, mrImportHelper );

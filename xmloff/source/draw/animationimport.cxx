@@ -167,7 +167,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
 
         Reference< XShape > _xShape( xRef, UNO_QUERY );
         if( _xShape.is() )
-            return makeAny( _xShape );
+            return Any( _xShape );
 
         Reference< XTextCursor > xTextCursor( xRef, UNO_QUERY );
         if( xTextCursor.is() )
@@ -187,7 +187,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
                 // break if start of selection is prior to end of current paragraph
                 if( xRange.is() && (xTextRangeCompare->compareRegionEnds( xStart, xRange ) >= 0 ) )
                 {
-                    return makeAny( ParagraphTarget( xShape, nParagraph ) );
+                    return Any( ParagraphTarget( xShape, nParagraph ) );
                 }
 
                 nParagraph++;
@@ -233,7 +233,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
         ValuePair aPair;
         aPair.First = convertValue( eAttributeName, rValue.copy( 0, nCommaPos ) );
         aPair.Second = convertValue( eAttributeName, rValue.copy( nCommaPos+1 ) );
-        return makeAny( aPair );
+        return Any( aPair );
     }
     else
     {
@@ -248,7 +248,7 @@ Any AnimationsImportHelperImpl::convertValue( XMLTokenEnum eAttributeName, const
         case XML_HEIGHT:
         case XML_TRANSLATE:
         {
-            return makeAny( rValue );
+            return Any( rValue );
         }
 
         case XML_SCALE:
@@ -425,7 +425,7 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( std::s
 
 Any AnimationsImportHelperImpl::convertPath( const OUString& rValue )
 {
-    return makeAny( rValue );
+    return Any( rValue );
 }
 
 
@@ -520,7 +520,7 @@ AnimationNodeContext::AnimationNodeContext(
                 if( nPresetClass != EffectPresetClass::CUSTOM )
                 {
                     Reference< XInitialization > xInit( mxNode, UNO_QUERY_THROW );
-                    const Any aAny( makeAny( nPresetClass ) );
+                    const Any aAny( nPresetClass );
                     Sequence< Any > aArgs( &aAny, 1 ) ;
                     xInit->initialize( aArgs );
                 }
@@ -662,7 +662,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(SMIL_SO52, XML_ENDSYNC):
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_Endsync ) )
-                    mxNode->setEndSync( makeAny( nEnum ) );
+                    mxNode->setEndSync( Any( nEnum ) );
             }
             break;
             case XML_ELEMENT(PRESENTATION, XML_NODE_TYPE):
@@ -671,7 +671,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_OASIS, XML_NODE_TYPE):
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_EffectNodeType ) )
-                    aUserData.emplace_back( GetXMLToken( XML_NODE_TYPE ), makeAny( nEnum ) );
+                    aUserData.emplace_back( GetXMLToken( XML_NODE_TYPE ), Any( nEnum ) );
             }
             break;
             case XML_ELEMENT(PRESENTATION, XML_PRESET_ID):
@@ -679,7 +679,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_OOO, XML_PRESET_ID):
             case XML_ELEMENT(PRESENTATION_OASIS, XML_PRESET_ID):
             {
-                aUserData.emplace_back( GetXMLToken( XML_PRESET_ID ), makeAny( aIter.toString() ) );
+                aUserData.emplace_back( GetXMLToken( XML_PRESET_ID ), Any( aIter.toString() ) );
             }
             break;
             case XML_ELEMENT(PRESENTATION, XML_PRESET_SUB_TYPE):
@@ -687,7 +687,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_OOO, XML_PRESET_SUB_TYPE):
             case XML_ELEMENT(PRESENTATION_OASIS, XML_PRESET_SUB_TYPE):
             {
-                aUserData.emplace_back( GetXMLToken( XML_PRESET_SUB_TYPE ), makeAny( aIter.toString() ) );
+                aUserData.emplace_back( GetXMLToken( XML_PRESET_SUB_TYPE ), Any( aIter.toString() ) );
             }
             break;
             case XML_ELEMENT(PRESENTATION, XML_PRESET_CLASS):
@@ -696,7 +696,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_OASIS, XML_PRESET_CLASS):
             {
                 if( SvXMLUnitConverter::convertEnum( nEnum, aIter.toView(), aAnimations_EnumMap_EffectPresetClass ) )
-                    aUserData.emplace_back( GetXMLToken( XML_PRESET_CLASS ), makeAny( nEnum ) );
+                    aUserData.emplace_back( GetXMLToken( XML_PRESET_CLASS ), Any( nEnum ) );
             }
             break;
             case XML_ELEMENT(PRESENTATION, XML_AFTER_EFFECT):
@@ -705,7 +705,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 bool bTemp;
                 if (::sax::Converter::convertBool( bTemp, aIter.toView() ))
-                    aUserData.emplace_back( GetXMLToken( XML_AFTER_EFFECT ), makeAny( bTemp ) );
+                    aUserData.emplace_back( GetXMLToken( XML_AFTER_EFFECT ), Any( bTemp ) );
             }
             break;
             case XML_ELEMENT(XLINK, XML_HREF):
@@ -713,7 +713,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                 if( nNodeType == AnimationNodeType::AUDIO )
                 {
                     Reference< XAudio > xAudio( mxNode, UNO_QUERY_THROW );
-                    xAudio->setSource( makeAny(lcl_GetMediaReference(GetImport(), aIter.toString())) );
+                    xAudio->setSource( Any(lcl_GetMediaReference(GetImport(), aIter.toString())) );
                     break;
                 }
                 [[fallthrough]];
@@ -758,7 +758,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_OOO, XML_MASTER_ELEMENT):
             {
                 Reference< XAnimationNode > xMaster( GetImport().getInterfaceToIdentifierMapper().getReference( aIter.toString() ), UNO_QUERY );
-                aUserData.emplace_back( GetXMLToken( XML_MASTER_ELEMENT ), makeAny( xMaster ) );
+                aUserData.emplace_back( GetXMLToken( XML_MASTER_ELEMENT ), Any( xMaster ) );
             }
             break;
 
@@ -927,7 +927,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
                 if( xAnimatePhysics.is() )
-                    xAnimatePhysics->setStartVelocityX( makeAny(aIter.toDouble()) );
+                    xAnimatePhysics->setStartVelocityX( Any(aIter.toDouble()) );
             }
             break;
 
@@ -937,7 +937,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
                 if( xAnimatePhysics.is() )
-                    xAnimatePhysics->setStartVelocityY( makeAny(aIter.toDouble()) );
+                    xAnimatePhysics->setStartVelocityY( Any(aIter.toDouble()) );
             }
             break;
 
@@ -947,7 +947,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
                 if( xAnimatePhysics.is() )
-                    xAnimatePhysics->setDensity( makeAny(aIter.toDouble()) );
+                    xAnimatePhysics->setDensity( Any(aIter.toDouble()) );
             }
             break;
 
@@ -957,7 +957,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             {
                 Reference< XAnimatePhysics > xAnimatePhysics( mxNode, UNO_QUERY );
                 if( xAnimatePhysics.is() )
-                    xAnimatePhysics->setBounciness( makeAny(aIter.toDouble()) );
+                    xAnimatePhysics->setBounciness( Any(aIter.toDouble()) );
             }
             break;
 
@@ -1100,7 +1100,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
             case XML_ELEMENT(PRESENTATION_SO52, XML_GROUP_ID):
             case XML_ELEMENT(PRESENTATION_OOO, XML_GROUP_ID):
             {
-                aUserData.emplace_back( "group-id", makeAny( aIter.toInt32() ) );
+                aUserData.emplace_back( "group-id", Any( aIter.toInt32() ) );
             }
             break;
 
@@ -1125,7 +1125,7 @@ void AnimationNodeContext::init_node(  const css::uno::Reference< css::xml::sax:
                     || IsTokenInNamespace(nToken, XML_NAMESPACE_PRESENTATION_OASIS)
                     || IsTokenInNamespace(nToken, XML_NAMESPACE_PRESENTATION_OOO))
                 {
-                    aUserData.emplace_back( SvXMLImport::getNameFromToken(aIter.getToken()), makeAny( aIter.toString() ) );
+                    aUserData.emplace_back( SvXMLImport::getNameFromToken(aIter.getToken()), Any( aIter.toString() ) );
                 }
                 else
                     XMLOFF_WARN_UNKNOWN("xmloff", aIter);
@@ -1226,7 +1226,7 @@ Any SAL_CALL AnimationsImport::queryInterface( const Type& aType )
 {
     if ( aType == cppu::UnoType<XAnimationNodeSupplier>::get())
     {
-        return makeAny( Reference<XAnimationNodeSupplier>( this ) );
+        return Any( Reference<XAnimationNodeSupplier>( this ) );
     }
     else
     {

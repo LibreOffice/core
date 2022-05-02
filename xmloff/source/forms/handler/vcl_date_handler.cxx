@@ -33,7 +33,6 @@ namespace xmloff
 {
 
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::util::DateTime;
     using ::com::sun::star::util::Date;
 
@@ -79,7 +78,7 @@ namespace xmloff
             aDate = ::Date(nVCLDate).GetUNODate();
         }
 
-        const Any aPropertyValue( makeAny( aDate ) );
+        const Any aPropertyValue( aDate );
 
         OSL_ENSURE( o_propertyValues.size() == 1, "VCLDateHandler::getPropertyValues: date strings represent exactly one property - not more, not less!" );
         for ( auto& prop : o_propertyValues )

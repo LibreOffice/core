@@ -101,7 +101,7 @@ void SAL_CALL ColorPropertySet::setPropertyValue( const OUString& /* aPropertyNa
 
 uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& /* PropertyName */ )
 {
-    return uno::makeAny( m_nColor );
+    return uno::Any( m_nColor );
 }
 
 void SAL_CALL ColorPropertySet::addPropertyChangeListener( const OUString& /* aPropertyName */, const Reference< XPropertyChangeListener >& /* xListener */ )
@@ -147,7 +147,7 @@ void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyNa
 uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
     if( aPropertyName == g_aColorPropName )
-        return uno::makeAny( m_nDefaultColor );
+        return uno::Any( m_nDefaultColor );
     return uno::Any();
 }
 

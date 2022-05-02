@@ -1280,7 +1280,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sal_Int32 nIndex = xTextPropMapper->getPropertySetMapper()->FindEntryIndex(
                                 "", XML_NAMESPACE_STYLE,
                                 GetXMLToken(XML_TEXT_COMBINE));
-    pFieldExport.reset( new XMLTextFieldExport( rExp, std::make_unique<XMLPropertyState>( nIndex, uno::makeAny(true) ) ) );
+    pFieldExport.reset( new XMLTextFieldExport( rExp, std::make_unique<XMLPropertyState>( nIndex, uno::Any(true) ) ) );
     PushNewTextListsHelper();
 }
 
@@ -2595,7 +2595,7 @@ XMLShapeExportFlags XMLTextParagraphExport::addTextFrameAttributes(
     {
         XMLAnchorTypePropHdl aAnchorTypeHdl;
         OUString sTmp;
-        aAnchorTypeHdl.exportXML( sTmp, uno::makeAny(eAnchor),
+        aAnchorTypeHdl.exportXML( sTmp, uno::Any(eAnchor),
                                   GetExport().GetMM100UnitConverter() );
         GetExport().AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, sTmp );
     }

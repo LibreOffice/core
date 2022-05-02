@@ -2767,7 +2767,7 @@ void XMLDdeFieldImportContext::endFastElement(sal_Int32 )
     Any aAny = xFieldMasterNameAccess->getByName(sMasterName);
     aAny >>= xMaster;
     //apply the content to the master
-    xMaster->setPropertyValue( sPropertyContent, uno::makeAny( GetContent()));
+    xMaster->setPropertyValue( sPropertyContent, uno::Any( GetContent()));
     // master exists: create text field and attach
     Reference<XPropertySet> xField;
     OUString sFieldName = OUString::Concat(sAPI_textfield_prefix) + sAPI_dde;
@@ -3297,16 +3297,16 @@ void XMLAnnotationImportContext::PrepareField(
 {
     // import (possibly empty) author
     OUString sAuthor( aAuthorBuffer.makeStringAndClear() );
-    xPropertySet->setPropertyValue(sAPI_author, makeAny(sAuthor));
+    xPropertySet->setPropertyValue(sAPI_author, Any(sAuthor));
 
     // import (possibly empty) initials
     OUString sInitials( aInitialsBuffer.makeStringAndClear() );
-    xPropertySet->setPropertyValue("Initials", makeAny(sInitials));
+    xPropertySet->setPropertyValue("Initials", Any(sInitials));
 
     //import resolved flag
     bool bTmp(false);
     (void)::sax::Converter::convertBool(bTmp, aResolved);
-    xPropertySet->setPropertyValue("Resolved", makeAny(bTmp));
+    xPropertySet->setPropertyValue("Resolved", Any(bTmp));
 
     util::DateTime aDateTime;
     if (::sax::Converter::parseDateTime(aDateTime,
@@ -3320,7 +3320,7 @@ void XMLAnnotationImportContext::PrepareField(
         xPropertySet->setPropertyValue(sPropertyDate, makeAny(aDate));
         */
         // why is there no UNO_NAME_DATE_TIME, but only UNO_NAME_DATE_TIME_VALUE?
-        xPropertySet->setPropertyValue(sAPI_date_time_value, makeAny(aDateTime));
+        xPropertySet->setPropertyValue(sAPI_date_time_value, Any(aDateTime));
     }
 
     OUString sBuffer = aTextBuffer.makeStringAndClear();
@@ -3329,11 +3329,11 @@ void XMLAnnotationImportContext::PrepareField(
         // delete last paragraph mark (if necessary)
         if (char(0x0a) == sBuffer[sBuffer.getLength()-1])
             sBuffer = sBuffer.copy(0, sBuffer.getLength()-1);
-        xPropertySet->setPropertyValue(sAPI_content, makeAny(sBuffer));
+        xPropertySet->setPropertyValue(sAPI_content, Any(sBuffer));
     }
 
     if (!aName.isEmpty())
-        xPropertySet->setPropertyValue(sAPI_name, makeAny(aName));
+        xPropertySet->setPropertyValue(sAPI_name, Any(aName));
 }
 
 

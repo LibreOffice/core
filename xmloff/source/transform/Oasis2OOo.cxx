@@ -1521,7 +1521,7 @@ void XMLConfigItemTContext_Impl::EndElement()
             {
                 Sequence < sal_Int8 > aKey;
                 ::comphelper::Base64::decode( aKey, m_aContent );
-                rPropSet->setPropertyValue( aPropName, makeAny( aKey ) );
+                rPropSet->setPropertyValue( aPropName, Any( aKey ) );
             }
         }
     }

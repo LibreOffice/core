@@ -1053,7 +1053,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             xPropSetInfo->hasPropertyByName( rPropName ) &&
             rStyles->hasByName( sStyleName ) )
         {
-            xPropSet->setPropertyValue( rPropName, makeAny(sStyleName) );
+            xPropSet->setPropertyValue( rPropName, Any(sStyleName) );
         }
         else
             sStyleName.clear();
@@ -1156,7 +1156,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 try
                 {
                     xPropSet->setPropertyValue(
-                        s_NumberingRules, makeAny(xNewNumRules) );
+                        s_NumberingRules, Any(xNewNumRules) );
                 }
                 catch(const Exception&)
                 {
@@ -1180,7 +1180,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 if (xPropSetInfo->hasPropertyByName(s_ParaIsNumberingRestart))
                 {
                     xPropSet->setPropertyValue(s_ParaIsNumberingRestart,
-                                               makeAny(true) );
+                                               Any(true) );
                 }
                 pListBlock->ResetRestartNumbering();
             }
@@ -1189,14 +1189,14 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 xPropSetInfo->hasPropertyByName(s_NumberingStartValue))
             {
                 xPropSet->setPropertyValue(s_NumberingStartValue,
-                                           makeAny(nStartValue));
+                                           Any(nStartValue));
             }
 
             if (xPropSetInfo->hasPropertyByName(s_PropNameListId))
             {
                 if (!sListId.isEmpty()) {
                     xPropSet->setPropertyValue(s_PropNameListId,
-                        makeAny(sListId) );
+                        Any(sListId) );
                 }
             }
 
@@ -1262,7 +1262,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                  m_xImpl->m_xPageStyles->hasByName( sDisplayName)))
             {
                 xPropSet->setPropertyValue(s_PageDescName,
-                        makeAny(sDisplayName));
+                        Any(sDisplayName));
             }
         }
         if( bPara && !pStyle->GetDropCapStyleName().isEmpty() &&
@@ -1275,7 +1275,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if (m_xImpl->m_xTextStyles->hasByName(sDisplayName) &&
                 xPropSetInfo->hasPropertyByName("DropCapCharStyleName"))
             {
-                xPropSet->setPropertyValue("DropCapCharStyleName", makeAny(sDisplayName));
+                xPropSet->setPropertyValue("DropCapCharStyleName", Any(sDisplayName));
             }
         }
 
@@ -1301,7 +1301,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
                     // set field value (the combined character string)
                     xTmp->setPropertyValue("Content",
-                        makeAny(rCursor->getString()));
+                        Any(rCursor->getString()));
 
                     // insert the field over it's original text
                     Reference<XTextContent> xTextContent(xTmp, UNO_QUERY);
@@ -1364,7 +1364,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 if ( nCurrentOutlineLevelInheritedFromParagraphStyle != nOutlineLevel )
                 {
                     xPropSet->setPropertyValue( s_OutlineLevel,
-                        makeAny( static_cast<sal_Int16>(nOutlineLevel) ) );
+                        Any( static_cast<sal_Int16>(nOutlineLevel) ) );
                 }
             }
             if (!bOutlineContentVisible)
@@ -1376,7 +1376,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                 auto pGrabBag = aGrabBag.getArray();
                 pGrabBag[length].Name = "OutlineContentVisibleAttr";
                 pGrabBag[length].Value <<= bool(bOutlineContentVisible);
-                xPropSet->setPropertyValue("ParaInteropGrabBag", uno::makeAny(aGrabBag));
+                xPropSet->setPropertyValue("ParaInteropGrabBag", uno::Any(aGrabBag));
             }
             // RFE: inserting headings into text documents (#i70748#)
             if ( bApplyOutlineLevelAsListLevel )
@@ -1387,7 +1387,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                      nNumLevel != (nOutlineLevel - 1) )
                 {
                     xPropSet->setPropertyValue( s_NumberingLevel,
-                            makeAny( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
+                            Any( static_cast<sal_Int8>(nOutlineLevel - 1) ) );
                 }
             }
             /* Correction: (#i69629#)
@@ -1434,9 +1434,9 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
                     {
                         // heading not in a list --> apply outline style
                         xPropSet->setPropertyValue( s_NumberingRules,
-                            makeAny(m_xImpl->m_xChapterNumbering) );
+                            Any(m_xImpl->m_xChapterNumbering) );
                         xPropSet->setPropertyValue( s_NumberingLevel,
-                            makeAny(static_cast<sal_Int8>(nOutlineLevel - 1)));
+                            Any(static_cast<sal_Int8>(nOutlineLevel - 1)));
                     }
                 }
             }
@@ -1447,7 +1447,7 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             if ( nCurrentOutlineLevelInheritedFromParagraphStyle != 0 )
             {
                 xPropSet->setPropertyValue(s_OutlineLevel,
-                    makeAny( sal_Int16(0) ));
+                    Any( sal_Int16(0) ));
             }
         }
     }
@@ -1606,7 +1606,7 @@ void XMLTextImportHelper::SetOutlineStyles( bool bSetEmptyLevels )
         {
             pProps->Value <<= sChosenStyles[i];
             m_xImpl->m_xChapterNumbering->replaceByIndex(i,
-                    makeAny( aProps ));
+                    Any( aProps ));
         }
     }
 
@@ -1635,17 +1635,17 @@ void XMLTextImportHelper::SetHyperlink(
     if (!xPropSetInfo.is() || !xPropSetInfo->hasPropertyByName(s_HyperLinkURL))
         return;
 
-    xPropSet->setPropertyValue(s_HyperLinkURL, makeAny(rHRef));
+    xPropSet->setPropertyValue(s_HyperLinkURL, Any(rHRef));
 
     if (xPropSetInfo->hasPropertyByName(s_HyperLinkName))
     {
-        xPropSet->setPropertyValue(s_HyperLinkName, makeAny(rName));
+        xPropSet->setPropertyValue(s_HyperLinkName, Any(rName));
     }
 
     if (xPropSetInfo->hasPropertyByName(s_HyperLinkTarget))
     {
         xPropSet->setPropertyValue(s_HyperLinkTarget,
-            makeAny(rTargetFrameName));
+            Any(rTargetFrameName));
     }
 
     if ( (pEvents != nullptr) &&
@@ -1663,7 +1663,7 @@ void XMLTextImportHelper::SetHyperlink(
             pEvents->SetEvents(xReplace);
 
             // put events
-            xPropSet->setPropertyValue(s_HyperLinkEvents, makeAny(xReplace));
+            xPropSet->setPropertyValue(s_HyperLinkEvents, Any(xReplace));
         }
     }
 
@@ -1678,7 +1678,7 @@ void XMLTextImportHelper::SetHyperlink(
         m_xImpl->m_xTextStyles->hasByName(sDisplayName))
     {
         xPropSet->setPropertyValue(s_UnvisitedCharStyleName,
-            makeAny(sDisplayName));
+            Any(sDisplayName));
     }
 
     sDisplayName =
@@ -1689,7 +1689,7 @@ void XMLTextImportHelper::SetHyperlink(
         m_xImpl->m_xTextStyles->hasByName(sDisplayName))
     {
         xPropSet->setPropertyValue(s_VisitedCharStyleName,
-            makeAny(sDisplayName));
+            Any(sDisplayName));
     }
 }
 
@@ -1710,7 +1710,7 @@ void XMLTextImportHelper::SetRuby(
         return;
 
     // the ruby text
-    xPropSet->setPropertyValue(sRubyText, makeAny(rText));
+    xPropSet->setPropertyValue(sRubyText, Any(rText));
 
     // the ruby style (ruby-adjust)
     if (!rStyleName.isEmpty() && m_xImpl->m_xAutoStyles.is())
@@ -1733,7 +1733,7 @@ void XMLTextImportHelper::SetRuby(
         if( (!sDisplayName.isEmpty()) &&
             m_xImpl->m_xTextStyles->hasByName( sDisplayName ))
         {
-            xPropSet->setPropertyValue("RubyCharStyleName", makeAny(sDisplayName));
+            xPropSet->setPropertyValue("RubyCharStyleName", Any(sDisplayName));
         }
     }
 }
@@ -2179,7 +2179,7 @@ void XMLTextImportHelper::ConnectFrameChains(
             && m_xImpl->m_xTextFrames->hasByName(sNextFrmName))
         {
             rFrmPropSet->setPropertyValue("ChainNextName",
-                makeAny(sNextFrmName));
+                Any(sNextFrmName));
         }
         else
         {
@@ -2201,7 +2201,7 @@ void XMLTextImportHelper::ConnectFrameChains(
         {
             // The previous frame must exist, because it existing than
             // inserting the entry
-            rFrmPropSet->setPropertyValue("ChainPrevName", makeAny(*i));
+            rFrmPropSet->setPropertyValue("ChainPrevName", Any(*i));
 
             i = m_xImpl->m_xPrevFrmNames->erase(i);
             j = m_xImpl->m_xNextFrmNames->erase(j);
@@ -2424,7 +2424,7 @@ void XMLTextImportHelper::MapCrossRefHeadingFieldsHorribly()
         {
             continue;
         }
-        xField->setPropertyValue("SourceName", uno::makeAny(iter->second));
+        xField->setPropertyValue("SourceName", uno::Any(iter->second));
     }
 }
 

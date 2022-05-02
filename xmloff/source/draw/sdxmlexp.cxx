@@ -1610,7 +1610,7 @@ void SdXMLExport::ImpWritePresentationStyles()
 
 void SdXMLExport::ExportMeta_()
 {
-    uno::Sequence<beans::NamedValue> stats { { "ObjectCount", uno::makeAny(mnObjectCount) } };
+    uno::Sequence<beans::NamedValue> stats { { "ObjectCount", uno::Any(mnObjectCount) } };
 
     // update document statistics at the model
     uno::Reference<document::XDocumentPropertiesSupplier> xPropSup(GetModel(),

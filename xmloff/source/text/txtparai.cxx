@@ -1028,7 +1028,7 @@ void XMLIndexMarkImportContext_Impl::ProcessAttribute(
         case XML_ELEMENT(TEXT, XML_ALPHABETICAL_INDEX_MARK):
             if ( aIter.getToken() == XML_ELEMENT(TEXT, XML_STRING_VALUE) )
             {
-                rPropSet->setPropertyValue("AlternativeText", uno::makeAny(aIter.toString()));
+                rPropSet->setPropertyValue("AlternativeText", uno::Any(aIter.toString()));
             }
             // else: ignore!
             break;
@@ -1154,7 +1154,7 @@ void XMLTOCMarkImportContext_Impl::ProcessAttribute(
                 && nTmp < GetImport().GetTextImport()->
                                 GetChapterNumbering()->getCount() )
             {
-                rPropSet->setPropertyValue("Level", uno::makeAny(static_cast<sal_Int16>(nTmp - 1)));
+                rPropSet->setPropertyValue("Level", uno::Any(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
             break;
@@ -1200,7 +1200,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
     switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_INDEX_NAME):
-            rPropSet->setPropertyValue("UserIndexName", uno::makeAny(aIter.toString()));
+            rPropSet->setPropertyValue("UserIndexName", uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_OUTLINE_LEVEL):
         {
@@ -1210,7 +1210,7 @@ void XMLUserIndexMarkImportContext_Impl::ProcessAttribute(
                 nTmp, aIter.toView(), 0,
                GetImport().GetTextImport()->GetChapterNumbering()->getCount()))
             {
-                rPropSet->setPropertyValue("Level", uno::makeAny(static_cast<sal_Int16>(nTmp - 1)));
+                rPropSet->setPropertyValue("Level", uno::Any(static_cast<sal_Int16>(nTmp - 1)));
             }
             // else: value out of range -> ignore
             break;
@@ -1256,19 +1256,19 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
     switch (aIter.getToken())
     {
         case XML_ELEMENT(TEXT, XML_KEY1):
-            rPropSet->setPropertyValue("PrimaryKey", uno::makeAny(aIter.toString()));
+            rPropSet->setPropertyValue("PrimaryKey", uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY2):
-            rPropSet->setPropertyValue("SecondaryKey", uno::makeAny(aIter.toString()));
+            rPropSet->setPropertyValue("SecondaryKey", uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY1_PHONETIC):
-            rPropSet->setPropertyValue("PrimaryKeyReading", uno::makeAny(aIter.toString()));
+            rPropSet->setPropertyValue("PrimaryKeyReading", uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_KEY2_PHONETIC):
-            rPropSet->setPropertyValue("SecondaryKeyReading", uno::makeAny(aIter.toString()));
+            rPropSet->setPropertyValue("SecondaryKeyReading", uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_STRING_VALUE_PHONETIC):
-            rPropSet->setPropertyValue("TextReading", uno::makeAny(aIter.toString()));
+            rPropSet->setPropertyValue("TextReading", uno::Any(aIter.toString()));
             break;
         case XML_ELEMENT(TEXT, XML_MAIN_ENTRY):
         {
@@ -1278,7 +1278,7 @@ void XMLAlphaIndexMarkImportContext_Impl::ProcessAttribute(
             if (::sax::Converter::convertBool(bTmp, aIter.toView()))
                 bMainEntry = bTmp;
 
-            rPropSet->setPropertyValue("IsMainEntry", uno::makeAny(bMainEntry));
+            rPropSet->setPropertyValue("IsMainEntry", uno::Any(bMainEntry));
             break;
         }
         default:
@@ -1791,7 +1791,7 @@ void XMLParaContext::endFastElement(sal_Int32 )
                    hasPropertyByName(sNumberingIsNumber))
                 {
                     xPropSet->setPropertyValue
-                        (sNumberingIsNumber, makeAny( false ) );
+                        (sNumberingIsNumber, Any( false ) );
                 }
             }
             if (bIsRestart)
@@ -1804,14 +1804,14 @@ void XMLParaContext::endFastElement(sal_Int32 )
                     hasPropertyByName(sParaIsNumberingRestart))
                 {
                     xPropSet->setPropertyValue
-                        (sParaIsNumberingRestart, makeAny(true));
+                        (sParaIsNumberingRestart, Any(true));
                 }
 
                 if (xPropSet->getPropertySetInfo()->
                     hasPropertyByName(sNumberingStartValue))
                 {
                     xPropSet->setPropertyValue
-                        (sNumberingStartValue, makeAny(nStartValue));
+                        (sNumberingStartValue, Any(nStartValue));
                 }
             }
 

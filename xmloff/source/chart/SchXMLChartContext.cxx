@@ -77,7 +77,7 @@ void lcl_setRoleAtLabeledSequence(
     {
         uno::Reference< beans::XPropertySet > xProp( xValues, uno::UNO_QUERY );
         if( xProp.is())
-            xProp->setPropertyValue("Role", uno::makeAny( rRole ));
+            xProp->setPropertyValue("Role", uno::Any( rRole ));
     }
 }
 
@@ -421,7 +421,7 @@ void SchXMLChartContext::startFastElement( sal_Int32 /*nElement*/,
             {
                 xDocProp->getPropertyValue("BaseDiagram") >>= aOldChartTypeName;
                 maChartTypeServiceName =  SchXMLTools::GetNewChartTypeName( aOldChartTypeName );
-                xDocProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( false) );
+                xDocProp->setPropertyValue("RefreshAddInAllowed", uno::Any( false) );
             }
             catch(const uno::Exception&)
             {
@@ -645,15 +645,15 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
            "CellRangeRepresentation",
-           -1, uno::makeAny( rRectangularRange ),
+           -1, uno::Any( rRectangularRange ),
            beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
            "DataRowSource",
-           -1, uno::makeAny( eDataRowSource ),
+           -1, uno::Any( eDataRowSource ),
            beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
            "FirstCellAsLabel",
-           -1, uno::makeAny( bFirstCellAsLabel ),
+           -1, uno::Any( bFirstCellAsLabel ),
            beans::PropertyState_DIRECT_VALUE )
     };
 
@@ -662,7 +662,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         aArgs.realloc( aArgs.getLength() + 1 );
         aArgs.getArray()[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
             "SequenceMapping",
-            -1, uno::makeAny( !sColTrans.isEmpty()
+            -1, uno::Any( !sColTrans.isEmpty()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
                 : lcl_getNumberSequenceFromString( sRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
         beans::PropertyState_DIRECT_VALUE );
@@ -687,7 +687,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
             aArgs.realloc( aArgs.getLength() + 1 );
             aArgs.getArray()[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
                 "ChartOleObjectName",
-                -1, uno::makeAny( aChartOleObjectName ),
+                -1, uno::Any( aChartOleObjectName ),
                 beans::PropertyState_DIRECT_VALUE );
         }
     }
@@ -699,11 +699,11 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     auto pArgs = aArgs.getArray();
     pArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 2 ] = beans::PropertyValue(
         "HasCategories",
-        -1, uno::makeAny( bHasCateories ),
+        -1, uno::Any( bHasCateories ),
         beans::PropertyState_DIRECT_VALUE );
     pArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
         "UseCategoriesAsX",
-        -1, uno::makeAny( false ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
+        -1, uno::Any( false ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
         beans::PropertyState_DIRECT_VALUE );
 
     xNewDia->setDiagramData( xDataSource, aArgs );
@@ -835,7 +835,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
             try
             {
                 if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
-                    xDiaProp->setPropertyValue("IncludeHiddenCells",uno::makeAny(false));
+                    xDiaProp->setPropertyValue("IncludeHiddenCells",uno::Any(false));
 
                 // note: mbRowHasLabels means the first row contains labels, that means we have "column-descriptions",
                 // (analogously mbColHasLabels means we have "row-descriptions")
@@ -940,7 +940,7 @@ void SchXMLChartContext::endFastElement(sal_Int32 )
     }
 
     if( xProp.is())
-        xProp->setPropertyValue("RefreshAddInAllowed", uno::makeAny( true) );
+        xProp->setPropertyValue("RefreshAddInAllowed", uno::Any( true) );
 }
 
 void SchXMLChartContext::MergeSeriesForStockChart()
@@ -1046,7 +1046,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue("HasMainTitle", uno::makeAny(true) );
+                    xProp->setPropertyValue("HasMainTitle", uno::Any(true) );
                 }
                 uno::Reference< drawing::XShape > xTitleShape = xDoc->getTitle();
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),
@@ -1058,7 +1058,7 @@ css::uno::Reference< css::xml::sax::XFastContextHandler > SchXMLChartContext::cr
             {
                 if( xProp.is())
                 {
-                    xProp->setPropertyValue("HasSubTitle", uno::makeAny(true) );
+                    xProp->setPropertyValue("HasSubTitle", uno::Any(true) );
                 }
                 uno::Reference< drawing::XShape > xTitleShape = xDoc->getSubTitle();
                 pContext = new SchXMLTitleContext( mrImportHelper, GetImport(),

@@ -2360,10 +2360,10 @@ void SchXMLExportHelper_Impl::exportAxis(
             if (sChartType == u"com.sun.star.chart.BarDiagram" || sChartType == u"com.sun.star.chart.StockDiagram")
             {
                 if (!bShiftedCatPos)
-                    rAxisProps->setPropertyValue("MajorOrigin", uno::makeAny(0.0));
+                    rAxisProps->setPropertyValue("MajorOrigin", uno::Any(0.0));
             }
             else if (bShiftedCatPos)
-                rAxisProps->setPropertyValue("MajorOrigin", uno::makeAny(0.5));
+                rAxisProps->setPropertyValue("MajorOrigin", uno::Any(0.5));
         }
 
         lcl_exportNumberFormat( "NumberFormat", rAxisProps, mrExport );
@@ -3098,7 +3098,7 @@ void SchXMLExportHelper_Impl::exportRegressionCurve(
 
         // Add service name (which is regression type)
         sal_Int32 nIndex = GetPropertySetMapper()->FindEntryIndex(XML_SCH_CONTEXT_SPECIAL_REGRESSION_TYPE);
-        XMLPropertyState property(nIndex,  uno::makeAny(aService));
+        XMLPropertyState property(nIndex,  uno::Any(aService));
         aPropertyStates.push_back(property);
 
         Reference< beans::XPropertySet > xEquationProperties;

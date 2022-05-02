@@ -1440,7 +1440,7 @@ void XMLTrackedChangesOOoTContext_Impl::StartElement(
                     Sequence < sal_Int8 > aKey;
                     ::comphelper::Base64::decode( aKey,
                                         rAttrList->getValueByIndex( i ) );
-                    rPropSet->setPropertyValue( aPropName, makeAny( aKey ) );
+                    rPropSet->setPropertyValue( aPropName, Any( aKey ) );
                 }
                 else
                 {

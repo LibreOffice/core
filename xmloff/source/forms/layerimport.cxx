@@ -261,7 +261,7 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
                 OSL_ENSURE(-1 != nFormatKey, "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain a format key!");
 
                 // set the format on the control model
-                _rxControlModel->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
+                _rxControlModel->setPropertyValue(PROPERTY_FORMATKEY, Any(nFormatKey));
             }
         }
         catch(const Exception&)
@@ -402,7 +402,7 @@ void OFormLayerXMLImport_Impl::endPage()
                 xCurrentReferring = lookupControlId(sCurrentReferring);
                 if (xCurrentReferring.is())
                     // if this condition fails, this is an error, but lookupControlId should have asserted this ...
-                    xCurrentReferring->setPropertyValue( PROPERTY_CONTROLLABEL, makeAny( rReferences.first ) );
+                    xCurrentReferring->setPropertyValue( PROPERTY_CONTROLLABEL, Any( rReferences.first ) );
 
                 nPrevSep = nSeparator;
             }

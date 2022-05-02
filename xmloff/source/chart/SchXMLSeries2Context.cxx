@@ -133,7 +133,7 @@ void lcl_setAutomaticSymbolSize( const uno::Reference< beans::XPropertySet >& xS
             aSymbolSize.Width = aSymbolSize.Height;
         }
     }
-    xSeriesOrPointProp->setPropertyValue("SymbolSize",uno::makeAny( aSymbolSize ));
+    xSeriesOrPointProp->setPropertyValue("SymbolSize",uno::Any( aSymbolSize ));
 }
 
 void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSeriesOrPointProp, const SvXMLImport& rImport )
@@ -150,7 +150,7 @@ void lcl_setSymbolSizeIfNeeded( const uno::Reference< beans::XPropertySet >& xSe
         if( chart::ChartSymbolType::BITMAPURL==nSymbolType )
         {
             //set special size for graphics to indicate to use the bitmap size itself
-            xSeriesOrPointProp->setPropertyValue("SymbolSize",uno::makeAny( awt::Size(-1,-1) ));
+            xSeriesOrPointProp->setPropertyValue("SymbolSize",uno::Any( awt::Size(-1,-1) ));
         }
         else
         {
@@ -182,7 +182,7 @@ void lcl_setLinkNumberFormatToSourceIfNeeded( const uno::Reference< beans::XProp
     {
         if( bLinkToSource )
         {
-            xPointProp->setPropertyValue("LinkNumberFormatToSource", uno::makeAny(false));
+            xPointProp->setPropertyValue("LinkNumberFormatToSource", uno::Any(false));
         }
     }
 }
@@ -226,7 +226,7 @@ Reference< chart2::data::XLabeledDataSequence2 > lcl_createAndAddSequenceToSerie
     Reference< chart2::data::XDataSequence > xSeq = SchXMLTools::CreateDataSequence( rRange, xChartDoc );
     Reference< beans::XPropertySet > xSeqProp( xSeq, uno::UNO_QUERY );
     if( xSeqProp.is())
-        xSeqProp->setPropertyValue("Role", uno::makeAny( rRole));
+        xSeqProp->setPropertyValue("Role", uno::Any( rRole));
     xLabeledSeq->setValues( xSeq );
 
     // add new sequence to data series / push to front to have the correct sequence order if charttype is changed afterwards
@@ -410,19 +410,19 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
         if (xSeriesProp.is())
         {
             if (bHideLegend)
-                xSeriesProp->setPropertyValue("ShowLegendEntry", uno::makeAny(false));
+                xSeriesProp->setPropertyValue("ShowLegendEntry", uno::Any(false));
 
             if( bIsCandleStick )
             {
                 // set default color for range-line to black (before applying styles)
                 xSeriesProp->setPropertyValue("Color",
-                        uno::makeAny( sal_Int32( 0x000000 ))); // black
+                        uno::Any( sal_Int32( 0x000000 ))); // black
             }
             else if ( maSeriesChartTypeName == "com.sun.star.chart2.PieChartType" )
             {
                 //@todo: this property should be saved
                 xSeriesProp->setPropertyValue("VaryColorsByPoint",
-                        uno::makeAny( true ));
+                        uno::Any( true ));
             }
 
         }
@@ -449,7 +449,7 @@ void SchXMLSeries2Context::startFastElement (sal_Int32 /*Element*/,
             OUString aMainRole("values-y");
             if (maSeriesChartTypeName == "com.sun.star.chart2.BubbleChartType")
                 aMainRole = "values-size";
-            xSeqProp->setPropertyValue("Role", uno::makeAny(aMainRole));
+            xSeqProp->setPropertyValue("Role", uno::Any(aMainRole));
         }
         xLabeledSeq->setValues(xSequenceValues);
 
@@ -858,7 +858,7 @@ void SchXMLSeries2Context::setStylesToSeries( SeriesDefaultsAndStyles& rSeriesDe
             if( seriesStyle.mnAttachedAxis != 1 )
             {
                 xSeriesProp->setPropertyValue("Axis"
-                    , uno::makeAny(chart::ChartAxisAssign::SECONDARY_Y) );
+                    , uno::Any(chart::ChartAxisAssign::SECONDARY_Y) );
             }
 
             if( seriesStyle.msStyleName.isEmpty())
@@ -1038,10 +1038,10 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                 uno::Reference< beans::XPropertySet > xNewSeriesProp(seriesStyle.m_xSeries,uno::UNO_QUERY);
 
                 if (seriesStyle.m_xErrorXProperties.is())
-                    xNewSeriesProp->setPropertyValue("ErrorBarX",uno::makeAny(seriesStyle.m_xErrorXProperties));
+                    xNewSeriesProp->setPropertyValue("ErrorBarX",uno::Any(seriesStyle.m_xErrorXProperties));
 
                 if (seriesStyle.m_xErrorYProperties.is())
-                    xNewSeriesProp->setPropertyValue("ErrorBarY",uno::makeAny(seriesStyle.m_xErrorYProperties));
+                    xNewSeriesProp->setPropertyValue("ErrorBarY",uno::Any(seriesStyle.m_xErrorYProperties));
             }
 
             try
@@ -1153,7 +1153,7 @@ void SchXMLSeries2Context::setStylesToDataPoints( SeriesDefaultsAndStyles& rSeri
                 {
                     //need to set this explicitly here for old files as the new api does not support this property fully anymore
                     if( bSwitchOffLinesForScatter )
-                        xPointProp->setPropertyValue("Lines",uno::makeAny(false));
+                        xPointProp->setPropertyValue("Lines",uno::Any(false));
                 }
                 catch( const uno::Exception & )
                 {
@@ -1295,7 +1295,7 @@ void SchXMLSeries2Context::switchSeriesLinesOff( ::std::vector< DataRowPointStyl
             if( !xSeries.is() )
                 continue;
 
-            xSeries->setPropertyValue("Lines",uno::makeAny(false));
+            xSeries->setPropertyValue("Lines",uno::Any(false));
         }
         catch( uno::Exception &  )
         {

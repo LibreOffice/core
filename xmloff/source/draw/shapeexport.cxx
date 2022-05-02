@@ -415,7 +415,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                             //          as member, thus saving time.
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
 
-                        XMLPropertyState aNewState(nIndex, uno::makeAny(sNumberStyle));
+                        XMLPropertyState aNewState(nIndex, uno::Any(sNumberStyle));
                         aPropStates.push_back(aNewState);
                     }
                 }
@@ -3315,10 +3315,10 @@ static void lcl_CopyStream(
         uno::UNO_QUERY);
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue("MediaType",
-            uno::makeAny(rMimeType));
+            uno::Any(rMimeType));
         xStreamProps->setPropertyValue( // turn off compression
             "Compressed",
-            uno::makeAny(false));
+            uno::Any(false));
     }
     ::comphelper::OStorageHelper::CopyInputToOutput(xInStream, xOutStream);
     xOutStream->closeOutput();

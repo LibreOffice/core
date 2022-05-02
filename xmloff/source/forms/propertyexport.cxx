@@ -95,7 +95,7 @@ namespace xmloff
         assert(bSuccess); (void)bSuccess;
         for (T const & i : std::as_const(anySeq))
         {
-            OUString sValue(implConvertAny(makeAny(i)));
+            OUString sValue(implConvertAny(Any(i)));
             AddAttribute(XML_NAMESPACE_OFFICE, eValueAttName, sValue );
             SvXMLElementExport aValueTag(
                 m_rContext.getGlobalContext(), XML_NAMESPACE_FORM,

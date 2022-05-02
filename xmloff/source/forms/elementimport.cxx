@@ -208,7 +208,7 @@ namespace xmloff
         }
 
         if (m_xParentContainer.is())
-            m_xParentContainer->insertByName(m_sName, makeAny(m_xElement));
+            m_xParentContainer->insertByName(m_sName, Any(m_xElement));
 
         LEAVE_LOG_CONTEXT( );
     }
@@ -1287,9 +1287,9 @@ namespace xmloff
         if ( m_xInfo.is() )
         {
             if ( m_xInfo->hasPropertyByName( PROPERTY_SPIN_INCREMENT ) )
-                m_xElement->setPropertyValue( PROPERTY_SPIN_INCREMENT, makeAny( m_nStepSizeValue ) );
+                m_xElement->setPropertyValue( PROPERTY_SPIN_INCREMENT, Any( m_nStepSizeValue ) );
             else if ( m_xInfo->hasPropertyByName( PROPERTY_LINE_INCREMENT ) )
-                m_xElement->setPropertyValue( PROPERTY_LINE_INCREMENT, makeAny( m_nStepSizeValue ) );
+                m_xElement->setPropertyValue( PROPERTY_LINE_INCREMENT, Any( m_nStepSizeValue ) );
         }
     }
 
@@ -1403,7 +1403,7 @@ namespace xmloff
             bHasRichTextProperty = m_xInfo->hasPropertyByName( PROPERTY_RICH_TEXT );
         OSL_ENSURE( bHasRichTextProperty, "OTextLikeImport::EndElement: text:p, but no rich text control?" );
         if ( bHasRichTextProperty )
-            m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, makeAny( true ) );
+            m_xElement->setPropertyValue( PROPERTY_RICH_TEXT, Any( true ) );
         // Note that we do *not* set the RichText property (in case our element has one) to sal_False here
         // since this is the default of this property, anyway.
     }
@@ -2053,9 +2053,9 @@ namespace xmloff
                 sValue = _rImport.GetAbsoluteReference(sValue);
                 INetURLObject aURL(sValue);
                 if ( aURL.GetProtocol() == INetProtocol::File )
-                    _xElement->setPropertyValue(PROPERTY_DATASOURCENAME,makeAny(sValue));
+                    _xElement->setPropertyValue(PROPERTY_DATASOURCENAME,Any(sValue));
                 else
-                    _xElement->setPropertyValue(PROPERTY_URL,makeAny(sValue)); // the url is the "sdbc:" string
+                    _xElement->setPropertyValue(PROPERTY_URL,Any(sValue)); // the url is the "sdbc:" string
                 break;
             }
             else

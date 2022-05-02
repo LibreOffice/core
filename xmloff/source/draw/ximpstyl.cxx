@@ -1084,7 +1084,7 @@ void SdXMLStylesContext::endFastElement(sal_Int32 )
             uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
 
             if( xInfoSetInfo->hasPropertyByName("PageLayouts") )
-                xInfoSet->setPropertyValue("PageLayouts", uno::makeAny( getPageLayouts() ) );
+                xInfoSet->setPropertyValue("PageLayouts", uno::Any( getPageLayouts() ) );
         }
 
     }
@@ -1347,7 +1347,7 @@ uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() co
         const SvXMLStyleContext* pStyle = GetStyle(a);
         if (const SdXMLPresentationPageLayoutContext* pContext = dynamic_cast<const SdXMLPresentationPageLayoutContext*>(pStyle))
         {
-            xLayouts->insertByName(pStyle->GetName(), uno::makeAny(static_cast<sal_Int32>(pContext->GetTypeId())));
+            xLayouts->insertByName(pStyle->GetName(), uno::Any(static_cast<sal_Int32>(pContext->GetTypeId())));
         }
     }
 
@@ -1507,7 +1507,7 @@ XMLThemeContext::XMLThemeContext(SvXMLImport& rImport,
 
 XMLThemeContext::~XMLThemeContext()
 {
-    uno::Any aTheme = uno::makeAny(m_aTheme.getAsConstPropertyValueList());
+    uno::Any aTheme(m_aTheme.getAsConstPropertyValueList());
     m_xMasterPage->setPropertyValue("Theme", aTheme);
 }
 

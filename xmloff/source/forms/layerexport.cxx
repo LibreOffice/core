@@ -582,7 +582,7 @@ namespace xmloff
                         // TODO: move this to the ctor
                     OSL_ENSURE ( -1 != nStyleMapIndex, "OFormLayerXMLExport_Impl::collectGridColumnStylesAndIds: could not obtain the index for our context id!");
 
-                    XMLPropertyState aNumberStyleState( nStyleMapIndex, makeAny( sColumnNumberStyle ) );
+                    XMLPropertyState aNumberStyleState( nStyleMapIndex, Any( sColumnNumberStyle ) );
                     aPropertyStates.push_back( aNumberStyleState );
                 }
 

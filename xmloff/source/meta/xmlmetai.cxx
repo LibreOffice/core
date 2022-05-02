@@ -307,7 +307,7 @@ void SvXMLMetaDocumentContext::setBuildId(OUString const& i_rBuildId, const uno:
             uno::Reference< beans::XPropertySetInfo > xSetInfo(
                 xImportInfo->getPropertySetInfo());
             if( xSetInfo.is() && xSetInfo->hasPropertyByName( aPropName ) )
-                xImportInfo->setPropertyValue( aPropName, uno::makeAny( sBuildId ) );
+                xImportInfo->setPropertyValue( aPropName, uno::Any( sBuildId ) );
         }
     }
     catch(const uno::Exception&)

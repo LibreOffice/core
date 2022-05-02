@@ -447,7 +447,7 @@ void XMLTextStyleContext::FillPropertySet(
 
                 if ( xInfo->hasPropertyByName( sAutoProp ) )
                 {
-                    rPropSet->setPropertyValue( sAutoProp, makeAny(GetAutoName()) );
+                    rPropSet->setPropertyValue( sAutoProp, Any(GetAutoName()) );
                 }
                 else
                 {
@@ -493,7 +493,7 @@ void XMLTextStyleContext::FillPropertySet(
         SAL_WARN_IF( !rPropSet->getPropertySetInfo()->hasPropertyByName( sIsSplitAllowed ), "xmloff", "property missing?" );
         rPropSet->setPropertyValue(
             sIsSplitAllowed,
-            (aContextIDs[1].nIndex == -1) ? makeAny( false ) : GetProperties()[aContextIDs[1].nIndex].maValue );
+            (aContextIDs[1].nIndex == -1) ? Any( false ) : GetProperties()[aContextIDs[1].nIndex].maValue );
     }
 
     if(IsDefaultStyle() && XmlStyleFamily::TABLE_TABLE == GetFamily())
@@ -503,7 +503,7 @@ void XMLTextStyleContext::FillPropertySet(
         rPropSet->setPropertyValue(
             sCollapsingBorders,
             (aContextIDs[2].nIndex == -1)
-            ? makeAny( false )
+            ? Any( false )
             : GetProperties()[aContextIDs[2].nIndex].maValue );
     }
 

@@ -33,7 +33,6 @@ namespace xmloff
 {
 
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::util::Duration;
     using ::com::sun::star::util::Time;
 
@@ -82,7 +81,7 @@ namespace xmloff
             aTime = ::tools::Time(nVCLTime).GetUNOTime();
         }
 
-        const Any aPropertyValue( makeAny( aTime ) );
+        const Any aPropertyValue( aTime );
 
         OSL_ENSURE( o_propertyValues.size() == 1, "VCLTimeHandler::getPropertyValues: time strings represent exactly one property - not more, not less!" );
         for ( auto& prop : o_propertyValues )

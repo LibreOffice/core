@@ -550,7 +550,7 @@ SvXMLExport::~SvXMLExport()
                         mxExportInfo->setPropertyValue(sProgressCurrent, uno::Any(nProgressCurrent));
                     }
                     if (xPropertySetInfo->hasPropertyByName(sRepeat))
-                        mxExportInfo->setPropertyValue(sRepeat, css::uno::makeAny(mpProgressBarHelper->GetRepeat()));
+                        mxExportInfo->setPropertyValue(sRepeat, css::uno::Any(mpProgressBarHelper->GetRepeat()));
                 }
                 if (mpNumExport && (mnExportFlags & (SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::STYLES)))
                 {
@@ -1094,9 +1094,9 @@ void SvXMLExport::ImplExportStyles()
         Sequence<sal_Int32> aStyleFamilies;
         Sequence<OUString> aStyleNames;
         mxAutoStylePool->GetRegisteredNames( aStyleFamilies, aStyleNames );
-        mxExportInfo->setPropertyValue( sStyleNames, makeAny( aStyleNames ) );
+        mxExportInfo->setPropertyValue( sStyleNames, Any( aStyleNames ) );
         mxExportInfo->setPropertyValue( sStyleFamilies,
-                                       makeAny( aStyleFamilies ) );
+                                       Any( aStyleFamilies ) );
     }
 }
 

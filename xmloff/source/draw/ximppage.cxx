@@ -289,7 +289,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
                 static const OUStringLiteral aStrHeaderTextProp( u"HeaderText" );
                 if( xInfo->hasPropertyByName( aStrHeaderTextProp ) )
                     xSet->setPropertyValue( aStrHeaderTextProp,
-                                            makeAny( GetSdImport().GetHeaderDecl( maUseHeaderDeclName ) ) );
+                                            Any( GetSdImport().GetHeaderDecl( maUseHeaderDeclName ) ) );
             }
 
             if( !maUseFooterDeclName.isEmpty() )
@@ -297,7 +297,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
                 static const OUStringLiteral aStrFooterTextProp( u"FooterText" );
                 if( xInfo->hasPropertyByName( aStrFooterTextProp ) )
                     xSet->setPropertyValue( aStrFooterTextProp,
-                                        makeAny( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
+                                        Any( GetSdImport().GetFooterDecl( maUseFooterDeclName ) ) );
             }
 
             if( !maUseDateTimeDeclName.isEmpty() )
@@ -310,11 +310,11 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
                     const OUString aText( GetSdImport().GetDateTimeDecl( maUseDateTimeDeclName, bFixed, aDateTimeFormat ) );
 
                     xSet->setPropertyValue("IsDateTimeFixed",
-                                        makeAny( bFixed ) );
+                                        Any( bFixed ) );
 
                     if( bFixed )
                     {
-                        xSet->setPropertyValue( aStrDateTimeTextProp, makeAny( aText ) );
+                        xSet->setPropertyValue( aStrDateTimeTextProp, Any( aText ) );
                     }
                     else if( !aDateTimeFormat.isEmpty() )
                     {
@@ -330,7 +330,7 @@ void SdXMLGenericPageContext::endFastElement(sal_Int32 )
                             if( pSdNumStyle )
                             {
                                 xSet->setPropertyValue("DateTimeFormat",
-                                                                    makeAny( pSdNumStyle->GetDrawKey() ) );
+                                                                    Any( pSdNumStyle->GetDrawKey() ) );
                             }
                         }
                     }
@@ -391,7 +391,7 @@ void SdXMLGenericPageContext::SetStyle( OUString const & rStyleName )
                         const_cast<XMLPropStyleContext*>(pPropStyle)->FillPropertySet(xPropSet);
 
                         if( xBackgroundSet.is() )
-                            xPropSet1->setPropertyValue( aBackground, uno::makeAny( xBackgroundSet ) );
+                            xPropSet1->setPropertyValue( aBackground, uno::Any( xBackgroundSet ) );
                     }
                 }
             }
@@ -442,7 +442,7 @@ void SdXMLGenericPageContext::SetLayout()
             OUString aPropName("Layout");
             Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
             if( xInfo.is() && xInfo->hasPropertyByName( aPropName ) )
-                xPropSet->setPropertyValue(aPropName, uno::makeAny( static_cast<sal_Int16>(nType) ) );
+                xPropSet->setPropertyValue(aPropName, uno::Any( static_cast<sal_Int16>(nType) ) );
         }
     }
 }
