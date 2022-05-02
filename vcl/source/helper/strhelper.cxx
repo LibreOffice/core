@@ -361,6 +361,7 @@ OString WhitespaceToSpace(std::string_view rLine)
     *pLeap = 0;
 
     // there might be a space at beginning or end
+    assert(pLeap > pBuffer);
     pLeap--;
     if( *pLeap == ' ' )
         *pLeap = 0;
