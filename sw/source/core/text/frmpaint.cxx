@@ -82,9 +82,14 @@ public:
         sal_Int16 eHor, bool bLnNm );
     SwFont* GetFont() const { return m_pFnt.get(); }
     void IncLineNr() { ++m_nLineNr; }
-    bool HasNumber() const { return !( m_nLineNr % m_rLineInf.GetCountBy() ); }
+    bool HasNumber() const {
+        if( m_rLineInf.GetCountBy() == 0 )
+            return false;
+        return !( m_nLineNr % m_rLineInf.GetCountBy() );
+    }
     bool HasDivider() const {
-        if( !m_nDivider ) return false;
+        if( !m_nDivider || m_rLineInf.GetDividerCountBy() == 0 )
+            return false;
         return !(m_nLineNr % m_rLineInf.GetDividerCountBy());
     }
 
