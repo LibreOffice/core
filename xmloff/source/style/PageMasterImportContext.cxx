@@ -383,7 +383,7 @@ void PageStyleContext::FillPropertySet_PageStyle(
         if (!isFullSize)
         {
             SAL_INFO("xmloff.style", "FillPropertySet_PageStyle: Heuristically resetting BackgroundFullSize");
-            xPropSet->setPropertyValue("BackgroundFullSize", uno::makeAny(isFullSize));
+            xPropSet->setPropertyValue("BackgroundFullSize", uno::Any(isFullSize));
         }
     }
 

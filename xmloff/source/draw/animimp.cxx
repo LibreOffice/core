@@ -547,16 +547,16 @@ void XMLAnimationsEffectContext::endFastElement(sal_Int32 )
                         const AnimationEffect eEffect = ImplSdXMLgetEffect( meEffect, meDirection, mnStartScale, meKind == XMLE_SHOW );
 
                         if (mbTextEffect)
-                            xSet->setPropertyValue( gsTextEffect, makeAny( eEffect ) );
+                            xSet->setPropertyValue( gsTextEffect, Any( eEffect ) );
                         else
-                            xSet->setPropertyValue( gsEffect, makeAny( eEffect ) );
-                        xSet->setPropertyValue( gsSpeed, makeAny( meSpeed ) );
+                            xSet->setPropertyValue( gsEffect, Any( eEffect ) );
+                        xSet->setPropertyValue( gsSpeed, Any( meSpeed ) );
 
                         if( eEffect == AnimationEffect_PATH && !maPathShapeId.isEmpty() )
                         {
                             Reference< XShape > xPath( GetImport().getInterfaceToIdentifierMapper().getReference( maPathShapeId ), UNO_QUERY );
                             if( xPath.is() )
-                                xSet->setPropertyValue( gsAnimPath, makeAny( xPath ) );
+                                xSet->setPropertyValue( gsAnimPath, Any( xPath ) );
                         }
                     }
                 }

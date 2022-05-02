@@ -51,7 +51,6 @@ using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xforms::Model;
 using com::sun::star::xforms::XModel2;
 using com::sun::star::container::XNameContainer;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Exception;
 
@@ -80,7 +79,7 @@ void xforms_addXFormsModel(
             {
                 OUString sName;
                 xModel->getPropertyValue("ID") >>= sName;
-                xForms->insertByName( sName, makeAny( xModel ) );
+                xForms->insertByName( sName, Any( xModel ) );
                 bSuccess = true;
             }
         }

@@ -65,20 +65,20 @@ namespace xmloff
                 auto pMappedEvent = rMappedEvent.getArray();
 
                 // ... the type
-                pMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, makeAny(rEvent.ScriptType), PropertyState_DIRECT_VALUE);
+                pMappedEvent[0] = PropertyValue(EVENT_TYPE, -1, Any(rEvent.ScriptType), PropertyState_DIRECT_VALUE);
 
                 // and the macro name
-                pMappedEvent[1] = PropertyValue(EVENT_LOCALMACRONAME, -1, makeAny(sLocalMacroName), PropertyState_DIRECT_VALUE);
+                pMappedEvent[1] = PropertyValue(EVENT_LOCALMACRONAME, -1, Any(sLocalMacroName), PropertyState_DIRECT_VALUE);
 
                 // the library
                 if ( !sLibrary.isEmpty() )
-                    pMappedEvent[2] = PropertyValue(EVENT_LIBRARY, -1, makeAny(sLibrary), PropertyState_DIRECT_VALUE);
+                    pMappedEvent[2] = PropertyValue(EVENT_LIBRARY, -1, Any(sLibrary), PropertyState_DIRECT_VALUE);
             }
             else
             {
-                rMappedEvent = { PropertyValue(EVENT_TYPE, -1, makeAny(rEvent.ScriptType), PropertyState_DIRECT_VALUE),
+                rMappedEvent = { PropertyValue(EVENT_TYPE, -1, Any(rEvent.ScriptType), PropertyState_DIRECT_VALUE),
                                  // and the macro name
-                                 PropertyValue(EVENT_SCRIPTURL, -1, makeAny(rEvent.ScriptCode), PropertyState_DIRECT_VALUE) };
+                                 PropertyValue(EVENT_SCRIPTURL, -1, Any(rEvent.ScriptCode), PropertyState_DIRECT_VALUE) };
             }
         }
     }
@@ -97,7 +97,7 @@ namespace xmloff
                 "There is no element named " + _rName,
                 static_cast< ::cppu::OWeakObject* >(this));
 
-        return makeAny(aPos->second);
+        return Any(aPos->second);
     }
 
     Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  )

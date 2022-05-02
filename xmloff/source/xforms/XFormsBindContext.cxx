@@ -36,7 +36,7 @@
 #include <sal/log.hxx>
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::makeAny;
+using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xml::sax::XFastAttributeList;
@@ -56,7 +56,7 @@ XFormsBindContext::XFormsBindContext(
     // attach binding to model
     mxBinding = mxModel->createBinding();
     SAL_WARN_IF( !mxBinding.is(), "xmloff", "can't create binding" );
-    mxModel->getBindings()->insert( makeAny( mxBinding ) );
+    mxModel->getBindings()->insert( Any( mxBinding ) );
 }
 
 void XFormsBindContext::HandleAttribute( const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )
@@ -141,9 +141,9 @@ static void lcl_fillNamespaceContainer(
         {
             // insert prefix (use replace if already known)
             if( xContainer->hasByName( sPrefix ) )
-                xContainer->replaceByName( sPrefix, makeAny( sNamespace ) );
+                xContainer->replaceByName( sPrefix, Any( sNamespace ) );
             else
-                xContainer->insertByName( sPrefix, makeAny( sNamespace ) );
+                xContainer->insertByName( sPrefix, Any( sNamespace ) );
         }
 
         // proceed to next

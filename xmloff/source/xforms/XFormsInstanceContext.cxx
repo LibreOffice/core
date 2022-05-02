@@ -37,7 +37,7 @@
 
 
 using com::sun::star::uno::Reference;
-using com::sun::star::uno::makeAny;
+using com::sun::star::uno::Any;
 using com::sun::star::uno::Sequence;
 using com::sun::star::xforms::XModel2;
 using com::sun::star::beans::PropertyValue;
@@ -117,7 +117,7 @@ void XFormsInstanceContext::endFastElement(sal_Int32 )
     pSequence[2].Name = "URL";
     pSequence[2].Value <<= msURL;
 
-    mxModel->getInstances()->insert( makeAny( aSequence ) );
+    mxModel->getInstances()->insert( Any( aSequence ) );
 }
 
 void XFormsInstanceContext::endUnknownElement(const OUString & /*Namespace*/, const OUString & /*Name*/)
@@ -131,7 +131,7 @@ void XFormsInstanceContext::endUnknownElement(const OUString & /*Namespace*/, co
     pSequence[2].Name = "URL";
     pSequence[2].Value <<= msURL;
 
-    mxModel->getInstances()->insert( makeAny( aSequence ) );
+    mxModel->getInstances()->insert( Any( aSequence ) );
 }
 
 void XFormsInstanceContext::HandleAttribute(const sax_fastparser::FastAttributeList::FastAttributeIter & aIter )

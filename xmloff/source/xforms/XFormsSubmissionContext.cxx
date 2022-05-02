@@ -50,7 +50,7 @@ XFormsSubmissionContext::XFormsSubmissionContext(
     SAL_WARN_IF( !xModel.is(), "xmloff", "need model" );
     mxSubmission = xModel->createSubmission().get();
     SAL_WARN_IF( !mxSubmission.is(), "xmloff", "can't create submission" );
-    xModel->getSubmissions()->insert( makeAny( mxSubmission ) );
+    xModel->getSubmissions()->insert( Any( mxSubmission ) );
 }
 
 namespace {

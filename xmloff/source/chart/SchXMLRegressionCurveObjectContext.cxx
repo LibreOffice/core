@@ -165,15 +165,15 @@ void SchXMLEquationContext::startFastElement (sal_Int32 /*nElement*/,
                 pPropStyleContext->FillPropertySet( xEquationProperties );
         }
     }
-    xEquationProperties->setPropertyValue( "ShowEquation", uno::makeAny( bShowEquation ));
-    xEquationProperties->setPropertyValue( "ShowCorrelationCoefficient", uno::makeAny( bShowRSquare ));
+    xEquationProperties->setPropertyValue( "ShowEquation", uno::Any( bShowEquation ));
+    xEquationProperties->setPropertyValue( "ShowCorrelationCoefficient", uno::Any( bShowRSquare ));
 
     if( bHasXPos && bHasYPos )
     {
         chart2::RelativePosition aRelPos;
         aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
         aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
-        xEquationProperties->setPropertyValue( "RelativePosition", uno::makeAny( aRelPos ));
+        xEquationProperties->setPropertyValue( "RelativePosition", uno::Any( aRelPos ));
     }
     mrRegressionStyle.m_xEquationProperties.set( xEquationProperties );
 }

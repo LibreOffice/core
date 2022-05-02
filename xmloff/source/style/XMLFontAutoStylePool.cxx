@@ -632,7 +632,7 @@ OUString XMLFontAutoStylePool::embedFontFile(OUString const & fileUrl, OUString 
         outputStream.set( storage->openStreamElement( name, ::embed::ElementModes::WRITE ), UNO_QUERY_THROW );
         uno::Reference < beans::XPropertySet > propertySet( outputStream, uno::UNO_QUERY );
         assert( propertySet.is());
-        propertySet->setPropertyValue( "MediaType", uno::makeAny( OUString( "application/x-font-ttf" ))); // TODO
+        propertySet->setPropertyValue( "MediaType", uno::Any( OUString( "application/x-font-ttf" ))); // TODO
         for(;;)
         {
             sal_Int8 buffer[ 4096 ];

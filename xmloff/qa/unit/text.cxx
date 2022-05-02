@@ -76,7 +76,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
 {
     getComponent() = loadFromDesktop("private:factory/swriter");
     uno::Sequence<beans::PropertyValue> aCommentProps = comphelper::InitPropertySequence({
-        { "Text", uno::makeAny(OUString("comment")) },
+        { "Text", uno::Any(OUString("comment")) },
     });
     dispatchCommand(getComponent(), ".uno:InsertAnnotation", aCommentProps);
     uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
@@ -88,11 +88,11 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCommentResolved)
     uno::Reference<beans::XPropertySet> xPortion(xPortionEnum->nextElement(), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xField(xPortion->getPropertyValue("TextField"),
                                                uno::UNO_QUERY);
-    xField->setPropertyValue("Resolved", uno::makeAny(true));
+    xField->setPropertyValue("Resolved", uno::Any(true));
 
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testBibliographyLocalUrl)
         comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
         comphelper::makePropertyValue("LocalURL", OUString("file:///home/me/test.pdf")),
     };
-    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    xField->setPropertyValue("Fields", uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -200,7 +200,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testParaStyleListLevel)
 
     // When exporting that to ODT:
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -254,7 +254,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testListId)
     // When storing that document as ODF:
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -280,7 +280,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     // SwLineBreakClear::ALL;
     sal_Int16 eClear = 3;
-    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testClearingBreakExport)
     // When exporting to ODT:
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -352,22 +352,22 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testRelativeWidth)
                                                         uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xStyle(xStyleFamily->getByName("Standard"), uno::UNO_QUERY);
     // Body frame width is 6cm (2+2cm margin).
-    xStyle->setPropertyValue("Width", uno::makeAny(static_cast<sal_Int32>(10000)));
+    xStyle->setPropertyValue("Width", uno::Any(static_cast<sal_Int32>(10000)));
     uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
     uno::Reference<text::XTextContent> xTextFrame(
         xMSF->createInstance("com.sun.star.text.TextFrame"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xTextFrameProps(xTextFrame, uno::UNO_QUERY);
-    xTextFrameProps->setPropertyValue("RelativeWidth", uno::makeAny(static_cast<sal_Int16>(50)));
+    xTextFrameProps->setPropertyValue("RelativeWidth", uno::Any(static_cast<sal_Int16>(50)));
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
     xText->insertTextContent(xCursor, xTextFrame, /*bAbsorb=*/false);
     // Body frame width is 16cm.
-    xStyle->setPropertyValue("Width", uno::makeAny(static_cast<sal_Int32>(20000)));
+    xStyle->setPropertyValue("Width", uno::Any(static_cast<sal_Int32>(20000)));
 
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -397,13 +397,13 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
@@ -467,16 +467,16 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("Checkbox", uno::makeAny(true));
-    xContentControlProps->setPropertyValue("Checked", uno::makeAny(true));
-    xContentControlProps->setPropertyValue("CheckedState", uno::makeAny(OUString(u"☒")));
-    xContentControlProps->setPropertyValue("UncheckedState", uno::makeAny(OUString(u"☐")));
+    xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
+    xContentControlProps->setPropertyValue("Checked", uno::Any(true));
+    xContentControlProps->setPropertyValue("CheckedState", uno::Any(OUString(u"☒")));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(OUString(u"☐")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to ODT:
     uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
-        { "FilterName", uno::makeAny(OUString("writer8")) },
+        { "FilterName", uno::Any(OUString("writer8")) },
     });
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();

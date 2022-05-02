@@ -29,7 +29,6 @@
 #include <sal/log.hxx>
 
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::makeAny;
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::beans;
 using namespace css;
@@ -75,7 +74,7 @@ void XMLReplacementImageContext::endFastElement(sal_Int32 )
 
     if (xGraphic.is() && xPropSetInfo->hasPropertyByName("Graphic"))
     {
-        m_xPropSet->setPropertyValue("Graphic", uno::makeAny(xGraphic));
+        m_xPropSet->setPropertyValue("Graphic", uno::Any(xGraphic));
     }
 }
 

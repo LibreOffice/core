@@ -1287,7 +1287,7 @@ void XMLTextFrameContext_Impl::SetTitle( const OUString& rTitle )
         Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( "Title" ) )
         {
-            xPropSet->setPropertyValue( "Title", makeAny( rTitle ) );
+            xPropSet->setPropertyValue( "Title", Any( rTitle ) );
         }
     }
 }
@@ -1299,7 +1299,7 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
         Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( "Description" ) )
         {
-            xPropSet->setPropertyValue( "Description", makeAny( rDesc ) );
+            xPropSet->setPropertyValue( "Description", Any( rDesc ) );
         }
     }
 }

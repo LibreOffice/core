@@ -123,24 +123,24 @@ void XMLContentControlContext::endFastElement(sal_Int32)
 
     if (m_bShowingPlaceHolder)
     {
-        xPropertySet->setPropertyValue("ShowingPlaceHolder", uno::makeAny(m_bShowingPlaceHolder));
+        xPropertySet->setPropertyValue("ShowingPlaceHolder", uno::Any(m_bShowingPlaceHolder));
     }
 
     if (m_bCheckbox)
     {
-        xPropertySet->setPropertyValue("Checkbox", uno::makeAny(m_bCheckbox));
+        xPropertySet->setPropertyValue("Checkbox", uno::Any(m_bCheckbox));
     }
     if (m_bChecked)
     {
-        xPropertySet->setPropertyValue("Checked", uno::makeAny(m_bChecked));
+        xPropertySet->setPropertyValue("Checked", uno::Any(m_bChecked));
     }
     if (!m_aCheckedState.isEmpty())
     {
-        xPropertySet->setPropertyValue("CheckedState", uno::makeAny(m_aCheckedState));
+        xPropertySet->setPropertyValue("CheckedState", uno::Any(m_aCheckedState));
     }
     if (!m_aUncheckedState.isEmpty())
     {
-        xPropertySet->setPropertyValue("UncheckedState", uno::makeAny(m_aUncheckedState));
+        xPropertySet->setPropertyValue("UncheckedState", uno::Any(m_aUncheckedState));
     }
 }
 

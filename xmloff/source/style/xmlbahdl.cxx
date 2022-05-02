@@ -219,7 +219,7 @@ bool XMLBoolFalsePropHdl::importXML( const OUString&, Any&, const SvXMLUnitConve
 
 bool XMLBoolFalsePropHdl::exportXML( OUString& rStrExpValue, const Any& /*rValue*/, const SvXMLUnitConverter& rCnv) const
 {
-    return XMLBoolPropHdl::exportXML( rStrExpValue, makeAny( false ), rCnv );
+    return XMLBoolPropHdl::exportXML( rStrExpValue, Any( false ), rCnv );
 }
 
 
