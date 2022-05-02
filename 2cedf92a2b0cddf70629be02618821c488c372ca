@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d2229ed_e9c92fab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-02T10:08:27Z",
+      "side": 1,
+      "message": "Can we please have sentence case for checkboxes and control labels?",
+      "revId": "2cedf92a2b0cddf70629be02618821c488c372ca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
