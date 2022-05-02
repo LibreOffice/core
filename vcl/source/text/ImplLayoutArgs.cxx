@@ -141,6 +141,9 @@ static bool IsControlChar(sal_UCS4 cChar)
     // byte order markers and invalid unicode
     if ((cChar == 0xFEFF) || (cChar == 0xFFFE) || (cChar == 0xFFFF))
         return true;
+    // drop null character too, broken documents may contain it (ofz34898-1.doc)
+    if (cChar == 0)
+        return true;
     return false;
 }
 
