@@ -29,6 +29,7 @@ PlacesListBox::PlacesListBox(std::unique_ptr<weld::TreeView> xControl,
 
     mxImpl->connect_changed( LINK( this, PlacesListBox, Selection ) );
     mxImpl->connect_row_activated( LINK( this, PlacesListBox, DoubleClick ) ) ;
+    mxImpl->connect_query_tooltip(LINK(this, PlacesListBox, QueryTooltipHdl));
 }
 
 PlacesListBox::~PlacesListBox( )
@@ -134,6 +135,17 @@ IMPL_LINK_NOARG( PlacesListBox, DoubleClick, weld::TreeView&, bool )
             break;
     }
     return true;
+}
+
+IMPL_LINK(PlacesListBox, QueryTooltipHdl, const weld::TreeIter&, rIter, OUString)
+{
+    const OUString sText = mxImpl->get_text(rIter);
+    for (const auto& pPlace : maPlaces)
+    {
+        if (pPlace->GetName() == sText)
+            return pPlace->GetUrlObject().GetMainURL(INetURLObject::DecodeMechanism::Unambiguous);
+    }
+    return OUString();
 }
 
 void PlacesListBox::updateView( )
