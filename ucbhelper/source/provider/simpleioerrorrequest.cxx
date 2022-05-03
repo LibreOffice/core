@@ -39,7 +39,7 @@ SimpleIOErrorRequest::SimpleIOErrorRequest(
     aRequest.Code            = eError;
     aRequest.Arguments       = rArgs;
 
-    setRequest( uno::makeAny( aRequest ) );
+    setRequest( uno::Any( aRequest ) );
 
     // Fill continuations...
     setContinuations({ new InteractionAbort(this) });

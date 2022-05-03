@@ -1342,8 +1342,8 @@ void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
             "RowCount",
             false,
             1001,
-            uno::makeAny( nOld ),     // old value
-            uno::makeAny( nNew ) ) ); // new value
+            uno::Any( nOld ),     // old value
+            uno::Any( nNew ) ) ); // new value
 }
 
 
@@ -1358,8 +1358,8 @@ void ResultSet::rowCountFinal()
             "IsRowCountFinal",
             false,
             1000,
-            uno:: makeAny( false ),   // old value
-            uno::makeAny( true ) ) ); // new value
+            uno:: Any( false ),   // old value
+            uno::Any( true ) ) ); // new value
 }
 
 

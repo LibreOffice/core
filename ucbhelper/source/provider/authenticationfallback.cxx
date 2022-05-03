@@ -22,7 +22,7 @@ AuthenticationFallbackRequest::AuthenticationFallbackRequest(
     aRequest.instructions = rInstructions;
     aRequest.url = rURL;
 
-    setRequest( uno::makeAny( aRequest ) );
+    setRequest( uno::Any( aRequest ) );
     m_xAuthFallback = new InteractionAuthFallback( this );
 
     setContinuations({ new InteractionAbort(this), m_xAuthFallback });
