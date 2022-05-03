@@ -131,7 +131,7 @@ void FontWorkGalleryDialog::fillFavorites(sal_uInt16 nThemeId)
     for( size_t nFavorite = 1; nFavorite <= nFavCount; nFavorite++ )
     {
         OUString sId = OUString::number(static_cast<sal_uInt16>(nFavorite));
-        maCtlFavorites->append(sId, "", maFavoritesHorizontal[nFavorite-1]);
+        maCtlFavorites->insert(-1, nullptr, &sId, maFavoritesHorizontal[nFavorite - 1], nullptr);
     }
 
     if (maCtlFavorites->n_children())
