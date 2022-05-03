@@ -481,7 +481,7 @@ Any ControlModelContainerBase::getByName( const OUString& aName )
     if ( maModels.end() == aElementPos )
         lcl_throwNoSuchElementException();
 
-    return makeAny( aElementPos->first );
+    return Any( aElementPos->first );
 }
 
 Sequence< OUString > ControlModelContainerBase::getElementNames()
@@ -598,7 +598,7 @@ void ControlModelContainerBase::removeByName( const OUString& aName )
     {
         try
         {
-            xPS->setPropertyValue( PROPERTY_RESOURCERESOLVER, makeAny( Reference< resource::XStringResourceResolver >() ) );
+            xPS->setPropertyValue( PROPERTY_RESOURCERESOLVER, Any( Reference< resource::XStringResourceResolver >() ) );
         }
         catch (const Exception&)
         {
@@ -648,7 +648,7 @@ void SAL_CALL ControlModelContainerBase::setControlModels( const Sequence< Refer
             if ( xProps.is() )
                 xPSI = xProps->getPropertySetInfo();
             if ( xPSI.is() && xPSI->hasPropertyByName( getTabIndexPropertyName() ) )
-                xProps->setPropertyValue( getTabIndexPropertyName(), makeAny( nTabIndex++ ) );
+                xProps->setPropertyValue( getTabIndexPropertyName(), Any( nTabIndex++ ) );
         }
         mbGroupsUpToDate = false;
     }
@@ -744,7 +744,7 @@ void SAL_CALL ControlModelContainerBase::setEnabled( sal_Bool _enabled )
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this, UNO_QUERY);
-    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED), makeAny(_enabled));
+    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_ENABLED), Any(_enabled));
 }
 OUString SAL_CALL ControlModelContainerBase::getTitle()
 {
@@ -758,7 +758,7 @@ void SAL_CALL ControlModelContainerBase::setTitle( const OUString& _title )
 {
     SolarMutexGuard aGuard;
     Reference<XPropertySet> xThis(*this,UNO_QUERY);
-    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),makeAny(_title));
+    xThis->setPropertyValue(GetPropertyName(BASEPROPERTY_TITLE),Any(_title));
 }
 OUString SAL_CALL ControlModelContainerBase::getImageURL()
 {
@@ -1788,7 +1788,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             // container control is being removed from this container, reset the
             // global list of containers
             if ( xProps.is() )
-                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( uno::Reference< XNameContainer >() ) );
+                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::Any( uno::Reference< XNameContainer >() ) );
             const Sequence< OUString > aChildNames = xChildContainer->getElementNames();
             for ( const auto& rName : aChildNames )
                 updateUserFormChildren( xAllChildren, rName, Operation,  Reference< XControlModel > () );
@@ -1796,7 +1796,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
     }
     else if ( Operation == Insert )
     {
-        xAllChildren->insertByName( aName, uno::makeAny( xTarget ) );
+        xAllChildren->insertByName( aName, uno::Any( xTarget ) );
         Reference< XNameContainer > xChildContainer( xTarget, UNO_QUERY );
         if ( xChildContainer.is() )
         {
@@ -1804,7 +1804,7 @@ ControlModelContainerBase::updateUserFormChildren( const Reference< XNameContain
             // global list of containers to point to the correct global list
             Reference< XPropertySet > xProps( xChildContainer, UNO_QUERY );
             if ( xProps.is() )
-                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::makeAny( xAllChildren ) );
+                xProps->setPropertyValue(  GetPropertyName( BASEPROPERTY_USERFORMCONTAINEES ), uno::Any( xAllChildren ) );
             const Sequence< OUString > aChildNames = xChildContainer->getElementNames();
             for ( const auto& rName : aChildNames )
             {

@@ -92,7 +92,7 @@ public:
         auto it = things.find( aName );
         if ( it == things.end() )
             throw NoSuchElementException();
-        return uno::makeAny( it->second );
+        return uno::Any( it->second );
     }
     virtual Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -197,7 +197,7 @@ UnoControlDialogModel::UnoControlDialogModel( const Reference< XComponentContext
     ImplRegisterProperty( BASEPROPERTY_CLOSEABLE, aBool );
     // #TODO separate class for 'UserForm' ( instead of re-using Dialog ? )
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
-    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::Any( xNameCont ) );
 }
 
 UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rModel )
@@ -213,7 +213,7 @@ UnoControlDialogModel::UnoControlDialogModel( const UnoControlDialogModel& rMode
         if ( xSrcNameCont->hasByName( name ) )
             xNameCont->insertByName( name, xSrcNameCont->getByName( name ) );
     }
-    setFastPropertyValue_NoBroadcast( BASEPROPERTY_USERFORMCONTAINEES, makeAny( xNameCont ) );
+    setFastPropertyValue_NoBroadcast( BASEPROPERTY_USERFORMCONTAINEES, Any( xNameCont ) );
 }
 
 rtl::Reference<UnoControlModel> UnoControlDialogModel::Clone() const
@@ -280,12 +280,12 @@ void SAL_CALL UnoControlDialogModel::setFastPropertyValue_NoBroadcast( sal_Int32
             {
                 setPropertyValue(
                     GetPropertyName(BASEPROPERTY_GRAPHIC),
-                    uno::makeAny(ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow(
+                    uno::Any(ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow(
                         mxGrfObj, sImageURL)));
             }
             else if (rValue >>= xGraphic)
             {
-                setPropertyValue("Graphic", uno::makeAny(xGraphic));
+                setPropertyValue("Graphic", uno::Any(xGraphic));
             }
         }
     }
@@ -416,9 +416,9 @@ void UnoDialogControl::PrepareWindowDescriptor( css::awt::WindowDescriptor& rDes
     if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
         ( !aImageURL.isEmpty() ))
     {
-        OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(PROPERTY_DIALOGSOURCEURL), uno::makeAny(aImageURL));
+        OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(PROPERTY_DIALOGSOURCEURL), uno::Any(aImageURL));
         xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
-        ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), true );
+        ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::Any( xGraphic ), true );
     }
 }
 
@@ -631,10 +631,10 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
             if (( ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_IMAGEURL ) ) >>= aImageURL ) &&
                 ( !aImageURL.isEmpty() ))
             {
-                OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(GetPropertyName(BASEPROPERTY_DIALOGSOURCEURL)), uno::makeAny(aImageURL));
+                OUString absoluteUrl = getPhysicalLocation(ImplGetPropertyValue(GetPropertyName(BASEPROPERTY_DIALOGSOURCEURL)), uno::Any(aImageURL));
                 xGraphic = ImageHelper::getGraphicFromURL_nothrow( absoluteUrl );
             }
-            ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::makeAny( xGraphic ), true );
+            ImplSetPropertyValue(  GetPropertyName( BASEPROPERTY_GRAPHIC), uno::Any( xGraphic ), true );
             break;
         }
         else if (bOwnModel && rEvt.PropertyName == "Graphic")
@@ -642,7 +642,7 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
             uno::Reference<graphic::XGraphic> xGraphic;
             if (ImplGetPropertyValue("Graphic") >>= xGraphic)
             {
-                ImplSetPropertyValue("Graphic", uno::makeAny(xGraphic), true);
+                ImplSetPropertyValue("Graphic", uno::Any(xGraphic), true);
             }
             break;
         }
@@ -675,7 +675,7 @@ void SAL_CALL UnoMultiPageControl::changed( SAL_UNUSED_PARAMETER ::sal_Int32,
 }
 void SAL_CALL UnoMultiPageControl::activated( ::sal_Int32 ID )
 {
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), false );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::Any( ID ), false );
 
 }
 void SAL_CALL UnoMultiPageControl::deactivated( SAL_UNUSED_PARAMETER ::sal_Int32 )
@@ -722,7 +722,7 @@ void SAL_CALL UnoMultiPageControl::activateTab( ::sal_Int32 ID )
 {
     Reference< XSimpleTabController > xMultiPage( getPeer(), UNO_QUERY_THROW );
     xMultiPage->activateTab( ID );
-    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( ID ), true );
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::Any( ID ), true );
 
 }
 
@@ -822,7 +822,7 @@ void UnoMultiPageControl::createPeer( const Reference< XToolkit > & rxToolkit, c
         if ( nActiveTab && aCtrls.hasElements() ) // Ensure peer is initialise with correct activated tab
         {
             xTabCntrl->activateTab( nActiveTab );
-            ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::makeAny( nActiveTab ), true );
+            ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_MULTIPAGEVALUE ), uno::Any( nActiveTab ), true );
         }
     }
 }
@@ -870,7 +870,7 @@ UnoMultiPageModel::UnoMultiPageModel( const Reference< XComponentContext >& rxCo
     ImplRegisterProperty( BASEPROPERTY_TABSTOP, aBool );
 
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
-    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::Any( xNameCont ) );
 }
 
 UnoMultiPageModel::~UnoMultiPageModel()
@@ -976,7 +976,7 @@ UnoPageModel::UnoPageModel( const Reference< XComponentContext >& rxContext ) : 
     //ImplRegisterProperty( BASEPROPERTY_TABSTOP, aBool );
 
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
-    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::Any( xNameCont ) );
 }
 
 UnoPageModel::~UnoPageModel()
@@ -1122,7 +1122,7 @@ UnoFrameModel::UnoFrameModel(  const Reference< XComponentContext >& rxContext )
 
 
     uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
-    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::makeAny( xNameCont ) );
+    ImplRegisterProperty( BASEPROPERTY_USERFORMCONTAINEES, uno::Any( xNameCont ) );
 }
 
 UnoFrameModel::~UnoFrameModel()
@@ -1158,7 +1158,7 @@ uno::Any UnoFrameModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         case BASEPROPERTY_USERFORMCONTAINEES:
         {
             uno::Reference< XNameContainer > xNameCont = new SimpleNamedThingContainer< XControlModel >;
-            return makeAny( xNameCont );
+            return Any( xNameCont );
         }
     }
     return ControlModelContainerBase::ImplGetDefaultValue( nPropId );

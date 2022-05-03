@@ -151,13 +151,13 @@ public:
         switch ( nPropId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( OUString("com.sun.star.awt.UnoControlSpinButton") );
+            return Any( OUString("com.sun.star.awt.UnoControlSpinButton") );
 
         case BASEPROPERTY_BORDER:
-            return makeAny( sal_Int16(0) );
+            return Any( sal_Int16(0) );
 
         case BASEPROPERTY_REPEAT:
-            return makeAny( true );
+            return Any( true );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
@@ -269,7 +269,7 @@ public:
             case AdjustmentType_ADJUST_LINE:
             case AdjustmentType_ADJUST_PAGE:
             case AdjustmentType_ADJUST_ABS:
-                ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( rEvent.Value ), false );
+                ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), Any( rEvent.Value ), false );
                 break;
             default:
                 OSL_FAIL( "UnoSpinButtonControl::adjustmentValueChanged - unknown Type" );
@@ -300,15 +300,15 @@ public:
 
     void SAL_CALL UnoSpinButtonControl::setValue( sal_Int32 value )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( value ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), Any( value ), true );
     }
 
 
     void SAL_CALL UnoSpinButtonControl::setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MIN ), makeAny( minValue ), true );
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MAX ), makeAny( maxValue ), true );
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), makeAny( currentValue ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MIN ), Any( minValue ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MAX ), Any( maxValue ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE ), Any( currentValue ), true );
     }
 
 
@@ -327,13 +327,13 @@ public:
 
     void SAL_CALL UnoSpinButtonControl::setMinimum( sal_Int32 minValue )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MIN ), makeAny( minValue ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MIN ), Any( minValue ), true );
     }
 
 
     void SAL_CALL UnoSpinButtonControl::setMaximum( sal_Int32 maxValue )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MAX ), makeAny( maxValue ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPINVALUE_MAX ), Any( maxValue ), true );
     }
 
 
@@ -365,7 +365,7 @@ public:
 
     void SAL_CALL UnoSpinButtonControl::setSpinIncrement( sal_Int32 spinIncrement )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPININCREMENT ), makeAny( spinIncrement ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_SPININCREMENT ), Any( spinIncrement ), true );
     }
 
 
@@ -384,7 +384,7 @@ public:
 
     void SAL_CALL UnoSpinButtonControl::setOrientation( sal_Int32 orientation )
     {
-        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), makeAny( orientation ), true );
+        ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ORIENTATION ), Any( orientation ), true );
     }
 
 
