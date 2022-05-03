@@ -22,6 +22,30 @@
       },
       "revId": "a62878ff86ecb38f9ea9fbe99f06518ed6016566",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "736e60fa_b84f0791",
+        "filename": "offapi/com/sun/star/document/MediaDescriptor.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-05-03T11:05:52Z",
+      "side": 1,
+      "message": "Should be correct:\nWhen saving a file using StoreAsURL with the MediaDescriptor property \"Overwrite\" not set (i.e. using the default, which the documentation describes as having the value FALSE), existing files are overwritten.",
+      "parentUuid": "70dbbfe7_60d2c368",
+      "range": {
+        "startLine": 323,
+        "startChar": 67,
+        "endLine": 323,
+        "endChar": 71
+      },
+      "revId": "a62878ff86ecb38f9ea9fbe99f06518ed6016566",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
