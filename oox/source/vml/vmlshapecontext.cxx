@@ -103,9 +103,9 @@ OptValue< Int32Pair > lclDecodeInt32Pair( const AttributeList& rAttribs, sal_Int
     OptValue< Int32Pair > oRetValue;
     if( oValue.has() )
     {
-        OUString aValue1, aValue2;
+        std::u16string_view aValue1, aValue2;
         ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
-        oRetValue = Int32Pair( aValue1.toInt32(), aValue2.toInt32() );
+        oRetValue = Int32Pair( o3tl::toInt32(aValue1), o3tl::toInt32(aValue2) );
     }
     return oRetValue;
 }
@@ -118,7 +118,7 @@ OptValue< DoublePair > lclDecodePercentPair( const AttributeList& rAttribs, sal_
     OptValue< DoublePair > oRetValue;
     if( oValue.has() )
     {
-        OUString aValue1, aValue2;
+        std::u16string_view aValue1, aValue2;
         ConversionHelper::separatePair( aValue1, aValue2, oValue.get(), ',' );
         oRetValue = DoublePair(
             ConversionHelper::decodePercent( aValue1, 0.0 ),
@@ -464,36 +464,36 @@ void ShapeTypeContext::setStyle( std::u16string_view rStyle )
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
     {
-        OUString aName, aValue;
+        std::u16string_view aName, aValue;
         if( ConversionHelper::separatePair( aName, aValue, o3tl::getToken(rStyle, 0, ';', nIndex ), ':' ) )
         {
-            if( aName == "position" )      mrTypeModel.maPosition = aValue;
-            else if( aName == "z-index" )        mrTypeModel.maZIndex = aValue;
-            else if( aName == "left" )           mrTypeModel.maLeft = aValue;
-            else if( aName == "top" )            mrTypeModel.maTop = aValue;
-            else if( aName == "width" )          mrTypeModel.maWidth = aValue;
-            else if( aName == "height" )         mrTypeModel.maHeight = aValue;
-            else if( aName == "margin-left" )    mrTypeModel.maMarginLeft = aValue;
-            else if( aName == "margin-top" )     mrTypeModel.maMarginTop = aValue;
-            else if( aName == "mso-position-vertical-relative" )  mrTypeModel.maPositionVerticalRelative = aValue;
-            else if( aName == "mso-position-horizontal-relative" )  mrTypeModel.maPositionHorizontalRelative = aValue;
-            else if( aName == "mso-position-horizontal" ) mrTypeModel.maPositionHorizontal = aValue;
-            else if( aName == "mso-position-vertical" ) mrTypeModel.maPositionVertical = aValue;
-            else if( aName == "mso-width-percent" ) mrTypeModel.maWidthPercent = aValue;
-            else if( aName == "mso-width-relative" ) mrTypeModel.maWidthRelative = aValue;
-            else if( aName == "mso-height-percent" ) mrTypeModel.maHeightPercent = aValue;
-            else if( aName == "mso-height-relative" ) mrTypeModel.maHeightRelative = aValue;
-            else if( aName == "mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = true;
-            else if( aName == "rotation" )       mrTypeModel.maRotation = aValue;
-            else if( aName == "flip" )       mrTypeModel.maFlip = aValue;
-            else if( aName == "visibility" )
-                mrTypeModel.mbVisible = aValue != "hidden";
-            else if( aName == "mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
-            else if ( aName == "v-text-anchor" ) mrTypeModel.maVTextAnchor = aValue;
-            else if ( aName == "mso-wrap-distance-left" ) mrTypeModel.maWrapDistanceLeft = aValue;
-            else if ( aName == "mso-wrap-distance-right" ) mrTypeModel.maWrapDistanceRight = aValue;
-            else if ( aName == "mso-wrap-distance-top" ) mrTypeModel.maWrapDistanceTop = aValue;
-            else if ( aName == "mso-wrap-distance-bottom" ) mrTypeModel.maWrapDistanceBottom = aValue;
+            if( aName == u"position" )      mrTypeModel.maPosition = aValue;
+            else if( aName == u"z-index" )        mrTypeModel.maZIndex = aValue;
+            else if( aName == u"left" )           mrTypeModel.maLeft = aValue;
+            else if( aName == u"top" )            mrTypeModel.maTop = aValue;
+            else if( aName == u"width" )          mrTypeModel.maWidth = aValue;
+            else if( aName == u"height" )         mrTypeModel.maHeight = aValue;
+            else if( aName == u"margin-left" )    mrTypeModel.maMarginLeft = aValue;
+            else if( aName == u"margin-top" )     mrTypeModel.maMarginTop = aValue;
+            else if( aName == u"mso-position-vertical-relative" )  mrTypeModel.maPositionVerticalRelative = aValue;
+            else if( aName == u"mso-position-horizontal-relative" )  mrTypeModel.maPositionHorizontalRelative = aValue;
+            else if( aName == u"mso-position-horizontal" ) mrTypeModel.maPositionHorizontal = aValue;
+            else if( aName == u"mso-position-vertical" ) mrTypeModel.maPositionVertical = aValue;
+            else if( aName == u"mso-width-percent" ) mrTypeModel.maWidthPercent = aValue;
+            else if( aName == u"mso-width-relative" ) mrTypeModel.maWidthRelative = aValue;
+            else if( aName == u"mso-height-percent" ) mrTypeModel.maHeightPercent = aValue;
+            else if( aName == u"mso-height-relative" ) mrTypeModel.maHeightRelative = aValue;
+            else if( aName == u"mso-fit-shape-to-text" )           mrTypeModel.mbAutoHeight = true;
+            else if( aName == u"rotation" )       mrTypeModel.maRotation = aValue;
+            else if( aName == u"flip" )       mrTypeModel.maFlip = aValue;
+            else if( aName == u"visibility" )
+                mrTypeModel.mbVisible = aValue != u"hidden";
+            else if( aName == u"mso-wrap-style" ) mrTypeModel.maWrapStyle = aValue;
+            else if ( aName == u"v-text-anchor" ) mrTypeModel.maVTextAnchor = aValue;
+            else if ( aName == u"mso-wrap-distance-left" ) mrTypeModel.maWrapDistanceLeft = aValue;
+            else if ( aName == u"mso-wrap-distance-right" ) mrTypeModel.maWrapDistanceRight = aValue;
+            else if ( aName == u"mso-wrap-distance-top" ) mrTypeModel.maWrapDistanceTop = aValue;
+            else if ( aName == u"mso-wrap-distance-bottom" ) mrTypeModel.maWrapDistanceBottom = aValue;
         }
     }
 }
@@ -599,10 +599,10 @@ void ShapeContext::setPoints(std::u16string_view rPoints)
     while (nIndex >= 0)
     {
         sal_Int32 nX = ConversionHelper::decodeMeasureToTwip(
-            mrShape.getDrawing().getFilter().getGraphicHelper(), OUString(o3tl::getToken(rPoints, 0, ',', nIndex)),
+            mrShape.getDrawing().getFilter().getGraphicHelper(), o3tl::getToken(rPoints, 0, ',', nIndex),
             0, true, true);
         sal_Int32 nY = ConversionHelper::decodeMeasureToTwip(
-            mrShape.getDrawing().getFilter().getGraphicHelper(), OUString(o3tl::getToken(rPoints, 0, ',', nIndex)),
+            mrShape.getDrawing().getFilter().getGraphicHelper(), o3tl::getToken(rPoints, 0, ',', nIndex),
             0, false, true);
         mrShapeModel.maPoints.emplace_back(nX, nY);
     }

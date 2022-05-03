@@ -57,7 +57,7 @@ namespace ConversionHelper
     /** Returns two values contained in rValue separated by cSep.
      */
     OOX_DLLPUBLIC bool         separatePair(
-                            OUString& orValue1, OUString& orValue2,
+                            std::u16string_view& orValue1, std::u16string_view& orValue2,
                             std::u16string_view rValue, sal_Unicode cSep );
 
     /** Returns the boolean value from the passed string of a VML attribute.
@@ -75,7 +75,7 @@ namespace ConversionHelper
             the value will be divided by 65536.
      */
     OOX_DLLPUBLIC double       decodePercent(
-                            const OUString& rValue,
+                            std::u16string_view rValue,
                             double fDefValue );
 
     /** Converts the passed VML rotation value to degrees.
@@ -88,7 +88,7 @@ namespace ConversionHelper
             point value will be returned unmodified. If the 'fd' suffix is
             present, the value will be divided by 65536.
     */
-    OOX_DLLPUBLIC Degree100 decodeRotation( const OUString& rValue );
+    OOX_DLLPUBLIC Degree100 decodeRotation( std::u16string_view rValue );
 
     /** Converts the passed VML measure string to EMU (English Metric Units).
 
@@ -110,7 +110,7 @@ namespace ConversionHelper
      */
     OOX_DLLPUBLIC sal_Int64    decodeMeasureToEmu(
                             const GraphicHelper& rGraphicHelper,
-                            const OUString& rValue,
+                            std::u16string_view rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
                             bool bDefaultAsPixel );
@@ -125,7 +125,7 @@ namespace ConversionHelper
      */
     OOX_DLLPUBLIC sal_Int32    decodeMeasureToHmm(
                             const GraphicHelper& rGraphicHelper,
-                            const OUString& rValue,
+                            std::u16string_view rValue,
                             sal_Int32 nRefValue,
                             bool bPixelX,
                             bool bDefaultAsPixel );
@@ -139,7 +139,7 @@ namespace ConversionHelper
         @param bDefaultAsPixel  See above.
      */
 OOX_DLLPUBLIC sal_Int32 decodeMeasureToTwip(const GraphicHelper& rGraphicHelper,
-                                            const OUString& rValue, sal_Int32 nRefValue,
+                                            std::u16string_view rValue, sal_Int32 nRefValue,
                                             bool bPixelX, bool bDefaultAsPixel);
 
     /** Converts VML color attributes to a DrawingML color.

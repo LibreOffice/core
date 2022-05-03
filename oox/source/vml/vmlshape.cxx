@@ -1143,11 +1143,11 @@ awt::Rectangle LineShape::getAbsRectangle() const
     awt::Rectangle aShapeRect;
     sal_Int32 nIndex = 0;
 
-    aShapeRect.X = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maFrom.getToken(0, ',', nIndex), 0, true, true);
-    aShapeRect.Y = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maFrom.getToken(0, ',', nIndex), 0, false, true);
+    aShapeRect.X = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex), 0, true, true);
+    aShapeRect.Y = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex), 0, false, true);
     nIndex = 0;
-    aShapeRect.Width = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, true, true) - aShapeRect.X;
-    aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, false, true) - aShapeRect.Y;
+    aShapeRect.Width = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex), 0, true, true) - aShapeRect.X;
+    aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex), 0, false, true) - aShapeRect.Y;
     return aShapeRect;
 }
 
@@ -1199,20 +1199,20 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
 
             // Start point
             aCoordLists[ 0 ].emplace_back(
-                  ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, true, true ),
-                  ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, false, true ) );
+                  ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex ), 0, true, true ),
+                  ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maFrom, 0, ',', nIndex ), 0, false, true ) );
             // Control point 1
             aCoordLists[ 0 ].emplace_back(
-                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, true, true ),
-                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, false, true ) );
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maControl1, 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maControl1, 0, ',', nIndex ), 0, false, true ) );
             // Control point 2
             aCoordLists[ 0 ].emplace_back(
-                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, true, true ),
-                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, false, true ) );
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maControl2, 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maControl2, 0, ',', nIndex ), 0, false, true ) );
             // End point
             aCoordLists[ 0 ].emplace_back(
-                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, true, true ),
-                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, false, true ) );
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex ), 0, true, true ),
+                      ConversionHelper::decodeMeasureToHmm( rGraphicHelper, o3tl::getToken(maShapeModel.maTo, 0, ',', nIndex ), 0, false, true ) );
 
             // First and last points are normals, points 2 and 4 are controls
             aFlagLists[ 0 ].resize( aCoordLists[ 0 ].size(), PolygonFlags_CONTROL );
