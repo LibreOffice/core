@@ -241,49 +241,49 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
             (_xDirect.is() && _xENDirect.is()) ||
             (!_xDirect.is() && _xENIntrospection.is()))
         {
-            return makeAny( Reference< XExactName >( static_cast< XExactName* >(this) ) );
+            return Any( Reference< XExactName >( static_cast< XExactName* >(this) ) );
         }
     }
     else if ( aType == cppu::UnoType<XNameContainer>::get())
     {
         if( _xNameContainer.is() )
-            return makeAny( Reference< XNameContainer >( static_cast< XNameContainer* >(this) ) );
+            return Any( Reference< XNameContainer >( static_cast< XNameContainer* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XNameReplace>::get())
     {
         if( _xNameReplace.is() )
-            return makeAny( Reference< XNameReplace >( static_cast< XNameReplace* >(this) ) );
+            return Any( Reference< XNameReplace >( static_cast< XNameReplace* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XNameAccess>::get())
     {
         if( _xNameAccess.is() )
-            return makeAny( Reference< XNameAccess >( static_cast< XNameAccess* >(this) ) );
+            return Any( Reference< XNameAccess >( static_cast< XNameAccess* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XIndexContainer>::get())
     {
         if (_xIndexContainer.is())
-            return makeAny( Reference< XIndexContainer >( static_cast< XIndexContainer* >(this) ) );
+            return Any( Reference< XIndexContainer >( static_cast< XIndexContainer* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XIndexReplace>::get())
     {
         if (_xIndexReplace.is())
-            return makeAny( Reference< XIndexReplace >( static_cast< XIndexReplace* >(this) ) );
+            return Any( Reference< XIndexReplace >( static_cast< XIndexReplace* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XIndexAccess>::get())
     {
         if (_xIndexAccess.is())
-            return makeAny( Reference< XIndexAccess >( static_cast< XIndexAccess* >(this) ) );
+            return Any( Reference< XIndexAccess >( static_cast< XIndexAccess* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XEnumerationAccess>::get())
     {
         if (_xEnumerationAccess.is())
-            return makeAny( Reference< XEnumerationAccess >( static_cast< XEnumerationAccess* >(this) ) );
+            return Any( Reference< XEnumerationAccess >( static_cast< XEnumerationAccess* >(this) ) );
     }
     else if ( aType == cppu::UnoType<XElementAccess>::get())
     {
         if (_xElementAccess.is())
         {
-            return makeAny( Reference< XElementAccess >(
+            return Any( Reference< XElementAccess >(
                 static_cast< XElementAccess* >(static_cast< XNameContainer* >(this)) ) );
         }
     }
@@ -295,7 +295,7 @@ Any SAL_CALL Invocation_Impl::queryInterface( const Type & aType )
              ( _xDirect.is() && _xDirect2.is()) ||
              (!_xDirect.is() && _xIntrospectionAccess.is() ) )
         {
-            return makeAny( Reference< XInvocation2 >( static_cast< XInvocation2* >(this) ) );
+            return Any( Reference< XInvocation2 >( static_cast< XInvocation2* >(this) ) );
         }
     }
 

@@ -623,7 +623,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                     "JavaVirtualMachine::getJavaVM failed because"
                     " No suitable JRE found!",
                     static_cast< cppu::OWeakObject * >(this));
-                askForRetry(css::uno::makeAny(exc));
+                askForRetry(css::uno::Any(exc));
                 return css::uno::Any();
             }
             else
@@ -644,7 +644,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 "JavaVirtualMachine::getJavaVM failed because"
                 " Java settings have changed!",
                 static_cast< cppu::OWeakObject * >(this));
-            askForRetry(css::uno::makeAny(exc));
+            askForRetry(css::uno::Any(exc));
             return css::uno::Any();
         }
         case JFW_E_JAVA_DISABLED:
@@ -659,7 +659,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             css::java::JavaDisabledException exc(
                 "JavaVirtualMachine::getJavaVM failed because Java is disabled!",
                 static_cast< cppu::OWeakObject * >(this));
-            if( ! askForRetry(css::uno::makeAny(exc)))
+            if( ! askForRetry(css::uno::Any(exc)))
                 return css::uno::Any();
             continue;
         }
@@ -696,7 +696,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
             css::java::JavaVMCreationFailureException exc(
                 "JavaVirtualMachine::getJavaVM failed because Java is defective!",
                 static_cast< cppu::OWeakObject * >(this), 0);
-            askForRetry(css::uno::makeAny(exc));
+            askForRetry(css::uno::Any(exc));
             return css::uno::Any();
         }
         case JFW_E_RUNNING_JVM:
@@ -714,7 +714,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 "JavaVirtualMachine::getJavaVM failed because "
                 "Office must be restarted before Java can be used!",
                 static_cast< cppu::OWeakObject * >(this));
-            askForRetry(css::uno::makeAny(exc));
+            askForRetry(css::uno::Any(exc));
             return css::uno::Any();
         }
         default:
@@ -762,15 +762,15 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
                 " that the requested JavaVM pointer is not available",
                 static_cast< cppu::OWeakObject * >(this));
         }
-        return css::uno::makeAny(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
+        return css::uno::Any(reinterpret_cast< sal_IntPtr >(m_pJavaVm));
     case RETURN_VIRTUALMACHINE:
         OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
-        return css::uno::makeAny(
+        return css::uno::Any(
             reinterpret_cast< sal_Int64 >(
                 m_xUnoVirtualMachine->getVirtualMachine().get()));
     case RETURN_UNOVIRTUALMACHINE:
         OSL_ASSERT(sizeof (sal_Int64) >= sizeof (jvmaccess::VirtualMachine *));
-        return css::uno::makeAny(
+        return css::uno::Any(
             reinterpret_cast< sal_Int64 >(m_xUnoVirtualMachine.get()));
     }
 }
