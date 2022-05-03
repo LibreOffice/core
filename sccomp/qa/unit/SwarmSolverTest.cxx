@@ -275,7 +275,7 @@ void SwarmSolverTest::testMultipleVariables()
                 uno::UNO_QUERY_THROW);
 
     uno::Reference<beans::XPropertySet> xPropSet(xSolver, uno::UNO_QUERY_THROW);
-    xPropSet->setPropertyValue("Integer", uno::makeAny(true));
+    xPropSet->setPropertyValue("Integer", uno::Any(true));
 
     table::CellAddress aObjective(0, 5, 7);
 
