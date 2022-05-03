@@ -22,6 +22,7 @@
 #include <vcl/vcllayout.hxx>
 #include <vcl/lazydelete.hxx>
 #include <tools/stream.hxx>
+#include <unotools/configmgr.hxx>
 #include <TextLayoutCache.hxx>
 #include <config_fuzzers.h>
 #include <officecfg/Office/Common.hxx>
@@ -210,7 +211,9 @@ bool SalLayoutGlyphsImpl::IsValid() const
 SalLayoutGlyphsCache* SalLayoutGlyphsCache::self()
 {
     static vcl::DeleteOnDeinit<SalLayoutGlyphsCache> cache(
-        officecfg::Office::Common::Cache::Font::GlyphsCacheSize::get());
+        !utl::ConfigManager::IsFuzzing()
+            ? officecfg::Office::Common::Cache::Font::GlyphsCacheSize::get()
+            : 20000);
     return cache.get();
 }
 
