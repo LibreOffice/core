@@ -22,6 +22,8 @@
 #include <libxml/xmlwriter.h>
 
 #include <sal/log.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
@@ -220,7 +222,74 @@ void SwContentControl::dumpAsXml(xmlTextWriterPtr pWriter) const
                                             BAD_CAST(m_aCheckedState.toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("unchecked-state"), "%s",
                                             BAD_CAST(m_aUncheckedState.toUtf8().getStr()));
+
+    if (!m_aListItems.empty())
+    {
+        for (const auto& rListItem : m_aListItems)
+        {
+            rListItem.dumpAsXml(pWriter);
+        }
+    }
+
     (void)xmlTextWriterEndElement(pWriter);
+}
+
+void SwContentControlListItem::dumpAsXml(xmlTextWriterPtr pWriter) const
+{
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("SwContentControlListItem"));
+    (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("ptr"), "%p", this);
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("display-text"),
+                                      BAD_CAST(m_aDisplayText.toUtf8().getStr()));
+    (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("value"),
+                                      BAD_CAST(m_aValue.toUtf8().getStr()));
+
+    (void)xmlTextWriterEndElement(pWriter);
+}
+
+void SwContentControlListItem::ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
+                                          uno::Any& rVal)
+{
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aRet(rItems.size());
+
+    uno::Sequence<beans::PropertyValue>* pRet = aRet.getArray();
+    for (size_t i = 0; i < rItems.size(); ++i)
+    {
+        const SwContentControlListItem& rItem = rItems[i];
+        uno::Sequence<beans::PropertyValue> aItem = {
+            comphelper::makePropertyValue("DisplayText", rItem.m_aDisplayText),
+            comphelper::makePropertyValue("Value", rItem.m_aValue),
+        };
+        pRet[i] = aItem;
+    }
+
+    rVal <<= aRet;
+}
+
+std::vector<SwContentControlListItem>
+SwContentControlListItem::ItemsFromAny(const css::uno::Any& rVal)
+{
+    std::vector<SwContentControlListItem> aRet;
+
+    uno::Sequence<uno::Sequence<beans::PropertyValue>> aSequence;
+    rVal >>= aSequence;
+    for (const auto& rItem : aSequence)
+    {
+        comphelper::SequenceAsHashMap aMap(rItem);
+        SwContentControlListItem aItem;
+        auto it = aMap.find("DisplayText");
+        if (it != aMap.end())
+        {
+            it->second >>= aItem.m_aDisplayText;
+        }
+        it = aMap.find("Value");
+        if (it != aMap.end())
+        {
+            it->second >>= aItem.m_aValue;
+        }
+        aRet.push_back(aItem);
+    }
+
+    return aRet;
 }
 
 SwTextContentControl* SwTextContentControl::CreateTextContentControl(SwTextNode* pTargetTextNode,
