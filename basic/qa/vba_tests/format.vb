@@ -17,6 +17,7 @@ Function doUnitTest() As String
     'Custom_Datetime_Format_Sample
     Custom_Number_Format_Sample
     Custom_Text_Format_Sample
+    Custom_Null_Format_Sample
     testFormat
 
     doUnitTest = TestUtil.GetResult()
@@ -154,13 +155,52 @@ Sub Custom_Number_Format_Sample()
 errorHandler:
     TestUtil.ReportErrorHandler("Custom_Number_Format_Sample", Err, Error$, Erl)
 End Sub
-
+Sub Custom_Null_Format_Sample()
+    On Error GoTo errorHandler
+    TestUtil.AssertEqual(Format(Null, "null"),                "",                    "Format(Null, ""null"")")
+    TestUtil.AssertEqual(Format(Null),                        "",                    "Format(Null)")
+    ' (Null, Null) does not actually return "". It produces an error in VBA, and here as well (Data type mismatch)
+    ' TestUtil.AssertEqual(Format(Null, Null),                  "",                    "Format(Null, Null)")
+    TestUtil.AssertEqual(Format(Null, ";;;NNN"),              "NNN",                 "Format(Null, "";;;NNN"")")
+    Exit Sub
+errorHandler:
+    TestUtil.ReportErrorHandler("Custom_Null_Format_Sample", Err, Error$, Erl)
+End Sub
 Sub Custom_Text_Format_Sample()
     On Error GoTo errorHandler
 
     TestUtil.AssertEqual(Format("VBA", "<"), "vba", "Format(""VBA"", ""<"")")
     TestUtil.AssertEqual(Format("vba", ">"), "VBA", "Format(""vba"", "">"")")
 
+    ' Test special VBA characters @, &, !
+    ' Results have been confirmed with VBA
+    
+    ' Order matters on whether a number gets parsed with numeric character (#, 0 etc.) rules or
+    ' with special character (@, &, ! etc.) rules
+    TestUtil.AssertEqual(Format(42, "fo#o@bar"),                    "fo42o@bar",                "Format(42, ""fo#o@bar"")")
+    TestUtil.AssertEqual(Format(42, "fo@o#bar"),                     "fo4o#bar2",               "Format(42, ""fo@o#bar"")")
+    ' When only string format characters are present, the result is as expected
+    TestUtil.AssertEqual(Format(42, "foo@bar"),                     "foo4bar2",                 "Format(42, ""foo@bar"")")
+    ' For the test below, format returns foo42bar, while LO returns 42 because it uses the svNumberFormatter
+    'TestUtil.AssertEqual(Format(42, "foo#bar"),                     "foo42bar",                 "Format(42, ""foo#bar"")")
+    ' No ! present, start right to left. When running out of characters, replace @ with space
+    TestUtil.AssertEqual(Format("ABCD", "a@b@c@d@e@f@g@h@"),        "a b c d eAfBgChD",         "Format(""ABCD"", ""a@b@c@d@e@f@g@h@"")")
+    ' No ! present, start right to left. When running out of characters, replace @ with nothing
+    TestUtil.AssertEqual(Format("ABCD", "a&b&c&d&e&f&g&h&"),        "abcdeAfBgChD",             "Format(""ABCD"", ""a&b&c&d&e&f&g&h&"")")
+    ' ! present, start left to right. When running out of characters, replace @ with space
+    ' ! position does not matter, so we place it in the middle of the format string
+    TestUtil.AssertEqual(Format("ABCD", "a@b@c@d@!e@f@g@h@"),       "aAbBcCdDe f g h ",         "Format(""ABCD"", ""a@b@c@d@!e@f@g@h@"")")
+    ' ! present, start left to right. When running out of characters, replace @ with nothing
+    TestUtil.AssertEqual(Format("ABCD", "a&b&c&d&e&f&g!&h&"),       "aAbBcCdDefgh",             "Format(""ABCD"", ""a&b&c&d&e&f&g!&h&"")")
+    ' remaining chars when no ! is present just get appended at the end
+    TestUtil.AssertEqual(Format("remaining_chars", "foo@bar@baz"),  "foorbarebazmaining_chars", "Format(""remaining_chars"", ""foo@bar@baz"")")
+    TestUtil.AssertEqual(Format("remaining_chars", "foo&bar&baz"),  "foorbarebazmaining_chars", "Format(""remaining_chars"", ""foo&bar&baz"")")
+    ' remaining chars when ! is present get discarded
+    TestUtil.AssertEqual(Format("remaining_chars", "fo!o@bar@baz"), "foorbarsbaz",              "Format(""remaining_chars"", ""fo!o@bar@baz"")")
+    TestUtil.AssertEqual(Format("remaining_chars", "fo!o&bar&baz"), "foorbarsbaz",              "Format(""remaining_chars"", ""fo!o&bar&baz"")")
+    ' @ mixed with & should work as expected
+    TestUtil.AssertEqual(Format("mixed", "a@b@c&d&e&f@g&h@"),       "a b cdmeifxgehd",          "Format(""mixed"", ""a@b@c&d&e&f@g&h@"")")
+    TestUtil.AssertEqual(Format("mixed", "a@b@c&d&e&!f@g&h@"),      "ambicxdeedf gh ",          "Format(""mixed"", ""a@b@c&d&e&!f@g&h@"")")
     Exit Sub
 errorHandler:
     TestUtil.ReportErrorHandler("Custom_Text_Format_Sample", Err, Error$, Erl)
