@@ -33,6 +33,24 @@
       "message": "Downloaded the patch and now the ndr.de sites content can be CTRL-A + copy-pasted correctly with images showing up.\n\nFound another site that does not work though: the articles on https://telex.hu/ still can\u0027t be copy-pasted to Writer, even with this, because their server gives HTTP 415:\n\nwarn:ucb.ucp.webdav:5998:6136:ucb/source/ucp/webdav-curl/webdavcontent.cxx:4186: OPTIONS - DAV_HTTP_ERROR, for URL \u003chttps://telex.hu/assets/images/20220427/1651069929-temp-IoFImk_cikktorzs-komplex-szeles.jpg\u003e, HTTP error: 415, \u0027\u0027\n\nLet\u0027s say this is a different issue.",
       "revId": "54426c5e468bc82e6421826350a5715b42cb24d9",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0098486_6439641e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-03T12:54:49Z",
+      "side": 1,
+      "message": "i can reproduce this, but with 7.2 (neon) the images are missing too, so no regression apparently.",
+      "parentUuid": "e0284563_2b1a4c36",
+      "revId": "54426c5e468bc82e6421826350a5715b42cb24d9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
