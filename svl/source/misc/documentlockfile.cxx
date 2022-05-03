@@ -101,7 +101,7 @@ bool GenDocumentLockFile::CreateOwnLockFile()
 
         // try to let the file be hidden if possible
         try {
-            aTargetContent.setPropertyValue("IsHidden", uno::makeAny( true ) );
+            aTargetContent.setPropertyValue("IsHidden", uno::Any( true ) );
         } catch( uno::Exception& ) {}
     }
     catch( ucb::NameClashException& )
@@ -159,7 +159,7 @@ void GenDocumentLockFile::RemoveFileDirectly()
     uno::Reference < css::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(GetURL(), xEnv, comphelper::getProcessComponentContext());
     aCnt.executeCommand("delete",
-        uno::makeAny(true));
+        uno::Any(true));
 }
 
 

@@ -76,11 +76,11 @@ ShareControlFile::ShareControlFile( std::u16string_view aOrigURL )
                 ucb::InsertCommandArgument aInsertArg;
                 aInsertArg.Data = xInput;
                 aInsertArg.ReplaceExisting = false;
-                aContent.executeCommand( "insert", uno::makeAny( aInsertArg ) );
+                aContent.executeCommand( "insert", uno::Any( aInsertArg ) );
 
                 // try to let the file be hidden if possible
                 try {
-                    aContent.setPropertyValue("IsHidden", uno::makeAny( true ) );
+                    aContent.setPropertyValue("IsHidden", uno::Any( true ) );
                 } catch( uno::Exception& ) {}
 
                 // Try to open one more time

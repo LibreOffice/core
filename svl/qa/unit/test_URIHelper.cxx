@@ -150,7 +150,7 @@ css::uno::Any Content::execute(
         }
         break;
     }
-    return css::uno::makeAny(uri.toAsciiLowerCase());
+    return css::uno::Any(uri.toAsciiLowerCase());
 }
 
 class Provider: public cppu::WeakImplHelper< css::ucb::XContentProvider > {
