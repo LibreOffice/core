@@ -6,6 +6,7 @@
 ' file, You can obtain one at http://mozilla.org/MPL/2.0/.
 '
 
+Option Compatible
 Option Explicit
 
 Function doUnitTest as String
@@ -15,6 +16,12 @@ End Function
 
 Function [Функция]([😁])
   [Функция] = [😁] & " and some text"
+End Function
+
+Function TestNonAscii as Integer
+    Dim Абв as Integer
+    Абв = 10
+    TestNonAscii = абв
 End Function
 
 Function TestNonAsciiNative as Integer
@@ -29,9 +36,10 @@ Sub [Prüfung]
   TestUtil.AssertEqual([Функция]("Smiley"), "Smiley and some text", "[Функция](""Smiley"")")
 
   ' tdf#148358 - compare Non-ASCII variable names case-insensitive
+  TestUtil.AssertEqual(TestNonAscii(), 10, "TestNonAscii()")
   TestUtil.AssertEqual(TestNonAsciiNative(), 5, "TestNonAsciiNative()")
 
   Exit Sub
 errorHandler:
-  TestUtil.ReportErrorHandler("Prüfung", Err, Error$, Erl)
+  TestUtil.ReportErrorHandler("Prüfung Compatible", Err, Error$, Erl)
 End Sub
