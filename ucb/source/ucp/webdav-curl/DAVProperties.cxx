@@ -76,6 +76,9 @@ void DAVProperties::createSerfPropName( OUString const& rFullName,
     }
     else
     {
+        // this must not be a URI - WebDAVResponseParser must have converted it
+        // to the "<prop:" form above
+        assert(rFullName.indexOf(':') == -1);
         // Add our namespace to our own properties.
         rName.nspace = "http://ucb.openoffice.org/dav/props/";
         rName.name
