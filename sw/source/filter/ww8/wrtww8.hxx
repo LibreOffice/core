@@ -306,7 +306,7 @@ private:
     FontFamily meFamily;
     rtl_TextEncoding meChrSet;
 public:
-     wwFont( const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
+     wwFont( std::u16string_view rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet);
     void Write( SvStream *pTableStram ) const;
     void WriteDocx( DocxAttributeOutput* rAttrOutput ) const;

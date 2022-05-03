@@ -109,7 +109,7 @@ void ScAsciiOptions::ReadFromString( std::u16string_view rString )
     // Token 2: Text encoding.
     if ( nPos >= 0 )
     {
-        eCharSet = ScGlobal::GetCharsetValue( OUString(o3tl::getToken(rString, 0, ',', nPos)) );
+        eCharSet = ScGlobal::GetCharsetValue( o3tl::getToken(rString, 0, ',', nPos) );
     }
 
     // Token 3: Number of start row.

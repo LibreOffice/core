@@ -658,7 +658,7 @@ public:
      */
     SC_DLLPUBLIC static const sal_Unicode* FindUnquoted( const sal_Unicode* pString, sal_Unicode cChar );
 
-    static  rtl_TextEncoding GetCharsetValue( const OUString& rCharSet );
+    static  rtl_TextEncoding GetCharsetValue( std::u16string_view rCharSet );
     static  OUString        GetCharsetString( rtl_TextEncoding eVal );
 
     /// a "ReadOnly" formatter for UNO/XML export

@@ -81,10 +81,10 @@ public:
     const LanguageTag& getLanguageTag() const;
 
     /// isdigit() on ascii values of entire string
-    static bool isAsciiNumeric( const OUString& rStr );
+    static bool isAsciiNumeric( std::u16string_view rStr );
 
     /// isalpha() on ascii values of entire string
-    static bool isAsciiAlpha( const OUString& rStr );
+    static bool isAsciiAlpha( std::u16string_view rStr );
 
     /// whether type is pure numeric or not, e.g. return of getStringType
     static bool isNumericType( sal_Int32 nType )

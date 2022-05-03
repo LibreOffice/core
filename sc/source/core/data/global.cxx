@@ -24,6 +24,7 @@
 #include <svl/itempool.hxx>
 #include <svl/srchitem.hxx>
 #include <editeng/langitem.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/dispatch.hxx>
@@ -560,31 +561,31 @@ void ScGlobal::Clear()
     xDrawClipDocShellRef.clear();
 }
 
-rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
+rtl_TextEncoding ScGlobal::GetCharsetValue( std::u16string_view rCharSet )
 {
     // new TextEncoding values
     if ( CharClass::isAsciiNumeric( rCharSet ) )
     {
-        sal_Int32 nVal = rCharSet.toInt32();
+        sal_Int32 nVal = o3tl::toInt32(rCharSet);
         if ( nVal == RTL_TEXTENCODING_DONTKNOW )
             return osl_getThreadTextEncoding();
         return static_cast<rtl_TextEncoding>(nVal);
     }
     // old CharSet values for compatibility
-    else if (rCharSet.equalsIgnoreAsciiCase("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
-    else if (rCharSet.equalsIgnoreAsciiCase("MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
-    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
-    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_437")) return RTL_TEXTENCODING_IBM_437;
-    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_850")) return RTL_TEXTENCODING_IBM_850;
-    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_860")) return RTL_TEXTENCODING_IBM_860;
-    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
-    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
-    else if (rCharSet.equalsIgnoreAsciiCase("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"ANSI")     ) return RTL_TEXTENCODING_MS_1252;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"IBMPC_437")) return RTL_TEXTENCODING_IBM_437;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"IBMPC_850")) return RTL_TEXTENCODING_IBM_850;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"IBMPC_860")) return RTL_TEXTENCODING_IBM_860;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
     // Some wrong "help" on the net mentions UTF8 and even unoconv uses it,
     // which worked accidentally if the system encoding is UTF-8 anyway, so
     // support it ;) but only when reading.
-    else if (rCharSet.equalsIgnoreAsciiCase("UTF8"))      return RTL_TEXTENCODING_UTF8;
-    else if (rCharSet.equalsIgnoreAsciiCase("UTF-8"))     return RTL_TEXTENCODING_UTF8;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"UTF8"))      return RTL_TEXTENCODING_UTF8;
+    else if (o3tl::equalsIgnoreAsciiCase(rCharSet, u"UTF-8"))     return RTL_TEXTENCODING_UTF8;
     else return osl_getThreadTextEncoding();
 }
 
