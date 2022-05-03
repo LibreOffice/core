@@ -161,9 +161,9 @@ SfxPrinterController::SfxPrinterController( const VclPtr<Printer>& i_rPrinter,
     }
 
     // set some job parameters
-    setValue( "IsApi", makeAny( i_bApi ) );
-    setValue( "IsDirect", makeAny( i_bDirect ) );
-    setValue( "IsPrinter", makeAny( true ) );
+    setValue( "IsApi", Any( i_bApi ) );
+    setValue( "IsDirect", Any( i_bDirect ) );
+    setValue( "IsPrinter", Any( true ) );
     setValue( "View", i_rViewProp );
 }
 
@@ -577,8 +577,8 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
         aSelection = xSupplier->getSelection();
     else
         aSelection <<= GetObjectShell()->GetModel();
-    Any aComplete( makeAny( GetObjectShell()->GetModel() ) );
-    Any aViewProp( makeAny( xController ) );
+    Any aComplete( Any( GetObjectShell()->GetModel() ) );
+    Any aViewProp( xController );
     VclPtr<Printer> aPrt;
 
     const beans::PropertyValue* pVal = std::find_if(rProps.begin(), rProps.end(),
@@ -605,7 +605,7 @@ void SfxViewShell::StartPrint( const uno::Sequence < beans::PropertyValue >& rPr
 
     SfxObjectShell *pObjShell = GetObjectShell();
     xNewController->setValue( "JobName",
-                        makeAny( pObjShell->GetTitle(1) ) );
+                        Any( pObjShell->GetTitle(1) ) );
     xNewController->setPrinterModified( mbPrinterSettingsModified );
 }
 

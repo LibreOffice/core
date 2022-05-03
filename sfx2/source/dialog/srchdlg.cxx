@@ -101,7 +101,7 @@ void SearchDialog::SaveConfig()
         OUString::number( m_xWrapAroundBox->get_active() ? 1 : 0 ) + ";" +
         OUString::number( m_xBackwardsBox->get_active() ? 1 : 0 );
 
-    Any aUserItem = makeAny( sUserData );
+    Any aUserItem( sUserData );
     aViewOpt.SetUserItem( "UserItem", aUserItem );
 }
 

@@ -354,7 +354,7 @@ void FileDialogHelper_Impl::SaveLastUsedFilter()
     std::optional<OUString> pConfigId = GetLastFilterConfigId( meContext );
     if( pConfigId )
         SvtViewOptions( EViewType::Dialog, IODLG_CONFIGNAME ).SetUserItem( *pConfigId,
-                            makeAny( getFilterWithExtension( getFilter() ) ) );
+                            Any( getFilterWithExtension( getFilter() ) ) );
 }
 
 std::shared_ptr<const SfxFilter> FileDialogHelper_Impl::getCurentSfxFilter()
@@ -506,7 +506,7 @@ void FileDialogHelper_Impl::updateSelectionBox()
             ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
             ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SfxFilterFlags::SUPPORTSSELECTION ) ) );
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( mbSelection ) );
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, Any( mbSelection ) );
     }
 }
 
@@ -530,14 +530,14 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
         {
             uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
             if( mbPwdCheckBoxState )
-                xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( true ) );
+                xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( true ) );
         }
     }
     else if( !bWasEnabled && mbIsPwdEnabled )
     {
         uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
         if( mbPwdCheckBoxState )
-            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( true ) );
+            xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( true ) );
     }
     else if( bWasEnabled && !mbIsPwdEnabled )
     {
@@ -546,7 +546,7 @@ void FileDialogHelper_Impl::enablePasswordBox( bool bInit )
         Any aValue = xCtrlAccess->getValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0 );
         bool bPassWord = false;
         mbPwdCheckBoxState = ( aValue >>= bPassWord ) && bPassWord;
-        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, makeAny( false ) );
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_PASSWORD, 0, Any( false ) );
     }
 }
 
@@ -1067,22 +1067,22 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         {
             pInitArguments[0] <<= NamedValue(
                                     "TemplateDescription",
-                                    makeAny( nTemplateDescription )
+                                    Any( nTemplateDescription )
                                 );
 
             pInitArguments[1] <<= NamedValue(
                                     "StandardDir",
-                                    makeAny( sStandardDir )
+                                    Any( sStandardDir )
                                 );
 
             pInitArguments[2] <<= NamedValue(
                                     "DenyList",
-                                    makeAny( rDenyList )
+                                    Any( rDenyList )
                                 );
 
 
             if (xWindow.is())
-                pInitArguments[3] <<= NamedValue("ParentWindow", makeAny(xWindow));
+                pInitArguments[3] <<= NamedValue("ParentWindow", Any(xWindow));
         }
 
         try
@@ -1216,7 +1216,7 @@ void FileDialogHelper_Impl::setControlHelpIds( const sal_Int16* _pControlId, con
                 DBG_ASSERT( INetURLObject( OStringToOUString( *_pHelpId, RTL_TEXTENCODING_UTF8 ) ).GetProtocol() == INetProtocol::NotValid, "Wrong HelpId!" );
                 OUString sId = sHelpIdPrefix +
                     OUString( *_pHelpId, strlen( *_pHelpId ), RTL_TEXTENCODING_UTF8 );
-                xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, makeAny( sId ) );
+                xControlAccess->setValue( *_pControlId, ControlActions::SET_HELP_URL, Any( sId ) );
 
                 ++_pControlId; ++_pHelpId;
             }
@@ -1570,7 +1570,7 @@ ErrCode FileDialogHelper_Impl::execute( std::vector<OUString>& rpURLList,
                     }
 
                     if ( aEncryptionData.hasElements() )
-                        rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData) ) );
+                        rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData) ) );
                 }
             }
             catch( const IllegalArgumentException& ){}
@@ -2009,15 +2009,15 @@ void SaveLastDirectory(OUString const& sContext, OUString const& sDirectory)
     if (found)
     {
         Reference<XPropertySet> el(v.get<Reference<XPropertySet>>(), UNO_SET_THROW);
-        el->setPropertyValue("LastPath", makeAny(sDirectory));
+        el->setPropertyValue("LastPath", Any(sDirectory));
     }
     else
     {
         Reference<XPropertySet> el(
             (Reference<lang::XSingleServiceFactory>(set, UNO_QUERY_THROW)->createInstance()),
             UNO_QUERY_THROW);
-        el->setPropertyValue("LastPath", makeAny(sDirectory));
-        Any v2(makeAny(el));
+        el->setPropertyValue("LastPath", Any(sDirectory));
+        Any v2(el);
         set->insertByName(sContext, v2);
     }
     batch->commit();
@@ -2053,7 +2053,7 @@ void FileDialogHelper_Impl::saveConfig()
             aFilter = EncodeSpaces_Impl( aFilter );
             SetToken( aUserData, 3, ' ', aFilter );
 
-            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
+            aDlgOpt.SetUserItem( USERITEM_NAME, Any( aUserData ) );
         }
         catch( const IllegalArgumentException& ){}
     }
@@ -2110,7 +2110,7 @@ void FileDialogHelper_Impl::saveConfig()
         }
 
         if ( bWriteConfig )
-            aDlgOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
+            aDlgOpt.SetUserItem( USERITEM_NAME, Any( aUserData ) );
     }
 
     // Store to config, if explicit context is set. Otherwise store in (global) runtime var.
@@ -2942,7 +2942,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
             // be unavailable, even for non-ODF documents, so append it here unconditionally
             pSet->Put(SfxUnoAnyItem(
                 SID_ENCRYPTIONDATA,
-                uno::makeAny(comphelper::concatSequences(
+                uno::Any(comphelper::concatSequences(
                     aEncryptionData, comphelper::OStorageHelper::CreatePackageEncryptionData(
                                          pPasswordRequest->getPassword())))));
         }
@@ -2959,7 +2959,7 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                         pPasswordRequest->getPasswordToModify());
                 if (aModifyPasswordInfo.hasElements())
                     pSet->Put(
-                        SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::makeAny(aModifyPasswordInfo)));
+                        SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(aModifyPasswordInfo)));
             }
             else
             {
@@ -2968,14 +2968,14 @@ ErrCode RequestPassword(const std::shared_ptr<const SfxFilter>& pCurrentFilter, 
                     pPasswordRequest->getPasswordToModify(),
                     pCurrentFilter->GetServiceName() == "com.sun.star.text.TextDocument");
                 if (nHash)
-                    pSet->Put(SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::makeAny(nHash)));
+                    pSet->Put(SfxUnoAnyItem(SID_MODIFYPASSWORDINFO, uno::Any(nHash)));
             }
         }
         else
         {
             uno::Sequence< beans::PropertyValue > aModifyPasswordInfo = ::comphelper::DocPasswordHelper::GenerateNewModifyPasswordInfo( pPasswordRequest->getPasswordToModify() );
             if ( aModifyPasswordInfo.hasElements() )
-                pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::makeAny( aModifyPasswordInfo ) ) );
+                pSet->Put( SfxUnoAnyItem( SID_MODIFYPASSWORDINFO, uno::Any( aModifyPasswordInfo ) ) );
         }
     }
     else

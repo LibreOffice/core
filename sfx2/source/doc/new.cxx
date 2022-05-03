@@ -308,7 +308,7 @@ SfxNewFileDialog::SfxNewFileDialog(weld::Window *pParent, SfxNewFileDialogMode n
 SfxNewFileDialog::~SfxNewFileDialog()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
-    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(m_xMoreBt->get_expanded() ? OUString("Y") : OUString("N")));
+    aDlgOpt.SetUserItem("UserItem", css::uno::Any(m_xMoreBt->get_expanded() ? OUString("Y") : OUString("N")));
 }
 
 bool SfxNewFileDialog::IsTemplate() const

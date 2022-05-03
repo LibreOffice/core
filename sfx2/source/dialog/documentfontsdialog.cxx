@@ -97,11 +97,11 @@ bool SfxDocumentFontsPage::FillItemSet( SfxItemSet* )
         {
             uno::Reference< lang::XMultiServiceFactory > xFac( pDocSh->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xProps( xFac->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY_THROW );
-            xProps->setPropertyValue("EmbedFonts", uno::makeAny(bEmbedFonts));
-            xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::makeAny(bEmbedUsedFonts));
-            xProps->setPropertyValue("EmbedLatinScriptFonts", uno::makeAny(bEmbedLatinScriptFonts));
-            xProps->setPropertyValue("EmbedAsianScriptFonts", uno::makeAny(bEmbedAsianScriptFonts));
-            xProps->setPropertyValue("EmbedComplexScriptFonts", uno::makeAny(bEmbedComplexScriptFonts));
+            xProps->setPropertyValue("EmbedFonts", uno::Any(bEmbedFonts));
+            xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::Any(bEmbedUsedFonts));
+            xProps->setPropertyValue("EmbedLatinScriptFonts", uno::Any(bEmbedLatinScriptFonts));
+            xProps->setPropertyValue("EmbedAsianScriptFonts", uno::Any(bEmbedAsianScriptFonts));
+            xProps->setPropertyValue("EmbedComplexScriptFonts", uno::Any(bEmbedComplexScriptFonts));
         }
         catch( uno::Exception& )
         {

@@ -84,15 +84,15 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBoxController(
 
         aPropValue.Name = "Frame";
         aPropValue.Value <<= rxFrame;
-        aPropertyVector.push_back(makeAny(aPropValue));
+        aPropertyVector.push_back(Any(aPropValue));
 
         aPropValue.Name = "ServiceManager";
         aPropValue.Value <<= ::comphelper::getProcessServiceFactory();
-        aPropertyVector.push_back(makeAny(aPropValue));
+        aPropertyVector.push_back(Any(aPropValue));
 
         aPropValue.Name = "CommandURL";
         aPropValue.Value <<= rsCommandName;
-        aPropertyVector.push_back(makeAny(aPropValue));
+        aPropertyVector.push_back(Any(aPropValue));
 
         Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));
         xInitialization->initialize(aArgs);
@@ -193,29 +193,29 @@ Reference<frame::XToolbarController> ControllerFactory::CreateToolBarController(
 
             aPropValue.Name = "ModuleIdentifier";
             aPropValue.Value <<= sModuleName;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
 
             aPropValue.Name = "Frame";
             aPropValue.Value <<= rxFrame;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
 
             aPropValue.Name = "ServiceManager";
             aPropValue.Value <<= comphelper::getProcessServiceFactory();
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
 
             aPropValue.Name = "ParentWindow";
             aPropValue.Value <<= rxToolbar;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
 
             aPropValue.Name = "IsSidebar";
             aPropValue.Value <<= bSideBar;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
 
             if (nWidth > 0)
             {
                 aPropValue.Name = "Width";
                 aPropValue.Value <<= nWidth;
-                aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropertyVector.push_back( Any( aPropValue ));
             }
 
             Sequence<Any> aArgs (comphelper::containerToSequence(aPropertyVector));

@@ -275,7 +275,7 @@ ErrCode SfxMacroLoader::loadMacro( const OUString& rURL, css::uno::Any& rRetval,
                 if ( bSetGlobalThisComponent )
                 {
                     // document is executed via AppBASIC, adjust ThisComponent variable
-                    aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", makeAny( pDoc->GetModel() ) );
+                    aOldThisComponent = pAppMgr->SetGlobalUNOConstant( "ThisComponent", Any( pDoc->GetModel() ) );
                 }
 
                 // just to let the shell be alive

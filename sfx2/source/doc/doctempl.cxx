@@ -761,7 +761,7 @@ bool SfxDocumentTemplates::CopyTo
         aTransferInfo.NewTitle = aTitle;
         aTransferInfo.NameClash = NameClash::RENAME;
 
-        Any aArg = makeAny( aTransferInfo );
+        Any aArg( aTransferInfo );
         aTarget.executeCommand( COMMAND_TRANSFER, aArg );
     }
     catch ( ContentCreationException& )

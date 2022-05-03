@@ -458,9 +458,9 @@ void SfxClassificationHelper::Impl::pushToDocumentProperties()
             try
             {
                 if (lcl_containsProperty(aProperties, rLabel.first))
-                    xPropertySet->setPropertyValue(rLabel.first, uno::makeAny(rLabel.second));
+                    xPropertySet->setPropertyValue(rLabel.first, uno::Any(rLabel.second));
                 else
-                    xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::makeAny(rLabel.second));
+                    xPropertyContainer->addProperty(rLabel.first, beans::PropertyAttribute::REMOVABLE, uno::Any(rLabel.second));
             }
             catch (const uno::Exception&)
             {

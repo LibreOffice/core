@@ -719,7 +719,7 @@ SfxTabDialogController::~SfxTabDialogController()
                 OUString sConfigId = OStringToOUString(elem->xTabPage->GetConfigId(),
                     RTL_TEXTENCODING_UTF8);
                 SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( aPageData ) );
+                aPageOpt.SetUserItem( USERITEM_NAME, Any( aPageData ) );
             }
 
             elem->xTabPage.reset();
@@ -963,7 +963,7 @@ void SfxTabDialogController::RemoveTabPage(const OString& rId)
                 OUString sConfigId = OStringToOUString(pDataObject->xTabPage->GetConfigId(),
                     RTL_TEXTENCODING_UTF8);
                 SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-                aPageOpt.SetUserItem( USERITEM_NAME, makeAny( aPageData ) );
+                aPageOpt.SetUserItem( USERITEM_NAME, Any( aPageData ) );
             }
 
             pDataObject->xTabPage.reset();

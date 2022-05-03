@@ -91,7 +91,7 @@ namespace sfx2
             ErrorCodeRequest aErrorCodeRequest;
             aErrorCodeRequest.ErrCode = sal_uInt32(nSfxErrorCode);
 
-            SfxMedium::CallApproveHandler( rxHandler, makeAny( aErrorCodeRequest ), false );
+            SfxMedium::CallApproveHandler( rxHandler, Any( aErrorCodeRequest ), false );
             rbAlreadyShown = true;
         }
 
@@ -121,7 +121,7 @@ namespace sfx2
         {
             DocumentMacroConfirmationRequest aRequest;
             aRequest.DocumentURL = rDocumentLocation;
-            return SfxMedium::CallApproveHandler( rxHandler, makeAny( aRequest ), true );
+            return SfxMedium::CallApproveHandler( rxHandler, Any( aRequest ), true );
         }
     }
 

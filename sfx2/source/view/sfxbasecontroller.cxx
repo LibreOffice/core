@@ -1192,7 +1192,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                         Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
                         Reference< beans::XPropertySet > xLayouterProps(
                             xFrameProps->getPropertyValue("LayoutManager"), uno::UNO_QUERY_THROW );
-                        xLayouterProps->setPropertyValue("PreserveContentSize", uno::makeAny( true ) );
+                        xLayouterProps->setPropertyValue("PreserveContentSize", uno::Any( true ) );
                     }
                     catch (const uno::Exception&)
                     {

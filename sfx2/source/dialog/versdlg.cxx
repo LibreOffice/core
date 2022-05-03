@@ -268,7 +268,7 @@ void SfxVersionDialog::Open_Impl()
     if ( GetEncryptionData_Impl( pObjShell->GetMedium()->GetItemSet(), aEncryptionData ) )
     {
         // there is a password, it should be used during the opening
-        SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) );
+        SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) );
         m_pViewFrame->GetDispatcher()->ExecuteList(
             SID_OPENDOC, SfxCallMode::ASYNCHRON,
             { &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem });

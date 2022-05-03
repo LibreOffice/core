@@ -482,7 +482,7 @@ getAllParts(struct DocumentMetadataAccess_Impl const& i_rImpl,
     catch (const uno::Exception& e)
     {
         throw lang::WrappedTargetRuntimeException("getAllParts: exception", nullptr,
-                                                  uno::makeAny(e));
+                                                  uno::Any(e));
     }
 }
 
@@ -497,11 +497,11 @@ mkException( OUString const & i_rMessage,
     iaioe.Code = i_ErrorCode;
 
     const beans::PropertyValue uriProp("Uri",
-        -1, uno::makeAny(i_rUri), static_cast<beans::PropertyState>(0));
+        -1, uno::Any(i_rUri), static_cast<beans::PropertyState>(0));
     const beans::PropertyValue rnProp(
         "ResourceName",
-        -1, uno::makeAny(i_rResource), static_cast<beans::PropertyState>(0));
-    iaioe.Arguments = { uno::makeAny(uriProp), uno::makeAny(rnProp) };
+        -1, uno::Any(i_rResource), static_cast<beans::PropertyState>(0));
+    iaioe.Arguments = { uno::Any(uriProp), uno::Any(rnProp) };
     return iaioe;
 }
 
@@ -520,11 +520,11 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
     if (!i_xHandler.is()) {
         throw lang::WrappedTargetException(
             "DocumentMetadataAccess::loadMetadataFromStorage: exception",
-            /* *this*/ nullptr, uno::makeAny(i_rException));
+            /* *this*/ nullptr, uno::Any(i_rException));
     }
 
     ::rtl::Reference< ::comphelper::OInteractionRequest > pRequest(
-        new ::comphelper::OInteractionRequest(uno::makeAny(i_rException)) );
+        new ::comphelper::OInteractionRequest(uno::Any(i_rException)) );
     ::rtl::Reference< ::comphelper::OInteractionRetry > pRetry(
         new ::comphelper::OInteractionRetry );
     ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove(
@@ -544,7 +544,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
         OSL_ENSURE(pAbort->wasSelected(), "no continuation selected?");
         throw lang::WrappedTargetException(
             "DocumentMetadataAccess::loadMetadataFromStorage: exception",
-            /* *this*/ nullptr, uno::makeAny(i_rException));
+            /* *this*/ nullptr, uno::Any(i_rException));
     }
 }
 
@@ -674,7 +674,7 @@ exportStream(struct DocumentMetadataAccess_Impl const & i_rImpl,
     if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
         xStreamProps->setPropertyValue(
             "MediaType",
-            uno::makeAny(OUString("application/rdf+xml")));
+            uno::Any(OUString("application/rdf+xml")));
     }
     const uno::Reference<io::XOutputStream> xOutStream(
         xStream->getOutputStream(), uno::UNO_SET_THROW );
@@ -1372,7 +1372,7 @@ DocumentMetadataAccess::storeMetadataToMedium(
             "DocumentMetadataAccess::storeMetadataToMedium Commit failed: " + nError.toHexString(),
             uno::Reference< uno::XInterface >(), sal_uInt32(nError));
         throw lang::WrappedTargetException(OUString(), *this,
-                uno::makeAny(ex));
+                uno::Any(ex));
     }
 }
 

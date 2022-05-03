@@ -615,7 +615,7 @@ SfxAutoRedactDialog::~SfxAutoRedactDialog()
         // Store the dialog data
         SvtViewOptions aDlgOpt(EViewType::Dialog,
                                OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
-        aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sUserDataStr));
+        aDlgOpt.SetUserItem("UserItem", css::uno::Any(sUserDataStr));
 
         if (!m_bTargetsCopied)
             clearTargets();

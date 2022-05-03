@@ -611,7 +611,7 @@ void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell const 
     OSL_ENSURE( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
     Sequence< PropertyValue > lProps{ comphelper::makePropertyValue(
         "ooSetupFactoryStyleFilter", i_nFilter | (m_bWantHierarchical ? 0x1000 : 0)) };
-    xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
+    xModuleManager->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), Any( lProps ) );
 }
 
 IMPL_LINK_NOARG(SfxCommonTemplateDialog_Impl, SaveSelection_Hdl, StyleList&, SfxObjectShell*)

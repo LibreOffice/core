@@ -44,11 +44,11 @@ SfxWatermarkItem* SfxWatermarkItem::Clone( SfxItemPool *) const
 bool SfxWatermarkItem::QueryValue( css::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= comphelper::InitPropertySequence( {
-        { "Text", css::uno::makeAny( m_aText ) },
-        { "Font", css::uno::makeAny( m_aFont ) },
-        { "Angle", css::uno::makeAny( m_nAngle ) },
-        { "Transparency", css::uno::makeAny( m_nTransparency ) },
-        { "Color", css::uno::makeAny( m_nColor ) },
+        { "Text", css::uno::Any( m_aText ) },
+        { "Font", css::uno::Any( m_aFont ) },
+        { "Angle", css::uno::Any( m_nAngle ) },
+        { "Transparency", css::uno::Any( m_nTransparency ) },
+        { "Color", css::uno::Any( m_nColor ) },
     } );
 
     return true;

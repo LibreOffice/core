@@ -332,8 +332,8 @@ IMPL_LINK(NotebookbarTabControl, OpenNotebookbarPopupMenu, NotebookBar*, pNotebo
         return;
 
     Sequence<Any> aArgs {
-        makeAny(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
-        makeAny(comphelper::makePropertyValue("Frame", m_xFrame)) };
+        Any(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
+        Any(comphelper::makePropertyValue("Frame", m_xFrame)) };
 
     Reference<XComponentContext> xContext = comphelper::getProcessComponentContext();
     Reference<XPopupMenuController> xPopupController(

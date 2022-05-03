@@ -462,9 +462,9 @@ void SfxTemplateManagerDlg::writeSettings ()
     // last folder
     Sequence< NamedValue > aSettings
     {
-        { TM_SETTING_LASTFOLDER, css::uno::makeAny(aLastFolder) },
-        { TM_SETTING_LASTAPPLICATION,     css::uno::makeAny(sal_uInt16(mxCBApp->get_active())) },
-        { TM_SETTING_VIEWMODE, css::uno::makeAny(static_cast<sal_Int16>(getTemplateViewMode()))}
+        { TM_SETTING_LASTFOLDER, css::uno::Any(aLastFolder) },
+        { TM_SETTING_LASTAPPLICATION,     css::uno::Any(sal_uInt16(mxCBApp->get_active())) },
+        { TM_SETTING_VIEWMODE, css::uno::Any(static_cast<sal_Int16>(getTemplateViewMode()))}
     };
 
     // write

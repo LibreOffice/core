@@ -217,7 +217,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
             uno::Reference< frame::XStorable > xStorable( xLoadable, uno::UNO_QUERY );
             xStorable->storeToURL( sUserTemplateURL, aArgs );
-            ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( true ));
+            ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::Any( true ));
             ::comphelper::ConfigurationHelper::flush( xConfig );
         }
         else
@@ -226,7 +226,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
 
             xSimpleFileAccess->copy( aBackupURL, sUserTemplateURL );
             xSimpleFileAccess->kill( aBackupURL );
-            ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::makeAny( false ));
+            ::comphelper::ConfigurationHelper::writeRelativeKey( xConfig, sConfPath, PROP_DEF_TEMPL_CHANGED, uno::Any( false ));
             ::comphelper::ConfigurationHelper::flush( xConfig );
         }
     }

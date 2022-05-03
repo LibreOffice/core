@@ -418,7 +418,7 @@ ErrCode  SfxFilterMatcher::GuessFilterControlDefaultUI( SfxMedium& rMedium, std:
                 // If there is no acceptable type for this document at all, the type detection has possibly returned something else.
                 // The DocumentService property is only a preselection, and all preselections are considered as optional!
                 // This "wrong" type will be sorted out now because we match only allowed filters to the detected type
-                uno::Sequence< beans::NamedValue > lQuery { { "Name", css::uno::makeAny(sTypeName) } };
+                uno::Sequence< beans::NamedValue > lQuery { { "Name", css::uno::Any(sTypeName) } };
 
                 pNewFilter = GetFilterForProps(lQuery, nMust, nDont);
             }
@@ -618,7 +618,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Mime( const OUStrin
         return nullptr;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq { { "MediaType", css::uno::makeAny(rMediaType) } };
+    css::uno::Sequence < css::beans::NamedValue > aSeq { { "MediaType", css::uno::Any(rMediaType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -644,7 +644,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4EA( const OUString&
         return nullptr;
     }
 
-    css::uno::Sequence < css::beans::NamedValue > aSeq { { "Name", css::uno::makeAny(rType) } };
+    css::uno::Sequence < css::beans::NamedValue > aSeq { { "Name", css::uno::Any(rType) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -680,7 +680,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4Extension( const OU
         sExt = sExt.copy(1);
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
-        { { "Extensions", css::uno::makeAny(uno::Sequence < OUString > { sExt } ) } };
+        { { "Extensions", css::uno::Any(uno::Sequence < OUString > { sExt } ) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 
@@ -690,7 +690,7 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4ClipBoardId( SotCli
         return nullptr;
 
     css::uno::Sequence < css::beans::NamedValue > aSeq
-        { { "ClipboardFormat", css::uno::makeAny(SotExchange::GetFormatName( nId )) } };
+        { { "ClipboardFormat", css::uno::Any(SotExchange::GetFormatName( nId )) } };
     return GetFilterForProps( aSeq, nMust, nDont );
 }
 

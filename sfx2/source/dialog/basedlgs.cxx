@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SfxSingleTabDialogController, OKHdl_Impl, weld::Button&, void)
         OUString sConfigId = OStringToOUString(m_xSfxPage->GetConfigId(),
             RTL_TEXTENCODING_UTF8);
         SvtViewOptions aPageOpt(EViewType::TabPage, sConfigId);
-        aPageOpt.SetUserItem( USERITEM_NAME, makeAny( sData ) );
+        aPageOpt.SetUserItem( USERITEM_NAME, Any( sData ) );
         m_xDialog->response(RET_OK);
     }
     else

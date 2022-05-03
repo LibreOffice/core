@@ -915,7 +915,7 @@ bool SfxDocumentPage::FillItemSet( SfxItemSet* rSet )
                     OUString aImagePreferredDPIString = m_xImagePreferredDpiComboBox->get_active_text();
                     nImagePreferredDPI = aImagePreferredDPIString.toInt32();
                 }
-                xProps->setPropertyValue("ImagePreferredDPI", uno::makeAny(nImagePreferredDPI));
+                xProps->setPropertyValue("ImagePreferredDPI", uno::Any(nImagePreferredDPI));
             }
         }
     }

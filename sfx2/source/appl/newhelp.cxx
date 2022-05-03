@@ -969,7 +969,7 @@ SearchTabPage_Impl::~SearchTabPage_Impl()
                 INetURLObject::EncodeMechanism::All ));
     }
 
-    Any aUserItem = makeAny( aUserData.makeStringAndClear() );
+    Any aUserItem( aUserData.makeStringAndClear() );
     aViewOpt.SetUserItem( USERITEM_NAME, aUserItem );
 
     m_xSearchED.reset();
@@ -1831,9 +1831,9 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, SelectHdl, Timer *, void)
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                xSrchDesc->setPropertyValue( "SearchRegularExpression", makeAny( true ) );
+                xSrchDesc->setPropertyValue( "SearchRegularExpression", Any( true ) );
                 if ( bIsFullWordSearch )
-                    xSrchDesc->setPropertyValue( "SearchWords", makeAny( true ) );
+                    xSrchDesc->setPropertyValue( "SearchWords", Any( true ) );
 
                 xSrchDesc->setSearchString( sfx2::PrepareSearchString( aSearchText, GetBreakIterator(), false ) );
                 Reference< XIndexAccess > xSelection = xSearchable->findAll( xSrchDesc );
@@ -1882,9 +1882,9 @@ void SfxHelpTextWindow_Impl::FindHdl(sfx2::SearchDialog* pDlg)
             {
                 // create descriptor, set string and find all words
                 Reference < XSearchDescriptor > xSrchDesc = xSearchable->createSearchDescriptor();
-                xSrchDesc->setPropertyValue( "SearchWords", makeAny(pDlg->IsOnlyWholeWords()) );
-                xSrchDesc->setPropertyValue( "SearchCaseSensitive", makeAny(pDlg->IsMarchCase()) );
-                xSrchDesc->setPropertyValue( "SearchBackwards", makeAny(pDlg->IsSearchBackwards()) );
+                xSrchDesc->setPropertyValue( "SearchWords", Any(pDlg->IsOnlyWholeWords()) );
+                xSrchDesc->setPropertyValue( "SearchCaseSensitive", Any(pDlg->IsMarchCase()) );
+                xSrchDesc->setPropertyValue( "SearchBackwards", Any(pDlg->IsSearchBackwards()) );
                 xSrchDesc->setSearchString( pDlg->GetSearchText() );
                 Reference< XInterface > xSelection;
                 Reference< XTextRange > xCursor = getCursor();
@@ -1956,7 +1956,7 @@ IMPL_LINK_NOARG(SfxHelpTextWindow_Impl, CheckHdl, weld::Toggleable&, void)
     try
     {
         ConfigurationHelper::writeRelativeKey(
-            xConfiguration, PATH_OFFICE_FACTORIES + sCurrentFactory, KEY_HELP_ON_OPEN, makeAny( bChecked ) );
+            xConfiguration, PATH_OFFICE_FACTORIES + sCurrentFactory, KEY_HELP_ON_OPEN, Any( bChecked ) );
         ConfigurationHelper::flush( xConfiguration );
     }
     catch( Exception const & )
@@ -2156,7 +2156,7 @@ void SfxHelpTextWindow_Impl::SetPageStyleHeaderOff() const
                             if ( xContainer->getByName( sStyleName ) >>= xStyle )
                             {
                                 Reference < XPropertySet > xPropSet( xStyle, UNO_QUERY );
-                                xPropSet->setPropertyValue( "HeaderIsOn",  makeAny( false ) );
+                                xPropSet->setPropertyValue( "HeaderIsOn",  Any( false ) );
 
                                 Reference< XModifiable > xReset(xStyles, UNO_QUERY);
                                 xReset->setModified(false);
@@ -2297,7 +2297,7 @@ void SfxHelpWindow_Impl::SaveConfig()
         + ";" + OUString::number( aWinPos.X() )
         + ";" + OUString::number( aWinPos.Y() );
 
-    aViewOpt.SetUserItem( USERITEM_NAME, makeAny( aUserData ) );
+    aViewOpt.SetUserItem( USERITEM_NAME, Any( aUserData ) );
 }
 
 void SfxHelpWindow_Impl::ShowStartPage()
@@ -2392,13 +2392,13 @@ void SfxHelpWindow_Impl::openDone(std::u16string_view sURL    ,
             Reference < XViewSettingsSupplier > xSettings( xController, UNO_QUERY );
             Reference < XPropertySet > xViewProps = xSettings->getViewSettings();
             Reference< XPropertySetInfo > xInfo = xViewProps->getPropertySetInfo();
-            xViewProps->setPropertyValue( "ShowContentTips", makeAny( false ) );
-            xViewProps->setPropertyValue( "ShowGraphics", makeAny( true ) );
-            xViewProps->setPropertyValue( "ShowTables", makeAny( true ) );
-            xViewProps->setPropertyValue( "HelpURL", makeAny( OUString("HID:SFX2_HID_HELP_ONHELP") ) );
+            xViewProps->setPropertyValue( "ShowContentTips", Any( false ) );
+            xViewProps->setPropertyValue( "ShowGraphics", Any( true ) );
+            xViewProps->setPropertyValue( "ShowTables", Any( true ) );
+            xViewProps->setPropertyValue( "HelpURL", Any( OUString("HID:SFX2_HID_HELP_ONHELP") ) );
             OUString sProperty( "IsExecuteHyperlinks" );
             if ( xInfo->hasPropertyByName( sProperty ) )
-                xViewProps->setPropertyValue( sProperty, makeAny( true ) );
+                xViewProps->setPropertyValue( sProperty, Any( true ) );
             xController->restoreViewData(Any());
         }
     }
