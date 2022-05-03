@@ -539,13 +539,13 @@ bool SwHTMLParser::InsertEmbed()
             if ( xSet.is() )
             {
                 if( bHasURL )
-                    xSet->setPropertyValue("PluginURL", uno::makeAny( aURL ) );
+                    xSet->setPropertyValue("PluginURL", uno::Any( aURL ) );
                 if( bHasType )
-                    xSet->setPropertyValue("PluginMimeType", uno::makeAny( aType ) );
+                    xSet->setPropertyValue("PluginMimeType", uno::Any( aType ) );
 
                 uno::Sequence < beans::PropertyValue > aProps;
                 aCmdLst.FillSequence( aProps );
-                xSet->setPropertyValue("PluginCommands", uno::makeAny( aProps ) );
+                xSet->setPropertyValue("PluginCommands", uno::Any( aProps ) );
 
             }
         }
@@ -582,9 +582,9 @@ bool SwHTMLParser::InsertEmbed()
                     if (bOwnFormat)
                     {
                         uno::Sequence<beans::PropertyValue> aMedium = comphelper::InitPropertySequence(
-                            { { "InputStream", uno::makeAny(xInStream) },
-                              { "URL", uno::makeAny(OUString("private:stream")) },
-                              { "DocumentBaseURL", uno::makeAny(m_sBaseURL) } });
+                            { { "InputStream", uno::Any(xInStream) },
+                              { "URL", uno::Any(OUString("private:stream")) },
+                              { "DocumentBaseURL", uno::Any(m_sBaseURL) } });
                         xObj = aCnt.InsertEmbeddedObject(aMedium, aName, &m_sBaseURL);
                     }
                     else
@@ -612,7 +612,7 @@ bool SwHTMLParser::InsertEmbed()
                     // Set media type of the native data.
                     uno::Reference<beans::XPropertySet> xOutStreamProps(xOutStream, uno::UNO_QUERY);
                     if (xOutStreamProps.is())
-                        xOutStreamProps->setPropertyValue("MediaType", uno::makeAny(aType));
+                        xOutStreamProps->setPropertyValue("MediaType", uno::Any(aType));
                 }
             }
             xObj = aCnt.GetEmbeddedObject(aObjName);
@@ -651,7 +651,7 @@ bool SwHTMLParser::InsertEmbed()
         // during parsing.
         uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue("StreamReadOnly",
                                                                                    true) };
-        uno::Sequence<uno::Any> aArguments{ uno::makeAny(aValues) };
+        uno::Sequence<uno::Any> aArguments{ uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
     }
     SwFrameFormat* pFlyFormat =
@@ -662,7 +662,7 @@ bool SwHTMLParser::InsertEmbed()
     {
         uno::Sequence<beans::PropertyValue> aValues{ comphelper::makePropertyValue("StreamReadOnly",
                                                                                    false) };
-        uno::Sequence<uno::Any> aArguments{ uno::makeAny(aValues) };
+        uno::Sequence<uno::Any> aArguments{ uno::Any(aValues) };
         xObjInitialization->initialize(aArguments);
     }
 
@@ -1097,24 +1097,24 @@ void SwHTMLParser::InsertFloatingFrame()
                 bool bHasBorder = aFrameDesc.HasFrameBorder();
                 Size aMargin = aFrameDesc.GetMargin();
 
-                xSet->setPropertyValue("FrameURL", uno::makeAny( aFrameDesc.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
-                xSet->setPropertyValue("FrameName", uno::makeAny( aName ) );
+                xSet->setPropertyValue("FrameURL", uno::Any( aFrameDesc.GetURL().GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
+                xSet->setPropertyValue("FrameName", uno::Any( aName ) );
 
                 if ( eScroll == ScrollingMode::Auto )
                     xSet->setPropertyValue("FrameIsAutoScroll",
-                        uno::makeAny( true ) );
+                        uno::Any( true ) );
                 else
                     xSet->setPropertyValue("FrameIsScrollingMode",
-                        uno::makeAny( eScroll == ScrollingMode::Yes ) );
+                        uno::Any( eScroll == ScrollingMode::Yes ) );
 
                 xSet->setPropertyValue("FrameIsBorder",
-                        uno::makeAny( bHasBorder ) );
+                        uno::Any( bHasBorder ) );
 
                 xSet->setPropertyValue("FrameMarginWidth",
-                    uno::makeAny( sal_Int32( aMargin.Width() ) ) );
+                    uno::Any( sal_Int32( aMargin.Width() ) ) );
 
                 xSet->setPropertyValue("FrameMarginHeight",
-                    uno::makeAny( sal_Int32( aMargin.Height() ) ) );
+                    uno::Any( sal_Int32( aMargin.Height() ) ) );
             }
         }
     }

@@ -225,7 +225,7 @@ CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::makeAny(true));
+    xContentControlProps->setPropertyValue("ShowingPlaceHolder", uno::Any(true));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:
@@ -257,10 +257,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     uno::Reference<text::XTextContent> xContentControl(
         xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
-    xContentControlProps->setPropertyValue("Checkbox", uno::makeAny(true));
-    xContentControlProps->setPropertyValue("Checked", uno::makeAny(true));
-    xContentControlProps->setPropertyValue("CheckedState", uno::makeAny(OUString(u"☒")));
-    xContentControlProps->setPropertyValue("UncheckedState", uno::makeAny(OUString(u"☐")));
+    xContentControlProps->setPropertyValue("Checkbox", uno::Any(true));
+    xContentControlProps->setPropertyValue("Checked", uno::Any(true));
+    xContentControlProps->setPropertyValue("CheckedState", uno::Any(OUString(u"☒")));
+    xContentControlProps->setPropertyValue("UncheckedState", uno::Any(OUString(u"☐")));
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     // When exporting to DOCX:

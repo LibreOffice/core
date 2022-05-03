@@ -1924,8 +1924,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf105413)
     pWrtShell->EndPara(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 1")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 1")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 
@@ -1962,8 +1962,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
     pWrtShell->Down(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 1")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 1")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 
@@ -1993,8 +1993,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817)
     CPPUNIT_ASSERT_EQUAL(OUString("3"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
 
     uno::Sequence<beans::PropertyValue> aPropertyValues2 = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 2")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 2")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues2);
 
@@ -2045,8 +2045,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     pWrtShell->Down(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 1")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 1")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 
@@ -2076,8 +2076,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_round_trip)
     CPPUNIT_ASSERT_EQUAL(OUString("3"), getProperty<OUString>(getParagraph(3), "ListLabelString"));
 
     uno::Sequence<beans::PropertyValue> aPropertyValues2 = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 2")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 2")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues2);
 
@@ -2128,8 +2128,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest2, testTdf76817_custom_outline)
     pWrtShell->Down(/*bSelect=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 1")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 1")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 

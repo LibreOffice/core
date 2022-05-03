@@ -43,7 +43,7 @@ CPPUNIT_TEST_FIXTURE(Test, testAuthorityTooltip)
         comphelper::makePropertyValue("Title", OUString("mytitle")),
         comphelper::makePropertyValue("Year", OUString("2020")),
     };
-    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    xField->setPropertyValue("Fields", uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();

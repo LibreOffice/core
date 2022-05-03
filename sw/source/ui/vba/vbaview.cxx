@@ -197,7 +197,7 @@ SwVbaView::getTableGridLines()
 void SAL_CALL
 SwVbaView::setTableGridLines( sal_Bool _tablegridlines )
 {
-    mxViewSettings->setPropertyValue("ShowTableBoundaries", uno::makeAny( _tablegridlines ) );
+    mxViewSettings->setPropertyValue("ShowTableBoundaries", uno::Any( _tablegridlines ) );
 }
 
 ::sal_Int32 SAL_CALL
@@ -218,12 +218,12 @@ SwVbaView::setType( ::sal_Int32 _type )
         case word::WdViewType::wdPrintView:
         case word::WdViewType::wdNormalView:
         {
-            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( false ) );
+            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::Any( false ) );
             break;
         }
         case word::WdViewType::wdWebView:
         {
-            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::makeAny( true ) );
+            mxViewSettings->setPropertyValue("ShowOnlineLayout", uno::Any( true ) );
             break;
         }
         case word::WdViewType::wdPrintPreview:
@@ -331,8 +331,8 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
     xPageProps->getPropertyValue( aPropIsShared ) >>= isShared;
     if( !isOn )
     {
-        xPageProps->setPropertyValue( aPropIsOn, uno::makeAny( true ) );
-        xPageProps->setPropertyValue( aPropBodyDistance, uno::makeAny( DEFAULT_BODY_DISTANCE ) );
+        xPageProps->setPropertyValue( aPropIsOn, uno::Any( true ) );
+        xPageProps->setPropertyValue( aPropBodyDistance, uno::Any( DEFAULT_BODY_DISTANCE ) );
     }
     if( !isShared )
     {

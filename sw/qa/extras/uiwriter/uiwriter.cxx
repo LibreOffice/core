@@ -1332,8 +1332,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testFdo87448)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor( comphelper::InitPropertySequence({
-            { "OutputStream", uno::makeAny(xOutputStream) },
-            { "FilterName", uno::makeAny(OUString("SVM")) }
+            { "OutputStream", uno::Any(xOutputStream) },
+            { "FilterName", uno::Any(OUString("SVM")) }
         }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
@@ -1366,7 +1366,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testTextCursorInvalidation)
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPageStyle.is());
-    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(true));
+    xPageStyle->setPropertyValue("HeaderIsOn", uno::Any(true));
     uno::Reference<text::XText> xHeader(getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText"));
     CPPUNIT_ASSERT(xHeader.is());
     // create cursor inside the header text

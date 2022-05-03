@@ -80,7 +80,7 @@ static void lcl_SetBOOLProp(
 {
     if(xInfo->hasPropertyByName(aPropName))
     {
-        xProps->setPropertyValue(aPropName, makeAny(bValue));
+        xProps->setPropertyValue(aPropName, Any(bValue));
     }
 }
 
@@ -170,7 +170,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
             uno::Reference< beans::XPropertySet >  xSectPr(m_vTypeData[i].m_pxIndexSections->xContainerSection, uno::UNO_QUERY);
             if(xSectPr.is())
             {
-                xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, makeAny(i == nTOXIndex));
+                xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, Any(i == nTOXIndex));
             }
         }
         // set properties

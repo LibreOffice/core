@@ -557,7 +557,7 @@ SwSpellPopup::SwSpellPopup(
     checkRedline();
     m_xPopupMenu->RemoveDisabledEntries(true);
 
-    SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::makeAny( true ));
+    SvtLinguConfig().SetProperty( UPN_IS_GRAMMAR_INTERACTIVE, uno::Any( true ));
 
     InitItemCommands(rSuggestions);
 }

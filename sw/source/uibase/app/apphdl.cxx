@@ -772,15 +772,15 @@ void SwModule::ExecOther(SfxRequest& rReq)
             // now the record has to be merged into the source document
             // TODO can we re-use PerformMailMerge() here somehow?
             const SwDBData& rDBData = xConfigItem->GetCurrentDBData();
-            uno::Sequence<uno::Any> vSelection({ uno::makeAny(xConfigItem->GetResultSetPosition()) });
+            uno::Sequence<uno::Any> vSelection({ uno::Any(xConfigItem->GetResultSetPosition()) });
             svx::ODataAccessDescriptor aDescriptor(::comphelper::InitPropertySequence({
-                        {"Selection",        uno::makeAny(vSelection)},
-                        {"DataSourceName",   uno::makeAny(rDBData.sDataSource)},
-                        {"Command",          uno::makeAny(rDBData.sCommand)},
-                        {"CommandType",      uno::makeAny(rDBData.nCommandType)},
-                        {"ActiveConnection", uno::makeAny(xConfigItem->GetConnection().getTyped())},
-                        {"Filter",           uno::makeAny(xConfigItem->GetFilter())},
-                        {"Cursor",           uno::makeAny(xConfigItem->GetResultSet())}
+                        {"Selection",        uno::Any(vSelection)},
+                        {"DataSourceName",   uno::Any(rDBData.sDataSource)},
+                        {"Command",          uno::Any(rDBData.sCommand)},
+                        {"CommandType",      uno::Any(rDBData.nCommandType)},
+                        {"ActiveConnection", uno::Any(xConfigItem->GetConnection().getTyped())},
+                        {"Filter",           uno::Any(xConfigItem->GetFilter())},
+                        {"Cursor",           uno::Any(xConfigItem->GetResultSet())}
                         }));
 
             SwWrtShell& rSh = pView->GetWrtShell();

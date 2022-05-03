@@ -287,15 +287,14 @@ CPPUNIT_TEST_FIXTURE(Test, testNestedHyperlink)
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
         uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-        xCursorProps->setPropertyValue("HyperLinkURL", uno::makeAny(OUString("http://body.com/")));
+        xCursorProps->setPropertyValue("HyperLinkURL", uno::Any(OUString("http://body.com/")));
         uno::Reference<text::XText> xFootnoteText(xFootnote, uno::UNO_QUERY);
         xCursor = xFootnoteText->createTextCursor();
         xFootnoteText->insertString(xCursor, "x", /*bAbsorb=*/false);
         xCursor->gotoStart(/*bExpand=*/false);
         xCursor->gotoEnd(/*bExpand=*/true);
         xCursorProps.set(xCursor, uno::UNO_QUERY);
-        xCursorProps->setPropertyValue("HyperLinkURL",
-                                       uno::makeAny(OUString("http://footnote.com/")));
+        xCursorProps->setPropertyValue("HyperLinkURL", uno::Any(OUString("http://footnote.com/")));
     }
 
     // When exporting to RTF:

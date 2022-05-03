@@ -3657,10 +3657,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlapWrap)
     xShape->setSize(aSize);
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(xDocument, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::Any(false));
     xShapeProperties->setPropertyValue("AnchorType",
-                                       uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProperties->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode_THROUGH));
+                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProperties->setPropertyValue("Surround", uno::Any(text::WrapTextMode_THROUGH));
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     aPoint = awt::Point(2000, 2000);
@@ -3668,10 +3668,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter, testShapeAllowOverlapWrap)
     xShape->setPosition(aPoint);
     xShape->setSize(aSize);
     xShapeProperties.set(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::Any(false));
     xShapeProperties->setPropertyValue("AnchorType",
-                                       uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProperties->setPropertyValue("Surround", uno::makeAny(text::WrapTextMode_THROUGH));
+                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProperties->setPropertyValue("Surround", uno::Any(text::WrapTextMode_THROUGH));
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
     // Now verify that the rectangle of the anchored objects do overlap.

@@ -120,7 +120,7 @@ uno::Any PrivateProfileStringListener::getValueEvent()
     sValue = OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
 
 
-    return uno::makeAny( sValue );
+    return uno::Any( sValue );
 }
 
 void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
@@ -253,7 +253,7 @@ SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rS
     OString aKey(OUStringToOString(rKey, RTL_TEXTENCODING_DONTKNOW));
     maPrivateProfileStringListener.Initialize( sFileUrl, aGroupName, aKey );
 
-    return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
+    return uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
 }
 
 OUString

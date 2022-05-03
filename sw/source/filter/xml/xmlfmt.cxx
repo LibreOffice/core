@@ -333,7 +333,7 @@ SwXMLTextStyleContext_Impl::Finish( bool bOverwrite )
 
         try
         {
-            xPropSet->setPropertyValue(UNO_NAME_PARA_STYLE_CONDITIONS, uno::makeAny(aSeq));
+            xPropSet->setPropertyValue(UNO_NAME_PARA_STYLE_CONDITIONS, uno::Any(aSeq));
         }
         catch (uno::Exception const&)
         {
@@ -473,7 +473,7 @@ void SwXMLCellStyleContext::AddDataFormat()
     if (aIter != GetProperties().end())
         aIter->maValue <<= nNumberFormat;
     else
-        GetProperties().push_back(XMLPropertyState(nIndex, makeAny(nNumberFormat)));
+        GetProperties().push_back(XMLPropertyState(nIndex, Any(nNumberFormat)));
 }
 
 void SwXMLCellStyleContext::FillPropertySet(const css::uno::Reference<css::beans::XPropertySet>& rPropSet)

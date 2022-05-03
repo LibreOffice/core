@@ -200,7 +200,7 @@ SwInsertChart::SwInsertChart( const Link<css::ui::dialogs::DialogClosedEvent*, v
                         tools::Rectangle aRect( aSwRect.SVRect() );
                         Point aDialogPos = SwGetChartDialogPos( &rWrtShell.GetView().GetEditWin(), aDialogSize, aRect );
                         xDialogProps->setPropertyValue("Position",
-                            uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
+                            uno::Any( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                     }
                 }
             }

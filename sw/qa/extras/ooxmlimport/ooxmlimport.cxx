@@ -1359,7 +1359,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo87488)
     {
         uno::Reference<beans::XPropertySet> props(group->getByIndex(1), uno::UNO_QUERY);
         CPPUNIT_ASSERT_EQUAL(props->getPropertyValue("RotateAngle"),
-                             uno::makeAny<sal_Int32>(270 * 100));
+                             uno::Any(sal_Int32(270 * 100)));
         comphelper::SequenceAsHashMap geom(props->getPropertyValue("CustomShapeGeometry"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(90), geom["TextPreRotateAngle"].get<sal_Int32>());
     }

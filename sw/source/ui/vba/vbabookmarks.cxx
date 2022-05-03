@@ -43,7 +43,7 @@ public:
     {
         uno::Reference< container::XNamed > xNamed( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         OUString aName = xNamed->getName();
-        return uno::makeAny( uno::Reference< word::XBookmark > ( new SwVbaBookmark( m_xParent, m_xContext, mxModel, aName ) ) );
+        return uno::Any( uno::Reference< word::XBookmark > ( new SwVbaBookmark( m_xParent, m_xContext, mxModel, aName ) ) );
     }
 
 };
@@ -134,7 +134,7 @@ SwVbaBookmarks::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< container::XNamed > xNamed( aSource, uno::UNO_QUERY_THROW );
     OUString aName = xNamed->getName();
-    return uno::makeAny( uno::Reference< word::XBookmark > ( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
+    return uno::Any( uno::Reference< word::XBookmark > ( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
 }
 
 void SwVbaBookmarks::removeBookmarkByName( const OUString& rName )
@@ -175,7 +175,7 @@ SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange )
 
     addBookmarkByName( mxModel, rName, xTextRange );
 
-    return uno::makeAny( uno::Reference< word::XBookmark >( new SwVbaBookmark( getParent(), mxContext, mxModel, rName ) ) );
+    return uno::Any( uno::Reference< word::XBookmark >( new SwVbaBookmark( getParent(), mxContext, mxModel, rName ) ) );
 }
 
 sal_Int32 SAL_CALL

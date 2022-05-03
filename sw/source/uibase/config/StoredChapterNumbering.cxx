@@ -129,7 +129,7 @@ public:
         uno::Sequence<beans::PropertyValue> const ret(
             SwXNumberingRules::GetPropertiesForNumFormat(
                 *pNumFormat, *pCharStyleName, &dummy, ""));
-        return uno::makeAny(ret);
+        return uno::Any(ret);
     }
 
     // XIndexReplace

@@ -82,7 +82,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf116640)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "Columns", uno::makeAny(sal_Int32(2)) } }));
+        comphelper::InitPropertySequence({ { "Columns", uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertSection", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -387,7 +387,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSectionInTableInTable3)
     uno::Reference<text::XTextTable> xRowSupplier(xTable, uno::UNO_QUERY);
     uno::Reference<table::XTableRows> xRows = xRowSupplier->getRows();
     uno::Reference<beans::XPropertySet> xRow(xRows->getByIndex(1), uno::UNO_QUERY);
-    xRow->setPropertyValue("IsSplitAllowed", uno::makeAny(true));
+    xRow->setPropertyValue("IsSplitAllowed", uno::Any(true));
     // This never returned.
     calcLayout();
 
@@ -634,11 +634,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testTdf108048)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Kind", uno::makeAny(sal_Int16(3)) },
-        { "TemplateName", uno::makeAny(OUString("Default Page Style")) },
-        { "PageNumber",
-          uno::makeAny(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
-        { "PageNumberFilled", uno::makeAny(true) },
+        { "Kind", uno::Any(sal_Int16(3)) },
+        { "TemplateName", uno::Any(OUString("Default Page Style")) },
+        { "PageNumber", uno::Any(sal_uInt16(6)) }, // Even number to avoid auto-inserted blank page
+        { "PageNumberFilled", uno::Any(true) },
     });
     dispatchCommand(mxComponent, ".uno:InsertBreak", aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
@@ -1142,8 +1141,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     // CASE 2 - font embedding enabled, but embed used fonts disabled
 
     // Enable font embedding, disable embedding used font only
-    xProps->setPropertyValue("EmbedFonts", uno::makeAny(true));
-    xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::makeAny(false));
+    xProps->setPropertyValue("EmbedFonts", uno::Any(true));
+    xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::Any(false));
 
     // Save the document again
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
@@ -1202,11 +1201,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testFontEmbedding)
     // CASE 3 - font embedding enabled, embed only used fonts enabled
 
     // Enable font embedding and setting to embed used fonts only
-    xProps->setPropertyValue("EmbedFonts", uno::makeAny(true));
-    xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::makeAny(true));
-    xProps->setPropertyValue("EmbedLatinScriptFonts", uno::makeAny(true));
-    xProps->setPropertyValue("EmbedAsianScriptFonts", uno::makeAny(true));
-    xProps->setPropertyValue("EmbedComplexScriptFonts", uno::makeAny(true));
+    xProps->setPropertyValue("EmbedFonts", uno::Any(true));
+    xProps->setPropertyValue("EmbedOnlyUsedFonts", uno::Any(true));
+    xProps->setPropertyValue("EmbedLatinScriptFonts", uno::Any(true));
+    xProps->setPropertyValue("EmbedAsianScriptFonts", uno::Any(true));
+    xProps->setPropertyValue("EmbedComplexScriptFonts", uno::Any(true));
 
     // Save the document again
     xStorable->storeToURL(aTempFile.GetURL(), aDescriptor);
@@ -1328,12 +1327,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testSpellOnlineParameter)
     bool bSet = pOpt->IsOnlineSpell();
 
     uno::Sequence<beans::PropertyValue> params
-        = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
+        = comphelper::InitPropertySequence({ { "Enable", uno::Any(!bSet) } });
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 
     // set the same state as now and we don't expect any change (no-toggle)
-    params = comphelper::InitPropertySequence({ { "Enable", uno::makeAny(!bSet) } });
+    params = comphelper::InitPropertySequence({ { "Enable", uno::Any(!bSet) } });
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());
 }
@@ -1996,10 +1995,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest6, testHatchFill)
     xShape->setSize(awt::Size(10000, 10000));
     xShape->setPosition(awt::Point(1000, 1000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_HATCH));
-    xShapeProps->setPropertyValue("FillHatchName", uno::makeAny(OUString("Black 0 Degrees")));
-    xShapeProps->setPropertyValue("FillBackground", uno::makeAny(false));
-    xShapeProps->setPropertyValue("FillTransparence", uno::makeAny(sal_Int32(30)));
+    xShapeProps->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_HATCH));
+    xShapeProps->setPropertyValue("FillHatchName", uno::Any(OUString("Black 0 Degrees")));
+    xShapeProps->setPropertyValue("FillBackground", uno::Any(false));
+    xShapeProps->setPropertyValue("FillTransparence", uno::Any(sal_Int32(30)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
     xDrawPage->add(xShape);

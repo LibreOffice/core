@@ -550,8 +550,8 @@ void SwModelTestBase::reload(const char* pFilter, const char* filename, const ch
         {
             OUString sPassword = OUString::createFromAscii(pPassword);
             css::uno::Sequence<css::beans::NamedValue> aEncryptionData{
-                { "CryptoType", css::uno::makeAny(OUString("Standard")) },
-                { "OOXPassword", css::uno::makeAny(sPassword) }
+                { "CryptoType", css::uno::Any(OUString("Standard")) },
+                { "OOXPassword", css::uno::Any(sPassword) }
             };
             aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA] <<= aEncryptionData;
         }

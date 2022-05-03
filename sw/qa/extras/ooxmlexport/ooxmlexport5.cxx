@@ -156,7 +156,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf120852_readOnlyUnProtected, "tdf120852_readOnlyU
     {
         CPPUNIT_ASSERT_MESSAGE("Section is not protected", !getProperty<bool>(xSect, "IsProtected"));
         // Enable section protection. The round-trip should have forms protection enabled.
-        xSect->setPropertyValue("IsProtected", uno::makeAny(true));
+        xSect->setPropertyValue("IsProtected", uno::Any(true));
     }
     else
     {

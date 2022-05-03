@@ -50,8 +50,7 @@
             /* Create & apply new URL */                                                           \
             OUString sOriginalFileInTempDir = sTempDir + sFileName;                                \
             uno::Reference<beans::XPropertySet> xPropertySet(xText, css::uno::UNO_QUERY);          \
-            xPropertySet->setPropertyValue("HyperLinkURL",                                         \
-                                           css::uno::makeAny(sOriginalFileInTempDir));             \
+            xPropertySet->setPropertyValue("HyperLinkURL", css::uno::Any(sOriginalFileInTempDir)); \
         }                                                                                          \
                                                                                                    \
     public:                                                                                        \

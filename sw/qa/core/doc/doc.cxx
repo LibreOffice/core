@@ -210,10 +210,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testImageHyperlinkStyle)
     xText->insertTextContent(xCursor, xImage, /*bAbsorb=*/false);
     uno::Reference<beans::XPropertySet> xImageProps(xImage, uno::UNO_QUERY);
     OUString aExpected = "http://www.example.com";
-    xImageProps->setPropertyValue("HyperLinkURL", uno::makeAny(aExpected));
+    xImageProps->setPropertyValue("HyperLinkURL", uno::Any(aExpected));
 
     // When applying a frame style on it:
-    xImageProps->setPropertyValue("FrameStyleName", uno::makeAny(OUString("Frame")));
+    xImageProps->setPropertyValue("FrameStyleName", uno::Any(OUString("Frame")));
 
     // Then make sure that the hyperlink is not lost:
     auto aActual = getProperty<OUString>(xImageProps, "HyperLinkURL");

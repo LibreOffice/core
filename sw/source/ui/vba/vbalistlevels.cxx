@@ -39,7 +39,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex <= pListLevels->getCount() )
-            return pListLevels->Item( uno::makeAny( nIndex++ ), uno::Any() );
+            return pListLevels->Item( uno::Any( nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -69,7 +69,7 @@ uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any&
     if( nIndex <=0 || nIndex > getCount() )
         throw  uno::RuntimeException("Index out of bounds" );
 
-    return uno::makeAny( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, pListHelper, nIndex - 1 ) ) );
+    return uno::Any( uno::Reference< word::XListLevel >( new SwVbaListLevel( this, mxContext, pListHelper, nIndex - 1 ) ) );
 }
 
 // XEnumerationAccess

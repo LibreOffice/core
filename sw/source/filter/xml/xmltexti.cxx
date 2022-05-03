@@ -696,10 +696,10 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             {
                 if( bValidURL )
                     xSet->setPropertyValue("PluginURL",
-                        makeAny( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
+                        Any( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ) ) );
                 if( bValidMimeType )
                     xSet->setPropertyValue("PluginMimeType",
-                        makeAny( rMimeType ) );
+                        Any( rMimeType ) );
             }
 
             SwFrameFormat *const pFrameFormat =
@@ -824,31 +824,31 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             if ( xSet.is() )
             {
                 xSet->setPropertyValue("FrameURL",
-                    makeAny( URIHelper::SmartRel2Abs(
+                    Any( URIHelper::SmartRel2Abs(
                             INetURLObject( GetXMLImport().GetBaseURL() ), rHRef ) ) );
 
                 xSet->setPropertyValue("FrameName",
-                    makeAny( rName ) );
+                    Any( rName ) );
 
                 if ( eScrollMode == ScrollingMode::Auto )
                     xSet->setPropertyValue("FrameIsAutoScroll",
-                        makeAny( true ) );
+                        Any( true ) );
                 else
                     xSet->setPropertyValue("FrameIsScrollingMode",
-                        makeAny( eScrollMode == ScrollingMode::Yes ) );
+                        Any( eScrollMode == ScrollingMode::Yes ) );
 
                 if ( bIsBorderSet )
                     xSet->setPropertyValue("FrameIsBorder",
-                        makeAny( bHasBorder ) );
+                        Any( bHasBorder ) );
                 else
                     xSet->setPropertyValue("FrameIsAutoBorder",
-                        makeAny( true ) );
+                        Any( true ) );
 
                 xSet->setPropertyValue("FrameMarginWidth",
-                    makeAny( sal_Int32( aMargin.Width() ) ) );
+                    Any( sal_Int32( aMargin.Width() ) ) );
 
                 xSet->setPropertyValue("FrameMarginHeight",
-                    makeAny( sal_Int32( aMargin.Height() ) ) );
+                    Any( sal_Int32( aMargin.Height() ) ) );
             }
 
             SwFrameFormat *const pFrameFormat =
@@ -914,14 +914,14 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     OUString aParaName("AppletCommands");
     try
     {
-        xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
+        xSet->setPropertyValue( aParaName, Any( aCommandSequence ) );
     }
     catch ( uno::Exception& )
     {
         aParaName = "PluginCommands";
         try
         {
-            xSet->setPropertyValue( aParaName, makeAny( aCommandSequence ) );
+            xSet->setPropertyValue( aParaName, Any( aCommandSequence ) );
         }
         catch ( uno::Exception& )
         {

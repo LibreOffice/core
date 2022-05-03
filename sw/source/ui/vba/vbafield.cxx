@@ -221,7 +221,7 @@ static uno::Any lcl_createField( const uno::Reference< XHelperInterface >& xPare
     uno::Reference< text::XTextField > xTextField( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< word::XField > xField( new SwVbaField( xParent, xContext, xTextField ) );
-    return uno::makeAny( xField );
+    return uno::Any( xField );
 }
 
 namespace {
@@ -373,7 +373,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_FileName( const OUS
     }
 
     uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-    xProps->setPropertyValue("FileFormat", uno::makeAny( nFileFormat ) );
+    xProps->setPropertyValue("FileFormat", uno::Any( nFileFormat ) );
 
     return xTextField;
 }
@@ -473,7 +473,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
     if( bCustom )
     {
         uno::Reference< beans::XPropertySet > xProps( xTextField, uno::UNO_QUERY_THROW );
-        xProps->setPropertyValue("Name", uno::makeAny( aDocProperty ) );
+        xProps->setPropertyValue("Name", uno::Any( aDocProperty ) );
     }
 
     return xTextField;

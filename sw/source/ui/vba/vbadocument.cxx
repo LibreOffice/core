@@ -177,7 +177,7 @@ SwVbaDocument::BuiltInDocumentProperties( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaBuiltinDocumentProperties( mxParent, mxContext, getModel() ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -186,7 +186,7 @@ SwVbaDocument::CustomDocumentProperties( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaCustomDocumentProperties( mxParent, mxContext, getModel() ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -196,7 +196,7 @@ SwVbaDocument::Bookmarks( const uno::Any& rIndex )
     uno::Reference<container::XIndexAccess > xBookmarks( xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xBookmarksVba( new SwVbaBookmarks( this, mxContext, xBookmarks, getModel() ) );
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
-        return uno::makeAny( xBookmarksVba );
+        return uno::Any( xBookmarksVba );
 
     return xBookmarksVba->Item( rIndex, uno::Any() );
 }
@@ -210,7 +210,7 @@ SwVbaDocument::Variables( const uno::Any& rIndex )
 
     uno::Reference< XCollection > xVariables( new SwVbaVariables( this, mxContext, xUserDefined ) );
     if (  rIndex.getValueTypeClass() == uno::TypeClass_VOID )
-        return uno::makeAny( xVariables );
+        return uno::Any( xVariables );
 
     return xVariables->Item( rIndex, uno::Any() );
 }
@@ -221,7 +221,7 @@ SwVbaDocument::Paragraphs( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaParagraphs( mxParent, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -230,7 +230,7 @@ SwVbaDocument::Styles( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaStyles( mxParent, mxContext, getModel() ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -239,7 +239,7 @@ SwVbaDocument::Fields( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaFields( mxParent, mxContext, getModel() ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -252,7 +252,7 @@ SwVbaDocument::Shapes( const uno::Any& index )
 
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -261,7 +261,7 @@ SwVbaDocument::Sections( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaSections( mxParent, mxContext, getModel() ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -270,21 +270,21 @@ SwVbaDocument::TablesOfContents( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaTablesOfContents( this, mxContext, mxTextDocument ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
 SwVbaDocument::FormFields( const uno::Any& /*index*/ )
 {
     uno::Reference< XCollection > xCol;
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
 SwVbaDocument::PageSetup( )
 {
     uno::Reference< beans::XPropertySet > xPageProps( word::getCurrentPageStyle( mxModel ), uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, xPageProps ) ) );
+    return uno::Any( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, xPageProps ) ) );
 }
 
 OUString
@@ -303,7 +303,7 @@ SwVbaDocument::getAttachedTemplate()
     OUString sTemplateUrl = xDocProps->getTemplateURL();
 
     xTemplate = new SwVbaTemplate( this, mxContext, sTemplateUrl );
-    return uno::makeAny( xTemplate );
+    return uno::Any( xTemplate );
 }
 
 void SAL_CALL
@@ -337,7 +337,7 @@ SwVbaDocument::Tables( const css::uno::Any& aIndex )
 
     if ( aIndex.hasValue() )
         return xColl->Item( aIndex, uno::Any() );
-    return uno::makeAny( xColl );
+    return uno::Any( xColl );
 }
 
 void SAL_CALL SwVbaDocument::Activate()
@@ -380,7 +380,7 @@ void SAL_CALL SwVbaDocument::setAutoHyphenation( sal_Bool _autohyphenation )
 {
     //TODO
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue("ParaIsHyphenation", uno::makeAny( _autohyphenation ) );
+    xParaProps->setPropertyValue("ParaIsHyphenation", uno::Any( _autohyphenation ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaDocument::getHyphenationZone()
@@ -407,7 +407,7 @@ void SAL_CALL SwVbaDocument::setConsecutiveHyphensLimit( ::sal_Int32 _consecutiv
 {
     sal_Int16 nHyphensLimit = static_cast< sal_Int16 >( _consecutivehyphenslimit );
     uno::Reference< beans::XPropertySet > xParaProps( word::getDefaultParagraphStyle( getModel() ), uno::UNO_QUERY_THROW );
-    xParaProps->setPropertyValue("ParaHyphenationMaxHyphens", uno::makeAny( nHyphensLimit ) );
+    xParaProps->setPropertyValue("ParaHyphenationMaxHyphens", uno::Any( nHyphensLimit ) );
 }
 
 uno::Reference< ooo::vba::word::XMailMerge > SAL_CALL SwVbaDocument::getMailMerge()
@@ -444,7 +444,7 @@ SwVbaDocument::Revisions( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaRevisions( this, mxContext, getModel(), xRedlines ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -455,7 +455,7 @@ SwVbaDocument::Frames( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaFrames( this, mxContext, xFrames, getModel() ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 void SAL_CALL
@@ -591,7 +591,7 @@ SwVbaDocument::getValue( const OUString& aPropertyName )
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
-    return uno::makeAny( xControl );
+    return uno::Any( xControl );
 }
 
 sal_Bool SAL_CALL

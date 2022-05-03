@@ -408,7 +408,7 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
     aCurNode.NodeType = svx::sidebar::TreeNode::ComplexProperty;
 
     aCurNode.children.push_back(
-        SimplePropToTreeNode("xml:id", uno::makeAny(xMeta->getMetadataReference().Second)));
+        SimplePropToTreeNode("xml:id", uno::Any(xMeta->getMetadataReference().Second)));
 
     // list associated (predicate, object) pairs of the actual subject
     // under the tree node "Metadata Reference"
@@ -420,7 +420,7 @@ static void MetadataToTreeNode(const css::uno::Reference<css::uno::XInterface>& 
     std::map<OUString, OUString> xStatements
         = SwRDFHelper::getStatements(pDocSh->GetBaseModel(), xRepo->getGraphNames(), xSubject);
     for (const auto& pair : xStatements)
-        aCurNode.children.push_back(SimplePropToTreeNode(pair.first, uno::makeAny(pair.second)));
+        aCurNode.children.push_back(SimplePropToTreeNode(pair.first, uno::Any(pair.second)));
 
     rNode.children.push_back(aCurNode);
 }

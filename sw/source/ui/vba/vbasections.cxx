@@ -46,7 +46,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( hasMoreElements() )
-            return uno::makeAny( *mIt++ );
+            return uno::Any( *mIt++ );
         throw container::NoSuchElementException();
     }
 };
@@ -102,7 +102,7 @@ public:
             throw css::lang::IndexOutOfBoundsException();
 
         uno::Reference< beans::XPropertySet > xPageProps( mxSections[ Index ], uno::UNO_SET_THROW );
-        return uno::makeAny( uno::Reference< word::XSection >( new SwVbaSection( mxParent,  mxContext, mxModel, xPageProps ) ) );
+        return uno::Any( uno::Reference< word::XSection >( new SwVbaSection( mxParent,  mxContext, mxModel, xPageProps ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
@@ -129,7 +129,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< beans::XPropertySet > xPageProps( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return uno::makeAny( uno::Reference< word::XSection > ( new SwVbaSection( m_xParent, m_xContext, mxModel, xPageProps ) ) );
+        return uno::Any( uno::Reference< word::XSection > ( new SwVbaSection( m_xParent, m_xContext, mxModel, xPageProps ) ) );
     }
 };
 

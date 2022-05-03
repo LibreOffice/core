@@ -275,7 +275,7 @@ XMLRedlineImportHelper::XMLRedlineImportHelper(
     // set redline mode to "don't record changes"
     if( bHandleRecordChanges )
     {
-        m_xModelPropertySet->setPropertyValue( g_sRecordChanges, makeAny(false) );
+        m_xModelPropertySet->setPropertyValue( g_sRecordChanges, Any(false) );
     }
 }
 

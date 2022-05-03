@@ -820,7 +820,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
     // Check field value (it should be value from data source) and set new
     CPPUNIT_ASSERT_EQUAL(OUString("True Core Property Value"), xField1->getPresentation(false));
     uno::Reference<beans::XPropertySet> xField1Props(xField1, uno::UNO_QUERY);
-    xField1Props->setPropertyValue("Content", uno::makeAny(OUString("New Core Property Value")));
+    xField1Props->setPropertyValue("Content", uno::Any(OUString("New Core Property Value")));
 
     // Third field: content from custom properties
     uno::Reference<text::XTextField> xField2(xFields->nextElement(), uno::UNO_QUERY);
@@ -828,7 +828,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
     // Check field value (it should be value from data source) and set new
     CPPUNIT_ASSERT_EQUAL(OUString("True Custom XML Value"), xField2->getPresentation(false));
     uno::Reference<beans::XPropertySet> xField2Props(xField2, uno::UNO_QUERY);
-    xField2Props->setPropertyValue("Content", uno::makeAny(OUString("New Custom XML Value")));
+    xField2Props->setPropertyValue("Content", uno::Any(OUString("New Custom XML Value")));
 
     // Second field: content from extended properties
     uno::Reference<text::XTextField> xField3(xFields->nextElement(), uno::UNO_QUERY);
@@ -836,7 +836,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf104823)
     // Check field value (it should be value from data source) and set new
     CPPUNIT_ASSERT_EQUAL(OUString("True Extended Property Value"), xField3->getPresentation(false));
     uno::Reference<beans::XPropertySet> xField3Props(xField3, uno::UNO_QUERY);
-    xField3Props->setPropertyValue("Content", uno::makeAny(OUString("New Extended Property Value")));
+    xField3Props->setPropertyValue("Content", uno::Any(OUString("New Extended Property Value")));
 
     // Save and check saved data
     save("Office Open XML Text", maTempFile);

@@ -3251,7 +3251,7 @@ bool SwTransferable::PasteDBData( const TransferableDataHelper& rData,
             {
                 pConnectionItem.reset(new SfxUnoAnyItem(FN_DB_CONNECTION_ANY, aDesc[DataAccessDescriptorProperty::Connection]));
                 pColumnItem.reset(new SfxUnoAnyItem(FN_DB_COLUMN_ANY, aDesc[DataAccessDescriptorProperty::ColumnObject]));
-                pSourceItem.reset(new SfxUnoAnyItem(FN_DB_DATA_SOURCE_ANY, makeAny(aDesc.getDataSource())));
+                pSourceItem.reset(new SfxUnoAnyItem(FN_DB_DATA_SOURCE_ANY, Any(aDesc.getDataSource())));
                 pCommandItem.reset(new SfxUnoAnyItem(FN_DB_DATA_COMMAND_ANY, aDesc[DataAccessDescriptorProperty::Command]));
                 pCommandTypeItem.reset(new SfxUnoAnyItem(FN_DB_DATA_COMMAND_TYPE_ANY, aDesc[DataAccessDescriptorProperty::CommandType]));
                 pColumnNameItem.reset(new SfxUnoAnyItem(FN_DB_DATA_COLUMN_NAME_ANY, aDesc[DataAccessDescriptorProperty::ColumnName]));

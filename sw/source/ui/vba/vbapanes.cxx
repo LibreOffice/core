@@ -45,7 +45,7 @@ public:
     {
         if( Index != 0 )
             throw lang::IndexOutOfBoundsException();
-        return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );
+        return uno::Any( uno::Reference< word::XPane >( new SwVbaPane( mxParent,  mxContext, mxModel ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {

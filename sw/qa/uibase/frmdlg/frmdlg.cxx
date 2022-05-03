@@ -40,8 +40,7 @@ CPPUNIT_TEST_FIXTURE(SwUibaseFrmdlgTest, testAnchorTypeFromStyle)
     createSwDoc();
     uno::Reference<beans::XPropertySet> xGraphics(getStyles("FrameStyles")->getByName("Graphics"),
                                                   uno::UNO_QUERY);
-    xGraphics->setPropertyValue("AnchorType",
-                                uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+    xGraphics->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AS_CHARACTER));
 
     // When inserting an image:
     OUString aImageURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "image.png";

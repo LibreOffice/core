@@ -131,17 +131,17 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
     }
     // Initialize properties.
     uno::Reference<beans::XPropertySet> xPropertySet(xTextFrame, uno::UNO_QUERY);
-    uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+    uno::Any aEmptyBorder{ table::BorderLine2() };
     xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
 
-    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
+    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(sal_Int32(100)));
 
-    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
+    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::Any(text::SizeType::FIX));
 
-    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGH));
+    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::Any(text::WrapTextMode_THROUGH));
 
     uno::Reference<container::XNamed> xNamed(xTextFrame, uno::UNO_QUERY);
     xNamed->setName(pShape->GetDoc()->GetUniqueFrameName());
@@ -161,7 +161,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 
     // Also initialize the properties, which are not constant, but inherited from the shape's ones.
     uno::Reference<drawing::XShape> xShape(pObject->getUnoShape(), uno::UNO_QUERY);
-    syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()), pObject);
+    syncProperty(pShape, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any(xShape->getSize()), pObject);
 
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
     syncProperty(pShape, RES_FOLLOW_TEXT_FLOW, MID_FOLLOW_TEXT_FLOW,
@@ -186,7 +186,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
                  xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_VERT_ADJUST), pObject);
     text::WritingMode eMode;
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
-        syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)), pObject);
+        syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(sal_Int16(eMode)), pObject);
 
     if (bIsGroupObj)
         doTextBoxPositioning(pShape, pObject);
@@ -264,21 +264,20 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
     }
     // Initialize its properties
     uno::Reference<beans::XPropertySet> xPropertySet(xNew, uno::UNO_QUERY);
-    uno::Any aEmptyBorder = uno::makeAny(table::BorderLine2());
+    uno::Any aEmptyBorder{ table::BorderLine2() };
     xPropertySet->setPropertyValue(UNO_NAME_TOP_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_BOTTOM_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_LEFT_BORDER, aEmptyBorder);
     xPropertySet->setPropertyValue(UNO_NAME_RIGHT_BORDER, aEmptyBorder);
-    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::makeAny(sal_Int32(100)));
-    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
-    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::makeAny(text::WrapTextMode_THROUGH));
+    xPropertySet->setPropertyValue(UNO_NAME_FILL_TRANSPARENCE, uno::Any(sal_Int32(100)));
+    xPropertySet->setPropertyValue(UNO_NAME_SIZE_TYPE, uno::Any(text::SizeType::FIX));
+    xPropertySet->setPropertyValue(UNO_NAME_SURROUND, uno::Any(text::WrapTextMode_THROUGH));
     // Add a new name to it
     uno::Reference<container::XNamed> xNamed(xNew, uno::UNO_QUERY);
     xNamed->setName(pShapeFormat->GetDoc()->GetUniqueFrameName());
     // And sync. properties.
     uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
-    syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(xShape->getSize()),
-                 pObj);
+    syncProperty(pShapeFormat, RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any(xShape->getSize()), pObj);
     uno::Reference<beans::XPropertySet> xShapePropertySet(xShape, uno::UNO_QUERY);
     syncProperty(pShapeFormat, RES_ANCHOR, MID_ANCHOR_ANCHORTYPE,
                  xShapePropertySet->getPropertyValue(UNO_NAME_ANCHOR_TYPE), pObj);
@@ -304,10 +303,10 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
         aVertAdj = xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_VERT_ADJUST)
                        .get<drawing::TextVerticalAdjust>();
     }
-    xPropertySet->setPropertyValue(UNO_NAME_TEXT_VERT_ADJUST, uno::makeAny(aVertAdj));
+    xPropertySet->setPropertyValue(UNO_NAME_TEXT_VERT_ADJUST, uno::Any(aVertAdj));
     text::WritingMode eMode;
     if (xShapePropertySet->getPropertyValue(UNO_NAME_TEXT_WRITINGMODE) >>= eMode)
-        syncProperty(pShapeFormat, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)), pObj);
+        syncProperty(pShapeFormat, RES_FRAMEDIR, 0, uno::Any(sal_Int16(eMode)), pObj);
     if (aOldProps.size())
     {
         for (auto& rProp : aOldProps)
@@ -434,7 +433,7 @@ uno::Any SwTextBoxHelper::getByIndex(SdrPage const* pPage, sal_Int32 nIndex)
     if (!pRet)
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY));
+    return uno::Any(uno::Reference<drawing::XShape>(pRet->getUnoShape(), uno::UNO_QUERY));
 }
 
 sal_Int32 SwTextBoxHelper::getOrdNum(const SdrObject* pObject)
@@ -615,17 +614,17 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
             case drawing::TextHorizontalAdjust::TextHorizontalAdjust_CENTER:
                 xFrameParaProps->setPropertyValue(
                     UNO_NAME_PARA_ADJUST,
-                    uno::makeAny(style::ParagraphAdjust::ParagraphAdjust_CENTER)); //3
+                    uno::Any(style::ParagraphAdjust::ParagraphAdjust_CENTER)); //3
                 break;
             case drawing::TextHorizontalAdjust::TextHorizontalAdjust_LEFT:
                 xFrameParaProps->setPropertyValue(
                     UNO_NAME_PARA_ADJUST,
-                    uno::makeAny(style::ParagraphAdjust::ParagraphAdjust_LEFT)); //0
+                    uno::Any(style::ParagraphAdjust::ParagraphAdjust_LEFT)); //0
                 break;
             case drawing::TextHorizontalAdjust::TextHorizontalAdjust_RIGHT:
                 xFrameParaProps->setPropertyValue(
                     UNO_NAME_PARA_ADJUST,
-                    uno::makeAny(style::ParagraphAdjust::ParagraphAdjust_RIGHT)); //1
+                    uno::Any(style::ParagraphAdjust::ParagraphAdjust_RIGHT)); //1
                 break;
             default:
                 SAL_WARN("sw.core",
@@ -645,12 +644,10 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         if (pObject)
         {
             tools::Rectangle aRectangle(pObject->GetSnapRect());
-            syncProperty(
-                pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION,
-                uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Left()))));
-            syncProperty(
-                pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION,
-                uno::makeAny(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
+            syncProperty(pShape, RES_HORI_ORIENT, MID_HORIORIENT_POSITION,
+                         uno::Any(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Left()))));
+            syncProperty(pShape, RES_VERT_ORIENT, MID_VERTORIENT_POSITION,
+                         uno::Any(static_cast<sal_Int32>(convertTwipToMm100(aRectangle.Top()))));
         }
 
         SwFrameFormat* pFormat = getOtherTextBoxFormat(pShape, RES_DRAWFRMFMT, pObj);
@@ -690,7 +687,7 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
 
             if (nDirection)
             {
-                syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(nDirection), pObj);
+                syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(nDirection), pObj);
             }
         }
     }
@@ -711,9 +708,9 @@ void SwTextBoxHelper::syncProperty(SwFrameFormat* pShape, std::u16string_view rP
         text::WritingMode eMode;
         sal_Int16 eMode2;
         if (rValue >>= eMode)
-            syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(sal_Int16(eMode)), pObj);
+            syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(sal_Int16(eMode)), pObj);
         else if (rValue >>= eMode2)
-            syncProperty(pShape, RES_FRAMEDIR, 0, uno::makeAny(eMode2), pObj);
+            syncProperty(pShape, RES_FRAMEDIR, 0, uno::Any(eMode2), pObj);
     }
     else
         SAL_INFO("sw.core", "SwTextBoxHelper::syncProperty: unhandled property: "
@@ -1254,8 +1251,7 @@ bool SwTextBoxHelper::changeAnchor(SwFrameFormat* pShape, SdrObject* pObj)
         const auto pOldCnt = rOldAnch.GetContentAnchor();
         const auto pNewCnt = rNewAnch.GetContentAnchor();
 
-        const uno::Any aShapeHorRelOrient
-            = uno::makeAny(pShape->GetHoriOrient().GetRelationOrient());
+        const uno::Any aShapeHorRelOrient(pShape->GetHoriOrient().GetRelationOrient());
 
         try
         {

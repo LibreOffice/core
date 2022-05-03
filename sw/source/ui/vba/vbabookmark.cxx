@@ -57,7 +57,7 @@ void SAL_CALL SwVbaBookmark::Select()
 {
     checkVality();
     uno::Reference< view::XSelectionSupplier > xSelectSupp( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    xSelectSupp->select( uno::makeAny( mxBookmark ) );
+    xSelectSupp->select( uno::Any( mxBookmark ) );
 }
 
 OUString SAL_CALL SwVbaBookmark::getName()
@@ -76,7 +76,7 @@ uno::Any SAL_CALL SwVbaBookmark::Range()
     uno::Reference< text::XTextContent > xTextContent( mxBookmark, uno::UNO_SET_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextRange > xTextRange( xTextContent->getAnchor(), uno::UNO_SET_THROW );
-    return uno::makeAny( uno::Reference< word::XRange>(  new SwVbaRange( this, mxContext, xTextDocument, xTextRange->getStart(), xTextRange->getEnd(), xTextRange->getText() ) ) );
+    return uno::Any( uno::Reference< word::XRange>(  new SwVbaRange( this, mxContext, xTextDocument, xTextRange->getStart(), xTextRange->getEnd(), xTextRange->getText() ) ) );
 }
 
 OUString

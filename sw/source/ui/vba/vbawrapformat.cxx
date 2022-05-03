@@ -66,13 +66,13 @@ void SwVbaWrapFormat::makeWrap()
             case word::WdWrapType::wdWrapSquare:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( false ) );
+                m_xPropertySet->setPropertyValue("SurroundContour", uno::Any( false ) );
                 break;
             }
             case word::WdWrapType::wdWrapTight:
             {
                 eTextMode = text::WrapTextMode_PARALLEL;
-                m_xPropertySet->setPropertyValue("SurroundContour", uno::makeAny( true ) );
+                m_xPropertySet->setPropertyValue("SurroundContour", uno::Any( true ) );
                 break;
             }
             default:
@@ -81,7 +81,7 @@ void SwVbaWrapFormat::makeWrap()
             }
         }
     }
-    m_xPropertySet->setPropertyValue("TextWrap", uno::makeAny( eTextMode ) );
+    m_xPropertySet->setPropertyValue("TextWrap", uno::Any( eTextMode ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaWrapFormat::getType()
@@ -173,7 +173,7 @@ float SwVbaWrapFormat::getDistance( const OUString& sName )
 void SwVbaWrapFormat::setDistance( const OUString& sName, float _distance )
 {
     sal_Int32 nDistance = Millimeter::getInHundredthsOfOneMillimeter( _distance );
-    m_xPropertySet->setPropertyValue( sName, uno::makeAny( nDistance ) );
+    m_xPropertySet->setPropertyValue( sName, uno::Any( nDistance ) );
 }
 
 float SAL_CALL SwVbaWrapFormat::getDistanceTop()

@@ -67,7 +67,7 @@ public:
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        return uno::makeAny( sal_Int32( ColorTable[ Index ] ) );
+        return uno::Any( sal_Int32( ColorTable[ Index ] ) );
     }
 
     // Methods XElementAccess

@@ -269,7 +269,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex <= pStyles->getCount() )
-            return pStyles->Item( uno::makeAny( nIndex++ ), uno::Any() );
+            return pStyles->Item( uno::Any( nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -286,7 +286,7 @@ uno::Any
 SwVbaStyles::createCollectionObject(const uno::Any& aObject)
 {
     uno::Reference< beans::XPropertySet > xStyleProp( aObject, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProp ) ) );
+    return uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProp ) ) );
 }
 
 uno::Type SAL_CALL
@@ -344,9 +344,9 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
                     // set the property "NumberingStyleName" if it is a listbullet
                     if( pTable->wdStyleType == word::WdStyleType::wdStyleTypeList )
                     {
-                        xStyleProps->setPropertyValue("NumberingStyleName", uno::makeAny( aStyleName ) );
+                        xStyleProps->setPropertyValue("NumberingStyleName", uno::Any( aStyleName ) );
                     }
-                    return uno::makeAny( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
+                    return uno::Any( uno::Reference< word::XStyle >( new SwVbaStyle( this, mxContext, mxModel, xStyleProps ) ) );
                 }
                 else
                 {

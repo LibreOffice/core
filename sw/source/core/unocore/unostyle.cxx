@@ -541,7 +541,7 @@ uno::Any SwXStyleFamilies::getByIndex(sal_Int32 nIndex)
     auto& rxFamily = m_vFamilies[eFamily];
     if(!rxFamily.is())
         rxFamily = new XStyleFamily(m_pDocShell, eFamily);
-    return uno::makeAny(rxFamily);
+    return uno::Any(rxFamily);
 }
 
 uno::Type SwXStyleFamilies::getElementType()
@@ -899,7 +899,7 @@ uno::Any XStyleFamily::getByName(const OUString& rName)
     uno::Reference<style::XStyle> xStyle = FindStyle(sStyleName);
     if(!xStyle.is())
         xStyle = m_rEntry.m_fCreateStyle(m_pBasePool, m_pDocShell, m_rEntry.m_eFamily == SfxStyleFamily::Frame ? pBase->GetName() : sStyleName);
-    return uno::makeAny(xStyle);
+    return uno::Any(xStyle);
 }
 
 uno::Sequence<OUString> XStyleFamily::getElementNames()
@@ -1082,7 +1082,7 @@ uno::Any SAL_CALL XStyleFamily::getPropertyValue( const OUString& sPropertyName 
     if(sPropertyName != "DisplayName")
         throw beans::UnknownPropertyException( "unknown property: " + sPropertyName, static_cast<OWeakObject *>(this) );
     SolarMutexGuard aGuard;
-    return uno::makeAny(SwResId(m_rEntry.m_pResId));
+    return uno::Any(SwResId(m_rEntry.m_pResId));
 }
 
 
@@ -1717,7 +1717,7 @@ void SwXStyle::SetPropertyValue<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProperty
     SfxItemSet& rStyleSet = o_rStyleBase.GetItemSet();
     SfxItemSet aSet(*rStyleSet.GetPool(), rEntry.nWID, rEntry.nWID);
     aSet.SetParent(&rStyleSet);
-    rPropSet.setPropertyValue(rEntry, uno::makeAny(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
+    rPropSet.setPropertyValue(rEntry, uno::Any(static_cast<sal_Int8>(nBin == std::numeric_limits<printeridx_t>::max()-1 ? -1 : nBin)), aSet);
     rStyleSet.Put(aSet);
 }
 template<>
@@ -2133,23 +2133,23 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_PHYSICAL>(const SfxItemPropertyMap
 {
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
     if(!pBase)
-        return uno::makeAny(false);
+        return uno::Any(false);
     bool bPhys = static_cast<SwDocStyleSheet*>(pBase)->IsPhysical();
     // The standard character format is not existing physically
     if( bPhys && SfxStyleFamily::Char == GetFamily() &&
         static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat() &&
         static_cast<SwDocStyleSheet*>(pBase)->GetCharFormat()->IsDefault() )
         bPhys = false;
-    return uno::makeAny<bool>(bPhys);
+    return uno::Any(bool(bPhys));
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_HIDDEN>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
 {
     SfxStyleSheetBase* pBase(GetStyleSheetBase());
     if(!pBase)
-        return uno::makeAny(false);
+        return uno::Any(false);
     rtl::Reference<SwDocStyleSheet> xBase(new SwDocStyleSheet(*static_cast<SwDocStyleSheet*>(pBase)));
-    return uno::makeAny(xBase->IsHidden());
+    return uno::Any(xBase->IsHidden());
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_STYLE_INTEROP_GRAB_BAG>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl&)
@@ -2171,11 +2171,11 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAPER_BIN)>(const SfxItemProp
     rPropSet.getPropertyValue(rEntry, rSet, aValue);
     sal_Int8 nBin(aValue.get<sal_Int8>());
     if(nBin == -1)
-        return uno::makeAny<OUString>("[From printer settings]");
+        return uno::Any(OUString("[From printer settings]"));
     SfxPrinter* pPrinter = GetDoc()->getIDocumentDeviceAccess().getPrinter(false);
     if(!pPrinter)
         return uno::Any();
-    return uno::makeAny(pPrinter->GetPaperBinName(nBin));
+    return uno::Any(pPrinter->GetPaperBinName(nBin));
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
@@ -2184,14 +2184,14 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_NUM_RULES>(const SfxItemPropertyMapEn
     const SwNumRule* pRule = rBase.getNewBase()->GetNumRule();
     assert(pRule && "Where is the NumRule?");
     uno::Reference<container::XIndexReplace> xRules(new SwXNumberingRules(*pRule, GetDoc()));
-    return uno::makeAny<uno::Reference<container::XIndexReplace>>(xRules);
+    return uno::Any(xRules);
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PARATR_OUTLINELEVEL)>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
     SAL_WARN_IF(SfxStyleFamily::Para != GetFamily(), "sw.uno", "only paras");
-    return uno::makeAny<sal_Int16>(rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel());
+    return uno::Any(sal_Int16(rBase.getNewBase()->GetCollection()->GetAttrOutlineLevel()));
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
@@ -2199,7 +2199,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_FOLLOW_STYLE>(const SfxItemPropertyMa
     PrepareStyleBase(rBase);
     OUString aString;
     SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetFollow(), aString, lcl_GetSwEnumFromSfxEnum(GetFamily()));
-    return uno::makeAny(aString);
+    return uno::Any(aString);
 }
 
 template <>
@@ -2211,7 +2211,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_LINK_STYLE>(const SfxItemPropertyMapE
     OUString aString;
     SwStyleNameMapper::FillProgName(rBase.getNewBase()->GetLink(), aString,
                                     lcl_GetSwEnumFromSfxEnum(GetFamily()));
-    return uno::makeAny(aString);
+    return uno::Any(aString);
 }
 
 template<>
@@ -2230,7 +2230,7 @@ uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_PAGEDESC)>(const SfxItemPrope
         return uno::Any();
     OUString aString;
     SwStyleNameMapper::FillProgName(pDesc->GetName(), aString, SwGetPoolIdFromName::PageDesc);
-    return uno::makeAny(aString);
+    return uno::Any(aString);
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
@@ -2238,8 +2238,8 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_IS_AUTO_UPDATE>(const SfxItemProperty
     PrepareStyleBase(rBase);
     switch(GetFamily())
     {
-        case SfxStyleFamily::Para : return uno::makeAny<bool>(rBase.getNewBase()->GetCollection()->IsAutoUpdateFormat());
-        case SfxStyleFamily::Frame: return uno::makeAny<bool>(rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateFormat());
+        case SfxStyleFamily::Para : return uno::Any(rBase.getNewBase()->GetCollection()->IsAutoUpdateFormat());
+        case SfxStyleFamily::Frame: return uno::Any(rBase.getNewBase()->GetFrameFormat()->IsAutoUpdateFormat());
         default: return uno::Any();
     }
 }
@@ -2247,7 +2247,7 @@ template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_DISPLAY_NAME>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
 {
     PrepareStyleBase(rBase);
-    return uno::makeAny(rBase.getNewBase()->GetName());
+    return uno::Any(rBase.getNewBase()->GetName());
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
@@ -2277,7 +2277,7 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_PARA_STYLE_CONDITIONS>(const SfxItemP
             pSeq[n].Value <<= aStyleName;
         }
     }
-    return uno::makeAny(aSeq);
+    return uno::Any(aSeq);
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
@@ -2294,8 +2294,8 @@ uno::Any SwXStyle::GetStyleProperty<FN_UNO_CATEGORY>(const SfxItemPropertyMapEnt
     const sal_uInt16 nPoolId = rBase.getNewBase()->GetCollection()->GetPoolFormatId();
     const auto pUnoToCoreIt(pUnoToCore->find(COLL_GET_RANGE_BITS & nPoolId));
     if(pUnoToCoreIt == pUnoToCore->end())
-        return uno::makeAny<sal_Int16>(-1);
-    return uno::makeAny(pUnoToCoreIt->second);
+        return uno::Any(sal_Int16(-1));
+    return uno::Any(pUnoToCoreIt->second);
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemPropertyMapEntry&, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
@@ -2303,13 +2303,13 @@ uno::Any SwXStyle::GetStyleProperty<SID_SWREGISTER_COLLECTION>(const SfxItemProp
     PrepareStyleBase(rBase);
     const SwPageDesc *pPageDesc = rBase.getNewBase()->GetPageDesc();
     if(!pPageDesc)
-        return uno::makeAny(OUString());
+        return uno::Any(OUString());
     const SwTextFormatColl* pCol = pPageDesc->GetRegisterFormatColl();
     if(!pCol)
-        return uno::makeAny(OUString());
+        return uno::Any(OUString());
     OUString aName;
     SwStyleNameMapper::FillProgName(pCol->GetName(), aName, SwGetPoolIdFromName::TxtColl);
-    return uno::makeAny(aName);
+    return uno::Any(aName);
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<sal_uInt16(RES_BACKGROUND)>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet&, SwStyleBase_Impl& rBase)
@@ -2328,10 +2328,10 @@ uno::Any SwXStyle::GetStyleProperty<OWN_ATTR_FILLBMP_MODE>(const SfxItemProperty
     PrepareStyleBase(rBase);
     const SfxItemSet& rSet = rBase.GetItemSet();
     if (rSet.Get(XATTR_FILLBMP_TILE).GetValue())
-        return uno::makeAny(drawing::BitmapMode_REPEAT);
+        return uno::Any(drawing::BitmapMode_REPEAT);
     if (rSet.Get(XATTR_FILLBMP_STRETCH).GetValue())
-        return uno::makeAny(drawing::BitmapMode_STRETCH);
-    return uno::makeAny(drawing::BitmapMode_NO_REPEAT);
+        return uno::Any(drawing::BitmapMode_STRETCH);
+    return uno::Any(drawing::BitmapMode_NO_REPEAT);
 }
 template<>
 uno::Any SwXStyle::GetStyleProperty<HINT_BEGIN>(const SfxItemPropertyMapEntry& rEntry, const SfxItemPropertySet& rPropSet, SwStyleBase_Impl& rBase)
@@ -3404,7 +3404,7 @@ uno::Sequence<uno::Type> SwXFrameStyle::getTypes()
 uno::Any SwXFrameStyle::queryInterface(const uno::Type& rType)
 {
     if(rType == cppu::UnoType<XEventsSupplier>::get())
-        return uno::makeAny(uno::Reference<XEventsSupplier>(this));
+        return uno::Any(uno::Reference<XEventsSupplier>(this));
     return SwXStyle::queryInterface(rType);
 }
 
@@ -4547,11 +4547,11 @@ css::uno::Any SAL_CALL SwXTextTableStyle::getPropertyValue(const OUString& rProp
     else if (rPropertyName == UNO_NAME_TABLE_LAST_ROW_START_COLUMN)
         bIsRow = m_pTableAutoFormat->LastRowStartColumnIsRow();
     else if (rPropertyName == UNO_NAME_DISPLAY_NAME)
-        return uno::makeAny(m_pTableAutoFormat->GetName());
+        return uno::Any(m_pTableAutoFormat->GetName());
     else
         throw css::beans::UnknownPropertyException(rPropertyName);
 
-    return uno::makeAny(bIsRow ? OUString("row") : OUString("column"));
+    return uno::Any(bIsRow ? OUString("row") : OUString("column"));
 }
 
 void SAL_CALL SwXTextTableStyle::addPropertyChangeListener( const OUString& /*aPropertyName*/, const css::uno::Reference< css::beans::XPropertyChangeListener >& /*xListener*/ )

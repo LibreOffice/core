@@ -679,14 +679,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf144272)
     // modify with track changes: Standard and Heading 2
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Standard")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Standard")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
     pWrtShell->Down(/*bSelect=*/false);
     aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 2")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 2")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 
@@ -717,15 +717,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf101873)
 
     // Search for something which does not exist, twice.
     uno::Sequence<beans::PropertyValue> aFirst(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::makeAny(OUString("fig")) },
-        { "SearchItem.Backward", uno::makeAny(false) },
+        { "SearchItem.SearchString", uno::Any(OUString("fig")) },
+        { "SearchItem.Backward", uno::Any(false) },
     }));
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aFirst);
 
     uno::Sequence<beans::PropertyValue> aSecond(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::makeAny(OUString("something")) },
-        { "SearchItem.Backward", uno::makeAny(false) },
+        { "SearchItem.SearchString", uno::Any(OUString("something")) },
+        { "SearchItem.Backward", uno::Any(false) },
     }));
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSecond);
 
@@ -953,13 +953,13 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testDocxAttributeTableExport)
 
         // change the properties
         // 8133 -> 8000
-        xShape->setPropertyValue("VertOrientPosition", uno::makeAny(static_cast<sal_Int32>(8000)));
+        xShape->setPropertyValue("VertOrientPosition", uno::Any(static_cast<sal_Int32>(8000)));
         // 5964 -> 5000
-        xShape->setPropertyValue("HoriOrientPosition", uno::makeAny(static_cast<sal_Int32>(5000)));
+        xShape->setPropertyValue("HoriOrientPosition", uno::Any(static_cast<sal_Int32>(5000)));
         // 0 (frame) -> 8 (page print area)
-        xShape->setPropertyValue("VertOrientRelation", uno::makeAny(static_cast<sal_Int16>(8)));
+        xShape->setPropertyValue("VertOrientRelation", uno::Any(static_cast<sal_Int16>(8)));
         // 8 (page print area) -> 0 (frame)
-        xShape->setPropertyValue("HoriOrientRelation", uno::makeAny(static_cast<sal_Int16>(0)));
+        xShape->setPropertyValue("HoriOrientRelation", uno::Any(static_cast<sal_Int16>(0)));
     }
     // save it to docx
     reload("Office Open XML Text", "floating-table-position.docx");
@@ -1719,8 +1719,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf118311)
 
     // Jump to the first cell, selecting its content
     uno::Sequence<beans::PropertyValue> aSearch(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::makeAny(OUString("a")) },
-        { "SearchItem.Backward", uno::makeAny(false) },
+        { "SearchItem.SearchString", uno::Any(OUString("a")) },
+        { "SearchItem.Backward", uno::Any(false) },
     }));
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aSearch);
 
@@ -2734,7 +2734,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf123218)
     uno::Reference<beans::XPropertySet> xShapeProps(
         xMSF->createInstance("com.sun.star.text.TextEmbeddedObject"), uno::UNO_QUERY);
     xShapeProps->setPropertyValue("CLSID",
-                                  uno::makeAny(OUString("12dcae26-281f-416f-a234-c3086127382e")));
+                                  uno::Any(OUString("12dcae26-281f-416f-a234-c3086127382e")));
     uno::Reference<drawing::XShape> xShape(xShapeProps, uno::UNO_QUERY_THROW);
     xShape->setSize(awt::Size(16000, 9000));
     uno::Reference<text::XTextContent> chartTextContent(xShapeProps, uno::UNO_QUERY_THROW);
@@ -2785,7 +2785,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(2)) } }));
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -2818,8 +2818,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest5, testTdf93747)
     pWrtSh->Right(CRSR_SKIP_CHARS, /*bSelect=*/true, 1, /*bBasicCall=*/false);
 
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 1")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 1")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 

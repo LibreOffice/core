@@ -43,11 +43,11 @@ SwVbaRow::~SwVbaRow()
 uno::Any SAL_CALL SwVbaRow::getHeight()
 {
     if( getHeightRule() == word::WdRowHeightRule::wdRowHeightAuto )
-        return uno::makeAny( sal_Int32( word::WdConstants::wdUndefined ) );
+        return uno::Any( sal_Int32( word::WdConstants::wdUndefined ) );
 
     sal_Int32 nHeight = 0;
     mxRowProps->getPropertyValue("Height") >>= nHeight;
-    return uno::makeAny( static_cast<float>(Millimeter::getInPoints( nHeight )) );
+    return uno::Any( static_cast<float>(Millimeter::getInPoints( nHeight )) );
 }
 
 void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )
@@ -56,7 +56,7 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )
     _height >>= height;
 
     sal_Int32 nHeight = Millimeter::getInHundredthsOfOneMillimeter( height );
-    mxRowProps->setPropertyValue("Height", uno::makeAny( nHeight ) );
+    mxRowProps->setPropertyValue("Height", uno::Any( nHeight ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaRow::getHeightRule()
@@ -69,7 +69,7 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )
 void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule )
 {
     bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
-    mxRowProps->setPropertyValue("IsAutoHeight", uno::makeAny( isAutoHeight ) );
+    mxRowProps->setPropertyValue("IsAutoHeight", uno::Any( isAutoHeight ) );
 }
 
 void SAL_CALL
@@ -92,13 +92,13 @@ void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const u
     uno::Reference< table::XCellRange > xSelRange = xCellRange->getCellRangeByName( sRangeName );
 
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    xSelection->select( uno::makeAny( xSelRange ) );
+    xSelection->select( uno::Any( xSelRange ) );
 }
 
 void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule )
 {
     setHeightRule( heightrule );
-    setHeight( uno::makeAny( height ) );
+    setHeight( uno::Any( height ) );
 }
 
 OUString
