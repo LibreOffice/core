@@ -22,6 +22,7 @@
 #include <comphelper/string.hxx>
 #include <vcl/event.hxx>
 #include <vcl/decoview.hxx>
+#include <vcl/glyphitemcache.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>
 #include <vcl/vcllayout.hxx>
@@ -69,8 +70,20 @@ struct ImplStatusItem
     bool                                mbVisible;
     OUString                            maAccessibleName;
     OUString                            maCommand;
-    std::unique_ptr<SalLayout>          mxLayoutCache;
+    std::optional<SalLayoutGlyphs>      mLayoutGlyphsCache;
+    SalLayoutGlyphs*                    GetTextGlyphs(const OutputDevice* pOutputDevice);
 };
+
+SalLayoutGlyphs* ImplStatusItem::GetTextGlyphs(const OutputDevice* outputDevice)
+{
+    if(!mLayoutGlyphsCache.has_value())
+    {
+        std::unique_ptr<SalLayout> pSalLayout = outputDevice->ImplLayout(
+            maText, 0, -1, Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
+        mLayoutGlyphsCache = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
+    }
+    return mLayoutGlyphsCache->IsValid() ? &mLayoutGlyphsCache.value() : nullptr;
+}
 
 static tools::Long ImplCalcProgressWidth( sal_uInt16 nMax, tools::Long nSize )
 {
@@ -389,18 +402,9 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     // if the framework code is drawing status, let it do all the work
     if (!(pItem->mnBits & StatusBarItemBits::UserDraw))
     {
-        SalLayout* pLayoutCache = pItem->mxLayoutCache.get();
-
-        if(!pLayoutCache)
-        {
-            // update cache
-            pItem->mxLayoutCache = rRenderContext.ImplLayout(pItem->maText, 0, -1, Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
-            pLayoutCache = pItem->mxLayoutCache.get();
-        }
-
-        const SalLayoutGlyphs glyphs = pLayoutCache ? pLayoutCache->GetGlyphs() : SalLayoutGlyphs();
-        const SalLayoutGlyphs* pGlyphs = pLayoutCache ? &glyphs : nullptr;
-        Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pGlyphs), rRenderContext.GetTextHeight());
+        SalLayoutGlyphs* pGlyphs = pItem->GetTextGlyphs(&rRenderContext);
+        Size aTextSize(rRenderContext.GetTextWidth(pItem->maText,0,-1,nullptr,pGlyphs),
+                       rRenderContext.GetTextHeight());
         Point aTextPos = ImplGetItemTextPos(aTextRectSize, aTextSize, pItem->mnBits);
 
         if (bOffScreen)
@@ -827,7 +831,7 @@ void StatusBar::StateChanged( StateChangedType nType )
     //invalidate layout cache
     for (auto & pItem : mvItemList)
     {
-        pItem->mxLayoutCache.reset();
+        pItem->mLayoutGlyphsCache.reset();
     }
 
 }
@@ -854,7 +858,7 @@ void StatusBar::DataChanged( const DataChangedEvent& rDCEvt )
         if( nWidth > pItem->mnWidth + STATUSBAR_OFFSET )
             pItem->mnWidth = nWidth + STATUSBAR_OFFSET;
 
-        pItem->mxLayoutCache.reset();
+        pItem->mLayoutGlyphsCache.reset();
     }
     Size aSize = GetSizePixel();
     // do not disturb current width, since
@@ -1141,18 +1145,13 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     {
         std::unique_ptr<SalLayout> pSalLayout = GetOutDev()->ImplLayout("0",0,-1,
             Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
-        const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
-        nWidth = GetTextWidth("0",0,-1,nullptr,pSalLayout ? &glyphs : nullptr);
+        nWidth = GetTextWidth("0",0,-1,nullptr,
+                    SalLayoutGlyphsCache::self()->GetLayoutGlyphs(GetOutDev(),"0"));
         nWidth = nWidth * nCharsWidth + nFudge;
     }
     else
     {
-        std::unique_ptr<SalLayout> pSalLayout = GetOutDev()->ImplLayout(pItem->maText,0,-1,
-            Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
-        const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
-        nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pSalLayout ? &glyphs : nullptr) + nFudge;
-        // Store the calculated layout.
-        pItem->mxLayoutCache = std::move(pSalLayout);
+        nWidth = GetTextWidth( pItem->maText,0,-1,nullptr, pItem->GetTextGlyphs(GetOutDev())) + nFudge;
     }
 
     if( (nWidth > pItem->mnWidth + STATUSBAR_OFFSET) ||
@@ -1213,7 +1212,7 @@ void StatusBar::SetItemData( sal_uInt16 nItemId, void* pNewData )
 
     ImplStatusItem* pItem = mvItemList[ nPos ].get();
     // invalidate cache
-    pItem->mxLayoutCache.reset();
+    pItem->mLayoutGlyphsCache.reset();
     pItem->mpUserData = pNewData;
 
     // call Draw-Item if it's a User-Item
