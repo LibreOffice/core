@@ -184,27 +184,27 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& 
     if( rAttribs.getString( XML_insetmode ).get() != "auto" )
     {
         OUString inset = rAttribs.getString( XML_inset ).get();
-        OUString value;
-        OUString remainingStr;
+        std::u16string_view value;
+        std::u16string_view remainingStr;
 
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceLeft = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.1in" : value, 0, false, false );
+            value.empty() ? u"0.1in" : value, 0, false, false );
 
         inset = remainingStr;
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceTop = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.05in" : value, 0, false, false );
+            value.empty() ? u"0.05in" : value, 0, false, false );
 
         inset = remainingStr;
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceRight = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.1in" : value, 0, false, false );
+            value.empty() ? u"0.1in" : value, 0, false, false );
 
         inset = remainingStr;
         ConversionHelper::separatePair( value, remainingStr, inset, ',' );
         rTextBox.borderDistanceBottom = ConversionHelper::decodeMeasureToHmm( graphicHelper,
-            value.isEmpty() ? "0.05in" : value, 0, false, false );
+            value.empty() ? u"0.05in" : value, 0, false, false );
 
         rTextBox.borderDistanceSet = true;
     }
@@ -213,18 +213,18 @@ TextBoxContext::TextBoxContext( ContextHandler2Helper const & rParent, TextBox& 
     sal_Int32 nIndex = 0;
     while( nIndex >= 0 )
     {
-        OUString aName, aValue;
+        std::u16string_view aName, aValue;
         if( ConversionHelper::separatePair( aName, aValue, o3tl::getToken(sStyle, 0, ';', nIndex ), ':' ) )
         {
-            if( aName == "layout-flow" )      rTextBox.maLayoutFlow = aValue;
-            else if (aName == "mso-fit-shape-to-text")
+            if( aName == u"layout-flow" )      rTextBox.maLayoutFlow = aValue;
+            else if (aName == u"mso-fit-shape-to-text")
                 rTextBox.mrTypeModel.mbAutoHeight = true;
-            else if (aName == "mso-layout-flow-alt")
+            else if (aName == u"mso-layout-flow-alt")
                 rTextBox.mrTypeModel.maLayoutFlowAlt = aValue;
-            else if (aName == "mso-next-textbox")
+            else if (aName == u"mso-next-textbox")
                 rTextBox.msNextTextbox = aValue;
             else
-                SAL_WARN("oox", "unhandled style property: " << aName);
+                SAL_WARN("oox", "unhandled style property: " << OUString(aName));
         }
     }
 }

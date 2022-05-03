@@ -65,17 +65,19 @@ using ::com::sun::star::drawing::PolygonFlags_CONTROL;
 
 namespace {
 
-bool lclExtractDouble( double& orfValue, sal_Int32& ornEndPos, std::u16string_view aValue )
+bool lclExtractDouble( double& orfValue, size_t& ornEndPos, std::u16string_view aValue )
 {
     // extract the double value and find start position of unit characters
     rtl_math_ConversionStatus eConvStatus = rtl_math_ConversionStatus_Ok;
-    orfValue = ::rtl::math::stringToDouble( aValue, '.', '\0', &eConvStatus, &ornEndPos );
+    sal_Int32 nEndPos;
+    orfValue = ::rtl::math::stringToDouble( aValue, '.', '\0', &eConvStatus, &nEndPos );
+    ornEndPos = nEndPos;
     return eConvStatus == rtl_math_ConversionStatus_Ok;
 }
 
 } // namespace
 
-bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
+bool ConversionHelper::separatePair( std::u16string_view& orValue1, std::u16string_view& orValue2,
         std::u16string_view rValue, sal_Unicode cSep )
 {
     size_t nSepPos = rValue.find( cSep );
@@ -88,7 +90,7 @@ bool ConversionHelper::separatePair( OUString& orValue1, OUString& orValue2,
     {
         orValue1 = o3tl::trim(rValue);
     }
-    return !orValue1.isEmpty() && !orValue2.isEmpty();
+    return !orValue1.empty() && !orValue2.empty();
 }
 
 bool ConversionHelper::decodeBool( std::u16string_view rValue )
@@ -98,43 +100,43 @@ bool ConversionHelper::decodeBool( std::u16string_view rValue )
     return (nToken == XML_t) || (nToken == XML_true);
 }
 
-double ConversionHelper::decodePercent( const OUString& rValue, double fDefValue )
+double ConversionHelper::decodePercent( std::u16string_view rValue, double fDefValue )
 {
-    if( rValue.isEmpty() )
+    if( rValue.empty() )
         return fDefValue;
 
     double fValue = 0.0;
-    sal_Int32 nEndPos = 0;
+    size_t nEndPos = 0;
     if( !lclExtractDouble( fValue, nEndPos, rValue ) )
         return fDefValue;
 
-    if( nEndPos == rValue.getLength() )
+    if( nEndPos == rValue.size() )
         return fValue;
 
-    if( (nEndPos + 1 == rValue.getLength()) && (rValue[ nEndPos ] == '%') )
+    if( (nEndPos + 1 == rValue.size()) && (rValue[ nEndPos ] == '%') )
         return fValue / 100.0;
 
-    if( (nEndPos + 1 == rValue.getLength()) && (rValue[ nEndPos ] == 'f') )
+    if( (nEndPos + 1 == rValue.size()) && (rValue[ nEndPos ] == 'f') )
         return fValue / 65536.0;
 
     OSL_FAIL( "ConversionHelper::decodePercent - unknown measure unit" );
     return fDefValue;
 }
 
-Degree100 ConversionHelper::decodeRotation( const OUString& rValue )
+Degree100 ConversionHelper::decodeRotation( std::u16string_view rValue )
 {
-    if( rValue.isEmpty() )
+    if( rValue.empty() )
         return 0_deg100;
 
     double fValue = 0.0;
     double fRotation = 0.0;
-    sal_Int32 nEndPos = 0;
+    size_t nEndPos = 0;
     if( !lclExtractDouble(fValue, nEndPos, rValue) )
         return 0_deg100;
 
-    if( nEndPos == rValue.getLength() )
+    if( nEndPos == rValue.size() )
         fRotation = fValue;
-    else if( (nEndPos + 2 == rValue.getLength()) && (rValue[nEndPos] == 'f') && (rValue[nEndPos+1] == 'd') )
+    else if( (nEndPos + 2 == rValue.size()) && (rValue[nEndPos] == 'f') && (rValue[nEndPos+1] == 'd') )
         fRotation = fValue / 65536.0;
     else
     {
@@ -146,14 +148,14 @@ Degree100 ConversionHelper::decodeRotation( const OUString& rValue )
 }
 
 sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHelper,
-        const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
+        std::u16string_view rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
     // default for missing values is 0
-    if( rValue.isEmpty() )
+    if( rValue.empty() )
         return 0;
 
     // TODO: according to spec, value may contain "auto"
-    if ( rValue == "auto" )
+    if ( rValue == u"auto" )
     {
         OSL_FAIL( "ConversionHelper::decodeMeasureToEmu - special value 'auto' must be handled by caller" );
         return nRefValue;
@@ -161,14 +163,14 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
 
     // extract the double value and find start position of unit characters
     double fValue = 0.0;
-    sal_Int32 nEndPos = 0;
+    size_t nEndPos = 0;
     if( !lclExtractDouble( fValue, nEndPos, rValue ) || (fValue == 0.0) )
         return 0;
 
     // process trailing unit, convert to EMU
     std::u16string_view aUnit;
-    if( (0 < nEndPos) && (nEndPos < rValue.getLength()) )
-        aUnit = rValue.subView( nEndPos );
+    if( (0 < nEndPos) && (nEndPos < rValue.size()) )
+        aUnit = rValue.substr( nEndPos );
     else if( bDefaultAsPixel )
         aUnit = u"px";
     // else default is EMU
@@ -205,13 +207,13 @@ sal_Int64 ConversionHelper::decodeMeasureToEmu( const GraphicHelper& rGraphicHel
 }
 
 sal_Int32 ConversionHelper::decodeMeasureToHmm( const GraphicHelper& rGraphicHelper,
-        const OUString& rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
+        std::u16string_view rValue, sal_Int32 nRefValue, bool bPixelX, bool bDefaultAsPixel )
 {
     return ::oox::drawingml::convertEmuToHmm( decodeMeasureToEmu( rGraphicHelper, rValue, nRefValue, bPixelX, bDefaultAsPixel ) );
 }
 
 sal_Int32 ConversionHelper::decodeMeasureToTwip(const GraphicHelper& rGraphicHelper,
-                                                const OUString& rValue, sal_Int32 nRefValue,
+                                                std::u16string_view rValue, sal_Int32 nRefValue,
                                                 bool bPixelX, bool bDefaultAsPixel)
 {
     return ::o3tl::convert(
@@ -240,22 +242,22 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     }
 
     // separate leading color name or RGB value from following palette index
-    OUString aColorName, aColorIndex;
+    std::u16string_view aColorName, aColorIndex;
     separatePair( aColorName, aColorIndex, roVmlColor.get(), ' ' );
 
     // RGB colors in the format '#RRGGBB'
-    if( (aColorName.getLength() == 7) && (aColorName[ 0 ] == '#') )
+    if( (aColorName.size() == 7) && (aColorName[ 0 ] == '#') )
     {
-        aDmlColor.setSrgbClr( o3tl::toUInt32(aColorName.subView( 1 ), 16) );
+        aDmlColor.setSrgbClr( o3tl::toUInt32(aColorName.substr( 1 ), 16) );
         return aDmlColor;
     }
 
     // RGB colors in the format '#RGB'
-    if( (aColorName.getLength() == 4) && (aColorName[ 0 ] == '#') )
+    if( (aColorName.size() == 4) && (aColorName[ 0 ] == '#') )
     {
-        sal_Int32 nR = o3tl::toUInt32(aColorName.subView( 1, 1 ), 16 ) * 0x11;
-        sal_Int32 nG = o3tl::toUInt32(aColorName.subView( 2, 1 ), 16 ) * 0x11;
-        sal_Int32 nB = o3tl::toUInt32(aColorName.subView( 3, 1 ), 16 ) * 0x11;
+        sal_Int32 nR = o3tl::toUInt32(aColorName.substr( 1, 1 ), 16 ) * 0x11;
+        sal_Int32 nG = o3tl::toUInt32(aColorName.substr( 2, 1 ), 16 ) * 0x11;
+        sal_Int32 nB = o3tl::toUInt32(aColorName.substr( 3, 1 ), 16 ) * 0x11;
         aDmlColor.setSrgbClr( (nR << 16) | (nG << 8) | nB );
         return aDmlColor;
     }
@@ -273,26 +275,27 @@ Color ConversionHelper::decodeColor( const GraphicHelper& rGraphicHelper,
     }
 
     // try palette colors enclosed in brackets
-    if( (aColorIndex.getLength() >= 3) && (aColorIndex[ 0 ] == '[') && (aColorIndex[ aColorIndex.getLength() - 1 ] == ']') )
+    if( (aColorIndex.size() >= 3) && (aColorIndex[ 0 ] == '[') && (aColorIndex[ aColorIndex.size() - 1 ] == ']') )
     {
-        aDmlColor.setPaletteClr( o3tl::toInt32(aColorIndex.subView( 1, aColorIndex.getLength() - 2 )) );
+        aDmlColor.setPaletteClr( o3tl::toInt32(aColorIndex.substr( 1, aColorIndex.size() - 2 )) );
         return aDmlColor;
     }
 
     // try fill gradient modificator 'fill <modifier>(<amount>)'
     if( (nPrimaryRgb != API_RGB_TRANSPARENT) && (nColorToken == XML_fill) )
     {
-        sal_Int32 nOpenParen = aColorIndex.indexOf( '(' );
-        sal_Int32 nCloseParen = aColorIndex.indexOf( ')' );
-        if( (2 <= nOpenParen) && (nOpenParen + 1 < nCloseParen) && (nCloseParen + 1 == aColorIndex.getLength()) )
+        size_t nOpenParen = aColorIndex.find( '(' );
+        size_t nCloseParen = aColorIndex.find( ')' );
+        if( nOpenParen != std::u16string_view::npos && nCloseParen != std::u16string_view::npos &&
+            (2 <= nOpenParen) && (nOpenParen + 1 < nCloseParen) && (nCloseParen + 1 == aColorIndex.size()) )
         {
             sal_Int32 nModToken = XML_TOKEN_INVALID;
-            switch( AttributeConversion::decodeToken( aColorIndex.subView( 0, nOpenParen ) ) )
+            switch( AttributeConversion::decodeToken( aColorIndex.substr( 0, nOpenParen ) ) )
             {
                 case XML_darken:    nModToken = XML_shade;break;
                 case XML_lighten:   nModToken = XML_tint;
             }
-            sal_Int32 nValue = o3tl::toInt32(aColorIndex.subView( nOpenParen + 1, nCloseParen - nOpenParen - 1 ));
+            sal_Int32 nValue = o3tl::toInt32(aColorIndex.substr( nOpenParen + 1, nCloseParen - nOpenParen - 1 ));
             if( (nModToken != XML_TOKEN_INVALID) && (0 <= nValue) && (nValue < 255) )
             {
                 /*  Simulate this modifier color by a color with related transformation.
@@ -878,11 +881,11 @@ void ShadowModel::pushToPropMap(ShapePropertyMap& rPropMap, const GraphicHelper&
     sal_Int32 nOffsetX = 62, nOffsetY = 62;
     if (moOffset.has())
     {
-        OUString aOffsetX, aOffsetY;
+        std::u16string_view aOffsetX, aOffsetY;
         ConversionHelper::separatePair(aOffsetX, aOffsetY, moOffset.get(), ',');
-        if (!aOffsetX.isEmpty())
+        if (!aOffsetX.empty())
             nOffsetX = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetX, 0, false, false );
-        if (!aOffsetY.isEmpty())
+        if (!aOffsetY.empty())
             nOffsetY = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, aOffsetY, 0, false, false );
     }
 
@@ -950,22 +953,22 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
         sal_Int32 nIndex = 0;
         while( nIndex >= 0 )
         {
-            OUString aName, aValue;
+            std::u16string_view aName, aValue;
             if (ConversionHelper::separatePair(aName, aValue, o3tl::getToken(aStyle, 0, ';', nIndex), ':'))
             {
-                if (aName == "font-family")
+                if (aName == u"font-family")
                 {
                     // remove " (first, and last character)
-                    if (aValue.getLength() > 2)
-                        aValue = aValue.copy(1, aValue.getLength() - 2);
+                    if (aValue.size() > 2)
+                        aValue = aValue.substr(1, aValue.size() - 2);
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("CharFontName", uno::Any(aValue));
+                    xPropertySet->setPropertyValue("CharFontName", uno::Any(OUString(aValue)));
                     sFont = aValue;
                 }
-                else if (aName == "font-size")
+                else if (aName == u"font-size")
                 {
-                    oox::OptValue<OUString> aOptString(aValue);
+                    oox::OptValue<OUString> aOptString {OUString(aValue)};
                     float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
