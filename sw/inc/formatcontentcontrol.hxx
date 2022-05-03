@@ -20,6 +20,7 @@
 #pragma once
 
 #include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <cppuhelper/weakref.hxx>
 #include <svl/poolitem.hxx>
@@ -35,6 +36,7 @@ enum class SwContentControlType
 {
     RICH_TEXT,
     CHECKBOX,
+    DROP_DOWN_LIST,
 };
 
 /// SfxPoolItem subclass that wraps an SwContentControl.
@@ -72,6 +74,21 @@ public:
     void dumpAsXml(xmlTextWriterPtr pWriter) const override;
 };
 
+/// Represents one list item in a content control dropdown list.
+class SwContentControlListItem
+{
+public:
+    OUString m_aDisplayText;
+    OUString m_aValue;
+
+    void dumpAsXml(xmlTextWriterPtr pWriter) const;
+
+    static void ItemsToAny(const std::vector<SwContentControlListItem>& rItems,
+                           css::uno::Any& rVal);
+
+    static std::vector<SwContentControlListItem> ItemsFromAny(const css::uno::Any& rVal);
+};
+
 /// Stores the properties of a content control.
 class SwContentControl : public sw::BroadcastingModify
 {
@@ -96,6 +113,8 @@ class SwContentControl : public sw::BroadcastingModify
 
     /// If m_bCheckbox is true, the value of an unchecked checkbox.
     OUString m_aUncheckedState;
+
+    std::vector<SwContentControlListItem> m_aListItems;
 
 public:
     SwTextContentControl* GetTextAttr() const;
@@ -146,6 +165,13 @@ public:
     void SetUncheckedState(const OUString& rUncheckedState) { m_aUncheckedState = rUncheckedState; }
 
     OUString GetUncheckedState() const { return m_aUncheckedState; }
+
+    std::vector<SwContentControlListItem> GetListItems() const { return m_aListItems; }
+
+    void SetListItems(const std::vector<SwContentControlListItem>& rListItems)
+    {
+        m_aListItems = rListItems;
+    }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
