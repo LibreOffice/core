@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c7cb5d9c_d49408da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-03T07:43:49Z",
+      "side": 1,
+      "message": "rebase to be on top of Revert \"enable test for all platforms\"",
+      "revId": "ae4aae32952c2674a11fe117db925b5a856b663c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
