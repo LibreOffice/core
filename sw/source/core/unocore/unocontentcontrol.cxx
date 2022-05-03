@@ -160,6 +160,7 @@ public:
     bool m_bChecked;
     OUString m_aCheckedState;
     OUString m_aUncheckedState;
+    std::vector<SwContentControlListItem> m_aListItems;
 
     Impl(SwXContentControl& rThis, SwDoc& rDoc, SwContentControl* pContentControl,
          const uno::Reference<text::XText>& xParentText,
@@ -516,6 +517,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     pContentControl->SetChecked(m_pImpl->m_bChecked);
     pContentControl->SetCheckedState(m_pImpl->m_aCheckedState);
     pContentControl->SetUncheckedState(m_pImpl->m_aUncheckedState);
+    pContentControl->SetListItems(m_pImpl->m_aListItems);
 
     SwFormatContentControl aContentControl(pContentControl, nWhich);
     bool bSuccess
@@ -524,7 +526,7 @@ void SwXContentControl::AttachImpl(const uno::Reference<text::XTextRange>& xText
     if (!bSuccess)
     {
         throw lang::IllegalArgumentException(
-            "SwXContentControl::AttachImpl(): cannot create meta: range invalid?",
+            "SwXContentControl::AttachImpl(): cannot create content control: invalid range",
             static_cast<::cppu::OWeakObject*>(this), 1);
     }
     if (!pTextAttr)
@@ -742,6 +744,19 @@ void SAL_CALL SwXContentControl::setPropertyValue(const OUString& rPropertyName,
             }
         }
     }
+    else if (rPropertyName == UNO_NAME_LIST_ITEMS)
+    {
+        std::vector<SwContentControlListItem> aItems
+            = SwContentControlListItem::ItemsFromAny(rValue);
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            m_pImpl->m_aListItems = aItems;
+        }
+        else
+        {
+            m_pImpl->m_pContentControl->SetListItems(aItems);
+        }
+    }
     else
     {
         throw beans::UnknownPropertyException();
@@ -807,6 +822,19 @@ uno::Any SAL_CALL SwXContentControl::getPropertyValue(const OUString& rPropertyN
         {
             aRet <<= m_pImpl->m_pContentControl->GetUncheckedState();
         }
+    }
+    else if (rPropertyName == UNO_NAME_LIST_ITEMS)
+    {
+        std::vector<SwContentControlListItem> aItems;
+        if (m_pImpl->m_bIsDescriptor)
+        {
+            aItems = m_pImpl->m_aListItems;
+        }
+        else
+        {
+            aItems = m_pImpl->m_pContentControl->GetListItems();
+        }
+        SwContentControlListItem::ItemsToAny(aItems, aRet);
     }
     else
     {
