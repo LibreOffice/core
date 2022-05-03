@@ -1996,7 +1996,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                         // first remove all open stream handles
                         if (pContent && (!pElement->m_xStream.is() || pElement->m_xStream->Clear()))
                         {
-                            pContent->executeCommand( "delete", makeAny( true ) );
+                            pContent->executeCommand( "delete", Any( true ) );
                             nRet = COMMIT_RESULT_SUCCESS;
                         }
                         else

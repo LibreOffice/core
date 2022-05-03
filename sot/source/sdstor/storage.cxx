@@ -678,7 +678,7 @@ SotStorage* SotStorage::OpenOLEStorage( const css::uno::Reference < css::embed::
         {
             uno::Reference < beans::XPropertySet > xStreamProps( xStream, uno::UNO_QUERY_THROW );
             xStreamProps->setPropertyValue( "MediaType",
-                                            uno::makeAny( OUString(  "application/vnd.sun.star.oleobject"  ) ) );
+                                            uno::Any( OUString(  "application/vnd.sun.star.oleobject"  ) ) );
         }
 
         pStream = utl::UcbStreamHelper::CreateStream( xStream );
