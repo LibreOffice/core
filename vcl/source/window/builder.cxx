@@ -1865,7 +1865,6 @@ VclPtr<vcl::Window> VclBuilder::makeObject(vcl::Window *pParent, const OString &
         //a) make SvHeaderTabListBox/SvTabListBox the default target for GtkTreeView
         //b) remove the non-drop down mode of ListBox and convert
         //   everything over to SvHeaderTabListBox/SvTabListBox
-        //c) remove the users of makeSvTabListBox and makeSvTreeListBox
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK;
         if (m_bLegacy)
