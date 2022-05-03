@@ -146,7 +146,7 @@ void VclPhysicalFontCollectionTest::testShouldFindFontFamilyByTokenNames()
     sTokenNames += GetEnglishSearchFontName(u"Test 2");
 
     vcl::font::PhysicalFontFamily* pFontFamily
-        = aFontCollection.FindFontFamilyByTokenNames("Test Font Family Name");
+        = aFontCollection.FindFontFamilyByTokenNames(u"Test Font Family Name");
     CPPUNIT_ASSERT_MESSAGE("Did not find the font family", pFontFamily);
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Font family name incorrect",
                                  GetEnglishSearchFontName(u"Test Font Family Name"),

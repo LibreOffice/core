@@ -243,7 +243,7 @@ namespace sw
         public:
             OUString msPrimary;
             OUString msSecondary;
-            explicit FontMapExport(const OUString &rFontDescription);
+            explicit FontMapExport(std::u16string_view rFontDescription);
         };
 
         class InsertedTableListener final : public SvtListener

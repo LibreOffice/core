@@ -602,13 +602,13 @@ static bool ImplKillLeading( OUString& rName, const char* const* ppStr )
     return false;
 }
 
-static sal_Int32 ImplIsTrailing( const OUString& rName, const char* pStr )
+static sal_Int32 ImplIsTrailing( std::u16string_view rName, const char* pStr )
 {
-    sal_Int32 nStrLen = static_cast<sal_Int32>(strlen( pStr ));
-    if( nStrLen >= rName.getLength() )
+    size_t nStrLen = strlen( pStr );
+    if( nStrLen >= rName.size() )
         return 0;
 
-    const sal_Unicode* pEndName = rName.getStr() + rName.getLength();
+    const sal_Unicode* pEndName = rName.data() + rName.size();
     const sal_Unicode* pNameStr = pEndName - nStrLen;
     do if( *(pNameStr++) != *(pStr++) )
         return 0;
