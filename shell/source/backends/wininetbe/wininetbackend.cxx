@@ -309,28 +309,28 @@ css::uno::Any WinInetBackend::getPropertyValue(
 {
     if ( PropertyName == "ooInetFTPProxyName" )
     {
-        return css::uno::makeAny(valueFtpProxyName_);
+        return css::uno::Any(valueFtpProxyName_);
     } else if ( PropertyName == "ooInetFTPProxyPort" )
     {
-        return css::uno::makeAny(valueFtpProxyPort_);
+        return css::uno::Any(valueFtpProxyPort_);
     } else if ( PropertyName == "ooInetHTTPProxyName" )
     {
-        return css::uno::makeAny(valueHttpProxyName_);
+        return css::uno::Any(valueHttpProxyName_);
     } else if ( PropertyName == "ooInetHTTPProxyPort" )
     {
-        return css::uno::makeAny(valueHttpProxyPort_);
+        return css::uno::Any(valueHttpProxyPort_);
     } else if ( PropertyName == "ooInetHTTPSProxyName" )
     {
-        return css::uno::makeAny(valueHttpsProxyName_);
+        return css::uno::Any(valueHttpsProxyName_);
     } else if ( PropertyName == "ooInetHTTPSProxyPort" )
     {
-        return css::uno::makeAny(valueHttpsProxyPort_);
+        return css::uno::Any(valueHttpsProxyPort_);
     } else if ( PropertyName == "ooInetNoProxy" )
     {
-        return css::uno::makeAny(valueNoProxy_);
+        return css::uno::Any(valueNoProxy_);
     } else if ( PropertyName == "ooInetProxyType" )
     {
-        return css::uno::makeAny(valueProxyType_);
+        return css::uno::Any(valueProxyType_);
     } else {
         throw css::beans::UnknownPropertyException(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
