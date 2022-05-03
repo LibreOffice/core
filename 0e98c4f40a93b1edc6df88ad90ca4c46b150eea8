@@ -16,6 +16,63 @@
       "message": "The amendment moves the string into a dedicated resource (that hopefully will be added to the translation). But Stephan pointed out that these errors are rather meant for developers. The message passes through some layers where localization might be better suited. At this point it\u0027s beyond my skills.",
       "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75ad1419_8292e978",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-03T09:57:40Z",
+      "side": 1,
+      "message": "There is a conceptional mismatch here.  The place where those C++ exceptions are thrown is part of the URE and does not know about LibreOffice (so it shouldn\u0027t mention \"Tools - Options - Advanced\"), and such exception messages are generally intended for developers rather than for end users (and should not be translated).\n\nThat the code in ExtensionCmdQueue::Thread::execute (desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx) uses such exception messages and displays them to the user is somewhat unfortunate.  (It could display that data as \"more detailed information\" alongside some more user-centric message, though.)  A fix for tdf#112723 \"Java-based extension installation leads to unhelpful error message when Java is not present or not found\" should thus better address the place where the exception message is consumed rather than where it is produced.",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e794f304_32e902b7",
+        "filename": "stoc/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-03T09:57:40Z",
+      "side": 1,
+      "message": "for new source files, please use the appropriate header/footer from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0826b830_58163126",
+        "filename": "stoc/inc/strings.hrc",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-03T09:57:40Z",
+      "side": 1,
+      "message": "here and elsewhere: is it intentional to have two spaces here?",
+      "range": {
+        "startLine": 24,
+        "startChar": 130,
+        "endLine": 24,
+        "endChar": 132
+      },
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
