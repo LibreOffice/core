@@ -1568,6 +1568,12 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     return pEntry;
 }
 
+bool SvTreeListBox::HasEntryText(SvTreeListEntry* pEntry) const
+{
+    assert(pEntry);
+    return pEntry->GetFirstItem(SvLBoxItemType::String) != nullptr;
+}
+
 void SvTreeListBox::SetEntryText(SvTreeListEntry* pEntry, const OUString& rStr)
 {
     SvLBoxString* pItem = static_cast<SvLBoxString*>(pEntry->GetFirstItem(SvLBoxItemType::String));
