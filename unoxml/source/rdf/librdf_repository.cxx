@@ -514,7 +514,7 @@ librdf_GraphResult::nextElement()
         throw lang::WrappedTargetException(
             "librdf_GraphResult::nextElement: "
             "librdf_stream_get_object failed", *this,
-                uno::makeAny(e));
+                uno::Any(e));
     }
     // NB: pCtxt may be null here if this is result of a graph query
     if (pCtxt && isInternalContext(pCtxt)) {
@@ -524,7 +524,7 @@ librdf_GraphResult::nextElement()
         m_xRep->getTypeConverter().convertToStatement(pStmt, pCtxt) );
     // NB: this will invalidate current item.
     librdf_stream_next(m_pStream.get());
-    return uno::makeAny(Stmt);
+    return uno::Any(Stmt);
 }
 
 
@@ -568,7 +568,7 @@ librdf_GraphResult2::nextElement()
         m_nIndex = m_vStatements.size(); // avoid overflow
         throw container::NoSuchElementException();
     }
-    return uno::makeAny(m_vStatements[n]);
+    return uno::Any(m_vStatements[n]);
 }
 
 /** result of tuple queries ("SELECT").
@@ -666,7 +666,7 @@ librdf_QuerySelectResult::nextElement()
         throw lang::WrappedTargetException(
             "librdf_QuerySelectResult::nextElement: "
             "librdf_query_results_get_bindings failed", *this,
-            uno::makeAny(e));
+            uno::Any(e));
     }
     uno::Sequence< uno::Reference< rdf::XNode > > ret(count);
     auto retRange = asNonConstRange(ret);
@@ -675,7 +675,7 @@ librdf_QuerySelectResult::nextElement()
     }
     // NB: this will invalidate current item.
     librdf_query_results_next(m_pQueryResult.get());
-    return uno::makeAny(ret);
+    return uno::Any(ret);
 }
 
 // css::rdf::XQuerySelectResult:
@@ -2015,7 +2015,7 @@ librdf_Repository::getStatementsGraph_NoLock(
             throw lang::WrappedTargetException(
                 "librdf_GraphResult::nextElement: "
                 "librdf_stream_get_object failed", *this,
-                    uno::makeAny(e));
+                    uno::Any(e));
         }
         // NB: pCtxt may be null here if this is result of a graph query
         if (pCtxt && isInternalContext(pCtxt)) {
