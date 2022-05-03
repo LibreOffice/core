@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9022f1f_6597585b",
+        "filename": "sc/source/ui/app/inputwin.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1337,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-03T18:33:23Z",
+      "side": 1,
+      "message": "With sanitization happening in SetFormulaBarLines(), ScViewData::nFormulaBarLines and this mnLastExpandedLines may be out of sync.",
+      "revId": "d0cacf09a1105d89bf3df84b18623d790e3aeb82",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
