@@ -638,10 +638,18 @@ private:
     SalLayoutFlags              m_nLayout; //< 0: mirroring off, 1: mirror x-axis
 
     // for buffering the Mirror-Matrix, see ::getMirror
+    enum class MirrorMode
+    {
+        NONE,
+        Antiparallel,
+        AntiparallelBiDi,
+        BiDi
+    };
+    MirrorMode                  m_eLastMirrorMode;
+    tools::Long                 m_nLastMirrorTranslation;
     basegfx::B2DHomMatrix       m_aLastMirror;
-    tools::Long                 m_aLastMirrorW;
-    tools::Long                 m_nLastMirrorDeviceLTRButBiDiRtlTranslate;
-    bool                        m_bLastMirrorDeviceLTRButBiDiRtlSet;
+
+    MirrorMode GetMirrorMode(const OutputDevice& rOutDev) const;
 
 protected:
     /// flags which hold the SetAntialiasing() value from OutputDevice
