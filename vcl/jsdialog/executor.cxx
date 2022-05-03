@@ -8,6 +8,7 @@
  */
 
 #include <jsdialog/jsdialogbuilder.hxx>
+#include <o3tl/string_view.hxx>
 #include <vcl/weld.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <sal/log.hxx>
@@ -81,8 +82,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             {
                 if (sAction == "selecttab")
                 {
-                    OString pageId = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int page = std::atoi(pageId.getStr());
+                    sal_Int32 page = o3tl::toInt32(rData["data"]);
 
                     pNotebook->set_current_page(page);
 
@@ -97,12 +97,12 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             {
                 if (sAction == "selected")
                 {
-                    int separatorPos = rData["data"].indexOf(';');
+                    OUString sSelectedData = rData["data"];
+                    int separatorPos = sSelectedData.indexOf(';');
                     if (separatorPos > 0)
                     {
-                        std::u16string_view entryPos = rData["data"].subView(0, separatorPos);
-                        OString posString = OUStringToOString(entryPos, RTL_TEXTENCODING_ASCII_US);
-                        int pos = std::atoi(posString.getStr());
+                        std::u16string_view entryPos = sSelectedData.subView(0, separatorPos);
+                        sal_Int32 pos = o3tl::toInt32(entryPos);
                         pCombobox->set_active(pos);
                         LOKTrigger::trigger_changed(*pCombobox);
                         return true;
@@ -174,18 +174,17 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             {
                 if (sAction == "click")
                 {
-                    int separatorPos = rData["data"].indexOf(';');
+                    OUString sClickData = rData["data"];
+                    int separatorPos = sClickData.indexOf(';');
                     if (separatorPos > 0)
                     {
                         // x;y
-                        OString clickPosX = OUStringToOString(
-                            rData["data"].subView(0, separatorPos), RTL_TEXTENCODING_ASCII_US);
-                        OString clickPosY = OUStringToOString(
-                            rData["data"].subView(separatorPos + 1), RTL_TEXTENCODING_ASCII_US);
-                        if (!clickPosX.isEmpty() && !clickPosY.isEmpty())
+                        std::u16string_view clickPosX = sClickData.subView(0, separatorPos);
+                        std::u16string_view clickPosY = sClickData.subView(separatorPos + 1);
+                        if (!clickPosX.empty() && !clickPosY.empty())
                         {
-                            double posX = std::atof(clickPosX.getStr());
-                            double posY = std::atof(clickPosY.getStr());
+                            double posX = o3tl::toDouble(clickPosX);
+                            double posY = o3tl::toDouble(clickPosY);
                             OutputDevice& rRefDevice = pArea->get_ref_device();
                             // We send OutPutSize for the drawing area bitmap
                             // get_size_request is not necessarily updated
@@ -202,31 +201,27 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "keypress")
                 {
-                    LOKTrigger::trigger_key_press(
-                        *pArea,
-                        KeyEvent(rData["data"].toUInt32(), vcl::KeyCode(rData["data"].toUInt32())));
-                    LOKTrigger::trigger_key_release(
-                        *pArea,
-                        KeyEvent(rData["data"].toUInt32(), vcl::KeyCode(rData["data"].toUInt32())));
+                    sal_uInt32 nKeyNo = rData["data"].toUInt32();
+                    LOKTrigger::trigger_key_press(*pArea, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
+                    LOKTrigger::trigger_key_release(*pArea, KeyEvent(nKeyNo, vcl::KeyCode(nKeyNo)));
                     return true;
                 }
                 else if (sAction == "textselection")
                 {
                     // start;end
-                    int nSeparatorPos = rData["data"].indexOf(';');
+                    OUString sTextData = rData["data"];
+                    int nSeparatorPos = sTextData.indexOf(';');
                     if (nSeparatorPos <= 0)
                         return true;
 
-                    std::u16string_view aStartPos = rData["data"].subView(0, nSeparatorPos);
-                    std::u16string_view aEndPos = rData["data"].subView(nSeparatorPos + 1);
+                    std::u16string_view aStartPos = sTextData.subView(0, nSeparatorPos);
+                    std::u16string_view aEndPos = sTextData.subView(nSeparatorPos + 1);
 
                     if (aStartPos.empty() || aEndPos.empty())
                         return true;
 
-                    int nStart = std::atoi(
-                        OUStringToOString(aStartPos.data(), RTL_TEXTENCODING_ASCII_US).getStr());
-                    int nEnd = std::atoi(
-                        OUStringToOString(aEndPos.data(), RTL_TEXTENCODING_ASCII_US).getStr());
+                    sal_Int32 nStart = o3tl::toInt32(aStartPos);
+                    sal_Int32 nEnd = o3tl::toInt32(aEndPos);
 
                     Point aPos(nStart, nEnd);
                     CommandEvent aCEvt(aPos, CommandEventId::CursorPos);
@@ -246,8 +241,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     if (rData["data"] == "undefined")
                         return true;
 
-                    OString sValue = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    double nValue = std::atof(sValue.getStr());
+                    double nValue = o3tl::toDouble(rData["data"]);
                     pSpinField->set_value(nValue
                                           * weld::SpinButton::Power10(pSpinField->get_digits()));
                     LOKTrigger::trigger_value_changed(*pSpinField);
@@ -323,8 +317,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                     StringMap aMap(jsonToStringMap(
                         OUStringToOString(sDataJSON, RTL_TEXTENCODING_ASCII_US).getStr()));
 
-                    OString nRowString = OUStringToOString(aMap["row"], RTL_TEXTENCODING_ASCII_US);
-                    int nRow = std::atoi(nRowString.getStr());
+                    sal_Int32 nRow = o3tl::toInt32(aMap["row"]);
                     bool bValue = aMap["value"] == "true";
 
                     pTreeView->set_toggle(nRow, bValue ? TRISTATE_TRUE : TRISTATE_FALSE);
@@ -333,12 +326,9 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "select")
                 {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
+                    sal_Int32 nAbsPos = o3tl::toInt32(rData["data"]);
 
                     pTreeView->unselect_all();
-
-                    int nAbsPos = std::atoi(nRowString.getStr());
 
                     std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
                     pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
@@ -349,9 +339,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "activate")
                 {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nRow = std::atoi(nRowString.getStr());
+                    sal_Int32 nRow = o3tl::toInt32(rData["data"]);
 
                     pTreeView->unselect_all();
                     pTreeView->select(nRow);
@@ -362,9 +350,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "expand")
                 {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nAbsPos = std::atoi(nRowString.getStr());
+                    sal_Int32 nAbsPos = o3tl::toInt32(rData["data"]);
                     std::unique_ptr<weld::TreeIter> itEntry(pTreeView->make_iterator());
                     pTreeView->get_iter_abs_pos(*itEntry, nAbsPos);
                     pTreeView->expand_row(*itEntry);
@@ -372,9 +358,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "dragstart")
                 {
-                    OString nRowString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nRow = std::atoi(nRowString.getStr());
+                    sal_Int32 nRow = o3tl::toInt32(rData["data"]);
 
                     pTreeView->select(nRow);
                     pTreeView->drag_start();
@@ -395,9 +379,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
             {
                 if (sAction == "select")
                 {
-                    OString nPosString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nPos = std::atoi(nPosString.getStr());
+                    sal_Int32 nPos = o3tl::toInt32(rData["data"]);
 
                     pIconView->select(nPos);
                     LOKTrigger::trigger_changed(*pIconView);
@@ -406,9 +388,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "activate")
                 {
-                    OString nPosString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nPos = std::atoi(nPosString.getStr());
+                    sal_Int32 nPos = o3tl::toInt32(rData["data"]);
 
                     pIconView->select(nPos);
                     LOKTrigger::trigger_changed(*pIconView);
@@ -442,9 +422,7 @@ bool ExecuteAction(const std::string& nWindowId, const OString& rWidget, StringM
                 }
                 else if (sAction == "response")
                 {
-                    OString nResponseString
-                        = OUStringToOString(rData["data"], RTL_TEXTENCODING_ASCII_US);
-                    int nResponse = std::atoi(nResponseString.getStr());
+                    sal_Int32 nResponse = o3tl::toInt32(rData["data"]);
                     pDialog->response(nResponse);
                     return true;
                 }
