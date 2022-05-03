@@ -386,7 +386,7 @@ namespace calc
         if ( !bWasBoolean )
         {
             sal_Int32 nNewIndex = xTypes->getStandardFormat( NumberFormat::LOGICAL, aLocale );
-            xCellProp->setPropertyValue( sPropName, makeAny( nNewIndex ) );
+            xCellProp->setPropertyValue( sPropName, Any( nNewIndex ) );
         }
     }
 

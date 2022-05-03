@@ -48,7 +48,7 @@ static uno::Any ComponentToWindow( const uno::Any& aSource, const uno::Reference
     // !! TODO !! iterate over all controllers
     uno::Reference< frame::XController > xController( xModel->getCurrentController(), uno::UNO_SET_THROW );
     uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext, aApplication ), xContext, xModel, xController ) );
-    return uno::makeAny( xWin );
+    return uno::Any( xWin );
 }
 
 typedef std::vector < uno::Reference< sheet::XSpreadsheetDocument > > Components;
@@ -96,7 +96,7 @@ public:
         {
             throw container::NoSuchElementException();
         }
-        return makeAny( *(m_it++) );
+        return css::uno::Any( *(m_it++) );
     }
 };
 
@@ -164,7 +164,7 @@ public:
         if ( Index < 0
             || o3tl::make_unsigned( Index ) >= m_windows.size() )
             throw lang::IndexOutOfBoundsException();
-        return makeAny( m_windows[ Index ] ); // returns xspreadsheetdoc
+        return css::uno::Any( m_windows[ Index ] ); // returns xspreadsheetdoc
     }
 
     //XElementAccess
@@ -184,7 +184,7 @@ public:
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
             throw container::NoSuchElementException();
-        return makeAny( m_windows[ it->second ] );
+        return css::uno::Any( m_windows[ it->second ] );
 
     }
 

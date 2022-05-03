@@ -2627,7 +2627,7 @@ uno::Reference< container::XIndexAccess > SAL_CALL ScModelObj::getViewData(  )
                 comphelper::makePropertyValue(SC_POSITIONLEFT, nPosLeft),
                 comphelper::makePropertyValue(SC_POSITIONTOP, nPosTop)
             };
-            xCont->insertByIndex( 0, uno::makeAny( aSeq ) );
+            xCont->insertByIndex( 0, uno::Any( aSeq ) );
         }
     }
 
@@ -3586,7 +3586,7 @@ uno::Any SAL_CALL ScDrawPagesObj::getByIndex( sal_Int32 nIndex )
     if (!xPage.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xPage);
+    return uno::Any(xPage);
 }
 
 uno::Type SAL_CALL ScDrawPagesObj::getElementType()
@@ -3913,7 +3913,7 @@ uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
     if (!xSheet.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xSheet);
+    return uno::Any(xSheet);
 
 //    return uno::Any();
 }
@@ -3939,7 +3939,7 @@ uno::Any SAL_CALL ScTableSheetsObj::getByName( const OUString& aName )
     if (!xSheet.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xSheet);
+    return uno::Any(xSheet);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableSheetsObj::getElementNames()
@@ -4085,7 +4085,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
     if (!xColumn.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xColumn);
+    return uno::Any(xColumn);
 
 }
 
@@ -4108,7 +4108,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getByName( const OUString& aName )
     if (!xColumn.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xColumn);
+    return uno::Any(xColumn);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableColumnsObj::getElementNames()
@@ -4329,7 +4329,7 @@ uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
     if (!xRow.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xRow);
+    return uno::Any(xRow);
 }
 
 uno::Type SAL_CALL ScTableRowsObj::getElementType()
@@ -4640,7 +4640,7 @@ uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
     if (!xAnnotation.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xAnnotation);
+    return uno::Any(xAnnotation);
 }
 
 uno::Type SAL_CALL ScAnnotationsObj::getElementType()
@@ -4795,7 +4795,7 @@ uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
     if (!xScen.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xScen);
+    return uno::Any(xScen);
 }
 
 uno::Type SAL_CALL ScScenariosObj::getElementType()
@@ -4817,7 +4817,7 @@ uno::Any SAL_CALL ScScenariosObj::getByName( const OUString& aName )
     if (!xScen.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xScen);
+    return uno::Any(xScen);
 }
 
 uno::Sequence<OUString> SAL_CALL ScScenariosObj::getElementNames()

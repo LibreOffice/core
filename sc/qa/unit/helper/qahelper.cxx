@@ -778,7 +778,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload(
     {
         SfxItemSet* pExportSet = aStoreMedium.GetItemSet();
         uno::Sequence< beans::NamedValue > aEncryptionData = comphelper::OStorageHelper::CreatePackageEncryptionData( *pPassword );
-        pExportSet->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, makeAny(aEncryptionData)));
+        pExportSet->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
 
         uno::Reference< embed::XStorage > xMedStorage = aStoreMedium.GetStorage();
         ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );

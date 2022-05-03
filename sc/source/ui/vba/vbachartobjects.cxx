@@ -146,7 +146,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         xTableCharts->addNewByName(sPersistChartName, aRectangle, aCellRangeAddress, true, false );
         uno::Reference< excel::XChartObject > xChartObject( getItemByStringIndex( sPersistChartName ), uno::UNO_QUERY_THROW );
         xChartObject->getChart()->setChartType(excel::XlChartType::xlColumnClustered);
-        return uno::makeAny( xChartObject );
+        return uno::Any( xChartObject );
     }
     catch (const uno::Exception&)
     {
@@ -184,7 +184,7 @@ ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< table::XTableChart > xTableChart( aSource, uno::UNO_QUERY_THROW );
     // correct parent object is sheet
-    return uno::makeAny( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
+    return uno::Any( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
 }
 
 OUString

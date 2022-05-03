@@ -45,7 +45,7 @@ ScVbaMenu::MenuItems( const uno::Any& aIndex )
     {
         return xMenuItems->Item( aIndex, uno::Any() );
     }
-    return uno::makeAny( xMenuItems );
+    return uno::Any( xMenuItems );
 }
 
 OUString

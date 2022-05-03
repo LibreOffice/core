@@ -240,7 +240,7 @@ ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> const & xSheet
     }
     // return new sheet
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XWorksheet > xNewSheet( xApplication->Worksheets( uno::makeAny( aSheetName ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorksheet > xNewSheet( xApplication->Worksheets( uno::Any( aSheetName ) ), uno::UNO_QUERY_THROW );
     return xNewSheet;
 }
 
@@ -433,7 +433,7 @@ ScVbaWorksheet::HPageBreaks( const uno::Any& aIndex )
     uno::Reference< excel::XHPageBreaks > xHPageBreaks( new ScVbaHPageBreaks( this, mxContext, xSheetPageBreak));
     if ( aIndex.hasValue() )
         return xHPageBreaks->Item( aIndex, uno::Any());
-    return uno::makeAny( xHPageBreaks );
+    return uno::Any( xHPageBreaks );
 }
 
 uno::Any
@@ -443,7 +443,7 @@ ScVbaWorksheet::VPageBreaks( const uno::Any& aIndex )
     uno::Reference< excel::XVPageBreaks > xVPageBreaks( new ScVbaVPageBreaks( this, mxContext, xSheetPageBreak ) );
     if( aIndex.hasValue() )
         return xVPageBreaks->Item( aIndex, uno::Any());
-    return uno::makeAny( xVPageBreaks );
+    return uno::Any( xVPageBreaks );
 }
 
 sal_Int32
@@ -705,7 +705,7 @@ ScVbaWorksheet::ChartObjects( const uno::Any& Index )
         return xColl->Item( Index, uno::Any() );
     }
     else
-        return uno::makeAny( mxCharts );
+        return uno::Any( mxCharts );
 
 }
 
@@ -719,7 +719,7 @@ ScVbaWorksheet::PivotTables( const uno::Any& Index )
     uno::Reference< XCollection > xColl(  new ScVbaPivotTables( this, mxContext, xIndexAccess ) );
     if ( Index.hasValue() )
         return xColl->Item( Index, uno::Any() );
-    return uno::makeAny( xColl );
+    return uno::Any( xColl );
 }
 
 uno::Any SAL_CALL
@@ -732,7 +732,7 @@ ScVbaWorksheet::Comments( const uno::Any& Index )
     uno::Reference< XCollection > xColl(  new ScVbaComments( this, mxContext, mxModel, xIndexAccess ) );
     if ( Index.hasValue() )
         return xColl->Item( Index, uno::Any() );
-    return uno::makeAny( xColl );
+    return uno::Any( xColl );
 }
 
 uno::Any SAL_CALL
@@ -783,7 +783,7 @@ ScVbaWorksheet::Shapes( const uno::Any& aIndex )
     uno::Reference< msforms::XShapes> xVbaShapes( new ScVbaShapes( this, mxContext, xIndexAccess, getModel() ) );
     if ( aIndex.hasValue() )
         return xVbaShapes->Item( aIndex, uno::Any() );
-    return uno::makeAny( xVbaShapes );
+    return uno::Any( xVbaShapes );
 }
 
 uno::Any
@@ -903,7 +903,7 @@ ScVbaWorksheet::getValue( const OUString& aPropertyName )
     uno::Reference<lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
     uno::Reference< XControlProvider > xControlProvider( xServiceManager->createInstanceWithContext("ooo.vba.ControlProvider", mxContext ), uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xControl( xControlProvider->createControl(  xControlShape, getModel() ) );
-    return uno::makeAny( xControl );
+    return uno::Any( xControl );
 }
 
 sal_Bool SAL_CALL

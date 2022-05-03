@@ -637,9 +637,9 @@ void ScXMLExport::ExportMeta_()
 
     uno::Sequence<beans::NamedValue> stats
     {
-        { "TableCount",  uno::makeAny(static_cast<sal_Int32>(nTableCount)) },
-        { "CellCount",   uno::makeAny(nCellCount) },
-        { "ObjectCount", uno::makeAny(nShapesCount) }
+        { "TableCount",  uno::Any(static_cast<sal_Int32>(nTableCount)) },
+        { "CellCount",   uno::Any(nCellCount) },
+        { "ObjectCount", uno::Any(nShapesCount) }
     };
 
     // update document statistics at the model

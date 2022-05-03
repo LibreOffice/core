@@ -182,16 +182,16 @@ void lcl_ChartInit(const uno::Reference <embed::XEmbeddedObject>& xObj, ScViewDa
     uno::Sequence< beans::PropertyValue > aArgs{
         beans::PropertyValue(
             "CellRangeRepresentation", -1,
-            uno::makeAny( aRangeString ), beans::PropertyState_DIRECT_VALUE ),
+            uno::Any( aRangeString ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             "HasCategories", -1,
-            uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
+            uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             "FirstCellAsLabel", -1,
-            uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
+            uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ),
         beans::PropertyValue(
             "DataRowSource", -1,
-            uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
+            uno::Any( eDataRowSource ), beans::PropertyState_DIRECT_VALUE )
     };
 
     try
@@ -655,12 +655,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell& rViewSh, vcl::Window* pWin, ScDrawV
                                     //calculate and set new position
                                     Point aDialogPos = rViewShell.GetChartDialogPos( aDialogSize, aRect );
                                     xDialogProps->setPropertyValue("Position",
-                                        uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
+                                        uno::Any( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                 }
                             }
                             //tell the dialog to unlock controller
                             xDialogProps->setPropertyValue("UnlockControllersOnExecute",
-                                        uno::makeAny( true ) );
+                                        uno::Any( true ) );
 
                         }
                         catch( uno::Exception& )

@@ -115,7 +115,7 @@ ScVbaStyle::setNameLocal( const OUString& NameLocal )
 {
     try
     {
-        mxPropertySet->setPropertyValue(DISPLAYNAME, uno::makeAny( NameLocal ) );
+        mxPropertySet->setPropertyValue(DISPLAYNAME, uno::Any( NameLocal ) );
     }
     catch (const uno::Exception& e)
     {

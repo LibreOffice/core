@@ -106,7 +106,7 @@ ScVbaComment::getCommentByIndex( sal_Int32 Index )
     // parent is sheet ( parent of the range which is the parent of the comment )
     uno::Reference< XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, mxModel, xIndexAccess ) );
 
-    return uno::Reference< excel::XComment > ( xColl->Item( uno::makeAny( Index ), uno::Any() ), uno::UNO_QUERY_THROW );
+    return uno::Reference< excel::XComment > ( xColl->Item( uno::Any( Index ), uno::Any() ), uno::UNO_QUERY_THROW );
  }
 
 // public vba functions

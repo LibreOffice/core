@@ -65,9 +65,9 @@ static uno::Any xSheetConditionToFormatCondition( const uno::Reference< XHelperI
     uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
     aObject >>= xSheetConditionalEntry;
 
-    uno::Reference< excel::XStyle > xStyle( xStyles->Item( uno::makeAny( xSheetConditionalEntry->getStyleName() ), uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XStyle > xStyle( xStyles->Item( uno::Any( xSheetConditionalEntry->getStyleName() ), uno::Any() ), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XFormatCondition > xCondition = new ScVbaFormatCondition( xRangeParent, xContext,  xSheetConditionalEntry, xStyle, xFormatConditions, xRangeProps );
-    return uno::makeAny( xCondition );
+    return uno::Any( xCondition );
 }
 
 uno::Any
@@ -172,12 +172,12 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
 
         if ( _aFormula1.hasValue() )
         {
-            beans::PropertyValue aProp( "Formula1", 0, uno::makeAny( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( "Formula1", 0, uno::Any( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         if ( _aFormula2.hasValue() )
         {
-            beans::PropertyValue aProp( "Formula2", 0, uno::makeAny( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
+            beans::PropertyValue aProp( "Formula2", 0, uno::Any( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
             aPropertyValueVector.push_back( aProp );
         }
         aProperty.Name = "StyleName";
@@ -213,7 +213,7 @@ ScVbaFormatConditions::notifyRange()
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::makeAny( mxSheetConditionalEntries ));
+        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::Any( mxSheetConditionalEntries ));
     }
     catch (uno::Exception& )
     {

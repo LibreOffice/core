@@ -130,7 +130,7 @@ ScVbaFormatCondition::notifyRange()
 {
     try
     {
-        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::makeAny( mxSheetConditionalEntries));
+        mxParentRangePropertySet->setPropertyValue(SC_UNONAME_CONDFMT, uno::Any( mxSheetConditionalEntries));
     }
     catch (uno::Exception& )
     {

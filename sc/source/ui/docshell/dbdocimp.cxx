@@ -97,7 +97,7 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, const SfxViewFrame*
         aSelection[svx::DataAccessDescriptorProperty::Command]      <<= rParam.aStatement;
         aSelection[svx::DataAccessDescriptorProperty::CommandType]  <<= nType;
 
-        xControllerSelection->select(uno::makeAny(aSelection.createPropertyValueSequence()));
+        xControllerSelection->select(uno::Any(aSelection.createPropertyValueSequence()));
     }
     else
     {

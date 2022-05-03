@@ -103,9 +103,9 @@ uno::Reference<uno::XInterface> ScDataPilotItemObj::init()
 
     uno::Reference<beans::XPropertySet> xDataPilotFieldProp(
         xDPD->getDataPilotFields()->getByIndex(0), uno::UNO_QUERY_THROW);
-    xDataPilotFieldProp->setPropertyValue("Function", uno::makeAny(sheet::GeneralFunction_SUM));
+    xDataPilotFieldProp->setPropertyValue("Function", uno::Any(sheet::GeneralFunction_SUM));
     xDataPilotFieldProp->setPropertyValue("Orientation",
-                                          uno::makeAny(sheet::DataPilotFieldOrientation_DATA));
+                                          uno::Any(sheet::DataPilotFieldOrientation_DATA));
 
     if (xDPT->hasByName("DataPilotTable"))
         xDPT->removeByName("DataPilotTable");

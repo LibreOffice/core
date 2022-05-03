@@ -172,7 +172,7 @@ public:
     /** Puts the passed value into the property set. */
     template< typename Type >
     void         SetProperty( const OUString& rPropName, const Type& rValue )
-                            { SetAnyProperty( rPropName, css::uno::makeAny( rValue ) ); }
+                            { SetAnyProperty( rPropName, css::uno::Any( rValue ) ); }
 
     /** Puts the passed Boolean value into the property set. */
     void         SetBoolProperty( const OUString& rPropName, bool bValue )

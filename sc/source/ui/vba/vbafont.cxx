@@ -74,7 +74,7 @@ ScVbaFont::setColorIndex( const uno::Any& _colorindex )
     if ( !nIndex || ( nIndex == excel::XlColorIndex::xlColorIndexAutomatic ) )
     {
         nIndex = 1;  // check default ( assume black )
-        ScVbaFont_BASE::setColorIndex( uno::makeAny( nIndex ) );
+        ScVbaFont_BASE::setColorIndex( uno::Any( nIndex ) );
     }
     else
         ScVbaFont_BASE::setColorIndex( _colorindex );
@@ -149,8 +149,8 @@ ScVbaFont::setFontStyle( const uno::Any& aValue )
         }
     }
 
-    setBold( uno::makeAny( bBold ) );
-    setItalic( uno::makeAny( bItalic ) );
+    setBold( uno::Any( bBold ) );
+    setItalic( uno::Any( bItalic ) );
 }
 
 uno::Any SAL_CALL
@@ -169,7 +169,7 @@ ScVbaFont::getFontStyle()
             aStyles.append(" ");
         aStyles.append("Italic");
     }
-    return uno::makeAny( aStyles.makeStringAndClear() );
+    return uno::Any( aStyles.makeStringAndClear() );
 }
 
 uno::Any SAL_CALL
@@ -228,7 +228,7 @@ ScVbaFont::getUnderline()
     sal_Int32 nValue = awt::FontUnderline::NONE;
 
     if(mbFormControl)
-        return uno::makeAny( nValue );
+        return uno::Any( nValue );
 
     mxFont->getPropertyValue("CharUnderline") >>= nValue;
     switch ( nValue )
@@ -246,7 +246,7 @@ ScVbaFont::getUnderline()
             throw uno::RuntimeException("Unknown value retrieved for Underline" );
 
     }
-    return uno::makeAny( nValue );
+    return uno::Any( nValue );
 }
 
 uno::Any SAL_CALL

@@ -226,16 +226,16 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         uno::Sequence< beans::PropertyValue > aArgs{
             beans::PropertyValue(
                     "CellRangeRepresentation", -1,
-                    uno::makeAny( sRangeStr ), beans::PropertyState_DIRECT_VALUE ),
+                    uno::Any( sRangeStr ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
                     "HasCategories", -1,
-                    uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE ),
+                    uno::Any( bRowHeaders ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
                     "FirstCellAsLabel", -1,
-                    uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE ),
+                    uno::Any( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE ),
             beans::PropertyValue(
                     "DataRowSource", -1,
-                    uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE )
+                    uno::Any( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE )
         };
         xReceiver->setArguments( aArgs );
     }
@@ -326,7 +326,7 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
     if (!xChart.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xChart);
+    return uno::Any(xChart);
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType()
@@ -348,7 +348,7 @@ uno::Any SAL_CALL ScChartsObj::getByName( const OUString& aName )
     if (!xChart.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xChart);
+    return uno::Any(xChart);
 }
 
 uno::Sequence<OUString> SAL_CALL ScChartsObj::getElementNames()

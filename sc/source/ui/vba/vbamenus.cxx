@@ -43,7 +43,7 @@ public:
         if( xCommandBarControl->getType() == office::MsoControlType::msoControlPopup )
         {
             uno::Reference< excel::XMenu > xMenu( new ScVbaMenu( m_xParent, m_xContext, xCommandBarControl ) );
-            return uno::makeAny( xMenu );
+            return uno::Any( xMenu );
         }
         nextElement();
 
@@ -92,13 +92,13 @@ ScVbaMenus::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
     uno::Reference< XCommandBarControl > xCommandBarControl( m_xCommandBarControls->Item( aIndex, uno::Any() ), uno::UNO_QUERY_THROW );
     if( xCommandBarControl->getType() != office::MsoControlType::msoControlPopup )
         throw uno::RuntimeException();
-    return uno::makeAny( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
+    return uno::Any( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
 }
 
 uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const OUString& Caption, const css::uno::Any& Before, const css::uno::Any& Restore )
 {
     uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add(
-            uno::makeAny( office::MsoControlType::msoControlPopup ),
+            uno::Any( office::MsoControlType::msoControlPopup ),
             uno::Any(), uno::Any(), Before, Restore );
     xCommandBarControl->setCaption( Caption );
     return uno::Reference< excel::XMenu >( new ScVbaMenu( this, mxContext, xCommandBarControl ) );

@@ -105,7 +105,7 @@ static void lcl_SelectObjectByName(std::u16string_view rObjName)
 void ScUiCalcTest::goToCell(const OUString& rCell)
 {
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", uno::makeAny(rCell) } });
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rCell) } });
     dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
 }
 
@@ -464,7 +464,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf107869)
 
     // Add a new comment to A1 and A2
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+        = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Comment")) } });
 
     goToCell("A1");
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
@@ -1516,7 +1516,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteTransposed)
     // Add a note to A1
     goToCell("A1");
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Note in A1")) } });
+        = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Note in A1")) } });
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
 
     // Set A2 bold
@@ -1579,7 +1579,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testPasteAsLink)
     // Add a note to A1
     goToCell("A1");
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Note in A1")) } });
+        = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Note in A1")) } });
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
 
     // Set A2 bold
@@ -2282,7 +2282,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf124778)
 
     // Add a new comment
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+        = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Comment")) } });
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
 
@@ -2312,7 +2312,7 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest, testTdf138428)
 
     // Add a new comment
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+        = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Comment")) } });
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
 

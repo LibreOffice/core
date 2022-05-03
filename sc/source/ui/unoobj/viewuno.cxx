@@ -859,7 +859,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         //  is something selected in drawing layer?
         uno::Reference<uno::XInterface> xRet(pViewSh->getSelectedXShapes());
         if (xRet.is())
-            return uno::makeAny(xRet);
+            return uno::Any(xRet);
 
         //  otherwise sheet (cell) selection
 
@@ -927,7 +927,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
         }
     }
 
-    return uno::makeAny(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
+    return uno::Any(uno::Reference<uno::XInterface>(static_cast<cppu::OWeakObject*>(pObj.get())));
 }
 
 // XEnumerationAccess
@@ -964,7 +964,7 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
     if (!xPane.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xPane);
+    return uno::Any(xPane);
 }
 
 uno::Type SAL_CALL ScTabViewObj::getElementType()

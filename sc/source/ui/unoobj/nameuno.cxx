@@ -608,7 +608,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType()
@@ -659,7 +659,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const OUString& aName )
     if ( !xRange.is() )
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 }
 
 uno::Sequence<OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -1143,7 +1143,7 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
     if ( !xRange.is() )
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType()

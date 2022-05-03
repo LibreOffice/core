@@ -204,7 +204,7 @@ std::shared_ptr<utl::TempFile> ScPDFExportTest::exportToPDFWithUnoCommands(const
     ::osl::FileBase::getFileURLFromSystemPath(sFileURL, sFileURL);
 
     uno::Sequence<beans::PropertyValue> aArgs
-        = comphelper::InitPropertySequence({ { "ToPoint", uno::makeAny(rRange) } });
+        = comphelper::InitPropertySequence({ { "ToPoint", uno::Any(rRange) } });
     dispatchCommand(mxComponent, ".uno:GoToCell", aArgs);
 
     dispatchCommand(mxComponent, ".uno:DefinePrintArea", {});

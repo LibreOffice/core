@@ -377,7 +377,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
     if (!xEntry.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xEntry);
+    return uno::Any(xEntry);
 }
 
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType()
@@ -417,7 +417,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const OUString& aName )
     if (!xEntry.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xEntry);
+    return uno::Any(xEntry);
 }
 
 uno::Sequence<OUString> SAL_CALL ScTableConditionalFormat::getElementNames()

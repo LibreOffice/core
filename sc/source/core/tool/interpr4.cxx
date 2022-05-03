@@ -3125,7 +3125,7 @@ static uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCe
             }
         }
     }
-    return uno::makeAny( xIf );
+    return uno::Any( xIf );
 }
 
 static bool lcl_setVBARange( const ScRange& aRange, const ScDocument& rDok, SbxVariable* pPar )

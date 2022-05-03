@@ -40,7 +40,7 @@ ScVbaFileDialog::ScVbaFileDialog( const uno::Reference< XHelperInterface >& xPar
 {}
 
 uno::Any
-ScVbaFileDialog::getInitialFileName() { return uno::makeAny( m_sInitialFileName ); }
+ScVbaFileDialog::getInitialFileName() { return uno::Any( m_sInitialFileName ); }
 
 void ScVbaFileDialog::setInitialFileName( const css::uno::Any& rName )
 {
@@ -58,7 +58,7 @@ void ScVbaFileDialog::setInitialFileName( const css::uno::Any& rName )
     }
 }
 
-css::uno::Any ScVbaFileDialog::getTitle() { return uno::makeAny( m_sTitle ); }
+css::uno::Any ScVbaFileDialog::getTitle() { return uno::Any( m_sTitle ); }
 
 void ScVbaFileDialog::setTitle( const css::uno::Any& rTitle )
 {
@@ -67,7 +67,7 @@ void ScVbaFileDialog::setTitle( const css::uno::Any& rTitle )
 
 uno::Any ScVbaFileDialog::getAllowMultiSelect()
 {
-    return uno::makeAny(m_bMultiSelectMode);
+    return uno::Any(m_bMultiSelectMode);
 }
 
 void ScVbaFileDialog::setAllowMultiSelect(const uno::Any& rAllowMultiSelect)

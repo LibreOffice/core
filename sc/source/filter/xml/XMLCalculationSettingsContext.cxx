@@ -117,18 +117,18 @@ void SAL_CALL ScXMLCalculationSettingsContext::endFastElement( sal_Int32 /*nElem
     if (!xPropertySet.is())
         return;
 
-    xPropertySet->setPropertyValue( SC_UNO_CALCASSHOWN, uno::makeAny(bCalcAsShown) );
-    xPropertySet->setPropertyValue( SC_UNO_IGNORECASE, uno::makeAny(bIgnoreCase) );
-    xPropertySet->setPropertyValue( SC_UNO_LOOKUPLABELS, uno::makeAny(bLookUpLabels) );
-    xPropertySet->setPropertyValue( SC_UNO_MATCHWHOLE, uno::makeAny(bMatchWholeCell) );
+    xPropertySet->setPropertyValue( SC_UNO_CALCASSHOWN, uno::Any(bCalcAsShown) );
+    xPropertySet->setPropertyValue( SC_UNO_IGNORECASE, uno::Any(bIgnoreCase) );
+    xPropertySet->setPropertyValue( SC_UNO_LOOKUPLABELS, uno::Any(bLookUpLabels) );
+    xPropertySet->setPropertyValue( SC_UNO_MATCHWHOLE, uno::Any(bMatchWholeCell) );
     bool bWildcards, bRegex;
     utl::SearchParam::ConvertToBool( eSearchType, bWildcards, bRegex);
-    xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED, uno::makeAny(bRegex) );
-    xPropertySet->setPropertyValue( SC_UNO_WILDCARDSENABLED, uno::makeAny(bWildcards) );
-    xPropertySet->setPropertyValue( SC_UNO_ITERENABLED, uno::makeAny(bIsIterationEnabled) );
-    xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, uno::makeAny(nIterationCount) );
-    xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, uno::makeAny(fIterationEpsilon) );
-    xPropertySet->setPropertyValue( SC_UNO_NULLDATE, uno::makeAny(aNullDate) );
+    xPropertySet->setPropertyValue( SC_UNO_REGEXENABLED, uno::Any(bRegex) );
+    xPropertySet->setPropertyValue( SC_UNO_WILDCARDSENABLED, uno::Any(bWildcards) );
+    xPropertySet->setPropertyValue( SC_UNO_ITERENABLED, uno::Any(bIsIterationEnabled) );
+    xPropertySet->setPropertyValue( SC_UNO_ITERCOUNT, uno::Any(nIterationCount) );
+    xPropertySet->setPropertyValue( SC_UNO_ITEREPSILON, uno::Any(fIterationEpsilon) );
+    xPropertySet->setPropertyValue( SC_UNO_NULLDATE, uno::Any(aNullDate) );
     if (GetScImport().GetDocument())
     {
         ScXMLImport::MutexGuard aGuard(GetScImport());

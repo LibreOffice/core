@@ -765,7 +765,7 @@ void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                                     SfxFrame* pFrame = ( pViewFrame ? &pViewFrame->GetFrame() : nullptr );
                                     uno::Reference< frame::XController > xController = ( pFrame ? pFrame->GetController() : nullptr );
                                     uno::Reference< sheet::XSpreadsheetView > xSpreadsheetView( xController, uno::UNO_QUERY_THROW );
-                                    uno::Sequence< beans::NamedValue > aArgsForJob { { "SpreadsheetView", uno::makeAny( xSpreadsheetView ) } };
+                                    uno::Sequence< beans::NamedValue > aArgsForJob { { "SpreadsheetView", uno::Any( xSpreadsheetView ) } };
                                     xJob->execute( aArgsForJob );
                                 }
                             }

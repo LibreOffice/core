@@ -65,7 +65,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue("String", css::uno::makeAny( Text ));
+            xShapePropertySet->setPropertyValue("String", css::uno::Any( Text ));
         }
         catch ( css::uno::Exception& )
         {
@@ -106,7 +106,7 @@ public:
     {
         try
         {
-            xShapePropertySet->setPropertyValue("TextRotation", css::uno::makeAny(_nOrientation*100));
+            xShapePropertySet->setPropertyValue("TextRotation", css::uno::Any(_nOrientation*100));
         }
         catch (css::uno::Exception& )
         {

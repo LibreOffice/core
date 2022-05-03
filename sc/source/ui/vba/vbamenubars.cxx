@@ -39,7 +39,7 @@ public:
 
         uno::Reference< XCommandBar > xCommandBar( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( m_xParent, m_xContext, xCommandBar ) );
-        return uno::makeAny( xMenuBar );
+        return uno::Any( xMenuBar );
     }
 };
 
@@ -92,7 +92,7 @@ ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
         aSource <<= OUString( "Worksheet Menu Bar" );
         uno::Reference< XCommandBar > xCommandBar( m_xCommandBars->Item( aSource, uno::Any() ), uno::UNO_QUERY_THROW );
         uno::Reference< excel::XMenuBar > xMenuBar( new ScVbaMenuBar( this, mxContext, xCommandBar ) );
-        return uno::makeAny( xMenuBar );
+        return uno::Any( xMenuBar );
     }
 
     throw uno::RuntimeException("Not implemented" );

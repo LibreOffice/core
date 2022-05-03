@@ -95,13 +95,13 @@ uno::Reference<uno::XInterface> ScStyleObj::init()
     {
         xNC->removeByName("ScStyleObj");
     }
-    xNC->insertByName("ScStyleObj", uno::makeAny(xStyle));
+    xNC->insertByName("ScStyleObj", uno::Any(xStyle));
 
     uno::Reference<container::XIndexAccess> xIA_sheets(xDoc->getSheets(), uno::UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet0(xIA_sheets->getByIndex(0), uno::UNO_QUERY_THROW);
     uno::Reference<table::XCell> xCell = xSheet0->getCellByPosition(2, 3);
     uno::Reference<beans::XPropertySet> xPS(xCell, uno::UNO_QUERY_THROW);
-    xPS->setPropertyValue("CellStyle", uno::makeAny(xStyle->getName()));
+    xPS->setPropertyValue("CellStyle", uno::Any(xStyle->getName()));
 
     return xStyle;
 }

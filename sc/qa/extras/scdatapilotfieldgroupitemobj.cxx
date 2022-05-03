@@ -122,19 +122,17 @@ uno::Reference<uno::XInterface> ScDataPilotFieldGroupItemObj::init()
 
     uno::Reference<beans::XPropertySet> xPropertySet0(xDPD->getDataPilotFields()->getByIndex(0),
                                                       uno::UNO_QUERY_THROW);
-    xPropertySet0->setPropertyValue("Orientation",
-                                    uno::makeAny(sheet::DataPilotFieldOrientation_ROW));
+    xPropertySet0->setPropertyValue("Orientation", uno::Any(sheet::DataPilotFieldOrientation_ROW));
 
     uno::Reference<beans::XPropertySet> xPropertySet1(xDPD->getDataPilotFields()->getByIndex(1),
                                                       uno::UNO_QUERY_THROW);
-    xPropertySet1->setPropertyValue("Function", uno::makeAny(sheet::GeneralFunction_SUM));
-    xPropertySet1->setPropertyValue("Orientation",
-                                    uno::makeAny(sheet::DataPilotFieldOrientation_DATA));
+    xPropertySet1->setPropertyValue("Function", uno::Any(sheet::GeneralFunction_SUM));
+    xPropertySet1->setPropertyValue("Orientation", uno::Any(sheet::DataPilotFieldOrientation_DATA));
 
     uno::Reference<beans::XPropertySet> xPropertySet2(xDPD->getDataPilotFields()->getByIndex(2),
                                                       uno::UNO_QUERY_THROW);
     xPropertySet2->setPropertyValue("Orientation",
-                                    uno::makeAny(sheet::DataPilotFieldOrientation_COLUMN));
+                                    uno::Any(sheet::DataPilotFieldOrientation_COLUMN));
 
     xDPT->insertNewByName("DataPilotTable", aCellAddress, xDPD);
 

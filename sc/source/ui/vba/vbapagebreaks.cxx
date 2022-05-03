@@ -136,8 +136,8 @@ uno::Any SAL_CALL RangePageBreaks::getByIndex( sal_Int32 Index )
         {
             uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nPos), uno::UNO_QUERY_THROW );
             if( m_bColumn )
-                return uno::makeAny( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
-            return uno::makeAny( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+                return uno::Any( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+            return uno::Any( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
         }
     }
     throw lang::IndexOutOfBoundsException();
@@ -179,13 +179,13 @@ uno::Any RangePageBreaks::Add( const css::uno::Any& Before )
     sal_Int32 nAPIRowColIndex = getAPIStartofRange( xRange );
     uno::Reference< container::XIndexAccess > xIndexAccess = getRowColContainer();
     uno::Reference< beans::XPropertySet > xRowColPropertySet( xIndexAccess->getByIndex(nAPIRowColIndex), uno::UNO_QUERY_THROW );
-    xRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::makeAny(true));
+    xRowColPropertySet->setPropertyValue("IsStartOfNewPage", uno::Any(true));
     sheet::TablePageBreakData aTablePageBreakData;
     aTablePageBreakData.ManualBreak = true;
     aTablePageBreakData.Position = nAPIRowColIndex;
     if( m_bColumn )
-        return uno::makeAny( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
-    return uno::makeAny( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+        return uno::Any( uno::Reference< excel::XVPageBreak >( new ScVbaVPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
+    return uno::Any( uno::Reference< excel::XHPageBreak >( new ScVbaHPageBreak( mxParent, mxContext, xRowColPropertySet, aTablePageBreakData) ));
 }
 
 namespace {

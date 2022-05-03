@@ -280,7 +280,7 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByIndex( sal_Int32 nIndex )
     uno::Reference< container::XNamed >  xFormat(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex)));
     if (!xFormat.is())
         throw lang::IndexOutOfBoundsException();
-    return uno::makeAny(xFormat);
+    return uno::Any(xFormat);
 }
 
 uno::Type SAL_CALL ScAutoFormatsObj::getElementType()
@@ -303,7 +303,7 @@ uno::Any SAL_CALL ScAutoFormatsObj::getByName( const OUString& aName )
     uno::Reference< container::XNamed >  xFormat(GetObjectByName_Impl(aName));
     if (!xFormat.is())
         throw container::NoSuchElementException();
-    return uno::makeAny(xFormat);
+    return uno::Any(xFormat);
 }
 
 uno::Sequence<OUString> SAL_CALL ScAutoFormatsObj::getElementNames()
@@ -397,7 +397,7 @@ uno::Any SAL_CALL ScAutoFormatObj::getByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 
     if (IsInserted())
-        return uno::makeAny(uno::Reference< beans::XPropertySet >(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex))));
+        return uno::Any(uno::Reference< beans::XPropertySet >(GetObjectByIndex_Impl(static_cast<sal_uInt16>(nIndex))));
     return uno::Any();
 }
 

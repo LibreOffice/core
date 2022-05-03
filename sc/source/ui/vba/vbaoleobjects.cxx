@@ -57,7 +57,7 @@ public:
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
-        return uno::makeAny( vObjects[ Index ] );
+        return uno::Any( vObjects[ Index ] );
     }
 
         // Methods XElementAccess
@@ -96,7 +96,7 @@ public:
             if ( nIndex < m_xIndexAccess->getCount() )
             {
                 uno::Reference< drawing::XControlShape > xControlShape (  m_xIndexAccess->getByIndex( nIndex++ ), uno::UNO_QUERY_THROW );
-                return uno::makeAny( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( m_xParent, m_xContext, xControlShape ) ) );
+                return uno::Any( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( m_xParent, m_xContext, xControlShape ) ) );
             }
             throw container::NoSuchElementException();
         }
@@ -127,7 +127,7 @@ ScVbaOLEObjects::createCollectionObject( const css::uno::Any& aSource )
     {
         uno::Reference< drawing::XControlShape > xControlShape( aSource, uno::UNO_QUERY_THROW );
     // parent of OLEObject is the same parent as the collection ( e.g. the sheet )
-        return uno::makeAny( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( getParent(), mxContext, xControlShape ) ) );
+        return uno::Any( uno::Reference< ov::excel::XOLEObject >( new ScVbaOLEObject( getParent(), mxContext, xControlShape ) ) );
     }
     return uno::Any();
 }

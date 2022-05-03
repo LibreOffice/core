@@ -27,7 +27,7 @@ using namespace ::ooo::vba;
 static uno::Any DataPilotToPivotTable( const uno::Any& aSource, const uno::Reference< uno::XComponentContext > & xContext )
 {
     uno::Reference< sheet::XDataPilotTable > xTable( aSource, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< excel::XPivotTable > ( new ScVbaPivotTable( xContext, xTable ) ) );
+    return uno::Any( uno::Reference< excel::XPivotTable > ( new ScVbaPivotTable( xContext, xTable ) ) );
 }
 
 namespace {

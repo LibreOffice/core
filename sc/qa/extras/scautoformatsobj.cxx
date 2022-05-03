@@ -106,14 +106,13 @@ uno::Reference<uno::XInterface> ScAutoFormatsObj::init()
     if (!xNC->hasByName("ScAutoFormatsObj"))
     {
         xNC->insertByName("ScAutoFormatsObj",
-                          uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+                          uno::Any(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
     }
     // XNameContainer
     XNameContainer::setElement(
-        uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+        uno::Any(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
     // XNameReplace
-    XNameReplace::setElement(
-        uno::makeAny(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
+    XNameReplace::setElement(uno::Any(xMSF->createInstance("com.sun.star.sheet.TableAutoFormat")));
 
     return xTAF;
 }
