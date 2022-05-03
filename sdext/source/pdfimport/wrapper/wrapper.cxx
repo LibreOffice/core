@@ -717,9 +717,9 @@ uno::Sequence<beans::PropertyValue> LineParser::readImageImpl()
         uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence( comphelper::InitPropertySequence({
-            { "URL", uno::makeAny(aFileName) },
-            { "InputStream", uno::makeAny( xDataStream ) },
-            { "InputSequence", uno::makeAny(aDataSequence) }
+            { "URL", uno::Any(aFileName) },
+            { "InputStream", uno::Any( xDataStream ) },
+            { "InputSequence", uno::Any(aDataSequence) }
         }));
 
     return aSequence;

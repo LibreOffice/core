@@ -73,7 +73,7 @@ private:
 
 PDFPasswordRequest::PDFPasswordRequest( bool bFirstTry, const OUString& rName ) :
     m_aRequest(
-        uno::makeAny(
+        uno::Any(
             task::DocumentPasswordRequest(
                 OUString(), uno::Reference< uno::XInterface >(),
                 task::InteractionClassification_QUERY,
@@ -127,7 +127,7 @@ private:
     virtual ~UnsupportedEncryptionFormatRequest() override {}
 
     virtual uno::Any SAL_CALL getRequest() override {
-        return uno::makeAny(
+        return uno::Any(
             task::ErrorCodeRequest(
                 OUString(), uno::Reference< uno::XInterface >(),
                 sal_uInt32(ERRCODE_IO_WRONGVERSION)));
