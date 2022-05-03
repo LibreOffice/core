@@ -335,13 +335,12 @@ void lcl_parseHandleRange(std::vector<beans::PropertyValue>& rHandle, const OStr
 void lcl_parseHandleRef(std::vector<beans::PropertyValue>& rHandle, const OString& rValue,
                         const OUString& rName)
 {
-    static const char aPrefix[] = "\", Handle = (long) 0, Value = (any) { (long) ";
-    const sal_Int32 nCheck = SAL_N_ELEMENTS(aPrefix) - 1;
+    static constexpr std::string_view aPrefix = "\", Handle = (long) 0, Value = (any) { (long) ";
     const sal_Int32 nStart = SAL_N_ELEMENTS("Name = \"") - 1 + rName.getLength();
 
-    if (rValue.copy(nStart, nCheck).equalsL(aPrefix, nCheck))
+    if (rValue.subView(nStart, aPrefix.size()) == aPrefix)
     {
-        sal_Int32 nIndex = nStart + nCheck;
+        sal_Int32 nIndex = nStart + aPrefix.size();
         beans::PropertyValue aPropertyValue;
         aPropertyValue.Name = rName;
         // We only expect a Value here
