@@ -70,7 +70,7 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
     sal_Int32 nNum = 0;
     if ( p[nNum] == '-' || p[nNum] == '+' )
         nNum = nSign = 1;
-    while ( p[nNum] && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
+    while ( p[nNum] && CharClass::isAsciiNumeric( std::u16string_view(&p[nNum], 1) ) )
         nNum++;
 
     sal_Unicode cNext = p[nNum];            // 0 if at the end
@@ -79,7 +79,7 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
     // #i5550# If there are numbers at the beginning and the end,
     // prefer the one at the beginning only if it's followed by a space.
     // Otherwise, use the number at the end, to enable things like IP addresses.
-    if ( nNum > nSign && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(OUString(cLast)) ) )
+    if ( nNum > nSign && ( cNext == 0 || cNext == ' ' || !CharClass::isAsciiNumeric(std::u16string_view(&cLast, 1)) ) )
     {   // number at the beginning
         nVal = o3tl::toInt32(rValue.subView( 0, nNum ));
         //  any number with a leading zero sets the minimum number of digits
@@ -92,7 +92,7 @@ short lcl_DecompValueString( OUString& rValue, sal_Int32& nVal, sal_uInt16* pMin
     {
         nSign = 0;
         sal_Int32 nEnd = nNum = rValue.getLength() - 1;
-        while ( nNum && CharClass::isAsciiNumeric( OUString(p[nNum]) ) )
+        while ( nNum && CharClass::isAsciiNumeric( std::u16string_view(&p[nNum], 1) ) )
             nNum--;
         if ( p[nNum] == '-' || p[nNum] == '+' )
         {

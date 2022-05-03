@@ -460,13 +460,13 @@ sal_uInt16 LocaleDataWrapper::getCurrDigits() const
     return nCurrDigits;
 }
 
-void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
+void LocaleDataWrapper::scanCurrFormatImpl( std::u16string_view rCode,
         sal_Int32 nStart, sal_Int32& nSign, sal_Int32& nPar,
         sal_Int32& nNum, sal_Int32& nBlank, sal_Int32& nSym ) const
 {
     nSign = nPar = nNum = nBlank = nSym = -1;
-    const sal_Unicode* const pStr = rCode.getStr();
-    const sal_Unicode* const pStop = pStr + rCode.getLength();
+    const sal_Unicode* const pStr = rCode.data();
+    const sal_Unicode* const pStop = pStr + rCode.size();
     const sal_Unicode* p = pStr + nStart;
     int nInSection = 0;
     bool bQuote = false;
@@ -523,7 +523,7 @@ void LocaleDataWrapper::scanCurrFormatImpl( const OUString& rCode,
                         p = pStop;
                 break;
                 default:
-                    if (!nInSection && nSym == -1 && rCode.match(aCurrSymbol, static_cast<sal_Int32>(p - pStr)))
+                    if (!nInSection && nSym == -1 && o3tl::starts_with(rCode.substr(static_cast<sal_Int32>(p - pStr)), aCurrSymbol))
                     {   // currency symbol not surrounded by [$...]
                         nSym = p - pStr;
                         if (nBlank == -1 && pStr < p && *(p-1) == ' ')

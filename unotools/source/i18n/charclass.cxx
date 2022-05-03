@@ -58,12 +58,12 @@ const css::lang::Locale& CharClass::getMyLocale() const
 }
 
 // static
-bool CharClass::isAsciiNumeric( const OUString& rStr )
+bool CharClass::isAsciiNumeric( std::u16string_view rStr )
 {
-    if ( rStr.isEmpty() )
+    if ( rStr.empty() )
         return false;
-    const sal_Unicode* p = rStr.getStr();
-    const sal_Unicode* const pStop = p + rStr.getLength();
+    const sal_Unicode* p = rStr.data();
+    const sal_Unicode* const pStop = p + rStr.size();
 
     do
     {
@@ -76,12 +76,12 @@ bool CharClass::isAsciiNumeric( const OUString& rStr )
 }
 
 // static
-bool CharClass::isAsciiAlpha( const OUString& rStr )
+bool CharClass::isAsciiAlpha( std::u16string_view rStr )
 {
-    if ( rStr.isEmpty() )
+    if ( rStr.empty() )
         return false;
-    const sal_Unicode* p = rStr.getStr();
-    const sal_Unicode* const pStop = p + rStr.getLength();
+    const sal_Unicode* p = rStr.data();
+    const sal_Unicode* const pStop = p + rStr.size();
 
     do
     {

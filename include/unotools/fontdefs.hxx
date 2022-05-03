@@ -40,7 +40,7 @@ namespace o3tl
     template<> struct typed_flags<SubsFontFlags> : is_typed_flags<SubsFontFlags, 0x03> {};
 }
 
-UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags );
+UNOTOOLS_DLLPUBLIC OUString GetSubsFontName( std::u16string_view rName, SubsFontFlags nFlags );
 
 UNLESS_MERGELIBS(UNOTOOLS_DLLPUBLIC) void AddTokenFontName( OUString& rName, std::u16string_view rNewToken );
 
@@ -84,7 +84,7 @@ enum class DefaultFontType
     CTL_DISPLAY         = 4004,
 };
 
-UNOTOOLS_DLLPUBLIC std::u16string_view GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex );
+UNOTOOLS_DLLPUBLIC std::u16string_view GetNextFontToken( std::u16string_view rTokenStr, sal_Int32& rIndex );
 UNOTOOLS_DLLPUBLIC OUString GetEnglishSearchFontName( std::u16string_view rName );
 
 /** Strip any "script font suffix" from the font name
@@ -104,7 +104,7 @@ UNOTOOLS_DLLPUBLIC OUString StripScriptFromName(const OUString& rName);
     @return true if this is Star|Open Symbol
 */
 // FIXME It's quite possible that code using this should instead check for RTL_TEXTENCODING_SYMBOL.
-UNOTOOLS_DLLPUBLIC bool IsStarSymbol(const OUString &rFontName);
+UNOTOOLS_DLLPUBLIC bool IsStarSymbol(std::u16string_view rFontName);
 
 #endif // INCLUDED_UNOTOOLS_FONTDEFS_HXX
 

@@ -134,7 +134,7 @@ namespace utl
             "*['<Name>']", where <Name> is properly escaped.
 
     */
-    UNOTOOLS_DLLPUBLIC OUString wrapConfigurationElementName(OUString const& _sElementName);
+    UNOTOOLS_DLLPUBLIC OUString wrapConfigurationElementName(std::u16string_view _sElementName);
 
     /** Create a one-level relative configuration path from a set element name
         and a known set element type.
@@ -152,7 +152,7 @@ namespace utl
             "<Type>['<Name>']", where <Name> is properly escaped.
 
     */
-    OUString wrapConfigurationElementName(OUString const& _sElementName,
+    OUString wrapConfigurationElementName(std::u16string_view _sElementName,
                                                  OUString const& _sTypeName);
 
 }   // namespace utl

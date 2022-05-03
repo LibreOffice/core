@@ -145,7 +145,7 @@ public:
     // If there are invalid characters in the string it returns sal_False.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
-    bool writeString(const OUString& rWriteOutString, bool bDoNormalization,
+    bool writeString(std::u16string_view rWriteOutString, bool bDoNormalization,
                      bool bNormalizeWhitespace);
 
     sal_uInt32 GetLastColumnCount() const noexcept
@@ -177,7 +177,7 @@ public:
     // If there are invalid characters in the string it returns sal_False.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
-    bool processingInstruction(const OUString& rTarget, const OUString& rData);
+    bool processingInstruction(std::u16string_view rTarget, std::u16string_view rData);
     /// @throws SAXException
     void startCDATA();
     /// @throws SAXException
@@ -187,7 +187,7 @@ public:
     // If there are invalid characters in the string it returns sal_False.
     // Than the calling method has to throw the needed Exception.
     /// @throws SAXException
-    bool comment(const OUString& rComment);
+    bool comment(std::u16string_view rComment);
 
     /// @throws SAXException
     void clearBuffer();
@@ -198,7 +198,7 @@ public:
             replacements);
 
     // Calculate length for convertToXML
-    sal_Int32 calcXMLByteLength(const OUString& rStr, bool bDoNormalization,
+    sal_Int32 calcXMLByteLength(std::u16string_view rStr, bool bDoNormalization,
                                 bool bNormalizeWhitespace);
 };
 
@@ -593,11 +593,11 @@ void SaxWriterHelper::insertIndentation(sal_uInt32 m_nLevel)
     }
 }
 
-bool SaxWriterHelper::writeString(const OUString& rWriteOutString, bool bDoNormalization,
+bool SaxWriterHelper::writeString(std::u16string_view rWriteOutString, bool bDoNormalization,
                                   bool bNormalizeWhitespace)
 {
     FinishStartElement();
-    return convertToXML(rWriteOutString.getStr(), rWriteOutString.getLength(), bDoNormalization,
+    return convertToXML(rWriteOutString.data(), rWriteOutString.size(), bDoNormalization,
                         bNormalizeWhitespace, mp_Sequence, nCurrentPos);
 }
 
@@ -790,7 +790,7 @@ void SaxWriterHelper::clearBuffer()
     }
 }
 
-bool SaxWriterHelper::processingInstruction(const OUString& rTarget, const OUString& rData)
+bool SaxWriterHelper::processingInstruction(std::u16string_view rTarget, std::u16string_view rData)
 {
     FinishStartElement();
     mp_Sequence[nCurrentPos] = '<';
@@ -852,7 +852,7 @@ void SaxWriterHelper::endCDATA()
         nCurrentPos = writeSequence();
 }
 
-bool SaxWriterHelper::comment(const OUString& rComment)
+bool SaxWriterHelper::comment(std::u16string_view rComment)
 {
     FinishStartElement();
     mp_Sequence[nCurrentPos] = '<';
@@ -890,15 +890,15 @@ bool SaxWriterHelper::comment(const OUString& rComment)
     return bRet;
 }
 
-sal_Int32 SaxWriterHelper::calcXMLByteLength(const OUString& rStr, bool bDoNormalization,
+sal_Int32 SaxWriterHelper::calcXMLByteLength(std::u16string_view rStr, bool bDoNormalization,
                                              bool bNormalizeWhitespace)
 {
     sal_Int32 nOutputLength = 0;
     sal_uInt32 nSurrogate = 0;
 
-    const sal_Unicode* pStr = rStr.getStr();
-    sal_Int32 nStrLen = rStr.getLength();
-    for (sal_Int32 i = 0; i < nStrLen; i++)
+    const sal_Unicode* pStr = rStr.data();
+    size_t nStrLen = rStr.size();
+    for (size_t i = 0; i < nStrLen; i++)
     {
         sal_uInt16 c = pStr[i];
         if (!IsInvalidChar(c) && (c >= 0x0001) && (c <= 0x007F))

@@ -158,9 +158,9 @@ namespace
         return false;
     }
 
-    bool write_OString(oslFileHandle& rHandle, const OString& rSource)
+    bool write_OString(oslFileHandle& rHandle, std::string_view rSource)
     {
-        const sal_uInt32 nLength(rSource.getLength());
+        const sal_uInt32 nLength(rSource.size());
 
         if (!write_sal_uInt32(rHandle, nLength))
         {
@@ -169,7 +169,7 @@ namespace
 
         sal_uInt64 nBaseWritten(0);
 
-        return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(rSource.getStr()), nLength, &nBaseWritten) && nLength == nBaseWritten;
+        return osl_File_E_None == osl_writeFile(rHandle, static_cast<const void*>(rSource.data()), nLength, &nBaseWritten) && nLength == nBaseWritten;
     }
 
     OUString createFileURL(
