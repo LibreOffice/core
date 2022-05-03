@@ -1468,8 +1468,25 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     }
                 }
 
-                xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd,
+                const uno::Reference< text::XTextContent >& xTextContent =
+                        xBodyText->convertToTextFrame(rInfo.m_xStart, rInfo.m_xEnd,
                                               rInfo.m_aFrameProperties);
+
+                // paragraph of the anchoring point of the floating table needs zero top and bottom
+                // margins, if the table was a not floating table in the footnote, otherwise
+                // docDefault margins could result bigger vertical spaces around the table
+                if ( rInfo.m_bConvertToFloatingInFootnote && xTextContent.is() )
+                {
+                    uno::Reference<beans::XPropertySet> xParagraph(
+                                    xTextContent->getAnchor(), uno::UNO_QUERY);
+                    if ( xParagraph.is() )
+                    {
+                        xParagraph->setPropertyValue("ParaTopMargin",
+                                    uno::makeAny(static_cast<sal_Int32>(0)));
+                        xParagraph->setPropertyValue("ParaBottomMargin",
+                                    uno::makeAny(static_cast<sal_Int32>(0)));
+                    }
+                }
 
                 uno::Reference<text::XTextTablesSupplier> xTextDocument(rDM_Impl.GetTextDocument(), uno::UNO_QUERY);
                 uno::Reference<container::XNameAccess> xTables = xTextDocument->getTextTables();
