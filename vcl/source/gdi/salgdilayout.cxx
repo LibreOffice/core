@@ -53,9 +53,8 @@ SalFrameGeometry SalFrame::GetGeometry() const
 
 SalGraphics::SalGraphics()
 :   m_nLayout( SalLayoutFlags::NONE ),
-    m_aLastMirrorW(0),
-    m_nLastMirrorDeviceLTRButBiDiRtlTranslate(0),
-    m_bLastMirrorDeviceLTRButBiDiRtlSet(false),
+    m_eLastMirrorMode(MirrorMode::NONE),
+    m_nLastMirrorTranslation(0),
     m_bAntiAlias(false),
     m_bTextRenderModeForResolutionIndependentLayout(false)
 {
@@ -271,50 +270,90 @@ basegfx::B2DPolyPolygon SalGraphics::mirror( const basegfx::B2DPolyPolygon& i_rP
     }
 }
 
+SalGraphics::MirrorMode SalGraphics::GetMirrorMode(const OutputDevice& rOutDev) const
+{
+    if (rOutDev.ImplIsAntiparallel())
+    {
+        if (m_nLayout & SalLayoutFlags::BiDiRtl)
+            return MirrorMode::AntiparallelBiDi;
+        else
+            return MirrorMode::Antiparallel;
+    }
+    else if (m_nLayout & SalLayoutFlags::BiDiRtl)
+        return MirrorMode::BiDi;
+    return MirrorMode::NONE;
+}
+
 const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice& i_rOutDev ) const
 {
     // get mirroring transformation
-    const tools::Long w = GetDeviceWidth(i_rOutDev);
-    SAL_WARN_IF( !w, "vcl", "missing graphics width" );
+    MirrorMode eNewMirrorMode = GetMirrorMode(i_rOutDev);
+    tools::Long nTranslate(0);
 
-    const bool bMirrorDeviceLTRButBiDiRtlSet = !i_rOutDev.IsRTLEnabled();
-    tools::Long nMirrorDeviceLTRButBiDiRtlTranslate(0);
-    if (bMirrorDeviceLTRButBiDiRtlSet)
-        nMirrorDeviceLTRButBiDiRtlTranslate = w - i_rOutDev.GetOutputWidthPixel() - (2 * i_rOutDev.GetOutOffXPixel());
-
-    // if the device width, or mirror state of the device changed, then m_aLastMirror is invalid
-    bool bLastMirrorValid = w == m_aLastMirrorW && bMirrorDeviceLTRButBiDiRtlSet == m_bLastMirrorDeviceLTRButBiDiRtlSet;
-    if (bLastMirrorValid && bMirrorDeviceLTRButBiDiRtlSet)
+    switch (eNewMirrorMode)
     {
-        // if the device is in the unusual mode of a LTR device, but layout flags of SalLayoutFlags::BiDiRtl are
-        // in use, then the m_aLastMirror is invalid if the distance it should translate has changed
-        bLastMirrorValid = nMirrorDeviceLTRButBiDiRtlTranslate == m_nLastMirrorDeviceLTRButBiDiRtlTranslate;
+        case MirrorMode::AntiparallelBiDi:
+        {
+            const tools::Long w = GetDeviceWidth(i_rOutDev);
+            SAL_WARN_IF(!w, "vcl", "missing graphics width");
+            nTranslate = w - i_rOutDev.GetOutputWidthPixel() - (2 * i_rOutDev.GetOutOffXPixel());
+            break;
+        }
+        case MirrorMode::Antiparallel:
+        {
+            nTranslate = i_rOutDev.GetOutputWidthPixel() + (2 * i_rOutDev.GetOutOffXPixel()) - 1;
+            break;
+        }
+        case MirrorMode::BiDi:
+        {
+            const tools::Long w = GetDeviceWidth(i_rOutDev);
+            SAL_WARN_IF(!w, "vcl", "missing graphics width");
+            nTranslate = w - 1;
+            break;
+        }
+        case MirrorMode::NONE:
+            break;
     }
 
+    // if the translation (due to device width), or mirror state of the device changed, then m_aLastMirror is invalid
+    bool bLastMirrorValid = eNewMirrorMode == m_eLastMirrorMode && nTranslate == m_nLastMirrorTranslation;
     if (!bLastMirrorValid)
     {
-        const_cast<SalGraphics*>(this)->m_aLastMirrorW = w;
-        const_cast<SalGraphics*>(this)->m_bLastMirrorDeviceLTRButBiDiRtlSet = bMirrorDeviceLTRButBiDiRtlSet;
-        const_cast<SalGraphics*>(this)->m_nLastMirrorDeviceLTRButBiDiRtlTranslate = nMirrorDeviceLTRButBiDiRtlTranslate;
+        const_cast<SalGraphics*>(this)->m_nLastMirrorTranslation = nTranslate;
+        const_cast<SalGraphics*>(this)->m_eLastMirrorMode = eNewMirrorMode;
 
-        if(w)
+        switch (eNewMirrorMode)
         {
-            if (bMirrorDeviceLTRButBiDiRtlSet)
+            // mirror this window back
+            case MirrorMode::AntiparallelBiDi:
             {
                 /* This path gets exercised in calc's RTL UI (e.g. SAL_RTL_ENABLED=1)
                    with its LTR horizontal scrollbar */
 
                 // Original code was:
-                //      // mirror this window back
                 //      double devX = w-i_rOutDev.GetOutputWidthPixel()-i_rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
                 //      aRet.setX( devX + (i_rPoint.getX() - i_rOutDev.GetOutOffXPixel()) );
-                // I do not really understand the comment 'mirror this window back', so cannot guarantee
-                // that this works as before, but I have reduced this (by re-placing and re-formatting) to
-                // a simple translation:
                 const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createTranslateB2DHomMatrix(
-                    nMirrorDeviceLTRButBiDiRtlTranslate, 0.0);
+                   nTranslate, 0.0);
+                break;
             }
-            else
+            case MirrorMode::Antiparallel:
+            {
+                /* This path gets exercised in writers's LTR UI with a RTL horizontal
+                   scrollbar, cross-reference dialog populated from contents from a
+                   RTL document tdf#131725 */
+
+                // Original code was;
+                //      tools::Long devX = rOutDev.GetOutOffXPixel();   // re-mirrored mnOutOffX
+                //      x = rOutDev.GetOutputWidthPixel() - (x - devX) + rOutDev.GetOutOffXPixel() - 1;
+                const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    -1.0,
+                    1.0,
+                    nTranslate,
+                    0.0);
+                break;
+            }
+            case MirrorMode::BiDi:
             {
                 // Original code was:
                 //      aRet.setX( w-1-i_rPoint.getX() );
@@ -324,13 +363,13 @@ const basegfx::B2DHomMatrix& SalGraphics::getMirror( const OutputDevice& i_rOutD
                 const_cast<SalGraphics*>(this)->m_aLastMirror = basegfx::utils::createScaleTranslateB2DHomMatrix(
                     -1.0,
                     1.0,
-                    w-1,
+                    nTranslate,
                     0.0);
+                break;
             }
-        }
-        else
-        {
-            const_cast<SalGraphics*>(this)->m_aLastMirror.identity();
+            case MirrorMode::NONE:
+                const_cast<SalGraphics*>(this)->m_aLastMirror.identity();
+                break;
         }
     }
 
