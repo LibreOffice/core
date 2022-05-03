@@ -31,6 +31,7 @@
 
 #include <vcl/sysdata.hxx>
 #include <comphelper/sequence.hxx>
+#include <o3tl/safeint.hxx>
 
 #include <awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
@@ -200,7 +201,7 @@ void SAL_CALL VCLXTopWindow::setDisplay( ::sal_Int32 _display )
 {
     SolarMutexGuard aGuard;
 
-    if ( ( _display < 0 ) || ( _display >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
+    if ( ( _display < 0 ) || ( o3tl::make_unsigned(_display) >= Application::GetScreenCount() ) )
         throw IndexOutOfBoundsException();
 
     SystemWindow* pWindow = VCLXContainer::GetAsDynamic<SystemWindow>();

@@ -1965,7 +1965,7 @@ struct UnoControlListBoxModel_Data
 
     const ListItem& getItem( const sal_Int32 i_nIndex ) const
     {
-        if ( ( i_nIndex < 0 ) || ( i_nIndex >= sal_Int32( m_aListItems.size() ) ) )
+        if ( ( i_nIndex < 0 ) || ( o3tl::make_unsigned(i_nIndex) >= m_aListItems.size() ) )
             throw IndexOutOfBoundsException( OUString(), m_rAntiImpl );
         return m_aListItems[ i_nIndex ];
     }
@@ -1977,7 +1977,7 @@ struct UnoControlListBoxModel_Data
 
     ListItem& insertItem( const sal_Int32 i_nIndex )
     {
-        if ( ( i_nIndex < 0 ) || ( i_nIndex > sal_Int32( m_aListItems.size() ) ) )
+        if ( ( i_nIndex < 0 ) || ( o3tl::make_unsigned(i_nIndex) > m_aListItems.size() ) )
             throw IndexOutOfBoundsException( OUString(), m_rAntiImpl );
         return *m_aListItems.insert( m_aListItems.begin() + i_nIndex, ListItem() );
     }
@@ -2001,7 +2001,7 @@ struct UnoControlListBoxModel_Data
 
     void    removeItem( const sal_Int32 i_nIndex )
     {
-        if ( ( i_nIndex < 0 ) || ( i_nIndex >= sal_Int32( m_aListItems.size() ) ) )
+        if ( ( i_nIndex < 0 ) || ( o3tl::make_unsigned(i_nIndex) >= m_aListItems.size() ) )
             throw IndexOutOfBoundsException( OUString(), m_rAntiImpl );
         m_aListItems.erase( m_aListItems.begin() + i_nIndex );
     }

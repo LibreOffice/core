@@ -52,6 +52,7 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/conditn.hxx>
 #include <osl/module.h>
 #include <osl/thread.hxx>
@@ -1971,7 +1972,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
 
         if ( aDescr.ParentIndex == -1 )
             aDescr.Parent = nullptr;
-        else if ( ( aDescr.ParentIndex >= 0 ) && ( aDescr.ParentIndex < static_cast<short>(n) ) )
+        else if ( ( aDescr.ParentIndex >= 0 ) && ( o3tl::make_unsigned(aDescr.ParentIndex) < n ) )
             aDescr.Parent = aSeq.getConstArray()[aDescr.ParentIndex];
         aSeq.getArray()[n] = createWindow( aDescr );
     }
