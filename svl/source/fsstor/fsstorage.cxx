@@ -924,9 +924,9 @@ uno::Any SAL_CALL FSStorage::getPropertyValue( const OUString& aPropertyName )
     ::osl::MutexGuard aGuard( m_aMutex );
 
     if ( aPropertyName == "URL" )
-        return uno::makeAny( m_aURL );
+        return uno::Any( m_aURL );
     else if ( aPropertyName == "OpenMode" )
-        return uno::makeAny( m_nMode );
+        return uno::Any( m_nMode );
 
     throw beans::UnknownPropertyException(aPropertyName); // TODO
 }
