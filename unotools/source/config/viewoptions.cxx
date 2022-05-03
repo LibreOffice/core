@@ -175,7 +175,7 @@ void SvtViewOptions::SetWindowState( const OUString& sState )
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_WINDOWSTATE, css::uno::makeAny(sState));
+        xNode->setPropertyValue(PROPERTY_WINDOWSTATE, css::uno::Any(sState));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception&)
@@ -223,7 +223,7 @@ void SvtViewOptions::SetPageID(std::string_view rID)
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::makeAny(OUString::fromUtf8(rID)));
+        xNode->setPropertyValue(PROPERTY_PAGEID, css::uno::Any(OUString::fromUtf8(rID)));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception&)
@@ -281,7 +281,7 @@ void SvtViewOptions::SetVisible( bool bVisible )
         css::uno::Reference< css::beans::XPropertySet > xNode(
             impl_getSetNode(m_sViewName, true),
             css::uno::UNO_QUERY_THROW);
-        xNode->setPropertyValue(PROPERTY_VISIBLE, css::uno::makeAny(bVisible));
+        xNode->setPropertyValue(PROPERTY_VISIBLE, css::uno::Any(bVisible));
         ::comphelper::ConfigurationHelper::flush(m_xRoot);
     }
     catch(const css::uno::Exception&)

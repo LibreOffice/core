@@ -60,7 +60,7 @@ static std::unique_ptr<SvStream> lcl_CreateStream( const OUString& rFileName, St
                 ::ucbhelper::Content aCnt(
                     rFileName, Reference < XCommandEnvironment >(),
                     comphelper::getProcessComponentContext() );
-                aCnt.executeCommand( "delete", css::uno::makeAny( true ) );
+                aCnt.executeCommand( "delete", css::uno::Any( true ) );
             }
 
             catch ( const CommandAbortedException& )

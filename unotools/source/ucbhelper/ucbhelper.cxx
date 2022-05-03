@@ -193,7 +193,7 @@ bool utl::UCBContentHelper::Kill(OUString const & url) {
     try {
         content(url).executeCommand(
             "delete",
-            css::uno::makeAny(true));
+            css::uno::Any(true));
         return true;
     } catch (css::uno::RuntimeException const &) {
         throw;

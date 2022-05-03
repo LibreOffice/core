@@ -180,7 +180,7 @@ void SvtUserOptions::Impl::SetValue_Impl (UserOptToken nToken, ValueType const& 
     try
     {
         if (m_xData.is())
-             m_xData->setPropertyValue(OUString::createFromAscii(vOptionNames[nToken]), uno::makeAny(sToken));
+             m_xData->setPropertyValue(OUString::createFromAscii(vOptionNames[nToken]), uno::Any(sToken));
         comphelper::ConfigurationHelper::flush(m_xCfg);
     }
     catch (uno::Exception const&)

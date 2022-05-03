@@ -160,7 +160,7 @@ void ZipPackageHelper::addFile( css::uno::Reference< css::uno::XInterface > cons
         return;
 
     Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
-    xNameContainer->insertByName(encodeZipUri( aName ), makeAny(xTunnel));
+    xNameContainer->insertByName(encodeZipUri( aName ), Any(xTunnel));
     xSink->setInputStream( xInput );
 }
 

@@ -178,11 +178,11 @@ void AppendItem(EHistoryType eHistory,
             if (sThumbnail)
             {
                 // update the thumbnail
-                xSet->setPropertyValue(s_sThumbnail, uno::makeAny(*sThumbnail));
+                xSet->setPropertyValue(s_sThumbnail, uno::Any(*sThumbnail));
             }
             if (oIsReadOnly)
             {
-                xSet->setPropertyValue(s_sReadOnly, uno::makeAny(*oIsReadOnly));
+                xSet->setPropertyValue(s_sReadOnly, uno::Any(*oIsReadOnly));
             }
 
             for (sal_Int32 i=0; i<nLength; ++i)
@@ -202,10 +202,10 @@ void AppendItem(EHistoryType eHistory,
 
                         OUString sTemp;
                         xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                        xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sTemp));
+                        xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
                     }
                     xOrderList->getByName(OUString::number(0)) >>= xSet;
-                    xSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(aItem));
+                    xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(aItem));
                     break;
                 }
             }
@@ -249,7 +249,7 @@ void AppendItem(EHistoryType eHistory,
                 xFac.set(xOrderList, uno::UNO_QUERY);
                 xInst = xFac->createInstance();
                 OUString sPush = OUString::number(nLength++);
-                xOrderList->insertByName(sPush, uno::makeAny(xInst));
+                xOrderList->insertByName(sPush, uno::Any(xInst));
             }
             for (sal_Int32 j=nLength-1; j>0; --j)
             {
@@ -257,24 +257,24 @@ void AppendItem(EHistoryType eHistory,
                 xOrderList->getByName( OUString::number(j-1) ) >>= xNextSet;
                 OUString sTemp;
                 xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sTemp));
+                xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
             }
             xOrderList->getByName( OUString::number(0) ) >>= xSet;
-            xSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sURL));
+            xSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sURL));
 
             // Append the item to ItemList.
             xFac.set(xItemList, uno::UNO_QUERY);
             xInst = xFac->createInstance();
-            xItemList->insertByName(sURL, uno::makeAny(xInst));
+            xItemList->insertByName(sURL, uno::Any(xInst));
 
             xSet.set(xInst, uno::UNO_QUERY);
-            xSet->setPropertyValue(s_sFilter, uno::makeAny(sFilter));
-            xSet->setPropertyValue(s_sTitle, uno::makeAny(sTitle));
-            xSet->setPropertyValue(s_sPassword, uno::makeAny(OUString()));
-            xSet->setPropertyValue(s_sThumbnail, uno::makeAny(sThumbnail.value_or(OUString())));
+            xSet->setPropertyValue(s_sFilter, uno::Any(sFilter));
+            xSet->setPropertyValue(s_sTitle, uno::Any(sTitle));
+            xSet->setPropertyValue(s_sPassword, uno::Any(OUString()));
+            xSet->setPropertyValue(s_sThumbnail, uno::Any(sThumbnail.value_or(OUString())));
             if (oIsReadOnly)
             {
-                xSet->setPropertyValue(s_sReadOnly, uno::makeAny(*oIsReadOnly));
+                xSet->setPropertyValue(s_sReadOnly, uno::Any(*oIsReadOnly));
             }
 
             ::comphelper::ConfigurationHelper::flush(xCfg);
@@ -333,7 +333,7 @@ void DeleteItem(EHistoryType eHistory, const OUString& sURL)
 
             OUString sTemp;
             xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-            xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::makeAny(sTemp));
+            xPrevSet->setPropertyValue(s_sHistoryItemRef, uno::Any(sTemp));
         }
         xOrderList->removeByName(OUString::number(nLength - 1));
 
