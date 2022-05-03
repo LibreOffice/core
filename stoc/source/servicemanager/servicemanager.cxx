@@ -541,7 +541,7 @@ Any SAL_CALL OServiceManagerWrapper::getPropertyValue(
     {
         MutexGuard aGuard( m_aMutex );
         if( m_xContext.is() )
-            return makeAny( m_xContext );
+            return Any( m_xContext );
         else
             return Any();
     }
@@ -680,7 +680,7 @@ Any OServiceManager::getPropertyValue(const OUString& PropertyName)
     {
         MutexGuard aGuard( m_aMutex );
         if( m_xContext.is() )
-            return makeAny( m_xContext );
+            return Any( m_xContext );
         else
             return Any();
     }
@@ -1265,7 +1265,7 @@ Reference<XInterface > ORegistryServiceManager::loadWithImplementationName(
             else
                 xMgr.set( this );
             ret = createSingleRegistryFactory( xMgr, name, xImpKey );
-            insert( makeAny( ret ) );
+            insert( Any( ret ) );
             // Remember this factory as loaded in contrast to inserted ( XSet::insert)
             // factories. Those loaded factories in this set are candidates for being
             // released on an unloading notification.
@@ -1440,7 +1440,7 @@ Any ORegistryServiceManager::getPropertyValue(const OUString& PropertyName)
     {
         MutexGuard aGuard( m_aMutex );
         if( m_xRegistry.is() )
-            return makeAny( m_xRegistry );
+            return Any( m_xRegistry );
         else
             return Any();
     }
