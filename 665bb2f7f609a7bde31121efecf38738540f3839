@@ -16,6 +16,24 @@
       "message": "Hi Xisco! I could not find how to add a new translatable string to libreoffice. Here I would add two tooltips for the [+] and the [-] button. May you know an example or any documentation? Thank you very much!",
       "revId": "665bb2f7f609a7bde31121efecf38738540f3839",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6aa666d4_a4cda92b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-03T08:05:50Z",
+      "side": 1,
+      "message": "Hi Andreas,\nnot sure what you want to do, but searching for similar strings in the fpicker dialog ( e.g. \u0027Servers...\u0027 ) they are defined in fpicker/uiconfig/ui/explorerfiledialog.ui",
+      "parentUuid": "bbaf8cc9_d8af5b6e",
+      "revId": "665bb2f7f609a7bde31121efecf38738540f3839",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
