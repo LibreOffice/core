@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "80075895_4605be36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001605
+      },
+      "writtenOn": "2022-05-03T02:45:58Z",
+      "side": 1,
+      "message": "https://en.wikipedia.org/wiki/Gettext\nhttps://www.gnu.org/software/gettext/manual/html_node/xgettext-Invocation.html\nhttps://opengrok.libreoffice.org/search?full\u003dxgettext\u0026project\u003dcore\nhttps://opengrok.libreoffice.org/xref/core/l10ntools/source/localize.cxx?r\u003d74957c7d#184\nhttps://opengrok.libreoffice.org/xref/core/solenv/gbuild/Module.mk?r\u003ddaa8e90f#233\n\nhttps://opengrok.libreoffice.org/xref/core/unotools/source/i18n/resmgr.cxx?r\u003d2b44f949#214\n\nfor example:\n\nhttps://opengrok.libreoffice.org/xref/core/include/svx/strings.hrc?r\u003dcccd2413#23\nhttps://opengrok.libreoffice.org/search?full\u003d%22Translate%3A%3Aget%22\u0026project\u003dcore\nhttps://opengrok.libreoffice.org/xref/core/svx/source/svdraw/svdobj.cxx?r\u003dcbaf1fba#1077",
+      "parentUuid": "e224512e_85570893",
+      "revId": "b7393ece3f5c5d6385567f60f07e4dd38a62c17b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c5af1d00_e8e1604a",
         "filename": "stoc/source/javaloader/javaloader.cxx",
         "patchSetId": 2
