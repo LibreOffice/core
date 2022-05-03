@@ -1198,10 +1198,15 @@ bool MultiSalLayout::IsKashidaPosValid(int nCharPos) const
 
 SalLayoutGlyphs MultiSalLayout::GetGlyphs() const
 {
+#if 0
+    // tdf#148477 doesn't work yet
     SalLayoutGlyphs glyphs;
     for( int n = 0; n < mnLevel; ++n )
         glyphs.AppendImpl(mpLayouts[n]->GlyphsImpl().clone());
     return glyphs;
+#else
+    return SalLayoutGlyphs();
+#endif
 }
 
 
