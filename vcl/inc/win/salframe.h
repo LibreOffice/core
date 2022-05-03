@@ -20,6 +20,10 @@
 #ifndef INCLUDED_VCL_INC_WIN_SALFRAME_H
 #define INCLUDED_VCL_INC_WIN_SALFRAME_H
 
+#include <sal/config.h>
+
+#include <string_view>
+
 #include <vcl/sysdata.hxx>
 #include <salframe.hxx>
 #include <svsys.h>
@@ -147,7 +151,7 @@ bool UseDarkMode();
 // get foreign key names
 namespace vcl_sal {
     OUString getKeysReplacementName(
-        OUString const & pLang,
+        std::u16string_view pLang,
         LONG nSymbol );
 }
 
