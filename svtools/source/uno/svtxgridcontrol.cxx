@@ -43,7 +43,6 @@ using css::uno::Exception;
 using css::uno::UNO_QUERY;
 using css::uno::UNO_QUERY_THROW;
 using css::uno::Any;
-using css::uno::makeAny;
 using css::uno::Sequence;
 using css::awt::grid::XGridSelectionListener;
 using css::style::VerticalAlignment;
@@ -794,7 +793,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             {
                 pTable->commitCellEventIfAccessibleAlive(
                     AccessibleEventId::STATE_CHANGED,
-                    makeAny( AccessibleStateType::FOCUSED ),
+                    Any( AccessibleStateType::FOCUSED ),
                     Any()
                 );
                 pTable->commitTableEventIfAccessibleAlive(
@@ -807,7 +806,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
             {
                 pTable->commitTableEventIfAccessibleAlive(
                     AccessibleEventId::STATE_CHANGED,
-                    makeAny( AccessibleStateType::FOCUSED ),
+                    Any( AccessibleStateType::FOCUSED ),
                     Any()
                 );
             }
@@ -823,7 +822,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
                 pTable->commitCellEventIfAccessibleAlive(
                     AccessibleEventId::STATE_CHANGED,
                     Any(),
-                    makeAny( AccessibleStateType::FOCUSED )
+                    Any( AccessibleStateType::FOCUSED )
                 );
             }
             else
@@ -831,7 +830,7 @@ void SVTXGridControl::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent 
                 pTable->commitTableEventIfAccessibleAlive(
                     AccessibleEventId::STATE_CHANGED,
                     Any(),
-                    makeAny( AccessibleStateType::FOCUSED )
+                    Any( AccessibleStateType::FOCUSED )
                 );
             }
         }

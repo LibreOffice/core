@@ -954,7 +954,7 @@ namespace svt
             {
                 commitTableEvent(
                     ACTIVE_DESCENDANT_CHANGED,
-                    makeAny( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
+                    Any( CreateAccessibleCell( nRow, GetColumnPos( nCol -1) ) ),
                     Any()
                 );
             }
@@ -969,7 +969,7 @@ namespace svt
 
         if ( isAccessibleAlive() )
         {
-            commitBrowseBoxEvent( CHILD, Any(), makeAny( m_aImpl->m_xActiveCell ) );
+            commitBrowseBoxEvent( CHILD, Any(), Any( m_aImpl->m_xActiveCell ) );
             m_aImpl->clearActiveCell();
         }
 

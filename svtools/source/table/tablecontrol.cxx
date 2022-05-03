@@ -102,7 +102,7 @@ namespace svt::table
             if ( m_pImpl->isAccessibleAlive() )
             {
                 m_pImpl->commitCellEvent( AccessibleEventId::STATE_CHANGED,
-                                          makeAny( AccessibleStateType::FOCUSED ),
+                                          Any( AccessibleStateType::FOCUSED ),
                                           Any()
                                         );
                     // Huh? What the heck? Why do we unconditionally notify a STATE_CHANGE/FOCUSED after each and every

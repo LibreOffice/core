@@ -87,8 +87,8 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
          {
              // we need this service to properly convert XL notation also
              // Should be easy to extend
-             xConvertor->setPropertyValue( "ReferenceSheet", uno::makeAny( nRefTab ) );
-             xConvertor->setPropertyValue( "XLA1Representation", uno::makeAny( rsCtrlSource ) );
+             xConvertor->setPropertyValue( "ReferenceSheet", uno::Any( nRefTab ) );
+             xConvertor->setPropertyValue( "XLA1Representation", uno::Any( rsCtrlSource ) );
              xConvertor->getPropertyValue( "Address" ) >>= aAddress;
          }
 
@@ -118,8 +118,8 @@ BindableControlHelper::ApplyListSourceAndBindableData( const css::uno::Reference
              {
                  // we need this service to properly convert XL notation also
                  // Should be easy to extend
-                 xConvertor->setPropertyValue( "ReferenceSheet", uno::makeAny( nRefTab ) );
-                 xConvertor->setPropertyValue( "XLA1Representation", uno::makeAny( rsRowSource ) );
+                 xConvertor->setPropertyValue( "ReferenceSheet", uno::Any( nRefTab ) );
+                 xConvertor->setPropertyValue( "XLA1Representation", uno::Any( rsRowSource ) );
                  xConvertor->getPropertyValue( "Address" ) >>= aAddress;
              }
          }

@@ -262,7 +262,7 @@ bool CellValueConversion::ensureNumberFormatter()
         css::util::Date const aNullDate(1, 1, 1900);
         Reference<XPropertySet> const xFormatSettings(xSupplier->getNumberFormatSettings(),
                                                       UNO_SET_THROW);
-        xFormatSettings->setPropertyValue("NullDate", makeAny(aNullDate));
+        xFormatSettings->setPropertyValue("NullDate", Any(aNullDate));
 
         // knit
         xFormatter->attachNumberFormatsSupplier(xSupplier);

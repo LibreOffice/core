@@ -51,7 +51,6 @@ namespace svt::table
 
 
     using ::com::sun::star::accessibility::AccessibleTableModelChange;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::uno::Reference;
@@ -325,7 +324,7 @@ namespace svt::table
         if ( impl_isAccessibleAlive() )
         {
             impl_commitAccessibleEvent( AccessibleEventId::TABLE_MODEL_CHANGED,
-                makeAny( AccessibleTableModelChange( AccessibleTableModelChangeType::ROWS_INSERTED, i_first, i_last, -1, -1 ) )
+                Any( AccessibleTableModelChange( AccessibleTableModelChangeType::ROWS_INSERTED, i_first, i_last, -1, -1 ) )
             );
         }
 
@@ -394,7 +393,7 @@ namespace svt::table
         {
             commitTableEvent(
                 AccessibleEventId::TABLE_MODEL_CHANGED,
-                makeAny( AccessibleTableModelChange(
+                Any( AccessibleTableModelChange(
                     AccessibleTableModelChangeType::ROWS_REMOVED,
                     firstRemovedRow,
                     lastRemovedRow,

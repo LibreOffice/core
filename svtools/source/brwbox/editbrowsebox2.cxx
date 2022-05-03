@@ -85,7 +85,7 @@ void EditBrowseBox::implCreateActiveAccessible( )
          GetColumnPos( GetCurColumnId() )
      );
 
-    commitBrowseBoxEvent( CHILD, makeAny( m_aImpl->m_xActiveCell ), Any() );
+    commitBrowseBoxEvent( CHILD, Any( m_aImpl->m_xActiveCell ), Any() );
 }
 
 
