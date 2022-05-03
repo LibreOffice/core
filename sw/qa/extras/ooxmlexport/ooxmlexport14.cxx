@@ -1253,6 +1253,12 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf143583)
     assertXPath(pXml, "/w:footnotes/w:footnote[6]/w:p", 3);
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf146346, "tdf146346.docx")
+{
+    // This was 2 (by bad docDefault vertical margins around tables in footnotes)
+    CPPUNIT_ASSERT_EQUAL(1, getPages());
+}
+
 DECLARE_OOXMLEXPORT_TEST(testContSectBreakHeaderFooter, "cont-sect-break-header-footer.docx")
 {
     // Load a document with a continuous section break on page 2.
