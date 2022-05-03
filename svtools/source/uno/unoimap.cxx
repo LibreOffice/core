@@ -638,7 +638,7 @@ Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 nIndex )
     std::advance(aIter, nIndex);
 
     Reference< XPropertySet > xObj( *aIter );
-    return makeAny( xObj );
+    return Any( xObj );
 }
 
 // XElementAccess

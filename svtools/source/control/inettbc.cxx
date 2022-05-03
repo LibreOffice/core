@@ -488,7 +488,7 @@ void SvtMatchContext_Impl::doExecute()
                                 res = proc->execute(
                                     css::ucb::Command(
                                         "getPropertyValues", -1,
-                                        css::uno::makeAny(prop)),
+                                        css::uno::Any(prop)),
                                     id,
                                     css::uno::Reference<
                                         css::ucb::XCommandEnvironment >());
