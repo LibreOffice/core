@@ -390,11 +390,10 @@ void StatusBar::ImplDrawItem(vcl::RenderContext& rRenderContext, bool bOffScreen
     if (!(pItem->mnBits & StatusBarItemBits::UserDraw))
     {
         SalLayout* pLayoutCache = pItem->mxLayoutCache.get();
-
         if(!pLayoutCache)
         {
             // update cache
-            pItem->mxLayoutCache = rRenderContext.ImplLayout(pItem->maText, 0, -1);
+            pItem->mxLayoutCache = rRenderContext.ImplLayout(pItem->maText, 0, -1, Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
             pLayoutCache = pItem->mxLayoutCache.get();
         }
 
@@ -1146,7 +1145,8 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     }
     else
     {
-        std::unique_ptr<SalLayout> pSalLayout = GetOutDev()->ImplLayout(pItem->maText,0,-1);
+        std::unique_ptr<SalLayout> pSalLayout = GetOutDev()->ImplLayout(pItem->maText,0,-1,
+            Point(0, 0), 0, {}, SalLayoutFlags::GlyphItemsOnly);
         const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
         nWidth = GetTextWidth( pItem->maText,0,-1,nullptr,pSalLayout ? &glyphs : nullptr) + nFudge;
         // Store the calculated layout.
