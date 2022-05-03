@@ -16,6 +16,23 @@
       "message": "this seems to work ok",
       "revId": "3b289af405b4ae0a1ba65ad37ff371dae46fb730",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5cbc8452_4b3dc0f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000092
+      },
+      "writtenOn": "2022-05-03T12:11:29Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/133758  :-/\n\nYou were faster, but I prefer mine, as it\u0027ll catch other such possible cases.\n\n\n",
+      "revId": "3b289af405b4ae0a1ba65ad37ff371dae46fb730",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
