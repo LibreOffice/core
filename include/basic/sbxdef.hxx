@@ -122,6 +122,7 @@ enum SbxOperator {
 
 enum class SbxNameType {          // Type of the questioned name of a variable
     NONE,           // plain name
+    CaseInsensitive, // plain name - case insensitive
     ShortTypes,     // Name%(A%,B$)
 };
 
