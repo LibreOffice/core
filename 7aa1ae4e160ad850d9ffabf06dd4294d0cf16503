@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd95a983_5481cc67",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-03T11:30:28Z",
+      "side": 1,
+      "message": "build-time tool crashed in i18npool/, resume",
+      "revId": "7aa1ae4e160ad850d9ffabf06dd4294d0cf16503",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
