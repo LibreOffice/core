@@ -690,6 +690,8 @@ public:
     virtual FactoryFunction GetUITestFactory() const override;
 
     void            SetDragHelper(const rtl::Reference<TransferDataContainer>& rHelper, sal_uInt8 eDNDConstants);
+
+    virtual void    EnableRTL(bool bEnable = true) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3567,6 +3567,14 @@ bool SvTreeListBox::set_property(const OString &rKey, const OUString &rValue)
     return true;
 }
 
+void SvTreeListBox::EnableRTL(bool bEnable)
+{
+    Control::EnableRTL(bEnable);
+    pImpl->m_aHorSBar->EnableRTL(bEnable);
+    pImpl->m_aVerSBar->EnableRTL(bEnable);
+    pImpl->m_aScrBarBox->EnableRTL(bEnable);
+}
+
 FactoryFunction SvTreeListBox::GetUITestFactory() const
 {
     return TreeListUIObject::create;
