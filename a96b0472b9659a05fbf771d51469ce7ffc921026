@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb90c79d_60095888",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003567
+      },
+      "writtenOn": "2022-05-03T01:49:01Z",
+      "side": 1,
+      "message": "The new version uses the bForceSystemLocale approach to obtain the strings representing the values in the system locale, which are then sent to the Fill Series dialog.",
+      "revId": "a96b0472b9659a05fbf771d51469ce7ffc921026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

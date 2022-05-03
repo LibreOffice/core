@@ -33,6 +33,42 @@
       "message": "https://gerrit.libreoffice.org/c/core/+/133026 changed SvNumberFormatter::GetEditFormat() such that it can take another locale to obtain the edit format for, for example LANGUAGE_SYSTEM. With that you could change ScColumn::GetInputString() to obtain such edit format if a parameter was passed like bool bForceSystemLocale\u003dtrue, which can be defaulted to bForceSystemLocale\u003dfalse for ScDocument::GetInputString(), ScTable::GetInputString() and ScColumn::GetInputString() and called with true in ScCellShell::ExecuteEdit() in the FID_FILL_SERIES case.",
       "revId": "06de4c0c6371a70f983c1c21b5d1761f7ad04877",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34425840_69cf75bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003567
+      },
+      "writtenOn": "2022-05-03T01:49:01Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dcb0e46a_9028a6ed",
+      "revId": "06de4c0c6371a70f983c1c21b5d1761f7ad04877",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2bb080b_108c5fec",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003567
+      },
+      "writtenOn": "2022-05-03T01:49:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7fe78cc_a46048c2",
+      "revId": "06de4c0c6371a70f983c1c21b5d1761f7ad04877",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
