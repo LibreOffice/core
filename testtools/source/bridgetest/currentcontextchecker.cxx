@@ -56,7 +56,7 @@ CurrentContext::CurrentContext() {}
 
 css::uno::Any CurrentContext::getValueByName(OUString const & Name)
 {
-    return Name == KEY ? css::uno::makeAny(OUString(VALUE)) : css::uno::Any();
+    return Name == KEY ? css::uno::Any(OUString(VALUE)) : css::uno::Any();
 }
 
 }
