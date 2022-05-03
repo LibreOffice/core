@@ -135,6 +135,23 @@
       "message": "online.git writer/delete_objects_spec.js failed, resume.",
       "revId": "6f11d91e080095a248c458c685b31a0d729c3c3c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6f82815_98a38fc6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-03T12:49:34Z",
+      "side": 1,
+      "message": "Already reviewed by Michael Stahl here: https://gerrit.libreoffice.org/c/core/+/133684",
+      "revId": "6f11d91e080095a248c458c685b31a0d729c3c3c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
