@@ -24,6 +24,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <o3tl/safeint.hxx>
 #include <rtl/ref.hxx>
 #include <toolkit/helper/mutexandbroadcasthelper.hxx>
 #include <mutex>
@@ -316,7 +317,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
 {
     std::unique_lock aGuard( maMutex );
 
-    if( (nChildIndex < 0) || (nChildIndex > static_cast<sal_Int32>(maChildren.size())) )
+    if( (nChildIndex < 0) || (o3tl::make_unsigned(nChildIndex) > maChildren.size()) )
         throw IndexOutOfBoundsException();
 
     rtl::Reference< MutableTreeNode > xImpl( dynamic_cast< MutableTreeNode* >( xChildNode.get() ) );
@@ -338,7 +339,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex )
 {
     std::unique_lock aGuard( maMutex );
 
-    if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
+    if( (nChildIndex < 0) || (o3tl::make_unsigned(nChildIndex) >= maChildren.size()) )
         throw IndexOutOfBoundsException();
 
     rtl::Reference< MutableTreeNode > xImpl;
@@ -428,7 +429,7 @@ Reference< XTreeNode > SAL_CALL MutableTreeNode::getChildAt( sal_Int32 nChildInd
 {
     std::scoped_lock aGuard( maMutex );
 
-    if( (nChildIndex < 0) || (nChildIndex >= static_cast<sal_Int32>(maChildren.size())) )
+    if( (nChildIndex < 0) || (o3tl::make_unsigned(nChildIndex) >= maChildren.size()) )
         throw IndexOutOfBoundsException();
     return maChildren[nChildIndex];
 }

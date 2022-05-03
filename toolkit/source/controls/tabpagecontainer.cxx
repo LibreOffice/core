@@ -27,6 +27,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
+#include <o3tl/safeint.hxx>
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
@@ -176,7 +177,7 @@ void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Ind
 uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    if ( nIndex < 0 || nIndex > sal_Int32(m_aTabPageVector.size()) )
+    if ( nIndex < 0 || o3tl::make_unsigned(nIndex) > m_aTabPageVector.size() )
         throw lang::IndexOutOfBoundsException();
     return uno::Any(m_aTabPageVector[nIndex]);
 }

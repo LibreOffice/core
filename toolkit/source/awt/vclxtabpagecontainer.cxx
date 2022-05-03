@@ -20,6 +20,7 @@
 #include <awt/vclxtabpagecontainer.hxx>
 #include <com/sun/star/awt/tab/XTabPageModel.hpp>
 #include <com/sun/star/awt/XControl.hpp>
+#include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 #include <toolkit/helper/property.hxx>
 #include <vcl/image.hxx>
@@ -106,7 +107,7 @@ sal_Bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageInde
 
 Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPage( ::sal_Int16 tabPageIndex )
 {
-    return (tabPageIndex >= 0 && tabPageIndex < static_cast<sal_Int16>(m_aTabPages.size())) ? m_aTabPages[tabPageIndex] : nullptr;
+    return (tabPageIndex >= 0 && o3tl::make_unsigned(tabPageIndex) < m_aTabPages.size()) ? m_aTabPages[tabPageIndex] : nullptr;
 }
 
 Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPageByID( ::sal_Int16 tabPageID )

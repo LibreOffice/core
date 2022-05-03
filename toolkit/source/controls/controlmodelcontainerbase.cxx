@@ -20,6 +20,7 @@
 
 #include <controls/controlmodelcontainerbase.hxx>
 #include <vcl/svapp.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/mutex.hxx>
 #include <toolkit/helper/property.hxx>
 #include <helper/servicenames.hxx>
@@ -820,7 +821,7 @@ void SAL_CALL ControlModelContainerBase::getGroup( sal_Int32 _nGroup, Sequence< 
 
     implUpdateGroupStructure();
 
-    if ( ( _nGroup < 0 ) || ( _nGroup >= static_cast<sal_Int32>(maGroups.size()) ) )
+    if ( ( _nGroup < 0 ) || ( o3tl::make_unsigned(_nGroup) >= maGroups.size() ) )
     {
         SAL_WARN("toolkit", "invalid argument and I am not allowed to throw exception!" );
         _rGroup.realloc( 0 );
