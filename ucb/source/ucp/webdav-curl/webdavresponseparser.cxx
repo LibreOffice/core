@@ -523,6 +523,15 @@ namespace
         }
     }
 
+    OUString MakePropertyName(WebDAVContext const& rContext)
+    {
+        OUString ret;
+        OString const name(OUStringToOString(rContext.getName(), RTL_TEXTENCODING_UTF8));
+        OString const nameSpace(OUStringToOString(rContext.getNamespace(), RTL_TEXTENCODING_UTF8));
+        DAVProperties::createUCBPropName(nameSpace.getStr(), name.getStr(), ret);
+        return ret;
+    }
+
     void SAL_CALL WebDAVResponseParser::endElement( const OUString& aName )
     {
         const sal_Int32 nLen(aName.getLength());
@@ -532,9 +541,9 @@ namespace
         {
             if(collectThisPropertyAsName())
             {
-                // When collecting property names and parent is prop, just append the prop name
-                // to the collection, no need to parse deeper
-                maPropStatNames.push_back(mpContext->getNamespace() + mpContext->getName());
+                // name must be encoded as expected by createSerfPropName()
+                OUString const name(MakePropertyName(*mpContext));
+                maPropStatNames.emplace_back(name);
             }
             else
             {
@@ -851,9 +860,7 @@ namespace
                                     && isCollectingProperties())
                                 {
                                     http_dav_ucp::DAVPropertyValue aDAVPropertyValue;
-                                    OString const name(OUStringToOString(mpContext->getParent()->getName(), RTL_TEXTENCODING_UTF8));
-                                    OString const nameSpace(OUStringToOString(mpContext->getParent()->getNamespace(), RTL_TEXTENCODING_UTF8));
-                                    DAVProperties::createUCBPropName(nameSpace.getStr(), name.getStr(), aDAVPropertyValue.Name);
+                                    aDAVPropertyValue.Name = MakePropertyName(*mpContext->getParent());
                                     if (UCBDeadPropertyValue::createFromXML(m_UCBType, m_UCBValue, aDAVPropertyValue.Value))
                                     {
                                         maPropStatProperties.push_back(aDAVPropertyValue);
