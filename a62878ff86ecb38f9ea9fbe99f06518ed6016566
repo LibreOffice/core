@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70dbbfe7_60d2c368",
+        "filename": "offapi/com/sun/star/document/MediaDescriptor.idl",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-03T08:19:50Z",
+      "side": 1,
+      "message": "The default is TRUE?",
+      "range": {
+        "startLine": 323,
+        "startChar": 67,
+        "endLine": 323,
+        "endChar": 71
+      },
+      "revId": "a62878ff86ecb38f9ea9fbe99f06518ed6016566",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
