@@ -301,7 +301,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 
                                 // Insert new item.
                                 xContainer->insertByName(
-                                        key, makeAny( xNameReplace ) );
+                                        key, Any( xNameReplace ) );
                                 // Commit changes.
                                 xBatch->commitChanges();
 
@@ -586,7 +586,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     {
                         // Insert new item.
                         xContainer->insertByName(
-                                    rNewKey, makeAny( xNameReplace ) );
+                                    rNewKey, Any( xNameReplace ) );
                         // Commit changes.
                         xBatch->commitChanges();
                     }
@@ -743,7 +743,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
 
                             // Insert new item.
                             xNewContainer->insertByName(
-                                rPropName, makeAny( xNewPropNameReplace ) );
+                                rPropName, Any( xNewPropNameReplace ) );
 
                             // Commit changes.
                             xBatch->commitChanges();
@@ -1162,7 +1162,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue( const OUString& aProperty
                     // Write state ( Now it is a directly set value )
                     xNameReplace->replaceByName(
                                     "State",
-                                    makeAny(
+                                    Any(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );
 
@@ -1400,7 +1400,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 // Set handle
                 xNameReplace->replaceByName(
                                     "Handle",
-                                    makeAny( sal_Int32( -1 ) ) );
+                                    Any( sal_Int32( -1 ) ) );
 
                 // Set default value
                 xNameReplace->replaceByName(
@@ -1410,17 +1410,17 @@ void SAL_CALL PersistentPropertySet::addProperty(
                 // Set state ( always "default" )
                 xNameReplace->replaceByName(
                                     "State",
-                                    makeAny(
+                                    Any(
                                         sal_Int32(
                                             PropertyState_DEFAULT_VALUE ) ) );
 
                 // Set attributes
                 xNameReplace->replaceByName(
                                     "Attributes",
-                                    makeAny( sal_Int32( Attributes ) ) );
+                                    Any( sal_Int32( Attributes ) ) );
 
                 // Insert new item.
-                xContainer->insertByName( Name, makeAny( xNameReplace ) );
+                xContainer->insertByName( Name, Any( xNameReplace ) );
 
                 // Commit changes.
                 xBatch->commitChanges();
@@ -1823,7 +1823,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         // Write handle
                         xNameReplace->replaceByName(
                                     "Handle",
-                                    makeAny( rNewValue.Handle ) );
+                                    Any( rNewValue.Handle ) );
 
                         // Save old value
                         OUString aValueName = aFullPropName +"/Value";
@@ -1838,7 +1838,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                         // Write state ( Now it is a directly set value )
                         xNameReplace->replaceByName(
                                     "State",
-                                    makeAny(
+                                    Any(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );
 

@@ -583,7 +583,7 @@ Any SAL_CALL UniversalContentBroker::execute(
             if ( !( aCommand.Argument >>= aArg ) )
             {
                 ucbhelper::cancelCommandExecution(
-                    makeAny( IllegalArgumentException(
+                    Any( IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -607,7 +607,7 @@ Any SAL_CALL UniversalContentBroker::execute(
         if ( !( aCommand.Argument >>= aCheckinArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
+                Any( IllegalArgumentException(
                                 "Wrong argument type!",
                                 static_cast< cppu::OWeakObject * >( this ),
                                 -1 ) ),
@@ -623,7 +623,7 @@ Any SAL_CALL UniversalContentBroker::execute(
 
 
         ucbhelper::cancelCommandExecution(
-            makeAny( UnsupportedCommandException(
+            Any( UnsupportedCommandException(
                             OUString(),
                             static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );

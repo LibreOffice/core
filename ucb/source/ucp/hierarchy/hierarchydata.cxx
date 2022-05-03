@@ -376,7 +376,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
                     // Set Title value.
                     xNameReplace->replaceByName(
                         "Title",
-                        uno::makeAny( rData.getTitle() ) );
+                        uno::Any( rData.getTitle() ) );
 
                     // Set TargetURL value.
 
@@ -392,18 +392,18 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 
                     xNameReplace->replaceByName(
                         "TargetURL",
-                        uno::makeAny( aValue ) );
+                        uno::Any( aValue ) );
 
                     // Set Type value.
                     sal_Int32 nType
                         = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
                     xNameReplace->replaceByName(
                         "Type",
-                        uno::makeAny( nType ) );
+                        uno::Any( nType ) );
 
                     if ( xContainer.is() )
                         xContainer->insertByName(
-                            m_aName, uno::makeAny( xNameReplace ) );
+                            m_aName, uno::Any( xNameReplace ) );
 
                     // Commit changes.
                     xBatch->commitChanges();
@@ -678,7 +678,7 @@ bool HierarchyEntry::move(
 
         xNewNameReplace->replaceByName(
             "Title",
-            uno::makeAny( rData.getTitle() ) );
+            uno::Any( rData.getTitle() ) );
 
         // TargetURL property may contain a reference to the Office
         // installation directory. To ensure a reloctable office
@@ -690,11 +690,11 @@ bool HierarchyEntry::move(
             aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
         xNewNameReplace->replaceByName(
             "TargetURL",
-            uno::makeAny( aValue ) );
+            uno::Any( aValue ) );
         sal_Int32 nType = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
         xNewNameReplace->replaceByName(
             "Type",
-            uno::makeAny( nType ) );
+            uno::Any( nType ) );
 
         xNewNameContainer->insertByName( aNewKey, aEntry );
         xNewParentBatch->commitChanges();
