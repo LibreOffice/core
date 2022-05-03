@@ -34,7 +34,7 @@ SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( sal_Int3
     aRequest.Certificate = certificate;
     aRequest.HostName = hostname;
 
-    setRequest( uno::makeAny( aRequest ) );
+    setRequest( uno::Any( aRequest ) );
 
     setContinuations({ new InteractionAbort(this), new InteractionApprove(this) });
 }

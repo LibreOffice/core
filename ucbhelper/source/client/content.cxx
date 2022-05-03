@@ -508,7 +508,7 @@ Sequence< Any > Content::setPropertyValues(
     if ( rPropertyNames.getLength() != rValues.getLength() )
     {
         ucbhelper::cancelCommandExecution(
-            makeAny( IllegalArgumentException(
+            Any( IllegalArgumentException(
                         "Length of property names sequence and value "
                         "sequence are unequal!",
                         get(),
@@ -927,7 +927,7 @@ bool Content::insertNewContent( const OUString& rContentType,
         xNew, m_xImpl->getEnvironment(), m_xImpl->getComponentContext() );
     aNewContent.setPropertyValues( rPropertyNames, rPropertyValues );
     aNewContent.executeCommand( "insert",
-                                makeAny(
+                                Any(
                                     InsertCommandArgument(
                                         rData.is() ? rData : new EmptyInputStream,
                                         false /* ReplaceExisting */ ) ) );
@@ -1009,7 +1009,7 @@ bool Content::isFolder()
         return bFolder;
 
     ucbhelper::cancelCommandExecution(
-         makeAny( UnknownPropertyException(
+         Any( UnknownPropertyException(
                     "Unable to retrieve value of property 'IsFolder'!",
                     get() ) ),
          m_xImpl->getEnvironment() );
@@ -1028,7 +1028,7 @@ bool Content::isDocument()
         return bDoc;
 
     ucbhelper::cancelCommandExecution(
-         makeAny( UnknownPropertyException(
+         Any( UnknownPropertyException(
                     "Unable to retrieve value of property 'IsDocument'!",
                     get() ) ),
          m_xImpl->getEnvironment() );

@@ -138,7 +138,7 @@ SimpleNameClashResolveRequest::SimpleNameClashResolveRequest(
     aRequest.ClashingName    = rClashingName;
     aRequest.ProposedNewName = OUString();
 
-    setRequest( uno::makeAny( aRequest ) );
+    setRequest( uno::Any( aRequest ) );
 
     // Fill continuations...
     m_xNameSupplier = new InteractionSupplyName( this );

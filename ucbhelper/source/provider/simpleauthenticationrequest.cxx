@@ -109,7 +109,7 @@ void SimpleAuthenticationRequest::initialize(
       bool bAllowUseSystemCredentials,
       bool bAllowSessionStoring )
 {
-    setRequest( uno::makeAny( rRequest ) );
+    setRequest( uno::Any( rRequest ) );
 
     // Fill continuations...
     unsigned int nSize = 2;
