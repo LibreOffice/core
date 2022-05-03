@@ -3049,10 +3049,10 @@ double* ScColumn::GetValueCell( SCROW nRow )
     return &sc::numeric_block::at(*it->data, aPos.second);
 }
 
-OUString ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, const svl::SharedString** pShared ) const
+OUString ScColumn::GetInputString( const ScRefCellValue& aCell, SCROW nRow, const svl::SharedString** pShared, bool bForceSystemLocale ) const
 {
     sal_uLong nFormat = GetNumberFormat(GetDoc().GetNonThreadedContext(), nRow);
-    return ScCellFormat::GetInputString(aCell, nFormat, *(GetDoc().GetFormatTable()), GetDoc(), pShared);
+    return ScCellFormat::GetInputString(aCell, nFormat, *(GetDoc().GetFormatTable()), GetDoc(), pShared, false, bForceSystemLocale);
 }
 
 double ScColumn::GetValue( SCROW nRow ) const

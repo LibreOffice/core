@@ -46,13 +46,14 @@ public:
     // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
     static OUString GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
-        const ScDocument& rDoc, const svl::SharedString** pShared = nullptr, bool bFiltering = false );
+        const ScDocument& rDoc, const svl::SharedString** pShared = nullptr, bool bFiltering = false,
+        bool bForceSystemLocale = false );
 
     static OUString GetInputString(
         const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter,
-        const ScDocument& rDoc, bool bFiltering)
+        const ScDocument& rDoc, bool bFiltering, bool bForceSystemLocale = false )
     {
-        return GetInputString( rCell, nFormat, rFormatter, rDoc, nullptr, bFiltering );
+        return GetInputString( rCell, nFormat, rFormatter, rDoc, nullptr, bFiltering, bForceSystemLocale );
     }
 
     static OUString GetOutputString(

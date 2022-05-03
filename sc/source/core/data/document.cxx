@@ -3581,10 +3581,10 @@ void ScDocument::DiscardFormulaGroupContext()
         mpFormulaGroupCxt.reset();
 }
 
-OUString ScDocument::GetInputString( SCCOL nCol, SCROW nRow, SCTAB nTab ) const
+OUString ScDocument::GetInputString(SCCOL nCol, SCROW nRow, SCTAB nTab, bool bForceSystemLocale ) const
 {
     if ( ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab] )
-        return maTabs[nTab]->GetInputString( nCol, nRow, nullptr );
+        return maTabs[nTab]->GetInputString( nCol, nRow, nullptr, bForceSystemLocale );
     else
         return OUString();
 }
