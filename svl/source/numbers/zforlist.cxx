@@ -1676,7 +1676,7 @@ sal_uInt32 SvNumberFormatter::GetEditFormat( double fNumber, sal_uInt32 nFIndex,
 void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
                                            sal_uInt32 nFIndex,
                                            OUString& sOutString,
-                                           bool bFiltering)
+                                           bool bFiltering, bool bForceSystemLocale)
 {
     ::osl::MutexGuard aGuard( GetInstanceMutex() );
     const Color* pColor;
@@ -1716,7 +1716,8 @@ void SvNumberFormatter::GetInputLineString(const double& fOutNumber,
         bPrecChanged = true;
     }
 
-    sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, pFormat);
+    sal_uInt32 nKey = GetEditFormat( fOutNumber, nRealKey, eType, pFormat,
+                                     bForceSystemLocale ? LANGUAGE_SYSTEM : LANGUAGE_DONTKNOW);
     // if bFiltering true keep the nRealKey format
     if ( nKey != nRealKey && !bFiltering )
     {
