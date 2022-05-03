@@ -515,7 +515,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 ContentInfo aArg;
                 if (!(aCommand.Argument >>= aArg)) {
                     ucbhelper::cancelCommandExecution(
-                        makeAny(
+                        Any(
                             IllegalArgumentException(
                                 "Wrong argument type!",
                                 static_cast< cppu::OWeakObject * >(this),
@@ -730,7 +730,7 @@ Reference< XRow > FTPContent::getPropertyValues(
             xRow->appendString(rProp,aDirEntry.m_aName);
         else if(Name == "CreatableContentsInfo")
             xRow->appendObject(rProp,
-                               makeAny(queryCreatableContentsInfo()));
+                               Any(queryCreatableContentsInfo()));
         else if(aDirEntry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN) {
             if(Name == "ContentType")
                 xRow->appendString(rProp,

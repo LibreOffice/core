@@ -123,25 +123,25 @@ namespace {
         pArguments[i++]
             <<= PropertyValue("Uri",
                               -1,
-                              makeAny(rPhysicalUrl),
+                              Any(rPhysicalUrl),
                               PropertyState_DIRECT_VALUE);
         if (bResourceName)
             pArguments[i++]
                 <<= PropertyValue("ResourceName",
                                   -1,
-                                  makeAny(aResourceName),
+                                  Any(aResourceName),
                                   PropertyState_DIRECT_VALUE);
         if (bResourceType)
             pArguments[i++]
                 <<= PropertyValue("ResourceType",
                                   -1,
-                                  makeAny(aResourceType),
+                                  Any(aResourceType),
                                   PropertyState_DIRECT_VALUE);
         if (bRemoveProperty)
             pArguments[i++]
                 <<= PropertyValue("Removable",
                                   -1,
-                                  makeAny(bRemovable),
+                                  Any(bRemovable),
                                   PropertyState_DIRECT_VALUE);
 
         return aArguments;

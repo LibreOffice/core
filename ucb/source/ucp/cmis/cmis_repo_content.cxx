@@ -71,7 +71,7 @@ namespace cmis
 
     uno::Any RepoContent::getBadArgExcept()
     {
-        return uno::makeAny( lang::IllegalArgumentException(
+        return uno::Any( lang::IllegalArgumentException(
             "Wrong argument type!",
             static_cast< cppu::OWeakObject * >( this ), -1) );
     }

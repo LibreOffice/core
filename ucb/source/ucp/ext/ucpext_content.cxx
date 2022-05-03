@@ -54,7 +54,6 @@ namespace ucb::ucp::ext
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::ucb::XContentIdentifier;
@@ -180,7 +179,7 @@ namespace ucb::ucp::ext
             Sequence< Property > Properties;
             if ( !( aCommand.Argument >>= Properties ) )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
+                ::ucbhelper::cancelCommandExecution( Any( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
                     i_rEnvironment );
                 // unreachable
@@ -193,7 +192,7 @@ namespace ucb::ucp::ext
             Sequence< PropertyValue > aProperties;
             if ( !( aCommand.Argument >>= aProperties ) )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
+                ::ucbhelper::cancelCommandExecution( Any( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
                     i_rEnvironment );
                 // unreachable
@@ -201,7 +200,7 @@ namespace ucb::ucp::ext
 
             if ( !aProperties.hasElements() )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
+                ::ucbhelper::cancelCommandExecution( Any( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
                     i_rEnvironment );
                 // unreachable
@@ -224,7 +223,7 @@ namespace ucb::ucp::ext
             OpenCommandArgument2 aOpenCommand;
             if ( !( aCommand.Argument >>= aOpenCommand ) )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
+                ::ucbhelper::cancelCommandExecution( Any( IllegalArgumentException(
                     OUString(), *this, -1 ) ),
                     i_rEnvironment );
                 // unreachable
@@ -246,13 +245,13 @@ namespace ucb::ucp::ext
             {
                 const OUString sPhysicalContentURL( getPhysicalURL() );
                 ::ucbhelper::Content aRequestedContent( sPhysicalContentURL, i_rEnvironment, m_xContext );
-                aRet = aRequestedContent.executeCommand( "open", makeAny( aOpenCommand ) );
+                aRet = aRequestedContent.executeCommand( "open", Any( aOpenCommand ) );
             }
         }
 
         else
         {
-            ::ucbhelper::cancelCommandExecution( makeAny( UnsupportedCommandException(
+            ::ucbhelper::cancelCommandExecution( Any( UnsupportedCommandException(
                 OUString(), *this ) ),
                 i_rEnvironment );
             // unreachable

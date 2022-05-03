@@ -448,7 +448,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -468,7 +468,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -479,7 +479,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !aProperties.getLength() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "No properties!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -519,7 +519,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aTmp ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -549,7 +549,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= arg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -613,7 +613,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= transferArgs ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                   "Wrong argument type!",
                                   static_cast< cppu::OWeakObject * >( this ),
                                   -1 ) ),
@@ -633,7 +633,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -683,7 +683,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -699,7 +699,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aPropArg ))
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -714,15 +714,15 @@ uno::Any SAL_CALL Content::execute(
         }
         catch ( const beans::PropertyExistException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
         }
         catch ( const beans::IllegalTypeException&e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
         }
         catch ( const lang::IllegalArgumentException&e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
         }
     }
     else if ( aCommand.Name == "removeProperty" )
@@ -731,7 +731,7 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= sPropName ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                uno::Any( lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -746,11 +746,11 @@ uno::Any SAL_CALL Content::execute(
         }
         catch( const beans::UnknownPropertyException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
         }
         catch( const beans::NotRemoveableException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( uno::Any( e ), Environment );
         }
     }
     else
@@ -760,7 +760,7 @@ uno::Any SAL_CALL Content::execute(
 
 
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( ucb::UnsupportedCommandException(
+            uno::Any( ucb::UnsupportedCommandException(
                               aCommand.Name,
                               static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
@@ -1584,7 +1584,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             if (!xProps)
                 xProps.reset(new ContentProperties(aUnescapedTitle));
             else
-                xProps->addProperty("Title", uno::makeAny(aUnescapedTitle), true);
+                xProps->addProperty("Title", uno::Any(aUnescapedTitle), true);
         }
         else
         {
@@ -1593,20 +1593,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             else
                 xProps->addProperty(
                     "Title",
-                    uno::makeAny( aUnescapedTitle ),
+                    uno::Any( aUnescapedTitle ),
                     true );
 
             xProps->addProperty(
                 "IsFolder",
-                uno::makeAny( false ),
+                uno::Any( false ),
                 true );
             xProps->addProperty(
                 "IsDocument",
-                uno::makeAny( true ),
+                uno::Any( true ),
                 true );
             xProps->addProperty(
                 "ContentType",
-                uno::makeAny( OUString(WEBDAV_CONTENT_TYPE) ),
+                uno::Any( OUString(WEBDAV_CONTENT_TYPE) ),
                 true );
         }
     }
@@ -1637,7 +1637,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 util::DateTime aDate;
                 xProps->addProperty(
                     (*it),
-                    uno::makeAny( aDate ),
+                    uno::Any( aDate ),
                     true );
             }
             else if (bNetworkAccessAllowed) // don't set these if connection failed
@@ -1648,14 +1648,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 {
                     xProps->addProperty(
                         (*it),
-                        uno::makeAny( false ),
+                        uno::Any( false ),
                         true );
                 }
                 else if ((*it) == "IsDocument")
                 {
                     xProps->addProperty(
                         (*it),
-                        uno::makeAny( true ),
+                        uno::Any( true ),
                         true );
                 }
             }
@@ -1671,7 +1671,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             // Add BaseURI property, if requested.
             xProps->addProperty(
                  "BaseURI",
-                 uno::makeAny( getBaseURI( xResAccess ) ),
+                 uno::Any( getBaseURI( xResAccess ) ),
                  true );
         }
         else if ( rName == "CreatableContentsInfo" )
@@ -1682,7 +1682,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     >>= bFolder;
             xProps->addProperty(
                 "CreatableContentsInfo",
-                uno::makeAny( bFolder
+                uno::Any( bFolder
                                   ? queryCreatableContentsInfo()
                                   : uno::Sequence< ucb::ContentInfo >() ),
                 true );
@@ -2150,7 +2150,7 @@ uno::Any Content::open(
             // Error: Not a folder!
 
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
+                uno::Any(
                     lang::IllegalArgumentException(
                         "Non-folder resource cannot be opened as folder! Wrong Open Mode!",
                         static_cast< cppu::OWeakObject * >( this ),
@@ -2169,7 +2169,7 @@ uno::Any Content::open(
         {
             // Currently(?) unsupported.
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
+                uno::Any(
                     ucb::UnsupportedOpenModeException(
                             OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
@@ -2297,7 +2297,7 @@ uno::Any Content::open(
                 //       implementation. Support for this type of
                 //       sink is optional...
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
+                    uno::Any(
                         ucb::UnsupportedDataSinkException(
                             OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
@@ -2385,7 +2385,7 @@ void Content::post(
         else
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
+                uno::Any(
                     ucb::UnsupportedDataSinkException(
                         OUString(),
                         static_cast< cppu::OWeakObject * >( this ),
@@ -2470,7 +2470,7 @@ void Content::insert(
 
         uno::Sequence<OUString> aProps { "Title" };
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( ucb::MissingPropertiesException(
+            uno::Any( ucb::MissingPropertiesException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 aProps ) ),
@@ -2511,7 +2511,7 @@ void Content::insert(
 
             if ( xIH.is() )
             {
-                uno::Any aExAsAny( uno::makeAny( aEx ) );
+                uno::Any aExAsAny( aEx );
 
                 rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
@@ -2645,7 +2645,7 @@ void Content::insert(
                         }
 
                         ucbhelper::cancelCommandExecution(
-                            uno::makeAny(
+                            uno::Any(
                                 ucb::NameClashException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
@@ -2679,7 +2679,7 @@ void Content::insert(
         if ( !xInputStream.is() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
+                uno::Any(
                     ucb::MissingInputStreamException(
                         OUString(),
                         static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -2769,7 +2769,7 @@ void Content::transfer(
             if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
+                    uno::Any(
                         ucb::InteractiveBadTransferURLException(
                             "Unsupported URL scheme!",
                             static_cast< cppu::OWeakObject * >( this ) ) ),
@@ -2802,7 +2802,7 @@ void Content::transfer(
              ( sourceURI.GetHost() != targetURI.GetHost() ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( ucb::InteractiveBadTransferURLException(
+                uno::Any( ucb::InteractiveBadTransferURLException(
                                 "Different hosts!",
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
                 Environment );
@@ -2926,7 +2926,7 @@ void Content::transfer(
                 case 0/*ucb::NameClash::ERROR*/:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::makeAny(
+                        uno::Any(
                             ucb::NameClashException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -2946,7 +2946,7 @@ void Content::transfer(
                 default:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::makeAny(
+                        uno::Any(
                             ucb::UnsupportedNameClashException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
@@ -3550,7 +3550,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
         case SC_NOT_FOUND:
         {
             uno::Sequence<uno::Any> aArgs{ uno::Any(beans::PropertyValue(
-                "Uri", -1, uno::makeAny(aURL), beans::PropertyState_DIRECT_VALUE)) };
+                "Uri", -1, uno::Any(aURL), beans::PropertyState_DIRECT_VALUE)) };
 
             aException <<=
                 ucb::InteractiveAugmentedIOException(

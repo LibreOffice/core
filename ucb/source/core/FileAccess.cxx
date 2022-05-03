@@ -288,7 +288,7 @@ void OFileAccess::kill( const OUString& FileURL )
     ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
     try
     {
-        aCnt.executeCommand( "delete", makeAny( true ) );
+        aCnt.executeCommand( "delete", Any( true ) );
     }
     catch ( css::ucb::CommandFailedException const & )
     {

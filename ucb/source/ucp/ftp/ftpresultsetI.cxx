@@ -79,7 +79,7 @@ ResultSetI::ResultSetI(const Reference<XComponentContext>&  rxContext,
             else if(Name == "CreatableContentsInfo")
                 xRow->appendObject(
                     rProp,
-                    makeAny(FTPContent::queryCreatableContentsInfo_Static()));
+                    Any(FTPContent::queryCreatableContentsInfo_Static()));
             else
                 xRow->appendVoid(rProp);
         }
