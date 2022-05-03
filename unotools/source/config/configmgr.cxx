@@ -117,10 +117,10 @@ css::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(utl::ConfigItem const & item) {
     css::uno::Sequence< css::uno::Any > args{ css::uno::Any(css::beans::NamedValue(
         "nodepath",
-        css::uno::makeAny("/org.openoffice." + item.GetSubTreeName()))) };
+        css::uno::Any("/org.openoffice." + item.GetSubTreeName()))) };
     if (item.GetMode() & ConfigItemMode::AllLocales) {
         args.realloc(2);
-        args.getArray()[1] <<= css::beans::NamedValue("locale", css::uno::makeAny(OUString("*")));
+        args.getArray()[1] <<= css::beans::NamedValue("locale", css::uno::Any(OUString("*")));
     }
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
@@ -133,7 +133,7 @@ css::uno::Reference< css::container::XHierarchicalNameAccess >
 utl::ConfigManager::acquireTree(std::u16string_view rSubTreeName) {
     css::uno::Sequence< css::uno::Any > args{ css::uno::Any(css::beans::NamedValue(
         "nodepath",
-        css::uno::makeAny(OUString::Concat(u"/org.openoffice.") + rSubTreeName))) };
+        css::uno::Any(OUString::Concat(u"/org.openoffice.") + rSubTreeName))) };
     return css::uno::Reference< css::container::XHierarchicalNameAccess >(
         getConfigurationProvider()->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationUpdateAccess",

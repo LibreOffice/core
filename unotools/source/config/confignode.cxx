@@ -234,7 +234,7 @@ namespace utl
             try
             {
                 OUString sName = normalizeName(_rName, NO_CALLER);
-                m_xContainerAccess->insertByName(sName, makeAny(_xNode));
+                m_xContainerAccess->insertByName(sName, Any(_xNode));
                 // if we're here, all was ok ...
                 return OConfigurationNode( _xNode );
             }

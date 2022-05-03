@@ -232,7 +232,7 @@ namespace utl
     template < class INTERFACE, class COMPONENT >
     inline css::uno::Any SAL_CALL makeAny( const SharedUNOComponent< INTERFACE, COMPONENT >& value )
     {
-        return makeAny( value.getTyped() );
+        return css::uno::Any( value.getTyped() );
     }
 
     template < class INTERFACE, class COMPONENT >

@@ -311,7 +311,7 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
         aPostArgument.MediaType = sMediaType;
         aPostArgument.Referer = getUnpackedValueOrDefault( PROP_REFERRER, OUString() );
 
-        aContent.executeCommand( "post", css::uno::makeAny( aPostArgument ) );
+        aContent.executeCommand( "post", css::uno::Any( aPostArgument ) );
 
         // get result
         xResultStream = xSink->getInputStream();
