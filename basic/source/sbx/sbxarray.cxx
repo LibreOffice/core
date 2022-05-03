@@ -23,6 +23,7 @@
 #include <tools/stream.hxx>
 #include <basic/sbx.hxx>
 #include <runtime.hxx>
+#include <global.hxx>
 
 #include <optional>
 
@@ -277,6 +278,7 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
         return nullptr;
     bool bExtSearch = IsSet( SbxFlagBits::ExtSearch );
     sal_uInt16 nHash = SbxVariable::MakeHashCode( rName );
+    const OUString aNameCI = SbGlobal::GetTransliteration().transliterate(rName, 0, rName.getLength());
     for (auto& rEntry : mVarEntries)
     {
         if (!rEntry.mpVar.is() || !rEntry.mpVar->IsVisible())
@@ -284,9 +286,10 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
 
         // The very secure search works as well, if there is no hashcode!
         sal_uInt16 nVarHash = rEntry.mpVar->GetHashCode();
+        // tdf#148358 - compare the names case-insensitive
         if ( (!nVarHash || nVarHash == nHash)
             && (t == SbxClassType::DontCare || rEntry.mpVar->GetClass() == t)
-            && (rEntry.mpVar->GetName().equalsIgnoreAsciiCase(rName)))
+            && (rEntry.mpVar->GetName(SbxNameType::CaseInsensitive) == aNameCI))
         {
             p = rEntry.mpVar.get();
             p->ResetFlag(SbxFlagBits::ExtFound);
