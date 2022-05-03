@@ -146,17 +146,17 @@ IMPL_LINK_NOARG(NumberingPopup, VSSelectValueSetHdl, ValueSet*, void)
     sal_uInt16 nSelItem = mxValueSet->GetSelectedItemId();
     if ( mePageType == NumberingPageType::BULLET )
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::makeAny( nSelItem ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { "SetBullet", css::uno::Any( nSelItem ) } } ) );
         mrController.dispatchCommand( ".uno:SetBullet", aArgs );
     }
     else if ( mePageType == NumberingPageType::SINGLENUM )
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "SetNumber", css::uno::makeAny( nSelItem ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { "SetNumber", css::uno::Any( nSelItem ) } } ) );
         mrController.dispatchCommand( ".uno:SetNumber", aArgs );
     }
     else
     {
-        auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", css::uno::makeAny( nSelItem ) } } ) );
+        auto aArgs( comphelper::InitPropertySequence( { { "SetOutline", css::uno::Any( nSelItem ) } } ) );
         mrController.dispatchCommand( ".uno:SetOutline", aArgs );
     }
     mrController.EndPopupMode();
@@ -169,7 +169,7 @@ void NumberingPopup::GrabFocus()
 
 IMPL_LINK_NOARG(NumberingPopup, VSButtonClickSetHdl, weld::Button&, void)
 {
-    auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::makeAny( OUString("customize") ) } } ) );
+    auto aArgs( comphelper::InitPropertySequence( { { "Page", css::uno::Any( OUString("customize") ) } } ) );
     mrController.dispatchCommand( ".uno:OutlineBullet", aArgs );
 
     mrController.EndPopupMode();

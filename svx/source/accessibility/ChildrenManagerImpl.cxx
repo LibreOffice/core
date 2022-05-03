@@ -399,7 +399,7 @@ void ChildrenManagerImpl::CreateAccessibilityObjects (
             rChild.mbCreateEventPending = false;
             mrContext.CommitChange (
                 AccessibleEventId::CHILD,
-                uno::makeAny(rChild.mxAccessibleShape),
+                uno::Any(rChild.mxAccessibleShape),
                 uno::Any());
         }
         ++nPos;
@@ -723,7 +723,7 @@ bool ChildrenManagerImpl::ReplaceChild (
         mrContext.CommitChange (
             AccessibleEventId::CHILD,
             uno::Any(),
-            uno::makeAny (I->mxAccessibleShape));
+            uno::Any (I->mxAccessibleShape));
 
         // Replace with replacement and send an event about existence
         // of the new child.
@@ -739,7 +739,7 @@ bool ChildrenManagerImpl::ReplaceChild (
         I->mxAccessibleShape = pNewChild.get();
         mrContext.CommitChange (
             AccessibleEventId::CHILD,
-            uno::makeAny (I->mxAccessibleShape),
+            uno::Any (I->mxAccessibleShape),
             uno::Any());
 
         return true;

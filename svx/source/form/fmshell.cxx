@@ -715,7 +715,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             }
 
             if ( nRecord != -1 )
-                rController->execute( nSlot, "Position", makeAny( nRecord ) );
+                rController->execute( nSlot, "Position", Any( nRecord ) );
 
             rReq.Done();
         }   break;

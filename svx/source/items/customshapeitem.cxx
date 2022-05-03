@@ -253,15 +253,15 @@ bool SdrCustomShapeGeometryItem::operator<( const SfxPoolItem& rCmp ) const
     if( aHashState == HashState::Valid )
         return aHash < other.aHash;
 
-    return comphelper::anyLess( css::uno::makeAny( aPropSeq ),
-        css::uno::makeAny( other.aPropSeq ));
+    return comphelper::anyLess( css::uno::Any( aPropSeq ),
+        css::uno::Any( other.aPropSeq ));
 }
 
 void SdrCustomShapeGeometryItem::UpdateHash() const
 {
     if( aHashState != HashState::Unknown )
         return;
-    std::optional< size_t > hash = comphelper::anyToHash( css::uno::makeAny( aPropSeq ));
+    std::optional< size_t > hash = comphelper::anyToHash( css::uno::Any( aPropSeq ));
     if( hash.has_value())
     {
         aHash = *hash;

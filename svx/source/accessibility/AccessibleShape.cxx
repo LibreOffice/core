@@ -1165,7 +1165,7 @@ AccessibleShape::getGroupPosition( const uno::Any& )
         Reference< XAccessibleGroupPosition > xGroupPosition( xParent,uno::UNO_QUERY );
         if ( xGroupPosition.is() )
         {
-            aRet = xGroupPosition->getGroupPosition( uno::makeAny( getAccessibleContext() ) );
+            aRet = xGroupPosition->getGroupPosition( uno::Any( getAccessibleContext() ) );
         }
         return aRet;
     }
@@ -1230,7 +1230,7 @@ OUString AccessibleShape::getObjectLink( const uno::Any& )
         Reference< XAccessibleGroupPosition > xGroupPosition( maShapeTreeInfo.GetDocumentWindow(), uno::UNO_QUERY );
         if (xGroupPosition.is())
         {
-            aRet = xGroupPosition->getObjectLink( uno::makeAny( getAccessibleContext() ) );
+            aRet = xGroupPosition->getObjectLink( uno::Any( getAccessibleContext() ) );
         }
     }
     return aRet;

@@ -172,10 +172,10 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
 
     try
     {
-        xProps->setPropertyValue("MediaType",  uno::makeAny( OUString( "text/xml" ) ) );
+        xProps->setPropertyValue("MediaType",  uno::Any( OUString( "text/xml" ) ) );
 
         // use stock encryption
-        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny( true ) );
+        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any( true ) );
     } catch ( const uno::Exception & )
     {
         TOOLS_WARN_EXCEPTION("svx", "exception setting stream metadata");

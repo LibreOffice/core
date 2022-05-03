@@ -54,14 +54,14 @@ SvxSmartTagItem::SvxSmartTagItem( const TypedWhichId<SvxSmartTagItem> nId,
 bool SvxSmartTagItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     rVal <<= comphelper::InitPropertySequence( {
-        { "ActionComponents", css::uno::makeAny( maActionComponentsSequence ) },
-        { "ActionIndices", css::uno::makeAny( maActionIndicesSequence ) },
-        { "StringKeyMaps", css::uno::makeAny( maStringKeyMaps ) },
-        { "TextRange", css::uno::makeAny( mxRange ) },
-        { "Controller", css::uno::makeAny( mxController ) },
-        { "Locale", css::uno::makeAny( maLocale ) },
-        { "ApplicationName", css::uno::makeAny( maApplicationName ) },
-        { "RangeText", css::uno::makeAny( maRangeText ) },
+        { "ActionComponents", css::uno::Any( maActionComponentsSequence ) },
+        { "ActionIndices", css::uno::Any( maActionIndicesSequence ) },
+        { "StringKeyMaps", css::uno::Any( maStringKeyMaps ) },
+        { "TextRange", css::uno::Any( mxRange ) },
+        { "Controller", css::uno::Any( mxController ) },
+        { "Locale", css::uno::Any( maLocale ) },
+        { "ApplicationName", css::uno::Any( maApplicationName ) },
+        { "RangeText", css::uno::Any( maRangeText ) },
     } );
     return true;
 }

@@ -79,7 +79,7 @@ bool SvxColorValueSetData::GetData( const css::datatransfer::DataFlavor& rFlavor
 
     if( SotExchange::GetFormat( rFlavor ) == SotClipboardFormatId::XFA )
     {
-        SetAny(uno::makeAny(m_Data));
+        SetAny(uno::Any(m_Data));
         bRet = true;
     }
 

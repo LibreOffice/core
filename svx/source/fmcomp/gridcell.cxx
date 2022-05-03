@@ -245,7 +245,7 @@ void DbGridColumn::impl_toggleScriptManager_nothrow( bool _bAttach )
 
         Reference< XInterface > xCellInterface( *m_pCell, UNO_QUERY );
         if ( _bAttach )
-            xManager->attach( nIndexInParent, xCellInterface, makeAny( xCellInterface ) );
+            xManager->attach( nIndexInParent, xCellInterface, Any( xCellInterface ) );
         else
             xManager->detach( nIndexInParent, xCellInterface );
     }
@@ -1199,7 +1199,7 @@ bool DbTextField::commitControl()
         if ( sOldValue.getLength() > nMaxTextLen && sOldValue.compareTo(aText,nMaxTextLen) == 0 )
             aText = sOldValue;
     }
-    m_rColumn.getModel()->setPropertyValue( FM_PROP_TEXT, makeAny( aText ) );
+    m_rColumn.getModel()->setPropertyValue( FM_PROP_TEXT, Any( aText ) );
     return true;
 }
 
@@ -1805,7 +1805,7 @@ void DbCheckBox::updateFromModel( Reference< XPropertySet > _rxModel )
 bool DbCheckBox::commitControl()
 {
     m_rColumn.getModel()->setPropertyValue( FM_PROP_STATE,
-                    makeAny( static_cast<sal_Int16>( static_cast< CheckBoxControl* >( m_pWindow.get() )->GetState() ) ) );
+                    Any( static_cast<sal_Int16>( static_cast< CheckBoxControl* >( m_pWindow.get() )->GetState() ) ) );
     return true;
 }
 
@@ -1919,7 +1919,7 @@ void DbPatternField::updateFromModel( Reference< XPropertySet > _rxModel )
 bool DbPatternField::commitControl()
 {
     weld::Entry& rEntry = static_cast<PatternControl*>(m_pWindow.get())->get_widget();
-    m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, makeAny(rEntry.get_text()));
+    m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, Any(rEntry.get_text()));
     return true;
 }
 
@@ -2560,7 +2560,7 @@ bool DbComboBox::commitControl()
     ComboBoxControl* pControl = static_cast<ComboBoxControl*>(m_pWindow.get());
     weld::ComboBox& rComboBox = pControl->get_widget();
     OUString aText(rComboBox.get_active_text());
-    m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, makeAny(aText));
+    m_rColumn.getModel()->setPropertyValue(FM_PROP_TEXT, Any(aText));
     return true;
 }
 
@@ -3107,7 +3107,7 @@ void DbFilterField::Update()
 
         xStatement = xConnection->createStatement();
         Reference< css::beans::XPropertySet >  xStatementProps(xStatement, UNO_QUERY);
-        xStatementProps->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, makeAny(true));
+        xStatementProps->setPropertyValue(FM_PROP_ESCAPE_PROCESSING, Any(true));
 
         xListCursor = xStatement->executeQuery(aStatement.makeStringAndClear());
 

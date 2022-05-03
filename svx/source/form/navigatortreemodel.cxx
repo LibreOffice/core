@@ -299,14 +299,14 @@ namespace svxform
 
             {
                 Reference< XForm >  xElementAsForm(xElement, UNO_QUERY);
-                xContainer->insertByIndex(nRelPos, makeAny(xElementAsForm));
+                xContainer->insertByIndex(nRelPos, Any(xElementAsForm));
             }
             else if (xContainer->getElementType() ==
                 cppu::UnoType<XFormComponent>::get())
 
             {
                 Reference< XFormComponent >  xElementAsComponent(xElement, UNO_QUERY);
-                xContainer->insertByIndex(nRelPos, makeAny(xElementAsComponent));
+                xContainer->insertByIndex(nRelPos, Any(xElementAsComponent));
             }
             else
             {
@@ -896,7 +896,7 @@ namespace svxform
 
 
         // set name
-        xSet->setPropertyValue( FM_PROP_NAME, makeAny(rNewText) );
+        xSet->setPropertyValue( FM_PROP_NAME, Any(rNewText) );
 
         return true;
     }

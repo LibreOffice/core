@@ -204,7 +204,7 @@ Any SAL_CALL NamespaceMap::getByName( const OUString& aName )
     if( !bFound )
         throw NoSuchElementException();
 
-    return makeAny( aURL );
+    return Any( aURL );
 }
 
 Sequence< OUString > SAL_CALL NamespaceMap::getElementNames()

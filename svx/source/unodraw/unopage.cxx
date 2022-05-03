@@ -363,7 +363,7 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
                                     + OUString::number(Index));
 
 
-    return makeAny(Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY ));
+    return Any(Reference< drawing::XShape >( pObj->getUnoShape(), uno::UNO_QUERY ));
 }
 
 // css::container::XElementAccess

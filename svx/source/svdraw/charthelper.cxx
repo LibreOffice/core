@@ -121,9 +121,9 @@ void ChartHelper::AdaptDefaultsForChart(
         if (uno::Reference< beans::XPropertySet > xPageProp = xChartDoc->getPageBackground())
         {
             // set background to transparent (none)
-            xPageProp->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
+            xPageProp->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
             // set no border
-            xPageProp->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
+            xPageProp->setPropertyValue("LineStyle", uno::Any(drawing::LineStyle_NONE));
         }
     }
     catch( const uno::Exception & )

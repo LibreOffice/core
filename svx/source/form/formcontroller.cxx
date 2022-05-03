@@ -1070,7 +1070,7 @@ Any SAL_CALL FormController::getByIndex(sal_Int32 Index)
         Index >= static_cast<sal_Int32>(m_aChildren.size()))
         throw IndexOutOfBoundsException();
 
-    return makeAny( m_aChildren[ Index ] );
+    return Any( m_aChildren[ Index ] );
 }
 
 //  EventListener
@@ -1302,7 +1302,7 @@ bool FormController::replaceControl( const Reference< XControl >& _rxExistentCon
                 // carry over the model
                 _rxNewControl->setModel( _rxExistentControl->getModel() );
 
-                xContainer->replaceByIdentifer( *pIdentifiers, makeAny( _rxNewControl ) );
+                xContainer->replaceByIdentifer( *pIdentifiers, Any( _rxNewControl ) );
                 bSuccess = true;
 
                 if ( bReplacedWasActive )
@@ -1915,7 +1915,7 @@ void FormController::addToEventAttacher(const Reference< XControl > & xControl)
         m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
         if (xComp.get() == xTemp.get())
         {
-            m_xModelAsManager->attach( nPos, Reference<XInterface>( xControl, UNO_QUERY ), makeAny(xControl) );
+            m_xModelAsManager->attach( nPos, Reference<XInterface>( xControl, UNO_QUERY ), Any(xControl) );
             break;
         }
     }
@@ -2923,7 +2923,7 @@ void SAL_CALL FormController::addChildController( const Reference< XFormControll
         m_xModelAsIndex->getByIndex(--nPos) >>= xTemp;
         if ( xFormOfChild == xTemp )
         {
-            m_xModelAsManager->attach( nPos, Reference<XInterface>( ChildController, UNO_QUERY ), makeAny( ChildController) );
+            m_xModelAsManager->attach( nPos, Reference<XInterface>( ChildController, UNO_QUERY ), Any( ChildController) );
             break;
         }
     }
@@ -3826,7 +3826,7 @@ sal_Bool SAL_CALL FormController::approveParameter(const DatabaseParameterEvent&
             ParametersRequest aRequest;
             aRequest.Parameters = aEvent.Parameters;
             aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
-            rtl::Reference<OInteractionRequest> pParamRequest = new OInteractionRequest(makeAny(aRequest));
+            rtl::Reference<OInteractionRequest> pParamRequest = new OInteractionRequest(Any(aRequest));
             // some knittings
             pParamRequest->addContinuation(pParamValues);
             pParamRequest->addContinuation(pAbort);
@@ -3934,7 +3934,7 @@ sal_Bool SAL_CALL FormController::confirmDelete(const RowChangeEvent& aEvent)
         aDetails.Message = SvxResId(RID_STR_DELETECONFIRM);
         aWarning.NextException <<= aDetails;
 
-        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( makeAny( aWarning ) );
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( Any( aWarning ) );
 
         // some knittings
         pRequest->addContinuation( pApprove );

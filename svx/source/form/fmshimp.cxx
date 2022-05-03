@@ -376,13 +376,13 @@ namespace
 
         if (xModel.is())
         {
-            Any aModel(makeAny(xModel));
+            Any aModel(xModel);
             aModelListeners = xIntrospection->inspect(aModel)->getSupportedListeners();
         }
 
         if (xControl.is())
         {
-            Any aControl(makeAny(xControl));
+            Any aControl(xControl);
             aControlListeners = xIntrospection->inspect(aControl)->getSupportedListeners();
         }
 
@@ -1132,7 +1132,7 @@ bool FmXFormShell::executeControlConversionSlot_Lock(const Reference<XFormCompon
                     // the form container works with FormComponents
                     Reference< XFormComponent> xComponent(xNewModel, UNO_QUERY);
                     DBG_ASSERT(xComponent.is(), "FmXFormShell::executeControlConversionSlot: the new model is no form component !");
-                    Any aNewModel(makeAny(xComponent));
+                    Any aNewModel(xComponent);
                     try
                     {
 
@@ -1612,7 +1612,7 @@ void FmXFormShell::SetY2KState_Lock(sal_uInt16 n)
             {
                 try
                 {
-                    xSet->setPropertyValue("TwoDigitDateStart", makeAny<sal_uInt16>(n));
+                    xSet->setPropertyValue("TwoDigitDateStart", Any(sal_uInt16(n)));
                 }
                 catch(Exception&)
                 {
@@ -1651,7 +1651,7 @@ void FmXFormShell::SetY2KState_Lock(sal_uInt16 n)
             {
                 try
                 {
-                    xSet->setPropertyValue("TwoDigitDateStart", makeAny<sal_uInt16>(n));
+                    xSet->setPropertyValue("TwoDigitDateStart", Any(sal_uInt16(n)));
                 }
                 catch(Exception&)
                 {
@@ -2201,7 +2201,7 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
     if (m_xLastGridFound.is() && (m_xLastGridFound != xControlModel))
     {
         Reference< XPropertySet> xOldSet(m_xLastGridFound, UNO_QUERY);
-        xOldSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, makeAny( false ) );
+        xOldSet->setPropertyValue(FM_PROP_ALWAYSSHOWCURSOR, Any( false ) );
         Reference< XPropertyState> xOldSetState(xOldSet, UNO_QUERY);
         if (xOldSetState.is())
             xOldSetState->setPropertyToDefault(FM_PROP_CURSORCOLOR);
@@ -2221,8 +2221,8 @@ IMPL_LINK(FmXFormShell, OnFoundData_Lock, FmFoundRecordInformation&, rfriWhere, 
         // enable a permanent cursor for the grid so we can see the found text
         Reference< XPropertySet> xModelSet(xControlModel, UNO_QUERY);
         DBG_ASSERT(xModelSet.is(), "FmXFormShell::OnFoundData : invalid control model (no property set) !");
-        xModelSet->setPropertyValue( FM_PROP_ALWAYSSHOWCURSOR, makeAny( true ) );
-        xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, makeAny( COL_LIGHTRED ) );
+        xModelSet->setPropertyValue( FM_PROP_ALWAYSSHOWCURSOR, Any( true ) );
+        xModelSet->setPropertyValue( FM_PROP_CURSORCOLOR, Any( COL_LIGHTRED ) );
         m_xLastGridFound = xControlModel;
 
         if ( xGrid.is() )
@@ -2958,7 +2958,7 @@ static void saveFilter(const Reference< runtime::XFormController >& _rxControlle
     {
 
         xFormAsSet->setPropertyValue(FM_PROP_FILTER, xControllerAsSet->getPropertyValue(FM_PROP_FILTER));
-        xFormAsSet->setPropertyValue(FM_PROP_APPLYFILTER, makeAny( true ) );
+        xFormAsSet->setPropertyValue(FM_PROP_APPLYFILTER, Any( true ) );
     }
     catch (const Exception& )
     {
@@ -3051,8 +3051,8 @@ void FmXFormShell::stopFiltering_Lock(bool bSave)
                     bool bOriginalApplyFlag = aOriginalApplyFlags[ j - rControllers.begin() ];
                     try
                     {
-                        xFormSet->setPropertyValue(FM_PROP_FILTER, makeAny(sOriginalFilter));
-                        xFormSet->setPropertyValue(FM_PROP_APPLYFILTER, makeAny(bOriginalApplyFlag));
+                        xFormSet->setPropertyValue(FM_PROP_FILTER, Any(sOriginalFilter));
+                        xFormSet->setPropertyValue(FM_PROP_APPLYFILTER, Any(bOriginalApplyFlag));
                         xReload->reload();
                     }
                     catch(const Exception&)

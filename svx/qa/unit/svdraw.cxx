@@ -119,9 +119,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
     xShapeText->getText()->setString("hello");
 
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue("CharColor", uno::makeAny(COL_RED));
+    xShapeProperties->setPropertyValue("CharColor", uno::Any(COL_RED));
     sal_Int16 nTransparence = 75;
-    xShapeProperties->setPropertyValue("CharTransparence", uno::makeAny(nTransparence));
+    xShapeProperties->setPropertyValue("CharTransparence", uno::Any(nTransparence));
 
     // Generates drawinglayer primitives for the page.
     auto pDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
@@ -153,9 +153,9 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     xShape->setPosition(awt::Point(2512, 6062));
     xShape->setSize(awt::Size(112, 112));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_SOLID));
-    xShapeProps->setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_SOLID));
-    xShapeProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(0)));
+    xShapeProps->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_SOLID));
+    xShapeProps->setPropertyValue("LineStyle", uno::Any(drawing::LineStyle_SOLID));
+    xShapeProps->setPropertyValue("FillColor", uno::Any(static_cast<sal_Int32>(0)));
     // Add it to the draw page.
     uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
     uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
@@ -197,7 +197,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
             drawing::PolygonFlags_NORMAL,
         },
     };
-    xShapeProps->setPropertyValue("PolyPolygonBezier", uno::makeAny(aPolyPolygonBezierCoords));
+    xShapeProps->setPropertyValue("PolyPolygonBezier", uno::Any(aPolyPolygonBezierCoords));
     drawing::HomogenMatrix3 aMatrix;
     aMatrix.Line1.Column1 = 56;
     aMatrix.Line2.Column1 = -97;
@@ -208,7 +208,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testHandlePathObjScale)
     aMatrix.Line1.Column3 = 3317;
     aMatrix.Line2.Column3 = 5583;
     aMatrix.Line3.Column3 = 1;
-    xShapeProps->setPropertyValue("Transformation", uno::makeAny(aMatrix));
+    xShapeProps->setPropertyValue("Transformation", uno::Any(aMatrix));
 
     // Then make sure the scaling is only applied once:
     // Without the accompanying fix in place, this test would have failed with:
@@ -246,7 +246,7 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testTextEditEmptyGrabBag)
         comphelper::makePropertyValue("OOXLayout", true),
     };
     uno::Reference<beans::XPropertySet> xGroupProps(xGroup, uno::UNO_QUERY);
-    xGroupProps->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+    xGroupProps->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag));
 
     // When editing the shape text of the 2nd rectangle (insert a char at the start).
     SfxViewShell* pViewShell = SfxViewShell::Current();

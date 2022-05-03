@@ -3499,7 +3499,7 @@ void SvxColorToolBoxControl::execute(sal_Int16 /*nSelectModifier*/)
     }
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { m_aCommandURL.copy(5), css::uno::makeAny(aColor) }
+        { m_aCommandURL.copy(5), css::uno::Any(aColor) }
     } ) );
     dispatchCommand( aCommand, aArgs );
 

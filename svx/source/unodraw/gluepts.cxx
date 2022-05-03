@@ -306,7 +306,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
             SdrGluePoint aTempPoint = mpObject->GetVertexGluePoint( static_cast<sal_uInt16>(Identifier) );
             aGluePoint.IsUserDefined = false;
             convert( aTempPoint, aGluePoint );
-            return uno::makeAny( aGluePoint );
+            return uno::Any( aGluePoint );
         }
         else
         {
@@ -326,7 +326,7 @@ uno::Any SAL_CALL SvxUnoGluePointAccess::getByIdentifier( sal_Int32 Identifier )
                     }
 
                     convert( rTempPoint, aGluePoint );
-                    return uno::makeAny( aGluePoint );
+                    return uno::Any( aGluePoint );
                 }
             }
         }

@@ -322,7 +322,7 @@ uno::Any SAL_CALL SvxShapeGroup::getByIndex( sal_Int32 Index )
         throw lang::IndexOutOfBoundsException();
 
     Reference< drawing::XShape > xShape( pDestObj->getUnoShape(), uno::UNO_QUERY );
-    return uno::makeAny( xShape );
+    return uno::Any( xShape );
 }
 
 // css::container::XElementAccess

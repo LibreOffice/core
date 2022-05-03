@@ -62,7 +62,6 @@ namespace svxform
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::XPropertySet;
@@ -390,14 +389,14 @@ namespace svxform
             switch ( nClassId )
             {
                 case FormComponentType::SCROLLBAR:
-                    _rxControlModel->setPropertyValue("LiveScroll", makeAny( true ) );
+                    _rxControlModel->setPropertyValue("LiveScroll", Any( true ) );
                     [[fallthrough]];
                 case FormComponentType::SPINBUTTON:
                 {
                     sal_Int32 eOrientation = ScrollBarOrientation::HORIZONTAL;
                     if ( !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() < _rControlBoundRect.GetHeight() ) )
                         eOrientation = ScrollBarOrientation::VERTICAL;
-                    _rxControlModel->setPropertyValue( FM_PROP_ORIENTATION, makeAny( eOrientation ) );
+                    _rxControlModel->setPropertyValue( FM_PROP_ORIENTATION, Any( eOrientation ) );
                 }
                 break;
 
@@ -406,8 +405,8 @@ namespace svxform
                 {
                     bool bDropDown = !_rControlBoundRect.IsEmpty() && ( _rControlBoundRect.GetWidth() >= 3 * _rControlBoundRect.GetHeight() );
                     if ( xPSI->hasPropertyByName( FM_PROP_DROPDOWN ) )
-                        _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, makeAny( bDropDown ) );
-                    _rxControlModel->setPropertyValue( FM_PROP_LINECOUNT, makeAny( sal_Int16( 20 ) ) );
+                        _rxControlModel->setPropertyValue( FM_PROP_DROPDOWN, Any( bDropDown ) );
+                    _rxControlModel->setPropertyValue( FM_PROP_LINECOUNT, Any( sal_Int16( 20 ) ) );
                 }
                 break;
 
@@ -421,7 +420,7 @@ namespace svxform
                         )
                     {
                         if ( xPSI->hasPropertyByName( FM_PROP_MULTILINE ) )
-                            _rxControlModel->setPropertyValue( FM_PROP_MULTILINE, makeAny( true ) );
+                            _rxControlModel->setPropertyValue( FM_PROP_MULTILINE, Any( true ) );
                     }
                 }
                 break;
@@ -432,7 +431,7 @@ namespace svxform
                 {
                     OUString sVertAlignPropertyName( "VerticalAlign" );
                     if ( xPSI->hasPropertyByName( sVertAlignPropertyName ) )
-                        _rxControlModel->setPropertyValue( sVertAlignPropertyName, makeAny( VerticalAlignment_MIDDLE ) );
+                        _rxControlModel->setPropertyValue( sVertAlignPropertyName, Any( VerticalAlignment_MIDDLE ) );
                 }
                 break;
 
@@ -441,7 +440,7 @@ namespace svxform
                 {
                     static const OUStringLiteral sScaleModeProperty( u"ScaleMode" );
                     if ( xPSI->hasPropertyByName( sScaleModeProperty ) )
-                        _rxControlModel->setPropertyValue( sScaleModeProperty, makeAny( ImageScaleMode::ISOTROPIC ) );
+                        _rxControlModel->setPropertyValue( sScaleModeProperty, Any( ImageScaleMode::ISOTROPIC ) );
                 }
                 break;
             }
@@ -471,7 +470,7 @@ namespace svxform
 
                     _rxControlModel->setPropertyValue(
                         FM_PROP_LABEL,
-                        makeAny( lcl_getUniqueLabel_nothrow( _rxControlModel, sInitialLabel ) )
+                        Any( lcl_getUniqueLabel_nothrow( _rxControlModel, sInitialLabel ) )
                     );
                 }
             }
@@ -479,17 +478,17 @@ namespace svxform
             // strict format = yes is the default (i93467)
             if ( xPSI->hasPropertyByName( FM_PROP_STRICTFORMAT ) )
             {
-                _rxControlModel->setPropertyValue( FM_PROP_STRICTFORMAT, makeAny( true ) );
+                _rxControlModel->setPropertyValue( FM_PROP_STRICTFORMAT, Any( true ) );
             }
 
             // mouse wheel: don't use it for scrolling by default (i110036)
             if ( xPSI->hasPropertyByName( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) )
             {
-                _rxControlModel->setPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
+                _rxControlModel->setPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR, Any( MouseWheelBehavior::SCROLL_DISABLED ) );
             }
 
             if ( xPSI->hasPropertyByName( FM_PROP_WRITING_MODE ) )
-                _rxControlModel->setPropertyValue( FM_PROP_WRITING_MODE, makeAny( WritingMode2::CONTEXT ) );
+                _rxControlModel->setPropertyValue( FM_PROP_WRITING_MODE, Any( WritingMode2::CONTEXT ) );
         }
         catch( const Exception& )
         {
@@ -521,7 +520,7 @@ namespace svxform
                 pInfo->Value >>= bDosLineEnds;
 
             sal_Int16 nLineEndFormat = bDosLineEnds ? LineEndFormat::CARRIAGE_RETURN_LINE_FEED : LineEndFormat::LINE_FEED;
-            _rxModel->setPropertyValue( FM_PROP_LINEENDFORMAT, makeAny( nLineEndFormat ) );
+            _rxModel->setPropertyValue( FM_PROP_LINEENDFORMAT, Any( nLineEndFormat ) );
         }
         catch( const Exception& )
         {
@@ -618,7 +617,7 @@ namespace svxform
             {
                 sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
                 OSL_VERIFY( _rxDatabaseField->getPropertyValue( FM_PROP_ISNULLABLE ) >>= nNullable );
-                _rxControlModel->setPropertyValue( FM_PROP_TRISTATE, makeAny( ColumnValue::NO_NULLS != nNullable ) );
+                _rxControlModel->setPropertyValue( FM_PROP_TRISTATE, Any( ColumnValue::NO_NULLS != nNullable ) );
             }
         }
         catch( const Exception& )

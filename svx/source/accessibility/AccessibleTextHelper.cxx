@@ -406,7 +406,7 @@ namespace accessibility
             {
                 AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
                 if ( !pAccessibleCell )
-                    GotPropertyEvent( uno::makeAny(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
+                    GotPropertyEvent( uno::Any(AccessibleStateType::FOCUSED), AccessibleEventId::STATE_CHANGED );
                 else    // the focus event on cell should be fired on table directly
                 {
                     AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
@@ -424,7 +424,7 @@ namespace accessibility
             {
                 AccessibleCell* pAccessibleCell = dynamic_cast< AccessibleCell* > ( mxFrontEnd.get() );
                 if ( !pAccessibleCell )
-                    FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::makeAny(AccessibleStateType::FOCUSED) );
+                    FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any(AccessibleStateType::FOCUSED) );
                 else
                 {
                     AccessibleTableShape* pAccTable = pAccessibleCell->GetParentTable();
@@ -521,8 +521,8 @@ namespace accessibility
                                 maParaManager.FireEvent( ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ),
                                                          ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex )+1,
                                                          AccessibleEventId::CARET_CHANGED,
-                                                         uno::makeAny(static_cast<sal_Int32>(-1)),
-                                                         uno::makeAny(maLastSelection.nEndPos) );
+                                                         uno::Any(static_cast<sal_Int32>(-1)),
+                                                         uno::Any(maLastSelection.nEndPos) );
                             }
 
                             ChangeChildFocus( aSelection.nEndPara );
@@ -556,7 +556,7 @@ namespace accessibility
                         maParaManager.FireEvent( aSelection.nEndPara,
                                                  aSelection.nEndPara+1,
                                                  AccessibleEventId::CARET_CHANGED,
-                                                 uno::makeAny(aSelection.nEndPos),
+                                                 uno::Any(aSelection.nEndPos),
                                                  aOldCursor );
                     }
 
@@ -767,7 +767,7 @@ namespace accessibility
                     // child not yet created?
                     if (!maParaManager.HasCreatedChild(nCurrPara))
                     {
-                        GotPropertyEvent( uno::makeAny( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
+                        GotPropertyEvent( uno::Any( maParaManager.CreateChild( nCurrPara - mnFirstVisibleChild,
                                                                                    mxFrontEnd, GetEditSource(), nCurrPara ).first ),
                                           AccessibleEventId::CHILD );
                     }
@@ -842,7 +842,7 @@ namespace accessibility
             auto aHardRef( rPara.first.get() );
 
             if( aHardRef.is() )
-                mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny<css::uno::Reference<css::accessibility::XAccessible>>(aHardRef) );
+                mrImpl.FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any(css::uno::Reference<css::accessibility::XAccessible>(aHardRef)) );
         }
 
     private:
@@ -1053,7 +1053,7 @@ namespace accessibility
                 // #109864# Enforce creation of this paragraph
                 try
                 {
-                    GotPropertyEvent( uno::makeAny( getAccessibleChild( aFunctor.GetParaIndex() -
+                    GotPropertyEvent( uno::Any( getAccessibleChild( aFunctor.GetParaIndex() -
                                                                         mnFirstVisibleChild + GetStartIndex() ) ),
                                       AccessibleEventId::CHILD );
                 }
@@ -1087,7 +1087,7 @@ namespace accessibility
 
                 // #i61812# notification for removed para
                 if (xPara.is())
-                    FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::makeAny( xPara) );
+                    FireEvent(AccessibleEventId::CHILD, uno::Any(), uno::Any( xPara) );
             }
 #ifdef DBG_UTIL
             else
