@@ -16,6 +16,23 @@
       "message": "I propose to duplicate option instead of moving it.\nIt still need some improvement as checkbox \"sticks\" at the top. I could not find how to add some space",
       "revId": "7b293278dc7842e565828c52009f9f85edab7c09",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11ef8a3a_86c448d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-03T07:05:34Z",
+      "side": 1,
+      "message": "Whether to sort column or row is essential as well and should be on the first tab. And IIRC the tricky part was and still is to get the functions working in this context. Looking into my patch now.\n\nBtw, had to #include \u003csortdlg.hxx\u003e\u003e to make your patch working.",
+      "revId": "7b293278dc7842e565828c52009f9f85edab7c09",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
