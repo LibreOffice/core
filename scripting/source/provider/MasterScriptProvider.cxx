@@ -323,7 +323,7 @@ MasterScriptProvider::getScript( const OUString& scriptURI )
             provider::theMasterScriptProviderFactory::get( m_xContext );
 
         Reference< provider::XScriptProvider > xSP(
-            xFac_->createScriptProvider( makeAny( location ) ), UNO_SET_THROW );
+            xFac_->createScriptProvider( Any( location ) ), UNO_SET_THROW );
         xScript = xSP->getScript( scriptURI );
     }
 

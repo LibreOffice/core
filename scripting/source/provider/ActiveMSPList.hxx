@@ -75,7 +75,7 @@ private:
     css::uno::Reference< css::script::provider::XScriptProvider >
         createNewMSP( const OUString& context )
     {
-        return createNewMSP( css::uno::makeAny( context ) );
+        return createNewMSP( css::uno::Any( context ) );
     }
 
     friend class NonDocMSPCreator;

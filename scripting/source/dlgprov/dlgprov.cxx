@@ -603,8 +603,8 @@ namespace dlgprov
                         aDecorationAny >>= bDecoration;
                         if( !bDecoration )
                         {
-                            xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
-                            xDlgModPropSet->setPropertyValue( "Title", makeAny( OUString() ) );
+                            xDlgModPropSet->setPropertyValue( aDecorationPropName, Any( true ) );
+                            xDlgModPropSet->setPropertyValue( "Title", Any( OUString() ) );
                         }
                     }
                     catch( UnknownPropertyException& )
