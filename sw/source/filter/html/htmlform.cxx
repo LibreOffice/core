@@ -1616,7 +1616,7 @@ void SwHTMLParser::InsertInput()
 
         if( bDisabled )
         {
-            xPropSet->setPropertyValue("Enabled", makeAny(false) );
+            xPropSet->setPropertyValue("Enabled", Any(false) );
         }
     }
 
@@ -2010,7 +2010,7 @@ void SwHTMLParser::NewTextArea()
 
     if( bDisabled )
     {
-        xPropSet->setPropertyValue("Enabled", makeAny(false) );
+        xPropSet->setPropertyValue("Enabled", Any(false) );
     }
 
     OSL_ENSURE( m_pFormImpl->GetText().isEmpty(), "Text is not empty!" );
@@ -2267,14 +2267,14 @@ void SwHTMLParser::NewSelect()
 
     if( bDisabled )
     {
-        xPropSet->setPropertyValue("Enabled", makeAny(false) );
+        xPropSet->setPropertyValue("Enabled", Any(false) );
     }
 
     Size aTextSz( 0, 0 );
     bool bMinWidth = true, bMinHeight = true;
     if( !bMultiple && 1==m_nSelectEntryCnt )
     {
-        xPropSet->setPropertyValue("Dropdown", makeAny(true) );
+        xPropSet->setPropertyValue("Dropdown", Any(true) );
     }
     else
     {
@@ -2283,7 +2283,7 @@ void SwHTMLParser::NewSelect()
 
         if( bMultiple )
         {
-            xPropSet->setPropertyValue("MultiSelection", makeAny(true) );
+            xPropSet->setPropertyValue("MultiSelection", Any(true) );
         }
         aTextSz.setHeight( m_nSelectEntryCnt );
         bMinHeight = false;

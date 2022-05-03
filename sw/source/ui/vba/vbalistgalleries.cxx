@@ -39,7 +39,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex <= pListGalleries->getCount() )
-            return pListGalleries->Item( uno::makeAny( nIndex++ ), uno::Any() );
+            return pListGalleries->Item( uno::Any( nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -64,7 +64,7 @@ uno::Any SAL_CALL SwVbaListGalleries::Item( const uno::Any& Index1, const uno::A
         if( nIndex == word::WdListGalleryType::wdBulletGallery
             || nIndex == word::WdListGalleryType::wdNumberGallery
             || nIndex == word::WdListGalleryType::wdOutlineNumberGallery )
-            return uno::makeAny( uno::Reference< word::XListGallery >( new SwVbaListGallery( this, mxContext, mxTextDocument, nIndex ) ) );
+            return uno::Any( uno::Reference< word::XListGallery >( new SwVbaListGallery( this, mxContext, mxTextDocument, nIndex ) ) );
     }
     throw  uno::RuntimeException("Index out of bounds" );
 }

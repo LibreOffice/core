@@ -35,7 +35,7 @@ SwVbaFrame::~SwVbaFrame()
 void SAL_CALL SwVbaFrame::Select()
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    xSelectSupp->select( uno::makeAny( mxTextFrame ) );
+    xSelectSupp->select( uno::Any( mxTextFrame ) );
 }
 
 OUString

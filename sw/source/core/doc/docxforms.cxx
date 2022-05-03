@@ -33,7 +33,7 @@ using namespace ::com::sun::star;
 
 using uno::Reference;
 using uno::UNO_QUERY;
-using uno::makeAny;
+using uno::Any;
 using uno::Exception;
 using xforms::XModel2;
 using frame::XModule;
@@ -74,7 +74,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
                 "Instance 1",
                 OUString(), true );
             xModel->initialize();
-            mxXForms->insertByName( sName, makeAny( xModel ) );
+            mxXForms->insertByName( sName, Any( xModel ) );
             OSL_ENSURE( mxXForms->hasElements(), "can't create XForms model" );
         }
 

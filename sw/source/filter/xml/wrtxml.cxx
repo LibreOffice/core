@@ -188,7 +188,7 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
 
     xInfoSet->setPropertyValue( "TargetStorage", Any( m_xStg ) );
 
-    xInfoSet->setPropertyValue("NoEmbDataSet", makeAny(bNoEmbDS));
+    xInfoSet->setPropertyValue("NoEmbDataSet", Any(bNoEmbDS));
 
     if (m_bShowProgress)
     {
@@ -204,7 +204,7 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
         xInfoSet->setPropertyValue("ProgressMax", Any(static_cast < sal_Int32 >( -1 )));
     }
 
-    xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()) );
+    xInfoSet->setPropertyValue( "UsePrettyPrinting", Any(officecfg::Office::Common::Save::Document::PrettyPrinting::get()) );
 
     uno::Reference<lang::XComponent> const xModelComp(m_pDoc->GetDocShell()->GetModel());
     uno::Reference<drawing::XDrawPageSupplier> const xDPS(xModelComp, uno::UNO_QUERY);
@@ -218,14 +218,14 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     // TODO: ideally this would be stored per-view...
     SwRootFrame const*const pLayout(m_pDoc->getIDocumentLayoutAccess().GetCurrentLayout());
     isShowChanges = pLayout == nullptr || !pLayout->IsHideRedlines();
-    xInfoSet->setPropertyValue("ShowChanges", makeAny(isShowChanges));
+    xInfoSet->setPropertyValue("ShowChanges", Any(isShowChanges));
     // ... and hide redlines for export
     nRedlineFlags &= ~RedlineFlags::ShowMask;
     nRedlineFlags |= RedlineFlags::ShowInsert;
     m_pDoc->getIDocumentRedlineAccess().SetRedlineFlags( nRedlineFlags );
 
     // Set base URI
-    xInfoSet->setPropertyValue( "BaseURI", makeAny( GetBaseURL() ) );
+    xInfoSet->setPropertyValue( "BaseURI", Any( GetBaseURL() ) );
 
     if( SfxObjectCreateMode::EMBEDDED == m_pDoc->GetDocShell()->GetCreateMode() )
     {
@@ -233,12 +233,12 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
             ? aDocHierarchicalName
             : OUString( "dummyObjectName" ) );
 
-        xInfoSet->setPropertyValue( "StreamRelPath", makeAny( aName ) );
+        xInfoSet->setPropertyValue( "StreamRelPath", Any( aName ) );
     }
 
     if( m_bBlock )
     {
-        xInfoSet->setPropertyValue( "AutoTextMode", makeAny(true) );
+        xInfoSet->setPropertyValue( "AutoTextMode", Any(true) );
     }
 
     // #i69627#
@@ -246,7 +246,7 @@ ErrCode SwXMLWriter::Write_(const SfxItemSet* pMediumItemSet)
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *m_pDoc ) )
     {
-        xInfoSet->setPropertyValue( "OutlineStyleAsNormalListStyle", makeAny( true ) );
+        xInfoSet->setPropertyValue( "OutlineStyleAsNormalListStyle", Any( true ) );
     }
 
     // filter arguments
@@ -508,7 +508,7 @@ bool SwXMLWriter::WriteThroughComponent(
         xSet->setPropertyValue("MediaType", Any(OUString("text/xml")) );
 
         // even plain stream should be encrypted in encrypted documents
-        xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", makeAny(true) );
+        xSet->setPropertyValue( "UseCommonStoragePasswordEncryption", Any(true) );
 
         // set buffer and create outputstream
         uno::Reference< io::XOutputStream > xOutputStream = xStream->getOutputStream();
@@ -520,7 +520,7 @@ bool SwXMLWriter::WriteThroughComponent(
         OSL_ENSURE( xInfoSet.is(), "missing property set" );
         if( xInfoSet.is() )
         {
-            xInfoSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
+            xInfoSet->setPropertyValue( "StreamName", Any( sStreamName ) );
         }
 
         // write the stuff

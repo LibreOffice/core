@@ -264,8 +264,8 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             SwTable* pTable = SwTable::FindTable( pFormat );
             const sal_uInt16 nRepeat = pTable->GetRowsToRepeat();
             if(pEntry->nWID == FN_TABLE_HEADLINE_REPEAT)
-                return uno::makeAny<bool>(nRepeat > 0);
-            return uno::makeAny<sal_Int32>(nRepeat);
+                return uno::Any(nRepeat > 0);
+            return uno::Any(sal_Int32(nRepeat));
         }
 
         case  FN_TABLE_WIDTH:
@@ -290,25 +290,25 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
             {
                 const SwPageDesc* pDsc = pItem->GetPageDesc();
                 if(pDsc)
-                    return uno::makeAny<OUString>(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ));
+                    return uno::Any(SwStyleNameMapper::GetProgName(pDsc->GetName(), SwGetPoolIdFromName::PageDesc ));
             }
-            return uno::makeAny(OUString());
+            return uno::Any(OUString());
         }
 
         case RES_ANCHOR:
-            return uno::makeAny(text::TextContentAnchorType_AT_PARAGRAPH);
+            return uno::Any(text::TextContentAnchorType_AT_PARAGRAPH);
 
         case FN_UNO_ANCHOR_TYPES:
         {
             uno::Sequence<text::TextContentAnchorType> aTypes{text::TextContentAnchorType_AT_PARAGRAPH};
-            return uno::makeAny(aTypes);
+            return uno::Any(aTypes);
         }
 
         case FN_UNO_WRAP :
-            return uno::makeAny(text::WrapTextMode_NONE);
+            return uno::Any(text::WrapTextMode_NONE);
 
         case FN_PARAM_LINK_DISPLAY_NAME :
-            return uno::makeAny(pFormat->GetName());
+            return uno::Any(pFormat->GetName());
 
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
@@ -326,7 +326,7 @@ static uno::Any lcl_GetSpecialProperty(SwFrameFormat* pFormat, const SfxItemProp
                     const SwNode& rStartOfRedline = SwNodeIndex(rRedPointNode) <= SwNodeIndex(rRedMarkNode) ?
                         rRedPointNode : rRedMarkNode;
                     bool bIsStart = &rStartOfRedline == pTableNode;
-                    return uno::makeAny(SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart));
+                    return uno::Any(SwXRedlinePortion::CreateRedlineProperties(*pRedline, bIsStart));
                 }
             }
         }
@@ -1015,7 +1015,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
     switch(pEntry->nWID)
     {
         case FN_UNO_CELL_ROW_SPAN:
-            return uno::makeAny(m_pBox->getRowSpan());
+            return uno::Any(m_pBox->getRowSpan());
         case FN_UNO_TEXT_SECTION:
         {
             SwFrameFormat* pTableFormat = GetFrameFormat();
@@ -1025,11 +1025,11 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
             if(!pSectionNode)
                 return uno::Any();
             SwSection& rSect = pSectionNode->GetSection();
-            return uno::makeAny(SwXTextSections::GetObject(*rSect.GetFormat()));
+            return uno::Any(SwXTextSections::GetObject(*rSect.GetFormat()));
         }
         break;
         case FN_UNO_CELL_NAME:
-            return uno::makeAny(m_pBox->GetName());
+            return uno::Any(m_pBox->GetName());
         case FN_UNO_REDLINE_NODE_START:
         case FN_UNO_REDLINE_NODE_END:
         {
@@ -1054,7 +1054,7 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
                 m_xParentText = sw::CreateParentXText(rDoc, aPos);
             }
 
-            return uno::makeAny(m_xParentText);
+            return uno::Any(m_xParentText);
         }
         break;
         default:
@@ -1205,7 +1205,7 @@ uno::Any SwXCell::GetAny() const
     // check if table box value item is set
     auto pBoxFormat(m_pBox->GetFrameFormat());
     const bool bIsNum = pBoxFormat->GetItemState(RES_BOXATR_VALUE, false) == SfxItemState::SET;
-    return bIsNum ? uno::makeAny(getValue()) : uno::makeAny(const_cast<SwXCell*>(this)->getString());
+    return bIsNum ? uno::Any(getValue()) : uno::Any(const_cast<SwXCell*>(this)->getString());
 }
 
 OUString SwXCell::getImplementationName()
@@ -3900,7 +3900,7 @@ uno::Any SwXTableRows::getByIndex(sal_Int32 nIndex)
     if(!aHint.m_pResult)
         aHint.m_pResult = new SwXTextTableRow(pFrameFormat, pLine);
     uno::Reference<beans::XPropertySet> xRet = static_cast<beans::XPropertySet*>(aHint.m_pResult.get());
-    return uno::makeAny(xRet);
+    return uno::Any(xRet);
 }
 
 uno::Type SAL_CALL SwXTableRows::getElementType()
@@ -4059,7 +4059,7 @@ uno::Any SwXTableColumns::getByIndex(sal_Int32 nIndex)
     SolarMutexGuard aGuard;
     if(nIndex < 0 || getCount() <= nIndex)
         throw lang::IndexOutOfBoundsException();
-    return uno::makeAny(uno::Reference<uno::XInterface>()); // i#21699 not supported
+    return uno::Any(uno::Reference<uno::XInterface>()); // i#21699 not supported
 }
 
 uno::Type SAL_CALL SwXTableColumns::getElementType()

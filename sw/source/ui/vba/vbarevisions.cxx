@@ -46,7 +46,7 @@ public:
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
         uno::Reference< beans::XPropertySet > xRevision( *mIt++ );
-        return uno::makeAny( xRevision ) ;
+        return uno::Any( xRevision ) ;
     }
 };
 
@@ -68,7 +68,7 @@ RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const u
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        return uno::makeAny( mRevisionMap[ Index ] );
+        return uno::Any( mRevisionMap[ Index ] );
 
     }
     // XEnumerationAccess
@@ -109,7 +109,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< beans::XPropertySet > xRevision( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return uno::makeAny( uno::Reference< word::XRevision > ( new SwVbaRevision( m_xParent, m_xContext, m_xModel, xRevision ) ) );
+        return uno::Any( uno::Reference< word::XRevision > ( new SwVbaRevision( m_xParent, m_xContext, m_xModel, xRevision ) ) );
     }
 
 };
@@ -141,7 +141,7 @@ uno::Any
 SwVbaRevisions::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< beans::XPropertySet > xRevision( aSource, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< word::XRevision > ( new SwVbaRevision( this, mxContext, mxModel, xRevision ) ) );
+    return uno::Any( uno::Reference< word::XRevision > ( new SwVbaRevision( this, mxContext, mxModel, xRevision ) ) );
 }
 
 void SAL_CALL SwVbaRevisions::AcceptAll(  )

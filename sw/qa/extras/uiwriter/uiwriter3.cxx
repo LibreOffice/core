@@ -830,7 +830,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132597)
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
     dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -857,7 +857,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139737)
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
     dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -901,8 +901,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf147206)
     // set one to heading so there will be an entry in the tox
     pWrtShell->Up(false, 1);
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Style", uno::makeAny(OUString("Heading 1")) },
-        { "FamilyName", uno::makeAny(OUString("ParagraphStyles")) },
+        { "Style", uno::Any(OUString("Heading 1")) },
+        { "FamilyName", uno::Any(OUString("ParagraphStyles")) },
     });
     dispatchCommand(mxComponent, ".uno:StyleApply", aPropertyValues);
 
@@ -977,7 +977,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf144840)
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
     dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1011,7 +1011,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131963)
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
     dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1036,7 +1036,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132596)
 
     // Paste special as RTF
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
-        { { "SelectedFormat", uno::makeAny(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
+        { { "SelectedFormat", uno::Any(static_cast<sal_uInt32>(SotClipboardFormatId::RTF)) } });
 
     dispatchCommand(mxComponent, ".uno:ClipboardFormatItems", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -2667,7 +2667,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
     //CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xTextTable, "TableTemplateName"));
     uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
 
-    xTableProps->setPropertyValue("HoriOrient", uno::makeAny(text::HoriOrientation::CENTER));
+    xTableProps->setPropertyValue("HoriOrient", uno::Any(text::HoriOrientation::CENTER));
 
     CPPUNIT_ASSERT_EQUAL(text::HoriOrientation::CENTER,
                          getProperty<sal_Int16>(xTextTable, "HoriOrient"));
@@ -2715,10 +2715,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf148791)
 
     // tdf#64902 add a test case for repeated table headings
 
-    xTableProps->setPropertyValue("RepeatHeadline", uno::makeAny(true));
+    xTableProps->setPropertyValue("RepeatHeadline", uno::Any(true));
     CPPUNIT_ASSERT(getProperty<bool>(xTextTable, "RepeatHeadline"));
 
-    xTableProps->setPropertyValue("HeaderRowCount", uno::makeAny(sal_Int32(3)));
+    xTableProps->setPropertyValue("HeaderRowCount", uno::Any(sal_Int32(3)));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getProperty<sal_Int32>(xTextTable, "HeaderRowCount"));
 
     dispatchCommand(mxComponent, ".uno:SelectTable", {});
@@ -2744,15 +2744,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf135014)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", uno::makeAny(sal_Int32(0)) } }));
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(sal_Int32(0)) } }));
 
     // Toggle Numbering List
     dispatchCommand(mxComponent, ".uno:DefaultBullet", aArgs);
     Scheduler::ProcessEventsToIdle();
 
     uno::Sequence<beans::PropertyValue> aArgs2(comphelper::InitPropertySequence(
-        { { "Param", uno::makeAny(OUString("NewNumberingStyle")) },
-          { "Family", uno::makeAny(static_cast<sal_Int16>(SfxStyleFamily::Pseudo)) } }));
+        { { "Param", uno::Any(OUString("NewNumberingStyle")) },
+          { "Family", uno::Any(static_cast<sal_Int16>(SfxStyleFamily::Pseudo)) } }));
 
     // New Style from selection
     dispatchCommand(mxComponent, ".uno:StyleNewByExample", aArgs2);
@@ -2771,7 +2771,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf130629)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Sequence<beans::PropertyValue> aArgs(
-        comphelper::InitPropertySequence({ { "KeyModifier", uno::makeAny(KEY_MOD1) } }));
+        comphelper::InitPropertySequence({ { "KeyModifier", uno::Any(KEY_MOD1) } }));
 
     dispatchCommand(mxComponent, ".uno:BasicShapes.diamond", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -3015,7 +3015,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107494)
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"),
                                                    uno::UNO_QUERY);
 
-    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(true));
+    xPageStyle->setPropertyValue("HeaderIsOn", uno::Any(true));
 
     uno::Reference<text::XText> xHeader(
         getProperty<uno::Reference<text::XText>>(xPageStyle, "HeaderText"));
@@ -3026,11 +3026,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107494)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    xPageStyle->setPropertyValue("HeaderIsOn", uno::makeAny(false));
+    xPageStyle->setPropertyValue("HeaderIsOn", uno::Any(false));
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 
-    xPageStyle->setPropertyValue("FooterIsOn", uno::makeAny(true));
+    xPageStyle->setPropertyValue("FooterIsOn", uno::Any(true));
 
     uno::Reference<text::XText> xFooter(
         getProperty<uno::Reference<text::XText>>(xPageStyle, "FooterText"));
@@ -3046,7 +3046,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf107494)
 
     CPPUNIT_ASSERT_EQUAL(1, getShapes());
 
-    xPageStyle->setPropertyValue("FooterIsOn", uno::makeAny(false));
+    xPageStyle->setPropertyValue("FooterIsOn", uno::Any(false));
 
     CPPUNIT_ASSERT_EQUAL(0, getShapes());
 }
@@ -3084,7 +3084,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131771)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(2)) } }));
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -3098,7 +3098,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf131771)
 
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(xTextTable, "TableTemplateName"));
     uno::Reference<beans::XPropertySet> xTableProps(xTextTable, uno::UNO_QUERY_THROW);
-    xTableProps->setPropertyValue("TableTemplateName", uno::makeAny(OUString("Default Style")));
+    xTableProps->setPropertyValue("TableTemplateName", uno::Any(OUString("Default Style")));
 
     CPPUNIT_ASSERT_EQUAL(OUString("Default Style"),
                          getProperty<OUString>(xTextTable, "TableTemplateName"));
@@ -3127,7 +3127,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf80663)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(2)) } }));
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -3208,7 +3208,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf121031)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(3)) }, { "Columns", uno::makeAny(sal_Int32(3)) } }));
+        { { "Rows", uno::Any(sal_Int32(3)) }, { "Columns", uno::Any(sal_Int32(3)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -3371,7 +3371,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf139566)
     SwWrtShell* pWrtSh = pDoc->GetDocShell()->GetWrtShell();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(1)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
+        { { "Rows", uno::Any(sal_Int32(1)) }, { "Columns", uno::Any(sal_Int32(1)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -3413,7 +3413,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf96067)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(3)) }, { "Columns", uno::makeAny(sal_Int32(3)) } }));
+        { { "Rows", uno::Any(sal_Int32(3)) }, { "Columns", uno::Any(sal_Int32(3)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -3447,7 +3447,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf87199)
     createSwDoc();
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(2)) }, { "Columns", uno::makeAny(sal_Int32(1)) } }));
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(1)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
 
@@ -3561,7 +3561,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf132603)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Sequence<beans::PropertyValue> aPropertyValues
-        = comphelper::InitPropertySequence({ { "Text", uno::makeAny(OUString("Comment")) } });
+        = comphelper::InitPropertySequence({ { "Text", uno::Any(OUString("Comment")) } });
 
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -3594,7 +3594,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf117601)
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
-        { { "Rows", uno::makeAny(sal_Int32(5)) }, { "Columns", uno::makeAny(sal_Int32(3)) } }));
+        { { "Rows", uno::Any(sal_Int32(5)) }, { "Columns", uno::Any(sal_Int32(3)) } }));
 
     dispatchCommand(mxComponent, ".uno:InsertTable", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -3954,7 +3954,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, AtPageTextBoxCrash)
     // Change its anchor to page
     uno::Reference<beans::XPropertySet> xShpProps(getShape(1), uno::UNO_QUERY_THROW);
     xShpProps->setPropertyValue(
-        "AnchorType", uno::makeAny(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
+        "AnchorType", uno::Any(text::TextContentAnchorType::TextContentAnchorType_AT_PAGE));
 
     // The page anchored objects must not have content anchor
     // unless this will lead to crash later, for example on
@@ -4008,8 +4008,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest3, testTdf133477)
     SvMemoryStream aStream;
     uno::Reference<io::XOutputStream> xOutputStream(new utl::OStreamWrapper(aStream));
     uno::Sequence<beans::PropertyValue> aDescriptor(
-        comphelper::InitPropertySequence({ { "OutputStream", uno::makeAny(xOutputStream) },
-                                           { "FilterName", uno::makeAny(OUString("BMP")) } }));
+        comphelper::InitPropertySequence({ { "OutputStream", uno::Any(xOutputStream) },
+                                           { "FilterName", uno::Any(OUString("BMP")) } }));
     xGraphicExporter->filter(aDescriptor);
     aStream.Seek(STREAM_SEEK_TO_BEGIN);
 

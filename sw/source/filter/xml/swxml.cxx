@@ -303,7 +303,7 @@ ErrCode ReadThroughComponent(
     OSL_ENSURE( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        xInfoSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
+        xInfoSet->setPropertyValue( "StreamName", Any( sStreamName ) );
     }
 
     try
@@ -642,7 +642,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     xInfoSet->setPropertyValue("ProgressRange", aProgRange);
 
     Reference< container::XNameAccess > xLateInitSettings( document::NamedPropertyValues::create(xContext), UNO_QUERY_THROW );
-    beans::NamedValue aLateInitSettings( "LateInitSettings", makeAny( xLateInitSettings ) );
+    beans::NamedValue aLateInitSettings( "LateInitSettings", Any( xLateInitSettings ) );
 
     xInfoSet->setPropertyValue( "SourceStorage", Any( xStorage ) );
 
@@ -684,16 +684,16 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
             *pSeq++ = "NumberingStyles";
 
         xInfoSet->setPropertyValue( "StyleInsertModeFamilies",
-                                    makeAny(aFamiliesSeq) );
+                                    Any(aFamiliesSeq) );
 
-        xInfoSet->setPropertyValue( "StyleInsertModeOverwrite", makeAny(!m_aOption.IsMerge()) );
+        xInfoSet->setPropertyValue( "StyleInsertModeOverwrite", Any(!m_aOption.IsMerge()) );
     }
     else if( m_bInsertMode )
     {
         const uno::Reference<text::XTextRange> xInsertTextRange =
             SwXTextRange::CreateXTextRange(rDoc, *rPaM.GetPoint(), nullptr);
         xInfoSet->setPropertyValue( "TextInsertModeRange",
-                                    makeAny(xInsertTextRange) );
+                                    Any(xInsertTextRange) );
     }
     else
     {
@@ -703,11 +703,11 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
     if( IsBlockMode() )
     {
-        xInfoSet->setPropertyValue( "AutoTextMode", makeAny(true) );
+        xInfoSet->setPropertyValue( "AutoTextMode", Any(true) );
     }
     if( IsOrganizerMode() )
     {
-        xInfoSet->setPropertyValue( "OrganizerMode", makeAny(true) );
+        xInfoSet->setPropertyValue( "OrganizerMode", Any(true) );
     }
 
     // Set base URI
@@ -716,7 +716,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     SfxMedium* pMedDescrMedium = m_pMedium ? m_pMedium : pDocSh->GetMedium();
     OSL_ENSURE( pMedDescrMedium, "There is no medium to get MediaDescriptor from!" );
 
-    xInfoSet->setPropertyValue( "BaseURI", makeAny( rBaseURL ) );
+    xInfoSet->setPropertyValue( "BaseURI", Any( rBaseURL ) );
 
     // TODO/LATER: separate links from usual embedded objects
     OUString StreamPath;
@@ -736,7 +736,7 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
 
         if( !StreamPath.isEmpty() )
         {
-            xInfoSet->setPropertyValue( "StreamRelPath", makeAny( StreamPath ) );
+            xInfoSet->setPropertyValue( "StreamRelPath", Any( StreamPath ) );
         }
     }
 
@@ -748,11 +748,11 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
     static const OUStringLiteral sRecordChanges(u"RecordChanges");
     static const OUStringLiteral sRedlineProtectionKey(u"RedlineProtectionKey");
     xInfoSet->setPropertyValue( sShowChanges,
-        makeAny(IDocumentRedlineAccess::IsShowChanges(rDoc.getIDocumentRedlineAccess().GetRedlineFlags())) );
+        Any(IDocumentRedlineAccess::IsShowChanges(rDoc.getIDocumentRedlineAccess().GetRedlineFlags())) );
     xInfoSet->setPropertyValue( sRecordChanges,
-        makeAny(IDocumentRedlineAccess::IsRedlineOn(rDoc.getIDocumentRedlineAccess().GetRedlineFlags())) );
+        Any(IDocumentRedlineAccess::IsRedlineOn(rDoc.getIDocumentRedlineAccess().GetRedlineFlags())) );
     xInfoSet->setPropertyValue( sRedlineProtectionKey,
-        makeAny(rDoc.getIDocumentRedlineAccess().GetRedlinePassword()) );
+        Any(rDoc.getIDocumentRedlineAccess().GetRedlinePassword()) );
 
     // force redline mode to "none"
     rDoc.getIDocumentRedlineAccess().SetRedlineFlags_intern( RedlineFlags::NONE );
@@ -763,13 +763,13 @@ ErrCode XMLReader::Read( SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, con
         const bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
                 "ShapePositionInHoriL2R",
-                makeAny( bShapePositionInHoriL2R ) );
+                Any( bShapePositionInHoriL2R ) );
     }
     {
         const bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
                 "TextDocInOOoFileFormat",
-                makeAny( bTextDocInOOoFileFormat ) );
+                Any( bTextDocInOOoFileFormat ) );
     }
 
     ErrCode nWarnRDF = ERRCODE_NONE;

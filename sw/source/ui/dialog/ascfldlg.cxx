@@ -266,7 +266,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( weld::Window* pParent, SwDocShell& rDocSh,
 SwAsciiFilterDlg::~SwAsciiFilterDlg()
 {
     SvtViewOptions aDlgOpt(EViewType::Dialog, OStringToOUString(m_xDialog->get_help_id(), RTL_TEXTENCODING_UTF8));
-    aDlgOpt.SetUserItem("UserItem", uno::makeAny(m_sExtraData));
+    aDlgOpt.SetUserItem("UserItem", uno::Any(m_sExtraData));
 }
 
 void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )

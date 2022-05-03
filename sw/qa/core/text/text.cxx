@@ -67,7 +67,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testSemiTransparentText)
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xParagraph.is());
     sal_Int16 nTransparence = 50;
-    xParagraph->setPropertyValue("CharTransparence", uno::makeAny(nTransparence));
+    xParagraph->setPropertyValue("CharTransparence", uno::Any(nTransparence));
     uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextRange.is());
     xTextRange->setString("x");
@@ -106,7 +106,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testBibliographyUrlPdfExport)
         comphelper::makePropertyValue("Title", OUString("Title")),
         comphelper::makePropertyValue("URL", OUString("http://www.example.com/test.pdf#page=1")),
     };
-    xField->setPropertyValue("Fields", uno::makeAny(aFields));
+    xField->setPropertyValue("Fields", uno::Any(aFields));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
@@ -273,7 +273,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreak)
         xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
 
     // When laying out that document:
@@ -303,7 +303,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakAtStart)
         xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::ALL);
-    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
 
     // When laying out that document:
@@ -333,7 +333,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
         xShape->setSize(awt::Size(5000, 5000));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         xShapeProps->setPropertyValue("AnchorType",
-                                      uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                                      uno::Any(text::TextContentAnchorType_AT_CHARACTER));
         uno::Reference<text::XTextContent> xShapeContent(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent, /*bAbsorb=*/false);
     }
@@ -343,8 +343,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
         xShape->setSize(awt::Size(5000, 7500));
         uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
         xShapeProps->setPropertyValue("AnchorType",
-                                      uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-        xShapeProps->setPropertyValue("HoriOrientPosition", uno::makeAny(sal_Int32(10000)));
+                                      uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+        xShapeProps->setPropertyValue("HoriOrientPosition", uno::Any(sal_Int32(10000)));
         uno::Reference<text::XTextContent> xShapeContent2(xShape, uno::UNO_QUERY);
         xText->insertTextContent(xCursor, xShapeContent2, /*bAbsorb=*/false);
     }
@@ -352,7 +352,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testClearingLineBreakLeft)
         xFactory->createInstance("com.sun.star.text.LineBreak"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xLineBreakProps(xLineBreak, uno::UNO_QUERY);
     auto eClear = static_cast<sal_Int16>(SwLineBreakClear::LEFT);
-    xLineBreakProps->setPropertyValue("Clear", uno::makeAny(eClear));
+    xLineBreakProps->setPropertyValue("Clear", uno::Any(eClear));
     xText->insertString(xCursor, "foo", /*bAbsorb=*/false);
     xText->insertTextContent(xCursor, xLineBreak, /*bAbsorb=*/false);
     xText->insertString(xCursor, "bar", /*bAbsorb=*/false);
@@ -395,7 +395,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreTextTest, testAsCharImageDocModelFromViewPoint)
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
     // Only set the anchor type, the actual bitmap content is not interesting.
     xTextGraphic->setPropertyValue("AnchorType",
-                                   uno::makeAny(text::TextContentAnchorType_AS_CHARACTER));
+                                   uno::Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xBodyText = xTextDocument->getText();
     uno::Reference<text::XTextCursor> xCursor(xBodyText->createTextCursor());

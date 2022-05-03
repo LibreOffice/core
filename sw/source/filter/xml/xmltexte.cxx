@@ -117,7 +117,7 @@ static void lcl_addAspect(
 {
     sal_Int64 nAspect = rObj.GetViewAspect();
     if ( nAspect )
-        rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::makeAny( nAspect ) );
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_OLE_DRAW_ASPECT ), uno::Any( nAspect ) );
 }
 
 static void lcl_addOutplaceProperties(
@@ -174,9 +174,9 @@ static void lcl_addFrameProperties(
     aAny >>= nHeight;
 
     if( !bIsAutoScroll )
-        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), makeAny(bIsScrollingMode) );
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_SCROLLBAR ), Any(bIsScrollingMode) );
     if( !bIsAutoBorder )
-        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), makeAny(bIsBorderSet) );
+        rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_DISPLAY_BORDER ), Any(bIsBorderSet) );
     if( SIZE_NOT_SET != nWidth )
         rStates.emplace_back( rMapper->FindEntryIndex( CTF_FRAME_MARGIN_HORI ), Any(nWidth) );
     if( SIZE_NOT_SET != nHeight )

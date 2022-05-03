@@ -303,7 +303,7 @@ bool Customization::ImportMenu( SwCTBWrapper& rWrapper, CustomToolBarImportHelpe
                     if ( pCust->customizationDataCTB && !pCust->customizationDataCTB->ImportMenuTB( rWrapper, xMenuContainer, helper ) )
                         return false;
                     SAL_INFO("sw.ww8","** there are " << xIndexContainer->getCount() << " menu items on the bar, inserting after that");
-                    xIndexContainer->insertByIndex( xIndexContainer->getCount(), uno::makeAny( aPopupMenu ) );
+                    xIndexContainer->insertByIndex( xIndexContainer->getCount(), uno::Any( aPopupMenu ) );
 
                     if ( bHasSettings )
                         helper.getCfgManager()->replaceSettings( sMenuBar, uno::Reference< container::XIndexAccess >( xIndexContainer, uno::UNO_QUERY_THROW ) );
@@ -434,7 +434,7 @@ bool SwCTB::ImportCustomToolBar( SwCTBWrapper& rWrapper, CustomToolBarImportHelp
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
 
         // set UI name for toolbar
-        xProps->setPropertyValue( "UIName", uno::makeAny( name.getString() ) );
+        xProps->setPropertyValue( "UIName", uno::Any( name.getString() ) );
 
         const OUString sToolBarName = "private:resource/toolbar/custom_" + name.getString();
         for ( auto& rItem : rTBC )
@@ -591,10 +591,10 @@ SwTBC::ImportToolBarControl( SwCTBWrapper& rWrapper, const css::uno::Reference< 
             // insert spacer
             uno::Sequence< beans::PropertyValue > sProps{ comphelper::makePropertyValue(
                 "Type", ui::ItemType::SEPARATOR_LINE) };
-            toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
+            toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::Any( sProps ) );
         }
 
-        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( comphelper::containerToSequence(props) ) );
+        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::Any( comphelper::containerToSequence(props) ) );
     }
     return true;
 }

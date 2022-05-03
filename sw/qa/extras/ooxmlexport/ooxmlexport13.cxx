@@ -742,9 +742,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTextInput)
             sContent = "content without hint";
             break;
         }
-        CPPUNIT_ASSERT_EQUAL(uno::makeAny(sContent), xPropertySet->getPropertyValue("Content"));
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sContent), xPropertySet->getPropertyValue("Content"));
         CPPUNIT_ASSERT_EQUAL(sContent, xText->getAnchor()->getString());
-        CPPUNIT_ASSERT_EQUAL(uno::makeAny(sHint), xPropertySet->getPropertyValue("Hint"));
+        CPPUNIT_ASSERT_EQUAL(uno::Any(sHint), xPropertySet->getPropertyValue("Hint"));
         nElements++;
     }
     while (xFields->hasMoreElements());

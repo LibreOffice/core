@@ -101,11 +101,11 @@ SwXFlatParagraph::getPropertyValue(const OUString& rPropertyName)
 
     if (rPropertyName == "FieldPositions")
     {
-        return uno::makeAny( comphelper::containerToSequence( GetConversionMap().getFieldPositions() ) );
+        return uno::Any( comphelper::containerToSequence( GetConversionMap().getFieldPositions() ) );
     }
     else if (rPropertyName == "FootnotePositions")
     {
-        return uno::makeAny( comphelper::containerToSequence( GetConversionMap().getFootnotePositions() ) );
+        return uno::Any( comphelper::containerToSequence( GetConversionMap().getFootnotePositions() ) );
     }
     return uno::Any();
 }

@@ -294,7 +294,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMargin)
 
     // Set the gutter margin to 2cm.
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
 
     // Verify that the new left edge is larger.
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
@@ -314,7 +314,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xSettings(
         xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-    xSettings->setPropertyValue("GutterAtTop", uno::makeAny(true));
+    xSettings->setPropertyValue("GutterAtTop", uno::Any(true));
     uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
                                                   uno::UNO_QUERY);
     SwRootFrame* pLayout = pDoc->getIDocumentLayoutAccess().GetCurrentLayout();
@@ -323,7 +323,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterTopMargin)
 
     // Set the gutter margin to 2cm.
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
 
     // Verify that the new top edge is larger.
     tools::Long nNewTop = pPage->getFramePrintArea().Top();
@@ -349,9 +349,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMirrorMargin)
 
     uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
                                                   uno::UNO_QUERY);
-    xStandard->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_MIRRORED));
+    xStandard->setPropertyValue("PageStyleLayout", uno::Any(style::PageStyleLayout_MIRRORED));
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
 
     tools::Long nNewLeft = pPage->getFramePrintArea().Left();
     tools::Long nGutterTwips = o3tl::toTwips(nGutterMm100, o3tl::Length::mm100);
@@ -375,9 +375,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testRtlGutterMargin)
     tools::Long nOldRight = pPage->getFramePrintArea().Right();
 
     // When setting enable RTL gutter mode and setting a gutter margin:
-    xStandard->setPropertyValue("RtlGutter", uno::makeAny(true));
+    xStandard->setPropertyValue("RtlGutter", uno::Any(true));
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
 
     // Then make sure the new right edge of the print area is decreased:
     tools::Long nNewRight = pPage->getFramePrintArea().Right();

@@ -758,7 +758,7 @@ uno::Any SAL_CALL SwXFieldmark::getPropertyValue(const OUString& rPropertyName)
         if ( !pCheckboxFm )
             throw uno::RuntimeException();
 
-        return uno::makeAny( pCheckboxFm->IsChecked() );
+        return uno::Any( pCheckboxFm->IsChecked() );
     }
     return uno::Any(); // this doesn't support any SwXBookmark property
 }

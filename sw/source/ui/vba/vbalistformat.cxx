@@ -83,16 +83,16 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
         if( isFirstElement )
         {
             bool isNumberingRestart = !bContinuePreviousList;
-            xProps->setPropertyValue("ParaIsNumberingRestart", uno::makeAny( isNumberingRestart ) );
+            xProps->setPropertyValue("ParaIsNumberingRestart", uno::Any( isNumberingRestart ) );
             if( isNumberingRestart )
             {
-                xProps->setPropertyValue("NumberingStartValue", uno::makeAny( sal_Int16(1) ) );
+                xProps->setPropertyValue("NumberingStartValue", uno::Any( sal_Int16(1) ) );
             }
             isFirstElement = false;
         }
         else
         {
-            xProps->setPropertyValue("ParaIsNumberingRestart", uno::makeAny( false ) );
+            xProps->setPropertyValue("ParaIsNumberingRestart", uno::Any( false ) );
         }
         rListTemplate.applyListTemplate( xProps );
     }

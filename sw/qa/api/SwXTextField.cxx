@@ -78,9 +78,9 @@ Reference<XInterface> SwXTextField::init()
 
     Reference<XPropertySet> xFieldMaster(
         xMSF->createInstance("com.sun.star.text.FieldMaster.Database"), UNO_QUERY_THROW);
-    xFieldMaster->setPropertyValue("DataBaseName", makeAny(OUString("Address Book File")));
-    xFieldMaster->setPropertyValue("DataTableName", makeAny(OUString("address")));
-    xFieldMaster->setPropertyValue("DataColumnName", makeAny(OUString("FIRSTNAME")));
+    xFieldMaster->setPropertyValue("DataBaseName", Any(OUString("Address Book File")));
+    xFieldMaster->setPropertyValue("DataTableName", Any(OUString("address")));
+    xFieldMaster->setPropertyValue("DataColumnName", Any(OUString("FIRSTNAME")));
 
     Reference<text::XDependentTextField> xField(
         xMSF->createInstance("com.sun.star.text.TextField.Database"), UNO_QUERY_THROW);

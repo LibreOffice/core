@@ -119,7 +119,7 @@ public:
                 if( xServiceInfo->supportsService("com.sun.star.text.Paragraph") )
                 {
                     if( Index == nCount )
-                        return uno::makeAny( xServiceInfo );
+                        return uno::Any( xServiceInfo );
                     nCount++;
                 }
             }
@@ -156,7 +156,7 @@ uno::Any
 SwVbaParagraphs::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< text::XTextRange > xTextRange( aSource, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< word::XParagraph >( new SwVbaParagraph( this, mxContext, mxTextDocument, xTextRange ) ) );
+    return uno::Any( uno::Reference< word::XParagraph >( new SwVbaParagraph( this, mxContext, mxTextDocument, xTextRange ) ) );
 }
 
 OUString

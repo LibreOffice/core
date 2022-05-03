@@ -109,7 +109,7 @@ uno::Any
 SwVbaAutoTextEntries::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< text::XAutoTextEntry > xEntry( aSource, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< word::XAutoTextEntry >( new SwVbaAutoTextEntry( this, mxContext, xEntry ) ) );
+    return uno::Any( uno::Reference< word::XAutoTextEntry >( new SwVbaAutoTextEntry( this, mxContext, xEntry ) ) );
 }
 
 OUString

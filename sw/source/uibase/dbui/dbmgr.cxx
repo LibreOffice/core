@@ -814,7 +814,7 @@ static bool lcl_SaveDoc(
                                         *pStoreToFilterOptions));
         if( pSaveToFilterData->hasElements() )
             pDstMed->GetItemSet()->Put( SfxUnoAnyItem(SID_FILTER_DATA,
-                                        uno::makeAny(*pSaveToFilterData)));
+                                        uno::Any(*pSaveToFilterData)));
     }
 
     // convert fields to text if we are exporting to PDF.
@@ -1906,11 +1906,11 @@ uno::Reference< sdbcx::XColumnsSupplier> SwDBManager::GetColumnSupplier(uno::Ref
         }
 
         uno::Reference<beans::XPropertySet> xRowProperties(xRowSet, uno::UNO_QUERY);
-        xRowProperties->setPropertyValue("DataSourceName", uno::makeAny(sDataSource));
-        xRowProperties->setPropertyValue("Command", uno::makeAny(rTableOrQuery));
-        xRowProperties->setPropertyValue("CommandType", uno::makeAny(nCommandType));
-        xRowProperties->setPropertyValue("FetchSize", uno::makeAny(sal_Int32(10)));
-        xRowProperties->setPropertyValue("ActiveConnection", uno::makeAny(xConnection));
+        xRowProperties->setPropertyValue("DataSourceName", uno::Any(sDataSource));
+        xRowProperties->setPropertyValue("Command", uno::Any(rTableOrQuery));
+        xRowProperties->setPropertyValue("CommandType", uno::Any(nCommandType));
+        xRowProperties->setPropertyValue("FetchSize", uno::Any(sal_Int32(10)));
+        xRowProperties->setPropertyValue("ActiveConnection", uno::Any(xConnection));
         xRowSet->execute();
         xRet.set( xRowSet, uno::UNO_QUERY );
     }
@@ -2720,7 +2720,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
                 uno::Reference < beans::XPropertySet > xDSSettings;
                 aSettings >>= xDSSettings;
                 ::comphelper::copyProperties(*pSettings, xDSSettings);
-                xDSSettings->setPropertyValue("Extension", uno::makeAny(sExt));
+                xDSSettings->setPropertyValue("Extension", uno::Any(sExt));
             }
 
             uno::Reference<sdb::XDocumentDataSource> xDS(xNewInstance, uno::UNO_QUERY_THROW);
@@ -2745,7 +2745,7 @@ OUString LoadAndRegisterDataSource_Impl(DBConnURIType type, const uno::Reference
                 // we can load it again next time the file is imported.
                 uno::Reference<lang::XMultiServiceFactory> xFactory(pDocShell->GetModel(), uno::UNO_QUERY);
                 uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::makeAny(aStreamRelPath));
+                xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::Any(aStreamRelPath));
 
                 // Store it only after setting the above property, so that only one data source gets registered.
                 SwDBManager::StoreEmbeddedDataSource(xStore, xStorage, aStreamRelPath, aOwnURL);
@@ -2844,9 +2844,9 @@ void SwDBManager::StoreEmbeddedDataSource(const uno::Reference<frame::XStorable>
 
     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
     {
-        {"TargetStorage", uno::makeAny(xStorage)},
-        {"StreamRelPath", uno::makeAny(rStreamRelPath)},
-        {"BaseURI", uno::makeAny(rOwnURL)}
+        {"TargetStorage", uno::Any(xStorage)},
+        {"StreamRelPath", uno::Any(rStreamRelPath)},
+        {"BaseURI", uno::Any(rOwnURL)}
     });
     if (bCopyTo)
         xStorable->storeToURL(sTmpName, aSequence);
@@ -3110,10 +3110,10 @@ uno::Reference<sdbc::XResultSet> SwDBManager::createCursor(const OUString& _sDat
             uno::Reference<beans::XPropertySet> xRowSetPropSet(xInstance, uno::UNO_QUERY);
             if(xRowSetPropSet.is())
             {
-                xRowSetPropSet->setPropertyValue("DataSourceName", uno::makeAny(_sDataSourceName));
-                xRowSetPropSet->setPropertyValue("ActiveConnection", uno::makeAny(_xConnection));
-                xRowSetPropSet->setPropertyValue("Command", uno::makeAny(_sCommand));
-                xRowSetPropSet->setPropertyValue("CommandType", uno::makeAny(_nCommandType));
+                xRowSetPropSet->setPropertyValue("DataSourceName", uno::Any(_sDataSourceName));
+                xRowSetPropSet->setPropertyValue("ActiveConnection", uno::Any(_xConnection));
+                xRowSetPropSet->setPropertyValue("Command", uno::Any(_sCommand));
+                xRowSetPropSet->setPropertyValue("CommandType", uno::Any(_nCommandType));
 
                 uno::Reference< sdb::XCompletedExecution > xRowSet(xInstance, uno::UNO_QUERY);
 

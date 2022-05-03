@@ -241,7 +241,7 @@ SwVbaApplication::Documents( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaDocuments( this, mxContext ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -250,7 +250,7 @@ SwVbaApplication::Addins( const uno::Any& index )
     static uno::Reference< XCollection > xCol( new SwVbaAddins( this, mxContext ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -259,7 +259,7 @@ SwVbaApplication::Dialogs( const uno::Any& index )
     uno::Reference< word::XDialogs > xCol( new SwVbaDialogs( this, mxContext, getCurrentDocument() ));
     if ( index.hasValue() )
         return xCol->Item( index );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -269,7 +269,7 @@ SwVbaApplication::ListGalleries( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaListGalleries( this, mxContext, xTextDoc ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 sal_Bool SAL_CALL SwVbaApplication::getDisplayAutoCompleteTips()
@@ -707,14 +707,14 @@ SwWordBasic::ToolsOptionsView( const css::uno::Any& DraftFont,
 css::uno::Any SAL_CALL
 SwWordBasic::WindowName( const css::uno::Any& /*Number*/ )
 {
-    return css::uno::makeAny( mpApp->getActiveSwVbaWindow()->getCaption() );
+    return css::uno::Any( mpApp->getActiveSwVbaWindow()->getCaption() );
 }
 
 css::uno::Any SAL_CALL
 SwWordBasic::ExistingBookmark( const OUString& Name )
 {
     uno::Reference< word::XBookmarks > xBookmarks( mpApp->getActiveDocument()->Bookmarks( uno::Any() ), uno::UNO_QUERY );
-    return css::uno::makeAny( xBookmarks.is() && xBookmarks->Exists( Name ) );
+    return css::uno::Any( xBookmarks.is() && xBookmarks->Exists( Name ) );
 }
 
 void SAL_CALL
@@ -742,7 +742,7 @@ SwWordBasic::AppMaximize( const css::uno::Any& WindowName, const css::uno::Any& 
     SAL_INFO("sw.vba", "WordBasic.AppMaximize( WindowName:=" << WindowName << ", State:=" << State);
 
     // FIXME: Implement if necessary
-    return css::uno::makeAny( sal_Int32(0) );
+    return css::uno::Any( sal_Int32(0) );
 }
 
 css::uno::Any SAL_CALL
@@ -751,7 +751,7 @@ SwWordBasic::DocMaximize( const css::uno::Any& State )
     SAL_INFO("sw.vba", "WordBasic.DocMaximize(State:=" << State << ")");
 
     // FIXME: Implement if necessary
-    return css::uno::makeAny( sal_Int32(0) );
+    return css::uno::Any( sal_Int32(0) );
 }
 
 void SAL_CALL
@@ -768,7 +768,7 @@ SwWordBasic::AppCount()
     SAL_INFO("sw.vba", "WordBasic.AppCount()");
 
     // FIXME: Implement if necessary. Return a random number for now.
-    return css::uno::makeAny( sal_Int32(2) );
+    return css::uno::Any( sal_Int32(2) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

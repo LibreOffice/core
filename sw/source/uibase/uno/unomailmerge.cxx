@@ -620,13 +620,13 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             if (xRowSetPropSet.is())
             {
                 if (xCurConnection.is())
-                    xRowSetPropSet->setPropertyValue( "ActiveConnection",  makeAny( xCurConnection ) );
-                xRowSetPropSet->setPropertyValue( "DataSourceName",    makeAny( aCurDataSourceName ) );
-                xRowSetPropSet->setPropertyValue( "Command",           makeAny( aCurDataCommand ) );
-                xRowSetPropSet->setPropertyValue( "CommandType",       makeAny( nCurDataCommandType ) );
-                xRowSetPropSet->setPropertyValue( "EscapeProcessing",  makeAny( bCurEscapeProcessing ) );
-                xRowSetPropSet->setPropertyValue( "ApplyFilter",       makeAny( true ) );
-                xRowSetPropSet->setPropertyValue( "Filter",            makeAny( aCurFilter ) );
+                    xRowSetPropSet->setPropertyValue( "ActiveConnection",  Any( xCurConnection ) );
+                xRowSetPropSet->setPropertyValue( "DataSourceName",    Any( aCurDataSourceName ) );
+                xRowSetPropSet->setPropertyValue( "Command",           Any( aCurDataCommand ) );
+                xRowSetPropSet->setPropertyValue( "CommandType",       Any( nCurDataCommandType ) );
+                xRowSetPropSet->setPropertyValue( "EscapeProcessing",  Any( bCurEscapeProcessing ) );
+                xRowSetPropSet->setPropertyValue( "ApplyFilter",       Any( true ) );
+                xRowSetPropSet->setPropertyValue( "Filter",            Any( aCurFilter ) );
 
                 Reference< sdbc::XRowSet > xRowSet( xInstance, UNO_QUERY );
                 if (xRowSet.is())
@@ -814,10 +814,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
     if (DBMGR_MERGE_SHELL == nMergeType)
     {
-        return makeAny( aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetBaseModel() );
+        return Any( aMergeDesc.pMailMergeConfigItem->GetTargetView()->GetDocShell()->GetBaseModel() );
     }
     else
-        return makeAny( true );
+        return Any( true );
 }
 
 void SAL_CALL SwXMailMerge::cancel()

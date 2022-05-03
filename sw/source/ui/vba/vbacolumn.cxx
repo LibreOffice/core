@@ -68,7 +68,7 @@ void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, c
     uno::Reference< table::XCellRange > xSelRange = xCellRange->getCellRangeByName( aRangeName );
 
     uno::Reference< view::XSelectionSupplier > xSelection( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
-    xSelection->select( uno::makeAny( xSelRange ) );
+    xSelection->select( uno::Any( xSelRange ) );
 }
 
 OUString

@@ -410,7 +410,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     for(sal_Int32 nIdx = 0; nIdx < nCount; nIdx++)
     {
         uno::Reference<drawing::XShape> xShape(pDrawPage->getByIndex(nIdx), uno::UNO_QUERY);
-        m_aShapes.push_back(uno::makeAny(xShape));
+        m_aShapes.push_back(uno::Any(xShape));
     }
 }
 
@@ -2354,7 +2354,7 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
     {
         mxShape->setSize( aSize );
     }
-    SwTextBoxHelper::syncProperty(GetFrameFormat(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::makeAny(aSize));
+    SwTextBoxHelper::syncProperty(GetFrameFormat(), RES_FRM_SIZE, MID_FRMSIZE_SIZE, uno::Any(aSize));
 }
 // #i31698#
 // implementation of virtual methods from drawing::XShapeDescriptor

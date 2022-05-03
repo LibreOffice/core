@@ -78,7 +78,7 @@ void SAL_CALL SwVbaCell::SetHeight( float height, sal_Int32 heightrule )
 {
     // FIXME: handle the argument: heightrule
     setHeightRule( heightrule );
-    setHeight( uno::makeAny( height ) );
+    setHeight( uno::Any( height ) );
 }
 
 OUString

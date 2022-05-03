@@ -646,27 +646,27 @@ void Test::testCharHighlightODF()
         switch (i)
         {
             case 1: // non-transparent highlight
-            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(true));
-            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(64)));
+            xRun->setPropertyValue("CharBackColor", uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::Any(true));
+            xRun->setPropertyValue("CharHighlight", uno::Any(static_cast<sal_Int32>(64)));
             break;
 
             case 2: // transparent backcolor
-            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(true));
-            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(COL_TRANSPARENT)));
+            xRun->setPropertyValue("CharBackColor", uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::Any(true));
+            xRun->setPropertyValue("CharHighlight", uno::Any(static_cast<sal_Int32>(COL_TRANSPARENT)));
             break;
 
             case 3: // non-transparent backcolor
-            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(false));
-            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(COL_TRANSPARENT)));
+            xRun->setPropertyValue("CharBackColor", uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::Any(false));
+            xRun->setPropertyValue("CharHighlight", uno::Any(static_cast<sal_Int32>(COL_TRANSPARENT)));
             break;
 
             case 4: // non-transparent highlight again
-            xRun->setPropertyValue("CharBackColor", uno::makeAny(static_cast<sal_Int32>(128)));
-            xRun->setPropertyValue("CharBackTransparent", uno::makeAny(false));
-            xRun->setPropertyValue("CharHighlight", uno::makeAny(static_cast<sal_Int32>(64)));
+            xRun->setPropertyValue("CharBackColor", uno::Any(static_cast<sal_Int32>(128)));
+            xRun->setPropertyValue("CharBackTransparent", uno::Any(false));
+            xRun->setPropertyValue("CharHighlight", uno::Any(static_cast<sal_Int32>(64)));
             break;
         }
     }
@@ -765,9 +765,9 @@ void Test::testMSCharBackgroundEditing()
                 case 3: nBackColor = COL_LIGHTGREEN; break; //green 0x00ff00
                 case 4: nBackColor = COL_LIGHTMAGENTA; break; //magenta 0xff00ff
             }
-            xRun->setPropertyValue("CharBackColor", uno::makeAny(nBackColor));
+            xRun->setPropertyValue("CharBackColor", uno::Any(nBackColor));
             // Remove highlighting
-            xRun->setPropertyValue("CharHighlight", uno::makeAny(COL_TRANSPARENT));
+            xRun->setPropertyValue("CharHighlight", uno::Any(COL_TRANSPARENT));
             // Remove shading marker
             uno::Sequence<beans::PropertyValue> aGrabBag = getProperty<uno::Sequence<beans::PropertyValue> >(xRun,"CharInteropGrabBag");
             for (beans::PropertyValue& rProp : asNonConstRange(aGrabBag))
@@ -778,7 +778,7 @@ void Test::testMSCharBackgroundEditing()
                     rProp.Value <<= false;
                 }
             }
-            xRun->setPropertyValue("CharInteropGrabBag", uno::makeAny(aGrabBag));
+            xRun->setPropertyValue("CharInteropGrabBag", uno::Any(aGrabBag));
         }
 
         SvtFilterOptions& rOpt = SvtFilterOptions::Get();

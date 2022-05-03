@@ -54,7 +54,7 @@ SwVbaTable::Select(  )
     uno::Reference< view::XSelectionSupplier > xSelectionSupplier( xController, uno::UNO_QUERY_THROW );
 
     // set the view cursor to the start of the table.
-    xSelectionSupplier->select( uno::makeAny( mxTextTable ) );
+    xSelectionSupplier->select( uno::Any( mxTextTable ) );
 
     // go to the end of the table and span the view
     uno::Reference< text::XTextViewCursor > xCursor = xViewCursorSupplier->getViewCursor();
@@ -84,7 +84,7 @@ SwVbaTable::Borders( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaBorders( this, mxContext, aCellRange, aPalette ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -94,7 +94,7 @@ SwVbaTable::Rows( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaRows( this, mxContext, mxTextTable, xTableRows ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL
@@ -104,7 +104,7 @@ SwVbaTable::Columns( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaColumns( this, mxContext, mxTextTable, xTableColumns ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 // XHelperInterface

@@ -855,15 +855,15 @@ Reference< XResultSet> const & SwMailMergeConfigItem::GetResultSet() const
 
             Reference<XRowSet> xRowSet( xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY );
             Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
-            xRowProperties->setPropertyValue("DataSourceName", makeAny(m_pImpl->m_aDBData.sDataSource));
-            xRowProperties->setPropertyValue("Command", makeAny(m_pImpl->m_aDBData.sCommand));
-            xRowProperties->setPropertyValue("CommandType", makeAny(m_pImpl->m_aDBData.nCommandType));
-            xRowProperties->setPropertyValue("FetchSize", makeAny(sal_Int32(10)));
-            xRowProperties->setPropertyValue("ActiveConnection", makeAny(m_pImpl->m_xConnection.getTyped()));
+            xRowProperties->setPropertyValue("DataSourceName", Any(m_pImpl->m_aDBData.sDataSource));
+            xRowProperties->setPropertyValue("Command", Any(m_pImpl->m_aDBData.sCommand));
+            xRowProperties->setPropertyValue("CommandType", Any(m_pImpl->m_aDBData.nCommandType));
+            xRowProperties->setPropertyValue("FetchSize", Any(sal_Int32(10)));
+            xRowProperties->setPropertyValue("ActiveConnection", Any(m_pImpl->m_xConnection.getTyped()));
             try
             {
-                xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->m_sFilter.isEmpty()));
-                xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->m_sFilter));
+                xRowProperties->setPropertyValue("ApplyFilter", Any(!m_pImpl->m_sFilter.isEmpty()));
+                xRowProperties->setPropertyValue("Filter", Any(m_pImpl->m_sFilter));
             }
             catch (const Exception&)
             {
@@ -909,8 +909,8 @@ void  SwMailMergeConfigItem::SetFilter(OUString const & rFilter)
 
     try
     {
-        xRowProperties->setPropertyValue("ApplyFilter", makeAny(!m_pImpl->m_sFilter.isEmpty()));
-        xRowProperties->setPropertyValue("Filter", makeAny(m_pImpl->m_sFilter));
+        xRowProperties->setPropertyValue("ApplyFilter", Any(!m_pImpl->m_sFilter.isEmpty()));
+        xRowProperties->setPropertyValue("Filter", Any(m_pImpl->m_sFilter));
         uno::Reference<XRowSet> xRowSet( m_pImpl->m_xResultSet, UNO_QUERY_THROW );
         xRowSet->execute();
     }
@@ -1004,7 +1004,7 @@ uno::Sequence<uno::Any> SwMailMergeConfigItem::GetSelection() const
     std::vector<uno::Any> vResult;
     for(sal_uInt32 nIdx=1; nIdx<nResultSetSize;++nIdx)
         if( !IsRecordExcluded(nIdx) && IsRecordIncluded(nIdx) )
-            vResult.push_back(uno::makeAny<sal_uInt32>(nIdx));
+            vResult.push_back(uno::Any(sal_uInt32(nIdx)));
     return comphelper::containerToSequence(vResult);
 }
 

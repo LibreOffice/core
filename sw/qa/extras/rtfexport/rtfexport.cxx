@@ -1020,7 +1020,7 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkWithoutURL)
     load(mpTestDocumentPath, "tdf90421.fodt");
     // Change the hyperlink, so its URL is empty.
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1), 2), uno::UNO_QUERY);
-    xRun->setPropertyValue("HyperLinkURL", uno::makeAny(OUString()));
+    xRun->setPropertyValue("HyperLinkURL", uno::Any(OUString()));
     reload(mpFilter, "gutter-left.rtf");
     SvMemoryStream aMemoryStream;
     SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);

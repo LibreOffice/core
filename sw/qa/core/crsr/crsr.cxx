@@ -52,14 +52,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreCrsrTest, testFindReplace)
     xViewCursor->goLeft(/*nCount=*/6, /*bExpand=*/false);
     xViewCursor->goLeft(/*nCount=*/1, /*bExpand=*/true);
     uno::Reference<beans::XPropertySet> xViewCursorProps(xViewCursor, uno::UNO_QUERY);
-    xViewCursorProps->setPropertyValue("CharWeight", uno::makeAny(awt::FontWeight::BOLD));
+    xViewCursorProps->setPropertyValue("CharWeight", uno::Any(awt::FontWeight::BOLD));
     xViewCursor->gotoStart(/*bExpand=*/false);
 
     // When: doing search & replace 3 times.
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::makeAny(OUString("foo")) },
-        { "SearchItem.ReplaceString", uno::makeAny(OUString("bar")) },
-        { "SearchItem.Command", uno::makeAny(static_cast<sal_Int16>(SvxSearchCmd::REPLACE)) },
+        { "SearchItem.SearchString", uno::Any(OUString("foo")) },
+        { "SearchItem.ReplaceString", uno::Any(OUString("bar")) },
+        { "SearchItem.Command", uno::Any(static_cast<sal_Int16>(SvxSearchCmd::REPLACE)) },
     }));
     // Find the first foo.
     dispatchCommand(mxComponent, ".uno:ExecuteSearch", aArgs);

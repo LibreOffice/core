@@ -366,7 +366,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
     //!! Please check SwSpellIter also when modifying this
     //!!
 
-    uno::Any    aConvRet( makeAny( OUString() ) );
+    uno::Any    aConvRet{ OUString() };
     SwEditShell *pMySh = GetSh();
     if( !pMySh )
         return aConvRet;
@@ -417,7 +417,7 @@ uno::Any SwConvIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
             --GetCursorCnt();
         }
     }while ( bGoOn );
-    return makeAny( aConvText );
+    return Any( aConvText );
 }
 
 bool SwHyphIter::IsAuto()

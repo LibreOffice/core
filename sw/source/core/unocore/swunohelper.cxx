@@ -64,7 +64,7 @@ bool UCB_DeleteFile( const OUString& rURL )
         ucbhelper::Content aTempContent( rURL,
                                 css::uno::Reference< css::ucb::XCommandEnvironment >(),
                                 comphelper::getProcessComponentContext() );
-        aTempContent.executeCommand("delete", css::uno::makeAny( true ) );
+        aTempContent.executeCommand("delete", css::uno::Any( true ) );
         bRemoved = true;
     }
     catch( css::uno::Exception& )

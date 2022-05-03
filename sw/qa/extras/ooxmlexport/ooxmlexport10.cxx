@@ -77,9 +77,9 @@ protected:
         uno::Reference<io::XStream> xStream(new utl::OStreamWrapper(std::move(pStream)));
         uno::Sequence<beans::PropertyValue> aDescriptor(comphelper::InitPropertySequence(
         {
-            {"InputStream", uno::makeAny(xStream)},
-            {"InputMode", uno::makeAny(true)},
-            {"TextInsertModeRange", uno::makeAny(xTextRange)},
+            {"InputStream", uno::Any(xStream)},
+            {"InputMode", uno::Any(true)},
+            {"TextInsertModeRange", uno::Any(xTextRange)},
         }));
         return xFilter->filter(aDescriptor);
     }
@@ -1342,7 +1342,7 @@ DECLARE_OOXMLEXPORT_TEST( testTablePosition14, "table-position-14.docx")
 
         // Verify X coord
         uno::Reference< view::XSelectionSupplier > xCtrl( xModel->getCurrentController(), uno::UNO_QUERY );
-        xCtrl->select( uno::makeAny( xTable1 ) );
+        xCtrl->select( uno::Any( xTable1 ) );
         uno::Reference< text::XTextViewCursorSupplier > xTextViewCursorSupplier( xCtrl, uno::UNO_QUERY );
         uno::Reference< text::XTextViewCursor > xCursor = xTextViewCursorSupplier->getViewCursor();
         awt::Point pos = xCursor->getPosition();
@@ -1367,7 +1367,7 @@ DECLARE_OOXMLEXPORT_TEST( testTablePosition15, "table-position-15.docx" )
 
         // Verify X coord
         uno::Reference< view::XSelectionSupplier > xCtrl( xModel->getCurrentController(), uno::UNO_QUERY );
-        xCtrl->select( uno::makeAny( xTable1 ) );
+        xCtrl->select( uno::Any( xTable1 ) );
         uno::Reference< text::XTextViewCursorSupplier > xTextViewCursorSupplier( xCtrl, uno::UNO_QUERY );
         uno::Reference< text::XTextViewCursor > xCursor = xTextViewCursorSupplier->getViewCursor();
         awt::Point pos = xCursor->getPosition();

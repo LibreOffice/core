@@ -1509,7 +1509,7 @@ void SwDocShell::ReloadFromHtml( const OUString& rStreamName, SwSrcView* pSrcVie
                 if( pBasic )
                 {
                     // Notify the IDE
-                    SfxUnoAnyItem aShellItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, makeAny( GetModel() ) );
+                    SfxUnoAnyItem aShellItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, Any( GetModel() ) );
                     OUString aLibName( pBasic->GetName() );
                     SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
                     pSrcView->GetViewFrame()->GetDispatcher()->ExecuteList(

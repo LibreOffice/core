@@ -47,7 +47,7 @@ public:
     {
         if( nIndex < mxIndexAccess->getCount() )
         {
-            return uno::makeAny( uno::Reference< word::XColumn > ( new SwVbaColumn( mxParent, mxContext, mxTextTable, nIndex++ ) ) );
+            return uno::Any( uno::Reference< word::XColumn > ( new SwVbaColumn( mxParent, mxContext, mxTextTable, nIndex++ ) ) );
         }
         throw container::NoSuchElementException();
     }
@@ -105,7 +105,7 @@ uno::Any SAL_CALL SwVbaColumns::Item( const uno::Any& Index1, const uno::Any& /*
         {
             throw  lang::IndexOutOfBoundsException("Index out of bounds" );
         }
-        return uno::makeAny( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
+        return uno::Any( uno::Reference< word::XColumn >( new SwVbaColumn( this, mxContext, mxTextTable, nIndex - 1 ) ) );
     }
     throw  uno::RuntimeException("Index out of bounds" );
 }

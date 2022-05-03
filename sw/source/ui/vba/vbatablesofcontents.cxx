@@ -89,7 +89,7 @@ public:
             throw lang::IndexOutOfBoundsException();
 
         uno::Reference< text::XDocumentIndex > xToc( maToc[Index], uno::UNO_SET_THROW );
-        return uno::makeAny( uno::Reference< word::XTableOfContents >( new SwVbaTableOfContents( mxParent, mxContext, mxTextDocument, xToc ) ) );
+        return uno::Any( uno::Reference< word::XTableOfContents >( new SwVbaTableOfContents( mxParent, mxContext, mxTextDocument, xToc ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
@@ -119,7 +119,7 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const u
     uno::Reference< text::XDocumentIndex > xDocumentIndex( xDocMSF->createInstance("com.sun.star.text.ContentIndex"), uno::UNO_QUERY_THROW );
 
     uno::Reference< beans::XPropertySet > xTocProps( xDocumentIndex, uno::UNO_QUERY_THROW );
-    xTocProps->setPropertyValue("IsProtected", uno::makeAny( false ) );
+    xTocProps->setPropertyValue("IsProtected", uno::Any( false ) );
 
     uno::Reference< word::XTableOfContents > xToc( new SwVbaTableOfContents( this, mxContext, mxTextDocument, xDocumentIndex ) );
 

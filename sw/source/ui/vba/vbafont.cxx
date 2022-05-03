@@ -120,7 +120,7 @@ SwVbaFont::getUnderline()
 {
     sal_Int32 nOOVal = 0;
     mxFont->getPropertyValue(  UnderLineMapper::propName() ) >>= nOOVal;
-    return uno::makeAny( UnderLineMapper::instance().getMSOFromOOO( nOOVal ) );
+    return uno::Any( UnderLineMapper::instance().getMSOFromOOO( nOOVal ) );
 }
 
 void SAL_CALL
@@ -131,7 +131,7 @@ SwVbaFont::setUnderline( const uno::Any& _underline )
     if ( _underline >>= nMSOVal )
     {
         sal_Int32 nOOVal =  UnderLineMapper::instance().getOOOFromMSO( nMSOVal );
-        mxFont->setPropertyValue(  UnderLineMapper::propName(), uno::makeAny( nOOVal ) );
+        mxFont->setPropertyValue(  UnderLineMapper::propName(), uno::Any( nOOVal ) );
     }
 }
 
@@ -167,7 +167,7 @@ SwVbaFont::getColorIndex()
             break;
         }
     }
-    return uno::makeAny( nIndex );
+    return uno::Any( nIndex );
 }
 uno::Any SAL_CALL
 SwVbaFont::getSubscript()

@@ -2521,7 +2521,7 @@ IMPL_LINK_NOARG(SwGrfExtPage, BrowseHdl, weld::Button&, void)
     m_xGrfDlg->SetDisplayDirectory(m_xConnectED->get_text());
     uno::Reference < ui::dialogs::XFilePicker3 > xFP = m_xGrfDlg->GetFilePicker();
     uno::Reference < ui::dialogs::XFilePickerControlAccess > xCtrlAcc(xFP, uno::UNO_QUERY);
-    xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, uno::makeAny(true) );
+    xCtrlAcc->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, uno::Any(true) );
 
     if ( m_xGrfDlg->Execute() != ERRCODE_NONE )
         return;

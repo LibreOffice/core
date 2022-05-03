@@ -123,9 +123,9 @@ public:
         assert( xRowSetPropSet.is() && "failed to get XPropertySet interface from RowSet" );
         if (xRowSetPropSet.is())
         {
-            xRowSetPropSet->setPropertyValue( "DataSourceName",    uno::makeAny( aDBName ) );
-            xRowSetPropSet->setPropertyValue( "Command",           uno::makeAny( OUString::createFromAscii(tablename) ) );
-            xRowSetPropSet->setPropertyValue( "CommandType",       uno::makeAny( sdb::CommandType::TABLE ) );
+            xRowSetPropSet->setPropertyValue( "DataSourceName",    uno::Any( aDBName ) );
+            xRowSetPropSet->setPropertyValue( "Command",           uno::Any( OUString::createFromAscii(tablename) ) );
+            xRowSetPropSet->setPropertyValue( "CommandType",       uno::Any( sdb::CommandType::TABLE ) );
 
             uno::Reference< sdbc::XRowSet > xRowSet( xInstance, uno::UNO_QUERY );
             if (xRowSet.is())
@@ -219,7 +219,7 @@ public:
         }
         else
         {
-            CPPUNIT_ASSERT_EQUAL(uno::makeAny(true), res);
+            CPPUNIT_ASSERT_EQUAL(uno::Any(true), res);
             if( !bMMFilenameFromColumn && !bDontLoadResult )
                 loadMailMergeDocument( 0 );
         }

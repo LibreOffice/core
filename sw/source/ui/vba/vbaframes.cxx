@@ -49,7 +49,7 @@ public:
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
         uno::Reference< text::XTextFrame > xTextFrame( mxIndexAccess->getByIndex( nCurrentPos++ ), uno::UNO_QUERY_THROW );
-        return uno::makeAny( uno::Reference< word::XFrame > ( new SwVbaFrame( mxParent, mxContext, mxModel, xTextFrame ) ) );
+        return uno::Any( uno::Reference< word::XFrame > ( new SwVbaFrame( mxParent, mxContext, mxModel, xTextFrame ) ) );
     }
 
 };
@@ -77,7 +77,7 @@ uno::Any
 SwVbaFrames::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< text::XTextFrame > xTextFrame( aSource, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< word::XFrame > ( new SwVbaFrame( this, mxContext, mxModel, xTextFrame ) ) );
+    return uno::Any( uno::Reference< word::XFrame > ( new SwVbaFrame( this, mxContext, mxModel, xTextFrame ) ) );
 }
 
 OUString

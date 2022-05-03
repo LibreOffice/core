@@ -62,7 +62,7 @@ SwVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& RouteDocument )
 uno::Any SAL_CALL
 SwVbaWindow::getView()
 {
-    return uno::makeAny( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, m_xModel ) ) );
+    return uno::Any( uno::Reference< word::XView >( new SwVbaView( this,  mxContext, m_xModel ) ) );
 }
 
 void SAL_CALL SwVbaWindow::setView( const uno::Any& _view )
@@ -89,7 +89,7 @@ SwVbaWindow::getWindowState()
         else if (pWork -> IsMinimized())
             nwindowState = word::WdWindowState::wdWindowStateMinimize;
     }
-    return uno::makeAny( nwindowState );
+    return uno::Any( nwindowState );
 }
 
 void SAL_CALL
@@ -141,7 +141,7 @@ SwVbaWindow::setCaption( const OUString& _caption )
     if( !xFrameProps.is() )
         return;
 
-    xFrameProps->setPropertyValue( "Title", uno::makeAny( _caption ) );
+    xFrameProps->setPropertyValue( "Title", uno::Any( _caption ) );
 }
 
 uno::Any SAL_CALL
@@ -149,7 +149,7 @@ SwVbaWindow::Panes( const uno::Any& aIndex )
 {
     uno::Reference< XCollection > xPanes( new SwVbaPanes( this,  mxContext, m_xModel ) );
     if(  aIndex.getValueTypeClass() == uno::TypeClass_VOID )
-        return uno::makeAny( xPanes );
+        return uno::Any( xPanes );
 
     return xPanes->Item( aIndex, uno::Any() );
 }
@@ -157,7 +157,7 @@ SwVbaWindow::Panes( const uno::Any& aIndex )
 uno::Any SAL_CALL
 SwVbaWindow::ActivePane()
 {
-    return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );
+    return uno::Any( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );
 }
 
 OUString

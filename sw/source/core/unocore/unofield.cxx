@@ -2730,7 +2730,7 @@ uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
 
     uno::Reference<beans::XPropertySet> const xRet(
             SwXFieldMaster::CreateXFieldMaster(GetDoc(), pType));
-    return uno::makeAny(xRet);
+    return uno::Any(xRet);
 }
 
 bool SwXTextFieldMasters::getInstanceName(

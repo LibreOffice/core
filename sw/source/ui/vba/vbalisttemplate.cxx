@@ -38,13 +38,13 @@ SwVbaListTemplate::ListLevels( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaListLevels( mxParent, mxContext, pListHelper ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 void SwVbaListTemplate::applyListTemplate( uno::Reference< beans::XPropertySet > const & xProps )
 {
     uno::Reference< container::XIndexReplace > xNumberingRules = pListHelper->getNumberingRules();
-    xProps->setPropertyValue("NumberingRules", uno::makeAny( xNumberingRules ) );
+    xProps->setPropertyValue("NumberingRules", uno::Any( xNumberingRules ) );
 }
 
 OUString

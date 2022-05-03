@@ -739,8 +739,8 @@ DECLARE_ODFEXPORT_TEST(testFdo79358, "fdo79358.odt")
         getProperty< uno::Reference<container::XIndexReplace> >(xTOCProps,
             "LevelParagraphStyles"));
     uno::Sequence<OUString> seq { "Heading" };
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(seq), xLevels->getByIndex(1));
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(uno::Sequence<OUString>()), xLevels->getByIndex(2));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(seq), xLevels->getByIndex(1));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(uno::Sequence<OUString>()), xLevels->getByIndex(2));
 }
 
 DECLARE_ODFEXPORT_TEST(testFirstHeaderFooter, "first-header-footer.odt")
@@ -1240,61 +1240,61 @@ DECLARE_ODFEXPORT_TEST(testTdf103091, "tdf103091.fodt")
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(28), conditions.getLength());
     CPPUNIT_ASSERT_EQUAL(OUString("TableHeader"), conditions[0].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Addressee")), conditions[0].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Addressee")), conditions[0].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Table"), conditions[1].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Bibliography 1")), conditions[1].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Bibliography 1")), conditions[1].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Frame"), conditions[2].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Bibliography Heading")), conditions[2].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Bibliography Heading")), conditions[2].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Section"), conditions[3].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Caption")), conditions[3].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Caption")), conditions[3].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Footnote"), conditions[4].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Salutation")), conditions[4].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Salutation")), conditions[4].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Endnote"), conditions[5].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 1")), conditions[5].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 1")), conditions[5].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Header"), conditions[6].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 2")), conditions[6].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 2")), conditions[6].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("Footer"), conditions[7].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 3")), conditions[7].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 3")), conditions[7].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel1"), conditions[8].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 4")), conditions[8].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 4")), conditions[8].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel2"), conditions[9].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 5")), conditions[9].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 5")), conditions[9].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel3"), conditions[10].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 6")), conditions[10].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 6")), conditions[10].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel4"), conditions[11].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 7")), conditions[11].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 7")), conditions[11].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel5"), conditions[12].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 8")), conditions[12].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 8")), conditions[12].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel6"), conditions[13].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 9")), conditions[13].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 9")), conditions[13].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel7"), conditions[14].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents 10")), conditions[14].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents 10")), conditions[14].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel8"), conditions[15].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Contents Heading")), conditions[15].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Contents Heading")), conditions[15].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel9"), conditions[16].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Standard")), conditions[16].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Standard")), conditions[16].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("OutlineLevel10"), conditions[17].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Drawing")), conditions[17].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Drawing")), conditions[17].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel1"), conditions[18].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Endnote")), conditions[18].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Endnote")), conditions[18].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel2"), conditions[19].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("First line indent")), conditions[19].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("First line indent")), conditions[19].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel3"), conditions[20].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footer")), conditions[20].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Footer")), conditions[20].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel4"), conditions[21].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footer left")), conditions[21].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Footer left")), conditions[21].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel5"), conditions[22].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footer right")), conditions[22].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Footer right")), conditions[22].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel6"), conditions[23].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Footnote")), conditions[23].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Footnote")), conditions[23].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel7"), conditions[24].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Frame contents")), conditions[24].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Frame contents")), conditions[24].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel8"), conditions[25].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Hanging indent")), conditions[25].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Hanging indent")), conditions[25].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel9"), conditions[26].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Header")), conditions[26].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Header")), conditions[26].Value);
     CPPUNIT_ASSERT_EQUAL(OUString("NumberingLevel10"), conditions[27].Name);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(OUString("Header left")), conditions[27].Value);
+    CPPUNIT_ASSERT_EQUAL(uno::Any(OUString("Header left")), conditions[27].Value);
 }
 
 DECLARE_ODFEXPORT_TEST(testTextframeTransparentShadow, "textframe-transparent-shadow.odt")
@@ -1814,7 +1814,7 @@ DECLARE_ODFEXPORT_TEST(testBtlrFrame, "btlr-frame.odt")
         return;
 
     // Make sure that btlr -> tbrl transition clears the "BT" flag.
-    xTextFrame->setPropertyValue("WritingMode", uno::makeAny(text::WritingMode2::TB_LR));
+    xTextFrame->setPropertyValue("WritingMode", uno::Any(text::WritingMode2::TB_LR));
     pFlyFrame = dynamic_cast<SwFlyFrame*>(rAnchored[0]);
     CPPUNIT_ASSERT(pFlyFrame);
     CPPUNIT_ASSERT(!pFlyFrame->IsVertLRBT());
@@ -2291,9 +2291,9 @@ DECLARE_ODFEXPORT_TEST(testCellUserDefineAttr, "userdefattr-tablecell.odt")
     uno::Reference<table::XCell> const xCellA1(xTable->getCellByName("A1"), uno::UNO_SET_THROW);
     uno::Reference<table::XCell> const xCellB1(xTable->getCellByName("B1"), uno::UNO_SET_THROW);
     uno::Reference<table::XCell> const xCellC1(xTable->getCellByName("C1"), uno::UNO_SET_THROW);
-    getUserDefineAttribute(uno::makeAny(xCellA1), "proName", "v1");
-    getUserDefineAttribute(uno::makeAny(xCellB1), "proName", "v2");
-    getUserDefineAttribute(uno::makeAny(xCellC1), "proName", "v3");
+    getUserDefineAttribute(uno::Any(xCellA1), "proName", "v1");
+    getUserDefineAttribute(uno::Any(xCellB1), "proName", "v2");
+    getUserDefineAttribute(uno::Any(xCellC1), "proName", "v3");
 }
 
 DECLARE_ODFEXPORT_TEST(testEmbeddedPdf, "embedded-pdf.odt")
@@ -2800,8 +2800,8 @@ DECLARE_ODFEXPORT_TEST(testReferenceLanguage, "referencelanguage.odt")
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
 
-    uno::Any aHu = uno::makeAny(OUString("Hu"));
-    uno::Any ahu = uno::makeAny(OUString("hu"));
+    uno::Any aHu(OUString("Hu"));
+    uno::Any ahu(OUString("hu"));
     for (size_t i = 0; i < SAL_N_ELEMENTS(aFieldTexts); i++)
     {
         uno::Any aField = xFields->nextElement();

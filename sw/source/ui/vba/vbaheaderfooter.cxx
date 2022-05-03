@@ -79,7 +79,7 @@ SwVbaHeaderFooter::Shapes( const uno::Any& index )
     uno::Reference< XCollection > xCol( new ScVbaShapes( this, mxContext, xIndexAccess, mxModel ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 OUString

@@ -40,7 +40,7 @@ static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< be
 /// @throws uno::RuntimeException
 static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq )
 {
-    xParaProps->setPropertyValue("ParaTabStops", uno::makeAny( aSeq ) );
+    xParaProps->setPropertyValue("ParaTabStops", uno::Any( aSeq ) );
 }
 
 namespace {
@@ -92,7 +92,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw css::lang::IndexOutOfBoundsException();
 
-        return uno::makeAny( uno::Reference< word::XTabStop >( new SwVbaTabStop( mxParent, mxContext ) ) );
+        return uno::Any( uno::Reference< word::XTabStop >( new SwVbaTabStop( mxParent, mxContext ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {

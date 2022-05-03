@@ -251,10 +251,10 @@ IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl, weld::Button&, void)
                 xMgr->createInstance("com.sun.star.sdb.RowSet"), UNO_QUERY);
         uno::Reference<XPropertySet> xRowProperties(xRowSet, UNO_QUERY);
         xRowProperties->setPropertyValue("DataSourceName",
-                makeAny(m_xListLB->get_text(nSelect, 0)));
-        xRowProperties->setPropertyValue("Command", makeAny(sCommand));
-        xRowProperties->setPropertyValue("CommandType", makeAny(pUserData->nCommandType));
-        xRowProperties->setPropertyValue("ActiveConnection", makeAny(pUserData->xConnection.getTyped()));
+                Any(m_xListLB->get_text(nSelect, 0)));
+        xRowProperties->setPropertyValue("Command", Any(sCommand));
+        xRowProperties->setPropertyValue("CommandType", Any(pUserData->nCommandType));
+        xRowProperties->setPropertyValue("ActiveConnection", Any(pUserData->xConnection.getTyped()));
         xRowSet->execute();
 
         OUString sQuery;

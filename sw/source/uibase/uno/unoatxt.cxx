@@ -108,7 +108,7 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     if ( !xGroup.is() )
         throw container::NoSuchElementException();
 
-    return makeAny( xGroup );
+    return css::uno::Any( xGroup );
 }
 
 uno::Sequence< OUString > SwXAutoTextContainer::getElementNames()
@@ -513,7 +513,7 @@ uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
     uno::Reference< text::XAutoTextEntry > xEntry = m_pGlossaries->GetAutoTextEntry( m_sGroupName, m_sName, _rName );
     OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
         // we told it to create the object, so why didn't it?
-    return makeAny( xEntry );
+    return css::uno::Any( xEntry );
 }
 
 uno::Sequence< OUString > SwXAutoTextGroup::getElementNames()

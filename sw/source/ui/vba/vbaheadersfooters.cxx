@@ -48,7 +48,7 @@ public:
     {
         if( Index < 1 || Index > 3 )
             throw lang::IndexOutOfBoundsException();
-        return uno::makeAny( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( mxParent,  mxContext, mxModel, mxPageStyleProps, mbHeader, Index ) ) );
+        return uno::Any( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( mxParent,  mxContext, mxModel, mxPageStyleProps, mbHeader, Index ) ) );
     }
     virtual uno::Type SAL_CALL getElementType(  ) override
     {
@@ -74,7 +74,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex < pHeadersFooters->getCount() )
-            return pHeadersFooters->Item( uno::makeAny( ++nIndex ), uno::Any() );
+            return pHeadersFooters->Item( uno::Any( ++nIndex ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -99,7 +99,7 @@ uno::Any SAL_CALL SwVbaHeadersFooters::Item( const uno::Any& Index1, const uno::
     {
         throw lang::IndexOutOfBoundsException();
     }
-    return uno::makeAny( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( this,  mxContext, mxModel, mxPageStyleProps, mbHeader, nIndex ) ) );
+    return uno::Any( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( this,  mxContext, mxModel, mxPageStyleProps, mbHeader, nIndex ) ) );
 }
 
 // XEnumerationAccess

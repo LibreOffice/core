@@ -86,7 +86,7 @@ private:
             default:
                 return;
         }
-        m_xProps->setPropertyValue( "TableBorder", uno::makeAny(aTableBorder) );
+        m_xProps->setPropertyValue( "TableBorder", uno::Any(aTableBorder) );
     }
 
     bool getBorderLine( table::BorderLine& rBorderLine )
@@ -167,7 +167,7 @@ public:
                 nLineStyle = word::WdLineStyle::wdLineStyleNone;
             }
         }
-        return uno::makeAny( nLineStyle );
+        return uno::Any( nLineStyle );
     }
     void SAL_CALL setLineStyle( const uno::Any& _linestyle ) override
     {
@@ -259,7 +259,7 @@ public:
         if ( nIndex >= 0 && nIndex < getCount() )
         {
             uno::Reference< beans::XPropertySet > xProps( m_xRange, uno::UNO_QUERY_THROW );
-            return uno::makeAny( uno::Reference< word::XBorder >( new SwVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ] )) );
+            return uno::Any( uno::Reference< word::XBorder >( new SwVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ] )) );
         }
         throw lang::IndexOutOfBoundsException();
     }

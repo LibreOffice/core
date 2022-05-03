@@ -244,7 +244,7 @@ ErrCode SwXMLTextBlocks::StartPutBlock( const OUString& rShort, const OUString& 
 
         uno::Reference< beans::XPropertySet > xRootProps( m_xRoot, uno::UNO_QUERY_THROW );
         OUString aMime( SotExchange::GetFormatMimeType( SotClipboardFormatId::STARWRITER_8 ) );
-        xRootProps->setPropertyValue( "MediaType", uno::makeAny( aMime ) );
+        xRootProps->setPropertyValue( "MediaType", uno::Any( aMime ) );
     }
     catch (const uno::Exception&)
     {

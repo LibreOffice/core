@@ -86,7 +86,7 @@ SwVbaOptions::DefaultFilePath( sal_Int32 _path )
             break;
         }
     }
-    return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
+    return uno::Any( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
 
 void SwVbaOptions::setValueEvent( const uno::Any& value )
@@ -105,7 +105,7 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     {
         sNewPathUrl = sOldPathUrl.subView( 0, nIndex + 1 ) + sNewPathUrl;
     }
-    xPathSettings->setPropertyValue( msDefaultFilePath, uno::makeAny( sNewPathUrl ) );
+    xPathSettings->setPropertyValue( msDefaultFilePath, uno::Any( sNewPathUrl ) );
 }
 
 uno::Any SwVbaOptions::getValueEvent()
@@ -122,7 +122,7 @@ uno::Any SwVbaOptions::getValueEvent()
     }
     OUString sPath;
     ::osl::File::getSystemPathFromFileURL( sPathUrl, sPath );
-    return uno::makeAny( sPath );
+    return uno::Any( sPath );
 }
 
 sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderLineStyle()

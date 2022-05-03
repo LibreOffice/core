@@ -30,9 +30,9 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testOverlapCrash)
 
     // Change their anchor type to to-char.
     uno::Reference<beans::XPropertySet> xShape1(getShape(1), uno::UNO_QUERY);
-    xShape1->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShape1->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
     uno::Reference<beans::XPropertySet> xShape2(getShape(1), uno::UNO_QUERY);
-    xShape2->setPropertyValue("AnchorType", uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+    xShape2->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert a new paragraph at the start.
     SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
@@ -51,13 +51,11 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertPosFromBottom)
         xFactory->createInstance("com.sun.star.drawing.RectangleShape"), uno::UNO_QUERY);
     xShape->setSize(awt::Size(10000, 10000));
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
-    xShapeProps->setPropertyValue("AnchorType",
-                                  uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapeProps->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::NONE));
+    xShapeProps->setPropertyValue("AnchorType", uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapeProps->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::NONE));
     xShapeProps->setPropertyValue("VertOrientRelation",
-                                  uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
-    xShapeProps->setPropertyValue("VertOrientPosition",
-                                  uno::makeAny(static_cast<sal_Int32>(-11000)));
+                                  uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+    xShapeProps->setPropertyValue("VertOrientPosition", uno::Any(static_cast<sal_Int32>(-11000)));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplier->getDrawPage()->add(xShape);
 
@@ -87,10 +85,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
     xShapeBottom->setSize(awt::Size(500, 500));
     uno::Reference<beans::XPropertySet> xShapePropsBottom(xShapeBottom, uno::UNO_QUERY);
     xShapePropsBottom->setPropertyValue("AnchorType",
-                                        uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapePropsBottom->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::BOTTOM));
+                                        uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsBottom->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::BOTTOM));
     xShapePropsBottom->setPropertyValue("VertOrientRelation",
-                                        uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                                        uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierBottom(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplierBottom->getDrawPage()->add(xShapeBottom);
 
@@ -100,10 +98,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
     xShapeCenter->setSize(awt::Size(500, 500));
     uno::Reference<beans::XPropertySet> xShapePropsCenter(xShapeCenter, uno::UNO_QUERY);
     xShapePropsCenter->setPropertyValue("AnchorType",
-                                        uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapePropsCenter->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::CENTER));
+                                        uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsCenter->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::CENTER));
     xShapePropsCenter->setPropertyValue("VertOrientRelation",
-                                        uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                                        uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierCenter(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplierCenter->getDrawPage()->add(xShapeCenter);
 
@@ -113,10 +111,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMargin)
     xShapeTop->setSize(awt::Size(500, 500));
     uno::Reference<beans::XPropertySet> xShapePropsTop(xShapeTop, uno::UNO_QUERY);
     xShapePropsTop->setPropertyValue("AnchorType",
-                                     uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapePropsTop->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::TOP));
+                                     uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsTop->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::TOP));
     xShapePropsTop->setPropertyValue("VertOrientRelation",
-                                     uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                                     uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierTop(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplierTop->getDrawPage()->add(xShapeTop);
 
@@ -159,10 +157,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithF
     xShapeBottom->setSize(awt::Size(1000, 1000));
     uno::Reference<beans::XPropertySet> xShapePropsBottom(xShapeBottom, uno::UNO_QUERY);
     xShapePropsBottom->setPropertyValue("AnchorType",
-                                        uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapePropsBottom->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::BOTTOM));
+                                        uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsBottom->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::BOTTOM));
     xShapePropsBottom->setPropertyValue("VertOrientRelation",
-                                        uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                                        uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierBottom(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplierBottom->getDrawPage()->add(xShapeBottom);
 
@@ -172,10 +170,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithF
     xShapeCenter->setSize(awt::Size(1000, 1000));
     uno::Reference<beans::XPropertySet> xShapePropsCenter(xShapeCenter, uno::UNO_QUERY);
     xShapePropsCenter->setPropertyValue("AnchorType",
-                                        uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapePropsCenter->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::CENTER));
+                                        uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsCenter->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::CENTER));
     xShapePropsCenter->setPropertyValue("VertOrientRelation",
-                                        uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                                        uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierCenter(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplierCenter->getDrawPage()->add(xShapeCenter);
 
@@ -185,10 +183,10 @@ CPPUNIT_TEST_FIXTURE(SwCoreObjectpositioningTest, testVertAlignBottomMarginWithF
     xShapeTop->setSize(awt::Size(1000, 1000));
     uno::Reference<beans::XPropertySet> xShapePropsTop(xShapeTop, uno::UNO_QUERY);
     xShapePropsTop->setPropertyValue("AnchorType",
-                                     uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
-    xShapePropsTop->setPropertyValue("VertOrient", uno::makeAny(text::VertOrientation::TOP));
+                                     uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xShapePropsTop->setPropertyValue("VertOrient", uno::Any(text::VertOrientation::TOP));
     xShapePropsTop->setPropertyValue("VertOrientRelation",
-                                     uno::makeAny(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
+                                     uno::Any(text::RelOrientation::PAGE_PRINT_AREA_BOTTOM));
     uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplierTop(mxComponent, uno::UNO_QUERY);
     xDrawPageSupplierTop->getDrawPage()->add(xShapeTop);
 

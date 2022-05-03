@@ -406,7 +406,7 @@ SwVbaSelection::MoveRight(const uno::Any& _unit, const uno::Any& _count, const u
 
     if( nCount < 0 )
     {
-        MoveLeft( _unit, uno::makeAny( -nCount ), _extend );
+        MoveLeft( _unit, uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -425,7 +425,7 @@ SwVbaSelection::MoveLeft(const uno::Any& _unit, const uno::Any& _count, const un
 
     if( nCount < 0 )
     {
-        MoveRight( _unit, uno::makeAny( -nCount ), _extend );
+        MoveRight( _unit, uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -445,7 +445,7 @@ SwVbaSelection::MoveDown(const uno::Any& _unit, const uno::Any& _count, const un
 
     if( nCount < 0 )
     {
-        MoveUp( _unit, uno::makeAny( -nCount ), _extend );
+        MoveUp( _unit, uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -465,7 +465,7 @@ SwVbaSelection::MoveUp(const uno::Any& _unit, const uno::Any& _count, const uno:
 
     if( nCount < 0 )
     {
-        MoveDown( _unit, uno::makeAny( -nCount ), _extend );
+        MoveDown( _unit, uno::Any( -nCount ), _extend );
         return;
     }
 
@@ -815,7 +815,7 @@ SwVbaSelection::Fields( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaFields( mxParent, mxContext, mxModel ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Reference< word::XHeaderFooter > SAL_CALL
@@ -851,7 +851,7 @@ SwVbaSelection::ShapeRange( )
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XDrawPage > xDrawPage = xDrawPageSupplier->getDrawPage();
     uno::Reference< container::XIndexAccess > xShapesAccess( xShapes, uno::UNO_QUERY_THROW );
-    return uno::makeAny( uno::Reference< msforms::XShapeRange >( new ScVbaShapeRange( this, mxContext, xShapesAccess, xDrawPage, mxModel ) ) );
+    return uno::Any( uno::Reference< msforms::XShapeRange >( new ScVbaShapeRange( this, mxContext, xShapesAccess, xDrawPage, mxModel ) ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaSelection::getStart()
@@ -908,7 +908,7 @@ uno::Any SAL_CALL SwVbaSelection::Rows( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaRows( this, mxContext, xTextTable, xTextTable->getRows(), nStartRow, nEndRow ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index )
@@ -934,7 +934,7 @@ uno::Any SAL_CALL SwVbaSelection::Columns( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaColumns( this, mxContext, xTextTable, xTextTable->getColumns(), nStartColumn, nEndColumn ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 uno::Reference< text::XTextTable > SwVbaSelection::GetXTextTable() const
@@ -1019,7 +1019,7 @@ uno::Any SAL_CALL SwVbaSelection::Cells( const uno::Any& index )
     uno::Reference< XCollection > xCol( new SwVbaCells( this, mxContext, xTextTable, nLeft, nTop, nRight, nBottom ) );
     if ( index.hasValue() )
         return xCol->Item( index, uno::Any() );
-    return uno::makeAny( xCol );
+    return uno::Any( xCol );
 }
 
 void SAL_CALL SwVbaSelection::Copy(  )

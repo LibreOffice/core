@@ -1431,42 +1431,42 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
 
     if( ! bAddExternalLeading )
     {
-        xProps->setPropertyValue( "AddExternalLeading", makeAny( false ) );
+        xProps->setPropertyValue( "AddExternalLeading", Any( false ) );
     }
 
     if( ! bUseFormerLineSpacing )
     {
-        xProps->setPropertyValue( "UseFormerLineSpacing", makeAny( true ) );
+        xProps->setPropertyValue( "UseFormerLineSpacing", Any( true ) );
     }
 
     if( !bUseFormerObjectPositioning )
     {
-        xProps->setPropertyValue( "UseFormerObjectPositioning", makeAny( true ) );
+        xProps->setPropertyValue( "UseFormerObjectPositioning", Any( true ) );
     }
 
     if( !bUseOldNumbering )
     {
-        xProps->setPropertyValue( "UseOldNumbering", makeAny(true) );
+        xProps->setPropertyValue( "UseOldNumbering", Any(true) );
     }
 
     if( !bAddParaSpacingToTableCells )
     {
         xProps->setPropertyValue( "AddParaSpacingToTableCells",
-            makeAny( false ) );
+            Any( false ) );
     }
     if (!bAddParaLineSpacingToTableCells)
     {
-        xProps->setPropertyValue("AddParaLineSpacingToTableCells", makeAny(false));
+        xProps->setPropertyValue("AddParaLineSpacingToTableCells", Any(false));
     }
 
     if( !bUseFormerTextWrapping )
     {
-        xProps->setPropertyValue( "UseFormerTextWrapping", makeAny( true ) );
+        xProps->setPropertyValue( "UseFormerTextWrapping", Any( true ) );
     }
 
     if (!bConsiderWrapOnObjPos && bAreUserSettingsFromDocument)
     {
-        xProps->setPropertyValue( "ConsiderTextWrapOnObjPos", makeAny( false ) );
+        xProps->setPropertyValue( "ConsiderTextWrapOnObjPos", Any( false ) );
     }
 
     // #i47448#
@@ -1483,40 +1483,40 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !bIgnoreFirstLineIndentInNumbering && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue( "IgnoreFirstLineIndentInNumbering",
-            makeAny( true ) );
+            Any( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotJustifyLinesWithManualBreak && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue( "DoNotJustifyLinesWithManualBreak",
-            makeAny( true ) );
+            Any( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotResetParaAttrsForNumFont && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue( "DoNotResetParaAttrsForNumFont",
-            makeAny( true ) );
+            Any( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bDoNotCaptureDrawObjsOnPage && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue( "DoNotCaptureDrawObjsOnPage",
-            makeAny( true ) );
+            Any( true ) );
     }
 
     // This flag has to be set for all documents < SO8
     if ( !bClipAsCharacterAnchoredWriterFlyFrames && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue( "ClipAsCharacterAnchoredWriterFlyFrames",
-            makeAny( true ) );
+            Any( true ) );
     }
 
     if ( !bUnixForceZeroExtLeading )
     {
-        xProps->setPropertyValue( "UnxForceZeroExtLeading", makeAny( true ) );
+        xProps->setPropertyValue( "UnxForceZeroExtLeading", Any( true ) );
     }
 
     // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
@@ -1525,12 +1525,12 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // are considered to be old files, so set the compatibility option too.
     if ( !bSmallCapsPercentage66 )
     {
-        xProps->setPropertyValue( "SmallCapsPercentage66", makeAny( true ) );
+        xProps->setPropertyValue( "SmallCapsPercentage66", Any( true ) );
     }
 
     if ( !bTabOverflow )
     {
-        xProps->setPropertyValue( "TabOverflow", makeAny( false ) );
+        xProps->setPropertyValue( "TabOverflow", Any( false ) );
     }
 
     if (bTabOverMarginValue)
@@ -1542,19 +1542,19 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             uno::Any(document::PrinterIndependentLayout::HIGH_RESOLUTION));
 
     if (!bPropLineSpacingShrinksFirstLine)
-        xProps->setPropertyValue("PropLineSpacingShrinksFirstLine", makeAny(false));
+        xProps->setPropertyValue("PropLineSpacingShrinksFirstLine", Any(false));
 
     if (!bSubtractFlysAnchoredAtFlys && bAreUserSettingsFromDocument)
-        xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", makeAny(true));
+        xProps->setPropertyValue("SubtractFlysAnchoredAtFlys", Any(true));
 
     if (!bEmptyDbFieldHidesPara && bAreUserSettingsFromDocument)
-        xProps->setPropertyValue("EmptyDbFieldHidesPara", makeAny(false));
+        xProps->setPropertyValue("EmptyDbFieldHidesPara", Any(false));
 
     if (!bCollapseEmptyCellPara)
-        xProps->setPropertyValue("CollapseEmptyCellPara", makeAny(false));
+        xProps->setPropertyValue("CollapseEmptyCellPara", Any(false));
 
     if (!bAutoFirstLineIndentDisregardLineSpace)
-        xProps->setPropertyValue("AutoFirstLineIndentDisregardLineSpace", makeAny(false));
+        xProps->setPropertyValue("AutoFirstLineIndentDisregardLineSpace", Any(false));
 
     SwDoc *pDoc = getDoc();
     SfxPrinter *pPrinter = pDoc->getIDocumentDeviceAccess().getPrinter( false );
@@ -1587,11 +1587,11 @@ void SwXMLImport::SetDocumentSpecificSettings(
     {
         if ( m_xLateInitSettings->hasByName( _rSettingsGroupName ) )
         {
-            m_xLateInitSettings->replaceByName( _rSettingsGroupName, makeAny( _rSettings ) );
+            m_xLateInitSettings->replaceByName( _rSettingsGroupName, Any( _rSettings ) );
             OSL_FAIL( "SwXMLImport::SetDocumentSpecificSettings: already have settings for this model!" );
         }
         else
-            m_xLateInitSettings->insertByName( _rSettingsGroupName, makeAny( _rSettings ) );
+            m_xLateInitSettings->insertByName( _rSettingsGroupName, Any( _rSettings ) );
     }
     catch( const Exception& )
     {
@@ -1779,8 +1779,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportDOCX(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::makeAny(xStream) },
-        { "InputMode", uno::makeAny(true) },
+        { "InputStream", uno::Any(xStream) },
+        { "InputMode", uno::Any(true) },
     }));
     xImporter->setTargetDocument(xModel);
 

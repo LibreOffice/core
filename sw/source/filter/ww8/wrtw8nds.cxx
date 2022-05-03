@@ -3352,13 +3352,13 @@ void MSWordExportBase::UpdateTocSectionNodeProperties(const SwSectionNode& rSect
     {
         uno::Sequence<beans::PropertyValue> aDocPropertyValues(comphelper::InitPropertySequence(
         {
-            {"ooxml:CT_SdtDocPart_docPartGallery", uno::makeAny(OUString("Table of Contents"))},
-            {"ooxml:CT_SdtDocPart_docPartUnique",  uno::makeAny(OUString("true"))},
+            {"ooxml:CT_SdtDocPart_docPartGallery", uno::Any(OUString("Table of Contents"))},
+            {"ooxml:CT_SdtDocPart_docPartUnique",  uno::Any(OUString("true"))},
         }));
 
         uno::Sequence<beans::PropertyValue> aSdtPrPropertyValues(comphelper::InitPropertySequence(
         {
-            {"ooxml:CT_SdtPr_docPartObj", uno::makeAny(aDocPropertyValues)},
+            {"ooxml:CT_SdtPr_docPartObj", uno::Any(aDocPropertyValues)},
         }));
 
         SfxGrabBagItem aGrabBag(RES_PARATR_GRABBAG);

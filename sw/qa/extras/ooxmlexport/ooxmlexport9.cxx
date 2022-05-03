@@ -801,27 +801,27 @@ DECLARE_OOXMLEXPORT_TEST(testBnc519228OddBreaks, "bnc519228_odd-breaksB.docx")
 {
     // Check that all the normal styles are not set as right-only, those should be only those used after odd page breaks.
     uno::Reference<beans::XPropertySet> defaultStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_ALL), defaultStyle->getPropertyValue("PageStyleLayout"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), defaultStyle->getPropertyValue("PageStyleLayout"));
     uno::Reference<beans::XPropertySet> firstPage( getStyles("PageStyles")->getByName("First Page"), uno::UNO_QUERY );
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_ALL), firstPage->getPropertyValue("PageStyleLayout"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), firstPage->getPropertyValue("PageStyleLayout"));
 
     OUString page1StyleName = getProperty<OUString>( getParagraph( 1, "This is the first page." ), "PageDescName");
     uno::Reference<beans::XPropertySet> page1Style(getStyles("PageStyles")->getByName(page1StyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_RIGHT), page1Style->getPropertyValue("PageStyleLayout"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_RIGHT), page1Style->getPropertyValue("PageStyleLayout"));
     getParagraphOfText( 1, getProperty< uno::Reference<text::XText> >(page1Style, "HeaderText"), "This is the header for odd pages");
 
     // Page2 comes from follow of style for page 1 and should be a normal page. Also check the two page style have the same properties,
     // since page style for page1 was created from page style for page 2.
     OUString page2StyleName = getProperty<OUString>( page1Style, "FollowStyle" );
     uno::Reference<beans::XPropertySet> page2Style(getStyles("PageStyles")->getByName(page2StyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_ALL), page2Style->getPropertyValue("PageStyleLayout"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_ALL), page2Style->getPropertyValue("PageStyleLayout"));
     getParagraphOfText( 1, getProperty< uno::Reference<text::XText> >(page2Style, "HeaderTextLeft"), "This is the even header");
     getParagraphOfText( 1, getProperty< uno::Reference<text::XText> >(page2Style, "HeaderTextRight"), "This is the header for odd pages");
     CPPUNIT_ASSERT_EQUAL(getProperty<sal_Int32>(page1Style, "TopMargin"), getProperty<sal_Int32>(page2Style, "TopMargin"));
 
     OUString page5StyleName = getProperty<OUString>( getParagraph( 4, "Then an odd break after an odd page, should lead us to page #5." ), "PageDescName");
     uno::Reference<beans::XPropertySet> page5Style(getStyles("PageStyles")->getByName(page5StyleName), uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(uno::makeAny(style::PageStyleLayout_RIGHT), page5Style->getPropertyValue("PageStyleLayout"));
+    CPPUNIT_ASSERT_EQUAL(uno::Any(style::PageStyleLayout_RIGHT), page5Style->getPropertyValue("PageStyleLayout"));
     getParagraphOfText( 1, getProperty< uno::Reference<text::XText> >(page5Style, "HeaderText"), "This is the header for odd pages");
 }
 
@@ -1494,7 +1494,7 @@ DECLARE_OOXMLEXPORT_TEST(testTdf90789, "tdf90789.docx")
 
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
     uno::Reference<view::XSelectionSupplier> xCtrl(xModel->getCurrentController(), uno::UNO_QUERY_THROW);
-    xCtrl->select(uno::makeAny(xShape->getAnchor()));
+    xCtrl->select(uno::Any(xShape->getAnchor()));
 
     uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xCtrl, uno::UNO_QUERY_THROW);
     uno::Reference<text::XTextViewCursor> xTextCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_SET_THROW);

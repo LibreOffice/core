@@ -127,14 +127,14 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testDefaultCharStyle)
     xCursor->goLeft(1, true);
 
     uno::Reference<beans::XPropertySet> xCursorProps(xCursor, uno::UNO_QUERY);
-    xCursorProps->setPropertyValue("CharStyleName", uno::makeAny(OUString("Emphasis")));
+    xCursorProps->setPropertyValue("CharStyleName", uno::Any(OUString("Emphasis")));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
                          getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
 
     // Now reset the char style and assert that the font slant is back to none.
     // This resulted in a lang.IllegalArgumentException, Standard was not
     // mapped to 'Default Style'.
-    xCursorProps->setPropertyValue("CharStyleName", uno::makeAny(OUString("Standard")));
+    xCursorProps->setPropertyValue("CharStyleName", uno::Any(OUString("Standard")));
     CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
                          getProperty<awt::FontSlant>(xCursorProps, "CharPosture"));
 }
@@ -239,9 +239,9 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURL)
 
     // Set a URL on it.
     OUString aGraphicURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "test.jpg";
-    xTextGraphic->setPropertyValue("GraphicURL", uno::makeAny(aGraphicURL));
+    xTextGraphic->setPropertyValue("GraphicURL", uno::Any(aGraphicURL));
     xTextGraphic->setPropertyValue("AnchorType",
-                                   uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                                   uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -264,14 +264,14 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testGraphicDescriptorURLBitmap)
     uno::Reference<container::XNameContainer> xBitmaps(
         xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
     OUString aGraphicURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "test.jpg";
-    xBitmaps->insertByName("test", uno::makeAny(aGraphicURL));
+    xBitmaps->insertByName("test", uno::Any(aGraphicURL));
 
     // Create a graphic.
     uno::Reference<beans::XPropertySet> xTextGraphic(
         xFactory->createInstance("com.sun.star.text.TextGraphicObject"), uno::UNO_QUERY);
     xTextGraphic->setPropertyValue("GraphicURL", xBitmaps->getByName("test"));
     xTextGraphic->setPropertyValue("AnchorType",
-                                   uno::makeAny(text::TextContentAnchorType_AT_CHARACTER));
+                                   uno::Any(text::TextContentAnchorType_AT_CHARACTER));
 
     // Insert it.
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
@@ -808,7 +808,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testRenderablePagePosition)
     uno::Reference<view::XRenderable> xRenderable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(mxComponent.is());
 
-    uno::Any aSelection = uno::makeAny(mxComponent);
+    uno::Any aSelection(mxComponent);
 
     uno::Reference<awt::XToolkit> xToolkit = VCLUnoHelper::CreateToolkit();
     uno::Reference<awt::XDevice> xDevice(xToolkit->createScreenCompatibleDevice(32, 32));
@@ -969,11 +969,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
     uno::Reference<beans::XPropertySet> xStyle(
         xDoc->createInstance("com.sun.star.style.CharacterStyle"), uno::UNO_QUERY);
     uno::Reference<container::XNamed> xStyleN(xStyle, uno::UNO_QUERY);
-    xStyle->setPropertyValue("CharColor", uno::makeAny(sal_Int32(0x00FF0000)));
+    xStyle->setPropertyValue("CharColor", uno::Any(sal_Int32(0x00FF0000)));
     uno::Reference<style::XStyleFamiliesSupplier> xSFS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameContainer> xStyles(
         xSFS->getStyleFamilies()->getByName("CharacterStyles"), uno::UNO_QUERY);
-    xStyles->insertByName("red", uno::makeAny(xStyle));
+    xStyles->insertByName("red", uno::Any(xStyle));
 
     uno::Reference<text::XChapterNumberingSupplier> xCNS(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexReplace> xOutline(xCNS->getChapterNumberingRules());
@@ -982,7 +982,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testChapterNumberingCharStyle)
         hashMap["CharStyleName"] <<= OUString("red");
         uno::Sequence<beans::PropertyValue> props;
         hashMap >> props;
-        xOutline->replaceByIndex(0, uno::makeAny(props));
+        xOutline->replaceByIndex(0, uno::Any(props));
     }
     // now rename the style
     xStyleN->setName("reddishred");
@@ -1064,11 +1064,11 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testShapeAllowOverlap)
 
     // The property is on by default, turn it off & verify.
     uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
-    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(false));
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::Any(false));
     CPPUNIT_ASSERT(!getProperty<bool>(xShapeProperties, "AllowOverlap"));
 
     // Turn it back to on & verify.
-    xShapeProperties->setPropertyValue("AllowOverlap", uno::makeAny(true));
+    xShapeProperties->setPropertyValue("AllowOverlap", uno::Any(true));
     CPPUNIT_ASSERT(getProperty<bool>(xShapeProperties, "AllowOverlap"));
 }
 
@@ -1143,7 +1143,7 @@ CPPUNIT_TEST_FIXTURE(SwUnoWriter, testTransparentText)
     // Set a custom transparency.
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     sal_Int16 nExpected = 42;
-    xParagraph->setPropertyValue("CharTransparence", uno::makeAny(nExpected));
+    xParagraph->setPropertyValue("CharTransparence", uno::Any(nExpected));
 
     // Get the transparency & verify.
     CPPUNIT_ASSERT_EQUAL(nExpected, getProperty<sal_Int16>(xParagraph, "CharTransparence"));

@@ -329,7 +329,7 @@ static uno::Any GetParaListAutoFormat(SwTextNode const& rNode)
             props.emplace_back(pEntry->aName, value);
         }
     }
-    return uno::makeAny(comphelper::containerToSequence(props));
+    return uno::Any(comphelper::containerToSequence(props));
 }
 
 // Read the special properties of the cursor

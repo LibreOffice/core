@@ -82,7 +82,7 @@ public:
             for( sal_Int32 col = mnLeft; col <= mnRight; col++ )
             {
                 if( Index == ( ( row - mnTop ) * ( mnRight - mnLeft + 1 ) + ( col - mnLeft ) ) )
-                    return uno::makeAny( uno::Reference< word::XCell >( new SwVbaCell( mxParent, mxContext, mxTextTable, col, row ) ) );
+                    return uno::Any( uno::Reference< word::XCell >( new SwVbaCell( mxParent, mxContext, mxTextTable, col, row ) ) );
             }
         }
         throw css::lang::IndexOutOfBoundsException();

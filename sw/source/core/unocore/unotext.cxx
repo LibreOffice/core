@@ -2118,10 +2118,10 @@ lcl_MergeCells(std::vector<VerticallyMergedCell> & rMergedCells)
             SAL_WARN("sw.uno", "incomplete vertical cell merge");
             continue;
         }
-        aMergedCell.aCells.front()->setPropertyValue(UNO_NAME_ROW_SPAN, uno::makeAny(nCellCount--));
+        aMergedCell.aCells.front()->setPropertyValue(UNO_NAME_ROW_SPAN, uno::Any(nCellCount--));
         nCellCount*=-1;
         for(auto pxPSet = aMergedCell.aCells.begin()+1; nCellCount<0; ++pxPSet, ++nCellCount)
-            (*pxPSet)->setPropertyValue(UNO_NAME_ROW_SPAN, uno::makeAny(nCellCount));
+            (*pxPSet)->setPropertyValue(UNO_NAME_ROW_SPAN, uno::Any(nCellCount));
     }
 }
 

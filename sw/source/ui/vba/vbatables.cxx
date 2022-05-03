@@ -47,7 +47,7 @@ static uno::Any lcl_createTable( const uno::Reference< XHelperInterface >& xPare
     uno::Reference< text::XTextTable > xTextTable( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextDocument > xTextDocument( xDocument, uno::UNO_QUERY_THROW );
     uno::Reference< word::XTable > xTable( new SwVbaTable( xParent, xContext, xTextDocument, xTextTable ) );
-    return uno::makeAny( xTable );
+    return uno::Any( xTable );
 }
 
 static bool lcl_isInHeaderFooter( const uno::Reference< text::XTextTable >& xTable )
@@ -93,7 +93,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
         uno::Reference< text::XTextTable > xTable( mxTables[ Index ], uno::UNO_SET_THROW );
-        return uno::makeAny( xTable );
+        return uno::Any( xTable );
     }
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextTable>::get(); }
@@ -104,7 +104,7 @@ public:
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         uno::Reference< text::XTextTable > xTable( *cachePos, uno::UNO_SET_THROW );
-        return uno::makeAny( xTable );
+        return uno::Any( xTable );
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {

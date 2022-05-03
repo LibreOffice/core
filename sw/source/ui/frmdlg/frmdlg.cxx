@@ -194,7 +194,7 @@ void SwFrameDlg::PageCreated(const OString& rId, SfxTabPage &rPage)
     {
         sal_Int32 nPreferredDPI = m_pWrtShell->GetDoc()->getIDocumentSettingAccess().getImagePreferredDPI();
         if (nPreferredDPI)
-            rPage.getAdditionalProperties().emplace("PreferredDPI", css::uno::makeAny(nPreferredDPI));
+            rPage.getAdditionalProperties().emplace("PreferredDPI", css::uno::Any(nPreferredDPI));
     }
 }
 

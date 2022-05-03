@@ -383,7 +383,7 @@ void SwModule::ShowDBObj(SwView const & rView, const SwDBData& rData)
         aSelection.setDataSource(rData.sDataSource);
         aSelection[DataAccessDescriptorProperty::Command]       <<= rData.sCommand;
         aSelection[DataAccessDescriptorProperty::CommandType]   <<= rData.nCommandType;
-        xControllerSelection->select(makeAny(aSelection.createPropertyValueSequence()));
+        xControllerSelection->select(Any(aSelection.createPropertyValueSequence()));
     }
     else {
         OSL_FAIL("no selection supplier in the beamer!");

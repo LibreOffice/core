@@ -239,7 +239,7 @@ void SwMacrosTest::testControlShapeGrouping()
         UNO_QUERY);
     xDateShape->setControl(xDateControlModel);
     uno::Reference<beans::XPropertySet> xDateShapeProps(xDateShape, UNO_QUERY);
-    xDateShapeProps->setPropertyValue("AnchorType", makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
+    xDateShapeProps->setPropertyValue("AnchorType", Any(text::TextContentAnchorType_AT_PARAGRAPH));
 
     uno::Reference<drawing::XControlShape> const xTimeShape(
         xFactory->createInstance("com.sun.star.drawing.ControlShape"),
@@ -249,11 +249,11 @@ void SwMacrosTest::testControlShapeGrouping()
         UNO_QUERY);
     xTimeShape->setControl(xTimeControlModel);
     uno::Reference<beans::XPropertySet> xTimeShapeProps(xTimeShape, UNO_QUERY);
-    xTimeShapeProps->setPropertyValue("AnchorType", makeAny(text::TextContentAnchorType_AT_PARAGRAPH));
+    xTimeShapeProps->setPropertyValue("AnchorType", Any(text::TextContentAnchorType_AT_PARAGRAPH));
 
-    xFormNC->insertByName("aDateCntrl", makeAny(xDateControlModel));
+    xFormNC->insertByName("aDateCntrl", Any(xDateControlModel));
     xDPShapes->add(xDateShape);
-    xFormNC->insertByName("aTimeCntrl", makeAny(xTimeControlModel));
+    xFormNC->insertByName("aTimeCntrl", Any(xTimeControlModel));
     xDPShapes->add(xTimeShape);
 
     xShapes->add(xDateShape);
@@ -323,16 +323,16 @@ void SwMacrosTest::testFdo55289()
             createInstance("com.sun.star.drawing.GraphicObjectShape"),
         UNO_QUERY);
     xShape->setPropertyValue("AnchorType",
-            makeAny(text::TextContentAnchorType_AT_PAGE));
+            Any(text::TextContentAnchorType_AT_PAGE));
     xShapes->add(uno::Reference<drawing::XShape>(xShape, UNO_QUERY));
     xShape->setPropertyValue("AnchorType",
-            makeAny(text::TextContentAnchorType_AT_CHARACTER));
+            Any(text::TextContentAnchorType_AT_CHARACTER));
     xShape->setPropertyValue("AnchorType",
-            makeAny(text::TextContentAnchorType_AS_CHARACTER));
+            Any(text::TextContentAnchorType_AS_CHARACTER));
     xShape->setPropertyValue("AnchorType",
-            makeAny(text::TextContentAnchorType_AT_CHARACTER));
+            Any(text::TextContentAnchorType_AT_CHARACTER));
     xShape->setPropertyValue("AnchorType",
-            makeAny(text::TextContentAnchorType_AS_CHARACTER));
+            Any(text::TextContentAnchorType_AS_CHARACTER));
     uno::Reference<text::XTextRange> const xEnd =
         uno::Reference<text::XTextDocument>(xModel, UNO_QUERY_THROW)->getText()->getEnd();
     uno::Reference<text::XTextContent> const xShapeContent(xShape, UNO_QUERY);
@@ -395,7 +395,7 @@ void SwMacrosTest::testFdo87530()
         Reference<script::XLibraryContainerPassword> xBasLibPwd(xStorBasLib, UNO_QUERY_THROW);
         Reference<container::XNameContainer> xLibrary(xBasLib->createLibrary("BarLibrary"));
         xLibrary->insertByName("BarModule",
-                uno::makeAny(OUString("Sub Main\nEnd Sub\n")));
+                uno::Any(OUString("Sub Main\nEnd Sub\n")));
         xBasLibPwd->changeLibraryPassword("BarLibrary", "", "foo");
 
         Reference<frame::XStorable> xDocStorable(xComponent, UNO_QUERY_THROW);
@@ -424,7 +424,7 @@ void SwMacrosTest::testFdo87530()
         // add a second module now - tdf#87530 happened here
         Reference<container::XNameContainer> xFooLib(xBasLib->createLibrary("FooLibrary"));
         xFooLib->insertByName("FooModule",
-                uno::makeAny(OUString("Sub Main\nEnd Sub\n")));
+                uno::Any(OUString("Sub Main\nEnd Sub\n")));
         xBasLibPwd->changeLibraryPassword("FooLibrary", "", "foo");
 
         // store again

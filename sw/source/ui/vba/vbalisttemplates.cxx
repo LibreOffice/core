@@ -38,7 +38,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex <= pListTemplates->getCount() )
-            return pListTemplates->Item( uno::makeAny( nIndex++ ), uno::Any() );
+            return pListTemplates->Item( uno::Any( nIndex++ ), uno::Any() );
         throw container::NoSuchElementException();
     }
 };
@@ -63,7 +63,7 @@ uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::A
     if( nIndex <=0 || nIndex > getCount() )
         throw  uno::RuntimeException("Index out of bounds" );
 
-    return uno::makeAny( uno::Reference< word::XListTemplate >( new SwVbaListTemplate( this, mxContext, mxTextDocument, mnGalleryType, nIndex ) ) );
+    return uno::Any( uno::Reference< word::XListTemplate >( new SwVbaListTemplate( this, mxContext, mxTextDocument, mnGalleryType, nIndex ) ) );
 }
 
 // XEnumerationAccess

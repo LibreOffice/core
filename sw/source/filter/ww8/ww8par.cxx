@@ -1847,7 +1847,7 @@ void SwWW8ImplReader::ImportDop()
 
         uno::Reference< uno::XComponentContext > xComponentContext(comphelper::getProcessComponentContext());
         uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(xComponentContext);
-        xBox->insertByIndex(sal_Int32(0), uno::makeAny(aViewProps));
+        xBox->insertByIndex(sal_Int32(0), uno::Any(aViewProps));
         uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_pDocShell->GetModel(), uno::UNO_QUERY);
         xViewDataSupplier->setViewData(xBox);
     }
@@ -1905,7 +1905,7 @@ void SwWW8ImplReader::ImportDop()
         if (xInfo.is())
         {
             if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
-                xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::makeAny(false));
+                xDocProps->setPropertyValue("ApplyFormDesignMode", css::uno::Any(false));
         }
     }
 
@@ -4897,7 +4897,7 @@ static void lcl_createTemplateToProjectEntry( const uno::Reference< container::X
         if ( nIndex != -1 )
         {
             OUString templateName = templateNameWithExt.copy( 0, nIndex );
-            xPrjNameCache->insertByName( templateName, uno::makeAny( sVBAProjName ) );
+            xPrjNameCache->insertByName( templateName, uno::Any( sVBAProjName ) );
         }
     }
     catch( const uno::Exception& )
@@ -5865,7 +5865,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         }
 
                         pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
-                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
                     }
                 }
                 break;
@@ -5929,7 +5929,7 @@ ErrCode SwWW8ImplReader::LoadThroughDecryption(WW8Glossary *pGloss)
                         }
 
                         pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
-                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
                     }
                 }
                 break;
@@ -6477,7 +6477,7 @@ ErrCode WW8Reader::DecryptDRMPackage()
 
         // Set the media descriptor data
         uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
-        m_pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::makeAny(aEncryptionData)));
+        m_pMedium->GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {

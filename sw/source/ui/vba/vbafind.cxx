@@ -133,7 +133,7 @@ bool SwVbaFind::SearchReplace()
                 if( xFindOne.is() )
                 {
                     xFindOne->setString( GetReplaceWith() );
-                    result = mxSelSupp->select( uno::makeAny( xFindOne ) );
+                    result = mxSelSupp->select( uno::Any( xFindOne ) );
                 }
                 break;
             }
@@ -164,7 +164,7 @@ bool SwVbaFind::SearchReplace()
     {
         uno::Reference< text::XTextRange > xFindOne = FindOneElement();
         if( xFindOne.is() )
-            result = mxSelSupp->select( uno::makeAny( xFindOne ) );
+            result = mxSelSupp->select( uno::Any( xFindOne ) );
     }
 
     return result;
@@ -182,7 +182,7 @@ void SAL_CALL SwVbaFind::setText( const OUString& _text )
 
 uno::Any SAL_CALL SwVbaFind::getReplacement()
 {
-    return uno::makeAny( uno::Reference< word::XReplacement >( new SwVbaReplacement( this, mxContext, mxPropertyReplace ) ) );
+    return uno::Any( uno::Reference< word::XReplacement >( new SwVbaReplacement( this, mxContext, mxPropertyReplace ) ) );
 }
 
 void SAL_CALL SwVbaFind::setReplacement( const uno::Any& /*_replacement */ )
@@ -200,7 +200,7 @@ sal_Bool SAL_CALL SwVbaFind::getForward()
 void SAL_CALL SwVbaFind::setForward( sal_Bool _forward )
 {
     bool bBackward = !_forward;
-    mxPropertyReplace->setPropertyValue("SearchBackwards", uno::makeAny( bBackward ) );
+    mxPropertyReplace->setPropertyValue("SearchBackwards", uno::Any( bBackward ) );
 }
 
 ::sal_Int32 SAL_CALL SwVbaFind::getWrap()
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL SwVbaFind::getMatchCase()
 
 void SAL_CALL SwVbaFind::setMatchCase( sal_Bool _matchcase )
 {
-    mxPropertyReplace->setPropertyValue("SearchCaseSensitive", uno::makeAny( _matchcase ) );
+    mxPropertyReplace->setPropertyValue("SearchCaseSensitive", uno::Any( _matchcase ) );
 }
 
 sal_Bool SAL_CALL SwVbaFind::getMatchWholeWord()
@@ -246,7 +246,7 @@ sal_Bool SAL_CALL SwVbaFind::getMatchWholeWord()
 
 void SAL_CALL SwVbaFind::setMatchWholeWord( sal_Bool _matchwholeword )
 {
-    mxPropertyReplace->setPropertyValue("SearchWords", uno::makeAny( _matchwholeword ) );
+    mxPropertyReplace->setPropertyValue("SearchWords", uno::Any( _matchwholeword ) );
 }
 
 sal_Bool SAL_CALL SwVbaFind::getMatchWildcards()
@@ -258,7 +258,7 @@ sal_Bool SAL_CALL SwVbaFind::getMatchWildcards()
 
 void SAL_CALL SwVbaFind::setMatchWildcards( sal_Bool _matchwildcards )
 {
-    mxPropertyReplace->setPropertyValue("SearchRegularExpression", uno::makeAny( _matchwildcards ) );
+    mxPropertyReplace->setPropertyValue("SearchRegularExpression", uno::Any( _matchwildcards ) );
 }
 
 sal_Bool SAL_CALL SwVbaFind::getMatchSoundsLike()
@@ -271,7 +271,7 @@ sal_Bool SAL_CALL SwVbaFind::getMatchSoundsLike()
 void SAL_CALL SwVbaFind::setMatchSoundsLike( sal_Bool _matchsoundslike )
 {
     // seems not accurate
-    mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::makeAny( _matchsoundslike ) );
+    mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::Any( _matchsoundslike ) );
 }
 
 sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms()
@@ -286,8 +286,8 @@ sal_Bool SAL_CALL SwVbaFind::getMatchAllWordForms()
 void SAL_CALL SwVbaFind::setMatchAllWordForms( sal_Bool _matchallwordforms )
 {
     // seems not accurate
-    mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::makeAny( _matchallwordforms ) );
-    mxPropertyReplace->setPropertyValue("SearchSimilarityRelax", uno::makeAny( _matchallwordforms ) );
+    mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::Any( _matchallwordforms ) );
+    mxPropertyReplace->setPropertyValue("SearchSimilarityRelax", uno::Any( _matchallwordforms ) );
 }
 
 uno::Any SAL_CALL SwVbaFind::getStyle()

@@ -85,7 +85,7 @@ void SwUiWriterTest4::mergeDocs(const char* aDestDoc, const char* aInsertDoc)
         const OUString insertFileid
             = m_directories.getURLFromSrc(DATA_DIRECTORY) + OUString::createFromAscii(aInsertDoc);
         uno::Sequence<beans::PropertyValue> aPropertyValues(
-            comphelper::InitPropertySequence({ { "Name", uno::makeAny(insertFileid) } }));
+            comphelper::InitPropertySequence({ { "Name", uno::Any(insertFileid) } }));
         dispatchCommand(mxComponent, ".uno:InsertDoc", aPropertyValues);
     }
 }
@@ -860,14 +860,14 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testClassificationPaste)
 
     // Classified source, not classified destination.
     uno::Sequence<beans::PropertyValue> aInternalOnly
-        = comphelper::InitPropertySequence({ { "Name", uno::makeAny(OUString("Internal Only")) } });
+        = comphelper::InitPropertySequence({ { "Name", uno::Any(OUString("Internal Only")) } });
     dispatchCommand(xSourceComponent, ".uno:ClassificationApply", aInternalOnly);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::TargetDocNotClassified),
                          checkShells(pSourceShell, pDestinationShell));
 
     // Classified source and classified destination -- internal only has a higher level than confidential.
     uno::Sequence<beans::PropertyValue> aConfidential
-        = comphelper::InitPropertySequence({ { "Name", uno::makeAny(OUString("Confidential")) } });
+        = comphelper::InitPropertySequence({ { "Name", uno::Any(OUString("Confidential")) } });
     dispatchCommand(mxComponent, ".uno:ClassificationApply", aConfidential);
     CPPUNIT_ASSERT_EQUAL(int(SfxClassificationCheckPasteResult::DocClassificationTooLow),
                          checkShells(pSourceShell, pDestinationShell));
@@ -1085,12 +1085,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineCopyPaste)
 
     // Turn on track changes, make changes, turn off track changes
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     lcl_selectCharacters(aPaM, 2, 3);
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "c", false);
     lcl_selectCharacters(aPaM, 6, 7);
     pDoc->getIDocumentContentOperations().ReplaceRange(aPaM, "f", false);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(false));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(false));
 
     // Create the clipboard document.
     SwDoc aClipboard;
@@ -1115,7 +1115,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf135260)
 
     // Turn on track changes
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
 
     for (int i = 0; i < 4; i++)
     {
@@ -1143,7 +1143,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
 
     // Turn on track changes, and add changes to the start and end of the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     pWrtShell->StartOfSection();
     pWrtShell->Insert("aaa");
     pWrtShell->EndOfSection();
@@ -1155,8 +1155,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     // Select the first redline.
     pWrtShell->StartOfSection();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
-        { { "NextTrackedChange",
-            uno::makeAny(o3tl::narrowing<sal_uInt16>(rTable[0]->GetId())) } }));
+        { { "NextTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[0]->GetId())) } }));
     dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
@@ -1167,7 +1166,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     // Select the second redline.
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
-        { { "NextTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
+        { { "NextTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
     dispatchCommand(mxComponent, ".uno:NextTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     pShellCursor = pWrtShell->getShellCursor(false);
@@ -1176,8 +1175,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineParam)
     // Move the cursor to the start again, and reject the second change.
     pWrtShell->StartOfSection();
     aPropertyValues = comphelper::InitPropertySequence(
-        { { "RejectTrackedChange",
-            uno::makeAny(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
+        { { "RejectTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(rTable[1]->GetId())) } });
     dispatchCommand(mxComponent, ".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
     pShellCursor = pWrtShell->getShellCursor(false);
@@ -1204,7 +1202,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineViewAuthor)
 
     // Turn on track changes, and add changes to the start of the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     pWrtShell->StartOfSection();
     pWrtShell->Insert("aaa");
 
@@ -1240,7 +1238,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf91292)
                                  getProperty<Color>(xPropertySet, "FillColor"));
 
     // remove background color
-    xPropertySet->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_NONE));
+    xPropertySet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_NONE));
 
     // Save it and load it back.
     reload("Office Open XML Text", "tdf91292_paraBackground.docx");
@@ -1272,7 +1270,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testRedlineTimestamp)
     // Turn on track changes, and add changes to the start and to the end of
     // the document.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     pWrtShell->StartOfSection();
     pWrtShell->Insert("aaa");
     osl::Thread::wait(std::chrono::seconds(1));
@@ -1894,8 +1892,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testCreateDocxAnnotation)
     // insert an annotation with a text
     const OUString aSomeText("some text");
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence({
-        { "Text", uno::makeAny(aSomeText) },
-        { "Author", uno::makeAny(OUString("me")) },
+        { "Text", uno::Any(aSomeText) },
+        { "Author", uno::Any(OUString("me")) },
     });
     dispatchCommand(mxComponent, ".uno:InsertAnnotation", aPropertyValues);
 

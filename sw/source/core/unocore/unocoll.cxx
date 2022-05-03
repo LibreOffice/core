@@ -183,7 +183,7 @@ public:
     {
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
-        return uno::makeAny( mTemplateToProject.find( aName )->second );
+        return uno::Any( mTemplateToProject.find( aName )->second );
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -252,7 +252,7 @@ public:
         uno::Reference< uno::XInterface > xDocObj = ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.word.Document" , aArgs );
         SAL_INFO("sw.uno",
             "Creating Object ( ooo.vba.word.Document ) 0x" << xDocObj.get());
-        return  uno::makeAny( xDocObj );
+        return  uno::Any( xDocObj );
     }
     virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -1002,7 +1002,7 @@ namespace
         {
             uno::Reference<text::XTextFrame> const xRet(
                 SwXTextFrame::CreateXTextFrame(*rFrameFormat.GetDoc(), &rFrameFormat));
-            return uno::makeAny(xRet);
+            return uno::Any(xRet);
         }
         static bool filter(const SwNode* const pNode) { return !pNode->IsNoTextNode(); };
     };
@@ -1014,7 +1014,7 @@ namespace
         {
             uno::Reference<text::XTextContent> const xRet(
                 SwXTextGraphicObject::CreateXTextGraphicObject(*rFrameFormat.GetDoc(), &rFrameFormat));
-            return uno::makeAny(xRet);
+            return uno::Any(xRet);
         }
         static bool filter(const SwNode* const pNode) { return pNode->IsGrfNode(); };
     };
@@ -1026,7 +1026,7 @@ namespace
         {
             uno::Reference<text::XTextContent> const xRet(
                 SwXTextEmbeddedObject::CreateXTextEmbeddedObject(*rFrameFormat.GetDoc(), &rFrameFormat));
-            return uno::makeAny(xRet);
+            return uno::Any(xRet);
         }
         static bool filter(const SwNode* const pNode) { return pNode->IsOLENode(); };
     };
@@ -1424,7 +1424,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
     SwSectionFormat* pFormat = rFormats[nIndex];
     xRet = GetObject(*pFormat);
 
-    return makeAny(xRet);
+    return Any(xRet);
 }
 
 uno::Any SwXTextSections::getByName(const OUString& rName)

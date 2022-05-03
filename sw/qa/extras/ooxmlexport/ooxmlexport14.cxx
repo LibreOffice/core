@@ -419,7 +419,7 @@ CPPUNIT_TEST_FIXTURE(Test, testArabicZeroNumberingFootnote)
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
     sal_uInt16 nNumberingType = style::NumberingType::ARABIC_ZERO;
-    xFootnoteSettings->setPropertyValue("NumberingType", uno::makeAny(nNumberingType));
+    xFootnoteSettings->setPropertyValue("NumberingType", uno::Any(nNumberingType));
 
     // Insert a footnote.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -447,7 +447,7 @@ CPPUNIT_TEST_FIXTURE(Test, testChicagoNumberingFootnote)
     uno::Reference<beans::XPropertySet> xFootnoteSettings
         = xFootnotesSupplier->getFootnoteSettings();
     sal_uInt16 nNumberingType = style::NumberingType::SYMBOL_CHICAGO;
-    xFootnoteSettings->setPropertyValue("NumberingType", uno::makeAny(nNumberingType));
+    xFootnoteSettings->setPropertyValue("NumberingType", uno::Any(nNumberingType));
 
     // Insert a footnote.
     uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
@@ -798,7 +798,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testZeroLineSpacing)
     style::LineSpacing aSpacing;
     aSpacing.Mode = style::LineSpacingMode::MINIMUM;
     aSpacing.Height = 0;
-    xParagraph->setPropertyValue("ParaLineSpacing", uno::makeAny(aSpacing));
+    xParagraph->setPropertyValue("ParaLineSpacing", uno::Any(aSpacing));
 
     // Export to docx.
     save("Office Open XML Text", maTempFile);
@@ -823,7 +823,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testSemiTransparentText)
     uno::Reference<beans::XPropertySet> xParagraph(getParagraph(1), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xParagraph.is());
     sal_Int16 nTransparence = 75;
-    xParagraph->setPropertyValue("CharTransparence", uno::makeAny(nTransparence));
+    xParagraph->setPropertyValue("CharTransparence", uno::Any(nTransparence));
     uno::Reference<text::XTextRange> xTextRange(xParagraph, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xTextRange.is());
     xTextRange->setString("x");
@@ -860,9 +860,9 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testUserField)
         xFactory->createInstance("com.sun.star.text.TextField.User"), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xMaster(
         xFactory->createInstance("com.sun.star.text.FieldMaster.User"), uno::UNO_QUERY);
-    xMaster->setPropertyValue("Name", uno::makeAny(OUString("foo")));
+    xMaster->setPropertyValue("Name", uno::Any(OUString("foo")));
     xField->attachTextFieldMaster(xMaster);
-    xField->getTextFieldMaster()->setPropertyValue("Content", uno::makeAny(OUString("bar")));
+    xField->getTextFieldMaster()->setPropertyValue("Content", uno::Any(OUString("bar")));
     uno::Reference<text::XTextDocument> xDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xDocument->getText();
     xText->insertTextContent(xText->createTextCursor(), xField, /*bAbsorb=*/false);
@@ -919,7 +919,7 @@ CPPUNIT_TEST_FIXTURE(SwModelTestBase, testHighlightEdit_numbering)
     aMap["CharInteropGrabBag"] <<= aGrabBag;
 
     aMap >> aListAutoFormat;
-    properties->setPropertyValue("ListAutoFormat", uno::makeAny(aListAutoFormat));
+    properties->setPropertyValue("ListAutoFormat", uno::Any(aListAutoFormat));
 
     // Export to docx.
     save("Office Open XML Text", maTempFile);

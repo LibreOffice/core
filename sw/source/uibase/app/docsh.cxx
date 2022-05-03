@@ -720,7 +720,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 // TODO/MBA: testing
                 uno::Reference < beans::XPropertySet > xSet( rMedium.GetStorage(), uno::UNO_QUERY );
                 if ( xSet.is() )
-                    xSet->setPropertyValue("MediaType", uno::makeAny( SotExchange::GetFormatMimeType( nSaveClipId ) ) );
+                    xSet->setPropertyValue("MediaType", uno::Any( SotExchange::GetFormatMimeType( nSaveClipId ) ) );
             }
             catch (const uno::Exception&)
             {
