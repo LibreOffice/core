@@ -1579,7 +1579,7 @@ void PowerPointExport::ImplWritePPTXLayout(sal_Int32 nOffset, sal_uInt32 nMaster
 #endif
 
     Reference< beans::XPropertySet > xPropSet(xSlide, uno::UNO_QUERY);
-    xPropSet->setPropertyValue("Layout", makeAny(short(aLayoutInfo[ nOffset ].nType)));
+    xPropSet->setPropertyValue("Layout", Any(short(aLayoutInfo[ nOffset ].nType)));
 #if OSL_DEBUG_LEVEL > 1
     dump_pset(xPropSet);
 #endif

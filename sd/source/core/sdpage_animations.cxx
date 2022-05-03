@@ -50,7 +50,7 @@ Reference< XAnimationNode > const & SdPage::getAnimationNode()
     {
         mxAnimationNode.set( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
         Sequence< css::beans::NamedValue > aUserData
-            { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::TIMING_ROOT) } };
+            { { "node-type", css::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
         mxAnimationNode->setUserData( aUserData );
     }
 
@@ -116,7 +116,7 @@ void SdPage::onParagraphInserted( const ::Outliner* pOutliner, Paragraph const *
          * paragraphs at a shape are unlikely... */
         aTarget.Paragraph = static_cast<sal_Int16>(pOutliner->GetAbsPos( pPara ));
 
-        getMainSequence()->insertTextRange( makeAny( aTarget ) );
+        getMainSequence()->insertTextRange( Any( aTarget ) );
     }
 }
 
@@ -131,7 +131,7 @@ void SdPage::onParagraphRemoving( const ::Outliner* pOutliner, Paragraph const *
          * paragraphs at a shape are unlikely... */
         aTarget.Paragraph = static_cast<sal_Int16>(pOutliner->GetAbsPos( pPara ));
 
-        getMainSequence()->disposeTextRange( makeAny( aTarget ) );
+        getMainSequence()->disposeTextRange( Any( aTarget ) );
     }
 }
 

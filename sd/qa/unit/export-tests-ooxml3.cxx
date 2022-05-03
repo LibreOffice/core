@@ -1306,7 +1306,7 @@ void SdOOXMLExportTest3::testTdf125360()
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
 
-    xShape->setPropertyValue("FillTransparence", uno::makeAny(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
 
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
@@ -1329,7 +1329,7 @@ void SdOOXMLExportTest3::testTdf125360_1()
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
 
-    xShape->setPropertyValue("FillTransparence", uno::makeAny(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
 
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);
@@ -1356,7 +1356,7 @@ void SdOOXMLExportTest3::testTdf125360_2()
     xShape->getPropertyValue("FillTransparence") >>= nTransparence;
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(82), nTransparence);
 
-    xShape->setPropertyValue("FillTransparence", uno::makeAny(static_cast<sal_Int32>(23)));
+    xShape->setPropertyValue("FillTransparence", uno::Any(static_cast<sal_Int32>(23)));
 
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);

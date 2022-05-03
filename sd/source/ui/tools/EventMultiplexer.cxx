@@ -229,15 +229,15 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     xConfigurationController->addConfigurationChangeListener(
         this,
         FrameworkHelper::msResourceActivationEvent,
-        makeAny(ResourceActivationEvent));
+        Any(ResourceActivationEvent));
     xConfigurationController->addConfigurationChangeListener(
         this,
         FrameworkHelper::msResourceDeactivationEvent,
-        makeAny(ResourceDeactivationEvent));
+        Any(ResourceDeactivationEvent));
     xConfigurationController->addConfigurationChangeListener(
         this,
         FrameworkHelper::msConfigurationUpdateEndEvent,
-        makeAny(ConfigurationUpdateEvent));
+        Any(ConfigurationUpdateEvent));
 }
 
 EventMultiplexer::Implementation::~Implementation()

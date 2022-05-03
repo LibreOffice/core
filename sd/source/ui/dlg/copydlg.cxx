@@ -81,7 +81,7 @@ CopyDlg::~CopyDlg()
         OUString::number(m_xMtrFldHeight->get_value(FieldUnit::NONE)) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbStartColor->GetSelectEntryColor())) + OUStringChar(TOKEN) +
         OUString::number(static_cast<sal_uInt32>(m_xLbEndColor->GetSelectEntryColor()));
-    aDlgOpt.SetUserItem("UserItem", css::uno::makeAny(sStr));
+    aDlgOpt.SetUserItem("UserItem", css::uno::Any(sStr));
 }
 
 /**

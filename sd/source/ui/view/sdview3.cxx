@@ -1048,8 +1048,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                              ( xProps->getPropertyValue( "DisableDataTableDialog" ) >>= bDisableDataTableDialog ) &&
                              bDisableDataTableDialog )
                         {
-                            xProps->setPropertyValue( "DisableDataTableDialog" , uno::makeAny( false ) );
-                            xProps->setPropertyValue( "DisableComplexChartTypes" , uno::makeAny( false ) );
+                            xProps->setPropertyValue( "DisableDataTableDialog" , uno::Any( false ) );
+                            xProps->setPropertyValue( "DisableComplexChartTypes" , uno::Any( false ) );
                             uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
                             if ( xModifiable.is() )
                             {

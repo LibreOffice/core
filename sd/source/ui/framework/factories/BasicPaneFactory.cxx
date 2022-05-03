@@ -176,11 +176,11 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
             xCC->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msConfigurationUpdateStartEvent,
-                makeAny(gnConfigurationUpdateStartEvent));
+                Any(gnConfigurationUpdateStartEvent));
             xCC->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msConfigurationUpdateEndEvent,
-                makeAny(gnConfigurationUpdateEndEvent));
+                Any(gnConfigurationUpdateEndEvent));
         }
     }
     catch (RuntimeException&)

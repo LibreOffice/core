@@ -583,7 +583,7 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     //2. ------ adapt the created effect ------
 
     // set the shape targeted by this effect
-    pEffect->setTarget( makeAny( xShape ) );
+    pEffect->setTarget( css::uno::Any( xShape ) );
 
     pEffect->setBegin( GetDelayTimeInSeconds() );
 
@@ -597,14 +597,14 @@ void Ppt97Animation::createAndSetCustomAnimationEffect( SdrObject* pObj )
     {
         pEffect->setHasAfterEffect( true );
         if( HasAfterEffect_ChangeColor() )
-            pEffect->setDimColor( uno::makeAny( GetDimColor() ) );
+            pEffect->setDimColor( uno::Any( GetDimColor() ) );
         else
             pEffect->setAfterEffectOnNext( HasAfterEffect_DimAtNextEffect() );
     }
 
     // set sound effect
     if( HasSoundEffect() )
-        pEffect->createAudio( uno::makeAny( m_aSoundFileUrl ) );
+        pEffect->createAudio( uno::Any( m_aSoundFileUrl ) );
 
     // text iteration
     pEffect->setIterateType( GetTextAnimationType() );

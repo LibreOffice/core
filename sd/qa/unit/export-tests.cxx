@@ -667,7 +667,7 @@ void SdExportTest::testTdf128985()
         xPropSet->getPropertyValue( "WritingMode" ) >>= nWritingMode;
         CPPUNIT_ASSERT_EQUAL(text::WritingMode2::RL_TB, nWritingMode);
 
-        xPropSet->setPropertyValue("WritingMode", uno::makeAny(text::WritingMode2::LR_TB));
+        xPropSet->setPropertyValue("WritingMode", uno::Any(text::WritingMode2::LR_TB));
 
         xDocShRef = saveAndReload( xDocShRef.get(), ODP );
     }

@@ -815,7 +815,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel()
                 if (xProperties.is())
                     xProperties->setPropertyValue(
                         "Layout",
-                        makeAny(sal_Int16(AUTOLAYOUT_TITLE)));
+                        Any(sal_Int16(AUTOLAYOUT_TITLE)));
             }
         }
     }

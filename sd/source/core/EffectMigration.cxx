@@ -508,7 +508,7 @@ void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEff
             if( xNode.is() )
             {
                 CustomAnimationEffectPtr pEffect = std::make_shared<CustomAnimationEffect>( xNode );
-                pEffect->setTarget( makeAny( xShape ) );
+                pEffect->setTarget( Any( xShape ) );
                 SdPage* pPage = dynamic_cast< SdPage* >( pObj->getSdrPageFromSdrObject() );
                 const bool bManual = (pPage == nullptr) || (pPage->GetPresChange() == PresChange::Manual);
                 if( !bManual )
@@ -662,7 +662,7 @@ void EffectMigration::SetTextAnimationEffect( SvxShape* pShape, AnimationEffect 
                 if( xNode.is() )
                 {
                     pShapeEffect = std::make_shared<CustomAnimationEffect>( xNode );
-                    pShapeEffect->setTarget( makeAny( xShape ) );
+                    pShapeEffect->setTarget( Any( xShape ) );
                     pShapeEffect->setDuration( 0.1 );
                     pMainSequence->append( pShapeEffect );
 
@@ -906,7 +906,7 @@ void EffectMigration::SetDimColor( SvxShape* pShape, sal_Int32 nColor )
         if( pEffect->getTargetShape() == xShape )
         {
             pEffect->setHasAfterEffect( true );
-            pEffect->setDimColor( makeAny( nColor ) );
+            pEffect->setDimColor( Any( nColor ) );
             pEffect->setAfterEffectOnNext( true );
             bNeedRebuild = true;
         }
@@ -1215,7 +1215,7 @@ void EffectMigration::UpdateSoundEffect( SvxShape* pShape, SdAnimationInfo const
         {
             if( !aSoundFile.isEmpty() )
             {
-                pEffect->createAudio( makeAny( aSoundFile ) );
+                pEffect->createAudio( Any( aSoundFile ) );
             }
             else
             {
@@ -1280,7 +1280,7 @@ void EffectMigration::SetAnimationPath( SvxShape* pShape, SdrPathObj const * pPa
         {
             std::shared_ptr< sd::MainSequence > pMainSequence( pPage->getMainSequence() );
             if( pMainSequence )
-                pMainSequence->append( *pPathObj, makeAny( xShape ), -1.0, "" );
+                pMainSequence->append( *pPathObj, Any( xShape ), -1.0, "" );
         }
     }
 }

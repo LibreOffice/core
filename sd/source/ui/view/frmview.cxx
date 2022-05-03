@@ -378,19 +378,19 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
 {
     std::vector< std::pair< OUString, Any > > aUserData;
 
-    aUserData.emplace_back( sUNO_View_GridIsVisible, makeAny( IsGridVisible() ) );
-    aUserData.emplace_back( sUNO_View_GridIsFront, makeAny( IsGridFront() ) );
-    aUserData.emplace_back( sUNO_View_IsSnapToGrid, makeAny( IsGridSnap() ) );
-    aUserData.emplace_back( sUNO_View_IsSnapToPageMargins, makeAny( IsBordSnap() ) );
-    aUserData.emplace_back( sUNO_View_IsSnapToSnapLines, makeAny( IsHlplSnap() ) );
-    aUserData.emplace_back( sUNO_View_IsSnapToObjectFrame, makeAny( IsOFrmSnap() ) );
-    aUserData.emplace_back( sUNO_View_IsSnapToObjectPoints, makeAny( IsOPntSnap() ) );
+    aUserData.emplace_back( sUNO_View_GridIsVisible, Any( IsGridVisible() ) );
+    aUserData.emplace_back( sUNO_View_GridIsFront, Any( IsGridFront() ) );
+    aUserData.emplace_back( sUNO_View_IsSnapToGrid, Any( IsGridSnap() ) );
+    aUserData.emplace_back( sUNO_View_IsSnapToPageMargins, Any( IsBordSnap() ) );
+    aUserData.emplace_back( sUNO_View_IsSnapToSnapLines, Any( IsHlplSnap() ) );
+    aUserData.emplace_back( sUNO_View_IsSnapToObjectFrame, Any( IsOFrmSnap() ) );
+    aUserData.emplace_back( sUNO_View_IsSnapToObjectPoints, Any( IsOPntSnap() ) );
 
-    aUserData.emplace_back( sUNO_View_IsPlusHandlesAlwaysVisible, makeAny( IsPlusHandlesAlwaysVisible() ) );
-    aUserData.emplace_back( sUNO_View_IsFrameDragSingles, makeAny( IsFrameDragSingles() ) );
+    aUserData.emplace_back( sUNO_View_IsPlusHandlesAlwaysVisible, Any( IsPlusHandlesAlwaysVisible() ) );
+    aUserData.emplace_back( sUNO_View_IsFrameDragSingles, Any( IsFrameDragSingles() ) );
 
-    aUserData.emplace_back( sUNO_View_EliminatePolyPointLimitAngle, makeAny( static_cast<sal_Int32>(GetEliminatePolyPointLimitAngle()) ) );
-    aUserData.emplace_back( sUNO_View_IsEliminatePolyPoints, makeAny( IsEliminatePolyPoints() ) );
+    aUserData.emplace_back( sUNO_View_EliminatePolyPointLimitAngle, Any( static_cast<sal_Int32>(GetEliminatePolyPointLimitAngle()) ) );
+    aUserData.emplace_back( sUNO_View_IsEliminatePolyPoints, Any( IsEliminatePolyPoints() ) );
 
     if ( officecfg::Office::Common::Misc::WriteLayerStateAsConfigItem::get() )
     {
@@ -406,28 +406,28 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
         aUserData.emplace_back( sUNO_View_LockedLayers, aAny );
     }
 
-    aUserData.emplace_back( sUNO_View_NoAttribs, makeAny( IsNoAttribs() ) );
-    aUserData.emplace_back( sUNO_View_NoColors, makeAny( IsNoColors() ) );
+    aUserData.emplace_back( sUNO_View_NoAttribs, Any( IsNoAttribs() ) );
+    aUserData.emplace_back( sUNO_View_NoColors, Any( IsNoColors() ) );
 
     if( GetStandardHelpLines().GetCount() )
-        aUserData.emplace_back( sUNO_View_SnapLinesDrawing, makeAny( createHelpLinesString( GetStandardHelpLines() ) ) );
+        aUserData.emplace_back( sUNO_View_SnapLinesDrawing, Any( createHelpLinesString( GetStandardHelpLines() ) ) );
 
     if( GetNotesHelpLines().GetCount() )
-        aUserData.emplace_back( sUNO_View_SnapLinesNotes, makeAny( createHelpLinesString( GetNotesHelpLines() ) ) );
+        aUserData.emplace_back( sUNO_View_SnapLinesNotes, Any( createHelpLinesString( GetNotesHelpLines() ) ) );
 
     if( GetHandoutHelpLines().GetCount() )
-        aUserData.emplace_back( sUNO_View_SnapLinesHandout, makeAny( createHelpLinesString( GetHandoutHelpLines() ) ) );
+        aUserData.emplace_back( sUNO_View_SnapLinesHandout, Any( createHelpLinesString( GetHandoutHelpLines() ) ) );
 
-    aUserData.emplace_back( sUNO_View_RulerIsVisible, makeAny( HasRuler() ) );
-    aUserData.emplace_back( sUNO_View_PageKind, makeAny( static_cast<sal_Int16>(GetPageKind()) ) );
-    aUserData.emplace_back( sUNO_View_SelectedPage, makeAny( static_cast<sal_Int16>(GetSelectedPage()) ) );
-    aUserData.emplace_back( sUNO_View_IsLayerMode, makeAny( IsLayerMode() ) );
+    aUserData.emplace_back( sUNO_View_RulerIsVisible, Any( HasRuler() ) );
+    aUserData.emplace_back( sUNO_View_PageKind, Any( static_cast<sal_Int16>(GetPageKind()) ) );
+    aUserData.emplace_back( sUNO_View_SelectedPage, Any( static_cast<sal_Int16>(GetSelectedPage()) ) );
+    aUserData.emplace_back( sUNO_View_IsLayerMode, Any( IsLayerMode() ) );
 
-    aUserData.emplace_back( sUNO_View_IsDoubleClickTextEdit,  makeAny( IsDoubleClickTextEdit() ) );
-    aUserData.emplace_back( sUNO_View_IsClickChangeRotation, makeAny( IsClickChangeRotation() ) );
+    aUserData.emplace_back( sUNO_View_IsDoubleClickTextEdit,  Any( IsDoubleClickTextEdit() ) );
+    aUserData.emplace_back( sUNO_View_IsClickChangeRotation, Any( IsClickChangeRotation() ) );
 
-    aUserData.emplace_back( sUNO_View_SlidesPerRow, makeAny( static_cast<sal_Int16>(GetSlidesPerRow()) ) );
-    aUserData.emplace_back( sUNO_View_EditMode, makeAny( static_cast<sal_Int32>(GetViewShEditMode()) ) );
+    aUserData.emplace_back( sUNO_View_SlidesPerRow, Any( static_cast<sal_Int16>(GetSlidesPerRow()) ) );
+    aUserData.emplace_back( sUNO_View_EditMode, Any( static_cast<sal_Int32>(GetViewShEditMode()) ) );
     // aUserData.emplace_back( sUNO_View_EditModeStandard, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Standard ) ) );
     // aUserData.emplace_back( sUNO_View_EditModeNotes, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Notes ) ) );
     // aUserData.emplace_back( sUNO_View_EditModeHandout, makeAny( (sal_Int32)GetViewShEditMode( PageKind::Handout ) ) );
@@ -435,22 +435,22 @@ void FrameView::WriteUserDataSequence ( css::uno::Sequence < css::beans::Propert
     {
         const ::tools::Rectangle aVisArea = GetVisArea();
 
-        aUserData.emplace_back( sUNO_View_VisibleAreaTop, makeAny( static_cast<sal_Int32>(aVisArea.Top()) ) );
-        aUserData.emplace_back( sUNO_View_VisibleAreaLeft, makeAny( static_cast<sal_Int32>(aVisArea.Left()) ) );
-        aUserData.emplace_back( sUNO_View_VisibleAreaWidth, makeAny( static_cast<sal_Int32>(aVisArea.GetWidth()) ) );
-        aUserData.emplace_back( sUNO_View_VisibleAreaHeight, makeAny( static_cast<sal_Int32>(aVisArea.GetHeight()) ) );
+        aUserData.emplace_back( sUNO_View_VisibleAreaTop, Any( static_cast<sal_Int32>(aVisArea.Top()) ) );
+        aUserData.emplace_back( sUNO_View_VisibleAreaLeft, Any( static_cast<sal_Int32>(aVisArea.Left()) ) );
+        aUserData.emplace_back( sUNO_View_VisibleAreaWidth, Any( static_cast<sal_Int32>(aVisArea.GetWidth()) ) );
+        aUserData.emplace_back( sUNO_View_VisibleAreaHeight, Any( static_cast<sal_Int32>(aVisArea.GetHeight()) ) );
     }
 
-    aUserData.emplace_back( sUNO_View_GridCoarseWidth, makeAny( static_cast<sal_Int32>(GetGridCoarse().Width()) ) );
-    aUserData.emplace_back( sUNO_View_GridCoarseHeight, makeAny( static_cast<sal_Int32>(GetGridCoarse().Height()) ) );
-    aUserData.emplace_back( sUNO_View_GridFineWidth, makeAny( static_cast<sal_Int32>(GetGridFine().Width()) ) );
-    aUserData.emplace_back( sUNO_View_GridFineHeight, makeAny( static_cast<sal_Int32>(GetGridFine().Height()) ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthXNumerator, makeAny( GetSnapGridWidthX().GetNumerator() ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthXDenominator, makeAny( GetSnapGridWidthX().GetDenominator() ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthYNumerator, makeAny( GetSnapGridWidthY().GetNumerator() ) );
-    aUserData.emplace_back( sUNO_View_GridSnapWidthYDenominator, makeAny( GetSnapGridWidthY().GetDenominator() ) );
-    aUserData.emplace_back( sUNO_View_IsAngleSnapEnabled, makeAny( IsAngleSnapEnabled() ) );
-    aUserData.emplace_back( sUNO_View_SnapAngle, makeAny( static_cast<sal_Int32>(GetSnapAngle()) ) );
+    aUserData.emplace_back( sUNO_View_GridCoarseWidth, Any( static_cast<sal_Int32>(GetGridCoarse().Width()) ) );
+    aUserData.emplace_back( sUNO_View_GridCoarseHeight, Any( static_cast<sal_Int32>(GetGridCoarse().Height()) ) );
+    aUserData.emplace_back( sUNO_View_GridFineWidth, Any( static_cast<sal_Int32>(GetGridFine().Width()) ) );
+    aUserData.emplace_back( sUNO_View_GridFineHeight, Any( static_cast<sal_Int32>(GetGridFine().Height()) ) );
+    aUserData.emplace_back( sUNO_View_GridSnapWidthXNumerator, Any( GetSnapGridWidthX().GetNumerator() ) );
+    aUserData.emplace_back( sUNO_View_GridSnapWidthXDenominator, Any( GetSnapGridWidthX().GetDenominator() ) );
+    aUserData.emplace_back( sUNO_View_GridSnapWidthYNumerator, Any( GetSnapGridWidthY().GetNumerator() ) );
+    aUserData.emplace_back( sUNO_View_GridSnapWidthYDenominator, Any( GetSnapGridWidthY().GetDenominator() ) );
+    aUserData.emplace_back( sUNO_View_IsAngleSnapEnabled, Any( IsAngleSnapEnabled() ) );
+    aUserData.emplace_back( sUNO_View_SnapAngle, Any( static_cast<sal_Int32>(GetSnapAngle()) ) );
 
     const sal_Int32 nOldLength = rValues.getLength();
     rValues.realloc( nOldLength + aUserData.size() );

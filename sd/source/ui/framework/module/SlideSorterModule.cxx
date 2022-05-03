@@ -68,11 +68,11 @@ SlideSorterModule::SlideSorterModule (
             mxConfigurationController->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msResourceActivationRequestEvent,
-                makeAny(ResourceActivationRequestEvent));
+                Any(ResourceActivationRequestEvent));
             mxConfigurationController->addConfigurationChangeListener(
                 this,
                 FrameworkHelper::msResourceDeactivationRequestEvent,
-                makeAny(ResourceDeactivationRequestEvent));
+                Any(ResourceDeactivationRequestEvent));
         }
     }
     if (!mxConfigurationController.is())

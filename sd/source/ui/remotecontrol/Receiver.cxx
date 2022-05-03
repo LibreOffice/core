@@ -134,7 +134,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             try
             {
                 // std::cerr << "pointer_coordination in the is" << std::endl;
-                xSlideShow->setProperty(beans::PropertyValue("PointerPosition", -1, makeAny(pos),
+                xSlideShow->setProperty(beans::PropertyValue("PointerPosition", -1, Any(pos),
                                                              beans::PropertyState_DIRECT_VALUE));
             }
             catch (Exception&)
@@ -144,7 +144,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
 
             try
             {
-                xSlideShow->setProperty(beans::PropertyValue("PointerVisible", -1, makeAny(true),
+                xSlideShow->setProperty(beans::PropertyValue("PointerVisible", -1, Any(true),
                                                              beans::PropertyState_DIRECT_VALUE));
             }
             catch (Exception&)
@@ -163,7 +163,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             xSlideShow->setProperty(
                         beans::PropertyValue( "PointerVisible" ,
                             -1,
-                            makeAny( false ),
+                            Any( false ),
                             beans::PropertyState_DIRECT_VALUE ) );
         }
         catch ( Exception& )
@@ -187,7 +187,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
             xSlideShow->setProperty(
                         beans::PropertyValue( "PointerPosition" ,
                             -1,
-                            makeAny( pos ),
+                            Any( pos ),
                             beans::PropertyState_DIRECT_VALUE ) );
         }
         catch ( Exception& )
