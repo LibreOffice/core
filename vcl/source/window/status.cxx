@@ -1138,10 +1138,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     tools::Long nWidth;
     if (nCharsWidth != -1)
     {
-        std::unique_ptr<SalLayout> pSalLayout = GetOutDev()->ImplLayout("0",0,-1);
-        const SalLayoutGlyphs glyphs = pSalLayout ? pSalLayout->GetGlyphs() : SalLayoutGlyphs();
-        nWidth = GetTextWidth("0",0,-1,nullptr,pSalLayout ? &glyphs : nullptr);
-        nWidth = nWidth * nCharsWidth + nFudge;
+        nWidth = GetTextWidth("0") * nCharsWidth + nFudge;
     }
     else
     {
