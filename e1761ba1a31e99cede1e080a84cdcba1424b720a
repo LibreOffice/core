@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90f4e9ad_9f891231",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-03T11:44:37Z",
+      "side": 1,
+      "message": "This works internally meaning when you switch from one tab to the other but does always sort the first column. Row sorting works as expected. I\u0027m starring at the code but don\u0027t find the issue. Do you?",
+      "revId": "e1761ba1a31e99cede1e080a84cdcba1424b720a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
