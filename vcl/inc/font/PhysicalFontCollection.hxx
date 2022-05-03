@@ -59,7 +59,7 @@ public:
     vcl::font::PhysicalFontFamily* FindFontFamily( std::u16string_view rFontName ) const;
     vcl::font::PhysicalFontFamily* FindOrCreateFontFamily( const OUString &rFamilyName );
     vcl::font::PhysicalFontFamily* FindFontFamily( vcl::font::FontSelectPattern& ) const;
-    vcl::font::PhysicalFontFamily* FindFontFamilyByTokenNames(const OUString& rTokenStr) const;
+    vcl::font::PhysicalFontFamily* FindFontFamilyByTokenNames(std::u16string_view rTokenStr) const;
     vcl::font::PhysicalFontFamily* FindFontFamilyByAttributes(ImplFontAttrs nSearchType, FontWeight, FontWidth,
                                              FontItalic, const OUString& rSearchFamily) const;
 

@@ -103,7 +103,7 @@ public:
 
 namespace {
 
-uno::Sequence< OUString> GetPropertyNames(const OUString& rScheme)
+uno::Sequence< OUString> GetPropertyNames(std::u16string_view rScheme)
 {
     struct ColorConfigEntryData_Impl
     {

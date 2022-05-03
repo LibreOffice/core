@@ -232,10 +232,10 @@ OUString dropPrefixFromConfigurationPath(OUString const& _sNestedPath,
 }
 
 static
-OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
+OUString lcl_wrapName(std::u16string_view _sContent, const OUString& _sType)
 {
-    const sal_Unicode * const pBeginContent = _sContent.getStr();
-    const sal_Unicode * const pEndContent   = pBeginContent + _sContent.getLength();
+    const sal_Unicode * const pBeginContent = _sContent.data();
+    const sal_Unicode * const pEndContent   = pBeginContent + _sContent.size();
 
     OSL_PRECOND(!_sType.isEmpty(), "Unexpected config type name: empty");
     OSL_PRECOND(pBeginContent <= pEndContent, "Invalid config name: empty");
@@ -243,7 +243,7 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     if (pBeginContent == pEndContent)
         return _sType;
 
-    OUStringBuffer aNormalized(_sType.getLength() + _sContent.getLength() + 4); // reserve approximate size initially
+    OUStringBuffer aNormalized(_sType.getLength() + _sContent.size() + 4); // reserve approximate size initially
 
     // prefix: type, opening bracket and quote
     aNormalized.append( _sType + "['" );
@@ -268,12 +268,12 @@ OUString lcl_wrapName(const OUString& _sContent, const OUString& _sType)
     return aNormalized.makeStringAndClear();
 }
 
-OUString wrapConfigurationElementName(OUString const& _sElementName)
+OUString wrapConfigurationElementName(std::u16string_view _sElementName)
 {
     return lcl_wrapName(_sElementName, "*" );
 }
 
-OUString wrapConfigurationElementName(OUString const& _sElementName,
+OUString wrapConfigurationElementName(std::u16string_view _sElementName,
                                       OUString const& _sTypeName)
 {
     // todo: check that _sTypeName is valid

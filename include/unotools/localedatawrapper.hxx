@@ -101,7 +101,7 @@ class UNOTOOLS_DLLPUBLIC LocaleDataWrapper
 
     void                loadCurrencyFormats();
 
-    void                scanCurrFormatImpl( const OUString& rCode,
+    void                scanCurrFormatImpl( std::u16string_view rCode,
                             sal_Int32 nStart, sal_Int32& nSign,
                             sal_Int32& nPar, sal_Int32& nNum,
                             sal_Int32& nBlank, sal_Int32& nSym ) const;

@@ -313,7 +313,7 @@ namespace myImplHelpers
         return pColl ? nullptr : maHelper.MakeStyle(aName);
     }
 
-    static OUString FindBestMSSubstituteFont(const OUString &rFont)
+    static OUString FindBestMSSubstituteFont(std::u16string_view rFont)
     {
         if (IsStarSymbol(rFont))
             return "Arial Unicode MS";
@@ -482,7 +482,7 @@ namespace sw
             return mpImpl->GetStyle(rName, eSti);
         }
 
-        FontMapExport::FontMapExport(const OUString &rFamilyName)
+        FontMapExport::FontMapExport(std::u16string_view rFamilyName)
         {
             sal_Int32 nIndex = 0;
             msPrimary = GetNextFontToken(rFamilyName, nIndex);
