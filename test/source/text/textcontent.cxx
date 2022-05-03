@@ -32,7 +32,7 @@ void TextContent::testTextContentProperties()
 
     try
     {
-        xPS->setPropertyValue("AnchorType", uno::makeAny(m_aNewTCAT));
+        xPS->setPropertyValue("AnchorType", uno::Any(m_aNewTCAT));
         text::TextContentAnchorType aNewTCAT;
         CPPUNIT_ASSERT(xPS->getPropertyValue("AnchorType") >>= aNewTCAT);
         CPPUNIT_ASSERT_EQUAL(m_aNewTCAT, aNewTCAT);
@@ -52,7 +52,7 @@ void TextContent::testTextContentProperties()
 
     try
     {
-        xPS->setPropertyValue("TextWrap", uno::makeAny(m_aNewWTM));
+        xPS->setPropertyValue("TextWrap", uno::Any(m_aNewWTM));
         text::WrapTextMode aNewWTM;
         CPPUNIT_ASSERT(xPS->getPropertyValue("TextWrap") >>= aNewWTM);
         CPPUNIT_ASSERT_EQUAL(m_aNewWTM, aNewWTM);

@@ -46,7 +46,7 @@ uno::Reference<drawing::XControlShape> OOO_DLLPUBLIC_TEST createControlShape(
         uno::UNO_SET_THROW);
     uno::Reference<beans::XPropertySet> xPropertySet(aComponent, uno::UNO_QUERY_THROW);
     xPropertySet->setPropertyValue(
-        "DefaultControl", uno::makeAny(OUString::Concat("com.sun.star.form.control.") + r_aKind));
+        "DefaultControl", uno::Any(OUString::Concat("com.sun.star.form.control.") + r_aKind));
     uno::Reference<awt::XControlModel> xControlModel(aComponent, uno::UNO_QUERY_THROW);
 
     xControlShape->setSize(awt::Size(nHeight, nWidth));

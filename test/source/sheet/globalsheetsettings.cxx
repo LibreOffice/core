@@ -38,7 +38,7 @@ void GlobalSheetSettings::testGlobalSheetSettingsProperties()
         css::uno::Any aOrigValue(origValue), aNewValue(newValue);
 
         css::uno::Sequence<css::uno::Any> args{ css::uno::Any(
-            css::beans::NamedValue("nodepath", css::uno::makeAny(regNodeName))) };
+            css::beans::NamedValue("nodepath", css::uno::Any(regNodeName))) };
         css::uno::Reference<beans::XPropertySet> xRegNodeRO(
             configProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationAccess", args),
