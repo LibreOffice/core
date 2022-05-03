@@ -22,6 +22,7 @@
 #include <expfld.hxx>
 #include <swmodule.hxx>
 #include "fldref.hxx"
+#include <frmatr.hxx>
 #include <reffld.hxx>
 #include <wrtsh.hxx>
 
@@ -34,8 +35,10 @@
 #include <osl/diagnose.h>
 
 #include <comphelper/string.hxx>
+#include <editeng/frmdiritem.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/settings.hxx>
 
 #define REFFLDFLAG          0x4000
 #define REFFLDFLAG_BOOKMARK 0x4800
@@ -196,6 +199,15 @@ void SwFieldRefPage::Reset(const SfxItemSet* )
 
     if (!pSh)
         return;
+
+    // tdf#148432 in LTR UI override the navigator treeview direction based on
+    // the first page directionality
+    if (!AllSettings::GetLayoutRTL())
+    {
+        const SwPageDesc& rDesc = pSh->GetPageDesc(0);
+        const SvxFrameDirectionItem& rFrameDir = rDesc.GetMaster().GetFrameDir();
+        m_xSelectionToolTipLB->set_direction(rFrameDir.GetValue() == SvxFrameDirection::Horizontal_RL_TB);
+    }
 
     const size_t nFieldTypeCnt = pSh->GetFieldTypeCount(SwFieldIds::SetExp);
 
