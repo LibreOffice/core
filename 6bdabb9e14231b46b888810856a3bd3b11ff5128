@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82357e0c_43750f69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-03T07:59:53Z",
+      "side": 1,
+      "message": "This patch makes the scrollwindow tiny for kf5 and gen. Gtk3 expands properly.",
+      "revId": "6bdabb9e14231b46b888810856a3bd3b11ff5128",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
