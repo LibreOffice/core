@@ -18,6 +18,7 @@
  */
 
 #include <string.h>
+#include <o3tl/string_view.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/macros.h>
 
@@ -201,11 +202,11 @@ namespace vcl_sal {
     };
 
     // translate keycodes, used within the displayed menu shortcuts
-    OUString getKeysReplacementName( OUString const & pLang, LONG nSymbol )
+    OUString getKeysReplacementName( std::u16string_view pLang, LONG nSymbol )
     {
         for( unsigned int n = 0; n < SAL_N_ELEMENTS(aKeyboards); n++ )
         {
-            if( pLang.equalsAscii( aKeyboards[n].pLangName ) )
+            if( o3tl::equalsAscii( pLang, aKeyboards[n].pLangName ) )
             {
                 const struct KeysNameReplacement* pRepl = aKeyboards[n].pReplacements;
                 for( int m = aKeyboards[n].nReplacements ; m ; )
