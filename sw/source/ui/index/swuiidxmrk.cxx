@@ -39,6 +39,7 @@
 #include <editeng/langitem.hxx>
 #include <osl/diagnose.h>
 #include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 #include <swtypes.hxx>
 #include <toxmgr.hxx>
 #include <txttxmrk.hxx>
@@ -94,7 +95,8 @@ bool SplitUrlAndPage(const OUString& rText, OUString& rUrl, int& nPageNumber)
         return false;
     }
 
-    nPageNumber = o3tl::toInt32(xUriRef->getFragment().subView(aPagePrefix.getLength()));
+    nPageNumber = o3tl::toInt32(
+        o3tl::temporary(xUriRef->getFragment()).subView(aPagePrefix.getLength()));
     xUriRef->clearFragment();
     rUrl = xUriRef->getUriReference();
     return true;

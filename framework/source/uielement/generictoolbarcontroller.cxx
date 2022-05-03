@@ -27,6 +27,7 @@
 #include <com/sun/star/frame/ControlCommand.hpp>
 
 #include <comphelper/propertyvalue.hxx>
+#include <o3tl/temporary.hxx>
 #include <vcl/commandinfoprovider.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>
@@ -74,7 +75,7 @@ static OUString getMasterCommand( const OUString& rCommand )
         sal_Int32 nIndex = aURL.GetURLPath().indexOf( '.' );
         if ( nIndex )
         {
-            aURL.SetURLPath( aURL.GetURLPath().subView( 0, nIndex ) );
+            aURL.SetURLPath( o3tl::temporary(aURL.GetURLPath()).subView( 0, nIndex ) );
             aMasterCommand = aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE );
         }
     }

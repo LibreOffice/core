@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <o3tl/temporary.hxx>
 #include <tools/urlobj.hxx>
 #include <sfx2/dialoghelper.hxx>
 #include <svx/colorbox.hxx>
@@ -155,7 +156,7 @@ void SvxPatternTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if( aURL.getBase().getLength() > 18 )
     {
-        aString += OUString::Concat(aURL.getBase().subView( 0, 15 )) + "...";
+        aString += OUString::Concat(o3tl::temporary(aURL.getBase()).subView( 0, 15 )) + "...";
     }
     else
         aString += aURL.getBase();

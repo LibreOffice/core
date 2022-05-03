@@ -2195,6 +2195,7 @@ public:
         assert(beginIndex <= getLength());
         return subView(beginIndex, getLength() - beginIndex);
     }
+    std::u16string_view subView(sal_Int32) const && = delete;
 
     /**
       Returns a std::u16string_view that is a view of a substring of this string.
@@ -2216,6 +2217,7 @@ public:
         assert(count <= getLength() - beginIndex);
         return std::u16string_view(*this).substr(beginIndex, count);
     }
+    std::u16string_view subView(sal_Int32, sal_Int32) const && = delete;
 #endif
 
 #ifndef LIBO_INTERNAL_ONLY // "RTL_FAST_STRING"

@@ -18,6 +18,7 @@
  */
 
 #include <memory>
+#include <o3tl/temporary.hxx>
 #include <tools/urlobj.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
@@ -157,7 +158,7 @@ void SvxGradientTabPage::ActivatePage( const SfxItemSet& rSet )
 
     if ( aURL.getBase().getLength() > 18 )
     {
-        aString += OUString::Concat(aURL.getBase().subView( 0, 15 )) + "...";
+        aString += OUString::Concat(o3tl::temporary(aURL.getBase()).subView( 0, 15 )) + "...";
     }
     else
         aString += aURL.getBase();

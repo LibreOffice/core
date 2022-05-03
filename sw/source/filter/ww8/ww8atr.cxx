@@ -27,6 +27,7 @@
 #include <hintids.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>
@@ -3254,11 +3255,11 @@ void AttributeOutputBase::TextField( const SwFormatField& rField )
             + "\\o (\\s\\up "
             + OUString::number(nHeight/2)
             + "("
-            + pField->GetPar1().subView(0, nAbove)
+            + o3tl::temporary(pField->GetPar1()).subView(0, nAbove)
             + "), \\s\\do "
             + OUString::number(nHeight/5)
             + "("
-            + pField->GetPar1().subView(nAbove)
+            + o3tl::temporary(pField->GetPar1()).subView(nAbove)
             + "))";
         GetExport().OutputField(pField, ww::eEQ, sStr);
         }

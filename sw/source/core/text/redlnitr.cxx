@@ -23,6 +23,7 @@
 
 #include <hintids.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/temporary.hxx>
 #include <svl/whiter.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <scriptinfo.hxx>
@@ -1021,7 +1022,7 @@ bool SwRedlineItr::CheckLine(
                             // TODO: remove extra space from GetDescr(true),
                             // but show deletion of paragraph or line break
                             rRedlineText = rRedlineText +
-                                    const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true).subView(1);
+                                    o3tl::temporary(const_cast<SwRangeRedline*>(pRedline)->GetDescr(/*bSimplified=*/true)).subView(1);
                         }
                         else
                             rRedlineText = OUString::Concat(rRedlineText.subView(0, rRedlineText.getLength() - 3)) + "...";

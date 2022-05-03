@@ -45,6 +45,7 @@
 #include <sal/types.h>
 #include <unoidl/unoidl.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 
 #include "classfile.hxx"
 #include "javaoptions.hxx"
@@ -1796,7 +1797,7 @@ void handleExceptionType(
         addExceptionBaseArguments(
             manager, dependencies, &desc2, code.get(), entity->getDirectBase(),
             &index3);
-        code->instrInvokespecial(superClass, "<init>", OString::Concat("(Ljava/lang/Throwable;") + desc2.getDescriptor().subView(1));
+        code->instrInvokespecial(superClass, "<init>", OString::Concat("(Ljava/lang/Throwable;") + o3tl::temporary(desc2.getDescriptor()).subView(1));
     }
     sal_uInt16 maxSize2 = index3;
     if (baseRuntimeException) {
@@ -1822,7 +1823,7 @@ void handleExceptionType(
     code->instrReturn();
     code->setMaxStackAndLocals(maxSize2, index3);
     cf->addMethod(
-        ClassFile::ACC_PUBLIC, "<init>", OString::Concat("(Ljava/lang/Throwable;") + desc2.getDescriptor().subView(1), code.get(),
+        ClassFile::ACC_PUBLIC, "<init>", OString::Concat("(Ljava/lang/Throwable;") + o3tl::temporary(desc2.getDescriptor()).subView(1), code.get(),
         std::vector< OString >(), desc2.getSignature());
 
     addTypeInfo(className, typeInfo, dependencies, cf.get());

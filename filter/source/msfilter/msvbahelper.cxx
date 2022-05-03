@@ -39,6 +39,7 @@
 #include <rtl/character.hxx>
 #include <sfx2/objsh.hxx>
 #include <o3tl/string_view.hxx>
+#include <o3tl/temporary.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
@@ -147,10 +148,10 @@ static SfxObjectShell* findShellForUrl( const OUString& sMacroURLOrPath )
                     sal_Int32 lastSlashIndex = xModel->getURL().lastIndexOf( '/' );
                     if ( lastSlashIndex > -1 )
                     {
-                        bDocNameNoPathMatch = xModel->getURL().subView( lastSlashIndex + 1 ) == aURL;
+                        bDocNameNoPathMatch = o3tl::temporary(xModel->getURL()).subView( lastSlashIndex + 1 ) == aURL;
                         if ( !bDocNameNoPathMatch )
                         {
-                            OUString aTmpName = OUString::Concat("'") + xModel->getURL().subView( lastSlashIndex + 1 ) + "'";
+                            OUString aTmpName = OUString::Concat("'") + o3tl::temporary(xModel->getURL()).subView( lastSlashIndex + 1 ) + "'";
                             bDocNameNoPathMatch = aTmpName == aURL;
                         }
                     }
