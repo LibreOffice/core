@@ -32,7 +32,7 @@ lcl_createAPIStyleToVBAObject( const css::uno::Any& aObject, const uno::Referenc
 {
     uno::Reference< beans::XPropertySet > xStyleProps( aObject, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XStyle > xStyle( new ScVbaStyle( xParent, xContext, xStyleProps, xModel ) );
-    return uno::makeAny( xStyle );
+    return uno::Any( xStyle );
 }
 
 ScVbaStyles::ScVbaStyles( const uno::Reference< XHelperInterface >& xParent,
@@ -151,13 +151,13 @@ ScVbaStyles::Add( const OUString& _sName, const uno::Any& _aBasedOn )
 
         if (!mxNameContainerCellStyles->hasByName(_sName))
         {
-            mxNameContainerCellStyles->insertByName(_sName, uno::makeAny( xStyle) );
+            mxNameContainerCellStyles->insertByName(_sName, uno::Any( xStyle) );
         }
         if (sParentCellStyleName != "Default")
         {
             xStyle->setParentStyle( sParentCellStyleName );
         }
-        aRet.set( Item( uno::makeAny( _sName ), uno::Any() ), uno::UNO_QUERY_THROW );
+        aRet.set( Item( uno::Any( _sName ), uno::Any() ), uno::UNO_QUERY_THROW );
     }
     catch (const uno::Exception&)
     {

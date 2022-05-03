@@ -114,7 +114,7 @@ ScVbaChartObject::Activate()
         // the XModel owner
         //uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getXModel().getCurrentController());
         uno::Reference< view::XSelectionSupplier > xSelectionSupplier( getCurrentExcelDoc(mxContext)->getCurrentController(), uno::UNO_QUERY_THROW );
-        xSelectionSupplier->select(uno::makeAny(xShape));
+        xSelectionSupplier->select(uno::Any(xShape));
     }
     catch (uno::Exception& )
     {

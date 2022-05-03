@@ -34,7 +34,7 @@ static uno::Any AnnotationToComment( const uno::Any& aSource, const uno::Referen
     uno::Reference< table::XCellRange > xCellRange( xChild->getParent(), uno::UNO_QUERY_THROW );
 
     // #FIXME needs to find the correct Parent
-    return uno::makeAny( uno::Reference< excel::XComment > (
+    return uno::Any( uno::Reference< excel::XComment > (
         new ScVbaComment( uno::Reference< XHelperInterface >(), xContext, xModel, xCellRange ) ) );
 }
 

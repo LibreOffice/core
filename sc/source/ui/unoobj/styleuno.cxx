@@ -485,7 +485,7 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByIndex( sal_Int32 nIndex )
     if (!xFamily.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xFamily);
+    return uno::Any(xFamily);
 }
 
 uno::Type SAL_CALL ScStyleFamiliesObj::getElementType()
@@ -509,7 +509,7 @@ uno::Any SAL_CALL ScStyleFamiliesObj::getByName( const OUString& aName )
     if (!xFamily.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xFamily);
+    return uno::Any(xFamily);
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamiliesObj::getElementNames()
@@ -801,7 +801,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByIndex( sal_Int32 nIndex )
     if (!xObj.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xObj);
+    return uno::Any(xObj);
 }
 
 uno::Type SAL_CALL ScStyleFamilyObj::getElementType()
@@ -826,7 +826,7 @@ uno::Any SAL_CALL ScStyleFamilyObj::getByName( const OUString& aName )
     if (!xObj.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xObj);
+    return uno::Any(xObj);
 }
 
 uno::Sequence<OUString> SAL_CALL ScStyleFamilyObj::getElementNames()

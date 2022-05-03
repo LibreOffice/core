@@ -38,7 +38,7 @@ public:
         if( !hasMoreElements() )
             throw container::NoSuchElementException();
         OUString sPath = *mIt++;
-        return uno::makeAny( sPath );
+        return uno::Any( sPath );
     }
 };
 
@@ -75,7 +75,7 @@ ScVbaFileDialogSelectedItems::createCollectionObject( const uno::Any& aSource )
         throw uno::RuntimeException("out of range");
 
     OUString sPath = m_sItems[nPosition];
-    return uno::makeAny( sPath );
+    return uno::Any( sPath );
 }
 
 // Methods
@@ -92,7 +92,7 @@ ScVbaFileDialogSelectedItems::Item( const uno::Any& aIndex, const uno::Any& /*aI
         throw uno::RuntimeException();
     }
 
-    return createCollectionObject( uno::makeAny( nPosition ) );
+    return createCollectionObject( uno::Any( nPosition ) );
 }
 
 sal_Int32 ScVbaFileDialogSelectedItems::getCount()

@@ -202,7 +202,7 @@ void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
         rXMLImport.GetDoc().setRowsVisible(nSheet, nFirstRow, nCurrentRow, false);
     }
     if (bFiltered)
-        xRowProperties->setPropertyValue(SC_ISFILTERED, uno::makeAny(bFiltered));
+        xRowProperties->setPropertyValue(SC_ISFILTERED, uno::Any(bFiltered));
 
     uno::Any any = xRowProperties->getPropertyValue(SC_UNONAME_OHEIGHT);
     bool bOptionalHeight = false;

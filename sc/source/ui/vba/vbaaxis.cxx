@@ -122,7 +122,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses )
         switch (_nCrosses)
         {
             case  xlAxisCrossesAutomatic:       //Microsoft Excel sets the axis crossing point.
-                mxPropertySet->setPropertyValue(AUTOORIGIN, uno::makeAny( true ) );
+                mxPropertySet->setPropertyValue(AUTOORIGIN, uno::Any( true ) );
                 bCrossesAreCustomized = false;
                 return;
             case xlAxisCrossesMinimum:                     // The axis crosses at the minimum value.
@@ -139,7 +139,7 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses )
                 bCrossesAreCustomized = true;
                 break;
         }
-        mxPropertySet->setPropertyValue(AUTOORIGIN, uno::makeAny(false) );
+        mxPropertySet->setPropertyValue(AUTOORIGIN, uno::Any(false) );
     }
     catch (const uno::Exception&)
     {
@@ -187,7 +187,7 @@ ScVbaAxis::setCrossesAt( double _fCrossesAt )
     {
         setMaximumScaleIsAuto( false );
         setMinimumScaleIsAuto( false );
-        mxPropertySet->setPropertyValue(ORIGIN, uno::makeAny(_fCrossesAt));
+        mxPropertySet->setPropertyValue(ORIGIN, uno::Any(_fCrossesAt));
     }
     catch (const uno::Exception& e)
     {
@@ -232,13 +232,13 @@ ScVbaAxis::setHasTitle( sal_Bool _bHasTitle )
         switch(nType)
         {
             case xlCategory:
-                pChart->mxDiagramPropertySet->setPropertyValue("HasXAxisTitle", uno::makeAny(_bHasTitle));
+                pChart->mxDiagramPropertySet->setPropertyValue("HasXAxisTitle", uno::Any(_bHasTitle));
                 break;
             case xlSeriesAxis:
-                pChart->mxDiagramPropertySet->setPropertyValue("HasZAxisTitle", uno::makeAny(_bHasTitle));
+                pChart->mxDiagramPropertySet->setPropertyValue("HasZAxisTitle", uno::Any(_bHasTitle));
                 break;
             default: // xlValue:
-                pChart->mxDiagramPropertySet->setPropertyValue("HasYAxisTitle", uno::makeAny(_bHasTitle));
+                pChart->mxDiagramPropertySet->setPropertyValue("HasYAxisTitle", uno::Any(_bHasTitle));
         }
 
     }
@@ -281,7 +281,7 @@ ScVbaAxis::setMinorUnit( double _fMinorUnit )
     try
     {
         if (isValueAxis())
-            mxPropertySet->setPropertyValue("StepHelp", uno::makeAny(_fMinorUnit));
+            mxPropertySet->setPropertyValue("StepHelp", uno::Any(_fMinorUnit));
     }
     catch (uno::Exception& )
     {
@@ -311,7 +311,7 @@ ScVbaAxis::setMinorUnitIsAuto( sal_Bool _bMinorUnitIsAuto )
     try
     {
         if (isValueAxis())
-            mxPropertySet->setPropertyValue("AutoStepHelp", uno::makeAny(_bMinorUnitIsAuto));
+            mxPropertySet->setPropertyValue("AutoStepHelp", uno::Any(_bMinorUnitIsAuto));
     }
     catch (uno::Exception& )
     {
@@ -357,7 +357,7 @@ ScVbaAxis::setMajorUnit( double _fMajorUnit )
     {
         if (isValueAxis())
         {
-            mxPropertySet->setPropertyValue("StepMain", uno::makeAny(_fMajorUnit));
+            mxPropertySet->setPropertyValue("StepMain", uno::Any(_fMajorUnit));
         }
     }
     catch (const uno::Exception&)
@@ -389,7 +389,7 @@ ScVbaAxis::setMajorUnitIsAuto( sal_Bool _bMajorUnitIsAuto )
     {
         if (isValueAxis())
         {
-            mxPropertySet->setPropertyValue("AutoStepMain", uno::makeAny( _bMajorUnitIsAuto ));
+            mxPropertySet->setPropertyValue("AutoStepMain", uno::Any( _bMajorUnitIsAuto ));
         }
     }
     catch (const uno::Exception&)
@@ -423,7 +423,7 @@ ScVbaAxis::setMaximumScale( double _fMaximumScale )
     {
         if ( isValueAxis() )
         {
-            mxPropertySet->setPropertyValue("Max", uno::makeAny(_fMaximumScale));
+            mxPropertySet->setPropertyValue("Max", uno::Any(_fMaximumScale));
         }
     }
     catch (const uno::Exception&)
@@ -457,7 +457,7 @@ ScVbaAxis::setMaximumScaleIsAuto( sal_Bool _bMaximumScaleIsAuto )
     try
     {
         if ( isValueAxis() )
-            mxPropertySet->setPropertyValue("AutoMax", uno::makeAny( _bMaximumScaleIsAuto ));
+            mxPropertySet->setPropertyValue("AutoMax", uno::Any( _bMaximumScaleIsAuto ));
 
     }
     catch (const uno::Exception&)
@@ -488,7 +488,7 @@ ScVbaAxis::setMinimumScale( double _fMinimumScale )
     try
     {
         if (isValueAxis())
-            mxPropertySet->setPropertyValue("Min", uno::makeAny( _fMinimumScale )  );
+            mxPropertySet->setPropertyValue("Min", uno::Any( _fMinimumScale )  );
     }
     catch ( uno::Exception& )
     {
@@ -519,7 +519,7 @@ ScVbaAxis::setMinimumScaleIsAuto( sal_Bool _bMinimumScaleIsAuto )
     {
         if (isValueAxis())
         {
-            mxPropertySet->setPropertyValue("AutoMin", uno::makeAny(_bMinimumScaleIsAuto));
+            mxPropertySet->setPropertyValue("AutoMin", uno::Any(_bMinimumScaleIsAuto));
         }
     }
     catch (const uno::Exception&)
@@ -562,10 +562,10 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType )
             switch (_nScaleType)
             {
                 case xlScaleLinear:
-                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( false ) );
+                    mxPropertySet->setPropertyValue("Logarithmic", uno::Any( false ) );
                     break;
                 case xlScaleLogarithmic:
-                    mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( true ) );
+                    mxPropertySet->setPropertyValue("Logarithmic", uno::Any( true ) );
                     break;
                 default:
                     // According to MS the parameter is ignored and no Error is thrown

@@ -85,7 +85,7 @@ css::uno::Sequence< OUString >                                                  
 
 #define SC_QUERYINTERFACE(x)    \
     if (rType == cppu::UnoType<x>::get())  \
-    { return uno::makeAny(uno::Reference<x>(this)); }
+    { return uno::Any(uno::Reference<x>(this)); }
 
 // SC_QUERY_MULTIPLE( XElementAccess, XIndexAccess ):
 //  use if interface is used several times in one class

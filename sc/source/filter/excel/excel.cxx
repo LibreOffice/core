@@ -131,7 +131,7 @@ static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const t
 
         // Set the media descriptor data
         uno::Sequence<beans::NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
-        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::makeAny(aEncryptionData)));
+        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {
@@ -266,7 +266,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         {
             uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
             uno::Sequence<uno::Any> aArguments{
-                uno::makeAny(beans::NamedValue("Binary", uno::makeAny(true))) };
+                uno::Any(beans::NamedValue("Binary", uno::Any(true))) };
             xPackageEncryption.set(
                 xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), uno::UNO_QUERY);
@@ -389,7 +389,7 @@ static ErrCode lcl_ExportExcelBiff( SfxMedium& rMedium, ScDocument *pDocument,
         xEncryptedRootStrg->Commit();
 
         // Restore encryption data
-        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::makeAny(aEncryptionData)));
+        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, uno::Any(aEncryptionData)));
     }
 
     return eRet;
@@ -445,7 +445,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportXLS(SvStream& rStream)
     ScDLL::Init();
     SfxMedium aMedium;
     css::uno::Reference<css::io::XInputStream> xStm(new utl::OInputStreamWrapper(rStream));
-    aMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::makeAny(xStm)));
+    aMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_INPUTSTREAM, css::uno::Any(xStm)));
 
     ScDocShellRef xDocShell = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT |
                                              SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS |

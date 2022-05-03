@@ -4482,7 +4482,7 @@ uno::Any SAL_CALL ScCellRangesObj::getByIndex( sal_Int32 nIndex )
     if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 
 }
 
@@ -6039,7 +6039,7 @@ void SAL_CALL ScCellObj::insertTextContent( const uno::Reference<text::XTextRang
             }
 
             if (pCellField->GetFieldType() == text::textfield::Type::TABLE)
-                pCellField->setPropertyValue(SC_UNONAME_TABLEPOS, uno::makeAny<sal_Int32>(aCellPos.Tab()));
+                pCellField->setPropertyValue(SC_UNONAME_TABLEPOS, uno::Any(sal_Int32(aCellPos.Tab())));
 
             SvxFieldItem aItem = pCellField->CreateFieldItem();
             SvxTextForwarder* pForwarder = pEditSource->GetTextForwarder();
@@ -8779,7 +8779,7 @@ uno::Any SAL_CALL ScCellsEnumeration::nextElement()
 
         ScAddress aTempPos(aPos);
         Advance_Impl();
-        return uno::makeAny(uno::Reference<table::XCell>(new ScCellObj( pDocShell, aTempPos )));
+        return uno::Any(uno::Reference<table::XCell>(new ScCellObj( pDocShell, aTempPos )));
     }
 
     throw container::NoSuchElementException();      // no more elements
@@ -8877,7 +8877,7 @@ uno::Any SAL_CALL ScCellFormatsObj::getByIndex( sal_Int32 nIndex )
     if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 
 }
 
@@ -9004,7 +9004,7 @@ uno::Any SAL_CALL ScCellFormatsEnumeration::nextElement()
 
     // interface must match ScCellFormatsObj::getElementType
 
-    return uno::makeAny(uno::Reference<table::XCellRange> (NextObject_Impl()));
+    return uno::Any(uno::Reference<table::XCellRange> (NextObject_Impl()));
 }
 
 ScUniqueCellFormatsObj::~ScUniqueCellFormatsObj()
@@ -9230,7 +9230,7 @@ uno::Any SAL_CALL ScUniqueCellFormatsObj::getByIndex( sal_Int32 nIndex )
     if(o3tl::make_unsigned(nIndex) >= aRangeLists.size())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nIndex])));
+    return uno::Any(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nIndex])));
 
 }
 
@@ -9302,7 +9302,7 @@ uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement()
 
     // interface type must match ScCellFormatsObj::getElementType
 
-    return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nCurrentPosition++])));
+    return uno::Any(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nCurrentPosition++])));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

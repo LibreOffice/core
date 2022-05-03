@@ -697,7 +697,7 @@ void ScChildrenShapes::Select(sal_Int32 nIndex)
 
     try
     {
-        xSelectionSupplier->select(uno::makeAny(xShapes));
+        xSelectionSupplier->select(uno::Any(xShapes));
         maZOrderedShapes[nIndex]->bSelected = true;
         if (maZOrderedShapes[nIndex]->pAccShape.is())
             maZOrderedShapes[nIndex]->pAccShape->SetState(AccessibleStateType::SELECTED);
@@ -761,7 +761,7 @@ void ScChildrenShapes::SelectAll()
                     xShapes->add(pAccShapeData->xShape);
             }
         }
-        xSelectionSupplier->select(uno::makeAny(xShapes));
+        xSelectionSupplier->select(uno::Any(xShapes));
     }
     catch (lang::IllegalArgumentException&)
     {
@@ -856,7 +856,7 @@ void ScChildrenShapes::Deselect(sal_Int32 nChildIndex)
 
     try
     {
-        xSelectionSupplier->select(uno::makeAny(xShapes));
+        xSelectionSupplier->select(uno::Any(xShapes));
     }
     catch (lang::IllegalArgumentException&)
     {

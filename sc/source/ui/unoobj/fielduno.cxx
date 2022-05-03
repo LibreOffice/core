@@ -355,7 +355,7 @@ uno::Any SAL_CALL ScCellFieldsObj::getByIndex( sal_Int32 nIndex )
     if (!xField.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xField);
+    return uno::Any(xField);
 }
 
 uno::Type SAL_CALL ScCellFieldsObj::getElementType()
@@ -506,7 +506,7 @@ uno::Any SAL_CALL ScHeaderFieldsObj::getByIndex( sal_Int32 nIndex )
     if (!xField.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xField);
+    return uno::Any(xField);
 }
 
 uno::Type SAL_CALL ScHeaderFieldsObj::getElementType()
@@ -908,10 +908,10 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
             {
                 SvxDateField* p = static_cast<SvxDateField*>(pField);
                 if (rName == SC_UNONAME_ISDATE)
-                    return uno::makeAny(true);
+                    return uno::Any(true);
 
                 if (rName == SC_UNONAME_ISFIXED)
-                    return uno::makeAny<sal_Bool>(p->GetType() == SvxDateType::Fix);
+                    return uno::Any(p->GetType() == SvxDateType::Fix);
 
                 if (rName == SC_UNONAME_DATETIME)
                 {
@@ -923,39 +923,39 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
                     maDateTime.Minutes = 0;
                     maDateTime.Seconds = 0;
                     maDateTime.NanoSeconds = 0;
-                    return uno::makeAny(maDateTime);
+                    return uno::Any(maDateTime);
                 }
 
                 if (rName == SC_UNONAME_NUMFMT)
-                    return uno::makeAny<sal_Int32>(static_cast<sal_Int32>(p->GetFormat()));
+                    return uno::Any(static_cast<sal_Int32>(p->GetFormat()));
             }
             break;
             case text::textfield::Type::TIME:
             {
                 // SvxTimeField doesn't have any attributes.
                 if (rName == SC_UNONAME_ISDATE)
-                    return uno::makeAny(false);
+                    return uno::Any(false);
 
                 if (rName == SC_UNONAME_ISFIXED)
-                    return uno::makeAny(false);
+                    return uno::Any(false);
 
                 if (rName == SC_UNONAME_DATETIME)
                     // This is the best we can do.
-                    return uno::makeAny(maDateTime);
+                    return uno::Any(maDateTime);
 
                 if (rName == SC_UNONAME_NUMFMT)
                     // Same as above.
-                    return uno::makeAny<sal_Int32>(0);
+                    return uno::Any(sal_Int32(0));
             }
             break;
             case text::textfield::Type::EXTENDED_TIME:
             {
                 SvxExtTimeField* p = static_cast<SvxExtTimeField*>(pField);
                 if (rName == SC_UNONAME_ISDATE)
-                    return uno::makeAny(false);
+                    return uno::Any(false);
 
                 if (rName == SC_UNONAME_ISFIXED)
-                    return uno::makeAny<sal_Bool>(p->GetType() == SvxTimeType::Fix);
+                    return uno::Any(p->GetType() == SvxTimeType::Fix);
 
                 if (rName == SC_UNONAME_DATETIME)
                 {
@@ -967,11 +967,11 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
                     maDateTime.Minutes = aT.GetMin();
                     maDateTime.Seconds = aT.GetSec();
                     maDateTime.NanoSeconds = aT.GetNanoSec();
-                    return uno::makeAny(maDateTime);
+                    return uno::Any(maDateTime);
                 }
 
                 if (rName == SC_UNONAME_NUMFMT)
-                    return uno::makeAny<sal_Int32>(static_cast<sal_Int32>(p->GetFormat()));
+                    return uno::Any(static_cast<sal_Int32>(p->GetFormat()));
             }
             break;
             default:
@@ -981,16 +981,16 @@ uno::Any ScEditFieldObj::getPropertyValueDateTime(const OUString& rName)
     else
     {
         if (rName == SC_UNONAME_ISDATE)
-            return uno::makeAny<sal_Bool>(mbIsDate);
+            return uno::Any(mbIsDate);
 
         if (rName == SC_UNONAME_ISFIXED)
-            return uno::makeAny<sal_Bool>(mbIsFixed);
+            return uno::Any(mbIsFixed);
 
         if (rName == SC_UNONAME_DATETIME)
-            return uno::makeAny(maDateTime);
+            return uno::Any(maDateTime);
 
         if (rName == SC_UNONAME_NUMFMT)
-            return uno::makeAny(mnNumFormat);
+            return uno::Any(mnNumFormat);
     }
 
     throw beans::UnknownPropertyException(rName);
@@ -1218,10 +1218,10 @@ uno::Any SAL_CALL ScEditFieldObj::getPropertyValue( const OUString& aPropertyNam
 {
     SolarMutexGuard aGuard;
     if (aPropertyName == SC_UNONAME_TEXTFIELD_TYPE)
-        return uno::makeAny(meType);
+        return uno::Any(meType);
 
     if (aPropertyName == SC_UNONAME_ANCHOR)
-        return uno::makeAny(mpContent);
+        return uno::Any(mpContent);
 
     if (aPropertyName == SC_UNONAME_ANCTYPE)
     {

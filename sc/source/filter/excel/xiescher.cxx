@@ -129,10 +129,8 @@
 #include <utility>
 
 using namespace com::sun::star;
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::beans::XPropertySet;
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -500,7 +498,7 @@ SdrObjectUniquePtr XclImpDrawObjBase::CreateSdrObject( XclImpDffConverter& rDffC
                             const sal_Int16 nOCXControlType =  eCreateFromMSOCXControl;
                             xPropSet->setPropertyValue(sPropertyName, Any(nOCXControlType));
                             //Detail type(checkbox, button ...)
-                            xPropSet->setPropertyValue(sObjIdPropertyName, makeAny<sal_uInt16>(mnObjId));
+                            xPropSet->setPropertyValue(sObjIdPropertyName, Any(sal_uInt16(mnObjId)));
                         }
                         catch(const Exception&)
                         {
@@ -2123,7 +2121,7 @@ void XclImpTbxObjBase::ConvertLabel( ScfPropertySet& rPropSet ) const
         Reference< css::beans::XPropertySet > xPropset( mxShape, UNO_QUERY );
         try{
         if(xPropset.is())
-            xPropset->setPropertyValue( "Description", makeAny(aLabel) );
+            xPropset->setPropertyValue( "Description", Any(aLabel) );
         }catch( ... )
         {
             SAL_WARN("sc.filter", "Can't set a default text for TBX Control ");

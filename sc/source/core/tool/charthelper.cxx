@@ -403,9 +403,9 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument& rDoc, co
                             else
                             {
                                 xProps->setPropertyValue("DisableDataTableDialog",
-                                    uno::makeAny( false ) );
+                                    uno::Any( false ) );
                                 xProps->setPropertyValue("DisableComplexChartTypes",
-                                    uno::makeAny( false ) );
+                                    uno::Any( false ) );
                             }
                         }
                     }

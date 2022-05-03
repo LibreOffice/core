@@ -44,12 +44,12 @@ public:
         if( xCommandBarControl->getType() == office::MsoControlType::msoControlPopup )
         {
             uno::Reference< excel::XMenu > xMenu( new ScVbaMenu( m_xParent, m_xContext, xCommandBarControl ) );
-            return uno::makeAny( xMenu );
+            return uno::Any( xMenu );
         }
         else if( xCommandBarControl->getType() == office::MsoControlType::msoControlButton )
         {
             uno::Reference< excel::XMenuItem > xMenuItem( new ScVbaMenuItem( m_xParent, m_xContext, xCommandBarControl ) );
-            return uno::makeAny( xMenuItem );
+            return uno::Any( xMenuItem );
         }
         nextElement();
 
@@ -97,16 +97,16 @@ ScVbaMenuItems::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ )
 {
     uno::Reference< XCommandBarControl > xCommandBarControl( m_xCommandBarControls->Item( aIndex, uno::Any() ), uno::UNO_QUERY_THROW );
     if( xCommandBarControl->getType() == office::MsoControlType::msoControlPopup )
-        return uno::makeAny( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
+        return uno::Any( uno::Reference< excel::XMenu > ( new ScVbaMenu( this, mxContext, xCommandBarControl ) ) );
     else if( xCommandBarControl->getType() == office::MsoControlType::msoControlButton )
-        return uno::makeAny( uno::Reference< excel::XMenuItem > ( new ScVbaMenuItem( this, mxContext, xCommandBarControl ) ) );
+        return uno::Any( uno::Reference< excel::XMenuItem > ( new ScVbaMenuItem( this, mxContext, xCommandBarControl ) ) );
     throw uno::RuntimeException();
 }
 
 uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const OUString& Caption, const css::uno::Any& OnAction, const css::uno::Any& /*ShortcutKey*/, const css::uno::Any& Before, const css::uno::Any& Restore, const css::uno::Any& /*StatusBar*/, const css::uno::Any& /*HelpFile*/, const css::uno::Any& /*HelpContextID*/ )
 {
     uno::Reference< XCommandBarControl > xCommandBarControl = m_xCommandBarControls->Add(
-            uno::makeAny( office::MsoControlType::msoControlButton ),
+            uno::Any( office::MsoControlType::msoControlButton ),
             uno::Any(), uno::Any(), Before, Restore );
     xCommandBarControl->setCaption( Caption );
     if( OnAction.hasValue() )

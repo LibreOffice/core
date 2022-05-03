@@ -181,7 +181,7 @@ bool ScCTB::ImportCustomToolBar( ScCTBWrapper& rWrapper, CustomToolBarImportHelp
         uno::Reference< beans::XPropertySet > xProps( xIndexContainer, uno::UNO_QUERY_THROW );
         WString& name = tb.getName();
         // set UI name for toolbar
-        xProps->setPropertyValue("UIName", uno::makeAny( name.getString() ) );
+        xProps->setPropertyValue("UIName", uno::Any( name.getString() ) );
 
         OUString sToolBarName = "private:resource/toolbar/custom_" + name.getString();
         for ( auto& rItem : rTBC )
@@ -318,9 +318,9 @@ bool ScTBC::ImportToolBarControl( ScCTBWrapper& rWrapper, const css::uno::Refere
             // insert spacer
             uno::Sequence sProps{ comphelper::makePropertyValue("Type",
                                                                 ui::ItemType::SEPARATOR_LINE) };
-            toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( sProps ) );
+            toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::Any( sProps ) );
         }
-        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::makeAny( comphelper::containerToSequence(props) ) );
+        toolbarcontainer->insertByIndex( toolbarcontainer->getCount(), uno::Any( comphelper::containerToSequence(props) ) );
     }
     return true;
 }

@@ -472,7 +472,7 @@ uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xLink);
+    return uno::Any(xLink);
 }
 
 uno::Type SAL_CALL ScSheetLinksObj::getElementType()
@@ -494,7 +494,7 @@ uno::Any SAL_CALL ScSheetLinksObj::getByName( const OUString& aName )
     if (!xLink.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xLink);
+    return uno::Any(xLink);
 }
 
 sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const OUString& aName )
@@ -973,7 +973,7 @@ uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xLink);
+    return uno::Any(xLink);
 
 }
 
@@ -1263,7 +1263,7 @@ uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
     if (!xLink.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xLink);
+    return uno::Any(xLink);
 }
 
 uno::Type SAL_CALL ScDDELinksObj::getElementType()
@@ -1285,7 +1285,7 @@ uno::Any SAL_CALL ScDDELinksObj::getByName( const OUString& aName )
     if (!xLink.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xLink);
+    return uno::Any(xLink);
 }
 
 uno::Sequence<OUString> SAL_CALL ScDDELinksObj::getElementNames()

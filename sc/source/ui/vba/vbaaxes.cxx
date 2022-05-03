@@ -123,7 +123,7 @@ public:
         try
         {
             AxesCoordinate dIndexes = mCoordinates[ Index ];
-            return uno::makeAny( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
+            return uno::Any( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
         }
         catch (const css::script::BasicErrorException&)
         {
@@ -183,7 +183,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup)
     if ( _oAxisGroup.hasValue() )
         _oAxisGroup >>= nAxisGroup ;
 
-    return uno::makeAny( createAxis( moChartParent, mxContext, nType, nAxisGroup ) );
+    return uno::Any( createAxis( moChartParent, mxContext, nType, nAxisGroup ) );
 }
 
 uno::Any

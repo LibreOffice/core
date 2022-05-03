@@ -50,7 +50,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< sheet::XNamedRange > xNamed( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        return uno::makeAny( uno::Reference< excel::XName > ( new ScVbaName( m_xParent, m_xContext, xNamed ,m_xNames , m_xModel ) ) );
+        return uno::Any( uno::Reference< excel::XName > ( new ScVbaName( m_xParent, m_xContext, xNamed ,m_xNames , m_xModel ) ) );
     }
 
 };
@@ -189,7 +189,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         if ( !xRange.is() )
             xRange = new ScVbaRange( mxParent, mxContext, xUnoRange );
 
-        uno::Reference< excel::XRange > xArea( xRange->Areas( uno::makeAny( sal_Int32(1) ) ), uno::UNO_QUERY );
+        uno::Reference< excel::XRange > xArea( xRange->Areas( uno::Any( sal_Int32(1) ) ), uno::UNO_QUERY );
 
         uno::Any aAny = xArea->getCellRange() ;
 
@@ -206,7 +206,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             uno::Reference< ov::XCollection > xCol( xRange->Areas( uno::Any() ), uno::UNO_QUERY );
             for ( sal_Int32 nArea = 1; nArea <= xCol->getCount(); ++nArea )
             {
-                xArea.set( xRange->Areas( uno::makeAny( nArea ) ), uno::UNO_QUERY_THROW );
+                xArea.set( xRange->Areas( uno::Any( nArea ) ), uno::UNO_QUERY_THROW );
 
                 OUString sRangeAdd = xArea->Address( aAny2, aAny2 , aAny2 , aAny2, aAny2 );
                 if ( nArea > 1 )
@@ -214,7 +214,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                 sTmp.append("'" + xRange->getWorksheet()->getName() + "'." + sRangeAdd);
             }
             mxNames->addNewByName( sName, sTmp.makeStringAndClear(), aCellAddr, 0/*nUnoType*/);
-            return Item( uno::makeAny( sName ), uno::Any() );
+            return Item( uno::Any( sName ), uno::Any() );
         }
     }
     return css::uno::Any();
@@ -238,7 +238,7 @@ uno::Any
 ScVbaNames::createCollectionObject( const uno::Any& aSource )
 {
     uno::Reference< sheet::XNamedRange > xName( aSource, uno::UNO_QUERY );
-    return uno::makeAny( uno::Reference< excel::XName > ( new ScVbaName( getParent(), mxContext, xName, mxNames , mxModel ) ) );
+    return uno::Any( uno::Reference< excel::XName > ( new ScVbaName( getParent(), mxContext, xName, mxNames , mxModel ) ) );
 }
 
 OUString

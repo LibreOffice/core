@@ -89,7 +89,7 @@ public:
             throw container::NoSuchElementException();
         }
         // #FIXME needs ThisWorkbook as parent
-        return uno::makeAny( uno::Reference< excel::XWorksheet > ( new ScVbaWorksheet( uno::Reference< XHelperInterface >(), m_xContext, *(m_it++), m_xModel ) ) );
+        return uno::Any( uno::Reference< excel::XWorksheet > ( new ScVbaWorksheet( uno::Reference< XHelperInterface >(), m_xContext, *(m_it++), m_xModel ) ) );
     }
 
 };
@@ -147,7 +147,7 @@ public:
         || o3tl::make_unsigned( Index ) >= sheets.size() )
             throw lang::IndexOutOfBoundsException();
 
-        return uno::makeAny( sheets[ Index ] );
+        return uno::Any( sheets[ Index ] );
     }
 
     //XElementAccess
@@ -167,7 +167,7 @@ public:
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
             throw container::NoSuchElementException();
-        return uno::makeAny( sheets[ it->second ] );
+        return uno::Any( sheets[ it->second ] );
 
     }
 
@@ -276,7 +276,7 @@ ScVbaWindow::SelectedSheets( const uno::Any& aIndex )
         uno::Reference< XCollection > xColl( xSheets, uno::UNO_QUERY_THROW );
         return xColl->Item( aIndex, uno::Any() );
     }
-    return uno::makeAny( xSheets );
+    return uno::Any( xSheets );
 }
 
 void SAL_CALL
@@ -305,7 +305,7 @@ ScVbaWindow::getCaption()
     // tdf#118129 - return only the caption property of the frame
     OUString sTitle;
     getFrameProps()->getPropertyValue(SC_UNONAME_TITLE) >>= sTitle;
-    return uno::makeAny( sTitle );
+    return uno::Any( sTitle );
 }
 
 void SAL_CALL
@@ -326,7 +326,7 @@ ScVbaWindow::getScrollRow()
         nValue = pViewShell->GetViewData().GetPosY(WhichV(eWhich));
     }
 
-    return uno::makeAny( nValue + 1);
+    return uno::Any( nValue + 1);
 }
 
 void SAL_CALL
@@ -356,7 +356,7 @@ ScVbaWindow::getScrollColumn()
         nValue = pViewShell->GetViewData().GetPosX(WhichH(eWhich));
     }
 
-    return uno::makeAny( nValue + 1);
+    return uno::Any( nValue + 1);
 }
 
 void SAL_CALL
@@ -389,7 +389,7 @@ ScVbaWindow::getWindowState()
         else if (pWork -> IsMinimized())
             nwindowState = xlMinimized;
     }
-    return uno::makeAny( nwindowState );
+    return uno::Any( nwindowState );
 }
 
 void SAL_CALL
@@ -469,7 +469,7 @@ ScVbaWindow::getDisplayGridlines()
 void SAL_CALL
 ScVbaWindow::setDisplayGridlines( sal_Bool _displaygridlines )
 {
-    getControllerProps()->setPropertyValue( SC_UNO_SHOWGRID, uno::makeAny( _displaygridlines ));
+    getControllerProps()->setPropertyValue( SC_UNO_SHOWGRID, uno::Any( _displaygridlines ));
 }
 
 sal_Bool SAL_CALL
@@ -483,7 +483,7 @@ ScVbaWindow::getDisplayHeadings()
 void SAL_CALL
 ScVbaWindow::setDisplayHeadings( sal_Bool _bDisplayHeadings )
 {
-    getControllerProps()->setPropertyValue( SC_UNO_COLROWHDR, uno::makeAny( _bDisplayHeadings ));
+    getControllerProps()->setPropertyValue( SC_UNO_COLROWHDR, uno::Any( _bDisplayHeadings ));
 }
 
 sal_Bool SAL_CALL
@@ -497,7 +497,7 @@ ScVbaWindow::getDisplayHorizontalScrollBar()
 void SAL_CALL
 ScVbaWindow::setDisplayHorizontalScrollBar( sal_Bool _bDisplayHorizontalScrollBar )
 {
-    getControllerProps()->setPropertyValue( SC_UNO_HORSCROLL, uno::makeAny( _bDisplayHorizontalScrollBar ));
+    getControllerProps()->setPropertyValue( SC_UNO_HORSCROLL, uno::Any( _bDisplayHorizontalScrollBar ));
 }
 
 sal_Bool SAL_CALL
@@ -511,7 +511,7 @@ ScVbaWindow::getDisplayOutline()
 void SAL_CALL
 ScVbaWindow::setDisplayOutline( sal_Bool _bDisplayOutline )
 {
-    getControllerProps()->setPropertyValue( SC_UNO_OUTLSYMB, uno::makeAny( _bDisplayOutline ));
+    getControllerProps()->setPropertyValue( SC_UNO_OUTLSYMB, uno::Any( _bDisplayOutline ));
 }
 
 sal_Bool SAL_CALL
@@ -525,7 +525,7 @@ ScVbaWindow::getDisplayVerticalScrollBar()
 void SAL_CALL
 ScVbaWindow::setDisplayVerticalScrollBar( sal_Bool _bDisplayVerticalScrollBar )
 {
-    getControllerProps()->setPropertyValue( SC_UNO_VERTSCROLL, uno::makeAny( _bDisplayVerticalScrollBar ));
+    getControllerProps()->setPropertyValue( SC_UNO_VERTSCROLL, uno::Any( _bDisplayVerticalScrollBar ));
 }
 
 sal_Bool SAL_CALL
@@ -539,7 +539,7 @@ ScVbaWindow::getDisplayWorkbookTabs()
 void SAL_CALL
 ScVbaWindow::setDisplayWorkbookTabs( sal_Bool _bDisplayWorkbookTabs )
 {
-    getControllerProps()->setPropertyValue( SC_UNO_SHEETTABS, uno::makeAny( _bDisplayWorkbookTabs ));
+    getControllerProps()->setPropertyValue( SC_UNO_SHEETTABS, uno::Any( _bDisplayWorkbookTabs ));
 }
 
 sal_Bool SAL_CALL
@@ -690,7 +690,7 @@ void ScVbaWindow::SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows )
 
         uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
         uno::Reference< excel::XWorksheet > xSheet( xApplication->getActiveSheet(), uno::UNO_SET_THROW );
-        xSheet->Cells(uno::makeAny(cellRow), uno::makeAny(cellColumn))->Select();
+        xSheet->Cells(uno::Any(cellRow), uno::Any(cellColumn))->Select();
 
         //pViewShell->FreezeSplitters( FALSE );
         dispatchExecute( pViewShell, SID_WINDOW_SPLIT );
@@ -706,14 +706,14 @@ ScVbaWindow::getZoom()
     xProps->getPropertyValue( sName ) >>= nZoomType;
     if( nZoomType == view::DocumentZoomType::PAGE_WIDTH )
     {
-        return uno::makeAny( true );
+        return uno::Any( true );
     }
     else if( nZoomType == view::DocumentZoomType::BY_VALUE )
     {
         sName = SC_UNO_ZOOMVALUE;
         sal_Int16 nZoom = 100;
         xProps->getPropertyValue( sName ) >>= nZoom;
-        return uno::makeAny( nZoom );
+        return uno::Any( nZoom );
     }
     return uno::Any();
 }
@@ -753,7 +753,7 @@ ScVbaWindow::getView()
     else
         nWindowView = excel::XlWindowView::xlNormalView;
 
-    return uno::makeAny( nWindowView );
+    return uno::Any( nWindowView );
 }
 
 void SAL_CALL

@@ -518,7 +518,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
         {
             uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
             lcl_FillSequence( aSeq, *pDesc );
-            return uno::makeAny(aSeq);
+            return uno::Any(aSeq);
         }
     }
 
@@ -551,7 +551,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
         {
             uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
             lcl_FillSequence( aSeq, *pDesc );
-            return uno::makeAny(aSeq);
+            return uno::Any(aSeq);
         }
     }
 

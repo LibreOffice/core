@@ -503,7 +503,7 @@ SfxMedium* ScDocumentLoader::CreateMedium( const OUString& rFileName, std::share
         css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
         css::uno::Reference<css::task::XInteractionHandler> xIHdl(css::task::InteractionHandler::createWithParent(xContext,
                     pInteractionParent->GetXWindow()), css::uno::UNO_QUERY_THROW);
-        pSet->Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, makeAny(xIHdl)));
+        pSet->Put(SfxUnoAnyItem(SID_INTERACTIONHANDLER, css::uno::Any(xIHdl)));
     }
 
     SfxMedium *pRet = new SfxMedium( rFileName, StreamMode::STD_READ, pFilter, std::move(pSet) );

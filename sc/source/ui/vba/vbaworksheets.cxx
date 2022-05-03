@@ -66,7 +66,7 @@ public:
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
         uno::Reference< sheet::XSpreadsheet > xSheet( *mIt++ );
-        return uno::makeAny( xSheet ) ;
+        return uno::Any( xSheet ) ;
     }
 };
 
@@ -86,7 +86,7 @@ public:
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
-        return uno::makeAny( *cachePos );
+        return uno::Any( *cachePos );
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
@@ -121,7 +121,7 @@ public:
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
 
-        return uno::makeAny( mSheetMap[ Index ] );
+        return uno::Any( mSheetMap[ Index ] );
 
     }
     // XEnumerationAccess
@@ -289,7 +289,7 @@ ScVbaWorksheets::Delete()
     sal_Int32 nElems = getCount();
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
-        uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
         xSheet->Delete();
     }
 }
@@ -330,7 +330,7 @@ ScVbaWorksheets::getVisible()
                 break;
         }
     }
-    return uno::makeAny( bVisible );
+    return uno::Any( bVisible );
 }
 
 void SAL_CALL
@@ -366,7 +366,7 @@ ScVbaWorksheets::Select( const uno::Any& Replace )
     sal_Int32 nElems = getCount();
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
-        uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
         ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
         if ( bSelectSingle )
         {
@@ -390,7 +390,7 @@ ScVbaWorksheets::Copy ( const uno::Any& Before, const uno::Any& After)
 
     for ( nItem = 1; nItem <= nElems; ++nItem)
     {
-        uno::Reference<excel::XWorksheet> xWorksheet(Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference<excel::XWorksheet> xWorksheet(Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
         Sheets.push_back(xWorksheet);
     }
     bool bNewDoc = (!(Before >>= xSheet) && !(After >>=xSheet)&& !(Before.hasValue()) && !(After.hasValue()));
@@ -441,7 +441,7 @@ ScVbaWorksheets::Item(const uno::Any& Index, const uno::Any& Index2)
         }
         uno::Reference< container::XIndexAccess > xIndexAccess = new SheetCollectionHelper( std::move(aSheets) );
         uno::Reference< XCollection > xSelectedSheets(  new ScVbaWorksheets( getParent(), mxContext, xIndexAccess, mxModel ) );
-        return uno::makeAny( xSelectedSheets );
+        return uno::Any( xSelectedSheets );
     }
     return  ScVbaWorksheets_BASE::Item( Index, Index2 );
 }
@@ -510,7 +510,7 @@ void ScVbaWorksheets::PrintPreview( const css::uno::Any& /*EnableChanges*/ )
     sal_Int32 nElems = getCount();
     for ( sal_Int32 nItem = 1; nItem <= nElems; ++nItem )
     {
-        uno::Reference< excel::XWorksheet > xSheet( Item( uno::makeAny( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
+        uno::Reference< excel::XWorksheet > xSheet( Item( uno::Any( nItem ), uno::Any() ), uno::UNO_QUERY_THROW );
         ScVbaWorksheet* pSheet = excel::getImplFromDocModuleWrapper<ScVbaWorksheet>( xSheet );
         if ( pSheet )
             aMarkData.SelectTable(static_cast< SCTAB >( pSheet->getSheetID() ), true );

@@ -143,9 +143,9 @@ void SAL_CALL TablePivotCharts::addNewByName(OUString const & rName,
         xReceiver->attachNumberFormatsSupplier(xNumberFormatsSupplier);
 
         uno::Sequence<beans::PropertyValue> aArgs( comphelper::InitPropertySequence({
-                    { "CellRangeRepresentation", uno::makeAny(rDataPilotName) },
-                    { "HasCategories", uno::makeAny(true) },
-                    { "DataRowSource", uno::makeAny(chart::ChartDataRowSource_COLUMNS) }
+                    { "CellRangeRepresentation", uno::Any(rDataPilotName) },
+                    { "HasCategories", uno::Any(true) },
+                    { "DataRowSource", uno::Any(chart::ChartDataRowSource_COLUMNS) }
                 }));
         xReceiver->setArguments(aArgs);
     }
@@ -218,7 +218,7 @@ uno::Any SAL_CALL TablePivotCharts::getByIndex(sal_Int32 nIndex)
     if (!xChart.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xChart);
+    return uno::Any(xChart);
 }
 
 uno::Type SAL_CALL TablePivotCharts::getElementType()
@@ -244,7 +244,7 @@ uno::Any SAL_CALL TablePivotCharts::getByName(OUString const & rName)
     if (!xChart.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xChart);
+    return uno::Any(xChart);
 }
 
 uno::Sequence<OUString> SAL_CALL TablePivotCharts::getElementNames()

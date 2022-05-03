@@ -361,7 +361,7 @@ ScVbaWorkbook::Styles( const uno::Any& Item )
     uno::Reference< XCollection > dStyles = new ScVbaStyles( uno::Reference< XHelperInterface >(), mxContext, getModel() );
     if ( Item.hasValue() )
         return dStyles->Item( Item, uno::Any() );
-    return uno::makeAny( dStyles );
+    return uno::Any( dStyles );
 }
 
 uno::Any SAL_CALL

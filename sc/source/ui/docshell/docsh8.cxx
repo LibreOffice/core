@@ -162,7 +162,7 @@ bool ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
         OUString aTransferName = "transfer";
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
-            aDestPath.executeCommand( aTransferName, uno::makeAny(
+            aDestPath.executeCommand( aTransferName, uno::Any(
                 css::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(INetURLObject::DecodeMechanism::NONE), aName,
                                                        css::ucb::NameClash::ERROR ) ) );
         }

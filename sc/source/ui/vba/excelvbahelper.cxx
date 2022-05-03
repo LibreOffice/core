@@ -368,9 +368,9 @@ void setUpDocumentModules( const uno::Reference< sheet::XSpreadsheetDocument >& 
                 sModuleInfo.ModuleType = script::ModuleType::DOCUMENT;
                 xVBAModuleInfo->insertModuleInfo( rName, sModuleInfo );
                 if( xLib->hasByName( rName ) )
-                    xLib->replaceByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n") ) );
+                    xLib->replaceByName( rName, uno::Any( OUString( "Option VBASupport 1\n") ) );
                 else
-                    xLib->insertByName( rName, uno::makeAny( OUString( "Option VBASupport 1\n" ) ) );
+                    xLib->insertByName( rName, uno::Any( OUString( "Option VBASupport 1\n" ) ) );
             }
         }
     }

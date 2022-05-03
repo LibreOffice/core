@@ -70,19 +70,19 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         {
             if( ::cppu::any2bool(xPropSet->getPropertyValue( sShare )) )
                 // Don't share headers any longer
-                xPropSet->setPropertyValue( sShare, uno::makeAny(false) );
+                xPropSet->setPropertyValue( sShare, uno::Any(false) );
         }
         else
         {
             if( !::cppu::any2bool(xPropSet->getPropertyValue( sShare )) )
                 // share headers
-                xPropSet->setPropertyValue( sShare, uno::makeAny(true) );
+                xPropSet->setPropertyValue( sShare, uno::Any(true) );
         }
     }
     else
     {
         if ( bOn != bDisplay )
-            xPropSet->setPropertyValue( sOn, uno::makeAny(bDisplay) );
+            xPropSet->setPropertyValue( sOn, uno::Any(bDisplay) );
     }
     if (bLeft)
     {
@@ -91,7 +91,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     else if (bFirst)
     {
         sCont = sContentFirst;
-        xPropSet->setPropertyValue( sShareFirstContent, uno::makeAny(!bDisplay) );
+        xPropSet->setPropertyValue( sShareFirstContent, uno::Any(!bDisplay) );
     }
     else
     {
@@ -183,7 +183,7 @@ void XMLTableHeaderFooterContext::endFastElement(sal_Int32 )
         if (!bContainsRight)
             xHeaderFooterContent->getRightText()->setString("");
 
-        xPropSet->setPropertyValue( sCont, uno::makeAny(xHeaderFooterContent) );
+        xPropSet->setPropertyValue( sCont, uno::Any(xHeaderFooterContent) );
     }
 }
 

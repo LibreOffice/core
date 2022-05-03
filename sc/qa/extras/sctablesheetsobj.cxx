@@ -142,10 +142,9 @@ uno::Reference<uno::XInterface> ScTableSheetsObj::init()
     uno::Reference<uno::XInterface> xReturn(xDocument->getSheets(), UNO_QUERY_THROW);
 
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY_THROW);
-    XNameContainer::setElement(
-        uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
+    XNameContainer::setElement(uno::Any(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
     // XNameReplace
-    XNameReplace::setElement(uno::makeAny(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
+    XNameReplace::setElement(uno::Any(xMSF->createInstance("com.sun.star.sheet.Spreadsheet")));
 
     return xReturn;
 }

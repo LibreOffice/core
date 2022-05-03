@@ -98,7 +98,7 @@ private:
             default:
                     return;
         }
-        m_xProps->setPropertyValue( sTableBorder, uno::makeAny(aTableBorder) );
+        m_xProps->setPropertyValue( sTableBorder, uno::Any(aTableBorder) );
     }
 
     bool getBorderLine( table::BorderLine& rBorderLine )
@@ -165,7 +165,7 @@ public:
     {
         table::BorderLine aBorderLine;
         if ( getBorderLine( aBorderLine ) )
-            return uno::makeAny( OORGBToXLRGB( Color(ColorTransparency, aBorderLine.Color) ) );
+            return uno::Any( OORGBToXLRGB( Color(ColorTransparency, aBorderLine.Color) ) );
         throw uno::RuntimeException("No Implementation available" );
     }
     void SAL_CALL setColor( const uno::Any& _color ) override
@@ -198,7 +198,7 @@ public:
                 break;
             }
         }
-        return uno::makeAny(nIndex);
+        return uno::Any(nIndex);
     }
 
     void SAL_CALL setColorIndex( const uno::Any& _colorindex ) override
@@ -218,13 +218,13 @@ public:
             {
                 case 0: // Thin = default OO thickness
                 case OOLineThin:
-                    return uno::makeAny( XlBorderWeight::xlThin );
+                    return uno::Any( XlBorderWeight::xlThin );
                 case OOLineMedium:
-                    return uno::makeAny( XlBorderWeight::xlMedium );
+                    return uno::Any( XlBorderWeight::xlMedium );
                 case OOLineThick:
-                    return uno::makeAny( XlBorderWeight::xlThick );
+                    return uno::Any( XlBorderWeight::xlThick );
                 case OOLineHairline:
-                    return uno::makeAny( XlBorderWeight::xlHairline );
+                    return uno::Any( XlBorderWeight::xlHairline );
                 default:
                     break;
             }
@@ -267,13 +267,13 @@ public:
     uno::Any SAL_CALL getTintAndShade() override
     {
         // TODO implement
-        return uno::makeAny(static_cast<double>(0));
+        return uno::Any(static_cast<double>(0));
     }
 
     uno::Any SAL_CALL getLineStyle() override
     {
         // always return xlContinuous;
-        return uno::makeAny( XlLineStyle::xlContinuous );
+        return uno::Any( XlLineStyle::xlContinuous );
     }
     void SAL_CALL setLineStyle( const uno::Any& _linestyle ) override
     {
@@ -339,7 +339,7 @@ public:
         if ( nIndex >= 0 && nIndex < getCount() )
         {
             uno::Reference< beans::XPropertySet > xProps( m_xRange, uno::UNO_QUERY_THROW );
-            return uno::makeAny( uno::Reference< excel::XBorder >( new ScVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ], m_Palette )) );
+            return uno::Any( uno::Reference< excel::XBorder >( new ScVbaBorder( xProps, m_xContext, supportedIndexTable[ nIndex ], m_Palette )) );
         }
         throw lang::IndexOutOfBoundsException();
     }
@@ -432,7 +432,7 @@ uno::Any SAL_CALL ScVbaBorders::getColor()
             if( color.hasValue() )
             {
                 if( color != xBorder->getColor() )
-                    return uno::makeAny( uno::Reference< uno::XInterface >() );
+                    return uno::Any( uno::Reference< uno::XInterface >() );
             }
             else
                 color = xBorder->getColor();
@@ -461,7 +461,7 @@ uno::Any SAL_CALL ScVbaBorders::getColorIndex()
             if( nColorIndex.hasValue() )
             {
                 if( nColorIndex != xBorder->getColorIndex() )
-                    return uno::makeAny( uno::Reference< uno::XInterface >() );
+                    return uno::Any( uno::Reference< uno::XInterface >() );
             }
             else
                 nColorIndex = xBorder->getColorIndex();
@@ -519,7 +519,7 @@ uno::Any SAL_CALL ScVbaBorders::getLineStyle()
             aLinestyle = XlLineStyle::xlContinuous;
         }
     }
-    return uno::makeAny( aLinestyle );
+    return uno::Any( aLinestyle );
 }
 void SAL_CALL ScVbaBorders::setLineStyle( const uno::Any& _linestyle )
 {
@@ -542,7 +542,7 @@ uno::Any SAL_CALL ScVbaBorders::getWeight()
             if( weight.hasValue() )
             {
                 if( weight != xBorder->getWeight() )
-                    return uno::makeAny( uno::Reference< uno::XInterface >() );
+                    return uno::Any( uno::Reference< uno::XInterface >() );
             }
             else
                 weight = xBorder->getWeight();
@@ -554,7 +554,7 @@ uno::Any SAL_CALL ScVbaBorders::getWeight()
 uno::Any SAL_CALL ScVbaBorders::getTintAndShade()
 {
     // TODO implement
-    return uno::makeAny(static_cast<double>(0));
+    return uno::Any(static_cast<double>(0));
 }
 
 void SAL_CALL ScVbaBorders::setTintAndShade(const uno::Any& /*rAny*/)

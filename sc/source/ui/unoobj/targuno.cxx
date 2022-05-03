@@ -97,7 +97,7 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const OUString& aName)
     {
         for (sal_uInt16 i=0; i<SC_LINKTARGETTYPE_COUNT; i++)
             if ( aNames[i] == aName )
-                return uno::makeAny(uno::Reference< beans::XPropertySet >(new ScLinkTargetTypeObj( pDocShell, i )));
+                return uno::Any(uno::Reference< beans::XPropertySet >(new ScLinkTargetTypeObj( pDocShell, i )));
     }
 
     throw container::NoSuchElementException();
@@ -264,7 +264,7 @@ uno::Any SAL_CALL ScLinkTargetsObj::getByName(const OUString& aName)
 {
     uno::Reference<beans::XPropertySet> xProp(xCollection->getByName(aName), uno::UNO_QUERY);
     if (xProp.is())
-        return uno::makeAny(xProp);
+        return uno::Any(xProp);
 
     throw container::NoSuchElementException();
 }

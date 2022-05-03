@@ -1930,7 +1930,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getVector(aTableNumVector);
         aResult.emplace_back( "TableNumberList", -1,
-                                  uno::makeAny( lcl_createTableNumberList( aTableNumVector ) ),
+                                  uno::Any( lcl_createTableNumberList( aTableNumVector ) ),
                                   beans::PropertyState_DIRECT_VALUE );
     }
 
@@ -1938,13 +1938,13 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     {
         // DataRowSource (calculated before)
         aResult.emplace_back( "DataRowSource", -1,
-                                  uno::makeAny( eRowSource ), beans::PropertyState_DIRECT_VALUE );
+                                  uno::Any( eRowSource ), beans::PropertyState_DIRECT_VALUE );
         // HasCategories
         aResult.emplace_back( "HasCategories", -1,
-                                  uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
+                                  uno::Any( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         // FirstCellAsLabel
         aResult.emplace_back( "FirstCellAsLabel", -1,
-                                  uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
+                                  uno::Any( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
     }
 
     // Add the left upper corner to the range if it is missing.
@@ -1969,7 +1969,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
     // add cell range property
     aResult.emplace_back( "CellRangeRepresentation", -1,
-                              uno::makeAny( sRangeRep ), beans::PropertyState_DIRECT_VALUE );
+                              uno::Any( sRangeRep ), beans::PropertyState_DIRECT_VALUE );
 
     //Sequence Mapping
     bool const bSequencesReordered = true;//todo detect this above or detect this sequence mapping cheaper ...
@@ -2029,7 +2029,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         if( bDifferentIndexes && !aSequenceMappingVector.empty() )
         {
             aResult.emplace_back( "SequenceMapping", -1,
-                    uno::makeAny( comphelper::containerToSequence(aSequenceMappingVector) )
+                    uno::Any( comphelper::containerToSequence(aSequenceMappingVector) )
                     , beans::PropertyState_DIRECT_VALUE );
         }
     }

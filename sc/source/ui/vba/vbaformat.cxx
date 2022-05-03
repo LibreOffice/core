@@ -255,7 +255,7 @@ ScVbaFormat< Ifc... >::setOrientation( const uno::Any& _aOrientation )
                 break;
             case excel::XlOrientation::xlHorizontal:
                 aVal <<= table::CellOrientation_STANDARD;
-                mxPropertySet->setPropertyValue( SC_UNONAME_ROTANG, uno::makeAny( sal_Int32(0) ) );
+                mxPropertySet->setPropertyValue( SC_UNONAME_ROTANG, uno::Any( sal_Int32(0) ) );
                 break;
             case excel::XlOrientation::xlUpward:
                 aVal <<= table::CellOrientation_BOTTOMTOP;
@@ -359,7 +359,7 @@ ScVbaFormat< Ifc... >::Borders( const uno::Any& Index )
     {
         return xColl->Item( Index, uno::Any() );
     }
-    return uno::makeAny( xColl );
+    return uno::Any( xColl );
 }
 
 template< typename... Ifc >
@@ -381,7 +381,7 @@ template< typename... Ifc >
 uno::Any SAL_CALL
 ScVbaFormat< Ifc... >::getNumberFormatLocal(  )
 {
-    uno::Any aRet = uno::makeAny( OUString() );
+    uno::Any aRet{ OUString() };
     try
     {
         OUString sPropName( SC_UNO_DP_NUMBERFO );
@@ -429,7 +429,7 @@ ScVbaFormat< Ifc... >::setNumberFormatLocal( const uno::Any& _oLocalFormatString
 
         if (nNewFormat == -1)
             nNewFormat = xNumberFormats->addNew(sLocalFormatString, aRangeLocale);
-        mxPropertySet->setPropertyValue(sNumFormat, uno::makeAny( nNewFormat ));
+        mxPropertySet->setPropertyValue(sNumFormat, uno::Any( nNewFormat ));
     }
     catch (const uno::Exception& )
     {
@@ -459,7 +459,7 @@ ScVbaFormat< Ifc... >::setNumberFormat( const uno::Any& _oFormatString )
         lang::Locale aRangeLocale;
         xNumberFormats->getByKey(nFormat)->getPropertyValue( LOCALE ) >>= aRangeLocale;
         sal_Int32 nNewFormat = xNumberFormatTypes->getFormatForLocale(nFormat, aRangeLocale);
-        mxPropertySet->setPropertyValue( SC_UNO_DP_NUMBERFO, uno::makeAny( nNewFormat));
+        mxPropertySet->setPropertyValue( SC_UNO_DP_NUMBERFO, uno::Any( nNewFormat));
     }
     catch (const uno::Exception& )
     {
@@ -483,8 +483,8 @@ ScVbaFormat< Ifc... >::setIndentLevel( const uno::Any& _aLevel )
         if ( !( mxPropertySet->getPropertyValue(sHoriJust) >>= aAPIAlignment ) )
             throw uno::RuntimeException();
         if (aAPIAlignment == table::CellHoriJustify_STANDARD)
-            mxPropertySet->setPropertyValue( sHoriJust, uno::makeAny( table::CellHoriJustify_LEFT) ) ;
-        mxPropertySet->setPropertyValue( SC_UNONAME_PINDENT, uno::makeAny( sal_Int16(nLevel * 352.8) ) );
+            mxPropertySet->setPropertyValue( sHoriJust, uno::Any( table::CellHoriJustify_LEFT) ) ;
+        mxPropertySet->setPropertyValue( SC_UNONAME_PINDENT, uno::Any( sal_Int16(nLevel * 352.8) ) );
     }
     catch (const uno::Exception&)
     {
@@ -529,7 +529,7 @@ ScVbaFormat< Ifc... >::setLocked( const uno::Any& _aLocked )
         OUString sCellProt( SC_UNONAME_CELLPRO );
         mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
         aCellProtection.IsLocked = bIsLocked;
-        mxPropertySet->setPropertyValue(sCellProt, uno::makeAny( aCellProtection ) );
+        mxPropertySet->setPropertyValue(sCellProt, uno::Any( aCellProtection ) );
     }
     catch (const uno::Exception&)
     {
@@ -549,7 +549,7 @@ ScVbaFormat< Ifc... >::setFormulaHidden( const uno::Any& FormulaHidden )
         OUString sCellProt( SC_UNONAME_CELLPRO );
         mxPropertySet->getPropertyValue(sCellProt) >>= aCellProtection;
         aCellProtection.IsFormulaHidden = bIsFormulaHidden;
-        mxPropertySet->setPropertyValue(sCellProt,uno::makeAny(aCellProtection));
+        mxPropertySet->setPropertyValue(sCellProt,uno::Any(aCellProtection));
     }
     catch (const uno::Exception&)
     {

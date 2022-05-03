@@ -88,7 +88,7 @@ public:
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
-        return uno::makeAny( IdToOleNameHash[ aName ] );
+        return uno::Any( IdToOleNameHash[ aName ] );
     }
     virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {

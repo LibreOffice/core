@@ -516,17 +516,17 @@ void XMLTableStyleContext::FillPropertySet(
         {
             if (!bParentSet)
             {
-                AddProperty(CTF_SC_CELLSTYLE, uno::makeAny(GetImport().GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, GetParentName() )));
+                AddProperty(CTF_SC_CELLSTYLE, uno::Any(GetImport().GetStyleDisplayName( XmlStyleFamily::TABLE_CELL, GetParentName() )));
                 bParentSet = true;
             }
             sal_Int32 nNumFmt = GetNumberFormat();
             if (nNumFmt >= 0)
-                AddProperty(CTF_SC_NUMBERFORMAT, uno::makeAny(nNumFmt));
+                AddProperty(CTF_SC_NUMBERFORMAT, uno::Any(nNumFmt));
         }
         else if (GetFamily() == XmlStyleFamily::TABLE_TABLE)
         {
             if (!sPageStyle.isEmpty())
-                AddProperty(CTF_SC_MASTERPAGENAME, uno::makeAny(GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE, sPageStyle )));
+                AddProperty(CTF_SC_MASTERPAGENAME, uno::Any(GetImport().GetStyleDisplayName( XmlStyleFamily::MASTER_PAGE, sPageStyle )));
         }
     }
     XMLPropStyleContext::FillPropertySet(rPropSet);
@@ -970,7 +970,7 @@ void ScMasterPageContext::ClearContent(const OUString& rContent)
             xHeaderFooterContent->getLeftText()->setString("");
             xHeaderFooterContent->getCenterText()->setString("");
             xHeaderFooterContent->getRightText()->setString("");
-            xPropSet->setPropertyValue( rContent, uno::makeAny(xHeaderFooterContent) );
+            xPropSet->setPropertyValue( rContent, uno::Any(xHeaderFooterContent) );
         }
     }
 }

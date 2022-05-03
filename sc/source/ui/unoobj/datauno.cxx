@@ -638,7 +638,7 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
     if (!xField.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xField);
+    return uno::Any(xField);
 }
 
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType()
@@ -2245,7 +2245,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
     if (!xRange.is())
         throw lang::IndexOutOfBoundsException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 }
 
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType()
@@ -2269,7 +2269,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const OUString& aName )
     if (!xRange.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 }
 
 uno::Sequence<OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
@@ -2371,7 +2371,7 @@ uno::Any ScUnnamedDatabaseRangesObj::getByTable( sal_Int32 nTab )
     if (!xRange.is())
         throw container::NoSuchElementException();
 
-    return uno::makeAny(xRange);
+    return uno::Any(xRange);
 }
 
 sal_Bool ScUnnamedDatabaseRangesObj::hasByTable( sal_Int32 nTab )

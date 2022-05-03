@@ -37,7 +37,7 @@ ScVbaTextFrame::Characters()
     ScVbaPalette aPalette( SfxObjectShell::Current() );
     uno::Any aStart( sal_Int32( 1 ) );
     uno::Any aLength(sal_Int32( -1 ) );
-    return uno::makeAny( uno::Reference< ov::excel::XCharacters >( new ScVbaCharacters( this, mxContext, aPalette, xSimpleText, aStart, aLength, true ) ) );
+    return uno::Any( uno::Reference< ov::excel::XCharacters >( new ScVbaCharacters( this, mxContext, aPalette, xSimpleText, aStart, aLength, true ) ) );
 }
 
 OUString

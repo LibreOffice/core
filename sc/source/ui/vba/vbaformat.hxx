@@ -66,7 +66,7 @@ public:
      /// @throws css::uno::RuntimeException
      void SAL_CALL setAddIndent( const css::uno::Any& BAddIndent) { BAddIndent >>= mbAddIndent; }
      /// @throws css::uno::RuntimeException
-     css::uno::Any SAL_CALL getAddIndent() { return css::uno::makeAny( mbAddIndent ); }
+     css::uno::Any SAL_CALL getAddIndent() { return css::uno::Any( mbAddIndent ); }
         // Interface Methods
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
