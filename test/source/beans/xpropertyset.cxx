@@ -184,63 +184,63 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         {
             // boolean type
             bool bOld = any.get<bool>();
-            xPropSet->setPropertyValue(rName, makeAny(!bOld));
+            xPropSet->setPropertyValue(rName, Any(!bOld));
         }
         else if (type == cppu::UnoType<sal_Int8>::get())
         {
             // 8-bit integer
             sal_Int8 nOld = any.get<sal_Int8>();
             sal_Int8 nNew = nOld + 1;
-            xPropSet->setPropertyValue(rName, makeAny(nNew));
+            xPropSet->setPropertyValue(rName, Any(nNew));
         }
         else if (type == cppu::UnoType<sal_Int16>::get())
         {
             // 16-bit integer
             sal_Int16 nOld = any.get<sal_Int16>();
             sal_Int16 nNew = nOld + 1;
-            xPropSet->setPropertyValue(rName, makeAny(nNew));
+            xPropSet->setPropertyValue(rName, Any(nNew));
         }
         else if (type == cppu::UnoType<sal_Int32>::get())
         {
             // 32-bit integer
             sal_Int32 nOld = any.get<sal_Int32>();
             sal_Int32 nNew = nOld + 3;
-            xPropSet->setPropertyValue(rName, makeAny(nNew));
+            xPropSet->setPropertyValue(rName, Any(nNew));
         }
         else if (type == cppu::UnoType<sal_Int64>::get())
         {
             // 64-bit integer
             sal_Int64 nOld = any.get<sal_Int64>();
             sal_Int64 nNew = nOld + 4;
-            xPropSet->setPropertyValue(rName, makeAny(nNew));
+            xPropSet->setPropertyValue(rName, Any(nNew));
         }
         else if (type == cppu::UnoType<float>::get())
         {
             // single precision
             float fOld = any.get<float>();
             float fNew = fOld + 1.2;
-            xPropSet->setPropertyValue(rName, makeAny(fNew));
+            xPropSet->setPropertyValue(rName, Any(fNew));
         }
         else if (type == cppu::UnoType<double>::get())
         {
             // double precision
             double fOld = any.get<double>();
             double fNew = fOld + 1.3;
-            xPropSet->setPropertyValue(rName, makeAny(fNew));
+            xPropSet->setPropertyValue(rName, Any(fNew));
         }
         else if (type == cppu::UnoType<OUString>::get())
         {
             // string type
             OUString aOld = any.get<OUString>();
             OUString aNew = aOld + "foo";
-            xPropSet->setPropertyValue(rName, makeAny(aNew));
+            xPropSet->setPropertyValue(rName, Any(aNew));
         }
         else if (type == cppu::UnoType<util::DateTime>::get())
         {
             // date time type
             util::DateTime aDT = any.get<util::DateTime>();
             aDT.Year += 1;
-            xPropSet->setPropertyValue(rName, makeAny(aDT));
+            xPropSet->setPropertyValue(rName, Any(aDT));
         }
         else
         {

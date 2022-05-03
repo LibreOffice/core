@@ -36,7 +36,7 @@ void TableColumn::testTableColumnProperties()
     uno::Reference<table::XCellRange> xCR(m_xSheet, uno::UNO_QUERY_THROW);
     xCR->getCellByPosition(0, 0)->setFormula("That's a pretty long text.");
     const sal_Int64 nWidthBefore = ::comphelper::getINT64(xPS->getPropertyValue("Width"));
-    xPS->setPropertyValue(aPropName, uno::makeAny(true));
+    xPS->setPropertyValue(aPropName, uno::Any(true));
     CPPUNIT_ASSERT(::comphelper::getBOOL(xPS->getPropertyValue(aPropName)));
     const sal_Int64 nWidthAfter = ::comphelper::getINT64(xPS->getPropertyValue("Width"));
     CPPUNIT_ASSERT(nWidthBefore != nWidthAfter);
