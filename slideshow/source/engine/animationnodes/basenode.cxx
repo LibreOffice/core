@@ -245,7 +245,7 @@ bool isMainSequenceRootNode_(
     // end-of-mainsequence signalling below)
     beans::NamedValue const aSearchKey(
         "node-type",
-        uno::makeAny( presentation::EffectNodeType::MAIN_SEQUENCE ) );
+        uno::Any( presentation::EffectNodeType::MAIN_SEQUENCE ) );
 
     uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());
     return findNamedValue( userData, aSearchKey );
