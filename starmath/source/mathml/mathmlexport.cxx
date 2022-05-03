@@ -148,7 +148,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
 
     // Set base URI
     OUString sPropName("BaseURI");
-    xInfoSet->setPropertyValue(sPropName, makeAny(rMedium.GetBaseURL(true)));
+    xInfoSet->setPropertyValue(sPropName, Any(rMedium.GetBaseURL(true)));
 
     sal_Int32 nSteps = 0;
     if (xStatusIndicator.is())
@@ -173,7 +173,7 @@ bool SmXMLExportWrapper::Export(SfxMedium& rMedium)
             if (!aName.isEmpty())
             {
                 sPropName = "StreamRelPath";
-                xInfoSet->setPropertyValue(sPropName, makeAny(aName));
+                xInfoSet->setPropertyValue(sPropName, Any(aName));
             }
         }
 
@@ -300,7 +300,7 @@ bool SmXMLExportWrapper::WriteThroughComponent(const Reference<embed::XStorage>&
     // set Base URL
     if (rPropSet.is())
     {
-        rPropSet->setPropertyValue("StreamName", makeAny(sStreamName));
+        rPropSet->setPropertyValue("StreamName", Any(sStreamName));
     }
 
     // write the stuff

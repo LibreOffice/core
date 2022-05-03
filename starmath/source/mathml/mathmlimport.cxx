@@ -144,7 +144,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
     // needed for relative URLs; but it's OK to import e.g. MathML from the
     // clipboard without one
     SAL_INFO_IF(baseURI.isEmpty(), "starmath", "SmXMLImportWrapper: no base URL");
-    xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
+    xInfoSet->setPropertyValue("BaseURI", Any(baseURI));
 
     sal_Int32 nSteps = 3;
     if (!(rMedium.IsStorage()))
@@ -176,7 +176,7 @@ ErrCode SmXMLImportWrapper::Import(SfxMedium& rMedium)
 
             if (!aName.isEmpty())
             {
-                xInfoSet->setPropertyValue("StreamRelPath", makeAny(aName));
+                xInfoSet->setPropertyValue("StreamRelPath", Any(aName));
             }
         }
 
@@ -374,7 +374,7 @@ ErrCode SmXMLImportWrapper::ReadThroughComponent(const uno::Reference<embed::XSt
         // set Base URL
         if (rPropSet.is())
         {
-            rPropSet->setPropertyValue("StreamName", makeAny(sStreamName));
+            rPropSet->setPropertyValue("StreamName", Any(sStreamName));
         }
 
         Reference<io::XInputStream> xStream = xEventsStream->getInputStream();
