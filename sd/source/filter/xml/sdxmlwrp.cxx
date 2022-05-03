@@ -342,7 +342,7 @@ ErrCode ReadThroughComponent(
     DBG_ASSERT( xInfoSet.is(), "missing property set" );
     if( xInfoSet.is() )
     {
-        xInfoSet->setPropertyValue( "StreamName", makeAny( sStreamName ) );
+        xInfoSet->setPropertyValue( "StreamName", Any( sStreamName ) );
     }
 
     try
@@ -477,7 +477,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( "Preview" , uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
+    xInfoSet->setPropertyValue( "Preview" , uno::Any( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
 
     // ---- get BuildId from parent container if available
 
@@ -557,7 +557,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     OUString const baseURI(mrMedium.GetBaseURL());
     // needed for relative URLs, but in clipboard copy/paste there may be none
     SAL_INFO_IF(baseURI.isEmpty(), "sd.filter", "SdXMLFilter: no base URL");
-    xInfoSet->setPropertyValue("BaseURI", makeAny(baseURI));
+    xInfoSet->setPropertyValue("BaseURI", Any(baseURI));
 
     if( ERRCODE_NONE == nRet && SfxObjectCreateMode::EMBEDDED == mrDocShell.GetCreateMode() )
     {
@@ -577,7 +577,7 @@ bool SdXMLFilter::Import( ErrCode& nError )
     }
 
     if (SdXMLFilterMode::Organizer == meFilterMode)
-        xInfoSet->setPropertyValue("OrganizerMode", uno::makeAny(true));
+        xInfoSet->setPropertyValue("OrganizerMode", uno::Any(true));
 
     if( ERRCODE_NONE == nRet )
     {
@@ -786,13 +786,13 @@ bool SdXMLFilter::Export()
         uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aExportInfoMap ) ) );
 
         bool bUsePrettyPrinting = officecfg::Office::Common::Save::Document::PrettyPrinting::get();
-        xInfoSet->setPropertyValue( "UsePrettyPrinting", makeAny( bUsePrettyPrinting ) );
+        xInfoSet->setPropertyValue( "UsePrettyPrinting", Any( bUsePrettyPrinting ) );
 
         const uno::Reference < embed::XStorage >& xStorage = mrMedium.GetOutputStorage();
 
         // Set base URI
         OUString sPropName( "BaseURI" );
-        xInfoSet->setPropertyValue( sPropName, makeAny( mrMedium.GetBaseURL( true ) ) );
+        xInfoSet->setPropertyValue( sPropName, Any( mrMedium.GetBaseURL( true ) ) );
 
         xInfoSet->setPropertyValue( "TargetStorage", Any( xStorage ) );
 
@@ -810,7 +810,7 @@ bool SdXMLFilter::Export()
             if( !aName.isEmpty() )
             {
                 sPropName = "StreamRelPath";
-                xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
+                xInfoSet->setPropertyValue( sPropName, Any( aName ) );
             }
         }
 
@@ -902,7 +902,7 @@ bool SdXMLFilter::Export()
 
                     // encrypt all streams
                     xProps->setPropertyValue( "UseCommonStoragePasswordEncryption",
-                                              uno::makeAny( true ) );
+                                              uno::Any( true ) );
 
                     xInfoSet->setPropertyValue( "StreamName", Any( sDocName ) );
                 }
@@ -1029,8 +1029,8 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool TestImportPPTX(SvStream &rStream)
     uno::Reference<document::XImporter> xImporter(xFilter, uno::UNO_QUERY_THROW);
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "InputStream", uno::makeAny(xStream) },
-        { "InputMode", uno::makeAny(true) },
+        { "InputStream", uno::Any(xStream) },
+        { "InputMode", uno::Any(true) },
     }));
     xImporter->setTargetDocument(xModel);
 

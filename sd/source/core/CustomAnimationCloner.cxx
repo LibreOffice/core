@@ -216,7 +216,7 @@ namespace sd
                 aValuePair.First = transformValue( aValuePair.First );
                 aValuePair.Second = transformValue( aValuePair.Second );
 
-                return makeAny( aValuePair );
+                return Any( aValuePair );
             }
             else if( rValue.getValueType() == cppu::UnoType< Sequence<Any> >::get() )
             {
@@ -226,7 +226,7 @@ namespace sd
                 for( Any& rAny : asNonConstRange(aSequence) )
                     rAny = transformValue( rAny );
 
-                return makeAny( aSequence );
+                return Any( aSequence );
             }
             else if( rValue.getValueTypeClass() == TypeClass_INTERFACE )
             {
@@ -234,14 +234,14 @@ namespace sd
                 rValue >>= xShape;
                 if( xShape.is() )
                 {
-                    return makeAny( getClonedShape( xShape ) );
+                    return Any( getClonedShape( xShape ) );
                 }
                 else
                 {
                     Reference< XAnimationNode > xNode;
                     rValue >>= xNode;
                     if( xNode.is() )
-                        return makeAny( getClonedNode( xNode ) );
+                        return Any( getClonedNode( xNode ) );
                 }
             }
             else if( rValue.getValueType() == cppu::UnoType<ParagraphTarget>::get() )
@@ -251,7 +251,7 @@ namespace sd
 
                 aParaTarget.Shape = getClonedShape( aParaTarget.Shape );
 
-                return makeAny( aParaTarget );
+                return Any( aParaTarget );
             }
             else if( rValue.getValueType() == cppu::UnoType<Event>::get() )
             {
@@ -260,7 +260,7 @@ namespace sd
 
                 aEvent.Source = transformValue( aEvent.Source );
 
-                return makeAny( aEvent );
+                return Any( aEvent );
             }
         }
         catch( Exception& )

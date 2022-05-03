@@ -733,10 +733,10 @@ void SdOOXMLExportTest2::testTdf92527()
     xShape1->setPosition(awt::Point(1000, 1000));
     uno::Sequence<beans::PropertyValue> aShapeGeometry(comphelper::InitPropertySequence(
         {
-            {"Type", uno::makeAny(OUString("diamond"))},
+            {"Type", uno::Any(OUString("diamond"))},
         }));
     uno::Reference<beans::XPropertySet> xPropertySet1(xShape1, uno::UNO_QUERY);
-    xPropertySet1->setPropertyValue("CustomShapeGeometry", uno::makeAny(aShapeGeometry));
+    xPropertySet1->setPropertyValue("CustomShapeGeometry", uno::Any(aShapeGeometry));
 
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX);
 
@@ -1503,7 +1503,7 @@ void SdOOXMLExportTest2::testSmartartRotation2()
     //       code to support this for now
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0, xDocShRef));
     uno::Sequence<beans::PropertyValue> aInteropGrabBag;
-    xShape->setPropertyValue("InteropGrabBag", uno::makeAny(aInteropGrabBag));
+    xShape->setPropertyValue("InteropGrabBag", uno::Any(aInteropGrabBag));
 
     utl::TempFile tempFile;
     xDocShRef = saveAndReload(xDocShRef.get(), PPTX, &tempFile);

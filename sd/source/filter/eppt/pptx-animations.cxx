@@ -778,7 +778,7 @@ void PPTXAnimationExport::WriteAnimationCond(const Cond& rCond)
         {
             mpFS->startElementNS(XML_p, XML_cond, XML_delay, rCond.getDelay(), XML_evt,
                                  rCond.mpEvent);
-            WriteAnimationTarget(makeAny(rCond.mxShape));
+            WriteAnimationTarget(Any(rCond.mxShape));
             mpFS->endElementNS(XML_p, XML_cond);
         }
         else if (rCond.mxNode.is() && (nId = GetAnimationNodeId(rCond.mxNode)) != -1)

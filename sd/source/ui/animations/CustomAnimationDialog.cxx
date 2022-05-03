@@ -74,7 +74,6 @@ using namespace ::com::sun::star::presentation;
 
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
@@ -178,7 +177,7 @@ Any SdPresetPropertyBox::getValue()
     const int nIndex = mxControl->get_active();
     if (nIndex == -1)
         return Any();
-    return makeAny(maPropertyValues[nIndex]);
+    return Any(maPropertyValues[nIndex]);
 }
 
 namespace {
@@ -234,7 +233,7 @@ void SdColorPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any SdColorPropertyBox::getValue()
 {
-    return makeAny(sal_Int32(mxControl->GetSelectEntryColor().GetRGBColor()));
+    return Any(sal_Int32(mxControl->GetSelectEntryColor().GetRGBColor()));
 }
 
 namespace {
@@ -318,7 +317,7 @@ void SdFontPropertyBox::setValue( const Any& rValue, const OUString& )
 Any SdFontPropertyBox::getValue()
 {
     OUString aFontName(mxControl->get_active_text());
-    return makeAny(aFontName);
+    return Any(aFontName);
 }
 
 namespace {
@@ -385,7 +384,7 @@ void SdCharHeightPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any SdCharHeightPropertyBox::getValue()
 {
-    return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
+    return Any(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
 }
 
 namespace {
@@ -474,7 +473,7 @@ void SdTransparencyPropertyBox::setValue(const Any& rValue, const OUString&)
 
 Any SdTransparencyPropertyBox::getValue()
 {
-    return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
+    return Any(static_cast<double>(mxMetric->get_value(FieldUnit::PERCENT)) / 100.0);
 }
 
 namespace {
@@ -577,7 +576,7 @@ void SdRotationPropertyBox::setValue( const Any& rValue, const OUString& )
 
 Any SdRotationPropertyBox::getValue()
 {
-    return makeAny(static_cast<double>(mxMetric->get_value(FieldUnit::DEGREE)));
+    return Any(static_cast<double>(mxMetric->get_value(FieldUnit::DEGREE)));
 }
 
 namespace {
@@ -759,7 +758,7 @@ Any SdScalePropertyBox::getValue()
     aValues.First <<= fValue1;
     aValues.Second <<= fValue2;
 
-    return makeAny( aValues );
+    return Any( aValues );
 }
 
 namespace {
@@ -864,7 +863,7 @@ void SdFontStylePropertyBox::setValue( const Any& rValue, const OUString& )
 Any SdFontStylePropertyBox::getValue()
 {
     Sequence<Any> aValues{ Any(mfFontWeight), Any(meFontSlant), Any(mnFontUnderline) };
-    return makeAny( aValues );
+    return Any( aValues );
 }
 
 class CustomAnimationEffectTabPage
@@ -1202,7 +1201,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             fOldTemp = -2.0;
 
         if( fOldTemp != fTemp )
-            pSet->setPropertyValue( nHandleAccelerate, makeAny( fTemp ) );
+            pSet->setPropertyValue( nHandleAccelerate, Any( fTemp ) );
 
         // set selected value for decelerate if different than in original set
         fTemp = mxCBSmoothEnd->get_active() ? 0.5 : 0.0;
@@ -1213,7 +1212,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             fOldTemp = -2.0;
 
         if( fOldTemp != fTemp )
-            pSet->setPropertyValue( nHandleDecelerate, makeAny( fTemp ) );
+            pSet->setPropertyValue( nHandleDecelerate, Any( fTemp ) );
     }
 
     auto nPos = mxLBAfterEffect->get_active();
@@ -1229,7 +1228,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             bOldAfterEffect = !bAfterEffect;
 
         if( bOldAfterEffect != bAfterEffect )
-            pSet->setPropertyValue( nHandleHasAfterEffect, makeAny( bAfterEffect ) );
+            pSet->setPropertyValue( nHandleHasAfterEffect, Any( bAfterEffect ) );
 
         Any aDimColor;
         if( nPos == 1 )
@@ -1249,7 +1248,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleAfterEffectOnNextEffect ) >>= bOldAfterEffectOnNextEffect;
 
         if( bAfterEffectOnNextEffect != bOldAfterEffectOnNextEffect )
-            pSet->setPropertyValue( nHandleAfterEffectOnNextEffect, makeAny( bAfterEffectOnNextEffect ) );
+            pSet->setPropertyValue( nHandleAfterEffectOnNextEffect, Any( bAfterEffectOnNextEffect ) );
     }
 
     nPos = mxLBTextAnim->get_active();
@@ -1271,7 +1270,7 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleIterateType ) >>= nOldIterateType;
 
         if( nIterateType != nOldIterateType )
-            pSet->setPropertyValue( nHandleIterateType, makeAny( nIterateType ) );
+            pSet->setPropertyValue( nHandleIterateType, Any( nIterateType ) );
     }
 
     {
@@ -1282,14 +1281,14 @@ void CustomAnimationEffectTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleIterateInterval ) >>= fOldIterateInterval;
 
         if( fIterateInterval != fOldIterateInterval )
-            pSet->setPropertyValue( nHandleIterateInterval, makeAny( fIterateInterval ) );
+            pSet->setPropertyValue( nHandleIterateInterval, Any( fIterateInterval ) );
     }
 
     nPos = mxLBSound->get_active();
     if (nPos == -1)
         return;
 
-    Any aNewSoundURL, aOldSoundURL( makeAny( sal_Int32(0) ) );
+    Any aNewSoundURL, aOldSoundURL( Any( sal_Int32(0) ) );
 
     if( nPos == 0 )
     {
@@ -1643,7 +1642,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleStart ) >>= nOldStart;
 
         if( nStart != nOldStart )
-            pSet->setPropertyValue( nHandleStart, makeAny( nStart ) );
+            pSet->setPropertyValue( nHandleStart, Any( nStart ) );
     }
 
     {
@@ -1654,7 +1653,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleBegin ) >>= fOldBegin;
 
         if( fBegin != fOldBegin )
-            pSet->setPropertyValue( nHandleBegin, makeAny( fBegin ) );
+            pSet->setPropertyValue( nHandleBegin, Any( fBegin ) );
     }
 
     nPos = mxCBRepeat->get_active();
@@ -1720,7 +1719,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleDuration ) >>= fOldDuration;
 
         if( fDuration != fOldDuration )
-            pSet->setPropertyValue( nHandleDuration, makeAny( fDuration ) );
+            pSet->setPropertyValue( nHandleDuration, Any( fDuration ) );
     }
 
     if (mxCBXRewind->get_state() != TRISTATE_INDET)
@@ -1737,7 +1736,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
         }
 
         if( bSet )
-            pSet->setPropertyValue( nHandleRewind, makeAny( nFill ) );
+            pSet->setPropertyValue( nHandleRewind, Any( nFill ) );
     }
 
     Reference< XShape > xTrigger;
@@ -1759,7 +1758,7 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
 
     if (xTrigger.is() || mxRBClickSequence->get_active())
     {
-        Any aNewValue( makeAny( xTrigger ) );
+        Any aNewValue( xTrigger );
         Any aOldValue;
 
         if( mpSet->getPropertyState( nHandleTrigger ) != STLPropertyState::Ambiguous )
@@ -1886,7 +1885,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleTextGrouping ) >>= nOldGrouping;
 
         if( nTextGrouping != nOldGrouping )
-            pSet->setPropertyValue( nHandleTextGrouping, makeAny( nTextGrouping ) );
+            pSet->setPropertyValue( nHandleTextGrouping, Any( nTextGrouping ) );
     }
 
     if (nPos != 0)
@@ -1898,7 +1897,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleTextReverse ) >>= bOldTextReverse;
 
         if( bTextReverse != bOldTextReverse )
-            pSet->setPropertyValue( nHandleTextReverse, makeAny( bTextReverse ) );
+            pSet->setPropertyValue( nHandleTextReverse, Any( bTextReverse ) );
 
         if( nPos > 1 )
         {
@@ -1909,7 +1908,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
                 mpSet->getPropertyValue( nHandleTextGroupingAuto ) >>= fOldTextGroupingAuto;
 
             if( fTextGroupingAuto != fOldTextGroupingAuto )
-                pSet->setPropertyValue( nHandleTextGroupingAuto, makeAny( fTextGroupingAuto ) );
+                pSet->setPropertyValue( nHandleTextGroupingAuto, Any( fTextGroupingAuto ) );
         }
     }
     //#i120049# impress crashes when modifying the "Random effects" animation
@@ -1924,7 +1923,7 @@ void CustomAnimationTextAnimTabPage::update( STLPropertySet* pSet )
             mpSet->getPropertyValue( nHandleAnimateForm ) >>= bOldAnimateForm;
 
         if( bAnimateForm != bOldAnimateForm )
-            pSet->setPropertyValue( nHandleAnimateForm, makeAny( bAnimateForm ) );
+            pSet->setPropertyValue( nHandleAnimateForm, Any( bAnimateForm ) );
     }
 }
 
@@ -1997,46 +1996,46 @@ std::unique_ptr<STLPropertySet> CustomAnimationDialog::createDefaultSet()
     Any aEmpty;
 
     std::unique_ptr<STLPropertySet> pSet(new STLPropertySet());
-    pSet->setPropertyDefaultValue( nHandleMaxParaDepth, makeAny( sal_Int32(-1) ) );
+    pSet->setPropertyDefaultValue( nHandleMaxParaDepth, Any( sal_Int32(-1) ) );
 
-    pSet->setPropertyDefaultValue( nHandleHasAfterEffect, makeAny( false ) );
-    pSet->setPropertyDefaultValue( nHandleAfterEffectOnNextEffect, makeAny( false ) );
+    pSet->setPropertyDefaultValue( nHandleHasAfterEffect, Any( false ) );
+    pSet->setPropertyDefaultValue( nHandleAfterEffectOnNextEffect, Any( false ) );
     pSet->setPropertyDefaultValue( nHandleDimColor, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleIterateType, makeAny( sal_Int16(0) ) );
-    pSet->setPropertyDefaultValue( nHandleIterateInterval, makeAny( 0.0 ) );
+    pSet->setPropertyDefaultValue( nHandleIterateType, Any( sal_Int16(0) ) );
+    pSet->setPropertyDefaultValue( nHandleIterateInterval, Any( 0.0 ) );
 
-    pSet->setPropertyDefaultValue( nHandleStart, makeAny( sal_Int16(EffectNodeType::ON_CLICK) ) );
-    pSet->setPropertyDefaultValue( nHandleBegin, makeAny( 0.0 ) );
-    pSet->setPropertyDefaultValue( nHandleDuration, makeAny( 2.0 ) );
+    pSet->setPropertyDefaultValue( nHandleStart, Any( sal_Int16(EffectNodeType::ON_CLICK) ) );
+    pSet->setPropertyDefaultValue( nHandleBegin, Any( 0.0 ) );
+    pSet->setPropertyDefaultValue( nHandleDuration, Any( 2.0 ) );
     pSet->setPropertyDefaultValue( nHandleRepeat, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleRewind, makeAny( AnimationFill::HOLD ) );
+    pSet->setPropertyDefaultValue( nHandleRewind, Any( AnimationFill::HOLD ) );
 
     pSet->setPropertyDefaultValue( nHandleEnd, aEmpty );
 
     pSet->setPropertyDefaultValue( nHandlePresetId, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleProperty1Type, makeAny( nPropertyTypeNone ) );
+    pSet->setPropertyDefaultValue( nHandleProperty1Type, Any( nPropertyTypeNone ) );
     pSet->setPropertyDefaultValue( nHandleProperty1Value, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleProperty2Type, makeAny( nPropertyTypeNone ) );
+    pSet->setPropertyDefaultValue( nHandleProperty2Type, Any( nPropertyTypeNone ) );
     pSet->setPropertyDefaultValue( nHandleProperty2Value, aEmpty );
     pSet->setPropertyDefaultValue( nHandleAccelerate, aEmpty );
     pSet->setPropertyDefaultValue( nHandleDecelerate, aEmpty );
     pSet->setPropertyDefaultValue( nHandleAutoReverse, aEmpty );
     pSet->setPropertyDefaultValue( nHandleTrigger, aEmpty );
 
-    pSet->setPropertyDefaultValue( nHandleHasText, makeAny( false ) );
-    pSet->setPropertyDefaultValue( nHandleHasVisibleShape, makeAny( false ) );
-    pSet->setPropertyDefaultValue( nHandleTextGrouping, makeAny( sal_Int32(-1) ) );
-    pSet->setPropertyDefaultValue( nHandleAnimateForm, makeAny( true ) );
-    pSet->setPropertyDefaultValue( nHandleTextGroupingAuto, makeAny( -1.0 ) );
-    pSet->setPropertyDefaultValue( nHandleTextReverse, makeAny( false ) );
+    pSet->setPropertyDefaultValue( nHandleHasText, Any( false ) );
+    pSet->setPropertyDefaultValue( nHandleHasVisibleShape, Any( false ) );
+    pSet->setPropertyDefaultValue( nHandleTextGrouping, Any( sal_Int32(-1) ) );
+    pSet->setPropertyDefaultValue( nHandleAnimateForm, Any( true ) );
+    pSet->setPropertyDefaultValue( nHandleTextGroupingAuto, Any( -1.0 ) );
+    pSet->setPropertyDefaultValue( nHandleTextReverse, Any( false ) );
 
     pSet->setPropertyDefaultValue( nHandleCurrentPage, aEmpty );
 
     pSet->setPropertyDefaultValue( nHandleSoundURL, aEmpty );
-    pSet->setPropertyDefaultValue( nHandleSoundVolume, makeAny( 1.0) );
-    pSet->setPropertyDefaultValue( nHandleSoundEndAfterSlide, makeAny( sal_Int32(0) ) );
+    pSet->setPropertyDefaultValue( nHandleSoundVolume, Any( 1.0) );
+    pSet->setPropertyDefaultValue( nHandleSoundEndAfterSlide, Any( sal_Int32(0) ) );
 
-    pSet->setPropertyDefaultValue( nHandleCommand, makeAny( sal_Int16(0) ) );
+    pSet->setPropertyDefaultValue( nHandleCommand, Any( sal_Int16(0) ) );
     return pSet;
 }
 

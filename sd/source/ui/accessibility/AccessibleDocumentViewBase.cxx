@@ -598,7 +598,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
             CommitChange (
                 AccessibleEventId::CHILD,
                 uno::Any(),
-                uno::makeAny (mxAccessibleOLEObject));
+                uno::Any (mxAccessibleOLEObject));
 
     // Assume that the accessible OLE Object disposes itself correctly.
 
@@ -611,7 +611,7 @@ void AccessibleDocumentViewBase::SetAccessibleOLEObject (
     if (mxAccessibleOLEObject.is())
         CommitChange (
             AccessibleEventId::CHILD,
-            uno::makeAny (mxAccessibleOLEObject),
+            uno::Any (mxAccessibleOLEObject),
             uno::Any());
 }
 

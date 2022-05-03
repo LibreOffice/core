@@ -200,7 +200,7 @@ void RecentlyUsedMasterPages::SavePersistentValues()
                 xChildFactory->createInstance(), UNO_QUERY);
             if (xChild.is())
             {
-                xSet->insertByName (sKey, makeAny(xChild));
+                xSet->insertByName (sKey, Any(xChild));
 
                 aValue <<= rDescriptor.msURL;
                 xChild->replaceByName (sURLMemberName, aValue);

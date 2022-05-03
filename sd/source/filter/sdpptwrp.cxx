@@ -155,7 +155,7 @@ static tools::SvRef<SotStorage> lcl_DRMDecrypt(const SfxMedium& rMedium, const t
 
         // Set the media descriptor data
         Sequence<NamedValue> aEncryptionData = xPackageEncryption->createEncryptionData("");
-        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, makeAny(aEncryptionData)));
+        rMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
     }
     catch (const std::exception&)
     {
@@ -267,7 +267,7 @@ bool SdPPTFilter::Export()
                 {
                     Reference<XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
                     Sequence<Any> aArguments{
-                        makeAny(NamedValue("Binary", makeAny(true))) };
+                        Any(NamedValue("Binary", Any(true))) };
                     xPackageEncryption.set(
                         xComponentContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                             "com.sun.star.comp.oox.crypto." + sCryptoType, aArguments, xComponentContext), UNO_QUERY);
@@ -349,7 +349,7 @@ bool SdPPTFilter::Export()
                     xEncryptedRootStrg->Commit();
 
                     // Restore encryption data
-                    mrMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, makeAny(aEncryptionData)));
+                    mrMedium.GetItemSet()->Put(SfxUnoAnyItem(SID_ENCRYPTIONDATA, Any(aEncryptionData)));
                 }
             }
         }

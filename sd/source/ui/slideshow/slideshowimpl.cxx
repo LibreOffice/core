@@ -1060,7 +1060,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                 mxShow->setProperty(
                     beans::PropertyValue( "WaitSymbolBitmap" ,
                         -1,
-                        makeAny( xBitmap ),
+                        Any( xBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
             }
 
@@ -1072,7 +1072,7 @@ bool SlideshowImpl::startShowImpl( const Sequence< beans::PropertyValue >& aProp
                 mxShow->setProperty(
                     beans::PropertyValue( "PointerSymbolBitmap" ,
                         -1,
-                        makeAny( xPointerBitmap ),
+                        Any( xPointerBitmap ),
                         beans::PropertyState_DIRECT_VALUE ) );
             }
         }

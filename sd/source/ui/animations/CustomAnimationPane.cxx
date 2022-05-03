@@ -926,7 +926,7 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
     case nPropertyTypeDirection:
     case nPropertyTypeSpokes:
     case nPropertyTypeZoom:
-        return makeAny( pEffect->getPresetSubType() );
+        return Any( pEffect->getPresetSubType() );
 
     case nPropertyTypeColor:
     case nPropertyTypeFillColor:
@@ -967,7 +967,7 @@ Any CustomAnimationPane::getProperty1Value( sal_Int32 nType, const CustomAnimati
                 pEffect->getProperty( AnimationNodeType::SET, u"CharPosture" , EValue::To ),
                 pEffect->getProperty( AnimationNodeType::SET, u"CharUnderline" , EValue::To )
             };
-            return makeAny( aValues );
+            return Any( aValues );
         }
     }
 
@@ -1080,7 +1080,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
 {
     std::unique_ptr<STLPropertySet> pSet = CustomAnimationDialog::createDefaultSet();
 
-    pSet->setPropertyValue( nHandleCurrentPage, makeAny( mxCurrentPage ) );
+    pSet->setPropertyValue( nHandleCurrentPage, Any( mxCurrentPage ) );
 
     sal_Int32 nMaxParaDepth = 0;
 
@@ -1099,10 +1099,10 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
                 nMaxParaDepth = n;
         }
 
-        addValue( pSet, nHandleHasAfterEffect, makeAny( pEffect->hasAfterEffect() ) );
-        addValue( pSet, nHandleAfterEffectOnNextEffect, makeAny( pEffect->IsAfterEffectOnNext() ) );
+        addValue( pSet, nHandleHasAfterEffect, Any( pEffect->hasAfterEffect() ) );
+        addValue( pSet, nHandleAfterEffectOnNextEffect, Any( pEffect->IsAfterEffectOnNext() ) );
         addValue( pSet, nHandleDimColor, pEffect->getDimColor() );
-        addValue( pSet, nHandleIterateType, makeAny( pEffect->getIterateType() ) );
+        addValue( pSet, nHandleIterateType, Any( pEffect->getIterateType() ) );
 
         // convert absolute time to percentage value
         // This calculation is done in float to avoid some rounding artifacts.
@@ -1110,18 +1110,18 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
         if( pEffect->getDuration() )
             fIterateInterval = static_cast<float>(fIterateInterval / pEffect->getDuration() );
         fIterateInterval *= 100.0;
-        addValue( pSet, nHandleIterateInterval, makeAny( static_cast<double>(fIterateInterval) ) );
+        addValue( pSet, nHandleIterateInterval, Any( static_cast<double>(fIterateInterval) ) );
 
-        addValue( pSet, nHandleBegin, makeAny( pEffect->getBegin() ) );
-        addValue( pSet, nHandleDuration, makeAny( pEffect->getDuration() ) );
-        addValue( pSet, nHandleStart, makeAny( pEffect->getNodeType() ) );
+        addValue( pSet, nHandleBegin, Any( pEffect->getBegin() ) );
+        addValue( pSet, nHandleDuration, Any( pEffect->getDuration() ) );
+        addValue( pSet, nHandleStart, Any( pEffect->getNodeType() ) );
         addValue( pSet, nHandleRepeat, pEffect->getRepeatCount() );
         addValue( pSet, nHandleEnd, pEffect->getEnd() );
-        addValue( pSet, nHandleRewind, makeAny( pEffect->getFill() ) );
+        addValue( pSet, nHandleRewind, Any( pEffect->getFill() ) );
 
-        addValue( pSet, nHandlePresetId, makeAny( pEffect->getPresetId() ) );
+        addValue( pSet, nHandlePresetId, Any( pEffect->getPresetId() ) );
 
-        addValue( pSet, nHandleHasText, makeAny( pEffect->hasText() ) );
+        addValue( pSet, nHandleHasText, Any( pEffect->hasText() ) );
 
         addValue( pSet, nHandleHasVisibleShape, Any( hasVisibleShape( pEffect->getTargetShape() ) ) );
 
@@ -1129,7 +1129,7 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
         if( pEffect->getAudio().is() )
         {
             aSoundSource = pEffect->getAudio()->getSource();
-            addValue( pSet, nHandleSoundVolume, makeAny( pEffect->getAudio()->getVolume() ) );
+            addValue( pSet, nHandleSoundVolume, Any( pEffect->getAudio()->getVolume() ) );
 // todo     addValue( pSet, nHandleSoundEndAfterSlide, makeAny( pEffect->getAudio()->getEndAfterSlide() ) );
 // this is now stored at the XCommand parameter sequence
         }
@@ -1144,15 +1144,15 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
         if( nGroupId != -1 )
             pTextGroup = pEffectSequence->findGroup( nGroupId );
 
-        addValue( pSet, nHandleTextGrouping, makeAny( pTextGroup ? pTextGroup->getTextGrouping() : sal_Int32(-1) ) );
-        addValue( pSet, nHandleAnimateForm, makeAny( !pTextGroup || pTextGroup->getAnimateForm() ) );
-        addValue( pSet, nHandleTextGroupingAuto, makeAny( pTextGroup ? pTextGroup->getTextGroupingAuto() : -1.0 ) );
-        addValue( pSet, nHandleTextReverse, makeAny( pTextGroup && pTextGroup->getTextReverse() ) );
+        addValue( pSet, nHandleTextGrouping, Any( pTextGroup ? pTextGroup->getTextGrouping() : sal_Int32(-1) ) );
+        addValue( pSet, nHandleAnimateForm, Any( !pTextGroup || pTextGroup->getAnimateForm() ) );
+        addValue( pSet, nHandleTextGroupingAuto, Any( pTextGroup ? pTextGroup->getTextGroupingAuto() : -1.0 ) );
+        addValue( pSet, nHandleTextReverse, Any( pTextGroup && pTextGroup->getTextReverse() ) );
 
         if( pEffectSequence->getSequenceType() == EffectNodeType::INTERACTIVE_SEQUENCE  )
         {
             InteractiveSequence* pIS = static_cast< InteractiveSequence* >( pEffectSequence );
-            addValue( pSet, nHandleTrigger, makeAny( pIS->getTriggerShape() ) );
+            addValue( pSet, nHandleTrigger, Any( pIS->getTriggerShape() ) );
         }
 
         CustomAnimationPresetPtr pDescriptor = rPresets.getEffectDescriptor( pEffect->getPresetId() );
@@ -1166,28 +1166,28 @@ std::unique_ptr<STLPropertySet> CustomAnimationPane::createSelectionSet()
 
             if( nType != nPropertyTypeNone )
             {
-                addValue( pSet, nHandleProperty1Type, makeAny( nType ) );
+                addValue( pSet, nHandleProperty1Type, Any( nType ) );
                 addValue( pSet, nHandleProperty1Value, getProperty1Value( nType, pEffect ) );
             }
 
             if( pDescriptor->hasProperty( u"Accelerate" ) )
             {
-                addValue( pSet, nHandleAccelerate, makeAny( pEffect->getAcceleration() ) );
+                addValue( pSet, nHandleAccelerate, Any( pEffect->getAcceleration() ) );
             }
 
             if( pDescriptor->hasProperty( u"Decelerate" ) )
             {
-                addValue( pSet, nHandleDecelerate, makeAny( pEffect->getDecelerate() ) );
+                addValue( pSet, nHandleDecelerate, Any( pEffect->getDecelerate() ) );
             }
 
             if( pDescriptor->hasProperty( u"AutoReverse" ) )
             {
-                addValue( pSet, nHandleAutoReverse, makeAny( pEffect->getAutoReverse() ) );
+                addValue( pSet, nHandleAutoReverse, Any( pEffect->getAutoReverse() ) );
             }
         }
     }
 
-    addValue( pSet, nHandleMaxParaDepth, makeAny( nMaxParaDepth ) );
+    addValue( pSet, nHandleMaxParaDepth, Any( nMaxParaDepth ) );
 
     return pSet;
 }
@@ -1560,7 +1560,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet const * pResultSet, ST
                     // in the text group is fine.
                     if (nTextGrouping == -1 && pTextGroup->getEffects().empty())
                     {
-                        pEffect->setTarget(makeAny(pEffect->getTargetShape()));
+                        pEffect->setTarget(Any(pEffect->getTargetShape()));
                         pEffect->setGroupId(-1);
                         mpMainSequence->append(pEffect);
                     }
@@ -1785,7 +1785,7 @@ void CustomAnimationPane::onAdd()
             for( const auto& rPara : aParaList )
             {
                 aParaTarget.Paragraph = rPara;
-                aTargets.push_back( makeAny( aParaTarget ) );
+                aTargets.push_back( Any( aParaTarget ) );
             }
         }
     }
@@ -2474,7 +2474,7 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
 {
     Reference< XParallelTimeContainer > xRoot = ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() );
     Sequence< css::beans::NamedValue > aUserData
-        { { "node-type", css::uno::makeAny(css::presentation::EffectNodeType::TIMING_ROOT) } };
+        { { "node-type", css::uno::Any(css::presentation::EffectNodeType::TIMING_ROOT) } };
     xRoot->setUserData( aUserData );
     xRoot->appendChild( xAnimationNode );
 

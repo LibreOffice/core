@@ -379,8 +379,8 @@ void DrawController::FireChangeEditMode (bool bMasterPageMode) noexcept
     {
         FirePropertyChange(
             PROPERTY_MASTERPAGEMODE,
-            makeAny(bMasterPageMode),
-            makeAny(mbMasterPageMode));
+            Any(bMasterPageMode),
+            Any(mbMasterPageMode));
 
         mbMasterPageMode = bMasterPageMode;
     }
@@ -392,8 +392,8 @@ void DrawController::FireChangeLayerMode (bool bLayerMode) noexcept
     {
         FirePropertyChange(
             PROPERTY_LAYERMODE,
-            makeAny(bLayerMode),
-            makeAny(mbLayerMode));
+            Any(bLayerMode),
+            Any(mbLayerMode));
 
         mbLayerMode = bLayerMode;
     }
@@ -408,7 +408,7 @@ void DrawController::FireSwitchCurrentPage (SdPage* pNewCurrentPage) noexcept
     try
     {
         Any aNewValue (
-            makeAny(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage(), UNO_QUERY)));
+            Any(Reference<drawing::XDrawPage>(pNewCurrentPage->getUnoPage(), UNO_QUERY)));
 
         Any aOldValue;
         if (pCurrentPage != nullptr)
@@ -440,7 +440,7 @@ void DrawController::fireChangeLayer( css::uno::Reference< css::drawing::XLayer>
     {
         sal_Int32 nHandle = PROPERTY_ACTIVE_LAYER;
 
-        Any aNewValue (makeAny( *pCurrentLayer) );
+        Any aNewValue ( *pCurrentLayer);
 
         Any aOldValue ;
 

@@ -81,8 +81,8 @@ CacheConfiguration::CacheConfiguration()
         // Obtain access to Impress configuration.
         Sequence<Any> aCreationArguments(comphelper::InitAnyPropertySequence(
         {
-            {"nodepath", makeAny(OUString("/org.openoffice.Office.Impress/"))},
-            {"depth", makeAny(sal_Int32(-1))}
+            {"nodepath", Any(OUString("/org.openoffice.Office.Impress/"))},
+            {"depth", Any(sal_Int32(-1))}
         }));
 
         Reference<XInterface> xRoot (xProvider->createInstanceWithArguments(

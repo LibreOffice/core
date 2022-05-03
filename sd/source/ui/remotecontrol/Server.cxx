@@ -283,9 +283,9 @@ bool RemoteServer::connectClient( const std::shared_ptr< ClientInfo >& pClient, 
             // Check whether the client is already saved
             Sequence< OUString > aNames = xConfig->getElementNames();
             if (comphelper::findValue(aNames, apClient->mName) != -1)
-                xConfig->replaceByName( apClient->mName, makeAny( xChild ) );
+                xConfig->replaceByName( apClient->mName, Any( xChild ) );
             else
-                xConfig->insertByName( apClient->mName, makeAny( xChild ) );
+                xConfig->insertByName( apClient->mName, Any( xChild ) );
             aValue <<= apClient->mPin;
             xChild->replaceByName("PIN", aValue);
             aChanges->commit();

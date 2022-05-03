@@ -558,7 +558,7 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
         const PageKind ePageKind = GetPage() ? GetPage()->GetPageKind() : PageKind::Standard;
 
         if( ePageKind == PageKind::Standard )
-            return makeAny( Reference< XAnimationNodeSupplier >( this ) );
+            return Any( Reference< XAnimationNodeSupplier >( this ) );
     }
     else
         return SvxDrawPage::queryInterface( rType );
@@ -1939,7 +1939,7 @@ Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
         if( pObj )
         {
             Reference< beans::XPropertySet > aRef( pObj->getUnoShape(), uno::UNO_QUERY );
-            return makeAny( aRef );
+            return Any( aRef );
         }
     }
 
@@ -2049,7 +2049,7 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
 {
     if( rType == cppu::UnoType<drawing::XMasterPageTarget>::get() )
     {
-        return makeAny( Reference< drawing::XMasterPageTarget >( this ) );
+        return Any( Reference< drawing::XMasterPageTarget >( this ) );
     }
     else if( IsImpressDocument()
              && rType == cppu::UnoType<presentation::XPresentationPage>::get() )
@@ -2057,7 +2057,7 @@ Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
         SdPage * p = dynamic_cast<SdPage *>(SvxDrawPage::mpPage);
         if( p == nullptr || p->GetPageKind() != PageKind::Handout )
         {
-            return makeAny( Reference< presentation::XPresentationPage >( this ) );
+            return Any( Reference< presentation::XPresentationPage >( this ) );
         }
     }
 

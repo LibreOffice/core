@@ -622,7 +622,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SdXImpressDocument::getViewD
 
                     uno::Sequence< beans::PropertyValue > aSeq;
                     pFrameView->WriteUserDataSequence( aSeq );
-                    xCont->insertByIndex( i, uno::makeAny( aSeq ) );
+                    xCont->insertByIndex( i, uno::Any( aSeq ) );
                 }
             }
         }

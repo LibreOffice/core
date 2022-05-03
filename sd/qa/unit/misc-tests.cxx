@@ -372,8 +372,8 @@ void SdMiscTest::testFillGradient()
     awt::Gradient aGradient;
     aGradient.StartColor = sal_Int32(Color(255, 0, 0));
     aGradient.EndColor = sal_Int32(Color(0, 255, 0));
-    xPropSet->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_GRADIENT));
-    xPropSet->setPropertyValue("FillGradient", uno::makeAny(aGradient));
+    xPropSet->setPropertyValue("FillStyle", uno::Any(drawing::FillStyle_GRADIENT));
+    xPropSet->setPropertyValue("FillGradient", uno::Any(aGradient));
     // Add the rectangle to the page.
     xShapes->add(xShape1);
 
@@ -469,7 +469,7 @@ void SdMiscTest::testTdf120527()
         xFactory->createInstance("com.sun.star.drawing.BitmapTable"), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xBitmaps.is());
     OUString aGraphicURL = m_directories.getURLFromSrc(u"/sd/qa/unit/data/tdf120527.jpg");
-    xBitmaps->insertByName("test", uno::makeAny(aGraphicURL));
+    xBitmaps->insertByName("test", uno::Any(aGraphicURL));
 
     // Create a graphic.
     uno::Reference<drawing::XShape> xShape(
