@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <o3tl/safeint.hxx>
 #include <unotools/fontdefs.hxx>
 #include <unotools/fontcfg.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -457,19 +458,19 @@ OUString GetEnglishSearchFontName(std::u16string_view rInName)
     return rNameStr;
 }
 
-std::u16string_view GetNextFontToken( const OUString& rTokenStr, sal_Int32& rIndex )
+std::u16string_view GetNextFontToken( std::u16string_view rTokenStr, sal_Int32& rIndex )
 {
     // check for valid start index
-    sal_Int32 nStringLen = rTokenStr.getLength();
-    if( rIndex >= nStringLen )
+    size_t nStringLen = rTokenStr.size();
+    if( o3tl::make_unsigned(rIndex) >= nStringLen )
     {
         rIndex = -1;
         return {};
     }
 
     // find the next token delimiter and return the token substring
-    const sal_Unicode* pStr = rTokenStr.getStr() + rIndex;
-    const sal_Unicode* pEnd = rTokenStr.getStr() + nStringLen;
+    const sal_Unicode* pStr = rTokenStr.data() + rIndex;
+    const sal_Unicode* pEnd = rTokenStr.data() + nStringLen;
     for(; pStr < pEnd; ++pStr )
         if( (*pStr == ';') || (*pStr == ',') )
             break;
@@ -478,7 +479,7 @@ std::u16string_view GetNextFontToken( const OUString& rTokenStr, sal_Int32& rInd
     sal_Int32 nTokenLen;
     if( pStr < pEnd )
     {
-        rIndex = sal::static_int_cast<sal_Int32>(pStr - rTokenStr.getStr());
+        rIndex = sal::static_int_cast<sal_Int32>(pStr - rTokenStr.data());
         nTokenLen = rIndex - nTokenStart;
         ++rIndex; // skip over token separator
     }
@@ -498,10 +499,10 @@ std::u16string_view GetNextFontToken( const OUString& rTokenStr, sal_Int32& rInd
         }
     }
 
-    return rTokenStr.subView( nTokenStart, nTokenLen );
+    return rTokenStr.substr( nTokenStart, nTokenLen );
 }
 
-static bool ImplIsFontToken( const OUString& rName, std::u16string_view rToken )
+static bool ImplIsFontToken( std::u16string_view rName, std::u16string_view rToken )
 {
     OUString      aTempName;
     sal_Int32  nIndex = 0;
@@ -531,7 +532,7 @@ void AddTokenFontName( OUString& rName, std::u16string_view rNewToken )
         ImplAppendFontToken( rName, rNewToken );
 }
 
-OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
+OUString GetSubsFontName( std::u16string_view rName, SubsFontFlags nFlags )
 {
     OUString aName;
 
@@ -563,7 +564,7 @@ OUString GetSubsFontName( const OUString& rName, SubsFontFlags nFlags )
     return aName;
 }
 
-bool IsStarSymbol(const OUString &rFontName)
+bool IsStarSymbol(std::u16string_view rFontName)
 {
     sal_Int32 nIndex = 0;
     OUString sFamilyNm(GetNextFontToken(rFontName, nIndex));

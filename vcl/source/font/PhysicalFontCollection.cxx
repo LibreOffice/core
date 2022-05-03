@@ -337,7 +337,7 @@ PhysicalFontFamily *PhysicalFontCollection::FindOrCreateFontFamily(OUString cons
     return pFoundData;
 }
 
-PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByTokenNames(OUString const& rTokenStr) const
+PhysicalFontFamily* PhysicalFontCollection::FindFontFamilyByTokenNames(std::u16string_view rTokenStr) const
 {
     PhysicalFontFamily* pFoundData = nullptr;
 

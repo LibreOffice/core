@@ -735,7 +735,7 @@ const SwNumRule* MSWordStyles::GetSwNumRule(sal_uInt16 nId) const
 
 //          Fonts
 
-wwFont::wwFont(const OUString &rFamilyName, FontPitch ePitch, FontFamily eFamily,
+wwFont::wwFont(std::u16string_view rFamilyName, FontPitch ePitch, FontFamily eFamily,
         rtl_TextEncoding eChrSet)
     : mbAlt(false), mePitch(ePitch), meFamily(eFamily), meChrSet(eChrSet)
 {
@@ -874,13 +874,13 @@ sal_uInt16 wwFontHelper::GetId(const wwFont &rFont)
 
 void wwFontHelper::InitFontTable(const SwDoc& rDoc)
 {
-    GetId(wwFont("Times New Roman", PITCH_VARIABLE,
+    GetId(wwFont(u"Times New Roman", PITCH_VARIABLE,
         FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252));
 
-    GetId(wwFont("Symbol", PITCH_VARIABLE, FAMILY_ROMAN,
+    GetId(wwFont(u"Symbol", PITCH_VARIABLE, FAMILY_ROMAN,
         RTL_TEXTENCODING_SYMBOL));
 
-    GetId(wwFont("Arial", PITCH_VARIABLE, FAMILY_SWISS,
+    GetId(wwFont(u"Arial", PITCH_VARIABLE, FAMILY_SWISS,
         RTL_TEXTENCODING_MS_1252));
 
     const SvxFontItem* pFont = GetDfltAttr(RES_CHRATR_FONT);
