@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce3eb67b_791359d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-03T06:41:01Z",
+      "side": 1,
+      "message": "The amendment moves the string into a dedicated resource (that hopefully will be added to the translation). But Stephan pointed out that these errors are rather meant for developers. The message passes through some layers where localization might be better suited. At this point it\u0027s beyond my skills.",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
