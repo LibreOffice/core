@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b83d510e_fd13bf76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-03T07:31:00Z",
+      "side": 1,
+      "message": "\u003e No real objection, but is this really worth it, if it doesn\u0027t find any actual failures?\n\nthat\u0027s why I added you as reviewer; I\u0027d be just as fine with reverting your original attempt",
+      "parentUuid": "9034bde7_cc4ec15a",
+      "revId": "1c02d28a9e1544f39346fbad5069725407195c41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "af4bf900_dd98c20b",
         "filename": "include/rtl/string.hxx",
         "patchSetId": 1
@@ -31,6 +49,24 @@
       "writtenOn": "2022-05-03T07:25:33Z",
       "side": 1,
       "message": "could do with a comment explaining why this is here",
+      "revId": "1c02d28a9e1544f39346fbad5069725407195c41",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16e8de6a_9d05ceec",
+        "filename": "include/rtl/string.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1549,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-03T07:31:00Z",
+      "side": 1,
+      "message": "\u003e could do with a comment explaining why this is here\n\nbut such a pair of \"const \u0026\" plus \"\u0026\u0026 \u003d delete\" overloads is a common idiom with rather obvious motivation, no?",
+      "parentUuid": "af4bf900_dd98c20b",
       "revId": "1c02d28a9e1544f39346fbad5069725407195c41",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
