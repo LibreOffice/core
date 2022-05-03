@@ -657,12 +657,13 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         double fInputEndVal = 0.0;
                         OUString aEndStr;
 
-                        aStartStr = rDoc.GetInputString( nStartCol, nStartRow, nStartTab );
+                        const bool forceSystemLocale = true;
+                        aStartStr = rDoc.GetInputString( nStartCol, nStartRow, nStartTab, forceSystemLocale );
                         fStartVal = rDoc.GetValue( nStartCol, nStartRow, nStartTab );
 
                         if(eFillDir==FILL_TO_BOTTOM && nStartRow < nEndRow )
                         {
-                            aEndStr = rDoc.GetInputString( nStartCol, nStartRow+1, nStartTab );
+                            aEndStr = rDoc.GetInputString( nStartCol, nStartRow+1, nStartTab, forceSystemLocale );
                             if(!aEndStr.isEmpty())
                             {
                                 fInputEndVal = rDoc.GetValue( nStartCol, nStartRow+1, nStartTab );
@@ -673,7 +674,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             if(nStartCol < nEndCol)
                             {
-                                aEndStr = rDoc.GetInputString( nStartCol+1, nStartRow, nStartTab );
+                                aEndStr = rDoc.GetInputString( nStartCol+1, nStartRow, nStartTab, forceSystemLocale );
                                 if(!aEndStr.isEmpty())
                                 {
                                     fInputEndVal = rDoc.GetValue( nStartCol+1, nStartRow, nStartTab );

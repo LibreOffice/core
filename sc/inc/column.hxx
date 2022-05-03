@@ -442,11 +442,11 @@ public:
         { return GetString( GetCellValue( rBlockPos, nRow ), nRow, pContext ); }
     double* GetValueCell( SCROW nRow );
     // Note that if pShared is set and a value is returned that way, the returned OUString is empty.
-    OUString    GetInputString( SCROW nRow, const svl::SharedString** pShared = nullptr ) const
-        { return GetInputString( GetCellValue( nRow ), nRow, pShared ); }
+    OUString    GetInputString( SCROW nRow, const svl::SharedString** pShared = nullptr, bool bForceSystemLocale = false ) const
+        { return GetInputString( GetCellValue( nRow ), nRow, pShared, bForceSystemLocale ); }
     OUString    GetInputString( sc::ColumnBlockConstPosition& rBlockPos, SCROW nRow,
-                    const svl::SharedString** pShared = nullptr ) const
-        { return GetInputString( GetCellValue( rBlockPos, nRow ), nRow, pShared ); }
+                    const svl::SharedString** pShared = nullptr, bool bForceSystemLocale = false ) const
+        { return GetInputString( GetCellValue( rBlockPos, nRow ), nRow, pShared, bForceSystemLocale ); }
     double      GetValue( SCROW nRow ) const;
     const EditTextObject* GetEditText( SCROW nRow ) const;
     void RemoveEditTextCharAttribs( SCROW nRow, const ScPatternAttr& rAttr );
@@ -822,7 +822,7 @@ private:
     SCROW FindNextVisibleRow(SCROW nRow, bool bForward) const;
 
     OUString GetString( const ScRefCellValue& cell, SCROW nRow, const ScInterpreterContext* pContext = nullptr ) const;
-    OUString GetInputString( const ScRefCellValue& cell, SCROW nRow, const svl::SharedString** pShared = nullptr ) const;
+    OUString GetInputString( const ScRefCellValue& cell, SCROW nRow, const svl::SharedString** pShared = nullptr, bool bForceSystemLocale = false ) const;
 
     /**
      * Called whenever the state of cell array gets modified i.e. new cell

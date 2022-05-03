@@ -128,7 +128,7 @@ OUString ScCellFormat::GetString(
 
 OUString ScCellFormat::GetInputString(
     const ScRefCellValue& rCell, sal_uInt32 nFormat, SvNumberFormatter& rFormatter, const ScDocument& rDoc,
-    const svl::SharedString** pShared, bool bFiltering )
+    const svl::SharedString** pShared, bool bFiltering, bool bForceSystemLocale )
 {
     if(pShared != nullptr)
         *pShared = nullptr;
@@ -140,7 +140,7 @@ OUString ScCellFormat::GetInputString(
         case CELLTYPE_VALUE:
         {
             OUString str;
-            rFormatter.GetInputLineString(rCell.mfValue, nFormat, str, bFiltering);
+            rFormatter.GetInputLineString(rCell.mfValue, nFormat, str, bFiltering, bForceSystemLocale);
             return str;
         }
         break;
@@ -151,7 +151,7 @@ OUString ScCellFormat::GetInputString(
             if (pFC->IsEmptyDisplayedAsString())
                 ; // empty
             else if (pFC->IsValue())
-                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, str, bFiltering);
+                rFormatter.GetInputLineString(pFC->GetValue(), nFormat, str, bFiltering, bForceSystemLocale);
             else
             {
                 const svl::SharedString& shared = pFC->GetString();
