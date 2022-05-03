@@ -139,7 +139,7 @@ Reference< XAccessible > SvxGraphCtrlAccessibleContext::getAccessible( const Sdr
             mxShapes[pObj] = pAcc;
 
             // Create event and inform listeners of the object creation.
-            CommitChange( AccessibleEventId::CHILD, makeAny( xAccessibleShape ), makeAny( Reference<XAccessible>() ) );
+            CommitChange( AccessibleEventId::CHILD, Any( xAccessibleShape ), Any( Reference<XAccessible>() ) );
         }
     }
 
@@ -713,10 +713,10 @@ void SvxGraphCtrlAccessibleContext::Notify( SfxBroadcaster& /*rBC*/, const SfxHi
                 break;
 
             case SdrHintKind::ObjectInserted:
-                CommitChange( AccessibleEventId::CHILD, makeAny( getAccessible( pSdrHint->GetObject() ) ) , uno::Any());
+                CommitChange( AccessibleEventId::CHILD, Any( getAccessible( pSdrHint->GetObject() ) ) , uno::Any());
                 break;
             case SdrHintKind::ObjectRemoved:
-                CommitChange( AccessibleEventId::CHILD, uno::Any(), makeAny( getAccessible( pSdrHint->GetObject() ) )  );
+                CommitChange( AccessibleEventId::CHILD, uno::Any(), Any( getAccessible( pSdrHint->GetObject() ) )  );
                 break;
             case SdrHintKind::ModelCleared:
                 dispose();

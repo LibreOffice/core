@@ -163,7 +163,7 @@ IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, Sdr
 
             case SdrObjKind::FormTimeField:
                 sServiceSpecifier = FM_COMPONENT_TIMEFIELD;
-                aInitialProperties.emplace_back( FM_PROP_TIMEMAX, makeAny( tools::Time( 23, 59, 59, 999999999 ).GetUNOTime() ) );
+                aInitialProperties.emplace_back( FM_PROP_TIMEMAX, Any( tools::Time( 23, 59, 59, 999999999 ).GetUNOTime() ) );
                 break;
 
             case SdrObjKind::FormNumericField:
@@ -196,12 +196,12 @@ IMPL_STATIC_LINK(FmFormObjFactory, MakeObject, SdrObjCreatorParams, aParams, Sdr
 
             case SdrObjKind::FormScrollbar:
                 sServiceSpecifier = FM_SUN_COMPONENT_SCROLLBAR;
-                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( sal_Int16(0) ) );
+                aInitialProperties.emplace_back( FM_PROP_BORDER, Any( sal_Int16(0) ) );
                 break;
 
             case SdrObjKind::FormSpinButton:
                 sServiceSpecifier = FM_SUN_COMPONENT_SPINBUTTON;
-                aInitialProperties.emplace_back( FM_PROP_BORDER, makeAny( sal_Int16(0) ) );
+                aInitialProperties.emplace_back( FM_PROP_BORDER, Any( sal_Int16(0) ) );
                 break;
 
             default:

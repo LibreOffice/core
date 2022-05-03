@@ -209,7 +209,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 
     if ( pIsLabelTextWithSmartTags )
     {
-        const Any aEnabled = makeAny( *pIsLabelTextWithSmartTags );
+        const Any aEnabled( *pIsLabelTextWithSmartTags );
 
         try
         {
@@ -225,7 +225,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
     {
         Sequence< OUString > aTypes = comphelper::containerToSequence(*pDisabledTypes);
 
-        const Any aNewTypes = makeAny( aTypes );
+        const Any aNewTypes( aTypes );
 
         try
         {
@@ -374,7 +374,7 @@ void SmartTagMgr::LoadLibraries()
 
 void SmartTagMgr::PrepareConfiguration( std::u16string_view rConfigurationGroupName )
 {
-    Any aAny = makeAny(
+    Any aAny(
         OUString::Concat("/org.openoffice.Office.Common/SmartTags/") + rConfigurationGroupName );
     beans::PropertyValue aPathArgument;
     aPathArgument.Name = "nodepath";

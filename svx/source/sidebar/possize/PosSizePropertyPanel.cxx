@@ -435,7 +435,7 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ClickAutoHdl, weld::Toggleable&, void )
 
     // mxCbxScale must synchronized with that on Position and Size tabpage on Shape Properties dialog
     SvtViewOptions aPageOpt(EViewType::TabPage, "cui/ui/possizetabpage/PositionAndSize");
-    aPageOpt.SetUserItem( USERITEM_NAME, css::uno::makeAny( OUString::number( int(mxCbxScale->get_active()) ) ) );
+    aPageOpt.SetUserItem( USERITEM_NAME, css::uno::Any( OUString::number( int(mxCbxScale->get_active()) ) ) );
 }
 
 IMPL_LINK_NOARG( PosSizePropertyPanel, RotationHdl, DialControl&, void )

@@ -489,7 +489,7 @@ void SvxOle2Shape::createLink( const OUString& aLinkURL )
     }
 
     // connect the object after the visual area is set
-    SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, uno::makeAny( aPersistName ) );
+    SvxShape::setPropertyValue( UNO_NAME_OLE2_PERSISTNAME, uno::Any( aPersistName ) );
 
     // the object is inserted during setting of PersistName property usually
     if ( pOle2Obj->IsEmpty() )

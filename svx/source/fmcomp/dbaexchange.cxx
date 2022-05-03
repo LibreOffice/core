@@ -223,7 +223,7 @@ namespace svx
             default: break;
         }
         if (nFormatId == getDescriptorFormatId())
-            return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ) );
+            return SetAny( Any( m_aDescriptor.createPropertyValueSequence() ) );
 
         return false;
     }
@@ -430,7 +430,7 @@ namespace svx
             case SotClipboardFormatId::DBACCESS_TABLE:
             case SotClipboardFormatId::DBACCESS_QUERY:
             case SotClipboardFormatId::DBACCESS_COMMAND:
-                return SetAny( makeAny(m_aDescriptor.createPropertyValueSequence()) );
+                return SetAny( Any(m_aDescriptor.createPropertyValueSequence()) );
 
             case SotClipboardFormatId::SBA_DATAEXCHANGE:
                 return SetString(m_sCompatibleObjectDescription);
@@ -592,7 +592,7 @@ namespace svx
         const SotClipboardFormatId nFormatId = SotExchange::GetFormat(_rFlavor);
         if (nFormatId == getDescriptorFormatId())
         {
-            return SetAny( makeAny( m_aDescriptors ) );
+            return SetAny( Any( m_aDescriptors ) );
         }
 
         return false;

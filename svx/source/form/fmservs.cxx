@@ -32,7 +32,7 @@ using namespace com::sun::star;
                         OUString(), ImplName##_NewInstance_Impl,    \
                         uno::Sequence< OUString>(&sString, 1));     \
     if (xSingleFactory.is())                                        \
-        xSet->insert(uno::makeAny(xSingleFactory));
+        xSet->insert(uno::Any(xSingleFactory));
 
 namespace svxform
 {
@@ -60,7 +60,7 @@ namespace svxform
                              OAddConditionDialog_GetSupportedServiceNames()
                          );
         if ( xSingleFactory.is() )
-            xSet->insert( uno::makeAny( xSingleFactory ) );
+            xSet->insert( uno::Any( xSingleFactory ) );
 
 
         // DBGridControl

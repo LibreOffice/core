@@ -56,7 +56,6 @@ namespace svxform
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::lang::Locale;
@@ -186,7 +185,7 @@ namespace svxform
                 // retrieve a default font for this locale, and set it at the control
                 vcl::Font aFont = OutputDevice::GetDefaultFont( DefaultFontType::SANS, LanguageTag::convertToLanguageType( aDocumentCharLocale ), GetDefaultFontFlags::OnlyOne );
                 FontDescriptor aFontDesc = VCLUnoHelper::CreateFontDescriptor( aFont );
-                _rxModel->setPropertyValue("FontDescriptor", makeAny( aFontDesc )
+                _rxModel->setPropertyValue("FontDescriptor", Any( aFontDesc )
                 );
             }
             catch( const Exception& )
@@ -260,16 +259,16 @@ namespace svxform
                         && ( nClassId != FormComponentType::SPINBUTTON )
                         )
                     {
-                        _rxControlModel->setPropertyValue( FM_PROP_BORDER, makeAny( nVisualEffect ) );
+                        _rxControlModel->setPropertyValue( FM_PROP_BORDER, Any( nVisualEffect ) );
                         if  (   ( nVisualEffect == VisualEffect::FLAT )
                             &&  ( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
                             )
                             // light gray flat border
-                            _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( sal_Int32(0x00C0C0C0) ) );
+                            _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, Any( sal_Int32(0x00C0C0C0) ) );
                     }
                 }
                 if ( xPSI->hasPropertyByName( FM_PROP_VISUALEFFECT ) )
-                    _rxControlModel->setPropertyValue( FM_PROP_VISUALEFFECT, makeAny( nVisualEffect ) );
+                    _rxControlModel->setPropertyValue( FM_PROP_VISUALEFFECT, Any( nVisualEffect ) );
             }
 
             // the font (only if we use the document's ref devices for rendering control text, otherwise, the

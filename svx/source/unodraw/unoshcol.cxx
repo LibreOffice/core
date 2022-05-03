@@ -209,7 +209,7 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
         throw lang::IndexOutOfBoundsException();
 
     Reference<drawing::XShape> xShape = maShapeContainer.getInterface(Index);
-    return uno::makeAny( xShape );
+    return uno::Any( xShape );
 }
 
 // XElementAccess

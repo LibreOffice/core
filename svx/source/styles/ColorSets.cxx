@@ -60,7 +60,7 @@ void UpdateTextPortionColorSet(const uno::Reference<beans::XPropertySet>& xPorti
     }
 
     xPortion->setPropertyValue(UNO_NAME_EDIT_CHAR_COLOR,
-                               uno::makeAny(static_cast<sal_Int32>(aColor)));
+                               uno::Any(static_cast<sal_Int32>(aColor)));
 }
 
 void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const svx::ColorSet& rColorSet)
@@ -87,7 +87,7 @@ void UpdateFillColorSet(const uno::Reference<beans::XPropertySet>& xShape, const
         aColor.ApplyLumModOff(nFillColorLumMod, nFillColorLumOff);
     }
 
-    xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::makeAny(static_cast<sal_Int32>(aColor)));
+    xShape->setPropertyValue(UNO_NAME_FILLCOLOR, uno::Any(static_cast<sal_Int32>(aColor)));
 }
 
 void UpdateSdrObject(svx::Theme* pTheme, SdrObject* pObject)

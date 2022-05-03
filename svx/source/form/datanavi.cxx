@@ -393,7 +393,7 @@ namespace svxform
                     {
                         Reference< css::xforms::XSubmission > xNewSubmission = aDlg.GetNewSubmission();
                         Reference< XSet > xSubmissions = xModel->getSubmissions();
-                        xSubmissions->insert( makeAny( xNewSubmission ) );
+                        xSubmissions->insert( Any( xNewSubmission ) );
                         AddEntry(xNewSubmission, m_xScratchIter.get());
                         m_xItemList->select(*m_xScratchIter);
                         bIsDocModified = true;
@@ -497,7 +497,7 @@ namespace svxform
                         pResId = RID_STR_DATANAV_ADD_BINDING;
                         xNewBinding = xModel->createBinding();
                         Reference< XSet > xBindings = xModel->getBindings();
-                        xBindings->insert( makeAny( xNewBinding ) );
+                        xBindings->insert( Any( xNewBinding ) );
                         pNode.reset(new ItemNode( xNewBinding ));
                         eType = DITBinding;
                     }
@@ -550,7 +550,7 @@ namespace svxform
                         try
                         {
                             Reference< XSet > xBindings = xModel->getBindings();
-                            xBindings->remove( makeAny( xNewBinding ) );
+                            xBindings->remove( Any( xNewBinding ) );
                         }
                         catch ( Exception const & )
                         {
@@ -930,9 +930,9 @@ namespace svxform
                     try
                     {
                         if ( bSubmission )
-                            xModel->getSubmissions()->remove( makeAny( pNode->m_xPropSet ) );
+                            xModel->getSubmissions()->remove( Any( pNode->m_xPropSet ) );
                         else // then Binding Page
-                            xModel->getBindings()->remove( makeAny( pNode->m_xPropSet ) );
+                            xModel->getBindings()->remove( Any( pNode->m_xPropSet ) );
                         bRet = true;
                     }
                     catch ( Exception const & )
@@ -1398,7 +1398,7 @@ namespace svxform
                                 xUIHelper->newModel( m_xFrameModel, sNewName ), UNO_SET_THROW );
 
                             Reference< XPropertySet > xModelProps( xNewModel, UNO_QUERY_THROW );
-                            xModelProps->setPropertyValue("ExternalData", makeAny( !bDocumentData ) );
+                            xModelProps->setPropertyValue("ExternalData", Any( !bDocumentData ) );
 
                             m_xModelsBox->append_text(sNewName);
                             m_xModelsBox->set_active(m_xModelsBox->get_count() - 1);
@@ -1444,7 +1444,7 @@ namespace svxform
                         Reference< css::xforms::XFormsSupplier > xFormsSupp( m_xFrameModel, UNO_QUERY_THROW );
                         Reference< XNameContainer > xXForms( xFormsSupp->getXForms(), UNO_SET_THROW );
                         Reference< XPropertySet > xModelProps( xXForms->getByName( sSelectedModel ), UNO_QUERY_THROW );
-                        xModelProps->setPropertyValue( "ExternalData", makeAny( !bDocumentData ) );
+                        xModelProps->setPropertyValue( "ExternalData", Any( !bDocumentData ) );
                         bIsDocModified = true;
                     }
                     catch( const Exception& )
@@ -2096,7 +2096,7 @@ namespace svxform
                 {
                     Reference < XSet > xBindings = xModel->getBindings();
                     if ( xBindings.is() )
-                        xBindings->remove( makeAny( m_xTempBinding ) );
+                        xBindings->remove( Any( m_xTempBinding ) );
                 }
                 catch (const Exception&)
                 {
@@ -2145,7 +2145,7 @@ namespace svxform
             sTemp = TRUE_VALUE;
         else if ( !bIsChecked && !sTemp.isEmpty() )
             sTemp.clear();
-        m_xTempBinding->setPropertyValue( sPropName, makeAny( sTemp ) );
+        m_xTempBinding->setPropertyValue( sPropName, Any( sTemp ) );
     }
 
     IMPL_LINK(AddDataItemDialog, ConditionHdl, weld::Button&, rBtn, void)
@@ -2187,7 +2187,7 @@ namespace svxform
             {
 
                 m_xTempBinding->setPropertyValue(
-                    sPropName, makeAny( sNewCondition ) );
+                    sPropName, Any( sNewCondition ) );
             }
         }
     }
@@ -2243,7 +2243,7 @@ namespace svxform
         }
 
         OUString sDataType( m_xDataTypeLB->get_active_text() );
-        m_xTempBinding->setPropertyValue( PN_BINDING_TYPE, makeAny( sDataType ) );
+        m_xTempBinding->setPropertyValue( PN_BINDING_TYPE, Any( sDataType ) );
 
         if ( bIsHandleBinding )
         {
@@ -2252,9 +2252,9 @@ namespace svxform
             try
             {
                 OUString sValue = m_xNameED->get_text();
-                m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_ID, makeAny( sValue ) );
+                m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_ID, Any( sValue ) );
                 sValue = m_xDefaultED->get_text();
-                m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_EXPR, makeAny( sValue ) );
+                m_pItemNode->m_xPropSet->setPropertyValue( PN_BINDING_EXPR, Any( sValue ) );
             }
             catch ( Exception const & )
             {
@@ -2349,7 +2349,7 @@ namespace svxform
                             m_xTempBinding = m_xUIHelper->cloneBindingAsGhost( m_xBinding );
                             Reference < XSet > xBindings = xModel->getBindings();
                             if ( xBindings.is() )
-                                xBindings->insert( makeAny( m_xTempBinding ) );
+                                xBindings->insert( Any( m_xTempBinding ) );
                         }
                     }
 
@@ -2376,7 +2376,7 @@ namespace svxform
                         m_xTempBinding = m_xUIHelper->cloneBindingAsGhost( m_pItemNode->m_xPropSet );
                         Reference < XSet > xBindings = xModel->getBindings();
                         if ( xBindings.is() )
-                            xBindings->insert( makeAny( m_xTempBinding ) );
+                            xBindings->insert( Any( m_xTempBinding ) );
                     }
                     catch ( Exception const & )
                     {
@@ -2587,7 +2587,7 @@ namespace svxform
         aDlg.run();
         try
         {
-            m_xBinding->setPropertyValue( PN_BINDING_NAMESPACES, makeAny( xNameContnr ) );
+            m_xBinding->setPropertyValue( PN_BINDING_NAMESPACES, Any( xNameContnr ) );
         }
         catch ( Exception const & )
         {
@@ -2725,9 +2725,9 @@ namespace svxform
                 OUString sURL(m_xNamespacesList->get_text(i, 1));
 
                 if ( m_rNamespaces->hasByName( sPrefix ) )
-                    m_rNamespaces->replaceByName( sPrefix, makeAny( sURL ) );
+                    m_rNamespaces->replaceByName( sPrefix, Any( sURL ) );
                 else
-                    m_rNamespaces->insertByName( sPrefix, makeAny( sURL ) );
+                    m_rNamespaces->insertByName( sPrefix, Any( sURL ) );
             }
         }
         catch ( Exception const & )
@@ -2882,21 +2882,21 @@ namespace svxform
             OUString sTemp = m_xNameED->get_text();
             try
             {
-                m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, makeAny( sTemp ) );
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_ID, Any( sTemp ) );
                 sTemp = m_xActionED->get_text();
-                m_xSubmission->setPropertyValue( PN_SUBMISSION_ACTION, makeAny( sTemp ) );
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_ACTION, Any( sTemp ) );
                 sTemp = m_aMethodString.toAPI( m_xMethodLB->get_active_text() );
-                m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, makeAny( sTemp ) );
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_METHOD, Any( sTemp ) );
                 sTemp = m_xRefED->get_text();
-                m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, makeAny( sTemp ) );
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_REF, Any( sTemp ) );
                 OUString sEntry = m_xBindLB->get_active_text();
                 sal_Int32 nColonIdx = sEntry.indexOf(':');
                 if (nColonIdx != -1)
                     sEntry = sEntry.copy(0, nColonIdx);
                 sTemp = sEntry;
-                m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, makeAny( sTemp ) );
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_BIND, Any( sTemp ) );
                 sTemp = m_aReplaceString.toAPI( m_xReplaceLB->get_active_text() );
-                m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, makeAny( sTemp ) );
+                m_xSubmission->setPropertyValue( PN_SUBMISSION_REPLACE, Any( sTemp ) );
             }
             catch ( Exception const & )
             {

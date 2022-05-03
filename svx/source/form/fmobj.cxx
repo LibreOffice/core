@@ -166,7 +166,7 @@ void FmFormObj::impl_checkRefDevice_nothrow( bool _force )
             rtl::Reference<VCLXDevice> pUnoRefDevice = new VCLXDevice;
             pUnoRefDevice->SetOutputDevice( m_pLastKnownRefDevice );
             Reference< XDevice > xRefDevice( pUnoRefDevice );
-            xModelProps->setPropertyValue( sRefDevicePropName, makeAny( xRefDevice ) );
+            xModelProps->setPropertyValue( sRefDevicePropName, Any( xRefDevice ) );
         }
     }
     catch( const Exception& )
@@ -315,7 +315,7 @@ void FmFormObj::handlePageChange(SdrPage* pOldPage, SdrPage* pNewPage)
             }
 
             // and insert into the new container
-            xNewParent->insertByIndex(xNewParent->getCount(), makeAny(xMeAsFormComp));
+            xNewParent->insertByIndex(xNewParent->getCount(), Any(xMeAsFormComp));
 
             // transfer the events
             if (aNewEvents.hasElements())
@@ -527,7 +527,7 @@ Reference< XInterface >  FmFormObj::ensureModelEnv(const Reference< XInterface >
                     ::comphelper::copyProperties( xCurrentSourceForm, xCurrentDestForm );
 
                     DBG_ASSERT(nCurrentDestIndex == xDestContainer->getCount(), "FmFormObj::ensureModelEnv : something went wrong with the numbers !");
-                    xDestContainer->insertByIndex(nCurrentDestIndex, makeAny(xCurrentDestForm));
+                    xDestContainer->insertByIndex(nCurrentDestIndex, Any(xCurrentDestForm));
 
                     ++nCurrentDestIndex;
                         // like nCurrentSourceIndex, nCurrentDestIndex now points 'behind' the form it actually means
@@ -618,7 +618,7 @@ bool FmFormObj::EndCreate( SdrDragStat& rStat, SdrCreateCmd eCmd )
                 FmFormPageImpl::setUniqueName( xContent, xParentForm );
 
                 if ( xFormToInsertInto.is() )
-                    xFormToInsertInto->insertByIndex( xFormToInsertInto->getCount(), makeAny( xContent ) );
+                    xFormToInsertInto->insertByIndex( xFormToInsertInto->getCount(), Any( xContent ) );
             }
             catch( const Exception& )
             {

@@ -161,7 +161,7 @@ bool FmFieldWin::createSelectionControls()
         aDescr[ DataAccessDescriptorProperty::ColumnName ]  <<= pSelected->sColumnName;
 
         // transfer this to the SFX world
-        SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, makeAny( aDescr.createPropertyValueSequence() ) );
+        SfxUnoAnyItem aDescriptorItem( SID_FM_DATACCESS_DESCRIPTOR, Any( aDescr.createPropertyValueSequence() ) );
         const SfxPoolItem* pArgs[] =
         {
             &aDescriptorItem, nullptr

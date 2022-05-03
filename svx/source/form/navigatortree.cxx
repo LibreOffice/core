@@ -1073,12 +1073,12 @@ namespace svxform
             {
                  // insert in a form needs a FormComponent
                 xContainer->insertByIndex( nIndex,
-                    makeAny( Reference< XFormComponent >( xCurrentChild, UNO_QUERY ) ) );
+                    Any( Reference< XFormComponent >( xCurrentChild, UNO_QUERY ) ) );
             }
             else
             {
                 xContainer->insertByIndex( nIndex,
-                    makeAny( Reference< XForm >( xCurrentChild, UNO_QUERY ) ) );
+                    Any( Reference< XForm >( xCurrentChild, UNO_QUERY ) ) );
             }
 
             if (aEvts.hasElements())
@@ -1292,9 +1292,9 @@ namespace svxform
 
         try
         {
-            xPropertySet->setPropertyValue( FM_PROP_NAME, makeAny(aName) );
+            xPropertySet->setPropertyValue( FM_PROP_NAME, Any(aName) );
             // a form should always have the command type table as default
-            xPropertySet->setPropertyValue( FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE)));
+            xPropertySet->setPropertyValue( FM_PROP_COMMANDTYPE, Any(sal_Int32(CommandType::TABLE)));
         }
         catch ( const Exception& )
         {

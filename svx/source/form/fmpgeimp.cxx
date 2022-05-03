@@ -246,7 +246,7 @@ namespace
         if ( !xControlShape.is() )
             return;
 
-        _map->put( makeAny( xControlModel ), makeAny( xControlShape ) );
+        _map->put( Any( xControlModel ), Any( xControlShape ) );
     }
 
     void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
@@ -259,9 +259,9 @@ namespace
             return;
         }
 
-        Any aOldAssignment = _map->remove( makeAny( xControlModel ) );
+        Any aOldAssignment = _map->remove( Any( xControlModel ) );
         OSL_ENSURE(
-            aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
+            aOldAssignment == Any( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
                 "lcl_removeFormObject: map was inconsistent!" );
     }
 }
@@ -407,11 +407,11 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
 
             // a form should always have the command type table as default
             Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
-            xFormProps->setPropertyValue( FM_PROP_COMMANDTYPE, makeAny( sal_Int32( CommandType::TABLE ) ) );
+            xFormProps->setPropertyValue( FM_PROP_COMMANDTYPE, Any( sal_Int32( CommandType::TABLE ) ) );
 
             // and the "Standard" name
             OUString sName = SvxResId(RID_STR_STDFORMNAME);
-            xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
+            xFormProps->setPropertyValue( FM_PROP_NAME, Any( sName ) );
 
             if( rModel.IsUndoEnabled() )
             {
@@ -423,7 +423,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
                         xForm,
                         xForms->getCount()));
             }
-            xForms->insertByName( sName, makeAny( xForm ) );
+            xForms->insertByName( sName, Any( xForm ) );
             xCurrentForm = xForm;
         }
         catch( const Exception& )
@@ -486,11 +486,11 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
             xForm.set(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
             // a form should always have the command type table as default
             Reference< css::beans::XPropertySet > xFormProps(xForm, UNO_QUERY);
-            try { xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
+            try { xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, Any(sal_Int32(CommandType::TABLE))); }
             catch(Exception&) { }
 
             if (!rDBTitle.isEmpty())
-                xFormProps->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
+                xFormProps->setPropertyValue(FM_PROP_DATASOURCE,Any(rDBTitle));
             else
             {
                 Reference< css::beans::XPropertySet >  xDatabaseProps(rDatabase, UNO_QUERY);
@@ -498,8 +498,8 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
                 xFormProps->setPropertyValue(FM_PROP_URL, aDatabaseUrl);
             }
 
-            xFormProps->setPropertyValue(FM_PROP_COMMAND,makeAny(rCursorSource));
-            xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
+            xFormProps->setPropertyValue(FM_PROP_COMMAND,Any(rCursorSource));
+            xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, Any(nCommandType));
 
             Reference< css::container::XNameAccess >  xNamedSet = getForms();
 
@@ -507,7 +507,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
             OUString sName = FormControlFactory::getUniqueName( xNamedSet,
                 bTableOrQuery ? rCursorSource : SvxResId(RID_STR_STDFORMNAME) );
 
-            xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
+            xFormProps->setPropertyValue( FM_PROP_NAME, Any( sName ) );
 
             if( bUndo )
             {
@@ -521,7 +521,7 @@ Reference< css::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy
                         xContainer->getCount()));
             }
 
-            getForms()->insertByName( sName, makeAny( xForm ) );
+            getForms()->insertByName( sName, Any( xForm ) );
 
             if( bUndo )
                 rModel.EndUndo();
@@ -594,8 +594,8 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             // if no data source is set yet, it is done here
             if (aCursorSource.isEmpty())
             {
-                xFormProps->setPropertyValue(FM_PROP_COMMAND, makeAny(_rCursorSource));
-                xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(nCommandType));
+                xFormProps->setPropertyValue(FM_PROP_COMMAND, Any(_rCursorSource));
+                xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, Any(nCommandType));
             }
         }
     }
@@ -646,7 +646,7 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
             // do not overwrite the name of radio buttons that have it!
             if (sName.isEmpty() || nClassId != css::form::FormComponentType::RADIOBUTTON)
             {
-                xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));
+                xSet->setPropertyValue(FM_PROP_NAME, Any(sDefaultName));
             }
 
             sName = sDefaultName;

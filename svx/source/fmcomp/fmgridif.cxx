@@ -2581,7 +2581,7 @@ Any SAL_CALL FmXGridPeer::getSelection(  )
 {
     VclPtr< FmGridControl > pVclControl = GetAs< FmGridControl >();
     Sequence< Any > aSelectionBookmarks = pVclControl->getSelectionBookmarks();
-    return makeAny(aSelectionBookmarks);
+    return Any(aSelectionBookmarks);
 }
 
 

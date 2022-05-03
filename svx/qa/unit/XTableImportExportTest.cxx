@@ -51,7 +51,7 @@ CPPUNIT_TEST_FIXTURE(XTableImportExportTest, testImportExport)
         Graphic aGraphic(aBitmapEx);
         uno::Reference<awt::XBitmap> xBitmap(aGraphic.GetXGraphic(), css::uno::UNO_QUERY);
 
-        xNameContainer->insertByName("SomeBitmap", uno::makeAny(xBitmap));
+        xNameContainer->insertByName("SomeBitmap", uno::Any(xBitmap));
         xBitmapList->Save();
 
         aChecksum = aBitmap.GetChecksum();

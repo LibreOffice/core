@@ -127,13 +127,13 @@ CPPUNIT_TEST_FIXTURE(XOutdevTest, testFillColorThemeUnoApi)
                                              uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
     sal_Int16 nExpected = 4; // Accent 1
-    xShape->setPropertyValue("FillColorTheme", uno::makeAny(nExpected));
+    xShape->setPropertyValue("FillColorTheme", uno::Any(nExpected));
 
     // 80% lighter
     sal_Int16 nExpectedLumMod = 2000;
-    xShape->setPropertyValue("FillColorLumMod", uno::makeAny(nExpectedLumMod));
+    xShape->setPropertyValue("FillColorLumMod", uno::Any(nExpectedLumMod));
     sal_Int16 nExpectedLumOff = 8000;
-    xShape->setPropertyValue("FillColorLumOff", uno::makeAny(nExpectedLumOff));
+    xShape->setPropertyValue("FillColorLumOff", uno::Any(nExpectedLumOff));
 
     // Then make sure the value we read back is the expected one:
     sal_Int16 nActual = -1;

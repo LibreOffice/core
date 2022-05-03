@@ -1820,7 +1820,7 @@ void SdrObject::SetOutlinerParaObject(std::optional<OutlinerParaObject> pTextObj
     {
         // A shape was modified, which is in a group shape. Empty the group shape's grab-bag,
         // which potentially contains the old text of the shapes in case of diagrams.
-        pTopGroupObj->SetGrabBagItem(uno::makeAny(uno::Sequence<beans::PropertyValue>()));
+        pTopGroupObj->SetGrabBagItem(uno::Any(uno::Sequence<beans::PropertyValue>()));
     }
 }
 

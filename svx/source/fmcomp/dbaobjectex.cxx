@@ -92,7 +92,7 @@ namespace svx
     {
         const SotClipboardFormatId nFormatId = SotExchange::GetFormat(_rFlavor);
         if ( nFormatId == getDescriptorFormatId(true) || nFormatId == getDescriptorFormatId(false) )
-            return SetAny( makeAny( m_aDescriptor.createPropertyValueSequence() ) );
+            return SetAny( Any( m_aDescriptor.createPropertyValueSequence() ) );
 
         return false;
     }

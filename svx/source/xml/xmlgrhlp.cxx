@@ -475,7 +475,7 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const OUSt
     if (aRet.xStream.is() && (SvXMLGraphicHelperMode::Write == meCreateMode))
     {
         uno::Reference<beans::XPropertySet> xProps(aRet.xStream, uno::UNO_QUERY);
-        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::makeAny(true));
+        xProps->setPropertyValue("UseCommonStoragePasswordEncryption", uno::Any(true));
     }
 
     return aRet;

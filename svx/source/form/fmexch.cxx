@@ -255,12 +255,12 @@ namespace svxform
             aCompleteInfo.getArray()[ 0 ] <<= m_xFormsRoot;
             aCompleteInfo.getArray()[ 1 ] <<= m_aControlPaths;
 
-            SetAny( makeAny( aCompleteInfo ) );
+            SetAny( Any( aCompleteInfo ) );
         }
         else if ( getHiddenControlModelsFormatId() == nFormatId )
         {
             // just need to transfer the models
-            SetAny( makeAny( m_aHiddenControlModels ) );
+            SetAny( Any( m_aHiddenControlModels ) );
         }
         else
             return OLocalExchange::GetData(_rFlavor, rDestDoc);

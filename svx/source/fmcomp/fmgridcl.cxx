@@ -136,7 +136,7 @@ void FmGridHeader::notifyColumnSelect(sal_uInt16 nColumnId)
         {
             Reference< XPropertySet >  xColumn;
             xColumns->getByIndex(nPos) >>= xColumn;
-            xSelSupplier->select(makeAny(xColumn));
+            xSelSupplier->select(Any(xColumn));
         }
     }
 }
@@ -307,7 +307,7 @@ sal_Int8 FmGridHeader::ExecuteDrop( const ExecuteDropEvent& _rEvt )
                     // not interested in any results
 
                     Reference< XPropertySet > xStatProps(xStatement,UNO_QUERY);
-                    xStatProps->setPropertyValue("MaxRows", makeAny(sal_Int32(0)));
+                    xStatProps->setPropertyValue("MaxRows", Any(sal_Int32(0)));
 
                     xResultSet = xStatement->executeQuery();
                     Reference< XColumnsSupplier >  xSupplyCols(xResultSet, UNO_QUERY);
@@ -556,13 +556,13 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         if (bDateNTimeCol)
         {
             OUString sTimePostfix(SvxResId(RID_STR_POSTFIX_TIME));
-            xCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sTimePostfix ) ) );
+            xCol->setPropertyValue(FM_PROP_LABEL, Any( OUString( sFieldName + sTimePostfix ) ) );
 
             OUString sDatePostfix(SvxResId( RID_STR_POSTFIX_DATE));
-            xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny( OUString( sFieldName + sDatePostfix ) ) );
+            xSecondCol->setPropertyValue(FM_PROP_LABEL, Any( OUString( sFieldName + sDatePostfix ) ) );
         }
         else
-            xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
+            xCol->setPropertyValue(FM_PROP_LABEL, Any(sFieldName));
 
         // insert now
         Any aElement;
@@ -574,9 +574,9 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
         aControlFactory.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xCol );
         FormControlFactory::initializeFieldDependentProperties( xField, xCol, xNumberFormats );
 
-        xCol->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny(sFieldName));
+        xCol->setPropertyValue(FM_PROP_CONTROLSOURCE, Any(sFieldName));
         if ( xSecondCol.is() )
-            xSecondCol->setPropertyValue(FM_PROP_CONTROLSOURCE, makeAny(sFieldName));
+            xSecondCol->setPropertyValue(FM_PROP_CONTROLSOURCE, Any(sFieldName));
 
         if (bDateNTimeCol)
         {
@@ -592,13 +592,13 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
                 sPurePostfix = comphelper::string::stripEnd(sPurePostfix, ')');
                 OUString sRealName = sFieldName + "_" + sPurePostfix;
                 if (i)
-                    xSecondCol->setPropertyValue(FM_PROP_NAME, makeAny(sRealName));
+                    xSecondCol->setPropertyValue(FM_PROP_NAME, Any(sRealName));
                 else
-                    xCol->setPropertyValue(FM_PROP_NAME, makeAny(sRealName));
+                    xCol->setPropertyValue(FM_PROP_NAME, Any(sRealName));
             }
         }
         else
-            xCol->setPropertyValue(FM_PROP_NAME, makeAny(sFieldName));
+            xCol->setPropertyValue(FM_PROP_NAME, Any(sFieldName));
 
         if (bDateNTimeCol)
         {
@@ -614,14 +614,14 @@ IMPL_LINK_NOARG( FmGridHeader, OnAsyncExecuteDrop, void*, void )
             if (::comphelper::getString(xForm->getPropertyValue(FM_PROP_DATASOURCE)).isEmpty())
             {
                 if ( !sDatasource.isEmpty() )
-                    xForm->setPropertyValue(FM_PROP_DATASOURCE, makeAny(sDatasource));
+                    xForm->setPropertyValue(FM_PROP_DATASOURCE, Any(sDatasource));
                 else
-                    xForm->setPropertyValue(FM_PROP_URL, makeAny(sURL));
+                    xForm->setPropertyValue(FM_PROP_URL, Any(sURL));
             }
 
             if (::comphelper::getString(xForm->getPropertyValue(FM_PROP_COMMAND)).isEmpty())
             {
-                xForm->setPropertyValue(FM_PROP_COMMAND, makeAny(sCommand));
+                xForm->setPropertyValue(FM_PROP_COMMAND, Any(sCommand));
                 Any aCommandType;
                 switch (nCommandType)
                 {
@@ -669,7 +669,7 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, weld::Menu& rM
         Reference< css::beans::XPropertySet>          xColumn( xColumns->getByIndex(nPos2), css::uno::UNO_QUERY);
         Reference< css::view::XSelectionSupplier >    xSelSupplier(xColumns, UNO_QUERY);
         if (xSelSupplier.is())
-            xSelSupplier->select(makeAny(xColumn));
+            xSelSupplier->select(Any(xColumn));
     }
 
     // insert position, always before the current column
@@ -834,7 +834,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
     else if (rExecutionResult == "hide")
     {
         Reference< css::beans::XPropertySet > xCurCol( xCols->getByIndex(nPos), css::uno::UNO_QUERY);
-        xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(true));
+        xCurCol->setPropertyValue(FM_PROP_HIDDEN, Any(true));
     }
     else if (rExecutionResult == "column")
     {
@@ -914,7 +914,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
         for (sal_Int32 i=0; i<xCols->getCount(); ++i)
         {
             xCurCol.set(xCols->getByIndex(i), css::uno::UNO_QUERY);
-            xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
+            xCurCol->setPropertyValue(FM_PROP_HIDDEN, Any(false));
         }
         // TODO : there must be a more clever way to do this...
         // with the above the view is updated after every single model update ...
@@ -934,7 +934,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
                 if (::comphelper::getBOOL(aHidden))
                     if (!--nExecutionResult)
                     {
-                        xCurCol->setPropertyValue(FM_PROP_HIDDEN, makeAny(false));
+                        xCurCol->setPropertyValue(FM_PROP_HIDDEN, Any(false));
                         break;
                     }
             }
@@ -956,7 +956,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
                 TransferFormComponentProperties(
                     xReplaced, xNewCol, Application::GetSettings().GetUILanguageTag().getLocale() );
 
-                xCols->replaceByIndex( nPos, makeAny( xNewCol ) );
+                xCols->replaceByIndex( nPos, Any( xNewCol ) );
                 ::comphelper::disposeComponent( xReplaced );
 
                 eInspectorAction = eUpdateInspector;
@@ -967,12 +967,12 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const weld::M
 
                 OUString sLabel = FormControlFactory::getDefaultUniqueName_ByComponentType(
                     Reference< XNameAccess >( xCols, UNO_QUERY_THROW ), xNewCol );
-                xNewCol->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel ) );
-                xNewCol->setPropertyValue( FM_PROP_NAME, makeAny( sLabel ) );
+                xNewCol->setPropertyValue( FM_PROP_LABEL, Any( sLabel ) );
+                xNewCol->setPropertyValue( FM_PROP_NAME, Any( sLabel ) );
 
                 factory.initializeControlModel( DocumentClassification::classifyHostDocument( xCols ), xNewCol );
 
-                xCols->insertByIndex( nPos, makeAny( xNewCol ) );
+                xCols->insertByIndex( nPos, Any( xNewCol ) );
             }
         }
         catch( const Exception& )
@@ -1509,7 +1509,7 @@ void FmGridControl::RowHeightChanged()
     try
     {
         sal_Int32 nUnzoomedPixelHeight = CalcReverseZoom( GetDataRowHeight() );
-        Any aProperty = makeAny( static_cast<sal_Int32>(PixelToLogic( Point(0, nUnzoomedPixelHeight), MapMode(MapUnit::Map10thMM)).Y()) );
+        Any aProperty( static_cast<sal_Int32>(PixelToLogic( Point(0, nUnzoomedPixelHeight), MapMode(MapUnit::Map10thMM)).Y()) );
         xModel->setPropertyValue( FM_PROP_ROWHEIGHT, aProperty );
     }
     catch( const Exception& )
@@ -2030,7 +2030,7 @@ void FmGridControl::Select()
                 Reference< XPropertySet >  xColumn(
                     xColumns->getByIndex(nSelectedColumn),
                     css::uno::UNO_QUERY);
-                xSelSupplier->select(makeAny(xColumn));
+                xSelSupplier->select(Any(xColumn));
             }
             else
             {

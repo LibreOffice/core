@@ -146,8 +146,7 @@ void setShapeCertificate(const SdrView* pView,
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
     comphelper::SequenceAsHashMap aMap(xShapeProps->getPropertyValue("InteropGrabBag"));
     aMap["SignatureCertificate"] <<= xCertificate;
-    xShapeProps->setPropertyValue("InteropGrabBag",
-                                  uno::makeAny(aMap.getAsConstPropertyValueList()));
+    xShapeProps->setPropertyValue("InteropGrabBag", uno::Any(aMap.getAsConstPropertyValueList()));
 
     // Read svg and replace placeholder texts.
     OUString aSvgImage(svx::SignatureLineHelper::getSignatureImage("signature-line-draw.svg"));

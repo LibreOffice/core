@@ -99,12 +99,12 @@ void displayException(const Any& _rExcept, const css::uno::Reference<css::awt::X
 
 void displayException(const css::sdbc::SQLException& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    displayException(makeAny(_rExcept), rParent);
+    displayException(Any(_rExcept), rParent);
 }
 
 void displayException(const css::sdb::SQLContext& _rExcept, const css::uno::Reference<css::awt::XWindow>& rParent)
 {
-    displayException(makeAny(_rExcept), rParent);
+    displayException(Any(_rExcept), rParent);
 }
 
 void displayException(const css::sdb::SQLErrorEvent& _rEvent, const css::uno::Reference<css::awt::XWindow>& rParent)

@@ -168,16 +168,16 @@ void impl_executeSearch( const css::uno::Reference< css::uno::XComponentContext 
                   | TransliterationFlags::IGNORE_KASHIDA_CTL;
 
     auto aArgs( comphelper::InitPropertySequence( {
-        { "SearchItem.SearchString", css::uno::makeAny( sFindText ) },
+        { "SearchItem.SearchString", css::uno::Any( sFindText ) },
         // Related tdf#102506: make Find Bar Ctrl+F searching by value by default
-        { "SearchItem.CellType", css::uno::makeAny( sal_Int16(SvxSearchCellType::VALUE) ) },
-        { "SearchItem.Backward", css::uno::makeAny( aSearchBackwards ) },
-        { "SearchItem.SearchFlags", css::uno::makeAny( sal_Int32(0) ) },
-        { "SearchItem.TransliterateFlags", css::uno::makeAny( static_cast<sal_Int32>(nFlags) ) },
-        { "SearchItem.Command", css::uno::makeAny( static_cast<sal_Int16>(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
-        { "SearchItem.AlgorithmType", css::uno::makeAny( sal_Int16(css::util::SearchAlgorithms_ABSOLUTE) ) },
-        { "SearchItem.AlgorithmType2", css::uno::makeAny( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
-        { "SearchItem.SearchFormatted", css::uno::makeAny( bSearchFormatted ) }
+        { "SearchItem.CellType", css::uno::Any( sal_Int16(SvxSearchCellType::VALUE) ) },
+        { "SearchItem.Backward", css::uno::Any( aSearchBackwards ) },
+        { "SearchItem.SearchFlags", css::uno::Any( sal_Int32(0) ) },
+        { "SearchItem.TransliterateFlags", css::uno::Any( static_cast<sal_Int32>(nFlags) ) },
+        { "SearchItem.Command", css::uno::Any( static_cast<sal_Int16>(aFindAll ?SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND ) ) },
+        { "SearchItem.AlgorithmType", css::uno::Any( sal_Int16(css::util::SearchAlgorithms_ABSOLUTE) ) },
+        { "SearchItem.AlgorithmType2", css::uno::Any( sal_Int16(css::util::SearchAlgorithms2::ABSOLUTE) ) },
+        { "SearchItem.SearchFormatted", css::uno::Any( bSearchFormatted ) }
     } ) );
 
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);

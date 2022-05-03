@@ -50,9 +50,9 @@ namespace svxform
         FontDescriptor aFont;
         OSL_VERIFY( _rxPeer->getProperty( FM_PROP_FONT ) >>= aFont );
         aFont.Underline = _rUnderline.nUnderlineType;
-        _rxPeer->setProperty( FM_PROP_FONT, makeAny( aFont ) );
+        _rxPeer->setProperty( FM_PROP_FONT, Any( aFont ) );
         // the underline color is a separate property
-        _rxPeer->setProperty( FM_PROP_TEXTLINECOLOR, makeAny( _rUnderline.nUnderlineColor ) );
+        _rxPeer->setProperty( FM_PROP_TEXTLINECOLOR, Any( _rUnderline.nUnderlineColor ) );
     }
 
 
@@ -81,8 +81,8 @@ namespace svxform
     {
         OSL_ENSURE( _rxPeer.is(), "setBorder: invalid peer!" );
 
-        _rxPeer->setProperty( FM_PROP_BORDER, makeAny( _rBorder.nBorderType ) );
-        _rxPeer->setProperty( FM_PROP_BORDERCOLOR, makeAny( _rBorder.nBorderColor ) );
+        _rxPeer->setProperty( FM_PROP_BORDER, Any( _rBorder.nBorderType ) );
+        _rxPeer->setProperty( FM_PROP_BORDERCOLOR, Any( _rBorder.nBorderColor ) );
     }
 
     ControlBorderManager::ControlBorderManager()
@@ -318,7 +318,7 @@ namespace svxform
             if ( xPeer.is() )
             {
                 updateBorderStyle( rControl.xControl, xPeer, rControl );
-                xPeer->setProperty( FM_PROP_HELPTEXT, makeAny( rControl.sOriginalHelpText ) );
+                xPeer->setProperty( FM_PROP_HELPTEXT, Any( rControl.sOriginalHelpText ) );
                 setUnderline( xPeer, rControl );
             }
         }
@@ -377,7 +377,7 @@ namespace svxform
                     // restore all the things we used to indicate invalidity
                     if ( m_bDynamicBorderColors )
                         updateBorderStyle( _rxControl, xPeer, aOriginalLayout );
-                    xPeer->setProperty( FM_PROP_HELPTEXT, makeAny( aOriginalLayout.sOriginalHelpText ) );
+                    xPeer->setProperty( FM_PROP_HELPTEXT, Any( aOriginalLayout.sOriginalHelpText ) );
                     setUnderline( xPeer, aOriginalLayout );
                 }
                 return;
@@ -410,7 +410,7 @@ namespace svxform
             Reference< XValidator > xValidator = _rxValidatable->getValidator();
             OSL_ENSURE( xValidator.is(), "ControlBorderManager::validityChanged: invalid, but no validator?" );
             OUString sExplainInvalidity = xValidator.is() ? xValidator->explainInvalid( _rxValidatable->getCurrentValue() ) : OUString();
-            xPeer->setProperty( FM_PROP_HELPTEXT, makeAny( sExplainInvalidity ) );
+            xPeer->setProperty( FM_PROP_HELPTEXT, Any( sExplainInvalidity ) );
         }
         catch( const Exception& )
         {

@@ -97,7 +97,6 @@ using namespace ::dbtools;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::form::FormButtonType_SUBMIT;
     using ::com::sun::star::form::binding::XValueBinding;
@@ -335,7 +334,7 @@ void FormViewPageWindowAdapter::setController(const Reference< XForm > & xForm, 
 
         // attaching the events
         Reference< XEventAttacherManager > xEventManager( xForm->getParent(), UNO_QUERY );
-        xEventManager->attach(m_aControllerList.size() - 1, Reference<XInterface>( xController, UNO_QUERY ), makeAny(xController) );
+        xEventManager->attach(m_aControllerList.size() - 1, Reference<XInterface>( xController, UNO_QUERY ), Any(xController) );
     }
 
     // now go through the subforms
@@ -1107,7 +1106,7 @@ namespace
         FmFormPageImpl::setUniqueName( xFormComponent, xTargetForm );
 
         Reference< XIndexContainer > xFormAsContainer( xTargetForm, UNO_QUERY_THROW );
-        xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), makeAny( xFormComponent ) );
+        xFormAsContainer->insertByIndex( xFormAsContainer->getCount(), Any( xFormComponent ) );
     }
 }
 
@@ -1452,11 +1451,11 @@ SdrObjectUniquePtr FmXFormView::implCreateXFormsControl( const svx::OXFormsDescr
 
             // set the button label
             Reference< XPropertySet > xControlSet(pControl->GetUnoControlModel(), UNO_QUERY);
-            xControlSet->setPropertyValue(FM_PROP_LABEL, makeAny(_rDesc.szName));
+            xControlSet->setPropertyValue(FM_PROP_LABEL, Any(_rDesc.szName));
 
             // connect the submission with the submission supplier (aka the button)
             xControlSet->setPropertyValue( FM_PROP_BUTTON_TYPE,
-                                           makeAny( FormButtonType_SUBMIT ) );
+                                           Any( FormButtonType_SUBMIT ) );
             Reference< css::form::submission::XSubmissionSupplier > xSubmissionSupplier(pControl->GetUnoControlModel(), UNO_QUERY);
             xSubmissionSupplier->setSubmission(xSubmission);
 
@@ -1583,9 +1582,9 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
             if ( sLabel.isEmpty() )
                 sLabel = sFieldName;
 
-            xLabelModel->setPropertyValue( FM_PROP_LABEL, makeAny( sLabel + _rFieldPostfix ) );
+            xLabelModel->setPropertyValue( FM_PROP_LABEL, Any( sLabel + _rFieldPostfix ) );
             OUString sObjectLabel(SvxResId(RID_STR_OBJECT_LABEL).replaceAll("#object#", sFieldName));
-            xLabelModel->setPropertyValue(FM_PROP_NAME, makeAny(sObjectLabel));
+            xLabelModel->setPropertyValue(FM_PROP_NAME, Any(sObjectLabel));
         }
 
         pLabel->SetLogicRect( ::tools::Rectangle(
@@ -1648,7 +1647,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
         {
             // no dedicated label control => use the label property
             if ( xControlPropInfo->hasPropertyByName( FM_PROP_LABEL ) )
-                xControlSet->setPropertyValue( FM_PROP_LABEL, makeAny( sFieldName + _rFieldPostfix ) );
+                xControlSet->setPropertyValue( FM_PROP_LABEL, Any( sFieldName + _rFieldPostfix ) );
             else
                 OSL_FAIL( "FmXFormView::createControlLabelPair: can't set a label for the control!" );
         }
@@ -1656,7 +1655,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
 
     if ( (nDataType == DataType::LONGVARCHAR || nDataType == DataType::CLOB) && xControlPropInfo->hasPropertyByName( FM_PROP_MULTILINE ) )
     {
-        xControlSet->setPropertyValue( FM_PROP_MULTILINE, makeAny( true ) );
+        xControlSet->setPropertyValue( FM_PROP_MULTILINE, Any( true ) );
     }
 
     // announce the label to the control
@@ -1664,7 +1663,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice const & _rOutDev, sal_Int
     {
         try
         {
-            xControlSet->setPropertyValue( FM_PROP_CONTROLLABEL, makeAny( xLabelModel ) );
+            xControlSet->setPropertyValue( FM_PROP_CONTROLLABEL, Any( xLabelModel ) );
         }
         catch (const Exception&)
         {
