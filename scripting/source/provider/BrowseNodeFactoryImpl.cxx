@@ -266,8 +266,8 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
     {
         xFac = provider::theMasterScriptProviderFactory::get( xCtx );
 
-        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( makeAny( OUString("user") ) ), UNO_QUERY_THROW );
-        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( makeAny( OUString("share") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( Any( OUString("user") ) ), UNO_QUERY_THROW );
+        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( Any( OUString("share") ) ), UNO_QUERY_THROW );
     }
     // TODO proper exception handling, should throw
     catch( const Exception& )
@@ -295,7 +295,7 @@ std::vector< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Referen
                 {
                     Reference< document::XEmbeddedScripts > xScripts( model, UNO_QUERY );
                     if ( xScripts.is() )
-                        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( makeAny( model ) ), UNO_QUERY_THROW );
+                        locnBNs[ mspIndex++ ].set( xFac->createScriptProvider( Any( model ) ), UNO_QUERY_THROW );
                 }
             }
         }

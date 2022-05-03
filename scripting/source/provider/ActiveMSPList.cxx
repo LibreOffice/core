@@ -142,7 +142,7 @@ Reference< provider::XScriptProvider >
     if ( pos == m_mScriptComponents.end() )
     {
         // TODO
-        msp = createNewMSP( uno::makeAny( xContext ) );
+        msp = createNewMSP( uno::Any( xContext ) );
         addActiveMSP( xNormalized, msp );
     }
     else

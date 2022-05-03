@@ -373,7 +373,7 @@ ScriptEventHelper::getEventListeners() const
     Reference< beans::XIntrospection > xIntrospection = beans::theIntrospection::get( m_xCtx );
 
     Reference< beans::XIntrospectionAccess > xIntrospectionAccess =
-        xIntrospection->inspect( makeAny( m_xControl ) );
+        xIntrospection->inspect( Any( m_xControl ) );
     const Sequence< Type > aControlListeners =
         xIntrospectionAccess->getSupportedListeners();
     for ( const Type& listType : aControlListeners )
@@ -894,7 +894,7 @@ EventListener::firing_Impl(const ScriptEvent& evt, Any* pRet )
                 OUString url = aMacroResolvedInfo.msResolvedMacro;
                 try
                 {
-                    uno::Any aDummyCaller = uno::makeAny( OUString("Error") );
+                    uno::Any aDummyCaller( OUString("Error") );
                     if ( pRet )
                     {
                         ooo::vba::executeMacro( mpShell, url, aArguments, *pRet, aDummyCaller );

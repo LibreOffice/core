@@ -867,10 +867,10 @@ void StringResourcePersistenceImpl::implStoreAtStorage
             if ( xProps.is() )
             {
                 OUString aPropName("MediaType");
-                xProps->setPropertyValue( aPropName, uno::makeAny( OUString("text/plain") ) );
+                xProps->setPropertyValue( aPropName, uno::Any( OUString("text/plain") ) );
 
                 aPropName = "UseCommonStoragePasswordEncryption";
-                xProps->setPropertyValue( aPropName, uno::makeAny( true ) );
+                xProps->setPropertyValue( aPropName, uno::Any( true ) );
             }
 
             Reference< io::XOutputStream > xOutputStream = xElementStream->getOutputStream();
