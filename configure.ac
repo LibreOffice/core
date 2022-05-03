@@ -7391,7 +7391,7 @@ foo bar
 ]])],
     [CPP_LIBRARY=LIBCPP
      cpp_library_name="LLVM libc++"
-     AC_DEFINE([HAVE_LIBCXX])
+     AC_DEFINE([HAVE_LIBCPP])
      HAVE_LIBCPP=TRUE
     ],
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
