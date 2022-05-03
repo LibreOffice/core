@@ -90,8 +90,8 @@ UnoGridModel::UnoGridModel( const css::uno::Reference< css::uno::XComponentConte
     ImplRegisterProperty( BASEPROPERTY_GRID_SHOWCOLUMNHEADER );
     ImplRegisterProperty( BASEPROPERTY_COLUMN_HEADER_HEIGHT );
     ImplRegisterProperty( BASEPROPERTY_ROW_HEIGHT );
-    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, makeAny( lcl_getDefaultDataModel_throw( m_xContext ) ) );
-    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( lcl_getDefaultColumnModel_throw( m_xContext ) ) );
+    ImplRegisterProperty( BASEPROPERTY_GRID_DATAMODEL, Any( lcl_getDefaultDataModel_throw( m_xContext ) ) );
+    ImplRegisterProperty( BASEPROPERTY_GRID_COLUMNMODEL, Any( lcl_getDefaultColumnModel_throw( m_xContext ) ) );
     ImplRegisterProperty( BASEPROPERTY_GRID_SELECTIONMODE );
     ImplRegisterProperty( BASEPROPERTY_FONTRELIEF );
     ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
@@ -130,7 +130,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         }
         if ( !xDataModel.is() )
             xDataModel = lcl_getDefaultDataModel_throw( m_xContext );
-        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_DATAMODEL, makeAny( xDataModel ) );
+        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_DATAMODEL, Any( xDataModel ) );
             // do *not* use setFastPropertyValue here: The UnoControlModel ctor made a simple copy of all property values,
             // so before this call here, we share our data model with the own of the clone source. setFastPropertyValue,
             // then, disposes the old data model - which means the data model which in fact belongs to the clone source.
@@ -149,7 +149,7 @@ UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
         }
         if ( !xColumnModel.is() )
             xColumnModel = lcl_getDefaultColumnModel_throw( m_xContext );
-        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( xColumnModel ) );
+        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_COLUMNMODEL, Any( xColumnModel ) );
             // same comment as above: do not use our own setPropertyValue here.
     }
     osl_atomic_decrement( &m_refCount );
@@ -220,16 +220,16 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch( nPropId )
     {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return uno::makeAny( OUString("com.sun.star.awt.grid.UnoControlGrid") );
+            return uno::Any( OUString("com.sun.star.awt.grid.UnoControlGrid") );
         case BASEPROPERTY_GRID_SELECTIONMODE:
-            return uno::makeAny( SelectionType(1) );
+            return uno::Any( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
         case BASEPROPERTY_USE_GRID_LINES:
-            return uno::makeAny( false );
+            return uno::Any( false );
         case BASEPROPERTY_ROW_HEADER_WIDTH:
-            return uno::makeAny( sal_Int32( 10 ) );
+            return uno::Any( sal_Int32( 10 ) );
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
-            return uno::makeAny( true );
+            return uno::Any( true );
         case BASEPROPERTY_COLUMN_HEADER_HEIGHT:
         case BASEPROPERTY_ROW_HEIGHT:
         case BASEPROPERTY_GRID_HEADER_BACKGROUND:

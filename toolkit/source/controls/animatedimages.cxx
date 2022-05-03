@@ -315,19 +315,19 @@ namespace toolkit {
         switch ( i_propertyId )
         {
         case BASEPROPERTY_DEFAULTCONTROL:
-            return makeAny( OUString("com.sun.star.awt.AnimatedImagesControl") );
+            return Any( OUString("com.sun.star.awt.AnimatedImagesControl") );
 
         case BASEPROPERTY_BORDER:
-            return makeAny( css::awt::VisualEffect::NONE );
+            return Any( css::awt::VisualEffect::NONE );
 
         case BASEPROPERTY_STEP_TIME:
-            return makeAny( sal_Int32(100) );
+            return Any( sal_Int32(100) );
 
         case BASEPROPERTY_AUTO_REPEAT:
-            return makeAny( true );
+            return Any( true );
 
         case BASEPROPERTY_IMAGE_SCALE_MODE:
-            return makeAny( ImageScaleMode::NONE );
+            return Any( ImageScaleMode::NONE );
 
         default:
             return UnoControlModel::ImplGetDefaultValue( i_propertyId );
@@ -352,7 +352,7 @@ namespace toolkit {
 
     void SAL_CALL AnimatedImagesControlModel::setStepTime( ::sal_Int32 i_stepTime )
     {
-        setPropertyValue( GetPropertyName( BASEPROPERTY_STEP_TIME ), makeAny( i_stepTime ) );
+        setPropertyValue( GetPropertyName( BASEPROPERTY_STEP_TIME ), Any( i_stepTime ) );
     }
 
 
@@ -366,7 +366,7 @@ namespace toolkit {
 
     void SAL_CALL AnimatedImagesControlModel::setAutoRepeat( sal_Bool i_autoRepeat )
     {
-        setPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ), makeAny( i_autoRepeat ) );
+        setPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ), Any( i_autoRepeat ) );
     }
 
 
@@ -380,7 +380,7 @@ namespace toolkit {
 
     void SAL_CALL AnimatedImagesControlModel::setScaleMode( ::sal_Int16 i_scaleMode )
     {
-        setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ), makeAny( i_scaleMode ) );
+        setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ), Any( i_scaleMode ) );
     }
 
 

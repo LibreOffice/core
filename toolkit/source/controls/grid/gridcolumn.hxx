@@ -104,7 +104,7 @@ private:
 
         TYPE const aOldValue( io_attribute );
         io_attribute = i_newValue;
-        broadcast_changed( i_attributeName, css::uno::makeAny( aOldValue ), css::uno::makeAny( io_attribute ), aGuard );
+        broadcast_changed( i_attributeName, css::uno::Any( aOldValue ), css::uno::Any( io_attribute ), aGuard );
     }
 
     css::uno::Any                      m_aIdentifier;

@@ -97,7 +97,7 @@ Any UnoTreeModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     case BASEPROPERTY_TREE_SHOWSHANDLES:
         return Any( true );
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString( "com.sun.star.awt.tree.TreeControl" ) );
+        return uno::Any( OUString( "com.sun.star.awt.tree.TreeControl" ) );
     default:
         return UnoControlModel::ImplGetDefaultValue( nPropId );
     }

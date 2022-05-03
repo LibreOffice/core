@@ -571,7 +571,7 @@ stardiv_Toolkit_UnoFileControl_get_implementation(
 uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_GRAPHIC )
-        return uno::makeAny( uno::Reference< graphic::XGraphic >() );
+        return uno::Any( uno::Reference< graphic::XGraphic >() );
 
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -592,7 +592,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingGraphic = true;
                 OUString sImageURL;
                 OSL_VERIFY( rValue >>= sImageURL );
-                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::makeAny( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_GRAPHIC, uno::Any( ImageHelper::getGraphicFromURL_nothrow( sImageURL ) ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -601,7 +601,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
             if ( !mbAdjustingGraphic && ImplHasProperty( BASEPROPERTY_IMAGEURL ) )
             {
                 mbAdjustingGraphic = true;
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGEURL, uno::makeAny( OUString() ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGEURL, uno::Any( OUString() ) );
                 mbAdjustingGraphic = false;
             }
             break;
@@ -612,7 +612,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGEPOSITION, uno::makeAny( getExtendedImagePosition( nUNOValue ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGEPOSITION, uno::Any( getExtendedImagePosition( nUNOValue ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -622,7 +622,7 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
                 mbAdjustingImagePosition = true;
                 sal_Int16 nUNOValue = 0;
                 OSL_VERIFY( rValue >>= nUNOValue );
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGEALIGN, uno::makeAny( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGEALIGN, uno::Any( getCompatibleImageAlign( translateImagePosition( nUNOValue ) ) ) );
                 mbAdjustingImagePosition = false;
             }
             break;
@@ -662,13 +662,13 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString( "stardiv.vcl.control.Button" ) );
+        return uno::Any( OUString( "stardiv.vcl.control.Button" ) );
     case BASEPROPERTY_TOGGLE:
-        return uno::makeAny( false );
+        return uno::Any( false );
     case BASEPROPERTY_ALIGN:
-        return uno::makeAny( sal_Int16(PROPERTY_ALIGN_CENTER) );
+        return uno::Any( sal_Int16(PROPERTY_ALIGN_CENTER) );
     case BASEPROPERTY_FOCUSONCLICK:
-        return uno::makeAny( true );
+        return uno::Any( true );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -893,10 +893,10 @@ UnoControlImageControlModel::getSupportedServiceNames()
 uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
-        return uno::makeAny( OUString( "stardiv.vcl.control.ImageControl" ) );
+        return uno::Any( OUString( "stardiv.vcl.control.ImageControl" ) );
 
     if ( nPropId == BASEPROPERTY_IMAGE_SCALE_MODE )
-        return makeAny( awt::ImageScaleMode::ANISOTROPIC );
+        return Any( awt::ImageScaleMode::ANISOTROPIC );
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
 }
@@ -929,7 +929,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 sal_Int16 nScaleMode( awt::ImageScaleMode::ANISOTROPIC );
                 OSL_VERIFY( _rValue >>= nScaleMode );
-                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::makeAny( nScaleMode != awt::ImageScaleMode::NONE ) );
+                setDependentFastPropertyValue( BASEPROPERTY_SCALEIMAGE, uno::Any( nScaleMode != awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -939,7 +939,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
                 mbAdjustingImageScaleMode = true;
                 bool bScale = true;
                 OSL_VERIFY( _rValue >>= bScale );
-                setDependentFastPropertyValue( BASEPROPERTY_IMAGE_SCALE_MODE, uno::makeAny( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
+                setDependentFastPropertyValue( BASEPROPERTY_IMAGE_SCALE_MODE, uno::Any( bScale ? awt::ImageScaleMode::ANISOTROPIC : awt::ImageScaleMode::NONE ) );
                 mbAdjustingImageScaleMode = false;
             }
             break;
@@ -1045,10 +1045,10 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString( "stardiv.vcl.control.RadioButton" ) );
+        return uno::Any( OUString( "stardiv.vcl.control.RadioButton" ) );
 
     case BASEPROPERTY_VISUALEFFECT:
-        return uno::makeAny( sal_Int16(awt::VisualEffect::LOOK3D) );
+        return uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -1278,10 +1278,10 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     switch ( nPropId )
     {
     case BASEPROPERTY_DEFAULTCONTROL:
-        return uno::makeAny( OUString( "stardiv.vcl.control.CheckBox" ) );
+        return uno::Any( OUString( "stardiv.vcl.control.CheckBox" ) );
 
     case BASEPROPERTY_VISUALEFFECT:
-        return uno::makeAny( sal_Int16(awt::VisualEffect::LOOK3D) );
+        return uno::Any( sal_Int16(awt::VisualEffect::LOOK3D) );
     }
 
     return GraphicControlModel::ImplGetDefaultValue( nPropId );
@@ -2333,7 +2333,7 @@ void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< 
     m_xData->m_bSettingLegacyProperty = true;
     try
     {
-        setFastPropertyValue( BASEPROPERTY_STRINGITEMLIST, uno::makeAny( aStringItems ) );
+        setFastPropertyValue( BASEPROPERTY_STRINGITEMLIST, uno::Any( aStringItems ) );
     }
     catch( const Exception& )
     {

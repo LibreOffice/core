@@ -521,7 +521,7 @@ uno::Any SAL_CALL UnoControlContainer::getByIdentifier( ::sal_Int32 _nIdentifier
     uno::Reference< awt::XControl > xControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
         throw container::NoSuchElementException();
-    return uno::makeAny( xControl );
+    return uno::Any( xControl );
 }
 
 uno::Sequence< ::sal_Int32 > SAL_CALL UnoControlContainer::getIdentifiers(  )

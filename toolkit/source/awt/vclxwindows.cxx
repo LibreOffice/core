@@ -68,7 +68,6 @@
 
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::ItemListEvent;
@@ -157,7 +156,7 @@ namespace toolkit
     Any getButtonLikeFaceColor( const vcl::Window* _pWindow )
     {
         Color nBackgroundColor = _pWindow->GetSettings().GetStyleSettings().GetFaceColor();
-        return makeAny( sal_Int32(nBackgroundColor) );
+        return Any( sal_Int32(nBackgroundColor) );
     }
 
     static void adjustBooleanWindowStyle( const Any& _rValue, vcl::Window* _pWindow, WinBits _nBits, bool _bInverseSemantics )
@@ -2679,8 +2678,8 @@ uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int3
 
     uno::Sequence< beans::NamedValue > props
     {
-        { "Title",    css::uno::makeAny(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
-        { "Position", css::uno::makeAny(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
+        { "Title",    css::uno::Any(pTabControl->GetPageText( sal::static_int_cast< sal_uInt16 >( ID ) )) },
+        { "Position", css::uno::Any(pTabControl->GetPagePos( sal::static_int_cast< sal_uInt16 >( ID ) )) }
     };
     return props;
 }
@@ -6888,7 +6887,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
                             sal_Int32 nValue = 0;
                             if (!(Value >>= nValue))
                                 throw css::lang::IllegalArgumentException();
-                            SetValue(css::uno::makeAny(static_cast<double>(nValue)));
+                            SetValue(css::uno::Any(static_cast<double>(nValue)));
                             break;
                         }
 
