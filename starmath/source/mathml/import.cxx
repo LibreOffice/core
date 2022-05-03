@@ -156,7 +156,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
     // Set base URI
     // needed for relative URLs; but it's OK to import e.g. MathML from the clipboard without one
     SAL_INFO_IF(rMedium.GetBaseURL().isEmpty(), "starmath", "SmMLImportWrapper: no base URL");
-    xInfoSet->setPropertyValue("BaseURI", makeAny(rMedium.GetBaseURL()));
+    xInfoSet->setPropertyValue("BaseURI", Any(rMedium.GetBaseURL()));
 
     // Fetch progress range
     sal_Int32 nProgressRange(rMedium.IsStorage() ? 3 : 1);
@@ -182,7 +182,7 @@ ErrCode SmMLImportWrapper::Import(SfxMedium& rMedium)
             }
 
             if (!aName.isEmpty())
-                xInfoSet->setPropertyValue("StreamRelPath", makeAny(aName));
+                xInfoSet->setPropertyValue("StreamRelPath", Any(aName));
         }
 
         // Check if use OASIS ( new document format )
@@ -535,7 +535,7 @@ ErrCode SmMLImportWrapper::ReadThroughComponentS(const uno::Reference<embed::XSt
         aAny >>= bEncrypted;
 
         // Set base URL and open stream
-        rPropSet->setPropertyValue("StreamName", makeAny(OUString(pStreamName)));
+        rPropSet->setPropertyValue("StreamName", Any(OUString(pStreamName)));
         Reference<io::XInputStream> xStream = xEventsStream->getInputStream();
 
         // Execute read

@@ -144,7 +144,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
     xInfoSet->setPropertyValue("UsePrettyPrinting", Any(true));
 
     // Set base URI
-    xInfoSet->setPropertyValue(u"BaseURI", makeAny(rMedium.GetBaseURL(true)));
+    xInfoSet->setPropertyValue(u"BaseURI", Any(rMedium.GetBaseURL(true)));
 
     if (!m_bFlat) //Storage (Package) of Stream
     {
@@ -165,7 +165,7 @@ bool SmMLExportWrapper::Export(SfxMedium& rMedium)
             {
                 OUString aName = pDocHierarchItem->GetValue();
                 if (!aName.isEmpty())
-                    xInfoSet->setPropertyValue("StreamRelPath", makeAny(aName));
+                    xInfoSet->setPropertyValue("StreamRelPath", Any(aName));
             }
         }
         else
@@ -395,7 +395,7 @@ bool SmMLExportWrapper::WriteThroughComponentS(const Reference<embed::XStorage>&
     xSet->setPropertyValue("UseCommonStoragePasswordEncryption", Any(true));
 
     // set Base URL
-    rPropSet->setPropertyValue("StreamName", makeAny(OUString(pStreamName)));
+    rPropSet->setPropertyValue("StreamName", Any(OUString(pStreamName)));
 
     // write the stuff
     // Note: export through an XML exporter component (output stream version)
