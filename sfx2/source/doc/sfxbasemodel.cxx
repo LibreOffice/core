@@ -2534,7 +2534,7 @@ void SAL_CALL SfxBaseModel::updateCmisProperties( const Sequence< document::Cmis
             Reference<ucb::XCommandEnvironment>(),
             comphelper::getProcessComponentContext() );
 
-        aContent.executeCommand( "updateProperties", uno::makeAny( aProperties ) );
+        aContent.executeCommand( "updateProperties", uno::Any( aProperties ) );
         loadCmisProperties( );
     }
     catch (const Exception & e)
@@ -3166,7 +3166,7 @@ void SfxBaseModel::impl_store(  const   OUString&                   sURL        
 
                 task::ErrorCodeRequest aErrorCode;
                 aErrorCode.ErrCode = sal_uInt32(nErrCode);
-                SfxMedium::CallApproveHandler( xHandler, makeAny( aErrorCode ), false );
+                SfxMedium::CallApproveHandler( xHandler, Any( aErrorCode ), false );
             }
         }
 
@@ -3489,7 +3489,7 @@ Reference< script::provider::XScriptProvider > SAL_CALL SfxBaseModel::getScriptP
     Reference< XScriptInvocationContext > xScriptContext( this );
 
     Reference< script::provider::XScriptProvider > xScriptProvider(
-        xScriptProviderFactory->createScriptProvider( makeAny( xScriptContext ) ),
+        xScriptProviderFactory->createScriptProvider( Any( xScriptContext ) ),
         UNO_SET_THROW );
 
     return xScriptProvider;
@@ -4083,7 +4083,7 @@ Reference< container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
     sal_Int32 c = m_pData->m_seqControllers.size();
     Sequence< Any > lEnum(c);
     std::transform(m_pData->m_seqControllers.begin(), m_pData->m_seqControllers.end(),
-                   lEnum.getArray(), [](const auto& x) { return css::uno::makeAny(x); });
+                   lEnum.getArray(), [](const auto& x) { return css::uno::Any(x); });
 
     return new ::comphelper::OAnyEnumeration(lEnum);
 }

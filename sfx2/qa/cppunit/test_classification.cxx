@@ -62,8 +62,8 @@ void ClassificationTest::testClassification()
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"Name", uno::makeAny(OUString("Non-Business"))},
-        {"Type", uno::makeAny(OUString("urn:bails:ExportControl:"))},
+        {"Name", uno::Any(OUString("Non-Business"))},
+        {"Type", uno::Any(OUString("urn:bails:ExportControl:"))},
     }));
     dispatchCommand(mxComponent, ".uno:ClassificationApply", aPropertyValues);
 
@@ -76,8 +76,8 @@ void ClassificationTest::testClassification()
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::makeAny(OUString("Confidential"))},
-        {"Type", uno::makeAny(OUString("urn:bails:NationalSecurity:"))},
+        {"Name", uno::Any(OUString("Confidential"))},
+        {"Type", uno::Any(OUString("urn:bails:NationalSecurity:"))},
     });
     dispatchCommand(mxComponent, ".uno:ClassificationApply", aPropertyValues);
     aAny = xPropertySet->getPropertyValue("urn:bails:NationalSecurity:BusinessAuthorizationCategory:Identifier");
@@ -85,8 +85,8 @@ void ClassificationTest::testClassification()
 
     aPropertyValues = comphelper::InitPropertySequence(
     {
-        {"Name", uno::makeAny(OUString("Internal Only"))},
-        {"Type", uno::makeAny(OUString("urn:bails:IntellectualProperty:"))},
+        {"Name", uno::Any(OUString("Internal Only"))},
+        {"Type", uno::Any(OUString("urn:bails:IntellectualProperty:"))},
     });
     dispatchCommand(mxComponent, ".uno:ClassificationApply", aPropertyValues);
     aAny = xPropertySet->getPropertyValue("urn:bails:IntellectualProperty:BusinessAuthorizationCategory:Identifier");

@@ -304,7 +304,7 @@ void SfxNotebookBar::ResetActiveToolbarModeToDefault(vcl::EnumContext::Applicati
     if ( !aAppNode.isValid() )
         return;
 
-    aAppNode.setNodeValue( "Active", makeAny( OUString( "Default" ) ) );
+    aAppNode.setNodeValue( "Active", Any( OUString( "Default" ) ) );
     aAppNode.commit();
 }
 

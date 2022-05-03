@@ -985,7 +985,7 @@ void SfxObjectShell::CheckEncryption_Impl( const uno::Reference< task::XInteract
         css::task::ErrorCodeRequest aErrorCode;
         aErrorCode.ErrCode = sal_uInt32(ERRCODE_SFX_INCOMPLETE_ENCRYPTION);
 
-        SfxMedium::CallApproveHandler( xHandler, uno::makeAny( aErrorCode ), false );
+        SfxMedium::CallApproveHandler( xHandler, uno::Any( aErrorCode ), false );
         pImpl->m_bIncomplEncrWarnShown = true;
     }
 
@@ -1413,7 +1413,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
         {
             Reference< provider::XScriptProviderFactory > xScriptProviderFactory =
                 provider::theMasterScriptProviderFactory::get( ::comphelper::getProcessComponentContext() );
-            xScriptProvider.set( xScriptProviderFactory->createScriptProvider( makeAny( _rxScriptContext ) ), UNO_SET_THROW );
+            xScriptProvider.set( xScriptProviderFactory->createScriptProvider( Any( _rxScriptContext ) ), UNO_SET_THROW );
         }
 
         // ry to protect the invocation context's undo manager (if present), just in case the script tampers with it
@@ -1427,7 +1427,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             if ( xProps.is() )
             {
                 Sequence< uno::Any > aArgs{ *pCaller };
-                xProps->setPropertyValue("Caller", uno::makeAny( aArgs ) );
+                xProps->setPropertyValue("Caller", uno::Any( aArgs ) );
             }
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );
@@ -1841,7 +1841,7 @@ bool SfxObjectShell_Impl::hasTrustedScriptingSignature( bool bAllowUIToAddAuthor
                             aRequest.DocumentSignatureInformation = aInfo;
                             aRequest.DocumentVersion = aVersion;
                             aRequest.Classification = task::InteractionClassification_QUERY;
-                            bResult = SfxMedium::CallApproveHandler( xInteraction, uno::makeAny( aRequest ), true );
+                            bResult = SfxMedium::CallApproveHandler( xInteraction, uno::Any( aRequest ), true );
                         }
                     }
                 }

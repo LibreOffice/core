@@ -216,7 +216,7 @@ public:
             {
                 OUString aLoadReadonlyString( "LoadReadonly" );
                 m_xDocumentSettings->getPropertyValue( aLoadReadonlyString ) >>= m_bPreserveReadOnly;
-                m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::makeAny( bReadOnly ) );
+                m_xDocumentSettings->setPropertyValue( aLoadReadonlyString, uno::Any( bReadOnly ) );
                 m_bReadOnlySupported = true;
             }
             catch( const uno::Exception& )
@@ -236,7 +236,7 @@ public:
             try
             {
                 if ( m_bReadOnlySupported )
-                    m_xDocumentSettings->setPropertyValue( "LoadReadonly", uno::makeAny( m_bPreserveReadOnly ) );
+                    m_xDocumentSettings->setPropertyValue( "LoadReadonly", uno::Any( m_bPreserveReadOnly ) );
             }
             catch( const uno::Exception& )
             {
@@ -481,7 +481,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 
 uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( SfxFilterFlags nMust, SfxFilterFlags nDont )
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest { { "DocumentService", css::uno::makeAny(GetDocServiceName()) } };
+    uno::Sequence< beans::NamedValue > aSearchRequest { { "DocumentService", css::uno::Any(GetDocServiceName()) } };
 
     return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
@@ -502,8 +502,8 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         // Preselect PDF-Filter for EXPORT
         uno::Sequence< beans::NamedValue > aSearchRequest
         {
-            { "Type", css::uno::makeAny(OUString("pdf_Portable_Document_Format")) },
-            { "DocumentService", css::uno::makeAny(GetDocServiceName()) }
+            { "Type", css::uno::Any(OUString("pdf_Portable_Document_Format")) },
+            { "DocumentService", css::uno::Any(GetDocServiceName()) }
         };
 
         aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -513,8 +513,8 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         // Preselect EPUB filter for export.
         uno::Sequence<beans::NamedValue> aSearchRequest
         {
-            { "Type", css::uno::makeAny(OUString("writer_EPUB_Document")) },
-            { "DocumentService", css::uno::makeAny(GetDocServiceName()) }
+            { "Type", css::uno::Any(OUString("writer_EPUB_Document")) },
+            { "DocumentService", css::uno::Any(GetDocServiceName()) }
         };
 
         aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
@@ -770,7 +770,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const OUString& aFilterName )
 
 bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
-    uno::Sequence< beans::NamedValue > aSearchRequest { { "DocumentService", css::uno::makeAny(GetDocServiceName()) } };
+    uno::Sequence< beans::NamedValue > aSearchRequest { { "DocumentService", css::uno::Any(GetDocServiceName()) } };
 
     uno::Reference< container::XEnumeration > xFilterEnum =
                                     m_pOwner->GetFilterQuery()->createSubSetEnumerationByProperties( aSearchRequest );

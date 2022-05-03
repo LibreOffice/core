@@ -223,8 +223,8 @@ static void showDocument( const char* pBaseName )
     try {
         Reference < XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         auto args(::comphelper::InitPropertySequence({
-            {"ViewOnly",    makeAny(true)},
-            {"ReadOnly",    makeAny(true)}
+            {"ViewOnly",    Any(true)},
+            {"ReadOnly",    Any(true)}
         }));
 
         OUString aURL;
@@ -763,7 +763,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 }
 
                 // Save new toolbar mode for a current module
-                aAppNode.setNodeValue( "Active", makeAny( aNewName ) );
+                aAppNode.setNodeValue( "Active", Any( aNewName ) );
                 aAppNode.commit();
             }
 
@@ -930,7 +930,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
                             if ( aCommandArg == aCurrentMode )
                             {
-                                aModeNode.setNodeValue( "UserToolbars", makeAny( aBackup ) );
+                                aModeNode.setNodeValue( "UserToolbars", Any( aBackup ) );
                                 break;
                             }
                         }
@@ -1059,7 +1059,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 if (aAppNode.isValid())
                 {
                     bool isLocked = comphelper::getBOOL(aAppNode.getNodeValue("Locked"));
-                    aAppNode.setNodeValue("Locked", makeAny(!isLocked));
+                    aAppNode.setNodeValue("Locked", Any(!isLocked));
                     aAppNode.commit();
                     //TODO: apply immediately w/o restart needed
                     SolarMutexGuard aGuard;

@@ -418,7 +418,7 @@ void SfxDocTplService_Impl::init_Impl()
     if ( !bIsInitialized )
     {
         if ( createFolder( maRootURL, true, false, maRootContent )
-          && setProperty( maRootContent, aTemplVersPropName, uno::makeAny( aTemplVers ) ) )
+          && setProperty( maRootContent, aTemplVersPropName, uno::Any( aTemplVers ) ) )
             bIsInitialized = true;
 
         bNeedsUpdate = true;
@@ -706,7 +706,7 @@ bool SfxDocTplService_Impl::addEntry( Content& rParentFolder,
         try
         {
             rParentFolder.insertNewContent( TYPE_LINK, { TITLE, IS_FOLDER, TARGET_URL }, aValues, aLink );
-            setProperty( aLink, PROPERTY_TYPE, makeAny( rType ) );
+            setProperty( aLink, PROPERTY_TYPE, Any( rType ) );
             bAddedEntry = true;
         }
         catch( Exception& )
@@ -888,7 +888,7 @@ bool SfxDocTplService_Impl::removeContent( Content& rContent )
     bool bRemoved = false;
     try
     {
-        Any aArg = makeAny( true );
+        Any aArg( true );
 
         rContent.executeCommand( COMMAND_DELETE, aArg );
         bRemoved = true;
@@ -1132,7 +1132,7 @@ void SfxDocTplService_Impl::doUpdate()
                 if ( Content::create( pGroup->getHierarchyURL(), maCmdEnv, comphelper::getProcessComponentContext(), aGroup ) )
                     setProperty( aGroup,
                                  TARGET_DIR_URL,
-                                 makeAny( pGroup->getTargetURL() ) );
+                                 Any( pGroup->getTargetURL() ) );
 
                 size_t nCount = pGroup->count();
                 for ( size_t i=0; i<nCount; i++ )
@@ -1339,7 +1339,7 @@ OUString SfxDocTplService_Impl::CreateNewGroupFsys( const OUString& rGroupName, 
         }
 
         // Now set the target url for this group and we are done
-        Any aValue = makeAny( aResultURL );
+        Any aValue( aResultURL );
 
         if ( ! setProperty( aGroup, TARGET_DIR_URL, aValue ) )
         {
@@ -1421,7 +1421,7 @@ bool SfxDocTplService_Impl::addGroup( const OUString& rGroupName )
     }
 
     // Now set the target url for this group and we are done
-    Any aValue = makeAny( aNewFolderURL );
+    Any aValue( aNewFolderURL );
 
     if ( ! setProperty( aNewGroup, TARGET_DIR_URL, aValue ) )
     {
@@ -1528,7 +1528,7 @@ bool SfxDocTplService_Impl::removeGroup( std::u16string_view rGroupName )
                       || !::utl::UCBContentHelper::Exists( aGroupTargetURL ) )
                     {
                         RemoveUINamesForTemplateDir_Impl( aGeneralTempPath, rGroupName );
-                        setProperty( aGroup, aPropName, uno::makeAny( OUString() ) );
+                        setProperty( aGroup, aPropName, uno::Any( OUString() ) );
                     }
                 }
             }
@@ -1923,7 +1923,7 @@ bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
             uno::Any aProperty;
             bool bReadOnly = false;
             if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )
-                setProperty( aResultContent, aPropertyName, uno::makeAny( false ) );
+                setProperty( aResultContent, aPropertyName, uno::Any( false ) );
         }
     }
     catch ( ContentCreationException& )
@@ -2517,12 +2517,12 @@ void SfxDocTplService_Impl::updateData( DocTemplates_EntryData_Impl const *pData
 
     if ( pData->getUpdateType() )
     {
-        setProperty( aTemplate, PROPERTY_TYPE, makeAny( pData->getType() ) );
+        setProperty( aTemplate, PROPERTY_TYPE, Any( pData->getType() ) );
     }
 
     if ( pData->getUpdateLink() )
     {
-        setProperty( aTemplate, TARGET_URL, makeAny( pData->getTargetURL() ) );
+        setProperty( aTemplate, TARGET_URL, Any( pData->getTargetURL() ) );
     }
 }
 
@@ -2540,7 +2540,7 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
 
     if ( createFolder( aNewGroupURL, false, false, aGroup ) )
     {
-        setProperty( aGroup, TARGET_DIR_URL, makeAny( pGroup->getTargetURL() ) );
+        setProperty( aGroup, TARGET_DIR_URL, Any( pGroup->getTargetURL() ) );
         pGroup->setHierarchyURL( aNewGroupURL );
 
         size_t nCount = pGroup->count();

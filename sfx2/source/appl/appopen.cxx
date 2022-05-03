@@ -258,7 +258,7 @@ ErrCode CheckPasswd_Impl
 
                             if ( aEncryptionData.hasElements() )
                             {
-                                pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+                                pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
 
                                 try
                                 {
@@ -694,7 +694,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 pHandler->setHandler(xWrappedHandler);
             else
                 pHandler->useDefaultUUIHandler();
-            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHandler)) );
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(xHandler)) );
 
             // define rules for this handler
             css::uno::Type aInteraction = ::cppu::UnoType<css::task::ErrorCodeRequest>::get();
@@ -989,7 +989,7 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         if (!pInteractionItem)
         {
             Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
-            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHdl)) );
+            rReq.AppendItem( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(xHdl)) );
         }
         if (!pMacroExecItem)
             rReq.AppendItem( SfxUInt16Item(SID_MACROEXECMODE,css::document::MacroExecMode::USE_CONFIG) );

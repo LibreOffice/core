@@ -748,7 +748,7 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                 {
                     Reference < task::XInteractionHandler2 > xHdl = task::InteractionHandler::createWithParent( ::comphelper::getProcessComponentContext(), nullptr );
                     if (xHdl.is())
-                        pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::makeAny(xHdl)) );
+                        pNewSet->Put( SfxUnoAnyItem(SID_INTERACTIONHANDLER,css::uno::Any(xHdl)) );
                 }
 
                 if (!pMacroExecItem)
@@ -2323,7 +2323,7 @@ void SfxViewFrame::SaveCurrentViewData_Impl( const SfxInterfaceId i_nNewViewId )
         }
 
         // then replace it with the most recent view data we just obtained
-        xViewData->insertByIndex( 0, makeAny( aViewData ) );
+        xViewData->insertByIndex( 0, Any( aViewData ) );
     }
     catch( const Exception& )
     {
@@ -3099,7 +3099,7 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                             {
                                 xLMPropSet->setPropertyValue(
                                     "HideCurrentUI",
-                                    makeAny( bNewFullScreenMode ));
+                                    Any( bNewFullScreenMode ));
                             }
                             catch ( css::beans::UnknownPropertyException& )
                             {

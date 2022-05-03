@@ -322,9 +322,9 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     utl::OConfigurationNode aDeckNode (aDeckRootNode.openNode(pDeckDesc->msNodeName));
 
-    css::uno::Any aTitle(makeAny(pDeckDesc->msTitle));
-    css::uno::Any aOrder(makeAny(pDeckDesc->mnOrderIndex));
-    css::uno::Any aContextList(makeAny(sContextList));
+    css::uno::Any aTitle(Any(pDeckDesc->msTitle));
+    css::uno::Any aOrder(Any(pDeckDesc->mnOrderIndex));
+    css::uno::Any aContextList(sContextList);
 
     bool bChanged = false;
     if (aTitle != aDeckNode.getNodeValue("Title"))

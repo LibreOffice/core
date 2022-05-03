@@ -120,7 +120,7 @@ void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicMan
     // global constants, additionally to the ones already added by createApplicationBasicManager:
     // ThisComponent
     Reference< XInterface > xCurrentComponent = SfxObjectShell::GetCurrentComponent();
-    _rBasicManager.SetGlobalUNOConstant( "ThisComponent", makeAny( xCurrentComponent ) );
+    _rBasicManager.SetGlobalUNOConstant( "ThisComponent", css::uno::Any( xCurrentComponent ) );
 #endif
 }
 

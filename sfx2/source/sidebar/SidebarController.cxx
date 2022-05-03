@@ -975,17 +975,17 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
 
        // Create the XUIElement.
         ::comphelper::NamedValueCollection aCreationArguments;
-        aCreationArguments.put("Frame", makeAny(mxFrame));
-        aCreationArguments.put("ParentWindow", makeAny(rxWindow));
+        aCreationArguments.put("Frame", Any(mxFrame));
+        aCreationArguments.put("ParentWindow", Any(rxWindow));
         SidebarDockingWindow* pSfxDockingWindow = mpParentWindow.get();
         if (pSfxDockingWindow != nullptr)
-            aCreationArguments.put("SfxBindings", makeAny(reinterpret_cast<sal_uInt64>(&pSfxDockingWindow->GetBindings())));
+            aCreationArguments.put("SfxBindings", Any(reinterpret_cast<sal_uInt64>(&pSfxDockingWindow->GetBindings())));
         aCreationArguments.put("Theme", Theme::GetPropertySet());
-        aCreationArguments.put("Sidebar", makeAny(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
+        aCreationArguments.put("Sidebar", Any(Reference<ui::XSidebar>(static_cast<ui::XSidebar*>(this))));
         if (bWantsCanvas)
         {
             Reference<rendering::XSpriteCanvas> xCanvas (VCLUnoHelper::GetWindow(rxWindow)->GetOutDev()->GetSpriteCanvas());
-            aCreationArguments.put("Canvas", makeAny(xCanvas));
+            aCreationArguments.put("Canvas", Any(xCanvas));
         }
 
         if (mxCurrentController.is())
@@ -993,13 +993,13 @@ Reference<ui::XUIElement> SidebarController::CreateUIElement (
             OUString aModule = Tools::GetModuleName(mxCurrentController);
             if (!aModule.isEmpty())
             {
-                aCreationArguments.put("Module", makeAny(aModule));
+                aCreationArguments.put("Module", Any(aModule));
             }
-            aCreationArguments.put("Controller", makeAny(mxCurrentController));
+            aCreationArguments.put("Controller", Any(mxCurrentController));
         }
 
-        aCreationArguments.put("ApplicationName", makeAny(rContext.msApplication));
-        aCreationArguments.put("ContextName", makeAny(rContext.msContext));
+        aCreationArguments.put("ApplicationName", Any(rContext.msApplication));
+        aCreationArguments.put("ContextName", Any(rContext.msContext));
 
         Reference<ui::XUIElement> xUIElement(
             xUIElementFactory->createUIElement(

@@ -560,7 +560,7 @@ static SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
         if (xProps.is())
             xProps->setPropertyValue(
                 "Title",
-                makeAny(SfxResId(STR_HELP_WINDOW_TITLE)));
+                Any(SfxResId(STR_HELP_WINDOW_TITLE)));
 
         pHelpWindow->setContainerWindow( xParentWindow );
         xParentWindow->setVisible(true);

@@ -589,7 +589,7 @@ SfxDocumentMetaData::getURLProperties(
         }
         xPropArg->addProperty("StreamName",
                 css::beans::PropertyAttribute::MAYBEVOID,
-                css::uno::makeAny(OUString(s_meta)));
+                css::uno::Any(OUString(s_meta)));
     } catch (const css::uno::Exception &) {
         // ignore
     }
@@ -1810,13 +1810,13 @@ SfxDocumentMetaData::storeToStorage(
         css::uno::UNO_QUERY_THROW);
     xStreamProps->setPropertyValue(
         "MediaType",
-        css::uno::makeAny(OUString("text/xml")));
+        css::uno::Any(OUString("text/xml")));
     xStreamProps->setPropertyValue(
         "Compressed",
-        css::uno::makeAny(false));
+        css::uno::Any(false));
     xStreamProps->setPropertyValue(
         "UseCommonStoragePasswordEncryption",
-        css::uno::makeAny(false));
+        css::uno::Any(false));
     css::uno::Reference<css::io::XOutputStream> xOutStream =
         xStream->getOutputStream();
     if (!xOutStream.is()) throw css::uno::RuntimeException();

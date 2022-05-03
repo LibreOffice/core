@@ -136,7 +136,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
         css::frame::theGlobalEventBroadcaster::get(xContext);
     try
     {
-        xModelCollection->insert(css::uno::makeAny(xModel));
+        xModelCollection->insert(css::uno::Any(xModel));
     }
     catch ( uno::Exception& )
     {
@@ -309,7 +309,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
 
     try
     {
-        xProps->setPropertyValue("MediaType", uno::makeAny( aDataFlavor.MimeType ) );
+        xProps->setPropertyValue("MediaType", uno::Any( aDataFlavor.MimeType ) );
     }
     catch( uno::Exception& )
     {
@@ -325,9 +325,9 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
     // the default values, that should be used for ODF1.1 and older formats
     uno::Sequence< beans::NamedValue > aEncryptionAlgs
     {
-        { "StartKeyGenerationAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1) },
-        { "EncryptionAlgorithm", css::uno::makeAny(xml::crypto::CipherID::BLOWFISH_CFB_8) },
-        { "ChecksumAlgorithm", css::uno::makeAny(xml::crypto::DigestID::SHA1_1K) }
+        { "StartKeyGenerationAlgorithm", css::uno::Any(xml::crypto::DigestID::SHA1) },
+        { "EncryptionAlgorithm", css::uno::Any(xml::crypto::CipherID::BLOWFISH_CFB_8) },
+        { "ChecksumAlgorithm", css::uno::Any(xml::crypto::DigestID::SHA1_1K) }
     };
 
     if (nDefVersion >= SvtSaveOptions::ODFSVER_012)
@@ -341,11 +341,11 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             SAL_INFO_IF(isBaseForm, "sfx.doc", "tdf#138209 force form export to ODF 1.2");
             if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
             {
-                xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_013_TEXT));
+                xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_013_TEXT)));
             }
             else
             {
-                xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_012_TEXT));
+                xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_012_TEXT)));
             }
         }
         catch( uno::Exception& )
@@ -727,7 +727,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 bool bSetProperty = true;
                 try
                 {
-                    xSet->setPropertyValue( sLockUpdates, makeAny( true ) );
+                    xSet->setPropertyValue( sLockUpdates, Any( true ) );
                 }
                 catch(const beans::UnknownPropertyException& )
                 {
@@ -738,7 +738,7 @@ bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                 {
                     try
                     {
-                        xSet->setPropertyValue( sLockUpdates, makeAny( false ) );
+                        xSet->setPropertyValue( sLockUpdates, Any( false ) );
                     }
                     catch(const beans::UnknownPropertyException& )
                     {}
@@ -994,11 +994,11 @@ bool SfxObjectShell::DoSave()
                     SAL_INFO_IF(isBaseForm, "sfx.doc", "tdf#138209 force form export to ODF 1.2");
                     if (!isBaseForm && SvtSaveOptions::ODFSVER_013 <= nDefVersion)
                     {
-                        xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_013_TEXT));
+                        xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_013_TEXT)));
                     }
                     else
                     {
-                        xProps->setPropertyValue("Version", uno::makeAny<OUString>(ODFVER_012_TEXT));
+                        xProps->setPropertyValue("Version", uno::Any(OUString(ODFVER_012_TEXT)));
                     }
                 }
                 catch (uno::Exception&)
@@ -1366,7 +1366,7 @@ bool SfxObjectShell::SaveTo_Impl
                 {
                     uno::Reference< beans::XPropertySet > xProps( rMedium.GetStorage(), uno::UNO_QUERY_THROW );
                     xProps->setPropertyValue("MediaType",
-                                            uno::makeAny( aDataFlavor.MimeType ) );
+                                            uno::Any( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
                 {
@@ -2301,7 +2301,7 @@ bool SfxObjectShell::ImportFrom(SfxMedium& rMedium,
                         {
                             uno::Reference< lang::XMultiServiceFactory > xFactory(GetModel(), uno::UNO_QUERY);
                             uno::Reference< beans::XPropertySet > xSettings(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                            xSettings->setPropertyValue("LoadReadonly", uno::makeAny(true));
+                            xSettings->setPropertyValue("LoadReadonly", uno::Any(true));
                         }
                         xPropertyContainer->removeProperty("_MarkAsFinal");
                     }
@@ -2588,7 +2588,7 @@ bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
     css::uno::Reference< XInteractionHandler > xInteract;
     const SfxUnoAnyItem* pxInteractionItem = SfxItemSet::GetItem<SfxUnoAnyItem>(pArgs, SID_INTERACTIONHANDLER, false);
     if ( pxInteractionItem && ( pxInteractionItem->GetValue() >>= xInteract ) && xInteract.is() )
-        pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny( xInteract ) ) );
+        pMediumTmp->GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any( xInteract ) ) );
 
     const SfxBoolItem* pNoFileSync = pArgs->GetItem<SfxBoolItem>(SID_NO_FILE_SYNC, false);
     if (pNoFileSync && pNoFileSync->GetValue())
@@ -2924,7 +2924,7 @@ bool SfxObjectShell::PreDoSaveAs_Impl(const OUString& rFileName, const OUString&
             }
 
             if( bRet )
-                pNewFile->GetItemSet()->Put( SfxUnoAnyItem(SID_FILTER_DATA, uno::makeAny(aSaveToFilterDataOptions)));
+                pNewFile->GetItemSet()->Put( SfxUnoAnyItem(SID_FILTER_DATA, uno::Any(aSaveToFilterDataOptions)));
         }
     }
     else
@@ -3653,7 +3653,7 @@ bool SfxObjectShell::WriteThumbnail(bool bEncrypted, const uno::Reference<io::XS
 
         uno::Reference <beans::XPropertySet> xSet(xStream, uno::UNO_QUERY);
         if (xSet.is())
-            xSet->setPropertyValue("MediaType", uno::makeAny(OUString("image/png")));
+            xSet->setPropertyValue("MediaType", uno::Any(OUString("image/png")));
         if (bEncrypted)
         {
             const OUString sResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(

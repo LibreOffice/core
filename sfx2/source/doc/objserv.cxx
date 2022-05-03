@@ -795,32 +795,32 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                         if (sShapeName == "RectangleRedactionShape"
                                 && xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
                         {
-                            xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
+                            xPropSet->setPropertyValue("FillTransparence", css::uno::Any(static_cast<sal_Int16>(0)));
                             if (sRedactionStyle == "White")
                             {
-                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_WHITE));
-                                xPropSet->setPropertyValue("LineStyle", css::uno::makeAny(css::drawing::LineStyle::LineStyle_SOLID));
-                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_BLACK));
+                                xPropSet->setPropertyValue("FillColor", css::uno::Any(COL_WHITE));
+                                xPropSet->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle::LineStyle_SOLID));
+                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_BLACK));
                             }
                             else
                             {
-                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_BLACK));
-                                xPropSet->setPropertyValue("LineStyle", css::uno::makeAny(css::drawing::LineStyle::LineStyle_NONE));
+                                xPropSet->setPropertyValue("FillColor", css::uno::Any(COL_BLACK));
+                                xPropSet->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
                             }
                         }
                         // Freeform redaction
                         else if (sShapeName == "FreeformRedactionShape"
                                  && xInfo->hasPropertyByName("LineTransparence") && xInfo->hasPropertyByName("LineColor"))
                         {
-                            xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(static_cast<sal_Int16>(0)));
+                            xPropSet->setPropertyValue("LineTransparence", css::uno::Any(static_cast<sal_Int16>(0)));
 
                             if (sRedactionStyle == "White")
                             {
-                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_WHITE));
+                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_WHITE));
                             }
                             else
                             {
-                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_BLACK));
+                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_BLACK));
                             }
                         }
                     }
@@ -890,7 +890,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
 
                     if ( xStatusIndicator.is() )
                     {
-                        SfxUnoAnyItem aStatIndItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::makeAny( xStatusIndicator ) );
+                        SfxUnoAnyItem aStatIndItem( SID_PROGRESS_STATUSBAR_CONTROL, uno::Any( xStatusIndicator ) );
 
                         if ( nId == SID_SAVEDOC )
                         {
@@ -923,7 +923,7 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                     uno::Reference< task::XInteractionHandler2 > xInteract(
                         task::InteractionHandler::createWithParent(xContext, xParentWindow) );
 
-                    SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::makeAny( xInteract ) );
+                    SfxUnoAnyItem aInteractionItem( SID_INTERACTIONHANDLER, uno::Any( xInteract ) );
                     if ( nId == SID_SAVEDOC )
                     {
                         // in case of saving it is not possible to transport the parameters from here
@@ -1085,16 +1085,16 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                             if (sShapeName == "RectangleRedactionShape"
                                     && xInfo->hasPropertyByName("FillTransparence") && xInfo->hasPropertyByName("FillColor"))
                             {
-                                xPropSet->setPropertyValue("FillTransparence", css::uno::makeAny(static_cast<sal_Int16>(50)));
-                                xPropSet->setPropertyValue("FillColor", css::uno::makeAny(COL_GRAY7));
-                                xPropSet->setPropertyValue("LineStyle", css::uno::makeAny(css::drawing::LineStyle::LineStyle_NONE));
+                                xPropSet->setPropertyValue("FillTransparence", css::uno::Any(static_cast<sal_Int16>(50)));
+                                xPropSet->setPropertyValue("FillColor", css::uno::Any(COL_GRAY7));
+                                xPropSet->setPropertyValue("LineStyle", css::uno::Any(css::drawing::LineStyle::LineStyle_NONE));
 
                             }
                             // Freeform redaction
                             else if (sShapeName == "FreeformRedactionShape")
                             {
-                                xPropSet->setPropertyValue("LineTransparence", css::uno::makeAny(static_cast<sal_Int16>(50)));
-                                xPropSet->setPropertyValue("LineColor", css::uno::makeAny(COL_GRAY7));
+                                xPropSet->setPropertyValue("LineTransparence", css::uno::Any(static_cast<sal_Int16>(50)));
+                                xPropSet->setPropertyValue("LineColor", css::uno::Any(COL_GRAY7));
                             }
                         }
                     }

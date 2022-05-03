@@ -524,7 +524,7 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
 
     try
     {
-        ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+        ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::Any(
             document::ChangedByOthersRequest() ) );
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations{
             new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() ),
@@ -971,7 +971,7 @@ void SfxMedium::SetEncryptionDataToStorage_Impl()
 
     // replace the password with encryption data
     pImpl->m_pSet->ClearItem( SID_PASSWORD );
-    pImpl->m_pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+    pImpl->m_pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::Any( aEncryptionData ) ) );
 
     try
     {
@@ -1060,7 +1060,7 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
         {
             aInfo = aData[LockFileComponent::EDITTIME];
 
-            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::Any(
                 document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
         }
         else
@@ -1085,13 +1085,13 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog(const LockFileEntr
 
             if (!bIsLoading) // so, !bHandleSysLocked
             {
-                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny(
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(uno::Any(
                     document::LockedOnSavingRequest(OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo)));
                 // Currently, only the last "Retry" continuation (meaning ignore the lock and try overwriting) can be returned.
             }
             else /*logically therefore bIsLoading is set */
             {
-                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
+                xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::Any(
                     document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
             }
         }
@@ -1189,10 +1189,10 @@ bool SfxMedium::ShowLockFileProblemDialog(MessageDlg nWhichDlg)
         switch (nWhichDlg)
         {
             case MessageDlg::LockFileIgnore:
-                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileIgnoreRequest() ));
+                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::Any( document::LockFileIgnoreRequest() ));
                 break;
             case MessageDlg::LockFileCorrupt:
-                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::makeAny( document::LockFileCorruptRequest() ));
+                xIgnoreRequestImpl = new ::ucbhelper::InteractionRequest(uno::Any( document::LockFileCorruptRequest() ));
                 break;
         }
 
@@ -1710,7 +1710,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( bool bCreateTempFile )
             aArgs.realloc(3); // ??? this may re-write the data added above for pRepairItem
             pArgs = aArgs.getArray();
             uno::Sequence<beans::PropertyValue> aProperties(
-                comphelper::InitPropertySequence({ { "NoFileSync", uno::makeAny(true) } }));
+                comphelper::InitPropertySequence({ { "NoFileSync", uno::Any(true) } }));
             pArgs[2] <<= aProperties;
         }
     }
@@ -2099,7 +2099,7 @@ void SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     {
                         Reference< XInputStream > aTempInput = aTempCont.openStream();
                         bTransactStarted = true;
-                        aOriginalContent.setPropertyValue( "Size", uno::makeAny( sal_Int64(0) ) );
+                        aOriginalContent.setPropertyValue( "Size", uno::Any( sal_Int64(0) ) );
                         aOriginalContent.writeStream( aTempInput, bOverWrite );
                         bResult = true;
                     }
@@ -2759,7 +2759,7 @@ void SfxMedium::GetMedium_Impl()
             if( !(pImpl->m_nStorOpenMode & StreamMode::WRITE) )
                 GetItemSet()->Put( SfxBoolItem( SID_DOC_READONLY, true ) );
             if (xInteractionHandler.is())
-                GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, makeAny(xInteractionHandler) ) );
+                GetItemSet()->Put( SfxUnoAnyItem( SID_INTERACTIONHANDLER, Any(xInteractionHandler) ) );
         }
 
         if ( pImpl->m_xInputStreamToLoadFrom.is() )
@@ -2818,9 +2818,9 @@ void SfxMedium::GetMedium_Impl()
         {
             //TODO/MBA: need support for SID_STREAM
             if ( pImpl->xStream.is() )
-                GetItemSet()->Put( SfxUnoAnyItem( SID_STREAM, makeAny( pImpl->xStream ) ) );
+                GetItemSet()->Put( SfxUnoAnyItem( SID_STREAM, Any( pImpl->xStream ) ) );
 
-            GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, makeAny( pImpl->xInputStream ) ) );
+            GetItemSet()->Put( SfxUnoAnyItem( SID_INPUTSTREAM, Any( pImpl->xInputStream ) ) );
         }
     }
 
@@ -4581,7 +4581,7 @@ IMPL_STATIC_LINK(SfxMedium, ShowReloadEditableDialog, void*, p, void)
         OUString aDocumentURL
             = pMed->GetURLObject().GetLastName(INetURLObject::DecodeMechanism::WithCharset);
         ::rtl::Reference<::ucbhelper::InteractionRequest> xInteractionRequestImpl
-            = new ::ucbhelper::InteractionRequest(uno::makeAny(document::ReloadEditableRequest(
+            = new ::ucbhelper::InteractionRequest(uno::Any(document::ReloadEditableRequest(
                 OUString(), uno::Reference<uno::XInterface>(), aDocumentURL)));
         if (xInteractionRequestImpl != nullptr)
         {

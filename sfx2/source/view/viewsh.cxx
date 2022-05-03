@@ -255,8 +255,8 @@ static OUString impl_retrieveFilterNameFromTypeAndModule(
 {
     // Retrieve filter from type
     css::uno::Sequence< css::beans::NamedValue > aQuery {
-        { "Type", css::uno::makeAny( rType ) },
-        { "DocumentService", css::uno::makeAny( rModuleIdentifier ) }
+        { "Type", css::uno::Any( rType ) },
+        { "DocumentService", css::uno::Any( rModuleIdentifier ) }
     };
 
     css::uno::Reference< css::container::XEnumeration > xEnumeration =

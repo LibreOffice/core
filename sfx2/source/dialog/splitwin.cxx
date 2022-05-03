@@ -326,7 +326,7 @@ void SfxSplitWindow::SaveConfig_Impl()
 
     const OUString aWindowId{ "SplitWindow" + OUString::number(static_cast<sal_Int32>(GetAlign())) };
     SvtViewOptions aWinOpt( EViewType::Window, aWindowId );
-    aWinOpt.SetUserItem( USERITEM_NAME, makeAny( aWinData.makeStringAndClear() ) );
+    aWinOpt.SetUserItem( USERITEM_NAME, Any( aWinData.makeStringAndClear() ) );
 }
 
 

@@ -114,7 +114,7 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testNoThumbnail)
     utl::TempFile aTempFile;
     aTempFile.EnableKillingFile();
     uno::Sequence<beans::PropertyValue> aProperties(
-        comphelper::InitPropertySequence({ { "NoThumbnail", uno::makeAny(true) } }));
+        comphelper::InitPropertySequence({ { "NoThumbnail", uno::Any(true) } }));
     osl::File::remove(aTempFile.GetURL());
     xStorable->storeToURL(aTempFile.GetURL(), aProperties);
     uno::Reference<packages::zip::XZipFileAccess2> xZipFile
@@ -206,13 +206,13 @@ CPPUNIT_TEST_FIXTURE(MiscTest, testOverwrite)
     // explicitly overwrite the file using the Overwrite option
     CPPUNIT_ASSERT_NO_THROW(xStorable->storeToURL(
         aTempFile.GetURL(),
-        comphelper::InitPropertySequence({ { "Overwrite", uno::makeAny(true) } })));
+        comphelper::InitPropertySequence({ { "Overwrite", uno::Any(true) } })));
 
     try
     {
         // overwrite an existing file with the Overwrite flag set to false
         xStorable->storeToURL(aTempFile.GetURL(), comphelper::InitPropertySequence(
-                                                      { { "Overwrite", uno::makeAny(false) } }));
+                                                      { { "Overwrite", uno::Any(false) } }));
         CPPUNIT_ASSERT_MESSAGE("We expect an exception on overwriting an existing file", false);
     }
     catch (const css::uno::Exception&)
