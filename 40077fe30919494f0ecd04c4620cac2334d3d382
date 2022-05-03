@@ -16,6 +16,24 @@
       "message": "(Just for the record:  Adding\n\n  OString::operator std::string_view() \u0026\u0026 \u003d delete;\n\netc. instead of the new loplugin:stringviewdangle would cause the common case to fail where an O[U]String rvalue is passed into a string_view function parameter.  Those could be dressed up with o3tl::temporary, but that would arguably be more clutter than it\u0027d be worth.)",
       "revId": "40077fe30919494f0ecd04c4620cac2334d3d382",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "afc2561a_a996fcd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-03T09:43:49Z",
+      "side": 1,
+      "message": "Yeah, I was specifically not going after that case, because, as you noticed with the other patch, most of the OUString temporaries passed as parameter to std::u16string_view parameters are fine.\n\nIt\u0027s really only the case where you assign an OUString temporary to a string_view that things start to go wrong.",
+      "parentUuid": "bc44012b_ad8bc534",
+      "revId": "40077fe30919494f0ecd04c4620cac2334d3d382",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
