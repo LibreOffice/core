@@ -141,7 +141,7 @@ namespace abp
             {
                 xNewDataSource->setPropertyValue(
                     "URL",
-                    makeAny( OUString::createFromAscii( _pInitialAsciiURL ) )
+                    Any( OUString::createFromAscii( _pInitialAsciiURL ) )
                 );
             }
 
@@ -360,9 +360,9 @@ namespace abp
                     uno::Reference<embed::XStorage> xStorage = pObjectShell->GetStorage();
                     uno::Sequence<beans::PropertyValue> aSequence = comphelper::InitPropertySequence(
                     {
-                        {"TargetStorage", uno::makeAny(xStorage)},
-                        {"StreamRelPath", uno::makeAny(aStreamRelPath)},
-                        {"BaseURI", uno::makeAny(aOwnURL)}
+                        {"TargetStorage", uno::Any(xStorage)},
+                        {"StreamRelPath", uno::Any(aStreamRelPath)},
+                        {"BaseURI", uno::Any(aOwnURL)}
                     });
                     xStorable->storeAsURL(sTmpName, aSequence);
                     m_pImpl->sName = sTmpName;
@@ -371,7 +371,7 @@ namespace abp
                     // we can load it again next time the file is imported.
                     uno::Reference<lang::XMultiServiceFactory> xFactory(pObjectShell->GetModel(), uno::UNO_QUERY);
                     uno::Reference<beans::XPropertySet> xPropertySet(xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::makeAny(aStreamRelPath));
+                    xPropertySet->setPropertyValue("EmbeddedDatabaseName", uno::Any(aStreamRelPath));
                 }
             }
         }
@@ -563,12 +563,12 @@ namespace abp
                     aDetailedError.Details = compmodule::ModuleRes(RID_STR_PLEASECHECKSETTINGS);
                     aDetailedError.NextException = aError;
                     // handle (aka display) the new context info
-                    xInteractions->handle( new OInteractionRequest( makeAny( aDetailedError ) ) );
+                    xInteractions->handle( new OInteractionRequest( Any( aDetailedError ) ) );
                 }
                 else
                 {
                       // handle (aka display) the original error
-                    xInteractions->handle( new OInteractionRequest( makeAny( aException ) ) );
+                    xInteractions->handle( new OInteractionRequest( Any( aException ) ) );
                 }
             }
             catch( const Exception& )

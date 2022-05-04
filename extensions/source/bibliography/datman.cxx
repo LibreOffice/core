@@ -630,11 +630,11 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
                 Any aFormatted(bFormattedIsNumeric);
                 xCurrentCol->setPropertyValue("TreatAsNumber", aFormatted);
             }
-            Any aColName = makeAny( rField );
+            Any aColName( rField );
             xCurrentCol->setPropertyValue(FM_PROP_CONTROLSOURCE,    aColName);
             xCurrentCol->setPropertyValue(FM_PROP_LABEL, aColName);
 
-            xColContainer->insertByName( rField, makeAny( xCurrentCol ) );
+            xColContainer->insertByName( rField, Any( xCurrentCol ) );
         }
     }
     catch (const Exception&)
@@ -661,7 +661,7 @@ Reference< awt::XControlModel > const & BibDataManager::updateGridModel(const Re
             m_xGridModel = createGridModel( gGridName );
 
             Reference< XNameContainer >  xNameCont(xDbForm, UNO_QUERY);
-            xNameCont->insertByName( sName, makeAny( m_xGridModel ) );
+            xNameCont->insertByName( sName, Any( m_xGridModel ) );
         }
 
         // insert the fields
@@ -788,8 +788,8 @@ void BibDataManager::setFilter(const OUString& rQuery)
         m_xParser->setFilter( rQuery );
         OUString aQuery = m_xParser->getFilter();
         Reference< XPropertySet >  xFormProps( m_xForm, UNO_QUERY_THROW );
-        xFormProps->setPropertyValue( "Filter", makeAny( aQuery ) );
-        xFormProps->setPropertyValue( "ApplyFilter", makeAny( true ) );
+        xFormProps->setPropertyValue( "Filter", Any( aQuery ) );
+        xFormProps->setPropertyValue( "ApplyFilter", Any( true ) );
         reload();
     }
     catch (const Exception&)
@@ -899,7 +899,7 @@ void BibDataManager::setActiveDataSource(const OUString& rURL)
         aActiveDataTable = aTableNameSeq[0];
         aVal <<= aActiveDataTable;
         aPropertySet->setPropertyValue("Command", aVal);
-        aPropertySet->setPropertyValue("CommandType", makeAny(CommandType::TABLE));
+        aPropertySet->setPropertyValue("CommandType", Any(CommandType::TABLE));
         //Caching for Performance
         aVal <<= sal_Int32(50);
         aPropertySet->setPropertyValue("FetchSize", aVal);
@@ -1107,7 +1107,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
 
         // set the
         Reference< XPropertySet > xPropSet( xModel, UNO_QUERY );
-        xPropSet->setPropertyValue( "Name", makeAny( rName ) );
+        xPropSet->setPropertyValue( "Name", Any( rName ) );
 
         // set the name of the to-be-created control
         Any aAny(OUString("com.sun.star.form.control.InteractionGridControl"));
@@ -1119,7 +1119,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const OUString& 
         if (xPropInfo->hasPropertyByName(uProp))
         {
             xPropSet->setPropertyValue(
-                uProp, makeAny<OUString>(INET_HID_SCHEME + HID_BIB_DB_GRIDCTRL));
+                uProp, Any(OUString(INET_HID_SCHEME + HID_BIB_DB_GRIDCTRL)));
         }
     }
     catch (const Exception&)
@@ -1206,8 +1206,8 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             Any aFieldName; aFieldName <<= aName;
 
             xPropSet->setPropertyValue( FM_PROP_NAME,aFieldName);
-            xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, makeAny( rName ) );
-            xPropSet->setPropertyValue("NativeWidgetLook", makeAny( true ) );
+            xPropSet->setPropertyValue( FM_PROP_CONTROLSOURCE, Any( rName ) );
+            xPropSet->setPropertyValue("NativeWidgetLook", Any( true ) );
 
             if (bForceListBox)
             {
@@ -1265,7 +1265,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             Reference< XFormComponent >  aFormComp(xModel,UNO_QUERY );
 
             Reference< XNameContainer >  xNameCont( m_xForm, UNO_QUERY );
-            xNameCont->insertByName(aName, makeAny( aFormComp ) );
+            xNameCont->insertByName(aName, Any( aFormComp ) );
 
             // now if the form where we inserted the new model is already loaded, notify the model of this
             // Note that this implementation below is a HACK as it relies on the fact that the model adds itself

@@ -593,7 +593,7 @@ namespace
             {
                 aText = m_rEntry.get_text();
             }
-            m_xPropSet->setPropertyValue("Text", makeAny(aText));
+            m_xPropSet->setPropertyValue("Text", Any(aText));
 
             css::uno::Reference<css::form::XBoundComponent> xBound(m_xPropSet, css::uno::UNO_QUERY);
             if (xBound.is())
@@ -667,7 +667,7 @@ namespace
             m_bSelfChanging = true;
 
             Sequence<sal_Int16> aSelection{ o3tl::narrowing<sal_Int16>(m_rComboBox.get_active()) };
-            m_xPropSet->setPropertyValue("SelectedItems", makeAny(aSelection));
+            m_xPropSet->setPropertyValue("SelectedItems", Any(aSelection));
 
             css::uno::Reference<css::form::XBoundComponent> xBound(m_xPropSet, css::uno::UNO_QUERY);
             if (xBound.is())

@@ -303,7 +303,7 @@ namespace pcr
         // create an introspection adapter for the component
         Reference< XIntrospection > xIntrospection = theIntrospection::get( m_xContext );
 
-        Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( makeAny( _rxIntrospectee ) ) );
+        Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( Any( _rxIntrospectee ) ) );
         if ( !xIntrospectionAccess.is() )
             throw RuntimeException("The introspection service could not handle the given component.", *this );
 

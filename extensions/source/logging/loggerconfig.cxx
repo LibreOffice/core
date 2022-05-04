@@ -54,7 +54,6 @@ namespace logging
     using ::com::sun::star::lang::XSingleServiceFactory;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::util::XChangesBatch;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::lang::NullPointerException;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::ServiceNotRegisteredException;
@@ -222,7 +221,7 @@ namespace logging
 
             // write access to the "Settings" node (which includes settings for all loggers)
             Sequence<Any> aArguments{ Any(NamedValue(
-                "nodepath", makeAny(OUString("/org.openoffice.Office.Logging/Settings")))) };
+                "nodepath", Any(OUString("/org.openoffice.Office.Logging/Settings")))) };
             Reference< XNameContainer > xAllSettings( xConfigProvider->createInstanceWithArguments(
                 "com.sun.star.configuration.ConfigurationUpdateAccess",
                 aArguments
@@ -234,7 +233,7 @@ namespace logging
                 // no node yet for this logger. Create default settings.
                 Reference< XSingleServiceFactory > xNodeFactory( xAllSettings, UNO_QUERY_THROW );
                 Reference< XInterface > xLoggerSettings( xNodeFactory->createInstance(), css::uno::UNO_SET_THROW );
-                xAllSettings->insertByName( sLoggerName, makeAny( xLoggerSettings ) );
+                xAllSettings->insertByName( sLoggerName, Any( xLoggerSettings ) );
                 Reference< XChangesBatch > xChanges( xAllSettings, UNO_QUERY_THROW );
                 xChanges->commitChanges();
             }

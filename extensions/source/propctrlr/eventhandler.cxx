@@ -98,7 +98,6 @@ namespace pcr
     using ::com::sun::star::form::runtime::FormController;
     using ::com::sun::star::form::runtime::XFormController;
     using ::com::sun::star::beans::UnknownPropertyException;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::container::NoSuchElementException;
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::container::XNameReplace;
@@ -275,7 +274,7 @@ namespace pcr
             OSL_PRECOND( _rxIntrospection.is(), "lcl_addListenerTypesFor_throw: this will crash!" );
 
             Reference< XIntrospectionAccess > xIntrospectionAccess(
-                _rxIntrospection->inspect( makeAny( _rxComponent ) ), UNO_SET_THROW );
+                _rxIntrospection->inspect( Any( _rxComponent ) ), UNO_SET_THROW );
 
             const Sequence< Type > aListeners( xIntrospectionAccess->getSupportedListeners() );
 
@@ -381,7 +380,7 @@ namespace pcr
             comphelper::makePropertyValue("Script", aDescriptor.ScriptCode)
         };
 
-        return makeAny( aScriptDescriptor );
+        return Any( aScriptDescriptor );
     }
 
     Sequence< OUString > SAL_CALL EventHolder::getElementNames(  )
@@ -511,7 +510,7 @@ namespace pcr
             }
         }
 
-        return makeAny( aPropertyValue );
+        return Any( aPropertyValue );
     }
 
     void SAL_CALL EventHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
@@ -568,7 +567,7 @@ namespace pcr
         // there is no need for this code...
 
         aAssignedScript.ScriptCode = sNewScriptCode;
-        return makeAny( aAssignedScript );
+        return Any( aAssignedScript );
     }
 
     Any SAL_CALL EventHandler::convertToControlValue( const OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType )
@@ -629,7 +628,7 @@ namespace pcr
             }
         }
 
-        return makeAny( sScript );
+        return Any( sScript );
     }
 
     PropertyState SAL_CALL EventHandler::getPropertyState( const OUString& /*_rPropertyName*/ )
@@ -802,7 +801,7 @@ namespace pcr
                 // set the new "property value"
                 setPropertyValue(
                     lcl_getEventPropertyName( event.second.sListenerClassName, event.second.sListenerMethodName ),
-                    makeAny( aScriptDescriptor )
+                    Any( aScriptDescriptor )
                 );
             }
         }

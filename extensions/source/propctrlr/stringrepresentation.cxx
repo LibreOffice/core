@@ -479,7 +479,7 @@ uno::Any StringRepresentation::convertStringToSimple( const OUString& _rValue,co
             }
 
             if ( !aReturn.hasValue() )
-                aReturn = m_xTypeConverter->convertToSimpleType( makeAny( _rValue ), _ePropertyType );
+                aReturn = m_xTypeConverter->convertToSimpleType( Any( _rValue ), _ePropertyType );
         }
         catch( const script::CannotConvertException& ) { }
         catch( const lang::IllegalArgumentException& ) { }

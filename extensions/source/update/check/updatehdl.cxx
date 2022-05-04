@@ -145,7 +145,7 @@ void UpdateHandler::setDownloadBtnLabel( bool bAppendDots )
             aLabel += "...";
 
         setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], "Label", uno::Any( aLabel ) );
-        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD2 ) );
+        setControlProperty( msButtonIDs[DOWNLOAD_BUTTON], "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD2 )) );
 
         mbDownloadBtnHasDots = bAppendDots;
     }
@@ -1035,7 +1035,7 @@ void UpdateHandler::createDialog()
         xPropSet->setPropertyValue( "PositionY", uno::Any(sal_Int32( 100 )) );
         xPropSet->setPropertyValue( "Width", uno::Any(sal_Int32( DIALOG_WIDTH )) );
         xPropSet->setPropertyValue( "Height", uno::Any(sal_Int32( DIALOG_HEIGHT )) );
-        xPropSet->setPropertyValue( "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DLG ) );
+        xPropSet->setPropertyValue( "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DLG )) );
     }
     {   // Label (fixed text) <status>
         uno::Sequence< beans::NamedValue > aProps { { "Label", uno::Any( msStatusFL ) } };
@@ -1060,7 +1060,7 @@ void UpdateHandler::createDialog()
             { "MultiLine", uno::Any( true ) },
             { "ReadOnly", uno::Any( true ) },
             { "AutoVScroll", uno::Any( true ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_STATUS ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_STATUS )) }
         };
 
         insertControlModel( xControlModel, EDIT_FIELD_MODEL, TEXT_STATUS,
@@ -1093,7 +1093,7 @@ void UpdateHandler::createDialog()
             { "Enabled", uno::Any( true ) },
             { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
             { "Label", uno::Any( msPauseBtn ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_PAUSE ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_PAUSE )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[PAUSE_BUTTON],
@@ -1107,7 +1107,7 @@ void UpdateHandler::createDialog()
             { "Enabled", uno::Any( true ) },
             { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
             { "Label", uno::Any( msResumeBtn ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_RESUME ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_RESUME )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[RESUME_BUTTON],
@@ -1124,7 +1124,7 @@ void UpdateHandler::createDialog()
             { "Enabled", uno::Any( true ) },
             { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
             { "Label", uno::Any( msCancelBtn ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CANCEL ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CANCEL )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[CANCEL_BUTTON],
@@ -1157,7 +1157,7 @@ void UpdateHandler::createDialog()
             { "MultiLine", uno::Any( true ) },
             { "ReadOnly", uno::Any( true ) },
             { "AutoVScroll", uno::Any( true ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DESCRIPTION ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DESCRIPTION )) }
         };
 
         insertControlModel( xControlModel, EDIT_FIELD_MODEL, TEXT_DESCRIPTION,
@@ -1186,7 +1186,7 @@ void UpdateHandler::createDialog()
             // setProperty( aProps, 2, "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_CANCEL) ) );
             // [property] string Label // only if PushButtonType_STANDARD
             { "Label", uno::Any( msClose ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CLOSE ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_CLOSE )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[ CLOSE_BUTTON ],
@@ -1200,7 +1200,7 @@ void UpdateHandler::createDialog()
             { "Enabled", uno::Any( true ) },
             { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
             { "Label", uno::Any( msInstall ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_INSTALL ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_INSTALL )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[INSTALL_BUTTON],
@@ -1214,7 +1214,7 @@ void UpdateHandler::createDialog()
             { "Enabled", uno::Any( true ) },
             { "PushButtonType", uno::Any( sal_Int16(awt::PushButtonType_STANDARD) ) },
             { "Label", uno::Any( msDownload ) },
-            { "HelpURL", uno::makeAny<OUString>( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD ) }
+            { "HelpURL", uno::Any(OUString( INET_HID_SCHEME + HID_CHECK_FOR_UPD_DOWNLOAD )) }
         };
 
         insertControlModel ( xControlModel, BUTTON_MODEL, msButtonIDs[DOWNLOAD_BUTTON],

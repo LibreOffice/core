@@ -170,19 +170,19 @@ namespace dbp
             }
 
             // ListSourceType: SQL
-            getContext().xObjectModel->setPropertyValue("ListSourceType", makeAny(sal_Int32(ListSourceType_SQL)));
+            getContext().xObjectModel->setPropertyValue("ListSourceType", Any(sal_Int32(ListSourceType_SQL)));
 
             if (isListBox())
             {
                 // BoundColumn: 1
-                getContext().xObjectModel->setPropertyValue("BoundColumn", makeAny(sal_Int16(1)));
+                getContext().xObjectModel->setPropertyValue("BoundColumn", Any(sal_Int16(1)));
 
                 // build the statement to set as list source
                 OUString sStatement = "SELECT " +
                     getSettings().sListContentField +  ", " + getSettings().sLinkedListField +
                     " FROM " + getSettings().sListContentTable;
                 Sequence< OUString > aListSource { sStatement };
-                getContext().xObjectModel->setPropertyValue("ListSource", makeAny(aListSource));
+                getContext().xObjectModel->setPropertyValue("ListSource", Any(aListSource));
             }
             else
             {
@@ -190,11 +190,11 @@ namespace dbp
                 OUString sStatement = "SELECT DISTINCT " +
                     getSettings().sListContentField +
                     " FROM " + getSettings().sListContentTable;
-                getContext().xObjectModel->setPropertyValue( "ListSource", makeAny(sStatement));
+                getContext().xObjectModel->setPropertyValue( "ListSource", Any(sStatement));
             }
 
             // the bound field
-            getContext().xObjectModel->setPropertyValue("DataField", makeAny(getSettings().sLinkedFormField));
+            getContext().xObjectModel->setPropertyValue("DataField", Any(getSettings().sLinkedFormField));
         }
         catch(const Exception&)
         {

@@ -257,7 +257,7 @@ namespace pcr
                 } catch( const Exception& ) { }
 
                 // set the new data type name
-                xBinding->setPropertyValue( PROPERTY_XSD_DATA_TYPE, makeAny( _rName ) );
+                xBinding->setPropertyValue( PROPERTY_XSD_DATA_TYPE, Any( _rName ) );
 
                 // retrieve the new data type object
                 Reference< XPropertySet > xNewType = getDataType( _rName );
@@ -269,7 +269,7 @@ namespace pcr
                 // fire the change in the Data Type property
                 OUString sNewDataTypeName;
                 OSL_VERIFY( xBinding->getPropertyValue( PROPERTY_XSD_DATA_TYPE ) >>= sNewDataTypeName );
-                firePropertyChange( PROPERTY_XSD_DATA_TYPE, makeAny( sOldDataTypeName ), makeAny( sNewDataTypeName ) );
+                firePropertyChange( PROPERTY_XSD_DATA_TYPE, Any( sOldDataTypeName ), Any( sNewDataTypeName ) );
             }
         }
         catch( const Exception& )
@@ -361,7 +361,7 @@ namespace pcr
                 sal_Int32 nDesiredFormat = xFormatTypes->getStandardFormat( nNumberFormatType, SvtSysLocale().GetLanguageTag().getLocale() );
 
                 // set this at the introspectee
-                m_xControlModel->setPropertyValue( PROPERTY_FORMATKEY, makeAny( nDesiredFormat ) );
+                m_xControlModel->setPropertyValue( PROPERTY_FORMATKEY, Any( nDesiredFormat ) );
             }
         }
         catch( const Exception& )

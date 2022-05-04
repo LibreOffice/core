@@ -206,7 +206,7 @@ uno::Reference< beans::XPropertySet > createMenuBarUI(
             xServiceManager->createInstanceWithContext( "com.sun.star.setup.UpdateCheckUI", xContext ),
             uno::UNO_QUERY_THROW);
 
-    xMenuBarUI->setPropertyValue( PROPERTY_CLICK_HDL, uno::makeAny( xJob ) );
+    xMenuBarUI->setPropertyValue( PROPERTY_CLICK_HDL, uno::Any( xJob ) );
 
     return xMenuBarUI;
 }
@@ -724,7 +724,7 @@ ShutdownThread::run()
     // Tell QuickStarter not to veto ..
     uno::Reference< css::beans::XFastPropertySet > xQuickStarter = css::office::Quickstart::createDefault(m_xContext);
 
-    xQuickStarter->setFastPropertyValue(0, uno::makeAny(false));
+    xQuickStarter->setFastPropertyValue(0, uno::Any(false));
 
     // Shutdown the office
     uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
@@ -1390,18 +1390,18 @@ void UpdateCheck::handleMenuBarUI( const rtl::Reference< UpdateHandler >& rUpdat
     {
         if( UPDATESTATE_NO_UPDATE_AVAIL == eState )
         {
-            xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(false) );
+            xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::Any(false) );
         }
         else
         {
-            xMenuBarUI->setPropertyValue( PROPERTY_TITLE, uno::makeAny(rUpdateHandler->getBubbleTitle(eState)) );
-            xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::makeAny(rUpdateHandler->getBubbleText(eState)) );
+            xMenuBarUI->setPropertyValue( PROPERTY_TITLE, uno::Any(rUpdateHandler->getBubbleTitle(eState)) );
+            xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::Any(rUpdateHandler->getBubbleText(eState)) );
 
             if( ! suppressBubble && ( ! rUpdateHandler->isVisible() || rUpdateHandler->isMinimized() ) )
-                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( true ) );
+                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::Any( true ) );
 
             if( UPDATESTATE_CHECKING != eState )
-                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(true) );
+                xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::Any(true) );
         }
     }
 }

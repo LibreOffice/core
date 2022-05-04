@@ -106,7 +106,7 @@ namespace abp
         Reference<awt::XWindow> xParentWindow;
         if (aArguments.getLength() == 1 && (aArguments[0] >>= xParentWindow) ) {
             Sequence< Any > aNewArgs{ Any(PropertyValue(
-                "ParentWindow", 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE )) };
+                "ParentWindow", 0, Any(xParentWindow), PropertyState_DIRECT_VALUE )) };
             OGenericUnoDialog::initialize(aNewArgs);
         } else {
             OGenericUnoDialog::initialize(aArguments);
@@ -129,8 +129,8 @@ namespace abp
         // User has one chance to accept it or not.
         // (or he can start it again by using wizard-menu!)
         // So we should deregister it on our general job execution service by using right protocol parameters.
-        css::uno::Sequence< css::beans::NamedValue > lProtocol { { "Deactivate", css::uno::makeAny( true ) } };
-        return makeAny( lProtocol );
+        css::uno::Sequence< css::beans::NamedValue > lProtocol { { "Deactivate", css::uno::Any( true ) } };
+        return Any( lProtocol );
     }
 
     void OABSPilotUno::executedDialog(sal_Int16 _nExecutionResult)

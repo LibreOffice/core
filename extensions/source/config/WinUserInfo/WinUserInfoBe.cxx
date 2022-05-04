@@ -401,8 +401,8 @@ css::uno::Any WinUserInfoBe::getPropertyValue(OUString const& PropertyName)
     else
         throw css::beans::UnknownPropertyException(sToken, static_cast<cppu::OWeakObject*>(this));
 
-    return css::uno::makeAny(css::beans::Optional<css::uno::Any>(
-        !sValue.isEmpty(), sValue.isEmpty() ? css::uno::Any() : css::uno::makeAny(sValue)));
+    return css::uno::Any(css::beans::Optional<css::uno::Any>(
+        !sValue.isEmpty(), sValue.isEmpty() ? css::uno::Any() : css::uno::Any(sValue)));
 }
 
 OUString SAL_CALL WinUserInfoBe::getImplementationName()

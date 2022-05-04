@@ -158,8 +158,8 @@ namespace pcr
                 nButtonType = sal_Int32(FormButtonType_URL);
             }
 
-            m_xControlModel->setPropertyValue( PROPERTY_BUTTONTYPE, makeAny( static_cast< FormButtonType >( nButtonType ) ) );
-            m_xControlModel->setPropertyValue( PROPERTY_TARGET_URL, makeAny( sTargetURL ) );
+            m_xControlModel->setPropertyValue( PROPERTY_BUTTONTYPE, Any( static_cast< FormButtonType >( nButtonType ) ) );
+            m_xControlModel->setPropertyValue( PROPERTY_TARGET_URL, Any( sTargetURL ) );
         }
         catch( const Exception& )
         {

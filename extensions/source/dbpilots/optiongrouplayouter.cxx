@@ -116,20 +116,20 @@ namespace dbp
                 UNO_QUERY);
 
             // the label
-            xRadioModel->setPropertyValue("Label", makeAny(*aLabelIter));
+            xRadioModel->setPropertyValue("Label", Any(*aLabelIter));
             // the value
-            xRadioModel->setPropertyValue("RefValue", makeAny(*aValueIter));
+            xRadioModel->setPropertyValue("RefValue", Any(*aValueIter));
 
             // default selection
             if (_rSettings.sDefaultField == *aLabelIter)
-                xRadioModel->setPropertyValue("DefaultState", makeAny(sal_Int16(1)));
+                xRadioModel->setPropertyValue("DefaultState", Any(sal_Int16(1)));
 
             // the connection to the database field
             if (!_rSettings.sDBField.isEmpty())
-                xRadioModel->setPropertyValue("DataField", makeAny(_rSettings.sDBField));
+                xRadioModel->setPropertyValue("DataField", Any(_rSettings.sDBField));
 
             // the name for the model
-            xRadioModel->setPropertyValue("Name", makeAny(sElementsName));
+            xRadioModel->setPropertyValue("Name", Any(sElementsName));
 
             // create a shape for the radio button
             Reference< XControlShape > xRadioShape(
@@ -164,7 +164,7 @@ namespace dbp
 
             // set the GroupBox as "LabelControl" for the RadioButton
             // (_after_ having inserted the model into the page!)
-            xRadioModel->setPropertyValue("LabelControl", makeAny(_rContext.xObjectModel));
+            xRadioModel->setPropertyValue("LabelControl", Any(_rContext.xObjectModel));
         }
 
         // group the shapes
@@ -176,7 +176,7 @@ namespace dbp
                 Reference< XShapeGroup > xGroupedOptions = xGrouper->group(xButtonCollection);
                 Reference< XSelectionSupplier > xSelector(_rContext.xDocumentModel->getCurrentController(), UNO_QUERY);
                 if (xSelector.is())
-                    xSelector->select(makeAny(xGroupedOptions));
+                    xSelector->select(Any(xGroupedOptions));
             }
         }
         catch(Exception&)
@@ -194,7 +194,7 @@ namespace dbp
         if (_rxShapeProps.is())
             xPropertyInfo = _rxShapeProps->getPropertySetInfo();
         if (xPropertyInfo.is() && xPropertyInfo->hasPropertyByName(s_sAnchorPropertyName))
-            _rxShapeProps->setPropertyValue(s_sAnchorPropertyName, makeAny(TextContentAnchorType_AT_PAGE));
+            _rxShapeProps->setPropertyValue(s_sAnchorPropertyName, Any(TextContentAnchorType_AT_PAGE));
     }
 
 
