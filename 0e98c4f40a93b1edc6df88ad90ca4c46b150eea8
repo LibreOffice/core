@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b03212c4_b3d3c122",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-04T15:20:26Z",
+      "side": 1,
+      "message": "\u003e \u003e case where no JRE has been installed yet. \n\u003e @Stefan Actually, one of these error messages arises if a JRE is installed, but not activated in \"Options\" -- which undermines your otherwise sensible suggestion, because that case will happen regardless of any changes to LanguageTool.\n\nIf no JRE has been selected yet, installation of an extension that uses passive Java component registration (see e.g. workdir/Extension/test-passive.oxt produced by `make Extension_test-passive`) does not cause any error message.  (And usage of the extension then causes the \"Enable JRE?\" dialog, as mentioned in my referenced comment.)\n\n\u003e @Heiko, @Adolfo - If no easy fix (in relation to translation), then maybe change OUString so that \u0027▸\u0027 can used without clang complaining?  or just use \u0027\u003e\u0027 instead?\n\nThe fix for the Clang loplugin:stringconstant warning would be to construct an OUString from a UTF-16 string literal, u\"...\".  But see my comment earlier in this thread, that the code in stoc/source/javaloader/javaloader.cxx \"shouldn\u0027t mention \u0027Tools - Options - Advanced\u0027\".",
+      "parentUuid": "5bd29c0f_fea0653b",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e794f304_32e902b7",
         "filename": "stoc/inc/strings.hrc",
         "patchSetId": 3
