@@ -19,6 +19,7 @@
 
 #include <queryiter.hxx>
 
+#include <comphelper/flagguard.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
@@ -55,18 +56,17 @@
 #include <limits>
 #include <vector>
 
-template< ScQueryCellIteratorType iteratorType >
-ScQueryCellIteratorBase< iteratorType >::ScQueryCellIteratorBase(ScDocument& rDocument,
+template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
+ScQueryCellIteratorBase< accessType, queryType >::ScQueryCellIteratorBase(ScDocument& rDocument,
     const ScInterpreterContext& rContext, SCTAB nTable, const ScQueryParam& rParam, bool bMod )
-    : maParam(rParam)
-    , rDoc( rDocument )
+    : AccessBase( rDocument, rParam )
     , mrContext( rContext )
-    , nTab( nTable)
     , nStopOnMismatch( nStopOnMismatchDisabled )
     , nTestEqualCondition( nTestEqualConditionDisabled )
     , bAdvanceQuery( false )
     , bIgnoreMismatchOnLeadingStrings( false )
 {
+    nTab = nTable;
     nCol = maParam.nCol1;
     nRow = maParam.nRow1;
     SCSIZE i;
@@ -85,41 +85,8 @@ ScQueryCellIteratorBase< iteratorType >::ScQueryCellIteratorBase(ScDocument& rDo
     }
 }
 
-template< ScQueryCellIteratorType iteratorType >
-void ScQueryCellIteratorBase< iteratorType >::InitPos()
-{
-    nRow = maParam.nRow1;
-    if (maParam.bHasHeader && maParam.bByRow)
-        ++nRow;
-    const ScColumn& rCol = rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
-    maCurPos = rCol.maCells.position(nRow);
-}
-
-template< ScQueryCellIteratorType iteratorType >
-void ScQueryCellIteratorBase< iteratorType >::IncPos()
-{
-    if (maCurPos.second + 1 < maCurPos.first->size)
-    {
-        // Move within the same block.
-        ++maCurPos.second;
-        ++nRow;
-    }
-    else
-        // Move to the next block.
-        IncBlock();
-}
-
-template< ScQueryCellIteratorType iteratorType >
-void ScQueryCellIteratorBase< iteratorType >::IncBlock()
-{
-    ++maCurPos.first;
-    maCurPos.second = 0;
-
-    nRow = maCurPos.first->position;
-}
-
-template< ScQueryCellIteratorType iteratorType >
-void ScQueryCellIteratorBase< iteratorType >::PerformQuery()
+template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
+void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
 {
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     const ScQueryEntry& rEntry = maParam.GetEntry(0);
@@ -136,7 +103,7 @@ void ScQueryCellIteratorBase< iteratorType >::PerformQuery()
     bool bTestEqualCondition = false;
     ScQueryEvaluator queryEvaluator(rDoc, *rDoc.maTabs[nTab], maParam, &mrContext,
         (nTestEqualCondition ? &bTestEqualCondition : nullptr));
-    if( iteratorType == ScQueryCellIteratorType::CountIf )
+    if( queryType == ScQueryCellIteratorType::CountIf )
     {
         // These are not used for COUNTIF, so should not be set, make the compiler
         // explicitly aware of it so that the relevant parts are optimized away.
@@ -266,8 +233,8 @@ void ScQueryCellIteratorBase< iteratorType >::PerformQuery()
     }
 }
 
-template< ScQueryCellIteratorType iteratorType >
-void ScQueryCellIteratorBase< iteratorType >::AdvanceQueryParamEntryField()
+template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
+void ScQueryCellIteratorBase< accessType, queryType >::AdvanceQueryParamEntryField()
 {
     SCSIZE nEntries = maParam.GetEntryCount();
     for ( SCSIZE j = 0; j < nEntries; j++  )
@@ -305,205 +272,10 @@ void decBlock(std::pair<Iter, size_t>& rPos)
     rPos.second = rPos.first->size - 1;
 }
 
-/**
- * This class sequentially indexes non-empty cells in order, from the top of
- * the block where the start row position is, to the bottom of the block
- * where the end row position is.  It skips all empty blocks that may be
- * present in between.
- *
- * The index value is an offset from the first element of the first block
- * disregarding all empty cell blocks.
- */
-class NonEmptyCellIndexer
-{
-    typedef std::map<size_t, sc::CellStoreType::const_iterator> BlockMapType;
-
-    BlockMapType maBlockMap;
-
-    const sc::CellStoreType& mrCells;
-
-    size_t mnLowIndex;
-    size_t mnHighIndex;
-
-    bool mbValid;
-
-public:
-
-    typedef std::pair<ScRefCellValue, SCROW> CellType;
-
-    /**
-     * @param rCells cell storage container
-     * @param nStartRow logical start row position
-     * @param nEndRow logical end row position, inclusive.
-     * @param bSkipTopStrBlock when true, skip all leading string cells.
-     */
-    NonEmptyCellIndexer(
-        const sc::CellStoreType& rCells, SCROW nStartRow, SCROW nEndRow, bool bSkipTopStrBlock ) :
-        mrCells(rCells), mnLowIndex(0), mnHighIndex(0), mbValid(true)
-    {
-        if (nEndRow < nStartRow)
-        {
-            mbValid = false;
-            return;
-        }
-
-        // Find the low position.
-
-        sc::CellStoreType::const_position_type aLoPos = mrCells.position(nStartRow);
-        if (aLoPos.first->type == sc::element_type_empty)
-            incBlock(aLoPos);
-
-        if (aLoPos.first == rCells.end())
-        {
-            mbValid = false;
-            return;
-        }
-
-        if (bSkipTopStrBlock)
-        {
-            // Skip all leading string or empty blocks.
-            while (aLoPos.first->type == sc::element_type_string ||
-                   aLoPos.first->type == sc::element_type_edittext ||
-                   aLoPos.first->type == sc::element_type_empty)
-            {
-                incBlock(aLoPos);
-                if (aLoPos.first == rCells.end())
-                {
-                    mbValid = false;
-                    return;
-                }
-            }
-        }
-
-        SCROW nFirstRow = aLoPos.first->position;
-        SCROW nLastRow = aLoPos.first->position + aLoPos.first->size - 1;
-
-        if (nFirstRow > nEndRow)
-        {
-            // Both start and end row positions are within the leading skipped
-            // blocks.
-            mbValid = false;
-            return;
-        }
-
-        // Calculate the index of the low position.
-        if (nFirstRow < nStartRow)
-            mnLowIndex = nStartRow - nFirstRow;
-        else
-        {
-            // Start row is within the skipped block(s). Set it to the first
-            // element of the low block.
-            mnLowIndex = 0;
-        }
-
-        if (nEndRow < nLastRow)
-        {
-            assert(nEndRow >= nFirstRow);
-            mnHighIndex = nEndRow - nFirstRow;
-
-            maBlockMap.emplace(aLoPos.first->size, aLoPos.first);
-            return;
-        }
-
-        // Find the high position.
-
-        sc::CellStoreType::const_position_type aHiPos = mrCells.position(aLoPos.first, nEndRow);
-        if (aHiPos.first->type == sc::element_type_empty)
-        {
-            // Move to the last position of the previous block.
-            decBlock(aHiPos);
-
-            // Check the row position of the end of the previous block, and make sure it's valid.
-            SCROW nBlockEndRow = aHiPos.first->position + aHiPos.first->size - 1;
-            if (nBlockEndRow < nStartRow)
-            {
-                mbValid = false;
-                return;
-            }
-        }
-
-        // Tag the start and end blocks, and all blocks in between in order
-        // but skip all empty blocks.
-
-        size_t nPos = 0;
-        sc::CellStoreType::const_iterator itBlk = aLoPos.first;
-        while (itBlk != aHiPos.first)
-        {
-            if (itBlk->type == sc::element_type_empty)
-            {
-                ++itBlk;
-                continue;
-            }
-
-            nPos += itBlk->size;
-            maBlockMap.emplace(nPos, itBlk);
-            ++itBlk;
-
-            if (itBlk->type == sc::element_type_empty)
-                ++itBlk;
-
-            assert(itBlk != mrCells.end());
-        }
-
-        assert(itBlk == aHiPos.first);
-        nPos += itBlk->size;
-        maBlockMap.emplace(nPos, itBlk);
-
-        // Calculate the high index.
-        BlockMapType::const_reverse_iterator ri = maBlockMap.rbegin();
-        mnHighIndex = ri->first;
-        mnHighIndex -= ri->second->size;
-        mnHighIndex += aHiPos.second;
-    }
-
-    sc::CellStoreType::const_position_type getPosition( size_t nIndex ) const
-    {
-        assert(mbValid);
-        assert(mnLowIndex <= nIndex);
-        assert(nIndex <= mnHighIndex);
-
-        sc::CellStoreType::const_position_type aRet(mrCells.end(), 0);
-
-        BlockMapType::const_iterator it = maBlockMap.upper_bound(nIndex);
-        if (it == maBlockMap.end())
-            return aRet;
-
-        sc::CellStoreType::const_iterator itBlk = it->second;
-        size_t nBlkIndex = it->first - itBlk->size; // index of the first element of the block.
-        assert(nBlkIndex <= nIndex);
-        assert(nIndex < it->first);
-
-        size_t nOffset = nIndex - nBlkIndex;
-        aRet.first = itBlk;
-        aRet.second = nOffset;
-        return aRet;
-    }
-
-    CellType getCell( size_t nIndex ) const
-    {
-        std::pair<ScRefCellValue, SCROW> aRet;
-        aRet.second = -1;
-
-        sc::CellStoreType::const_position_type aPos = getPosition(nIndex);
-        if (aPos.first == mrCells.end())
-            return aRet;
-
-        aRet.first = sc::toRefCell(aPos.first, aPos.second);
-        aRet.second = aPos.first->position + aPos.second;
-        return aRet;
-    }
-
-    size_t getLowIndex() const { return mnLowIndex; }
-
-    size_t getHighIndex() const { return mnHighIndex; }
-
-    bool isValid() const { return mbValid; }
-};
-
 }
 
-template< ScQueryCellIteratorType iteratorType >
-bool ScQueryCellIteratorBase< iteratorType >::BinarySearch()
+template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
+bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
 {
     assert(maParam.GetEntry(0).bDoQuery && !maParam.GetEntry(1).bDoQuery
         && maParam.GetEntry(0).GetQueryItems().size() == 1 );
@@ -556,13 +328,34 @@ bool ScQueryCellIteratorBase< iteratorType >::BinarySearch()
         }
     }
 
-    NonEmptyCellIndexer aIndexer(pCol->maCells, nRow, maParam.nRow2, bAllStringIgnore);
+    // Skip leading empty block, if any.
+    sc::CellStoreType::const_position_type startPos = pCol->maCells.position(nRow);
+    if (startPos.first->type == sc::element_type_empty)
+        incBlock(startPos);
+    if(bAllStringIgnore)
+    {
+        // Skip all leading string or empty blocks.
+        while (startPos.first != pCol->maCells.end()
+            && (startPos.first->type == sc::element_type_string ||
+                startPos.first->type == sc::element_type_edittext ||
+                startPos.first->type == sc::element_type_empty))
+        {
+            incBlock(startPos);
+        }
+    }
+    if(startPos.first == pCol->maCells.end())
+        return false;
+    nRow = startPos.first->position + startPos.second;
+    if (nRow > maParam.nRow2)
+        return false;
+
+    auto aIndexer = MakeBinarySearchIndexer(pCol->maCells, nRow, maParam.nRow2);
     if (!aIndexer.isValid())
         return false;
 
     size_t nLo = aIndexer.getLowIndex();
     size_t nHi = aIndexer.getHighIndex();
-    NonEmptyCellIndexer::CellType aCellData;
+    BinarySearchCellType aCellData;
 
     // Bookkeeping values for breaking up the binary search in case the data
     // range isn't strictly sorted.
@@ -780,19 +573,12 @@ bool ScQueryCellIteratorBase< iteratorType >::BinarySearch()
 }
 
 
-bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
+template< ScQueryCellIteratorAccess accessType >
+bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
         SCROW& nFoundRow )
 {
-    // Set and automatically reset mpParam->mbRangeLookup when returning. We
-    // could use comphelper::FlagRestorationGuard, but really, that one is
-    // overengineered for this simple purpose here.
-    struct BoolResetter
-    {
-        bool& mr;
-        bool  mb;
-        BoolResetter( bool& r, bool b ) : mr(r), mb(r) { r = b; }
-        ~BoolResetter() { mr = mb; }
-    } aRangeLookupResetter( maParam.mbRangeLookup, true);
+    // Set and automatically reset mpParam->mbRangeLookup when returning.
+    comphelper::FlagRestorationGuard aRangeLookupResetter( maParam.mbRangeLookup, true );
 
     nFoundCol = rDoc.MaxCol()+1;
     nFoundRow = rDoc.MaxRow()+1;
@@ -969,21 +755,233 @@ bool ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
     return (nFoundCol <= rDoc.MaxCol()) && (nFoundRow <= rDoc.MaxRow());
 }
 
-template<>
-bool ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >::HandleItemFound()
+// Direct linear cell access using mdds.
+
+ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >
+    ::ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, const ScQueryParam& rParam )
+    : maParam( rParam )
+    , rDoc( rDocument )
+{
+}
+
+void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::InitPos()
+{
+    nRow = maParam.nRow1;
+    if (maParam.bHasHeader && maParam.bByRow)
+        ++nRow;
+    const ScColumn& rCol = rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
+    maCurPos = rCol.maCells.position(nRow);
+}
+
+void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::IncPos()
+{
+    if (maCurPos.second + 1 < maCurPos.first->size)
+    {
+        // Move within the same block.
+        ++maCurPos.second;
+        ++nRow;
+    }
+    else
+        // Move to the next block.
+        IncBlock();
+}
+
+void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::IncBlock()
+{
+    ++maCurPos.first;
+    maCurPos.second = 0;
+
+    nRow = maCurPos.first->position;
+}
+
+/**
+ * This class sequentially indexes non-empty cells in order, from the top of
+ * the block where the start row position is, to the bottom of the block
+ * where the end row position is.  It skips all empty blocks that may be
+ * present in between.
+ *
+ * The index value is an offset from the first element of the first block
+ * disregarding all empty cell blocks.
+ */
+class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::NonEmptyCellIndexer
+{
+    typedef std::map<size_t, sc::CellStoreType::const_iterator> BlockMapType;
+
+    BlockMapType maBlockMap;
+
+    const sc::CellStoreType& mrCells;
+
+    size_t mnLowIndex;
+    size_t mnHighIndex;
+
+    bool mbValid;
+
+public:
+    /**
+     * @param rCells cell storage container
+     * @param nStartRow logical start row position
+     * @param nEndRow logical end row position, inclusive.
+     */
+    NonEmptyCellIndexer(
+        const sc::CellStoreType& rCells, SCROW nStartRow, SCROW nEndRow) :
+        mrCells(rCells), mnLowIndex(0), mnHighIndex(0), mbValid(true)
+    {
+        // Find the low position.
+
+        sc::CellStoreType::const_position_type aLoPos = mrCells.position(nStartRow);
+        assert(aLoPos.first->type != sc::element_type_empty);
+        assert(aLoPos.first != rCells.end());
+
+        SCROW nFirstRow = aLoPos.first->position;
+        SCROW nLastRow = aLoPos.first->position + aLoPos.first->size - 1;
+
+        if (nFirstRow > nEndRow)
+        {
+            // Both start and end row positions are within the leading skipped
+            // blocks.
+            mbValid = false;
+            return;
+        }
+
+        // Calculate the index of the low position.
+        if (nFirstRow < nStartRow)
+            mnLowIndex = nStartRow - nFirstRow;
+        else
+        {
+            // Start row is within the skipped block(s). Set it to the first
+            // element of the low block.
+            mnLowIndex = 0;
+        }
+
+        if (nEndRow < nLastRow)
+        {
+            assert(nEndRow >= nFirstRow);
+            mnHighIndex = nEndRow - nFirstRow;
+
+            maBlockMap.emplace(aLoPos.first->size, aLoPos.first);
+            return;
+        }
+
+        // Find the high position.
+
+        sc::CellStoreType::const_position_type aHiPos = mrCells.position(aLoPos.first, nEndRow);
+        if (aHiPos.first->type == sc::element_type_empty)
+        {
+            // Move to the last position of the previous block.
+            decBlock(aHiPos);
+
+            // Check the row position of the end of the previous block, and make sure it's valid.
+            SCROW nBlockEndRow = aHiPos.first->position + aHiPos.first->size - 1;
+            if (nBlockEndRow < nStartRow)
+            {
+                mbValid = false;
+                return;
+            }
+        }
+
+        // Tag the start and end blocks, and all blocks in between in order
+        // but skip all empty blocks.
+
+        size_t nPos = 0;
+        sc::CellStoreType::const_iterator itBlk = aLoPos.first;
+        while (itBlk != aHiPos.first)
+        {
+            if (itBlk->type == sc::element_type_empty)
+            {
+                ++itBlk;
+                continue;
+            }
+
+            nPos += itBlk->size;
+            maBlockMap.emplace(nPos, itBlk);
+            ++itBlk;
+
+            if (itBlk->type == sc::element_type_empty)
+                ++itBlk;
+
+            assert(itBlk != mrCells.end());
+        }
+
+        assert(itBlk == aHiPos.first);
+        nPos += itBlk->size;
+        maBlockMap.emplace(nPos, itBlk);
+
+        // Calculate the high index.
+        BlockMapType::const_reverse_iterator ri = maBlockMap.rbegin();
+        mnHighIndex = ri->first;
+        mnHighIndex -= ri->second->size;
+        mnHighIndex += aHiPos.second;
+    }
+
+    sc::CellStoreType::const_position_type getPosition( size_t nIndex ) const
+    {
+        assert(mbValid);
+        assert(mnLowIndex <= nIndex);
+        assert(nIndex <= mnHighIndex);
+
+        sc::CellStoreType::const_position_type aRet(mrCells.end(), 0);
+
+        BlockMapType::const_iterator it = maBlockMap.upper_bound(nIndex);
+        if (it == maBlockMap.end())
+            return aRet;
+
+        sc::CellStoreType::const_iterator itBlk = it->second;
+        size_t nBlkIndex = it->first - itBlk->size; // index of the first element of the block.
+        assert(nBlkIndex <= nIndex);
+        assert(nIndex < it->first);
+
+        size_t nOffset = nIndex - nBlkIndex;
+        aRet.first = itBlk;
+        aRet.second = nOffset;
+        return aRet;
+    }
+
+    BinarySearchCellType getCell( size_t nIndex ) const
+    {
+        BinarySearchCellType aRet;
+        aRet.second = -1;
+
+        sc::CellStoreType::const_position_type aPos = getPosition(nIndex);
+        if (aPos.first == mrCells.end())
+            return aRet;
+
+        aRet.first = sc::toRefCell(aPos.first, aPos.second);
+        aRet.second = aPos.first->position + aPos.second;
+        return aRet;
+    }
+
+    size_t getLowIndex() const { return mnLowIndex; }
+
+    size_t getHighIndex() const { return mnHighIndex; }
+
+    bool isValid() const { return mbValid; }
+};
+
+ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::NonEmptyCellIndexer
+ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::MakeBinarySearchIndexer(
+    const sc::CellStoreType& rCells, SCROW nStartRow, SCROW nEndRow )
+{
+    return NonEmptyCellIndexer(rCells, nStartRow, nEndRow);
+}
+
+// Generic query implementation.
+
+bool ScQueryCellIteratorTypeSpecific< ScQueryCellIteratorType::Generic >::HandleItemFound()
 {
     getThisResult = true;
     return true; // Return from PerformQuery().
 }
 
-bool ScQueryCellIterator::GetThis()
+template< ScQueryCellIteratorAccess accessType >
+bool ScQueryCellIterator< accessType >::GetThis()
 {
     getThisResult = false;
     PerformQuery();
     return getThisResult;
 }
 
-bool ScQueryCellIterator::GetFirst()
+template< ScQueryCellIteratorAccess accessType >
+bool ScQueryCellIterator< accessType >::GetFirst()
 {
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     nCol = maParam.nCol1;
@@ -991,7 +989,8 @@ bool ScQueryCellIterator::GetFirst()
     return GetThis();
 }
 
-bool ScQueryCellIterator::GetNext()
+template< ScQueryCellIteratorAccess accessType >
+bool ScQueryCellIterator< accessType >::GetNext()
 {
     IncPos();
     if ( nStopOnMismatch )
@@ -1001,15 +1000,16 @@ bool ScQueryCellIterator::GetNext()
     return GetThis();
 }
 
+// Countifs implementation.
 
-template<>
-bool ScQueryCellIteratorBase< ScQueryCellIteratorType::CountIf >::HandleItemFound()
+bool ScQueryCellIteratorTypeSpecific< ScQueryCellIteratorType::CountIf >::HandleItemFound()
 {
     ++countIfCount;
     return false; // Continue searching.
 }
 
-sal_uInt64 ScCountIfCellIterator::GetCount()
+template< ScQueryCellIteratorAccess accessType >
+sal_uInt64 ScCountIfCellIterator< accessType >::GetCount()
 {
     // Keep Entry.nField in iterator on column change
     SetAdvanceQueryParamEntryField( true );
@@ -1023,7 +1023,11 @@ sal_uInt64 ScCountIfCellIterator::GetCount()
     return countIfCount;
 }
 
-template class ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >;
-template class ScQueryCellIteratorBase< ScQueryCellIteratorType::CountIf >;
+template class ScQueryCellIterator< ScQueryCellIteratorAccess::Direct >;
+template class ScCountIfCellIterator< ScQueryCellIteratorAccess::Direct >;
+
+// gcc for some reason needs these too
+template class ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic >;
+template class ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf >;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
