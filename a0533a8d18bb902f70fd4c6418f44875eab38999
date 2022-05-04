@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "148bfd35_eb398ab3",
+        "filename": "bin/update/path.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-04T17:50:18Z",
+      "side": 0,
+      "message": "You can\u0027t remove this as it\u0027s used in bin/update/create_full_mar.py\n(although I\u0027m not sure if this whole mar installer stuff is used anymore)",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c33c8dc5_aa96c7b1",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-04T17:50:18Z",
+      "side": 0,
+      "message": "Difficult to say if this could be removed without testing as the scripts are so interconnected. I see command defined with a real value in bin/update/upload_builds.py",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1392c7c6_544f1867",
+        "filename": "bin/update/uncompress_mar.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1001613
+      },
+      "writtenOn": "2022-05-04T17:50:18Z",
+      "side": 0,
+      "message": "You can\u0027t remove this as it\u0027s used by subprocess.check_call a couple of lines later",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
