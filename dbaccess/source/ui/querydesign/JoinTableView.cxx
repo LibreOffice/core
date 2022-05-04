@@ -258,7 +258,7 @@ bool OJoinTableView::RemoveConnection(VclPtr<OTableConnection>& rConn, bool _bDe
     modified();
     if ( m_pAccessible )
         m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                makeAny(xConn->GetAccessible()),
+                                                Any(xConn->GetAccessible()),
                                                 Any());
     if (_bDelete)
         xConn->disposeOnce();
@@ -338,7 +338,7 @@ void OJoinTableView::AddTabWin(const OUString& _rComposedName, const OUString& r
         if ( m_pAccessible )
             m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                     Any(),
-                                                    makeAny(pNewTabWin->GetAccessible()));
+                                                    Any(pNewTabWin->GetAccessible()));
     }
     else
     {
@@ -374,7 +374,7 @@ void OJoinTableView::RemoveTabWin( OTableWindow* pTabWin )
     {
         if ( m_pAccessible )
             m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
-                                                    makeAny(pTabWin->GetAccessible()),Any()
+                                                    Any(pTabWin->GetAccessible()),Any()
                                                     );
 
         pTabWin->Hide();
@@ -1546,7 +1546,7 @@ void OJoinTableView::addConnection(OTableConnection* _pConnection,bool _bAddData
     if ( m_pAccessible )
         m_pAccessible->notifyAccessibleEvent(   AccessibleEventId::CHILD,
                                                 Any(),
-                                                makeAny(_pConnection->GetAccessible()));
+                                                Any(_pConnection->GetAccessible()));
 }
 
 bool OJoinTableView::allowQueries() const

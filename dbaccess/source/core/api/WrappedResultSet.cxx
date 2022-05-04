@@ -49,7 +49,7 @@ Any WrappedResultSet::getBookmark()
     {
         return m_xRowLocate->getBookmark( );
     }
-    return makeAny(m_xDriverSet->getRow());
+    return Any(m_xDriverSet->getRow());
 }
 
 bool WrappedResultSet::moveToBookmark( const Any& bookmark )

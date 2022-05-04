@@ -69,8 +69,8 @@ DatabaseDataProvider::DatabaseDataProvider(uno::Reference< uno::XComponentContex
         uno::Reference<beans::XPropertySet> xProp(static_cast< ::cppu::OWeakObject* >( this ),uno::UNO_QUERY);
         m_aFilterManager.initialize( m_xAggregateSet );
         m_aParameterManager.initialize( xProp, m_xAggregate );
-        m_xAggregateSet->setPropertyValue(PROPERTY_COMMAND_TYPE,uno::makeAny(m_CommandType));
-        m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,uno::makeAny(m_EscapeProcessing));
+        m_xAggregateSet->setPropertyValue(PROPERTY_COMMAND_TYPE,uno::Any(m_CommandType));
+        m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,uno::Any(m_EscapeProcessing));
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -123,7 +123,7 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
         else if ( !m_xHandler.is() )
             (*pIter) >>= m_xHandler;
     }
-    m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, uno::makeAny( m_xActiveConnection ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, uno::Any( m_xActiveConnection ) );
 }
 
 // chart2::data::XDataProvider:
@@ -201,7 +201,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             uno::Reference< lang::XInitialization> xIni(m_xInternal,uno::UNO_QUERY);
             if ( xIni.is() )
             {
-                beans::NamedValue aParam("CreateDefaultData",uno::makeAny(true));
+                beans::NamedValue aParam("CreateDefaultData",uno::Any(true));
                 uno::Sequence< uno::Any > aInitArgs{ uno::Any(aParam) };
                 xIni->initialize(aInitArgs);
             }
@@ -215,9 +215,9 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
 {
     ::comphelper::NamedValueCollection aArguments;
     aArguments.put( "CellRangeRepresentation", uno::Any( OUString( "all" ) ) );
-    aArguments.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+    aArguments.put( "DataRowSource", uno::Any( chart::ChartDataRowSource_COLUMNS ) );
     // internal data always contains labels
-    aArguments.put( "FirstCellAsLabel", uno::makeAny( true ) );
+    aArguments.put( "FirstCellAsLabel", uno::Any( true ) );
 
     bool bHasCategories = false;
     if( _xDataSource.is())
@@ -241,7 +241,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL DatabaseDataProvider::detectArgum
             }
         }
     }
-    aArguments.put( "HasCategories", uno::makeAny( bHasCategories ) );
+    aArguments.put( "HasCategories", uno::Any( bHasCategories ) );
     return aArguments.getPropertyValues();
 }
 
@@ -255,7 +255,7 @@ uno::Any DatabaseDataProvider::impl_getNumberFormatKey_nothrow(const OUString & 
     std::map< OUString,css::uno::Any>::const_iterator aFind = m_aNumberFormats.find(_sRangeRepresentation);
     if ( aFind != m_aNumberFormats.end() )
         return aFind->second;
-    return uno::makeAny(sal_Int32(0));
+    return uno::Any(sal_Int32(0));
 }
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL DatabaseDataProvider::createDataSequenceByRangeRepresentation(const OUString & _sRangeRepresentation)
@@ -444,7 +444,7 @@ void SAL_CALL DatabaseDataProvider::setCommand(const OUString & the_value)
     {
         osl::MutexGuard g(m_aMutex);
         impl_invalidateParameter_nothrow();
-        m_xAggregateSet->setPropertyValue( PROPERTY_COMMAND,   uno::makeAny( the_value ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_COMMAND,   uno::Any( the_value ) );
     }
     set(PROPERTY_COMMAND,the_value,m_Command);
 }
@@ -459,7 +459,7 @@ void SAL_CALL DatabaseDataProvider::setCommandType(::sal_Int32 the_value)
 {
     {
         osl::MutexGuard g(m_aMutex);
-        m_xAggregateSet->setPropertyValue( PROPERTY_COMMAND_TYPE,   uno::makeAny( the_value ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_COMMAND_TYPE,   uno::Any( the_value ) );
     }
     set(PROPERTY_COMMAND_TYPE,the_value,m_CommandType);
 }
@@ -489,7 +489,7 @@ void SAL_CALL DatabaseDataProvider::setApplyFilter( sal_Bool the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
-        m_xAggregateSet->setPropertyValue( PROPERTY_APPLYFILTER,   uno::makeAny( the_value ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_APPLYFILTER,   uno::Any( the_value ) );
     }
     set(PROPERTY_APPLYFILTER,static_cast<bool>(the_value),m_ApplyFilter);
 }
@@ -504,7 +504,7 @@ void SAL_CALL DatabaseDataProvider::setHavingClause( const OUString& the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
-        m_xAggregateSet->setPropertyValue( PROPERTY_HAVING_CLAUSE,   uno::makeAny( the_value ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_HAVING_CLAUSE,   uno::Any( the_value ) );
     }
     set(PROPERTY_HAVING_CLAUSE,the_value,m_HavingClause);
 }
@@ -519,7 +519,7 @@ void SAL_CALL DatabaseDataProvider::setGroupBy( const OUString& the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
-        m_xAggregateSet->setPropertyValue( PROPERTY_GROUP_BY,   uno::makeAny( the_value ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_GROUP_BY,   uno::Any( the_value ) );
     }
     set(PROPERTY_GROUP_BY,the_value,m_GroupBy);
 }
@@ -534,7 +534,7 @@ void SAL_CALL DatabaseDataProvider::setOrder( const OUString& the_value )
 {
     {
         osl::MutexGuard g(m_aMutex);
-        m_xAggregateSet->setPropertyValue( PROPERTY_ORDER,   uno::makeAny( the_value ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_ORDER,   uno::Any( the_value ) );
     }
     set(PROPERTY_ORDER,the_value,m_Order);
 }
@@ -792,7 +792,7 @@ void DatabaseDataProvider::impl_fillInternalDataProvider_throw(bool _bHasCategor
 
 void DatabaseDataProvider::impl_fillRowSet_throw()
 {
-    m_xAggregateSet->setPropertyValue( PROPERTY_FILTER,   uno::makeAny( getFilter() ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_FILTER,   uno::Any( getFilter() ) );
     uno::Reference< sdbc::XParameters> xParam(m_xRowSet,uno::UNO_QUERY_THROW);
     xParam->clearParameters( );
 }

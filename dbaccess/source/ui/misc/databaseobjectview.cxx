@@ -71,7 +71,7 @@ namespace dbaui
 
     Reference< XComponent > DatabaseObjectView::createNew( const Reference< XDataSource >& _xDataSource, const ::comphelper::NamedValueCollection& i_rDispatchArgs )
     {
-        return doCreateView( makeAny( _xDataSource ), OUString(), i_rDispatchArgs );
+        return doCreateView( Any( _xDataSource ), OUString(), i_rDispatchArgs );
     }
 
     Reference< XComponent > DatabaseObjectView::openExisting( const Any& _rDataSource, const OUString& _rName,

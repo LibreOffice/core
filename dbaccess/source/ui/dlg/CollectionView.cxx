@@ -141,7 +141,7 @@ IMPL_LINK_NOARG(OCollectionView, Save_Click, weld::Button&, void)
 
                     Reference<XInteractionHandler2> xHandler(
                         InteractionHandler::createWithParent(m_xContext, m_xDialog->GetXWindow()));
-                    rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aException));
+                    rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(Any(aException));
 
                     rtl::Reference<OInteractionApprove> pApprove = new OInteractionApprove;
                     pRequest->addContinuation(pApprove);

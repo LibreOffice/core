@@ -43,7 +43,7 @@ void OStaticSet::fillValueRow(ORowSetRow& _rRow,sal_Int32 /*_nPosition*/)
 // css::sdbcx::XRowLocate
 Any OStaticSet::getBookmark()
 {
-    return makeAny(getRow());
+    return Any(getRow());
 }
 
 bool OStaticSet::moveToBookmark( const Any& bookmark )

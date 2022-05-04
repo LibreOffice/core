@@ -1831,7 +1831,7 @@ Reference< XComponent > OApplicationController::openElementWithArguments( const 
                 pDesigner.reset( new ResultSetBrowser( getORB(), this, m_aCurrentFrame.getFrame(), _eType == E_TABLE ) );
 
                 if ( !aArguments.has( PROPERTY_SHOWMENU ) )
-                    aArguments.put( PROPERTY_SHOWMENU, makeAny( true ) );
+                    aArguments.put( PROPERTY_SHOWMENU, Any( true ) );
 
                 aDataSource <<= getDatabaseName();
             }
@@ -2266,7 +2266,7 @@ Any OApplicationController::getCurrentSelection(weld::TreeView& rControl) const
 {
     Sequence< NamedDatabaseObject > aSelection;
     getContainer()->describeCurrentSelectionForControl(rControl, aSelection);
-    return makeAny( aSelection );
+    return Any( aSelection );
 }
 
 vcl::Window* OApplicationController::getMenuParent() const
@@ -2529,7 +2529,7 @@ void OApplicationController::OnFirstControllerConnected()
         aDetail.Message = DBA_RES(STR_SUB_DOCS_WITH_SCRIPTS_DETAIL);
         aWarning.NextException <<= aDetail;
 
-        Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( getORB(), "", nullptr, makeAny( aWarning ) );
+        Reference< XExecutableDialog > xDialog = ErrorMessageDialog::create( getORB(), "", nullptr, Any( aWarning ) );
         xDialog->execute();
     }
     catch( const Exception& )
@@ -2829,7 +2829,7 @@ Any SAL_CALL OApplicationController::getSelection(  )
             }
         }
     }
-    return makeAny( aCurrentSelection );
+    return Any( aCurrentSelection );
 }
 
 }   // namespace dbaui

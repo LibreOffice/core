@@ -393,7 +393,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                     Reference<XContent > xNew(xORB->createInstanceWithArguments(sServiceName,aArguments),UNO_QUERY);
                     Reference<XNameContainer> xNameContainer(xContent,UNO_QUERY);
                     if ( xNameContainer.is() )
-                        xNameContainer->insertByName(*elements,makeAny(xNew));
+                        xNameContainer->insertByName(*elements,Any(xNew));
                 }
             }
         }
@@ -423,7 +423,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
+                Any( IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -450,7 +450,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         {
             // Unsupported.
             ucbhelper::cancelCommandExecution(
-                makeAny( UnsupportedOpenModeException(
+                Any( UnsupportedOpenModeException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 sal_Int16( aOpenCommand.Mode ) ) ),
@@ -467,7 +467,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
+                Any( IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
@@ -751,8 +751,8 @@ void SAL_CALL ODocumentContainer::rename( const OUString& newName )
             return;
 
         sal_Int32 nHandle = PROPERTY_ID_NAME;
-        Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
-        Any aNew = makeAny(newName);
+        Any aOld(m_pImpl->m_aProps.aTitle);
+        Any aNew(newName);
 
         aGuard.clear();
         fire(&nHandle, &aNew, &aOld, 1, true );

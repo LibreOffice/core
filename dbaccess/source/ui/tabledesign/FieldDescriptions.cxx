@@ -235,7 +235,7 @@ void OFieldDescription::SetName(const OUString& _rName)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_NAME) )
-            m_xDest->setPropertyValue(PROPERTY_NAME,makeAny(_rName));
+            m_xDest->setPropertyValue(PROPERTY_NAME,Any(_rName));
         else
             m_sName = _rName;
     }
@@ -250,7 +250,7 @@ void OFieldDescription::SetHelpText(const OUString& _sHelpText)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
-            m_xDest->setPropertyValue(PROPERTY_HELPTEXT,makeAny(_sHelpText));
+            m_xDest->setPropertyValue(PROPERTY_HELPTEXT,Any(_sHelpText));
         else
             m_sHelpText = _sHelpText;
     }
@@ -265,7 +265,7 @@ void OFieldDescription::SetDescription(const OUString& _rDescription)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_DESCRIPTION) )
-            m_xDest->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_rDescription));
+            m_xDest->setPropertyValue(PROPERTY_DESCRIPTION,Any(_rDescription));
         else
             m_sDescription = _rDescription;
     }
@@ -308,7 +308,7 @@ void OFieldDescription::SetAutoIncrementValue(const OUString& _sAutoIncValue)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
-            m_xDest->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_sAutoIncValue));
+            m_xDest->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,Any(_sAutoIncValue));
         else
             m_sAutoIncrementValue = _sAutoIncValue;
     }
@@ -327,7 +327,7 @@ void OFieldDescription::SetType(const TOTypeInfoSP& _pType)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPE) )
-            m_xDest->setPropertyValue(PROPERTY_TYPE,makeAny(m_pType->nType));
+            m_xDest->setPropertyValue(PROPERTY_TYPE,Any(m_pType->nType));
         else
             m_nType = m_pType->nType;
     }
@@ -342,7 +342,7 @@ void OFieldDescription::SetTypeValue(sal_Int32 _nType)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPE) )
-            m_xDest->setPropertyValue(PROPERTY_TYPE,makeAny(_nType));
+            m_xDest->setPropertyValue(PROPERTY_TYPE,Any(_nType));
         else
         {
             m_nType = _nType;
@@ -360,7 +360,7 @@ void OFieldDescription::SetPrecision(sal_Int32 _rPrecision)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_PRECISION) )
-            m_xDest->setPropertyValue(PROPERTY_PRECISION,makeAny(_rPrecision));
+            m_xDest->setPropertyValue(PROPERTY_PRECISION,Any(_rPrecision));
         else
             m_nPrecision = _rPrecision;
     }
@@ -375,7 +375,7 @@ void OFieldDescription::SetScale(sal_Int32 _rScale)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_SCALE) )
-            m_xDest->setPropertyValue(PROPERTY_SCALE,makeAny(_rScale));
+            m_xDest->setPropertyValue(PROPERTY_SCALE,Any(_rScale));
         else
             m_nScale = _rScale;
     }
@@ -390,7 +390,7 @@ void OFieldDescription::SetIsNullable(sal_Int32 _rIsNullable)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISNULLABLE) )
-            m_xDest->setPropertyValue(PROPERTY_ISNULLABLE,makeAny(_rIsNullable));
+            m_xDest->setPropertyValue(PROPERTY_ISNULLABLE,Any(_rIsNullable));
         else
             m_nIsNullable = _rIsNullable;
     }
@@ -405,7 +405,7 @@ void OFieldDescription::SetFormatKey(sal_Int32 _rFormatKey)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
-            m_xDest->setPropertyValue(PROPERTY_FORMATKEY,makeAny(_rFormatKey));
+            m_xDest->setPropertyValue(PROPERTY_FORMATKEY,Any(_rFormatKey));
         else
             m_nFormatKey = _rFormatKey;
     }
@@ -420,7 +420,7 @@ void OFieldDescription::SetHorJustify(const SvxCellHorJustify& _rHorJustify)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ALIGN) )
-            m_xDest->setPropertyValue(PROPERTY_ALIGN,makeAny( dbaui::mapTextAlign(_rHorJustify)));
+            m_xDest->setPropertyValue(PROPERTY_ALIGN,Any( dbaui::mapTextAlign(_rHorJustify)));
         else
             m_eHorJustify = _rHorJustify;
     }
@@ -435,7 +435,7 @@ void OFieldDescription::SetAutoIncrement(bool _bAuto)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT) )
-            m_xDest->setPropertyValue(PROPERTY_ISAUTOINCREMENT,makeAny(_bAuto));
+            m_xDest->setPropertyValue(PROPERTY_ISAUTOINCREMENT,Any(_bAuto));
         else
             m_bIsAutoIncrement = _bAuto;
     }
@@ -602,7 +602,7 @@ void OFieldDescription::SetTypeName(const OUString& _sTypeName)
     try
     {
         if ( m_xDest.is() && m_xDestInfo->hasPropertyByName(PROPERTY_TYPENAME) )
-            m_xDest->setPropertyValue(PROPERTY_TYPENAME,makeAny(_sTypeName));
+            m_xDest->setPropertyValue(PROPERTY_TYPENAME,Any(_sTypeName));
         else
             m_sTypeName = _sTypeName;
     }
@@ -620,11 +620,11 @@ void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _r
     Reference<XPropertySetInfo> xInfo = _rxColumn->getPropertySetInfo();
 
     if ( GetFormatKey() != NumberFormat::ALL && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
-        _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(GetFormatKey()));
+        _rxColumn->setPropertyValue(PROPERTY_FORMATKEY,Any(GetFormatKey()));
     if ( GetHorJustify() != SvxCellHorJustify::Standard && xInfo->hasPropertyByName(PROPERTY_ALIGN) )
-        _rxColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAlign(GetHorJustify())));
+        _rxColumn->setPropertyValue(PROPERTY_ALIGN,Any(dbaui::mapTextAlign(GetHorJustify())));
     if ( !GetHelpText().isEmpty() && xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
-        _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(GetHelpText()));
+        _rxColumn->setPropertyValue(PROPERTY_HELPTEXT,Any(GetHelpText()));
     if ( GetControlDefault().hasValue() && xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT) )
         _rxColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,GetControlDefault());
 
@@ -633,7 +633,7 @@ void OFieldDescription::copyColumnSettingsTo(const Reference< XPropertySet >& _r
     if(xInfo->hasPropertyByName(PROPERTY_WIDTH))
         _rxColumn->setPropertyValue(PROPERTY_WIDTH,m_aWidth);
     if(xInfo->hasPropertyByName(PROPERTY_HIDDEN))
-        _rxColumn->setPropertyValue(PROPERTY_HIDDEN,makeAny(m_bHidden));
+        _rxColumn->setPropertyValue(PROPERTY_HIDDEN,Any(m_bHidden));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -68,7 +68,7 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
         try
         {
             Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
-                makeAny( sCatalog ), sSchema, sTable );
+                Any( sCatalog ), sSchema, sTable );
             if ( xVersionColumns.is() ) // allowed to be NULL
             {
                 Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );

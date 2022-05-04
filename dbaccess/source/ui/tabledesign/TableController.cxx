@@ -315,9 +315,9 @@ bool OTableController::doSaveDoc(bool _bSaveAs)
             xTable = xFact->createDataDescriptor();
             OSL_ENSURE(xTable.is(),"OTableController::doSaveDoc: Create query failed!");
             // to set the name is only allowed when the query is new
-            xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
-            xTable->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
-            xTable->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
+            xTable->setPropertyValue(PROPERTY_CATALOGNAME,Any(sCatalog));
+            xTable->setPropertyValue(PROPERTY_SCHEMANAME,Any(sSchema));
+            xTable->setPropertyValue(PROPERTY_NAME,Any(m_sName));
 
             // now append the columns
             Reference<XColumnsSupplier> xColSup(xTable,UNO_QUERY);
@@ -663,7 +663,7 @@ void OTableController::appendColumns(Reference<XColumnsSupplier> const & _rxColS
                 if(!_bKeyColumns)
                     ::dbaui::setColumnProperties(xColumn,pField);
                 else
-                    xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
+                    xColumn->setPropertyValue(PROPERTY_NAME,Any(pField->GetName()));
 
                 xAppend->appendByDescriptor(xColumn);
                 xColumn = nullptr;
@@ -722,7 +722,7 @@ void OTableController::appendPrimaryKey(Reference<XKeysSupplier> const & _rxSup,
 
     Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
     OSL_ENSURE(xKey.is(),"Key is null!");
-    xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::PRIMARY));
+    xKey->setPropertyValue(PROPERTY_TYPE,Any(KeyType::PRIMARY));
 
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
     if(xColSup.is())
@@ -1121,14 +1121,14 @@ void OTableController::alterColumns()
             xColumns->getByName(pField->GetName()) >>= xColumn;
             Reference<XPropertySetInfo> xInfo = xColumn->getPropertySetInfo();
             if ( xInfo->hasPropertyByName(PROPERTY_HELPTEXT) )
-                xColumn->setPropertyValue(PROPERTY_HELPTEXT,makeAny(pField->GetHelpText()));
+                xColumn->setPropertyValue(PROPERTY_HELPTEXT,Any(pField->GetHelpText()));
 
             if(xInfo->hasPropertyByName(PROPERTY_CONTROLDEFAULT))
                 xColumn->setPropertyValue(PROPERTY_CONTROLDEFAULT,pField->GetControlDefault());
             if(xInfo->hasPropertyByName(PROPERTY_FORMATKEY))
-                xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
+                xColumn->setPropertyValue(PROPERTY_FORMATKEY,Any(pField->GetFormatKey()));
             if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
-                xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAlign(pField->GetHorJustify())));
+                xColumn->setPropertyValue(PROPERTY_ALIGN,Any(dbaui::mapTextAlign(pField->GetHorJustify())));
         }
     }
     // second drop all columns which could be found by name

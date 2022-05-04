@@ -126,9 +126,9 @@ void SAL_CALL OCommandDefinition::rename( const OUString& newName )
     {
         sal_Int32 nHandle = PROPERTY_ID_NAME;
         osl::ClearableGuard< osl::Mutex > aGuard(m_aMutex);
-        Any aOld = makeAny(m_pImpl->m_aProps.aTitle);
+        Any aOld(m_pImpl->m_aProps.aTitle);
         aGuard.clear();
-        Any aNew = makeAny(newName);
+        Any aNew(newName);
         fire(&nHandle, &aNew, &aOld, 1, true );
 
         m_pImpl->m_aProps.aTitle = newName;

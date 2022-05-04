@@ -89,15 +89,15 @@ void OTableCopyHelper::insertTable( std::u16string_view i_rSourceDataSource, con
         Reference< XDataAccessDescriptorFactory > xFactory( DataAccessDescriptorFactory::get( aContext ) );
 
         Reference< XPropertySet > xSource( xFactory->createDataAccessDescriptor(), UNO_SET_THROW );
-        xSource->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( i_nCommandType ) );
-        xSource->setPropertyValue( PROPERTY_COMMAND, makeAny( i_rCommand ) );
-        xSource->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xSrcConnection ) );
-        xSource->setPropertyValue( PROPERTY_RESULT_SET, makeAny( i_rSourceRows ) );
-        xSource->setPropertyValue( PROPERTY_SELECTION, makeAny( i_rSelection ) );
-        xSource->setPropertyValue( PROPERTY_BOOKMARK_SELECTION, makeAny( i_bBookmarkSelection ) );
+        xSource->setPropertyValue( PROPERTY_COMMAND_TYPE, Any( i_nCommandType ) );
+        xSource->setPropertyValue( PROPERTY_COMMAND, Any( i_rCommand ) );
+        xSource->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( xSrcConnection ) );
+        xSource->setPropertyValue( PROPERTY_RESULT_SET, Any( i_rSourceRows ) );
+        xSource->setPropertyValue( PROPERTY_SELECTION, Any( i_rSelection ) );
+        xSource->setPropertyValue( PROPERTY_BOOKMARK_SELECTION, Any( i_bBookmarkSelection ) );
 
         Reference< XPropertySet > xDest( xFactory->createDataAccessDescriptor(), UNO_SET_THROW );
-        xDest->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( i_rDestConnection ) );
+        xDest->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( i_rDestConnection ) );
 
         auto xInteractionHandler = InteractionHandler::createWithParent(aContext, VCLUnoHelper::GetInterface(m_pController->getView()));
 

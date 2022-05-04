@@ -84,9 +84,9 @@ void OXMLTableFilterList::endFastElement(sal_Int32 )
     if ( xDataSource.is() )
     {
         if ( !m_aPatterns.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(comphelper::containerToSequence(m_aPatterns)));
+            xDataSource->setPropertyValue(PROPERTY_TABLEFILTER,Any(comphelper::containerToSequence(m_aPatterns)));
         if ( !m_aTypes.empty() )
-            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,makeAny(comphelper::containerToSequence(m_aTypes)));
+            xDataSource->setPropertyValue(PROPERTY_TABLETYPEFILTER,Any(comphelper::containerToSequence(m_aTypes)));
     }
 }
 

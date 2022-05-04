@@ -1045,7 +1045,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
     aArgs.put( "AsTemplate", false );
     aArgs.put( PROPERTY_SHOWMENU, false );
 
-    Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
+    Reference< XController > xPreview( pDispatcher->openExisting( Any( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
     bool bClearPreview = !xPreview.is();
 
     // clear the preview when the query or table could not be loaded
@@ -1105,9 +1105,9 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, weld::Toggleable&, voi
     auto xFrame = getBorderWin().getView()->getAppController().getFrame();
 
     css::uno::Sequence<css::uno::Any> aArgs {
-        css::uno::makeAny(comphelper::makePropertyValue("InToolbar", true)),
-        css::uno::makeAny(comphelper::makePropertyValue("ModuleIdentifier", OUString("com.sun.star.sdb.OfficeDatabaseDocument"))),
-        css::uno::makeAny(comphelper::makePropertyValue("Frame", xFrame)) };
+        css::uno::Any(comphelper::makePropertyValue("InToolbar", true)),
+        css::uno::Any(comphelper::makePropertyValue("ModuleIdentifier", OUString("com.sun.star.sdb.OfficeDatabaseDocument"))),
+        css::uno::Any(comphelper::makePropertyValue("Frame", xFrame)) };
 
     css::uno::Reference<css::frame::XPopupMenuController> xPopupController
             (xPopupMenuFactory->createInstanceWithArgumentsAndContext(".uno:DBPreview", aArgs, xContext), css::uno::UNO_QUERY);

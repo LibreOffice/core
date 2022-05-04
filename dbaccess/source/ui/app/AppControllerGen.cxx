@@ -110,7 +110,7 @@ void OApplicationController::convertToView(const OUString& _sName)
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
                 throw SQLException(DBA_RES(STR_NO_TABLE_FORMAT_INSIDE),*this, "S1000",0,Any());
-            getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
+            getContainer()->elementAdded(E_TABLE,sNewName,Any(xView));
         }
     }
     catch(const SQLException& )
@@ -168,7 +168,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
         // the parent window
         pArgs[nArgPos++] <<= PropertyValue( "ParentWindow",
                                     0,
-                                    makeAny(xWindow),
+                                    Any(xWindow),
                                     PropertyState_DIRECT_VALUE);
 
         // the initial selection
@@ -179,7 +179,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
         {
             pArgs[ nArgPos++ ] <<= PropertyValue(
                 "InitialSelection", 0,
-                makeAny( sInitialSelection ), PropertyState_DIRECT_VALUE );
+                Any( sInitialSelection ), PropertyState_DIRECT_VALUE );
         }
 
         SharedConnection xConnection( getConnection() );
@@ -487,7 +487,7 @@ void OApplicationController::previewChanged( sal_Int32 _nMode )
             if ( nOldMode != _nMode )
             {
                 aLayoutInfo.put( "Preview", _nMode );
-                m_xDataSource->setPropertyValue( PROPERTY_LAYOUTINFORMATION, makeAny( aLayoutInfo.getPropertyValues() ) );
+                m_xDataSource->setPropertyValue( PROPERTY_LAYOUTINFORMATION, Any( aLayoutInfo.getPropertyValues() ) );
             }
         }
         catch ( const Exception& )

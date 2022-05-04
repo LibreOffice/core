@@ -124,8 +124,8 @@ namespace dbaui
             // set the properties
             static constexpr OUStringLiteral s_sNamePropertyName = u"Name";
             // the index' own props
-            xIndexDescriptor->setPropertyValue("IsUnique", css::uno::makeAny(_rPos->bUnique));
-            xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
+            xIndexDescriptor->setPropertyValue("IsUnique", css::uno::Any(_rPos->bUnique));
+            xIndexDescriptor->setPropertyValue(s_sNamePropertyName, Any(_rPos->sName));
 
             // the fields
             for (auto const& field : _rPos->aFields)
@@ -136,8 +136,8 @@ namespace dbaui
                 OSL_ENSURE(xColDescriptor.is(), "OIndexCollection::commitNewIndex: invalid column descriptor!");
                 if (xColDescriptor.is())
                 {
-                    xColDescriptor->setPropertyValue("IsAscending", css::uno::makeAny(field.bSortAscending));
-                    xColDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(field.sFieldName));
+                    xColDescriptor->setPropertyValue("IsAscending", css::uno::Any(field.bSortAscending));
+                    xColDescriptor->setPropertyValue(s_sNamePropertyName, Any(field.sFieldName));
                     xAppendCols->appendByDescriptor(xColDescriptor);
                 }
             }

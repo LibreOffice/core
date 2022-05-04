@@ -106,8 +106,8 @@ namespace
         {
             OUString sSQLStateGeneralError( getStandardSQLState( StandardSQLState::GENERAL_ERROR ) );
             SQLException aError2( aErrorMsg, _rxContext, sSQLStateGeneralError, 1000, Any() );
-            SQLException aError1( _rStatement, _rxContext, sSQLStateGeneralError, 1000, makeAny( aError2 ) );
-            throw SQLException(_rParser.getContext().getErrorMessage(OParseContext::ErrorCode::General),_rxContext,sSQLStateGeneralError,1000,makeAny(aError1));
+            SQLException aError1( _rStatement, _rxContext, sSQLStateGeneralError, 1000, Any( aError2 ) );
+            throw SQLException(_rParser.getContext().getErrorMessage(OParseContext::ErrorCode::General),_rxContext,sSQLStateGeneralError,1000,Any(aError1));
         }
         return pNewSqlParseNode;
     }
@@ -133,7 +133,7 @@ namespace
             // and now really ...
             SQLException aError1( _rOriginatingCommand, _rxContext, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, Any() );
             throw SQLException( DBA_RES( RID_STR_ONLY_QUERY ), _rxContext,
-                getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, makeAny( aError1 ) );
+                getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 1000, Any( aError1 ) );
         }
 
         delete pOldNode;
@@ -474,7 +474,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnRealName_throw(const Referenc
     {
         OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
         SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
-        throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+        throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any(aErr) );
     }
 
     OUString aName, aNewName;
@@ -544,7 +544,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnNameOrderBy_throw(const Refer
     {
         OUString sError(DBA_RES(RID_STR_COLUMN_UNKNOWN_PROP));
         SQLException aErr(sError.replaceAll("%value", PROPERTY_NAME),*this,SQLSTATE_GENERAL,1000,Any() );
-        throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,makeAny(aErr) );
+        throw SQLException(DBA_RES(RID_STR_COLUMN_NOT_VALID),*this,SQLSTATE_GENERAL,1000,Any(aErr) );
     }
 
     OUString aName;
@@ -847,7 +847,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
         {
             xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_SET_THROW ) );
             Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
-            try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( false ) ); }
+            try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, Any( false ) ); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION("dbaccess"); }
             xResMetaDataSup.set( xStatement->executeQuery( sSQL ), UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_SET_THROW );

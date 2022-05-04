@@ -689,7 +689,7 @@ bool ODatabaseExport::executeWizard(const OUString& _rTableName, const Any& _aTe
                         bError = !m_xTable.is();
                         if(m_xTable.is())
                         {
-                            m_xTable->setPropertyValue(PROPERTY_FONT,makeAny(_rFont));
+                            m_xTable->setPropertyValue(PROPERTY_FONT,Any(_rFont));
                             if(_aTextColor.hasValue())
                                 m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
                         }

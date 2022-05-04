@@ -914,7 +914,7 @@ void OFieldDescControl::DisplayData(OFieldDescription* pFieldDescr )
             else
                 m_xBoolDefault->set_active_text(sDef);
 
-            pFieldDescr->SetControlDefault(makeAny(BoolStringPersistent(m_xBoolDefault->get_active_text())));
+            pFieldDescr->SetControlDefault(Any(BoolStringPersistent(m_xBoolDefault->get_active_text())));
         }
         else if (m_xBoolDefault->get_count() < 3)
         {
@@ -1115,7 +1115,7 @@ void OFieldDescControl::SaveData( OFieldDescription* pFieldDescr )
     }
 
     if ( !sDefault.isEmpty() )
-        pFieldDescr->SetControlDefault(makeAny(sDefault));
+        pFieldDescr->SetControlDefault(Any(sDefault));
     else
         pFieldDescr->SetControlDefault(Any());
 

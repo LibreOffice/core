@@ -771,7 +771,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         aContext.Message = DBA_RES(RID_STR_CONNECTION_REQUEST).
             replaceFirst("$name$", m_pImpl->m_sConnectURL);
 
-        throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
+        throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), Any( aContext ) );
     }
 
 #if ENABLE_FIREBIRD_SDBC
@@ -1160,7 +1160,7 @@ Reference< XConnection > ODatabaseSource::connectWithCompletion( const Reference
         aRequest.HasUserName = aRequest.HasPassword = true;
         aRequest.UserName = m_pImpl->m_sUser;
         aRequest.Password = m_pImpl->m_sFailedPassword.isEmpty() ?  m_pImpl->m_aPassword : m_pImpl->m_sFailedPassword;
-        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aRequest));
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(Any(aRequest));
         // some knittings
         pRequest->addContinuation(pAbort);
         pRequest->addContinuation(pAuthenticate);
@@ -1279,7 +1279,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( )
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
-                Sequence<Any> aArgs{ Any(NamedValue("DataSource",makeAny(xMy))) };
+                Sequence<Any> aArgs{ Any(NamedValue("DataSource",Any(xMy))) };
                 xContainer.set( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext), UNO_QUERY);
             }
         }

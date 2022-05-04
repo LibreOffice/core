@@ -281,7 +281,7 @@ void DataSourceInfoConverter::convert(const Reference<XComponentContext> & xCont
     lcl_removeUnused(aOldProperties,aNewProperties,aDS);
 
     aDS >>= aInfo;
-    _xDatasource->setPropertyValue(PROPERTY_INFO,uno::makeAny(aInfo));
+    _xDatasource->setPropertyValue(PROPERTY_INFO,uno::Any(aInfo));
 }
 
 void ODbTypeWizDialogSetup::activateDatabasePath()
@@ -699,7 +699,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                     aRequest.Code = IOErrorCode_GENERAL;
                 aRequest.Message = e.Message;
                 aRequest.Context = e.Context;
-                lcl_handle( xHandler, makeAny( aRequest ) );
+                lcl_handle( xHandler, Any( aRequest ) );
             }
         }
     }
@@ -738,7 +738,7 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
             OSL_ENSURE(xDatasource.is(),"DataSource is null!");
             if ( xDatasource.is() )
-                xDatasource->setPropertyValue( PROPERTY_INFO, makeAny( m_pCollection->getDefaultDBSettings( eType ) ) );
+                xDatasource->setPropertyValue( PROPERTY_INFO, Any( m_pCollection->getDefaultDBSettings( eType ) ) );
             m_pImpl->translateProperties(xDatasource,*m_pOutSet);
         }
         else if ( m_pCollection->isFileSystemBased(eType) )

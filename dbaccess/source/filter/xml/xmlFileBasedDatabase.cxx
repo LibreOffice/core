@@ -95,7 +95,7 @@ OXMLFileBasedDatabase::OXMLFileBasedDatabase( ODBFilter& rImport,
     OUString sURL = aTypeCollection.getDatasourcePrefixFromMediaType(sMediaType,sFileTypeExtension) + sLocation;
     try
     {
-        xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sURL));
+        xDataSource->setPropertyValue(PROPERTY_URL,Any(sURL));
     }
     catch(const Exception&)
     {

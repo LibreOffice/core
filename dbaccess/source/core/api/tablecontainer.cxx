@@ -156,7 +156,7 @@ void lcl_createDefinitionObject(const OUString& _rName
     {
         // set as folder
         _xTableDefinition = TableDefinition::createWithName( ::comphelper::getProcessComponentContext(), _rName );
-        _xTableDefinitions->insertByName(_rName,makeAny(_xTableDefinition));
+        _xTableDefinitions->insertByName(_rName,Any(_xTableDefinition));
     }
     Reference<XColumnsSupplier> xColumnsSupplier(_xTableDefinition,UNO_QUERY);
     if ( xColumnsSupplier.is() )
@@ -408,7 +408,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event )
             ObjectType xName = createObject(sName);
             insertElement(sName,xName);
             // and notify our listeners
-            ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xName), Any());
+            ContainerEvent aEvent(static_cast<XContainer*>(this), Any(sName), Any(xName), Any());
             m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
         }
     }

@@ -194,7 +194,7 @@ Any SAL_CALL SbaTableQueryBrowser::queryInterface(const Type& _rType)
     {
         OSL_PRECOND( !!m_aDocScriptSupport, "SbaTableQueryBrowser::queryInterface: did not initialize this, yet!" );
         if ( !!m_aDocScriptSupport && *m_aDocScriptSupport )
-            return makeAny( Reference< XScriptInvocationContext >( this ) );
+            return Any( Reference< XScriptInvocationContext >( this ) );
         return Any();
     }
 
@@ -416,7 +416,7 @@ void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
         if ( invalidColumn )
         {
             // reset the complete order statement at both the row set and the parser
-            xRowSetProps->setPropertyValue( PROPERTY_ORDER, makeAny( OUString() ) );
+            xRowSetProps->setPropertyValue( PROPERTY_ORDER, Any( OUString() ) );
             xComposer->setOrder( "" );
         }
 
@@ -523,9 +523,9 @@ void SbaTableQueryBrowser::initializePreviewMode()
     Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
     if ( xDataSourceSet.is() )
     {
-        xDataSourceSet->setPropertyValue("AllowInserts",makeAny(false));
-        xDataSourceSet->setPropertyValue("AllowUpdates",makeAny(false));
-        xDataSourceSet->setPropertyValue("AllowDeletes",makeAny(false));
+        xDataSourceSet->setPropertyValue("AllowInserts",Any(false));
+        xDataSourceSet->setPropertyValue("AllowUpdates",Any(false));
+        xDataSourceSet->setPropertyValue("AllowDeletes",Any(false));
     }
 }
 
@@ -641,14 +641,14 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::BOOLEAN:
                     {
                         aCurrentModelType = "CheckBox";
-                        aInitialValues.emplace_back( "VisualEffect", makeAny( VisualEffect::FLAT ) );
+                        aInitialValues.emplace_back( "VisualEffect", Any( VisualEffect::FLAT ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
                         sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
                         OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullable );
                         aInitialValues.emplace_back(
                             "TriState",
-                            makeAny( ColumnValue::NO_NULLS != nNullable )
+                            Any( ColumnValue::NO_NULLS != nNullable )
                         );
                         if ( ColumnValue::NO_NULLS == nNullable )
                             aDefault <<= sal_Int16(TRISTATE_FALSE);
@@ -657,7 +657,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
 
                     case DataType::LONGVARCHAR:
                     case DataType::CLOB:
-                        aInitialValues.emplace_back( "MultiLine", makeAny( true ) );
+                        aInitialValues.emplace_back( "MultiLine", Any( true ) );
                         [[fallthrough]];
                     case DataType::BINARY:
                     case DataType::VARBINARY:
@@ -675,19 +675,19 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )
-                            aInitialValues.emplace_back( "FormatsSupplier", makeAny( xSupplier ) );
-                        aInitialValues.emplace_back( "TreatAsNumber", makeAny( bFormattedIsNumeric ) );
+                            aInitialValues.emplace_back( "FormatsSupplier", Any( xSupplier ) );
+                        aInitialValues.emplace_back( "TreatAsNumber", Any( bFormattedIsNumeric ) );
                         aCopyProperties.emplace_back(PROPERTY_FORMATKEY );
                         break;
                 }
 
-                aInitialValues.emplace_back( PROPERTY_CONTROLSOURCE, makeAny( rName ) );
+                aInitialValues.emplace_back( PROPERTY_CONTROLSOURCE, Any( rName ) );
                 OUString sLabel;
                 xColumn->getPropertyValue(PROPERTY_LABEL) >>= sLabel;
                 if ( !sLabel.isEmpty() )
-                    aInitialValues.emplace_back( PROPERTY_LABEL, makeAny( sLabel ) );
+                    aInitialValues.emplace_back( PROPERTY_LABEL, Any( sLabel ) );
                 else
-                    aInitialValues.emplace_back( PROPERTY_LABEL, makeAny( rName ) );
+                    aInitialValues.emplace_back( PROPERTY_LABEL, Any( rName ) );
 
                 Reference< XPropertySet > xGridCol( xColFactory->createColumn( aCurrentModelType ), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xGridColPSI( xGridCol->getPropertySetInfo(), UNO_SET_THROW );
@@ -734,7 +734,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
 
                 // don't allow the mouse to scroll in the cells
                 if ( xGridColPSI->hasPropertyByName( PROPERTY_MOUSE_WHEEL_BEHAVIOR ) )
-                    aInitialValues.emplace_back( PROPERTY_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
+                    aInitialValues.emplace_back( PROPERTY_MOUSE_WHEEL_BEHAVIOR, Any( MouseWheelBehavior::SCROLL_DISABLED ) );
 
                 // now set all those values
                 for (auto const& property : aInitialValues)
@@ -744,7 +744,7 @@ void SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                 for (auto const& copyPropertyName : aCopyProperties)
                     xGridCol->setPropertyValue( copyPropertyName, xColumn->getPropertyValue(copyPropertyName) );
 
-                xColContainer->insertByName(rName, makeAny(xGridCol));
+                xColContainer->insertByName(rName, Any(xGridCol));
             }
         }
     }
@@ -805,7 +805,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
             if(xProp.is())
             {
                 if(!evt.NewValue.hasValue())
-                    xProp->setPropertyValue(PROPERTY_WIDTH,makeAny(sal_Int32(227)));
+                    xProp->setPropertyValue(PROPERTY_WIDTH,Any(sal_Int32(227)));
                 else
                     xProp->setPropertyValue(PROPERTY_WIDTH,evt.NewValue);
             }
@@ -831,12 +831,12 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
                     {
                         sal_Int16 nAlign = 0;
                         if(evt.NewValue >>= nAlign)
-                            xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(sal_Int32(nAlign)));
+                            xProp->setPropertyValue(PROPERTY_ALIGN,Any(sal_Int32(nAlign)));
                         else
                             xProp->setPropertyValue(PROPERTY_ALIGN,evt.NewValue);
                     }
                     else
-                        xProp->setPropertyValue(PROPERTY_ALIGN,makeAny(css::awt::TextAlign::LEFT));
+                        xProp->setPropertyValue(PROPERTY_ALIGN,Any(css::awt::TextAlign::LEFT));
                 }
             }
             catch( const Exception& )
@@ -867,7 +867,7 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt)
 
                 bool bDefault = !evt.NewValue.hasValue();
                 if (bDefault)
-                    pData->xObjectProperties->setPropertyValue(PROPERTY_ROW_HEIGHT,makeAny(sal_Int32(45)));
+                    pData->xObjectProperties->setPropertyValue(PROPERTY_ROW_HEIGHT,Any(sal_Int32(45)));
                 else
                     pData->xObjectProperties->setPropertyValue(PROPERTY_ROW_HEIGHT,evt.NewValue);
             }
@@ -2347,17 +2347,17 @@ bool SbaTableQueryBrowser::implLoadAnything(const OUString& _rDataSourceName, co
         Reference<XPropertySet> xProp( getRowSet(), UNO_QUERY_THROW );
         Reference< XLoadable >  xLoadable( xProp, UNO_QUERY_THROW );
         // the values allowing the RowSet to re-execute
-        xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
+        xProp->setPropertyValue(PROPERTY_DATASOURCENAME, Any(_rDataSourceName));
         if(_rxConnection.is())
-            xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( _rxConnection.getTyped() ) );
+            xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( _rxConnection.getTyped() ) );
 
             // set this _before_ setting the connection, else the rowset would rebuild it ...
-        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE, makeAny(nCommandType));
-        xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
-        xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, css::uno::makeAny(_bEscapeProcessing));
+        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE, Any(nCommandType));
+        xProp->setPropertyValue(PROPERTY_COMMAND, Any(_rCommand));
+        xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, css::uno::Any(_bEscapeProcessing));
         if ( m_bPreview )
         {
-            xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, makeAny(FetchDirection::FORWARD));
+            xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, Any(FetchDirection::FORWARD));
         }
 
         // the formatter depends on the data source we're working on, so rebuild it here ...
@@ -3252,9 +3252,9 @@ void SbaTableQueryBrowser::impl_initialize()
         try
         {
             Reference< XPropertySet > xRowSetProps(getRowSet(), UNO_QUERY);
-            xRowSetProps->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(aCatalogName));
-            xRowSetProps->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(aSchemaName));
-            xRowSetProps->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(aTableName));
+            xRowSetProps->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,Any(aCatalogName));
+            xRowSetProps->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,Any(aSchemaName));
+            xRowSetProps->setPropertyValue(PROPERTY_UPDATE_TABLENAME,Any(aTableName));
 
         }
         catch(const Exception&)
@@ -3544,7 +3544,7 @@ Any SbaTableQueryBrowser::getCurrentSelection(weld::TreeView& rControl) const
         break;
     }
 
-    return makeAny( aSelectedObject );
+    return Any( aSelectedObject );
 }
 
 vcl::Window* SbaTableQueryBrowser::getMenuParent() const

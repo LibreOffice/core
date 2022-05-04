@@ -455,7 +455,7 @@ static Any lcl_getBookmark(ORowSetValue& i_aValue,OCacheSet* i_pCacheSet)
         case DataType::TINYINT:
         case DataType::SMALLINT:
         case DataType::INTEGER:
-            return makeAny(i_aValue.getInt32());
+            return Any(i_aValue.getInt32());
         default:
             if ( i_pCacheSet && i_aValue.isNull())
                 i_aValue = i_pCacheSet->getBookmark();
@@ -591,7 +591,7 @@ void ORowSetCache::updateCharacterStream( sal_Int32 columnIndex, const Reference
     rInsert[columnIndex].setBound(true);
     rInsert[columnIndex] = aSeq;
     rInsert[columnIndex].setModified(true);
-    io_aRow[columnIndex] = makeAny(x);
+    io_aRow[columnIndex] = Any(x);
 
     m_xCacheSet->mergeColumnValues(columnIndex,rInsert,io_aRow,o_ChangedColumns);
     impl_updateRowFromCache_throw(io_aRow,o_ChangedColumns);

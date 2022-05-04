@@ -47,7 +47,7 @@ namespace dbaui
     using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::frame::XFrame;
     using ::com::sun::star::frame::XController;
@@ -315,7 +315,7 @@ namespace dbaui
                 xBroadcaster->notifyDocumentEvent(
                     OUString::createFromAscii( _pAsciiEventName ),
                     &_rData.m_rController,
-                    makeAny( _rComponent.xFrame )
+                    Any( _rComponent.xFrame )
                 );
             }
             catch( const Exception& )

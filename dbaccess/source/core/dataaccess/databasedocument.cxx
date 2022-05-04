@@ -452,8 +452,8 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
     if (sBaseURI.isEmpty())
         sBaseURI = _rResource.getOrDefault("URL",OUString());
     assert(!sBaseURI.isEmpty()); // needed for relative URLs
-    xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sBaseURI));
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
+    xInfoSet->setPropertyValue("BaseURI", uno::Any(sBaseURI));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
 
     const sal_Int32 nCount = aFilterCreationArgs.getLength();
     aFilterCreationArgs.realloc(nCount + 1);
@@ -1030,7 +1030,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     if ( !bIsInitializationProcess )
     {
         _rGuard.clear();
-        m_aEventNotifier.notifyDocumentEvent( _eType == SAVE ? "OnSave" : "OnSaveAs", nullptr, makeAny( _rURL ) );
+        m_aEventNotifier.notifyDocumentEvent( _eType == SAVE ? "OnSave" : "OnSaveAs", nullptr, Any( _rURL ) );
         _rGuard.reset();
     }
 
@@ -1090,13 +1090,13 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     catch( const IOException& )
     {
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, makeAny( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, Any( _rURL ) );
         throw;
     }
     catch( const RuntimeException& )
     {
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, makeAny( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, Any( _rURL ) );
         throw;
     }
     catch( const Exception& )
@@ -1105,14 +1105,14 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
 
         // notify the failure
         if ( !bIsInitializationProcess )
-            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, makeAny( _rURL ) );
+            m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", nullptr, Any( _rURL ) );
 
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
     // notify the document event
     if ( !bIsInitializationProcess )
-        m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveDone" : "OnSaveAsDone", nullptr, makeAny( _rURL ) );
+        m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveDone" : "OnSaveAsDone", nullptr, Any( _rURL ) );
 
     // reset our "modified" flag, and clear the guard
     impl_setModified_nothrow( false, _rGuard );
@@ -1252,7 +1252,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
 
     {
         aGuard.clear();
-        m_aEventNotifier.notifyDocumentEvent( "OnSaveTo", nullptr, makeAny( _rURL ) );
+        m_aEventNotifier.notifyDocumentEvent( "OnSaveTo", nullptr, Any( _rURL ) );
         aGuard.reset();
     }
 
@@ -1284,7 +1284,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
-    m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", nullptr, makeAny( _rURL ) );
+    m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", nullptr, Any( _rURL ) );
 }
 
 // XModifyBroadcaster
@@ -1431,7 +1431,7 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
             aValue >>= sSupportService;
             if ( !sSupportService.isEmpty() )
             {
-                Sequence<Any> aArgs{ Any(NamedValue("DatabaseDocument",makeAny(xMy))) };
+                Sequence<Any> aArgs{ Any(NamedValue("DatabaseDocument",Any(xMy))) };
                 xContainer.set(
                        m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(sSupportService, aArgs, m_pImpl->m_aContext),
                        UNO_QUERY);
@@ -1582,8 +1582,8 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
         xSeek->seek(0);
 
     Reference< XPropertySet > xStreamProp( xOutputStream, UNO_QUERY_THROW );
-    xStreamProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString( "text/xml" ) ) );
-    xStreamProp->setPropertyValue( "Compressed", makeAny( true ) );
+    xStreamProp->setPropertyValue( INFO_MEDIATYPE, Any( OUString( "text/xml" ) ) );
+    xStreamProp->setPropertyValue( "Compressed", Any( true ) );
 
     // write the stuff
     WriteThroughComponent( xOutputStream, xComponent, pServiceName, _rArguments, rMediaDesc );
@@ -1629,17 +1629,17 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
 
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
-    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
+    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::Any(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
     if ( officecfg::Office::Common::Save::URL::FileSystem::get() )
     {
         OUString sBaseURI = _rMediaDescriptor.getOrDefault("BaseURI", OUString());
         if (sBaseURI.isEmpty())
             sBaseURI = _rMediaDescriptor.getOrDefault("URL",OUString());
-        xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sBaseURI));
+        xInfoSet->setPropertyValue("BaseURI", uno::Any(sBaseURI));
     }
 
     // Set TargetStorage, so it doesn't have to be re-constructed based on possibly empty URL.
-    xInfoSet->setPropertyValue("TargetStorage", uno::makeAny(m_pImpl->getRootStorage()));
+    xInfoSet->setPropertyValue("TargetStorage", uno::Any(m_pImpl->getRootStorage()));
 
     // Set StreamRelPath, in case this document is an embedded one.
     OUString sStreamRelPath;
@@ -1653,14 +1653,14 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
             sStreamRelPath = sStreamRelPath.copy(1);
     }
     if (!sStreamRelPath.isEmpty())
-        xInfoSet->setPropertyValue("StreamRelPath", uno::makeAny(sStreamRelPath));
+        xInfoSet->setPropertyValue("StreamRelPath", uno::Any(sStreamRelPath));
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
     aDelegatorArguments.realloc(nArgsLen+1);
     aDelegatorArguments.getArray()[nArgsLen++] <<= xInfoSet;
 
     Reference< XPropertySet > xProp( _rxTargetStorage, UNO_QUERY_THROW );
-    xProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) ) );
+    xProp->setPropertyValue( INFO_MEDIATYPE, Any( OUString(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) ) );
 
     OUString aVersion;
     SvtSaveOptions::ODFSaneDefaultVersion const nDefVersion =
@@ -1680,7 +1680,7 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     {
         try
         {
-            xProp->setPropertyValue("Version" , uno::makeAny(aVersion));
+            xProp->setPropertyValue("Version" , uno::Any(aVersion));
         }
         catch (const uno::Exception&)
         {
@@ -1693,11 +1693,11 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     Sequence< PropertyValue > aMediaDescriptor;
     _rMediaDescriptor >>= aMediaDescriptor;
 
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("settings.xml")));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("settings.xml")));
     WriteThroughComponent( xComponent, "settings.xml", "com.sun.star.comp.sdb.XMLSettingsExporter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
     WriteThroughComponent( xComponent, "content.xml", "com.sun.star.comp.sdb.DBExportFilter",
         aDelegatorArguments, aMediaDescriptor, _rxTargetStorage );
 
@@ -1922,9 +1922,9 @@ void SAL_CALL ODatabaseDocument::loadFromStorage(const Reference<XStorage>& xSto
 
     uno::Reference<beans::XPropertySet> xInfoSet(comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(aEmbeddedImportInfoMap)));
     comphelper::NamedValueCollection aDescriptor(rMediaDescriptor);
-    xInfoSet->setPropertyValue("StreamRelPath", uno::makeAny(aDescriptor.getOrDefault("HierarchicalDocumentName", OUString())));
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
-    xInfoSet->setPropertyValue("SourceStorage", uno::makeAny(xStorage));
+    xInfoSet->setPropertyValue("StreamRelPath", uno::Any(aDescriptor.getOrDefault("HierarchicalDocumentName", OUString())));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
+    xInfoSet->setPropertyValue("SourceStorage", uno::Any(xStorage));
 
     uno::Sequence<uno::Any> aFilterCreationArgs{ Any(xInfoSet) };
 
@@ -2039,7 +2039,7 @@ struct CreateAny
 {
     Any operator() (const Reference<XController>& lhs) const
     {
-        return makeAny(lhs);
+        return Any(lhs);
     }
 };
 

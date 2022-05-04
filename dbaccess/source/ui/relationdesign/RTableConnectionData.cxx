@@ -256,11 +256,11 @@ bool ORelationTableConnectionData::Update()
         xTableProp->getPropertyValue(PROPERTY_NAME) >>= sSourceName;
         OUString sKeyName = sSourceName + getReferencedTable()->GetTableName();
 
-        xKey->setPropertyValue(PROPERTY_NAME,makeAny(sKeyName));
-        xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::FOREIGN));
-        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,makeAny(getReferencedTable()->GetTableName()));
-        xKey->setPropertyValue(PROPERTY_UPDATERULE, makeAny(GetUpdateRules()));
-        xKey->setPropertyValue(PROPERTY_DELETERULE, makeAny(GetDeleteRules()));
+        xKey->setPropertyValue(PROPERTY_NAME,Any(sKeyName));
+        xKey->setPropertyValue(PROPERTY_TYPE,Any(KeyType::FOREIGN));
+        xKey->setPropertyValue(PROPERTY_REFERENCEDTABLE,Any(getReferencedTable()->GetTableName()));
+        xKey->setPropertyValue(PROPERTY_UPDATERULE, Any(GetUpdateRules()));
+        xKey->setPropertyValue(PROPERTY_DELETERULE, Any(GetDeleteRules()));
     }
 
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
@@ -278,8 +278,8 @@ bool ORelationTableConnectionData::Update()
                     Reference<XPropertySet> xColumn = xColumnFactory->createDataDescriptor();
                     if ( xColumn.is() )
                     {
-                        xColumn->setPropertyValue(PROPERTY_NAME,makeAny(elem->GetSourceFieldName()));
-                        xColumn->setPropertyValue(PROPERTY_RELATEDCOLUMN,makeAny(elem->GetDestFieldName()));
+                        xColumn->setPropertyValue(PROPERTY_NAME,Any(elem->GetSourceFieldName()));
+                        xColumn->setPropertyValue(PROPERTY_RELATEDCOLUMN,Any(elem->GetDestFieldName()));
                         xColumnAppend->appendByDescriptor(xColumn);
                     }
                 }

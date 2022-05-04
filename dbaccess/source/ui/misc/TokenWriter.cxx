@@ -260,9 +260,9 @@ void ODatabaseImportExport::initialize()
             {
                 m_xResultSet.set( m_xContext->getServiceManager()->createInstanceWithContext("com.sun.star.sdb.RowSet", m_xContext), UNO_QUERY );
                 Reference< XPropertySet > xProp( m_xResultSet, UNO_QUERY_THROW );
-                xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
-                xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( m_nCommandType ) );
-                xProp->setPropertyValue( PROPERTY_COMMAND, makeAny( m_sName ) );
+                xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( m_xConnection.getTyped() ) );
+                xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, Any( m_nCommandType ) );
+                xProp->setPropertyValue( PROPERTY_COMMAND, Any( m_sName ) );
                 Reference< XRowSet > xRowSet( xProp, UNO_QUERY );
                 xRowSet->execute();
             }

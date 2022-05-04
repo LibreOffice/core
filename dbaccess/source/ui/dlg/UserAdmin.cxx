@@ -200,8 +200,8 @@ IMPL_LINK(OUserAdmin, UserHdl, weld::Button&, rButton, void)
                 Reference<XPropertySet> xNewUser = xUserFactory->createDataDescriptor();
                 if(xNewUser.is())
                 {
-                    xNewUser->setPropertyValue(PROPERTY_NAME,makeAny(aPwdDlg.GetUser()));
-                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,makeAny(aPwdDlg.GetPassword()));
+                    xNewUser->setPropertyValue(PROPERTY_NAME,Any(aPwdDlg.GetUser()));
+                    xNewUser->setPropertyValue(PROPERTY_PASSWORD,Any(aPwdDlg.GetPassword()));
                     Reference<XAppend> xAppend(m_xUsers,UNO_QUERY);
                     if(xAppend.is())
                         xAppend->appendByDescriptor(xNewUser);
