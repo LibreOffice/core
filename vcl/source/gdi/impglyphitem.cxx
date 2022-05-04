@@ -322,6 +322,14 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             // and then return subsets of them. So if the first call is for a prefix of the string,
             // remember that, and if the next call follows the previous part of the string,
             // cache the entire string.
+            // Writer layouts tests enable SAL_ABORT_ON_NON_APPLICATION_FONT_USE in order
+            // to make PrintFontManager::Substitute() abort if font fallback happens. When
+            // laying out the entire string the chance this happens increases (e.g. testAbi11870
+            // normally calls this function only for a part of a string, but this optimization
+            // lays out the entire string and causes a fallback). Since this optimization
+            // does not change result of this function, simply disable it for those tests.
+            static bool bAbortOnFontSubstitute
+                = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
             if (nIndex == 0)
             {
                 mLastPrefixKey = key;
@@ -330,7 +338,8 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             else if (mLastPrefixKey.has_value() && mLastPrefixKey->len == nIndex
                      && mLastPrefixKey
                             == CachedGlyphsKey(outputDevice, text, mLastPrefixKey->index,
-                                               mLastPrefixKey->len, nLogicWidth))
+                                               mLastPrefixKey->len, nLogicWidth)
+                     && !bAbortOnFontSubstitute)
             {
                 assert(mLastPrefixKey->index == 0);
                 std::unique_ptr<SalLayout> layout
