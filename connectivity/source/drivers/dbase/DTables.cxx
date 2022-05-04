@@ -68,7 +68,7 @@ sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const R
     auto pTable = comphelper::getFromUnoTunnel<ODbaseTable>(descriptor);
     if(pTable)
     {
-        pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(_rForName));
+        pTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),Any(_rForName));
         try
         {
             if(!pTable->CreateImpl())

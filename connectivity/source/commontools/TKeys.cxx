@@ -236,7 +236,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
                 OUString sName = xRow->getString(nColumn);
                 if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be the new one
                 {
-                    descriptor->setPropertyValue( rPropMap.getNameByIndex( PROPERTY_ID_NAME ), makeAny( sName ) );
+                    descriptor->setPropertyValue( rPropMap.getNameByIndex( PROPERTY_ID_NAME ), Any( sName ) );
                     sNewName = sName;
                     break;
                 }

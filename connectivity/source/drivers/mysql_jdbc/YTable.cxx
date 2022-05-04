@@ -198,7 +198,7 @@ void SAL_CALL OMySQLTable::alterColumnByName(const OUString& colName,
                     {
                         sTypeName += OUString::Concat(" ") + s_sAutoIncrement;
                         descriptor->setPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME),
-                                                     makeAny(sTypeName));
+                                                     Any(sTypeName));
                     }
                 }
                 else
@@ -210,7 +210,7 @@ void SAL_CALL OMySQLTable::alterColumnByName(const OUString& colName,
                         {
                             sTypeName = sTypeName.copy(0, nIndex);
                             descriptor->setPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME),
-                                                         makeAny(sTypeName));
+                                                         Any(sTypeName));
                         }
                     }
                 }
@@ -269,7 +269,7 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType, const OUString& _rColName,
     rtl::Reference<OColumn> pColumn = new OColumn(true);
     ::comphelper::copyProperties(_xDescriptor, pColumn);
     pColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),
-                              makeAny(nNewType));
+                              Any(nNewType));
 
     sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(
         pColumn, getConnection(), static_cast<OTables*>(m_pTables), getTypeCreatePattern()));

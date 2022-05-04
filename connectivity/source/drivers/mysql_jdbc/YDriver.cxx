@@ -158,31 +158,31 @@ Sequence<PropertyValue> lcl_convertProperties(T_DRIVERTYPE _eType,
 
     if (_eType == T_DRIVERTYPE::Odbc)
     {
-        aProps.push_back(PropertyValue("Silent", 0, makeAny(true), PropertyState_DIRECT_VALUE));
-        aProps.push_back(PropertyValue("PreventGetVersionColumns", 0, makeAny(true),
-                                       PropertyState_DIRECT_VALUE));
+        aProps.push_back(PropertyValue("Silent", 0, Any(true), PropertyState_DIRECT_VALUE));
+        aProps.push_back(
+            PropertyValue("PreventGetVersionColumns", 0, Any(true), PropertyState_DIRECT_VALUE));
     }
     else if (_eType == T_DRIVERTYPE::Jdbc)
     {
         if (!jdc)
         {
             aProps.push_back(PropertyValue("JavaDriverClass", 0,
-                                           makeAny(OUString("com.mysql.jdbc.Driver")),
+                                           Any(OUString("com.mysql.jdbc.Driver")),
                                            PropertyState_DIRECT_VALUE));
         }
     }
     else
     {
         aProps.push_back(
-            PropertyValue("PublicConnectionURL", 0, makeAny(_sUrl), PropertyState_DIRECT_VALUE));
+            PropertyValue("PublicConnectionURL", 0, Any(_sUrl), PropertyState_DIRECT_VALUE));
     }
     aProps.push_back(
-        PropertyValue("IsAutoRetrievingEnabled", 0, makeAny(true), PropertyState_DIRECT_VALUE));
+        PropertyValue("IsAutoRetrievingEnabled", 0, Any(true), PropertyState_DIRECT_VALUE));
     aProps.push_back(PropertyValue("AutoRetrievingStatement", 0,
-                                   makeAny(OUString("SELECT LAST_INSERT_ID()")),
+                                   Any(OUString("SELECT LAST_INSERT_ID()")),
                                    PropertyState_DIRECT_VALUE));
     aProps.push_back(
-        PropertyValue("ParameterNameSubstitution", 0, makeAny(true), PropertyState_DIRECT_VALUE));
+        PropertyValue("ParameterNameSubstitution", 0, Any(true), PropertyState_DIRECT_VALUE));
     return Sequence<PropertyValue>(aProps.data(), aProps.size());
 }
 }

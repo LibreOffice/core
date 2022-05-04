@@ -2285,11 +2285,11 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
             (*this) = _rValueSource.getLong();
         break;
     case DataType::CLOB:
-        (*this) = css::uno::makeAny(_rValueSource.getClob());
+        (*this) = css::uno::Any(_rValueSource.getClob());
         setTypeKind(DataType::CLOB);
         break;
     case DataType::BLOB:
-        (*this) = css::uno::makeAny(_rValueSource.getBlob());
+        (*this) = css::uno::Any(_rValueSource.getBlob());
         setTypeKind(DataType::BLOB);
         break;
     case DataType::OTHER:

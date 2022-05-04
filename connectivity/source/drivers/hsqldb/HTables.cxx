@@ -160,7 +160,7 @@ void OTables::appendNew(const OUString& _rsNewTable)
     insertElement(_rsNewTable,nullptr);
 
     // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
+    ContainerEvent aEvent(static_cast<XContainer*>(this), Any(_rsNewTable), Any(), Any());
     OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
         aListenerLoop.next()->elementInserted(aEvent);

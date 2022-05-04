@@ -31,7 +31,7 @@ java_sql_SQLException::java_sql_SQLException( const java_sql_SQLException_BASE& 
                                 _rContext,
                                 _rException.getSQLState(),
                                 _rException.getErrorCode(),
-                                makeAny(_rException.getNextException())
+                                Any(_rException.getNextException())
                             )
 {
 }

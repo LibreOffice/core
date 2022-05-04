@@ -55,7 +55,6 @@ using osl::MutexGuard;
 using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
@@ -149,7 +148,7 @@ void Indexes::refresh()
             pIndex->setPropertyValue_NoBroadcast_public(
                 st.IS_CLUSTERED, Any( isClusterd ) );
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.NAME, makeAny( currentIndexName ) );
+                st.NAME, Any( currentIndexName ) );
 
             std::vector< sal_Int32 > seq = parseIntArray( row->getString( C_COLUMNS ) );
             Sequence< OUString > columnNames(seq.size());
@@ -160,10 +159,10 @@ void Indexes::refresh()
             }
 
             pIndex->setPropertyValue_NoBroadcast_public(
-                st.PRIVATE_COLUMN_INDEXES, makeAny( columnNames ));
+                st.PRIVATE_COLUMN_INDEXES, Any( columnNames ));
 
             {
-                m_values.push_back( makeAny( prop ) );
+                m_values.push_back( Any( prop ) );
                 map[ currentIndexName ] = index;
                 ++index;
             }

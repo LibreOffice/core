@@ -465,7 +465,7 @@ OUString OConnection::transFormPreparedStatement(const OUString& _sSQL)
         try
         {
             Reference<XConnection> xCon = this;
-            Sequence<Any> aArgs{ Any(NamedValue("ActiveConnection", makeAny(xCon))) };
+            Sequence<Any> aArgs{ Any(NamedValue("ActiveConnection", Any(xCon))) };
 
             m_xParameterSubstitution.set(
                 m_xDriver->getFactory()->createInstanceWithArguments(

@@ -52,7 +52,6 @@ using osl::MutexGuard;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Type;
 
 using com::sun::star::beans::XPropertySet;
@@ -121,7 +120,7 @@ void View::rename( const OUString& newName )
             bufferQuoteIdentifier( buf, newSchemaName, m_pSettings );
             Reference< XStatement > statement = m_conn->createStatement();
             statement->executeUpdate( buf.makeStringAndClear() );
-            setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, makeAny(newSchemaName) );
+            setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, Any(newSchemaName) );
             disposeNoThrow( statement );
             schema = newSchemaName;
         }
@@ -142,7 +141,7 @@ void View::rename( const OUString& newName )
         bufferQuoteIdentifier( buf, newTableName, m_pSettings );
         Reference< XStatement > statement = m_conn->createStatement();
         statement->executeUpdate( buf.makeStringAndClear() );
-        setPropertyValue_NoBroadcast_public( st.NAME, makeAny(newTableName) );
+        setPropertyValue_NoBroadcast_public( st.NAME, Any(newTableName) );
     }
 
     // inform the container of the name change !

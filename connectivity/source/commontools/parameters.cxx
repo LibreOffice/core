@@ -650,7 +650,7 @@ namespace dbtools
         ParametersRequest aRequest;
         aRequest.Parameters = m_pOuterParameters.get();
         aRequest.Connection = _rxConnection;
-        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( makeAny( aRequest ) );
+        rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest( Any( aRequest ) );
 
         // some knittings
         pRequest->addContinuation( pAbort );

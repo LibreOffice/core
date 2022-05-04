@@ -891,7 +891,7 @@ void SAL_CALL OResultSet::insertRow(  )
 
     if(m_pSkipDeletedSet)
     {
-        if(moveToBookmark(makeAny(aBookmark)))
+        if(moveToBookmark(Any(aBookmark)))
         {
             sal_Int32 nRowPos = getDriverPos();
             if ( -1 == m_nRowPos )
@@ -1686,7 +1686,7 @@ bool OResultSet::move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nO
             TBookmarkPosMap::const_iterator aIter = std::find_if(m_aPosToBookmarks.begin(), m_aPosToBookmarks.end(),
                 [&_nOffset](const TBookmarkPosMap::value_type& rEntry) { return rEntry.second == _nOffset; });
             if (aIter != m_aPosToBookmarks.end())
-                return moveToBookmark(makeAny(aIter->first));
+                return moveToBookmark(Any(aIter->first));
             SAL_WARN( "connectivity.odbc", "Bookmark not found!");
         }
         return false;

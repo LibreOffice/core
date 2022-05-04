@@ -814,7 +814,7 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
     {
         ::utl::SharedUNOComponent< XStatement > xStmt( _xConnection->createStatement() );
         Reference< XPropertySet > xStatementProps( xStmt, UNO_QUERY_THROW );
-        xStatementProps->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ), makeAny( false ) );
+        xStatementProps->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ESCAPEPROCESSING ), Any( false ) );
         Reference< XResultSet > xResult( xStmt->executeQuery( sSelect ), UNO_SET_THROW );
         Reference< XResultSetMetaDataSupplier > xSuppMeta( xResult, UNO_QUERY_THROW );
         Reference< XResultSetMetaData > xMeta( xSuppMeta->getMetaData(), UNO_SET_THROW );

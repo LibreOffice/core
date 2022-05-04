@@ -470,7 +470,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  )
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
 
-    return makeAny(m_aLastWarning);
+    return Any(m_aLastWarning);
 }
 
 

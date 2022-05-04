@@ -56,7 +56,6 @@ using osl::MutexGuard;
 using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
@@ -131,7 +130,7 @@ void IndexColumns::refresh()
 
             columnMetaData2SDBCX( pIndexColumn.get(), xRow );
             pIndexColumn->setPropertyValue_NoBroadcast_public(
-                st.IS_ASCENDING , makeAny( false ) );
+                st.IS_ASCENDING , Any( false ) );
 
             m_values[ index ] <<= prop;
             m_name2index[ columnName ] = index;

@@ -565,7 +565,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTableTypes()
         if (m_rConnection.getMysqlVersion() >= requiredVersion[i])
         {
             rRows.push_back(
-                { { Any(), makeAny(mysqlc_sdbc_driver::convert(table_types[i], encoding)) } });
+                { { Any(), Any(mysqlc_sdbc_driver::convert(table_types[i], encoding)) } });
         }
     }
     lcl_setRows_throw(xResultSet, 5, rRows);
@@ -585,17 +585,17 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getTypeInfo()
     while (mysqlc_types[i].typeName)
     {
         rRows.push_back(
-            { { Any(), makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].typeName, encoding)),
-                makeAny(mysqlc_types[i].dataType), makeAny(mysqlc_types[i].precision),
-                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalPrefix, encoding)),
-                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalSuffix, encoding)),
-                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].createParams, encoding)),
-                makeAny(mysqlc_types[i].nullable), makeAny(mysqlc_types[i].caseSensitive),
-                makeAny(mysqlc_types[i].searchable), makeAny(mysqlc_types[i].isUnsigned),
-                makeAny(mysqlc_types[i].fixedPrecScale), makeAny(mysqlc_types[i].autoIncrement),
-                makeAny(mysqlc_sdbc_driver::convert(mysqlc_types[i].localTypeName, encoding)),
-                makeAny(mysqlc_types[i].minScale), makeAny(mysqlc_types[i].maxScale),
-                makeAny(sal_Int32(0)), makeAny(sal_Int32(0)), makeAny(sal_Int32(10)) } });
+            { { Any(), Any(mysqlc_sdbc_driver::convert(mysqlc_types[i].typeName, encoding)),
+                Any(mysqlc_types[i].dataType), Any(mysqlc_types[i].precision),
+                Any(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalPrefix, encoding)),
+                Any(mysqlc_sdbc_driver::convert(mysqlc_types[i].literalSuffix, encoding)),
+                Any(mysqlc_sdbc_driver::convert(mysqlc_types[i].createParams, encoding)),
+                Any(mysqlc_types[i].nullable), Any(mysqlc_types[i].caseSensitive),
+                Any(mysqlc_types[i].searchable), Any(mysqlc_types[i].isUnsigned),
+                Any(mysqlc_types[i].fixedPrecScale), Any(mysqlc_types[i].autoIncrement),
+                Any(mysqlc_sdbc_driver::convert(mysqlc_types[i].localTypeName, encoding)),
+                Any(mysqlc_types[i].minScale), Any(mysqlc_types[i].maxScale), Any(sal_Int32(0)),
+                Any(sal_Int32(0)), Any(sal_Int32(10)) } });
 
         i++;
     }
@@ -636,7 +636,7 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getSchemas()
         for (sal_uInt32 i = 1; i <= columns; i++)
         {
             OUString columnStringValue = xRow->getString(i);
-            aRow.push_back(makeAny(columnStringValue));
+            aRow.push_back(Any(columnStringValue));
         }
         rRows.push_back(aRow);
     }
@@ -733,18 +733,18 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
         std::vector<Any> aRow{ Any() }; // 0. element is unused
 
         // catalog name
-        aRow.push_back(makeAny(xRow->getString(1)));
+        aRow.push_back(Any(xRow->getString(1)));
         // schema name
-        aRow.push_back(makeAny(xRow->getString(2)));
+        aRow.push_back(Any(xRow->getString(2)));
         // table name
-        aRow.push_back(makeAny(xRow->getString(3)));
+        aRow.push_back(Any(xRow->getString(3)));
         // column name
-        aRow.push_back(makeAny(xRow->getString(4)));
+        aRow.push_back(Any(xRow->getString(4)));
         // data type
         OUString sDataType = xRow->getString(5);
-        aRow.push_back(makeAny(mysqlc_sdbc_driver::mysqlStrToOOOType(sDataType)));
+        aRow.push_back(Any(mysqlc_sdbc_driver::mysqlStrToOOOType(sDataType)));
         // type name
-        aRow.push_back(makeAny(sDataType)); // TODO
+        aRow.push_back(Any(sDataType)); // TODO
         // column size
         sal_Int32 nColumnSize = 0;
         OUString sColumnType = xRow->getString(14);
@@ -763,34 +763,34 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getColumns(const Any& /*catalo
             nColumnSize = xRow->getShort(7); // numeric precision
         else
             nColumnSize = nCharMaxLen;
-        aRow.push_back(makeAny(nColumnSize));
+        aRow.push_back(Any(nColumnSize));
         aRow.push_back(Any()); // buffer length - unused
         // decimal digits (scale)
-        aRow.push_back(makeAny(xRow->getShort(8)));
+        aRow.push_back(Any(xRow->getShort(8)));
         // num_prec_radix
-        aRow.push_back(makeAny(sal_Int32(10)));
+        aRow.push_back(Any(sal_Int32(10)));
         // nullable
         OUString sIsNullable = xRow->getString(13);
         if (xRow->wasNull())
-            aRow.push_back(makeAny(ColumnValue::NULLABLE_UNKNOWN));
+            aRow.push_back(Any(ColumnValue::NULLABLE_UNKNOWN));
         else if (sIsNullable.equalsIgnoreAsciiCase("YES"))
-            aRow.push_back(makeAny(ColumnValue::NULLABLE));
+            aRow.push_back(Any(ColumnValue::NULLABLE));
         else
-            aRow.push_back(makeAny(ColumnValue::NO_NULLS));
+            aRow.push_back(Any(ColumnValue::NO_NULLS));
         // remarks
-        aRow.push_back(makeAny(xRow->getString(9)));
+        aRow.push_back(Any(xRow->getString(9)));
         // default
-        aRow.push_back(makeAny(xRow->getString(10)));
+        aRow.push_back(Any(xRow->getString(10)));
 
         aRow.push_back(Any{}); // sql_data_type - unused
         aRow.push_back(Any{}); // sql_datetime_sub - unused
 
         // character octet length
-        aRow.push_back(makeAny(xRow->getString(11)));
+        aRow.push_back(Any(xRow->getString(11)));
         // ordinal position
-        aRow.push_back(makeAny(xRow->getString(12)));
+        aRow.push_back(Any(xRow->getString(12)));
         // is nullable
-        aRow.push_back(makeAny(sIsNullable));
+        aRow.push_back(Any(sIsNullable));
         aRows.push_back(aRow);
     }
     lcl_setRows_throw(xResultSet, 1, aRows);
@@ -929,34 +929,34 @@ Reference<XResultSet> SAL_CALL ODatabaseMetaData::getImportedKeys(const Any& /*c
         std::vector<Any> aRow{ Any() }; // 0. element is unused
 
         // primary key catalog
-        aRow.push_back(makeAny(xRow->getString(3)));
+        aRow.push_back(Any(xRow->getString(3)));
         // primary key schema
-        aRow.push_back(makeAny(xRow->getString(4)));
+        aRow.push_back(Any(xRow->getString(4)));
         // primary key table
-        aRow.push_back(makeAny(xRow->getString(5)));
+        aRow.push_back(Any(xRow->getString(5)));
         // primary column name
-        aRow.push_back(makeAny(xRow->getString(6)));
+        aRow.push_back(Any(xRow->getString(6)));
 
         // fk table catalog
-        aRow.push_back(makeAny(xRow->getString(1)));
+        aRow.push_back(Any(xRow->getString(1)));
         // fk schema
-        aRow.push_back(makeAny(xRow->getString(11)));
+        aRow.push_back(Any(xRow->getString(11)));
         // fk table
-        aRow.push_back(makeAny(xRow->getString(10)));
+        aRow.push_back(Any(xRow->getString(10)));
         // fk column name
-        aRow.push_back(makeAny(xRow->getString(2)));
+        aRow.push_back(Any(xRow->getString(2)));
         // KEY_SEQ
-        aRow.push_back(makeAny(sal_Int32{ 0 })); // TODO
+        aRow.push_back(Any(sal_Int32{ 0 })); // TODO
         // update rule
-        aRow.push_back(makeAny(xRow->getShort(7)));
+        aRow.push_back(Any(xRow->getShort(7)));
         // delete rule
-        aRow.push_back(makeAny(xRow->getShort(8)));
+        aRow.push_back(Any(xRow->getShort(8)));
         // foreign key name
-        aRow.push_back(makeAny(xRow->getString(9)));
+        aRow.push_back(Any(xRow->getString(9)));
         // primary key name
-        aRow.push_back(makeAny(OUString{})); // TODO
+        aRow.push_back(Any(OUString{})); // TODO
         // deferrability
-        aRow.push_back(makeAny(Deferrability::NONE));
+        aRow.push_back(Any(Deferrability::NONE));
         aRows.push_back(aRow);
     }
     lcl_setRows_throw(xResultSet, 1, aRows);

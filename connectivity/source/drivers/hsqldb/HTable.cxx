@@ -259,7 +259,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
 
     rtl::Reference<OHSQLColumn> pColumn = new OHSQLColumn;
     ::comphelper::copyProperties(_xDescriptor,pColumn);
-    pColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),makeAny(nNewType));
+    pColumn->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE),Any(nNewType));
 
     sSql += ::dbtools::createStandardColumnPart(pColumn,getConnection());
     executeStatement(sSql);
