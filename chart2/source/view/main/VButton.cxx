@@ -69,11 +69,11 @@ rtl::Reference<SvxShapePolyPolygon> VButton::createTriangle(awt::Size aSize)
     pInnerSequenceY[2] = 0.0;
     pInnerSequenceZ[2] = 0.0;
 
-    xShape->SvxShape::setPropertyValue("Name", uno::makeAny(m_sCID));
+    xShape->SvxShape::setPropertyValue("Name", uno::Any(m_sCID));
     xShape->SvxShape::setPropertyValue(UNO_NAME_POLYPOLYGON,
                                        uno::Any(PolyToPointSequence(aPolyPolygon)));
-    xShape->SvxShape::setPropertyValue("LineStyle", uno::makeAny(drawing::LineStyle_NONE));
-    xShape->SvxShape::setPropertyValue("FillColor", uno::makeAny(m_nArrowColor));
+    xShape->SvxShape::setPropertyValue("LineStyle", uno::Any(drawing::LineStyle_NONE));
+    xShape->SvxShape::setPropertyValue("FillColor", uno::Any(m_nArrowColor));
 
     return xShape;
 }

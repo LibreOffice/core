@@ -56,7 +56,7 @@ OUString getCID(const rtl::Reference<::chart::ChartModel>& xModel)
     css::uno::Any aAny = xSelectionSupplier->getSelection();
     if (!aAny.hasValue())
     {
-        xSelectionSupplier->select(css::uno::makeAny(OUString("CID/Page=")));
+        xSelectionSupplier->select(css::uno::Any(OUString("CID/Page=")));
         aAny = xSelectionSupplier->getSelection();
     }
 

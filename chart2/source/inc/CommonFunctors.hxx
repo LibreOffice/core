@@ -39,7 +39,7 @@ template< typename T >
 {
     css::uno::Any operator() ( const T & aVal )
     {
-        return css::uno::makeAny( aVal );
+        return css::uno::Any( aVal );
     }
 };
 

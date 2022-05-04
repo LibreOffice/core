@@ -419,7 +419,7 @@ void TitleHelper::hideTitle( TitleHelper::eTitleType nTitleIndex
     if( xTitled.is())
     {
         css::uno::Reference<css::beans::XPropertySet> xProps(xTitled, css::uno::UNO_QUERY_THROW);
-        xProps->setPropertyValue("Visible",css::uno::makeAny(false));
+        xProps->setPropertyValue("Visible",css::uno::Any(false));
     }
 }
 

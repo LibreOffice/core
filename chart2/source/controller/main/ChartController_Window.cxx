@@ -2099,12 +2099,12 @@ void ChartController::sendPopupRequest(OUString const & rCID, tools::Rectangle a
 
     uno::Sequence<beans::PropertyValue> aCallbackData = comphelper::InitPropertySequence(
     {
-        {"Rectangle",      uno::makeAny<awt::Rectangle>(xRectangle)},
-        {"DimensionIndex", uno::makeAny<sal_Int32>(nDimensionIndex)},
-        {"PivotTableName", uno::makeAny<OUString>(sPivotTableName)},
+        {"Rectangle",      uno::Any(xRectangle)},
+        {"DimensionIndex", uno::Any(sal_Int32(nDimensionIndex))},
+        {"PivotTableName", uno::Any(sPivotTableName)},
     });
 
-    pPopupRequest->getCallback()->notify(uno::makeAny(aCallbackData));
+    pPopupRequest->getCallback()->notify(uno::Any(aCallbackData));
 }
 
 } //namespace chart
