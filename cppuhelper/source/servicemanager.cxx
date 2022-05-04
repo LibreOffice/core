@@ -781,9 +781,9 @@ void cppuhelper::ServiceManager::addSingletonContextEntries(
         entries->push_back(
             cppu::ContextEntry_Init(
                 "/singletons/" + rName,
-                css::uno::makeAny<
-                    css::uno::Reference<css::lang::XSingleComponentFactory> >(
-                        new SingletonFactory(this, rImpls[0])),
+                css::uno::Any(
+                    css::uno::Reference<css::lang::XSingleComponentFactory>(
+                        new SingletonFactory(this, rImpls[0]))),
                 true));
     }
 }
