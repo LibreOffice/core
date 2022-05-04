@@ -79,7 +79,6 @@ using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::UNO_QUERY_THROW;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Exception;
-using com::sun::star::uno::makeAny;
 using com::sun::star::util::XModifyListener;
 using com::sun::star::xforms::XDataTypeRepository;
 using com::sun::star::xml::dom::NodeType_ATTRIBUTE_NODE;
@@ -1273,7 +1272,7 @@ void SAL_CALL Binding::setName( const OUString& rName )
 {
     // use the XPropertySet methods, so the change in the name is notified to the
     // property listeners
-    setFastPropertyValue( HANDLE_BindingID, makeAny( rName ) );
+    setFastPropertyValue( HANDLE_BindingID, Any( rName ) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

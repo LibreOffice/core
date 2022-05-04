@@ -428,7 +428,7 @@ bool OImageControlModel::impl_updateStreamForURL_lck( const OUString& _rURL, Val
         if ( m_xColumnUpdate.is() )
             m_xColumnUpdate->updateBinaryStream( xImageStream, xImageStream->available() );
         else
-            setControlValue( makeAny( xImageStream ), _eInstigator );
+            setControlValue( Any( xImageStream ), _eInstigator );
         xImageStream->closeInput();
         return true;
     }
@@ -549,14 +549,14 @@ Any OImageControlModel::translateDbColumnToControlValue()
         Reference< XInputStream > xImageStream( m_xColumn->getBinaryStream() );
         if ( m_xColumn->wasNull() )
             xImageStream.clear();
-        return makeAny( xImageStream );
+        return Any( xImageStream );
     }
     case ImageStoreLink:
     {
         OUString sImageLink( m_xColumn->getString() );
         if ( !m_sDocumentURL.isEmpty() )
             sImageLink = INetURLObject::GetAbsURL( m_sDocumentURL, sImageLink );
-        return makeAny( sImageLink );
+        return Any( sImageLink );
     }
     case ImageStoreInvalid:
         OSL_FAIL( "OImageControlModel::translateDbColumnToControlValue: invalid field type!" );
@@ -568,7 +568,7 @@ Any OImageControlModel::translateDbColumnToControlValue()
 
 Any OImageControlModel::getControlValue( ) const
 {
-    return makeAny( m_sImageURL );
+    return Any( m_sImageURL );
 }
 
 
@@ -657,7 +657,7 @@ IMPL_LINK( OImageControlModel, OnImageImportDone, ::Graphic*, i_pGraphic, void )
     m_bExternalGraphic = false;
     try
     {
-        setPropertyValue( PROPERTY_GRAPHIC, makeAny( xGraphic ) );
+        setPropertyValue( PROPERTY_GRAPHIC, Any( xGraphic ) );
     }
     catch ( const Exception& )
     {
@@ -761,12 +761,12 @@ void OImageControlControl::implClearGraphics( bool _bForce )
         if ( sOldImageURL.isEmpty() )
             // the ImageURL is already empty, so simply setting a new empty one would not suffice
             // (since it would be ignored)
-            xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString( "private:emptyImage" ) ) );
+            xSet->setPropertyValue( PROPERTY_IMAGE_URL, Any( OUString( "private:emptyImage" ) ) );
                 // (the concrete URL we're passing here doesn't matter. It's important that
                 // the model cannot resolve it to a valid resource describing an image stream
     }
 
-    xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( OUString() ) );
+    xSet->setPropertyValue( PROPERTY_IMAGE_URL, Any( OUString() ) );
 }
 
 
@@ -805,7 +805,7 @@ bool OImageControlControl::implInsertGraphics()
             OSL_VERIFY( xBoundField->getPropertyValue( PROPERTY_FIELDTYPE ) >>= nFieldType );
             bImageIsLinked = ( lcl_getImageStoreType( nFieldType ) == ImageStoreLink );
         }
-        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, makeAny( bImageIsLinked ) );
+        xController->setValue(ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, Any( bImageIsLinked ) );
 
         if ( ERRCODE_NONE == aDialog.Execute() )
         {
@@ -823,10 +823,10 @@ bool OImageControlControl::implInsertGraphics()
             {
                 Graphic aGraphic;
                 aDialog.GetGraphic( aGraphic );
-                xSet->setPropertyValue( PROPERTY_GRAPHIC, makeAny( aGraphic.GetXGraphic() ) );
+                xSet->setPropertyValue( PROPERTY_GRAPHIC, Any( aGraphic.GetXGraphic() ) );
             }
             else
-                xSet->setPropertyValue( PROPERTY_IMAGE_URL, makeAny( aDialog.GetPath() ) );
+                xSet->setPropertyValue( PROPERTY_IMAGE_URL, Any( aDialog.GetPath() ) );
 
             return true;
         }

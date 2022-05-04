@@ -36,7 +36,6 @@ namespace xforms
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::util::VetoException;
     using ::com::sun::star::container::NoSuchElementException;
@@ -166,7 +165,7 @@ namespace xforms
 
     Any SAL_CALL ODataTypeRepository::getByName( const OUString& aName )
     {
-        return makeAny( getDataType( aName ) );
+        return Any( getDataType( aName ) );
     }
 
 

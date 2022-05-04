@@ -190,7 +190,7 @@ namespace frm
 
     Any OSpinButtonModel::getDefaultForReset() const
     {
-        return makeAny( m_nDefaultSpinValue );
+        return Any( m_nDefaultSpinValue );
     }
 
 

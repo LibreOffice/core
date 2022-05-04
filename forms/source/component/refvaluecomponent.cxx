@@ -151,7 +151,7 @@ namespace frm
 
     Any OReferenceValueComponent::getDefaultForReset() const
     {
-        return makeAny( static_cast<sal_Int16>(m_eDefaultChecked) );
+        return Any( static_cast<sal_Int16>(m_eDefaultChecked) );
     }
 
 
@@ -212,7 +212,7 @@ namespace frm
             OSL_FAIL( "OReferenceValueComponent::translateExternalValueToControlValue: unexpected value type!" );
         }
 
-        return makeAny( nState );
+        return Any( nState );
     }
 
 

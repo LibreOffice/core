@@ -30,7 +30,6 @@ using ::com::sun::star::uno::XComponentContext;
 using ::com::sun::star::beans::Property;
 using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::sdbc::XRowSet;
 using ::com::sun::star::uno::UNO_QUERY;
 
@@ -202,7 +201,7 @@ Any OPatternModel::translateDbColumnToControlValue()
     else
         m_aLastKnownValue.clear();
 
-    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( OUString() );
+    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : Any( OUString() );
         // (m_aLastKnownValue is allowed to be VOID, the control value isn't)
 }
 
@@ -210,7 +209,7 @@ Any OPatternModel::translateDbColumnToControlValue()
 
 Any OPatternModel::getDefaultForReset() const
 {
-    return makeAny( m_aDefaultText );
+    return Any( m_aDefaultText );
 }
 
 void OPatternModel::resetNoBroadcast()

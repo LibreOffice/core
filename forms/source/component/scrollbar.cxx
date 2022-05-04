@@ -72,7 +72,7 @@ namespace frm
                 _rxProperties->getPropertyValue( _rMinValueName ) >>= nControlValue;
         }
 
-        return makeAny( nControlValue );
+        return Any( nControlValue );
     }
 
 
@@ -236,7 +236,7 @@ namespace frm
 
     Any OScrollBarModel::getDefaultForReset() const
     {
-        return makeAny( m_nDefaultScrollValue );
+        return Any( m_nDefaultScrollValue );
     }
 
 

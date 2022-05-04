@@ -690,8 +690,8 @@ namespace frm
             &&  !hasExternalListSource()
             )
         {
-            setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
-            setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
+            setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( css::uno::Sequence<OUString>() ) );
+            setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<css::uno::Any>() ) );
         }
 
         if (nVersion > 3)
@@ -1011,8 +1011,8 @@ namespace frm
 
         setBoundValues(std::move(aValueList));
 
-        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
-        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( lcl_convertToStringSequence( aDisplayList ) ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<css::uno::Any>() ) );
     }
 
 
@@ -1039,7 +1039,7 @@ namespace frm
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
             if ( !hasExternalListSource() )
-                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
+                setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( css::uno::Sequence<OUString>() ) );
 
             m_aListRowSet.dispose();
         }
@@ -1262,7 +1262,7 @@ namespace frm
 
         m_aSaveValue = aCurrentValue;
 
-        return makeAny( translateDbValueToControlValue(aCurrentValue) );
+        return Any( translateDbValueToControlValue(aCurrentValue) );
 #else
         return Any();
 #endif
@@ -1446,7 +1446,7 @@ namespace frm
         break;
         }
 
-        return makeAny( aSelectIndexes );
+        return Any( aSelectIndexes );
     }
 
 
@@ -1520,7 +1520,7 @@ namespace frm
                 aSelectedEntriesTexts.getArray(),
                 ExtractStringFromSequence_Safe( _rStringList )
             );
-            return makeAny( aSelectedEntriesTexts );
+            return Any( aSelectedEntriesTexts );
         }
 
 
@@ -1731,8 +1731,8 @@ namespace frm
         suspendValueListening();
         try
         {
-            m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( comphelper::containerToSequence(getStringItemList()) ) );
-            m_xAggregateSet->setPropertyValue( PROPERTY_TYPEDITEMLIST, makeAny( getTypedItemList() ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, Any( comphelper::containerToSequence(getStringItemList()) ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_TYPEDITEMLIST, Any( getTypedItemList() ) );
         }
         catch( const Exception& )
         {
@@ -1752,7 +1752,7 @@ namespace frm
             else
             {
                 if ( m_aDefaultSelectSeq.hasElements() )
-                    setControlValue( makeAny( m_aDefaultSelectSeq ), eOther );
+                    setControlValue( Any( m_aDefaultSelectSeq ), eOther );
             }
         }
     }

@@ -103,7 +103,7 @@ public:
     {
         Reference< XPropertySet > xNewField( m_rModel.getField() );
         if ( m_xOldField != xNewField )
-            m_rLock.addPropertyNotification( PROPERTY_ID_BOUNDFIELD, makeAny( m_xOldField ), makeAny( xNewField ) );
+            m_rLock.addPropertyNotification( PROPERTY_ID_BOUNDFIELD, Any( m_xOldField ), Any( xNewField ) );
     }
 
 private:
@@ -459,7 +459,7 @@ void OControlModel::readHelpTextCompatibly(const css::uno::Reference< css::io::X
     try
     {
         if (m_xAggregateSet.is())
-            m_xAggregateSet->setPropertyValue(PROPERTY_HELPTEXT, makeAny(sHelpText));
+            m_xAggregateSet->setPropertyValue(PROPERTY_HELPTEXT, Any(sHelpText));
     }
     catch(const Exception&)
     {
@@ -516,7 +516,7 @@ OControlModel::OControlModel(
             try
             {
                 if ( !rDefault.isEmpty() )
-                    m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( rDefault ) );
+                    m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, Any( rDefault ) );
             }
             catch( const Exception& )
             {
@@ -645,7 +645,7 @@ void SAL_CALL OControlModel::setName(const OUString& _rName)
 {
     try
     {
-        setFastPropertyValue(PROPERTY_ID_NAME, makeAny(_rName));
+        setFastPropertyValue(PROPERTY_ID_NAME, Any(_rName));
     }
     catch (const css::beans::UnknownPropertyException&)
     {
@@ -1477,7 +1477,7 @@ void SAL_CALL OBoundControlModel::disposing(const css::lang::EventObject& _rEven
         Reference<XPropertySet> xOldValue = m_xLabelControl;
         m_xLabelControl = nullptr;
         // fire a propertyChanged (when we leave aLock's scope)
-        aLock.addPropertyNotification( PROPERTY_ID_CONTROLLABEL, makeAny( xOldValue ), makeAny( m_xLabelControl ) );
+        aLock.addPropertyNotification( PROPERTY_ID_CONTROLLABEL, Any( xOldValue ), Any( m_xLabelControl ) );
     }
 
     else if ( _rEvent.Source == m_xExternalBinding )
@@ -2151,7 +2151,7 @@ void OBoundControlModel::onConnectedValidator( )
         if ( m_xAggregateSet.is() )
             xAggregatePropertyInfo = m_xAggregateSet->getPropertySetInfo();
         if ( xAggregatePropertyInfo.is() && xAggregatePropertyInfo->hasPropertyByName( PROPERTY_ENFORCE_FORMAT ) )
-            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, makeAny( false ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, Any( false ) );
     }
 
     catch( const Exception& )
@@ -2170,7 +2170,7 @@ void OBoundControlModel::onDisconnectedValidator( )
         if ( m_xAggregateSet.is() )
             xAggregatePropertyInfo = m_xAggregateSet->getPropertySetInfo();
         if ( xAggregatePropertyInfo.is() && xAggregatePropertyInfo->hasPropertyByName( PROPERTY_ENFORCE_FORMAT ) )
-            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, makeAny( true ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_ENFORCE_FORMAT, Any( true ) );
     }
 
     catch( const Exception& )

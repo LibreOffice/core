@@ -33,7 +33,6 @@
 
 using xforms::Convert;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using namespace utl;
 
 Convert::Convert()
@@ -111,7 +110,7 @@ namespace
 
     Any lcl_toAny_UNODate( const OUString& rString )
     {
-        return makeAny( lcl_toUNODate( rString ) );
+        return Any( lcl_toUNODate( rString ) );
     }
 
 
@@ -181,7 +180,7 @@ namespace
 
     Any lcl_toAny_UNOTime( const OUString& rString )
     {
-        return makeAny( lcl_toUNOTime( rString ) );
+        return Any( lcl_toUNOTime( rString ) );
     }
 
 
@@ -224,7 +223,7 @@ namespace
             aTime.NanoSeconds, aTime.Seconds, aTime.Minutes, aTime.Hours,
             aDate.Day, aDate.Month, aDate.Year, aTime.IsUTC
         );
-        return makeAny( aDateTime );
+        return Any( aDateTime );
     }
 }
 

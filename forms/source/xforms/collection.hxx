@@ -161,7 +161,7 @@ public:
     {
         if( !isValidIndex( nIndex ) )
             throw css::lang::IndexOutOfBoundsException();
-        return css::uno::makeAny( getItem( nIndex ) );
+        return css::uno::Any( getItem( nIndex ) );
     }
 
     // XIndexReplace : XIndexAccess
@@ -239,8 +239,8 @@ protected:
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
         css::container::ContainerEvent aEvent(
             static_cast<css::container::XIndexReplace*>( this ),
-            css::uno::makeAny( nPos ),
-            css::uno::makeAny( getItem( nPos ) ),
+            css::uno::Any( nPos ),
+            css::uno::Any( getItem( nPos ) ),
             css::uno::Any() );
         for (auto const& listener : maListeners)
         {
@@ -253,7 +253,7 @@ protected:
         css::container::ContainerEvent aEvent(
             static_cast<css::container::XIndexReplace*>( this ),
             css::uno::Any(),
-            css::uno::makeAny( aOld ),
+            css::uno::Any( aOld ),
             css::uno::Any() );
         for (auto const& listener : maListeners)
         {
@@ -266,9 +266,9 @@ protected:
         OSL_ENSURE( isValidIndex(nPos), "invalid index" );
         css::container::ContainerEvent aEvent(
             static_cast<css::container::XIndexReplace*>( this ),
-            css::uno::makeAny( nPos ),
-            css::uno::makeAny( getItem( nPos ) ),
-            css::uno::makeAny( aNew ) );
+            css::uno::Any( nPos ),
+            css::uno::Any( getItem( nPos ) ),
+            css::uno::Any( aNew ) );
         for (auto const& listener : maListeners)
         {
             listener->elementReplaced( aEvent );

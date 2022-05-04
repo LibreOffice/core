@@ -797,10 +797,10 @@ namespace frm
     {
         switch (nHandle)
         {
-            case PROPERTY_ID_BUTTONTYPE             : return makeAny( FormButtonType_PUSH );
+            case PROPERTY_ID_BUTTONTYPE             : return Any( FormButtonType_PUSH );
             case PROPERTY_ID_TARGET_URL             :
-            case PROPERTY_ID_TARGET_FRAME           : return makeAny( OUString() );
-            case PROPERTY_ID_DISPATCHURLINTERNAL    : return makeAny( false );
+            case PROPERTY_ID_TARGET_FRAME           : return Any( OUString() );
+            case PROPERTY_ID_DISPATCHURLINTERNAL    : return Any( false );
             default:
                 return OControlModel::getPropertyDefaultByHandle(nHandle);
         }

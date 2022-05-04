@@ -88,7 +88,7 @@ public:
 
     virtual void getValue( css::uno::Any& rValue ) const override
     {
-        rValue = css::uno::makeAny( (m_pInstance->*m_pReader)() );
+        rValue = css::uno::Any( (m_pInstance->*m_pReader)() );
     }
 
     virtual bool isWriteable() const override

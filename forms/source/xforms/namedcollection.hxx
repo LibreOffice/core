@@ -93,7 +93,7 @@ public:
     {
         if( !hasItem( aName ) )
             throw css::container::NoSuchElementException();
-        return css::uno::makeAny( getItem( aName ) );
+        return css::uno::Any( getItem( aName ) );
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getElementNames() override
