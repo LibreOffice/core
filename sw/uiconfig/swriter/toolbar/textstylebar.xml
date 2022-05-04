@@ -24,7 +24,7 @@
  <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleNewByExample"/>
  <toolbar:toolbaritem xlink:href=".uno:EditStyle"/>
-T<toolbar:toolbarseparator/>
+ <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:CharFontName" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:FontHeight" toolbar:visible="false"/>
