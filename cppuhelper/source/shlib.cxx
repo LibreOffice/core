@@ -34,6 +34,7 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/shlib.hxx>
+#include <o3tl/string_view.hxx>
 #include <osl/module.hxx>
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
@@ -46,17 +47,17 @@
 #endif
 
 css::uno::Environment cppuhelper::detail::getEnvironment(
-    OUString const & name, OUString const & implementation)
+    OUString const & name, std::u16string_view implementation)
 {
     OUString n(name);
-    if (!implementation.isEmpty()) {
+    if (!implementation.empty()) {
         static char const * log = std::getenv("UNO_ENV_LOG");
         if (log != nullptr && *log != 0) {
             OString imps(log);
             for (sal_Int32 i = 0; i != -1;) {
-                OString imp(imps.getToken(0, ';', i));
+                std::string_view imp(o3tl::getToken(imps, 0, ';', i));
                 //TODO: this assumes UNO_ENV_LOG only contains ASCII characters:
-                if (implementation.equalsAsciiL(imp.getStr(), imp.getLength()))
+                if (o3tl::equalsAscii(implementation, imp))
                 {
                     n += ":log";
                     break;
@@ -73,7 +74,7 @@ namespace {
 
 css::uno::Environment getEnvironmentFromModule(
     osl::Module const & module, css::uno::Environment const & target,
-    OUString const & implementation, OUString const & prefix)
+    std::u16string_view implementation, OUString const & prefix)
 {
     char const * name = nullptr;
     css::uno::Environment env;
@@ -402,7 +403,7 @@ void cppu::writeSharedLibComponentInfo(
             css::uno::Reference<css::uno::XInterface>());
     }
     css::uno::Environment curEnv(css::uno::Environment::getCurrent());
-    css::uno::Environment env(getEnvironmentFromModule(mod, curEnv, "", ""));
+    css::uno::Environment env(getEnvironmentFromModule(mod, curEnv, u"", ""));
     if (!(curEnv.is() && env.is())) {
         throw css::registry::CannotRegisterImplementationException(
             "cannot get environments",

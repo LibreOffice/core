@@ -259,7 +259,7 @@ namespace connectivity
                                     if ( sLine.isEmpty() )
                                         continue;
                                     sal_Int32 nIdx {0};
-                                    const OString sIniKey = sLine.getToken(0, '=', nIdx);
+                                    const std::string_view sIniKey = o3tl::getToken(sLine, 0, '=', nIdx);
                                     const OString sValue = sLine.getToken(0, '=', nIdx);
                                     if( sIniKey == "hsqldb.compatible_version" )
                                     {

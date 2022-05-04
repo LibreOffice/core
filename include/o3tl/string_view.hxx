@@ -27,6 +27,13 @@ inline bool equalsAscii(std::u16string_view s1, const char* s2)
     return rtl_ustr_ascii_compare_WithLength(s1.data(), s1.size(), s2) == 0;
 }
 
+// Like OUString::equalsAsciiL
+inline bool equalsAscii(std::u16string_view s1, std::string_view s2)
+{
+    return rtl_ustr_ascii_shortenedCompare_WithLength(s1.data(), s1.size(), s2.data(), s2.size())
+           == 0;
+}
+
 // Like OUString::equalsIgnoreAsciiCase, but for two std::u16string_view:
 inline bool equalsIgnoreAsciiCase(std::u16string_view s1, std::u16string_view s2)
 {

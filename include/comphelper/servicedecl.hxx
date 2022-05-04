@@ -118,7 +118,7 @@ public:
     css::uno::Sequence< OUString> getSupportedServiceNames() const;
 
     /// @return whether name is in set of supported service names
-    bool supportsService( OUString const& name ) const;
+    bool supportsService( std::u16string_view name ) const;
 
     /// @return implementation name
     OUString getImplementationName() const;
