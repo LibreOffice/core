@@ -246,10 +246,12 @@ void SvxToolbarConfigPage::Init()
 
     ReloadTopLevelListBox();
 
-    sal_Int32 nPos = 0;
+    sal_Int32 nCount = m_xTopLevelListBox->get_count();
+    sal_Int32 nPos = nCount > 0 ? 0 : -1;
+
     if (!m_aURLToSelect.isEmpty())
     {
-        for (sal_Int32 i = 0, nCount = m_xTopLevelListBox->get_count(); i < nCount; ++i)
+        for (sal_Int32 i = 0; i < nCount; ++i)
         {
             SvxConfigEntry* pData
                 = reinterpret_cast<SvxConfigEntry*>(m_xTopLevelListBox->get_id(i).toInt64());
