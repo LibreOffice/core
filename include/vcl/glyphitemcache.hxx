@@ -96,8 +96,8 @@ private:
     // Last temporary glyphs returned (pointer is returned, so the object needs to be kept somewhere).
     std::optional<CachedGlyphsKey> mLastTemporaryKey;
     SalLayoutGlyphs mLastTemporaryGlyphs;
-    // If set, info about the last call which wanted a prefix of the full text.
-    std::optional<CachedGlyphsKey> mLastPrefixKey;
+    // If set, info about the last call which wanted a substring of the full text.
+    std::optional<CachedGlyphsKey> mLastSubstringKey;
 
     SalLayoutGlyphsCache(const SalLayoutGlyphsCache&) = delete;
     SalLayoutGlyphsCache& operator=(const SalLayoutGlyphsCache&) = delete;
