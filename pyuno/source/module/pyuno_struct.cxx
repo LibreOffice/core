@@ -30,7 +30,6 @@
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::TypeClass;
 using com::sun::star::uno::RuntimeException;
@@ -112,7 +111,7 @@ static PyObject* PyUNOStruct_dir( PyObject *self )
     }
     catch( const RuntimeException &e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
 
     return member_list;
@@ -166,19 +165,19 @@ static PyObject* PyUNOStruct_getattr( PyObject* self, char* name )
     }
     catch( const css::beans::UnknownPropertyException & e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
     catch( const css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
     catch( const css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
     catch( const RuntimeException &e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
 
     return nullptr;
@@ -211,17 +210,17 @@ static int PyUNOStruct_setattr (PyObject* self, char* name, PyObject* value)
     }
     catch( const css::beans::UnknownPropertyException & e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
         return 1;
     }
     catch( const css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
         return 1;
     }
     catch( const RuntimeException & e )
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
         return 1;
     }
     PyErr_SetString (PyExc_AttributeError, name);
@@ -274,7 +273,7 @@ static PyObject* PyUNOStruct_cmp( PyObject *self, PyObject *that, int op )
     }
     catch( const css::uno::RuntimeException & e)
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
 
     result = (op == Py_EQ ? Py_False : Py_True);

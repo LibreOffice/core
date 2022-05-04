@@ -57,7 +57,6 @@ using osl::Module;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::RuntimeException;
 using com::sun::star::uno::TypeDescription;
 using com::sun::star::uno::XComponentContext;
@@ -278,7 +277,7 @@ static PyObject* getComponentContext(
             Runtime::initialize( ctx );
         }
         Runtime runtime;
-        ret = runtime.any2PyObject( makeAny( ctx ) );
+        ret = runtime.any2PyObject( Any( ctx ) );
     }
     catch (const css::registry::InvalidRegistryException &e)
     {
@@ -469,15 +468,15 @@ static PyObject *createUnoStructHelper(
     }
     catch( const css::uno::RuntimeException & e )
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     catch( const css::script::CannotConvertException & e )
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     catch( const css::uno::Exception & e )
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     return ret.getAcquired();
 }
@@ -510,7 +509,7 @@ static PyObject *getTypeByName(
     }
     catch ( const RuntimeException & e )
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     return ret;
 }
@@ -543,19 +542,19 @@ static PyObject *getConstantByName(
         // to the python programmer, this is a runtime exception,
         // do not support tweakings with the type system
         RuntimeException runExc( e.Message );
-        raisePyExceptionWithAny( makeAny( runExc ) );
+        raisePyExceptionWithAny( Any( runExc ) );
     }
     catch(const css::script::CannotConvertException & e)
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     catch(const css::lang::IllegalArgumentException & e)
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     catch( const RuntimeException & e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
     return ret;
 }
@@ -576,7 +575,7 @@ static PyObject *checkType( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     }
     catch(const  RuntimeException & e)
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
         return nullptr;
     }
     Py_INCREF( Py_None );
@@ -599,7 +598,7 @@ static PyObject *checkEnum( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     }
     catch(const RuntimeException & e)
     {
-        raisePyExceptionWithAny( makeAny( e) );
+        raisePyExceptionWithAny( Any( e) );
         return nullptr;
     }
     Py_INCREF( Py_None );
@@ -621,7 +620,7 @@ static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     }
     catch(const RuntimeException & e)
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
     return nullptr;
 }
@@ -647,11 +646,11 @@ static PyObject * generateUuid(
     try
     {
         Runtime runtime;
-        ret = runtime.any2PyObject( makeAny( seq ) );
+        ret = runtime.any2PyObject( Any( seq ) );
     }
     catch( const RuntimeException & e )
     {
-        raisePyExceptionWithAny( makeAny(e) );
+        raisePyExceptionWithAny( Any(e) );
     }
     return ret.getAcquired();
 }
@@ -675,7 +674,7 @@ static PyObject *systemPathToFileUrl(
                 OUString::number( static_cast<sal_Int32>(e) ) +
                 ")";
         raisePyExceptionWithAny(
-            makeAny( RuntimeException( buf )));
+            Any( RuntimeException( buf )));
         return nullptr;
     }
     return ustring2PyUnicode( url ).getAcquired();
@@ -700,7 +699,7 @@ static PyObject * fileUrlToSystemPath(
                 OUString::number( static_cast<sal_Int32>(e) ) +
                 ")";
         raisePyExceptionWithAny(
-            makeAny( RuntimeException( buf )));
+            Any( RuntimeException( buf )));
         return nullptr;
     }
     return ustring2PyUnicode( sysPath ).getAcquired();
@@ -783,11 +782,11 @@ static PyObject *getCurrentContext(
     {
         Runtime runtime;
         ret = runtime.any2PyObject(
-            makeAny( css::uno::getCurrentContext() ) );
+            Any( css::uno::getCurrentContext() ) );
     }
     catch( const css::uno::Exception & e )
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     return ret.getAcquired();
 }
@@ -829,7 +828,7 @@ static PyObject *setCurrentContext(
     }
     catch( const css::uno::Exception & e )
     {
-        raisePyExceptionWithAny( makeAny( e ) );
+        raisePyExceptionWithAny( Any( e ) );
     }
     return ret.getAcquired();
 }

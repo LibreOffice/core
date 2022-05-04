@@ -33,7 +33,6 @@
 
 using com::sun::star::beans::XIntrospectionAccess;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::RuntimeException;
@@ -119,7 +118,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
             // an instance of the introspection at (this), but this results in a cyclic
             // reference, which is never broken (as it is up to OOo1.1.0).
             Reference< XIntrospectionAccess > introspection =
-                runtime.getImpl()->cargo->xIntrospection->inspect( makeAny( unoAdapterObject ) );
+                runtime.getImpl()->cargo->xIntrospection->inspect( Any( unoAdapterObject ) );
 
             if( !introspection.is() )
             {
@@ -171,7 +170,7 @@ Any Adapter::invoke( const OUString &aFunctionName,
     {
         Sequence< sal_Int8 > id;
         if( aParams[0] >>= id )
-            return css::uno::makeAny( getSomething( id ) );
+            return css::uno::Any( getSomething( id ) );
 
     }
 
