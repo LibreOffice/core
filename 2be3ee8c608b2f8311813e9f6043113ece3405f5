@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "466f9857_260e9967",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-04T09:35:56Z",
+      "side": 1,
+      "message": "Hi Hossein,\nis this patch good to go ?",
+      "revId": "2be3ee8c608b2f8311813e9f6043113ece3405f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
