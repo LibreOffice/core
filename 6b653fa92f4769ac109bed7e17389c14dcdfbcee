@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b310a023_fc91971e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:26:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b15dd4ba_f68a74bc",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7ebf3e1_061aa4f7",
@@ -35,6 +53,42 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86f04333_3a3ab4eb",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:26:48Z",
+      "side": 1,
+      "message": "What pylint warnings should I use and what not? It\u0027s asking for other changes that already exist (Pylint: Missing module docstring, Pylint: Missing function or method docstring and Pylint: Consider using \u0027with\u0027 for resource-allocating operations).",
+      "parentUuid": "a7ebf3e1_061aa4f7",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9ea50f0_83c8ff47",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:26:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a7ebf3e1_061aa4f7",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38b35554_1a4a3a91",
@@ -48,6 +102,24 @@
       "writtenOn": "2022-04-22T10:48:07Z",
       "side": 1,
       "message": "This is btw. not how the script is used in practice, usually the symbols are not uploaded from the machine they are generated on, so making this a parameter instead and possibly fallback to the system it runs on would be preferred if the script is touched..",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "883c422a_5a12bfb3",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:26:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38b35554_1a4a3a91",
       "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
