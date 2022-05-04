@@ -45,7 +45,7 @@ OXMLCondPrtExpr::OXMLCondPrtExpr( ORptFilter& _rImport
             switch( aIter.getToken() )
             {
                 case XML_ELEMENT(REPORT, XML_FORMULA):
-                    m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,uno::makeAny(ORptFilter::convertFormula(aIter.toString())));
+                    m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,uno::Any(ORptFilter::convertFormula(aIter.toString())));
                     break;
                 default:
                     XMLOFF_WARN_UNKNOWN("reportdesign", aIter);
@@ -74,7 +74,7 @@ void OXMLCondPrtExpr::characters( const OUString& rChars )
 void OXMLCondPrtExpr::endFastElement( sal_Int32 )
 {
     if (m_aCharBuffer.getLength())
-        m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,makeAny(m_aCharBuffer.makeStringAndClear()));
+        m_xComponent->setPropertyValue(PROPERTY_CONDITIONALPRINTEXPRESSION,Any(m_aCharBuffer.makeStringAndClear()));
 }
 
 } // namespace rptxml

@@ -140,7 +140,7 @@ void OUndoContainerAction::implReInsert( )
     if ( m_xContainer.is() )
     {
         // insert the element
-        m_xContainer->insertByIndex( m_xContainer->getCount(),uno::makeAny(m_xElement) );
+        m_xContainer->insertByIndex( m_xContainer->getCount(),uno::Any(m_xElement) );
     }
     // we don't own the object anymore
     m_xOwnElement = nullptr;

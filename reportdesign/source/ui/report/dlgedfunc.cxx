@@ -139,7 +139,7 @@ static Color lcl_setColorOfObject(const uno::Reference< uno::XInterface >& _xObj
         {
             aAny >>= nBackColor;
             // try to set background color at the ReportComponent
-            uno::Any aBlackColorAny = uno::makeAny(_nColorTRGB);
+            uno::Any aBlackColorAny(_nColorTRGB);
             xProp->setPropertyValue(PROPERTY_CONTROLBACKGROUND, aBlackColorAny);
         }
     }

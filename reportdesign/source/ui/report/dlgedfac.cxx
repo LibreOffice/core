@@ -73,7 +73,7 @@ IMPL_STATIC_LINK(
                     if ( aParams.nObjIdentifier == SdrObjKind::ReportDesignHorizontalFixedLine )
                     {
                         uno::Reference<beans::XPropertySet> xProp = pObj->getAwtComponent();
-                        xProp->setPropertyValue( PROPERTY_ORIENTATION, uno::makeAny(sal_Int32(0)) );
+                        xProp->setPropertyValue( PROPERTY_ORIENTATION, uno::Any(sal_Int32(0)) );
                     }
                 }
                 break;

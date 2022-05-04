@@ -418,7 +418,7 @@ OUString SAL_CALL OShape::getShapeType(  )
 void SAL_CALL OShape::setZOrder( ::sal_Int32 _zorder )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_ZORDER,uno::makeAny(_zorder));
+    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_ZORDER,uno::Any(_zorder));
     set(PROPERTY_ZORDER,_zorder,m_nZOrder);
 }
 
@@ -443,7 +443,7 @@ drawing::HomogenMatrix3 SAL_CALL OShape::getTransformation()
 
 void SAL_CALL OShape::setTransformation( const drawing::HomogenMatrix3& _transformation )
 {
-    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_TRANSFORMATION,uno::makeAny(_transformation));
+    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_TRANSFORMATION,uno::Any(_transformation));
     set(PROPERTY_TRANSFORMATION,_transformation,m_Transformation);
 }
 
@@ -457,7 +457,7 @@ OUString SAL_CALL OShape::getCustomShapeEngine()
 
 void SAL_CALL OShape::setCustomShapeEngine( const OUString& _customshapeengine )
 {
-    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEENGINE,uno::makeAny(_customshapeengine));
+    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEENGINE,uno::Any(_customshapeengine));
     set(PROPERTY_CUSTOMSHAPEENGINE,_customshapeengine,m_CustomShapeEngine);
 }
 
@@ -470,7 +470,7 @@ OUString SAL_CALL OShape::getCustomShapeData()
 
 void SAL_CALL OShape::setCustomShapeData( const OUString& _customshapedata )
 {
-    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEDATA,uno::makeAny(_customshapedata));
+    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEDATA,uno::Any(_customshapedata));
     set(PROPERTY_CUSTOMSHAPEDATA,_customshapedata,m_CustomShapeData);
 }
 
@@ -483,7 +483,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL OShape::getCustomShapeGeometry()
 
 void SAL_CALL OShape::setCustomShapeGeometry( const uno::Sequence< beans::PropertyValue >& _customshapegeometry )
 {
-    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEGEOMETRY,uno::makeAny(_customshapegeometry));
+    m_aProps.aComponent.m_xProperty->setPropertyValue(PROPERTY_CUSTOMSHAPEGEOMETRY,uno::Any(_customshapegeometry));
     set(PROPERTY_CUSTOMSHAPEGEOMETRY,_customshapegeometry,m_CustomShapeGeometry);
 }
 

@@ -106,7 +106,7 @@ void OControlStyleContext::FillPropertySet(const Reference< XPropertySet > & rPr
                 if ( pStyle )
                 {
                     m_nNumberFormat = pStyle->GetKey();
-                    AddProperty(CTF_RPT_NUMBERFORMAT, uno::makeAny(m_nNumberFormat));
+                    AddProperty(CTF_RPT_NUMBERFORMAT, uno::Any(m_nNumberFormat));
                 }
             }
         }

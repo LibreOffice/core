@@ -426,10 +426,10 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const OUString & Act
             bool bModified = xReport->isModified();
             // this fills the chart again
             ::comphelper::NamedValueCollection aArgs;
-            aArgs.put( "CellRangeRepresentation", uno::makeAny( OUString( "all" ) ) );
-            aArgs.put( "HasCategories", uno::makeAny( true ) );
-            aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
-            aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+            aArgs.put( "CellRangeRepresentation", uno::Any( OUString( "all" ) ) );
+            aArgs.put( "HasCategories", uno::Any( true ) );
+            aArgs.put( "FirstCellAsLabel", uno::Any( true ) );
+            aArgs.put( "DataRowSource", uno::Any( chart::ChartDataRowSource_COLUMNS ) );
             uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xChartModel,uno::UNO_QUERY_THROW);
             xReceiver->setArguments( aArgs.getPropertyValues() );
             if ( !bModified )

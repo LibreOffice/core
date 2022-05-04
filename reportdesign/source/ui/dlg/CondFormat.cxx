@@ -145,7 +145,7 @@ namespace rptui
 
             Reference< XFormatCondition > xCond = m_xCopy->createFormatCondition();
             ::comphelper::copyProperties(m_xCopy, xCond);
-            m_xCopy->insertByIndex( _nNewCondIndex, makeAny( xCond ) );
+            m_xCopy->insertByIndex( _nNewCondIndex, Any( xCond ) );
             auto xCon = std::make_unique<Condition>(m_xConditionPlayground.get(), m_xDialog.get(), *this, m_rController);
             xCon->setCondition(xCond);
             m_xConditionPlayground->reorder_child(xCon->get_widget(), _nNewCondIndex);
@@ -378,7 +378,7 @@ namespace rptui
                     if ( bAppend )
                     {
                         xNewCond = m_xFormatConditions->createFormatCondition();
-                        m_xFormatConditions->insertByIndex( i, makeAny( xNewCond ) );
+                        m_xFormatConditions->insertByIndex( i, Any( xNewCond ) );
                     }
                     else
                         xNewCond.set( m_xFormatConditions->getByIndex(j), UNO_QUERY );

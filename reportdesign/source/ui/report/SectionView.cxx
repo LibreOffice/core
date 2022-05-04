@@ -177,7 +177,7 @@ void OSectionView::SetMarkedToLayer( SdrLayerID _nLayerNo )
             OObjectBase& rBaseObj = dynamic_cast<OObjectBase&>(*pObj);
             try
             {
-                rBaseObj.getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::makeAny(_nLayerNo == RPT_LAYER_FRONT));
+                rBaseObj.getReportComponent()->setPropertyValue(PROPERTY_OPAQUE,uno::Any(_nLayerNo == RPT_LAYER_FRONT));
             }
             catch(const uno::Exception&)
             {

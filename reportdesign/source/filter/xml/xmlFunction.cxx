@@ -99,7 +99,7 @@ void OXMLFunction::endFastElement(sal_Int32 )
     {
         try
         {
-            m_xFunctions->insertByIndex(m_xFunctions->getCount(),uno::makeAny(m_xFunction));
+            m_xFunctions->insertByIndex(m_xFunctions->getCount(),uno::Any(m_xFunction));
             m_xFunction.clear();
         }catch(uno::Exception&)
         {

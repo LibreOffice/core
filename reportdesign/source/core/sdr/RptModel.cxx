@@ -146,7 +146,7 @@ uno::Reference< uno::XInterface > OReportModel::createShape(const OUString& aSer
             xRet = xProp;
             if ( _rShape.is() )
                 throw uno::Exception("no shape", nullptr);
-            xProp->setPropertyValue( PROPERTY_FORMATSSUPPLIER, uno::makeAny(uno::Reference< util::XNumberFormatsSupplier >(*m_pReportDefinition,uno::UNO_QUERY)) );
+            xProp->setPropertyValue( PROPERTY_FORMATSSUPPLIER, uno::Any(uno::Reference< util::XNumberFormatsSupplier >(*m_pReportDefinition,uno::UNO_QUERY)) );
         }
         else if ( aServiceSpecifier == SERVICE_FIXEDTEXT)
         {

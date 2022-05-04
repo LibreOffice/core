@@ -277,7 +277,7 @@ void OXMLHelper::copyStyleElements(const bool _bOld,const OUString& _sStyleName,
     {
         pAutoStyle->FillPropertySet(_xProp);
         if ( _bOld && _xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_CHARHIDDEN) )
-            _xProp->setPropertyValue(PROPERTY_CHARHIDDEN,uno::makeAny(false));
+            _xProp->setPropertyValue(PROPERTY_CHARHIDDEN,uno::Any(false));
 
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
         pAutoStyle->FillPropertySet(xProp);

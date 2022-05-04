@@ -1165,7 +1165,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             aProps.emplace_back(PROPERTY_BORDERLEFT);
         }
 
-        xBorderProp->setPropertyValue(sBorderProp,uno::makeAny(aValue));
+        xBorderProp->setPropertyValue(sBorderProp,uno::Any(aValue));
 
         aValue.Color = aValue.OuterLineWidth = aValue.LineWidth = 0;
         aValue.LineStyle = table::BorderLineStyle::NONE;
@@ -1192,7 +1192,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormatted
             {
                 sal_Int32 nStyleMapIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_RPT_NUMBERFORMAT );
                 addDataStyle(nNumberFormat);
-                XMLPropertyState aNumberStyleState( nStyleMapIndex, uno::makeAny( getDataStyleName(nNumberFormat) ) );
+                XMLPropertyState aNumberStyleState( nStyleMapIndex, uno::Any( getDataStyleName(nNumberFormat) ) );
                 auto const iter(::std::find_if(
                     aPropertyStates.begin(), aPropertyStates.end(),
                     [nStyleMapIndex] (XMLPropertyState const& rItem)

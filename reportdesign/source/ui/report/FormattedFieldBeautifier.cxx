@@ -108,15 +108,15 @@ namespace rptui
             throw uno::RuntimeException();
 
         // the actual text
-        _xVclWindowPeer->setProperty(PROPERTY_TEXT, uno::makeAny(_rText));
+        _xVclWindowPeer->setProperty(PROPERTY_TEXT, uno::Any(_rText));
         // the text color
-        _xVclWindowPeer->setProperty(PROPERTY_TEXTCOLOR, uno::makeAny(getTextColor()));
+        _xVclWindowPeer->setProperty(PROPERTY_TEXTCOLOR, uno::Any(getTextColor()));
         // font->italic
         uno::Any aFontDescriptor = _xVclWindowPeer->getProperty(PROPERTY_FONTDESCRIPTOR);
         awt::FontDescriptor aFontDescriptorStructure;
         aFontDescriptor >>= aFontDescriptorStructure;
         aFontDescriptorStructure.Slant = css::awt::FontSlant_ITALIC;
-        _xVclWindowPeer->setProperty(PROPERTY_FONTDESCRIPTOR, uno::makeAny(aFontDescriptorStructure));
+        _xVclWindowPeer->setProperty(PROPERTY_FONTDESCRIPTOR, uno::Any(aFontDescriptorStructure));
     }
 
 

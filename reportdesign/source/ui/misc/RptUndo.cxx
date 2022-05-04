@@ -329,7 +329,7 @@ void OGroupUndo::implReInsert( )
 {
     try
     {
-        m_xReportDefinition->getGroups()->insertByIndex(m_nLastPosition,uno::makeAny(m_xGroup));
+        m_xReportDefinition->getGroups()->insertByIndex(m_nLastPosition,uno::Any(m_xGroup));
     }
     catch(uno::Exception&)
     {

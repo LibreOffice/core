@@ -580,7 +580,7 @@ void OSection::notifyElementAdded(const uno::Reference< drawing::XShape >& xShap
 {
     if ( !m_bInInsertNotify )
     {
-        container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(), uno::makeAny(xShape), uno::Any());
+        container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(), uno::Any(xShape), uno::Any());
         m_aContainerListeners.notifyEach(&container::XContainerListener::elementInserted,aEvent);
     }
 }
@@ -590,7 +590,7 @@ void OSection::notifyElementRemoved(const uno::Reference< drawing::XShape >& xSh
     if ( !m_bInRemoveNotify )
     {
         // notify our container listeners
-        container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(), uno::makeAny(xShape), uno::Any());
+        container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(), uno::Any(xShape), uno::Any());
         m_aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
     }
 }

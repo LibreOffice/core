@@ -62,7 +62,7 @@ namespace reportdesign
                 ::osl::MutexGuard aGuard(m_aMutex);
                 if ( _member != Value )
                 {
-                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    prepareSet(_sProperty, css::uno::Any(_member), css::uno::Any(Value), &l);
                     _member = Value;
                 }
             }
@@ -77,7 +77,7 @@ namespace reportdesign
                 ::osl::MutexGuard aGuard(m_aMutex);
                 if ( _member != Value )
                 {
-                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    prepareSet(_sProperty, css::uno::Any(_member), css::uno::Any(Value), &l);
                     _member = Value;
                 }
             }

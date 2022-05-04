@@ -105,8 +105,8 @@ void SAL_CALL ImportDocumentHandler::endDocument()
     // this fills the chart again
     ::comphelper::NamedValueCollection aArgs;
     aArgs.put( "CellRangeRepresentation", OUString("all") );
-    aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
-    aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+    aArgs.put( "FirstCellAsLabel", uno::Any( true ) );
+    aArgs.put( "DataRowSource", uno::Any( chart::ChartDataRowSource_COLUMNS ) );
 
     bool bHasCategories = false;
 
@@ -131,13 +131,13 @@ void SAL_CALL ImportDocumentHandler::endDocument()
             }
         }
     }
-    aArgs.put( "HasCategories", uno::makeAny( bHasCategories ) );
+    aArgs.put( "HasCategories", uno::Any( bHasCategories ) );
 
     uno::Reference< chart::XComplexDescriptionAccess > xDataProvider(m_xModel->getDataProvider(),uno::UNO_QUERY);
     if ( xDataProvider.is() )
     {
         const uno::Sequence< OUString > aColumnNames = xDataProvider->getColumnDescriptions();
-        aArgs.put( "ColumnDescriptions", uno::makeAny( aColumnNames ) );
+        aArgs.put( "ColumnDescriptions", uno::Any( aColumnNames ) );
     }
 
     xReceiver->attachDataProvider( m_xDatabaseDataProvider );

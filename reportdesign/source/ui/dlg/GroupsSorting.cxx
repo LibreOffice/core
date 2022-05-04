@@ -235,7 +235,7 @@ uno::Sequence<uno::Any> OFieldExpressionControl::fillSelectedGroups()
                     uno::Reference< report::XGroup> xOrgGroup(xGroups->getByIndex(m_aGroupPositions[nIndex]),uno::UNO_QUERY);
                     /*uno::Reference< report::XGroup> xCopy = xGroups->createGroup();
                     ::comphelper::copyProperties(xOrgGroup.get(),xCopy.get());*/
-                    vClipboardList.push_back( uno::makeAny(xOrgGroup) );
+                    vClipboardList.push_back( uno::Any(xOrgGroup) );
                 }
             }
             catch(uno::Exception&)

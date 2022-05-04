@@ -75,7 +75,7 @@ namespace rptui
 
     void FixedTextColor::setPropertyTextColor(const uno::Reference< awt::XVclWindowPeer >& _xVclWindowPeer, Color _nTextColor)
     {
-        _xVclWindowPeer->setProperty(PROPERTY_TEXTCOLOR, uno::makeAny(_nTextColor));
+        _xVclWindowPeer->setProperty(PROPERTY_TEXTCOLOR, uno::Any(_nTextColor));
     }
 
 

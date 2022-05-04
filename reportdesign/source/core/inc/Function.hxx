@@ -58,7 +58,7 @@ namespace reportdesign
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                prepareSet(_sProperty, css::uno::Any(_member), css::uno::Any(Value), &l);
                 _member = Value;
             }
             l.notify();
@@ -70,7 +70,7 @@ namespace reportdesign
             BoundListeners l;
             {
                 ::osl::MutexGuard aGuard(m_aMutex);
-                prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                prepareSet(_sProperty, css::uno::Any(_member), css::uno::Any(Value), &l);
                 _member = Value;
             }
             l.notify();
