@@ -133,7 +133,7 @@ RemoteFilesDialog::~RemoteFilesDialog()
 
         OUString sUserData = m_xFileView->GetConfigString();
         aDlgOpt.SetUserItem( "UserData",
-                             makeAny( sSize + sUserData ) );
+                             Any( sSize + sUserData ) );
     }
 
     // save services

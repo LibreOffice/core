@@ -470,7 +470,7 @@ SvtFileDialog::~SvtFileDialog()
         aDlgOpt.SetWindowState(OStringToOUString(m_xDialog->get_window_state(WindowStateMask::All), RTL_TEXTENCODING_UTF8));
         OUString sUserData = m_xFileView->GetConfigString();
         aDlgOpt.SetUserItem( "UserData",
-                             makeAny( sUserData ) );
+                             Any( sUserData ) );
     }
 
     m_xFileView->SetSelectHdl(Link<SvtFileView*,void>());
@@ -1403,7 +1403,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
 
         // let and interaction handler handle this exception
         rtl::Reference<::comphelper::OInteractionRequest> pRequest =
-            new ::comphelper::OInteractionRequest( makeAny( aException ) );
+            new ::comphelper::OInteractionRequest( Any( aException ) );
         pRequest->addContinuation( new ::comphelper::OInteractionAbort( ) );
 
         Reference< XInteractionHandler2 > xHandler(
