@@ -181,7 +181,7 @@ namespace comphelper
         template < typename VALUE_TYPE >
         bool put( const OUString& _rValueName, const VALUE_TYPE& _rValue )
         {
-            return impl_put( _rValueName, css::uno::makeAny( _rValue ) );
+            return impl_put( _rValueName, css::uno::Any( _rValue ) );
         }
 
         bool put( const OUString& _rValueName, const css::uno::Any& _rValue )
@@ -280,7 +280,7 @@ namespace comphelper
             const VALUE_TYPE* pV = aValues.getConstArray();
             const sal_Int32 nLen = aValues.getLength();
             for( sal_Int32 i = 0; i < nLen; ++i )
-                *(pO++) = css::uno::makeAny<VALUE_TYPE>( *(pV++) );
+                *(pO++) = css::uno::Any( *(pV++) );
 
             return aWrappedValues;
         }

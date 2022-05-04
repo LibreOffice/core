@@ -91,22 +91,22 @@ void VariadicTemplatesTest::testUnwrapArgs() {
     sal_Int32 tmp2  = 42;
     sal_uInt32 tmp3 = 42;
     ::com::sun::star::uno::Any tmp6(
-        ::com::sun::star::uno::makeAny( tmp1 )
+        tmp1
         );
     ::com::sun::star::uno::Any tmp7(
-        ::com::sun::star::uno::makeAny( tmp2 )
+        tmp2
         );
     ::com::sun::star::uno::Any tmp8(
-        ::com::sun::star::uno::makeAny( tmp3 )
+        tmp3
         );
     ::com::sun::star::uno::Any tmp9(
-        ::com::sun::star::uno::makeAny( OUString("Test2") )
+        OUString("Test2")
         );
     ::std::optional< ::com::sun::star::uno::Any > tmp10(
-        ::com::sun::star::uno::makeAny( OUString("Test3") )
+        OUString("Test3")
         );
     ::std::optional< ::com::sun::star::uno::Any > tmp11(
-        ::com::sun::star::uno::makeAny( tmp1 )
+        tmp1
         );
 
     // test equality with the baseline and template specialization with

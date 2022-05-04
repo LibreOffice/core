@@ -140,7 +140,7 @@ private:
 /// @internal
 template< typename T > struct Convert {
     static css::uno::Any toAny(T const & value)
-    { return css::uno::makeAny(value); }
+    { return css::uno::Any(value); }
 
     static T fromAny(css::uno::Any const & value)
     { return value.get< T >(); }
@@ -158,7 +158,7 @@ template< typename T > struct Convert< std::optional< T > >
 {
     static css::uno::Any toAny(std::optional< T > const & value) {
         return value
-            ? css::uno::makeAny(*value)
+            ? css::uno::Any(*value)
             : css::uno::Any();
     }
 
