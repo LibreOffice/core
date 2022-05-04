@@ -829,7 +829,7 @@ void DocumentHolder::show()
             if ( xLMProps.is() )
             {
                 xLMProps->setPropertyValue("MenuBarCloser",
-                                            uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
+                                            uno::Any( uno::Reference< frame::XStatusListener >() ) );
             }
 
             if ( !m_bLink )
@@ -1008,7 +1008,7 @@ IDispatch* DocumentHolder::GetIDispatch()
 
             try {
                 uno::Any anyResult = xSupplier->createBridge(
-                    uno::makeAny( m_xDocument ),
+                    uno::Any( m_xDocument ),
                     aProcId,
                     bridge::ModelDependent::UNO,
                     bridge::ModelDependent::OLE );
