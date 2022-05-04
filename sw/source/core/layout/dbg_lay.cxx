@@ -106,6 +106,7 @@
 #include <frame.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
+#include <o3tl/string_view.hxx>
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
@@ -330,7 +331,7 @@ void SwImplProtocol::CheckLine( OString& rLine )
         return;
     if( '[' == rLine[0] )   // section: FrameIds, type or function
     {
-        OString aTmp = rLine.getToken(0, ']');
+        std::string_view aTmp = o3tl::getToken(rLine, 0, ']');
         if (aTmp == "[frmid")      // section FrameIds
         {
             m_nInitFile = 1;
@@ -362,23 +363,23 @@ void SwImplProtocol::CheckLine( OString& rLine )
         }
         else
             m_nInitFile = 0; // oops: unknown section?
-        rLine = rLine.copy(aTmp.getLength() + 1);
+        rLine = rLine.copy(aTmp.size() + 1);
     }
 
     // spaces (or tabs) are the delimiter
     sal_Int32 nIndex = 0;
     do
     {
-        OString aTok = rLine.getToken( 0, ' ', nIndex );
+        std::string_view aTok = o3tl::getToken(rLine, 0, ' ', nIndex );
         bool bNo = false;
-        if( !aTok.isEmpty() && '!' == aTok[0] )
+        if( !aTok.empty() && '!' == aTok[0] )
         {
             bNo = true;                 // remove this function/type
-            aTok = aTok.copy(1);
+            aTok = aTok.substr(1);
         }
-        if( !aTok.isEmpty() )
+        if( !aTok.empty() )
         {
-            sal_Int64 nVal = aTok.toInt64();
+            sal_Int64 nVal = o3tl::toInt64(aTok);
             switch (m_nInitFile)
             {
                 case 1: InsertFrame( sal_uInt16( nVal ) );    // add FrameId
