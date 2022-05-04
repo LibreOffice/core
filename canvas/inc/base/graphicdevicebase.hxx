@@ -325,7 +325,7 @@ namespace canvas
 
         css::uno::Any getDumpScreenContent() const
         {
-            return css::uno::makeAny( mbDumpScreenContent );
+            return css::uno::Any( mbDumpScreenContent );
         }
 
         void setDumpScreenContent( const css::uno::Any& rAny )

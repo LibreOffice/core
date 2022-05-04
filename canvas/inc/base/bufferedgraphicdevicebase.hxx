@@ -154,7 +154,7 @@ namespace canvas
 
         css::uno::Any getXWindow() const
         {
-            return css::uno::makeAny(mxWindow);
+            return css::uno::Any(mxWindow);
         }
 
         virtual void disposeThis() override
