@@ -251,6 +251,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity implements Settings
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_OPEN_FILECHOOSER && resultCode == RESULT_OK) {
             final Uri fileUri = data.getData();
             openDocument(fileUri);
