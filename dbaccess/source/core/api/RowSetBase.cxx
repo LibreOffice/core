@@ -94,7 +94,7 @@ ORowSetBase::ORowSetBase( const Reference<XComponentContext>& _rContext, ::cppu:
 {
     sal_Int32 nRBT  = PropertyAttribute::READONLY   | PropertyAttribute::BOUND      | PropertyAttribute::TRANSIENT;
 
-    registerPropertyNoMember( PROPERTY_ROWCOUNT,        PROPERTY_ID_ROWCOUNT,        nRBT, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0) );
+    registerPropertyNoMember( PROPERTY_ROWCOUNT,        PROPERTY_ID_ROWCOUNT,        nRBT, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)) );
     registerPropertyNoMember( PROPERTY_ISROWCOUNTFINAL, PROPERTY_ID_ISROWCOUNTFINAL, nRBT, cppu::UnoType<bool>::get(), css::uno::Any(false) );
 }
 
@@ -1213,8 +1213,8 @@ bool ORowSetBase::isPropertyChangeNotificationEnabled() const
 
 void ORowSetBase::fireProperty( sal_Int32 _nProperty, bool _bNew, bool _bOld )
 {
-    Any aNew = css::uno::makeAny( _bNew );
-    Any aOld = css::uno::makeAny( _bOld );
+    Any aNew( _bNew );
+    Any aOld( _bOld );
     fire( &_nProperty, &aNew, &aOld, 1, false );
 }
 

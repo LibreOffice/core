@@ -970,7 +970,7 @@ void OTableEditorCtrl::SetCellData( sal_Int32 nRow, sal_uInt16 nColId, const css
 
         case FIELD_PROPERTY_BOOL_DEFAULT:
             sValue = GetView()->GetDescWin()->BoolStringPersistent(::comphelper::getString(_rNewData));
-            pFieldDescr->SetControlDefault(makeAny(sValue));
+            pFieldDescr->SetControlDefault(Any(sValue));
             break;
 
         case FIELD_PROPERTY_FORMAT:
@@ -1050,7 +1050,7 @@ Any OTableEditorCtrl::GetCellData( sal_Int32 nRow, sal_uInt16 nColId )
             break;
     }
 
-    return makeAny(sValue);
+    return Any(sValue);
 }
 
 OUString OTableEditorCtrl::GetCellText( sal_Int32 nRow, sal_uInt16 nColId ) const

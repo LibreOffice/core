@@ -610,20 +610,20 @@ void fillTypeInfo(  const Reference< css::sdbc::XConnection>& _rxConnection,
 
 void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc)
 {
-    _rxColumn->setPropertyValue(PROPERTY_NAME,makeAny(_pFieldDesc->GetName()));
-    _rxColumn->setPropertyValue(PROPERTY_TYPENAME,makeAny(_pFieldDesc->getTypeInfo()->aTypeName));
-    _rxColumn->setPropertyValue(PROPERTY_TYPE,makeAny(_pFieldDesc->GetType()));
-    _rxColumn->setPropertyValue(PROPERTY_PRECISION,makeAny(_pFieldDesc->GetPrecision()));
-    _rxColumn->setPropertyValue(PROPERTY_SCALE,makeAny(_pFieldDesc->GetScale()));
-    _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, makeAny(_pFieldDesc->GetIsNullable()));
-    _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT, css::uno::makeAny(_pFieldDesc->IsAutoIncrement()));
-    _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
+    _rxColumn->setPropertyValue(PROPERTY_NAME,Any(_pFieldDesc->GetName()));
+    _rxColumn->setPropertyValue(PROPERTY_TYPENAME,Any(_pFieldDesc->getTypeInfo()->aTypeName));
+    _rxColumn->setPropertyValue(PROPERTY_TYPE,Any(_pFieldDesc->GetType()));
+    _rxColumn->setPropertyValue(PROPERTY_PRECISION,Any(_pFieldDesc->GetPrecision()));
+    _rxColumn->setPropertyValue(PROPERTY_SCALE,Any(_pFieldDesc->GetScale()));
+    _rxColumn->setPropertyValue(PROPERTY_ISNULLABLE, Any(_pFieldDesc->GetIsNullable()));
+    _rxColumn->setPropertyValue(PROPERTY_ISAUTOINCREMENT, css::uno::Any(_pFieldDesc->IsAutoIncrement()));
+    _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,Any(_pFieldDesc->GetDescription()));
     if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISCURRENCY) && _pFieldDesc->IsCurrency() )
-        _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY, css::uno::makeAny(_pFieldDesc->IsCurrency()));
+        _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY, css::uno::Any(_pFieldDesc->IsCurrency()));
     // set autoincrement value when available
     // and only set when the entry is not empty, that lets the value in the column untouched
     if ( _pFieldDesc->IsAutoIncrement() && !_pFieldDesc->GetAutoIncrementValue().isEmpty() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
-        _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_pFieldDesc->GetAutoIncrementValue()));
+        _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,Any(_pFieldDesc->GetAutoIncrementValue()));
 }
 
 OUString createDefaultName(const Reference< XDatabaseMetaData>& _xMetaData,const Reference<XNameAccess>& _xTables,const OUString& _sName)
@@ -739,9 +739,9 @@ void callColumnFormatDialog(const Reference<XPropertySet>& xAffectedCol,
 
         if(callColumnFormatDialog(_pParent,_pFormatter,nDataType,nFormatKey,eJustify,bHasFormat))
         {
-            xAffectedCol->setPropertyValue(PROPERTY_ALIGN, makeAny(static_cast<sal_Int16>(dbaui::mapTextAlign(eJustify))));
+            xAffectedCol->setPropertyValue(PROPERTY_ALIGN, Any(static_cast<sal_Int16>(dbaui::mapTextAlign(eJustify))));
             if (bHasFormat)
-                xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
+                xAffectedCol->setPropertyValue(PROPERTY_FORMATKEY, Any(nFormatKey));
 
         }
     }
@@ -907,7 +907,7 @@ bool appendToFilter(const Reference<XConnection>& _xConnection,
                 {
                     aFilter.realloc(aFilter.getLength()+1);
                     aFilter.getArray()[aFilter.getLength()-1] = _sName;
-                    xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aFilter));
+                    xProp->setPropertyValue(PROPERTY_TABLEFILTER,Any(aFilter));
                 }
             }
         }
@@ -1203,11 +1203,11 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
                                         sTable,
                                         ::dbtools::EComposeRule::InDataManipulation);
 
-    xView->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
-    xView->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
-    xView->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
+    xView->setPropertyValue(PROPERTY_CATALOGNAME,Any(sCatalog));
+    xView->setPropertyValue(PROPERTY_SCHEMANAME,Any(sSchema));
+    xView->setPropertyValue(PROPERTY_NAME,Any(sTable));
 
-    xView->setPropertyValue( PROPERTY_COMMAND, makeAny( _rCommand ) );
+    xView->setPropertyValue( PROPERTY_COMMAND, Any( _rCommand ) );
 
     Reference<XAppend> xAppend(xViews,UNO_QUERY);
     if(xAppend.is())
@@ -1327,7 +1327,7 @@ bool insertHierarchyElement(weld::Window* pParent, const Reference< XComponentCo
 
         Reference<XContent > xNew( xORB->createInstanceWithArguments( sServiceName, aArguments ), UNO_QUERY_THROW );
         Reference< XNameContainer > xNameContainer( xNameAccess, UNO_QUERY_THROW );
-        xNameContainer->insertByName( sNewName, makeAny( xNew ) );
+        xNameContainer->insertByName( sNewName, Any( xNew ) );
     }
     catch( const IllegalArgumentException& e )
     {

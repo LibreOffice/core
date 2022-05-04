@@ -1226,7 +1226,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
         dataColumn->getPropertyValue(PROPERTY_ISREADONLY) >>= bReadOnly;
         *aReadIter = bReadOnly;
 
-        dataColumn->setPropertyValue(PROPERTY_ISREADONLY,makeAny(false));
+        dataColumn->setPropertyValue(PROPERTY_ISREADONLY,Any(false));
         ++aReadIter;
     }
 }
@@ -1237,7 +1237,7 @@ void ORowSet::impl_restoreDataColumnsWriteable_throw()
     TDataColumns::const_iterator aIter = m_aDataColumns.begin();
     for (bool readOnlyDataColumn : m_aReadOnlyDataColumns)
     {
-        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, makeAny(readOnlyDataColumn) );
+        (*aIter)->setPropertyValue(PROPERTY_ISREADONLY, Any(readOnlyDataColumn) );
         ++aIter;
     }
     m_aReadOnlyDataColumns.clear();
@@ -1616,8 +1616,8 @@ void ORowSet::setStatementResultSetType( const Reference< XPropertySet >& _rxSta
         }
     }
 
-    _rxStatement->setPropertyValue( PROPERTY_RESULTSETTYPE, makeAny( nResultSetType ) );
-    _rxStatement->setPropertyValue( PROPERTY_RESULTSETCONCURRENCY, makeAny( nResultSetConcurrency ) );
+    _rxStatement->setPropertyValue( PROPERTY_RESULTSETTYPE, Any( nResultSetType ) );
+    _rxStatement->setPropertyValue( PROPERTY_RESULTSETCONCURRENCY, Any( nResultSetConcurrency ) );
 }
 
 void ORowSet::impl_ensureStatement_throw()
@@ -1644,8 +1644,8 @@ void ORowSet::impl_ensureStatement_throw()
         // set the result set type and concurrency
         try
         {
-            xStatementProps->setPropertyValue( PROPERTY_USEBOOKMARKS, makeAny( true ) );
-            xStatementProps->setPropertyValue( PROPERTY_MAXROWS, makeAny( m_nMaxRows ) );
+            xStatementProps->setPropertyValue( PROPERTY_USEBOOKMARKS, Any( true ) );
+            xStatementProps->setPropertyValue( PROPERTY_MAXROWS, Any( m_nMaxRows ) );
 
             setStatementResultSetType( xStatementProps, m_nResultSetType, m_nResultSetConcurrency );
         }
@@ -1741,7 +1741,7 @@ void ORowSet::impl_initializeColumnSettings_nothrow( const Reference< XPropertyS
         }
         if ( !nFormatKey && m_xNumberFormatTypes.is() )
             nFormatKey = ::dbtools::getDefaultNumberFormat( _rxTemplateColumn, m_xNumberFormatTypes, SvtSysLocale().GetLanguageTag().getLocale() );
-        _rxRowSetColumn->setPropertyValue( PROPERTY_NUMBERFORMAT, makeAny( nFormatKey ) );
+        _rxRowSetColumn->setPropertyValue( PROPERTY_NUMBERFORMAT, Any( nFormatKey ) );
     }
     catch(Exception&)
     {
@@ -1873,7 +1873,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         aNames.push_back(sName);
                         m_aDataColumns.push_back(pColumn.get());
 
-                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i+1) != rKeyColumns.end()));
+                        pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,Any(rKeyColumns.find(i+1) != rKeyColumns.end()));
 
                         try
                         {
@@ -1882,10 +1882,10 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                                 nFormatKey = ::dbtools::getDefaultNumberFormat(pColumn,m_xNumberFormatTypes,aLocale);
 
 
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,makeAny(sal_Int32(i+1)));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,makeAny(sal_Int32(227)));
-                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,makeAny(sal_Int32(0)));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,Any(nFormatKey));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,Any(sal_Int32(i+1)));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,Any(sal_Int32(227)));
+                            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,Any(sal_Int32(0)));
                             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN, css::uno::Any(false));
                         }
                         catch(Exception&)
@@ -1973,7 +1973,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                         });
                     aColumns->emplace_back(pColumn);
 
-                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,makeAny(rKeyColumns.find(i) != rKeyColumns.end()));
+                    pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ISREADONLY,Any(rKeyColumns.find(i) != rKeyColumns.end()));
 
                     if(sColumnLabel.isEmpty())
                     {
@@ -2797,7 +2797,7 @@ ORowSetClone::ORowSetClone( const Reference<XComponentContext>& _rContext, ORowS
             xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT) >>= nFormatKey;
             if(!nFormatKey && xColumn.is() && m_xNumberFormatTypes.is())
                 nFormatKey = ::dbtools::getDefaultNumberFormat(xColumn,m_xNumberFormatTypes,aLocale);
-            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,makeAny(nFormatKey));
+            pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_NUMBERFORMAT,Any(nFormatKey));
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_RELATIVEPOSITION,xColumn->getPropertyValue(PROPERTY_RELATIVEPOSITION));
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_WIDTH,xColumn->getPropertyValue(PROPERTY_WIDTH));
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HIDDEN,xColumn->getPropertyValue(PROPERTY_HIDDEN));

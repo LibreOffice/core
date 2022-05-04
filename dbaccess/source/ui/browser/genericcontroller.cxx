@@ -370,11 +370,11 @@ namespace
         // #i68216# is the bug which requests to fix the code in Draw which relies on
         //          framework's implementation details
         if ( !!_rFeatureState.sTitle )
-            _out_rStates.push_back( makeAny( *_rFeatureState.sTitle ) );
+            _out_rStates.push_back( Any( *_rFeatureState.sTitle ) );
         if ( !!_rFeatureState.bChecked )
-            _out_rStates.push_back( makeAny( *_rFeatureState.bChecked ) );
+            _out_rStates.push_back( Any( *_rFeatureState.bChecked ) );
         if ( !!_rFeatureState.bInvisible )
-            _out_rStates.push_back( makeAny( Visibility( !*_rFeatureState.bInvisible ) ) );
+            _out_rStates.push_back( Any( Visibility( !*_rFeatureState.bInvisible ) ) );
         if ( _rFeatureState.aValue.hasValue() )
             _out_rStates.push_back( _rFeatureState.aValue );
         if ( _out_rStates.empty() )

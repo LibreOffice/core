@@ -630,7 +630,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const OUString& _s
             if ( aFind == m_aSupportServices.end() )
             {
                 Reference<XConnection> xMy(this);
-                Sequence<Any> aArgs{ Any(NamedValue("ActiveConnection",makeAny(xMy))) };
+                Sequence<Any> aArgs{ Any(NamedValue("ActiveConnection",Any(xMy))) };
                 aFind = m_aSupportServices.emplace(
                                _sServiceSpecifier,
                                m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(_sServiceSpecifier, aArgs, m_aContext)

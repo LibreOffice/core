@@ -520,7 +520,7 @@ void ODBFilter::SetConfigurationSettings(const Sequence<PropertyValue>& aConfigP
             pIter->Value >>= aWindows;
             uno::Reference<XPropertySet> xProp(getDataSource());
             if ( xProp.is() )
-                xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aWindows));
+                xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,Any(aWindows));
         }
     }
 }
@@ -603,7 +603,7 @@ void ODBFilter::setPropertyInfo()
     {
         try
         {
-            xDataSource->setPropertyValue(PROPERTY_INFO,makeAny(aInfo));
+            xDataSource->setPropertyValue(PROPERTY_INFO,Any(aInfo));
         }
         catch (const Exception&)
         {

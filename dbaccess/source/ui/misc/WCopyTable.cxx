@@ -167,7 +167,7 @@ void ObjectCopySource::copyFilterAndSortingTo( const Reference< XConnection >& _
                 {
                     sStatement.append(aProperty.second);
                     sFilter = sFilter.replaceFirst(sSourceName,sTargetNameTemp);
-                    _rxObject->setPropertyValue( aProperty.first, makeAny(sFilter) );
+                    _rxObject->setPropertyValue( aProperty.first, Any(sFilter) );
                     sStatement.append(sFilter);
                 }
             }
@@ -269,7 +269,7 @@ bool NamedTableCopySource::isView() const
     OUString sTableType;
     try
     {
-        Reference< XResultSet > xTableDesc( m_xMetaData->getTables( makeAny( m_sTableCatalog ), m_sTableSchema, m_sTableBareName,
+        Reference< XResultSet > xTableDesc( m_xMetaData->getTables( Any( m_sTableCatalog ), m_sTableSchema, m_sTableBareName,
             Sequence< OUString >() ) );
         Reference< XRow > xTableDescRow( xTableDesc, UNO_QUERY_THROW );
         OSL_VERIFY( xTableDesc->next() );
@@ -341,7 +341,7 @@ Sequence< OUString > NamedTableCopySource::getPrimaryKeyColumnNames() const
 
     try
     {
-        Reference< XResultSet > xPKDesc( m_xMetaData->getPrimaryKeys( makeAny( m_sTableCatalog ), m_sTableSchema, m_sTableBareName ) );
+        Reference< XResultSet > xPKDesc( m_xMetaData->getPrimaryKeys( Any( m_sTableCatalog ), m_sTableSchema, m_sTableBareName ) );
         Reference< XRow > xPKDescRow( xPKDesc, UNO_QUERY_THROW );
         while ( xPKDesc->next() )
         {
@@ -844,7 +844,7 @@ IMPL_LINK_NOARG(OCopyTableWizard, ImplOKHdl, weld::Button&, void)
                         OUString sMsg(DBA_RES(STR_TABLEDESIGN_NO_PRIM_KEY));
                         SQLContext aError;
                         aError.Message = sMsg;
-                        ::rtl::Reference xRequest( new ::comphelper::OInteractionRequest( makeAny( aError ) ) );
+                        ::rtl::Reference xRequest( new ::comphelper::OInteractionRequest( Any( aError ) ) );
                         ::rtl::Reference xYes = new ::comphelper::OInteractionApprove;
                         xRequest->addContinuation( xYes );
                         xRequest->addContinuation( new ::comphelper::OInteractionDisapprove );
@@ -1075,7 +1075,7 @@ void OCopyTableWizard::appendColumns( Reference<XColumnsSupplier> const & _rxCol
             if(!_bKeyColumns)
                 dbaui::setColumnProperties(xColumn,pField);
             else
-                xColumn->setPropertyValue(PROPERTY_NAME,makeAny(pField->GetName()));
+                xColumn->setPropertyValue(PROPERTY_NAME,Any(pField->GetName()));
 
             xAppend->appendByDescriptor(xColumn);
             xColumn = nullptr;
@@ -1110,7 +1110,7 @@ void OCopyTableWizard::appendKey( Reference<XKeysSupplier> const & _rxSup, const
 
     Reference<XPropertySet> xKey = xKeyFactory->createDataDescriptor();
     OSL_ENSURE(xKey.is(),"Key is null!");
-    xKey->setPropertyValue(PROPERTY_TYPE,makeAny(KeyType::PRIMARY));
+    xKey->setPropertyValue(PROPERTY_TYPE,Any(KeyType::PRIMARY));
 
     Reference<XColumnsSupplier> xColSup(xKey,UNO_QUERY);
     if(xColSup.is())
@@ -1202,9 +1202,9 @@ Reference< XPropertySet > OCopyTableWizard::createTable()
         }
     }
 
-    xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
-    xTable->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
-    xTable->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
+    xTable->setPropertyValue(PROPERTY_CATALOGNAME,Any(sCatalog));
+    xTable->setPropertyValue(PROPERTY_SCHEMANAME,Any(sSchema));
+    xTable->setPropertyValue(PROPERTY_NAME,Any(sTable));
 
     Reference< XColumnsSupplier > xSuppDestinationColumns( xTable, UNO_QUERY );
     // now append the columns

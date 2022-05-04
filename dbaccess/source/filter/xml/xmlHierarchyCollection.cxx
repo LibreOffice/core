@@ -73,7 +73,7 @@ OXMLHierarchyCollection::OXMLHierarchyCollection( ODBFilter& rImport
             m_xContainer.set(xORB->createInstanceWithArguments(_sCollectionServiceName,aArguments),UNO_QUERY);
             Reference<XNameContainer> xNameContainer(_xParentContainer,UNO_QUERY);
             if ( xNameContainer.is() && !xNameContainer->hasByName(sName) )
-                xNameContainer->insertByName(sName,makeAny(m_xContainer));
+                xNameContainer->insertByName(sName,Any(m_xContainer));
         }
     }
     catch(Exception&)

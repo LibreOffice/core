@@ -118,7 +118,7 @@ OXMLServerDatabase::OXMLServerDatabase( ODBFilter& rImport,
     }
     try
     {
-        xDataSource->setPropertyValue(PROPERTY_URL,makeAny(sURL.makeStringAndClear()));
+        xDataSource->setPropertyValue(PROPERTY_URL,Any(sURL.makeStringAndClear()));
     }
     catch(const Exception&)
     {

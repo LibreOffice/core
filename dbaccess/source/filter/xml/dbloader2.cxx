@@ -474,7 +474,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             {
                 NamedDatabaseObject aSelection;
                 aSelection.Type = nInitialSelection;
-                xDocView->select( makeAny( aSelection ) );
+                xDocView->select( Any( aSelection ) );
             }
         }
 

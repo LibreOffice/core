@@ -210,7 +210,7 @@ namespace dbaui
         if ( _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() ) )
         {
             if ( m_pImpl->documentHasScriptSupport() )
-                return makeAny( Reference< XScriptInvocationContext >( this ) );
+                return Any( Reference< XScriptInvocationContext >( this ) );
             return Any();
         }
 

@@ -282,7 +282,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet, const OUStrin
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer, UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
-    findTableColumnsMatching_throw( makeAny(m_xTable), m_sUpdateTableName, xMeta, xQueryColumns, m_pKeyColumnNames );
+    findTableColumnsMatching_throw( Any(m_xTable), m_sUpdateTableName, xMeta, xQueryColumns, m_pKeyColumnNames );
 
     Reference< XSingleSelectQueryComposer> xSourceComposer(m_xComposer,UNO_QUERY);
     Reference< XMultiServiceFactory >  xFactory(m_xConnection, UNO_QUERY_THROW);
@@ -406,7 +406,7 @@ Any OKeySet::getBookmark()
 {
     OSL_ENSURE(m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin(),
         "getBookmark is only possible when we stand on a valid row!");
-    return makeAny(m_aKeyIter->first);
+    return Any(m_aKeyIter->first);
 }
 
 bool OKeySet::moveToBookmark( const Any& bookmark )
@@ -761,7 +761,7 @@ void OKeySet::executeInsert( const ORowSetRow& _rInsertRow,const OUString& i_sSQ
 
         m_aKeyIter = m_aKeyMap.emplace( aKeyIter->first + 1, OKeySetValue(aKeyRow,std::pair<sal_Int32,Reference<XRow> >(1,Reference<XRow>())) ).first;
         // now we set the bookmark for this row
-        (*_rInsertRow)[0] = makeAny(static_cast<sal_Int32>(m_aKeyIter->first));
+        (*_rInsertRow)[0] = Any(static_cast<sal_Int32>(m_aKeyIter->first));
         tryRefetch(_rInsertRow,bRefetch);
     }
 }

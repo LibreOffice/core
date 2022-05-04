@@ -52,7 +52,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                         bUserFound = true;
                         try
                         {
-                            xDataSource->setPropertyValue(PROPERTY_USER,makeAny(aIter.toString()));
+                            xDataSource->setPropertyValue(PROPERTY_USER,Any(aIter.toString()));
                         }
                         catch(const Exception&)
                         {
@@ -63,7 +63,7 @@ OXMLLogin::OXMLLogin( ODBFilter& rImport,
                 case XML_IS_PASSWORD_REQUIRED:
                     try
                     {
-                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,makeAny(IsXMLToken(aIter, XML_TRUE)));
+                        xDataSource->setPropertyValue(PROPERTY_ISPASSWORDREQUIRED,Any(IsXMLToken(aIter, XML_TRUE)));
                     }
                     catch(const Exception&)
                     {

@@ -94,10 +94,10 @@ void OXMLColumn::endFastElement(sal_Int32 )
         Reference<XPropertySet> xProp(xFac->createDataDescriptor());
         if ( xProp.is() )
         {
-            xProp->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
-            xProp->setPropertyValue(PROPERTY_HIDDEN,makeAny(m_bHidden));
+            xProp->setPropertyValue(PROPERTY_NAME,Any(m_sName));
+            xProp->setPropertyValue(PROPERTY_HIDDEN,Any(m_bHidden));
             if ( !m_sHelpMessage.isEmpty() )
-                xProp->setPropertyValue(PROPERTY_HELPTEXT,makeAny(m_sHelpMessage));
+                xProp->setPropertyValue(PROPERTY_HELPTEXT,Any(m_sHelpMessage));
 
             if ( m_aDefaultValue.hasValue() )
                 xProp->setPropertyValue(PROPERTY_CONTROLDEFAULT,m_aDefaultValue);

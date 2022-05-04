@@ -181,7 +181,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
             nControlPos = 0;
 
         // append the column
-        xColContainer->insertByIndex(nControlPos, makeAny(xNewCol));
+        xColContainer->insertByIndex(nControlPos, Any(xNewCol));
     }
     else if ( aURL.Complete == ".uno:FormSlots/ClearView" )
     {

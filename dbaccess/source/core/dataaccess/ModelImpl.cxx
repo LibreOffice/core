@@ -441,7 +441,7 @@ void ODatabaseModelImpl::impl_construct_nothrow()
                     pSettings->ValueType,
                     PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID
                 );
-                xSettingsSet->insert( makeAny( aProperty ) );
+                xSettingsSet->insert( Any( aProperty ) );
             }
             else
             {
@@ -976,7 +976,7 @@ Reference< XModel > ODatabaseModelImpl::createNewModel_deliverOwnership()
         try
         {
             Reference< XGlobalEventBroadcaster > xModelCollection = theGlobalEventBroadcaster::get( m_aContext );
-            xModelCollection->insert( makeAny( xModel ) );
+            xModelCollection->insert( Any( xModel ) );
         }
         catch( const Exception& )
         {
@@ -1032,68 +1032,68 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
     static const AsciiPropertyValue aKnownSettings[] =
     {
         // known JDBC settings
-        AsciiPropertyValue( "JavaDriverClass",            makeAny( OUString() ) ),
-        AsciiPropertyValue( "JavaDriverClassPath",        makeAny( OUString() ) ),
-        AsciiPropertyValue( "IgnoreCurrency",             makeAny( false ) ),
+        AsciiPropertyValue( "JavaDriverClass",            Any( OUString() ) ),
+        AsciiPropertyValue( "JavaDriverClassPath",        Any( OUString() ) ),
+        AsciiPropertyValue( "IgnoreCurrency",             Any( false ) ),
         // known settings for file-based drivers
-        AsciiPropertyValue( "Extension",                  makeAny( OUString() ) ),
-        AsciiPropertyValue( "CharSet",                    makeAny( OUString() ) ),
-        AsciiPropertyValue( "HeaderLine",                 makeAny( true ) ),
-        AsciiPropertyValue( "FieldDelimiter",             makeAny( OUString( "," ) ) ),
-        AsciiPropertyValue( "StringDelimiter",            makeAny( OUString( "\"" ) ) ),
-        AsciiPropertyValue( "DecimalDelimiter",           makeAny( OUString( "." ) ) ),
-        AsciiPropertyValue( "ThousandDelimiter",          makeAny( OUString() ) ),
-        AsciiPropertyValue( "ShowDeleted",                makeAny( false ) ),
+        AsciiPropertyValue( "Extension",                  Any( OUString() ) ),
+        AsciiPropertyValue( "CharSet",                    Any( OUString() ) ),
+        AsciiPropertyValue( "HeaderLine",                 Any( true ) ),
+        AsciiPropertyValue( "FieldDelimiter",             Any( OUString( "," ) ) ),
+        AsciiPropertyValue( "StringDelimiter",            Any( OUString( "\"" ) ) ),
+        AsciiPropertyValue( "DecimalDelimiter",           Any( OUString( "." ) ) ),
+        AsciiPropertyValue( "ThousandDelimiter",          Any( OUString() ) ),
+        AsciiPropertyValue( "ShowDeleted",                Any( false ) ),
         // known ODBC settings
-        AsciiPropertyValue( "SystemDriverSettings",       makeAny( OUString() ) ),
-        AsciiPropertyValue( "UseCatalog",                 makeAny( false ) ),
-        AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
+        AsciiPropertyValue( "SystemDriverSettings",       Any( OUString() ) ),
+        AsciiPropertyValue( "UseCatalog",                 Any( false ) ),
+        AsciiPropertyValue( "TypeInfoSettings",           Any( Sequence< Any >()) ),
         // settings related to auto increment handling
-        AsciiPropertyValue( "AutoIncrementCreation",      makeAny( OUString() ) ),
-        AsciiPropertyValue( "AutoRetrievingStatement",    makeAny( OUString() ) ),
-        AsciiPropertyValue( "IsAutoRetrievingEnabled",    makeAny( false ) ),
+        AsciiPropertyValue( "AutoIncrementCreation",      Any( OUString() ) ),
+        AsciiPropertyValue( "AutoRetrievingStatement",    Any( OUString() ) ),
+        AsciiPropertyValue( "IsAutoRetrievingEnabled",    Any( false ) ),
         // known LDAP driver settings
-        AsciiPropertyValue( "HostName",                   makeAny( OUString() ) ),
-        AsciiPropertyValue( "PortNumber",                 makeAny( sal_Int32(389) ) ),
-        AsciiPropertyValue( "BaseDN",                     makeAny( OUString() ) ),
-        AsciiPropertyValue( "MaxRowCount",                makeAny( sal_Int32(100) ) ),
+        AsciiPropertyValue( "HostName",                   Any( OUString() ) ),
+        AsciiPropertyValue( "PortNumber",                 Any( sal_Int32(389) ) ),
+        AsciiPropertyValue( "BaseDN",                     Any( OUString() ) ),
+        AsciiPropertyValue( "MaxRowCount",                Any( sal_Int32(100) ) ),
         // known MySQLNative driver settings
-        AsciiPropertyValue( "LocalSocket",                makeAny( OUString() ) ),
-        AsciiPropertyValue( "NamedPipe",                  makeAny( OUString() ) ),
+        AsciiPropertyValue( "LocalSocket",                Any( OUString() ) ),
+        AsciiPropertyValue( "NamedPipe",                  Any( OUString() ) ),
         // misc known driver settings
-        AsciiPropertyValue( "ParameterNameSubstitution",  makeAny( false ) ),
-        AsciiPropertyValue( "AddIndexAppendix",           makeAny( true ) ),
-        AsciiPropertyValue( "IgnoreDriverPrivileges",     makeAny( true ) ),
+        AsciiPropertyValue( "ParameterNameSubstitution",  Any( false ) ),
+        AsciiPropertyValue( "AddIndexAppendix",           Any( true ) ),
+        AsciiPropertyValue( "IgnoreDriverPrivileges",     Any( true ) ),
         AsciiPropertyValue( "ImplicitCatalogRestriction", ::cppu::UnoType< OUString >::get() ),
         AsciiPropertyValue( "ImplicitSchemaRestriction",  ::cppu::UnoType< OUString >::get() ),
         AsciiPropertyValue( "PrimaryKeySupport",          ::cppu::UnoType< sal_Bool >::get() ),
-        AsciiPropertyValue( "ShowColumnDescription",      makeAny( false ) ),
+        AsciiPropertyValue( "ShowColumnDescription",      Any( false ) ),
         // known SDB level settings
-        AsciiPropertyValue( "NoNameLengthLimit",          makeAny( false ) ),
-        AsciiPropertyValue( "AppendTableAliasName",       makeAny( false ) ),
-        AsciiPropertyValue( "GenerateASBeforeCorrelationName",  makeAny( false ) ),
-        AsciiPropertyValue( "ColumnAliasInOrderBy",       makeAny( true ) ),
-        AsciiPropertyValue( "EnableSQL92Check",           makeAny( false ) ),
-        AsciiPropertyValue( "BooleanComparisonMode",      makeAny( BooleanComparisonMode::EQUAL_INTEGER ) ),
-        AsciiPropertyValue( "TableTypeFilterMode",        makeAny( sal_Int32(3) ) ),
-        AsciiPropertyValue( "RespectDriverResultSetType", makeAny( false ) ),
-        AsciiPropertyValue( "UseSchemaInSelect",          makeAny( true ) ),
-        AsciiPropertyValue( "UseCatalogInSelect",         makeAny( true ) ),
-        AsciiPropertyValue( "EnableOuterJoinEscape",      makeAny( true ) ),
-        AsciiPropertyValue( "PreferDosLikeLineEnds",      makeAny( false ) ),
-        AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( true ) ),
-        AsciiPropertyValue( "EscapeDateTime",             makeAny( true ) ),
+        AsciiPropertyValue( "NoNameLengthLimit",          Any( false ) ),
+        AsciiPropertyValue( "AppendTableAliasName",       Any( false ) ),
+        AsciiPropertyValue( "GenerateASBeforeCorrelationName",  Any( false ) ),
+        AsciiPropertyValue( "ColumnAliasInOrderBy",       Any( true ) ),
+        AsciiPropertyValue( "EnableSQL92Check",           Any( false ) ),
+        AsciiPropertyValue( "BooleanComparisonMode",      Any( BooleanComparisonMode::EQUAL_INTEGER ) ),
+        AsciiPropertyValue( "TableTypeFilterMode",        Any( sal_Int32(3) ) ),
+        AsciiPropertyValue( "RespectDriverResultSetType", Any( false ) ),
+        AsciiPropertyValue( "UseSchemaInSelect",          Any( true ) ),
+        AsciiPropertyValue( "UseCatalogInSelect",         Any( true ) ),
+        AsciiPropertyValue( "EnableOuterJoinEscape",      Any( true ) ),
+        AsciiPropertyValue( "PreferDosLikeLineEnds",      Any( false ) ),
+        AsciiPropertyValue( "FormsCheckRequiredFields",   Any( true ) ),
+        AsciiPropertyValue( "EscapeDateTime",             Any( true ) ),
 
         // known services to handle database tasks
-        AsciiPropertyValue( "TableAlterationServiceName", makeAny( OUString() ) ),
-        AsciiPropertyValue( "TableRenameServiceName",     makeAny( OUString() ) ),
-        AsciiPropertyValue( "ViewAlterationServiceName",  makeAny( OUString() ) ),
-        AsciiPropertyValue( "ViewAccessServiceName",      makeAny( OUString() ) ),
-        AsciiPropertyValue( "CommandDefinitions",         makeAny( OUString() ) ),
-        AsciiPropertyValue( "Forms",                      makeAny( OUString() ) ),
-        AsciiPropertyValue( "Reports",                    makeAny( OUString() ) ),
-        AsciiPropertyValue( "KeyAlterationServiceName",   makeAny( OUString() ) ),
-        AsciiPropertyValue( "IndexAlterationServiceName", makeAny( OUString() ) ),
+        AsciiPropertyValue( "TableAlterationServiceName", Any( OUString() ) ),
+        AsciiPropertyValue( "TableRenameServiceName",     Any( OUString() ) ),
+        AsciiPropertyValue( "ViewAlterationServiceName",  Any( OUString() ) ),
+        AsciiPropertyValue( "ViewAccessServiceName",      Any( OUString() ) ),
+        AsciiPropertyValue( "CommandDefinitions",         Any( OUString() ) ),
+        AsciiPropertyValue( "Forms",                      Any( OUString() ) ),
+        AsciiPropertyValue( "Reports",                    Any( OUString() ) ),
+        AsciiPropertyValue( "KeyAlterationServiceName",   Any( OUString() ) ),
+        AsciiPropertyValue( "IndexAlterationServiceName", Any( OUString() ) ),
 
         AsciiPropertyValue()
     };
@@ -1402,7 +1402,7 @@ bool ODatabaseModelImpl::hasTrustedScriptingSignature(bool bAllowUIToAddAuthor)
                 aRequest.DocumentSignatureInformation = aInfo;
                 aRequest.DocumentVersion = aODFVersion;
                 aRequest.Classification = task::InteractionClassification_QUERY;
-                bResult = SfxMedium::CallApproveHandler(xInteraction, uno::makeAny(aRequest), true);
+                bResult = SfxMedium::CallApproveHandler(xInteraction, uno::Any(aRequest), true);
             }
         }
     }

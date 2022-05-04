@@ -205,9 +205,9 @@ namespace dbaui
                     bool bModified = ( xModi.is() && xModi->isModified() );
 
                     Sequence< OUString > aNewTableFilter { "%" };
-                    xProp->setPropertyValue(PROPERTY_TABLEFILTER,makeAny(aNewTableFilter));
+                    xProp->setPropertyValue(PROPERTY_TABLEFILTER,Any(aNewTableFilter));
 
-                    xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, makeAny( Sequence< OUString >() ) );
+                    xProp->setPropertyValue( PROPERTY_TABLETYPEFILTER, Any( Sequence< OUString >() ) );
                     Reference< css::lang::XEventListener> xEvt;
                     aErrorInfo = ::dbaui::createConnection(xProp, m_xORB, xEvt, m_xCurrentConnection);
 

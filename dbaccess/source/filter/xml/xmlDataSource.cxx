@@ -61,7 +61,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 case XML_CONNECTION_RESOURCE:
                     try
                     {
-                        xDataSource->setPropertyValue(PROPERTY_URL,makeAny(aIter.toString()));
+                        xDataSource->setPropertyValue(PROPERTY_URL,Any(aIter.toString()));
                     }
                     catch(const Exception&)
                     {
@@ -71,7 +71,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
                 case XML_SUPPRESS_VERSION_COLUMNS:
                     try
                     {
-                        xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(IsXMLToken(aIter, XML_TRUE)));
+                        xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,Any(IsXMLToken(aIter, XML_TRUE)));
                         bFoundSuppressVersionColumns = true;
                     }
                     catch(const Exception&)
@@ -180,7 +180,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
     {
         try
         {
-            xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,makeAny(true));
+            xDataSource->setPropertyValue(PROPERTY_SUPPRESSVERSIONCL,Any(true));
         }
         catch(const Exception&)
         {

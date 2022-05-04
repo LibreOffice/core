@@ -286,7 +286,7 @@ void ODefinitionContainer::notifyByName( ResettableMutexGuard& _rGuard, const OU
     if ( !rContainer.getLength() )
         return;
 
-    ContainerEvent aEvent( *this, makeAny( _rName ), makeAny( _xNewElement ), makeAny( _xOldElement ) );
+    ContainerEvent aEvent( *this, Any( _rName ), Any( _xNewElement ), Any( _xOldElement ) );
 
     _rGuard.clear();
     switch ( _eOperation )
@@ -385,14 +385,14 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex )
         // and update the name-access map
     }
 
-    return makeAny(xProp);
+    return Any(xProp);
 }
 
 Any SAL_CALL ODefinitionContainer::getByName( const OUString& _rName )
 {
     MutexGuard aGuard(m_aMutex);
 
-    return makeAny( implGetByName( _rName, true ) );
+    return Any( implGetByName( _rName, true ) );
 }
 
 Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName, bool _bReadIfNecessary)

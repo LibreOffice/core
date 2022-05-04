@@ -213,7 +213,7 @@ namespace dbaui
                 Reference< com::sun::star::beans::XPropertySet > xStatementProps(xStatement, UNO_QUERY_THROW);
                 try
                 {
-                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(false));
+                    xStatementProps->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, Any(false));
                 }
                 catch( const Exception& )
                 {

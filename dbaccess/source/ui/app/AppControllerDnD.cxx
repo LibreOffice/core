@@ -744,11 +744,11 @@ bool OApplicationController::paste( ElementType _eType, const svx::ODataAccessDe
                         ::comphelper::copyProperties(xQuery,xNewQuery);
                     else
                     {
-                        xNewQuery->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
-                        xNewQuery->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,makeAny(bEscapeProcessing));
+                        xNewQuery->setPropertyValue(PROPERTY_COMMAND,Any(sCommand));
+                        xNewQuery->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,Any(bEscapeProcessing));
                     }
                     // insert
-                    xDestQueries->insertByName( sTargetName, makeAny(xNewQuery) );
+                    xDestQueries->insertByName( sTargetName, Any(xNewQuery) );
                     xNewQuery.set(xDestQueries->getByName( sTargetName),UNO_QUERY);
                     if ( xQuery.is() && xNewQuery.is() )
                     {

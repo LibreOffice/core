@@ -39,7 +39,7 @@ namespace dbaccess
 {
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::container::NoSuchElementException;
@@ -196,7 +196,7 @@ namespace dbaccess
         }
 
         ::utl::OConfigurationNode aNewNode( m_aConfigurationRoot.createNode( sNewNodeName ) );
-        aNewNode.setNodeValue( getNameNodeName(), makeAny( _rName ) );
+        aNewNode.setNodeValue( getNameNodeName(), Any( _rName ) );
         return aNewNode;
     }
 
@@ -280,7 +280,7 @@ namespace dbaccess
         ::utl::OConfigurationNode aDataSourceRegistration = impl_checkValidName_throw_must_not_exist(Name);
 
         // register
-        aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( Location ) );
+        aDataSourceRegistration.setNodeValue( getLocationNodeName(), Any( Location ) );
         m_aConfigurationRoot.commit();
 
         // notify
@@ -330,7 +330,7 @@ namespace dbaccess
         OSL_VERIFY( aDataSourceRegistration.getNodeValue( getLocationNodeName() ) >>= sOldLocation );
 
         // change
-        aDataSourceRegistration.setNodeValue( getLocationNodeName(), makeAny( NewLocation ) );
+        aDataSourceRegistration.setNodeValue( getLocationNodeName(), Any( NewLocation ) );
         m_aConfigurationRoot.commit();
 
         // notify

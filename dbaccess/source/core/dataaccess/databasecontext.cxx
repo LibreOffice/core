@@ -317,7 +317,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
             SQLException aError;
             aError.Message = sErrorMessage.replaceAll( "$file$", aTransformer.get( ::svt::OFileNotation::N_SYSTEM ) );
 
-            throw WrappedTargetException( _sURL, *this, makeAny( aError ) );
+            throw WrappedTargetException( _sURL, *this, Any( aError ) );
         }
         throw WrappedTargetException( _sURL, *this, ::cppu::getCaughtException() );
     }
@@ -440,7 +440,7 @@ void ODatabaseContext::registerObject(const OUString& _rName, const Reference< X
     }
 
     // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), makeAny(_rxObject), Any());
+    ContainerEvent aEvent(static_cast<XContainer*>(this), Any(_rName), Any(_rxObject), Any());
     m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 }
 
@@ -528,7 +528,7 @@ void ODatabaseContext::revokeObject(const OUString& _rName)
         m_aDatabaseObjects.erase( aExistent );
 
     // notify our container listeners
-    ContainerEvent aEvent( *this, makeAny( _rName ), Any(), Any() );
+    ContainerEvent aEvent( *this, Any( _rName ), Any(), Any() );
     aGuard.clear();
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
 }
@@ -611,7 +611,7 @@ Any ODatabaseContext::getByName(const OUString& _rName)
     {
         Reference< XInterface > xExistent = getObject( _rName );
         if ( xExistent.is() )
-            return makeAny( xExistent );
+            return Any( xExistent );
 
         // see whether this is a registered name
         OUString sURL;
@@ -628,7 +628,7 @@ Any ODatabaseContext::getByName(const OUString& _rName)
         if ( !xExistent.is() )
             // try to load this as URL
             xExistent = loadObjectFromURL( _rName, sURL );
-        return makeAny( xExistent );
+        return Any( xExistent );
     }
     catch (const NoSuchElementException&)
     {   // let these exceptions through
@@ -736,7 +736,7 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
 
     // ... whose BasicManager has just been created, then add the global DatabaseDocument variable to its scope.
     if ( xDatabaseDocument.is() )
-        _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", makeAny( xDatabaseDocument ) );
+        _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", Any( xDatabaseDocument ) );
 #endif
 }
 

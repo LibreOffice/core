@@ -81,7 +81,7 @@ OXMLComponent::OXMLComponent( ODBFilter& rImport
         Reference< XMultiServiceFactory > xORB( _xParentContainer, UNO_QUERY_THROW );
         Reference< XInterface > xComponent( xORB->createInstanceWithArguments( _sComponentServiceName, aArguments ) );
         Reference< XNameContainer > xNameContainer( _xParentContainer, UNO_QUERY_THROW );
-        xNameContainer->insertByName( sName, makeAny( xComponent ) );
+        xNameContainer->insertByName( sName, Any( xComponent ) );
     }
     catch(Exception&)
     {

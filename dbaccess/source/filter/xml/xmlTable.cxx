@@ -141,12 +141,12 @@ void OXMLTable::setProperties(uno::Reference< XPropertySet > & _xProp )
     {
         if ( _xProp.is() )
         {
-            _xProp->setPropertyValue(PROPERTY_APPLYFILTER,makeAny(m_bApplyFilter));
-            _xProp->setPropertyValue(PROPERTY_FILTER,makeAny(m_sFilterStatement));
+            _xProp->setPropertyValue(PROPERTY_APPLYFILTER,Any(m_bApplyFilter));
+            _xProp->setPropertyValue(PROPERTY_FILTER,Any(m_sFilterStatement));
 
             if ( _xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_APPLYORDER) )
-                _xProp->setPropertyValue(PROPERTY_APPLYORDER,makeAny(m_bApplyOrder));
-            _xProp->setPropertyValue(PROPERTY_ORDER,makeAny(m_sOrderStatement));
+                _xProp->setPropertyValue(PROPERTY_APPLYORDER,Any(m_bApplyOrder));
+            _xProp->setPropertyValue(PROPERTY_ORDER,Any(m_sOrderStatement));
         }
     }
     catch(Exception&)
@@ -180,7 +180,7 @@ void OXMLTable::endFastElement(sal_Int32 )
                 }
             }
 
-            xNameContainer->insertByName(m_sName,makeAny(m_xTable));
+            xNameContainer->insertByName(m_sName,Any(m_xTable));
         }
     }
     catch(Exception&)

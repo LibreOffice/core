@@ -210,7 +210,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
     const SfxStringItem* pUser = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_USER);
     if (pUser && pUser->GetValue().getLength())
         aReturn.emplace_back(  "user", 0,
-                            makeAny(pUser->GetValue()), PropertyState_DIRECT_VALUE);
+                            Any(pUser->GetValue()), PropertyState_DIRECT_VALUE);
 
     // check if the connection type requires a password
     if (hasAuthentication(*m_pItemSetHelper->getOutputSet()))
@@ -260,7 +260,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
             aRequest.HasAccount  = false;
             // aRequest.Account
 
-            rtl::Reference<comphelper::OInteractionRequest> pRequest = new comphelper::OInteractionRequest(makeAny(aRequest));
+            rtl::Reference<comphelper::OInteractionRequest> pRequest = new comphelper::OInteractionRequest(Any(aRequest));
 
             // build an interaction request
             // two continuations (Ok and Cancel)
@@ -294,7 +294,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
 
         if (!sPassword.isEmpty())
             aReturn.emplace_back( "password", 0,
-                               makeAny(sPassword), PropertyState_DIRECT_VALUE);
+                               Any(sPassword), PropertyState_DIRECT_VALUE);
     }
 
     if ( !aReturn.empty() )
@@ -320,7 +320,7 @@ void ODbDataSourceAdministrationHelper::successfullyConnected()
             OUString sPassword = pPassword->GetValue();
 
             Reference< XPropertySet > xCurrentDatasource = getCurrentDataSource();
-            lcl_putProperty(xCurrentDatasource,m_aDirectPropTranslator[DSID_PASSWORD], makeAny(sPassword));
+            lcl_putProperty(xCurrentDatasource,m_aDirectPropTranslator[DSID_PASSWORD], Any(sPassword));
         }
     }
 }
@@ -648,7 +648,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
             {
                 if ( sUrlProp == elem.second )
                 {
-                    Any aValue(makeAny(getConnectionURL()));
+                    Any aValue(getConnectionURL());
                     //  aValue <<= OUString();
                     lcl_putProperty(_rxDest, elem.second,aValue);
                 }
@@ -671,7 +671,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
     // overwrite and extend them
     fillDatasourceInfo(_rSource, aInfo);
     // and propagate the (newly composed) sequence to the set
-    lcl_putProperty(_rxDest,PROPERTY_INFO, makeAny(aInfo));
+    lcl_putProperty(_rxDest,PROPERTY_INFO, Any(aInfo));
 }
 
 void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rSource, Sequence< css::beans::PropertyValue >& _rInfo)
@@ -700,7 +700,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
                 OUString sCharSet;
                 implTranslateProperty(pCurrent) >>= sCharSet;
                 if ( !sCharSet.isEmpty() )
-                    aRelevantSettings.insert(PropertyValue(aTranslation->second, 0, makeAny(sCharSet), PropertyState_DIRECT_VALUE));
+                    aRelevantSettings.insert(PropertyValue(aTranslation->second, 0, Any(sCharSet), PropertyState_DIRECT_VALUE));
             }
             else
                 aRelevantSettings.insert(PropertyValue(aTranslation->second, 0, implTranslateProperty(pCurrent), PropertyState_DIRECT_VALUE));
@@ -770,7 +770,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // here we have a special entry for types from oracle
     if ( aTypeSettings.hasElements() )
     {
-        aRelevantSettings.insert(PropertyValue("TypeInfoSettings", 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
+        aRelevantSettings.insert(PropertyValue("TypeInfoSettings", 0, Any(aTypeSettings), PropertyState_DIRECT_VALUE));
     }
 
     // check which values are still left ('cause they were not present in the original sequence, but are to be set)

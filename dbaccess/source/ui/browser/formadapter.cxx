@@ -1323,7 +1323,7 @@ Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle)
     OSL_ENSURE(xSet.is(), "SAL_CALL SbaXFormAdapter::getFastPropertyValue : have no master form !");
 
     if (m_nNamePropHandle == nHandle)
-        return makeAny(m_sName);
+        return Any(m_sName);
 
     return xSet->getFastPropertyValue(nHandle);
 }
@@ -1336,7 +1336,7 @@ OUString SAL_CALL SbaXFormAdapter::getName()
 
 void SAL_CALL SbaXFormAdapter::setName(const OUString& aName)
 {
-    setPropertyValue(PROPERTY_NAME, makeAny(aName));
+    setPropertyValue(PROPERTY_NAME, Any(aName));
 }
 
 // css::io::XPersistObject
@@ -1614,7 +1614,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OU
     try
     {
         if (pNewElName)
-            xElementSet->setPropertyValue(PROPERTY_NAME, makeAny(*pNewElName));
+            xElementSet->setPropertyValue(PROPERTY_NAME, Any(*pNewElName));
 
         xElementSet->getPropertyValue(PROPERTY_NAME) >>= sName;
     }
@@ -1693,7 +1693,7 @@ Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName)
     {
         throw css::container::NoSuchElementException();
     }
-    return makeAny(m_aChildren[nPos]);
+    return Any(m_aChildren[nPos]);
 }
 
 Sequence< OUString > SAL_CALL SbaXFormAdapter::getElementNames()
@@ -1822,7 +1822,7 @@ Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex)
         throw css::lang::IndexOutOfBoundsException();
 
     Reference< css::form::XFormComponent >  xElement = *(m_aChildren.begin() + _rIndex);
-    return makeAny(xElement);
+    return Any(xElement);
 }
 
 // css::container::XContainer

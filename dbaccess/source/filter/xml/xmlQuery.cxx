@@ -90,20 +90,20 @@ void OXMLQuery::setProperties(Reference< XPropertySet > & _xProp )
         {
             OXMLTable::setProperties(_xProp);
 
-            _xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sCommand));
-            _xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,makeAny(m_bEscapeProcessing));
+            _xProp->setPropertyValue(PROPERTY_COMMAND,Any(m_sCommand));
+            _xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,Any(m_bEscapeProcessing));
 
             if ( !m_sTable.isEmpty() )
-                _xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,makeAny(m_sTable));
+                _xProp->setPropertyValue(PROPERTY_UPDATE_TABLENAME,Any(m_sTable));
             if ( !m_sCatalog.isEmpty() )
-                _xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,makeAny(m_sCatalog));
+                _xProp->setPropertyValue(PROPERTY_UPDATE_CATALOGNAME,Any(m_sCatalog));
             if ( !m_sSchema.isEmpty() )
-                _xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,makeAny(m_sSchema));
+                _xProp->setPropertyValue(PROPERTY_UPDATE_SCHEMANAME,Any(m_sSchema));
 
             const ODBFilter::TPropertyNameMap& rSettings = GetOwnImport().getQuerySettings();
             ODBFilter::TPropertyNameMap::const_iterator aFind = rSettings.find(m_sName);
             if ( aFind != rSettings.end() )
-                _xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,makeAny(aFind->second));
+                _xProp->setPropertyValue(PROPERTY_LAYOUTINFORMATION,Any(aFind->second));
         }
     }
     catch(Exception&)
