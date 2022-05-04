@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "483cc8a5_aea666c3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-04T14:06:38Z",
+      "side": 1,
+      "message": "Updating the commit message in Gerrit will mask Jenkins verification; I wonder if Infra can do anything about it.",
+      "revId": "2592b3c493bc8f94ab38c0d60f9d7d9b238a4d08",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
