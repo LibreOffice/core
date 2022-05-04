@@ -406,7 +406,7 @@ extern "C" int unopkg_main()
                 {
                     beans::NamedValue nvSuppress(
                         "SUPPRESS_LICENSE", option_suppressLicense ?
-                        makeAny(OUString("1")):makeAny(OUString("0")));
+                        Any(OUString("1")):Any(OUString("0")));
                     xExtensionManager->addExtension(
                             cmdPackage, Sequence<beans::NamedValue>(&nvSuppress, 1),
                             repository, Reference<task::XAbortChannel>(), xCmdEnv);

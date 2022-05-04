@@ -197,7 +197,7 @@ bool MigrationImpl::doMigration()
 
 
             OUString aOldCfgDataPath = m_aInfo.userdata + "/user/config/soffice.cfg/modules/" + i.sModuleShortName;
-            uno::Sequence< uno::Any > lArgs {uno::makeAny(aOldCfgDataPath), uno::makeAny(embed::ElementModes::READ)};
+            uno::Sequence< uno::Any > lArgs {uno::Any(aOldCfgDataPath), uno::Any(embed::ElementModes::READ)};
 
             uno::Reference< uno::XComponentContext > xContext(comphelper::getProcessComponentContext());
             uno::Reference< lang::XSingleServiceFactory > xStorageFactory(embed::FileSystemStorageFactory::create(xContext));
@@ -261,7 +261,7 @@ void MigrationImpl::setMigrationCompleted()
 {
     try {
         uno::Reference< XPropertySet > aPropertySet(getConfigAccess("org.openoffice.Setup/Office", true), uno::UNO_QUERY_THROW);
-        aPropertySet->setPropertyValue("MigrationCompleted", uno::makeAny(true));
+        aPropertySet->setPropertyValue("MigrationCompleted", uno::Any(true));
         uno::Reference< XChangesBatch >(aPropertySet, uno::UNO_QUERY_THROW)->commitChanges();
     } catch (...) {
         // fail silently
@@ -703,7 +703,7 @@ uno::Reference< XNameAccess > MigrationImpl::getConfigAccess(const char* pPath, 
                 comphelper::getProcessComponentContext()));
 
         // access the provider
-        uno::Sequence< uno::Any > theArgs {uno::makeAny(sConfigURL)};
+        uno::Sequence< uno::Any > theArgs {uno::Any(sConfigURL)};
         xNameAccess.set(
             theConfigProvider->createInstanceWithArguments(
                 sAccessSrvc, theArgs ), uno::UNO_QUERY_THROW );
@@ -753,9 +753,9 @@ void MigrationImpl::runServices()
     uno::Sequence< uno::Any > seqArguments(3);
     auto pseqArguments = seqArguments.getArray();
     pseqArguments[0] <<= NamedValue("Productname",
-                                   uno::makeAny(m_aInfo.productname));
+                                   uno::Any(m_aInfo.productname));
     pseqArguments[1] <<= NamedValue("UserData",
-                                   uno::makeAny(m_aInfo.userdata));
+                                   uno::Any(m_aInfo.userdata));
 
 
     // create an instance of every migration service
@@ -775,7 +775,7 @@ void MigrationImpl::runServices()
                     seqExtDenyList = comphelper::arrayToSequence< OUString >(
                                           rMigration.excludeExtensions.data(), nSize );
                 pseqArguments[2] <<= NamedValue("ExtensionDenyList",
-                                               uno::makeAny( seqExtDenyList ));
+                                               uno::Any( seqExtDenyList ));
 
                 xMigrationJob.set(
                     xContext->getServiceManager()->createInstanceWithArgumentsAndContext(rMigration.service, seqArguments, xContext),
@@ -802,8 +802,8 @@ std::vector< MigrationModuleInfo > MigrationImpl::detectUIChangesForAllModules()
     static const OUStringLiteral MENUBAR(u"menubar");
     static const OUStringLiteral TOOLBAR(u"toolbar");
 
-    uno::Sequence< uno::Any > lArgs {uno::makeAny(m_aInfo.userdata + "/user/config/soffice.cfg/modules"),
-                                     uno::makeAny(embed::ElementModes::READ)};
+    uno::Sequence< uno::Any > lArgs {uno::Any(m_aInfo.userdata + "/user/config/soffice.cfg/modules"),
+                                     uno::Any(embed::ElementModes::READ)};
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
         embed::FileSystemStorageFactory::create(comphelper::getProcessComponentContext()));
@@ -974,13 +974,13 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         if (nIndex == -1) {
             auto aProperties = vcl::CommandInfoProvider::GetCommandProperties(elem.m_sCommandURL, sModuleIdentifier);
             uno::Sequence< beans::PropertyValue > aPropSeq {
-                beans::PropertyValue(ITEM_DESCRIPTOR_COMMANDURL, 0, uno::makeAny(elem.m_sCommandURL), beans::PropertyState_DIRECT_VALUE),
-                beans::PropertyValue(ITEM_DESCRIPTOR_LABEL, 0, uno::makeAny(vcl::CommandInfoProvider::GetLabelForCommand(aProperties)), beans::PropertyState_DIRECT_VALUE),
-                beans::PropertyValue(ITEM_DESCRIPTOR_CONTAINER, 0, uno::makeAny(elem.m_xPopupMenu), beans::PropertyState_DIRECT_VALUE)
+                beans::PropertyValue(ITEM_DESCRIPTOR_COMMANDURL, 0, uno::Any(elem.m_sCommandURL), beans::PropertyState_DIRECT_VALUE),
+                beans::PropertyValue(ITEM_DESCRIPTOR_LABEL, 0, uno::Any(vcl::CommandInfoProvider::GetLabelForCommand(aProperties)), beans::PropertyState_DIRECT_VALUE),
+                beans::PropertyValue(ITEM_DESCRIPTOR_CONTAINER, 0, uno::Any(elem.m_xPopupMenu), beans::PropertyState_DIRECT_VALUE)
             };
 
             if (elem.m_sPrevSibling.isEmpty())
-                xTemp->insertByIndex(0, uno::makeAny(aPropSeq));
+                xTemp->insertByIndex(0, uno::Any(aPropSeq));
             else {
                 sal_Int32 nCount = xTemp->getCount();
                 sal_Int32 i = 0;
@@ -999,7 +999,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                         break;
                 }
 
-                xTemp->insertByIndex(i+1, uno::makeAny(aPropSeq));
+                xTemp->insertByIndex(i+1, uno::Any(aPropSeq));
             }
         }
     }

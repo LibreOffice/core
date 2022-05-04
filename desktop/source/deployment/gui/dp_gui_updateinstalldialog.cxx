@@ -441,7 +441,7 @@ void UpdateInstallDialog::Thread::installExtensions()
             }
             if (!updateData.aUpdateSource.is() && !updateData.sLocalURL.isEmpty())
             {
-                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
+                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::Any(OUString("1")));
                 if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.sLocalURL, css::uno::Sequence<css::beans::NamedValue>(&prop, 1),
@@ -458,7 +458,7 @@ void UpdateInstallDialog::Thread::installExtensions()
                 //add extension. Currently it contains only "SUPPRESS_LICENSE". So it could happen
                 //that a license is displayed when updating from the shared repository, although the
                 //shared extension was installed using "SUPPRESS_LICENSE".
-                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::makeAny(OUString("1")));
+                css::beans::NamedValue prop("EXTENSION_UPDATE", css::uno::Any(OUString("1")));
                 if (!updateData.bIsShared)
                     xExtension = m_dialog.getExtensionManager()->addExtension(
                         updateData.aUpdateSource->getURL(), css::uno::Sequence<css::beans::NamedValue>(&prop, 1),

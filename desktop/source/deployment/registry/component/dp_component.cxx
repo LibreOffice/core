@@ -1496,7 +1496,7 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
                     "/singletons"
                     "/com.sun.star.reflection.theTypeDescriptionManager"),
                 css::uno::UNO_QUERY_THROW)->insert(
-                    css::uno::makeAny(expandUnoRcUrl(url)));
+                    css::uno::Any(expandUnoRcUrl(url)));
         }
 
         that->addToUnoRc( m_jarFile ? RCITEM_JAR_TYPELIB : RCITEM_RDB_TYPELIB,
@@ -1514,7 +1514,7 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
                     "/singletons"
                     "/com.sun.star.reflection.theTypeDescriptionManager"),
                 css::uno::UNO_QUERY_THROW)->remove(
-                    css::uno::makeAny(expandUnoRcUrl(url)));
+                    css::uno::Any(expandUnoRcUrl(url)));
         }
     }
 }
@@ -1670,13 +1670,13 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
             // supporting the extended XSet semantics:
             css::uno::Sequence< css::beans::NamedValue > args
             {
-                { "uri", css::uno::makeAny(expandUnoRcUrl(url)) },
-                { "component-context", css::uno::makeAny(context) }
+                { "uri", css::uno::Any(expandUnoRcUrl(url)) },
+                { "component-context", css::uno::Any(context) }
             };
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
                 css::uno::UNO_QUERY_THROW);
-            smgr->insert(css::uno::makeAny(args));
+            smgr->insert(css::uno::Any(args));
         }
         that->addToUnoRc(RCITEM_COMPONENTS, url, xCmdEnv);
     } else { // revoke
@@ -1684,11 +1684,11 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
         if (!startup) {
             // This relies on the root component context's service manager
             // supporting the extended XSet semantics:
-            css::uno::Sequence< css::beans::NamedValue > args { { "uri", css::uno::makeAny(expandUnoRcUrl(url)) } };
+            css::uno::Sequence< css::beans::NamedValue > args { { "uri", css::uno::Any(expandUnoRcUrl(url)) } };
             css::uno::Reference< css::container::XSet > smgr(
                 that->getRootContext()->getServiceManager(),
                 css::uno::UNO_QUERY_THROW);
-            smgr->remove(css::uno::makeAny(args));
+            smgr->remove(css::uno::Any(args));
         }
         that->releaseObject(url);
         that->revokeEntryFromDb(url); // in case it got added with old code
