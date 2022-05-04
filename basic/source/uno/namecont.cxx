@@ -2887,7 +2887,7 @@ void SAL_CALL SfxLibraryContainer::setPropertyValue(const OUString& aPropertyNam
 css::uno::Any SAL_CALL SfxLibraryContainer::getPropertyValue(const OUString& aPropertyName)
 {
     if (aPropertyName == sVBATextEncodingPropName)
-        return uno::makeAny(meVBATextEncoding);
+        return uno::Any(meVBATextEncoding);
     throw UnknownPropertyException(aPropertyName, static_cast<uno::XWeak*>(this));
 }
 

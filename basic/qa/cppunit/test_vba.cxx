@@ -236,8 +236,8 @@ void VBATest::testMiscOLEStuff()
 
     uno::Sequence< uno::Any > aArgs
     {
-        uno::makeAny(sPath),
-        uno::makeAny(OUString(o3tl::toU(pODBCDriverName)))
+        uno::Any(sPath),
+        uno::Any(OUString(o3tl::toU(pODBCDriverName)))
     };
 
     for ( sal_uInt32  i=0; i<std::size( macroSource ); ++i )
