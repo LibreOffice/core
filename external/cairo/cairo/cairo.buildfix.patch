@@ -13,7 +13,7 @@ diff -ru cairo-1.17.4.orig/build/Makefile.win32.features cairo-1.17.4/build/Make
 diff -ru cairo-1.17.4.orig/configure cairo-1.17.4/configure
 --- misc/cairo-1.17.4.orig/configure	2021-08-29 19:43:26.966436173 +0100
 +++ misc/build/cairo-1.17.4/configure	2021-08-29 19:43:47.500506604 +0100
-@@ -21080,61 +21080,12 @@
+@@ -17149,61 +17149,12 @@
  rm -f confcache
  
  
@@ -75,7 +75,7 @@ diff -ru cairo-1.17.4.orig/configure cairo-1.17.4/configure
  save_LIBS="$LIBS"
  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for lzo2a_decompress in -llzo2" >&5
  $as_echo_n "checking for lzo2a_decompress in -llzo2... " >&6; }
-@@ -30670,7 +30621,7 @@
+@@ -24319,7 +24270,7 @@
      { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FREETYPE_VERSION - OK" >&5
  $as_echo "$FREETYPE_VERSION - OK" >&6; }
  			   ft_NONPKGCONFIG_CFLAGS=`$FREETYPE_CONFIG --cflags`
@@ -84,7 +84,7 @@ diff -ru cairo-1.17.4.orig/configure cairo-1.17.4/configure
      else { $as_echo "$as_me:${as_lineno-$LINENO}: result: $FREETYPE_VERSION - Too old" >&5
  $as_echo "$FREETYPE_VERSION - Too old" >&6; }
  			   use_ft="no ($FREETYPE_VERSION found; version $FREETYPE_MIN_VERSION from release $FREETYPE_MIN_RELEASE required)"
-@@ -30680,7 +30631,7 @@
+@@ -24329,7 +24280,7 @@
      fi
  
    ft_CFLAGS="$FREETYPE_CFLAGS"
@@ -93,7 +93,7 @@ diff -ru cairo-1.17.4.orig/configure cairo-1.17.4/configure
  
  
  		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's FreeType font backend feature could be enabled" >&5
-@@ -31321,7 +31272,7 @@
+@@ -24962,7 +24913,7 @@
  
      # The ps backend requires zlib.
      use_ps=$have_libz
@@ -102,7 +102,7 @@ diff -ru cairo-1.17.4.orig/configure cairo-1.17.4/configure
  
  
  		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's PostScript surface backend feature could be enabled" >&5
-@@ -31718,7 +31669,7 @@
+@@ -25355,7 +25306,7 @@
  
      # The pdf backend requires zlib.
      use_pdf=$have_libz
@@ -111,12 +111,12 @@ diff -ru cairo-1.17.4.orig/configure cairo-1.17.4/configure
  
  
  		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's PDF surface backend feature could be enabled" >&5
-@@ -33610,7 +33561,7 @@
+@@ -27218,7 +27169,7 @@
+         use_xml="no (requires --enable-png)"
+     else
+         use_xml=$have_libz
+-        xml_NONPKGCONFIG_LIBS=-lz
++        xml_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
+     fi
  
  
-     use_xml=$have_libz
--    xml_NONPKGCONFIG_LIBS=-lz
-+    xml_NONPKGCONFIG_LIBS=$ZLIB3RDLIB
- 
- 
- 		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking whether cairo's xml surface backend feature could be enabled" >&5
