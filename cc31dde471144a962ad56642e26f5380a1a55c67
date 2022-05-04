@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e09651c6_6c43fd04",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 1758,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-04T10:46:26Z",
+      "side": 1,
+      "message": "Obsolete comment - we can remove this next time",
+      "range": {
+        "startLine": 1758,
+        "startChar": 4,
+        "endLine": 1758,
+        "endChar": 74
+      },
+      "revId": "cc31dde471144a962ad56642e26f5380a1a55c67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
