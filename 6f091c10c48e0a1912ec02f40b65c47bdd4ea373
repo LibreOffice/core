@@ -16,6 +16,24 @@
       "message": "Please change the commit message. It\u0027s not a WIP patch anymore and that it is for GSoC 2022 is irrelevant. \nYou need to describe what the change does, and think about what is meaningful to write in a commit message and what would be better be a comment in the code.",
       "revId": "6f091c10c48e0a1912ec02f40b65c47bdd4ea373",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b416732e_7db25b25",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003564
+      },
+      "writtenOn": "2022-05-04T20:35:43Z",
+      "side": 1,
+      "message": "Commit message updated and rebased",
+      "parentUuid": "451649f9_da7621d7",
+      "revId": "6f091c10c48e0a1912ec02f40b65c47bdd4ea373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
