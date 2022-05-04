@@ -272,15 +272,15 @@ void Pump::run()
         }
         catch ( const IOException & e )
         {
-            fireError( makeAny( e ) );
+            fireError( Any( e ) );
         }
         catch ( const RuntimeException & e )
         {
-            fireError( makeAny( e ) );
+            fireError( Any( e ) );
         }
         catch ( const Exception & e )
         {
-            fireError( makeAny( e ) );
+            fireError( Any( e ) );
         }
 
         close();
