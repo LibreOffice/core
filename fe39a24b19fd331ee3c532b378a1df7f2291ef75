@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b086701_71b33e64",
+        "filename": "sw/source/ui/dialog/uiregionsw.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-04T18:50:03Z",
+      "side": 1,
+      "message": "not your failt, but this nLen+1 looks wrong, output can only be nLen or less, probably a mental thing from whoever wrote it automatically adding one for the null byte :-)",
+      "revId": "fe39a24b19fd331ee3c532b378a1df7f2291ef75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
