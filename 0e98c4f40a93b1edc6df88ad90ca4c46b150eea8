@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "511ab496_b00118be",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-04T17:36:18Z",
+      "side": 1,
+      "message": "Thanks for your helpful and patient guidance Stefan. Now with better understanding . . . an attempt to draw a map out of the labyrinth…\n\n1. Empirical fact: if LanguageTools (and presumably other Java-requiring extensions) are already installed in LO, but an installed JRE is not activated in LO Options on startup of LO, then  ”Enable JRE?” Dialog appears – which activates JRE in Options (on a positive response).\n\n      \u003d\u003e no change needed for this case (as Stefan suggested), but also not tdf#112723 OP\n\nTurning to OP case...\n\n2. Empirical fact: *Install* LanguageTools, when system-installed JRE is not activated in LO Options, then ”Extension Manager” dialog (from desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx ) shows: \n\n\"Could not create Java implementation loader\"  \n\n(Could not figure out if the exception in this case comes from JavaComponentLoader::writeRegistryInfo or JavaComponentLoader::activate (in stoc/source/javaloader/javaloader.cxx))\n\n3. Did not test:  install LanguageTools, when no JRE is installed.  I assume a JavaComponentLoader command would complain, but which one?\n\n\nHypothesis: iiuc – there might be a (simple?) way in desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx ) to pick up which exception was thrown in javaloader.cxx and give appropriate messages (placed in:  desktop/inc/strings.hrc)\n\n   \u003d\u003e additional code in dp_gui_extensioncmdqueue.cxx presumably around here\n\nline 782  //Todo display the user an error\n\nhttps://opengrok.libreoffice.org/xref/core/desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx?r\u003d8f5141ce#782\n\nConclusion: If this sketch sounds right, then both the translation issue and the OP could be addressed, without changing stoc/source/javaloader/javaloader.cxx\n\nAnd I will leave it to others to communicate with LanguageTool developers about trying passive registry.",
+      "parentUuid": "b03212c4_b3d3c122",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e794f304_32e902b7",
         "filename": "stoc/inc/strings.hrc",
         "patchSetId": 3
