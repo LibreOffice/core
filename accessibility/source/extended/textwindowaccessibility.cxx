@@ -2097,9 +2097,9 @@ void Document::handleSelectionChangeNotification()
                 xParagraph->notifyEvent(
                     css::accessibility::AccessibleEventId::
                     CARET_CHANGED,
-                    css::uno::makeAny< ::sal_Int32 >(
+                    css::uno::Any( ::sal_Int32 (
                         nNewLastPara == m_nSelectionLastPara
-                        ? m_nSelectionLastPos : 0),
+                        ? m_nSelectionLastPos : 0)),
                     css::uno::Any(nNewLastPos));
         }
     }
@@ -2216,7 +2216,7 @@ void Document::disposeParagraphs()
 // static
 css::uno::Any Document::mapFontColor(::Color const & rColor)
 {
-    return css::uno::makeAny(rColor.GetRGBColor());
+    return css::uno::Any(rColor.GetRGBColor());
         // FIXME  keep transparency?
 }
 
