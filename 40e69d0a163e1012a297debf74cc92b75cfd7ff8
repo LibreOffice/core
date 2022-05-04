@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10657820_9deae653",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001965
+      },
+      "writtenOn": "2022-05-04T14:45:49Z",
+      "side": 1,
+      "message": "tdf#103954 seems as related bug report",
+      "revId": "40e69d0a163e1012a297debf74cc92b75cfd7ff8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
