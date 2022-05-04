@@ -179,7 +179,7 @@ uno::Any SAL_CALL ConvDicNameContainer::getByName( const OUString& rName )
     uno::Reference< XConversionDictionary > xRes( GetByName( rName ) );
     if (!xRes.is())
         throw NoSuchElementException();
-    return makeAny( xRes );
+    return Any( xRes );
 }
 
 uno::Sequence< OUString > SAL_CALL ConvDicNameContainer::getElementNames(  )
@@ -254,7 +254,7 @@ void SAL_CALL ConvDicNameContainer::removeByName( const OUString& rName )
             ::ucbhelper::Content    aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                                     uno::Reference< css::ucb::XCommandEnvironment >(),
                                     comphelper::getProcessComponentContext() );
-            aCnt.executeCommand( "delete", makeAny( true ) );
+            aCnt.executeCommand( "delete", Any( true ) );
         }
         catch( ... )
         {
