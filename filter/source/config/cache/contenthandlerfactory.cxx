@@ -75,7 +75,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
         aHandler >> lConfig;
 
         ::std::vector< css::uno::Any > stlArguments(comphelper::sequenceToContainer< ::std::vector< css::uno::Any > >(lArguments));
-        stlArguments.insert(stlArguments.begin(), css::uno::makeAny(lConfig));
+        stlArguments.insert(stlArguments.begin(), css::uno::Any(lConfig));
 
         xInit->initialize(comphelper::containerToSequence(stlArguments));
     }

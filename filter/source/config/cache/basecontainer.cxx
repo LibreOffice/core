@@ -430,7 +430,7 @@ void SAL_CALL BaseContainer::flush()
 
         throw css::lang::WrappedTargetRuntimeException( "Flush rejected by internal container.",
                 static_cast< OWeakObject* >(this),
-                css::uno::makeAny(ex));
+                css::uno::Any(ex));
     }
 
     m_pFlushCache.reset();

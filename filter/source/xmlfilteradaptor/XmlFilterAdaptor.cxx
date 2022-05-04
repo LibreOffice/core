@@ -91,7 +91,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
 
     Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( "BaseURI", makeAny( aBaseURI ));
+    xInfoSet->setPropertyValue( "BaseURI", Any( aBaseURI ));
 
     OUString aFilterName;
     auto It = aMediaMap.find(OUString("FilterName"));
@@ -101,7 +101,7 @@ bool XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& 
         PropertyValue EmptyDbFieldHidesPara("EmptyDbFieldHidesPara", 0, Any(false),
                                             PropertyState::PropertyState_DIRECT_VALUE);
         Sequence<PropertyValue> aSettings{ EmptyDbFieldHidesPara };
-        xInfoSet->setPropertyValue("DefaultDocumentSettings", makeAny(aSettings));
+        xInfoSet->setPropertyValue("DefaultDocumentSettings", Any(aSettings));
     }
     Sequence< Any > aAnys{ Any(xInfoSet) };
 
@@ -290,11 +290,11 @@ bool XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& 
 
         Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-        xInfoSet->setPropertyValue("UsePrettyPrinting", makeAny( bPrettyPrint ));
+        xInfoSet->setPropertyValue("UsePrettyPrinting", Any( bPrettyPrint ));
         xInfoSet->setPropertyValue(
                         "ExportTextNumberElement",
-                        makeAny( bExportTextNumberElementForListItems ));
-        xInfoSet->setPropertyValue("BaseURI", makeAny( aBaseURI ));
+                        Any( bExportTextNumberElementForListItems ));
+        xInfoSet->setPropertyValue("BaseURI", Any( aBaseURI ));
         Sequence < Any > aAnys{ Any(xConverter), Any(xInfoSet) };
 
         Reference< XExporter > xExporter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(

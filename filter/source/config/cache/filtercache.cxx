@@ -623,7 +623,7 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
 
                 CacheItemList::const_iterator pItem = rCache.find(item);
                 impl_saveItem(xItem, eType, pItem->second);
-                xAddRemoveSet->insertByName(item, css::uno::makeAny(xItem));
+                xAddRemoveSet->insertByName(item, css::uno::Any(xItem));
             }
             break;
 
@@ -890,14 +890,14 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
             // set root path
             aParam.Name = "nodepath";
             aParam.Value <<= sRoot;
-            lParams.push_back(css::uno::makeAny(aParam));
+            lParams.push_back(css::uno::Any(aParam));
 
             // enable "all locales mode" ... if required
             if (bLocalesMode)
             {
                 aParam.Name = "locale";
                 aParam.Value <<= OUString("*");
-                lParams.push_back(css::uno::makeAny(aParam));
+                lParams.push_back(css::uno::Any(aParam));
             }
 
             // open it

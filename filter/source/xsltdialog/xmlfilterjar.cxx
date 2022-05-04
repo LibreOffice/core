@@ -109,7 +109,7 @@ static void addFile_( Reference< XInterface > const & xRootFolder, Reference< XS
     if( xSink.is() && xTunnel.is())
     {
         Reference< XNameContainer > xNameContainer(xRootFolder, UNO_QUERY );
-        xNameContainer->insertByName(encodeZipUri( aName ), makeAny(xTunnel));
+        xNameContainer->insertByName(encodeZipUri( aName ), Any(xTunnel));
         xSink->setInputStream( xInput );
     }
 }

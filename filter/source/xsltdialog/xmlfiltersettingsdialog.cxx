@@ -514,7 +514,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         // 4. insert new or replace existing filter
         try
         {
-            Any aAny( makeAny( aFilterData ) );
+            Any aAny( aFilterData );
             if( mxFilterContainer->hasByName( pFilterEntry->maFilterName ) )
             {
                 mxFilterContainer->replaceByName( pFilterEntry->maFilterName, aAny );
@@ -567,7 +567,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         {
             try
             {
-                Any aAny( makeAny( aValues ) );
+                Any aAny( aValues );
                 if( mxTypeDetection->hasByName( pFilterEntry->maType ) )
                 {
                     mxTypeDetection->replaceByName( pFilterEntry->maType, aAny );
@@ -677,7 +677,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
                                     aSequenceRange[nIndex].Value <<= aTypes;
 
-                                    mxExtendedTypeDetection->replaceByName( sFilterDetectService, makeAny( aSequence ) );
+                                    mxExtendedTypeDetection->replaceByName( sFilterDetectService, Any( aSequence ) );
 
                                     Reference< XFlushable > xFlushable( mxExtendedTypeDetection, UNO_QUERY );
                                     if( xFlushable.is() )

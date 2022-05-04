@@ -102,7 +102,7 @@ CustomToolBarImportHelper::createCommandFromMacro( std::u16string_view sCmd )
     // create script url
     OUString scriptURL
         = OUString::Concat("vnd.sun.star.script:") + sCmd + "?language=Basic&location=document";
-    return uno::makeAny( scriptURL );
+    return uno::Any( scriptURL );
 }
 
 OUString CustomToolBarImportHelper::MSOCommandToOOCommand( sal_Int16 msoCmd )
@@ -132,7 +132,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_SET_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
         // set name for menubar
-        xProps->setPropertyValue("UIName", uno::makeAny( rName ) );
+        xProps->setPropertyValue("UIName", uno::Any( rName ) );
         if ( xPopup.is() )
         {
             uno::Sequence< beans::PropertyValue > aPopupMenu{
@@ -142,7 +142,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
                 comphelper::makePropertyValue("Type", sal_Int32( 0 ))
             };
 
-            xPopup->insertByIndex( xPopup->getCount(), uno::makeAny( aPopupMenu ) );
+            xPopup->insertByIndex( xPopup->getCount(), uno::Any( aPopupMenu ) );
             xCfgManager->insertSettings( sMenuBar, xPopup );
             uno::Reference< ui::XUIConfigurationPersistence > xPersistence( xCfgManager, uno::UNO_QUERY_THROW );
             xPersistence->store();

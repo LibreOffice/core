@@ -7402,7 +7402,7 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
                 {
                     eFS = css::drawing::FillStyle_SOLID;
                     Color aFillColor( pObj->GetMergedItem( XATTR_FILLCOLOR ).GetColorValue() );
-                    xPropSet->setPropertyValue( "FillColor", makeAny( aFillColor ) );
+                    xPropSet->setPropertyValue( "FillColor", Any( aFillColor ) );
                 }
                 break;
             case drawing::FillStyle_GRADIENT :
@@ -7435,16 +7435,16 @@ static void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell > const
                     const XFillBitmapItem & rXFillBitmapItem(pObj->GetMergedItem( XATTR_FILLBITMAP ));
                     uno::Reference<graphic::XGraphic> xGraphic = rXFillBitmapItem.GetGraphicObject().GetGraphic().GetXGraphic();
                     uno::Reference<awt::XBitmap> xBitmap(xGraphic, uno::UNO_QUERY);
-                    xPropSet->setPropertyValue("FillBitmap", uno::makeAny(xBitmap));
+                    xPropSet->setPropertyValue("FillBitmap", uno::Any(xBitmap));
 
                     const XFillBmpStretchItem & rStretchItem(pObj->GetMergedItem( XATTR_FILLBMP_STRETCH ));
                     const XFillBmpTileItem & rTileItem(pObj->GetMergedItem( XATTR_FILLBMP_TILE ));
                     if( rTileItem.GetValue() )
-                        xPropSet->setPropertyValue("FillBitmapMode", uno::makeAny(drawing::BitmapMode_REPEAT));
+                        xPropSet->setPropertyValue("FillBitmapMode", uno::Any(drawing::BitmapMode_REPEAT));
                     else if( rStretchItem.GetValue() )
-                        xPropSet->setPropertyValue("FillBitmapMode", uno::makeAny(drawing::BitmapMode_STRETCH));
+                        xPropSet->setPropertyValue("FillBitmapMode", uno::Any(drawing::BitmapMode_STRETCH));
                     else
-                        xPropSet->setPropertyValue("FillBitmapMode", uno::makeAny(drawing::BitmapMode_NO_REPEAT));
+                        xPropSet->setPropertyValue("FillBitmapMode", uno::Any(drawing::BitmapMode_NO_REPEAT));
                 }
             break;
             default:

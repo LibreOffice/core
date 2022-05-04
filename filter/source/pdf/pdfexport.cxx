@@ -946,14 +946,14 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                         xViewProperties->getPropertyValue( sShowOnlineLayout ) >>= bReChangeToNormalView;
                         if( bReChangeToNormalView )
                         {
-                            xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( false ) );
+                            xViewProperties->setPropertyValue( sShowOnlineLayout, uno::Any( false ) );
                         }
 
                         // Also, disable hide-whitespace during export.
                         xViewProperties->getPropertyValue(sHideWhitespace) >>= bReHideWhitespace;
                         if (bReHideWhitespace)
                         {
-                            xViewProperties->setPropertyValue(sHideWhitespace, uno::makeAny(false));
+                            xViewProperties->setPropertyValue(sHideWhitespace, uno::Any(false));
                         }
                     }
                     catch( const uno::Exception& )
@@ -1016,7 +1016,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 {
                     try
                     {
-                        xViewProperties->setPropertyValue( sShowOnlineLayout, uno::makeAny( true ) );
+                        xViewProperties->setPropertyValue( sShowOnlineLayout, uno::Any( true ) );
                     }
                     catch( const uno::Exception& )
                     {
@@ -1026,7 +1026,7 @@ bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& 
                 {
                     try
                     {
-                        xViewProperties->setPropertyValue( sHideWhitespace, uno::makeAny( true ) );
+                        xViewProperties->setPropertyValue( sHideWhitespace, uno::Any( true ) );
                     }
                     catch( const uno::Exception& )
                     {
