@@ -120,6 +120,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fe8d497_f700b5fe",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-04T10:52:01Z",
+      "side": 0,
+      "message": "Partial revert done in: cc7732fb4bbe8ffd6820c4db559d326c043bfb67",
+      "parentUuid": "60105e51_e5ce7aa9",
+      "range": {
+        "startLine": 376,
+        "startChar": 87,
+        "endLine": 376,
+        "endChar": 94
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d65ad511_f23d1151",
@@ -143,6 +167,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7a3c261_1d75c2f4",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 378,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-04T10:52:01Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "d65ad511_f23d1151",
+      "range": {
+        "startLine": 378,
+        "startChar": 88,
+        "endLine": 378,
+        "endChar": 95
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac58d260_584168ec",
@@ -156,6 +204,30 @@
       "writtenOn": "2022-04-27T17:05:09Z",
       "side": 0,
       "message": "And this.",
+      "range": {
+        "startLine": 380,
+        "startChar": 88,
+        "endLine": 380,
+        "endChar": 95
+      },
+      "revId": "3ce4689dd73e5652d58d186ed7380f576ff56617",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e972f565_fb23ac34",
+        "filename": "sw/inc/strings.hrc",
+        "patchSetId": 6
+      },
+      "lineNbr": 380,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-04T10:52:01Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "ac58d260_584168ec",
       "range": {
         "startLine": 380,
         "startChar": 88,
