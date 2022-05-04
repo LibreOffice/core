@@ -135,7 +135,7 @@ void SvxMenuConfigPage::Init()
 
     ReloadTopLevelListBox();
 
-    m_xTopLevelListBox->set_active(0);
+    m_xTopLevelListBox->set_active(m_xTopLevelListBox->get_count() ? 0 : -1);
     SelectElement();
 
     m_xCommandCategoryListBox->Init(comphelper::getProcessComponentContext(), m_xFrame,
