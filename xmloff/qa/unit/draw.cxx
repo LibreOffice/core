@@ -242,6 +242,25 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testReferToTheme)
     // i.e. only the direct color was written, but not the theme reference.
     assertXPath(pXmlDoc, "//style:style[@style:name='gr2']/style:graphic-properties",
                 "fill-theme-color", "accent1");
+
+    // Shape fill, 60% lighter.
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr3']/style:graphic-properties",
+                "fill-theme-color", "accent1");
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//style:style[@style:name='gr3']/style:graphic-properties' no attribute 'fill-color-lum-mod' exist
+    // i.e. the themed color was fine, but its effects were lost.
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr3']/style:graphic-properties",
+                "fill-color-lum-mod", "40%");
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr3']/style:graphic-properties",
+                "fill-color-lum-off", "60%");
+
+    // Shape fill, 25% darker.
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr4']/style:graphic-properties",
+                "fill-theme-color", "accent1");
+    assertXPath(pXmlDoc, "//style:style[@style:name='gr4']/style:graphic-properties",
+                "fill-color-lum-mod", "75%");
+    assertXPathNoAttribute(pXmlDoc, "//style:style[@style:name='gr4']/style:graphic-properties",
+                           "fill-color-lum-off");
 }
 
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testTableInShape)

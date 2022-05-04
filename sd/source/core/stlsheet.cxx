@@ -1326,6 +1326,22 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
                         eState = PropertyState_DEFAULT_VALUE;
                     }
                 }
+                else if (pEntry->nMemberId == MID_COLOR_LUM_MOD)
+                {
+                    const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
+                    if (pColor->GetThemeColor().GetLumMod() == 10000)
+                    {
+                        eState = PropertyState_DEFAULT_VALUE;
+                    }
+                }
+                else if (pEntry->nMemberId == MID_COLOR_LUM_OFF)
+                {
+                    const XFillColorItem* pColor = rStyleSet.GetItem<XFillColorItem>(pEntry->nWID);
+                    if (pColor->GetThemeColor().GetLumOff() == 0)
+                    {
+                        eState = PropertyState_DEFAULT_VALUE;
+                    }
+                }
                 break;
             }
         }
