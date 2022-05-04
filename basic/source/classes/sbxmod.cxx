@@ -2616,9 +2616,9 @@ void SbUserFormModule::InitObject()
             uno::Sequence< uno::Any > aArgs
             {
                 uno::Any(),
-                makeAny(m_xDialog),
-                makeAny(m_xModel),
-                makeAny(GetParent()->GetName())
+                Any(m_xDialog),
+                Any(m_xModel),
+                Any(GetParent()->GetName())
             };
             pDocObject = new SbUnoObject( GetName(), uno::Any( xVBAFactory->createInstanceWithArguments( "ooo.vba.msforms.UserForm", aArgs  ) ) );
 
