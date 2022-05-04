@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a2a1430_4aedcd0a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-04T12:41:12Z",
+      "side": 1,
+      "message": "\u003e better address the place where the exception message is consumed \nwould that be: cui/source/options/optjava.cxx  and the error message should be put in: /cui/inc/strings.hrc   (together with other Java error messages) rather than creating a new strings.hrc ?",
+      "parentUuid": "75ad1419_8292e978",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e794f304_32e902b7",
         "filename": "stoc/inc/strings.hrc",
         "patchSetId": 3
