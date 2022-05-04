@@ -798,7 +798,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
 
     if (aName == "/")
         // root directory.
-        return makeAny ( uno::Reference < XUnoTunnel > ( m_xRootFolder ) );
+        return Any ( uno::Reference < XUnoTunnel > ( m_xRootFolder ) );
 
     nStreamIndex = aName.lastIndexOf ( '/' );
     bool bFolder = nStreamIndex == nIndex-1; // last character is '/'.
@@ -821,7 +821,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
                 sTemp = aName.copy ( nDirIndex == -1 ? 0 : nDirIndex+1, nStreamIndex-nDirIndex-1 );
 
                 if (pFolder && sTemp == pFolder->getName())
-                    return makeAny(uno::Reference<XUnoTunnel>(pFolder));
+                    return Any(uno::Reference<XUnoTunnel>(pFolder));
             }
             else
             {
@@ -867,7 +867,7 @@ Any SAL_CALL ZipPackage::getByHierarchicalName( const OUString& aName )
     {
         if ( nStreamIndex != -1 )
             m_aRecent[sDirName] = pPrevious; // cache it.
-        return makeAny ( uno::Reference < XUnoTunnel > ( pCurrent ) );
+        return Any ( uno::Reference < XUnoTunnel > ( pCurrent ) );
     }
 
     sTemp = aName.copy( nOldIndex );
@@ -1338,7 +1338,7 @@ uno::Reference< io::XInputStream > ZipPackage::writeTempFile()
             embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), OUString() );
             throw WrappedTargetException( aErrTxt,
                                             static_cast < OWeakObject * > ( this ),
-                                            makeAny ( aException ) );
+                                            Any ( aException ) );
         }
     }
 
@@ -1362,7 +1362,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             try
             {
                 Exception aDetect;
-                Any aAny = aOriginalContent.setPropertyValue("Size", makeAny( sal_Int64(0) ) );
+                Any aAny = aOriginalContent.setPropertyValue("Size", Any( sal_Int64(0) ) );
                 if( !( aAny >>= aDetect ) )
                     bTruncSuccess = true;
             }
@@ -1385,7 +1385,7 @@ uno::Reference< XActiveDataStreamer > ZipPackage::openOriginalForOutput()
             aArg.Sink       = xSink;
             aArg.Properties = uno::Sequence< Property >( 0 ); // unused
 
-            aOriginalContent.executeCommand("open", makeAny( aArg ) );
+            aOriginalContent.executeCommand("open", Any( aArg ) );
         }
         catch( Exception& )
         {
@@ -1406,7 +1406,7 @@ void SAL_CALL ZipPackage::commitChanges()
     {
         IOException aException;
         throw WrappedTargetException(THROW_WHERE "This package is read only!",
-                static_cast < OWeakObject * > ( this ), makeAny ( aException ) );
+                static_cast < OWeakObject * > ( this ), Any ( aException ) );
     }
     // first the writeTempFile is called, if it returns a stream the stream should be written to the target
     // if no stream was returned, the file was written directly, nothing should be done
@@ -1599,7 +1599,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
         uno::Any aUrl = xTempFile->getPropertyValue("Uri");
         aUrl >>= aTempURL;
         xTempFile->setPropertyValue("RemoveFile",
-                                     uno::makeAny( false ) );
+                                     uno::Any( false ) );
     }
     catch ( uno::Exception& )
     {
@@ -1610,7 +1610,7 @@ void ZipPackage::DisconnectFromTargetAndThrowException_Impl( const uno::Referenc
     embed::UseBackupException aException( aErrTxt, uno::Reference< uno::XInterface >(), aTempURL );
     throw WrappedTargetException( aErrTxt,
                                     static_cast < OWeakObject * > ( this ),
-                                    makeAny ( aException ) );
+                                    Any ( aException ) );
 }
 
 uno::Sequence< sal_Int8 > ZipPackage::GetEncryptionKey()

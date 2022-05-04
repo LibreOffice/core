@@ -292,7 +292,7 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     if ( !xEntryStream.is() )
         throw uno::RuntimeException(THROW_WHERE );
 
-    return uno::makeAny ( xEntryStream );
+    return uno::Any ( xEntryStream );
 }
 
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()

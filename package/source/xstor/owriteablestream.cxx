@@ -116,7 +116,7 @@ void SetEncryptionKeyProperty_Impl( const uno::Reference< beans::XPropertySet >&
         throw uno::RuntimeException();
 
     try {
-        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, uno::makeAny( aKey ) );
+        xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY, uno::Any( aKey ) );
     }
     catch ( const uno::Exception& ex )
     {
@@ -339,7 +339,7 @@ void OWriteStream_Impl::InsertIntoPackageFolder( const OUString& aName,
     {
         SAL_WARN_IF( !m_xPackageStream.is(), "package.xstor", "An inserted stream is incomplete!" );
         uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageStream, uno::UNO_QUERY_THROW );
-        xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
+        xParentPackageFolder->insertByName( aName, uno::Any( xTunnel ) );
 
         m_bFlushed = false;
         m_bHasInsertedStreamOptimization = false;
@@ -742,7 +742,7 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
     if ( bCompressedIsSet )
     {
-        xPropertySet->setPropertyValue( aComprPropName, uno::makeAny( bCompressed ) );
+        xPropertySet->setPropertyValue( aComprPropName, uno::Any( bCompressed ) );
         m_bCompressedSetExplicit = true;
     }
 
@@ -753,8 +753,8 @@ void OWriteStream_Impl::InsertStreamDirectly( const uno::Reference< io::XInputSt
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
-        xPropertySet->setPropertyValue( "Encrypted", uno::makeAny( true ) );
+                                        uno::Any( uno::Sequence< beans::NamedValue >() ) );
+        xPropertySet->setPropertyValue( "Encrypted", uno::Any( true ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -843,9 +843,9 @@ void OWriteStream_Impl::Commit()
 
         // set to be encrypted but do not use encryption key
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
+                                        uno::Any( uno::Sequence< beans::NamedValue >() ) );
         xPropertySet->setPropertyValue( "Encrypted",
-                                        uno::makeAny( true ) );
+                                        uno::Any( true ) );
     }
     else if ( m_bHasCachedEncryptionData )
     {
@@ -853,7 +853,7 @@ void OWriteStream_Impl::Commit()
             throw uno::RuntimeException();
 
         xPropertySet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::makeAny( m_aEncryptionData.getAsConstNamedValueList() ) );
+                                        uno::Any( m_aEncryptionData.getAsConstNamedValueList() ) );
     }
 
     // the stream should be free soon, after package is stored
@@ -1533,7 +1533,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
                 uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
                 xPropSet->setPropertyValue(
                     "MediaType",
-                    uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                    uno::Any( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
 
                 m_nRelInfoStatus = RELINFO_READ;
             }
@@ -1557,7 +1557,7 @@ void OWriteStream_Impl::CommitStreamRelInfo( const uno::Reference< embed::XStora
             // set the mediatype
             uno::Reference< beans::XPropertySet > xPropSet( xRelsStream, uno::UNO_QUERY_THROW );
             xPropSet->setPropertyValue("MediaType",
-                uno::makeAny( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
+                uno::Any( OUString("application/vnd.openxmlformats-package.relationships+xml" ) ) );
 
             if ( m_nRelInfoStatus == RELINFO_CHANGED_STREAM )
                 m_nRelInfoStatus = RELINFO_NO_INIT;
@@ -2058,7 +2058,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
     catch( const io::IOException& r )
     {
         throw lang::WrappedTargetRuntimeException("OWriteStream::getOutputStream: Could not create backing temp file",
-                static_cast < OWeakObject * > ( this ), makeAny ( r ) );
+                static_cast < OWeakObject * > ( this ), css::uno::Any ( r ) );
     }
 
     if ( !m_pImpl )
@@ -2886,7 +2886,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
 
     if ( aProp == "RelId" )
     {
-        return uno::makeAny( m_pImpl->GetNewRelId() );
+        return uno::Any( m_pImpl->GetNewRelId() );
     }
 
     OUString aPropertyName;
@@ -2909,7 +2909,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
     }
     else if ( m_pData->m_nStorageType == embed::StorageFormats::PACKAGE
             && aPropertyName == "UseCommonStoragePasswordEncryption" )
-        return uno::makeAny( m_pImpl->m_bUseCommonEncryption );
+        return uno::Any( m_pImpl->m_bUseCommonEncryption );
     else if ( aPropertyName == "Size" )
     {
         bool bThrow = false;
@@ -2924,7 +2924,7 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
         if (bThrow || !m_xSeekable.is())
             throw uno::RuntimeException();
 
-        return uno::makeAny( m_xSeekable->getLength() );
+        return uno::Any( m_xSeekable->getLength() );
     }
 
     throw beans::UnknownPropertyException(aPropertyName); // TODO
