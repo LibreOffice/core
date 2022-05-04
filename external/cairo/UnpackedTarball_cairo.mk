@@ -11,15 +11,17 @@ $(eval $(call gb_UnpackedTarball_UnpackedTarball,cairo))
 
 $(eval $(call gb_UnpackedTarball_set_tarball,cairo,$(CAIRO_TARBALL),,cairo))
 
+# cairo >= 1.17.6 was probably created in Fedora where
+# https://salsa.debian.org/mckinstry/libtool/-/commit/26c23f951d049241128e5e04a7bbc263e5b145f1
+# isn't applied, so add that in to avoid: /usr/bin/ld: unrecognized option '--gdb-index'
+
 $(eval $(call gb_UnpackedTarball_add_patches,cairo,\
 	external/cairo/cairo/cairo.buildfix.patch \
 	external/cairo/cairo/cairo.RGB24_888.patch \
 	external/cairo/cairo/cairo-libtool-rpath.patch.1 \
 	external/cairo/cairo/cairo.oldfreetype.patch \
-	external/cairo/cairo/san.patch.0 \
-	external/cairo/cairo/0001-Fix-mask-usage-in-image-compositor.patch.1 \
-    external/cairo/cairo/cairo-fix_function_signature.patch.1 \
-    external/cairo/cairo/cairo.ofz46165.patch.1 \
+	external/cairo/cairo/cairo.ofz46165.patch.1 \
+	external/cairo/cairo/0025-libtool-pass-use-ld.patch \
 ))
 
 ifeq ($(OS),iOS)
