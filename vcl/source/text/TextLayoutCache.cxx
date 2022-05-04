@@ -23,6 +23,7 @@
 
 #include <o3tl/hash_combine.hxx>
 #include <o3tl/lru_map.hxx>
+#include <unotools/configmgr.hxx>
 #include <vcl/lazydelete.hxx>
 #include <officecfg/Office/Common.hxx>
 
@@ -55,7 +56,9 @@ std::shared_ptr<const TextLayoutCache> TextLayoutCache::Create(OUString const& r
                           FastStringCompareEqual, TextLayoutCacheCost>
         Cache;
     static vcl::DeleteOnDeinit<Cache> cache(
-        officecfg::Office::Common::Cache::Font::TextRunsCacheSize::get());
+        !utl::ConfigManager::IsFuzzing()
+            ? officecfg::Office::Common::Cache::Font::TextRunsCacheSize::get()
+            : 100);
     if (Cache* map = cache.get())
     {
         auto it = map->find(rString);
