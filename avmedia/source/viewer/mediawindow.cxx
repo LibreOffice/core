@@ -445,10 +445,10 @@ void MediaWindow::dispatchInsertAVMedia(const css::uno::Reference<css::frame::XD
 
     css::uno::Reference<css::frame::XDispatch> xDispatch = rDispatchProvider->queryDispatch(aDispatchURL, "", 0);
     css::uno::Sequence<css::beans::PropertyValue> aArgs(comphelper::InitPropertySequence({
-        { "URL", css::uno::makeAny(rURL) },
-        { "Size.Width", uno::makeAny(rSize.Width)},
-        { "Size.Height", uno::makeAny(rSize.Height)},
-        { "IsLink", css::uno::makeAny(bLink) },
+        { "URL", css::uno::Any(rURL) },
+        { "Size.Width", uno::Any(rSize.Width)},
+        { "Size.Height", uno::Any(rSize.Height)},
+        { "IsLink", css::uno::Any(bLink) },
     }));
     xDispatch->dispatch(aDispatchURL, aArgs);
 }
