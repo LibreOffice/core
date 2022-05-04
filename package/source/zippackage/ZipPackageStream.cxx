@@ -293,12 +293,12 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         uno::Reference< XPropertySet > xNewPSProps( xNewPackStream, UNO_QUERY_THROW );
 
         // copy all the properties of this stream to the new stream
-        xNewPSProps->setPropertyValue("MediaType", makeAny( msMediaType ) );
-        xNewPSProps->setPropertyValue("Compressed", makeAny( m_bToBeCompressed ) );
+        xNewPSProps->setPropertyValue("MediaType", Any( msMediaType ) );
+        xNewPSProps->setPropertyValue("Compressed", Any( m_bToBeCompressed ) );
         if ( m_bToBeEncrypted )
         {
-            xNewPSProps->setPropertyValue(ENCRYPTION_KEY_PROPERTY, makeAny( aKey ) );
-            xNewPSProps->setPropertyValue("Encrypted", makeAny( true ) );
+            xNewPSProps->setPropertyValue(ENCRYPTION_KEY_PROPERTY, Any( aKey ) );
+            xNewPSProps->setPropertyValue("Encrypted", Any( true ) );
         }
 
         // insert a new stream in the package
@@ -308,7 +308,7 @@ uno::Reference< io::XInputStream > ZipPackageStream::TryToGetRawFromDataStream( 
         uno::Reference< container::XNameContainer > xRootNameContainer( xTunnel, UNO_QUERY_THROW );
 
         uno::Reference< XUnoTunnel > xNPSTunnel( xNewPackStream, UNO_QUERY );
-        xRootNameContainer->insertByName("dummy", makeAny( xNPSTunnel ) );
+        xRootNameContainer->insertByName("dummy", Any( xNPSTunnel ) );
 
         // commit the temporary package
         pPackage->commitChanges();

@@ -390,7 +390,7 @@ void OStorage_Impl::OpenOwnPackage()
 
             // do not allow elements to remove themself from the old container in case of insertion to another container
             pArguments[ 1 ] <<= beans::NamedValue( "AllowRemoveOnInsert",
-                                                    uno::makeAny( false ) );
+                                                    uno::Any( false ) );
 
             sal_Int32 nArgNum = 2;
             for ( const auto& rProp : std::as_const(m_xProperties) )
@@ -631,8 +631,8 @@ void OStorage_Impl::CopyToStorage( const uno::Reference< embed::XStorage >& xDes
     // move storage properties to the destination one ( means changeable properties )
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
     {
-        xPropSet->setPropertyValue( "MediaType", uno::makeAny( m_aMediaType ) );
-        xPropSet->setPropertyValue( "Version", uno::makeAny( m_aVersion ) );
+        xPropSet->setPropertyValue( "MediaType", uno::Any( m_aMediaType ) );
+        xPropSet->setPropertyValue( "Version", uno::Any( m_aVersion ) );
     }
 
     if ( m_nStorageType == embed::StorageFormats::PACKAGE )
@@ -932,7 +932,7 @@ void OStorage_Impl::InsertIntoPackageFolder( const OUString& aName,
 
     SAL_WARN_IF( !m_xPackageFolder.is(), "package.xstor", "An inserted storage is incomplete!" );
     uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageFolder, uno::UNO_QUERY_THROW );
-    xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
+    xParentPackageFolder->insertByName( aName, uno::Any( xTunnel ) );
 
     m_bCommited = false;
 }
@@ -1138,8 +1138,8 @@ void OStorage_Impl::Commit()
     {
         // move properties to the destination package folder
         uno::Reference< beans::XPropertySet > xProps( xNewPackageFolder, uno::UNO_QUERY_THROW );
-        xProps->setPropertyValue( "MediaType", uno::makeAny( m_aMediaType ) );
-        xProps->setPropertyValue( "Version", uno::makeAny( m_aVersion ) );
+        xProps->setPropertyValue( "MediaType", uno::Any( m_aMediaType ) );
+        xProps->setPropertyValue( "Version", uno::Any( m_aVersion ) );
     }
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML )
@@ -1661,7 +1661,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
             // set the mediatype
             uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
             xPropSet->setPropertyValue(
-                "MediaType", uno::makeAny(OUString(
+                "MediaType", uno::Any(OUString(
                                  "application/vnd.openxmlformats-package.relationships+xml")));
 
             m_nRelInfoStatus = RELINFO_READ;
@@ -1689,7 +1689,7 @@ void OStorage_Impl::CommitRelInfo( const uno::Reference< container::XNameContain
         uno::Reference<beans::XPropertySet> xPropSet(xRelsStream, uno::UNO_QUERY_THROW);
         xPropSet->setPropertyValue(
             "MediaType",
-            uno::makeAny(OUString("application/vnd.openxmlformats-package.relationships+xml")));
+            uno::Any(OUString("application/vnd.openxmlformats-package.relationships+xml")));
 
         m_xNewRelInfoStream.clear();
         if (m_nRelInfoStatus == RELINFO_CHANGED_STREAM)
@@ -4032,7 +4032,7 @@ void SAL_CALL OStorage::removeEncryption()
     try
     {
         xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::makeAny( uno::Sequence< beans::NamedValue >() ) );
+                                        uno::Any( uno::Sequence< beans::NamedValue >() ) );
 
         m_pImpl->m_bHasCommonEncryptionData = false;
         m_pImpl->m_aCommonEncryptionData.clear();
@@ -4094,7 +4094,7 @@ void SAL_CALL OStorage::setEncryptionData( const uno::Sequence< beans::NamedValu
     {
         ::comphelper::SequenceAsHashMap aEncryptionMap( aEncryptionData );
         xPackPropSet->setPropertyValue( STORAGE_ENCRYPTION_KEYS_PROPERTY,
-                                        uno::makeAny( aEncryptionMap.getAsConstNamedValueList() ) );
+                                        uno::Any( aEncryptionMap.getAsConstNamedValueList() ) );
 
         m_pImpl->m_bHasCommonEncryptionData = true;
         m_pImpl->m_aCommonEncryptionData = aEncryptionMap;
@@ -4158,7 +4158,7 @@ void SAL_CALL OStorage::setEncryptionAlgorithms( const uno::Sequence< beans::Nam
     try
     {
         xPackPropSet->setPropertyValue( ENCRYPTION_ALGORITHMS_PROPERTY,
-                                        uno::makeAny( aAlgorithms ) );
+                                        uno::Any( aAlgorithms ) );
     }
     catch ( const uno::RuntimeException& )
     {
@@ -4218,7 +4218,7 @@ void SAL_CALL OStorage::setGpgProperties( const uno::Sequence< uno::Sequence< be
     try
     {
         xPackPropSet->setPropertyValue( ENCRYPTION_GPG_PROPERTIES,
-                                        uno::makeAny( aProps ) );
+                                        uno::Any( aProps ) );
     }
     catch ( const uno::RuntimeException& aRuntimeException )
     {
@@ -4444,19 +4444,19 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
         }
 
         if ( aPropertyName == "MediaType" )
-            return uno::makeAny( m_pImpl->m_aMediaType );
+            return uno::Any( m_pImpl->m_aMediaType );
         else if ( aPropertyName == "Version" )
-            return uno::makeAny( m_pImpl->m_aVersion );
+            return uno::Any( m_pImpl->m_aVersion );
         else
-            return uno::makeAny( m_pImpl->m_bMTFallbackUsed );
+            return uno::Any( m_pImpl->m_bMTFallbackUsed );
     }
     else if ( aPropertyName == "IsRoot" )
     {
-        return uno::makeAny( m_pImpl->m_bIsRoot );
+        return uno::Any( m_pImpl->m_bIsRoot );
     }
     else if ( aPropertyName == "OpenMode" )
     {
-        return uno::makeAny( m_pImpl->m_nStorageMode );
+        return uno::Any( m_pImpl->m_nStorageMode );
     }
     else if ( m_pImpl->m_bIsRoot )
     {
@@ -4469,9 +4469,9 @@ uno::Any SAL_CALL OStorage::getPropertyValue( const OUString& aPropertyName )
                 return pProp->Value;
 
             if ( aPropertyName == "URL" )
-                return uno::makeAny( OUString() );
+                return uno::Any( OUString() );
 
-            return uno::makeAny( false ); // RepairPackage
+            return uno::Any( false ); // RepairPackage
         }
         else if ( m_pImpl->m_nStorageType == embed::StorageFormats::PACKAGE
           && ( aPropertyName == HAS_ENCRYPTED_ENTRIES_PROPERTY
@@ -5220,7 +5220,7 @@ uno::Any SAL_CALL OStorage::getElementPropertyValue( const OUString& aElementNam
             throw io::IOException( THROW_WHERE ); // TODO: general_error
 
         pElement->m_xStorage->ReadContents();
-        return uno::makeAny(pElement->m_xStorage->m_aMediaType);
+        return uno::Any(pElement->m_xStorage->m_aMediaType);
     }
     catch( const embed::InvalidStorageException& )
     {

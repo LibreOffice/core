@@ -203,7 +203,7 @@ ZipContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
 
 uno::Any SAL_CALL ZipPackageFolder::getByName( const OUString& aName )
 {
-    return uno::makeAny ( doGetByName ( aName ).xTunnel );
+    return uno::Any ( doGetByName ( aName ).xTunnel );
 }
 uno::Sequence< OUString > SAL_CALL ZipPackageFolder::getElementNames(  )
 {
@@ -358,12 +358,12 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
         // if ( m_nFormat != embed::StorageFormats::PACKAGE )
         //  throw UnknownPropertyException(THROW_WHERE );
 
-        return uno::makeAny ( msMediaType );
+        return uno::Any ( msMediaType );
     }
     else if ( PropertyName == "Version" )
-        return uno::makeAny( m_sVersion );
+        return uno::Any( m_sVersion );
     else if ( PropertyName == "Size" )
-        return uno::makeAny ( aEntry.nSize );
+        return uno::Any ( aEntry.nSize );
     else
         throw UnknownPropertyException(PropertyName);
 }
