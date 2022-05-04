@@ -475,7 +475,7 @@ void Test::testPolyStruct() {
     CPPUNIT_ASSERT_EQUAL(
         OUString(
                 "test.codemaker.cppumaker.Struct<char,short>"),
-        (css::uno::makeAny(
+        (css::uno::Any(
             test::codemaker::cppumaker::Struct< sal_Unicode, sal_Int16 >()).
          getValueType().getTypeName()));
 
@@ -494,7 +494,7 @@ void Test::testExceptions() {
 
     test::codemaker::cppumaker::TestException1 e11(
         "abc", nullptr, 1,
-        css::uno::makeAny(123.0),
+        css::uno::Any(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException1 e12(e11);
@@ -504,7 +504,7 @@ void Test::testExceptions() {
     CPPUNIT_ASSERT_EQUAL(e11, e13);
     test::codemaker::cppumaker::TestException2 e21(
         "abc", nullptr, 1,
-        css::uno::makeAny(123.0),
+        css::uno::Any(123.0),
         test::codemaker::cppumaker::HelperEnum_ONE,
         test::codemaker::cppumaker::Struct<sal_Int32, sal_Int32>(5, aEmptySequence), 2);
     test::codemaker::cppumaker::TestException2 e22(e21);
