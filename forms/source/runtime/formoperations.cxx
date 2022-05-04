@@ -105,7 +105,6 @@ namespace frm
     using namespace ::com::sun::star::sdb;
     using ::com::sun::star::form::XReset;
     using ::com::sun::star::beans::XMultiPropertySet;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::ui::dialogs::XExecutableDialog;
     using ::com::sun::star::beans::NamedValue;
@@ -740,7 +739,7 @@ namespace frm
                     // simply toggle the value
                     bool bApplied = false;
                     m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
-                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( !bApplied ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, Any( !bApplied ) );
 
                     // and reload
                     weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
@@ -1551,7 +1550,7 @@ namespace frm
             weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
             try
             {
-                m_xCursorProperties->setPropertyValue( PROPERTY_SORT, makeAny( m_xParser->getOrder() ) );
+                m_xCursorProperties->setPropertyValue( PROPERTY_SORT, Any( m_xParser->getOrder() ) );
                 m_xLoadableForm->reload();
             }
             catch( const Exception& )
@@ -1565,7 +1564,7 @@ namespace frm
                 try
                 {
                     m_xParser->setOrder( sOriginalSort );
-                    m_xCursorProperties->setPropertyValue( PROPERTY_SORT, makeAny( m_xParser->getOrder() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_SORT, Any( m_xParser->getOrder() ) );
                     m_xLoadableForm->reload();
                 }
                 catch( const Exception& )
@@ -1622,9 +1621,9 @@ namespace frm
             weld::WaitObject aWO(Application::GetFrameWeld(GetDialogParent()));
             try
             {
-                m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
-                m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, makeAny( m_xParser->getHavingClause() ) );
-                m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( true ) );
+                m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       Any( m_xParser->getFilter() ) );
+                m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, Any( m_xParser->getHavingClause() ) );
+                m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, Any( true ) );
 
                 m_xLoadableForm->reload();
             }
@@ -1640,9 +1639,9 @@ namespace frm
                 {
                     m_xParser->setFilter      ( sOriginalFilter );
                     m_xParser->setHavingClause( sOriginalHaving );
-                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( bApplied ) );
-                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
-                    m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, makeAny( m_xParser->getHavingClause() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, Any( bApplied ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       Any( m_xParser->getFilter() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, Any( m_xParser->getHavingClause() ) );
                     m_xLoadableForm->reload();
                 }
                 catch( const Exception& )
@@ -1709,11 +1708,11 @@ namespace frm
                 weld::WaitObject aWO(Application::GetFrameWeld(xDialogParent));
                 if ( _bFilter )
                 {
-                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       makeAny( m_xParser->getFilter() ) );
-                    m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, makeAny( m_xParser->getHavingClause() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_FILTER,       Any( m_xParser->getFilter() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_HAVINGCLAUSE, Any( m_xParser->getHavingClause() ) );
                 }
                 else
-                    m_xCursorProperties->setPropertyValue( PROPERTY_SORT, makeAny( m_xParser->getOrder() ) );
+                    m_xCursorProperties->setPropertyValue( PROPERTY_SORT, Any( m_xParser->getOrder() ) );
                 m_xLoadableForm->reload();
             }
 

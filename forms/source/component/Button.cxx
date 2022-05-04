@@ -715,7 +715,7 @@ void OButtonControl::featureStateChanged( sal_Int16 _nFeatureId, bool _bEnabled 
         // enable or disable our peer, according to the new state
         Reference< XVclWindowPeer > xPeer( getPeer(), UNO_QUERY );
         if ( xPeer.is() )
-            xPeer->setProperty( PROPERTY_ENABLED, makeAny( m_bEnabledByPropertyValue && _bEnabled ) );
+            xPeer->setProperty( PROPERTY_ENABLED, Any( m_bEnabledByPropertyValue && _bEnabled ) );
             // if we're disabled according to our model's property, then
             // we don't care for the feature state, but *are* disabled.
             // If the model's property states that we're enabled, then we *do*

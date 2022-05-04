@@ -514,19 +514,19 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
 
         m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN) >>= nOldTextLen;
-        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny(sal_Int16(0)));
+        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, Any(sal_Int16(0)));
     }
 
     OEditBaseModel::write(_rxOutStream);
 
     if ( m_bMaxTextLenModified )
     {   // Reset again
-        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny(nOldTextLen));
+        m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, Any(nOldTextLen));
         // and reset the text
         // First we set it to an empty string : Without this the second setPropertyValue would not do anything as it thinks
         // we aren't changing the prop (it didn't notify the - implicit - change of the text prop while setting the max text len)
         // This seems to be a bug with in toolkit's EditControl-implementation.
-        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(OUString()));
+        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, Any(OUString()));
         m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, aCurrentText);
     }
 }
@@ -546,7 +546,7 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream)
             &&  (getString(aDefaultControl) == STARDIV_ONE_FORM_CONTROL_TEXTFIELD )
             )
         {
-            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( OUString(STARDIV_ONE_FORM_CONTROL_EDIT) ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, Any( OUString(STARDIV_ONE_FORM_CONTROL_EDIT) ) );
             // Older as well as current versions should understand this : the former knew only the STARDIV_ONE_FORM_CONTROL_EDIT,
             // the latter are registered for both STARDIV_ONE_FORM_CONTROL_EDIT and STARDIV_ONE_FORM_CONTROL_TEXTFIELD.
         }
@@ -689,13 +689,13 @@ Any OEditModel::translateDbColumnToControlValue()
         }
     }
 
-    return aRet.hasValue() ? aRet : makeAny( OUString() );
+    return aRet.hasValue() ? aRet : Any( OUString() );
 }
 
 
 Any OEditModel::getDefaultForReset() const
 {
-    return makeAny( m_aDefaultText );
+    return Any( m_aDefaultText );
 }
 
 }

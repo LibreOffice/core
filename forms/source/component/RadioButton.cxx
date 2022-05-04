@@ -346,7 +346,7 @@ void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent)
 
 Any ORadioButtonModel::translateDbColumnToControlValue()
 {
-    return makeAny( static_cast<sal_Int16>( ( m_xColumn->getString() == getReferenceValue() ) ? TRISTATE_TRUE : TRISTATE_FALSE )
+    return Any( static_cast<sal_Int16>( ( m_xColumn->getString() == getReferenceValue() ) ? TRISTATE_TRUE : TRISTATE_FALSE )
     );
 }
 
@@ -373,7 +373,7 @@ bool ORadioButtonModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
             sal_Int16 nValue = 0;
             m_xAggregateSet->getPropertyValue( PROPERTY_STATE ) >>= nValue;
             if ( nValue == 1 )
-                xField->setPropertyValue( PROPERTY_VALUE, makeAny( getReferenceValue() ) );
+                xField->setPropertyValue( PROPERTY_VALUE, Any( getReferenceValue() ) );
         }
         catch(const Exception&)
         {

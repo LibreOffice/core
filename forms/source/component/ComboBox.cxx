@@ -444,8 +444,8 @@ void SAL_CALL OComboBoxModel::read(const Reference<css::io::XObjectInputStream>&
         &&  !hasExternalListSource()
         )
     {
-        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( css::uno::Sequence<OUString>() ) );
-        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( css::uno::Sequence<OUString>() ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<css::uno::Any>() ) );
     }
 
     if (nVersion > 0x0004)
@@ -662,9 +662,9 @@ void OComboBoxModel::loadData( bool _bForce )
     }
 
     // Set String-Sequence at ListBox
-    setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( comphelper::containerToSequence(aStringList) ) );
+    setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( comphelper::containerToSequence(aStringList) ) );
     // Reset TypedItemList, no matching data.
-    setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
+    setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<css::uno::Any>() ) );
 }
 
 
@@ -687,7 +687,7 @@ void OComboBoxModel::onDisconnectedDbColumn()
 
     // reset the string item list
     if ( !hasExternalListSource() )
-        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( m_aDesignModeStringItems ) );
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( m_aDesignModeStringItems ) );
 
     m_aListRowSet.dispose();
 }
@@ -776,8 +776,8 @@ bool OComboBoxModel::commitControlValueToDbColumn( bool _bPostReset )
         aStringItemList.realloc( nOldLen + 1 );
         aStringItemList.getArray()[ nOldLen ] = sNewValue;
 
-        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringItemList ) );
-        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, makeAny( css::uno::Sequence<css::uno::Any>() ) );
+        setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, Any( aStringItemList ) );
+        setFastPropertyValue( PROPERTY_ID_TYPEDITEMLIST, Any( css::uno::Sequence<css::uno::Any>() ) );
     }
 
     return true;
@@ -808,14 +808,14 @@ Any OComboBoxModel::translateDbColumnToControlValue()
     else
         m_aLastKnownValue.clear();
 
-    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : makeAny( OUString() );
+    return m_aLastKnownValue.hasValue() ? m_aLastKnownValue : Any( OUString() );
         // (m_aLastKnownValue is allowed to be VOID, the control value isn't)
 }
 
 
 Any OComboBoxModel::getDefaultForReset() const
 {
-    return makeAny( m_aDefaultText );
+    return Any( m_aDefaultText );
 }
 
 
@@ -823,8 +823,8 @@ void OComboBoxModel::stringItemListChanged( ControlModelLock& /*_rInstanceLock*/
 {
     if ( m_xAggregateSet.is() )
     {
-        m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( comphelper::containerToSequence(getStringItemList()) ) );
-        m_xAggregateSet->setPropertyValue( PROPERTY_TYPEDITEMLIST, makeAny( getTypedItemList()) ) ;
+        m_xAggregateSet->setPropertyValue( PROPERTY_STRINGITEMLIST, Any( comphelper::containerToSequence(getStringItemList()) ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_TYPEDITEMLIST, Any( getTypedItemList()) ) ;
     }
 }
 

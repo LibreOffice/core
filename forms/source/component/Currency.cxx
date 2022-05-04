@@ -96,8 +96,8 @@ void OCurrencyModel::implConstruct()
         }
         if (!sCurrencySymbol.isEmpty())
         {
-            m_xAggregateSet->setPropertyValue(PROPERTY_CURRENCYSYMBOL, makeAny(sCurrencySymbol));
-            m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, makeAny(bPrependCurrencySymbol));
+            m_xAggregateSet->setPropertyValue(PROPERTY_CURRENCYSYMBOL, Any(sCurrencySymbol));
+            m_xAggregateSet->setPropertyValue(PROPERTY_CURRSYM_POSITION, Any(bPrependCurrencySymbol));
         }
     }
     catch(const Exception&)

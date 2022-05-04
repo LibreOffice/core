@@ -510,7 +510,7 @@ css::uno::Reference<css::xforms::XModel> Model::newModel( const Reference<css::f
         pModel->setID( sName );
         pModel->newInstance( OUString(), OUString(), false );
         pModel->initialize();
-        xModels->insertByName( sName, makeAny( xModel ) );
+        xModels->insertByName( sName, Any( xModel ) );
     }
 
     return xModel;
@@ -527,7 +527,7 @@ void Model::renameModel( const Reference<css::frame::XModel>& xCmp,
     {
         Reference<XModel> xModel( xModels->getByName( sFrom ), UNO_QUERY );
         xModel->setID( sTo );
-        xModels->insertByName( sTo, makeAny( xModel ) );
+        xModels->insertByName( sTo, Any( xModel ) );
         xModels->removeByName( sFrom );
     }
 }

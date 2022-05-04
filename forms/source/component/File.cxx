@@ -131,7 +131,7 @@ Any OFileControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     switch ( _nHandle )
     {
         case PROPERTY_ID_DEFAULT_TEXT:
-            return makeAny( OUString() );
+            return Any( OUString() );
     }
     return OControlModel::getPropertyDefaultByHandle( _nHandle );
 }
@@ -245,7 +245,7 @@ void SAL_CALL OFileControlModel::reset()
         // don't lock our mutex as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
-        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(m_sDefaultValue));
+        m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, Any(m_sDefaultValue));
         m_aResetListeners.notifyEach( &XResetListener::resetted, aEvt );
     }
 }

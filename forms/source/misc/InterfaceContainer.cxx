@@ -203,7 +203,7 @@ void OInterfaceContainer::clonedFrom(const OInterfaceContainer& _cloneSource)
         {
             Reference< XCloneable > xCloneable( xSourceHierarchy->getByIndex( i ), UNO_QUERY_THROW );
             Reference< XInterface > xClone( xCloneable->createClone() );
-            insertByIndex( i, makeAny( xClone ) );
+            insertByIndex( i, Any( xClone ) );
         }
     }
     catch (const RuntimeException&)
@@ -437,7 +437,7 @@ void SAL_CALL OInterfaceContainer::readEvents(const Reference<XObjectInputStream
         {
             Reference< XInterface > xAsIFace( item, UNO_QUERY );    // important to normalize this...
             Reference< XPropertySet > xAsSet( xAsIFace, UNO_QUERY );
-            m_xEventAttacher->attach( i++, xAsIFace, makeAny( xAsSet ) );
+            m_xEventAttacher->attach( i++, xAsIFace, Any( xAsSet ) );
         }
     }
 }
@@ -488,8 +488,8 @@ namespace
             {
                 try
                 {
-                    xObjProps->setPropertyValue( PROPERTY_NAME, makeAny( ResourceManager::loadString(RID_STR_CONTROL_SUBSTITUTED_NAME) ) );
-                    xObjProps->setPropertyValue( PROPERTY_TAG, makeAny( ResourceManager::loadString(RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN) ) );
+                    xObjProps->setPropertyValue( PROPERTY_NAME, Any( ResourceManager::loadString(RID_STR_CONTROL_SUBSTITUTED_NAME) ) );
+                    xObjProps->setPropertyValue( PROPERTY_TAG, Any( ResourceManager::loadString(RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN) ) );
                 }
                 catch(const Exception&)
                 {
@@ -812,7 +812,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     if ( bHandleEvents )
     {
         m_xEventAttacher->insertEntry(_nIndex);
-        m_xEventAttacher->attach( _nIndex, pElementMetaData->xInterface, makeAny( _rxElement ) );
+        m_xEventAttacher->attach( _nIndex, pElementMetaData->xInterface, Any( _rxElement ) );
     }
 
     // notify derived classes
@@ -976,7 +976,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     {
         m_xEventAttacher->insertEntry( _nIndex );
         m_xEventAttacher->attach(_nIndex, aElementMetaData->xInterface,
-                                 makeAny(aElementMetaData->xPropertySet));
+                                 Any(aElementMetaData->xPropertySet));
     }
 
     ContainerEvent aReplaceEvent;
@@ -1079,7 +1079,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const OUString& _rName, const An
         _rElement >>= xElementProps;
         approveNewElement( xElementProps, aElementMetaData.get() );
 
-        xElementProps->setPropertyValue( PROPERTY_NAME, makeAny( _rName ) );
+        xElementProps->setPropertyValue( PROPERTY_NAME, Any( _rName ) );
     }
     catch( const IllegalArgumentException& )
     {
@@ -1115,7 +1115,7 @@ void SAL_CALL OInterfaceContainer::replaceByName(const OUString& Name, const Any
         if (!hasProperty(PROPERTY_NAME, xSet))
             lcl_throwIllegalArgumentException();
 
-        xSet->setPropertyValue(PROPERTY_NAME, makeAny(Name));
+        xSet->setPropertyValue(PROPERTY_NAME, Any(Name));
     }
 
     // determine the element pos

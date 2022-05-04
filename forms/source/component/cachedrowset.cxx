@@ -39,7 +39,7 @@ namespace frm
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::beans::XPropertySet;
-    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Any;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::sdb::XQueriesSupplier;
     using ::com::sun::star::container::XNameAccess;
@@ -132,8 +132,8 @@ namespace frm
 
             Reference< XStatement > xStatement( m_pData->xConnection->createStatement(), UNO_SET_THROW );
             Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
-            xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( m_pData->bEscapeProcessing ) );
-            xStatementProps->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( ResultSetType::FORWARD_ONLY ) );
+            xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, Any( m_pData->bEscapeProcessing ) );
+            xStatementProps->setPropertyValue( PROPERTY_RESULTSET_TYPE, Any( ResultSetType::FORWARD_ONLY ) );
 
             xResult.set( xStatement->executeQuery( m_pData->sCommand ), UNO_SET_THROW );
             m_pData->bStatementDirty = false;

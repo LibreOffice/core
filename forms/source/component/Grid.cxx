@@ -293,7 +293,7 @@ sal_Bool SAL_CALL OGridControlModel::select(const Any& rElement)
 }
 Any SAL_CALL OGridControlModel::getSelection()
 {
-    return makeAny(m_xSelection);
+    return Any(m_xSelection);
 }
 
 void OGridControlModel::addSelectionChangeListener(const Reference< XSelectionChangeListener >& _rxListener)

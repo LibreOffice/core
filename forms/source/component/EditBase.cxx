@@ -358,9 +358,9 @@ Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     switch (nHandle)
     {
         case PROPERTY_ID_DEFAULT_TEXT:
-            return makeAny(OUString());
+            return Any(OUString());
         case PROPERTY_ID_FILTERPROPOSAL:
-            return makeAny(false);
+            return Any(false);
         case PROPERTY_ID_DEFAULT_VALUE:
         case PROPERTY_ID_DEFAULT_DATE:
         case PROPERTY_ID_DEFAULT_TIME:

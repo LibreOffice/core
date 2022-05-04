@@ -44,7 +44,7 @@ namespace frm
 {
 
 
-    using ::com::sun::star::uno::makeAny;
+    using ::com::sun::star::uno::Any;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
 
@@ -634,7 +634,7 @@ namespace frm
     {
         if (!m_pDispatcher)
             return;
-        m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", makeAny( static_cast<sal_Int32>(nRecord) ) );
+        m_pDispatcher->dispatchWithArgument( FormFeature::MoveAbsolute, "Position", Any( static_cast<sal_Int32>(nRecord) ) );
     }
 
 }   // namespace frm

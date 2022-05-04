@@ -1021,7 +1021,7 @@ void ODatabaseForm::onError( const SQLException& _rException, const OUString& _r
     if ( !m_aErrorListeners.getLength() )
         return;
 
-    SQLErrorEvent aEvent( *this, makeAny( prependErrorInfo( _rException, *this, _rContextDescription ) ) );
+    SQLErrorEvent aEvent( *this, Any( prependErrorInfo( _rException, *this, _rContextDescription ) ) );
     onError( aEvent );
 }
 
@@ -1127,15 +1127,15 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
 
         // switch to "insert only" mode
         saveInsertOnlyState( );
-        m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( true ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, Any( true ) );
     }
     else if (m_bAllowInsert || m_bAllowUpdate || m_bAllowDelete)
         nConcurrency = ResultSetConcurrency::UPDATABLE;
     else
         nConcurrency = ResultSetConcurrency::READ_ONLY;
 
-    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, makeAny( nConcurrency ) );
-    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( sal_Int32(ResultSetType::SCROLL_SENSITIVE) ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_CONCURRENCY, Any( nConcurrency ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_RESULTSET_TYPE, Any( sal_Int32(ResultSetType::SCROLL_SENSITIVE) ) );
 
     bool bSuccess = false;
     try
@@ -1616,7 +1616,7 @@ void ODatabaseForm::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const A
             if ( m_aIgnoreResult.hasValue() )
                 m_aIgnoreResult <<= m_bInsertOnly;
             else
-                m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, makeAny( m_bInsertOnly ) );
+                m_xAggregateSet->setPropertyValue( PROPERTY_INSERTONLY, Any( m_bInsertOnly ) );
             break;
 
         case PROPERTY_ID_FILTER:
@@ -2365,7 +2365,7 @@ void SAL_CALL ODatabaseForm::setParent(const css::uno::Reference<css::uno::XInte
     bool bIsEmbedded = ::dbtools::isEmbeddedInDatabase( Parent, xOuterConnection );
 
     if ( bIsEmbedded )
-        xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCE, makeAny( OUString() ) );
+        xAggregateProperties->setPropertyValue( PROPERTY_DATASOURCE, Any( OUString() ) );
 }
 
 
@@ -2416,7 +2416,7 @@ void SAL_CALL ODatabaseForm::setControlModels(const Sequence<Reference<XControlM
                 {
                     Reference<XPropertySet>  xSet(xComp, UNO_QUERY);
                     if (xSet.is() && hasProperty(PROPERTY_TABINDEX, xSet))
-                        xSet->setPropertyValue( PROPERTY_TABINDEX, makeAny(nTabIndex++) );
+                        xSet->setPropertyValue( PROPERTY_TABINDEX, Any(nTabIndex++) );
                     break;
                 }
             }
@@ -2455,7 +2455,7 @@ void SAL_CALL ODatabaseForm::setGroup( const Sequence<Reference<XControlModel> >
         if (sGroupName.isEmpty())
             xSet->getPropertyValue(PROPERTY_NAME) >>= sGroupName;
         else
-            xSet->setPropertyValue(PROPERTY_NAME, makeAny(sGroupName));
+            xSet->setPropertyValue(PROPERTY_NAME, Any(sGroupName));
     }
 }
 
@@ -2678,7 +2678,7 @@ void ODatabaseForm::doShareConnection( const Reference< XPropertySet >& _rxParen
 
         // forward the connection to our own aggregate
         m_bForwardingConnection = true;
-        m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xParentConn ) );
+        m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( xParentConn ) );
         m_bForwardingConnection = false;
 
         m_bSharingConnection = true;
@@ -2720,7 +2720,7 @@ void ODatabaseForm::stopSharingConnection( )
     // reset the property
     xSharedConn.clear();
     m_bForwardingConnection = true;
-    m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xSharedConn ) );
+    m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( xSharedConn ) );
     m_bForwardingConnection = false;
 
     // reset the flag
@@ -2755,7 +2755,7 @@ bool ODatabaseForm::implEnsureConnection()
         Reference< XConnection > xOuterConnection;
         if ( ::dbtools::isEmbeddedInDatabase( getParent(), xOuterConnection ) )
         {
-            m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( xOuterConnection ) );
+            m_xAggregateSet->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, Any( xOuterConnection ) );
             return xOuterConnection.is();
         }
 
@@ -2829,7 +2829,7 @@ void ODatabaseForm::load_impl(bool bCausedByParentForm, bool bMoveToFirst, const
     // a database form always uses caching
     // we use starting fetchsize with at least 10 rows
     if (bConnected)
-        m_xAggregateSet->setPropertyValue(PROPERTY_FETCHSIZE, makeAny(sal_Int32(40)));
+        m_xAggregateSet->setPropertyValue(PROPERTY_FETCHSIZE, Any(sal_Int32(40)));
 
     // if we're loaded as sub form we got a "rowSetChanged" from the parent rowset _before_ we got the "loaded"
     // so we don't need to execute the statement again, this was already done
@@ -3881,10 +3881,10 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
     OUString sAggregateProp;
     _rxInStream >> sAggregateProp;
     if (m_xAggregateSet.is())
-        m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, makeAny(sAggregateProp));
+        m_xAggregateSet->setPropertyValue(PROPERTY_DATASOURCE, Any(sAggregateProp));
     _rxInStream >> sAggregateProp;
     if (m_xAggregateSet.is())
-        m_xAggregateSet->setPropertyValue(PROPERTY_COMMAND, makeAny(sAggregateProp));
+        m_xAggregateSet->setPropertyValue(PROPERTY_COMMAND, Any(sAggregateProp));
 
     _rxInStream >> m_aMasterFields;
     _rxInStream >> m_aDetailFields;
@@ -3900,13 +3900,13 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
         {
             nCommandType = CommandType::COMMAND;
             bool bEscapeProcessing = static_cast<DataSelectionType>(nCursorSourceType) != DataSelectionType_SQLPASSTHROUGH;
-            m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, makeAny(bEscapeProcessing));
+            m_xAggregateSet->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, Any(bEscapeProcessing));
         }
         break;
         default : OSL_FAIL("ODatabaseForm::read : wrong CommandType !");
     }
     if (m_xAggregateSet.is())
-        m_xAggregateSet->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(nCommandType));
+        m_xAggregateSet->setPropertyValue(PROPERTY_COMMANDTYPE, Any(nCommandType));
 
     // obsolete
     _rxInStream->readShort();
@@ -3919,7 +3919,7 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 
     bool bInsertOnly = _rxInStream->readBoolean();
     if (m_xAggregateSet.is())
-        m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY, makeAny(bInsertOnly));
+        m_xAggregateSet->setPropertyValue(PROPERTY_INSERTONLY, Any(bInsertOnly));
 
     m_bAllowInsert      = _rxInStream->readBoolean();
     m_bAllowUpdate      = _rxInStream->readBoolean();
@@ -3941,12 +3941,12 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
 
         _rxInStream >> sAggregateProp;
         if (m_xAggregateSet.is())
-            m_xAggregateSet->setPropertyValue(PROPERTY_FILTER, makeAny(sAggregateProp));
+            m_xAggregateSet->setPropertyValue(PROPERTY_FILTER, Any(sAggregateProp));
         if(nVersion > 3)
         {
             _rxInStream >> sAggregateProp;
             if (m_xAggregateSet.is())
-                m_xAggregateSet->setPropertyValue(PROPERTY_SORT, makeAny(sAggregateProp));
+                m_xAggregateSet->setPropertyValue(PROPERTY_SORT, Any(sAggregateProp));
         }
     }
 
@@ -3963,13 +3963,13 @@ void SAL_CALL ODatabaseForm::read(const Reference<XObjectInputStream>& _rxInStre
             m_aCycle.clear();
     }
     if (m_xAggregateSet.is())
-        m_xAggregateSet->setPropertyValue(PROPERTY_APPLYFILTER, makeAny((nAnyMask & DONTAPPLYFILTER) == 0));
+        m_xAggregateSet->setPropertyValue(PROPERTY_APPLYFILTER, Any((nAnyMask & DONTAPPLYFILTER) == 0));
 
     if(nVersion > 4)
     {
         _rxInStream >> sAggregateProp;
         if (m_xAggregateSet.is())
-            m_xAggregateSet->setPropertyValue(PROPERTY_HAVINGCLAUSE, makeAny(sAggregateProp));
+            m_xAggregateSet->setPropertyValue(PROPERTY_HAVINGCLAUSE, Any(sAggregateProp));
     }
 }
 
@@ -4029,7 +4029,7 @@ OUString SAL_CALL ODatabaseForm::getName()
 
 void SAL_CALL ODatabaseForm::setName(const OUString& aName)
 {
-    setFastPropertyValue(PROPERTY_ID_NAME, makeAny(aName));
+    setFastPropertyValue(PROPERTY_ID_NAME, Any(aName));
 }
 
 }   // namespace frm

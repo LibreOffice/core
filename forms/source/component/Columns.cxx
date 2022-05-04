@@ -189,7 +189,7 @@ Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType )
 OGridColumn::OGridColumn( const Reference<XComponentContext>& _rContext, const OUString& _sModelName )
     :OGridColumn_BASE(m_aMutex)
     ,OPropertySetAggregationHelper(OGridColumn_BASE::rBHelper)
-    ,m_aHidden( makeAny( false ) )
+    ,m_aHidden( Any( false ) )
     ,m_aModelName(_sModelName)
 {
 
@@ -443,7 +443,7 @@ Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         case PROPERTY_ID_ALIGN:
             return Any();
         case PROPERTY_ID_HIDDEN:
-            return makeAny(false);
+            return Any(false);
         default:
             return OPropertySetAggregationHelper::getPropertyDefaultByHandle(nHandle);
     }

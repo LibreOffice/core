@@ -38,7 +38,6 @@ namespace xforms
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::util::Date;
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
@@ -111,7 +110,7 @@ namespace xforms
     void SAL_CALL OXSDDataType::setName( const OUString& aName )
     {
         // TODO: check the name for conflicts in the repository
-        setFastPropertyValue( PROPERTY_ID_NAME, makeAny(aName) );
+        setFastPropertyValue( PROPERTY_ID_NAME, Any(aName) );
         SAL_WARN_IF( m_sName != aName, "forms.misc", "OXSDDataType::setName: inconsistency!" );
     }
 
@@ -124,7 +123,7 @@ namespace xforms
 
     void SAL_CALL OXSDDataType::setPattern( const OUString& _pattern )
     {
-        setFastPropertyValue( PROPERTY_ID_XSD_PATTERN, makeAny(_pattern) );
+        setFastPropertyValue( PROPERTY_ID_XSD_PATTERN, Any(_pattern) );
         SAL_WARN_IF( m_sPattern != _pattern, "forms.misc", "OXSDDataType::setPattern: inconsistency!" );
     }
 
@@ -137,7 +136,7 @@ namespace xforms
 
     void SAL_CALL OXSDDataType::setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment )
     {
-        setFastPropertyValue( PROPERTY_ID_XSD_WHITESPACE, makeAny(_whitespacetreatment) );
+        setFastPropertyValue( PROPERTY_ID_XSD_WHITESPACE, Any(_whitespacetreatment) );
         SAL_WARN_IF( m_nWST != _whitespacetreatment, "forms.misc", "OXSDDataType::setWhiteSpaceTreatment: inconsistency!" );
     }
 

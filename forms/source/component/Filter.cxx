@@ -183,8 +183,8 @@ namespace frm
                 case FormComponentType::CHECKBOX:
                 {
                     // checkboxes always have a tristate-mode
-                    xVclWindow->setProperty( PROPERTY_TRISTATE, makeAny( true ) );
-                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( TRISTATE_INDET ) ) );
+                    xVclWindow->setProperty( PROPERTY_TRISTATE, Any( true ) );
+                    xVclWindow->setProperty( PROPERTY_STATE, Any( sal_Int32( TRISTATE_INDET ) ) );
 
                     Reference< XCheckBox >  xBox( getPeer(), UNO_QUERY_THROW );
                     xBox->addItemListener( this );
@@ -194,7 +194,7 @@ namespace frm
 
                 case FormComponentType::RADIOBUTTON:
                 {
-                    xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( TRISTATE_FALSE ) ) );
+                    xVclWindow->setProperty( PROPERTY_STATE, Any( sal_Int32( TRISTATE_FALSE ) ) );
 
                     Reference< XRadioButton >  xRadio( getPeer(), UNO_QUERY_THROW );
                     xRadio->addItemListener( this );
@@ -210,7 +210,7 @@ namespace frm
 
                 case FormComponentType::COMBOBOX:
                 {
-                    xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, makeAny( true ) );
+                    xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, Any( true ) );
                     [[fallthrough]];
                 }
 
@@ -230,7 +230,7 @@ namespace frm
             Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
             if ( xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
-                xVclWindow->setProperty( PROPERTY_READONLY, makeAny( false ) );
+                xVclWindow->setProperty( PROPERTY_READONLY, Any( false ) );
         }
         catch( const Exception& )
         {
@@ -730,7 +730,7 @@ namespace frm
     {
         try
         {
-            Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create( m_xContext, "",  m_xMessageParent, makeAny(_rExcept));
+            Reference< XExecutableDialog > xErrorDialog = ErrorMessageDialog::create( m_xContext, "",  m_xMessageParent, Any(_rExcept));
             xErrorDialog->execute();
         }
         catch( const Exception& )

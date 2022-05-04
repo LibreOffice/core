@@ -368,7 +368,7 @@ sal_Bool SAL_CALL Submission::convertFastPropertyValue(
                 aPrefixes.push_back( sTokenList.getToken( 0, ',', p ) );
 
             Sequence< OUString > aConvertedPrefixes( aPrefixes.data(), aPrefixes.size() );
-            return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, makeAny( aConvertedPrefixes ) );
+            return PropertySetBase::convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, Any( aConvertedPrefixes ) );
         }
     }
 
@@ -429,7 +429,7 @@ void SAL_CALL Submission::submitWithInteraction(
             // laboriously create interaction request
             rtl::Reference<comphelper::OInteractionRequest> pRequest
                 = new comphelper::OInteractionRequest(
-                    makeAny( aInvalidDataException ) );
+                    Any( aInvalidDataException ) );
 
             rtl::Reference<comphelper::OInteractionApprove> pContinue
                 = new comphelper::OInteractionApprove();

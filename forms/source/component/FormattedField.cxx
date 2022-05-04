@@ -379,7 +379,7 @@ void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         Reference<XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
         DBG_ASSERT(m_xAggregateSet.is(), "OFormattedModel::setPropertyToDefaultByHandle(FORMATSSUPPLIER) : have no aggregate !");
         if (m_xAggregateSet.is())
-            m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
+            m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, Any(xSupplier));
     }
     else
         OEditBaseModel::setPropertyToDefaultByHandle(nHandle);
@@ -400,7 +400,7 @@ Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
     {
         Reference<XNumberFormatsSupplier>  xSupplier = calcDefaultFormatsSupplier();
-        return makeAny(xSupplier);
+        return Any(xSupplier);
     }
     else
         return OEditBaseModel::getPropertyDefaultByHandle(nHandle);
@@ -571,7 +571,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                     }
                 }
                 aSupplier >>= m_xOriginalFormatter;
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, Any(xSupplier));
                 m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, aFmtKey);
                 // Adapt the NumericFalg to my bound field
                 if (xField.is())
@@ -599,7 +599,7 @@ void OFormattedModel::onConnectedDbColumn( const Reference< XInterface >& _rxFor
                 }
                 else
                     m_bNumeric = m_bOriginalNumeric;
-                setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bNumeric));
+                setPropertyValue(PROPERTY_TREATASNUMERIC, Any(m_bNumeric));
                 OSL_VERIFY( aFmtKey >>= nFormatKey );
             }
         }
@@ -616,9 +616,9 @@ void OFormattedModel::onDisconnectedDbColumn()
     OEditBaseModel::onDisconnectedDbColumn();
     if (m_xOriginalFormatter.is())
     {   // Our aggregated model does not hold any Format information
-        m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(m_xOriginalFormatter));
+        m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, Any(m_xOriginalFormatter));
         m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any());
-        setPropertyValue(PROPERTY_TREATASNUMERIC, makeAny(m_bOriginalNumeric));
+        setPropertyValue(PROPERTY_TREATASNUMERIC, Any(m_bOriginalNumeric));
         m_xOriginalFormatter = nullptr;
     }
     m_nKeyType   = NumberFormat::UNDEFINED;
@@ -790,8 +790,8 @@ void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
     }
     if ((nKey != -1) && m_xAggregateSet.is())
     {
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, makeAny(xSupplier));
-                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nKey));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATSSUPPLIER, Any(xSupplier));
+                m_xAggregateSet->setPropertyValue(PROPERTY_FORMATKEY, Any(nKey));
     }
     else
     {
