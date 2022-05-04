@@ -379,7 +379,7 @@ void SAL_CALL OReadStatusBarDocumentHandler::startElement(
                     comphelper::makePropertyValue(ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::DEFAULT)
                 };
 
-                m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), makeAny( aStatusbarItemProp ) );
+                m_aStatusBarItems->insertByIndex( m_aStatusBarItems->getCount(), Any( aStatusbarItemProp ) );
            }
         }
         break;

@@ -239,9 +239,9 @@ void PopupMenuToolbarController::createPopupMenuController()
     else
     {
         css::uno::Sequence<css::uno::Any> aArgs {
-            css::uno::makeAny(comphelper::makePropertyValue("Frame", m_xFrame)),
-            css::uno::makeAny(comphelper::makePropertyValue("ModuleIdentifier", m_sModuleName)),
-            css::uno::makeAny(comphelper::makePropertyValue("InToolbar", true))
+            css::uno::Any(comphelper::makePropertyValue("Frame", m_xFrame)),
+            css::uno::Any(comphelper::makePropertyValue("ModuleIdentifier", m_sModuleName)),
+            css::uno::Any(comphelper::makePropertyValue("InToolbar", true))
         };
 
         try

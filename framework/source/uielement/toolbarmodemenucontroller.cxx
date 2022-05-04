@@ -214,7 +214,7 @@ void SAL_CALL ToolbarModeMenuController::statusChanged( const FeatureStateEvent&
 // XMenuListener
 void SAL_CALL ToolbarModeMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
-    auto aArgs(comphelper::InitPropertySequence({{"Mode", makeAny(m_xPopupMenu->getCommand(rEvent.MenuId))}}));
+    auto aArgs(comphelper::InitPropertySequence({{"Mode", Any(m_xPopupMenu->getCommand(rEvent.MenuId))}}));
     dispatchCommand(m_aCommandURL, aArgs);
 }
 

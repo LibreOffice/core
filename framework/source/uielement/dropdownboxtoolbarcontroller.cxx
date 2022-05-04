@@ -198,7 +198,7 @@ void DropdownToolbarController::executeControlCommand( const css::frame::Control
                 m_pListBoxControl->set_active(0);
 
                 // send notification
-                uno::Sequence< beans::NamedValue > aInfo { { "List", css::uno::makeAny(aList) } };
+                uno::Sequence< beans::NamedValue > aInfo { { "List", css::uno::Any(aList) } };
                 addNotifyInfo( "ListChanged",
                                getDispatchFromCommand( m_aCommandURL ),
                                aInfo );

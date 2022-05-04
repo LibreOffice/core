@@ -571,7 +571,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                             {
                                 // Default is: Every context sensitive toolbar is visible
                                 aWindowState.getArray()[nVisibleIndex].Value <<= true;
-                                xNameReplace->replaceByName( aElementName, makeAny( aWindowState ));
+                                xNameReplace->replaceByName( aElementName, Any( aWindowState ));
                                 bRefreshToolbars = true;
                             }
                         }
@@ -591,7 +591,7 @@ void SAL_CALL ToolbarsMenuController::itemSelected( const css::awt::MenuEvent& r
                         {
                             try
                             {
-                                xPropSet->setPropertyValue("RefreshContextToolbarVisibility", makeAny( true ));
+                                xPropSet->setPropertyValue("RefreshContextToolbarVisibility", Any( true ));
                             }
                             catch ( const RuntimeException& )
                             {

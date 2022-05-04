@@ -305,7 +305,7 @@ Any SAL_CALL MenuBarWrapper::getByName(
         throw container::NoSuchElementException();
 
     uno::Reference< frame::XDispatchProvider > xDispatchProvider = pIter->second.m_xDispatchProvider;
-    return uno::makeAny( xDispatchProvider );
+    return uno::Any( xDispatchProvider );
 }
 
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()

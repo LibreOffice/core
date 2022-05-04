@@ -1586,12 +1586,12 @@ void ToolbarLayoutManager::implts_writeWindowStateData( const UIElement& rElemen
         if ( xPersistentWindowState->hasByName( aName ))
         {
             uno::Reference< container::XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
-            xReplace->replaceByName( aName, uno::makeAny( aWindowState ));
+            xReplace->replaceByName( aName, uno::Any( aWindowState ));
         }
         else
         {
             uno::Reference< container::XNameContainer > xInsert( xPersistentWindowState, uno::UNO_QUERY );
-            xInsert->insertByName( aName, uno::makeAny( aWindowState ));
+            xInsert->insertByName( aName, uno::Any( aWindowState ));
         }
     }
     catch (const uno::Exception&)
@@ -3150,7 +3150,7 @@ void ToolbarLayoutManager::implts_renumberRowColumnData(
                             aDockedPos.X += 1;
 
                         uno::Reference< container::XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
-                        xReplace->replaceByName( rWindowElementName, makeAny( aPropValueSeq ));
+                        xReplace->replaceByName( rWindowElementName, css::uno::Any( aPropValueSeq ));
                     }
                 }
                 catch (const uno::Exception&)
@@ -3773,7 +3773,7 @@ void SAL_CALL ToolbarLayoutManager::elementInserted( const ui::ConfigurationEven
         if ( xPropSet.is() )
         {
             if ( rEvent.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
+                xPropSet->setPropertyValue( "ConfigurationSource", css::uno::Any( m_xDocCfgMgr ));
         }
         xElementSettings->updateSettings();
     }
@@ -3857,7 +3857,7 @@ void SAL_CALL ToolbarLayoutManager::elementRemoved( const ui::ConfigurationEvent
             // document settings removed
             if ( xModuleCfgMgr->hasSettings( rEvent.ResourceURL ))
             {
-                xPropSet->setPropertyValue( aConfigSourcePropName, makeAny( xModuleCfgMgr ));
+                xPropSet->setPropertyValue( aConfigSourcePropName, css::uno::Any( xModuleCfgMgr ));
                 xElementSettings->updateSettings();
                 return;
             }

@@ -230,7 +230,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                     {
                         try
                         {
-                            xPropSet->setPropertyValue("UIName", makeAny( aUIName ) );
+                            xPropSet->setPropertyValue("UIName", Any( aUIName ) );
                         }
                         catch ( const UnknownPropertyException& )
                         {
@@ -372,14 +372,14 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 }
 
                 auto aToolbarItemProp( comphelper::InitPropertySequence( {
-                    { m_aCommandURL, css::uno::makeAny( aCommandURL ) },
-                    { m_aLabel, css::uno::makeAny( aLabel ) },
-                    { m_aType, css::uno::makeAny( css::ui::ItemType::DEFAULT ) },
-                    { m_aStyle, css::uno::makeAny( nItemBits ) },
-                    { m_aIsVisible, css::uno::makeAny( bVisible ) },
+                    { m_aCommandURL, css::uno::Any( aCommandURL ) },
+                    { m_aLabel, css::uno::Any( aLabel ) },
+                    { m_aType, css::uno::Any( css::ui::ItemType::DEFAULT ) },
+                    { m_aStyle, css::uno::Any( nItemBits ) },
+                    { m_aIsVisible, css::uno::Any( bVisible ) },
                 } ) );
 
-                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+                m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), Any( aToolbarItemProp ) );
             }
         }
         break;
@@ -402,7 +402,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 comphelper::makePropertyValue(m_aType, css::ui::ItemType::SEPARATOR_SPACE)
             };
 
-            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), Any( aToolbarItemProp ) );
         }
         break;
 
@@ -424,7 +424,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 comphelper::makePropertyValue(m_aType, css::ui::ItemType::SEPARATOR_LINEBREAK)
             };
 
-            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), Any( aToolbarItemProp ) );
         }
         break;
 
@@ -446,7 +446,7 @@ void SAL_CALL OReadToolBoxDocumentHandler::startElement(
                 comphelper::makePropertyValue(m_aType, css::ui::ItemType::SEPARATOR_LINE)
             };
 
-            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), makeAny( aToolbarItemProp ) );
+            m_rItemContainer->insertByIndex( m_rItemContainer->getCount(), Any( aToolbarItemProp ) );
         }
         break;
 

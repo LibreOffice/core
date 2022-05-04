@@ -192,7 +192,7 @@ void PersistentWindowState::implst_setWindowStateOnConfig(
             "org.openoffice.Setup/",
             OUString::Concat("Office/Factories/*[\"") + sModuleName + "\"]",
             "ooSetupFactoryWindowAttributes",
-            css::uno::makeAny(sWindowState),
+            css::uno::Any(sWindowState),
             ::comphelper::EConfigurationModes::Standard);
     }
     catch(const css::uno::RuntimeException&)
