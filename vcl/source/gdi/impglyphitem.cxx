@@ -304,7 +304,8 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
     const SalLayoutFlags glyphItemsOnlyLayout
         = SalLayoutFlags::GlyphItemsOnly | SalLayoutFlags::BiDiStrong;
 #endif
-    bool resetLastPrefixKey = true;
+    bool resetLastSubstringKey = true;
+    const sal_Unicode nbSpace = 0xa0; // non-breaking space
     if (nIndex != 0 || nLen != text.getLength())
     {
         // The glyphs functions are often called first for an entire string
@@ -319,9 +320,13 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         {
             // This function may often be called repeatedly for segments of the same string,
             // in which case it is more efficient to cache glyphs for the entire string
-            // and then return subsets of them. So if the first call is for a prefix of the string,
-            // remember that, and if the next call follows the previous part of the string,
-            // cache the entire string.
+            // and then return subsets of them. So if a second call either starts at the same
+            // position or starts at the end of the previous call, cache the entire string.
+            // This used to do this only for the first two segments of the string,
+            // but that missed the case when the font slightly changed e.g. because of the first
+            // part being underlined. Doing this for any two segments allows this optimization
+            // even when the prefix of the string would use a different font.
+            // TODO: Can those font differences be ignored?
             // Writer layouts tests enable SAL_ABORT_ON_NON_APPLICATION_FONT_USE in order
             // to make PrintFontManager::Substitute() abort if font fallback happens. When
             // laying out the entire string the chance this happens increases (e.g. testAbi11870
@@ -330,28 +335,35 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             // does not change result of this function, simply disable it for those tests.
             static bool bAbortOnFontSubstitute
                 = getenv("SAL_ABORT_ON_NON_APPLICATION_FONT_USE") != nullptr;
-            if (nIndex == 0)
+            if (mLastSubstringKey.has_value() && !bAbortOnFontSubstitute)
             {
-                mLastPrefixKey = key;
-                resetLastPrefixKey = false;
+                sal_Int32 pos = nIndex;
+                if (mLastSubstringKey->len < pos && text[pos - 1] == nbSpace)
+                    --pos; // Writer skips a non-breaking space, so skip that character too.
+                if ((mLastSubstringKey->len == pos || mLastSubstringKey->index == nIndex)
+                    && mLastSubstringKey
+                           == CachedGlyphsKey(outputDevice, text, mLastSubstringKey->index,
+                                              mLastSubstringKey->len, nLogicWidth))
+                {
+                    std::unique_ptr<SalLayout> layout
+                        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
+                                                   glyphItemsOnlyLayout, layoutCache);
+                    GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), nLogicWidth,
+                                    layoutCache);
+                    itWhole = mCachedGlyphs.find(keyWhole);
+                }
+                else
+                    mLastSubstringKey.reset();
             }
-            else if (mLastPrefixKey.has_value() && mLastPrefixKey->len == nIndex
-                     && mLastPrefixKey
-                            == CachedGlyphsKey(outputDevice, text, mLastPrefixKey->index,
-                                               mLastPrefixKey->len, nLogicWidth)
-                     && !bAbortOnFontSubstitute)
+            if (!mLastSubstringKey.has_value())
             {
-                assert(mLastPrefixKey->index == 0);
-                std::unique_ptr<SalLayout> layout
-                    = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
-                                               glyphItemsOnlyLayout, layoutCache);
-                GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), nLogicWidth, layoutCache);
-                itWhole = mCachedGlyphs.find(keyWhole);
+                mLastSubstringKey = key;
+                resetLastSubstringKey = false;
             }
         }
         if (itWhole != mCachedGlyphs.end() && itWhole->second.IsValid())
         {
-            mLastPrefixKey.reset();
+            mLastSubstringKey.reset();
             mLastTemporaryGlyphs
                 = makeGlyphsSubset(itWhole->second, outputDevice, text, nIndex, nLen);
             if (mLastTemporaryGlyphs.IsValid())
@@ -376,8 +388,14 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
             }
         }
     }
-    if (resetLastPrefixKey)
-        mLastPrefixKey.reset();
+    if (resetLastSubstringKey)
+    {
+        // Writer does non-breaking space differently (not as part of the string), so in that
+        // case ignore that call and still allow finding two adjacent substrings that have
+        // the non-breaking space between them.
+        if (nLen != 1 || text[nIndex] != nbSpace)
+            mLastSubstringKey.reset();
+    }
 
     std::shared_ptr<const vcl::text::TextLayoutCache> tmpLayoutCache;
     if (layoutCache == nullptr)
