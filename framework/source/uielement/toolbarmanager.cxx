@@ -1095,20 +1095,20 @@ void ToolBarManager::CreateControllers()
 
             aPropValue.Name     = "ModuleIdentifier";
             aPropValue.Value    <<= m_aModuleIdentifier;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
             aPropValue.Name     = "Frame";
             aPropValue.Value    <<= m_xFrame;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
             aPropValue.Name     = "ServiceManager";
             Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
             aPropValue.Value    <<= xMSF;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
             aPropValue.Name     = "ParentWindow";
             aPropValue.Value    <<= xToolbarWindow;
-            aPropertyVector.push_back( makeAny( aPropValue ));
+            aPropertyVector.push_back( Any( aPropValue ));
             aPropValue.Name     = "Identifier";
             aPropValue.Value    <<= sal_uInt16(nId);
-            aPropertyVector.push_back( uno::makeAny( aPropValue ) );
+            aPropertyVector.push_back( uno::Any( aPropValue ) );
 
             Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
             xController.set( m_xToolbarControllerFactory->createInstanceWithArgumentsAndContext( aCommandURL, aArgs, m_xContext ),
@@ -1199,23 +1199,23 @@ void ToolBarManager::CreateControllers()
 
                 aPropValue.Name = "Frame";
                 aPropValue.Value <<= m_xFrame;
-                aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropertyVector.push_back( Any( aPropValue ));
                 aPropValue.Name = "CommandURL";
                 aPropValue.Value <<= aCommandURL;
-                aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropertyVector.push_back( Any( aPropValue ));
                 aPropValue.Name = "ServiceManager";
                 Reference<XMultiServiceFactory> xMSF(m_xContext->getServiceManager(), UNO_QUERY_THROW);
                 aPropValue.Value <<= xMSF;
-                aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropertyVector.push_back( Any( aPropValue ));
                 aPropValue.Name = "ParentWindow";
                 aPropValue.Value <<= xToolbarWindow;
-                aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropertyVector.push_back( Any( aPropValue ));
                 aPropValue.Name = "ModuleIdentifier";
                 aPropValue.Value <<= m_aModuleIdentifier;
-                aPropertyVector.push_back( makeAny( aPropValue ));
+                aPropertyVector.push_back( Any( aPropValue ));
                 aPropValue.Name     = "Identifier";
                 aPropValue.Value    <<= sal_uInt16(nId);
-                aPropertyVector.push_back( uno::makeAny( aPropValue ) );
+                aPropertyVector.push_back( uno::Any( aPropValue ) );
 
                 Sequence< Any > aArgs( comphelper::containerToSequence( aPropertyVector ));
                 xInit->initialize( aArgs );
@@ -1223,7 +1223,7 @@ void ToolBarManager::CreateControllers()
                 if (pController)
                 {
                     if (aCommandURL == ".uno:SwitchXFormsDesignMode" || aCommandURL == ".uno:ViewDataSourceBrowser")
-                        pController->setFastPropertyValue_NoBroadcast(1, makeAny(true));
+                        pController->setFastPropertyValue_NoBroadcast(1, Any(true));
                 }
             }
 
@@ -2207,7 +2207,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
                                         aProp.getArray()[nVisibleIndex].Value <<= !bVisible;
                                         try
                                         {
-                                            xItemContainer->replaceByIndex( i, makeAny( aProp ));
+                                            xItemContainer->replaceByIndex( i, Any( aProp ));
                                             xUIElementSettings->setSettings( xItemContainer );
                                             Reference< XPropertySet > xPropSet( xUIElementSettings, UNO_QUERY );
                                             if ( xPropSet.is() )

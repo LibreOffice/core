@@ -45,7 +45,7 @@ uno::Any SAL_CALL GraphicNameAccess::getByName( const OUString& aName )
     NameGraphicHashMap::const_iterator pIter = m_aNameToElementMap.find( aName );
     if ( pIter == m_aNameToElementMap.end() )
         throw container::NoSuchElementException();
-    return uno::makeAny( pIter->second );
+    return uno::Any( pIter->second );
 }
 
 uno::Sequence< OUString > SAL_CALL GraphicNameAccess::getElementNames()

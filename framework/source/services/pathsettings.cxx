@@ -638,13 +638,13 @@ void PathSettings::impl_storePath(const PathSettings::PathInfo& aPath)
         ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
                                                             aResubstPath.sPathName,
                                                             CFGPROP_USERPATHS,
-                            css::uno::makeAny(comphelper::containerToSequence(aResubstPath.lUserPaths)));
+                            css::uno::Any(comphelper::containerToSequence(aResubstPath.lUserPaths)));
     }
 
     ::comphelper::ConfigurationHelper::writeRelativeKey(xCfgNew,
                                                         aResubstPath.sPathName,
                                                         CFGPROP_WRITEPATH,
-                                                        css::uno::makeAny(aResubstPath.sWritePath));
+                                                        css::uno::Any(aResubstPath.sWritePath));
 
     ::comphelper::ConfigurationHelper::flush(xCfgNew);
 

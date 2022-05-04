@@ -179,7 +179,7 @@ void SessionListener::StoreSession( bool bAsync )
         if ( bAsync )
             xDispatch->addStatusListener(this, aURL);
 
-        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,makeAny(bAsync),
+        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,Any(bAsync),
                                                       PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception&) {
@@ -207,7 +207,7 @@ void SessionListener::QuitSessionQuietly()
         aURL.Complete = "vnd.sun.star.autorecovery:/doSessionQuietQuit";
         xURLTransformer->parseStrict(aURL);
 
-        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,makeAny(false),
+        Sequence< PropertyValue > args{ PropertyValue("DispatchAsynchron",-1,Any(false),
                                                       PropertyState_DIRECT_VALUE) };
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception&) {

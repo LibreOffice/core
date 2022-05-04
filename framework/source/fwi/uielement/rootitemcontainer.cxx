@@ -170,7 +170,7 @@ Any SAL_CALL RootItemContainer::getByIndex( sal_Int32 Index )
     if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
 
-    return makeAny( m_aItemVector[Index] );
+    return Any( m_aItemVector[Index] );
 }
 
 // XIndexContainer
@@ -239,7 +239,7 @@ sal_Bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConve
     {
         case PROPHANDLE_UINAME:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_aUIName),
+                        css::uno::Any(m_aUIName),
                         aValue,
                         aOldValue,
                         aConvertedValue);

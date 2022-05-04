@@ -1335,21 +1335,21 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
     {
         case PropHandle::SuspendQuickstartVeto:
                 bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(m_bSuspendQuickstartVeto),
+                    css::uno::Any(m_bSuspendQuickstartVeto),
                     aValue,
                     aOldValue,
                     aConvertedValue);
                 break;
         case PropHandle::DispatchRecorderSupplier :
                 bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(m_xDispatchRecorderSupplier),
+                    css::uno::Any(m_xDispatchRecorderSupplier),
                     aValue,
                     aOldValue,
                     aConvertedValue);
                 break;
         case PropHandle::Title :
                 bReturn = PropHelper::willPropertyBeChanged(
-                    css::uno::makeAny(m_sTitle),
+                    css::uno::Any(m_sTitle),
                     aValue,
                     aOldValue,
                     aConvertedValue);

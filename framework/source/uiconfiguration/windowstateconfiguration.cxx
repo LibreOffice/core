@@ -555,7 +555,7 @@ Any ConfigurationAccess_WindowState::impl_getSequenceFromStruct( const WindowSta
         }
     }
 
-    return makeAny( comphelper::containerToSequence(aPropVec) );
+    return Any( comphelper::containerToSequence(aPropVec) );
 }
 
 Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OUString& rResourceURL, Reference< XNameAccess > const & xNameAccess )
@@ -751,7 +751,7 @@ Any ConfigurationAccess_WindowState::impl_insertCacheAndReturnSequence( const OU
 
     aWindowStateInfo.nMask = nMask;
     m_aResourceURLToInfoCache.emplace( rResourceURL, aWindowStateInfo );
-    return makeAny( comphelper::containerToSequence(aPropVec) );
+    return Any( comphelper::containerToSequence(aPropVec) );
 }
 
 ConfigurationAccess_WindowState::WindowStateInfo& ConfigurationAccess_WindowState::impl_insertCacheAndReturnWinState( const OUString& rResourceURL, Reference< XNameAccess > const & rNameAccess )
@@ -1127,23 +1127,23 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                 switch ( i )
                 {
                     case PROPERTY_LOCKED:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bLocked ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bLocked ) ); break;
                     case PROPERTY_DOCKED:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bDocked ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bDocked ) ); break;
                     case PROPERTY_VISIBLE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bVisible ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bVisible ) ); break;
                     case PROPERTY_CONTEXT:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bContext ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bContext ) ); break;
                     case PROPERTY_HIDEFROMMENU:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bHideFromMenu ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bHideFromMenu ) ); break;
                     case PROPERTY_NOCLOSE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bNoClose ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bNoClose ) ); break;
                     case PROPERTY_SOFTCLOSE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bSoftClose ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bSoftClose ) ); break;
                     case PROPERTY_CONTEXTACTIVE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.bContextActive ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.bContextActive ) ); break;
                     case PROPERTY_DOCKINGAREA:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Int16( rWinStateInfo.aDockingArea ) ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( sal_Int16( rWinStateInfo.aDockingArea ) ) ); break;
                     case PROPERTY_POS:
                     case PROPERTY_DOCKPOS:
                     {
@@ -1157,7 +1157,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                             aPosStr += OUString::number( rWinStateInfo.aPos.Y );
                         else
                             aPosStr += OUString::number( rWinStateInfo.aDockPos.Y );
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( aPosStr ) );
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( aPosStr ) );
                         break;
                     }
                     case PROPERTY_SIZE:
@@ -1173,15 +1173,15 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
                             aSizeStr += OUString::number( rWinStateInfo.aSize.Height );
                         else
                             aSizeStr += OUString::number( rWinStateInfo.aDockSize.Height );
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( aSizeStr ) );
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( aSizeStr ) );
                         break;
                     }
                     case PROPERTY_UINAME:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( rWinStateInfo.aUIName ) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( rWinStateInfo.aUIName ) ); break;
                     case PROPERTY_INTERNALSTATE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Int32( rWinStateInfo.nInternalState )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( sal_Int32( rWinStateInfo.nInternalState )) ); break;
                     case PROPERTY_STYLE:
-                        xPropSet->setPropertyValue( m_aPropArray[i], makeAny( sal_Int32( rWinStateInfo.nStyle )) ); break;
+                        xPropSet->setPropertyValue( m_aPropArray[i], Any( sal_Int32( rWinStateInfo.nStyle )) ); break;
                     default:
                        assert( false && "Wrong value for ConfigurationAccess_WindowState. Who has forgotten to add this new property!" );
                 }

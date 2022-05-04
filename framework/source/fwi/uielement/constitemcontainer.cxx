@@ -187,7 +187,7 @@ Any SAL_CALL ConstItemContainer::getByIndex( sal_Int32 Index )
 {
     if ( sal_Int32( m_aItemVector.size()) <= Index )
         throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
-    return makeAny( m_aItemVector[Index] );
+    return Any( m_aItemVector[Index] );
 }
 
 // XPropertySet
@@ -207,7 +207,7 @@ void SAL_CALL ConstItemContainer::setPropertyValue( const OUString&, const Any& 
 Any SAL_CALL ConstItemContainer::getPropertyValue( const OUString& PropertyName )
 {
     if ( PropertyName == PROPNAME_UINAME )
-        return makeAny( m_aUIName );
+        return Any( m_aUIName );
 
     throw UnknownPropertyException(PropertyName);
 }
@@ -239,7 +239,7 @@ void SAL_CALL ConstItemContainer::setFastPropertyValue( sal_Int32, const css::un
 Any SAL_CALL ConstItemContainer::getFastPropertyValue( sal_Int32 nHandle )
 {
     if ( nHandle == PROPHANDLE_UINAME )
-        return makeAny( m_aUIName );
+        return Any( m_aUIName );
 
     throw UnknownPropertyException(OUString::number(nHandle));
 }

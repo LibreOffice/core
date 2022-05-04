@@ -381,7 +381,7 @@ void SAL_CALL OReadMenuBarHandler::startElement(
                 initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
                 aSubMenuProp.getArray()[2].Value <<= xSubItemContainer;
 
-                m_xMenuBarContainer->insertByIndex( m_xMenuBarContainer->getCount(), makeAny( aSubMenuProp ) );
+                m_xMenuBarContainer->insertByIndex( m_xMenuBarContainer->getCount(), Any( aSubMenuProp ) );
             }
             else
             {
@@ -582,7 +582,7 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
             initPropertyCommon( aSubMenuProp, aCommandId, aHelpId, aLabel, nItemBits );
             aSubMenuProp.getArray()[2].Value <<= xSubItemContainer;
 
-            m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aSubMenuProp ) );
+            m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), Any( aSubMenuProp ) );
         }
         else
         {
@@ -638,7 +638,7 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
             initPropertyCommon( aMenuItem, aCommandId, aHelpId, aLabel, nItemBits );
             aMenuItem.getArray()[2].Value <<= Reference< XIndexContainer >();
 
-            m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuItem ) );
+            m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), Any( aMenuItem ) );
         }
 
         m_nNextElementExpected = ELEM_CLOSE_MENUITEM;
@@ -648,7 +648,7 @@ void SAL_CALL OReadMenuPopupHandler::startElement(
         Sequence< PropertyValue > aMenuSeparator{ comphelper::makePropertyValue(
             ITEM_DESCRIPTOR_TYPE, css::ui::ItemType::SEPARATOR_LINE) };
 
-        m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), makeAny( aMenuSeparator ) );
+        m_xMenuContainer->insertByIndex( m_xMenuContainer->getCount(), Any( aMenuSeparator ) );
 
         m_nNextElementExpected = ELEM_CLOSE_MENUSEPARATOR;
     }

@@ -315,7 +315,7 @@ void ComplexToolbarController::notifyFocusLost()
 void ComplexToolbarController::notifyTextChanged( const OUString& aText )
 {
     // send text changed notification
-    uno::Sequence< beans::NamedValue > aInfo { { "Text", css::uno::makeAny(aText) } };
+    uno::Sequence< beans::NamedValue > aInfo { { "Text", css::uno::Any(aText) } };
     addNotifyInfo( "TextChanged",
                    getDispatchFromCommand( m_aCommandURL ),
                    aInfo );

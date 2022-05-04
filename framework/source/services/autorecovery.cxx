@@ -2025,17 +2025,17 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             else
                 xCheck->getByName(sID) >>= xSet;
 
-            xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL, css::uno::makeAny(rInfo.OrgURL       ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL, css::uno::makeAny(rInfo.OldTempURL   ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL, css::uno::makeAny(rInfo.TemplateURL  ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER, css::uno::makeAny(rInfo.RealFilter));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(sal_Int32(rInfo.DocumentState)));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE, css::uno::makeAny(rInfo.AppModule));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE, css::uno::makeAny(rInfo.Title));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES, css::uno::makeAny(rInfo.ViewNames));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL, css::uno::Any(rInfo.OrgURL       ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL, css::uno::Any(rInfo.OldTempURL   ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL, css::uno::Any(rInfo.TemplateURL  ));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER, css::uno::Any(rInfo.RealFilter));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::Any(sal_Int32(rInfo.DocumentState)));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE, css::uno::Any(rInfo.AppModule));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE, css::uno::Any(rInfo.Title));
+            xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES, css::uno::Any(rInfo.ViewNames));
 
             if (bNew)
-                xModify->insertByName(sID, css::uno::makeAny(xSet));
+                xModify->insertByName(sID, css::uno::Any(xSet));
         }
     }
     catch(const css::uno::RuntimeException&)
@@ -4121,7 +4121,7 @@ void AutoRecovery::impl_establishProgress(const AutoRecovery::TDocumentInfo&    
     {
         css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
         if (xFrameProps.is())
-            xFrameProps->setPropertyValue(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION, css::uno::makeAny(xExternalProgress));
+            xFrameProps->setPropertyValue(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION, css::uno::Any(xExternalProgress));
     }
 
     // But inside the MediaDescriptor we must set our own create progress ...
@@ -4152,7 +4152,7 @@ void AutoRecovery::impl_forgetProgress(const AutoRecovery::TDocumentInfo&       
     // stop progress interception on corresponding frame.
     css::uno::Reference< css::beans::XPropertySet > xFrameProps(xFrame, css::uno::UNO_QUERY);
     if (xFrameProps.is())
-        xFrameProps->setPropertyValue(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION, css::uno::makeAny(css::uno::Reference< css::task::XStatusIndicator >()));
+        xFrameProps->setPropertyValue(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION, css::uno::Any(css::uno::Reference< css::task::XStatusIndicator >()));
 
     // forget progress inside list of arguments.
     utl::MediaDescriptor::iterator pArg = rArgs.find(utl::MediaDescriptor::PROP_STATUSINDICATOR);
@@ -4184,7 +4184,7 @@ void AutoRecovery::st_impl_removeFile(const OUString& sURL)
     try
     {
         ::ucbhelper::Content aContent(sURL, css::uno::Reference< css::ucb::XCommandEnvironment >(), m_xContext);
-        aContent.executeCommand("delete", css::uno::makeAny(true));
+        aContent.executeCommand("delete", css::uno::Any(true));
     }
     catch(const css::uno::Exception&)
     {

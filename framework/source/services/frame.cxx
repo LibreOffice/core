@@ -3217,7 +3217,7 @@ void XFrameImpl::impl_setCloser( /*IN*/ const css::uno::Reference< css::frame::X
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
         xFrameProps->getPropertyValue(FRAME_PROPNAME_ASCII_LAYOUTMANAGER) >>= xLayoutManager;
         css::uno::Reference< css::beans::XPropertySet > xLayoutProps(xLayoutManager, css::uno::UNO_QUERY_THROW);
-        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::makeAny(bState));
+        xLayoutProps->setPropertyValue(LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, css::uno::Any(bState));
     }
     catch(const css::uno::RuntimeException&)
         { throw; }

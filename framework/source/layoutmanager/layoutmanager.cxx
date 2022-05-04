@@ -693,12 +693,12 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         if ( xPersistentWindowState->hasByName( aName ))
         {
             Reference< XNameReplace > xReplace( xPersistentWindowState, uno::UNO_QUERY );
-            xReplace->replaceByName( aName, makeAny( aWindowState ));
+            xReplace->replaceByName( aName, Any( aWindowState ));
         }
         else
         {
             Reference< XNameContainer > xInsert( xPersistentWindowState, uno::UNO_QUERY );
-            xInsert->insertByName( aName, makeAny( aWindowState ));
+            xInsert->insertByName( aName, Any( aWindowState ));
         }
     }
     catch (const Exception&)
@@ -1481,7 +1481,7 @@ void SAL_CALL LayoutManager::createElement( const OUString& aName )
     if ( bNotify )
     {
         // UI element is invisible - provide information to listeners
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::makeAny( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::Any( aName ) );
     }
 }
 
@@ -1551,7 +1551,7 @@ void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
         doLayout();
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::makeAny( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::Any( aName ) );
 }
 
 sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
@@ -1625,7 +1625,7 @@ sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
     }
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::makeAny( rResourceURL ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::Any( rResourceURL ) );
 
     return bResult;
 }
@@ -1753,7 +1753,7 @@ sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
         doLayout();
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::makeAny( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::Any( aName ) );
 
     return bResult;
 }
@@ -1835,7 +1835,7 @@ sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
         doLayout();
 
     if ( bNotify )
-        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::makeAny( aName ) );
+        implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_INVISIBLE, uno::Any( aName ) );
 
     return false;
 }
@@ -2523,7 +2523,7 @@ void LayoutManager::implts_createMSCompatibleMenuBar( const OUString& aName )
     assert(xFormsMenuIndex->getCount() >= 1);
     uno::Sequence< beans::PropertyValue > aNewFormsMenu;
     xFormsMenuIndex->getByIndex( 0 ) >>= aNewFormsMenu;
-    xMenuIndex->replaceByIndex(nFormsMenu, uno::makeAny(aNewFormsMenu));
+    xMenuIndex->replaceByIndex(nFormsMenu, uno::Any(aNewFormsMenu));
 
     setMergedMenuBar( xMenuIndex );
 
@@ -2853,7 +2853,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
             if ( xPropSet.is() )
             {
                 if ( Event.Source == uno::Reference< uno::XInterface >( m_xDocCfgMgr, uno::UNO_QUERY ))
-                    xPropSet->setPropertyValue( "ConfigurationSource", makeAny( m_xDocCfgMgr ));
+                    xPropSet->setPropertyValue( "ConfigurationSource", Any( m_xDocCfgMgr ));
             }
             xElementSettings->updateSettings();
         }
@@ -2916,7 +2916,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                     // document settings removed
                     if ( xModuleCfgMgr->hasSettings( Event.ResourceURL ))
                     {
-                        xPropSet->setPropertyValue( aConfigSourcePropName, makeAny( m_xModuleCfgMgr ));
+                        xPropSet->setPropertyValue( aConfigSourcePropName, Any( m_xModuleCfgMgr ));
                         xElementSettings->updateSettings();
                         return;
                     }

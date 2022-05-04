@@ -261,7 +261,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
         lProps[sPropName] = xModule->getByName(sPropName);
     }
 
-    return css::uno::makeAny(lProps.getAsConstPropertyValueList());
+    return css::uno::Any(lProps.getAsConstPropertyValueList());
 }
 
 css::uno::Sequence< OUString > SAL_CALL ModuleManager::getElementNames()
@@ -301,7 +301,7 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
         {
             ::comphelper::SequenceAsHashMap lModuleProps = getByName(rModuleName);
             if (lModuleProps.match(lSearchProps))
-                lResult.push_back(css::uno::makeAny(lModuleProps.getAsConstPropertyValueList()));
+                lResult.push_back(css::uno::Any(lModuleProps.getAsConstPropertyValueList()));
         }
         catch(const css::uno::Exception&)
         {

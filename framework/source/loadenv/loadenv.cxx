@@ -624,7 +624,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const OUString&                  
     css::uno::Sequence< OUString > lTypesReg { sType };
     css::uno::Sequence< css::beans::NamedValue >           lQuery
     {
-        css::beans::NamedValue(PROP_TYPES, makeAny(lTypesReg))
+        css::beans::NamedValue(PROP_TYPES, css::uno::Any(lTypesReg))
     };
 
     xLoaderFactory = css::frame::FrameLoaderFactory::create(xContext);
@@ -866,7 +866,7 @@ bool LoadEnv::impl_handleContent()
     // query
     css::uno::Sequence< OUString > lTypeReg { sType };
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::makeAny(lTypeReg) } };
+    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::Any(lTypeReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
@@ -1151,7 +1151,7 @@ bool LoadEnv::impl_loadContent()
         {
             // Set the URL on the frame itself, for the duration of the load, when it has no
             // controller.
-            xTargetFrameProps->setPropertyValue("URL", uno::makeAny(sURL));
+            xTargetFrameProps->setPropertyValue("URL", uno::Any(sURL));
         }
         bool bResult = xSyncLoader->load(lDescriptor, xTargetFrame);
         // react for the result here, so the outside waiting
@@ -1204,7 +1204,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
 
     css::uno::Sequence< OUString > lTypesReg { sType };
 
-    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::makeAny(lTypesReg) } };
+    css::uno::Sequence< css::beans::NamedValue > lQuery { { PROP_TYPES, css::uno::Any(lTypesReg) } };
 
     css::uno::Reference< css::container::XEnumeration > xSet = xLoaderFactory->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())

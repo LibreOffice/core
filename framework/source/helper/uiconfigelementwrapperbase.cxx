@@ -174,7 +174,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
     {
         case UIELEMENT_PROPHANDLE_CONFIGLISTENER:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_bConfigListener),
+                        css::uno::Any(m_bConfigListener),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -182,7 +182,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_CONFIGSOURCE:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_xConfigSource),
+                        css::uno::Any(m_xConfigSource),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -192,7 +192,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
         {
             Reference< XFrame > xFrame( m_xWeakFrame );
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(xFrame),
+                        css::uno::Any(xFrame),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -201,7 +201,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_PERSISTENT:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_bPersistent),
+                        css::uno::Any(m_bPersistent),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -209,7 +209,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_RESOURCEURL:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_aResourceURL),
+                        css::uno::Any(m_aResourceURL),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -217,7 +217,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_TYPE :
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_nType),
+                        css::uno::Any(m_nType),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -225,7 +225,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_XMENUBAR :
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_xMenuBar),
+                        css::uno::Any(m_xMenuBar),
                         aValue,
                         aOldValue,
                         aConvertedValue);
@@ -233,7 +233,7 @@ sal_Bool SAL_CALL UIConfigElementWrapperBase::convertFastPropertyValue( Any&    
 
         case UIELEMENT_PROPHANDLE_NOCLOSE:
             bReturn = PropHelper::willPropertyBeChanged(
-                        css::uno::makeAny(m_bNoClose),
+                        css::uno::Any(m_bNoClose),
                         aValue,
                         aOldValue,
                         aConvertedValue);

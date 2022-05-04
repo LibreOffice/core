@@ -1152,7 +1152,7 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
         {
             xFac.set(xModules, css::uno::UNO_QUERY);
             xInst = xFac->createInstance();
-            xModules->insertByName(m_sModuleCFG, css::uno::makeAny(xInst));
+            xModules->insertByName(m_sModuleCFG, css::uno::Any(xInst));
         }
         xModules->getByName(m_sModuleCFG) >>= xContainer;
     }
@@ -1164,16 +1164,16 @@ void XCUBasedAcceleratorConfiguration::insertKeyToConfiguration( const css::awt:
     {
         xFac.set(xContainer, css::uno::UNO_QUERY);
         xInst = xFac->createInstance();
-        xContainer->insertByName(sKey, css::uno::makeAny(xInst));
+        xContainer->insertByName(sKey, css::uno::Any(xInst));
     }
     xContainer->getByName(sKey) >>= xKey;
 
     xKey->getByName(CFG_PROP_COMMAND) >>= xCommand;
     OUString sLocale = impl_ts_getLocale();
     if ( !xCommand->hasByName(sLocale) )
-        xCommand->insertByName(sLocale, css::uno::makeAny(sCommand));
+        xCommand->insertByName(sLocale, css::uno::Any(sCommand));
     else
-        xCommand->replaceByName(sLocale, css::uno::makeAny(sCommand));
+        xCommand->replaceByName(sLocale, css::uno::Any(sCommand));
 }
 
 void XCUBasedAcceleratorConfiguration::removeKeyFromConfiguration( const css::awt::KeyEvent& aKeyEvent, const bool bPreferred )

@@ -203,11 +203,11 @@ Any ConfigurationAccess_UICommand::getByNameImpl( const OUString& rCommandURL )
         addGenericInfoToCache();
 
         if ( rCommandURL.equalsIgnoreAsciiCase( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST ))
-            return makeAny( m_aCommandImageList );
+            return Any( m_aCommandImageList );
         else if ( rCommandURL.equalsIgnoreAsciiCase( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST ))
-            return makeAny( m_aCommandRotateImageList );
+            return Any( m_aCommandRotateImageList );
         else if ( rCommandURL.equalsIgnoreAsciiCase( UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST ))
-            return makeAny( m_aCommandMirrorImageList );
+            return Any( m_aCommandMirrorImageList );
         else
             return Any();
     }
@@ -268,8 +268,8 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
 
         Sequence< PropertyValue > aPropSeq{
             comphelper::makePropertyValue("Label", !pIter->second.aContextLabel.isEmpty()
-                                                       ? makeAny(pIter->second.aContextLabel)
-                                                       : makeAny(pIter->second.aLabel)),
+                                                       ? Any(pIter->second.aContextLabel)
+                                                       : Any(pIter->second.aLabel)),
             comphelper::makePropertyValue("Name", pIter->second.aCommandName),
             comphelper::makePropertyValue("Popup", pIter->second.bPopup),
             comphelper::makePropertyValue(m_aPropProperties, pIter->second.nProperties),
@@ -278,7 +278,7 @@ Any ConfigurationAccess_UICommand::getSequenceFromCache( const OUString& aComman
             comphelper::makePropertyValue("TargetURL", pIter->second.aTargetURL),
             comphelper::makePropertyValue("IsExperimental", pIter->second.bIsExperimental)
         };
-        return makeAny( aPropSeq );
+        return Any( aPropSeq );
     }
 
     return Any();
