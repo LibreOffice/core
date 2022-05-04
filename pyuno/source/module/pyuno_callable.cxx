@@ -152,7 +152,7 @@ static PyObject* PyUNO_callable_call(
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( const css::lang::IllegalArgumentException &e )
     {
@@ -161,7 +161,7 @@ static PyObject* PyUNO_callable_call(
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch (const css::uno::RuntimeException &e)
     {
@@ -170,7 +170,7 @@ static PyObject* PyUNO_callable_call(
             logException( cargo, "error  py->uno[0x", me->members->xInvocation.get() ,
                           me->members->methodName, &e, cppu::UnoType<decltype(e)>::get().getTypeLibType());
         }
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
 
     return ret.getAcquired();

@@ -88,23 +88,23 @@ static PyObject* PyUNO_iterator_next( PyObject *self )
     }
     catch( css::container::NoSuchElementException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
 
     return nullptr;
@@ -238,19 +238,19 @@ static PyObject* PyUNO_list_iterator_next( PyObject *self )
     }
     catch( css::script::CannotConvertException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( css::lang::IllegalArgumentException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( const css::lang::WrappedTargetException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
     catch( const css::uno::RuntimeException &e )
     {
-        raisePyExceptionWithAny( css::uno::makeAny( e ) );
+        raisePyExceptionWithAny( css::uno::Any( e ) );
     }
 
     return nullptr;

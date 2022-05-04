@@ -259,7 +259,7 @@ pyuno_Loader_get_implementation(
         Runtime runtime;
 
         PyRef pyCtx = runtime.any2PyObject(
-            css::uno::makeAny( css::uno::Reference(ctx) ) );
+            css::uno::Any( css::uno::Reference(ctx) ) );
 
         PyRef clazz = getObjectFromLoaderModule( "Loader" );
         PyRef args ( PyTuple_New( 1 ), SAL_NO_ACQUIRE, NOT_NULL );
