@@ -1151,6 +1151,7 @@ void StatusBar::SetItemText( sal_uInt16 nItemId, const OUString& rText, int nCha
     }
     else
     {
+        pItem->mLayoutGlyphsCache.reset();
         nWidth = GetTextWidth( pItem->maText,0,-1,nullptr, pItem->GetTextGlyphs(GetOutDev())) + nFudge;
     }
 
