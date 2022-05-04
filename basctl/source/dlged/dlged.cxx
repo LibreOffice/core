@@ -789,7 +789,7 @@ void DlgEditor::Copy()
         Sequence< Any > aSeqData
         {
             aNoResourceDialogModelBytesAny,
-            makeAny(aCombinedData)
+            Any(aCombinedData)
         };
 
         pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavorsResource, aSeqData );
@@ -797,7 +797,7 @@ void DlgEditor::Copy()
     else
     {
         // No resource, support only old format
-        pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , { makeAny(DialogModelBytes) } );
+        pTrans = new DlgEdTransferableImpl( m_ClipboardDataFlavors , { Any(DialogModelBytes) } );
     }
     SolarMutexReleaser aReleaser;
     xClipboard->setContents( pTrans , pTrans );
