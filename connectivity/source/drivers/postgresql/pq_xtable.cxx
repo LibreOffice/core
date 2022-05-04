@@ -60,7 +60,6 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Type;
 
 using com::sun::star::beans::XPropertySet;
@@ -168,7 +167,7 @@ void Table::rename( const OUString& newName )
         if( Xrename.is() )
         {
             Xrename->rename( newName );
-            setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, makeAny(newSchemaName) );
+            setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, Any(newSchemaName) );
         }
     }
     else
@@ -185,7 +184,7 @@ void Table::rename( const OUString& newName )
                 bufferQuoteIdentifier( buf, newSchemaName, m_pSettings );
                 Reference< XStatement > statement = m_conn->createStatement();
                 statement->executeUpdate( buf.makeStringAndClear() );
-                setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, makeAny(newSchemaName) );
+                setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME, Any(newSchemaName) );
                 disposeNoThrow( statement );
                 schema = newSchemaName;
             }
@@ -209,7 +208,7 @@ void Table::rename( const OUString& newName )
             disposeNoThrow( statement );
         }
     }
-    setPropertyValue_NoBroadcast_public( st.NAME, makeAny(newTableName) );
+    setPropertyValue_NoBroadcast_public( st.NAME, Any(newTableName) );
     // inform the container of the name change !
     if( m_pSettings->tables.is() )
     {

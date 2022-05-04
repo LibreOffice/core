@@ -274,7 +274,7 @@ namespace
             sComposedName.clear();
 
             Reference< XResultSet> xRes = _rxDBMeta->getTables(
-                !_rCatalog.isEmpty() ? makeAny( _rCatalog ) : Any(), !_rSchema.isEmpty() ? _rSchema : s_sWildcard, _rTableName, sTableTypes );
+                !_rCatalog.isEmpty() ? Any( _rCatalog ) : Any(), !_rSchema.isEmpty() ? _rSchema : s_sWildcard, _rTableName, sTableTypes );
 
             Reference< XRow > xCurrentRow( xRes, UNO_QUERY );
             if ( xCurrentRow.is() && xRes->next() )

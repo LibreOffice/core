@@ -47,7 +47,6 @@ using osl::MutexGuard;
 using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::Type;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Reference;
@@ -76,7 +75,7 @@ public:
         const OUString & name,
         const Any & newElement,
         const OUString & oldElement ) :
-        m_event( source, makeAny( name ), newElement, makeAny(oldElement) )
+        m_event( source, Any( name ), newElement, Any(oldElement) )
     {}
 
     virtual void fire( XEventListener * listener ) const override
@@ -97,7 +96,7 @@ public:
         const Reference< XInterface > & source,
         const OUString & name,
         const Any & newElement ) :
-        m_event( source, makeAny( name ), newElement, Any() )
+        m_event( source, Any( name ), newElement, Any() )
     {}
 
     virtual void fire( XEventListener * listener ) const override
@@ -118,7 +117,7 @@ public:
     RemovedBroadcaster(
         const Reference< XInterface > & source,
         const OUString & name) :
-        m_event( source, makeAny( name ), Any(), Any() )
+        m_event( source, Any( name ), Any(), Any() )
     {}
 
     virtual void fire( XEventListener * listener ) const override
@@ -350,10 +349,10 @@ void Container::append(
     }
 
     int index = m_values.size();
-    m_values.push_back( makeAny( descriptor ) );
+    m_values.push_back( Any( descriptor ) );
     m_name2index[name] = index;
 
-    fire( InsertedBroadcaster( *this, name, makeAny( descriptor ) ) );
+    fire( InsertedBroadcaster( *this, name, Any( descriptor ) ) );
 }
 
 void Container::appendByDescriptor(

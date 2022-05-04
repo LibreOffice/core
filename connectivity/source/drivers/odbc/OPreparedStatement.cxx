@@ -909,7 +909,7 @@ void OPreparedStatement::checkParameterIndex(sal_Int32 _parameterIndex)
             ));
         SQLException aNext(sError,*this, OUString(),0,Any());
 
-        ::dbtools::throwInvalidIndexException(*this,makeAny(aNext));
+        ::dbtools::throwInvalidIndexException(*this,Any(aNext));
     }
 }
 

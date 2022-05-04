@@ -236,7 +236,7 @@ namespace connectivity
                 // security: permitted Java classes
                 NamedValue aPermittedClasses(
                     "hsqldb.method_class_names",
-                    makeAny( lcl_getPermittedJavaMethods_nothrow( m_xContext ) )
+                    Any( lcl_getPermittedJavaMethods_nothrow( m_xContext ) )
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
 

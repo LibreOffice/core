@@ -193,7 +193,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    return makeAny(m_aLastWarning);
+    return Any(m_aLastWarning);
 }
 
 void SAL_CALL OStatement_Base::clearWarnings(  )

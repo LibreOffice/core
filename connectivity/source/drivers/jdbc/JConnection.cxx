@@ -530,7 +530,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  )
         aWarning.ErrorCode = aAsException.ErrorCode;
         aWarning.NextException = aAsException.NextException;
 
-        return makeAny( aWarning );
+        return Any( aWarning );
     }
 
     return Any();

@@ -52,7 +52,6 @@ using osl::MutexGuard;
 using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
@@ -126,11 +125,11 @@ void KeyColumns::refresh()
             if( keyindex < m_foreignColumnNames.getLength() )
             {
                 pKeyColumn->setPropertyValue_NoBroadcast_public(
-                    st.RELATED_COLUMN, makeAny( m_foreignColumnNames[keyindex]) );
+                    st.RELATED_COLUMN, Any( m_foreignColumnNames[keyindex]) );
             }
 
             {
-                m_values.push_back( makeAny( prop ) );
+                m_values.push_back( Any( prop ) );
                 map[ name ] = columnIndex;
                 ++columnIndex;
             }

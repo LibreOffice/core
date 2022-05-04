@@ -1455,7 +1455,7 @@ bool ODbaseTable::Drop_Static(std::u16string_view _sUrl, bool _bHasMemoFields, O
             try
             {
                 ::ucbhelper::Content aDeleteContent( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), Reference< XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                aDeleteContent.executeCommand( "delete", makeAny( true ) );
+                aDeleteContent.executeCommand( "delete", Any( true ) );
             }
             catch(const Exception&)
             {
@@ -2193,7 +2193,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
 
         rtl::Reference<ODbaseTable> pNewTable = new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection));
         Reference<XPropertySet> xHoldTable = pNewTable;
-        pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
+        pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),Any(sTempName));
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
         OSL_ENSURE(xAppend.is(),"ODbaseTable::alterColumn: No XAppend interface!");
 
@@ -2335,7 +2335,7 @@ namespace
                                                 Any(sNewName),
                                                 css::beans::PropertyState_DIRECT_VALUE } };
             Sequence< Any > aValues;
-            aContent.executeCommand( "setPropertyValues",makeAny(aProps) ) >>= aValues;
+            aContent.executeCommand( "setPropertyValues",Any(aProps) ) >>= aValues;
             if(aValues.hasElements() && aValues[0].hasValue())
                 throw Exception("setPropertyValues returned non-zero", nullptr);
         }
@@ -2365,7 +2365,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     OUString sTempName = createTempFile();
 
     rtl::Reference xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
-    xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
+    xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),Any(sTempName));
     {
         Reference<XAppend> xAppend(xNewTable->getColumns(),UNO_QUERY);
         bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
@@ -2423,7 +2423,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     OUString sTempName = createTempFile();
 
     rtl::Reference xNewTable(new ODbaseTable(m_pTables,static_cast<ODbaseConnection*>(m_pConnection)));
-    xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sTempName));
+    xNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),Any(sTempName));
     {
         Reference<XAppend> xAppend(xNewTable->getColumns(),UNO_QUERY);
         bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();

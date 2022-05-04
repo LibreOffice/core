@@ -302,7 +302,7 @@ Any SAL_CALL OCollection::getByIndex( sal_Int32 Index )
     if (Index < 0 || Index >= m_pElements->size() )
         throw IndexOutOfBoundsException(OUString::number(Index),static_cast<XTypeProvider*>(this));
 
-    return makeAny(getObject(Index));
+    return Any(getObject(Index));
 }
 
 Any SAL_CALL OCollection::getByName( const OUString& aName )
@@ -319,7 +319,7 @@ Any SAL_CALL OCollection::getByName( const OUString& aName )
         throw NoSuchElementException( sError, static_cast< XTypeProvider* >( this ) );
     }
 
-    return makeAny(getObject(m_pElements->findColumn(aName)));
+    return Any(getObject(m_pElements->findColumn(aName)));
 }
 
 Sequence< OUString > SAL_CALL OCollection::getElementNames(  )
@@ -383,7 +383,7 @@ void SAL_CALL OCollection::appendByDescriptor( const Reference< XPropertySet >& 
         m_pElements->insert( sName, xNewlyCreated );
 
     // notify our container listeners
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xNewlyCreated), Any());
+    ContainerEvent aEvent(static_cast<XContainer*>(this), Any(sName), Any(xNewlyCreated), Any());
     aGuard.clear();
     m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 }
@@ -423,7 +423,7 @@ void OCollection::dropImpl(sal_Int32 _nIndex, bool _bReallyDrop)
 
 void OCollection::notifyElementRemoved(const OUString& _sName)
 {
-    ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_sName), Any(), Any());
+    ContainerEvent aEvent(static_cast<XContainer*>(this), Any(_sName), Any(), Any());
     // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
     OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())
@@ -517,7 +517,7 @@ void OCollection::renameObject(const OUString& _sOldName, const OUString& _sNewN
 
     if ( m_pElements->rename(_sOldName,_sNewName) )
     {
-        ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_sNewName), makeAny(m_pElements->getObject(_sNewName)),makeAny(_sOldName));
+        ContainerEvent aEvent(static_cast<XContainer*>(this), Any(_sNewName), Any(m_pElements->getObject(_sNewName)),Any(_sOldName));
         // note that xExistent may be empty, in case somebody removed the data source while it is not alive at this moment
         OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
         while (aListenerLoop.hasMoreElements())

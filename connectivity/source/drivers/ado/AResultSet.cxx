@@ -818,12 +818,12 @@ Any SAL_CALL OResultSet::getBookmark(  )
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     if(m_nRowPos < static_cast<sal_Int32>(m_aBookmarks.size())) // this bookmark was already fetched
-        return makeAny(sal_Int32(m_nRowPos-1));
+        return Any(sal_Int32(m_nRowPos-1));
 
     OLEVariant aVar;
     m_pRecordSet->get_Bookmark(&aVar);
     m_aBookmarks.push_back(aVar);
-    return makeAny(static_cast<sal_Int32>(m_aBookmarks.size()-1));
+    return Any(static_cast<sal_Int32>(m_aBookmarks.size()-1));
 
 }
 

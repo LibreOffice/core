@@ -61,19 +61,19 @@ namespace dbtools
 
     void WarningsContainer::appendWarning(const SQLException& _rWarning)
     {
-        lcl_concatWarnings( m_aOwnWarnings, makeAny( _rWarning ) );
+        lcl_concatWarnings( m_aOwnWarnings, Any( _rWarning ) );
     }
 
 
     void WarningsContainer::appendWarning( const SQLContext& _rContext )
     {
-        lcl_concatWarnings( m_aOwnWarnings, makeAny( _rContext ));
+        lcl_concatWarnings( m_aOwnWarnings, Any( _rContext ));
     }
 
 
     void WarningsContainer::appendWarning(const SQLWarning& _rWarning)
     {
-        lcl_concatWarnings( m_aOwnWarnings, makeAny( _rWarning ) );
+        lcl_concatWarnings( m_aOwnWarnings, Any( _rWarning ) );
     }
 
 

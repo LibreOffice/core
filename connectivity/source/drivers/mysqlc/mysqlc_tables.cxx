@@ -124,7 +124,7 @@ void connectivity::mysqlc::Tables::appendNew(const OUString& _rsNewTable)
 
     // notify our container listeners
     css::container::ContainerEvent aEvent(static_cast<XContainer*>(this),
-                                          css::uno::makeAny(_rsNewTable), css::uno::Any(),
+                                          css::uno::Any(_rsNewTable), css::uno::Any(),
                                           css::uno::Any());
     comphelper::OInterfaceIteratorHelper3 aListenerLoop(m_aContainerListeners);
     while (aListenerLoop.hasMoreElements())

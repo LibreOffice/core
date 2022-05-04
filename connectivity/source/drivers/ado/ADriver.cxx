@@ -230,7 +230,7 @@ void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >&
                 else
                 {
                     SQLException aTemp(aErr.GetDescription(),
-                        _xInterface,aErr.GetSQLState(),aErr.GetNumber(),makeAny(aException));
+                        _xInterface,aErr.GetSQLState(),aErr.GetNumber(),Any(aException));
                     aTemp.NextException <<= aException;
                     aException = aTemp;
                 }

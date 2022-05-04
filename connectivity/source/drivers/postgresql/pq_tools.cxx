@@ -80,7 +80,6 @@ using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
 using com::sun::star::uno::XInterface;
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 
 using com::sun::star::container::XEnumeration;
 using com::sun::star::container::XEnumerationAccess;
@@ -645,7 +644,7 @@ std::vector< Any > parseArray( const OUString & str )
             if( brackets == 0 )
             {
                 if( !current.isEmpty() || doubleQuotedValue )
-                    elements.push_back( makeAny( current.makeStringAndClear() ) );
+                    elements.push_back( Any( current.makeStringAndClear() ) );
             }
             else
             {
@@ -674,7 +673,7 @@ std::vector< Any > parseArray( const OUString & str )
         else if( ',' == c && brackets == 1)
         {
             doubleQuotedValue = false;
-            elements.push_back( makeAny( current.makeStringAndClear() ) );
+            elements.push_back( Any( current.makeStringAndClear() ) );
         }
         else if( isWhitespace( c ) )
         {

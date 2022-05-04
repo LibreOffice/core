@@ -96,7 +96,7 @@ Any SAL_CALL OFlatResultSet::getBookmark(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    return makeAny((*m_aRow)[0]->getValue().getInt32());
+    return Any((*m_aRow)[0]->getValue().getInt32());
 }
 
 sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark )

@@ -60,7 +60,7 @@ using osl::MutexGuard;
 
 using css::beans::XPropertySet;
 
-using com::sun::star::uno::makeAny;
+using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 
@@ -156,16 +156,16 @@ void Keys::refresh()
             Reference< css::beans::XPropertySet > prop = pKey;
 
             pKey->setPropertyValue_NoBroadcast_public(
-                st.NAME, makeAny( xRow->getString( 1 ) ) );
+                st.NAME, Any( xRow->getString( 1 ) ) );
             sal_Int32 keyType = string2keytype( xRow->getString(2) );
-            pKey->setPropertyValue_NoBroadcast_public( st.TYPE, makeAny( keyType  ) );
+            pKey->setPropertyValue_NoBroadcast_public( st.TYPE, Any( keyType  ) );
             pKey->setPropertyValue_NoBroadcast_public(
-                st.UPDATE_RULE, makeAny( string2keyrule( xRow->getString(3) ) ) );
+                st.UPDATE_RULE, Any( string2keyrule( xRow->getString(3) ) ) );
             pKey->setPropertyValue_NoBroadcast_public(
-                st.DELETE_RULE, makeAny( string2keyrule( xRow->getString(4) ) ) );
+                st.DELETE_RULE, Any( string2keyrule( xRow->getString(4) ) ) );
             pKey->setPropertyValue_NoBroadcast_public(
                 st.PRIVATE_COLUMNS,
-                makeAny(
+                Any(
                     convertMappedIntArray2StringArray(
                         mainMap,
                         string2intarray( xRow->getString( 7 ) ) ) ) );
@@ -174,13 +174,13 @@ void Keys::refresh()
             {
                 OUString buf = xRow->getString( 6 ) + "." + xRow->getString( 5 );
                 pKey->setPropertyValue_NoBroadcast_public(
-                    st.REFERENCED_TABLE, makeAny( buf ) );
+                    st.REFERENCED_TABLE, Any( buf ) );
 
                 Int2StringMap foreignMap;
                 fillAttnum2attnameMap( foreignMap, m_origin, xRow->getString(6), xRow->getString(5));
                 pKey->setPropertyValue_NoBroadcast_public(
                     st.PRIVATE_FOREIGN_COLUMNS,
-                    makeAny(
+                    Any(
                     convertMappedIntArray2StringArray(
                         foreignMap,
                         string2intarray( xRow->getString(8) ) ) ) );
@@ -189,7 +189,7 @@ void Keys::refresh()
 
             {
                 map[ xRow->getString( 1 ) ] = keyIndex;
-                m_values.push_back( makeAny( prop ) );
+                m_values.push_back( Any( prop ) );
                 ++keyIndex;
             }
         }

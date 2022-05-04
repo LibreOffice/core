@@ -49,7 +49,7 @@ namespace dbtools
         OSL_ENSURE( m_xComponentAggregate.is(), "FilterManager::initialize: invalid arguments!" );
 
         if ( m_xComponentAggregate.is() )
-            m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_APPLYFILTER), makeAny( true ) );
+            m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_APPLYFILTER), Any( true ) );
     }
 
 
@@ -108,14 +108,14 @@ namespace dbtools
                     [[fallthrough]];
                 case FilterComponent::LinkFilter:
                     if (propagate)
-                        m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), makeAny( getComposedFilter() ) );
+                        m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), Any( getComposedFilter() ) );
                     break;
                 case FilterComponent::PublicHaving:
                     propagate = propagate && m_bApplyPublicFilter;
                     [[fallthrough]];
                 case FilterComponent::LinkHaving:
                     if (propagate)
-                        m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HAVINGCLAUSE), makeAny( getComposedHaving() ) );
+                        m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HAVINGCLAUSE), Any( getComposedHaving() ) );
                     break;
                 }
             }
@@ -140,9 +140,9 @@ namespace dbtools
             {
                 // only where/if something changed
                 if (!getFilterComponent( FilterComponent::PublicFilter ).isEmpty())
-                    m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), makeAny( getComposedFilter() ) );
+                    m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FILTER), Any( getComposedFilter() ) );
                 if (!getFilterComponent( FilterComponent::PublicHaving ).isEmpty())
-                    m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HAVINGCLAUSE), makeAny( getComposedHaving() ) );
+                    m_xComponentAggregate->setPropertyValue( OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_HAVINGCLAUSE), Any( getComposedHaving() ) );
             }
         }
         catch( const Exception& )

@@ -55,7 +55,6 @@ using osl::MutexGuard;
 using com::sun::star::beans::XPropertySet;
 
 using com::sun::star::uno::Any;
-using com::sun::star::uno::makeAny;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::Sequence;
@@ -111,16 +110,16 @@ void Tables::refresh()
             OUString name = xRow->getString( TABLE_INDEX_NAME+1);
             OUString schema = xRow->getString( TABLE_INDEX_SCHEMA+1);
             pTable->setPropertyValue_NoBroadcast_public(
-                st.CATALOG_NAME , makeAny(xRow->getString( TABLE_INDEX_CATALOG+1) ) );
-            pTable->setPropertyValue_NoBroadcast_public( st.NAME , makeAny( name ) );
-            pTable->setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME , makeAny( schema ));
+                st.CATALOG_NAME , Any(xRow->getString( TABLE_INDEX_CATALOG+1) ) );
+            pTable->setPropertyValue_NoBroadcast_public( st.NAME , Any( name ) );
+            pTable->setPropertyValue_NoBroadcast_public( st.SCHEMA_NAME , Any( schema ));
             pTable->setPropertyValue_NoBroadcast_public(
-                st.TYPE , makeAny( xRow->getString( TABLE_INDEX_TYPE+1) ) );
+                st.TYPE , Any( xRow->getString( TABLE_INDEX_TYPE+1) ) );
             pTable->setPropertyValue_NoBroadcast_public(
-                st.DESCRIPTION , makeAny( xRow->getString( TABLE_INDEX_REMARKS+1) ) );
+                st.DESCRIPTION , Any( xRow->getString( TABLE_INDEX_REMARKS+1) ) );
             pTable->setPropertyValue_NoBroadcast_public(
                 st.PRIVILEGES ,
-                makeAny( sal_Int32( css::sdbcx::Privilege::SELECT |
+                Any( sal_Int32( css::sdbcx::Privilege::SELECT |
                            css::sdbcx::Privilege::INSERT |
                            css::sdbcx::Privilege::UPDATE |
                            css::sdbcx::Privilege::DELETE |
@@ -131,7 +130,7 @@ void Tables::refresh()
                            css::sdbcx::Privilege::DROP ) ) );
 
             {
-                m_values.push_back( makeAny( prop ) );
+                m_values.push_back( Any( prop ) );
                 map[ schema + "." + name ] = tableIndex;
                 ++tableIndex;
             }

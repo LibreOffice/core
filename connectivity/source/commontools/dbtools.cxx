@@ -278,7 +278,7 @@ static Reference< XConnection > getConnection_allowException(
         Reference<XInitialization> xIni(xDataSource, UNO_QUERY);
         if (xIni.is())
         {
-            Sequence< Any > aArgs{ Any(NamedValue( "ParentWindow", makeAny(_rxParent) )) };
+            Sequence< Any > aArgs{ Any(NamedValue( "ParentWindow", Any(_rxParent) )) };
             xIni->initialize(aArgs);
         }
 
@@ -316,7 +316,7 @@ static Reference< XConnection > getConnection_allowException(
 
         if (xIni.is())
         {
-            Sequence< Any > aArgs{ Any(NamedValue( "ParentWindow", makeAny(Reference<XWindow>()) )) };
+            Sequence< Any > aArgs{ Any(NamedValue( "ParentWindow", Any(Reference<XWindow>()) )) };
             xIni->initialize(aArgs);
         }
 
@@ -380,7 +380,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
             ||  ( xExistingConn = findConnection( _rxRowSet ) ).is()
             )
         {
-            xRowSetProps->setPropertyValue("ActiveConnection", makeAny( xExistingConn ) );
+            xRowSetProps->setPropertyValue("ActiveConnection", Any( xExistingConn ) );
             // no auto disposer needed, since we did not create the connection
 
             xConnection.reset( xExistingConn, SharedConnection::NoTakeOwnership );
@@ -425,8 +425,8 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
                 if (!sUser.isEmpty())
                 {   // use user and pwd together with the url
                     auto aInfo(::comphelper::InitPropertySequence({
-                        { "user", makeAny(sUser) },
-                        { "password", makeAny(sPwd) }
+                        { "user", Any(sUser) },
+                        { "password", Any(sPwd) }
                     }));
                     xPureConnection = xDriverManager->getConnectionWithInfo( sURL, aInfo );
                 }
@@ -453,7 +453,7 @@ static SharedConnection lcl_connectRowSet(const Reference< XRowSet>& _rxRowSet, 
                 else
                     xRowSetProps->setPropertyValue(
                         "ActiveConnection",
-                        makeAny( xConnection.getTyped() )
+                        Any( xConnection.getTyped() )
                     );
             }
             catch(Exception&)
@@ -683,7 +683,7 @@ Reference< XNameAccess > getFieldsByCommandDescriptor( const Reference< XConnect
                     try
                     {
                         if ( xStatementProps.is() )
-                            xStatementProps->setPropertyValue( "MaxRows",  makeAny( sal_Int32( 0 ) ) );
+                            xStatementProps->setPropertyValue( "MaxRows",  Any( sal_Int32( 0 ) ) );
                     }
                     catch( const Exception& )
                     {
@@ -743,7 +743,7 @@ SQLException prependErrorInfo( const SQLException& _rChainedException, const Ref
 {
     return SQLException( _rAdditionalError, _rxContext,
         _eSQLState == StandardSQLState::ERROR_UNSPECIFIED ? OUString() : getStandardSQLState( _eSQLState ),
-        0, makeAny( _rChainedException ) );
+        0, Any( _rChainedException ) );
 }
 
 namespace
@@ -1058,13 +1058,13 @@ try
             {   // (to convert an OUString into a date will not always succeed, because it might be bound to a text-column,
                 // but we can work with a double)
                 Date aDate = DBTypeConversion::toDate(getDouble(aEffectiveDefault));
-                xNewProps->setPropertyValue(sPropDefaultDate, makeAny(aDate));
+                xNewProps->setPropertyValue(sPropDefaultDate, Any(aDate));
             }
 
             if (hasProperty(sPropDefaultTime, xNewProps) && !bIsString)
             {   // Completely analogous to time
                 css::util::Time aTime = DBTypeConversion::toTime(getDouble(aEffectiveDefault));
-                xNewProps->setPropertyValue(sPropDefaultTime, makeAny(aTime));
+                xNewProps->setPropertyValue(sPropDefaultTime, Any(aTime));
             }
 
             if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), xNewProps) && !bIsString)
@@ -1134,7 +1134,7 @@ try
                 nKey = xFormats->addNew(sNewFormat, _rLocale);
             }
 
-            xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), makeAny(nKey));
+            xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), Any(nKey));
         }
 
         // min-/max-Value
@@ -1713,7 +1713,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     Reference<XIndexAccess> xWrappedParameters = new OParameterWrapper(std::move(aNewParameterSet),xParamsAsIndicies);
     aRequest.Parameters = xWrappedParameters;
     aRequest.Connection = _xConnection;
-    rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(makeAny(aRequest));
+    rtl::Reference<OInteractionRequest> pRequest = new OInteractionRequest(Any(aRequest));
     // some knittings
     pRequest->addContinuation(pAbort);
     pRequest->addContinuation(pParams);

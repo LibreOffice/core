@@ -514,7 +514,7 @@ css::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  )
     if( out )
     {
         java_sql_SQLWarning_BASE        warn_base( t.pEnv, out );
-        return makeAny(
+        return Any(
             static_cast< css::sdbc::SQLException >(
                 java_sql_SQLWarning(warn_base,*this)));
     }

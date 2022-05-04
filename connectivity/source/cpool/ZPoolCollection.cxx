@@ -295,7 +295,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
                             const OUString& _rPath)
 {
     OSL_ASSERT(_rxConfProvider.is());
-    Sequence< Any > args{ Any(NamedValue( "nodepath", makeAny(_rPath))) };
+    Sequence< Any > args{ Any(NamedValue( "nodepath", Any(_rPath))) };
     Reference< XInterface > xInterface(
         _rxConfProvider->createInstanceWithArguments(
             "com.sun.star.configuration.ConfigurationAccess",

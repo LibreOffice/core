@@ -50,7 +50,7 @@ namespace dbtools
 
         try
         {
-            xProps->setPropertyValue( ACTIVE_CONNECTION_PROPERTY_NAME, makeAny( _rxConnection ) );
+            xProps->setPropertyValue( ACTIVE_CONNECTION_PROPERTY_NAME, Any( _rxConnection ) );
             m_xOriginalConnection = _rxConnection;
             startPropertyListening( xProps );
         }

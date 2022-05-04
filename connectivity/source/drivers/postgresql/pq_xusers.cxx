@@ -51,7 +51,7 @@ using osl::MutexGuard;
 
 using com::sun::star::beans::XPropertySet;
 
-using com::sun::star::uno::makeAny;
+using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::uno::Reference;
 
@@ -98,10 +98,10 @@ void Users::refresh()
 
             OUString name = xRow->getString( 1);
             pUser->setPropertyValue_NoBroadcast_public(
-                st.NAME , makeAny(xRow->getString( TABLE_INDEX_CATALOG+1) ) );
+                st.NAME , Any(xRow->getString( TABLE_INDEX_CATALOG+1) ) );
 
             {
-                m_values.push_back( makeAny( prop ) );
+                m_values.push_back( Any( prop ) );
                 map[ name ] = tableIndex;
                 ++tableIndex;
             }
