@@ -136,7 +136,7 @@ public class FileUtilities {
             String[] columns = {OpenableColumns.DISPLAY_NAME};
             cursor = resolver.query(docUri, columns, null, null, null);
             if (cursor != null && cursor.moveToFirst()) {
-                displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+                displayName = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME));
             }
         } catch (SecurityException e) {
             // thrown e.g. when Uri has become invalid, e.g. corresponding file has been deleted
