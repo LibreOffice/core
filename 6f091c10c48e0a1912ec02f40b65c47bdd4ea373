@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "451649f9_da7621d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-04T00:26:02Z",
+      "side": 1,
+      "message": "Please change the commit message. It\u0027s not a WIP patch anymore and that it is for GSoC 2022 is irrelevant. \nYou need to describe what the change does, and think about what is meaningful to write in a commit message and what would be better be a comment in the code.",
+      "revId": "6f091c10c48e0a1912ec02f40b65c47bdd4ea373",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
