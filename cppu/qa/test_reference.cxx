@@ -49,12 +49,12 @@ public:
     {
         if (_type == cppu::UnoType<XInterface>::get())
         {
-            return css::uno::makeAny<css::uno::Reference<css::uno::XInterface>>(
-                this);
+            return css::uno::Any(css::uno::Reference<css::uno::XInterface>(
+                this));
         }
         if (_type == cppu::UnoType<Interface1>::get())
         {
-            return css::uno::makeAny<css::uno::Reference<Interface1>>(this);
+            return css::uno::Any(css::uno::Reference<Interface1>(this));
         }
 
         return Any();
