@@ -52,7 +52,11 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
         "/bin/classic/jvm.dll",
-        "/bin/jrockit/jvm.dll"
+        "/bin/jrockit/jvm.dll",
+        // Needed by IBM Semeru Runtime, which is an OpenJDK (so should actually use SunInfo) with a
+        // java.vendor of "IBM Corporation", so using OtherInfo here (cf. gVendorMap in
+        // jvmfwk/plugins/sunmajor/pluginlib/vendorlist.cxx):
+        "/bin/server/jvm.dll"
 #elif defined UNX
 #ifdef MACOSX
         "/../../../../../Frameworks/JavaVM.framework/JavaVM" //as of  1.6.0_22
