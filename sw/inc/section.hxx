@@ -130,8 +130,6 @@ public:
 
     bool IsConnectFlag() const                  { return m_bConnectFlag; }
     void SetConnectFlag(bool const bFlag){ m_bConnectFlag = bFlag; }
-
-    static OUString CollapseWhiteSpaces(const OUString& sName);
 };
 
 class SW_DLLPUBLIC SwSection
