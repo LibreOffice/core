@@ -188,7 +188,7 @@ static OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimiz
 static void SetStreamMediaType_Impl( const uno::Reference< io::XStream >& xStream, const OUString& aMediaType )
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
-    xPropSet->setPropertyValue("MediaType", uno::makeAny( aMediaType ) );
+    xPropSet->setPropertyValue("MediaType", uno::Any( aMediaType ) );
 }
 #endif
 
@@ -196,7 +196,7 @@ static void LetCommonStoragePassBeUsed_Impl( const uno::Reference< io::XStream >
 {
     uno::Reference< beans::XPropertySet > xPropSet( xStream, uno::UNO_QUERY_THROW );
     xPropSet->setPropertyValue("UseCommonStoragePasswordEncryption",
-                                uno::makeAny( true ) );
+                                uno::Any( true ) );
 }
 #ifdef _WIN32
 
@@ -485,9 +485,9 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
     // insert the result file as replacement image
     OUString aCacheName = "\002OlePres000";
     if ( xNameContainer->hasByName( aCacheName ) )
-        xNameContainer->replaceByName( aCacheName, uno::makeAny( xTempFile ) );
+        xNameContainer->replaceByName( aCacheName, uno::Any( xTempFile ) );
     else
-        xNameContainer->insertByName( aCacheName, uno::makeAny( xTempFile ) );
+        xNameContainer->insertByName( aCacheName, uno::Any( xTempFile ) );
 
     uno::Reference< embed::XTransactedObject > xTransacted( xNameContainer, uno::UNO_QUERY_THROW );
     xTransacted->commit();

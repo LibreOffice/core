@@ -144,7 +144,7 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
         pTargetProps[nInd-1].Value <<= xSourceDisp;
     }
 
-    xTargetMenu->insertByIndex( nTargetIndex, uno::makeAny( aTargetProps ) );
+    xTargetMenu->insertByIndex( nTargetIndex, uno::Any( aTargetProps ) );
 }
 
 

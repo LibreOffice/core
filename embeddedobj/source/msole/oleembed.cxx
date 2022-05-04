@@ -286,7 +286,7 @@ bool OleEmbeddedObject::TryToConvertToOOo( const uno::Reference< io::XStream >& 
             {
                 // create the model
                 uno::Sequence< uno::Any > aArguments{ uno::Any(
-                    beans::NamedValue( "EmbeddedObject", uno::makeAny( true ))) };
+                    beans::NamedValue( "EmbeddedObject", uno::Any( true ))) };
 
                 uno::Reference< util::XCloseable > xDocument( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aDocServiceName, aArguments, m_xContext ), uno::UNO_QUERY_THROW );
                 uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
