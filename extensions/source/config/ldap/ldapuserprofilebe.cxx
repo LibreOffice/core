@@ -93,7 +93,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
             css::configuration::theDefaultProvider::get(context));
 
-        css::beans::NamedValue aPath("nodepath", uno::makeAny(OUString("org.openoffice.LDAP/UserDirectory")) );
+        css::beans::NamedValue aPath("nodepath", uno::Any(OUString("org.openoffice.LDAP/UserDirectory")) );
 
         uno::Sequence< uno::Any > aArgs{ uno::Any(aPath) };
 
@@ -172,16 +172,16 @@ css::uno::Any LdapUserProfileBe::getPropertyValue(
         }
         LdapData::iterator k(data_.find(PropertyName.copy(i, j - i)));
         if (k != data_.end()) {
-            return css::uno::makeAny(
+            return css::uno::Any(
                 css::beans::Optional< css::uno::Any >(
-                    true, css::uno::makeAny(k->second)));
+                    true, css::uno::Any(k->second)));
         }
         if (j == PropertyName.getLength()) {
             break;
         }
         i = j + 1;
     }
-    return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+    return css::uno::Any(css::beans::Optional< css::uno::Any >());
 }
 
 

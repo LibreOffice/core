@@ -472,7 +472,7 @@ Any SAL_CALL MacabCommonStatement::getWarnings(  )
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(rBHelper.bDisposed);
 
-    return makeAny(m_aLastWarning);
+    return Any(m_aLastWarning);
 }
 
 void SAL_CALL MacabCommonStatement::clearWarnings(  )

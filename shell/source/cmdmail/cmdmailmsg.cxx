@@ -115,25 +115,25 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
     std::scoped_lock aGuard( m_aMutex );
 
     if( aName == "body" &&  !m_aBody.isEmpty() )
-        return makeAny( m_aBody );
+        return Any( m_aBody );
 
     if( aName == "from" &&  !m_aOriginator.isEmpty() )
-        return makeAny( m_aOriginator );
+        return Any( m_aOriginator );
 
     else if( aName == "to" &&  !m_aRecipient.isEmpty() )
-        return makeAny( m_aRecipient );
+        return Any( m_aRecipient );
 
     else if( aName == "cc" &&  m_CcRecipients.hasElements() )
-        return makeAny( m_CcRecipients );
+        return Any( m_CcRecipients );
 
     else if( aName == "bcc" &&  m_BccRecipients.hasElements() )
-        return makeAny( m_BccRecipients );
+        return Any( m_BccRecipients );
 
     else if( aName == "subject" &&  !m_aSubject.isEmpty() )
-        return makeAny( m_aSubject );
+        return Any( m_aSubject );
 
     else if( aName == "attachment" &&  m_Attachments.hasElements() )
-        return makeAny( m_Attachments );
+        return Any( m_Attachments );
 
     throw NoSuchElementException("key not found: " + aName,
         static_cast < XNameAccess * > (this) );
