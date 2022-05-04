@@ -345,7 +345,7 @@ bool SeriesOptionsItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const Sf
             bool bHideLegendEntry = static_cast<const SfxBoolItem &>(rItemSet.Get(nWhichId)).GetValue();
             if (bHideLegendEntry != m_bHideLegendEntry)
             {
-                GetPropertySet()->setPropertyValue("ShowLegendEntry", css::uno::makeAny(!bHideLegendEntry));
+                GetPropertySet()->setPropertyValue("ShowLegendEntry", css::uno::Any(!bHideLegendEntry));
             }
         }
         break;

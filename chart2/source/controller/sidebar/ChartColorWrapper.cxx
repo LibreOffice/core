@@ -96,7 +96,7 @@ void ChartColorWrapper::operator()([[maybe_unused]] const OUString& , const svx:
         return;
     }
 
-    xPropSet->setPropertyValue(maPropertyName, css::uno::makeAny(rColor.m_aColor));
+    xPropSet->setPropertyValue(maPropertyName, css::uno::Any(rColor.m_aColor));
 }
 
 void ChartColorWrapper::updateModel(const rtl::Reference<::chart::ChartModel>& xModel)

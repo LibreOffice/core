@@ -71,7 +71,7 @@ void lclModifyOrientation(uno::Reference<sheet::XDataPilotDescriptor> const & xD
         OUString aName = xNamed->getName();
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
-            xPropSet->setPropertyValue("Orientation", uno::makeAny(eOrientation));
+            xPropSet->setPropertyValue("Orientation", uno::Any(eOrientation));
     }
 }
 
@@ -87,7 +87,7 @@ void lclModifyFunction(uno::Reference<sheet::XDataPilotDescriptor> const & xDesc
         OUString aName = xNamed->getName();
         uno::Reference<beans::XPropertySet> xPropSet(xNamed, UNO_QUERY_THROW);
         if (aName == sFieldName)
-            xPropSet->setPropertyValue("Function", uno::makeAny(eFunction));
+            xPropSet->setPropertyValue("Function", uno::Any(eFunction));
     }
 }
 
@@ -134,13 +134,13 @@ void lclModifySubtotals(uno::Reference<sheet::XDataPilotDescriptor> const & xDes
 void lclModifyColumnGrandTotal(uno::Reference<sheet::XDataPilotDescriptor> const & xDataPilotDescriptor, bool bTotal)
 {
         uno::Reference<beans::XPropertySet> xProperties(xDataPilotDescriptor, uno::UNO_QUERY_THROW);
-        xProperties->setPropertyValue("ColumnGrand", uno::makeAny(bTotal));
+        xProperties->setPropertyValue("ColumnGrand", uno::Any(bTotal));
 }
 
 void lclModifyRowGrandTotal(uno::Reference<sheet::XDataPilotDescriptor> const & xDataPilotDescriptor, bool bTotal)
 {
         uno::Reference<beans::XPropertySet> xProperties(xDataPilotDescriptor, uno::UNO_QUERY_THROW);
-        xProperties->setPropertyValue("RowGrand", uno::makeAny(bTotal));
+        xProperties->setPropertyValue("RowGrand", uno::Any(bTotal));
 }
 
 void lclCheckSequence(std::vector<double> const & reference,
@@ -293,7 +293,7 @@ table::CellRangeAddress lclCreateTestData(uno::Reference<sheet::XSpreadsheetDocu
     sal_Int32 nDateKey = xNumberFormatTypes->getStandardFormat(util::NumberFormat::DATE, aLocale);
     uno::Reference<table::XCellRange> xCellRange = xSheet->getCellRangeByPosition(nEndCol, 1, nEndCol, nEndRow);
     uno::Reference<beans::XPropertySet> xCellProp(xCellRange, UNO_QUERY_THROW);
-    xCellProp->setPropertyValue("NumberFormat", uno::makeAny(nDateKey));
+    xCellProp->setPropertyValue("NumberFormat", uno::Any(nDateKey));
 
     table::CellRangeAddress sCellRangeAddress;
     sCellRangeAddress.Sheet = 0;
@@ -493,7 +493,7 @@ void PivotChartTest::testChangePivotTable()
     // Enable column totals and check the data is still unchanged
     {
         uno::Reference<beans::XPropertySet> xProperties(xDataPilotTable, uno::UNO_QUERY_THROW);
-        xProperties->setPropertyValue("ColumnGrand", uno::makeAny(true));
+        xProperties->setPropertyValue("ColumnGrand", uno::Any(true));
     }
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), getNumberOfDataSeries(xChartDoc));

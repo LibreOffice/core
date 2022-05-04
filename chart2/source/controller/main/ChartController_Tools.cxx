@@ -993,7 +993,7 @@ void ChartController::executeDispatch_LineColor(sal_uInt32 nColor)
             }
 
             if( xPropSet.is() )
-                xPropSet->setPropertyValue( "LineColor", css::uno::makeAny( Color(ColorTransparency, nColor) ) );
+                xPropSet->setPropertyValue( "LineColor", css::uno::Any( Color(ColorTransparency, nColor) ) );
         }
     }
     catch( const uno::Exception& )
@@ -1023,7 +1023,7 @@ void ChartController::executeDispatch_LineWidth(sal_uInt32 nWidth)
             }
 
             if( xPropSet.is() )
-                xPropSet->setPropertyValue( "LineWidth", css::uno::makeAny( nWidth ) );
+                xPropSet->setPropertyValue( "LineWidth", css::uno::Any( nWidth ) );
         }
     }
     catch( const uno::Exception& )
