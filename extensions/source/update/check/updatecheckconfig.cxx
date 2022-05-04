@@ -316,7 +316,7 @@ UpdateCheckConfig::storeLocalFileName(const OUString& rLocalFileName, sal_Int64 
 {
     const sal_uInt8 nItems = 2;
     const OUString aNameList[nItems] = { OUString(LOCAL_FILE), OUString(DOWNLOAD_SIZE) };
-    const uno::Any aValueList[nItems] = { uno::makeAny(rLocalFileName), uno::makeAny(nFileSize) };
+    const uno::Any aValueList[nItems] = { uno::Any(rLocalFileName), uno::Any(nFileSize) };
 
     for( sal_uInt8 i=0; i < nItems; ++i )
     {
@@ -347,7 +347,7 @@ UpdateCheckConfig::clearLocalFileName()
 void
 UpdateCheckConfig::storeDownloadPaused(bool paused)
 {
-    replaceByName(DOWNLOAD_PAUSED , uno::makeAny(paused));
+    replaceByName(DOWNLOAD_PAUSED , uno::Any(paused));
     commitChanges();
 }
 
@@ -359,7 +359,7 @@ UpdateCheckConfig::updateLastChecked()
 
     sal_Int64 lastCheck = systime.Seconds;
 
-    replaceByName(LAST_CHECK, uno::makeAny(lastCheck));
+    replaceByName(LAST_CHECK, uno::Any(lastCheck));
 }
 
 void
@@ -370,17 +370,17 @@ UpdateCheckConfig::storeUpdateFound( const UpdateInfo& rInfo, const OUString& aC
 
     uno::Any aValues[nUpdateEntryProperties] =
     {
-        uno::makeAny(rInfo.Version),
-        uno::makeAny(rInfo.BuildId),
-        uno::makeAny(rInfo.Description),
-        uno::makeAny(rInfo.Sources[0].URL),
-        uno::makeAny(rInfo.Sources[0].IsDirect),
-        uno::makeAny(getReleaseNote(rInfo, 1, autoDownloadEnabled) ),
-        uno::makeAny(getReleaseNote(rInfo, 2, autoDownloadEnabled) ),
-        uno::makeAny(getReleaseNote(rInfo, 3, autoDownloadEnabled) ),
-        uno::makeAny(getReleaseNote(rInfo, 4, autoDownloadEnabled) ),
-        uno::makeAny(getReleaseNote(rInfo, 5, autoDownloadEnabled) ),
-        uno::makeAny(aCurrentBuild)
+        uno::Any(rInfo.Version),
+        uno::Any(rInfo.BuildId),
+        uno::Any(rInfo.Description),
+        uno::Any(rInfo.Sources[0].URL),
+        uno::Any(rInfo.Sources[0].IsDirect),
+        uno::Any(getReleaseNote(rInfo, 1, autoDownloadEnabled) ),
+        uno::Any(getReleaseNote(rInfo, 2, autoDownloadEnabled) ),
+        uno::Any(getReleaseNote(rInfo, 3, autoDownloadEnabled) ),
+        uno::Any(getReleaseNote(rInfo, 4, autoDownloadEnabled) ),
+        uno::Any(getReleaseNote(rInfo, 5, autoDownloadEnabled) ),
+        uno::Any(aCurrentBuild)
     };
 
     OUString aName;
@@ -412,7 +412,7 @@ UpdateCheckConfig::clearUpdateFound()
         } catch(const lang::WrappedTargetException& ) {
             // Can not remove value, probably in share layer
             OSL_ASSERT(false);
-            m_xContainer->replaceByName(aName, uno::makeAny(OUString()));
+            m_xContainer->replaceByName(aName, uno::Any(OUString()));
         }
     }
 

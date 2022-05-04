@@ -39,7 +39,6 @@ namespace pcr
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Sequence;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::beans::Property;
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
@@ -226,7 +225,7 @@ namespace pcr
 
     void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool IsReadOnly )
     {
-        setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( IsReadOnly ) );
+        setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, Any( IsReadOnly ) );
     }
 
     sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName )

@@ -146,7 +146,7 @@ namespace pcr
         Any aAddress;
         return doConvertAddressRepresentations(
                     PROPERTY_UI_REPRESENTATION,
-                    makeAny( _rAddressDescription ),
+                    Any( _rAddressDescription ),
                     PROPERTY_ADDRESS,
                     aAddress,
                     false
@@ -174,7 +174,7 @@ namespace pcr
             try
             {
                 Reference< XSpreadsheet > xSheet;
-                xConverter->setPropertyValue( PROPERTY_REFERENCE_SHEET, makeAny( static_cast<sal_Int32>(getControlSheetIndex( xSheet )) ) );
+                xConverter->setPropertyValue( PROPERTY_REFERENCE_SHEET, Any( static_cast<sal_Int32>(getControlSheetIndex( xSheet )) ) );
                 xConverter->setPropertyValue( _rInputProperty, _rInputValue );
                 _rOutputValue = xConverter->getPropertyValue( _rOutputProperty );
                 bSuccess = true;
@@ -195,7 +195,7 @@ namespace pcr
         Any aAddress;
         return doConvertAddressRepresentations(
                     PROPERTY_UI_REPRESENTATION,
-                    makeAny( _rAddressDescription ),
+                    Any( _rAddressDescription ),
                     PROPERTY_ADDRESS,
                     aAddress,
                     true
@@ -209,7 +209,7 @@ namespace pcr
         Reference< XValueBinding > xBinding( createDocumentDependentInstance(
             _bSupportIntegerExchange ? OUString(SERVICE_SHEET_CELL_INT_BINDING) : OUString(SERVICE_SHEET_CELL_BINDING),
             PROPERTY_BOUND_CELL,
-            makeAny( _rAddress )
+            Any( _rAddress )
         ), UNO_QUERY );
 
         return xBinding;
@@ -244,7 +244,7 @@ namespace pcr
         xSource.set(createDocumentDependentInstance(
             SERVICE_SHEET_CELLRANGE_LISTSOURCE,
             PROPERTY_LIST_CELL_RANGE,
-            makeAny( aRangeAddress )
+            Any( aRangeAddress )
         ), css::uno::UNO_QUERY);
 
         return xSource;
@@ -316,7 +316,7 @@ namespace pcr
         if ( getAddressFromCellBinding( _rxBinding, aAddress ) )
         {
             Any aStringAddress;
-            doConvertAddressRepresentations( PROPERTY_ADDRESS, makeAny( aAddress ),
+            doConvertAddressRepresentations( PROPERTY_ADDRESS, Any( aAddress ),
                 PROPERTY_UI_REPRESENTATION, aStringAddress, false );
 
             aStringAddress >>= sAddress;
@@ -345,7 +345,7 @@ namespace pcr
                 xSourceProps->getPropertyValue( PROPERTY_LIST_CELL_RANGE ) >>= aRangeAddress;
 
                 Any aStringAddress;
-                doConvertAddressRepresentations( PROPERTY_ADDRESS, makeAny( aRangeAddress ),
+                doConvertAddressRepresentations( PROPERTY_ADDRESS, Any( aRangeAddress ),
                     PROPERTY_UI_REPRESENTATION, aStringAddress, true );
                 aStringAddress >>= sAddress;
             }

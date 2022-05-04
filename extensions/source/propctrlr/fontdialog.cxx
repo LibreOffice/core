@@ -305,10 +305,10 @@ namespace pcr
                 const SvxFontItem& rFontItem =
                     static_cast<const SvxFontItem&>(_rSet.Get(CFID_FONT));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , makeAny(rFontItem.GetFamilyName()));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, makeAny(rFontItem.GetStyleName()));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_FAMILY   , makeAny(static_cast<sal_Int16>(rFontItem.GetFamily())));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny(static_cast<sal_Int16>(rFontItem.GetCharSet())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_NAME     , Any(rFontItem.GetFamilyName()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STYLENAME, Any(rFontItem.GetStyleName()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_FAMILY   , Any(static_cast<sal_Int16>(rFontItem.GetFamily())));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , Any(static_cast<sal_Int16>(rFontItem.GetCharSet())));
             }
 
 
@@ -321,7 +321,7 @@ namespace pcr
                     static_cast<const SvxFontHeightItem&>(_rSet.Get(CFID_HEIGHT));
 
                 float nHeight = static_cast<float>(o3tl::convert(rSvxFontHeightItem.GetHeight(), o3tl::Length::twip, o3tl::Length::pt));
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_HEIGHT,makeAny(nHeight));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_HEIGHT,Any(nHeight));
 
             }
 
@@ -335,7 +335,7 @@ namespace pcr
                     static_cast<const SvxWeightItem&>(_rSet.Get(CFID_WEIGHT));
 
                 float nWeight = vcl::unohelper::ConvertFontWeight(rWeightItem.GetWeight());
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_WEIGHT,makeAny(nWeight));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_WEIGHT,Any(nWeight));
             }
 
 
@@ -348,7 +348,7 @@ namespace pcr
                     static_cast<const SvxPostureItem&>(_rSet.Get(CFID_POSTURE));
 
                 css::awt::FontSlant eSlant = vcl::unohelper::ConvertFontSlant(rPostureItem.GetPosture());
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny(static_cast<sal_Int16>(eSlant)));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, Any(static_cast<sal_Int16>(eSlant)));
             }
 
 
@@ -361,7 +361,7 @@ namespace pcr
                     static_cast<const SvxUnderlineItem&>(_rSet.Get(CFID_UNDERLINE));
 
                 sal_Int16 nUnderline = static_cast<sal_Int16>(rUnderlineItem.GetLineStyle());
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,Any(nUnderline));
 
                 // the text line color is transported in this item, too
                 Color nColor = rUnderlineItem.GetColor();
@@ -383,7 +383,7 @@ namespace pcr
                     static_cast<const SvxCrossedOutItem&>(_rSet.Get(CFID_STRIKEOUT));
 
                 sal_Int16 nStrikeout = static_cast<sal_Int16>(rCrossedOutItem.GetStrikeout());
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STRIKEOUT,makeAny(nStrikeout));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_STRIKEOUT,Any(nStrikeout));
             }
 
 
@@ -395,7 +395,7 @@ namespace pcr
                 const SvxWordLineModeItem& rWordLineModeItem =
                     static_cast<const SvxWordLineModeItem&>(_rSet.Get(CFID_WORDLINEMODE));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, css::uno::makeAny(rWordLineModeItem.GetValue()));
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_WORDLINEMODE, css::uno::Any(rWordLineModeItem.GetValue()));
             }
 
 
@@ -425,7 +425,7 @@ namespace pcr
                 const SvxCharReliefItem& rReliefItem =
                     static_cast<const SvxCharReliefItem&>(_rSet.Get(CFID_RELIEF));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_RELIEF, makeAny(static_cast<sal_Int16>(rReliefItem.GetValue())) );
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_RELIEF, Any(static_cast<sal_Int16>(rReliefItem.GetValue())) );
             }
 
 
@@ -437,7 +437,7 @@ namespace pcr
                 const SvxEmphasisMarkItem& rEmphMarkItem =
                     static_cast<const SvxEmphasisMarkItem&>(_rSet.Get(CFID_EMPHASIS));
 
-                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_EMPHASIS_MARK, makeAny(static_cast<sal_Int16>(rEmphMarkItem.GetEmphasisMark())) );
+                lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_EMPHASIS_MARK, Any(static_cast<sal_Int16>(rEmphMarkItem.GetEmphasisMark())) );
             }
         }
         catch (const Exception& )

@@ -189,17 +189,17 @@ namespace dbp
                     disambiguateName(xExistenceChecker, sColumnName);
 
                     // the data field the column should be bound to
-                    xColumn->setPropertyValue("DataField", makeAny(*pFormFieldName));
+                    xColumn->setPropertyValue("DataField", Any(*pFormFieldName));
                     // the label
-                    xColumn->setPropertyValue("Label", makeAny(*pFormFieldName + *pColumnLabelPostfix));
+                    xColumn->setPropertyValue("Label", Any(*pFormFieldName + *pColumnLabelPostfix));
                     // the width (<void/> => column will be auto-sized)
                     xColumn->setPropertyValue("Width", Any());
 
                     if ( xColumnPSI->hasPropertyByName( s_sMouseWheelBehavior ) )
-                        xColumn->setPropertyValue( s_sMouseWheelBehavior, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
+                        xColumn->setPropertyValue( s_sMouseWheelBehavior, Any( MouseWheelBehavior::SCROLL_DISABLED ) );
 
                     // insert the column
-                    xColumnContainer->insertByName(sColumnName, makeAny(xColumn));
+                    xColumnContainer->insertByName(sColumnName, Any(xColumn));
                 }
                 catch(const Exception&)
                 {

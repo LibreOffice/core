@@ -299,7 +299,7 @@ namespace pcr
     {
         Reference<css::container::XNameContainer> xName(rContext, UNO_QUERY_THROW);
         Reference<XWindow> xWindow(new weld::TransportAsXWindow(pParent));
-        xName->insertByName("BuilderParent", makeAny(xWindow));
+        xName->insertByName("BuilderParent", Any(xWindow));
     }
 
     void PropertyHandlerHelper::clearBuilderParent(const css::uno::Reference<css::uno::XComponentContext>& rContext)

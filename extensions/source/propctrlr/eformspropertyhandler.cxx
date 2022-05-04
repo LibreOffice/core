@@ -178,7 +178,7 @@ namespace pcr
                     OUString sOldBindingName = m_pHelper->getCurrentBindingName();
                     m_pHelper->setBinding( nullptr );
                     firePropertyChange( PROPERTY_BINDING_NAME, PROPERTY_ID_BINDING_NAME,
-                        makeAny( sOldBindingName ), makeAny( OUString() ) );
+                        Any( sOldBindingName ), Any( OUString() ) );
                 }
             }
             break;
@@ -211,7 +211,7 @@ namespace pcr
                     // However, there's no such mechanism in place currently.
                     m_bSimulatingModelChange = true;
                     firePropertyChange( PROPERTY_XML_DATA_MODEL, PROPERTY_ID_XML_DATA_MODEL,
-                        makeAny( OUString() ), makeAny( getModelNamePropertyValue() ) );
+                        Any( OUString() ), Any( getModelNamePropertyValue() ) );
                     m_bSimulatingModelChange = false;
                 }
             }
@@ -499,9 +499,9 @@ namespace pcr
             if ( !xModel.is() || !xBinding.is() || sFacetName.isEmpty() )
                 return InteractiveSelectionResult_Cancelled;
 
-            xDialogProps->setPropertyValue("FormModel", makeAny( xModel ) );
-            xDialogProps->setPropertyValue("Binding", makeAny( xBinding ) );
-            xDialogProps->setPropertyValue("FacetName", makeAny( sFacetName ) );
+            xDialogProps->setPropertyValue("FormModel", Any( xModel ) );
+            xDialogProps->setPropertyValue("Binding", Any( xBinding ) );
+            xDialogProps->setPropertyValue("FacetName", Any( sFacetName ) );
 
             if ( !xDialog->execute() )
                 // cancelled

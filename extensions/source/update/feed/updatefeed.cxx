@@ -236,7 +236,7 @@ public:
             if( xContentNode.is() )
                 aEntry.UpdateDocument = m_xUpdateInformationProvider->getDocumentRoot(xContentNode);
 
-            return uno::makeAny(aEntry);
+            return uno::Any(aEntry);
         }
         catch( ucb::CommandAbortedException const &)
         {
@@ -279,7 +279,7 @@ public:
             throw container::NoSuchElementException(OUString::number(m_nCount), *this);
 
         ++m_nCount;
-        return uno::makeAny(m_aEntry);
+        return uno::Any(m_aEntry);
     };
 
 private:
@@ -448,7 +448,7 @@ UpdateInformationProvider::load(const OUString& rURL)
 
     // Disable KeepAlive in webdav - don't want millions of office
     // instances phone home & clog up servers
-    uno::Sequence< beans::NamedValue > aProps { { "KeepAlive", uno::makeAny(false) } };
+    uno::Sequence< beans::NamedValue > aProps { { "KeepAlive", uno::Any(false) } };
 
     ucb::OpenCommandArgument3 aOpenArgument;
     aOpenArgument.Mode = ucb::OpenMode::DOCUMENT;

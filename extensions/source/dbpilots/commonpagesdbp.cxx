@@ -162,13 +162,13 @@ namespace dbp
                 xOldConn = getFormConnection();
 
                 OUString sDataSource = m_xDatasource->get_selected_text();
-                rContext.xForm->setPropertyValue("DataSourceName", makeAny( sDataSource ) );
+                rContext.xForm->setPropertyValue("DataSourceName", Any( sDataSource ) );
             }
             OUString sCommand = m_xTable->get_selected_text();
             sal_Int32 nCommandType = m_xTable->get_selected_id().toInt32();
 
-            rContext.xForm->setPropertyValue("Command", makeAny( sCommand ) );
-            rContext.xForm->setPropertyValue("CommandType", makeAny( nCommandType ) );
+            rContext.xForm->setPropertyValue("Command", Any( sCommand ) );
+            rContext.xForm->setPropertyValue("CommandType", Any( nCommandType ) );
 
             if ( !rContext.bEmbedded )
                 setFormConnection( xOldConn, false );

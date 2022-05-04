@@ -164,7 +164,7 @@ namespace pcr
             ::rtl::Reference< IPropertyEnumRepresentation > aEnumConversion(
                 new DefaultEnumRepresentation( *m_pInfoService, _rPropertyValue.getValueType(), nPropId ) );
             // TODO/UNOize: cache those converters?
-            return makeAny( aEnumConversion->getDescriptionForValue( _rPropertyValue ) );
+            return Any( aEnumConversion->getDescriptionForValue( _rPropertyValue ) );
         }
 
         return PropertyHandlerHelper::convertToControlValue(

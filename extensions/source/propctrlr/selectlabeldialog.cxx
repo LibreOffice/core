@@ -70,7 +70,7 @@ namespace pcr
             nClassID = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID));
 
         sDescription = sDescription.replaceAll("$controlclass$",
-            GetUIHeadlineName(nClassID, makeAny(m_xControlModel)));
+            GetUIHeadlineName(nClassID, Any(m_xControlModel)));
         OUString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME));
         sDescription = sDescription.replaceAll("$controlname$", sName);
         m_xMainDesc->set_label(sDescription);

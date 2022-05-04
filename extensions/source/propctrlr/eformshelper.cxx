@@ -525,8 +525,8 @@ namespace pcr
                         xBinding = xModel->createBinding( );
                         if ( xBinding.is() )
                         {
-                            xBinding->setPropertyValue( PROPERTY_BINDING_ID, makeAny( _rBindingName ) );
-                            xModel->getBindings()->insert( makeAny( xBinding ) );
+                            xBinding->setPropertyValue( PROPERTY_BINDING_ID, Any( _rBindingName ) );
+                            xModel->getBindings()->insert( Any( xBinding ) );
                         }
                     }
                 }
@@ -547,7 +547,7 @@ namespace pcr
                         Reference< XNamed > xName( xBinding, UNO_QUERY_THROW );
                         xName->setName( sNewName );
                         // and insert into the model
-                        xModel->getBindings()->insert( makeAny( xBinding ) );
+                        xModel->getBindings()->insert( Any( xBinding ) );
                     }
                 }
             }
@@ -674,7 +674,7 @@ namespace pcr
                         xElement->getPropertyValue( PROPERTY_MODEL ) >>= xElementsModel;
                         OSL_ENSURE( xElementsModel == xModel, "EFormsHelper::getAllElementUINames: inconsistency in the model-element relationship!" );
                         if ( xElementsModel != xModel )
-                            xElement->setPropertyValue( PROPERTY_MODEL, makeAny( xModel ) );
+                            xElement->setPropertyValue( PROPERTY_MODEL, Any( xModel ) );
                     }
 #endif
                     OUString sElementName = ( _eType == Submission ) ? xHelper->getSubmissionName( xElement, true ) : xHelper->getBindingName( xElement, true );

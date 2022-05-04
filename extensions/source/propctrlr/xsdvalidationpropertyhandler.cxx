@@ -102,9 +102,9 @@ namespace pcr
         switch ( nPropId )
         {
         // common facets
-        case PROPERTY_ID_XSD_DATA_TYPE:  aReturn = pType.is() ? pType->getFacet( PROPERTY_NAME ) : makeAny( OUString() ); break;
-        case PROPERTY_ID_XSD_WHITESPACES:aReturn = pType.is() ? pType->getFacet( PROPERTY_XSD_WHITESPACES ) : makeAny( WhiteSpaceTreatment::Preserve ); break;
-        case PROPERTY_ID_XSD_PATTERN:    aReturn = pType.is() ? pType->getFacet( PROPERTY_XSD_PATTERN ) : makeAny( OUString() ); break;
+        case PROPERTY_ID_XSD_DATA_TYPE:  aReturn = pType.is() ? pType->getFacet( PROPERTY_NAME ) : Any( OUString() ); break;
+        case PROPERTY_ID_XSD_WHITESPACES:aReturn = pType.is() ? pType->getFacet( PROPERTY_XSD_WHITESPACES ) : Any( WhiteSpaceTreatment::Preserve ); break;
+        case PROPERTY_ID_XSD_PATTERN:    aReturn = pType.is() ? pType->getFacet( PROPERTY_XSD_PATTERN ) : Any( OUString() ); break;
 
         // all other properties are simply forwarded, if they exist at the given type
         default:

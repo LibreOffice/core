@@ -405,7 +405,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                         {
                             try
                             {
-                                Any anySeq = makeAny(unoSeq);
+                                Any anySeq(unoSeq);
                                 Any convAny = conv->convertTo(anySeq, ptype);
                                 rAny = convAny;
                             }

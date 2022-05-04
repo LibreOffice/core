@@ -443,7 +443,7 @@ namespace pcr
 
     Any SAL_CALL OPropertyBrowserController::getViewData(  )
     {
-        return makeAny( m_sPageSelection );
+        return Any( m_sPageSelection );
     }
 
 

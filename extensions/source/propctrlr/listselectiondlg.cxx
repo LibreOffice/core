@@ -99,7 +99,7 @@ namespace pcr
 
         try
         {
-            m_xListBox->setPropertyValue( m_sPropertyName, makeAny( comphelper::containerToSequence(aSelection) ) );
+            m_xListBox->setPropertyValue( m_sPropertyName, Any( comphelper::containerToSequence(aSelection) ) );
         }
         catch( const Exception& )
         {

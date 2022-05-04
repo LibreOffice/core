@@ -209,8 +209,8 @@ namespace pcr
         {
             if ( m_xDetailForm.is() )
             {
-                m_xDetailForm->setPropertyValue( PROPERTY_DETAILFIELDS, makeAny( Sequence< OUString >( aDetailFields.data(), aDetailFields.size() ) ) );
-                m_xDetailForm->setPropertyValue( PROPERTY_MASTERFIELDS, makeAny( Sequence< OUString >( aMasterFields.data(), aMasterFields.size() ) ) );
+                m_xDetailForm->setPropertyValue( PROPERTY_DETAILFIELDS, Any( Sequence< OUString >( aDetailFields.data(), aDetailFields.size() ) ) );
+                m_xDetailForm->setPropertyValue( PROPERTY_MASTERFIELDS, Any( Sequence< OUString >( aMasterFields.data(), aMasterFields.size() ) ) );
             }
         }
         catch( const Exception& )

@@ -411,7 +411,7 @@ namespace dbp
             }
             else
             {
-                m_aContext.xForm->setPropertyValue("ActiveConnection", makeAny( _rxConn ) );
+                m_aContext.xForm->setPropertyValue("ActiveConnection", Any( _rxConn ) );
             }
         }
         catch(const Exception&)
@@ -527,7 +527,7 @@ namespace dbp
 
                             // not interested in any results, only in the fields
                             Reference< XPropertySet > xStatementProps(xStatement, UNO_QUERY);
-                            xStatementProps->setPropertyValue("MaxRows", makeAny(sal_Int32(0)));
+                            xStatementProps->setPropertyValue("MaxRows", Any(sal_Int32(0)));
 
                             // TODO: think about handling local SQLExceptions here ...
                             Reference< XColumnsSupplier >  xSupplyCols(xStatement->executeQuery(), UNO_QUERY);
@@ -585,7 +585,7 @@ namespace dbp
             if ( !xHandler.is() )
                 return false;
 
-            Reference< XInteractionRequest > xRequest = new OInteractionRequest(makeAny(aContext));
+            Reference< XInteractionRequest > xRequest = new OInteractionRequest(Any(aContext));
             try
             {
                 xHandler->handle(xRequest);
@@ -613,7 +613,7 @@ namespace dbp
                 OUString sControlLabel(_pSettings->sControlLabel);
                 m_aContext.xObjectModel->setPropertyValue(
                     "Label",
-                    makeAny(sControlLabel)
+                    Any(sControlLabel)
                 );
             }
         }

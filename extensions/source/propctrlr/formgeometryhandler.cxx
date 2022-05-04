@@ -58,7 +58,6 @@ namespace pcr
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Any;
-    using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::beans::Property;
@@ -306,7 +305,7 @@ namespace pcr
                     Reference< XMap > xControlMap;
                     Any any = m_xContext->getValueByName( "ControlShapeAccess" );
                     any >>= xControlMap;
-                    m_xAssociatedShape.set( xControlMap->get( makeAny( xControlModel ) ), UNO_QUERY_THROW );
+                    m_xAssociatedShape.set( xControlMap->get( Any( xControlModel ) ), UNO_QUERY_THROW );
                     m_xShapeProperties.set( m_xAssociatedShape, UNO_QUERY_THROW );
                 }
             }
@@ -671,7 +670,7 @@ namespace pcr
                 if ( xSheet.is() )
                 {
                     css::awt::Point aPreservePosition( m_xAssociatedShape->getPosition() );
-                    m_xShapeProperties->setPropertyValue( PROPERTY_ANCHOR, makeAny( xSheet ) );
+                    m_xShapeProperties->setPropertyValue( PROPERTY_ANCHOR, Any( xSheet ) );
                     m_xAssociatedShape->setPosition( aPreservePosition );
                 }
                 break;
@@ -739,14 +738,14 @@ namespace pcr
         if ( _event.PropertyName == "Position" )
         {
             css::awt::Point aPos = m_xShape->getPosition();
-            aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONX, makeAny( aPos.X ) ) );
-            aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONY, makeAny( aPos.Y ) ) );
+            aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONX, Any( aPos.X ) ) );
+            aEventTranslations.push_back( EventTranslation( PROPERTY_POSITIONY, Any( aPos.Y ) ) );
         }
         else if ( _event.PropertyName == "Size" )
         {
             css::awt::Size aSize = m_xShape->getSize();
-            aEventTranslations.push_back( EventTranslation( PROPERTY_WIDTH, makeAny( aSize.Width ) ) );
-            aEventTranslations.push_back( EventTranslation( PROPERTY_HEIGHT, makeAny( aSize.Height ) ) );
+            aEventTranslations.push_back( EventTranslation( PROPERTY_WIDTH, Any( aSize.Width ) ) );
+            aEventTranslations.push_back( EventTranslation( PROPERTY_HEIGHT, Any( aSize.Height ) ) );
         }
         else if ( _event.PropertyName == PROPERTY_ANCHOR_TYPE )
         {

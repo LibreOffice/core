@@ -314,7 +314,7 @@ namespace pcr
     Any SAL_CALL OHyperlinkControl::getValue()
     {
         OUString sText = m_xEntry->get_text();
-        return makeAny( sText );
+        return Any( sText );
     }
 
     void SAL_CALL OHyperlinkControl::setValue( const Any& _value )
@@ -638,7 +638,7 @@ namespace pcr
 
     Any SAL_CALL OComboboxControl::getValue()
     {
-        return makeAny( getTypedControlWindow()->get_active_text() );
+        return Any( getTypedControlWindow()->get_active_text() );
     }
 
     Type SAL_CALL OComboboxControl::getValueType()

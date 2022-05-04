@@ -129,7 +129,7 @@ namespace pcr
                 // ensure that the "transfer selection as" property is reset. Since we can't remember
                 // it at the object itself, but derive it from the binding only, we have to normalize
                 // it now that there *is* no binding anymore.
-                setPropertyValue( PROPERTY_CELL_EXCHANGE_TYPE, makeAny( sal_Int16(0) ) );
+                setPropertyValue( PROPERTY_CELL_EXCHANGE_TYPE, Any( sal_Int16(0) ) );
             }
         }
         break;
@@ -156,8 +156,8 @@ namespace pcr
                 {
                     if ( !xSource.is() )
                     {
-                        setPropertyValue( PROPERTY_STRINGITEMLIST, makeAny( Sequence< OUString >() ) );
-                        setPropertyValue( PROPERTY_TYPEDITEMLIST, makeAny( Sequence< Any >() ) );
+                        setPropertyValue( PROPERTY_STRINGITEMLIST, Any( Sequence< OUString >() ) );
+                        setPropertyValue( PROPERTY_TYPEDITEMLIST, Any( Sequence< Any >() ) );
                     }
                 }
                 catch( const Exception& )
