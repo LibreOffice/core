@@ -26,7 +26,7 @@ namespace com::sun::star {
 namespace cppuhelper::detail {
 
 css::uno::Environment getEnvironment(
-    OUString const & name, OUString const & implementation);
+    OUString const & name, std::u16string_view implementation);
 
 void loadSharedLibComponentFactory(
     OUString const & uri, OUString const & environment,
