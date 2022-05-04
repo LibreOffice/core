@@ -26,21 +26,78 @@
 #include "mtvelements.hxx"
 #include "types.hxx"
 
-// Query-related iterators. There is one template class ScQueryCellIteratorBase
-// that implements most of the shared functionality, specific parts are done
-// by specializing the templates and then subclassing as the actual class to use.
+/*
+Query-related iterators. There is one template class ScQueryCellIteratorBase
+that implements most of the shared functionality, specific parts are done
+by specializing the templates and then subclassing as the actual class to use.
+A template is used for maximum performance, as that allows fast code specializing,
+inlining, etc.
+There are two template arguments:
+* ScQueryCellIteratorAccess specifies how cells are accessed:
+  + Direct - direct access to cells using mdds.
+  + SortedCache - for accessing unsorted cells in a sorted way using ScSortedRangeCache.
+* ScQueryCellIteratorType specifies the type of the query operation:
+  + Generic - the generic lookup, used e.g. by VLOOKUP.
+  + CountIf - faster implementation for COUNTIF(S).
 
-// Specific data should be in ScQueryCellIteratorSpecific (otherwise adding data
-// members here would mean specializing the entire ScQueryCellIteratorBase).
-template< ScQueryCellIteratorType iteratorType >
-class ScQueryCellIteratorSpecific
+Specific data should be in specific templated base classes, otherwise adding data
+members would mean specializing the entire ScQueryCellIteratorBase. Some specific
+functionality may also be implemented in the base classes or depending on the template
+parameter.
+*/
+
+// Data and functionality for accessing cells in a specific way.
+// Needs specialization, see ScQueryCellIteratorAccess::Direct for what is needed.
+template< ScQueryCellIteratorAccess accessType >
+class ScQueryCellIteratorAccessSpecific
 {
 };
 
-// Shared code for query-based iterators.
-template< ScQueryCellIteratorType iteratorType >
-class ScQueryCellIteratorBase : public ScQueryCellIteratorSpecific< iteratorType >
+// The implementation using linear direct mdds access.
+template<>
+class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >
 {
+protected:
+    ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, const ScQueryParam& rParam );
+    // Initialize position for new column.
+    void InitPos();
+    // Increase position (next row).
+    void IncPos();
+    // Next mdds block. If access is not direct/linear, then
+    // should call IncPos().
+    void IncBlock();
+
+    // These members needs to be available already in the base class.
+    typedef sc::CellStoreType::const_position_type PositionType;
+    PositionType maCurPos;
+    ScQueryParam    maParam;
+    ScDocument&     rDoc;
+    SCTAB           nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+
+    class NonEmptyCellIndexer;
+    typedef std::pair<ScRefCellValue, SCROW> BinarySearchCellType;
+    static NonEmptyCellIndexer MakeBinarySearchIndexer(const sc::CellStoreType& rCells,
+        SCROW nStartRow, SCROW nEndRow);
+};
+
+// Data and functionality for specific types of query.
+template< ScQueryCellIteratorType iteratorType >
+class ScQueryCellIteratorTypeSpecific
+{
+protected:
+    bool HandleItemFound(); // not implemented, needs specialization
+};
+
+// Shared code for query-based iterators. The main class.
+template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
+class ScQueryCellIteratorBase
+    : public ScQueryCellIteratorAccessSpecific< accessType >
+    , public ScQueryCellIteratorTypeSpecific< queryType >
+{
+    typedef ScQueryCellIteratorAccessSpecific< accessType > AccessBase;
+    typedef ScQueryCellIteratorTypeSpecific< queryType > TypeBase;
 protected:
     enum StopOnMismatchBits
     {
@@ -58,32 +115,29 @@ protected:
         nTestEqualConditionFulfilled = nTestEqualConditionEnabled | nTestEqualConditionMatched
     };
 
-    typedef sc::CellStoreType::const_position_type PositionType;
-    PositionType maCurPos;
-
-    ScQueryParam    maParam;
-    ScDocument&     rDoc;
     const ScInterpreterContext& mrContext;
-    SCTAB           nTab;
-    SCCOL           nCol;
-    SCROW           nRow;
     sal_uInt8            nStopOnMismatch;
     sal_uInt8            nTestEqualCondition;
     bool            bAdvanceQuery;
     bool            bIgnoreMismatchOnLeadingStrings;
 
-    /** Initialize position for new column. */
-    void InitPos();
-    void IncPos();
-    void IncBlock();
+    // Make base members directly visible here (templated bases need 'this->').
+    using AccessBase::maCurPos;
+    using AccessBase::maParam;
+    using AccessBase::rDoc;
+    using AccessBase::nTab;
+    using AccessBase::nCol;
+    using AccessBase::nRow;
+    using AccessBase::InitPos;
+    using AccessBase::IncPos;
+    using AccessBase::IncBlock;
+    using typename AccessBase::BinarySearchCellType;
+    using AccessBase::MakeBinarySearchIndexer;
+    using TypeBase::HandleItemFound;
 
     // The actual query function. It will call HandleItemFound() for any matching type
     // and return if HandleItemFound() returns true.
     void PerformQuery();
-    bool HandleItemFound(); // not implemented, needs specialization
-
-    SCCOL           GetCol() const { return nCol; }
-    SCROW           GetRow() const { return nRow; }
 
     /* Only works if no regular expression is involved, only searches for rows in one column,
        and only the first query entry is considered with simple conditions SC_LESS_EQUAL
@@ -137,24 +191,55 @@ public:
                         { return nTestEqualCondition == nTestEqualConditionFulfilled; }
 };
 
+
 template<>
-class ScQueryCellIteratorSpecific< ScQueryCellIteratorType::Generic >
+class ScQueryCellIteratorTypeSpecific< ScQueryCellIteratorType::Generic >
 {
 protected:
+    bool HandleItemFound();
     bool getThisResult;
 };
 
 // The generic query iterator, used e.g. by VLOOKUP.
-class ScQueryCellIterator : public ScQueryCellIteratorBase< ScQueryCellIteratorType::Generic >
+template< ScQueryCellIteratorAccess accessType >
+class ScQueryCellIterator
+    : public ScQueryCellIteratorBase< accessType, ScQueryCellIteratorType::Generic >
 {
+    typedef ScQueryCellIteratorBase< accessType, ScQueryCellIteratorType::Generic > Base;
+    // Make base members directly visible here (templated bases need 'this->').
+    using Base::maParam;
+    using Base::rDoc;
+    using Base::nTab;
+    using Base::nCol;
+    using Base::nRow;
+    using Base::InitPos;
+    using Base::IncPos;
+    using Base::bIgnoreMismatchOnLeadingStrings;
+    using Base::SetStopOnMismatch;
+    using Base::SetTestEqualCondition;
+    using Base::BinarySearch;
+    using typename Base::PositionType;
+    using Base::maCurPos;
+    using Base::IsEqualConditionFulfilled;
+    using Base::bAdvanceQuery;
+    using Base::StoppedOnMismatch;
+    using Base::nStopOnMismatch;
+    using Base::nStopOnMismatchEnabled;
+    using Base::nTestEqualCondition;
+    using Base::nTestEqualConditionEnabled;
+    using Base::PerformQuery;
+    using Base::getThisResult;
+
     bool GetThis();
 
 public:
-    using ScQueryCellIteratorBase::ScQueryCellIteratorBase;
+    ScQueryCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+                        const ScQueryParam& aParam, bool bMod)
+        : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     bool GetFirst();
     bool GetNext();
-    using ScQueryCellIteratorBase::GetCol;
-    using ScQueryCellIteratorBase::GetRow;
+    SCCOL GetCol() const { return nCol; }
+    SCROW GetRow() const { return nRow; }
 
                     /** In a range assumed to be sorted find either the last of
                         a sequence of equal entries or the last being less than
@@ -177,20 +262,41 @@ public:
     bool            FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW& nFoundRow );
 };
 
+typedef ScQueryCellIterator< ScQueryCellIteratorAccess::Direct > ScQueryCellIteratorDirect;
+
 
 template<>
-class ScQueryCellIteratorSpecific< ScQueryCellIteratorType::CountIf >
+class ScQueryCellIteratorTypeSpecific< ScQueryCellIteratorType::CountIf >
 {
 protected:
+    bool HandleItemFound();
     sal_uInt64 countIfCount;
 };
 
 // Used by ScInterpreter::ScCountIf.
-class ScCountIfCellIterator : public ScQueryCellIteratorBase< ScQueryCellIteratorType::CountIf >
+template< ScQueryCellIteratorAccess accessType >
+class ScCountIfCellIterator
+    : public ScQueryCellIteratorBase< accessType, ScQueryCellIteratorType::CountIf >
 {
+    typedef ScQueryCellIteratorBase< accessType, ScQueryCellIteratorType::CountIf > Base;
+    // Make base members directly visible here (templated bases need 'this->').
+    using Base::maParam;
+    using Base::rDoc;
+    using Base::nTab;
+    using Base::nCol;
+    using Base::nRow;
+    using Base::InitPos;
+    using Base::PerformQuery;
+    using Base::SetAdvanceQueryParamEntryField;
+    using Base::countIfCount;
+
 public:
-    using ScQueryCellIteratorBase::ScQueryCellIteratorBase;
+    ScCountIfCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+                          const ScQueryParam& aParam, bool bMod)
+        : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     sal_uInt64 GetCount();
 };
+
+typedef ScCountIfCellIterator< ScQueryCellIteratorAccess::Direct > ScCountIfCellIteratorDirect;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
