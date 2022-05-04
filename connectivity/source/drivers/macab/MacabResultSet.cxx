@@ -885,7 +885,7 @@ Any SAL_CALL MacabResultSet::getBookmark()
         {
             if(uidField->type == kABStringProperty)
             {
-                return makeAny(CFStringToOUString( static_cast<CFStringRef>(uidField->value) ));
+                return Any(CFStringToOUString( static_cast<CFStringRef>(uidField->value) ));
             }
         }
     }

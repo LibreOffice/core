@@ -474,21 +474,21 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)
     {
         uno::Sequence<beans::PropertyValues> aListItems = {
             {
-                comphelper::makePropertyValue("DisplayText", uno::makeAny(OUString("red"))),
-                comphelper::makePropertyValue("Value", uno::makeAny(OUString("R"))),
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("R"))),
             },
             {
-                comphelper::makePropertyValue("DisplayText", uno::makeAny(OUString("green"))),
-                comphelper::makePropertyValue("Value", uno::makeAny(OUString("G"))),
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("green"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("G"))),
             },
             {
-                comphelper::makePropertyValue("DisplayText", uno::makeAny(OUString("blue"))),
-                comphelper::makePropertyValue("Value", uno::makeAny(OUString("B"))),
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("blue"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("B"))),
             },
         };
         // Without the accompanying fix in place, this test would have failed with:
         // An uncaught exception of type com.sun.star.beans.UnknownPropertyException
-        xContentControlProps->setPropertyValue("ListItems", uno::makeAny(aListItems));
+        xContentControlProps->setPropertyValue("ListItems", uno::Any(aListItems));
     }
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 

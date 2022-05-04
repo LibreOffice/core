@@ -204,9 +204,9 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             if( aDocDir.getLength() > 0 &&
                 osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )
             {
-                return css::uno::makeAny(
+                return css::uno::Any(
                     css::beans::Optional< css::uno::Any >(
-                        true, css::uno::makeAny( aDocURL ) ) );
+                        true, css::uno::Any( aDocURL ) ) );
             }
             else
             {
@@ -217,7 +217,7 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         {
             SAL_WARN("shell", "Got nil or empty list of user document directories" );
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetFTPProxyName" )
     {
         char host[MAXHOSTNAMELEN];
@@ -231,12 +231,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
-                return css::uno::makeAny(
+                return css::uno::Any(
                     css::beans::Optional< css::uno::Any >(
-                        true, uno::makeAny( Server ) ) );
+                        true, uno::Any( Server ) ) );
             }
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetFTPProxyPort" )
     {
         char host[MAXHOSTNAMELEN];
@@ -247,11 +247,11 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal && port > 0)
         {
-            return css::uno::makeAny(
+            return css::uno::Any(
                 css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( sal_Int32(port) ) ) );
+                    true, uno::Any( sal_Int32(port) ) ) );
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPProxyName" )
     {
         char host[MAXHOSTNAMELEN];
@@ -265,12 +265,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
-                return css::uno::makeAny(
+                return css::uno::Any(
                     css::beans::Optional< css::uno::Any >(
-                        true, uno::makeAny( Server ) ) );
+                        true, uno::Any( Server ) ) );
             }
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPProxyPort" )
     {
         char host[MAXHOSTNAMELEN];
@@ -281,11 +281,11 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal && port > 0)
         {
-            return css::uno::makeAny(
+            return css::uno::Any(
                 css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( sal_Int32(port) ) ) );
+                    true, uno::Any( sal_Int32(port) ) ) );
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPSProxyName" )
     {
         char host[MAXHOSTNAMELEN];
@@ -299,12 +299,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
             auto const Server = OUString::createFromAscii( host );
             if( Server.getLength() > 0 )
             {
-                return css::uno::makeAny(
+                return css::uno::Any(
                     css::beans::Optional< css::uno::Any >(
-                        true, uno::makeAny( Server ) ) );
+                        true, uno::Any( Server ) ) );
             }
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetHTTPSProxyPort" )
     {
         char host[MAXHOSTNAMELEN];
@@ -315,17 +315,17 @@ css::uno::Any MacOSXBackend::getPropertyValue(
 
         if (retVal && port > 0)
         {
-            return css::uno::makeAny(
+            return css::uno::Any(
                 css::beans::Optional< css::uno::Any >(
-                    true, uno::makeAny( sal_Int32(port) ) ) );
+                    true, uno::Any( sal_Int32(port) ) ) );
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else if ( PropertyName == "ooInetProxyType" )
     {
         // override default for ProxyType, which is "0" meaning "No proxies".
-        return css::uno::makeAny(
+        return css::uno::Any(
             css::beans::Optional< css::uno::Any >(
-                true, uno::makeAny( sal_Int32(1) ) ) );
+                true, uno::Any( sal_Int32(1) ) ) );
     } else if ( PropertyName == "ooInetNoProxy" )
     {
         OUString aProxyBypassList;
@@ -357,12 +357,12 @@ css::uno::Any MacOSXBackend::getPropertyValue(
         // fill proxy bypass list
         if( aProxyBypassList.getLength() > 0 )
         {
-            return css::uno::makeAny(
+            return css::uno::Any(
                 css::beans::Optional< css::uno::Any >(
                     true,
-                    uno::makeAny( aProxyBypassList.replace( SPACE, SEMI_COLON ) ) ) );
+                    uno::Any( aProxyBypassList.replace( SPACE, SEMI_COLON ) ) ) );
         }
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     } else {
         throw css::beans::UnknownPropertyException(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
