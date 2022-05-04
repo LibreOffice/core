@@ -754,10 +754,10 @@ uno::Any SAL_CALL SvxUnoTextField::getPropertyValue( const OUString& PropertyNam
     SolarMutexGuard aGuard;
 
     if (PropertyName == UNO_TC_PROP_ANCHOR)
-        return uno::makeAny(mxAnchor);
+        return uno::Any(mxAnchor);
 
     if (PropertyName == UNO_TC_PROP_TEXTFIELD_TYPE)
-        return uno::makeAny(mnServiceId);
+        return uno::Any(mnServiceId);
 
     uno::Any aValue;
 
