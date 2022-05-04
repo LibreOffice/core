@@ -1270,7 +1270,6 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
         if (!IsWebDAVLockingUsed())
             return LockFileResult::Succeeded;
 
-        try
         {
             bool bResult = pImpl->m_bLocked;
             bool bIsTemplate = false;
@@ -1362,7 +1361,9 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
                             // exception available
                         }
                         catch( uno::Exception& )
-                        {}
+                        {
+                            TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
+                        }
                     }
                 } while( !bResult && bUIStatus == ShowLockResult::Try );
             }
@@ -1387,10 +1388,6 @@ SfxMedium::LockFileResult SfxMedium::LockOrigFileOnDemand(bool bLoading, bool bN
 
             if ( bResult )
                 eResult = LockFileResult::Succeeded;
-        }
-        catch ( const uno::Exception& )
-        {
-            TOOLS_WARN_EXCEPTION( "sfx.doc", "Locking exception: WebDAV while trying to lock the file" );
         }
         return eResult;
     }
