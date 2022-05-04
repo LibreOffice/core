@@ -5049,7 +5049,7 @@ void ScInterpreter::ScMatch()
             rParam.bByRow = false;
             rParam.nRow2 = nRow1;
             rEntry.nField = nCol1;
-            ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
             // Advance Entry.nField in Iterator if column changed
             aCellIter.SetAdvanceQueryParamEntryField( true );
             if (fTyp == 0.0)
@@ -5533,7 +5533,7 @@ void ScInterpreter::IterateParametersIf( ScIterFuncIf eFunc )
             }
             else
             {
-                ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                 // Increment Entry.nField in iterator when switching to next column.
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if ( aCellIter.GetFirst() )
@@ -5786,7 +5786,7 @@ void ScInterpreter::ScCountIf()
             }
             else
             {
-                ScCountIfCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                ScCountIfCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                 fCount += aCellIter.GetCount();
             }
         }
@@ -6140,7 +6140,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                 // Increment Entry.nField in iterator when switching to next column.
                 aCellIter.SetAdvanceQueryParamEntryField( true );
                 if ( aCellIter.GetFirst() )
@@ -7074,7 +7074,7 @@ void ScInterpreter::ScLookup()
     if (rItem.meType == ScQueryEntry::ByString)
         aParam.eSearchType = DetectSearchType(rItem.maString.getString(), mrDoc);
 
-    ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, aParam, false);
+    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, aParam, false);
     SCCOL nC;
     SCROW nR;
     // Advance Entry.nField in iterator upon switching columns if
@@ -7421,7 +7421,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
             rEntry.eOp = SC_LESS_EQUAL;
         if ( bHLookup )
         {
-            ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab1, aParam, false);
+            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, aParam, false);
             // advance Entry.nField in Iterator upon switching columns
             aCellIter.SetAdvanceQueryParamEntryField( true );
             if ( bSorted )
@@ -7891,11 +7891,11 @@ void ScInterpreter::ScDBCount()
             ScDBQueryParamInternal* p = static_cast<ScDBQueryParamInternal*>(pQueryParam.get());
             p->nCol2 = p->nCol1; // Don't forget to select only one column.
             SCTAB nTab = p->nTab;
-            // ScQueryCellIterator doesn't make use of ScDBQueryParamBase::mnField,
+            // ScQueryCellIteratorDirect doesn't make use of ScDBQueryParamBase::mnField,
             // so the source range has to be restricted, like before the introduction
             // of ScDBQueryParamBase.
             p->nCol1 = p->nCol2 = p->mnField;
-            ScQueryCellIterator aCellIter(mrDoc, mrContext, nTab, *p, true);
+            ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab, *p, true);
             if ( aCellIter.GetFirst() )
             {
                 do
@@ -9942,7 +9942,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, const S
         const ScQueryParam & rParam, const ScQueryEntry & rEntry )
 {
     bool bFound = false;
-    ScQueryCellIterator aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
+    ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
     if (rEntry.eOp != SC_EQUAL)
     {
         // range lookup <= or >=
