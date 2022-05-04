@@ -133,10 +133,18 @@ namespace o3tl{
     template<> struct typed_flags<sc::MatrixEdge> : o3tl::is_typed_flags<sc::MatrixEdge, 63> {};
 }
 
+// Type of query done by ScQueryCellIteratorBase.
 enum class ScQueryCellIteratorType
 {
   Generic,
   CountIf
+};
+
+// Type of cell access done by ScQueryCellIteratorBase.
+enum class ScQueryCellIteratorAccess
+{
+  Direct, // Accessing directly cells.
+  SortedCache // Using ScSortedRangeCache.
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

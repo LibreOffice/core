@@ -208,9 +208,10 @@ friend class ScTable;
 friend class ScValueIterator;
 friend class ScHorizontalValueIterator;
 friend class ScDBQueryDataIterator;
-template< ScQueryCellIteratorType >
+template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
 friend class ScQueryCellIteratorBase;
-friend class ScQueryCellIterator;
+template< ScQueryCellIteratorAccess accessType >
+friend class ScQueryCellIteratorAccessSpecific;
 friend class ScFormulaGroupIterator;
 friend class ScCellIterator;
 friend class ScHorizontalCellIterator;
