@@ -345,6 +345,11 @@ void SpellCheckContext::ensureResults(SCCOL nCol, SCROW nRow)
 
         if (pRanges->empty())
             pRanges.reset(nullptr);
+        else
+        {
+            // The cell will take ownership of the text object instance.
+            pDoc->SetEditText(ScAddress(nCol,nRow,mnTab), mpEngine->CreateTextObject());
+        }
     }
     // else : No change in status for EditStatusFlags::WRONGWORDCHANGED => no spell errors (which is the default status).
 
