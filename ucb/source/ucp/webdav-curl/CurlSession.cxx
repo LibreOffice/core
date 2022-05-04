@@ -19,6 +19,7 @@
 #include <comphelper/string.hxx>
 
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 
 #include <officecfg/Inet.hxx>
 
@@ -752,15 +753,15 @@ struct CurlProcessor
     static auto URIReferenceToURI(CurlSession& rSession, OUString const& rURIReference) -> CurlUri;
 
     static auto ProcessRequestImpl(
-        CurlSession& rSession, CurlUri const& rURI, curl_slist* pRequestHeaderList,
-        uno::Reference<io::XOutputStream> const* pxOutStream,
+        CurlSession& rSession, CurlUri const& rURI, OUString const& rMethod,
+        curl_slist* pRequestHeaderList, uno::Reference<io::XOutputStream> const* pxOutStream,
         uno::Sequence<sal_Int8> const* pInData,
         ::std::pair<::std::vector<OUString> const&, DAVResource&> const* pRequestedHeaders,
         ResponseHeaders& rHeaders) -> void;
 
     static auto ProcessRequest(
-        CurlSession& rSession, CurlUri const& rURI, ::std::vector<CurlOption> const& rOptions,
-        DAVRequestEnvironment const* pEnv,
+        CurlSession& rSession, CurlUri const& rURI, OUString const& rMethod,
+        ::std::vector<CurlOption> const& rOptions, DAVRequestEnvironment const* pEnv,
         ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>>
             pRequestHeaderList,
         uno::Reference<io::XOutputStream> const* pxOutStream,
@@ -807,7 +808,8 @@ auto CurlProcessor::URIReferenceToURI(CurlSession& rSession, OUString const& rUR
 
 /// main function to initiate libcurl requests
 auto CurlProcessor::ProcessRequestImpl(
-    CurlSession& rSession, CurlUri const& rURI, curl_slist* const pRequestHeaderList,
+    CurlSession& rSession, CurlUri const& rURI, OUString const& rMethod,
+    curl_slist* const pRequestHeaderList,
     uno::Reference<io::XOutputStream> const* const pxOutStream,
     uno::Sequence<sal_Int8> const* const pInData,
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const* const pRequestedHeaders,
@@ -1007,6 +1009,15 @@ auto CurlProcessor::ProcessRequestImpl(
     }
     else
     {
+        // create message containing the HTTP method and response status line
+        OUString statusLine("\n" + rMethod + "\n=>\n");
+        if (!rHeaders.HeaderFields.empty() && !rHeaders.HeaderFields.back().first.empty()
+            && rHeaders.HeaderFields.back().first.front().startsWith("HTTP"))
+        {
+            statusLine += ::rtl::OStringToOUString(
+                ::o3tl::trim(rHeaders.HeaderFields.back().first.front()),
+                RTL_TEXTENCODING_ASCII_US);
+        }
         switch (statusCode)
         {
             case SC_REQUEST_TIMEOUT:
@@ -1041,7 +1052,7 @@ auto CurlProcessor::ProcessRequestImpl(
                 [[fallthrough]];
             }
             default:
-                throw DAVException(DAVException::DAV_HTTP_ERROR, "", statusCode);
+                throw DAVException(DAVException::DAV_HTTP_ERROR, statusLine, statusCode);
         }
     }
 
@@ -1098,8 +1109,8 @@ static auto TryRemoveExpiredLockToken(CurlSession& rSession, CurlUri const& rURI
 }
 
 auto CurlProcessor::ProcessRequest(
-    CurlSession& rSession, CurlUri const& rURI, ::std::vector<CurlOption> const& rOptions,
-    DAVRequestEnvironment const* const pEnv,
+    CurlSession& rSession, CurlUri const& rURI, OUString const& rMethod,
+    ::std::vector<CurlOption> const& rOptions, DAVRequestEnvironment const* const pEnv,
     ::std::unique_ptr<curl_slist, deleter_from_fn<curl_slist, curl_slist_free_all>>
         pRequestHeaderList,
     uno::Reference<io::XOutputStream> const* const pxOutStream,
@@ -1293,7 +1304,7 @@ auto CurlProcessor::ProcessRequest(
 
         try
         {
-            ProcessRequestImpl(rSession, rURI, pRequestHeaderList.get(), &xTempOutStream,
+            ProcessRequestImpl(rSession, rURI, rMethod, pRequestHeaderList.get(), &xTempOutStream,
                                pxInStream ? &data : nullptr, pRequestedHeaders, headers);
             if (pxOutStream)
             { // only copy to result stream if transfer was successful
@@ -1482,7 +1493,8 @@ auto CurlSession::OPTIONS(OUString const& rURIReference,
         g_NoBody, { CURLOPT_CUSTOMREQUEST, "OPTIONS", "CURLOPT_CUSTOMREQUEST" }
     };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, &headers);
+    CurlProcessor::ProcessRequest(*this, uri, "OPTIONS", options, &rEnv, nullptr, nullptr, nullptr,
+                                  &headers);
 
     for (auto const& it : result.properties)
     {
@@ -1626,7 +1638,7 @@ auto CurlProcessor::PropFind(
     assert(xResponseInStream.is());
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(rSession, rURI, options, &rEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(rSession, rURI, "PROPFIND", options, &rEnv, ::std::move(pList),
                                   &xResponseOutStream, &xRequestInStream, nullptr);
 
     if (o_pResourceInfos)
@@ -1774,8 +1786,8 @@ auto CurlSession::PROPPATCH(OUString const& rURIReference,
         { CURLOPT_INFILESIZE_LARGE, len, nullptr, CurlOption::Type::CurlOffT }
     };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), nullptr,
-                                  &xRequestInStream, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, "PROPPATCH", options, &rEnv, ::std::move(pList),
+                                  nullptr, &xRequestInStream, nullptr);
 }
 
 auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> const& rHeaderNames,
@@ -1790,7 +1802,8 @@ auto CurlSession::HEAD(OUString const& rURIReference, ::std::vector<OUString> co
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, &headers);
+    CurlProcessor::ProcessRequest(*this, uri, "HEAD", options, &rEnv, nullptr, nullptr, nullptr,
+                                  &headers);
 }
 
 auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const& rEnv)
@@ -1812,8 +1825,8 @@ auto CurlSession::GET(OUString const& rURIReference, DAVRequestEnvironment const
 
     ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &xResponseOutStream, nullptr,
-                                  nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &xResponseOutStream,
+                                  nullptr, nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
         io::SequenceInputStream::createStreamFromSequence(m_xContext,
@@ -1832,7 +1845,7 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
 
     ::std::vector<CurlOption> const options{ { CURLOPT_HTTPGET, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &rxOutStream, nullptr,
+    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &rxOutStream, nullptr,
                                   nullptr);
 }
 
@@ -1854,8 +1867,8 @@ auto CurlSession::GET(OUString const& rURIReference, ::std::vector<OUString> con
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &xResponseOutStream, nullptr,
-                                  &headers);
+    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &xResponseOutStream,
+                                  nullptr, &headers);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
         io::SequenceInputStream::createStreamFromSequence(m_xContext,
@@ -1878,7 +1891,7 @@ auto CurlSession::GET(OUString const& rURIReference, uno::Reference<io::XOutputS
     ::std::pair<::std::vector<OUString> const&, DAVResource&> const headers(rHeaderNames,
                                                                             io_rResource);
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, &rxOutStream, nullptr,
+    CurlProcessor::ProcessRequest(*this, uri, "GET", options, &rEnv, nullptr, &rxOutStream, nullptr,
                                   &headers);
 }
 
@@ -1924,7 +1937,7 @@ auto CurlSession::PUT(OUString const& rURIReference,
     ::std::vector<CurlOption> const options{ { CURLOPT_INFILESIZE_LARGE, len, nullptr,
                                                CurlOption::Type::CurlOffT } };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), nullptr,
+    CurlProcessor::ProcessRequest(*this, uri, "PUT", options, &rEnv, ::std::move(pList), nullptr,
                                   &rxInStream, nullptr);
 }
 
@@ -1964,7 +1977,7 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
     uno::Reference<io::XOutputStream> const xResponseOutStream(xSeqOutStream);
     assert(xResponseOutStream.is());
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList),
+    CurlProcessor::ProcessRequest(*this, uri, "POST", options, &rEnv, ::std::move(pList),
                                   &xResponseOutStream, &rxInStream, nullptr);
 
     uno::Reference<io::XInputStream> const xResponseInStream(
@@ -2007,8 +2020,8 @@ auto CurlSession::POST(OUString const& rURIReference, OUString const& rContentTy
 
     ::std::vector<CurlOption> const options{ { CURLOPT_POST, 1L, nullptr } };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, ::std::move(pList), &rxOutStream,
-                                  &rxInStream, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, "POST", options, &rEnv, ::std::move(pList),
+                                  &rxOutStream, &rxInStream, nullptr);
 }
 
 auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment const& rEnv) -> void
@@ -2021,7 +2034,8 @@ auto CurlSession::MKCOL(OUString const& rURIReference, DAVRequestEnvironment con
         g_NoBody, { CURLOPT_CUSTOMREQUEST, "MKCOL", "CURLOPT_CUSTOMREQUEST" }
     };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, "MKCOL", options, &rEnv, nullptr, nullptr, nullptr,
+                                  nullptr);
 }
 
 auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURIReference,
@@ -2050,8 +2064,8 @@ auto CurlProcessor::MoveOrCopy(CurlSession& rSession, OUString const& rSourceURI
         g_NoBody, { CURLOPT_CUSTOMREQUEST, pMethod, "CURLOPT_CUSTOMREQUEST" }
     };
 
-    CurlProcessor::ProcessRequest(rSession, uriSource, options, &rEnv, ::std::move(pList), nullptr,
-                                  nullptr, nullptr);
+    CurlProcessor::ProcessRequest(rSession, uriSource, OUString::createFromAscii(pMethod), options,
+                                  &rEnv, ::std::move(pList), nullptr, nullptr, nullptr);
 }
 
 auto CurlSession::COPY(OUString const& rSourceURIReference, OUString const& rDestinationURI,
@@ -2082,7 +2096,8 @@ auto CurlSession::DESTROY(OUString const& rURIReference, DAVRequestEnvironment c
         g_NoBody, { CURLOPT_CUSTOMREQUEST, "DELETE", "CURLOPT_CUSTOMREQUEST" }
     };
 
-    CurlProcessor::ProcessRequest(*this, uri, options, &rEnv, nullptr, nullptr, nullptr, nullptr);
+    CurlProcessor::ProcessRequest(*this, uri, "DESTROY", options, &rEnv, nullptr, nullptr, nullptr,
+                                  nullptr);
 }
 
 auto CurlProcessor::Lock(
@@ -2115,8 +2130,9 @@ auto CurlProcessor::Lock(
     TimeValue startTime;
     osl_getSystemTime(&startTime);
 
-    CurlProcessor::ProcessRequest(rSession, rURI, options, pEnv, ::std::move(pRequestHeaderList),
-                                  &xResponseOutStream, pxRequestInStream, nullptr);
+    CurlProcessor::ProcessRequest(rSession, rURI, "LOCK", options, pEnv,
+                                  ::std::move(pRequestHeaderList), &xResponseOutStream,
+                                  pxRequestInStream, nullptr);
 
     ::std::vector<ucb::Lock> const acquiredLocks(parseWebDAVLockResponse(xResponseInStream));
     SAL_WARN_IF(acquiredLocks.empty(), "ucb.ucp.webdav.curl",
@@ -2292,8 +2308,8 @@ auto CurlProcessor::Unlock(CurlSession& rSession, CurlUri const& rURI,
     ::std::vector<CurlOption> const options{ { CURLOPT_CUSTOMREQUEST, "UNLOCK",
                                                "CURLOPT_CUSTOMREQUEST" } };
 
-    CurlProcessor::ProcessRequest(rSession, rURI, options, pEnv, ::std::move(pList), nullptr,
-                                  nullptr, nullptr);
+    CurlProcessor::ProcessRequest(rSession, rURI, "UNLOCK", options, pEnv, ::std::move(pList),
+                                  nullptr, nullptr, nullptr);
 }
 
 auto CurlSession::UNLOCK(OUString const& rURIReference, DAVRequestEnvironment const& rEnv) -> void
