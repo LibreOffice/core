@@ -1455,6 +1455,22 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName )
                             eState = PropertyState_DEFAULT_VALUE;
                         }
                     }
+                    else if (pMap->nMemberId == MID_COLOR_LUM_MOD)
+                    {
+                        const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
+                        if (pColor->GetThemeColor().GetLumMod() == 10000)
+                        {
+                            eState = PropertyState_DEFAULT_VALUE;
+                        }
+                    }
+                    else if (pMap->nMemberId == MID_COLOR_LUM_OFF)
+                    {
+                        const XFillColorItem* pColor = rSet.GetItem<XFillColorItem>(pMap->nWID);
+                        if (pColor->GetThemeColor().GetLumOff() == 0)
+                        {
+                            eState = PropertyState_DEFAULT_VALUE;
+                        }
+                    }
                 }
             }
         }

@@ -3489,6 +3489,8 @@ namespace xmloff::token {
         TOKEN("folHlink",            XML_FOLHLINK ),
         TOKEN("color-lum-mod",       XML_COLOR_LUM_MOD ),
         TOKEN("color-lum-off",       XML_COLOR_LUM_OFF ),
+        TOKEN("fill-color-lum-mod",  XML_FILL_COLOR_LUM_MOD ),
+        TOKEN("fill-color-lum-off",  XML_FILL_COLOR_LUM_OFF ),
 
         TOKEN("content-control",     XML_CONTENT_CONTROL ),
         TOKEN("showing-place-holder", XML_SHOWING_PLACE_HOLDER ),
