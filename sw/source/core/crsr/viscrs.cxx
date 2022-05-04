@@ -645,10 +645,10 @@ void SwSelPaintRects::HighlightContentControl()
         SwTextContentControl* pCurContentControlAtCursor = nullptr;
         if (pTextNode)
         {
-            // SwTextNode::PARENT because this way we highlight when the cursor is on the right side
-            // of the dummy character: ideally the end of the range would have the same behavior.
+            // SwTextNode::EXPAND because the LHS of the dummy character doesn't count, the RHS of
+            // the start of the LHS of the end counts.
             SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                pStart->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
+                pStart->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::EXPAND);
             if (pAttr)
             {
                 pCurContentControlAtCursor = static_txtattr_cast<SwTextContentControl*>(pAttr);
