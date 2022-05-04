@@ -5219,7 +5219,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
-    OString aCommand(pCommand);
+    const std::string_view aCommand(pCommand);
     static constexpr OStringLiteral aViewRowColumnHeaders(".uno:ViewRowColumnHeaders");
     static constexpr OStringLiteral aSheetGeometryData(".uno:SheetGeometryData");
     static constexpr OStringLiteral aCellCursor(".uno:CellCursor");
@@ -5265,7 +5265,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     {
         return getRulerState(pThis);
     }
-    else if (aCommand.startsWith(aViewRowColumnHeaders))
+    else if (o3tl::starts_with(aCommand, aViewRowColumnHeaders))
     {
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
@@ -5275,38 +5275,38 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         }
 
         tools::Rectangle aRectangle;
-        if (aCommand.getLength() > aViewRowColumnHeaders.getLength())
+        if (aCommand.size() > o3tl::make_unsigned(aViewRowColumnHeaders.getLength()))
         {
             // Command has parameters.
             int nX = 0;
             int nY = 0;
             int nWidth = 0;
             int nHeight = 0;
-            OString aArguments = aCommand.copy(aViewRowColumnHeaders.getLength() + 1);
+            std::string_view aArguments = aCommand.substr(aViewRowColumnHeaders.getLength() + 1);
             sal_Int32 nParamIndex = 0;
             do
             {
-                OString aParamToken = aArguments.getToken(0, '&', nParamIndex);
+                std::string_view aParamToken = o3tl::getToken(aArguments, 0, '&', nParamIndex);
                 sal_Int32 nIndex = 0;
-                OString aKey;
-                OString aValue;
+                std::string_view aKey;
+                std::string_view aValue;
                 do
                 {
-                    OString aToken = aParamToken.getToken(0, '=', nIndex);
-                    if (!aKey.getLength())
+                    std::string_view aToken = o3tl::getToken(aParamToken, 0, '=', nIndex);
+                    if (aKey.empty())
                         aKey = aToken;
                     else
                         aValue = aToken;
                 }
                 while (nIndex >= 0);
                 if (aKey == "x")
-                    nX = aValue.toInt32();
+                    nX = o3tl::toInt32(aValue);
                 else if (aKey == "y")
-                    nY = aValue.toInt32();
+                    nY = o3tl::toInt32(aValue);
                 else if (aKey == "width")
-                    nWidth = aValue.toInt32();
+                    nWidth = o3tl::toInt32(aValue);
                 else if (aKey == "height")
-                    nHeight = aValue.toInt32();
+                    nHeight = o3tl::toInt32(aValue);
             }
             while (nParamIndex >= 0);
 
@@ -5317,7 +5317,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         pDoc->getRowColumnHeaders(aRectangle, aJsonWriter);
         return aJsonWriter.extractData();
     }
-    else if (aCommand.startsWith(aSheetGeometryData))
+    else if (o3tl::starts_with(aCommand, aSheetGeometryData))
     {
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
@@ -5332,30 +5332,30 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         bool bHidden = true;
         bool bFiltered = true;
         bool bGroups = true;
-        if (aCommand.getLength() > aSheetGeometryData.getLength())
+        if (aCommand.size() > o3tl::make_unsigned(aSheetGeometryData.getLength()))
         {
             bColumns = bRows = bSizes = bHidden = bFiltered = bGroups = false;
 
-            OString aArguments = aCommand.copy(aSheetGeometryData.getLength() + 1);
+            std::string_view aArguments = aCommand.substr(aSheetGeometryData.getLength() + 1);
             sal_Int32 nParamIndex = 0;
             do
             {
-                OString aParamToken = aArguments.getToken(0, '&', nParamIndex);
+                std::string_view aParamToken = o3tl::getToken(aArguments, 0, '&', nParamIndex);
                 sal_Int32 nIndex = 0;
-                OString aKey;
-                OString aValue;
+                std::string_view aKey;
+                std::string_view aValue;
                 do
                 {
-                    OString aToken = aParamToken.getToken(0, '=', nIndex);
-                    if (!aKey.getLength())
+                    std::string_view aToken = o3tl::getToken(aParamToken, 0, '=', nIndex);
+                    if (aKey.empty())
                         aKey = aToken;
                     else
                         aValue = aToken;
 
                 } while (nIndex >= 0);
 
-                bool bEnableFlag = aValue.isEmpty() ||
-                    aValue.equalsIgnoreAsciiCase("true") || aValue.toInt32() > 0;
+                bool bEnableFlag = aValue.empty() ||
+                    o3tl::equalsIgnoreAsciiCase(aValue, "true") || o3tl::toInt32(aValue) > 0;
                 if (!bEnableFlag)
                     continue;
 
@@ -5383,7 +5383,7 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
 
         return convertOString(aGeomDataStr);
     }
-    else if (aCommand.startsWith(aCellCursor))
+    else if (o3tl::starts_with(aCommand, aCellCursor))
     {
         ITiledRenderable* pDoc = getTiledRenderable(pThis);
         if (!pDoc)
@@ -5396,9 +5396,9 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
         pDoc->getCellCursor(aJsonWriter);
         return aJsonWriter.extractData();
     }
-    else if (aCommand.startsWith(aFontSubset))
+    else if (o3tl::starts_with(aCommand, aFontSubset))
     {
-        return getFontSubset(std::string_view(pCommand + aFontSubset.getLength()));
+        return getFontSubset(aCommand.substr(aFontSubset.getLength()));
     }
     else
     {

@@ -48,7 +48,7 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         while( rStream.ReadLine( sLine ) )
         {
             nIndex = 0;
-            OString sTmp(sLine.getToken(0, ':', nIndex));
+            std::string_view sTmp(o3tl::getToken(sLine, 0, ':', nIndex));
             if (sTmp == "StartHTML")
                 nStt = o3tl::toInt32(sLine.subView(nIndex));
             else if (sTmp == "EndHTML")
