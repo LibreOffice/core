@@ -395,12 +395,12 @@ SAL_IMPLEMENT_MAIN()
         std::vector< rtl::Reference< unoidl::Provider > > unoidlMandatoryProvs;
         for (auto& rRegistry : extra_registries)
         {
-            xSet->insert(makeAny(rRegistry));
+            xSet->insert(Any(rRegistry));
             unoidlMgr->addProvider(rRegistry);
         }
         for (auto& rRegistry : mandatory_registries)
         {
-            xSet->insert(makeAny(rRegistry));
+            xSet->insert(Any(rRegistry));
             rtl::Reference< unoidl::Provider > prov(unoidlMgr->addProvider(rRegistry));
             unoidlMandatoryProvs.push_back(prov);
         }
