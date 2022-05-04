@@ -4821,8 +4821,8 @@ static bool doc_paste(LibreOfficeKitDocument* pThis, const char* pMimeType, cons
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AnchorType", uno::makeAny(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
-        {"IgnoreComments", uno::makeAny(true)},
+        {"AnchorType", uno::Any(static_cast<sal_uInt16>(css::text::TextContentAnchorType_AS_CHARACTER))},
+        {"IgnoreComments", uno::Any(true)},
     }));
     if (!comphelper::dispatchCommand(".uno:Paste", aPropertyValues))
     {
@@ -6419,7 +6419,7 @@ static void activateNotebookbar(std::u16string_view rApp)
 
     if (aAppNode.isValid())
     {
-        aAppNode.setNodeValue("Active", makeAny(OUString("notebookbar_online.ui")));
+        aAppNode.setNodeValue("Active", Any(OUString("notebookbar_online.ui")));
         aAppNode.commit();
     }
 }
@@ -6678,7 +6678,7 @@ static int lo_initialize(LibreOfficeKit* pThis, const char* pAppPath, const char
                 // 3) InitVCL()
                 {
                     comphelper::ProfileZone aInit("preload");
-                    aService->initialize({css::uno::makeAny<OUString>("preload")});
+                    aService->initialize({css::uno::Any(OUString("preload"))});
                 }
                 { // Force load some modules
                     comphelper::ProfileZone aInit("preload modules");

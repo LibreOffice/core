@@ -37,7 +37,7 @@ inline void progressUpdate(
         css::uno::Reference<css::ucb::XProgressHandler> xProgressHandler(
             xCmdEnv->getProgressHandler() );
         if (xProgressHandler.is()) {
-            xProgressHandler->update( css::uno::makeAny(status) );
+            xProgressHandler->update( css::uno::Any(status) );
         }
     }
 }
@@ -65,7 +65,7 @@ inline ProgressLevel::ProgressLevel(
     if (xCmdEnv.is())
         m_xProgressHandler = xCmdEnv->getProgressHandler();
     if (m_xProgressHandler.is())
-        m_xProgressHandler->push( css::uno::makeAny(status) );
+        m_xProgressHandler->push( css::uno::Any(status) );
 }
 
 
@@ -79,7 +79,7 @@ inline ProgressLevel::~ProgressLevel()
 inline void ProgressLevel::update( OUString const & status ) const
 {
     if (m_xProgressHandler.is())
-        m_xProgressHandler->update( css::uno::makeAny(status) );
+        m_xProgressHandler->update( css::uno::Any(status) );
 }
 
 

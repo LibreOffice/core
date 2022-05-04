@@ -356,7 +356,7 @@ void BackendImpl::PackageImpl::processPackage_(
     if (doRegisterPackage)
     {
         // will throw if it fails
-        m_xNameCntrPkgHandler->insertByName( m_url, makeAny( Reference< XPackage >(this) ) );
+        m_xNameCntrPkgHandler->insertByName( m_url, Any( Reference< XPackage >(this) ) );
 
     }
     else // revokePackage()
