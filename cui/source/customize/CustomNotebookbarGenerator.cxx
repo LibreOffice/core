@@ -266,7 +266,7 @@ void CustomNotebookbarGenerator::setCustomizedUIItem(Sequence<OUString> sUIItemP
     const utl::OConfigurationNode aModesNode = aAppNode.openNode("Modes");
     const utl::OConfigurationNode aModeNode(aModesNode.openNode(sNotebookbarConfigType));
 
-    css::uno::Any aUIItemProperties(makeAny(sUIItemProperties));
+    css::uno::Any aUIItemProperties(sUIItemProperties);
     aModeNode.setNodeValue("UIItemProperties", aUIItemProperties);
     aAppNode.commit();
 }

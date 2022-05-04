@@ -197,13 +197,13 @@ IMPL_LINK(ToolbarmodeDialog, OnApplyClick, weld::Button&, rButton, void)
             const utl::OConfigurationTreeRoot aAppNode(
                 xContext, "org.openoffice.Office.UI.ToolbarMode/Applications/", true);
             if (sCurrentApp != "Writer")
-                aAppNode.setNodeValue("Writer/Active", css::uno::makeAny(sCmd));
+                aAppNode.setNodeValue("Writer/Active", css::uno::Any(sCmd));
             if (sCurrentApp != "Calc")
-                aAppNode.setNodeValue("Calc/Active", css::uno::makeAny(sCmd));
+                aAppNode.setNodeValue("Calc/Active", css::uno::Any(sCmd));
             if (sCurrentApp != "Impress")
-                aAppNode.setNodeValue("Impress/Active", css::uno::makeAny(sCmd));
+                aAppNode.setNodeValue("Impress/Active", css::uno::Any(sCmd));
             if (sCurrentApp != "Draw")
-                aAppNode.setNodeValue("Draw/Active", css::uno::makeAny(sCmd));
+                aAppNode.setNodeValue("Draw/Active", css::uno::Any(sCmd));
             aAppNode.commit();
         };
     }
