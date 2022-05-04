@@ -73,6 +73,23 @@ OUString BuildBitmap(bool bProtect, bool bHidden)
     return bHidden ? OUString(RID_BMP_HIDE) : OUString(RID_BMP_NO_HIDE);
 }
 
+OUString CollapseWhiteSpaces(const OUString& sName)
+{
+    const sal_Int32 nLen = sName.getLength();
+    const sal_Unicode cRef = ' ';
+    OUStringBuffer aBuf(nLen+1);
+    for (sal_Int32 i = 0; i<nLen; )
+    {
+        const sal_Unicode cCur = sName[i++];
+        aBuf.append(cCur);
+        if (cCur!=cRef)
+            continue;
+        while (i<nLen && sName[i]==cRef)
+            ++i;
+    }
+    return aBuf.makeStringAndClear();
+}
+
 }
 
 static void   lcl_ReadSections( SfxMedium& rMedium, weld::ComboBox& rBox );
@@ -1099,7 +1116,7 @@ IMPL_LINK(SwEditRegionDlg, FileNameEntryHdl, weld::Entry&, rEdit, void)
     m_bSubRegionsFilled = false;
     if (m_xDDECB->get_active())
     {
-        OUString sLink( SwSectionData::CollapseWhiteSpaces(rEdit.get_text()) );
+        OUString sLink( CollapseWhiteSpaces(rEdit.get_text()) );
         sal_Int32 nPos = 0;
         sLink = sLink.replaceFirst( " ", OUStringChar(sfx2::cTokenSeparator), &nPos );
         if (nPos>=0)
@@ -1539,7 +1556,7 @@ bool SwInsertSectionTabPage::FillItemSet( SfxItemSet* )
         OUString aLinkFile;
         if( bDDe )
         {
-            aLinkFile = SwSectionData::CollapseWhiteSpaces(sFileName);
+            aLinkFile = CollapseWhiteSpaces(sFileName);
             sal_Int32 nPos = 0;
             aLinkFile = aLinkFile.replaceFirst( " ", OUStringChar(sfx2::cTokenSeparator), &nPos );
             if (nPos>=0)

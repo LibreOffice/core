@@ -176,23 +176,6 @@ bool SwSectionData::operator==(SwSectionData const& rOther) const
     // FIXME: old code ignored m_bCondHiddenFlag m_bHiddenFlag m_bConnectFlag
 }
 
-OUString SwSectionData::CollapseWhiteSpaces(const OUString& sName)
-{
-    const sal_Int32 nLen = sName.getLength();
-    const sal_Unicode cRef = ' ';
-    OUStringBuffer aBuf(nLen+1);
-    for (sal_Int32 i = 0; i<nLen; )
-    {
-        const sal_Unicode cCur = sName[i++];
-        aBuf.append(cCur);
-        if (cCur!=cRef)
-            continue;
-        while (i<nLen && sName[i]==cRef)
-            ++i;
-    }
-    return aBuf.makeStringAndClear();
-}
-
 SwSection::SwSection(
         SectionType const eType, OUString const& rName, SwSectionFormat & rFormat)
     : SwClient(& rFormat)
@@ -1438,7 +1421,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     SwIntrnlSectRefLink *const pLnk =
         static_cast<SwIntrnlSectRefLink*>( m_RefLink.get() );
 
-    const OUString sCmd(SwSectionData::CollapseWhiteSpaces(m_Data.GetLinkFileName()));
+    const OUString sCmd(m_Data.GetLinkFileName());
     pLnk->SetUpdateMode( nUpdateType );
     pLnk->SetVisible( pFormat->GetDoc()->getIDocumentLinksAdministration().IsVisibleLinks() );
 
