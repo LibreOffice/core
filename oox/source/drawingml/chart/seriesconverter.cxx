@@ -203,12 +203,12 @@ void importBorderProperties( PropertySet& rPropSet, Shape& rShape, const Graphic
     if (rLP.moLineWidth.has())
     {
         sal_Int32 nWidth = convertEmuToHmm(rLP.moLineWidth.get());
-        rPropSet.setProperty(PROP_LabelBorderWidth, uno::makeAny(nWidth));
-        rPropSet.setProperty(PROP_LabelBorderStyle, uno::makeAny(drawing::LineStyle_SOLID));
+        rPropSet.setProperty(PROP_LabelBorderWidth, uno::Any(nWidth));
+        rPropSet.setProperty(PROP_LabelBorderStyle, uno::Any(drawing::LineStyle_SOLID));
     }
     const Color& aColor = rLP.maLineFill.maFillColor;
     ::Color nColor = aColor.getColor(rGraphicHelper);
-    rPropSet.setProperty(PROP_LabelBorderColor, uno::makeAny(nColor));
+    rPropSet.setProperty(PROP_LabelBorderColor, uno::Any(nColor));
 }
 
 void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHelper& rGraphicHelper, ModelObjectHelper& rModelObjHelper )
@@ -221,7 +221,7 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
 
         const Color& aColor = rFP.maFillColor;
         ::Color nColor = aColor.getColor(rGraphicHelper);
-        rPropSet.setProperty(PROP_LabelFillColor, uno::makeAny(nColor));
+        rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
     }
     else if(rFP.moFillType.has() && rFP.moFillType.get() == XML_pattFill)
     {
@@ -236,7 +236,7 @@ void importFillProperties( PropertySet& rPropSet, Shape& rShape, const GraphicHe
 
         const Color& aColor = rFP.maPatternProps.maPattBgColor;
         ::Color nColor = aColor.getColor(rGraphicHelper);
-        rPropSet.setProperty(PROP_LabelFillColor, uno::makeAny(nColor));
+        rPropSet.setProperty(PROP_LabelFillColor, uno::Any(nColor));
     }
 
 }
@@ -384,7 +384,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
                 }
             }
 
-            aPropSet.setProperty( PROP_CustomLabelFields, makeAny( aSequence ) );
+            aPropSet.setProperty( PROP_CustomLabelFields, Any( aSequence ) );
             convertTextProperty(aPropSet, getFormatter(), mrModel.mxText->mxTextBody);
         }
     }

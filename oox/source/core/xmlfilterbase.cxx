@@ -1224,7 +1224,7 @@ void XmlFilterBase::exportCustomFragments()
             {
                 const OUString aType = comphelper::OFOPXMLHelper::GetContentTypeByName(aContentTypes, aFilename);
                 const OUString aContentType = (aType.getLength() ? aType : OUString("application/octet-stream"));
-                xProps->setPropertyValue("MediaType", uno::makeAny(aContentType));
+                xProps->setPropertyValue("MediaType", uno::Any(aContentType));
             }
         }
     }

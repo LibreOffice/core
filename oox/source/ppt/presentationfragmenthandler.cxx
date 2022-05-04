@@ -241,7 +241,7 @@ void PresentationFragmentHandler::saveThemeToGrabBag(const oox::drawingml::Theme
                     ::Color nColor;
 
                     rClrScheme.getColor(nToken, nColor);
-                    const uno::Any& rColor = uno::makeAny(nColor);
+                    const uno::Any& rColor = uno::Any(nColor);
 
                     pCurrentTheme[nId].Name = sName;
                     pCurrentTheme[nId].Value = rColor;
@@ -668,7 +668,7 @@ void PresentationFragmentHandler::finalizeImport()
                         getFilter().getModelFactory()->createInstance(
                             "com.sun.star.document.Settings"),
                         uno::UNO_QUERY);
-                    xDocSettings->setPropertyValue("ModifyPasswordInfo", uno::makeAny(aResult));
+                    xDocSettings->setPropertyValue("ModifyPasswordInfo", uno::Any(aResult));
                 }
                 catch (const uno::Exception&)
                 {

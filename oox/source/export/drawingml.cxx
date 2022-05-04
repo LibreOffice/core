@@ -5787,7 +5787,7 @@ void DrawingML::writeDiagramRels(const uno::Sequence<uno::Sequence<uno::Any>>& x
                              + OUString::number(j) + sExtension;
 
         PropertySet aProps(xOutStream);
-        aProps.setAnyProperty(PROP_RelId, uno::makeAny(sRelId.toInt32()));
+        aProps.setAnyProperty(PROP_RelId, uno::Any(sRelId.toInt32()));
 
         mpFB->addRelation(xOutStream, sType, OUStringConcatenation("../" + sFragment));
 

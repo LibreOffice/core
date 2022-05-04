@@ -467,7 +467,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
                     if( !rioBulletMap.hasProperty( PROP_BulletRelSize ) )
                         rioBulletMap.setProperty<sal_Int16>( PROP_BulletRelSize, 100);
                     Sequence< PropertyValue > aBulletPropSeq = rioBulletMap.makePropertyValueSequence();
-                    xNumRule->replaceByIndex( getLevel(), makeAny( aBulletPropSeq ) );
+                    xNumRule->replaceByIndex( getLevel(), Any( aBulletPropSeq ) );
                 }
 
                 aPropSet.setProperty( PROP_NumberingRules, xNumRule );

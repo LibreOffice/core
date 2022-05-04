@@ -255,7 +255,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         aPropSet.setProperty( PROP_Expansion, eLegendExpand );
 
         if (bTopRight && !bManualLayout)
-            aPropSet.setProperty( PROP_RelativePosition , makeAny(eRelPos));
+            aPropSet.setProperty( PROP_RelativePosition , Any(eRelPos));
 
         aPropSet.setProperty(PROP_Overlay, mrModel.mbOverlay);
 

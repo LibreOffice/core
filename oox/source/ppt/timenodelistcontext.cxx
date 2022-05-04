@@ -92,7 +92,7 @@ namespace {
         // rPoint.X and rPoint.Y are in 1000th of a percent, but we only need ratio.
         aPair.First <<= static_cast<double>(rPoint.X) / 100000.0;
         aPair.Second <<= static_cast<double>(rPoint.Y) / 100000.0;
-        return makeAny(aPair);
+        return Any(aPair);
     }
 }
 
@@ -459,9 +459,9 @@ namespace oox::ppt {
                 rProps[ NP_COLORINTERPOLATION ] <<= mnColorSpace == XML_hsl ? AnimationColorSpace::HSL : AnimationColorSpace::RGB;
                 const GraphicHelper& rGraphicHelper = getFilter().getGraphicHelper();
                 if( maToClr.isUsed() )
-                    mpNode->setTo( makeAny( maToClr.getColor( rGraphicHelper ) ) );
+                    mpNode->setTo( Any( maToClr.getColor( rGraphicHelper ) ) );
                 if( maFromClr.isUsed() )
-                    mpNode->setFrom( makeAny( maFromClr.getColor( rGraphicHelper ) ) );
+                    mpNode->setFrom( Any( maFromClr.getColor( rGraphicHelper ) ) );
                 if( mbHasByColor )
                     mpNode->setBy( m_byColor.get() );
             }
@@ -741,17 +741,17 @@ namespace oox::ppt {
                 if(attribs.hasAttribute( XML_by ) )
                 {
                     double fBy = attribs.getDouble( XML_by, 0.0 ) / PER_DEGREE; //1 PowerPoint-angle-unit = 1/60000 degree
-                    pNode->setBy( makeAny( fBy ) );
+                    pNode->setBy( Any( fBy ) );
                 }
                 if(attribs.hasAttribute( XML_from ) )
                 {
                     double fFrom = attribs.getDouble( XML_from, 0.0 ) / PER_DEGREE;
-                    pNode->setFrom( makeAny( fFrom ) );
+                    pNode->setFrom( Any( fFrom ) );
                 }
                 if(attribs.hasAttribute( XML_to ) )
                 {
                     double fTo = attribs.getDouble( XML_to, 0.0 ) / PER_DEGREE;
-                    pNode->setTo( makeAny( fTo ) );
+                    pNode->setTo( Any( fTo ) );
                 }
             }
 

@@ -66,7 +66,7 @@ Any addToSequence( const Any& rOldValue, const Any& rNewValue )
         {
             aNewSeq = { rOldValue, rNewValue };
         }
-        return makeAny( aNewSeq );
+        return Any( aNewSeq );
     }
 }
 

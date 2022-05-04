@@ -1123,9 +1123,9 @@ void ObjectFormatter::convertNumberFormat( PropertySet& rPropSet, const NumberFo
 
     // Setting "LinkNumberFormatToSource" does not really work, at least not for axis :-/
     if (!bAxis)
-        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.mbSourceLinked));
+        rPropSet.setProperty(PROP_LinkNumberFormatToSource, Any(rNumberFormat.mbSourceLinked));
     else
-        rPropSet.setProperty(PROP_LinkNumberFormatToSource, makeAny(rNumberFormat.maFormatCode.isEmpty()));
+        rPropSet.setProperty(PROP_LinkNumberFormatToSource, Any(rNumberFormat.maFormatCode.isEmpty()));
 }
 
 void ObjectFormatter::convertAutomaticFill( PropertySet& rPropSet, ObjectType eObjType, sal_Int32 nSeriesIdx )

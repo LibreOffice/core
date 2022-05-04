@@ -276,12 +276,12 @@ Reference< XShape > Drawing::createAndInsertXShape( const OUString& rService,
         else
         {
             Reference< XPropertySet > xPropSet( xShape, UNO_QUERY_THROW );
-            xPropSet->setPropertyValue( "HoriOrient", makeAny( HoriOrientation::NONE ) );
-            xPropSet->setPropertyValue( "VertOrient", makeAny( VertOrientation::NONE ) );
-            xPropSet->setPropertyValue( "HoriOrientPosition", makeAny( rShapeRect.X ) );
-            xPropSet->setPropertyValue( "VertOrientPosition", makeAny( rShapeRect.Y ) );
-            xPropSet->setPropertyValue( "HoriOrientRelation", makeAny( RelOrientation::FRAME ) );
-            xPropSet->setPropertyValue( "VertOrientRelation", makeAny( RelOrientation::FRAME ) );
+            xPropSet->setPropertyValue( "HoriOrient", Any( HoriOrientation::NONE ) );
+            xPropSet->setPropertyValue( "VertOrient", Any( VertOrientation::NONE ) );
+            xPropSet->setPropertyValue( "HoriOrientPosition", Any( rShapeRect.X ) );
+            xPropSet->setPropertyValue( "VertOrientPosition", Any( rShapeRect.Y ) );
+            xPropSet->setPropertyValue( "HoriOrientRelation", Any( RelOrientation::FRAME ) );
+            xPropSet->setPropertyValue( "VertOrientRelation", Any( RelOrientation::FRAME ) );
         }
         xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
     }

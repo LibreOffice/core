@@ -129,16 +129,16 @@ void lclCreateTextFields( std::vector< Reference< XTextField > > & aFields,
         switch( idx )
         {
             case 1: // Path
-                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(1));
+                xProps->setPropertyValue("FileFormat", Any(sal_Int16(1)));
                 break;
             case 2: // File name without extension
-                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(2));
+                xProps->setPropertyValue("FileFormat", Any(sal_Int16(2)));
                 break;
             case 3: // File name with extension
-                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(3));
+                xProps->setPropertyValue("FileFormat", Any(sal_Int16(3)));
                 break;
             default: // Path/File name
-                xProps->setPropertyValue("FileFormat", makeAny<sal_Int16>(0));
+                xProps->setPropertyValue("FileFormat", Any(sal_Int16(0)));
         }
     }
     else if( sType == u"author" )
