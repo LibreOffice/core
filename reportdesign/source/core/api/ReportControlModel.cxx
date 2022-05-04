@@ -62,7 +62,7 @@ void OReportControlModel::insertByIndex(::sal_Int32 Index, const uno::Any& Eleme
     }
 
     // notify our container listeners
-    container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
+    container::ContainerEvent aEvent(xBroadcaster, uno::Any(Index), Element, uno::Any());
     aContainerListeners.notifyEach(&container::XContainerListener::elementInserted, aEvent);
 }
 
@@ -77,7 +77,7 @@ void OReportControlModel::removeByIndex(::sal_Int32 Index)
         Element <<= m_aFormatConditions[Index];
         m_aFormatConditions.erase(m_aFormatConditions.begin() + Index);
     }
-    container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
+    container::ContainerEvent aEvent(xBroadcaster, uno::Any(Index), Element, uno::Any());
     aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved, aEvent);
 }
 
@@ -94,7 +94,7 @@ void OReportControlModel::replaceByIndex(::sal_Int32 Index, const uno::Any& Elem
         checkIndex(Index);
         m_aFormatConditions[Index] = xElement;
     }
-    container::ContainerEvent aEvent(xBroadcaster, uno::makeAny(Index), Element, uno::Any());
+    container::ContainerEvent aEvent(xBroadcaster, uno::Any(Index), Element, uno::Any());
     aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced, aEvent);
 }
 

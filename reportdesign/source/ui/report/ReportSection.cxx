@@ -420,9 +420,9 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     OReportController& rController = m_pParent->getViewsWindow()->getView()->getReportView()->getController();
     uno::Reference<frame::XFrame> xFrame = rController.getFrame();
     css::uno::Sequence<css::uno::Any> aArgs {
-        css::uno::makeAny(comphelper::makePropertyValue("Value", OUString("report"))),
-        css::uno::makeAny(comphelper::makePropertyValue("Frame", xFrame)),
-        css::uno::makeAny(comphelper::makePropertyValue("IsContextMenu", true))
+        css::uno::Any(comphelper::makePropertyValue("Value", OUString("report"))),
+        css::uno::Any(comphelper::makePropertyValue("Frame", xFrame)),
+        css::uno::Any(comphelper::makePropertyValue("IsContextMenu", true))
     };
 
     css::uno::Reference<css::uno::XComponentContext> xContext(rController.getORB());

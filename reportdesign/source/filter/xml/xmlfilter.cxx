@@ -412,7 +412,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                 uno::UNO_QUERY);
 
         uno::Reference< lang::XMultiServiceFactory > xReportServiceFactory( m_xReportDefinition, uno::UNO_QUERY);
-        aArgs.getArray()[0] <<= beans::NamedValue("Storage", uno::makeAny(xStorage));
+        aArgs.getArray()[0] <<= beans::NamedValue("Storage", uno::Any(xStorage));
         xEmbeddedObjectResolver.set( xReportServiceFactory->createInstanceWithArguments("com.sun.star.document.ImportEmbeddedObjectResolver",aArgs) , uno::UNO_QUERY);
 
         static constexpr OUStringLiteral s_sOld = u"OldFormat";
@@ -429,14 +429,14 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         uno::Reference<beans::XPropertySet> xProp = comphelper::GenericPropertySet_CreateInstance(new comphelper::PropertySetInfo(pMap));
         const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString()) );
         assert(!sVal.isEmpty()); // needed for relative URLs
-        xProp->setPropertyValue("BaseURI", uno::makeAny(sVal));
+        xProp->setPropertyValue("BaseURI", uno::Any(sVal));
         const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString()) );
-        xProp->setPropertyValue("StreamRelPath", uno::makeAny(sHierarchicalDocumentName));
+        xProp->setPropertyValue("StreamRelPath", uno::Any(sHierarchicalDocumentName));
 
         uno::Reference<XComponent> xModel = GetModel();
         static constexpr OUStringLiteral s_sMeta = u"meta.xml";
         static constexpr OUStringLiteral s_sStreamName = u"StreamName";
-        xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString(s_sMeta)));
+        xProp->setPropertyValue(s_sStreamName, uno::Any(OUString(s_sMeta)));
         ErrCode nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"meta.xml"
@@ -450,16 +450,16 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         try
         {
-            xProp->setPropertyValue(s_sOld,uno::makeAny(!(xStorage->hasByName(s_sMeta) || xStorage->isStreamElement( s_sMeta ))));
+            xProp->setPropertyValue(s_sOld,uno::Any(!(xStorage->hasByName(s_sMeta) || xStorage->isStreamElement( s_sMeta ))));
         }
         catch (const uno::Exception&)
         {
-            xProp->setPropertyValue(s_sOld,uno::makeAny(true));
+            xProp->setPropertyValue(s_sOld,uno::Any(true));
         }
 
         if ( nRet == ERRCODE_NONE )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("settings.xml")));
+            xProp->setPropertyValue(s_sStreamName, uno::Any(OUString("settings.xml")));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"settings.xml"
@@ -472,7 +472,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         }
         if ( nRet == ERRCODE_NONE )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("styles.xml")));
+            xProp->setPropertyValue(s_sStreamName, uno::Any(OUString("styles.xml")));
             nRet = ReadThroughComponent(xStorage
                                     ,xModel
                                     ,"styles.xml"
@@ -485,7 +485,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
 
         if ( nRet == ERRCODE_NONE )
         {
-            xProp->setPropertyValue(s_sStreamName, uno::makeAny(OUString("content.xml")));
+            xProp->setPropertyValue(s_sStreamName, uno::Any(OUString("content.xml")));
             nRet = ReadThroughComponent( xStorage
                                     ,xModel
                                     ,"content.xml"

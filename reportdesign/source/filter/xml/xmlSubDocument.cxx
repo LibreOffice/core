@@ -129,7 +129,7 @@ void OXMLSubDocument::endFastElement(sal_Int32 )
             uno::Reference< report::XFormatCondition > xCond(xFakeModel->getByIndex(i),uno::UNO_QUERY);
             uno::Reference< report::XFormatCondition > xNewCond = xComponentModel->createFormatCondition();
             ::comphelper::copyProperties(xCond, xNewCond);
-            xComponentModel->insertByIndex(xComponentModel->getCount(),uno::makeAny(xNewCond));
+            xComponentModel->insertByIndex(xComponentModel->getCount(),uno::Any(xNewCond));
         }
     }
     catch(uno::Exception&)

@@ -188,7 +188,7 @@ void OXMLReport::endFastElement(sal_Int32)
     Reference< XFunctions > xFunctions = m_xReportDefinition->getFunctions();
     const ORptFilter::TGroupFunctionMap& aFunctions = m_rImport.getFunctions();
     for (const auto& rEntry : aFunctions)
-        xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(rEntry.second));
+        xFunctions->insertByIndex(xFunctions->getCount(),uno::Any(rEntry.second));
 
     if ( !m_aMasterFields.empty() )
         m_xReportDefinition->setMasterFields(Sequence< OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));

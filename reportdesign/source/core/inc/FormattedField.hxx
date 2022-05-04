@@ -64,7 +64,7 @@ namespace reportdesign
                 ::osl::MutexGuard aGuard(m_aMutex);
                 if ( static_cast<sal_Int16>(_member) != Value )
                 {
-                    prepareSet(_sProperty, css::uno::makeAny(static_cast<sal_Int16>(_member)), css::uno::makeAny(Value), &l);
+                    prepareSet(_sProperty, css::uno::Any(static_cast<sal_Int16>(_member)), css::uno::Any(Value), &l);
                     _member = static_cast<css::style::ParagraphAdjust>(Value);
                 }
             }
@@ -79,7 +79,7 @@ namespace reportdesign
                 ::osl::MutexGuard aGuard(m_aMutex);
                 if ( _member != Value )
                 {
-                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    prepareSet(_sProperty, css::uno::Any(_member), css::uno::Any(Value), &l);
                     _member = Value;
                 }
             }
@@ -94,7 +94,7 @@ namespace reportdesign
                 ::osl::MutexGuard aGuard(m_aMutex);
                 if ( _member != Value )
                 {
-                    prepareSet(_sProperty, css::uno::makeAny(_member), css::uno::makeAny(Value), &l);
+                    prepareSet(_sProperty, css::uno::Any(_member), css::uno::Any(Value), &l);
                     _member = Value;
                 }
             }

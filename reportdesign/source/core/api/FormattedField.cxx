@@ -215,7 +215,7 @@ uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  )
     {
         uno::Reference< report::XFormatCondition > xCond = xSet->createFormatCondition();
         ::comphelper::copyProperties(rxFormatCondition, xCond);
-        xSet->insertByIndex(i,uno::makeAny(xCond));
+        xSet->insertByIndex(i,uno::Any(xCond));
         ++i;
     }
     return xSet;

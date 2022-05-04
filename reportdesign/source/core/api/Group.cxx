@@ -296,7 +296,7 @@ void OGroup::setSection(     const OUString& _sProperty
     BoundListeners l;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        prepareSet(_sProperty, uno::makeAny(_member), uno::makeAny(_bOn), &l);
+        prepareSet(_sProperty, uno::Any(_member), uno::Any(_bOn), &l);
 
         // create section if needed
         if ( _bOn && !_member.is() )

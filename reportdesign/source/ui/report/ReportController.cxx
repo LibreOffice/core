@@ -1135,7 +1135,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 select(aArgs[0].Value);
             break;
         case SID_SELECT_REPORT:
-            select(uno::makeAny(m_xReportDefinition));
+            select(uno::Any(m_xReportDefinition));
             break;
         case SID_EXECUTE_REPORT:
             getView()->PostUserEvent(LINK(this, OReportController,OnExecuteReport));
@@ -1167,7 +1167,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                     const OUString sUndoAction = RptResId(RID_STR_UNDO_REMOVE_FUNCTION);
                     UndoContext aUndoContext( getUndoManager(), sUndoAction );
                     xFunctions->removeByIndex(nIndex);
-                    select(uno::makeAny(xFunctions->getParent()));
+                    select(uno::Any(xFunctions->getParent()));
                     InvalidateFeature( SID_UNDO );
                 }
             }
@@ -1432,7 +1432,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_BACKGROUND_COLOR:
             {
                 const util::Color aColor( lcl_extractBackgroundColor( aArgs ) );
-                if ( !impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CONTROLBACKGROUND,uno::makeAny(aColor),aArgs) )
+                if ( !impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CONTROLBACKGROUND,uno::Any(aColor),aArgs) )
                 {
                     uno::Reference< report::XSection > xSection = getDesignView()->getCurrentSection();
                     if ( xSection.is() )
@@ -1467,7 +1467,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
                 const SequenceAsHashMap aMap(aArgs);
                 const util::Color aColor = aMap.getUnpackedValueOrDefault(PROPERTY_FONTCOLOR,util::Color());
-                impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARCOLOR,uno::makeAny(aColor),aArgs);
+                impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARCOLOR,uno::Any(aColor),aArgs);
                 bForceBroadcast = true;
             }
             break;
@@ -1477,7 +1477,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                 awt::FontDescriptor aFont;
                 if ( aArgs[0].Value >>= aFont )
                 {
-                    impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARFONTNAME,uno::makeAny(aFont.Name),aArgs);
+                    impl_setPropertyAtControls_throw(RID_STR_UNDO_CHANGEFONT,PROPERTY_CHARFONTNAME,uno::Any(aFont.Name),aArgs);
                 }
             }
             break;
@@ -1510,7 +1510,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
                         eParagraphAdjust = style::ParagraphAdjust_BLOCK;
                         break;
                 }
-                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::makeAny(static_cast<sal_Int16>(eParagraphAdjust)),aArgs);
+                impl_setPropertyAtControls_throw(RID_STR_UNDO_ALIGNMENT,PROPERTY_PARAADJUST,uno::Any(static_cast<sal_Int16>(eParagraphAdjust)),aArgs);
 
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_LEFT);
                 InvalidateFeature(SID_ATTR_PARA_ADJUST_CENTER);
@@ -2481,13 +2481,13 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                     }
                     if ( const SvxULSpaceItem* pSpaceItem = pSet->GetItemIfSet( RPTUI_ID_ULSPACE ))
                     {
-                        xProp->setPropertyValue(PROPERTY_TOPMARGIN,uno::makeAny(pSpaceItem->GetUpper()));
-                        xProp->setPropertyValue(PROPERTY_BOTTOMMARGIN,uno::makeAny(pSpaceItem->GetLower()));
+                        xProp->setPropertyValue(PROPERTY_TOPMARGIN,uno::Any(pSpaceItem->GetUpper()));
+                        xProp->setPropertyValue(PROPERTY_BOTTOMMARGIN,uno::Any(pSpaceItem->GetLower()));
                     }
                     if ( const SvxPageItem* pPageItem = pSet->GetItemIfSet( RPTUI_ID_PAGE ))
                     {
-                        xProp->setPropertyValue(PROPERTY_ISLANDSCAPE,uno::makeAny(pPageItem->IsLandscape()));
-                        xProp->setPropertyValue(PROPERTY_NUMBERINGTYPE,uno::makeAny(static_cast<sal_Int16>(pPageItem->GetNumType())));
+                        xProp->setPropertyValue(PROPERTY_ISLANDSCAPE,uno::Any(pPageItem->IsLandscape()));
+                        xProp->setPropertyValue(PROPERTY_NUMBERINGTYPE,uno::Any(static_cast<sal_Int16>(pPageItem->GetNumType())));
                         uno::Any aValue;
                         pPageItem->QueryValue(aValue,MID_PAGE_LAYOUT);
                         xProp->setPropertyValue(PROPERTY_PAGESTYLELAYOUT,aValue);
@@ -2496,8 +2496,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                     if ( const SvxBrushItem* pBrushItem = pSet->GetItemIfSet( RPTUI_ID_BRUSH ))
                     {
                         ::Color aBackColor = pBrushItem->GetColor();
-                        xProp->setPropertyValue(PROPERTY_BACKTRANSPARENT,uno::makeAny(aBackColor == COL_TRANSPARENT));
-                        xProp->setPropertyValue(PROPERTY_BACKCOLOR,uno::makeAny(aBackColor));
+                        xProp->setPropertyValue(PROPERTY_BACKTRANSPARENT,uno::Any(aBackColor == COL_TRANSPARENT));
+                        xProp->setPropertyValue(PROPERTY_BACKCOLOR,uno::Any(aBackColor));
                     }
                 }
             }
@@ -2751,7 +2751,7 @@ uno::Any SAL_CALL OReportController::getViewData()
     }
 
     aViewData.put( "ZoomFactor", m_nZoomValue );
-    return uno::makeAny( aViewData.getPropertyValues() );
+    return uno::Any( aViewData.getPropertyValues() );
 }
 
 void SAL_CALL OReportController::restoreViewData(const uno::Any& i_data)
@@ -2957,8 +2957,8 @@ uno::Reference< sdbc::XRowSet > const & OReportController::getRowSet()
             uno::UNO_QUERY );
         uno::Reference< beans::XPropertySet> xRowSetProp( xRowSet, uno::UNO_QUERY_THROW );
 
-        xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::makeAny( getConnection() ) );
-        xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::makeAny( true ) );
+        xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::Any( getConnection() ) );
+        xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::Any( true ) );
 
         auto aNoConverter = std::make_shared<AnyConverter>();
         TPropertyNamePair aPropertyMediation;
@@ -3080,7 +3080,7 @@ void OReportController::createNewFunction(const uno::Any& _aValue)
     uno::Reference< report::XFunction> xFunction(report::Function::create(m_xContext));
     xFunction->setName(sNewName);
     // the call below will also create an undo action -> listener
-    xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(xFunction));
+    xFunctions->insertByIndex(xFunctions->getCount(),uno::Any(xFunction));
 }
 
 IMPL_LINK_NOARG( OReportController, OnExecuteReport, void*, void )
@@ -3192,21 +3192,21 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
             if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) && !_sFunction.isEmpty() )
             {
                 ReportFormula aFunctionFormula( ReportFormula::Expression, _sFunction );
-                xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFunctionFormula.getCompleteFormula() ) );
+                xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::Any( aFunctionFormula.getCompleteFormula() ) );
             }
 
             sal_Int32 nFormatKey = aMap.getUnpackedValueOrDefault(PROPERTY_FORMATKEY,sal_Int32(0));
             if ( nFormatKey && xInfo->hasPropertyByName(PROPERTY_FORMATKEY) )
-                xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::makeAny( nFormatKey ) );
+                xUnoProp->setPropertyValue( PROPERTY_FORMATKEY, uno::Any( nFormatKey ) );
 
             OUString sUrl = aMap.getUnpackedValueOrDefault(PROPERTY_IMAGEURL,OUString());
             if ( !sUrl.isEmpty() && xInfo->hasPropertyByName(PROPERTY_IMAGEURL) )
-                xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::makeAny( sUrl ) );
+                xUnoProp->setPropertyValue( PROPERTY_IMAGEURL, uno::Any( sUrl ) );
 
             pObj->CreateMediator(true);
 
             if ( _nObjectId == SdrObjKind::ReportDesignFixedText ) // special case for fixed text
-                xUnoProp->setPropertyValue(PROPERTY_LABEL,uno::makeAny(OUnoObject::GetDefaultName(pObj)));
+                xUnoProp->setPropertyValue(PROPERTY_LABEL,uno::Any(OUnoObject::GetDefaultName(pObj)));
             else if ( _nObjectId == SdrObjKind::ReportDesignVerticalFixedLine )
             {
                 awt::Size aOlSize = xShapeProp->getSize();
@@ -3295,7 +3295,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
 
     if ( !pSectionWindow[0] )
     {
-        select(uno::makeAny(m_xReportDefinition->getDetail()));
+        select(uno::Any(m_xReportDefinition->getDetail()));
         pSectionWindow[0] = getDesignView()->getMarkedSection();
         if ( !pSectionWindow[0] )
             return;
@@ -3501,10 +3501,10 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             OUString sName;
                             xUnoProp->getPropertyValue(PROPERTY_DATAFIELD) >>= sName;
                             sDefaultName = sName;
-                            xUnoProp->setPropertyValue(PROPERTY_NAME,uno::makeAny(sDefaultName));
+                            xUnoProp->setPropertyValue(PROPERTY_NAME,uno::Any(sDefaultName));
 
                             ReportFormula aFormula( ReportFormula::Field, sName );
-                            xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::makeAny( aFormula.getCompleteFormula() ) );
+                            xUnoProp->setPropertyValue( PROPERTY_DATAFIELD, uno::Any( aFormula.getCompleteFormula() ) );
                         }
 
                         if ( xInfo->hasPropertyByName(PROPERTY_BORDER) && xShapeInfo->hasPropertyByName(PROPERTY_CONTROLBORDER) )
@@ -3866,7 +3866,7 @@ void OReportController::modifyGroup(const bool _bAppend, const Sequence< Propert
         if ( _bAppend )
         {
             const sal_Int32 nPos = aMap.getUnpackedValueOrDefault( PROPERTY_POSITIONY, xGroups->getCount() );
-            xGroups->insertByIndex( nPos, uno::makeAny( xGroup ) );
+            xGroups->insertByIndex( nPos, uno::Any( xGroup ) );
             rUndoEnv.AddElement( xGroup->getFunctions() );
         }
 
@@ -3939,16 +3939,16 @@ void OReportController::markSection(const bool _bNext)
     {
         OSectionWindow *pPrevSection = getDesignView()->getMarkedSection(_bNext ? POST : PREVIOUS);
         if ( pPrevSection != pSection && pPrevSection )
-            select(uno::makeAny(pPrevSection->getReportSection().getSection()));
+            select(uno::Any(pPrevSection->getReportSection().getSection()));
         else
-            select(uno::makeAny(m_xReportDefinition));
+            select(uno::Any(m_xReportDefinition));
     }
     else
     {
         getDesignView()->markSection(_bNext ? 0 : getDesignView()->getSectionCount() - 1);
         pSection = getDesignView()->getMarkedSection();
         if ( pSection )
-            select(uno::makeAny(pSection->getReportSection().getSection()));
+            select(uno::Any(pSection->getReportSection().getSection()));
     }
 }
 

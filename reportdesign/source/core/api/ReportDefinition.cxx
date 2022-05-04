@@ -289,82 +289,82 @@ OStyle::OStyle()
     sal_Int32 i = 0;
     registerPropertyNoMember( PROPERTY_NAME, ++i, nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString("Default")) );
 
-    registerPropertyNoMember(PROPERTY_BACKCOLOR,                    ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
+    registerPropertyNoMember(PROPERTY_BACKCOLOR,                    ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(COL_TRANSPARENT));
 
     registerPropertyNoMember(PROPERTY_BACKGRAPHICLOCATION,  ++i,nBound, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
     registerPropertyNoMember(PROPERTY_BACKTRANSPARENT,  ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(true));
-    registerPropertyNoMember(SC_UNO_PAGE_BORDERDIST,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_BORDERDIST,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_BOTTBORDER,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_BOTTBRDDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_BOTTBRDDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(PROPERTY_BOTTOMMARGIN, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(nMargin));
     registerPropertyNoMember("DisplayName",       ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRBACKCOL,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRBACKCOL,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(COL_TRANSPARENT));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFFILT,  ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRFLOC,   ++i,nBound, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
     registerPropertyNoMember(SC_UNO_PAGE_FTRGRF,      ++i,nBound|nMayBeVoid, cppu::UnoType<graphic::XGraphic>::get(), css::uno::Any(uno::Reference<graphic::XGraphic>()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRBACKTRAN, ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(true));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRBODYDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRBRDDIST,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRBODYDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRBRDDIST,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_FTRBOTTBOR,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRBOTTBDIS, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRHEIGHT,   ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRBOTTBDIS, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRHEIGHT,   ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_FTRDYNAMIC,  ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FTRON,       ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FTRSHARED,   ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FIRSTFTRSHARED, ++i,nBound,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTBOR,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTBDIS, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTMAR,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTBDIS, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRLEFTMAR,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_FTRRIGHTBOR, ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRRIGHTBDIS,++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRRIGHTMAR, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRRIGHTBDIS,++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRRIGHTMAR, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_FTRSHADOW,   ++i,nBound, cppu::UnoType<table::ShadowFormat>::get(), css::uno::Any(table::ShadowFormat()));
     registerPropertyNoMember(SC_UNO_PAGE_FTRTOPBOR,   ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_FTRTOPBDIS,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_FTRTOPBDIS,  ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
 
-    registerPropertyNoMember(SC_UNO_PAGE_HDRBACKCOL,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny(COL_TRANSPARENT));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRBACKCOL,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(COL_TRANSPARENT));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFFILT,  ++i,nBound|nMayBeVoid, cppu::UnoType<OUString>::get(), css::uno::Any(OUString()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRFLOC,   ++i,nBound|nMayBeVoid, cppu::UnoType<style::GraphicLocation>::get(), css::uno::Any(style::GraphicLocation_NONE));
     registerPropertyNoMember(SC_UNO_PAGE_HDRGRF,      ++i,nBound|nMayBeVoid, cppu::UnoType<graphic::XGraphic>::get(), css::uno::Any(uno::Reference<graphic::XGraphic>()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRBACKTRAN, ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(true));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRBODYDIST, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRBRDDIST,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRBODYDIST, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRBRDDIST,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_HDRBOTTBOR,  ++i,nBound|nMayBeVoid, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRBOTTBDIS, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRHEIGHT,   ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRBOTTBDIS, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRHEIGHT,   ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_HDRDYNAMIC,  ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_HDRON,       ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_HDRSHARED,   ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_FIRSTHDRSHARED, ++i,nBound|nMayBeVoid,cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTBOR,  ++i,nBound|nMayBeVoid, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTBDIS, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTMAR,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTBDIS, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRLEFTMAR,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_HDRRIGHTBOR, ++i,nBound|nMayBeVoid, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRRIGHTBDIS,++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRRIGHTMAR, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRRIGHTBDIS,++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRRIGHTMAR, ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(SC_UNO_PAGE_HDRSHADOW,   ++i,nBound|nMayBeVoid, cppu::UnoType<table::ShadowFormat>::get(), css::uno::Any(table::ShadowFormat()));
     registerPropertyNoMember(SC_UNO_PAGE_HDRTOPBOR,   ++i,nBound|nMayBeVoid, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_HDRTOPBDIS,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_HDRTOPBDIS,  ++i,nBound|nMayBeVoid, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
 
     registerProperty(PROPERTY_HEIGHT,       ++i,nBound,&m_aSize.Height,     ::cppu::UnoType<sal_Int32>::get() );
     registerPropertyNoMember(PROPERTY_ISLANDSCAPE,                  ++i,nBound,         cppu::UnoType<bool>::get(), css::uno::Any(false));
     registerPropertyNoMember(SC_UNO_PAGE_LEFTBORDER,  ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_LEFTBRDDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_LEFTBRDDIST, ++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(PROPERTY_LEFTMARGIN,   ++i,beans::PropertyAttribute::BOUND,        ::cppu::UnoType<sal_Int32>::get(), css::uno::Any(nMargin));
     registerPropertyNoMember(PROPERTY_NUMBERINGTYPE,                ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::Any(style::NumberingType::ARABIC));
-    registerPropertyNoMember(SC_UNO_PAGE_SCALEVAL,    ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::makeAny<sal_Int16>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_SCALEVAL,    ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::Any(sal_Int16(0)));
     registerPropertyNoMember(PROPERTY_PAGESTYLELAYOUT,              ++i,nBound, cppu::UnoType<style::PageStyleLayout>::get(), css::uno::Any(style::PageStyleLayout_ALL));
     registerPropertyNoMember(SC_UNO_PAGE_PAPERTRAY,   ++i,nBound, cppu::UnoType<OUString>::get(), css::uno::Any(OUString("[From printer settings]")));
     registerPropertyNoMember(SC_UNO_PAGE_RIGHTBORDER, ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_RIGHTBRDDIST,++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_RIGHTBRDDIST,++i,nBound, cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(PROPERTY_RIGHTMARGIN,  ++i,beans::PropertyAttribute::BOUND,::cppu::UnoType<sal_Int32>::get(), css::uno::Any(nMargin));
-    registerPropertyNoMember(SC_UNO_PAGE_SCALETOPAG,  ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::makeAny<sal_Int16>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_SCALETOX,    ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::makeAny<sal_Int16>(0));
-    registerPropertyNoMember(SC_UNO_PAGE_SCALETOY,    ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::makeAny<sal_Int16>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_SCALETOPAG,  ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::Any(sal_Int16(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_SCALETOX,    ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::Any(sal_Int16(0)));
+    registerPropertyNoMember(SC_UNO_PAGE_SCALETOY,    ++i,nBound, cppu::UnoType<sal_Int16>::get(), css::uno::Any(sal_Int16(0)));
     registerPropertyNoMember(SC_UNO_PAGE_SHADOWFORM,  ++i,nBound, cppu::UnoType<table::ShadowFormat>::get(), css::uno::Any(table::ShadowFormat()));
     registerProperty(PROPERTY_PAPERSIZE,                    ++i,beans::PropertyAttribute::BOUND,&m_aSize, cppu::UnoType<awt::Size>::get() );
     registerPropertyNoMember(SC_UNO_PAGE_TOPBORDER,   ++i,nBound, cppu::UnoType<table::BorderLine2>::get(), css::uno::Any(table::BorderLine2()));
-    registerPropertyNoMember(SC_UNO_PAGE_TOPBRDDIST,  ++i,nBound,::cppu::UnoType<sal_Int32>::get(), css::uno::makeAny<sal_Int32>(0));
+    registerPropertyNoMember(SC_UNO_PAGE_TOPBRDDIST,  ++i,nBound,::cppu::UnoType<sal_Int32>::get(), css::uno::Any(sal_Int32(0)));
     registerPropertyNoMember(PROPERTY_TOPMARGIN,    ++i,nBound,::cppu::UnoType<sal_Int32>::get(), css::uno::Any(nMargin));
     registerPropertyNoMember("UserDefinedAttributes",     ++i,nBound, cppu::UnoType<container::XNameContainer>::get(), css::uno::Any(comphelper::NameContainer_createInstance(cppu::UnoType<xml::AttributeData>::get())));
     registerProperty(PROPERTY_WIDTH,        ++i,nBound,&m_aSize.Width, cppu::UnoType<sal_Int32>::get() );
@@ -427,7 +427,7 @@ OUString SAL_CALL OStyle::getName(  )
 
 void SAL_CALL OStyle::setName( const OUString& aName )
 {
-    setPropertyValue(PROPERTY_NAME,uno::makeAny(aName));
+    setPropertyValue(PROPERTY_NAME,uno::Any(aName));
 }
 
 void SAL_CALL OStyle::setAllPropertiesToDefault(  )
@@ -605,7 +605,7 @@ void OReportDefinition::init()
             OUString sMediaType;
             xStorProps->getPropertyValue("MediaType") >>= sMediaType;
             if ( sMediaType.isEmpty() )
-                xStorProps->setPropertyValue("MediaType",uno::makeAny<OUString>(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII));
+                xStorProps->setPropertyValue("MediaType",uno::Any(OUString(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII)));
         }
         m_pImpl->m_pObjectContainer = std::make_shared<comphelper::EmbeddedObjectContainer>(m_pImpl->m_xStorage , static_cast<cppu::OWeakObject*>(this) );
     }
@@ -1031,7 +1031,7 @@ void OReportDefinition::setSection(  const OUString& _sProperty
     BoundListeners l;
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        prepareSet(_sProperty, uno::makeAny(_member), uno::makeAny(_bOn), &l);
+        prepareSet(_sProperty, uno::Any(_member), uno::Any(_bOn), &l);
 
         // create section if needed
         if ( _bOn && !_member.is() )
@@ -1232,7 +1232,7 @@ void OReportDefinition::impl_loadFromStorage_nolck_throw( const uno::Reference< 
 
     utl::MediaDescriptor aDescriptor( _aMediaDescriptor );
     fillArgs(aDescriptor);
-    aDescriptor.createItemIfMissing("Storage",uno::makeAny(_xStorageToLoadFrom));
+    aDescriptor.createItemIfMissing("Storage",uno::Any(_xStorageToLoadFrom));
 
     uno::Sequence< uno::Any > aDelegatorArguments(_aMediaDescriptor.getLength());
     uno::Any* pIter = aDelegatorArguments.getArray();
@@ -1303,7 +1303,7 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
         OUString sOldMediaType;
         xProp->getPropertyValue(sPropName) >>= sOldMediaType;
         if ( !xProp->getPropertyValue(sPropName).hasValue() || sOldMediaType.isEmpty() || MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII != sOldMediaType )
-            xProp->setPropertyValue( sPropName, uno::makeAny<OUString>(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII) );
+            xProp->setPropertyValue( sPropName, uno::Any(OUString(MIMETYPE_OASIS_OPENDOCUMENT_REPORT_ASCII)) );
     }
 
     /** property map for export info set */
@@ -1317,14 +1317,14 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     };
     uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aExportInfoMap ) ) );
 
-    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::makeAny(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
+    xInfoSet->setPropertyValue("UsePrettyPrinting", uno::Any(officecfg::Office::Common::Save::Document::PrettyPrinting::get()));
     if ( officecfg::Office::Common::Save::URL::FileSystem::get() )
     {
         const OUString sVal( aDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_DOCUMENTBASEURL, OUString()) );
-        xInfoSet->setPropertyValue("BaseURI", uno::makeAny(sVal));
+        xInfoSet->setPropertyValue("BaseURI", uno::Any(sVal));
     }
     const OUString sHierarchicalDocumentName( aDescriptor.getUnpackedValueOrDefault("HierarchicalDocumentName",OUString()) );
-    xInfoSet->setPropertyValue("StreamRelPath", uno::makeAny(sHierarchicalDocumentName));
+    xInfoSet->setPropertyValue("StreamRelPath", uno::Any(sHierarchicalDocumentName));
 
 
     sal_Int32 nArgsLen = aDelegatorArguments.getLength();
@@ -1345,19 +1345,19 @@ void SAL_CALL OReportDefinition::storeToStorage( const uno::Reference< embed::XS
     uno::Reference<XComponent> xCom(static_cast<OWeakObject*>(this),uno::UNO_QUERY);
     // Try to write to settings.xml, meta.xml, and styles.xml; only really care about success of
     // write to content.xml (keeping logic of commit 94ccba3eebc83b58e74e18f0e028c6a995ce6aa6)
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("settings.xml")));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("settings.xml")));
     WriteThroughComponent(xCom, "settings.xml", "com.sun.star.comp.report.XMLSettingsExporter",
                           aDelegatorArguments, aProps, _xStorageToSaveTo);
 
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("meta.xml")));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("meta.xml")));
     WriteThroughComponent(xCom, "meta.xml", "com.sun.star.comp.report.XMLMetaExporter",
                           aDelegatorArguments, aProps, _xStorageToSaveTo);
 
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("styles.xml")));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("styles.xml")));
     WriteThroughComponent(xCom, "styles.xml", "com.sun.star.comp.report.XMLStylesExporter",
                           aDelegatorArguments, aProps, _xStorageToSaveTo);
 
-    xInfoSet->setPropertyValue("StreamName", uno::makeAny(OUString("content.xml")));
+    xInfoSet->setPropertyValue("StreamName", uno::Any(OUString("content.xml")));
     bool bOk = WriteThroughComponent(xCom, "content.xml", "com.sun.star.comp.report.ExportFilter",
                                      aDelegatorArguments, aProps, _xStorageToSaveTo);
 
@@ -1480,7 +1480,7 @@ bool OReportDefinition::WriteThroughComponent(
 
     // encrypt all streams
     xStreamProp->setPropertyValue( "UseCommonStoragePasswordEncryption",
-                                       uno::makeAny( true ) );
+                                       uno::Any( true ) );
 
     // set buffer and create outputstream
 
@@ -2362,19 +2362,19 @@ uno::Reference< container::XNameAccess > SAL_CALL OReportDefinition::getStyleFam
         uno::Reference< container::XNameContainer> xStyles(m_pImpl->m_xStyles,uno::UNO_QUERY);
 
         uno::Reference< container::XNameContainer> xPageStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName("PageStyles",uno::makeAny(xPageStyles));
+        xStyles->insertByName("PageStyles",uno::Any(xPageStyles));
         uno::Reference< style::XStyle> xPageStyle(createInstance("com.sun.star.style.PageStyle"),uno::UNO_QUERY);
-        xPageStyles->insertByName(xPageStyle->getName(),uno::makeAny(xPageStyle));
+        xPageStyles->insertByName(xPageStyle->getName(),uno::Any(xPageStyle));
 
         uno::Reference< container::XNameContainer> xFrameStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName("FrameStyles",uno::makeAny(xFrameStyles));
+        xStyles->insertByName("FrameStyles",uno::Any(xFrameStyles));
         uno::Reference< style::XStyle> xFrameStyle(createInstance("com.sun.star.style.FrameStyle"),uno::UNO_QUERY);
-        xFrameStyles->insertByName(xFrameStyle->getName(),uno::makeAny(xFrameStyle));
+        xFrameStyles->insertByName(xFrameStyle->getName(),uno::Any(xFrameStyle));
 
         uno::Reference< container::XNameContainer> xGraphicStyles = new OStylesHelper(cppu::UnoType<style::XStyle>::get());
-        xStyles->insertByName("graphics",uno::makeAny(xGraphicStyles));
+        xStyles->insertByName("graphics",uno::Any(xGraphicStyles));
         uno::Reference< style::XStyle> xGraphicStyle(createInstance("com.sun.star.style.GraphicStyle"),uno::UNO_QUERY);
-        xGraphicStyles->insertByName(xGraphicStyle->getName(),uno::makeAny(xGraphicStyle));
+        xGraphicStyles->insertByName(xGraphicStyle->getName(),uno::Any(xGraphicStyle));
     }
     return m_pImpl->m_xStyles;
 }

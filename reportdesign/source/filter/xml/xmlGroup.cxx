@@ -231,7 +231,7 @@ void OXMLGroup::endFastElement(sal_Int32 )
     try
     {
         // the group elements end in the reverse order
-        m_xGroups->insertByIndex(0,uno::makeAny(m_xGroup));
+        m_xGroups->insertByIndex(0,uno::Any(m_xGroup));
     }catch(uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION( "reportdesign", "");

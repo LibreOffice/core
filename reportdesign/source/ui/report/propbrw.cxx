@@ -119,9 +119,9 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
         {
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
-                ::cppu::ContextEntry_Init( "ContextDocument", makeAny( m_pDesignView->getController().getModel() )),
-                ::cppu::ContextEntry_Init( "DialogParentWindow", makeAny( VCLUnoHelper::GetInterface ( this ) )),
-                ::cppu::ContextEntry_Init( "ActiveConnection", makeAny( m_pDesignView->getController().getConnection() ) ),
+                ::cppu::ContextEntry_Init( "ContextDocument", Any( m_pDesignView->getController().getModel() )),
+                ::cppu::ContextEntry_Init( "DialogParentWindow", Any( VCLUnoHelper::GetInterface ( this ) )),
+                ::cppu::ContextEntry_Init( "ActiveConnection", Any( m_pDesignView->getController().getConnection() ) ),
             };
             m_xInspectorContext.set(
                 ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),
@@ -393,9 +393,9 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
                                                               ,const uno::Reference< uno::XInterface>& _xReportComponent)
 {
     uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(cppu::UnoType<XInterface>::get());
-    xNameCont->insertByName("FormComponent",uno::makeAny(_xFormComponent));
-    xNameCont->insertByName("ReportComponent",uno::makeAny(_xReportComponent));
-    xNameCont->insertByName("RowSet",uno::makeAny(uno::Reference< uno::XInterface>(m_pDesignView->getController().getRowSet())));
+    xNameCont->insertByName("FormComponent",uno::Any(_xFormComponent));
+    xNameCont->insertByName("ReportComponent",uno::Any(_xReportComponent));
+    xNameCont->insertByName("RowSet",uno::Any(uno::Reference< uno::XInterface>(m_pDesignView->getController().getRowSet())));
 
     return xNameCont;
 }
@@ -437,7 +437,7 @@ void PropBrw::Update( OSectionView* pNewView )
             {
                 try
                 {
-                    m_xBrowserController->restoreViewData( makeAny( m_sLastActivePage ) );
+                    m_xBrowserController->restoreViewData( Any( m_sLastActivePage ) );
                 }
                 catch( const Exception& )
                 {
@@ -474,7 +474,7 @@ void PropBrw::Update( OSectionView* pNewView )
             uno::Reference< uno::XInterface> xTemp(m_pView->getReportSection()->getSection());
             m_xLastSection = xTemp;
             uno::Reference< container::XNameContainer > xNameCont = ::comphelper::NameContainer_createInstance(cppu::UnoType<XInterface>::get() );
-            xNameCont->insertByName("ReportComponent",uno::makeAny(xTemp));
+            xNameCont->insertByName("ReportComponent",uno::Any(xTemp));
             xTemp = xNameCont;
 
             implSetNewObject( uno::Sequence< uno::Reference< uno::XInterface> >(&xTemp,1) );

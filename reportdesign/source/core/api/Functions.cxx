@@ -89,7 +89,7 @@ void SAL_CALL OFunctions::insertByIndex( ::sal_Int32 Index, const uno::Any& aEle
         xFunction->setParent(*this);
     }
     // notify our container listeners
-    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), aElement, uno::Any());
+    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), aElement, uno::Any());
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementInserted,aEvent);
 }
 
@@ -106,7 +106,7 @@ void SAL_CALL OFunctions::removeByIndex( ::sal_Int32 Index )
         m_aFunctions.erase(aPos);
         xFunction->setParent(nullptr);
     }
-    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), uno::makeAny(xFunction), uno::Any());
+    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), uno::Any(xFunction), uno::Any());
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
 }
 
@@ -126,7 +126,7 @@ void SAL_CALL OFunctions::replaceByIndex( ::sal_Int32 Index, const uno::Any& Ele
         *aPos = xFunction;
     }
 
-    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), Element, aOldElement);
+    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), Element, aOldElement);
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced,aEvent);
 }
 
@@ -143,7 +143,7 @@ uno::Any SAL_CALL OFunctions::getByIndex( ::sal_Int32 Index )
     checkIndex(Index);
     TFunctions::const_iterator aPos = m_aFunctions.begin();
     ::std::advance(aPos,Index);
-    return uno::makeAny(*aPos);
+    return uno::Any(*aPos);
 }
 
 // XElementAccess

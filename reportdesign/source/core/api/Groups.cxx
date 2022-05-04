@@ -92,7 +92,7 @@ void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElemen
         }
     }
     // notify our container listeners
-    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), aElement, uno::Any());
+    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), aElement, uno::Any());
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementInserted,aEvent);
 }
 
@@ -108,7 +108,7 @@ void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index )
         xGroup = *aPos;
         m_aGroups.erase(aPos);
     }
-    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), uno::makeAny(xGroup), uno::Any());
+    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), uno::Any(xGroup), uno::Any());
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
 }
 
@@ -128,7 +128,7 @@ void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Elemen
         *aPos = xGroup;
     }
 
-    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::makeAny(Index), Element, aOldElement);
+    container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(Index), Element, aOldElement);
     m_aContainerListeners.notifyEach(&container::XContainerListener::elementReplaced,aEvent);
 }
 
@@ -145,7 +145,7 @@ uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index )
     checkIndex(Index);
     TGroups::const_iterator aPos = m_aGroups.begin();
     ::std::advance(aPos,Index);
-    return uno::makeAny(*aPos);
+    return uno::Any(*aPos);
 }
 
 // XElementAccess

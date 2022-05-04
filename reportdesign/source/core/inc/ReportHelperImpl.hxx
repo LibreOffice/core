@@ -478,7 +478,7 @@ void SAL_CALL clazz::setCharLocale(const lang::Locale & the_value) \
             || varName.aCharLocale.Country != the_value.Country  \
             || varName.aCharLocale.Variant != the_value.Variant ) \
         { \
-            prepareSet(PROPERTY_CHARLOCALE, css::uno::makeAny(varName.aCharLocale), css::uno::makeAny(the_value), &l); \
+            prepareSet(PROPERTY_CHARLOCALE, css::uno::Any(varName.aCharLocale), css::uno::Any(the_value), &l); \
             varName.aCharLocale = the_value; \
         } \
     } \
@@ -696,7 +696,7 @@ void SAL_CALL clazz::setCharLocaleAsian( const css::lang::Locale& the_value )\
             || varName.aCharLocaleAsian.Country != the_value.Country  \
             || varName.aCharLocaleAsian.Variant != the_value.Variant ) \
         { \
-            prepareSet(PROPERTY_CHARLOCALEASIAN, css::uno::makeAny(varName.aCharLocaleAsian), css::uno::makeAny(the_value), &l); \
+            prepareSet(PROPERTY_CHARLOCALEASIAN, css::uno::Any(varName.aCharLocaleAsian), css::uno::Any(the_value), &l); \
             varName.aCharLocaleAsian = the_value; \
         } \
     } \
@@ -788,7 +788,7 @@ void SAL_CALL clazz::setCharLocaleComplex( const css::lang::Locale& the_value )\
             || varName.aCharLocaleComplex.Country != the_value.Country  \
             || varName.aCharLocaleComplex.Variant != the_value.Variant ) \
         { \
-            prepareSet(PROPERTY_CHARLOCALECOMPLEX, css::uno::makeAny(varName.aCharLocaleComplex), css::uno::makeAny(the_value), &l); \
+            prepareSet(PROPERTY_CHARLOCALECOMPLEX, css::uno::Any(varName.aCharLocaleComplex), css::uno::Any(the_value), &l); \
             varName.aCharLocaleComplex = the_value; \
         } \
     } \

@@ -464,7 +464,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                         removeFunction();
                     m_xFunction.clear();
                     OBlocker aBlocker(m_bIn);
-                    m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(OUString()));
+                    m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::Any(OUString()));
                 }
                 resetOwnProperties(aGuard,sOldFunctionName,sOldScope,m_nDataFieldType);
             }
@@ -493,7 +493,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                     else if ( m_nDataFieldType == USER_DEF_FUNCTION )
                     {
                         OBlocker aBlocker(m_bIn);
-                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(OUString()));
+                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::Any(OUString()));
                     }
                 }
                 else if ( m_nDataFieldType == USER_DEF_FUNCTION )
@@ -518,11 +518,11 @@ void SAL_CALL GeometryHandler::setPropertyValue(const OUString & PropertyName, c
                         }
                         const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
                         m_nDataFieldType = nNewDataType;
-                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(impl_convertToFormula( uno::makeAny(sFunction))));
+                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::Any(impl_convertToFormula( uno::Any(sFunction))));
                         resetOwnProperties(aGuard,sOldFunctionName,sOldScope,nOldDataFieldType);
                     }
                     else
-                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(impl_convertToFormula( uno::makeAny(sFunction))));
+                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::Any(impl_convertToFormula( uno::Any(sFunction))));
                 }
                 else if ( m_nDataFieldType == FUNCTION )
                 {
@@ -905,7 +905,7 @@ uno::Any GeometryHandler::getConstantValue(bool _bToControlValue,const Translate
     uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::createConstant( m_xContext,m_xTypeConverter,_sConstantName,aSeq);
     if ( _bToControlValue )
     {
-        return uno::makeAny( xConversionHelper->convertToControlValue( _aValue ) );
+        return uno::Any( xConversionHelper->convertToControlValue( _aValue ) );
     }
     else
     {
@@ -998,7 +998,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
-            return uno::makeAny( impl_convertToFormula( _rControlValue ) );
+            return uno::Any( impl_convertToFormula( _rControlValue ) );
         case PROPERTY_ID_DATAFIELD:
             {
                 OUString sDataField;
@@ -1006,7 +1006,7 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const OUString & Prope
                 if ( isDefaultFunction(sDataField,sDataField) )
                 {
                     OSL_ENSURE(m_xFunction.is(),"No function set!");
-                    aPropertyValue <<= impl_convertToFormula( uno::makeAny(lcl_getQuotedFunctionName(m_xFunction)) );
+                    aPropertyValue <<= impl_convertToFormula( uno::Any(lcl_getQuotedFunctionName(m_xFunction)) );
                 }
                 else
                     aPropertyValue <<= impl_convertToFormula( _rControlValue );
@@ -1561,7 +1561,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( OUString& _out_rSelectedClause,
         {
             m_xRowSet.set(xFactory->createInstanceWithContext("com.sun.star.sdb.RowSet",m_xContext),uno::UNO_QUERY);
             xRowSetProp.set(m_xRowSet,uno::UNO_QUERY);
-            xRowSetProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,uno::makeAny(xCon));
+            xRowSetProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,uno::Any(xCon));
             ::comphelper::copyProperties(m_xReportComponent,xRowSetProp);
         }
 
@@ -1951,7 +1951,7 @@ void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard
                 impl_createFunction(sFunctionName,_sDataField,*aIter);
 
             OBlocker aBlocker(m_bIn);
-            m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny( impl_convertToFormula( uno::makeAny(sQuotedFunctionName) )));
+            m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::Any( impl_convertToFormula( uno::Any(sQuotedFunctionName) )));
             aEvent.NewValue <<= m_sScope;
             _aGuard.clear();
             m_aPropertyListeners.notifyEach( &beans::XPropertyChangeListener::propertyChange, aEvent );
@@ -2114,7 +2114,7 @@ void GeometryHandler::impl_createFunction(const OUString& _sFunctionName,std::u1
     OUString sNamePostfix;
     const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostfix);
     const uno::Reference< container::XIndexContainer> xFunctions(xFunctionsSupplier->getFunctions(),uno::UNO_QUERY_THROW);
-    xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(m_xFunction));
+    xFunctions->insertByIndex(xFunctions->getCount(),uno::Any(m_xFunction));
     m_aFunctionNames.emplace(sQuotedFunctionName,TFunctionPair(m_xFunction,xFunctionsSupplier));
     m_bNewFunction = true;
 }
@@ -2130,7 +2130,7 @@ void GeometryHandler::impl_setCounterFunction_throw()
         impl_createFunction(sFunctionName,{},m_aCounterFunction);
 
     OBlocker aBlocker(m_bIn);
-    m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(impl_convertToFormula( uno::makeAny(sQuotedFunctionName))));
+    m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::Any(impl_convertToFormula( uno::Any(sQuotedFunctionName))));
 }
 
 sal_uInt32 GeometryHandler::impl_getDataFieldType_throw(const OUString& _sDataField) const

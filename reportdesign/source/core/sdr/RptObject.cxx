@@ -104,7 +104,7 @@ SdrObject* OObjectBase::createObject(
 
                 uno::Reference<beans::XPropertySet> xControlModel(pUnoObj->GetUnoControlModel(),uno::UNO_QUERY);
                 if ( xControlModel.is() )
-                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::makeAny(true));
+                    xControlModel->setPropertyValue( PROPERTY_MULTILINE,uno::Any(true));
             }
             break;
         case SdrObjKind::ReportDesignImageControl:
@@ -630,7 +630,7 @@ void OUnoObject::impl_initializeModel_nothrow()
         if ( xFormatted.is() )
         {
             const Reference< XPropertySet > xModelProps( GetUnoControlModel(), UNO_QUERY_THROW );
-            xModelProps->setPropertyValue( "TreatAsNumber", makeAny( false ) );
+            xModelProps->setPropertyValue( "TreatAsNumber", Any( false ) );
             xModelProps->setPropertyValue( PROPERTY_VERTICALALIGN,m_xReportComponent->getPropertyValue(PROPERTY_VERTICALALIGN));
         }
     }
@@ -856,7 +856,7 @@ void OUnoObject::CreateMediator(bool _bReverse)
             {
                 m_xReportComponent->setPropertyValue(
                     PROPERTY_LABEL,
-                    uno::makeAny(GetDefaultName(this)));
+                    uno::Any(GetDefaultName(this)));
             }
         }
         catch(const uno::Exception&)
@@ -1156,7 +1156,7 @@ void OOle2Obj::initializeOle()
         uno::Reference< beans::XPropertySet > xChartProps( xCompSupp->getComponent(), uno::UNO_QUERY );
         if ( xChartProps.is() )
             xChartProps->setPropertyValue("NullDate",
-                uno::makeAny(util::DateTime(0,0,0,0,30,12,1899,false)));
+                uno::Any(util::DateTime(0,0,0,0,30,12,1899,false)));
     }
 }
 
@@ -1183,10 +1183,10 @@ void OOle2Obj::initializeChart( const uno::Reference< frame::XModel>& _xModel)
     rRptModel.GetUndoEnv().AddElement(lcl_getDataProvider(xObj));
 
     ::comphelper::NamedValueCollection aArgs;
-    aArgs.put( "CellRangeRepresentation", uno::makeAny( OUString( "all" ) ) );
-    aArgs.put( "HasCategories", uno::makeAny( true ) );
-    aArgs.put( "FirstCellAsLabel", uno::makeAny( true ) );
-    aArgs.put( "DataRowSource", uno::makeAny( chart::ChartDataRowSource_COLUMNS ) );
+    aArgs.put( "CellRangeRepresentation", uno::Any( OUString( "all" ) ) );
+    aArgs.put( "HasCategories", uno::Any( true ) );
+    aArgs.put( "FirstCellAsLabel", uno::Any( true ) );
+    aArgs.put( "DataRowSource", uno::Any( chart::ChartDataRowSource_COLUMNS ) );
     xReceiver->setArguments( aArgs.getPropertyValues() );
 
     if( xChartModel.is() )

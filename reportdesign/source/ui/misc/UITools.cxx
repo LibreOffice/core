@@ -246,7 +246,7 @@ namespace
         const vcl::Font aFont( lcl_getReportControlFont( _rxReportControlFormat, aControlFont,_nWhich ) );
 
         SvxFontItem aFontItem(_nFont);
-        aFontItem.PutValue( uno::makeAny( aControlFont ), 0 );
+        aFontItem.PutValue( uno::Any( aControlFont ), 0 );
         _rItemSet.Put(aFontItem);
 
         _rItemSet.Put(SvxFontHeightItem(o3tl::convert(aFont.GetFontHeight(), o3tl::Length::pt, o3tl::Length::twip), 100, _nFontHeight));
@@ -435,19 +435,19 @@ namespace
         // create an AWT font
         awt::FontDescriptor aAwtFont;
         lcl_initAwtFont( _rOriginalControlFont, _rItemSet, aAwtFont,ITEMID_FONT,ITEMID_FONTHEIGHT,ITEMID_POSTURE, ITEMID_WEIGHT);
-        lcl_pushBack( _out_rProperties, "Font", uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, "Font", uno::Any( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontAsian, _rItemSet, aAwtFont,ITEMID_FONT_ASIAN,ITEMID_FONTHEIGHT_ASIAN,ITEMID_POSTURE_ASIAN, ITEMID_WEIGHT_ASIAN);
-        lcl_pushBack( _out_rProperties, "FontAsian", uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, "FontAsian", uno::Any( aAwtFont ) );
         lcl_initAwtFont( _rOriginalControlFontComplex, _rItemSet, aAwtFont,ITEMID_FONT_COMPLEX,ITEMID_FONTHEIGHT_COMPLEX,ITEMID_POSTURE_COMPLEX, ITEMID_WEIGHT_COMPLEX);
-        lcl_pushBack( _out_rProperties, "FontComplex", uno::makeAny( aAwtFont ) );
+        lcl_pushBack( _out_rProperties, "FontComplex", uno::Any( aAwtFont ) );
 
         // properties which cannot be represented in an AWT font need to be preserved directly
         if ( const SvxShadowedItem* pShadowedItem = _rItemSet.GetItemIfSet( ITEMID_SHADOWED) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARSHADOWED, uno::makeAny( pShadowedItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARSHADOWED, uno::Any( pShadowedItem->GetValue() ) );
         if ( const SvxContourItem* pContourItem = _rItemSet.GetItemIfSet( ITEMID_CONTOUR ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCONTOURED, uno::makeAny( pContourItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCONTOURED, uno::Any( pContourItem->GetValue() ) );
         if ( const SvxUnderlineItem* pUnderlineItem = _rItemSet.GetItemIfSet( ITEMID_UNDERLINE ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARUNDERLINECOLOR, uno::makeAny( pUnderlineItem->GetColor() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARUNDERLINECOLOR, uno::Any( pUnderlineItem->GetColor() ) );
         if ( const SvxHorJustifyItem* pJustifyItem = _rItemSet.GetItemIfSet( ITEMID_HORJUSTIFY ) )
         {
             uno::Any aValue;
@@ -461,29 +461,29 @@ namespace
             lcl_pushBack( _out_rProperties, PROPERTY_VERTICALALIGN, aValue );
         }
         if ( const SvxCharReliefItem* pReliefItem = _rItemSet.GetItemIfSet( ITEMID_CHARRELIEF ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARRELIEF, uno::makeAny( static_cast< sal_Int16 >( pReliefItem->GetEnumValue() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARRELIEF, uno::Any( static_cast< sal_Int16 >( pReliefItem->GetEnumValue() ) ) );
         if ( const SvxCharHiddenItem* pHiddenItem = _rItemSet.GetItemIfSet( ITEMID_CHARHIDDEN ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARHIDDEN, uno::makeAny( pHiddenItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARHIDDEN, uno::Any( pHiddenItem->GetValue() ) );
         if ( const SvxAutoKernItem* pKernItem = _rItemSet.GetItemIfSet( ITEMID_AUTOKERN ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARAUTOKERNING, uno::makeAny( pKernItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARAUTOKERNING, uno::Any( pKernItem->GetValue() ) );
         if ( const SvxBrushItem* pBrushItem = _rItemSet.GetItemIfSet( ITEMID_BRUSH ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CONTROLBACKGROUND, uno::makeAny( pBrushItem->GetColor() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CONTROLBACKGROUND, uno::Any( pBrushItem->GetColor() ) );
         if ( const SvxBlinkItem* pBlinkItem =  _rItemSet.GetItemIfSet( ITEMID_BLINK ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARFLASH, uno::makeAny( pBlinkItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARFLASH, uno::Any( pBlinkItem->GetValue() ) );
         if ( const SvxEmphasisMarkItem* pMarkItem = _rItemSet.GetItemIfSet( ITEMID_EMPHASISMARK ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHAREMPHASIS, uno::makeAny( static_cast< sal_Int16 >( pMarkItem->GetEmphasisMark() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHAREMPHASIS, uno::Any( static_cast< sal_Int16 >( pMarkItem->GetEmphasisMark() ) ) );
         if ( const SvxTwoLinesItem* pLinesItem = _rItemSet.GetItemIfSet( ITEMID_TWOLINES ) )
         {
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEISON, uno::makeAny( pLinesItem->GetValue() ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEPREFIX, uno::makeAny( OUString( pLinesItem->GetStartBracket() ) ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINESUFFIX, uno::makeAny( OUString( pLinesItem->GetEndBracket() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEISON, uno::Any( pLinesItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINEPREFIX, uno::Any( OUString( pLinesItem->GetStartBracket() ) ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOMBINESUFFIX, uno::Any( OUString( pLinesItem->GetEndBracket() ) ) );
         }
         if ( const SvxColorItem* pColorItem = _rItemSet.GetItemIfSet( ITEMID_COLOR ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOLOR, uno::makeAny( pColorItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCOLOR, uno::Any( pColorItem->GetValue() ) );
         if ( const SvxKerningItem* pKernItem = _rItemSet.GetItemIfSet( ITEMID_KERNING ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARKERNING, uno::makeAny( pKernItem->GetValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARKERNING, uno::Any( pKernItem->GetValue() ) );
         if ( const SvxCaseMapItem* pCaseMapItem = _rItemSet.GetItemIfSet( ITEMID_CASEMAP ) )
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::makeAny( pCaseMapItem->GetEnumValue() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARCASEMAP, uno::Any( pCaseMapItem->GetEnumValue() ) );
         struct Items {
                 TypedWhichId<SvxLanguageItem> nWhich;
                 OUString sPropertyName;
@@ -497,13 +497,13 @@ namespace
             if ( const SvxLanguageItem* pLanguageItem = _rItemSet.GetItemIfSet( k.nWhich ) )
             {
                 lang::Locale aCharLocale( LanguageTag( pLanguageItem->GetLanguage()).getLocale());
-                lcl_pushBack( _out_rProperties, k.sPropertyName, uno::makeAny( aCharLocale ) );
+                lcl_pushBack( _out_rProperties, k.sPropertyName, uno::Any( aCharLocale ) );
             }
         }
         if ( const SvxEscapementItem* pEscapementItem = _rItemSet.GetItemIfSet( ITEMID_ESCAPEMENT ) )
         {
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENT, uno::makeAny( pEscapementItem->GetEsc() ) );
-            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENTHEIGHT, uno::makeAny(static_cast<sal_Int8>(pEscapementItem->GetProportionalHeight())) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENT, uno::Any( pEscapementItem->GetEsc() ) );
+            lcl_pushBack( _out_rProperties, PROPERTY_CHARESCAPEMENTHEIGHT, uno::Any(static_cast<sal_Int8>(pEscapementItem->GetProportionalHeight())) );
         }
     }
 
