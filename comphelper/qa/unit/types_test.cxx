@@ -42,7 +42,7 @@ public:
 
 void TypesTest::testGetINT64()
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(1337), ::comphelper::getINT64(uno::makeAny(sal_Int64(1337))));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(1337), ::comphelper::getINT64(uno::Any(sal_Int64(1337))));
 
     uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int64(0), ::comphelper::getINT64(aValue));
@@ -50,7 +50,7 @@ void TypesTest::testGetINT64()
 
 void TypesTest::testGetINT32()
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1337), ::comphelper::getINT32(uno::makeAny(sal_Int32(1337))));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1337), ::comphelper::getINT32(uno::Any(sal_Int32(1337))));
 
     uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), ::comphelper::getINT32(aValue));
@@ -58,7 +58,7 @@ void TypesTest::testGetINT32()
 
 void TypesTest::testGetINT16()
 {
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(1337), ::comphelper::getINT16(uno::makeAny(sal_Int16(1337))));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(1337), ::comphelper::getINT16(uno::Any(sal_Int16(1337))));
 
     uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int16(0), ::comphelper::getINT16(aValue));
@@ -66,7 +66,7 @@ void TypesTest::testGetINT16()
 
 void TypesTest::testGetDouble()
 {
-    CPPUNIT_ASSERT_EQUAL(1337.1337, ::comphelper::getDouble(uno::makeAny(1337.1337)));
+    CPPUNIT_ASSERT_EQUAL(1337.1337, ::comphelper::getDouble(uno::Any(1337.1337)));
 
     uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(0.0, ::comphelper::getDouble(aValue));
@@ -75,7 +75,7 @@ void TypesTest::testGetDouble()
 void TypesTest::testGetFloat()
 {
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(1337.0),
-                         ::comphelper::getFloat(uno::makeAny(static_cast<float>(1337.0))));
+                         ::comphelper::getFloat(uno::Any(static_cast<float>(1337.0))));
 
     uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(static_cast<float>(0.0), ::comphelper::getFloat(aValue));
@@ -83,7 +83,7 @@ void TypesTest::testGetFloat()
 
 void TypesTest::testGetString()
 {
-    CPPUNIT_ASSERT_EQUAL(OUString("1337"), ::comphelper::getString(uno::makeAny(OUString("1337"))));
+    CPPUNIT_ASSERT_EQUAL(OUString("1337"), ::comphelper::getString(uno::Any(OUString("1337"))));
 
     uno::Any aValue;
     CPPUNIT_ASSERT_EQUAL(OUString(""), ::comphelper::getString(aValue));

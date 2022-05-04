@@ -145,8 +145,8 @@ comphelper::detail::ConfigurationWrapper::ConfigurationWrapper():
 
         // set root path
         css::uno::Sequence< css::uno::Any > params {
-            css::uno::makeAny( css::beans::NamedValue{ "nodepath", css::uno::makeAny( OUString("/"))} ),
-            css::uno::makeAny( css::beans::NamedValue{ "locale", css::uno::makeAny( OUString("*"))} ) };
+            css::uno::Any( css::beans::NamedValue{ "nodepath", css::uno::Any( OUString("/"))} ),
+            css::uno::Any( css::beans::NamedValue{ "locale", css::uno::Any( OUString("*"))} ) };
 
         css::uno::Reference< css::uno::XInterface > xCfg
             = xConfigProvider->createInstanceWithArguments(u"com.sun.star.configuration.ConfigurationAccess",
