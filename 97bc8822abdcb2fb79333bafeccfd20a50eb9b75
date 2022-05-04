@@ -16,6 +16,24 @@
       "message": "I assume that you didn\u0027t want to include bin/upload_symbols.py in this patch as you\u0027ve done heavy work on it in https://gerrit.libreoffice.org/c/core/+/133223",
       "revId": "97bc8822abdcb2fb79333bafeccfd20a50eb9b75",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fe62cb3_27938ace",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:24:32Z",
+      "side": 1,
+      "message": "Yes, sorry is fixed.",
+      "parentUuid": "7931d2ec_f9520c1a",
+      "revId": "97bc8822abdcb2fb79333bafeccfd20a50eb9b75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }

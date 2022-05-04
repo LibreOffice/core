@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b79c5bb_2f507f11",
+        "filename": "bin/update/path.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:24:32Z",
+      "side": 0,
+      "message": "It\u0027s a double, see L41.",
+      "parentUuid": "148bfd35_eb398ab3",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c33c8dc5_aa96c7b1",
         "filename": "bin/update/tools.py",
         "patchSetId": 5
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b3c40d37_f4d3cb65",
+        "filename": "bin/update/tools.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:24:32Z",
+      "side": 0,
+      "message": "I\u0027m not sure. This looks good to me.",
+      "parentUuid": "c33c8dc5_aa96c7b1",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1392c7c6_544f1867",
         "filename": "bin/update/uncompress_mar.py",
         "patchSetId": 5
@@ -48,6 +84,24 @@
       "writtenOn": "2022-05-04T17:50:18Z",
       "side": 0,
       "message": "You can\u0027t remove this as it\u0027s used by subprocess.check_call a couple of lines later",
+      "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f7974fb_649ead82",
+        "filename": "bin/update/uncompress_mar.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-04T19:24:32Z",
+      "side": 0,
+      "message": "I see, I thought the same thing but it\u0027s a string instead of a reference.",
+      "parentUuid": "1392c7c6_544f1867",
       "revId": "a0533a8d18bb902f70fd4c6418f44875eab38999",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
