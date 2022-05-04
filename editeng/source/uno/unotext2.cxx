@@ -34,7 +34,7 @@ using namespace ::com::sun::star;
 
 #define QUERYINT( xint ) \
     if( rType == cppu::UnoType<xint>::get() ) \
-        return uno::makeAny(uno::Reference< xint >(this))
+        return uno::Any(uno::Reference< xint >(this))
 
 
 // SvxUnoTextContentEnumeration
@@ -108,7 +108,7 @@ uno::Any SvxUnoTextContentEnumeration::nextElement()
 
     uno::Reference< text::XTextContent > xRef( maContents.at(mnNextParagraph) );
     mnNextParagraph++;
-    return uno::makeAny( xRef );
+    return uno::Any( xRef );
 }
 
 
@@ -429,7 +429,7 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
 
     uno::Reference< text::XTextRange > xRange = maPortions.at(mnNextPortion);
     mnNextPortion++;
-    return uno::makeAny( xRange );
+    return uno::Any( xRange );
 }
 
 SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) noexcept
@@ -457,7 +457,7 @@ SvxUnoTextCursor::~SvxUnoTextCursor() noexcept
 uno::Any SAL_CALL SvxUnoTextCursor::queryAggregation( const uno::Type & rType )
 {
     if( rType == cppu::UnoType<text::XTextRange>::get())
-        return uno::makeAny(uno::Reference< text::XTextRange >(static_cast<SvxUnoTextRangeBase *>(this)));
+        return uno::Any(uno::Reference< text::XTextRange >(static_cast<SvxUnoTextRangeBase *>(this)));
     else QUERYINT( text::XTextCursor );
     else QUERYINT( beans::XMultiPropertyStates );
     else QUERYINT( beans::XPropertySet );

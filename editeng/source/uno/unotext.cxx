@@ -71,7 +71,7 @@ ESelection toESelection(const text::TextRangeSelection& rSel)
 
 #define QUERYINT( xint ) \
     if( rType == cppu::UnoType<xint>::get() ) \
-        return uno::makeAny(uno::Reference< xint >(this))
+        return uno::Any(uno::Reference< xint >(this))
 
 const SvxItemPropertySet* ImplGetSvxUnoOutlinerTextCursorSvxPropertySet()
 {
@@ -583,7 +583,7 @@ uno::Any SAL_CALL SvxUnoTextRangeBase::getPropertyValue(const OUString& Property
         aSel.Start.PositionInParagraph = rSel.nStartPos;
         aSel.End.Paragraph = rSel.nEndPara;
         aSel.End.PositionInParagraph = rSel.nEndPos;
-        return uno::makeAny(aSel);
+        return uno::Any(aSel);
     }
 
     return _getPropertyValue( PropertyName );
@@ -1543,13 +1543,13 @@ uno::Any SAL_CALL SvxUnoTextRange::queryAggregation( const uno::Type & rType )
 {
     QUERYINT( text::XTextRange );
     else if( rType == cppu::UnoType<beans::XMultiPropertyStates>::get())
-        return uno::makeAny(uno::Reference< beans::XMultiPropertyStates >(this));
+        return uno::Any(uno::Reference< beans::XMultiPropertyStates >(this));
     else if( rType == cppu::UnoType<beans::XPropertySet>::get())
-        return uno::makeAny(uno::Reference< beans::XPropertySet >(this));
+        return uno::Any(uno::Reference< beans::XPropertySet >(this));
     else QUERYINT( beans::XPropertyState );
     else QUERYINT( text::XTextRangeCompare );
     else if( rType == cppu::UnoType<beans::XMultiPropertySet>::get())
-        return uno::makeAny(uno::Reference< beans::XMultiPropertySet >(this));
+        return uno::Any(uno::Reference< beans::XMultiPropertySet >(this));
     else QUERYINT( lang::XServiceInfo );
     else QUERYINT( lang::XTypeProvider );
     else QUERYINT( lang::XUnoTunnel );
@@ -1646,7 +1646,7 @@ uno::Any SAL_CALL SvxUnoTextBase::queryAggregation( const uno::Type & rType )
     QUERYINT( text::XText );
     QUERYINT( text::XSimpleText );
     if( rType == cppu::UnoType<text::XTextRange>::get())
-        return uno::makeAny(uno::Reference< text::XTextRange >(static_cast<text::XText*>(this)));
+        return uno::Any(uno::Reference< text::XTextRange >(static_cast<text::XText*>(this)));
     QUERYINT(container::XEnumerationAccess );
     QUERYINT( container::XElementAccess );
     QUERYINT( beans::XMultiPropertyStates );
@@ -1870,11 +1870,11 @@ void SAL_CALL SvxUnoTextBase::insertTextContent( const uno::Reference< text::XTe
     if (!xContent.is())
         throw lang::IllegalArgumentException();
 
-    xPropSetContent->setPropertyValue(UNO_TC_PROP_ANCHOR, uno::makeAny(xRange));
+    xPropSetContent->setPropertyValue(UNO_TC_PROP_ANCHOR, uno::Any(xRange));
 
     aSel.End.PositionInParagraph += 1;
     aSel.Start.PositionInParagraph = aSel.End.PositionInParagraph;
-    xPropSet->setPropertyValue(UNO_TR_PROP_SELECTION, uno::makeAny(aSel));
+    xPropSet->setPropertyValue(UNO_TR_PROP_SELECTION, uno::Any(aSel));
 }
 
 void SAL_CALL SvxUnoTextBase::removeTextContent( const uno::Reference< text::XTextContent >& )

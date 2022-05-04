@@ -2595,7 +2595,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             try
             {
                 ::ucbhelper::Content aContent ( aDest.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ), uno::Reference < XCommandEnvironment >(), comphelper::getProcessComponentContext() );
-                aContent.executeCommand ( "delete", makeAny ( true ) );
+                aContent.executeCommand ( "delete", Any ( true ) );
             }
             catch (...)
             {

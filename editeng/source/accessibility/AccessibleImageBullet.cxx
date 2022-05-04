@@ -431,7 +431,7 @@ namespace accessibility
             !mxStateSet->contains(nStateId) )
         {
             mxStateSet->AddState( nStateId );
-            FireEvent( AccessibleEventId::STATE_CHANGED, uno::makeAny( nStateId ) );
+            FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any( nStateId ) );
         }
     }
 
@@ -441,7 +441,7 @@ namespace accessibility
             mxStateSet->contains(nStateId) )
         {
             mxStateSet->RemoveState( nStateId );
-            FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::makeAny( nStateId ) );
+            FireEvent( AccessibleEventId::STATE_CHANGED, uno::Any(), uno::Any( nStateId ) );
         }
     }
 
@@ -468,8 +468,8 @@ namespace accessibility
             if( nOldIndex != nIndex )
             {
                 // index and therefore description changed
-                FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, uno::makeAny( getAccessibleDescription() ), aOldDesc );
-                FireEvent( AccessibleEventId::NAME_CHANGED, uno::makeAny( getAccessibleName() ), aOldName );
+                FireEvent( AccessibleEventId::DESCRIPTION_CHANGED, uno::Any( getAccessibleDescription() ), aOldDesc );
+                FireEvent( AccessibleEventId::NAME_CHANGED, uno::Any( getAccessibleName() ), aOldName );
             }
         }
         catch( const uno::Exception& ) {} // optional behaviour
