@@ -209,7 +209,7 @@ void Diagram::syncDiagramFontHeights()
                 uno::Reference<beans::XPropertySet> xPropertySet(rShapePair.second, uno::UNO_QUERY);
                 if (xPropertySet.is())
                 {
-                    xPropertySet->setPropertyValue("TextFitToSizeScale", uno::makeAny(nMinScale));
+                    xPropertySet->setPropertyValue("TextFitToSizeScale", uno::Any(nMinScale));
                 }
             }
         }

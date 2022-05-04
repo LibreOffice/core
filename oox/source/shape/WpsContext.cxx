@@ -70,7 +70,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (nVert == XML_eaVert)
                 {
                     xPropertySet->setPropertyValue("TextWritingMode",
-                                                   uno::makeAny(text::WritingMode_TB_RL));
+                                                   uno::Any(text::WritingMode_TB_RL));
                 }
                 else if (nVert != XML_horz)
                 {
@@ -103,7 +103,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                         aCustomShapeGeometry["TextPreRotateAngle"] <<= nRotation;
                         xPropertySet->setPropertyValue(
                             "CustomShapeGeometry",
-                            uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+                            uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
                     }
                 }
 
@@ -116,7 +116,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     auto pGrabBag = aGrabBag.getArray();
                     pGrabBag[length].Name = "Upright";
                     pGrabBag[length].Value <<= bUpright;
-                    xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
+                    xPropertySet->setPropertyValue("InteropGrabBag", uno::Any(aGrabBag));
                 }
 
                 if (xServiceInfo.is())
@@ -139,8 +139,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                             OUString("TextRightDistance"), OUString("TextLowerDistance") };
                     for (std::size_t i = 0; i < SAL_N_ELEMENTS(aShapeProps); ++i)
                         if (oInsets[i])
-                            xPropertySet->setPropertyValue(aShapeProps[i],
-                                                           uno::makeAny(*oInsets[i]));
+                            xPropertySet->setPropertyValue(aShapeProps[i], uno::Any(*oInsets[i]));
                 }
 
                 // Handle text vertical adjustment inside a text frame
@@ -148,7 +147,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 {
                     drawing::TextVerticalAdjust eAdjust
                         = drawingml::GetTextVerticalAdjust(rAttribs.getToken(XML_anchor, XML_t));
-                    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::makeAny(eAdjust));
+                    xPropertySet->setPropertyValue("TextVerticalAdjust", uno::Any(eAdjust));
                 }
 
                 // Apply character color of the shape to the shape's textbox.
@@ -214,7 +213,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
 
                 auto nWrappingType = rAttribs.getToken(XML_wrap, XML_square);
                 xPropertySet->setPropertyValue("TextWordWrap",
-                                               uno::makeAny(nWrappingType == XML_square));
+                                               uno::Any(nWrappingType == XML_square));
 
                 return this;
             }
@@ -266,11 +265,11 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (xServiceInfo->supportsService("com.sun.star.text.TextFrame"))
                     xPropertySet->setPropertyValue(
                         "FrameIsAutomaticHeight",
-                        uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));
+                        uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
                 else
                     xPropertySet->setPropertyValue(
                         "TextAutoGrowHeight",
-                        uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));
+                        uno::Any(getBaseToken(nElementToken) == XML_spAutoFit));
             }
         }
         break;
@@ -287,7 +286,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                     aCustomShapeGeometry["PresetTextWarp"] <<= preset;
                     xPropertySet->setPropertyValue(
                         "CustomShapeGeometry",
-                        uno::makeAny(aCustomShapeGeometry.getAsConstPropertyValueList()));
+                        uno::Any(aCustomShapeGeometry.getAsConstPropertyValueList()));
                 }
             }
             break;

@@ -117,10 +117,10 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyValue( const OUString& aPropertyN
 {
     if( aPropertyName == "FillStyle" && m_bIsFillColor )
     {
-        return uno::makeAny(css::drawing::FillStyle_SOLID);
+        return uno::Any(css::drawing::FillStyle_SOLID);
     }
     else if (aPropertyName == m_aColorPropName)
-        return uno::makeAny( m_nColor );
+        return uno::Any( m_nColor );
 
     throw UnknownPropertyException(aPropertyName);
 }
@@ -168,7 +168,7 @@ void SAL_CALL ColorPropertySet::setPropertyToDefault( const OUString& PropertyNa
 uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropertyName )
 {
     if( aPropertyName == m_aColorPropName )
-        return uno::makeAny( m_nDefaultColor );
+        return uno::Any( m_nDefaultColor );
 
     return uno::Any();
 }

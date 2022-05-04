@@ -114,7 +114,7 @@ void Theme::addTheme(const css::uno::Reference<css::drawing::XDrawPage>& xDrawPa
         aColorScheme,
     };
     uno::Reference<beans::XPropertySet> xPropertySet(xDrawPage, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("Theme", uno::makeAny(aValues));
+    xPropertySet->setPropertyValue("Theme", uno::Any(aValues));
 }
 
 } // namespace oox::drawingml

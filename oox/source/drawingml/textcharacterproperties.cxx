@@ -221,7 +221,7 @@ static void pushToGrabBag( PropertySet& rPropSet, const std::vector<PropertyValu
     Any aAnyGrabBag = rPropSet.getAnyProperty(PROP_CharInteropGrabBag);
     aAnyGrabBag >>= aGrabBag;
 
-    rPropSet.setAnyProperty(PROP_CharInteropGrabBag, makeAny(comphelper::concatSequences(aGrabBag, aVectorOfPropertyValues)));
+    rPropSet.setAnyProperty(PROP_CharInteropGrabBag, Any(comphelper::concatSequences(aGrabBag, aVectorOfPropertyValues)));
 }
 
 void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter ) const

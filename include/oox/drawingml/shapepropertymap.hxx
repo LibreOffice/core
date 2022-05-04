@@ -128,7 +128,7 @@ public:
     }
     bool setProperty(ShapeProperty ePropId, const ::Color& rValue)
     {
-        return setAnyProperty(ePropId, css::uno::makeAny(rValue));
+        return setAnyProperty(ePropId, css::uno::Any(rValue));
     }
 
     using PropertyMap::setAnyProperty;

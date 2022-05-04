@@ -630,9 +630,9 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     }
 
     // Set properties
-    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::makeAny( false ) );
-    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWWIDTH, uno::makeAny( false ) );
-    xSet->setPropertyValue( UNO_NAME_FILLSTYLE, uno::makeAny( drawing::FillStyle_SOLID ) );
+    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWHEIGHT, uno::Any( false ) );
+    xSet->setPropertyValue( UNO_NAME_TEXT_AUTOGROWWIDTH, uno::Any( false ) );
+    xSet->setPropertyValue( UNO_NAME_FILLSTYLE, uno::Any( drawing::FillStyle_SOLID ) );
 
     // ToDo: Old binary WordArt does not allow different styles for different paragraphs, so it
     // was not necessary to examine all paragraphs. Solution for DrawingML is needed.
@@ -646,33 +646,33 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
 
         if (pProperties.moBold.has() && pProperties.moBold.get())
         {
-            xSet->setPropertyValue( UNO_NAME_CHAR_WEIGHT, uno::makeAny( css::awt::FontWeight::BOLD ) );
+            xSet->setPropertyValue( UNO_NAME_CHAR_WEIGHT, uno::Any( css::awt::FontWeight::BOLD ) );
         }
         if (pProperties.moItalic.has() && pProperties.moItalic.get())
         {
-            xSet->setPropertyValue( UNO_NAME_CHAR_POSTURE, uno::makeAny( css::awt::FontSlant::FontSlant_ITALIC ) );
+            xSet->setPropertyValue( UNO_NAME_CHAR_POSTURE, uno::Any( css::awt::FontSlant::FontSlant_ITALIC ) );
         }
         if (pProperties.moHeight.has())
         {
             sal_Int32 nHeight = pProperties.moHeight.get() / 100;
-            xSet->setPropertyValue( UNO_NAME_CHAR_HEIGHT, uno::makeAny( nHeight ) );
+            xSet->setPropertyValue( UNO_NAME_CHAR_HEIGHT, uno::Any( nHeight ) );
         }
         if (pProperties.maFillProperties.maFillColor.isUsed())
         {
             const sal_Int32 aFillColor = static_cast<sal_Int32>(
                 pProperties.maFillProperties.maFillColor.getColor( rGraphicHelper ).GetRGBColor() );
-            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::makeAny( aFillColor ) );
+            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::Any( aFillColor ) );
         }
         else
         {
             // Set default color
-            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::makeAny( COL_BLACK ) );
+            xSet->setPropertyValue( UNO_NAME_FILLCOLOR, uno::Any( COL_BLACK ) );
         }
         {
             ParagraphAdjust eAdjust = ParagraphAdjust_LEFT;
             if (pParagraph->getProperties().getParaAdjust())
                 eAdjust = *pParagraph->getProperties().getParaAdjust();
-            xSet->setPropertyValue( "ParaAdjust", uno::makeAny( eAdjust ) );
+            xSet->setPropertyValue( "ParaAdjust", uno::Any( eAdjust ) );
             SdrObject* pShape = SdrObject::getSdrObjectFromXShape( xShape );
             assert(pShape);
             SdrTextHorzAdjust eHorzAdjust = lcl_convertAdjust( eAdjust );
@@ -722,7 +722,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
     // Apply geometry properties
     uno::Sequence<beans::PropertyValue> aPropertyValues(
         comphelper::InitPropertySequence(
-            { { sTextPath, uno::makeAny( true ) },
+            { { sTextPath, uno::Any( true ) },
                 { "TextPathMode",
                 uno::Any( drawing::EnhancedCustomShapeTextPathMode_PATH ) },
                 { "ScaleX", uno::Any(bScaleX) } } ) );
@@ -741,7 +741,7 @@ static void lcl_createPresetShape(const uno::Reference<drawing::XShape>& xShape,
 
     xSet->setPropertyValue(
         "CustomShapeGeometry",
-        uno::makeAny(comphelper::containerToSequence(aGeomPropVec)));
+        uno::Any(comphelper::containerToSequence(aGeomPropVec)));
 }
 
 // Some helper methods for createAndInsert
@@ -1147,7 +1147,7 @@ Reference< XShape > const & Shape::createAndInsert(
             // the shape first, and it can be read only after the shape is
             // inserted into the document, so delay the actual import until here
             SvGlobalName name(SO3_SM_CLASSID);
-            xSet->setPropertyValue("CLSID", uno::makeAny(name.GetHexName()));
+            xSet->setPropertyValue("CLSID", uno::Any(name.GetHexName()));
             uno::Reference<embed::XEmbeddedObject> const xObj(
                 xSet->getPropertyValue("EmbeddedObject"), uno::UNO_QUERY);
             if (xObj.is())
@@ -1185,14 +1185,14 @@ Reference< XShape > const & Shape::createAndInsert(
                 // Store style-related properties to InteropGrabBag to be able to export them back
                 uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
-                    {"SchemeClr", uno::makeAny(pLineRef->maPhClr.getSchemeColorName())},
-                    {"Idx", uno::makeAny(pLineRef->mnThemedIdx)},
-                    {"Color", uno::makeAny(nLinePhClr)},
-                    {"LineStyle", uno::makeAny(aLineProperties.getLineStyle())},
-                    {"LineCap", uno::makeAny(aLineProperties.getLineCap())},
-                    {"LineJoint", uno::makeAny(aLineProperties.getLineJoint())},
-                    {"LineWidth", uno::makeAny(aLineProperties.getLineWidth())},
-                    {"Transformations", uno::makeAny(pLineRef->maPhClr.getTransformations())}
+                    {"SchemeClr", uno::Any(pLineRef->maPhClr.getSchemeColorName())},
+                    {"Idx", uno::Any(pLineRef->mnThemedIdx)},
+                    {"Color", uno::Any(nLinePhClr)},
+                    {"LineStyle", uno::Any(aLineProperties.getLineStyle())},
+                    {"LineCap", uno::Any(aLineProperties.getLineCap())},
+                    {"LineJoint", uno::Any(aLineProperties.getLineJoint())},
+                    {"LineWidth", uno::Any(aLineProperties.getLineWidth())},
+                    {"Transformations", uno::Any(pLineRef->maPhClr.getTransformations())}
                 });
                 putPropertyToGrabBag( "StyleLnRef", Any( aProperties ) );
             }
@@ -1209,10 +1209,10 @@ Reference< XShape > const & Shape::createAndInsert(
                 {
                     uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                     {
-                        {"SchemeClr", uno::makeAny(sColorScheme)},
-                        {"Idx", uno::makeAny(pFillRef->mnThemedIdx)},
-                        {"Color", uno::makeAny(nFillPhClr)},
-                        {"Transformations", uno::makeAny(pFillRef->maPhClr.getTransformations())}
+                        {"SchemeClr", uno::Any(sColorScheme)},
+                        {"Idx", uno::Any(pFillRef->mnThemedIdx)},
+                        {"Color", uno::Any(nFillPhClr)},
+                        {"Transformations", uno::Any(pFillRef->maPhClr.getTransformations())}
                     });
 
                     putPropertyToGrabBag( "StyleFillRef", Any( aProperties ) );
@@ -1226,9 +1226,9 @@ Reference< XShape > const & Shape::createAndInsert(
                 // Store style-related properties to InteropGrabBag to be able to export them back
                 uno::Sequence<beans::PropertyValue> aProperties = comphelper::InitPropertySequence(
                 {
-                    {"SchemeClr", uno::makeAny(pEffectRef->maPhClr.getSchemeColorName())},
-                    {"Idx", uno::makeAny(pEffectRef->mnThemedIdx)},
-                    {"Transformations", uno::makeAny(pEffectRef->maPhClr.getTransformations())}
+                    {"SchemeClr", uno::Any(pEffectRef->maPhClr.getSchemeColorName())},
+                    {"Idx", uno::Any(pEffectRef->mnThemedIdx)},
+                    {"Transformations", uno::Any(pEffectRef->maPhClr.getTransformations())}
                 });
                 putPropertyToGrabBag( "StyleEffectRef", Any( aProperties ) );
             }
@@ -1300,7 +1300,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     OUString sShapePresetTypeName(reinterpret_cast< const char* >(
                         aNameSeq.getConstArray()), aNameSeq.getLength(), RTL_TEXTENCODING_UTF8);
                     pGrabBag[length].Value <<= sShapePresetTypeName;
-                    propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
+                    propertySet->setPropertyValue("FrameInteropGrabBag",uno::Any(aGrabBag));
                 }
                 //If the text box has links then save the link information so that
                 //it can be accessed in DomainMapper_Impl.cxx while chaining the text frames.
@@ -1318,7 +1318,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     pGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
                     pGrabBag[length + 2 ].Name = "Txbx-Seq";
                     pGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
-                    propertySet->setPropertyValue("FrameInteropGrabBag",uno::makeAny(aGrabBag));
+                    propertySet->setPropertyValue("FrameInteropGrabBag",uno::Any(aGrabBag));
                 }
 
                 // TextFrames have BackColor, not FillColor
@@ -1384,7 +1384,7 @@ Reference< XShape > const & Shape::createAndInsert(
                     {
                         aGrabBag = { aPair };
                     }
-                    xPropertySet->setPropertyValue(aGrabBagPropName, uno::makeAny(aGrabBag));
+                    xPropertySet->setPropertyValue(aGrabBagPropName, uno::Any(aGrabBag));
                 }
                 // TextFrames have ShadowFormat, not individual shadow properties.
                 std::optional<sal_Int32> oShadowDistance;
@@ -1456,7 +1456,7 @@ Reference< XShape > const & Shape::createAndInsert(
                 pGrabBag[length + 1 ].Value <<= getLinkedTxbxAttributes().id;
                 pGrabBag[length + 2 ].Name = "Txbx-Seq";
                 pGrabBag[length + 2 ].Value <<= getLinkedTxbxAttributes().seq;
-                propertySet->setPropertyValue("InteropGrabBag",uno::makeAny(aGrabBag));
+                propertySet->setPropertyValue("InteropGrabBag",uno::Any(aGrabBag));
             }
 
             // If the shape is a picture placeholder.
@@ -1610,9 +1610,9 @@ Reference< XShape > const & Shape::createAndInsert(
             {
                 uno::Sequence<beans::PropertyValue> a3DEffectsGrabBag = comphelper::InitPropertySequence(
                 {
-                    {"Camera", uno::makeAny(aCamera3DEffects)},
-                    {"LightRig", uno::makeAny(aLightRig3DEffects)},
-                    {"Shape3D", uno::makeAny(aShape3DEffects)}
+                    {"Camera", uno::Any(aCamera3DEffects)},
+                    {"LightRig", uno::Any(aLightRig3DEffects)},
+                    {"Shape3D", uno::Any(aShape3DEffects)}
                 });
                 putPropertyToGrabBag( "3DEffectProperties", Any( a3DEffectsGrabBag ) );
             }
@@ -1627,9 +1627,9 @@ Reference< XShape > const & Shape::createAndInsert(
                 {
                     uno::Sequence<beans::PropertyValue> aText3DEffectsGrabBag = comphelper::InitPropertySequence(
                     {
-                        {"Camera", uno::makeAny(aTextCamera3DEffects)},
-                        {"LightRig", uno::makeAny(aTextLightRig3DEffects)},
-                        {"Shape3D", uno::makeAny(aTextShape3DEffects)}
+                        {"Camera", uno::Any(aTextCamera3DEffects)},
+                        {"LightRig", uno::Any(aTextLightRig3DEffects)},
+                        {"Shape3D", uno::Any(aTextShape3DEffects)}
                     });
                     putPropertyToGrabBag( "Text3DEffectProperties", Any( aText3DEffectsGrabBag ) );
                 }
@@ -1717,10 +1717,10 @@ Reference< XShape > const & Shape::createAndInsert(
 
                 auto sHorzOverflow = getTextBody()->getTextProperties().msHorzOverflow;
                 if (!sHorzOverflow.isEmpty())
-                    putPropertyToGrabBag("horzOverflow", uno::makeAny(getTextBody()->getTextProperties().msHorzOverflow));
+                    putPropertyToGrabBag("horzOverflow", uno::Any(getTextBody()->getTextProperties().msHorzOverflow));
                 auto nVertOverflow = getTextBody()->getTextProperties().msVertOverflow;
                 if (!nVertOverflow.isEmpty())
-                    putPropertyToGrabBag("vertOverflow", uno::makeAny(getTextBody()->getTextProperties().msVertOverflow));
+                    putPropertyToGrabBag("vertOverflow", uno::Any(getTextBody()->getTextProperties().msVertOverflow));
             }
 
             // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks
@@ -1751,9 +1751,9 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             // use the same logic for rotation from VML exporter (SimpleShape::implConvertAndInsert at vmlshape.cxx)
             Degree100 nAngle = NormAngle36000( Degree100((mnRotation - nCameraRotation) / -600) );
-            aPropertySet.setAnyProperty( PROP_RotateAngle, makeAny( sal_Int32( nAngle.get() ) ) );
-            aPropertySet.setAnyProperty( PROP_HoriOrientPosition, makeAny( maPosition.X ) );
-            aPropertySet.setAnyProperty( PROP_VertOrientPosition, makeAny( maPosition.Y ) );
+            aPropertySet.setAnyProperty( PROP_RotateAngle, Any( sal_Int32( nAngle.get() ) ) );
+            aPropertySet.setAnyProperty( PROP_HoriOrientPosition, Any( maPosition.X ) );
+            aPropertySet.setAnyProperty( PROP_VertOrientPosition, Any( maPosition.Y ) );
         }
 
         // in some cases, we don't have any text body.
@@ -1793,7 +1793,7 @@ Reference< XShape > const & Shape::createAndInsert(
                         {
                             // If the first paragraph is centered, then set the para adjustment of
                             // the shape itself to centered as well.
-                            aPropertySet.setAnyProperty(PROP_ParaAdjust, uno::makeAny(eAdjust));
+                            aPropertySet.setAnyProperty(PROP_ParaAdjust, uno::Any(eAdjust));
                         }
                     }
                 }
@@ -1806,7 +1806,7 @@ Reference< XShape > const & Shape::createAndInsert(
             if(const ShapeStyleRef* pFontRef = getShapeStyleRef(XML_fontRef))
             {
                 ::Color nCharColor = pFontRef->maPhClr.getColor(rGraphicHelper);
-                aPropertySet.setAnyProperty(PROP_CharColor, uno::makeAny(nCharColor));
+                aPropertySet.setAnyProperty(PROP_CharColor, uno::Any(nCharColor));
             }
         }
 
@@ -1814,9 +1814,9 @@ Reference< XShape > const & Shape::createAndInsert(
         if ( aEffectProperties.maGlow.moGlowRad.has() )
         {
             uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue("GlowEffectRadius", makeAny(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.get())));
-            propertySet->setPropertyValue("GlowEffectColor", makeAny(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
-            propertySet->setPropertyValue("GlowEffectTransparency", makeAny(aEffectProperties.maGlow.moGlowColor.getTransparency()));
+            propertySet->setPropertyValue("GlowEffectRadius", Any(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.get())));
+            propertySet->setPropertyValue("GlowEffectColor", Any(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
+            propertySet->setPropertyValue("GlowEffectTransparency", Any(aEffectProperties.maGlow.moGlowColor.getTransparency()));
         }
 
         // Set soft edge effect properties
@@ -1824,7 +1824,7 @@ Reference< XShape > const & Shape::createAndInsert(
         {
             uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
             propertySet->setPropertyValue(
-                "SoftEdgeRadius", makeAny(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.get())));
+                "SoftEdgeRadius", Any(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.get())));
         }
     }
 

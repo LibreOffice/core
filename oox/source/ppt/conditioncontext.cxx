@@ -98,7 +98,7 @@ namespace oox::ppt {
     {
         if( maCond.mnType == 0 || maCond.mnType == PPT_TOKEN(tn))
         {
-            maCond.maValue = (maEvent.Trigger == EventTrigger::NONE) ? maEvent.Offset : makeAny( maEvent );
+            maCond.maValue = (maEvent.Trigger == EventTrigger::NONE) ? maEvent.Offset : Any( maEvent );
         }
     }
 

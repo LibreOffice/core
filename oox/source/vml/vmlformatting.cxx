@@ -941,7 +941,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
             aGeomPropSeq.realloc(nSize+1);
             aGeomPropSeq.getArray()[nSize] = lcl_createTextpathProps();
         }
-        rPropMap.setAnyProperty(PROP_CustomShapeGeometry, uno::makeAny(aGeomPropSeq));
+        rPropMap.setAnyProperty(PROP_CustomShapeGeometry, uno::Any(aGeomPropSeq));
     }
     if (moStyle.has())
     {
@@ -960,7 +960,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                         aValue = aValue.copy(1, aValue.getLength() - 2);
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("CharFontName", uno::makeAny(aValue));
+                    xPropertySet->setPropertyValue("CharFontName", uno::Any(aValue));
                     sFont = aValue;
                 }
                 else if (aName == "font-size")
@@ -969,7 +969,7 @@ void TextpathModel::pushToPropMap(ShapePropertyMap& rPropMap, const uno::Referen
                     float nSize = drawingml::convertEmuToPoints(lclGetEmu(rGraphicHelper, aOptString, 1));
 
                     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
-                    xPropertySet->setPropertyValue("CharHeight", uno::makeAny(nSize));
+                    xPropertySet->setPropertyValue("CharHeight", uno::Any(nSize));
                 }
             }
         }

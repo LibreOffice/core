@@ -196,8 +196,8 @@ sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDe
     {
         uno::Sequence<uno::Any> aArguments(comphelper::InitAnyPropertySequence(
         {
-            {"IsPPTM", uno::makeAny(exportVBA())},
-            {"IsTemplate", uno::makeAny(isExportTemplate())},
+            {"IsPPTM", uno::Any(exportVBA())},
+            {"IsTemplate", uno::Any(isExportTemplate())},
         }));
 
         Reference<css::lang::XMultiServiceFactory> aFactory(getComponentContext()->getServiceManager(), UNO_QUERY_THROW);

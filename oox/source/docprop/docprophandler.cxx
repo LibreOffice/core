@@ -373,7 +373,7 @@ void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
                         // the property has string type, so it is valid
                         // even with an empty value - characters() has
                         // not been called in that case
-                        AddCustomProperty(uno::makeAny(OUString()));
+                        AddCustomProperty(uno::Any(OUString()));
                     }
                 break;
             }
@@ -412,27 +412,27 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                 {
                 case COREPR_TOKEN( category ):
                     m_aCustomPropertyName = "OOXMLCorePropertyCategory";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case COREPR_TOKEN( contentStatus ):
                     m_aCustomPropertyName = "OOXMLCorePropertyContentStatus";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case COREPR_TOKEN( contentType ):
                     m_aCustomPropertyName = "OOXMLCorePropertyContentType";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case DC_TOKEN( identifier ):
                     m_aCustomPropertyName = "OOXMLCorePropertyIdentifier";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case COREPR_TOKEN( version ):
                     m_aCustomPropertyName = "OOXMLCorePropertyVersion";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case DCT_TOKEN( created ):
@@ -536,28 +536,28 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     m_aCustomPropertyName = "HyperlinksChanged";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toBoolean() )
-                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                        AddCustomProperty( uno::Any( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( LinksUpToDate ):
                     m_aCustomPropertyName = "LinksUpToDate";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toBoolean() )
-                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                        AddCustomProperty( uno::Any( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( ScaleCrop ):
                     m_aCustomPropertyName = "ScaleCrop";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toBoolean() )
-                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                        AddCustomProperty( uno::Any( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( SharedDoc ):
                     m_aCustomPropertyName = "ShareDoc";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toBoolean() )
-                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                        AddCustomProperty( uno::Any( aChars.toBoolean() ) ); // the property has boolean type
                     break;
 
                 case EXTPR_TOKEN( DocSecurity ):
@@ -567,60 +567,60 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     // 1 - password protected, 2 - recommended read-only
                     // 4 - enforced read-only, 8 - locked for annotation
                     if ( aChars.toInt32() != 0 )
-                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                        AddCustomProperty( uno::Any( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( HiddenSlides ):
                     m_aCustomPropertyName = "HiddenSlides";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toInt32() != 0 )
-                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                        AddCustomProperty( uno::Any( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( MMClips ):
                     m_aCustomPropertyName = "MMClips";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toInt32() != 0 )
-                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                        AddCustomProperty( uno::Any( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( Notes ):
                     m_aCustomPropertyName = "Notes";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toInt32() != 0 )
-                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                        AddCustomProperty( uno::Any( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( Slides ):
                     m_aCustomPropertyName = "Slides";
                     // tdf#103987 Don't create custom property if the value is default
                     if ( aChars.toInt32() != 0 )
-                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                        AddCustomProperty( uno::Any( aChars.toInt32() ) ); // the property has sal_Int32 type
                     break;
 
                 case EXTPR_TOKEN( AppVersion ):
                     m_aCustomPropertyName = "AppVersion";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case EXTPR_TOKEN( Company ):
                     m_aCustomPropertyName = "Company";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case EXTPR_TOKEN( HyperlinkBase ):
                     m_aCustomPropertyName = "HyperlinkBase";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case EXTPR_TOKEN( Manager ):
                     m_aCustomPropertyName = "Manager";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case EXTPR_TOKEN( PresentationFormat ):
                     m_aCustomPropertyName = "PresentationFormat";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::Any( aChars ) ); // the property has string type
                     break;
 
                 case EXTPR_TOKEN( Lines ):
@@ -643,42 +643,42 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     switch( m_nType )
                     {
                     case VT_TOKEN( bool ):
-                        AddCustomProperty( uno::makeAny( aChars.toBoolean() ) );
+                        AddCustomProperty( uno::Any( aChars.toBoolean() ) );
                         break;
 
                     case VT_TOKEN( bstr ):
                     case VT_TOKEN( lpstr ):
                     case VT_TOKEN( lpwstr ):
                         // the property has string type
-                        AddCustomProperty( uno::makeAny( AttributeConversion::decodeXString( aChars ) ) );
+                        AddCustomProperty( uno::Any( AttributeConversion::decodeXString( aChars ) ) );
                         m_CustomStringPropertyState = INSERTED;
                         break;
 
                     case VT_TOKEN( date ):
                     case VT_TOKEN( filetime ):
-                        AddCustomProperty( uno::makeAny( GetDateTimeFromW3CDTF( aChars ) ) );
+                        AddCustomProperty( uno::Any( GetDateTimeFromW3CDTF( aChars ) ) );
                         break;
 
                     case VT_TOKEN( i1 ):
                     case VT_TOKEN( i2 ):
-                        AddCustomProperty( uno::makeAny( static_cast<sal_Int16>(aChars.toInt32()) ) );
+                        AddCustomProperty( uno::Any( static_cast<sal_Int16>(aChars.toInt32()) ) );
                         break;
 
                     case VT_TOKEN( i4 ):
                     case VT_TOKEN( int ):
-                        AddCustomProperty( uno::makeAny( aChars.toInt32() ) );
+                        AddCustomProperty( uno::Any( aChars.toInt32() ) );
                         break;
 
                     case VT_TOKEN( i8 ):
-                        AddCustomProperty( uno::makeAny( aChars.toInt64() ) );
+                        AddCustomProperty( uno::Any( aChars.toInt64() ) );
                         break;
 
                     case VT_TOKEN( r4 ):
-                        AddCustomProperty( uno::makeAny( aChars.toFloat() ) );
+                        AddCustomProperty( uno::Any( aChars.toFloat() ) );
                         break;
 
                     case VT_TOKEN( r8 ):
-                        AddCustomProperty( uno::makeAny( aChars.toDouble() ) );
+                        AddCustomProperty( uno::Any( aChars.toDouble() ) );
                         break;
 
                     default:

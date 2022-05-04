@@ -64,17 +64,17 @@ void GrabBagStack::pop()
     Sequence<PropertyValue> aSequence(comphelper::containerToSequence(mCurrentElement.maPropertyList));
     mCurrentElement = mStack.top();
     mStack.pop();
-    appendElement(aName, makeAny(aSequence));
+    appendElement(aName, Any(aSequence));
 }
 
 void GrabBagStack::addInt32(const OUString& aElementName, sal_Int32 aIntValue)
 {
-    appendElement(aElementName, makeAny(aIntValue));
+    appendElement(aElementName, Any(aIntValue));
 }
 
 void GrabBagStack::addString(const OUString& aElementName, const OUString& aStringValue)
 {
-    appendElement(aElementName, makeAny(aStringValue));
+    appendElement(aElementName, Any(aStringValue));
 }
 
 } // namespace oox
