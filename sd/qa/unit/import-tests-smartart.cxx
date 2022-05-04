@@ -73,6 +73,7 @@ public:
     void testCnt();
     void testDir();
     void testTdf148665();
+    void testTdf148921();
     void testMaxDepth();
     void testRotation();
     void testTextAutoRotation();
@@ -127,6 +128,7 @@ public:
     CPPUNIT_TEST(testCnt);
     CPPUNIT_TEST(testDir);
     CPPUNIT_TEST(testTdf148665);
+    CPPUNIT_TEST(testTdf148921);
     CPPUNIT_TEST(testMaxDepth);
     CPPUNIT_TEST(testRotation);
     CPPUNIT_TEST(testTextAutoRotation);
@@ -352,6 +354,32 @@ void SdImportTestSmartArt::testTdf148665()
     CPPUNIT_ASSERT_EQUAL(OUString("Susu"), xText1->getString());
     uno::Reference<text::XText> xText2(xShapeGroup->getByIndex(3), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(OUString("Sasa Haha"), xText2->getString());
+
+    xDocShRef->DoClose();
+}
+
+void SdImportTestSmartArt::testTdf148921()
+{
+    sd::DrawDocShellRef xDocShRef
+        = loadURL(m_directories.getURLFromSrc(u"sd/qa/unit/data/pptx/tdf148921.pptx"), PPTX);
+    uno::Reference<drawing::XShapes> xShapeGroup(getShapeFromPage(0, 0, xDocShRef),
+                                                 uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup->getCount());
+
+    uno::Reference<drawing::XShapes> xShapeGroup2(xShapeGroup->getByIndex(1), uno::UNO_QUERY_THROW);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 2
+    // - Actual  : 4
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xShapeGroup2->getCount());
+
+    uno::Reference<drawing::XShape> xShape0(xShapeGroup2->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape1(xShapeGroup2->getByIndex(1), uno::UNO_QUERY_THROW);
+
+    CPPUNIT_ASSERT(xShape0->getPosition().X < xShape1->getPosition().X);
+    CPPUNIT_ASSERT(xShape0->getPosition().Y < xShape1->getPosition().Y);
+    CPPUNIT_ASSERT(xShape0->getSize().Height > xShape1->getSize().Height);
+    CPPUNIT_ASSERT(xShape0->getSize().Width > xShape1->getSize().Width);
 
     xDocShRef->DoClose();
 }
