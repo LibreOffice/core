@@ -116,6 +116,13 @@ struct SvxShapeImpl
     bool            mbHasSdrObjectOwnership;
     bool            mbDisposing;
 
+    /** CL, OD 2005-07-19 #i52126# - this is initially 0 and set when
+     *  a SvxShape::Create() call is executed. It is then set to the created
+     *  SdrObject so a multiple call to SvxShape::Create() with same SdrObject
+     *  is prohibited.
+     */
+    ::tools::WeakReference< SdrObject > mpCreatedObj;
+
     // for xComponent
     ::comphelper::OInterfaceContainerHelper3<css::lang::XEventListener> maDisposeListeners;
     svx::PropertyChangeNotifier       maPropertyNotifier;
@@ -379,7 +386,7 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     if ( !pNewObj )
         return;
 
-    SdrObject* pCreatedObj = mpSdrObjectWeakReference.get();
+    SdrObject* pCreatedObj = mpImpl->mpCreatedObj.get();
     assert( ( !pCreatedObj || ( pCreatedObj == pNewObj ) ) &&
         "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
 
@@ -387,14 +394,20 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     if ( pCreatedObj == pNewObj )
         return;
 
-    if( pCreatedObj )
+    // Correct condition (#i52126#)
+    mpImpl->mpCreatedObj = pNewObj;
+
+    if( HasSdrObject() )
     {
-        EndListening( pCreatedObj->getSdrModelFromSdrObject() );
+        EndListening( GetSdrObject()->getSdrModelFromSdrObject() );
     }
 
     mpSdrObjectWeakReference.reset( pNewObj );
 
-    StartListening( pNewObj->getSdrModelFromSdrObject() );
+    if( HasSdrObject() )
+    {
+        StartListening( GetSdrObject()->getSdrModelFromSdrObject() );
+    }
 
     OSL_ENSURE( !mbIsMultiPropertyCall, "SvxShape::Create: hmm?" );
         // this was previously set in impl_initFromSdrObject, but I think it was superfluous
@@ -405,19 +418,19 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     ObtainSettingsFromPropertySet( *mpPropSet );
 
     // save user call
-    SdrObjUserCall* pUser = pNewObj->GetUserCall();
-    pNewObj->SetUserCall(nullptr);
+    SdrObjUserCall* pUser = GetSdrObject()->GetUserCall();
+    GetSdrObject()->SetUserCall(nullptr);
 
     setPosition( maPosition );
     setSize( maSize );
 
     // restore user call after we set the initial size
-    pNewObj->SetUserCall( pUser );
+    GetSdrObject()->SetUserCall( pUser );
 
     // if this shape was already named, use this name
     if( !maShapeName.isEmpty() )
     {
-        pNewObj->SetName( maShapeName );
+        GetSdrObject()->SetName( maShapeName );
         maShapeName.clear();
     }
 }
