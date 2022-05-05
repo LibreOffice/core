@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "420c8d14_58975063",
+        "filename": "sc/source/ui/view/spellcheckcontext.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-05-05T01:52:23Z",
+      "side": 1,
+      "message": "BTW, you don\u0027t modify the content of the document during spell checking. Point of my rework was to do the spell checking purely as a view event without modifying the document since the spell check is supposed to be an immutable operation.  Dennis Francis then later reworked this to add the cache mechanism, but I don\u0027t think his rework has changed my original goal.",
+      "revId": "d647d2b54bb1e0c9acda00adada0303209dfe251",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
