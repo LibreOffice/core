@@ -156,6 +156,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/crsr/BlockCursor \
     sw/source/core/crsr/bookmark \
     sw/source/core/crsr/callnk \
+    sw/source/core/crsr/contentcontrolbutton \
     sw/source/core/crsr/crbm \
     sw/source/core/crsr/crossrefbookmark \
     sw/source/core/crsr/crsrsh \
@@ -163,6 +164,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/crsr/crstrvl1 \
     sw/source/core/crsr/DateFormFieldButton \
     sw/source/core/crsr/DropDownFormFieldButton \
+    sw/source/core/crsr/dropdowncontentcontrolbutton \
     sw/source/core/crsr/findattr \
     sw/source/core/crsr/findcoll \
     sw/source/core/crsr/findfmt \

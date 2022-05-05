@@ -121,6 +121,7 @@ $(eval $(call gb_UIConfig_add_uifiles,modules/swriter,\
 	sw/uiconfig/swriter/ui/combobox \
 	sw/uiconfig/swriter/ui/comboboxfragment \
 	sw/uiconfig/swriter/ui/conditionpage \
+	sw/uiconfig/swriter/ui/contentcontroldropdown \
 	sw/uiconfig/swriter/ui/converttexttable \
 	sw/uiconfig/swriter/ui/createaddresslist \
 	sw/uiconfig/swriter/ui/createauthorentry \

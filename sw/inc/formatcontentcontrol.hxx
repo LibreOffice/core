@@ -169,6 +169,8 @@ public:
 
     std::vector<SwContentControlListItem> GetListItems() const { return m_aListItems; }
 
+    bool HasListItems() const { return !m_aListItems.empty(); }
+
     void SetListItems(const std::vector<SwContentControlListItem>& rListItems)
     {
         m_aListItems = rListItems;
