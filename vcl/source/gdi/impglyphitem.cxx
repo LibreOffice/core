@@ -345,9 +345,6 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
                            == CachedGlyphsKey(outputDevice, text, mLastSubstringKey->index,
                                               mLastSubstringKey->len, nLogicWidth))
                 {
-                    std::unique_ptr<SalLayout> layout
-                        = outputDevice->ImplLayout(text, nIndex, nLen, Point(0, 0), nLogicWidth, {},
-                                                   glyphItemsOnlyLayout, layoutCache);
                     GetLayoutGlyphs(outputDevice, text, 0, text.getLength(), nLogicWidth,
                                     layoutCache);
                     itWhole = mCachedGlyphs.find(keyWhole);

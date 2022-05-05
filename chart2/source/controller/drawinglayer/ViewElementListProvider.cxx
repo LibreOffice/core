@@ -110,10 +110,6 @@ SdrObjList* ViewElementListProvider::GetSymbolList() const
     {
         //@todo use mutex
 
-        //get shape factory
-        uno::Reference<lang::XMultiServiceFactory> xShapeFactory(
-            m_pDrawModelWrapper->getShapeFactory());
-
         //get hidden draw page (target):
         rtl::Reference<SvxDrawPage> xTarget = m_pDrawModelWrapper->getHiddenDrawPage();
 

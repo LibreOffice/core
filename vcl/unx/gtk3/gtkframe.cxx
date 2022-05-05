@@ -3163,8 +3163,6 @@ IMPL_LINK_NOARG(GtkSalFrame, AsyncScroll, Timer *, void)
 {
     assert(!m_aPendingScrollEvents.empty());
 
-    SalWheelMouseEvent aEvent;
-
     GdkEvent* pEvent = m_aPendingScrollEvents.back();
     auto nEventX = pEvent->scroll.x;
     auto nEventY = pEvent->scroll.y;

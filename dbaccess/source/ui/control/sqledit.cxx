@@ -86,7 +86,6 @@ void SQLEditView::DisableInternalUndo()
 
 void SQLEditView::SetItemPoolFont(SfxItemPool* pItemPool)
 {
-    StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
     OUString sFontName(officecfg::Office::Common::Font::SourceViewFont::FontName::get().value_or(OUString()));
     if (sFontName.isEmpty())
     {

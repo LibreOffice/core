@@ -3234,7 +3234,6 @@ void SAL_CALL ToolbarLayoutManager::startDocking( const awt::DockingEvent& e )
     bool bWinFound( false );
 
     SolarMutexClearableGuard aReadGuard;
-    uno::Reference< awt::XWindow2 > xContainerWindow( m_xContainerWindow );
     uno::Reference< awt::XWindow2 > xWindow( e.Source, uno::UNO_QUERY );
     aReadGuard.clear();
 

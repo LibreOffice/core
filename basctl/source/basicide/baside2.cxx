@@ -459,7 +459,6 @@ void ModulWindow::LoadBasic()
 
 void ModulWindow::SaveBasicSource()
 {
-    Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
     sfx2::FileDialogHelper aDlg(ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD,
                                 FileDialogFlags::NONE, this->GetFrameWeld());
     aDlg.SetContext(sfx2::FileDialogHelper::BasicExportSource);

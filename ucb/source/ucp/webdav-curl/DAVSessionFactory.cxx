@@ -44,8 +44,6 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
 
     if ( aIt == m_aMap.end() )
     {
-        CurlUri const aURI( inUri );
-
         std::unique_ptr< DAVSession > xElement(
             new CurlSession(rxContext, this, inUri, rFlags, *m_xProxyDecider) );
 
@@ -64,11 +62,6 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
     {
         osl_atomic_decrement( &aIt->second->m_nRefCount );
         aIt->second->m_aContainerIt = m_aMap.end();
-
-        // If URL scheme is different from http or https we definitely
-        // have to use a proxy and therefore can optimize the getProxy
-        // call a little:
-        CurlUri const aURI( inUri );
 
         aIt->second = new CurlSession(rxContext, this, inUri, rFlags, *m_xProxyDecider);
         aIt->second->m_aContainerIt = aIt;

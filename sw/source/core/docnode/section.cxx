@@ -903,7 +903,6 @@ void SwSectionFormat::UpdateParent()
         pEditInReadonly = &pPS->GetFormat()->GetEditInReadonly();
         bIsHidden = pPS->IsHiddenFlag();
     }
-    SwIterator<SwSectionFormat,SwSectionFormat> aIter(*this);
     if(!pProtect->IsContentProtected() != !pSection->IsProtectFlag())
         CallSwClientNotify(sw::LegacyModifyHint(pProtect, pProtect));
 

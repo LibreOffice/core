@@ -88,9 +88,6 @@ bool NetChartTypeTemplate::matchesTemplate(
 {
     bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
-    rtl::Reference< ChartType > xChartType =
-        DiagramHelper::getChartTypeByIndex( xDiagram, 0 );
-
     if( bResult )
     {
         //filled net chart?:

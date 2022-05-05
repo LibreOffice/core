@@ -107,6 +107,8 @@ public:
             return true;
         if (var->isExceptionVariable()) // not interesting
             return true;
+        if (isa<DecompositionDecl>(var))
+            return true;
 
         auto type = var->getType().getCanonicalType().getUnqualifiedType();
         auto typeName = type.getAsString();
@@ -125,10 +127,10 @@ public:
             "BoolResetter",
             "boost::io::basic_ios_all_saver<char, struct std::char_traits<char> >",
             "BorderLinesGuard",
+            "BorderTest",
             "BroadcastRecalcOnRefMoveGuard",
             "CacheLockGuard",
             "cc_reset",
-            "ViewCallback",
             "chart::ControllerLockGuard",
             "chart::ControllerLockGuardUNO",
             "chart::HiddenUndoContext",
@@ -173,6 +175,7 @@ public:
             "dbaxml::(anonymous namespace)::FocusWindowWaitGuard",
             "DBG_Model",
             "DeactivateUpdateMode",
+            "DepthProtect",
             "desktop::Desktop",
             "desktop::(anonymous namespace)::ConditionSetGuard",
             "desktop::(anonymous namespace)::RefClearGuard<class "
@@ -184,6 +187,7 @@ public:
             "DisableCallbacks",
             "DisableGetPivotData",
             "DispatchMutexLock_Impl",
+            "DisplayLockGuard",
             "DocTemplLocker_Impl",
             "DocumentSettingsGuard",
             "DocxTableExportContext",
@@ -223,11 +227,13 @@ public:
             "HelpParser",
             "HtmlExport",
             "HTMLSaveData",
+            "http_dav_ucp::CurlUri",
             "IMapCompat",
             "jni_uno::JLocalAutoRef",
             "LoadMediumGuard",
             "LockGuard",
             "MacroInterpretIncrementer",
+            "MakeAllOutlineContentTemporarilyVisible",
             "MailMergeExecuteFinalizer",
             "ModifyBlocker_Impl",
             "MutexRelease",
@@ -255,8 +261,8 @@ public:
             "rptui::OXUndoEnvironment::OUndoEnvLock",
             "PaMIntoCursorShellRing",
             "ParserCleanup",
-            "BorderTest",
             "pcr::ComposedUIAutoFireGuard",
+            "PngDestructor",
             "writerperfect::(anonymous namespace)::PositionHolder",
             "pq_sdbc_driver::DisposeGuard",
             "PropertyChangeNotifier",
@@ -276,6 +282,7 @@ public:
             "SaveRunState",
             "SbiExpression",
             "sc::AutoCalcSwitch",
+            "sc::DelayDeletingBroadcasters",
             "sc::DelayFormulaGroupingSwitch",
             "sc::IdleSwitch",
             "sc::UndoSwitch",
@@ -317,7 +324,9 @@ public:
             "sd::ModifyGuard",
             "sd::OutlineViewModelChangeGuard",
             "setFastDocumentHandlerGuard",
+            "SmMathConfig::CommitLocker",
             "SfxErrorContext",
+            "SfxFilterListener",
             "SfxObjectShellLock",
             "SfxProgress",
             "SfxSaveGuard",
@@ -327,20 +336,18 @@ public:
             "SolarMutexGuard",
             "SolarMutexReleaser",
             "StackHack",
+            "std::lock_guard<class std::mutex>",
             "std::scoped_lock<class std::mutex>",
-            "std::unique_ptr<class com::sun::star::uno::ContextLayer, struct "
-            "std::default_delete<class com::sun::star::uno::ContextLayer> >",
-            "std::unique_ptr<class weld::WaitObject, struct std::default_delete<class "
-            "weld::WaitObject> >",
+            "std::unique_lock<class std::mutex>",
+            "std::unique_lock<class std::recursive_mutex>",
+            "std::unique_ptr<class com::sun::star::uno::ContextLayer>",
+            "std::unique_ptr<class weld::WaitObject>",
             "std::unique_ptr<class ClearableClipRegion, struct o3tl::default_delete<class "
-            "ClearableClipRegion> >",
-            "std::unique_ptr<class SwDocShell::LockAllViewsGuard, struct "
-            "std::default_delete<class "
-            "SwDocShell::LockAllViewsGuard> >",
-            "std::unique_ptr<class SwSaveFootnoteHeight, struct std::default_delete<class "
-            "SwSaveFootnoteHeight> >",
-            "std::unique_ptr<class SwModelTestBase::Resetter, struct std::default_delete<class "
-            "SwModelTestBase::Resetter> >",
+            "ClearableClipRegion>>",
+            "std::unique_ptr<class SfxObjectShell::LockAllViewsGuard>",
+            "std::unique_ptr<class SwDocShell::LockAllViewsGuard>",
+            "std::unique_ptr<class SwSaveFootnoteHeight>",
+            "std::unique_ptr<class SwModelTestBase::Resetter>",
             "StreamExceptionsEnabler",
             "SvAddressParser_Impl",
             "svl::undo::impl::LockGuard",
@@ -349,8 +356,9 @@ public:
             "SvXMLElementExport",
             "svxform::(anonymous namespace)::QuitGuard",
             "sw::DrawUndoGuard",
-            "sw::UndoGuard",
+            "sw::FlyCreationSuppressor",
             "sw::GroupUndoGuard",
+            "sw::UndoGuard",
             "sw::(anonymous namespace)::CursorGuard",
             "SwActContext",
             "SwAutoFormat",
@@ -371,8 +379,7 @@ public:
             "SwFootnoteSave",
             "SwFrameDeleteGuard",
             "SwModelTestBase::Resetter",
-            "std::unique_ptr<class ScTokenArray, struct std::default_delete<class "
-            "ScTokenArray> >", // ScCompiler::CompileString has nasty semantics
+            "std::unique_ptr<class ScTokenArray>", // ScCompiler::CompileString has nasty semantics
             "Resetter",
             "SwFrameSwapper",
             "SwFlyNotify",
@@ -415,6 +422,9 @@ public:
             "TimerTriggeredControllerLock",
             "ToggleSaveToModule",
             "toolkit::(anonymous namespace)::ResetFlagOnExit",
+            "tools::ScopedJsonWriterArray",
+            "tools::ScopedJsonWriterNode",
+            "tools::ScopedJsonWriterStruct",
             "TravelSuspension",
             "TreeUpdateSwitch",
             "rptui::UndoContext",
@@ -435,6 +445,7 @@ public:
             "VerbExecutionControllerGuard",
             "VersionCompatRead",
             "VersionCompatWrite",
+            "ViewCallback",
             "SlideShowImpl::WaitSymbolLock",
             "weld::WaitObject",
             "writerfilter::ooxml::(anonymous namespace)::StatusIndicatorGuard",
