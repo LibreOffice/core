@@ -374,6 +374,12 @@ CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF16Adobe)
     verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "pdf16adobe.pdf", 1);
 }
 
+CPPUNIT_TEST_FIXTURE(PDFSigningTest, testTdf145312)
+{
+    // Without the fix in place, this test would have crashed
+    verify(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf145312.pdf", 2);
+}
+
 /// Test adding a signature to a PDF 1.6 document.
 CPPUNIT_TEST_FIXTURE(PDFSigningTest, testPDF16Add)
 {
