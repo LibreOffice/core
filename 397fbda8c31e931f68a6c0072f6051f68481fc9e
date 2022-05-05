@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b04e93_50872a08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-05T19:25:24Z",
+      "side": 1,
+      "message": "Caolan: why is there a functional difference between gtk and other integrations in this? ",
+      "revId": "397fbda8c31e931f68a6c0072f6051f68481fc9e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
