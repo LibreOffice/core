@@ -2656,6 +2656,20 @@ void ShapeFactory::removeSubShapes( const uno::Reference< drawing::XShapes >& xS
     }
 }
 
+rtl::Reference<SvxTableShape> ShapeFactory::createTable(uno::Reference<drawing::XShapes>& xTarget)
+{
+    if (!xTarget.is())
+        return nullptr;
+
+    //create table shape
+    rtl::Reference<SvxTableShape> xShape = new SvxTableShape(nullptr);
+    xShape->setShapeKind(OBJ_TABLE);
+    uno::Reference<drawing::XShape> xShapeUno(xShape);
+    xTarget->add(xShapeUno);
+
+    return xShape;
+}
+
 } //namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
