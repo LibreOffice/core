@@ -30,6 +30,7 @@ namespace sdr::overlay { class OverlayObject; }
 
 class SwCursorShell;
 class SfxViewShell;
+class SwContentControlButton;
 
 // From here classes/methods for non-text cursor.
 
@@ -86,6 +87,7 @@ class SwSelPaintRects : public SwRects
     std::unique_ptr<sw::overlay::OverlayRangesOutline> m_pTextInputFieldOverlay;
     bool m_bShowContentControlOverlay;
     std::unique_ptr<sw::overlay::OverlayRangesOutline> m_pContentControlOverlay;
+    VclPtr<SwContentControlButton> m_pContentControlButton;
 
     void HighlightInputField();
     void HighlightContentControl();
