@@ -2522,6 +2522,8 @@ SwFrameFormat::SwFrameFormat(
 :   SwFormat(rPool, pFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_ffList(nullptr)
 {
+    if (Which() == RES_DRAWFRMFMT)
+        m_pTextBoxHandler.reset(new SwTextBoxHandler(*this));
 }
 
 SwFrameFormat::SwFrameFormat(
@@ -2533,6 +2535,8 @@ SwFrameFormat::SwFrameFormat(
 :   SwFormat(rPool, rFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_ffList(nullptr)
 {
+    if (Which() == RES_DRAWFRMFMT)
+        m_pTextBoxHandler.reset(new SwTextBoxHandler(*this));
 }
 
 SwFrameFormat::~SwFrameFormat()
@@ -2555,6 +2559,8 @@ SwFrameFormat::~SwFrameFormat()
         m_pOtherTextBoxFormats->DelTextBox(this);
 
     m_pOtherTextBoxFormats.reset();
+
+    m_pTextBoxHandler.reset();
 }
 
 void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )

@@ -28,6 +28,7 @@
 #include "swdllapi.h"
 #include <list>
 #include "textboxhelper.hxx"
+#include <textboxhandler.hxx>
 
 class SwFlyFrame;
 class SwFlyDrawContact;
@@ -76,6 +77,8 @@ class SW_DLLPUBLIC SwFrameFormat
 
     std::shared_ptr< SwTextBoxNode > m_pOtherTextBoxFormats;
 
+    SwTextBoxHandlerPtr m_pTextBoxHandler;
+
     struct change_name
     {
         change_name(const OUString &rName) : mName(rName) {}
@@ -104,6 +107,10 @@ public:
 
     const std::shared_ptr< SwTextBoxNode >& GetOtherTextBoxFormats() const { return m_pOtherTextBoxFormats; };
     void SetOtherTextBoxFormats(const std::shared_ptr<SwTextBoxNode>& rNew) { m_pOtherTextBoxFormats = rNew; };
+
+    const SwTextBoxHandlerPtr& GetTextBoxHandler() const { return m_pTextBoxHandler; };
+    void SetTextBoxHandler(const SwTextBoxHandlerPtr& rNew) { m_pTextBoxHandler = rNew; };
+
 
     virtual ~SwFrameFormat() override;
 
