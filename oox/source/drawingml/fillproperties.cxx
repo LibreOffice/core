@@ -397,7 +397,7 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
                 {
                     rPropMap.setProperty(PROP_FillColorTheme, nPhClrTheme);
                 }
-                else
+                else if (maFillColor.getTintOrShade() == 0)
                 {
                     rPropMap.setProperty(PROP_FillColorTheme, maFillColor.getSchemeColorIndex());
                     rPropMap.setProperty(PROP_FillColorLumMod, maFillColor.getLumMod());
