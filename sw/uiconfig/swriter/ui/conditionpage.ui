@@ -219,7 +219,7 @@
                 <child>
                   <object class="GtkComboBoxText" id="filter">
                     <property name="visible">True</property>
-                    <property name="sensitive">False</property>
+                    <property name="sensitive">True</property>
                     <property name="can-focus">False</property>
                     <items>
                       <item translatable="yes" context="conditionpage|filter">Table Header</item>
