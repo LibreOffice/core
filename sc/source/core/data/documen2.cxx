@@ -67,6 +67,7 @@
 #include <listenercalls.hxx>
 #include <recursionhelper.hxx>
 #include <lookupcache.hxx>
+#include <rangecache.hxx>
 #include <externalrefmgr.hxx>
 #include <viewdata.hxx>
 #include <viewutil.hxx>
@@ -1193,6 +1194,29 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
     return *pCache;
 }
 
+ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, bool bDescending, ScInterpreterContext* pContext )
+{
+    ScSortedRangeCache* pCache = nullptr;
+    if (!pContext->mxScSortedRangeCache)
+        pContext->mxScSortedRangeCache.reset(new ScSortedRangeCacheMap);
+    ScSortedRangeCacheMap* pCacheMap = pContext->mxScSortedRangeCache.get();
+    // insert with temporary value to avoid doing two lookups
+    auto [findIt, bInserted] = pCacheMap->aCacheMap.emplace(ScSortedRangeCache::HashKey{rRange, bDescending}, nullptr);
+    if (bInserted)
+    {
+        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, bDescending, *pCacheMap);
+        pCache = findIt->second.get();
+        // The StartListeningArea() call is not thread-safe, as all threads
+        // would access the same SvtBroadcaster.
+        std::unique_lock guard( mScLookupMutex );
+        StartListeningArea(rRange, false, pCache);
+    }
+    else
+        pCache = (*findIt).second.get();
+
+    return *pCache;
+}
+
 void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
 {
     // Data changes leading to this should never happen during calculation (they are either
@@ -1212,12 +1236,33 @@ void ScDocument::RemoveLookupCache( ScLookupCache & rCache )
     OSL_FAIL( "ScDocument::RemoveLookupCache: range not found in hash map");
 }
 
+void ScDocument::RemoveSortedRangeCache( ScSortedRangeCache & rCache )
+{
+    // Data changes leading to this should never happen during calculation (they are either
+    // a result of user input or recalc). If it turns out this can be the case, locking is needed
+    // here and also in ScSortedRangeCache::Notify().
+    assert(!IsThreadedGroupCalcInProgress());
+    auto & cacheMap = rCache.getCacheMap();
+    auto it(cacheMap.aCacheMap.find(rCache.getHashKey()));
+    if (it != cacheMap.aCacheMap.end())
+    {
+        ScSortedRangeCache* pCache = (*it).second.release();
+        cacheMap.aCacheMap.erase(it);
+        assert(!IsThreadedGroupCalcInProgress()); // EndListeningArea() is not thread-safe
+        EndListeningArea(pCache->getRange(), false, &rCache);
+        return;
+    }
+    OSL_FAIL( "ScDocument::RemoveSortedRangeCache: range not found in hash map");
+}
+
 void ScDocument::ClearLookupCaches()
 {
     assert(!IsThreadedGroupCalcInProgress());
     GetNonThreadedContext().mxScLookupCache.reset();
+    GetNonThreadedContext().mxScSortedRangeCache.reset();
     // Clear lookup cache in all interpreter-contexts in the (threaded/non-threaded) pools.
     ScInterpreterContextPool::ClearLookupCaches();
+    ScInterpreterContextPool::ClearSortedRangeCaches();
 }
 
 bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBorder)

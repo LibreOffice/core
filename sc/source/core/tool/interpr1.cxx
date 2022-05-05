@@ -5746,6 +5746,7 @@ void ScInterpreter::ScCountIf()
             ScQueryParam rParam;
             rParam.nRow1       = nRow1;
             rParam.nRow2       = nRow2;
+            rParam.nTab        = nTab1;
 
             ScQueryEntry& rEntry = rParam.GetEntry(0);
             ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
@@ -5786,8 +5787,16 @@ void ScInterpreter::ScCountIf()
             }
             else
             {
-                ScCountIfCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
-                fCount += aCellIter.GetCount();
+                if(ScCountIfCellIteratorSortedCache::CanBeUsed(rParam))
+                {
+                    ScCountIfCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    fCount += aCellIter.GetCount();
+                }
+                else
+                {
+                    ScCountIfCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    fCount += aCellIter.GetCount();
+                }
             }
         }
         else
@@ -9938,7 +9947,7 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( std::u16string_vie
     return utl::SearchParam::SearchType::Normal;
 }
 
-static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, const ScInterpreterContext& rContext,
+static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry )
 {
     bool bFound = false;
