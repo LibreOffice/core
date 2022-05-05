@@ -235,6 +235,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "74439d02_384f4184",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-05T13:37:23Z",
+      "side": 1,
+      "message": "But it wont hurt developers and in case of languagetool it give some insights at the issue. The \"...UTF-16 string literal, u...\" is a nice to have, true. But I wouldn\u0027t put too much effort in this patch, in case it doesn\u0027t work out of the box.",
+      "parentUuid": "ff11baf2_b247fe7a",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e794f304_32e902b7",
         "filename": "stoc/inc/strings.hrc",
         "patchSetId": 3
