@@ -1814,9 +1814,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                         if( nSprmId != NS_ooxml::LN_EG_RPrBase_bCs )
                             rContext->Insert(PROP_CHAR_WEIGHT_ASIAN, aBold );
 
-                        uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
-                        if (xCharStyle.is())
-                            xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_WEIGHT), aBold);
                         if (nSprmId == NS_ooxml::LN_EG_RPrBase_b)
                             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "b", OUString::number(nIntValue));
                         else if (nSprmId == NS_ooxml::LN_EG_RPrBase_bCs)
@@ -1894,10 +1891,6 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, const PropertyMapPtr& rContext )
                 //Asian get the same value as Western
                 rContext->Insert( PROP_CHAR_HEIGHT, aVal );
                 rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
-
-                uno::Reference<beans::XPropertySet> xCharStyle(m_pImpl->GetCurrentNumberingCharStyle());
-                if (xCharStyle.is())
-                    xCharStyle->setPropertyValue(getPropertyName(PROP_CHAR_HEIGHT), aVal);
             }
             m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, (nSprmId == NS_ooxml::LN_EG_RPrBase_sz ? OUString("sz") : OUString("szCs")), OUString::number(nIntValue));
         }
