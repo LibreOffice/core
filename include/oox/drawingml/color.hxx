@@ -99,7 +99,7 @@ public:
     /** Returns the scheme name from the a:schemeClr element for interoperability purposes */
     const OUString&     getSchemeColorName() const { return msSchemeName; }
     sal_Int16           getSchemeColorIndex() const;
-    sal_Int16           getTintOrShade();
+    sal_Int16           getTintOrShade() const;
     sal_Int16           getLumMod() const;
     sal_Int16           getLumOff() const;
 
