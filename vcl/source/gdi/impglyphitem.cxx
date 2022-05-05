@@ -24,7 +24,6 @@
 #include <tools/stream.hxx>
 #include <unotools/configmgr.hxx>
 #include <TextLayoutCache.hxx>
-#include <config_fuzzers.h>
 #include <officecfg/Office/Common.hxx>
 
 // These need being explicit because of SalLayoutGlyphsImpl being private in vcl.
@@ -297,13 +296,7 @@ SalLayoutGlyphsCache::GetLayoutGlyphs(VclPtr<const OutputDevice> outputDevice, c
         // So in that case this is a cached failure.
         return nullptr;
     }
-#if !ENABLE_FUZZERS
     const SalLayoutFlags glyphItemsOnlyLayout = SalLayoutFlags::GlyphItemsOnly;
-#else
-    // ofz#39150 skip detecting bidi directions
-    const SalLayoutFlags glyphItemsOnlyLayout
-        = SalLayoutFlags::GlyphItemsOnly | SalLayoutFlags::BiDiStrong;
-#endif
     bool resetLastSubstringKey = true;
     const sal_Unicode nbSpace = 0xa0; // non-breaking space
     if (nIndex != 0 || nLen != text.getLength())
