@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cff44501_7312b4e0",
+        "filename": "basic/source/classes/eventatt.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-05T11:10:05Z",
+      "side": 1,
+      "message": "Interesting, if some plugin will catch that aLibName and aLocation could become u16string_view, since they are created from aScriptEvent.ScriptCode that outlives the views, and are only used in comparisons.",
+      "revId": "9f1701d01d9f664828356976d8592492f85b30f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
