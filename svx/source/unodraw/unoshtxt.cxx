@@ -775,14 +775,15 @@ void SvxTextEditSourceImpl::UpdateData()
             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( mpObject );
             if( pTextObj )
             {
-                if( (mpOutliner->GetParagraphCount() != 1 && mpOutliner->GetParagraphCount() != 2)
-                    || mpOutliner->GetEditEngine().GetTextLen( 0 ) )
+                if( (mpOutliner->GetParagraphCount() == 1 && mpOutliner->GetEditEngine().GetTextLen( 0 ) == 0 )
+                        || (mpOutliner->GetParagraphCount() == 2 && mpOutliner->GetEditEngine().GetTextLen( 0 ) == 0
+                            && mpOutliner->GetEditEngine().GetTextLen( 1 ) == 0) )
                 {
-                    pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
+                    pTextObj->NbcSetOutlinerParaObjectForText( nullptr, mpText );
                 }
                 else
                 {
-                    pTextObj->NbcSetOutlinerParaObjectForText( nullptr,mpText );
+                    pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
                 }
             }
 
