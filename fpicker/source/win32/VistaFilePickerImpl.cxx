@@ -37,6 +37,7 @@
 #include <rtl/process.h>
 #include <o3tl/char16_t2wchar_t.hxx>
 #include <o3tl/string_view.hxx>
+#include <vcl/svapp.hxx>
 #include "WinImplHelper.hxx"
 
 #include <shlguid.h>
@@ -962,6 +963,10 @@ void VistaFilePickerImpl::impl_sta_ShowDialogModal(Request& rRequest)
     HRESULT hResult = E_FAIL;
     try
     {
+        // tdf#146007: Make sure we don't hold solar mutex: COM may need to forward
+        // the execution to the main thread, and holding solar mutex could deadlock
+        SolarMutexGuard g; // First acquire, to avoid releaser failure
+        SolarMutexReleaser r;
         // show dialog and wait for user decision
         hResult = iDialog->Show(m_hParentWindow ? m_hParentWindow
                                                 : choose_parent_window()); // parent window needed
