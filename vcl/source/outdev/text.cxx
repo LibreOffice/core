@@ -41,7 +41,6 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 
-#include <config_fuzzers.h>
 #include <ImplLayoutArgs.hxx>
 #include <ImplOutDevData.hxx>
 #include <drawmode.hxx>
@@ -791,12 +790,7 @@ vcl::Region OutputDevice::GetOutputBoundsClipRegion() const
     return GetClipRegion();
 }
 
-#if !ENABLE_FUZZERS
 const SalLayoutFlags eDefaultLayout = SalLayoutFlags::NONE;
-#else
-// ofz#23573 skip detecting bidi directions
-const SalLayoutFlags eDefaultLayout = SalLayoutFlags::BiDiStrong;
-#endif
 
 void OutputDevice::DrawText( const Point& rStartPt, const OUString& rStr,
                              sal_Int32 nIndex, sal_Int32 nLen,
