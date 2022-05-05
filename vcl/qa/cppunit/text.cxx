@@ -315,7 +315,7 @@ void VclTextTest::testVerticalText()
     exportDevice("vertical-text-36.png", device);
     // Height of U+30E8 with font 36 size should be roughly 28 pixels,
     // but since we don't know which font will be used, allow even more range.
-    tools::Long height36 = getCharacterRightSideHeight(device, Point(99, 20));
+    tools::Long height36 = getCharacterRightSideHeight(device, Point(99, 22));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(28), height36, 6);
     tools::Long width36 = getCharacterTopWidth(device, Point(65, 0));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(tools::Long(25), width36, 6);
@@ -390,7 +390,7 @@ void VclTextTest::testVerticalText()
     device->SetFont(font);
     device->DrawText(Point(90, 10), text);
     exportDevice("vertical-text-36-50pct.png", device);
-    tools::Long height36pct50 = getCharacterRightSideHeight(device, Point(99, 15));
+    tools::Long height36pct50 = getCharacterRightSideHeight(device, Point(99, 16));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(height36 / 2, height36pct50, 2);
     tools::Long width36pct50 = getCharacterTopWidth(device, Point(65, 0));
     CPPUNIT_ASSERT_DOUBLES_EQUAL(width36, width36pct50, 2);
