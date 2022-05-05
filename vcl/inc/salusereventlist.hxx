@@ -22,7 +22,7 @@
 
 #include <sal/config.h>
 #include <vcl/dllapi.h>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <osl/thread.hxx>
 
 #include <list>
@@ -57,7 +57,7 @@ public:
     };
 
 protected:
-    mutable osl::Mutex         m_aUserEventsMutex;
+    mutable std::mutex         m_aUserEventsMutex;
     std::list< SalUserEvent >  m_aUserEvents;
     std::list< SalUserEvent >  m_aProcessingUserEvents;
     bool                       m_bAllUserEventProcessedSignaled;
@@ -68,6 +68,7 @@ protected:
     virtual void TriggerUserEventProcessing() = 0;
     virtual void TriggerAllUserEventsProcessed() {}
 
+    inline bool HasUserEvents_NoLock() const;
 public:
     SalUserEventList();
     virtual ~SalUserEventList() COVERITY_NOEXCEPT_FALSE;
@@ -100,13 +101,18 @@ inline bool SalUserEventList::isFrameAlive( const SalFrame* pFrame ) const
 
 inline bool SalUserEventList::HasUserEvents() const
 {
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
+    std::unique_lock aGuard( m_aUserEventsMutex );
+    return HasUserEvents_NoLock();
+}
+
+inline bool SalUserEventList::HasUserEvents_NoLock() const
+{
     return !(m_aUserEvents.empty() && m_aProcessingUserEvents.empty());
 }
 
 inline void SalUserEventList::PostEvent( SalFrame* pFrame, void* pData, SalEvent nEvent )
 {
-    osl::MutexGuard aGuard( m_aUserEventsMutex );
+    std::unique_lock aGuard( m_aUserEventsMutex );
     m_aUserEvents.push_back( SalUserEvent( pFrame, pData, nEvent ) );
     m_bAllUserEventProcessedSignaled = false;
     TriggerUserEventProcessing();
