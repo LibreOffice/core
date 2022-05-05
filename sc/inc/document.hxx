@@ -182,6 +182,8 @@ class ScAutoNameCache;
 class ScTemporaryChartLock;
 class ScLookupCache;
 struct ScLookupCacheMap;
+class ScSortedRangeCache;
+struct ScSortedRangeCacheMap;
 class SfxUndoManager;
 class ScFormulaParserPool;
 struct ScClipParam;
@@ -1397,9 +1399,11 @@ public:
                     /** Creates a ScLookupCache cache for the range if it
                         doesn't already exist. */
     ScLookupCache & GetLookupCache( const ScRange & rRange, ScInterpreterContext* pContext );
+    ScSortedRangeCache & GetSortedRangeCache( const ScRange & rRange, bool bDescending, ScInterpreterContext* pContext );
                     /** Only ScLookupCache dtor uses RemoveLookupCache(), do
                         not use elsewhere! */
     void            RemoveLookupCache( ScLookupCache & rCache );
+    void            RemoveSortedRangeCache( ScSortedRangeCache & rCache );
                     /** Zap all caches. */
     void            ClearLookupCaches();
 
