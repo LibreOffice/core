@@ -33,6 +33,7 @@
 #include <svl/poolitem.hxx>
 #include <svl/intitem.hxx>
 #include <svl/PasswordHelper.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 
 #include <sfx2/strings.hrc>
 
@@ -114,11 +115,28 @@ static bool lcl_IsPasswordCorrect( std::u16string_view rPassword )
     pCurDocShell->GetProtectionHash( aPasswordHash );
 
     // check if supplied password was correct
-    uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );
-    SvPasswordHelper::GetHashPassword( aNewPasswd, rPassword );
-    if (SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword ))
-        bRes = true;    // password was correct
+    if (aPasswordHash.getLength() == 1 && aPasswordHash[0] == 1)
+    {
+        // dummy RedlinePassword from OOXML import: get real password info
+        // from the grab-bag to verify the password
+        const css::uno::Sequence< css::beans::PropertyValue > aDocumentProtection =
+                                                pCurDocShell->GetDocumentProtectionFromGrabBag();
+        bRes =
+            // password is ok, if there is no DocumentProtection in the GrabBag,
+            // i.e. the dummy RedlinePassword imported from an OpenDocument file
+            !aDocumentProtection.hasElements() ||
+            // verify password with the password info imported from OOXML
+            ::comphelper::DocPasswordHelper::IsModifyPasswordCorrect( rPassword,
+                    ::comphelper::DocPasswordHelper::ConvertPasswordInfo ( aDocumentProtection ) );
+    }
     else
+    {
+        uno::Sequence< sal_Int8 > aNewPasswd( aPasswordHash );
+        SvPasswordHelper::GetHashPassword( aNewPasswd, rPassword );
+        bRes = SvPasswordHelper::CompareHashPassword( aPasswordHash, rPassword );
+    }
+
+    if ( !bRes )
     {
         std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
                                                       VclMessageType::Info, VclButtonsType::Ok,

@@ -781,6 +781,9 @@ public:
     /// Gets the certificate that is already picked by the user but not yet used for signing.
     css::uno::Reference<css::security::XCertificate> GetSignPDFCertificate() const;
 
+    /// Gets grab-bagged password info to unprotect change tracking with verification
+    css::uno::Sequence< css::beans::PropertyValue > GetDocumentProtectionFromGrabBag() const;
+
     // Lock all unlocked views, and returns a guard object which unlocks those views when destructed
     virtual std::unique_ptr<LockAllViewsGuard> LockAllViews()
     {

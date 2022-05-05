@@ -113,6 +113,23 @@ public:
     static css::uno::Sequence< css::beans::PropertyValue >
         GenerateNewModifyPasswordInfo( std::u16string_view aPassword );
 
+    /** This helper function converts a grab-bagged password, e.g. the
+        trackChanges password which has no complete inner equivalent to
+        the inner format. The result sequence contains the hash and the
+        algorithm-related info to use e.g. in IsModifyPasswordCorrect().
+
+        @param aInfo
+            The sequence containing the hash and the algorithm-related info
+            according to the OOXML origin, used by grab-bagging.
+
+        @return
+            The sequence containing the hash and the algorithm-related info
+            in the inner format.
+      */
+
+    static css::uno::Sequence< css::beans::PropertyValue > ConvertPasswordInfo(
+        const css::uno::Sequence< css::beans::PropertyValue >& aInfo );
+
     static css::uno::Sequence<css::beans::PropertyValue>
     GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassword);
 
