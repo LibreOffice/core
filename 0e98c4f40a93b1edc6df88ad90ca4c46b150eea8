@@ -145,6 +145,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "926b0928_d8327bd1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-05T10:24:37Z",
+      "side": 1,
+      "message": "\u003e A css.uno.CannotRegisterImplementationException can be caused by any number of issues\n- Was aware that this command is used in many other places in the source code. \n- Was hoping for simple identifier -- iiuc -- no error code or other unique identifier is given. \n\n- But line 789 gets the \"error message\" string...\n- Would it be too ugly to test that message for \"Java implementation loader\" --  (which only appears in javaloader.cxx) and then give a more meaningful message (about installing and activating Java, using Options, etc.) \n- or something more elegant along those lines...",
+      "parentUuid": "d1f4f3a3_3ca91d71",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e794f304_32e902b7",
         "filename": "stoc/inc/strings.hrc",
         "patchSetId": 3
