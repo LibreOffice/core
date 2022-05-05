@@ -33,7 +33,6 @@
 #include <vcl/event.hxx>
 #include <sal/log.hxx>
 #include <tools/diagnose_ex.h>
-#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 #include <memory>

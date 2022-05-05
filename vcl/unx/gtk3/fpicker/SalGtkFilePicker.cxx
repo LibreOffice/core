@@ -48,7 +48,6 @@
 #include <o3tl/string_view.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
-#include <o3tl/string_view.hxx>
 
 #include <algorithm>
 #include <set>
