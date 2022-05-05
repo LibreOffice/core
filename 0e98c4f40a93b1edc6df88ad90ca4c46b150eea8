@@ -127,6 +127,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d1f4f3a3_3ca91d71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-05T09:58:29Z",
+      "side": 1,
+      "message": "\u003e Hypothesis: iiuc – there might be a (simple?) way in desktop/source/deployment/gui/dp_gui_extensioncmdqueue.cxx ) to pick up which exception was thrown in javaloader.cxx and give appropriate messages (placed in:  desktop/inc/strings.hrc)\n\u003e \n\u003e    \u003d\u003e additional code in dp_gui_extensioncmdqueue.cxx presumably around here\n\u003e \n\u003e line 782  //Todo display the user an error\n\nThere is no simple way at least.  A css.uno.CannotRegisterImplementationException can be caused by any number of issues, not necessarily related to no JRE being selected.",
+      "parentUuid": "511ab496_b00118be",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e794f304_32e902b7",
         "filename": "stoc/inc/strings.hrc",
         "patchSetId": 3
