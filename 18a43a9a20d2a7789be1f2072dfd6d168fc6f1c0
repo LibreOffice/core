@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2657273a_de8fa64e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-05-05T06:20:11Z",
+      "side": 1,
+      "message": "Thanks! It works well for the single user case, but I see that when we have two users/views and if user2 starts editing on a cell with wrap+center align, for both users tile-contents have offsets like the original problem. I think it is fine to have the fix for that as a follow-up to this patch.",
+      "revId": "18a43a9a20d2a7789be1f2072dfd6d168fc6f1c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d0239b9_1ad7911d",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1151,
+      "author": {
+        "id": 1000947
+      },
+      "writtenOn": "2022-05-05T06:20:11Z",
+      "side": 1,
+      "message": "Seems like we could apply the same fix here too for the multi-view(user) case.",
+      "range": {
+        "startLine": 1149,
+        "startChar": 28,
+        "endLine": 1151,
+        "endChar": 0
+      },
+      "revId": "18a43a9a20d2a7789be1f2072dfd6d168fc6f1c0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
