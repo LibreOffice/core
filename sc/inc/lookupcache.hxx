@@ -110,8 +110,8 @@ public:
     };
 
     /// MUST be new'd because Notify() deletes.
-                            ScLookupCache( ScDocument * pDoc, const ScRange & rRange, ScLookupCacheMap & cacheMap );
-    virtual                 ~ScLookupCache() override;
+                            ScLookupCache( ScDocument * pDoc, const ScRange & rRange, ScLookupCacheMap & cacheMap )
+                                : maRange( rRange), mpDoc( pDoc), mCacheMap(cacheMap) {}
     /// Remove from document structure and delete (!) cache on modify hint.
     virtual void Notify( const SfxHint& rHint ) override;
 

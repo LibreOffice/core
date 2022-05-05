@@ -24,6 +24,7 @@
 #include <document.hxx>
 #include <formula/token.hxx>
 #include <lookupcache.hxx>
+#include <rangecache.hxx>
 #include <algorithm>
 
 ScInterpreterContextPool ScInterpreterContextPool::aThreadedInterpreterPool(true);
@@ -38,11 +39,7 @@ ScInterpreterContext::ScInterpreterContext(const ScDocument& rDoc, SvNumberForma
 {
 }
 
-ScInterpreterContext::~ScInterpreterContext()
-{
-    ResetTokens();
-    mxScLookupCache.reset();
-}
+ScInterpreterContext::~ScInterpreterContext() { ResetTokens(); }
 
 void ScInterpreterContext::ResetTokens()
 {
@@ -67,13 +64,15 @@ void ScInterpreterContext::initFormatTable()
 
 void ScInterpreterContext::Cleanup()
 {
-    // Do not disturb mScLookupCache
+    // Do not disturb mxScLookupCache/mxScSortedRangeCache
     maConditions.clear();
     maDelayedSetNumberFormat.clear();
     ResetTokens();
 }
 
 void ScInterpreterContext::ClearLookupCache() { mxScLookupCache.reset(); }
+
+void ScInterpreterContext::ClearSortedRangeCache() { mxScSortedRangeCache.reset(); }
 
 SvNumFormatType ScInterpreterContext::GetNumberFormatType(sal_uInt32 nFIndex) const
 {
@@ -166,6 +165,14 @@ void ScInterpreterContextPool::ClearLookupCaches()
         rPtr->ClearLookupCache();
     for (auto& rPtr : aNonThreadedInterpreterPool.maPool)
         rPtr->ClearLookupCache();
+}
+
+void ScInterpreterContextPool::ClearSortedRangeCaches()
+{
+    for (auto& rPtr : aThreadedInterpreterPool.maPool)
+        rPtr->ClearSortedRangeCache();
+    for (auto& rPtr : aNonThreadedInterpreterPool.maPool)
+        rPtr->ClearSortedRangeCache();
 }
 
 /* ScThreadedInterpreterContextGetterGuard */

@@ -26,6 +26,8 @@
 #include "mtvelements.hxx"
 #include "types.hxx"
 
+class ScSortedRangeCache;
+
 /*
 Query-related iterators. There is one template class ScQueryCellIteratorBase
 that implements most of the shared functionality, specific parts are done
@@ -82,6 +84,39 @@ protected:
         SCROW nStartRow, SCROW nEndRow);
 };
 
+// The implementation using ScSortedRangeCache, which allows sorted iteration
+// of unsorted cells.
+template<>
+class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
+{
+public:
+    void SetSortedRangeCache( const ScSortedRangeCache& cache );
+protected:
+    ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, const ScQueryParam& rParam );
+    void InitPos();
+    void IncPos();
+    void IncBlock() { IncPos(); } // Cannot skip entire block, not linear.
+
+    // These members needs to be available already in the base class.
+    typedef sc::CellStoreType::const_position_type PositionType;
+    PositionType maCurPos;
+    ScQueryParam    maParam;
+    ScDocument&     rDoc;
+    SCTAB           nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+
+    const ScSortedRangeCache* sortedCache;
+    size_t sortedCachePos;
+
+    class SortedCacheIndexer;
+    typedef std::pair<ScRefCellValue, SCROW> BinarySearchCellType;
+    SortedCacheIndexer MakeBinarySearchIndexer(const sc::CellStoreType& rCells,
+        SCROW nStartRow, SCROW nEndRow);
+private:
+    void UpdatePos();
+};
+
 // Data and functionality for specific types of query.
 template< ScQueryCellIteratorType iteratorType >
 class ScQueryCellIteratorTypeSpecific
@@ -115,7 +150,7 @@ protected:
         nTestEqualConditionFulfilled = nTestEqualConditionEnabled | nTestEqualConditionMatched
     };
 
-    const ScInterpreterContext& mrContext;
+    ScInterpreterContext& mrContext;
     sal_uInt8            nStopOnMismatch;
     sal_uInt8            nTestEqualCondition;
     bool            bAdvanceQuery;
@@ -151,7 +186,7 @@ protected:
     bool BinarySearch( SCCOL col );
 
 public:
-                    ScQueryCellIteratorBase(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+                    ScQueryCellIteratorBase(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
                                             const ScQueryParam& aParam, bool bMod);
                                         // when !bMod, the QueryParam has to be filled
                                         // (bIsString)
@@ -237,7 +272,7 @@ class ScQueryCellIterator
     bool GetThis();
 
 public:
-    ScQueryCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+    ScQueryCellIterator(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
                         const ScQueryParam& aParam, bool bMod)
         : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     bool GetFirst();
@@ -282,6 +317,7 @@ template< ScQueryCellIteratorAccess accessType >
 class ScCountIfCellIterator
     : public ScQueryCellIteratorBase< accessType, ScQueryCellIteratorType::CountIf >
 {
+protected:
     typedef ScQueryCellIteratorBase< accessType, ScQueryCellIteratorType::CountIf > Base;
     // Make base members directly visible here (templated bases need 'this->').
     using Base::maParam;
@@ -295,12 +331,24 @@ class ScCountIfCellIterator
     using Base::countIfCount;
 
 public:
-    ScCountIfCellIterator(ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+    ScCountIfCellIterator(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
                           const ScQueryParam& aParam, bool bMod)
         : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     sal_uInt64 GetCount();
 };
 
 typedef ScCountIfCellIterator< ScQueryCellIteratorAccess::Direct > ScCountIfCellIteratorDirect;
+
+class ScCountIfCellIteratorSortedCache
+    : public ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >
+{
+    typedef ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache > Base;
+public:
+    ScCountIfCellIteratorSortedCache(ScDocument& rDocument, ScInterpreterContext& rContext,
+        SCTAB nTable, const ScQueryParam& aParam, bool bMod)
+    : Base( rDocument, rContext, nTable, aParam, bMod ) {}
+    // Returns true if this iterator can be used for the given query.
+    static bool CanBeUsed(const ScQueryParam& aParam);
+};
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

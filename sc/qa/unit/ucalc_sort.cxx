@@ -2030,7 +2030,7 @@ class TestQueryIterator
 {
     typedef ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic > Base;
 public:
-    TestQueryIterator( ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+    TestQueryIterator( ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
         const ScQueryParam& aParam, bool bMod )
     : Base( rDocument, rContext, nTable, aParam, bMod )
     {
