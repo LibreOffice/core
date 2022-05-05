@@ -776,7 +776,7 @@ void ScTiledRenderingTest::testSpellOnlineRenderParameter()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
-        comphelper::makePropertyValue(".uno:SpellOnline", uno::makeAny(!bSet)),
+        comphelper::makePropertyValue(".uno:SpellOnline", uno::Any(!bSet)),
     };
     pModelObj->initializeForTiledRendering(aPropertyValues);
 
@@ -880,9 +880,9 @@ void ScTiledRenderingTest::testMoveShapeHandle()
         sal_uInt32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", uno::makeAny(id)},
-            {"NewPosX", uno::makeAny(x+1)},
-            {"NewPosY", uno::makeAny(y+1)}
+            {"HandleNum", uno::Any(id)},
+            {"NewPosX", uno::Any(x+1)},
+            {"NewPosY", uno::Any(y+1)}
         }));
         comphelper::dispatchCommand(".uno:MoveShapeHandle", aPropertyValues);
         Scheduler::ProcessEventsToIdle();
@@ -1270,8 +1270,8 @@ void ScTiledRenderingTest::testCommentCallback()
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::makeAny(OUString("Comment"))},
-            {"Author", uno::makeAny(OUString("LOK User1"))},
+            {"Text", uno::Any(OUString("Comment"))},
+            {"Author", uno::Any(OUString("LOK User1"))},
         }));
         comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
         Scheduler::ProcessEventsToIdle();
@@ -1300,9 +1300,9 @@ void ScTiledRenderingTest::testCommentCallback()
             pTabViewShell->SetCursor(3, 100);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))},
-            {"Text", uno::makeAny(OUString("Edited comment"))},
-            {"Author", uno::makeAny(OUString("LOK User2"))},
+            {"Id", uno::Any(OUString::createFromAscii(aCommentId.c_str()))},
+            {"Text", uno::Any(OUString("Edited comment"))},
+            {"Author", uno::Any(OUString("LOK User2"))},
         });
         comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
         Scheduler::ProcessEventsToIdle();
@@ -1324,7 +1324,7 @@ void ScTiledRenderingTest::testCommentCallback()
             pTabViewShell->SetCursor(4, 43);
         aArgs = comphelper::InitPropertySequence(
         {
-            {"Id", uno::makeAny(OUString::createFromAscii(aCommentId.c_str()))}
+            {"Id", uno::Any(OUString::createFromAscii(aCommentId.c_str()))}
         });
         comphelper::dispatchCommand(".uno:DeleteNote", aArgs);
         Scheduler::ProcessEventsToIdle();
@@ -1441,7 +1441,7 @@ void ScTiledRenderingTest::testUndoRepairDispatch()
     SfxLokHelper::setView(nView2);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"Repair", uno::makeAny(true)}
+        {"Repair", uno::Any(true)}
     }));
     comphelper::dispatchCommand(".uno:Undo", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1855,7 +1855,7 @@ void ScTiledRenderingTest::testSpellOnlineParameter()
 
     uno::Sequence<beans::PropertyValue> params =
     {
-        comphelper::makePropertyValue("Enable", uno::makeAny(!bSet)),
+        comphelper::makePropertyValue("Enable", uno::Any(!bSet)),
     };
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
@@ -1863,7 +1863,7 @@ void ScTiledRenderingTest::testSpellOnlineParameter()
     // set the same state as now and we don't expect any change (no-toggle)
     params =
     {
-        comphelper::makePropertyValue("Enable", uno::makeAny(!bSet)),
+        comphelper::makePropertyValue("Enable", uno::Any(!bSet)),
     };
     dispatchCommand(mxComponent, ".uno:SpellOnline", params);
     CPPUNIT_ASSERT_EQUAL(!bSet, pDoc->GetDocOptions().IsAutoSpell());
@@ -2873,8 +2873,8 @@ void ScTiledRenderingTest::testCommentCellCopyPaste()
         // Add a new comment
         uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
         {
-            {"Text", uno::makeAny(OUString("LOK Comment Cell B2"))},
-            {"Author", uno::makeAny(OUString("LOK Client"))},
+            {"Text", uno::Any(OUString("LOK Comment Cell B2"))},
+            {"Author", uno::Any(OUString("LOK Client"))},
         }));
         comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
         Scheduler::ProcessEventsToIdle();

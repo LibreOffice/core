@@ -1482,9 +1482,9 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
                     if ( xParagraph.is() )
                     {
                         xParagraph->setPropertyValue("ParaTopMargin",
-                                    uno::makeAny(static_cast<sal_Int32>(0)));
+                                    uno::Any(static_cast<sal_Int32>(0)));
                         xParagraph->setPropertyValue("ParaBottomMargin",
-                                    uno::makeAny(static_cast<sal_Int32>(0)));
+                                    uno::Any(static_cast<sal_Int32>(0)));
                     }
                 }
 

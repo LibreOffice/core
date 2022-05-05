@@ -258,7 +258,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf107868)
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
     uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
-        { { "FileName", uno::makeAny(maTempFile.GetURL()) }, { "Wait", uno::makeAny(true) } }));
+        { { "FileName", uno::Any(maTempFile.GetURL()) }, { "Wait", uno::Any(true) } }));
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.
@@ -500,7 +500,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testSofthyphenPos)
     uno::Reference<view::XPrintable> xPrintable(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xPrintable.is());
     uno::Sequence<beans::PropertyValue> aOptions(comphelper::InitPropertySequence(
-        { { "FileName", uno::makeAny(maTempFile.GetURL()) }, { "Wait", uno::makeAny(true) } }));
+        { { "FileName", uno::Any(maTempFile.GetURL()) }, { "Wait", uno::Any(true) } }));
     xPrintable->print(aOptions);
 
     // Parse the export result with pdfium.

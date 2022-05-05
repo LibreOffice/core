@@ -135,9 +135,9 @@ void lcl_search(const OUString& rKey, bool bFindAll = false, bool bBackwards = f
     SvxSearchCmd eSearch = bFindAll ? SvxSearchCmd::FIND_ALL : SvxSearchCmd::FIND;
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::makeAny(rKey) },
-        { "SearchItem.Backward", uno::makeAny(bBackwards) },
-        { "SearchItem.Command", uno::makeAny(sal_uInt16(eSearch)) },
+        { "SearchItem.SearchString", uno::Any(rKey) },
+        { "SearchItem.Backward", uno::Any(bBackwards) },
+        { "SearchItem.Command", uno::Any(sal_uInt16(eSearch)) },
     }));
 
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
@@ -151,9 +151,9 @@ void lcl_replace(const OUString& rKey, const OUString& rReplace, bool bAll = fal
     SvxSearchCmd eSearch = bAll ? SvxSearchCmd::REPLACE_ALL : SvxSearchCmd::REPLACE;
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence({
-        { "SearchItem.SearchString", uno::makeAny(rKey) },
-        { "SearchItem.ReplaceString", uno::makeAny(rReplace) },
-        { "SearchItem.Command", uno::makeAny(sal_uInt16(eSearch)) },
+        { "SearchItem.SearchString", uno::Any(rKey) },
+        { "SearchItem.ReplaceString", uno::Any(rReplace) },
+        { "SearchItem.Command", uno::Any(sal_uInt16(eSearch)) },
     }));
 
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
