@@ -25,6 +25,7 @@
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 
 #include <rtl/ustring.hxx>
+#include <svx/unodraw/SvxTableShape.hxx>
 
 namespace chart { struct VLineProperties; }
 namespace com::sun::star::beans { class XPropertySet; }
@@ -211,6 +212,8 @@ public:
                 css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
                 const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth );
+
+    static rtl::Reference<SvxTableShape> createTable(css::uno::Reference< css::drawing::XShapes >& xTarget);
 
     css::uno::Reference< css::drawing::XShape >
         createInvisibleRectangle(
