@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eba230ad_1605c1fc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-05-05T21:03:01Z",
+      "side": 1,
+      "message": "I just want someone to give me a quick ack that this license.xml file is to be edited manually (like I did here) rather than having it auto-generated in some ways. I\u0027m assuming we are supposed to manually edit this file, so if I don\u0027t hear from anyone then I\u0027ll just take that as a yes.",
+      "revId": "63b941fd2625e87b47d633d923e325f992099c9f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
