@@ -16,6 +16,24 @@
       "message": "why bother with the risk of backporting a fix for an issue that had been there since forvever?",
       "revId": "22bfa2327876bf01622b58181dcc9eb6a0ccb91a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bad0bfde_e10bb162",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-05T13:47:02Z",
+      "side": 1,
+      "message": "My rationale was to bring the fix earlier to the reporter but yeah, he just need to remove the second space from the file name and it will work for him, not a big deal. Abandoning",
+      "parentUuid": "f0cc949c_30ce5669",
+      "revId": "22bfa2327876bf01622b58181dcc9eb6a0ccb91a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
