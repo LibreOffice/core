@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6461657b_14394822",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-05-05T10:42:05Z",
+      "side": 1,
+      "message": "Resume https://ci.libreoffice.org/job/gerrit_master/113879/",
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
