@@ -48,7 +48,7 @@ class Type;
 /** C++ class representing an IDL any.
     This class is used to transport any type defined in IDL. The class inherits from the
     binary C representation of uno_Any.
-    You can insert a value by either using the <<= operators or the template function makeAny().
+    You can insert a value by using the <<= operators.
     No any can hold an any. You can extract values from an any by using the >>= operators which
     return true if the any contains an assignable value (no data loss), e.g. the any contains a
     short and you >>= it into a long variable.
@@ -303,12 +303,13 @@ template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
 /// @endcond
 #endif
 
+#if !defined LIBO_INTERNAL_ONLY
 /** Template function to generically construct an any from a C++ value.
 
-    This can be useful with an explicitly specified template parameter, when the
+    @deprecated Just use an Any constructor with an appropriately typed argument.  (When the
     (UNO) type recorded in the Any instance shall be different from what would
-    be deduced from the (C++) type of the argument if no template parameter were
-    specified explicitly.
+    be deduced from the (C++) type of the argument, cast the argument to the appropriate type
+    first.)
 
     @tparam C value type
     @param value a value
@@ -317,16 +318,15 @@ template<> bool Any::has<sal_uInt16>() const SAL_DELETED_FUNCTION;
 template< class C >
 inline Any SAL_CALL makeAny( const C & value );
 
-#if !defined LIBO_INTERNAL_ONLY
 template<> inline Any SAL_CALL makeAny(sal_uInt16 const & value);
-#endif
 
 template<> Any SAL_CALL makeAny(Any const &) SAL_DELETED_FUNCTION;
+#endif
 
 /** Wrap a value in an Any, if necessary.
 
-    The difference to makeAny is that makeAny cannot be called on an Any, while
-    toAny just returns the given Any.
+    (A difference to the deprecated makeAny is that makeAny cannot be called on an Any, while
+    toAny just returns the given Any.)
 
     @since LibreOffice 5.0
 */

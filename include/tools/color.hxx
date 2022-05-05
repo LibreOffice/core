@@ -438,12 +438,6 @@ inline void operator <<=( css::uno::Any & rAny, Color value )
 
 namespace com::sun::star::uno {
     template<> inline Any::Any(Color const & value): Any(sal_Int32(value)) {}
-
-    template<>
-    inline Any makeAny( Color const & value )
-    {
-        return Any(sal_Int32(value));
-    }
 }
 
 // Test compile time conversion of Color to sal_uInt32

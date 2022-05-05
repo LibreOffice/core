@@ -230,38 +230,32 @@ inline bool Any::operator != ( const Any & rAny ) const
 }
 
 
+#if !defined LIBO_INTERNAL_ONLY
 template< class C >
 inline Any SAL_CALL makeAny( const C & value )
 {
     return Any(value);
 }
 
-#if !defined LIBO_INTERNAL_ONLY
 template<> Any makeAny(sal_uInt16 const & value)
 { return Any(&value, cppu::UnoType<cppu::UnoUnsignedShortType>::get()); }
 #endif
 
-template<typename T> Any toAny(T const & value) { return makeAny(value); }
+template<typename T> Any toAny(T const & value) {
+    return Any(value);
+}
 
 template<> Any toAny(Any const & value) { return value; }
 
 #if defined LIBO_INTERNAL_ONLY
 
 template<typename T1, typename T2>
-Any makeAny(rtl::OUStringConcat<T1, T2> && value)
-{ return Any(std::move(value)); }
-
-template<typename T1, typename T2>
 Any toAny(rtl::OUStringConcat<T1, T2> && value)
-{ return makeAny(std::move(value)); }
-
-template<typename T>
-Any makeAny(rtl::OUStringNumber<T> && value)
-{ return Any(OUString(std::move(value))); }
+{ return Any(std::move(value)); }
 
 template<typename T>
 Any toAny(rtl::OUStringNumber<T> && value)
-{ return makeAny(std::move(value)); }
+{ return Any(std::move(value)); }
 
 template<typename T> bool fromAny(Any const & any, T * value) {
     assert(value != nullptr);
