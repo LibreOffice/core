@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0661e03b_a78d7660",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-05-05T01:21:56Z",
+      "side": 1,
+      "message": "I just noticed that we now list the licenses of all third party libraries, and didn\u0027t see liborcus listed, so I decided to add it. Could one of you give it a quick look and see if I did it correctly?",
+      "revId": "ae81fb59a688a4bd79f7323df0d6e0283b54d44f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
