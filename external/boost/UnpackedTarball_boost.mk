@@ -12,9 +12,6 @@ boost_patches :=
 #https://svn.boost.org/trac/boost/ticket/6142
 boost_patches += boost.6142.warnings.patch.1
 
-# https://svn.boost.org/trac/boost/ticket/9903
-boost_patches += boost.utility.Wundef.warnings.patch
-
 boost_patches += boost.noiconv.patch
 boost_patches += boost.between.warning.patch
 boost_patches += boost.fallback.encoding.patch
