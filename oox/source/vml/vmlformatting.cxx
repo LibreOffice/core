@@ -89,6 +89,7 @@ bool ConversionHelper::separatePair( std::u16string_view& orValue1, std::u16stri
     else
     {
         orValue1 = o3tl::trim(rValue);
+        orValue2 = std::u16string_view();
     }
     return !orValue1.empty() && !orValue2.empty();
 }
