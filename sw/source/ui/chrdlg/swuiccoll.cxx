@@ -86,7 +86,7 @@ SwCondCollPage::SwCondCollPage(weld::Container* pPage, weld::DialogController* p
         }
     }
 
-    m_xFilterLB->set_active(1);
+    m_xFilterLB->set_active(0);
     m_xTbLinks->show();
 }
 
