@@ -2337,25 +2337,25 @@ void EnhancedCustomShape2d::CreateSubPath(
 
                 case ARC :
                 case CLOCKWISEARC :
-                {
-                    if(aNewB2DPolygon.count() > 1)
-                    {
-                        // #i76201# Add conversion to closed polygon when first and last points are equal
-                        basegfx::utils::checkClosed(aNewB2DPolygon);
-                        aNewB2DPolyPolygon.append(aNewB2DPolygon);
-                    }
-
-                    aNewB2DPolygon.clear();
-
-                    [[fallthrough]];
-                }
                 case ARCTO :
                 case CLOCKWISEARCTO :
                 {
                     bool bClockwise = ( nCommand == CLOCKWISEARC ) || ( nCommand == CLOCKWISEARCTO );
+                    bool bImplicitMoveTo = (nCommand == ARC) || (nCommand == CLOCKWISEARC);
                     sal_uInt32 nXor = bClockwise ? 3 : 2;
                     for ( sal_uInt16 i = 0; ( i < nPntCount ) && ( ( rSrcPt + 3 ) < nCoordSize ); i++ )
                     {
+                        if (bImplicitMoveTo)
+                        {
+                            if (aNewB2DPolygon.count() > 1)
+                            {
+                                // #i76201# Add conversion to closed polygon when first and last
+                                // points are equal
+                                basegfx::utils::checkClosed(aNewB2DPolygon);
+                                aNewB2DPolyPolygon.append(aNewB2DPolygon);
+                            }
+                            aNewB2DPolygon.clear();
+                        }
                         tools::Rectangle aRect = tools::Rectangle::Justify( GetPoint( seqCoordinates[ rSrcPt ], true, true ), GetPoint( seqCoordinates[ rSrcPt + 1 ], true, true ) );
                         if ( aRect.GetWidth() && aRect.GetHeight() )
                         {

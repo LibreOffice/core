@@ -1377,6 +1377,29 @@ CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148714_CurvedArrows)
         }
     }
 }
+
+CPPUNIT_TEST_FIXTURE(CustomshapesTest, testTdf148707_two_commands_B_V)
+{
+    // tdf148707 custom shape with multiple command B or multiple command V were drawn with a line
+    // between the arcs as if the second command was a A or W respectively.
+    // The test document has a shape with path "V 0 0 50 100 0 50 25 0 50 0 100 100 75 0 100 50 N"
+    // and a shape with path "B 0 0 50 100 0 50 25 100 50 0 100 100 75 100 100 50 N".
+    OUString sURL = m_directories.getURLFromSrc(sDataDirectory) + "tdf148707_two_commands_B_V.odp";
+    mxComponent = loadFromDesktop(sURL, "com.sun.star.comp.drawing.DrawingDocument");
+    for (sal_uInt8 i = 0; i < 2; i++)
+    {
+        uno::Reference<drawing::XShape> xShape(getShape(i));
+        // In case no line is drawn, two polygons are generated; with line only one polygon
+        SdrObjCustomShape& rSdrObjCustomShape(
+            static_cast<SdrObjCustomShape&>(*SdrObject::getSdrObjectFromXShape(xShape)));
+        EnhancedCustomShape2d aCustomShape2d(rSdrObjCustomShape);
+        SdrPathObjUniquePtr pPathObj(
+            static_cast<SdrPathObj*>(aCustomShape2d.CreateLineGeometry().release()));
+        CPPUNIT_ASSERT_MESSAGE("Could not convert to SdrPathObj", pPathObj);
+        const basegfx::B2DPolyPolygon aPolyPolygon(pPathObj->GetPathPoly());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("count polygons", sal_uInt32(2), aPolyPolygon.count());
+    }
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
