@@ -358,7 +358,6 @@ bool SmGraphicWidget::MouseButtonDown(const MouseEvent& rMEvt)
     SmEditWindow* pEdit = mrViewShell.GetEditWindow();
     if (!pEdit)
         return true;
-    const SmToken  aToken (pNode->GetToken());
 
     // set selection to the beginning of the token
     pEdit->SetSelection(pNode->GetSelection());

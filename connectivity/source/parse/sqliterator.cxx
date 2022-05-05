@@ -823,7 +823,6 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                 pColumn->setFunction(false);
                 pColumn->setRealName(aColumnName);
 
-                Reference< XPropertySet> xCol = pColumn;
                 m_aCreateColumns->push_back(pColumn);
             }
         }

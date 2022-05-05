@@ -1686,12 +1686,6 @@ void LoadEnv::impl_reactForLoadingState()
 void LoadEnv::impl_makeFrameWindowVisible(const css::uno::Reference< css::awt::XWindow >& xWindow      ,
                                                 bool bForceToFront)
 {
-    // SAFE -> ----------------------------------
-    osl::ClearableMutexGuard aReadLock(m_mutex);
-    css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
-    aReadLock.clear();
-    // <- SAFE ----------------------------------
-
     SolarMutexGuard aSolarGuard;
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(xWindow);
     if ( !pWindow )
