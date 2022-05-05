@@ -975,7 +975,9 @@ uno::Any SwXShape::queryInterface( const uno::Type& aType )
     {
         pObj = SdrObject::getSdrObjectFromXShape(mxShape);
 
-        aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType, pObj);
+        if (pObj && GetFrameFormat() && GetFrameFormat()->GetTextBoxHandler())
+            aRet = GetFrameFormat()->GetTextBoxHandler()->QueryInterface(pObj, aType);
+
         if (aRet.hasValue())
             return aRet;
     }
@@ -1169,14 +1171,14 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     bool bValue(false);
                     aValue >>= bValue;
                     if (bValue)
-                        SwTextBoxHelper::create(pFormat, GetSvxShape()->GetSdrObject());
+                        pFormat->GetTextBoxHandler()->Create(GetSvxShape()->GetSdrObject());
                     else
-                        SwTextBoxHelper::destroy(pFormat, GetSvxShape()->GetSdrObject());
+                        pFormat->GetTextBoxHandler()->Destroy(GetSvxShape()->GetSdrObject());
                 }
                 else if (pEntry->nMemberId == MID_TEXT_BOX_CONTENT)
                 {
                     if (aValue.getValueType() == cppu::UnoType<uno::Reference<text::XTextFrame>>::get())
-                        SwTextBoxHelper::set(pFormat, GetSvxShape()->GetSdrObject(),
+                        pFormat->GetTextBoxHandler()->Replace(GetSvxShape()->GetSdrObject(),
                                              aValue.get<uno::Reference<text::XTextFrame>>());
                     else
                         SAL_WARN( "sw.uno", "This is not a TextFrame!" );
@@ -1184,9 +1186,12 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
             }
             else if (pEntry->nWID == RES_CHAIN)
             {
-                if (pEntry->nMemberId == MID_CHAIN_NEXTNAME || pEntry->nMemberId == MID_CHAIN_PREVNAME)
-                    SwTextBoxHelper::syncProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aValue,
-                                                  SdrObject::getSdrObjectFromXShape(mxShape));
+            if (pEntry->nMemberId == MID_CHAIN_NEXTNAME || pEntry->nMemberId == MID_CHAIN_PREVNAME)
+                if (auto& rHandler = pFormat->GetTextBoxHandler())
+                    if (auto pObj = SdrObject::getSdrObjectFromXShape(mxShape))
+                        rHandler->SetProperty(
+                            pObj, pEntry->nWID, pEntry->nMemberId,
+                            rHandler->GetProperty(pObj, pEntry->nWID, pEntry->nMemberId));
             }
             // #i28749#
             else if ( FN_SHAPE_POSITION_LAYOUT_DIR == pEntry->nWID )
@@ -1533,21 +1538,19 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     if (pEntry->nMemberId == MID_TEXT_BOX)
                     {
                         auto pSvxShape = GetSvxShape();
-                        bool bValue = SwTextBoxHelper::isTextBox(
-                            pFormat, RES_DRAWFRMFMT,
-                            ((pSvxShape && pSvxShape->GetSdrObject()) ? pSvxShape->GetSdrObject()
-                                : pFormat->FindRealSdrObject()));
-                        aRet <<= bValue;
+
+                        aRet <<= pFormat->GetTextBoxHandler() ? (pFormat->GetTextBoxHandler()->Has(
+                                     pSvxShape ? pSvxShape->GetSdrObject()
+                                               : pFormat->FindRealSdrObject()))
+                                                              : false;
                     }
                     else if (pEntry->nMemberId == MID_TEXT_BOX_CONTENT)
                     {
                         auto pObj = SdrObject::getSdrObjectFromXShape(mxShape);
-                        auto xRange = SwTextBoxHelper::queryInterface(
-                            pFormat, cppu::UnoType<text::XText>::get(),
-                            pObj ? pObj : pFormat->FindRealSdrObject());
-                        uno::Reference<text::XTextFrame> xFrame(xRange, uno::UNO_QUERY);
-                        if (xFrame.is())
-                            aRet <<= xFrame;
+                        if (auto& rHandler = pFormat->GetTextBoxHandler())
+                            aRet = rHandler->QueryInterface(pObj ? pObj
+                                                                 : pFormat->FindRealSdrObject(),
+                                                            cppu::UnoType<text::XText>::get());
                     }
                 }
                 else if (pEntry->nWID == RES_CHAIN)
@@ -1557,7 +1560,9 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
                     case MID_CHAIN_PREVNAME:
                     case MID_CHAIN_NEXTNAME:
                     case MID_CHAIN_NAME:
-                        SwTextBoxHelper::getProperty(pFormat, pEntry->nWID, pEntry->nMemberId, aRet);
+                        if (auto& rHandler = pFormat->GetTextBoxHandler())
+                            aRet = rHandler->GetProperty(SdrObject::getSdrObjectFromXShape(mxShape),
+                                                         pEntry->nWID, pEntry->nMemberId);
                     break;
                     }
                 }

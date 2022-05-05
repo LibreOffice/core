@@ -2522,6 +2522,8 @@ SwFrameFormat::SwFrameFormat(
 :   SwFormat(rPool, pFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_ffList(nullptr)
 {
+    if (Which() == RES_DRAWFRMFMT)
+        m_pTextBoxHandler.reset(new SwTextBoxHandler(*this));
 }
 
 SwFrameFormat::SwFrameFormat(
@@ -2533,6 +2535,8 @@ SwFrameFormat::SwFrameFormat(
 :   SwFormat(rPool, rFormatNm, pWhichRange, pDrvdFrame, nFormatWhich),
     m_ffList(nullptr)
 {
+    if (Which() == RES_DRAWFRMFMT)
+        m_pTextBoxHandler.reset(new SwTextBoxHandler(*this));
 }
 
 SwFrameFormat::~SwFrameFormat()
@@ -2546,7 +2550,20 @@ SwFrameFormat::~SwFrameFormat()
         }
     }
 
-    if( nullptr == m_pOtherTextBoxFormats )
+    if (m_pTextBoxHandler)
+    {
+        if (Which() == RES_DRAWFRMFMT)
+        {
+            m_pTextBoxHandler.reset();
+        }
+
+        if (Which() == RES_FLYFRMFMT)
+        {
+            m_pTextBoxHandler->Del(this);
+
+        }
+    }
+    //if( nullptr == m_pOtherTextBoxFormats )
         return;
 
     // This is a fly-frame-format just delete this
@@ -2555,6 +2572,8 @@ SwFrameFormat::~SwFrameFormat()
         m_pOtherTextBoxFormats->DelTextBox(this);
 
     m_pOtherTextBoxFormats.reset();
+
+
 }
 
 void SwFrameFormat::SetName( const OUString& rNewName, bool bBroadcast )

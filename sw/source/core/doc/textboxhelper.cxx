@@ -63,6 +63,10 @@ using namespace com::sun::star;
 
 void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCopyText)
 {
+    if (auto& rHandler = pShape->GetTextBoxHandler())
+        rHandler->Create(pObject);
+    return;
+
     assert(pShape);
     assert(pObject);
 
@@ -212,6 +216,7 @@ void SwTextBoxHelper::create(SwFrameFormat* pShape, SdrObject* pObject, bool bCo
 void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
                           uno::Reference<text::XTextFrame> xNew)
 {
+    return;
     // Do not set invalid data
     assert(pShapeFormat && pObj && xNew);
     // Firstly find the format of the new textbox.
@@ -335,6 +340,9 @@ void SwTextBoxHelper::set(SwFrameFormat* pShapeFormat, SdrObject* pObj,
 
 void SwTextBoxHelper::destroy(const SwFrameFormat* pShape, const SdrObject* pObject)
 {
+    pShape->GetTextBoxHandler()->Destroy(pObject);
+    return;
+
     // If a TextBox was enabled previously
     auto pTextBox = pShape->GetOtherTextBoxFormats();
     if (pTextBox && pTextBox->IsTextBoxActive(pObject))
@@ -1066,6 +1074,7 @@ text::TextContentAnchorType SwTextBoxHelper::mapAnchorType(const RndStdIds& rAnc
 void SwTextBoxHelper::syncFlyFrameAttr(SwFrameFormat& rShape, SfxItemSet const& rSet,
                                        SdrObject* pObj)
 {
+    return;
     SwFrameFormat* pFormat = getOtherTextBoxFormat(&rShape, RES_DRAWFRMFMT, pObj);
     if (!pFormat)
         return;
@@ -1590,6 +1599,7 @@ bool SwTextBoxHelper::DoTextBoxZOrderCorrection(SwFrameFormat* pShape, const Sdr
 void SwTextBoxHelper::synchronizeGroupTextBoxProperty(bool pFunc(SwFrameFormat*, SdrObject*),
                                                       SwFrameFormat* pFormat, SdrObject* pObj)
 {
+    return;
     if (auto pChildren = pObj->getChildrenOfSdrObject())
     {
         for (size_t i = 0; i < pChildren->GetObjCount(); ++i)
