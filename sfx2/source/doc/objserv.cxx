@@ -104,6 +104,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <editeng/unoprnms.hxx>
 
 #include <autoredactdialog.hxx>
 
@@ -2095,6 +2096,36 @@ const uno::Sequence<sal_Int8>& SfxObjectShell::getUnoTunnelId()
 {
     static const comphelper::UnoIdInit theSfxObjectShellUnoTunnelId;
     return theSfxObjectShellUnoTunnelId.getSeq();
+}
+
+uno::Sequence< beans::PropertyValue > SfxObjectShell::GetDocumentProtectionFromGrabBag() const
+{
+    uno::Reference<frame::XModel> xModel = GetBaseModel();
+
+    if (!xModel.is())
+    {
+        return uno::Sequence< beans::PropertyValue>();
+    }
+
+    uno::Reference< beans::XPropertySet > xPropSet( xModel, uno::UNO_QUERY_THROW );
+    uno::Reference< beans::XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
+    const OUString aGrabBagName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
+    if ( xPropSetInfo->hasPropertyByName( aGrabBagName ) )
+    {
+        uno::Sequence< beans::PropertyValue > propList;
+        xPropSet->getPropertyValue( aGrabBagName ) >>= propList;
+        for( const auto& rProp : std::as_const(propList) )
+        {
+            if (rProp.Name == "DocumentProtection")
+            {
+                uno::Sequence< beans::PropertyValue > rAttributeList;
+                rProp.Value >>= rAttributeList;
+                return rAttributeList;
+            }
+        }
+    }
+
+    return uno::Sequence< beans::PropertyValue>();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

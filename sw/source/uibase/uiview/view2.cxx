@@ -117,6 +117,7 @@
 #include <reffld.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/string.hxx>
+#include <comphelper/docpasswordhelper.hxx>
 
 #include <PostItMgr.hxx>
 
@@ -682,34 +683,48 @@ void SwView::Execute(SfxRequest &rReq)
                 {
                     OSL_ENSURE( !static_cast<const SfxBoolItem*>(pItem)->GetValue(), "SwView::Execute(): password set and redlining off doesn't match!" );
 
-                    // dummy password from OOXML import: only confirmation dialog
+                    // xmlsec05:    new password dialog
+                    SfxPasswordDialog aPasswdDlg(GetFrameWeld());
+                    aPasswdDlg.SetMinLen(1);
+                    //#i69751# the result of Execute() can be ignored
+                    (void)aPasswdDlg.run();
+                    OUString sNewPasswd(aPasswdDlg.GetPassword());
+
+                    // password verification
+                    bool bPasswordOk = false;
                     if (aPasswd.getLength() == 1 && aPasswd[0] == 1)
                     {
-                        std::unique_ptr<weld::MessageDialog> xWarn(Application::CreateMessageDialog(m_pWrtShell->GetView().GetFrameWeld(),
-                                                   VclMessageType::Warning, VclButtonsType::YesNo,
-                                                   SfxResId(RID_SVXSTR_END_REDLINING_WARNING)));
-                        xWarn->set_default_response(RET_NO);
-                        if (xWarn->run() == RET_YES)
-                            rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
-                        else
-                            break;
+                        // dummy RedlinePassword from OOXML import: get real password info
+                        // from the grab-bag to verify the password
+                        const css::uno::Sequence< css::beans::PropertyValue > aDocumentProtection =
+                            static_cast<SfxObjectShell*>(GetDocShell())->
+                                                   GetDocumentProtectionFromGrabBag();
+
+                        bPasswordOk =
+                            // password is ok, if there is no DocumentProtection in the GrabBag,
+                            // i.e. the dummy RedlinePassword imported from an OpenDocument file
+                            !aDocumentProtection.hasElements() ||
+                            // verify password with the password info imported from OOXML
+                            ::comphelper::DocPasswordHelper::IsModifyPasswordCorrect(sNewPasswd,
+                                ::comphelper::DocPasswordHelper::ConvertPasswordInfo ( aDocumentProtection ) );
                     }
                     else
                     {
-                        // xmlsec05:    new password dialog
-                        SfxPasswordDialog aPasswdDlg(GetFrameWeld());
-                        aPasswdDlg.SetMinLen(1);
-                        //#i69751# the result of Execute() can be ignored
-                        (void)aPasswdDlg.run();
-                        OUString sNewPasswd(aPasswdDlg.GetPassword());
+                        // the simplified RedlinePassword
                         Sequence <sal_Int8> aNewPasswd = rIDRA.GetRedlinePassword();
                         SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
-                        if(SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd))
-                            rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
-                        else
-                        {   // xmlsec05: message box for wrong password
-                            break;
-                        }
+                        bPasswordOk = SvPasswordHelper::CompareHashPassword(aPasswd, sNewPasswd);
+                    }
+
+                    if (bPasswordOk)
+                        rIDRA.SetRedlinePassword(Sequence <sal_Int8> ());
+                    else
+                    {   // xmlsec05: message box for wrong password
+                        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(nullptr,
+                                                      VclMessageType::Info, VclButtonsType::Ok,
+                                                      SfxResId(RID_SVXSTR_INCORRECT_PASSWORD)));
+                        xInfoBox->run();
+                        break;
                     }
                 }
 
