@@ -137,6 +137,63 @@ DocPasswordHelper::GenerateNewModifyPasswordInfoOOXML(std::u16string_view aPassw
 }
 
 
+uno::Sequence< beans::PropertyValue > DocPasswordHelper::ConvertPasswordInfo( const uno::Sequence< beans::PropertyValue >& aInfo )
+{
+    uno::Sequence< beans::PropertyValue > aResult;
+    OUString sAlgorithm, sHash, sSalt, sCount;
+    sal_Int32 nAlgorithm = 0;
+
+    for ( const auto & prop : aInfo )
+    {
+        if ( prop.Name == "cryptAlgorithmSid" )
+        {
+            prop.Value >>= sAlgorithm;
+            nAlgorithm = sAlgorithm.toInt32();
+        }
+        else if ( prop.Name == "salt" )
+            prop.Value >>= sSalt;
+        else if ( prop.Name == "cryptSpinCount" )
+            prop.Value >>= sCount;
+        else if ( prop.Name == "hash" )
+            prop.Value >>= sHash;
+    }
+
+    if (nAlgorithm == 1)
+        sAlgorithm = "MD2";
+    else if (nAlgorithm == 2)
+        sAlgorithm = "MD4";
+    else if (nAlgorithm == 3)
+        sAlgorithm = "MD5";
+    else if (nAlgorithm == 4)
+        sAlgorithm = "SHA-1";
+    else if (nAlgorithm == 5)
+        sAlgorithm = "MAC";
+    else if (nAlgorithm == 6)
+        sAlgorithm = "RIPEMD";
+    else if (nAlgorithm == 7)
+        sAlgorithm = "RIPEMD-160";
+    else if (nAlgorithm == 9)
+        sAlgorithm = "HMAC";
+    else if (nAlgorithm == 12)
+        sAlgorithm = "SHA-256";
+    else if (nAlgorithm == 13)
+        sAlgorithm = "SHA-384";
+    else if (nAlgorithm == 14)
+        sAlgorithm = "SHA-512";
+
+    if ( !sCount.isEmpty() )
+    {
+        sal_Int32 nCount = sCount.toInt32();
+        aResult = { comphelper::makePropertyValue("algorithm-name", sAlgorithm),
+                    comphelper::makePropertyValue("salt", sSalt),
+                    comphelper::makePropertyValue("iteration-count", nCount),
+                    comphelper::makePropertyValue("hash", sHash) };
+    }
+
+    return aResult;
+}
+
+
 bool DocPasswordHelper::IsModifyPasswordCorrect( std::u16string_view aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     bool bResult = false;
