@@ -39,7 +39,6 @@
 #include <sal/log.hxx>
 #include <uno/environment.hxx>
 #include <uno/mapping.hxx>
-#include <o3tl/string_view.hxx>
 
 #include "loadsharedlibcomponentfactory.hxx"
 

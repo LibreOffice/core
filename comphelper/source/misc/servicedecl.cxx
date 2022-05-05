@@ -23,7 +23,6 @@
 #include <rtl/string.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/sequence.hxx>
-#include <o3tl/string_view.hxx>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <cassert>
 #include <vector>
