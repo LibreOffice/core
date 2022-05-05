@@ -580,8 +580,8 @@ void SdTiledRenderingTest::testUndoShells()
     SdXImpressDocument* pXImpressDocument = createDoc("shape.odp");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AttributePageSize.Width", uno::makeAny(static_cast<sal_Int32>(10000))},
-        {"AttributePageSize.Height", uno::makeAny(static_cast<sal_Int32>(10000))},
+        {"AttributePageSize.Width", uno::Any(static_cast<sal_Int32>(10000))},
+        {"AttributePageSize.Height", uno::Any(static_cast<sal_Int32>(10000))},
     }));
     comphelper::dispatchCommand(".uno:AttributePageSize", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -738,8 +738,8 @@ void SdTiledRenderingTest::testInsertTable()
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "Rows", uno::makeAny(sal_Int32(3)) },
-        { "Columns", uno::makeAny(sal_Int32(5)) }
+        { "Rows", uno::Any(sal_Int32(3)) },
+        { "Columns", uno::Any(sal_Int32(5)) }
     }));
 
     comphelper::dispatchCommand(".uno:InsertTable", aArgs);
@@ -764,8 +764,8 @@ void SdTiledRenderingTest::testDeleteTable()
 
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        { "Rows", uno::makeAny(sal_Int32(3)) },
-        { "Columns", uno::makeAny(sal_Int32(5)) }
+        { "Rows", uno::Any(sal_Int32(3)) },
+        { "Columns", uno::Any(sal_Int32(5)) }
     }));
 
     comphelper::dispatchCommand(".uno:InsertTable", aArgs);
@@ -1802,7 +1802,7 @@ void SdTiledRenderingTest::testCommentCallbacks()
 
     SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::makeAny(OUString("LOK User1"))},
+        {".uno:Author", uno::Any(OUString("LOK User1"))},
     }));
     ViewCallback aView1;
     int nView1 = SfxLokHelper::getView();
@@ -1810,7 +1810,7 @@ void SdTiledRenderingTest::testCommentCallbacks()
     SfxLokHelper::createView();
     uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::makeAny(OUString("LOK User2"))},
+        {".uno:Author", uno::Any(OUString("LOK User2"))},
     }));
     pXImpressDocument->initializeForTiledRendering(aArgs);
     ViewCallback aView2;
@@ -1821,7 +1821,7 @@ void SdTiledRenderingTest::testCommentCallbacks()
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", uno::makeAny(OUString("Comment"))},
+        {"Text", uno::Any(OUString("Comment"))},
     });
     comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1845,8 +1845,8 @@ void SdTiledRenderingTest::testCommentCallbacks()
     SfxLokHelper::setView(nView2);
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", uno::makeAny(OUString::number(nComment1))},
-        {"Text", uno::makeAny(OUString("Reply to comment"))},
+        {"Id", uno::Any(OUString::number(nComment1))},
+        {"Text", uno::Any(OUString("Reply to comment"))},
     });
     comphelper::dispatchCommand(".uno:ReplyToAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1870,8 +1870,8 @@ void SdTiledRenderingTest::testCommentCallbacks()
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", uno::makeAny(OUString::number(nComment1))},
-        {"Text", uno::makeAny(OUString("Edited comment"))},
+        {"Id", uno::Any(OUString::number(nComment1))},
+        {"Text", uno::Any(OUString("Edited comment"))},
     });
     comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1889,7 +1889,7 @@ void SdTiledRenderingTest::testCommentCallbacks()
     // Delete the comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", uno::makeAny(OUString::number(nComment1))},
+        {"Id", uno::Any(OUString::number(nComment1))},
     });
     comphelper::dispatchCommand(".uno:DeleteAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1913,7 +1913,7 @@ void SdTiledRenderingTest::testCommentChangeImpress()
 
     createDoc("dummy.odp", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::makeAny(OUString("LOK User1"))},
+        {".uno:Author", uno::Any(OUString("LOK User1"))},
     }));
 
     ViewCallback aView1;
@@ -1921,7 +1921,7 @@ void SdTiledRenderingTest::testCommentChangeImpress()
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", uno::makeAny(OUString("Comment"))},
+        {"Text", uno::Any(OUString("Comment"))},
     });
     comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1937,9 +1937,9 @@ void SdTiledRenderingTest::testCommentChangeImpress()
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", uno::makeAny(OUString::number(nComment1))},
-        {"PositionX", uno::makeAny(sal_Int32(10))},
-        {"PositionY", uno::makeAny(sal_Int32(20))}
+        {"Id", uno::Any(OUString::number(nComment1))},
+        {"PositionX", uno::Any(sal_Int32(10))},
+        {"PositionY", uno::Any(sal_Int32(20))}
     });
     comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1961,7 +1961,7 @@ void SdTiledRenderingTest::testCommentChangeDraw()
 
     createDoc("dummy.odg", comphelper::InitPropertySequence(
     {
-        {".uno:Author", uno::makeAny(OUString("LOK User1"))},
+        {".uno:Author", uno::Any(OUString("LOK User1"))},
     }));
 
     ViewCallback aView1;
@@ -1969,7 +1969,7 @@ void SdTiledRenderingTest::testCommentChangeDraw()
     // Add a new comment
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Text", uno::makeAny(OUString("Comment"))},
+        {"Text", uno::Any(OUString("Comment"))},
     });
     comphelper::dispatchCommand(".uno:InsertAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -1985,9 +1985,9 @@ void SdTiledRenderingTest::testCommentChangeDraw()
     // Edit this annotation now
     aArgs = comphelper::InitPropertySequence(
     {
-        {"Id", uno::makeAny(OUString::number(nComment1))},
-        {"PositionX", uno::makeAny(sal_Int32(10))},
-        {"PositionY", uno::makeAny(sal_Int32(20))}
+        {"Id", uno::Any(OUString::number(nComment1))},
+        {"PositionX", uno::Any(sal_Int32(10))},
+        {"PositionY", uno::Any(sal_Int32(20))}
     });
     comphelper::dispatchCommand(".uno:EditAnnotation", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -2267,7 +2267,7 @@ void SdTiledRenderingTest::testLanguageAllText()
 
     // Set the language to English for all text.
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
-        { "Language", uno::makeAny(OUString("Default_English (USA)")) },
+        { "Language", uno::Any(OUString("Default_English (USA)")) },
     });
     comphelper::dispatchCommand(".uno:LanguageStatus", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -2361,7 +2361,7 @@ void SdTiledRenderingTest::testTdf115783()
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, nShiftRight);
     pXImpressDocument->postKeyEvent(LOK_KEYEVENT_KEYUP, 0, nShiftRight);
     uno::Sequence<beans::PropertyValue> aArgs = comphelper::InitPropertySequence({
-        { "FontHeight.Height", uno::makeAny(static_cast<float>(12)) },
+        { "FontHeight.Height", uno::Any(static_cast<float>(12)) },
     });
     comphelper::dispatchCommand(".uno:FontHeight", aArgs);
     Scheduler::ProcessEventsToIdle();
@@ -2619,7 +2619,7 @@ void SdTiledRenderingTest::testSpellOnlineRenderParameter()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues =
     {
-        comphelper::InitPropertySequence({ { ".uno:SpellOnline", uno::makeAny(!bSet) } }),
+        comphelper::InitPropertySequence({ { ".uno:SpellOnline", uno::Any(!bSet) } }),
     };
     pXImpressDocument->initializeForTiledRendering(aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(!bSet, pXImpressDocument->GetDoc()->GetOnlineSpell());
@@ -2715,9 +2715,9 @@ void SdTiledRenderingTest::testMoveShapeHandle()
         sal_uInt32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", uno::makeAny(id)},
-            {"NewPosX", uno::makeAny(x+1)},
-            {"NewPosY", uno::makeAny(y+1)}
+            {"HandleNum", uno::Any(id)},
+            {"NewPosX", uno::Any(x+1)},
+            {"NewPosY", uno::Any(y+1)}
         }));
         comphelper::dispatchCommand(".uno:MoveShapeHandle", aPropertyValues);
         Scheduler::ProcessEventsToIdle();

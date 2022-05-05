@@ -68,27 +68,27 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         else
             aClientProgram = aClientProgram.section(QLatin1Char(' '), 0, 0);
         sClientProgram = fromQStringToOUString(aClientProgram);
-        return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sClientProgram));
+        return css::beans::Optional<css::uno::Any>(true, uno::Any(sClientProgram));
     }
     else if (id == u"SourceViewFontHeight")
     {
         const QFont aFixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         const short nFontHeight = aFixedFont.pointSize();
-        return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nFontHeight));
+        return css::beans::Optional<css::uno::Any>(true, uno::Any(nFontHeight));
     }
     else if (id == u"SourceViewFontName")
     {
         const QFont aFixedFont = QFontDatabase::systemFont(QFontDatabase::FixedFont);
         const QString aFontName = aFixedFont.family();
         const OUString sFontName = fromQStringToOUString(aFontName);
-        return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sFontName));
+        return css::beans::Optional<css::uno::Any>(true, uno::Any(sFontName));
     }
     else if (id == u"EnableATToolSupport")
     {
         /* does not make much sense without an accessibility bridge */
         bool ATToolSupport = false;
         return css::beans::Optional<css::uno::Any>(true,
-                                                   uno::makeAny(OUString::boolean(ATToolSupport)));
+                                                   uno::Any(OUString::boolean(ATToolSupport)));
     }
     else if (id == u"WorkPathVariable")
     {
@@ -101,7 +101,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
             aDocumentsDir.truncate(aDocumentsDir.length() - 1);
         sDocumentsDir = fromQStringToOUString(aDocumentsDir);
         osl_getFileURLFromSystemPath(sDocumentsDir.pData, &sDocumentsURL.pData);
-        return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sDocumentsURL));
+        return css::beans::Optional<css::uno::Any>(true, uno::Any(sDocumentsURL));
     }
     else if (id == u"ooInetFTPProxyName")
     {
@@ -127,7 +127,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         {
             QUrl aProxy(aFTPProxy);
             OUString sProxy = fromQStringToOUString(aProxy.host());
-            return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
+            return css::beans::Optional<css::uno::Any>(true, uno::Any(sProxy));
         }
     }
     else if (id == u"ooInetFTPProxyPort")
@@ -154,7 +154,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         {
             QUrl aProxy(aFTPProxy);
             sal_Int32 nPort = aProxy.port();
-            return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nPort));
+            return css::beans::Optional<css::uno::Any>(true, uno::Any(nPort));
         }
     }
     else if (id == u"ooInetHTTPProxyName")
@@ -181,7 +181,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         {
             QUrl aProxy(aHTTPProxy);
             OUString sProxy = fromQStringToOUString(aProxy.host());
-            return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
+            return css::beans::Optional<css::uno::Any>(true, uno::Any(sProxy));
         }
     }
     else if (id == u"ooInetHTTPProxyPort")
@@ -208,7 +208,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         {
             QUrl aProxy(aHTTPProxy);
             sal_Int32 nPort = aProxy.port();
-            return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nPort));
+            return css::beans::Optional<css::uno::Any>(true, uno::Any(nPort));
         }
     }
     else if (id == u"ooInetHTTPSProxyName")
@@ -235,7 +235,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         {
             QUrl aProxy(aHTTPSProxy);
             OUString sProxy = fromQStringToOUString(aProxy.host());
-            return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sProxy));
+            return css::beans::Optional<css::uno::Any>(true, uno::Any(sProxy));
         }
     }
     else if (id == u"ooInetHTTPSProxyPort")
@@ -262,7 +262,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
         {
             QUrl aProxy(aHTTPSProxy);
             sal_Int32 nPort = aProxy.port();
-            return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nPort));
+            return css::beans::Optional<css::uno::Any>(true, uno::Any(nPort));
         }
     }
     else if (id == u"ooInetNoProxy")
@@ -285,7 +285,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
 
             aNoProxyFor = aNoProxyFor.replace(QLatin1Char(','), QLatin1Char(';'));
             sNoProxyFor = fromQStringToOUString(aNoProxyFor);
-            return css::beans::Optional<css::uno::Any>(true, uno::makeAny(sNoProxyFor));
+            return css::beans::Optional<css::uno::Any>(true, uno::Any(sNoProxyFor));
         }
     }
     else if (id == u"ooInetProxyType")
@@ -302,7 +302,7 @@ css::beans::Optional<css::uno::Any> getValue(std::u16string_view id)
             default: // No proxy is used
                 nProxyType = 0;
         }
-        return css::beans::Optional<css::uno::Any>(true, uno::makeAny(nProxyType));
+        return css::beans::Optional<css::uno::Any>(true, uno::Any(nProxyType));
     }
     else
     {

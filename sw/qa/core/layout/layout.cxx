@@ -400,13 +400,13 @@ CPPUNIT_TEST_FIXTURE(SwCoreLayoutTest, testGutterMarginPageBorder)
     uno::Reference<beans::XPropertySet> xStandard(getStyles("PageStyles")->getByName("Standard"),
                                                   uno::UNO_QUERY);
     sal_Int32 nGutterMm100 = 2000;
-    xStandard->setPropertyValue("GutterMargin", uno::makeAny(nGutterMm100));
+    xStandard->setPropertyValue("GutterMargin", uno::Any(nGutterMm100));
 
     // When setting a left border.
     table::BorderLine2 aBorder;
     aBorder.LineWidth = 2;
     aBorder.OuterLineWidth = 2;
-    xStandard->setPropertyValue("LeftBorder", uno::makeAny(aBorder));
+    xStandard->setPropertyValue("LeftBorder", uno::Any(aBorder));
 
     // Then make sure border is at the left edge of the text area.
     SwDocShell* pShell = pDoc->GetDocShell();

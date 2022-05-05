@@ -603,9 +603,9 @@ void DesktopLOKTest::testSearchCalc()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", uno::makeAny(OUString("foo"))},
-        {"SearchItem.Backward", uno::makeAny(false)},
-        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+        {"SearchItem.SearchString", uno::Any(OUString("foo"))},
+        {"SearchItem.Backward", uno::Any(false)},
+        {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -634,9 +634,9 @@ void DesktopLOKTest::testSearchAllNotificationsCalc()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"SearchItem.SearchString", uno::makeAny(OUString("foo"))},
-        {"SearchItem.Backward", uno::makeAny(false)},
-        {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+        {"SearchItem.SearchString", uno::Any(OUString("foo"))},
+        {"SearchItem.Backward", uno::Any(false)},
+        {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
     }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -776,7 +776,7 @@ void DesktopLOKTest::testPasteWriterJPEG()
     uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY_THROW)->dispose();
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {"AnchorType", uno::makeAny(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
+        {"AnchorType", uno::Any(static_cast<sal_uInt16>(text::TextContentAnchorType_AT_CHARACTER))},
     }));
     comphelper::dispatchCommand(".uno:Paste", aPropertyValues);
     xShape.set(xDrawPage->getByIndex(0), uno::UNO_QUERY);
@@ -2112,7 +2112,7 @@ void DesktopLOKTest::testRedlineWriter()
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 't', 0);
     Scheduler::ProcessEventsToIdle();
@@ -2139,7 +2139,7 @@ void DesktopLOKTest::testRedlineCalc()
     // Load a Writer document, enable change recording and press a key.
     LibLODocument_Impl* pDocument = loadDoc("sheets.ods");
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYUP, 't', 0);
     pDocument->pClass->postKeyEvent(pDocument, LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);

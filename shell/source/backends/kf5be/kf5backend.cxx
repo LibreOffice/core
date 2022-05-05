@@ -237,14 +237,14 @@ css::uno::Any Service::getPropertyValue(OUString const& PropertyName)
         std::map<OUString, css::beans::Optional<css::uno::Any>>::iterator it
             = m_KDESettings.find(PropertyName);
         if (it != m_KDESettings.end())
-            return css::uno::makeAny(it->second);
+            return css::uno::Any(it->second);
         else
-            return css::uno::makeAny(css::beans::Optional<css::uno::Any>());
+            return css::uno::Any(css::beans::Optional<css::uno::Any>());
     }
     else if (PropertyName == "givenname" || PropertyName == "sn"
              || PropertyName == "TemplatePathVariable")
     {
-        return css::uno::makeAny(css::beans::Optional<css::uno::Any>());
+        return css::uno::Any(css::beans::Optional<css::uno::Any>());
         //TODO: obtain values from KDE?
     }
     throw css::beans::UnknownPropertyException(PropertyName, static_cast<cppu::OWeakObject*>(this));

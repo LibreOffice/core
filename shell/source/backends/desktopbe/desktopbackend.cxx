@@ -248,7 +248,7 @@ css::uno::Any Default::getPropertyValue(OUString const & PropertyName)
          PropertyName == "givenname" ||
          PropertyName == "sn" )
     {
-        return css::uno::makeAny(css::beans::Optional< css::uno::Any >());
+        return css::uno::Any(css::beans::Optional< css::uno::Any >());
     }
 
     throw css::beans::UnknownPropertyException(

@@ -667,8 +667,8 @@ static void lcl_search(bool bBackward)
 {
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-                {"SearchItem.Backward", uno::makeAny(bBackward)}
+                {"SearchItem.SearchString", uno::Any(OUString("shape"))},
+                {"SearchItem.Backward", uno::Any(bBackward)}
                 }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
 }
@@ -728,10 +728,10 @@ void SwTiledRenderingTest::testSearchViewArea()
     pWrtShell->GotoPage(1, false);
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", uno::makeAny(OUString("Heading"))},
-                {"SearchItem.Backward", uno::makeAny(false)},
-                {"SearchItem.SearchStartPointX", uno::makeAny(static_cast<sal_Int32>(aPoint.getX()))},
-                {"SearchItem.SearchStartPointY", uno::makeAny(static_cast<sal_Int32>(aPoint.getY()))}
+                {"SearchItem.SearchString", uno::Any(OUString("Heading"))},
+                {"SearchItem.Backward", uno::Any(false)},
+                {"SearchItem.SearchStartPointX", uno::Any(static_cast<sal_Int32>(aPoint.getX()))},
+                {"SearchItem.SearchStartPointY", uno::Any(static_cast<sal_Int32>(aPoint.getY()))}
                 }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was just "Heading", i.e. SwView::SearchAndWrap() did not search from only the top of the second page.
@@ -745,8 +745,8 @@ void SwTiledRenderingTest::testSearchTextFrame()
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
-                {"SearchItem.Backward", uno::makeAny(false)},
+                {"SearchItem.SearchString", uno::Any(OUString("TextFrame"))},
+                {"SearchItem.Backward", uno::Any(false)},
                 }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was empty: nothing was highlighted after searching for 'TextFrame'.
@@ -760,8 +760,8 @@ void SwTiledRenderingTest::testSearchTextFrameWrapAround()
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", uno::makeAny(OUString("TextFrame"))},
-                {"SearchItem.Backward", uno::makeAny(false)},
+                {"SearchItem.SearchString", uno::Any(OUString("TextFrame"))},
+                {"SearchItem.Backward", uno::Any(false)},
                 }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     CPPUNIT_ASSERT(m_bFound);
@@ -794,9 +794,9 @@ void SwTiledRenderingTest::testSearchAll()
     setupLibreOfficeKitViewCallback(pWrtShell->GetSfxViewShell());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-                {"SearchItem.Backward", uno::makeAny(false)},
-                {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+                {"SearchItem.SearchString", uno::Any(OUString("shape"))},
+                {"SearchItem.Backward", uno::Any(false)},
+                {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
                 }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     // This was 0; should be 2 results in the body text.
@@ -814,9 +814,9 @@ void SwTiledRenderingTest::testSearchAllNotifications()
     m_nSelectionBeforeSearchResult = 0;
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"SearchItem.SearchString", uno::makeAny(OUString("shape"))},
-                {"SearchItem.Backward", uno::makeAny(false)},
-                {"SearchItem.Command", uno::makeAny(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
+                {"SearchItem.SearchString", uno::Any(OUString("shape"))},
+                {"SearchItem.Backward", uno::Any(false)},
+                {"SearchItem.Command", uno::Any(static_cast<sal_uInt16>(SvxSearchCmd::FIND_ALL))},
                 }));
     comphelper::dispatchCommand(".uno:ExecuteSearch", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -832,7 +832,7 @@ void SwTiledRenderingTest::testPageDownInvalidation()
     SwXTextDocument* pXTextDocument = createDoc("pagedown-invalidation.odt");
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {".uno:HideWhitespace", uno::makeAny(true)},
+                {".uno:HideWhitespace", uno::Any(true)},
                 }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
@@ -1603,7 +1603,7 @@ void SwTiledRenderingTest::testUndoRepairDispatch()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rUndoManager.GetUndoActionCount());
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"Repair", uno::makeAny(true)}
+                {"Repair", uno::Any(true)}
                 }));
     comphelper::dispatchCommand(".uno:Undo", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1708,7 +1708,7 @@ void SwTiledRenderingTest::testTrackChanges()
 
     // Turn on track changes, type "zzz" at the end, and move to the start.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     ViewCallback aView(pWrtShell->GetSfxViewShell());
     pWrtShell->EndOfSection();
@@ -1723,7 +1723,7 @@ void SwTiledRenderingTest::testTrackChanges()
     // Reject the change by id, while the cursor does not cover the tracked change.
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
                 {
-                {"RejectTrackedChange", uno::makeAny(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
+                {"RejectTrackedChange", uno::Any(o3tl::narrowing<sal_uInt16>(pRedline->GetId()))}
                 }));
     comphelper::dispatchCommand(".uno:RejectTrackedChange", aPropertyValues);
     Scheduler::ProcessEventsToIdle();
@@ -1743,7 +1743,7 @@ void SwTiledRenderingTest::testTrackChangesCallback()
 
     // Turn on track changes and type "x".
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     m_nRedlineTableSizeChanged = 0;
     pWrtShell->Insert("x");
 
@@ -1770,7 +1770,7 @@ void SwTiledRenderingTest::testRedlineUpdateCallback()
 
     // Turn on track changes, type "xx" and delete the second one.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     pWrtShell->Insert("xx");
     m_nRedlineTableEntryModified = 0;
     pWrtShell->DelLeft();
@@ -1781,7 +1781,7 @@ void SwTiledRenderingTest::testRedlineUpdateCallback()
 
     // Turn off the change tracking mode, make some modification to left of the
     // redline so that its position changes
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(false));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(false));
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 1, /*bBasicCall=*/false);
     pWrtShell->Insert("This text is left of the redline");
 
@@ -1890,7 +1890,7 @@ void SwTiledRenderingTest::testRedlineColors()
 
     // Turn on track changes, type "zzz" at the end.
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
     SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
     pWrtShell->EndOfSection();
     pWrtShell->Insert("zzz");
@@ -1959,8 +1959,8 @@ void SwTiledRenderingTest::testCommentInsert()
     uno::Reference<frame::XFrame> xFrame = pView->GetViewFrame()->GetFrame().GetFrameInterface();
     uno::Sequence<beans::PropertyValue> aPropertyValues = comphelper::InitPropertySequence(
             {
-            {"Text", uno::makeAny(OUString("some text"))},
-            {"Author", uno::makeAny(OUString("me"))},
+            {"Text", uno::Any(OUString("some text"))},
+            {"Author", uno::Any(OUString("me"))},
             });
     ViewCallback aView;
     comphelper::dispatchCommand(".uno:InsertAnnotation", xFrame, aPropertyValues);
@@ -2171,7 +2171,7 @@ void SwTiledRenderingTest::testAllTrackedChanges()
     createDoc("dummy.fodt");
 
     uno::Reference<beans::XPropertySet> xPropSet(mxComponent, uno::UNO_QUERY);
-    xPropSet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropSet->setPropertyValue("RecordChanges", uno::Any(true));
 
     // view #1
     SwView* pView1 = dynamic_cast<SwView*>(SfxViewShell::Current());
@@ -2396,7 +2396,7 @@ void SwTiledRenderingTest::testRedlineField()
 
     // Turn on track changes and type "x".
     uno::Reference<beans::XPropertySet> xPropertySet(mxComponent, uno::UNO_QUERY);
-    xPropertySet->setPropertyValue("RecordChanges", uno::makeAny(true));
+    xPropertySet->setPropertyValue("RecordChanges", uno::Any(true));
 
     SwDateTimeField aDate(static_cast<SwDateTimeFieldType*>(pWrtShell->GetFieldType(0, SwFieldIds::DateTime)));
     //aDate->SetDateTime(::DateTime(::DateTime::SYSTEM));
@@ -3305,9 +3305,9 @@ void SwTiledRenderingTest::testMoveShapeHandle()
         sal_Int32 oldY = y;
         uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
         {
-            {"HandleNum", uno::makeAny(id)},
-            {"NewPosX", uno::makeAny(x+1)},
-            {"NewPosY", uno::makeAny(y+1)}
+            {"HandleNum", uno::Any(id)},
+            {"NewPosX", uno::Any(x+1)},
+            {"NewPosY", uno::Any(y+1)}
         }));
         comphelper::dispatchCommand(".uno:MoveShapeHandle", aPropertyValues);
         Scheduler::ProcessEventsToIdle();
@@ -3396,7 +3396,7 @@ void SwTiledRenderingTest::testSpellOnlineRenderParameter()
 
     uno::Sequence<beans::PropertyValue> aPropertyValues(comphelper::InitPropertySequence(
     {
-        {".uno:SpellOnline", uno::makeAny(!bSet)},
+        {".uno:SpellOnline", uno::Any(!bSet)},
     }));
     pXTextDocument->initializeForTiledRendering(aPropertyValues);
     CPPUNIT_ASSERT_EQUAL(!bSet, pOpt->IsOnlineSpell());

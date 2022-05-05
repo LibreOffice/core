@@ -549,7 +549,7 @@ Any SAL_CALL OCommonStatement::getWarnings(  )
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
 
 
-    return makeAny(SQLWarning());
+    return Any(SQLWarning());
 }
 
 
