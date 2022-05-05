@@ -29,6 +29,7 @@
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
+#include <com/sun/star/table/XCellRange.hpp>
 
 #include <unotools/mediadescriptor.hxx>
 #include <unotools/tempfile.hxx>
@@ -507,6 +508,37 @@ CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testTdf132557_footerCustomShapes)
     uno::Reference<drawing::XShape> xShapeSlideNum(xDrawPage->getByIndex(2), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("com.sun.star.drawing.CustomShape"),
                          xShapeSlideNum->getShapeType());
+}
+
+CPPUNIT_TEST_FIXTURE(OoxDrawingmlTest, testThemeTint)
+{
+    // Given a document with a table style, using theme color with tinting in the A2 cell:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "theme-tint.pptx";
+
+    // When loading that document:
+    load(aURL);
+
+    // Then make sure that we only import theming info to the doc model if the effects are limited
+    // to lum mod / off that we can handle (i.e. no tint/shade):
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(getComponent(), uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<table::XCellRange> xTable;
+    CPPUNIT_ASSERT(xShape->getPropertyValue("Model") >>= xTable);
+    uno::Reference<beans::XPropertySet> xA1(xTable->getCellByPosition(0, 0), uno::UNO_QUERY);
+    sal_Int16 nFillColorTheme{};
+    CPPUNIT_ASSERT(xA1->getPropertyValue("FillColorTheme") >>= nFillColorTheme);
+    // This is OK, no problematic effects:
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(4), nFillColorTheme);
+    uno::Reference<beans::XPropertySet> xA2(xTable->getCellByPosition(0, 1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xA2->getPropertyValue("FillColorTheme") >>= nFillColorTheme);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: -1
+    // - Actual  : 4
+    // i.e. we remembered the theme index, without being able to remember the tint effect, leading
+    // to a bad background color.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int16>(-1), nFillColorTheme);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

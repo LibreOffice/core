@@ -479,7 +479,7 @@ void Color::clearTransparence()
     mnAlpha = MAX_PERCENT;
 }
 
-sal_Int16 Color::getTintOrShade()
+sal_Int16 Color::getTintOrShade() const
 {
     for(auto const& aTransform : maTransforms)
     {
