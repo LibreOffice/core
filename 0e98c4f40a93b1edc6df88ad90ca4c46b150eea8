@@ -181,6 +181,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9b6656db_66fa56af",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-05T10:48:21Z",
+      "side": 1,
+      "message": "- Thanks Stefan. \n- I have no opinion. Only responded to request to do something about tdf#112723\n- Options are laid out now.\n- Only need a decision about how to proceed....\n\n@Heiko? @Adolfo?",
+      "parentUuid": "ea700bc8_a55af402",
+      "revId": "0e98c4f40a93b1edc6df88ad90ca4c46b150eea8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e794f304_32e902b7",
         "filename": "stoc/inc/strings.hrc",
         "patchSetId": 3
