@@ -27,6 +27,7 @@
 #include <rtl/ref.hxx>
 #include <rtl/ustring.hxx>
 #include <svx/unoshape.hxx>
+#include <svx/unodraw/SvxTableShape.hxx>
 #include <svx/unopage.hxx>
 
 namespace chart { struct VLineProperties; }
@@ -215,6 +216,8 @@ public:
                 css::uno::Sequence< css::uno::Reference< css::chart2::XFormattedString > >& xFormattedString,
                 const css::uno::Reference< css::beans::XPropertySet > & xTextProperties,
                 double nRotation, const OUString& aName, sal_Int32 nTextMaxWidth );
+
+    static rtl::Reference<SvxTableShape> createTable(rtl::Reference<SvxShapeGroupAnyD> const& xTarget);
 
     static rtl::Reference<SvxShapeRect>
         createInvisibleRectangle(
