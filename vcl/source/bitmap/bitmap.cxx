@@ -1512,7 +1512,6 @@ bool Bitmap::Dither()
         BitmapScopedWriteAccess pWriteAcc(aNewBmp);
         if( pReadAcc && pWriteAcc )
         {
-            BitmapColor aColor;
             tools::Long nWidth = pReadAcc->Width();
             tools::Long nWidth1 = nWidth - 1;
             tools::Long nHeight = pReadAcc->Height();

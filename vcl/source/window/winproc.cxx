@@ -401,9 +401,6 @@ bool ImplHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, MouseNotifyEvent 
             }
 
             // Call the hook also, if Window is disabled
-            Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
-            MouseEvent aMEvt( aChildPos, pWinFrameData->mnClickCount, nMode, nCode, nCode );
-            NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
 
             if ( nSVEvent == MouseNotifyEvent::MOUSEBUTTONDOWN )
                 return true;

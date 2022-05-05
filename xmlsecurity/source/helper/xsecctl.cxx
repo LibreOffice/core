@@ -926,7 +926,6 @@ void XSecController::exportOOXMLSignature(const uno::Reference<embed::XStorage>&
 void XSecController::UpdateSignatureInformation(sal_Int32 const nSecurityId,
     std::vector<SignatureInformation::X509Data> && rDatas)
 {
-    SignatureInformation aInf( 0 );
     int const nIndex = findSignatureInfor(nSecurityId);
     assert(nIndex != -1); // nothing should touch this between parsing and verify
     m_vInternalSignatureInformations[nIndex].signatureInfor.X509Datas = std::move(rDatas);
