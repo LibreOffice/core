@@ -1036,7 +1036,6 @@ Reference< XShape > const & Shape::createAndInsert(
         sal_Int32 i, nNumPoints = aPoly.count();
         uno::Sequence< awt::Point > aPointSequence( nNumPoints );
         awt::Point* pPoints = aPointSequence.getArray();
-        uno::Reference<lang::XServiceInfo> xModelInfo(rFilterBase.getModel(), uno::UNO_QUERY);
         for( i = 0; i < nNumPoints; ++i )
         {
             basegfx::B2DPoint aPoint( aPoly.getB2DPoint( i ) );

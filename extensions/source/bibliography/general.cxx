@@ -782,7 +782,6 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::Entry& rEntry)
 
             if( xPropSet.is())
             {
-                uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
                 maChangeListeners.emplace_back(new EntryChangeListener(rEntry, xPropSet, *this));
                 maChangeListeners.back()->start();
                 if (&rEntry == m_xLocalURLED.get())
@@ -849,8 +848,6 @@ bool BibGeneralPage::AddXControl(const OUString& rName, weld::ComboBox& rList)
 
             if( xPropSet.is())
             {
-                uno::Reference< beans::XPropertySetInfo >  xPropInfo = xPropSet->getPropertySetInfo();
-
                 css::uno::Sequence<OUString> aEntries;
                 xPropSet->getPropertyValue("StringItemList") >>= aEntries;
                 for (const OUString& rString : std::as_const(aEntries))

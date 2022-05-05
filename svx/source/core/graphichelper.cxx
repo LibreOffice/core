@@ -430,7 +430,6 @@ void GraphicHelper::SaveShapeAsGraphic(weld::Window* pParent,
 {
     try
     {
-        Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
         Reference< XPropertySet > xShapeSet( xShape, UNO_QUERY_THROW );
 
         FileDialogHelper aDialogHelper(TemplateDescription::FILESAVE_AUTOEXTENSION, FileDialogFlags::NONE, pParent);

@@ -2543,7 +2543,6 @@ ScVbaRange::Copy(const ::uno::Any& Destination)
     }
     else
     {
-        uno::Reference<frame::XModel> xModel = getModelFromRange(mxRange);
         Select();
         excel::implnCopy(getUnoModel());
     }

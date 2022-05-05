@@ -364,7 +364,6 @@ void SlidePersist::createConnectorShapeConnection()
                 if (pShape == maShapeMap.end())
                     continue;
                 uno::Reference<drawing::XShape> xShape(pShape->second->getXShape(), uno::UNO_QUERY);
-                uno::Reference<beans::XPropertySet> xSet(xShape, uno::UNO_QUERY);
                 if (xShape.is())
                 {
                     uno::Reference<drawing::XGluePointsSupplier> xSupplier(xShape, uno::UNO_QUERY);
