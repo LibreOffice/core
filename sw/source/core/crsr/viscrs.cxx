@@ -61,6 +61,7 @@
 #include <cellfrm.hxx>
 #include <wrtsh.hxx>
 #include <textcontentcontrol.hxx>
+#include <dropdowncontentcontrolbutton.hxx>
 
 // Here static members are defined. They will get changed on alteration of the
 // MapMode. This is done so that on ShowCursor the same size does not have to be
@@ -360,6 +361,7 @@ SwSelPaintRects::SwSelPaintRects( const SwCursorShell& rCSh )
 SwSelPaintRects::~SwSelPaintRects()
 {
     Hide();
+    m_pContentControlButton.disposeAndClear();
 }
 
 void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
@@ -636,6 +638,8 @@ void SwSelPaintRects::HighlightContentControl()
 {
     std::vector<basegfx::B2DRange> aContentControlRanges;
     std::vector<OString> aLOKRectangles;
+    SwRect aLastPortionPaintArea;
+    const SwContentControl* pContentControl = nullptr;
 
     if (m_bShowContentControlOverlay)
     {
@@ -675,6 +679,12 @@ void SwSelPaintRects::HighlightContentControl()
                     aLOKRectangles.push_back(aRect.toString());
                 }
             }
+
+            if (!pRects->empty())
+            {
+                aLastPortionPaintArea = (*pRects)[pRects->size() - 1];
+            }
+            pContentControl = pCurContentControlAtCursor->GetContentControl().GetContentControl();
         }
     }
 
@@ -711,6 +721,18 @@ void SwSelPaintRects::HighlightContentControl()
                 xTargetOverlay->add(*m_pContentControlOverlay);
             }
         }
+
+        if (!m_pContentControlButton && pContentControl && pContentControl->HasListItems())
+        {
+            auto pWrtShell = dynamic_cast<const SwWrtShell*>(GetShell());
+            if (pWrtShell)
+            {
+                auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
+                m_pContentControlButton = VclPtr<SwDropDownContentControlButton>::Create(&rEditWin, *pContentControl);
+                m_pContentControlButton->CalcPosAndSize(aLastPortionPaintArea);
+                m_pContentControlButton->Show();
+            }
+        }
     }
     else
     {
@@ -722,6 +744,11 @@ void SwSelPaintRects::HighlightContentControl()
             GetShell()->GetSfxViewShell()->libreOfficeKitViewCallback(LOK_CALLBACK_CONTENT_CONTROL, pJson.get());
         }
         m_pContentControlOverlay.reset();
+
+        if (m_pContentControlButton)
+        {
+            m_pContentControlButton.disposeAndClear();
+        }
     }
 }
 
