@@ -16,6 +16,24 @@
       "message": "Is it fine to add the option compatible here or should I add a new file for the entire test?",
       "revId": "cf1647cff4acfe276937a155a7729f56db33a46a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff11a810_0427a666",
+        "filename": "basic/qa/basic_coverage/test_non_ascii_names.bas",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-05T20:56:57Z",
+      "side": 1,
+      "message": "Please add another.bas for Option Compatible to test them separately. That one could also test these, too - to make sure that this syntax works in either case.",
+      "parentUuid": "1e3cf967_2e94bcb3",
+      "revId": "cf1647cff4acfe276937a155a7729f56db33a46a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
