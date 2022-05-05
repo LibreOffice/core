@@ -1876,6 +1876,11 @@ void ImplListBoxWindow::SetTopEntry( sal_Int32 nTop )
 
 void ImplListBoxWindow::ShowProminentEntry( sal_Int32 nEntryPos )
 {
+    sal_Int32 nPos = nEntryPos;
+    auto nWHeight = PixelToLogic( GetSizePixel() ).Height();
+    while( nEntryPos > 0 && maEntryList.GetAddedHeight( nPos+1, nEntryPos ) < nWHeight/2 )
+        nEntryPos--;
+
     SetTopEntry( nEntryPos );
 }
 
