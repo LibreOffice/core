@@ -671,8 +671,8 @@ bool TypeDetection::impl_getPreselectionForType(
 
         // otherwise we must know, if it matches to the given URL really.
         // especially if it matches by its extension or pattern registration.
-        std::vector<OUString> lExtensions(comphelper::sequenceToContainer< std::vector<OUString> >(aType[PROPNAME_EXTENSIONS].get<css::uno::Sequence<OUString> >() ));
-        std::vector<OUString> lURLPattern(comphelper::sequenceToContainer< std::vector<OUString> >(aType[PROPNAME_URLPATTERN].get<css::uno::Sequence<OUString> >() ));
+        const css::uno::Sequence<OUString> lExtensions = aType[PROPNAME_EXTENSIONS].get<css::uno::Sequence<OUString> >();
+        const css::uno::Sequence<OUString> lURLPattern = aType[PROPNAME_URLPATTERN].get<css::uno::Sequence<OUString> >();
 
         for (auto const& extension : lExtensions)
         {
