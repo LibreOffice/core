@@ -51,6 +51,23 @@
       "parentUuid": "af59ccca_4220df87",
       "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e6f4d24_bbb9c7ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-05-06T22:46:40Z",
+      "side": 1,
+      "message": "In AOO bugzilla i97605 has files with test cases. Have you used them for the Linux compilers? I have just tested it with VC 2019. The only difference in that files is for asinh(-1.23E+050), where std::asinh is better. ",
+      "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
