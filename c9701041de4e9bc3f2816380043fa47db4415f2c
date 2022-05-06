@@ -16,6 +16,40 @@
       "message": "Caolan and Eike, could you please help to review this change? Thanks.",
       "revId": "c9701041de4e9bc3f2816380043fa47db4415f2c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "624df9c1_1cdb60e1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-06T12:03:24Z",
+      "side": 1,
+      "message": "Odd enough, playing with such selection in a debug build freezes LO on the 2nd negative selection (but also already before this patch, or I haven\u0027t been patient enough), does not happen in a non-debug build, applied and fixes things.\n",
+      "revId": "c9701041de4e9bc3f2816380043fa47db4415f2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b6c9be8b_8b1244fe",
+        "filename": "sc/source/core/data/markmulti.cxx",
+        "patchSetId": 6
+      },
+      "lineNbr": 240,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-06T12:03:24Z",
+      "side": 1,
+      "message": "ScMarkArray::SetMarkArea() indeed isn\u0027t prepared to receive nStartRow \u003e nEndRow (and probably shouldn\u0027t), so having the caller of ScMultiSel::MarkAllCols() take care of that is good.\n\nFrom a first glance it looks odd that checking nBeg \u003c\u003d nLast isn\u0027t done for this call, but the loop actually is executed only for such good condition, nBeg \u003e nLast can happen only if nBeg \u003d\u003d mrSheetLimits.GetMaxRowCount().",
+      "revId": "c9701041de4e9bc3f2816380043fa47db4415f2c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
