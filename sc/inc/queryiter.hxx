@@ -185,18 +185,6 @@ protected:
     */
     bool BinarySearch( SCCOL col );
 
-public:
-                    ScQueryCellIteratorBase(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
-                                            const ScQueryParam& aParam, bool bMod);
-                                        // when !bMod, the QueryParam has to be filled
-                                        // (bIsString)
-
-                    // increments all Entry.nField, if column
-                    // changes, for ScInterpreter ScHLookup()
-    void            SetAdvanceQueryParamEntryField( bool bVal )
-                        { bAdvanceQuery = bVal; }
-    void            AdvanceQueryParamEntryField();
-
                     /** If set, iterator stops on first non-matching cell
                         content. May be used in SC_LESS_EQUAL queries where a
                         cell range is assumed to be sorted; stops on first
@@ -228,6 +216,18 @@ public:
                         }
     bool            IsEqualConditionFulfilled() const
                         { return nTestEqualCondition == nTestEqualConditionFulfilled; }
+
+public:
+                    ScQueryCellIteratorBase(ScDocument& rDocument, ScInterpreterContext& rContext, SCTAB nTable,
+                                            const ScQueryParam& aParam, bool bMod);
+                                        // when !bMod, the QueryParam has to be filled
+                                        // (bIsString)
+
+                    // increments all Entry.nField, if column
+                    // changes, for ScInterpreter ScHLookup()
+    void            SetAdvanceQueryParamEntryField( bool bVal )
+                        { bAdvanceQuery = bVal; }
+    void            AdvanceQueryParamEntryField();
 };
 
 
