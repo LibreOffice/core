@@ -16,6 +16,24 @@
       "message": "this code was applying paragraph marker formatting to numbering styles?\n\nthat was kinda wrong anyway, the numbering could affect other paragraphs than the current one.\n\nand writer is able to store paragraph marker formatting as RES_PARATR_LIST_AUTOFMT now so i guess this can be removed without issues.",
       "revId": "0eb3e01013d10e5506aeef68d57a4a202f97949b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c35da7df_7760c077",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000880
+      },
+      "writtenOn": "2022-05-06T11:42:47Z",
+      "side": 1,
+      "message": "Yeah, it was okay with DOCX. But seems RTF wants some. Seems it should be improved also",
+      "parentUuid": "a6f8fa8f_4cde83a9",
+      "revId": "0eb3e01013d10e5506aeef68d57a4a202f97949b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
