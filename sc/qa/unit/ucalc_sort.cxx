@@ -2176,26 +2176,26 @@ void TestSort::testQueryBinarySearch()
     }
 
     {
-        // All values are larger than 0, so this should be an error.
+        // All values are larger than 0, so there should be no match.
         m_pDoc->SetFormula( formulaAddress, "=MATCH(0;" + ascendingRangeName + ";1)",
             formula::FormulaGrammar::GRAM_NATIVE_UI);
         CPPUNIT_ASSERT_EQUAL( FormulaError::NotAvailable, m_pDoc->GetErrCode( formulaAddress ));
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
@@ -2242,45 +2242,45 @@ void TestSort::testQueryBinarySearch()
     }
 
     {
-        // Descending, all values are smaller than 10, so this should be an error.
+        // Descending, all values are smaller than 10, so there should be no match.
         m_pDoc->SetFormula( formulaAddress, "=MATCH(10;" + descendingRangeName + ";-1)",
             formula::FormulaGrammar::GRAM_NATIVE_UI);
         CPPUNIT_ASSERT_EQUAL( FormulaError::NotAvailable, m_pDoc->GetErrCode( formulaAddress ));
 
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
     {
-        // Search as ascending but use descending range (=search will not work).
+        // Search as ascending but use descending range, will return no match.
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_LESS_EQUAL, 1 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
     {
-        // Search as descending but use ascending range (=search will not work).
+        // Search as descending but use ascending range, will return no match.
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_GREATER_EQUAL, 9 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
     {
-        // SC_EQUAL with descending is considered an error.
+        // SC_EQUAL with descending is considered an error, will return no match.
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_EQUAL, 9 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
     m_pDoc->DeleteTab(0);

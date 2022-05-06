@@ -141,9 +141,13 @@ protected:
 
     /* Only works if no regular expression is involved, only searches for rows in one column,
        and only the first query entry is considered with simple conditions SC_LESS,SC_LESS_EQUAL,
-       SC_EQUAL (sorted ascending) or SC_GREATER,SC_GREATER_EQUAL (sorted descending). Delivers
-       a starting point, continue with e.g. GetThis() and GetNext() afterwards. Introduced
-       for FindEqualOrSortedLastInRange(). */
+       SC_EQUAL (sorted ascending) or SC_GREATER,SC_GREATER_EQUAL (sorted descending). It
+       delivers a starting point set to nRow, i.e. the last row that either matches the searched
+       for value, or the last row that matches the condition. Continue with e.g. GetThis() and
+       GetNext() afterwards. Returns false if the searched for value is not in the search range
+       or if the range is not properly sorted, with nRow in that case set to the first row or after
+       the last row. In that case use GetFirst().
+    */
     bool BinarySearch();
 
 public:
