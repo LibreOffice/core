@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f096761_e5d3fb28",
+        "filename": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-06T11:47:33Z",
+      "side": 1,
+      "message": "here \"name\" is prefixed like \"dc:title\", this needs to pass a namespace uri?",
+      "revId": "fe57df08f2510e80532faeecceef7ed344e1b5c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7261a479_873a3141",
+        "filename": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1174,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-06T11:47:33Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "fe57df08f2510e80532faeecceef7ed344e1b5c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
