@@ -35,6 +35,8 @@ public:
     virtual void LaunchPopup();
     virtual void DestroyPopup();
 
+    const SwContentControl& GetContentControl() const { return m_rContentControl; }
+
 private:
     tools::Rectangle m_aFramePixel;
 

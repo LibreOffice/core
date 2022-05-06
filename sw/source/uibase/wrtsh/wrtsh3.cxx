@@ -37,6 +37,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <SwRewriter.hxx>
 #include <strings.hrc>
+#include <textcontentcontrol.hxx>
 
 using namespace ::com::sun::star;
 
@@ -119,6 +120,32 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         // Toggle the state.
         DelLeft();
         pContentControl->SetChecked(!pContentControl->GetChecked());
+        Insert(aNewState);
+
+        GetIDocumentUndoRedo().EndUndo(SwUndoId::REPLACE, &aRewriter);
+        LockView(/*bViewLocked=*/false);
+        ShowCursor();
+    }
+    else if (bRet && pContentControl && pContentControl->GetSelectedListItem())
+    {
+        // Dropdown: GotoFormatContentControl() selected the old content.
+        size_t nSelectedListItem = *pContentControl->GetSelectedListItem();
+        LockView(/*bViewLocked=*/true);
+        OUString aOldState = GetCursorDescr();
+        OUString aNewState = pContentControl->GetListItems()[nSelectedListItem].m_aDisplayText;
+        SwRewriter aRewriter;
+        aRewriter.AddRule(UndoArg1, aOldState);
+        aRewriter.AddRule(UndoArg2, SwResId(STR_YIELDS));
+        aRewriter.AddRule(UndoArg3, SwResId(STR_START_QUOTE) + aNewState + SwResId(STR_END_QUOTE));
+        GetIDocumentUndoRedo().StartUndo(SwUndoId::REPLACE, &aRewriter);
+
+        // Update the content.
+        SwTextContentControl* pTextContentControl
+            = const_cast<SwFormatContentControl&>(rContentControl).GetTextAttr();
+        // If the content control is at the end of the line, then expand is false by default.
+        pTextContentControl->SetDontExpand(false);
+        DelLeft();
+        pContentControl->SetSelectedListItem(std::nullopt);
         Insert(aNewState);
 
         GetIDocumentUndoRedo().EndUndo(SwUndoId::REPLACE, &aRewriter);

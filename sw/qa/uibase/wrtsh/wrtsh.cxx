@@ -17,6 +17,7 @@
 
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <comphelper/propertyvalue.hxx>
 
 #include <doc.hxx>
 #include <docsh.hxx>
@@ -164,6 +165,58 @@ CPPUNIT_TEST_FIXTURE(Test, testInsertCheckboxContentControl)
     // Without the accompanying fix in place, this test would have failed, the inserted content
     // control wasn't a checkbox one.
     CPPUNIT_ASSERT(pContentControl->GetCheckbox());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
+{
+    // Given a document with a dropdown content control:
+    SwDoc* pDoc = createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "choose an item", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    {
+        uno::Sequence<beans::PropertyValues> aListItems = {
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("R"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("green"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("G"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("blue"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("B"))),
+            },
+        };
+        xContentControlProps->setPropertyValue("ListItems", uno::Any(aListItems));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When clicking on that content control:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetNode().GetTextNode();
+    SwTextAttr* pAttr = pTextNode->GetTextAttrForCharAt(0, RES_TXTATR_CONTENTCONTROL);
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    auto& rFormatContentControl
+        = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
+    rFormatContentControl.GetContentControl()->SetSelectedListItem(0);
+    pWrtShell->GotoContentControl(rFormatContentControl);
+
+    // Then make sure that the document text is updated:
+    // Without the accompanying fix in place, this test would have failed:
+    // - Expected: red
+    // - Actual  : choose an item
+    // i.e. the document text was unchanged instead of CH_TXTATR_BREAKWORD + display text of the
+    // first list item.
+    CPPUNIT_ASSERT_EQUAL(OUString(u"\x0001red"), pTextNode->GetText());
 }
 }
 
