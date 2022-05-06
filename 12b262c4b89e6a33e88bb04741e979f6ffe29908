@@ -16,6 +16,23 @@
       "message": "Mike, what do you think about this patch? By considering the 15 significant digits, the test passes.\n\n\"A double-precision floating point number carries fifteen significant digits.\"\nhttps://devblogs.microsoft.com/oldnewthing/20060616-09/?p\u003d30843\n\nThe relative error here is less than 1e-15.",
       "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af59ccca_4220df87",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-06T20:39:53Z",
+      "side": 1,
+      "message": "I think it should at least be reported. I don\u0027t think it is too important, but it still is annoying that the same version of Calc would calculate differently on different platforms, just because the respective library functions don\u0027t agree on such details.",
+      "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
