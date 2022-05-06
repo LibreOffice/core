@@ -70,6 +70,24 @@
       "parentUuid": "d8714c85_43072960",
       "revId": "2be3ee8c608b2f8311813e9f6043113ece3405f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52aabcc4_d8a27a46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000179
+      },
+      "writtenOn": "2022-05-06T08:53:03Z",
+      "side": 1,
+      "message": "Hi Hossein,\nThanks for the explanation.\nYep, in that case it makes sense to create a new bug report with some sample reproducers and have a patch for that issue. Do not forget to work on top of this patch, otherwise you will get merge conflicts in sd/qa/unit/import-tests-smartart.cxx.\nThanks",
+      "parentUuid": "ef2258c7_ac30d098",
+      "revId": "2be3ee8c608b2f8311813e9f6043113ece3405f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
