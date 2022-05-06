@@ -1493,8 +1493,7 @@ void SAL_CALL SfxBaseController::appendInfobar(const OUString& sId, const OUStri
     if (!pInfoBar)
         throw uno::RuntimeException("Could not create Infobar");
 
-    auto vActionButtons = comphelper::sequenceToContainer<std::vector<StringPair>>(actionButtons);
-    for (auto& actionButton : vActionButtons)
+    for (const StringPair & actionButton : std::as_const(actionButtons))
     {
         if (actionButton.First.isEmpty() || actionButton.Second.isEmpty())
             continue;

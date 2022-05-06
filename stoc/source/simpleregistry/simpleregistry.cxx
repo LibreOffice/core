@@ -315,9 +315,8 @@ css::uno::Sequence< sal_Int32 > Key::getLongListValue()
 void Key::setLongListValue(css::uno::Sequence< sal_Int32 > const & seqValue)
 {
     std::scoped_lock guard(registry_->mutex_);
-    auto list = comphelper::sequenceToContainer<std::vector<sal_Int32>>(seqValue);
     RegError err = key_.setLongListValue(
-        OUString(), list.data(), static_cast< sal_uInt32 >(list.size()));
+        OUString(), seqValue.getConstArray(), static_cast< sal_uInt32 >(seqValue.getLength()));
     if (err != RegError::NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             "com.sun.star.registry.SimpleRegistry key setLongListValue:"

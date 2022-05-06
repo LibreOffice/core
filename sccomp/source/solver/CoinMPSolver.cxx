@@ -67,7 +67,7 @@ void SAL_CALL CoinMPSolver::solve()
 
     // collect variables in vector (?)
 
-    auto aVariableCells = comphelper::sequenceToContainer<std::vector<table::CellAddress>>(maVariables);
+    const auto & aVariableCells = maVariables;
     size_t nVariables = aVariableCells.size();
     size_t nVar = 0;
 

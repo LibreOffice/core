@@ -277,9 +277,9 @@ void SchXMLTableContext::endFastElement(sal_Int32 )
     if( mbHasColumnPermutation )
     {
         SAL_WARN_IF( mbHasRowPermutation, "xmloff.chart", "mbHasColumnPermutation is true" );
-        auto aPermutation( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( maColumnPermutation ));
-        SAL_WARN_IF( aPermutation.empty(), "xmloff.chart", "aPermutation is NULL");
-        if( aPermutation.empty())
+        const auto & aPermutation( maColumnPermutation );
+        SAL_WARN_IF( !aPermutation.hasElements(), "xmloff.chart", "aPermutation is NULL");
+        if( !aPermutation.hasElements())
             return;
 
         // permute the values of all rows according to aPermutation
@@ -316,9 +316,9 @@ void SchXMLTableContext::endFastElement(sal_Int32 )
     }
     else if( mbHasRowPermutation )
     {
-        auto aPermutation( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( maRowPermutation ));
-        SAL_WARN_IF( aPermutation.empty(), "xmloff.chart", "aPermutation is NULL");
-        if( aPermutation.empty())
+        const auto & aPermutation( maRowPermutation );
+        SAL_WARN_IF( !aPermutation.hasElements(), "xmloff.chart", "aPermutation is NULL");
+        if( !aPermutation.hasElements())
             return;
 
         bool bModified = false;
