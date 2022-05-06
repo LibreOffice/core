@@ -111,9 +111,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
                     colorPalette[i][k] = (Color.rgb(red_tint, green_tint, blue_tint));
                 }
             }
-        }
-        for (int i = 0; i < 11; i++){
-            this.colorPalette[i][7] = Color.WHITE; // last one is always white
+            colorPalette[i][7] = Color.WHITE; // last one is always white
         }
         colorPaletteAdapter.setColorPalette(colorPalette);
     }
