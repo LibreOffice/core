@@ -2100,7 +2100,7 @@ void TestSort::testQueryBinarySearch()
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 5 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
 
     {
@@ -2112,7 +2112,7 @@ void TestSort::testQueryBinarySearch()
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 5 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(6), it.GetRow());
+        CPPUNIT_ASSERT_EQUAL(SCROW(6), it.GetRow());
     }
 
     {
@@ -2124,7 +2124,7 @@ void TestSort::testQueryBinarySearch()
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
 
     {
@@ -2136,7 +2136,7 @@ void TestSort::testQueryBinarySearch()
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
     }
 
     {
@@ -2172,7 +2172,7 @@ void TestSort::testQueryBinarySearch()
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
-        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+        CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
     }
 
     {
