@@ -323,11 +323,11 @@ sal_Int32 VCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int32 nDimensio
 }
 
 void VCoordinateSystem::createVAxisList(
-              const rtl::Reference<::chart::ChartModel> & /* xChartDoc */
-            , const awt::Size& /* rFontReferenceSize */
-            , const awt::Rectangle& /* rMaximumSpaceForLabels */
-            , bool /* bLimitSpaceForLabels */
-            )
+            const rtl::Reference<::chart::ChartModel> & /* xChartDoc */,
+            const awt::Size& /* rFontReferenceSize */,
+            const awt::Rectangle& /* rMaximumSpaceForLabels */,
+            bool /* bLimitSpaceForLabels */,
+            std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/)
 {
 }
 

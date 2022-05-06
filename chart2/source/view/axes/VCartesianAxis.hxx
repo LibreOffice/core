@@ -99,6 +99,8 @@ public:
         ::basegfx::B2DVector aScreenPos;
     };
 
+    void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
+                             css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier) override;
 private: //methods
     /**
      * Go through all tick label positions and decide which labels to display
