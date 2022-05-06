@@ -25,6 +25,7 @@
 #include <editeng/langitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/editview.hxx>
+#include <editeng/eeitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -40,6 +41,7 @@
 #include <globstr.hrc>
 #include <scresid.hxx>
 #include <markdata.hxx>
+#include <docpool.hxx>
 
 #include <memory>
 
@@ -91,7 +93,18 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
         OUString aNewStr = GetText();
 
+        // Check if the user has changed the language. If the new language is
+        // applied to the entire string length, we will set the language as cell
+        // attribute. Otherwise we will commit this as an edit-engine string.
+        editeng::LanguageSpan aLang = GetLanguage(0, 0);
+
+        bool bSimpleString = GetParagraphCount() == 1 &&
+            aLang.nLang != LANGUAGE_DONTKNOW &&
+            aLang.nStart == 0 &&
+            aLang.nEnd == aNewStr.getLength();
+
         bool bMultiTab = (rMark.GetSelectCount() > 1);
+
         OUString aVisibleStr;
         if( bMultiTab )
             aVisibleStr = mrDoc.GetString(mnCurrCol, mnCurrRow, mnStartTab);
@@ -111,13 +124,27 @@ bool ScConversionEngineBase::FindNextConversionCell()
                 if (mpUndoDoc && !bEmptyCell)
                     mrDoc.CopyCellToDocument(aPos, aPos, *mpUndoDoc);
 
-                if (eCellType == CELLTYPE_EDIT)
+                if (!bSimpleString || eCellType == CELLTYPE_EDIT)
                 {
                     std::unique_ptr<EditTextObject> pEditObj(CreateTextObject());
                     mrDoc.SetEditText(aPos, *pEditObj, GetEditTextObjectPool());
                 }
                 else
+                {
+                    // Set the new string and update the language with the cell.
                     mrDoc.SetString(aPos, aNewStr);
+
+                    const ScPatternAttr* pAttr = mrDoc.GetPattern(mnCurrCol, mnCurrRow, mnStartTab);
+                    std::unique_ptr<ScPatternAttr> pNewAttr;
+
+                    if (pAttr)
+                        pNewAttr = std::make_unique<ScPatternAttr>(*pAttr);
+                    else
+                        pNewAttr = std::make_unique<ScPatternAttr>(mrDoc.GetPool());
+
+                    pNewAttr->GetItemSet().Put(SvxLanguageItem(aLang.nLang, EE_CHAR_LANGUAGE), ATTR_FONT_LANGUAGE);
+                    mrDoc.SetPattern(mnCurrCol, mnCurrRow, mnStartTab, std::move(pNewAttr));
+                }
 
                 if (mpRedoDoc && !bEmptyCell)
                     mrDoc.CopyCellToDocument(aPos, aPos, *mpRedoDoc);

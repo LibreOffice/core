@@ -1377,25 +1377,34 @@ void ImpEditEngine::SetAllMisspellRanges( const std::vector<editeng::MisspellRan
     }
 }
 
-LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos ) const
+editeng::LanguageSpan ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos ) const
 {
     short nScriptTypeI18N = GetI18NScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
     SvtScriptType nScriptType = SvtLanguageOptions::FromI18NToSvtScriptType(nScriptTypeI18N);
     sal_uInt16 nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
     const SvxLanguageItem* pLangItem = &static_cast<const SvxLanguageItem&>(rPaM.GetNode()->GetContentAttribs().GetItem( nLangId ));
     const EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
+
+    editeng::LanguageSpan aLang;
+
     if ( pAttr )
+    {
         pLangItem = static_cast<const SvxLanguageItem*>(pAttr->GetItem());
+        aLang.nStart = pAttr->GetStart();
+        aLang.nEnd = pAttr->GetEnd();
+    }
 
     if ( pEndPos && pAttr && ( pAttr->GetEnd() < *pEndPos ) )
         *pEndPos = pAttr->GetEnd();
 
-    return pLangItem->GetLanguage();
+    aLang.nLang = pLangItem->GetLanguage();
+
+    return aLang;
 }
 
 css::lang::Locale ImpEditEngine::GetLocale( const EditPaM& rPaM ) const
 {
-    return LanguageTag( GetLanguage( rPaM ) ).getLocale();
+    return LanguageTag( GetLanguage( rPaM ).nLang ).getLocale();
 }
 
 Reference< XSpellChecker1 > const & ImpEditEngine::GetSpeller()
@@ -1486,7 +1495,7 @@ bool ImpEditEngine::HasConvertibleTextPortion( LanguageType nSrcLang )
             // specified position is evaluated.
             if (nEnd > nStart)  // empty para?
                 ++nStart;
-            LanguageType nLangFound = pEditEngine->GetLanguage( k, nStart );
+            LanguageType nLangFound = pEditEngine->GetLanguage( k, nStart ).nLang;
 #ifdef DEBUG
             lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
@@ -1671,7 +1680,7 @@ void ImpEditEngine::ImpConvert( OUString &rConvTxt, LanguageType &rConvTxtLang,
             // thus we usually have to add 1 in order to get the language
             // of the text right to the cursor position
             const sal_Int32 nLangIdx = nEnd > nStart ? nStart + 1 : nStart;
-            LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nLangIdx );
+            LanguageType nLangFound = pEditEngine->GetLanguage( aCurStart.nPara, nLangIdx ).nLang;
 #ifdef DEBUG
             lang::Locale aLocale( LanguageTag::convertToLocale( nLangFound ) );
 #endif
@@ -1834,7 +1843,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 
         if ( !aWord.isEmpty() )
         {
-            LanguageType eLang = GetLanguage( aCurSel.Max() );
+            LanguageType eLang = GetLanguage( aCurSel.Max() ).nLang;
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
             xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
@@ -1883,7 +1892,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpFindNextError(EditSelection& r
         }
 
         if ( !aWord.isEmpty() )
-            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(GetLanguage( aCurSel.Max() )), aEmptySeq );
+            xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(GetLanguage( aCurSel.Max() ).nLang), aEmptySeq );
 
         if ( !xSpellAlt.is() )
             aCurSel = WordRight( aCurSel.Min(), css::i18n::WordType::DICTIONARY_WORD );
@@ -1967,7 +1976,7 @@ void ImpEditEngine::AddPortion(
 
     svx::SpellPortion aPortion;
     aPortion.sText = GetSelected( rSel );
-    aPortion.eLanguage = GetLanguage( rSel.Min() );
+    aPortion.eLanguage = GetLanguage( rSel.Min() ).nLang;
     aPortion.xAlternatives = xAlt;
     aPortion.bIsField = bIsField;
     rToFill.push_back(aPortion);
@@ -2002,7 +2011,7 @@ void ImpEditEngine::AddPortionIterated(
         //set the mark equal to the point
         EditPaM aCursor(aStart);
         rEditView.pImpEditView->SetEditSelection( aCursor );
-        LanguageType eStartLanguage = GetLanguage( aCursor );
+        LanguageType eStartLanguage = GetLanguage( aCursor ).nLang;
         //search for a field attribute at the beginning - only the end position
         //of this field is kept to end a portion at that position
         const EditCharAttrib* pFieldAttr = aCursor.GetNode()->GetCharAttribs().
@@ -2028,7 +2037,7 @@ void ImpEditEngine::AddPortionIterated(
             if (bIsField)
                 nEndField = _pFieldAttr->GetEnd();
 
-            LanguageType eCurLanguage = GetLanguage( aCursor );
+            LanguageType eCurLanguage = GetLanguage( aCursor ).nLang;
             if(eCurLanguage != eStartLanguage || bIsField || bIsEndField)
             {
                 eStartLanguage = eCurLanguage;
@@ -2130,7 +2139,7 @@ void ImpEditEngine::ApplyChangedSentence(EditView const & rEditView,
         for(const auto& rCurrentNewPortion : rNewPortions)
         {
             //set the language attribute
-            LanguageType eCurLanguage = GetLanguage( aCurrentPaM );
+            LanguageType eCurLanguage = GetLanguage( aCurrentPaM ).nLang;
             if(eCurLanguage != rCurrentNewPortion.eLanguage)
             {
                 SvtScriptType nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( rCurrentNewPortion.eLanguage );
@@ -2254,7 +2263,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, bool bSpellAtC
                 {
                     const sal_Int32 nWStart = aSel.Min().GetIndex();
                     const sal_Int32 nWEnd = aSel.Max().GetIndex();
-                    if ( !xSpeller->isValid( aWord, static_cast<sal_uInt16>(GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) )), aEmptySeq ) )
+                    if ( !xSpeller->isValid( aWord, static_cast<sal_uInt16>(GetLanguage( EditPaM( aSel.Min().GetNode(), nWStart+1 ) ).nLang), aEmptySeq ) )
                     {
                         // Check if already marked correctly...
                         const sal_Int32 nXEnd = bDottAdded ? nWEnd -1 : nWEnd;
@@ -2400,7 +2409,7 @@ EESpellState ImpEditEngine::HasSpellErrors()
         aWord = GetSelected( aCurSel );
         if ( !aWord.isEmpty() )
         {
-            LanguageType eLang = GetLanguage( aCurSel.Max() );
+            LanguageType eLang = GetLanguage( aCurSel.Max() ).nLang;
             SvxSpellWrapper::CheckSpellLang( xSpeller, eLang );
             xSpellAlt = xSpeller->spell( aWord, static_cast<sal_uInt16>(eLang), aEmptySeq );
         }
@@ -2428,7 +2437,7 @@ EESpellState ImpEditEngine::StartThesaurus(EditView* pEditView, weld::Widget* pD
 
     EditAbstractDialogFactory* pFact = EditAbstractDialogFactory::Create();
     ScopedVclPtr<AbstractThesaurusDialog> xDlg(pFact->CreateThesaurusDialog(pDialogParent, xThes,
-                                               aWord, GetLanguage( aCurSel.Max() ) ));
+                                               aWord, GetLanguage( aCurSel.Max() ).nLang ));
     if (xDlg->Execute() == RET_OK)
     {
         // Replace Word...
@@ -2759,7 +2768,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
                 Sequence< sal_Int32 > aOffsets;
                 OUString aNewText( aTransliterationWrapper.transliterate(aNodeStr,
-                        GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
+                        GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ).nLang,
                         nCurrentStart, nLen, &aOffsets ));
 
                 if (aNodeStr != aNewText)
@@ -2850,7 +2859,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
 
                 Sequence< sal_Int32 > aOffsets;
                 OUString aNewText( aTransliterationWrapper.transliterate( aNodeStr,
-                        GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ),
+                        GetLanguage( EditPaM( pNode, nCurrentStart + 1 ) ).nLang,
                         nCurrentStart, nLen, &aOffsets ));
 
                 if (aNodeStr != aNewText)
@@ -2880,7 +2889,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             {
                 if ( bConsiderLanguage )
                 {
-                    nLanguage = GetLanguage( EditPaM( pNode, nCurrentStart+1 ), &nCurrentEnd );
+                    nLanguage = GetLanguage( EditPaM( pNode, nCurrentStart+1 ), &nCurrentEnd ).nLang;
                     if ( nCurrentEnd > nEndPos )
                         nCurrentEnd = nEndPos;
                 }

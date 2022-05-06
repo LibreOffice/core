@@ -253,8 +253,8 @@ public:
     EEHorizontalTextDirection   GetDefaultHorizontalTextDirection() const;
 
     SvtScriptType   GetScriptType( const ESelection& rSelection ) const;
-    LanguageType    GetLanguage(const EditPaM& rPaM) const;
-    LanguageType    GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
+    editeng::LanguageSpan GetLanguage(const EditPaM& rPaM) const;
+    editeng::LanguageSpan GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const;
 
     void            TransliterateText( const ESelection& rSelection, TransliterationFlags nTransliterationMode );
     EditSelection   TransliterateText( const EditSelection& rSelection, TransliterationFlags nTransliterationMode );

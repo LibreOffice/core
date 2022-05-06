@@ -654,7 +654,7 @@ bool EdtAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos,
     if( aShort.isEmpty() )
         return bRet;
 
-    LanguageTag aLanguageTag( mpEditEngine->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) ));
+    LanguageTag aLanguageTag( mpEditEngine->GetLanguage( EditPaM( pCurNode, rSttPos+1 ) ).nLang );
     const SvxAutocorrWord* pFnd = rACorrect.SearchWordsInList(
             pCurNode->GetString(), rSttPos, nEndPos, *this, aLanguageTag);
     if( pFnd && pFnd->IsTextOnly() )
@@ -693,7 +693,7 @@ bool EdtAutoCorrDoc::TransliterateRTLWord( sal_Int32& /*rSttPos*/,
 
 LanguageType EdtAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
 {
-    return mpEditEngine->GetLanguage( EditPaM( pCurNode, nPos+1 ) );
+    return mpEditEngine->GetLanguage( EditPaM( pCurNode, nPos+1 ) ).nLang;
 }
 
 void EdtAutoCorrDoc::ImplStartUndoAction()

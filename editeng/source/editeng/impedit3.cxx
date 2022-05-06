@@ -2116,7 +2116,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     for ( sal_Int32 nChar = nFirstChar; nChar <= nLastChar; nChar++ )
     {
         EditPaM aPaM( pNode, nChar+1 );
-        LanguageType eLang = GetLanguage(aPaM);
+        LanguageType eLang = GetLanguage(aPaM).nLang;
         sal_uInt16 nScript = GetI18NScriptType(aPaM);
         if ( MsLangId::getPrimaryLanguage( eLang) == LANGUAGE_ARABIC_PRIMARY_ONLY )
             // Arabic script is handled later.
@@ -2155,7 +2155,7 @@ void ImpEditEngine::ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine,
     // The width must be distributed to the blockers in front...
     // But not if it is the only one.
     if ( ( pNode->GetChar( nLastChar ) == ' ' ) && ( aPositions.size() > 1 ) &&
-         ( MsLangId::getPrimaryLanguage( GetLanguage( EditPaM( pNode, nLastChar ) ) ) != LANGUAGE_ARABIC_PRIMARY_ONLY ) )
+         ( MsLangId::getPrimaryLanguage( GetLanguage( EditPaM( pNode, nLastChar ) ).nLang ) != LANGUAGE_ARABIC_PRIMARY_ONLY ) )
     {
         aPositions.pop_back();
         sal_Int32 nPortionStart, nPortion;

@@ -23,6 +23,7 @@
 
 #include <rtl/ustring.hxx>
 #include <editeng/editengdllapi.h>
+#include <i18nlangtag/lang.h>
 #include <memory>
 #include <ostream>
 
@@ -340,6 +341,18 @@ struct EENotify
     EENotify( EENotifyType eType )
         { eNotificationType = eType; nParagraph = EE_PARA_NOT_FOUND; nParam1 = 0; nParam2 = 0; }
 };
+
+namespace editeng
+{
+
+struct LanguageSpan
+{
+    LanguageType nLang = LANGUAGE_DONTKNOW;
+    sal_Int32 nStart = -1;
+    sal_Int32 nEnd = -1;
+};
+
+}
 
 #endif // INCLUDED_EDITENG_EDITDATA_HXX
 
