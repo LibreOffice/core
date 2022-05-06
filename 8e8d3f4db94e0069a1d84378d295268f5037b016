@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e2b7f924_d0c36760",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-05-06T20:50:57Z",
+      "side": 1,
+      "message": "So, I made this class move away from using virtual methods to achieve interface implementation separation to real pimpl in 4da3a0108468a3e7fd4aae32129b9c0fbe4635a4, and you made us go back to the old way... ",
+      "revId": "8e8d3f4db94e0069a1d84378d295268f5037b016",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
