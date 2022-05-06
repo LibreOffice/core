@@ -637,8 +637,14 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                     }
                     else if (aCell.hasNumeric())
                     {
-                        nCount++;
                         fVal = GetCellValue(aAdr, aCell);
+                        if (nGlobalError != FormulaError::NONE)
+                        {
+                            if (eFunc == ifCOUNT || (mnSubTotalFlags & SubtotalFlags::IgnoreErrVal))
+                                nGlobalError = FormulaError::NONE;
+                            break;
+                        }
+                        nCount++;
                         CurFmtToFuncFmt();
                         switch( eFunc )
                         {
@@ -646,13 +652,6 @@ void ScInterpreter::IterateParameters( ScIterFunc eFunc, bool bTextAsZero )
                             case ifSUM:     fRes += fVal; break;
                             case ifSUMSQ:   fRes += fVal * fVal; break;
                             case ifPRODUCT: fRes *= fVal; break;
-                            case ifCOUNT:
-                                if ( nGlobalError != FormulaError::NONE )
-                                {
-                                    nGlobalError = FormulaError::NONE;
-                                    nCount--;
-                                }
-                                break;
                             default: ; // nothing
                         }
                     }
