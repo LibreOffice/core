@@ -537,7 +537,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
             rpVCooSys->set3DWallPositions( eLeftWallPos, eBackWallPos, eBottomPos );
         }
 
-        rpVCooSys->createVAxisList(&mrChartModel, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize);
+        rpVCooSys->createVAxisList(&mrChartModel, rPageSize, rParam.maRemainingSpace, rParam.mbUseFixedInnerSize, rSeriesPlotterList);
     }
 
     // - prepare list of all axis and how they are used
