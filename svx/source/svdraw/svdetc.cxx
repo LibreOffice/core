@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(OLEObjCache, UnloadCheckHdl, Timer*, void)
         try
         {
             // it is important to get object without reinitialization to avoid reentrance
-            uno::Reference< embed::XEmbeddedObject > xUnloadObj = pUnloadObj->GetObjRef_NoInit();
+            const uno::Reference< embed::XEmbeddedObject > & xUnloadObj = pUnloadObj->GetObjRef_NoInit();
 
             bool bUnload = !xUnloadObj || SdrOle2Obj::CanUnloadRunningObj( xUnloadObj, pUnloadObj->GetAspect() );
 
