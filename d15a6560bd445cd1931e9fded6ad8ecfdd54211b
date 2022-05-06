@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf48f7f3_f527cc06",
+        "filename": "drawinglayer/source/tools/wmfemfhelper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-06T07:38:20Z",
+      "side": 0,
+      "message": "Fix for line join issue visible here:\nhttps://bugs.documentfoundation.org/attachment.cgi?id\u003d179962",
+      "revId": "d15a6560bd445cd1931e9fded6ad8ecfdd54211b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
