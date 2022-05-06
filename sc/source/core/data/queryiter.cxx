@@ -291,6 +291,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
 
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
     nCol = maParam.nCol1;
+    nRow = maParam.nRow1;
 
     if (nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
         return false;
@@ -309,7 +310,6 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
         !maParam.bHasHeader && bByString;
 
-    nRow = maParam.nRow1;
     if (maParam.bHasHeader)
         ++nRow;
 
@@ -364,7 +364,6 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     // Bookkeeping values for breaking up the binary search in case the data
     // range isn't strictly sorted.
     size_t nLastInRange = nLo;
-    size_t nFirstLastInRange = nLastInRange;
     double fLastInRangeValue = bAscending ?
         -(::std::numeric_limits<double>::max()) :
             ::std::numeric_limits<double>::max();
@@ -400,6 +399,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     sal_Int32 nRes = 0;
     std::optional<size_t> found;
     bool bDone = false;
+    bool orderBroken = false;
     while (nLo <= nHi && !bDone)
     {
         size_t nMid = (nLo+nHi)/2;
@@ -438,7 +438,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                     else if (fLastInRangeValue >= nCellVal)
                     {
                         // not strictly sorted, continue with GetThis()
-                        nLastInRange = nFirstLastInRange;
+                        orderBroken = true;
                         bDone = true;
                     }
                 }
@@ -457,7 +457,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                     else if (fLastInRangeValue <= nCellVal)
                     {
                         // not strictly sorted, continue with GetThis()
-                        nLastInRange = nFirstLastInRange;
+                        orderBroken = true;
                         bDone = true;
                     }
                 }
@@ -481,7 +481,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                 else if (nTmp > 0)
                 {
                     // not strictly sorted, continue with GetThis()
-                    nLastInRange = nFirstLastInRange;
+                    orderBroken = true;
                     bDone = true;
                 }
             }
@@ -497,7 +497,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                 else if (nTmp < 0)
                 {
                     // not strictly sorted, continue with GetThis()
-                    nLastInRange = nFirstLastInRange;
+                    orderBroken = true;
                     bDone = true;
                 }
             }
@@ -564,18 +564,32 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
         }
     }
 
-    if (found)
+    bool isInRange;
+    if (orderBroken)
+    {
+        // Reset position to the first row in range and force caller
+        // to search from start.
+        nLo = aIndexer.getLowIndex();
+        isInRange = false;
+    }
+    else if (found)
+    {
         nLo = *found;
+        isInRange = true;
+    }
     else
     {
-        // If all hits didn't result in a moving limit there's something
-        // strange, e.g. data range not properly sorted, or only identical
-        // values encountered, which doesn't mean there aren't any others in
-        // between... leave it to GetThis(). The condition for this would be
-        // if (nLastInRange == nFirstLastInRange) nLo = nFirstLastInRange;
-        // Else, in case no exact match was found, we step back for a
-        // subsequent GetThis() to find the last in range. Effectively this is
-        // --nLo with nLastInRange == nLo-1. Both conditions combined yield:
+        // Not nothing was found and the search position is at the start,
+        // then the possible match would need to be before the data range.
+        // In that case return false to force the caller to search from the start
+        // and detect this.
+        isInRange = nLo != aIndexer.getLowIndex();
+        // If nothing was found, that is either because there is no value
+        // that would match exactly, or the data range is not properly sorted
+        // and we failed to detect (doing so reliably would require a linear scan).
+        // Set the position to the last one that was in matching range (i.e. before
+        // where the exact match would be), and leave sorting it out to GetThis()
+        // or whatever the caller uses.
         nLo = nLastInRange;
     }
 
@@ -584,7 +598,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     {
         nRow = aCellData.second;
         maCurPos = aIndexer.getPosition(nLo);
-        return true;
+        return isInRange;
     }
     else
     {
@@ -625,6 +639,8 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
             maParam.mbRangeLookup = false;
             bFound = GetThis();
         }
+        else // Not sorted properly, or before the range (in which case GetFirst() will be simple).
+            bFound = GetFirst();
     }
     else
     {
