@@ -52,6 +52,8 @@ OOO_DLLPUBLIC_CHARTTOOLS css::awt::Point B2IRectangleToAWTPoint(
 OOO_DLLPUBLIC_CHARTTOOLS css::awt::Size B2IRectangleToAWTSize(
             const ::basegfx::B2IRectangle& rB2IRectangle );
 
+OOO_DLLPUBLIC_CHARTTOOLS css::awt::Rectangle toAwtRectangle(const basegfx::B2IRectangle& rB2IRectangle);
+
 ::basegfx::B3DVector Direction3DToB3DVector(
     const css::drawing::Direction3D& rDirection );
 
