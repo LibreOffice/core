@@ -16,6 +16,23 @@
       "message": "The new version uses the bForceSystemLocale approach to obtain the strings representing the values in the system locale, which are then sent to the Fill Series dialog.",
       "revId": "a96b0472b9659a05fbf771d51469ce7ffc921026",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d54ed17b_0e09275a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2022-05-06T12:14:01Z",
+      "side": 1,
+      "message": "I was undecided if passing the bool bForceSystemLocale to SvNumberFormatter::GetInputLineString() was the best thing to do, but given that can look up even replacement formats for some specific cases it actually is. (it could even be changed to passing a LanguageType if needed in future but that\u0027s not the case now).\n\nThanks for the nice fix!\n",
+      "revId": "a96b0472b9659a05fbf771d51469ce7ffc921026",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
