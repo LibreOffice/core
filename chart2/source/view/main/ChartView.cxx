@@ -751,7 +751,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         else
         {
             ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
-            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( aConsumedInnerRect.getMinX(), aConsumedInnerRect.getMinY(), aConsumedInnerRect.getWidth(), aConsumedInnerRect.getHeight() );
+            m_aResultingDiagramRectangleExcludingAxes = BaseGFXHelper::toAwtRectangle(aConsumedInnerRect);
         }
     }
     else
@@ -761,7 +761,7 @@ awt::Rectangle ChartView::impl_createDiagramAndContent( const CreateShapeParam2D
         else
         {
             ::basegfx::B2IRectangle aConsumedInnerRect = aVDiagram.getCurrentRectangle();
-            m_aResultingDiagramRectangleExcludingAxes = awt::Rectangle( aConsumedInnerRect.getMinX(), aConsumedInnerRect.getMinY(), aConsumedInnerRect.getWidth(), aConsumedInnerRect.getHeight() );
+            m_aResultingDiagramRectangleExcludingAxes = BaseGFXHelper::toAwtRectangle(aConsumedInnerRect);
         }
     }
 
