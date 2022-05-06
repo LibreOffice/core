@@ -1657,13 +1657,16 @@ void ScGridWindow::PaintTile( VirtualDevice& rDevice,
     {
         bool bPrintTwipsMsgs = comphelper::LibreOfficeKit::isCompatFlagSet(
                 comphelper::LibreOfficeKit::Compat::scPrintTwipsMsgs);
-        mpLOKDrawView.reset(bPrintTwipsMsgs ?
-            new ScLOKDrawView(
-                &rDevice,
-                mrViewData) :
-            new FmFormView(
-                *pModel,
-                &rDevice));
+        if (!mpLOKDrawView)
+        {
+            mpLOKDrawView.reset(bPrintTwipsMsgs ?
+                new ScLOKDrawView(
+                    &rDevice,
+                    mrViewData) :
+                new FmFormView(
+                    *pModel,
+                    &rDevice));
+        }
 
         mpLOKDrawView->SetNegativeX(bLayoutRTL);
         mpLOKDrawView->ShowSdrPage(mpLOKDrawView->GetModel().GetPage(nTab));
