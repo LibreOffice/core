@@ -29,6 +29,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 
 #include <cppuhelper/exc_hlp.hxx>
+#include <mutex>
 
 using namespace ::osl;
 using namespace ::cppu;
@@ -235,7 +236,21 @@ void SAL_CALL throwException( Any const & exc )
 #if RETHROW_FAKE_EXCEPTIONS
     lo_mobile_throwException(exc);
 #else
-    Mapping uno2cpp(Environment(UNO_LB_UNO), Environment::getCurrent());
+
+    static Environment aCachedEnv;
+    static Mapping uno2cpp;
+    {
+        // when we throw exceptions a lot, the cost of constructing a Mapping starts to show
+        // up on performance profiles, so cache that.
+        static std::mutex aCacheMutex;
+        std::unique_lock aGuard(aCacheMutex);
+        Environment aCurrentEnv = Environment::getCurrent();
+        if (!aCachedEnv.is() || aCurrentEnv.getTypeName() != aCachedEnv.getTypeName())
+        {
+            uno2cpp = Mapping(Environment(UNO_LB_UNO), Environment::getCurrent());
+            aCachedEnv = Environment::getCurrent();
+        }
+    }
     if (! uno2cpp.is())
     {
         throw RuntimeException(
