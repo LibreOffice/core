@@ -2317,6 +2317,7 @@ std::vector<VDataSeries const*> VSeriesPlotter::getAllSeries() const
     return aAllSeries;
 }
 
+
 std::vector<VDataSeries*> VSeriesPlotter::getAllSeries()
 {
     std::vector<VDataSeries*> aAllSeries;
@@ -2357,6 +2358,25 @@ uno::Sequence<OUString> VSeriesPlotter::getSeriesNames() const
         }
     }
     return comphelper::containerToSequence( aRetVector );
+}
+
+uno::Sequence<OUString> VSeriesPlotter::getAllSeriesNames() const
+{
+    std::vector<OUString> aRetVector;
+
+    OUString aRole;
+    if (m_xChartTypeModel.is())
+        aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
+
+    for (VDataSeries const* pSeries : getAllSeries())
+    {
+        if (pSeries)
+        {
+            OUString aSeriesName(DataSeriesHelper::getDataSeriesLabel(pSeries->getModel(), aRole));
+            aRetVector.push_back(aSeriesName);
+        }
+    }
+    return comphelper::containerToSequence(aRetVector);
 }
 
 void VSeriesPlotter::setPageReferenceSize( const css::awt::Size & rPageRefSize )

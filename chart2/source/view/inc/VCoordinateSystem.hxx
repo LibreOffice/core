@@ -20,6 +20,7 @@
 
 #include "MinimumAndMaximumSupplier.hxx"
 #include <ThreeDHelper.hxx>
+#include "VSeriesPlotter.hxx"
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -30,9 +31,6 @@
 #include <memory>
 #include <vector>
 
-namespace chart { class ExplicitCategoriesProvider; }
-namespace chart { class ScaleAutomatism; }
-namespace chart { class ChartModel; }
 namespace com::sun::star::awt { struct Rectangle; }
 namespace com::sun::star::awt { struct Size; }
 namespace com::sun::star::beans { class XPropertySet; }
@@ -42,9 +40,11 @@ namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
 
-
 namespace chart
 {
+class ExplicitCategoriesProvider;
+class ScaleAutomatism;
+class ChartModel;
 class Axis;
 class BaseCoordinateSystem;
 class VAxisBase;
@@ -116,10 +116,11 @@ public:
      * Create "view" axis objects 'VAxis' from the coordinate system model.
      */
     virtual void createVAxisList(
-            const rtl::Reference<::chart::ChartModel> & xChartDoc
-            , const css::awt::Size& rFontReferenceSize
-            , const css::awt::Rectangle& rMaximumSpaceForLabels
-            , bool bLimitSpaceForLabels );
+            const rtl::Reference<::chart::ChartModel> & xChartDoc,
+            const css::awt::Size& rFontReferenceSize,
+            const css::awt::Rectangle& rMaximumSpaceForLabels,
+            bool bLimitSpaceForLabels,
+            std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList);
 
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();
