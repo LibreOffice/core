@@ -20,6 +20,7 @@
 #include <tools/stream.hxx>
 #include <tools/vcompat.hxx>
 #include <tools/gen.hxx>
+#include <unotools/configmgr.hxx>
 #include <unotools/fontcfg.hxx>
 #include <unotools/fontdefs.hxx>
 #include <o3tl/hash_combine.hxx>
@@ -464,6 +465,16 @@ SvStream& ReadImplFont( SvStream& rIStm, ImplFont& rImplFont, tools::Long& rnNor
     rImplFont.maStyleName = rIStm.ReadUniOrByteString(rIStm.GetStreamCharSet());
     TypeSerializer aSerializer(rIStm);
     aSerializer.readSize(rImplFont.maAverageFontSize);
+
+    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+    if (bFuzzing)
+    {
+        if (rImplFont.maAverageFontSize.Width() > 8192)
+        {
+            SAL_WARN("vcl.gdi", "suspicious average width of: " << rImplFont.maAverageFontSize.Width());
+            rImplFont.maAverageFontSize.setWidth(8192);
+        }
+    }
 
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetCharSet( static_cast<rtl_TextEncoding>(nTmp16) );
     rIStm.ReadUInt16( nTmp16 ); rImplFont.SetFamilyType( static_cast<FontFamily>(nTmp16) );
