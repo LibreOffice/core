@@ -2099,19 +2099,19 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 5 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 5 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(2), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 5 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
 
@@ -2123,13 +2123,13 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 5 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(6), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 5 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
     }
 
@@ -2141,19 +2141,19 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
 
@@ -2165,13 +2165,13 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
     }
 
@@ -2183,19 +2183,19 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
@@ -2207,13 +2207,13 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
     }
 
@@ -2225,19 +2225,19 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT(it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
     }
 
@@ -2249,13 +2249,13 @@ void TestSort::testQueryBinarySearch()
 
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
     {
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
@@ -2263,7 +2263,7 @@ void TestSort::testQueryBinarySearch()
         // Search as ascending but use descending range, will return no match.
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_LESS_EQUAL, 1 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
@@ -2271,7 +2271,7 @@ void TestSort::testQueryBinarySearch()
         // Search as descending but use ascending range, will return no match.
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_GREATER_EQUAL, 9 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( ascendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
@@ -2279,7 +2279,7 @@ void TestSort::testQueryBinarySearch()
         // SC_EQUAL with descending is considered an error, will return no match.
         ScQueryParam param = makeSearchParam( range, descendingCol, SC_EQUAL, 9 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
-        CPPUNIT_ASSERT(!it.BinarySearch());
+        CPPUNIT_ASSERT(!it.BinarySearch( descendingCol ));
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
 
