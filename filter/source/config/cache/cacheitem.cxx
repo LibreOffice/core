@@ -198,12 +198,12 @@ static bool isSubSet(const css::uno::Any& aSubSet,
                 (aSet    >>= uno_s2)
                )
             {
-                std::vector<OUString> stl_s1(comphelper::sequenceToContainer< std::vector<OUString> >(uno_s1));
-                std::vector<OUString> stl_s2(comphelper::sequenceToContainer< std::vector<OUString> >(uno_s2));
+                auto s2Begin = uno_s2.getConstArray();
+                auto s2End = uno_s2.getConstArray() + uno_s2.getLength();
 
-                for (auto const& elem : stl_s1)
+                for (auto const& elem : uno_s1)
                 {
-                    if (::std::find(stl_s2.begin(), stl_s2.end(), elem) == stl_s2.end())
+                    if (::std::find(s2Begin, s2End, elem) == s2End)
                     {
                         return false;
                     }
