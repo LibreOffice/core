@@ -52,6 +52,24 @@
       "parentUuid": "f200956c_80cb1d90",
       "revId": "2be3ee8c608b2f8311813e9f6043113ece3405f5",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ef2258c7_ac30d098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-05-06T08:43:37Z",
+      "side": 1,
+      "message": "Hello Xisco,\nThis fix is complete in addressing this specific issue.\nWith 3 or more paragraphs the problem does not occur, so I decided to push the fix with minimal changes, and work on the new approach to handle blank paragraphs later.\nThe generalized approach changes the behavior much, and it still needs more work. Even with that in place, there are other problems with the text boxes with blank paragraphs that need to be addressed. I will add a new bug report for the remaining issue.",
+      "parentUuid": "d8714c85_43072960",
+      "revId": "2be3ee8c608b2f8311813e9f6043113ece3405f5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
