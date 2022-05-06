@@ -341,7 +341,9 @@ bool SmEditTextWindow::KeyInput(const KeyEvent& rKEvt)
     if (!bConsumed)
     {
         SmViewShell *pView = mrEditWindow.GetView();
-        if ( pView && !pView->KeyInput(rKEvt) )
+        if (pView)
+            bConsumed = pView->KeyInput(rKEvt);
+        if (pView && !bConsumed)
         {
             // F1 (help) leads to the destruction of this
             Flush();
