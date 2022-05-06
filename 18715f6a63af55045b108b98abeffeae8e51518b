@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c5a1aa7_d16f41b2",
+        "filename": "chart2/source/tools/DataSeriesHelper.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 808,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-06T20:43:30Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/123518 removed non-const begin/end from Sequence, so safe to use them now without std::as_const.",
+      "range": {
+        "startLine": 808,
+        "startChar": 43,
+        "endLine": 808,
+        "endChar": 51
+      },
+      "revId": "18715f6a63af55045b108b98abeffeae8e51518b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
