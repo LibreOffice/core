@@ -2173,8 +2173,8 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                         {
                             uno::Sequence<beans::PropertyValue> aPrevPropertiesSeq;
                             m_xPreviousParagraph->getPropertyValue("ParaInteropGrabBag") >>= aPrevPropertiesSeq;
-                            auto aPrevProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(aPrevPropertiesSeq);
-                            bool bParaAutoBefore = m_bParaAutoBefore || std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                            const auto & rPrevProperties = aPrevPropertiesSeq;
+                            bool bParaAutoBefore = m_bParaAutoBefore || std::any_of(rPrevProperties.begin(), rPrevProperties.end(), [](const beans::PropertyValue& rValue)
                             {
                                     return rValue.Name == "ParaTopMarginBeforeAutoSpacing";
                             });
@@ -2202,7 +2202,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
                                     aProperties.push_back(comphelper::makePropertyValue("ParaTopMargin", static_cast<sal_Int32>(0)));
                             }
 
-                            bool bPrevParaAutoAfter = std::any_of(aPrevProperties.begin(), aPrevProperties.end(), [](const beans::PropertyValue& rValue)
+                            bool bPrevParaAutoAfter = std::any_of(rPrevProperties.begin(), rPrevProperties.end(), [](const beans::PropertyValue& rValue)
                             {
                                 return rValue.Name == "ParaBottomMarginAfterAutoSpacing";
                             });

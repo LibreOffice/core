@@ -1286,12 +1286,12 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrameFormat* pFrameFormat, cons
 
             m_pImpl->getSerializer()->startElementNS(XML_wp, XML_wrapPolygon, XML_edited, "0");
             auto aSeqSeq = it->second.get<drawing::PointSequenceSequence>();
-            auto aPoints(comphelper::sequenceToContainer<std::vector<awt::Point>>(aSeqSeq[0]));
-            for (auto i = aPoints.begin(); i != aPoints.end(); ++i)
+            const auto& rPoints = aSeqSeq[0];
+            for (auto i = rPoints.begin(); i != rPoints.end(); ++i)
             {
-                awt::Point& rPoint = *i;
+                const awt::Point& rPoint = *i;
                 m_pImpl->getSerializer()->singleElementNS(
-                    XML_wp, (i == aPoints.begin() ? XML_start : XML_lineTo), XML_x,
+                    XML_wp, (i == rPoints.begin() ? XML_start : XML_lineTo), XML_x,
                     OString::number(rPoint.X), XML_y, OString::number(rPoint.Y));
             }
             m_pImpl->getSerializer()->endElementNS(XML_wp, XML_wrapPolygon);

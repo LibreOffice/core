@@ -1067,9 +1067,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                             {
                                 if( bIsPoint )
                                 {
-                                    auto aIndices( comphelper::sequenceToContainer<std::vector< sal_Int32 >>( aAttributedDataPointIndexList ) );
-                                    std::vector< sal_Int32 >::iterator aIt = std::find( aIndices.begin(), aIndices.end(), nPointIndex );
-                                    if( aIt != aIndices.end())
+                                    auto aIt = std::find( std::as_const(aAttributedDataPointIndexList).begin(), std::as_const(aAttributedDataPointIndexList).end(), nPointIndex );
+                                    if( aIt != std::as_const(aAttributedDataPointIndexList).end())
                                         bSelectedPointIsFormatted = true;
                                     else
                                         bHasFormattedDataPointsOtherThanSelected = true;
