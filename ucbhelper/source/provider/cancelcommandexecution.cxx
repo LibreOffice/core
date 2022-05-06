@@ -27,7 +27,9 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <com/sun/star/ucb/CommandFailedException.hpp>
+#include <com/sun/star/ucb/InteractiveAugmentedIOException.hpp>
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <ucbhelper/interactionrequest.hxx>
 #include <ucbhelper/cancelcommandexecution.hxx>
 #include "simpleioerrorrequest.hxx"
@@ -80,11 +82,23 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
                              const uno::Reference<
                                     ucb::XCommandProcessor > & xContext )
 {
-    rtl::Reference< ucbhelper::SimpleIOErrorRequest > xRequest
-        = new ucbhelper::SimpleIOErrorRequest(
-                                    eError, rArgs, rMessage, xContext );
-    if ( xEnv.is() )
+    if ( !xEnv )
     {
+        // Fast path
+
+        ucb::InteractiveAugmentedIOException aRequest;
+        aRequest.Message         = rMessage;
+        aRequest.Context         = xContext;
+        aRequest.Classification  = task::InteractionClassification_ERROR;
+        aRequest.Code            = eError;
+        aRequest.Arguments       = rArgs;
+        cppu::throwException( uno::Any( aRequest ) );
+    }
+    else
+    {
+        rtl::Reference< ucbhelper::SimpleIOErrorRequest > xRequest
+            = new ucbhelper::SimpleIOErrorRequest(
+                                        eError, rArgs, rMessage, xContext );
         uno::Reference<
             task::XInteractionHandler > xIH = xEnv->getInteractionHandler();
         if ( xIH.is() )
@@ -99,9 +113,8 @@ void cancelCommandExecution( const ucb::IOErrorCode eError,
                                                    xContext,
                                                    xRequest->getRequest() );
         }
+        cppu::throwException( xRequest->getRequest() );
     }
-
-    cppu::throwException( xRequest->getRequest() );
 
     OSL_FAIL( "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
