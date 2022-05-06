@@ -1190,7 +1190,7 @@ SfxItemState WeldTextForwarder::GetItemState(sal_Int32 nPara, sal_uInt16 nWhich)
 LanguageType WeldTextForwarder::GetLanguage(sal_Int32 nPara, sal_Int32 nIndex) const
 {
     EditEngine* pEditEngine = m_rEditAcc.GetEditEngine();
-    return pEditEngine ? pEditEngine->GetLanguage(nPara, nIndex) : LANGUAGE_NONE;
+    return pEditEngine ? pEditEngine->GetLanguage(nPara, nIndex).nLang : LANGUAGE_NONE;
 }
 
 sal_Int32 WeldTextForwarder::GetFieldCount(sal_Int32 nPara) const

@@ -478,16 +478,16 @@ SvtScriptType EditEngine::GetScriptType( const ESelection& rSelection ) const
     return pImpEditEngine->GetItemScriptType( aSel );
 }
 
-LanguageType EditEngine::GetLanguage(const EditPaM& rPaM) const
+editeng::LanguageSpan EditEngine::GetLanguage(const EditPaM& rPaM) const
 {
     return pImpEditEngine->GetLanguage(rPaM);
 }
 
-LanguageType EditEngine::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
+editeng::LanguageSpan EditEngine::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 {
     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
     DBG_ASSERT( pNode, "GetLanguage - nPara is invalid!" );
-    return pNode ? pImpEditEngine->GetLanguage( EditPaM( pNode, nPos ) ) : LANGUAGE_DONTKNOW;
+    return pNode ? pImpEditEngine->GetLanguage( EditPaM( pNode, nPos ) ) : editeng::LanguageSpan{};
 }
 
 
@@ -1328,7 +1328,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, v
                             {
                                 OUString aComplete;
 
-                                LanguageType eLang = pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1));
+                                LanguageType eLang = pImpEditEngine->GetLanguage( EditPaM( aStart.GetNode(), aStart.GetIndex()+1)).nLang;
                                 LanguageTag aLanguageTag( eLang);
 
                                 if (!pImpEditEngine->xLocaleDataWrapper.isInitialized())

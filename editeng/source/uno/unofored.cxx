@@ -267,7 +267,7 @@ SfxItemState SvxEditEngineForwarder::GetItemState( sal_Int32 nPara, sal_uInt16 n
 
 LanguageType SvxEditEngineForwarder::GetLanguage( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    return rEditEngine.GetLanguage(nPara, nIndex);
+    return rEditEngine.GetLanguage(nPara, nIndex).nLang;
 }
 
 sal_Int32 SvxEditEngineForwarder::GetFieldCount( sal_Int32 nPara ) const

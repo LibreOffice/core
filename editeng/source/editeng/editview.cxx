@@ -1022,7 +1022,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
 
     // Are there any replace suggestions?
     Reference< linguistic2::XSpellAlternatives >  xSpellAlt =
-            xSpeller->spell( aSelected, static_cast<sal_uInt16>(pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 )), aPropVals );
+            xSpeller->spell( aSelected, static_cast<sal_uInt16>(pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ).nLang), aPropVals );
 
     Reference< linguistic2::XLanguageGuessing >  xLangGuesser( EditDLL::Get().GetGlobalData()->GetLanguageGuesser() );
 
@@ -1102,7 +1102,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
 
         aDics = xDicList->getDictionaries();
         pDic  = aDics.getConstArray();
-        LanguageType nCheckedLanguage = pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 );
+        LanguageType nCheckedLanguage = pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ).nLang;
         sal_uInt16 nDicCount = static_cast<sal_uInt16>(aDics.getLength());
         for (sal_uInt16 i = 0; i < nDicCount; i++)
         {
@@ -1254,7 +1254,7 @@ bool EditView::ExecuteSpellPopup(const Point& rPosPixel, const Link<SpellCallbac
         OUString aWord = pAlt[sId.toInt32() - MN_AUTOSTART];
         SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
         if ( pAutoCorrect )
-            pAutoCorrect->PutText( aSelected, aWord, pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ) );
+            pAutoCorrect->PutText( aSelected, aWord, pImpEditView->pEditEngine->pImpEditEngine->GetLanguage( aPaM2 ).nLang );
         InsertText( aWord );
     }
     else if ( sId.toInt32() >= MN_ALTSTART )  // Replace
