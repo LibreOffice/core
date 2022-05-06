@@ -1054,20 +1054,35 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
 // Rows in the given range are kept in a sorted vector and that vector is binary-searched.
 class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::SortedCacheIndexer
 {
-    std::vector<SCROW> mSortedRows;
+    std::vector<SCROW> mSortedRowsCopy;
+    const std::vector<SCROW>& mSortedRows;
     const sc::CellStoreType& mCells;
     size_t mLowIndex;
     size_t mHighIndex;
     bool mValid;
+
+    const std::vector<SCROW>& makeSortedRows( const ScSortedRangeCache* cache, SCROW startRow, SCROW endRow )
+    {
+        // Keep a reference to rows from the cache if equal, otherwise make a copy.
+        if(startRow == cache->getRange().aStart.Row() && endRow == cache->getRange().aEnd.Row())
+            return cache->sortedRows();
+        else
+        {
+            mSortedRowsCopy.reserve( cache->sortedRows().size());
+            for( SCROW row : cache->sortedRows())
+                if( row >= startRow && row <= endRow )
+                    mSortedRowsCopy.emplace_back( row );
+            return mSortedRowsCopy;
+        }
+    }
+
 public:
     SortedCacheIndexer( const sc::CellStoreType& cells, SCROW startRow, SCROW endRow,
         const ScSortedRangeCache* cache )
-        : mCells( cells ), mValid( false )
+        : mSortedRows( makeSortedRows( cache, startRow, endRow ))
+        , mCells( cells )
+        , mValid( false )
     {
-        mSortedRows.reserve( cache->sortedRows().size());
-        for( SCROW row : cache->sortedRows())
-            if( row >= startRow && row <= endRow )
-                mSortedRows.emplace_back( row );
         if(mSortedRows.empty())
             return;
         mLowIndex = 0;
