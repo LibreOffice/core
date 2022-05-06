@@ -239,6 +239,9 @@ public:
     //get series names for the z axis labels
     css::uno::Sequence<OUString> getSeriesNames() const;
 
+    //get all series names
+    css::uno::Sequence<OUString> getAllSeriesNames() const;
+
     void setPageReferenceSize( const css::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const css::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
@@ -255,6 +258,11 @@ public:
 
     bool WantToPlotInFrontOfAxisLine();
     virtual bool shouldSnapRectToUsedArea();
+
+    /// This method returns a text string representation of the passed numeric
+    /// value by exploiting a NumberFormatterWrapper object.
+    OUString getLabelTextForValue(VDataSeries const & rDataSeries, sal_Int32 nPointIndex,
+                                  double fValue, bool bAsPercentage);
 
 protected:
 
@@ -323,13 +331,6 @@ protected:
                 , LabelAlignment eAlignment
                 , sal_Int32 nOffset=0
                 , sal_Int32 nTextWidth = 0 );
-
-    /// This method returns a text string representation of the passed numeric
-    /// value by exploiting a NumberFormatterWrapper object.
-    OUString getLabelTextForValue( VDataSeries const & rDataSeries
-                , sal_Int32 nPointIndex
-                , double fValue
-                , bool bAsPercentage );
 
     /** creates two T-shaped error bars in both directions (up/down or
         left/right depending on the bVertical parameter)
