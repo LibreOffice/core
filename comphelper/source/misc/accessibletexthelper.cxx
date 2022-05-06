@@ -682,9 +682,8 @@ namespace comphelper
         auto pLastDiffNew  = rNewString.end();
 
         // find first difference
-        while ((*pFirstDiffOld == *pFirstDiffNew) &&
-               (pFirstDiffOld  <  pLastDiffOld) &&
-               (pFirstDiffNew  <  pLastDiffNew))
+        while ((pFirstDiffOld < pLastDiffOld) && (pFirstDiffNew < pLastDiffNew)
+               && (*pFirstDiffOld == *pFirstDiffNew))
         {
             pFirstDiffOld++;
             pFirstDiffNew++;
