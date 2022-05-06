@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "013674ba_3526e3e0",
+        "filename": "comphelper/source/misc/accessibletexthelper.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 687,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-06T11:41:27Z",
+      "side": 1,
+      "message": "What a nice code it was - dereferencing before checking the iterator 😊",
+      "revId": "b1148c31ed2786396f0b018a988fce8288f1797d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c8f235b8_d77d8e3f",
         "filename": "comphelper/source/misc/syntaxhighlight.cxx",
         "patchSetId": 11
