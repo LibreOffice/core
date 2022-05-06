@@ -166,7 +166,7 @@ void ScPerfObj::testSheetFindAll()
     xSearchDescr = xSearchableStyle->createSearchDescriptor();
 
     uno::Reference< beans::XPropertySet > xSearchProp(xSearchDescr,UNO_QUERY_THROW);
-    xSearchProp->setPropertyValue("SearchStyles", makeAny(true));
+    xSearchProp->setPropertyValue("SearchStyles", Any(true));
 
     xSearchDescr->setSearchString("aCellStyle");
 
