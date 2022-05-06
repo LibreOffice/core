@@ -275,7 +275,7 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 }
 
 template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
-bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
+bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col )
 {
     assert(maParam.GetEntry(0).bDoQuery && !maParam.GetEntry(1).bDoQuery
         && maParam.GetEntry(0).GetQueryItems().size() == 1 );
@@ -290,7 +290,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     // TODO: This will be extremely slow with mdds::multi_type_vector.
 
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
-    nCol = maParam.nCol1;
+    nCol = col;
     nRow = maParam.nRow1;
 
     if (nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
@@ -632,7 +632,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
     bool bFound = false;
     if (bBinary)
     {
-        if (BinarySearch())
+        if (BinarySearch( maParam.nCol1 ))
         {
             // BinarySearch() already positions correctly and only needs real
             // query comparisons afterwards, skip the verification check below.
