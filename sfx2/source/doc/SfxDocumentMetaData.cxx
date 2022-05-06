@@ -1034,6 +1034,46 @@ SfxDocumentMetaData::checkInit() const // throw (css::uno::RuntimeException)
     assert(m_xDoc.is() && m_xParent.is());
 }
 
+static css::uno::Reference<css::xml::dom::XElement> getChildNodeByName(
+                const css::uno::Reference<css::xml::dom::XNode>& xNode,
+                std::u16string_view rNamespace,
+                std::u16string_view rChildNodeName)
+{
+    css::uno::Reference< css::xml::dom::XNodeList > xList = xNode->getChildNodes();
+    if (!xList)
+        return nullptr;
+    const sal_Int32 nLength(xList->getLength());
+    for (sal_Int32 a(0); a < nLength; a++)
+    {
+        const css::uno::Reference< css::xml::dom::XElement > xChild(xList->item(a), css::uno::UNO_QUERY);
+        if (xChild && xChild->getNodeName() == rChildNodeName)
+            if (rNamespace.empty() || rNamespace == xChild->getNamespaceURI())
+                return xChild;
+    }
+    return nullptr;
+}
+
+
+static std::vector<css::uno::Reference<css::xml::dom::XNode> > getChildNodeListByName(
+                const css::uno::Reference<css::xml::dom::XNode>& xNode,
+                std::u16string_view rNamespace,
+                std::u16string_view rChildNodeName)
+{
+    css::uno::Reference< css::xml::dom::XNodeList > xList = xNode->getChildNodes();
+    if (!xList)
+        return {};
+    std::vector<css::uno::Reference<css::xml::dom::XNode>> aList;
+    const sal_Int32 nLength(xList->getLength());
+    for (sal_Int32 a(0); a < nLength; a++)
+    {
+        const css::uno::Reference< css::xml::dom::XElement > xChild(xList->item(a), css::uno::UNO_QUERY);
+        if (xChild && xChild->getNodeName() == rChildNodeName)
+            if (rNamespace.empty() || rNamespace == xChild->getNamespaceURI())
+                aList.push_back(xChild);
+    }
+    return aList;
+}
+
 // initialize state from DOM tree
 void SfxDocumentMetaData::init(
         const css::uno::Reference<css::xml::dom::XDocument>& i_xDoc)
@@ -1041,16 +1081,14 @@ void SfxDocumentMetaData::init(
     if (!i_xDoc.is())
         throw css::uno::RuntimeException("SfxDocumentMetaData::init: no DOM tree given", *this);
 
-    css::uno::Reference<css::xml::xpath::XXPathAPI> xPath = css::xml::xpath::XPathAPI::create(m_xContext);
-
     m_isInitialized = false;
     m_xDoc = i_xDoc;
 
     // select nodes for standard meta data stuff
-    xPath->registerNS("xlink", s_nsXLink);
-    xPath->registerNS("dc", s_nsDC);
-    xPath->registerNS("office", s_nsODF);
-    xPath->registerNS("meta", s_nsODFMeta);
+//    xPath->registerNS("xlink", s_nsXLink);
+//    xPath->registerNS("dc", s_nsDC);
+//    xPath->registerNS("office", s_nsODF);
+//    xPath->registerNS("meta", s_nsODFMeta);
     // NB: we do not handle the single-XML-file ODF variant, which would
     //     have the root element office:document.
     //     The root of such documents must be converted in the importer!
@@ -1058,7 +1096,9 @@ void SfxDocumentMetaData::init(
         m_xDoc, css::uno::UNO_QUERY_THROW);
     m_xParent.clear();
     try {
-        m_xParent = xPath->selectSingleNode(xDocNode, "/child::office:document-meta/child::office:meta");
+        css::uno::Reference<css::xml::dom::XNode> xChild = getChildNodeByName(xDocNode, s_nsODF, u"document-meta");
+        if (xChild)
+            m_xParent = getChildNodeByName(xChild, s_nsODF, u"meta");
     } catch (const css::uno::Exception &) {
     }
 
@@ -1121,7 +1161,7 @@ void SfxDocumentMetaData::init(
         // The ODF spec says that handling multiple occurrences is
         // application-specific.
         css::uno::Reference<css::xml::dom::XNode> xNode =
-            xPath->selectSingleNode(m_xParent, "child::" + name);
+                getChildNodeByName(m_xParent, u"", name);
         // Do not create an empty element if it is missing;
         // for certain elements, such as dateTime, this would be invalid
         m_meta[name] = xNode;
@@ -1130,15 +1170,9 @@ void SfxDocumentMetaData::init(
     // select nodes for elements of which we handle all occurrences
     for (const char **pName = s_stdMetaList; *pName != nullptr; ++pName) {
         OUString name = OUString::createFromAscii(*pName);
-        css::uno::Reference<css::xml::dom::XNodeList> nodes =
-            xPath->selectNodeList(m_xParent, "child::" + name);
-        std::vector<css::uno::Reference<css::xml::dom::XNode> > v;
-        v.reserve(nodes->getLength());
-        for (sal_Int32 i = 0; i < nodes->getLength(); ++i)
-        {
-            v.push_back(nodes->item(i));
-        }
-        m_metaList[name] = v;
+        std::vector<css::uno::Reference<css::xml::dom::XNode> > nodes =
+            getChildNodeListByName(m_xParent, u"", name);
+        m_metaList[name] = nodes;
     }
 
     // initialize members corresponding to attributes from DOM nodes
