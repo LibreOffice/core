@@ -2696,9 +2696,17 @@ void ScExportTest2::testHyperlinkLocationXLSX()
 void ScExportTest2::testTdf142264ManyChartsToXLSX()
 {
     // The cache size for the test should be small enough, to make sure that some charts get
-    // unloaded in the process, and then loaded on demand properly (default is currently 20)
-    CPPUNIT_ASSERT_LESS(sal_Int32(40),
-                        officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get());
+    // unloaded in the process, and then loaded on demand properly (default is currently 200)
+    comphelper::ScopeGuard g([]() {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::set(200, pBatch);
+        return pBatch->commit();
+    });
+    std::shared_ptr<comphelper::ConfigurationChanges> pBatch(
+        comphelper::ConfigurationChanges::create());
+    officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::set(20, pBatch);
+    pBatch->commit();
 
     ScDocShellRef xDocSh = loadDoc(u"many_charts.", FORMAT_ODS);
     xDocSh = saveAndReload(*xDocSh, FORMAT_XLSX);
