@@ -60,8 +60,7 @@
 template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
 ScQueryCellIteratorBase< accessType, queryType >::ScQueryCellIteratorBase(ScDocument& rDocument,
     ScInterpreterContext& rContext, SCTAB nTable, const ScQueryParam& rParam, bool bMod )
-    : AccessBase( rDocument, rParam )
-    , mrContext( rContext )
+    : AccessBase( rDocument, rContext, rParam )
     , nStopOnMismatch( nStopOnMismatchDisabled )
     , nTestEqualCondition( nTestEqualConditionDisabled )
     , bAdvanceQuery( false )
@@ -231,6 +230,47 @@ void ScQueryCellIteratorBase< accessType, queryType >::PerformQuery()
                 IncPos();
         }
         bFirstStringIgnore = false;
+    }
+}
+
+template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
+void ScQueryCellIteratorBase< accessType, queryType >::InitPos()
+{
+    if constexpr( accessType != ScQueryCellIteratorAccess::SortedCache )
+        AccessBase::InitPos();
+    else
+    {
+        // This should be all in AccessBase::InitPos(), but that one can't call
+        // BinarySearch(), so do it this way instead.
+        AccessBase::InitPosStart();
+        ScQueryOp& op = maParam.GetEntry(0).eOp;
+        SCROW beforeRow = -1;
+        SCROW lastRow = -1;
+        if( op == SC_EQUAL )
+        {
+            if( BinarySearch( nCol ))
+            {
+                // BinarySearch() searches for the last item that matches. Now we
+                // also need to find the first item where to start. Find the last
+                // non-matching position using SC_LESS and the start position
+                // is the one after it.
+                lastRow = nRow;
+                ScQueryOp saveOp = op;
+                op = SC_LESS;
+                if( BinarySearch( nCol ))
+                    beforeRow = nRow;
+                // If BinarySearch() returns false, there was no match, which means
+                // there's no value smaller. In that case BinarySearch() has set
+                // the position to the first row in the range.
+                op = saveOp; // back to SC_EQUAL
+            }
+        }
+        else
+        {   // The range is from the start up to and including the last matching.
+            if( BinarySearch( nCol ))
+                lastRow = nRow;
+        }
+        AccessBase::InitPosFinish( beforeRow, lastRow );
     }
 }
 
@@ -799,9 +839,11 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
 // Direct linear cell access using mdds.
 
 ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >
-    ::ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, const ScQueryParam& rParam )
+    ::ScQueryCellIteratorAccessSpecific( ScDocument& rDocument,
+        ScInterpreterContext& rContext, const ScQueryParam& rParam )
     : maParam( rParam )
     , rDoc( rDocument )
+    , mrContext( rContext )
 {
 }
 
@@ -1008,9 +1050,11 @@ ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >::MakeBina
 // Sorted access using ScSortedRangeCache.
 
 ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
-    ::ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, const ScQueryParam& rParam )
+    ::ScQueryCellIteratorAccessSpecific( ScDocument& rDocument,
+        ScInterpreterContext& rContext, const ScQueryParam& rParam )
     : maParam( rParam )
     , rDoc( rDocument )
+    , mrContext( rContext )
 {
 }
 
@@ -1020,31 +1064,54 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
     sortedCache = &cache;
 }
 
-void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPos()
+// The idea in iterating using the sorted cache is that the iteration is instead done
+// over indexes of the sorted cache (which is a stable sort of the cell contents) in the range
+// that fits the query condition and then that is mapped to rows. This will result in iterating
+// over only matching rows in their sorted order (and for equal rows in their row order).
+void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPosStart()
 {
-    assert(sortedCache->getRange().aStart.Row() == maParam.nRow1);
-    assert(!(maParam.bHasHeader && maParam.bByRow));
-    sortedCachePos = 0;
-    UpdatePos();
+    ScRange aSortedRangeRange( nCol, maParam.nRow1, nTab, nCol, maParam.nRow2, nTab );
+    ScQueryOp& op = maParam.GetEntry(0).eOp;
+    // We want all matching values first in the sort order,
+    bool descending = op == SC_GREATER || op == SC_GREATER_EQUAL;
+    SetSortedRangeCache( rDoc.GetSortedRangeCache( aSortedRangeRange, descending, &mrContext ));
+    // InitPosFinish() needs to be called after this, ScQueryCellIteratorBase::InitPos()
+    // will handle that
+}
+
+void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPosFinish(
+    SCROW beforeRow, SCROW lastRow )
+{
+    const ScColumn& rCol = rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
+    if(lastRow >= 0)
+    {
+        sortedCachePos = beforeRow >= 0 ? sortedCache->indexForRow(beforeRow) + 1 : 0;
+        sortedCachePosLast = sortedCache->indexForRow(lastRow);
+        if(sortedCachePos <= sortedCachePosLast)
+        {
+            nRow = sortedCache->rowForIndex(sortedCachePos);
+            maCurPos = rCol.maCells.position(nRow);
+            return;
+        }
+    }
+    // No rows, set to end.
+    sortedCachePos = sortedCachePosLast = 0;
+    maCurPos.first = rCol.maCells.end();
+    maCurPos.second = 0;
 }
 
 void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::IncPos()
 {
-    ++sortedCachePos;
-    UpdatePos();
-}
-
-void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::UpdatePos()
-{
-    // TODO optimize?
-    const ScColumn& rCol = rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
-    if(sortedCachePos < sortedCache->size())
+    const ScColumn& rCol = rDoc.maTabs[nTab]->aCol[nCol];
+    if(sortedCachePos < sortedCachePosLast)
     {
+        ++sortedCachePos;
         nRow = sortedCache->rowForIndex(sortedCachePos);
         maCurPos = rCol.maCells.position(nRow);
     }
     else
     {
+        // This will make PerformQuery() go to next column.
         maCurPos.first = rCol.maCells.end();
         maCurPos.second = 0;
     }
@@ -1125,6 +1192,25 @@ ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::Mak
     return SortedCacheIndexer(rCells, nStartRow, nEndRow, sortedCache);
 }
 
+static bool CanBeUsedForSorterCache(const ScQueryParam& rParam)
+{
+    if(!rParam.GetEntry(0).bDoQuery || rParam.GetEntry(1).bDoQuery
+        || rParam.GetEntry(0).GetQueryItems().size() != 1 )
+        return false;
+    if(rParam.eSearchType != utl::SearchParam::SearchType::Normal)
+        return false;
+    if(rParam.GetEntry(0).GetQueryItem().meType != ScQueryEntry::ByValue)
+        return false;
+    if(!rParam.bByRow)
+        return false;
+    if(rParam.bHasHeader)
+        return false;
+    if(rParam.GetEntry(0).eOp != SC_LESS && rParam.GetEntry(0).eOp != SC_LESS_EQUAL
+        && rParam.GetEntry(0).eOp != SC_GREATER && rParam.GetEntry(0).eOp != SC_GREATER_EQUAL
+        && rParam.GetEntry(0).eOp != SC_EQUAL)
+        return false;
+    return true;
+}
 
 // Generic query implementation.
 
@@ -1162,6 +1248,11 @@ bool ScQueryCellIterator< accessType >::GetNext()
     return GetThis();
 }
 
+bool ScQueryCellIteratorSortedCache::CanBeUsed(const ScQueryParam& rParam)
+{
+    return CanBeUsedForSorterCache(rParam);
+}
+
 // Countifs implementation.
 
 bool ScQueryCellIteratorTypeSpecific< ScQueryCellIteratorType::CountIf >::HandleItemFound()
@@ -1188,22 +1279,7 @@ sal_uInt64 ScCountIfCellIterator< accessType >::GetCount()
 
 bool ScCountIfCellIteratorSortedCache::CanBeUsed(const ScQueryParam& rParam)
 {
-    if(!rParam.GetEntry(0).bDoQuery || rParam.GetEntry(1).bDoQuery
-        || rParam.GetEntry(0).GetQueryItems().size() != 1 )
-        return false;
-    if(rParam.eSearchType != utl::SearchParam::SearchType::Normal)
-        return false;
-    if(rParam.GetEntry(0).GetQueryItem().meType != ScQueryEntry::ByValue)
-        return false;
-    if(!rParam.bByRow)
-        return false;
-    if(rParam.bHasHeader)
-        return false;
-    if(rParam.GetEntry(0).eOp != SC_LESS && rParam.GetEntry(0).eOp != SC_LESS_EQUAL
-        && rParam.GetEntry(0).eOp != SC_GREATER && rParam.GetEntry(0).eOp != SC_GREATER_EQUAL
-        && rParam.GetEntry(0).eOp != SC_EQUAL)
-        return false;
-    return true;
+    return CanBeUsedForSorterCache(rParam);
 }
 
 template<>
@@ -1272,11 +1348,13 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
 }
 
 template class ScQueryCellIterator< ScQueryCellIteratorAccess::Direct >;
+template class ScQueryCellIterator< ScQueryCellIteratorAccess::SortedCache >;
 template class ScCountIfCellIterator< ScQueryCellIteratorAccess::Direct >;
 template class ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >;
 
 // gcc for some reason needs these too
 template class ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic >;
+template class ScQueryCellIteratorBase< ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::Generic >;
 template class ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::CountIf >;
 template class ScQueryCellIteratorBase< ScQueryCellIteratorAccess::SortedCache, ScQueryCellIteratorType::CountIf >;
 
