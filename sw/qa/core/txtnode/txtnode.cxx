@@ -16,6 +16,7 @@
 #include <vcl/scheduler.hxx>
 #include <sfx2/lokhelper.hxx>
 #include <test/lokcallback.hxx>
+#include <editeng/escapementitem.hxx>
 
 #include <IDocumentStatistics.hxx>
 #include <fmtanchr.hxx>
@@ -156,6 +157,31 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testTitleFieldInvalidate)
     mxComponent->dispose();
     mxComponent.clear();
     comphelper::LibreOfficeKit::setActive(false);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testSplitNodeSuperscriptCopy)
+{
+    // Given a document with superscript text at the end of a paragraph:
+    SwDoc* pDoc = createSwDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    pWrtShell->Insert("1st");
+    pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 2, /*bBasicCall=*/false);
+    SfxItemSet aSet(pWrtShell->GetAttrPool(),
+                    svl::Items<RES_CHRATR_ESCAPEMENT, RES_CHRATR_ESCAPEMENT>{});
+    SvxEscapementItem aItem(SvxEscapement::Superscript, RES_CHRATR_ESCAPEMENT);
+    aSet.Put(aItem);
+    pWrtShell->SetAttrSet(aSet);
+
+    // When hitting enter at the end of the paragraph:
+    pWrtShell->SttEndDoc(/*bStt=*/false);
+    pWrtShell->SplitNode(/*bAutoFormat=*/true);
+
+    // Then make sure that the superscript formatting doesn't appear on the next paragraph:
+    aSet.ClearItem(RES_CHRATR_ESCAPEMENT);
+    pWrtShell->GetCurAttr(aSet);
+    // Without the accompanying fix in place, this test would have failed, the unexpected
+    // superscript appeared in the next paragraph.
+    CPPUNIT_ASSERT(!aSet.HasItem(RES_CHRATR_ESCAPEMENT));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
