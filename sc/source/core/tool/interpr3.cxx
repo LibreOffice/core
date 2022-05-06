@@ -28,6 +28,7 @@
 #include <scmatrix.hxx>
 
 #include <cassert>
+#include <cmath>
 #include <memory>
 #include <set>
 #include <vector>
@@ -1152,7 +1153,7 @@ void ScInterpreter::ScFisher()
     if (std::abs(fVal) >= 1.0)
         PushIllegalArgument();
     else
-        PushDouble( ::rtl::math::atanh( fVal));
+        PushDouble(::atanh(fVal));
 }
 
 void ScInterpreter::ScFisherInv()
