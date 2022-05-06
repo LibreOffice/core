@@ -33,6 +33,24 @@
       "message": "I think it should at least be reported. I don\u0027t think it is too important, but it still is annoying that the same version of Calc would calculate differently on different platforms, just because the respective library functions don\u0027t agree on such details.",
       "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "66e735a1_41e2d6a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-05-06T21:55:22Z",
+      "side": 1,
+      "message": "One may provide more significant digits in certain situations, but when 15 significant digits are provided by the algorithm that works with double variables, I assume that it should be considered OK.",
+      "parentUuid": "af59ccca_4220df87",
+      "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
