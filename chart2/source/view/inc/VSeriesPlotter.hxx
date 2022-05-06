@@ -216,7 +216,8 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xContext
                 );
 
-    std::vector< VDataSeries* > getAllSeries();
+    std::vector<VDataSeries*> getAllSeries();
+    std::vector<VDataSeries const*> getAllSeries() const;
 
     // This method creates a series plotter of the requested type; e.g. : return new PieChart...
     static VSeriesPlotter* createSeriesPlotter( const rtl::Reference< ::chart::ChartType >& xChartTypeModel

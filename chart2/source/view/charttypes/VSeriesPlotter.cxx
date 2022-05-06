@@ -2286,6 +2286,34 @@ OUString VSeriesPlotter::getCategoryName( sal_Int32 nPointIndex ) const
     return OUString();
 }
 
+std::vector<VDataSeries const*> VSeriesPlotter::getAllSeries() const
+{
+    std::vector<VDataSeries const*> aAllSeries;
+    for (std::vector<VDataSeriesGroup> const & rXSlot : m_aZSlots)
+    {
+        for(VDataSeriesGroup const & rGroup : rXSlot)
+        {
+            for (std::unique_ptr<VDataSeries> const & p : rGroup.m_aSeriesVector)
+                aAllSeries.push_back(p.get());
+        }
+    }
+    return aAllSeries;
+}
+
+std::vector<VDataSeries*> VSeriesPlotter::getAllSeries()
+{
+    std::vector<VDataSeries*> aAllSeries;
+    for (std::vector<VDataSeriesGroup> const & rXSlot : m_aZSlots)
+    {
+        for(VDataSeriesGroup const & rGroup : rXSlot)
+        {
+            for (std::unique_ptr<VDataSeries> const & p : rGroup.m_aSeriesVector)
+                aAllSeries.push_back(p.get());
+        }
+    }
+    return aAllSeries;
+}
+
 uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
 {
     std::vector<OUString> aRetVector;
@@ -2294,21 +2322,12 @@ uno::Sequence< OUString > VSeriesPlotter::getSeriesNames() const
     if( m_xChartTypeModel.is() )
         aRole = m_xChartTypeModel->getRoleOfSequenceForSeriesLabel();
 
-    for (auto const& rGroup : m_aZSlots)
+    for (VDataSeries const* pSeries : getAllSeries())
     {
-        if (!rGroup.empty())
+        if (pSeries)
         {
-            VDataSeriesGroup const & rSeriesGroup(rGroup[0]);
-            if (!rSeriesGroup.m_aSeriesVector.empty())
-            {
-                VDataSeries const * pSeries = rSeriesGroup.m_aSeriesVector[0].get();
-                rtl::Reference< DataSeries > xSeries( pSeries ? pSeries->getModel() : nullptr );
-                if( xSeries.is() )
-                {
-                    OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( xSeries, aRole ) );
-                    aRetVector.push_back( aSeriesName );
-                }
-            }
+            OUString aSeriesName( DataSeriesHelper::getDataSeriesLabel( pSeries->getModel(), aRole ) );
+            aRetVector.push_back( aSeriesName );
         }
     }
     return comphelper::containerToSequence( aRetVector );
@@ -2429,20 +2448,6 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
     }
 
     return aResult;
-}
-
-std::vector<VDataSeries*> VSeriesPlotter::getAllSeries()
-{
-    std::vector<VDataSeries*> aAllSeries;
-    for (std::vector<VDataSeriesGroup> const & rXSlot : m_aZSlots)
-    {
-        for(VDataSeriesGroup const & rGroup : rXSlot)
-        {
-            for (std::unique_ptr<VDataSeries> const & p : rGroup.m_aSeriesVector)
-                aAllSeries.push_back(p.get());
-        }
-    }
-    return aAllSeries;
 }
 
 namespace
