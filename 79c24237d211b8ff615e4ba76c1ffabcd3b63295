@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3b5ee74_e1ac08ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-06T15:29:23Z",
+      "side": 1,
+      "message": "Just in case you want to comment...otherwise LGTM.",
+      "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
