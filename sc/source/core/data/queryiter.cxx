@@ -276,7 +276,7 @@ void decBlock(std::pair<Iter, size_t>& rPos)
 }
 
 template< ScQueryCellIteratorAccess accessType, ScQueryCellIteratorType queryType >
-bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
+bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col )
 {
     assert(maParam.GetEntry(0).bDoQuery && !maParam.GetEntry(1).bDoQuery
         && maParam.GetEntry(0).GetQueryItems().size() == 1 );
@@ -291,7 +291,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     // TODO: This will be extremely slow with mdds::multi_type_vector.
 
     assert(nTab < rDoc.GetTableCount() && "index out of bounds, FIX IT");
-    nCol = maParam.nCol1;
+    nCol = col;
     nRow = maParam.nRow1;
 
     if (nCol >= rDoc.maTabs[nTab]->GetAllocatedColumnsCount())
@@ -632,7 +632,7 @@ bool ScQueryCellIterator< accessType >::FindEqualOrSortedLastInRange( SCCOL& nFo
     bool bFound = false;
     if (bBinary)
     {
-        if (BinarySearch())
+        if (BinarySearch( maParam.nCol1 ))
         {
             // BinarySearch() already positions correctly and only needs real
             // query comparisons afterwards, skip the verification check below.
@@ -1230,11 +1230,11 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
             // matching position using SC_EQUAL.
             ScQueryOp saveOp = op;
             op = SC_LESS;
-            if( BinarySearch())
+            if( BinarySearch( nCol ))
             {
                 op = saveOp; // back to SC_EQUAL
                 size_t lastNonMatching = sortedCache->indexForRow(nRow);
-                if( BinarySearch())
+                if( BinarySearch( nCol ))
                 {
                     size_t lastMatching = sortedCache->indexForRow(nRow);
                     assert(lastMatching >= lastNonMatching);
@@ -1253,7 +1253,7 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
                 // so try to find matching ones and count those up to and including
                 // the found one.
                 op = saveOp; // back to SC_EQUAL
-                if( BinarySearch())
+                if( BinarySearch( nCol ))
                 {
                     size_t lastMatching = sortedCache->indexForRow(nRow) + 1;
                     count += lastMatching;
@@ -1264,7 +1264,7 @@ sal_uInt64 ScCountIfCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetC
         {
             // BinarySearch() searches for the last item that matches. Therefore everything
             // up to and including the found row matches the condition.
-            if( BinarySearch())
+            if( BinarySearch( nCol ))
                 count += sortedCache->indexForRow(nRow) + 1;
         }
     }

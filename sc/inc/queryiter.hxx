@@ -183,7 +183,7 @@ protected:
        or if the range is not properly sorted, with nRow in that case set to the first row or after
        the last row. In that case use GetFirst().
     */
-    bool BinarySearch();
+    bool BinarySearch( SCCOL col );
 
                     /** If set, iterator stops on first non-matching cell
                         content. May be used in SC_LESS_EQUAL queries where a
