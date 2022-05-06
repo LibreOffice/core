@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c503b92_00803805",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-05-06T19:32:50Z",
+      "side": 1,
+      "message": "Mike, what do you think about this patch? By considering the 15 significant digits, the test passes.\n\n\"A double-precision floating point number carries fifteen significant digits.\"\nhttps://devblogs.microsoft.com/oldnewthing/20060616-09/?p\u003d30843\n\nThe relative error here is less than 1e-15.",
+      "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
