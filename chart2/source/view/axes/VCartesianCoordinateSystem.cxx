@@ -175,16 +175,13 @@ void VCartesianCoordinateSystem::initVAxisInList()
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = getPropertySwapXAndYAxis();
 
-    for (auto const& elem : m_aAxisMap)
+    for (auto const& [nIndexPair, pVAxis] : m_aAxisMap)
     {
-        VAxisBase* pVAxis = elem.second.get();
-        if( pVAxis )
+        if (pVAxis)
         {
-            sal_Int32 nDimensionIndex = elem.first.first;
-            sal_Int32 nAxisIndex = elem.first.second;
+            auto [nDimensionIndex, nAxisIndex] = nIndexPair;
             pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
-            pVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget
-                , createCIDForAxis( nDimensionIndex, nAxisIndex ) );
+            pVAxis->initPlotter(m_xLogicTargetForAxes, m_xFinalTarget, createCIDForAxis( nDimensionIndex, nAxisIndex ) );
             if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
             pVAxis->setScales( getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
@@ -200,13 +197,12 @@ void VCartesianCoordinateSystem::updateScalesAndIncrementsOnAxes()
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = getPropertySwapXAndYAxis();
 
-    for (auto const& elem : m_aAxisMap)
+    for (auto const& [nIndexPair, pVAxis] : m_aAxisMap)
     {
-        VAxisBase* pVAxis = elem.second.get();
-        if( pVAxis )
+        if (pVAxis)
         {
-            sal_Int32 nDimensionIndex = elem.first.first;
-            sal_Int32 nAxisIndex = elem.first.second;
+            auto [nDimensionIndex, nAxisIndex] = nIndexPair;
+
             pVAxis->setExplicitScaleAndIncrement( getExplicitScale( nDimensionIndex, nAxisIndex ), getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
             if(nDimensionCount==2)
                 pVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );

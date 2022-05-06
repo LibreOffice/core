@@ -498,10 +498,8 @@ void SeriesPlotterContainer::doAutoScaling(ChartModel& rChartModel)
     for (sal_Int32 nAxisIndex = 0; nAxisIndex <= m_nMaxAxisIndex; ++nAxisIndex)
     {
         // - first do autoscale for all x and z scales (because they are treated independent)
-        for (auto& axisUsage : m_aAxisUsageList)
+        for (auto & [ rAxis, rAxisUsage ] : m_aAxisUsageList)
         {
-            AxisUsage& rAxisUsage = axisUsage.second;
-
             rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 0, nAxisIndex);
             rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 2, nAxisIndex);
 
@@ -517,10 +515,8 @@ void SeriesPlotterContainer::doAutoScaling(ChartModel& rChartModel)
         }
 
         // - second do autoscale for the dependent y scales (the coordinate systems are prepared with x and z scales already )
-        for (auto& axisUsage : m_aAxisUsageList)
+        for (auto & [ rAxis, rAxisUsage ] : m_aAxisUsageList)
         {
-            AxisUsage& rAxisUsage = axisUsage.second;
-
             rAxisUsage.prepareAutomaticAxisScaling(rAxisUsage.aAutoScaling, 1, nAxisIndex);
 
             ExplicitScaleData aExplicitScale;
@@ -544,9 +540,8 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries(ChartModel& 
     //issue #i80518#
     for (sal_Int32 nAxisIndex = 0; nAxisIndex <= m_nMaxAxisIndex; nAxisIndex++)
     {
-        for (auto& axisUsage : m_aAxisUsageList)
+        for (auto & [ rAxis, rAxisUsage ] : m_aAxisUsageList)
         {
-            AxisUsage& rAxisUsage = axisUsage.second;
             std::vector<VCoordinateSystem*> aVCooSysList_Y
                 = rAxisUsage.getCoordinateSystems(1, nAxisIndex);
             if (aVCooSysList_Y.empty())
@@ -648,9 +643,8 @@ void SeriesPlotterContainer::AdaptScaleOfYAxisWithoutAttachedSeries(ChartModel& 
     //correct origin for y main axis (the origin is where the other main axis crosses)
     sal_Int32 nAxisIndex = 0;
     sal_Int32 nDimensionIndex = 1;
-    for (auto& axisUsage : m_aAxisUsageList)
+    for (auto & [ rAxis, rAxisUsage ] : m_aAxisUsageList)
     {
-        AxisUsage& rAxisUsage = axisUsage.second;
         std::vector<VCoordinateSystem*> aVCooSysList
             = rAxisUsage.getCoordinateSystems(nDimensionIndex, nAxisIndex);
         size_t nC;
