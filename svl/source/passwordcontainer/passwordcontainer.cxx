@@ -1098,8 +1098,10 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
                 do {
                     aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
 
-                    if (m_pStorageFile->getStorageVersion() == 0)
+                    if (!aPass.isEmpty() && m_pStorageFile->getStorageVersion() == 0)
+                    {
                         aPass = ReencodeAsOldHash(aPass);
+                    }
 
                     bResult = ( !aPass.isEmpty() && aPass == m_aMasterPasswd );
                     aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
