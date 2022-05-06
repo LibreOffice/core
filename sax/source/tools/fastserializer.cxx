@@ -784,8 +784,8 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::ForSort::setCurrentElement( sal_Int32 nElement )
     {
-        vector< sal_Int32 > aOrder( comphelper::sequenceToContainer<vector<sal_Int32> >(maOrder) );
-        if( std::find( aOrder.begin(), aOrder.end(), nElement ) != aOrder.end() )
+        const auto & rOrder = maOrder;
+        if( std::find( rOrder.begin(), rOrder.end(), nElement ) != rOrder.end() )
         {
             mnCurrentElement = nElement;
             if ( maData.find( nElement ) == maData.end() )

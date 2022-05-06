@@ -1789,14 +1789,13 @@ void SwEditShell::SignParagraph()
 
     const OUString signature = OStringToOUString(sigBuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8, 0);
 
-    std::vector<css::beans::PropertyValue> vec = comphelper::sequenceToContainer<std::vector<css::beans::PropertyValue>>(aProperties);
-    auto it = std::find_if(vec.begin(), vec.end(), [](const beans::PropertyValue& rValue)
+    auto it = std::find_if(std::as_const(aProperties).begin(), std::as_const(aProperties).end(), [](const beans::PropertyValue& rValue)
                                                     {
                                                         return rValue.Name == "Usage";
                                                     });
 
     OUString aUsage;
-    if (it != vec.end())
+    if (it != std::as_const(aProperties).end())
         it->Value >>= aUsage;
 
     // 4. Add metadata
