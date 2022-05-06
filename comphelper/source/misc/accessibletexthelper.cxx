@@ -682,9 +682,8 @@ namespace comphelper
         const sal_Unicode* pLastDiffNew  = rNewString.getStr() + nLenNew;
 
         // find first difference
-        while ((*pFirstDiffOld == *pFirstDiffNew) &&
-               (pFirstDiffOld  <  pLastDiffOld) &&
-               (pFirstDiffNew  <  pLastDiffNew))
+        while ((pFirstDiffOld < pLastDiffOld) && (pFirstDiffNew < pLastDiffNew)
+               && (*pFirstDiffOld == *pFirstDiffNew))
         {
             pFirstDiffOld++;
             pFirstDiffNew++;
