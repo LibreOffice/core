@@ -391,7 +391,7 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterList(const QueryTokeniz
     {
         // more complex search for all filters
         // We check first, which office modules are installed...
-        std::vector<OUString> lModules = impl_getListOfInstalledModules();
+        const css::uno::Sequence<OUString> lModules = impl_getListOfInstalledModules();
         for (auto const& module : lModules)
         {
             std::vector<OUString> lFilters4Module = impl_getSortedFilterListForModule(module, nIFlags, nEFlags);
@@ -406,11 +406,10 @@ std::vector<OUString> FilterFactory::impl_getSortedFilterList(const QueryTokeniz
 }
 
 
-std::vector<OUString> FilterFactory::impl_getListOfInstalledModules()
+css::uno::Sequence<OUString> FilterFactory::impl_getListOfInstalledModules()
 {
     css::uno::Reference< css::container::XNameAccess > xModuleConfig = officecfg::Setup::Office::Factories::get();
-    std::vector<OUString> lModules(comphelper::sequenceToContainer< std::vector<OUString> >(xModuleConfig->getElementNames()));
-    return lModules;
+    return xModuleConfig->getElementNames();
 }
 
 

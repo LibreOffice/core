@@ -95,7 +95,7 @@ class FilterFactory : public ::cppu::ImplInheritanceHelper< BaseContainer       
 
         /** TODO document me
          */
-        static std::vector<OUString> impl_getListOfInstalledModules();
+        static css::uno::Sequence<OUString> impl_getListOfInstalledModules();
 
 
         /** @short  implement the container string query:

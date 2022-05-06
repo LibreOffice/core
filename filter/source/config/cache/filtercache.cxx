@@ -1177,7 +1177,7 @@ void FilterCache::impl_validateAndOptimize()
 
         CacheItem&     rLoader   = frameLoader.second;
         css::uno::Any& rTypesReg = rLoader[PROPNAME_TYPES];
-        std::vector<OUString>   lTypesReg (comphelper::sequenceToContainer< std::vector<OUString> >(rTypesReg.get<css::uno::Sequence<OUString> >()));
+        const css::uno::Sequence<OUString> lTypesReg = rTypesReg.get<css::uno::Sequence<OUString> >();
 
         for (auto const& typeReg : lTypesReg)
         {
@@ -2170,8 +2170,8 @@ OUString FilterCache::impl_searchFrameLoaderForType(const OUString& sType) const
     {
         const OUString& sItem = frameLoader.first;
         ::comphelper::SequenceAsHashMap lProps(frameLoader.second);
-        std::vector<OUString>           lTypes(
-                comphelper::sequenceToContainer< std::vector<OUString> >(lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >()));
+        const css::uno::Sequence<OUString> lTypes =
+                lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >();
 
         if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
@@ -2187,8 +2187,8 @@ OUString FilterCache::impl_searchContentHandlerForType(const OUString& sType) co
     {
         const OUString& sItem = contentHandler.first;
         ::comphelper::SequenceAsHashMap lProps(contentHandler.second);
-        std::vector<OUString>           lTypes(
-                comphelper::sequenceToContainer< std::vector<OUString> >( lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >() ));
+        const css::uno::Sequence<OUString> lTypes =
+                lProps[PROPNAME_TYPES].get<css::uno::Sequence<OUString> >();
         if (::std::find(lTypes.begin(), lTypes.end(), sType) != lTypes.end())
             return sItem;
     }
