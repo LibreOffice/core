@@ -117,6 +117,9 @@ class SAL_DLLPUBLIC_RTTI SwContentControl : public sw::BroadcastingModify
 
     std::vector<SwContentControlListItem> m_aListItems;
 
+    /// Stores a list item index, in case the doc model is not yet updated.
+    std::optional<size_t> m_oSelectedListItem;
+
 public:
     SwTextContentControl* GetTextAttr() const;
 
@@ -175,6 +178,13 @@ public:
     {
         m_aListItems = rListItems;
     }
+
+    void SetSelectedListItem(std::optional<size_t> oSelectedListItem)
+    {
+        m_oSelectedListItem = oSelectedListItem;
+    }
+
+    std::optional<size_t> GetSelectedListItem() const { return m_oSelectedListItem; }
 
     virtual void dumpAsXml(xmlTextWriterPtr pWriter) const;
 };
