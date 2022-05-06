@@ -26,9 +26,9 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     private boolean mFontNameSpinnerSet = false;
     private boolean mFontSizeSpinnerSet = false;
     private final LibreOfficeMainActivity mActivity;
-    private final ArrayList<String> mFontList = new ArrayList<String>();
-    private final ArrayList<String> mFontSizes = new ArrayList<String>();
-    private final HashMap<String, ArrayList<String>> mAllFontSizes = new HashMap<String, ArrayList<String>>();
+    private final ArrayList<String> mFontList = new ArrayList<>();
+    private final ArrayList<String> mFontSizes = new ArrayList<>();
+    private final HashMap<String, ArrayList<String>> mAllFontSizes = new HashMap<>();
 
     private String mCurrentFontSelected = null;
     private String mCurrentFontSizeSelected = null;
@@ -213,7 +213,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
                 String key = keys.next();
                 mFontList.add(key);
                 JSONArray array = jObject2.getJSONArray(key);
-                fontSizes = new ArrayList<String>();
+                fontSizes = new ArrayList<>();
                 for (int i = 0; i < array.length(); i++) {
                     fontSizes.add(array.getString(i));
                 }
@@ -237,14 +237,14 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
     private void setupFontNameSpinner() {
         Spinner fontSpinner = mActivity.findViewById(R.id.font_name_spinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_item, mFontList);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(mActivity, android.R.layout.simple_spinner_item, mFontList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fontSpinner.setAdapter(dataAdapter);
     }
 
     private void setupFontSizeSpinner() {
         Spinner fontSizeSpinner = mActivity.findViewById(R.id.font_size_spinner);
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_item, mFontSizes);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(mActivity, android.R.layout.simple_spinner_item, mFontSizes);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         fontSizeSpinner.setAdapter(dataAdapter);
     }
