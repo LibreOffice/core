@@ -113,7 +113,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
             }
         }
         for (int i = 0; i < 11; i++){
-            this.colorPalette[i][7] = (Color.rgb(255, 255, 255)); // last one is always white
+            this.colorPalette[i][7] = Color.WHITE; // last one is always white
         }
         colorPaletteAdapter.setColorPalette(colorPalette);
     }
