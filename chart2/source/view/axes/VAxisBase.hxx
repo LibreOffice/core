@@ -27,6 +27,9 @@ namespace com::sun::star::util { class XNumberFormatsSupplier; }
 namespace chart
 {
 
+class VSeriesPlotter;
+class DataTableView;
+
 class VAxisBase : public VAxisOrGridBase
 {
 public:
@@ -59,6 +62,11 @@ public:
 
     void setExtraLinePositionAtOtherAxis( double fCrossingAt );
 
+    virtual void createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList,
+                                     css::uno::Reference<css::util::XNumberFormatsSupplier> const& xNumberFormatsSupplier);
+
+    std::shared_ptr<DataTableView> getDataTableView() { return m_pDataTableView; }
+
 protected: //methods
     static size_t getIndexOfLongestLabel( const css::uno::Sequence<OUString>& rLabels );
     void removeTextShapesFromTicks();
@@ -80,6 +88,9 @@ protected: //member
 
     css::uno::Reference< css::drawing::XShapes > m_xGroupShape_Shapes;
     css::uno::Reference< css::drawing::XShapes > m_xTextTarget;
+    css::uno::Reference< css::drawing::XShapes > m_xDataTableTarget;
+
+    std::shared_ptr<DataTableView> m_pDataTableView;
 
     /**
      * This typically consists of 2 TickInfo vectors (i.e. the outer vector
