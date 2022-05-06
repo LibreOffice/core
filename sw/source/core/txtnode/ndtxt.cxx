@@ -702,6 +702,37 @@ SwTextNode *SwTextNode::SplitContentNode(const SwPosition & rPos,
         }
     }
 
+    // pNode is the previous node, 'this' is the next node from the split.
+    if (nSplitPos == nTextLen && m_pSwpHints)
+    {
+        // We just created an empty next node: avoid unwanted superscript in the new node if it's
+        // there.
+        for (size_t i = 0; i < m_pSwpHints->Count(); ++i)
+        {
+            SwTextAttr* pHt = m_pSwpHints->Get(i);
+            if (pHt->Which() != RES_TXTATR_AUTOFMT)
+            {
+                continue;
+            }
+
+            const sal_Int32* pEnd = pHt->GetEnd();
+            if (!pEnd || pHt->GetStart() != *pEnd)
+            {
+                continue;
+            }
+
+            const std::shared_ptr<SfxItemSet>& pSet = pHt->GetAutoFormat().GetStyleHandle();
+            if (!pSet || pSet->Count() != 1 || !pSet->GetItem(RES_CHRATR_ESCAPEMENT))
+            {
+                continue;
+            }
+
+            m_pSwpHints->DeleteAtPos(i);
+            SwTextAttr::Destroy(pHt, GetDoc().GetAttrPool());
+            --i;
+        }
+    }
+
 #ifndef NDEBUG
     if (isHide) // otherwise flags won't be set anyway
     {
