@@ -857,7 +857,8 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
 {
     bool bRet = false;
     auto pContentControl = const_cast<SwContentControl*>(rContentControl.GetContentControl());
-    if (!pContentControl->GetShowingPlaceHolder() && !pContentControl->GetCheckbox())
+    if (!pContentControl->GetShowingPlaceHolder() && !pContentControl->GetCheckbox()
+        && !pContentControl->GetSelectedListItem())
     {
         return bRet;
     }
