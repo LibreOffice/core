@@ -1471,7 +1471,7 @@ bool GetStatusValueForThesaurusFromContext(
     if (!isSingleScriptType(pEditEngine->GetScriptType(aTextSel)))
         return false;
 
-    LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos );
+    LanguageType nLang = pEditEngine->GetLanguage( aTextSel.nStartPara, aTextSel.nStartPos ).nLang;
     OUString aLangText( LanguageTag::convertToBcp47( nLang ) );
 
     // set word and locale to look up as status value

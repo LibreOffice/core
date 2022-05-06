@@ -559,7 +559,7 @@ EEHorizontalTextDirection Outliner::GetDefaultHorizontalTextDirection() const
 
 LanguageType Outliner::GetLanguage( sal_Int32 nPara, sal_Int32 nPos ) const
 {
-    return pEditEngine->GetLanguage( nPara, nPos );
+    return pEditEngine->GetLanguage( nPara, nPos ).nLang;
 }
 
 void Outliner::RemoveAttribs( const ESelection& rSelection, bool bRemoveParaAttribs, sal_uInt16 nWhich )

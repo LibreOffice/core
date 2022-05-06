@@ -346,7 +346,7 @@ void TextConvWrapper::ReplaceUnit(
     //EditSelection aOldEditSel = pEditView->GetImpEditView()->GetEditSelection();
 
 #ifdef DBG_UTIL
-    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( aOldSel ).Min() );
+    LanguageType nOldLang   = pImpEditEng->GetLanguage( pImpEditEng->CreateSel( aOldSel ).Min() ).nLang;
 #endif
 
     pImpEditEng->UndoActionStart( EDITUNDO_INSERT );
