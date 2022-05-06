@@ -60,7 +60,8 @@ template<>
 class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::Direct >
 {
 protected:
-    ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, const ScQueryParam& rParam );
+    ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, ScInterpreterContext& rContext,
+        const ScQueryParam& rParam );
     // Initialize position for new column.
     void InitPos();
     // Increase position (next row).
@@ -74,6 +75,7 @@ protected:
     PositionType maCurPos;
     ScQueryParam    maParam;
     ScDocument&     rDoc;
+    ScInterpreterContext& mrContext;
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
@@ -92,8 +94,10 @@ class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache 
 public:
     void SetSortedRangeCache( const ScSortedRangeCache& cache );
 protected:
-    ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, const ScQueryParam& rParam );
-    void InitPos();
+    ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, ScInterpreterContext& rContext,
+        const ScQueryParam& rParam );
+    void InitPosStart();
+    void InitPosFinish( SCROW beforeRow, SCROW lastRow );
     void IncPos();
     void IncBlock() { IncPos(); } // Cannot skip entire block, not linear.
 
@@ -102,19 +106,19 @@ protected:
     PositionType maCurPos;
     ScQueryParam    maParam;
     ScDocument&     rDoc;
+    ScInterpreterContext& mrContext;
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
 
     const ScSortedRangeCache* sortedCache;
     size_t sortedCachePos;
+    size_t sortedCachePosLast;
 
     class SortedCacheIndexer;
     typedef std::pair<ScRefCellValue, SCROW> BinarySearchCellType;
     SortedCacheIndexer MakeBinarySearchIndexer(const sc::CellStoreType& rCells,
         SCROW nStartRow, SCROW nEndRow);
-private:
-    void UpdatePos();
 };
 
 // Data and functionality for specific types of query.
@@ -150,7 +154,6 @@ protected:
         nTestEqualConditionFulfilled = nTestEqualConditionEnabled | nTestEqualConditionMatched
     };
 
-    ScInterpreterContext& mrContext;
     sal_uInt8            nStopOnMismatch;
     sal_uInt8            nTestEqualCondition;
     bool            bAdvanceQuery;
@@ -160,15 +163,17 @@ protected:
     using AccessBase::maCurPos;
     using AccessBase::maParam;
     using AccessBase::rDoc;
+    using AccessBase::mrContext;
     using AccessBase::nTab;
     using AccessBase::nCol;
     using AccessBase::nRow;
-    using AccessBase::InitPos;
     using AccessBase::IncPos;
     using AccessBase::IncBlock;
     using typename AccessBase::BinarySearchCellType;
     using AccessBase::MakeBinarySearchIndexer;
     using TypeBase::HandleItemFound;
+
+    void InitPos();
 
     // The actual query function. It will call HandleItemFound() for any matching type
     // and return if HandleItemFound() returns true.
@@ -248,6 +253,7 @@ class ScQueryCellIterator
     // Make base members directly visible here (templated bases need 'this->').
     using Base::maParam;
     using Base::rDoc;
+    using Base::mrContext;
     using Base::nTab;
     using Base::nCol;
     using Base::nRow;
@@ -302,6 +308,18 @@ public:
 };
 
 typedef ScQueryCellIterator< ScQueryCellIteratorAccess::Direct > ScQueryCellIteratorDirect;
+
+class ScQueryCellIteratorSortedCache
+    : public ScQueryCellIterator< ScQueryCellIteratorAccess::SortedCache >
+{
+    typedef ScQueryCellIterator< ScQueryCellIteratorAccess::SortedCache > Base;
+public:
+    ScQueryCellIteratorSortedCache(ScDocument& rDocument, ScInterpreterContext& rContext,
+        SCTAB nTable, const ScQueryParam& aParam, bool bMod)
+    : Base( rDocument, rContext, nTable, aParam, bMod ) {}
+    // Returns true if this iterator can be used for the given query.
+    static bool CanBeUsed(const ScQueryParam& aParam);
+};
 
 
 template<>

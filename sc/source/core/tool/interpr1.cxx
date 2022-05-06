@@ -6150,17 +6150,35 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
-                // Increment Entry.nField in iterator when switching to next column.
-                aCellIter.SetAdvanceQueryParamEntryField( true );
-                if ( aCellIter.GetFirst() )
+                if( ScQueryCellIteratorSortedCache::CanBeUsed( rParam ))
                 {
-                    do
+                    ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    // Increment Entry.nField in iterator when switching to next column.
+                    aCellIter.SetAdvanceQueryParamEntryField( true );
+                    if ( aCellIter.GetFirst() )
                     {
-                        size_t nC = aCellIter.GetCol() + nColDiff;
-                        size_t nR = aCellIter.GetRow() + nRowDiff;
-                        ++vConditions[nC * nDimensionRows + nR];
-                    } while ( aCellIter.GetNext() );
+                        do
+                        {
+                            size_t nC = aCellIter.GetCol() + nColDiff;
+                            size_t nR = aCellIter.GetRow() + nRowDiff;
+                            ++vConditions[nC * nDimensionRows + nR];
+                        } while ( aCellIter.GetNext() );
+                    }
+                }
+                else
+                {
+                    ScQueryCellIteratorDirect aCellIter(mrDoc, mrContext, nTab1, rParam, false);
+                    // Increment Entry.nField in iterator when switching to next column.
+                    aCellIter.SetAdvanceQueryParamEntryField( true );
+                    if ( aCellIter.GetFirst() )
+                    {
+                        do
+                        {
+                            size_t nC = aCellIter.GetCol() + nColDiff;
+                            size_t nR = aCellIter.GetRow() + nRowDiff;
+                            ++vConditions[nC * nDimensionRows + nR];
+                        } while ( aCellIter.GetNext() );
+                    }
                 }
             }
             if (nRefArrayPos != std::numeric_limits<size_t>::max())
@@ -9951,28 +9969,43 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( std::u16string_vie
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInterpreterContext& rContext,
         const ScQueryParam & rParam, const ScQueryEntry & rEntry )
 {
-    bool bFound = false;
-    ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
     if (rEntry.eOp != SC_EQUAL)
     {
         // range lookup <= or >=
         SCCOL nCol;
         SCROW nRow;
-        bFound = aCellIter.FindEqualOrSortedLastInRange( nCol, nRow);
-        if (bFound)
+        ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
+        if( aCellIter.FindEqualOrSortedLastInRange( nCol, nRow ))
         {
             o_rResultPos.SetCol( nCol);
             o_rResultPos.SetRow( nRow);
+            return true;
         }
     }
-    else if (aCellIter.GetFirst())
+    else // EQUAL
     {
-        // EQUAL
-        bFound = true;
-        o_rResultPos.SetCol( aCellIter.GetCol());
-        o_rResultPos.SetRow( aCellIter.GetRow());
+        if( ScQueryCellIteratorSortedCache::CanBeUsed( rParam ))
+        {
+            ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
+            if (aCellIter.GetFirst())
+            {
+                o_rResultPos.SetCol( aCellIter.GetCol());
+                o_rResultPos.SetRow( aCellIter.GetRow());
+                return true;
+            }
+        }
+        else
+        {
+            ScQueryCellIteratorDirect aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
+            if (aCellIter.GetFirst())
+            {
+                o_rResultPos.SetCol( aCellIter.GetCol());
+                o_rResultPos.SetRow( aCellIter.GetRow());
+                return true;
+            }
+        }
     }
-    return bFound;
+    return false;
 }
 
 // tdf#121052:

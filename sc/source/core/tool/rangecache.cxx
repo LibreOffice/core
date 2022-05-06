@@ -35,7 +35,6 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, 
     assert(maRange.aStart.Tab() == maRange.aEnd.Tab());
     SCTAB nTab = maRange.aStart.Tab();
     SCTAB nCol = maRange.aStart.Col();
-    mSortedRows.reserve(maRange.aEnd.Row() - maRange.aStart.Row() + 1);
     for (SCROW nRow = maRange.aStart.Row(); nRow <= maRange.aEnd.Row(); ++nRow)
     {
         ScRefCellValue cell(pDoc->GetRefCellValue(ScAddress(nCol, nRow, nTab)));
