@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d16d2019_8eec46eb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-06T00:49:35Z",
+      "side": 1,
+      "message": "1. @Heiko: Please send this back to tdf#112723 as an EasyHack for SkillCpp – will be better for everyone.\n\n2. From looking at the /stoc tree, it seemed better to put strings.hrc in the same directory as javaloader.cxx. \n\n3. @Stefan – is the javaloader in /stoc used (a) by others for other purposes or (b) only for LO?\n\n- if (a), then seems better/necessary to use a more generic message (as you have advocated) – where the idea is to ”fit” close enough to the LO case (of trying to install an extension without activating Java in Options), but still not be confusing for other contexts. For example: ”Could not find an installed and activated Java Runtime Environment (JRE)” \n\n- if (b) then should not be a problem to use the message as proposed here (i.e., referring to Tools, Options, etc.) – (because only LO developers would see it, and could understand).\n\n\n4. Proposal in point 3 tries to find a pragmatic way to reconcile the \"tension\" that arises within the existing code, which sends the ”backend” javaloader error message directly out to LO users -- especially given that there is no enthusiasm for adding a way to handle the interaction between the ”backend” and the user.",
+      "revId": "ab11089751bb8cc99faeb2a5ad5f1e3bf9df2483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
