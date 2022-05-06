@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b2e34fd_cdcc17eb",
+        "filename": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-06T12:55:24Z",
+      "side": 1,
+      "message": "yes it does - by registering the namespace prefixes (which you commented out at line 1008) and then using prefixed names in the XPath expression.",
+      "parentUuid": "a4ede110_735d4122",
+      "revId": "fe57df08f2510e80532faeecceef7ed344e1b5c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7261a479_873a3141",
         "filename": "sfx2/source/doc/SfxDocumentMetaData.cxx",
         "patchSetId": 1
