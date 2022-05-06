@@ -283,7 +283,9 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     assert(maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
         || maParam.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue);
     assert(maParam.bByRow);
-    assert(maParam.GetEntry(0).eOp == SC_LESS_EQUAL || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL);
+    assert(maParam.GetEntry(0).eOp == SC_LESS || maParam.GetEntry(0).eOp == SC_LESS_EQUAL
+        || maParam.GetEntry(0).eOp == SC_GREATER || maParam.GetEntry(0).eOp == SC_GREATER_EQUAL
+        || maParam.GetEntry(0).eOp == SC_EQUAL);
 
     // TODO: This will be extremely slow with mdds::multi_type_vector.
 
@@ -301,7 +303,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     SvNumberFormatter& rFormatter = *(mrContext.GetFormatTable());
     const ScQueryEntry& rEntry = maParam.GetEntry(0);
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
-    bool bLessEqual = rEntry.eOp == SC_LESS_EQUAL;
+    bool bAscending = rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_EQUAL;
     bool bByString = rItem.meType == ScQueryEntry::ByString;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings && !bByString;
     bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
@@ -323,7 +325,9 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
             sal_Int32 nTmp = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
             if ((rEntry.eOp == SC_LESS_EQUAL && nTmp > 0) ||
                     (rEntry.eOp == SC_GREATER_EQUAL && nTmp < 0) ||
-                    (rEntry.eOp == SC_EQUAL && nTmp != 0))
+                    (rEntry.eOp == SC_EQUAL && nTmp != 0) ||
+                    (rEntry.eOp == SC_LESS && nTmp >= 0) ||
+                    (rEntry.eOp == SC_GREATER && nTmp <= 0))
                 ++nRow;
         }
     }
@@ -361,11 +365,11 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     // range isn't strictly sorted.
     size_t nLastInRange = nLo;
     size_t nFirstLastInRange = nLastInRange;
-    double fLastInRangeValue = bLessEqual ?
+    double fLastInRangeValue = bAscending ?
         -(::std::numeric_limits<double>::max()) :
             ::std::numeric_limits<double>::max();
     OUString aLastInRangeString;
-    if (!bLessEqual)
+    if (!bAscending)
         aLastInRangeString = OUString(u'\xFFFF');
 
     aCellData = aIndexer.getCell(nLastInRange);
@@ -424,7 +428,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                         nCellVal, rItem.mfVal))
             {
                 nRes = -1;
-                if (bLessEqual)
+                if (bAscending)
                 {
                     if (fLastInRangeValue <= nCellVal)
                     {
@@ -443,7 +447,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                         nCellVal, rItem.mfVal))
             {
                 nRes = 1;
-                if (!bLessEqual)
+                if (!bAscending)
                 {
                     if (fLastInRangeValue >= nCellVal)
                     {
@@ -465,7 +469,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
             OUString aCellStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
 
             nRes = rCollator.compareString(aCellStr, rEntry.GetQueryItem().maString.getString());
-            if (nRes < 0 && bLessEqual)
+            if (nRes < 0 && bAscending)
             {
                 sal_Int32 nTmp = rCollator.compareString( aLastInRangeString,
                         aCellStr);
@@ -481,7 +485,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                     bDone = true;
                 }
             }
-            else if (nRes > 0 && !bLessEqual)
+            else if (nRes > 0 && !bAscending)
             {
                 sal_Int32 nTmp = rCollator.compareString( aLastInRangeString,
                         aCellStr);
@@ -501,18 +505,18 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
         else if (!bStr && bByString)
         {
             nRes = -1; // numeric < string
-            if (bLessEqual)
+            if (bAscending)
                 nLastInRange = i;
         }
         else // if (bStr && !bByString)
         {
             nRes = 1; // string > numeric
-            if (!bLessEqual)
+            if (!bAscending)
                 nLastInRange = i;
         }
         if (nRes < 0)
         {
-            if (bLessEqual)
+            if (bAscending)
                 nLo = nMid + 1;
             else // assumed to be SC_GREATER_EQUAL
             {
@@ -524,7 +528,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
         }
         else if (nRes > 0)
         {
-            if (bLessEqual)
+            if (bAscending)
             {
                 if (nMid > 0)
                     nHi = nMid - 1;
@@ -536,9 +540,27 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
         }
         else
         {
-            found = i;
-            // But keep searching to find the last matching one.
-            nLo = nMid + 1;
+            if(rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_GREATER_EQUAL || rEntry.eOp == SC_EQUAL)
+            {
+                found = i;
+                nLastInRange = i;
+                // But keep searching to find the last matching one.
+                nLo = nMid + 1;
+            }
+            else if (bAscending)
+            {
+                if (nMid > 0)
+                    nHi = nMid - 1;
+                else
+                    bDone = true;
+            }
+            else
+            {
+                if (nMid > 0)
+                    nHi = nMid - 1;
+                else
+                    bDone = true;
+            }
         }
     }
 
