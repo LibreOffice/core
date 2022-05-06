@@ -1098,8 +1098,14 @@ sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::R
                 do {
                     aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
 
+<<<<<<< HEAD   (b1d1a0 Update git submodules)
                     if (m_pStorageFile->getStorageVersion() == 0)
+=======
+                    if (!aPass.isEmpty() && m_xStorageFile->getStorageVersion() == 0)
+                    {
+>>>>>>> CHANGE (bbb861 svl: fix crash if user cancels/closes master password dialog)
                         aPass = ReencodeAsOldHash(aPass);
+                    }
 
                     bResult = ( !aPass.isEmpty() && aPass == m_aMasterPasswd );
                     aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
