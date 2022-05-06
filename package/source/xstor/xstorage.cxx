@@ -1461,17 +1461,24 @@ uno::Sequence< OUString > OStorage_Impl::GetElementNames()
 
     ReadContents();
 
-    std::vector< OUString > aElementNames;
-    aElementNames.reserve( m_aChildrenMap.size() );
-
+    sal_Int32 nCnt = 0;
     for ( const auto& pair : m_aChildrenMap )
         for (auto pElement : pair.second)
         {
             if ( !pElement->m_bIsRemoved )
-                aElementNames.push_back(pair.first);
+                nCnt++;
         }
 
-    return comphelper::containerToSequence(aElementNames);
+    uno::Sequence<OUString> aElementNames(nCnt);
+    OUString* pArray = aElementNames.getArray();
+    for ( const auto& pair : m_aChildrenMap )
+        for (auto pElement : pair.second)
+        {
+            if ( !pElement->m_bIsRemoved )
+                *pArray++ = pair.first;
+        }
+
+    return aElementNames;
 }
 
 void OStorage_Impl::RemoveElement( OUString const & rName, SotElement_Impl* pElement )
