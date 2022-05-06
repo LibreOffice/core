@@ -723,13 +723,22 @@ void SwSelPaintRects::HighlightContentControl()
             }
         }
 
-        if (!m_pContentControlButton && pContentControl && pContentControl->HasListItems())
+        if (pContentControl && pContentControl->HasListItems())
         {
             auto pWrtShell = dynamic_cast<const SwWrtShell*>(GetShell());
             if (pWrtShell)
             {
                 auto& rEditWin = const_cast<SwEditWin&>(pWrtShell->GetView().GetEditWin());
-                m_pContentControlButton = VclPtr<SwDropDownContentControlButton>::Create(&rEditWin, *pContentControl);
+                if (m_pContentControlButton
+                    && &m_pContentControlButton->GetContentControl() != pContentControl)
+                {
+                    m_pContentControlButton.disposeAndClear();
+                }
+                if (!m_pContentControlButton)
+                {
+                    m_pContentControlButton = VclPtr<SwDropDownContentControlButton>::Create(
+                        &rEditWin, *pContentControl);
+                }
                 m_pContentControlButton->CalcPosAndSize(aLastPortionPaintArea);
                 m_pContentControlButton->Show();
             }

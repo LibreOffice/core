@@ -17,6 +17,7 @@
 #include <docsh.hxx>
 #include <strings.hrc>
 #include <formatcontentcontrol.hxx>
+#include <wrtsh.hxx>
 
 void SwDropDownContentControlButton::InitDropdown()
 {
@@ -52,14 +53,15 @@ IMPL_LINK(SwDropDownContentControlButton, ListBoxHandler, weld::TreeView&, rBox,
     }
 
     sal_Int32 nSelection = rBox.get_selected_index();
+    m_xPopup->popdown();
     if (nSelection >= 0)
     {
-        // TODO update the doc model
         SwView& rView = static_cast<SwEditWin*>(GetParent())->GetView();
-        rView.GetDocShell()->SetModified();
+        SwWrtShell& rWrtShell = rView.GetWrtShell();
+        auto& rContentControl = const_cast<SwContentControl&>(m_rContentControl);
+        rContentControl.SetSelectedListItem(nSelection);
+        rWrtShell.GotoContentControl(*m_rContentControl.GetFormatContentControl());
     }
-
-    m_xPopup->popdown();
 
     return true;
 }
