@@ -769,7 +769,7 @@ double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C()
     __attribute__((no_sanitize("float-divide-by-zero"))) // atahn(1) -> inf
 #endif
 {
-   return 0.5 * rtl_math_log1p(2.0 * fValue / (1.0-fValue));
+    return ::atanh(fValue);
 }
 
 /** Parent error function (erf) */

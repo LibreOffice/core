@@ -75,6 +75,7 @@
 #include <memory>
 #include <limits>
 #include <string_view>
+#include <cmath>
 
 const sal_uInt64 n2power48 = SAL_CONST_UINT64( 281474976710656); // 2^48
 
@@ -1919,7 +1920,7 @@ void ScInterpreter::ScArcTanHyp()
     if (fabs(fVal) >= 1.0)
         PushIllegalArgument();
     else
-        PushDouble( ::rtl::math::atanh( fVal));
+        PushDouble(::atanh(fVal));
 }
 
 void ScInterpreter::ScArcCotHyp()
