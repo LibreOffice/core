@@ -22,6 +22,7 @@
 #include <ExplicitCategoriesProvider.hxx>
 #include "Tickmarks.hxx"
 #include <Axis.hxx>
+#include <VSeriesPlotter.hxx>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
 
@@ -183,8 +184,10 @@ bool VAxisBase::prepareShapeCreation()
     //create named group shape
     m_xGroupShape_Shapes = createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : "");
 
-    if( m_aAxisProperties.m_bDisplayLabels )
+    if (m_aAxisProperties.m_bDisplayLabels)
         m_xTextTarget = ShapeFactory::createGroup2D( m_xFinalTarget, m_aCID );
+    if (m_aAxisProperties.m_bDisplayDataTable)
+        m_xDataTableTarget = ShapeFactory::createGroup2D(m_xFinalTarget, m_aCID);
 
     return true;
 }
@@ -237,6 +240,11 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
     {
         //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
     }
+}
+
+void VAxisBase::createDataTableView(std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/,
+                                    uno::Reference<util::XNumberFormatsSupplier> const& /*xNumberFormatsSupplier*/)
+{
 }
 
 } //namespace chart

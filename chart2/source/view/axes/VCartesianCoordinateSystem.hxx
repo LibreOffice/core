@@ -31,10 +31,11 @@ public:
     virtual ~VCartesianCoordinateSystem() override;
 
     virtual void createVAxisList(
-            const rtl::Reference<::chart::ChartModel> &ChartDoc
-            , const css::awt::Size& rFontReferenceSize
-            , const css::awt::Rectangle& rMaximumSpaceForLabels
-            , bool bLimitSpaceForLabels ) override;
+            const rtl::Reference<::chart::ChartModel> &ChartDoc,
+            const css::awt::Size& rFontReferenceSize,
+            const css::awt::Rectangle& rMaximumSpaceForLabels,
+            bool bLimitSpaceForLabels,
+            std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList) override;
 
     virtual void initVAxisInList() override;
     virtual void updateScalesAndIncrementsOnAxes() override;
