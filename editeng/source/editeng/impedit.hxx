@@ -1017,7 +1017,7 @@ public:
     void                SetDefaultLanguage( LanguageType eLang ) { eDefLanguage = eLang; }
     LanguageType        GetDefaultLanguage() const { return eDefLanguage; }
 
-    LanguageType        GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos = nullptr ) const;
+    editeng::LanguageSpan GetLanguage( const EditPaM& rPaM, sal_Int32* pEndPos = nullptr ) const;
     css::lang::Locale   GetLocale( const EditPaM& rPaM ) const;
 
     void DoOnlineSpelling( ContentNode* pThisNodeOnly = nullptr, bool bSpellAtCursorPos = false, bool bInterruptible = true );
