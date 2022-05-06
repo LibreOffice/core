@@ -394,7 +394,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
     }
 
     sal_Int32 nRes = 0;
-    bool bFound = false;
+    std::optional<size_t> found;
     bool bDone = false;
     while (nLo <= nHi && !bDone)
     {
@@ -426,12 +426,12 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                 nRes = -1;
                 if (bLessEqual)
                 {
-                    if (fLastInRangeValue < nCellVal)
+                    if (fLastInRangeValue <= nCellVal)
                     {
                         fLastInRangeValue = nCellVal;
                         nLastInRange = i;
                     }
-                    else if (fLastInRangeValue > nCellVal)
+                    else if (fLastInRangeValue >= nCellVal)
                     {
                         // not strictly sorted, continue with GetThis()
                         nLastInRange = nFirstLastInRange;
@@ -445,12 +445,12 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
                 nRes = 1;
                 if (!bLessEqual)
                 {
-                    if (fLastInRangeValue > nCellVal)
+                    if (fLastInRangeValue >= nCellVal)
                     {
                         fLastInRangeValue = nCellVal;
                         nLastInRange = i;
                     }
-                    else if (fLastInRangeValue < nCellVal)
+                    else if (fLastInRangeValue <= nCellVal)
                     {
                         // not strictly sorted, continue with GetThis()
                         nLastInRange = nFirstLastInRange;
@@ -469,7 +469,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
             {
                 sal_Int32 nTmp = rCollator.compareString( aLastInRangeString,
                         aCellStr);
-                if (nTmp < 0)
+                if (nTmp <= 0)
                 {
                     aLastInRangeString = aCellStr;
                     nLastInRange = i;
@@ -485,7 +485,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
             {
                 sal_Int32 nTmp = rCollator.compareString( aLastInRangeString,
                         aCellStr);
-                if (nTmp > 0)
+                if (nTmp >= 0)
                 {
                     aLastInRangeString = aCellStr;
                     nLastInRange = i;
@@ -536,12 +536,15 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch()
         }
         else
         {
-            nLo = i;
-            bDone = bFound = true;
+            found = i;
+            // But keep searching to find the last matching one.
+            nLo = nMid + 1;
         }
     }
 
-    if (!bFound)
+    if (found)
+        nLo = *found;
+    else
     {
         // If all hits didn't result in a moving limit there's something
         // strange, e.g. data range not properly sorted, or only identical
