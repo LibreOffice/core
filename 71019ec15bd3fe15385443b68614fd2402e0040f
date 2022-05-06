@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2272003_4046b9cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000037
+      },
+      "writtenOn": "2022-05-06T17:29:34Z",
+      "side": 1,
+      "message": "My hero ! \u003d)\n\nThanks Miklos.",
+      "revId": "71019ec15bd3fe15385443b68614fd2402e0040f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
