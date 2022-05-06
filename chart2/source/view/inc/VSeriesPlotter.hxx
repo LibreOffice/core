@@ -218,6 +218,7 @@ public:
                 );
 
     std::vector< VDataSeries* > getAllSeries();
+    std::vector<VDataSeries const*> getAllSeries() const;
 
     // This method creates a series plotter of the requested type; e.g. : return new PieChart...
     static VSeriesPlotter* createSeriesPlotter( const css::uno::Reference< css::chart2::XChartType >& xChartTypeModel
@@ -234,8 +235,13 @@ public:
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* pExplicitCategoriesProvider );
 
+    ExplicitCategoriesProvider* getExplicitCategoriesProvider() { return m_pExplicitCategoriesProvider; }
+
     //get series names for the z axis labels
     css::uno::Sequence< OUString > getSeriesNames() const;
+
+    //get all series names
+    css::uno::Sequence<OUString> getAllSeriesNames() const;
 
     void setPageReferenceSize( const css::awt::Size & rPageRefSize );
     //better performance for big data
@@ -253,6 +259,11 @@ public:
 
     bool WantToPlotInFrontOfAxisLine();
     virtual bool shouldSnapRectToUsedArea();
+
+    /// This method returns a text string representation of the passed numeric
+    /// value by exploiting a NumberFormatterWrapper object.
+    OUString getLabelTextForValue(VDataSeries const & rDataSeries, sal_Int32 nPointIndex,
+                                  double fValue, bool bAsPercentage);
 
 protected:
 
@@ -321,13 +332,6 @@ protected:
                 , LabelAlignment eAlignment
                 , sal_Int32 nOffset=0
                 , sal_Int32 nTextWidth = 0 );
-
-    /// This method returns a text string representation of the passed numeric
-    /// value by exploiting a NumberFormatterWrapper object.
-    OUString getLabelTextForValue( VDataSeries const & rDataSeries
-                , sal_Int32 nPointIndex
-                , double fValue
-                , bool bAsPercentage );
 
     /** creates two T-shaped error bars in both directions (up/down or
         left/right depending on the bVertical parameter)

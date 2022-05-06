@@ -108,7 +108,8 @@ struct AxisProperties final
 
     AxisLabelAlignment maLabelAlignment;
 
-    bool            m_bDisplayLabels;
+    bool m_bDisplayDataTable;
+    bool m_bDisplayLabels;
 
     // Compatibility option: starting from LibreOffice 5.1 the rotated
     // layout is preferred to staggering for axis labels.

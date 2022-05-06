@@ -34,7 +34,8 @@ public:
             const css::uno::Reference< css::chart2::XChartDocument> &ChartDoc
             , const css::awt::Size& rFontReferenceSize
             , const css::awt::Rectangle& rMaximumSpaceForLabels
-            , bool bLimitSpaceForLabels ) override;
+            , bool bLimitSpaceForLabels
+            , std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList) override;
 
     virtual void initVAxisInList() override;
     virtual void updateScalesAndIncrementsOnAxes() override;

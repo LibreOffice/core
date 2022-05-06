@@ -20,6 +20,7 @@
 
 #include "MinimumAndMaximumSupplier.hxx"
 #include <ThreeDHelper.hxx>
+#include "VSeriesPlotter.hxx"
 #include <chartview/ExplicitScaleValues.hxx>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/uno/Sequence.h>
@@ -38,7 +39,6 @@ namespace com::sun::star::chart2 { class XChartDocument; }
 namespace com::sun::star::chart2 { class XCoordinateSystem; }
 namespace com::sun::star::drawing { class XShapes; }
 namespace com::sun::star::lang { class XMultiServiceFactory; }
-
 
 namespace chart
 {
@@ -116,7 +116,8 @@ public:
             const css::uno::Reference< css::chart2::XChartDocument> & xChartDoc
             , const css::awt::Size& rFontReferenceSize
             , const css::awt::Rectangle& rMaximumSpaceForLabels
-            , bool bLimitSpaceForLabels );
+            , bool bLimitSpaceForLabels
+            , std::vector<std::unique_ptr<VSeriesPlotter>>& rSeriesPlotterList);
 
     virtual void initVAxisInList();
     virtual void updateScalesAndIncrementsOnAxes();

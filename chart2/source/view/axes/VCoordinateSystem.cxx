@@ -330,7 +330,7 @@ void VCoordinateSystem::createVAxisList(
             , const awt::Size& /* rFontReferenceSize */
             , const awt::Rectangle& /* rMaximumSpaceForLabels */
             , bool /* bLimitSpaceForLabels */
-            )
+            , std::vector<std::unique_ptr<VSeriesPlotter>>& /*rSeriesPlotterList*/)
 {
 }
 
