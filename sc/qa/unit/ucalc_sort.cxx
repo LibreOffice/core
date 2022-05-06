@@ -2102,6 +2102,18 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
     }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 5 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(2), it.GetRow());
+    }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 5 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
+    }
 
     {
         // Descending, this should return the last 5.
@@ -2114,6 +2126,12 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(6), it.GetRow());
     }
+    {
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 5 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
+    }
 
     {
         // There's no 6, so this should return the last 5.
@@ -2122,6 +2140,18 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue( formulaAddress ));
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 6 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
+    }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 6 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
+    }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 6 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
@@ -2138,6 +2168,12 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
     }
+    {
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 6 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
+    }
 
     {
         // All values are larger than 0, so this should be an error.
@@ -2146,6 +2182,18 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT_EQUAL( FormulaError::NotAvailable, m_pDoc->GetErrCode( formulaAddress ));
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 0 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
+    }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 0 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
+    }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 0 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
@@ -2162,6 +2210,12 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
     }
+    {
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 0 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
 
     {
         // All values are smaller than 10, so this should return the last item.
@@ -2170,6 +2224,18 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT_EQUAL( 11.0, m_pDoc->GetValue( formulaAddress ));
 
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 10 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS, 10 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
+    {
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_EQUAL, 10 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
@@ -2186,6 +2252,12 @@ void TestSort::testQueryBinarySearch()
         CPPUNIT_ASSERT(it.BinarySearch());
         CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
     }
+    {
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER, 10 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
+    }
 
     {
         // Search as ascending but use descending range (=search will not work).
@@ -2198,6 +2270,14 @@ void TestSort::testQueryBinarySearch()
     {
         // Search as descending but use ascending range (=search will not work).
         ScQueryParam param = makeSearchParam( range, ascendingCol, SC_GREATER_EQUAL, 9 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
+
+    {
+        // SC_EQUAL with descending is considered an error.
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_EQUAL, 9 );
         TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
         CPPUNIT_ASSERT(it.BinarySearch());
         // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
