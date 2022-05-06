@@ -23,6 +23,7 @@
 #include <scitems.hxx>
 #include <editutil.hxx>
 #include <drwlayer.hxx>
+#include <queryiter.hxx>
 
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
@@ -58,6 +59,7 @@ public:
     void testSortOutOfPlaceResult();
     void testSortPartialFormulaGroup();
     void testSortImages();
+    void testQueryBinarySearch();
 
     CPPUNIT_TEST_SUITE(TestSort);
 
@@ -80,6 +82,7 @@ public:
     CPPUNIT_TEST(testSortOutOfPlaceResult);
     CPPUNIT_TEST(testSortPartialFormulaGroup);
     CPPUNIT_TEST(testSortImages);
+    CPPUNIT_TEST(testQueryBinarySearch);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -2015,6 +2018,190 @@ void TestSort::testSortImages()
     pRowObjects
         = pDrawLayer->GetObjectsAnchoredToRange(aCellPos.Tab(), aCellPos.Col(), aCellPos.Row(), aCellPos.Row());
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pRowObjects[aCellPos.Row()].size());
+
+    m_pDoc->DeleteTab(0);
+}
+
+namespace
+{
+
+class TestQueryIterator
+    : public ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic >
+{
+    typedef ScQueryCellIteratorBase< ScQueryCellIteratorAccess::Direct, ScQueryCellIteratorType::Generic > Base;
+public:
+    TestQueryIterator( ScDocument& rDocument, const ScInterpreterContext& rContext, SCTAB nTable,
+        const ScQueryParam& aParam, bool bMod )
+    : Base( rDocument, rContext, nTable, aParam, bMod )
+    {
+    }
+    using Base::BinarySearch; // make public
+    SCROW GetRow() const { return nRow; }
+};
+
+ScQueryParam makeSearchParam( const ScRange& range, SCCOL col, ScQueryOp op, double value )
+{
+    ScQueryParam param;
+    param.nCol1 = param.nCol2 = col;
+    param.nRow1 = range.aStart.Row();
+    param.nRow2 = range.aEnd.Row();
+    param.nTab = 0;
+    ScQueryEntry& entry = param.GetEntry(0);
+    ScQueryEntry::Item& item = entry.GetQueryItem();
+    entry.bDoQuery = true;
+    entry.eOp = op;
+    item.mfVal = value;
+    item.meType = ScQueryEntry::ByValue;
+    return param;
+}
+
+} // namespace
+
+void TestSort::testQueryBinarySearch()
+{
+    m_pDoc->InsertTab(0, "testQueryBinarySearch");
+
+    const ScAddress formulaAddress( 10, 0, 0 );
+    ScRange range;
+    SCCOL ascendingCol;
+    SCCOL descendingCol;
+    OUString ascendingRangeName;
+    OUString descendingRangeName;
+    {
+        const std::vector<std::vector<const char*>> data = {
+            { "1", "9" },  // 0
+            { "2", "9" },  // 1
+            { "4", "5" },  // 2
+            { "5", "5" },  // 3
+            { "5", "5" },  // 4
+            { "5", "5" },  // 5
+            { "5", "5" },  // 6
+            { "5", "4" },  // 7
+            { "5", "4" },  // 8
+            { "9", "2" },  // 9
+            { "9", "1" },  // 10
+        };
+        ascendingCol = 0;
+        descendingCol = 1;
+        ascendingRangeName = u"$A$1:$A$" + OUString::number(data.size());
+        descendingRangeName = u"$B$1:$B$" + OUString::number(data.size());
+
+        ScAddress pos(0,0,0);
+        range = insertRangeData(m_pDoc, pos, data);
+        CPPUNIT_ASSERT_EQUAL( ScRange( 0, 0, 0, data[ 0 ].size() - 1, data.size() - 1, 0 ), range );
+    }
+
+    {
+        // This should return the last 5.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(5;" + ascendingRangeName + ";1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 5 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
+    }
+
+    {
+        // Descending, this should return the last 5.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(5;" + descendingRangeName + ";-1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 5 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(6), it.GetRow());
+    }
+
+    {
+        // There's no 6, so this should return the last 5.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(6;" + ascendingRangeName + ";1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL( 9.0, m_pDoc->GetValue( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 6 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(8), it.GetRow());
+    }
+
+    {
+        // Descending, there's no 6, so this should return the last 9.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(6;" + descendingRangeName + ";-1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL( 2.0, m_pDoc->GetValue( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 6 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(1), it.GetRow());
+    }
+
+    {
+        // All values are larger than 0, so this should be an error.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(0;" + ascendingRangeName + ";1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL( FormulaError::NotAvailable, m_pDoc->GetErrCode( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 0 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
+    }
+
+    {
+        // Descending, all values are larger than 0, so this should return the last item.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(0;" + descendingRangeName + ";-1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL( 11.0, m_pDoc->GetValue( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 0 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
+
+    {
+        // All values are smaller than 10, so this should return the last item.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(10;" + ascendingRangeName + ";1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL( 11.0, m_pDoc->GetValue( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_LESS_EQUAL, 10 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
+
+    {
+        // Descending, all values are smaller than 10, so this should be an error.
+        m_pDoc->SetFormula( formulaAddress, "=MATCH(10;" + descendingRangeName + ";-1)",
+            formula::FormulaGrammar::GRAM_NATIVE_UI);
+        CPPUNIT_ASSERT_EQUAL( FormulaError::NotAvailable, m_pDoc->GetErrCode( formulaAddress ));
+
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_GREATER_EQUAL, 10 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        CPPUNIT_ASSERT_EQUAL(SCROW(0), it.GetRow());
+    }
+
+    {
+        // Search as ascending but use descending range (=search will not work).
+        ScQueryParam param = makeSearchParam( range, descendingCol, SC_LESS_EQUAL, 1 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
+
+    {
+        // Search as descending but use ascending range (=search will not work).
+        ScQueryParam param = makeSearchParam( range, ascendingCol, SC_GREATER_EQUAL, 9 );
+        TestQueryIterator it( *m_pDoc, m_pDoc->GetNonThreadedContext(), 0, param, false );
+        CPPUNIT_ASSERT(it.BinarySearch());
+        // CPPUNIT_ASSERT_EQUAL(SCROW(10), it.GetRow());
+    }
 
     m_pDoc->DeleteTab(0);
 }
