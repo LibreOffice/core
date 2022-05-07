@@ -69,15 +69,8 @@ public class SearchController implements View.OnClickListener {
         ImageButton button = (ImageButton) view;
 
         SearchDirection direction = SearchDirection.DOWN;
-        switch(button.getId()) {
-            case R.id.button_search_down:
-                direction = SearchDirection.DOWN;
-                break;
-            case R.id.button_search_up:
-                direction = SearchDirection.UP;
-                break;
-            default:
-                break;
+        if (button.getId() == R.id.button_search_up) {
+            direction = SearchDirection.UP;
         }
 
         String searchText = ((EditText) mActivity.findViewById(R.id.search_string)).getText().toString();
