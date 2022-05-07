@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b9e005cf_eaa87ba4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000446
+      },
+      "writtenOn": "2022-05-07T06:51:57Z",
+      "side": 1,
+      "message": "I heard SwClient is something obsolete, it\u0027s probably not a wise idea to add a new subclass of it.\nSee also: https://events.documentfoundation.org/libocon2021/talk/E9XWD8/ ",
+      "revId": "062d82664828abafa8cc4e9cf8b7f27d94f1e1fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
