@@ -16,6 +16,46 @@
       "message": "Just in case you want to comment...otherwise LGTM.",
       "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6c0fa3d_c153ab3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-07T06:12:12Z",
+      "side": 1,
+      "message": "Besides, LGTM",
+      "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac7553e8_1dcc9042",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1001318
+      },
+      "writtenOn": "2022-05-07T06:12:12Z",
+      "side": 1,
+      "message": "use*d*?",
+      "range": {
+        "startLine": 275,
+        "startChar": 41,
+        "endLine": 275,
+        "endChar": 44
+      },
+      "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
