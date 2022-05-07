@@ -168,4 +168,5 @@
     <string name="highlight_color">Highlight Color</string>
     <string name="font_color">Font Color</string>
     <string name="action_rename_slide">Rename Slide</string>
+    <string name="automatic">Automatic</string>
 </resources>

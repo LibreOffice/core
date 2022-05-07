@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -48,7 +49,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     final ColorPaletteListener colorPaletteListener = new ColorPaletteListener() {
         @Override
         public void applyColor(int color) {
-            sendFontColorChange(color);
+            sendFontColorChange(color, false);
         }
 
         @Override
@@ -70,7 +71,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
     final ColorPaletteListener backColorPaletteListener = new ColorPaletteListener() {
         @Override
         public void applyColor(int color) {
-            sendFontBackColorChange(color);
+            sendFontBackColorChange(color, false);
         }
 
         @Override
@@ -141,12 +142,12 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         }
     }
 
-    private void sendFontColorChange(int color){
+    private void sendFontColorChange(int color, boolean keepAlpha){
         try {
             JSONObject json = new JSONObject();
             JSONObject valueJson = new JSONObject();
             valueJson.put("type", "long");
-            valueJson.put("value", 0x00FFFFFF & color);
+            valueJson.put("value", keepAlpha ? color : 0x00FFFFFF & color);
             json.put("Color", valueJson);
 
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Color", json.toString()));
@@ -161,12 +162,12 @@ public class FontController implements AdapterView.OnItemSelectedListener {
      * 0x00FFFFFF & color operation removes the alpha which is FF,
      * if we don't remove it, the color value becomes negative which is not recognized by LOK
      */
-    private void sendFontBackColorChange(int color){
+    private void sendFontBackColorChange(int color, boolean keepAlpha) {
         try {
             JSONObject json = new JSONObject();
             JSONObject valueJson = new JSONObject();
             valueJson.put("type", "long");
-            valueJson.put("value", 0x00FFFFFF & color);
+            valueJson.put("value", keepAlpha ? color : 0x00FFFFFF & color);
             if(mActivity.getTileProvider().isSpreadsheet()){
                 json.put("BackgroundColor", valueJson);
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:BackgroundColor", json.toString()));
@@ -315,6 +316,10 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         fontColorPicker.setOnClickListener(clickListener);
         fontColorPickerButton.setOnClickListener(clickListener);
 
+        final Button autoColorButton = colorPickerLayout.findViewById(R.id.button_auto_color);
+        autoColorButton.setOnClickListener(view -> {
+            sendFontColorChange(COLOR_AUTO, true);
+        });
     }
 
     private void setupBackColorPicker(){
@@ -374,6 +379,10 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         fontColorPicker.setOnClickListener(clickListener);
         fontColorPickerButton.setOnClickListener(clickListener);
 
+        final Button autoColorButton = backColorPickerLayout.findViewById(R.id.button_auto_color);
+        autoColorButton.setOnClickListener(view -> {
+            sendFontBackColorChange(COLOR_AUTO, true);
+        });
     }
 
     public void selectFont(final String fontName) {
