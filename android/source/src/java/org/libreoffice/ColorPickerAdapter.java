@@ -40,10 +40,10 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
     public void onBindViewHolder(final ColorPickerViewHolder holder, int position) {
         holder.colorBox.setBackgroundColor(colorList[position]);
 
-        if (colorPaletteAdapter.getUpperSelectedBox() != position)
-            holder.colorBox.setImageDrawable(null);
-        else {
+        if (colorPaletteAdapter.getUpperSelectedBox() == position) {
             holder.colorBox.setImageResource(R.drawable.ic_done_white_12dp);
+        } else {
+            holder.colorBox.setImageDrawable(null);
         }
 
         holder.colorBox.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +86,15 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
             int red_shade = red;
             int green_shade = green;
             int blue_shade = blue;
-            if (i != 0) {
+            if (i == 0) {
+                colorPalette[0][0] = colorList[i];
+                for (int k = 1; k < 7; k++) {
+                    red_tint = (int) (red_tint + (255 - red_tint) * 0.25);
+                    green_tint = (int) (green_tint + (255 - green_tint) * 0.25);
+                    blue_tint = (int) (blue_tint + (255 - blue_tint) * 0.25);
+                    colorPalette[i][k] = (Color.rgb(red_tint, green_tint, blue_tint));
+                }
+            } else {
                 colorPalette[i][3] = colorList[i];
                 for (int k = 2; k >= 0; k--) {
                     red_shade = (int) (red_shade * 0.75);
@@ -98,14 +106,6 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
                     red_tint = (int) (red_tint + (255 - red_tint) * 0.45);
                     green_tint = (int) (green_tint + (255 - green_tint) * 0.45);
                     blue_tint = (int) (blue_tint + (255 - blue_tint) * 0.45);
-                    colorPalette[i][k] = (Color.rgb(red_tint, green_tint, blue_tint));
-                }
-            } else {
-                colorPalette[0][0] = colorList[i];
-                for (int k = 1; k < 7; k++) {
-                    red_tint = (int) (red_tint + (255 - red_tint) * 0.25);
-                    green_tint = (int) (green_tint + (255 - green_tint) * 0.25);
-                    blue_tint = (int) (blue_tint + (255 - blue_tint) * 0.25);
                     colorPalette[i][k] = (Color.rgb(red_tint, green_tint, blue_tint));
                 }
             }
