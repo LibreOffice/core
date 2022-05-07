@@ -36,6 +36,10 @@ public class ColorPaletteAdapter extends RecyclerView.Adapter<ColorPaletteAdapte
         return selectedBox;
     }
 
+    public int getUpperSelectedBox() {
+        return upperSelectedBox;
+    }
+
     @Override
     public void onBindViewHolder(final ColorPaletteViewHolder holder, int position) {
 

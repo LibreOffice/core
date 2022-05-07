@@ -17,7 +17,6 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
     private final ColorPaletteListener colorPaletteListener;
     private final int[] colorList;
     private final int[][] colorPalette = new int[11][8];
-    private int selectedBox = 0;
 
     public ColorPickerAdapter(Context mContext, final ColorPaletteAdapter colorPaletteAdapter, ColorPaletteListener colorPaletteListener) {
         this.mContext = mContext;
@@ -41,7 +40,7 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
     public void onBindViewHolder(final ColorPickerViewHolder holder, int position) {
         holder.colorBox.setBackgroundColor(colorList[position]);
 
-        if (selectedBox != position)
+        if (colorPaletteAdapter.getUpperSelectedBox() != position)
             holder.colorBox.setImageDrawable(null);
         else {
             holder.colorBox.setImageResource(R.drawable.ic_done_white_12dp);
@@ -64,7 +63,6 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
 
 
     private void setPosition(int position) {
-        this.selectedBox = position;
         selectSubColor(position, position==0?0:3);
         colorPaletteListener.applyColor(colorList[position]);
         updateAdapter();
@@ -122,19 +120,17 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
          */
         if (color == -1) {
             colorPaletteAdapter.changePosition(0, 0);
-            selectedBox = 0;
             updateAdapter();
             return;
         }
         /*
             Find the color if the palette points another color
          */
-        if (colorPalette[selectedBox][colorPaletteAdapter.getSelectedBox()] != color) {
+        if (colorPalette[colorPaletteAdapter.getUpperSelectedBox()][colorPaletteAdapter.getSelectedBox()] != color) {
             for (int i = 0; i < 11; i++) {
                 for (int k = 0; k < 8; k++) {
                     if (colorPalette[i][k] == color) {
                         colorPaletteAdapter.changePosition(i, k);
-                        selectedBox = i;
                         updateAdapter();
                         return;
                     }
