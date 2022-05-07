@@ -128,7 +128,6 @@ StatusBarManager::StatusBarManager(
     m_bUpdateControllers( false ),
     m_pStatusBar( pStatusBar ),
     m_xFrame( rFrame ),
-    m_aListenerContainer( m_mutex ),
     m_xContext( rxContext )
 {
 
@@ -177,9 +176,11 @@ void SAL_CALL StatusBarManager::dispose()
 {
     uno::Reference< lang::XComponent > xThis(this );
 
-    lang::EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
-
+    {
+        lang::EventObject aEvent( xThis );
+        std::unique_lock aGuard(m_mutex);
+        m_aListenerContainer.disposeAndClear( aGuard, aEvent );
+    }
     {
         SolarMutexGuard g;
         if ( m_bDisposed )
@@ -223,12 +224,14 @@ void SAL_CALL StatusBarManager::addEventListener( const uno::Reference< lang::XE
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    m_aListenerContainer.addInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aListenerContainer.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
 {
-    m_aListenerContainer.removeInterface( cppu::UnoType<lang::XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aListenerContainer.removeInterface( aGuard, xListener );
 }
 
 // XUIConfigurationListener
