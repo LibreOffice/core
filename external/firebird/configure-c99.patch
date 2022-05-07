@@ -1,18 +1,23 @@
 --- configure
 +++ configure
-@@ -21478,6 +21478,7 @@
+@@ -21478,8 +21478,9 @@
  else
    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
 +#include <stdlib.h>
  #include <semaphore.h>
- main () {
+-main () {
++int main () {
    struct s {
-@@ -21514,6 +21515,7 @@
+     char a;
+     union { long long x; sem_t y; } b;
+@@ -21514,7 +21515,8 @@
  else
    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
  /* end confdefs.h.  */
+-main () {
 +#include <stdlib.h>
- main () {
++int main () {
    struct s {
      char a;
+     double b;

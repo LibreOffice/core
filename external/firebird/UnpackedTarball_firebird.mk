@@ -49,7 +49,7 @@ $(eval $(call gb_UnpackedTarball_add_patches,firebird,\
     external/firebird/msvc.patch \
     external/firebird/wnt-per-process-trace-storage.patch.1 \
     external/firebird/0001-extern-cloop-Missing-dependencies-of-compilations-on.patch.1 \
-    external/firebird/configure-include.patch \
+    external/firebird/configure-c99.patch \
 ))
 
 ifeq ($(OS),WNT)
