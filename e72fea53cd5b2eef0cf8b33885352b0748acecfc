@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "155f62dc_21924fc9",
+        "filename": "test/source/text/xfootnote.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-05-07T04:40:00Z",
+      "side": 1,
+      "message": "I\u0027m not sure if I made the file correctly, I just followed another suite in the same folder.",
+      "parentUuid": "cc44d04b_7326b3ea",
+      "revId": "e72fea53cd5b2eef0cf8b33885352b0748acecfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5eda76e7_d9d5e943",
@@ -35,6 +53,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb29a3ca_2b3f540e",
+        "filename": "test/source/text/xfootnote.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-05-07T04:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5eda76e7_d9d5e943",
+      "revId": "e72fea53cd5b2eef0cf8b33885352b0748acecfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c10cc5f_7d745c0c",
@@ -48,6 +84,24 @@
       "writtenOn": "2022-04-10T01:31:29Z",
       "side": 1,
       "message": "You are comparing the same things; This is not OK.\nPlease take a closer look at the Java tests, and try to do the similar things in C++. I see that you have tried to do this in the previous patch sets, but in order to fix the build problems, you have reached to this point.",
+      "revId": "e72fea53cd5b2eef0cf8b33885352b0748acecfc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe41ae1_d90738d8",
+        "filename": "test/source/text/xfootnote.cxx",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1003332
+      },
+      "writtenOn": "2022-05-07T04:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c10cc5f_7d745c0c",
       "revId": "e72fea53cd5b2eef0cf8b33885352b0748acecfc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
