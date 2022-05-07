@@ -25,9 +25,9 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <comphelper/multiinterfacecontainer3.hxx>
+#include <comphelper/multiinterfacecontainer4.hxx>
 #include <comphelper/propertysethelper.hxx>
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ref.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <comphelper/propertysetinfo.hxx>
@@ -51,8 +51,8 @@ namespace comphelper
     {
     private:
         std::map<OUString, Any>   maAnyMap;
-        osl::Mutex                maMutex;
-        comphelper::OMultiTypeInterfaceContainerHelperVar3<XPropertyChangeListener, OUString> m_aListener;
+        std::mutex                maMutex;
+        comphelper::OMultiTypeInterfaceContainerHelperVar4<OUString, XPropertyChangeListener> m_aListener;
 
     protected:
         virtual void _setPropertyValues( const PropertyMapEntry** ppEntries, const  Any* pValues ) override;
@@ -87,7 +87,6 @@ namespace comphelper
 
 GenericPropertySet::GenericPropertySet( PropertySetInfo* pInfo ) noexcept
 : PropertySetHelper( pInfo )
-,m_aListener(maMutex)
 {
 }
 
@@ -97,6 +96,7 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPr
     if ( !xInfo.is() )
         return;
 
+    std::unique_lock aGuard(maMutex);
     if ( aPropertyName.isEmpty() )
     {
         Sequence< Property> aSeq = xInfo->getProperties();
@@ -104,23 +104,22 @@ void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& aPr
         const Property* pEnd  = pIter + aSeq.getLength();
         for( ; pIter != pEnd ; ++pIter)
         {
-            m_aListener.addInterface(pIter->Name,xListener);
+            m_aListener.addInterface(aGuard, pIter->Name,xListener);
         }
     }
     else if ( xInfo->hasPropertyByName(aPropertyName) )
-        m_aListener.addInterface(aPropertyName,xListener);
+        m_aListener.addInterface(aGuard, aPropertyName,xListener);
     else
         throw UnknownPropertyException( aPropertyName, *this );
 }
 
 void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener )
 {
-    ClearableMutexGuard aGuard( maMutex );
     Reference < XPropertySetInfo > xInfo = getPropertySetInfo(  );
-    aGuard.clear();
     if ( !xInfo.is() )
         return;
 
+    std::unique_lock aGuard(maMutex);
     if ( aPropertyName.isEmpty() )
     {
         Sequence< Property> aSeq = xInfo->getProperties();
@@ -128,22 +127,22 @@ void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& 
         const Property* pEnd  = pIter + aSeq.getLength();
         for( ; pIter != pEnd ; ++pIter)
         {
-            m_aListener.removeInterface(pIter->Name,xListener);
+            m_aListener.removeInterface(aGuard, pIter->Name,xListener);
         }
     }
     else if ( xInfo->hasPropertyByName(aPropertyName) )
-        m_aListener.removeInterface(aPropertyName,xListener);
+        m_aListener.removeInterface(aGuard, aPropertyName,xListener);
     else
         throw UnknownPropertyException( aPropertyName, *this );
 }
 
 void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries, const Any* pValues )
 {
-    ResettableMutexGuard aGuard( maMutex );
+    std::unique_lock aGuard(maMutex);
 
     while( *ppEntries )
     {
-        OInterfaceContainerHelper3<XPropertyChangeListener> * pHelper = m_aListener.getContainer((*ppEntries)->maName);
+        OInterfaceContainerHelper4<XPropertyChangeListener> * pHelper = m_aListener.getContainer((*ppEntries)->maName);
 
         maAnyMap[ (*ppEntries)->maName ] = *pValues;
 
@@ -152,9 +151,8 @@ void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries,
             PropertyChangeEvent aEvt;
             aEvt.PropertyName = (*ppEntries)->maName;
             aEvt.NewValue = *pValues;
-            aGuard.clear();
-            pHelper->notifyEach( &XPropertyChangeListener::propertyChange, aEvt );
-            aGuard.reset();
+            pHelper->notifyEach( aGuard, &XPropertyChangeListener::propertyChange, aEvt );
+            aGuard.lock();
         }
 
         ppEntries++;
@@ -164,7 +162,7 @@ void GenericPropertySet::_setPropertyValues( const PropertyMapEntry** ppEntries,
 
 void GenericPropertySet::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, Any* pValue )
 {
-    MutexGuard aGuard( maMutex );
+    std::unique_lock aGuard(maMutex);
 
     while( *ppEntries )
     {
