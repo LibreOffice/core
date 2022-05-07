@@ -84,70 +84,47 @@ class FormattingController implements View.OnClickListener {
             button.getBackground().setState(new int[]{android.R.attr.state_selected});
         }
 
-        switch(button.getId()) {
-
-            case R.id.button_insertFormatListBullets:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultBullet"));
-                break;
-
-            case R.id.button_insertFormatListNumbering:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultNumbering"));
-                break;
-
-            case R.id.button_bold:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Bold"));
-                break;
-            case R.id.button_italic:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Italic"));
-                break;
-            case R.id.button_strikethrough:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Strikeout"));
-                break;
-            case R.id.button_clearformatting:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:ResetAttributes"));
-                break;
-            case R.id.button_underlined:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:UnderlineDouble"));
-                break;
-            case R.id.button_align_left:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:LeftPara"));
-                break;
-            case R.id.button_align_center:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:CenterPara"));
-                break;
-            case R.id.button_align_right:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:RightPara"));
-                break;
-            case R.id.button_align_justify:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:JustifyPara"));
-                break;
-            case R.id.button_insert_line:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Line"));
-                break;
-            case R.id.button_insert_rect:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Rect"));
-                break;
-            case R.id.button_font_shrink:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Shrink"));
-                break;
-            case R.id.button_font_grow:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Grow"));
-                break;
-            case R.id.button_subscript:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SubScript"));
-                break;
-            case R.id.button_superscript:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SuperScript"));
-                break;
-            case R.id.button_insert_picture:
-                insertPicture();
-                break;
-            case R.id.button_insert_table:
-                insertTable();
-                break;
-            case R.id.button_delete_table:
-                deleteTable();
-                break;
+        final int buttonId = button.getId();
+        if (buttonId == R.id.button_insertFormatListBullets) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultBullet"));
+        } else if (buttonId == R.id.button_insertFormatListNumbering) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:DefaultNumbering"));
+        } else if (buttonId == R.id.button_bold) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Bold"));
+        } else if (buttonId == R.id.button_italic) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Italic"));
+        } else if (buttonId == R.id.button_strikethrough) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Strikeout"));
+        } else if (buttonId == R.id.button_clearformatting) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:ResetAttributes"));
+        } else if (buttonId == R.id.button_underlined) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:UnderlineDouble"));
+        } else if (buttonId == R.id.button_align_left) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:LeftPara"));
+        } else if (buttonId == R.id.button_align_center) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:CenterPara"));
+        } else if (buttonId == R.id.button_align_right) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:RightPara"));
+        } else if (buttonId == R.id.button_align_justify) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:JustifyPara"));
+        } else if (buttonId == R.id.button_insert_line) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Line"));
+        } else if (buttonId == R.id.button_insert_rect) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Rect"));
+        } else if (buttonId == R.id.button_font_shrink) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Shrink"));
+        } else if (buttonId == R.id.button_font_grow) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Grow"));
+        } else if (buttonId == R.id.button_subscript) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SubScript"));
+        }else if (buttonId == R.id.button_superscript) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:SuperScript"));
+        } else if (buttonId == R.id.button_insert_picture) {
+            insertPicture();
+        } else if (buttonId == R.id.button_insert_table) {
+            insertTable();
+        } else if (buttonId == R.id.button_delete_table) {
+            deleteTable();
         }
     }
 
@@ -243,15 +220,11 @@ class FormattingController implements View.OnClickListener {
             public void onClick(View v) {
                 int rowCount = Integer.parseInt(npRowCount.getText().toString());
                 int colCount = Integer.parseInt(npColCount.getText().toString());
-                switch (v.getId()){
-                    case R.id.number_picker_rows_positive:
-                        if(rowCount < maxValue)
-                            npRowCount.setText(String.valueOf(++rowCount));
-                        break;
-                    case R.id.number_picker_cols_positive:
-                        if(colCount < maxValue)
-                            npColCount.setText(String.valueOf(++colCount));
-                        break;
+                final int id = v.getId();
+                if (id == R.id.number_picker_rows_positive && rowCount < maxValue) {
+                    npRowCount.setText(String.valueOf(++rowCount));
+                } else if (id == R.id.number_picker_cols_positive && colCount < maxValue) {
+                    npColCount.setText(String.valueOf(++colCount));
                 }
             }
         };
@@ -261,15 +234,11 @@ class FormattingController implements View.OnClickListener {
             public void onClick(View v) {
                 int rowCount = Integer.parseInt(npRowCount.getText().toString());
                 int colCount = Integer.parseInt(npColCount.getText().toString());
-                switch (v.getId()){
-                    case R.id.number_picker_rows_negative:
-                        if(rowCount > minValue)
-                            npRowCount.setText(String.valueOf(--rowCount));
-                        break;
-                    case R.id.number_picker_cols_negative:
-                        if(colCount > minValue)
-                            npColCount.setText(String.valueOf(--colCount));
-                        break;
+                final int id = v.getId();
+                if (id == R.id.number_picker_rows_negative && rowCount > minValue) {
+                    npRowCount.setText(String.valueOf(--rowCount));
+                } else if (id == R.id.number_picker_cols_negative && colCount > minValue) {
+                    npColCount.setText(String.valueOf(--colCount));
                 }
             }
         };
