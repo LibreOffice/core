@@ -653,7 +653,7 @@ sal_Int32 FastGetPos(const Array& rArray, const Val* p, sal_Int32& rLastPos)
 
         for (sal_Int32 nIdx = rLastPos - 2; nIdx < nEnd; ++nIdx)
         {
-            if (rArray.at(nIdx).get() == p)
+            if (rArray[nIdx].get() == p)
             {
                 rLastPos = nIdx;
                 return nIdx;
@@ -662,7 +662,7 @@ sal_Int32 FastGetPos(const Array& rArray, const Val* p, sal_Int32& rLastPos)
     }
     // The world's lamest linear search from svarray...
     for (sal_Int32 nIdx = 0; nIdx < nArrayLen; ++nIdx)
-        if (rArray.at(nIdx).get() == p)
+        if (rArray[nIdx].get() == p)
         {
             rLastPos = nIdx;
             return rLastPos;
