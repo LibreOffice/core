@@ -39,6 +39,7 @@
 #include <memory>
 #include <vector>
 #include <algorithm>
+#include <cassert>
 #include <cstring>
 #include <limits.h>
 #include <cmath>
@@ -1578,7 +1579,7 @@ void Polygon::Insert( sal_uInt16 nPos, const tools::Polygon& rPoly )
 
 Point& Polygon::operator[]( sal_uInt16 nPos )
 {
-    DBG_ASSERT( nPos < mpImplPolygon->mnPoints, "Polygon::[]: nPos >= nPoints" );
+    assert( nPos < mpImplPolygon->mnPoints );
 
     return mpImplPolygon->mxPointAry[nPos];
 }
