@@ -21,10 +21,10 @@
 #define INCLUDED_SLIDESHOW_SOURCE_INC_EVENTQUEUE_HXX
 
 #include <canvas/elapsedtime.hxx>
-#include <osl/mutex.hxx>
 
 #include "event.hxx"
 
+#include <mutex>
 #include <queue>
 #include <vector>
 
@@ -116,7 +116,7 @@ namespace slideshow::internal
             getTimer() const { return mpTimer; }
 
         private:
-            mutable ::osl::Mutex      maMutex;
+            mutable std::mutex      maMutex;
 
             struct EventEntry
             {

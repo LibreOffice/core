@@ -77,7 +77,7 @@ namespace slideshow::internal
 
         bool EventQueue::addEvent( const EventSharedPtr& rEvent )
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::unique_lock aGuard( maMutex );
 
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
                 << "\" [" << rEvent.get()
@@ -103,7 +103,7 @@ namespace slideshow::internal
 
         bool EventQueue::addEventForNextRound( EventSharedPtr const& rEvent )
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::unique_lock aGuard( maMutex );
 
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rEvent->GetDescription()
                 << "\" [" << rEvent.get()
@@ -120,7 +120,7 @@ namespace slideshow::internal
 
         bool EventQueue::addEventWhenQueueIsEmpty (const EventSharedPtr& rpEvent)
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::unique_lock aGuard( maMutex );
 
             SAL_INFO("slideshow.eventqueue", "adding event \"" << rpEvent->GetDescription()
                 << "\" [" << rpEvent.get()
@@ -140,20 +140,18 @@ namespace slideshow::internal
 
         void EventQueue::forceEmpty()
         {
-            ::osl::MutexGuard aGuard( maMutex );
-
             process_(true);
         }
 
         void EventQueue::process()
         {
-            ::osl::MutexGuard aGuard( maMutex );
-
             process_(false);
         }
 
         void EventQueue::process_( bool bFireAllEvents )
         {
+            std::unique_lock aGuard( maMutex );
+
             SAL_INFO("slideshow.verbose", "EventQueue: heartbeat" );
 
             // add in all that have been added explicitly for this round:
@@ -197,6 +195,7 @@ namespace slideshow::internal
                 // the need to prune queues of those inactive shells.
                 if( event.pEvent->isCharged() )
                 {
+                    aGuard.unlock();
                     try
                     {
                         SAL_INFO("slideshow.eventqueue", "firing event \""
@@ -243,6 +242,7 @@ namespace slideshow::internal
                         // still better let our clients now...
                         SAL_WARN("slideshow.eventqueue", "::presentation::internal::EventQueue: Event threw a SlideShowException, action might not have been fully performed" );
                     }
+                    aGuard.lock();
                 }
                 else
                 {
@@ -257,14 +257,14 @@ namespace slideshow::internal
 
         bool EventQueue::isEmpty() const
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::unique_lock aGuard( maMutex );
 
             return maEvents.empty() && maNextEvents.empty() && maNextNextEvents.empty();
         }
 
         double EventQueue::nextTimeout() const
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::unique_lock aGuard( maMutex );
 
             // return time for next entry (if any)
             double nTimeout (::std::numeric_limits<double>::max());
@@ -281,7 +281,7 @@ namespace slideshow::internal
 
         void EventQueue::clear()
         {
-            ::osl::MutexGuard aGuard( maMutex );
+            std::unique_lock aGuard( maMutex );
 
             // TODO(P1): Maybe a plain vector and vector.swap will
             // be faster here. Profile.
