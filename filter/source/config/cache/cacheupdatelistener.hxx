@@ -21,6 +21,7 @@
 #include "filtercache.hxx"
 #include <com/sun/star/util/XChangesListener.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <mutex>
 
 
 namespace filter::config {
@@ -30,13 +31,14 @@ namespace filter::config {
                 global filter cache, if the underlying configuration
                 wa changed by other processes.
  */
-class CacheUpdateListener : public cppu::BaseMutex // must be the first one to guarantee right initialized mutex member!
-                          , public ::cppu::WeakImplHelper< css::util::XChangesListener >
+class CacheUpdateListener : public ::cppu::WeakImplHelper< css::util::XChangesListener >
 {
 
     // member
 
     private:
+
+        std::mutex  m_aMutex;
 
         /** @short  reference to the singleton(!) filter cache implementation,
                     which should be updated by this thread. */

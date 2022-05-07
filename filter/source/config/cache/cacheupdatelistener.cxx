@@ -46,9 +46,9 @@ CacheUpdateListener::~CacheUpdateListener()
 void CacheUpdateListener::startListening()
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE
 
     if (!xNotifier.is())
@@ -62,9 +62,9 @@ void CacheUpdateListener::startListening()
 void CacheUpdateListener::stopListening()
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
     css::uno::Reference< css::util::XChangesNotifier > xNotifier(m_xConfig, css::uno::UNO_QUERY);
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE
 
     if (!xNotifier.is())
@@ -78,7 +78,7 @@ void CacheUpdateListener::stopListening()
 void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEvent& aEvent)
 {
     // SAFE ->
-    osl::ClearableMutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
 
     // disposed ?
     if ( ! m_xConfig.is())
@@ -86,7 +86,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
 
     FilterCache::EItemType                             eType = m_eConfigType;
 
-    aLock.clear();
+    aLock.unlock();
     // <- SAFE
 
     std::vector<OUString> lChangedItems;
@@ -172,7 +172,7 @@ void SAL_CALL  CacheUpdateListener::changesOccurred(const css::util::ChangesEven
 void SAL_CALL CacheUpdateListener::disposing(const css::lang::EventObject& aEvent)
 {
     // SAFE ->
-    osl::MutexGuard aLock(m_aMutex);
+    std::unique_lock aLock(m_aMutex);
     if (aEvent.Source == m_xConfig)
         m_xConfig.clear();
     // <- SAFE
