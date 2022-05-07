@@ -162,85 +162,76 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_keyboard:
-                mContext.showSoftKeyboard();
-                break;
-            case R.id.action_format:
-                mContext.showFormattingToolbar();
-                break;
-            case R.id.action_about:
-                mContext.showAbout();
-                return true;
-            case R.id.action_save:
-                mContext.getTileProvider().saveDocument();
-                return true;
-            case R.id.action_save_as:
-                mContext.saveDocumentAs();
-                return true;
-            case R.id.action_parts:
-                mContext.openDrawer();
-                return true;
-            case R.id.action_exportToPDF:
-                mContext.exportToPDF();
-                return true;
-            case R.id.action_print:
-                mContext.getTileProvider().printDocument();
-                return true;
-            case R.id.action_settings:
-                mContext.showSettings();
-                return true;
-            case R.id.action_search:
-                mContext.showSearchToolbar();
-                return true;
-            case R.id.action_undo:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Undo"));
-                return true;
-            case R.id.action_redo:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Redo"));
-                return true;
-            case R.id.action_presentation:
-                mContext.preparePresentation();
-                return true;
-            case R.id.action_add_slide:
-                mContext.addPart();
-                return true;
-            case R.id.action_add_worksheet:
-                mContext.addPart();
-                return true;
-            case R.id.action_rename_worksheet:
-            case R.id.action_rename_slide:
-                mContext.renamePart();
-                return true;
-            case R.id.action_delete_worksheet:
-                mContext.deletePart();
-                return true;
-            case R.id.action_delete_slide:
-                mContext.deletePart();
-                return true;
-            case R.id.action_back:
-                hideClipboardActions();
-                return true;
-            case R.id.action_copy:
-                LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Copy"));
-                clipData = ClipData.newPlainText("clipboard data", clipboardText);
-                clipboardManager.setPrimaryClip(clipData);
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.action_text_copied), Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.action_paste:
-                clipData = clipboardManager.getPrimaryClip();
-                ClipData.Item clipItem = clipData.getItemAt(0);
-                mContext.setDocumentChanged(true);
-                return mContext.getTileProvider().paste("text/plain;charset=utf-16", clipItem.getText().toString());
-            case R.id.action_cut:
-                clipData = ClipData.newPlainText("clipboard data", clipboardText);
-                clipboardManager.setPrimaryClip(clipData);
-                LOKitShell.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-                mContext.setDocumentChanged(true);
-                return true;
-            case R.id.action_UNO_commands:
-                mContext.showUNOCommandsToolbar();
-                return true;
+        final int itemId = item.getItemId();
+        if (itemId == R.id.action_keyboard) {
+            mContext.showSoftKeyboard();
+        } else if (itemId == R.id.action_format) {
+            mContext.showFormattingToolbar();
+        } else if (itemId == R.id.action_about) {
+            mContext.showAbout();
+            return true;
+        } else if (itemId == R.id.action_save) {
+            mContext.getTileProvider().saveDocument();
+            return true;
+        } else if (itemId == R.id.action_save_as) {
+            mContext.saveDocumentAs();
+            return true;
+        } else if (itemId == R.id.action_parts) {
+            mContext.openDrawer();
+            return true;
+        } else if (itemId == R.id.action_exportToPDF) {
+            mContext.exportToPDF();
+            return true;
+        } else if (itemId == R.id.action_print) {
+            mContext.getTileProvider().printDocument();
+            return true;
+        } else if (itemId == R.id.action_settings) {
+            mContext.showSettings();
+            return true;
+        } else if (itemId == R.id.action_search) {
+            mContext.showSearchToolbar();
+            return true;
+        } else if (itemId == R.id.action_undo) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Undo"));
+            return true;
+        } else if (itemId == R.id.action_redo) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Redo"));
+            return true;
+        } else if (itemId == R.id.action_presentation) {
+            mContext.preparePresentation();
+            return true;
+        } else if (itemId == R.id.action_add_slide || itemId == R.id.action_add_worksheet) {
+            mContext.addPart();
+            return true;
+        } else if (itemId == R.id.action_rename_worksheet || itemId == R.id.action_rename_slide) {
+            mContext.renamePart();
+            return true;
+        } else if (itemId == R.id.action_delete_worksheet || itemId == R.id.action_delete_slide) {
+            mContext.deletePart();
+            return true;
+        } else if (itemId == R.id.action_back) {
+            hideClipboardActions();
+            return true;
+        } else if (itemId == R.id.action_copy) {
+            LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Copy"));
+            clipData = ClipData.newPlainText("clipboard data", clipboardText);
+            clipboardManager.setPrimaryClip(clipData);
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.action_text_copied), Toast.LENGTH_SHORT).show();
+            return true;
+        } else if (itemId == R.id.action_paste) {
+            clipData = clipboardManager.getPrimaryClip();
+            ClipData.Item clipItem = clipData.getItemAt(0);
+            mContext.setDocumentChanged(true);
+            return mContext.getTileProvider().paste("text/plain;charset=utf-16", clipItem.getText().toString());
+        } else if (itemId == R.id.action_cut) {
+            clipData = ClipData.newPlainText("clipboard data", clipboardText);
+            clipboardManager.setPrimaryClip(clipData);
+            LOKitShell.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
+            mContext.setDocumentChanged(true);
+            return true;
+        } else if (itemId == R.id.action_UNO_commands) {
+            mContext.showUNOCommandsToolbar();
+            return true;
         }
         return false;
     }
