@@ -5097,6 +5097,11 @@ const ScPatternAttr* ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab,
     return nullptr;
 }
 
+const ScPatternAttr* ScDocument::SetPattern( const ScAddress& rPos, std::unique_ptr<ScPatternAttr> pAttr )
+{
+    return SetPattern(rPos.Col(), rPos.Row(), rPos.Tab(), std::move(pAttr));
+}
+
 void ScDocument::SetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab, const ScPatternAttr& rAttr )
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
