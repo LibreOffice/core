@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a22fcab6_da2a2921",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-07T21:34:33Z",
+      "side": 1,
+      "message": "Thanks for following up Regina (and for interpreting the problem).\nHere is my first attempt toward trying to make things right.",
+      "revId": "b06dc97357e520e99e534cf3c64f69cfb3c8e834",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
