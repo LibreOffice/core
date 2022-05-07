@@ -40,7 +40,8 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
     public void onBindViewHolder(final ColorPickerViewHolder holder, int position) {
         holder.colorBox.setBackgroundColor(colorList[position]);
 
-        if (colorPaletteAdapter.getUpperSelectedBox() == position) {
+        if (colorPaletteAdapter.getUpperSelectedBox() == position
+                && colorPaletteAdapter.getSelectedBox() >= 0) {
             holder.colorBox.setImageResource(R.drawable.ic_done_white_12dp);
         } else {
             holder.colorBox.setImageDrawable(null);
@@ -123,20 +124,21 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
             updateAdapter();
             return;
         }
-        /*
-            Find the color if the palette points another color
-         */
-        if (colorPalette[colorPaletteAdapter.getUpperSelectedBox()][colorPaletteAdapter.getSelectedBox()] != color) {
-            for (int i = 0; i < 11; i++) {
-                for (int k = 0; k < 8; k++) {
-                    if (colorPalette[i][k] == color) {
-                        colorPaletteAdapter.changePosition(i, k);
-                        updateAdapter();
-                        return;
-                    }
+
+        // try to find and highlight the color in the existing palettes
+        for (int i = 0; i < 11; i++) {
+            for (int k = 0; k < 8; k++) {
+                if (colorPalette[i][k] == color) {
+                    colorPaletteAdapter.changePosition(i, k);
+                    updateAdapter();
+                    return;
                 }
             }
         }
+
+        // none matched, switch to first palette, but don't mark any color as selected
+        colorPaletteAdapter.changePosition(0, -1);
+        updateAdapter();
     }
     private void updateAdapter(){
         LOKitShell.getMainHandler().post(new Runnable() {
