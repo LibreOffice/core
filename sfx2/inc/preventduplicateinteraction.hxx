@@ -34,6 +34,7 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
+#include <mutex>
 
 namespace com::sun::star::uno {
     class XComponentContext;
@@ -152,7 +153,7 @@ public:
 class PreventDuplicateInteraction final :
                                   public ::cppu::WeakImplHelper<css::lang::XInitialization, css::task::XInteractionHandler2>
 {
-    mutable ::osl::Mutex m_aLock;
+    mutable std::mutex m_aLock;
 
     // structs, types etc.
     public:
