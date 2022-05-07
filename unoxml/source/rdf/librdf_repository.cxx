@@ -741,7 +741,7 @@ private:
 
     /// Querying is rather slow, so cache the results.
     std::map<OUString, std::vector<rdf::Statement>> m_aStatementsCache;
-    ::osl::Mutex m_CacheMutex;
+    std::mutex m_CacheMutex;
 };
 
 
@@ -783,7 +783,7 @@ void SAL_CALL librdf_NamedGraph::clear()
         throw lang::WrappedTargetRuntimeException( ex.Message,
                         *this, anyEx );
     }
-    ::osl::MutexGuard g(m_CacheMutex);
+    std::unique_lock g(m_CacheMutex);
     m_aStatementsCache.clear();
 }
 
@@ -798,7 +798,7 @@ void SAL_CALL librdf_NamedGraph::addStatement(
             "librdf_NamedGraph::addStatement: repository is gone", *this);
     }
     {
-        ::osl::MutexGuard g(m_CacheMutex);
+        std::unique_lock g(m_CacheMutex);
         m_aStatementsCache.clear();
     }
     m_pRep->addStatementGraph_NoLock(
@@ -816,7 +816,7 @@ void SAL_CALL librdf_NamedGraph::removeStatements(
             "librdf_NamedGraph::removeStatements: repository is gone", *this);
     }
     {
-        ::osl::MutexGuard g(m_CacheMutex);
+        std::unique_lock g(m_CacheMutex);
         m_aStatementsCache.clear();
     }
     m_pRep->removeStatementsGraph_NoLock(
@@ -845,7 +845,7 @@ librdf_NamedGraph::getStatements(
 {
     OUString cacheKey = createCacheKey_NoLock(i_xSubject, i_xPredicate, i_xObject);
     {
-        ::osl::MutexGuard g(m_CacheMutex);
+        std::unique_lock g(m_CacheMutex);
         auto it = m_aStatementsCache.find(cacheKey);
         if (it != m_aStatementsCache.end()) {
             return new librdf_GraphResult2(it->second);
@@ -861,7 +861,7 @@ librdf_NamedGraph::getStatements(
             i_xSubject, i_xPredicate, i_xObject, m_xName);
 
     {
-        ::osl::MutexGuard g(m_CacheMutex);
+        std::unique_lock g(m_CacheMutex);
         m_aStatementsCache.emplace(cacheKey, vStatements);
     }
     return new librdf_GraphResult2(vStatements);
