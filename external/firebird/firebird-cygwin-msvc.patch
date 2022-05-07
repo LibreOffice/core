@@ -34,7 +34,7 @@
  /* end confdefs.h.  */
  #include <stdlib.h>
 -#include <semaphore.h>
- main () {
+ int main () {
    struct s {
      char a;
 -    union { long long x; sem_t y; } b;
