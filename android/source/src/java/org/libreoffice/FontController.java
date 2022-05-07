@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -146,7 +147,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
             JSONObject json = new JSONObject();
             JSONObject valueJson = new JSONObject();
             valueJson.put("type", "long");
-            valueJson.put("value", 0x00FFFFFF & color);
+            valueJson.put("value", color == COLOR_AUTO ? color : 0x00FFFFFF & color);
             json.put("Color", valueJson);
 
             LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:Color", json.toString()));
@@ -166,7 +167,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
             JSONObject json = new JSONObject();
             JSONObject valueJson = new JSONObject();
             valueJson.put("type", "long");
-            valueJson.put("value", 0x00FFFFFF & color);
+            valueJson.put("value", color == COLOR_AUTO ? color : 0x00FFFFFF & color);
             if(mActivity.getTileProvider().isSpreadsheet()){
                 json.put("BackgroundColor", valueJson);
                 LOKitShell.sendEvent(new LOEvent(LOEvent.UNO_COMMAND, ".uno:BackgroundColor", json.toString()));
@@ -315,6 +316,10 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         fontColorPicker.setOnClickListener(clickListener);
         fontColorPickerButton.setOnClickListener(clickListener);
 
+        final Button autoColorButton = colorPickerLayout.findViewById(R.id.button_auto_color);
+        autoColorButton.setOnClickListener(view -> {
+            sendFontColorChange(COLOR_AUTO);
+        });
     }
 
     private void setupBackColorPicker(){
@@ -374,6 +379,10 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         fontColorPicker.setOnClickListener(clickListener);
         fontColorPickerButton.setOnClickListener(clickListener);
 
+        final Button autoColorButton = backColorPickerLayout.findViewById(R.id.button_auto_color);
+        autoColorButton.setOnClickListener(view -> {
+            sendFontBackColorChange(COLOR_AUTO);
+        });
     }
 
     public void selectFont(final String fontName) {
