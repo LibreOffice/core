@@ -77,7 +77,7 @@ OUString CollapseWhiteSpaces(const OUString& sName)
 {
     const sal_Int32 nLen = sName.getLength();
     const sal_Unicode cRef = ' ';
-    OUStringBuffer aBuf(nLen+1);
+    OUStringBuffer aBuf(nLen);
     for (sal_Int32 i = 0; i<nLen; )
     {
         const sal_Unicode cCur = sName[i++];
