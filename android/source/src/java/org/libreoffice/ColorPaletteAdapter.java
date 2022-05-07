@@ -12,12 +12,12 @@ import android.widget.ImageButton;
 
 public class ColorPaletteAdapter extends RecyclerView.Adapter<ColorPaletteAdapter.ColorPaletteViewHolder> {
 
-    int[][] color_palette;
-    Context mContext;
-    int upperSelectedBox = -1;
-    int selectedBox = 0;
-    boolean animate;
-    ColorPaletteListener colorPaletteListener;
+    private int[][] color_palette;
+    private final Context mContext;
+    private int upperSelectedBox = -1;
+    private int selectedBox = 0;
+    private boolean animate;
+    private final ColorPaletteListener colorPaletteListener;
 
     public ColorPaletteAdapter(Context mContext, ColorPaletteListener colorPaletteListener) {
         this.mContext = mContext;
