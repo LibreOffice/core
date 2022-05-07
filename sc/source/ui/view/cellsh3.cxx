@@ -51,8 +51,6 @@
 
 #include <memory>
 
-#define IS_EDITMODE() GetViewData().HasEditView( GetViewData().GetActivePart() )
-
 using sc::TwipsToEvenHMM;
 
 namespace
@@ -163,7 +161,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
     if (nSlot != SID_CURRENTCELL)       // this comes with MouseButtonUp
         pTabViewShell->HideListBox();   // Autofilter-DropDown-Listbox
 
-    if ( IS_EDITMODE() )
+    if ( GetViewData().HasEditView( GetViewData().GetActivePart() ) )
     {
         switch ( nSlot )
         {
