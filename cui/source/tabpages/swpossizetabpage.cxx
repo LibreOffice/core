@@ -205,7 +205,7 @@ FrmMap const aHFlyHtmlMap[] =
 
 // #i18732# - own vertical alignment map for to frame anchored objects
 // #i22305#
-#define VERT_FRAME_REL   (LB::VertFrame|LB::FlyVertPrintArea)
+#define VERT_FRAME_REL   (LB::FlyVertFrame|LB::FlyVertPrintArea)
 
 FrmMap const aVFrameMap[] =
 {
