@@ -1,0 +1,11 @@
+--- configure
++++ configure
+@@ -14691,7 +14691,7 @@
+ #include <sys/types.h>
+ #include <regex.h>
+ static char *pattern, *string;
+-main()
++int main()
+ {
+ 	int rc;
+ 	regex_t re;
