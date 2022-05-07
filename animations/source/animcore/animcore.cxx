@@ -60,6 +60,7 @@
 #include <array>
 #include <vector>
 #include <algorithm>
+#include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
 namespace com::sun::star::beans { struct NamedValue; }
@@ -366,8 +367,7 @@ private:
 };
 
 
-class TimeContainerEnumeration : private cppu::BaseMutex,
-                                 public ::cppu::WeakImplHelper< XEnumeration >
+class TimeContainerEnumeration : public ::cppu::WeakImplHelper< XEnumeration >
 {
 public:
     explicit TimeContainerEnumeration( std::vector< Reference< XAnimationNode > >&& rChildren );
@@ -377,6 +377,8 @@ public:
     virtual Any SAL_CALL nextElement(  ) override;
 
 private:
+    std::mutex m_aMutex;
+
     /** sorted list of child nodes */
     std::vector< Reference< XAnimationNode > > maChildren;
 
@@ -395,14 +397,14 @@ TimeContainerEnumeration::TimeContainerEnumeration( std::vector< Reference< XAni
 // Methods
 sal_Bool SAL_CALL TimeContainerEnumeration::hasMoreElements()
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     return maIter != maChildren.end();
 }
 
 Any SAL_CALL TimeContainerEnumeration::nextElement()
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if( maIter == maChildren.end() )
         throw NoSuchElementException();
