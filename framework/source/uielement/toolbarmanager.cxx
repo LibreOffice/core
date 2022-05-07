@@ -575,7 +575,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_pToolBar( pToolBar ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
-    m_aListenerContainer( m_mutex ),
     m_xContext( rxContext ),
     m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -596,7 +595,6 @@ ToolBarManager::ToolBarManager( const Reference< XComponentContext >& rxContext,
     m_pToolBar( nullptr ),
     m_aResourceName( rResourceName ),
     m_xFrame( rFrame ),
-    m_aListenerContainer( m_mutex ),
     m_xContext( rxContext ),
     m_aAsyncUpdateControllersTimer( "framework::ToolBarManager m_aAsyncUpdateControllersTimer" ),
     m_sIconTheme( SvtMiscOptions().GetIconTheme() )
@@ -844,9 +842,11 @@ void SAL_CALL ToolBarManager::dispose()
 {
     Reference< XComponent > xThis(this);
 
-    EventObject aEvent( xThis );
-    m_aListenerContainer.disposeAndClear( aEvent );
-
+    {
+        EventObject aEvent( xThis );
+        std::unique_lock aGuard(m_mutex);
+        m_aListenerContainer.disposeAndClear( aGuard, aEvent );
+    }
     {
         SolarMutexGuard g;
 
@@ -922,12 +922,14 @@ void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener 
     if ( m_bDisposed )
         throw DisposedException();
 
-    m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aListenerContainer.addInterface( aGuard, xListener );
 }
 
 void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
-    m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
+    std::unique_lock aGuard(m_mutex);
+    m_aListenerContainer.removeInterface( aGuard, xListener );
 }
 
 // XUIConfigurationListener
