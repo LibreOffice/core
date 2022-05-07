@@ -56,6 +56,30 @@
       },
       "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "436fa8c3_0de18476",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-07T21:46:16Z",
+      "side": 1,
+      "message": "I believe \"use\" is correct here.   \"used\" would require \"never-used\" (i.e., a change from verb to adjective) -- Then it might be:\n\n \"Never-used arrow styles?\" which seems less clear to me.\n\nTried to see if another formulation could be found -- but do not see an obvious alternative.\n\n@Adolfo -- maybe you have a \"second\" opinion?",
+      "parentUuid": "ac7553e8_1dcc9042",
+      "range": {
+        "startLine": 275,
+        "startChar": 41,
+        "endLine": 275,
+        "endChar": 44
+      },
+      "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
