@@ -208,6 +208,8 @@ void ScQueryParamBase::FillInExcelSyntax(
 
     ScQueryEntry& rEntry = GetEntry(nIndex);
     ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
+    bool bByEmpty = false;
+    bool bByNonEmpty = false;
 
     if (rCellStr.isEmpty())
         rItem.maString = svl::SharedString::getEmptyString();
@@ -221,6 +223,8 @@ void ScQueryParamBase::FillInExcelSyntax(
             {
                 rItem.maString = rPool.intern(rCellStr.copy(2));
                 rEntry.eOp   = SC_NOT_EQUAL;
+                if (rCellStr.getLength() == 2)
+                    bByNonEmpty = true;
             }
             else if (rCellStr.getLength() > 1 && rCellStr[1] == '=')
             {
@@ -249,7 +253,11 @@ void ScQueryParamBase::FillInExcelSyntax(
         else
         {
             if (rCellStr[0] == '=')
+            {
                 rItem.maString = rPool.intern(rCellStr.copy(1));
+                if (rCellStr.getLength() == 1)
+                    bByEmpty = true;
+            }
             else
                 rItem.maString = rPool.intern(rCellStr);
             rEntry.eOp = SC_EQUAL;
@@ -259,19 +267,32 @@ void ScQueryParamBase::FillInExcelSyntax(
     if (!pFormatter)
         return;
 
-    sal_uInt32 nFormat = 0;
-    bool bNumber = pFormatter->IsNumberFormat( rItem.maString.getString(), nFormat, rItem.mfVal);
-    rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
-
     /* TODO: pFormatter currently is also used as a flag whether matching
      * empty cells with an empty string is triggered from the interpreter.
      * This could be handled independently if all queries should support
      * it, needs to be evaluated if that actually is desired. */
 
+    // Interpreter queries have only one query, also QueryByEmpty and
+    // QueryByNonEmpty rely on that.
+    if (nIndex != 0)
+        return;
+
     // (empty = empty) is a match, and (empty <> not-empty) also is a
     // match. (empty = 0) is not a match.
     rItem.mbMatchEmpty = ((rEntry.eOp == SC_EQUAL && rItem.maString.isEmpty())
             || (rEntry.eOp == SC_NOT_EQUAL && !rItem.maString.isEmpty()));
+
+    // SetQueryBy override item members with special values, so do this last.
+    if (bByEmpty)
+        rEntry.SetQueryByEmpty();
+    else if (bByNonEmpty)
+        rEntry.SetQueryByNonEmpty();
+    else
+    {
+        sal_uInt32 nFormat = 0;
+        bool bNumber = pFormatter->IsNumberFormat( rItem.maString.getString(), nFormat, rItem.mfVal);
+        rItem.meType = bNumber ? ScQueryEntry::ByValue : ScQueryEntry::ByString;
+    }
 }
 
 ScQueryParamTable::ScQueryParamTable() :
