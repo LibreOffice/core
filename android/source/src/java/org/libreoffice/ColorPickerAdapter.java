@@ -125,15 +125,6 @@ public class ColorPickerAdapter extends RecyclerView.Adapter<ColorPickerAdapter.
     }
 
     public void findSelectedTextColor(int color) {
-        /*
-            Libreoffice recognizes -1 as Black
-         */
-        if (color == -1) {
-            colorPaletteAdapter.changePosition(0, 0);
-            updateAdapter();
-            return;
-        }
-
         // try to find and highlight the color in the existing palettes
         for (int i = 0; i < 11; i++) {
             for (int k = 0; k < 8; k++) {

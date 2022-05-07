@@ -23,6 +23,9 @@ import java.util.Iterator;
 
 public class FontController implements AdapterView.OnItemSelectedListener {
 
+    /** -1 as value in ".uno:Color" et al. means "automatic color"/no color set. */
+    private static final int COLOR_AUTO = -1;
+
     private boolean mFontNameSpinnerSet = false;
     private boolean mFontSizeSpinnerSet = false;
     private final LibreOfficeMainActivity mActivity;
@@ -50,9 +53,17 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void updateColorPickerPosition(int color) {
-            if (null == colorPickerAdapter) return;
-            colorPickerAdapter.findSelectedTextColor(color + 0xFF000000);
-            changeFontColorBoxColor(color + 0xFF000000);
+            if (colorPickerAdapter == null) {
+                return;
+            }
+            if (color == COLOR_AUTO) {
+                colorPickerAdapter.unselectColors();
+                changeFontColorBoxColor(Color.TRANSPARENT);
+                return;
+            }
+            final int colorWithAlpha = color | 0xFF000000;
+            colorPickerAdapter.findSelectedTextColor(colorWithAlpha);
+            changeFontColorBoxColor(colorWithAlpha);
         }
     };
 
@@ -64,10 +75,17 @@ public class FontController implements AdapterView.OnItemSelectedListener {
 
         @Override
         public void updateColorPickerPosition(int color) {
-            if(backColorPickerAdapter != null)
-            backColorPickerAdapter.findSelectedTextColor(color + 0xFF000000);
-            changeFontBackColorBoxColor(color + 0xFF000000);
-
+            if (backColorPickerAdapter == null) {
+                return;
+            }
+            if (color == COLOR_AUTO) {
+                backColorPickerAdapter.unselectColors();
+                changeFontBackColorBoxColor(Color.TRANSPARENT);
+                return;
+            }
+            final int colorWithAlpha = color | 0xFF000000;
+            backColorPickerAdapter.findSelectedTextColor(colorWithAlpha);
+            changeFontBackColorBoxColor(colorWithAlpha);
         }
     };
 
@@ -77,11 +95,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                if(color == -1){ //Libreoffice recognizes -1 as black
-                    fontColorPickerButton.setBackgroundColor(Color.BLACK);
-                }else{
-                    fontColorPickerButton.setBackgroundColor(color);
-                }
+                fontColorPickerButton.setBackgroundColor(color);
             }
         });
     }
@@ -92,12 +106,7 @@ public class FontController implements AdapterView.OnItemSelectedListener {
         LOKitShell.getMainHandler().post(new Runnable() {
             @Override
             public void run() {
-                if(color == -1){ //Libreoffice recognizes -1 as black
-                    fontBackColorPickerButton.setBackgroundColor(Color.BLACK);
-                }else{
-                    fontBackColorPickerButton.setBackgroundColor(color);
-
-                }
+                fontBackColorPickerButton.setBackgroundColor(color);
             }
         });
     }
