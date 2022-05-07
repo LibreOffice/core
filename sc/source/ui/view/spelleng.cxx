@@ -134,7 +134,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
                     // Set the new string and update the language with the cell.
                     mrDoc.SetString(aPos, aNewStr);
 
-                    const ScPatternAttr* pAttr = mrDoc.GetPattern(mnCurrCol, mnCurrRow, mnStartTab);
+                    const ScPatternAttr* pAttr = mrDoc.GetPattern(aPos);
                     std::unique_ptr<ScPatternAttr> pNewAttr;
 
                     if (pAttr)
@@ -143,7 +143,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
                         pNewAttr = std::make_unique<ScPatternAttr>(mrDoc.GetPool());
 
                     pNewAttr->GetItemSet().Put(SvxLanguageItem(aLang.nLang, EE_CHAR_LANGUAGE), ATTR_FONT_LANGUAGE);
-                    mrDoc.SetPattern(mnCurrCol, mnCurrRow, mnStartTab, std::move(pNewAttr));
+                    mrDoc.SetPattern(aPos, std::move(pNewAttr));
                 }
 
                 if (mpRedoDoc && !bEmptyCell)
