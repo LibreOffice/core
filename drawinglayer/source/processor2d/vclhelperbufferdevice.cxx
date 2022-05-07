@@ -30,16 +30,16 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/stream.hxx>
 #include <vcl/timer.hxx>
-#include <cppuhelper/basemutex.hxx>
 #include <vcl/lazydelete.hxx>
 #include <vcl/dibtools.hxx>
 #include <vcl/skia/SkiaHelper.hxx>
+#include <mutex>
 
 // buffered VDev usage
 
 namespace
 {
-class VDevBuffer : public Timer, protected cppu::BaseMutex
+class VDevBuffer : public Timer
 {
 private:
     struct Entry
@@ -52,6 +52,8 @@ private:
         {
         }
     };
+
+    std::mutex m_aMutex;
 
     // available buffers
     std::vector<Entry> maFreeBuffers;
@@ -85,7 +87,7 @@ VDevBuffer::VDevBuffer()
 
 VDevBuffer::~VDevBuffer()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     Stop();
 
     while (!maFreeBuffers.empty())
@@ -132,7 +134,7 @@ bool VDevBuffer::isSizeSuitable(const VclPtr<VirtualDevice>& device, const Size&
 VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSizePixel,
                                         bool bTransparent)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     VclPtr<VirtualDevice> pRetval;
 
     sal_Int32 nBits = rOutDev.GetBitCount();
@@ -248,7 +250,7 @@ VclPtr<VirtualDevice> VDevBuffer::alloc(OutputDevice& rOutDev, const Size& rSize
 
 void VDevBuffer::free(VirtualDevice& rDevice)
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
     const auto aUsedFound
         = std::find_if(maUsedBuffers.begin(), maUsedBuffers.end(),
                        [&rDevice](const Entry& el) { return el.buf == &rDevice; });
@@ -266,7 +268,7 @@ void VDevBuffer::free(VirtualDevice& rDevice)
 
 void VDevBuffer::Invoke()
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     while (!maFreeBuffers.empty())
     {
