@@ -971,8 +971,8 @@ bool Signing::Sign(OStringBuffer& rCMSHexBuffer)
     digest.len = aHashResult.size();
 
     PRTime now = PR_Now();
-    NSSCMSSignedData *cms_sd;
-    NSSCMSSignerInfo *cms_signer;
+    NSSCMSSignedData *cms_sd(nullptr);
+    NSSCMSSignerInfo *cms_signer(nullptr);
     NSSCMSMessage *cms_msg = CreateCMSMessage(nullptr, &cms_sd, &cms_signer, cert, &digest);
     if (!cms_msg)
         return false;
