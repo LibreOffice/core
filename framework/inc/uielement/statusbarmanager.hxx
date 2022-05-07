@@ -26,10 +26,11 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/multicontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <vcl/status.hxx>
 #include <vcl/vclptr.hxx>
 #include <map>
+#include <mutex>
 
 namespace framework
 {
@@ -92,8 +93,8 @@ class StatusBarManager final: public ::cppu::WeakImplHelper<
         VclPtr<StatusBar>                                                     m_pStatusBar;
         css::uno::Reference< css::frame::XFrame >                             m_xFrame;
         StatusBarControllerMap                                                m_aControllerMap;
-        osl::Mutex                                                            m_mutex;
-        comphelper::OMultiTypeInterfaceContainerHelper2                       m_aListenerContainer;   /// container for ALL Listener
+        std::mutex                                                            m_mutex;
+        comphelper::OInterfaceContainerHelper4<XEventListener>                m_aListenerContainer;
         css::uno::Reference< css::uno::XComponentContext >                    m_xContext;
         css::uno::Reference< css::frame::XUIControllerFactory >               m_xStatusbarControllerFactory;
 };
