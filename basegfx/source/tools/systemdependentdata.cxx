@@ -37,6 +37,10 @@ namespace basegfx
 
     sal_uInt32 SystemDependentData::calculateCombinedHoldCyclesInSeconds() const
     {
+#if ENABLE_FUZZERS
+        return 0;
+#endif
+
         if(0 == mnCalculatedCycles)
         {
             const sal_Int64 nBytes(estimateUsageInBytes());
@@ -49,11 +53,7 @@ namespace basegfx
             if(nBytes > 450)
             {
                 // HoldCyclesInSeconds
-#if !ENABLE_FUZZERS
                 const sal_uInt32 nSeconds = 60;
-#else
-                const sal_uInt32 nSeconds = 1;
-#endif
 
                 // default is Seconds (minimal is one)
                 sal_uInt32 nResult(0 == nSeconds ? 1 : nSeconds);
