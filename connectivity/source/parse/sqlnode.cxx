@@ -1456,7 +1456,7 @@ OSQLParser::OSQLParser(const css::uno::Reference< css::uno::XComponentContext >&
             { OSQLParseNode::cast_spec, "cast_spec" },
             { OSQLParseNode::window_function, "window_function" }
         };
-        const size_t nRuleMapCount = SAL_N_ELEMENTS( aRuleDescriptions );
+        const size_t nRuleMapCount = std::size( aRuleDescriptions );
         // added a new rule? Adjust this map!
         // +1 for UNKNOWN_RULE
         static_assert(nRuleMapCount + 1 == static_cast<size_t>(OSQLParseNode::rule_count), "must be equal");

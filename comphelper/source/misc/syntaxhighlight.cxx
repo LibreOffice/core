@@ -713,11 +713,11 @@ SyntaxHighlighter::SyntaxHighlighter(HighlighterLanguage language):
     {
         case HighlighterLanguage::Basic:
             m_tokenizer->setKeyWords( strListBasicKeyWords,
-                                      SAL_N_ELEMENTS( strListBasicKeyWords ));
+                                      std::size( strListBasicKeyWords ));
             break;
         case HighlighterLanguage::SQL:
             m_tokenizer->setKeyWords( strListSqlKeyWords,
-                                      SAL_N_ELEMENTS( strListSqlKeyWords ));
+                                      std::size( strListSqlKeyWords ));
             break;
         default:
             assert(false); // this cannot happen

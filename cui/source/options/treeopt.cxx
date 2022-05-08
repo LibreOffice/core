@@ -1354,7 +1354,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     {
         setGroupName(u"ProductName", CuiResId(SID_GENERAL_OPTIONS_RES[0].first));
         nGroup = AddGroup(CuiResId(SID_GENERAL_OPTIONS_RES[0].first), nullptr, nullptr, SID_GENERAL_OPTIONS );
-        const sal_uInt16 nEnd = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_GENERAL_OPTIONS_RES));
+        const sal_uInt16 nEnd = static_cast<sal_uInt16>(std::size(SID_GENERAL_OPTIONS_RES));
 
         for (sal_uInt16 i = 1; i < nEnd; ++i)
         {
@@ -1394,7 +1394,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     {
         setGroupName( u"LoadSave", CuiResId(SID_FILTER_DLG_RES[0].first) );
         nGroup = AddGroup( CuiResId(SID_FILTER_DLG_RES[0].first), nullptr, nullptr, SID_FILTER_DLG );
-        for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_FILTER_DLG_RES); ++i )
+        for ( size_t i = 1; i < std::size(SID_FILTER_DLG_RES); ++i )
         {
             nPageId = static_cast<sal_uInt16>(SID_FILTER_DLG_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1408,7 +1408,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     {
         setGroupName(u"LanguageSettings", CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first));
         nGroup = AddGroup(CuiResId(SID_LANGUAGE_OPTIONS_RES[0].first), nullptr, nullptr, SID_LANGUAGE_OPTIONS );
-        for (size_t i = 1; i < SAL_N_ELEMENTS(SID_LANGUAGE_OPTIONS_RES); ++i)
+        for (size_t i = 1; i < std::size(SID_LANGUAGE_OPTIONS_RES); ++i)
         {
             nPageId = static_cast<sal_uInt16>(SID_LANGUAGE_OPTIONS_RES[i].second);
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1440,7 +1440,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 else
                     setGroupName( u"Writer", CuiResId(SID_SW_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup(CuiResId(SID_SW_EDITOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_EDITOPTIONS );
-                for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SW_EDITOPTIONS_RES); ++i )
+                for ( size_t i = 1; i < std::size(SID_SW_EDITOPTIONS_RES); ++i )
                 {
                     nPageId = static_cast<sal_uInt16>(SID_SW_EDITOPTIONS_RES[i].second);
                     if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1459,7 +1459,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( !lcl_isOptionHidden( SID_SW_ONLINEOPTIONS, aOptionsDlgOpt ) )
             {
                 nGroup = AddGroup(CuiResId(SID_SW_ONLINEOPTIONS_RES[0].first), pSwMod, pSwMod, SID_SW_ONLINEOPTIONS );
-                for( size_t i = 1; i < SAL_N_ELEMENTS(SID_SW_ONLINEOPTIONS_RES); ++i )
+                for( size_t i = 1; i < std::size(SID_SW_ONLINEOPTIONS_RES); ++i )
                 {
                     nPageId = static_cast<sal_uInt16>(SID_SW_ONLINEOPTIONS_RES[i].second);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1482,7 +1482,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 SfxModule* pScMod = SfxApplication::GetModule( SfxToolsModule::Calc );
                 setGroupName( u"Calc", CuiResId(SID_SC_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup( CuiResId(SID_SC_EDITOPTIONS_RES[0].first), pScMod, pScMod, SID_SC_EDITOPTIONS );
-                const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SC_EDITOPTIONS_RES));
+                const sal_uInt16 nCount = static_cast<sal_uInt16>(std::size(SID_SC_EDITOPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = static_cast<sal_uInt16>(SID_SC_EDITOPTIONS_RES[i].second);
@@ -1505,7 +1505,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             {
                 setGroupName( u"Impress", CuiResId(SID_SD_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup( CuiResId(SID_SD_EDITOPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_EDITOPTIONS );
-                const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_EDITOPTIONS_RES));
+                const sal_uInt16 nCount = static_cast<sal_uInt16>(std::size(SID_SD_EDITOPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = static_cast<sal_uInt16>(SID_SD_EDITOPTIONS_RES[i].second);
@@ -1527,7 +1527,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             {
                 setGroupName( u"Draw", CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first) );
                 nGroup = AddGroup( CuiResId(SID_SD_GRAPHIC_OPTIONS_RES[0].first), pSdMod, pSdMod, SID_SD_GRAPHIC_OPTIONS );
-                const sal_uInt16 nCount = static_cast<sal_uInt16>(SAL_N_ELEMENTS(SID_SD_GRAPHIC_OPTIONS_RES));
+                const sal_uInt16 nCount = static_cast<sal_uInt16>(std::size(SID_SD_GRAPHIC_OPTIONS_RES));
                 for ( sal_uInt16 i = 1; i < nCount; ++i )
                 {
                     nPageId = static_cast<sal_uInt16>(SID_SD_GRAPHIC_OPTIONS_RES[i].second);
@@ -1550,7 +1550,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
                 SfxModule* pSmMod = SfxApplication::GetModule(SfxToolsModule::Math);
                 setGroupName( u"Math", CuiResId(SID_SM_EDITOPTIONS_RES[0].first) );
                 nGroup = AddGroup(CuiResId(SID_SM_EDITOPTIONS_RES[0].first), pSmMod, pSmMod, SID_SM_EDITOPTIONS );
-                for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SM_EDITOPTIONS_RES); ++i )
+                for ( size_t i = 1; i < std::size(SID_SM_EDITOPTIONS_RES); ++i )
                 {
                     nPageId = static_cast<sal_uInt16>(SID_SM_EDITOPTIONS_RES[i].second);
                     if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1569,7 +1569,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     {
         setGroupName( u"Base", CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first) );
         nGroup = AddGroup( CuiResId(SID_SB_STARBASEOPTIONS_RES[0].first), nullptr, nullptr, SID_SB_STARBASEOPTIONS );
-        for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SB_STARBASEOPTIONS_RES); ++i )
+        for ( size_t i = 1; i < std::size(SID_SB_STARBASEOPTIONS_RES); ++i )
         {
             nPageId = static_cast<sal_uInt16>(SID_SB_STARBASEOPTIONS_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1582,7 +1582,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     {
         setGroupName( u"Charts", CuiResId(SID_SCH_EDITOPTIONS_RES[0].first) );
         nGroup = AddGroup( CuiResId(SID_SCH_EDITOPTIONS_RES[0].first), nullptr, nullptr, SID_SCH_EDITOPTIONS );
-        for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_SCH_EDITOPTIONS_RES); ++i )
+        for ( size_t i = 1; i < std::size(SID_SCH_EDITOPTIONS_RES); ++i )
         {
             nPageId = static_cast<sal_uInt16>(SID_SCH_EDITOPTIONS_RES[i].second);
             if ( !lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
@@ -1597,7 +1597,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     setGroupName(u"Internet", CuiResId(SID_INET_DLG_RES[0].first));
     nGroup = AddGroup(CuiResId(SID_INET_DLG_RES[0].first), nullptr, nullptr, SID_INET_DLG );
 
-    for ( size_t i = 1; i < SAL_N_ELEMENTS(SID_INET_DLG_RES); ++i )
+    for ( size_t i = 1; i < std::size(SID_INET_DLG_RES); ++i )
     {
         nPageId = static_cast<sal_uInt16>(SID_INET_DLG_RES[i].second);
         if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
