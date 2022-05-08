@@ -30,9 +30,10 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <comphelper/weakbag.hxx>
-#include <osl/mutex.hxx>
 #include <osl/conditn.hxx>
 #include <osl/thread.hxx>
+
+#include <mutex>
 
 namespace com::sun::star::uno { class XComponentContext; }
 
@@ -42,7 +43,7 @@ class  Acceptor
     : public ::cppu::WeakImplHelper<css::lang::XServiceInfo, css::lang::XInitialization>
 {
 private:
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
 
     oslThread m_thread;
     comphelper::WeakBag< css::bridge::XBridge > m_bridges;
