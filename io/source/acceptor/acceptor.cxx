@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <osl/mutex.hxx>
-
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/unourl.hxx>
@@ -33,6 +31,7 @@
 
 #include "acceptor.hxx"
 #include <memory>
+#include <mutex>
 #include <string_view>
 
 using namespace ::osl;
@@ -61,7 +60,7 @@ namespace {
     private:
         std::unique_ptr<io_acceptor::PipeAcceptor> m_pPipe;
         std::unique_ptr<io_acceptor::SocketAcceptor> m_pSocket;
-        Mutex m_mutex;
+        std::mutex m_mutex;
         OUString m_sLastDescription;
         bool m_bInAccept;
 
@@ -136,7 +135,7 @@ Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescripti
                 catch( ... )
                 {
                     {
-                        MutexGuard g( m_mutex );
+                        std::unique_lock g( m_mutex );
                         m_pPipe.reset();
                     }
                     throw;
@@ -169,7 +168,7 @@ Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescripti
                 catch( ... )
                 {
                     {
-                        MutexGuard g( m_mutex );
+                        std::unique_lock g( m_mutex );
                         m_pSocket.reset();
                     }
                     throw;
@@ -212,7 +211,7 @@ Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescripti
 
 void SAL_CALL OAcceptor::stopAccepting(  )
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
 
     if( m_pPipe )
     {
