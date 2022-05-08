@@ -1836,10 +1836,11 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107025)
         return;
 
     CPPUNIT_ASSERT(!parseDump("(//SwLinePortion)[2]", "width").isEmpty());
-    // Width of the second line is expected to be 9 times of the first.
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
+    sal_Int32 nRatio = nWidth2 / nWidth1;
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nWidth2 / nWidth1);
+    CPPUNIT_ASSERT(nRatio >= 9); // Occupy at least 9 cells.
+    CPPUNIT_ASSERT(nRatio < 18); // Occupy at most 18 cells.
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107362)
