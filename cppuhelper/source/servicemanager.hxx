@@ -14,6 +14,7 @@
 #include <cassert>
 #include <unordered_map>
 #include <memory>
+#include <mutex>
 #include <string_view>
 #include <vector>
 
@@ -29,7 +30,6 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/ustring.hxx>
 
 namespace com::sun::star::lang {
@@ -146,7 +146,7 @@ public:
             css::uno::Reference< css::lang::XComponent > component;
             Status status;
 
-            osl::Mutex mutex;
+            std::mutex mutex;
             css::uno::Reference<css::uno::XInterface> singleInstance;
             css::uno::Reference< css::lang::XComponent > disposeInstance;
             bool dispose;

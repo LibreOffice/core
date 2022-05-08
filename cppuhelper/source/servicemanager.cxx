@@ -665,7 +665,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstance(
 {
     css::uno::Reference<css::uno::XInterface> inst;
     if (isSingleInstance) {
-        osl::MutexGuard g(mutex);
+        std::unique_lock g(mutex);
         if (!singleInstance.is()) {
             singleInstance = doCreateInstance(context);
         }
@@ -684,7 +684,7 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
 {
     css::uno::Reference<css::uno::XInterface> inst;
     if (isSingleInstance) {
-        osl::MutexGuard g(mutex);
+        std::unique_lock g(mutex);
         if (!singleInstance.is()) {
             singleInstance = doCreateInstanceWithArguments(context, arguments);
         }
@@ -751,14 +751,14 @@ void cppuhelper::ServiceManager::Data::Implementation::updateDisposeInstance(
     // at most one of the instances obtained via the service manager, in case
     // the implementation hands out different instances):
     if (singletonRequest) {
-        osl::MutexGuard g(mutex);
+        std::unique_lock g(mutex);
         disposeInstance.clear();
         dispose = false;
     } else if (shallDispose()) {
         css::uno::Reference<css::lang::XComponent> comp(
             instance, css::uno::UNO_QUERY);
         if (comp.is()) {
-            osl::MutexGuard g(mutex);
+            std::unique_lock g(mutex);
             if (dispose) {
                 disposeInstance = comp;
             }
@@ -891,7 +891,7 @@ void cppuhelper::ServiceManager::disposing() {
         {
             assert(rEntry.second);
             if (rEntry.second->shallDispose()) {
-                osl::MutexGuard g2(rEntry.second->mutex);
+                std::unique_lock g2(rEntry.second->mutex);
                 if (rEntry.second->disposeInstance.is()) {
                     sngls.push_back(rEntry.second->disposeInstance);
                 }
@@ -901,7 +901,7 @@ void cppuhelper::ServiceManager::disposing() {
         {
             assert(rEntry.second);
             if (rEntry.second->shallDispose()) {
-                osl::MutexGuard g2(rEntry.second->mutex);
+                std::unique_lock g2(rEntry.second->mutex);
                 if (rEntry.second->disposeInstance.is()) {
                     sngls.push_back(rEntry.second->disposeInstance);
                 }
