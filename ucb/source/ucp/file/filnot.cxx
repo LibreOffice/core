@@ -91,7 +91,7 @@ void ContentEventNotifier::notifyRemoved( const OUString& aChildName ) const
 
     rtl::Reference<BaseContent> pp = new BaseContent( m_pMyShell,xChildId,aChildName );
     {
-        osl::MutexGuard aGuard( pp->m_aMutex );
+        std::unique_lock aGuard( pp->m_aMutex );
         pp->m_nState |= BaseContent::Deleted;
     }
 
