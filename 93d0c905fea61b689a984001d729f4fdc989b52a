@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9dbe946_056cc439",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-08T08:17:25Z",
+      "side": 1,
+      "message": "Sure, just be careful. Translators won’t always get these language subtleties and may misinterpret the sentence. I teach English as a foreign language, and students are taught that indicative sentences in English isn’t pro-drop (i.e., sentences always have a subject and a verb).",
+      "revId": "93d0c905fea61b689a984001d729f4fdc989b52a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
