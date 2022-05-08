@@ -1306,14 +1306,7 @@ namespace sw::mark
         assert(&pMark->GetMarkPos().GetDoc() == &m_rDoc &&
             "<MarkManager::deleteMark(..)>"
             " - Mark is not in my doc.");
-        // finds the last Mark that is starting before pMark
-        // (pMarkLow < pMark)
-        auto [it, endIt] = equal_range(
-                m_vAllMarks.begin(),
-                m_vAllMarks.end(),
-                pMark->GetMarkStart(),
-                CompareIMarkStartsBefore());
-        for ( ; it != endIt; ++it)
+        for (auto it = m_vAllMarks.begin(); it != m_vAllMarks.end(); ++it)
             if (*it == pMark)
             {
                 deleteMark(iterator(it), false);
