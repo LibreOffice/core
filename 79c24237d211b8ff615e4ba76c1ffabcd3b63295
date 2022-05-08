@@ -80,6 +80,30 @@
       },
       "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f94f6e4_bb44866c",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000321
+      },
+      "writtenOn": "2022-05-08T04:36:26Z",
+      "side": 1,
+      "message": "Starting a question with “Never use...?” isn’t incorrect — just informal.",
+      "parentUuid": "436fa8c3_0de18476",
+      "range": {
+        "startLine": 275,
+        "startChar": 41,
+        "endLine": 275,
+        "endChar": 44
+      },
+      "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
