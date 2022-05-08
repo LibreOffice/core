@@ -29,7 +29,6 @@
 #include <vcl/hatch.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
 #include <drawmode.hxx>
