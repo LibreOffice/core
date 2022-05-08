@@ -39,7 +39,7 @@
 
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
-
+#include <mutex>
 
 using namespace ::std;
 using namespace ::cppu;
@@ -121,7 +121,7 @@ private:
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
 
-    Mutex m_mutex;
+    std::mutex m_mutex;
 };
 
 }
@@ -145,7 +145,7 @@ void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)
         m_output->writeBytes( aData );
     }
     else {
-        MutexGuard guard( m_mutex );
+        std::unique_lock guard( m_mutex );
         // new data must be buffered
         m_pBuffer->writeAt( m_nCurrentPos , aData );
         m_nCurrentPos += aData.getLength();
@@ -158,7 +158,7 @@ void OMarkableOutputStream::flush()
 {
     Reference< XOutputStream > output;
     {
-        MutexGuard guard( m_mutex );
+        std::unique_lock guard( m_mutex );
         output = m_output;
     }
 
@@ -176,7 +176,7 @@ void OMarkableOutputStream::closeOutput()
     if( !m_bValidStream ) {
         throw NotConnectedException();
     }
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     // all marks must be cleared and all
 
     m_mapMarks.clear();
@@ -194,7 +194,7 @@ void OMarkableOutputStream::closeOutput()
 
 sal_Int32 OMarkableOutputStream::createMark()
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     sal_Int32 nMark = m_nCurrentMark;
 
     m_mapMarks[nMark] = m_nCurrentPos;
@@ -205,7 +205,7 @@ sal_Int32 OMarkableOutputStream::createMark()
 
 void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
@@ -219,7 +219,7 @@ void OMarkableOutputStream::deleteMark(sal_Int32 Mark)
 
 void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() ) {
@@ -232,7 +232,7 @@ void OMarkableOutputStream::jumpToMark(sal_Int32 nMark)
 
 void OMarkableOutputStream::jumpToFurthest()
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     m_nCurrentPos = m_pBuffer->getSize();
     checkMarksAndFlush();
 }
@@ -240,7 +240,7 @@ void OMarkableOutputStream::jumpToFurthest()
 sal_Int32 OMarkableOutputStream::offsetToMark(sal_Int32 nMark)
 {
 
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::const_iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() )
