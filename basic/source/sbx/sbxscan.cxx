@@ -600,7 +600,7 @@ void SbxValue::Format( OUString& rRes, const OUString* pFmt ) const
                      sal_Unicode aBuf[2];
                      aBuf[0] = '0';
                      aBuf[1] = '0' + nMin;
-                     rRes = OUString(aBuf, SAL_N_ELEMENTS(aBuf));
+                     rRes = OUString(aBuf, std::size(aBuf));
                 }
                 else
                 {

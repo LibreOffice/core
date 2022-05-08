@@ -94,7 +94,7 @@ ToolbarmodeDialog::ToolbarmodeDialog(weld::Window* pParent)
                        (m_xBuilder->weld_radio_button("rbButton9")) }
     , m_pInfoLabel(m_xBuilder->weld_label("lbInfo"))
 {
-    static_assert(SAL_N_ELEMENTS(m_pRadioButtons) == SAL_N_ELEMENTS(TOOLBARMODES_ARRAY));
+    static_assert(std::size(m_pRadioButtons) == std::size(TOOLBARMODES_ARRAY));
 
     Link<weld::Toggleable&, void> aLink = LINK(this, ToolbarmodeDialog, SelectToolbarmode);
 

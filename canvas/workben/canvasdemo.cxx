@@ -208,7 +208,7 @@ class DemoRenderer
         {
             const double SCALE=7.0;
             const char hilbert[] = "urdrrulurulldluuruluurdrurddldrrruluurdrurddldrddlulldrdldrrurd";
-            int nLength = SAL_N_ELEMENTS( hilbert );
+            int nLength = std::size( hilbert );
 
             uno::Sequence< geometry::RealPoint2D > aPoints( nLength );
             auto pPoints = aPoints.getArray();
