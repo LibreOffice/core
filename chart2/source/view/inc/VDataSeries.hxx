@@ -53,9 +53,8 @@ public:
     sal_Int32 detectNumberFormatKey( sal_Int32 index ) const;
     sal_Int32 getLength() const;
 
-    css::uno::Reference<css::chart2::data::XDataSequence> Model;
-
-    mutable css::uno::Sequence<double> Doubles;
+    css::uno::Reference<css::chart2::data::XDataSequence> m_xModel;
+    mutable css::uno::Sequence<double> m_aValues;
 };
 
 class VDataSeries final
