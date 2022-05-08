@@ -104,6 +104,30 @@
       },
       "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35408ba1_f895c8c1",
+        "filename": "cui/inc/tipoftheday.hrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-08T06:53:05Z",
+      "side": 1,
+      "message": "\u003e just informal.\n\nInformal is good for ToD.  Thanks for feedback Adolfo.",
+      "parentUuid": "6f94f6e4_bb44866c",
+      "range": {
+        "startLine": 275,
+        "startChar": 41,
+        "endLine": 275,
+        "endChar": 44
+      },
+      "revId": "79c24237d211b8ff615e4ba76c1ffabcd3b63295",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
