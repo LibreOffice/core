@@ -18,10 +18,11 @@
  */
 #pragma once
 
+#include <mutex>
 #include <vector>
 #include <osl/file.hxx>
 
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/sdbc/XCloseable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -407,11 +408,10 @@ class XResultSet_impl :
         css::uno::Sequence< css::beans::Property >      m_sProperty;
         css::uno::Sequence< css::ucb::NumberedSortingInfo >  m_sSortingInfo;
 
-        osl::Mutex                          m_aMutex;
-        osl::Mutex                          m_aEventListenerMutex;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pDisposeEventListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::beans::XPropertyChangeListener>> m_pRowCountListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::beans::XPropertyChangeListener>> m_pIsFinalListeners;
+        std::mutex                          m_aMutex;
+        comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aDisposeEventListeners;
+        comphelper::OInterfaceContainerHelper4<css::beans::XPropertyChangeListener> m_aRowCountListeners;
+        comphelper::OInterfaceContainerHelper4<css::beans::XPropertyChangeListener> m_aIsFinalListeners;
 
         css::uno::Reference< css::ucb::XDynamicResultSetListener >       m_xListener;
 
@@ -423,7 +423,7 @@ class XResultSet_impl :
         /// @throws css::uno::RuntimeException
         bool OneMore();
 
-        void rowCountChanged();
+        void rowCountChanged(std::unique_lock<std::mutex>&);
         void isFinalChanged();
     };
 
