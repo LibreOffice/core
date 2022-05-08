@@ -154,7 +154,7 @@ struct MappingsData
     t_OUString2Entry    aName2Entry;
     t_Mapping2Entry     aMapping2Entry;
 
-    Mutex               aCallbacksMutex;
+    std::mutex          aCallbacksMutex;
     std::set< uno_getMappingFunc >
                         aCallbacks;
 
@@ -621,7 +621,7 @@ void SAL_CALL uno_getMapping(
 
         // try callback chain
         {
-            MutexGuard aGuard(rData.aCallbacksMutex);
+            std::unique_lock aGuard(rData.aCallbacksMutex);
             for (const auto& rCallback : rData.aCallbacks)
             {
                 (*rCallback)(ppMapping, pFrom, pTo, aAddPurpose.pData);
@@ -735,7 +735,7 @@ void SAL_CALL uno_registerMappingCallback(
 {
     OSL_ENSURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();
-    MutexGuard aGuard( rData.aCallbacksMutex );
+    std::unique_lock aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.insert( pCallback );
 }
 
@@ -745,7 +745,7 @@ void SAL_CALL uno_revokeMappingCallback(
 {
     OSL_ENSURE( pCallback, "### null ptr!" );
     MappingsData & rData = getMappingsData();
-    MutexGuard aGuard( rData.aCallbacksMutex );
+    std::unique_lock aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.erase( pCallback );
 }
 } // extern "C"
