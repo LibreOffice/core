@@ -19,13 +19,10 @@
 
 #include <cassert>
 
-#include <sal/types.h>
-
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
-#include <vcl/gdimtf.hxx>
+
 #include <vcl/metaact.hxx>
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
 #include <salgdi.hxx>
