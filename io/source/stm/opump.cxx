@@ -30,11 +30,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer2.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/supportsservice.hxx>
-#include <osl/mutex.hxx>
 #include <osl/thread.h>
-
+#include <mutex>
 
 using namespace osl;
 using namespace cppu;
@@ -49,14 +48,14 @@ namespace io_stm {
     class Pump : public WeakImplHelper<
           XActiveDataSource, XActiveDataSink, XActiveDataControl, XConnectable, XServiceInfo >
     {
-        Mutex                                   m_aMutex;
+        std::mutex                              m_aMutex;
         oslThread                               m_aThread;
 
         Reference< XConnectable >               m_xPred;
         Reference< XConnectable >               m_xSucc;
         Reference< XInputStream >               m_xInput;
         Reference< XOutputStream >              m_xOutput;
-        comphelper::OInterfaceContainerHelper2  m_cnt;
+        comphelper::OInterfaceContainerHelper4<XStreamListener>  m_cnt;
         bool                                m_closeFired;
 
         void run();
@@ -101,7 +100,6 @@ namespace io_stm {
     }
 
 Pump::Pump() : m_aThread( nullptr ),
-               m_cnt( m_aMutex ),
                m_closeFired( false )
 {
 }
@@ -118,12 +116,14 @@ Pump::~Pump()
 
 void Pump::fireError( const  Any & exception )
 {
-    comphelper::OInterfaceIteratorHelper2 iter( m_cnt );
+    std::unique_lock guard( m_aMutex );
+    comphelper::OInterfaceIteratorHelper4<XStreamListener> iter( guard, m_cnt );
+    guard.unlock();
     while( iter.hasMoreElements() )
     {
         try
         {
-            static_cast< XStreamListener * > ( iter.next() )->error( exception );
+            iter.next()->error( exception );
         }
         catch ( const RuntimeException &e )
         {
@@ -136,7 +136,7 @@ void Pump::fireClose()
 {
     bool bFire = false;
     {
-        MutexGuard guard( m_aMutex );
+        std::unique_lock guard( m_aMutex );
         if( ! m_closeFired  )
         {
             m_closeFired = true;
@@ -147,12 +147,14 @@ void Pump::fireClose()
     if( !bFire )
         return;
 
-    comphelper::OInterfaceIteratorHelper2 iter( m_cnt );
+    std::unique_lock guard( m_aMutex );
+    comphelper::OInterfaceIteratorHelper4<XStreamListener> iter( guard, m_cnt );
+    guard.unlock();
     while( iter.hasMoreElements() )
     {
         try
         {
-            static_cast< XStreamListener * > ( iter.next() )->closed( );
+            iter.next()->closed( );
         }
         catch ( const RuntimeException &e )
         {
@@ -163,12 +165,14 @@ void Pump::fireClose()
 
 void Pump::fireStarted()
 {
-    comphelper::OInterfaceIteratorHelper2 iter( m_cnt );
+    std::unique_lock guard( m_aMutex );
+    comphelper::OInterfaceIteratorHelper4<XStreamListener> iter( guard, m_cnt );
+    guard.unlock();
     while( iter.hasMoreElements() )
     {
         try
         {
-            static_cast< XStreamListener * > ( iter.next() )->started( );
+            iter.next()->started( );
         }
         catch ( const RuntimeException &e )
         {
@@ -179,12 +183,14 @@ void Pump::fireStarted()
 
 void Pump::fireTerminated()
 {
-    comphelper::OInterfaceIteratorHelper2 iter( m_cnt );
+    std::unique_lock guard( m_aMutex );
+    comphelper::OInterfaceIteratorHelper4<XStreamListener> iter( guard, m_cnt );
+    guard.unlock();
     while( iter.hasMoreElements() )
     {
         try
         {
-            static_cast< XStreamListener * > ( iter.next() )->terminated();
+            iter.next()->terminated();
         }
         catch ( const RuntimeException &e )
         {
@@ -200,7 +206,7 @@ void Pump::close()
     Reference< XInputStream > rInput;
     Reference< XOutputStream > rOutput;
     {
-        MutexGuard guard( m_aMutex );
+        std::unique_lock guard( m_aMutex );
         rInput = m_xInput;
         m_xInput.clear();
 
@@ -250,7 +256,7 @@ void Pump::run()
             Reference< XInputStream > rInput;
             Reference< XOutputStream > rOutput;
             {
-                Guard< Mutex > aGuard( m_aMutex );
+                std::unique_lock aGuard( m_aMutex );
                 rInput = m_xInput;
                 rOutput = m_xOutput;
             }
@@ -301,28 +307,28 @@ void Pump::run()
 
 void Pump::setPredecessor( const Reference< XConnectable >& xPred )
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_xPred = xPred;
 }
 
 
 Reference< XConnectable > Pump::getPredecessor()
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_xPred;
 }
 
 
 void Pump::setSuccessor( const Reference< XConnectable >& xSucc )
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_xSucc = xSucc;
 }
 
 
 Reference< XConnectable > Pump::getSuccessor()
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_xSucc;
 }
 
@@ -333,19 +339,21 @@ Reference< XConnectable > Pump::getSuccessor()
 
 void Pump::addListener( const Reference< XStreamListener >& xListener )
 {
-    m_cnt.addInterface( xListener );
+    std::unique_lock aGuard( m_aMutex );
+    m_cnt.addInterface( aGuard, xListener );
 }
 
 
 void Pump::removeListener( const Reference< XStreamListener >& xListener )
 {
-    m_cnt.removeInterface( xListener );
+    std::unique_lock aGuard( m_aMutex );
+    m_cnt.removeInterface( aGuard, xListener );
 }
 
 
 void Pump::start()
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_aThread = osl_createSuspendedThread(Pump::static_run,this);
     if( !m_aThread )
     {
@@ -380,7 +388,7 @@ void Pump::terminate()
 
 void Pump::setInputStream( const Reference< XInputStream >& xStream )
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_xInput = xStream;
     Reference< XConnectable > xConnect( xStream, UNO_QUERY );
     if( xConnect.is() )
@@ -391,7 +399,7 @@ void Pump::setInputStream( const Reference< XInputStream >& xStream )
 
 Reference< XInputStream > Pump::getInputStream()
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_xInput;
 }
 
@@ -402,7 +410,7 @@ Reference< XInputStream > Pump::getInputStream()
 
 void Pump::setOutputStream( const Reference< XOutputStream >& xOut )
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     m_xOutput = xOut;
     Reference< XConnectable > xConnect( xOut, UNO_QUERY );
     if( xConnect.is() )
@@ -412,7 +420,7 @@ void Pump::setOutputStream( const Reference< XOutputStream >& xOut )
 
 Reference< XOutputStream > Pump::getOutputStream()
 {
-    Guard< Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     return m_xOutput;
 }
 
