@@ -27,8 +27,6 @@
 bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
                             const GfxLink& rGfxLink, GDIMetaFile* pSubst )
 {
-    bool bDrawn(true);
-
     if ( mpMetaFile )
     {
         GDIMetaFile aSubst;
@@ -40,12 +38,14 @@ bool OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
     }
 
     if ( !IsDeviceOutputNecessary() || ImplIsRecordLayout() )
-        return bDrawn;
+        return true;
 
     if( mbOutputClipped )
-        return bDrawn;
+        return true;
 
     tools::Rectangle aRect( ImplLogicToDevicePixel( tools::Rectangle( rPoint, rSize ) ) );
+
+    bool bDrawn = true;
 
     if( !aRect.IsEmpty() )
     {
