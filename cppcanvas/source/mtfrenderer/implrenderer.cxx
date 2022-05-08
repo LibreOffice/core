@@ -963,7 +963,7 @@ namespace cppcanvas::internal
                 pChars[3]=pChars[2]=pChars[1]=pChars[0];
 
                 ::tools::Long nStrikeoutWidth = (rParms.mrVDev.GetTextWidth(
-                    OUString(pChars, SAL_N_ELEMENTS(pChars))) + 2) / 4;
+                    OUString(pChars, std::size(pChars))) + 2) / 4;
 
                 if( nStrikeoutWidth <= 0 )
                     nStrikeoutWidth = 1;

@@ -139,7 +139,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaDataBase::getTypeInfo(  )
                 ::connectivity::ODatabaseMetaDataResultSet::ORow aRow;
                 aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
                 const sal_Int32* pType = pTypes;
-                for (sal_Int32 i = 1; i <= sal_Int32(SAL_N_ELEMENTS(pTypes)); ++i,++pType)
+                for (sal_Int32 i = 1; i <= sal_Int32(std::size(pTypes)); ++i,++pType)
                 {
                     ORowSetValue aValue;
                     aValue.fill(i,*pType,xRow);

@@ -215,7 +215,7 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage(weld::Container* pPage, weld::Dia
     , m_xLbLanguage(new SvxLanguageBox(m_xBuilder->weld_combo_box("languagelb")))
     , m_xWndPreview(new weld::CustomWeld(*m_xBuilder, "preview", m_aWndPreview))
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(NUM_CATEGORIES); ++i)
+    for (size_t i = 0; i < std::size(NUM_CATEGORIES); ++i)
         m_xLbCategory->append_text(CuiResId(NUM_CATEGORIES[i]));
 
     auto nWidth = m_xLbCategory->get_approximate_digit_width() * 22;

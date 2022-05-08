@@ -996,7 +996,7 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  )
     rtl::Reference<::connectivity::ODatabaseMetaDataResultSet> pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    auto nNbTypes = SAL_N_ELEMENTS(sTableTypes);
+    auto nNbTypes = std::size(sTableTypes);
     ODatabaseMetaDataResultSet::ORows aRows;
     for(std::size_t i=0;i < nNbTypes;++i)
     {

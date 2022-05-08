@@ -122,7 +122,7 @@ void Base64::encode(OStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& aP
     {
         char aCharBuffer[4];
         ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
-        aStrBuffer.append(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
+        aStrBuffer.append(aCharBuffer, std::size(aCharBuffer));
         i += 3;
     }
 }
@@ -136,7 +136,7 @@ void Base64::encode(OUStringBuffer& aStrBuffer, const uno::Sequence<sal_Int8>& a
     {
         char aCharBuffer[4];
         ThreeByteToFourByte(pBuffer, i, nBufferLength, aCharBuffer);
-        aStrBuffer.appendAscii(aCharBuffer, SAL_N_ELEMENTS(aCharBuffer));
+        aStrBuffer.appendAscii(aCharBuffer, std::size(aCharBuffer));
         i += 3;
     }
 }
