@@ -155,6 +155,11 @@ void SvpGraphicsBackend::drawLine(tools::Long nX1, tools::Long nY1, tools::Long 
 void SvpGraphicsBackend::drawRect(tools::Long nX, tools::Long nY, tools::Long nWidth,
                                   tools::Long nHeight)
 {
+    implDrawRect(nX, nY, nWidth, nHeight);
+}
+
+void SvpGraphicsBackend::implDrawRect(double nX, double nY, double nWidth, double nHeight)
+{
     // because of the -1 hack we have to do fill and draw separately
     Color aOrigFillColor = m_rCairoCommon.m_aFillColor;
     Color aOrigLineColor = m_rCairoCommon.m_aLineColor;
