@@ -19,7 +19,6 @@
 
 #include <cassert>
 
-#include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <sal/log.hxx>
