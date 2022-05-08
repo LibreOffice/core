@@ -250,19 +250,32 @@ SfxItemSet& ScStyleSheet::GetItemSet()
 
 bool ScStyleSheet::IsUsed() const
 {
-    if ( GetFamily() == SfxStyleFamily::Para )
+    switch (GetFamily())
     {
-        // Always query the document to let it decide if a rescan is necessary,
-        // and store the state.
-        ScDocument* pDoc = static_cast<ScStyleSheetPool*>(m_pPool)->GetDocument();
-        if ( pDoc && pDoc->IsStyleSheetUsed( *this ) )
-            eUsage = Usage::USED;
-        else
-            eUsage = Usage::NOTUSED;
-        return eUsage == Usage::USED;
+        case SfxStyleFamily::Para:
+        {
+            // Always query the document to let it decide if a rescan is necessary,
+            // and store the state.
+            ScDocument* pDoc = static_cast<ScStyleSheetPool*>(m_pPool)->GetDocument();
+            if ( pDoc && pDoc->IsStyleSheetUsed( *this ) )
+                eUsage = Usage::USED;
+            else
+                eUsage = Usage::NOTUSED;
+            return eUsage == Usage::USED;
+        }
+        case SfxStyleFamily::Page:
+        {
+            // tdf#108188 - verify that the page style is actually used
+            ScDocument* pDoc = static_cast<ScStyleSheetPool*>(m_pPool)->GetDocument();
+            if (pDoc && pDoc->IsPageStyleInUse(GetName(), nullptr))
+                eUsage = Usage::USED;
+            else
+                eUsage = Usage::NOTUSED;
+            return eUsage == Usage::USED;
+        }
+        default:
+            return true;
     }
-    else
-        return true;
 }
 
 void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
