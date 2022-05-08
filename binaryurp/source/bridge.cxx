@@ -991,7 +991,7 @@ void Bridge::makeReleaseCall(
     // its own:
     static auto const tid = [] {
             static sal_Int8 const id[] = {'r', 'e', 'l', 'e', 'a', 's', 'e', 'h', 'a', 'c', 'k'};
-            return rtl::ByteSequence(id, SAL_N_ELEMENTS(id));
+            return rtl::ByteSequence(id, std::size(id));
         }();
     sendRequest(
         tid, oid, type,

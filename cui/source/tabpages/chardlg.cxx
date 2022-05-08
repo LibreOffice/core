@@ -3032,9 +3032,9 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage(weld::Container* pPage, weld::DialogCon
     , m_xStartBracketLB(m_xBuilder->weld_tree_view("startbracket"))
     , m_xEndBracketLB(m_xBuilder->weld_tree_view("endbracket"))
 {
-    for (size_t i = 0; i < SAL_N_ELEMENTS(TWOLINE_OPEN); ++i)
+    for (size_t i = 0; i < std::size(TWOLINE_OPEN); ++i)
         m_xStartBracketLB->append(OUString::number(TWOLINE_OPEN[i].second), CuiResId(TWOLINE_OPEN[i].first));
-    for (size_t i = 0; i < SAL_N_ELEMENTS(TWOLINE_CLOSE); ++i)
+    for (size_t i = 0; i < std::size(TWOLINE_CLOSE); ++i)
         m_xEndBracketLB->append(OUString::number(TWOLINE_CLOSE[i].second), CuiResId(TWOLINE_CLOSE[i].first));
 
     m_xPreviewWin.reset(new weld::CustomWeld(*m_xBuilder, "preview", m_aPreviewWin));

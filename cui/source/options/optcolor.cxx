@@ -405,7 +405,7 @@ void ColorConfigWindow_Impl::CreateEntries()
 
     // creating entries
     vEntries.reserve(ColorConfigEntryCount);
-    for (size_t i = 0; i < SAL_N_ELEMENTS(vEntryInfo); ++i)
+    for (size_t i = 0; i < std::size(vEntryInfo); ++i)
     {
         vEntries.push_back(std::make_shared<Entry>(m_pTopLevel, *m_xBuilder,
             vEntryInfo[i].pText, vEntryInfo[i].pColor,

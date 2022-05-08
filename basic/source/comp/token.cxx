@@ -377,7 +377,7 @@ SbiToken SbiTokenizer::Next()
         }
         // valid token?
         short lb = 0;
-        short ub = SAL_N_ELEMENTS(aTokTable_Basic)-1;
+        short ub = std::size(aTokTable_Basic)-1;
         short delta;
         do
         {

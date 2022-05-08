@@ -151,7 +151,7 @@ void ConfigColorScheme::retrieveConfigColors()
         0xff00ff, 0x00ffff, 0xffff00
     };
 
-    static const sal_Int32 nMaxDefaultColors = SAL_N_ELEMENTS( nDefaultColors );
+    static const sal_Int32 nMaxDefaultColors = std::size( nDefaultColors );
     return nDefaultColors[ nIndex % nMaxDefaultColors ];
 }
 
