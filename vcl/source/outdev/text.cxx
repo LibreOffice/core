@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <memory>
-#include <basegfx/matrix/b2dhommatrix.hxx>
 
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
@@ -29,16 +28,14 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.h>
 #include <rtl/ustrbuf.hxx>
-#include <sal/log.hxx>
 #include <tools/lineend.hxx>
 #include <tools/debug.hxx>
+
 #include <vcl/ctrl.hxx>
-#include <vcl/gdimtf.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/textrectinfo.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/sysdata.hxx>
 #include <vcl/unohelp.hxx>
 
 #include <ImplLayoutArgs.hxx>
@@ -48,7 +45,6 @@
 #include <svdata.hxx>
 #include <textlayout.hxx>
 #include <textlineinfo.hxx>
-#include <impglyphitem.hxx>
 #include <optional>
 #include <TextLayoutCache.hxx>
 #include <font/PhysicalFontFace.hxx>
