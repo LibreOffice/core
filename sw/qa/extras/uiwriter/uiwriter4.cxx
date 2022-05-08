@@ -1720,10 +1720,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107025)
         return;
 
     CPPUNIT_ASSERT(!parseDump("(//SwLinePortion)[2]", "width").isEmpty());
-    // Width of the second line is expected to be 9 times of the first.
     sal_Int32 nWidth2 = getXPath(pXmlDoc, "(//SwLinePortion)[2]", "width").toInt32();
+    sal_Int32 nRatio = nWidth2 / nWidth1;
 
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(9), nWidth2 / nWidth1);
+    // A character occupies two cells, one of them are partailly occupied.
+    // the ratio should between 9 and 18.
+    CPPUNIT_ASSERT(nRatio >= 9 && nRatio < 18);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest4, testTdf107362)
