@@ -1321,21 +1321,6 @@ IMPL_LINK_NOARG(StyleList, EnableDelete, void*, void)
             {
                 bEnableDelete = true;
             }
-            else if (pStyle->GetFamily() == SfxStyleFamily::Page)
-            {
-                // Hack to allow Calc page styles to be deleted,
-                // remove when IsUsed is fixed for Calc page styles.
-                SfxViewFrame* pFrame = m_pCurObjShell->GetFrame();
-                if (pFrame)
-                {
-                    uno::Reference<frame::XFrame> xFrame = pFrame->GetFrame().GetFrameInterface();
-                    if (vcl::CommandInfoProvider::GetModuleIdentifier(xFrame)
-                        == "com.sun.star.sheet.SpreadsheetDocument")
-                    {
-                        bEnableDelete = true;
-                    }
-                }
-            }
         }
     }
     m_pParentDialog->EnableDel(bEnableDelete, this);
