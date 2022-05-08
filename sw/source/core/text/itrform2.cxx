@@ -507,7 +507,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
                 }
             }
         }
-        else if ( bHasGrid && pGrid->IsSnapToChars() && ! pGridKernPortion && ! m_pMulti && ! pPor->InTabGrp() )
+        else if ( bHasGrid && ! pGridKernPortion && ! m_pMulti && ! pPor->InTabGrp() )
         {
             // insert a grid kerning portion
             pGridKernPortion = pPor->IsKernPortion() ?
@@ -650,7 +650,7 @@ void SwTextFormatter::BuildPortions( SwTextFormatInfo &rInf )
             }
         }
 
-        if ( bHasGrid && pGrid->IsSnapToChars() && pPor != pGridKernPortion && ! m_pMulti && ! pPor->InTabGrp() )
+        if ( bHasGrid && pPor != pGridKernPortion && ! m_pMulti && ! pPor->InTabGrp() )
         {
             TextFrameIndex const nTmp = rInf.GetIdx() + pPor->GetLen();
             const SwTwips nRestWidth = rInf.Width() - rInf.X() - pPor->Width();
