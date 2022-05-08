@@ -60,7 +60,7 @@ HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
                                                         sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( nIndex < m_aResults.size() )
     {
@@ -93,7 +93,7 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
 uno::Reference< ucb::XContentIdentifier >
 HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( nIndex < m_aResults.size() )
     {
@@ -122,7 +122,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 uno::Reference< ucb::XContent >
 HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( nIndex < m_aResults.size() )
     {
@@ -158,7 +158,7 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 // virtual
 bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_aResults.size() > nIndex )
     {
@@ -201,7 +201,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     if ( xResultSet.is() )
     {
         // Callbacks follow!
-        aGuard.clear();
+        aGuard.unlock();
 
         if ( nOldCount < m_aResults.size() )
             xResultSet->rowCountChanged(
@@ -218,7 +218,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 // virtual
 sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
 {
-    osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( m_bCountFinal )
         return m_aResults.size();
@@ -238,7 +238,7 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
     if ( xResultSet.is() )
     {
         // Callbacks follow!
-        aGuard.clear();
+        aGuard.unlock();
 
         if ( nOldCount < m_aResults.size() )
             xResultSet->rowCountChanged(
@@ -269,7 +269,7 @@ bool HierarchyResultSetDataSupplier::isCountFinal()
 uno::Reference< sdbc::XRow >
 HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( nIndex < m_aResults.size() )
     {
@@ -306,7 +306,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 // virtual
 void HierarchyResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
     if ( nIndex < m_aResults.size() )
         m_aResults[ nIndex ]->xRow.clear();
