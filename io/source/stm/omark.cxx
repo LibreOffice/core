@@ -37,7 +37,6 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-#include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <mutex>
 
@@ -430,7 +429,7 @@ private:
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
 
-    Mutex m_mutex;
+    std::mutex m_mutex;
 };
 
 }
@@ -455,7 +454,7 @@ sal_Int32 OMarkableInputStream::readBytes(Sequence< sal_Int8 >& aData, sal_Int32
             "MarkableInputStream::readBytes NotConnectedException",
             *this );
     }
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
         // normal read !
         nBytesRead = m_input->readBytes( aData, nBytesToRead );
@@ -500,7 +499,7 @@ sal_Int32 OMarkableInputStream::readSomeBytes(Sequence< sal_Int8 >& aData, sal_I
             *this );
     }
 
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     if( m_mapMarks.empty() && ! m_pBuffer->getSize() ) {
         // normal read !
         nBytesRead = m_input->readSomeBytes( aData, nMaxBytesToRead );
@@ -560,7 +559,7 @@ sal_Int32 OMarkableInputStream::available()
             *this );
     }
 
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     sal_Int32 nAvail = m_input->available() + ( m_pBuffer->getSize() - m_nCurrentPos );
     return nAvail;
 }
@@ -573,7 +572,7 @@ void OMarkableInputStream::closeInput()
             "MarkableInputStream::closeInput NotConnectedException",
             *this );
     }
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
 
     m_input->closeInput();
 
@@ -590,7 +589,7 @@ void OMarkableInputStream::closeInput()
 
 sal_Int32 OMarkableInputStream::createMark()
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     sal_Int32 nMark = m_nCurrentMark;
 
     m_mapMarks[nMark] = m_nCurrentPos;
@@ -601,7 +600,7 @@ sal_Int32 OMarkableInputStream::createMark()
 
 void OMarkableInputStream::deleteMark(sal_Int32 Mark)
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( Mark );
 
     if( ii == m_mapMarks.end() ) {
@@ -615,7 +614,7 @@ void OMarkableInputStream::deleteMark(sal_Int32 Mark)
 
 void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() )
@@ -629,14 +628,14 @@ void OMarkableInputStream::jumpToMark(sal_Int32 nMark)
 
 void OMarkableInputStream::jumpToFurthest()
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     m_nCurrentPos = m_pBuffer->getSize();
     checkMarksAndFlush();
 }
 
 sal_Int32 OMarkableInputStream::offsetToMark(sal_Int32 nMark)
 {
-    MutexGuard guard( m_mutex );
+    std::unique_lock guard( m_mutex );
     map<sal_Int32,sal_Int32,less<sal_Int32> >::const_iterator ii = m_mapMarks.find( nMark );
 
     if( ii == m_mapMarks.end() )
