@@ -29,6 +29,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdomeas.hxx>
 #include <userdat.hxx>
+#include <stlpool.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -63,6 +64,7 @@ public:
     void testTdf129789();
     void testTdf130725();
     void testTdf104502_hiddenColsCountedInPageCount();
+    void testTdf108188_pagestyle();
 
     CPPUNIT_TEST_SUITE(ScFiltersTest);
     CPPUNIT_TEST(testTdf137576_Measureline);
@@ -87,6 +89,7 @@ public:
     CPPUNIT_TEST(testTdf129789);
     CPPUNIT_TEST(testTdf130725);
     CPPUNIT_TEST(testTdf104502_hiddenColsCountedInPageCount);
+    CPPUNIT_TEST(testTdf108188_pagestyle);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -726,6 +729,24 @@ void ScFiltersTest::testTdf104502_hiddenColsCountedInPageCount()
 
     xShell->DoClose();
 }
+void ScFiltersTest::testTdf108188_pagestyle()
+{
+    ScDocShellRef xDocSh = loadDoc(u"tdf108188_pagestyle.", FORMAT_ODS);
+    CPPUNIT_ASSERT(xDocSh);
+
+    // Check if the user defined page style is present
+    const OUString aTestPageStyle = "TestPageStyle";
+    ScDocument& rDoc = xDocSh->GetDocument();
+    CPPUNIT_ASSERT_EQUAL(aTestPageStyle, rDoc.GetPageStyle(0));
+
+    // Without the accompanying fix in place, the page styles are always used
+    ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+    CPPUNIT_ASSERT(pStylePool->Find(aTestPageStyle, SfxStyleFamily::Page)->IsUsed());
+    CPPUNIT_ASSERT(!pStylePool->Find("Default", SfxStyleFamily::Page)->IsUsed());
+
+    xDocSh->DoClose();
+}
+
 
 ScFiltersTest::ScFiltersTest()
       : ScBootstrapFixture( "sc/qa/unit/data" )
