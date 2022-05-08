@@ -3568,26 +3568,26 @@ void ScInterpreter::ScTableOp()
         PushIllegalParameter();
         return;
     }
-    std::optional<ScInterpreterTableOpParams> pTableOp(std::in_place);
+    ScInterpreterTableOpParams aTableOp;
     if (nParamCount == 5)
     {
-        PopSingleRef( pTableOp->aNew2 );
-        PopSingleRef( pTableOp->aOld2 );
+        PopSingleRef( aTableOp.aNew2 );
+        PopSingleRef( aTableOp.aOld2 );
     }
-    PopSingleRef( pTableOp->aNew1 );
-    PopSingleRef( pTableOp->aOld1 );
-    PopSingleRef( pTableOp->aFormulaPos );
+    PopSingleRef( aTableOp.aNew1 );
+    PopSingleRef( aTableOp.aOld1 );
+    PopSingleRef( aTableOp.aFormulaPos );
 
-    pTableOp->bValid = true;
-    mrDoc.m_TableOpList.push_back(&*pTableOp);
+    aTableOp.bValid = true;
+    mrDoc.m_TableOpList.push_back(&aTableOp);
     mrDoc.IncInterpreterTableOpLevel();
 
-    bool bReuseLastParams = (mrDoc.aLastTableOpParams == *pTableOp);
+    bool bReuseLastParams = (mrDoc.aLastTableOpParams == aTableOp);
     if ( bReuseLastParams )
     {
-        pTableOp->aNotifiedFormulaPos = mrDoc.aLastTableOpParams.aNotifiedFormulaPos;
-        pTableOp->bRefresh = true;
-        for ( const auto& rPos : pTableOp->aNotifiedFormulaPos )
+        aTableOp.aNotifiedFormulaPos = mrDoc.aLastTableOpParams.aNotifiedFormulaPos;
+        aTableOp.bRefresh = true;
+        for ( const auto& rPos : aTableOp.aNotifiedFormulaPos )
         {   // emulate broadcast and indirectly collect cell pointers
             ScRefCellValue aCell(mrDoc, rPos);
             if (aCell.meType == CELLTYPE_FORMULA)
@@ -3596,18 +3596,18 @@ void ScInterpreter::ScTableOp()
     }
     else
     {   // broadcast and indirectly collect cell pointers and positions
-        mrDoc.SetTableOpDirty( pTableOp->aOld1 );
+        mrDoc.SetTableOpDirty( aTableOp.aOld1 );
         if ( nParamCount == 5 )
-            mrDoc.SetTableOpDirty( pTableOp->aOld2 );
+            mrDoc.SetTableOpDirty( aTableOp.aOld2 );
     }
-    pTableOp->bCollectNotifications = false;
+    aTableOp.bCollectNotifications = false;
 
-    ScRefCellValue aCell(mrDoc, pTableOp->aFormulaPos);
+    ScRefCellValue aCell(mrDoc, aTableOp.aFormulaPos);
     if (aCell.meType == CELLTYPE_FORMULA)
         aCell.mpFormula->SetDirtyVar();
     if (aCell.hasNumeric())
     {
-        PushDouble(GetCellValue(pTableOp->aFormulaPos, aCell));
+        PushDouble(GetCellValue(aTableOp.aFormulaPos, aCell));
     }
     else
     {
@@ -3617,21 +3617,21 @@ void ScInterpreter::ScTableOp()
     }
 
     auto const itr =
-        ::std::find(mrDoc.m_TableOpList.begin(), mrDoc.m_TableOpList.end(), &*pTableOp);
+        ::std::find(mrDoc.m_TableOpList.begin(), mrDoc.m_TableOpList.end(), &aTableOp);
     if (itr != mrDoc.m_TableOpList.end())
     {
         mrDoc.m_TableOpList.erase(itr);
     }
 
     // set dirty again once more to be able to recalculate original
-    for ( const auto& pCell : pTableOp->aNotifiedFormulaCells )
+    for ( const auto& pCell : aTableOp.aNotifiedFormulaCells )
     {
         pCell->SetTableOpDirty();
     }
 
     // save these params for next incarnation
     if ( !bReuseLastParams )
-        mrDoc.aLastTableOpParams = *pTableOp;
+        mrDoc.aLastTableOpParams = aTableOp;
 
     if (aCell.meType == CELLTYPE_FORMULA)
     {
@@ -3642,11 +3642,10 @@ void ScInterpreter::ScTableOp()
     // Reset all dirty flags so next incarnation does really collect all cell
     // pointers during notifications and not just non-dirty ones, which may
     // happen if a formula cell is used by more than one TableOp block.
-    for ( const auto& pCell : pTableOp->aNotifiedFormulaCells )
+    for ( const auto& pCell : aTableOp.aNotifiedFormulaCells )
     {
         pCell->ResetTableOpDirtyVar();
     }
-    pTableOp.reset();
 
     mrDoc.DecInterpreterTableOpLevel();
 }
