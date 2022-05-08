@@ -73,7 +73,7 @@ private:
         explicit ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
     };
     typedef std::vector< std::unique_ptr<ResultListEntry> > ResultList;
-    osl::Mutex                                      m_aMutex;
+    std::mutex                                      m_aMutex;
     ResultList                                      m_aResults;
     rtl::Reference< HierarchyContent >              m_xContent;
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
