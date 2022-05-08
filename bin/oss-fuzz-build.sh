@@ -28,7 +28,7 @@ export CC_FOR_BUILD="$CC"
 #similarly force the -fsanitize etc args in as well as pthread to get
 #things to link successfully during the build
 export LDFLAGS="$CFLAGS -Wl,--compress-debug-sections,zlib -lpthread"
-#build-time rsc tool leaks a titch
+#build-time concat-deps tool leaks a titch
 export ASAN_OPTIONS="detect_leaks=0"
 
 cd $WORK
