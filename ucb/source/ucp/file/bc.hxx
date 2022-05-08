@@ -19,10 +19,10 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
+#include <mutex>
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
@@ -203,12 +203,10 @@ namespace fileaccess {
         bool                                                  m_bFolder;
         sal_uInt16                                            m_nState;
 
-        osl::Mutex                         m_aMutex;
-
-        osl::Mutex                          m_aEventListenerMutex;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>>   m_pDisposeEventListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::ucb::XContentEventListener>> m_pContentEventListeners;
-        std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::beans::XPropertySetInfoChangeListener>> m_pPropertySetInfoChangeListeners;
+        std::mutex                         m_aMutex;
+        comphelper::OInterfaceContainerHelper4<css::lang::XEventListener>   m_aDisposeEventListeners;
+        comphelper::OInterfaceContainerHelper4<css::ucb::XContentEventListener> m_aContentEventListeners;
+        comphelper::OInterfaceContainerHelper4<css::beans::XPropertySetInfoChangeListener> m_aPropertySetInfoChangeListeners;
         std::unique_ptr<PropertyListeners>                  m_pPropertyListener;
 
 
