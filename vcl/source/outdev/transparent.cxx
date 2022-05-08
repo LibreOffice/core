@@ -17,8 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <sal/types.h>
-#include <osl/diagnose.h>
 #include <rtl/math.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <tools/helpers.hxx>
@@ -27,7 +25,6 @@
 #include <vcl/BitmapTools.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/print.hxx>
-#include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
 
