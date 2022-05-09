@@ -341,7 +341,6 @@ Dim oParentPosSize As Object		&apos;	Parent com.sun.star.awt.Rectangle
 Dim lParentX As Long				&apos;	X position of parent dialog
 Dim lParentY As Long				&apos;	Y position of parent dialog
 Dim oPosSize As Object				&apos;	Dialog com.sun.star.awt.Rectangle
-Dim iFlags As Integer				&apos;	com.sun.star.awt.PosSize constants
 Const cstThisSub = &quot;SFDialogs.Dialog.Center&quot;
 Const cstSubArgs = &quot;[Parent]&quot;
 
@@ -696,10 +695,12 @@ Public Function Methods() As Variant
 
 	Methods = Array( _
 					&quot;Activate&quot; _
+					, &quot;Center&quot; _
 					, &quot;Controls&quot; _
 					, &quot;EndExecute&quot; _
 					, &quot;Execute&quot; _
 					, &quot;GetTextsFromL10N&quot; _
+					, &quot;Resize&quot; _
 					, &quot;Terminate&quot; _
 					)
 
@@ -739,12 +740,12 @@ Public Function Resize(Optional ByVal Left As Variant _
 								, Optional ByVal Width As Variant _
 								, Optional ByVal Height As Variant _
 								) As Boolean
-&apos;&apos;&apos;	Move the topleft corner of a dialog to new coordinates and/or modify its dimensions
-&apos;&apos;&apos;	All distances are expressed in 1/100th mm
+&apos;&apos;&apos;	Move the top-left corner of a dialog to new coordinates and/or modify its dimensions
+&apos;&apos;&apos;	All distances are expressed in 1/100 mm.
 &apos;&apos;&apos;	Without arguments, the method resets the initial dimensions
 &apos;&apos;&apos;	Args:
-&apos;&apos;&apos;		Left : the vertical distance from the topleft corner
-&apos;&apos;&apos;		Top : the horizontal distance from the topleft corner
+&apos;&apos;&apos;		Left : the horizontal distance from the top-left corner
+&apos;&apos;&apos;		Top : the vertical distance from the top-left corner
 &apos;&apos;&apos;		Width : the horizontal width of the rectangle containing the Dialog
 &apos;&apos;&apos;		Height : the vertical height of the rectangle containing the Dialog
 &apos;&apos;&apos;		Negative or missing arguments are left unchanged
