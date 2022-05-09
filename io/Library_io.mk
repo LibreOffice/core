@@ -14,7 +14,6 @@ $(eval $(call gb_Library_use_external,io,boost_headers))
 $(eval $(call gb_Library_use_udk_api,io))
 
 $(eval $(call gb_Library_use_libraries,io,\
-    comphelper \
     cppu \
     cppuhelper \
     sal \
