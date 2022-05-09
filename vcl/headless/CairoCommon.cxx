@@ -26,6 +26,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <unotools/configmgr.hxx>
 #include <sal/log.hxx>
 #include <osl/module.h>
 
@@ -313,9 +314,11 @@ SystemDependentData_CairoPath::SystemDependentData_CairoPath(
     , mbNoJoin(bNoJoin)
     , mbAntiAlias(bAntiAlias)
 {
+    static const bool bFuzzing = utl::ConfigManager::IsFuzzing();
+
     // tdf#129845 only create a copy of the path when nSizeMeasure is
     // bigger than some decent threshold
-    if (nSizeMeasure > 50)
+    if (!bFuzzing && nSizeMeasure > 50)
     {
         mpCairoPath = cairo_copy_path(cr);
 
