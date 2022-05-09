@@ -89,8 +89,9 @@
               <object class="GtkLabel" id="object_title_label">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes" context="objecttitledescdialog|object_title_label">_Title:</property>
+                <property name="label" translatable="yes" context="objecttitledescdialog|object_title_label">_Text Alternative:</property>
                 <property name="use_underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="objecttitledescdialog|object_title_label|tooltip_text">Give a short description of non-text content for users who do not see this object.</property>
                 <property name="mnemonic_widget">object_title_entry</property>
                 <property name="xalign">0</property>
               </object>
@@ -125,6 +126,7 @@
                 <property name="can_focus">False</property>
                 <property name="label" translatable="yes" context="objecttitledescdialog|desc_label">_Description:</property>
                 <property name="use_underline">True</property>
+                <property name="tooltip_text" translatable="yes" context="objecttitledescdialog|desc_label|tooltip_text">Give longer explanation of non-text content that is too complex to be described briefly in “Text Alternative”</property>
                 <property name="xalign">0</property>
               </object>
               <packing>
