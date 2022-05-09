@@ -16,6 +16,24 @@
       "message": "I heard SwClient is something obsolete, it\u0027s probably not a wise idea to add a new subclass of it.\nSee also: https://events.documentfoundation.org/libocon2021/talk/E9XWD8/ ",
       "revId": "062d82664828abafa8cc4e9cf8b7f27d94f1e1fb",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "990390cd_bb3946f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002210
+      },
+      "writtenOn": "2022-05-09T07:04:50Z",
+      "side": 1,
+      "message": "Hi Gabor! :) Thank you for this information. I did not know that the callback is under deprecating. This slide is useful to understand, I think better to abandon this patch. Greetings! :)",
+      "parentUuid": "b9e005cf_eaa87ba4",
+      "revId": "062d82664828abafa8cc4e9cf8b7f27d94f1e1fb",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
