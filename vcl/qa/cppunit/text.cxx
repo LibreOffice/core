@@ -7,11 +7,14 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <osl/file.hxx>
+#include <osl/process.h>
 #include <test/bootstrapfixture.hxx>
 #include <sal/log.hxx>
 #include <tools/stream.hxx>
 
 #include <vcl/BitmapReadAccess.hxx>
+#include <vcl/errcode.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
@@ -32,8 +35,14 @@ class VclTextTest : public test::BootstrapFixture
         if (mbExportBitmap)
         {
             BitmapEx aBitmapEx(device->GetBitmapEx(Point(0, 0), device->GetOutputSizePixel()));
-            SvFileStream aStream(filename, StreamMode::WRITE | StreamMode::TRUNC);
-            GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream);
+            OUString cwd;
+            CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_getProcessWorkingDir(&cwd.pData));
+            OUString url;
+            CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                                 osl::FileBase::getAbsoluteFileURL(cwd, filename, url));
+            SvFileStream aStream(url, StreamMode::WRITE | StreamMode::TRUNC);
+            CPPUNIT_ASSERT_EQUAL(
+                ERRCODE_NONE, GraphicFilter::GetGraphicFilter().compressAsPNG(aBitmapEx, aStream));
         }
     }
 
