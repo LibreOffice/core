@@ -68,6 +68,24 @@
       "message": "In AOO bugzilla i97605 has files with test cases. Have you used them for the Linux compilers? I have just tested it with VC 2019. The only difference in that files is for asinh(-1.23E+050), where std::asinh is better. ",
       "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "564583f5_6ca3ede3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-09T10:31:59Z",
+      "side": 1,
+      "message": "\u003e when 15 significant digits are provided by the algorithm that works with double variables, I assume that it should be considered OK\n\nThis might be OK when we discuss some home-grown code with some simplifications consciously made for some reasons; but in case of standard library, the deviations should by default be considered at least for reporting (and then it\u0027s the library maintainers\u0027 business if this is to be considered OK or not).\n\nRemember that it\u0027s physically impossible to test all possible double against some function; so if you came across such thing, you maybe have a rare opportunity to help library maintainers.\n\nThis all is orthogonal to the acceptance of this specific patch to our codebase. Yet, you asked for my opinion, so I gave it ;)",
+      "parentUuid": "66e735a1_41e2d6a0",
+      "revId": "12b262c4b89e6a33e88bb04741e979f6ffe29908",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
