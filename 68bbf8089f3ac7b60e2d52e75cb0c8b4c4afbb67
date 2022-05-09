@@ -58,6 +58,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86ed6ee0_33e60904",
+        "filename": "embeddedobj/Library_embobj.mk",
+        "patchSetId": 30
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-05-09T12:15:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b8fe2f5d_1ca34afc",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 9
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2f3438fe_9aaf72ef",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-05-09T08:39:26Z",
       "side": 1,
       "message": "I think we tried to get rid of this include style (relative includes with \"..\").",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 29
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b670f656_fb731bd8",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-05-09T12:15:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2f3438fe_9aaf72ef",
       "range": {
         "startLine": 41,
         "startChar": 0,
@@ -104,6 +152,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "477aa6f3_46bd61dd",
+        "filename": "include/embeddedobj/emodllapi.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-05-09T12:15:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "70c50734_bdb38087",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d27e603_1e83ff31",
@@ -117,6 +189,30 @@
       "writtenOn": "2022-05-09T08:39:26Z",
       "side": 1,
       "message": "EMBOBJ",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd16b45b_66ee5c85",
+        "filename": "include/embeddedobj/emodllapi.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-05-09T12:15:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7d27e603_1e83ff31",
       "range": {
         "startLine": 15,
         "startChar": 12,
@@ -150,6 +246,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6567e9dd_331efb70",
+        "filename": "include/embeddedobj/emodllapi.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-05-09T12:15:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2c5137bb_5fc99834",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "424c735f_bfd3ff2b",
@@ -163,6 +283,30 @@
       "writtenOn": "2022-05-09T08:39:26Z",
       "side": 1,
       "message": "instead of indenting the whole block, just return early when (mpCallback \u003d\u003d nullptr)",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18e3592c_fa15bca3",
+        "filename": "svtools/source/misc/filechangedchecker.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2022-05-09T12:15:54Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "424c735f_bfd3ff2b",
       "range": {
         "startLine": 49,
         "startChar": 4,
