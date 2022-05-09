@@ -133,7 +133,7 @@ static void FilterWhiteSpace( OUString& rStr )
     rStr = aRet.makeStringAndClear();
 }
 
-static tools::Long GetDayDiff( const Date& rDate );
+static sal_Int32 GetDayDiff(const Date& rDate) { return rDate - Date(1899'12'30); }
 
 static const CharClass& GetCharClass()
 {
@@ -1681,9 +1681,8 @@ void SbRtl_Val(StarBASIC *, SbxArray & rPar, bool)
 // Helper functions for date conversion
 sal_Int16 implGetDateDay( double aDate )
 {
-    aDate -= 2.0; // standardize: 1.1.1900 => 0.0
     aDate = floor( aDate );
-    Date aRefDate( 1, 1, 1900 );
+    Date aRefDate(1899'12'30);
     aRefDate.AddDays( aDate );
 
     sal_Int16 nRet = static_cast<sal_Int16>( aRefDate.GetDay() );
@@ -1692,9 +1691,8 @@ sal_Int16 implGetDateDay( double aDate )
 
 sal_Int16 implGetDateMonth( double aDate )
 {
-    Date aRefDate( 1,1,1900 );
+    Date aRefDate(1899'12'30);
     sal_Int32 nDays = static_cast<sal_Int32>(aDate);
-    nDays -= 2; // standardize: 1.1.1900 => 0.0
     aRefDate.AddDays( nDays );
     sal_Int16 nRet = static_cast<sal_Int16>( aRefDate.GetMonth() );
     return nRet;
@@ -4653,28 +4651,10 @@ void SbRtl_Partition(StarBASIC *, SbxArray & rPar, bool)
 
 #endif
 
-static tools::Long GetDayDiff( const Date& rDate )
-{
-    Date aRefDate( 1,1,1900 );
-    tools::Long nDiffDays;
-    if ( aRefDate > rDate )
-    {
-        nDiffDays = aRefDate - rDate;
-        nDiffDays *= -1;
-    }
-    else
-    {
-        nDiffDays = rDate - aRefDate;
-    }
-    nDiffDays += 2; // adjustment VisualBasic: 1.Jan.1900 == 2
-    return nDiffDays;
-}
-
 sal_Int16 implGetDateYear( double aDate )
 {
-    Date aRefDate( 1,1,1900 );
-    tools::Long nDays = static_cast<tools::Long>(aDate);
-    nDays -= 2; // standardize: 1.1.1900 => 0.0
+    Date aRefDate(1899'12'30);
+    sal_Int32 nDays = static_cast<sal_Int32>(aDate);
     aRefDate.AddDays( nDays );
     sal_Int16 nRet = aRefDate.GetYear();
     return nRet;
@@ -4786,8 +4766,7 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay,
         }
     }
 
-    tools::Long nDiffDays = GetDayDiff( aCurDate );
-    rdRet = static_cast<double>(nDiffDays);
+    rdRet = GetDayDiff(aCurDate);
     return true;
 }
 
