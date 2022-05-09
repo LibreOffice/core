@@ -3496,6 +3496,7 @@ namespace xmloff::token {
         TOKEN("showing-place-holder", XML_SHOWING_PLACE_HOLDER ),
         TOKEN("checked-state", XML_CHECKED_STATE),
         TOKEN("unchecked-state", XML_UNCHECKED_STATE),
+        TOKEN("display-text", XML_DISPLAY_TEXT),
 
 
 #if OSL_DEBUG_LEVEL > 0

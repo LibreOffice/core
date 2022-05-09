@@ -3239,4 +3239,5 @@ content-control
 showing-place-holder
 checked-state
 unchecked-state
+display-text
 TOKEN_END_DUMMY
