@@ -277,7 +277,6 @@ SbxVariable* SbxArray::Find( const OUString& rName, SbxClassType t )
         return nullptr;
     bool bExtSearch = IsSet( SbxFlagBits::ExtSearch );
     sal_uInt16 nHash = SbxVariable::MakeHashCode( rName );
-    //const OUString aNameCI = SbxVariable::NameToCaseInsensitiveName(rName);
     const OUString aNameCI = SbxVariable::NameToCaseInsensitiveName(rName);
     for (auto& rEntry : mVarEntries)
     {
