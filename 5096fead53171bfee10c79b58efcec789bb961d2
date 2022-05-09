@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a1e1751_f9e0178f",
+        "filename": "chart2/source/controller/dialogs/res_BarGeometry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-09T09:26:30Z",
+      "side": 1,
+      "message": "Why you did this change? In my opinion it shouldn\u0027t be touched.",
+      "revId": "5096fead53171bfee10c79b58efcec789bb961d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
