@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "757c0aa2_ec8e91d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-09T06:25:15Z",
+      "side": 1,
+      "message": "https://gerrit.libreoffice.org/c/core/+/133947/1 is a follow-up change that passed CI, so this is probably false alarm.",
+      "revId": "39a1ef78d10805bf2def9d2fa8456a7a1de45e4b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
