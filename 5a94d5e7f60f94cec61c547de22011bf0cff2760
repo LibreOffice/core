@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "683a3247_ad17d33c",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-05-09T17:20:49Z",
+      "side": 1,
+      "message": "That is not making use of the updated function with parameter. I\u0027d prefer if it was changed to call the function - then the function could be extended to do some validation of the provided platform string... Or get rid of the function since it doesn\u0027t really do anything useful at this point.\n\nthe check could also be placed in the test for system switch in line 45. If argv[4] is \"--system\"... else if argv[4] is \"--platform\" → check for presence of argv[5]\n\nAnd probably the variable should also be renamed to just platform",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 0
+      },
+      "revId": "5a94d5e7f60f94cec61c547de22011bf0cff2760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
