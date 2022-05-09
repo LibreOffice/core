@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b46353ba_a737ee8a",
+        "filename": "sw/source/core/doc/docbm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-09T08:23:03Z",
+      "side": 1,
+      "message": "eh, this is an important optimisation, removing it makes some document operations a lot slower. I would rather know how m_vAllMarks managed to become un-sorted.\n\nThere are frequent calls to lcl_DebugMarks(m_vAllMarks) that should be catching anything that makes m_vAllMarks un-sorted.\n\n@quikee, @vmiklos any idea what could be doing this?",
+      "revId": "976487b8928eb12cf0613a7ea5050aad25a4c728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
