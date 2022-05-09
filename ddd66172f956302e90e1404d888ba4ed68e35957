@@ -16,6 +16,64 @@
       "message": "Hi Mike! Is this change simple enough from the programming point of view? I did not reduce it to just return pDoc \u0026\u0026 pDoc-\u003eIsPageStyleInUse(GetName(), \u0026nInTab) because I don\u0027t know if eUsage is used somewhere. Thx for your help.",
       "revId": "ddd66172f956302e90e1404d888ba4ed68e35957",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ecb8e7a_256ff02a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-09T20:01:37Z",
+      "side": 1,
+      "message": "\u003e if eUsage is used somewhere\n\nI suppose you are doing it right. Please keep setting eUsage.",
+      "parentUuid": "b00cc54f_c9b4c18b",
+      "revId": "ddd66172f956302e90e1404d888ba4ed68e35957",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4371874b_e6ae84bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-09T20:01:37Z",
+      "side": 1,
+      "message": "Looks absolutely sane. I am not as familiar with Calc styles, but I don\u0027t know how page styles could be used outside of what ScDocument::IsPageStyleInUse checks.",
+      "revId": "ddd66172f956302e90e1404d888ba4ed68e35957",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a13b76e_bf8c2208",
+        "filename": "sc/source/core/data/stlsheet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-09T20:01:37Z",
+      "side": 1,
+      "message": "pInTab is an optional argument: https://opengrok.libreoffice.org/xref/core/sc/source/core/data/documen8.cxx?r\u003da5a1863e\u0026mo\u003d10935\u0026fi\u003d310#310\n\nSo no need to define a temporary here, just pass nullptr",
+      "range": {
+        "startLine": 271,
+        "startChar": 59,
+        "endLine": 271,
+        "endChar": 65
+      },
+      "revId": "ddd66172f956302e90e1404d888ba4ed68e35957",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
