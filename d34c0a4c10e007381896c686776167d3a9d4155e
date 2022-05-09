@@ -16,6 +16,23 @@
       "message": "Seems ok to me but not an Android expert.",
       "revId": "d34c0a4c10e007381896c686776167d3a9d4155e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f50a401_453c3953",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000789
+      },
+      "writtenOn": "2022-05-09T21:07:59Z",
+      "side": 1,
+      "message": "Looks good, thanks.",
+      "revId": "d34c0a4c10e007381896c686776167d3a9d4155e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
