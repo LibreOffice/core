@@ -18,6 +18,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfcf0325_5f53318e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-09T10:08:59Z",
+      "side": 1,
+      "message": "Yes, SwUnoCursor is what you get when you need an UNO API cursor to point to a Writer document model position (or a pair of positions). These are implemented using \"marks\", which is the same \"mark\" concept as user-visible bookmarks.\n\nThis is necessary because the UNO API supports e.g. creating a cursor, going somewhere, creating a selection, marking that selection as bold -- without touching the user\u0027s cursor.\n\nFrom the commit message, I would say 1) is the correct fix and 2) is just hiding the root cause, so it would be ideal to go with 1) if there is time for it.\n\nI agree that 1) can easily lead to some mail merge performance regression (that scenario can easily lead to a large number of bookmarks).",
+      "parentUuid": "1eea25e6_5dffe37c",
+      "revId": "976487b8928eb12cf0613a7ea5050aad25a4c728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b46353ba_a737ee8a",
