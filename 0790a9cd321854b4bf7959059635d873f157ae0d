@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef5d1082_a5a0b4c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-09T06:55:13Z",
+      "side": 1,
+      "message": "What kind of excessive cppu::throwException calling are we talking about in the context of tdf#121740?\n\nI\u0027m afraid that statically holding on to Environments and Mappings may have negative consequences (though I didn\u0027t look into the details right now).",
+      "revId": "0790a9cd321854b4bf7959059635d873f157ae0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
