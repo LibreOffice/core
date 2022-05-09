@@ -22,21 +22,21 @@ public class PageView extends View{
     public PageView(Context context ) {
         super(context);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.dummy_page);
-        intialise();
+        initialise();
     }
     public PageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.dummy_page);
         Log.d(LOGTAG, bmp.toString());
-        intialise();
+        initialise();
     }
     public PageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         bmp = BitmapFactory.decodeResource(getResources(), R.drawable.dummy_page);//load a "page"
-        intialise();
+        initialise();
     }
 
-    private void intialise(){
+    private void initialise(){
         mPaintBlack = new Paint();
         mPaintBlack.setARGB(255, 0, 0, 0);
         Log.d(LOGTAG, " Doing some set-up");
