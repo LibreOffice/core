@@ -16,6 +16,23 @@
       "message": "\u003cpresetShapeDefinitons\u003e must not be changed, see https://wiki.documentfoundation.org/Development/stuck_stuff",
       "revId": "484cd8caa378c56734b648580589bb5415bc9ff2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c89825f8_d2c12445",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000638
+      },
+      "writtenOn": "2022-05-09T21:43:02Z",
+      "side": 1,
+      "message": "Thanks a lot Regina.\nI record this to not change.",
+      "revId": "484cd8caa378c56734b648580589bb5415bc9ff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
