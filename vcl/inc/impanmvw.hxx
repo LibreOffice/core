@@ -72,6 +72,7 @@ public:
                     ImplAnimView( Animation* pParent, OutputDevice* pOut,
                                   const Point& rPt, const Size& rSz, sal_uLong nExtraData,
                                   OutputDevice* pFirstFrameOutDev = nullptr );
+                    ImplAnimView(ImplAnimView&&) = delete;
                     ~ImplAnimView();
 
     bool            matches(const OutputDevice* pOut, tools::Long nExtraData) const;
