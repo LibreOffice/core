@@ -52,6 +52,24 @@
       "parentUuid": "717a4258_f541bf49",
       "revId": "8e8d3f4db94e0069a1d84378d295268f5037b016",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e39a2a55_2af708ca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-09T13:48:45Z",
+      "side": 1,
+      "message": "Of course you are right!\n\nFirst of all, I didn\u0027t want to step on anyone\u0027s toe. But, since \"what code looks \"simpler\" is in the eye of the beholders\", and I was the person who needed to work on that code at that moment, it was me who needed that the code was simpler to myself to have a chance to see the path forward :)",
+      "parentUuid": "8e870b7e_374675ac",
+      "revId": "8e8d3f4db94e0069a1d84378d295268f5037b016",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
