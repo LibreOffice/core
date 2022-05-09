@@ -120,6 +120,10 @@ typedef ::cppu::WeakImplHelper
 ,   css::util::XUpdatable
 > SwXTextField_Base;
 
+/**
+ * UNO wrapper around an SwFormatField, i.e. a Writer field that the user creates via Insert ->
+ * Field.
+ */
 class SwXTextField final
     : public SwXTextField_Base
 {
