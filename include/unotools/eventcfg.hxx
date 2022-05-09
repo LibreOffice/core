@@ -65,7 +65,6 @@ class UNOTOOLS_DLLPUBLIC GlobalEventConfig final :
     public:
         GlobalEventConfig( );
         virtual ~GlobalEventConfig( ) override;
-        static ::osl::Mutex& GetOwnStaticMutex();
 
         css::uno::Reference< css::container::XNameReplace > SAL_CALL getEvents(  ) override;
         void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) override;
