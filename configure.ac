@@ -11404,7 +11404,6 @@ else
 fi
 AC_SUBST(SYSTEM_LIBNUMBERTEXT)
 AC_SUBST(SYSTEM_LIBNUMBERTEXT_DATA)
-AC_SUBST(LIBNUMBERTEXT_CFLAGS)
 
 dnl ***************************************
 dnl testing libc version for Linux...
