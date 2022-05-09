@@ -7517,31 +7517,6 @@ if test "$GCC" = "yes"; then
     AC_SUBST(ATOMIC_LIB)
 fi
 
-dnl Test for temporarily incompatible libstdc++ 4.7.{0,1}, where
-dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=179528> introduced
-dnl an additional member _M_size into C++11 std::list towards 4.7.0 and
-dnl <https://gcc.gnu.org/viewcvs/gcc?view=revision&revision=189186> removed it
-dnl again towards 4.7.2:
-if test $CPP_LIBRARY = GLIBCXX; then
-    AC_MSG_CHECKING([whether using C++11 causes libstdc++ 4.7.0/4.7.1 ABI breakage])
-    AC_LANG_PUSH([C++])
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#include <list>
-#if !defined __GLIBCXX__ || (__GLIBCXX__ != 20120322 && __GLIBCXX__ != 20120614)
-    // according to <https://gcc.gnu.org/onlinedocs/libstdc++/manual/abi.html>:
-    //   GCC 4.7.0: 20120322
-    //   GCC 4.7.1: 20120614
-    // and using a range check is not possible as the mapping between
-    // __GLIBCXX__ values and GCC versions is not monotonic
-/* ok */
-#else
-abi broken
-#endif
-        ]])], [AC_MSG_RESULT(no, ok)],
-        [AC_MSG_ERROR(yes)])
-    AC_LANG_POP([C++])
-fi
-
 AC_MSG_CHECKING([whether $CXX_BASE supports C++11 without Language Defect 757])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS $CXXFLAGS_CXX11"
