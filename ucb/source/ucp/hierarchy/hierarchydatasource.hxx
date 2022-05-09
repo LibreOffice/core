@@ -19,14 +19,14 @@
 
 #pragma once
 
-#include <osl/mutex.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <comphelper/interfacecontainer3.hxx>
+#include <comphelper/interfacecontainer4.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <memory>
+#include <mutex>
 #include <string_view>
 
 
@@ -38,10 +38,10 @@ class HierarchyDataSource : public cppu::WeakImplHelper<
                                 css::lang::XComponent,
                                 css::lang::XMultiServiceFactory>
 {
-    osl::Mutex m_aMutex;
+    std::mutex m_aMutex;
     css::uno::Reference< css::uno::XComponentContext >     m_xContext;
     css::uno::Reference< css::lang::XMultiServiceFactory >  m_xConfigProvider;
-    std::unique_ptr<comphelper::OInterfaceContainerHelper3<css::lang::XEventListener>> m_pDisposeEventListeners;
+    comphelper::OInterfaceContainerHelper4<css::lang::XEventListener> m_aDisposeEventListeners;
 
 public:
     explicit HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );
