@@ -34,6 +34,24 @@
       "parentUuid": "e2b7f924_d0c36760",
       "revId": "8e8d3f4db94e0069a1d84378d295268f5037b016",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e870b7e_374675ac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000030
+      },
+      "writtenOn": "2022-05-09T12:54:50Z",
+      "side": 1,
+      "message": "\u003e Those are less of a problem these days, and it has a performance impact, because it doubles the number of allocations for an object.\n\nIn theory yes, but this pattern is used in lots of places in this codebase some are in the hot spots.  I wonder what the actual impacts are in real life performance.  The pimpl pattern also makes it easier to implement move semantics as well.\n\n\u003e IMO it also makes the code harder to read.\n\nAnd switching to virtual methods IMO makes it harder to navigate the code. This point is highly subjective.\n\nAnyway, I don\u0027t mean to object this change, since you guys need to change the code to fit your needs. But I just wanted to point out that sometimes what code looks \"simpler\" is in the eye of the beholders.",
+      "parentUuid": "717a4258_f541bf49",
+      "revId": "8e8d3f4db94e0069a1d84378d295268f5037b016",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
