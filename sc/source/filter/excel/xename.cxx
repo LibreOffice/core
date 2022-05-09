@@ -648,7 +648,9 @@ sal_uInt16 XclExpNameManagerImpl::CreateName( SCTAB nTab, const ScRangeData& rRa
         }
         else
         {
-            xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr, &rRangeData.GetPos() );
+            bool bOOXML = GetOutput() == EXC_OUTPUT_XML_2007;
+            xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, *pScTokArr, bOOXML ?
+                     &rRangeData.GetPos() : nullptr );
             sSymbol = rRangeData.GetSymbol( (GetOutput() == EXC_OUTPUT_BINARY) ?
                      formula::FormulaGrammar::GRAM_ENGLISH_XL_A1 : formula::FormulaGrammar::GRAM_OOXML);
         }
