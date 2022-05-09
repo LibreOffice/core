@@ -16,6 +16,23 @@
       "message": "It should be ok, only a silent argument in the declaration of a function",
       "revId": "9da11e4b99f590c96f0d51daf25226fc3d10b1af",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd8811dd_54617236",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-09T17:51:03Z",
+      "side": 1,
+      "message": "Let\u0027s forget Android, if Windows, Linux and Mac are ok, let\u0027s push this one.",
+      "revId": "9da11e4b99f590c96f0d51daf25226fc3d10b1af",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
