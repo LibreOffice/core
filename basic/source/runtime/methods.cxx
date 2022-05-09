@@ -783,9 +783,7 @@ void SbRtl_Hex(StarBASIC *, SbxArray & rPar, bool)
         sal_uInt32 nVal = pArg->IsInteger() ?
             static_cast<sal_uInt16>(pArg->GetInteger()) :
             static_cast<sal_uInt32>(pArg->GetLong());
-        OUString aStr(OUString::number( nVal, 16 ));
-        aStr = aStr.toAsciiUpperCase();
-        rPar.Get(0)->PutString(aStr);
+        rPar.Get(0)->PutString(OUString::number(nVal, 16).toAsciiUpperCase());
     }
 }
 
@@ -1202,17 +1200,12 @@ void SbRtl_Oct(StarBASIC *, SbxArray & rPar, bool)
     }
     else
     {
-        char aBuffer[16];
         SbxVariableRef pArg = rPar.Get(1);
-        if ( pArg->IsInteger() )
-        {
-            snprintf( aBuffer, sizeof(aBuffer), "%o", pArg->GetInteger() );
-        }
-        else
-        {
-            snprintf( aBuffer, sizeof(aBuffer), "%lo", static_cast<long unsigned int>(pArg->GetLong()) );
-        }
-        rPar.Get(0)->PutString(OUString::createFromAscii(aBuffer));
+        // converting value to unsigned and limit to 2 or 4 byte representation
+        sal_uInt32 nVal = pArg->IsInteger() ?
+            static_cast<sal_uInt16>(pArg->GetInteger()) :
+            static_cast<sal_uInt32>(pArg->GetLong());
+        rPar.Get(0)->PutString(OUString::number(nVal, 8));
     }
 }
 
