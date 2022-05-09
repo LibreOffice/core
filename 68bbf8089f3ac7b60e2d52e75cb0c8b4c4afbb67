@@ -16,6 +16,161 @@
       "message": "Resume https://ci.libreoffice.org/job/gerrit_master/113879/",
       "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f61dae4d_9fb97f6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 30
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-09T08:39:26Z",
+      "side": 1,
+      "message": "Looks much better, just some nitpicks left.",
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8fe2f5d_1ca34afc",
+        "filename": "embeddedobj/Library_embobj.mk",
+        "patchSetId": 30
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-09T08:39:26Z",
+      "side": 1,
+      "message": "When looking at the context, it seems the common abbreviation is \"embobj\", not EMO",
+      "range": {
+        "startLine": 25,
+        "startChar": 6,
+        "endLine": 25,
+        "endChar": 9
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f3438fe_9aaf72ef",
+        "filename": "embeddedobj/source/commonembedding/miscobj.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-09T08:39:26Z",
+      "side": 1,
+      "message": "I think we tried to get rid of this include style (relative includes with \"..\").",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 29
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70c50734_bdb38087",
+        "filename": "include/embeddedobj/emodllapi.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-09T08:39:26Z",
+      "side": 1,
+      "message": "you can use \"#pragma once\"",
+      "range": {
+        "startLine": 10,
+        "startChar": 1,
+        "endLine": 10,
+        "endChar": 32
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d27e603_1e83ff31",
+        "filename": "include/embeddedobj/emodllapi.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-09T08:39:26Z",
+      "side": 1,
+      "message": "EMBOBJ",
+      "range": {
+        "startLine": 15,
+        "startChar": 12,
+        "endLine": 15,
+        "endChar": 15
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c5137bb_5fc99834",
+        "filename": "include/embeddedobj/emodllapi.h",
+        "patchSetId": 30
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-09T08:39:26Z",
+      "side": 1,
+      "message": "EMBOBJ",
+      "range": {
+        "startLine": 16,
+        "startChar": 8,
+        "endLine": 16,
+        "endChar": 11
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "424c735f_bfd3ff2b",
+        "filename": "svtools/source/misc/filechangedchecker.cxx",
+        "patchSetId": 30
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-09T08:39:26Z",
+      "side": 1,
+      "message": "instead of indenting the whole block, just return early when (mpCallback \u003d\u003d nullptr)",
+      "range": {
+        "startLine": 49,
+        "startChar": 4,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "68bbf8089f3ac7b60e2d52e75cb0c8b4c4afbb67",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
