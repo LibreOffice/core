@@ -68,6 +68,25 @@ bool ScQueryEvaluator::isTextMatchOp(const ScQueryEntry& rEntry)
     return false;
 }
 
+bool ScQueryEvaluator::isMatchWholeCellHelper(bool docMatchWholeCell, const ScQueryEntry& rEntry)
+{
+    bool bMatchWholeCell = docMatchWholeCell;
+    if (isPartialTextMatchOp(rEntry))
+        // may have to do partial textural comparison.
+        bMatchWholeCell = false;
+    return bMatchWholeCell;
+}
+
+bool ScQueryEvaluator::isMatchWholeCell(const ScQueryEntry& rEntry) const
+{
+    return isMatchWholeCellHelper(mbMatchWholeCell, rEntry);
+}
+
+bool ScQueryEvaluator::isMatchWholeCell(const ScDocument& rDoc, const ScQueryEntry& rEntry)
+{
+    return isMatchWholeCellHelper(rDoc.GetDocOptions().IsMatchWholeCell(), rEntry);
+}
+
 void ScQueryEvaluator::setupTransliteratorIfNeeded()
 {
     if (!mpTransliteration)
@@ -322,16 +341,11 @@ bool ScQueryEvaluator::isFastCompareByString(const ScQueryEntry& rEntry) const
     // can be selected using the template argument to get fast code
     // that will not check the same conditions every time. This makes a difference
     // in fast lookups that search for an exact value (case sensitive or not).
-    bool bMatchWholeCell = mbMatchWholeCell;
-    if (isPartialTextMatchOp(rEntry))
-        // may have to do partial textural comparison.
-        bMatchWholeCell = false;
-
     const bool bRealWildOrRegExp = isRealWildOrRegExp(rEntry);
     const bool bTestWildOrRegExp = isTestWildOrRegExp(rEntry);
-
     // SC_EQUAL is part of isTextMatchOp(rEntry)
-    return rEntry.eOp == SC_EQUAL && !bRealWildOrRegExp && !bTestWildOrRegExp && bMatchWholeCell;
+    return rEntry.eOp == SC_EQUAL && !bRealWildOrRegExp && !bTestWildOrRegExp
+           && isMatchWholeCell(rEntry);
 }
 
 // The value is placed inside one parameter: [pValueSource1] or [pValueSource2] but never in both.
@@ -348,13 +362,7 @@ std::pair<bool, bool> ScQueryEvaluator::compareByString(const ScQueryEntry& rEnt
     if (bFast)
         bMatchWholeCell = true;
     else
-    {
-        bMatchWholeCell = mbMatchWholeCell;
-        if (isPartialTextMatchOp(rEntry))
-            // may have to do partial textural comparison.
-            bMatchWholeCell = false;
-    }
-
+        bMatchWholeCell = isMatchWholeCell(rEntry);
     const bool bRealWildOrRegExp = !bFast && isRealWildOrRegExp(rEntry);
     const bool bTestWildOrRegExp = !bFast && isTestWildOrRegExp(rEntry);
 
