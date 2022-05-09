@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b00cc54f_c9b4c18b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002115
+      },
+      "writtenOn": "2022-05-09T17:59:04Z",
+      "side": 1,
+      "message": "Hi Mike! Is this change simple enough from the programming point of view? I did not reduce it to just return pDoc \u0026\u0026 pDoc-\u003eIsPageStyleInUse(GetName(), \u0026nInTab) because I don\u0027t know if eUsage is used somewhere. Thx for your help.",
+      "revId": "ddd66172f956302e90e1404d888ba4ed68e35957",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
