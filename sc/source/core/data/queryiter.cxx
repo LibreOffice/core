@@ -20,6 +20,7 @@
 #include <queryiter.hxx>
 
 #include <comphelper/flagguard.hxx>
+#include <o3tl/safeint.hxx>
 #include <svl/numformat.hxx>
 #include <svl/zforlist.hxx>
 
@@ -1106,7 +1107,12 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
     {
         ++sortedCachePos;
         nRow = sortedCache->rowForIndex(sortedCachePos);
-        maCurPos = rCol.maCells.position(nRow);
+        // Avoid mdds position() call if row is in the same block.
+        if(maCurPos.first != rCol.maCells.end() && o3tl::make_unsigned(nRow) >= maCurPos.first->position
+            && o3tl::make_unsigned(nRow) < maCurPos.first->position + maCurPos.first->size)
+            maCurPos.second = nRow - maCurPos.first->position;
+        else
+            maCurPos = rCol.maCells.position(nRow);
     }
     else
     {
