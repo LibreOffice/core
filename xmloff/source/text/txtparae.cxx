@@ -110,6 +110,7 @@
 #include <iterator>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/safeint.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 
 using namespace ::std;
 using namespace ::com::sun::star;
@@ -3888,9 +3889,9 @@ void XMLTextParagraphExport::ExportContentControl(
     uno::Reference<container::XEnumerationAccess> xEA(xTextContent, uno::UNO_QUERY_THROW);
     uno::Reference<container::XEnumeration> xTextEnum = xEA->createEnumeration();
 
+    uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY_THROW);
     if (bExport)
     {
-        uno::Reference<beans::XPropertySet> xPropertySet(xTextContent, uno::UNO_QUERY_THROW);
         bool bShowingPlaceHolder = false;
         xPropertySet->getPropertyValue("ShowingPlaceHolder") >>= bShowingPlaceHolder;
         if (bShowingPlaceHolder)
@@ -3936,6 +3937,29 @@ void XMLTextParagraphExport::ExportContentControl(
 
     SvXMLElementExport aElem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_CONTENT_CONTROL, false,
                              false);
+
+    // Export list items of dropdowns.
+    uno::Sequence<beans::PropertyValues> aListItems;
+    xPropertySet->getPropertyValue("ListItems") >>= aListItems;
+    for (const auto& rListItem : aListItems)
+    {
+        comphelper::SequenceAsHashMap aMap(rListItem);
+        auto it = aMap.find("DisplayText");
+        OUString aValue;
+        if (it != aMap.end() && (it->second >>= aValue))
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_DISPLAY_TEXT, aValue);
+        }
+
+        it = aMap.find("Value");
+        if (it != aMap.end() && (it->second >>= aValue))
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_LO_EXT, XML_VALUE, aValue);
+        }
+
+        SvXMLElementExport aItem(GetExport(), bExport, XML_NAMESPACE_LO_EXT, XML_LIST_ITEM, false,
+                                 false);
+    }
 
     // Recurse to export content.
     exportTextRangeEnumeration(xTextEnum, bAutoStyles, isProgress, rPrevCharIsSpace);

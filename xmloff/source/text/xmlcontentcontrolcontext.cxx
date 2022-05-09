@@ -25,6 +25,8 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>
+#include <comphelper/propertyvalue.hxx>
+#include <comphelper/sequence.hxx>
 
 #include "XMLTextMarkImportContext.hxx"
 #include "txtparai.hxx"
@@ -142,12 +144,26 @@ void XMLContentControlContext::endFastElement(sal_Int32)
     {
         xPropertySet->setPropertyValue("UncheckedState", uno::Any(m_aUncheckedState));
     }
+    if (!m_aListItems.empty())
+    {
+        xPropertySet->setPropertyValue("ListItems",
+                                       uno::Any(comphelper::containerToSequence(m_aListItems)));
+    }
 }
 
 css::uno::Reference<css::xml::sax::XFastContextHandler>
 XMLContentControlContext::createFastChildContext(
     sal_Int32 nElement, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
 {
+    switch (nElement)
+    {
+        case XML_ELEMENT(LO_EXT, XML_LIST_ITEM):
+            return new XMLListItemContext(GetImport(), *this);
+            break;
+        default:
+            break;
+    }
+
     return XMLImpSpanContext_Impl::CreateSpanContext(GetImport(), nElement, xAttrList, m_rHints,
                                                      m_rIgnoreLeadingSpace);
 }
@@ -155,6 +171,50 @@ XMLContentControlContext::createFastChildContext(
 void XMLContentControlContext::characters(const OUString& rChars)
 {
     GetImport().GetTextImport()->InsertString(rChars, m_rIgnoreLeadingSpace);
+}
+
+void XMLContentControlContext::AppendListItem(const css::beans::PropertyValues& rListItem)
+{
+    m_aListItems.push_back(rListItem);
+}
+
+XMLListItemContext::XMLListItemContext(SvXMLImport& rImport,
+                                       XMLContentControlContext& rContentControl)
+    : SvXMLImportContext(rImport)
+    , m_rContentControl(rContentControl)
+{
+}
+
+void XMLListItemContext::startFastElement(
+    sal_Int32 /*nElement*/, const uno::Reference<xml::sax::XFastAttributeList>& xAttrList)
+{
+    OUString aDisplayText;
+    OUString aValue;
+
+    for (auto& rIter : sax_fastparser::castToFastAttributeList(xAttrList))
+    {
+        switch (rIter.getToken())
+        {
+            case XML_ELEMENT(LO_EXT, XML_DISPLAY_TEXT):
+            {
+                aDisplayText = rIter.toString();
+                break;
+            }
+            case XML_ELEMENT(LO_EXT, XML_VALUE):
+            {
+                aValue = rIter.toString();
+                break;
+            }
+            default:
+                XMLOFF_WARN_UNKNOWN("xmloff", rIter);
+        }
+    }
+
+    uno::Sequence<beans::PropertyValue> aListItem = {
+        comphelper::makePropertyValue("DisplayText", uno::Any(aDisplayText)),
+        comphelper::makePropertyValue("Value", uno::Any(aValue)),
+    };
+    m_rContentControl.AppendListItem(aListItem);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

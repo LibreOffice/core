@@ -12,6 +12,7 @@
 #include <test/xmltesttools.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -535,6 +536,112 @@ CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testCheckboxContentControlImport)
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), xContent->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlExport)
+{
+    // Given a document with a dropdown content control around a text portion:
+    getComponent() = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "choose an item", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    {
+        uno::Sequence<beans::PropertyValues> aListItems = {
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("R"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("green"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("G"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("blue"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("B"))),
+            },
+        };
+        xContentControlProps->setPropertyValue("ListItems", uno::Any(aListItems));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to ODT:
+    uno::Reference<frame::XStorable> xStorable(getComponent(), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aStoreProps = comphelper::InitPropertySequence({
+        { "FilterName", uno::Any(OUString("writer8")) },
+    });
+    utl::TempFile aTempFile;
+    aTempFile.EnableKillingFile();
+    xStorable->storeToURL(aTempFile.GetURL(), aStoreProps);
+    validate(aTempFile.GetFileName(), test::ODF);
+
+    // Then make sure the expected markup is used:
+    std::unique_ptr<SvStream> pStream = parseExportStream(aTempFile, "content.xml");
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(pStream.get());
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//loext:content-control/loext:list-item[1]' number of nodes is incorrect
+    // i.e. the list items were lost on export.
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[1]", "display-text", "red");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[1]", "value", "R");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[2]", "display-text", "green");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[2]", "value", "G");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[3]", "display-text", "blue");
+    assertXPath(pXmlDoc, "//loext:content-control/loext:list-item[3]", "value", "B");
+}
+
+CPPUNIT_TEST_FIXTURE(XmloffStyleTest, testDropdownContentControlImport)
+{
+    // Given an ODF document with a dropdown content control:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "content-control-dropdown.fodt";
+
+    // When loading that document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the content control is not lost on import:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValues> aListItems;
+    xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: 3
+    // - Actual  : 0
+    // i.e. the list items were lost on import.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
+    comphelper::SequenceAsHashMap aMap0(aListItems[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("red"), aMap0["DisplayText"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("R"), aMap0["Value"].get<OUString>());
+    comphelper::SequenceAsHashMap aMap1(aListItems[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("green"), aMap1["DisplayText"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("G"), aMap1["Value"].get<OUString>());
+    comphelper::SequenceAsHashMap aMap2(aListItems[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("blue"), aMap2["DisplayText"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), aMap2["Value"].get<OUString>());
+    uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xContentControlRange->getText();
+    uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("choose a color"), xContent->getString());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
