@@ -16,6 +16,24 @@
       "message": "eh, this is an important optimisation, removing it makes some document operations a lot slower. I would rather know how m_vAllMarks managed to become un-sorted.\n\nThere are frequent calls to lcl_DebugMarks(m_vAllMarks) that should be catching anything that makes m_vAllMarks un-sorted.\n\n@quikee, @vmiklos any idea what could be doing this?",
       "revId": "976487b8928eb12cf0613a7ea5050aad25a4c728",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c853d85_7d1163e5",
+        "filename": "sw/source/core/doc/docbm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1309,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-09T08:43:22Z",
+      "side": 1,
+      "message": "Yes, lcl_DebugMarks() asserts that these marks are sorted by their start position, we depend on that at many places. I guess the way to track this down is to find an early location where the container is still sorted, then find a later point where lcl_DebugMarks() results in an assertion failure, then binary search.",
+      "parentUuid": "b46353ba_a737ee8a",
+      "revId": "976487b8928eb12cf0613a7ea5050aad25a4c728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
