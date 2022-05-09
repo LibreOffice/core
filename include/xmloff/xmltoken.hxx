@@ -3472,6 +3472,7 @@ namespace xmloff::token {
         XML_SHOWING_PLACE_HOLDER,
         XML_CHECKED_STATE,
         XML_UNCHECKED_STATE,
+        XML_DISPLAY_TEXT,
 
         XML_TOKEN_END
     };
