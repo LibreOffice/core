@@ -4000,6 +4000,54 @@
      <table:table-cell table:style-name="ce58"/>
     </table:table-row>
     <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.I44:.L44];&quot;=&quot;)" office:value-type="float" office:value="4" calcext:value-type="float">
+      <text:p>4</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="3" calcext:value-type="float">
+      <text:p>3</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A44];12)=ROUND([.B44];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A44])" office:value-type="string" office:string-value="=COUNTIF(I44:L44;&quot;=&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF(I44:L44;&quot;=&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>Tdf#148948</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce20" table:formula="of:=&quot;&quot;">
+      <text:p/>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
+     <table:table-cell table:formula="of:=COUNTIF([.I45:.L45];&quot;&lt;&gt;&quot;)" office:value-type="float" office:value="0" calcext:value-type="float">
+      <text:p>0</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="1" calcext:value-type="float">
+      <text:p>1</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce65" table:formula="of:=ROUND([.A45];12)=ROUND([.B45];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>TRUE</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A45])" office:value-type="string" office:string-value="=COUNTIF(I45:L45;&quot;&lt;&gt;&quot;)" calcext:value-type="string">
+      <text:p>=COUNTIF(I45:L45;&quot;&lt;&gt;&quot;)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p><text:s/>Tdf#148948</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ce20" table:formula="of:=&quot;&quot;">
+      <text:p/>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="16"/>
+     <table:table-cell table:style-name="ce56"/>
+     <table:table-cell table:style-name="ce58"/>
+    </table:table-row>
+    <table:table-row table:style-name="ro2">
      <table:table-cell table:number-columns-repeated="2"/>
      <table:table-cell table:style-name="ce64"/>
      <table:table-cell table:style-name="ce34"/>
