@@ -318,7 +318,7 @@ public:
         SCTAB nTable, const ScQueryParam& aParam, bool bMod)
     : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     // Returns true if this iterator can be used for the given query.
-    static bool CanBeUsed(const ScQueryParam& aParam);
+    static bool CanBeUsed(const ScDocument& rDoc, const ScQueryParam& aParam);
 };
 
 
@@ -366,7 +366,7 @@ public:
         SCTAB nTable, const ScQueryParam& aParam, bool bMod)
     : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     // Returns true if this iterator can be used for the given query.
-    static bool CanBeUsed(const ScQueryParam& aParam);
+    static bool CanBeUsed(const ScDocument& rDoc, const ScQueryParam& aParam);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

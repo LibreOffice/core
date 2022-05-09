@@ -20,12 +20,15 @@
 #pragma once
 
 #include "address.hxx"
+#include <o3tl/hash_combine.hxx>
 #include <svl/listener.hxx>
 
 #include <memory>
 #include <unordered_map>
 
 class ScDocument;
+struct ScInterpreterContext;
+struct ScQueryParam;
 struct ScSortedRangeCacheMap;
 
 /** Sorted cache for one range used with interpreter functions such as VLOOKUP
@@ -41,8 +44,8 @@ class ScSortedRangeCache final : public SvtListener
 {
 public:
     /// MUST be new'd because Notify() deletes.
-    ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, bool bDescending,
-                       ScSortedRangeCacheMap& cacheMap);
+    ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, const ScQueryParam& param,
+                       ScSortedRangeCacheMap& cacheMap, ScInterpreterContext* context);
 
     /// Remove from document structure and delete (!) cache on modify hint.
     virtual void Notify(const SfxHint& rHint) override;
@@ -52,16 +55,24 @@ public:
 
     ScSortedRangeCacheMap& getCacheMap() const { return mCacheMap; }
 
+    enum class ValueType
+    {
+        Values,
+        StringsCaseSensitive,
+        StringsCaseInsensitive
+    };
     struct HashKey
     {
         ScRange range;
         bool descending;
+        ValueType type;
         bool operator==(const HashKey& other) const
         {
-            return range == other.range && descending == other.descending;
+            return range == other.range && descending == other.descending && type == other.type;
         }
     };
-    HashKey getHashKey() const { return { maRange, mDescending }; }
+    HashKey getHashKey() const { return { maRange, mDescending, mValues }; }
+    static HashKey makeHashKey(const ScRange& range, const ScQueryParam& param);
 
     struct Hash
     {
@@ -69,8 +80,8 @@ public:
         {
             // Range should be just one column.
             size_t hash = key.range.hashStartColumn();
-            if (key.descending)
-                hash = ~hash;
+            o3tl::hash_combine(hash, key.descending);
+            o3tl::hash_combine(hash, key.type);
             return hash;
         }
     };
@@ -93,6 +104,7 @@ private:
     ScDocument* mpDoc;
     ScSortedRangeCacheMap& mCacheMap;
     bool mDescending;
+    ValueType mValues;
 
     ScSortedRangeCache(const ScSortedRangeCache&) = delete;
     ScSortedRangeCache& operator=(const ScSortedRangeCache&) = delete;

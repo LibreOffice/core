@@ -21,32 +21,112 @@
 #include <cellvalue.hxx>
 #include <document.hxx>
 #include <brdcst.hxx>
+#include <queryevaluator.hxx>
+#include <queryparam.hxx>
 
 #include <sal/log.hxx>
+#include <unotools/collatorwrapper.hxx>
 
-ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange, bool bDescending,
-                                       ScSortedRangeCacheMap& cacheMap)
+static bool needsDescending(const ScQueryParam& param)
+{
+    assert(param.GetEntry(0).bDoQuery && !param.GetEntry(1).bDoQuery
+           && param.GetEntry(0).GetQueryItems().size() == 1);
+    assert(param.GetEntry(0).eOp == SC_GREATER || param.GetEntry(0).eOp == SC_GREATER_EQUAL
+           || param.GetEntry(0).eOp == SC_LESS || param.GetEntry(0).eOp == SC_LESS_EQUAL
+           || param.GetEntry(0).eOp == SC_EQUAL);
+    // We want all matching values to start in the sort order,
+    // since the data is searched from start until the last matching one.
+    return param.GetEntry(0).eOp == SC_GREATER || param.GetEntry(0).eOp == SC_GREATER_EQUAL;
+}
+
+static ScSortedRangeCache::ValueType toValueType(const ScQueryParam& param)
+{
+    assert(param.GetEntry(0).bDoQuery && !param.GetEntry(1).bDoQuery
+           && param.GetEntry(0).GetQueryItems().size() == 1);
+    assert(param.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByString
+           || param.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue);
+    if (param.GetEntry(0).GetQueryItem().meType == ScQueryEntry::ByValue)
+        return ScSortedRangeCache::ValueType::Values;
+    return param.bCaseSens ? ScSortedRangeCache::ValueType::StringsCaseSensitive
+                           : ScSortedRangeCache::ValueType::StringsCaseInsensitive;
+}
+
+ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
+                                       const ScQueryParam& param, ScSortedRangeCacheMap& cacheMap,
+                                       ScInterpreterContext* context)
     : maRange(rRange)
     , mpDoc(pDoc)
     , mCacheMap(cacheMap)
-    , mDescending(bDescending)
+    , mDescending(needsDescending(param))
+    , mValues(toValueType(param))
 {
     assert(maRange.aStart.Col() == maRange.aEnd.Col());
     assert(maRange.aStart.Tab() == maRange.aEnd.Tab());
     SCTAB nTab = maRange.aStart.Tab();
     SCTAB nCol = maRange.aStart.Col();
-    for (SCROW nRow = maRange.aStart.Row(); nRow <= maRange.aEnd.Row(); ++nRow)
+    assert(param.GetEntry(0).bDoQuery && !param.GetEntry(1).bDoQuery
+           && param.GetEntry(0).GetQueryItems().size() == 1);
+    const ScQueryEntry& entry = param.GetEntry(0);
+    const ScQueryEntry::Item& item = entry.GetQueryItem();
+    if (mValues == ValueType::Values)
     {
-        ScRefCellValue cell(pDoc->GetRefCellValue(ScAddress(nCol, nRow, nTab)));
-        if (!cell.hasError() && cell.hasNumeric())
-            mSortedRows.push_back(nRow);
+        struct RowData
+        {
+            SCROW row;
+            double value;
+        };
+        std::vector<RowData> rowData;
+        for (SCROW nRow = maRange.aStart.Row(); nRow <= maRange.aEnd.Row(); ++nRow)
+        {
+            ScRefCellValue cell(pDoc->GetRefCellValue(ScAddress(nCol, nRow, nTab)));
+            if (ScQueryEvaluator::isQueryByValue(entry, item, cell))
+                rowData.push_back(RowData{ nRow, cell.getValue() });
+        }
+        std::stable_sort(rowData.begin(), rowData.end(),
+                         [](const RowData& d1, const RowData& d2) { return d1.value < d2.value; });
+        if (mDescending)
+            for (auto it = rowData.rbegin(); it != rowData.rend(); ++it)
+                mSortedRows.emplace_back(it->row);
+        else
+            for (const RowData& d : rowData)
+                mSortedRows.emplace_back(d.row);
     }
-    std::stable_sort(
-        mSortedRows.begin(), mSortedRows.end(), [pDoc, nCol, nTab](SCROW nRow1, SCROW nRow2) {
-            return pDoc->GetValue(nCol, nRow1, nTab) < pDoc->GetValue(nCol, nRow2, nTab);
-        });
-    if (mDescending)
-        std::reverse(mSortedRows.begin(), mSortedRows.end());
+    else
+    {
+        struct RowData
+        {
+            SCROW row;
+            OUString string;
+        };
+        std::vector<RowData> rowData;
+        // Try to reuse as much ScQueryEvaluator code as possible, this should
+        // basically do the same comparisons.
+        ScQueryEvaluator evaluator(*pDoc, *pDoc->FetchTable(nTab), param, context);
+        for (SCROW nRow = maRange.aStart.Row(); nRow <= maRange.aEnd.Row(); ++nRow)
+        {
+            ScRefCellValue cell(pDoc->GetRefCellValue(ScAddress(nCol, nRow, nTab)));
+            if (ScQueryEvaluator::isQueryByString(entry, item, cell))
+            {
+                const svl::SharedString* sharedString = nullptr;
+                OUString string = evaluator.getCellString(cell, nRow, entry, &sharedString);
+                if (sharedString)
+                    string = sharedString->getString();
+                rowData.push_back(RowData{ nRow, string });
+            }
+        }
+        CollatorWrapper& collator
+            = ScGlobal::GetCollator(mValues == ValueType::StringsCaseSensitive);
+        std::stable_sort(rowData.begin(), rowData.end(),
+                         [&collator](const RowData& d1, const RowData& d2) {
+                             return collator.compareString(d1.string, d2.string) < 0;
+                         });
+        if (mDescending)
+            for (auto it = rowData.rbegin(); it != rowData.rend(); ++it)
+                mSortedRows.emplace_back(it->row);
+        else
+            for (const RowData& d : rowData)
+                mSortedRows.emplace_back(d.row);
+    }
 }
 
 void ScSortedRangeCache::Notify(const SfxHint& rHint)
@@ -61,6 +141,12 @@ void ScSortedRangeCache::Notify(const SfxHint& rHint)
             delete this;
         }
     }
+}
+
+ScSortedRangeCache::HashKey ScSortedRangeCache::makeHashKey(const ScRange& range,
+                                                            const ScQueryParam& param)
+{
+    return { range, needsDescending(param), toValueType(param) };
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
