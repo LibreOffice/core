@@ -75,9 +75,8 @@ public:
     static double GetNow()
     {
         DateTime aNow( DateTime::SYSTEM );
-        Date aRefDate( 1,1,1900 );
+        Date aRefDate(1899'12'30);
         tools::Long nDiffDays = aNow - aRefDate;
-        nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
 
         tools::Long nDiffSeconds = aNow.GetHour() * 3600 + aNow.GetMin() * 60 + aNow.GetSec();
         return static_cast<double>(nDiffDays) + static_cast<double>(nDiffSeconds)/double(24*3600);
