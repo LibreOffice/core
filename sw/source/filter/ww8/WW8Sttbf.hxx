@@ -54,7 +54,7 @@ namespace ww8
     class WW8Sttb : public WW8Struct
     {
         typedef std::shared_ptr< void > ExtraPointer_t;
-        bool                            bDoubleByteCharacters;
+        bool                            m_bDoubleByteCharacters;
         std::vector<OUString>           m_Strings;
         std::vector< ExtraPointer_t >   m_Extras;
 
@@ -70,13 +70,13 @@ namespace ww8
 
     template <class T>
     WW8Sttb<T>::WW8Sttb(SvStream& rSt, sal_Int32 nPos, sal_uInt32 nSize)
-    : WW8Struct(rSt, nPos, nSize), bDoubleByteCharacters(false)
+    : WW8Struct(rSt, nPos, nSize), m_bDoubleByteCharacters(false)
     {
         sal_uInt32 nOffset = 0;
 
         if (getU16(nOffset) == 0xffff)
         {
-            bDoubleByteCharacters = true;
+            m_bDoubleByteCharacters = true;
             nOffset += 2;
         }
 
@@ -86,7 +86,7 @@ namespace ww8
         nOffset += 4;
         for (sal_uInt16 i = 0; i < nCount; i++)
         {
-            if (bDoubleByteCharacters)
+            if (m_bDoubleByteCharacters)
             {
                 sal_uInt16 nStrLen = getU16(nOffset);
 

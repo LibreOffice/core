@@ -31,17 +31,17 @@ class RTFSurround
             sal_uInt8 nJunk : 3;
         } Flags;
         sal_uInt8 nVal;
-    } Value;
+    } m_Value;
 
 public:
     RTFSurround(bool bGoldCut, sal_uInt8 nOrder)
     {
-        Value.Flags.nGoldCut = sal_uInt8(bGoldCut);
-        Value.Flags.nOrder = nOrder;
-        Value.Flags.nJunk = 0;
+        m_Value.Flags.nGoldCut = sal_uInt8(bGoldCut);
+        m_Value.Flags.nOrder = nOrder;
+        m_Value.Flags.nJunk = 0;
     }
 
-    sal_uInt16 GetValue() const { return Value.nVal; }
+    sal_uInt16 GetValue() const { return m_Value.nVal; }
 };
 
 #endif // INCLUDED_SW_SOURCE_FILTER_INC_RTF_HXX

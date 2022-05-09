@@ -2988,7 +2988,7 @@ sal_uInt32 SwEscherEx::QueryTextID(
 }
 
 SwMSConvertControls::SwMSConvertControls( SfxObjectShell const *pDSh, SwPaM *pP ) : oox
-::ole::MSConvertOCXControls(  pDSh ? pDSh->GetModel() : nullptr ), pPaM( pP ), mnObjectId(0)
+::ole::MSConvertOCXControls(  pDSh ? pDSh->GetModel() : nullptr ), m_pPaM( pP ), mnObjectId(0)
 {
 }
 

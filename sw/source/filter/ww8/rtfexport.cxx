@@ -1044,7 +1044,7 @@ RtfExport::RtfExport(RtfExportFilter* pFilter, SwDoc& rDocument,
     // that just causes problems for RTF
     m_bSubstituteBullets = false;
     // needed to have a complete font table
-    m_aFontHelper.bLoadAllFonts = true;
+    m_aFontHelper.m_bLoadAllFonts = true;
     // the related SdrExport
     m_pSdrExport = std::make_unique<RtfSdrExport>(*this);
 

@@ -738,7 +738,7 @@ public:
         css::uno::Reference< css::drawing::XShape > *pShapeRef,
         bool bFloatingCtrl=false );
 private:
-    SwPaM *pPaM;
+    SwPaM *m_pPaM;
     sal_uInt32 mnObjectId;
 };
 
