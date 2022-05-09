@@ -2657,9 +2657,6 @@ private:
         ScDocument& mrDoc;
     };
 
-    ScTable* FetchTable( SCTAB nTab );
-    const ScTable* FetchTable( SCTAB nTab ) const;
-
     void    MergeNumberFormatter(const ScDocument& rSrcDoc);
 
     void    ImplCreateOptions(); // Suggestion: switch to on-demand?
@@ -2684,6 +2681,9 @@ private:
     bool    HasPartOfMerged( const ScRange& rRange );
 
 public:
+    ScTable* FetchTable( SCTAB nTab );
+    const ScTable* FetchTable( SCTAB nTab ) const;
+
     ScRefCellValue GetRefCellValue( const ScAddress& rPos );
 private:
     ScRefCellValue GetRefCellValue( const ScAddress& rPos, sc::ColumnBlockPosition& rBlockPos );
