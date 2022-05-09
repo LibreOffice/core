@@ -3557,9 +3557,8 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
                 }
                 else
                 {
-                    if (m_ePLCF == CHP)
-                        p->nEndPos = nCpEnd;
-                    else
+                    p->nEndPos = nCpEnd;
+                    if (m_ePLCF != CHP)
                     {
                         /*
                         If the FKP FC that was found was greater than the FC
