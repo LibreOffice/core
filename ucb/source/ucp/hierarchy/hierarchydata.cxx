@@ -123,7 +123,6 @@ HierarchyEntry::HierarchyEntry(
 
 bool HierarchyEntry::hasData()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
     uno::Reference< container::XHierarchicalNameAccess > xRootReadAccess
         = getRootReadAccess();
 
@@ -140,8 +139,6 @@ bool HierarchyEntry::getData( HierarchyEntryData& rData )
 {
     try
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
         uno::Reference< container::XHierarchicalNameAccess > xRootReadAccess
             = getRootReadAccess();
 
@@ -242,7 +239,7 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 {
     try
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider.set(
@@ -454,9 +451,9 @@ bool HierarchyEntry::setData( const HierarchyEntryData& rData )
 bool HierarchyEntry::move(
     const OUString& rNewURL, const HierarchyEntryData& rData )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     OUString aNewPath = createPathFromHierarchyURL( HierarchyUri(rNewURL) );
+
+    std::unique_lock aGuard( m_aMutex );
 
     if ( aNewPath == m_aPath )
         return true;
@@ -736,7 +733,7 @@ bool HierarchyEntry::remove()
 {
     try
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
 
         if ( !m_xConfigProvider.is() )
             m_xConfigProvider.set(
@@ -844,8 +841,6 @@ bool HierarchyEntry::remove()
 
 bool HierarchyEntry::first( iterator & it )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     if ( it.pos == -1 )
     {
         // Init...
@@ -912,8 +907,6 @@ bool HierarchyEntry::first( iterator & it )
 
 bool HierarchyEntry::next( iterator& it )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     if ( it.pos == -1 )
         return first( it );
 
@@ -972,7 +965,7 @@ HierarchyEntry::getRootReadAccess()
 {
     if ( !m_xRootReadAccess.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if ( !m_xRootReadAccess.is() )
         {
             if ( m_bTriedToGetRootReadAccess )
