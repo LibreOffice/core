@@ -26,7 +26,6 @@ $(eval $(call gb_Library_use_internal_bootstrap_api,bootstrap,\
 ))
 
 $(eval $(call gb_Library_use_libraries,bootstrap,\
-    comphelper \
     cppu \
     cppuhelper \
     reg \
