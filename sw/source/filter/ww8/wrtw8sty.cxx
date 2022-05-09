@@ -896,7 +896,7 @@ void wwFontHelper::InitFontTable(const SwDoc& rDoc)
             pFont->GetFamily(), pFont->GetCharSet()));
     }
 
-    if (!bLoadAllFonts)
+    if (!m_bLoadAllFonts)
         return;
 
     const sal_uInt16 aTypes[] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, 0 };

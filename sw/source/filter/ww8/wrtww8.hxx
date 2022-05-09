@@ -325,7 +325,7 @@ private:
     std::vector< const wwFont* > AsVector() const;
 
 public:
-    wwFontHelper() : bLoadAllFonts(false) {}
+    wwFontHelper() : m_bLoadAllFonts(false) {}
     /// rDoc used only to get the initial standard font(s) in use.
     void InitFontTable(const SwDoc& rDoc);
     sal_uInt16 GetId(const SvxFontItem& rFont);
@@ -335,7 +335,7 @@ public:
     void WriteFontTable( const RtfAttributeOutput& rAttrOutput );
 
     /// If true, all fonts are loaded before processing the document.
-    bool bLoadAllFonts: 1;
+    bool m_bLoadAllFonts: 1;
 };
 
 class DrawObj
