@@ -1175,10 +1175,14 @@ ErrCode GraphicFilter::readWMF_EMF(SvStream & rStream, Graphic & rGraphic, GfxLi
     {
         ZCodec aCodec;
         aCodec.BeginCompression(ZCODEC_DEFAULT_COMPRESSION, /*gzLib*/true);
-        nStreamLength = aCodec.Decompress(rStream, aMemStream);
+        auto nDecompressLength = aCodec.Decompress(rStream, aMemStream);
         aCodec.EndCompression();
         aMemStream.Seek(STREAM_SEEK_TO_BEGIN);
-        aNewStream = &aMemStream;
+        if (nDecompressLength >= 0)
+        {
+            nStreamLength = nDecompressLength;
+            aNewStream = &aMemStream;
+        }
     }
     VectorGraphicDataArray aNewData(nStreamLength);
     aNewStream->ReadBytes(aNewData.getArray(), nStreamLength);
