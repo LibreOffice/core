@@ -34,6 +34,24 @@
       "parentUuid": "4a1e1751_f9e0178f",
       "revId": "5096fead53171bfee10c79b58efcec789bb961d2",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52a96186_d3473ed9",
+        "filename": "chart2/source/controller/dialogs/res_BarGeometry.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-09T11:09:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3191f52b_e8d6302b",
+      "revId": "5096fead53171bfee10c79b58efcec789bb961d2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
