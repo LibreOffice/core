@@ -11365,17 +11365,6 @@ if test "$with_system_libnumbertext" = "yes"; then
     SYSTEM_LIBNUMBERTEXT=YES
 else
     SYSTEM_LIBNUMBERTEXT=
-    AC_LANG_PUSH([C++])
-    save_CPPFLAGS=$CPPFLAGS
-    CPPFLAGS="$CPPFLAGS $CXXFLAGS_CXX11"
-    AC_CHECK_HEADERS([codecvt regex])
-    AS_IF([test "x$ac_cv_header_codecvt" != xyes -o "x$ac_cv_header_regex" != xyes],
-            [ LIBNUMBERTEXT_CFLAGS=''
-              AC_MSG_WARN([No system-provided libnumbertext or codecvt/regex C++11 headers (min. libstdc++ 4.9).
-                           Enable libnumbertext fallback (missing number to number name conversion).])
-            ])
-    CPPFLAGS=$save_CPPFLAGS
-    AC_LANG_POP([C++])
 fi
 AC_SUBST(SYSTEM_LIBNUMBERTEXT)
 AC_SUBST(SYSTEM_LIBNUMBERTEXT_DATA)
