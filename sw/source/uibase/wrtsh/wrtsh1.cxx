@@ -1050,9 +1050,12 @@ void SwWrtShell::InsertContentControl(SwContentControlType eType)
             break;
         }
     }
-    Insert(aPlaceholder);
-    Left(CRSR_SKIP_CHARS, /*bSelect=*/true, aPlaceholder.getLength(),
-            /*bBasicCall=*/false);
+    if (aPlaceholder.getLength())
+    {
+        Insert(aPlaceholder);
+        Left(CRSR_SKIP_CHARS, /*bSelect=*/true, aPlaceholder.getLength(),
+                /*bBasicCall=*/false);
+    }
     SwFormatContentControl aContentControl(pContentControl, RES_TXTATR_CONTENTCONTROL);
     SetAttrItem(aContentControl);
 }
