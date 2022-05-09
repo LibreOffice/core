@@ -188,7 +188,7 @@ protected:
        or if the range is not properly sorted, with nRow in that case set to the first row or after
        the last row. In that case use GetFirst().
     */
-    bool BinarySearch( SCCOL col );
+    bool BinarySearch( SCCOL col, bool forEqual = false );
 
                     /** If set, iterator stops on first non-matching cell
                         content. May be used in SC_LESS_EQUAL queries where a
@@ -318,7 +318,7 @@ public:
         SCTAB nTable, const ScQueryParam& aParam, bool bMod)
     : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     // Returns true if this iterator can be used for the given query.
-    static bool CanBeUsed(const ScQueryParam& aParam);
+    static bool CanBeUsed(const ScDocument& rDoc, const ScQueryParam& aParam);
 };
 
 
@@ -366,7 +366,7 @@ public:
         SCTAB nTable, const ScQueryParam& aParam, bool bMod)
     : Base( rDocument, rContext, nTable, aParam, bMod ) {}
     // Returns true if this iterator can be used for the given query.
-    static bool CanBeUsed(const ScQueryParam& aParam);
+    static bool CanBeUsed(const ScDocument& rDoc, const ScQueryParam& aParam);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

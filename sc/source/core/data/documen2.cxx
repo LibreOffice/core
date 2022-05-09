@@ -1194,17 +1194,18 @@ ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange, ScInterprete
     return *pCache;
 }
 
-ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, bool bDescending, ScInterpreterContext* pContext )
+ScSortedRangeCache& ScDocument::GetSortedRangeCache( const ScRange & rRange, const ScQueryParam& param,
+                                                     ScInterpreterContext* pContext )
 {
     ScSortedRangeCache* pCache = nullptr;
     if (!pContext->mxScSortedRangeCache)
         pContext->mxScSortedRangeCache.reset(new ScSortedRangeCacheMap);
     ScSortedRangeCacheMap* pCacheMap = pContext->mxScSortedRangeCache.get();
     // insert with temporary value to avoid doing two lookups
-    auto [findIt, bInserted] = pCacheMap->aCacheMap.emplace(ScSortedRangeCache::HashKey{rRange, bDescending}, nullptr);
+    auto [findIt, bInserted] = pCacheMap->aCacheMap.emplace(ScSortedRangeCache::makeHashKey(rRange, param), nullptr);
     if (bInserted)
     {
-        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, bDescending, *pCacheMap);
+        findIt->second = std::make_unique<ScSortedRangeCache>(this, rRange, param, *pCacheMap, pContext);
         pCache = findIt->second.get();
         // The StartListeningArea() call is not thread-safe, as all threads
         // would access the same SvtBroadcaster.
