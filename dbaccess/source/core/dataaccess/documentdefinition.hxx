@@ -207,7 +207,7 @@ private:
         @throws css::uno::RuntimeException
     */
     static void impl_removeFrameFromDesktop_throw(
-                    const css::uno::Reference< css::uno::XComponentContext >& _rContxt,
+                    const css::uno::Reference< css::uno::XComponentContext >& _rContext,
                     const css::uno::Reference< css::frame::XFrame >& _rxFrame
                 );
 
