@@ -16,6 +16,24 @@
       "message": "Fix for line join issue visible here:\nhttps://bugs.documentfoundation.org/attachment.cgi?id\u003d179962",
       "revId": "d15a6560bd445cd1931e9fded6ad8ecfdd54211b",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62416009_44b9af8e",
+        "filename": "drawinglayer/source/tools/wmfemfhelper.cxx",
+        "patchSetId": 8
+      },
+      "lineNbr": 1573,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-09T09:08:57Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "cf48f7f3_f527cc06",
+      "revId": "d15a6560bd445cd1931e9fded6ad8ecfdd54211b",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
