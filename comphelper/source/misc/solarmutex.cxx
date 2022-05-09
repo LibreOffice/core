@@ -38,7 +38,6 @@ SolarMutex *SolarMutex::get()
 
 SolarMutex::SolarMutex()
     : m_nCount( 0 )
-    , m_nThreadId( 0 )
     , m_aBeforeReleaseHandler( nullptr )
 {
     assert(!g_pSolarMutex);
@@ -53,8 +52,8 @@ SolarMutex::~SolarMutex()
 void SolarMutex::doAcquire( const sal_uInt32 nLockCount )
 {
     for ( sal_uInt32 n = nLockCount; n ; --n )
-        m_aMutex.acquire();
-    m_nThreadId = osl::Thread::getCurrentIdentifier();
+        m_aMutex.lock();
+    m_nThreadId = std::this_thread::get_id();
     m_nCount += nLockCount;
 }
 
@@ -72,25 +71,25 @@ sal_uInt32 SolarMutex::doRelease( bool bUnlockAll )
     {
         if ( m_aBeforeReleaseHandler )
             m_aBeforeReleaseHandler();
-        m_nThreadId = 0;
+        m_nThreadId = std::thread::id();
     }
 
     for ( sal_uInt32 n = nCount ; n ; --n )
-        m_aMutex.release();
+        m_aMutex.unlock();
 
     return nCount;
 }
 
 bool SolarMutex::IsCurrentThread() const
 {
-    return m_nThreadId == osl::Thread::getCurrentIdentifier();
+    return m_nThreadId == std::this_thread::get_id();
 }
 
 bool SolarMutex::tryToAcquire()
 {
-    if ( m_aMutex.tryToAcquire() )
+    if ( m_aMutex.try_lock() )
     {
-        m_nThreadId = osl::Thread::getCurrentIdentifier();
+        m_nThreadId = std::this_thread::get_id();
         m_nCount++;
         return true;
     }

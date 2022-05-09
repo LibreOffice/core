@@ -139,11 +139,11 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
             // Calling Condition::reset frequently turns out to be a little expensive,
             // and the vast majority of the time there is no contention, so first
             // try just acquiring the mutex.
-            if (m_aMutex.tryToAcquire())
+            if (m_aMutex.try_lock())
                 break;
             // reset condition *before* acquiring!
             m_condition.reset();
-            if (m_aMutex.tryToAcquire())
+            if (m_aMutex.try_lock())
                 break;
             // wait for SalYieldMutex::release() to set the condition
             osl::Condition::Result res = m_condition.wait();
