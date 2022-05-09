@@ -126,7 +126,7 @@ void QtYieldMutex::doAcquire(sal_uInt32 nLockCount)
         std::function<void()> func; // copy of closure on thread stack
         {
             std::unique_lock<std::mutex> g(m_RunInMainMutex);
-            if (m_aMutex.tryToAcquire())
+            if (m_aMutex.try_lock())
             {
                 // if there's a closure, the other thread holds m_aMutex
                 assert(!m_Closure);

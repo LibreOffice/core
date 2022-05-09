@@ -349,7 +349,7 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
             SvpRequest request = SvpRequest::NONE;
             {
                 std::unique_lock<std::mutex> g(m_WakeUpMainMutex);
-                if (m_aMutex.tryToAcquire()) {
+                if (m_aMutex.try_lock()) {
                     // if there's a request, the other thread holds m_aMutex
                     assert(m_Request == SvpRequest::NONE);
                     m_wakeUpMain = false;
@@ -377,7 +377,7 @@ void SvpSalYieldMutex::doAcquire(sal_uInt32 const nLockCount)
     }
     else
     {
-        m_aMutex.acquire();
+        m_aMutex.lock();
     }
     ++m_nCount;
     SalYieldMutex::doAcquire(nLockCount - 1);

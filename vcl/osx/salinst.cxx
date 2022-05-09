@@ -212,7 +212,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
             RuninmainBlock block = nullptr;
             {
                 std::unique_lock<std::mutex> g(m_runInMainMutex);
-                if (m_aMutex.tryToAcquire()) {
+                if (m_aMutex.try_lock()) {
                     assert(m_aCodeBlock == nullptr);
                     m_wakeUpMain = false;
                     break;
@@ -238,7 +238,7 @@ void SalYieldMutex::doAcquire( sal_uInt32 nLockCount )
         while ( true );
     }
     else
-        m_aMutex.acquire();
+        m_aMutex.lock();
     ++m_nCount;
     --nLockCount;
 

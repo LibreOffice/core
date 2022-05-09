@@ -24,6 +24,8 @@
 
 #include <assert.h>
 #include <atomic>
+#include <mutex>
+#include <thread>
 
 #include <osl/thread.h>
 #include <osl/mutex.hxx>
@@ -68,11 +70,11 @@ protected:
     virtual sal_uInt32 doRelease( bool bUnlockAll );
     virtual void doAcquire( sal_uInt32 nLockCount );
 
-    osl::Mutex            m_aMutex;
+    std::recursive_mutex  m_aMutex;
     sal_uInt32            m_nCount;
 
 private:
-    std::atomic<oslThreadIdentifier> m_nThreadId;
+    std::atomic<std::thread::id> m_nThreadId;
 
     SolarMutex(const SolarMutex&) = delete;
     SolarMutex& operator=(const SolarMutex&) = delete;
