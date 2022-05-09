@@ -107,6 +107,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "485091b0_6c504ad6",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-05-09T17:02:17Z",
+      "side": 1,
+      "message": "pylint and pycodestyle should be the ones relevant here, although those old/existing ones might not have followed it before. So PEP8 formatting rules should be followed and pylint should be happy. pydocstyle/inline documentation would be nice to have, but is not a must-have, esp. not for build-only-tools.",
+      "parentUuid": "544d8a21_91ebcd62",
+      "revId": "6b653fa92f4769ac109bed7e17389c14dcdfbcee",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38b35554_1a4a3a91",
