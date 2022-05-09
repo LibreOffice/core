@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1eea25e6_5dffe37c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-09T08:53:00Z",
+      "side": 1,
+      "message": "These are rather weird SwMark objects - they seem to be some kind of UNO API related cursor thing? Not directly present in the document.\n\nIf they are going to do weird stuff, then possibly we could just have a special DeleteUnoMark method that scans the array instead of relying on the sorting, that is unlikely to have an impact on normal document operations.",
+      "revId": "976487b8928eb12cf0613a7ea5050aad25a4c728",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b46353ba_a737ee8a",
