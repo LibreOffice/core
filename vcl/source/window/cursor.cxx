@@ -43,6 +43,12 @@ struct ImplCursorData
     VclPtr<vcl::Window> mpWindow;           // assigned window
 };
 
+namespace
+{
+const char* pDisableCursorIndicator(getenv("SAL_DISABLE_CURSOR_INDICATOR"));
+bool bDisableCursorIndicator(nullptr != pDisableCursorIndicator);
+}
+
 static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, ImplCursorData const * pData)
 {
     tools::Rectangle aPaintRect;
@@ -65,7 +71,7 @@ static tools::Rectangle ImplCursorInvert(vcl::RenderContext* pRenderContext, Imp
             aPoly[2].AdjustX(1 );
 
             // apply direction flag after slant to use the correct shape
-            if ( pData->mnDirection != CursorDirection::NONE)
+            if (!bDisableCursorIndicator && pData->mnDirection != CursorDirection::NONE)
             {
                 Point pAry[7];
                 // Related system settings for "delta" could be:
