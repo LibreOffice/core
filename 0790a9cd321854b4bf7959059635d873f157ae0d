@@ -33,6 +33,24 @@
       "message": "Sent you a flamegraph by email. Sorry it\u0027s not SVG, the SVG export in Hotspot is currently broken.\n\nSo this particular document contains a ton of equations. Each equation is treated as it\u0027s own little embedded Math document, and is saved into some EmbeddedObjectContainer thing, which invokes the whole save mechanism, including embedded VBA libraries, which triggers a ton of isFolder() calls into UCB, which is more expensive than a normal isFolder call because of the rather extreme indirection going on there, along with the cost of exception throwing.\n\nSo there are obviously a number of pathologies here, and I\u0027m quite happy to leave cppu::throwException alone if it doesn\u0027t look safe (and it sounds like that is the case).\n",
       "revId": "0790a9cd321854b4bf7959059635d873f157ae0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d34d7bb0_d1787ada",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-09T11:27:52Z",
+      "side": 1,
+      "message": "\u003e Sent you a flamegraph by email. Sorry it\u0027s not SVG, the SVG export in Hotspot is currently broken.\n\nHard to tell from that why exactly there are so many file UCP throwException calls.  But at least it confirms that it\u0027s that dreaded file UCP scenario.\n \n\u003e So this particular document contains a ton of equations. Each equation is treated as it\u0027s own little embedded Math document, and is saved into some EmbeddedObjectContainer thing, which invokes the whole save mechanism, including embedded VBA libraries, which triggers a ton of isFolder() calls into UCB, which is more expensive than a normal isFolder call because of the rather extreme indirection going on there, along with the cost of exception throwing.\n\u003e \n\u003e So there are obviously a number of pathologies here, and I\u0027m quite happy to leave cppu::throwException alone if it doesn\u0027t look safe (and it sounds like that is the case).\n\nYeah, if there\u0027s another place where we can reduce cost here (like the file UCP\u0027s poor use of a central throwException, instead of throwing directly, which would also give better throw sites when debugging; or why so many apparently failing and throwing file UCP are made here in the first place), that would probably be safer.",
+      "parentUuid": "05e725b8_a5f21444",
+      "revId": "0790a9cd321854b4bf7959059635d873f157ae0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
