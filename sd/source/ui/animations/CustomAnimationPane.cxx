@@ -2117,6 +2117,8 @@ IMPL_LINK_NOARG(CustomAnimationPane, SelectionHandler, Timer*, void)
     }
 
     int nSelected = mxLBAnimation->get_selected_index();
+    if (nSelected == -1)
+        return;
 
     // tdf#99137, the selected entry may also be a subcategory title, so not an effect
     // just skip it and move to the next one in this case
