@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e0196b7_61dda1b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000447
+      },
+      "writtenOn": "2022-05-09T11:53:01Z",
+      "side": 1,
+      "message": "\u003cpresetShapeDefinitons\u003e must not be changed, see https://wiki.documentfoundation.org/Development/stuck_stuff",
+      "revId": "484cd8caa378c56734b648580589bb5415bc9ff2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
