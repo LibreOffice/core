@@ -16,6 +16,24 @@
       "message": "So, I made this class move away from using virtual methods to achieve interface implementation separation to real pimpl in 4da3a0108468a3e7fd4aae32129b9c0fbe4635a4, and you made us go back to the old way... ",
       "revId": "8e8d3f4db94e0069a1d84378d295268f5037b016",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "717a4258_f541bf49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-09T07:56:10Z",
+      "side": 1,
+      "message": "The Pimpl pattern is a way to get around C++ compile time issues.\n\nThose are less of a problem these days, and it has a performance impact, because it doubles the number of allocations for an object.\n\nIMO it also makes the code harder to read.",
+      "parentUuid": "e2b7f924_d0c36760",
+      "revId": "8e8d3f4db94e0069a1d84378d295268f5037b016",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
