@@ -223,13 +223,13 @@ ucb_HierarchyDataSource_get_implementation(
 // virtual
 void SAL_CALL HierarchyDataSource::dispose()
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if ( m_pDisposeEventListeners && m_pDisposeEventListeners->getLength() )
+    if ( m_aDisposeEventListeners.getLength(aGuard) )
     {
         lang::EventObject aEvt;
         aEvt.Source = static_cast< lang::XComponent * >( this );
-        m_pDisposeEventListeners->disposeAndClear( aEvt );
+        m_aDisposeEventListeners.disposeAndClear( aGuard, aEvt );
     }
 }
 
@@ -238,13 +238,9 @@ void SAL_CALL HierarchyDataSource::dispose()
 void SAL_CALL HierarchyDataSource::addEventListener(
                     const uno::Reference< lang::XEventListener > & Listener )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners.reset(
-            new comphelper::OInterfaceContainerHelper3<lang::XEventListener>( m_aMutex ) );
-
-    m_pDisposeEventListeners->addInterface( Listener );
+    m_aDisposeEventListeners.addInterface( aGuard, Listener );
 }
 
 
@@ -252,10 +248,9 @@ void SAL_CALL HierarchyDataSource::addEventListener(
 void SAL_CALL HierarchyDataSource::removeEventListener(
                     const uno::Reference< lang::XEventListener > & Listener )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
 
-    if ( m_pDisposeEventListeners )
-        m_pDisposeEventListeners->removeInterface( Listener );
+    m_aDisposeEventListeners.removeInterface( aGuard, Listener );
 }
 
 
@@ -304,8 +299,6 @@ HierarchyDataSource::createInstanceWithArguments(
                                 const uno::Sequence< uno::Any > & Arguments,
                                 bool bCheckArgs )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
     // Check service specifier.
     bool bReadOnly  = ServiceSpecifier == READ_SERVICE_NAME;
     bool bReadWrite = !bReadOnly && ServiceSpecifier == READWRITE_SERVICE_NAME;
@@ -420,7 +413,7 @@ HierarchyDataSource::getConfigProvider()
 {
     if ( !m_xConfigProvider.is() )
     {
-        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        std::unique_lock aGuard( m_aMutex );
         if ( !m_xConfigProvider.is() )
         {
             try
