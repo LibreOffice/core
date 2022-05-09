@@ -765,7 +765,7 @@ void SbRtl_FileLen(StarBASIC *, SbxArray & rPar, bool)
             (void)aItem.getFileStatus( aFileStatus );
             nLen = static_cast<sal_Int32>(aFileStatus.getFileSize());
         }
-        rPar.Get(0)->PutLong(static_cast<tools::Long>(nLen));
+        rPar.Get(0)->PutLong(nLen);
     }
 }
 
