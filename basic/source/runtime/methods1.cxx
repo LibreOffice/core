@@ -3033,9 +3033,8 @@ bool LibreOffice6FloatingPointMode()
 
 sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay )
 {
-    Date aRefDate( 1,1,1900 );
+    Date aRefDate(1899'12'30);
     sal_Int32 nDays = static_cast<sal_Int32>(aDate);
-    nDays -= 2; // normalize: 1.1.1900 => 0
     aRefDate.AddDays( nDays);
     DayOfWeek aDay = aRefDate.GetDayOfWeek();
     sal_Int16 nDay;
