@@ -457,7 +457,7 @@ public:
                                        const OString& rVal );
     inline void OutCSS1_Property( const char *pProp, const OUString& rVal );
     void OutCSS1_Property( const char *pProp, const char *pVal,
-                           const OUString *pSVal );
+                           const OUString *pSVal, bool bTable = false );
     void OutCSS1_UnitProperty( const char *pProp, long nVal );
     void OutCSS1_PixelProperty( const char *pProp, long nVal, bool bVert );
     void OutCSS1_SfxItemSet( const SfxItemSet& rItemSet, bool bDeep=true );
@@ -698,7 +698,8 @@ Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt );
 OString GetCSS1_Color(const Color& rColor);
 
 /// Determines if rProperty with a given rValue has to be suppressed due to ReqIF mode.
-bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, const OString& rValue);
+bool IgnorePropertyForReqIF(bool bReqIF, const OString& rProperty, const OString& rValue,
+                            bool bTable = false);
 
 #endif // INCLUDED_SW_SOURCE_FILTER_HTML_WRTHTML_HXX
 

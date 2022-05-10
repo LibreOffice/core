@@ -39,6 +39,9 @@
 #include <sot/storage.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/dibtools.hxx>
+#include <editeng/brushitem.hxx>
+
+#include <itabenum.hxx>
 
 namespace
 {
@@ -698,9 +701,9 @@ DECLARE_HTMLEXPORT_TEST(testReqIfTable, "reqif-table.xhtml")
     // <div> was missing, so the XHTML fragment wasn't a valid
     // xhtml.BlkStruct.class type anymore.
     assertXPath(pDoc, "/html/body/div/table/tr/th", 1);
-    // The attribute was present to contain "background" and "border", which is
-    // ignored in reqif-xhtml.
-    assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "style");
+    // Make sure that row background is written using CSS.
+    OUString aStyle = getXPath(pDoc, "/html/body/div/table/tr/th", "style");
+    CPPUNIT_ASSERT(aStyle.startsWith("background: "));
     // The attribute was present, which is not valid in reqif-xhtml.
     assertXPathNoAttribute(pDoc, "/html/body/div/table/tr/th", "bgcolor");
 }
@@ -1621,6 +1624,44 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testNestedBullets)
     assertXPathContent(
         pXmlDoc, "//reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:ol/reqif-xhtml:li/reqif-xhtml:p",
         "second");
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testTableBackground)
+{
+    // Given a document with two tables: first stable has a background, second table has a
+    // background in its first row:
+    loadURL("private:factory/swriter", nullptr);
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    SwInsertTableOptions aInsertTableOptions(SwInsertTableFlags::DefaultBorder,
+                                             /*nRowsToRepeat=*/0);
+    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/1, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    SvxBrushItem aBrush(Color(0xff0000), RES_BACKGROUND);
+    pWrtShell->SetTabBackground(aBrush);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->SplitNode();
+    pWrtShell->InsertTable(aInsertTableOptions, /*nRows=*/1, /*nCols=*/1);
+    pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+    aBrush.SetColor(0x00ff00);
+    pWrtShell->SetRowBackground(aBrush);
+
+    // When exporting to reqif-xhtml:
+    ExportToReqif();
+
+    // Then make sure that CSS markup is used, not HTML one:
+    SvMemoryStream aStream;
+    HtmlExportTest::wrapFragment(maTempFile, aStream);
+    xmlDocUniquePtr pXmlDoc = parseXmlStream(&aStream);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - XPath '//reqif-xhtml:table[1]' no attribute 'style' exist
+    // i.e. HTML markup was used for the table background color.
+    assertXPath(pXmlDoc, "//reqif-xhtml:table[1]", "style", "background: #ff0000");
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:table[1]", "bgcolor");
+    assertXPath(pXmlDoc, "//reqif-xhtml:table[2]/reqif-xhtml:tr[1]", "style",
+                "background: #00ff00");
+    assertXPathNoAttribute(pXmlDoc, "//reqif-xhtml:table[2]/reqif-xhtml:tr[1]", "bgcolor");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
