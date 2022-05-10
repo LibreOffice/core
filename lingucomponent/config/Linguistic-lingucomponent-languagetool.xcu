@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE oor:component-data SYSTEM "../../officecfg/registry/component-update.dtd">
+<oor:component-data oor:name="OptionsDialog" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <node oor:name="Nodes">
+        <node oor:name="LanguageSettings" oor:op="fuse">
+            <prop oor:name="Label">
+                <value xml:lang="en-US">Language Settings</value>
+            </prop>
+            <node oor:name="Leaves">
+                <node oor:name="org.openoffice.lingu.LanguageToolGrammarChecker" oor:op="fuse">
+                    <prop oor:name="Id">
+                        <value>org.openoffice.lingu.LanguageToolGrammarChecker</value>
+                    </prop>
+                    <prop oor:name="Label">
+                        <value>LanguageTool Grammar Checker</value>
+                    </prop>
+                    <prop oor:name="OptionsPage">
+                        <value>file:///home/mertt/collabora/core/co-2021/instdir/share/registry/en.xdl</value>
+                    </prop>
+                </node>
+            </node>
+        </node>
+    </node>
+</oor:component-data>

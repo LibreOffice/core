@@ -121,6 +121,7 @@ postprocess_FILES_lingucomponent := \
 	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-hyphenator.xcu \
 	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-spellchecker.xcu \
 	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-thesaurus.xcu \
+	$(SRCDIR)/lingucomponent/config/Linguistic-lingucomponent-languagetool.xcu \
 
 postprocess_FILES_main := \
 	$(postprocess_XCS)/Inet.xcs \
