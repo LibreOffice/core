@@ -1114,6 +1114,29 @@ void ScInterpreter::PopDoubleRef( ScRange& rRange, bool bDontCheckForTableOp )
         SetError( FormulaError::UnknownStackVariable);
 }
 
+const ScComplexRefData* ScInterpreter::GetStackDoubleRef(size_t rRefInList)
+{
+    if( sp )
+    {
+        const FormulaToken* p = pStack[ sp - 1 ];
+        switch (p->GetType())
+        {
+            case svDoubleRef:
+                return p->GetDoubleRef();
+            case svRefList:
+            {
+                const ScRefList* pList = p->GetRefList();
+                if (rRefInList < pList->size())
+                    return &(*pList)[rRefInList];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    return nullptr;
+}
+
 void ScInterpreter::PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef)
 {
     if (!sp)
