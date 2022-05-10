@@ -972,6 +972,10 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
     if( meInitMode != DEFAULT )
         return;
 
+    // tdf#121740 speed up loading documents with lots of embedded documents by avoid the UCB work of updating non-existent VBA libraries
+    if (rInitialDocumentURL.isEmpty())
+        return;
+
     INetURLObject aUserBasicInetObj( o3tl::getToken(maLibraryPath, 1, ';') );
     OUString aStandardStr("Standard");
 
