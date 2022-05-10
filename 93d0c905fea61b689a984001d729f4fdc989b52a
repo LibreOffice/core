@@ -33,6 +33,24 @@
       "message": "(I didn’t finish formulating my sentence LOL, but you get the gist)",
       "revId": "93d0c905fea61b689a984001d729f4fdc989b52a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01da9684_c38f201b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-10T02:49:29Z",
+      "side": 1,
+      "message": "\u003e just be careful. Translators won’t always get these language subtleties\nExactly my concern here -- but I suppose I can see how it gets handled in Weblate...",
+      "parentUuid": "9cac091d_20139ab2",
+      "revId": "93d0c905fea61b689a984001d729f4fdc989b52a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
