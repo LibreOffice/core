@@ -473,7 +473,8 @@ void OStorage_Impl::GetStorageProperties()
         uno::Reference< beans::XPropertySet > xPackageProps( m_xPackage, uno::UNO_QUERY_THROW );
         xPackageProps->getPropertyValue( MEDIATYPE_FALLBACK_USED_PROPERTY ) >>= m_bMTFallbackUsed;
 
-        xProps->getPropertyValue( "MediaType" ) >>= m_aMediaType;
+        static constexpr OUStringLiteral sMediaType(u"MediaType");
+        xProps->getPropertyValue( sMediaType ) >>= m_aMediaType;
         m_bControlMediaType = true;
     }
 
