@@ -198,6 +198,26 @@ bool AdvancedDiagramHelper::removeNode(const OUString& rNodeId)
     return bRetval;
 }
 
+svx::diagram::DiagramDataStatePtr AdvancedDiagramHelper::extractDiagramDataState() const
+{
+    if(!mpDiagramPtr)
+    {
+        return svx::diagram::DiagramDataStatePtr();
+    }
+
+    return mpDiagramPtr->getData()->extractDiagramDataState();
+}
+
+void AdvancedDiagramHelper::applyDiagramDataState(const svx::diagram::DiagramDataStatePtr& rState)
+{
+    if(!mpDiagramPtr)
+    {
+        return;
+    }
+
+    mpDiagramPtr->getData()->applyDiagramDataState(rState);
+}
+
 void AdvancedDiagramHelper::doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape)
 {
     if(!mpDiagramPtr)
