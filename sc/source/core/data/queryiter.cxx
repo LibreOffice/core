@@ -45,6 +45,7 @@
 #include <rowheightcontext.hxx>
 #include <queryevaluator.hxx>
 #include <rangecache.hxx>
+#include <refdata.hxx>
 
 #include <o3tl/safeint.hxx>
 #include <tools/fract.hxx>
