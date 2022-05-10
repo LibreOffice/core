@@ -76,7 +76,7 @@ private:
     tools::Long                mnLineHeight;                  // Ascent+Descent+EmphasisMark
     tools::Long                mnSlant;                       // Slant
     tools::Long                mnBulletOffset;                // Offset for non-printing character
-    tools::Long                mnHangingBaseline;             // Offset from Romn baseline to hanigng baseline.
+    tools::Long                mnHangingBaseline;             // Offset from Romn baseline to hanging baseline.
 
     bool                mbFullstopCentered;
 };

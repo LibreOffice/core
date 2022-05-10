@@ -117,7 +117,7 @@ private:
     tools::Long            mnExtLeading;               // External Leading
     int             mnSlant;                    // Slant (Italic/Oblique)
     tools::Long            mnMinKashida;               // Minimal width of kashida (Arabic)
-    tools::Long            mnHangingBaseline;          // Offset of haning baseline to Romn baseline
+    tools::Long            mnHangingBaseline;          // Offset of hanging baseline to Romn baseline
 
     // font attributes queried from the font instance
     bool            mbFullstopCentered;
