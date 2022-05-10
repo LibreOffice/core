@@ -72,6 +72,24 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b1091f7_7dc7b3a6",
+        "filename": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1164,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2022-05-10T07:39:43Z",
+      "side": 1,
+      "message": "Fixed now",
+      "parentUuid": "1f768d7d_108f927a",
+      "revId": "fe57df08f2510e80532faeecceef7ed344e1b5c5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7261a479_873a3141",
