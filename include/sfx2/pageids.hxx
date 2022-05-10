@@ -56,6 +56,7 @@
 #define RID_SVXPAGE_PERSONALIZATION         (RID_SVX_START + 247)
 #define RID_SVXPAGE_COLORCONFIG             (RID_SVX_START + 249)
 #define RID_SVXPAGE_BASICIDE_OPTIONS        (RID_SVX_START + 209)
+#define RID_SVXPAGE_LANGTOOL_OPTIONS        (RID_SVX_START + 210)
 
 // Resource-Id's ------------------------------------------------------------
 
