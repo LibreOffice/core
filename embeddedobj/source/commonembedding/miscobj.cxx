@@ -436,7 +436,7 @@ void OCommonEmbeddedObject::handleLinkedOLE( CopyBackToOLELink eState )
     else if ( ( eState == CopyBackToOLELink::CopyLinkToTemp ) && bTmpFileChg )
     {
         // Refresh pressed,  but the Temp-file is changed, question to user for overwrite
-        // it is not importent it has bLnkFileChg, always overwite the temp-file
+        // it is not important it has bLnkFileChg, always overwrite the temp-file
         if ( ShowMsgDialog( STR_OVERWRITE_TEMP, m_aLinkURL ) == RET_CANCEL )
             eState = CopyBackToOLELink::NoCopy;
     }

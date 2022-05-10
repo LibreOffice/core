@@ -102,7 +102,7 @@ public:
                         const css::uno::Reference< css::io::XInputStream >& xInGrStream,
                         const OUString& rMediaType );
 
-                    // bUpdateOle = false udate the Link-Objects
+                    // bUpdateOle = false update the Link-Objects
                     //            = true  update the OLE-Objects
     void            UpdateReplacement( bool bUpdateOle = false );
     void            UpdateReplacementOnDemand();
