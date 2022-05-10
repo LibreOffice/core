@@ -529,11 +529,14 @@ void SwHTMLWrtTable::OutTableCells( SwHTMLWriter& rWrt,
     rWrt.Strm().WriteChar( '<' ).WriteOString( OStringConcatenation(rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_tablerow) );
     if( pBrushItem )
     {
-        rWrt.OutBackground( pBrushItem, false );
+        if (!rWrt.mbXHTML)
+        {
+            rWrt.OutBackground(pBrushItem, false);
+        }
 
         rWrt.m_bTextAttr = false;
         rWrt.m_bOutOpts = true;
-        if( rWrt.m_bCfgOutStyles )
+        if (rWrt.m_bCfgOutStyles || rWrt.mbXHTML)
             OutCSS1_TableBGStyleOpt( rWrt, *pBrushItem );
     }
 
@@ -697,10 +700,15 @@ void SwHTMLWrtTable::Write( SwHTMLWriter& rWrt, sal_Int16 eAlign,
     // output background
     if( pFrameFormat )
     {
-        rWrt.OutBackground( pFrameFormat->GetAttrSet(), false );
+        if (!rWrt.mbXHTML)
+        {
+            rWrt.OutBackground(pFrameFormat->GetAttrSet(), false);
+        }
 
-        if (rWrt.m_bCfgOutStyles)
+        if (rWrt.m_bCfgOutStyles || rWrt.mbXHTML)
+        {
             rWrt.OutCSS1_TableFrameFormatOptions( *pFrameFormat );
+        }
     }
 
     sOut.append('>');
