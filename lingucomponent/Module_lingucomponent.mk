@@ -21,6 +21,7 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_hyphen \
 	Library_lnth \
 	Library_spell \
+	Library_LanguageTool \
 	StaticLibrary_ulingu \
 ))
 endif
