@@ -1,0 +1,26 @@
+# Configuration for Repo Lockdown - https://github.com/dessant/repo-lockdown
+# LibreOffice project uses gerrit as its patch management & review system
+name: Repo Lockdown
+
+on:
+  issues:
+    types: opened
+  pull_request_target:
+    types: opened
+
+jobs:
+  point-to-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dessant/repo-lockdown@v2.2.0
+        with:
+          issue-comment: >
+            Thank you for your report. We use GitHub as a read-only mirror, so please submit your report into our own bug tracker: https://wiki.documentfoundation.org/QA/BugReport
+          skip-closed-issue-comment: true
+          close-issue: true
+          lock-issue: false
+          pr-comment: >
+            Thank you for your contribution. We use GitHub as a read-only mirror, so please submit your patch into our own code review system: https://wiki.documentfoundation.org/Development/GetInvolved
+          skip-closed-pr-comment: true
+          close-pr: true
+          lock-pr: false
