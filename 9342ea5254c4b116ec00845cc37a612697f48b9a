@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf7f197e_f810f84f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-10T11:18:38Z",
+      "side": 1,
+      "message": "Adjusted some tooltip formulations -- in response to feedback in tdf#148941 comment 3",
+      "revId": "9342ea5254c4b116ec00845cc37a612697f48b9a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
