@@ -261,7 +261,6 @@ bool ScDocument::GetCodeName( SCTAB nTab, OUString& rName ) const
 
 bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
 {
-    OUString aUpperName;
     static OUString aCacheName, aCacheUpperName;
 
     assert(!IsThreadedGroupCalcInProgress());
@@ -271,7 +270,7 @@ bool ScDocument::GetTable( const OUString& rName, SCTAB& rTab ) const
         // surprisingly slow ...
         aCacheUpperName = ScGlobal::getCharClass().uppercase(rName);
     }
-    aUpperName = aCacheUpperName;
+    const OUString aUpperName = aCacheUpperName;
 
     for (SCTAB i=0; i< static_cast<SCTAB>(maTabs.size()); i++)
         if (maTabs[i])
