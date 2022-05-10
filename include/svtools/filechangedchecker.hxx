@@ -40,6 +40,6 @@ public:
     bool hasFileChanged(bool bUpdate = true);
     FileChangedChecker(const OUString& rFilename,
             const ::std::function<void ()>& rCallback);
-    // with out Timer function
+    // without Timer function
     FileChangedChecker(const OUString& rFilename);
 };
