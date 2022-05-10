@@ -34,7 +34,7 @@ namespace com::sun::star::frame { class XModel; }
 
 class Dialog;
 class BitmapEx;
-class IDiagramHelper;
+class SdrObjGroup;
 namespace weld
 {
     class Dialog;
@@ -179,7 +179,7 @@ public:
 
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
-        const std::shared_ptr<IDiagramHelper>& pDiagramHelper) = 0;
+        SdrObjGroup& rDiagram) = 0;
 
 #ifdef _WIN32
     virtual VclPtr<VclAbstractDialog>

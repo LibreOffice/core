@@ -27,6 +27,13 @@
 // Forward declarations
 class SfxItemSet;
 class SdrObjGroup;
+namespace svx
+{
+namespace diagram
+{
+class DiagramDataState;
+}
+}
 
 // Helper class to allow administer advanced Diagram related
 // data and functionality
@@ -80,6 +87,12 @@ public:
     // add/remove new top-level node to data model, returns its id
     virtual OUString addNode(const OUString& rText) = 0;
     virtual bool removeNode(const OUString& rNodeId) = 0;
+
+    // Undo/Redo helpers for extracting/restoring Diagram-defining data
+    virtual std::shared_ptr<svx::diagram::DiagramDataState> extractDiagramDataState() const = 0;
+    virtual void
+    applyDiagramDataState(const std::shared_ptr<svx::diagram::DiagramDataState>& rState)
+        = 0;
 
     bool UseDiagramThemeData() const { return mbUseDiagramThemeData; }
     bool UseDiagramModelData() const { return mbUseDiagramModelData; }

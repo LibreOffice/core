@@ -25,6 +25,10 @@
 #include <oox/shape/ShapeFilterBase.hxx>
 #include <svx/svdogrp.hxx>
 
+namespace svx { namespace diagram {
+    class DiagramDataState;
+}}
+
 namespace oox::drawingml {
 
 class Diagram;
@@ -72,6 +76,10 @@ public:
     // add/remove new top-level node to data model, returns its id
     virtual OUString addNode(const OUString& rText) override;
     virtual bool removeNode(const OUString& rNodeId) override;
+
+    // Undo/Redo helpers to extract/restore Diagram-defining data
+    virtual std::shared_ptr< svx::diagram::DiagramDataState > extractDiagramDataState() const override;
+    virtual void applyDiagramDataState(const std::shared_ptr< svx::diagram::DiagramDataState >& rState) override;
 
     void doAnchor(SdrObjGroup& rTarget, ::oox::drawingml::Shape& rRootShape);
     std::shared_ptr< ::oox::drawingml::Theme > getOrCreateThemePtr(

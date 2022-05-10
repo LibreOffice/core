@@ -298,7 +298,7 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
                             vcl::Window* pWin = rViewData.GetActiveWin();
                             ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                                 pWin ? pWin->GetFrameWeld() : nullptr,
-                                pAnchorObj->getDiagramHelper());
+                                *pAnchorObj);
                             pDlg->Execute();
                         }
                     }
