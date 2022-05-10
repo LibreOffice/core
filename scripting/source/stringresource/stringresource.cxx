@@ -37,6 +37,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/urlobj.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <sal/log.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

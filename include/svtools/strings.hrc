@@ -338,5 +338,6 @@
 #define STR_DESCRIPTION_LIBHYPHEN               NC_("STR_DESCRIPTION_LIBHYPHEN", "Libhyphen Hyphenator")
 #define STR_DESCRIPTION_MYTHES                  NC_("STR_DESCRIPTION_MYTHES", "MyThes Thesaurus")
 #define STR_DESCRIPTION_IGNOREALLLIST           NC_("STR_DESCRIPTION_IGNOREALLLIST", "List of Ignored Words")
+#define STR_DESCRIPTION_LANGUAGETOOL            NC_("STR_DESCRIPTION_LANGUAGETOOL", "LanguageTool Remote Grammar Checker")
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
