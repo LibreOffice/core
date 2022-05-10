@@ -926,6 +926,27 @@ bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
     return bSuccess;
 }
 
+bool SvtLinguConfig::GetLocaleListFor( const OUString &rSetName, const OUString &rSetEntry, css::uno::Sequence< OUString > &rLocaleList ) const
+{
+    if (rSetName.isEmpty() || rSetEntry.isEmpty())
+        return false;
+    bool bSuccess = false;
+    try
+    {
+        uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName("ServiceManager"), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
+        if (xNA->getByName( "Locales" ) >>= rLocaleList)
+            bSuccess = true;
+        DBG_ASSERT( rLocaleList.hasElements(), "Locale list is empty" );
+    }
+    catch (uno::Exception &)
+    {
+    }
+    return bSuccess;
+}
+
 static bool lcl_GetFileUrlFromOrigin(
     OUString /*out*/ &rFileUrl,
     const OUString &rOrigin )
