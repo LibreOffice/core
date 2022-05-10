@@ -649,8 +649,6 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
         maLibraryPath = SvtPathOptions().GetBasicPath();
     }
 
-    Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
-
     uno::Reference< io::XInputStream > xInput;
 
     mxStorage = xStorage;
@@ -784,6 +782,7 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
             // start parsing
             auto pLibArray = std::make_unique<::xmlscript::LibDescriptorArray> ( );
 
+            Reference< XParser > xParser = xml::sax::Parser::create(mxContext);
             try
             {
                 xParser->setDocumentHandler( ::xmlscript::importLibraryContainer( pLibArray.get() ) );
