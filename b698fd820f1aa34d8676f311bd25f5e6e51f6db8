@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04951368_257fa4aa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T11:05:37Z",
+      "side": 1,
+      "message": "What does this change try to achieve?  What bug would it fix?\n\nFor example, typereg::Writer::setFieldData has a narrow interface, where the index parameter is documented to be \"a valid index into the range of fields of this type writer\".  Why should this interface be widened so that the special case \"fieldCount \u003d\u003d 0 and index (thus necessarily) out of range\" causes a bad_alloc exception (which would also violate the function\u0027s documented use of bad_alloc as \"raised if an out-of-memory condition occurs\")?\n\n(And /if/ there were need to widen those functions\u0027 interfaces, it should be done in the underlying typereg_writer_setFieldData etc.)",
+      "revId": "b698fd820f1aa34d8676f311bd25f5e6e51f6db8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
