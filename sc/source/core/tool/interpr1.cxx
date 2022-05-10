@@ -5827,7 +5827,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     sal_uInt8 nParamCount = GetByte();
     sal_uInt8 nQueryCount = nParamCount / 2;
 
-    std::vector<sal_uInt32>& vConditions = mrContext.maConditions;
+    std::vector<sal_uInt8>& vConditions = mrContext.maConditions;
     // vConditions is cached, although it is clear'ed after every cell is interpreted,
     // if the SUMIFS/COUNTIFS are part of a matrix formula, then that is not enough because
     // with a single InterpretTail() call it results in evaluation of all the cells in the
@@ -5886,7 +5886,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
     SCCOL nDimensionCols = 0;
     SCROW nDimensionRows = 0;
     const SCSIZE nRefArrayRows = GetRefListArrayMaxSize( nParamCount);
-    std::vector<std::vector<sal_uInt32>> vRefArrayConditions;
+    std::vector<std::vector<sal_uInt8>> vRefArrayConditions;
 
     while (nParamCount > 1 && nGlobalError == FormulaError::NONE)
     {
@@ -6016,7 +6016,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                                     }
                                     // Reset condition results.
                                     std::for_each( vConditions.begin(), vConditions.end(),
-                                            [](sal_uInt32 & r){ r = 0.0; } );
+                                            [](sal_uInt8 & r){ r = 0.0; } );
                                 }
                             }
                             nRefArrayPos = nRefInList;
@@ -6192,7 +6192,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             if (nRefArrayPos != std::numeric_limits<size_t>::max())
             {
                 // Apply condition result to reference list array result position.
-                std::vector<sal_uInt32>& rVec = vRefArrayConditions[nRefArrayPos];
+                std::vector<sal_uInt8>& rVec = vRefArrayConditions[nRefArrayPos];
                 if (rVec.empty())
                     rVec = vConditions;
                 else
@@ -6207,9 +6207,9 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                 // When leaving an svRefList this has to be emptied not set to
                 // 0.0 because it's checked when entering an svRefList.
                 if (nRefInList == 0)
-                    std::vector<sal_uInt32>().swap( vConditions);
+                    std::vector<sal_uInt8>().swap( vConditions);
                 else
-                    std::for_each( vConditions.begin(), vConditions.end(), [](sal_uInt32 & r){ r = 0.0; } );
+                    std::for_each( vConditions.begin(), vConditions.end(), [](sal_uInt8 & r){ r = 0; } );
             }
         }
         nParamCount -= 2;
@@ -6392,7 +6392,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                         return;
                     }
 
-                    std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
+                    std::vector<sal_uInt8>::const_iterator itRes = vConditions.begin(), itResEnd = vConditions.end();
                     std::vector<double>::const_iterator itMain = aMainValues.begin();
                     for (; itRes != itResEnd; ++itRes, ++itMain)
                     {
@@ -6427,7 +6427,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                     if (nRefArrayMainPos < vRefArrayConditions.size())
                         vConditions = vRefArrayConditions[nRefArrayMainPos];
 
-                    std::vector<sal_uInt32>::const_iterator itRes = vConditions.begin();
+                    std::vector<sal_uInt8>::const_iterator itRes = vConditions.begin();
                     for (SCCOL nCol = 0; nCol < nDimensionCols; ++nCol)
                     {
                         for (SCROW nRow = 0; nRow < nDimensionRows; ++nRow, ++itRes)

@@ -61,7 +61,7 @@ struct ScInterpreterContext
     std::unique_ptr<ScSortedRangeCacheMap> mxScSortedRangeCache; // cache for unsorted lookups
     // Allocation cache for "aConditions" array in ScInterpreter::IterateParameterIfs()
     // This is populated/used only when formula-group threading is enabled.
-    std::vector<sal_uInt32> maConditions;
+    std::vector<sal_uInt8> maConditions;
     ScInterpreter* pInterpreter;
 
     ScInterpreterContext(const ScDocument& rDoc, SvNumberFormatter* pFormatter);
