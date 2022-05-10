@@ -120,6 +120,8 @@ protected:
     typedef std::pair<ScRefCellValue, SCROW> BinarySearchCellType;
     SortedCacheIndexer MakeBinarySearchIndexer(const sc::CellStoreType& rCells,
         SCROW nStartRow, SCROW nEndRow);
+
+    const sc::CellStoreType& columnCells() const;
 };
 
 // Data and functionality for specific types of query.

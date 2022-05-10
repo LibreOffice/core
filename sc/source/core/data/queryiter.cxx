@@ -1065,6 +1065,13 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
     sortedCache = &cache;
 }
 
+const sc::CellStoreType&
+ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::columnCells() const
+{   // Helper because these touch internal members, so that subclasses don't need to be friends.
+    const ScColumn& rCol = rDoc.maTabs[nTab]->aCol[nCol];
+    return rCol.maCells;
+}
+
 // The idea in iterating using the sorted cache is that the iteration is instead done
 // over indexes of the sorted cache (which is a stable sort of the cell contents) in the range
 // that fits the query condition and then that is mapped to rows. This will result in iterating
@@ -1101,22 +1108,22 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
 
 void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::IncPos()
 {
-    const ScColumn& rCol = rDoc.maTabs[nTab]->aCol[nCol];
+    const sc::CellStoreType& colCells = columnCells();
     if(sortedCachePos < sortedCachePosLast)
     {
         ++sortedCachePos;
         nRow = sortedCache->rowForIndex(sortedCachePos);
         // Avoid mdds position() call if row is in the same block.
-        if(maCurPos.first != rCol.maCells.end() && o3tl::make_unsigned(nRow) >= maCurPos.first->position
+        if(maCurPos.first != colCells.end() && o3tl::make_unsigned(nRow) >= maCurPos.first->position
             && o3tl::make_unsigned(nRow) < maCurPos.first->position + maCurPos.first->size)
             maCurPos.second = nRow - maCurPos.first->position;
         else
-            maCurPos = rCol.maCells.position(nRow);
+            maCurPos = colCells.position(nRow);
     }
     else
     {
         // This will make PerformQuery() go to next column.
-        maCurPos.first = rCol.maCells.end();
+        maCurPos.first = colCells.end();
         maCurPos.second = 0;
     }
 }
@@ -1276,6 +1283,20 @@ bool ScQueryCellIterator< accessType >::GetNext()
         nStopOnMismatch = nStopOnMismatchEnabled;
     if ( nTestEqualCondition )
         nTestEqualCondition = nTestEqualConditionEnabled;
+    if constexpr ( accessType == ScQueryCellIteratorAccess::SortedCache )
+    {
+        // When searching using sorted cache, we should always find cells that match,
+        // because InitPos()/IncPos() select only such rows, so skip GetThis() (and thus
+        // the somewhat expensive PerformQuery) as long as we're not at the end
+        // of a column.
+        if( maCurPos.first != this->columnCells().end())
+        {
+#ifdef DBG_UTIL
+            assert(GetThis());
+#endif
+            return true;
+        }
+    }
     return GetThis();
 }
 
