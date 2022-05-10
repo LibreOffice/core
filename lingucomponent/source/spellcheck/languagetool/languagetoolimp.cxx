@@ -295,14 +295,6 @@ void parseProofreadingJSONResponse(ProofreadingResult& rResult, std::string&& aJ
         });
 }
 
-OUString getLocaleListURL()
-{
-    if (auto oURL = LanguageToolCfg::BaseURL::get())
-        if (!oURL->isEmpty())
-            return *oURL + "/languages";
-    return {};
-}
-
 OUString getCheckerURL()
 {
     if (auto oURL = LanguageToolCfg::BaseURL::get())
@@ -336,44 +328,26 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
 
 uno::Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 {
+    osl::MutexGuard aGuard(linguistic::GetLinguMutex());
+
     if (m_aSuppLocales.hasElements())
         return m_aSuppLocales;
-    if (!LanguageToolCfg::IsEnabled::get())
-    {
-        return m_aSuppLocales;
-    }
 
-    OUString localeUrl = getLocaleListURL();
-    if (localeUrl.isEmpty())
-    {
-        return m_aSuppLocales;
-    }
-    tools::Long statusCode = 0;
-    std::string response = makeHttpRequest(localeUrl, HTTP_METHOD::HTTP_GET, OString(), statusCode);
-    if (statusCode != 200)
-    {
-        return m_aSuppLocales;
-    }
-    if (response.empty())
-    {
-        return m_aSuppLocales;
-    }
-    boost::property_tree::ptree root;
-    std::stringstream aStream(response);
-    boost::property_tree::read_json(aStream, root);
+    SvtLinguConfig aLinguCfg;
+    uno::Sequence<OUString> aLocaleList;
+    aLinguCfg.GetLocaleListFor("GrammarCheckers", "org.openoffice.lingu.LanguageToolGrammarChecker",
+                               aLocaleList);
 
-    size_t length = root.size();
-    m_aSuppLocales.realloc(length);
+    auto nLength = aLocaleList.getLength();
+    m_aSuppLocales.realloc(nLength);
     auto pArray = m_aSuppLocales.getArray();
-    int i = 0;
-    for (auto it = root.begin(); it != root.end(); it++, i++)
+    auto pLocaleList = aLocaleList.getArray();
+
+    for (auto i = 0; i < nLength; i++)
     {
-        boost::property_tree::ptree& localeItem = it->second;
-        const std::string longCode = localeItem.get<std::string>("longCode");
-        Locale aLocale = LanguageTag::convertToLocale(
-            OUString(longCode.c_str(), longCode.length(), RTL_TEXTENCODING_UTF8));
-        pArray[i] = aLocale;
+        pArray[i] = LanguageTag::convertToLocale(pLocaleList[i]);
     }
+
     return m_aSuppLocales;
 }
 
