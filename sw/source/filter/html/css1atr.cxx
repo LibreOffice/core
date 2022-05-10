@@ -190,9 +190,10 @@ OString lclConvToHex(sal_uInt16 nHex)
 }
 }
 
-bool IgnorePropertyForReqIF(bool bReqIF, std::string_view rProperty, std::string_view rValue)
+bool IgnorePropertyForReqIF(bool bReqIF, std::string_view rProperty, std::string_view rValue,
+                            bool bTable)
 {
-    if (!bReqIF)
+    if (!bReqIF || bTable)
         return false;
 
     // Only allow these two keys, nothing else in ReqIF mode.
@@ -248,9 +249,10 @@ public:
 
 void SwHTMLWriter::OutCSS1_Property( const char *pProp,
                                      std::string_view sVal,
-                                     const OUString *pSVal )
+                                     const OUString *pSVal,
+                                     bool bTable )
 {
-    if (IgnorePropertyForReqIF(mbReqIF, pProp, sVal))
+    if (IgnorePropertyForReqIF(mbReqIF, pProp, sVal, bTable))
         return;
 
     OStringBuffer sOut;
@@ -3207,7 +3209,8 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
     }
 
     if( !sOut.isEmpty() )
-        rHTMLWrt.OutCSS1_Property( sCSS1_P_background, sOut );
+        rHTMLWrt.OutCSS1_Property(sCSS1_P_background, std::string_view(), &sOut,
+                                  nMode == Css1Background::Table);
 
     return rWrt;
 }
