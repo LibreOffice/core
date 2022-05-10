@@ -30,6 +30,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.h>
 #include <rtl/strbuf.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/long.hxx>
 #include <comphelper/lok.hxx>
 
@@ -73,6 +74,12 @@ public:
     bool FindFontSubstitute(vcl::font::FontSelectPattern&, LogicalFontInstance* pLogicalFont, OUString&) const override;
 };
 
+bool FontHasCharacter(CTFontRef pFont, const OUString& rString, sal_Int32 nIndex, sal_Int32 nLen)
+{
+    CGGlyph glyphs[nLen];
+    return CTFontGetGlyphsForCharacters(pFont, reinterpret_cast<const UniChar*>(rString.getStr() + nIndex), glyphs, nLen);
+}
+
 }
 
 bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSelectPattern& rPattern, LogicalFontInstance* pLogicalFont,
@@ -88,6 +95,19 @@ bool CoreTextGlyphFallbackSubstititution::FindFontSubstitute(vcl::font::FontSele
         if (pFallback)
         {
             bFound = true;
+
+            // tdf#148470 remove the resolved chars from rMissing to flag which ones are still missing
+            // for an attempt with another font
+            OUStringBuffer aStillMissingChars;
+            for (sal_Int32 nStrIndex = 0; nStrIndex < rMissingChars.getLength();)
+            {
+                sal_Int32 nOldStrIndex = nStrIndex;
+                rMissingChars.iterateCodePoints(&nStrIndex);
+                sal_Int32 nCharLength = nStrIndex - nOldStrIndex;
+                if (!FontHasCharacter(pFallback, rMissingChars, nOldStrIndex, nCharLength))
+                    aStillMissingChars.append(rMissingChars.getStr() + nOldStrIndex, nCharLength);
+            }
+            rMissingChars = aStillMissingChars.toString();
 
             CTFontDescriptorRef pDesc = CTFontCopyFontDescriptor(pFallback);
             FontAttributes rAttr = DevFontFromCTFontDescriptor(pDesc, nullptr);
