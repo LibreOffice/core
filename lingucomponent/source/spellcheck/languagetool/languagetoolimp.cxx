@@ -35,11 +35,20 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <algorithm>
 #include <string_view>
+<<<<<<< HEAD
 #include <sal/log.hxx>
+=======
+
+>>>>>>> LanguageTool Grammar Checker implementation
 #include <svtools/languagetoolcfg.hxx>
 #include <tools/color.hxx>
 #include <tools/long.hxx>
 #include <com/sun/star/uno/Any.hxx>
+<<<<<<< HEAD
+=======
+#include <unotools/lingucfg.hxx>
+#include <osl/mutex.hxx>
+>>>>>>> LanguageTool Grammar Checker implementation
 
 using namespace osl;
 using namespace com::sun::star;
@@ -108,40 +117,26 @@ sal_Bool SAL_CALL LanguageToolGrammarChecker::hasLocale(const Locale& rLocale)
 
 Sequence<Locale> SAL_CALL LanguageToolGrammarChecker::getLocales()
 {
+    MutexGuard  aGuard( GetLinguMutex() );
+
     if (m_aSuppLocales.hasElements())
         return m_aSuppLocales;
-    SvxLanguageToolOptions& rLanguageOpts = SvxLanguageToolOptions::Get();
-    OString localeUrl = OUStringToOString(rLanguageOpts.getLocaleListURL(), RTL_TEXTENCODING_UTF8);
-    if (localeUrl.isEmpty())
-    {
-        return m_aSuppLocales;
-    }
-    tools::Long statusCode = 0;
-    std::string response = makeHttpRequest(localeUrl, HTTP_METHOD::HTTP_GET, OString(), statusCode);
-    if (statusCode != 200)
-    {
-        return m_aSuppLocales;
-    }
-    if (response.empty())
-    {
-        return m_aSuppLocales;
-    }
-    boost::property_tree::ptree root;
-    std::stringstream aStream(response);
-    boost::property_tree::read_json(aStream, root);
 
-    size_t length = root.size();
-    m_aSuppLocales.realloc(length);
+    SvtLinguConfig aLinguCfg;
+    uno::Sequence< OUString > aLocaleList;
+    aLinguCfg.GetLocaleListFor( "GrammarCheckers",
+            "org.openoffice.lingu.LanguageToolGrammarChecker", aLocaleList );
+
+    auto nLength = aLocaleList.getLength();
+    m_aSuppLocales.realloc(nLength);
     auto pArray = m_aSuppLocales.getArray();
-    int i = 0;
-    for (auto it = root.begin(); it != root.end(); it++, i++)
+    auto pLocaleList = aLocaleList.getArray();
+
+    for (auto i = 0; i < nLength; i++)
     {
-        boost::property_tree::ptree& localeItem = it->second;
-        const std::string longCode = localeItem.get<std::string>("longCode");
-        Locale aLocale = LanguageTag::convertToLocale(
-            OUString(longCode.c_str(), longCode.length(), RTL_TEXTENCODING_UTF8));
-        pArray[i] = aLocale;
+        pArray[i] = LanguageTag::convertToLocale(pLocaleList[i]);
     }
+
     return m_aSuppLocales;
 }
 
