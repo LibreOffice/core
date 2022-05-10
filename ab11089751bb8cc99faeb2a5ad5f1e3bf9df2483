@@ -34,6 +34,24 @@
       "parentUuid": "d16d2019_8eec46eb",
       "revId": "ab11089751bb8cc99faeb2a5ad5f1e3bf9df2483",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c7880c7_26089193",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002268
+      },
+      "writtenOn": "2022-05-10T03:01:54Z",
+      "side": 1,
+      "message": "Thanks for clear explanation Stefan. My goal is limited to supporting an informed decision. I think the dialog between you and me has come as far as necessary for that goal. And now the decision about the concrete path forward among the options that are laid out must rest with Heiko (and maybe Adolfo).",
+      "parentUuid": "aac843d1_50057834",
+      "revId": "ab11089751bb8cc99faeb2a5ad5f1e3bf9df2483",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
