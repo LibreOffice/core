@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d484057_5d97e71a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-10T08:38:33Z",
+      "side": 1,
+      "message": "Carry over the code review from https://gerrit.libreoffice.org/c/core/+/133867",
+      "revId": "571f82cce2b3fbc3f08ea783cd478cd364c5da4f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
