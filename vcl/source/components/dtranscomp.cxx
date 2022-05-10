@@ -20,7 +20,6 @@
 #include <sal/config.h>
 
 #include <comphelper/lok.hxx>
-#include <osl/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
@@ -40,8 +39,7 @@
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
-#include <cppuhelper/basemutex.hxx>
-#include <cppuhelper/compbase.hxx>
+#include <comphelper/compbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
 using namespace com::sun::star;
@@ -54,8 +52,7 @@ namespace {
 
 // generic implementation to satisfy SalInstance
 class GenericClipboard :
-        public cppu::BaseMutex,
-        public cppu::WeakComponentImplHelper<
+        public comphelper::WeakComponentImplHelper<
         datatransfer::clipboard::XSystemClipboard,
         XServiceInfo
         >
@@ -66,10 +63,7 @@ class GenericClipboard :
 
 public:
 
-    GenericClipboard() : cppu::WeakComponentImplHelper<
-        datatransfer::clipboard::XSystemClipboard,
-        XServiceInfo
-        >( m_aMutex )
+    GenericClipboard()
     {}
 
     /*
@@ -142,7 +136,7 @@ void GenericClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
 {
-    osl::ClearableMutexGuard aGuard( m_aMutex );
+    std::unique_lock aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
     Reference< datatransfer::XTransferable > xOldContents( m_aContents );
     m_aContents = xTrans;
@@ -152,7 +146,7 @@ void GenericClipboard::setContents(
     datatransfer::clipboard::ClipboardEvent aEv;
     aEv.Contents = m_aContents;
 
-    aGuard.clear();
+    aGuard.unlock();
 
     if( xOldOwner.is() && xOldOwner != xClipboardOwner )
         xOldOwner->lostOwnership( this, xOldContents );
@@ -174,14 +168,14 @@ sal_Int8 GenericClipboard::getRenderingCapabilities()
 
 void GenericClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     m_aListeners.push_back( listener );
 }
 
 void GenericClipboard::removeClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    std::unique_lock aGuard(m_aMutex);
 
     m_aListeners.erase(std::remove(m_aListeners.begin(), m_aListeners.end(), listener), m_aListeners.end());
 }
@@ -204,16 +198,15 @@ namespace {
 /*
 *   generic DragSource dummy
 */
-class GenericDragSource : public cppu::WeakComponentImplHelper<
+class GenericDragSource : public ::comphelper::WeakComponentImplHelper<
             datatransfer::dnd::XDragSource,
             XInitialization,
             css::lang::XServiceInfo
             >
 {
-    osl::Mutex                          m_aMutex;
     css::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
 public:
-    GenericDragSource() : WeakComponentImplHelper( m_aMutex ) {}
+    GenericDragSource() {}
 
     // XDragSource
     virtual sal_Bool    SAL_CALL isDragImageSupported() override;
@@ -311,16 +304,14 @@ Reference< XInterface > DragSource_createInstance( const Reference< XMultiServic
 
 namespace {
 
-class GenericDropTarget : public cppu::WeakComponentImplHelper<
+class GenericDropTarget : public comphelper::WeakComponentImplHelper<
                                            datatransfer::dnd::XDropTarget,
                                            XInitialization,
                                            css::lang::XServiceInfo
                                            >
 {
-    osl::Mutex m_aMutex;
 public:
-    GenericDropTarget() : WeakComponentImplHelper( m_aMutex )
-    {}
+    GenericDropTarget() {}
 
     // XInitialization
     virtual void        SAL_CALL initialize( const Sequence< Any >& args ) override;
