@@ -190,10 +190,13 @@ static void TransferMediaType( const uno::Reference< embed::XStorage >& i_rSourc
 static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< uno::XComponentContext >& _rxContext,
     const OUString& _rDocumentServiceName, bool _bEmbeddedScriptSupport, const bool i_bDocumentRecoverySupport )
 {
+    static constexpr OUStringLiteral sEmbeddedObject = u"EmbeddedObject";
+    static constexpr OUStringLiteral sEmbeddedScriptSupport = u"EmbeddedScriptSupport";
+    static constexpr OUStringLiteral sDocumentRecoverySupport = u"DocumentRecoverySupport";
     ::comphelper::NamedValueCollection aArguments;
-    aArguments.put( "EmbeddedObject", true );
-    aArguments.put( "EmbeddedScriptSupport", _bEmbeddedScriptSupport );
-    aArguments.put( "DocumentRecoverySupport", i_bDocumentRecoverySupport );
+    aArguments.put( sEmbeddedObject, true );
+    aArguments.put( sEmbeddedScriptSupport, _bEmbeddedScriptSupport );
+    aArguments.put( sDocumentRecoverySupport, i_bDocumentRecoverySupport );
 
     uno::Reference< uno::XInterface > xDocument;
     try

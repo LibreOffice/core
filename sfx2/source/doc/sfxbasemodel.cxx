@@ -879,15 +879,24 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
             pObjectShell->SetMacroCallsSeenWhileLoading();
         }
 
-        aArgs.remove( "WinExtent" );
-        aArgs.remove( "BreakMacroSignature" );
-        aArgs.remove( "MacroEventRead" );
-        aArgs.remove( "Stream" );
-        aArgs.remove( "InputStream" );
-        aArgs.remove( "URL" );
-        aArgs.remove( "Frame" );
-        aArgs.remove( "Password" );
-        aArgs.remove( "EncryptionData" );
+        static constexpr OUStringLiteral sWinExtent = u"WinExtent";
+        static constexpr OUStringLiteral sBreakMacroSignature = u"BreakMacroSignature";
+        static constexpr OUStringLiteral sMacroEventRead = u"MacroEventRead";
+        static constexpr OUStringLiteral sStream = u"Stream";
+        static constexpr OUStringLiteral sInputStream = u"InputStream";
+        static constexpr OUStringLiteral sURL = u"URL";
+        static constexpr OUStringLiteral sFrame = u"Frame";
+        static constexpr OUStringLiteral sPassword = u"Password";
+        static constexpr OUStringLiteral sEncryptionData = u"EncryptionData";
+        aArgs.remove( sWinExtent );
+        aArgs.remove( sBreakMacroSignature );
+        aArgs.remove( sMacroEventRead );
+        aArgs.remove( sStream );
+        aArgs.remove( sInputStream );
+        aArgs.remove( sURL );
+        aArgs.remove( sFrame );
+        aArgs.remove( sPassword );
+        aArgs.remove( sEncryptionData );
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
