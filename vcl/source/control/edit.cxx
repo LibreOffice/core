@@ -445,8 +445,9 @@ void Edit::ImplInvalidateOrRepaint()
     if( IsPaintTransparent() )
     {
         Invalidate();
-        // FIXME: this is currently only on macOS
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects )
+        // FIXME: this was only for macOS, unclear now.
+        if( !comphelper::LibreOfficeKit::isActive() &&
+            ImplGetSVData()->maNWFData.mbNoFocusRects )
             PaintImmediately();
     }
     else
@@ -1875,9 +1876,10 @@ void Edit::GetFocus()
 
         ImplShowCursor();
 
-        // FIXME: this is currently only on macOS
+        // FIXME: this was only on macOS
         // check for other platforms that need similar handling
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+        if( !comphelper::LibreOfficeKit::isActive() &&
+            ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
             IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
         {
@@ -1902,15 +1904,15 @@ void Edit::LoseFocus()
 {
     if ( !mpSubEdit )
     {
-        // FIXME: this is currently only on macOS
+        // FIXME: this was only on macOS
         // check for other platforms that need similar handling
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+        if( !comphelper::LibreOfficeKit::isActive() &&
+            ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
             IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
         {
             ImplInvalidateOutermostBorder( mbIsSubEdit ? GetParent() : this );
         }
-
         if ( !mbActivePopup && !( GetStyle() & WB_NOHIDESELECTION ) && maSelection.Len() )
             ImplInvalidateOrRepaint();    // paint the selection
     }
@@ -2339,9 +2341,11 @@ void Edit::Modify()
 
         // #i13677# notify edit listeners about caret position change
         CallEventListeners( VclEventId::EditCaretChanged );
-        // FIXME: this is currently only on macOS
+
+        // FIXME: this was only on macOS
         // check for other platforms that need similar handling
-        if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
+        if( !comphelper::LibreOfficeKit::isActive() &&
+            ImplGetSVData()->maNWFData.mbNoFocusRects &&
             IsNativeWidgetEnabled() &&
             IsNativeControlSupported( ControlType::Editbox, ControlPart::Entire ) )
         {
