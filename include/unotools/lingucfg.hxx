@@ -192,6 +192,8 @@ public:
 
     bool GetDictionaryEntry( const OUString &rNodeName, SvtLinguConfigDictionaryEntry &rDicEntry ) const;
 
+    bool GetLocaleListFor( const OUString &rSetName, const OUString &rSetEntry, css::uno::Sequence< OUString > &rFormatList ) const;
+
     css::uno::Sequence< OUString > GetDisabledDictionaries() const;
 
     std::vector< SvtLinguConfigDictionaryEntry > GetActiveDictionariesByFormat( std::u16string_view rFormatName ) const;

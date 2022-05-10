@@ -319,6 +319,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ogltrans, \
 
 $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	acc \
+	LanguageTool \
 	$(call gb_Helper_optional,AVMEDIA,avmedia) \
 	$(if $(filter MACOSX,$(OS)),\
 		avmediaMacAVF \
