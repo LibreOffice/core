@@ -58,6 +58,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c399401_bd7fb5d6",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1706,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-10T07:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aec03648_bb548708",
+      "range": {
+        "startLine": 1706,
+        "startChar": 58,
+        "endLine": 1706,
+        "endChar": 63
+      },
+      "revId": "16a23aa7ed3dae3c9da4099d4ffcb9c54f856454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d30e069_39171a28",
@@ -71,6 +95,30 @@
       "writtenOn": "2022-05-02T15:23:47Z",
       "side": 1,
       "message": "same as above",
+      "range": {
+        "startLine": 1707,
+        "startChar": 59,
+        "endLine": 1707,
+        "endChar": 63
+      },
+      "revId": "16a23aa7ed3dae3c9da4099d4ffcb9c54f856454",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf910247_9d9f5cb3",
+        "filename": "oox/source/export/shapes.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1707,
+      "author": {
+        "id": 1001002
+      },
+      "writtenOn": "2022-05-10T07:20:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d30e069_39171a28",
       "range": {
         "startLine": 1707,
         "startChar": 59,
