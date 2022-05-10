@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bea47c0d_1d78d937",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T11:11:04Z",
+      "side": 1,
+      "message": "note description of \u003chttps://bugs.documentfoundation.org/show_bug.cgi?id\u003d143148#c0\u003e \"Use pragma once instead of include guards (Episode 2: Endgame)\":\n\n\"There are some source files containing include guards that are meant to also be processed by compilers other than LO\u0027s build baseline compilers:\n\n* \"All URE include files, see the (generated via odk/CustomTarget_allheaders.mk) workdir/CustomTarget/odk/allheaders/allheaders.hxx for a complete list.\n\n[...]\n\n\"For those source files, it is probably better to conservatively stick with include guards than to replace them with #pragma once.\"",
+      "revId": "68915010f0650775b8c781e53677197a05e9d801",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
