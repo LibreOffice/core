@@ -1023,7 +1023,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
 
                 pAvailGrammarSvcs->push_back( SvcInfo( aImplName, std::move(aLanguages) ) );
             }
-            catch (const uno::Exception &)
+            catch (const uno::Exception &ex)
             {
                 SAL_WARN( "linguistic", "createInstance failed" );
             }
