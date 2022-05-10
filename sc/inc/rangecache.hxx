@@ -90,16 +90,16 @@ public:
     size_t size() const { return mSortedRows.size(); }
     size_t indexForRow(SCROW row) const
     {
-        std::vector<SCROW>::const_iterator pos
-            = std::find(mSortedRows.begin(), mSortedRows.end(), row);
-        assert(pos != mSortedRows.end());
-        return pos - mSortedRows.begin();
+        assert(row >= maRange.aStart.Row() && row <= maRange.aEnd.Row());
+        assert(mRowToIndex[row - maRange.aStart.Row()] != mSortedRows.max_size());
+        return mRowToIndex[row - maRange.aStart.Row()];
     }
     SCROW rowForIndex(size_t index) const { return mSortedRows[index]; }
 
 private:
     // Rows sorted by their value.
     std::vector<SCROW> mSortedRows;
+    std::vector<size_t> mRowToIndex; // indexed by 'SCROW - maRange.aStart.Row()'
     ScRange maRange;
     ScDocument* mpDoc;
     ScSortedRangeCacheMap& mCacheMap;
