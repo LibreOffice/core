@@ -18,6 +18,7 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_spell \
 	StaticLibrary_ulingu \
 	Library_numbertext \
+	Library_LanguageTool \
 ))
 
 # vim: set noet sw=4 ts=4:
