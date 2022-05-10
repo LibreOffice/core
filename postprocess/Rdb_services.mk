@@ -94,6 +94,7 @@ $(eval $(call gb_Rdb_add_components,services,\
 	lingucomponent/source/hyphenator/hyphen/hyphen \
 	lingucomponent/source/languageguessing/guesslang \
 	lingucomponent/source/spellcheck/spell/spell \
+	lingucomponent/source/spellcheck/languagetool/LanguageTool \
 	lingucomponent/source/thesaurus/libnth/lnth \
 	lingucomponent/source/numbertext/numbertext \
 	linguistic/source/lng \
