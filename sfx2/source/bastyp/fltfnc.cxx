@@ -715,12 +715,12 @@ std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4UIName( std::u16str
 
 std::shared_ptr<const SfxFilter> SfxFilterMatcher::GetFilter4FilterName( const OUString& rName, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    OUString aName( rName );
-    sal_Int32 nIndex = aName.indexOf(": ");
+    std::u16string_view aName( rName );
+    sal_Int32 nIndex = rName.indexOf(": ");
     if (  nIndex != -1 )
     {
         SAL_WARN( "sfx.bastyp", "Old filter name used!");
-        aName = rName.copy( nIndex + 2 );
+        aName = rName.subView( nIndex + 2 );
     }
 
     if ( bFirstRead )
