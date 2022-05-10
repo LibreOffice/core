@@ -23,12 +23,12 @@
 
 namespace basegfx
 {
-    B2DRange::B2DRange( const B2IRange& rRange )
+    B2DRange::B2DRange(const B2IRange& rRange)
     {
-        if( !rRange.isEmpty() )
+        if (!rRange.isEmpty())
         {
-            maRangeX = MyBasicRange(rRange.getMinX());
-            maRangeY = MyBasicRange(rRange.getMinY());
+            maRangeX = basegfx::BasicRange<ValueType, TraitsType>(rRange.getMinX());
+            maRangeY = basegfx::BasicRange<ValueType, TraitsType>(rRange.getMinY());
 
             maRangeX.expand(rRange.getMaxX());
             maRangeY.expand(rRange.getMaxY());
@@ -48,9 +48,9 @@ namespace basegfx
         }
     }
 
-    B2DRange& B2DRange::operator*=( const ::basegfx::B2DHomMatrix& rMat )
+    B2DRange& B2DRange::operator*=(const basegfx::B2DHomMatrix& rMatrix)
     {
-        transform(rMat);
+        transform(rMatrix);
         return *this;
     }
 

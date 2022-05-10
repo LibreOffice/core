@@ -27,7 +27,7 @@
 
 class B2DRangeTest : public CppUnit::TestFixture
 {
-    void testRange()
+    void testCreation()
     {
         basegfx::B2DRange aRange(1.2, 2.3, 3.5, 4.8);
         CPPUNIT_ASSERT_EQUAL(1.2, aRange.getMinX());
@@ -37,9 +37,20 @@ class B2DRangeTest : public CppUnit::TestFixture
 
         CPPUNIT_ASSERT_EQUAL(2.3, aRange.getWidth());
         CPPUNIT_ASSERT_EQUAL(2.5, aRange.getHeight());
+    }
 
+    void testRound()
+    {
+        basegfx::B2DRange aRange(1.2, 2.3, 3.5, 4.8);
         CPPUNIT_ASSERT_EQUAL_MESSAGE("simple range rounding from double to integer",
                                      basegfx::B2IRange(1, 2, 4, 5), fround(aRange));
+    }
+
+    void testCenter()
+    {
+        basegfx::B2DRange aRange(1.0, 2.0, 2.0, 3.0);
+        CPPUNIT_ASSERT_EQUAL(1.5, aRange.getCenterX());
+        CPPUNIT_ASSERT_EQUAL(2.5, aRange.getCenterY());
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -47,7 +58,9 @@ class B2DRangeTest : public CppUnit::TestFixture
     // because these macros are need by auto register mechanism.
 
     CPPUNIT_TEST_SUITE(B2DRangeTest);
-    CPPUNIT_TEST(testRange);
+    CPPUNIT_TEST(testCreation);
+    CPPUNIT_TEST(testRound);
+    CPPUNIT_TEST(testCenter);
     CPPUNIT_TEST_SUITE_END();
 };
 

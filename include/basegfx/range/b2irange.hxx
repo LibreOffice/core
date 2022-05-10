@@ -22,11 +22,12 @@
 #include <ostream>
 #include <vector>
 
+#include <basegfx/basegfxdllapi.h>
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/tuple/b2ituple.hxx>
 #include <basegfx/tuple/b2i64tuple.hxx>
 #include <basegfx/range/basicrange.hxx>
-#include <basegfx/basegfxdllapi.h>
+#include <basegfx/range/Range2D.hxx>
 
 namespace basegfx
 {
@@ -48,106 +49,29 @@ namespace basegfx
 
         @see B2IBox
      */
-    class B2IRange
+    class B2IRange : public Range2D<sal_Int32, Int32Traits>
     {
     public:
-        typedef sal_Int32       ValueType;
-        typedef Int32Traits     TraitsType;
-
-        B2IRange() {}
+        B2IRange()
+            : Range2D()
+        {}
 
         /// Create degenerate interval consisting of a single point
-        explicit B2IRange(const B2ITuple& rTuple)
-        :   maRangeX(rTuple.getX()),
-            maRangeY(rTuple.getY())
+        explicit B2IRange(const Tuple2D<ValueType>& rTuple)
+            : Range2D(rTuple)
         {
-        }
-
-        /// Create proper interval between the two given integer pairs
-        B2IRange(sal_Int32 x1,
-                 sal_Int32 y1,
-                 sal_Int32 x2,
-                 sal_Int32 y2)
-        :   maRangeX(x1),
-            maRangeY(y1)
-        {
-            maRangeX.expand(x2);
-            maRangeY.expand(y2);
         }
 
         /// Create proper interval between the two given points
-        B2IRange(const B2ITuple& rTuple1,
-                 const B2ITuple& rTuple2)
-        :   maRangeX(rTuple1.getX()),
-            maRangeY(rTuple1.getY())
+        B2IRange(const Tuple2D<ValueType>& rTuple1,
+                 const Tuple2D<ValueType>& rTuple2)
+            : Range2D(rTuple1, rTuple2)
         {
-            expand( rTuple2 );
         }
 
-        /** Check if the interval set is empty
-
-            @return false, if no value is in this set - having a
-            single point included will already return true.
-         */
-        bool isEmpty() const
-        {
-            return maRangeX.isEmpty() || maRangeY.isEmpty();
-        }
-
-        /// reset the object to empty state again, clearing all values
-        void reset()
-        {
-            maRangeX.reset();
-            maRangeY.reset();
-        }
-
-        bool operator==( const B2IRange& rRange ) const
-        {
-            return (maRangeX == rRange.maRangeX
-                && maRangeY == rRange.maRangeY);
-        }
-
-        bool operator!=( const B2IRange& rRange ) const
-        {
-            return (maRangeX != rRange.maRangeX
-                || maRangeY != rRange.maRangeY);
-        }
-
-        /// get lower bound of the set. returns arbitrary values for empty sets.
-        sal_Int32 getMinX() const
-        {
-            return maRangeX.getMinimum();
-        }
-
-        /// get lower bound of the set. returns arbitrary values for empty sets.
-        sal_Int32 getMinY() const
-        {
-            return maRangeY.getMinimum();
-        }
-
-        /// get upper bound of the set. returns arbitrary values for empty sets.
-        sal_Int32 getMaxX() const
-        {
-            return maRangeX.getMaximum();
-        }
-
-        /// get upper bound of the set. returns arbitrary values for empty sets.
-        sal_Int32 getMaxY() const
-        {
-            return maRangeY.getMaximum();
-        }
-
-        /// return difference between upper and lower X value. returns 0 for empty sets.
-        sal_Int64 getWidth() const
-        {
-            return maRangeX.getRange();
-        }
-
-        /// return difference between upper and lower Y value. returns 0 for empty sets.
-        sal_Int64 getHeight() const
-        {
-            return maRangeY.getRange();
-        }
+        B2IRange(ValueType x1, ValueType y1, ValueType x2, ValueType y2)
+            : Range2D(x1, y1, x2, y2)
+        {}
 
         /// get lower bound of the set. returns arbitrary values for empty sets.
         B2IPoint getMinimum() const
@@ -175,49 +99,6 @@ namespace basegfx
                 maRangeY.getRange()
                 );
         }
-
-        /// yields true if given point is contained in set
-        bool isInside(const B2ITuple& rTuple) const
-        {
-            return (
-                maRangeX.isInside(rTuple.getX())
-                && maRangeY.isInside(rTuple.getY())
-                );
-        }
-
-        /// add point to the set, expanding as necessary
-        void expand(const B2ITuple& rTuple)
-        {
-            maRangeX.expand(rTuple.getX());
-            maRangeY.expand(rTuple.getY());
-        }
-
-        /// add rRange to the set, expanding as necessary
-        void expand(const B2IRange& rRange)
-        {
-            maRangeX.expand(rRange.maRangeX);
-            maRangeY.expand(rRange.maRangeY);
-        }
-
-        /// calc set intersection
-        void intersect(const B2IRange& rRange)
-        {
-            maRangeX.intersect(rRange.maRangeX);
-            maRangeY.intersect(rRange.maRangeY);
-        }
-
-        B2ITuple clamp(const B2ITuple& rTuple) const
-        {
-            return B2ITuple(
-                maRangeX.clamp(rTuple.getX()),
-                maRangeY.clamp(rTuple.getY()));
-        }
-
-    private:
-        typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
-
-        MyBasicRange        maRangeX;
-        MyBasicRange        maRangeY;
     };
 
     /** Compute the set difference of the two given ranges
@@ -239,19 +120,20 @@ namespace basegfx
 
         @return the input vector
      */
-    BASEGFX_DLLPUBLIC ::std::vector< B2IRange >& computeSetDifference( ::std::vector< B2IRange >&   o_rResult,
-                                                     const B2IRange&            rFirst,
-                                                     const B2IRange&            rSecond );
+    BASEGFX_DLLPUBLIC std::vector<B2IRange>& computeSetDifference(
+                                                std::vector<B2IRange>& o_rResult,
+                                                const B2IRange& rFirst,
+                                                const B2IRange& rSecond);
 
-    template< typename charT, typename traits >
-    inline std::basic_ostream<charT, traits> & operator <<(
-        std::basic_ostream<charT, traits> & stream, const B2IRange& range )
+    /** Write to char stream */
+    template<typename charT, typename traits>
+    inline std::basic_ostream<charT, traits>& operator<<(
+        std::basic_ostream<charT, traits>& stream, const B2IRange& range)
     {
         if (range.isEmpty())
             return stream << "EMPTY";
         else
-            return stream << range.getWidth() << 'x' << range.getHeight()
-                          << "@(" << range.getMinX() << "," << range.getMinY() << ")";
+            return stream << range.getWidth() << 'x' << range.getHeight() << "@" << range.getMinimum();
     }
 
 } // end of namespace basegfx
