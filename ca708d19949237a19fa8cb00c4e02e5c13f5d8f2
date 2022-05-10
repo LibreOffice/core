@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b0e844_730f8448",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-05-10T08:57:03Z",
+      "side": 1,
+      "message": "created from https://github.com/LibreOffice/core/pull/32",
+      "revId": "ca708d19949237a19fa8cb00c4e02e5c13f5d8f2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
