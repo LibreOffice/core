@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a4bcfa3_0ffaccbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-05-10T11:22:20Z",
+      "side": 1,
+      "message": "personally I\u0027d prefer the parallelism to be handled by make/decoupling the targets instead of having a single target that does additional parallelism on its own.\n\nAlso not sure what the benefit is in using a shellscript instead of a make macro. But definitely won\u0027t block it :-)",
+      "revId": "185b687aa0e254b3be088cc6e9038388af719d35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
