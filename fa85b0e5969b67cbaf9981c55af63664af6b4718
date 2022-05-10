@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8956496_4c176a46",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T14:48:45Z",
+      "side": 1,
+      "message": "\u003e Patch Set 10 was rebased.\n\nmanually fixed merge conflicts of this relation chain against master",
+      "revId": "fa85b0e5969b67cbaf9981c55af63664af6b4718",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
