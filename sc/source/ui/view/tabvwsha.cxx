@@ -29,6 +29,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/ilstitem.hxx>
 #include <svl/numformat.hxx>
+#include <svl/zformat.hxx>
 #include <svl/int64item.hxx>
 #include <svl/srchitem.hxx>
 #include <svl/srchdefs.hxx>
@@ -127,6 +128,17 @@ bool ScTabViewShell::GetFunction( OUString& rFuncStr, FormulaError nErrCode )
                     {
                         // number format from attributes or formula
                         nNumFmt = rDoc.GetNumberFormat( nPosX, nPosY, nTab );
+                        // If the number format is time (without date) and the
+                        // result is not within 24 hours, use a duration
+                        // format. Summing date+time doesn't make much sense
+                        // otherwise but we also don't want to display duration
+                        // for a single date+time value.
+                        if (nVal < 0.0 || nVal >= 1.0)
+                        {
+                            const SvNumberformat* pFormat = pFormatter->GetEntry(nNumFmt);
+                            if (pFormat && (pFormat->GetType() == SvNumFormatType::TIME))
+                                nNumFmt = pFormatter->GetTimeFormat( nVal, pFormat->GetLanguage(), true);
+                        }
                     }
 
                     OUString aValStr;
