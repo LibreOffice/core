@@ -406,6 +406,36 @@
         </info>
         <value>true</value>
       </prop>
+      <group oor:name="LanguageTool">
+        <info>
+          <desc>Contains grammar checking relevant settings.</desc>
+        </info>
+          <prop oor:name="BaseURL" oor:type="xs:string">
+            <info>
+              <desc>LanguageTool Grammar Checker URL</desc>
+              <label>URL for automatic grammar checking</label>
+            </info>
+          </prop>
+          <prop oor:name="Username" oor:type="xs:string">
+            <info>
+              <desc>LanguageTool Grammar Checker Username for private API</desc>
+              <label>Locale List URL for automatic grammar checking</label>
+            </info>
+          </prop>
+          <prop oor:name="ApiKey" oor:type="xs:string">
+            <info>
+              <desc>LanguageTool Grammar Checker Api Key for private API</desc>
+              <label>Api Key for automatic grammar checking</label>
+            </info>
+          </prop>
+          <prop oor:name="IsEnabled" oor:type="xs:boolean" oor:nillable="false">
+            <info>
+              <desc>Enable or disable LanguageTool Remote Grammar Checker</desc>
+              <label>LanguageTool Grammar Checker</label>
+            </info>
+            <value>false</value>
+          </prop>
+      </group>
     </group>
     <group oor:name="Hyphenation">
       <info>
