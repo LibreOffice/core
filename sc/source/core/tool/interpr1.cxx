@@ -6465,10 +6465,20 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         // COUNTIFS only.
         if (vRefArrayConditions.empty())
         {
-            for (auto const & rCond : vConditions)
+            // The code below is this but optimized for most elements not matching.
+            // for (auto const & rCond : vConditions)
+            //     if (rCond == nQueryCount)
+            //         ++aRes.mfCount;
+            static_assert(sizeof(vConditions[0]) == 1);
+            const sal_uInt8* pos = vConditions.data();
+            const sal_uInt8* end = pos + vConditions.size();
+            for(;;)
             {
-                if (rCond == nQueryCount)
-                    ++aRes.mfCount;
+                pos = static_cast< const sal_uInt8* >( memchr( pos, nQueryCount, end - pos ));
+                if( pos == nullptr )
+                    break;
+                ++aRes.mfCount;
+                ++pos;
             }
         }
         else
