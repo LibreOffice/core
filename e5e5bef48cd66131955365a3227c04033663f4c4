@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d451a937_08d79679",
+        "filename": "sfx2/source/doc/SfxDocumentMetaData.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 1037,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-10T12:05:40Z",
+      "side": 1,
+      "message": "a similar function getNameSpace already exists but ofc it returns OUString so it\u0027s probably unusably slow and obsolete",
+      "revId": "e5e5bef48cd66131955365a3227c04033663f4c4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
