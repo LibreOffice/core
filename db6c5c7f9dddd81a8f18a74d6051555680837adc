@@ -16,6 +16,24 @@
       "message": "I came across this via \u003chttps://gerrit.libreoffice.org/c/core/+/134103\u003e \"Fix stack-use-after-scope\" and naively wonder whether it is really intended to create maObjectRange here in the destructor if it hasn\u0027t already been created during the object\u0027s lifetime (i.e., if the below call to InvalidatePartOfView would indeed be necessary if maObjectRange had not been created in the first place)",
       "revId": "db6c5c7f9dddd81a8f18a74d6051555680837adc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "289b6840_1c5a790b",
+        "filename": "svx/source/sdr/contact/viewobjectcontact.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1002266
+      },
+      "writtenOn": "2022-05-10T12:53:13Z",
+      "side": 1,
+      "message": "the argument is valid and makes complete sense. The problem was only in the case of undoing. sometimes charts won\u0027t disappear on undoing if it was created using copy-paste. I may be missing something but it was not disappearing because maObjectRange was not correctly initialised and InvalidatePartOfView was never called.",
+      "parentUuid": "d1fada89_9f7c12bc",
+      "revId": "db6c5c7f9dddd81a8f18a74d6051555680837adc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
