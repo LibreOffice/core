@@ -3447,9 +3447,11 @@ SfxMedium::SfxMedium( const uno::Sequence<beans::PropertyValue>& aArgs ) :
 
 void SfxMedium::SetArgs(const uno::Sequence<beans::PropertyValue>& rArgs)
 {
+    static constexpr OUStringLiteral sStream(u"Stream");
+    static constexpr OUStringLiteral sInputStream(u"InputStream");
     comphelper::SequenceAsHashMap aArgsMap(rArgs);
-    aArgsMap.erase("Stream");
-    aArgsMap.erase("InputStream");
+    aArgsMap.erase(sStream);
+    aArgsMap.erase(sInputStream);
     pImpl->m_aArgs = aArgsMap.getAsConstPropertyValueList();
 }
 

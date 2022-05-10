@@ -267,10 +267,14 @@ bool MimeConfigurationHelper::GetVerbByShortcut( const OUString& aVerbShortcut,
         if ( xVerbsConfig.is() && ( xVerbsConfig->getByName( aVerbShortcut ) >>= xVerbsProps ) && xVerbsProps.is() )
         {
             embed::VerbDescriptor aTempDescr;
-            if ( ( xVerbsProps->getByName("VerbID") >>= aTempDescr.VerbID )
-              && ( xVerbsProps->getByName("VerbUIName") >>= aTempDescr.VerbName )
-              && ( xVerbsProps->getByName("VerbFlags") >>= aTempDescr.VerbFlags )
-              && ( xVerbsProps->getByName("VerbAttributes") >>= aTempDescr.VerbAttributes ) )
+            static constexpr OUStringLiteral sVerbID = u"VerbID";
+            static constexpr OUStringLiteral sVerbUIName = u"VerbUIName";
+            static constexpr OUStringLiteral sVerbFlags = u"VerbFlags";
+            static constexpr OUStringLiteral sVerbAttributes = u"VerbAttributes";
+            if ( ( xVerbsProps->getByName(sVerbID) >>= aTempDescr.VerbID )
+              && ( xVerbsProps->getByName(sVerbUIName) >>= aTempDescr.VerbName )
+              && ( xVerbsProps->getByName(sVerbFlags) >>= aTempDescr.VerbFlags )
+              && ( xVerbsProps->getByName(sVerbAttributes) >>= aTempDescr.VerbAttributes ) )
             {
                 aDescriptor = aTempDescr;
                 bResult = true;

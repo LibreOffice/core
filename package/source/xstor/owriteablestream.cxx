@@ -242,8 +242,9 @@ OUString GetNewTempFileURL( const uno::Reference< uno::XComponentContext >& rCon
 
 uno::Reference< io::XStream > CreateMemoryStream( const uno::Reference< uno::XComponentContext >& rContext )
 {
+    static constexpr OUStringLiteral sName(u"com.sun.star.comp.MemoryStream");
     return uno::Reference< io::XStream >(
-        rContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.MemoryStream", rContext),
+        rContext->getServiceManager()->createInstanceWithContext(sName, rContext),
         uno::UNO_QUERY_THROW);
 }
 
