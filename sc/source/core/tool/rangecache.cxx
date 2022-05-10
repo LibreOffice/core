@@ -127,6 +127,9 @@ ScSortedRangeCache::ScSortedRangeCache(ScDocument* pDoc, const ScRange& rRange,
             for (const RowData& d : rowData)
                 mSortedRows.emplace_back(d.row);
     }
+    mRowToIndex.resize(maRange.aEnd.Row() - maRange.aStart.Row() + 1, mSortedRows.max_size());
+    for (size_t i = 0; i < mSortedRows.size(); ++i)
+        mRowToIndex[mSortedRows[i] - maRange.aStart.Row()] = i;
 }
 
 void ScSortedRangeCache::Notify(const SfxHint& rHint)
