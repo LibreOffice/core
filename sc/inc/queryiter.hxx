@@ -94,12 +94,15 @@ class ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache 
 {
 public:
     void SetSortedRangeCache( const ScSortedRangeCache& cache );
+    template<bool fast>
+    bool IncPosImpl();
 protected:
     ScQueryCellIteratorAccessSpecific( ScDocument& rDocument, ScInterpreterContext& rContext,
         const ScQueryParam& rParam );
     void InitPosStart();
     void InitPosFinish( SCROW beforeRow, SCROW lastRow );
-    void IncPos();
+    void IncPos() { IncPosImpl<false>(); }
+    bool IncPosFast() { return IncPosImpl<true>(); }
     void IncBlock() { IncPos(); } // Cannot skip entire block, not linear.
 
     // These members needs to be available already in the base class.
@@ -111,6 +114,7 @@ protected:
     SCTAB           nTab;
     SCCOL           nCol;
     SCROW           nRow;
+    const ScColumn* pColumn; // matching nCol, set by InitPos()
 
     const ScSortedRangeCache* sortedCache;
     size_t sortedCachePos;

@@ -1083,7 +1083,7 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
 void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::InitPosFinish(
     SCROW beforeRow, SCROW lastRow )
 {
-    const ScColumn& rCol = rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
+    pColumn = &rDoc.maTabs[nTab]->CreateColumnIfNotExists(nCol);
     if(lastRow >= 0)
     {
         sortedCachePos = beforeRow >= 0 ? sortedCache->indexForRow(beforeRow) + 1 : 0;
@@ -1091,35 +1091,43 @@ void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >
         if(sortedCachePos <= sortedCachePosLast)
         {
             nRow = sortedCache->rowForIndex(sortedCachePos);
-            maCurPos = rCol.maCells.position(nRow);
+            maCurPos = pColumn->maCells.position(nRow);
             return;
         }
     }
     // No rows, set to end.
     sortedCachePos = sortedCachePosLast = 0;
-    maCurPos.first = rCol.maCells.end();
+    maCurPos.first = pColumn->maCells.end();
     maCurPos.second = 0;
 }
 
-void ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::IncPos()
+template<bool fast>
+bool ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::IncPosImpl()
 {
-    const ScColumn& rCol = rDoc.maTabs[nTab]->aCol[nCol];
     if(sortedCachePos < sortedCachePosLast)
     {
         ++sortedCachePos;
         nRow = sortedCache->rowForIndex(sortedCachePos);
-        // Avoid mdds position() call if row is in the same block.
-        if(maCurPos.first != rCol.maCells.end() && o3tl::make_unsigned(nRow) >= maCurPos.first->position
-            && o3tl::make_unsigned(nRow) < maCurPos.first->position + maCurPos.first->size)
-            maCurPos.second = nRow - maCurPos.first->position;
-        else
-            maCurPos = rCol.maCells.position(nRow);
+#ifndef DBG_UTIL
+        if constexpr (!fast)
+#endif
+        {
+            // Avoid mdds position() call if row is in the same block.
+            if(maCurPos.first != pColumn->maCells.end() && o3tl::make_unsigned(nRow) >= maCurPos.first->position
+                && o3tl::make_unsigned(nRow) < maCurPos.first->position + maCurPos.first->size)
+                maCurPos.second = nRow - maCurPos.first->position;
+            else
+                maCurPos = pColumn->maCells.position(nRow);
+        }
+        return true;
     }
     else
     {
         // This will make PerformQuery() go to next column.
-        maCurPos.first = rCol.maCells.end();
+        // Necessary even in fast mode, as GetNext() will call GetThis() in this case.
+        maCurPos.first = pColumn->maCells.end();
         maCurPos.second = 0;
+        return false;
     }
 }
 
@@ -1278,6 +1286,26 @@ bool ScQueryCellIterator< accessType >::GetNext()
         nStopOnMismatch = nStopOnMismatchEnabled;
     if ( nTestEqualCondition )
         nTestEqualCondition = nTestEqualConditionEnabled;
+    return GetThis();
+}
+
+template<>
+bool ScQueryCellIterator< ScQueryCellIteratorAccess::SortedCache >::GetNext()
+{
+    assert( !nStopOnMismatch );
+    assert( !nTestEqualCondition );
+    // When searching using sorted cache, we should always find cells that match,
+    // because InitPos()/IncPos() select only such rows, so skip GetThis() (and thus
+    // the somewhat expensive PerformQuery) as long as we're not at the end
+    // of a column. As an optimization IncPosFast() returns true if not at the end,
+    // in which case in non-DBG_UTIL mode it doesn't even bother to set maCurPos.
+    if( IncPosFast())
+    {
+#ifdef DBG_UTIL
+        assert(GetThis());
+#endif
+        return true;
+    }
     return GetThis();
 }
 
