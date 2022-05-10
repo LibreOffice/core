@@ -27,16 +27,6 @@ public:
         : SwModelTestBase("/sw/qa/extras/ooxmlexport/data/", "Office Open XML Text")
     {
     }
-
-protected:
-    /**
-     * Denylist handling
-     */
-    bool mustTestImportOf(const char* filename) const override
-    {
-        // If the testcase is stored in some other format, it's pointless to test.
-        return o3tl::ends_with(filename, ".docx");
-    }
 };
 
 CPPUNIT_TEST_FIXTURE(Test, testTableCrossReference)
@@ -722,8 +712,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf112202, "090716_Studentische_Arbeit_VWS.docx")
     assertXPath(pXmlDoc, "/root/page[6]/header//anchored", 0);
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf79435_legacyInputFields, "tdf79435_legacyInputFields.doc")
+CPPUNIT_TEST_FIXTURE(Test, testTdf79435_legacyInputFields)
 {
+    loadAndReload("tdf79435_legacyInputFields.doc");
     //using .doc input file to verify cross-format compatibility.
     uno::Reference<text::XFormField> xFormField
         = getProperty<uno::Reference<text::XFormField>>(getRun(getParagraph(5), 3), "Bookmark");
@@ -926,8 +917,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf117137, "tdf117137.docx")
     CPPUNIT_ASSERT(xPara3->getPropertyValue("NumberingRules").hasValue());
 }
 
-DECLARE_OOXMLEXPORT_TEST(testTdf138780, "tdf138780.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf138780)
 {
+    loadAndReload("tdf138780.odt");
     CPPUNIT_ASSERT_EQUAL(1, getPages());
     // Paragraphs were not part of a numbering anymore after roundtrip.
     uno::Reference<beans::XPropertySet> xPara1(getParagraph(1), uno::UNO_QUERY);
@@ -1971,8 +1963,9 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf101122_noFillForCustomShape)
 // - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
 //   before the first section
 //
-DECLARE_OOXMLEXPORT_TEST(testTdf124678_case1, "tdf124678_no_leading_paragraph.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case1)
 {
+    loadAndReload("tdf124678_no_leading_paragraph.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""),
                                  parseDump("/root/page[1]/header/txt"));
@@ -1985,8 +1978,9 @@ DECLARE_OOXMLEXPORT_TEST(testTdf124678_case1, "tdf124678_no_leading_paragraph.od
 // - tdf124678_no_leading_paragraph.odt doesn't contain leading empty paragraph
 //   before the first section
 //
-DECLARE_OOXMLEXPORT_TEST(testTdf124678_case2, "tdf124678_with_leading_paragraph.odt")
+CPPUNIT_TEST_FIXTURE(Test, testTdf124678_case2)
 {
+    loadAndReload("tdf124678_with_leading_paragraph.odt");
     CPPUNIT_ASSERT_EQUAL(2, getPages());
     CPPUNIT_ASSERT_EQUAL_MESSAGE("First page header text", OUString(""),
                                  parseDump("/root/page[1]/header/txt"));
