@@ -110,6 +110,8 @@ using namespace com::sun::star::uno;
 
 #include <vcl/TypeSerializer.hxx>
 
+static sal_Int32 GetDayDiff(const Date& rDate) { return rDate - Date(1899'12'30); }
+
 #if HAVE_FEATURE_SCRIPTING
 
 static void FilterWhiteSpace( OUString& rStr )
@@ -132,8 +134,6 @@ static void FilterWhiteSpace( OUString& rStr )
 
     rStr = aRet.makeStringAndClear();
 }
-
-static sal_Int32 GetDayDiff(const Date& rDate) { return rDate - Date(1899'12'30); }
 
 static const CharClass& GetCharClass()
 {
