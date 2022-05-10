@@ -28,6 +28,7 @@ endif
 $(eval $(call gb_Module_add_targets,lingucomponent,\
 	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
 	Library_numbertext \
+	Library_LanguageTool \
 ))
 
 # vim: set noet sw=4 ts=4:
