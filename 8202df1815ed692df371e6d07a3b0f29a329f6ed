@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "369e32b6_5a665a71",
+        "filename": "registry/test/testregcpp.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 0,
+      "message": "why include an unrelated random whitespace change here",
+      "revId": "8202df1815ed692df371e6d07a3b0f29a329f6ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a449361_1a49f71b",
+        "filename": "registry/test/testregcpp.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 371,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 0,
+      "message": "instead of moving this to a new file, I think I would change it in-place (which would also make the git history more obvious, though there are probably only few lines that remain unchanged)",
+      "revId": "8202df1815ed692df371e6d07a3b0f29a329f6ed",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}

@@ -1,6 +1,40 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "74fb6a33_27340f15",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 1,
+      "message": "I wouldn\u0027t repeat that list here, it is already obvious from the code itself.",
+      "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "637959a0_9133f40c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 1,
+      "message": "I wouldn\u0027t add that redundant information here, it\u0027s just the way any CppunitTest is run.",
+      "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "a4bebe8f_ef9af1e4",
@@ -49,6 +83,91 @@
       "writtenOn": "2022-05-10T12:03:30Z",
       "side": 1,
       "message": "I have checked some of these tests, and they seem to be correctly ported.\nOn the other hand, I think it would be good if Stephan can take a look and check if these tests are still relevant.",
+      "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94a238b8_aa2e68e4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 1,
+      "message": "This conflicts with \u003chttps://gerrit.libreoffice.org/c/core/+/123615\u003e \"[API CHANGE] Deprecate css.registry.XSimpleRegistry::mergeKey\" removing include/registry/writer.hxx etc., which will soon be merged after libreoffice-7-4 branch off (see the comment at \u003chttps://gerrit.libreoffice.org/c/core/+/122363/11#message-e1aaec3dd412e92551def087e5f48e9d92ec3168\u003e \"[API CHANGE] Remove deprecated idlc and regmerge from the SDK\").  To avoid needless work, I think it would be good if you rebased this change on top of that relation chain and dropped any testing of functionality removed there.",
+      "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62720771_0695acbb",
+        "filename": "registry/CppunitTest_registry.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 1,
+      "message": "please use the latest header/footer version from TEMPLATE.SOURCECODE.HEADER",
+      "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e02dc03_cddb58ac",
+        "filename": "registry/CppunitTest_registry.mk",
+        "patchSetId": 11
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 1,
+      "message": "I would keep such lists sorted lexicographically (and is salhelper actually needed?)",
+      "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eac62eb5_baf66421",
+        "filename": "registry/qa/registry.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 1,
+      "message": "is this the morally correct license header?",
+      "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "939bfb3c_d16d7988",
+        "filename": "registry/qa/registry.cxx",
+        "patchSetId": 11
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-10T15:35:10Z",
+      "side": 1,
+      "message": "why is that needed?",
       "revId": "68dacde180504ce928b9d89d69c4ec754e87e7fc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
