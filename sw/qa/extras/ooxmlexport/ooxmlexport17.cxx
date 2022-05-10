@@ -19,6 +19,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/string_view.hxx>
+#include <comphelper/propertyvalue.hxx>
 
 #include <queue>
 #include <swmodeltestbase.hxx>
@@ -277,6 +278,58 @@ CPPUNIT_TEST_FIXTURE(Test, testCheckboxContentControlExport)
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checked", "val", "1");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:checkedState", "val", "2612");
     assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w14:checkbox/w14:uncheckedState", "val", "2610");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testDropdownContentControlExport)
+{
+    // Given a document with a checkbox content control around a text portion:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "choose an item", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    {
+        uno::Sequence<beans::PropertyValues> aListItems = {
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("red"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("R"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("green"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("G"))),
+            },
+            {
+                comphelper::makePropertyValue("DisplayText", uno::Any(OUString("blue"))),
+                comphelper::makePropertyValue("Value", uno::Any(OUString("B"))),
+            },
+        };
+        xContentControlProps->setPropertyValue("ListItems", uno::Any(aListItems));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When exporting to DOCX:
+    save("Office Open XML Text", maTempFile);
+    mbExported = true;
+
+    // Then make sure the expected markup is used:
+    xmlDocUniquePtr pXmlDoc = parseExport("word/document.xml");
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 0
+    // - XPath '//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]' number of nodes is incorrect
+    // i.e. the list items were lost on export.
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "displayText", "red");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[1]", "value", "R");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "displayText", "green");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[2]", "value", "G");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]", "displayText", "blue");
+    assertXPath(pXmlDoc, "//w:sdt/w:sdtPr/w:dropDownList/w:listItem[3]", "value", "B");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf148494)
