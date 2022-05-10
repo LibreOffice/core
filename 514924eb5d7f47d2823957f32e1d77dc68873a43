@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89d5494f_518ece40",
+        "filename": "stoc/source/javaloader/javaloader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-10T17:07:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a09aaea7_0cd2f2eb",
+      "range": {
+        "startLine": 291,
+        "startChar": 31,
+        "endLine": 291,
+        "endChar": 38
+      },
+      "revId": "514924eb5d7f47d2823957f32e1d77dc68873a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d18900e1_7dc267f3",
@@ -37,6 +61,24 @@
       "writtenOn": "2022-05-10T15:44:02Z",
       "side": 1,
       "message": "...in which case the above UNO_QUERY_THROW will already have fired",
+      "revId": "514924eb5d7f47d2823957f32e1d77dc68873a43",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ee02849b_c3b67ab2",
+        "filename": "stoc/source/javaloader/javaloader.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 296,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-10T17:07:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d18900e1_7dc267f3",
       "revId": "514924eb5d7f47d2823957f32e1d77dc68873a43",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
