@@ -1017,7 +1017,7 @@ void LngSvcMgr::GetAvailableGrammarSvcs_Impl()
                     xSvc.set(xFactory->createInstance(), uno::UNO_QUERY);
                 }
             }
-            catch (const uno::Exception &)
+            catch (const uno::Exception &ex)
             {
                 SAL_WARN( "linguistic", "createInstance failed" );
             }
