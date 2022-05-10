@@ -16,6 +16,24 @@
       "message": "\u003e the junit test JunitTest_chart2_unoapi failed\n\nLooks like it\u0027s one of the touchy ones if I believe the latest ESC minutes (6 failures in 1w), am I supposed to restart and hope for the best, or something else?\n\nLooks like otherwise I finally managed to please Jenkins (yes, I probably should try and setup a local Clang build to get these errors earlier).  The new tests passed, and no warnings in the touched files I can see in any log.",
       "revId": "b5a6236c55a347976c9486c2b8fdf8ba4d12267a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4519091f_85364dc3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000027
+      },
+      "writtenOn": "2022-05-10T14:11:15Z",
+      "side": 1,
+      "message": "it is one that fails occasionally indeed, but of ocurse it should still pass more often than it fails, so I resumed the build to retry.",
+      "parentUuid": "dfc6a306_f6b70dd7",
+      "revId": "b5a6236c55a347976c9486c2b8fdf8ba4d12267a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
