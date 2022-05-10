@@ -2355,6 +2355,18 @@ void DocxAttributeOutput::WriteContentControlStart()
         m_pSerializer->endElementNS(XML_w14, XML_checkbox);
     }
 
+    if (m_pContentControl->HasListItems())
+    {
+        m_pSerializer->startElementNS(XML_w, XML_dropDownList);
+        for (const auto& rItem : m_pContentControl->GetListItems())
+        {
+            m_pSerializer->singleElementNS(XML_w, XML_listItem,
+                    FSNS(XML_w, XML_displayText), rItem.m_aDisplayText,
+                    FSNS(XML_w, XML_value), rItem.m_aValue);
+        }
+        m_pSerializer->endElementNS(XML_w, XML_dropDownList);
+    }
+
     m_pSerializer->endElementNS(XML_w, XML_sdtPr);
     m_pSerializer->startElementNS(XML_w, XML_sdtContent);
     m_pContentControl = nullptr;
