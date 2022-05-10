@@ -45,6 +45,7 @@
 #include <svx/svdoashp.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
+#include <svx/diagram/datamodel.hxx>
 
 
 // iterates over all views and unmarks this SdrObject if it is marked
@@ -628,6 +629,52 @@ OUString SdrUndoGeoObj::GetComment() const
     return ImpGetDescriptionStr(STR_DragMethObjOwn);
 }
 
+SdrUndoDiagramModelData::SdrUndoDiagramModelData(SdrObject& rNewObj, svx::diagram::DiagramDataStatePtr& rStartState)
+: SdrUndoObj(rNewObj)
+, m_aStartState(rStartState)
+, m_aEndState()
+{
+    SdrObjGroup* pDiagram(dynamic_cast<SdrObjGroup*>(&rNewObj));
+
+    if(pDiagram && pDiagram->isDiagram())
+    {
+        m_aEndState = pDiagram->getDiagramHelper()->extractDiagramDataState();
+    }
+}
+
+SdrUndoDiagramModelData::~SdrUndoDiagramModelData()
+{
+}
+
+void SdrUndoDiagramModelData::implUndoRedo(bool bUndo)
+{
+    if(nullptr == pObj)
+        return;
+
+    SdrObjGroup* pDiagram(dynamic_cast<SdrObjGroup*>(pObj));
+
+    if(nullptr == pDiagram || !pDiagram->isDiagram())
+        return;
+
+    pDiagram->getDiagramHelper()->applyDiagramDataState(
+        bUndo ? m_aStartState : m_aEndState);
+    pDiagram->getDiagramHelper()->reLayout(*pDiagram);
+}
+
+void SdrUndoDiagramModelData::Undo()
+{
+    implUndoRedo(true);
+}
+
+void SdrUndoDiagramModelData::Redo()
+{
+    implUndoRedo(false);
+}
+
+OUString SdrUndoDiagramModelData::GetComment() const
+{
+    return ImpGetDescriptionStr(STR_DiagramModelDataChange);
+}
 
 SdrUndoObjList::SdrUndoObjList(SdrObject& rNewObj, bool bOrdNumDirect)
     : SdrUndoObj(rNewObj)
@@ -1674,6 +1721,12 @@ std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoMoveObject( SdrObject& 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoGeoObject( SdrObject& rObject )
 {
     return std::make_unique<SdrUndoGeoObj>( rObject );
+}
+
+// Diagram ModelData changes
+std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoDiagramModelData( SdrObject& rObject, std::shared_ptr< svx::diagram::DiagramDataState >& rStartState )
+{
+    return std::make_unique<SdrUndoDiagramModelData>( rObject, rStartState );
 }
 
 std::unique_ptr<SdrUndoAction> SdrUndoFactory::CreateUndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )

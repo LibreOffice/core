@@ -461,7 +461,7 @@ void SwDrawBaseShell::Execute(SfxRequest const &rReq)
                             VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                             ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                                 GetView().GetFrameWeld(),
-                                pAnchorObj->getDiagramHelper());
+                                *pAnchorObj);
                             pDlg->Execute();
                         }
                     }

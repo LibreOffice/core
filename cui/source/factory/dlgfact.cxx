@@ -1524,10 +1524,12 @@ AbstractDialogFactory_Impl::CreateToolbarmodeDialog(weld::Window* pParent)
 }
 
 VclPtr<AbstractDiagramDialog>
-AbstractDialogFactory_Impl::CreateDiagramDialog(weld::Window* pParent, const std::shared_ptr<IDiagramHelper>& pDiagramHelper)
+AbstractDialogFactory_Impl::CreateDiagramDialog(
+    weld::Window* pParent,
+    SdrObjGroup& rDiagram)
 {
     return VclPtr<AbstractDiagramDialog_Impl>::Create(
-        std::make_unique<DiagramDialog>(pParent, pDiagramHelper));
+        std::make_unique<DiagramDialog>(pParent, rDiagram));
 }
 
 #ifdef _WIN32
