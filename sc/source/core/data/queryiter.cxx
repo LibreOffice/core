@@ -1198,7 +1198,8 @@ ScQueryCellIteratorAccessSpecific< ScQueryCellIteratorAccess::SortedCache >::Mak
     return SortedCacheIndexer(rCells, nStartRow, nEndRow, sortedCache);
 }
 
-static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& rParam)
+static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& rParam,
+    const ScFormulaCell* cell, const ScComplexRefData* refData)
 {
     if(!rParam.GetEntry(0).bDoQuery || rParam.GetEntry(1).bDoQuery
         || rParam.GetEntry(0).GetQueryItems().size() != 1 )
@@ -1221,6 +1222,26 @@ static bool CanBeUsedForSorterCache(const ScDocument& rDoc, const ScQueryParam& 
         && rParam.GetEntry(0).eOp != SC_GREATER && rParam.GetEntry(0).eOp != SC_GREATER_EQUAL
         && rParam.GetEntry(0).eOp != SC_EQUAL)
         return false;
+    // For unittests allow inefficient caching, in order for the code to be checked.
+    static bool inUnitTest = getenv("LO_TESTNAME") != nullptr;
+    if(refData == nullptr || refData->Ref1.IsRowRel() || refData->Ref2.IsRowRel())
+    {
+        // If this is not a range, then a cache is not worth it. If rows are relative, then each
+        // computation will use a different area, so the cache wouldn't be reused. Tab/cols are
+        // not a problem, because formula group computations are done for the same tab/col.
+        if(!inUnitTest)
+            return false;
+    }
+    if(rParam.nRow2 - rParam.nRow1 < 10)
+    {
+        if(!inUnitTest)
+            return false;
+    }
+    if( !cell || !cell->GetCellGroup() || cell->GetCellGroup()->mnLength < 10 )
+    {
+        if(!inUnitTest)
+            return false;
+    }
     return true;
 }
 
@@ -1260,9 +1281,10 @@ bool ScQueryCellIterator< accessType >::GetNext()
     return GetThis();
 }
 
-bool ScQueryCellIteratorSortedCache::CanBeUsed(const ScDocument& rDoc, const ScQueryParam& rParam)
+bool ScQueryCellIteratorSortedCache::CanBeUsed(const ScDocument& rDoc, const ScQueryParam& rParam,
+    const ScFormulaCell* cell, const ScComplexRefData* refData)
 {
-    return CanBeUsedForSorterCache(rDoc, rParam);
+    return CanBeUsedForSorterCache(rDoc, rParam, cell, refData);
 }
 
 // Countifs implementation.
@@ -1289,9 +1311,10 @@ sal_uInt64 ScCountIfCellIterator< accessType >::GetCount()
 }
 
 
-bool ScCountIfCellIteratorSortedCache::CanBeUsed(const ScDocument& rDoc, const ScQueryParam& rParam)
+bool ScCountIfCellIteratorSortedCache::CanBeUsed(const ScDocument& rDoc, const ScQueryParam& rParam,
+    const ScFormulaCell* cell, const ScComplexRefData* refData)
 {
-    return CanBeUsedForSorterCache(rDoc, rParam);
+    return CanBeUsedForSorterCache(rDoc, rParam, cell, refData);
 }
 
 template<>

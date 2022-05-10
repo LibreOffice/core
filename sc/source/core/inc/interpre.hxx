@@ -345,6 +345,8 @@ private:
     ScDBRangeBase* PopDBDoubleRef();
     void PopDoubleRef(SCCOL& rCol1, SCROW &rRow1, SCTAB& rTab1,
                               SCCOL& rCol2, SCROW &rRow2, SCTAB& rTab2 );
+    // peek double ref data
+    const ScComplexRefData* GetStackDoubleRef(size_t rRefInList = 0);
 
     void PopExternalSingleRef(sal_uInt16& rFileId, OUString& rTabName, ScSingleRefData& rRef);
 
@@ -481,7 +483,7 @@ private:
     inline void TreatDoubleError( double& rVal );
     // Lookup using ScLookupCache, @returns true if found and result address
     bool LookupQueryWithCache( ScAddress & o_rResultPos,
-            const ScQueryParam & rParam ) const;
+            const ScQueryParam & rParam, const ScComplexRefData* refData ) const;
 
     void ScIfJump();
     void ScIfError( bool bNAonly );

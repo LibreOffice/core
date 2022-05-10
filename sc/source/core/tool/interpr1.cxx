@@ -4839,6 +4839,7 @@ void ScInterpreter::ScMatch()
         rParam.nRow1       = nRow1;
         rParam.nCol2       = nCol2;
         rParam.nTab        = nTab1;
+        const ScComplexRefData* refData = nullptr;
 
         ScQueryEntry& rEntry = rParam.GetEntry(0);
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
@@ -4863,6 +4864,8 @@ void ScInterpreter::ScMatch()
             }
             break;
             case svDoubleRef :
+                refData = GetStackDoubleRef();
+                [[fallthrough]];
             case svSingleRef :
             {
                 ScAddress aAdr;
@@ -5037,7 +5040,7 @@ void ScInterpreter::ScMatch()
             rParam.nRow2 = nRow2;
             rEntry.nField = nCol1;
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            if (!LookupQueryWithCache( aResultPos, rParam))
+            if (!LookupQueryWithCache( aResultPos, rParam, refData))
             {
                 PushNA();
                 return;
@@ -5689,6 +5692,7 @@ void ScInterpreter::ScCountIf()
         SCROW nRow2 = 0;
         SCTAB nTab2 = 0;
         ScMatrixRef pQueryMatrix;
+        const ScComplexRefData* refData = nullptr;
         switch ( GetStackType() )
         {
             case svRefList :
@@ -5696,6 +5700,7 @@ void ScInterpreter::ScCountIf()
                 [[fallthrough]];
             case svDoubleRef :
                 {
+                    refData = GetStackDoubleRef(nRefInList);
                     ScRange aRange;
                     PopDoubleRef( aRange, nParam, nRefInList);
                     aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -5788,7 +5793,7 @@ void ScInterpreter::ScCountIf()
             }
             else
             {
-                if(ScCountIfCellIteratorSortedCache::CanBeUsed(mrDoc, rParam))
+                if(ScCountIfCellIteratorSortedCache::CanBeUsed(mrDoc, rParam, pMyFormulaCell, refData))
                 {
                     ScCountIfCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                     fCount += aCellIter.GetCount();
@@ -5979,6 +5984,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
         ScMatrixRef pQueryMatrix;
         while (nParam-- == nParamCount)
         {
+            const ScComplexRefData* refData = nullptr;
             switch ( GetStackType() )
             {
                 case svRefList :
@@ -6015,12 +6021,14 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
                             }
                             nRefArrayPos = nRefInList;
                         }
+                        refData = GetStackDoubleRef(nRefInList);
                         ScRange aRange;
                         PopDoubleRef( aRange, nParam, nRefInList);
                         aRange.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
                     }
                 break;
                 case svDoubleRef :
+                    refData = GetStackDoubleRef();
                     PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                 break;
                 case svSingleRef :
@@ -6150,7 +6158,7 @@ void ScInterpreter::IterateParametersIfs( double(*ResultFunc)( const sc::ParamIf
             }
             else
             {
-                if( ScQueryCellIteratorSortedCache::CanBeUsed( mrDoc, rParam ))
+                if( ScQueryCellIteratorSortedCache::CanBeUsed( mrDoc, rParam, pMyFormulaCell, refData ))
                 {
                     ScQueryCellIteratorSortedCache aCellIter(mrDoc, mrContext, nTab1, rParam, false);
                     // Increment Entry.nField in iterator when switching to next column.
@@ -7250,9 +7258,11 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
     SCTAB nTab1 = 0;
     SCCOL nCol2 = 0;
     SCROW nRow2 = 0;
+    const ScComplexRefData* refData = nullptr;
     StackVar eType = GetStackType();
     if (eType == svDoubleRef)
     {
+        refData = GetStackDoubleRef(0);
         SCTAB nTab2;
         PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
         if (nTab1 != nTab2)
@@ -7467,7 +7477,7 @@ void ScInterpreter::CalculateLookup(bool bHLookup)
         else
         {
             ScAddress aResultPos( nCol1, nRow1, nTab1);
-            bFound = LookupQueryWithCache( aResultPos, aParam);
+            bFound = LookupQueryWithCache( aResultPos, aParam, refData);
             nRow = aResultPos.Row();
             nCol = nSpIndex;
         }
@@ -9967,7 +9977,8 @@ utl::SearchParam::SearchType ScInterpreter::DetectSearchType( std::u16string_vie
 }
 
 static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInterpreterContext& rContext,
-        const ScQueryParam & rParam, const ScQueryEntry & rEntry )
+        const ScQueryParam & rParam, const ScQueryEntry & rEntry, const ScFormulaCell* cell,
+        const ScComplexRefData* refData )
 {
     if (rEntry.eOp != SC_EQUAL)
     {
@@ -9984,7 +9995,7 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument& rDoc, ScInter
     }
     else // EQUAL
     {
-        if( ScQueryCellIteratorSortedCache::CanBeUsed( rDoc, rParam ))
+        if( ScQueryCellIteratorSortedCache::CanBeUsed( rDoc, rParam, cell, refData ))
         {
             ScQueryCellIteratorSortedCache aCellIter( rDoc, rContext, rParam.nTab, rParam, false);
             if (aCellIter.GetFirst())
@@ -10047,7 +10058,7 @@ static SCROW lcl_getPrevRowWithEmptyValueLookup( const ScLookupCache& rCache,
 }
 
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
-        const ScQueryParam & rParam ) const
+        const ScQueryParam & rParam, const ScComplexRefData* refData ) const
 {
     bool bFound = false;
     const ScQueryEntry& rEntry = rParam.GetEntry(0);
@@ -10060,7 +10071,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
      * direct lookups here. We could even further attribute volatility per
      * parameter so it would affect only the lookup range parameter. */
     if (!bColumnsMatch || GetVolatileType() != NOT_VOLATILE)
-        bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry);
+        bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry, pMyFormulaCell, refData);
     else
     {
         ScRange aLookupRange( rParam.nCol1, rParam.nRow1, rParam.nTab,
@@ -10091,7 +10102,7 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         {
             case ScLookupCache::NOT_CACHED :
             case ScLookupCache::CRITERIA_DIFFERENT :
-                bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry);
+                bFound = lcl_LookupQuery( o_rResultPos, mrDoc, mrContext, rParam, rEntry, pMyFormulaCell, refData);
                 if (eCacheResult == ScLookupCache::NOT_CACHED)
                     rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
                 break;
