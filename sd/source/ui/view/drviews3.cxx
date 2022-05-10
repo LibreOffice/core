@@ -506,7 +506,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                         VclAbstractDialogFactory* pFact = VclAbstractDialogFactory::Create();
                         ScopedVclPtr<VclAbstractDialog> pDlg = pFact->CreateDiagramDialog(
                             GetFrameWeld(),
-                            pAnchorObj->getDiagramHelper());
+                            *pAnchorObj);
                         pDlg->Execute();
                     }
                 }

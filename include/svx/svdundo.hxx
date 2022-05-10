@@ -49,6 +49,10 @@ class SdrLayerAdmin;
 class SdrObjGeoData;
 class OutlinerParaObject;
 
+namespace svx { namespace diagram {
+    class DiagramDataState;
+}}
+
 /**
  * Abstract base class (ABC) for all UndoActions of DrawingEngine
  */
@@ -222,6 +226,24 @@ public:
 
     virtual OUString GetComment() const override;
     void SetSkipChangeLayout(bool bOn) { mbSkipChangeLayout=bOn; }
+};
+
+// Diagram ModelData changes
+class SVXCORE_DLLPUBLIC SdrUndoDiagramModelData : public SdrUndoObj
+{
+    std::shared_ptr< svx::diagram::DiagramDataState > m_aStartState;
+    std::shared_ptr< svx::diagram::DiagramDataState > m_aEndState;
+
+    void implUndoRedo(bool bUndo);
+
+public:
+    SdrUndoDiagramModelData(SdrObject& rNewObj, std::shared_ptr< svx::diagram::DiagramDataState >& rStartState);
+    virtual ~SdrUndoDiagramModelData() override;
+
+    virtual void Undo() override;
+    virtual void Redo() override;
+
+    virtual OUString GetComment() const override;
 };
 
 /**
@@ -740,6 +762,9 @@ public:
                                                     SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
                                                     const OUString& sOldStr,
                                                     const OUString& sNewStr );
+
+    // Diagram ModelData changes
+    virtual std::unique_ptr<SdrUndoAction> CreateUndoDiagramModelData( SdrObject& rObject, std::shared_ptr< svx::diagram::DiagramDataState >& rStartState );
 
     // Layer
     virtual std::unique_ptr<SdrUndoAction> CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);

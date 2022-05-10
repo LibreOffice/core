@@ -11,12 +11,15 @@
 
 #include <comphelper/dispatchcommand.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdmodel.hxx>
+#include <svx/svdundo.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <svx/diagram/datamodel.hxx>
 
-DiagramDialog::DiagramDialog(weld::Window* pWindow,
-                             const std::shared_ptr<IDiagramHelper>& pDiagramHelper)
+DiagramDialog::DiagramDialog(weld::Window* pWindow, SdrObjGroup& rDiagram)
     : GenericDialogController(pWindow, "cui/ui/diagramdialog.ui", "DiagramDialog")
-    , mpDiagramHelper(pDiagramHelper)
+    , m_rDiagram(rDiagram)
+    , m_nUndos(0)
     , mpBtnOk(m_xBuilder->weld_button("btnOk"))
     , mpBtnCancel(m_xBuilder->weld_button("btnCancel"))
     , mpBtnAdd(m_xBuilder->weld_button("btnAdd"))
@@ -24,6 +27,7 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
     , mpTreeDiagram(m_xBuilder->weld_tree_view("treeDiagram"))
     , mpTextAdd(m_xBuilder->weld_text_view("textAdd"))
 {
+    mpBtnCancel->connect_clicked(LINK(this, DiagramDialog, OnAddCancel));
     mpBtnAdd->connect_clicked(LINK(this, DiagramDialog, OnAddClick));
     mpBtnRemove->connect_clicked(LINK(this, DiagramDialog, OnRemoveClick));
 
@@ -37,13 +41,51 @@ DiagramDialog::DiagramDialog(weld::Window* pWindow,
     });
 }
 
+IMPL_LINK_NOARG(DiagramDialog, OnAddCancel, weld::Button&, void)
+{
+    // If the user cancels the dialog, undo all changes done so far. It may
+    // even be feasible to then delete the redo-stack, since it stays
+    // available (?) - but it does no harm either...
+    while (0 != m_nUndos)
+    {
+        comphelper::dispatchCommand(".uno:Undo", {});
+        m_nUndos--;
+    }
+
+    m_xDialog->response(RET_CANCEL);
+}
+
 IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
 {
-    OUString sText = mpTextAdd->get_text();
+    if (!m_rDiagram.isDiagram())
+        return;
 
-    if (!sText.isEmpty())
+    OUString sText = mpTextAdd->get_text();
+    const std::shared_ptr<IDiagramHelper>& pDiagramHelper(m_rDiagram.getDiagramHelper());
+
+    if (pDiagramHelper && !sText.isEmpty())
     {
-        OUString sNodeId = mpDiagramHelper->addNode(sText);
+        SdrModel& rDrawModel(m_rDiagram.getSdrModelFromSdrObject());
+        const bool bUndo(rDrawModel.IsUndoEnabled());
+        svx::diagram::DiagramDataStatePtr aStartState;
+
+        if (bUndo)
+        {
+            // rescue all start state Diagram-defining data
+            aStartState = pDiagramHelper->extractDiagramDataState();
+        }
+
+        OUString sNodeId = pDiagramHelper->addNode(sText);
+
+        if (bUndo)
+        {
+            // create undo action. That will internally secure the
+            // current Diagram-defining data as end state
+            rDrawModel.AddUndo(
+                rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(m_rDiagram, aStartState));
+            m_nUndos++;
+        }
+
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
         mpTreeDiagram->insert(nullptr, -1, &sText, &sNodeId, nullptr, nullptr, false, pEntry.get());
         mpTreeDiagram->select(*pEntry);
@@ -53,11 +95,35 @@ IMPL_LINK_NOARG(DiagramDialog, OnAddClick, weld::Button&, void)
 
 IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
 {
+    if (!m_rDiagram.isDiagram())
+        return;
+
     std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());
-    if (mpTreeDiagram->get_selected(pEntry.get()))
+    const std::shared_ptr<IDiagramHelper>& pDiagramHelper(m_rDiagram.getDiagramHelper());
+
+    if (pDiagramHelper && mpTreeDiagram->get_selected(pEntry.get()))
     {
-        if (mpDiagramHelper->removeNode(mpTreeDiagram->get_id(*pEntry)))
+        SdrModel& rDrawModel(m_rDiagram.getSdrModelFromSdrObject());
+        const bool bUndo(rDrawModel.IsUndoEnabled());
+        svx::diagram::DiagramDataStatePtr aStartState;
+
+        if (bUndo)
         {
+            // rescue all start state Diagram-defining data
+            aStartState = pDiagramHelper->extractDiagramDataState();
+        }
+
+        if (pDiagramHelper->removeNode(mpTreeDiagram->get_id(*pEntry)))
+        {
+            if (bUndo)
+            {
+                // create undo action. That will internally secure the
+                // current Diagram-defining data as end state
+                rDrawModel.AddUndo(rDrawModel.GetSdrUndoFactory().CreateUndoDiagramModelData(
+                    m_rDiagram, aStartState));
+                m_nUndos++;
+            }
+
             mpTreeDiagram->remove(*pEntry);
             comphelper::dispatchCommand(".uno:RegenerateDiagram", {});
         }
@@ -66,7 +132,15 @@ IMPL_LINK_NOARG(DiagramDialog, OnRemoveClick, weld::Button&, void)
 
 void DiagramDialog::populateTree(const weld::TreeIter* pParent, const OUString& rParentId)
 {
-    auto aItems = mpDiagramHelper->getChildren(rParentId);
+    if (!m_rDiagram.isDiagram())
+        return;
+
+    const std::shared_ptr<IDiagramHelper>& pDiagramHelper(m_rDiagram.getDiagramHelper());
+
+    if (!pDiagramHelper)
+        return;
+
+    auto aItems = pDiagramHelper->getChildren(rParentId);
     for (auto& aItem : aItems)
     {
         std::unique_ptr<weld::TreeIter> pEntry(mpTreeDiagram->make_iterator());

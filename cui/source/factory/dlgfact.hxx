@@ -608,7 +608,7 @@ public:
 
     virtual VclPtr<AbstractDiagramDialog> CreateDiagramDialog(
         weld::Window* pParent,
-        const std::shared_ptr<IDiagramHelper>& pDiagramHelper) override;
+        SdrObjGroup& rDiagram) override;
 
 #ifdef _WIN32
     virtual VclPtr<VclAbstractDialog> CreateFileExtCheckDialog(weld::Window* pParent,

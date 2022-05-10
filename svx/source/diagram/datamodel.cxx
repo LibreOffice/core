@@ -141,6 +141,33 @@ bool DiagramData::removeNode(const OUString& rNodeId)
     return true;
 }
 
+DiagramDataState::DiagramDataState(const Connections& rConnections, const Points& rPoints)
+: maConnections(rConnections)
+, maPoints(rPoints)
+{
+}
+
+DiagramDataStatePtr DiagramData::extractDiagramDataState() const
+{
+    // Just copy all Connections && Points. The shared_ptr data in
+    // Point-entries is no problem, it just continues exiting shared
+    return std::make_shared< DiagramDataState >(maConnections, maPoints);
+}
+
+void DiagramData::applyDiagramDataState(const DiagramDataStatePtr& rState)
+{
+    if(rState)
+    {
+        maConnections = rState->getConnections();
+        maPoints = rState->getPoints();
+
+        // Reset temporary buffered ModelData association lists & rebuild them
+        // and the Diagram DataModel. Do that here *immediately* to prevent
+        // re-usage of potentially invalid Connection/Point objects
+        buildDiagramDataModel(true);
+    }
+}
+
 void DiagramData::getChildrenString(
     OUStringBuffer& rBuf,
     const svx::diagram::Point* pPoint,

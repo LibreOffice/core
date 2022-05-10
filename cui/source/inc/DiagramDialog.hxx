@@ -12,17 +12,19 @@
 #include <tools/link.hxx>
 #include <vcl/weld.hxx>
 
-class IDiagramHelper;
+class SdrObjGroup;
 
 /** Edit Diagram dialog */
 class DiagramDialog : public weld::GenericDialogController
 {
 public:
-    DiagramDialog(weld::Window* pWindow, const std::shared_ptr<IDiagramHelper>& pDiagramHelper);
+    DiagramDialog(weld::Window* pWindow, SdrObjGroup& rDiagram);
     virtual ~DiagramDialog() override;
 
 private:
-    const std::shared_ptr<IDiagramHelper> mpDiagramHelper;
+    SdrObjGroup& m_rDiagram;
+    sal_uInt32 m_nUndos;
+
     std::unique_ptr<weld::Button> mpBtnOk;
     std::unique_ptr<weld::Button> mpBtnCancel;
     std::unique_ptr<weld::Button> mpBtnAdd;
@@ -30,6 +32,7 @@ private:
     std::unique_ptr<weld::TreeView> mpTreeDiagram;
     std::unique_ptr<weld::TextView> mpTextAdd;
 
+    DECL_LINK(OnAddCancel, weld::Button&, void);
     DECL_LINK(OnAddClick, weld::Button&, void);
     DECL_LINK(OnRemoveClick, weld::Button&, void);
 

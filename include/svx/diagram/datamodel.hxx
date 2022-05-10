@@ -154,6 +154,22 @@ struct SVXCORE_DLLPUBLIC Point
 
 typedef std::vector< Point >        Points;
 
+/** Snippet of Diagram ModelData for Diagram-defining data undo/redo
+ */
+class SVXCORE_DLLPUBLIC DiagramDataState
+{
+    Connections maConnections;
+    Points maPoints;
+
+public:
+    DiagramDataState(const Connections& rConnections, const Points& rPoints);
+
+    Connections& getConnections() { return maConnections; }
+    Points& getPoints() { return maPoints; }
+};
+
+typedef std::shared_ptr< DiagramDataState > DiagramDataStatePtr;
+
 /** The collected Diagram ModelData
  */
 class SVXCORE_DLLPUBLIC DiagramData
@@ -206,6 +222,10 @@ public:
     // model modifiers
     OUString addNode(const OUString& rText);
     bool removeNode(const OUString& rNodeId);
+
+    // Undo/Redo helpers to extract/restore Diagram-defining data
+    DiagramDataStatePtr extractDiagramDataState() const;
+    void applyDiagramDataState(const DiagramDataStatePtr& rState);
 
 protected:
     // helpers
