@@ -360,6 +360,7 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
 	hyphen \
 	lnth \
 	spell \
+	LanguageTool \
 	$(if $(filter iOS MACOSX,$(OS)), \
 		MacOSXSpell \
 	) \
