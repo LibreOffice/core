@@ -709,8 +709,8 @@ SwTextFrame* SwAnchoredObject::FindAnchorCharFrame()
     if ( mpAnchorFrame )
     {
         const SwFormatAnchor& rAnch = GetFrameFormat().GetAnchor();
-        if ((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
-            (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR))
+        if (((rAnch.GetAnchorId() == RndStdIds::FLY_AT_CHAR) ||
+            (rAnch.GetAnchorId() == RndStdIds::FLY_AS_CHAR)) && rAnch.GetContentAnchor())
         {
             SwTextFrame *const pFrame(static_cast<SwTextFrame*>(AnchorFrame()));
             TextFrameIndex const nOffset(pFrame->MapModelToViewPos(*rAnch.GetContentAnchor()));

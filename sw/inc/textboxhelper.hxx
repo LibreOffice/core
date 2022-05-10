@@ -24,6 +24,7 @@
 class SdrPage;
 class SdrObject;
 class SfxItemSet;
+class SfxPoolItem;
 class SwFrameFormat;
 class SwFrameFormats;
 class SwFormatContent;
@@ -93,14 +94,14 @@ public:
 
     /// Sets the anchor of the associated textframe of the given shape, and
     /// returns true on success.
-    static bool changeAnchor(SwFrameFormat* pShape, SdrObject* pObj);
+    static bool changeAnchor(SwFrameFormat* pShape, const SdrObject* pObj);
 
     /// Does the positioning for the associated textframe of the shape, and
     /// returns true on success.
-    static bool doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pObj);
+    static bool doTextBoxPositioning(SwFrameFormat* pShape, const SdrObject* pObj);
 
     /// Sets the correct size of textframe depending on the given SdrObject.
-    static bool syncTextBoxSize(SwFrameFormat* pShape, SdrObject* pObj);
+    static bool syncTextBoxSize(SwFrameFormat* pShape, const SdrObject* pObj);
 
     // Returns true on success. Synchronize z-order of the text frame of the given textbox
     // by setting it one level higher than the z-order of the shape of the textbox.
@@ -126,7 +127,7 @@ public:
     static css::uno::Reference<css::text::XTextFrame>
     getUnoTextFrame(css::uno::Reference<css::drawing::XShape> const& xShape);
     /// Return the textbox rectangle of a draw shape (in relative twips).
-    static tools::Rectangle getRelativeTextRectangle(SdrObject* pShape);
+    static tools::Rectangle getRelativeTextRectangle(const SdrObject* pShape);
 
     /**
      * Is the frame format a text box?
@@ -203,6 +204,12 @@ class SwTextBoxNode
     // (and the textboxes)
     SwFrameFormat* m_pOwnerShapeFormat;
 
+    bool m_bLocked;
+
+    void Lock() { m_bLocked = true; }
+    void Unlock() { m_bLocked = false; }
+    const bool& IsLocked() { return m_bLocked; }
+
 public:
     // Not needed.
     SwTextBoxNode() = delete;
@@ -250,6 +257,14 @@ public:
     size_t GetTextBoxCount() const { return m_pTextBoxes.size(); };
     // Returns with a const collection of textboxes owned by this node.
     std::map<SdrObject*, SwFrameFormat*> GetAllTextBoxes() const;
+
+    void SyncAll(const SfxItemSet& rSet);
+    void SyncAll(const SfxPoolItem& rItem);
+    void SyncAll(const OUString& rPropertyName, const css::uno::Any rVal);
+    void SyncAll(const sal_uInt16& rWID, const sal_uInt16& rMID, const css::uno::Any rVal);
+
+private:
+    void Sync_Impl(const SfxPoolItem& rItem, const SdrObject* pObj);
 };
 
 #endif // INCLUDED_SW_INC_TEXTBOXHELPER_HXX

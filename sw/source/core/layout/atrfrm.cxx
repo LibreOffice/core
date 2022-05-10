@@ -2623,6 +2623,12 @@ void SwFrameFormat::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 assert(pNewAnchorPosition == nullptr || // style's set must not contain position!
                         pNewAttrSetChg->GetTheChgdSet() == &m_aSet);
             }
+
+            // Has a textbox? forward the notfy to it!
+            auto& pTextBoxes = GetOtherTextBoxFormats();
+            if (pTextBoxes && Which() == RES_DRAWFRMFMT)
+                pTextBoxes->SyncAll(*pNewAttrSetChg->GetChgSet());
+
             break;
         }
         case RES_FMT_CHG:

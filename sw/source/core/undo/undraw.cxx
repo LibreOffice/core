@@ -48,6 +48,7 @@ struct SwUndoGroupObjImpl
     SwDrawFrameFormat* pFormat;
     SdrObject* pObj;
     SwNodeOffset nNodeIdx;
+    sal_Int32 nNodeOffset;
 };
 
 // Draw-Objecte
@@ -96,7 +97,7 @@ OUString SwSdrUndo::GetComment() const
     return m_pSdrUndo->GetComment();
 }
 
-static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
+static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos, sal_Int32& rContentPos )
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
     if (!((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -105,36 +106,35 @@ static void lcl_SaveAnchor( SwFrameFormat* pFormat, SwNodeOffset& rNodePos )
         (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())))
         return;
 
+    if (!rAnchor.GetContentAnchor())
+        return;
     rNodePos = rAnchor.GetContentAnchor()->nNode.GetIndex();
-    sal_Int32 nContentPos = 0;
 
     if (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())
     {
-        nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
+        rContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
 
         // destroy TextAttribute
         SwTextNode *pTextNd = pFormat->GetDoc()->GetNodes()[ rNodePos ]->GetTextNode();
         OSL_ENSURE( pTextNd, "No text node found!" );
         SwTextFlyCnt* pAttr = static_cast<SwTextFlyCnt*>(
-            pTextNd->GetTextAttrForCharAt( nContentPos, RES_TXTATR_FLYCNT ));
+            pTextNd->GetTextAttrForCharAt( rContentPos, RES_TXTATR_FLYCNT ));
         // attribute still in text node, delete
         if( pAttr && pAttr->GetFlyCnt().GetFrameFormat() == pFormat )
         {
             // just set pointer to 0, don't delete
             const_cast<SwFormatFlyCnt&>(pAttr->GetFlyCnt()).SetFlyFormat();
-            SwIndex aIdx( pTextNd, nContentPos );
+            SwIndex aIdx( pTextNd, rContentPos );
             pTextNd->EraseText( aIdx, 1 );
         }
     }
     else if (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId())
     {
-        nContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
+        rContentPos = rAnchor.GetContentAnchor()->nContent.GetIndex();
     }
-
-    pFormat->SetFormatAttr( SwFormatAnchor( rAnchor.GetAnchorId(), nContentPos ) );
 }
 
-static void lcl_RestoreAnchor( SwFrameFormat* pFormat, SwNodeOffset nNodePos )
+static void lcl_RestoreAnchor( SwFrameFormat* pFormat, const SwNodeOffset& rnNodePos, const sal_Int32& rnContentPos)
 {
     const SwFormatAnchor& rAnchor = pFormat->GetAnchor();
     if (!((RndStdIds::FLY_AT_PARA == rAnchor.GetAnchorId()) ||
@@ -143,17 +143,16 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, SwNodeOffset nNodePos )
         (RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId())))
         return;
 
-    const sal_Int32 nContentPos = rAnchor.GetPageNum();
     SwNodes& rNds = pFormat->GetDoc()->GetNodes();
 
-    SwNodeIndex aIdx( rNds, nNodePos );
+    SwNodeIndex aIdx( rNds, rnNodePos );
     SwPosition aPos( aIdx );
 
     SwFormatAnchor aTmp( rAnchor.GetAnchorId() );
     if ((RndStdIds::FLY_AS_CHAR == rAnchor.GetAnchorId()) ||
         (RndStdIds::FLY_AT_CHAR == rAnchor.GetAnchorId()))
     {
-        aPos.nContent.Assign( aIdx.GetNode().GetContentNode(), nContentPos );
+        aPos.nContent.Assign( aIdx.GetNode().GetContentNode(), rnContentPos );
     }
     aTmp.SetAnchor( &aPos );
     RndStdIds nAnchorId = rAnchor.GetAnchorId();
@@ -164,7 +163,7 @@ static void lcl_RestoreAnchor( SwFrameFormat* pFormat, SwNodeOffset nNodePos )
         SwTextNode *pTextNd = aIdx.GetNode().GetTextNode();
         OSL_ENSURE( pTextNd, "no Text Node" );
         SwFormatFlyCnt aFormat( pFormat );
-        pTextNd->InsertItem( aFormat, nContentPos, nContentPos );
+        pTextNd->InsertItem( aFormat, rnContentPos, rnContentPos );
     }
 }
 
@@ -213,7 +212,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
         }
     }
 
-    ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
+    ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx, m_pObjArray[0].nNodeOffset );
 
     pFormat->RemoveAllUnos();
 
@@ -226,7 +225,7 @@ void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
     {
         SwUndoGroupObjImpl& rSave = m_pObjArray[n];
 
-        ::lcl_RestoreAnchor( rSave.pFormat, rSave.nNodeIdx );
+        ::lcl_RestoreAnchor( rSave.pFormat, rSave.nNodeIdx, rSave.nNodeOffset );
         rFlyFormats.push_back( rSave.pFormat );
 
         pObj = rSave.pObj;
@@ -288,7 +287,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
         pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
         pObj->SetUserCall( nullptr );
 
-        ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx );
+        ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx, rSave.nNodeOffset );
 
         rSave.pFormat->RemoveAllUnos();
 
@@ -296,7 +295,7 @@ void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
     }
 
     // re-insert group object
-    ::lcl_RestoreAnchor( m_pObjArray[0].pFormat, m_pObjArray[0].nNodeIdx );
+    ::lcl_RestoreAnchor( m_pObjArray[0].pFormat, m_pObjArray[0].nNodeIdx, m_pObjArray[0].nNodeOffset);
     rFlyFormats.push_back( m_pObjArray[0].pFormat );
 
     SwDrawContact *pContact = new SwDrawContact( m_pObjArray[0].pFormat, m_pObjArray[0].pObj );
@@ -331,7 +330,7 @@ void SwUndoDrawGroup::AddObj( sal_uInt16 nPos, SwDrawFrameFormat* pFormat, SdrOb
     SwUndoGroupObjImpl& rSave = m_pObjArray[nPos + 1];
     rSave.pObj = pObj;
     rSave.pFormat = pFormat;
-    ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx );
+    ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx, rSave.nNodeOffset );
 
     pFormat->RemoveAllUnos();
 
@@ -362,7 +361,7 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj, const SwDoc& rDoc )
     pContact->Changed( *pObj, SdrUserCallType::Delete, pObj->GetLastBoundRect() );
     pObj->SetUserCall( nullptr );
 
-    ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
+    ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx, m_pObjArray[0].nNodeOffset );
 
     pFormat->RemoveAllUnos();
 
@@ -398,7 +397,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SwUndoGroupObjImpl& rSave = m_pObjArray[n];
 
-        ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx );
+        ::lcl_SaveAnchor( rSave.pFormat, rSave.nNodeIdx, rSave.nNodeOffset );
 
         // copy the textboxes for later use to this vector
         if (auto pTxBxNd = rSave.pFormat->GetOtherTextBoxFormats())
@@ -423,7 +422,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     // re-insert group object
-    ::lcl_RestoreAnchor( m_pObjArray[0].pFormat, m_pObjArray[0].nNodeIdx );
+    ::lcl_RestoreAnchor( m_pObjArray[0].pFormat, m_pObjArray[0].nNodeIdx, m_pObjArray[0].nNodeOffset );
     rFlyFormats.push_back( m_pObjArray[0].pFormat );
 
     SwDrawContact *pContact = new SwDrawContact( m_pObjArray[0].pFormat, m_pObjArray[0].pObj );
@@ -462,7 +461,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
     pFormat->CallSwClientNotify(sw::ContactChangedHint(&(m_pObjArray[0].pObj)));
     m_pObjArray[0].pObj->SetUserCall( nullptr );
 
-    ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx );
+    ::lcl_SaveAnchor( pFormat, m_pObjArray[0].nNodeIdx, m_pObjArray[0].nNodeOffset );
 
     // Store the textboxes in this vector for later use.
     std::vector<std::pair<SdrObject*, SwFrameFormat*>> vTextBoxes;
@@ -488,7 +487,7 @@ void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
     {
         SwUndoGroupObjImpl& rSave = m_pObjArray[n];
 
-        ::lcl_RestoreAnchor( rSave.pFormat, rSave.nNodeIdx );
+        ::lcl_RestoreAnchor( rSave.pFormat, rSave.nNodeIdx, rSave.nNodeOffset );
         rFlyFormats.push_back( rSave.pFormat );
 
         SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
@@ -592,7 +591,7 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
     for( size_t n = 0; n < m_pMarkList->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = m_pObjArray[n];
-        ::lcl_RestoreAnchor( rSave.pFormat, rSave.nNodeIdx );
+        ::lcl_RestoreAnchor( rSave.pFormat, rSave.nNodeIdx, rSave.nNodeOffset );
         rFlyFormats.push_back( rSave.pFormat );
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFormat, pObj );
@@ -601,10 +600,9 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         pContact->MoveObjToVisibleLayer( pObj );
 
         SwDrawFrameFormat* pDrawFrameFormat = rSave.pFormat;
-        if (pDrawFrameFormat->GetOtherTextBoxFormats())
+        if (auto& pTextBoxes = pDrawFrameFormat->GetOtherTextBoxFormats())
         {
-            SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                SwTextBoxHelper::changeAnchor, pDrawFrameFormat, pObj);
+            pTextBoxes->SyncAll(SwFormatAnchor());
         }
 
         // #i45952# - notify that position attributes are already set
@@ -634,7 +632,7 @@ void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
         pFormat->RemoveAllUnos();
 
         rFlyFormats.erase( std::find( rFlyFormats.begin(), rFlyFormats.end(), pFormat ));
-        ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx );
+        ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx, rSave.nNodeOffset);
     }
 }
 
@@ -644,7 +642,7 @@ void SwUndoDrawDelete::AddObj( SwDrawFrameFormat* pFormat,
     SwUndoGroupObjImpl& rSave = m_pObjArray[ m_pMarkList->GetMarkCount() ];
     rSave.pObj = rMark.GetMarkedSdrObj();
     rSave.pFormat = pFormat;
-    ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx );
+    ::lcl_SaveAnchor( pFormat, rSave.nNodeIdx, rSave.nNodeOffset);
 
     pFormat->RemoveAllUnos();
 

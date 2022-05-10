@@ -1086,13 +1086,16 @@ class NestedUserCallHdl
 /// Notify the format's textbox that it should reconsider its position / size.
 static void lcl_textBoxSizeNotify(SwFrameFormat* pFormat)
 {
-    if (SwTextBoxHelper::isTextBox(pFormat, RES_DRAWFRMFMT))
+    if (!pFormat)
+        return;
+
+    if (auto& pTextBoxes = pFormat->GetOtherTextBoxFormats())
     {
         // Just notify the textbox that the size has changed, the actual object size is not interesting.
         SfxItemSetFixed<RES_FRM_SIZE, RES_FRM_SIZE> aResizeSet(pFormat->GetDoc()->GetAttrPool());
         SwFormatFrameSize aSize;
         aResizeSet.Put(aSize);
-        SwTextBoxHelper::syncFlyFrameAttr(*pFormat, aResizeSet, pFormat->FindRealSdrObject());
+        pTextBoxes->SyncAll(aResizeSet);
     }
 }
 
@@ -1250,10 +1253,6 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
                     }
                     // use geometry of drawing object
                     aObjRect = pGroupObj->GetSnapRect();
-
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::changeAnchor, GetFormat(), &const_cast<SdrObject&>(rObj));
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(&SwTextBoxHelper::syncTextBoxSize, GetFormat(), &const_cast<SdrObject&>(rObj));
-
                 }
                 SwTwips nXPosDiff(0);
                 SwTwips nYPosDiff(0);
@@ -1369,14 +1368,8 @@ void SwDrawContact::Changed_( const SdrObject& rObj,
 
                     aSet.Put(aSyncSet);
                     aSet.Put(pSdrObj->GetMergedItem(RES_FRM_SIZE));
-                    SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSet, pSdrObj);
 
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::changeAnchor, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
-                    SwTextBoxHelper::synchronizeGroupTextBoxProperty(
-                        &SwTextBoxHelper::syncTextBoxSize, GetFormat(),
-                        GetFormat()->FindRealSdrObject());
+                    GetFormat()->GetOtherTextBoxFormats()->SyncAll(aSet);
                 }
                 else
                     SwTextBoxHelper::syncFlyFrameAttr(*GetFormat(), aSyncSet, GetFormat()->FindRealSdrObject());
