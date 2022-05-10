@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,basegfx,\
 
 $(eval $(call gb_CppunitTest_add_exception_objects,basegfx,\
     basegfx/test/B2DRangeTest \
+    basegfx/test/B2IRangeTest \
     basegfx/test/B2DPolyRangeTest \
     basegfx/test/B2DHomMatrixTest \
     basegfx/test/B2DPointTest \

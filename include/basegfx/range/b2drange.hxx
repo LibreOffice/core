@@ -22,11 +22,12 @@
 #include <ostream>
 #include <vector>
 
+#include <basegfx/basegfxdllapi.h>
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 #include <basegfx/range/basicrange.hxx>
-#include <basegfx/basegfxdllapi.h>
+#include <basegfx/range/Range2D.hxx>
 
 namespace basegfx
 {
@@ -49,117 +50,31 @@ namespace basegfx
 
         @see B1DRange
      */
-    class SAL_WARN_UNUSED B2DRange
+    class SAL_WARN_UNUSED B2DRange : public Range2D<double, DoubleTraits>
     {
     public:
-        typedef double          ValueType;
-        typedef DoubleTraits    TraitsType;
-
-        B2DRange() {}
+        B2DRange()
+            : Range2D()
+        {}
 
         /// Create degenerate interval consisting of a single point
-        explicit B2DRange(const B2DTuple& rTuple)
-        :   maRangeX(rTuple.getX()),
-            maRangeY(rTuple.getY())
+        explicit B2DRange(const Tuple2D<ValueType>& rTuple)
+            : Range2D(rTuple)
         {
-        }
-
-        /// Create proper interval between the two given double pairs
-        B2DRange(double x1,
-                 double y1,
-                 double x2,
-                 double y2)
-        :   maRangeX(x1),
-            maRangeY(y1)
-        {
-            maRangeX.expand(x2);
-            maRangeY.expand(y2);
         }
 
         /// Create proper interval between the two given points
-        B2DRange(const B2DTuple& rTuple1,
-                 const B2DTuple& rTuple2)
-        :   maRangeX(rTuple1.getX()),
-            maRangeY(rTuple1.getY())
+        B2DRange(const Tuple2D<ValueType>& rTuple1,
+                 const Tuple2D<ValueType>& rTuple2)
+            : Range2D(rTuple1, rTuple2)
         {
-            expand( rTuple2 );
         }
+
+        B2DRange(ValueType x1, ValueType y1, ValueType x2, ValueType y2)
+            : Range2D(x1, y1, x2, y2)
+        {}
 
         BASEGFX_DLLPUBLIC explicit B2DRange(const B2IRange& rRange);
-
-        /** Check if the interval set is empty
-
-            @return false, if no value is in this set - having a
-            single point included will already return true.
-         */
-        bool isEmpty() const
-        {
-            return (
-                maRangeX.isEmpty()
-                || maRangeY.isEmpty()
-                );
-        }
-
-        /// reset the object to empty state again, clearing all values
-        void reset()
-        {
-            maRangeX.reset();
-            maRangeY.reset();
-        }
-
-        bool operator==( const B2DRange& rRange ) const
-        {
-            return (maRangeX == rRange.maRangeX
-                && maRangeY == rRange.maRangeY);
-        }
-
-        bool operator!=( const B2DRange& rRange ) const
-        {
-            return (maRangeX != rRange.maRangeX
-                || maRangeY != rRange.maRangeY);
-        }
-
-        bool equal(const B2DRange& rRange) const
-        {
-            return (maRangeX.equal(rRange.maRangeX)
-                    && maRangeY.equal(rRange.maRangeY));
-        }
-
-        /// get lower bound of the set. returns arbitrary values for empty sets.
-        double getMinX() const
-        {
-            return maRangeX.getMinimum();
-        }
-
-        /// get lower bound of the set. returns arbitrary values for empty sets.
-        double getMinY() const
-        {
-            return maRangeY.getMinimum();
-        }
-
-        /// get upper bound of the set. returns arbitrary values for empty sets.
-        double getMaxX() const
-        {
-            return maRangeX.getMaximum();
-        }
-
-        /// get upper bound of the set. returns arbitrary values for empty sets.
-        double getMaxY() const
-        {
-            return maRangeY.getMaximum();
-        }
-
-        /// return difference between upper and lower X value. returns 0 for empty sets.
-        double getWidth() const
-        {
-            return maRangeX.getRange();
-        }
-
-        /// return difference between upper and lower Y value. returns 0 for empty sets.
-        double getHeight() const
-        {
-            return maRangeY.getRange();
-        }
 
         /// get lower bound of the set. returns arbitrary values for empty sets.
         B2DPoint getMinimum() const
@@ -197,90 +112,6 @@ namespace basegfx
                 );
         }
 
-        /// return center X value of set. returns 0 for empty sets.
-        double getCenterX() const
-        {
-            return maRangeX.getCenter();
-        }
-
-        /// return center Y value of set. returns 0 for empty sets.
-        double getCenterY() const
-        {
-            return maRangeY.getCenter();
-        }
-
-        /// yields true if given point is contained in set
-        bool isInside(const B2DTuple& rTuple) const
-        {
-            return (
-                maRangeX.isInside(rTuple.getX())
-                && maRangeY.isInside(rTuple.getY())
-                );
-        }
-
-        /// yields true if rRange is inside, or equal to set
-        bool isInside(const B2DRange& rRange) const
-        {
-            return (
-                maRangeX.isInside(rRange.maRangeX)
-                && maRangeY.isInside(rRange.maRangeY)
-                );
-        }
-
-        /// yields true if rRange at least partly inside set
-        bool overlaps(const B2DRange& rRange) const
-        {
-            return (
-                maRangeX.overlaps(rRange.maRangeX)
-                && maRangeY.overlaps(rRange.maRangeY)
-                );
-        }
-
-        /// yields true if overlaps(rRange) does, and the overlap is larger than infinitesimal
-        bool overlapsMore(const B2DRange& rRange) const
-        {
-            return (
-                maRangeX.overlapsMore(rRange.maRangeX)
-                && maRangeY.overlapsMore(rRange.maRangeY)
-                );
-        }
-
-        /// add point to the set, expanding as necessary
-        void expand(const B2DTuple& rTuple)
-        {
-            maRangeX.expand(rTuple.getX());
-            maRangeY.expand(rTuple.getY());
-        }
-
-        /// add rRange to the set, expanding as necessary
-        void expand(const B2DRange& rRange)
-        {
-            maRangeX.expand(rRange.maRangeX);
-            maRangeY.expand(rRange.maRangeY);
-        }
-
-        /// calc set intersection
-        void intersect(const B2DRange& rRange)
-        {
-            maRangeX.intersect(rRange.maRangeX);
-            maRangeY.intersect(rRange.maRangeY);
-        }
-
-        /// grow set by fValue on all sides
-        void grow(double fValue)
-        {
-            maRangeX.grow(fValue);
-            maRangeY.grow(fValue);
-        }
-
-        /// clamp value on range
-        B2DTuple clamp(const B2DTuple& rTuple) const
-        {
-            return B2DTuple(
-                maRangeX.clamp(rTuple.getX()),
-                maRangeY.clamp(rTuple.getY()));
-        }
-
         /** Transform Range by given transformation matrix. */
         BASEGFX_DLLPUBLIC void transform(const B2DHomMatrix& rMatrix);
 
@@ -295,12 +126,6 @@ namespace basegfx
 
         /** Get a range filled with (0.0, 0.0, 1.0, 1.0) */
         static const B2DRange& getUnitB2DRange();
-
-    private:
-        typedef ::basegfx::BasicRange< ValueType, TraitsType >  MyBasicRange;
-
-        MyBasicRange        maRangeX;
-        MyBasicRange        maRangeY;
     };
 
     /** Transform B2DRange by given transformation matrix (see operator*=())
@@ -332,13 +157,15 @@ namespace basegfx
 
         @return the input vector
      */
-    BASEGFX_DLLPUBLIC ::std::vector< B2DRange >& computeSetDifference( ::std::vector< B2DRange >&   o_rResult,
-                                                     const B2DRange&            rFirst,
-                                                     const B2DRange&            rSecond );
+    BASEGFX_DLLPUBLIC std::vector<B2DRange>& computeSetDifference(
+                                                std::vector<B2DRange>& o_rResult,
+                                                const B2DRange& rFirst,
+                                                const B2DRange& rSecond);
 
-    template< typename charT, typename traits >
-    inline std::basic_ostream<charT, traits> & operator <<(
-        std::basic_ostream<charT, traits> & stream, const B2DRange& range )
+    /** Write to char stream */
+    template<typename charT, typename traits>
+    inline std::basic_ostream<charT, traits>& operator<<(
+        std::basic_ostream<charT, traits>& stream, const B2DRange& range)
     {
         return stream << range.getWidth() << "x" << range.getHeight() << "@" << range.getMinimum();
     }
