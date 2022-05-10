@@ -347,6 +347,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col )
     const ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
     bool bAscending = rEntry.eOp == SC_LESS || rEntry.eOp == SC_LESS_EQUAL || rEntry.eOp == SC_EQUAL;
     bool bByString = rItem.meType == ScQueryEntry::ByString;
+    bool bForceStr = bByString && rEntry.eOp == SC_EQUAL;
     bool bAllStringIgnore = bIgnoreMismatchOnLeadingStrings && !bByString;
     bool bFirstStringIgnore = bIgnoreMismatchOnLeadingStrings &&
         !maParam.bHasHeader && bByString;
@@ -413,7 +414,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col )
 
     aCellData = aIndexer.getCell(nLastInRange);
     ScRefCellValue aCell = aCellData.first;
-    if (aCell.hasString())
+    if (bForceStr || aCell.hasString())
     {
         sal_uInt32 nFormat = pCol->GetNumberFormat(mrContext, aCellData.second);
         OUString aStr = ScCellFormat::GetInputString(aCell, nFormat, rFormatter, rDoc);
@@ -447,7 +448,7 @@ bool ScQueryCellIteratorBase< accessType, queryType >::BinarySearch( SCCOL col )
 
         aCellData = aIndexer.getCell(i);
         aCell = aCellData.first;
-        bool bStr = aCell.hasString();
+        bool bStr = bForceStr || aCell.hasString();
         nRes = 0;
 
         // compares are content<query:-1, content>query:1
