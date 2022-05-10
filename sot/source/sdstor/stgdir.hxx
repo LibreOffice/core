@@ -80,6 +80,7 @@ public:
     sal_Int32 Read( void*, sal_Int32 );
     sal_Int32 Write( const void*, sal_Int32 );
     void  Copy( BaseStorageStream& );
+    StgDirEntry* FindDir( std::u16string_view );
 };
 
 class StgDirStrm : public StgDataStrm
@@ -94,7 +95,7 @@ public:
     bool         Store();
     void*        GetEntry( sal_Int32 n, bool );// get an entry
     StgDirEntry* GetRoot() { return m_pRoot; }
-    static StgDirEntry* Find( StgDirEntry&, const OUString& );
+    static StgDirEntry* Find( StgDirEntry&, std::u16string_view );
     StgDirEntry* Create( StgDirEntry&, const OUString&, StgEntryType );
 };
 

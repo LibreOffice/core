@@ -77,7 +77,7 @@ OUString SAL_CALL SdFilterDetect::detect( Sequence< beans::PropertyValue >& lDes
         try
         {
             tools::SvRef<SotStorage> aStorage = new SotStorage( pInStrm, false );
-            if ( !aStorage->GetError() && aStorage->IsStream( "PowerPoint Document" ) )
+            if ( !aStorage->GetError() && aStorage->IsStream( u"PowerPoint Document" ) )
                 return aTypeName;
         }
         catch (const css::ucb::ContentCreationException&)

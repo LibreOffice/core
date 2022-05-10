@@ -380,6 +380,14 @@ sal_Int32 StgEntry::Compare( const StgEntry& r ) const
         return r.m_aName.compareTo(m_aName);
 }
 
+sal_Int32 StgEntry::Compare( std::u16string_view r ) const
+{
+    if (r.size() != m_nNameLen)
+        return r.size() > m_nNameLen ? 1 : -1;
+    else
+        return - m_aName.compareTo(r);
+}
+
 // These load/store operations are a bit more complicated,
 // since they have to copy their contents into a packed structure.
 

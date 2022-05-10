@@ -615,7 +615,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             if ( SotStorage::IsStorageFile( pStream ) )
             {
                 tools::SvRef<SotStorage> aStorage = new SotStorage( pStream, false );
-                if ( aStorage->IsStream("Equation Native") )
+                if ( aStorage->IsStream(u"Equation Native") )
                 {
                     // is this a MathType Storage?
                     OUStringBuffer aBuffer;

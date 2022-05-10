@@ -101,9 +101,9 @@ public:
     virtual BaseStorage*        OpenOLEStorage( const OUString & rEleName,
                                                 StreamMode = StreamMode::STD_READWRITE,
                                                 bool bDirect = false ) = 0;
-    virtual bool                IsStream( const OUString& rEleName ) const = 0;
-    virtual bool                IsStorage( const OUString& rEleName ) const = 0;
-    virtual bool                IsContained( const OUString& rEleName ) const = 0;
+    virtual bool                IsStream( std::u16string_view rEleName ) const = 0;
+    virtual bool                IsStorage( std::u16string_view rEleName ) const = 0;
+    virtual bool                IsContained( std::u16string_view rEleName ) const = 0;
     virtual void                Remove( const OUString & rEleName ) = 0;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) = 0;
     virtual bool                ValidateFAT() = 0;
@@ -188,9 +188,9 @@ public:
     virtual BaseStorage*        OpenOLEStorage( const OUString & rEleName,
                                                 StreamMode = StreamMode::STD_READWRITE,
                                                 bool bDirect = false ) override;
-    virtual bool                IsStream( const OUString& rEleName ) const override;
-    virtual bool                IsStorage( const OUString& rEleName ) const override;
-    virtual bool                IsContained( const OUString& rEleName ) const override;
+    virtual bool                IsStream( std::u16string_view rEleName ) const override;
+    virtual bool                IsStorage( std::u16string_view rEleName ) const override;
+    virtual bool                IsContained( std::u16string_view rEleName ) const override;
     virtual void                Remove( const OUString & rEleName ) override;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) override;
     virtual bool                ValidateFAT() override;
@@ -294,9 +294,9 @@ public:
     virtual BaseStorage*        OpenOLEStorage( const OUString & rEleName,
                                                 StreamMode = StreamMode::STD_READWRITE,
                                                 bool bDirect = false ) override;
-    virtual bool                IsStream( const OUString& rEleName ) const override;
-    virtual bool                IsStorage( const OUString& rEleName ) const override;
-    virtual bool                IsContained( const OUString& rEleName ) const override;
+    virtual bool                IsStream( std::u16string_view rEleName ) const override;
+    virtual bool                IsStorage( std::u16string_view rEleName ) const override;
+    virtual bool                IsContained( std::u16string_view rEleName ) const override;
     virtual void                Remove( const OUString & rEleName ) override;
     virtual bool                CopyTo( const OUString & rEleName, BaseStorage * pDest, const OUString & rNewName ) override;
     virtual bool                ValidateFAT() override;

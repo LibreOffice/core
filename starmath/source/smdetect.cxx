@@ -75,7 +75,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         bStorageOk = !aStorage->GetError();
         if (bStorageOk)
         {
-            if ( aStorage->IsStream("Equation Native") )
+            if ( aStorage->IsStream(u"Equation Native") )
             {
                 sal_uInt8 nVersion;
                 if ( GetMathTypeVersion( aStorage.get(), nVersion ) && nVersion <=3 )

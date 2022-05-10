@@ -181,7 +181,7 @@ bool SdPPTFilter::Import()
             xDualStorage = pStorage->OpenSotStorage( sDualStorage, StreamMode::STD_READ );
             pStorage = xDualStorage;
         }
-        if (pStorage->IsContained("\011DRMContent"))
+        if (pStorage->IsContained(u"\011DRMContent"))
         {
             // Document is DRM encrypted
             pStorage = lcl_DRMDecrypt(mrMedium, pStorage, aDecryptedStorageStrm);
@@ -192,7 +192,7 @@ bool SdPPTFilter::Import()
             pDocStream->SetVersion( pStorage->GetVersion() );
             pDocStream->SetCryptMaskKey(pStorage->GetKey());
 
-            if ( pStorage->IsStream( "EncryptedSummary" ) )
+            if ( pStorage->IsStream( u"EncryptedSummary" ) )
                 mrMedium.SetError(ERRCODE_SVX_READ_FILTER_PPOINT);
             else
             {

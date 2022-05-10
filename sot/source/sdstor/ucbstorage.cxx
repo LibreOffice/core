@@ -2737,27 +2737,27 @@ UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement,
     return pRet;
 }
 
-bool UCBStorage::IsStorage( const OUString& rEleName ) const
+bool UCBStorage::IsStorage( std::u16string_view rEleName ) const
 {
-    if( rEleName.isEmpty() )
+    if( rEleName.empty() )
         return false;
 
     const UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     return ( pElement && pElement->m_bIsStorage );
 }
 
-bool UCBStorage::IsStream( const OUString& rEleName ) const
+bool UCBStorage::IsStream( std::u16string_view rEleName ) const
 {
-    if( rEleName.isEmpty() )
+    if( rEleName.empty() )
         return false;
 
     const UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     return ( pElement && !pElement->m_bIsStorage );
 }
 
-bool UCBStorage::IsContained( const OUString & rEleName ) const
+bool UCBStorage::IsContained( std::u16string_view rEleName ) const
 {
-    if( rEleName.isEmpty() )
+    if( rEleName.empty() )
         return false;
     const UCBStorageElement_Impl *pElement = FindElement_Impl( rEleName );
     return ( pElement != nullptr );

@@ -40,9 +40,9 @@ private:
 protected:
     short m_nId;                          // iterator ID
     short m_nBalance;                     // indicates tree balance
-    StgAvlNode* m_pLeft, *m_pRight;         // leaves
     StgAvlNode();
 public:
+    StgAvlNode* m_pLeft, *m_pRight;         // leaves
     virtual ~StgAvlNode();
     StgAvlNode* Find( StgAvlNode const * );
     static bool Insert( StgAvlNode**, StgAvlNode* );

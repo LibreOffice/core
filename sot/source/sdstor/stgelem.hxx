@@ -122,6 +122,7 @@ public:
     void        GetName( OUString& rName ) const;
                                         // fill in the name
     sal_Int32   Compare( const StgEntry& ) const;   // compare two entries
+    sal_Int32   Compare( std::u16string_view aName ) const;   // compare two entries
     bool        Load( const void* pBuffer, sal_uInt32 nBufSize, sal_uInt64 nUnderlyingStreamSize );
     void        Store( void* );
     StgEntryType GetType() const            { return static_cast<StgEntryType>(m_cType);  }

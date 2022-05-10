@@ -93,10 +93,10 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             tools::SvRef<SotStorage> aStorage = new SotStorage ( pInStrm, false );
             if ( !aStorage->GetError() )
             {
-                bIsDetected = aStorage->IsContained( "WordDocument" );
+                bIsDetected = aStorage->IsContained( u"WordDocument" );
                 if ( bIsDetected && aTypeName.startsWith( "writer_MS_Word_97" ) )
                 {
-                    bIsDetected = ( aStorage->IsContained("0Table") || aStorage->IsContained("1Table") );
+                    bIsDetected = ( aStorage->IsContained(u"0Table") || aStorage->IsContained(u"1Table") );
 
                     // If we are checking the template type, and the document is not a .dot, don't
                     // mis-detect it.

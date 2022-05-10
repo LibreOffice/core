@@ -751,7 +751,7 @@ bool Storage::CopyTo( BaseStorage* pDest ) const
     return Good() && pDest->Good();
 }
 
-bool Storage::IsStorage( const OUString& rName ) const
+bool Storage::IsStorage( std::u16string_view rName ) const
 {
     if( Validate() )
     {
@@ -762,7 +762,7 @@ bool Storage::IsStorage( const OUString& rName ) const
     return false;
 }
 
-bool Storage::IsStream( const OUString& rName ) const
+bool Storage::IsStream( std::u16string_view rName ) const
 {
     if( Validate() )
     {
@@ -773,7 +773,7 @@ bool Storage::IsStream( const OUString& rName ) const
     return false;
 }
 
-bool Storage::IsContained( const OUString& rName ) const
+bool Storage::IsContained( std::u16string_view rName ) const
 {
     if( Validate() )
         return StgDirStrm::Find( *pEntry, rName ) != nullptr;

@@ -577,7 +577,7 @@ SotStorage * SotStorage::OpenSotStorage( const OUString & rEleName,
     return nullptr;
 }
 
-bool SotStorage::IsStorage( const OUString & rEleName ) const
+bool SotStorage::IsStorage( std::u16string_view rEleName ) const
 {
     // a little bit faster
     if( m_pOwnStg )
@@ -586,7 +586,7 @@ bool SotStorage::IsStorage( const OUString & rEleName ) const
     return false;
 }
 
-bool SotStorage::IsStream( const OUString & rEleName ) const
+bool SotStorage::IsStream( std::u16string_view rEleName ) const
 {
     // a little bit faster
     if( m_pOwnStg )
@@ -595,7 +595,7 @@ bool SotStorage::IsStream( const OUString & rEleName ) const
     return false;
 }
 
-bool SotStorage::IsContained( const OUString & rEleName ) const
+bool SotStorage::IsContained( std::u16string_view rEleName ) const
 {
     // a little bit faster
     if( m_pOwnStg )

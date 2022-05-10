@@ -120,26 +120,26 @@ std::shared_ptr<const SfxFilter> SfxFilter::GetFilterByName( const OUString& rNa
 OUString SfxFilter::GetTypeFromStorage( const SotStorage& rStg )
 {
     const char* pType=nullptr;
-    if ( rStg.IsStream( "WordDocument" ) )
+    if ( rStg.IsStream( u"WordDocument" ) )
     {
-        if ( rStg.IsStream( "0Table" ) || rStg.IsStream( "1Table" ) )
+        if ( rStg.IsStream( u"0Table" ) || rStg.IsStream( u"1Table" ) )
             pType = "writer_MS_Word_97";
         else
             pType = "writer_MS_Word_95";
     }
-    else if ( rStg.IsStream( "Book" ) )
+    else if ( rStg.IsStream( u"Book" ) )
     {
         pType = "calc_MS_Excel_95";
     }
-    else if ( rStg.IsStream( "Workbook" ) )
+    else if ( rStg.IsStream( u"Workbook" ) )
     {
         pType = "calc_MS_Excel_97";
     }
-    else if ( rStg.IsStream( "PowerPoint Document" ) )
+    else if ( rStg.IsStream( u"PowerPoint Document" ) )
     {
         pType = "impress_MS_PowerPoint_97";
     }
-    else if ( rStg.IsStream( "Equation Native" ) )
+    else if ( rStg.IsStream( u"Equation Native" ) )
     {
         pType = "math_MathType_3x";
     }

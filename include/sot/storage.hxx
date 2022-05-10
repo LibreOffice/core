@@ -149,9 +149,9 @@ public:
                                bool transacted = true);
 
     // query whether Storage or Stream
-    bool IsStream( const OUString & rEleName ) const;
-    bool IsStorage( const OUString & rEleName ) const;
-    bool IsContained( const OUString & rEleName ) const;
+    bool IsStream( std::u16string_view rEleName ) const;
+    bool IsStorage( std::u16string_view rEleName ) const;
+    bool IsContained( std::u16string_view rEleName ) const;
     // remove element
     bool Remove(const OUString & rEleName);
     bool CopyTo(const OUString & rEleName, SotStorage* pDest,

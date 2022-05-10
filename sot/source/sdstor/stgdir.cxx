@@ -691,6 +691,21 @@ void StgDirEntry::Invalidate( bool bDel )
     }
 }
 
+StgDirEntry* StgDirEntry::FindDir( std::u16string_view aFind)
+{
+    StgAvlNode* p = this;
+    while( p )
+    {
+        StgDirEntry* pEntry = static_cast<StgDirEntry*>(p);
+        sal_Int32 nRes = m_aEntry.Compare( aFind );
+        if( !nRes )
+            return pEntry;
+        else
+            p = ( nRes < 0 ) ? p->m_pLeft : p->m_pRight;
+    }
+    return nullptr;
+}
+
 ///////////////////////////// class StgDirStrm
 
 // This specialized stream is the maintenance stream for the directory tree.
@@ -880,16 +895,11 @@ void* StgDirStrm::GetEntry( sal_Int32 n, bool bDirty )
 
 // Find a dir entry.
 
-StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, const OUString& rName )
+StgDirEntry* StgDirStrm::Find( StgDirEntry& rStg, std::u16string_view rName )
 {
     if( rStg.m_pDown )
     {
-        StgEntry aEntry;
-        aEntry.Init();
-        aEntry.SetName( rName );
-        // Look in the directory attached to the entry
-        StgDirEntry aTest( aEntry );
-        return static_cast<StgDirEntry*>( rStg.m_pDown->Find( &aTest ) );
+        return rStg.m_pDown->FindDir( rName );
     }
     else
         return nullptr;

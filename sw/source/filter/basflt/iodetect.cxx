@@ -125,8 +125,8 @@ bool SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
         /* Bug 62703 - and also WinWord Docs w/o ClipBoardId! */
         if (rFilter.GetUserData() == FILTER_WW8 || rFilter.GetUserData() == sWW6)
         {
-            bRet = (rStg.IsContained("0Table")
-                    || rStg.IsContained("1Table"))
+            bRet = (rStg.IsContained(u"0Table")
+                    || rStg.IsContained(u"1Table"))
                 == (rFilter.GetUserData() == FILTER_WW8);
             if (bRet && !rFilter.IsAllowedAsTemplate())
             {
