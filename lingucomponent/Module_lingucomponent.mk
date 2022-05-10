@@ -16,6 +16,7 @@ $(eval $(call gb_Module_add_targets,lingucomponent,\
 	Library_lnth \
 	$(if $(filter iOS MACOSX,$(OS)),Library_MacOSXSpell) \
 	Library_spell \
+	Library_LanguageTool \
 	StaticLibrary_ulingu \
 	Library_numbertext \
 ))
