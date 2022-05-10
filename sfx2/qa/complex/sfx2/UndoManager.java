@@ -224,7 +224,9 @@ public class UndoManager
         };
         events.replaceByName( "OnViewCreated", scriptDescriptor );
 
-        // The below doesn't work: event notification is broken in m96, see https://bz.apache.org/ooo/show_bug.cgi?id=116313
+        // note: this may be prevented from working by setting
+        // Office::Common::Security::Scripting::AllowedDocumentEventURLs
+        // (checked in SfxEvents_Impl::isScriptURLAllowed())
         m_callbackCalled = false;
         m_currentDocument.getCurrentView().dispatch( ".uno:NewWindow" );
         assertTrue( "triggering an event did not work as expected - basic script not called", m_callbackCalled );
