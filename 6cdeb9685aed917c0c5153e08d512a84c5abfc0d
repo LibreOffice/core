@@ -16,6 +16,24 @@
       "message": "Hossein, who should review this patch?",
       "revId": "6cdeb9685aed917c0c5153e08d512a84c5abfc0d",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d73b6c0_59a089a5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002951
+      },
+      "writtenOn": "2022-05-10T10:37:56Z",
+      "side": 1,
+      "message": "I think Stephan can help.",
+      "parentUuid": "6e0e286e_d13800ab",
+      "revId": "6cdeb9685aed917c0c5153e08d512a84c5abfc0d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
