@@ -4800,7 +4800,7 @@ if test "$enable_gdb_index" != "no"; then
     if test "$enable_gdb_index" = yes -o \( "$test_gdb_index" = "yes" -a -n "$ENABLE_DEBUG$ENABLE_DBGUTIL" \); then
         AC_MSG_CHECKING([whether $CC_BASE supports -ggnu-pubnames])
         save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS -Werror -ggnu-pubnames"
+        CFLAGS="$CFLAGS -Werror -g -ggnu-pubnames"
         have_ggnu_pubnames=
         AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[have_ggnu_pubnames=TRUE],[have_ggnu_pubnames=])
         if test "$have_ggnu_pubnames" != "TRUE"; then
