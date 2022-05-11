@@ -2801,18 +2801,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
     if (IsExpanded(&rEntry))
         pImg = &pImpl->GetExpandedNodeBmp();
     else
-    {
-        if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
-            (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
-            pImpl->GetDontKnowNodeBmp().GetSizePixel().Width())
-        {
-            pImg = &pImpl->GetDontKnowNodeBmp( );
-        }
-        else
-        {
-            pImg = &pImpl->GetCollapsedNodeBmp( );
-        }
-    }
+        pImg = &pImpl->GetCollapsedNodeBmp();
     aPos.AdjustY((nTempEntryHeight - pImg->GetSizePixel().Height()) / 2 );
 
     DrawImageFlags nStyle = DrawImageFlags::NONE;
@@ -2835,8 +2824,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         else
         {
             if ((!rEntry.HasChildren()) && rEntry.HasChildrenOnDemand() &&
-                (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)) &&
-                pImpl->GetDontKnowNodeBmp().GetSizePixel().Width())
+                (!(rEntry.GetFlags() & SvTLEntryFlags::HAD_CHILDREN)))
             {
                 aControlValue.setTristateVal( ButtonValue::DontKnow ); //don't know
             }

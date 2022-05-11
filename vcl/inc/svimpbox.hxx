@@ -107,7 +107,6 @@ private:
     {
         NodeExpanded = 0,     // node is expanded ( usually a bitmap showing a minus )
         NodeCollapsed,        // node is collapsed ( usually a bitmap showing a plus )
-        NodeDontKnow,         // don't know the node state
         EntryDefExpanded,     // default for expanded entries
         EntryDefCollapsed,    // default for collapsed entries
         LAST = EntryDefCollapsed
@@ -280,7 +279,6 @@ public:
 
     inline const Image& GetExpandedNodeBmp( );
     inline const Image& GetCollapsedNodeBmp( );
-    inline const Image& GetDontKnowNodeBmp( );
 
     inline void         SetDefaultEntryExpBmp( const Image& _rImg );
     inline void         SetDefaultEntryColBmp( const Image& _rImg );
@@ -336,11 +334,6 @@ inline void SvImpLBox::SetCollapsedNodeBmp( const Image& rImg )
 {
     implGetImageLocation( ImageType::NodeCollapsed ) = rImg;
     SetNodeBmpWidth( rImg );
-}
-
-inline const Image& SvImpLBox::GetDontKnowNodeBmp( )
-{
-    return implGetImageLocation( ImageType::NodeDontKnow );
 }
 
 inline const Image& SvImpLBox::GetExpandedNodeBmp( )
