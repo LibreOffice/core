@@ -2096,8 +2096,7 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap, con
             {
                 aProperties = comphelper::sequenceToContainer< std::vector<beans::PropertyValue> >(pPropertyMap->GetPropertyValues());
             }
-            // TODO: this *should* work for RTF but there are test failures, maybe rtftok doesn't distinguish between formatting for the paragraph marker and for the paragraph as a whole; needs investigation
-            if (pPropertyMap && IsOOXMLImport())
+            if (pPropertyMap)
             {
                 // tdf#64222 filter out the "paragraph marker" formatting and
                 // set it as a separate paragraph property, not a empty hint at
@@ -8337,70 +8336,6 @@ uno::Reference<container::XIndexAccess> DomainMapper_Impl::GetCurrentNumberingRu
     catch (const uno::Exception&)
     {
         TOOLS_WARN_EXCEPTION("writerfilter.dmapper", "GetCurrentNumberingRules: exception caught");
-    }
-    return xRet;
-}
-
-uno::Reference<beans::XPropertySet> DomainMapper_Impl::GetCurrentNumberingCharStyle()
-{
-    uno::Reference<beans::XPropertySet> xRet;
-    try
-    {
-        sal_Int32 nListLevel = -1;
-        uno::Reference<container::XIndexAccess> xLevels;
-        if ( GetTopContextType() == CONTEXT_PARAGRAPH )
-            xLevels = GetCurrentNumberingRules(&nListLevel);
-        if (!xLevels.is())
-        {
-            if (IsOOXMLImport())
-                return xRet;
-
-            PropertyMapPtr pContext = m_pTopContext;
-            if (IsRTFImport() && !IsOpenField())
-            {
-                // Looking up the paragraph context explicitly (and not just taking
-                // the top context) is necessary for RTF, where formatting of a run
-                // and of the paragraph mark is not separated.
-                // We know that the formatting inside a field won't affect the
-                // paragraph marker formatting, though.
-                pContext = GetTopContextOfType(CONTEXT_PARAGRAPH);
-                if (!pContext)
-                    return xRet;
-            }
-
-            // In case numbering rules is not found via a style, try the direct formatting instead.
-            std::optional<PropertyMap::Property> oProp = pContext->getProperty(PROP_NUMBERING_RULES);
-            if (oProp)
-            {
-                xLevels.set(oProp->second, uno::UNO_QUERY);
-                // Found the rules, then also try to look up our numbering level.
-                oProp = pContext->getProperty(PROP_NUMBERING_LEVEL);
-                if (oProp)
-                    oProp->second >>= nListLevel;
-                else
-                    nListLevel = 0;
-            }
-
-            if (!xLevels.is())
-                return xRet;
-        }
-        uno::Sequence<beans::PropertyValue> aProps;
-        xLevels->getByIndex(nListLevel) >>= aProps;
-        auto pProp = std::find_if(std::cbegin(aProps), std::cend(aProps),
-            [](const beans::PropertyValue& rProp) { return rProp.Name == "CharStyleName"; });
-        if (pProp != std::cend(aProps))
-        {
-            OUString aCharStyle;
-            pProp->Value >>= aCharStyle;
-            uno::Reference<container::XNameAccess> xCharacterStyles;
-            uno::Reference< style::XStyleFamiliesSupplier > xStylesSupplier(GetTextDocument(), uno::UNO_QUERY);
-            uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
-            xStyleFamilies->getByName("CharacterStyles") >>= xCharacterStyles;
-            xRet.set(xCharacterStyles->getByName(aCharStyle), uno::UNO_QUERY_THROW);
-        }
-    }
-    catch( const uno::Exception& )
-    {
     }
     return xRet;
 }
