@@ -67,6 +67,7 @@ class Test : public test::BootstrapFixture, public XmlTestTools, public unotest:
     void TestFillRegion();
     void TestEmfPlusGetDC();
     void TestEmfPlusSave();
+    void TestEmfPlusDrawPathWithMiterLimit();
     void TestExtTextOutOpaqueAndClipTransform();
 
     void TestBitBltStretchBltWMF();
@@ -115,6 +116,7 @@ public:
     CPPUNIT_TEST(TestFillRegion);
     CPPUNIT_TEST(TestEmfPlusGetDC);
     CPPUNIT_TEST(TestEmfPlusSave);
+    CPPUNIT_TEST(TestEmfPlusDrawPathWithMiterLimit);
     CPPUNIT_TEST(TestExtTextOutOpaqueAndClipTransform);
 
     CPPUNIT_TEST(TestBitBltStretchBltWMF);
@@ -1017,6 +1019,54 @@ void Test::TestEmfPlusSave()
     assertXPathContent(pDocument, aXPathPrefix + "mask/polygonstrokearrow/polygon",
                        "10853.4145539602,7321.41354709201 10853.4145539602,4907.54325697157 "
                        "12832.6557236512,4907.54325697157");
+}
+
+void Test::TestEmfPlusDrawPathWithMiterLimit()
+{
+    // tdf#142261 EMF+ records: DrawPath, TranslateWorldTransform, Object (Brush, Pen, Path)
+    // Check if Miter is correctly set for Lines
+    Primitive2DSequence aSequence
+        = parseEmf(u"emfio/qa/cppunit/emf/data/TestEmfPlusDrawPathWithMiterLimit.emf");
+    CPPUNIT_ASSERT_EQUAL(1, static_cast<int>(aSequence.getLength()));
+    drawinglayer::Primitive2dXmlDump dumper;
+    xmlDocUniquePtr pDocument = dumper.dumpAndParse(Primitive2DContainer(aSequence));
+    CPPUNIT_ASSERT(pDocument);
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke", 3);
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "color", "#c800c8");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "width", "1057");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "linejoin", "Miter");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/line", "miterangle", "5");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[1]/stroke", 0);
+
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence", 3);
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]", "transparence", "85");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line", "color",
+                "#6400c8");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line", "width",
+                "1057");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line",
+                "linejoin", "Miter");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[1]/polypolygonstroke/line",
+                "miterangle", "19");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[2]", "transparence", "69");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[2]/polypolygonstroke/line",
+                "miterangle", "19");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[3]", "transparence", "53");
+    assertXPath(pDocument, aXPathPrefix + "unifiedtransparence[3]/polypolygonstroke/line",
+                "miterangle", "19");
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "color", "#0000ff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "width", "1057");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "linejoin", "Miter");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/line", "miterangle", "60");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[2]/stroke", 0);
+
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "color", "#0000ff");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "width", "1057");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "linejoin", "Miter");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/line", "miterangle", "60");
+    assertXPath(pDocument, aXPathPrefix + "polypolygonstroke[3]/stroke", 0);
 }
 
 void Test::TestExtTextOutOpaqueAndClipTransform()

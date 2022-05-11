@@ -167,8 +167,12 @@ void writeLineAttribute(::tools::XmlWriter& rWriter,
             rWriter.attribute("linejoin", "Bevel");
             break;
         case basegfx::B2DLineJoin::Miter:
+        {
             rWriter.attribute("linejoin", "Miter");
+            rWriter.attribute("miterangle",
+                              basegfx::rad2deg(rLineAttribute.getMiterMinimumAngle()));
             break;
+        }
         case basegfx::B2DLineJoin::Round:
             rWriter.attribute("linejoin", "Round");
             break;
@@ -191,6 +195,7 @@ void writeLineAttribute(::tools::XmlWriter& rWriter,
             rWriter.attribute("linecap", "Unknown");
             break;
     }
+
     rWriter.endElement();
 }
 
