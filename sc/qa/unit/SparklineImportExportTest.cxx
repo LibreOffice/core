@@ -47,17 +47,20 @@ public:
 
     virtual void registerNamespaces(xmlXPathContextPtr& pXmlXPathContextPtr) override
     {
+        XmlTestTools::registerOOXMLNamespaces(pXmlXPathContextPtr);
         XmlTestTools::registerODFNamespaces(pXmlXPathContextPtr);
     }
 
     void testSparklinesRoundtripXLSX();
     void testSparklinesExportODS();
     void testSparklinesRoundtripODS();
+    void testNoSparklinesInDocumentXLSX();
 
     CPPUNIT_TEST_SUITE(SparklineImportExportTest);
     CPPUNIT_TEST(testSparklinesRoundtripXLSX);
     CPPUNIT_TEST(testSparklinesExportODS);
     CPPUNIT_TEST(testSparklinesRoundtripODS);
+    CPPUNIT_TEST(testNoSparklinesInDocumentXLSX);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -236,6 +239,25 @@ void SparklineImportExportTest::testSparklinesRoundtripODS()
     checkSparklines(xDocSh->GetDocument());
 
     xDocSh->DoClose();
+}
+
+void SparklineImportExportTest::testNoSparklinesInDocumentXLSX()
+{
+    // tdf#148835
+    // Check no sparkline elements are written when there is none in the document
+
+    // Load the document containing NO sparklines
+    ScDocShellRef xDocSh = loadDoc(u"empty.", FORMAT_XLSX);
+
+    std::shared_ptr<utl::TempFile> pXPathFile = ScBootstrapFixture::exportTo(*xDocSh, FORMAT_XLSX);
+    xmlDocUniquePtr pXmlDoc
+        = XPathHelper::parseExport(pXPathFile, m_xSFactory, "xl/worksheets/sheet1.xml");
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    assertXPath(pXmlDoc, "/x:worksheet", 1);
+    assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext/x14:sparklineGroups", 0);
+    assertXPath(pXmlDoc, "/x:worksheet/x:extLst/x:ext", 0);
+    assertXPath(pXmlDoc, "/x:worksheet/x:extLst", 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SparklineImportExportTest);
