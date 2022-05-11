@@ -230,7 +230,12 @@ void SparklineExt::addSparklineGroup(XclExpXmlStream& rStream, sc::SparklineGrou
 SparklineBuffer::SparklineBuffer(const XclExpRoot& rRoot, XclExtLstRef const& xExtLst)
     : XclExpRoot(rRoot)
 {
-    xExtLst->AddRecord(new xcl::exp::SparklineExt(GetRoot()));
+    auto& rDocument = GetDoc();
+    auto* pSparklineList = rDocument.GetSparklineList(GetCurrScTab());
+    if (pSparklineList && !pSparklineList->getSparklineGroups().empty())
+    {
+        xExtLst->AddRecord(new xcl::exp::SparklineExt(GetRoot()));
+    }
 }
 
 } // end namespace xcl::exp
