@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8522c775_eed38c7a",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2022-05-11T07:01:21Z",
+      "side": 1,
+      "message": "Now that this is JVM-specific, this setting is better placed in officecfg/registry/schema/org/openoffice/Office/Java.xcs .",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 68,
+        "endChar": 88
+      },
+      "revId": "cfd2da999dd6b487b4a193f4e63001c0d63316b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
