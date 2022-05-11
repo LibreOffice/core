@@ -228,7 +228,7 @@ enum SmModelPropertyHandles
 
 }
 
-static rtl::Reference<PropertySetInfo> lcl_createModelPropertyInfo ()
+static const rtl::Reference<PropertySetInfo> & lcl_createModelPropertyInfo ()
 {
     static PropertyMapEntry aModelPropertyInfoMap[] =
     {
@@ -304,7 +304,8 @@ static rtl::Reference<PropertySetInfo> lcl_createModelPropertyInfo ()
         { OUString("SyntaxVersion")                    , HANDLE_STARMATH_VERSION                   ,  ::cppu::UnoType<sal_Int16>::get(),                             PROPERTY_NONE,  0                     },
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
-    return rtl::Reference<PropertySetInfo>( new PropertySetInfo ( aModelPropertyInfoMap ) );
+    static const rtl::Reference<PropertySetInfo> PROPS_INFO = new PropertySetInfo ( aModelPropertyInfoMap );
+    return PROPS_INFO;
 }
 
 SmModel::SmModel( SfxObjectShell *pObjSh )
