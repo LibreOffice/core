@@ -30,26 +30,6 @@ using namespace ::basegfx;
 
 namespace emfplushelper
 {
-    namespace {
-
-    enum EmfPlusPenData
-    {
-        PenDataTransform        = 0x00000001,
-        PenDataStartCap         = 0x00000002,
-        PenDataEndCap           = 0x00000004,
-        PenDataJoin             = 0x00000008,
-        PenDataMiterLimit       = 0x00000010,
-        PenDataLineStyle        = 0x00000020,
-        PenDataDashedLineCap    = 0x00000040,
-        PenDataDashedLineOffset = 0x00000080,
-        PenDataDashedLine       = 0x00000100,
-        PenDataAlignment        = 0x00000200,
-        PenDataCompoundLine     = 0x00000400,
-        PenDataCustomStartCap   = 0x00000800,
-        PenDataCustomEndCap     = 0x00001000
-    };
-
-    }
 
     EMFPPen::EMFPPen()
         : penDataFlags(0)
@@ -57,7 +37,7 @@ namespace emfplushelper
         , penWidth(0.0)
         , startCap(0)
         , endCap(0)
-        , lineJoin(0)
+        , maLineJoin(basegfx::B2DLineJoin::Miter)
         , fMiterMinimumAngle(basegfx::deg2rad(5.0))
         , dashStyle(0)
         , dashCap(0)
@@ -137,18 +117,6 @@ namespace emfplushelper
         return "";
     }
 
-    static OUString LineJoinTypeToString(sal_uInt32 jointype)
-    {
-        switch (jointype)
-        {
-            case LineJoinTypeMiter: return "LineJoinTypeMiter";
-            case LineJoinTypeBevel: return "LineJoinTypeBevel";
-            case LineJoinTypeRound: return "LineJoinTypeRound";
-            case LineJoinTypeMiterClipped: return "LineJoinTypeMiterClipped";
-        }
-        return "";
-    }
-
     static OUString DashedLineCapTypeToString(sal_uInt32 dashedlinecaptype)
     {
         switch (dashedlinecaptype)
@@ -171,25 +139,6 @@ namespace emfplushelper
             case PenAlignmentRight: return "PenAlignmentRight";
         }
         return "";
-    }
-
-    basegfx::B2DLineJoin EMFPPen::GetLineJoinType() const
-    {
-        if (penDataFlags & EmfPlusPenDataJoin) // additional line join information
-        {
-            switch (lineJoin)
-            {
-                case EmfPlusLineJoinTypeMiter: // fall-through
-                case EmfPlusLineJoinTypeMiterClipped:
-                    return basegfx::B2DLineJoin::Miter;
-                case EmfPlusLineJoinTypeBevel:
-                    return basegfx::B2DLineJoin::Bevel;
-                case EmfPlusLineJoinTypeRound:
-                    return basegfx::B2DLineJoin::Round;
-            }
-        }
-        // If nothing set, then miter applied with no limit
-        return basegfx::B2DLineJoin::Miter;
     }
 
     drawinglayer::attribute::StrokeAttribute
@@ -233,6 +182,7 @@ namespace emfplushelper
 
     void EMFPPen::Read(SvStream& s, EmfPlusHelperData const & rR)
     {
+        sal_Int32 lineJoin = EmfPlusLineJoinTypeMiter;
         sal_uInt32 graphicsVersion, penType;
         s.ReadUInt32(graphicsVersion).ReadUInt32(penType).ReadUInt32(penDataFlags).ReadUInt32(penUnit).ReadFloat(penWidth);
         SAL_INFO("drawinglayer.emf", "EMF+\t\tGraphics version: 0x" << std::hex << graphicsVersion);
@@ -248,13 +198,13 @@ namespace emfplushelper
                 : 0.05f;  // 0.05f is taken from old EMF+ implementation (case of Unit == Pixel etc.)
         }
 
-        if (penDataFlags & PenDataTransform)
+        if (penDataFlags & EmfPlusPenDataTransform)
         {
             EmfPlusHelperData::readXForm(s, pen_transformation);
             SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO PenDataTransform: " << pen_transformation);
         }
 
-        if (penDataFlags & PenDataStartCap)
+        if (penDataFlags & EmfPlusPenDataStartCap)
         {
             s.ReadInt32(startCap);
             SAL_INFO("drawinglayer.emf", "EMF+\t\tstartCap: " << LineCapTypeToString(startCap) << " (0x" << std::hex << startCap << ")");
@@ -264,7 +214,7 @@ namespace emfplushelper
             startCap = 0;
         }
 
-        if (penDataFlags & PenDataEndCap)
+        if (penDataFlags & EmfPlusPenDataEndCap)
         {
             s.ReadInt32(endCap);
             SAL_INFO("drawinglayer.emf", "EMF+\t\tendCap: " << LineCapTypeToString(endCap) << " (0x" << std::hex << startCap << ")");
@@ -274,17 +224,29 @@ namespace emfplushelper
             endCap = 0;
         }
 
-        if (penDataFlags & PenDataJoin)
+        if (penDataFlags & EmfPlusPenDataJoin)
         {
             s.ReadInt32(lineJoin);
-            SAL_WARN("drawinglayer.emf", "EMF+\t\t LineJoin: " << LineJoinTypeToString(lineJoin) << " (0x" << std::hex << lineJoin << ")");
+            SAL_INFO("drawinglayer.emf", "EMF+\t\t LineJoin: " << lineJoin);
+            switch (lineJoin)
+            {
+                case EmfPlusLineJoinTypeBevel:
+                    maLineJoin = basegfx::B2DLineJoin::Bevel;
+                    break;
+                case EmfPlusLineJoinTypeRound:
+                    maLineJoin = basegfx::B2DLineJoin::Round;
+                    break;
+                case EmfPlusLineJoinTypeMiter:
+                case EmfPlusLineJoinTypeMiterClipped:
+                default: // If nothing set, then apply Miter (based on MS Paint)
+                    maLineJoin = basegfx::B2DLineJoin::Miter;
+                    break;
+            }
         }
         else
-        {
-            lineJoin = 0;
-        }
+            maLineJoin = basegfx::B2DLineJoin::Miter;
 
-        if (penDataFlags & PenDataMiterLimit)
+        if (penDataFlags & EmfPlusPenDataMiterLimit)
         {
             float miterLimit;
             s.ReadFloat(miterLimit);
@@ -307,7 +269,7 @@ namespace emfplushelper
             fMiterMinimumAngle = basegfx::deg2rad(5.0);
 
 
-        if (penDataFlags & PenDataLineStyle)
+        if (penDataFlags & EmfPlusPenDataLineStyle)
         {
             s.ReadInt32(dashStyle);
             SAL_INFO("drawinglayer.emf", "EMF+\t\tdashStyle: " << DashedLineCapTypeToString(dashStyle) << " (0x" << std::hex << dashStyle << ")");
@@ -317,7 +279,7 @@ namespace emfplushelper
             dashStyle = 0;
         }
 
-        if (penDataFlags & PenDataDashedLineCap)
+        if (penDataFlags & EmfPlusPenDataDashedLineCap)
         {
             s.ReadInt32(dashCap);
             SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO PenDataDashedLineCap: 0x" << std::hex << dashCap);
@@ -327,7 +289,7 @@ namespace emfplushelper
             dashCap = 0;
         }
 
-        if (penDataFlags & PenDataDashedLineOffset)
+        if (penDataFlags & EmfPlusPenDataDashedLineOffset)
         {
             s.ReadFloat(dashOffset);
             SAL_WARN("drawinglayer.emf", "EMF+\t\t TODO PenDataDashedLineOffset: 0x" << std::hex << dashOffset);
@@ -337,7 +299,7 @@ namespace emfplushelper
             dashOffset = 0;
         }
 
-        if (penDataFlags & PenDataDashedLine)
+        if (penDataFlags & EmfPlusPenDataDashedLine)
         {
             dashStyle = EmfPlusLineStyleCustom;
             sal_uInt32 dashPatternLen;
@@ -354,7 +316,7 @@ namespace emfplushelper
             }
         }
 
-        if (penDataFlags & PenDataAlignment)
+        if (penDataFlags & EmfPlusPenDataAlignment)
         {
             s.ReadInt32(alignment);
             SAL_WARN("drawinglayer.emf", "EMF+\t\t\tTODO PenDataAlignment: " << PenAlignmentToString(alignment) << " (0x" << std::hex << alignment << ")");
@@ -364,7 +326,7 @@ namespace emfplushelper
             alignment = 0;
         }
 
-        if (penDataFlags & PenDataCompoundLine)
+        if (penDataFlags & EmfPlusPenDataCompoundLine)
         {
             SAL_WARN("drawinglayer.emf", "EMF+\t\t\tTODO PenDataCompoundLine");
             sal_uInt32 compoundArrayLen;
@@ -379,7 +341,7 @@ namespace emfplushelper
             }
         }
 
-        if (penDataFlags & PenDataCustomStartCap)
+        if (penDataFlags & EmfPlusPenDataCustomStartCap)
         {
             s.ReadUInt32(customStartCapLen);
             SAL_INFO("drawinglayer.emf", "EMF+\t\t\tcustomStartCapLen: " << customStartCapLen);
@@ -396,7 +358,7 @@ namespace emfplushelper
             customStartCapLen = 0;
         }
 
-        if (penDataFlags & PenDataCustomEndCap)
+        if (penDataFlags & EmfPlusPenDataCustomEndCap)
         {
             s.ReadUInt32(customEndCapLen);
             SAL_INFO("drawinglayer.emf", "EMF+\t\t\tcustomEndCapLen: " << customEndCapLen);

@@ -104,7 +104,7 @@ namespace emfplushelper
         float penWidth;
         sal_Int32 startCap;
         sal_Int32 endCap;
-        sal_Int32 lineJoin;
+        basegfx::B2DLineJoin maLineJoin;
         double fMiterMinimumAngle;
         sal_Int32 dashStyle;
         sal_Int32 dashCap;
@@ -124,7 +124,6 @@ namespace emfplushelper
         void Read(SvStream& s, EmfPlusHelperData const & rR);
 
         drawinglayer::attribute::StrokeAttribute GetStrokeAttribute(const double aTransformation) const;
-        basegfx::B2DLineJoin GetLineJoinType() const;
     };
 }
 
