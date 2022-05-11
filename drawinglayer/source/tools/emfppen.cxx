@@ -58,7 +58,7 @@ namespace emfplushelper
         , startCap(0)
         , endCap(0)
         , lineJoin(0)
-        , miterLimit(0.0)
+        , fMiterMinimumAngle(basegfx::deg2rad(5.0))
         , dashStyle(0)
         , dashCap(0)
         , dashOffset(0.0)
@@ -286,13 +286,21 @@ namespace emfplushelper
 
         if (penDataFlags & PenDataMiterLimit)
         {
+            float miterLimit;
             s.ReadFloat(miterLimit);
-            SAL_WARN("drawinglayer.emf", "EMF+\t\tTODO PenDataMiterLimit: " << std::dec << miterLimit);
+            // asin angle must be in range [-1, 1]
+            if (abs(miterLimit) > 1.0)
+                fMiterMinimumAngle = 2.0 * asin(1.0 / miterLimit);
+            else
+                // enable miter limit for all angles
+                fMiterMinimumAngle = basegfx::deg2rad(180.0);
+            SAL_INFO("drawinglayer.emf",
+                     "EMF+\t\t MiterLimit: " << std::dec << miterLimit
+                                             << ", Miter minimum angle (rad): " << fMiterMinimumAngle);
         }
         else
-        {
-            miterLimit = 0;
-        }
+            fMiterMinimumAngle = basegfx::deg2rad(5.0);
+
 
         if (penDataFlags & PenDataLineStyle)
         {
