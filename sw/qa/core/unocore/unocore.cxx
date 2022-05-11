@@ -321,7 +321,7 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlInsert)
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
 {
     // Given a document with a content control around one or more text portions:
-    createSwDoc();
+    SwDoc* pDoc = createSwDoc();
     uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<text::XText> xText = xTextDocument->getText();
@@ -363,6 +363,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlTextPortionEnum)
     // portion.
     assertXPath(pXmlDoc, "//SwParaPortion/SwLineLayout/SwLinePortion[2]", "type",
                 "PortionType::ContentControl");
+
+    // Also test the doc model, make sure that there is a dummy character at the start and end, so
+    // the user can explicitly decide if they want to expand the content control or not:
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    OUString aText = pWrtShell->GetCursor()->GetNode().GetTextNode()->GetText();
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: ^Atest^A
+    // - Actual  : ^Atest
+    // i.e. there was no dummy character at the end.
+    CPPUNIT_ASSERT_EQUAL(OUString("\x0001test\x0001"), aText);
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlCheckbox)

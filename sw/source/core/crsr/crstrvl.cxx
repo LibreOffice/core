@@ -879,7 +879,9 @@ bool SwCursorShell::GotoFormatContentControl(const SwFormatContentControl& rCont
         sal_Int32 nStart = pTextContentControl->GetStart() + 1;
         pCursor->GetPoint()->nContent.Assign(pTextNode, nStart);
         pCursor->GetMark()->nNode = *pTextNode;
-        pCursor->GetMark()->nContent.Assign(pTextNode, *(pTextContentControl->End()));
+        // Don't select the CH_TXTATR_BREAKWORD itself at the end.
+        sal_Int32 nEnd = *pTextContentControl->End() - 1;
+        pCursor->GetMark()->nContent.Assign(pTextNode, nEnd);
 
         // Assume that once the placeholder is selected, the content is no longer the placeholder.
         pContentControl->SetShowingPlaceHolder(false);
