@@ -332,6 +332,7 @@ public:
     struct CheckBoxWidget final : public AnyWidget
     {
         bool                Checked;
+        OUString            OnValue; // the value of the checkbox if it is selected
 
         CheckBoxWidget()
                 : AnyWidget( vcl::PDFWriter::CheckBox ),
