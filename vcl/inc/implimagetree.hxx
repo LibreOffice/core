@@ -103,11 +103,15 @@ private:
         IconLinkHash maLinkHash;
 
         IconSet()
-        {}
+        {
+            maLinkHash.reserve(50);
+        }
 
         IconSet(const OUString & rURL)
             : maURL(rURL)
-        {}
+        {
+            maLinkHash.reserve(50);
+        }
     };
 
     /// Remember all the (used) icon styles and individual icons in them.
