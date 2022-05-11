@@ -31,6 +31,7 @@
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/decoview.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -2851,7 +2852,17 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     if (!bNativeOK)
     {
-        rRenderContext.DrawImage(aPos, *pImg ,nStyle);
+        DecorationView aDecoView(&rRenderContext);
+        DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
+        if (!IsEnabled())
+            nSymbolStyle |= DrawSymbolFlags::Disable;
+
+        Color aCol = aBackupTextColor;
+        if (pViewDataEntry->IsHighlighted())
+            aCol = aHighlightTextColor;
+
+        SymbolType eSymbol = IsExpanded(&rEntry) ? SymbolType::SPIN_DOWN : SymbolType::SPIN_RIGHT;
+        aDecoView.DrawSymbol(tools::Rectangle(aPos, pImg->GetSizePixel()), eSymbol, aCol, nSymbolStyle);
     }
 }
 
