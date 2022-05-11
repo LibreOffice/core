@@ -140,10 +140,6 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
         GetIDocumentUndoRedo().StartUndo(SwUndoId::REPLACE, &aRewriter);
 
         // Update the content.
-        SwTextContentControl* pTextContentControl
-            = const_cast<SwFormatContentControl&>(rContentControl).GetTextAttr();
-        // If the content control is at the end of the line, then expand is false by default.
-        pTextContentControl->SetDontExpand(false);
         DelLeft();
         pContentControl->SetSelectedListItem(std::nullopt);
         Insert(aNewState);

@@ -316,7 +316,8 @@ bool SwXContentControl::SetContentRange(SwTextNode*& rpNode, sal_Int32& rStart,
             {
                 // rStart points at the first position within the content control.
                 rStart = pTextAttr->GetStart() + 1;
-                rEnd = *pTextAttr->End();
+                // rEnd points at the last position within the content control.
+                rEnd = *pTextAttr->End() - 1;
                 return true;
             }
         }
