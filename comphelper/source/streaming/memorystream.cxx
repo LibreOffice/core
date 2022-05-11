@@ -91,6 +91,7 @@ private:
 UNOMemoryStream::UNOMemoryStream()
 : mnCursor(0)
 {
+    maData.reserve(1 * 1024 * 1024);
 }
 
 // XServiceInfo
