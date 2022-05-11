@@ -122,6 +122,7 @@ SmSym *SmSymbolManager::GetSymbolByName(const OUString& rSymbolName)
 SymbolPtrVec_t SmSymbolManager::GetSymbols() const
 {
     SymbolPtrVec_t aRes;
+    aRes.reserve(m_aSymbols.size());
     for (const auto& rEntry : m_aSymbols)
         aRes.push_back( &rEntry.second );
 //    OSL_ENSURE( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
