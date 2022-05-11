@@ -33,6 +33,59 @@
       "message": "another problem: what happens if the user creates a paragraph break inside the text attribute? with meta-field it was handled by setting the end to the end of the paragraph, but that may be less than ideal; maybe it should be converted to a line-break instead - but that still has problems, now you need to prevent e.g. inserting a file inside the text attribute too, see for example 42c6dfa1662603793cf6e2c5be99a8a8ed0acaa1.",
       "revId": "32188f6f505dbce3e4711decb06526c42c49051a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "29bc88a4_19367888",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-11T10:20:55Z",
+      "side": 1,
+      "message": "SwTextShell::ExecInsert() and SwEditWin::KeyInput() checks for rSh.CursorInsideInputField() and converts the para break to a line break in that case. I plan to extend that for content controls as well to address this.\n\nAnd now that you mention, I should indeed also extend InsertFile(), will do. :-) I hope to get this done tomorrow.",
+      "parentUuid": "4278a50c_e78e35e9",
+      "revId": "32188f6f505dbce3e4711decb06526c42c49051a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa0228be_fe0609cd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-11T10:20:55Z",
+      "side": 1,
+      "message": "Yes, I\u0027m working on a follow-up change to do that. Thanks for noticing it.",
+      "parentUuid": "9c1d74cc_3242b4a3",
+      "revId": "32188f6f505dbce3e4711decb06526c42c49051a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e927078_3d30cef9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2022-05-11T10:20:55Z",
+      "side": 1,
+      "message": "Thanks for the feedback in general. I tried hard to avoid the end dummy character, exactly because now we have to maintain consistency (so either both chars are deleted or none of them), but typing at the end of a paragraph ending with a content control is ugly without it, since whatever I do (expand vs not expand), some user will be unhappy.\n\nSo I have these to check in a next change:\n\n- DOC/RTF export\n- enter in the middle of a content control\n- delete of start/end dummy char to maintain consistency\n- insert file",
+      "revId": "32188f6f505dbce3e4711decb06526c42c49051a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
