@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c1d74cc_3242b4a3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-11T09:25:07Z",
+      "side": 1,
+      "message": "yay! i guess the function \"CalcBreaks\" in DocumentContentOperationsManager.cxx may need adapting to prevent deleting the end dummy char",
+      "revId": "32188f6f505dbce3e4711decb06526c42c49051a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
