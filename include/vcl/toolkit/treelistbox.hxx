@@ -530,7 +530,6 @@ public:
 
     void            EnableCheckButton( SvLBoxButtonData* );
     void            SetCheckButtonData( SvLBoxButtonData* );
-    void            SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp );
 
     /** Returns the default image which clients should use for expanded nodes, to have a consistent user
         interface experience in the whole product.
@@ -544,13 +543,7 @@ public:
 
     /** Sets default bitmaps for collapsed and expanded nodes.
     */
-    void    SetNodeDefaultImages( )
-    {
-        SetNodeBitmaps(
-            GetDefaultCollapsedNodeImage( ),
-            GetDefaultExpandedNodeImage( )
-        );
-    }
+    void    SetNodeDefaultImages();
 
     virtual SvTreeListEntry*    InsertEntry( const OUString& rText, SvTreeListEntry* pParent = nullptr,
                                          bool bChildrenOnDemand = false,

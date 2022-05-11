@@ -1808,10 +1808,10 @@ const Image& SvTreeListBox::GetDefaultCollapsedNodeImage( )
     return SvImpLBox::GetDefaultCollapsedNodeImage( );
 }
 
-void SvTreeListBox::SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp )
+void SvTreeListBox::SetNodeDefaultImages()
 {
-    SetExpandedNodeBmp( rExpandedNodeBmp );
-    SetCollapsedNodeBmp( rCollapsedNodeBmp );
+    SetExpandedNodeBmp(GetDefaultExpandedNodeImage());
+    SetCollapsedNodeBmp(GetDefaultCollapsedNodeImage());
     SetTabs();
 }
 
