@@ -1367,25 +1367,24 @@ bool BasicManager::GetGlobalUNOConstant( const OUString& rName, uno::Any& aOut )
     return bRes;
 }
 
-uno::Any BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::Any& _rValue )
+void BasicManager::SetGlobalUNOConstant( const OUString& rName, const uno::Any& _rValue, css::uno::Any* pOldValue )
 {
-    uno::Any aOldValue;
-
     StarBASIC* pStandardLib = GetStdLib();
     OSL_PRECOND( pStandardLib, "BasicManager::SetGlobalUNOConstant: no lib to insert into!" );
     if ( !pStandardLib )
-        return aOldValue;
+        return;
 
-    // obtain the old value
-    SbxVariable* pVariable = pStandardLib->Find( rName, SbxClassType::Object );
-    if ( pVariable )
-        aOldValue = sbxToUnoValue( pVariable );
+    if (pOldValue)
+    {
+        // obtain the old value
+        SbxVariable* pVariable = pStandardLib->Find( rName, SbxClassType::Object );
+        if ( pVariable )
+            *pOldValue = sbxToUnoValue( pVariable );
+    }
     SbxObjectRef xUnoObj = GetSbUnoObject( _rValue.getValueType ().getTypeName () , _rValue );
     xUnoObj->SetName(rName);
     xUnoObj->SetFlag( SbxFlagBits::DontStore );
     pStandardLib->Insert( xUnoObj.get() );
-
-    return aOldValue;
 }
 
 bool BasicManager::LegacyPsswdBinaryLimitExceeded( std::vector< OUString >& _out_rModuleNames )

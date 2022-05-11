@@ -174,10 +174,10 @@ public:
     /** sets a global constant in the basic library, referring to some UNO object, to a new value.
 
         If a constant with this name already existed before, its value is changed, and the old constant is
-        returned. If it does not yet exist, it is newly created, and inserted into the basic library.
+        returned in pOldValue. If it does not yet exist, it is newly created, and inserted into the basic library.
     */
     IF_MERGELIBS(BASIC_DLLPUBLIC)
-    css::uno::Any   SetGlobalUNOConstant( const OUString& rName, const css::uno::Any& _rValue );
+    void            SetGlobalUNOConstant( const OUString& rName, const css::uno::Any& _rValue, css::uno::Any* pOldValue = nullptr );
 
     /** retrieves a global constant in the basic library, referring to some UNO object, returns true if a value is found ( value is in aOut ) false otherwise. */
     IF_MERGELIBS(BASIC_DLLPUBLIC)

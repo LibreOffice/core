@@ -242,7 +242,7 @@ constexpr OUStringLiteral BASSCRIPT_PROPERTY_CALLER = u"Caller";
             // if it's a document-based script, temporarily reset ThisComponent to the script invocation context
             Any aOldThisComponent;
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
-                aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", Any( m_xDocumentScriptContext ) );
+                m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", Any( m_xDocumentScriptContext ), &aOldThisComponent );
 
             if ( m_caller.hasElements() && m_caller[ 0 ].hasValue()  )
             {
