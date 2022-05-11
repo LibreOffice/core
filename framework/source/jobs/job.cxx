@@ -156,6 +156,18 @@ void Job::setJobData( const JobData& aData )
 void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lDynamicArgs )
 {
     /* SAFE { */
+    class SolarMutexAntiGuard {
+        SolarMutexResettableGuard & m_rGuard;
+    public:
+        SolarMutexAntiGuard(SolarMutexResettableGuard & rGuard) : m_rGuard(rGuard)
+        {
+            m_rGuard.clear();
+        }
+        ~SolarMutexAntiGuard()
+        {
+            m_rGuard.reset();
+        }
+    };
     SolarMutexResettableGuard aWriteLock;
 
     // reject dangerous calls
@@ -191,23 +203,24 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         if (xAJob.is())
         {
             m_aAsyncWait.reset();
-            aWriteLock.clear();
+            SolarMutexAntiGuard const ag(aWriteLock);
             /* } SAFE */
             xAJob->executeAsync(lJobArgs, xThis);
             // wait for finishing this job - so this method
             // does the same for synchronous and asynchronous jobs!
             m_aAsyncWait.wait();
-            aWriteLock.reset();
             /* SAFE { */
             // Note: Result handling was already done inside the callback!
         }
         // execute it synchron
         else if (xSJob.is())
         {
-            aWriteLock.clear();
-            /* } SAFE */
-            css::uno::Any aResult = xSJob->execute(lJobArgs);
-            aWriteLock.reset();
+            css::uno::Any aResult;
+            {
+                SolarMutexAntiGuard const ag(aWriteLock);
+                /* } SAFE */
+                aResult = xSJob->execute(lJobArgs);
+            }
             /* SAFE { */
             impl_reactForJobResult(aResult);
         }
