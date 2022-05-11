@@ -15,8 +15,11 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
+#include <com/sun/star/awt/FontWeight.hpp>
 
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <o3tl/string_view.hxx>
 #include <comphelper/propertyvalue.hxx>
@@ -762,6 +765,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf147978enhancedPathABVW)
     {
         uno::Reference<drawing::XShape> xShape = getShape(i);
         CPPUNIT_ASSERT_EQUAL(sal_Int32(506), getProperty<awt::Rectangle>(xShape, "BoundRect").Height);
+    }
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf148132, "tdf148132.docx")
+{
+    {
+        uno::Reference<text::XTextRange> xParagraph = getParagraph(1);
+        auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
+        // Get level 2 char style
+        comphelper::SequenceAsHashMap levelProps(xLevels->getByIndex(1));
+        OUString aCharStyleName = levelProps["CharStyleName"].get<OUString>();
+        // Ensure that numbering in this paragraph is 24pt bold italic
+        // Previously it got overriden by paragraph properties and became 6pt, no bold, no italic
+        uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aCharStyleName), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(24.f, getProperty<float>(xStyle, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStyle, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xStyle, "CharPosture"));
+    }
+    // And do the same for second paragraph. Numbering should be identical
+    {
+        uno::Reference<text::XTextRange> xParagraph = getParagraph(2);
+        auto xLevels = getProperty< uno::Reference<container::XIndexAccess> >(xParagraph, "NumberingRules");
+        comphelper::SequenceAsHashMap levelProps(xLevels->getByIndex(1));
+        OUString aCharStyleName = levelProps["CharStyleName"].get<OUString>();
+
+        uno::Reference<beans::XPropertySet> xStyle(getStyles("CharacterStyles")->getByName(aCharStyleName), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(24.f, getProperty<float>(xStyle, "CharHeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStyle, "CharWeight"));
+        CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC, getProperty<awt::FontSlant>(xStyle, "CharPosture"));
     }
 }
 
