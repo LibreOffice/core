@@ -7144,14 +7144,16 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
         }
         else
         {
-            SfxFilterMatcher aMatch( sStarName );
             tools::SvRef<SotStorage> xStorage = new SotStorage( false, aMemStream );
             rSrcStg.CopyTo( xStorage.get() );
             xStorage->Commit();
             xStorage.clear();
             OUString aType = SfxFilter::GetTypeFromStorage( rSrcStg );
             if (aType.getLength() && !utl::ConfigManager::IsFuzzing())
+            {
+                SfxFilterMatcher aMatch( sStarName );
                 pFilter = aMatch.GetFilter4EA( aType );
+            }
         }
 
 #ifdef DEBUG_FILTER_MSFILTER
