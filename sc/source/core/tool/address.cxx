@@ -1223,23 +1223,12 @@ static ScRefFlags lcl_ScAddress_Parse_OOo( const sal_Unicode* p, const ScDocumen
                 }
                 aTab = aTabAcc.makeStringAndClear();
             }
-            if( *p++ != '.' )
+            if (*p != '.')
                 nBits = ScRefFlags::ZERO;
-
-            if (!bExtDoc && !rDoc.GetTable( aTab, nTab ))
+            else
             {
-                // Specified table name is not found in this document.  Assume this is an external document.
-                aDocName = aTab;
-                sal_Int32 n = aDocName.lastIndexOf('.');
-                // Assume that common filename extensions are not more than 4 characters.
-                if (n > 0 && aTab.getLength() - n <= 4)
-                {
-                    // Extension found.  Strip it.
-                    aTab = aTab.copy(0, n);
-                    bExtDoc = true;
-                }
-                else
-                    // No extension found.  This is probably not an external document.
+                ++p;
+                if (!bExtDoc && !rDoc.GetTable( aTab, nTab ))
                     nBits = ScRefFlags::ZERO;
             }
         }
