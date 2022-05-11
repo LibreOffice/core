@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "68ab2aaa_46aa8f34",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-11T19:07:51Z",
+      "side": 1,
+      "message": "About the code itself, I can\u0027t tell  but I gave a try to the patch, I confirm I don\u0027t have assertion anymore whereas with master sources updated today, without the patch, I could still reproduce the assertion.\nGood job! :-)",
+      "revId": "4209a8ad9e8bdff06318847e960fbaf3fc4a0eda",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
