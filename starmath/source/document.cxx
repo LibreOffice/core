@@ -70,8 +70,8 @@
 #include "ooxmlexport.hxx"
 #include "ooxmlimport.hxx"
 #include "rtfexport.hxx"
-#include <mathmlimport.hxx>
-#include <mathmlexport.hxx>
+#include <import.hxx>
+#include <export.hxx>
 #include <svx/svxids.hrc>
 #include <cursor.hxx>
 #include <tools/diagnose_ex.h>
@@ -603,8 +603,7 @@ bool SmDocShell::ConvertFrom(SfxMedium &rMedium)
             InvalidateCursor();
         }
         Reference<css::frame::XModel> xModel(GetModel());
-        SmXMLImportWrapper aEquation(xModel);
-        aEquation.useHTMLMLEntities(true);
+        SmMLImportWrapper aEquation(xModel);
         bSuccess = ( ERRCODE_NONE == aEquation.Import(rMedium) );
     }
     else
@@ -664,7 +663,7 @@ bool SmDocShell::Load( SfxMedium& rMedium )
         {
             // is this a fabulous math package ?
             Reference<css::frame::XModel> xModel(GetModel());
-            SmXMLImportWrapper aEquation(xModel);
+            SmMLImportWrapper aEquation(xModel);
             auto nError = aEquation.Import(rMedium);
             bRet = ERRCODE_NONE == nError;
             SetError(nError);
@@ -695,8 +694,8 @@ bool SmDocShell::Save()
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
-        SmXMLExportWrapper aEquation(xModel);
-        aEquation.SetFlat(false);
+        SmMLExportWrapper aEquation(xModel);
+        aEquation.setFlat(false);
         return aEquation.Export(*GetMedium());
     }
 
@@ -755,8 +754,8 @@ bool SmDocShell::SaveAs( SfxMedium& rMedium )
             ArrangeFormula();
 
         Reference<css::frame::XModel> xModel(GetModel());
-        SmXMLExportWrapper aEquation(xModel);
-        aEquation.SetFlat(false);
+        SmMLExportWrapper aEquation(xModel);
+        aEquation.setFlat(false);
         bRet = aEquation.Export(rMedium);
     }
     return bRet;
@@ -777,15 +776,15 @@ bool SmDocShell::ConvertTo( SfxMedium &rMedium )
         if(rFltName == STAROFFICE_XML)
         {
             Reference<css::frame::XModel> xModel(GetModel());
-            SmXMLExportWrapper aEquation(xModel);
-            aEquation.SetFlat(false);
+            SmMLExportWrapper aEquation(xModel);
+            aEquation.setFlat(false);
             bRet = aEquation.Export(rMedium);
         }
         else if(rFltName == MATHML_XML)
         {
             Reference<css::frame::XModel> xModel(GetModel());
-            SmXMLExportWrapper aEquation(xModel);
-            aEquation.SetFlat(true);
+            SmMLExportWrapper aEquation(xModel);
+            aEquation.setFlat(true);
             aEquation.SetUseHTMLMLEntities(true);
             bRet = aEquation.Export(rMedium);
         }
