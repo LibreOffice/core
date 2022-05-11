@@ -563,7 +563,7 @@ void DrawingML::WriteSolidFill( const Reference< XPropertySet >& rXPropSet )
     else if ( nFillColor != nOriginalColor )
     {
         // the user has set a different color for the shape
-        if (aTransformations.hasElements() || !WriteFillColor(rXPropSet))
+        if (!WriteFillColor(rXPropSet))
         {
             WriteSolidFill(::Color(ColorTransparency, nFillColor & 0xffffff), nAlpha);
         }
@@ -598,7 +598,23 @@ bool DrawingML::WriteFillColor(const uno::Reference<beans::XPropertySet>& xPrope
     const char* pColorName = g_aPredefinedClrNames[nFillColorTheme];
 
     mpFS->startElementNS(XML_a, XML_solidFill);
-    mpFS->singleElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
+    mpFS->startElementNS(XML_a, XML_schemeClr, XML_val, pColorName);
+
+    sal_Int32 nFillColorLumMod{};
+    xPropertySet->getPropertyValue("FillColorLumMod") >>= nFillColorLumMod;
+    if (nFillColorLumMod != 10000)
+    {
+        mpFS->singleElementNS(XML_a, XML_lumMod, XML_val, OString::number(nFillColorLumMod * 10));
+    }
+
+    sal_Int32 nFillColorLumOff{};
+    xPropertySet->getPropertyValue("FillColorLumOff") >>= nFillColorLumOff;
+    if (nFillColorLumOff != 0)
+    {
+        mpFS->singleElementNS(XML_a, XML_lumOff, XML_val, OString::number(nFillColorLumOff * 10));
+    }
+
+    mpFS->endElementNS(XML_a, XML_schemeClr);
     mpFS->endElementNS(XML_a, XML_solidFill);
 
     return true;
