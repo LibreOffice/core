@@ -125,9 +125,8 @@ CPPUNIT_TEST_FIXTURE(Test, testTickCheckboxContentControl)
     // Without the accompanying fix in place, this test would have failed:
     // - Expected: ☐
     // - Actual  : ☒
-    // i.e. the text node's text was CH_TXTATR_BREAKWORD + "Ballot Box with X", not just
-    // CH_TXTATR_BREAKWORD + "Ballot Box".
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\x0001☐"), pTextNode->GetText());
+    // i.e. the text node's text was "Ballot Box with X", not just "Ballot Box".
+    CPPUNIT_ASSERT_EQUAL(OUString(u"☐"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testInsertContentControl)
@@ -214,9 +213,8 @@ CPPUNIT_TEST_FIXTURE(Test, testSelectDropdownContentControl)
     // Without the accompanying fix in place, this test would have failed:
     // - Expected: red
     // - Actual  : choose an item
-    // i.e. the document text was unchanged instead of CH_TXTATR_BREAKWORD + display text of the
-    // first list item.
-    CPPUNIT_ASSERT_EQUAL(OUString(u"\x0001red"), pTextNode->GetText());
+    // i.e. the document text was unchanged instead of display text of the first list item.
+    CPPUNIT_ASSERT_EQUAL(OUString("red"), pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 }
 

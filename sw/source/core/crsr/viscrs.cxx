@@ -649,10 +649,10 @@ void SwSelPaintRects::HighlightContentControl()
         SwTextContentControl* pCurContentControlAtCursor = nullptr;
         if (pTextNode)
         {
-            // SwTextNode::EXPAND because the LHS of the dummy character doesn't count, the RHS of
-            // the start of the LHS of the end counts.
+            // SwTextNode::PARENT because this way we highlight when the user will type inside the
+            // content control, not outside of it.
             SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
-                pStart->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::EXPAND);
+                pStart->nContent.GetIndex(), RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT);
             if (pAttr)
             {
                 pCurContentControlAtCursor = static_txtattr_cast<SwTextContentControl*>(pAttr);

@@ -3412,6 +3412,7 @@ OUString SwTextNode::GetExpandText(SwRootFrame const*const pLayout,
     // remove dummy characters of Input Fields
     comphelper::string::remove(aText, CH_TXT_ATR_INPUTFIELDSTART);
     comphelper::string::remove(aText, CH_TXT_ATR_INPUTFIELDEND);
+    comphelper::string::remove(aText, CH_TXTATR_BREAKWORD);
 
     if( bWithNum )
     {

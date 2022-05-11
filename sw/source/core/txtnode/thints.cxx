@@ -1566,10 +1566,29 @@ bool SwTextNode::InsertHint( SwTextAttr * const pAttr, const SetAttrMode nMode )
             }
 
             // adjust end of hint to account for inserted CH_TXTATR
-            const sal_Int32 * const pEnd(pAttr->GetEnd());
+            const sal_Int32* pEnd(pAttr->GetEnd());
             if (pEnd)
             {
                 pAttr->SetEnd(*pEnd + 1);
+            }
+
+            if (pAttr->Which() == RES_TXTATR_CONTENTCONTROL)
+            {
+                // Content controls have a dummy character at their end as well.
+                SwIndex aEndIdx(this, *pAttr->GetEnd());
+                OUString aEnd
+                    = InsertText(OUString(GetCharOfTextAttr(*pAttr)), aEndIdx, nInsertFlags);
+                if (aEnd.isEmpty())
+                {
+                    DestroyAttr(pAttr);
+                    return false;
+                }
+
+                pEnd = pAttr->GetEnd();
+                if (pEnd)
+                {
+                    pAttr->SetEnd(*pEnd + 1);
+                }
             }
         }
     }
