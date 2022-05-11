@@ -53,10 +53,8 @@ void SAL_CALL rtl_freeMemory(void * p) SAL_THROW_EXTERN_C()
 
 void * SAL_CALL rtl_allocateZeroMemory(sal_Size n) SAL_THROW_EXTERN_C()
 {
-    void * p = rtl_allocateMemory (n);
-    if (p)
-        memset (p, 0, n);
-    return p;
+    SAL_WARN_IF( n >= SAL_MAX_INT32, "sal.rtl", "suspicious massive alloc " << n);
+    return calloc(n, 1);
 }
 
 void SAL_CALL rtl_freeZeroMemory(void * p, sal_Size n) SAL_THROW_EXTERN_C()
