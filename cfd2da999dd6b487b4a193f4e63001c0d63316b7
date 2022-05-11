@@ -46,6 +46,30 @@
       },
       "revId": "cfd2da999dd6b487b4a193f4e63001c0d63316b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec963f65_866d1830",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2022-05-11T13:13:54Z",
+      "side": 1,
+      "message": "but the new .../Java/VirtualMachine/RunOutOfProcess prop isn\u0027t ideal either, as it does not dictate whether a JVM shall be run OOP, but whether UNO Java components shall be instantiated OOP",
+      "parentUuid": "a1000349_e1360fe7",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 68,
+        "endChar": 88
+      },
+      "revId": "cfd2da999dd6b487b4a193f4e63001c0d63316b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
