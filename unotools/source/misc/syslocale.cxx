@@ -31,6 +31,7 @@
 #include <osl/nlsupport.h>
 
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <vector>
 
@@ -40,6 +41,18 @@ using namespace com::sun::star;
 namespace {
 
 std::weak_ptr<SvtSysLocale_Impl> g_pSysLocale;
+
+// static
+std::mutex& GetMutex()
+{
+    // #i77768# Due to a static reference in the toolkit lib
+    // we need a mutex that lives longer than the svl library.
+    // Otherwise the dtor would use a destructed mutex!!
+    static std::mutex* persistentMutex(new std::mutex);
+
+    return *persistentMutex;
+}
+
 
 }
 
@@ -88,7 +101,7 @@ void SvtSysLocale_Impl::ConfigurationChanged( utl::ConfigurationBroadcaster*, Co
          !(nHint & ConfigurationHints::DatePatterns) )
         return;
 
-    MutexGuard aGuard( SvtSysLocale::GetMutex() );
+    std::unique_lock aGuard( GetMutex() );
 
     const LanguageTag& rLanguageTag = aSysLocaleOptions.GetRealLanguageTag();
     if ( nHint & ConfigurationHints::Locale )
@@ -115,7 +128,7 @@ std::vector<OUString> SvtSysLocale_Impl::getDateAcceptancePatternsConfig() const
 
 SvtSysLocale::SvtSysLocale()
 {
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( GetMutex() );
     pImpl = g_pSysLocale.lock();
     if ( !pImpl )
     {
@@ -126,19 +139,8 @@ SvtSysLocale::SvtSysLocale()
 
 SvtSysLocale::~SvtSysLocale()
 {
-    MutexGuard aGuard( GetMutex() );
+    std::unique_lock aGuard( GetMutex() );
     pImpl.reset();
-}
-
-// static
-Mutex& SvtSysLocale::GetMutex()
-{
-    // #i77768# Due to a static reference in the toolkit lib
-    // we need a mutex that lives longer than the svl library.
-    // Otherwise the dtor would use a destructed mutex!!
-    static Mutex* persistentMutex(new Mutex);
-
-    return *persistentMutex;
 }
 
 const LocaleDataWrapper& SvtSysLocale::GetLocaleData() const

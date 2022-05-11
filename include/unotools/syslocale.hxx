@@ -31,8 +31,6 @@ class LocaleDataWrapper;
 class SvtSysLocale_Impl;
 class SvtSysLocaleOptions;
 
-namespace osl { class Mutex; }
-
 /**
     SvtSysLocale provides a refcounted single instance of an application wide
     LocaleDataWrapper and <type>CharClass</type> which always
@@ -47,8 +45,6 @@ class UNOTOOLS_DLLPUBLIC SvtSysLocale
     friend class SvtSysLocale_Impl;     // access to mutex
 
     std::shared_ptr<SvtSysLocale_Impl>  pImpl;
-
-    UNOTOOLS_DLLPRIVATE static  ::osl::Mutex&               GetMutex();
 
 public:
                                         SvtSysLocale();
