@@ -2311,11 +2311,8 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
             return;
     }
 
-    Reference< XTypeProvider > xTypeProvider;
     // Did the object have an invocation itself?
     mxInvocation.set( x, UNO_QUERY );
-
-    xTypeProvider.set( x, UNO_QUERY );
 
     if( mxInvocation.is() )
     {
@@ -2324,6 +2321,7 @@ SbUnoObject::SbUnoObject( const OUString& aName_, const Any& aUnoObj_ )
         mxExactNameInvocation.set( mxInvocation, UNO_QUERY );
 
         // The remainder refers only to the introspection
+        Reference< XTypeProvider > xTypeProvider( x, UNO_QUERY );
         if( !xTypeProvider.is() )
         {
             bNeedIntrospection = false;
