@@ -154,7 +154,7 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     m_aStatusBarItems( rStatusBarItems )
 {
     // create hash map
-    for ( int i = 0; i < int(SB_XML_ENTRY_COUNT); i++ )
+    for ( int i = 0; i < SB_XML_ENTRY_COUNT; i++ )
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
         {
