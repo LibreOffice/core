@@ -121,7 +121,7 @@ bool ChildAccess::isFinalized() {
         (parent_.is() && parent_->isFinalized());
 }
 
-OUString ChildAccess::getNameInternal() {
+const OUString & ChildAccess::getNameInternal() {
     return name_;
 }
 

@@ -1416,7 +1416,7 @@ rtl::Reference< ChildAccess > Access::getChild(OUString const & name) {
                 getAllChildren());
             for (auto const& child : children)
             {
-                OUString name2(child->getNameInternal());
+                const OUString & name2(child->getNameInternal());
                 if (name2.startsWith(locale) &&
                     (name2.getLength() == locale.getLength() ||
                      name2[locale.getLength()] == '-' ||
