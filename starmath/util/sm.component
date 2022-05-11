@@ -67,4 +67,28 @@
         constructor="org_libreoffice_comp_Math_sidebar_SmPanelFactory">
     <service name="com.sun.star.ui.UIElementFactory"/>
   </implementation>
+    <implementation name="com.sun.star.comp.Math.MLImporter"
+      constructor="Math_MLImporter_get_implementation">
+    <service name="com.sun.star.xml.MLImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Math.MLOasisMetaImporter"
+      constructor="Math_MLOasisMetaImporter_get_implementation">
+    <service name="com.sun.star.xml.MLImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Math.MLOasisSettingsImporter"
+      constructor="Math_MLOasisSettingsImporter_get_implementation">
+    <service name="com.sun.star.xml.MLImportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Math.MLContentExporter"
+      constructor="Math_MLContentExporter_get_implementation">
+    <service name="com.sun.star.xml.MLExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Math.MLOasisMetaExporter"
+      constructor="Math_MLOasisMetaExporter_get_implementation">
+    <service name="com.sun.star.xml.MLExportFilter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Math.MLOasisSettingsExporter"
+      constructor="Math_MLOasisSettingsExporter_get_implementation">
+    <service name="com.sun.star.xml.MLExportFilter"/>
+  </implementation>
 </component>
