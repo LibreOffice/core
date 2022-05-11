@@ -31,6 +31,7 @@
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/decoview.hxx>
 #include <vcl/uitest/uiobject.hxx>
 #include <sot/formats.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
@@ -2798,10 +2799,13 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     const Image* pImg = nullptr;
 
-    if (IsExpanded(&rEntry))
+    const bool bExpanded = IsExpanded(&rEntry);
+    if (bExpanded)
         pImg = &pImpl->GetExpandedNodeBmp();
     else
         pImg = &pImpl->GetCollapsedNodeBmp();
+    const bool bDefaultImage = bExpanded ? *pImg == GetDefaultExpandedNodeImage()
+                                         : *pImg == GetDefaultCollapsedNodeImage();
     aPos.AdjustY((nTempEntryHeight - pImg->GetSizePixel().Height()) / 2 );
 
     DrawImageFlags nStyle = DrawImageFlags::NONE;
@@ -2810,7 +2814,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     //native
     bool bNativeOK = false;
-    if (rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
+    if (bDefaultImage && rRenderContext.IsNativeControlSupported(ControlType::ListNode, ControlPart::Entire))
     {
         ImplControlValue aControlValue;
         tools::Rectangle aCtrlRegion(aPos,  pImg->GetSizePixel());
@@ -2819,7 +2823,7 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
         if (IsEnabled())
             nState |= ControlState::ENABLED;
 
-        if (IsExpanded(&rEntry))
+        if (bExpanded)
             aControlValue.setTristateVal(ButtonValue::On); //expanded node
         else
         {
@@ -2839,7 +2843,26 @@ void SvTreeListBox::PaintEntry1(SvTreeListEntry& rEntry, tools::Long nLine, vcl:
 
     if (!bNativeOK)
     {
-        rRenderContext.DrawImage(aPos, *pImg ,nStyle);
+        if (bDefaultImage)
+        {
+            DecorationView aDecoView(&rRenderContext);
+            DrawSymbolFlags nSymbolStyle = DrawSymbolFlags::NONE;
+            if (!IsEnabled())
+                nSymbolStyle |= DrawSymbolFlags::Disable;
+
+            Color aCol = aBackupTextColor;
+            if (pViewDataEntry->IsHighlighted())
+                aCol = aHighlightTextColor;
+
+            SymbolType eSymbol = bExpanded ? SymbolType::SPIN_DOWN : SymbolType::SPIN_RIGHT;
+            aDecoView.DrawSymbol(tools::Rectangle(aPos, pImg->GetSizePixel()), eSymbol, aCol, nSymbolStyle);
+        }
+        else
+        {
+            // setDefaultExpandedGraphicURL is exposed via uno, see TreeControlPeer::setDefaultExpandedGraphicURL,
+            // while that's supported keep the possibility to render a custom image here
+            rRenderContext.DrawImage(aPos, *pImg ,nStyle);
+        }
     }
 }
 
