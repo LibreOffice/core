@@ -22,6 +22,30 @@
       },
       "revId": "cfd2da999dd6b487b4a193f4e63001c0d63316b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1000349_e1360fe7",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-11T12:53:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8522c775_eed38c7a",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 68,
+        "endChar": 88
+      },
+      "revId": "cfd2da999dd6b487b4a193f4e63001c0d63316b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
