@@ -857,50 +857,47 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   OUString&               
 
         SfxObjectShell* pObjectShell = m_pData->m_pObjectShell.get();
 
-        ::comphelper::NamedValueCollection aArgs( rArgs );
-
         Sequence< sal_Int32 > aWinExtent;
-        if ( ( aArgs.get( "WinExtent" ) >>= aWinExtent )&& ( aWinExtent.getLength() == 4 ) )
+        for (const beans::PropertyValue & rProp : rArgs)
         {
-            tools::Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
-            aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(MapUnit::Map100thMM), MapMode(pObjectShell->GetMapUnit()));
-            pObjectShell->SetVisArea( aVisArea );
+            if (rProp.Name == "WinExtent" && (rProp.Value >>= aWinExtent) && ( aWinExtent.getLength() == 4 ) )
+            {
+                tools::Rectangle aVisArea( aWinExtent[0], aWinExtent[1], aWinExtent[2], aWinExtent[3] );
+                aVisArea = OutputDevice::LogicToLogic(aVisArea, MapMode(MapUnit::Map100thMM), MapMode(pObjectShell->GetMapUnit()));
+                pObjectShell->SetVisArea( aVisArea );
+            }
+            bool bBreakMacroSign = false;
+            if ( rProp.Name == "BreakMacroSignature" && (rProp.Value >>= bBreakMacroSign) )
+            {
+                pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
+            }
+            bool bMacroEventRead = false;
+            if ( rProp.Name == "MacroEventRead" && (rProp.Value >>= bMacroEventRead) && bMacroEventRead)
+            {
+                pObjectShell->SetMacroCallsSeenWhileLoading();
+            }
         }
-
-        bool bBreakMacroSign = false;
-        if ( aArgs.get( "BreakMacroSignature" ) >>= bBreakMacroSign )
+        Sequence<beans::PropertyValue> aStrippedArgs(rArgs.getLength());
+        beans::PropertyValue* pStripped = aStrippedArgs.getArray();
+        for (const beans::PropertyValue & rProp : rArgs)
         {
-            pObjectShell->BreakMacroSign_Impl( bBreakMacroSign );
+            if (rProp.Name == "WinExtent"
+                || rProp.Name == "BreakMacroSignature"
+                || rProp.Name == "MacroEventRead"
+                || rProp.Name == "Stream"
+                || rProp.Name == "InputStream"
+                || rProp.Name == "URL"
+                || rProp.Name == "Frame"
+                || rProp.Name == "Password"
+                || rProp.Name == "EncryptionData")
+                continue;
+            *pStripped++ = rProp;
         }
-
-        bool bMacroEventRead = false;
-        if ((aArgs.get("MacroEventRead") >>= bMacroEventRead) && bMacroEventRead)
-        {
-            pObjectShell->SetMacroCallsSeenWhileLoading();
-        }
-
-        static constexpr OUStringLiteral sWinExtent = u"WinExtent";
-        static constexpr OUStringLiteral sBreakMacroSignature = u"BreakMacroSignature";
-        static constexpr OUStringLiteral sMacroEventRead = u"MacroEventRead";
-        static constexpr OUStringLiteral sStream = u"Stream";
-        static constexpr OUStringLiteral sInputStream = u"InputStream";
-        static constexpr OUStringLiteral sURL = u"URL";
-        static constexpr OUStringLiteral sFrame = u"Frame";
-        static constexpr OUStringLiteral sPassword = u"Password";
-        static constexpr OUStringLiteral sEncryptionData = u"EncryptionData";
-        aArgs.remove( sWinExtent );
-        aArgs.remove( sBreakMacroSignature );
-        aArgs.remove( sMacroEventRead );
-        aArgs.remove( sStream );
-        aArgs.remove( sInputStream );
-        aArgs.remove( sURL );
-        aArgs.remove( sFrame );
-        aArgs.remove( sPassword );
-        aArgs.remove( sEncryptionData );
+        aStrippedArgs.realloc(pStripped - aStrippedArgs.getArray());
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
-        m_pData->m_seqArguments = aArgs.getPropertyValues();
+        m_pData->m_seqArguments = aStrippedArgs;
 
         SfxMedium* pMedium = pObjectShell->GetMedium();
         if ( pMedium )
