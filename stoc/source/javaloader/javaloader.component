@@ -20,7 +20,8 @@
 <component loader="com.sun.star.loader.SharedLibrary" environment="@CPPU_ENV@"
     xmlns="http://openoffice.org/2010/uno-components">
   <implementation name="com.sun.star.comp.stoc.JavaComponentLoader"
-    constructor="stoc_JavaComponentLoader_get_implementation">
+    constructor="stoc_JavaComponentLoader_get_implementation"
+    single-instance="true">
     <service name="com.sun.star.loader.Java"/>
     <service name="com.sun.star.loader.Java2"/>
   </implementation>

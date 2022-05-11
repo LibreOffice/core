@@ -93,7 +93,7 @@ $(if $(URE),\
     $(if $(strip $(UNO_TYPES)),\
 	    "-env:UNO_TYPES=$(foreach item,$(UNO_TYPES),$(call gb_Helper_make_url,$(item)))") \
     $(if $(strip $(UNO_SERVICES)),\
-	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))") \
+	"-env:UNO_SERVICES=$(foreach item,$(UNO_SERVICES),$(call gb_Helper_make_url,$(item)))" -env:URE_BIN_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_BIN_FOLDER))) \
 	-env:URE_INTERNAL_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_URE_LIB_FOLDER)) \
 	-env:LO_LIB_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_LIB_FOLDER)) \
 	-env:LO_JAVA_DIR=$(call gb_Helper_make_url,$(INSTROOT)/$(LIBO_SHARE_JAVA_FOLDER)) \
