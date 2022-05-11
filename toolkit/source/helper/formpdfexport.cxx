@@ -563,6 +563,15 @@ namespace toolkitform
                 if( ! (xModelProps->getPropertyValue( FM_PROP_STATE ) >>= nState) )
                     SAL_WARN("toolkit.helper", "describePDFControl: unable to get property " << FM_PROP_STATE);
                 pCheckBoxWidget->Checked = ( nState != 0 );
+
+                try
+                {
+                    xModelProps->getPropertyValue( "RefValue" ) >>= pCheckBoxWidget->OnValue;
+                }
+                catch(...)
+                {
+                    pCheckBoxWidget->OnValue = "On";
+                }
             }
 
 

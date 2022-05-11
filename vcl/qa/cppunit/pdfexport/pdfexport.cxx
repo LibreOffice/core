@@ -820,6 +820,64 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf108963)
     CPPUNIT_ASSERT_EQUAL(1, nYellowPathCount);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
+{
+    vcl::filter::PDFDocument aDocument;
+    load(u"tdf148442.odt", aDocument);
+
+    // The document has one page.
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aPages.size());
+
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), pAnnots->GetElements().size());
+
+    sal_uInt32 nBtnCount = 0;
+    for (const auto& aElement : aDocument.GetElements())
+    {
+        auto pObject = dynamic_cast<vcl::filter::PDFObjectElement*>(aElement.get());
+        if (!pObject)
+            continue;
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("FT"));
+        if (pType && pType->GetValue() == "Btn")
+        {
+            ++nBtnCount;
+            auto pT = dynamic_cast<vcl::filter::PDFLiteralStringElement*>(pObject->Lookup("T"));
+            CPPUNIT_ASSERT(pT);
+            auto pAS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("AS"));
+            CPPUNIT_ASSERT(pAS);
+
+            auto pAP = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pObject->Lookup("AP"));
+            CPPUNIT_ASSERT(pAP);
+            auto pN = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pAP->LookupElement("N"));
+            CPPUNIT_ASSERT(pN);
+            CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), pN->GetItems().size());
+
+            if (nBtnCount == 1)
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("Checkbox1"), pT->GetValue());
+                CPPUNIT_ASSERT_EQUAL(OString("Yes"), pAS->GetValue());
+                CPPUNIT_ASSERT(!pN->GetItems().count("ref"));
+            }
+            else if (nBtnCount == 2)
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("Checkbox2"), pT->GetValue());
+                CPPUNIT_ASSERT_EQUAL(OString("Yes"), pAS->GetValue());
+
+                // Without the fix in place, this test would have failed here
+                CPPUNIT_ASSERT(pN->GetItems().count("ref"));
+            }
+            else
+            {
+                CPPUNIT_ASSERT_EQUAL(OString("Checkbox3"), pT->GetValue());
+                CPPUNIT_ASSERT_EQUAL(OString("Off"), pAS->GetValue());
+                CPPUNIT_ASSERT(pN->GetItems().count("ref"));
+            }
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf118244_radioButtonGroup)
 {
     vcl::filter::PDFDocument aDocument;
