@@ -376,9 +376,11 @@ void ImpEditEngine::FormatDoc()
 
     // Here already, so that not always in CreateLines...
     bool bMapChanged = ImpCheckRefMapMode();
-    std::set<sal_Int32> aRepaintParas;
+    sal_Int32 nParaCount = GetParaPortions().Count();
+    o3tl::sorted_vector<sal_Int32> aRepaintParas;
+    aRepaintParas.reserve(nParaCount);
 
-    for ( sal_Int32 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
+    for ( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
     {
         ParaPortion* pParaPortion = GetParaPortions()[nPara];
         if ( pParaPortion->MustRepaint() || ( pParaPortion->IsInvalid() && pParaPortion->IsVisible() ) )
