@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71f26dfa_53a8db79",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2022-05-11T07:41:23Z",
+      "side": 1,
+      "message": "@sberg That\u0027s terrible. Thank you for catching it.",
+      "revId": "fb6399cd0958d4079d391e2851fa12ec7a3f98a0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
