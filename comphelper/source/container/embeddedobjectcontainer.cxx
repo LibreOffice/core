@@ -65,6 +65,7 @@ struct EmbedImpl
     EmbeddedObjectContainer* mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;
     uno::WeakReference < uno::XInterface > m_xModel;
+    sal_Int32 mnNextUnique = 1;
 
     bool mbOwnsStorage : 1;
     bool mbUserAllowsLinkUpdate : 1;
@@ -213,10 +214,9 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
 OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 {
     OUString aStr;
-    sal_Int32 i=1;
     do
     {
-        aStr = "Object " + OUString::number( i++ );
+        aStr = "Object " + OUString::number( pImpl->mnNextUnique++ );
     }
     while( HasEmbeddedObject( aStr ) );
     // TODO/LATER: should we consider deleted objects?
@@ -827,6 +827,7 @@ void EmbeddedObjectContainer::RemoveEmbeddedObject( const OUString& rName, bool 
     uno::Reference < embed::XEmbeddedObject > xObj = GetEmbeddedObject( rName );
     if ( xObj.is() )
         RemoveEmbeddedObject( xObj, bKeepToTempStorage );
+    pImpl->mnNextUnique = 1;
 }
 
 bool EmbeddedObjectContainer::MoveEmbeddedObject( const OUString& rName, EmbeddedObjectContainer& rCnt )
@@ -956,6 +957,8 @@ bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < embed
         return false;
     }
 
+    pImpl->mnNextUnique = 1;
+
     auto aIter = std::find_if(pImpl->maNameToObjectMap.begin(), pImpl->maNameToObjectMap.end(),
         [&xObj](const EmbeddedObjectContainerNameMap::value_type& rEntry) { return rEntry.second == xObj; });
     if (aIter != pImpl->maNameToObjectMap.end())
@@ -1005,6 +1008,7 @@ void EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < embed:
 
     pImpl->maObjectToNameMap.erase( aIter->second );
     pImpl->maNameToObjectMap.erase( aIter );
+    pImpl->mnNextUnique = 1;
 
     try
     {
@@ -1116,6 +1120,7 @@ bool EmbeddedObjectContainer::InsertGraphicStreamDirectly( const css::uno::Refer
 
 void EmbeddedObjectContainer::RemoveGraphicStream( const OUString& rObjectName )
 {
+    pImpl->mnNextUnique = 1;
     try
     {
         uno::Reference < embed::XStorage > xReplacements = pImpl->GetReplacements();
