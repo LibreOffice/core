@@ -442,6 +442,65 @@ DECLARE_OOXMLEXPORT_TEST(TestWPGZOrder, "testWPGZOrder.docx")
     }
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf148720, "tdf148720.odt")
+{
+    const auto& pLayout = parseLayoutDump();
+
+    const OString sShapeXPaths[] =
+    {
+        OString("/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[1]"),
+        OString("/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObject[1]"),
+        OString("/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObjGroup/SdrObjList/SdrObject[2]"),
+        OString("/root/page/body/txt/anchored/SwAnchoredDrawObject/SdrObjGroup/SdrObjList/SdrObject[2]")
+    };
+
+    const OString sTextXPaths[] =
+    {
+        OString("/root/page/body/txt/anchored/fly[1]/infos/bounds"),
+        OString("/root/page/body/txt/anchored/fly[2]/infos/bounds"),
+        OString("/root/page/body/txt/anchored/fly[3]/infos/bounds"),
+        OString("/root/page/body/txt/anchored/fly[4]/infos/bounds")
+    };
+
+    const OString sAttribs[] =
+    {
+        OString("left"),
+        OString("top"),
+        OString("width"),
+        OString("height")
+    };
+
+    for (sal_Int32 i = 0; i < 4; ++i)
+    {
+        OUString aShapeVals[4];
+        int aTextVals[4] = {0, 0, 0, 0};
+
+        const auto aOutRect = getXPath(pLayout, sShapeXPaths[i], "aOutRect");
+
+        sal_uInt16 nCommaPos[4] = {0, 0, 0, 0};
+        nCommaPos[1] = aOutRect.indexOf(",");
+        nCommaPos[2] = aOutRect.indexOf(",", nCommaPos[1] + 1);
+        nCommaPos[3] = aOutRect.indexOf(",", nCommaPos[2] + 1);
+
+
+        aShapeVals[0] = aOutRect.copy(nCommaPos[0], nCommaPos[1] - nCommaPos[0]);
+        aShapeVals[1] = aOutRect.copy(nCommaPos[1] + 2, nCommaPos[2] - nCommaPos[1] - 2);
+        aShapeVals[2] = aOutRect.copy(nCommaPos[2] + 2, nCommaPos[3] - nCommaPos[2] - 2);
+        aShapeVals[3] = aOutRect.copy(nCommaPos[3] + 2, aOutRect.getLength() - nCommaPos[3] - 2);
+
+        for (int ii = 0; ii < 4; ++ii)
+        {
+            aTextVals[ii] = getXPath(pLayout, sTextXPaths[i], sAttribs[ii]).toInt32();
+        }
+
+        tools::Rectangle ShapeArea(Point(aShapeVals[0].toInt32(), aShapeVals[1].toInt32()), Size(aShapeVals[2].toInt32() + 5, aShapeVals[3].toInt32() + 5));
+
+        tools::Rectangle TextArea(Point(aTextVals[0], aTextVals[1]), Size(aTextVals[2], aTextVals[3]));
+
+        CPPUNIT_ASSERT(ShapeArea.Contains(TextArea));
+    }
+}
+
 DECLARE_OOXMLEXPORT_TEST(testTdf126287, "tdf126287.docx")
 {
     CPPUNIT_ASSERT_EQUAL(2, getPages());
