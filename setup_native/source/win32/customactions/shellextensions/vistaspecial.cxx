@@ -80,6 +80,12 @@ static bool RemoveCompleteDirectoryW(const std::wstring& rPath)
     return bDirectoryRemoved;
 }
 
+/** Move program folder to program_old. Tries 10 times (program_old1, program_old2, ...).
+ *
+ * @return
+ *  ERROR_INSTALL_FAILURE when the folder cannot be moved.
+ *  ERROR_SUCCESS otherwise.
+ */
 extern "C" __declspec(dllexport) UINT __stdcall RenamePrgFolder( MSIHANDLE handle )
 {
     std::wstring sOfficeInstallPath = GetMsiPropertyW(handle, L"INSTALLLOCATION");
@@ -101,22 +107,30 @@ extern "C" __declspec(dllexport) UINT __stdcall RenamePrgFolder( MSIHANDLE handl
         }
     }
 
-    // ? This succeeds unconditionally, even if bSuccess is false!
-    return ERROR_SUCCESS;
+    return bSuccess ? ERROR_SUCCESS : ERROR_INSTALL_FAILURE;
 }
 
+
+/** Remove leftover program_old folder(s).
+ *
+ * @return
+ *  ERROR_INSTALL_FAILURE when the folder cannot be removed.
+ *  ERROR_SUCCESS otherwise.
+ */
 extern "C" __declspec(dllexport) UINT __stdcall RemovePrgFolder( MSIHANDLE handle )
 {
     std::wstring sOfficeInstallPath = GetMsiPropertyW(handle, L"INSTALLLOCATION");
     std::wstring sRemoveDir = sOfficeInstallPath + L"program_old";
 
-    RemoveCompleteDirectoryW( sRemoveDir );
+    if (!RemoveCompleteDirectoryW(sRemoveDir))
+        return ERROR_INSTALL_FAILURE;
 
     WCHAR sAppend[2] = L"0";
     for ( int i = 0; i < 10; i++ )
     {
         sRemoveDir = sOfficeInstallPath + L"program_old" + sAppend;
-        RemoveCompleteDirectoryW( sRemoveDir );
+        if (!RemoveCompleteDirectoryW( sRemoveDir ))
+            return ERROR_INSTALL_FAILURE;
         sAppend[0] += 1;
     }
 
