@@ -447,12 +447,12 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             hb_buffer_set_script(pHbBuffer, aSubRun.maScript);
             if (!msLanguage.isEmpty())
             {
-                hb_buffer_set_language(pHbBuffer, hb_language_from_string(msLanguage.getStr(), -1));
+                hb_buffer_set_language(pHbBuffer, hb_language_from_string(msLanguage.getStr(), msLanguage.getLength()));
             }
             else
             {
                 OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
-                hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
+                hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), sLanguage.getLength()));
             }
             hb_buffer_set_flags(pHbBuffer, static_cast<hb_buffer_flags_t>(nHbFlags));
             hb_buffer_add_utf16(
