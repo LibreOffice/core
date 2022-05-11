@@ -65,6 +65,7 @@ struct EmbedImpl
     EmbeddedObjectContainer* mpTempObjectContainer;
     uno::Reference < embed::XStorage > mxImageStorage;
     uno::WeakReference < uno::XInterface > m_xModel;
+    sal_Int32 mnNextUnique = 1;
 
     bool mbOwnsStorage : 1;
     bool mbUserAllowsLinkUpdate : 1;
@@ -213,10 +214,9 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
 OUString EmbeddedObjectContainer::CreateUniqueObjectName()
 {
     OUString aStr;
-    sal_Int32 i=1;
     do
     {
-        aStr = "Object " + OUString::number( i++ );
+        aStr = "Object " + OUString::number( pImpl->mnNextUnique++ );
     }
     while( HasEmbeddedObject( aStr ) );
     // TODO/LATER: should we consider deleted objects?
