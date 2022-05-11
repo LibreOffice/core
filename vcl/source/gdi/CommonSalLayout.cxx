@@ -437,10 +437,6 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
             const int nEndRunPos = aSubRun.mnEnd;
             const int nRunLen = nEndRunPos - nMinRunPos;
 
-            OString sLanguage = msLanguage;
-            if (sLanguage.isEmpty())
-                sLanguage = OUStringToOString(rArgs.maLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
-
             int nHbFlags = HB_BUFFER_FLAGS_DEFAULT;
             if (nMinRunPos == 0)
                 nHbFlags |= HB_BUFFER_FLAG_BOT; /* Beginning-of-text */
@@ -449,7 +445,15 @@ bool GenericSalLayout::LayoutText(vcl::text::ImplLayoutArgs& rArgs, const SalLay
 
             hb_buffer_set_direction(pHbBuffer, aSubRun.maDirection);
             hb_buffer_set_script(pHbBuffer, aSubRun.maScript);
-            hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
+            if (!msLanguage.isEmpty())
+            {
+                hb_buffer_set_language(pHbBuffer, hb_language_from_string(msLanguage.getStr(), -1));
+            }
+            else
+            {
+                OString sLanguage = OUStringToOString(rArgs.maLanguageTag.getBcp47(), RTL_TEXTENCODING_ASCII_US);
+                hb_buffer_set_language(pHbBuffer, hb_language_from_string(sLanguage.getStr(), -1));
+            }
             hb_buffer_set_flags(pHbBuffer, static_cast<hb_buffer_flags_t>(nHbFlags));
             hb_buffer_add_utf16(
                 pHbBuffer, reinterpret_cast<uint16_t const *>(pStr), nLength,
