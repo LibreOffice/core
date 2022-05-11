@@ -114,7 +114,8 @@ private:
     void addImpl(PropertyMapEntry const * pMap) noexcept;
 
     PropertyMap maPropertyMap;
-    std::vector< css::beans::Property > maProperties;
+    /// Cache the value we return in getProperties because it is expensive to construct
+    css::uno::Sequence< css::beans::Property > maProperties;
 };
 
 }
