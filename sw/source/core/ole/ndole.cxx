@@ -69,8 +69,7 @@ class SwOLELRUCache
     : private utl::ConfigItem
 {
 private:
-    typedef std::deque<SwOLEObj *> OleObjects_t;
-    OleObjects_t m_OleObjects;
+    std::deque<SwOLEObj *> m_OleObjects;
     sal_Int32 m_nLRU_InitSize;
     static uno::Sequence< OUString > GetPropertyNames();
 
@@ -1226,16 +1225,14 @@ void SwOLELRUCache::Load()
 void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 {
     SwOLEObj* pObj = &rObj;
-    OleObjects_t::iterator it =
-        std::find(m_OleObjects.begin(), m_OleObjects.end(), pObj);
-    if (it != m_OleObjects.end() && it != m_OleObjects.begin())
+    if (auto const it = std::find(m_OleObjects.begin(), m_OleObjects.end(), pObj);
+        it != m_OleObjects.end())
     {
+        if (it == m_OleObjects.begin())
+            return; // Everything is already in place
         // object in cache but is currently not the first in cache
         m_OleObjects.erase(it);
-        it = m_OleObjects.end();
     }
-    if (it != m_OleObjects.end())
-        return;
 
     std::shared_ptr<SwOLELRUCache> xKeepAlive(g_pOLELRU_Cache); // prevent delete this
     // try to remove objects if necessary
@@ -1252,8 +1249,7 @@ void SwOLELRUCache::InsertObj( SwOLEObj& rObj )
 
 void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
 {
-    OleObjects_t::iterator const it =
-        std::find(m_OleObjects.begin(), m_OleObjects.end(), &rObj);
+    auto const it = std::find(m_OleObjects.begin(), m_OleObjects.end(), &rObj);
     if (it != m_OleObjects.end())
     {
         m_OleObjects.erase(it);
