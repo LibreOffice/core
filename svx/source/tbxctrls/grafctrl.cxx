@@ -71,7 +71,6 @@ namespace {
 class ImplGrafControl final : public InterimItemWindow
 {
 private:
-    Idle maIdle;
     OUString maCommand;
     Reference<XFrame> mxFrame;
     std::unique_ptr<weld::Image> mxImage;
@@ -79,7 +78,7 @@ private:
 
     DECL_LINK(ValueChangedHdl, weld::MetricSpinButton&, void);
     DECL_LINK(KeyInputHdl, const KeyEvent&, bool);
-    DECL_LINK(ImplModifyHdl, Timer*, void);
+    void ImplModify();
 
 public:
     ImplGrafControl( vcl::Window* pParent, const OUString& rCmd, const Reference< XFrame >& rFrame );
@@ -100,10 +99,10 @@ public:
 
 IMPL_LINK_NOARG(ImplGrafControl, ValueChangedHdl, weld::MetricSpinButton&, void)
 {
-    maIdle.Start();
+    ImplModify();
 }
 
-IMPL_LINK_NOARG(ImplGrafControl, ImplModifyHdl, Timer*, void)
+void ImplGrafControl::ImplModify()
 {
     const sal_Int64 nVal = mxField->get_value(FieldUnit::NONE);
 
@@ -196,7 +195,6 @@ ImplGrafControl::ImplGrafControl(
     const OUString& rCmd,
     const Reference< XFrame >& rFrame)
     : InterimItemWindow(pParent, "svx/ui/grafctrlbox.ui", "GrafCtrlBox")
-    , maIdle("svx ImplGrafControl maIdle")
     , maCommand(rCmd)
     , mxFrame(rFrame)
     , mxImage(m_xBuilder->weld_image("image"))
@@ -231,8 +229,6 @@ ImplGrafControl::ImplGrafControl(
         mxField->set_range(nMinVal, 100, FieldUnit::PERCENT);
         mxField->set_increments(1, 10, FieldUnit::PERCENT);
     }
-
-    maIdle.SetInvokeHandler( LINK( this, ImplGrafControl, ImplModifyHdl ) );
 
     SetSizePixel(m_xContainer->get_preferred_size());
 }
