@@ -93,7 +93,15 @@ SdrGlobalData & GetSdrGlobalData() {
 OLEObjCache::OLEObjCache()
 {
     if (!utl::ConfigManager::IsFuzzing())
+    {
+// This limit is only useful on 32-bit windows, where we can run out of virtual memory (see tdf#95579)
+// For everything else, we are better off keeping it in main memory rather than using our hacky page-out thing
+#if defined _WIN32 && !defined _WIN64
         nSize = officecfg::Office::Common::Cache::DrawingEngine::OLE_Objects::get();
+#else
+        nSize = SAL_MAX_INT32; // effectively disable the page-out mechanism
+#endif
+    }
     else
         nSize = 100;
     pTimer.reset( new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" ) );
