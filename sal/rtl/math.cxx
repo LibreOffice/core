@@ -765,9 +765,6 @@ double SAL_CALL rtl_math_log1p(double fValue) SAL_THROW_EXTERN_C()
 }
 
 double SAL_CALL rtl_math_atanh(double fValue) SAL_THROW_EXTERN_C()
-#if defined __clang__
-    __attribute__((no_sanitize("float-divide-by-zero"))) // atahn(1) -> inf
-#endif
 {
     return ::atanh(fValue);
 }
