@@ -128,9 +128,7 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
     // (for non-RTL charPos is always the start of a multi-character glyph).
     if (rtl && pos->charPos() + pos->charCount() > beginPos + 1)
         return nullptr;
-    // Don't create a subset if it's not safe to break at the beginning or end of the sequence
-    // (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
-    if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
+    if (!isSafeToBreak(pos, rtl))
         return nullptr;
     // LinearPos needs adjusting to start at xOffset/yOffset for the first item,
     // that's how it's computed in GenericSalLayout::LayoutText().
@@ -163,7 +161,7 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
         // that we're not cutting in the middle of a multi-character glyph.
         if (rtl ? pos->charPos() + pos->charCount() != endPos + 1 : pos->charPos() != endPos)
             return nullptr;
-        if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
+        if (!isSafeToBreak(pos, rtl))
             return nullptr;
     }
     // HACK: If mode is se to be RTL, but the last glyph is a non-RTL space,
@@ -177,6 +175,30 @@ SalLayoutGlyphsImpl* SalLayoutGlyphsImpl::cloneCharRange(sal_Int32 index, sal_In
         return nullptr;
     }
     return copy.release();
+}
+
+bool SalLayoutGlyphsImpl::isSafeToBreak(const_iterator pos, bool rtl) const
+{
+    if (rtl)
+    {
+        // RTL is more complicated, because HB_GLYPH_FLAG_UNSAFE_TO_BREAK talks about beginning
+        // of a cluster, which refers to the text, not glyphs. This function is called
+        // for the first glyph of the subset and the first glyph after the subset, but since
+        // the glyphs are backwards, and we need the beginning of cluster at the start of the text
+        // and beginning of the cluster after the text, we need to check glyphs before this position.
+        if (pos == begin())
+            return true;
+        --pos;
+        while (pos >= begin() && (pos->IsInCluster() && !pos->IsClusterStart()))
+            --pos;
+        if (pos < begin())
+            return true;
+    }
+    // Don't create a subset if it's not safe to break at the beginning or end of the sequence
+    // (https://harfbuzz.github.io/harfbuzz-hb-buffer.html#hb-glyph-flags-t).
+    if (pos->IsUnsafeToBreak() || (pos->IsInCluster() && !pos->IsClusterStart()))
+        return false;
+    return true;
 }
 
 #ifdef DBG_UTIL

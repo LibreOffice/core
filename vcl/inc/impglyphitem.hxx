@@ -153,6 +153,7 @@ public:
 #endif
 
 private:
+    bool isSafeToBreak(const_iterator pos, bool rtl) const;
     rtl::Reference<LogicalFontInstance> m_rFontInstance;
     SalLayoutFlags mnFlags = SalLayoutFlags::NONE;
 };
