@@ -1056,8 +1056,6 @@ public:
     }
 
     SectionPropertyMap * GetSectionContext();
-    /// If the current paragraph has a numbering style associated, this method returns its character style (part of the numbering rules)
-    css::uno::Reference<css::beans::XPropertySet> GetCurrentNumberingCharStyle();
     /// If the current paragraph has a numbering style associated, this method returns its numbering rules
     css::uno::Reference<css::container::XIndexAccess> GetCurrentNumberingRules(sal_Int32* pListLevel);
 

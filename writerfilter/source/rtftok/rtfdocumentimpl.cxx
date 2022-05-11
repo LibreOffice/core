@@ -1971,7 +1971,14 @@ RTFError RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int n
     }
     if (nSprm >= 0)
     {
-        m_aStates.top().getCharacterSprms().set(nSprm, pBoolValue);
+        if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
+        {
+            m_aStates.top().getTableSprms().set(nSprm, pBoolValue);
+        }
+        else
+        {
+            m_aStates.top().getCharacterSprms().set(nSprm, pBoolValue);
+        }
         return RTFError::OK;
     }
 
