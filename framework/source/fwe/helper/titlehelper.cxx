@@ -368,14 +368,10 @@ void TitleHelper::impl_updateTitleForModel (const css::uno::Reference< css::fram
         if (nLeasedNumber == css::frame::UntitledNumbersConst::INVALID_NUMBER)
             nLeasedNumber = xNumbers->leaseNumber (xOwner);
 
-        OUStringBuffer sNewTitle(256);
-        sNewTitle.append (xNumbers->getUntitledPrefix ());
         if (nLeasedNumber != css::frame::UntitledNumbersConst::INVALID_NUMBER)
-            sNewTitle.append(nLeasedNumber);
+            sTitle = xNumbers->getUntitledPrefix() + OUString::number(nLeasedNumber);
         else
-            sNewTitle.append("?");
-
-        sTitle = sNewTitle.makeStringAndClear ();
+            sTitle = xNumbers->getUntitledPrefix() + "?";
     }
 
     bool     bChanged;

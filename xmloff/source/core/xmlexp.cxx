@@ -538,9 +538,9 @@ SvXMLExport::~SvXMLExport()
             {
                 if (mpProgressBarHelper)
                 {
-                    OUString sProgressMax(XML_PROGRESSMAX);
-                    OUString sProgressCurrent(XML_PROGRESSCURRENT);
-                    OUString sRepeat(XML_PROGRESSREPEAT);
+                    static constexpr OUStringLiteral sProgressMax(XML_PROGRESSMAX);
+                    static constexpr OUStringLiteral sProgressCurrent(XML_PROGRESSCURRENT);
+                    static constexpr OUStringLiteral sRepeat(XML_PROGRESSREPEAT);
                     if (xPropertySetInfo->hasPropertyByName(sProgressMax) &&
                         xPropertySetInfo->hasPropertyByName(sProgressCurrent))
                     {
@@ -554,7 +554,7 @@ SvXMLExport::~SvXMLExport()
                 }
                 if (mpNumExport && (mnExportFlags & (SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::STYLES)))
                 {
-                    OUString sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
+                    static constexpr OUStringLiteral sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
                     if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                     {
                         mxExportInfo->setPropertyValue(sWrittenNumberFormats, Any(mpNumExport->GetWasUsed()));

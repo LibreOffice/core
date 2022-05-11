@@ -705,7 +705,8 @@ StgDirStrm::StgDirStrm( StgIo& r )
     {
         StgEntry aRoot;
         aRoot.Init();
-        aRoot.SetName( "Root Entry" );
+        static constexpr OUStringLiteral sRootEntry = u"Root Entry";
+        aRoot.SetName( sRootEntry );
         aRoot.SetType( STG_ROOT );
         m_pRoot = new StgDirEntry( aRoot );
         m_pRoot->SetDirty();
