@@ -427,6 +427,10 @@ void ImplFontMetricData::ImplInitBaselines(LogicalFontInstance *pFontInstance)
     {
         mnHangingBaseline = nBaseline * fScale;
     }
+    else
+    {
+        mnHangingBaseline = 0;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
