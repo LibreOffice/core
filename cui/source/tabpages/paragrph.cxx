@@ -1779,55 +1779,54 @@ void SvxExtParagraphTabPage::Reset( const SfxItemSet* rSet )
         else
         {
             m_xKeepTogetherBox->set_state(TRISTATE_FALSE);
-
-            // widows and orphans
+            // default widows and orphans to enabled
             m_xWidowBox->set_sensitive(true);
-            _nWhich = GetWhich( SID_ATTR_PARA_WIDOWS );
-            SfxItemState eTmpState = rSet->GetItemState( _nWhich );
-
-            if ( eTmpState >= SfxItemState::DEFAULT )
-            {
-                const SvxWidowsItem& rWidow =
-                    static_cast<const SvxWidowsItem&>(rSet->Get( _nWhich ));
-                aWidowState.bTriStateEnabled = false;
-                const sal_uInt16 nLines = rWidow.GetValue();
-
-                bool _bEnable = nLines > 0;
-                m_xWidowRowNo->set_value(m_xWidowRowNo->normalize(nLines));
-                m_xWidowBox->set_state(_bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
-                m_xWidowRowNo->set_sensitive(_bEnable);
-                //m_xWidowRowLabel->set_sensitive(_bEnable);
-
-            }
-            else if ( SfxItemState::DONTCARE == eTmpState )
-                m_xWidowBox->set_state( TRISTATE_INDET );
-            else
-                m_xWidowBox->set_sensitive(false);
-
             m_xOrphanBox->set_sensitive(true);
-            _nWhich = GetWhich( SID_ATTR_PARA_ORPHANS );
-            eTmpState = rSet->GetItemState( _nWhich );
-
-            if ( eTmpState >= SfxItemState::DEFAULT )
-            {
-                const SvxOrphansItem& rOrphan =
-                    static_cast<const SvxOrphansItem&>(rSet->Get( _nWhich ));
-                const sal_uInt16 nLines = rOrphan.GetValue();
-                aOrphanState.bTriStateEnabled = false;
-
-                bool _bEnable = nLines > 0;
-                m_xOrphanBox->set_state(_bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
-                m_xOrphanRowNo->set_value(m_xOrphanRowNo->normalize(nLines));
-                m_xOrphanRowNo->set_sensitive(_bEnable);
-                m_xOrphanRowLabel->set_sensitive(_bEnable);
-
-            }
-            else if ( SfxItemState::DONTCARE == eTmpState )
-                m_xOrphanBox->set_state(TRISTATE_INDET);
-            else
-                m_xOrphanBox->set_sensitive(false);
-            aOrphanState.eState = m_xOrphanBox->get_state();
         }
+
+        // widows and orphans
+        _nWhich = GetWhich( SID_ATTR_PARA_WIDOWS );
+        SfxItemState eTmpState = rSet->GetItemState( _nWhich );
+
+        if ( eTmpState >= SfxItemState::DEFAULT )
+        {
+            const SvxWidowsItem& rWidow =
+                static_cast<const SvxWidowsItem&>(rSet->Get( _nWhich ));
+            aWidowState.bTriStateEnabled = false;
+            const sal_uInt16 nLines = rWidow.GetValue();
+
+            bool _bEnable = nLines > 0;
+            m_xWidowRowNo->set_value(m_xWidowRowNo->normalize(nLines));
+            m_xWidowBox->set_state(_bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
+            m_xWidowRowNo->set_sensitive(_bEnable);
+        }
+        else if ( SfxItemState::DONTCARE == eTmpState )
+            m_xWidowBox->set_state( TRISTATE_INDET );
+        else
+            m_xWidowBox->set_sensitive(false);
+
+        _nWhich = GetWhich( SID_ATTR_PARA_ORPHANS );
+        eTmpState = rSet->GetItemState( _nWhich );
+
+        if ( eTmpState >= SfxItemState::DEFAULT )
+        {
+            const SvxOrphansItem& rOrphan =
+                static_cast<const SvxOrphansItem&>(rSet->Get( _nWhich ));
+            const sal_uInt16 nLines = rOrphan.GetValue();
+            aOrphanState.bTriStateEnabled = false;
+
+            bool _bEnable = nLines > 0;
+            m_xOrphanBox->set_state(_bEnable ? TRISTATE_TRUE : TRISTATE_FALSE);
+            m_xOrphanRowNo->set_value(m_xOrphanRowNo->normalize(nLines));
+            m_xOrphanRowNo->set_sensitive(_bEnable);
+            m_xOrphanRowLabel->set_sensitive(_bEnable);
+
+        }
+        else if ( SfxItemState::DONTCARE == eTmpState )
+            m_xOrphanBox->set_state(TRISTATE_INDET);
+        else
+            m_xOrphanBox->set_sensitive(false);
+        aOrphanState.eState = m_xOrphanBox->get_state();
     }
     else if ( SfxItemState::DONTCARE == eItemState )
         m_xKeepTogetherBox->set_state(TRISTATE_INDET);
