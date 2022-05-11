@@ -931,6 +931,8 @@ static void selectShape(weld::TreeView* pTreeList, const Reference< XShape >& xS
     if (!pTreeList->get_iter_first(*xEntry))
         return;
 
+    bool bFirstEntry = true;
+
     do
     {
         CustomAnimationListEntryItem* pEntry = weld::fromId<CustomAnimationListEntryItem*>(pTreeList->get_id(*xEntry));
@@ -938,7 +940,14 @@ static void selectShape(weld::TreeView* pTreeList, const Reference< XShape >& xS
         if (pEffect)
         {
             if (pEffect->getTarget() == xShape)
+            {
                 pTreeList->select(*xEntry);
+                if (bFirstEntry)
+                {
+                    pTreeList->scroll_to_row(*xEntry);
+                    bFirstEntry = false;
+                }
+            }
         }
     } while (pTreeList->iter_next(*xEntry));
 }
