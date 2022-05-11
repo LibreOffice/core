@@ -158,6 +158,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::uno::Any >& lS
     sal_Int32 c = lSource.getLength();
     sal_Int32 i = 0;
 
+    m_aMap.reserve(c);
     for (i=0; i<c; ++i)
     {
         css::beans::PropertyValue lP;
@@ -203,6 +204,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::Propert
     sal_Int32                        c       = lSource.getLength();
     const css::beans::PropertyValue* pSource = lSource.getConstArray();
 
+    m_aMap.reserve(c);
     for (sal_Int32 i=0; i<c; ++i)
         (*this)[pSource[i].Name] = pSource[i].Value;
 }
@@ -214,6 +216,7 @@ void SequenceAsHashMap::operator<<(const css::uno::Sequence< css::beans::NamedVa
     sal_Int32                     c       = lSource.getLength();
     const css::beans::NamedValue* pSource = lSource.getConstArray();
 
+    m_aMap.reserve(c);
     for (sal_Int32 i=0; i<c; ++i)
         (*this)[pSource[i].Name] = pSource[i].Value;
 }
@@ -297,6 +300,7 @@ bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
 
 void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
 {
+    m_aMap.reserve(std::max(size(), rUpdate.size()));
     for (auto const& elem : rUpdate)
     {
         const OUString& sName  = elem.first;
