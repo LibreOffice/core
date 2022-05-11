@@ -24,6 +24,30 @@
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67bb4d25_cb21c42e",
+        "filename": "include/basegfx/range/Range2D.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-11T02:36:22Z",
+      "side": 1,
+      "message": "ups..",
+      "parentUuid": "7ff0c76d_1b0a9753",
+      "range": {
+        "startLine": 55,
+        "startChar": 53,
+        "endLine": 55,
+        "endChar": 59
+      },
+      "revId": "68e240e22a4f2ffdd0a3f1754d409d7a7dfa7b35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "01ddc4b2_76651ec0",
@@ -37,6 +61,30 @@
       "writtenOn": "2022-05-10T13:35:10Z",
       "side": 1,
       "message": "What is the center of a range of integers?",
+      "range": {
+        "startLine": 112,
+        "startChar": 37,
+        "endLine": 112,
+        "endChar": 57
+      },
+      "revId": "68e240e22a4f2ffdd0a3f1754d409d7a7dfa7b35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bfbd1cc_e2458b91",
+        "filename": "include/basegfx/range/Range2D.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000154
+      },
+      "writtenOn": "2022-05-11T02:36:22Z",
+      "side": 1,
+      "message": "Ah.. getCenter always returns a double. Maybe I could make the type part of the Trait.",
+      "parentUuid": "01ddc4b2_76651ec0",
       "range": {
         "startLine": 112,
         "startChar": 37,
