@@ -104,6 +104,13 @@
           <desc>Specifies properties for use with the Java VM.</desc>
         </info>
       </prop>
+      <prop oor:name="RunUnoComponentsOutOfProcess" oor:type="xs:boolean" oor:nillable="false">
+        <info>
+          <desc>Specifies whether JVM based UNO components are run via uno command outside the LibreOffice process.</desc>
+          <label>Run UNO components out-of-process</label>
+        </info>
+        <value>false</value>
+      </prop>
     </group>
   </component>
 </oor:component-schema>

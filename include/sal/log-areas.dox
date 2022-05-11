@@ -456,6 +456,7 @@ certain functionality.
 @section stoc
 
 @li @c stoc.corerefl - CoreReflection
+@li @c stoc.java - javaloader and javavm
 
 @section VCL
 
