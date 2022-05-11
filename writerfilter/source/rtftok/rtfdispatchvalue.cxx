@@ -194,7 +194,14 @@ bool RTFDocumentImpl::dispatchCharacterSprmValue(RTFKeyword nKeyword, int nParam
     }
     if (nSprm > 0)
     {
-        m_aStates.top().getCharacterSprms().set(nSprm, pIntValue);
+        if (m_aStates.top().getDestination() == Destination::LISTLEVEL)
+        {
+            m_aStates.top().getTableSprms().set(nSprm, pIntValue);
+        }
+        else
+        {
+            m_aStates.top().getCharacterSprms().set(nSprm, pIntValue);
+        }
         return true;
     }
 
