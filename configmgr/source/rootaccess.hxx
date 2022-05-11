@@ -98,7 +98,7 @@ private:
 
     virtual bool isFinalized() override;
 
-    virtual OUString getNameInternal() override;
+    virtual const OUString & getNameInternal() override;
 
     virtual rtl::Reference< RootAccess > getRootAccess() override;
 

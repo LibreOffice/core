@@ -233,7 +233,7 @@ bool RootAccess::isFinalized() {
     return finalized_;
 }
 
-OUString RootAccess::getNameInternal() {
+const OUString & RootAccess::getNameInternal() {
     getNode();
     return name_;
 }

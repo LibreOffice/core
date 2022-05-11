@@ -301,7 +301,7 @@ protected:
 
     virtual ~Access() override;
 
-    virtual OUString getNameInternal() = 0;
+    virtual const OUString & getNameInternal() = 0;
     virtual rtl::Reference< RootAccess > getRootAccess() = 0;
     virtual rtl::Reference< Access > getParentAccess() = 0;
 
