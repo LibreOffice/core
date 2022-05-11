@@ -52,6 +52,9 @@ const OUString sEmpty;
 SvXMLNamespaceMap::SvXMLNamespaceMap()
 : sXMLNS( GetXMLToken ( XML_XMLNS ) )
 {
+    // approx worst-case size
+    aNameHash.reserve(20);
+    aNameHash.reserve(20);
 }
 
 SvXMLNamespaceMap::SvXMLNamespaceMap( const SvXMLNamespaceMap& rMap )
