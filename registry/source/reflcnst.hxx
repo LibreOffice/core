@@ -51,11 +51,6 @@ extern const sal_uInt16 majorVersion;
 #define CP_OFFSET_ENTRY_SIZE        0
 #define CP_OFFSET_ENTRY_TAG         static_cast<sal_uInt32>(CP_OFFSET_ENTRY_SIZE + sizeof(sal_uInt32))
 #define CP_OFFSET_ENTRY_DATA        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_TAG + sizeof(sal_uInt16))
-#define CP_OFFSET_ENTRY_UIK1        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_DATA)
-#define CP_OFFSET_ENTRY_UIK2        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK1 + sizeof(sal_uInt32))
-#define CP_OFFSET_ENTRY_UIK3        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK2 + sizeof(sal_uInt16))
-#define CP_OFFSET_ENTRY_UIK4        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK3 + sizeof(sal_uInt16))
-#define CP_OFFSET_ENTRY_UIK5        static_cast<sal_uInt32>(CP_OFFSET_ENTRY_UIK4 + sizeof(sal_uInt32))
 
 #define FIELD_OFFSET_ACCESS         0
 #define FIELD_OFFSET_NAME           static_cast<sal_uInt32>(FIELD_OFFSET_ACCESS + sizeof(sal_uInt16))
@@ -94,24 +89,8 @@ enum CPInfoTag
     CP_TAG_CONST_FLOAT = RT_TYPE_FLOAT,
     CP_TAG_CONST_DOUBLE = RT_TYPE_DOUBLE,
     CP_TAG_CONST_STRING = RT_TYPE_STRING,
-    CP_TAG_UTF8_NAME,
-    CP_TAG_UIK
+    CP_TAG_UTF8_NAME
 };
-
-inline sal_uInt32 writeBYTE(sal_uInt8* buffer, sal_uInt8 v)
-{
-    buffer[0] = v;
-
-    return sizeof(sal_uInt8);
-}
-
-inline sal_uInt32 writeINT16(sal_uInt8* buffer, sal_Int16 v)
-{
-    buffer[0] = static_cast<sal_uInt8>((v >> 8) & 0xFF);
-    buffer[1] = static_cast<sal_uInt8>((v >> 0) & 0xFF);
-
-    return sizeof(sal_Int16);
-}
 
 inline sal_uInt32 writeUINT16(sal_uInt8* buffer, sal_uInt16 v)
 {
@@ -177,20 +156,6 @@ inline sal_uInt32 readUINT32(const sal_uInt8* buffer, sal_uInt32& v)
     return sizeof(sal_uInt32);
 }
 
-inline sal_uInt32 writeUINT64(sal_uInt8* buffer, sal_uInt64 v)
-{
-    buffer[0] = static_cast<sal_uInt8>((v >> 56) & 0xFF);
-    buffer[1] = static_cast<sal_uInt8>((v >> 48) & 0xFF);
-    buffer[2] = static_cast<sal_uInt8>((v >> 40) & 0xFF);
-    buffer[3] = static_cast<sal_uInt8>((v >> 32) & 0xFF);
-    buffer[4] = static_cast<sal_uInt8>((v >> 24) & 0xFF);
-    buffer[5] = static_cast<sal_uInt8>((v >> 16) & 0xFF);
-    buffer[6] = static_cast<sal_uInt8>((v >> 8) & 0xFF);
-    buffer[7] = static_cast<sal_uInt8>((v >> 0) & 0xFF);
-
-    return sizeof(sal_uInt64);
-}
-
 inline sal_uInt32 writeUtf8(sal_uInt8* buffer, const char* v)
 {
     sal_uInt32 size = strlen(v) + 1;
@@ -216,8 +181,6 @@ inline sal_uInt32 readUtf8(const sal_uInt8* buffer, char* v, sal_uInt32 maxSize)
 }
 
 
-sal_uInt32 writeFloat(sal_uInt8* buffer, float v);
-sal_uInt32 writeDouble(sal_uInt8* buffer, double v);
 sal_uInt32 writeString(sal_uInt8* buffer, const sal_Unicode* v);
 sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSize);
 

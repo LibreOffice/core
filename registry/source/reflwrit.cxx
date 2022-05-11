@@ -19,7 +19,6 @@
 
 
 #include <sal/types.h>
-#include <osl/endian.h>
 #include <rtl/ustring.h>
 
 #include <registry/refltype.hxx>
@@ -75,54 +74,6 @@ sal_uInt32 readString(const sal_uInt8* buffer, sal_Unicode* v, sal_uInt32 maxSiz
     v[len - 1] = L'\0';
 
     return (buff - buffer);
-}
-
-sal_uInt32 writeFloat(sal_uInt8* buffer, float v)
-{
-    union
-    {
-        float   v;
-        sal_uInt32  b;
-    } x;
-
-    x.v = v;
-
-#ifdef REGTYPE_IEEE_NATIVE
-    writeUINT32(buffer, x.b);
-#else
-#   error no IEEE
-#endif
-
-    return sizeof(sal_uInt32);
-}
-
-sal_uInt32 writeDouble(sal_uInt8* buffer, double v)
-{
-    union
-    {
-        double v;
-        struct
-        {
-            sal_uInt32  b1;
-            sal_uInt32  b2;
-        } b;
-    } x;
-
-    x.v = v;
-
-#ifdef REGTYPE_IEEE_NATIVE
-#   ifdef OSL_BIGENDIAN
-    writeUINT32(buffer, x.b.b1);
-    writeUINT32(buffer + sizeof(sal_uInt32), x.b.b2);
-#   else
-    writeUINT32(buffer, x.b.b2);
-    writeUINT32(buffer + sizeof(sal_uInt32), x.b.b1);
-#   endif
-#else
-#   error no IEEE
-#endif
-
-    return (sizeof(sal_uInt32) + sizeof(sal_uInt32));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
