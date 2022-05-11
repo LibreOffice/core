@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90c09bc4_b737fe6c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-11T12:53:13Z",
+      "side": 1,
+      "message": "this still crashes on shutdown, with call coming in over the bridge while the main thread is running atexit handlers",
+      "revId": "cb5009f2e35cf028bcf02110e8500136dd369f75",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
