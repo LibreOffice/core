@@ -1344,6 +1344,8 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
 
             // Set the textbox position at the X-axis:
             SwFormatHoriOrient aNewHOri(pFormat->GetHoriOrient());
+            if (bIsGroupObj && aNewHOri.GetHoriOrient() != text::HoriOrientation::NONE)
+                aNewHOri.SetHoriOrient(text::HoriOrientation::NONE);
             aNewHOri.SetPos(aRect.Left() + nLeftSpace
                             + (bIsGroupObj ? pObj->GetRelativePos().getX() : 0));
             SwFormatVertOrient aNewVOri(pFormat->GetVertOrient());
@@ -1424,6 +1426,9 @@ bool SwTextBoxHelper::doTextBoxPositioning(SwFrameFormat* pShape, SdrObject* pOb
 
             // Set the same position as the (child) shape has
             SwFormatHoriOrient aNewHOri(pShape->GetHoriOrient());
+            if (bIsGroupObj && aNewHOri.GetHoriOrient() != text::HoriOrientation::NONE)
+                aNewHOri.SetHoriOrient(text::HoriOrientation::NONE);
+
             aNewHOri.SetPos(
                 (bIsGroupObj && pObj ? pObj->GetRelativePos().getX() : aNewHOri.GetPos())
                 + aRect.Left());
