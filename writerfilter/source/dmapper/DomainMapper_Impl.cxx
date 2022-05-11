@@ -905,6 +905,26 @@ void DomainMapper_Impl::PopSdt()
                                                uno::Any(m_pSdtHelper->GetUncheckedState()));
     }
 
+    if (m_pSdtHelper->getControlType() == SdtControlType::dropDown)
+    {
+        std::vector<OUString>& rDisplayTexts = m_pSdtHelper->getDropDownDisplayTexts();
+        std::vector<OUString>& rValues = m_pSdtHelper->getDropDownItems();
+        if (rDisplayTexts.size() == rValues.size())
+        {
+            uno::Sequence<beans::PropertyValues> aItems(rValues.size());
+            beans::PropertyValues* pItems = aItems.getArray();
+            for (size_t i = 0; i < rValues.size(); ++i)
+            {
+                uno::Sequence<beans::PropertyValue> aItem = {
+                    comphelper::makePropertyValue("DisplayText", rDisplayTexts[i]),
+                    comphelper::makePropertyValue("Value", rValues[i]),
+                };
+                pItems[i] = aItem;
+            }
+            xContentControlProps->setPropertyValue("ListItems", uno::Any(aItems));
+        }
+    }
+
     xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
 
     m_pSdtHelper->clear();

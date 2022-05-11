@@ -599,8 +599,7 @@ DECLARE_OOXMLEXPORT_TEST(testParaAdjustDistribute, "para-adjust-distribute.docx"
 
 DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
 {
-    CPPUNIT_ASSERT_EQUAL(1, getPages());
-    if (!mbExported || getShapes() == 0) // importing the ODT, an input field
+    if (!mbExported) // importing the ODT, an input field
     {
         uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
         uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
@@ -610,19 +609,28 @@ DECLARE_OOXMLEXPORT_TEST(testInputListExport, "tdf122186_input_list.odt")
         uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
         CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
     }
-    else // importing the DOCX, a form control
+    else // importing the DOCX, a content control
     {
-        uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
-        uno::Reference<beans::XPropertySet> xPropertySet(xControlShape->getControl(), uno::UNO_QUERY);
-        uno::Reference<lang::XServiceInfo> xServiceInfo(xPropertySet, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.form.component.ComboBox"));
-        CPPUNIT_ASSERT(getProperty<bool>(xPropertySet, "Dropdown"));
-        auto const items(getProperty<uno::Sequence<OUString>>(xPropertySet, "StringItemList"));
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), items.getLength());
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), items[0]);
-        CPPUNIT_ASSERT_EQUAL(OUString("2"), items[1]);
-        CPPUNIT_ASSERT_EQUAL(OUString("3"), items[2]);
-        CPPUNIT_ASSERT_EQUAL(OUString("1"), getProperty<OUString>(xPropertySet, "DefaultText"));
+        uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 1), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValues> aListItems;
+        xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
+        comphelper::SequenceAsHashMap aMap0(aListItems[0]);
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), aMap0["Value"].get<OUString>());
+        comphelper::SequenceAsHashMap aMap1(aListItems[1]);
+        CPPUNIT_ASSERT_EQUAL(OUString("2"), aMap1["Value"].get<OUString>());
+        comphelper::SequenceAsHashMap aMap2(aListItems[2]);
+        CPPUNIT_ASSERT_EQUAL(OUString("3"), aMap2["Value"].get<OUString>());
+        uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xContentControl, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+        uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("1"), xContent->getString());
     }
 }
 
@@ -1119,17 +1127,18 @@ DECLARE_OOXMLEXPORT_TEST(tdf119809, "tdf119809.docx")
     }
     else
     {
-        // ComboBox was imported as DropDown text field
-        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-        CPPUNIT_ASSERT(xFields->hasMoreElements());
-        uno::Any aField = xFields->nextElement();
-        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
-
-        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aItems.getLength());
+        // DropDown was imported as content control
+        // First run: bookmark
+        uno::Reference<beans::XPropertySet> xTextPortion(getRun(getParagraph(1), 2), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValues> aListItems;
+        xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aListItems.getLength());
     }
 }
 
