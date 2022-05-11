@@ -22,6 +22,30 @@
       },
       "revId": "5a94d5e7f60f94cec61c547de22011bf0cff2760",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0a528330_a4482a69",
+        "filename": "bin/upload_symbols.py",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1003542
+      },
+      "writtenOn": "2022-05-11T12:24:40Z",
+      "side": 1,
+      "message": "There seems to be an undefined number of possible values for the platform so I\u0027m not sure how I\u0027d evaluate that string. Or maybe not if LibreOffice is only available on a few specific platforms.",
+      "parentUuid": "683a3247_ad17d33c",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 41,
+        "endChar": 0
+      },
+      "revId": "5a94d5e7f60f94cec61c547de22011bf0cff2760",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
