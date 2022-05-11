@@ -40,6 +40,7 @@ StillReadWriteInteraction::StillReadWriteInteraction(const css::uno::Reference< 
              , m_xAuxiliaryHandler(xAuxiliaryHandler)
 {
     std::vector< ::ucbhelper::InterceptedInteraction::InterceptedRequest > lInterceptions;
+    lInterceptions.reserve(4);
     ::ucbhelper::InterceptedInteraction::InterceptedRequest                  aInterceptedRequest;
 
     aInterceptedRequest.Handle = HANDLE_INTERACTIVEIOEXCEPTION;
