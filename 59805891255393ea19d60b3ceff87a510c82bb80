@@ -16,6 +16,24 @@
       "message": "Note: atanh does not seem to be used all that much. I think it\u0027s safe to remove the function in rtl::math entirely. I could not find any other uses of rtl::math::atanh, except for those in the unit test.",
       "revId": "59805891255393ea19d60b3ceff87a510c82bb80",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b6373e2_85e83c36",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001339
+      },
+      "writtenOn": "2022-05-11T08:31:30Z",
+      "side": 1,
+      "message": "Yes, it would be great to remove it entirely",
+      "parentUuid": "93700945_3d9de04b",
+      "revId": "59805891255393ea19d60b3ceff87a510c82bb80",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
