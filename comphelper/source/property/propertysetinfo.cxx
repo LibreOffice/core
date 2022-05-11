@@ -37,7 +37,7 @@ void PropertySetInfo::addImpl(PropertyMapEntry const * pMap) noexcept
 
         maPropertyMap[pMap->maName] = pMap;
 
-        maProperties.clear();
+        maProperties.realloc(0);
 
         ++pMap;
     }
@@ -90,7 +90,7 @@ void PropertySetInfo::add( PropertyMapEntry const * pMap ) noexcept
 void PropertySetInfo::remove( const OUString& aName ) noexcept
 {
     maPropertyMap.erase( aName );
-    maProperties.clear();
+    maProperties.realloc(0);
 }
 
 Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
@@ -100,8 +100,8 @@ Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
     // to getProperties
     if( maProperties.size() != maPropertyMap.size() )
     {
-        maProperties.resize( maPropertyMap.size() );
-        auto propIter = maProperties.begin();
+        maProperties.realloc( maPropertyMap.size() );
+        auto propIter = maProperties.getArray();
 
         for( const auto& rProperty : maPropertyMap )
         {
@@ -115,7 +115,7 @@ Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
             ++propIter;
         }
     }
-    return comphelper::containerToSequence(maProperties);
+    return maProperties;
 }
 
 Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
