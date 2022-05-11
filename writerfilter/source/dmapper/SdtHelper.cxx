@@ -441,6 +441,7 @@ OUString SdtHelper::GetUncheckedState() const { return m_aUncheckedState; }
 void SdtHelper::clear()
 {
     m_aDropDownItems.clear();
+    m_aDropDownDisplayTexts.clear();
     setControlType(SdtControlType::unknown);
     m_sDataBindingPrefixMapping.clear();
     m_sDataBindingXPath.clear();

@@ -933,20 +933,35 @@ DECLARE_OOXMLEXPORT_TEST(testN779630, "n779630.docx")
     }
     else
     {
-        // ComboBox was imported as DropDown text field
-        uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
-        uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
-        uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
-        CPPUNIT_ASSERT(xFields->hasMoreElements());
-        uno::Any aField = xFields->nextElement();
-        uno::Reference<lang::XServiceInfo> xServiceInfo(aField, uno::UNO_QUERY);
-        CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.text.textfield.DropDown"));
-
-        uno::Sequence<OUString> aItems = getProperty< uno::Sequence<OUString> >(aField, "Items");
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), aItems.getLength());
-        CPPUNIT_ASSERT_EQUAL(OUString("Yes"), aItems[0]);
-        CPPUNIT_ASSERT_EQUAL(OUString("No"), aItems[1]);
-        CPPUNIT_ASSERT_EQUAL(OUString("dropdown default text"), aItems[2]);
+        // Inline SDT: dropdown is imported as content control.
+        uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
+        uno::Reference<text::XTextTable> xTable(xTables->getByIndex(0), uno::UNO_QUERY);
+        uno::Reference<table::XCell> xCell = xTable->getCellByName("B1");
+        uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xCell, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+        uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+        // Label:
+        xPortions->nextElement();
+        // Space:
+        xPortions->nextElement();
+        // Default text:
+        uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+        OUString aPortionType;
+        xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+        CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+        uno::Reference<text::XTextContent> xContentControl;
+        xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+        uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+        uno::Sequence<beans::PropertyValues> aListItems;
+        xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+        CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2), aListItems.getLength());
+        uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xContentControl, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+        uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+        CPPUNIT_ASSERT_EQUAL(OUString("dropdown default text"), xContent->getString());
     }
 }
 

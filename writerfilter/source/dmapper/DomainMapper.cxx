@@ -1092,10 +1092,12 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_SdtRun_sdtEndContent:
             if (nName == NS_ooxml::LN_CT_SdtRun_sdtEndContent)
             {
+                // Inline SDT.
                 switch (m_pImpl->m_pSdtHelper->getControlType())
                 {
                     case SdtControlType::richText:
                     case SdtControlType::checkBox:
+                    case SdtControlType::dropDown:
                         m_pImpl->PopSdt();
                         break;
                     default:
@@ -1128,7 +1130,7 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
             }
         break;
         case NS_ooxml::LN_CT_SdtListItem_displayText:
-            // TODO handle when this is != value
+            m_pImpl->m_pSdtHelper->getDropDownDisplayTexts().push_back(sStringValue);
         break;
         case NS_ooxml::LN_CT_SdtListItem_value:
             m_pImpl->m_pSdtHelper->getDropDownItems().push_back(sStringValue);
@@ -3695,8 +3697,9 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
     }
 
     bool bNewLine = len == 1 && (sText[0] == 0x0d || sText[0] == 0x07);
-    if (m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::dropDown)
+    if (m_pImpl->GetSdtStarts().empty() && m_pImpl->m_pSdtHelper->getControlType() == SdtControlType::dropDown)
     {
+        // Block, cell or row SDT.
         if (bNewLine)
             // Dropdown control has single-line texts, so in case of newline, create the control.
             m_pImpl->m_pSdtHelper->createDropDownControl();
@@ -3748,11 +3751,21 @@ void DomainMapper::lcl_utext(const sal_uInt8 * data_, size_t len)
                 // We have a field, insert the SDT properties to the field's grab-bag, so they won't be lost.
                 pContext = m_pImpl->GetTopFieldContext()->getProperties();
 
-            pContext->Insert(PROP_SDTPR, uno::Any(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, CHAR_GRAB_BAG);
+            uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+            if (m_pImpl->GetSdtStarts().empty() || m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown)
+            {
+                pContext->Insert(PROP_SDTPR, uno::Any(aGrabBag), true, CHAR_GRAB_BAG);
+            }
         }
         else
-            m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
-                    uno::Any(m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear()), true, PARA_GRAB_BAG);
+        {
+            uno::Sequence<beans::PropertyValue> aGrabBag = m_pImpl->m_pSdtHelper->getInteropGrabBagAndClear();
+            if (m_pImpl->GetSdtStarts().empty() || m_pImpl->m_pSdtHelper->getControlType() != SdtControlType::dropDown)
+            {
+                m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)->Insert(PROP_SDTPR,
+                        uno::Any(aGrabBag), true, PARA_GRAB_BAG);
+            }
+        }
     }
     else if (len == 1 && sText[0] == 0x03)
     {

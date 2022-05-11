@@ -59,8 +59,10 @@ class SdtHelper final : public virtual SvRefBase
     DomainMapper_Impl& m_rDM_Impl;
     css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
 
-    /// Items of the drop-down control.
+    /// Items of the drop-down control: <w:listItem w:value="...">.
     std::vector<OUString> m_aDropDownItems;
+    /// Display texts of a drop-down control: <w:listItem w:displayText="...">.
+    std::vector<OUString> m_aDropDownDisplayTexts;
     /// Type of sdt control
     SdtControlType m_aControlType;
     /// Pieces of the default text -- currently used only by the dropdown control.
@@ -122,6 +124,7 @@ public:
     ~SdtHelper() override;
 
     std::vector<OUString>& getDropDownItems() { return m_aDropDownItems; }
+    std::vector<OUString>& getDropDownDisplayTexts() { return m_aDropDownDisplayTexts; }
     OUStringBuffer& getSdtTexts() { return m_aSdtTexts; }
 
     OUStringBuffer& getDate() { return m_sDate; }

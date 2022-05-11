@@ -10,7 +10,10 @@
 #include <test/bootstrapfixture.hxx>
 #include <unotest/macros_test.hxx>
 
+#include <comphelper/sequenceashashmap.hxx>
+
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 
@@ -129,6 +132,54 @@ CPPUNIT_TEST_FIXTURE(Test, testSdtRunCheckbox)
     uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
     uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(u"☒"), xContent->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testSdtRunDropdown)
+{
+    // Given a document with a dropdown inline/run SDT:
+    OUString aURL = m_directories.getURLFromSrc(DATA_DIRECTORY) + "sdt-run-dropdown.docx";
+
+    // When loading the document:
+    getComponent() = loadFromDesktop(aURL);
+
+    // Then make sure that the doc model has a clickable dropdown content control:
+    uno::Reference<text::XTextDocument> xTextDocument(getComponent(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParagraphsAccess(xTextDocument->getText(),
+                                                                    uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParagraphs = xParagraphsAccess->createEnumeration();
+    uno::Reference<container::XEnumerationAccess> xParagraph(xParagraphs->nextElement(),
+                                                             uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xPortions = xParagraph->createEnumeration();
+    uno::Reference<beans::XPropertySet> xTextPortion(xPortions->nextElement(), uno::UNO_QUERY);
+    OUString aPortionType;
+    xTextPortion->getPropertyValue("TextPortionType") >>= aPortionType;
+    // Without the accompanying fix in place, this failed with:
+    // - Expected: ContentControl
+    // - Actual  : TextField
+    // i.e. the SDT was imported as a dropdown field, which does not support display-text + value
+    // pairs.
+    CPPUNIT_ASSERT_EQUAL(OUString("ContentControl"), aPortionType);
+    uno::Reference<text::XTextContent> xContentControl;
+    xTextPortion->getPropertyValue("ContentControl") >>= xContentControl;
+    uno::Reference<beans::XPropertySet> xContentControlProps(xContentControl, uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValues> aListItems;
+    xContentControlProps->getPropertyValue("ListItems") >>= aListItems;
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3), aListItems.getLength());
+    comphelper::SequenceAsHashMap aMap0(aListItems[0]);
+    CPPUNIT_ASSERT_EQUAL(OUString("red"), aMap0["DisplayText"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("R"), aMap0["Value"].get<OUString>());
+    comphelper::SequenceAsHashMap aMap1(aListItems[1]);
+    CPPUNIT_ASSERT_EQUAL(OUString("green"), aMap1["DisplayText"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("G"), aMap1["Value"].get<OUString>());
+    comphelper::SequenceAsHashMap aMap2(aListItems[2]);
+    CPPUNIT_ASSERT_EQUAL(OUString("blue"), aMap2["DisplayText"].get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(OUString("B"), aMap2["Value"].get<OUString>());
+    uno::Reference<text::XTextRange> xContentControlRange(xContentControl, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xContentControlRange->getText();
+    uno::Reference<container::XEnumerationAccess> xContentEnumAccess(xText, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xContentEnum = xContentEnumAccess->createEnumeration();
+    uno::Reference<text::XTextRange> xContent(xContentEnum->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(OUString("choose a color"), xContent->getString());
 }
 }
 
