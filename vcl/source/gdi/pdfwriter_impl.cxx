@@ -4168,6 +4168,25 @@ bool PDFWriterImpl::emitWidgetAnnotations()
     {
         PDFWidget& rWidget = m_aWidgets[a];
 
+        if( rWidget.m_eType == PDFWriter::CheckBox )
+        {
+            auto app_it = rWidget.m_aAppearances.find( "N" );
+            if( app_it != rWidget.m_aAppearances.end() )
+            {
+                auto stream_it = app_it->second.find( "Yes" );
+                if( stream_it != app_it->second.end() )
+                {
+                    SvMemoryStream* pStream = stream_it->second;
+                    app_it->second.erase( stream_it );
+                    OStringBuffer aBuf( rWidget.m_aOnValue.getLength()*2 );
+                    appendName( rWidget.m_aOnValue, aBuf );
+                    (app_it->second)[ aBuf.makeStringAndClear() ] = pStream;
+                }
+                else
+                    SAL_INFO("vcl.pdfwriter", "error: CheckBox without \"Yes\" stream" );
+            }
+        }
+
         OStringBuffer aLine( 1024 );
         OStringBuffer aValue( 256 );
         aLine.append( rWidget.m_nObject );
@@ -10849,6 +10868,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
 
         rNewWidget.m_aValue
             = rBox.Checked ? std::u16string_view(u"Yes") : std::u16string_view(u"Off" );
+        rNewWidget.m_aOnValue   = rBox.OnValue;
         // create default appearance before m_aRect gets transformed
         createDefaultCheckBoxAppearance( rNewWidget, rBox );
     }
