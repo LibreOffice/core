@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "71c55b03_430c9ae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2022-05-12T20:42:38Z",
+      "side": 1,
+      "message": "A very massive change ... do you think this approach makes sense?",
+      "revId": "a58d91093c9cfeb9a43e1bcf02538e3c46c6bcb2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
