@@ -176,17 +176,17 @@ void SparklineTest::testCopyPasteSparkline()
 
     // CopyToClip / CopyFromClip with a aClipDoc
     {
-        ScDocument aClipDoc(SCDOCMODE_CLIP);
-        copyToClip(&rDocument, aSourceRange, &aClipDoc);
+        ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+        copyToClip(&rDocument, aSourceRange, pClipDoc);
 
-        auto pClipSparkline = aClipDoc.GetSparkline(aSourceRange.aStart);
+        auto pClipSparkline = pClipDoc->GetSparkline(aSourceRange.aStart);
         CPPUNIT_ASSERT(pClipSparkline);
 
         ScRange aPasteRange(0, 7, 0, 0, 7, 0);
 
         ScMarkData aMark(rDocument.GetSheetLimits());
         aMark.SetMarkArea(aPasteRange);
-        rDocument.CopyFromClip(aPasteRange, aMark, InsertDeleteFlags::ALL, nullptr, &aClipDoc);
+        rDocument.CopyFromClip(aPasteRange, aMark, InsertDeleteFlags::ALL, nullptr, pClipDoc);
 
         auto pSparklineCopy = rDocument.GetSparkline(aPasteRange.aStart);
         CPPUNIT_ASSERT(pSparklineCopy);
@@ -205,14 +205,14 @@ void SparklineTest::testCopyPasteSparkline()
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aSourceRange);
 
         // Copy
-        ScDocument aClipDoc(SCDOCMODE_CLIP);
-        pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+        ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+        pViewShell->GetViewData().GetView()->CopyToClip(pClipDoc, false, false, false, false);
 
         // Paste
         ScRange aPasteRange(0, 8, 0, 0, 8, 0);
 
         pViewShell->GetViewData().GetMarkData().SetMarkArea(aPasteRange);
-        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+        pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, pClipDoc);
 
         auto pSparklineCopy = rDocument.GetSparkline(aPasteRange.aStart);
         CPPUNIT_ASSERT(pSparklineCopy);

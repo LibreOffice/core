@@ -17,16 +17,16 @@
 #include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 #include "datatableview.hxx"
+#include <document.hxx>
 #include <memory>
 
-class ScDocument;
 class ScDataTransformationBaseControl;
 class ScDBData;
 
 class ScDataProviderDlg : public weld::GenericDialogController
 {
 private:
-    std::shared_ptr<ScDocument> mxDoc;
+    ScDocumentRef mxDoc;
     std::unique_ptr<weld::Container> mxBox;
     css::uno::Reference<css::awt::XWindow> m_xTableParent;
     VclPtr<ScDataTableView> mxTable;
@@ -68,8 +68,7 @@ private:
     DECL_LINK(BrowseBtnHdl, weld::Button&, void);
 
 public:
-    ScDataProviderDlg(weld::Window* pWindow, std::shared_ptr<ScDocument> pDoc,
-                      const ScDocument* pDocument);
+    ScDataProviderDlg(weld::Window* pWindow, ScDocumentRef pDoc, const ScDocument* pDocument);
     virtual ~ScDataProviderDlg() override;
 
     void applyAndQuit();

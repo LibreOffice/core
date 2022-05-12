@@ -770,10 +770,10 @@ std::shared_ptr<sc::DataTransformation> ScSwapRowsTransformation::getTransformat
 
 }
 
-ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, std::shared_ptr<ScDocument> pDoc,
+ScDataProviderDlg::ScDataProviderDlg(weld::Window* pParent, ScDocumentRef pDoc,
                                      const ScDocument* pDocument)
     : GenericDialogController(pParent, "modules/scalc/ui/dataproviderdlg.ui", "dataproviderdlg")
-    , mxDoc(std::move(pDoc))
+    , mxDoc(pDoc)
     , mxBox(m_xBuilder->weld_container("data_table"))
     , m_xTableParent(mxBox->CreateChildFrame())
     , mxTable(VclPtr<ScDataTableView>::Create(m_xTableParent, mxDoc))
@@ -1048,7 +1048,7 @@ void ScDataProviderDlg::import(ScDocument& rDoc, bool bInternal)
             return;
         rDoc.GetExternalDataMapper().insertDataSource(aSource);
     }
-    aSource.refresh(&rDoc, true);
+    aSource.refresh(rDoc, true);
     mxTable->Invalidate();
 }
 

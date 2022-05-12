@@ -165,54 +165,54 @@ public:
 
 void ScRangeUpdaterTest::testUpdateInsertTabBeforePos()
 {
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
     ScAddress aAddr(1, 1, 1);
-    sc::RefUpdateInsertTabContext aContext(aDoc, 0, 1);
+    sc::RefUpdateInsertTabContext aContext(*pDoc, 0, 1);
     ScRangeUpdater::UpdateInsertTab(aAddr, aContext);
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
 }
 
 void ScRangeUpdaterTest::testUpdateInsertTabAtPos()
 {
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
     ScAddress aAddr(1, 1, 1);
-    sc::RefUpdateInsertTabContext aContext(aDoc, 1, 1);
+    sc::RefUpdateInsertTabContext aContext(*pDoc, 1, 1);
     ScRangeUpdater::UpdateInsertTab(aAddr, aContext);
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 2), aAddr);
 }
 
 void ScRangeUpdaterTest::testUpdateInsertTabAfterPos()
 {
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
     ScAddress aAddr(1, 1, 1);
-    sc::RefUpdateInsertTabContext aContext(aDoc, 2, 1);
+    sc::RefUpdateInsertTabContext aContext(*pDoc, 2, 1);
     ScRangeUpdater::UpdateInsertTab(aAddr, aContext);
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
 }
 
 void ScRangeUpdaterTest::testUpdateDeleteTabBeforePos()
 {
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
     ScAddress aAddr(1, 1, 1);
-    sc::RefUpdateDeleteTabContext aContext(aDoc, 0, 1);
+    sc::RefUpdateDeleteTabContext aContext(*pDoc, 0, 1);
     ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
 }
 
 void ScRangeUpdaterTest::testUpdateDeleteTabAtPos()
 {
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
     ScAddress aAddr(1, 1, 1);
-    sc::RefUpdateDeleteTabContext aContext(aDoc, 1, 1);
+    sc::RefUpdateDeleteTabContext aContext(*pDoc, 1, 1);
     ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 0), aAddr);
 }
 
 void ScRangeUpdaterTest::testUpdateDeleteTabAfterPos()
 {
-    ScDocument aDoc;
+    ScDocumentRef pDoc(new ScDocument);
     ScAddress aAddr(1, 1, 1);
-    sc::RefUpdateDeleteTabContext aContext(aDoc, 2, 1);
+    sc::RefUpdateDeleteTabContext aContext(*pDoc, 2, 1);
     ScRangeUpdater::UpdateDeleteTab(aAddr, aContext);
     CPPUNIT_ASSERT_EQUAL(ScAddress(1, 1, 1), aAddr);
 }

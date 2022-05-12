@@ -20,6 +20,7 @@
 
 #include <tools/fract.hxx>
 #include <sfx2/zoomitem.hxx>
+#include <document.hxx>
 #include <rangelst.hxx>
 #include <scdllapi.h>
 #include <viewopti.hxx>
@@ -98,7 +99,6 @@ namespace o3tl {
 }
 
 class ScDocFunc;
-class ScDocument;
 class ScDBFunc;
 class ScTabViewShell;
 class ScDrawView;
@@ -494,7 +494,7 @@ public:
                         one direction as the clipboard source.
                         To prevent DOOM.
                      */
-    bool            SelectionForbidsPaste( ScDocument* pClipDoc = nullptr );
+    bool            SelectionForbidsPaste( const ScDocumentRef& pClipDoc = nullptr );
     bool            SelectionForbidsPaste( SCCOL nSrcCols, SCROW nSrcRows );
 
                     /** Disallow cell fill (Fill,Enter,...) on Ctrl+A all

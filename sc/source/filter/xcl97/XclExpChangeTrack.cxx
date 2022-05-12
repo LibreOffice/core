@@ -1510,7 +1510,7 @@ ScChangeTrack* XclExpChangeTrack::CreateTempChangeTrack()
 
     assert(!xTempDoc);
     // create empty document
-    xTempDoc.reset(new ScDocument);
+    xTempDoc.set(new ScDocument);
 
     // adjust table count
     SCTAB nOrigCount = GetDoc().GetTableCount();

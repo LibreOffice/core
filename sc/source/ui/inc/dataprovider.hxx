@@ -90,13 +90,13 @@ public:
 class CSVDataProvider : public DataProvider
 {
     rtl::Reference<CSVFetchThread> mxCSVFetchThread;
-    ScDocument* mpDocument;
-    ScDocumentUniquePtr mpDoc;
+    ScDocument& mrDocument;
+    ScDocumentRef mpDoc;
 
     void Refresh();
 
 public:
-    CSVDataProvider (ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
+    CSVDataProvider (ScDocument& rDoc, sc::ExternalDataSource& rDataSource);
     virtual ~CSVDataProvider() override;
 
     virtual void Import() override;
@@ -118,10 +118,10 @@ public:
 class ScDBDataManager
 {
     OUString maDBName;
-    ScDocument* mpDoc;
+    ScDocument& mrDoc;
 
 public:
-    ScDBDataManager(const OUString& rDBName, ScDocument* pDoc);
+    ScDBDataManager(const OUString& rDBName, ScDocument& rDoc);
     ~ScDBDataManager();
 
     void SetDatabase(const OUString& rDBName);
@@ -139,7 +139,7 @@ private:
 
 public:
 
-    static std::shared_ptr<DataProvider> getDataProvider(ScDocument* pDoc, sc::ExternalDataSource& rDataSource);
+    static std::shared_ptr<DataProvider> getDataProvider(ScDocument& rDoc, sc::ExternalDataSource& rDataSource);
 
     static std::vector<OUString> getDataProviders();
 };

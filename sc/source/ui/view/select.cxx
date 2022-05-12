@@ -172,9 +172,9 @@ void ScViewFunctionSet::BeginDrag()
     if ( !rMark.IsMarked() || rMark.IsMultiMarked() )
         return;
 
-    ScDocumentUniquePtr pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
+    ScDocumentRef pClipDoc(new ScDocument( SCDOCMODE_CLIP ));
     // bApi = TRUE -> no error messages
-    bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc.get(), false, true );
+    bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, true );
     if ( !bCopied )
         return;
 
@@ -188,7 +188,7 @@ void ScViewFunctionSet::BeginDrag()
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
     // maSize is set in ScTransferObj ctor
 
-    rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( std::move(pClipDoc), aObjDesc );
+    rtl::Reference<ScTransferObj> pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
 
     // set position of dragged cell within range
     ScRange aMarkRange = pTransferObj->GetRange();

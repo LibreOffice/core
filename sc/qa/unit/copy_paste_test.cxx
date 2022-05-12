@@ -100,8 +100,8 @@ void ScCopyPasteTest::testCopyPasteXLS()
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
 
     // 3. Copy
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    pViewShell->GetViewData().GetView()->CopyToClip(pClipDoc, false, false, false, false);
 
     // 4. Close the document (Ctrl-W)
     xDocSh->DoClose();
@@ -114,7 +114,7 @@ void ScCopyPasteTest::testCopyPasteXLS()
     CPPUNIT_ASSERT(pViewShell != nullptr);
 
     // 6. Paste
-    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, pClipDoc);
 
     xDocSh->DoClose();
 }
@@ -131,7 +131,7 @@ ScMarkData::MarkedTabsType TabsInRange(const ScRange& r)
 
 void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument& rDoc, ScTabViewShell* pViewShell )
 {
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
 
     // 1. Copy
     ScRange aSrcRange;
@@ -139,7 +139,7 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aSrcRange);
     pViewShell->GetViewData().GetMarkData().SetSelectedTabs(TabsInRange(aSrcRange));
-    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    pViewShell->GetViewData().GetView()->CopyToClip(pClipDoc, false, false, false, false);
 
     // 2. Paste
     ScRange aDstRange;
@@ -147,7 +147,7 @@ void lcl_copy( const OUString& rSrcRange, const OUString& rDstRange, ScDocument&
     CPPUNIT_ASSERT_MESSAGE("Failed to parse.", (nRes & ScRefFlags::VALID));
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aDstRange);
     pViewShell->GetViewData().GetMarkData().SetSelectedTabs(TabsInRange(aDstRange));
-    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, pClipDoc);
 }
 
 } // anonymous namespace
@@ -215,19 +215,19 @@ void ScCopyPasteTest::testTdf124565()
     rDoc.SetManualHeight(0, 0, 0, true);
 
     // Copy first row
-    ScDocument aClipDoc(SCDOCMODE_CLIP);
-    ScRange aCopyRange(0, 0, 0, aClipDoc.MaxCol(), 0, 0);
+    ScDocumentRef pClipDoc(new ScDocument(SCDOCMODE_CLIP));
+    ScRange aCopyRange(0, 0, 0, pClipDoc->MaxCol(), 0, 0);
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aCopyRange);
-    pViewShell->GetViewData().GetView()->CopyToClip(&aClipDoc, false, false, false, false);
+    pViewShell->GetViewData().GetView()->CopyToClip(pClipDoc, false, false, false, false);
 
     // Paste to second row
     SCTAB nTab = 0;
     SCCOL nCol = 0;
     SCROW nRow = 1;
 
-    ScRange aPasteRange(nCol, nRow, nTab, aClipDoc.MaxCol(), nRow, nTab);
+    ScRange aPasteRange(nCol, nRow, nTab, pClipDoc->MaxCol(), nRow, nTab);
     pViewShell->GetViewData().GetMarkData().SetMarkArea(aPasteRange);
-    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, &aClipDoc);
+    pViewShell->GetViewData().GetView()->PasteFromClip(InsertDeleteFlags::ALL, pClipDoc);
 
     // Copy-pasted?
     CPPUNIT_ASSERT_EQUAL_MESSAGE("String was not pasted!", OUString("Test"), rDoc.GetString(nCol, nRow, nTab));
