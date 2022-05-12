@@ -1547,9 +1547,6 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
     const Image& rDefExpBmp = pImpl->GetDefaultEntryExpBmp( );
     const Image& rDefColBmp = pImpl->GetDefaultEntryColBmp( );
 
-    aCurInsertedExpBmp = rDefExpBmp;
-    aCurInsertedColBmp = rDefColBmp;
-
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->SetUserData( pUser );
     InitEntry( pEntry, rText, rDefColBmp, rDefExpBmp );
@@ -1559,9 +1556,6 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
         Insert( pEntry, nPos );
     else
         Insert( pEntry, pParent, nPos );
-
-    aPrevInsertedExpBmp = rDefExpBmp;
-    aPrevInsertedColBmp = rDefColBmp;
 
     nTreeFlags &= ~SvTreeFlags::MANINS;
 
@@ -1645,9 +1639,7 @@ void SvTreeListBox::ImpEntryInserted( SvTreeListEntry* pEntry )
         pParent->SetFlags( nFlags );
     }
 
-    if(!((nTreeFlags & SvTreeFlags::MANINS) &&
-         (aPrevInsertedExpBmp == aCurInsertedExpBmp)  &&
-         (aPrevInsertedColBmp == aCurInsertedColBmp) ))
+    if (!(nTreeFlags & SvTreeFlags::MANINS))
     {
         Size aSize = GetCollapsedEntryBmp( pEntry ).GetSizePixel();
         if( aSize.Width() > nContextBmpWidthMax )

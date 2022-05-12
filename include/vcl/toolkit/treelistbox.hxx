@@ -201,11 +201,6 @@ class VCL_DLLPUBLIC SvTreeListBox
     Link<svtree_render_args, void> aCustomRenderHdl;
     Link<svtree_measure_args, Size> aCustomMeasureHdl;
 
-    Image           aPrevInsertedExpBmp;
-    Image           aPrevInsertedColBmp;
-    Image           aCurInsertedExpBmp;
-    Image           aCurInsertedColBmp;
-
     short           nContextBmpWidthMax;
     short           nEntryHeightOffs;
     short           nIndent;
