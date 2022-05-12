@@ -822,13 +822,9 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
     {
         ScGlobal::xDrawClipDocShellRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS); // there must be a ref
         ScGlobal::xDrawClipDocShellRef->DoInitNew();
-        return ScGlobal::xDrawClipDocShellRef.get();
     }
-    else
-    {
-        ScGlobal::xDrawClipDocShellRef.clear();
-        return nullptr;
-    }
+
+    return ScGlobal::xDrawClipDocShellRef.get();
 }
 
 void ScTransferObj::StripRefs( ScDocument& rDoc,
