@@ -1746,10 +1746,10 @@ void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, dou
         // In JumpMatrix context use its dimensions for the return matrix; the
         // formula cell range selected may differ, for example if the result is
         // to be transposed.
-        if (pJumpMatrix)
+        if (GetStackType(1) == svJumpMatrix)
         {
             SCSIZE nC, nR;
-            pJumpMatrix->GetDimensions( nC, nR);
+            pStack[sp-1]->GetJumpMatrix()->GetDimensions( nC, nR);
             nCols = std::max<SCCOL>(0, static_cast<SCCOL>(nC));
             nRows = std::max<SCROW>(0, static_cast<SCROW>(nR));
         }
