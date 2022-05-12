@@ -858,6 +858,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
                 CPPUNIT_ASSERT_EQUAL(OString("Yes"), pAS->GetValue());
                 CPPUNIT_ASSERT(!pN->GetItems().count("ref"));
                 CPPUNIT_ASSERT(pN->GetItems().count("Yes"));
+                CPPUNIT_ASSERT(pN->GetItems().count("Off"));
             }
             else if (nBtnCount == 2)
             {
@@ -867,6 +868,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
                 // Without the fix in place, this test would have failed here
                 CPPUNIT_ASSERT(pN->GetItems().count("ref"));
                 CPPUNIT_ASSERT(!pN->GetItems().count("Yes"));
+                CPPUNIT_ASSERT(pN->GetItems().count("Off"));
             }
             else
             {
@@ -874,6 +876,10 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf148442)
                 CPPUNIT_ASSERT_EQUAL(OString("Off"), pAS->GetValue());
                 CPPUNIT_ASSERT(pN->GetItems().count("ref"));
                 CPPUNIT_ASSERT(!pN->GetItems().count("Yes"));
+
+                // tdf#143612: Without the fix in place, this test would have failed here
+                CPPUNIT_ASSERT(!pN->GetItems().count("Off"));
+                CPPUNIT_ASSERT(pN->GetItems().count("refOff"));
             }
         }
     }
