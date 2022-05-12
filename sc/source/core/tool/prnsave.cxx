@@ -21,6 +21,7 @@
 #include <address.hxx>
 
 #include <osl/diagnose.h>
+#include <tools/json_writer.hxx>
 
 //      Data per table
 
@@ -84,6 +85,37 @@ const ScPrintSaverTab& ScPrintRangeSaver::GetTabData(SCTAB nTab) const
 {
     OSL_ENSURE(nTab<nTabCount,"ScPrintRangeSaver Tab too big");
     return pData[nTab];
+}
+
+void ScPrintRangeSaver::GetPrintRangesInfo(tools::JsonWriter& rPrintRanges) const
+{
+    // Array for sheets in the document.
+    auto printRanges = rPrintRanges.startArray("printranges");
+    for (SCTAB nTab = 0; nTab < nTabCount; nTab++)
+    {
+        auto sheetNode = rPrintRanges.startStruct();
+        const ScPrintSaverTab& rPsTab = pData[nTab];
+        const std::vector<ScRange>& rRangeVec = rPsTab.GetPrintRanges();
+
+        rPrintRanges.put("sheet", static_cast<sal_Int32>(nTab));
+
+        // Array for ranges within each sheet.
+        auto sheetRanges = rPrintRanges.startArray("ranges");
+        OStringBuffer aRanges;
+        sal_Int32 nLast = rRangeVec.size() - 1;
+        for (sal_Int32 nIdx = 0; nIdx <= nLast; ++nIdx)
+        {
+            const ScRange& rRange = rRangeVec[nIdx];
+            aRanges.append("[ " +
+                OString::number(rRange.aStart.Col()) + ", " +
+                OString::number(rRange.aStart.Row()) + ", " +
+                OString::number(rRange.aEnd.Col()) + ", " +
+                OString::number(rRange.aEnd.Row()) +
+                (nLast == nIdx ? std::string_view("]") : std::string_view("], ")));
+        }
+
+        rPrintRanges.putRaw(aRanges.getStr());
+    }
 }
 
 bool ScPrintRangeSaver::operator==( const ScPrintRangeSaver& rCmp ) const

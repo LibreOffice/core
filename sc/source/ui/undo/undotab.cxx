@@ -49,6 +49,9 @@
 #include <drwlayer.hxx>
 #include <scresid.hxx>
 #include <sheetevents.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
+#include <comphelper/lok.hxx>
+#include <tools/json_writer.hxx>
 
 #include <memory>
 #include <utility>
@@ -1316,6 +1319,18 @@ void ScUndoPrintRange::DoChange(bool bUndo)
         pViewShell->SetTabNo( nTab );
 
     ScPrintFunc( pDocShell, pDocShell->GetPrinter(), nTab ).UpdatePages();
+
+    if (pViewShell && comphelper::LibreOfficeKit::isActive())
+    {
+        tools::JsonWriter aJsonWriter;
+        if (bUndo)
+            pOldRanges->GetPrintRangesInfo(aJsonWriter);
+        else
+            pNewRanges->GetPrintRangesInfo(aJsonWriter);
+
+        const std::string message = aJsonWriter.extractAsStdString();
+        pViewShell->libreOfficeKitViewCallback(LOK_CALLBACK_PRINT_RANGES, message.c_str());
+    }
 
     pDocShell->PostPaint( ScRange(0,0,nTab,rDoc.MaxCol(),rDoc.MaxRow(),nTab), PaintPartFlags::Grid );
 }
