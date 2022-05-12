@@ -72,6 +72,7 @@
 #include <svtools/rtfkeywd.hxx>
 #include <editeng/edtdlg.hxx>
 
+#include <cstddef>
 #include <memory>
 #include <unordered_map>
 #include <vector>
@@ -247,7 +248,7 @@ bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_I
 
 static void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_Int32 nIndex, sal_uInt16 nScriptType )
 {
-    sal_uInt16 nAttr = 0;
+    std::size_t nAttr = 0;
     EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
     while ( pAttr && ( pAttr->GetStart() <= nIndex ) )
     {
@@ -1040,7 +1041,7 @@ std::unique_ptr<EditTextObject> ImpEditEngine::CreateTextObject( EditSelection a
         auto& rCAttriblist = pC->GetCharAttribs();
 
         // and the Attribute...
-        sal_uInt16 nAttr = 0;
+        std::size_t nAttr = 0;
         EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
         while ( pAttr )
         {
