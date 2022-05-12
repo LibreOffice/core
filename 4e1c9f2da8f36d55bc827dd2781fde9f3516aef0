@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07c43bbd_13f9cf45",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000043
+      },
+      "writtenOn": "2022-05-12T17:30:08Z",
+      "side": 1,
+      "message": "As often, Windows Jenkins seems to be stuck again for an unrelated reason to the patch.\nLet\u0027s give it a try. At worst this one line patch can be quickly reverted.",
+      "revId": "4e1c9f2da8f36d55bc827dd2781fde9f3516aef0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    }
+  ]
+}
