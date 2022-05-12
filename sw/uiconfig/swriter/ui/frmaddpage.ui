@@ -211,7 +211,7 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes" context="frmaddpage|label1">Names</property>
+            <property name="label" translatable="yes" context="frmaddpage|label1">Accessibility</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
