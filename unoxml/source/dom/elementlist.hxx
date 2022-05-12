@@ -23,6 +23,8 @@
 #include <string_view>
 #include <memory>
 
+#include <mutex>
+
 #include <libxml/tree.h>
 
 #include <sal/types.h>
@@ -51,7 +53,7 @@ namespace DOM
         css::uno::Reference< css::xml::dom::events::XEventListener > m_xEventListener;
 
         ::rtl::Reference<CElement> const m_pElement;
-        ::osl::Mutex & m_rMutex;
+        ::std::recursive_mutex & m_rMutex;
         ::std::unique_ptr<xmlChar[]> const m_pName;
         ::std::unique_ptr<xmlChar[]> const m_pURI;
         bool m_bRebuild;
@@ -61,7 +63,7 @@ namespace DOM
 
     public:
         CElementListImpl(::rtl::Reference<CElement> const& pElement,
-                ::osl::Mutex & rMutex,
+                ::std::recursive_mutex & rMutex,
                 std::u16string_view rName, OUString const*const pURI);
 
         void registerListener(CElement & rElement);
@@ -89,7 +91,7 @@ namespace DOM
         rtl::Reference<CElementListImpl> m_xImpl;
     public:
         CElementList(::rtl::Reference<CElement> const& pElement,
-                ::osl::Mutex & rMutex,
+                ::std::recursive_mutex & rMutex,
                 std::u16string_view rName, OUString const*const pURI = nullptr);
 
         /**

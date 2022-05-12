@@ -29,7 +29,7 @@ using namespace css::xml::dom;
 namespace DOM
 {
 
-    CEntity::CEntity(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CEntity::CEntity(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlEntityPtr const pEntity)
         : CEntity_Base(rDocument, rMutex,
             NodeType_ENTITY_NODE, reinterpret_cast<xmlNodePtr>(pEntity))
@@ -67,7 +67,7 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getPublicId()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         OUString aID;
         if(m_aEntityPtr != nullptr)
@@ -82,7 +82,7 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getSystemId()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         OUString aID;
         if(m_aEntityPtr != nullptr)
@@ -93,7 +93,7 @@ namespace DOM
     }
     OUString SAL_CALL CEntity::getNodeName()
     {
-        ::osl::MutexGuard const g(m_rMutex);
+        ::std::unique_lock const g(m_rMutex);
 
         OUString aName;
         if (m_aNodePtr != nullptr)

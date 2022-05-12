@@ -18,6 +18,7 @@
  */
 
 #include "cdatasection.hxx"
+#include <mutex>
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
 
@@ -28,7 +29,7 @@ using namespace css::xml::sax;
 namespace DOM
 {
     CCDATASection::CCDATASection(
-            CDocument const& rDocument, ::osl::Mutex const& rMutex,
+            CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlNodePtr const pNode)
         : CCDATASection_Base(rDocument, rMutex,
                 NodeType_CDATA_SECTION_NODE, pNode)

@@ -35,7 +35,7 @@ namespace DOM
     {
         friend class CDocument;
 
-        CComment(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+        CComment(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
                 xmlNodePtr const pNode);
 
     public:

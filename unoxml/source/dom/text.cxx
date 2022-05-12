@@ -27,13 +27,13 @@ using namespace css::xml::sax;
 
 namespace DOM
 {
-    CText::CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CText::CText(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             NodeType const& reNodeType, xmlNodePtr const& rpNode)
         : CText_Base(rDocument, rMutex, reNodeType, rpNode)
     {
     }
 
-    CText::CText(CDocument const& rDocument, ::osl::Mutex const& rMutex,
+    CText::CText(CDocument const& rDocument, ::std::recursive_mutex const& rMutex,
             xmlNodePtr const pNode)
         : CText_Base(rDocument, rMutex, NodeType_TEXT_NODE, pNode)
     {
