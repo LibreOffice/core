@@ -1743,7 +1743,17 @@ void ScInterpreter::ScRandomImpl( const std::function<double( double fFirst, dou
     {
         SCCOL nCols = 0;
         SCROW nRows = 0;
-        if (pMyFormulaCell)
+        // In JumpMatrix context use its dimensions for the return matrix; the
+        // formula cell range selected may differ, for example if the result is
+        // to be transposed.
+        if (pJumpMatrix)
+        {
+            SCSIZE nC, nR;
+            pJumpMatrix->GetDimensions( nC, nR);
+            nCols = std::max<SCCOL>(0, static_cast<SCCOL>(nC));
+            nRows = std::max<SCROW>(0, static_cast<SCROW>(nR));
+        }
+        else if (pMyFormulaCell)
             pMyFormulaCell->GetMatColsRows( nCols, nRows);
 
         if (nCols == 1 && nRows == 1)
