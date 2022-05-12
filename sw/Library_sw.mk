@@ -437,6 +437,7 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/core/txtnode/atrtox \
     sw/source/core/txtnode/attrlinebreak \
     sw/source/core/txtnode/chrfmt \
+    sw/source/core/txtnode/justify \
     sw/source/core/txtnode/fmtatr2 \
     sw/source/core/txtnode/fntcache \
     sw/source/core/txtnode/fntcap \
