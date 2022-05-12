@@ -75,6 +75,15 @@ SvXMLNamespaceMap::~SvXMLNamespaceMap()
 {
 }
 
+void SvXMLNamespaceMap::Clear()
+{
+    aNameHash.clear();
+    aNameCache.clear();
+    aNameMap.clear();
+    aQNameCache.clear();
+}
+
+
 bool SvXMLNamespaceMap::operator ==( const SvXMLNamespaceMap& rCmp ) const
 {
     return aNameHash == rCmp.aNameHash;

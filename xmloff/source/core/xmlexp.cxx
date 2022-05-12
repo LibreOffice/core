@@ -1406,7 +1406,7 @@ ErrCode SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
 
 void SvXMLExport::ResetNamespaceMap()
 {
-    mpNamespaceMap.reset( new SvXMLNamespaceMap );
+    mpNamespaceMap->Clear();
 }
 
 OUString const & SvXMLExport::GetSourceShellID() const
