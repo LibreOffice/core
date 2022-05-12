@@ -162,10 +162,9 @@ void SvTabListBox::SetTabs()
     }
 }
 
-void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr,
-    const Image& rColl, const Image& rExp)
+void SvTabListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr)
 {
-    SvTreeListBox::InitEntry(pEntry, rStr, rColl, rExp);
+    SvTreeListBox::InitEntry(pEntry, rStr);
 
     sal_Int32 nIndex = 0;
     // TODO: verify if nTabCount is always >0 here!

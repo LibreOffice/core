@@ -49,7 +49,7 @@ protected:
     static std::u16string_view  GetToken( std::u16string_view sStr, sal_Int32 &nIndex );
 
     virtual void                SetTabs() override;
-    virtual void                InitEntry(SvTreeListEntry*, const OUString&, const Image&, const Image&) override;
+    virtual void                InitEntry(SvTreeListEntry*, const OUString&) override;
 
     OUString                    GetTabEntryText( sal_uInt32 nPos, sal_uInt16 nCol ) const;
     SvTreeListEntry*            GetEntryOnPos( sal_uInt32 _nEntryPos ) const;

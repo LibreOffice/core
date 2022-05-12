@@ -1492,17 +1492,18 @@ void SvTreeListBox::SetTabs()
     pImpl->NotifyTabsChanged();
 }
 
-void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry,
-    const OUString& aStr, const Image& aCollEntryBmp, const Image& aExpEntryBmp)
+void SvTreeListBox::InitEntry(SvTreeListEntry* pEntry, const OUString& rStr)
 {
     if( nTreeFlags & SvTreeFlags::CHKBTN )
     {
         pEntry->AddItem(std::make_unique<SvLBoxButton>(pCheckButtonData));
     }
 
-    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>( aCollEntryBmp,aExpEntryBmp, mbContextBmpExpanded));
+    const Image& rDefColBmp = pImpl->GetDefaultEntryColBmp();
+    const Image& rDefExpBmp = pImpl->GetDefaultEntryExpBmp();
+    pEntry->AddItem(std::make_unique<SvLBoxContextBmp>(rDefColBmp, rDefExpBmp, mbContextBmpExpanded));
 
-    pEntry->AddItem(std::make_unique<SvLBoxString>(aStr));
+    pEntry->AddItem(std::make_unique<SvLBoxString>(rStr));
 }
 
 OUString SvTreeListBox::GetEntryText(SvTreeListEntry* pEntry) const
@@ -1544,12 +1545,9 @@ SvTreeListEntry* SvTreeListBox::InsertEntry(
 {
     nTreeFlags |= SvTreeFlags::MANINS;
 
-    const Image& rDefExpBmp = pImpl->GetDefaultEntryExpBmp( );
-    const Image& rDefColBmp = pImpl->GetDefaultEntryColBmp( );
-
     SvTreeListEntry* pEntry = new SvTreeListEntry;
     pEntry->SetUserData( pUser );
-    InitEntry( pEntry, rText, rDefColBmp, rDefExpBmp );
+    InitEntry(pEntry, rText);
     pEntry->EnableChildrenOnDemand( bChildrenOnDemand );
 
     if( !pParent )
@@ -1717,20 +1715,12 @@ void SvTreeListBox::CheckButtonHdl()
 SvTreeListEntry* SvTreeListBox::CloneEntry( SvTreeListEntry* pSource )
 {
     OUString aStr;
-    Image aCollEntryBmp;
-    Image aExpEntryBmp;
-
     SvLBoxString* pStringItem = static_cast<SvLBoxString*>(pSource->GetFirstItem(SvLBoxItemType::String));
     if( pStringItem )
         aStr = pStringItem->GetText();
-    SvLBoxContextBmp* pBmpItem = static_cast<SvLBoxContextBmp*>(pSource->GetFirstItem(SvLBoxItemType::ContextBmp));
-    if( pBmpItem )
-    {
-        aCollEntryBmp = pBmpItem->GetBitmap1( );
-        aExpEntryBmp  = pBmpItem->GetBitmap2( );
-    }
+
     SvTreeListEntry* pClone = new SvTreeListEntry;
-    InitEntry( pClone, aStr, aCollEntryBmp, aExpEntryBmp );
+    InitEntry(pClone, aStr);
     pClone->SvTreeListEntry::Clone( pSource );
     pClone->EnableChildrenOnDemand( pSource->HasChildrenOnDemand() );
     pClone->SetUserData( pSource->GetUserData() );
