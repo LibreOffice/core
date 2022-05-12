@@ -549,7 +549,7 @@ static void printStack( PCONTEXT ctx )
         if (SymFromAddr(process, stack.AddrPC.Offset, nullptr, pSymbol))
             printf("\tat %s", pSymbol->Name);
         else
-            printf("\tat unknown (Error in SymFromAddr=%#08x)", GetLastError());
+            printf("\tat unknown (Error in SymFromAddr=%#08lx)", GetLastError());
 
         DWORD disp;
         //try to get line
