@@ -30,6 +30,7 @@
 #include <tools/lineend.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
+#include <cstddef>
 #include <memory>
 #include <string_view>
 #include <vector>
@@ -809,9 +810,9 @@ public:
     static OUString GetSepStr( LineEnd eEnd );
 };
 
-inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, sal_Int32 nAttr)
+inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, std::size_t nAttr)
 {
-    return (nAttr < static_cast<sal_Int32>(rAttribs.size())) ? rAttribs[nAttr].get() : nullptr;
+    return (nAttr < rAttribs.size()) ? rAttribs[nAttr].get() : nullptr;
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG

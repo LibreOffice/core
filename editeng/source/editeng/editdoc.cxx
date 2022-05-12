@@ -59,6 +59,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <limits>
 #include <memory>
 #include <set>
@@ -1215,7 +1216,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
     bool bResort = false;
     bool bExpandedEmptyAtIndexNull = false;
 
-    sal_Int32 nAttr = 0;
+    std::size_t nAttr = 0;
     CharAttribList::AttribsType& rAttribs = aCharAttribList.GetAttribs();
     EditCharAttrib* pAttrib = GetAttrib(rAttribs, nAttr);
     while ( pAttrib )
@@ -1280,7 +1281,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                         {
                             // Check if this kind of attribute was empty and expanded here...
                             sal_uInt16 nW = pAttrib->GetItem()->Which();
-                            for ( sal_Int32 nA = 0; nA < nAttr; nA++ )
+                            for ( std::size_t nA = 0; nA < nAttr; nA++ )
                             {
                                 const EditCharAttrib& r = *aCharAttribList.GetAttribs()[nA];
                                 if ( ( r.GetStart() == 0 ) && ( r.GetItem()->Which() == nW ) )
@@ -1318,9 +1319,11 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
             bResort = true;
             rItemPool.Remove( *pAttrib->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
-            --nAttr;
         }
-        ++nAttr;
+        else
+        {
+            ++nAttr;
+        }
         pAttrib = GetAttrib(rAttribs, nAttr);
     }
 
@@ -1352,7 +1355,7 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItem
     bool bResort = false;
     sal_Int32 nEndChanges = nIndex+nDeleted;
 
-    sal_Int32 nAttr = 0;
+    std::size_t nAttr = 0;
     CharAttribList::AttribsType& rAttribs = aCharAttribList.GetAttribs();
     EditCharAttrib* pAttrib = GetAttrib(rAttribs, nAttr);
     while ( pAttrib )
@@ -1412,12 +1415,14 @@ void ContentNode::CollapseAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItem
             bResort = true;
             rItemPool.Remove( *pAttrib->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
-            nAttr--;
         }
-        else if ( pAttrib->IsEmpty() )
-            aCharAttribList.SetHasEmptyAttribs(true);
+        else
+        {
+            if ( pAttrib->IsEmpty() )
+                aCharAttribList.SetHasEmptyAttribs(true);
+            nAttr++;
+        }
 
-        nAttr++;
         pAttrib = GetAttrib(rAttribs, nAttr);
     }
 
@@ -1443,7 +1448,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
 
     sal_Int32 nCut = pPrevNode->Len();
 
-    sal_Int32 nAttr = 0;
+    std::size_t nAttr = 0;
     CharAttribList::AttribsType& rPrevAttribs = pPrevNode->GetCharAttribs().GetAttribs();
     EditCharAttrib* pAttrib = GetAttrib(rPrevAttribs, nAttr);
     while ( pAttrib )
@@ -1451,7 +1456,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         if ( pAttrib->GetEnd() < nCut )
         {
             // remain unchanged...
-            ;
+            nAttr++;
         }
         else if ( pAttrib->GetEnd() == nCut )
         {
@@ -1462,6 +1467,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
                 assert(pNewAttrib);
                 aCharAttribList.InsertAttrib( pNewAttrib );
             }
+            nAttr++;
         }
         else if ( pAttrib->IsInside( nCut ) || ( !nCut && !pAttrib->GetStart() && !pAttrib->IsFeature() ) )
         {
@@ -1471,6 +1477,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             assert(pNewAttrib);
             aCharAttribList.InsertAttrib( pNewAttrib );
             pAttrib->GetEnd() = nCut;
+            nAttr++;
         }
         else
         {
@@ -1479,9 +1486,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
             aCharAttribList.InsertAttrib(it->release());
             rPrevAttribs.erase(it);
             pAttrib->MoveBackward( nCut );
-            nAttr--;
         }
-        nAttr++;
         pAttrib = GetAttrib(rPrevAttribs, nAttr);
     }
 
@@ -1502,7 +1507,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
     CharAttribList::DbgCheckAttribs(pNextNode->aCharAttribList);
 #endif
 
-    sal_Int32 nAttr = 0;
+    std::size_t nAttr = 0;
     CharAttribList::AttribsType& rNextAttribs = pNextNode->GetCharAttribs().GetAttribs();
     EditCharAttrib* pAttrib = GetAttrib(rNextAttribs, nAttr);
     while ( pAttrib )
@@ -1512,10 +1517,11 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
         if ( ( pAttrib->GetStart() == 0 ) && ( !pAttrib->IsFeature() ) )
         {
             // Attributes can possibly be summarized as:
-            sal_Int32 nTmpAttr = 0;
+            std::size_t nTmpAttr = 0;
             EditCharAttrib* pTmpAttrib = GetAttrib( aCharAttribList.GetAttribs(), nTmpAttr );
             while ( !bMelted && pTmpAttrib )
             {
+                ++nTmpAttr;
                 if ( pTmpAttrib->GetEnd() == nNewStart )
                 {
                     if (pTmpAttrib->Which() == pAttrib->Which())
@@ -1532,12 +1538,11 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
                         }
                         else if (0 == pTmpAttrib->GetLen())
                         {
+                            --nTmpAttr; // to cancel earlier increment...
                             aCharAttribList.Remove(nTmpAttr);
-                            --nTmpAttr; // to cancel later increment...
                         }
                     }
                 }
-                ++nTmpAttr;
                 pTmpAttrib = GetAttrib( aCharAttribList.GetAttribs(), nTmpAttr );
             }
         }
@@ -2425,7 +2430,7 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
 #endif
 
     // iterate over the attributes ...
-    sal_Int32 nAttr = 0;
+    std::size_t nAttr = 0;
     CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
     EditCharAttrib* pAttr = GetAttrib(rAttribs, nAttr);
     while ( pAttr )
@@ -2505,9 +2510,11 @@ bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEn
             DBG_ASSERT( !pAttr->IsFeature(), "RemoveAttribs: Remove a feature?!" );
             GetItemPool().Remove( *pAttr->GetItem() );
             rAttribs.erase(rAttribs.begin()+nAttr);
-            nAttr--;
         }
-        nAttr++;
+        else
+        {
+            nAttr++;
+        }
         pAttr = GetAttrib(rAttribs, nAttr);
     }
 
@@ -2585,7 +2592,7 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
     assert(pNode);
     DBG_ASSERT( nStartPos <= nEndPos, "Invalid region!" );
 
-    sal_uInt16 nAttr = 0;
+    std::size_t nAttr = 0;
     EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
     // No Selection...
     if ( nStartPos == nEndPos )
