@@ -58,9 +58,6 @@ namespace internal
         bool operator==(const OPropertyAccessor& rOb) const { return nPos == rOb.nPos; }
         bool operator <(const OPropertyAccessor& rOb) const { return nPos < rOb.nPos; }
     };
-
-    typedef std::map< sal_Int32, OPropertyAccessor >  PropertyAccessorMap;
-    typedef PropertyAccessorMap::const_iterator     ConstPropertyAccessorMapIterator;
 }
 
 
@@ -93,7 +90,7 @@ class COMPHELPER_DLLPUBLIC OPropertyArrayAggregationHelper final : public ::cppu
     friend class OPropertySetAggregationHelper;
 
     std::vector<css::beans::Property>         m_aProperties;
-    internal::PropertyAccessorMap             m_aPropertyAccessors;
+    std::map< sal_Int32, internal::OPropertyAccessor > m_aPropertyAccessors;
 
 public:
     /** construct the object.

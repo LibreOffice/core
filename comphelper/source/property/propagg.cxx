@@ -128,7 +128,7 @@ OPropertyArrayAggregationHelper::PropertyOrigin OPropertyArrayAggregationHelper:
     if ( pPropertyDescriptor )
     {
         // look up the handle for this name
-        ConstPropertyAccessorMapIterator aPos = m_aPropertyAccessors.find( pPropertyDescriptor->Handle );
+        auto aPos = m_aPropertyAccessors.find( pPropertyDescriptor->Handle );
         OSL_ENSURE( m_aPropertyAccessors.end() != aPos, "OPropertyArrayAggregationHelper::classifyProperty: should have this handle in my map!" );
         if ( m_aPropertyAccessors.end() != aPos )
         {
@@ -172,7 +172,7 @@ sal_Int32 OPropertyArrayAggregationHelper::getHandleByName(const OUString& _rPro
 sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
             OUString* _pPropName, sal_Int16* _pAttributes, sal_Int32 _nHandle)
 {
-    ConstPropertyAccessorMapIterator i = m_aPropertyAccessors.find(_nHandle);
+    auto i = m_aPropertyAccessors.find(_nHandle);
     bool bRet = i != m_aPropertyAccessors.end();
     if (bRet)
     {
@@ -188,7 +188,7 @@ sal_Bool OPropertyArrayAggregationHelper::fillPropertyMembersByHandle(
 
 bool OPropertyArrayAggregationHelper::getPropertyByHandle( sal_Int32 _nHandle, Property& _rProperty ) const
 {
-    ConstPropertyAccessorMapIterator pos = m_aPropertyAccessors.find(_nHandle);
+    auto pos = m_aPropertyAccessors.find(_nHandle);
     if ( pos != m_aPropertyAccessors.end() )
     {
         _rProperty = m_aProperties[ pos->second.nPos ];
@@ -201,7 +201,7 @@ bool OPropertyArrayAggregationHelper::getPropertyByHandle( sal_Int32 _nHandle, P
 bool OPropertyArrayAggregationHelper::fillAggregatePropertyInfoByHandle(
             OUString* _pPropName, sal_Int32* _pOriginalHandle, sal_Int32 _nHandle) const
 {
-    ConstPropertyAccessorMapIterator i = m_aPropertyAccessors.find(_nHandle);
+    auto i = m_aPropertyAccessors.find(_nHandle);
     bool bRet = i != m_aPropertyAccessors.end() && (*i).second.bAggregate;
     if (bRet)
     {
