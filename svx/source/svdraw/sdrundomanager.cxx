@@ -18,6 +18,7 @@
  */
 
 #include <svx/sdrundomanager.hxx>
+#include <svx/svdundo.hxx>
 #include <sfx2/objsh.hxx>
 #include <svl/hint.hxx>
 
@@ -64,6 +65,7 @@ bool SdrUndoManager::Undo()
 bool SdrUndoManager::Redo()
 {
     bool bRetval(false);
+    bool bClearRedoStack(false);
 
     if (isTextEditActive())
     {
@@ -73,8 +75,47 @@ bool SdrUndoManager::Redo()
 
     if (!bRetval)
     {
+        // Check if the current and thus to-be undone UndoAction is a SdrUndoDiagramModelData action
+        const bool bCurrentIsDiagramChange(
+            GetRedoActionCount()
+            && nullptr != dynamic_cast<SdrUndoDiagramModelData*>(GetRedoAction()));
+
         // no redo triggered up to now, trigger local one
         bRetval = SfxUndoManager::Redo();
+
+        // it was a SdrUndoDiagramModelData action and we have more Redo actions
+        if (bCurrentIsDiagramChange && GetRedoActionCount())
+        {
+            const bool bNextIsDiagramChange(
+                nullptr != dynamic_cast<SdrUndoDiagramModelData*>(GetRedoAction()));
+
+            // We have more Redo-actions and the 'next' one to be executed is *not* a
+            // SdrUndoDiagramModelData-action. This means that the already executed
+            // one had done a re-Layout/Re-create of the Diagram XShape/SdrObject
+            // representation based on the restored Diagram ModelData. When the next
+            // Redo action is something else (and thus will not itself re-create
+            // XShapes/SdrShapes) it may be that it is an UnGroup/Delete where a former
+            // as-content-of-Diagram created XShape/SdrShape is referenced, an action
+            // that references a XShape/SdrShape by pointer/reference. That
+            // pointer/reference *cannot* be valid anymore (now).
+
+            // The problem here is that Undo/Redo actions historically reference
+            // XShapes/SdrShapes by pointer/reference, e.g. deleting means: remove
+            // from an SdrObjList and add to an Undo action. I is *not*
+            // adddress/incarnation-invariant in the sense to remember e.g. to
+            // remove the Nth object in tha list (that would work).
+
+            // It might be possible to solve/correct this better, but since it's
+            // a rare corner case just avoid the possible crash when continuing Redos
+            // by clearing the Redo-Stack here as a consequence
+            bClearRedoStack = !bNextIsDiagramChange;
+        }
+    }
+
+    if (bClearRedoStack)
+    {
+        // clear Redo-Stack (explanation see above)
+        ClearRedo();
     }
 
     return bRetval;
