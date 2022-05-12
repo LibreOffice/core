@@ -70,6 +70,30 @@
       },
       "revId": "cfd2da999dd6b487b4a193f4e63001c0d63316b7",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24379de6_1112cf30",
+        "filename": "officecfg/registry/schema/org/openoffice/Office/ExtensionManager.xcs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2022-05-12T11:35:36Z",
+      "side": 1,
+      "message": "well i dont have a better name...\n\ni was thinking the difference is merely theoretical but now i found there\u0027s a second caller of getJavaVM() here:\n\nconnectivity/source/commontools/CommonTools.cxx:            Any uaJVM \u003d xVM-\u003egetJavaVM( processID );\n\nlet\u0027s hope the memory usage of hsqldb is relatively small, compared to extensions containing 20+mb of jars...",
+      "parentUuid": "ec963f65_866d1830",
+      "range": {
+        "startLine": 68,
+        "startChar": 6,
+        "endLine": 68,
+        "endChar": 88
+      },
+      "revId": "cfd2da999dd6b487b4a193f4e63001c0d63316b7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615"
     }
   ]
 }
