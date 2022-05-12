@@ -764,8 +764,8 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsTranspose()
     m_pDoc->SetValue(0, 2, srcSheet, 3); // A3
     m_pDoc->SetValue(0, 3, srcSheet, 4); // A4
 
-    m_pDoc->DoMerge(srcSheet, 0, 1, 1, 1, false); // Merge A2 and B2
-    m_pDoc->DoMerge(srcSheet, 0, 2, 1, 2, false); // Merge A3 and B3
+    m_pDoc->DoMerge(0, 1, 1, 1, srcSheet, false); // Merge A2 and B2
+    m_pDoc->DoMerge(0, 2, 1, 2, srcSheet, false); // Merge A3 and B3
 
     // Test precondition
     CPPUNIT_ASSERT_EQUAL(ScAddress(0, 0, srcSheet),
@@ -833,8 +833,8 @@ void TestCopyPaste::testCopyPasteSpecialMergedCellsFilteredTranspose()
     m_pDoc->SetValue(0, 2, srcSheet, 3); // A3
     m_pDoc->SetValue(0, 3, srcSheet, 4); // A4
 
-    m_pDoc->DoMerge(srcSheet, 0, 1, 1, 1, false); // Merge A2 and B2
-    m_pDoc->DoMerge(srcSheet, 0, 2, 1, 2, false); // Merge A3 and B3
+    m_pDoc->DoMerge(0, 1, 1, 1, srcSheet, false); // Merge A2 and B2
+    m_pDoc->DoMerge(0, 2, 1, 2, srcSheet, false); // Merge A3 and B3
 
     // Filter row 1
     ScDBData* pDBData = new ScDBData("TRANSPOSE_TEST_DATA", srcSheet, 0, 0, 0, 3);

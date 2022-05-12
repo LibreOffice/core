@@ -339,9 +339,8 @@ void ScDBFunc::ToggleAutoFilter()
     }
     else                                    // show filter buttons
     {
-        if ( !rDoc.IsBlockEmpty( nTab,
-                                 aParam.nCol1, aParam.nRow1,
-                                 aParam.nCol2, aParam.nRow2 ) )
+        if ( !rDoc.IsBlockEmpty( aParam.nCol1, aParam.nRow1,
+                                 aParam.nCol2, aParam.nRow2, nTab ) )
         {
             if (!bHeader)
             {

@@ -3020,7 +3020,7 @@ static void lcl_SetHidden( const ScDocument& rDoc, SCTAB nPrintTab, ScPageRowEnt
     {
         OSL_ENSURE(i < rPageEndX.size(), "vector access error for aPageEndX");
         SCCOL nEndCol = rPageEndX[i];
-        if ( rDoc.IsPrintEmpty( nPrintTab, nStartCol, nStartRow, nEndCol, nEndRow,
+        if ( rDoc.IsPrintEmpty( nStartCol, nStartRow, nEndCol, nEndRow, nPrintTab,
                                     bLeftIsEmpty, &aTempRange, &aTempRect ) )
         {
             rPageRowEntry.SetHidden(i);
@@ -3165,7 +3165,7 @@ void PrintPageRanges::calculate(ScDocument& rDoc,
             (*m_xPageEndY)[m_nTotalY] = nRow - 1;
             ++m_nTotalY;
 
-            if (!bSkipEmpty || !rDoc.IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nRow-1))
+            if (!bSkipEmpty || !rDoc.IsPrintEmpty(nStartCol, nPageStartRow, nEndCol, nRow-1, nPrintTab))
             {
                 auto& rPageRow = (*m_xPageRows)[m_nPagesY];
                 rPageRow.SetStartRow(nPageStartRow);
@@ -3209,7 +3209,7 @@ void PrintPageRanges::calculate(ScDocument& rDoc,
     (*m_xPageEndY)[m_nTotalY] = nEndRow;
     ++m_nTotalY;
 
-    if (!bSkipEmpty || !rDoc.IsPrintEmpty(nPrintTab, nStartCol, nPageStartRow, nEndCol, nEndRow))
+    if (!bSkipEmpty || !rDoc.IsPrintEmpty(nStartCol, nPageStartRow, nEndCol, nEndRow, nPrintTab))
     {
         auto& rPageRow = (*m_xPageRows)[m_nPagesY];
         rPageRow.SetStartRow(nPageStartRow);

@@ -432,11 +432,12 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
     return pFound;
 }
 
-bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                SCCOL nEndCol, SCROW nEndRow, bool bLeftIsEmpty,
+bool ScDocument::IsPrintEmpty( SCCOL nStartCol, SCROW nStartRow,
+                                SCCOL nEndCol, SCROW nEndRow,
+                                SCTAB nTab, bool bLeftIsEmpty,
                                 ScRange* pLastRange, tools::Rectangle* pLastMM ) const
 {
-    if (!IsBlockEmpty( nTab, nStartCol, nStartRow, nEndCol, nEndRow ))
+    if (!IsBlockEmpty( nStartCol, nStartRow, nEndCol, nEndRow, nTab ))
         return false;
 
     if (HasAttrib(ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), HasAttrFlags::Lines))

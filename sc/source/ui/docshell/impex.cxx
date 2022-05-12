@@ -1751,7 +1751,7 @@ bool ScImportExport::ExtText2Doc( SvStream& rStrm )
             aRange.aEnd.SetRow( nRow );
 
             if ( !mbApi && nStartCol != nEndCol &&
-                 !rDoc.IsBlockEmpty( nTab, nStartCol + 1, nStartRow, nEndCol, nRow ) )
+                 !rDoc.IsBlockEmpty( nStartCol + 1, nStartRow, nEndCol, nRow, nTab ) )
             {
                 ScReplaceWarnBox aBox(ScDocShell::GetActiveDialogParent());
                 if (aBox.run() != RET_YES)

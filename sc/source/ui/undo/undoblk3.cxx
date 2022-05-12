@@ -678,9 +678,9 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         else
         {
             // repeat merge, but do not remove note captions (will be done by drawing redo below)
-            rDoc.DoMerge( aRange.aStart.Tab(),
-                           aRange.aStart.Col(), aRange.aStart.Row(),
-                           aRange.aEnd.Col(),   aRange.aEnd.Row(), false );
+            rDoc.DoMerge( aRange.aStart.Col(), aRange.aStart.Row(),
+                          aRange.aEnd.Col(),   aRange.aEnd.Row(),
+                          aRange.aStart.Tab(), false );
 
             if (maOption.mbCenter)
             {
@@ -709,9 +709,9 @@ void ScUndoMerge::DoChange( bool bUndo ) const
         // redo -> merge contents again
         else if (!bUndo && mbMergeContents)
         {
-            rDoc.DoMergeContents( aRange.aStart.Tab(),
-                                   aRange.aStart.Col(), aRange.aStart.Row(),
-                                   aRange.aEnd.Col(), aRange.aEnd.Row() );
+            rDoc.DoMergeContents( aRange.aStart.Col(), aRange.aStart.Row(),
+                                  aRange.aEnd.Col(), aRange.aEnd.Row(),
+                                  aRange.aStart.Tab() );
         }
 
         if (bUndo)

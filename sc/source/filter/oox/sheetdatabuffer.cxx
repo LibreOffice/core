@@ -815,7 +815,7 @@ void SheetDataBuffer::applyCellMerging( const ScRange& rRange )
         lcl_SetBorderLine( rDoc, rRange, getSheetIndex(), SvxBoxItemLine::BOTTOM );
     // do merge
     if( bMultiCol || bMultiRow )
-        rDoc.DoMerge( getSheetIndex(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
+        rDoc.DoMerge( rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row(), getSheetIndex() );
 }
 
 } // namespace oox

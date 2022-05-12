@@ -5388,8 +5388,8 @@ void ScDocument::GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
         *ppBottom = pBottomLine;
 }
 
-bool ScDocument::IsBlockEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
-                                        SCCOL nEndCol, SCROW nEndRow, bool bIgnoreNotes ) const
+bool ScDocument::IsBlockEmpty(SCCOL nStartCol, SCROW nStartRow,
+                              SCCOL nEndCol, SCROW nEndRow, SCTAB nTab, bool bIgnoreNotes ) const
 {
     if (ValidTab(nTab) && nTab < static_cast<SCTAB>(maTabs.size()))
         if (maTabs[nTab])

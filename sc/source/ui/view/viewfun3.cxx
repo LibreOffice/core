@@ -846,8 +846,8 @@ bool checkDestRangeForOverwrite(const ScRangeList& rDestRanges, const ScDocument
         {
             const ScRange& rRange = rDestRanges[i];
             bIsEmpty = rDoc.IsBlockEmpty(
-                rTab, rRange.aStart.Col(), rRange.aStart.Row(),
-                rRange.aEnd.Col(), rRange.aEnd.Row());
+                rRange.aStart.Col(), rRange.aStart.Row(),
+                rRange.aEnd.Col(), rRange.aEnd.Row(), rTab );
         }
         if (!bIsEmpty)
             break;
