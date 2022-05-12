@@ -2839,11 +2839,11 @@ bool HtmlExport::CopyScript( std::u16string_view rPath, const OUString& rSource,
 
     if( pIStm )
     {
-        OString aLine;
+        OStringBuffer aLine;
 
         while( pIStm->ReadLine( aLine ) )
         {
-            aScriptBuf.appendAscii( aLine.getStr() );
+            aScriptBuf.appendAscii( aLine.getStr(), aLine.getLength() );
             if( bUnix )
             {
                 aScriptBuf.append("\n");

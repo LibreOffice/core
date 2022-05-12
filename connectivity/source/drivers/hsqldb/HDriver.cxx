@@ -252,7 +252,7 @@ namespace connectivity
                             std::unique_ptr<SvStream> pStream( ::utl::UcbStreamHelper::CreateStream(xStream) );
                             if (pStream)
                             {
-                                OString sLine;
+                                OStringBuffer sLine;
                                 OString sVersionString;
                                 while ( pStream->ReadLine(sLine) )
                                 {
@@ -260,7 +260,7 @@ namespace connectivity
                                         continue;
                                     sal_Int32 nIdx {0};
                                     const std::string_view sIniKey = o3tl::getToken(sLine, 0, '=', nIdx);
-                                    const OString sValue = sLine.getToken(0, '=', nIdx);
+                                    const OString sValue(o3tl::getToken(sLine, 0, '=', nIdx));
                                     if( sIniKey == "hsqldb.compatible_version" )
                                     {
                                         sVersionString = sValue;

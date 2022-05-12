@@ -108,6 +108,7 @@
 #include <comphelper/xmltools.hxx>
 #include <o3tl/any.hxx>
 #include <o3tl/safeint.hxx>
+#include <o3tl/string_view.hxx>
 #include <tools/stream.hxx>
 #include <unotools/fontdefs.hxx>
 #include <vcl/cvtgrf.hxx>
@@ -3707,14 +3708,14 @@ static std::map< OString, std::vector<OString> > lcl_getAdjNames()
     SvFileStream aStream(aPath, StreamMode::READ);
     if (aStream.GetError() != ERRCODE_NONE)
         SAL_WARN("oox.shape", "failed to open oox-drawingml-adj-names");
-    OString aLine;
+    OStringBuffer aLine;
     bool bNotDone = aStream.ReadLine(aLine);
     while (bNotDone)
     {
         sal_Int32 nIndex = 0;
         // Each line is in a "key\tvalue" format: read the key, the rest is the value.
-        OString aKey = aLine.getToken(0, '\t', nIndex);
-        OString aValue = aLine.copy(nIndex);
+        OString aKey( o3tl::getToken(aLine, 0, '\t', nIndex) );
+        OString aValue( std::string_view(aLine).substr(nIndex) );
         aRet[aKey].push_back(aValue);
         bNotDone = aStream.ReadLine(aLine);
     }

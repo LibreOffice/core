@@ -1187,7 +1187,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
                     OSL_FAIL("no output file created?");
                     continue;
                 }
-                OString sLine;
+                OStringBuffer sLine;
                 bool bDone = pInStream->ReadLine( sLine );
                 while ( bDone )
                 {

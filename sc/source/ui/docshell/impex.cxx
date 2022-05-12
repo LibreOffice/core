@@ -2053,7 +2053,7 @@ bool ScImportExport::Sylk2Doc( SvStream& rStrm )
     {
         OUString aLine;
         OUString aText;
-        OString aByteLine;
+        OStringBuffer aByteLine;
         SCCOL nCol = nStartCol;
         SCROW nRow = nStartRow;
         SCCOL nRefCol = nCol;

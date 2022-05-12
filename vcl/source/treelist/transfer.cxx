@@ -1999,7 +1999,7 @@ bool TransferableDataHelper::GetFileList( FileList& rFileList ) const
             {
                 if( aFlavor.MimeType.indexOf( "text/uri-list" ) > -1 )
                 {
-                    OString aDiskString;
+                    OStringBuffer aDiskString;
 
                     while( xStm->ReadLine( aDiskString ) )
                         if( !aDiskString.isEmpty() && aDiskString[0] != '#' )

@@ -2409,7 +2409,7 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     if ( aSel.HasRange() )
         aSel = ImpDeleteText( aSel );
 
-    OString aLine;
+    OStringBuffer aLine;
     bool bDone = rInput.ReadLine( aLine );
     OUString aTmpStr(OStringToOUString(aLine, rInput.GetStreamCharSet()));
     while ( bDone )

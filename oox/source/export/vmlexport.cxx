@@ -1138,13 +1138,13 @@ static std::vector<OString> lcl_getShapeTypes()
     SvFileStream aStream(aPath, StreamMode::READ);
     if (aStream.GetError() != ERRCODE_NONE)
         SAL_WARN("oox", "failed to open vml-shape-types");
-    OString aLine;
+    OStringBuffer aLine;
     bool bNotDone = aStream.ReadLine(aLine);
     while (bNotDone)
     {
         // Filter out comments.
-        if (!aLine.startsWith("/"))
-            aRet.push_back(aLine);
+        if (!o3tl::starts_with(aLine, "/"))
+            aRet.push_back(OString(aLine));
         bNotDone = aStream.ReadLine(aLine);
     }
     return aRet;
