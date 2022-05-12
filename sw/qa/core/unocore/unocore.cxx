@@ -14,6 +14,7 @@
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XDependentTextField.hpp>
+#include <com/sun/star/document/XDocumentInsertable.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
@@ -514,6 +515,32 @@ CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testContentControlDropdown)
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aListItems.size());
     CPPUNIT_ASSERT_EQUAL(OUString("red"), aListItems[0].m_aDisplayText);
     CPPUNIT_ASSERT_EQUAL(OUString("R"), aListItems[0].m_aValue);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreUnocoreTest, testInsertFileInContentControlException)
+{
+    // Given a document with a content control:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // Reject inserting a document inside the content control:
+    xCursor->goLeft(1, false);
+    OUString aURL(m_directories.getURLFromSrc(DATA_DIRECTORY) + "tdf119081.odt");
+    uno::Reference<document::XDocumentInsertable> xInsertable(xCursor, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_THROW(xInsertable->insertDocumentFromURL(aURL, {}), uno::RuntimeException);
+
+    // Accept inserting a document outside the content control:
+    xCursor->goRight(1, false);
+    xInsertable->insertDocumentFromURL(aURL, {});
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

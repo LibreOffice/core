@@ -1071,6 +1071,34 @@ DECLARE_WW8EXPORT_TEST(testTdf118412, "tdf118412.doc")
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1251), nBottomMargin);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testContentControlExport)
+{
+    // Given a document with a (rich text) content control:
+    mxComponent = loadFromDesktop("private:factory/swriter");
+    uno::Reference<lang::XMultiServiceFactory> xMSF(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xText = xTextDocument->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, "test", /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    uno::Reference<text::XTextContent> xContentControl(
+        xMSF->createInstance("com.sun.star.text.ContentControl"), uno::UNO_QUERY);
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+
+    // When saving that document to DOC and loading it back:
+    reload("MS Word 97", "");
+
+    // Then make sure the dummy character at the end is filtered out:
+    OUString aBodyText = getBodyText();
+    // Without the accompanying fix in place, this test would have failed:
+    // - Expected: test
+    // - Actual  : test<space>
+    // i.e. the CH_TXTATR_BREAKWORD at the end was written, then the import replaced that with a
+    // space.
+    CPPUNIT_ASSERT_EQUAL(OUString("test"), aBodyText);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

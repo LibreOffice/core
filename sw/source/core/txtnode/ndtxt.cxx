@@ -3090,6 +3090,28 @@ SwTextAttr * SwTextNode::GetTextAttrForCharAt(
     return nullptr;
 }
 
+SwTextAttr* SwTextNode::GetTextAttrForEndCharAt(sal_Int32 nIndex, sal_uInt16 nWhich) const
+{
+    SwTextAttr* pAttr = GetTextAttrAt(nIndex, nWhich, SwTextNode::EXPAND);
+    if (!pAttr)
+    {
+        return nullptr;
+    }
+
+    if (!pAttr->End())
+    {
+        return nullptr;
+    }
+
+    // The start-end range covers the end dummy character.
+    if (*pAttr->End() - 1 != nIndex)
+    {
+        return nullptr;
+    }
+
+    return pAttr;
+}
+
 namespace
 {
 

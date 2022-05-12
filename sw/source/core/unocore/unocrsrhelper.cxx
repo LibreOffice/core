@@ -1033,6 +1033,12 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
         {
             throw uno::RuntimeException("cannot insert file inside input field");
         }
+
+        if (pTextNode->GetTextAttrAt(pUnoCursor->GetPoint()->nContent.GetIndex(),
+                                     RES_TXTATR_CONTENTCONTROL, SwTextNode::PARENT))
+        {
+            throw uno::RuntimeException("cannot insert file inside content controls");
+        }
     }
 
     std::unique_ptr<SfxMedium> pMed;

@@ -1876,7 +1876,8 @@ KEYINPUT_CHECKTABLE_INSDEL:
                 case KEY_RETURN:
                 {
                     if ( !rSh.HasReadonlySel()
-                         && !rSh.CursorInsideInputField() )
+                         && !rSh.CursorInsideInputField()
+                         && !rSh.CursorInsideContentControl() )
                     {
                         const SelectionType nSelectionType = rSh.GetSelectionType();
                         if(nSelectionType & SelectionType::Ole)

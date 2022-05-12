@@ -85,6 +85,7 @@
 #include <oox/export/vmlexport.hxx>
 #include <sal/log.hxx>
 #include <comphelper/propertysequence.hxx>
+#include <comphelper/string.hxx>
 
 #include "sprmids.hxx"
 
@@ -1788,6 +1789,12 @@ OUString SwWW8AttrIter::GetSnippet(const OUString &rStr, sal_Int32 nCurrentPos,
     aSnippet = aSnippet.replace(0x0A, 0x0B);
     aSnippet = aSnippet.replace(CHAR_HARDHYPHEN, 0x1e);
     aSnippet = aSnippet.replace(CHAR_SOFTHYPHEN, 0x1f);
+    // Ignore the dummy character at the end of content controls.
+    static sal_Unicode const aForbidden[] = {
+        CH_TXTATR_BREAKWORD,
+        0
+    };
+    aSnippet = comphelper::string::removeAny(aSnippet, aForbidden);
 
     m_rExport.m_aCurrentCharPropStarts.push( nCurrentPos );
     const SfxPoolItem &rItem = GetItem(RES_CHRATR_CASEMAP);
