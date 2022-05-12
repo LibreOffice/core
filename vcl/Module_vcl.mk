@@ -219,7 +219,7 @@ $(eval $(call gb_Module_add_check_targets,vcl,\
 endif
 
 ifeq ($(USING_X11),TRUE)
-$(eval $(call gb_Module_add_check_targets,vcl,\
+#$(eval $(call gb_Module_add_check_targets,vcl,\
 	CppunitTest_vcl_timer \
 ))
 endif
